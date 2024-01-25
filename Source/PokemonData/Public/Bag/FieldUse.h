@@ -10,7 +10,7 @@
  * Represents the different options for how an item can be used in the field
  */
 UENUM()
-enum EFieldUse : uint8
+enum class EFieldUse : uint8
 {
 	NoFieldUse = 0,
 	OnPokemon = 1,

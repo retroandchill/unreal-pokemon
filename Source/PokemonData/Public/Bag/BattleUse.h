@@ -9,7 +9,7 @@
 /**
  * Represents the different options for how an item can be used in battle
  */
-UCLASS()
+UENUM(BlueprintType)
 enum class EBattleUse : uint8
 {
  NoBattleUse = 0,
