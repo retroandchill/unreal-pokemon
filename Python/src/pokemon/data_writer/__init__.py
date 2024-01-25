@@ -1,0 +1,1 @@
+from pokemon.data_writer import write_items

@@ -97,7 +97,7 @@ struct  POKEMONDATA_API FItem : public FTableRowBase
 	 * Whether the Bag shows how many of this item are in there.
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool ShowQuanity;
+	bool ShowQuantity;
 
 	/**
 	 * Move taught by this HM, TM or TR.
