@@ -31,21 +31,7 @@ def parse_csv_value(value: str, schema: str, enumeration: Optional[dict[str, str
     values = regex.split(value)
     idx = -1
     while True:
-        record = []
-        for i in range(start, len(schema)):
-            idx += 1
-            sche = schema[i]
-            if re.match(r'[A-Z]', sche):
-                if not values[idx]:
-                    record.append(None)
-                    continue
-
-            if sche.lower() == 'q':
-                record.append(value)
-                idx = len(values)
-                break
-            else:
-                record.append(string_to_json_value(values[idx], sche, enumeration))
+        idx, record = method_name(idx, value, values, schema, start, enumeration)
 
         if record:
             if subarrays:
@@ -58,8 +44,27 @@ def parse_csv_value(value: str, schema: str, enumeration: Optional[dict[str, str
 
     return ret[0] if not repeat and schema_length == 1 else ret
 
+
+def method_name(idx: int, value: any, values: list[any], schema: str, start: int, enumeration: Optional[dict[str, str]]):
+    record = []
+    for i in range(start, len(schema)):
+        idx += 1
+        sche = schema[i]
+        if re.match(r'[A-Z]', sche) and not values[idx]:
+            record.append(None)
+            continue
+
+        if sche.lower() == 'q':
+            record.append(value)
+            idx = len(values)
+            break
+        else:
+            record.append(string_to_json_value(values[idx], sche, enumeration))
+    return idx, record
+
+
 def string_to_json_value(value: str, schema: str, enumeration: Optional[Type[Enum]] = None):
-    match schema:
+    match schema.lower():
         case 'i':
             return int(value)
         case 'u':
