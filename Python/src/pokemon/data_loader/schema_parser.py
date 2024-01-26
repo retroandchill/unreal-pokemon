@@ -112,8 +112,7 @@ def check_enum_field(field: str, enumeration: Optional[set[str]]) -> str:
     if enumeration is None:
         warn("Field '{0}' was specified as an enumeration, but no enumeration was provided! "
              "Validation will be skipped".format(field))
-
-    if field not in enumeration:
+    elif field not in enumeration:
         raise ValueError("Undefined value {0} in {1}.".format(field, str(enumeration)))
 
     return field
