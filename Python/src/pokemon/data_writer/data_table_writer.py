@@ -4,7 +4,7 @@ from pokemon.data_loader import IniData, ItemData
 from unreal import AssetImportTask, DataTable, DataTableFunctionLibrary, EditorAssetLibrary
 
 
-def write_items(item_data: ItemData, target_dir: str):
+def import_items(item_data: ItemData, target_dir: str):
     ue_asset_path = os.path.join(target_dir, "Items.uasset")
     data_table = DataTable(EditorAssetLibrary.load_asset(ue_asset_path))
 

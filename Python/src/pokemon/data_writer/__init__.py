@@ -1,1 +1,1 @@
-from pokemon.data_writer import write_items
+from pokemon.data_writer.data_table_writer import import_items
