@@ -8,10 +8,55 @@ def convert_data_to_json(section_name: str, data: dict[str, str], schema: dict[s
     ret = {'ID': string_to_json_value(section_name, schema["SectionName"][0])}
     for key, value in data.items():
         s = schema[key]
-        ret[key] = string_to_json_value(value, s[0], s[1])
+        ret[key] = parse_csv_value(value, s[0], s[1])
 
     return ret
 
+
+def parse_csv_value(value: str, schema: str, enumeration: Optional[dict[str, str]]):
+    ret = []
+    repeat = False
+    start = 0
+    schema_length = len(schema)
+    match schema[0]:
+        case '*':
+            repeat = True
+            start = 1
+        case '^':
+            start = 1
+            schema_length -= 1
+
+    subarrays = repeat and len(schema) - start > 1
+    regex = re.compile(r",(?=(?:[^\"']*[\"'][^\"']*[\"'])*[^\"']*$)")
+    values = regex.split(value)
+    idx = -1
+    while True:
+        record = []
+        for i in range(start, len(schema)):
+            idx += 1
+            sche = schema[i]
+            if re.match(r'[A-Z]', sche):
+                if not values[idx]:
+                    record.append(None)
+                    continue
+
+            if sche.lower() == 'q':
+                record.append(value)
+                idx = len(values)
+                break
+            else:
+                record.append(string_to_json_value(values[idx], sche, enumeration))
+
+        if record:
+            if subarrays:
+                ret.append(record)
+            else:
+                ret.extend(record)
+
+        if not repeat or idx >= len(values) - 1:
+            break
+
+    return ret[0] if not repeat and schema_length == 1 else ret
 
 def string_to_json_value(value: str, schema: str, enumeration: Optional[Type[Enum]] = None):
     match schema:

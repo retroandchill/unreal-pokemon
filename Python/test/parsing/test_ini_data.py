@@ -23,7 +23,7 @@ class TestIniData(unittest.TestCase):
     def test_parse_items(self):
         item_data = ItemData("resources/items.txt")
         print(item_data.to_json())
-        self.assertNotEquals('', item_data.to_json())
+        self.assertNotEqual('', item_data.to_json())
 
 
 if __name__ == '__main__':

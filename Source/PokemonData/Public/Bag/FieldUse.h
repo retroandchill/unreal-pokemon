@@ -15,7 +15,7 @@ enum class EFieldUse : uint8
 	NoFieldUse = 0,
 	OnPokemon = 1,
 	Direct = 2,
-	TechnicalMachine = 3,
-	HiddenMachine = 4,
-	TechnicalRecord = 5
+	TM = 3,
+	HM = 4,
+	TR = 5
 };
