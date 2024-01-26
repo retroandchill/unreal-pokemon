@@ -1,51 +1,39 @@
 import json
 from typing import TypedDict
+from enum import Enum
 
-from pokemon.data_loader import IniData
+from pokemon.data_loader import IniData, convert_data_to_json
 
-Item = TypedDict("Item", {
-    "ID": str,
-    "RealName": str,
-    "RealNamePlural": str,
-    "RealPortionName": str,
-    "RealPortionNamePlural": str,
-    "Pocket": int,
-    "Price": int,
-    "SellPrice": int,
-    "BPPrice": int,
-    "FieldUse": str,
-    "BattleUse": str,
-    "Tags": list[str],
-    "Consumable": bool,
-    "ShowQuantity": bool,
-    "Move": str,
-    "Description": str
-})
+FieldUse = {'NoFieldUse', 'OnPokemon', 'Direct', 'TM', 'HM', 'TR'}
+
+BattleUse = {'NoBattleUse', 'OnPokemon', 'OnMove', 'OnBattler', 'OnFoe', 'Direct'}
+
 
 class ItemData:
+    SCHEMA = {
+        "SectionName": ("m", None),
+        "Name": ("s", None),
+        "NamePlural": ("s", None),
+        "PortionName": ("s", None),
+        "PortionNamePlural": ("s", None),
+        "Pocket": ("v", None),
+        "Price": ("u", None),
+        "SellPrice": ("u", None),
+        "BPPrice": ("u", None),
+        "FieldUse": ("e", FieldUse),
+        "BattleUse": ("e", BattleUse),
+        "Flags": ("*s", None),
+        "Consumable": ("b", None),
+        "ShowQuantity": ("b", None),
+        "Move": ("e", None),
+        "Description": ("q", None)
+    }
+
     def __init__(self, config_path: str):
         ini_data = IniData(config_path)
         self.__data = []
-        for id, data in ini_data:
-            result: Item = {
-                "ID": id,
-                "RealName": data["Name"],
-                "RealNamePlural": data["NamePlural"],
-                "RealPortionName": data["PortionName"] if data["PortionName"] else "",
-                "RealPortionNamePlural": data["PortionNamePlural"] if data["PortionNamePlural"] else "",
-                "Pocket": int(data["Pocket"]),
-                "Price": int(data["Price"]),
-                "SellPrice": int(data["SellPrice"]) if data["SellPrice"] else int(data["Price"]) / 2,
-                "BPPrice": int(data["BPPrice"]) if data["BPPrice"] else 0,
-                "FieldUse": data["FieldUse"] if data["FieldUse"] else "NoFieldUse",
-                "BattleUse": data["BattleUse"] if data["BattleUse"] else "NoBattleUse",
-                "Tags": data["Tags"].split(',') if data["Tags"] else [],
-                "Consumable": bool(data["Consumable"]) if data["Consumable"] else True,
-                "ShowQuantity": bool(data["ShowQuantity"]) if data["ShowQuantity"] else True,
-                "Move": bool(data["Move"]) if data["Move"] else "",
-                "Description": data["Description"] if data["Description"] else ""
-            }
-            self.__data.append(result)
+        for section_name, data in ini_data:
+            self.__data.append(convert_data_to_json(section_name, data, self.SCHEMA))
 
     def to_json(self) -> str:
         return json.dumps(self.__data)

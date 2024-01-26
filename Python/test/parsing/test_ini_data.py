@@ -1,5 +1,5 @@
 import unittest
-from pokemon.data_loader import IniData
+from pokemon.data_loader import IniData, ItemData
 
 
 class TestIniData(unittest.TestCase):
@@ -19,6 +19,11 @@ class TestIniData(unittest.TestCase):
             names.append(item[0])
 
         self.assertEqual(["REPEL", "SUPERREPEL", "MAXREPEL"], names)
+
+    def test_parse_items(self):
+        item_data = ItemData("resources/items.txt")
+        print(item_data.to_json())
+        self.assertNotEquals('', item_data.to_json())
 
 
 if __name__ == '__main__':
