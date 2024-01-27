@@ -3,11 +3,15 @@
 
 #include "Exp/Erratic.h"
 
-FName UErratic::GetId() const {
+using namespace Exp;
+
+REGISTER_SUBCLASS(GrowthRate, Erratic);
+
+FName Erratic::GetId() const {
 	return "Erratic";
 }
 
-int UErratic::ExpForLevel(int Level) const {
+int Erratic::ExpForLevel(int Level) const {
 	if (Level <= 50) 
 		return std::pow(Level, 3) * (100 - Level) / 50;
 	

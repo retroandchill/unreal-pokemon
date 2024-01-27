@@ -3,5 +3,8 @@
 
 #include "Exp/GrowthRate.h"
 
+using namespace Exp;
 
-// Add default functionality here for any IGrowthRate functions that are not pure virtual.
+IMPLEMENT_REGISTRY_CLASS(GrowthRate);
+
+GrowthRate::~GrowthRate() = default;

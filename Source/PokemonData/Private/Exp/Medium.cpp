@@ -3,10 +3,14 @@
 
 #include "Exp/Medium.h"
 
-FName UMedium::GetId() const {
+using namespace Exp;
+
+REGISTER_SUBCLASS(GrowthRate, Medium);
+
+FName Medium::GetId() const {
 	return "Medium";
 }
 
-int UMedium::ExpForLevel(int Level) const {
+int Medium::ExpForLevel(int Level) const {
 	return std::pow(Level, 3);
 }
