@@ -20,7 +20,7 @@ class PbsIniData:
         pass
 
     @abc.abstractmethod
-    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]):
+    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]) -> dict[str, any]:
         pass
 
     def to_json(self) -> str:
