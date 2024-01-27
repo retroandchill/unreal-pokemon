@@ -5,7 +5,7 @@ from typing import Optional
 from pokemon.data_loader import IniData, convert_data_to_json
 
 
-class PbsIniData:
+class PbsIniData(abc.ABC):
     def __init__(self, config_path: str):
         ini_data = IniData(config_path)
         self.__data = []

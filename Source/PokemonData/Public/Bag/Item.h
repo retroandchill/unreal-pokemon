@@ -54,19 +54,19 @@ struct  POKEMONDATA_API FItem : public FTableRowBase
 	/**
 	 * Purchase price of this item.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (ClampMin = 0, UIMin = 0))
 	int32 Price;
 
 	/**
 	 * Sell price of this item. If blank, is half the purchase price.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (ClampMin = 0, UIMin = 0))
 	int32 SellPrice;
 
 	/**
 	 * Purchase price of this item in Battle Points (BP).
 	 */
-	UPROPERTY(DisplayName="BP Price", BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(DisplayName="BP Price", BlueprintReadOnly, EditAnywhere, meta = (ClampMin = 1, UIMin = 1))
 	int32 BPPrice;
 
 	/**
