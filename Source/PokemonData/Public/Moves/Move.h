@@ -66,7 +66,7 @@ struct POKEMONDATA_API FMove : public FTableRowBase {
 	 * The target of the move in question (None = the move calculates the target)
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FName Target;
+	FString Target;
 
 	/**
 	 * The function code of the move used to locate the move effect during runtime

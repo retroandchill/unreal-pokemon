@@ -10,7 +10,7 @@ namespace Exp {
 	 * Interface to represent various Exp. grow rates
 	 */
 	class POKEMONDATA_API GrowthRate {
-		DECLARE_REGISTRY_CLASS(GrowthRate, FName)
+		DECLARE_REGISTRY_CLASS(GrowthRate)
 		
 	public:
 		virtual ~GrowthRate();

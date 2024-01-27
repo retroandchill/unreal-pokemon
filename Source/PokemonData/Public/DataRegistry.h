@@ -1,23 +1,27 @@
 ﻿#pragma once
 
+#include <map>
+
 #include "CoreMinimal.h"
 
 /**
  * Declare a registry for this class
  * @param BaseClass The name of this class
- * @param IdType The data type to use as the ID
  */
-#define DECLARE_REGISTRY_CLASS(BaseClass, IdType) \
+#define DECLARE_REGISTRY_CLASS(BaseClass) \
 	public: \
-	using Registry = DataRegistry<BaseClass, IdType>; \
-	static Registry SubclassRegistry; \
+	using Registry = DataRegistry<BaseClass>; \
+	static Registry &GetSubclassRegistry(); \
 	private:
 
 /**
  * Implement the details of the registry for this class
  * @param BaseClass The name of the class
  */
-#define IMPLEMENT_REGISTRY_CLASS(BaseClass) BaseClass::Registry BaseClass::SubclassRegistry
+#define IMPLEMENT_REGISTRY_CLASS(BaseClass) BaseClass::Registry &BaseClass::GetSubclassRegistry() { \
+		static Registry SubclassRegistry;	\
+		return SubclassRegistry;	\
+	}
 
 /**
  * Register this subclass to the registry of the base class
@@ -25,15 +29,14 @@
  * @param Subclass The name of the class to be registered
  */
 #define REGISTER_SUBCLASS(BaseClass, Subclass) \
-	const bool _Registered_##Subclass = BaseClass::SubclassRegistry.RegisterClass<Subclass>(#Subclass)
+	const bool Registered_##Subclass = BaseClass::GetSubclassRegistry().RegisterClass<Subclass>(#Subclass)
 
 /**
  * Template class used to handle creating a registry for a data type
  * @tparam Base The base type that the Construct method produces
- * @tparam Key The type that represents the ID of the data object
  * @tparam Args The constructor arguments taken by the derived type
  */
-template<typename Base, typename Key, typename... Args>
+template<typename Base, typename... Args>
 class DataRegistry {
 public:
 	using FactoryFunc = TFunction<TUniquePtr<Base>(Args...)>;
@@ -48,7 +51,7 @@ public:
 	 * @return If the class was successfully registered
 	 */
 	template<typename Derived>
-	bool RegisterClass(const Key &ID) {
+	bool RegisterClass(std::string_view ID) {
 		return RegisterFactory(ID, &ConstructDerived<Derived>);	
 	}
 
@@ -58,8 +61,8 @@ public:
 	 * @param Factory The function used to construct the class
 	 * @return If the class was successfully registered
 	 */
-	bool RegisterFactory(const Key &ID, const FactoryFunc Factory) {
-		FactoryMap[ID] = Factory;
+	bool RegisterFactory(std::string_view ID, const FactoryFunc Factory) {
+		FactoryMap[std::string(ID)] = Factory;
 		return true;
 	}
 
@@ -69,7 +72,7 @@ public:
 	 * @param Arguments The constructor arguments needed to create the type
 	 * @return The constructed data object
 	 */
-	TUniquePtr<Base> Construct(const Key &ID, Args&&... Arguments) const {
+	TUniquePtr<Base> Construct(std::string_view ID, Args&&... Arguments) const {
 		auto Factory = FactoryMap.Find(ID);
 		if (Factory == nullptr) {
 			return TUniquePtr<Base>();
@@ -83,7 +86,7 @@ public:
 	 * @param ID The ID to check the validity of
 	 * @return If the registered ID is valid
 	 */
-	bool IsValid(const Key& ID) const {
+	bool IsValid(std::string_view ID) const {
 		return FactoryMap.Contains(ID);
 	}
 
@@ -102,5 +105,5 @@ private:
 	/**
 	 * A map that holds all of the factory functions mapped by ID
 	 */
-	TMap<Key, FactoryFunc> FactoryMap;
+	std::map<std::string, FactoryFunc, std::less<>> FactoryMap;
 };
