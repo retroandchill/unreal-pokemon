@@ -1,4 +1,3 @@
-from configparser import ConfigParser
 import re
 from typing import Optional, Iterator
 

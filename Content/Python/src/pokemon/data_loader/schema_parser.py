@@ -1,7 +1,7 @@
-from enum import Enum
-from typing import Type, Optional, TypeVar
-from warnings import warn
 import re
+from enum import Enum
+from typing import Type, Optional
+from warnings import warn
 
 
 def convert_data_to_json(section_name: str, data: dict[str, str],
