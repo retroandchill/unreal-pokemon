@@ -25,6 +25,9 @@ class TestIniData(unittest.TestCase):
         print(item_data.to_json())
         self.assertNotEqual('', item_data.to_json())
 
+        with open("items.json", 'w') as file:
+            file.write(item_data.to_json())
+
 
 if __name__ == '__main__':
     unittest.main()

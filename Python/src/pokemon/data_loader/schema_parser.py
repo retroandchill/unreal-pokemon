@@ -5,11 +5,12 @@ import re
 
 
 def convert_data_to_json(section_name: str, data: dict[str, str],
-                         schema: dict[str, tuple[str, Optional[Type[Enum]]]]) -> dict[str, any]:
-    ret = {'ID': string_to_json_value(section_name, schema["SectionName"][0])}
+                         schema: dict[str, tuple[str, str, Optional[Type[Enum]]]]) -> dict[str, any]:
+    ret = {'Name': string_to_json_value(section_name, schema["SectionName"][1])}
+    ret['ID'] = ret['Name']
     for key, value in data.items():
         s = schema[key]
-        ret[key] = parse_csv_value(value, s[0], s[1])
+        ret[s[0]] = parse_csv_value(value, s[1], s[2])
 
     return ret
 
