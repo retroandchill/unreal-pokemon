@@ -11,10 +11,9 @@
  * Represents the data for an Item
  */
 USTRUCT(BlueprintType)
-struct  POKEMONDATA_API FItem : public FTableRowBase 
-{
+struct POKEMONDATA_API FItem : public FTableRowBase {
 	GENERATED_BODY()
-	
+
 	/**
 	 * ID of this item
 	 */
@@ -112,5 +111,4 @@ struct  POKEMONDATA_API FItem : public FTableRowBase
 	FText Description;
 
 	FItem();
-	
 };

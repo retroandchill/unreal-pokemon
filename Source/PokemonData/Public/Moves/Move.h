@@ -11,8 +11,7 @@
  * Represents the data for a Move in the game
  */
 USTRUCT(BlueprintType)
-struct  POKEMONDATA_API FMove : public FTableRowBase
-{
+struct POKEMONDATA_API FMove : public FTableRowBase {
 	GENERATED_BODY()
 
 	/**
@@ -74,7 +73,7 @@ struct  POKEMONDATA_API FMove : public FTableRowBase
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName FunctionCode;
-	
+
 	/**
 	 * Words/phrases that can be used to group certain kinds of moves."
 	 */
