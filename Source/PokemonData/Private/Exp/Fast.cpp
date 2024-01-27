@@ -13,6 +13,6 @@ int Fast::ExpForLevel(int Level) const {
 
 	if (Level == 1)
 		return 0;
-	
+
 	return std::pow(Level, 3) * 4 / 5;
 }

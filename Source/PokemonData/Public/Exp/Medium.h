@@ -9,7 +9,6 @@ namespace Exp {
 	 * Medium/Medium Fast Exp Growth curve
 	 */
 	class POKEMONDATA_API Medium final : public GrowthRate {
-
 	public:
 		virtual int ExpForLevel(int Level) const override;
 	};

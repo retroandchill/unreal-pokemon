@@ -5,11 +5,11 @@
 
 constexpr std::array GROWTH_TABLE = {
 	-1,
-	0,      6,      21,     51,     100,    172,    274,    409,    583,    800,
-	1064,   1382,   1757,   2195,   2700,   3276,   3930,   4665,   5487,   6400,
-	7408,   8518,   9733,   11059,  12500,  14060,  15746,  17561,  19511,  21600,
-	23832,  26214,  28749,  31443,  34300,  37324,  40522,  43897,  47455,  51200,
-	55136,  59270,  63605,  68147,  72900,  77868,  83058,  88473,  94119,  100000,
+	0, 6, 21, 51, 100, 172, 274, 409, 583, 800,
+	1064, 1382, 1757, 2195, 2700, 3276, 3930, 4665, 5487, 6400,
+	7408, 8518, 9733, 11059, 12500, 14060, 15746, 17561, 19511, 21600,
+	23832, 26214, 28749, 31443, 34300, 37324, 40522, 43897, 47455, 51200,
+	55136, 59270, 63605, 68147, 72900, 77868, 83058, 88473, 94119, 100000,
 	106120, 112486, 119101, 125971, 133100, 140492, 148154, 156089, 164303, 172800,
 	181584, 190662, 200037, 209715, 219700, 229996, 240610, 251545, 262807, 274400,
 	286328, 298598, 311213, 324179, 337500, 351180, 365226, 379641, 394431, 409600,
@@ -29,7 +29,7 @@ void GrowthRateFastTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FS
 		OutBeautifiedNames.Add(Fmt);
 		OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
 	}
-	
+
 	OutBeautifiedNames.Add("Tests.Exp.GrowthRateFastTest: Level = 100");
 	OutTestCommands.Add("100");
 }
@@ -39,5 +39,5 @@ bool GrowthRateFastTest::RunTest(const FString& Parameters) {
 
 	Exp::Fast GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-		GrowthRate.ExpForLevel(Level), GROWTH_TABLE[Level]);
+	                 GrowthRate.ExpForLevel(Level), GROWTH_TABLE[Level]);
 }

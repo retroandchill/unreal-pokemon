@@ -9,10 +9,8 @@ namespace Exp {
 	/**
 	 * Represents the Fast Exp. Growth Scheme
 	 */
-	class POKEMONDATA_API Fast : public GrowthRate
-	{
+	class POKEMONDATA_API Fast : public GrowthRate {
 	public:
 		virtual int ExpForLevel(int Level) const override;
 	};
 }
-	

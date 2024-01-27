@@ -11,7 +11,7 @@ namespace Exp {
 	 */
 	class POKEMONDATA_API GrowthRate {
 		DECLARE_REGISTRY_CLASS(GrowthRate)
-		
+
 	public:
 		virtual ~GrowthRate();
 

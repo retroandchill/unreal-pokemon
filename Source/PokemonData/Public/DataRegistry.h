@@ -36,7 +36,7 @@
  * @tparam Base The base type that the Construct method produces
  * @tparam Args The constructor arguments taken by the derived type
  */
-template<typename Base, typename... Args>
+template <typename Base, typename... Args>
 class DataRegistry {
 public:
 	using FactoryFunc = TFunction<TUniquePtr<Base>(Args...)>;
@@ -50,9 +50,9 @@ public:
 	 * @param ID The ID of the derived class
 	 * @return If the class was successfully registered
 	 */
-	template<typename Derived>
+	template <typename Derived>
 	bool RegisterClass(std::string_view ID) {
-		return RegisterFactory(ID, &ConstructDerived<Derived>);	
+		return RegisterFactory(ID, &ConstructDerived<Derived>);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public:
 	TUniquePtr<Base> Construct(std::string_view ID, Args&&... Arguments) const {
 		try {
 			return FactoryMap.at(std::string(ID))(std::forward<Args>(Arguments)...);
-		} catch (const std::out_of_range &) {
+		} catch (const std::out_of_range&) {
 			return TUniquePtr<Base>();
 		}
 	}
@@ -96,7 +96,7 @@ private:
 	 * @param Arguments The constructor arguments for the derived type
 	 * @return The constructed data object
 	 */
-	template<typename Derived>
+	template <typename Derived>
 	static TUniquePtr<Base> ConstructDerived(Args&&... Arguments) {
 		return MakeUnique<Derived>(std::forward<Args>(Arguments)...);
 	}
