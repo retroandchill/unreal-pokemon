@@ -73,12 +73,11 @@ public:
 	 * @return The constructed data object
 	 */
 	TUniquePtr<Base> Construct(std::string_view ID, Args&&... Arguments) const {
-		auto Factory = FactoryMap.Find(ID);
-		if (Factory == nullptr) {
+		try {
+			return FactoryMap.at(std::string(ID))(std::forward<Args>(Arguments)...);
+		} catch (const std::out_of_range &) {
 			return TUniquePtr<Base>();
 		}
-		
-		return Factory(std::forward<Args>(Arguments)...);
 	}
 
 	/**

@@ -8,10 +8,9 @@ namespace Exp {
 	/**
 	 * Represents the Erratic Exp. Growth Scheme
 	 */
-	class POKEMONDATA_API Erratic : public GrowthRate {
+	class POKEMONDATA_API Erratic final : public GrowthRate {
 
 	public:
-		virtual FName GetId() const override;
 		virtual int ExpForLevel(int Level) const override;
 	};
 }

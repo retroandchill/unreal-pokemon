@@ -11,7 +11,6 @@ namespace Exp {
 	class POKEMONDATA_API Medium final : public GrowthRate {
 
 	public:
-		virtual FName GetId() const override;
 		virtual int ExpForLevel(int Level) const override;
 	};
 }

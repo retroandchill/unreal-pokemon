@@ -7,11 +7,13 @@ using namespace Exp;
 
 REGISTER_SUBCLASS(GrowthRate, Erratic);
 
-FName Erratic::GetId() const {
-	return "Erratic";
-}
-
 int Erratic::ExpForLevel(int Level) const {
+	if (Level <= 0)
+		throw std::invalid_argument("A level value must be a positive integer!");
+	
+	if (Level == 1)
+		return 0;
+	
 	if (Level <= 50) 
 		return std::pow(Level, 3) * (100 - Level) / 50;
 	
