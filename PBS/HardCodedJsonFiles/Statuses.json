@@ -1,0 +1,44 @@
+[
+  {
+    "ID": "NONE",
+    "Name": "NONE",
+    "RealName": "None",
+    "Animation": null,
+    "IconPosition": 0
+  },
+  {
+    "ID": "SLEEP",
+    "Name": "SLEEP",
+    "RealName": "Sleep",
+    "Animation": "Sleep",
+    "IconPosition": 0
+  },
+  {
+    "ID": "POISON",
+    "Name": "POISON",
+    "RealName": "Poison",
+    "Animation": "Poison",
+    "IconPosition": 1
+  },
+  {
+    "ID": "BURN",
+    "Name": "BURN",
+    "RealName": "Burn",
+    "Animation": "Burn",
+    "IconPosition": 2
+  },
+  {
+    "ID": "PARALYSIS",
+    "Name": "PARALYSIS",
+    "RealName": "Paralysis",
+    "Animation": "Paralysis",
+    "IconPosition": 3
+  },
+  {
+    "ID": "FROZEN",
+    "Name": "FROZEN",
+    "RealName": "Frozen",
+    "Animation": "Frozen",
+    "IconPosition": 4
+  }
+]

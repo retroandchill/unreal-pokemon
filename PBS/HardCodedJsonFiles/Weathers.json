@@ -1,0 +1,184 @@
+[
+  {
+    "ID": "None",
+    "Name": "None",
+    "IdNumber": 0,
+    "RealName": "None",
+    "Category": "None",
+    "ParticleDeltaX": 0,
+    "ParticleDeltaY": 0,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": 0,
+    "TileDeltaY": 0,
+    "Graphics": [
+
+    ],
+    "ToneProc": null
+  },
+  {
+    "ID": "Rain",
+    "Name": "Rain",
+    "IdNumber": 1,
+    "RealName": "Rain",
+    "Category": "Rain",
+    "ParticleDeltaX": -600,
+    "ParticleDeltaY": 2400,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": 0,
+    "TileDeltaY": 0,
+    "Graphics": [
+      [
+        "rain_1",
+        "rain_2",
+        "rain_3",
+        "rain_4"
+      ]
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5be38 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:77>"
+  },
+  {
+    "ID": "Storm",
+    "Name": "Storm",
+    "IdNumber": 2,
+    "RealName": "Storm",
+    "Category": "Rain",
+    "ParticleDeltaX": -3600,
+    "ParticleDeltaY": 3600,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": 0,
+    "TileDeltaY": 0,
+    "Graphics": [
+      [
+        "storm_1",
+        "storm_2",
+        "storm_3",
+        "storm_4"
+      ]
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5bc80 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:90>"
+  },
+  {
+    "ID": "Snow",
+    "Name": "Snow",
+    "IdNumber": 3,
+    "RealName": "Snow",
+    "Category": "Hail",
+    "ParticleDeltaX": -240,
+    "ParticleDeltaY": 240,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": 0,
+    "TileDeltaY": 0,
+    "Graphics": [
+      [
+        "hail_1",
+        "hail_2",
+        "hail_3"
+      ]
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5baf0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:103>"
+  },
+  {
+    "ID": "Blizzard",
+    "Name": "Blizzard",
+    "IdNumber": 4,
+    "RealName": "Blizzard",
+    "Category": "Hail",
+    "ParticleDeltaX": -720,
+    "ParticleDeltaY": 240,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": -1200,
+    "TileDeltaY": 600,
+    "Graphics": [
+      [
+        "blizzard_1",
+        "blizzard_2",
+        "blizzard_3",
+        "blizzard_4"
+      ],
+      [
+        "blizzard_tile"
+      ]
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5b8e8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:117>"
+  },
+  {
+    "ID": "Sandstorm",
+    "Name": "Sandstorm",
+    "IdNumber": 5,
+    "RealName": "Sandstorm",
+    "Category": "Sandstorm",
+    "ParticleDeltaX": -1200,
+    "ParticleDeltaY": 640,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": -800,
+    "TileDeltaY": 400,
+    "Graphics": [
+      [
+        "sandstorm_1",
+        "sandstorm_2",
+        "sandstorm_3",
+        "sandstorm_4"
+      ],
+      [
+        "sandstorm_tile"
+      ]
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5b6e0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:131>"
+  },
+  {
+    "ID": "HeavyRain",
+    "Name": "HeavyRain",
+    "IdNumber": 6,
+    "RealName": "HeavyRain",
+    "Category": "Rain",
+    "ParticleDeltaX": -3600,
+    "ParticleDeltaY": 3600,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": 0,
+    "TileDeltaY": 0,
+    "Graphics": [
+      [
+        "storm_1",
+        "storm_2",
+        "storm_3",
+        "storm_4"
+      ]
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5b528 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:143>"
+  },
+  {
+    "ID": "Sun",
+    "Name": "Sun",
+    "IdNumber": 7,
+    "RealName": "Sun",
+    "Category": "Sun",
+    "ParticleDeltaX": 0,
+    "ParticleDeltaY": 0,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": 0,
+    "TileDeltaY": 0,
+    "Graphics": [
+
+    ],
+    "ToneProc": "#<Proc:0x0000029684a5b460 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/012_Weather.rb:153>"
+  },
+  {
+    "ID": "Fog",
+    "Name": "Fog",
+    "IdNumber": 8,
+    "RealName": "Fog",
+    "Category": "Fog",
+    "ParticleDeltaX": 0,
+    "ParticleDeltaY": 0,
+    "ParticleDeltaOpacity": 0,
+    "TileDeltaX": -32,
+    "TileDeltaY": 0,
+    "Graphics": [
+      null,
+      [
+        "fog_tile"
+      ]
+    ],
+    "ToneProc": null
+  }
+]

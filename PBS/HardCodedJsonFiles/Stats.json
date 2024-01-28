@@ -1,0 +1,66 @@
+[
+  {
+    "ID": "HP",
+    "Name": "HP",
+    "RealName": "HP",
+    "RealNameBrief": "HP",
+    "Type": "main",
+    "PbsOrder": 0
+  },
+  {
+    "ID": "ATTACK",
+    "Name": "ATTACK",
+    "RealName": "Attack",
+    "RealNameBrief": "Atk",
+    "Type": "main_battle",
+    "PbsOrder": 1
+  },
+  {
+    "ID": "DEFENSE",
+    "Name": "DEFENSE",
+    "RealName": "Defense",
+    "RealNameBrief": "Def",
+    "Type": "main_battle",
+    "PbsOrder": 2
+  },
+  {
+    "ID": "SPECIAL_ATTACK",
+    "Name": "SPECIAL_ATTACK",
+    "RealName": "Special Attack",
+    "RealNameBrief": "SpAtk",
+    "Type": "main_battle",
+    "PbsOrder": 4
+  },
+  {
+    "ID": "SPECIAL_DEFENSE",
+    "Name": "SPECIAL_DEFENSE",
+    "RealName": "Special Defense",
+    "RealNameBrief": "SpDef",
+    "Type": "main_battle",
+    "PbsOrder": 5
+  },
+  {
+    "ID": "SPEED",
+    "Name": "SPEED",
+    "RealName": "Speed",
+    "RealNameBrief": "Spd",
+    "Type": "main_battle",
+    "PbsOrder": 3
+  },
+  {
+    "ID": "ACCURACY",
+    "Name": "ACCURACY",
+    "RealName": "accuracy",
+    "RealNameBrief": "Acc",
+    "Type": "battle",
+    "PbsOrder": -1
+  },
+  {
+    "ID": "EVASION",
+    "Name": "EVASION",
+    "RealName": "evasiveness",
+    "RealNameBrief": "Eva",
+    "Type": "battle",
+    "PbsOrder": -1
+  }
+]

@@ -1,0 +1,182 @@
+[
+  {
+    "ID": "None",
+    "Name": "None",
+    "RealName": "None",
+    "NumTargets": 0,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "User",
+    "Name": "User",
+    "RealName": "User",
+    "NumTargets": 0,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "NearAlly",
+    "Name": "NearAlly",
+    "RealName": "Near Ally",
+    "NumTargets": 1,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "UserOrNearAlly",
+    "Name": "UserOrNearAlly",
+    "RealName": "User or Near Ally",
+    "NumTargets": 1,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "AllAllies",
+    "Name": "AllAllies",
+    "RealName": "All Allies",
+    "NumTargets": 2,
+    "TargetsFoe": false,
+    "TargetsAll": true,
+    "AffectsFoeSide": false,
+    "LongRange": true
+  },
+  {
+    "ID": "UserAndAllies",
+    "Name": "UserAndAllies",
+    "RealName": "User and Allies",
+    "NumTargets": 2,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": true
+  },
+  {
+    "ID": "NearFoe",
+    "Name": "NearFoe",
+    "RealName": "Near Foe",
+    "NumTargets": 1,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "RandomNearFoe",
+    "Name": "RandomNearFoe",
+    "RealName": "Random Near Foe",
+    "NumTargets": 1,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "AllNearFoes",
+    "Name": "AllNearFoes",
+    "RealName": "All Near Foes",
+    "NumTargets": 2,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "Foe",
+    "Name": "Foe",
+    "RealName": "Foe",
+    "NumTargets": 1,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": true
+  },
+  {
+    "ID": "AllFoes",
+    "Name": "AllFoes",
+    "RealName": "All Foes",
+    "NumTargets": 2,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": true
+  },
+  {
+    "ID": "NearOther",
+    "Name": "NearOther",
+    "RealName": "Near Other",
+    "NumTargets": 1,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "AllNearOthers",
+    "Name": "AllNearOthers",
+    "RealName": "All Near Others",
+    "NumTargets": 2,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "Other",
+    "Name": "Other",
+    "RealName": "Other",
+    "NumTargets": 1,
+    "TargetsFoe": true,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": true
+  },
+  {
+    "ID": "AllBattlers",
+    "Name": "AllBattlers",
+    "RealName": "All Battlers",
+    "NumTargets": 2,
+    "TargetsFoe": true,
+    "TargetsAll": true,
+    "AffectsFoeSide": false,
+    "LongRange": true
+  },
+  {
+    "ID": "UserSide",
+    "Name": "UserSide",
+    "RealName": "User Side",
+    "NumTargets": 0,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": false,
+    "LongRange": false
+  },
+  {
+    "ID": "FoeSide",
+    "Name": "FoeSide",
+    "RealName": "Foe Side",
+    "NumTargets": 0,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": true,
+    "LongRange": false
+  },
+  {
+    "ID": "BothSides",
+    "Name": "BothSides",
+    "RealName": "Both Sides",
+    "NumTargets": 0,
+    "TargetsFoe": false,
+    "TargetsAll": false,
+    "AffectsFoeSide": true,
+    "LongRange": false
+  }
+]

@@ -1,0 +1,342 @@
+[
+  {
+    "ID": "HARDY",
+    "Name": "HARDY",
+    "RealName": "Hardy",
+    "StatChanges": [
+
+    ]
+  },
+  {
+    "ID": "LONELY",
+    "Name": "LONELY",
+    "RealName": "Lonely",
+    "StatChanges": [
+      [
+        "ATTACK",
+        10
+      ],
+      [
+        "DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "BRAVE",
+    "Name": "BRAVE",
+    "RealName": "Brave",
+    "StatChanges": [
+      [
+        "ATTACK",
+        10
+      ],
+      [
+        "SPEED",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "ADAMANT",
+    "Name": "ADAMANT",
+    "RealName": "Adamant",
+    "StatChanges": [
+      [
+        "ATTACK",
+        10
+      ],
+      [
+        "SPECIAL_ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "NAUGHTY",
+    "Name": "NAUGHTY",
+    "RealName": "Naughty",
+    "StatChanges": [
+      [
+        "ATTACK",
+        10
+      ],
+      [
+        "SPECIAL_DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "BOLD",
+    "Name": "BOLD",
+    "RealName": "Bold",
+    "StatChanges": [
+      [
+        "DEFENSE",
+        10
+      ],
+      [
+        "ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "DOCILE",
+    "Name": "DOCILE",
+    "RealName": "Docile",
+    "StatChanges": [
+
+    ]
+  },
+  {
+    "ID": "RELAXED",
+    "Name": "RELAXED",
+    "RealName": "Relaxed",
+    "StatChanges": [
+      [
+        "DEFENSE",
+        10
+      ],
+      [
+        "SPEED",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "IMPISH",
+    "Name": "IMPISH",
+    "RealName": "Impish",
+    "StatChanges": [
+      [
+        "DEFENSE",
+        10
+      ],
+      [
+        "SPECIAL_ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "LAX",
+    "Name": "LAX",
+    "RealName": "Lax",
+    "StatChanges": [
+      [
+        "DEFENSE",
+        10
+      ],
+      [
+        "SPECIAL_DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "TIMID",
+    "Name": "TIMID",
+    "RealName": "Timid",
+    "StatChanges": [
+      [
+        "SPEED",
+        10
+      ],
+      [
+        "ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "HASTY",
+    "Name": "HASTY",
+    "RealName": "Hasty",
+    "StatChanges": [
+      [
+        "SPEED",
+        10
+      ],
+      [
+        "DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "SERIOUS",
+    "Name": "SERIOUS",
+    "RealName": "Serious",
+    "StatChanges": [
+
+    ]
+  },
+  {
+    "ID": "JOLLY",
+    "Name": "JOLLY",
+    "RealName": "Jolly",
+    "StatChanges": [
+      [
+        "SPEED",
+        10
+      ],
+      [
+        "SPECIAL_ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "NAIVE",
+    "Name": "NAIVE",
+    "RealName": "Naive",
+    "StatChanges": [
+      [
+        "SPEED",
+        10
+      ],
+      [
+        "SPECIAL_DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "MODEST",
+    "Name": "MODEST",
+    "RealName": "Modest",
+    "StatChanges": [
+      [
+        "SPECIAL_ATTACK",
+        10
+      ],
+      [
+        "ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "MILD",
+    "Name": "MILD",
+    "RealName": "Mild",
+    "StatChanges": [
+      [
+        "SPECIAL_ATTACK",
+        10
+      ],
+      [
+        "DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "QUIET",
+    "Name": "QUIET",
+    "RealName": "Quiet",
+    "StatChanges": [
+      [
+        "SPECIAL_ATTACK",
+        10
+      ],
+      [
+        "SPEED",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "BASHFUL",
+    "Name": "BASHFUL",
+    "RealName": "Bashful",
+    "StatChanges": [
+
+    ]
+  },
+  {
+    "ID": "RASH",
+    "Name": "RASH",
+    "RealName": "Rash",
+    "StatChanges": [
+      [
+        "SPECIAL_ATTACK",
+        10
+      ],
+      [
+        "SPECIAL_DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "CALM",
+    "Name": "CALM",
+    "RealName": "Calm",
+    "StatChanges": [
+      [
+        "SPECIAL_DEFENSE",
+        10
+      ],
+      [
+        "ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "GENTLE",
+    "Name": "GENTLE",
+    "RealName": "Gentle",
+    "StatChanges": [
+      [
+        "SPECIAL_DEFENSE",
+        10
+      ],
+      [
+        "DEFENSE",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "SASSY",
+    "Name": "SASSY",
+    "RealName": "Sassy",
+    "StatChanges": [
+      [
+        "SPECIAL_DEFENSE",
+        10
+      ],
+      [
+        "SPEED",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "CAREFUL",
+    "Name": "CAREFUL",
+    "RealName": "Careful",
+    "StatChanges": [
+      [
+        "SPECIAL_DEFENSE",
+        10
+      ],
+      [
+        "SPECIAL_ATTACK",
+        -10
+      ]
+    ]
+  },
+  {
+    "ID": "QUIRKY",
+    "Name": "QUIRKY",
+    "RealName": "Quirky",
+    "StatChanges": [
+
+    ]
+  }
+]
