@@ -1,0 +1,32 @@
+[
+  {
+    "ID": "None",
+    "Name": "None",
+    "RealName": "None",
+    "Animation": null
+  },
+  {
+    "ID": "Electric",
+    "Name": "Electric",
+    "RealName": "Electric",
+    "Animation": "ElectricTerrain"
+  },
+  {
+    "ID": "Grassy",
+    "Name": "Grassy",
+    "RealName": "Grassy",
+    "Animation": "GrassyTerrain"
+  },
+  {
+    "ID": "Misty",
+    "Name": "Misty",
+    "RealName": "Misty",
+    "Animation": "MistyTerrain"
+  },
+  {
+    "ID": "Psychic",
+    "Name": "Psychic",
+    "RealName": "Psychic",
+    "Animation": "PsychicTerrain"
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "ID": "None",
+    "Name": "None",
+    "RealName": "None",
+    "BattleBase": null
+  },
+  {
+    "ID": "Grass",
+    "Name": "Grass",
+    "RealName": "Grass",
+    "BattleBase": "grass"
+  },
+  {
+    "ID": "TallGrass",
+    "Name": "TallGrass",
+    "RealName": "Tall grass",
+    "BattleBase": "grass"
+  },
+  {
+    "ID": "MovingWater",
+    "Name": "MovingWater",
+    "RealName": "Moving water",
+    "BattleBase": "water"
+  },
+  {
+    "ID": "StillWater",
+    "Name": "StillWater",
+    "RealName": "Still water",
+    "BattleBase": "water"
+  },
+  {
+    "ID": "Puddle",
+    "Name": "Puddle",
+    "RealName": "Puddle",
+    "BattleBase": "puddle"
+  },
+  {
+    "ID": "Underwater",
+    "Name": "Underwater",
+    "RealName": "Underwater",
+    "BattleBase": null
+  },
+  {
+    "ID": "Cave",
+    "Name": "Cave",
+    "RealName": "Cave",
+    "BattleBase": null
+  },
+  {
+    "ID": "Rock",
+    "Name": "Rock",
+    "RealName": "Rock",
+    "BattleBase": null
+  },
+  {
+    "ID": "Sand",
+    "Name": "Sand",
+    "RealName": "Sand",
+    "BattleBase": "sand"
+  },
+  {
+    "ID": "Forest",
+    "Name": "Forest",
+    "RealName": "Forest",
+    "BattleBase": null
+  },
+  {
+    "ID": "ForestGrass",
+    "Name": "ForestGrass",
+    "RealName": "Forest grass",
+    "BattleBase": "grass"
+  },
+  {
+    "ID": "Snow",
+    "Name": "Snow",
+    "RealName": "Snow",
+    "BattleBase": null
+  },
+  {
+    "ID": "Ice",
+    "Name": "Ice",
+    "RealName": "Ice",
+    "BattleBase": "ice"
+  },
+  {
+    "ID": "Volcano",
+    "Name": "Volcano",
+    "RealName": "Volcano",
+    "BattleBase": null
+  },
+  {
+    "ID": "Graveyard",
+    "Name": "Graveyard",
+    "RealName": "Graveyard",
+    "BattleBase": null
+  },
+  {
+    "ID": "Sky",
+    "Name": "Sky",
+    "RealName": "Sky",
+    "BattleBase": null
+  },
+  {
+    "ID": "Space",
+    "Name": "Space",
+    "RealName": "Space",
+    "BattleBase": null
+  },
+  {
+    "ID": "UltraSpace",
+    "Name": "UltraSpace",
+    "RealName": "Ultra Space",
+    "BattleBase": null
+  }
+]

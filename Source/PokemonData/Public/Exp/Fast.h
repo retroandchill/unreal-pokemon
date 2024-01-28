@@ -4,13 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
+#include "Fast.generated.h"
 
-namespace Exp {
-	/**
-	 * Represents the Fast Exp. Growth Scheme
-	 */
-	class POKEMONDATA_API Fast : public GrowthRate {
-	public:
-		virtual int ExpForLevel(int Level) const override;
-	};
-}
+/**
+ * Represents the Fast Exp. Growth Scheme
+ */
+UCLASS(BlueprintType)
+class POKEMONDATA_API UFast final : public UObject, public IGrowthRate {
+	GENERATED_BODY()
+
+public:
+	UFUNCTION()
+	virtual int ExpForLevel(int Level) const override;
+};

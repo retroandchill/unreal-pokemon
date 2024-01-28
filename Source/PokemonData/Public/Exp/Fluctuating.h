@@ -4,13 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
+#include "Fluctuating.generated.h"
 
-namespace Exp {
-	/**
-	* Represents the Fluctuating Exp. Growth Scheme
-	*/
-	class POKEMONDATA_API Fluctuating : public GrowthRate {
-	public:
-		virtual int ExpForLevel(int Level) const override;
-	};
-}
+/**
+* Represents the Fluctuating Exp. Growth Scheme
+*/
+UCLASS(BlueprintType)
+class POKEMONDATA_API UFluctuating final : public UObject, public IGrowthRate {
+	GENERATED_BODY()
+
+public:
+	UFUNCTION()
+	virtual int ExpForLevel(int Level) const override;
+};

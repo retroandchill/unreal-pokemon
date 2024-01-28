@@ -3,11 +3,7 @@
 
 #include "Exp/Medium.h"
 
-using namespace Exp;
-
-REGISTER_SUBCLASS(GrowthRate, Medium);
-
-int Medium::ExpForLevel(int Level) const {
+int UMedium::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 

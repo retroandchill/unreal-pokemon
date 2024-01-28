@@ -1,0 +1,77 @@
+[
+  {
+    "ID": "Undiscovered",
+    "Name": "Undiscovered",
+    "RealName": "Undiscovered"
+  },
+  {
+    "ID": "Monster",
+    "Name": "Monster",
+    "RealName": "Monster"
+  },
+  {
+    "ID": "Water1",
+    "Name": "Water1",
+    "RealName": "Water 1"
+  },
+  {
+    "ID": "Bug",
+    "Name": "Bug",
+    "RealName": "Bug"
+  },
+  {
+    "ID": "Flying",
+    "Name": "Flying",
+    "RealName": "Flying"
+  },
+  {
+    "ID": "Field",
+    "Name": "Field",
+    "RealName": "Field"
+  },
+  {
+    "ID": "Fairy",
+    "Name": "Fairy",
+    "RealName": "Fairy"
+  },
+  {
+    "ID": "Grass",
+    "Name": "Grass",
+    "RealName": "Grass"
+  },
+  {
+    "ID": "Humanlike",
+    "Name": "Humanlike",
+    "RealName": "Humanlike"
+  },
+  {
+    "ID": "Water3",
+    "Name": "Water3",
+    "RealName": "Water 3"
+  },
+  {
+    "ID": "Mineral",
+    "Name": "Mineral",
+    "RealName": "Mineral"
+  },
+  {
+    "ID": "Amorphous",
+    "Name": "Amorphous",
+    "RealName": "Amorphous"
+  },
+  {
+    "ID": "Water2",
+    "Name": "Water2",
+    "RealName": "Water 2"
+  },
+  {
+    "ID": "Ditto",
+    "Name": "Ditto",
+    "RealName": "Ditto"
+  },
+  {
+    "ID": "Dragon",
+    "Name": "Dragon",
+    "RealName": "Dragon"
+  }
+]

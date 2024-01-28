@@ -1,0 +1,184 @@
+[
+  {
+    "ID": "Land",
+    "Name": "Land",
+    "RealName": "Land",
+    "Type": "land",
+    "TriggerChance": 21
+  },
+  {
+    "ID": "LandDay",
+    "Name": "LandDay",
+    "RealName": "LandDay",
+    "Type": "land",
+    "TriggerChance": 21
+  },
+  {
+    "ID": "LandNight",
+    "Name": "LandNight",
+    "RealName": "LandNight",
+    "Type": "land",
+    "TriggerChance": 21
+  },
+  {
+    "ID": "LandMorning",
+    "Name": "LandMorning",
+    "RealName": "LandMorning",
+    "Type": "land",
+    "TriggerChance": 21
+  },
+  {
+    "ID": "LandAfternoon",
+    "Name": "LandAfternoon",
+    "RealName": "LandAfternoon",
+    "Type": "land",
+    "TriggerChance": 21
+  },
+  {
+    "ID": "LandEvening",
+    "Name": "LandEvening",
+    "RealName": "LandEvening",
+    "Type": "land",
+    "TriggerChance": 21
+  },
+  {
+    "ID": "PokeRadar",
+    "Name": "PokeRadar",
+    "RealName": "PokeRadar",
+    "Type": "land",
+    "TriggerChance": 20
+  },
+  {
+    "ID": "Cave",
+    "Name": "Cave",
+    "RealName": "Cave",
+    "Type": "cave",
+    "TriggerChance": 5
+  },
+  {
+    "ID": "CaveDay",
+    "Name": "CaveDay",
+    "RealName": "CaveDay",
+    "Type": "cave",
+    "TriggerChance": 5
+  },
+  {
+    "ID": "CaveNight",
+    "Name": "CaveNight",
+    "RealName": "CaveNight",
+    "Type": "cave",
+    "TriggerChance": 5
+  },
+  {
+    "ID": "CaveMorning",
+    "Name": "CaveMorning",
+    "RealName": "CaveMorning",
+    "Type": "cave",
+    "TriggerChance": 5
+  },
+  {
+    "ID": "CaveAfternoon",
+    "Name": "CaveAfternoon",
+    "RealName": "CaveAfternoon",
+    "Type": "cave",
+    "TriggerChance": 5
+  },
+  {
+    "ID": "CaveEvening",
+    "Name": "CaveEvening",
+    "RealName": "CaveEvening",
+    "Type": "cave",
+    "TriggerChance": 5
+  },
+  {
+    "ID": "Water",
+    "Name": "Water",
+    "RealName": "Water",
+    "Type": "water",
+    "TriggerChance": 2
+  },
+  {
+    "ID": "WaterDay",
+    "Name": "WaterDay",
+    "RealName": "WaterDay",
+    "Type": "water",
+    "TriggerChance": 2
+  },
+  {
+    "ID": "WaterNight",
+    "Name": "WaterNight",
+    "RealName": "WaterNight",
+    "Type": "water",
+    "TriggerChance": 2
+  },
+  {
+    "ID": "WaterMorning",
+    "Name": "WaterMorning",
+    "RealName": "WaterMorning",
+    "Type": "water",
+    "TriggerChance": 2
+  },
+  {
+    "ID": "WaterAfternoon",
+    "Name": "WaterAfternoon",
+    "RealName": "WaterAfternoon",
+    "Type": "water",
+    "TriggerChance": 2
+  },
+  {
+    "ID": "WaterEvening",
+    "Name": "WaterEvening",
+    "RealName": "WaterEvening",
+    "Type": "water",
+    "TriggerChance": 2
+  },
+  {
+    "ID": "OldRod",
+    "Name": "OldRod",
+    "RealName": "OldRod",
+    "Type": "fishing",
+    "TriggerChance": 0
+  },
+  {
+    "ID": "GoodRod",
+    "Name": "GoodRod",
+    "RealName": "GoodRod",
+    "Type": "fishing",
+    "TriggerChance": 0
+  },
+  {
+    "ID": "SuperRod",
+    "Name": "SuperRod",
+    "RealName": "SuperRod",
+    "Type": "fishing",
+    "TriggerChance": 0
+  },
+  {
+    "ID": "RockSmash",
+    "Name": "RockSmash",
+    "RealName": "RockSmash",
+    "Type": "none",
+    "TriggerChance": 50
+  },
+  {
+    "ID": "HeadbuttLow",
+    "Name": "HeadbuttLow",
+    "RealName": "HeadbuttLow",
+    "Type": "none",
+    "TriggerChance": 0
+  },
+  {
+    "ID": "HeadbuttHigh",
+    "Name": "HeadbuttHigh",
+    "RealName": "HeadbuttHigh",
+    "Type": "none",
+    "TriggerChance": 0
+  },
+  {
+    "ID": "BugContest",
+    "Name": "BugContest",
+    "RealName": "BugContest",
+    "Type": "contest",
+    "TriggerChance": 21
+  }
+]

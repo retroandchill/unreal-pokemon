@@ -1,0 +1,52 @@
+[
+  {
+    "ID": "Red",
+    "Name": "Red",
+    "RealName": "Red"
+  },
+  {
+    "ID": "Blue",
+    "Name": "Blue",
+    "RealName": "Blue"
+  },
+  {
+    "ID": "Yellow",
+    "Name": "Yellow",
+    "RealName": "Yellow"
+  },
+  {
+    "ID": "Green",
+    "Name": "Green",
+    "RealName": "Green"
+  },
+  {
+    "ID": "Black",
+    "Name": "Black",
+    "RealName": "Black"
+  },
+  {
+    "ID": "Brown",
+    "Name": "Brown",
+    "RealName": "Brown"
+  },
+  {
+    "ID": "Purple",
+    "Name": "Purple",
+    "RealName": "Purple"
+  },
+  {
+    "ID": "Gray",
+    "Name": "Gray",
+    "RealName": "Gray"
+  },
+  {
+    "ID": "White",
+    "Name": "White",
+    "RealName": "White"
+  },
+  {
+    "ID": "Pink",
+    "Name": "Pink",
+    "RealName": "Pink"
+  }
+]

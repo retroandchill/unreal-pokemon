@@ -4,7 +4,7 @@
 
 #include "Exp/Fluctuating.h"
 
-constexpr std::array GROWTH_TABLE = {
+constexpr std::array GFluctuatingGrowthTable = {
 	-1,
 	0, 4, 13, 32, 65, 112, 178, 276, 393, 540,
 	745, 967, 1230, 1591, 1957, 2457, 3046, 3732, 4526, 5440,
@@ -53,7 +53,7 @@ void GrowthRateFluctuatingTest::GetTests(TArray<FString>& OutBeautifiedNames, TA
 bool GrowthRateFluctuatingTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	Exp::Fluctuating GrowthRate;
+	UFluctuating GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GROWTH_TABLE[Level]);
+	                 GrowthRate.ExpForLevel(Level), GFluctuatingGrowthTable[Level]);
 }
