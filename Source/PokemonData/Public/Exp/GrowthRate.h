@@ -9,11 +9,11 @@ namespace Exp {
 	/**
 	 * Interface to represent various Exp. grow rates
 	 */
-	class POKEMONDATA_API GrowthRate {
-		DECLARE_REGISTRY_CLASS(GrowthRate)
+	class POKEMONDATA_API IGrowthRate {
+		DECLARE_REGISTRY_CLASS(IGrowthRate)
 
 	public:
-		virtual ~GrowthRate();
+		virtual ~IGrowthRate();
 
 		/**
 		 * Gets the amount of Exp that is required to reach a certain level 

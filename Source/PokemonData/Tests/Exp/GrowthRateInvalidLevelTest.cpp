@@ -25,7 +25,7 @@ void GrowthRateInvalidLevelTest::GetTests(TArray<FString>& OutBeautifiedNames, T
 }
 
 bool GrowthRateInvalidLevelTest::RunTest(const FString& Parameters) {
-	auto GrowthRate = Exp::GrowthRate::GetSubclassRegistry().Construct(TCHAR_TO_UTF8(*Parameters));
+	auto GrowthRate = Exp::IGrowthRate::GetSubclassRegistry().Construct(TCHAR_TO_UTF8(*Parameters));
 	if (!TestNotNull("The specified growth rate doesn't exist!", GrowthRate.Get()))
 		return false;
 

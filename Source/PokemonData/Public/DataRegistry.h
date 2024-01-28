@@ -10,16 +10,16 @@
  */
 #define DECLARE_REGISTRY_CLASS(BaseClass) \
 	public: \
-	using Registry = DataRegistry<BaseClass>; \
-	static Registry &GetSubclassRegistry(); \
+	using FRegistry = TDataRegistry<BaseClass>; \
+	static FRegistry &GetSubclassRegistry(); \
 	private:
 
 /**
  * Implement the details of the registry for this class
  * @param BaseClass The name of the class
  */
-#define IMPLEMENT_REGISTRY_CLASS(BaseClass) BaseClass::Registry &BaseClass::GetSubclassRegistry() { \
-		static Registry SubclassRegistry;	\
+#define IMPLEMENT_REGISTRY_CLASS(BaseClass) BaseClass::FRegistry &BaseClass::GetSubclassRegistry() { \
+		static FRegistry SubclassRegistry;	\
 		return SubclassRegistry;	\
 	}
 
@@ -37,12 +37,12 @@
  * @tparam Args The constructor arguments taken by the derived type
  */
 template <typename Base, typename... Args>
-class DataRegistry {
+class TDataRegistry {
 public:
-	using FactoryFunc = TFunction<TUniquePtr<Base>(Args...)>;
+	using FFactoryFunc = TFunction<TUniquePtr<Base>(Args...)>;
 
-	DataRegistry() = default;
-	~DataRegistry() = default;
+	TDataRegistry() = default;
+	~TDataRegistry() = default;
 
 	/**
 	 * Register a class using the default factory function
@@ -61,7 +61,7 @@ public:
 	 * @param Factory The function used to construct the class
 	 * @return If the class was successfully registered
 	 */
-	bool RegisterFactory(std::string_view ID, const FactoryFunc Factory) {
+	bool RegisterFactory(std::string_view ID, const FFactoryFunc Factory) {
 		FactoryMap[std::string(ID)] = Factory;
 		return true;
 	}
@@ -104,5 +104,5 @@ private:
 	/**
 	 * A map that holds all of the factory functions mapped by ID
 	 */
-	std::map<std::string, FactoryFunc, std::less<>> FactoryMap;
+	std::map<std::string, FFactoryFunc, std::less<>> FactoryMap;
 };

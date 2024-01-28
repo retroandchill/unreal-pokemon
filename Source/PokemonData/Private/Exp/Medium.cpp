@@ -5,9 +5,9 @@
 
 using namespace Exp;
 
-REGISTER_SUBCLASS(GrowthRate, Medium);
+REGISTER_SUBCLASS(IGrowthRate, FMedium);
 
-int Medium::ExpForLevel(int Level) const {
+int FMedium::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 

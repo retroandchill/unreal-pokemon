@@ -5,6 +5,6 @@
 
 using namespace Exp;
 
-IMPLEMENT_REGISTRY_CLASS(GrowthRate);
+IMPLEMENT_REGISTRY_CLASS(IGrowthRate);
 
-GrowthRate::~GrowthRate() = default;
+IGrowthRate::~IGrowthRate() = default;

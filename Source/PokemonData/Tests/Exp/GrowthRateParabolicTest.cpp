@@ -3,7 +3,7 @@
 
 #include <array>
 
-constexpr std::array GROWTH_TABLE = {
+constexpr std::array GGrowthTable = {
 	-1,
 	0, 9, 57, 96, 135, 179, 236, 314, 419, 560,
 	742, 973, 1261, 1612, 2035, 2535, 3120, 3798, 4575, 5460,
@@ -37,7 +37,7 @@ void GrowthRateParabolicTest::GetTests(TArray<FString>& OutBeautifiedNames, TArr
 bool GrowthRateParabolicTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	Exp::Parabolic GrowthRate;
+	Exp::FParabolic GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GROWTH_TABLE[Level]);
+	                 GrowthRate.ExpForLevel(Level), GGrowthTable[Level]);
 }

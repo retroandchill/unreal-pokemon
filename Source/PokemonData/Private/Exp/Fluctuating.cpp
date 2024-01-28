@@ -6,9 +6,9 @@
 using namespace Exp;
 
 
-REGISTER_SUBCLASS(GrowthRate, Fluctuating);
+REGISTER_SUBCLASS(IGrowthRate, FFluctuating);
 
-int Fluctuating::ExpForLevel(int Level) const {
+int FFluctuating::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 

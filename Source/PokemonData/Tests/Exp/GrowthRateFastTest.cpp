@@ -3,7 +3,7 @@
 
 #include <array>
 
-constexpr std::array GROWTH_TABLE = {
+constexpr std::array GGrowthTable = {
 	-1,
 	0, 6, 21, 51, 100, 172, 274, 409, 583, 800,
 	1064, 1382, 1757, 2195, 2700, 3276, 3930, 4665, 5487, 6400,
@@ -37,7 +37,7 @@ void GrowthRateFastTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FS
 bool GrowthRateFastTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	Exp::Fast GrowthRate;
+	Exp::FFast GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GROWTH_TABLE[Level]);
+	                 GrowthRate.ExpForLevel(Level), GGrowthTable[Level]);
 }

@@ -5,9 +5,9 @@
 
 using namespace Exp;
 
-REGISTER_SUBCLASS(GrowthRate, Fast);
+REGISTER_SUBCLASS(IGrowthRate, FFast);
 
-int Fast::ExpForLevel(int Level) const {
+int FFast::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 

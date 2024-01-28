@@ -5,9 +5,9 @@
 
 using namespace Exp;
 
-REGISTER_SUBCLASS(GrowthRate, Erratic);
+REGISTER_SUBCLASS(IGrowthRate, FErratic);
 
-int Erratic::ExpForLevel(int Level) const {
+int FErratic::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 

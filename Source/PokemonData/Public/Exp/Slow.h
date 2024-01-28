@@ -7,9 +7,9 @@
 
 namespace Exp {
 	/**
-	 * 
+	 * Represents the Slow Exp. Growth Scheme
 	 */
-	class POKEMONDATA_API Slow : public GrowthRate {
+	class POKEMONDATA_API FSlow final : public IGrowthRate {
 	public:
 		virtual int ExpForLevel(int Level) const override;
 	};
