@@ -1,0 +1,50 @@
+[
+  {
+    "ID": "AlwaysMale",
+    "Name": "AlwaysMale",
+    "RealName": "Always Male",
+    "FemaleChance": null
+  },
+  {
+    "ID": "AlwaysFemale",
+    "Name": "AlwaysFemale",
+    "RealName": "Always Female",
+    "FemaleChance": null
+  },
+  {
+    "ID": "Genderless",
+    "Name": "Genderless",
+    "RealName": "Genderless",
+    "FemaleChance": null
+  },
+  {
+    "ID": "FemaleOneEighth",
+    "Name": "FemaleOneEighth",
+    "RealName": "Female One Eighth",
+    "FemaleChance": 32
+  },
+  {
+    "ID": "Female25Percent",
+    "Name": "Female25Percent",
+    "RealName": "Female 25 Percent",
+    "FemaleChance": 64
+  },
+  {
+    "ID": "Female50Percent",
+    "Name": "Female50Percent",
+    "RealName": "Female 50 Percent",
+    "FemaleChance": 128
+  },
+  {
+    "ID": "Female75Percent",
+    "Name": "Female75Percent",
+    "RealName": "Female 75 Percent",
+    "FemaleChance": 192
+  },
+  {
+    "ID": "FemaleSevenEighths",
+    "Name": "FemaleSevenEighths",
+    "RealName": "Female Seven Eighths",
+    "FemaleChance": 224
+  }
+]

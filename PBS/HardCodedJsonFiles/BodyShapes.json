@@ -1,0 +1,86 @@
+[
+  {
+    "ID": "Head",
+    "Name": "Head",
+    "RealName": "Head",
+    "IconPosition": 0
+  },
+  {
+    "ID": "Serpentine",
+    "Name": "Serpentine",
+    "RealName": "Serpentine",
+    "IconPosition": 1
+  },
+  {
+    "ID": "Finned",
+    "Name": "Finned",
+    "RealName": "Finned",
+    "IconPosition": 2
+  },
+  {
+    "ID": "HeadArms",
+    "Name": "HeadArms",
+    "RealName": "Head and arms",
+    "IconPosition": 3
+  },
+  {
+    "ID": "HeadBase",
+    "Name": "HeadBase",
+    "RealName": "Head and base",
+    "IconPosition": 4
+  },
+  {
+    "ID": "BipedalTail",
+    "Name": "BipedalTail",
+    "RealName": "Bipedal with tail",
+    "IconPosition": 5
+  },
+  {
+    "ID": "HeadLegs",
+    "Name": "HeadLegs",
+    "RealName": "Head and legs",
+    "IconPosition": 6
+  },
+  {
+    "ID": "Quadruped",
+    "Name": "Quadruped",
+    "RealName": "Quadruped",
+    "IconPosition": 7
+  },
+  {
+    "ID": "Winged",
+    "Name": "Winged",
+    "RealName": "Winged",
+    "IconPosition": 8
+  },
+  {
+    "ID": "Multiped",
+    "Name": "Multiped",
+    "RealName": "Multiped",
+    "IconPosition": 9
+  },
+  {
+    "ID": "MultiBody",
+    "Name": "MultiBody",
+    "RealName": "Multi Body",
+    "IconPosition": 10
+  },
+  {
+    "ID": "Bipedal",
+    "Name": "Bipedal",
+    "RealName": "Bipedal",
+    "IconPosition": 11
+  },
+  {
+    "ID": "MultiWinged",
+    "Name": "MultiWinged",
+    "RealName": "Multi Winged",
+    "IconPosition": 12
+  },
+  {
+    "ID": "Insectoid",
+    "Name": "Insectoid",
+    "RealName": "Insectoid",
+    "IconPosition": 13
+  }
+]

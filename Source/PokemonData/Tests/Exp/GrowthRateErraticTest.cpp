@@ -4,7 +4,7 @@
 
 #include "Exp/Erratic.h"
 
-constexpr std::array GROWTH_TABLE = {
+constexpr std::array GErraticGrowthTable = {
 	-1,
 	0, 15, 52, 122, 237, 406, 637, 942, 1326, 1800,
 	2369, 3041, 3822, 4719, 5737, 6881, 8155, 9564, 11111, 12800,
@@ -59,7 +59,7 @@ void GrowthRateErraticTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray
 bool GrowthRateErraticTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	Exp::Erratic GrowthRate;
+	UErratic GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GROWTH_TABLE[Level]);
+	                 GrowthRate.ExpForLevel(Level), GErraticGrowthTable[Level]);
 }
