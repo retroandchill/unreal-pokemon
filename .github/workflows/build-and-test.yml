@@ -1,0 +1,23 @@
+name: Build & Test
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+      types: 
+        - opened
+        - synchronize
+        - reopened
+jobs:
+  build:
+    name: Build - Linux
+    runs-on: ubuntu-latest
+    container: ghcr.io/epicgames/unreal-engine:dev-slim-5.3.2
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Build Game
+        run:
+          - ./Engine/Build/BatchFiles/RunUAT.sh BuildEditor -project=UnrealPokemon
