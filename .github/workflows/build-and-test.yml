@@ -12,7 +12,11 @@ jobs:
   build:
     name: Build - Linux
     runs-on: ubuntu-latest
-    container: ghcr.io/epicgames/unreal-engine:dev-slim-5.3.2
+    container: 
+      image: ghcr.io/epicgames/unreal-engine:dev-slim-5.3.2
+      credentials:
+        username: retroandchill
+        password: ${{ secrets.DOCKER_TOKEN }}
     steps:
       - uses: actions/checkout@v3
         with:
