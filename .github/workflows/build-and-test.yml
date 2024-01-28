@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - main
-    pull_request:
-      types: 
-        - opened
-        - synchronize
-        - reopened
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
 jobs:
   build:
     name: Build - Linux
@@ -19,5 +19,4 @@ jobs:
           fetch-depth: 0
           
       - name: Build Game
-        run:
-          - ./Engine/Build/BatchFiles/RunUAT.sh BuildEditor -project=UnrealPokemon
+        run: ./Engine/Build/BatchFiles/RunUAT.sh BuildEditor -project=UnrealPokemon
