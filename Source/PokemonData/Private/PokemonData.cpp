@@ -8,7 +8,6 @@
 #define LOCTEXT_NAMESPACE "FPokemonDataModule"
 
 void FPokemonDataModule::StartupModule() {
-	using namespace Exp;
 }
 
 void FPokemonDataModule::ShutdownModule() {

@@ -2,9 +2,3 @@
 
 
 #include "Exp/GrowthRate.h"
-
-using namespace Exp;
-
-IMPLEMENT_REGISTRY_CLASS(IGrowthRate);
-
-IGrowthRate::~IGrowthRate() = default;

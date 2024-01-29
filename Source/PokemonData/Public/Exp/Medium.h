@@ -3,13 +3,17 @@
 #pragma once
 
 #include "GrowthRate.h"
+#include "Medium.generated.h"
 
-namespace Exp {
-	/**
-	 * Medium/Medium Fast Exp Growth curve
-	 */
-	class POKEMONDATA_API FMedium final : public IGrowthRate {
-	public:
-		virtual int ExpForLevel(int Level) const override;
-	};
-}
+
+/**
+ * Medium/Medium Fast Exp Growth curve
+ */
+UCLASS(BlueprintType)
+class POKEMONDATA_API UMedium final : public UObject, public IGrowthRate {
+	GENERATED_BODY()
+
+public:
+	UFUNCTION()
+	virtual int ExpForLevel(int Level) const override;
+};

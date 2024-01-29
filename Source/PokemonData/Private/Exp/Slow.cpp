@@ -3,11 +3,7 @@
 
 #include "Exp/Slow.h"
 
-using namespace Exp;
-
-REGISTER_SUBCLASS(IGrowthRate, FSlow);
-
-int FSlow::ExpForLevel(int Level) const {
+int USlow::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 

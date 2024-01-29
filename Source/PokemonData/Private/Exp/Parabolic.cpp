@@ -3,12 +3,7 @@
 
 #include "Exp/Parabolic.h"
 
-using namespace Exp;
-
-
-REGISTER_SUBCLASS(IGrowthRate, FParabolic);
-
-int FParabolic::ExpForLevel(int Level) const {
+int UParabolic::ExpForLevel(int Level) const {
 	if (Level <= 0)
 		throw std::invalid_argument("A level value must be a positive integer!");
 
