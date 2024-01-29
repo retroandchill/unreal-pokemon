@@ -3,7 +3,7 @@
 
 #include <array>
 
-constexpr std::array GGrowthTable = {
+constexpr std::array GSlowGrowthTable = {
 	-1,
 	0, 10, 33, 80, 156, 270, 428, 640, 911, 1250,
 	1663, 2160, 2746, 3430, 4218, 5120, 6141, 7290, 8573, 10000,
@@ -39,5 +39,5 @@ bool GrowthRateSlowTest::RunTest(const FString& Parameters) {
 
 	Exp::FSlow GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GGrowthTable[Level]);
+	                 GrowthRate.ExpForLevel(Level), GSlowGrowthTable[Level]);
 }

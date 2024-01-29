@@ -5,7 +5,7 @@
 #include "Exp/Erratic.h"
 #include "Exp/Medium.h"
 
-constexpr std::array GGrowthTable = {
+constexpr std::array GMediumGrowthTable = {
 	-1,
 	0, 8, 27, 64, 125, 216, 343, 512, 729, 1000,
 	1331, 1728, 2197, 2744, 3375, 4096, 4913, 5832, 6859, 8000,
@@ -41,5 +41,5 @@ bool GrowthRateMediumTest::RunTest(const FString& Parameters) {
 
 	Exp::FMedium GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GGrowthTable[Level]);
+	                 GrowthRate.ExpForLevel(Level), GMediumGrowthTable[Level]);
 }
