@@ -9,7 +9,7 @@ public class PokemonData : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "Paper2D",
             }
         );
 

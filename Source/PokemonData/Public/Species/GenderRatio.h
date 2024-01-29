@@ -13,13 +13,13 @@ struct POKEMONDATA_API FGenderRatio : public FTableRowBase {
   GENERATED_BODY()
 
   /**
-   * The internal ID of this Gender Ratio
+   * The internal ID used for lookup by the game
    */
   UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	 FName ID;
 
   /**
-   * The name of this ratio if this were to be displayed to the player
+   * The name that is displayed to the player
    */
   UPROPERTY(BlueprintReadOnly, EditAnywhere)
   FText RealName;
