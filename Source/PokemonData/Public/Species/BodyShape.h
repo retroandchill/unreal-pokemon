@@ -14,8 +14,8 @@ struct  POKEMONDATA_API FBodyShape : public FTableRowBase {
 	GENERATED_BODY()
 
 	/**
-   * The internal ID used for lookup by the game
-   */
+	 * The internal ID used for lookup by the game
+     */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName ID;
 

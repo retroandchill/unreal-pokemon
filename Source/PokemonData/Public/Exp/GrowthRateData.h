@@ -29,6 +29,6 @@ struct POKEMONDATA_API FGrowthRateData : public FTableRowBase {
 	/**
 	 * The C++ or Blueprint Class that implements Growth Rate that corresponds to this Growth rate
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TSubclassOf<IGrowthRate> ImplementationClass;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (MustImplement = "GrowthRate"))
+	TSubclassOf<UObject> ImplementationClass;
 };
