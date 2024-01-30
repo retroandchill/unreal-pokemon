@@ -36,23 +36,23 @@ struct POKEMONDATA_API FTarget : public FTableRowBase {
 	 * Does this move target a Pokémon on the opposing side?
 	 */
 	UPROPERTY(BlueprintType, EditAnywhere)
-	bool bTargetsFoe = false;
+	bool TargetsFoe = false;
 
 	/**
 	 * Does this move target both sides of the field?
 	 */
 	UPROPERTY(BlueprintType, EditAnywhere)
-	bool bTargetsAll = false;
+	bool TargetsAll = false;
 
 	/**
 	 * Does this move affect the opposing side of the field?
 	 */
 	UPROPERTY(BlueprintType, EditAnywhere)
-	bool bAffectsFoeSide = false;
+	bool AffectsFoeSide = false;
 
 	/**
 	 * Is this move able to hit an opponent that is not directly adjacent to the target?
 	 */
 	UPROPERTY(BlueprintType, EditAnywhere)
-	bool bLongRange = false;
+	bool LongRange = false;
 };

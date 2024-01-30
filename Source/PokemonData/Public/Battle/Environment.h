@@ -29,5 +29,5 @@ struct POKEMONDATA_API FEnvironment : public FTableRowBase {
 	 * The name pattern used to retrieve the base graphic from the asset list
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FString Base;
+	FString BattleBase;
 };
