@@ -12,14 +12,14 @@
     "Name": "LONELY",
     "RealName": "Lonely",
     "StatChanges": [
-      [
-        "ATTACK",
-        10
-      ],
-      [
-        "DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -27,14 +27,14 @@
     "Name": "BRAVE",
     "RealName": "Brave",
     "StatChanges": [
-      [
-        "ATTACK",
-        10
-      ],
-      [
-        "SPEED",
-        -10
-      ]
+      {
+        "Stat": "ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "SPEED",
+        "Change": -10
+      }
     ]
   },
   {
@@ -42,14 +42,14 @@
     "Name": "ADAMANT",
     "RealName": "Adamant",
     "StatChanges": [
-      [
-        "ATTACK",
-        10
-      ],
-      [
-        "SPECIAL_ATTACK",
-        -10
-      ]
+      {
+        "Stat": "ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -57,14 +57,14 @@
     "Name": "NAUGHTY",
     "RealName": "Naughty",
     "StatChanges": [
-      [
-        "ATTACK",
-        10
-      ],
-      [
-        "SPECIAL_DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -72,14 +72,14 @@
     "Name": "BOLD",
     "RealName": "Bold",
     "StatChanges": [
-      [
-        "DEFENSE",
-        10
-      ],
-      [
-        "ATTACK",
-        -10
-      ]
+      {
+        "Stat": "DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -95,14 +95,14 @@
     "Name": "RELAXED",
     "RealName": "Relaxed",
     "StatChanges": [
-      [
-        "DEFENSE",
-        10
-      ],
-      [
-        "SPEED",
-        -10
-      ]
+      {
+        "Stat": "DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "SPEED",
+        "Change": -10
+      }
     ]
   },
   {
@@ -110,14 +110,14 @@
     "Name": "IMPISH",
     "RealName": "Impish",
     "StatChanges": [
-      [
-        "DEFENSE",
-        10
-      ],
-      [
-        "SPECIAL_ATTACK",
-        -10
-      ]
+      {
+        "Stat": "DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -125,14 +125,14 @@
     "Name": "LAX",
     "RealName": "Lax",
     "StatChanges": [
-      [
-        "DEFENSE",
-        10
-      ],
-      [
-        "SPECIAL_DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -140,14 +140,14 @@
     "Name": "TIMID",
     "RealName": "Timid",
     "StatChanges": [
-      [
-        "SPEED",
-        10
-      ],
-      [
-        "ATTACK",
-        -10
-      ]
+      {
+        "Stat": "SPEED",
+        "Change": 10
+      },
+      {
+        "Stat": "ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -155,14 +155,14 @@
     "Name": "HASTY",
     "RealName": "Hasty",
     "StatChanges": [
-      [
-        "SPEED",
-        10
-      ],
-      [
-        "DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "SPEED",
+        "Change": 10
+      },
+      {
+        "Stat": "DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -178,14 +178,14 @@
     "Name": "JOLLY",
     "RealName": "Jolly",
     "StatChanges": [
-      [
-        "SPEED",
-        10
-      ],
-      [
-        "SPECIAL_ATTACK",
-        -10
-      ]
+      {
+        "Stat": "SPEED",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -193,14 +193,14 @@
     "Name": "NAIVE",
     "RealName": "Naive",
     "StatChanges": [
-      [
-        "SPEED",
-        10
-      ],
-      [
-        "SPECIAL_DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "SPEED",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -208,14 +208,14 @@
     "Name": "MODEST",
     "RealName": "Modest",
     "StatChanges": [
-      [
-        "SPECIAL_ATTACK",
-        10
-      ],
-      [
-        "ATTACK",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -223,14 +223,14 @@
     "Name": "MILD",
     "RealName": "Mild",
     "StatChanges": [
-      [
-        "SPECIAL_ATTACK",
-        10
-      ],
-      [
-        "DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -238,14 +238,14 @@
     "Name": "QUIET",
     "RealName": "Quiet",
     "StatChanges": [
-      [
-        "SPECIAL_ATTACK",
-        10
-      ],
-      [
-        "SPEED",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "SPEED",
+        "Change": -10
+      }
     ]
   },
   {
@@ -261,14 +261,14 @@
     "Name": "RASH",
     "RealName": "Rash",
     "StatChanges": [
-      [
-        "SPECIAL_ATTACK",
-        10
-      ],
-      [
-        "SPECIAL_DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -276,14 +276,14 @@
     "Name": "CALM",
     "RealName": "Calm",
     "StatChanges": [
-      [
-        "SPECIAL_DEFENSE",
-        10
-      ],
-      [
-        "ATTACK",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
@@ -291,14 +291,14 @@
     "Name": "GENTLE",
     "RealName": "Gentle",
     "StatChanges": [
-      [
-        "SPECIAL_DEFENSE",
-        10
-      ],
-      [
-        "DEFENSE",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "DEFENSE",
+        "Change": -10
+      }
     ]
   },
   {
@@ -306,14 +306,14 @@
     "Name": "SASSY",
     "RealName": "Sassy",
     "StatChanges": [
-      [
-        "SPECIAL_DEFENSE",
-        10
-      ],
-      [
-        "SPEED",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "SPEED",
+        "Change": -10
+      }
     ]
   },
   {
@@ -321,14 +321,14 @@
     "Name": "CAREFUL",
     "RealName": "Careful",
     "StatChanges": [
-      [
-        "SPECIAL_DEFENSE",
-        10
-      ],
-      [
-        "SPECIAL_ATTACK",
-        -10
-      ]
+      {
+        "Stat": "SPECIAL_DEFENSE",
+        "Change": 10
+      },
+      {
+        "Stat": "SPECIAL_ATTACK",
+        "Change": -10
+      }
     ]
   },
   {
