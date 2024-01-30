@@ -12,9 +12,9 @@ USTRUCT(BlueprintType)
 struct POKEMONDATA_API FHabitat : public FTableRowBase {
 	GENERATED_BODY()
 
-   /**
-   * The internal ID used for lookup by the game
-   */
+    /**
+     * The internal ID used for lookup by the game
+     */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName ID;
 
