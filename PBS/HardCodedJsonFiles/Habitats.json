@@ -1,0 +1,52 @@
+[
+  {
+    "ID": "None",
+    "Name": "None",
+    "RealName": "None"
+  },
+  {
+    "ID": "Grassland",
+    "Name": "Grassland",
+    "RealName": "Grassland"
+  },
+  {
+    "ID": "Forest",
+    "Name": "Forest",
+    "RealName": "Forest"
+  },
+  {
+    "ID": "WatersEdge",
+    "Name": "WatersEdge",
+    "RealName": "Water's Edge"
+  },
+  {
+    "ID": "Sea",
+    "Name": "Sea",
+    "RealName": "Sea"
+  },
+  {
+    "ID": "Cave",
+    "Name": "Cave",
+    "RealName": "Cave"
+  },
+  {
+    "ID": "Mountain",
+    "Name": "Mountain",
+    "RealName": "Mountain"
+  },
+  {
+    "ID": "RoughTerrain",
+    "Name": "RoughTerrain",
+    "RealName": "Rough Terrain"
+  },
+  {
+    "ID": "Urban",
+    "Name": "Urban",
+    "RealName": "Urban"
+  },
+  {
+    "ID": "Rare",
+    "Name": "Rare",
+    "RealName": "Rare"
+  }
+]

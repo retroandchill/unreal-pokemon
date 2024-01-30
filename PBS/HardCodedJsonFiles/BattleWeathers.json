@@ -1,0 +1,56 @@
+[
+  {
+    "ID": "None",
+    "Name": "None",
+    "RealName": "None",
+    "Animation": null
+  },
+  {
+    "ID": "Sun",
+    "Name": "Sun",
+    "RealName": "Sun",
+    "Animation": "Sun"
+  },
+  {
+    "ID": "Rain",
+    "Name": "Rain",
+    "RealName": "Rain",
+    "Animation": "Rain"
+  },
+  {
+    "ID": "Sandstorm",
+    "Name": "Sandstorm",
+    "RealName": "Sandstorm",
+    "Animation": "Sandstorm"
+  },
+  {
+    "ID": "Hail",
+    "Name": "Hail",
+    "RealName": "Hail",
+    "Animation": "Hail"
+  },
+  {
+    "ID": "HarshSun",
+    "Name": "HarshSun",
+    "RealName": "Harsh Sun",
+    "Animation": "HarshSun"
+  },
+  {
+    "ID": "HeavyRain",
+    "Name": "HeavyRain",
+    "RealName": "Heavy Rain",
+    "Animation": "HeavyRain"
+  },
+  {
+    "ID": "StrongWinds",
+    "Name": "StrongWinds",
+    "RealName": "Strong Winds",
+    "Animation": "StrongWinds"
+  },
+  {
+    "ID": "ShadowSky",
+    "Name": "ShadowSky",
+    "RealName": "Shadow Sky",
+    "Animation": "ShadowSky"
+  }
+]

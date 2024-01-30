@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DamageCategory.h"
+#include "MoveDamageCategory.h"
 #include "UObject/Object.h"
 #include "Move.generated.h"
 
@@ -36,7 +36,7 @@ struct POKEMONDATA_API FMove : public FTableRowBase {
 	 * The damage category of the move
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	EDamageCategory Category;
+	EMoveDamageCategory Category;
 
 	/**
 	 * The Base Power of the move (0 = non-damaging, 1 = unknown/fixed damage)
