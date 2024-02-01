@@ -24,7 +24,6 @@ public:
 	 * Gets the amount of Exp that is required to reach a certain level 
 	 * @param Level The level in to calculate the Exp. for
 	 * @return The amount of Exp. required to level up
-	 * @throws std::invalid_argument If the level passed in in either 0 or negative
 	 */
 	UFUNCTION()
 	virtual int ExpForLevel(int Level) const = 0;
