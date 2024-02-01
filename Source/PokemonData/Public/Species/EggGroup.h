@@ -9,7 +9,7 @@
 /**
  * Represents an Egg Group for the game
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FEggGroup : public FTableRowBase  {
  GENERATED_BODY()
  

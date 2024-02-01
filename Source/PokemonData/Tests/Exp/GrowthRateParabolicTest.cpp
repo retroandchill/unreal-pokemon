@@ -37,7 +37,7 @@ void GrowthRateParabolicTest::GetTests(TArray<FString>& OutBeautifiedNames, TArr
 bool GrowthRateParabolicTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	UParabolic GrowthRate;
+	auto GrowthRate = NewObject<UParabolic>();;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GParabolicGrowthTable[Level]);
+	                 GrowthRate->ExpForLevel(Level), GParabolicGrowthTable[Level]);
 }

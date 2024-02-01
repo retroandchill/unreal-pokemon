@@ -53,7 +53,7 @@ void GrowthRateFluctuatingTest::GetTests(TArray<FString>& OutBeautifiedNames, TA
 bool GrowthRateFluctuatingTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	UFluctuating GrowthRate;
+	auto GrowthRate = NewObject<UFluctuating>();;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GFluctuatingGrowthTable[Level]);
+	                 GrowthRate->ExpForLevel(Level), GFluctuatingGrowthTable[Level]);
 }
