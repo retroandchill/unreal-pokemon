@@ -10,7 +10,7 @@
 /**
  * Represents one of the possible Pokémon natures
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FNature : public FTableRowBase {
 	GENERATED_BODY()
 

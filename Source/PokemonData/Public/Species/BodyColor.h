@@ -8,7 +8,7 @@
 /**
  * Represents the Body Color of a Pokémon. Used when searching in the Pokédex.
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct  POKEMONDATA_API FBodyColor : public FTableRowBase {
 	GENERATED_BODY()
 
