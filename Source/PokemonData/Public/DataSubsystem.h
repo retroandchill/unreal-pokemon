@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataRetrieval/DataTableProxy.h"
+#include "DataRetrieval/GameData.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "DataSubsystem.generated.h"
 
@@ -426,9 +428,30 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, DisplayName = "Is Item ID Valid?", Category = "Data/PBS/Item")
 	bool IsItemIdValid(FName ID) const;
+
+	/**
+	 * Get the data table that contains data of the specified type
+	 * @tparam T The type to look up the table for
+	 * @return A reference to the table proxy object
+	 */
+	template <typename T>
+	const TDataTableProxy<T> &GetDataTable() const {
+		auto StructClass = T::StaticClass();
+		check(DataTables.Contains(StructClass));
+
+		auto TableOut = dynamic_cast<const TUniquePtr<TDataTableProxy<T>> &>(DataTables.Get(StructClass));
+		check(TableOut.IsValid());
+
+		return *TableOut;
+	}
 	
 
 private:
+	/**
+	 * The list of data tables in the game
+	 */
+	TMap<TObjectPtr<UStruct>, TUniquePtr<IGameData>> DataTables;
+	
 	/**
 	 * The data table used for loading the Growth Rates
 	 */

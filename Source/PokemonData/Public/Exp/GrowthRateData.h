@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
+#include "DataRetrieval/DataTableProxy.h"
 #include "UObject/Object.h"
 #include "GrowthRateData.generated.h"
 
