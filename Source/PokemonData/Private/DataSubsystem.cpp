@@ -22,32 +22,39 @@
 
 #include "Bag/Item.h"
 
-static UDataTable* LoadDataTable(FStringView TableName) {
+/**
+ * Convenience method to load a data table into a proxy object
+ * @tparam T The struct type the proxy stores
+ * @param TableMap The map of types to tables
+ * @param TableName The name of the table to load
+ */
+template <typename T>
+static void LoadDataTable(TMap<TObjectPtr<UStruct>, TUniquePtr<IGameData>>& TableMap, FStringView TableName) {
 	ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TableName.GetData());
 	check(DataTable.Succeeded());
 
-	return DataTable.Object.Get();
+	TableMap.Add(T::StaticStruct(), MakeUnique<TDataTableProxy<T>>(DataTable.Object.Get()));
 }
 
 UDataSubsystem::UDataSubsystem() {
-	GrowthRateTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/GrowthRates.GrowthRates"));
-	GenderRatioTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/GenderRatios.GenderRatios"));
-	EggGroupTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/EggGroups.EggGroups"));
-	BodyShapeTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/BodyShapes.BodyShapes"));
-	BodyColorTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/BodyColors.BodyColors"));
-	HabitatTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Habitats.Habitats"));
-	EvolutionTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Evolutions.Evolutions"));
-	StatTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Stats.Stats"));
-	NatureTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Natures.Natures"));
-	StatusTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Statuses.Statuses"));
-	WeatherTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Weathers.Weathers"));
-	EncounterTypeTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/EncounterTypes.EncounterTypes"));
-	EnvironmentTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Environments.Environments"));
-	BattleWeatherTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/BattleWeathers.BattleWeathers"));
-	BattleTerrainTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/BattleTerrains.BattleTerrains"));
-	TargetTable = LoadDataTable(TEXT("/Game/Data/Hardcoded/Targets.Targets"));
+	LoadDataTable<FGrowthRateData>(DataTables, TEXT("/Game/Data/Hardcoded/GrowthRates.GrowthRates"));
+	LoadDataTable<FGenderRatio>(DataTables, TEXT("/Game/Data/Hardcoded/GenderRatios.GenderRatios"));
+	LoadDataTable<FEggGroup>(DataTables, TEXT("/Game/Data/Hardcoded/EggGroups.EggGroups"));
+	LoadDataTable<FBodyShape>(DataTables, TEXT("/Game/Data/Hardcoded/BodyShapes.BodyShapes"));
+	LoadDataTable<FBodyColor>(DataTables, TEXT("/Game/Data/Hardcoded/BodyColors.BodyColors"));
+	LoadDataTable<FHabitat>(DataTables, TEXT("/Game/Data/Hardcoded/Habitats.Habitats"));
+	LoadDataTable<FEvolutionData>(DataTables, TEXT("/Game/Data/Hardcoded/Evolutions.Evolutions"));
+	LoadDataTable<FStat>(DataTables, TEXT("/Game/Data/Hardcoded/Stats.Stats"));
+	LoadDataTable<FNature>(DataTables, TEXT("/Game/Data/Hardcoded/Natures.Natures"));
+	LoadDataTable<FStatus>(DataTables, TEXT("/Game/Data/Hardcoded/Statuses.Statuses"));
+	LoadDataTable<FWeather>(DataTables, TEXT("/Game/Data/Hardcoded/Weathers.Weathers"));
+	LoadDataTable<FEncounterType>(DataTables, TEXT("/Game/Data/Hardcoded/EncounterTypes.EncounterTypes"));
+	LoadDataTable<FEnvironment>(DataTables, TEXT("/Game/Data/Hardcoded/Environments.Environments"));
+	LoadDataTable<FBattleWeather>(DataTables, TEXT("/Game/Data/Hardcoded/BattleWeathers.BattleWeathers"));
+	LoadDataTable<FBattleTerrain>(DataTables, TEXT("/Game/Data/Hardcoded/BattleTerrains.BattleTerrains"));
+	LoadDataTable<FTarget>(DataTables, TEXT("/Game/Data/Hardcoded/Targets.Targets"));
 
-	ItemTable = LoadDataTable(TEXT("/Game/Data/Items.Items"));
+	LoadDataTable<FItem>(DataTables, TEXT("/Game/Data/Items.Items"));
 }
 
 template <typename T>
@@ -259,4 +266,9 @@ TArray<FName> UDataSubsystem::GetItemIds() const {
 
 bool UDataSubsystem::IsItemIdValid(FName ID) const {
 	return GetItemIds().Contains(ID);
+}
+
+const IGameData& UDataSubsystem::GetDataTable(TObjectPtr<UStruct> StructType) {
+	check(DataTables.Contains(StructType));
+	return *DataTables[StructType];
 }

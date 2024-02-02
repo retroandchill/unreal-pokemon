@@ -439,12 +439,18 @@ public:
 		auto StructClass = T::StaticClass();
 		check(DataTables.Contains(StructClass));
 
-		auto TableOut = dynamic_cast<const TUniquePtr<TDataTableProxy<T>> &>(DataTables.Get(StructClass));
+		auto TableOut = dynamic_cast<const TUniquePtr<TDataTableProxy<T>> &>(DataTables[StructClass]);
 		check(TableOut.IsValid());
 
 		return *TableOut;
 	}
-	
+
+	/**
+	 * Get the data table that contains data of the specified type
+	 * @param StructType The type to look up the table for
+	 * @return A reference to the table proxy object
+	 */
+	const IGameData &GetDataTable(TObjectPtr<UStruct> StructType);
 
 private:
 	/**
