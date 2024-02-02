@@ -29,7 +29,7 @@
  * @param TableName The name of the table to load
  */
 template <typename T>
-static void LoadDataTable(TMap<TObjectPtr<UStruct>, TUniquePtr<IGameData>>& TableMap, FStringView TableName) {
+static void LoadDataTable(TMap<TObjectPtr<const UScriptStruct>, TUniquePtr<IGameData>>& TableMap, FStringView TableName) {
 	ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TableName.GetData());
 	check(DataTable.Succeeded());
 
@@ -268,7 +268,7 @@ bool UDataSubsystem::IsItemIdValid(FName ID) const {
 	return GetItemIds().Contains(ID);
 }
 
-const IGameData& UDataSubsystem::GetDataTable(TObjectPtr<UStruct> StructType) {
+const IGameData& UDataSubsystem::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const {
 	check(DataTables.Contains(StructType));
 	return *DataTables[StructType];
 }

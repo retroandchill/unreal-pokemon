@@ -18,7 +18,7 @@ public:
 	 * Set up the node assigning the struct that this should be retrieving
 	 * @param NodeStruct The struct type for this node
 	 */
-	void Initialize(const UScriptStruct* NodeStruct);
+	void Initialize(UScriptStruct* NodeStruct);
 
 	virtual void AllocateDefaultPins() override;
 	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
@@ -26,11 +26,12 @@ public:
 	virtual bool IsNodePure() const override;
 
 	virtual void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
+	virtual void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override; 
 
 private:
 	/**
 	 * The struct type represented by this node
 	 */
 	UPROPERTY()
-	TObjectPtr<const UScriptStruct> StructType;
+	TObjectPtr<UScriptStruct> StructType;
 };

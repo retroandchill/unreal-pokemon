@@ -5,9 +5,13 @@
 
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
+#include "K2Node_CallFunction.h"
+#include "KismetCompiler.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "DataRetrieval/DataUtilities.h"
+#include "Kismet/DataTableFunctionLibrary.h"
 
-void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
+void UK2Node_GetGameData::Initialize(UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
 }
 
@@ -59,7 +63,7 @@ void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& Acti
 	TArray<FAssetData> AssetData;
 	AssetRegistryModule.Get().GetAssetsByClass(UDataTable::StaticClass()->GetFName(), AssetData);
 
-	auto CustomizeCallback = [](UEdGraphNode* Node, bool bIsTemplateNode, const UScriptStruct* Subclass)
+	auto CustomizeCallback = [](UEdGraphNode* Node, bool bIsTemplateNode, UScriptStruct* Subclass)
 	{
 		auto TypedNode = CastChecked<UK2Node_GetGameData>(Node);
 		TypedNode->Initialize(Subclass);
@@ -74,7 +78,7 @@ void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& Acti
 			if (Table == nullptr)
 				continue;
 
-			auto Type = Table->GetRowStruct();
+			auto Type = const_cast<UScriptStruct*>(Table->GetRowStruct());
 			if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Type, true))
 				continue;
 
@@ -85,4 +89,42 @@ void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& Acti
 			ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 		}
 	}
+}
+
+void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {
+	Super::ExpandNode(CompilerContext, SourceGraph);
+
+	// FUNCTION NODE
+	const FName FunctionName = GET_FUNCTION_NAME_CHECKED(UDataUtilities, GetData);
+	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
+	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataTableFunctionLibrary::StaticClass());
+	CallGetNode->AllocateDefaultPins();
+
+	static const FName WorldContextObject_ParamName(TEXT("ContextObject"));
+	static const FName StructType_ParamName(TEXT("StructType"));
+	static const FName RowName_ParamName(TEXT("RowName"));
+	static const FName OutRow_ParamName(TEXT("OutRow"));
+
+	auto SpawnWorldContextPin = FindPinChecked(TEXT("WorldContext"));
+	auto RowNamePin = FindPinChecked(TEXT("RowName"));
+	auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
+
+	auto CallCreateWorldContextPin = CallGetNode->FindPinChecked(WorldContextObject_ParamName);
+	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
+	auto CallCreateRowNamePin = CallGetNode->FindPinChecked(RowName_ParamName);
+	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(OutRow_ParamName);
+
+	// Copy the world context connection from the spawn node to 'USubsystemBlueprintLibrary::Get[something]Subsystem' if necessary
+	if (SpawnWorldContextPin)
+	{
+		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
+	}
+
+	CallCreateStructTypePin->DefaultObject = StructType;
+	CompilerContext.MovePinLinksToIntermediate(*RowNamePin, *CallCreateRowNamePin);
+
+	CallCreateOutRowPin->PinType = ReturnValuePin->PinType;
+	CallCreateOutRowPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
+
+	BreakAllNodeLinks();
 }

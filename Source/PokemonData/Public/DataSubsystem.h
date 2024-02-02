@@ -450,13 +450,13 @@ public:
 	 * @param StructType The type to look up the table for
 	 * @return A reference to the table proxy object
 	 */
-	const IGameData &GetDataTable(TObjectPtr<UStruct> StructType);
+	const IGameData &GetDataTable(TObjectPtr<const UScriptStruct> StructType) const;
 
 private:
 	/**
 	 * The list of data tables in the game
 	 */
-	TMap<TObjectPtr<UStruct>, TUniquePtr<IGameData>> DataTables;
+	TMap<TObjectPtr<const UScriptStruct>, TUniquePtr<IGameData>> DataTables;
 	
 	/**
 	 * The data table used for loading the Growth Rates
