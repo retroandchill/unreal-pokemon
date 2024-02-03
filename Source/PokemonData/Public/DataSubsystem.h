@@ -8,25 +8,6 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "DataSubsystem.generated.h"
 
-struct FGrowthRateData;
-struct FGenderRatio;
-struct FEggGroup;
-struct FBodyShape;
-struct FBodyColor;
-struct FHabitat;
-struct FEvolutionData;
-struct FStat;
-struct FNature;
-struct FStatus;
-struct FWeather;
-struct FEncounterType;
-struct FEnvironment;
-struct FBattleWeather;
-struct FBattleTerrain;
-struct FTarget;
-
-struct FItem;
-
 /**
  * Persistent subsystem used to get the data tables
  */
