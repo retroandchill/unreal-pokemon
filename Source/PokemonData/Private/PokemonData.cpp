@@ -1,13 +1,13 @@
 ﻿#include "PokemonData.h"
 
-#define LOCTEXT_NAMESPACE "FPokemonDataModule"
+constexpr auto GLoctextNamespace = "FPokemonDataModule";
 
 void FPokemonDataModule::StartupModule() {
+	// No custom setup needed
 }
 
 void FPokemonDataModule::ShutdownModule() {
+	// No custom shutdown needed
 }
-
-#undef LOCTEXT_NAMESPACE
 
 IMPLEMENT_MODULE(FPokemonDataModule, PokemonData)

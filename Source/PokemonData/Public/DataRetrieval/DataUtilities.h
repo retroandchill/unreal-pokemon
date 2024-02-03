@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataSubsystem.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Subsystems/SubsystemBlueprintLibrary.h"
 #include "DataUtilities.generated.h"
 
 /**
@@ -23,15 +25,24 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, CustomThunk, Category = "DataTable", meta=(WorldContext = "ContextObject", CustomStructureParam = "OutRow", BlueprintInternalUseOnly="true"))
 	static void GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, FTableRowBase& OutRow);
-
+	
 	/**
 	 * Get a data item from the Database
+	 * @tparam T The data type of the struct being processed out
 	 * @param ContextObject The context object used to retrieve the data subsystem
 	 * @param StructType The struct type to get the data from
 	 * @param RowName The name of the row to retrieve
 	 * @param OutRow The output struct returned to the user
 	 */
-	static void Generic_GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, void* OutRow);
+	template <typename T>
+	static void Generic_GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, T* OutRow) {
+		check(StructType != nullptr && OutRow != nullptr);
+
+		const auto DataSubsystem = Cast<UDataSubsystem>(USubsystemBlueprintLibrary::GetGameInstanceSubsystem(ContextObject, UDataSubsystem::StaticClass()));
+		check(DataSubsystem != nullptr);
+		const auto Row = DataSubsystem->GetDataTable(StructType).GetData(RowName);
+		StructType->CopyScriptStruct(OutRow, Row);
+	}
 
 	/** Based on UDataUtilities::GetData */
 	DECLARE_FUNCTION(execGetData) {
@@ -43,8 +54,8 @@ public:
 		void* OutRowPtr = Stack.MostRecentPropertyAddress;
 
 		P_FINISH;
-		
-		FStructProperty* StructProp = CastField<FStructProperty>(Stack.MostRecentProperty);
+
+		const auto StructProp = CastField<FStructProperty>(Stack.MostRecentProperty);
 		if (!ContextObject) {
 			FBlueprintExceptionInfo ExceptionInfo(
 				EBlueprintExceptionType::AccessViolation,
@@ -52,11 +63,8 @@ public:
 			);
 			FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ExceptionInfo);
 		} else if(StructProp && OutRowPtr) {
-			UScriptStruct* OutputType = StructProp->Struct;
-		
-			const bool bCompatible = (OutputType == StructType) || 
-				(OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType));
-			if (bCompatible) {
+			if (auto OutputType = StructProp->Struct; (OutputType == StructType) || 
+				(OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType))) {
 				P_NATIVE_BEGIN;
 				Generic_GetData(ContextObject, StructType, RowName, OutRowPtr);
 				P_NATIVE_END;
