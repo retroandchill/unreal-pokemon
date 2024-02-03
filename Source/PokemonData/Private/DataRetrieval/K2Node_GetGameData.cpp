@@ -97,7 +97,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	// FUNCTION NODE
 	const FName FunctionName = GET_FUNCTION_NAME_CHECKED(UDataUtilities, GetData);
 	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataTableFunctionLibrary::StaticClass());
+	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataUtilities::StaticClass());
 	CallGetNode->AllocateDefaultPins();
 
 	static const FName WorldContextObject_ParamName(TEXT("ContextObject"));
@@ -105,7 +105,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	static const FName RowName_ParamName(TEXT("RowName"));
 	static const FName OutRow_ParamName(TEXT("OutRow"));
 
-	auto SpawnWorldContextPin = FindPinChecked(TEXT("WorldContext"));
+	auto SpawnWorldContextPin = FindPin(TEXT("WorldContext"));
 	auto RowNamePin = FindPinChecked(TEXT("RowName"));
 	auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
@@ -115,8 +115,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(OutRow_ParamName);
 
 	// Copy the world context connection from the spawn node to 'USubsystemBlueprintLibrary::Get[something]Subsystem' if necessary
-	if (SpawnWorldContextPin)
-	{
+	if (SpawnWorldContextPin != nullptr) {
 		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
 	}
 
@@ -125,6 +124,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 
 	CallCreateOutRowPin->PinType = ReturnValuePin->PinType;
 	CallCreateOutRowPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
+	CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateOutRowPin);
 
 	BreakAllNodeLinks();
 }
