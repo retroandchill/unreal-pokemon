@@ -21,7 +21,7 @@ public:
 	 * @param RowName The name of the row to retrieve
 	 * @param OutRow The output struct returned to the user
 	 */
-	UFUNCTION(BlueprintPure, CustomThunk, Category = "DataTable", meta=(CustomStructureParam = "OutRow", BlueprintInternalUseOnly="true"))
+	UFUNCTION(BlueprintPure, CustomThunk, Category = "DataTable", meta=(WorldContext = "ContextObject", CustomStructureParam = "OutRow", BlueprintInternalUseOnly="true"))
 	static void GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, FTableRowBase& OutRow);
 
 	/**
@@ -34,8 +34,7 @@ public:
 	static void Generic_GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, void* OutRow);
 
 	/** Based on UDataUtilities::GetData */
-	DECLARE_FUNCTION(execGetData)
-	{
+	DECLARE_FUNCTION(execGetData) {
 		P_GET_OBJECT(UObject, ContextObject);
 		P_GET_OBJECT(UScriptStruct, StructType);
 		P_GET_PROPERTY(FNameProperty, RowName);
@@ -46,37 +45,29 @@ public:
 		P_FINISH;
 		
 		FStructProperty* StructProp = CastField<FStructProperty>(Stack.MostRecentProperty);
-		if (!ContextObject)
-		{
+		if (!ContextObject) {
 			FBlueprintExceptionInfo ExceptionInfo(
 				EBlueprintExceptionType::AccessViolation,
 				NSLOCTEXT("GetData", "MissingWorldContext", "Failed to world context object. Unable to retrieve subsystems.")
 			);
 			FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ExceptionInfo);
-		}
-		else if(StructProp && OutRowPtr)
-		{
+		} else if(StructProp && OutRowPtr) {
 			UScriptStruct* OutputType = StructProp->Struct;
 		
 			const bool bCompatible = (OutputType == StructType) || 
 				(OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType));
-			if (bCompatible)
-			{
+			if (bCompatible) {
 				P_NATIVE_BEGIN;
 				Generic_GetData(ContextObject, StructType, RowName, OutRowPtr);
 				P_NATIVE_END;
-			}
-			else
-			{
+			} else {
 				FBlueprintExceptionInfo ExceptionInfo(
 					EBlueprintExceptionType::AccessViolation,
 					NSLOCTEXT("GetData", "IncompatibleProperty", "Incompatible output parameter; the data table's type is not the same as the return type.")
 					);
 				FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ExceptionInfo);
 			}
-		}
-		else
-		{
+		} else {
 			FBlueprintExceptionInfo ExceptionInfo(
 				EBlueprintExceptionType::AccessViolation,
 				NSLOCTEXT("GetData", "MissingOutputProperty", "Failed to resolve the output parameter for GetDataTableRow.")
