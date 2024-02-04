@@ -43,7 +43,14 @@ public:
 	 * @param DataTable The data table asset this proxy points to
 	 * @return A unique reference to the proxy
 	 */
-	TUniquePtr<IGameData> CreateDataTableProxy(UScriptStruct *StructType, const TObjectPtr<UDataTable>& DataTable) const;
+	TUniquePtr<IGameData> CreateDataTableProxy(const UScriptStruct *StructType, const TObjectPtr<UDataTable>& DataTable) const;
+
+	/**
+	 * Get if the type in question is registered in as a valid constructor
+	 * @param StructType The struct type in question
+	 * @return Is the type registered?
+	 */
+	bool IsTypeRegistered(const UScriptStruct *StructType) const;
 	
 
 private:
@@ -62,5 +69,3 @@ private:
 	 */
 	TMap<FName, FFactoryFunction> RegisteredConstructors;
 };
-
-#define REGISTER_DATA_TABLE(StructType) const bool GRegistered_##StructType = FDataRegistry::GetInstance().RegisterStruct<StructType>()

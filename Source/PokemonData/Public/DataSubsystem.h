@@ -25,10 +25,11 @@ public:
 	 */
 	template <typename T>
 	const TDataTableProxy<T> &GetDataTable() const {
-		auto StructClass = T::StaticStruct();
-		check(DataTables.Contains(StructClass));
+		UScriptStruct *StructClass = T::StaticStruct();
+		auto RowName = StructClass->GetFName();
+		check(DataTables.Contains(RowName));
 
-		auto TableOut = dynamic_cast<TDataTableProxy<T> *>(DataTables[StructClass].Get());
+		auto TableOut = dynamic_cast<TDataTableProxy<T> *>(DataTables[RowName].Get());
 		check(TableOut != nullptr);
 
 		return *TableOut;
@@ -45,6 +46,6 @@ private:
 	/**
 	 * The list of data tables in the game
 	 */
-	TMap<TObjectPtr<const UScriptStruct>, TUniquePtr<IGameData>> DataTables;
+	TMap<FName, TUniquePtr<IGameData>> DataTables;
 	
 };

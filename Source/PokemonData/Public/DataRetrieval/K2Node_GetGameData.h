@@ -18,7 +18,7 @@ public:
 	 * Set up the node assigning the struct that this should be retrieving
 	 * @param NodeStruct The struct type for this node
 	 */
-	void Initialize(UScriptStruct* NodeStruct);
+	void Initialize(const UScriptStruct* NodeStruct);
 
 	void AllocateDefaultPins() override;
 	FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
@@ -33,5 +33,5 @@ private:
 	 * The struct type represented by this node
 	 */
 	UPROPERTY()
-	TObjectPtr<UScriptStruct> StructType;
+	TObjectPtr<const UScriptStruct> StructType;
 };

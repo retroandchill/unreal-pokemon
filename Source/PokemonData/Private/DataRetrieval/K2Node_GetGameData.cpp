@@ -8,10 +8,10 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "DataRetrieval/DataRegistry.h"
 #include "DataRetrieval/DataUtilities.h"
-#include "Kismet/DataTableFunctionLibrary.h"
 
-void UK2Node_GetGameData::Initialize(UScriptStruct* NodeStruct) {
+void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
 }
 
@@ -61,25 +61,22 @@ void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& Acti
 
 	auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 	TArray<FAssetData> AssetData;
-	AssetRegistryModule.Get().GetAssetsByClass(UDataTable::StaticClass()->GetFName(), AssetData);
+	AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()), AssetData);
 
-	auto CustomizeCallback = [](UEdGraphNode* Node, bool bIsTemplateNode, UScriptStruct* Subclass)
-	{
+	auto CustomizeCallback = [](UEdGraphNode* Node, bool bIsTemplateNode, const UScriptStruct* Subclass) {
 		auto TypedNode = CastChecked<UK2Node_GetGameData>(Node);
 		TypedNode->Initialize(Subclass);
 	};
 
-	auto ActionKey = GetClass();
-	if (ActionRegistrar.IsOpenForRegistration(ActionKey))
-	{
-		for (auto &Iter : AssetData)
-		{
+	if (auto ActionKey = GetClass(); ActionRegistrar.IsOpenForRegistration(ActionKey)) {
+		auto &DataRegistry = FDataRegistry::GetInstance();
+		for (auto &Iter : AssetData) {
 			auto Table = Cast<UDataTable>(Iter.GetAsset());
 			if (Table == nullptr)
 				continue;
 
-			auto Type = const_cast<UScriptStruct*>(Table->GetRowStruct());
-			if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Type, true))
+			auto Type = Table->GetRowStruct();
+			if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Type, true) || !DataRegistry.IsTypeRegistered(Type))
 				continue;
 
 			UBlueprintNodeSpawner* Spawner = UBlueprintNodeSpawner::Create(ActionKey);
@@ -119,7 +116,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
 	}
 
-	CallCreateStructTypePin->DefaultObject = StructType;
+	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct *>(StructType.Get());
 	CompilerContext.MovePinLinksToIntermediate(*RowNamePin, *CallCreateRowNamePin);
 
 	CallCreateOutRowPin->PinType = ReturnValuePin->PinType;

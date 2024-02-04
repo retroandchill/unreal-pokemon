@@ -3,6 +3,7 @@
 
 #include "DataSubsystem.h"
 
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Exp/GrowthRateData.h"
 #include "Species/GenderRatio.h"
 #include "Species/EggGroup.h"
@@ -21,43 +22,29 @@
 #include "Moves/Target.h"
 
 #include "Bag/Item.h"
-
-/**
- * Convenience method to load a data table into a proxy object
- * @tparam T The struct type the proxy stores
- * @param TableMap The map of types to tables
- * @param TableName The name of the table to load
- */
-template <typename T>
-static void LoadDataTable(TMap<TObjectPtr<const UScriptStruct>, TUniquePtr<IGameData>>& TableMap, FStringView TableName) {
-	ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TableName.GetData());
-	check(DataTable.Succeeded());
-
-	TableMap.Add(T::StaticStruct(), MakeUnique<TDataTableProxy<T>>(DataTable.Object.Get()));
-}
+#include "DataRetrieval/DataRegistry.h"
 
 UDataSubsystem::UDataSubsystem() {
-	LoadDataTable<FGrowthRateData>(DataTables, TEXT("/Game/Data/Hardcoded/GrowthRates.GrowthRates"));
-	LoadDataTable<FGenderRatio>(DataTables, TEXT("/Game/Data/Hardcoded/GenderRatios.GenderRatios"));
-	LoadDataTable<FEggGroup>(DataTables, TEXT("/Game/Data/Hardcoded/EggGroups.EggGroups"));
-	LoadDataTable<FBodyShape>(DataTables, TEXT("/Game/Data/Hardcoded/BodyShapes.BodyShapes"));
-	LoadDataTable<FBodyColor>(DataTables, TEXT("/Game/Data/Hardcoded/BodyColors.BodyColors"));
-	LoadDataTable<FHabitat>(DataTables, TEXT("/Game/Data/Hardcoded/Habitats.Habitats"));
-	LoadDataTable<FEvolutionData>(DataTables, TEXT("/Game/Data/Hardcoded/Evolutions.Evolutions"));
-	LoadDataTable<FStat>(DataTables, TEXT("/Game/Data/Hardcoded/Stats.Stats"));
-	LoadDataTable<FNature>(DataTables, TEXT("/Game/Data/Hardcoded/Natures.Natures"));
-	LoadDataTable<FStatus>(DataTables, TEXT("/Game/Data/Hardcoded/Statuses.Statuses"));
-	LoadDataTable<FWeather>(DataTables, TEXT("/Game/Data/Hardcoded/Weathers.Weathers"));
-	LoadDataTable<FEncounterType>(DataTables, TEXT("/Game/Data/Hardcoded/EncounterTypes.EncounterTypes"));
-	LoadDataTable<FEnvironment>(DataTables, TEXT("/Game/Data/Hardcoded/Environments.Environments"));
-	LoadDataTable<FBattleWeather>(DataTables, TEXT("/Game/Data/Hardcoded/BattleWeathers.BattleWeathers"));
-	LoadDataTable<FBattleTerrain>(DataTables, TEXT("/Game/Data/Hardcoded/BattleTerrains.BattleTerrains"));
-	LoadDataTable<FTarget>(DataTables, TEXT("/Game/Data/Hardcoded/Targets.Targets"));
+	auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	TArray<FAssetData> AssetData;
+	AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()), AssetData);
+	for (auto &Iter : AssetData) {
+		auto Table = Cast<UDataTable>(Iter.GetAsset());
+		if (Table == nullptr)
+			continue;
 
-	LoadDataTable<FItem>(DataTables, TEXT("/Game/Data/Items.Items"));
+		auto RowStruct = Table->GetRowStruct();
+		auto &DataRegistry = FDataRegistry::GetInstance();
+		if (!DataRegistry.IsTypeRegistered(RowStruct))
+			continue;
+		
+		DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table));
+	}
 }
 
 const IGameData& UDataSubsystem::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const {
-	check(DataTables.Contains(StructType));
-	return *DataTables[StructType];
+	check(StructType != nullptr);
+	auto StructName = StructType->GetFName();
+	check(DataTables.Contains(StructName));
+	return *DataTables[StructName];
 }
