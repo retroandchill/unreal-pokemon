@@ -10,6 +10,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "DataRetrieval/DataUtilities.h"
+#include "UObject/UnrealTypePrivate.h"
 
 void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
@@ -27,10 +28,8 @@ void UK2Node_GetGameData::AllocateDefaultPins() {
 }
 
 FText UK2Node_GetGameData::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-	if (StructType)
-	{
-		if (TitleType == ENodeTitleType::FullTitle)
-		{
+	if (StructType) {
+		if (TitleType == ENodeTitleType::FullTitle) {
 			return StructType->GetDisplayNameText();
 		}
 
@@ -42,14 +41,13 @@ FText UK2Node_GetGameData::GetNodeTitle(ENodeTitleType::Type TitleType) const {
 }
 
 FText UK2Node_GetGameData::GetTooltipText() const {
-	if (StructType)
-	{
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetSubsystem_TooltipFormat", "Get {StructName} \n\n{StructTooltip}"),
+	if (StructType) {
+		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetGameData_TooltipFormat", "Get {StructName} \n\n{StructTooltip}"),
 			TEXT("StructName"), StructType->GetDisplayNameText(),
 			TEXT("StructTooltip"), StructType->GetToolTipText(/*bShortTooltip=*/ true));
 	}
 
-	return NSLOCTEXT("K2Node", "GetSubsystem_InvalidSubsystemTypeTooltip", "Invalid Subsystem Type");
+	return NSLOCTEXT("K2Node", "GetGameData_InvalidStructTypeTooltip", "Invalid Struct Type");
 }
 
 bool UK2Node_GetGameData::IsNodePure() const {
@@ -58,34 +56,8 @@ bool UK2Node_GetGameData::IsNodePure() const {
 
 void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	Super::GetMenuActions(ActionRegistrar);
-
-	auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-	TArray<FAssetData> AssetData;
-	AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()), AssetData);
-
-	auto CustomizeCallback = [](UEdGraphNode* Node, bool bIsTemplateNode, const UScriptStruct* Subclass) {
-		auto TypedNode = CastChecked<UK2Node_GetGameData>(Node);
-		TypedNode->Initialize(Subclass);
-	};
-
-	if (auto ActionKey = GetClass(); ActionRegistrar.IsOpenForRegistration(ActionKey)) {
-		auto &DataRegistry = FDataRegistry::GetInstance();
-		for (auto &Iter : AssetData) {
-			auto Table = Cast<UDataTable>(Iter.GetAsset());
-			if (Table == nullptr)
-				continue;
-
-			auto Type = Table->GetRowStruct();
-			if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Type, true) || !DataRegistry.IsTypeRegistered(Type))
-				continue;
-
-			UBlueprintNodeSpawner* Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-			check(Spawner);
-
-			Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(CustomizeCallback, Type);
-			ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
-		}
-	}
+	
+	UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_GetGameData>(GetClass(), ActionRegistrar);
 }
 
 void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {
