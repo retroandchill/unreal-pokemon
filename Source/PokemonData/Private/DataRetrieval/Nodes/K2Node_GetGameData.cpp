@@ -1,7 +1,7 @@
 // Created by Retro & Chill.
 
 
-#include "DataRetrieval/K2Node_GetGameData.h"
+#include "DataRetrieval/Nodes/K2Node_GetGameData.h"
 
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
