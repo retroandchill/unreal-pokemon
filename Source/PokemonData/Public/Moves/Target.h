@@ -10,7 +10,7 @@
 /**
  * Handles target processing for a move
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FTarget : public FTableRowBase {
 	GENERATED_BODY()
 

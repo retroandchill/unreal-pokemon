@@ -10,6 +10,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "DataRetrieval/DataUtilities.h"
+#include "Engine/UserDefinedStruct.h"
 #include "UObject/UnrealTypePrivate.h"
 
 void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
@@ -52,6 +53,24 @@ FText UK2Node_GetGameData::GetTooltipText() const {
 
 bool UK2Node_GetGameData::IsNodePure() const {
 	return true;
+}
+
+FText UK2Node_GetGameData::GetMenuCategory() const {
+	if (StructType == nullptr)
+		return Super::GetMenuCategory();
+	
+	FString FullCategory = "Data";
+	if (auto MetaTag = TEXT("DatabaseType"); StructType->HasMetaData(MetaTag))
+		FullCategory += "|" + StructType->GetMetaData(MetaTag);
+
+	FullCategory += "|" + StructType->GetDisplayNameText().ToString();
+	return FText::FromString(FullCategory);
+}
+
+FSlateIcon UK2Node_GetGameData::GetIconAndTint(FLinearColor& OutColor) const {
+	OutColor = GetNodeTitleColor();
+	static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
+	return Icon;
 }
 
 void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {

@@ -3,15 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GrowthRate.h"
-#include "DataRetrieval/DataTableProxy.h"
 #include "UObject/Object.h"
 #include "GrowthRateData.generated.h"
 
 /**
  * Represents the data row used to retrieve the exp growth curves
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FGrowthRateData : public FTableRowBase {
 	GENERATED_BODY()
 

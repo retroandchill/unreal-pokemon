@@ -9,7 +9,7 @@
 /**
  * Represents a battle environment which is used for determining the battle base to display as well as the type of Nature Power
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FEnvironment : public FTableRowBase {
 	GENERATED_BODY()
 

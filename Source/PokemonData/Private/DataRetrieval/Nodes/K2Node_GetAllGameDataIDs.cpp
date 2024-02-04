@@ -52,9 +52,26 @@ bool UK2Node_GetAllGameDataIDs::IsNodePure() const {
 	return true;
 }
 
+FText UK2Node_GetAllGameDataIDs::GetMenuCategory() const {
+	if (StructType == nullptr)
+		return Super::GetMenuCategory();
+	
+	FString FullCategory = "Data";
+	if (auto MetaTag = TEXT("DatabaseType"); StructType->HasMetaData(MetaTag))
+		FullCategory += "|" + StructType->GetMetaData(MetaTag);
+
+	FullCategory += "|" + StructType->GetDisplayNameText().ToString();
+	return FText::FromString(FullCategory);
+}
+
+FSlateIcon UK2Node_GetAllGameDataIDs::GetIconAndTint(FLinearColor& OutColor) const {
+	OutColor = GetNodeTitleColor();
+	static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
+	return Icon;
+}
+
 void UK2Node_GetAllGameDataIDs::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	Super::GetMenuActions(ActionRegistrar);
-
 	
 	UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_GetAllGameDataIDs>(GetClass(), ActionRegistrar);
 }

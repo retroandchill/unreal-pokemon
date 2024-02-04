@@ -10,7 +10,7 @@
 /**
  * Represents any of the various encounter types that may occur within the world
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FEncounterType : public FTableRowBase {
 	GENERATED_BODY()
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
+#include "K2Node_GetGameData.h"
 #include "K2Node_GetAllGameDataIDs.generated.h"
 
 /**
@@ -24,6 +25,8 @@ public:
 	FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 	FText GetTooltipText() const override;
 	bool IsNodePure() const override;
+	FText GetMenuCategory() const override;
+	FSlateIcon GetIconAndTint(FLinearColor& OutColor) const override;
 
 	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
 	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override; 
