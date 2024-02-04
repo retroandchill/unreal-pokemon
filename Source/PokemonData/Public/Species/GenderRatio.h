@@ -8,7 +8,7 @@
 /**
  * Represents the Gender Ratio for a Specific Pokémon
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FGenderRatio : public FTableRowBase {
   GENERATED_BODY()
 

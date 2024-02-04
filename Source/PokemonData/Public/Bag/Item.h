@@ -10,7 +10,7 @@
 /**
  * Represents the data for an Item
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="PBS"))
 struct POKEMONDATA_API FItem : public FTableRowBase {
 	GENERATED_BODY()
 

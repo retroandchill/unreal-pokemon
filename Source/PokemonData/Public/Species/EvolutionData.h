@@ -9,7 +9,7 @@
 /**
  * The data related with how a Pokémon evolves
  */
-USTRUCT()
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FEvolutionData : public FTableRowBase {
 	GENERATED_BODY()
 

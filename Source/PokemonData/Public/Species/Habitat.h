@@ -8,7 +8,7 @@
 /**
  * Represents the Body Shape of a Pokémon. Used when searching in the Pokédex.
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FHabitat : public FTableRowBase {
 	GENERATED_BODY()
 

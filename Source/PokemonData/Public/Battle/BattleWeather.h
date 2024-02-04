@@ -9,7 +9,7 @@
 /**
  * Represents the weather effects that occur in battle
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FBattleWeather : public FTableRowBase {
 	GENERATED_BODY()
 

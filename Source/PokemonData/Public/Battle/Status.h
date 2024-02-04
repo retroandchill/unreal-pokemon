@@ -10,7 +10,7 @@
 /**
  * Represents the data for a status condition
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FStatus : public FTableRowBase {
 	GENERATED_BODY()
 
