@@ -1,55 +1,55 @@
 // Created by Retro & Chill.
 
 
-#include "DataRetrieval/Nodes/K2Node_GetGameData.h"
+#include "DataRetrieval/Nodes/K2Node_IsGameDataIDValid.h"
 
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "DataRetrieval/DataUtilities.h"
 
-void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
+void UK2Node_IsGameDataIDValid::Initialize(const UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
 }
 
-void UK2Node_GetGameData::AllocateDefaultPins() {
+void UK2Node_IsGameDataIDValid::AllocateDefaultPins() {
 	if (GetBlueprint()->ParentClass->HasMetaData(FBlueprintMetadata::MD_ShowWorldContextPin)) {
 		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), TEXT("WorldContext"));
 	}
 	
 	CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
-	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, (StructType != nullptr ? static_cast<UStruct*>(StructType) : FTableRowBase::StaticStruct()), UEdGraphSchema_K2::PN_ReturnValue);
+	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Boolean, UEdGraphSchema_K2::PN_ReturnValue);
 	
 	Super::AllocateDefaultPins();
 }
 
-FText UK2Node_GetGameData::GetNodeTitle(ENodeTitleType::Type TitleType) const {
+FText UK2Node_IsGameDataIDValid::GetNodeTitle(ENodeTitleType::Type TitleType) const {
 	if (StructType) {
 		if (TitleType == ENodeTitleType::FullTitle) {
 			return StructType->GetDisplayNameText();
 		}
 
 		const FString& StructName = StructType->GetName();
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetGameData_NodeTitleFormat", "Get {ClassName}"), TEXT("ClassName"), FText::FromString(StructName));
+		return FText::FormatNamed(NSLOCTEXT("K2Node", "IsGameDataIDValid_NodeTitleFormat", "Is {ClassName} ID Valid?"), TEXT("ClassName"), FText::FromString(StructName));
 	}
 
 	return GetTooltipText();
 }
 
-FText UK2Node_GetGameData::GetTooltipText() const {
+FText UK2Node_IsGameDataIDValid::GetTooltipText() const {
 	if (StructType) {
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetGameData_TooltipFormat", "Get {StructName} \n\n{StructTooltip}"),
+		return FText::FormatNamed(NSLOCTEXT("K2Node", "IsGameDataIDValid_TooltipFormat", "Is {StructName} ID Valid? \n\n{StructTooltip}"),
 			TEXT("StructName"), StructType->GetDisplayNameText(),
 			TEXT("StructTooltip"), StructType->GetToolTipText(/*bShortTooltip=*/ true));
 	}
 
-	return NSLOCTEXT("K2Node", "GetGameData_InvalidStructTypeTooltip", "Invalid Struct Type");
+	return NSLOCTEXT("K2Node", "IsGameDataIDValid_InvalidStructTypeTooltip", "Invalid Struct Type");
 }
 
-bool UK2Node_GetGameData::IsNodePure() const {
+bool UK2Node_IsGameDataIDValid::IsNodePure() const {
 	return true;
 }
 
-FText UK2Node_GetGameData::GetMenuCategory() const {
+FText UK2Node_IsGameDataIDValid::GetMenuCategory() const {
 	if (StructType == nullptr)
 		return Super::GetMenuCategory();
 	
@@ -61,23 +61,23 @@ FText UK2Node_GetGameData::GetMenuCategory() const {
 	return FText::FromString(FullCategory);
 }
 
-FSlateIcon UK2Node_GetGameData::GetIconAndTint(FLinearColor& OutColor) const {
+FSlateIcon UK2Node_IsGameDataIDValid::GetIconAndTint(FLinearColor& OutColor) const {
 	OutColor = GetNodeTitleColor();
 	static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
 	return Icon;
 }
 
-void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
+void UK2Node_IsGameDataIDValid::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	Super::GetMenuActions(ActionRegistrar);
 	
-	UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_GetGameData>(GetClass(), ActionRegistrar);
+	UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_IsGameDataIDValid>(GetClass(), ActionRegistrar);
 }
 
-void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {
+void UK2Node_IsGameDataIDValid::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {
 	Super::ExpandNode(CompilerContext, SourceGraph);
 
 	// FUNCTION NODE
-	const FName FunctionName = GET_FUNCTION_NAME_CHECKED(UDataUtilities, GetData);
+	const FName FunctionName = GET_FUNCTION_NAME_CHECKED(UDataUtilities, IsDataRowNameValid);
 	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataUtilities::StaticClass());
 	CallGetNode->AllocateDefaultPins();
@@ -85,7 +85,6 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	static const FName WorldContextObject_ParamName(TEXT("ContextObject"));
 	static const FName StructType_ParamName(TEXT("StructType"));
 	static const FName RowName_ParamName(TEXT("RowName"));
-	static const FName OutRow_ParamName(TEXT("OutRow"));
 
 	auto SpawnWorldContextPin = FindPin(TEXT("WorldContext"));
 	auto RowNamePin = FindPinChecked(TEXT("RowName"));
@@ -94,7 +93,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	auto CallCreateWorldContextPin = CallGetNode->FindPinChecked(WorldContextObject_ParamName);
 	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
 	auto CallCreateRowNamePin = CallGetNode->FindPinChecked(RowName_ParamName);
-	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(OutRow_ParamName);
+	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
 	// Copy the world context connection from the spawn node to 'USubsystemBlueprintLibrary::Get[something]Subsystem' if necessary
 	if (SpawnWorldContextPin != nullptr) {

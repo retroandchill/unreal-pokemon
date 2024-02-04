@@ -15,3 +15,10 @@ TSet<FName> UDataUtilities::GetAllDataIDs(UObject* ContextObject, const UScriptS
 	check(DataSubsystem != nullptr);
 	return DataSubsystem->GetDataTable(StructType).GetTableRowNames();
 }
+
+bool UDataUtilities::IsDataRowNameValid(UObject* ContextObject, const UScriptStruct* StructType, FName RowName) {
+	const auto DataSubsystem = Cast<UDataSubsystem>(
+			USubsystemBlueprintLibrary::GetGameInstanceSubsystem(ContextObject, UDataSubsystem::StaticClass()));
+	check(DataSubsystem != nullptr);
+	return DataSubsystem->GetDataTable(StructType).IsRowNameValid(RowName);
+}

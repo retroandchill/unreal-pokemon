@@ -27,7 +27,7 @@ public:
 	 * @param RowName The name of the row to retrieve
 	 * @param OutRow The output struct returned to the user
 	 */
-	UFUNCTION(BlueprintPure, CustomThunk, Category = "DataTable",
+	UFUNCTION(BlueprintPure, CustomThunk, Category = "Data Table",
 		meta=(WorldContext = "ContextObject", CustomStructureParam = "OutRow", BlueprintInternalUseOnly="true"))
 	static void GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, FTableRowBase& OutRow);
 
@@ -105,8 +105,18 @@ public:
 	 * @param StructType The struct type to get the data from
 	 * @return The IDs used to lookup each row in the table
 	 */
-	UFUNCTION(BlueprintPure, Category = "DataTable", meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
+	UFUNCTION(BlueprintPure, Category = "Data Table", meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
 	static TSet<FName> GetAllDataIDs(UObject* ContextObject, const UScriptStruct* StructType);
+
+	/**
+	 * Check if the given row name in the table exists
+	 * @param ContextObject The context object used to retrieve the data subsystem
+	 * @param StructType The struct type to get the data from
+	 * @param RowName The name of the row to retrieve
+	 * @return Does the row name in question exists?
+	 */
+	UFUNCTION(BlueprintPure, Category = "Data Table", meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
+	static bool IsDataRowNameValid(UObject* ContextObject, const UScriptStruct* StructType, FName RowName);
 	
 	/**
 	 * Utility method used by the K2Nodes to add all the types to the menu as needed
