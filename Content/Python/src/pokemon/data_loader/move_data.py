@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pokemon.data_loader.pbs_ini_data import PbsIniData
+from pokemon.data_loader import PbsIniData, DataContainer
 
 DamageCategory = {"Physical", "Special", "Status"}
 
@@ -28,7 +28,8 @@ class MoveData(PbsIniData):
     def get_schema(self) -> dict[str, tuple[str, str, Optional[set[str]]]]:
         return self.SCHEMA
 
-    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]) -> dict[str, any]:
+    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[DataContainer]]]) -> dict[
+        str, any]:
         item["RealName"] = item.get("RealName", "Unnamed")
         item["Type"] = item.get("Type", "")
         item["Category"] = item.get("Category", "Status")

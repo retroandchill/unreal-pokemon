@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, Union, Container
 
 
 class UnrealDataLoader:
@@ -11,3 +11,6 @@ class UnrealDataLoader:
             self.__data = self.__getter()
 
         return item in self.__data
+
+
+DataContainer = Union[Container[str], UnrealDataLoader]

@@ -2,7 +2,9 @@ import abc
 import json
 from typing import Optional
 
-from pokemon.data_loader import IniData, convert_data_to_json
+from pokemon.data_loader.ini_data import IniData
+from pokemon.data_loader.schema_parser import convert_data_to_json
+from pokemon.data_loader.unreal_data_loader import DataContainer
 
 
 class PbsIniData(abc.ABC):
@@ -16,12 +18,19 @@ class PbsIniData(abc.ABC):
             self.__data.append(item)
 
     @abc.abstractmethod
-    def get_schema(self) -> dict[str, tuple[str, str, Optional[set[str]]]]:
+    def get_schema(self) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
         pass
 
     @abc.abstractmethod
     def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]) -> dict[str, any]:
         pass
+
+    @staticmethod
+    def _get_key(item: dict[str, any]) -> str:
+        return item["Name"]
+
+    def get_keys(self) -> set[str]:
+        return set(map(self._get_key, self.__data))
 
     def to_json(self) -> str:
         return json.dumps(self.__data)
