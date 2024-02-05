@@ -15,7 +15,7 @@
 /**
  * Utility library used for getting data for the custom nodes
  */
-UCLASS()
+UCLASS(Blueprintable)
 class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
