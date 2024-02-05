@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pokemon.data_loader import PbsIniData, DataContainer
+from pokemon.data_loader.pbs_ini_data import PbsIniData, DataContainer
 
 DamageCategory = {"Physical", "Special", "Status"}
 
