@@ -6,7 +6,6 @@ DamageCategory = {"Physical", "Special", "Status"}
 
 
 class MoveData(PbsIniData):
-
     SCHEMA = {
         "SectionName": ("ID", "m", None),
         "Name": ("RealName", "s", None),

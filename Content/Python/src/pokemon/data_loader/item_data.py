@@ -8,7 +8,6 @@ BattleUse = {'NoBattleUse', 'OnPokemon', 'OnMove', 'OnBattler', 'OnFoe', 'Direct
 
 
 class ItemData(PbsIniData):
-
     SCHEMA = {
         "SectionName": ("ID", "m", None),
         "Name": ("RealName", "s", None),
@@ -66,4 +65,3 @@ class ItemData(PbsIniData):
     @staticmethod
     def __is_hm(item: dict[str, any]) -> bool:
         return item["FieldUse"] == "HM"
-
