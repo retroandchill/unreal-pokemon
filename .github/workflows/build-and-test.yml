@@ -28,7 +28,7 @@ jobs:
       - name: Clone Unreal Engine Repository
         uses: actions/checkout@v2
         with:
-          repository: https://github.com/EpicGames/UnrealEngine.git
+          repository: EpicGames/UnrealEngine.git
           ref: 5.3.2-release
           path: /home/runner/.ue5
           token: ${{ secrets.UNREAL_ENGINE_PAT }}
