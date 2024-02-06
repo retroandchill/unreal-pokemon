@@ -1,13 +1,26 @@
 from typing import Optional
 
-from pokemon.data_loader.pbs_ini_data import PbsIniData, DataContainer
+from .pbs_ini_data import PbsIniData, DataContainer
+from ..ini_data import IniData
+
+ItemArgs = tuple[DataContainer, DataContainer, DataContainer]
 
 
-class ItemData(PbsIniData):
+class ItemData(PbsIniData[ItemArgs]):
 
     def __init__(self, config_path: str, field_use_enum: DataContainer,
                  battle_use_enum: DataContainer, move_type_enum: DataContainer):
-        self.__schema = {
+        super().__init__(config_path, (field_use_enum, battle_use_enum, move_type_enum))
+
+    def _preprocess_data(self, section_name: str, data: dict[str, str]):
+        # No additional processing needed on items
+        pass
+
+    def get_schema(self, ini_data: IniData, args: ItemArgs) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
+        field_use_enum = args[0]
+        battle_use_enum = args[1]
+        move_type_enum = args[2]
+        return {
             "SectionName": ("ID", "m", None),
             "Name": ("RealName", "s", None),
             "NamePlural": ("RealNamePlural", "s", None),
@@ -25,14 +38,6 @@ class ItemData(PbsIniData):
             "Move": ("Move", "e", move_type_enum),
             "Description": ("Description", "q", None)
         }
-        super().__init__(config_path)
-
-    def _preprocess_data(self, section_name: str, data: dict[str, str]):
-        # No additional processing needed on items
-        pass
-
-    def get_schema(self) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
-        return self.__schema
 
     def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[DataContainer]]]):
         item["RealName"] = item.get("RealName", "Unnamed")

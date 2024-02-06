@@ -1,17 +1,19 @@
 import abc
 import json
-from typing import Optional
+from typing import Optional, Generic, TypeVar
 
 from pokemon.data_loader.ini_data import IniData
 from pokemon.data_loader.schema_parser import convert_data_to_json
 from pokemon.data_loader.unreal_data_loader import DataContainer
 
+T = TypeVar('T')
 
-class PbsIniData(abc.ABC):
-    def __init__(self, config_path: str):
+
+class PbsIniData(Generic[T], abc.ABC):
+    def __init__(self, config_path: str, args: T):
         ini_data = IniData(config_path)
         self.__data = []
-        schema = self.get_schema()
+        schema = self.get_schema(ini_data, args)
         for section_name, data in ini_data:
             self._preprocess_data(section_name, data)
             item = convert_data_to_json(section_name, data, schema)
@@ -23,7 +25,7 @@ class PbsIniData(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_schema(self) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
+    def get_schema(self, ini_data: IniData, args: T) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
         pass
 
     @abc.abstractmethod

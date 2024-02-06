@@ -30,3 +30,6 @@ class IniData:
 
     def __getitem__(self, item_id: str) -> dict[str, str]:
         return self._items[item_id]
+
+    def get_keys(self) -> set[str]:
+        return set(self._items.keys())

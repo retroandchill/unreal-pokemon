@@ -64,7 +64,7 @@ struct POKEMONDATA_API FType : public FTableRowBase {
 	TArray<FName> Immunities;
 
 	/**
-	 * Words/phrases that can be used to group certain kinds of moves."
+	 * Words/phrases that can be used to group certain kinds of types"
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TArray<FName> Tags;
