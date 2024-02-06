@@ -29,15 +29,14 @@ class MoveData(PbsIniData):
     def get_schema(self) -> dict[str, tuple[str, str, Optional[set[str]]]]:
         return self.__schema
 
-    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[DataContainer]]]) \
-            -> dict[str, any]:
+    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[DataContainer]]]):
         item["RealName"] = item.get("RealName", "Unnamed")
         item["Type"] = item.get("Type", "")
         item["Category"] = item.get("Category", "Status")
         item["Power"] = item.get("Power", 0)
         item["Accuracy"] = item.get("Accuracy", 100)
         item["TotalPP"] = item.get("TotalPP", 5)
-        item["Target"] = item.get("Target", "")
+        item["Target"] = item.get("Target", "NoTarget")
         item["Priority"] = item.get("Priority", 0)
         item["FunctionCode"] = item.get("FunctionCode", "")
         item["Tags"] = item.get("Tags", [])

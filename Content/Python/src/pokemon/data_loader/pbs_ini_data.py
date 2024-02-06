@@ -27,7 +27,7 @@ class PbsIniData(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]) -> dict[str, any]:
+    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]):
         pass
 
     @staticmethod
