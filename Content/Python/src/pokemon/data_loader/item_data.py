@@ -27,6 +27,10 @@ class ItemData(PbsIniData):
         }
         super().__init__(config_path)
 
+    def _preprocess_data(self, section_name: str, data: dict[str, str]):
+        # No additional processing needed on items
+        pass
+
     def get_schema(self) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
         return self.__schema
 

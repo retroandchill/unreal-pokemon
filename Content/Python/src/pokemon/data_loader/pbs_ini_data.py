@@ -13,9 +13,14 @@ class PbsIniData(abc.ABC):
         self.__data = []
         schema = self.get_schema()
         for section_name, data in ini_data:
+            self._preprocess_data(section_name, data)
             item = convert_data_to_json(section_name, data, schema)
             self._fix_data(item, schema)
             self.__data.append(item)
+
+    @abc.abstractmethod
+    def _preprocess_data(self, section_name: str, data: dict[str, str]):
+        pass
 
     @abc.abstractmethod
     def get_schema(self) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
