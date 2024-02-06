@@ -18,4 +18,3 @@ def import_moves(move_data: MoveData):
 def import_items(item_data: ItemData):
     print("Importing items...")
     import_data(item_data, "Items")
-
