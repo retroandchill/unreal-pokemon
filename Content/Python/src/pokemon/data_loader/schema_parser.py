@@ -1,21 +1,49 @@
+# ====================================================================================================================
+# ** Unreal Pokémon created by Retro & Chill
+# --------------------------------------------------------------------------------------------------------------------
+# This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
+# from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
+# property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
+# --------------------------------------------------------------------------------------------------------------------
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+# THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ====================================================================================================================
 import re
-from enum import Enum
-from typing import Type, Optional
+from typing import Optional
 from warnings import warn
+
+from pokemon.data_loader.unreal_data_loader import DataContainer
 
 
 def convert_data_to_json(section_name: str, data: dict[str, str],
-                         schema: dict[str, tuple[str, str, Optional[Type[Enum]]]]) -> dict[str, any]:
+                         schema: dict[str, tuple[str, str, Optional[DataContainer]]]) -> dict[str, any]:
+    """
+    Converts a raw INI dictionary to one that can be converted to a JSON
+    :param section_name: The name of the section to convert
+    :param data: The unformatted data dictionary
+    :param schema: The schema to convert the string data by
+    :return: The formatted data dictionary
+    """
     ret = {'Name': string_to_json_value(section_name, schema["SectionName"][1])}
     ret['ID'] = ret['Name']
     for key, value in data.items():
         s = schema[key]
-        ret[s[0]] = parse_csv_value(value, s[1], s[2])
+        ret[s[0]] = parse_ini_value(value, s[1], s[2])
 
     return ret
 
 
-def parse_csv_value(value: str, schema: str, enumeration: Optional[dict[str, str]]):
+def parse_ini_value(value: str, schema: str, enumeration: Optional[DataContainer]) -> any:
+    """
+    Parses a string in in the INI file and returns whatever data the schema requires
+    :param value: The string representation of the value
+    :param schema: The schema for the data
+    :param enumeration: The enumeration to validate the data against (only needed for enumeration fields)
+    :return: The formmated data
+    """
     ret = []
     repeat = False
     start = 0
@@ -32,7 +60,7 @@ def parse_csv_value(value: str, schema: str, enumeration: Optional[dict[str, str
     values = regex.split(value)
     idx = -1
     while True:
-        idx, record = method_name(idx, value, values, schema, start, enumeration)
+        idx, record = get_index_and_record(idx, value, values, schema, start, enumeration)
 
         if record:
             if subarrays:
@@ -46,8 +74,18 @@ def parse_csv_value(value: str, schema: str, enumeration: Optional[dict[str, str
     return ret[0] if not repeat and schema_length == 1 else ret
 
 
-def method_name(idx: int, value: any, values: list[any], schema: str, start: int,
-                enumeration: Optional[dict[str, str]]):
+def get_index_and_record(idx: int, value: str, values: list[str], schema: str, start: int,
+                         enumeration: Optional[dict[str, str]]):
+    """
+    Get the index and record information for the given schema value
+    :param idx: The current index at the beginning of this function
+    :param value: The string representation of the value
+    :param values: The full set of values for the given string
+    :param schema: The schema to parse the value from
+    :param start: The index to begin iteration from
+    :param enumeration: The enumeration to validate the data against (only needed for enumeration fields)
+    :return: A tuple containing the index following iteration and record information
+    """
     record = []
     for i in range(start, len(schema)):
         idx += 1
@@ -65,7 +103,15 @@ def method_name(idx: int, value: any, values: list[any], schema: str, start: int
     return idx, record
 
 
-def string_to_json_value(value: str, schema: str, enumeration: Optional[Type[Enum]] = None):
+def string_to_json_value(value: str, schema: str, enumeration: Optional[DataContainer] = None) -> any:
+    """
+    Converts a string to the appropriate JSON field value
+    :param value: The string to parse
+    :param schema: The schema string to convert the value with
+    :param enumeration: The enumeration to validate the data against (only needed for enumeration fields)
+    :return: The parsed JSON field value
+    :raises ValueError: If the provided schema is not a recognized schema value
+    """
     if schema == 'i':
         return int(value)
     elif schema == 'u':
@@ -97,7 +143,13 @@ def string_to_json_value(value: str, schema: str, enumeration: Optional[Type[Enu
     raise ValueError("Failed to parse field '{0}' with provided schema value '{1}'".format(value, schema))
 
 
-def validate_name_field(value):
+def validate_name_field(value: str) -> str:
+    """
+    Validate a field that must represent name value
+    :param value: The string to validate
+    :return: The validate name string
+    :raises ValueError: If the provided string does not conform to the schema defined
+    """
     if re.match(r'^(?!\d)\w+$', value):
         raise ValueError("Field '{0}' must contain only letters, digits, and underscores and can't "
                          "begin with a number.".format(value))
@@ -105,7 +157,13 @@ def validate_name_field(value):
     return value
 
 
-def validate_unsigned_int_field(value: any) -> int:
+def validate_unsigned_int_field(value: str) -> int:
+    """
+    Validate that a string value is an unsigned integer
+    :param value: The value to validate
+    :return: The integer representation of the value
+    :raises ValueError: If the provided value is negative
+    """
     ret = int(value)
     if ret < 0:
         raise ValueError('Field {0} is not a positive integer or 0.'.format(value))
@@ -113,7 +171,13 @@ def validate_unsigned_int_field(value: any) -> int:
     return ret
 
 
-def validate_positive_int_field(value):
+def validate_positive_int_field(value: str) -> int:
+    """
+    Validate that a string value is a positive integer
+    :param value: The value to validate
+    :return: The integer representation of the value
+    :raises ValueError: If the provided value is 0 or negative
+    """
     ret = int(value)
     if ret <= 0:
         raise ValueError('Field {0} is not a positive integer.'.format(value))
@@ -121,7 +185,14 @@ def validate_positive_int_field(value):
     return ret
 
 
-def check_enum_field(field: str, enumeration: Optional[set[str]]) -> str:
+def check_enum_field(field: str, enumeration: Optional[DataContainer]) -> str:
+    """
+    Validate that a field is contained within an enumeration
+    :param field: The string to validate against the enum
+    :param enumeration: The set of possible values to consider
+    :return: The validated value
+    :raises ValueError: If the provided value is not in the enumeration
+    """
     if enumeration is None:
         warn("Field '{0}' was specified as an enumeration, but no enumeration was provided! "
              "Validation will be skipped".format(field))
