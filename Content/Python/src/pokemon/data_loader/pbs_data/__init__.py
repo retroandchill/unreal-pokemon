@@ -13,4 +13,5 @@
 # ====================================================================================================================
 from .item_data import ItemData
 from .move_data import MoveData
+from .pbs_ini_data import PbsIniData
 from .type_data import TypeData

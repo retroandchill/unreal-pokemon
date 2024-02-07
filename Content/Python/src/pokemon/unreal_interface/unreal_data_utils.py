@@ -18,6 +18,11 @@ from unreal import EnumBase, Name, EditorAssetLibrary, DataTable, DataTableFunct
 
 
 def enum_values(enum: Type[EnumBase]) -> set[str]:
+    """
+    Parse an Unreal enumeration into a set of string keys
+    :param enum: The enum to parse the keys from
+    :return: The unordered set of keys
+    """
     ret = set()
     pattern = re.compile(r'\s+')
     for attr in vars(enum):
@@ -30,10 +35,21 @@ def enum_values(enum: Type[EnumBase]) -> set[str]:
 
 
 def convert_name(name: Name) -> str:
+    """
+    Converts an Unreal Name object into a Python string
+    :param name: The name object to convert
+    :return: The Python string version
+    """
     return str(name)
 
 
 def data_table_values(directory_name: str, table_name: str) -> set[str]:
+    """
+    Gets the keys from an Unreal DataTable asset
+    :param directory_name: The directory in the Content Browser to look in
+    :param table_name: The name of the table as seen in the editor
+    :return: The unordered set of keys from the table
+    """
     eal = EditorAssetLibrary()
     data_table = eal.load_asset('/Game/{0}/{1}.{1}'.format(directory_name, table_name))
     if isinstance(data_table, DataTable):

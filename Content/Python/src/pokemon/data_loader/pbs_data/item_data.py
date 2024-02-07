@@ -20,6 +20,7 @@ ItemArgs = tuple[DataContainer, DataContainer, DataContainer]
 
 
 class ItemData(PbsIniData[ItemArgs]):
+    """Represents the translated item data imported from items.txt"""
 
     def __init__(self, config_path: str, field_use_enum: DataContainer,
                  battle_use_enum: DataContainer, move_type_enum: DataContainer):

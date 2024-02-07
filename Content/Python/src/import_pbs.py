@@ -15,7 +15,8 @@ import os
 
 from unreal import Paths, FieldUse, BattleUse, MoveDamageCategory
 
-from pokemon.data_loader import ItemData, MoveData, UnrealDataLoader, TypeData
+from pokemon.data_loader import UnrealDataLoader
+from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData
 from pokemon.data_writer import import_items, import_moves, import_types
 from pokemon.unreal_interface import enum_values, data_table_values
 
