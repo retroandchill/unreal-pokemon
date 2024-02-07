@@ -1,3 +1,16 @@
+# ====================================================================================================================
+# ** Unreal Pokémon created by Retro & Chill
+# --------------------------------------------------------------------------------------------------------------------
+# This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
+# from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
+# property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
+# --------------------------------------------------------------------------------------------------------------------
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+# THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ====================================================================================================================
 import abc
 import json
 from typing import Optional, Generic, TypeVar
@@ -10,6 +23,8 @@ T = TypeVar('T')
 
 
 class PbsIniData(Generic[T], abc.ABC):
+    """Abstract class used for parsing PBS files that resemble a .ini file"""
+
     def __init__(self, config_path: str, args: T):
         ini_data = IniData(config_path)
         self.__data = []
@@ -21,23 +36,49 @@ class PbsIniData(Generic[T], abc.ABC):
             self.__data.append(item)
 
     @abc.abstractmethod
-    def _preprocess_data(self, section_name: str, data: dict[str, str]):
+    def _preprocess_data(self, section_name: str, data: dict[str, str]) -> None:
+        """Preprocesses the data that is received from the raw PBS file
+        :param section_name: The name of the section parsed from the file
+        :param data: The dictionary represeting the data, as unformatted strings
+        """
         pass
 
     @abc.abstractmethod
     def get_schema(self, ini_data: IniData, args: T) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
+        """Get the schema used to parse the individual ini entries
+        :param ini_data: The raw ini data that was passed
+        :param args: The additional arguments that were passed to the constructor
+        :return: The schema to parse the individual ini entries
+        """
         pass
 
     @abc.abstractmethod
-    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]):
+    def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[set[str]]]]) -> None:
+        """
+        Fix any issues with the data after it has been parsed
+        :param item: The item that is to be fixed if needed
+        :param schema: The original schema used to parse the item
+        """
         pass
 
     @staticmethod
     def _get_key(item: dict[str, any]) -> str:
+        """Get the key of the given item
+        :param item: The item to extract the key from
+        :return: The key of the given item
+        """
         return item["Name"]
 
     def get_keys(self) -> set[str]:
+        """
+        Get the keys of each of the data entries
+        :return: An unordered set of keys
+        """
         return set(map(self._get_key, self.__data))
 
     def to_json(self) -> str:
+        """
+        Convert the list of data to a JSON string
+        :return: A JSON representation of the data
+        """
         return json.dumps(self.__data)
