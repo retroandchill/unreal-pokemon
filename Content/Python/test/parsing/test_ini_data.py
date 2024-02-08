@@ -13,7 +13,8 @@
 # ====================================================================================================================
 import unittest
 
-from pokemon.data_loader import IniData, ItemData
+from pokemon.data_loader import IniData
+from pokemon.data_loader.pbs_data import ItemData, SpeciesData
 
 
 class TestIniData(unittest.TestCase):
@@ -35,12 +36,16 @@ class TestIniData(unittest.TestCase):
         self.assertEqual(["REPEL", "SUPERREPEL", "MAXREPEL"], names)
 
     def test_parse_items(self):
-        item_data = ItemData("resources/items.txt")
+        item_data = ItemData("resources/items.txt", None, None, None)
         print(item_data.to_json())
         self.assertNotEqual('', item_data.to_json())
 
-        with open("items.json", 'w') as file:
-            file.write(item_data.to_json())
+    def test_parse_pokemon_data(self):
+        pokemon_data = SpeciesData("resources/pokemon.txt", None, None, None,
+                                   None, None, None, None, None,
+                                   None, None, None, None)
+        print(pokemon_data.to_json())
+        self.assertNotEqual('', pokemon_data.to_json())
 
 
 if __name__ == '__main__':

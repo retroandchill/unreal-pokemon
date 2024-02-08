@@ -86,7 +86,7 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
             "WildItemCommon": ("WildItemCommon", "*e", item_ids),
             "WildItemUncommon": ("WildItemUncommon", "*e", item_ids),
             "WildItemRare": ("WildItemRare", "*e", item_ids),
-            "Evolution": ("Evolution", "^seS", key_loader, evolution_ids)
+            "Evolutions": ("Evolutions", "^seS", key_loader, evolution_ids)
         }
 
     def _fix_data(self, item: dict[str, any], schema: dict[str, tuple[str, str, Optional[DataContainer]]]):
