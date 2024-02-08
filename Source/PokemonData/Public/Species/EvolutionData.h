@@ -27,18 +27,18 @@ struct POKEMONDATA_API FEvolutionData : public FTableRowBase {
 	/**
 	 * The internal ID used for lookup by the game
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * The name that is displayed to the player
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**
 	 * The C++ or Blueprint Class that implements Evolution Base that corresponds to this evolution method
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (MustImplement = "EvolutionBase"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Condition Evaluation", meta = (MustImplement = "EvolutionBase"))
 	TSubclassOf<UObject> ImplementationClass;
 };

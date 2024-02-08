@@ -71,7 +71,7 @@ void GrowthRateErraticTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray
 
 bool GrowthRateErraticTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
-	
+
 	auto GrowthRate = NewObject<UErratic>();
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
 	                 GrowthRate->ExpForLevel(Level), GErraticGrowthTable[Level]);

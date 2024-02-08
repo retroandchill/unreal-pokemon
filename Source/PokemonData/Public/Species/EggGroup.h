@@ -21,25 +21,24 @@
  * Represents an Egg Group for the game
  */
 USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
-struct POKEMONDATA_API FEggGroup : public FTableRowBase  {
- GENERATED_BODY()
- 
- /**
-   * The internal ID used for lookup by the game
-   */
- UPROPERTY(BlueprintReadOnly, EditAnywhere)
- FName ID;
+struct POKEMONDATA_API FEggGroup : public FTableRowBase {
+	GENERATED_BODY()
 
- /**
-  * The name that is displayed to the player
-  */
- UPROPERTY(BlueprintReadOnly, EditAnywhere)
- FText RealName;
+	/**
+	  * The internal ID used for lookup by the game
+	  */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
+	FName ID;
 
- /**
-  * What kind of Egg Group is this
-  */
- UPROPERTY(BlueprintReadOnly, EditAnywhere)
- EEggGroupType Type;
- 
+	/**
+	 * The name that is displayed to the player
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
+	FText RealName;
+
+	/**
+	 * What kind of Egg Group is this
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding")
+	EEggGroupType Type;
 };

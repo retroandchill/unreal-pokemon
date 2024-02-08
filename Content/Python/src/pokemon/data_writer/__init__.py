@@ -11,4 +11,4 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # ====================================================================================================================
-from .data_table_writer import import_items, import_moves, import_types
+from .data_table_writer import import_items, import_moves, import_types, import_abilities
