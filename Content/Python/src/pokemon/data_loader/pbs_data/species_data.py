@@ -13,23 +13,26 @@
 # ====================================================================================================================
 from typing import Optional
 
+from unreal import Stat
+
 from .pbs_ini_data import DataContainer, PbsIniData
 from ..ini_data import IniData
 from ..unreal_data_loader import UnrealDataLoader
 
 SpeciesArgs = tuple[
-    DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer]
+    DataContainer, DataContainer, DataContainer, dict[
+        str, Stat], DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer]
 
 
 class SpeciesData(PbsIniData[SpeciesArgs]):
     """Represents the translated species data imported from pokemon.txt"""
 
     def __init__(self, config_path: str, type_ids: DataContainer, gender_ratio_ids: DataContainer,
-                 growth_rate_ids: DataContainer, stat_ids: DataContainer, ability_ids: DataContainer,
+                 growth_rate_ids: DataContainer, stat_ids: dict[str, Stat], ability_ids: DataContainer,
                  move_ids: DataContainer, egg_group_ids: DataContainer, item_ids: DataContainer,
                  body_color_ids: DataContainer, body_shape_ids: DataContainer, habitat_ids: DataContainer,
                  evolution_ids: DataContainer):
-        self.__stat_ids: Optional[DataContainer] = None
+        self.__stat_ids: dict[str, Stat] = stat_ids
         super().__init__(config_path, (type_ids, gender_ratio_ids, growth_rate_ids, stat_ids, ability_ids,
                                        move_ids, egg_group_ids, item_ids, body_color_ids, body_shape_ids,
                                        habitat_ids, evolution_ids))
@@ -43,7 +46,6 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         type_ids = args[0]
         gender_ratio_ids = args[1]
         growth_rate_ids = args[2]
-        self.__stat_ids = args[3]
         ability_ids = args[4]
         move_ids = args[5]
         egg_group_ids = args[6]
@@ -97,6 +99,17 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         item["Types"] = item.get("Types", ["NORMAL"])
         item["BaseStats"] = item.get("BaseStats", {})
         item["EVs"] = item.get("EVs", {})
+
+        stats_in_order = list(self.__stat_ids.values())
+        stats_in_order.sort(key=lambda stat: stat.pbs_order, reverse=True)
+
+        if isinstance(item["BaseStats"], list):
+            formated_base_stats = {}
+            for i in range(0, len(item["BaseStats"])):
+                formated_base_stats[stats_in_order[i].id] = item["BaseStats"][i]
+
+            item["BaseStats"] = formated_base_stats
+
 
         for s in self.__stat_ids:
             if s not in item["BaseStats"] or item["BaseStats"][s] <= 0:
