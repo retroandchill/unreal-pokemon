@@ -26,13 +26,13 @@ struct POKEMONDATA_API FMove : public FTableRowBase {
 	GENERATED_BODY()
 
 	/**
-	 * ID of this move
+	 * The internal ID used for lookup by the game
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FName ID;
 
 	/**
-	 * Name of this move as displayed by the game.
+	 * The name that is displayed to the player
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FText RealName;
@@ -98,7 +98,7 @@ struct POKEMONDATA_API FMove : public FTableRowBase {
 	int32 EffectChance;
 
 	/**
-	 * Description of this item.
+	 * Description as displayed to the player
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FText Description;
