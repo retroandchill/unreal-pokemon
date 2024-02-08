@@ -25,10 +25,10 @@ void UK2Node_IsGameDataIDValid::AllocateDefaultPins() {
 	if (GetBlueprint()->ParentClass->HasMetaData(FBlueprintMetadata::MD_ShowWorldContextPin)) {
 		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), TEXT("WorldContext"));
 	}
-	
+
 	CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Boolean, UEdGraphSchema_K2::PN_ReturnValue);
-	
+
 	Super::AllocateDefaultPins();
 }
 
@@ -39,7 +39,9 @@ FText UK2Node_IsGameDataIDValid::GetNodeTitle(ENodeTitleType::Type TitleType) co
 		}
 
 		const FString& StructName = StructType->GetName();
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "IsGameDataIDValid_NodeTitleFormat", "Is {ClassName} ID Valid?"), TEXT("ClassName"), FText::FromString(StructName));
+		return FText::FormatNamed(
+			NSLOCTEXT("K2Node", "IsGameDataIDValid_NodeTitleFormat", "Is {ClassName} ID Valid?"), TEXT("ClassName"),
+			FText::FromString(StructName));
 	}
 
 	return GetTooltipText();
@@ -47,9 +49,10 @@ FText UK2Node_IsGameDataIDValid::GetNodeTitle(ENodeTitleType::Type TitleType) co
 
 FText UK2Node_IsGameDataIDValid::GetTooltipText() const {
 	if (StructType) {
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "IsGameDataIDValid_TooltipFormat", "Is {StructName} ID Valid? \n\n{StructTooltip}"),
-			TEXT("StructName"), StructType->GetDisplayNameText(),
-			TEXT("StructTooltip"), StructType->GetToolTipText(/*bShortTooltip=*/ true));
+		return FText::FormatNamed(NSLOCTEXT("K2Node", "IsGameDataIDValid_TooltipFormat",
+		                                    "Is {StructName} ID Valid? \n\n{StructTooltip}"),
+		                          TEXT("StructName"), StructType->GetDisplayNameText(),
+		                          TEXT("StructTooltip"), StructType->GetToolTipText(/*bShortTooltip=*/ true));
 	}
 
 	return NSLOCTEXT("K2Node", "IsGameDataIDValid_InvalidStructTypeTooltip", "Invalid Struct Type");
@@ -62,7 +65,7 @@ bool UK2Node_IsGameDataIDValid::IsNodePure() const {
 FText UK2Node_IsGameDataIDValid::GetMenuCategory() const {
 	if (StructType == nullptr)
 		return Super::GetMenuCategory();
-	
+
 	FString FullCategory = "Data";
 	if (auto MetaTag = TEXT("DatabaseType"); StructType->HasMetaData(MetaTag))
 		FullCategory += "|" + StructType->GetMetaData(MetaTag);
@@ -79,7 +82,7 @@ FSlateIcon UK2Node_IsGameDataIDValid::GetIconAndTint(FLinearColor& OutColor) con
 
 void UK2Node_IsGameDataIDValid::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	Super::GetMenuActions(ActionRegistrar);
-	
+
 	UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_IsGameDataIDValid>(GetClass(), ActionRegistrar);
 }
 
@@ -110,7 +113,7 @@ void UK2Node_IsGameDataIDValid::ExpandNode(FKismetCompilerContext& CompilerConte
 		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
 	}
 
-	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct *>(StructType.Get());
+	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
 	CompilerContext.MovePinLinksToIntermediate(*RowNamePin, *CallCreateRowNamePin);
 
 	CallCreateOutRowPin->PinType = ReturnValuePin->PinType;

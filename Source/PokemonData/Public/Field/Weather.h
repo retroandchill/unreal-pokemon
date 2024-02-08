@@ -27,13 +27,13 @@ struct POKEMONDATA_API FWeather : public FTableRowBase {
 	/**
 	 * The internal ID used for lookup by the game
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * The name that is displayed to the player
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**
@@ -43,12 +43,12 @@ struct POKEMONDATA_API FWeather : public FTableRowBase {
 	 * - Some evolution methods check the current weather's category.
 	 * - "Rain" auto-waters berry plants.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
 	FName Category;
 
 	/**
 	 * The Actor class that handles actually displaying the weather on the map
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (MustImplement = "WeatherVisuals"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals", meta = (MustImplement = "WeatherVisuals"))
 	TSubclassOf<AActor> ImplementationClass;
 };

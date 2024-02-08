@@ -28,24 +28,24 @@ struct POKEMONDATA_API FStatus : public FTableRowBase {
 	/**
 	 * The internal ID used for lookup by the game
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * The name that is displayed to the player
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**
 	 * The animation displayed when this status is inflicted and when its effect goes off
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (MustImplement = "AnimationBase"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals", meta = (MustImplement = "AnimationBase"))
 	TSubclassOf<AActor> Animation;
 
 	/**
 	 * The icon displayed in the UI for this status condition
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UPaperSprite *Icon;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals")
+	UPaperSprite* Icon;
 };

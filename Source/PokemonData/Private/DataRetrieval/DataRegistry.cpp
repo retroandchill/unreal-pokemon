@@ -22,7 +22,8 @@ FDataRegistry& FDataRegistry::GetInstance() {
 	return DataRegistry;
 }
 
-TUniquePtr<IGameData> FDataRegistry::CreateDataTableProxy(const UScriptStruct* StructType, const TObjectPtr<UDataTable>& DataTable) const {
+TUniquePtr<IGameData> FDataRegistry::CreateDataTableProxy(const UScriptStruct* StructType,
+                                                          const TObjectPtr<UDataTable>& DataTable) const {
 	check(StructType != nullptr);
 	auto TypeName = StructType->GetFName();
 

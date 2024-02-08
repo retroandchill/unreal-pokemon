@@ -41,4 +41,4 @@ class UnrealDataLoader:
             raise AttributeError("Getter already assigned!")
 
 
-DataContainer = Union[set[str], UnrealDataLoader]
+DataContainer = Union[set[str], UnrealDataLoader, dict[str, any]]

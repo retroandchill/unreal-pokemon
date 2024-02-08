@@ -116,7 +116,8 @@ public:
 	 * @param StructType The struct type to get the data from
 	 * @return The IDs used to lookup each row in the table
 	 */
-	UFUNCTION(BlueprintPure, Category = "Data Table", meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
+	UFUNCTION(BlueprintPure, Category = "Data Table",
+		meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
 	static TSet<FName> GetAllDataIDs(UObject* ContextObject, const UScriptStruct* StructType);
 
 	/**
@@ -126,9 +127,10 @@ public:
 	 * @param RowName The name of the row to retrieve
 	 * @return Does the row name in question exists?
 	 */
-	UFUNCTION(BlueprintPure, Category = "Data Table", meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
+	UFUNCTION(BlueprintPure, Category = "Data Table",
+		meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
 	static bool IsDataRowNameValid(UObject* ContextObject, const UScriptStruct* StructType, FName RowName);
-	
+
 	/**
 	 * Utility method used by the K2Nodes to add all the types to the menu as needed
 	 * @tparam T The type of the node we're registering
@@ -142,7 +144,8 @@ public:
 		AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()),
 		                                           AssetData);
 
-		auto CustomizeCallback = [](UEdGraphNode* Node, [[maybe_unused]] bool bIsTemplateNode, const UScriptStruct* Subclass) {
+		auto CustomizeCallback = [](UEdGraphNode* Node, [[maybe_unused]] bool bIsTemplateNode,
+		                            const UScriptStruct* Subclass) {
 			auto TypedNode = CastChecked<T>(Node);
 			TypedNode->Initialize(Subclass);
 		};
