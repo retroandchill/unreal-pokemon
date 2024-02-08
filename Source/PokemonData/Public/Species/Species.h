@@ -57,6 +57,18 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	TMap<FName, int32> BaseStats;
 
 	/**
+	 * Determines a Pokémon's chance of being Male/Female
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
+	FName GenderRatio;
+
+	/**
+	 * The rate at which this Pokémon levels up from gaining Exp.
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
+	FName GrowthRate;
+
+	/**
 	 * The base amount of Exp this species gives when defeated/caught
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
