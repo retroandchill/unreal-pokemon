@@ -16,10 +16,10 @@ from typing import Optional
 from .pbs_ini_data import PbsIniData, DataContainer
 from ..ini_data import IniData
 
-TypeArgs = tuple
+AbilityArgs = tuple
 
 
-class AbilityData(PbsIniData):
+class AbilityData(PbsIniData[AbilityArgs]):
     """Represents the translated ability data imported from abilities.txt"""
 
     def __init__(self, config_path: str):
@@ -29,7 +29,7 @@ class AbilityData(PbsIniData):
         # No additional processing needed on abilities
         pass
 
-    def get_schema(self, ini_data: IniData, args: TypeArgs) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
+    def get_schema(self, ini_data: IniData, args: AbilityArgs) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
         return {
             "SectionName": ("ID", "m", None),
             "Name": ("RealName", "s", None),
