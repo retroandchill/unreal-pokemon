@@ -31,17 +31,21 @@ def convert_data_to_json(section_name: str, data: dict[str, str],
     ret['ID'] = ret['Name']
     for key, value in data.items():
         s = schema[key]
-        ret[s[0]] = parse_ini_value(value, s[1], s[2])
+        enums = []
+        for i in range(2, len(s)):
+            enums.append(s[i])
+
+        ret[s[0]] = parse_ini_value(value, s[1], enums)
 
     return ret
 
 
-def parse_ini_value(value: str, schema: str, enumeration: Optional[DataContainer]) -> any:
+def parse_ini_value(value: str, schema: str, enumerations: list[Optional[DataContainer]]) -> any:
     """
     Parses a string in in the INI file and returns whatever data the schema requires
     :param value: The string representation of the value
     :param schema: The schema for the data
-    :param enumeration: The enumeration to validate the data against (only needed for enumeration fields)
+    :param enumerations: The enumerations to validate the data against (only needed for enumeration fields)
     :return: The formmated data
     """
     ret = []
@@ -60,7 +64,7 @@ def parse_ini_value(value: str, schema: str, enumeration: Optional[DataContainer
     values = regex.split(value)
     idx = -1
     while True:
-        idx, record = get_index_and_record(idx, value, values, schema, start, enumeration)
+        idx, record = get_index_and_record(idx, value, values, schema, start, enumerations)
 
         if record:
             if subarrays:
@@ -75,7 +79,7 @@ def parse_ini_value(value: str, schema: str, enumeration: Optional[DataContainer
 
 
 def get_index_and_record(idx: int, value: str, values: list[str], schema: str, start: int,
-                         enumeration: Optional[dict[str, str]]):
+                         enumerations: list[Optional[dict[str, str]]]):
     """
     Get the index and record information for the given schema value
     :param idx: The current index at the beginning of this function
@@ -83,7 +87,7 @@ def get_index_and_record(idx: int, value: str, values: list[str], schema: str, s
     :param values: The full set of values for the given string
     :param schema: The schema to parse the value from
     :param start: The index to begin iteration from
-    :param enumeration: The enumeration to validate the data against (only needed for enumeration fields)
+    :param enumerations: The enumeration to validate the data against (only needed for enumeration fields)
     :return: A tuple containing the index following iteration and record information
     """
     record = []
@@ -99,7 +103,8 @@ def get_index_and_record(idx: int, value: str, values: list[str], schema: str, s
             idx = len(values)
             break
         else:
-            record.append(string_to_json_value(values[idx], sche, enumeration))
+            enum = enumerations[i - start] if i - start < len(enumerations) else None
+            record.append(string_to_json_value(values[idx], sche.lower(), enum))
     return idx, record
 
 
