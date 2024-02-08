@@ -29,30 +29,31 @@ void UK2Node_GetAllGameDataIDs::AllocateDefaultPins() {
 	FCreatePinParams ReturnTypePinParams;
 	ReturnTypePinParams.ContainerType = EPinContainerType::Set;
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PN_ReturnValue, ReturnTypePinParams);
-	
+
 	Super::AllocateDefaultPins();
 }
 
 FText UK2Node_GetAllGameDataIDs::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-	if (StructType)
-	{
-		if (TitleType == ENodeTitleType::FullTitle)
-		{
+	if (StructType) {
+		if (TitleType == ENodeTitleType::FullTitle) {
 			return StructType->GetDisplayNameText();
 		}
 
 		const FString& StructName = StructType->GetName();
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetAllGameDataIDs_NodeTitleFormat", "Get All {ClassName} IDs"), TEXT("ClassName"), FText::FromString(StructName));
+		return FText::FormatNamed(
+			NSLOCTEXT("K2Node", "GetAllGameDataIDs_NodeTitleFormat", "Get All {ClassName} IDs"), TEXT("ClassName"),
+			FText::FromString(StructName));
 	}
-	
+
 	return Super::GetNodeTitle(TitleType);
 }
 
 FText UK2Node_GetAllGameDataIDs::GetTooltipText() const {
 	if (StructType) {
-		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetAllGameDataIDs_TooltipFormat", "Get All {StructName} IDs \n\n{StructTooltip}"),
-			TEXT("StructName"), StructType->GetDisplayNameText(),
-			TEXT("StructTooltip"), StructType->GetToolTipText(/*bShortTooltip=*/ true));
+		return FText::FormatNamed(NSLOCTEXT("K2Node", "GetAllGameDataIDs_TooltipFormat",
+		                                    "Get All {StructName} IDs \n\n{StructTooltip}"),
+		                          TEXT("StructName"), StructType->GetDisplayNameText(),
+		                          TEXT("StructTooltip"), StructType->GetToolTipText(/*bShortTooltip=*/ true));
 	}
 
 	return NSLOCTEXT("K2Node", "GetAllGameDataIDs_InvalidStructTypeTooltip", "Invalid Struct Type");
@@ -65,7 +66,7 @@ bool UK2Node_GetAllGameDataIDs::IsNodePure() const {
 FText UK2Node_GetAllGameDataIDs::GetMenuCategory() const {
 	if (StructType == nullptr)
 		return Super::GetMenuCategory();
-	
+
 	FString FullCategory = "Data";
 	if (auto MetaTag = TEXT("DatabaseType"); StructType->HasMetaData(MetaTag))
 		FullCategory += "|" + StructType->GetMetaData(MetaTag);
@@ -82,7 +83,7 @@ FSlateIcon UK2Node_GetAllGameDataIDs::GetIconAndTint(FLinearColor& OutColor) con
 
 void UK2Node_GetAllGameDataIDs::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	Super::GetMenuActions(ActionRegistrar);
-	
+
 	UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_GetAllGameDataIDs>(GetClass(), ActionRegistrar);
 }
 
@@ -110,7 +111,7 @@ void UK2Node_GetAllGameDataIDs::ExpandNode(FKismetCompilerContext& CompilerConte
 		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
 	}
 
-	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct *>(StructType.Get());
+	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
 	CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateReturnValuePin);
 
 	BreakAllNodeLinks();

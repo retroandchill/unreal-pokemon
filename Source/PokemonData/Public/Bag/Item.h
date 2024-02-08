@@ -28,13 +28,13 @@ struct POKEMONDATA_API FItem : public FTableRowBase {
 	/**
 	 * ID of this item
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * Name of this item as displayed by the game.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**

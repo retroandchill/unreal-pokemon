@@ -28,30 +28,31 @@ struct POKEMONDATA_API FStat : public FTableRowBase {
 	/**
 	 * The internal ID used for lookup by the game
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * The name that is displayed to the player
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**
 	 * The name that is displayed to the player when there is a limited space
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealNameBrief;
 
 	/**
 	 * What kind of stat is this?
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
 	EPokemonStatType Type;
 
 	/**
 	 * The order this stat is processed when parsing the PBS files
 	 */
-	UPROPERTY(DisplayName = "PBS Order", BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "Type != EPokemonStatType::Battle", UIMin = 0, ClampMin = 0))
+	UPROPERTY(DisplayName = "PBS Order", BlueprintReadOnly, EditAnywhere, Category = "Metadata",
+		meta = (EditCondition = "Type != EPokemonStatType::Battle", UIMin = 0, ClampMin = 0))
 	int32 PbsOrder;
 };

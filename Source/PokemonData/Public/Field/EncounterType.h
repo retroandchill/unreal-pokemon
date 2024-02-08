@@ -28,25 +28,24 @@ struct POKEMONDATA_API FEncounterType : public FTableRowBase {
 	/**
 	 * The internal ID used for lookup by the game
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * The name that is displayed to the player
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**
 	 * The category of encounter this belongs to
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Encounter Info")
 	EEncounterCategory Type;
 
 	/**
 	 * The weight applied for when an encounter will occur when taking a step
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (UIMin = 0, ClampMin = 10, UIMax = 100, ClampMax = 100))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Encounter Info", meta = (UIMin = 0, ClampMin = 10, UIMax = 100, ClampMax = 100))
 	int32 TriggerChance;
-	
 };

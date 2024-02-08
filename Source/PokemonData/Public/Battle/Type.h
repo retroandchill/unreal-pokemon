@@ -27,25 +27,25 @@ struct POKEMONDATA_API FType : public FTableRowBase {
 	/**
 	 * The internal ID used for lookup by the game
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FName ID;
 
 	/**
 	 * The name that is displayed to the player
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 
 	/**
 	 * Graphic that represents a sprite in the menu
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals")
 	UPaperSprite* Icon;
 
 	/**
 	 * Is this type special? (Only means anything when the Physical/Special-split is disabled)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Type Info")
 	bool IsSpecialType = false;
 
 	/**
@@ -53,30 +53,30 @@ struct POKEMONDATA_API FType : public FTableRowBase {
 	 *
 	 * Examples of this would include the "???" Type used by Curse in generation II-IV and Shadow Moves.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Type Info")
 	bool IsPseudoType = false;
 
 	/**
 	 * Move types that deal super-effective damage to this type
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Matchups")
 	TArray<FName> Weaknesses;
 
 	/**
 	 * Move types that deal not very effective damage to this type
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Matchups")
 	TArray<FName> Resistances;
 
 	/**
 	 * Move types that deal no damage to this type
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Matchups")
 	TArray<FName> Immunities;
 
 	/**
 	 * Words/phrases that can be used to group certain kinds of types"
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
 	TArray<FName> Tags;
 };

@@ -157,7 +157,7 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex", meta = (UIMin = 0.1f, ClampMin = 0.1f))
 	float Height;
-	
+
 	/**
 	 * This Pokémon's weight in kilograms (kg)
 	 */
@@ -205,7 +205,7 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata", meta = (UIMin = 1, ClampMin = 1))
 	int32 Generation;
-	
+
 	/**
 	 * Words/phrases that can be used to group the data"
 	 */
