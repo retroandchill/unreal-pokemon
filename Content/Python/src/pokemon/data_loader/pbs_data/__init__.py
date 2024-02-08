@@ -11,6 +11,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # ====================================================================================================================
+from .ability_data import AbilityData
 from .item_data import ItemData
 from .move_data import MoveData
 from .pbs_ini_data import PbsIniData
