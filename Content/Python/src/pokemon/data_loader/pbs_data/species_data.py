@@ -106,10 +106,12 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         if isinstance(item["BaseStats"], list):
             formated_base_stats = {}
             for i in range(0, len(item["BaseStats"])):
-                formated_base_stats[stats_in_order[i].id] = item["BaseStats"][i]
+                formated_base_stats[str(stats_in_order[i].id)] = item["BaseStats"][i]
 
             item["BaseStats"] = formated_base_stats
 
+        if isinstance(item["EVs"], list):
+            item["EVs"] = dict(item["EVs"])
 
         for s in self.__stat_ids:
             if s not in item["BaseStats"] or item["BaseStats"][s] <= 0:

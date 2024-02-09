@@ -13,9 +13,12 @@
 # ====================================================================================================================
 import unittest
 
+import mocks
+from mocks.mock_unreal import Stat, Name, PokemonStatType, Text
 from pokemon.data_loader import IniData
 from pokemon.data_loader.pbs_data import ItemData, SpeciesData
 
+assert mocks, "Something is imported for its side effects."
 
 class TestIniData(unittest.TestCase):
     def test_get_item(self):
@@ -41,8 +44,19 @@ class TestIniData(unittest.TestCase):
         self.assertNotEqual('', item_data.to_json())
 
     def test_parse_pokemon_data(self):
+        stats = {
+            "HP": Stat(Name("HP"), 0, Text("HP"), Text("HP"), PokemonStatType("Main")),
+            "ATTACK": Stat(Name("ATTACK"), 1, Text("Attack"), Text("Atk"), PokemonStatType("Main Battle")),
+            "DEFENSE": Stat(Name("DEFENSE"), 2, Text("Defense"), Text("Def"), PokemonStatType("Main Battle")),
+            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), 4, Text("Special Attack"), Text("SpAtk"),
+                                   PokemonStatType("Main Battle")),
+            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), 5, Text("Special Defense"), Text("SpDef"),
+                                    PokemonStatType("Main Battle")),
+            "SPEED": Stat(Name("SPEED"), 3, Text("Speed"), Text("Spd"), PokemonStatType("Main Battle"))
+        }
+
         pokemon_data = SpeciesData("resources/pokemon.txt", None, None, None,
-                                   None, None, None, None, None,
+                                   stats, None, None, None, None,
                                    None, None, None, None)
         print(pokemon_data.to_json())
         self.assertNotEqual('', pokemon_data.to_json())

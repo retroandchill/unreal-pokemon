@@ -8,7 +8,14 @@ class StringWrapper:
 
 Name = StringWrapper
 Text = StringWrapper
-PokemonStatType = StringWrapper
+
+
+class PokemonStatType:
+    def __init__(self, display_name: str):
+        self.display_name = display_name
+
+    def get_display_name(self):
+        return self.display_name
 
 
 class Stat:
