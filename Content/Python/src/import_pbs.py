@@ -16,9 +16,13 @@ import os
 from unreal import Paths, FieldUse, BattleUse, MoveDamageCategory
 
 from pokemon.data_loader import UnrealDataLoader
-from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityData
+from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityData, SpeciesData
 from pokemon.data_writer import import_items, import_moves, import_types, import_abilities
+from pokemon.data_writer.data_table_writer import import_species
 from pokemon.unreal_interface import enum_values, data_table_values
+from pokemon.unreal_interface.unreal_data_utils import stat_entries
+
+HARDCODED_DATA_DIR = "Data/Hardcoded"
 
 if __name__ == "__main__":
     base_path = Paths.project_dir()
@@ -30,7 +34,7 @@ if __name__ == "__main__":
 
     type_ids = UnrealDataLoader(types.get_keys)
     damage_category_enum = enum_values(MoveDamageCategory)
-    target_ids = data_table_values("Data/Hardcoded", "Targets")
+    target_ids = data_table_values(HARDCODED_DATA_DIR, "Targets")
     moves = MoveData(os.path.join(pbs_dir, "moves.txt"), type_ids, damage_category_enum, target_ids)
     import_moves(moves)
 
@@ -43,4 +47,17 @@ if __name__ == "__main__":
     abilities = AbilityData(os.path.join(pbs_dir, "abilities.txt"))
     import_abilities(abilities)
 
+    gender_ratio_ids = data_table_values(HARDCODED_DATA_DIR, "GenderRatios")
+    growth_rate_ids = data_table_values(HARDCODED_DATA_DIR, "GrowthRates")
+    stats = stat_entries(HARDCODED_DATA_DIR, "Stats")
     ability_ids = UnrealDataLoader(abilities.get_keys)
+    egg_group_ids = data_table_values(HARDCODED_DATA_DIR, "EggGroups")
+    item_ids = UnrealDataLoader(items.get_keys)
+    body_color_ids = data_table_values(HARDCODED_DATA_DIR, "BodyColors")
+    body_shape_ids = data_table_values(HARDCODED_DATA_DIR, "BodyShapes")
+    habitat_ids = data_table_values(HARDCODED_DATA_DIR, "Habitats")
+    evolution_ids = data_table_values(HARDCODED_DATA_DIR, "Evolutions")
+    species = SpeciesData(os.path.join(pbs_dir, "pokemon.txt"), type_ids, gender_ratio_ids, growth_rate_ids, stats,
+                          ability_ids, move_ids, egg_group_ids, item_ids, body_color_ids, body_shape_ids, habitat_ids,
+                          evolution_ids)
+    import_species(species)

@@ -58,7 +58,6 @@ class TestIniData(unittest.TestCase):
         pokemon_data = SpeciesData("resources/pokemon.txt", None, None, None,
                                    stats, None, None, None, None,
                                    None, None, None, None)
-        print(pokemon_data.to_json())
         self.assertNotEqual('', pokemon_data.to_json())
 
 

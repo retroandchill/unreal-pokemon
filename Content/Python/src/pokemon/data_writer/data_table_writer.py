@@ -13,7 +13,7 @@
 # ====================================================================================================================
 from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary
 
-from pokemon.data_loader.pbs_data import PbsIniData, ItemData, MoveData, TypeData, AbilityData
+from pokemon.data_loader.pbs_data import PbsIniData, ItemData, MoveData, TypeData, AbilityData, SpeciesData
 
 
 def import_data(item_data: PbsIniData, table_name: str) -> None:
@@ -62,3 +62,12 @@ def import_abilities(ability_data: AbilityData) -> None:
     """
     print("Importing abilities...")
     import_data(ability_data, "Abilities")
+
+
+def import_species(species_data: SpeciesData) -> None:
+    """
+    Import species data into Unreal
+    :param species_data: The list of species to import
+    """
+    print("Importing species...")
+    import_data(species_data, "Pokemon")

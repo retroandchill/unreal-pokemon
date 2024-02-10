@@ -11,22 +11,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "ImportUtils.h"
 
-using UnrealBuildTool;
-
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
+TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* DataTable) {
+	TArray<FStat*> References;
+	DataTable->GetAllRows(TEXT("UImportUtils::GetMainStatsFromTable"), References);
+	TArray<FStat> Ret;
+	for (const auto Ref : References) {
+		if (Ref->Type == EPokemonStatType::Battle)
+			continue;
+		
+		Ret.Add(*Ref);
 	}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[] { "PokemonData", "PokemonEditorUtils" });
-	}
+	return Ret;
 }

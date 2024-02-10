@@ -104,11 +104,11 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         stats_in_order.sort(key=lambda stat: stat.pbs_order, reverse=True)
 
         if isinstance(item["BaseStats"], list):
-            formated_base_stats = {}
+            formatted_base_stats = {}
             for i in range(0, len(item["BaseStats"])):
-                formated_base_stats[str(stats_in_order[i].id)] = item["BaseStats"][i]
+                formatted_base_stats[str(stats_in_order[i].id)] = item["BaseStats"][i]
 
-            item["BaseStats"] = formated_base_stats
+            item["BaseStats"] = formatted_base_stats
 
         if isinstance(item["EVs"], list):
             item["EVs"] = dict(item["EVs"])
@@ -126,6 +126,15 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         item["CatchRate"] = item.get("CatchRate", 255)
         item["Happiness"] = item.get("Happiness", 70)
         item["Moves"] = item.get("Moves", [])
+
+        formatted_moves = []
+        for move in item["Moves"]:
+            formatted_moves.append({
+                "Level": move[0],
+                "Move": move[1]
+            })
+        item["Moves"] = formatted_moves
+
         item["TutorMoves"] = item.get("TutorMoves", [])
         item["EggMoves"] = item.get("EggMoves", [])
         item["Abilities"] = item.get("Abilities", [])
@@ -137,7 +146,18 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         item["HatchSteps"] = item.get("HatchSteps", 1)
         item["Incense"] = item.get("Incense", "")
         item["Offspring"] = item.get("Offspring", [])
-        item["Evolution"] = item.get("Evolution", [])
+        item["Evolutions"] = item.get("Evolutions", [])
+
+        formatted_evolutions = []
+        grouped_evolutions = zip(*(iter(item["Evolutions"]),) * 3)
+        for evolution in grouped_evolutions:
+            formatted_evolutions.append({
+                "Species": evolution[0],
+                "Method": evolution[1],
+                "Parameter": evolution[2],
+            })
+        item["Evolutions"] = formatted_evolutions
+        
         item["Height"] = item.get("Height", 1.0)
         item["Weight"] = item.get("Weight", 1.0)
         item["Color"] = item.get("Color", "Red")

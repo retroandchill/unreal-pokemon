@@ -11,22 +11,25 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Species/Stat.h"
+#include "ImportUtils.generated.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+/**
+ * Utility functions to handle importing data from data tables. Mainly used for the Python API
+ */
+UCLASS(BlueprintType)
+class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[] { "PokemonData", "PokemonEditorUtils" });
-	}
-}
+	/**
+	 * Get the list of Stat elements from the table that exclude any battle stats
+	 * @param DataTable The data table to draw from
+	 * @return The list of main and main/battle stats
+	 */
+	UFUNCTION(BlueprintPure, Category = "Editor|Data")
+	static TArray<FStat> GetMainStatsFromTable(UDataTable *DataTable);
+};

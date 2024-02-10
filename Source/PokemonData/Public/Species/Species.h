@@ -126,7 +126,7 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	 * Methods of evolution that are possible for this species
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Evolution")
-	TArray<FEvolutionMethod> Evolution;
+	TArray<FEvolutionMethod> Evolutions;
 
 	/**
 	 * What breeding egg groups is this Pokémon a part of
