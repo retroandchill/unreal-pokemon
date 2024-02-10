@@ -18,6 +18,8 @@ from mocks.mock_unreal import Stat, Name, PokemonStatType, Text
 from pokemon.data_loader import IniData
 from pokemon.data_loader.pbs_data import ItemData, SpeciesData
 
+MAIN_BATTLE = "Main Battle"
+
 assert mocks, "Something is imported for its side effects."
 
 class TestIniData(unittest.TestCase):
@@ -46,13 +48,13 @@ class TestIniData(unittest.TestCase):
     def test_parse_pokemon_data(self):
         stats = {
             "HP": Stat(Name("HP"), 0, Text("HP"), Text("HP"), PokemonStatType("Main")),
-            "ATTACK": Stat(Name("ATTACK"), 1, Text("Attack"), Text("Atk"), PokemonStatType("Main Battle")),
-            "DEFENSE": Stat(Name("DEFENSE"), 2, Text("Defense"), Text("Def"), PokemonStatType("Main Battle")),
+            "ATTACK": Stat(Name("ATTACK"), 1, Text("Attack"), Text("Atk"), PokemonStatType(MAIN_BATTLE)),
+            "DEFENSE": Stat(Name("DEFENSE"), 2, Text("Defense"), Text("Def"), PokemonStatType(MAIN_BATTLE)),
             "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), 4, Text("Special Attack"), Text("SpAtk"),
-                                   PokemonStatType("Main Battle")),
+                                   PokemonStatType(MAIN_BATTLE)),
             "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), 5, Text("Special Defense"), Text("SpDef"),
-                                    PokemonStatType("Main Battle")),
-            "SPEED": Stat(Name("SPEED"), 3, Text("Speed"), Text("Spd"), PokemonStatType("Main Battle"))
+                                    PokemonStatType(MAIN_BATTLE)),
+            "SPEED": Stat(Name("SPEED"), 3, Text("Speed"), Text("Spd"), PokemonStatType(MAIN_BATTLE))
         }
 
         pokemon_data = SpeciesData("resources/pokemon.txt", None, None, None,

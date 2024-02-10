@@ -13,18 +13,16 @@
 //====================================================================================================================
 #include "PokemonEditorUtils.h"
 
-#define LOCTEXT_NAMESPACE "FPokemonEditorUtilsModule"
+constexpr auto GLoctextNamespace = "FPokemonEditorUtilsModule";
 
 void FPokemonEditorUtilsModule::StartupModule()
 {
-    
+    // No startup needed
 }
 
 void FPokemonEditorUtilsModule::ShutdownModule()
 {
-    
+    // No special shutdown code
 }
-
-#undef LOCTEXT_NAMESPACE
     
 IMPLEMENT_MODULE(FPokemonEditorUtilsModule, PokemonEditorUtils)
