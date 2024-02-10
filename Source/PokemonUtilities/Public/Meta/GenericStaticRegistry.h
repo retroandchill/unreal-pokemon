@@ -11,22 +11,27 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "PokeRegistry.h"
 
-public class UnrealPokemonTarget : TargetRules
-{
-	public UnrealPokemonTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
+/**
+ * The generic version of the static registry that requires no additional specialized methods, and can act as a
+ * singleton object all on its own
+ */
+template <typename T, typename ...Args>
+class TGenericStaticRegistry : public TPokeRegistry<T, Args...> {
+	TGenericStaticRegistry() = default;
+	~TGenericStaticRegistry() = default;
+
+public:
+	/**
+	 * Get the singleton instance of the class
+	 * @return A reference to the only instance of this class
+	 */
+	static TGenericStaticRegistry& GetInstance() {
+		static TGenericStaticRegistry Instance;
+		return Instance;
 	}
-
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[] { "PokemonData", "PokemonEditorUtils", "PokemonUtilities" });
-	}
-}
+};
