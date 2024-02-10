@@ -35,7 +35,7 @@
 constexpr auto GLoctextNamespace = "FPokemonDataModule";
 
 void FPokemonDataModule::StartupModule() {
-	auto &DataRegistry = FDataRegistry::GetInstance();
+	auto& DataRegistry = FDataRegistry::GetInstance();
 	DataRegistry.RegisterStruct<FGrowthRateData>();
 	DataRegistry.RegisterStruct<FGenderRatio>();
 	DataRegistry.RegisterStruct<FEggGroup>();

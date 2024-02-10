@@ -14,7 +14,7 @@
 import re
 from typing import Type
 
-from unreal import EnumBase, Name, EditorAssetLibrary, DataTable, DataTableFunctionLibrary
+from unreal import EnumBase, Name, EditorAssetLibrary, DataTable, DataTableFunctionLibrary, Stat, ImportUtils
 
 
 def enum_values(enum: Type[EnumBase]) -> set[str]:
@@ -54,5 +54,26 @@ def data_table_values(directory_name: str, table_name: str) -> set[str]:
     data_table = eal.load_asset('/Game/{0}/{1}.{1}'.format(directory_name, table_name))
     if isinstance(data_table, DataTable):
         return set(map(convert_name, DataTableFunctionLibrary.get_data_table_row_names(data_table)))
+    else:
+        raise ValueError("Unexpected data table name")
+
+
+def stat_entries(directory_name: str, table_name: str) -> dict[str, Stat]:
+    """
+    Gets a map of data table row names to their entries
+    :param directory_name: The directory in the Content Browser to look in
+    :param table_name: The name of the table as seen in the editor
+    :return: The map of data table row names to their entries
+    """
+
+    eal = EditorAssetLibrary()
+    data_table = eal.load_asset('/Game/{0}/{1}.{1}'.format(directory_name, table_name))
+    if isinstance(data_table, DataTable):
+        rows = ImportUtils.get_main_stats_from_table(data_table)
+        ret = {}
+        for row in rows:
+            ret[str(row.id)] = row
+
+        return ret
     else:
         raise ValueError("Unexpected data table name")

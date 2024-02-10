@@ -22,7 +22,7 @@
 class POKEMONDATA_API IGameData {
 public:
 	virtual ~IGameData();
-	
+
 	/**
 	 * Get the type of struct this proxy points to
 	 * @return The type of struct contained within the table
