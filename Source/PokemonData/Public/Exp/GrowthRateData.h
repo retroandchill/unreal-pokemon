@@ -35,10 +35,5 @@ struct POKEMONDATA_API FGrowthRateData : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
-
-	/**
-	 * The C++ or Blueprint Class that implements Growth Rate that corresponds to this Growth rate
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Calculation", meta = (MustImplement = "GrowthRate"))
-	TSubclassOf<UObject> ImplementationClass;
+	
 };

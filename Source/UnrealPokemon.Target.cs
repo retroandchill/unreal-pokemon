@@ -27,6 +27,7 @@ public class UnrealPokemonTarget : TargetRules
 
 	private void RegisterModulesCreatedByRider()
 	{
-		ExtraModuleNames.AddRange(new string[] { "PokemonData", "PokemonEditorUtils", "PokemonUtilities" });
+		ExtraModuleNames.AddRange(new string[]
+			{ "PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore" });
 	}
 }

@@ -35,10 +35,4 @@ struct POKEMONDATA_API FBattleTerrain : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
-
-	/**
-	 * The animation displayed when the weather is active. When it displays depends on the specific implementation.
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals", meta = (MustImplement = "AnimationBase"))
-	TSubclassOf<AActor> Animation;
 };
