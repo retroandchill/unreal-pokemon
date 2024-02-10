@@ -11,25 +11,49 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Pokemon/Stats/StatUtils.h"
 
-using UnrealBuildTool;
+#include "DataManager.h"
+#include "Species/Nature.h"
+#include "Species/Stat.h"
 
-public class UnrealPokemon : ModuleRules
-{
-	public UnrealPokemon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+using namespace StatUtils;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
+	auto &DataSubsystem = FDataManager::GetInstance();
+	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "PokemonData", "PokemonCore" });
+	TMap<FName, int32> Ret;
+	StatTable.ForEach([&Ret](const FStat &Stat) {
+		if (Stat.Type == EPokemonStatType::Battle)
+			return;
 
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+		Ret[Stat.ID] = FMath::RandRange(0, 31);
+	});
 
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
+	return Ret;
+}
 
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
+POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
+	auto &DataSubsystem = FDataManager::GetInstance();
+	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
+
+	TMap<FName, int32> Ret;
+	StatTable.ForEach([&Ret](const FStat &Stat) {
+		if (Stat.Type == EPokemonStatType::Battle)
+			return;
+
+		Ret[Stat.ID] = 0;
+	});
+
+	return Ret;
+}
+
+POKEMONCORE_API FName StatUtils::RandomNature() {
+	auto &DataSubsystem = FDataManager::GetInstance();
+	auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
+
+	auto Rows = NatureTable.GetTableRowNames().Array();
+	auto Index = FMath::RandRange(0, Rows.Num() - 1);
+	return Rows[Index];
 }

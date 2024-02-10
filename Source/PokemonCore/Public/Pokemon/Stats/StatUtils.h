@@ -14,48 +14,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DataRetrieval/DataTableProxy.h"
-#include "DataRetrieval/GameData.h"
-#include "Subsystems/GameInstanceSubsystem.h"
-#include "DataSubsystem.generated.h"
 
-/**
- * Persistent subsystem used to get the data tables
- */
-UCLASS(BlueprintType)
-class POKEMONDATA_API UDataSubsystem : public UGameInstanceSubsystem {
-	GENERATED_BODY()
-
-public:
-	UDataSubsystem();
+namespace StatUtils {
+	/**
+	 * Randomize the Pokémon's IVs and return a map of the values
+	 * @return The randomized IVs
+	 */
+	POKEMONCORE_API TMap<FName, int32> RandomizeIVs();
 
 	/**
-	 * Get the data table that contains data of the specified type
-	 * @tparam T The type to look up the table for
-	 * @return A reference to the table proxy object
+	 * Set all of the EVs to 0
+	 * @return The map of EVs all set to 0
 	 */
-	template <typename T>
-	const TDataTableProxy<T>& GetDataTable() const {
-		UScriptStruct* StructClass = T::StaticStruct();
-		auto RowName = StructClass->GetFName();
-		check(DataTables.Contains(RowName));
-
-		auto TableOut = dynamic_cast<TDataTableProxy<T>*>(DataTables[RowName].Get());
-		check(TableOut != nullptr);
-
-		return *TableOut;
-	}
+	POKEMONCORE_API TMap<FName, int32> DefaultEVs();
 
 	/**
-	 * Get the data table that contains data of the specified type
-	 * @param StructType The type to look up the table for
-	 * @return A reference to the table proxy object
+	 * Generate a random nature for the Pokémon
+	 * @return The randomized Nature for the Pokémon in question
 	 */
-	const IGameData& GetDataTable(TObjectPtr<const UScriptStruct> StructType) const;
+	POKEMONCORE_API FName RandomNature();
+}
 
-private:
-	/**
-	 * The list of data tables in the game
-	 */
-	TMap<FName, TUniquePtr<IGameData>> DataTables;
-};

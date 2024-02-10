@@ -14,12 +14,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pokemon/Pokemon.h"
+#include "Species/Nature.h"
 
 /**
  * Represents a the stat block for calculating the Pokémon's Stats
  */
-class IStatBlock {
+class POKEMONCORE_API IStatBlock {
 public:
 	virtual ~IStatBlock() = default;
 
@@ -29,41 +29,41 @@ public:
 	 * @param Stat The stat to calculate
 	 * @return The value of the stat
 	 */
-	virtual int32 CalculateStat(const TMap<FName, int32> &BaseStats, FName Stat) const;
+	virtual int32 CalculateStat(const TMap<FName, int32> &BaseStats, FName Stat) const = 0;
 
 	/**
 	 * Get the level of the Pokémon in question
 	 * @return The level of this particular Pokémon
 	 */
-	virtual int32 GetLevel() const;
+	virtual int32 GetLevel() const = 0;
 
 	/**
 	 * Get the Pokémon's IVs
 	 * @return The full map of the Pokémon's IVs
 	 */
-	virtual TMap<FName, int32> &GetIVs();
+	virtual TMap<FName, int32> &GetIVs() = 0;
 
 	/**
 	 * Get the IV for the given stat
 	 * @return The full map of the Pokémon's IVs
 	 */
-	virtual const TMap<FName, int32> &GetIVs() const;
+	virtual const TMap<FName, int32> &GetIVs() const = 0;
 
 	/**
 	 * Get the Pokémon's EVs
 	 * @return The full map of the Pokémon's EVs
 	 */
-	virtual TMap<FName, int32> &GetEVs();
+	virtual TMap<FName, int32> &GetEVs() = 0;
 	
 	/**
 	 * Get the Pokémon's EVs
 	 * @return The full map of the Pokémon's EVs
 	 */
-	virtual const TMap<FName, int32> &GetEVs() const;
+	virtual const TMap<FName, int32> &GetEVs() const = 0;
 
 	/**
 	 * Get the Pokémon's Nature value
 	 * @return The Nature of the Pokémon in question
 	 */
-	virtual const FNature &GetNature() const;
+	virtual const FNature &GetNature() const = 0;
 };

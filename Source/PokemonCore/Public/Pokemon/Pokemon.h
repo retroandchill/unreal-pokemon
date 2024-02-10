@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Species/Nature.h"
 #include "Species/Species.h"
 
 /**
  * Abstract interface for a Pokémon object
  */
-class IPokemon {
+class POKEMONCORE_API IPokemon {
 public:
 	virtual ~IPokemon() = default;
 
