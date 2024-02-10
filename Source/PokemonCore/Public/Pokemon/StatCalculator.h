@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,30 +11,23 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
 
-public class PokemonCore : ModuleRules
-{
-	public PokemonCore(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+class IPokemon;
+/**
+ * Represents a the stat block for calculating the Pokémon's Stats
+ */
+class IStatCalculator {
+public:
+	virtual ~IStatCalculator() = default;
 
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core", "PokemonData",
-			}
-		);
-
-		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore"
-			}
-		);
-	}
-}
+	/**
+	 * Calculate the stat of the given Pokémon in question
+	 * @param Pokemon The Pokémon to get the formula inputs for
+	 * @param Stat The stat to calculate
+	 * @return The value of the stat
+	 */
+	virtual int32 CalculateStat(const IPokemon& Pokemon, FName Stat) const;
+};
