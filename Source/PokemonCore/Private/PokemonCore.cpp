@@ -1,4 +1,4 @@
-//====================================================================================================================
+﻿//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,23 +11,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "PokemonCore.h"
 
-using UnrealBuildTool;
+constexpr auto GLoctextNamespace = "FPokemonCoreModule";
 
-public class UnrealPokemonTarget : TargetRules
+void FPokemonCoreModule::StartupModule()
 {
-	public UnrealPokemonTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
-
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-			{ "PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore" });
-	}
+	// No implementation needed   
 }
+
+void FPokemonCoreModule::ShutdownModule()
+{
+    // No implementation needed
+}
+    
+IMPLEMENT_MODULE(FPokemonCoreModule, PokemonCore)
