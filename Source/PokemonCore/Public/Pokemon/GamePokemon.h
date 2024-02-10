@@ -14,57 +14,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Meta/GenericStaticRegistry.h"
-#include "Species/Nature.h"
+#include "Pokemon.h"
+#include "Stats/StatBlock.h"
 
 /**
- * Represents a the stat block for calculating the Pokémon's Stats
+ * Basic Pokémon class that holds all of the information for a complete Pokémon
  */
-class POKEMONCORE_API IStatBlock {
+class POKEMONCORE_API FGamePokemon : public IPokemon {
 public:
-	virtual ~IStatBlock() = default;
-
 	/**
-	 * Calculate the stat of the given Pokémon in question
-	 * @param BaseStats The base stats of the Pokémon species/form
-	 * @param Stat The stat to calculate
-	 * @return The value of the stat
+	 * Create a Pokémon with the following species and level information
+	 * @param Species The species of Pokémon to create
+	 * @param Level The level of the Pokémon in question
 	 */
-	virtual int32 CalculateStat(const TMap<FName, int32> &BaseStats, FName Stat) const = 0;
-
-	/**
-	 * Get the level of the Pokémon in question
-	 * @return The level of this particular Pokémon
-	 */
-	virtual int32 GetLevel() const = 0;
-
-	/**
-	 * Get the Pokémon's IVs
-	 * @return The full map of the Pokémon's IVs
-	 */
-	virtual TMap<FName, int32> &GetIVs() = 0;
-
-	/**
-	 * Get the IV for the given stat
-	 * @return The full map of the Pokémon's IVs
-	 */
-	virtual const TMap<FName, int32> &GetIVs() const = 0;
-
-	/**
-	 * Get the Pokémon's EVs
-	 * @return The full map of the Pokémon's EVs
-	 */
-	virtual TMap<FName, int32> &GetEVs() = 0;
+	explicit FGamePokemon(FName Species, int32 Level = 5);
 	
-	/**
-	 * Get the Pokémon's EVs
-	 * @return The full map of the Pokémon's EVs
-	 */
-	virtual const TMap<FName, int32> &GetEVs() const = 0;
+	virtual const FSpeciesData& GetSpecies() const override;
+	virtual const IStatBlock& GetStatBlock() const override;
 
+private:
 	/**
-	 * Get the Pokémon's Nature value
-	 * @return The Nature of the Pokémon in question
+	 * The ID of the species of Pokémon this is
 	 */
-	virtual const FNature &GetNature() const = 0;
+	FName Species;
+
+	TUniquePtr<IStatBlock> StatBlock;
 };

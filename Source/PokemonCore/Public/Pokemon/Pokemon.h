@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Species/SpeciesData.h"
+#include "Stats/StatBlock.h"
 
 /**
  * Abstract interface for a Pokémon object
@@ -17,5 +18,11 @@ public:
 	 * @return The species data
 	 */
 	virtual const FSpeciesData &GetSpecies() const = 0;
+
+	/**
+	 * Get the stat information for this Pokémon
+	 * @return A reference to the owned stat block
+	 */
+	virtual const IStatBlock &GetStatBlock() const = 0;
 	
 };
