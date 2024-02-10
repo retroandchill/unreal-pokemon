@@ -13,6 +13,8 @@
 //====================================================================================================================
 #include "DataRetrieval/DataRegistry.h"
 
+#include "Meta/PokeRegistry.h"
+
 FDataRegistry::FDataRegistry() = default;
 
 FDataRegistry::~FDataRegistry() = default;
@@ -25,14 +27,10 @@ FDataRegistry& FDataRegistry::GetInstance() {
 TUniquePtr<IGameData> FDataRegistry::CreateDataTableProxy(const UScriptStruct* StructType,
                                                           const TObjectPtr<UDataTable>& DataTable) const {
 	check(StructType != nullptr);
-	auto TypeName = StructType->GetFName();
-
-	check(RegisteredConstructors.Contains(TypeName));
-	return RegisteredConstructors[TypeName](DataTable);
+	return Registry.Construct(StructType->GetFName(), DataTable);
 }
 
 bool FDataRegistry::IsTypeRegistered(const UScriptStruct* StructType) const {
 	check(StructType != nullptr);
-	auto TypeName = StructType->GetFName();
-	return RegisteredConstructors.Contains(TypeName);
+	return Registry.IsTypeRegistered(StructType->GetFName());
 }
