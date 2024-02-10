@@ -35,10 +35,4 @@ struct POKEMONDATA_API FEvolutionData : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
-
-	/**
-	 * The C++ or Blueprint Class that implements Evolution Base that corresponds to this evolution method
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Condition Evaluation", meta = (MustImplement = "EvolutionBase"))
-	TSubclassOf<UObject> ImplementationClass;
 };

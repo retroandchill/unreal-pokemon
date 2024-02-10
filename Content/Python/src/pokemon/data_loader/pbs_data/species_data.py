@@ -39,7 +39,13 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
 
     def _preprocess_data(self, section_name: str, data: dict[str, str]):
         # No additional processing needed on items
-        pass
+        if "Evolutions" in data:
+            split_evolutions = data["Evolutions"].split(',')
+            for i in range(1, len(split_evolutions), 3):
+                if split_evolutions[i].lower() == "none":
+                    split_evolutions[i] = "SpecialMethod"
+
+            data["Evolutions"] = ','.join(split_evolutions)
 
     def get_schema(self, ini_data: IniData, args: SpeciesArgs) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
         key_loader = UnrealDataLoader(lambda: ini_data.get_keys())

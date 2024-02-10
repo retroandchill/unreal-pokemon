@@ -18,11 +18,14 @@
 #include "Battle/BattleWeather.h"
 #include "Battle/Environment.h"
 #include "Battle/Status.h"
+#include "Battle/Type.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "Exp/GrowthRateData.h"
 #include "Field/EncounterType.h"
 #include "Field/Weather.h"
+#include "Moves/Move.h"
 #include "Moves/Target.h"
+#include "Species/Ability.h"
 #include "Species/BodyColor.h"
 #include "Species/BodyShape.h"
 #include "Species/EggGroup.h"
@@ -30,6 +33,7 @@
 #include "Species/GenderRatio.h"
 #include "Species/Habitat.h"
 #include "Species/Nature.h"
+#include "..\Public\Species\SpeciesData.h"
 #include "Species/Stat.h"
 
 constexpr auto GLoctextNamespace = "FPokemonDataModule";
@@ -53,7 +57,11 @@ void FPokemonDataModule::StartupModule() {
 	DataRegistry.RegisterStruct<FBattleTerrain>();
 	DataRegistry.RegisterStruct<FTarget>();
 
+	DataRegistry.RegisterStruct<FType>();
+	DataRegistry.RegisterStruct<FAbility>();
+	DataRegistry.RegisterStruct<FMove>();
 	DataRegistry.RegisterStruct<FItem>();
+	DataRegistry.RegisterStruct<FSpeciesData>();
 }
 
 void FPokemonDataModule::ShutdownModule() {

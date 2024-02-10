@@ -22,7 +22,7 @@ public class UnrealPokemon : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "PokemonData" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "PokemonData", "PokemonCore" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

@@ -22,10 +22,6 @@ void UK2Node_IsGameDataIDValid::Initialize(const UScriptStruct* NodeStruct) {
 }
 
 void UK2Node_IsGameDataIDValid::AllocateDefaultPins() {
-	if (GetBlueprint()->ParentClass->HasMetaData(FBlueprintMetadata::MD_ShowWorldContextPin)) {
-		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), TEXT("WorldContext"));
-	}
-
 	CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Boolean, UEdGraphSchema_K2::PN_ReturnValue);
 
@@ -94,24 +90,16 @@ void UK2Node_IsGameDataIDValid::ExpandNode(FKismetCompilerContext& CompilerConte
 	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataUtilities::StaticClass());
 	CallGetNode->AllocateDefaultPins();
-
-	static const FName WorldContextObject_ParamName(TEXT("ContextObject"));
+	
 	static const FName StructType_ParamName(TEXT("StructType"));
 	static const FName RowName_ParamName(TEXT("RowName"));
-
-	auto SpawnWorldContextPin = FindPin(TEXT("WorldContext"));
+	
 	auto RowNamePin = FindPinChecked(TEXT("RowName"));
 	auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-
-	auto CallCreateWorldContextPin = CallGetNode->FindPinChecked(WorldContextObject_ParamName);
+	
 	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
 	auto CallCreateRowNamePin = CallGetNode->FindPinChecked(RowName_ParamName);
 	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-
-	// Copy the world context connection from the spawn node to 'USubsystemBlueprintLibrary::Get[something]Subsystem' if necessary
-	if (SpawnWorldContextPin != nullptr) {
-		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
-	}
 
 	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
 	CompilerContext.MovePinLinksToIntermediate(*RowNamePin, *CallCreateRowNamePin);
