@@ -18,6 +18,11 @@
 			"Name": "PokemonEditorUtils",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+        },
+      {
+        "Name": "PokemonUtilities",
+        "Type": "Runtime",
+        "LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

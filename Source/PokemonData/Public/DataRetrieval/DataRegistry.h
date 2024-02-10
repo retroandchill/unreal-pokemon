@@ -16,6 +16,7 @@
 #include "CoreMinimal.h"
 #include "DataRetrieval/GameData.h"
 #include "DataRetrieval/DataTableProxy.h"
+#include "Meta/PokeRegistry.h"
 
 /**
  * Internal registry used to handle the tracking of the data table structs
@@ -28,7 +29,13 @@ public:
 	/**
 	 * Factory function that produces a unique pointer to the proxy type
 	 */
-	using FFactoryFunction = TFunction<TUniquePtr<IGameData>(const TObjectPtr<UDataTable>& DataTable)>;
+	using FFactoryFunction = TFunction<TUniquePtr<IGameData>(UDataTable*)>;
+
+	/**
+	 * The internal registry used to actually retrieve the objects.
+	 * @return The registry in question to retrieve
+	 */
+	using FInternalRegistry = TPokeRegistry<IGameData, UDataTable*>;
 
 	/**
 	 * Get the singleton instance of the class
@@ -44,7 +51,7 @@ public:
 	template <typename T>
 	bool RegisterStruct() {
 		UScriptStruct* TypeStruct = T::StaticStruct();
-		RegisteredConstructors.Add(TypeStruct->GetFName(), CreateDataTableProxy<T>);
+		Registry.RegisterClass<TDataTableProxy<T>>(TypeStruct->GetFName());
 		return true;
 	}
 
@@ -66,17 +73,7 @@ public:
 
 private:
 	/**
-	 * Create a data table proxy of the specified type
-	 * @tparam T The type that the proxy references
-	 * @return A unique reference to the proxy
+	 * The internal registry type that handles this particular registration
 	 */
-	template <typename T>
-	static TUniquePtr<IGameData> CreateDataTableProxy(const TObjectPtr<UDataTable>& DataTable) {
-		return MakeUnique<TDataTableProxy<T>>(DataTable);
-	}
-
-	/**
-	 * The set of registered constructors for the data table proxy types
-	 */
-	TMap<FName, FFactoryFunction> RegisteredConstructors;
+	FInternalRegistry Registry;
 };
