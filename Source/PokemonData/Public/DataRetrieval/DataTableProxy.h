@@ -42,6 +42,21 @@ public:
 		return GetTableRowNames().Contains(ID);
 	}
 
+	/**
+	 * Iterate through the data table's rows and execute the callback on each entry
+	 * @tparam Functor The signature of the callback
+	 * @param Callback The callback method
+	 */
+	template <typename Functor>
+	void ForEach(Functor Callback) const {
+		TArray<T*> Rows;
+		DataTable->GetAllRows(TEXT("ForEach"), Rows);
+		for (auto Row : Rows) {
+			const T& Ref = *Row;
+			Callback(Ref);
+		}
+	}
+
 private:
 	/**
 	 * A pointer to the data table asset that this proxy object contains
