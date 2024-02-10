@@ -108,7 +108,7 @@ public:
 
 	/**
 	 * Get the raw pointer contained within the object
-	 * @return The raw pointer value contained wihtin
+	 * @return The raw pointer value contained within
 	 */
 	T* Get() const noexcept {
 		return Pointer.Get();
