@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Species/Species.h"
+#include "Species/SpeciesData.h"
 
 /**
  * Abstract interface for a Pokémon object
@@ -16,6 +16,6 @@ public:
 	 * Get the species information about the Pokémon in question
 	 * @return The species data
 	 */
-	virtual const FSpecies &GetSpecies() const = 0;
+	virtual const FSpeciesData &GetSpecies() const = 0;
 	
 };

@@ -33,7 +33,7 @@
 #include "Species/GenderRatio.h"
 #include "Species/Habitat.h"
 #include "Species/Nature.h"
-#include "Species/Species.h"
+#include "..\Public\Species\SpeciesData.h"
 #include "Species/Stat.h"
 
 constexpr auto GLoctextNamespace = "FPokemonDataModule";
@@ -61,7 +61,7 @@ void FPokemonDataModule::StartupModule() {
 	DataRegistry.RegisterStruct<FAbility>();
 	DataRegistry.RegisterStruct<FMove>();
 	DataRegistry.RegisterStruct<FItem>();
-	DataRegistry.RegisterStruct<FSpecies>();
+	DataRegistry.RegisterStruct<FSpeciesData>();
 }
 
 void FPokemonDataModule::ShutdownModule() {

@@ -17,13 +17,13 @@
 #include "EvolutionMethod.h"
 #include "LevelUpMove.h"
 #include "UObject/Object.h"
-#include "Species.generated.h"
+#include "SpeciesData.generated.h"
 
 /**
  * Represents an individual species object
  */
 USTRUCT(BlueprintType, meta = (DatabaseType="PBS"))
-struct POKEMONDATA_API FSpecies : public FTableRowBase {
+struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	GENERATED_BODY()
 
 	/**
@@ -51,16 +51,28 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	TArray<FName> Types;
 
 	/**
-	 * The base stats of this particular species
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
-	TMap<FName, int32> BaseStats;
-
-	/**
 	 * Determines a Pokémon's chance of being Male/Female
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
 	FName GenderRatio;
+
+	/**
+	 * The catch rate of this species
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
+	uint8 CatchRate;
+
+	/**
+	 * The base happiness of this species when they are caught
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
+	uint8 Happiness;
+
+	/**
+	 * The base stats of this particular species
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
+	TMap<FName, int32> BaseStats;
 
 	/**
 	 * The rate at which this Pokémon levels up from gaining Exp.
@@ -79,18 +91,6 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
 	TMap<FName, uint8> EVs;
-
-	/**
-	 * The catch rate of this species
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
-	uint8 CatchRate;
-
-	/**
-	 * The base happiness of this species when they are caught
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
-	uint8 Happiness;
 
 	/**
 	 * The normal abilities this Pokémon can have
@@ -168,13 +168,13 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	 * This Pokémon's height in meters (m)
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex", meta = (UIMin = 0.1f, ClampMin = 0.1f))
-	float Height;
+	float Height = 0.1f;
 
 	/**
 	 * This Pokémon's weight in kilograms (kg)
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex", meta = (UIMin = 0.1f, ClampMin = 0.1f))
-	float Weight;
+	float Weight = 0.1f;
 
 	/**
 	 * The color of this Pokémon (used for Pokédex filtering)
@@ -197,26 +197,26 @@ struct POKEMONDATA_API FSpecies : public FTableRowBase {
 	/**
 	 * Item(s) held 100% of the time
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Held Items")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems")
 	TArray<FName> WildItemCommon;
 
 	/**
 	 * Item(s) held 50% of the time
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Held Items")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems")
 	TArray<FName> WildItemUncommon;
 
 	/**
 	 * Item(s) held 5% of the time
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Held Items")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems")
 	TArray<FName> WildItemRare;
 
 	/**
 	 * The generation this Pokémon was introduced in
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata", meta = (UIMin = 1, ClampMin = 1))
-	int32 Generation;
+	int32 Generation = 1;
 
 	/**
 	 * Words/phrases that can be used to group the data"
