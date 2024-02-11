@@ -30,5 +30,5 @@ public:
 	FDefaultMainStatEntry(FName Stat, int32 IV, int32 EV = 0);
 	
 	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) final;
-	virtual TUniquePtr<IStatEntry> Clone() const override;
+	TUniquePtr<IStatEntry> Clone() const override;
 };

@@ -31,11 +31,11 @@ protected:
 	FDefaultStatEntry(FName Stat, int32 IV, int32 EV = 0);
 
 public:
-	virtual int32 GetStatValue() const override;
-	virtual const FStat& GetStat() const override;
-	virtual FName GetStatID() const override;
-	virtual int32 GetIV() const override;
-	virtual int32 GetEV() const override;
+	int32 GetStatValue() const override;
+	const FStat& GetStat() const override;
+	FName GetStatID() const override;
+	int32 GetIV() const override;
+	int32 GetEV() const override;
 
 protected:
 	/**
