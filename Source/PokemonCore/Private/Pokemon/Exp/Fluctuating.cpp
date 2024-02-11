@@ -29,3 +29,7 @@ int32 FFluctuating::ExpForLevel(int32 Level) const {
 
 	return std::pow(Level, 3) * (32 + Level / 2) / 50;
 }
+
+TUniquePtr<IGrowthRate> FFluctuating::Clone() const {
+	return MakeUnique<FFluctuating>(*this);
+}

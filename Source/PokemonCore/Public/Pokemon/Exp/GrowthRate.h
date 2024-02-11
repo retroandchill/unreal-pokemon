@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Meta/GenericStaticRegistry.h"
 
 
 namespace Exp {
@@ -31,5 +32,16 @@ namespace Exp {
 		 * @return The amount of Exp. required to level up
 		 */
 		virtual int32 ExpForLevel(int32 Level) const = 0;
+
+		/**
+		 * Create a duplicate of this object
+		 * @return A unique reference to a deep copy of this object
+		 */
+		virtual TUniquePtr<IGrowthRate> Clone() const = 0;
 	};
+
+	/**
+	 * Static registry for the growth rate types
+	 */
+	using FGrowthRateRegistry = TGenericStaticRegistry<IGrowthRate>;
 };

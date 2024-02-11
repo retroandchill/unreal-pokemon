@@ -32,7 +32,7 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPEED", 23}
 	};
 
-	FDefaultStatBlock Block(78, IVs, EVs, "ADAMANT");
+	FDefaultStatBlock Block("Slow", 78, IVs, EVs, "ADAMANT");
 	Block.CalculateStats(BaseStats);
 
 	int32 HP = Block.GetStat("HP").GetStatValue();
@@ -52,6 +52,12 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 
 	int32 Spe = Block.GetStat("SPEED").GetStatValue();
 	Passed &= TestEqual("Speed", Spe, 171);
+
+	int32 Exp = Block.GetExp();
+	Passed &= TestEqual("Exp.", Exp, 593190);
+
+	int32 NextLevel = Block.GetExpForNextLevel();
+	Passed &= TestEqual("Next Level Exp.", NextLevel, 616298);
 	
 	return Passed;
 }

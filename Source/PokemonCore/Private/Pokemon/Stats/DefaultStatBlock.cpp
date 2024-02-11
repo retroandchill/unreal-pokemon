@@ -21,31 +21,7 @@
 
 using namespace StatUtils;
 
-FDefaultStatBlock::~FDefaultStatBlock() = default;
-
-FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level), Nature(Other.Nature) {
-	for (auto &[StatID, Stat] : Other.Stats) {
-		Stats.Add(StatID, Stat->Clone());
-	}
-}
-
-FDefaultStatBlock::FDefaultStatBlock(FDefaultStatBlock&& Other) noexcept = default;
-
-FDefaultStatBlock& FDefaultStatBlock::operator=(const FDefaultStatBlock& Other) {
-	Level = Other.Level;
-	Nature = Other.Nature;
-	
-	Stats.Empty(Other.Stats.Num());
-	for (auto &[StatID, Stat] : Other.Stats) {
-		Stats.Add(StatID, Stat->Clone());
-	}
-
-	return *this;
-}
-
-FDefaultStatBlock& FDefaultStatBlock::operator=(FDefaultStatBlock&& Other) noexcept = default;
-
-FDefaultStatBlock::FDefaultStatBlock(int32 Level) : Level(Level), Nature(RandomNature()) {
+FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(RandomNature()) {
 	auto &DataSubsystem = FDataManager::GetInstance();
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 	
@@ -64,8 +40,8 @@ FDefaultStatBlock::FDefaultStatBlock(int32 Level) : Level(Level), Nature(RandomN
 	});
 }
 
-FDefaultStatBlock::FDefaultStatBlock(int32 Level, const TMap<FName, int32>& IVs,
-	const TMap<FName, int32>& EVs, FName Nature) : Level(Level), Nature(Nature) {
+FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs,
+	const TMap<FName, int32>& EVs, FName Nature) : Level(Level), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)),  Nature(Nature) {
 	auto &DataSubsystem = FDataManager::GetInstance();
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 	
@@ -86,8 +62,45 @@ FDefaultStatBlock::FDefaultStatBlock(int32 Level, const TMap<FName, int32>& IVs,
 		});
 }
 
+FDefaultStatBlock::~FDefaultStatBlock() = default;
+
+FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level), GrowthRate(Other.GrowthRate->Clone()), Exp(FMath::Max(Other.Exp, GrowthRate->ExpForLevel(Level))), Nature(Other.Nature) {
+	for (auto &[StatID, Stat] : Other.Stats) {
+		Stats.Add(StatID, Stat->Clone());
+	}
+}
+
+FDefaultStatBlock::FDefaultStatBlock(FDefaultStatBlock&& Other) noexcept = default;
+
+FDefaultStatBlock& FDefaultStatBlock::operator=(const FDefaultStatBlock& Other) {
+	Level = Other.Level;
+	Nature = Other.Nature;
+	GrowthRate = Other.GrowthRate->Clone();
+	Exp = FMath::Max(Other.Exp, GrowthRate->ExpForLevel(Level));
+	
+	Stats.Empty(Other.Stats.Num());
+	for (auto &[StatID, Stat] : Other.Stats) {
+		Stats.Add(StatID, Stat->Clone());
+	}
+
+	return *this;
+}
+
+FDefaultStatBlock& FDefaultStatBlock::operator=(FDefaultStatBlock&& Other) noexcept = default;
+
 int32 FDefaultStatBlock::GetLevel() const {
 	return Level;
+}
+
+int32 FDefaultStatBlock::GetExp() const {
+	return Exp;
+}
+
+int32 FDefaultStatBlock::GetExpForNextLevel() const {
+	if (Level == GetMaxLevel())
+		return 0;
+
+	return GrowthRate->ExpForLevel(Level + 1);
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {

@@ -57,3 +57,12 @@ POKEMONCORE_API FName StatUtils::RandomNature() {
 	auto Index = FMath::RandRange(0, Rows.Num() - 1);
 	return Rows[Index];
 }
+
+POKEMONCORE_API TUniquePtr<Exp::IGrowthRate> StatUtils::CreateGrowthRate(FName GrowthRate) {
+	return Exp::FGrowthRateRegistry::GetInstance().Construct(GrowthRate);
+}
+
+POKEMONCORE_API int32 StatUtils::GetMaxLevel() {
+	// TODO: Allow this to be configurable
+	return 100;
+}

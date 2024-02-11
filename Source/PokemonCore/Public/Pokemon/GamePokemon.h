@@ -29,8 +29,8 @@ public:
 	 */
 	explicit FGamePokemon(FName Species, int32 Level = 5);
 	
-	virtual const FSpeciesData& GetSpecies() const override;
-	virtual const IStatBlock& GetStatBlock() const override;
+	const FSpeciesData& GetSpecies() const override;
+	const IStatBlock& GetStatBlock() const override;
 
 private:
 	/**

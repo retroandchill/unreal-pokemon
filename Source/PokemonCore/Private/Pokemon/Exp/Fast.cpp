@@ -23,3 +23,7 @@ int32 FFast::ExpForLevel(int32 Level) const {
 
 	return std::pow(Level, 3) * 4 / 5;
 }
+
+TUniquePtr<IGrowthRate> FFast::Clone() const {
+	return MakeUnique<FFast>(*this);
+}

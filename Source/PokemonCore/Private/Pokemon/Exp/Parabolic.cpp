@@ -23,3 +23,7 @@ int32 FParabolic::ExpForLevel(int32 Level) const {
 
 	return std::pow(Level, 3) * 6 / 5 - 15 * std::pow(Level, 2) + 100 * Level - 140;
 }
+
+TUniquePtr<IGrowthRate> FParabolic::Clone() const {
+	return MakeUnique<FParabolic>(*this);
+}

@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pokemon/Exp/GrowthRate.h"
 
 namespace StatUtils {
 	/**
@@ -33,5 +34,17 @@ namespace StatUtils {
 	 * @return The randomized Nature for the Pokémon in question
 	 */
 	POKEMONCORE_API FName RandomNature();
+
+	/**
+	 * Create a new growth rate instance with the provided key
+	 * @param GrowthRate The name of the growth rate to get the ID for
+	 * @return The created growth rate
+	 */
+	POKEMONCORE_API TUniquePtr<Exp::IGrowthRate> CreateGrowthRate(FName GrowthRate);
+
+	/**
+	 * Get the maximum achievable level for a Pokémon
+	 */
+	POKEMONCORE_API int32 GetMaxLevel();
 }
 

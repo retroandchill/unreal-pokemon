@@ -17,7 +17,14 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
 // TODO: Instantiate the stat block dynamically based on a user config
-FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species), StatBlock(MakeUnique<FDefaultStatBlock>(Level)) {
+FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species) {
+	auto &DataManager = FDataManager::GetInstance();
+	auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
+
+	auto SpeciesData = SpeciesTable.GetData(Species);
+	check(SpeciesData != nullptr);
+	StatBlock = MakeUnique<FDefaultStatBlock>(SpeciesData->GrowthRate, Level);
+	StatBlock->CalculateStats(SpeciesData->BaseStats);
 }
 
 const FSpeciesData& FGamePokemon::GetSpecies() const {

@@ -31,6 +31,18 @@ public:
 	virtual int32 GetLevel() const = 0;
 
 	/**
+	 * Get the current amount of Exp. this Pokémon has
+	 * @return The current amount of Exp.
+	 */
+	virtual int32 GetExp() const = 0;
+
+	/**
+	 * Get the amount of Exp. required to reach the next level
+	 * @return The exp amount required to reach the next level
+	 */
+	virtual int32 GetExpForNextLevel() const = 0;
+
+	/**
 	 * Get the Pokémon's Nature value
 	 * @return The Nature of the Pokémon in question
 	 */

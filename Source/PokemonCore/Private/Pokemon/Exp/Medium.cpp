@@ -23,3 +23,7 @@ int32 FMedium::ExpForLevel(int32 Level) const {
 
 	return std::pow(Level, 3);
 }
+
+TUniquePtr<IGrowthRate> FMedium::Clone() const {
+	return MakeUnique<FMedium>(*this);
+}
