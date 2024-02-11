@@ -22,10 +22,6 @@ void UK2Node_GetAllGameDataIDs::Initialize(const UScriptStruct* NodeStruct) {
 }
 
 void UK2Node_GetAllGameDataIDs::AllocateDefaultPins() {
-	if (GetBlueprint()->ParentClass->HasMetaData(FBlueprintMetadata::MD_ShowWorldContextPin)) {
-		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), TEXT("WorldContext"));
-	}
-
 	FCreatePinParams ReturnTypePinParams;
 	ReturnTypePinParams.ContainerType = EPinContainerType::Set;
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PN_ReturnValue, ReturnTypePinParams);
@@ -95,21 +91,13 @@ void UK2Node_GetAllGameDataIDs::ExpandNode(FKismetCompilerContext& CompilerConte
 	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataUtilities::StaticClass());
 	CallGetNode->AllocateDefaultPins();
-
-	static const FName WorldContextObject_ParamName(TEXT("ContextObject"));
+	
 	static const FName StructType_ParamName(TEXT("StructType"));
-
-	auto SpawnWorldContextPin = FindPin(TEXT("WorldContext"));
+	
 	auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-
-	auto CallCreateWorldContextPin = CallGetNode->FindPinChecked(WorldContextObject_ParamName);
+	
 	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
 	auto CallCreateReturnValuePin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-
-	// Copy the world context connection from the spawn node to 'USubsystemBlueprintLibrary::Get[something]Subsystem' if necessary
-	if (SpawnWorldContextPin != nullptr) {
-		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
-	}
 
 	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
 	CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateReturnValuePin);

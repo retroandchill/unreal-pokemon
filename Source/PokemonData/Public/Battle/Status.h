@@ -42,10 +42,4 @@ struct POKEMONDATA_API FStatus : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals", meta = (MustImplement = "AnimationBase"))
 	TSubclassOf<AActor> Animation;
-
-	/**
-	 * The icon displayed in the UI for this status condition
-	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals")
-	UPaperSprite* Icon;
 };

@@ -16,8 +16,8 @@
 #include "CoreMinimal.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
+#include "DataManager.h"
 #include "DataRegistry.h"
-#include "DataSubsystem.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Subsystems/SubsystemBlueprintLibrary.h"
@@ -33,31 +33,26 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
 public:
 	/**
 	 * Get a data item from the Database
-	 * @param ContextObject The context object used to retrieve the data subsystem
 	 * @param StructType The struct type to get the data from
 	 * @param RowName The name of the row to retrieve
 	 * @param OutRow The output struct returned to the user
 	 */
 	UFUNCTION(BlueprintPure, CustomThunk, Category = "Data Table",
-		meta=(WorldContext = "ContextObject", CustomStructureParam = "OutRow", BlueprintInternalUseOnly="true"))
-	static void GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, FTableRowBase& OutRow);
+		meta=(CustomStructureParam = "OutRow", BlueprintInternalUseOnly="true"))
+	static void GetData(const UScriptStruct* StructType, FName RowName, FTableRowBase& OutRow);
 
 	/**
 	 * Get a data item from the Database
 	 * @tparam T The data type of the struct being processed out
-	 * @param ContextObject The context object used to retrieve the data subsystem
 	 * @param StructType The struct type to get the data from
 	 * @param RowName The name of the row to retrieve
 	 * @param OutRow The output struct returned to the user
 	 */
 	template <typename T>
-	static void Generic_GetData(UObject* ContextObject, const UScriptStruct* StructType, FName RowName, T* OutRow) {
+	static void Generic_GetData(const UScriptStruct* StructType, FName RowName, T* OutRow) {
 		check(StructType != nullptr && OutRow != nullptr);
-
-		const auto DataSubsystem = Cast<UDataSubsystem>(
-			USubsystemBlueprintLibrary::GetGameInstanceSubsystem(ContextObject, UDataSubsystem::StaticClass()));
-		check(DataSubsystem != nullptr);
-		const auto Row = DataSubsystem->GetDataTable(StructType).GetData(RowName);
+		
+		const auto Row = FDataManager::GetInstance().GetDataTable(StructType).GetData(RowName);
 		StructType->CopyScriptStruct(OutRow, Row);
 	}
 
@@ -89,7 +84,7 @@ public:
 			if (auto OutputType = StructProp->Struct; (OutputType == StructType) ||
 				(OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType))) {
 				P_NATIVE_BEGIN;
-					Generic_GetData(ContextObject, StructType, RowName, OutRowPtr);
+					Generic_GetData(StructType, RowName, OutRowPtr);
 				P_NATIVE_END;
 			} else {
 				FBlueprintExceptionInfo ExceptionInfo(
@@ -118,7 +113,7 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Data Table",
 		meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
-	static TSet<FName> GetAllDataIDs(UObject* ContextObject, const UScriptStruct* StructType);
+	static TSet<FName> GetAllDataIDs(const UScriptStruct* StructType);
 
 	/**
 	 * Check if the given row name in the table exists
