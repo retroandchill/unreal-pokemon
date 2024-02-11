@@ -26,14 +26,15 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Le
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 	
 	StatTable.ForEach([this](const FStat &Stat) {
+		using enum EPokemonStatType;
 		switch (Stat.Type) {
-		case EPokemonStatType::Main:
+		case Main:
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
 			break;
-		case EPokemonStatType::MainBattle:
+		case MainBattle:
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
 			break;
-		case EPokemonStatType::Battle:
+		case Battle:
 			// Skip over this stat as we don't track a value for it
 			break;
 		}
@@ -42,20 +43,23 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Le
 
 FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs,
 	const TMap<FName, int32>& EVs, FName Nature) : Level(Level), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)),  Nature(Nature) {
+	
 	auto &DataSubsystem = FDataManager::GetInstance();
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 	
 	StatTable.ForEach([this, &IVs, &EVs](const FStat &Stat) {
+		
 		switch (Stat.Type) {
-		case EPokemonStatType::Main:
+		using enum EPokemonStatType;
+		case Main:
 			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID));
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
 			break;
-		case EPokemonStatType::MainBattle:
+		case MainBattle:
 			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID));
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
 			break;
-		case EPokemonStatType::Battle:
+		case Battle:
 			// Skip over this stat as we don't track a value for it
 				break;
 			}
