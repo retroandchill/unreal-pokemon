@@ -15,7 +15,7 @@
 
 using namespace Exp;
 
-int FSlow::ExpForLevel(int Level) const {
+int32 FSlow::ExpForLevel(int32 Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

@@ -30,6 +30,6 @@ namespace Exp {
 		 * @param Level The level in to calculate the Exp. for
 		 * @return The amount of Exp. required to level up
 		 */
-		virtual int ExpForLevel(int Level) const = 0;
+		virtual int32 ExpForLevel(int32 Level) const = 0;
 	};
 };

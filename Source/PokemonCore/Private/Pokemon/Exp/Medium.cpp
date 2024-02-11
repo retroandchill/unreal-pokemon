@@ -15,7 +15,7 @@
 
 using namespace Exp;
 
-int FMedium::ExpForLevel(int Level) const {
+int32 FMedium::ExpForLevel(int32 Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

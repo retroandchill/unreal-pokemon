@@ -22,6 +22,6 @@ namespace Exp {
 	 */
 	class POKEMONCORE_API FParabolic : public IGrowthRate {
 	public:
-		int ExpForLevel(int Level) const override;
+		int32 ExpForLevel(int32 Level) const override;
 	};
 }

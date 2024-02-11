@@ -15,7 +15,7 @@
 
 using namespace Exp;
 
-int FParabolic::ExpForLevel(int Level) const {
+int32 FParabolic::ExpForLevel(int32 Level) const {
 	check(Level > 0);
 
 	if (Level == 1)
