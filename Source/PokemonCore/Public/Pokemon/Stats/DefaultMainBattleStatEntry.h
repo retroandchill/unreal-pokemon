@@ -14,46 +14,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "StatEntry.h"
-#include "Species/Nature.h"
+#include "DefaultStatEntry.h"
 
 /**
- * Represents a the stat block for calculating the Pokémon's Stats
+ * Handles the default representation of the main battle stats
  */
-class POKEMONCORE_API IStatBlock {
+class POKEMONCORE_API FDefaultMainBattleStatEntry : public FDefaultStatEntry {
 public:
-	virtual ~IStatBlock() = default;
-
 	/**
-	 * Get the level of the Pokémon in question
-	 * @return The level of this particular Pokémon
+	 * Initialize the stat with the given IV and EV
+	 * @param Stat The stat in question to set this to
+	 * @param IV The IV of the stat
+	 * @param EV The EV of the stat
 	 */
-	virtual int32 GetLevel() const = 0;
-
-	/**
-	 * Get the Pokémon's Nature value
-	 * @return The Nature of the Pokémon in question
-	 */
-	virtual const FNature &GetNature() const = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual IStatEntry &GetStat(FName Stat) = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual const IStatEntry &GetStat(FName Stat) const = 0;
-
-	/**
-	 * Calculate the stats of the given Pokémon in question
-	 * @param BaseStats The base stats of the Pokémon species/form
-	 */
-	virtual void CalculateStats(const TMap<FName, int32> &BaseStats) = 0;
+	FDefaultMainBattleStatEntry(FName Stat, int32 IV, int32 EV = 0);
 	
+	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) final;
+	virtual TUniquePtr<IStatEntry> Clone() const override;
 };

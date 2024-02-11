@@ -21,6 +21,14 @@
  */
 class POKEMONCORE_API FDefaultStatBlock final : public IStatBlock {
 public:
+	~FDefaultStatBlock() override;
+	
+	FDefaultStatBlock(const FDefaultStatBlock& Other);
+	FDefaultStatBlock(FDefaultStatBlock&& Other) noexcept;
+	
+	FDefaultStatBlock &operator=(const FDefaultStatBlock& Other);
+	FDefaultStatBlock &operator=(FDefaultStatBlock&& Other) noexcept;
+	
 	/**
 	 * Initialize a new stat block with the given level randomizing the IVs and nature
 	 * @param Level The level to start at
@@ -35,23 +43,12 @@ public:
 	 * @param Nature The nature of the Pokémon in question
 	 */
 	FDefaultStatBlock(int32 Level, const TMap<FName, int32> &IVs, const TMap<FName, int32> &EVs, FName Nature);
-
-	/**
-	 * Initialize a new stat block explicitly setting the values of all the Pokémon's stats
-	 * @param Level The level to start at 
-	 * @param IVs The values of the IVs
-	 * @param EVs The values of the EVs
-	 * @param Nature The nature of the Pokémon in question
-	 */
-	FDefaultStatBlock(int32 Level, TMap<FName, int32> &&IVs, TMap<FName, int32> &&EVs, FName Nature);
 	
-	int32 CalculateStat(const TMap<FName, int32>& BaseStats, FName Stat) const override;
 	int32 GetLevel() const override;
-	TMap<FName, int32>& GetIVs() override;
-	const TMap<FName, int32>& GetIVs() const override;
-	TMap<FName, int32>& GetEVs() override;
-	const TMap<FName, int32>& GetEVs() const override;
 	const FNature& GetNature() const override;
+	IStatEntry& GetStat(FName Stat) override;
+	const IStatEntry& GetStat(FName Stat) const override;
+	void CalculateStats(const TMap<FName, int32>& BaseStats) override;
 
 private:
 	/**
@@ -60,17 +57,12 @@ private:
 	int32 Level;
 
 	/**
-	 * The Pokémon's IVs
-	 */
-	TMap<FName, int32> IVs;
-
-	/**
-	 * The Pokémon's EVs
-	 */
-	TMap<FName, int32> EVs;
-
-	/**
 	 * The Pokémon's Nature ID
 	 */
 	FName Nature;
+
+	/**
+	 * Map to each of the Pokémon's individual stat values
+	 */
+	TMap<FName, TUniquePtr<IStatEntry>> Stats;
 };

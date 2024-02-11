@@ -32,24 +32,25 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPEED", 23}
 	};
 
-	FDefaultStatBlock Block(78, MoveTemp(IVs), MoveTemp(EVs), "ADAMANT");
+	FDefaultStatBlock Block(78, IVs, EVs, "ADAMANT");
+	Block.CalculateStats(BaseStats);
 
-	int32 HP = Block.CalculateStat(BaseStats, "HP");
+	int32 HP = Block.GetStat("HP").GetStatValue();
 	bool Passed = TestEqual("HP", HP, 289);
 
-	int32 Atk = Block.CalculateStat(BaseStats, "ATTACK");
+	int32 Atk = Block.GetStat("ATTACK").GetStatValue();
 	Passed &= TestEqual("Attack", Atk, 278);
 
-	int32 Def = Block.CalculateStat(BaseStats, "DEFENSE");
+	int32 Def = Block.GetStat("DEFENSE").GetStatValue();
 	Passed &= TestEqual("Defense", Def, 193);
 
-	int32 SpA = Block.CalculateStat(BaseStats, "SPECIAL_ATTACK");
+	int32 SpA = Block.GetStat("SPECIAL_ATTACK").GetStatValue();
 	Passed &= TestEqual("Sp. Atk", SpA, 135);
 
-	int32 SpD = Block.CalculateStat(BaseStats, "SPECIAL_DEFENSE");
+	int32 SpD = Block.GetStat("SPECIAL_DEFENSE").GetStatValue();
 	Passed &= TestEqual("Sp. Def", SpD, 171);
 
-	int32 Spe = Block.CalculateStat(BaseStats, "SPEED");
+	int32 Spe = Block.GetStat("SPEED").GetStatValue();
 	Passed &= TestEqual("Speed", Spe, 171);
 	
 	return Passed;

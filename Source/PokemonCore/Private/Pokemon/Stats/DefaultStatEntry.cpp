@@ -11,49 +11,37 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Pokemon/Stats/DefaultStatEntry.h"
 
-#include "CoreMinimal.h"
-#include "StatEntry.h"
-#include "Species/Nature.h"
+#include "DataManager.h"
 
-/**
- * Represents a the stat block for calculating the Pokémon's Stats
- */
-class POKEMONCORE_API IStatBlock {
-public:
-	virtual ~IStatBlock() = default;
 
-	/**
-	 * Get the level of the Pokémon in question
-	 * @return The level of this particular Pokémon
-	 */
-	virtual int32 GetLevel() const = 0;
+FDefaultStatEntry::FDefaultStatEntry(FName Stat, int32 IV, int32 EV) : StatID(Stat), IV(IV), EV(EV) {
+}
 
-	/**
-	 * Get the Pokémon's Nature value
-	 * @return The Nature of the Pokémon in question
-	 */
-	virtual const FNature &GetNature() const = 0;
+int32 FDefaultStatEntry::GetStatValue() const {
+	return Value;
+}
 
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual IStatEntry &GetStat(FName Stat) = 0;
+const FStat& FDefaultStatEntry::GetStat() const {
+	auto Stat = FDataManager::GetInstance().GetDataTable<FStat>().GetData(StatID);
+	check(Stat != nullptr);
 
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual const IStatEntry &GetStat(FName Stat) const = 0;
+	return *Stat;
+}
 
-	/**
-	 * Calculate the stats of the given Pokémon in question
-	 * @param BaseStats The base stats of the Pokémon species/form
-	 */
-	virtual void CalculateStats(const TMap<FName, int32> &BaseStats) = 0;
-	
-};
+FName FDefaultStatEntry::GetStatID() const {
+	return StatID;
+}
+
+int32 FDefaultStatEntry::GetIV() const {
+	return IV;
+}
+
+int32 FDefaultStatEntry::GetEV() const {
+	return EV;
+}
+
+void FDefaultStatEntry::SetStatValue(int32 NewValue) {
+	Value = NewValue;
+}

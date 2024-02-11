@@ -11,49 +11,22 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
 
-#include "CoreMinimal.h"
-#include "StatEntry.h"
-#include "Species/Nature.h"
 
-/**
- * Represents a the stat block for calculating the Pokémon's Stats
- */
-class POKEMONCORE_API IStatBlock {
-public:
-	virtual ~IStatBlock() = default;
+FDefaultMainBattleStatEntry::FDefaultMainBattleStatEntry(FName Stat, int32 IV, int32 EV) : FDefaultStatEntry(Stat, IV, EV) {
+}
 
-	/**
-	 * Get the level of the Pokémon in question
-	 * @return The level of this particular Pokémon
-	 */
-	virtual int32 GetLevel() const = 0;
+void FDefaultMainBattleStatEntry::RefreshValue(int32 Level, int32 Base, const FNature& Nature) {
+	auto Stat = GetStatID();
+	auto NatureChange = Nature.StatChanges.FindByPredicate([&Stat](const FNatureStatChange &Change) {
+		return Change.Stat == Stat;
+	});
+	int32 NatureModifer = NatureChange != nullptr ? 100 + NatureChange->Change : 100;
+		
+	SetStatValue(((2 * Base + GetIV() + GetEV() / 4) * Level / 100 + 5) * NatureModifer / 100);
+}
 
-	/**
-	 * Get the Pokémon's Nature value
-	 * @return The Nature of the Pokémon in question
-	 */
-	virtual const FNature &GetNature() const = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual IStatEntry &GetStat(FName Stat) = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual const IStatEntry &GetStat(FName Stat) const = 0;
-
-	/**
-	 * Calculate the stats of the given Pokémon in question
-	 * @param BaseStats The base stats of the Pokémon species/form
-	 */
-	virtual void CalculateStats(const TMap<FName, int32> &BaseStats) = 0;
-	
-};
+TUniquePtr<IStatEntry> FDefaultMainBattleStatEntry::Clone() const {
+	return MakeUnique<FDefaultMainBattleStatEntry>(*this);
+}

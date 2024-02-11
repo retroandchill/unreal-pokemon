@@ -15,45 +15,53 @@
 
 #include "CoreMinimal.h"
 #include "StatEntry.h"
-#include "Species/Nature.h"
 
 /**
- * Represents a the stat block for calculating the Pokémon's Stats
+ * The default setup of a Pokémon's stat calculation as defined in the main series games
  */
-class POKEMONCORE_API IStatBlock {
+class POKEMONCORE_API FDefaultStatEntry : public IStatEntry {
+
+protected:
+	/**
+	 * Initialize the stat with the given IV and EV
+	 * @param Stat The stat in question to set this to
+	 * @param IV The IV of the stat
+	 * @param EV The EV of the stat
+	 */
+	FDefaultStatEntry(FName Stat, int32 IV, int32 EV = 0);
+
 public:
-	virtual ~IStatBlock() = default;
+	virtual int32 GetStatValue() const override;
+	virtual const FStat& GetStat() const override;
+	virtual FName GetStatID() const override;
+	virtual int32 GetIV() const override;
+	virtual int32 GetEV() const override;
 
+protected:
 	/**
-	 * Get the level of the Pokémon in question
-	 * @return The level of this particular Pokémon
+	 * Set the value of the stat in question
+	 * @param NewValue The value of the stat
 	 */
-	virtual int32 GetLevel() const = 0;
+	void SetStatValue(int32 NewValue);
 
+private:
 	/**
-	 * Get the Pokémon's Nature value
-	 * @return The Nature of the Pokémon in question
+	 * The ID of the stat in question
 	 */
-	virtual const FNature &GetNature() const = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual IStatEntry &GetStat(FName Stat) = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
-	virtual const IStatEntry &GetStat(FName Stat) const = 0;
-
-	/**
-	 * Calculate the stats of the given Pokémon in question
-	 * @param BaseStats The base stats of the Pokémon species/form
-	 */
-	virtual void CalculateStats(const TMap<FName, int32> &BaseStats) = 0;
+	FName StatID;
 	
+	/**
+	 * The value of the stat's IV
+	 */
+	int32 IV;
+
+	/**
+	 * The value of the stat's EV
+	 */
+	int32 EV;
+
+	/**
+	 * The actual value of the stat in question
+	 */
+	int32 Value = 0;
 };

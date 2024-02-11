@@ -14,63 +14,80 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
 #include "DataManager.h"
+#include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
+#include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "Species/Stat.h"
 
 using namespace StatUtils;
 
-FDefaultStatBlock::FDefaultStatBlock(int32 Level) : Level(Level), IVs(RandomizeIVs()), EVs(DefaultEVs()), Nature(RandomNature()) {
+FDefaultStatBlock::~FDefaultStatBlock() = default;
+
+FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level), Nature(Other.Nature) {
+	for (auto &[StatID, Stat] : Other.Stats) {
+		Stats.Add(StatID, Stat->Clone());
+	}
+}
+
+FDefaultStatBlock::FDefaultStatBlock(FDefaultStatBlock&& Other) noexcept = default;
+
+FDefaultStatBlock& FDefaultStatBlock::operator=(const FDefaultStatBlock& Other) {
+	Level = Other.Level;
+	Nature = Other.Nature;
+	
+	Stats.Empty(Other.Stats.Num());
+	for (auto &[StatID, Stat] : Other.Stats) {
+		Stats.Add(StatID, Stat->Clone());
+	}
+
+	return *this;
+}
+
+FDefaultStatBlock& FDefaultStatBlock::operator=(FDefaultStatBlock&& Other) noexcept = default;
+
+FDefaultStatBlock::FDefaultStatBlock(int32 Level) : Level(Level), Nature(RandomNature()) {
+	auto &DataSubsystem = FDataManager::GetInstance();
+	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
+	
+	StatTable.ForEach([this](const FStat &Stat) {
+		switch (Stat.Type) {
+		case EPokemonStatType::Main:
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
+			break;
+		case EPokemonStatType::MainBattle:
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
+			break;
+		case EPokemonStatType::Battle:
+			// Skip over this stat as we don't track a value for it
+			break;
+		}
+	});
 }
 
 FDefaultStatBlock::FDefaultStatBlock(int32 Level, const TMap<FName, int32>& IVs,
-	const TMap<FName, int32>& EVs, FName Nature) : Level(Level), IVs(IVs), EVs(EVs), Nature(Nature) {
-}
-
-FDefaultStatBlock::FDefaultStatBlock(int32 Level, TMap<FName, int32>&& IVs, TMap<FName, int32>&& EVs,
-	FName Nature) : Level(Level), IVs(MoveTemp(IVs)), EVs(MoveTemp(EVs)), Nature(Nature) {
-}
-
-int32 FDefaultStatBlock::CalculateStat(const TMap<FName, int32>& BaseStats, FName Stat) const {
+	const TMap<FName, int32>& EVs, FName Nature) : Level(Level), Nature(Nature) {
 	auto &DataSubsystem = FDataManager::GetInstance();
+	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 	
-	auto StatData = DataSubsystem.GetDataTable<FStat>().GetData(Stat);
-	check(StatData != nullptr);
-	check(StatData->Type != EPokemonStatType::Battle);
-	
-	check(BaseStats.Contains(Stat));
-	if (StatData->Type == EPokemonStatType::Main) {
-		return (2 * BaseStats[Stat] + IVs[Stat] + EVs[Stat] / 4) * Level / 100 + Level + 10;
-	}
-	
-	auto NatureData = DataSubsystem.GetDataTable<FNature>().GetData(Nature);
-	check(NatureData != nullptr);
-		
-	auto NatureChange = NatureData->StatChanges.FindByPredicate([&Stat](const FNatureStatChange &Change) {
-		return Change.Stat == Stat;
-	});
-	int32 NatureModifer = NatureChange != nullptr ? 100 + NatureChange->Change : 100;
-		
-	return ((2 * BaseStats[Stat] + IVs[Stat] + EVs[Stat] / 4) * Level / 100 + 5) * NatureModifer / 100;
+	StatTable.ForEach([this, &IVs, &EVs](const FStat &Stat) {
+		switch (Stat.Type) {
+		case EPokemonStatType::Main:
+			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID));
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
+			break;
+		case EPokemonStatType::MainBattle:
+			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID));
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
+			break;
+		case EPokemonStatType::Battle:
+			// Skip over this stat as we don't track a value for it
+				break;
+			}
+		});
 }
 
 int32 FDefaultStatBlock::GetLevel() const {
 	return Level;
-}
-
-TMap<FName, int32>& FDefaultStatBlock::GetIVs() {
-	return IVs;
-}
-
-const TMap<FName, int32>& FDefaultStatBlock::GetIVs() const {
-	return IVs;
-}
-
-TMap<FName, int32>& FDefaultStatBlock::GetEVs() {
-	return EVs;
-}
-
-const TMap<FName, int32>& FDefaultStatBlock::GetEVs() const {
-	return EVs;
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {
@@ -80,4 +97,23 @@ const FNature& FDefaultStatBlock::GetNature() const {
 	auto Ret = NatureTable.GetData(Nature);
 	check(Ret != nullptr);
 	return *Ret;
+}
+
+IStatEntry& FDefaultStatBlock::GetStat(FName Stat) {
+	check(Stats.Contains(Stat));
+	return *Stats[Stat];
+}
+
+const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
+	check(Stats.Contains(Stat));
+	return *Stats[Stat];
+}
+
+void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
+	auto &NatureData = GetNature();
+	
+	for (auto &[StatID, Stat] : Stats) {
+		check(BaseStats.Contains(StatID));
+		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
+	}
 }
