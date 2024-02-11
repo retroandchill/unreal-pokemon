@@ -14,16 +14,12 @@
 #pragma once
 
 #include "GrowthRate.h"
-#include "Erratic.generated.h"
 
 /**
  * Represents the Erratic Exp. Growth Scheme
  */
-UCLASS(BlueprintType)
-class POKEMONDATA_API UErratic final : public UObject, public IGrowthRate {
-	GENERATED_BODY()
+class POKEMONDATA_API FErratic : public IGrowthRate {
 
 public:
-	UFUNCTION()
-	virtual int ExpForLevel(int Level) const override;
+	int ExpForLevel(int Level) const override;
 };

@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Exp/Slow.h"
 
-int USlow::ExpForLevel(int Level) const {
+int FSlow::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

@@ -15,16 +15,11 @@
 
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
-#include "Parabolic.generated.h"
 
 /**
  * Represents the Parabolic Exp. Growth Scheme
  */
-UCLASS(BlueprintType)
-class POKEMONDATA_API UParabolic final : public UObject, public IGrowthRate {
-	GENERATED_BODY()
-
+class POKEMONDATA_API FParabolic : public IGrowthRate {
 public:
-	UFUNCTION()
-	virtual int ExpForLevel(int Level) const override;
+	int ExpForLevel(int Level) const override;
 };

@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Exp/Fast.h"
 
-int UFast::ExpForLevel(int Level) const {
+int FFast::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

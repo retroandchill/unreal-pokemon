@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Exp/Medium.h"
 
-int UMedium::ExpForLevel(int Level) const {
+int FMedium::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

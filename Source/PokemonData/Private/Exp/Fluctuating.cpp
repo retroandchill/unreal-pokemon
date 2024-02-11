@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Exp/Fluctuating.h"
 
-int UFluctuating::ExpForLevel(int Level) const {
+int FFluctuating::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

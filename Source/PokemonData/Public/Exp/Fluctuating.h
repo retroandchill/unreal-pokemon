@@ -15,16 +15,12 @@
 
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
-#include "Fluctuating.generated.h"
 
 /**
 * Represents the Fluctuating Exp. Growth Scheme
 */
-UCLASS(BlueprintType)
-class POKEMONDATA_API UFluctuating final : public UObject, public IGrowthRate {
-	GENERATED_BODY()
+class POKEMONDATA_API FFluctuating : public IGrowthRate {
 
 public:
-	UFUNCTION()
-	virtual int ExpForLevel(int Level) const override;
+	int ExpForLevel(int Level) const override;
 };

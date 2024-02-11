@@ -15,16 +15,12 @@
 
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
-#include "Slow.generated.h"
 
 /**
  * Represents the Slow Exp. Growth Scheme
  */
-UCLASS(BlueprintType)
-class POKEMONDATA_API USlow final : public UObject, public IGrowthRate {
-	GENERATED_BODY()
+class POKEMONDATA_API FSlow : public IGrowthRate {
 
 public:
-	UFUNCTION()
-	virtual int ExpForLevel(int Level) const override;
+	int ExpForLevel(int Level) const override;
 };

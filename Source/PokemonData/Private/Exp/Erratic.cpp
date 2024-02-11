@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Exp/Erratic.h"
 
-int UErratic::ExpForLevel(int Level) const {
+int FErratic::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

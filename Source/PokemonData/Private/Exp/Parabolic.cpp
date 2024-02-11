@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Exp/Parabolic.h"
 
-int UParabolic::ExpForLevel(int Level) const {
+int FParabolic::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)

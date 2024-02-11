@@ -12,7 +12,6 @@
 // SOFTWARE.
 //====================================================================================================================
 #include "DataManager.h"
-#include "Exp/GrowthRate.h"
 #include "Exp/GrowthRateData.h"
 #include "Misc/AutomationTest.h"
 
@@ -36,10 +35,6 @@ bool GetGrowthRateTest::RunTest(const FString& Parameters) {
 		}
 
 		Passes &= TestEqual("IDs do not match!", GrowthRate->ID, ID);
-
-		auto ImplementationClass = NewObject<UObject>(nullptr, GrowthRate->ImplementationClass);
-		auto AsInterface = Cast<IGrowthRate>(ImplementationClass);
-		Passes &= TestNotNull("Implementation class does not Implement Growth Rate!", AsInterface);
 	}
 
 	return Passes;
