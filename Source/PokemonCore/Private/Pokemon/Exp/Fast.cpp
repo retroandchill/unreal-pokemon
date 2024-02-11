@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,16 +11,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Pokemon/Exp/Fast.h"
 
-#include "GrowthRate.h"
+using namespace Exp;
 
+int FFast::ExpForLevel(int Level) const {
+	check(Level > 0);
 
-/**
- * Medium/Medium Fast Exp Growth curve
- */
-class POKEMONDATA_API FMedium : public IGrowthRate {
+	if (Level == 1)
+		return 0;
 
-public:
-	int ExpForLevel(int Level) const override;
-};
+	return std::pow(Level, 3) * 4 / 5;
+}

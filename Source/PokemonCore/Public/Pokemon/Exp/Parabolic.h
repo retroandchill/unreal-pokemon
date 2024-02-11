@@ -16,11 +16,12 @@
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
 
-/**
-* Represents the Fluctuating Exp. Growth Scheme
-*/
-class POKEMONDATA_API FFluctuating : public IGrowthRate {
-
-public:
-	int ExpForLevel(int Level) const override;
-};
+namespace Exp {
+	/**
+	 * Represents the Parabolic Exp. Growth Scheme
+	 */
+	class POKEMONCORE_API FParabolic : public IGrowthRate {
+	public:
+		int ExpForLevel(int Level) const override;
+	};
+}

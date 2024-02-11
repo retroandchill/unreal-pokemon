@@ -11,16 +11,21 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Pokemon/Exp/Fluctuating.h"
 
-#include "CoreMinimal.h"
-#include "GrowthRate.h"
+using namespace Exp;
 
-/**
- * Represents the Fast Exp. Growth Scheme
- */
-class POKEMONDATA_API FFast : public IGrowthRate {
+int FFluctuating::ExpForLevel(int Level) const {
+	check(Level > 0);
 
-public:
-	int ExpForLevel(int Level) const override;
-};
+	if (Level == 1)
+		return 0;
+
+	if (Level <= 15)
+		return std::pow(Level, 3) * (24 + (Level + 1) / 3) / 50;
+
+	if (Level <= 35)
+		return std::pow(Level, 3) * (14 + Level) / 50;
+
+	return std::pow(Level, 3) * (32 + Level / 2) / 50;
+}

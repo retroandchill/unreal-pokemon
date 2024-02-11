@@ -11,13 +11,17 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Exp/Medium.h"
+#pragma once
 
-int FMedium::ExpForLevel(int Level) const {
-	check(Level > 0);
+#include "GrowthRate.h"
 
-	if (Level == 1)
-		return 0;
+namespace Exp {
+	/**
+	 * Represents the Erratic Exp. Growth Scheme
+	 */
+	class POKEMONCORE_API FErratic : public IGrowthRate {
 
-	return std::pow(Level, 3);
+	public:
+		int ExpForLevel(int Level) const override;
+	};
 }

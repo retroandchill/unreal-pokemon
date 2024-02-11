@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,23 +11,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Pokemon/Exp/Slow.h"
 
-#include "CoreMinimal.h"
+using namespace Exp;
 
+int FSlow::ExpForLevel(int Level) const {
+	check(Level > 0);
 
-/**
- * Interface to represent various Exp. grow rates
- */
-class POKEMONDATA_API IGrowthRate {
+	if (Level == 1)
+		return 0;
 
-public:
-	virtual ~IGrowthRate() = default;
-	
-	/**
-	 * Gets the amount of Exp that is required to reach a certain level 
-	 * @param Level The level in to calculate the Exp. for
-	 * @return The amount of Exp. required to level up
-	 */
-	virtual int ExpForLevel(int Level) const = 0;
-};
+	return std::pow(Level, 3) * 5 / 4;
+}

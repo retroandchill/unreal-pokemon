@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,22 +11,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Exp/Erratic.h"
+#pragma once
 
-int FErratic::ExpForLevel(int Level) const {
-	check(Level > 0);
+#include "CoreMinimal.h"
+#include "GrowthRate.h"
 
-	if (Level == 1)
-		return 0;
+namespace Exp {
+	/**
+	 * Represents the Slow Exp. Growth Scheme
+	 */
+	class POKEMONCORE_API FSlow : public IGrowthRate {
 
-	if (Level <= 50)
-		return std::pow(Level, 3) * (100 - Level) / 50;
-
-	if (Level <= 68)
-		return std::pow(Level, 3) * (150 - Level) / 100;
-
-	if (Level <= 98)
-		return std::pow(Level, 3) * ((1911 - 10 * Level) / 3) / 500;
-
-	return std::pow(Level, 3) * (160 - Level) / 100;
+	public:
+		int ExpForLevel(int Level) const override;
+	};
 }

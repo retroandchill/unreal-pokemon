@@ -11,13 +11,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Exp/Slow.h"
+#pragma once
 
-int FSlow::ExpForLevel(int Level) const {
-	check(Level > 0);
+#include "CoreMinimal.h"
+#include "GrowthRate.h"
 
-	if (Level == 1)
-		return 0;
+namespace Exp {
+	/**
+	 * Represents the Fast Exp. Growth Scheme
+	 */
+	class POKEMONCORE_API FFast : public IGrowthRate {
 
-	return std::pow(Level, 3) * 5 / 4;
+	public:
+		int ExpForLevel(int Level) const override;
+	};
 }

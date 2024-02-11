@@ -11,7 +11,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Exp/Slow.h"
+#include "Pokemon/Exp/Slow.h"
 #include "Misc/AutomationTest.h"
 
 #include <array>
@@ -50,7 +50,7 @@ void GrowthRateSlowTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FS
 bool GrowthRateSlowTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	FSlow GrowthRate;
+	Exp::FSlow GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
 	                 GrowthRate.ExpForLevel(Level), GSlowGrowthTable[Level]);
 }

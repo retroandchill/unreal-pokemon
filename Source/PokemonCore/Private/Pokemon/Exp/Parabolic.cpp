@@ -11,16 +11,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Pokemon/Exp/Parabolic.h"
 
-#include "CoreMinimal.h"
-#include "GrowthRate.h"
+using namespace Exp;
 
-/**
- * Represents the Slow Exp. Growth Scheme
- */
-class POKEMONDATA_API FSlow : public IGrowthRate {
+int FParabolic::ExpForLevel(int Level) const {
+	check(Level > 0);
 
-public:
-	int ExpForLevel(int Level) const override;
-};
+	if (Level == 1)
+		return 0;
+
+	return std::pow(Level, 3) * 6 / 5 - 15 * std::pow(Level, 2) + 100 * Level - 140;
+}

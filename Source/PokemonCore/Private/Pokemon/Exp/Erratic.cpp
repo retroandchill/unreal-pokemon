@@ -1,4 +1,4 @@
-//====================================================================================================================
+﻿//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,19 +11,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Exp/Fluctuating.h"
+#include "Pokemon/Exp/Erratic.h"
 
-int FFluctuating::ExpForLevel(int Level) const {
+using namespace Exp;
+
+int FErratic::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)
 		return 0;
 
-	if (Level <= 15)
-		return std::pow(Level, 3) * (24 + (Level + 1) / 3) / 50;
+	if (Level <= 50)
+		return std::pow(Level, 3) * (100 - Level) / 50;
 
-	if (Level <= 35)
-		return std::pow(Level, 3) * (14 + Level) / 50;
+	if (Level <= 68)
+		return std::pow(Level, 3) * (150 - Level) / 100;
 
-	return std::pow(Level, 3) * (32 + Level / 2) / 50;
+	if (Level <= 98)
+		return std::pow(Level, 3) * ((1911 - 10 * Level) / 3) / 500;
+
+	return std::pow(Level, 3) * (160 - Level) / 100;
 }

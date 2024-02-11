@@ -15,11 +15,14 @@
 
 #include "GrowthRate.h"
 
-/**
- * Represents the Erratic Exp. Growth Scheme
- */
-class POKEMONDATA_API FErratic : public IGrowthRate {
 
-public:
-	int ExpForLevel(int Level) const override;
-};
+namespace Exp {
+	/**
+	 * Medium/Medium Fast Exp Growth curve
+	 */
+	class POKEMONCORE_API FMedium : public IGrowthRate {
+
+	public:
+		int ExpForLevel(int Level) const override;
+	};
+}

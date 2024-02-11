@@ -11,48 +11,46 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Pokemon/Exp/Fast.h"
 #include "Misc/AutomationTest.h"
 
 #include <array>
 
-#include "Exp/Erratic.h"
-#include "Exp/Medium.h"
-
-constexpr std::array GMediumGrowthTable = {
+constexpr std::array GFastGrowthTable = {
 	-1,
-	0, 8, 27, 64, 125, 216, 343, 512, 729, 1000,
-	1331, 1728, 2197, 2744, 3375, 4096, 4913, 5832, 6859, 8000,
-	9261, 10648, 12167, 13824, 15625, 17576, 19683, 21952, 24389, 27000,
-	29791, 32768, 35937, 39304, 42875, 46656, 50653, 54872, 59319, 64000,
-	68921, 74088, 79507, 85184, 91125, 97336, 103823, 110592, 117649, 125000,
-	132651, 140608, 148877, 157464, 166375, 175616, 185193, 195112, 205379, 216000,
-	226981, 238328, 250047, 262144, 274625, 287496, 300763, 314432, 328509, 343000,
-	357911, 373248, 389017, 405224, 421875, 438976, 456533, 474552, 493039, 512000,
-	531441, 551368, 571787, 592704, 614125, 636056, 658503, 681472, 704969, 729000,
-	753571, 778688, 804357, 830584, 857375, 884736, 912673, 941192, 970299, 1000000
+	0, 6, 21, 51, 100, 172, 274, 409, 583, 800,
+	1064, 1382, 1757, 2195, 2700, 3276, 3930, 4665, 5487, 6400,
+	7408, 8518, 9733, 11059, 12500, 14060, 15746, 17561, 19511, 21600,
+	23832, 26214, 28749, 31443, 34300, 37324, 40522, 43897, 47455, 51200,
+	55136, 59270, 63605, 68147, 72900, 77868, 83058, 88473, 94119, 100000,
+	106120, 112486, 119101, 125971, 133100, 140492, 148154, 156089, 164303, 172800,
+	181584, 190662, 200037, 209715, 219700, 229996, 240610, 251545, 262807, 274400,
+	286328, 298598, 311213, 324179, 337500, 351180, 365226, 379641, 394431, 409600,
+	425152, 441094, 457429, 474163, 491300, 508844, 526802, 545177, 563975, 583200,
+	602856, 622950, 643485, 664467, 685900, 707788, 730138, 752953, 776239, 800000
 };
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateMediumTest, "Tests.Exp.GrowthRateMediumTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFastTest, "Tests.Exp.GrowthRateFastTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void GrowthRateMediumTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const {
-	OutBeautifiedNames.Add("Tests.Exp.GrowthRateMediumTest: Level = 1");
+void GrowthRateFastTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const {
+	OutBeautifiedNames.Add("Tests.Exp.GrowthRateFastTest: Level = 1");
 	OutTestCommands.Add("1");
 
 	for (int i = 0; i < 3; i++) {
-		auto Fmt = FString::Printf(TEXT("Tests.Exp.GrowthRateMediumTest: Level = 2-99 (Sample %d)"), i + 1);
+		auto Fmt = FString::Printf(TEXT("Tests.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
 		OutBeautifiedNames.Add(Fmt);
 		OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
 	}
 
-	OutBeautifiedNames.Add("Tests.Exp.GrowthRateMediumTest: Level = 100");
+	OutBeautifiedNames.Add("Tests.Exp.GrowthRateFastTest: Level = 100");
 	OutTestCommands.Add("100");
 }
 
-bool GrowthRateMediumTest::RunTest(const FString& Parameters) {
+bool GrowthRateFastTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	FMedium GrowthRate;
+	Exp::FFast GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
-	                 GrowthRate.ExpForLevel(Level), GMediumGrowthTable[Level]);
+	                 GrowthRate.ExpForLevel(Level), GFastGrowthTable[Level]);
 }

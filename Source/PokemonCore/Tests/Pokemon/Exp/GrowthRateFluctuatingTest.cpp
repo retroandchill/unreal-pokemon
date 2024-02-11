@@ -15,7 +15,7 @@
 
 #include <array>
 
-#include "Exp/Fluctuating.h"
+#include "Pokemon/Exp/Fluctuating.h"
 
 constexpr std::array GFluctuatingGrowthTable = {
 	-1,
@@ -66,7 +66,7 @@ void GrowthRateFluctuatingTest::GetTests(TArray<FString>& OutBeautifiedNames, TA
 bool GrowthRateFluctuatingTest::RunTest(const FString& Parameters) {
 	const int32 Level = FCString::Atoi(GetData(Parameters));
 
-	FFluctuating GrowthRate;
+	Exp::FFluctuating GrowthRate;
 	return TestEqual("The amount of Exp. required to level up should match the expected value!",
 	                 GrowthRate.ExpForLevel(Level), GFluctuatingGrowthTable[Level]);
 }

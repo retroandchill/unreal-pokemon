@@ -1,4 +1,4 @@
-//====================================================================================================================
+﻿//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,13 +11,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Exp/Parabolic.h"
+#include "Pokemon/Exp/Medium.h"
 
-int FParabolic::ExpForLevel(int Level) const {
+using namespace Exp;
+
+int FMedium::ExpForLevel(int Level) const {
 	check(Level > 0);
 
 	if (Level == 1)
 		return 0;
 
-	return std::pow(Level, 3) * 6 / 5 - 15 * std::pow(Level, 2) + 100 * Level - 140;
+	return std::pow(Level, 3);
 }
