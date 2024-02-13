@@ -15,9 +15,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PaperTileMapComponent.h"
 #include "GridBasedMap.generated.h"
 
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, ClassGroup=(Map))
 class GRIDBASED2D_API AGridBasedMap : public AActor {
 	GENERATED_BODY()
 
@@ -27,9 +28,37 @@ public:
 	 */
 	AGridBasedMap();
 
+	void PostInitProperties() override;
+	void PostReinitProperties() override;
+	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent);
+
 protected:
 	void BeginPlay() override;
 
 public:
 	void Tick(float DeltaTime) override;
+
+private:
+	/**
+	 * Set up the location of the map based on the configured properties
+	 */
+	void SetUpMapLocation();
+
+	/**
+	 * The TileMap object that this map holds.
+	 */
+	UPROPERTY(EditAnywhere, Category = "Display")
+	TObjectPtr<UPaperTileMap> TileMap;
+	
+	/**
+	 * The tilemap to use for this asset
+	 */
+	UPROPERTY()
+	TObjectPtr<UPaperTileMapComponent> TileMapComponent;
+
+	/**
+	 * The layer of the tilemap that is at the same level as the player
+	 */
+	UPROPERTY(EditAnywhere, Category = "Display", meta = (UIMin = 0, ClampMin = 0))
+	int32 PlayerLevelLayer;
 };

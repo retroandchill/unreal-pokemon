@@ -12,12 +12,34 @@
 // SOFTWARE.
 //====================================================================================================================
 #include "Map/GridBasedMap.h"
+#include "PaperTileMap.h"
 
 
 // Sets default values
-AGridBasedMap::AGridBasedMap() {
+AGridBasedMap::AGridBasedMap() : PlayerLevelLayer(1) {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootCompontent"));
+
+	TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Map"));
+	TileMapComponent->SetRelativeRotation(FRotator(0, 0, -90));
+	TileMapComponent->SetupAttachment(RootComponent);
+}
+
+void AGridBasedMap::PostInitProperties() {
+	Super::PostInitProperties();
+	SetUpMapLocation();
+}
+
+void AGridBasedMap::PostReinitProperties() {
+	Super::PostReinitProperties();
+	SetUpMapLocation();
+}
+
+void AGridBasedMap::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	SetUpMapLocation();
 }
 
 // Called when the game starts or when spawned
@@ -29,5 +51,20 @@ void AGridBasedMap::BeginPlay() {
 // Called every frame
 void AGridBasedMap::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
+}
+
+void AGridBasedMap::SetUpMapLocation() {
+	if (TileMap == nullptr)
+		return;
+	
+	TileMapComponent->SetTileMap(TileMap);
+	
+	auto MapLocation = TileMapComponent->GetRelativeLocation();
+	int32 TotalLayers = TileMap->TileLayers.Num();
+	PlayerLevelLayer = FMath::Min(PlayerLevelLayer, TotalLayers - 1);
+	float LowestLayerZ = -TotalLayers * TileMap->SeparationPerLayer / 2;
+
+	MapLocation.Z = LowestLayerZ + TileMap->SeparationPerLayer * PlayerLevelLayer;
+	TileMapComponent->SetRelativeLocation(MapLocation);
 }
 

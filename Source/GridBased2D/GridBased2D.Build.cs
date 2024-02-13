@@ -23,7 +23,7 @@ public class GridBased2D : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "Paper2D"
             }
         );
 
