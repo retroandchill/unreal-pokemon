@@ -11,25 +11,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "GameFramework/PlayerStart.h"
+#include "GamePlayerStart.generated.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+/**
+ * Player start class with a capsule that matches the size of the grid.
+ */
+UCLASS(Blueprintable)
+class GRIDBASED2D_API AGamePlayerStart : public APlayerStart {
+	GENERATED_BODY()
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
-}
+public:
+	/**
+	 * Sets default values for this actor's properties
+	 * @param ObjectInitializer The initialization parameters of the object
+	 */
+	explicit AGamePlayerStart(const FObjectInitializer& ObjectInitializer);
+
+protected:
+	void BeginPlay() override;
+
+public:
+	void Tick(float DeltaTime) override;
+};

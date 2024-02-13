@@ -11,25 +11,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "DirectionalSprite.generated.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+class UPaperFlipbook;
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
-}
+/**
+ * Struct used to house the movement information for a character
+ */
+USTRUCT(BlueprintType)
+struct GRIDBASED2D_API FDirectionalSprite {
+	GENERATED_BODY()
+
+	/**
+	 * The flipbook sprite used to house this character set
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
+	TObjectPtr<UPaperFlipbook> Flipbook;
+
+	/**
+	 * The set of valid frames this sprite can stop on
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
+	TSet<int32> ValidStopFrames = { 0, 2 };
+};

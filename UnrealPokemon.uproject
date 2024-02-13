@@ -28,6 +28,16 @@
         "Name": "PokemonCore",
         "Type": "Runtime",
         "LoadingPhase": "Default"
+      },
+      {
+        "Name": "GridBased2D",
+        "Type": "Runtime",
+        "LoadingPhase": "Default"
+      },
+      {
+        "Name": "GridBased2DEditor",
+        "Type": "Editor",
+        "LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

@@ -11,25 +11,17 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "GridUtils.h"
+#include "Misc/AutomationTest.h"
 
-using UnrealBuildTool;
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "Tests.LinearInterpolationTest",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
-
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+bool LinearInterpolationTest::RunTest(const FString& Parameters) {
+	// Make the test pass by returning true, or fail by returning false.
+	bool Passed = TestEqual("Negative Duration", 70.0, GridBased2D::LinearInterpolation(30, 70, -3, 20));
+	Passed &= TestEqual("Negative Delta", 30.0, GridBased2D::LinearInterpolation(30, 70, 20, -8));
+	Passed &= TestEqual("Delta Past Duration", 70.0, GridBased2D::LinearInterpolation(30, 70, 20, 30));
+	Passed &= TestEqual("Delta Within Duration", 50.0, GridBased2D::LinearInterpolation(30, 70, 20, 10));
+	return Passed;
 }

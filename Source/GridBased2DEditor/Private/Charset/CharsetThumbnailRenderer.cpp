@@ -11,25 +11,37 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Charset/CharsetThumbnailRenderer.h"
 
-using UnrealBuildTool;
+#include "Characters/Charset.h"
+#include "PaperFlipbook.h"
+#include "ThumbnailRendering/ThumbnailManager.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+bool UCharsetThumbnailRenderer::AllowsRealtimeThumbnails(UObject* Object) const {
+	return true;
+}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+bool UCharsetThumbnailRenderer::CanVisualizeAsset(UObject* Object) {
+	auto Charset = Cast<UCharset>(Object);
+	if (Charset == nullptr)
+		return false;
+
+	return Charset->GetDownSprite() != nullptr;
+}
+
+void UCharsetThumbnailRenderer::Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height,
+	FRenderTarget* RenderTarget, FCanvas* Canvas, bool bAdditionalViewFamily) {
+	auto Charset = Cast<UCharset>(Object);
+	if (Charset == nullptr)
+		return;
+
+	auto DownSprite = Charset->GetDownSprite();
+	if (DownSprite == nullptr)
+		return;
+
+	auto ThumbnailInfo = UThumbnailManager::Get().GetRenderingInfo(DownSprite);
+	if (ThumbnailInfo == nullptr || ThumbnailInfo->Renderer == nullptr)
+		return;
+	
+	ThumbnailInfo->Renderer->Draw(DownSprite, X, Y, Width, Height, RenderTarget, Canvas, bAdditionalViewFamily);
 }
