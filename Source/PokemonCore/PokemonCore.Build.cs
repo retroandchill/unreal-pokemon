@@ -19,7 +19,6 @@ public class PokemonCore : ModuleRules
 	public PokemonCore(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		bUseRTTI = true;
 
 		PublicDependencyModuleNames.AddRange(
 			new[]

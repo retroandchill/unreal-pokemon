@@ -11,25 +11,23 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "GameFramework/GameMode.h"
+#include "GameFramework/GameModeBase.h"
+#include "GridBasedGameModeBase.generated.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+/**
+ * Game Mode class used to define the information about all of the characters in the game
+ */
+UCLASS(Blueprintable)
+class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
+	GENERATED_BODY()
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
-}
+public:
+	/**
+	 * Initialize the GameMode to use the C++ defined classes
+	 */
+	AGridBasedGameModeBase();
+};

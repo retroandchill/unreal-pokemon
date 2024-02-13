@@ -19,7 +19,6 @@ public class PokemonData : ModuleRules
 	public PokemonData(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		bUseRTTI = true;
 
 		PublicDependencyModuleNames.AddRange(
 			new[]

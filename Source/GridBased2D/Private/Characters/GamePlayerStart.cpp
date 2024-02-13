@@ -11,25 +11,31 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Characters/GamePlayerStart.h"
 
-using UnrealBuildTool;
+#include "GridUtils.h"
+#include "Components/CapsuleComponent.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+// Sets default values
+AGamePlayerStart::AGamePlayerStart(const FObjectInitializer& ObjectInitializer) : APlayerStart(ObjectInitializer) {
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	double Radius = GridBased2D::GGridSize / 2;;
+	auto Capsule = GetCapsuleComponent();
+	Capsule->SetCapsuleRadius(Radius);
+	Capsule->SetCapsuleHalfHeight(Radius);
 }
+
+// Called when the game starts or when spawned
+void AGamePlayerStart::BeginPlay() {
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void AGamePlayerStart::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+}
+
