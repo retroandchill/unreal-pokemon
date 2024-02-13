@@ -36,9 +36,10 @@ public:
 		auto RowName = StructClass->GetFName();
 		check(DataTables.Contains(RowName));
 
-		auto TableOut = dynamic_cast<TDataTableProxy<T>*>(DataTables[RowName].Get());
-		check(TableOut != nullptr);
+		auto TableInterface = DataTables[RowName].Get();
+		check(StructClass->GetName() == TableInterface->GetStructType()->GetName())
 
+		auto TableOut = static_cast<TDataTableProxy<T>*>(TableInterface);
 		return *TableOut;
 	}
 
