@@ -9,7 +9,7 @@
 /**
  * The actions used for editing the Charset assets
  */
-class GRIDBASED2DEDITOR_API FCharsetAssetActions : public FAssetTypeActions_Base {
+class FCharsetAssetActions : public FAssetTypeActions_Base {
 public:
  /**
   * Create an asset action for Charset assets with the specified Asset Category

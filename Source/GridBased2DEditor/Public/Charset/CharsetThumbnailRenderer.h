@@ -14,20 +14,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Factories/Factory.h"
-#include "Characters/Assets/Charset.h"
-#include "CharsetFactory.generated.h"
+#include "ThumbnailRendering/ThumbnailRenderer.h"
+#include "CharsetThumbnailRenderer.generated.h"
 
 /**
- * Editor Factory for Charset objects
+ * Class to handle the rendering of Charset thubmnails in the editor
  */
-UCLASS(HideCategories=Object)
-class UCharsetFactory : public UFactory {
+UCLASS()
+class UCharsetThumbnailRenderer : public UThumbnailRenderer {
 	GENERATED_BODY()
 
 public:
-	UCharsetFactory();
-	
-	UCharset* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
-	bool ShouldShowInNewMenu() const override;
+	bool AllowsRealtimeThumbnails(UObject* Object) const override;
+	bool CanVisualizeAsset(UObject* Object) override;
+	void Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height, FRenderTarget*, FCanvas* Canvas, bool bAdditionalViewFamily) override;
 };

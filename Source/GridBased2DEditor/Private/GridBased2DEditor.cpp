@@ -15,7 +15,9 @@
 
 #include "AssetToolsModule.h"
 #include "IAssetTools.h"
+#include "Characters/Assets/Charset.h"
 #include "Charset/CharsetAssetActions.h"
+#include "Charset/CharsetThumbnailRenderer.h"
 
 constexpr auto GLoctextNamespace = "FGridBased2DEditorModule";
 
@@ -29,6 +31,9 @@ void FGridBased2DEditorModule::OnPostEngineInit() {
 
 	auto Paper2DAssetCategoryBit = AssetTools.FindAdvancedAssetCategory(FName(TEXT("Paper2D")));
 	AssetTools.RegisterAssetTypeActions(MakeShareable(new FCharsetAssetActions(Paper2DAssetCategoryBit)));
+
+	// Register thubmnails
+	UThumbnailManager::Get().RegisterCustomRenderer(UCharset::StaticClass(), UCharsetThumbnailRenderer::StaticClass());
 }
 
 void FGridBased2DEditorModule::ShutdownModule() {

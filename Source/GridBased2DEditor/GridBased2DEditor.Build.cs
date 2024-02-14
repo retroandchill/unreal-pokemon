@@ -33,7 +33,8 @@ public class GridBased2DEditor : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "UnrealEd"
+                "UnrealEd",
+                "Paper2DEditor"
             }
         );
     }

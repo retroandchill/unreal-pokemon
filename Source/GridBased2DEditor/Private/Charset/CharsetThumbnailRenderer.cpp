@@ -11,23 +11,37 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Charset/CharsetThumbnailRenderer.h"
 
-#include "CoreMinimal.h"
-#include "Factories/Factory.h"
 #include "Characters/Assets/Charset.h"
-#include "CharsetFactory.generated.h"
+#include "PaperFlipbook.h"
+#include "ThumbnailRendering/ThumbnailManager.h"
 
-/**
- * Editor Factory for Charset objects
- */
-UCLASS(HideCategories=Object)
-class UCharsetFactory : public UFactory {
-	GENERATED_BODY()
+bool UCharsetThumbnailRenderer::AllowsRealtimeThumbnails(UObject* Object) const {
+	return true;
+}
 
-public:
-	UCharsetFactory();
+bool UCharsetThumbnailRenderer::CanVisualizeAsset(UObject* Object) {
+	auto Charset = Cast<UCharset>(Object);
+	if (Charset == nullptr)
+		return false;
+
+	return Charset->GetDownSprite() != nullptr;
+}
+
+void UCharsetThumbnailRenderer::Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height,
+	FRenderTarget* RenderTarget, FCanvas* Canvas, bool bAdditionalViewFamily) {
+	auto Charset = Cast<UCharset>(Object);
+	if (Charset == nullptr)
+		return;
+
+	auto DownSprite = Charset->GetDownSprite();
+	if (DownSprite == nullptr)
+		return;
+
+	auto ThumbnailInfo = UThumbnailManager::Get().GetRenderingInfo(DownSprite);
+	if (ThumbnailInfo == nullptr || ThumbnailInfo->Renderer == nullptr)
+		return;
 	
-	UCharset* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
-	bool ShouldShowInNewMenu() const override;
-};
+	ThumbnailInfo->Renderer->Draw(DownSprite, X, Y, Width, Height, RenderTarget, Canvas, bAdditionalViewFamily);
+}
