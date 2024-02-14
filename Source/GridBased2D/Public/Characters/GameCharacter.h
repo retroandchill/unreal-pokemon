@@ -15,7 +15,7 @@
 
 #include "CoreMinimal.h"
 #include "FacingDirection.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "GameCharacter.generated.h"
 
 class UPaperFlipbook;
@@ -27,7 +27,7 @@ class UPaperFlipbookComponent;
  * Basic character class used to represent a character moving in 2D space
  */
 UCLASS(Blueprintable, ClassGroup=(Characters))
-class GRIDBASED2D_API AGameCharacter : public AActor {
+class GRIDBASED2D_API AGameCharacter : public APawn {
 	GENERATED_BODY()
 
 public:
