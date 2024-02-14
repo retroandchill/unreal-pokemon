@@ -11,36 +11,34 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Characters/Charset.h"
+#pragma once
 
-UPaperFlipbook* UCharset::GetDownSprite() const {
-	return DownSprite;
-}
+#include "CoreMinimal.h"
+#include "FacingDirection.generated.h"
 
-UPaperFlipbook* UCharset::GetLeftSprite() const {
-	return LeftSprite;
-}
+/**
+ * Enum to handle the facing direction of a character
+ */
+UENUM(BlueprintType)
+enum class EFacingDirection : uint8 {
+	
+	/**
+	 * The character is facing down
+	 */
+	Down,
 
-UPaperFlipbook* UCharset::GetRightSprite() const {
-	return RightSprite;
-}
+	/**
+	 * The character is facing left
+	 */
+	Left,
 
-UPaperFlipbook* UCharset::GetUpSprite() const {
-	return UpSprite;
-}
+	/**
+	 * The character is facing right
+	 */
+	Right,
 
-UPaperFlipbook* UCharset::GetSprite(EFacingDirection Direction) const {
-	switch (Direction) {
-		using enum EFacingDirection;
-	case Down:
-		return DownSprite;
-	case Left:
-		return LeftSprite;
-	case Right:
-		return RightSprite;
-	case Up:
-		return UpSprite;
-	}
-
-	return nullptr;
-}
+	/**
+	 * The character is facing up
+	 */
+	Up
+};

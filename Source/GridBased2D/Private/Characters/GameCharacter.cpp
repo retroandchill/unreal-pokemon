@@ -12,12 +12,24 @@
 // SOFTWARE.
 //====================================================================================================================
 #include "Characters/GameCharacter.h"
+#include "PaperFlipbookComponent.h"
+#include "Characters/Charset.h"
+#include "Components/BoxComponent.h"
 
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollider"));
+	Collider->SetBoxExtent(FVector(16, 16, 16));
+	RootComponent = Collider;
+
+	CharacterSprite = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
+	CharacterSprite->SetupAttachment(Collider);
+	CharacterSprite->SetRelativeLocation(FVector(0, 16, 0));
+	CharacterSprite->SetRelativeRotation(FRotator(0, 0, -90));
 }
 
 // Called when the game starts or when spawned
@@ -26,8 +38,36 @@ void AGameCharacter::BeginPlay() {
 	
 }
 
+void AGameCharacter::PostInitProperties() {
+	Super::PostInitProperties();
+	InitCharacterSpriteData();
+}
+
+void AGameCharacter::PostReinitProperties() {
+	Super::PostReinitProperties();
+	InitCharacterSpriteData();
+}
+
+void AGameCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	InitCharacterSpriteData();
+}
+
 // Called every frame
 void AGameCharacter::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
+}
+
+void AGameCharacter::InitCharacterSpriteData() {
+	auto Flipbook = GetDesiredFlipbook();
+	CharacterSprite->SetFlipbook(Flipbook);
+	CharacterSprite->Stop(); // TODO: We want this to toggle depending on the current situation
+}
+
+UPaperFlipbook* AGameCharacter::GetDesiredFlipbook() const {
+	if (Charset == nullptr)
+		return nullptr;
+
+	return Charset->GetSprite(Direction);
 }
 

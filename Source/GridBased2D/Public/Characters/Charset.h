@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FacingDirection.h"
 #include "UObject/Object.h"
 #include "Charset.generated.h"
 
@@ -54,6 +55,14 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Character|Sprites")
 	UPaperFlipbook* GetUpSprite() const;
+
+	/**
+	 * Get the character sprite for the given facing direction.
+	 * @param Direction The direction to get the sprite for
+	 * @return The Flipbook Asset for the given direction
+	 */
+	UFUNCTION(BlueprintPure, Category = "Character|Sprites")
+	UPaperFlipbook* GetSprite(EFacingDirection Direction) const;
 
 private:
 	/**

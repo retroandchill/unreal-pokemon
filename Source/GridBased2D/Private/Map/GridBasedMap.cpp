@@ -20,7 +20,7 @@ AGridBasedMap::AGridBasedMap() : PlayerLevelLayer(1) {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootCompontent"));
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
 	TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Map"));
 	TileMapComponent->SetRelativeRotation(FRotator(0, 0, -90));

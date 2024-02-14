@@ -14,9 +14,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FacingDirection.h"
 #include "GameFramework/Actor.h"
 #include "GameCharacter.generated.h"
 
+class UPaperFlipbook;
 class UCharset;
 class UBoxComponent;
 class UPaperFlipbookComponent;
@@ -24,7 +26,7 @@ class UPaperFlipbookComponent;
 /**
  * Basic character class used to represent a character moving in 2D space
  */
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, ClassGroup=(Characters))
 class GRIDBASED2D_API AGameCharacter : public AActor {
 	GENERATED_BODY()
 
@@ -36,11 +38,25 @@ public:
 
 protected:
 	void BeginPlay() override;
+	void PostInitProperties() override;
+	void PostReinitProperties() override;
+	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent);
 
 public:
 	void Tick(float DeltaTime) override;
 
 private:
+	/**
+	 * Initialize the character sprite information based on the selected charset and direction
+	 */
+	void InitCharacterSpriteData();
+
+	/**
+	 * Get the desired flipbook for the character
+	 * @return Get the flipbook we want this character to have
+	 */
+	UPaperFlipbook* GetDesiredFlipbook() const;
+	
 	/**
 	 * The collider used to handle collisions for the character
 	 */
@@ -58,6 +74,12 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Character")
 	TObjectPtr<UCharset> Charset;
+
+	/**
+	 * The direction this character is facing
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character")
+	EFacingDirection Direction = EFacingDirection::Down;
 
 	/**
 	 * Can other characters step onto the same tile as this character?
