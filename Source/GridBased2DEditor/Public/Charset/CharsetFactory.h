@@ -15,7 +15,7 @@
 
 #include "CoreMinimal.h"
 #include "Factories/Factory.h"
-#include "Characters/Assets/Charset.h"
+#include "Characters/Charset.h"
 #include "CharsetFactory.generated.h"
 
 /**

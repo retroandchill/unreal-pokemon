@@ -11,7 +11,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Characters/Assets/Charset.h"
+#include "Characters/Charset.h"
 
 UPaperFlipbook* UCharset::GetDownSprite() const {
 	return DownSprite;

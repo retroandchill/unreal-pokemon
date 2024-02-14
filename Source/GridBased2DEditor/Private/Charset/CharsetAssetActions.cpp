@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Charset/CharsetAssetActions.h"
 
-#include "Characters/Assets/Charset.h"
+#include "Characters/Charset.h"
 
 
 FCharsetAssetActions::FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory) : AssetCategory(InAssetCategory) {

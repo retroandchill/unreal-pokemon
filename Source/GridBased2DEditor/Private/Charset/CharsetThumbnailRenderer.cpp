@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Charset/CharsetThumbnailRenderer.h"
 
-#include "Characters/Assets/Charset.h"
+#include "Characters/Charset.h"
 #include "PaperFlipbook.h"
 #include "ThumbnailRendering/ThumbnailManager.h"
 

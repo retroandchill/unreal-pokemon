@@ -15,7 +15,7 @@
 
 #include "AssetToolsModule.h"
 #include "IAssetTools.h"
-#include "Characters/Assets/Charset.h"
+#include "Characters/Charset.h"
 #include "Charset/CharsetAssetActions.h"
 #include "Charset/CharsetThumbnailRenderer.h"
 
