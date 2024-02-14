@@ -15,7 +15,7 @@
 
 #include "CoreMinimal.h"
 #include "FacingDirection.h"
-#include "GameFramework/Pawn.h"
+#include "PaperCharacter.h"
 #include "GameCharacter.generated.h"
 
 class UPaperFlipbook;
@@ -27,7 +27,7 @@ class UPaperFlipbookComponent;
  * Basic character class used to represent a character moving in 2D space
  */
 UCLASS(Blueprintable, ClassGroup=(Characters))
-class GRIDBASED2D_API AGameCharacter : public APawn {
+class GRIDBASED2D_API AGameCharacter : public APaperCharacter {
 	GENERATED_BODY()
 
 public:
@@ -53,6 +53,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void MoveInDirection(EFacingDirection MovementDirection);
 
+protected:
+	
+
 private:
 	/**
 	 * Initialize the character sprite information based on the selected charset and direction
@@ -75,18 +78,6 @@ private:
 	 * Update the character's animation state
 	 */
 	void UpdateAnimation();
-	
-	/**
-	 * The collider used to handle collisions for the character
-	 */
-	UPROPERTY()
-	TObjectPtr<UBoxComponent> Collider;
-
-	/**
-	 * The actual sprite of the character in question
-	 */
-	UPROPERTY()
-	TObjectPtr<UPaperFlipbookComponent> CharacterSprite;
 
 	/**
 	 * The character set used for displaying the sprite 
@@ -94,6 +85,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Character")
 	TObjectPtr<UCharset> Charset;
 
+protected:
+	/**
+	 * Set the charset sprite to the specified value
+	 * @param NewCharset The Charset asset to set this character to
+	 */
+	void SetCharset(UCharset* NewCharset);
+
+private:
 	/**
 	 * The direction this character is facing
 	 */

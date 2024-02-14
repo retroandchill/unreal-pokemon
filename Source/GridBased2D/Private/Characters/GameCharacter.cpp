@@ -16,6 +16,9 @@
 #include "Characters/Charset.h"
 #include "Components/BoxComponent.h"
 #include "..\..\Public\GridUtils.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 
 // Sets default values
@@ -24,14 +27,15 @@ AGameCharacter::AGameCharacter() {
 	PrimaryActorTick.bCanEverTick = true;
 
 	double BoxSize = GridBased2D::GGridSize / 2;
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollider"));
-	Collider->SetBoxExtent(FVector(BoxSize, BoxSize, BoxSize));
-	RootComponent = Collider;
+	auto Capsule = GetCapsuleComponent();
+	Capsule->SetCapsuleRadius(BoxSize);
+	Capsule->SetCapsuleHalfHeight(BoxSize);
 
-	CharacterSprite = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
-	CharacterSprite->SetupAttachment(Collider);
+	auto CharacterSprite = GetSprite();
 	CharacterSprite->SetRelativeLocation(FVector(0, BoxSize, 0));
 	CharacterSprite->SetRelativeRotation(FRotator(0, 0, -90));
+
+	GetCharacterMovement()->GravityScale = 0;
 }
 
 void AGameCharacter::PostInitProperties() {
@@ -89,6 +93,7 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 
 void AGameCharacter::InitCharacterData() {
 	auto Flipbook = GetDesiredFlipbook();
+	auto CharacterSprite = GetSprite();
 	CharacterSprite->SetFlipbook(Flipbook);
 	CharacterSprite->Stop(); // TODO: We want this to toggle depending on the current situation
 }
@@ -141,10 +146,15 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 }
 
 void AGameCharacter::UpdateAnimation() {
+	auto CharacterSprite = GetSprite();
 	if (MoveTimer.IsSet()) {
 		CharacterSprite->PlayFromStart();
 	} else {
 		CharacterSprite->Stop();
 		CharacterSprite->SetNewTime(0);
 	}
+}
+
+void AGameCharacter::SetCharset(UCharset* NewCharset) {
+	Charset = NewCharset;
 }
