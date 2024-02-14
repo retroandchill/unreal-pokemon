@@ -11,25 +11,26 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Charset/CharsetAssetActions.h"
 
-using UnrealBuildTool;
+#include "Characters/Assets/Charset.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+FCharsetAssetActions::FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory) : AssetCategory(InAssetCategory) {
+}
+
+FText FCharsetAssetActions::GetName() const {
+	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_Charset", "Character Set");
+}
+
+UClass* FCharsetAssetActions::GetSupportedClass() const {
+	return UCharset::StaticClass();
+}
+
+FColor FCharsetAssetActions::GetTypeColor() const {
+	return FColor::Blue;
+}
+
+uint32 FCharsetAssetActions::GetCategories() {
+	return AssetCategory;
 }

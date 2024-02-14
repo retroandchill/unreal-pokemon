@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IAssetTools.h"
 #include "Modules/ModuleManager.h"
 
 /**
@@ -22,5 +23,6 @@
 class FGridBased2DModule : public IModuleInterface {
 public:
     void StartupModule() override;
+	
     void ShutdownModule() override;
 };

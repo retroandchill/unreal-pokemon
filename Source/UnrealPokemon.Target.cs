@@ -29,7 +29,7 @@ public class UnrealPokemonTarget : TargetRules
 	{
 		ExtraModuleNames.AddRange(new string[]
 		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D"
+			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
 		});
 	}
 }

@@ -11,25 +11,20 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Characters/Assets/Charset.h"
 
-using UnrealBuildTool;
+UPaperFlipbook* UCharset::GetDownSprite() const {
+	return DownSprite;
+}
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+UPaperFlipbook* UCharset::GetLeftSprite() const {
+	return LeftSprite;
+}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+UPaperFlipbook* UCharset::GetRightSprite() const {
+	return RightSprite;
+}
+
+UPaperFlipbook* UCharset::GetUpSprite() const {
+	return UpSprite;
 }

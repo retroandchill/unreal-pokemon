@@ -1,4 +1,4 @@
-//====================================================================================================================
+﻿//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,25 +11,28 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "GridBased2DEditor.h"
 
-using UnrealBuildTool;
+#include "AssetToolsModule.h"
+#include "IAssetTools.h"
+#include "Charset/CharsetAssetActions.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+constexpr auto GLoctextNamespace = "FGridBased2DEditorModule";
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+void FGridBased2DEditorModule::StartupModule() {
+	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FGridBased2DEditorModule::OnPostEngineInit);
 }
+
+void FGridBased2DEditorModule::OnPostEngineInit() {
+	// Register asset types
+	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
+
+	auto Paper2DAssetCategoryBit = AssetTools.FindAdvancedAssetCategory(FName(TEXT("Paper2D")));
+	AssetTools.RegisterAssetTypeActions(MakeShareable(new FCharsetAssetActions(Paper2DAssetCategoryBit)));
+}
+
+void FGridBased2DEditorModule::ShutdownModule() {
+    
+}
+    
+IMPLEMENT_MODULE(FGridBased2DEditorModule, GridBased2DEditor)

@@ -11,25 +11,57 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "GameCharacter.generated.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+class UCharset;
+class UBoxComponent;
+class UPaperFlipbookComponent;
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
-}
+/**
+ * Basic character class used to represent a character moving in 2D space
+ */
+UCLASS(Blueprintable)
+class GRIDBASED2D_API AGameCharacter : public AActor {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Sets default values for this actor's properties
+	 */
+	AGameCharacter();
+
+protected:
+	void BeginPlay() override;
+
+public:
+	void Tick(float DeltaTime) override;
+
+private:
+	/**
+	 * The collider used to handle collisions for the character
+	 */
+	UPROPERTY()
+	TObjectPtr<UBoxComponent> Collider;
+
+	/**
+	 * The actual sprite of the character in question
+	 */
+	UPROPERTY()
+	TObjectPtr<UPaperFlipbookComponent> CharacterSprite;
+
+	/**
+	 * The character set used for displaying the sprite 
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character")
+	TObjectPtr<UCharset> Charset;
+
+	/**
+	 * Can other characters step onto the same tile as this character?
+	 */
+	UPROPERTY(EditAnywhere, Category = "Collision")
+	bool bPassThrough = false;
+};

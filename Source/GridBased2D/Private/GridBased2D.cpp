@@ -16,11 +16,11 @@
 constexpr auto GLoctextNamespace = "FGridBased2DModule";
 
 void FGridBased2DModule::StartupModule() {
-    
+	
 }
 
 void FGridBased2DModule::ShutdownModule() {
     
 }
-    
+
 IMPLEMENT_MODULE(FGridBased2DModule, GridBased2D)
