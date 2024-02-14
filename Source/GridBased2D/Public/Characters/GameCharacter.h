@@ -37,25 +37,44 @@ public:
 	AGameCharacter();
 
 protected:
-	void BeginPlay() override;
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
 	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent);
+	
+	void BeginPlay() override;
 
 public:
 	void Tick(float DeltaTime) override;
+
+	/**
+	 * Move the character in the specified direction
+	 * @param MovementDirection The direction to move the character in
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+	void MoveInDirection(EFacingDirection MovementDirection);
 
 private:
 	/**
 	 * Initialize the character sprite information based on the selected charset and direction
 	 */
-	void InitCharacterSpriteData();
+	void InitCharacterData();
 
 	/**
 	 * Get the desired flipbook for the character
 	 * @return Get the flipbook we want this character to have
 	 */
 	UPaperFlipbook* GetDesiredFlipbook() const;
+
+	/**
+	 * Update the character's movement upon a tick
+	 * @param DeltaTime The amount to update the movement by
+	 */
+	void UpdateMovement(float DeltaTime);
+
+	/**
+	 * Update the character's animation state
+	 */
+	void UpdateAnimation();
 	
 	/**
 	 * The collider used to handle collisions for the character
@@ -86,4 +105,21 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Collision")
 	bool bPassThrough = false;
+
+	/**
+	 * The current position of the character within the movement grid
+	 */
+	UPROPERTY(VisibleAnywhere, Category = "Position")
+	FIntVector2 CurrentPosition;
+
+	/**
+	 * The desired position of the character within the movement grid
+	 */
+	UPROPERTY(VisibleAnywhere, Category = "Position")
+	FIntVector2 DesiredPosition;
+
+	/**
+	 * The timer for movement used to linearly interpolate the position to the new one
+	 */
+	TOptional<float> MoveTimer;
 };
