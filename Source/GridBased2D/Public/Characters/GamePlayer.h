@@ -20,6 +20,8 @@
 class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
+class UInputMappingContext;
+
 /**
  * Character class to handle the player character
  */
@@ -59,6 +61,12 @@ private:
 	 */
 	UPROPERTY()
 	TObjectPtr<UCameraComponent> TopDownCamera;
+
+	/**
+	 * The mapping context asset to use to determine movement controls
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputMappingContext* DefaultMappingContext;
 
 	/**
 	 * The input to use for movement on the map

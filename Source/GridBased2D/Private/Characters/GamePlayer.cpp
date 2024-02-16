@@ -18,6 +18,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Characters/Charset.h"
 #include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "GridUtils.h"
 
 
@@ -51,7 +52,14 @@ AGamePlayer::AGamePlayer() {
 // Called when the game starts or when spawned
 void AGamePlayer::BeginPlay() {
 	Super::BeginPlay();
-	
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
 }
 
 // Called every frame

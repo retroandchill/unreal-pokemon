@@ -117,7 +117,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
-		int32 Distance = FMath::Abs(CurrentPosition.X - CurrentPosition.Y);
+		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
 		Position.X = GridBased2D::LinearInterpolation(CurrentPosition.X * GridBased2D::GGridSize,
 													  DesiredPosition.X * GridBased2D::GGridSize,
 													  MoveSpeed * Distance,
