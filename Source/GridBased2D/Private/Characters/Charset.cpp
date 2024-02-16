@@ -11,25 +11,52 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Characters/Charset.h"
 
-using UnrealBuildTool;
+UPaperFlipbook* UCharset::GetDownSprite() const {
+	return DownSprite.Flipbook;
+}
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
+UPaperFlipbook* UCharset::GetLeftSprite() const {
+	return LeftSprite.Flipbook;
+}
+
+UPaperFlipbook* UCharset::GetRightSprite() const {
+	return RightSprite.Flipbook;
+}
+
+UPaperFlipbook* UCharset::GetUpSprite() const {
+	return UpSprite.Flipbook;
+}
+
+UPaperFlipbook* UCharset::GetSprite(EFacingDirection Direction) const {
+	auto SpriteData = GetDirectionalSprite(Direction);
+	if (SpriteData == nullptr)
+		return nullptr;
+
+	return SpriteData->Flipbook;
+}
+
+bool UCharset::CanStopOnFrame(EFacingDirection Direction, int32 CurrentFrame) const {
+	auto SpriteData = GetDirectionalSprite(Direction);
+	if (SpriteData == nullptr)
+		return false;
+
+	return SpriteData->ValidStopFrames.Contains(CurrentFrame);
+}
+
+const FDirectionalSprite* UCharset::GetDirectionalSprite(EFacingDirection Direction) const {
+	switch (Direction) {
+		using enum EFacingDirection;
+	case Down:
+		return &DownSprite;
+	case Left:
+		return &LeftSprite;
+	case Right:
+		return &RightSprite;
+	case Up:
+		return &UpSprite;
 	}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+	return nullptr;
 }

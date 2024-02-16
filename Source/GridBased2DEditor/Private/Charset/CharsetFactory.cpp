@@ -11,25 +11,19 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Charset/CharsetFactory.h"
 
-using UnrealBuildTool;
+UCharsetFactory::UCharsetFactory() {
+	SupportedClass = UCharset::StaticClass();
+	bCreateNew = true;
+	bEditAfterNew = true;
+}
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+UCharset* UCharsetFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
+	UObject* Context, FFeedbackContext* Warn) {
+	return NewObject<UCharset>(InParent, InClass, InName, Flags);
+}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
-	}
+bool UCharsetFactory::ShouldShowInNewMenu() const {
+	return true;
 }

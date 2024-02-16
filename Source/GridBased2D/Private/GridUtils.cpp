@@ -11,25 +11,38 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "GridUtils.h"
 
-using UnrealBuildTool;
+GRIDBASED2D_API double GridBased2D::LinearInterpolation(double StartValue, double EndValue, double Duration, double Delta) {
+	if (Duration <= 0)
+		return EndValue;
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
+	if (Delta <= 0)
+		return StartValue;
+
+	if (Delta >= Duration)
+		return EndValue;
+
+	return StartValue + (EndValue - StartValue) * Delta / Duration;
+}
+
+TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D Vector) {
+	using enum EFacingDirection;
+	if (Vector.Y > 0) {
+		return Down;
 	}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor"
-		});
+	if (Vector.X < 0 ) {
+		return Left;
 	}
+
+	if (Vector.X > 0) {
+		return Right;
+	}
+
+	if (Vector.Y < 0) {
+		return Up;
+	}
+
+	return TOptional<EFacingDirection>();
 }
