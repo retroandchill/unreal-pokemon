@@ -14,6 +14,7 @@
 #include "Characters/GameCharacter.h"
 
 #include "InputAction.h"
+#include "KismetTraceUtils.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 #include "Components/BoxComponent.h"
@@ -74,24 +75,32 @@ void AGameCharacter::Tick(float DeltaTime) {
 
 void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	FaceDirection(MovementDirection);
-	switch (MovementDirection) {
-		using enum EFacingDirection;
-	case Down:
-		DesiredPosition.Y += 1;
-		break;
-	case Left:
-		DesiredPosition.X -= 1;
-		break;
-	case Right:
-		DesiredPosition.X += 1;
-		break;
-	case Up:
-		DesiredPosition.Y -= 1;
-		break;
-	}
+	if (!CanMoveInDirection(MovementDirection))
+		return;
+	
+	GridBased2D::AdjustMovementPosition(MovementDirection, DesiredPosition);
 
 	MoveTimer.Emplace(0.f);
 	StopTimer.Reset();
+}
+
+bool AGameCharacter::CanMoveInDirection(EFacingDirection MovementDirection) const {
+	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GGridSize);
+	
+	FVector LocalOffset(0, 0, 0);
+	GridBased2D::AdjustMovementPosition(MovementDirection, LocalOffset);
+
+	auto Position = GetActorLocation();
+	auto GridPosition = LocalOffset * GridBased2D::GGridSize + Position;
+	FHitResult Result;
+	FCollisionShape GridSquare;
+	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	GetWorld()->SweepSingleByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
+		ECC_Pawn, GridSquare, Params);
+
+	return !Result.bBlockingHit;
 }
 
 void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {

@@ -62,7 +62,7 @@ void AGridBasedMap::SetUpMapLocation() {
 	auto MapLocation = TileMapComponent->GetRelativeLocation();
 	int32 TotalLayers = TileMap->TileLayers.Num();
 	PlayerLevelLayer = FMath::Min(PlayerLevelLayer, TotalLayers - 1);
-	float LowestLayerZ = -TotalLayers * TileMap->SeparationPerLayer / 2;
+	float LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer / 2;
 
 	MapLocation.Z = LowestLayerZ + TileMap->SeparationPerLayer * PlayerLevelLayer;
 	TileMapComponent->SetRelativeLocation(MapLocation);

@@ -59,13 +59,13 @@ private:
 	/**
 	 * The boom arm for holding the camera.
 	 */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> CameraBoom;
 
 	/**
 	 * The orthographic camera used to display the world to the player
 	 */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> TopDownCamera;
 
 	/**

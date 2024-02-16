@@ -53,7 +53,7 @@ private:
 	/**
 	 * The tilemap to use for this asset
 	 */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPaperTileMapComponent> TileMapComponent;
 
 	/**

@@ -55,6 +55,14 @@ public:
 	void MoveInDirection(EFacingDirection MovementDirection);
 
 	/**
+	 * Check to see if the character can move in the specified direction
+	 * @param MovementDirection The direction the character would like to move in
+	 * @return Can the character move to that tile
+	 */
+	UFUNCTION(BlueprintPure, Category = "Character|Movement")
+	bool CanMoveInDirection(EFacingDirection MovementDirection) const;
+
+	/**
 	 * Turn the character to face a specific direction
 	 * @param FacingDirection The direction to update the character's facing direction to
 	 */
