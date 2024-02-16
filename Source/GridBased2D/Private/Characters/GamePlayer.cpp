@@ -71,17 +71,24 @@ void AGamePlayer::Tick(float DeltaTime) {
 void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	auto Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	Input->BindAction(MoveInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Move);
+	Input->BindAction(FaceDirectionInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Turn);
 }
 
 void AGamePlayer::Move(const FInputActionInstance& Input) {
 	auto Vector = Input.GetValue().Get<FVector2D>();
 	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
-	if (!Dir.IsSet())
-		return;
-
-	if (GetCurrentPosition() != GetDesiredPosition())
+	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
 	
 	MoveInDirection(Dir.GetValue());
+}
+
+void AGamePlayer::Turn(const FInputActionInstance& Input) {
+	auto Vector = Input.GetValue().Get<FVector2D>();
+	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
+	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
+		return;
+	
+	FaceDirection(Dir.GetValue());
 }
 

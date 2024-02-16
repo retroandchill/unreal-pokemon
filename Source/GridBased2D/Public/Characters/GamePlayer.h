@@ -49,6 +49,12 @@ private:
 	 * @param Input The input information received
 	 */
 	void Move(const FInputActionInstance &Input);
+
+	/**
+	 * Perform the face direction action when receiving the input
+	 * @param Input The input information received
+	 */
+	void Turn(const FInputActionInstance &Input);
 	
 	/**
 	 * The boom arm for holding the camera.
@@ -73,5 +79,11 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TSoftObjectPtr<UInputAction> MoveInput;
+
+	/**
+	 * The input to use for facing a given direction
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TSoftObjectPtr<UInputAction> FaceDirectionInput;
 	
 };
