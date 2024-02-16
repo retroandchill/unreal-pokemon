@@ -32,8 +32,8 @@ public:
 	explicit AGamePlayerStart(const FObjectInitializer& ObjectInitializer);
 
 protected:
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 public:
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 };

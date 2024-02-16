@@ -27,20 +27,21 @@ GRIDBASED2D_API double GridBased2D::LinearInterpolation(double StartValue, doubl
 }
 
 TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D Vector) {
+	using enum EFacingDirection;
 	if (Vector.Y > 0) {
-		return EFacingDirection::Down;
+		return Down;
 	}
 
 	if (Vector.X < 0 ) {
-		return EFacingDirection::Left;
+		return Left;
 	}
 
 	if (Vector.X > 0) {
-		return EFacingDirection::Right;
+		return Right;
 	}
 
 	if (Vector.Y < 0) {
-		return EFacingDirection::Up;
+		return Up;
 	}
 
 	return TOptional<EFacingDirection>();

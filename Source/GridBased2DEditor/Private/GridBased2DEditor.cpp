@@ -30,14 +30,14 @@ void FGridBased2DEditorModule::OnPostEngineInit() {
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 
 	auto Paper2DAssetCategoryBit = AssetTools.FindAdvancedAssetCategory(FName(TEXT("Paper2D")));
-	AssetTools.RegisterAssetTypeActions(MakeShareable(new FCharsetAssetActions(Paper2DAssetCategoryBit)));
+	AssetTools.RegisterAssetTypeActions(MakeShared<FCharsetAssetActions>(Paper2DAssetCategoryBit));
 
 	// Register thubmnails
 	UThumbnailManager::Get().RegisterCustomRenderer(UCharset::StaticClass(), UCharsetThumbnailRenderer::StaticClass());
 }
 
 void FGridBased2DEditorModule::ShutdownModule() {
-    
+	// No special shutdown required
 }
     
 IMPLEMENT_MODULE(FGridBased2DEditorModule, GridBased2DEditor)
