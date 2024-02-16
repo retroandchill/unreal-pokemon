@@ -118,7 +118,7 @@ bool AGameCharacter::CanMoveInDirection(EFacingDirection MovementDirection) cons
 	Params.AddIgnoredActor(this);
 	GetWorld()->SweepSingleByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
 		ECC_Pawn, GridSquare, Params);
-
+	
 	return !Result.bBlockingHit;
 }
 
