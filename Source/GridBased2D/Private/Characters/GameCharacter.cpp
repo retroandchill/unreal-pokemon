@@ -73,6 +73,7 @@ void AGameCharacter::Tick(float DeltaTime) {
 }
 
 void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
+	FaceDirection(MovementDirection);
 	switch (MovementDirection) {
 		using enum EFacingDirection;
 	case Down:
@@ -90,6 +91,10 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	}
 
 	MoveTimer.Emplace(0.f);
+}
+
+void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
+	Direction = FacingDirection;
 }
 
 void AGameCharacter::InitCharacterData() {
@@ -147,7 +152,9 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 }
 
 void AGameCharacter::UpdateAnimation() {
+	auto Flipbook = GetDesiredFlipbook();
 	auto CharacterSprite = GetSprite();
+	CharacterSprite->SetFlipbook(Flipbook);
 	if (MoveTimer.IsSet()) {
 		CharacterSprite->PlayFromStart();
 	} else {

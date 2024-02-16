@@ -54,7 +54,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void MoveInDirection(EFacingDirection MovementDirection);
 
-protected:
+	/**
+	 * Turn the character to face a specific direction
+	 * @param FacingDirection The direction to update the character's facing direction to
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+	void FaceDirection(EFacingDirection FacingDirection);
 	
 
 private:

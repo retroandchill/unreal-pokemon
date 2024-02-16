@@ -41,7 +41,7 @@ protected:
 public:
 	void Tick(float DeltaTime) override;
 	
-	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 private:
 	/**
