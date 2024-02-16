@@ -69,7 +69,7 @@ void AGameCharacter::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
 	UpdateMovement(DeltaTime);
-	UpdateAnimation();
+	UpdateAnimation(DeltaTime);
 }
 
 void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
@@ -91,6 +91,7 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	}
 
 	MoveTimer.Emplace(0.f);
+	StopTimer.Reset();
 }
 
 void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
@@ -148,18 +149,27 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	SetActorLocation(Position);
 	if (CurrentPosition == DesiredPosition) {
 		MoveTimer.Reset();
+		StopTimer.Emplace(0.f);
 	}
 }
 
-void AGameCharacter::UpdateAnimation() {
+void AGameCharacter::UpdateAnimation(float DeltaTime) {
 	auto Flipbook = GetDesiredFlipbook();
 	auto CharacterSprite = GetSprite();
 	CharacterSprite->SetFlipbook(Flipbook);
-	if (MoveTimer.IsSet()) {
+
+	if (MoveTimer.IsSet() && !CharacterSprite->IsPlaying()) {
 		CharacterSprite->PlayFromStart();
-	} else {
-		CharacterSprite->Stop();
-		CharacterSprite->SetNewTime(0);
+		CharacterSprite->SetLooping(true);
+	} else if (StopTimer.IsSet()) {
+		auto &Timer = StopTimer.GetValue();
+		Timer += DeltaTime;
+
+		if (Timer >= 0.125f && Charset->CanStopOnFrame(Direction, CharacterSprite->GetPlaybackPositionInFrames())) {
+			CharacterSprite->Stop();
+			CharacterSprite->SetPlaybackPositionInFrames(0, false);
+			StopTimer.Reset();
+		}
 	}
 }
 

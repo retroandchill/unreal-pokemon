@@ -11,52 +11,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Characters/Charset.h"
+#pragma once
 
-UPaperFlipbook* UCharset::GetDownSprite() const {
-	return DownSprite.Flipbook;
-}
+#include "CoreMinimal.h"
+#include "DirectionalSprite.generated.h"
 
-UPaperFlipbook* UCharset::GetLeftSprite() const {
-	return LeftSprite.Flipbook;
-}
+class UPaperFlipbook;
 
-UPaperFlipbook* UCharset::GetRightSprite() const {
-	return RightSprite.Flipbook;
-}
+/**
+ * Struct used to house the movement information for a character
+ */
+USTRUCT(BlueprintType)
+struct GRIDBASED2D_API FDirectionalSprite {
+	GENERATED_BODY()
 
-UPaperFlipbook* UCharset::GetUpSprite() const {
-	return UpSprite.Flipbook;
-}
+	/**
+	 * The flipbook sprite used to house this character set
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
+	TObjectPtr<UPaperFlipbook> Flipbook;
 
-UPaperFlipbook* UCharset::GetSprite(EFacingDirection Direction) const {
-	auto SpriteData = GetDirectionalSprite(Direction);
-	if (SpriteData == nullptr)
-		return nullptr;
-
-	return SpriteData->Flipbook;
-}
-
-bool UCharset::CanStopOnFrame(EFacingDirection Direction, int32 CurrentFrame) const {
-	auto SpriteData = GetDirectionalSprite(Direction);
-	if (SpriteData == nullptr)
-		return false;
-
-	return SpriteData->ValidStopFrames.Contains(CurrentFrame);
-}
-
-const FDirectionalSprite* UCharset::GetDirectionalSprite(EFacingDirection Direction) const {
-	switch (Direction) {
-		using enum EFacingDirection;
-	case Down:
-		return &DownSprite;
-	case Left:
-		return &LeftSprite;
-	case Right:
-		return &RightSprite;
-	case Up:
-		return &UpSprite;
-	}
-
-	return nullptr;
-}
+	/**
+	 * The set of valid frames this sprite can stop on
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
+	TSet<int32> ValidStopFrames = { 0, 2 };
+};

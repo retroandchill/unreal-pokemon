@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DirectionalSprite.h"
 #include "FacingDirection.h"
 #include "UObject/Object.h"
 #include "Charset.generated.h"
@@ -64,28 +65,44 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Character|Sprites")
 	UPaperFlipbook* GetSprite(EFacingDirection Direction) const;
 
+	/**
+	 * Can the sprite stop moving on the provided frame if it is moving
+	 * @param Direction The direction the character is facing
+	 * @param CurrentFrame The current playback frame for the sprite
+	 * @return If the character can safely stop
+	 */
+	UFUNCTION(BlueprintPure, Category = "Character|Sprites")
+	bool CanStopOnFrame(EFacingDirection Direction, int32 CurrentFrame) const;
+
 private:
+	/**
+	 * Get the full internal directional sprite data for the given direction
+	 * @param Direction The direction to get the sprite for
+	 * @return The Flibook Asset and set of valid stop frames
+	 */
+	const FDirectionalSprite* GetDirectionalSprite(EFacingDirection Direction) const;
+	
 	/**
 	 * The Flipbook Asset for when the character is facing down
 	 */
 	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
-	TObjectPtr<UPaperFlipbook> DownSprite;
+	FDirectionalSprite DownSprite;
 
 	/**
 	 * The Flipbook Asset for when the character is facing left
 	 */
 	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
-	TObjectPtr<UPaperFlipbook> LeftSprite;
+	FDirectionalSprite LeftSprite;
 
 	/**
 	 * The Flipbook Asset for when the character is facing left
 	 */
 	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
-	TObjectPtr<UPaperFlipbook> RightSprite;
+	FDirectionalSprite RightSprite;
 
 	/**
 	 * The Flipbook Asset for when the character is facing up
 	 */
 	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
-	TObjectPtr<UPaperFlipbook> UpSprite;
+	FDirectionalSprite UpSprite;
 };

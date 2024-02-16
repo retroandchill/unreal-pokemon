@@ -76,20 +76,15 @@ private:
 
 	/**
 	 * Update the character's movement upon a tick
-	 * @param DeltaTime The amount to update the movement by
+	 * @param DeltaTime The amount of time that has passed since the previous frame
 	 */
 	void UpdateMovement(float DeltaTime);
 
 	/**
 	 * Update the character's animation state
+	 * @param DeltaTime The amount of time that has passed since the previous frame
 	 */
-	void UpdateAnimation();
-
-	/**
-	 * The character set used for displaying the sprite 
-	 */
-	UPROPERTY(EditAnywhere, Category = "Character")
-	TObjectPtr<UCharset> Charset;
+	void UpdateAnimation(float DeltaTime);
 
 protected:
 	/**
@@ -98,7 +93,26 @@ protected:
 	 */
 	void SetCharset(UCharset* NewCharset);
 
+public:
+	/**
+	 * Get the current grid position of this character
+	 * @return The current grid position of the character
+	 */
+	FIntVector2 GetCurrentPosition() const;
+
+	/**
+	 * Get the position that this character is currently moving to
+	 * @return The intended grid position of the character
+	 */
+	FIntVector2 GetDesiredPosition() const;
+
 private:
+
+	/**
+	 * The character set used for displaying the sprite 
+	 */
+	UPROPERTY(EditAnywhere, Category = "Character")
+	TObjectPtr<UCharset> Charset;
 	
 	/**
 	 * The direction this character is facing
@@ -117,21 +131,7 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere, Category = "Position")
 	FIntVector2 CurrentPosition;
-
-public:
-	/**
-	 * Get the current grid position of this character
-	 * @return The current grid position of the character
-	 */
-	FIntVector2 GetCurrentPosition() const;
-
-	/**
-	 * Get the position that this character is currently moving to
-	 * @return The intended grid position of the character
-	 */
-	FIntVector2 GetDesiredPosition() const;
-
-private:
+	
 	/**
 	 * The desired position of the character within the movement grid
 	 */
@@ -142,4 +142,9 @@ private:
 	 * The timer for movement used to linearly interpolate the position to the new one
 	 */
 	TOptional<float> MoveTimer;
+
+	/**
+	 * The timer for movement used to determine where to stop animation
+	 */
+	TOptional<float> StopTimer;
 };
