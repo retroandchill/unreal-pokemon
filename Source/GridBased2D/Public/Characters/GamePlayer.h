@@ -17,6 +17,7 @@
 #include "GameCharacter.h"
 #include "GamePlayer.generated.h"
 
+class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
 /**
@@ -42,6 +43,12 @@ public:
 
 private:
 	/**
+	 * Perform the movement action when receiving the input
+	 * @param Input The input information received
+	 */
+	void Move(const FInputActionInstance &Input);
+	
+	/**
 	 * The boom arm for holding the camera.
 	 */
 	UPROPERTY()
@@ -52,5 +59,11 @@ private:
 	 */
 	UPROPERTY()
 	TObjectPtr<UCameraComponent> TopDownCamera;
+
+	/**
+	 * The input to use for movement on the map
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TSoftObjectPtr<UInputAction> MoveInput;
 	
 };

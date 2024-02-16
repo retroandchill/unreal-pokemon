@@ -17,6 +17,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Characters/Charset.h"
+#include "EnhancedInputComponent.h"
+#include "GridUtils.h"
 
 
 // Sets default values
@@ -44,12 +46,6 @@ AGamePlayer::AGamePlayer() {
 	CameraBoom->SetUsingAbsoluteRotation(true);
 	TopDownCamera->bUsePawnControlRotation = false;
 	TopDownCamera->bAutoActivate = true;
-
-	// TODO: Replace this is a configured character retrieval system
-	static ConstructorHelpers::FObjectFinder<UCharset> CharsetAsset(TEXT("/Game/Graphics/Characters/trainer_POKEMONTRAINER_Red.trainer_POKEMONTRAINER_Red"));
-	if (CharsetAsset.Succeeded()) {
-		SetCharset(CharsetAsset.Object);
-	}
 }
 
 // Called when the game starts or when spawned
@@ -65,6 +61,19 @@ void AGamePlayer::Tick(float DeltaTime) {
 
 // Called to bind functionality to input
 void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	auto Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	Input->BindAction(MoveInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Move);
+}
+
+void AGamePlayer::Move(const FInputActionInstance& Input) {
+	auto Vector = Input.GetValue().Get<FVector2D>();
+	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
+	if (!Dir.IsSet())
+		return;
+
+	if (GetCurrentPosition() != GetDesiredPosition())
+		return;
+	
+	MoveInDirection(Dir.GetValue());
 }
 

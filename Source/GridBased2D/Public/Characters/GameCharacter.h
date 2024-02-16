@@ -18,6 +18,7 @@
 #include "PaperCharacter.h"
 #include "GameCharacter.generated.h"
 
+struct FInputActionInstance;
 class UPaperFlipbook;
 class UCharset;
 class UBoxComponent;
@@ -93,6 +94,7 @@ protected:
 	void SetCharset(UCharset* NewCharset);
 
 private:
+	
 	/**
 	 * The direction this character is facing
 	 */
@@ -111,6 +113,20 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Position")
 	FIntVector2 CurrentPosition;
 
+public:
+	/**
+	 * Get the current grid position of this character
+	 * @return The current grid position of the character
+	 */
+	FIntVector2 GetCurrentPosition() const;
+
+	/**
+	 * Get the position that this character is currently moving to
+	 * @return The intended grid position of the character
+	 */
+	FIntVector2 GetDesiredPosition() const;
+
+private:
 	/**
 	 * The desired position of the character within the movement grid
 	 */

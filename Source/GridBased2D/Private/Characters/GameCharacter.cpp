@@ -12,6 +12,8 @@
 // SOFTWARE.
 //====================================================================================================================
 #include "Characters/GameCharacter.h"
+
+#include "InputAction.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 #include "Components/BoxComponent.h"
@@ -19,7 +21,6 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
-
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
@@ -157,4 +158,12 @@ void AGameCharacter::UpdateAnimation() {
 
 void AGameCharacter::SetCharset(UCharset* NewCharset) {
 	Charset = NewCharset;
+}
+
+FIntVector2 AGameCharacter::GetCurrentPosition() const {
+	return CurrentPosition;
+}
+
+FIntVector2 AGameCharacter::GetDesiredPosition() const {
+	return DesiredPosition;
 }

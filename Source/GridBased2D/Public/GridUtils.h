@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/FacingDirection.h"
 
 namespace GridBased2D {
 	/**
@@ -31,4 +32,11 @@ namespace GridBased2D {
 	 * @return The interpolated value
 	 */
 	GRIDBASED2D_API double LinearInterpolation(double StartValue, double EndValue, double Duration, double Delta);
+
+	/**
+	 * Convert a vector into a facing direction
+	 * @param Vector The input vector
+	 * @return The interpreted direction
+	 */
+	GRIDBASED2D_API TOptional<EFacingDirection> VectorToFacingDirection(const FVector2D Vector);
 }
