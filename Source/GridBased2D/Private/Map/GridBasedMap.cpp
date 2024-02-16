@@ -42,6 +42,16 @@ void AGridBasedMap::PostEditChangeProperty(FPropertyChangedEvent& PropertyChange
 	SetUpMapLocation();
 }
 
+void AGridBasedMap::PostLoad() {
+	Super::PostLoad();
+	SetUpMapLocation();
+}
+
+void AGridBasedMap::PostEditMove(bool bFinished) {
+	Super::PostEditMove(bFinished);
+	SetUpMapLocation();
+}
+
 // Called when the game starts or when spawned
 void AGridBasedMap::BeginPlay() {
 	Super::BeginPlay();
@@ -59,12 +69,16 @@ void AGridBasedMap::SetUpMapLocation() {
 	
 	TileMapComponent->SetTileMap(TileMap);
 	
-	auto MapLocation = TileMapComponent->GetRelativeLocation();
+	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
 	PlayerLevelLayer = FMath::Min(PlayerLevelLayer, TotalLayers - 1);
-	float LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer / 2;
+	float LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer;
 
-	MapLocation.Z = LowestLayerZ + TileMap->SeparationPerLayer * PlayerLevelLayer;
+	MapLocation.Z = LowestLayerZ - TileMap->SeparationPerLayer * (TotalLayers - PlayerLevelLayer) - 1;
 	TileMapComponent->SetRelativeLocation(MapLocation);
+
+	auto Position = GetActorLocation();
+	Position.Z = 0.0;
+	SetActorLocation(Position);
 }
 

@@ -41,6 +41,8 @@ protected:
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
 	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent);
+	void PostLoad() override;
+	void PostEditMove(bool bFinished) override;
 	
 	void BeginPlay() override;
 

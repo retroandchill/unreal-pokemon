@@ -38,6 +38,10 @@ AGameCharacter::AGameCharacter() {
 	CharacterSprite->SetRelativeRotation(FRotator(0, 0, -90));
 
 	GetCharacterMovement()->GravityScale = 0;
+
+	if (ConstructorHelpers::FObjectFinder<UMaterialInterface> SpriteMaterial(TEXT("/Paper2D/TranslucentUnlitSpriteMaterial.TranslucentUnlitSpriteMaterial")); SpriteMaterial.Succeeded()) {
+		GetSprite()->SetMaterial(0, SpriteMaterial.Object);
+	}
 }
 
 void AGameCharacter::PostInitProperties() {
@@ -55,6 +59,17 @@ void AGameCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 	InitCharacterData();
 }
 
+void AGameCharacter::PostLoad() {
+	Super::PostLoad();
+	InitCharacterData();
+}
+
+void AGameCharacter::PostEditMove(bool bFinished) {
+	Super::PostEditMove(bFinished);
+	InitCharacterData();
+}
+
+
 // Called when the game starts or when spawned
 void AGameCharacter::BeginPlay() {
 	Super::BeginPlay();
@@ -63,6 +78,10 @@ void AGameCharacter::BeginPlay() {
 	CurrentPosition.Y = FMath::FloorToInt(Position.Y / GridBased2D::GGridSize);
 
 	DesiredPosition = CurrentPosition;
+	
+	auto CharacterSprite = GetSprite();
+	CharacterSprite->Stop();
+	CharacterSprite->SetPlaybackPositionInFrames(0, false);
 }
 
 // Called every frame
@@ -112,6 +131,16 @@ void AGameCharacter::InitCharacterData() {
 	auto CharacterSprite = GetSprite();
 	CharacterSprite->SetFlipbook(Flipbook);
 	CharacterSprite->Stop(); // TODO: We want this to toggle depending on the current situation
+	CharacterSprite->SetTranslucentSortPriority(static_cast<int32>(GetActorLocation().Y));
+
+	auto Position = GetActorLocation();
+	CurrentPosition.X = FMath::FloorToInt(Position.X / GridBased2D::GGridSize);
+	CurrentPosition.Y = FMath::FloorToInt(Position.Y / GridBased2D::GGridSize);
+
+	DesiredPosition = CurrentPosition;
+
+	Position.Z = 0.0;
+	SetActorLocation(Position);
 }
 
 UPaperFlipbook* AGameCharacter::GetDesiredFlipbook() const {
@@ -180,6 +209,8 @@ void AGameCharacter::UpdateAnimation(float DeltaTime) {
 			StopTimer.Reset();
 		}
 	}
+
+	CharacterSprite->SetTranslucentSortPriority(static_cast<int32>(GetActorLocation().Y));
 }
 
 void AGameCharacter::SetCharset(UCharset* NewCharset) {
