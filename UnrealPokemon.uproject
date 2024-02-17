@@ -43,6 +43,11 @@
         "Name": "RPGMenus",
         "Type": "Runtime",
         "LoadingPhase": "Default"
+      },
+      {
+        "Name": "RPGMenusEditor",
+        "Type": "Editor",
+        "LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
