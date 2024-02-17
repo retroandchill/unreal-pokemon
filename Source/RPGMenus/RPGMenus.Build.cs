@@ -25,7 +25,7 @@ public class RPGMenus : ModuleRules
 			{
 				"Core",
 				"UMG",
-				"Paper2D"
+				"CommonUI"
 			}
 		);
 
@@ -36,6 +36,7 @@ public class RPGMenus : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"EnhancedInput"
 			}
 		);
 	}

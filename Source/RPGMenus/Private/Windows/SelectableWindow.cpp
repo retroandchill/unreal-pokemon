@@ -11,23 +11,46 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Windows/SelectableWindow.h"
 
-#include "CoreMinimal.h"
-#include "Factories/Factory.h"
-#include "Windows/Windowskin.h"
-#include "WindowskinFactory.generated.h"
+USelectableWindow::USelectableWindow(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
+}
 
-/**
- * Editor factory for Windowskin objects
- */
-UCLASS(HideCategories=Object)
-class RPGMENUSEDITOR_API UWindowskinFactory : public UFactory {
-	GENERATED_BODY()
+int32 USelectableWindow::GetItemCount_Implementation() const {
+	return 0;
+}
 
-public:
-	UWindowskinFactory();
-	
-	UWindowskin* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
-	bool ShouldShowInNewMenu() const override;
-};
+int32 USelectableWindow::GetRowCount() const {
+	int32 ColumnCount = GetColumnCount();
+	return (GetItemCount() + ColumnCount - 1) / ColumnCount; 
+}
+
+int32 USelectableWindow::GetColumnCount_Implementation() const {
+	return 1;
+}
+
+int32 USelectableWindow::GetIndex() const {
+	return Index;
+}
+
+void USelectableWindow::SetIndex(int32 NewIndex) {
+	Index = NewIndex;
+	OnSelectionChange(Index);
+}
+
+void USelectableWindow::Deselect() {
+	Index = -1;
+	OnSelectionChange(Index);
+}
+
+bool USelectableWindow::IsActive() const {
+	return bActive;
+}
+
+void USelectableWindow::SetActive(bool bNewActiveState) {
+	bActive = bNewActiveState;
+}
+
+void USelectableWindow::OnSelectionChange_Implementation(int32 Index) {
+	// No implementation, but we cannot have an abstract method in an Unreal class
+}

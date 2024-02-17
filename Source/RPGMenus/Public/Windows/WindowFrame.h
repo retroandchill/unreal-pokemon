@@ -21,7 +21,7 @@ class UImage;
 /**
  * Widget class to represent the frame of the window
  */
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, Abstract)
 class RPGMENUS_API UWindowFrame : public UUserWidget {
 	GENERATED_BODY()
 

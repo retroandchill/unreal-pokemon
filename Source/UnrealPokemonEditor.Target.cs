@@ -30,7 +30,7 @@ public class UnrealPokemonEditorTarget : TargetRules
 		ExtraModuleNames.AddRange(new string[]
 		{
 			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
-			"RPGMenus", "RPGMenusEditor"
+			"RPGMenus", "PokemonUI"
 		});
 	}
 }

@@ -11,16 +11,44 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windowskin/WindowskinFactory.h"
+#pragma once
 
-UWindowskinFactory::UWindowskinFactory() {
-}
+#include "CoreMinimal.h"
+#include "Menus/SelectableMenu.h"
+#include "BasicCommandWindow.generated.h"
 
-UWindowskin* UWindowskinFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
-	UObject* Context, FFeedbackContext* Warn) {
-	return nullptr; //Super::FactoryCreateNew(InClass, InParent, InName, Flags, Context, Warn);
-}
+class UTextCommand;
+/**
+ * Struct for a simple menu command
+ */
+USTRUCT(BlueprintType)
+struct FMenuCommand {
+	GENERATED_BODY()
 
-bool UWindowskinFactory::ShouldShowInNewMenu() const {
-	return true;
-}
+	/**
+	 * The identifier for the command in the menu
+	 */
+	UPROPERTY(EditAnywhere, Category = Menus)
+	FName ID;
+
+	/**
+	 * The text for the option that is displayed directly to the player
+	 */
+	UPROPERTY(EditAnywhere, Category = Menus)
+	FText DisplayText;
+};
+
+/**
+ * Basic command window, with a set of commands that can be dispatched
+ */
+UCLASS(Blueprintable, Abstract)
+class RPGMENUS_API UBasicCommandWindow : public USelectableMenu {
+	GENERATED_BODY()
+
+public:
+	int32 GetItemCount_Implementation() const override;
+
+private:
+	UPROPERTY(EditAnywhere, Category = Commands)
+	TArray<TSoftObjectPtr<UTextCommand>> Commands;
+};

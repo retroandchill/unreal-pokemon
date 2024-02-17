@@ -72,7 +72,7 @@ private:
 	 * The mapping context asset to use to determine movement controls
 	 */
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputMappingContext* DefaultMappingContext;
+	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
 	/**
 	 * The input to use for movement on the map
