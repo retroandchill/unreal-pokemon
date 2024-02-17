@@ -14,43 +14,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
-#include "Windowskin.generated.h"
+#include "Factories/Factory.h"
+#include "Windows/Windowskin.h"
+#include "WindowskinFactory.generated.h"
 
-class UPaperSprite;
 /**
- * Basic Windowskin that contains the necessary assets in order to construct a Window frame
+ * Editor factory for Windowskin objects
  */
-UCLASS(BlueprintType)
-class RPGMENUS_API UWindowskin : public UObject {
+UCLASS(HideCategories=Object)
+class RPGMENUSEDITOR_API UWindowskinFactory : public UFactory {
 	GENERATED_BODY()
 
 public:
-
-	/**
-	 * Get one of the parts of the windowskin
-	 * @param Index The index to look for the window part from
-	 * @return The sprite asset used for the window
-	 */
-	UFUNCTION(BlueprintPure, Category = "Windowskin")
-	UPaperSprite *GetWindowPart(int32 Index) const;
+	UWindowskinFactory();
 	
-private:
-	/**
-	 * The 9 sub-components of the Windowskin image that make up the entire window.
-	 *
-	 * Starts from the top left and moves left-to-right up-to-down
-	 */
-	UPROPERTY(EditAnywhere, EditFixedOrder, Category = "Windowskin")
-	TArray<TObjectPtr<UPaperSprite>> WindowskinParts = {
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr,
-		nullptr
-	};
+	UWindowskin* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
+	bool ShouldShowInNewMenu() const override;
 };

@@ -11,9 +11,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/Windowskin.h"
+#include "Windowskin/WindowskinFactory.h"
 
-UPaperSprite* UWindowskin::GetWindowPart(int32 Index) const {
-	check(Index >= 0 && Index < WindowskinParts.Num());
-	return WindowskinParts[Index];
+UWindowskinFactory::UWindowskinFactory() {
+}
+
+UWindowskin* UWindowskinFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
+	UObject* Context, FFeedbackContext* Warn) {
+	return nullptr; //Super::FactoryCreateNew(InClass, InParent, InName, Flags, Context, Warn);
+}
+
+bool UWindowskinFactory::ShouldShowInNewMenu() const {
+	return true;
 }

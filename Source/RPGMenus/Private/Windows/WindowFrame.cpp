@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,31 +11,27 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Windows/WindowFrame.h"
 
-using UnrealBuildTool;
+#include "Blueprint/WidgetTree.h"
+#include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/Image.h"
 
-public class RPGMenusEditor : ModuleRules
-{
-	public RPGMenusEditor(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+UWindowFrame::UWindowFrame(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
+}
 
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core", "RPGMenus",
-			}
-		);
+TSharedRef<SWidget> UWindowFrame::RebuildWidget() {
+	auto Widget = Super::RebuildWidget();
 
-		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				"UnrealEd"
-			}
-		);
+	if (WindowBackground != nullptr) {
+		auto Brush = WindowBackground->GetBrush();
+		Brush.SetResourceObject(SourceTexture);
+		WindowBackground->SetBrush(Brush);
 	}
+	
+	return Widget;
+}
+
+void UWindowFrame::ChangeWindowskin(UTexture2D* NewWindowskin) {
 }
