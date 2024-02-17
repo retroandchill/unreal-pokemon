@@ -1,17 +1,24 @@
-// Created by Retro & Chill.
-
+//====================================================================================================================
+// ** Unreal Pokémon created by Retro & Chill
+//--------------------------------------------------------------------------------------------------------------------
+// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
+// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
+// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
+//--------------------------------------------------------------------------------------------------------------------
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//====================================================================================================================
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "TextCommand.generated.h"
 
+class UMenuCommand;
 class UTextBlock;
-
-/**
- * Delegate for when the user presses confirm
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCommand);
 
 
 /**
@@ -31,6 +38,13 @@ public:
 	TSharedRef<SWidget> RebuildWidget() override;
 
 	/**
+	 * Set the command that determines the display text
+	 * @param NewCommand The new command information
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Command")
+	void SetCommand(UMenuCommand* NewCommand);
+
+	/**
 	 * Select this command and execute the bound delegate
 	 */
 	void Select();
@@ -42,15 +56,6 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> DisplayTextWidget;
 
-	/**
-	 * The text of the command in the menu
-	 */
-	UPROPERTY(EditAnywhere, Category = "Command")
-	FText DisplayText;
-
-	/**
-	 * The delegate bound to when the command is selected
-	 */
-	UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
-	FProcessCommand CommandDelegate;
+	UPROPERTY(VisibleAnywhere, Category = "Command")
+	TObjectPtr<UMenuCommand> Command;
 };

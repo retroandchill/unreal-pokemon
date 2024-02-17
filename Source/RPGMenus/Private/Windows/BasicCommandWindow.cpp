@@ -13,6 +13,36 @@
 //====================================================================================================================
 #include "Windows/BasicCommandWindow.h"
 
+#include "Components/UniformGridPanel.h"
+#include "Primatives/MenuCommand.h"
+#include "Primatives/TextCommand.h"
+
+UBasicCommandWindow::UBasicCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWindow(ObjectInitializer) {
+}
+
+TSharedRef<SWidget> UBasicCommandWindow::RebuildWidget() {
+	auto Ret = Super::RebuildWidget();
+
+	if (ContentsPanel != nullptr && CommandWidgetClass != nullptr) {
+		for (auto Widget : CommandWidgets) {
+			ContentsPanel->RemoveChild(Widget);
+		}
+		CommandWidgets.Empty();
+
+		int32 ColumnCount = GetColumnCount();
+		for (int32 i = 0; i < Commands.Num(); i++) {
+			UMenuCommand *Command = Commands[i];
+			
+			auto NewWidget = NewObject<UTextCommand>(GetTransientPackage(), CommandWidgetClass);
+			NewWidget->SetCommand(Command);
+			ContentsPanel->AddChildToUniformGrid(NewWidget, i / ColumnCount, i % ColumnCount);
+			CommandWidgets.Add(NewWidget);
+		}
+	}
+	
+	return Ret;
+}
+
 int32 UBasicCommandWindow::GetItemCount_Implementation() const {
 	return Commands.Num();
 }

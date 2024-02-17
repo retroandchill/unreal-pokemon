@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,36 +11,44 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "UObject/Object.h"
+#include "MenuCommand.generated.h"
 
-public class RPGMenus : ModuleRules
-{
-	public RPGMenus(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+/**
+ * Delegate for when the user presses confirm
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCommand);
 
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core",
-				"UMG",
-				"CommonUI"
-			}
-		);
+/**
+ * Object that contains a command in the menu
+ */
+UCLASS(BlueprintType, EditInlineNew)
+class RPGMENUS_API UMenuCommand : public UObject {
+	GENERATED_BODY()
 
-		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				"EnhancedInput",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"UnrealEd"
-			}
-		);
-	}
-}
+public:
+	/**
+	 * Get the display text for the command
+	 * @return The text for the option that is displayed directly to the player
+	 */
+	UFUNCTION(BlueprintPure, Category = Menus)
+	FText GetDisplayText() const;
+
+private:
+	/**
+	 * The text for the option that is displayed directly to the player
+	 */
+	UPROPERTY(EditAnywhere, Category = Menus)
+	FText DisplayText;
+
+public:
+	/**
+	 * Delegate for when this menu option is selected
+	 */
+	UPROPERTY(BlueprintAssignable, BlueprintReadOnly, Category = Events)
+	FProcessCommand OnSelected;
+	
+};

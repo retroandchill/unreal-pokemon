@@ -17,26 +17,9 @@
 #include "SelectableWindow.h"
 #include "BasicCommandWindow.generated.h"
 
+class UMenuCommand;
+class UUniformGridPanel;
 class UTextCommand;
-/**
- * Struct for a simple menu command
- */
-USTRUCT(BlueprintType)
-struct FMenuCommand {
-	GENERATED_BODY()
-
-	/**
-	 * The identifier for the command in the menu
-	 */
-	UPROPERTY(EditAnywhere, Category = Menus)
-	FName ID;
-
-	/**
-	 * The text for the option that is displayed directly to the player
-	 */
-	UPROPERTY(EditAnywhere, Category = Menus)
-	FText DisplayText;
-};
 
 /**
  * Basic command window, with a set of commands that can be dispatched
@@ -46,9 +29,37 @@ class RPGMENUS_API UBasicCommandWindow : public USelectableWindow {
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Construct the default version of the window
+	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
+	 */
+	explicit UBasicCommandWindow(const FObjectInitializer& ObjectInitializer);
+	
+	TSharedRef<SWidget> RebuildWidget() override;
 	int32 GetItemCount_Implementation() const override;
 
 private:
+	/**
+	 * The list of commands in the menu
+	 */
+	UPROPERTY(EditAnywhere, Instanced, Category = Commands)
+	TArray<TObjectPtr<UMenuCommand>> Commands;
+
+	/**
+	 * The class used to instantiate the command widgets in the array
+	 */
 	UPROPERTY(EditAnywhere, Category = Commands)
-	TArray<TSoftObjectPtr<UTextCommand>> Commands;
+	TSubclassOf<UTextCommand> CommandWidgetClass;
+
+	/**
+	 * The list of command widgets added to the menu
+	 */
+	UPROPERTY(EditAnywhere, Instanced, Category = Commands)
+	TArray<TObjectPtr<UTextCommand>> CommandWidgets;
+	
+	/**
+	 * The panel where the commands are placed
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UUniformGridPanel> ContentsPanel;
 };

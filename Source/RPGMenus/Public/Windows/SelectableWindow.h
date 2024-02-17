@@ -113,10 +113,10 @@ public:
 protected:
 	/**
 	 * Called when the selection is changed
-	 * @param Index The new index to select to
+	 * @param NewIndex The new index to select to
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Selection)
-	void OnSelectionChange(int32 Index);
+	void OnSelectionChange(int32 NewIndex);
 	
 private:
 	

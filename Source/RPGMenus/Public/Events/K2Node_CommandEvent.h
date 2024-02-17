@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,36 +11,31 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "EnhancedInputComponent.h"
+#include "K2Node_Event.h"
+#include "K2Node_CommandEvent.generated.h"
 
-public class RPGMenus : ModuleRules
-{
-	public RPGMenus(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+class UMenuCommand;
+/**
+ * Node called when using invoking a command to a delegate in an array
+ */
+UCLASS()
+class RPGMENUS_API UK2Node_CommandEvent : public UK2Node_Event {
+	GENERATED_BODY()
 
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core",
-				"UMG",
-				"CommonUI"
-			}
-		);
+public:
+	UPROPERTY()
+	TObjectPtr<UMenuCommand> MenuCommand;
 
-		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				"EnhancedInput",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"UnrealEd"
-			}
-		);
-	}
-}
+	UPROPERTY()
+	ETriggerEvent TriggerEvent;
+
+	//~ Begin UK2Node Interface
+	UClass* GetDynamicBindingClass() const override;
+	void RegisterDynamicBinding(UDynamicBlueprintBinding* BindingObject) const override;
+	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
+	//~ End UK2Node Interface
+};

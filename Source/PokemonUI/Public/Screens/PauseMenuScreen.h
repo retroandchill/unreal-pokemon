@@ -1,4 +1,4 @@
-﻿//====================================================================================================================
+//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,36 +11,21 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "PauseMenuScreen.generated.h"
 
-public class RPGMenus : ModuleRules
-{
-	public RPGMenus(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+class UBasicCommandWindow;
+/**
+ * Basic Pokémon pause menu screen
+ */
+UCLASS(Blueprintable, Abstract)
+class POKEMONUI_API UPauseMenuScreen : public UUserWidget {
+	GENERATED_BODY()
 
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core",
-				"UMG",
-				"CommonUI"
-			}
-		);
-
-		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				"EnhancedInput",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"UnrealEd"
-			}
-		);
-	}
-}
+private:
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UBasicCommandWindow> CommandWindow;
+};

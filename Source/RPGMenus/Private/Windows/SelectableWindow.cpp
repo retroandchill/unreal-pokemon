@@ -51,6 +51,6 @@ void USelectableWindow::SetActive(bool bNewActiveState) {
 	bActive = bNewActiveState;
 }
 
-void USelectableWindow::OnSelectionChange_Implementation(int32 Index) {
+void USelectableWindow::OnSelectionChange_Implementation(int32 NewIndex) {
 	// No implementation, but we cannot have an abstract method in an Unreal class
 }
