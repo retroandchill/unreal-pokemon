@@ -38,6 +38,11 @@
         "Name": "GridBased2DEditor",
         "Type": "Editor",
         "LoadingPhase": "Default"
+      },
+      {
+        "Name": "RPGMenus",
+        "Type": "Runtime",
+        "LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

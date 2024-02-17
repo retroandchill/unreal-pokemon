@@ -1,4 +1,4 @@
-//====================================================================================================================
+﻿//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,26 +11,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "RPGMenus.h"
 
-using UnrealBuildTool;
+constexpr auto GLoctextNamespace = "FRPGMenusModule";
 
-public class UnrealPokemonTarget : TargetRules
-{
-	public UnrealPokemonTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
-
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
-			"RPGMenus"
-		});
-	}
+void FRPGMenusModule::StartupModule() {
+    // No special startup code needed
 }
+
+void FRPGMenusModule::ShutdownModule() {
+    // No special shutdown code needed
+}
+    
+IMPLEMENT_MODULE(FRPGMenusModule, RPGMenus)
