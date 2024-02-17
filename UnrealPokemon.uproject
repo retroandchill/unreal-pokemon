@@ -43,7 +43,7 @@
         "Name": "RPGMenus",
         "Type": "Runtime",
         "LoadingPhase": "Default"
-      },
+	  }
 	],
 	"Plugins": [
 		{
