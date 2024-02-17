@@ -18,24 +18,39 @@
 			"Name": "PokemonEditorUtils",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonUtilities",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "GridBased2D",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "GridBased2DEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGMenus",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonUI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
         },
       {
-        "Name": "PokemonUtilities",
-        "Type": "Runtime",
-        "LoadingPhase": "Default"
-      },
-      {
-        "Name": "PokemonCore",
-        "Type": "Runtime",
-        "LoadingPhase": "Default"
-      },
-      {
-        "Name": "GridBased2D",
-        "Type": "Runtime",
-        "LoadingPhase": "Default"
-      },
-      {
-        "Name": "GridBased2DEditor",
+        "Name": "RPGMenusEditor",
         "Type": "Editor",
         "LoadingPhase": "Default"
 		}
