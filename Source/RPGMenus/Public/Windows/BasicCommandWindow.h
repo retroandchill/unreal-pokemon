@@ -14,7 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Menus/SelectableMenu.h"
+#include "SelectableWindow.h"
 #include "BasicCommandWindow.generated.h"
 
 class UTextCommand;
@@ -42,7 +42,7 @@ struct FMenuCommand {
  * Basic command window, with a set of commands that can be dispatched
  */
 UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UBasicCommandWindow : public USelectableMenu {
+class RPGMENUS_API UBasicCommandWindow : public USelectableWindow {
 	GENERATED_BODY()
 
 public:
