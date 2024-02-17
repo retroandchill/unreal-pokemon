@@ -17,10 +17,10 @@ public:
   */
  explicit FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory);
  
- virtual FText GetName() const override;
- virtual UClass* GetSupportedClass() const override;
- virtual FColor GetTypeColor() const override;
- virtual uint32 GetCategories() override;
+ FText GetName() const override;
+ UClass* GetSupportedClass() const override;
+ FColor GetTypeColor() const override;
+ uint32 GetCategories() override;
 
 private:
  /**
