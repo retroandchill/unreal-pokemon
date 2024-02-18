@@ -14,6 +14,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Window.h"
 #include "Blueprint/UserWidget.h"
 #include "SelectableWindow.generated.h"
 
@@ -32,8 +33,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
 /**
  * Widget for a menu that options can be selected from using the cursor
  */
-UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API USelectableWindow : public UUserWidget {
+UCLASS(BlueprintType)
+class RPGMENUS_API USelectableWindow : public UWindow {
 	GENERATED_BODY()
 
 public:
@@ -119,7 +120,6 @@ protected:
 	void OnSelectionChange(int32 NewIndex);
 	
 private:
-	
 	/**
 	 * The index of the menu in question
 	 */

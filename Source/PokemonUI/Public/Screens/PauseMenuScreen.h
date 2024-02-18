@@ -17,7 +17,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PauseMenuScreen.generated.h"
 
-class UBasicCommandWindow;
+class UCommandWindow;
 /**
  * Basic Pokémon pause menu screen
  */
@@ -27,5 +27,5 @@ class POKEMONUI_API UPauseMenuScreen : public UUserWidget {
 
 private:
 	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UBasicCommandWindow> CommandWindow;
+	TObjectPtr<UCommandWindow> CommandWindow;
 };

@@ -11,38 +11,55 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/BasicCommandWindow.h"
+#include "Windows/CommandWindow.h"
 
+#include "Components/GridSlot.h"
 #include "Components/UniformGridPanel.h"
+#include "Components/UniformGridSlot.h"
 #include "Primatives/MenuCommand.h"
 #include "Primatives/TextCommand.h"
+#include "Widgets/Layout/SConstraintCanvas.h"
 
-UBasicCommandWindow::UBasicCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWindow(ObjectInitializer) {
+UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : UWindow(ObjectInitializer) {
 }
 
-TSharedRef<SWidget> UBasicCommandWindow::RebuildWidget() {
-	auto Ret = Super::RebuildWidget();
+void UCommandWindow::ReleaseSlateResources(bool bReleaseChildren) {
+	Super::ReleaseSlateResources(bReleaseChildren);
+	ContentGrid.Reset();
+}
 
-	if (ContentsPanel != nullptr && CommandWidgetClass != nullptr) {
-		for (auto Widget : CommandWidgets) {
-			ContentsPanel->RemoveChild(Widget);
-		}
-		CommandWidgets.Empty();
-
-		int32 ColumnCount = GetColumnCount();
-		for (int32 i = 0; i < Commands.Num(); i++) {
-			UMenuCommand *Command = Commands[i];
-			
-			auto NewWidget = NewObject<UTextCommand>(GetTransientPackage(), CommandWidgetClass);
-			NewWidget->SetCommand(Command);
-			ContentsPanel->AddChildToUniformGrid(NewWidget, i / ColumnCount, i % ColumnCount);
-			CommandWidgets.Add(NewWidget);
+void UCommandWindow::AddChildrenToSlots() {
+	ContentGrid = SNew(SGridPanel);
+	ContentGrid->SetColumnFill(0, 1);
+	GetMyCanvas()->AddSlot().Anchors(FAnchors(0, 0, 1, 1)).AttachWidget(ContentGrid.ToSharedRef());
+	
+	for (auto PanelSlot : Slots) {
+		if (auto TypedSlot = Cast<UGridSlot>(PanelSlot)) {
+			TypedSlot->Parent = this;
+			TypedSlot->BuildSlot(ContentGrid.ToSharedRef());
 		}
 	}
-	
-	return Ret;
 }
 
-int32 UBasicCommandWindow::GetItemCount_Implementation() const {
-	return Commands.Num();
+UClass* UCommandWindow::GetSlotClass() const {
+	return UGridSlot::StaticClass();
+}
+
+void UCommandWindow::OnSlotAdded(UPanelSlot* InSlot) {
+	// Add the child to the live canvas if it already exists
+		auto GridSlot = CastChecked<UGridSlot>(InSlot);
+		GridSlot->SetRow(Slots.Num() - 1);
+	
+	if (ContentGrid.IsValid()) {
+		GridSlot->BuildSlot(ContentGrid.ToSharedRef());
+	}
+}
+
+void UCommandWindow::OnSlotRemoved(UPanelSlot* InSlot) {
+	// Remove the widget from the live slot if it exists.
+	if (ContentGrid.IsValid() && InSlot->Content) {
+		if (auto Widget = InSlot->Content->GetCachedWidget(); Widget.IsValid() ) {
+			ContentGrid->RemoveSlot(Widget.ToSharedRef());
+		}
+	}
 }

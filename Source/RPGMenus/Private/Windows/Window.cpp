@@ -13,13 +13,28 @@
 //====================================================================================================================
 #include "Windows/Window.h"
 
+#include "Components/CanvasPanelSlot.h"
 #include "Windows/Windowskin.h"
 
-UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UWidget(ObjectInitializer) {
+UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UPanelWidget(ObjectInitializer) {
 	Brush.DrawAs = ESlateBrushDrawType::Box;
 }
 
 TSharedRef<SWidget> UWindow::RebuildWidget() {
+	MyCanvas = SNew(SConstraintCanvas);
+	
+	auto Overlay = SNew(SOverlay);
+	Overlay->AddSlot().HAlign(HAlign_Fill).VAlign(VAlign_Fill).AttachWidget(SNew(SImage).Image(&Brush));
+	FMargin Padding(0, 0, 0, 0);
+	if (Windowskin != nullptr) {
+		Padding = Windowskin->GetMargins();
+	}
+	Overlay->AddSlot().HAlign(HAlign_Fill).VAlign(VAlign_Fill).Padding(Padding).AttachWidget(MyCanvas.ToSharedRef());
+	AddChildrenToSlots();
+	return Overlay;
+}
+
+void UWindow::SynchronizeProperties() {
 	if (Windowskin != nullptr) {
 		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
 
@@ -35,6 +50,46 @@ TSharedRef<SWidget> UWindow::RebuildWidget() {
 		Brush.TintColor = FSlateColor(FColor(0, 0, 0, 0));
 		Brush.SetResourceObject(nullptr);
 	}
-	
-	return SNew(SImage).Image(&Brush);
+}
+
+void UWindow::ReleaseSlateResources(bool bReleaseChildren) {
+	Super::ReleaseSlateResources(bReleaseChildren);
+	MyCanvas.Reset();
+}
+
+void UWindow::AddChildrenToSlots() {
+	for (auto PanelSlot : Slots) {
+		if (auto TypedSlot = Cast<UCanvasPanelSlot>(PanelSlot)) {
+			TypedSlot->Parent = this;
+			TypedSlot->BuildSlot(MyCanvas.ToSharedRef());
+		}
+	}
+}
+
+UWindowskin* UWindow::GetWindowskin() const {
+	return Windowskin;
+}
+
+TSharedPtr<SConstraintCanvas>& UWindow::GetMyCanvas() {
+	return MyCanvas;
+}
+
+UClass* UWindow::GetSlotClass() const {
+	return UCanvasPanelSlot::StaticClass();
+}
+
+void UWindow::OnSlotAdded(UPanelSlot* InSlot) {
+	// Add the child to the live canvas if it already exists
+	if ( MyCanvas.IsValid() ) {
+		CastChecked<UCanvasPanelSlot>(InSlot)->BuildSlot(MyCanvas.ToSharedRef());
+	}
+}
+
+void UWindow::OnSlotRemoved(UPanelSlot* InSlot) {
+	// Remove the widget from the live slot if it exists.
+	if ( MyCanvas.IsValid() && InSlot->Content) {
+		if (auto Widget = InSlot->Content->GetCachedWidget(); Widget.IsValid() ) {
+			MyCanvas->RemoveSlot(Widget.ToSharedRef());
+		}
+	}
 }

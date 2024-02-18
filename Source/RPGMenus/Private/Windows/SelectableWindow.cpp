@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Windows/SelectableWindow.h"
 
-USelectableWindow::USelectableWindow(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
+USelectableWindow::USelectableWindow(const FObjectInitializer& ObjectInitializer) : UWindow(ObjectInitializer) {
 }
 
 int32 USelectableWindow::GetItemCount_Implementation() const {
