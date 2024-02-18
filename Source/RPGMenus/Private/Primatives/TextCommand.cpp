@@ -14,7 +14,6 @@
 #include "Primatives/TextCommand.h"
 
 #include "Components/TextBlock.h"
-#include "Primatives/MenuCommand.h"
 
 UTextCommand::UTextCommand(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
@@ -22,20 +21,14 @@ UTextCommand::UTextCommand(const FObjectInitializer& ObjectInitializer) : UUserW
 TSharedRef<SWidget> UTextCommand::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
 
-	if (DisplayTextWidget != nullptr && Command != nullptr) {
-		DisplayTextWidget->SetText(Command->GetDisplayText());
+	if (DisplayTextWidget != nullptr) {
+		DisplayTextWidget->SetText(DisplayText);
 	}
 	
 	return Ret;
 }
 
-void UTextCommand::SetCommand(UMenuCommand* NewCommand) {
-	Command = NewCommand;
-	RebuildWidget();
-}
-
-void UTextCommand::Select() {
-	if (Command != nullptr) {
-		Command->OnSelected.Broadcast();
-	}
+void UTextCommand::SynchronizeProperties() {
+	Super::SynchronizeProperties();
+	UTextCommand::RebuildWidget();
 }

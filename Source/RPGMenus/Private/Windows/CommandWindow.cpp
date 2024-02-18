@@ -15,9 +15,6 @@
 
 #include "Components/GridSlot.h"
 #include "Components/UniformGridPanel.h"
-#include "Components/UniformGridSlot.h"
-#include "Primatives/MenuCommand.h"
-#include "Primatives/TextCommand.h"
 #include "Widgets/Layout/SConstraintCanvas.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : UWindow(ObjectInitializer) {

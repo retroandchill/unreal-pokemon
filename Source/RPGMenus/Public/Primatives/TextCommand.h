@@ -20,6 +20,11 @@
 class UMenuCommand;
 class UTextBlock;
 
+/**
+* Delegate for when the user presses confirm
+*/
+UDELEGATE()
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCommand);
 
 /**
  * Basic text command widget used for handling an option in a menu
@@ -36,18 +41,7 @@ public:
 	explicit UTextCommand(const FObjectInitializer& ObjectInitializer);
 
 	TSharedRef<SWidget> RebuildWidget() override;
-
-	/**
-	 * Set the command that determines the display text
-	 * @param NewCommand The new command information
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Command")
-	void SetCommand(UMenuCommand* NewCommand);
-
-	/**
-	 * Select this command and execute the bound delegate
-	 */
-	void Select();
+	void SynchronizeProperties() override;
 
 private:
 	/**
@@ -56,6 +50,16 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> DisplayTextWidget;
 
-	UPROPERTY(VisibleAnywhere, Category = "Command")
-	TObjectPtr<UMenuCommand> Command;
+	/**
+	 * The text for the option that is displayed directly to the player
+	 */
+	UPROPERTY(EditAnywhere, Category = Menus)
+	FText DisplayText;
+
+public:
+	/**
+	 * Delegate for when this menu option is selected
+	 */
+	UPROPERTY(BlueprintAssignable, BlueprintReadOnly, Category = Menus)
+	FProcessCommand OnSelected;
 };
