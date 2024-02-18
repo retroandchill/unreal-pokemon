@@ -11,30 +11,21 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/Window.h"
+#pragma once
 
-#include "Windows/Windowskin.h"
+#include "CoreMinimal.h"
+#include "ThumbnailRendering/ThumbnailRenderer.h"
+#include "WindowskinThumbnailRenderer.generated.h"
 
-UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UWidget(ObjectInitializer) {
-	Brush.DrawAs = ESlateBrushDrawType::Box;
-}
+/**
+ * Class to handle the rendering of Windowskin thubmnails in the editor
+ */
+UCLASS()
+class UWindowskinThumbnailRenderer : public UThumbnailRenderer {
+	GENERATED_BODY()
 
-TSharedRef<SWidget> UWindow::RebuildWidget() {
-	if (Windowskin != nullptr) {
-		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
-
-		auto SourceTexture = Windowskin->GetSourceTexture();
-		auto &Margins = Windowskin->GetMargins();
-		double TextureWidth = SourceTexture->GetSizeX();
-		double TextureHeight = SourceTexture->GetSizeY();
-		
-		Brush.SetResourceObject(SourceTexture);
-		Brush.Margin = FMargin(Margins.Left / TextureWidth, Margins.Top / TextureHeight,
-			Margins.Right / TextureWidth, Margins.Bottom / TextureHeight);
-	} else {
-		Brush.TintColor = FSlateColor(FColor(0, 0, 0, 0));
-		Brush.SetResourceObject(nullptr);
-	}
-	
-	return SNew(SImage).Image(&Brush);
-}
+public:
+	bool AllowsRealtimeThumbnails(UObject* Object) const override;
+	bool CanVisualizeAsset(UObject* Object) override;
+	void Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height, FRenderTarget*, FCanvas* Canvas, bool bAdditionalViewFamily) override;
+};

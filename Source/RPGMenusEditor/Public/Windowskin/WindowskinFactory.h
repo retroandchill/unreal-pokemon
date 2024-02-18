@@ -22,7 +22,7 @@
  * Editor factory for Windowskin assets
  */
 UCLASS(HideCategories=(Object))
-class RPGMENUSEDITOR_API UWindowskinFactory : public UFactory {
+class UWindowskinFactory : public UFactory {
 	GENERATED_BODY()
 
 public:

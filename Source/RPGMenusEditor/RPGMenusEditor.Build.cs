@@ -33,7 +33,8 @@ public class RPGMenusEditor : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore"
+				"SlateCore",
+				"UnrealEd"
 			}
 		);
 	}

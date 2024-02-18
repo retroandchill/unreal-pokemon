@@ -11,30 +11,23 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/Window.h"
+#include "Windowskin/WindowskinAssetActions.h"
 
 #include "Windows/Windowskin.h"
 
-UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UWidget(ObjectInitializer) {
-	Brush.DrawAs = ESlateBrushDrawType::Box;
+
+FText FWindowskinAssetActions::GetName() const {
+	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_Windowskin", "Windowskin");
 }
 
-TSharedRef<SWidget> UWindow::RebuildWidget() {
-	if (Windowskin != nullptr) {
-		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
+UClass* FWindowskinAssetActions::GetSupportedClass() const {
+	return UWindowskin::StaticClass();
+}
 
-		auto SourceTexture = Windowskin->GetSourceTexture();
-		auto &Margins = Windowskin->GetMargins();
-		double TextureWidth = SourceTexture->GetSizeX();
-		double TextureHeight = SourceTexture->GetSizeY();
-		
-		Brush.SetResourceObject(SourceTexture);
-		Brush.Margin = FMargin(Margins.Left / TextureWidth, Margins.Top / TextureHeight,
-			Margins.Right / TextureWidth, Margins.Bottom / TextureHeight);
-	} else {
-		Brush.TintColor = FSlateColor(FColor(0, 0, 0, 0));
-		Brush.SetResourceObject(nullptr);
-	}
-	
-	return SNew(SImage).Image(&Brush);
+FColor FWindowskinAssetActions::GetTypeColor() const {
+	return FColor::Silver;
+}
+
+uint32 FWindowskinAssetActions::GetCategories() {
+	return EAssetTypeCategories::UI;
 }

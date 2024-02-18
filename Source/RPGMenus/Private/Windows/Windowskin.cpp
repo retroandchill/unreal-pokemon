@@ -7,6 +7,6 @@ UTexture2D* UWindowskin::GetSourceTexture() const {
 	return SourceTexture;
 }
 
-const FBox2D &UWindowskin::GetMargins() const {
+const FMargin& UWindowskin::GetMargins() const {
 	return Margins;
 }

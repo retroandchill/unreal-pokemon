@@ -14,6 +14,9 @@
 #include "Windowskin/WindowskinFactory.h"
 
 UWindowskinFactory::UWindowskinFactory() {
+	SupportedClass = UWindowskin::StaticClass();
+	bCreateNew = true;
+	bEditAfterNew = true;
 }
 
 UWindowskin* UWindowskinFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,

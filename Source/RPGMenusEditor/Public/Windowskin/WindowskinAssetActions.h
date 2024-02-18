@@ -11,30 +11,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/Window.h"
+#pragma once
 
-#include "Windows/Windowskin.h"
+#include "CoreMinimal.h"
+#include "AssetTypeActions_Base.h"
 
-UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UWidget(ObjectInitializer) {
-	Brush.DrawAs = ESlateBrushDrawType::Box;
-}
-
-TSharedRef<SWidget> UWindow::RebuildWidget() {
-	if (Windowskin != nullptr) {
-		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
-
-		auto SourceTexture = Windowskin->GetSourceTexture();
-		auto &Margins = Windowskin->GetMargins();
-		double TextureWidth = SourceTexture->GetSizeX();
-		double TextureHeight = SourceTexture->GetSizeY();
-		
-		Brush.SetResourceObject(SourceTexture);
-		Brush.Margin = FMargin(Margins.Left / TextureWidth, Margins.Top / TextureHeight,
-			Margins.Right / TextureWidth, Margins.Bottom / TextureHeight);
-	} else {
-		Brush.TintColor = FSlateColor(FColor(0, 0, 0, 0));
-		Brush.SetResourceObject(nullptr);
-	}
-	
-	return SNew(SImage).Image(&Brush);
-}
+/**
+ * The actions used for editing the Windowskin assets
+ */
+class FWindowskinAssetActions : public FAssetTypeActions_Base {
+public:
+ FText GetName() const override;
+ UClass* GetSupportedClass() const override;
+ FColor GetTypeColor() const override;
+ uint32 GetCategories() override;
+};

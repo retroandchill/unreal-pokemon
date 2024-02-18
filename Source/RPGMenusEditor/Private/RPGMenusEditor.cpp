@@ -13,10 +13,26 @@
 //====================================================================================================================
 #include "RPGMenusEditor.h"
 
+#include "AssetToolsModule.h"
+#include "IAssetTools.h"
+#include "Windows/Windowskin.h"
+#include "Windowskin/WindowskinAssetActions.h"
+#include "Windowskin/WindowskinThumbnailRenderer.h"
+
 constexpr auto GLoctextNamespace = "FRPGMenusEditorModule";
 
 void FRPGMenusEditorModule::StartupModule() {
-    // TODO: Add startup code
+	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FRPGMenusEditorModule::OnPostEngineInit);
+}
+
+void FRPGMenusEditorModule::OnPostEngineInit() {
+	// Register asset types
+	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
+    
+	AssetTools.RegisterAssetTypeActions(MakeShared<FWindowskinAssetActions>());
+
+	// Register thubmnails
+	UThumbnailManager::Get().RegisterCustomRenderer(UWindowskin::StaticClass(), UWindowskinThumbnailRenderer::StaticClass());
 }
 
 void FRPGMenusEditorModule::ShutdownModule() {

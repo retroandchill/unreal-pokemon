@@ -35,7 +35,7 @@ public:
 	 * Get the margins for the window
 	 * @return The size of the margins for the window in pixel offset from the edges
 	 */
-	const FBox2D &GetMargins() const;
+	const FMargin& GetMargins() const;
 
 private:
 	/**
@@ -48,5 +48,5 @@ private:
 	 * The size of the margins for the window in pixel offset from the edges
 	 */
 	UPROPERTY(EditAnywhere, Category = Windowskin)
-	FBox2D Margins;
+	FMargin Margins;
 };

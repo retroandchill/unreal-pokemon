@@ -11,30 +11,36 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/Window.h"
+#include "Windowskin/WindowskinThumbnailRenderer.h"
 
+#include "ThumbnailRendering/ThumbnailManager.h"
 #include "Windows/Windowskin.h"
 
-UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UWidget(ObjectInitializer) {
-	Brush.DrawAs = ESlateBrushDrawType::Box;
+bool UWindowskinThumbnailRenderer::AllowsRealtimeThumbnails(UObject* Object) const {
+	return true;
 }
 
-TSharedRef<SWidget> UWindow::RebuildWidget() {
-	if (Windowskin != nullptr) {
-		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
+bool UWindowskinThumbnailRenderer::CanVisualizeAsset(UObject* Object) {
+	auto Windowskin = Cast<UWindowskin>(Object);
+	if (Windowskin == nullptr)
+		return false;
+
+	return Windowskin->GetSourceTexture() != nullptr;
+}
+
+void UWindowskinThumbnailRenderer::Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height,
+	FRenderTarget* RenderTarget, FCanvas* Canvas, bool bAdditionalViewFamily) {
+		auto Windowskin = Cast<UWindowskin>(Object);
+		if (Windowskin == nullptr)
+			return;
 
 		auto SourceTexture = Windowskin->GetSourceTexture();
-		auto &Margins = Windowskin->GetMargins();
-		double TextureWidth = SourceTexture->GetSizeX();
-		double TextureHeight = SourceTexture->GetSizeY();
-		
-		Brush.SetResourceObject(SourceTexture);
-		Brush.Margin = FMargin(Margins.Left / TextureWidth, Margins.Top / TextureHeight,
-			Margins.Right / TextureWidth, Margins.Bottom / TextureHeight);
-	} else {
-		Brush.TintColor = FSlateColor(FColor(0, 0, 0, 0));
-		Brush.SetResourceObject(nullptr);
-	}
+		if (SourceTexture == nullptr)
+			return;
+
+		auto ThumbnailInfo = UThumbnailManager::Get().GetRenderingInfo(SourceTexture);
+		if (ThumbnailInfo == nullptr || ThumbnailInfo->Renderer == nullptr)
+			return;
 	
-	return SNew(SImage).Image(&Brush);
+		ThumbnailInfo->Renderer->Draw(SourceTexture, X, Y, Width, Height, RenderTarget, Canvas, bAdditionalViewFamily);
 }

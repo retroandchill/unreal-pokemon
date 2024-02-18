@@ -22,5 +22,11 @@
 class FRPGMenusEditorModule : public IModuleInterface {
 public:
     void StartupModule() override;
+
+	/**
+	 * Called after the engine is fully initialized
+	 */
+	void OnPostEngineInit();
+	
     void ShutdownModule() override;
 };
