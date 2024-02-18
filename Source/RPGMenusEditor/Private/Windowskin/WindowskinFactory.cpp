@@ -11,26 +11,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Windowskin/WindowskinFactory.h"
 
-using UnrealBuildTool;
+UWindowskinFactory::UWindowskinFactory() {
+}
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
-	}
+UWindowskin* UWindowskinFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
+	UObject* Context, FFeedbackContext* Warn) {
+	return NewObject<UWindowskin>(InParent, InClass, InName, Flags);
+}
 
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
-			"RPGMenus", "PokemonUI", "RPGMenusEditor"
-		});
-	}
+bool UWindowskinFactory::ShouldShowInNewMenu() const {
+	return true;
 }

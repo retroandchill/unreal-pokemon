@@ -1,4 +1,4 @@
-//====================================================================================================================
+﻿//====================================================================================================================
 // ** Unreal Pokémon created by Retro & Chill
 //--------------------------------------------------------------------------------------------------------------------
 // This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
@@ -11,25 +11,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Events/K2Node_CommandEvent.h"
 
-#include "Events/CommandBlueprintBinding.h"
+using UnrealBuildTool;
 
-UClass* UK2Node_CommandEvent::GetDynamicBindingClass() const {
-	return UCommandBlueprintBinding::StaticClass();
-}
+public class RPGMenusEditor : ModuleRules
+{
+	public RPGMenusEditor(ReadOnlyTargetRules Target) : base(Target)
+	{
+		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-void UK2Node_CommandEvent::RegisterDynamicBinding(UDynamicBlueprintBinding* BindingObject) const {
-	auto* CommandDelegateBinding = CastChecked<UCommandBlueprintBinding>(BindingObject);
+		PublicDependencyModuleNames.AddRange(
+			new string[]
+			{
+				"Core", "RPGMenus",
+			}
+		);
 
-	FBlueprintCommandBinding Binding;
-	Binding.MenuCommand = MenuCommand;
-	Binding.TriggerEvent = TriggerEvent;
-	Binding.FunctionNameToBind = CustomFunctionName;
-
-	CommandDelegateBinding->CommandBindings.Add(Binding);
-}
-
-void UK2Node_CommandEvent::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
-	Super::GetMenuActions(ActionRegistrar);
+		PrivateDependencyModuleNames.AddRange(
+			new string[]
+			{
+				"CoreUObject",
+				"Engine",
+				"Slate",
+				"SlateCore"
+			}
+		);
+	}
 }

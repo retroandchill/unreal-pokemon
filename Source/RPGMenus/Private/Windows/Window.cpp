@@ -11,26 +11,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Windows/Window.h"
 
-using UnrealBuildTool;
+#include "Windows/Windowskin.h"
 
-public class UnrealPokemonEditorTarget : TargetRules
-{
-	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UnrealPokemon");
-		RegisterModulesCreatedByRider();
+UWindow::UWindow(const FObjectInitializer& ObjectInitializer) : UWidget(ObjectInitializer) {
+	Brush.DrawAs = ESlateBrushDrawType::Box;
+}
+
+TSharedRef<SWidget> UWindow::RebuildWidget() {
+	if (Windowskin != nullptr) {
+		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
+
+		auto SourceTexture = Windowskin->GetSourceTexture();
+		auto &Margins = Windowskin->GetMargins();
+		double TextureWidth = SourceTexture->GetSizeX();
+		double TextureHeight = SourceTexture->GetSizeY();
+		
+		Brush.SetResourceObject(SourceTexture);
+		Brush.SetUVRegion(FBox2D(FVector2D(TextureWidth / Margins.Min.X, TextureWidth / Margins.Min.Y),
+			FVector2D(TextureWidth / Margins.Max.X, TextureWidth / Margins.Max.Y)));
+	} else {
+		Brush.TintColor = FSlateColor(FColor(0, 0, 0, 0));
+		Brush.SetResourceObject(nullptr);
 	}
-
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[]
-		{
-			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
-			"RPGMenus", "PokemonUI", "RPGMenusEditor"
-		});
-	}
+	
+	return SNew(SImage).Image(&Brush);
 }

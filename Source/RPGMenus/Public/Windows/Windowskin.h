@@ -14,28 +14,39 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnhancedInputComponent.h"
-#include "K2Node_Event.h"
-#include "K2Node_CommandEvent.generated.h"
+#include "UObject/Object.h"
+#include "Windowskin.generated.h"
 
-class UMenuCommand;
 /**
- * Node called when using invoking a command to a delegate in an array
+ * Represents a valid Windowskin the the editor
  */
-UCLASS()
-class RPGMENUS_API UK2Node_CommandEvent : public UK2Node_Event {
+UCLASS(BlueprintType, HideCategories=(Object))
+class RPGMENUS_API UWindowskin : public UObject {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY()
-	TObjectPtr<UMenuCommand> MenuCommand;
+	/**
+	 * Get the source texture for the window
+	 * @return The source texture used to make the window
+	 */
+	UTexture2D* GetSourceTexture() const;
 
-	UPROPERTY()
-	ETriggerEvent TriggerEvent;
+	/**
+	 * Get the margins for the window
+	 * @return The size of the margins for the window in pixel offset from the edges
+	 */
+	const FBox2D &GetMargins() const;
 
-	//~ Begin UK2Node Interface
-	UClass* GetDynamicBindingClass() const override;
-	void RegisterDynamicBinding(UDynamicBlueprintBinding* BindingObject) const override;
-	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
-	//~ End UK2Node Interface
+private:
+	/**
+	 * The source texture used to make the window
+	 */
+	UPROPERTY(EditAnywhere, Category = Windowskin)
+	TObjectPtr<UTexture2D> SourceTexture;
+
+	/**
+	 * The size of the margins for the window in pixel offset from the edges
+	 */
+	UPROPERTY(EditAnywhere, Category = Windowskin)
+	FBox2D Margins;
 };
