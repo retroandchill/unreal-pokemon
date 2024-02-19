@@ -16,7 +16,7 @@
 #include "CoreMinimal.h"
 #include "Window.h"
 #include "Blueprint/UserWidget.h"
-#include "SelectableWindow.generated.h"
+#include "SelectableWidget.generated.h"
 
 class UInputMappingContext;
 class UInputAction;
@@ -34,7 +34,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
  * Widget for a menu that options can be selected from using the cursor
  */
 UCLASS(BlueprintType)
-class RPGMENUS_API USelectableWindow : public UWindow {
+class RPGMENUS_API USelectableWidget : public UUserWidget {
 	GENERATED_BODY()
 
 public:
@@ -42,7 +42,7 @@ public:
 	 * Construct the default version of the widget
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
-	explicit USelectableWindow(const FObjectInitializer &ObjectInitializer);
+	explicit USelectableWidget(const FObjectInitializer &ObjectInitializer);
 	
 	/**
 	 * Get the number of items in the menu that can be selected

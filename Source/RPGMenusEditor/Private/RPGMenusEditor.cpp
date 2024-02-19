@@ -15,7 +15,7 @@
 
 #include "AssetToolsModule.h"
 #include "IAssetTools.h"
-#include "Windows/Windowskin.h"
+#include "Data/Windowskin.h"
 #include "Windowskin/WindowskinAssetActions.h"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 

@@ -13,50 +13,35 @@
 //====================================================================================================================
 #include "Windows/CommandWindow.h"
 
+#include "Blueprint/WidgetTree.h"
+#include "Components/GridPanel.h"
 #include "Components/GridSlot.h"
-#include "Components/UniformGridPanel.h"
-#include "Widgets/Layout/SConstraintCanvas.h"
+#include "Components/TextBlock.h"
+#include "Data/Command.h"
 
-UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : UWindow(ObjectInitializer) {
+UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }
 
-void UCommandWindow::ReleaseSlateResources(bool bReleaseChildren) {
-	Super::ReleaseSlateResources(bReleaseChildren);
-	ContentGrid.Reset();
-}
+TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
+	auto Original = USelectableWidget::RebuildWidget();
 
-void UCommandWindow::AddChildrenToSlots() {
-	ContentGrid = SNew(SGridPanel);
-	ContentGrid->SetColumnFill(0, 1);
-	GetMyCanvas()->AddSlot().Anchors(FAnchors(0, 0, 1, 1)).AttachWidget(ContentGrid.ToSharedRef());
-	
-	for (auto PanelSlot : Slots) {
-		if (auto TypedSlot = Cast<UGridSlot>(PanelSlot)) {
-			TypedSlot->Parent = this;
-			TypedSlot->BuildSlot(ContentGrid.ToSharedRef());
+	if (CommandArea != nullptr) {
+		CommandArea->ClearChildren();
+		for (UCommand* const Command : Commands) {
+			if (Command == nullptr || !Command->IsEnabled())
+				continue;
+		
+			auto TextWidget = WidgetTree->ConstructWidget<UTextBlock>();
+			TextWidget->SetText(Command->GetText());
+
+			int32 CurrentIndex = ActiveCommands.Num();
+			CommandArea->AddChildToGrid(TextWidget, CurrentIndex / GetColumnCount(), CurrentIndex % GetColumnCount());
 		}
 	}
-}
-
-UClass* UCommandWindow::GetSlotClass() const {
-	return UGridSlot::StaticClass();
-}
-
-void UCommandWindow::OnSlotAdded(UPanelSlot* InSlot) {
-	// Add the child to the live canvas if it already exists
-		auto GridSlot = CastChecked<UGridSlot>(InSlot);
-		GridSlot->SetRow(Slots.Num() - 1);
 	
-	if (ContentGrid.IsValid()) {
-		GridSlot->BuildSlot(ContentGrid.ToSharedRef());
-	}
+	return Original;
 }
 
-void UCommandWindow::OnSlotRemoved(UPanelSlot* InSlot) {
-	// Remove the widget from the live slot if it exists.
-	if (ContentGrid.IsValid() && InSlot->Content) {
-		if (auto Widget = InSlot->Content->GetCachedWidget(); Widget.IsValid() ) {
-			ContentGrid->RemoveSlot(Widget.ToSharedRef());
-		}
-	}
+void UCommandWindow::SynchronizeProperties() {
+	RebuildWidget();
 }

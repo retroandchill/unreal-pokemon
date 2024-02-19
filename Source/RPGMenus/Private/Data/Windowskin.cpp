@@ -11,46 +11,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/SelectableWindow.h"
+#include "Data/Windowskin.h"
 
-USelectableWindow::USelectableWindow(const FObjectInitializer& ObjectInitializer) : UWindow(ObjectInitializer) {
+UTexture2D* UWindowskin::GetSourceTexture() const {
+	return SourceTexture;
 }
 
-int32 USelectableWindow::GetItemCount_Implementation() const {
-	return 0;
-}
-
-int32 USelectableWindow::GetRowCount() const {
-	int32 ColumnCount = GetColumnCount();
-	return (GetItemCount() + ColumnCount - 1) / ColumnCount; 
-}
-
-int32 USelectableWindow::GetColumnCount_Implementation() const {
-	return 1;
-}
-
-int32 USelectableWindow::GetIndex() const {
-	return Index;
-}
-
-void USelectableWindow::SetIndex(int32 NewIndex) {
-	Index = NewIndex;
-	OnSelectionChange(Index);
-}
-
-void USelectableWindow::Deselect() {
-	Index = -1;
-	OnSelectionChange(Index);
-}
-
-bool USelectableWindow::IsActive() const {
-	return bActive;
-}
-
-void USelectableWindow::SetActive(bool bNewActiveState) {
-	bActive = bNewActiveState;
-}
-
-void USelectableWindow::OnSelectionChange_Implementation(int32 NewIndex) {
-	// No implementation, but we cannot have an abstract method in an Unreal class
+const FMargin& UWindowskin::GetMargins() const {
+	return Margins;
 }

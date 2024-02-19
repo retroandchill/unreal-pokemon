@@ -14,7 +14,7 @@
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 
 #include "ThumbnailRendering/ThumbnailManager.h"
-#include "Windows/Windowskin.h"
+#include "Data/Windowskin.h"
 
 bool UWindowskinThumbnailRenderer::AllowsRealtimeThumbnails(UObject* Object) const {
 	return true;

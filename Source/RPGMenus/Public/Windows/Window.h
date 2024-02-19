@@ -14,7 +14,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/PanelWidget.h"
 #include "Components/Widget.h"
 #include "Window.generated.h"
 
@@ -23,37 +22,14 @@ class UWindowskin;
 /**
  * Basic Window Widget class
  */
-UCLASS(BlueprintType)
-class RPGMENUS_API UWindow : public UPanelWidget {
+UCLASS(BlueprintType, Category = Windows)
+class RPGMENUS_API UWindow : public UWidget {
 	GENERATED_BODY()
 
 public:
 	explicit UWindow(const FObjectInitializer &ObjectInitializer);
 	TSharedRef<SWidget> RebuildWidget() override;
 	void SynchronizeProperties() override;
-	void ReleaseSlateResources(bool bReleaseChildren) override;
-
-protected:
-	/**
-	 * Add the child widgets to the correct child panel
-	 */
-	virtual void AddChildrenToSlots();
-	
-	/**
-	 * Get eh windowskin asset
-	 * @return The windowskin asset used to create the window
-	 */
-	UWindowskin* GetWindowskin() const;
-
-	/**
-	 * Get the canvas used to place all of the additional window contents
-	 * @return The canvas that houses the actual contents of the window
-	 */
-	TSharedPtr<SConstraintCanvas>& GetMyCanvas();
-	
-	UClass* GetSlotClass() const override;
-	void OnSlotAdded(UPanelSlot* InSlot) override;
-	void OnSlotRemoved(UPanelSlot* InSlot) override;
 
 private:
 	/**
@@ -61,11 +37,6 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Windowskin)
 	TObjectPtr<UWindowskin> Windowskin;
-
-	/**
-	 * The canvas that houses the actual contents of the window
-	 */
-	TSharedPtr<SConstraintCanvas> MyCanvas;
 	
 	/**
 	 * The source texture used to make the window

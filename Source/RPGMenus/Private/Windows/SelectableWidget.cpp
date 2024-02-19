@@ -11,52 +11,46 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Windows/SelectableWidget.h"
 
-#include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "WindowFrame.generated.h"
+USelectableWidget::USelectableWidget(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
+}
 
-class UImage;
-/**
- * Widget class to represent the frame of the window
- */
-UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UWindowFrame : public UUserWidget {
-	GENERATED_BODY()
+int32 USelectableWidget::GetItemCount_Implementation() const {
+	return 0;
+}
 
-public:
-	/**
-	 * Construct the default version of the window
-	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-	 */
-	explicit UWindowFrame(const FObjectInitializer& ObjectInitializer);
+int32 USelectableWidget::GetRowCount() const {
+	int32 ColumnCount = GetColumnCount();
+	return (GetItemCount() + ColumnCount - 1) / ColumnCount; 
+}
 
-	TSharedRef<SWidget> RebuildWidget() override;
+int32 USelectableWidget::GetColumnCount_Implementation() const {
+	return 1;
+}
 
-	/** 
-	* Change the windowskin and redraw the windowskin components 
-	* @param NewWindowskin The next windowskin texture to use
-	*/
-	UFUNCTION(BlueprintCallable, Category = Window)
-	void ChangeWindowskin(UTexture2D *NewWindowskin);
+int32 USelectableWidget::GetIndex() const {
+	return Index;
+}
 
-private:
-	/**
-	 * The source texture used to make the window
-	 */
-	UPROPERTY(EditAnywhere, Category = Windowskin)
-	TObjectPtr<UTexture2D> SourceTexture;
+void USelectableWidget::SetIndex(int32 NewIndex) {
+	Index = NewIndex;
+	OnSelectionChange(Index);
+}
 
-	/**
-	 * The image used to construct the top left part of the window
-	 */
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UImage> WindowBackground;
+void USelectableWidget::Deselect() {
+	Index = -1;
+	OnSelectionChange(Index);
+}
 
-	/**
-	 * The image used to construct the top left part of the window
-	 */
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UNamedSlot> ContentsPane;
-};
+bool USelectableWidget::IsActive() const {
+	return bActive;
+}
+
+void USelectableWidget::SetActive(bool bNewActiveState) {
+	bActive = bNewActiveState;
+}
+
+void USelectableWidget::OnSelectionChange_Implementation(int32 NewIndex) {
+	// No implementation, but we cannot have an abstract method in an Unreal class
+}

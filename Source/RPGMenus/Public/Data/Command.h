@@ -11,27 +11,54 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Windows/WindowFrame.h"
+#pragma once
 
-#include "Blueprint/WidgetTree.h"
-#include "Components/CanvasPanel.h"
-#include "Components/CanvasPanelSlot.h"
-#include "Components/Image.h"
+#include "CoreMinimal.h"
+#include "Command.generated.h"
 
-UWindowFrame::UWindowFrame(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
-}
+/**
+ * The struct that holds the command information
+ */
+UCLASS(Blueprintable, EditInlineNew)
+class RPGMENUS_API UCommand : public UObject {
+	GENERATED_BODY()
 
-TSharedRef<SWidget> UWindowFrame::RebuildWidget() {
-	auto Widget = Super::RebuildWidget();
+public:
+	/**
+	 * Get the internal ID of the command
+	 * @return The unique ID given to the command
+	 */
+	UFUNCTION(BlueprintPure, Category = Commands)
+	FName GetID() const;
 
-	if (WindowBackground != nullptr) {
-		auto Brush = WindowBackground->GetBrush();
-		Brush.SetResourceObject(SourceTexture);
-		WindowBackground->SetBrush(Brush);
-	}
-	
-	return Widget;
-}
+	/**
+	 * Get the displayed text for the command
+	 * @return The text displayed to the user
+	 */
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Commands)
+	FText GetText() const;
 
-void UWindowFrame::ChangeWindowskin(UTexture2D* NewWindowskin) {
-}
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Commands)
+	bool IsEnabled() const;
+
+protected:
+	/**
+	 * Get the original text without any additional formatting brought about by subclasses
+	 * @return 
+	 */
+	UFUNCTION(BlueprintPure, Category = Commands)
+	FText GetOriginalText() const;
+
+private:
+	/**
+	 * The unique ID given to the command
+	 */
+	UPROPERTY(EditAnywhere, Category = Commands)
+	FName ID;
+
+	/**
+	 * The text displayed to the user for the command in question
+	*/
+	UPROPERTY(EditAnywhere, Category = Commands)
+	FText Text;
+};

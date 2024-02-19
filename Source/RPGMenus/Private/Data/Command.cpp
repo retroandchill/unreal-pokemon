@@ -11,58 +11,20 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Data/Command.h"
 
-#include "CoreMinimal.h"
-#include "SelectableWidget.h"
-#include "CommandWindow.generated.h"
+FName UCommand::GetID() const {
+	return ID;
+}
 
-class UCommand;
-class UGridPanel;
-class SUniformGridPanel;
-class UMenuCommand;
-class UUniformGridPanel;
-class UTextCommand;
+FText UCommand::GetText_Implementation() const {
+	return Text;
+}
 
-/**
- * Basic command window, with a set of commands that can be dispatched
- */
-UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UCommandWindow : public USelectableWidget {
-	GENERATED_BODY()
+bool UCommand::IsEnabled_Implementation() const {
+	return true;
+}
 
-public:
-	/**
-	 * Construct the default version of the window
-	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-	 */
-	explicit UCommandWindow(const FObjectInitializer& ObjectInitializer);
-	
-	TSharedRef<SWidget> RebuildWidget() override;
-	void SynchronizeProperties() override;
-
-private:
-	/**
-	 * The actual area where the window is drawn
-	 */
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UWindow> Window;
-
-	/**
-	 * The panel where all the commands and the cursor are placed
-	 */
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UGridPanel> CommandArea;
-
-	/**
-	 * The commands displayed in the window
-	 */
-	UPROPERTY(EditAnywhere, Instanced, Category = Commands)
-	TArray<TObjectPtr<UCommand>> Commands;
-
-	/**
-	 * The internal list of active commands
-	 */
-	TArray<TObjectPtr<UCommand>> ActiveCommands;
-
-};
+FText UCommand::GetOriginalText() const {
+	return Text;
+}

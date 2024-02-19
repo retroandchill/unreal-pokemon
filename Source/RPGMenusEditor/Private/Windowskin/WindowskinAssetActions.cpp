@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Windowskin/WindowskinAssetActions.h"
 
-#include "Windows/Windowskin.h"
+#include "Data/Windowskin.h"
 
 
 FText FWindowskinAssetActions::GetName() const {
