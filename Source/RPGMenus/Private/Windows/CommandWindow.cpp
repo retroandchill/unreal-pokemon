@@ -25,6 +25,7 @@ UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : US
 TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 	auto Original = USelectableWidget::RebuildWidget();
 
+	ActiveCommands.Empty();
 	if (CommandArea != nullptr) {
 		CommandArea->ClearChildren();
 		for (UCommand* const Command : Commands) {
@@ -33,9 +34,12 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 		
 			auto TextWidget = WidgetTree->ConstructWidget<UTextBlock>();
 			TextWidget->SetText(Command->GetText());
+			TextWidget->SetColorAndOpacity(Command->GetColorAndOpacity());
+			TextWidget->SetFont(Command->GetFont());
 
 			int32 CurrentIndex = ActiveCommands.Num();
 			CommandArea->AddChildToGrid(TextWidget, CurrentIndex / GetColumnCount(), CurrentIndex % GetColumnCount());
+			ActiveCommands.Add(Command);
 		}
 	}
 	
