@@ -26,8 +26,10 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 	auto Original = USelectableWidget::RebuildWidget();
 
 	ActiveCommands.Empty();
+	CommandWidgets.Empty();
 	if (CommandArea != nullptr) {
 		CommandArea->ClearChildren();
+		
 		for (UCommand* const Command : Commands) {
 			if (Command == nullptr || !Command->IsEnabled())
 				continue;
@@ -40,6 +42,7 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 			int32 CurrentIndex = ActiveCommands.Num();
 			CommandArea->AddChildToGrid(TextWidget, CurrentIndex / GetColumnCount(), CurrentIndex % GetColumnCount());
 			ActiveCommands.Add(Command);
+			CommandWidgets.Add(TextWidget);
 		}
 	}
 	

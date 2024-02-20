@@ -63,6 +63,13 @@ private:
 	/**
 	 * The internal list of active commands
 	 */
+	UPROPERTY()
 	TArray<TObjectPtr<UCommand>> ActiveCommands;
+
+	/**
+	 * The actual widgets that make up the commands
+	 */
+	UPROPERTY()
+	TArray<TObjectPtr<UWidget>> CommandWidgets;
 
 };
