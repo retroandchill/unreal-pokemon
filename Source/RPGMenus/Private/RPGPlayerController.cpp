@@ -13,6 +13,7 @@
 //====================================================================================================================
 #include "RPGPlayerController.h"
 
+#include "EnhancedInputComponent.h"
 #include "Blueprint/UserWidget.h"
 
 #include "Screens/Screen.h"

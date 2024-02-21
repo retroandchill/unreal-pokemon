@@ -16,10 +16,14 @@
 #include "CoreMinimal.h"
 #include "Window.h"
 #include "Blueprint/UserWidget.h"
+#include "Data/CursorDirection.h"
 #include "SelectableWidget.generated.h"
 
+class USelectionInputs;
+struct FInputActionInstance;
 class UInputMappingContext;
 class UInputAction;
+
 /**
  * Delegate for when the user presses confirm
  */
@@ -112,6 +116,8 @@ public:
 	FProcessCancel OnCancel;
 	
 protected:
+	FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+	
 	/**
 	 * Called when the selection is changed
 	 * @param NewIndex The new index to select to
@@ -128,6 +134,12 @@ protected:
 	
 private:
 	/**
+	 * Function called when the cursor is moved
+	 * @param Direction The received cursor input
+	 */
+	void ReceiveMoveCursor(ECursorDirection Direction);
+	
+	/**
 	 * The index of the menu in question
 	 */
 	UPROPERTY(EditAnywhere, Category = Selection)
@@ -138,5 +150,17 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Selection)
 	bool bActive = false;
+
+	/**
+	 * Do the selection options wrap when input would exceed the end
+	 */
+	UPROPERTY(EditAnywhere, Category = Selection)
+	bool bWrapSelection = true;
+
+	/**
+	 * Do the selection options wrap when input would exceed the end
+	 */
+	UPROPERTY(EditAnywhere, Category = Selection)
+	TObjectPtr<USelectionInputs> InputMappings;
 	
 };

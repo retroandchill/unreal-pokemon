@@ -11,26 +11,58 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Screens/Screen.h"
+#pragma once
 
-#include "Blueprint/WidgetTree.h"
-#include "Windows/SelectableWidget.h"
+#include "CoreMinimal.h"
+#include "CursorDirection.h"
+#include "UObject/Object.h"
+#include "SelectionInputs.generated.h"
 
-UScreen::UScreen(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
-	SetIsFocusable(true);
-}
+/**
+ * The input data used for selection in the menus.
+ */
+UCLASS(Blueprintable, EditInlineNew)
+class RPGMENUS_API USelectionInputs : public UDataAsset {
+	GENERATED_BODY()
 
-TSharedRef<SWidget> UScreen::RebuildWidget() {
-	auto Ret = Super::RebuildWidget();
-
-	SelectableWidgets.Empty();
-	WidgetTree->ForEachWidget([this](UWidget *Widget) {
-		auto SelectableWidget = Cast<USelectableWidget>(Widget);
-		if (SelectableWidget == nullptr)
-			return;
-
-		SelectableWidgets.Emplace(SelectableWidget);
-	});
+public:
+	TOptional<ECursorDirection> ParseInputs(const FKey &Key) const;
 	
-	return Ret;
-}
+private:
+	/**
+	 * The Up Input
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input|Navigation")
+	TSet<FKey> UpInputs;
+
+	/**
+	 * The Down Input
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input|Navigation")
+	TSet<FKey> DownInputs;
+
+	/**
+	 * The Left Input
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input|Navigation")
+	TSet<FKey> LeftInputs;
+
+	/**
+	 * The Right Input
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input|Navigation")
+	TSet<FKey> RightInputs;
+
+	/**
+	 * The Confirm Input
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input|Options")
+	TSet<FKey> ConfirmInputs;
+
+	/**
+	 * The Cancel Input
+	 */
+	UPROPERTY(EditAnywhere, Category = "Input|Options")
+	TSet<FKey> CancelInputs;
+	
+};

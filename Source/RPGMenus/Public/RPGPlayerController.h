@@ -16,8 +16,10 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
+#include "Screens/Screen.h"
 #include "RPGPlayerController.generated.h"
 
+struct FInputActionInstance;
 class UScreen;
 class USelectableWidget;
 class UInputAction;
@@ -39,39 +41,26 @@ public:
 	T* AddScreenToStack(TSubclassOf<T> ScreenClass = T::StaticClass()) {
 		auto Screen = CreateWidget<T>(this, ScreenClass);
         Screen->AddToViewport();
+		Screen->SetFocus();
         ScreenStack.Add(Screen);
+		
+		if (ScreenStack.Num() == 1) {
+			SetInputMode(FInputModeUIOnly());
+		}
+		
         return Screen;
 	}
 
-	/** Creates a widget */
+	/**
+	 * Helper function used to create a screen on the stack from Blueprints
+	 * @param WorldContextObject The world context object needed to get the controller
+	 * @param ScreenType The screen class to spawn
+	 * @return The created screen.
+	 */
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta=( WorldContext="WorldContextObject", DisplayName="Add Screen to Stack", BlueprintInternalUseOnly="true" ), Category="Widget")
 	static UScreen* AddScreenToStackHelper(UObject* WorldContextObject, TSubclassOf<UScreen> ScreenType);
 
 private:
-	/**
-	 * The mapping context asset to use to determine navigation controls
-	 */
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-	
-	/**
-	 * The input to use for moving the cursor around the menu
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TSoftObjectPtr<UInputAction> CursorInput;
-
-	/**
-	 * The input to use for moving the cursor around the menu
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TSoftObjectPtr<UInputAction> ConfirmInput;
-
-	/**
-	 * The input to use for canceling the
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TSoftObjectPtr<UInputAction> CancelInput;
-
 	/**
 	 * The internal stack of screens used to handle the input.
 	 */

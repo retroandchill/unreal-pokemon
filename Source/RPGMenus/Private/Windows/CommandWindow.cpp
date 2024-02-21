@@ -38,6 +38,11 @@ void UCommandWindow::SynchronizeProperties() {
 
 void UCommandWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
+	
+	// If the commands are set but the active command are not, then we don't want to change anything
+	if (!Commands.IsEmpty() && ActiveCommands.IsEmpty())
+		return;
+	
 	if (GetIndex() >= GetItemCount()) {
 		SetIndex(GetItemCount() - 1);
 	}

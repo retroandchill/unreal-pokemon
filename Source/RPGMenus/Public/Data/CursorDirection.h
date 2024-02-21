@@ -11,26 +11,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Screens/Screen.h"
+#pragma once
 
-#include "Blueprint/WidgetTree.h"
-#include "Windows/SelectableWidget.h"
+#include "CoreMinimal.h"
 
-UScreen::UScreen(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
-	SetIsFocusable(true);
-}
+/**
+ * The direction of the cursor based upon the key received
+ */
+UENUM(BlueprintType)
+enum class ECursorDirection : uint8 {
+  /**
+   * Cursor UP
+   */
+	Up,
+  /**
+   * Cursor DOWN
+   */
+  Down,
 
-TSharedRef<SWidget> UScreen::RebuildWidget() {
-	auto Ret = Super::RebuildWidget();
-
-	SelectableWidgets.Empty();
-	WidgetTree->ForEachWidget([this](UWidget *Widget) {
-		auto SelectableWidget = Cast<USelectableWidget>(Widget);
-		if (SelectableWidget == nullptr)
-			return;
-
-		SelectableWidgets.Emplace(SelectableWidget);
-	});
-	
-	return Ret;
-}
+  /**
+   * Cursor LEFT
+   */
+  Left,
+  /**
+   * Cursor RIGHT
+   */
+  Right
+};

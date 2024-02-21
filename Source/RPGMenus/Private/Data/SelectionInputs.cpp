@@ -11,26 +11,25 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Screens/Screen.h"
+#include "Data/SelectionInputs.h"
 
-#include "Blueprint/WidgetTree.h"
-#include "Windows/SelectableWidget.h"
+TOptional<ECursorDirection> USelectionInputs::ParseInputs(const FKey& Key) const {
+	using enum ECursorDirection;
+	if (UpInputs.Contains(Key)) {
+			return Up;
+	}
 
-UScreen::UScreen(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
-	SetIsFocusable(true);
-}
+	if (DownInputs.Contains(Key)) {
+		return Down;
+	}
 
-TSharedRef<SWidget> UScreen::RebuildWidget() {
-	auto Ret = Super::RebuildWidget();
+	if (LeftInputs.Contains(Key)) {
+		return Left;
+	}
 
-	SelectableWidgets.Empty();
-	WidgetTree->ForEachWidget([this](UWidget *Widget) {
-		auto SelectableWidget = Cast<USelectableWidget>(Widget);
-		if (SelectableWidget == nullptr)
-			return;
-
-		SelectableWidgets.Emplace(SelectableWidget);
-	});
+	if (RightInputs.Contains(Key)) {
+		return Right;
+	}
 	
-	return Ret;
+	return TOptional<ECursorDirection>();
 }
