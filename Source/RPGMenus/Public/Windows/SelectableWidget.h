@@ -138,29 +138,5 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Selection)
 	bool bActive = false;
-
-	/**
-	 * The mapping context asset to use to determine navigation controls
-	 */
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-	
-	/**
-	 * The input to use for moving the cursor around the menu
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Selection|Input")
-	TSoftObjectPtr<UInputAction> CursorInput;
-
-	/**
-	 * The input to use for moving the cursor around the menu
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Selection|Input")
-	TSoftObjectPtr<UInputAction> ConfirmInput;
-
-	/**
-	 * The input to use for canceling the
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Selection|Input")
-	TSoftObjectPtr<UInputAction> CancelInput;
 	
 };
