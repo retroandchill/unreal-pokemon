@@ -39,11 +39,30 @@ public:
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
 	explicit UCommandWindow(const FObjectInitializer& ObjectInitializer);
-	
+
 	TSharedRef<SWidget> RebuildWidget() override;
 	void SynchronizeProperties() override;
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+
+	int32 GetItemCount_Implementation() const override;
+
+protected:
+	void OnSelectionChange_Implementation(int32 NewIndex) override;
 
 private:
+	/**
+	 * Get the position of a particular cell in the grid based on the given index.
+	 * @param TargetIndex The index in question to get the position of.
+	 * @return The row and column of the cell.
+	 */
+	FIntVector2 GetCellPosition(int32 TargetIndex) const;
+
+
+	/**
+	 * Add the commands to the window.
+	 */
+	void AddCommands();
+	
 	/**
 	 * The actual area where the window is drawn
 	 */
@@ -54,13 +73,19 @@ private:
 	 * The panel where all the commands and the cursor are placed
 	 */
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UGridPanel> CommandArea;
+	TObjectPtr<UUniformGridPanel> CommandArea;
 
 	/**
 	 * The scroll box used to contain the various command elements
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UScrollBox> ScrollBox;
+
+	/**
+	 * The widget that acts as the cursor for the window
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UWidget> CursorWidget;
 
 	/**
 	 * The commands displayed in the window

@@ -16,10 +16,9 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/GridPanel.h"
 #include "Components/GridSlot.h"
-#include "Components/SizeBox.h"
-#include "Components/TextBlock.h"
+#include "Components/UniformGridPanel.h"
+#include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
-#include "Fonts/FontMeasure.h"
 #include "Primatives/TextCommand.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWidget(ObjectInitializer) {
@@ -27,31 +26,71 @@ UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : US
 
 TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 	auto Original = USelectableWidget::RebuildWidget();
-
-	ActiveCommands.Empty();
-	if (CommandArea != nullptr && DisplayTextWidgetClass != nullptr) {
-		for (UWidget* Command : CommandWidgets) {
-			CommandArea->RemoveChild(Command);
-		}
-		CommandWidgets.Empty();
-		
-		for (UCommand* const Command : Commands) {
-			if (Command == nullptr || !Command->IsEnabled())
-				continue;
-		
-			auto TextWidget = WidgetTree->ConstructWidget<UTextCommand>(DisplayTextWidgetClass);
-			TextWidget->SetText(Command->GetText());
-
-			int32 CurrentIndex = ActiveCommands.Num();
-			CommandArea->AddChildToGrid(TextWidget, CurrentIndex / GetColumnCount(), CurrentIndex % GetColumnCount());
-			ActiveCommands.Add(Command);
-			CommandWidgets.Add(TextWidget);
-		}
-	}
-	
+	AddCommands();
+	OnSelectionChange(GetIndex());
+	OnActiveChanged(IsActive());
 	return Original;
 }
 
 void UCommandWindow::SynchronizeProperties() {
 	RebuildWidget();
+}
+
+void UCommandWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	if (GetIndex() >= GetItemCount()) {
+		SetIndex(GetItemCount() - 1);
+	}
+}
+
+int32 UCommandWindow::GetItemCount_Implementation() const {
+	return ActiveCommands.Num();
+}
+
+void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {
+	if (CursorWidget == nullptr)
+		return;
+	
+	auto CursorSlot = Cast<UUniformGridSlot>(CursorWidget->Slot);
+	if (CursorSlot == nullptr)
+		return;
+
+	if (NewIndex >= 0) {
+		auto Pos = GetCellPosition(NewIndex);
+		CursorSlot->SetColumn(Pos.X);
+		CursorSlot->SetRow(Pos.Y);
+		CursorWidget->SetVisibility(ESlateVisibility::Visible);
+	} else {
+		CursorWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
+FIntVector2 UCommandWindow::GetCellPosition(int32 TargetIndex) const {
+	int32 ColumnCount = GetColumnCount();
+	return FIntVector2(TargetIndex % ColumnCount, TargetIndex / ColumnCount);
+}
+
+void UCommandWindow::AddCommands() {
+	ActiveCommands.Empty();
+	if (CommandArea == nullptr || DisplayTextWidgetClass == nullptr)
+		return;
+	
+	for (UWidget* Command : CommandWidgets) {
+		CommandArea->RemoveChild(Command);
+	}
+	CommandWidgets.Empty();
+
+	for (UCommand* const Command : Commands) {
+		if (Command == nullptr || !Command->IsEnabled())
+			continue;
+
+		auto TextWidget = WidgetTree->ConstructWidget<UTextCommand>(DisplayTextWidgetClass);
+		TextWidget->SetText(Command->GetText());
+
+		int32 CurrentIndex = ActiveCommands.Num();
+		auto Pos = GetCellPosition(CurrentIndex);
+		CommandArea->AddChildToUniformGrid(TextWidget, Pos.Y, Pos.X);
+		ActiveCommands.Add(Command);
+		CommandWidgets.Add(TextWidget);
+	}
 }

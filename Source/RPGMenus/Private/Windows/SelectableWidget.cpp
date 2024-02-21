@@ -34,7 +34,7 @@ int32 USelectableWidget::GetIndex() const {
 }
 
 void USelectableWidget::SetIndex(int32 NewIndex) {
-	Index = NewIndex;
+	Index = FMath::Clamp(NewIndex, -1, GetItemCount() - 1);
 	OnSelectionChange(Index);
 }
 
@@ -49,8 +49,13 @@ bool USelectableWidget::IsActive() const {
 
 void USelectableWidget::SetActive(bool bNewActiveState) {
 	bActive = bNewActiveState;
+	OnActiveChanged(bActive);
 }
 
 void USelectableWidget::OnSelectionChange_Implementation(int32 NewIndex) {
+	// No implementation, but we cannot have an abstract method in an Unreal class
+}
+
+void USelectableWidget::OnActiveChanged_Implementation(bool bNewActiveState) {
 	// No implementation, but we cannot have an abstract method in an Unreal class
 }

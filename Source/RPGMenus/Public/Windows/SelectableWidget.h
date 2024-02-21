@@ -118,6 +118,13 @@ protected:
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Selection)
 	void OnSelectionChange(int32 NewIndex);
+
+	/**
+	 * Called when the active state is changed
+	 * @param bNewActiveState The new active state of the widget
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Selection)
+	void OnActiveChanged(bool bNewActiveState);
 	
 private:
 	/**
