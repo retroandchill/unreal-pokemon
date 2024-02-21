@@ -29,9 +29,11 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 	auto Original = USelectableWidget::RebuildWidget();
 
 	ActiveCommands.Empty();
-	CommandWidgets.Empty();
 	if (CommandArea != nullptr && DisplayTextWidgetClass != nullptr) {
-		CommandArea->ClearChildren();
+		for (UWidget* Command : CommandWidgets) {
+			CommandArea->RemoveChild(Command);
+		}
+		CommandWidgets.Empty();
 		
 		for (UCommand* const Command : Commands) {
 			if (Command == nullptr || !Command->IsEnabled())
