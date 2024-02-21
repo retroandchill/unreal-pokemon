@@ -25,22 +25,6 @@ bool UCommand::IsEnabled_Implementation() const {
 	return true;
 }
 
-FSlateColor UCommand::GetColorAndOpacity_Implementation() const {
-	return ColorAndOpacity;
-}
-
-FSlateFontInfo UCommand::GetFont_Implementation() const {
-	return Font;
-}
-
 FText UCommand::GetOriginalText() const {
 	return Text;
-}
-
-const FSlateColor& UCommand::GetOriginalColorAndOpacity() const {
-	return ColorAndOpacity;
-}
-
-const FSlateFontInfo& UCommand::GetOriginalFont() const {
-	return Font;
 }

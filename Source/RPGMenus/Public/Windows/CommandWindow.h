@@ -69,6 +69,12 @@ private:
 	TArray<TObjectPtr<UCommand>> Commands;
 
 	/**
+	 * The widget type used for the display text shown to the player
+	 */
+	UPROPERTY(EditAnywhere, Category = Commands)
+	TSubclassOf<UTextCommand> DisplayTextWidgetClass;
+
+	/**
 	 * The internal list of active commands
 	 */
 	UPROPERTY()

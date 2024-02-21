@@ -18,17 +18,14 @@
 UTextCommand::UTextCommand(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
 
-TSharedRef<SWidget> UTextCommand::RebuildWidget() {
-	auto Ret = Super::RebuildWidget();
+FText UTextCommand::GetText() const {
+	check(DisplayTextWidget != nullptr);
+	return DisplayTextWidget->GetText();
+}
 
+void UTextCommand::SetText(const FText& NewText) {
 	if (DisplayTextWidget != nullptr) {
-		DisplayTextWidget->SetText(DisplayText);
+		DisplayTextWidget->SetText(NewText);
 	}
-	
-	return Ret;
 }
 
-void UTextCommand::SynchronizeProperties() {
-	Super::SynchronizeProperties();
-	UTextCommand::RebuildWidget();
-}

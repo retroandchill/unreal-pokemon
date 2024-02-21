@@ -20,6 +20,7 @@
 #include "Components/TextBlock.h"
 #include "Data/Command.h"
 #include "Fonts/FontMeasure.h"
+#include "Primatives/TextCommand.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }
@@ -29,17 +30,15 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 
 	ActiveCommands.Empty();
 	CommandWidgets.Empty();
-	if (CommandArea != nullptr) {
+	if (CommandArea != nullptr && DisplayTextWidgetClass != nullptr) {
 		CommandArea->ClearChildren();
 		
 		for (UCommand* const Command : Commands) {
 			if (Command == nullptr || !Command->IsEnabled())
 				continue;
 		
-			auto TextWidget = WidgetTree->ConstructWidget<UTextBlock>();
+			auto TextWidget = WidgetTree->ConstructWidget<UTextCommand>(DisplayTextWidgetClass);
 			TextWidget->SetText(Command->GetText());
-			TextWidget->SetColorAndOpacity(Command->GetColorAndOpacity());
-			TextWidget->SetFont(Command->GetFont());
 
 			int32 CurrentIndex = ActiveCommands.Num();
 			CommandArea->AddChildToGrid(TextWidget, CurrentIndex / GetColumnCount(), CurrentIndex % GetColumnCount());

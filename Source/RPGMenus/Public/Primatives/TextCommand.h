@@ -40,8 +40,18 @@ public:
 	 */
 	explicit UTextCommand(const FObjectInitializer& ObjectInitializer);
 
-	TSharedRef<SWidget> RebuildWidget() override;
-	void SynchronizeProperties() override;
+	/**
+	 * Get the display text as shown to the player
+	 * @return The display text
+	 */
+	UFUNCTION(BlueprintPure, Category = Text)
+	FText GetText() const;
+
+	/**
+	 * Set the display text for this widget
+	 * @param NewText The new display text for the widget
+	 */
+	void SetText(const FText& NewText);
 
 private:
 	/**
@@ -49,17 +59,4 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> DisplayTextWidget;
-
-	/**
-	 * The text for the option that is displayed directly to the player
-	 */
-	UPROPERTY(EditAnywhere, Category = Menus)
-	FText DisplayText;
-
-public:
-	/**
-	 * Delegate for when this menu option is selected
-	 */
-	UPROPERTY(BlueprintAssignable, BlueprintReadOnly, Category = Menus)
-	FProcessCommand OnSelected;
 };
