@@ -16,8 +16,10 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/GridPanel.h"
 #include "Components/GridSlot.h"
+#include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
 #include "Data/Command.h"
+#include "Fonts/FontMeasure.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }

@@ -17,6 +17,7 @@
 #include "SelectableWidget.h"
 #include "CommandWindow.generated.h"
 
+class USizeBox;
 class UScrollBox;
 class UCommand;
 class UGridPanel;
@@ -78,5 +79,5 @@ private:
 	 */
 	UPROPERTY()
 	TArray<TObjectPtr<UWidget>> CommandWidgets;
-
+	
 };
