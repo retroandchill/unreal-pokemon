@@ -15,6 +15,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Screens/Screen.h"
 #include "PauseMenuScreen.generated.h"
 
 class UCommandWindow;
@@ -22,7 +23,7 @@ class UCommandWindow;
  * Basic Pokémon pause menu screen
  */
 UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UPauseMenuScreen : public UUserWidget {
+class POKEMONUI_API UPauseMenuScreen : public UScreen {
 	GENERATED_BODY()
 
 private:

@@ -21,7 +21,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 
 	static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(ARPGPlayerController, AddScreenToStackHelper);
 	static const FName WorldContextObject_ParamName(TEXT("WorldContextObject"));
-	static const FName WidgetType_ParamName(TEXT("WidgetType"));
+	static const FName WidgetType_ParamName(TEXT("ScreenType"));
 
 	UK2Node_AddWidgetToStack* CreateWidgetNode = this;
 	UEdGraphPin* SpawnNodeExec = CreateWidgetNode->GetExecPin();
@@ -41,7 +41,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 	//////////////////////////////////////////////////////////////////////////
 	// create 'UWidgetBlueprintLibrary::Create' call node
 	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
-	CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, UWidgetBlueprintLibrary::StaticClass());
+	CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, ARPGPlayerController::StaticClass());
 	CallCreateNode->AllocateDefaultPins();
 
 	// store off the class to spawn before we mutate pin connections:
@@ -94,7 +94,7 @@ FName UK2Node_AddWidgetToStack::GetCornerIcon() const {
 }
 
 FText UK2Node_AddWidgetToStack::GetBaseNodeTitle() const {
-	return NSLOCTEXT("UK2Node_AddWidgetToStack", "AddWidgetToStack_BaseTitle", "Add Widget to Stack");
+	return NSLOCTEXT("UK2Node_AddWidgetToStack", "AddWidgetToStack_BaseTitle", "Add Screen to Stack");
 }
 
 FText UK2Node_AddWidgetToStack::GetNodeTitleFormat() const {

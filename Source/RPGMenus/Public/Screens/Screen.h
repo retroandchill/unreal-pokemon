@@ -21,7 +21,7 @@
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
  * of the other.
  */
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, Abstract)
 class RPGMENUS_API UScreen : public UUserWidget {
 	GENERATED_BODY()
 
