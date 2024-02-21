@@ -17,6 +17,7 @@
 #include "SelectableWidget.h"
 #include "CommandWindow.generated.h"
 
+class UScrollBox;
 class UCommand;
 class UGridPanel;
 class SUniformGridPanel;
@@ -53,6 +54,12 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UGridPanel> CommandArea;
+
+	/**
+	 * The scroll box used to contain the various command elements
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UScrollBox> ScrollBox;
 
 	/**
 	 * The commands displayed in the window
