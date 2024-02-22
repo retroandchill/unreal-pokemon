@@ -72,6 +72,7 @@ void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	auto Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	Input->BindAction(MoveInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Move);
 	Input->BindAction(FaceDirectionInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Turn);
+	Input->BindAction(PauseInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::PauseGame);
 }
 
 void AGamePlayer::Move(const FInputActionInstance& Input) {

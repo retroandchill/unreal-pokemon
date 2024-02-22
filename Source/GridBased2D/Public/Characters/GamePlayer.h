@@ -55,6 +55,15 @@ private:
 	 * @param Input The input information received
 	 */
 	void Turn(const FInputActionInstance &Input);
+
+protected:
+	/**
+	 * Pause the game and pull up the menu.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category = Input)
+	void PauseGame();
+	
+private:
 	
 	/**
 	 * The boom arm for holding the camera.
@@ -85,5 +94,11 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TSoftObjectPtr<UInputAction> FaceDirectionInput;
+
+	/**
+	 * The input to use for pausing the game
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TSoftObjectPtr<UInputAction> PauseInput;
 	
 };
