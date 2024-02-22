@@ -13,6 +13,7 @@
 //====================================================================================================================
 #include "Screens/Screen.h"
 
+#include "RPGPlayerController.h"
 #include "Blueprint/WidgetTree.h"
 #include "Windows/SelectableWidget.h"
 
@@ -33,4 +34,12 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
 	});
 	
 	return Ret;
+}
+
+void UScreen::CloseScreen() {
+	auto RPGPlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
+	if (RPGPlayerController == nullptr)
+		return;
+
+	RPGPlayerController->RemoveScreenFromStack();
 }

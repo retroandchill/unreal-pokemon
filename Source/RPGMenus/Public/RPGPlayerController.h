@@ -70,6 +70,21 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta=( WorldContext="WorldContextObject", DisplayName="Add Screen to Stack", BlueprintInternalUseOnly="true" ), Category="Widget")
 	static UScreen* AddScreenToStackHelper(UObject* WorldContextObject, TSubclassOf<UScreen> ScreenType);
 
+
+	/**
+	 * Remove the current screen from the stack
+	 * @return The screen to remove from the stack
+	 */
+	UScreen *RemoveScreenFromStack();
+
+	/**
+	 * Remove the current screen from the stack
+	 * @param WorldContextObject The world context object needed to get the controller
+	 * @return The screen to remove from the stack
+	 */
+	UFUNCTION(BlueprintCallable, Category="Widget", meta = (WorldContext = "WorldContextObject"))
+	static UScreen* RemoveScreenFromStack(UObject* WorldContextObject);
+
 private:
 	/**
 	 * The internal stack of screens used to handle the input.

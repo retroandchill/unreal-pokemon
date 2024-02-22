@@ -36,6 +36,13 @@ public:
 	
 	TSharedRef<SWidget> RebuildWidget() override;
 
+protected:
+	/**
+	 * Close the screen and return to the previous one
+	 */
+	UFUNCTION(BlueprintCallable, Category = Navigation)
+	void CloseScreen();
+
 private:
 	/**
 	 * Get list of selectable widgets in the window

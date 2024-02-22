@@ -26,7 +26,13 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UPauseMenuScreen : public UScreen {
 	GENERATED_BODY()
 
+public:
+	void NativePreConstruct() override;
+	
 private:
+	/**
+	 * The command window that is displayed to the player
+	 */
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommandWindow> CommandWindow;
 };
