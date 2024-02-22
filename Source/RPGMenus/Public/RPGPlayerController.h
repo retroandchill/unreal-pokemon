@@ -32,6 +32,12 @@ class RPGMENUS_API ARPGPlayerController : public APlayerController {
 	GENERATED_BODY()
 
 public:
+	explicit ARPGPlayerController(const FObjectInitializer &ObjectInitializer);
+	
+protected:
+	void BeginPlay() override;
+	
+public:
 	/**
 	 * Add a screen of the given class to the stack
 	 * @tparam T The screen class to spawn
@@ -41,12 +47,16 @@ public:
 	T* AddScreenToStack(TSubclassOf<T> ScreenClass = T::StaticClass()) {
 		auto Screen = CreateWidget<T>(this, ScreenClass);
         Screen->AddToViewport();
-		Screen->SetFocus();
         ScreenStack.Add(Screen);
 		
 		if (ScreenStack.Num() == 1) {
 			SetInputMode(FInputModeUIOnly());
+			SetShowMouseCursor(false);
 		}
+		Screen->SetKeyboardFocus();
+		bShowMouseCursor = false;
+		bEnableClickEvents = false;
+		bEnableMouseOverEvents = false;
 		
         return Screen;
 	}

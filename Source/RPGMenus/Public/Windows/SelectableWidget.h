@@ -131,6 +131,8 @@ protected:
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Selection)
 	void OnActiveChanged(bool bNewActiveState);
+
+	void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
 	
 private:
 	/**

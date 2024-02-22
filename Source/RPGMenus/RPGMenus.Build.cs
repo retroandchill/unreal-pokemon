@@ -37,7 +37,6 @@ public class RPGMenus : ModuleRules
 				"Slate",
 				"SlateCore",
 				"InputCore",
-				"EnhancedInput",
 				"BlueprintGraph",
 				"KismetCompiler",
 				"UnrealEd"

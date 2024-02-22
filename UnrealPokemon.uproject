@@ -70,10 +70,6 @@
 		{
 			"Name": "PythonAutomationTest",
 			"Enabled": true
-		},
-		{
-			"Name": "CommonUI",
-			"Enabled": true
 		}
 	]
 }

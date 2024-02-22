@@ -18,6 +18,17 @@
 
 #include "Screens/Screen.h"
 
+ARPGPlayerController::ARPGPlayerController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
+	bShowMouseCursor = false;
+	bEnableClickEvents = false;
+	bEnableMouseOverEvents = false;
+}
+
+void ARPGPlayerController::BeginPlay() {
+	Super::BeginPlay();
+	SetInputMode(FInputModeGameOnly());
+}
+
 UScreen* ARPGPlayerController::AddScreenToStackHelper(UObject* WorldContextObject, TSubclassOf<UScreen> ScreenType) {
 	if (ScreenType == nullptr)
 		return nullptr;

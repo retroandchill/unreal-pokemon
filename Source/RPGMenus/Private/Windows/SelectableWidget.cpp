@@ -90,9 +90,17 @@ void USelectableWidget::OnSelectionChange_Implementation(int32 NewIndex) {
 void USelectableWidget::OnActiveChanged_Implementation(bool bNewActiveState) {
 	// No implementation, but we cannot have an abstract method in an Unreal class
 	if (bNewActiveState)
-		SetFocus();
+		SetKeyboardFocus();
 }
 
+
+void USelectableWidget::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
+	Super::NativeOnFocusLost(InFocusEvent);
+	
+	if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
+		SetKeyboardFocus();
+	}
+}
 
 void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
 	if (!IsActive())
