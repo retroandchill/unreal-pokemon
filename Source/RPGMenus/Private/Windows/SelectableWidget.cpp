@@ -75,10 +75,17 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKe
 	
 	bool bHandled = false;
 	auto Key = InKeyEvent.GetKey();
-	auto CursorDirection = InputMappings->ParseInputs(Key);\
-	if (CursorDirection.IsSet()) {
+	if (auto CursorDirection = InputMappings->ParseDirectionalInputs(Key); CursorDirection.IsSet()) {
 		ReceiveMoveCursor(CursorDirection.GetValue());
+	} else if (InputMappings->IsConfirmInput(Key)) {
+		int32 CurrentIndex = GetIndex();
+		OnConfirm.Broadcast(CurrentIndex);
+		ProcessConfirm(CurrentIndex);
+	} else if (InputMappings->IsCancelInput(Key)) {
+		OnCancel.Broadcast();
+		ProcessCancel();
 	}
+	
 	
 	return bHandled ? FReply::Handled() : FReply::Unhandled();
 }
@@ -88,11 +95,18 @@ void USelectableWidget::OnSelectionChange_Implementation(int32 NewIndex) {
 }
 
 void USelectableWidget::OnActiveChanged_Implementation(bool bNewActiveState) {
-	// No implementation, but we cannot have an abstract method in an Unreal class
 	if (bNewActiveState)
 		SetKeyboardFocus();
 }
 
+
+void USelectableWidget::ProcessConfirm_Implementation(int32 CurrentIndex) {
+	// No implementation, but we cannot have an abstract method in an Unreal class
+}
+
+void USelectableWidget::ProcessCancel_Implementation() {
+	// No implementation, but we cannot have an abstract method in an Unreal class
+}
 
 void USelectableWidget::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 	Super::NativeOnFocusLost(InFocusEvent);

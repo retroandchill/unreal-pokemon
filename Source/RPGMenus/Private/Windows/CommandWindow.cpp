@@ -70,6 +70,14 @@ void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {
 	}
 }
 
+void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
+	if (CurrentIndex >= ActiveCommands.Num())
+		return;
+	
+	UCommand *CurrentCommand = ActiveCommands[CurrentIndex];
+	OnCommandSelected.Broadcast(CurrentIndex, CurrentCommand);
+}
+
 FIntVector2 UCommandWindow::GetCellPosition(int32 TargetIndex) const {
 	int32 ColumnCount = GetColumnCount();
 	return FIntVector2(TargetIndex % ColumnCount, TargetIndex / ColumnCount);

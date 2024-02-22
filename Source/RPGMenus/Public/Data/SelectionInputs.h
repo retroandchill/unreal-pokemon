@@ -26,7 +26,26 @@ class RPGMENUS_API USelectionInputs : public UDataAsset {
 	GENERATED_BODY()
 
 public:
-	TOptional<ECursorDirection> ParseInputs(const FKey &Key) const;
+	/**
+	 * Parse the provided key input and determine what direction to move the cursor (if at all)
+	 * @param Key The key that was pressed
+	 * @return The direction to move the cursor (if applicable)
+	 */
+	TOptional<ECursorDirection> ParseDirectionalInputs(const FKey &Key) const;
+
+	/**
+	 * Is the provided input the confirm button
+	 * @param Key The key that was pressed
+	 * @return Is this a confirm input?
+	 */
+	bool IsConfirmInput(const FKey &Key) const;
+
+	/**
+	 * Is the provided input the cancel button
+	 * @param Key The key that was pressed
+	 * @return Is this a cancel input?
+	 */
+	bool IsCancelInput(const FKey &Key) const;
 	
 private:
 	/**

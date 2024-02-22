@@ -13,7 +13,7 @@
 //====================================================================================================================
 #include "Data/SelectionInputs.h"
 
-TOptional<ECursorDirection> USelectionInputs::ParseInputs(const FKey& Key) const {
+TOptional<ECursorDirection> USelectionInputs::ParseDirectionalInputs(const FKey& Key) const {
 	using enum ECursorDirection;
 	if (UpInputs.Contains(Key)) {
 			return Up;
@@ -32,4 +32,12 @@ TOptional<ECursorDirection> USelectionInputs::ParseInputs(const FKey& Key) const
 	}
 	
 	return TOptional<ECursorDirection>();
+}
+
+bool USelectionInputs::IsConfirmInput(const FKey& Key) const {
+	return ConfirmInputs.Contains(Key);
+}
+
+bool USelectionInputs::IsCancelInput(const FKey& Key) const {
+	return CancelInputs.Contains(Key);
 }

@@ -27,6 +27,11 @@ class UUniformGridPanel;
 class UTextCommand;
 
 /**
+ * Delegate for when the user presses confirm
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FProcessCommand, int32, CurrentIndex, UCommand*, SelectedCommand);
+
+/**
  * Basic command window, with a set of commands that can be dispatched
  */
 UCLASS(Blueprintable, Abstract)
@@ -46,10 +51,18 @@ public:
 
 	int32 GetItemCount_Implementation() const override;
 
+	/**
+	 * Callback for when a command is selected
+	 */
+	UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
+	FProcessCommand OnCommandSelected;
+
 protected:
 	void OnSelectionChange_Implementation(int32 NewIndex) override;
+	void ProcessConfirm_Implementation(int32 CurrentIndex) override;
 
 private:
+	
 	/**
 	 * Get the position of a particular cell in the grid based on the given index.
 	 * @param TargetIndex The index in question to get the position of.

@@ -27,7 +27,7 @@ class UInputAction;
 /**
  * Delegate for when the user presses confirm
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessConfirm);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProcessConfirm, int32, CurrentIndex);
 
 /**
  * Delegate for when the user presses cancel
@@ -131,6 +131,19 @@ protected:
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Selection)
 	void OnActiveChanged(bool bNewActiveState);
+
+	/**
+	 * Additional functionality for when confirm is selected
+	 * @param CurrentIndex The current index of the window
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "Selection|Confirm")
+	void ProcessConfirm(int32 CurrentIndex);
+
+	/**
+	 * Additional functionality for when cancel is selected
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "Selection|Cancel")
+	void ProcessCancel();
 
 	void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
 	

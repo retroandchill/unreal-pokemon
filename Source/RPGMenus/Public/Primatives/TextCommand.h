@@ -21,12 +21,6 @@ class UMenuCommand;
 class UTextBlock;
 
 /**
-* Delegate for when the user presses confirm
-*/
-UDELEGATE()
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCommand);
-
-/**
  * Basic text command widget used for handling an option in a menu
  */
 UCLASS(Blueprintable, Abstract)
