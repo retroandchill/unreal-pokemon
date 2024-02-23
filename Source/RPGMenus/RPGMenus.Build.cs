@@ -25,7 +25,7 @@ public class RPGMenus : ModuleRules
 			{
 				"Core",
 				"UMG",
-				"CommonUI"
+				"InputCore"
 			}
 		);
 
@@ -36,7 +36,6 @@ public class RPGMenus : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"InputCore",
 				"BlueprintGraph",
 				"KismetCompiler",
 				"UnrealEd"

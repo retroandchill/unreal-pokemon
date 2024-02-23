@@ -11,26 +11,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "MenuAction.h"
 
-using UnrealBuildTool;
+#include "RPGPlayerController.h"
+#include "Characters/GamePlayer.h"
 
-public class UnrealPokemon : ModuleRules
-{
-	public UnrealPokemon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-
-		PrivateDependencyModuleNames.AddRange(new string[]
-			{ "PokemonData", "PokemonCore", "GridBased2D", "RPGMenus", "UMG" });
-
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
-
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
+void UMenuAction::PerformAction_Implementation(UObject* Owner) {
+	auto Player = CastChecked<AGamePlayer>(Owner);
+	auto Controller = CastChecked<ARPGPlayerController>(Player->GetController());
+	Controller->AddScreenToStack(MenuClass);
 }

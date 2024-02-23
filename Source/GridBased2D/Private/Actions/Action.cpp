@@ -11,26 +11,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#include "Actions/Action.h"
 
-using UnrealBuildTool;
 
-public class UnrealPokemon : ModuleRules
-{
-	public UnrealPokemon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-
-		PrivateDependencyModuleNames.AddRange(new string[]
-			{ "PokemonData", "PokemonCore", "GridBased2D", "RPGMenus", "UMG" });
-
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
-
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
+void UAction::PerformAction_Implementation(UObject* Owner) {
+	// No default implementation needed, but we need this because abstract methods in UObject classes is not allowed.
 }

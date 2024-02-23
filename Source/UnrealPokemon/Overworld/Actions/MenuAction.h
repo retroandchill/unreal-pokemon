@@ -11,26 +11,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "Actions/Action.h"
+#include "UObject/Object.h"
+#include "MenuAction.generated.h"
 
-public class UnrealPokemon : ModuleRules
-{
-	public UnrealPokemon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+class UScreen;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+/**
+ * Action for when the player tries to pull up a menu and add it to the stack.
+ */
+UCLASS(Blueprintable, EditInlineNew)
+class UNREALPOKEMON_API UMenuAction : public UAction {
+	GENERATED_BODY()
 
-		PrivateDependencyModuleNames.AddRange(new string[]
-			{ "PokemonData", "PokemonCore", "GridBased2D", "RPGMenus", "UMG" });
+public:
+	void PerformAction_Implementation(UObject* Owner) override;
 
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
-
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
-}
+private:
+	/**
+	 * The class for the menu to bring up.
+	 */
+	UPROPERTY(EditAnywhere, Category = Menus)
+	TSubclassOf<UScreen> MenuClass;
+};

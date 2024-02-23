@@ -20,6 +20,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GridUtils.h"
+#include "Actions/Action.h"
 
 
 // Sets default values
@@ -91,5 +92,9 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 		return;
 	
 	FaceDirection(Dir.GetValue());
+}
+
+void AGamePlayer::PauseGame() {
+	PauseAction->PerformAction(this);
 }
 

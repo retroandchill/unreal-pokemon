@@ -17,6 +17,7 @@
 #include "GameCharacter.h"
 #include "GamePlayer.generated.h"
 
+class UAction;
 class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
@@ -55,15 +56,10 @@ private:
 	 * @param Input The input information received
 	 */
 	void Turn(const FInputActionInstance &Input);
-
-protected:
 	/**
 	 * Pause the game and pull up the menu.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category = Input)
 	void PauseGame();
-	
-private:
 	
 	/**
 	 * The boom arm for holding the camera.
@@ -100,5 +96,10 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TSoftObjectPtr<UInputAction> PauseInput;
-	
+
+	/**
+	 * The class for the action that is invoked when the player pauses the game
+	 */
+	UPROPERTY(EditDefaultsOnly, Instanced, Category = Actions)
+	TObjectPtr<UAction> PauseAction;
 };

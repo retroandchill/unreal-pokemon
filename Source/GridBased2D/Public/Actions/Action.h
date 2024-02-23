@@ -11,26 +11,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
+#pragma once
 
-using UnrealBuildTool;
+#include "CoreMinimal.h"
+#include "Action.generated.h"
 
-public class UnrealPokemon : ModuleRules
-{
-	public UnrealPokemon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+/**
+ * Dispatcher for an action performable by another object.
+ */
+UCLASS(Blueprintable, Abstract)
+class GRIDBASED2D_API UAction : public UObject {
+	GENERATED_BODY()
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-
-		PrivateDependencyModuleNames.AddRange(new string[]
-			{ "PokemonData", "PokemonCore", "GridBased2D", "RPGMenus", "UMG" });
-
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
-
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
-}
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+public:
+	/**
+	 * Perform the assigned action for the owning class.
+	 * @param Owner The object that owns this action
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
+	void PerformAction(UObject *Owner);
+};
