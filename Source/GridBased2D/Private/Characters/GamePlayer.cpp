@@ -20,6 +20,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GridUtils.h"
+#include "Actions/Action.h"
+#include "Interaction/Interactable.h"
 
 
 // Sets default values
@@ -72,6 +74,7 @@ void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	auto Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	Input->BindAction(MoveInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Move);
 	Input->BindAction(FaceDirectionInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Turn);
+	Input->BindAction(InteractInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Interact);
 	Input->BindAction(PauseInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::PauseGame);
 }
 
@@ -91,5 +94,18 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 		return;
 	
 	FaceDirection(Dir.GetValue());
+}
+
+void AGamePlayer::Interact() {
+	auto Result = HitTestOnFacingTile(GetDirection());
+	auto Interactable = Cast<IInteractable>(Result.GetActor());
+	if (Interactable == nullptr)
+		return;
+
+	IInteractable::Execute_OnInteract(Result.GetActor(), this);
+}
+
+void AGamePlayer::PauseGame() {
+	PauseAction->PerformAction(this);
 }
 

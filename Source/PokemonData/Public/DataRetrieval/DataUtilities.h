@@ -63,7 +63,6 @@ public:
 	 * @param Z_Param__Result The block of memory to save the result of the execution to
 	 */
 	DECLARE_FUNCTION(execGetData) {
-		P_GET_OBJECT(UObject, ContextObject);
 		P_GET_OBJECT(UScriptStruct, StructType);
 		P_GET_PROPERTY(FNameProperty, RowName);
 
@@ -72,15 +71,7 @@ public:
 
 		P_FINISH;
 
-		const auto StructProp = CastField<FStructProperty>(Stack.MostRecentProperty);
-		if (!ContextObject) {
-			FBlueprintExceptionInfo ExceptionInfo(
-				EBlueprintExceptionType::AccessViolation,
-				NSLOCTEXT("GetData", "MissingWorldContext",
-				          "Failed to world context object. Unable to retrieve subsystems.")
-			);
-			FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ExceptionInfo);
-		} else if (StructProp && OutRowPtr) {
+		if (const auto StructProp = CastField<FStructProperty>(Stack.MostRecentProperty); StructProp && OutRowPtr) {
 			if (auto OutputType = StructProp->Struct; (OutputType == StructType) ||
 				(OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType))) {
 				P_NATIVE_BEGIN;

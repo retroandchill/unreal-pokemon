@@ -44,6 +44,13 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Commands)
 	bool IsEnabled() const;
+
+	/**
+	 * Create a basic command using the supplied text
+	 * @param Text The text to display. Is normalized to serve as the name symbol.
+	 * @return The created command
+	 */
+	static UCommand* CreateBasicCommand(const FText &Text);
 	
 
 protected:

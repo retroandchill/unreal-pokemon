@@ -15,6 +15,7 @@
 
 #include "InputAction.h"
 #include "KismetTraceUtils.h"
+#include "MathUtilities.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 #include "Components/BoxComponent.h"
@@ -104,6 +105,15 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 }
 
 bool AGameCharacter::CanMoveInDirection(EFacingDirection MovementDirection) const {
+	auto Result = HitTestOnFacingTile(MovementDirection);
+	return !Result.bBlockingHit;
+}
+
+void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
+	Direction = FacingDirection;
+}
+
+FHitResult AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
 	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GGridSize);
 	
 	FVector LocalOffset(0, 0, 0);
@@ -111,19 +121,16 @@ bool AGameCharacter::CanMoveInDirection(EFacingDirection MovementDirection) cons
 
 	auto Position = GetActorLocation();
 	auto GridPosition = LocalOffset * GridBased2D::GGridSize + Position;
-	FHitResult Result;
 	FCollisionShape GridSquare;
 	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
-	GetWorld()->SweepSingleByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
-		ECC_Pawn, GridSquare, Params);
-	
-	return !Result.bBlockingHit;
-}
 
-void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
-	Direction = FacingDirection;
+	FHitResult Result;
+	GetWorld()->SweepSingleByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
+									 ECC_Pawn, GridSquare, Params);
+
+	return Result;
 }
 
 void AGameCharacter::InitCharacterData() {
@@ -162,7 +169,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-		Position.X = GridBased2D::LinearInterpolation(CurrentPosition.X * GridBased2D::GGridSize,
+		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridBased2D::GGridSize,
 													  DesiredPosition.X * GridBased2D::GGridSize,
 													  MoveSpeed * Distance,
 													  Timer);
@@ -174,7 +181,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-		Position.Y = GridBased2D::LinearInterpolation(CurrentPosition.Y * GridBased2D::GGridSize,
+		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridBased2D::GGridSize,
 													  DesiredPosition.Y * GridBased2D::GGridSize,
 													  MoveSpeed * Distance,
 													  Timer);
@@ -223,4 +230,8 @@ FIntVector2 AGameCharacter::GetCurrentPosition() const {
 
 FIntVector2 AGameCharacter::GetDesiredPosition() const {
 	return DesiredPosition;
+}
+
+EFacingDirection AGameCharacter::GetDirection() const {
+	return Direction;
 }

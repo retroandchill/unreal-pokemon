@@ -70,7 +70,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FaceDirection(EFacingDirection FacingDirection);
-	
+
+protected:
+	FHitResult HitTestOnFacingTile(EFacingDirection MovementDirection) const;
 
 private:
 	/**
@@ -115,6 +117,12 @@ public:
 	 * @return The intended grid position of the character
 	 */
 	FIntVector2 GetDesiredPosition() const;
+
+	/**
+	 * Get the direction this character is actively facing
+	 * @return The direction the character is facing.
+	 */
+	EFacingDirection GetDirection() const;
 
 private:
 
