@@ -17,11 +17,7 @@
 #include "UObject/Interface.h"
 #include "Interactable.generated.h"
 
-/**
- * Callback delegate for when the player tries to interact with this component.
- */
-DECLARE_MULTICAST_DELEGATE(FOnPlayerInteraction)
-
+class AGameCharacter;
 // This class does not need to be modified.
 UINTERFACE()
 class UInteractable : public UInterface {
@@ -40,5 +36,10 @@ public:
 	 * Called when this object is interacted with by the player.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Interaction)
-	void OnInteract();
+	void OnInteract(AGameCharacter* Character);
 };
+
+/**
+ * Callback delegate for when the player tries to interact with this component.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerInteraction);

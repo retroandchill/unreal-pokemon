@@ -64,4 +64,11 @@ namespace GridBased2D {
 			break;
 		}
 	}
+
+	/**
+	 * Get the direction directly opposite the provided direction
+	 * @param Direction The original direction
+	 * @return The opposing direction
+	 */
+	GRIDBASED2D_API TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
 }

@@ -56,6 +56,12 @@ private:
 	 * @param Input The input information received
 	 */
 	void Turn(const FInputActionInstance &Input);
+
+	/**
+	 * Interact with the object directly in front of the player;
+	 */
+	void Interact();
+	
 	/**
 	 * Pause the game and pull up the menu.
 	 */
@@ -90,6 +96,12 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TSoftObjectPtr<UInputAction> FaceDirectionInput;
+
+	/**
+	 * The input used for interacting with other objects
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TSoftObjectPtr<UInputAction> InteractInput;
 
 	/**
 	 * The input to use for pausing the game
