@@ -24,6 +24,8 @@ TSharedRef<SWidget> UWindow::RebuildWidget() {
 }
 
 void UWindow::SynchronizeProperties() {
+	Super::SynchronizeProperties();
+	
 	if (Windowskin != nullptr) {
 		Brush.TintColor = FSlateColor(FColor(255, 255, 255));
 

@@ -23,17 +23,6 @@ namespace GridBased2D {
 	constexpr double GGridSize = 32.0;
 
 	/**
-	 * Linear interpolation between two values, given the duration of the change and the time passed since the start of
-	 * the change (delta)
-	 * @param StartValue The starting value for the change
-	 * @param EndValue Where the value should be at the end of the duration
-	 * @param Duration The duration of the change
-	 * @param Delta The change in time
-	 * @return The interpolated value
-	 */
-	GRIDBASED2D_API double LinearInterpolation(double StartValue, double EndValue, double Duration, double Delta);
-
-	/**
 	 * Convert a vector into a facing direction
 	 * @param Vector The input vector
 	 * @return The interpreted direction
@@ -64,4 +53,11 @@ namespace GridBased2D {
 			break;
 		}
 	}
+
+	/**
+	 * Get the direction directly opposite the provided direction
+	 * @param Direction The original direction
+	 * @return The opposing direction
+	 */
+	GRIDBASED2D_API TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
 }

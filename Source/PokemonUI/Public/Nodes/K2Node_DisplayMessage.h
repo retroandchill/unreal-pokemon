@@ -11,21 +11,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Primatives/TextCommand.h"
+#pragma once
 
-#include "Components/TextBlock.h"
+#include "CoreMinimal.h"
+#include "K2Node.h"
+#include "K2Node_BaseAsyncTask.h"
+#include "K2Node_DisplayMessageBase.h"
+#include "K2Node_DisplayMessage.generated.h"
 
-UTextCommand::UTextCommand(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
-}
+class UTextDisplayScreen;
+/**
+ * Blueprint node for handling the display of a message to the player
+ */
+UCLASS()
+class POKEMONUI_API UK2Node_DisplayMessage : public UK2Node_DisplayMessageBase {
+	GENERATED_BODY()
 
-FText UTextCommand::GetText() const {
-	check(DisplayTextWidget != nullptr);
-	return DisplayTextWidget->GetText();
-}
+public:
+	/**
+	 * Default construct the class using the given initializer
+	 * @param ObjectInitializer The Unreal provided initializer
+	 */
+	explicit UK2Node_DisplayMessage(const FObjectInitializer& ObjectInitializer);
 
-void UTextCommand::SetText(const FText& NewText) {
-	if (DisplayTextWidget != nullptr) {
-		DisplayTextWidget->SetText(NewText);
-	}
-}
-
+	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
+	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
+	
+};

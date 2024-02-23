@@ -14,43 +14,44 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "TextCommand.generated.h"
-
-class UMenuCommand;
-class UTextBlock;
+#include "K2Node_AddPinInterface.h"
+#include "K2Node_BaseAsyncTask.h"
+#include "K2Node_DisplayMessageBase.h"
+#include "K2Node_DisplayMessageWithChoices.generated.h"
 
 /**
- * Basic text command widget used for handling an option in a menu
+ * Blueprint node for handling the display of a message to the player with optional choices
  */
-UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UTextCommand : public UUserWidget {
+UCLASS()
+class POKEMONUI_API UK2Node_DisplayMessageWithChoices : public UK2Node_DisplayMessageBase, public IK2Node_AddPinInterface {
 	GENERATED_BODY()
 
 public:
 	/**
-	 * Construct the default version of the window
-	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
+	 * Default construct the class using the given initializer
+	 * @param ObjectInitializer The Unreal provided initializer
 	 */
-	explicit UTextCommand(const FObjectInitializer& ObjectInitializer);
+	explicit UK2Node_DisplayMessageWithChoices(const FObjectInitializer& ObjectInitializer);
 
-	/**
-	 * Get the display text as shown to the player
-	 * @return The display text
-	 */
-	UFUNCTION(BlueprintPure, Category = Text)
-	FText GetText() const;
-
-	/**
-	 * Set the display text for this widget
-	 * @param NewText The new display text for the widget
-	 */
-	void SetText(const FText& NewText);
+	void AllocateDefaultPins() override;
+	void GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const override;
+	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
+	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
+	
+	void AddInputPin() override;
+	void RemoveInputPin(UEdGraphPin* Pin) override;
+	bool CanRemovePin(const UEdGraphPin* Pin) const override;
 
 private:
 	/**
-	 * The displayed text widget to the player
+	 * Add an input and output pin corresponding to the given index
+	 * @param Index The index to set the pin for
 	 */
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> DisplayTextWidget;
+	void AddInputAndOutputPin(int Index);
+	
+	/**
+	 * The count of how many choices are visible
+	 */
+	UPROPERTY()
+	int32 ChoiceCount = 0;
 };
