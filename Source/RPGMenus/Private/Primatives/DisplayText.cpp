@@ -20,6 +20,16 @@
 UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
 
+TSharedRef<SWidget> UDisplayText::RebuildWidget() {
+	auto Ret = Super::RebuildWidget();
+
+	if (DisplayTextWidget != nullptr) {
+		DisplayTextWidget->SetFont(DisplayFont);
+	}	
+	
+	return Ret;
+}
+
 FText UDisplayText::GetText() const {
 	check(DisplayTextWidget != nullptr);
 	return DisplayTextWidget->GetText();
@@ -32,19 +42,34 @@ void UDisplayText::SetText(const FText& NewText) {
 	}
 }
 
+const FSlateFontInfo& UDisplayText::GetDisplayFont() const {
+	return DisplayFont;
+}
+
 FVector2D UDisplayText::GetTextSize() const {
 	check(DisplayTextWidget != nullptr);
-	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-	return FontMeasure->Measure(DisplayTextWidget->GetText(), DisplayTextWidget->GetFont());
+	return GetTextSize(DisplayTextWidget->GetText().ToString());
 }
 
 FVector2D UDisplayText::GetTextSize(const FString& Text) const {
 	check(DisplayTextWidget != nullptr);
 	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-	return FontMeasure->Measure(Text, DisplayTextWidget->GetFont());
+	FVector2D Size = FontMeasure->Measure(Text, DisplayFont);
+	auto TextPadding = GetDisplayTextPadding();
+	Size.X += TextPadding.Left + TextPadding.Right;
+	Size.Y += TextPadding.Top + TextPadding.Bottom;
+	return Size;
 }
 
 FVector2D UDisplayText::GetTotalTextAreaSize() const {
 	return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
+}
+
+void UDisplayText::OnTextSet_Implementation(const FText& Text) {
+	// No definition needed here in this class
+}
+
+UTextBlock* UDisplayText::GetDisplayTextWidget() const {
+	return DisplayTextWidget;
 }
 

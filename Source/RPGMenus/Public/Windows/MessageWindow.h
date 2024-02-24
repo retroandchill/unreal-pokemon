@@ -134,4 +134,5 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	int32 LinesToShow = 2;
+	
 };

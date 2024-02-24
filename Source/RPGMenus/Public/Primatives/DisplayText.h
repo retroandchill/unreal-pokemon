@@ -34,6 +34,8 @@ public:
 	 */
 	explicit UDisplayText(const FObjectInitializer& ObjectInitializer);
 
+	TSharedRef<SWidget> RebuildWidget() override;
+
 	/**
 	 * Get the display text as shown to the player
 	 * @return The display text
@@ -46,6 +48,13 @@ public:
 	 * @param NewText The new display text for the widget
 	 */
 	void SetText(const FText& NewText);
+
+	/**
+	 * Get the font to be displayed to the player
+	 * @return The font to set for the window
+	 */
+	UFUNCTION(BlueprintPure, Category = Text)
+	const FSlateFontInfo& GetDisplayFont() const;
 
 	/**
 	 * Get the size of the current text contained within this widget
@@ -70,8 +79,22 @@ protected:
 	/**
 	 * Called when the text is set by the game to make sure all Blueprint Visuals are good
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category = Text)
+	UFUNCTION(BlueprintNativeEvent, Category = Text)
 	void OnTextSet(const FText &Text);
+
+	/**
+	 * Get the padding around the display text for the player
+	 * @return The padding around the text
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Text|Size")
+	FMargin GetDisplayTextPadding() const;
+
+	/**
+	 * Get the primary display text widget
+	 * @return The displayed text widget to the player
+	 */
+	UFUNCTION(BlueprintPure, Category = "Widgets|Text")
+	UTextBlock *GetDisplayTextWidget() const;
 	
 private:
 	/**
@@ -79,4 +102,10 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> DisplayTextWidget;
+
+	/**
+	 * The font to set for the window
+	 */
+	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 1, ClampMin = 1))
+	FSlateFontInfo DisplayFont;
 };
