@@ -19,7 +19,7 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
-#include "Primatives/TextCommand.h"
+#include "Primatives/DisplayText.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }
@@ -97,7 +97,7 @@ void UCommandWindow::AddCommands() {
 		if (Command == nullptr || !Command->IsEnabled())
 			continue;
 
-		auto TextWidget = WidgetTree->ConstructWidget<UTextCommand>(DisplayTextWidgetClass);
+		auto TextWidget = WidgetTree->ConstructWidget<UDisplayText>(DisplayTextWidgetClass);
 		TextWidget->SetText(Command->GetText());
 
 		int32 CurrentIndex = ActiveCommands.Num();

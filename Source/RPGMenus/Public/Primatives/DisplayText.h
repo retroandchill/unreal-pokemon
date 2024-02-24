@@ -15,7 +15,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "TextCommand.generated.h"
+#include "DisplayText.generated.h"
 
 class UMenuCommand;
 class UTextBlock;
@@ -24,7 +24,7 @@ class UTextBlock;
  * Basic text command widget used for handling an option in a menu
  */
 UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UTextCommand : public UUserWidget {
+class RPGMENUS_API UDisplayText : public UUserWidget {
 	GENERATED_BODY()
 
 public:
@@ -32,7 +32,7 @@ public:
 	 * Construct the default version of the window
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
-	explicit UTextCommand(const FObjectInitializer& ObjectInitializer);
+	explicit UDisplayText(const FObjectInitializer& ObjectInitializer);
 
 	/**
 	 * Get the display text as shown to the player
@@ -46,6 +46,25 @@ public:
 	 * @param NewText The new display text for the widget
 	 */
 	void SetText(const FText& NewText);
+
+	/**
+	 * Get the size of the current text contained within this widget
+	 * @return The size of the current text
+	 */
+	FVector2D GetTextSize() const;
+
+	/**
+	 * Get the size of the given text when displayed to the player
+	 * @param Text The text to display to the player
+	 * @return The size of the given text
+	 */
+	FVector2D GetTextSize(const FString& Text) const;
+
+	/**
+	 * Get the total size of the text drawing area
+	 * @return The total size of the area to draw the text in
+	 */
+	FVector2D GetTotalTextAreaSize() const;
 
 private:
 	/**

@@ -11,21 +11,39 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Primatives/TextCommand.h"
+#include "Primatives/DisplayText.h"
 
+#include "CanvasItem.h"
 #include "Components/TextBlock.h"
+#include "Fonts/FontMeasure.h"
 
-UTextCommand::UTextCommand(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
+UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
 
-FText UTextCommand::GetText() const {
+FText UDisplayText::GetText() const {
 	check(DisplayTextWidget != nullptr);
 	return DisplayTextWidget->GetText();
 }
 
-void UTextCommand::SetText(const FText& NewText) {
+void UDisplayText::SetText(const FText& NewText) {
 	if (DisplayTextWidget != nullptr) {
 		DisplayTextWidget->SetText(NewText);
 	}
+}
+
+FVector2D UDisplayText::GetTextSize() const {
+	check(DisplayTextWidget != nullptr);
+	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+	return FontMeasure->Measure(DisplayTextWidget->GetText(), DisplayTextWidget->GetFont());
+}
+
+FVector2D UDisplayText::GetTextSize(const FString& Text) const {
+	check(DisplayTextWidget != nullptr);
+	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+	return FontMeasure->Measure(Text, DisplayTextWidget->GetFont());
+}
+
+FVector2D UDisplayText::GetTotalTextAreaSize() const {
+	return DisplayTextWidget->GetTickSpaceGeometry().GetLocalSize();
 }
 

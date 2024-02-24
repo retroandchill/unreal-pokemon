@@ -24,7 +24,7 @@ class UGridPanel;
 class SUniformGridPanel;
 class UMenuCommand;
 class UUniformGridPanel;
-class UTextCommand;
+class UDisplayText;
 
 /**
  * Delegate for when the user presses confirm
@@ -110,7 +110,7 @@ private:
 	 * The widget type used for the display text shown to the player
 	 */
 	UPROPERTY(EditAnywhere, Category = Commands)
-	TSubclassOf<UTextCommand> DisplayTextWidgetClass;
+	TSubclassOf<UDisplayText> DisplayTextWidgetClass;
 
 	/**
 	 * The internal list of active commands
