@@ -16,6 +16,7 @@
 #include "CanvasItem.h"
 #include "Components/TextBlock.h"
 #include "Fonts/FontMeasure.h"
+#include "Utilities/WidgetUtilities.h"
 
 UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
@@ -54,10 +55,7 @@ FVector2D UDisplayText::GetTextSize() const {
 FVector2D UDisplayText::GetTextSize(const FString& Text) const {
 	check(DisplayTextWidget != nullptr);
 	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-	FVector2D Size = FontMeasure->Measure(Text, DisplayFont);
-	auto TextPadding = GetDisplayTextPadding();
-	Size.X += TextPadding.Left + TextPadding.Right;
-	Size.Y += TextPadding.Top + TextPadding.Bottom;
+	FVector2D Size = FontMeasure->Measure(Text, DisplayFont, UWidgetUtilities::GetWidgetDPIScale());
 	return Size;
 }
 

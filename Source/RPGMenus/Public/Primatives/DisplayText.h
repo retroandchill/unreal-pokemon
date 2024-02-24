@@ -74,13 +74,6 @@ public:
 	 * @return The total size of the area to draw the text in
 	 */
 	FVector2D GetTotalTextAreaSize() const;
-	
-protected:
-	/**
-	 * Called when the text is set by the game to make sure all Blueprint Visuals are good
-	 */
-	UFUNCTION(BlueprintNativeEvent, Category = Text)
-	void OnTextSet(const FText &Text);
 
 	/**
 	 * Get the padding around the display text for the player
@@ -88,6 +81,13 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Text|Size")
 	FMargin GetDisplayTextPadding() const;
+	
+protected:
+	/**
+	 * Called when the text is set by the game to make sure all Blueprint Visuals are good
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Text)
+	void OnTextSet(const FText &Text);
 
 	/**
 	 * Get the primary display text widget

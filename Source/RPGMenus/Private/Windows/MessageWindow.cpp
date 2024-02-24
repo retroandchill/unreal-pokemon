@@ -22,7 +22,8 @@ TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
 
 	if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
 		double TextHeight = DisplayTextWidget->GetTextSize("Sample").Y;
-		SizeBox->SetHeightOverride(TextHeight * LinesToShow);
+		auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
+		SizeBox->SetHeightOverride(TextHeight * LinesToShow + DisplayTextPadding.Top + DisplayTextPadding.Bottom);
 	}
 	
 	return Ret;
