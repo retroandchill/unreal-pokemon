@@ -33,6 +33,7 @@ public:
 	TSharedRef<SWidget> RebuildWidget() override;
 
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 
 	/**
 	 * Set the text to display to the player

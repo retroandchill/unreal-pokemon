@@ -15,6 +15,7 @@
 
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
+#include "Data/SelectionInputs.h"
 #include "Primatives/DisplayText.h"
 
 TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
@@ -48,6 +49,14 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	ScrollBox->ScrollToEnd();
 	DisplayTextWidget->SetText(FText::FromString(NewText));
 	TextTimer = 0;
+}
+
+FReply UMessageWindow::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) {
+	if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()))
+		return FReply::Unhandled();
+
+	
+	return FReply::Handled();
 }
 
 void UMessageWindow::SetDisplayText(FText Text) {
