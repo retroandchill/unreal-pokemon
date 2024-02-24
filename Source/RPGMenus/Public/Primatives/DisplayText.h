@@ -65,7 +65,14 @@ public:
 	 * @return The total size of the area to draw the text in
 	 */
 	FVector2D GetTotalTextAreaSize() const;
-
+	
+protected:
+	/**
+	 * Called when the text is set by the game to make sure all Blueprint Visuals are good
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category = Text)
+	void OnTextSet(const FText &Text);
+	
 private:
 	/**
 	 * The displayed text widget to the player

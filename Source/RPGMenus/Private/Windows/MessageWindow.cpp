@@ -13,62 +13,113 @@
 //====================================================================================================================
 #include "Windows/MessageWindow.h"
 
+#include "Components/ScrollBox.h"
+#include "Components/SizeBox.h"
 #include "Primatives/DisplayText.h"
+
+TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
+	auto Ret = Super::RebuildWidget();
+
+	if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
+		double TextHeight = DisplayTextWidget->GetTextSize("Sample").Y;
+		SizeBox->SetHeightOverride(TextHeight * LinesToShow);
+	}
+	
+	return Ret;
+}
 
 void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-	if (TextToDisplay.IsEmpty())
+	QueueUpNewText();
+
+	if (WordToDisplay.IsEmpty())
 		return;
 
 	TextTimer += InDeltaTime;
 	if (TextTimer < TextSpeed)
 		return;
 	
-	if (!WordToDisplay.IsEmpty()) {
-		TCHAR NextChar;
-		WordToDisplay.Dequeue(NextChar);
-		auto NewText = DisplayTextWidget->GetText().ToString();
-		NewText.AppendChar(NextChar);
-	} else {
-		auto &CurrentLine = *TextToDisplay.Peek();
-		double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X;
-
-		auto &CurrentWord = *CurrentLine.Peek();
-		auto NewText = FString(" ") + CurrentWord;
-		double CurrentTextAreaWidth = DisplayTextWidget->GetTextSize().X;
-		double NewTextWidth = DisplayTextWidget->GetTextSize(NewText).X;
-		if (double FullTextWidth = CurrentTextAreaWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {
-			for (FString LineTerminator = LINE_TERMINATOR; auto Character : LineTerminator) {
-				WordToDisplay.Enqueue(Character);
-			}
-		} else {
-			WordToDisplay.Enqueue(TEXT(' '));
-		}
-
-		for (auto Character : CurrentWord) {
-			WordToDisplay.Enqueue(Character);
-		}
-	}
+	TCHAR NextChar;
+	WordToDisplay.Dequeue(NextChar);
+	auto NewText = DisplayTextWidget->GetText().ToString();
+	NewText.AppendChar(NextChar);
+	ScrollBox->ScrollToEnd();
+	DisplayTextWidget->SetText(FText::FromString(NewText));
 	TextTimer = 0;
 }
 
 void UMessageWindow::SetDisplayText(FText Text) {
+	check(DisplayTextWidget != nullptr);
+	
 	if (FMath::IsNearlyZero(TextSpeed)) {
 		DisplayTextWidget->SetText(Text);
-		return;
 	} else {
-		auto &AsString = Text.ToString();
-		TArray<FString> Lines;
-		FString::ParseIntoArray(Lines, LINE_TERMINATOR);
-		for (const auto &Line : Lines) {
-			TextToDisplay.Enqueue(TQueue<FString>());
-			auto &CurrentLine = *TextToDisplay.Peek();
-			TArray<FString> Words;
-			FString::ParseIntoArray(Words, TEXT(" "));
-			for (auto &Word : Words) {
-				CurrentLine.Enqueue(MoveTemp(Word));
-			}
-		}
+		FullText = MoveTemp(Text);
 	}
+}
+
+void UMessageWindow::ClearDisplayText() {
+	check(DisplayTextWidget != nullptr);
+	DisplayTextWidget->SetText(FText::FromString(TEXT("")));
+	WordToDisplay.Empty();
+	FullText.Reset();
+}
+
+void UMessageWindow::QueueUpNewText() {
+	if (!FullText.IsSet())
+		return;
+	
+	double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X;
+	if (FMath::IsNearlyZero(TotalTextAreaWidth))
+		return;
+		
+	auto &AsString = FullText.GetValue().ToString();
+	TArray<FString> Lines;
+	AsString.ParseIntoArray(Lines, LINE_TERMINATOR);
+	for (const auto &Line : Lines) {
+		QueueLine(Line, TotalTextAreaWidth);
+	}
+
+	FullText.Reset();
+}
+
+void UMessageWindow::QueueLine(const FString& Line, double TotalTextAreaWidth) {
+	if (double LineWidth = DisplayTextWidget->GetTextSize(Line).X; TotalTextAreaWidth >= LineWidth) {
+		QueueText(Line);
+	} else {
+		QueueIndividualWords(Line, TotalTextAreaWidth);
+	}
+}
+
+void UMessageWindow::QueueText(FStringView Text) {
+	for (auto Char : Text) {
+		WordToDisplay.Enqueue(Char);
+	}
+}
+
+void UMessageWindow::QueueIndividualWords(const FString& Line, double TotalTextAreaWidth) {
+	TArray<FString> Words;
+	Line.ParseIntoArray(Words, TEXT(" "));
+	FString CurrentLine = "";
+	for (auto &Word : Words) {
+		FString NewText = CurrentLine.IsEmpty() ? Word : FString(" ") + Word;
+		double CurrentTextWidth = DisplayTextWidget->GetTextSize(CurrentLine).X;
+		double NewTextWidth = DisplayTextWidget->GetTextSize(NewText).X;
+
+		if (double FullTextWidth = CurrentTextWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {
+			AddNewLine();
+			CurrentLine = "";
+		} else {
+			QueueText(TEXT(" "));
+			CurrentLine += " ";
+		}
+
+		QueueText(Word);
+		CurrentLine += Word;
+	}
+}
+
+void UMessageWindow::AddNewLine() {
+	QueueText(LINE_TERMINATOR);
 }

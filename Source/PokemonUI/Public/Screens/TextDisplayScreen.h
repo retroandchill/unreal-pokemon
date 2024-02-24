@@ -11,40 +11,38 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Primatives/DisplayText.h"
+#pragma once
 
-#include "CanvasItem.h"
-#include "Components/TextBlock.h"
-#include "Fonts/FontMeasure.h"
+#include "CoreMinimal.h"
+#include "Screens/Screen.h"
+#include "TextDisplayScreen.generated.h"
 
-UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
-}
+class UMessageWindow;
+/**
+ * Screen for displaying text to the player
+ */
+UCLASS(Blueprintable, Abstract)
+class POKEMONUI_API UTextDisplayScreen : public UScreen {
+	GENERATED_BODY()
 
-FText UDisplayText::GetText() const {
-	check(DisplayTextWidget != nullptr);
-	return DisplayTextWidget->GetText();
-}
-
-void UDisplayText::SetText(const FText& NewText) {
-	if (DisplayTextWidget != nullptr) {
-		DisplayTextWidget->SetText(NewText);
-		OnTextSet(NewText);
-	}
-}
-
-FVector2D UDisplayText::GetTextSize() const {
-	check(DisplayTextWidget != nullptr);
-	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-	return FontMeasure->Measure(DisplayTextWidget->GetText(), DisplayTextWidget->GetFont());
-}
-
-FVector2D UDisplayText::GetTextSize(const FString& Text) const {
-	check(DisplayTextWidget != nullptr);
-	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-	return FontMeasure->Measure(Text, DisplayTextWidget->GetFont());
-}
-
-FVector2D UDisplayText::GetTotalTextAreaSize() const {
-	return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
-}
-
+public:
+	/**
+	 * Set the text to display to the player from this menu
+	 * @param TextToDisplay The text to display to the player
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
+	void SetText(FText TextToDisplay);
+	
+	/**
+	 * Clear all currently displaying text
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
+	void ClearDisplayText();
+	
+private:
+	/**
+	 * The command window that is displayed to the player
+	 */
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UMessageWindow> MessageWindow;
+};

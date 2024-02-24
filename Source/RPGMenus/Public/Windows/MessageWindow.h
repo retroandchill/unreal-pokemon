@@ -17,6 +17,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MessageWindow.generated.h"
 
+class UScrollBox;
 class UWindow;
 class USizeBox;
 class UDisplayText;
@@ -29,6 +30,8 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
 	GENERATED_BODY()
 
 public:
+	TSharedRef<SWidget> RebuildWidget() override;
+
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	/**
@@ -38,7 +41,43 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
 	void SetDisplayText(FText Text);
 
+	/**
+	 * Clear all currently displaying text
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
+	void ClearDisplayText();
+
 private:
+	/**
+	 * Queue up the new text if the geometry information is available
+	 */
+	void QueueUpNewText();
+
+	/**
+	 * Queue up a new line of text to display to the player
+	 * @param Line The current line of text to queue
+	 * @param TotalTextAreaWidth The total width of the rendering area
+	 */
+	void QueueLine(const FString& Line, double TotalTextAreaWidth);
+
+	/**
+	 * Queue the given text to the display queue
+	 * @param Text The text to add to the queue
+	 */
+	void QueueText(FStringView Text);
+
+	/**
+	 * Split up the line by word and add each word individually wrapping when necessary
+	 * @param Line The current line of text to queue
+	 * @param TotalTextAreaWidth The total width of the rendering area
+	 */
+	void QueueIndividualWords(const FString& Line, double TotalTextAreaWidth);
+
+	/**
+	 * Queue a new line to be added
+	 */
+	void AddNewLine();
+	
 	/**
 	 * The actual area where the window is drawn
 	 */
@@ -52,6 +91,12 @@ private:
 	TObjectPtr<UDisplayText> DisplayTextWidget;
 
 	/**
+	 * The scroll box used to keep the text visible on screen
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UScrollBox> ScrollBox;
+	
+	/**
 	 * The size box used to control the desired height
 	 */
 	UPROPERTY(meta = (BindWidget))
@@ -64,9 +109,9 @@ private:
 	TObjectPtr<USelectionInputs> InputMappings;
 
 	/**
-	 * The text to display to the player, split up by line and word.
+	 * The full text to queue up for display
 	 */
-	TQueue<TQueue<FString>> TextToDisplay;
+	TOptional<FText> FullText;
 
 	/**
 	 * The current word to be displayed to the player
