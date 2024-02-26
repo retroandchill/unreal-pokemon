@@ -20,14 +20,18 @@
 
 TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
-
-	if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
-		double TextHeight = DisplayTextWidget->GetTextSize("Sample").Y;
-		auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
-		SizeBox->SetHeightOverride(TextHeight * LinesToShow + DisplayTextPadding.Top + DisplayTextPadding.Bottom);
-	}
-	
+	ResizeWindow();
 	return Ret;
+}
+
+void UMessageWindow::SynchronizeProperties() {
+	Super::SynchronizeProperties();
+	ResizeWindow();
+}
+
+void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	ResizeWindow();
 }
 
 void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
@@ -59,6 +63,14 @@ FReply UMessageWindow::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEv
 	return FReply::Handled();
 }
 
+void UMessageWindow::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
+	Super::NativeOnFocusLost(InFocusEvent);
+	
+	if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
+		SetKeyboardFocus();
+	}
+}
+
 void UMessageWindow::SetDisplayText(FText Text) {
 	check(DisplayTextWidget != nullptr);
 	
@@ -74,6 +86,14 @@ void UMessageWindow::ClearDisplayText() {
 	DisplayTextWidget->SetText(FText::FromString(TEXT("")));
 	WordToDisplay.Empty();
 	FullText.Reset();
+}
+
+void UMessageWindow::ResizeWindow() {
+	if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
+		double TextHeight = DisplayTextWidget->GetTextSize("Sample").Y;
+		auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
+		SizeBox->SetHeightOverride(TextHeight * LinesToShow + DisplayTextPadding.Top + DisplayTextPadding.Bottom);
+	}
 }
 
 void UMessageWindow::QueueUpNewText() {
@@ -120,7 +140,7 @@ void UMessageWindow::QueueIndividualWords(const FString& Line, double TotalTextA
 		if (double FullTextWidth = CurrentTextWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {
 			AddNewLine();
 			CurrentLine = "";
-		} else {
+		} else if (!WordToDisplay.IsEmpty()) {
 			QueueText(TEXT(" "));
 			CurrentLine += " ";
 		}

@@ -37,10 +37,16 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
 
 public:
 	TSharedRef<SWidget> RebuildWidget() override;
+	void SynchronizeProperties() override;
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	
+protected:
 	FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+	void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
 
+public:
 	/**
 	 * Set the text to display to the player
 	 * @param Text The text to display to the player
@@ -61,6 +67,11 @@ public:
 	FAdvanceText OnAdvanceText;
 
 private:
+	/**
+	 * Automatically resize the window to match the desired number of lines
+	 */
+	void ResizeWindow();
+	
 	/**
 	 * Queue up the new text if the geometry information is available
 	 */

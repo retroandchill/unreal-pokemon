@@ -29,6 +29,15 @@ public:
 
 	void OnTextSet_Implementation(const FText& Text) override;
 
+	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
+	UTextBlock* GetShadow1() const;
+
+	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
+	UTextBlock* GetShadow2() const;
+
+	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
+	UTextBlock* GetShadow3() const;
+
 private:
 	/**
 	 * Internal method used to set the text and font of a shadow
@@ -46,18 +55,18 @@ private:
 	/**
 	 * The first text shadow to display
 	 */
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetShadow1, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> Shadow1;
 
 	/**
 	 * The second text shadow to display
 	 */
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetShadow2, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> Shadow2;
 
 	/**
 	 * The third text shadow to display
 	 */
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetShadow3, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> Shadow3;
 };

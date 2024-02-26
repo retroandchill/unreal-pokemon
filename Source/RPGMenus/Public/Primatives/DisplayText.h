@@ -53,7 +53,7 @@ public:
 	 * Get the font to be displayed to the player
 	 * @return The font to set for the window
 	 */
-	UFUNCTION(BlueprintPure, Category = Text)
+	UFUNCTION(BlueprintPure, Category = Display, meta = (BlueprintInternalUseOnly="true"))
 	const FSlateFontInfo& GetDisplayFont() const;
 
 	/**
@@ -93,19 +93,19 @@ protected:
 	 * Get the primary display text widget
 	 * @return The displayed text widget to the player
 	 */
-	UFUNCTION(BlueprintPure, Category = "Widgets|Text")
+	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock *GetDisplayTextWidget() const;
 	
 private:
 	/**
 	 * The displayed text widget to the player
 	 */
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetDisplayTextWidget, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> DisplayTextWidget;
 
 	/**
 	 * The font to set for the window
 	 */
-	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 1, ClampMin = 1))
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetDisplayFont, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	FSlateFontInfo DisplayFont;
 };
