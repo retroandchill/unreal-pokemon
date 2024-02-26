@@ -11,30 +11,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#include "Nodes/DisplayMessage.h"
+#pragma once
 
-#include "RPGPlayerController.h"
-#include "Screens/TextDisplayScreen.h"
+#include "CoreMinimal.h"
+#include "UObject/Interface.h"
+#include "MessageNode.generated.h"
 
-UDisplayMessage* UDisplayMessage::DisplayMessage(const UObject* WorldContextObject,
-                                                 TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message) {
-	auto Node = NewObject<UDisplayMessage>();
-	Node->WorldContextObject = WorldContextObject;
-	Node->ScreenClass = ScreenClass;
-	Node->Message = Message;
-	return Node;
-}
+// This class does not need to be modified.
+UINTERFACE()
+class UMessageNode : public UInterface {
+	GENERATED_BODY()
+};
 
-void UDisplayMessage::Activate() {
-	auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
-	if (Controller == nullptr)
-		return;
+/**
+ * Marker interface used to denote a node that contains a message.
+ */
+class POKEMONUI_API IMessageNode {
+	GENERATED_BODY()
 
-	auto Screen = Controller->AddScreenToStack(ScreenClass);
-	Screen->SetText(Message);
-	Screen->NextMessage.AddDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
-}
-
-void UDisplayMessage::ExecuteOnConfirm() {
-	OnConfirm.Broadcast();
-}
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+public:
+};

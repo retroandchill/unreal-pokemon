@@ -35,7 +35,10 @@ public class PokemonUI : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"UMG"
+				"UMG",
+				"UnrealEd",
+				"BlueprintGraph",
+				"KismetCompiler"
 			}
 		);
 	}
