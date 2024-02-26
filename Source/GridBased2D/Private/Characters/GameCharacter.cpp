@@ -15,6 +15,7 @@
 
 #include "InputAction.h"
 #include "KismetTraceUtils.h"
+#include "MathUtilities.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 #include "Components/BoxComponent.h"
@@ -168,7 +169,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-		Position.X = GridBased2D::LinearInterpolation(CurrentPosition.X * GridBased2D::GGridSize,
+		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridBased2D::GGridSize,
 													  DesiredPosition.X * GridBased2D::GGridSize,
 													  MoveSpeed * Distance,
 													  Timer);
@@ -180,7 +181,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-		Position.Y = GridBased2D::LinearInterpolation(CurrentPosition.Y * GridBased2D::GGridSize,
+		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridBased2D::GGridSize,
 													  DesiredPosition.Y * GridBased2D::GGridSize,
 													  MoveSpeed * Distance,
 													  Timer);

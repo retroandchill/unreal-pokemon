@@ -152,11 +152,27 @@ private:
 	 * The current timer for the text letter display
 	 */
 	float TextTimer = 0.0f;
+
+	/**
+	 * The original scroll position
+	 */
+	TOptional<float> OriginalScroll;
+
+	/**
+	 * The current timer for scrolling the window
+	 */
+	TOptional<float> ScrollTimer;
 	
 	/**
 	 * The desired number of lines to display to the player
 	 */
 	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	int32 LinesToShow = 2;
+
+	/**
+	 * The desired number of lines to display to the player
+	 */
+	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 0.001f, ClampMin = 0.001f))
+	float ScrollSpeed = 0.1f;
 	
 };

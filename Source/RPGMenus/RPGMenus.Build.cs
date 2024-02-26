@@ -38,7 +38,8 @@ public class RPGMenus : ModuleRules
 				"SlateCore",
 				"BlueprintGraph",
 				"KismetCompiler",
-				"UnrealEd"
+				"UnrealEd",
+				"CommonMath"
 			}
 		);
 	}

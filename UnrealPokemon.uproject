@@ -53,6 +53,11 @@
         "Name": "RPGMenusEditor",
         "Type": "Editor",
         "LoadingPhase": "Default"
+      },
+      {
+        "Name": "CommonMath",
+        "Type": "Runtime",
+        "LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

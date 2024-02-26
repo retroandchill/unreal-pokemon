@@ -11,53 +11,17 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "MathUtilities.h"
+#include "Misc/AutomationTest.h"
 
-#include "CoreMinimal.h"
-#include "Characters/FacingDirection.h"
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "Tests.LinearInterpolationTest",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-namespace GridBased2D {
-	/**
-	 * The size of the grid according to the game
-	 */
-	constexpr double GGridSize = 32.0;
-
-	/**
-	 * Convert a vector into a facing direction
-	 * @param Vector The input vector
-	 * @return The interpreted direction
-	 */
-	GRIDBASED2D_API TOptional<EFacingDirection> VectorToFacingDirection(const FVector2D Vector);
-
-	/**
-	 * Adjust the movement position based upon the given direction
-	 * @tparam Vector The vector type to adjust the position of
-	 * @param MovementDirection The direction to move in
-	 * @param Position The position struct to alter
-	 */
-	template <typename Vector>
-	void AdjustMovementPosition(EFacingDirection MovementDirection, Vector &Position) {
-		switch (MovementDirection) {
-			using enum EFacingDirection;
-		case Down:
-			Position.Y += 1;
-			break;
-		case Left:
-			Position.X -= 1;
-			break;
-		case Right:
-			Position.X += 1;
-			break;
-		case Up:
-			Position.Y -= 1;
-			break;
-		}
-	}
-
-	/**
-	 * Get the direction directly opposite the provided direction
-	 * @param Direction The original direction
-	 * @return The opposing direction
-	 */
-	GRIDBASED2D_API TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
+bool LinearInterpolationTest::RunTest(const FString& Parameters) {
+	// Make the test pass by returning true, or fail by returning false.
+	bool Passed = TestEqual("Negative Duration", 70.0, UMathUtilities::LinearInterpolation(30.0, 70, -3, 20));
+	Passed &= TestEqual("Negative Delta", 30.0f, UMathUtilities::LinearInterpolationF(30.f, 70.f, 20.f, -8.f));
+	Passed &= TestEqual("Delta Past Duration", 70.0, UMathUtilities::LinearInterpolation(30.0, 70, 20, 30));
+	Passed &= TestEqual("Delta Within Duration", 50.0, UMathUtilities::LinearInterpolation(30.0, 70, 20, 10));
+	return Passed;
 }

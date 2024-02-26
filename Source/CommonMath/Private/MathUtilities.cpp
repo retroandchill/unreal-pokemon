@@ -1,0 +1,26 @@
+// Created by Retro & Chill.
+
+
+#include "MathUtilities.h"
+
+template <typename T>
+T LinearInterpolation_Internal(T StartValue, T EndValue, T Duration, T Delta) {
+	if (Duration <= 0)
+		return EndValue;
+
+	if (Delta <= 0)
+		return StartValue;
+
+	if (Delta >= Duration)
+		return EndValue;
+
+	return StartValue + (EndValue - StartValue) * Delta / Duration;
+}
+
+double UMathUtilities::LinearInterpolation(double StartValue, double EndValue, double Duration, double Delta) {
+	return LinearInterpolation_Internal(StartValue, EndValue, Duration, Delta);
+}
+
+float UMathUtilities::LinearInterpolationF(float StartValue, float EndValue, float Duration, float Delta) {
+	return LinearInterpolation_Internal(StartValue, EndValue, Duration, Delta);
+}

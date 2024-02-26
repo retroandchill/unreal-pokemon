@@ -13,6 +13,7 @@
 //====================================================================================================================
 #include "Windows/MessageWindow.h"
 
+#include "MathUtilities.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
 #include "Data/SelectionInputs.h"
@@ -36,7 +37,20 @@ void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 
 void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-
+	
+	if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
+		ScrollTimer.GetValue() += InDeltaTime;
+		ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolationF(OriginalScroll.GetValue(), BottomScroll, ScrollSpeed, ScrollTimer.GetValue()));
+		
+		if (FMath::IsNearlyEqual(ScrollBox->GetScrollOffset(), BottomScroll)) {
+			ScrollTimer.Reset();
+			OriginalScroll.Reset();
+		}
+	} else if (float CurrentScroll = ScrollBox->GetScrollOffset(); !FMath::IsNearlyEqual(CurrentScroll, BottomScroll)) {
+		ScrollTimer.Emplace(0.f);
+		OriginalScroll.Emplace(CurrentScroll);
+	}
+	
 	QueueUpNewText();
 
 	if (WordToDisplay.IsEmpty())
@@ -50,7 +64,6 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	WordToDisplay.Dequeue(NextChar);
 	auto NewText = DisplayTextWidget->GetText().ToString();
 	NewText.AppendChar(NextChar);
-	ScrollBox->ScrollToEnd();
 	DisplayTextWidget->SetText(FText::FromString(NewText));
 	TextTimer = 0;
 }
