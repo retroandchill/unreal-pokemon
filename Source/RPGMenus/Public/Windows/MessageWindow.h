@@ -22,6 +22,7 @@ class UWindow;
 class USizeBox;
 class UDisplayText;
 class USelectionInputs;
+
 /**
  * Window for display text to the player
  */
@@ -47,6 +48,12 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
 	void ClearDisplayText();
+
+	/**
+	 * Set the callback for when the text is advanced
+	 * @param Callback The callback to invoke when the text is advanced
+	 */
+	void SetAdvanceTextCallback(TFunction<void(UMessageWindow*)> &&Callback);
 
 private:
 	/**
@@ -135,5 +142,10 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	int32 LinesToShow = 2;
+
+	/**
+	 * The callback for when the text has finished displaying
+	 */
+	TOptional<TFunction<void(UMessageWindow*)>> AdvanceTextCallback;
 	
 };
