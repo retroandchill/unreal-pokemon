@@ -15,6 +15,15 @@
 
 #include "Windows/MessageWindow.h"
 
+void UTextDisplayScreen::NativeConstruct() {
+	Super::NativeConstruct();
+	if (MessageWindow == nullptr)
+		return;
+
+	MessageWindow->OnAdvanceText.AddDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
+	MessageWindow->SetKeyboardFocus();
+}
+
 void UTextDisplayScreen::SetText(FText TextToDisplay) {
 	check(MessageWindow != nullptr);
 	MessageWindow->ClearDisplayText();
@@ -24,4 +33,8 @@ void UTextDisplayScreen::SetText(FText TextToDisplay) {
 void UTextDisplayScreen::ClearDisplayText() {
 	check(MessageWindow != nullptr);
 	MessageWindow->ClearDisplayText();
+}
+
+void UTextDisplayScreen::AdvanceToNextMessage() {
+	NextMessage.Broadcast();
 }

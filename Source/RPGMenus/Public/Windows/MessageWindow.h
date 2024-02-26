@@ -24,6 +24,11 @@ class UDisplayText;
 class USelectionInputs;
 
 /**
+ * Delegate to handle advancing the text in the message
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdvanceText);
+
+/**
  * Window for display text to the player
  */
 UCLASS()
@@ -50,10 +55,10 @@ public:
 	void ClearDisplayText();
 
 	/**
-	 * Set the callback for when the text is advanced
-	 * @param Callback The callback to invoke when the text is advanced
+	 * The callback for when the text has finished displaying
 	 */
-	void SetAdvanceTextCallback(TFunction<void(UMessageWindow*)> &&Callback);
+	UPROPERTY(BlueprintAssignable, Category = Events)
+	FAdvanceText OnAdvanceText;
 
 private:
 	/**
@@ -142,10 +147,5 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	int32 LinesToShow = 2;
-
-	/**
-	 * The callback for when the text has finished displaying
-	 */
-	TOptional<TFunction<void(UMessageWindow*)>> AdvanceTextCallback;
 	
 };

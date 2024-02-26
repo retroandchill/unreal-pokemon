@@ -24,6 +24,7 @@ class UScreen;
 class USelectableWidget;
 class UInputAction;
 class UInputMappingContext;
+
 /**
  * Player controller responsible for RPG menu related actions and behaviors.
  */
@@ -43,7 +44,8 @@ public:
 	 * @tparam T The screen class to spawn
 	 * @return The created screen.
 	 */
-	template <typename T, typename = std::enable_if_t<std::is_base_of_v<UScreen, T>>>
+	template <typename T>
+	requires std::is_base_of_v<UScreen, T>
 	T* AddScreenToStack(TSubclassOf<T> ScreenClass = T::StaticClass()) {
 		auto Screen = CreateWidget<T>(this, ScreenClass);
         Screen->AddToViewport();

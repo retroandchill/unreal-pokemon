@@ -55,11 +55,7 @@ FReply UMessageWindow::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEv
 	if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()) || !WordToDisplay.IsEmpty())
 		return FReply::Unhandled();
 
-	if (AdvanceTextCallback.IsSet()) {
-		auto &Callback = AdvanceTextCallback.GetValue();
-		Callback(this);
-	}
-	
+	OnAdvanceText.Broadcast();
 	return FReply::Handled();
 }
 
@@ -78,10 +74,6 @@ void UMessageWindow::ClearDisplayText() {
 	DisplayTextWidget->SetText(FText::FromString(TEXT("")));
 	WordToDisplay.Empty();
 	FullText.Reset();
-}
-
-void UMessageWindow::SetAdvanceTextCallback(TFunction<void(UMessageWindow*)>&& Callback) {
-	AdvanceTextCallback.Emplace(MoveTemp(Callback));
 }
 
 void UMessageWindow::QueueUpNewText() {

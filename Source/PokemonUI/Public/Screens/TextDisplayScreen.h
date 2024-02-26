@@ -18,6 +18,12 @@
 #include "TextDisplayScreen.generated.h"
 
 class UMessageWindow;
+
+/**
+ * Handle advancing to the next message
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FNextMessage);
+
 /**
  * Screen for displaying text to the player
  */
@@ -26,6 +32,8 @@ class POKEMONUI_API UTextDisplayScreen : public UScreen {
 	GENERATED_BODY()
 
 public:
+	void NativeConstruct() override;
+	
 	/**
 	 * Set the text to display to the player from this menu
 	 * @param TextToDisplay The text to display to the player
@@ -38,8 +46,20 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
 	void ClearDisplayText();
+
+	/**
+	 * Assignable delegate for advancing to the next message
+	 */
+	UPROPERTY(BlueprintAssignable, Category = "Messages|Flow Control")
+	FNextMessage NextMessage;
 	
 private:
+	/**
+	 * Function used to advance to the next message
+	 */
+	UFUNCTION()
+	void AdvanceToNextMessage();
+	
 	/**
 	 * The command window that is displayed to the player
 	 */
