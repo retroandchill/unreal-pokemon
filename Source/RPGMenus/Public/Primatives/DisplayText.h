@@ -107,7 +107,7 @@ private:
 	/**
 	 * The box used to constrain the size of the widget to a fixed amount
 	 */
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidgetOptional))
 	TObjectPtr<USizeBox> SizeBox;
 
 	/**

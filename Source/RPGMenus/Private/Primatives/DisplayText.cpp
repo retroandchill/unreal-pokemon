@@ -72,6 +72,7 @@ FVector2D UDisplayText::GetTextSize(const FString& Text) const {
 }
 
 FVector2D UDisplayText::GetTotalTextAreaSize() const {
+	check(DisplayTextWidget != nullptr);
 	return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
 }
 

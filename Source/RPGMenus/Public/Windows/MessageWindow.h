@@ -15,6 +15,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Containers/Deque.h"
 #include "MessageWindow.generated.h"
 
 class UScrollBox;
@@ -40,9 +41,8 @@ public:
 	void SynchronizeProperties() override;
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
-	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-	
 protected:
+	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 	void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
 
@@ -65,6 +65,8 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category = Events)
 	FAdvanceText OnAdvanceText;
+
+	void SetPaused(bool bPausedIn);
 
 private:
 	/**
@@ -125,6 +127,12 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<USizeBox> SizeBox;
+
+	/**
+	 * The arrow to show when the text is paused
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UWidget> PauseArrow;
 	
 	/**
 	 * Do the selection options wrap when input would exceed the end
@@ -174,5 +182,10 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Display, meta=(UIMin = 0.001f, ClampMin = 0.001f))
 	float ScrollSpeed = 0.1f;
+
+	/**
+	 * Is the current game state paused
+	 */
+	bool bPaused = false;
 	
 };

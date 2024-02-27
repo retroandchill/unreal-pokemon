@@ -104,7 +104,7 @@ void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {
 		auto Pos = GetCellPosition(NewIndex);
 		CursorSlot->SetColumn(Pos.X);
 		CursorSlot->SetRow(Pos.Y);
-		CursorWidget->SetVisibility(ESlateVisibility::Visible);
+		CursorWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	} else {
 		CursorWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -169,7 +169,7 @@ void UCommandWindow::SetScrollArrowsVisible() {
 		return;
 
 	if (TopRow > 0) {
-		UpArrow->SetVisibility(ESlateVisibility::Visible);
+		UpArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	} else {
 		UpArrow->SetVisibility(ESlateVisibility::Collapsed);
 	}
@@ -177,7 +177,7 @@ void UCommandWindow::SetScrollArrowsVisible() {
 	int32 RowCount = GetRowCount();
 	int32 PageMax = GetPageMax().GetValue();
 	if (TopRow + PageMax < RowCount && RowCount > PageMax) {
-		DownArrow->SetVisibility(ESlateVisibility::Visible);
+		DownArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	} else {
 		DownArrow->SetVisibility(ESlateVisibility::Collapsed);
 	}

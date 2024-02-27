@@ -18,6 +18,7 @@
 #include "Components/SizeBox.h"
 #include "Data/SelectionInputs.h"
 #include "Primatives/DisplayText.h"
+#include "Utilities/WidgetUtilities.h"
 
 TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
@@ -38,6 +39,11 @@ void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	
+	QueueUpNewText();
+
+	if (bPaused)
+		return;
+	
 	if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
 		ScrollTimer.GetValue() += InDeltaTime;
 		ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolationF(OriginalScroll.GetValue(), BottomScroll, ScrollSpeed, ScrollTimer.GetValue()));
@@ -49,9 +55,11 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	} else if (float CurrentScroll = ScrollBox->GetScrollOffset(); !FMath::IsNearlyEqual(CurrentScroll, BottomScroll)) {
 		ScrollTimer.Emplace(0.f);
 		OriginalScroll.Emplace(CurrentScroll);
+
+		if (!DisplayTextWidget->GetText().IsEmpty()) {
+			SetPaused(true);
+		}
 	}
-	
-	QueueUpNewText();
 
 	if (WordToDisplay.IsEmpty())
 		return;
@@ -69,10 +77,14 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 }
 
 FReply UMessageWindow::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) {
-	if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()) || !WordToDisplay.IsEmpty())
+	if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()) || !bPaused)
 		return FReply::Unhandled();
 
-	OnAdvanceText.Broadcast();
+	if (WordToDisplay.IsEmpty()) {
+		OnAdvanceText.Broadcast();
+	} else {
+		SetPaused(false);
+	}
 	return FReply::Handled();
 }
 
@@ -101,6 +113,19 @@ void UMessageWindow::ClearDisplayText() {
 	FullText.Reset();
 }
 
+void UMessageWindow::SetPaused(bool bPausedIn) {
+	bPaused = bPausedIn;
+
+	if (PauseArrow == nullptr)
+		return;
+
+	if (bPaused && !WordToDisplay.IsEmpty()) {
+		PauseArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	} else {
+		PauseArrow->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
 void UMessageWindow::ResizeWindow() {
 	if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
 		double TextHeight = DisplayTextWidget->GetTextSize("Sample").Y;
@@ -113,10 +138,10 @@ void UMessageWindow::QueueUpNewText() {
 	if (!FullText.IsSet())
 		return;
 	
-	double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X;
+	double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X * UWidgetUtilities::GetWidgetDPIScale();
 	if (FMath::IsNearlyZero(TotalTextAreaWidth))
 		return;
-		
+	
 	auto &AsString = FullText.GetValue().ToString();
 	TArray<FString> Lines;
 	AsString.ParseIntoArray(Lines, LINE_TERMINATOR);
