@@ -14,6 +14,7 @@
 #include "Primatives/DisplayText.h"
 
 #include "CanvasItem.h"
+#include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
 #include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
@@ -26,7 +27,12 @@ TSharedRef<SWidget> UDisplayText::RebuildWidget() {
 
 	if (DisplayTextWidget != nullptr) {
 		DisplayTextWidget->SetFont(DisplayFont);
-	}	
+
+		if (SizeBox != nullptr) {
+			auto TextPadding = GetDisplayTextPadding();
+			SizeBox->SetHeightOverride(GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
+		}
+	}
 	
 	return Ret;
 }
@@ -39,6 +45,12 @@ FText UDisplayText::GetText() const {
 void UDisplayText::SetText(const FText& NewText) {
 	if (DisplayTextWidget != nullptr) {
 		DisplayTextWidget->SetText(NewText);
+		
+		if (SizeBox != nullptr) {
+			auto TextPadding = GetDisplayTextPadding();
+			SizeBox->SetHeightOverride(GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
+		}
+		
 		OnTextSet(NewText);
 	}
 }

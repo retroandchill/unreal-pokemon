@@ -17,6 +17,7 @@
 #include "Blueprint/UserWidget.h"
 #include "DisplayText.generated.h"
 
+class USizeBox;
 class UMenuCommand;
 class UTextBlock;
 
@@ -102,6 +103,12 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetDisplayTextWidget, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> DisplayTextWidget;
+
+	/**
+	 * The box used to constrain the size of the widget to a fixed amount
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<USizeBox> SizeBox;
 
 	/**
 	 * The font to set for the window
