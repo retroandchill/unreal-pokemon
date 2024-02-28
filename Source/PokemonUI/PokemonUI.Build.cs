@@ -38,7 +38,8 @@ public class PokemonUI : ModuleRules
 				"UMG",
 				"UnrealEd",
 				"BlueprintGraph",
-				"KismetCompiler"
+				"KismetCompiler",
+				"ToolMenus"
 			}
 		);
 	}

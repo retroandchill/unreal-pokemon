@@ -15,6 +15,9 @@
 
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
+#include "K2Node_CallFunction.h"
+#include "KismetCompiler.h"
+#include "RPGPlayerController.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -74,4 +77,26 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
 		Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(CustomizeCallback, TSubclassOf<UTextDisplayScreen>(*It), ScreenCounter, FactoryFunc);
 		ActionRegistrar.AddBlueprintAction(GetClass(), Spawner);
 	}
+}
+
+void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext& CompilerContext,
+                                                    UEdGraphPin* OutputPin) {
+	if (OutputPin->LinkedTo.ContainsByPredicate([](UEdGraphPin* Link) { return Link->GetOwningNode()->GetClass()->ImplementsInterface(UMessageNode::StaticClass()); }))
+		return;
+	
+	const FName FunctionName = GET_FUNCTION_NAME_CHECKED_OneParam(ARPGPlayerController, RemoveScreenFromStack, UObject*);
+	auto IntermediateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, GetGraph());
+	IntermediateNode->FunctionReference.SetExternalMember(FunctionName, ARPGPlayerController::StaticClass());
+	IntermediateNode->AllocateDefaultPins();
+
+	if (auto This_WorldContextPin = FindPin(TEXT("WorldContextObject")); This_WorldContextPin != nullptr) {
+		auto Intermediate_WorldContextPin = IntermediateNode->FindPinChecked(TEXT("WorldContextObject"));
+		CompilerContext.CopyPinLinksToIntermediate(*This_WorldContextPin, *Intermediate_WorldContextPin);
+	}
+
+	auto InputPin = IntermediateNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
+	auto ThenPin = IntermediateNode->FindPinChecked(UEdGraphSchema_K2::PN_Then);
+	
+	CompilerContext.MovePinLinksToIntermediate(*OutputPin, *ThenPin);
+	OutputPin->MakeLinkTo(InputPin);
 }

@@ -39,29 +39,10 @@ void UK2Node_DisplayMessage::GetMenuActions(FBlueprintActionDatabaseRegistrar& A
 }
 
 void UK2Node_DisplayMessage::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {
-	const FName FunctionName = GET_FUNCTION_NAME_CHECKED_OneParam(ARPGPlayerController, RemoveScreenFromStack, UObject*);
 	static const FName OnConfirmPinName(TEXT("OnConfirm"));
 
-	if (auto OnConfirmPin = FindPinChecked(OnConfirmPinName);
-		!OnConfirmPin->LinkedTo.ContainsByPredicate([](UEdGraphPin* Link) {
-			return Link->GetOwningNode()->GetClass()->ImplementsInterface(UMessageNode::StaticClass());
-		})) {
-		
-		auto IntermediateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, GetGraph());
-		IntermediateNode->FunctionReference.SetExternalMember(FunctionName, ARPGPlayerController::StaticClass());
-		IntermediateNode->AllocateDefaultPins();
-
-		if (auto This_WorldContextPin = FindPin(TEXT("WorldContextObject")); This_WorldContextPin != nullptr) {
-			auto Intermediate_WorldContextPin = IntermediateNode->FindPinChecked(TEXT("WorldContextObject"));
-			CompilerContext.CopyPinLinksToIntermediate(*This_WorldContextPin, *Intermediate_WorldContextPin);
-		}
-
-		auto InputPin = IntermediateNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
-		auto OutputPin = IntermediateNode->FindPinChecked(UEdGraphSchema_K2::PN_Then);
-	
-		CompilerContext.MovePinLinksToIntermediate(*OnConfirmPin, *OutputPin);
-		OnConfirmPin->MakeLinkTo(InputPin);	
-	}
+	auto OnConfirmPin = FindPinChecked(OnConfirmPinName);
+	ReconnectOutputPin(CompilerContext, OnConfirmPin);
 	
 	Super::ExpandNode(CompilerContext, SourceGraph);
 }
