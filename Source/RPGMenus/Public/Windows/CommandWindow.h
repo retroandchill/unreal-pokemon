@@ -63,6 +63,12 @@ public:
 	TOptional<int32> GetPageMax();
 
 	/**
+	 * Set the commands to the given values
+	 * @param NewCommands The commands to move into the list of commands
+	 */
+	void SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands);
+
+	/**
 	 * Callback for when a command is selected
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")

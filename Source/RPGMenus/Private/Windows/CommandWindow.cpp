@@ -36,6 +36,7 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 }
 
 void UCommandWindow::SynchronizeProperties() {
+	Super::SynchronizeProperties();
 	RebuildWidget();
 }
 
@@ -90,6 +91,11 @@ TOptional<int32> UCommandWindow::GetPageMax() {
 		VisibleLines = FMath::Max(VisibleLines, MaxLines);
 	}
 	return VisibleLines;
+}
+
+void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>>&& NewCommands) {
+	Commands = MoveTemp(NewCommands);
+	RebuildWidget();
 }
 
 void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {

@@ -30,11 +30,21 @@ void UDisplayMessage::Activate() {
 	if (Controller == nullptr)
 		return;
 
-	auto Screen = Controller->AddScreenToStack(ScreenClass);
+	auto Screen = Controller->ConditionallyAddScreenToStack(ScreenClass);
 	Screen->SetText(Message);
 	Screen->NextMessage.AddDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
 }
 
 void UDisplayMessage::ExecuteOnConfirm() {
 	OnConfirm.Broadcast();
+
+	auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
+	if (Controller == nullptr)
+		return;
+
+	auto Screen = Controller->GetTopOfStack<UTextDisplayScreen>();
+	if (Screen == nullptr)
+		return;
+
+	Screen->NextMessage.RemoveDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
 }

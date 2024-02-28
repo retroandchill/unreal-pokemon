@@ -41,8 +41,13 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	
 	QueueUpNewText();
 
-	if (bPaused)
-		return;
+	if (bPaused) {
+		if (DisplayTextWidget->GetText().IsEmpty()) {
+			SetPaused(false);
+		} else {
+			return;
+		}
+	}
 	
 	if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
 		ScrollTimer.GetValue() += InDeltaTime;
@@ -74,15 +79,23 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	NewText.AppendChar(NextChar);
 	DisplayTextWidget->SetText(FText::FromString(NewText));
 	TextTimer = 0;
+
+	if (WordToDisplay.IsEmpty()) {
+		SetPaused(true);
+
+		if (bWaitForChoice) {
+			OnDisplayChoices.Broadcast();
+		}
+	}
 }
 
 FReply UMessageWindow::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) {
 	if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()) || !bPaused)
 		return FReply::Unhandled();
 
-	if (WordToDisplay.IsEmpty()) {
+	if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
 		OnAdvanceText.Broadcast();
-	} else {
+	} else if (bPaused) {
 		SetPaused(false);
 	}
 	return FReply::Handled();
@@ -96,9 +109,10 @@ void UMessageWindow::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 	}
 }
 
-void UMessageWindow::SetDisplayText(FText Text) {
+void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
 	check(DisplayTextWidget != nullptr);
-	
+
+	bWaitForChoice = bHasCommands;
 	if (FMath::IsNearlyZero(TextSpeed)) {
 		DisplayTextWidget->SetText(Text);
 	} else {

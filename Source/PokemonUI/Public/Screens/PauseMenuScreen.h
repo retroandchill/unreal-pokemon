@@ -26,8 +26,9 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UPauseMenuScreen : public UScreen {
 	GENERATED_BODY()
 
-public:
+protected:
 	void NativePreConstruct() override;
+	
 	
 private:
 	/**

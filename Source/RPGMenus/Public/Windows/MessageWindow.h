@@ -18,11 +18,17 @@
 #include "Containers/Deque.h"
 #include "MessageWindow.generated.h"
 
+class UCommandWindow;
 class UScrollBox;
 class UWindow;
 class USizeBox;
 class UDisplayText;
 class USelectionInputs;
+
+/**
+ * Delegate to what happens when the text finishes displaying and we need some type of user input (such as a command input)
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDisplayChoices);
 
 /**
  * Delegate to handle advancing the text in the message
@@ -52,7 +58,7 @@ public:
 	 * @param Text The text to display to the player
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
-	void SetDisplayText(FText Text);
+	void SetDisplayText(FText Text, bool bHasCommands = false);
 
 	/**
 	 * Clear all currently displaying text
@@ -65,6 +71,12 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category = Events)
 	FAdvanceText OnAdvanceText;
+
+	/**
+	 * Callback for when we need to display a choice to the player
+	 */
+	UPROPERTY(BlueprintAssignable, Category = Events)
+	FDisplayChoices OnDisplayChoices;
 
 	void SetPaused(bool bPausedIn);
 
@@ -187,5 +199,10 @@ private:
 	 * Is the current game state paused
 	 */
 	bool bPaused = false;
+
+	/**
+	 * Should we wait for commands at the end of the text display?
+	 */
+	bool bWaitForChoice = false;
 	
 };
