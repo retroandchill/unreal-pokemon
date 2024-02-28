@@ -30,64 +30,12 @@ class UK2Node_AsyncAction;
 
 UK2Node_DisplayMessage::UK2Node_DisplayMessage(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) {
-	ProxyActivateFunctionName = GET_FUNCTION_NAME_CHECKED(UBlueprintAsyncActionBase, Activate);
-}
-
-void UK2Node_DisplayMessage::Initialize(TSubclassOf<UTextDisplayScreen> NodeClass, TSharedRef<uint32> NodeCounter) {
-	ScreenType = MoveTemp(NodeClass);
-	TotalScreens = MoveTemp(NodeCounter);
-}
-
-void UK2Node_DisplayMessage::AllocateDefaultPins() {
-	Super::AllocateDefaultPins();
-	static const FName ScreenType_ParamName(TEXT("ScreenClass"));
-	auto ScreenClassPin = FindPinChecked(ScreenType_ParamName);
-	ScreenClassPin->DefaultObject = ScreenType;
-	ScreenClassPin->bHidden = true;
-}
-
-FText UK2Node_DisplayMessage::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-	if (ScreenType != nullptr && *TotalScreens > 1) {
-		const auto& ScreenName = ScreenType->GetName();
-		return FText::FormatNamed(
-			NSLOCTEXT("K2Node", "DisplayMessage_NodeTitleFormat", "{OriginalName} ({ClassName})"), TEXT("OriginalName"),
-				Super::GetNodeTitle(TitleType), TEXT("ClassName"), FText::FromString(ScreenName));
-	}
-
-	return Super::GetNodeTitle(TitleType);
 }
 
 void UK2Node_DisplayMessage::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
-	auto CustomizeCallback = [](UEdGraphNode* Node, [[maybe_unused]] bool bIsTemplateNode,
-								TSubclassOf<UTextDisplayScreen> Subclass, TSharedRef<uint32> NodeCounter, UFunction *FactoryFunc) {
-		
-		auto TypedNode = CastChecked<UK2Node_DisplayMessage>(Node);
-		auto ReturnProp = CastFieldChecked<FObjectProperty>(FactoryFunc->GetReturnProperty());
-						
-		TypedNode->ProxyFactoryFunctionName = FactoryFunc->GetFName();
-		TypedNode->ProxyFactoryClass        = FactoryFunc->GetOuterUClass();
-		TypedNode->ProxyClass               = ReturnProp->PropertyClass;
-		TypedNode->Initialize(Subclass, MoveTemp(NodeCounter));
-	};
-
 	auto FactoryFunc = UDisplayMessage::StaticClass()->FindFunctionByName("DisplayMessage");
 	check(FactoryFunc != nullptr);
-
-	auto ScreenCounter = MakeShared<uint32>(0);
-	for (TObjectIterator<UClass> It; It; ++It) {
-		if (!It->IsChildOf(UTextDisplayScreen::StaticClass()) || It->HasAnyClassFlags(CLASS_Abstract))
-			continue;
-		
-		if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(*It, true))
-			continue;
-
-		auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
-		check(Spawner != nullptr);
-
-		(*ScreenCounter)++;
-		Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(CustomizeCallback, TSubclassOf<UTextDisplayScreen>(*It), ScreenCounter, FactoryFunc);
-		ActionRegistrar.AddBlueprintAction(GetClass(), Spawner);
-	}
+	SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 
 void UK2Node_DisplayMessage::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {

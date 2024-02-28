@@ -11,30 +11,19 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //====================================================================================================================
-#pragma once
+#include "Nodes/K2Node_DisplayMessageWithChoices.h"
 
-#include "CoreMinimal.h"
-#include "K2Node.h"
-#include "K2Node_BaseAsyncTask.h"
-#include "K2Node_DisplayMessageBase.h"
-#include "K2Node_DisplayMessage.generated.h"
+#include "Nodes/DisplayMessageWithChoices.h"
 
-class UTextDisplayScreen;
-/**
- * Blueprint node for handling the display of a message to the player
- */
-UCLASS()
-class POKEMONUI_API UK2Node_DisplayMessage : public UK2Node_DisplayMessageBase {
-	GENERATED_BODY()
+UK2Node_DisplayMessageWithChoices::UK2Node_DisplayMessageWithChoices(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
+}
 
-public:
-	/**
-	 * Default construct the class using the given initializer
-	 * @param ObjectInitializer The Unreal provided initializer
-	 */
-	explicit UK2Node_DisplayMessage(const FObjectInitializer& ObjectInitializer);
+void UK2Node_DisplayMessageWithChoices::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
+	auto FactoryFunc = UDisplayMessageWithChoices::StaticClass()->FindFunctionByName("DisplayMessageWithChoices");
+	check(FactoryFunc != nullptr);
+	SupplyMenuActions(ActionRegistrar, FactoryFunc);
+}
 
-	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
-	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
-	
-};
+void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) {
+	Super::ExpandNode(CompilerContext, SourceGraph);
+}

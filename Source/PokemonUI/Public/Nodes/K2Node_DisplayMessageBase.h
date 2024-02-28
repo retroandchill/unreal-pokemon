@@ -14,17 +14,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node.h"
 #include "K2Node_BaseAsyncTask.h"
-#include "K2Node_DisplayMessageBase.h"
-#include "K2Node_DisplayMessage.generated.h"
+#include "K2Node_DisplayMessageBase.generated.h"
 
 class UTextDisplayScreen;
 /**
- * Blueprint node for handling the display of a message to the player
+ * Basic template of any async node that requires the display of a message
  */
-UCLASS()
-class POKEMONUI_API UK2Node_DisplayMessage : public UK2Node_DisplayMessageBase {
+UCLASS(Abstract)
+class POKEMONUI_API UK2Node_DisplayMessageBase : public UK2Node_BaseAsyncTask {
 	GENERATED_BODY()
 
 public:
@@ -32,9 +30,36 @@ public:
 	 * Default construct the class using the given initializer
 	 * @param ObjectInitializer The Unreal provided initializer
 	 */
-	explicit UK2Node_DisplayMessage(const FObjectInitializer& ObjectInitializer);
-
-	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
-	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
+	explicit UK2Node_DisplayMessageBase(const FObjectInitializer& ObjectInitializer);
 	
+	/**
+	 * Set up the node assigning the struct that this should be retrieving
+	 * @param NodeClass The screen type for this node
+	 * @param NodeCounter The internal counter for how many nodes there are
+	 */
+	void Initialize(TSubclassOf<UTextDisplayScreen> NodeClass, TSharedRef<uint32> NodeCounter);
+
+	void AllocateDefaultPins() override;
+	FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
+
+protected:
+	/**
+	 * Add the supplied menu actions for each Display Text Screen subclass
+	 * @param ActionRegistrar Used to register nodes
+	 * @param FactoryFunc The function used to actually produce the nodes
+	 */
+	void SupplyMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar, UFunction* FactoryFunc) const;
+
+	
+private:
+	/**
+	 * The class referenced by this node
+	 */
+	UPROPERTY()
+	TSubclassOf<UTextDisplayScreen> ScreenType;
+
+	/**
+	 * How many total screens are there
+	 */
+	TSharedRef<uint32> TotalScreens = MakeShared<uint32>(0);
 };
