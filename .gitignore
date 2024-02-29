@@ -75,3 +75,5 @@ DerivedDataCache/*
 
 .idea
 *.uproject.DotSettings.user
+/CMakeLists.txt
+/cmake-build-debug

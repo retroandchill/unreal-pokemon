@@ -48,16 +48,16 @@
 			"Name": "PokemonUI",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-        },
-      {
-        "Name": "RPGMenusEditor",
-        "Type": "Editor",
-        "LoadingPhase": "Default"
-      },
-      {
-        "Name": "CommonMath",
-        "Type": "Runtime",
-        "LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGMenusEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "CommonMath",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
@@ -75,6 +75,17 @@
 		{
 			"Name": "PythonAutomationTest",
 			"Enabled": true
+		},
+		{
+			"Name": "XCodeSourceCodeAccess",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Mac"
+			]
+		},
+		{
+			"Name": "XGEController",
+			"Enabled": false
 		}
 	]
 }
