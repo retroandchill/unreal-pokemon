@@ -1,21 +1,11 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Species/SpeciesData.h"
+#include "Breeding/Gender.h"
 #include "Stats/StatBlock.h"
+
+struct FSpeciesData;
 
 /**
  * Abstract interface for a Pokémon object
@@ -25,10 +15,40 @@ public:
 	virtual ~IPokemon() = default;
 
 	/**
+	 * Get the name of the Pokémon in question
+	 * @return The Pokémon's Nickname
+	 */
+	virtual FText GetName() const = 0;
+
+	/**
 	 * Get the species information about the Pokémon in question
 	 * @return The species data
 	 */
 	virtual const FSpeciesData &GetSpecies() const = 0;
+
+	/**
+	 * Get the gender of the Pokémon in question
+	 * @return The Pokémon's gender
+	 */
+	virtual EGender GetGender() const = 0;
+
+	/**
+	 * Get the current HP of the Pokémon in question
+	 * @return The current HP of this particular Pokémon
+	 */
+	virtual int32 GetCurrentHP() const = 0;
+
+	/**
+	 * Get the current HP of the Pokémon in question
+	 * @return The current HP of this particular Pokémon
+	 */
+	virtual int32 GetMaxHP() const = 0;
+
+	/**
+	 * Returns if the Pokémon is currently fainted
+	 * @return Is the Pokémon currently fainted
+	 */
+	virtual bool IsFainted() const = 0;
 
 	/**
 	 * Get the stat information for this Pokémon

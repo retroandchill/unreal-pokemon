@@ -1,16 +1,4 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/SelectableWidget.h"
 
 #include "Data/SelectionInputs.h"
@@ -37,20 +25,30 @@ int32 USelectableWidget::GetIndex() const {
 	return Index;
 }
 
+int32 USelectableWidget::GetRow(int32 IndexToCheck) {
+	return IndexToCheck / GetRowCount();
+}
+
+int32 USelectableWidget::GetColumn(int32 IndexToCheck) {
+	return IndexToCheck % GetRowCount();
+}
+
 void USelectableWidget::SetIndex(int32 NewIndex) {
 	if (Index == NewIndex)
 		return;
-	
+
+	int32 OldIndex = Index;
 	Index = FMath::Clamp(NewIndex, -1, GetItemCount() - 1);
-	OnSelectionChange(Index);
+	OnSelectionChange(OldIndex, Index);
 }
 
 void USelectableWidget::Deselect() {
 	if (Index == -1)
 		return;
 	
+	int32 OldIndex = Index;
 	Index = -1;
-	OnSelectionChange(Index);
+	OnSelectionChange(OldIndex, Index);
 }
 
 bool USelectableWidget::IsActive() const {
@@ -86,7 +84,7 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKe
 	return bHandled ? FReply::Handled() : FReply::Unhandled();
 }
 
-void USelectableWidget::OnSelectionChange_Implementation(int32 NewIndex) {
+void USelectableWidget::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
 	// No implementation, but we cannot have an abstract method in an Unreal class
 }
 
@@ -112,10 +110,7 @@ void USelectableWidget::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 	}
 }
 
-void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
-	if (!IsActive())
-		return;
-
+int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction) {
 	int32 NewIndex = GetIndex();
 	int32 ItemCount = GetItemCount();
 	switch (Direction) {
@@ -142,5 +137,12 @@ void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
 		break;
 	}
 
-	SetIndex(NewIndex);
+	return NewIndex;
+}
+
+void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
+	if (!IsActive())
+		return;
+	
+	SetIndex(GetNextIndex(Direction));
 }

@@ -1,16 +1,4 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -77,6 +65,22 @@ public:
 	int32 GetIndex() const;
 
 	/**
+	 * Convenience method to get the row of a given index.
+	 * @param IndexToCheck The index to get the row of.
+	 * @return The row that index resides in.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
+	int32 GetRow(int32 IndexToCheck);
+
+	/**
+	 * Convenience method to get the row of a given index.
+	 * @param IndexToCheck The index to get the row of.
+	 * @return The row that index resides in.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
+	int32 GetColumn(int32 IndexToCheck);
+
+	/**
 	 * Set the current index of the menu
 	 * @param NewIndex The current selection index of the menu
 	 */
@@ -120,10 +124,11 @@ protected:
 	
 	/**
 	 * Called when the selection is changed
+	 * @param OldIndex The previous index of this widget
 	 * @param NewIndex The new index to select to
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Selection)
-	void OnSelectionChange(int32 NewIndex);
+	void OnSelectionChange(int32 OldIndex, int32 NewIndex);
 
 	/**
 	 * Called when the active state is changed
@@ -146,7 +151,14 @@ protected:
 	void ProcessCancel();
 
 	void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
-	
+
+	/**
+	 * Process the procedure for handling when the cursor moves
+	 * @param Direction The direction the cursor should move in
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Selection)
+	int32 GetNextIndex(ECursorDirection Direction);
+
 private:
 	/**
 	 * Function called when the cursor is moved
