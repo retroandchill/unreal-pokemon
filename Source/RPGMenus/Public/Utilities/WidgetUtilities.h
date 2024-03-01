@@ -1,16 +1,4 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -32,4 +20,29 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, DisplayName = "Get Widget DPI Scale", Category = "UMG|Scaling")
 	static float GetWidgetDPIScale();
+
+	/**
+	 * Get the desired size of a brush based on its input image. Defaults to the user-defined size if another size
+	 * cannot be found.
+	 * @param Brush The brush in question to get the size of
+	 * @return The desired size. 
+	 */
+	UFUNCTION(BlueprintPure, Category = "Slate|Images")
+	static FVector2D GetDesiredBrushSize(const FSlateBrush &Brush);
+
+	/**
+	 * Get the desired size of a texture asset based on the width and height of the source image.
+	 * @param Texture The source texture
+	 * @return The desired size. 
+	 */
+	UFUNCTION(BlueprintPure, Category = "Slate|Images")
+	static FVector2D GetDesiredTextureSize(UTexture2D *Texture);
+
+	/**
+	 * Set the size of the brush to the desired size, keeping all other elements the same
+	 * @param Brush The size of the brush in question
+	 * @param NewSize The new size of the brush to set
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Slate|Images")
+	static void ChangeBrushSize(UPARAM(Ref) FSlateBrush &Brush, FVector2D NewSize);
 };

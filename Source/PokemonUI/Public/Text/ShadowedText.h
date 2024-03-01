@@ -1,16 +1,4 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -24,19 +12,39 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UShadowedText : public UDisplayText {
 	GENERATED_BODY()
 
-public:
-	TSharedRef<SWidget> RebuildWidget() override;
+protected:
+	void SetTextInfo() override;
 
+public:
 	void OnTextSet_Implementation(const FText& Text) override;
 
+	/**
+	 * Get the first text shadow to display
+	 * @return The first text shadow to display
+	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock* GetShadow1() const;
 
+	/**
+	 * Get the second text shadow to display
+	 * @return The second text shadow to display
+	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock* GetShadow2() const;
 
+	/**
+	 * Get the third text shadow to display
+	 * @return The third text shadow to display
+	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock* GetShadow3() const;
+
+	/**
+	 * Set the color of the text's shadow
+	 * @param Color The new shadow color
+	 */
+	UFUNCTION(BlueprintCallable, Category = Display, meta=(BlueprintInternalUseOnly="true"))
+	void SetShadowColor(const FSlateColor& Color);
 
 private:
 	/**
@@ -69,4 +77,10 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetShadow3, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> Shadow3;
+
+	/**
+	 * The color to set for the shadow text
+	 */
+	UPROPERTY(EditAnywhere, BlueprintSetter=SetShadowColor, Category = Display)
+	FSlateColor ShadowColor;
 };

@@ -1,16 +1,4 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -35,8 +23,16 @@ public:
 	 */
 	explicit UDisplayText(const FObjectInitializer& ObjectInitializer);
 
+protected:
 	TSharedRef<SWidget> RebuildWidget() override;
+	void SynchronizeProperties() override;
 
+	/**
+	 * Set the information about the text based on the default settings of the widget
+	 */
+	virtual void SetTextInfo();
+
+public:
 	/**
 	 * Get the display text as shown to the player
 	 * @return The display text
@@ -48,6 +44,7 @@ public:
 	 * Set the display text for this widget
 	 * @param NewText The new display text for the widget
 	 */
+	UFUNCTION(BlueprintCallable, Category = Display)
 	void SetText(const FText& NewText);
 
 	/**
@@ -56,6 +53,13 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = Display, meta = (BlueprintInternalUseOnly="true"))
 	const FSlateFontInfo& GetDisplayFont() const;
+
+	/**
+	 * Set the color of the text to the given new color
+	 * @param Color The new color for the text
+	 */
+	UFUNCTION(BlueprintCallable, Category = Display, meta = (BlueprintInternalUseOnly="true"))
+	void SetTextColor(const FSlateColor& Color);
 
 	/**
 	 * Get the size of the current text contained within this widget
@@ -98,6 +102,9 @@ protected:
 	UTextBlock *GetDisplayTextWidget() const;
 	
 private:
+	UPROPERTY(EditAnywhere, Category = "Widgets|Text")
+	FText InitialText = NSLOCTEXT("PokemonUI", "DisplayText_InitialText", "Text Block");
+	
 	/**
 	 * The displayed text widget to the player
 	 */
@@ -115,4 +122,10 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintGetter=GetDisplayFont, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	FSlateFontInfo DisplayFont;
+
+	/**
+	 * The color of the text to display
+	 */
+	UPROPERTY(EditAnywhere, BlueprintSetter=SetTextColor, Category = Display)
+	FSlateColor TextColor;
 };

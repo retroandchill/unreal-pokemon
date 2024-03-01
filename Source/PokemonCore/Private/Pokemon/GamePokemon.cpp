@@ -1,23 +1,15 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
 
 #include "DataManager.h"
+#include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Species/GenderRatio.h"
+#include "Species/SpeciesData.h"
+#include "Utilities/PersonalityValueUtils.h"
 
 // TODO: Instantiate the stat block dynamically based on a user config
-FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species) {
+FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species), PersonalityValue(UPersonalityValueUtils::GeneratePersonalityValue()) {
 	auto &DataManager = FDataManager::GetInstance();
 	auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
@@ -25,6 +17,36 @@ FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species) {
 	check(SpeciesData != nullptr);
 	StatBlock = MakeUnique<FDefaultStatBlock>(SpeciesData->GrowthRate, Level);
 	StatBlock->CalculateStats(SpeciesData->BaseStats);
+	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+}
+
+FText FGamePokemon::GetName() const {
+	return Nickname.IsSet() ? Nickname.GetValue() : GetSpecies().RealName;
+}
+
+EGender FGamePokemon::GetGender() const {
+	using enum EGender;
+	
+	if (Gender.IsSet())
+		return Gender.GetValue();
+	
+	auto &GenderRatio = GetSpecies().GetGenderRatio();
+	if (GenderRatio.IsGenderless)
+		return Genderless;
+
+	return (PersonalityValue & UPersonalityValueUtils::LOWER_8_BITS) < GenderRatio.FemaleChance ? Female : Male;
+}
+
+int32 FGamePokemon::GetCurrentHP() const {
+	return CurrentHP;
+}
+
+int32 FGamePokemon::GetMaxHP() const {
+	return GetStatBlock().GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+}
+
+bool FGamePokemon::IsFainted() const {
+	return CurrentHP <= 0;
 }
 
 const FSpeciesData& FGamePokemon::GetSpecies() const {
