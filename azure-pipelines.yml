@@ -8,6 +8,8 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
+  
+container: ghcr.io/epicgames/unreal-engine:dev-slim-5.3.2
 
 steps:
 - script: echo Hello, world!
