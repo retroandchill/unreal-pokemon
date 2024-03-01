@@ -16,10 +16,12 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/GridPanel.h"
 #include "Components/GridSlot.h"
+#include "Components/ScrollBox.h"
+#include "Components/SizeBox.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
-#include "Primatives/TextCommand.h"
+#include "Primatives/DisplayText.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }
@@ -29,10 +31,12 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 	AddCommands();
 	OnSelectionChange(GetIndex());
 	OnActiveChanged(IsActive());
+	SetScrollArrowsVisible();
 	return Original;
 }
 
 void UCommandWindow::SynchronizeProperties() {
+	Super::SynchronizeProperties();
 	RebuildWidget();
 }
 
@@ -48,8 +52,50 @@ void UCommandWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 	}
 }
 
+void UCommandWindow::NativeConstruct() {
+	Super::NativeConstruct();
+	SetScrollArrowsVisible();
+}
+
+void UCommandWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	if (auto VisibleLines = GetPageMax(); VisibleLines.IsSet()) {
+		int32 Row = GetIndex() / GetColumnCount();
+		int32 NewTopRow = Row - (VisibleLines.GetValue() - 1) / 2;
+		NewTopRow = FMath::Max(FMath::Min(NewTopRow, GetRowCount() - VisibleLines.GetValue()), 0);
+		if (TopRow != NewTopRow) {
+			TopRow = NewTopRow;
+			ScrollBox->SetScrollOffset(TopRow * CommandHeight.GetValue());
+		}
+	}
+	
+	SetScrollArrowsVisible();
+}
+
 int32 UCommandWindow::GetItemCount_Implementation() const {
 	return ActiveCommands.Num();
+}
+
+TOptional<int32> UCommandWindow::GetPageMax() {
+	if (ScrollBox == nullptr)
+		return TOptional<int32>();
+	
+	auto ScrollBoxGeometry = ScrollBox->GetCachedGeometry();
+	float Height = ScrollBoxGeometry.GetLocalSize().Y;
+	if (FMath::IsNearlyZero(Height) || !CommandHeight.IsSet())
+		return true;
+	
+	int32 VisibleLines = FMath::FloorToInt(Height / CommandHeight.GetValue());
+	if (bOverride_MaxLines) {
+		VisibleLines = FMath::Max(VisibleLines, MaxLines);
+	}
+	return VisibleLines;
+}
+
+void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>>&& NewCommands) {
+	Commands = MoveTemp(NewCommands);
+	RebuildWidget();
 }
 
 void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {
@@ -64,7 +110,7 @@ void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {
 		auto Pos = GetCellPosition(NewIndex);
 		CursorSlot->SetColumn(Pos.X);
 		CursorSlot->SetRow(Pos.Y);
-		CursorWidget->SetVisibility(ESlateVisibility::Visible);
+		CursorWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	} else {
 		CursorWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -93,11 +139,12 @@ void UCommandWindow::AddCommands() {
 	}
 	CommandWidgets.Empty();
 
+	CommandHeight.Reset();
 	for (UCommand* const Command : Commands) {
 		if (Command == nullptr || !Command->IsEnabled())
 			continue;
 
-		auto TextWidget = WidgetTree->ConstructWidget<UTextCommand>(DisplayTextWidgetClass);
+		auto TextWidget = WidgetTree->ConstructWidget<UDisplayText>(DisplayTextWidgetClass);
 		TextWidget->SetText(Command->GetText());
 
 		int32 CurrentIndex = ActiveCommands.Num();
@@ -105,5 +152,39 @@ void UCommandWindow::AddCommands() {
 		CommandArea->AddChildToUniformGrid(TextWidget, Pos.Y, Pos.X);
 		ActiveCommands.Add(Command);
 		CommandWidgets.Add(TextWidget);
+
+		if (!CommandHeight.IsSet()) {
+			auto TextPadding = TextWidget->GetDisplayTextPadding();
+			CommandHeight.Emplace(TextWidget->GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
+		}
+	}
+
+	if (SizeBox == nullptr)
+		return;
+
+	if (CommandHeight.IsSet() && bOverride_MaxLines) {
+		SizeBox->SetMaxDesiredHeight(CommandHeight.GetValue() * MaxLines);
+	} else {
+		SizeBox->ClearMaxDesiredHeight();
+	}
+
+}
+
+void UCommandWindow::SetScrollArrowsVisible() {
+	if (ScrollBox == nullptr)
+		return;
+
+	if (TopRow > 0) {
+		UpArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	} else {
+		UpArrow->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	int32 RowCount = GetRowCount();
+	int32 PageMax = GetPageMax().GetValue();
+	if (TopRow + PageMax < RowCount && RowCount > PageMax) {
+		DownArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	} else {
+		DownArrow->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }

@@ -24,7 +24,7 @@ class UGridPanel;
 class SUniformGridPanel;
 class UMenuCommand;
 class UUniformGridPanel;
-class UTextCommand;
+class UDisplayText;
 
 /**
  * Delegate for when the user presses confirm
@@ -44,12 +44,29 @@ public:
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
 	explicit UCommandWindow(const FObjectInitializer& ObjectInitializer);
-
+	
 	TSharedRef<SWidget> RebuildWidget() override;
 	void SynchronizeProperties() override;
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
+protected:
+	void NativeConstruct() override;
+	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+public:
 	int32 GetItemCount_Implementation() const override;
+
+	/**
+	 * Get the maximum number of rows that appear at once
+	 * @return The max number of visible rows
+	 */
+	TOptional<int32> GetPageMax();
+
+	/**
+	 * Set the commands to the given values
+	 * @param NewCommands The commands to move into the list of commands
+	 */
+	void SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands);
 
 	/**
 	 * Callback for when a command is selected
@@ -75,6 +92,11 @@ private:
 	 * Add the commands to the window.
 	 */
 	void AddCommands();
+
+	/**
+	 * Set the visible status of the arrows as needed
+	 */
+	void SetScrollArrowsVisible();
 	
 	/**
 	 * The actual area where the window is drawn
@@ -95,10 +117,28 @@ private:
 	TObjectPtr<UScrollBox> ScrollBox;
 
 	/**
+	 * The size box used to constrain the maximum number of displayed lines
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<USizeBox> SizeBox;
+
+	/**
 	 * The widget that acts as the cursor for the window
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UWidget> CursorWidget;
+
+	/**
+	 * The up arrow widget to display when the window can scroll
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UWidget> UpArrow;
+
+	/**
+	 * The down arrow widget to display when the window can scroll
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UWidget> DownArrow;
 
 	/**
 	 * The commands displayed in the window
@@ -110,7 +150,7 @@ private:
 	 * The widget type used for the display text shown to the player
 	 */
 	UPROPERTY(EditAnywhere, Category = Commands)
-	TSubclassOf<UTextCommand> DisplayTextWidgetClass;
+	TSubclassOf<UDisplayText> DisplayTextWidgetClass;
 
 	/**
 	 * The internal list of active commands
@@ -123,5 +163,28 @@ private:
 	 */
 	UPROPERTY()
 	TArray<TObjectPtr<UWidget>> CommandWidgets;
+
+	/**
+	 * The top row being displayed by the widget
+	 */
+	int32 TopRow = 0;
+
+	/**
+	 * The widget type used for the display text shown to the player
+	 */
+	UPROPERTY(EditAnywhere, Category = Display, meta = (editcondition = "bOverride_MaxLines", UIMin = 1, ClampMin = 1))
+	int32 MaxLines = 4;
+
+	/**
+	 * Override toggle for the max lines of the window. If this is true, then the value set by MaxLines is used to
+	 * limit how many command lines are shown.
+	 */
+	UPROPERTY(EditAnywhere, Category=Overrides, meta=(PinHiddenByDefault, InlineEditConditionToggle))
+	bool bOverride_MaxLines = false;
+
+	/**
+	 * The height of a single command in the window
+	 */
+	TOptional<float> CommandHeight;
 	
 };
