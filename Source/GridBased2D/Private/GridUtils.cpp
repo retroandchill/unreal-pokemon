@@ -13,19 +13,6 @@
 //====================================================================================================================
 #include "GridUtils.h"
 
-GRIDBASED2D_API double GridBased2D::LinearInterpolation(double StartValue, double EndValue, double Duration, double Delta) {
-	if (Duration <= 0)
-		return EndValue;
-
-	if (Delta <= 0)
-		return StartValue;
-
-	if (Delta >= Duration)
-		return EndValue;
-
-	return StartValue + (EndValue - StartValue) * Delta / Duration;
-}
-
 TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D Vector) {
 	using enum EFacingDirection;
 	if (Vector.Y > 0) {
@@ -42,6 +29,22 @@ TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D
 
 	if (Vector.Y < 0) {
 		return Up;
+	}
+
+	return TOptional<EFacingDirection>();
+}
+
+TOptional<EFacingDirection> GridBased2D::GetOpposingDirection(EFacingDirection Direction) {
+	switch (Direction) {
+		using enum EFacingDirection;
+	case Down:
+		return Up;
+	case Left:
+		return Right;
+	case Right:
+		return Left;
+	case Up:
+		return Down;
 	}
 
 	return TOptional<EFacingDirection>();

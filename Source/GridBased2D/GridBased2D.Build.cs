@@ -33,7 +33,9 @@ public class GridBased2D : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore", "EnhancedInput"
+				"SlateCore",
+				"EnhancedInput",
+				"CommonMath"
 			}
 		);
 	}
