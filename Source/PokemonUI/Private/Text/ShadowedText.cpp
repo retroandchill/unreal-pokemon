@@ -3,12 +3,11 @@
 
 #include "Components/TextBlock.h"
 
-TSharedRef<SWidget> UShadowedText::RebuildWidget() {
-	auto Ret = Super::RebuildWidget();
+void UShadowedText::SetTextInfo() {
+	Super::SetTextInfo();
 	SetShadowTextAndFont(Shadow1);
 	SetShadowTextAndFont(Shadow2);
 	SetShadowTextAndFont(Shadow3);
-	return Ret;
 }
 
 void UShadowedText::OnTextSet_Implementation(const FText& Text) {
@@ -33,6 +32,7 @@ void UShadowedText::SetShadowTextAndFont(UTextBlock* Shadow) {
 	if (Shadow != nullptr) {
 		Shadow->SetText(GetText());
 		Shadow->SetFont(GetDisplayFont());
+		Shadow->SetColorAndOpacity(ShadowColor);
 	}
 }
 

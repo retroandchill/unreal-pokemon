@@ -23,8 +23,16 @@ public:
 	 */
 	explicit UDisplayText(const FObjectInitializer& ObjectInitializer);
 
+protected:
 	TSharedRef<SWidget> RebuildWidget() override;
+	void SynchronizeProperties() override;
 
+	/**
+	 * Set the information about the text based on the default settings of the widget
+	 */
+	virtual void SetTextInfo();
+
+public:
 	/**
 	 * Get the display text as shown to the player
 	 * @return The display text
@@ -86,6 +94,9 @@ protected:
 	UTextBlock *GetDisplayTextWidget() const;
 	
 private:
+	UPROPERTY(EditAnywhere, Category = "Widgets|Text")
+	FText InitialText = NSLOCTEXT("PokemonUI", "DisplayText_InitialText", "Text Block");
+	
 	/**
 	 * The displayed text widget to the player
 	 */
@@ -103,4 +114,10 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintGetter=GetDisplayFont, Category = Display, meta=(UIMin = 1, ClampMin = 1))
 	FSlateFontInfo DisplayFont;
+
+	/**
+	 * The color of the text to display
+	 */
+	UPROPERTY(EditAnywhere, Category = Display)
+	FSlateColor TextColor;
 };

@@ -12,9 +12,10 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UShadowedText : public UDisplayText {
 	GENERATED_BODY()
 
-public:
-	TSharedRef<SWidget> RebuildWidget() override;
+protected:
+	void SetTextInfo() override;
 
+public:
 	void OnTextSet_Implementation(const FText& Text) override;
 
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
@@ -57,4 +58,10 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget), BlueprintGetter=GetShadow3, Category = "Widgets|Text")
 	TObjectPtr<UTextBlock> Shadow3;
+
+	/**
+	 * The color to set for the shadow text
+	 */
+	UPROPERTY(EditAnywhere, Category = Display)
+	FSlateColor ShadowColor;
 };

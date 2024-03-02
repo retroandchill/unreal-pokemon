@@ -17,10 +17,4 @@ public:
 	 * @return The list of Pokémon in the order the trainer has them in
 	 */
 	virtual const TArray<TSharedRef<IPokemon>> &GetParty() = 0;
-
-	/**
-	 * Get the trainer's list of party Pokémon
-	 * @return The list of Pokémon in the order the trainer has them in
-	 */
-	virtual const TArray<TSharedRef<const IPokemon>> &GetParty() const = 0;
 };

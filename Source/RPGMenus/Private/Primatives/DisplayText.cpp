@@ -12,17 +12,26 @@ UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserW
 
 TSharedRef<SWidget> UDisplayText::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
+	SetTextInfo();
+	return Ret;
+}
 
+void UDisplayText::SynchronizeProperties() {
+	Super::SynchronizeProperties();
+	SetTextInfo();
+}
+
+void UDisplayText::SetTextInfo() {
 	if (DisplayTextWidget != nullptr) {
+		DisplayTextWidget->SetText(InitialText);
 		DisplayTextWidget->SetFont(DisplayFont);
+		DisplayTextWidget->SetColorAndOpacity(TextColor);
 
 		if (SizeBox != nullptr) {
 			auto TextPadding = GetDisplayTextPadding();
 			SizeBox->SetHeightOverride(GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
 		}
 	}
-	
-	return Ret;
 }
 
 FText UDisplayText::GetText() const {

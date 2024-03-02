@@ -14,7 +14,6 @@ public:
 	FTrainerStub();
 
 	const TArray<TSharedRef<IPokemon>>& GetParty() override;
-	const TArray<TSharedRef<const IPokemon>>& GetParty() const override;
 
 private:
 	TArray<TSharedRef<IPokemon>> Party;

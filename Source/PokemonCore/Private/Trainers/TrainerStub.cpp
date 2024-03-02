@@ -19,7 +19,3 @@ FTrainerStub::FTrainerStub() {
 const TArray<TSharedRef<IPokemon>>& FTrainerStub::GetParty() {
 	return Party;
 }
-
-const TArray<TSharedRef<const IPokemon>>& FTrainerStub::GetParty() const {
-	return static_cast<TArray<TSharedRef<const IPokemon>>>(Party);
-}
