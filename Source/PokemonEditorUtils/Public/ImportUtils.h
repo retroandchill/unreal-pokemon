@@ -20,4 +20,12 @@ class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
 	 */
 	UFUNCTION(BlueprintPure, Category = "Editor|Data")
 	static TArray<FStat> GetMainStatsFromTable(UDataTable *DataTable);
+
+	/**
+	 * Select a file from the filesystem and set it to a text box
+	 * @param FileTypes The filter for the filetypes to employ in the selector
+	 * @return The full qualified path of the filename, 
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Editor|Filesystem")
+	static FText SelectFile(const FString &FileTypes);
 };

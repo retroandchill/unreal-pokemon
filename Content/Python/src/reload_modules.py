@@ -13,6 +13,6 @@
 # ====================================================================================================================
 from importlib import reload
 
-import pokemon
+import import_pbs
 
-reload(pokemon)
+reload(import_pbs)

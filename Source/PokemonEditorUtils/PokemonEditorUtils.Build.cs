@@ -21,7 +21,9 @@ public class PokemonEditorUtils : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore",
+                "UnrealEd",
+                "DesktopPlatform"
             }
         );
     }
