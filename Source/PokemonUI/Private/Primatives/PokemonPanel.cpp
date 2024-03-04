@@ -3,8 +3,9 @@
 
 #include "Primatives/PokemonPanel.h"
 
+#include "Components/Image.h"
 #include "PokemonCore/Public/Pokemon/Pokemon.h"
-#include "Primatives/PokemonPanelState.h"
+#include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 
 const TSharedPtr<IPokemon>& UPokemonPanel::GetPokemon() {
@@ -43,6 +44,13 @@ void UPokemonPanel::Refresh() {
 	RefreshVisuals();
 	if (Pokemon != nullptr) {
 		RefreshPokemonInfo();
+
+		auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+		check(GraphicsLoadingSubsystem != nullptr);
+		PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon));
+	} else {
+		PokemonIcon->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	
 }

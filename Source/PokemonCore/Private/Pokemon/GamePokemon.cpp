@@ -2,6 +2,7 @@
 #include "Pokemon/GamePokemon.h"
 
 #include "DataManager.h"
+#include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
@@ -16,7 +17,7 @@ FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species), Perso
 	check(SpeciesData != nullptr);
 	StatBlock = MakeUnique<FDefaultStatBlock>(SpeciesData->GrowthRate, Level);
 	StatBlock->CalculateStats(SpeciesData->BaseStats);
-	CurrentHP = StatBlock->GetStat(GetHPStat()).GetStatValue();
+	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
 }
 
 FText FGamePokemon::GetName() const {
@@ -41,7 +42,7 @@ int32 FGamePokemon::GetCurrentHP() const {
 }
 
 int32 FGamePokemon::GetMaxHP() const {
-	return GetStatBlock().GetStat(GetHPStat()).GetStatValue();
+	return GetStatBlock().GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
 }
 
 bool FGamePokemon::IsFainted() const {
@@ -58,9 +59,4 @@ const FSpeciesData& FGamePokemon::GetSpecies() const {
 
 const IStatBlock& FGamePokemon::GetStatBlock() const {
 	return *StatBlock;
-}
-
-FName FGamePokemon::GetHPStat() {
-	static FName HPStat = TEXT("HP");
-	return HPStat;
 }

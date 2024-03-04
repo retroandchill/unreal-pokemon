@@ -29,12 +29,6 @@ public:
 
 private:
 	/**
-	 * Get the stat name that corresponds to HP
-	 * @return The stat that corresponds to HP
-	 */
-	static FName GetHPStat();
-	
-	/**
 	 * The ID of the species of Pokémon this is
 	 */
 	FName Species;

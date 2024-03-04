@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Primatives/PokemonPanelState.h"
 #include "PokemonUIUtils.generated.h"
 
 class UProgressBar;
