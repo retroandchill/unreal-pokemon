@@ -6,6 +6,7 @@
 #include "Screens/Screen.h"
 #include "PauseMenuScreen.generated.h"
 
+class UCommand;
 class UCommandWindow;
 /**
  * Basic Pokémon pause menu screen
@@ -19,6 +20,14 @@ protected:
 	
 	
 private:
+	/**
+	 * Process the selected command
+	 * @param CurrentIndex The index of the command
+	 * @param SelectedCommand The command in question
+	 */
+	UFUNCTION()
+	void ProcessCommand(int32 CurrentIndex, UCommand* SelectedCommand);
+	
 	/**
 	 * The command window that is displayed to the player
 	 */

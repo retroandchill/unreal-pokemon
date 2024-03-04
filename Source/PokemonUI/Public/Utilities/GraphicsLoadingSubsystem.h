@@ -15,6 +15,8 @@ class POKEMONUI_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
 	GENERATED_BODY()
 
 public:
+	void Initialize(FSubsystemCollectionBase& Collection) override;
+	
 	/**
 	 * Get the icon based upon the Pokémon that was passed in.
 	 * @param Pokemon The Pokémon to get the icon for

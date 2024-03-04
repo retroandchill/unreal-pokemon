@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Command.generated.h"
 
+class ARPGPlayerController;
 /**
  * The struct that holds the command information
  */
@@ -39,6 +40,13 @@ public:
 	 * @return The created command
 	 */
 	static UCommand* CreateBasicCommand(const FText &Text);
+
+	/**
+	 * Execute any special effects that this command may have associated with it
+	 * @param Controller The player controller used to execute any processing
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Events)
+	void ExecuteCommand(ARPGPlayerController* Controller);
 	
 
 protected:

@@ -3,25 +3,30 @@
 
 #include "Managers/PokemonSubsystem.h"
 
+#include "PokemonCoreSettings.h"
 #include "Trainers/TrainerStub.h"
+
+UPokemonSubsystem *UPokemonSubsystem::Instance = nullptr;
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	Super::Initialize(Collection);
+
+	Instance = this;
+	auto Settings = GetDefault<UPokemonCoreSettings>();
+	HPStat = Settings->GetHPStat();
 	
 	// TODO: Swap this instantiation with the actual trainer instantiation
 	Player = MakeUnique<FTrainerStub>();
 }
 
+void UPokemonSubsystem::Deinitialize() {
+	Super::Deinitialize();
+	Instance = nullptr;
+}
+
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
-	check(GEngine != nullptr);
-	
-	auto World = GEngine->GetWorld();
-	check(World != nullptr);
-	
-	auto GameInstance = World->GetGameInstance();
-	check(GameInstance != nullptr);
-	
-	return *GameInstance->GetSubsystem<UPokemonSubsystem>();
+	check(Instance != nullptr);
+	return *Instance;
 }
 
 FName UPokemonSubsystem::GetHPStat() const {

@@ -40,6 +40,7 @@ FText UDisplayText::GetText() const {
 }
 
 void UDisplayText::SetText(const FText& NewText) {
+	InitialText = NewText;
 	if (DisplayTextWidget != nullptr) {
 		DisplayTextWidget->SetText(NewText);
 		

@@ -7,18 +7,24 @@
 #include "PokemonCore/Public/Pokemon/Pokemon.h"
 #include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
+#include "Windows/SelectableWidget.h"
+
+void UPokemonPanel::SetOwner(USelectableWidget* NewOwner) {
+	Owner = NewOwner;
+}
 
 const TSharedPtr<IPokemon>& UPokemonPanel::GetPokemon() {
 	return Pokemon;
 }
 
-void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon) {
+void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index) {
 	Pokemon = MoveTemp(NewPokemon);
+	MenuIndex = Index;
 }
 
 bool UPokemonPanel::IsActive() const {
-	// TODO: Actually implement the functionality for this
-	return false;
+	// TODO: There's a bit more to this I think, but for now this will work
+	return MenuIndex == 0;
 }
 
 bool UPokemonPanel::IsPokemonFainted() const {
@@ -26,8 +32,7 @@ bool UPokemonPanel::IsPokemonFainted() const {
 }
 
 bool UPokemonPanel::IsPanelSelected() const {
-	// TODO: Actually implement the functionality for this
-	return false;
+	return Owner != nullptr && Owner->GetIndex() == MenuIndex;
 }
 
 bool UPokemonPanel::IsSwapping() const {

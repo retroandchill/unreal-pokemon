@@ -3,9 +3,17 @@
 
 #include "Utilities/GraphicsLoadingSubsystem.h"
 
+#include "PokemonUISettings.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Pokemon/Pokemon.h"
 #include "Species/SpeciesData.h"
+
+void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
+	Super::Initialize(Collection);
+
+	auto Settings = GetDefault<UPokemonUISettings>();
+	PokemonIconsPackageName = Settings->GetPokemonIconsPackageName();
+}
 
 UObject* UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon& Pokemon) {
 	return GetPokemonIcon(Pokemon.GetSpecies().ID);

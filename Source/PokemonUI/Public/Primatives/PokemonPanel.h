@@ -5,6 +5,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PokemonPanel.generated.h"
 
+class USelectableWidget;
+class UPokemonSelectionPane;
 class UProgressBar;
 class UImage;
 class UDisplayText;
@@ -19,6 +21,12 @@ class POKEMONUI_API UPokemonPanel : public UUserWidget {
 
 public:
 	/**
+	 * Set the widget that owns this one
+	 * @param NewOwner The new owner widget
+	 */
+	void SetOwner(USelectableWidget* NewOwner);
+	
+	/**
 	 * Get the Pokémon that this panel displays the information for
 	 * @return The Pokémon that this panel displays the information for
 	 */
@@ -27,8 +35,9 @@ public:
 	/**
 	 * Set the Pokémon for the panel setting how everything is displayed
 	 * @param NewPokemon The Pokémon to set this panel to
+	 * @param Index The index of this particular panel
 	 */
-	void SetPokemon(TSharedPtr<IPokemon> NewPokemon);
+	void SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index);
 
 	/**
 	* Returns if this panel represents a Pokémon that is currently active in battle
@@ -82,11 +91,21 @@ private:
 	 * Refresh all the information related to the Pokémon
 	 */
 	void RefreshPokemonInfo();
+
+	/**
+	 * The panel class that owns this one
+	 */
+	TObjectPtr<USelectableWidget> Owner;
 	
 	/**
 	 * The Pokémon reference that is currently being held onto
 	 */
 	TSharedPtr<IPokemon> Pokemon;
+
+	/**
+	 * The index of this particular panel
+	 */
+	int32 MenuIndex;
 
 	/**
 	 * The image that displays the icon of the Pokémon to the player

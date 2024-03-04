@@ -10,7 +10,7 @@ class UPokemonSelectionPane;
 /**
  * Screen for when the player needs to select a Pokémon from the menu
  */
-UCLASS()
+UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UPokemonSelectScreen : public UScreen {
 	GENERATED_BODY()
 

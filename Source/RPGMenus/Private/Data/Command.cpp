@@ -25,6 +25,10 @@ UCommand* UCommand::CreateBasicCommand(const FText& Text) {
 	return Command;
 }
 
+void UCommand::ExecuteCommand_Implementation(ARPGPlayerController* Controller) {
+	// No implementation in this class, this is simply used by the child classes to handle the effects
+}
+
 FText UCommand::GetOriginalText() const {
 	return Text;
 }
