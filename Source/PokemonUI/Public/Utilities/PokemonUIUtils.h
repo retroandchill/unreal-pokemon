@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Primatives/PokemonPanelState.h"
 #include "PokemonUIUtils.generated.h"
 
+class UProgressBar;
+class UDisplayText;
 /**
  * Blueprint function library for basic operations that the UI might require
  */
@@ -40,4 +43,27 @@ public:
 	 * @return The formatted number string
 	 */
 	static FString PadInt(int32 Value, int32 DesiredLength, TCHAR PaddingCharacter = TEXT('0'));
+
+	/**
+	 * Set the text for the item if it is not null
+	 * @param TextWidget The item to set the text of
+	 * @param Text The text to set everything to
+	 */
+	static void SetItemText(TObjectPtr<UDisplayText>& TextWidget, const FText &Text);
+
+	/**
+	 * Set the text for the item if it is not null
+	 * @param TextWidget The item to set the text of
+	 * @param Text The text to set everything to
+	 */
+	static void SetItemText(TObjectPtr<UDisplayText>& TextWidget, FStringView Text);
+
+	/**
+	 * Set the values in the given progres bar to percentage given the provided values
+	 * @param ProgressBar The progress bar to set the percent of
+	 * @param CurrentValue The current value
+	 * @param MaxValue The maximum value
+	 */
+	static void SetBarValues(TObjectPtr<UProgressBar>& ProgressBar, float CurrentValue, float MaxValue);
+	
 };

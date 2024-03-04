@@ -12,6 +12,7 @@ public class PokemonUI : ModuleRules
 			new string[]
 			{
 				"Core",
+				"PokemonCore",
 				"RPGMenus"
 			}
 		);

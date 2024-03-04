@@ -2,6 +2,7 @@
 #include "Pokemon/Stats/DefaultStatEntry.h"
 
 #include "DataManager.h"
+#include "Species/Stat.h"
 
 
 FDefaultStatEntry::FDefaultStatEntry(FName Stat, int32 IV, int32 EV) : StatID(Stat), IV(IV), EV(EV) {

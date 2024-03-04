@@ -4,6 +4,12 @@
 #include "CoreMinimal.h"
 #include "GenderRatio.generated.h"
 
+// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+/**
+ * The maximum chance of a Pokémon being female
+ */
+constexpr int32 FEMALE_CHANCE_MAX = 255;
+
 /**
  * Represents the Gender Ratio for a Specific Pokémon
  */
@@ -32,6 +38,7 @@ struct POKEMONDATA_API FGenderRatio : public FTableRowBase {
 	/**
 	 * The chance this species has of being female out of 255. (Ignored if "Is Genderless" is set to true)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gender Determination", meta = (UIMin = 0, ClampMin = 0, UIMax = 255, ClampMax = 255))
-	int32 FemaleChance;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gender Determination")
+	uint8 FemaleChance;
+	
 };

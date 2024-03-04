@@ -2,8 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Species/Nature.h"
-#include "Species/Stat.h"
+
+struct FStat;
+struct FNature;
 
 /**
  * Represents an individual stat entry on a Pokémon

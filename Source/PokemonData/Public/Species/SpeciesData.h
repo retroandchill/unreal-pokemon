@@ -7,6 +7,7 @@
 #include "UObject/Object.h"
 #include "SpeciesData.generated.h"
 
+struct FGenderRatio;
 /**
  * Represents an individual species object
  */
@@ -211,4 +212,10 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
 	TArray<FName> Tags;
+
+	/**
+	 * Get the Pokémon's gender ratio data
+	 * @return The gender ratio data of the Pokémon in question
+	 */
+	const FGenderRatio &GetGenderRatio() const;
 };

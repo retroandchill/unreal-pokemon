@@ -3,6 +3,9 @@
 
 #include "Utilities/PokemonUIUtils.h"
 
+#include "Components/ProgressBar.h"
+#include "Primatives/DisplayText.h"
+
 FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) {
 	return PadInt(Value, DesiredLength);
 }
@@ -24,4 +27,22 @@ FString UPokemonUIUtils::PadInt(int32 Value, int32 DesiredLength, TCHAR PaddingC
 
 	Output.Append(AsString);
 	return Output;
+}
+
+void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText>& TextWidget, const FText& Text) {
+	if (TextWidget == nullptr)
+		return;
+
+	TextWidget->SetText(Text);
+}
+
+void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText>& TextWidget, FStringView Text) {
+	SetItemText(TextWidget, FText::FromStringView(Text));
+}
+
+void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar>& ProgressBar, float CurrentValue, float MaxValue) {
+	if (ProgressBar == nullptr)
+		return;
+
+	ProgressBar->SetPercent(FMath::Clamp(CurrentValue / MaxValue, 0, 1));
 }

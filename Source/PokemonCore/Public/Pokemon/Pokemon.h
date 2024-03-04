@@ -3,8 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/Gender.h"
-#include "Species/SpeciesData.h"
 #include "Stats/StatBlock.h"
+
+struct FSpeciesData;
 
 /**
  * Abstract interface for a Pokémon object
@@ -42,6 +43,12 @@ public:
 	 * @return The current HP of this particular Pokémon
 	 */
 	virtual int32 GetMaxHP() const = 0;
+
+	/**
+	 * Returns if the Pokémon is currently fainted
+	 * @return Is the Pokémon currently fainted
+	 */
+	virtual bool IsFainted() const = 0;
 
 	/**
 	 * Get the stat information for this Pokémon

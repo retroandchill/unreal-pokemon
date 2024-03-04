@@ -4,29 +4,8 @@
 #include "Primatives/PokemonPanel.h"
 
 #include "PokemonCore/Public/Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
+#include "Primatives/PokemonPanelState.h"
 #include "Utilities/PokemonUIUtils.h"
-
-/**
- * Set the text for the item if it is not null
- * @param TextWidget The item to set the text of
- * @param Text The text to set everything to
- */
-void SetItemText(TObjectPtr<UDisplayText>& TextWidget, const FText &Text) {
-	if (TextWidget == nullptr)
-		return;
-
-	TextWidget->SetText(Text);
-}
-
-/**
- * Set the text for the item if it is not null
- * @param TextWidget The item to set the text of
- * @param Text The text to set everything to
- */
-void SetItemText(TObjectPtr<UDisplayText>& TextWidget, FStringView Text) {
-	SetItemText(TextWidget, FText::FromStringView(Text));
-}
 
 const TSharedPtr<IPokemon>& UPokemonPanel::GetPokemon() {
 	return Pokemon;
@@ -36,26 +15,52 @@ void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon) {
 	Pokemon = MoveTemp(NewPokemon);
 }
 
+bool UPokemonPanel::IsActive() const {
+	// TODO: Actually implement the functionality for this
+	return false;
+}
+
+bool UPokemonPanel::IsPokemonFainted() const {
+	return Pokemon != nullptr ? Pokemon->IsFainted() : false;
+}
+
+bool UPokemonPanel::IsPanelSelected() const {
+	// TODO: Actually implement the functionality for this
+	return false;
+}
+
+bool UPokemonPanel::IsSwapping() const {
+	// TODO: Actually implement the functionality for this
+	return false;
+}
+
+bool UPokemonPanel::IsPreselected() const {
+	// TODO: Actually implement the functionality for this
+	return false;
+}
+
 void UPokemonPanel::Refresh() {
+	RefreshVisuals();
 	if (Pokemon != nullptr) {
 		RefreshPokemonInfo();
 	}
+	
 }
 
 void UPokemonPanel::RefreshPokemonInfo() {
-	SetItemText(NameText, Pokemon->GetName());
-	SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock().GetLevel()));
+	UPokemonUIUtils::SetItemText(NameText, Pokemon->GetName());
+	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock().GetLevel()));
 
 	// TODO: Change the text color depending on the gender
 	switch (Pokemon->GetGender()) {
 	case EGender::Male:
-		SetItemText(GenderText, TEXT("♂"));
+		UPokemonUIUtils::SetItemText(GenderText, TEXT("♂"));
 		break;
 	case EGender::Female:
-		SetItemText(GenderText, TEXT("♀"));
+		UPokemonUIUtils::SetItemText(GenderText, TEXT("♀"));
 		break;
 	case EGender::Genderless:
-		SetItemText(GenderText, TEXT(""));
+		UPokemonUIUtils::SetItemText(GenderText, TEXT(""));
 		break;
 	}
 
@@ -64,5 +69,6 @@ void UPokemonPanel::RefreshPokemonInfo() {
 		{TEXT("MaxHP"), UPokemonUIUtils::SpacePad(Pokemon->GetMaxHP(), 3)}
 	}));
 
-	SetItemText(HPText, HP);
+	UPokemonUIUtils::SetItemText(HPText, HP);
+	UPokemonUIUtils::SetBarValues(HPBar, Pokemon->GetCurrentHP(), Pokemon->GetMaxHP());
 }
