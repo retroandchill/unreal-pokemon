@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PokemonUIUtils.generated.h"
 
+struct FTextColor;
 class UProgressBar;
 class UDisplayText;
 /**
@@ -56,6 +57,13 @@ public:
 	 * @param Text The text to set everything to
 	 */
 	static void SetItemText(TObjectPtr<UDisplayText>& TextWidget, FStringView Text);
+
+	/**
+	 * Set the color of the text if it is not null
+	 * @param TextWidget The item to set the color of
+	 * @param Color The color to set everything to
+	 */
+	static void SetItemTextColor(TObjectPtr<UDisplayText>& TextWidget, const FTextColor &Color);
 
 	/**
 	 * Set the values in the given progres bar to percentage given the provided values

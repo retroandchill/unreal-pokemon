@@ -27,7 +27,7 @@ protected:
 	 * @return The X and Y coordinates to place the panel in
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Placement")
-	FVector2D GetPanelOffset(int32 PanelIndex);
+	FMargin GetPanelOffset(int32 PanelIndex);
 
 private:
 	/**

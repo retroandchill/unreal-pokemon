@@ -5,6 +5,8 @@
 
 #include "Components/ProgressBar.h"
 #include "Primatives/DisplayText.h"
+#include "Text/ShadowedText.h"
+#include "Text/TextColor.h"
 
 FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) {
 	return PadInt(Value, DesiredLength);
@@ -38,6 +40,17 @@ void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText>& TextWidget, const FT
 
 void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText>& TextWidget, FStringView Text) {
 	SetItemText(TextWidget, FText::FromStringView(Text));
+}
+
+void UPokemonUIUtils::SetItemTextColor(TObjectPtr<UDisplayText>& TextWidget, const FTextColor &Color) {
+	if (TextWidget == nullptr)
+		return;
+
+	TextWidget->SetTextColor(Color.MainColor);
+
+	if (auto ShadowedText = Cast<UShadowedText>(TextWidget); ShadowedText != nullptr) {
+		ShadowedText->SetShadowColor(Color.ShadowColor);
+	}
 }
 
 void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar>& ProgressBar, float CurrentValue, float MaxValue) {

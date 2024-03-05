@@ -57,6 +57,13 @@ const FSlateFontInfo& UDisplayText::GetDisplayFont() const {
 	return DisplayFont;
 }
 
+void UDisplayText::SetTextColor(const FSlateColor& Color) {
+	TextColor = Color;
+	
+	check(DisplayTextWidget != nullptr);
+	DisplayTextWidget->SetColorAndOpacity(TextColor);
+}
+
 FVector2D UDisplayText::GetTextSize() const {
 	check(DisplayTextWidget != nullptr);
 	return GetTextSize(DisplayTextWidget->GetText().ToString());

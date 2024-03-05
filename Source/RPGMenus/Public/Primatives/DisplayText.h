@@ -54,6 +54,13 @@ public:
 	const FSlateFontInfo& GetDisplayFont() const;
 
 	/**
+	 * Set the color of the text to the given new color
+	 * @param Color The new color for the text
+	 */
+	UFUNCTION(BlueprintCallable, Category = Display, meta = (BlueprintInternalUseOnly="true"))
+	void SetTextColor(const FSlateColor& Color);
+
+	/**
 	 * Get the size of the current text contained within this widget
 	 * @return The size of the current text
 	 */
@@ -118,6 +125,6 @@ private:
 	/**
 	 * The color of the text to display
 	 */
-	UPROPERTY(EditAnywhere, Category = Display)
+	UPROPERTY(EditAnywhere, BlueprintSetter=SetTextColor, Category = Display)
 	FSlateColor TextColor;
 };

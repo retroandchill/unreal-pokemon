@@ -10,7 +10,7 @@ class IPokemon;
 /**
  * Subsystem designed to handle the loading of graphical assets into memory
  */
-UCLASS(Abstract, Blueprintable)
+UCLASS()
 class POKEMONUI_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
 	GENERATED_BODY()
 

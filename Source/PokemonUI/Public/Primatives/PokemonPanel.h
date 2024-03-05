@@ -3,6 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Pokemon/Breeding/Gender.h"
+#include "Text/TextColor.h"
 #include "PokemonPanel.generated.h"
 
 class USelectableWidget;
@@ -136,6 +138,12 @@ private:
 	 */
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UDisplayText> GenderText;
+
+	/**
+	 * The color settings for the gender text widget
+	 */
+	UPROPERTY(EditAnywhere, Category = "Visuals|Text")
+	TMap<EGender, FTextColor> GenderTextColors;
 
 	/**
 	 * The text block that displays the current and total HP of the Pokémon

@@ -20,6 +20,7 @@ const TSharedPtr<IPokemon>& UPokemonPanel::GetPokemon() {
 void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index) {
 	Pokemon = MoveTemp(NewPokemon);
 	MenuIndex = Index;
+	Refresh();
 }
 
 bool UPokemonPanel::IsActive() const {
@@ -65,7 +66,8 @@ void UPokemonPanel::RefreshPokemonInfo() {
 	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock().GetLevel()));
 
 	// TODO: Change the text color depending on the gender
-	switch (Pokemon->GetGender()) {
+	auto Gender = Pokemon->GetGender();
+	switch (Gender) {
 	case EGender::Male:
 		UPokemonUIUtils::SetItemText(GenderText, TEXT("♂"));
 		break;
@@ -75,6 +77,10 @@ void UPokemonPanel::RefreshPokemonInfo() {
 	case EGender::Genderless:
 		UPokemonUIUtils::SetItemText(GenderText, TEXT(""));
 		break;
+	}
+	
+	if (GenderTextColors.Contains(Gender)) {
+		UPokemonUIUtils::SetItemTextColor(GenderText, GenderTextColors[Gender]);
 	}
 
 	auto HP = FString::Format(TEXT("{CurrentHP} /{MaxHP}"), FStringFormatNamedArguments({

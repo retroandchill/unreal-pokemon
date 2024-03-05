@@ -18,14 +18,33 @@ protected:
 public:
 	void OnTextSet_Implementation(const FText& Text) override;
 
+	/**
+	 * Get the first text shadow to display
+	 * @return The first text shadow to display
+	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock* GetShadow1() const;
 
+	/**
+	 * Get the second text shadow to display
+	 * @return The second text shadow to display
+	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock* GetShadow2() const;
 
+	/**
+	 * Get the third text shadow to display
+	 * @return The third text shadow to display
+	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
 	UTextBlock* GetShadow3() const;
+
+	/**
+	 * Set the color of the text's shadow
+	 * @param Color The new shadow color
+	 */
+	UFUNCTION(BlueprintCallable, Category = Display, meta=(BlueprintInternalUseOnly="true"))
+	void SetShadowColor(const FSlateColor& Color);
 
 private:
 	/**
@@ -62,6 +81,6 @@ private:
 	/**
 	 * The color to set for the shadow text
 	 */
-	UPROPERTY(EditAnywhere, Category = Display)
+	UPROPERTY(EditAnywhere, BlueprintSetter=SetShadowColor, Category = Display)
 	FSlateColor ShadowColor;
 };

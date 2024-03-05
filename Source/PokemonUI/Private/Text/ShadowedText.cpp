@@ -28,6 +28,13 @@ UTextBlock* UShadowedText::GetShadow3() const {
 	return Shadow3;
 }
 
+void UShadowedText::SetShadowColor(const FSlateColor& Color) {
+	ShadowColor = Color;
+	SetShadowTextAndFont(Shadow1);
+	SetShadowTextAndFont(Shadow2);
+	SetShadowTextAndFont(Shadow3);
+}
+
 void UShadowedText::SetShadowTextAndFont(UTextBlock* Shadow) {
 	if (Shadow != nullptr) {
 		Shadow->SetText(GetText());
