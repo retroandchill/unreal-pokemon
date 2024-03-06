@@ -28,17 +28,19 @@ int32 USelectableWidget::GetIndex() const {
 void USelectableWidget::SetIndex(int32 NewIndex) {
 	if (Index == NewIndex)
 		return;
-	
+
+	int32 OldIndex = Index;
 	Index = FMath::Clamp(NewIndex, -1, GetItemCount() - 1);
-	OnSelectionChange(Index);
+	OnSelectionChange(OldIndex, Index);
 }
 
 void USelectableWidget::Deselect() {
 	if (Index == -1)
 		return;
 	
+	int32 OldIndex = Index;
 	Index = -1;
-	OnSelectionChange(Index);
+	OnSelectionChange(OldIndex, Index);
 }
 
 bool USelectableWidget::IsActive() const {
@@ -74,7 +76,7 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKe
 	return bHandled ? FReply::Handled() : FReply::Unhandled();
 }
 
-void USelectableWidget::OnSelectionChange_Implementation(int32 NewIndex) {
+void USelectableWidget::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
 	// No implementation, but we cannot have an abstract method in an Unreal class
 }
 

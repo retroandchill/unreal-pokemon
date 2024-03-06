@@ -20,4 +20,29 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, DisplayName = "Get Widget DPI Scale", Category = "UMG|Scaling")
 	static float GetWidgetDPIScale();
+
+	/**
+	 * Get the desired size of a brush based on its input image. Defaults to the user-defined size if another size
+	 * cannot be found.
+	 * @param Brush The brush in question to get the size of
+	 * @return The desired size. 
+	 */
+	UFUNCTION(BlueprintPure, Category = "Slate|Images")
+	static FVector2D GetDesiredBrushSize(const FSlateBrush &Brush);
+
+	/**
+	 * Get the desired size of a texture asset based on the width and height of the source image.
+	 * @param Texture The source texture
+	 * @return The desired size. 
+	 */
+	UFUNCTION(BlueprintPure, Category = "Slate|Images")
+	static FVector2D GetDesiredTextureSize(UTexture2D *Texture);
+
+	/**
+	 * Set the size of the brush to the desired size, keeping all other elements the same
+	 * @param Brush The size of the brush in question
+	 * @param NewSize The new size of the brush to set
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Slate|Images")
+	static void ChangeBrushSize(UPARAM(Ref) FSlateBrush &Brush, FVector2D NewSize);
 };

@@ -63,7 +63,7 @@ public:
 	FProcessCommand OnCommandSelected;
 
 protected:
-	void OnSelectionChange_Implementation(int32 NewIndex) override;
+	void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 	void ProcessConfirm_Implementation(int32 CurrentIndex) override;
 
 private:

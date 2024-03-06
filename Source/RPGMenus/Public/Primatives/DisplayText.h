@@ -44,6 +44,7 @@ public:
 	 * Set the display text for this widget
 	 * @param NewText The new display text for the widget
 	 */
+	UFUNCTION(BlueprintCallable, Category = Display)
 	void SetText(const FText& NewText);
 
 	/**

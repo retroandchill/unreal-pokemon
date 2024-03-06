@@ -14,7 +14,8 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UPokemonSelectScreen : public UScreen {
 	GENERATED_BODY()
 
-public:
+protected:
+	void NativeConstruct() override;
 
 private:
 	/**

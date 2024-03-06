@@ -17,7 +17,7 @@ UCommandWindow::UCommandWindow(const FObjectInitializer& ObjectInitializer) : US
 TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
 	auto Original = USelectableWidget::RebuildWidget();
 	AddCommands();
-	OnSelectionChange(GetIndex());
+	OnSelectionChange(GetIndex(), GetIndex());
 	OnActiveChanged(IsActive());
 	SetScrollArrowsVisible();
 	return Original;
@@ -86,7 +86,7 @@ void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>>&& NewCommands) {
 	RebuildWidget();
 }
 
-void UCommandWindow::OnSelectionChange_Implementation(int32 NewIndex) {
+void UCommandWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
 	if (CursorWidget == nullptr)
 		return;
 	

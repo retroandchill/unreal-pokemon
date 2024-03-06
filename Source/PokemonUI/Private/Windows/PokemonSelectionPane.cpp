@@ -4,8 +4,10 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/WidgetSwitcher.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Primatives/PokemonPanel.h"
+#include "Primatives/PartySelectCancelPanel.h"
 
 void UPokemonSelectionPane::NativeConstruct() {
 	Super::NativeConstruct();
@@ -13,21 +15,46 @@ void UPokemonSelectionPane::NativeConstruct() {
 	check(ContentsArea != nullptr);
 	auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
 	auto &PlayerParty = PokemonSubsystem.GetPlayer().GetParty();
-	
+
+	ActivePanels.Empty();
 	for (int32 i = 0; i < PlayerParty.Num(); i++) {
 		auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass);
 		NewWidget->SetOwner(this);
 		NewWidget->SetPokemon(PlayerParty[i], i);
 		auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
 		PanelSlot->SetOffsets(GetPanelOffset(i));
+		ActivePanels.Add(NewWidget);
+	}
+
+	MultiSelectConfirmPanel->SetOwner(this);
+	MultiSelectCancelPanel->SetOwner(this);
+	CancelPanel->SetOwner(this);
+
+	if (bMultiSelectMode) {
+		ConfirmCancelSwitcher->SetActiveWidgetIndex(1);
+		AddAdditionalPanelToOptions(MultiSelectConfirmPanel);
+		AddAdditionalPanelToOptions(MultiSelectCancelPanel);
+	} else {
+		ConfirmCancelSwitcher->SetActiveWidgetIndex(0);
+		AddAdditionalPanelToOptions(CancelPanel);
 	}
 }
 
 int32 UPokemonSelectionPane::GetItemCount_Implementation() const {
-	auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
-	return PokemonSubsystem.GetPlayer().GetParty().Num();
+	return ActivePanels.Num();
 }
 
 int32 UPokemonSelectionPane::GetColumnCount_Implementation() const {
 	return Columns;
+}
+
+void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
+	for (ISelectablePanel* Panel : ActivePanels) {
+		Panel->Refresh();
+	}
+}
+
+void UPokemonSelectionPane::AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel> &Panel) {
+	Panel->SetMenuIndex(ActivePanels.Num());
+	ActivePanels.Add(Panel);
 }

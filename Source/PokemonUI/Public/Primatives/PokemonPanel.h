@@ -2,6 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Refreshable.h"
+#include "SelectablePanel.h"
 #include "Blueprint/UserWidget.h"
 #include "Pokemon/Breeding/Gender.h"
 #include "Text/TextColor.h"
@@ -18,15 +20,11 @@ class IPokemon;
  * Widget for housing a single panel of a Pokémon
  */
 UCLASS()
-class POKEMONUI_API UPokemonPanel : public UUserWidget {
+class POKEMONUI_API UPokemonPanel : public UUserWidget, public ISelectablePanel {
 	GENERATED_BODY()
 
 public:
-	/**
-	 * Set the widget that owns this one
-	 * @param NewOwner The new owner widget
-	 */
-	void SetOwner(USelectableWidget* NewOwner);
+	void SetOwner(USelectableWidget* NewOwner) override;
 	
 	/**
 	 * Get the Pokémon that this panel displays the information for
@@ -75,13 +73,10 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "User Interface|Visuals")
 	bool IsPreselected() const;
+	
+	void Refresh() override;
 
 protected:
-	/**
-	 * Refresh the contents of the window setting the values where appropriate
-	 */
-	void Refresh();
-
 	/**
 	 * Set the Blueprint specific details of the widget based on the information from the state of the Pokémon
 	 */

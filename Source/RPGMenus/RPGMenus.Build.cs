@@ -27,7 +27,8 @@ public class RPGMenus : ModuleRules
 				"BlueprintGraph",
 				"KismetCompiler",
 				"UnrealEd",
-				"CommonMath"
+				"CommonMath", 
+				"Paper2D"
 			}
 		);
 	}

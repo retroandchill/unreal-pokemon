@@ -108,10 +108,11 @@ protected:
 	
 	/**
 	 * Called when the selection is changed
+	 * @param OldIndex The previous index of this widget
 	 * @param NewIndex The new index to select to
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Selection)
-	void OnSelectionChange(int32 NewIndex);
+	void OnSelectionChange(int32 OldIndex, int32 NewIndex);
 
 	/**
 	 * Called when the active state is changed
