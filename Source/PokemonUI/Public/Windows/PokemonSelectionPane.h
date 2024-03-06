@@ -23,6 +23,13 @@ public:
 	int32 GetItemCount_Implementation() const override;
 	int32 GetColumnCount_Implementation() const override;
 
+	/**
+	 * Is this panel currently in multi-select mode?
+	 * @return Is this panel in single select mode or multi-select mode?
+	 */
+	UFUNCTION(BlueprintPure, Category = Display, meta = (BlueprintInternalUseOnly))
+	bool IsMultiSelectMode() const;
+
 protected:
 	/**
 	 * Get the location in the grid to place the panel in
@@ -92,6 +99,6 @@ private:
 	/**
 	 * Is this panel being used to select multiple Pokémon or just one?
 	 */
-	UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin =1))
+	UPROPERTY(EditAnywhere, BlueprintGetter=IsMultiSelectMode, Category = Display, meta = (UIMin = 1, ClampMin =1))
 	bool bMultiSelectMode = false;
 };

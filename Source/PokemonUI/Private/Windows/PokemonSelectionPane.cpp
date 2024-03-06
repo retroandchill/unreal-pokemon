@@ -48,6 +48,10 @@ int32 UPokemonSelectionPane::GetColumnCount_Implementation() const {
 	return Columns;
 }
 
+bool UPokemonSelectionPane::IsMultiSelectMode() const {
+	return bMultiSelectMode;
+}
+
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
 	for (ISelectablePanel* Panel : ActivePanels) {
 		Panel->Refresh();

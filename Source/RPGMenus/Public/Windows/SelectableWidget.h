@@ -65,6 +65,22 @@ public:
 	int32 GetIndex() const;
 
 	/**
+	 * Convenience method to get the row of a given index.
+	 * @param IndexToCheck The index to get the row of.
+	 * @return The row that index resides in.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
+	int32 GetRow(int32 IndexToCheck);
+
+	/**
+	 * Convenience method to get the row of a given index.
+	 * @param IndexToCheck The index to get the row of.
+	 * @return The row that index resides in.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
+	int32 GetColumn(int32 IndexToCheck);
+
+	/**
 	 * Set the current index of the menu
 	 * @param NewIndex The current selection index of the menu
 	 */
@@ -135,7 +151,14 @@ protected:
 	void ProcessCancel();
 
 	void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
-	
+
+	/**
+	 * Process the procedure for handling when the cursor moves
+	 * @param Direction The direction the cursor should move in
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Selection)
+	int32 GetNextIndex(ECursorDirection Direction);
+
 private:
 	/**
 	 * Function called when the cursor is moved

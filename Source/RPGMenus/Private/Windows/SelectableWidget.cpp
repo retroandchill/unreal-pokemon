@@ -25,6 +25,14 @@ int32 USelectableWidget::GetIndex() const {
 	return Index;
 }
 
+int32 USelectableWidget::GetRow(int32 IndexToCheck) {
+	return IndexToCheck / GetRowCount();
+}
+
+int32 USelectableWidget::GetColumn(int32 IndexToCheck) {
+	return IndexToCheck % GetRowCount();
+}
+
 void USelectableWidget::SetIndex(int32 NewIndex) {
 	if (Index == NewIndex)
 		return;
@@ -102,10 +110,7 @@ void USelectableWidget::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 	}
 }
 
-void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
-	if (!IsActive())
-		return;
-
+int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction) {
 	int32 NewIndex = GetIndex();
 	int32 ItemCount = GetItemCount();
 	switch (Direction) {
@@ -132,5 +137,12 @@ void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
 		break;
 	}
 
-	SetIndex(NewIndex);
+	return NewIndex;
+}
+
+void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
+	if (!IsActive())
+		return;
+	
+	SetIndex(GetNextIndex(Direction));
 }
