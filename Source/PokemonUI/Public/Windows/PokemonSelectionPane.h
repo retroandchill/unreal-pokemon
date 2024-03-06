@@ -27,8 +27,15 @@ public:
 	 * Is this panel currently in multi-select mode?
 	 * @return Is this panel in single select mode or multi-select mode?
 	 */
-	UFUNCTION(BlueprintPure, Category = Display, meta = (BlueprintInternalUseOnly))
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Display)
 	bool IsMultiSelectMode() const;
+
+	/**
+	 * Toggle whether the bottom commands should be visible or not
+	 * @param bIsVisible Should the elements be visible
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Display)
+	void ToggleCommandVisibility(bool bIsVisible);
 
 protected:
 	/**
@@ -83,6 +90,12 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Display)
 	TSubclassOf<UPokemonPanel> PanelClass;
+
+	/**
+	 * The class used for the blank panels used to fill space
+	 */
+	UPROPERTY(EditAnywhere, Category = Display)
+	TSubclassOf<UWidget> BlankPanelClass;
 
 	/**
 	 * The list of panels being displayed by this widget

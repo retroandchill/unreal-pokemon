@@ -18,8 +18,15 @@ public:
 	 * The the ID of the HP stat
 	 * @return The stat used referring to a Pokémon's HP
 	 */
-	UFUNCTION(BlueprintPure, Category = "Display Names", meta = (BlueprintInternalUseOnly))
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
 	FName GetHPStat() const;
+
+	/**
+	 * The maximum number of Pokémon a trainer can carry at any given time
+	 * @return The maximum number of Pokémon a trainer can carry at any given time
+	 */
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
+	int32 GetMaxPartySize() const;
 
 private:
 	/**
@@ -27,4 +34,10 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintGetter=GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names")
 	FName HPStat;
+
+	/**
+	 * The maximum number of Pokémon a trainer can carry at any given time
+	 */
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetMaxPartySize, Config, Category = Party, meta = (UIMin = 1, ClampMin = 1))
+	int32 MaxPartySize;
 };

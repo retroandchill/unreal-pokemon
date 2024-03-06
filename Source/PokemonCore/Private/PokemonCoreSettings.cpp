@@ -6,3 +6,7 @@
 FName UPokemonCoreSettings::GetHPStat() const {
 	return HPStat;
 }
+
+int32 UPokemonCoreSettings::GetMaxPartySize() const {
+	return MaxPartySize;
+}

@@ -14,6 +14,7 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	Instance = this;
 	auto Settings = GetDefault<UPokemonCoreSettings>();
 	HPStat = Settings->GetHPStat();
+	MaxPartySize = Settings->GetMaxPartySize();
 	
 	// TODO: Swap this instantiation with the actual trainer instantiation
 	Player = MakeUnique<FTrainerStub>();
@@ -31,6 +32,10 @@ UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
 
 FName UPokemonSubsystem::GetHPStat() const {
 	return HPStat;
+}
+
+int32 UPokemonSubsystem::GetMaxPartySize() const {
+	return MaxPartySize;
 }
 
 ITrainer& UPokemonSubsystem::GetPlayer() {

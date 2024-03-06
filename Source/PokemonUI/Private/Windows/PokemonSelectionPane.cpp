@@ -17,13 +17,19 @@ void UPokemonSelectionPane::NativeConstruct() {
 	auto &PlayerParty = PokemonSubsystem.GetPlayer().GetParty();
 
 	ActivePanels.Empty();
-	for (int32 i = 0; i < PlayerParty.Num(); i++) {
-		auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass);
-		NewWidget->SetOwner(this);
-		NewWidget->SetPokemon(PlayerParty[i], i);
-		auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
-		PanelSlot->SetOffsets(GetPanelOffset(i));
-		ActivePanels.Add(NewWidget);
+	for (int32 i = 0; i < PokemonSubsystem.GetMaxPartySize(); i++) {
+		if (i < PlayerParty.Num()) {
+			auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass);
+			NewWidget->SetOwner(this);
+			NewWidget->SetPokemon(PlayerParty[i], i);
+			auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
+			PanelSlot->SetOffsets(GetPanelOffset(i));
+			ActivePanels.Add(NewWidget);
+		} else {
+			auto NewWidget = WidgetTree->ConstructWidget<UWidget>(BlankPanelClass);
+			auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
+			PanelSlot->SetOffsets(GetPanelOffset(i));
+		}
 	}
 
 	MultiSelectConfirmPanel->SetOwner(this);
