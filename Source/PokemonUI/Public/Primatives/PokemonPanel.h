@@ -19,7 +19,7 @@ class IPokemon;
 /**
  * Widget for housing a single panel of a Pokémon
  */
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UPokemonPanel : public UUserWidget, public ISelectablePanel {
 	GENERATED_BODY()
 

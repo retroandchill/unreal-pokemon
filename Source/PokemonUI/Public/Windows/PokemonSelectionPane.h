@@ -14,7 +14,7 @@ class UPokemonPanel;
 /**
  * Pane used to select Pokémon from in a grid based format
  */
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
 	GENERATED_BODY()
 

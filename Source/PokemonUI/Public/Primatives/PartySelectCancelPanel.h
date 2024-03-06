@@ -10,7 +10,7 @@
 /**
  * The panel for the cancel options in the window.
  */
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UPartySelectCancelPanel : public UUserWidget, public ISelectablePanel {
 	GENERATED_BODY()
 
