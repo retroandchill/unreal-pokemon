@@ -77,3 +77,5 @@ DerivedDataCache/*
 *.uproject.DotSettings.user
 /CMakeLists.txt
 /cmake-build-debug
+/codecoverage
+LastCoverageResults.log

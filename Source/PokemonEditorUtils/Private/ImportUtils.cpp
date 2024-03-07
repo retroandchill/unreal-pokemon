@@ -1,17 +1,7 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #include "ImportUtils.h"
+
+#include "DesktopPlatformModule.h"
 
 TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* DataTable) {
 	TArray<FStat*> References;
@@ -25,4 +15,20 @@ TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* DataTable) {
 	}
 
 	return Ret;
+}
+
+FText UImportUtils::SelectFile(const FString& FileTypes) {
+	auto DesktopPlatform = FDesktopPlatformModule::Get();
+	if (DesktopPlatform == nullptr) {
+		return FText::FromStringView(TEXT(""));
+	}
+
+	auto WindowHandle = FSlateApplication::Get().FindBestParentWindowHandleForDialogs(nullptr);
+	TArray<FString> SelectedFiles;
+	DesktopPlatform->OpenFileDialog(WindowHandle, TEXT("Select a File"), FPaths::GetProjectFilePath(), TEXT(""), FileTypes, EFileDialogFlags::None, SelectedFiles);
+	if (SelectedFiles.IsEmpty()) {
+		return FText::FromStringView(TEXT(""));
+	}
+	
+	return FText::FromStringView(SelectedFiles[0]);
 }

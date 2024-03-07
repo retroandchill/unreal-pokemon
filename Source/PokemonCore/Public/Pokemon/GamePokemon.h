@@ -1,21 +1,11 @@
-//====================================================================================================================
-// ** Unreal Pokémon created by Retro & Chill
-//--------------------------------------------------------------------------------------------------------------------
-// This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-// from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-// property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-//--------------------------------------------------------------------------------------------------------------------
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//====================================================================================================================
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Pokemon.h"
 #include "Stats/StatBlock.h"
+
+struct FSpeciesData;
 
 /**
  * Basic Pokémon class that holds all of the information for a complete Pokémon
@@ -29,7 +19,12 @@ public:
 	 */
 	explicit FGamePokemon(FName Species, int32 Level = 5);
 	
+	FText GetName() const override;
 	const FSpeciesData& GetSpecies() const override;
+	EGender GetGender() const override;
+	int32 GetCurrentHP() const override;
+	int32 GetMaxHP() const override;
+	bool IsFainted() const override;
 	const IStatBlock& GetStatBlock() const override;
 
 private:
@@ -38,5 +33,29 @@ private:
 	 */
 	FName Species;
 
+	/**
+	 * The internal personality value of the Pokémon. Determines the default values of various aspects of the
+	 * Pokémon if the values are not already set.
+	 */
+	uint32 PersonalityValue;
+	
+	/**
+	 * The nickname assigned to the Pokémon. Uses the species name if empty.
+	 */
+	TOptional<FText> Nickname;
+
+	/**
+	 * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
+	 */
+	TOptional<EGender> Gender;
+
+	/**
+	 * The current amount of HP this Pokémon has
+	 */
+	int32 CurrentHP;
+
+	/**
+	 * The handler for calculating stats
+	 */
 	TUniquePtr<IStatBlock> StatBlock;
 };
