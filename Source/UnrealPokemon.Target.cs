@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
+using System.Linq;
 using UnrealBuildTool;
 
 public class UnrealPokemonTarget : TargetRules
@@ -11,6 +12,7 @@ public class UnrealPokemonTarget : TargetRules
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 		ExtraModuleNames.Add("UnrealPokemon");
 		RegisterModulesCreatedByRider();
+		AdditionalCompilerArguments += " -fprofile-instr-generate -fcoverage-mapping";
 	}
 
 	private void RegisterModulesCreatedByRider()

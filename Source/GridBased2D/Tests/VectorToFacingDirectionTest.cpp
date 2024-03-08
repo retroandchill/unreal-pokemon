@@ -6,7 +6,7 @@
 #include "GridUtils.h"
 #include "Characters/FacingDirection.h"
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(VectorToFacingDirectionTest, "Tests.VectorToFacingDirectionTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(VectorToFacingDirectionTest, "Project.Movement.VectorToFacingDirectionTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void VectorToFacingDirectionTest::GetTests(TArray<FString>& OutBeautifiedNames,
