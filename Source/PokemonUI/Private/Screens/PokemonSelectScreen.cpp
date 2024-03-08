@@ -14,6 +14,7 @@ void UPokemonSelectScreen::NativeConstruct() {
 	SelectionPane->SetActive(true);
 	SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
 	SelectionPane->OnCancel.AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
+	CommandWindow->OnCancel.AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
 	ToggleCommandWindowVisibility(false);
 	
 }
@@ -38,6 +39,12 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 	} else {
 		// TODO: Handle the additional options
 	}
+}
+
+void UPokemonSelectScreen::OnCommandWindowCancel() {
+	ToggleCommandWindowVisibility(false);
+	CommandWindow->SetActive(false);
+	SelectionPane->SetActive(true);
 }
 
 void UPokemonSelectScreen::ToggleCommandWindowVisibility(bool bIsVisible) {

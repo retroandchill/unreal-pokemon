@@ -18,7 +18,6 @@ class POKEMONUI_API UPauseMenuScreen : public UScreen {
 protected:
 	void NativePreConstruct() override;
 	
-	
 private:
 	/**
 	 * Process the selected command

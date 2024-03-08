@@ -53,7 +53,7 @@ UScreen* ARPGPlayerController::RemoveScreenFromStack() {
 	}
 
 	UScreen *NewTop = ScreenStack.Top();
-	NewTop->SetKeyboardFocus();
+	NewTop->GiveMenuFocus();
 	return NewTop;
 }
 

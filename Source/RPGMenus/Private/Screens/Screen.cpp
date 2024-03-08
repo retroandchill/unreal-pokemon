@@ -24,6 +24,22 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
 	return Ret;
 }
 
+bool UScreen::GiveMenuFocus() {
+	bool FocusGranted = false;
+	WidgetTree->ForWidgetAndChildren(WidgetTree->RootWidget, [&FocusGranted](UWidget *Widget) {
+		auto SelectableWidget = Cast<USelectableWidget>(Widget);
+		if (SelectableWidget == nullptr)
+			return;
+
+		if (SelectableWidget->IsActive()) {
+			FocusGranted = true;
+			SelectableWidget->SetKeyboardFocus();
+		}
+	});
+
+	return FocusGranted;
+}
+
 void UScreen::CloseScreen() {
 	auto RPGPlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
 	if (RPGPlayerController == nullptr)
