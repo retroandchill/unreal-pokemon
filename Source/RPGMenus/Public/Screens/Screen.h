@@ -24,6 +24,12 @@ public:
 	
 	TSharedRef<SWidget> RebuildWidget() override;
 
+	/**
+	 * Grant focus to this menu when the player selects it.
+	 * @return Was focus granted to a widget.
+	 */
+	virtual bool GiveMenuFocus();
+
 protected:
 	/**
 	 * Close the screen and return to the previous one
