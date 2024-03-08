@@ -44,7 +44,7 @@ public:
 			SetInputMode(FInputModeUIOnly());
 			SetShowMouseCursor(false);
 		}
-		Screen->SetKeyboardFocus();
+		Screen->GiveMenuFocus();
 		bShowMouseCursor = false;
 		bEnableClickEvents = false;
 		bEnableMouseOverEvents = false;

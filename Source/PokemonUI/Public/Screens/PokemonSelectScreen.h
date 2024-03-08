@@ -28,6 +28,12 @@ private:
 	void OnPokemonSelected(int32 Index);
 
 	/**
+	 * Callback for when the player cancels from the command window
+	 */
+	UFUNCTION()
+	void OnCommandWindowCancel();
+
+	/**
 	 * Display the area the command window is contained in
 	 * @param bIsVisible Should the window be shown
 	 */
