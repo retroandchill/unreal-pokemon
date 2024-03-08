@@ -3,7 +3,7 @@
 #include "Exp/GrowthRateData.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "Tests.Exp.GetGrowthRateTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "Project.Core.Exp.GetGrowthRateTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetGrowthRateTest::RunTest(const FString& Parameters) {

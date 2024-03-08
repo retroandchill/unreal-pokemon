@@ -79,3 +79,5 @@ DerivedDataCache/*
 /cmake-build-debug
 /codecoverage
 LastCoverageResults.log
+
+.sonar
