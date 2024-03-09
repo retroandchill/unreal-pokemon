@@ -15,6 +15,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - uses: actions/cache@v3
+        with:
+          path: |
+            .scannerwork/
+            .sonar/
+          key: windows-build
+          
       - name: Install sonar-scanner and build-wrapper
         run: |
           ./download-sonar-scanner.ps1
