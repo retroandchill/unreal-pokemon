@@ -12,7 +12,7 @@ class UScreen;
  * Action for when the player tries to pull up a menu and add it to the stack.
  */
 UCLASS(Blueprintable, EditInlineNew)
-class UNREALPOKEMON_API UMenuAction : public UAction {
+class POKEMONUI_API UMenuAction : public UAction {
 	GENERATED_BODY()
 
 public:

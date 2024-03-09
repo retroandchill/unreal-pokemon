@@ -83,7 +83,7 @@ public:
 	 * @tparam T The type to check for
 	 * @return The top widget on the stack (if the types match), otherwise nullptr
 	 */
-	template <typename T>
+	template <typename T = UScreen>
 	requires std::is_base_of_v<UScreen, T>
 	T* GetTopOfStack() {
 		if (ScreenStack.IsEmpty())
@@ -94,7 +94,7 @@ public:
 
 	/**
 	 * Remove the current screen from the stack
-	 * @return The screen to remove from the stack
+	 * @return The new top of the stack
 	 */
 	UScreen *RemoveScreenFromStack();
 

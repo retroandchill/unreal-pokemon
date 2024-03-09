@@ -11,6 +11,7 @@ namespace Exp {
 	class POKEMONCORE_API FMedium : public IGrowthRate {
 
 	public:
+		~FMedium() override = default;
 		int32 ExpForLevel(int32 Level) const override;
 		TUniquePtr<IGrowthRate> Clone() const override;
 	};
