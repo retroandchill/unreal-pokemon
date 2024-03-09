@@ -12,7 +12,6 @@ public class UnrealPokemonTarget : TargetRules
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 		ExtraModuleNames.Add("UnrealPokemon");
 		RegisterModulesCreatedByRider();
-		AdditionalCompilerArguments += " -fprofile-instr-generate -fcoverage-mapping";
 	}
 
 	private void RegisterModulesCreatedByRider()
