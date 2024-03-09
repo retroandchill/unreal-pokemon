@@ -16,21 +16,21 @@ class POKEMONUI_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
 
 public:
 	void Initialize(FSubsystemCollectionBase& Collection) override;
-	
+
 	/**
 	 * Get the icon based upon the Pokémon that was passed in.
 	 * @param Pokemon The Pokémon to get the icon for
 	 * @return The graphical asset that this icon refers to.
 	 */
-	UObject *GetPokemonIcon(const IPokemon &Pokemon);
+	UObject* GetPokemonIcon(const IPokemon& Pokemon);
 
 	/**
 	 * Get the icon based upon the Pokémon information that was passed in.
 	 * @param Species The species of Pokémon to get the icon for
 	 * @return The graphical asset that this icon refers to.
 	 */
-	UObject *GetPokemonIcon(FName Species);
-	
+	UObject* GetPokemonIcon(FName Species);
+
 private:
 	/**
 	 * The name of the package that contains the Pokémon Icon graphics

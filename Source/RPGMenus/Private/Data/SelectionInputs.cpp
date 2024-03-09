@@ -4,7 +4,7 @@
 TOptional<ECursorDirection> USelectionInputs::ParseDirectionalInputs(const FKey& Key) const {
 	using enum ECursorDirection;
 	if (UpInputs.Contains(Key)) {
-			return Up;
+		return Up;
 	}
 
 	if (DownInputs.Contains(Key)) {
@@ -18,7 +18,7 @@ TOptional<ECursorDirection> USelectionInputs::ParseDirectionalInputs(const FKey&
 	if (RightInputs.Contains(Key)) {
 		return Right;
 	}
-	
+
 	return TOptional<ECursorDirection>();
 }
 

@@ -86,25 +86,25 @@ public:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Text|Size")
 	FMargin GetDisplayTextPadding() const;
-	
+
 protected:
 	/**
 	 * Called when the text is set by the game to make sure all Blueprint Visuals are good
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Text)
-	void OnTextSet(const FText &Text);
+	void OnTextSet(const FText& Text);
 
 	/**
 	 * Get the primary display text widget
 	 * @return The displayed text widget to the player
 	 */
 	UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta=(BlueprintInternalUseOnly="true"))
-	UTextBlock *GetDisplayTextWidget() const;
-	
+	UTextBlock* GetDisplayTextWidget() const;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Widgets|Text")
 	FText InitialText = NSLOCTEXT("PokemonUI", "DisplayText_InitialText", "Text Block");
-	
+
 	/**
 	 * The displayed text widget to the player
 	 */

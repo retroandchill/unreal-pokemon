@@ -52,7 +52,8 @@ struct POKEMONDATA_API FMove : public FTableRowBase {
 	/**
 	 * The accuracy of the move in question (0 = always hits)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats", meta = (ClampMin = 0, ClampMax = 100, UIMin = 0, UIMax = 100))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats",
+		meta = (ClampMin = 0, ClampMax = 100, UIMin = 0, UIMax = 100))
 	int32 Accuracy;
 
 	/**
@@ -82,7 +83,8 @@ struct POKEMONDATA_API FMove : public FTableRowBase {
 	/**
 	 * The chance of the moves additional effect happening (0 = guaranteed to occur)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Effect", meta = (ClampMin = 0, ClampMax = 100, UIMin = 0, UIMax = 100))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Effect",
+		meta = (ClampMin = 0, ClampMax = 100, UIMin = 0, UIMax = 100))
 	int32 EffectChance;
 
 	/**

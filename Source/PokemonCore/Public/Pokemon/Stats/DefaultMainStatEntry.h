@@ -16,7 +16,7 @@ public:
 	 * @param EV The EV of the stat
 	 */
 	FDefaultMainStatEntry(FName Stat, int32 IV, int32 EV = 0);
-	
+
 	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) final;
 	TUniquePtr<IStatEntry> Clone() const override;
 };

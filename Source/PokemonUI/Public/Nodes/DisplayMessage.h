@@ -33,8 +33,10 @@ public:
 	 * @param Message The message to display to the player
 	 * @return The node to execute the task with
 	 */
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "Messages")
-	static UDisplayMessage* DisplayMessage(const UObject* WorldContextObject, TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message);
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
+		Category = "Messages")
+	static UDisplayMessage* DisplayMessage(const UObject* WorldContextObject,
+	                                       TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message);
 
 	void Activate() override;
 

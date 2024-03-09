@@ -9,6 +9,6 @@
  */
 class FCommonMathModule : public IModuleInterface {
 public:
-    void StartupModule() override;
-    void ShutdownModule() override;
+	void StartupModule() override;
+	void ShutdownModule() override;
 };

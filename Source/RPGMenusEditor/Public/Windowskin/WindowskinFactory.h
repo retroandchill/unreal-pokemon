@@ -15,7 +15,8 @@ class UWindowskinFactory : public UFactory {
 
 public:
 	UWindowskinFactory();
-	
-	UWindowskin* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
+
+	UWindowskin* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
+	                              UObject* Context, FFeedbackContext* Warn) override;
 	bool ShouldShowInNewMenu() const override;
 };

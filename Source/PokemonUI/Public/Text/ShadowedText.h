@@ -58,8 +58,8 @@ private:
 	 * @param Shadow A pointer to the shadow
 	 * @param Text The text to set
 	 */
-	void SetShadowText(UTextBlock* Shadow, const FText &Text);
-	
+	void SetShadowText(UTextBlock* Shadow, const FText& Text);
+
 	/**
 	 * The first text shadow to display
 	 */

@@ -13,18 +13,19 @@ void FRPGMenusEditorModule::StartupModule() {
 	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FRPGMenusEditorModule::OnPostEngineInit);
 }
 
-void FRPGMenusEditorModule::OnPostEngineInit() {
+void FRPGMenusEditorModule::OnPostEngineInit() const {
 	// Register asset types
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
-    
+
 	AssetTools.RegisterAssetTypeActions(MakeShared<FWindowskinAssetActions>());
 
 	// Register thubmnails
-	UThumbnailManager::Get().RegisterCustomRenderer(UWindowskin::StaticClass(), UWindowskinThumbnailRenderer::StaticClass());
+	UThumbnailManager::Get().RegisterCustomRenderer(UWindowskin::StaticClass(),
+	                                                UWindowskinThumbnailRenderer::StaticClass());
 }
 
 void FRPGMenusEditorModule::ShutdownModule() {
-    // No special shutdown needed
+	// No special shutdown needed
 }
-    
+
 IMPLEMENT_MODULE(FRPGMenusEditorModule, RPGMenusEditor)

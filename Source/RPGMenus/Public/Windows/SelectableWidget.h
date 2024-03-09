@@ -34,8 +34,8 @@ public:
 	 * Construct the default version of the widget
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
-	explicit USelectableWidget(const FObjectInitializer &ObjectInitializer);
-	
+	explicit USelectableWidget(const FObjectInitializer& ObjectInitializer);
+
 	/**
 	 * Get the number of items in the menu that can be selected
 	 * @return The total number of items
@@ -56,7 +56,7 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Selection)
 	int32 GetColumnCount() const;
-	
+
 	/**
 	 * Get the current index of the menu 
 	 * @return The current selection index of the menu (-1 = inactive)
@@ -118,10 +118,10 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "Selection|Cancel")
 	FProcessCancel OnCancel;
-	
+
 protected:
 	FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
-	
+
 	/**
 	 * Called when the selection is changed
 	 * @param OldIndex The previous index of this widget
@@ -165,7 +165,7 @@ private:
 	 * @param Direction The received cursor input
 	 */
 	void ReceiveMoveCursor(ECursorDirection Direction);
-	
+
 	/**
 	 * The index of the menu in question
 	 */
@@ -189,5 +189,4 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Selection)
 	TObjectPtr<USelectionInputs> InputMappings;
-	
 };

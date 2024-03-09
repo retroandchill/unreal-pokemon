@@ -43,8 +43,8 @@ public:
 	 * @param Choices The choices to choose from
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Messages|Display")
-	void DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices);
-	
+	void DisplayChoices(FText TextToDisplay, const TArray<FText>& Choices);
+
 	/**
 	 * Clear all currently displaying text
 	 */
@@ -62,7 +62,7 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "Messages|Flow Control")
 	FChoiceMade ProcessChoice;
-	
+
 private:
 	/**
 	 * Function used to advance to the next message
@@ -83,7 +83,7 @@ private:
 	 */
 	UFUNCTION()
 	void ProcessSelectedChoice(int32 Index, UCommand* Choice);
-	
+
 	/**
 	 * The command window that is displayed to the player
 	 */

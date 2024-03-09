@@ -30,11 +30,11 @@ void UCommandWindow::SynchronizeProperties() {
 
 void UCommandWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
-	
+
 	// If the commands are set but the active command are not, then we don't want to change anything
 	if (!Commands.IsEmpty() && ActiveCommands.IsEmpty())
 		return;
-	
+
 	if (GetIndex() >= GetItemCount()) {
 		SetIndex(GetItemCount() - 1);
 	}
@@ -57,7 +57,7 @@ void UCommandWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 			ScrollBox->SetScrollOffset(TopRow * CommandHeight.GetValue());
 		}
 	}
-	
+
 	SetScrollArrowsVisible();
 }
 
@@ -68,12 +68,12 @@ int32 UCommandWindow::GetItemCount_Implementation() const {
 TOptional<int32> UCommandWindow::GetPageMax() {
 	if (ScrollBox == nullptr)
 		return TOptional<int32>();
-	
+
 	auto ScrollBoxGeometry = ScrollBox->GetCachedGeometry();
 	float Height = ScrollBoxGeometry.GetLocalSize().Y;
 	if (FMath::IsNearlyZero(Height) || !CommandHeight.IsSet())
 		return true;
-	
+
 	int32 VisibleLines = FMath::FloorToInt(Height / CommandHeight.GetValue());
 	if (bOverride_MaxLines) {
 		VisibleLines = FMath::Max(VisibleLines, MaxLines);
@@ -89,7 +89,7 @@ void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>>&& NewCommands) {
 void UCommandWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
 	if (CursorWidget == nullptr)
 		return;
-	
+
 	auto CursorSlot = Cast<UUniformGridSlot>(CursorWidget->Slot);
 	if (CursorSlot == nullptr)
 		return;
@@ -107,8 +107,8 @@ void UCommandWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewI
 void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
 	if (CurrentIndex >= ActiveCommands.Num())
 		return;
-	
-	UCommand *CurrentCommand = ActiveCommands[CurrentIndex];
+
+	UCommand* CurrentCommand = ActiveCommands[CurrentIndex];
 	OnCommandSelected.Broadcast(CurrentIndex, CurrentCommand);
 }
 
@@ -121,7 +121,7 @@ void UCommandWindow::AddCommands() {
 	ActiveCommands.Empty();
 	if (CommandArea == nullptr || DisplayTextWidgetClass == nullptr)
 		return;
-	
+
 	for (UWidget* Command : CommandWidgets) {
 		CommandArea->RemoveChild(Command);
 	}
@@ -155,7 +155,6 @@ void UCommandWindow::AddCommands() {
 	} else {
 		SizeBox->ClearMaxDesiredHeight();
 	}
-
 }
 
 void UCommandWindow::SetScrollArrowsVisible() {

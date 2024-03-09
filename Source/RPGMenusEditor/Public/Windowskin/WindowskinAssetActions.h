@@ -9,8 +9,8 @@
  */
 class FWindowskinAssetActions : public FAssetTypeActions_Base {
 public:
- FText GetName() const override;
- UClass* GetSupportedClass() const override;
- FColor GetTypeColor() const override;
- uint32 GetCategories() override;
+	FText GetName() const override;
+	UClass* GetSupportedClass() const override;
+	FColor GetTypeColor() const override;
+	uint32 GetCategories() override;
 };

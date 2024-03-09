@@ -4,7 +4,7 @@
 #include "PaperTileMap.h"
 
 // Sets default values
-AGridBasedMap::AGridBasedMap() : PlayerLevelLayer(1) {
+AGridBasedMap::AGridBasedMap() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -17,15 +17,15 @@ AGridBasedMap::AGridBasedMap() : PlayerLevelLayer(1) {
 	TopBounds = CreateDefaultSubobject<UBoxComponent>(TEXT("TopBounds"));
 	TopBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	TopBounds->SetupAttachment(TileMapComponent);
-	
+
 	BottomBounds = CreateDefaultSubobject<UBoxComponent>(TEXT("BottomBounds"));
 	BottomBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	BottomBounds->SetupAttachment(TileMapComponent);
-	
+
 	LeftBounds = CreateDefaultSubobject<UBoxComponent>(TEXT("LeftBounds"));
 	LeftBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	LeftBounds->SetupAttachment(TileMapComponent);
-	
+
 	RightBounds = CreateDefaultSubobject<UBoxComponent>(TEXT("RightBounds"));
 	RightBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	RightBounds->SetupAttachment(TileMapComponent);
@@ -57,29 +57,19 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 	SetUpMapLocation(bFinished);
 }
 
-// Called when the game starts or when spawned
-void AGridBasedMap::BeginPlay() {
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AGridBasedMap::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-}
-
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	if (TileMap == nullptr)
 		return;
-	
+
 	TileMapComponent->SetTileMap(TileMap);
-	
+
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
 	PlayerLevelLayer = FMath::Min(PlayerLevelLayer, TotalLayers - 1);
-	float LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer;
+	double LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer;
 
-	MapLocation.Z = LowestLayerZ - TileMap->SeparationPerLayer * (TotalLayers - PlayerLevelLayer) - 1;
+	MapLocation.Z = LowestLayerZ - static_cast<double>(TileMap->SeparationPerLayer) * (TotalLayers - PlayerLevelLayer) -
+		1;
 	TileMapComponent->SetRelativeLocation(MapLocation);
 	SetBoundsPositions();
 
@@ -90,16 +80,16 @@ void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	}
 }
 
-void AGridBasedMap::SetBoundsPositions(bool bIsInitializing) {
+void AGridBasedMap::SetBoundsPositions(bool) {
 	int32 TileWidth = TileMapComponent->TileMap->TileWidth;
 	int32 TileHeight = TileMapComponent->TileMap->TileHeight;
 	int32 TotalMapWidth = TileWidth * TileMapComponent->TileMap->MapWidth;
 	int32 TotalMapHeight = TileHeight * TileMapComponent->TileMap->MapHeight;
 	int32 BoxHeight = FMath::Max(TileWidth, TileHeight) / 2;
-	
-	FVector TopLeft(-TileWidth / 2, 0,TileHeight / 2);
 
-	auto TopBoundsPosition = TopLeft + FVector(TotalMapWidth / 2, 0,TileHeight / 2);
+	FVector TopLeft(-TileWidth / 2, 0, TileHeight / 2);
+
+	auto TopBoundsPosition = TopLeft + FVector(TotalMapWidth / 2, 0, TileHeight / 2);
 	TopBounds->SetRelativeLocation(TopBoundsPosition);
 	TopBounds->SetBoxExtent(FVector(TotalMapWidth / 2, BoxHeight, TileHeight / 2));
 
@@ -107,7 +97,7 @@ void AGridBasedMap::SetBoundsPositions(bool bIsInitializing) {
 	BottomBounds->SetRelativeLocation(BottomBoundsPosition);
 	BottomBounds->SetBoxExtent(FVector(TotalMapWidth / 2, BoxHeight, TileHeight / 2));
 
-	auto LeftBoundPosition = TopLeft + FVector(-TileWidth / 2, 0,-TotalMapHeight / 2);
+	auto LeftBoundPosition = TopLeft + FVector(-TileWidth / 2, 0, -TotalMapHeight / 2);
 	LeftBounds->SetRelativeLocation(LeftBoundPosition);
 	LeftBounds->SetBoxExtent(FVector(TileWidth / 2, BoxHeight, TotalMapHeight / 2));
 
@@ -115,4 +105,3 @@ void AGridBasedMap::SetBoundsPositions(bool bIsInitializing) {
 	RightBounds->SetRelativeLocation(RightBoundPosition);
 	RightBounds->SetBoxExtent(FVector(TileWidth / 2, BoxHeight, TotalMapHeight / 2));
 }
-

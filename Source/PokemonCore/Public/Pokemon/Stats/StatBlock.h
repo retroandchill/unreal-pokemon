@@ -34,26 +34,25 @@ public:
 	 * Get the Pokémon's Nature value
 	 * @return The Nature of the Pokémon in question
 	 */
-	virtual const FNature &GetNature() const = 0;
+	virtual const FNature& GetNature() const = 0;
 
 	/**
 	 * Get the stat that corresponds to the given ID
 	 * @param Stat The stat ID to retrieve
 	 * @return The entry of the stat
 	 */
-	virtual IStatEntry &GetStat(FName Stat) = 0;
+	virtual IStatEntry& GetStat(FName Stat) = 0;
 
 	/**
 	 * Get the stat that corresponds to the given ID
 	 * @param Stat The stat ID to retrieve
 	 * @return The entry of the stat
 	 */
-	virtual const IStatEntry &GetStat(FName Stat) const = 0;
+	virtual const IStatEntry& GetStat(FName Stat) const = 0;
 
 	/**
 	 * Calculate the stats of the given Pokémon in question
 	 * @param BaseStats The base stats of the Pokémon species/form
 	 */
-	virtual void CalculateStats(const TMap<FName, int32> &BaseStats) = 0;
-	
+	virtual void CalculateStats(const TMap<FName, int32>& BaseStats) = 0;
 };

@@ -53,8 +53,8 @@ private:
 	 * Convenience method to add a panel to the window and set the index.
 	 * @param Panel The panel to add.
 	 */
-	void AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel> &Panel);
-	
+	void AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel>& Panel);
+
 	/**
 	 * The canvas to place the panels in
 	 */
@@ -84,7 +84,7 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UPartySelectCancelPanel> MultiSelectCancelPanel;
-	
+
 	/**
 	 * The class used for the panels that house the 6 Pokémon
 	 */

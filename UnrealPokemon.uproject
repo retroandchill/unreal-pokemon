@@ -5,11 +5,6 @@
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "UnrealPokemon",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "PokemonData",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
@@ -57,6 +52,26 @@
 		{
 			"Name": "CommonMath",
 			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonTests",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonUIDeveloper",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonDataDeveloper",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGMenusDeveloper",
+			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
 		}
 	],

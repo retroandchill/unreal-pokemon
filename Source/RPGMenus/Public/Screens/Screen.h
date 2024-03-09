@@ -21,7 +21,7 @@ public:
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
 	explicit UScreen(const FObjectInitializer& ObjectInitializer);
-	
+
 	TSharedRef<SWidget> RebuildWidget() override;
 
 	/**

@@ -22,14 +22,14 @@ public:
 	 * @param Index The index in the selection pane this panel represents
 	 */
 	void SetMenuIndex(int32 Index);
-	
+
 	/**
 	 * Returns if this panel represents the current index of the selection
 	 * @return Is this panel being selected?
 	 */
 	UFUNCTION(BlueprintPure, Category = "User Interface|Visuals")
 	bool IsPanelSelected() const;
-	
+
 	void Refresh() override;
 
 protected:

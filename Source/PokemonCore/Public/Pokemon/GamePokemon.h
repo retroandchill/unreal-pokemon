@@ -18,10 +18,14 @@ public:
 	 * @param Level The level of the Pokémon in question
 	 */
 	explicit FGamePokemon(FName Species, int32 Level = 5);
-	
+
+	FGamePokemon(FGamePokemon&& Other) noexcept = default;
+
+	FGamePokemon& operator=(FGamePokemon&& Other) noexcept = default;
+
 	FText GetName() const override;
 	const FSpeciesData& GetSpecies() const override;
-	EGender GetGender() const override;
+	EPokemonGender GetGender() const override;
 	int32 GetCurrentHP() const override;
 	int32 GetMaxHP() const override;
 	bool IsFainted() const override;
@@ -38,7 +42,7 @@ private:
 	 * Pokémon if the values are not already set.
 	 */
 	uint32 PersonalityValue;
-	
+
 	/**
 	 * The nickname assigned to the Pokémon. Uses the species name if empty.
 	 */
@@ -47,7 +51,7 @@ private:
 	/**
 	 * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
 	 */
-	TOptional<EGender> Gender;
+	TOptional<EPokemonGender> Gender;
 
 	/**
 	 * The current amount of HP this Pokémon has

@@ -7,7 +7,7 @@ TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D
 		return Down;
 	}
 
-	if (Vector.X < 0 ) {
+	if (Vector.X < 0) {
 		return Left;
 	}
 
