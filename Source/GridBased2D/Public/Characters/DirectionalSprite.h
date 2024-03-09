@@ -25,6 +25,7 @@ struct GRIDBASED2D_API FDirectionalSprite {
 	UPROPERTY(EditAnywhere, Category = "Character|Sprites")
 	TSet<int32> ValidStopFrames = { 0, 2 };
 
+	FDirectionalSprite() = default;
 	FDirectionalSprite(const FDirectionalSprite &Other) = default;
 	FDirectionalSprite(FDirectionalSprite&& Other) noexcept = default;
 	~FDirectionalSprite() = default;
