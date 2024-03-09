@@ -29,7 +29,7 @@ jobs:
       - name: Run build-wrapper
         run: |
           ./set-sonar-variables.ps1
-          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output "C:/Program Files/Epic Games/UE_5.3/Engine/Build/BatchFiles/RunUAT.bat" BuildCookRun -project="$(pwd)\UnrealPokemon.uproject" -clientconfig=DebugGame -build
+          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output "C:/Program Files/Epic Games/UE_5.3/Engine/Build/BatchFiles/RunUAT.bat" BuildCookRun -project="$(pwd)\UnrealPokemon.uproject" -configuration =DebugGame -build
       - name: Run Tests
         run: |
           ./run_tests.ps1
