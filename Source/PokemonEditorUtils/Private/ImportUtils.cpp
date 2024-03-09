@@ -3,14 +3,14 @@
 
 #include "DesktopPlatformModule.h"
 
-TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* DataTable) {
+TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* const DataTable) {
 	TArray<FStat*> References;
 	DataTable->GetAllRows(TEXT("UImportUtils::GetMainStatsFromTable"), References);
 	TArray<FStat> Ret;
 	for (const auto Ref : References) {
 		if (Ref->Type == EPokemonStatType::Battle)
 			continue;
-		
+
 		Ret.Add(*Ref);
 	}
 
@@ -25,10 +25,11 @@ FText UImportUtils::SelectFile(const FString& FileTypes) {
 
 	auto WindowHandle = FSlateApplication::Get().FindBestParentWindowHandleForDialogs(nullptr);
 	TArray<FString> SelectedFiles;
-	DesktopPlatform->OpenFileDialog(WindowHandle, TEXT("Select a File"), FPaths::GetProjectFilePath(), TEXT(""), FileTypes, EFileDialogFlags::None, SelectedFiles);
+	DesktopPlatform->OpenFileDialog(WindowHandle, TEXT("Select a File"), FPaths::GetProjectFilePath(), TEXT(""),
+	                                FileTypes, EFileDialogFlags::None, SelectedFiles);
 	if (SelectedFiles.IsEmpty()) {
 		return FText::FromStringView(TEXT(""));
 	}
-	
+
 	return FText::FromStringView(SelectedFiles[0]);
 }

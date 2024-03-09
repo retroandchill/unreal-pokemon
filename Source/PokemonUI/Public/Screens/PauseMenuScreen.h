@@ -17,7 +17,7 @@ class POKEMONUI_API UPauseMenuScreen : public UScreen {
 
 protected:
 	void NativePreConstruct() override;
-	
+
 private:
 	/**
 	 * Process the selected command
@@ -26,7 +26,7 @@ private:
 	 */
 	UFUNCTION()
 	void ProcessCommand(int32 CurrentIndex, UCommand* SelectedCommand);
-	
+
 	/**
 	 * The command window that is displayed to the player
 	 */

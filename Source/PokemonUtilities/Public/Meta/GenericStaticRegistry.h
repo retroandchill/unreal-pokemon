@@ -8,7 +8,7 @@
  * The generic version of the static registry that requires no additional specialized methods, and can act as a
  * singleton object all on its own
  */
-template <typename T, typename ...Args>
+template <typename T, typename... Args>
 class TGenericStaticRegistry : public TPokeRegistry<T, Args...> {
 	TGenericStaticRegistry() = default;
 	~TGenericStaticRegistry() = default;

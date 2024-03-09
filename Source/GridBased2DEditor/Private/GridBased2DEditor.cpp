@@ -13,7 +13,7 @@ void FGridBased2DEditorModule::StartupModule() {
 	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FGridBased2DEditorModule::OnPostEngineInit);
 }
 
-void FGridBased2DEditorModule::OnPostEngineInit() {
+void FGridBased2DEditorModule::OnPostEngineInit() const {
 	// Register asset types
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 
@@ -27,5 +27,5 @@ void FGridBased2DEditorModule::OnPostEngineInit() {
 void FGridBased2DEditorModule::ShutdownModule() {
 	// No special shutdown required
 }
-    
+
 IMPLEMENT_MODULE(FGridBased2DEditorModule, GridBased2DEditor)

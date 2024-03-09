@@ -9,18 +9,17 @@
 
 void UPokemonSelectScreen::NativeConstruct() {
 	Super::NativeConstruct();
-	check(SelectionPane != nullptr);
+	check(SelectionPane != nullptr)
 	SelectionPane->SetIndex(0);
 	SelectionPane->SetActive(true);
 	SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
 	SelectionPane->OnCancel.AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
 	CommandWindow->OnCancel.AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
 	ToggleCommandWindowVisibility(false);
-	
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-	auto &Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty();
+	auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty();
 	if (Index < Party.Num()) {
 		TArray<TObjectPtr<UCommand>> Commands;
 		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Summary", "Summary")));
@@ -28,14 +27,13 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Item", "Item")));
 		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Cancel", "Cancel")));
 		CommandWindow->SetCommands(MoveTemp(Commands));
-		
+
 		SelectionPane->SetActive(false);
 		CommandWindow->SetIndex(0);
 		CommandWindow->SetActive(true);
-		
+
 		SelectionPane->ToggleCommandVisibility(false);
 		ToggleCommandWindowVisibility(true);
-
 	} else {
 		// TODO: Handle the additional options
 	}

@@ -11,19 +11,19 @@ class POKEMONDATA_API FDataManager {
 	FDataManager();
 	~FDataManager();
 
-	FDataManager(const FDataManager &) = delete;
-	FDataManager(FDataManager &&) = delete;
+	FDataManager(const FDataManager&) = delete;
+	FDataManager(FDataManager&&) = delete;
 
-	FDataManager &operator=(const FDataManager&) = delete;
-	FDataManager &operator=(FDataManager&&) = delete;
+	FDataManager& operator=(const FDataManager&) = delete;
+	FDataManager& operator=(FDataManager&&) = delete;
 
 public:
 	/**
 	 * Get the singleton instance of the Data Manager
 	 * @return A reference to the data manager
 	 */
-	static FDataManager &GetInstance();
-	
+	static FDataManager& GetInstance();
+
 	/**
 	 * Get the data table that contains data of the specified type
 	 * @tparam T The type to look up the table for
@@ -31,9 +31,9 @@ public:
 	 */
 	template <typename T>
 	const TDataTableProxy<T>& GetDataTable() const {
-		UScriptStruct* StructClass = T::StaticStruct();
+		UScriptStruct* const StructClass = T::StaticStruct();
 		auto RowName = StructClass->GetFName();
-		check(DataTables.Contains(RowName));
+		check(DataTables.Contains(RowName))
 
 		auto TableInterface = DataTables[RowName].Get();
 		check(StructClass->GetName() == TableInterface->GetStructType()->GetName())

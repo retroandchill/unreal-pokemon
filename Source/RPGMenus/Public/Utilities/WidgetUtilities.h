@@ -13,7 +13,6 @@ class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
 public:
-	
 	/**
 	 * Get the DPI scale of the UMG widgets
 	 * @return The current DPI scale
@@ -28,7 +27,7 @@ public:
 	 * @return The desired size. 
 	 */
 	UFUNCTION(BlueprintPure, Category = "Slate|Images")
-	static FVector2D GetDesiredBrushSize(const FSlateBrush &Brush);
+	static FVector2D GetDesiredBrushSize(const FSlateBrush& Brush);
 
 	/**
 	 * Get the desired size of a texture asset based on the width and height of the source image.
@@ -36,7 +35,7 @@ public:
 	 * @return The desired size. 
 	 */
 	UFUNCTION(BlueprintPure, Category = "Slate|Images")
-	static FVector2D GetDesiredTextureSize(UTexture2D *Texture);
+	static FVector2D GetDesiredTextureSize(UTexture2D* Texture);
 
 	/**
 	 * Set the size of the brush to the desired size, keeping all other elements the same
@@ -44,5 +43,5 @@ public:
 	 * @param NewSize The new size of the brush to set
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Slate|Images")
-	static void ChangeBrushSize(UPARAM(Ref) FSlateBrush &Brush, FVector2D NewSize);
+	static void ChangeBrushSize(UPARAM(Ref) FSlateBrush& Brush, FVector2D NewSize);
 };

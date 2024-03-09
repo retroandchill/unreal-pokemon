@@ -13,14 +13,14 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
 
 	SelectableWidgets.Empty();
-	WidgetTree->ForEachWidget([this](UWidget *Widget) {
+	WidgetTree->ForEachWidget([this](UWidget* Widget) {
 		auto SelectableWidget = Cast<USelectableWidget>(Widget);
 		if (SelectableWidget == nullptr)
 			return;
 
 		SelectableWidgets.Emplace(SelectableWidget);
 	});
-	
+
 	return Ret;
 }
 

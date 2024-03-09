@@ -8,7 +8,6 @@
  * The default setup of a Pokémon's stat calculation as defined in the main series games
  */
 class POKEMONCORE_API FDefaultStatEntry : public IStatEntry {
-
 protected:
 	/**
 	 * Initialize the stat with the given IV and EV
@@ -37,7 +36,7 @@ private:
 	 * The ID of the stat in question
 	 */
 	FName StatID;
-	
+
 	/**
 	 * The value of the stat's IV
 	 */

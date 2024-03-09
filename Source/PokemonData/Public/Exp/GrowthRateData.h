@@ -23,5 +23,4 @@ struct POKEMONDATA_API FGrowthRateData : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
-	
 };

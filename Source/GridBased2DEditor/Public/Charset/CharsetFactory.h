@@ -15,7 +15,8 @@ class UCharsetFactory : public UFactory {
 
 public:
 	UCharsetFactory();
-	
-	UCharset* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
+
+	UCharset* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, UObject* Context,
+	                           FFeedbackContext* Warn) override;
 	bool ShouldShowInNewMenu() const override;
 };

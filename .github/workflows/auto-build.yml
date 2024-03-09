@@ -1,0 +1,88 @@
+﻿name: SonarCloud
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and test
+    runs-on: self-hosted
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - name: Run build-wrapper
+        run: |
+          ./ci/set-sonar-variables.ps1
+          $Location = $(Get-Location)
+          & "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\DotNet\UnrealBuildTool\UnrealBuildTool.exe" "${Location}/UnrealPokemon.uproject" UnrealEditor Win64 DebugGame
+      
+      - name: Run Tests
+        run: |
+          ./ci/run_tests.ps1
+          
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            cpp-coverage.xml
+            TestResults/*
+      
+      
+  python-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Requirements
+        working-directory: Content/Python
+        run: pip install -r requirements.txt
+
+      - name: Run Tests
+        working-directory: Content/Python
+        run: coverage run -m unittest discover -s . -p "test_*.py"
+
+      - name: Generate Coverage Report
+        working-directory: Content/Python
+        run: coverage xml --omit=test/* -o python-coverage.xml
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: Content/Python/python-coverage.xml
+  
+  code-coverage:
+    runs-on: ubuntu-latest
+    needs: 
+      - build
+      - python-test
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - uses: actions/download-artifact@v3
+          
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: artifact/*-coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'

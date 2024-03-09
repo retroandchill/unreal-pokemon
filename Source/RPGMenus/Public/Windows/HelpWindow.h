@@ -15,7 +15,7 @@ class UDisplayText;
 UCLASS(Abstract, Blueprintable)
 class RPGMENUS_API UHelpWindow : public UUserWidget {
 	GENERATED_BODY()
-	
+
 protected:
 	TSharedRef<SWidget> RebuildWidget() override;
 	void SynchronizeProperties() override;
@@ -27,23 +27,22 @@ public:
 	 * @return The text to display
 	 */
 	UFUNCTION(BlueprintPure, Category = Display, BlueprintInternalUseOnly)
-	const FText &GetText() const;
-	
+	const FText& GetText() const;
+
 	/**
 	 * Set the text of this window to the given value.
 	 * @param NewText The text to display
 	 */
 	UFUNCTION(BlueprintCallable, Category = Display, BlueprintInternalUseOnly)
-	void SetText(const FText &NewText);
-	
-	
+	void SetText(const FText& NewText);
+
 private:
 	/**
 	 * The frame used for the background of the widget.
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UWindow> WindowFrame;
-	
+
 	/**
 	 * The text displayed to the player in the window.
 	 */

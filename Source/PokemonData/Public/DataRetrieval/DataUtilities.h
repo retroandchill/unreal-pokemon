@@ -38,8 +38,8 @@ public:
 	 */
 	template <typename T>
 	static void Generic_GetData(const UScriptStruct* StructType, FName RowName, T* OutRow) {
-		check(StructType != nullptr && OutRow != nullptr);
-		
+		check(StructType != nullptr && OutRow != nullptr)
+
 		const auto Row = FDataManager::GetInstance().GetDataTable(StructType).GetData(RowName);
 		StructType->CopyScriptStruct(OutRow, Row);
 	}
@@ -137,7 +137,7 @@ public:
 					continue;
 
 				UBlueprintNodeSpawner* Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-				check(Spawner);
+				check(Spawner)
 
 				Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(
 					CustomizeCallback, Type);

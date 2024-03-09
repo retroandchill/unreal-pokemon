@@ -8,7 +8,7 @@ UWindowskinFactory::UWindowskinFactory() {
 }
 
 UWindowskin* UWindowskinFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
-	UObject* Context, FFeedbackContext* Warn) {
+                                                  UObject* Context, FFeedbackContext* Warn) {
 	return NewObject<UWindowskin>(InParent, InClass, InName, Flags);
 }
 

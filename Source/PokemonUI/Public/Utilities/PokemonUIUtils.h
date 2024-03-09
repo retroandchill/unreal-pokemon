@@ -49,7 +49,7 @@ public:
 	 * @param TextWidget The item to set the text of
 	 * @param Text The text to set everything to
 	 */
-	static void SetItemText(TObjectPtr<UDisplayText>& TextWidget, const FText &Text);
+	static void SetItemText(TObjectPtr<UDisplayText>& TextWidget, const FText& Text);
 
 	/**
 	 * Set the text for the item if it is not null
@@ -63,7 +63,7 @@ public:
 	 * @param TextWidget The item to set the color of
 	 * @param Color The color to set everything to
 	 */
-	static void SetItemTextColor(TObjectPtr<UDisplayText>& TextWidget, const FTextColor &Color);
+	static void SetItemTextColor(TObjectPtr<UDisplayText>& TextWidget, const FTextColor& Color);
 
 	/**
 	 * Set the values in the given progres bar to percentage given the provided values
@@ -72,5 +72,4 @@ public:
 	 * @param MaxValue The maximum value
 	 */
 	static void SetBarValues(TObjectPtr<UProgressBar>& ProgressBar, float CurrentValue, float MaxValue);
-	
 };

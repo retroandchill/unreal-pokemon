@@ -9,8 +9,8 @@ namespace Exp {
 	* Represents the Fluctuating Exp. Growth Scheme
 	*/
 	class POKEMONCORE_API FFluctuating : public IGrowthRate {
-
 	public:
+		~FFluctuating() override = default;
 		int32 ExpForLevel(int32 Level) const override;
 		TUniquePtr<IGrowthRate> Clone() const override;
 	};

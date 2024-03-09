@@ -20,7 +20,6 @@ class RPGMENUS_API IRefreshable {
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	
 	/**
 	 * Refresh the contents of the widget setting the values where appropriate
 	 */
