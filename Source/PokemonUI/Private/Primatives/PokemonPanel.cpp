@@ -4,7 +4,7 @@
 #include "Primatives/PokemonPanel.h"
 
 #include "Components/Image.h"
-#include "PokemonCore/Public/Pokemon/Pokemon.h"
+#include "Pokemon/Pokemon.h"
 #include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/SelectableWidget.h"
@@ -68,13 +68,13 @@ void UPokemonPanel::RefreshPokemonInfo() {
 	// TODO: Change the text color depending on the gender
 	auto Gender = Pokemon->GetGender();
 	switch (Gender) {
-	case EGender::Male:
+	case EPokemonGender::Male:
 		UPokemonUIUtils::SetItemText(GenderText, TEXT("♂"));
 		break;
-	case EGender::Female:
+	case EPokemonGender::Female:
 		UPokemonUIUtils::SetItemText(GenderText, TEXT("♀"));
 		break;
-	case EGender::Genderless:
+	case EPokemonGender::Genderless:
 		UPokemonUIUtils::SetItemText(GenderText, TEXT(""));
 		break;
 	}

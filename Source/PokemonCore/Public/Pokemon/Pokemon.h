@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Breeding/Gender.h"
+#include "Breeding/PokemonGender.h"
 #include "Stats/StatBlock.h"
 
 struct FSpeciesData;
@@ -30,7 +30,7 @@ public:
 	 * Get the gender of the Pokémon in question
 	 * @return The Pokémon's gender
 	 */
-	virtual EGender GetGender() const = 0;
+	virtual EPokemonGender GetGender() const = 0;
 
 	/**
 	 * Get the current HP of the Pokémon in question

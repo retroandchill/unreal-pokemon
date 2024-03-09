@@ -8,7 +8,7 @@
  * in the UI.
  */
 UENUM(BlueprintType)
-enum class EGender {
+enum class EPokemonGender {
 	/**
 	 * The Pokémon is male
 	 */

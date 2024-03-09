@@ -5,7 +5,7 @@
 #include "Refreshable.h"
 #include "SelectablePanel.h"
 #include "Blueprint/UserWidget.h"
-#include "Pokemon/Breeding/Gender.h"
+#include "Pokemon/Breeding/PokemonGender.h"
 #include "Text/TextColor.h"
 #include "PokemonPanel.generated.h"
 
@@ -138,7 +138,7 @@ private:
 	 * The color settings for the gender text widget
 	 */
 	UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-	TMap<EGender, FTextColor> GenderTextColors;
+	TMap<EPokemonGender, FTextColor> GenderTextColors;
 
 	/**
 	 * The text block that displays the current and total HP of the Pokémon

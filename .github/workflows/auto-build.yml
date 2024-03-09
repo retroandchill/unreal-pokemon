@@ -16,12 +16,9 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           
-      - uses: actions/cache@v3
-        with:
-          path: |
-            .scannerwork/
-            .sonar/
-          key: windows-build
+      - name: Restore Cached Directories
+        run:
+          |
           
       - name: Install sonar-scanner and build-wrapper
         run: |
@@ -29,7 +26,8 @@ jobs:
       - name: Run build-wrapper
         run: |
           ./set-sonar-variables.ps1
-          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output "C:/Program Files/Epic Games/UE_5.3/Engine/Build/BatchFiles/RunUAT.bat" BuildCookRun -project="$(pwd)\UnrealPokemon.uproject" -configuration=DebugGame -build
+          $Location = $(Get-Location)
+          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output & "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\DotNet\UnrealBuildTool\UnrealBuildTool.exe" $Location/UnrealPokemon.uproject UnrealEditor Win64 DebugGame
       - name: Run Tests
         run: |
           ./run_tests.ps1
@@ -39,4 +37,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./set-sonar-variables.ps1
-          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=coverage.xml
+          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=coverage.xml -D sonar.working.directory=C:/.sonar/cache/unreal-pokemon-internal

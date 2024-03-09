@@ -24,8 +24,8 @@ FText FGamePokemon::GetName() const {
 	return Nickname.IsSet() ? Nickname.GetValue() : GetSpecies().RealName;
 }
 
-EGender FGamePokemon::GetGender() const {
-	using enum EGender;
+EPokemonGender FGamePokemon::GetGender() const {
+	using enum EPokemonGender;
 	
 	if (Gender.IsSet())
 		return Gender.GetValue();

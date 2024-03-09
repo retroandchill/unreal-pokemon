@@ -25,7 +25,7 @@ public:
 	
 	FText GetName() const override;
 	const FSpeciesData& GetSpecies() const override;
-	EGender GetGender() const override;
+	EPokemonGender GetGender() const override;
 	int32 GetCurrentHP() const override;
 	int32 GetMaxHP() const override;
 	bool IsFainted() const override;
@@ -51,7 +51,7 @@ private:
 	/**
 	 * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
 	 */
-	TOptional<EGender> Gender;
+	TOptional<EPokemonGender> Gender;
 
 	/**
 	 * The current amount of HP this Pokémon has
