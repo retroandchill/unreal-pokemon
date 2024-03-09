@@ -13,8 +13,6 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
 public:
-
-
 	/**
 	 * Linear interpolation between two values, given the duration of the change and the time passed since the start of
 	 * the change (delta)
