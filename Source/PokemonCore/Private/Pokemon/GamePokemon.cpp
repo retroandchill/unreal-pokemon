@@ -10,11 +10,11 @@
 
 // TODO: Instantiate the stat block dynamically based on a user config
 FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species), PersonalityValue(UPersonalityValueUtils::GeneratePersonalityValue()) {
-	auto &DataManager = FDataManager::GetInstance();
+	const auto &DataManager = FDataManager::GetInstance();
 	auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
 	auto SpeciesData = SpeciesTable.GetData(Species);
-	check(SpeciesData != nullptr);
+	check(SpeciesData != nullptr)
 	StatBlock = MakeUnique<FDefaultStatBlock>(SpeciesData->GrowthRate, Level);
 	StatBlock->CalculateStats(SpeciesData->BaseStats);
 	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
@@ -52,7 +52,7 @@ bool FGamePokemon::IsFainted() const {
 const FSpeciesData& FGamePokemon::GetSpecies() const {
 	auto &DataTable = FDataManager::GetInstance().GetDataTable<FSpeciesData>();
 	auto SpeciesData = DataTable.GetData(Species);
-	check(SpeciesData != nullptr);
+	check(SpeciesData != nullptr)
 
 	return  *SpeciesData;
 }

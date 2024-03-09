@@ -22,3 +22,7 @@ double UMathUtilities::LinearInterpolation(double StartValue, double EndValue, d
 float UMathUtilities::LinearInterpolationF(float StartValue, float EndValue, float Duration, float Delta) {
 	return LinearInterpolation_Internal(StartValue, EndValue, Duration, Delta);
 }
+
+int32 UMathUtilities::Pow(int32 Base, int32 Exponent) {
+	return FMath::FloorToInt(FMath::Pow(static_cast<float>(Base), Exponent));
+}

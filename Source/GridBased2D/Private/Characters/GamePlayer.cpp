@@ -43,27 +43,23 @@ AGamePlayer::AGamePlayer() {
 void AGamePlayer::BeginPlay() {
 	Super::BeginPlay();
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
+	if (const auto* const PlayerController = Cast<APlayerController>(Controller)) {
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
 }
 
-// Called every frame
-void AGamePlayer::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-}
 
 // Called to bind functionality to input
 void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
+	using enum ETriggerEvent;
+	
 	auto Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-	Input->BindAction(MoveInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Move);
-	Input->BindAction(FaceDirectionInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Turn);
-	Input->BindAction(InteractInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::Interact);
-	Input->BindAction(PauseInput.Get(), ETriggerEvent::Triggered, this, &AGamePlayer::PauseGame);
+	Input->BindAction(MoveInput.Get(), Triggered, this, &AGamePlayer::Move);
+	Input->BindAction(FaceDirectionInput.Get(), Triggered, this, &AGamePlayer::Turn);
+	Input->BindAction(InteractInput.Get(), Triggered, this, &AGamePlayer::Interact);
+	Input->BindAction(PauseInput.Get(), Triggered, this, &AGamePlayer::PauseGame);
 }
 
 void AGamePlayer::Move(const FInputActionInstance& Input) {
@@ -86,8 +82,7 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 
 void AGamePlayer::Interact() {
 	auto Result = HitTestOnFacingTile(GetDirection());
-	auto Interactable = Cast<IInteractable>(Result.GetActor());
-	if (Interactable == nullptr)
+	if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr)
 		return;
 
 	IInteractable::Execute_OnInteract(Result.GetActor(), this);

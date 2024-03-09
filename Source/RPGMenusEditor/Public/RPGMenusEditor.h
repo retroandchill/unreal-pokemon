@@ -14,7 +14,7 @@ public:
 	/**
 	 * Called after the engine is fully initialized
 	 */
-	void OnPostEngineInit();
+    void OnPostEngineInit() const;
 	
     void ShutdownModule() override;
 };

@@ -35,5 +35,13 @@ public:
 	 * @return The interpolated value
 	 */
 	static float LinearInterpolationF(float StartValue, float EndValue, float Duration, float Delta);
+
+	/**
+	 * Take the power of two exponents and return the result as an integer.
+	 * @param Base The base of the operation
+	 * @param Exponent The exponent of the operation
+	 * @return The result of the exponentiation
+	 */
+	static int32 Pow(int32 Base, int32 Exponent);
 	
 };

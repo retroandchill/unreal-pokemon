@@ -18,6 +18,10 @@ public:
 	 * @param Level The level of the Pokémon in question
 	 */
 	explicit FGamePokemon(FName Species, int32 Level = 5);
+
+	FGamePokemon(FGamePokemon&& Other) noexcept = default;
+
+	FGamePokemon &operator=(FGamePokemon&& Other) noexcept = default;
 	
 	FText GetName() const override;
 	const FSpeciesData& GetSpecies() const override;

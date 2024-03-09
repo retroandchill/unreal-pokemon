@@ -8,7 +8,7 @@
 using namespace StatUtils;
 
 POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
-	auto &DataSubsystem = FDataManager::GetInstance();
+	const auto &DataSubsystem = FDataManager::GetInstance();
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
 	TMap<FName, int32> Ret;
@@ -23,7 +23,7 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
 }
 
 POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
-	auto &DataSubsystem = FDataManager::GetInstance();
+	const auto &DataSubsystem = FDataManager::GetInstance();
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
 	TMap<FName, int32> Ret;
@@ -38,7 +38,7 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
 }
 
 POKEMONCORE_API FName StatUtils::RandomNature() {
-	auto &DataSubsystem = FDataManager::GetInstance();
+	const auto &DataSubsystem = FDataManager::GetInstance();
 	auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
 
 	auto Rows = NatureTable.GetTableRowNames().Array();

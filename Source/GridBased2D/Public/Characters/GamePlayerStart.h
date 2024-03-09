@@ -18,10 +18,5 @@ public:
 	 * @param ObjectInitializer The initialization parameters of the object
 	 */
 	explicit AGamePlayerStart(const FObjectInitializer& ObjectInitializer);
-
-protected:
-	void BeginPlay() override;
-
-public:
-	void Tick(float DeltaTime) override;
+	
 };

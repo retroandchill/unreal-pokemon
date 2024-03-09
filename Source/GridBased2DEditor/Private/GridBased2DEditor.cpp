@@ -13,7 +13,7 @@ void FGridBased2DEditorModule::StartupModule() {
 	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FGridBased2DEditorModule::OnPostEngineInit);
 }
 
-void FGridBased2DEditorModule::OnPostEngineInit() {
+void FGridBased2DEditorModule::OnPostEngineInit() const {
 	// Register asset types
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 

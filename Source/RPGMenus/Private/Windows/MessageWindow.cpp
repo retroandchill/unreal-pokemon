@@ -98,7 +98,7 @@ void UMessageWindow::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 }
 
 void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
-	check(DisplayTextWidget != nullptr);
+	check(DisplayTextWidget != nullptr)
 
 	bWaitForChoice = bHasCommands;
 	if (FMath::IsNearlyZero(TextSpeed)) {
@@ -109,7 +109,7 @@ void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
 }
 
 void UMessageWindow::ClearDisplayText() {
-	check(DisplayTextWidget != nullptr);
+	check(DisplayTextWidget != nullptr)
 	DisplayTextWidget->SetText(FText::FromString(TEXT("")));
 	WordToDisplay.Empty();
 	FullText.Reset();

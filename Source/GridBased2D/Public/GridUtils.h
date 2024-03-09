@@ -8,7 +8,7 @@ namespace GridBased2D {
 	/**
 	 * The size of the grid according to the game
 	 */
-	constexpr double GGridSize = 32.0;
+	constexpr float GRID_SIZE = 32.0f;
 
 	/**
 	 * Convert a vector into a facing direction

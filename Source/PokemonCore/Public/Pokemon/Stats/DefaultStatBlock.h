@@ -37,8 +37,8 @@ public:
 	FDefaultStatBlock &operator=(FDefaultStatBlock&& Other) noexcept;
 	
 	int32 GetLevel() const override;
-	virtual int32 GetExp() const override;
-	virtual int32 GetExpForNextLevel() const override;
+	int32 GetExp() const override;
+	int32 GetExpForNextLevel() const override;
 	const FNature& GetNature() const override;
 	IStatEntry& GetStat(FName Stat) override;
 	const IStatEntry& GetStat(FName Stat) const override;

@@ -26,7 +26,7 @@ void UPokemonSubsystem::Deinitialize() {
 }
 
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
-	check(Instance != nullptr);
+	check(Instance != nullptr)
 	return *Instance;
 }
 
@@ -39,11 +39,11 @@ int32 UPokemonSubsystem::GetMaxPartySize() const {
 }
 
 ITrainer& UPokemonSubsystem::GetPlayer() {
-	check(Player != nullptr);
+	check(Player != nullptr)
 	return *Player;
 }
 
 const ITrainer& UPokemonSubsystem::GetPlayer() const {
-	check(Player != nullptr);
+	check(Player != nullptr)
 	return *Player;
 }

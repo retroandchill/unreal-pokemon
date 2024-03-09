@@ -59,7 +59,7 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
 			continue;
 
 		auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
-		check(Spawner != nullptr);
+		check(Spawner != nullptr)
 
 		(*ScreenCounter)++;
 		Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(CustomizeCallback, TSubclassOf<UTextDisplayScreen>(*It), ScreenCounter, FactoryFunc);

@@ -4,7 +4,7 @@
 #include "PaperTileMap.h"
 
 // Sets default values
-AGridBasedMap::AGridBasedMap() : PlayerLevelLayer(1) {
+AGridBasedMap::AGridBasedMap() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -57,17 +57,6 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 	SetUpMapLocation(bFinished);
 }
 
-// Called when the game starts or when spawned
-void AGridBasedMap::BeginPlay() {
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AGridBasedMap::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-}
-
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	if (TileMap == nullptr)
 		return;
@@ -77,9 +66,9 @@ void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
 	PlayerLevelLayer = FMath::Min(PlayerLevelLayer, TotalLayers - 1);
-	float LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer;
+	double LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer;
 
-	MapLocation.Z = LowestLayerZ - TileMap->SeparationPerLayer * (TotalLayers - PlayerLevelLayer) - 1;
+	MapLocation.Z = LowestLayerZ - static_cast<double>(TileMap->SeparationPerLayer) * (TotalLayers - PlayerLevelLayer) - 1;
 	TileMapComponent->SetRelativeLocation(MapLocation);
 	SetBoundsPositions();
 
@@ -90,7 +79,7 @@ void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	}
 }
 
-void AGridBasedMap::SetBoundsPositions(bool bIsInitializing) {
+void AGridBasedMap::SetBoundsPositions(bool) {
 	int32 TileWidth = TileMapComponent->TileMap->TileWidth;
 	int32 TileHeight = TileMapComponent->TileMap->TileHeight;
 	int32 TotalMapWidth = TileWidth * TileMapComponent->TileMap->MapWidth;

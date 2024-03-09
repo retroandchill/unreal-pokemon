@@ -31,9 +31,9 @@ public:
 	 */
 	template <typename T>
 	const TDataTableProxy<T>& GetDataTable() const {
-		UScriptStruct* StructClass = T::StaticStruct();
+		UScriptStruct* const StructClass = T::StaticStruct();
 		auto RowName = StructClass->GetFName();
-		check(DataTables.Contains(RowName));
+		check(DataTables.Contains(RowName))
 
 		auto TableInterface = DataTables[RowName].Get();
 		check(StructClass->GetName() == TableInterface->GetStructType()->GetName())

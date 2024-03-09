@@ -3,7 +3,7 @@
 
 #include "DesktopPlatformModule.h"
 
-TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* DataTable) {
+TArray<FStat> UImportUtils::GetMainStatsFromTable(UDataTable* const DataTable) {
 	TArray<FStat*> References;
 	DataTable->GetAllRows(TEXT("UImportUtils::GetMainStatsFromTable"), References);
 	TArray<FStat> Ret;

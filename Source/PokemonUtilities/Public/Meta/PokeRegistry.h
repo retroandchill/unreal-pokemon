@@ -40,7 +40,7 @@ public:
 	 * @return A unique reference to the factory instance
 	 */
 	TUniquePtr<T> Construct(FName Key, Args... Arguments) const {
-		check(RegisteredConstructors.Contains(Key));
+		check(RegisteredConstructors.Contains(Key))
 		return RegisteredConstructors[Key](Arguments...);
 	}
 

@@ -13,7 +13,7 @@ void FRPGMenusEditorModule::StartupModule() {
 	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FRPGMenusEditorModule::OnPostEngineInit);
 }
 
-void FRPGMenusEditorModule::OnPostEngineInit() {
+void FRPGMenusEditorModule::OnPostEngineInit() const {
 	// Register asset types
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
     

@@ -10,7 +10,7 @@
 using namespace StatUtils;
 
 FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(RandomNature()) {
-	auto &DataSubsystem = FDataManager::GetInstance();
+	const auto &DataSubsystem = FDataManager::GetInstance();
 	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 	
 	StatTable.ForEach([this](const FStat &Stat) {
@@ -40,11 +40,11 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap
 		switch (Stat.Type) {
 		using enum EPokemonStatType;
 		case Main:
-			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID));
+			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
 			break;
 		case MainBattle:
-			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID));
+			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
 			break;
 		case Battle:
@@ -96,29 +96,29 @@ int32 FDefaultStatBlock::GetExpForNextLevel() const {
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {
-	auto &DataSubsystem = FDataManager::GetInstance();
+	const auto &DataSubsystem = FDataManager::GetInstance();
 	auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
 
 	auto Ret = NatureTable.GetData(Nature);
-	check(Ret != nullptr);
+	check(Ret != nullptr)
 	return *Ret;
 }
 
 IStatEntry& FDefaultStatBlock::GetStat(FName Stat) {
-	check(Stats.Contains(Stat));
+	check(Stats.Contains(Stat))
 	return *Stats[Stat];
 }
 
 const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
-	check(Stats.Contains(Stat));
+	check(Stats.Contains(Stat))
 	return *Stats[Stat];
 }
 
 void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 	auto &NatureData = GetNature();
 	
-	for (auto &[StatID, Stat] : Stats) {
-		check(BaseStats.Contains(StatID));
+	for (const auto &[StatID, Stat] : Stats) {
+		check(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}
 }

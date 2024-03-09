@@ -19,15 +19,9 @@ public:
 
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
-	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent);
+	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
-
-protected:
-	void BeginPlay() override;
-
-public:
-	void Tick(float DeltaTime) override;
 
 private:
 	/**
@@ -82,5 +76,5 @@ private:
 	 * The layer of the tilemap that is at the same level as the player
 	 */
 	UPROPERTY(EditAnywhere, Category = "Display", meta = (UIMin = 0, ClampMin = 0))
-	int32 PlayerLevelLayer;
+	int32 PlayerLevelLayer = 1;
 };

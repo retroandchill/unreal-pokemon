@@ -7,7 +7,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 #include "Components/BoxComponent.h"
-#include "..\..\Public\GridUtils.h"
+#include "GridUtils.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
@@ -17,7 +17,7 @@ AGameCharacter::AGameCharacter() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	double BoxSize = GridBased2D::GGridSize / 2;
+	float BoxSize = GridBased2D::GRID_SIZE / 2;
 	auto Capsule = GetCapsuleComponent();
 	Capsule->SetCapsuleRadius(BoxSize);
 	Capsule->SetCapsuleHalfHeight(BoxSize);
@@ -63,8 +63,8 @@ void AGameCharacter::PostEditMove(bool bFinished) {
 void AGameCharacter::BeginPlay() {
 	Super::BeginPlay();
 	auto Position = GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt(Position.X / GridBased2D::GGridSize);
-	CurrentPosition.Y = FMath::FloorToInt(Position.Y / GridBased2D::GGridSize);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / GridBased2D::GRID_SIZE);
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridBased2D::GRID_SIZE);
 
 	DesiredPosition = CurrentPosition;
 	
@@ -102,13 +102,13 @@ void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
 }
 
 FHitResult AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
-	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GGridSize);
+	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GRID_SIZE);
 	
 	FVector LocalOffset(0, 0, 0);
 	GridBased2D::AdjustMovementPosition(MovementDirection, LocalOffset);
 
 	auto Position = GetActorLocation();
-	auto GridPosition = LocalOffset * GridBased2D::GGridSize + Position;
+	auto GridPosition = LocalOffset * GridBased2D::GRID_SIZE + Position;
 	FCollisionShape GridSquare;
 	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
 	FCollisionQueryParams Params;
@@ -129,8 +129,8 @@ void AGameCharacter::InitCharacterData() {
 	CharacterSprite->SetTranslucentSortPriority(static_cast<int32>(GetActorLocation().Y));
 
 	auto Position = GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt(Position.X / GridBased2D::GGridSize);
-	CurrentPosition.Y = FMath::FloorToInt(Position.Y / GridBased2D::GGridSize);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / GridBased2D::GRID_SIZE);
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridBased2D::GRID_SIZE);
 
 	DesiredPosition = CurrentPosition;
 
@@ -157,8 +157,8 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridBased2D::GGridSize,
-													  DesiredPosition.X * GridBased2D::GGridSize,
+		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridBased2D::GRID_SIZE,
+													  DesiredPosition.X * GridBased2D::GRID_SIZE,
 													  MoveSpeed * Distance,
 													  Timer);
 
@@ -169,8 +169,8 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridBased2D::GGridSize,
-													  DesiredPosition.Y * GridBased2D::GGridSize,
+		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridBased2D::GRID_SIZE,
+													  DesiredPosition.Y * GridBased2D::GRID_SIZE,
 													  MoveSpeed * Distance,
 													  Timer);
 

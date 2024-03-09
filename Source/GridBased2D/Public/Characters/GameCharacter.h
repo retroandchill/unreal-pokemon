@@ -28,7 +28,7 @@ public:
 protected:
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
-	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent);
+	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
 	

@@ -28,8 +28,6 @@ protected:
 	void BeginPlay() override;
 
 public:
-	void Tick(float DeltaTime) override;
-	
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 private:
