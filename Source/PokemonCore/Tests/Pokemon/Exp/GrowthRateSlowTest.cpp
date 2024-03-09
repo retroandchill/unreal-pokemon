@@ -18,20 +18,20 @@ constexpr std::array GSlowGrowthTable = {
 	941963, 973360, 1005446, 1038230, 1071718, 1105920, 1140841, 1176490, 1212873, 1250000
 };
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateSlowTest, "Tests.Exp.GrowthRateSlowTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateSlowTest, "Project.Core.Exp.GrowthRateSlowTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateSlowTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const {
-	OutBeautifiedNames.Add("Tests.Exp.GrowthRateFastTest: Level = 1");
+	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFastTest: Level = 1");
 	OutTestCommands.Add("1");
 
 	for (int i = 0; i < 3; i++) {
-		auto Fmt = FString::Printf(TEXT("Tests.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
+		auto Fmt = FString::Printf(TEXT("Project.Core.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
 		OutBeautifiedNames.Add(Fmt);
 		OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
 	}
 
-	OutBeautifiedNames.Add("Tests.Exp.GrowthRateFastTest: Level = 100");
+	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFastTest: Level = 100");
 	OutTestCommands.Add("100");
 }
 

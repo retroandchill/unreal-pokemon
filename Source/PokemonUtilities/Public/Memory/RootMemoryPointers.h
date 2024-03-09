@@ -17,7 +17,6 @@ inline void RemoveObjectFromRoot(UObject* Ptr) {
 class FRootDeleter {
 public:
 	FRootDeleter() = default;
-	FRootDeleter(const FRootDeleter&) = default;
 
 	/**
 	 * Removes the pointed UObject from the root allowing it to be garbage collected

@@ -1,7 +1,7 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Tests.DefaultStatBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
