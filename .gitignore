@@ -81,3 +81,4 @@ DerivedDataCache/*
 LastCoverageResults.log
 
 .sonar
+coverage.xml
