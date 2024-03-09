@@ -13,17 +13,7 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
 public:
-	/**
-	 * Linear interpolation between two values, given the duration of the change and the time passed since the start of
-	 * the change (delta)
-	 * @param StartValue The starting value for the change
-	 * @param EndValue Where the value should be at the end of the duration
-	 * @param Duration The duration of the change
-	 * @param Delta The change in time
-	 * @return The interpolated value
-	 */
-	UFUNCTION(BlueprintPure, Category = "Utilities|Math")
-	static double LinearInterpolation(double StartValue, double EndValue, double Duration, double Delta);
+
 
 	/**
 	 * Linear interpolation between two values, given the duration of the change and the time passed since the start of
@@ -34,7 +24,23 @@ public:
 	 * @param Delta The change in time
 	 * @return The interpolated value
 	 */
-	static float LinearInterpolationF(float StartValue, float EndValue, float Duration, float Delta);
+	template <typename A, typename B, typename C, typename D>
+	requires std::is_arithmetic_v<A> && std::is_arithmetic_v<B> &&
+		std::is_arithmetic_v<C> && std::is_arithmetic_v<D> &&
+			(std::is_floating_point_v<A> || std::is_floating_point_v<B> ||
+				std::is_floating_point_v<C> || std::is_floating_point_v<D>)
+	static auto LinearInterpolation(A StartValue, B EndValue, C Duration, D Delta) -> decltype(StartValue * EndValue * Duration * Delta) {
+		if (Duration <= 0)
+			return EndValue;
+		
+		if (Delta <= 0)
+			return StartValue;
+
+		if (Delta >= Duration)
+			return EndValue;
+		
+		return StartValue + (EndValue - StartValue) * Delta / Duration;
+	}
 
 	/**
 	 * Take the power of two exponents and return the result as an integer.

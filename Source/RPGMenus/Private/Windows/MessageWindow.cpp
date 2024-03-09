@@ -39,7 +39,7 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	
 	if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
 		ScrollTimer.GetValue() += InDeltaTime;
-		ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolationF(OriginalScroll.GetValue(), BottomScroll, ScrollSpeed, ScrollTimer.GetValue()));
+		ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolation(OriginalScroll.GetValue(), BottomScroll, ScrollSpeed, ScrollTimer.GetValue()));
 		
 		if (FMath::IsNearlyEqual(ScrollBox->GetScrollOffset(), BottomScroll)) {
 			ScrollTimer.Reset();
