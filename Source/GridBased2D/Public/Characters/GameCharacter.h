@@ -110,6 +110,7 @@ public:
 	 * Get the direction this character is actively facing
 	 * @return The direction the character is facing.
 	 */
+	UFUNCTION(BlueprintPure, Category = "Character|Movement")
 	EFacingDirection GetDirection() const;
 
 private:
