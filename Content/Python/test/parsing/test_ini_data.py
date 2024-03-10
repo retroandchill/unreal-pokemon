@@ -40,7 +40,7 @@ class TestIniData(unittest.TestCase):
         for item in ini_data:
             names.append(item[0])
 
-        self.assertTrue(len(names) > 0)
+        self.assertGreater(len(names), 0)
 
     def test_parse_items(self):
         item_data = ItemData(os.path.join(ROOT_DIR, "resources/items.txt"), None, None, None)
