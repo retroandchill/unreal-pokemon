@@ -24,9 +24,9 @@ UObject* UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species) {
 
 	// TODO: Add support for alternate forms, gender differences, etc.
 	auto AssetPath = FString::Format(TEXT("{Path}/{AssetName}.{AssetName}"), {
-		{TEXT("PATH"), PokemonIconsPackageName},
-		{TEXT("AssetName"), Species.ToString()}
-	});
+		                                 {TEXT("PATH"), PokemonIconsPackageName},
+		                                 {TEXT("AssetName"), Species.ToString()}
+	                                 });
 	auto AssetData = AssetRegistryModule.GetRegistry().GetAssetByObjectPath(AssetPath);
-	return AssetData.GetAsset();	
+	return AssetData.GetAsset();
 }

@@ -39,7 +39,7 @@ public:
 	 * @param Text The text to display. Is normalized to serve as the name symbol.
 	 * @return The created command
 	 */
-	static UCommand* CreateBasicCommand(const FText &Text);
+	static UCommand* CreateBasicCommand(const FText& Text);
 
 	/**
 	 * Execute any special effects that this command may have associated with it
@@ -47,7 +47,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Events)
 	void ExecuteCommand(ARPGPlayerController* Controller);
-	
 
 protected:
 	/**

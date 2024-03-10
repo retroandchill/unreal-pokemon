@@ -7,7 +7,7 @@
  * Signifies a generic static registry for different data types. Used to create a static registry that sits below
  * Unreal Engine and doesn't require the classes to be UObjects
  */
-template <typename T, typename ...Args>
+template <typename T, typename... Args>
 class TPokeRegistry {
 public:
 	/**
@@ -19,7 +19,7 @@ public:
 	 * Register the given class for the given key using the default constructor
 	 * @param Key The key to use for the registry
 	 */
-	template<typename Derived>
+	template <typename Derived>
 	void RegisterClass(FName Key) {
 		RegisterFactory(Key, ConstructDerived<Derived>);
 	}
@@ -29,7 +29,7 @@ public:
 	 * @param Key The key to use for the registry
 	 * @param FactoryFunction 
 	 */
-	void RegisterFactory(FName Key, const FFactoryFunction &FactoryFunction) {
+	void RegisterFactory(FName Key, const FFactoryFunction& FactoryFunction) {
 		RegisteredConstructors.Add(Key, FactoryFunction);
 	}
 
@@ -40,7 +40,7 @@ public:
 	 * @return A unique reference to the factory instance
 	 */
 	TUniquePtr<T> Construct(FName Key, Args... Arguments) const {
-		check(RegisteredConstructors.Contains(Key));
+		check(RegisteredConstructors.Contains(Key))
 		return RegisteredConstructors[Key](Arguments...);
 	}
 
@@ -54,11 +54,11 @@ public:
 	}
 
 private:
-	template<typename Derived>
+	template <typename Derived>
 	static TUniquePtr<T> ConstructDerived(Args... Arguments) {
 		return MakeUnique<Derived>(Arguments...);
 	}
-	
+
 	/**
 	 * The set of registered constructors for the data table proxy types
 	 */

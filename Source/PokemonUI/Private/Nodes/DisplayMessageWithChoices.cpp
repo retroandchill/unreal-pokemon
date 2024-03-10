@@ -5,7 +5,7 @@
 #include "Screens/TextDisplayScreen.h"
 
 UDisplayMessageWithChoices* UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject* WorldContextObject,
-                                                                       TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message, const TArray<FText>& Choices) {
+	TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message, const TArray<FText>& Choices) {
 	auto Node = NewObject<UDisplayMessageWithChoices>();
 	Node->WorldContextObject = WorldContextObject;
 	Node->ScreenClass = ScreenClass;
@@ -27,7 +27,7 @@ void UDisplayMessageWithChoices::Activate() {
 void UDisplayMessageWithChoices::ExecuteOnChoiceSelected(int32 ChoiceIndex, FName ChoiceID) {
 	OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);
 
-	
+
 	auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
 	if (Controller == nullptr)
 		return;

@@ -15,7 +15,7 @@ class RPGMENUS_API UWindow : public UWidget {
 	GENERATED_BODY()
 
 public:
-	explicit UWindow(const FObjectInitializer &ObjectInitializer);
+	explicit UWindow(const FObjectInitializer& ObjectInitializer);
 	TSharedRef<SWidget> RebuildWidget() override;
 	void SynchronizeProperties() override;
 
@@ -25,7 +25,7 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Windowskin)
 	TObjectPtr<UWindowskin> Windowskin;
-	
+
 	/**
 	 * The source texture used to make the window
 	 */

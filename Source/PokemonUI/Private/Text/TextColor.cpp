@@ -2,5 +2,3 @@
 
 
 #include "Text/TextColor.h"
-
-

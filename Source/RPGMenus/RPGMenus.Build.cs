@@ -24,9 +24,6 @@ public class RPGMenus : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"UnrealEd",
 				"CommonMath", 
 				"Paper2D"
 			}

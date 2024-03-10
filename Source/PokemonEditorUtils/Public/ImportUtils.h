@@ -19,7 +19,7 @@ class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
 	 * @return The list of main and main/battle stats
 	 */
 	UFUNCTION(BlueprintPure, Category = "Editor|Data")
-	static TArray<FStat> GetMainStatsFromTable(UDataTable *DataTable);
+	static TArray<FStat> GetMainStatsFromTable(UDataTable* const DataTable);
 
 	/**
 	 * Select a file from the filesystem and set it to a text box
@@ -27,5 +27,5 @@ class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
 	 * @return The full qualified path of the filename, 
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Editor|Filesystem")
-	static FText SelectFile(const FString &FileTypes);
+	static FText SelectFile(const FString& FileTypes);
 };

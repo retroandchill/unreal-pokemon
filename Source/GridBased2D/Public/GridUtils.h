@@ -8,7 +8,7 @@ namespace GridBased2D {
 	/**
 	 * The size of the grid according to the game
 	 */
-	constexpr double GGridSize = 32.0;
+	constexpr double GRID_SIZE = 32.0f;
 
 	/**
 	 * Convert a vector into a facing direction
@@ -24,7 +24,7 @@ namespace GridBased2D {
 	 * @param Position The position struct to alter
 	 */
 	template <typename Vector>
-	void AdjustMovementPosition(EFacingDirection MovementDirection, Vector &Position) {
+	void AdjustMovementPosition(EFacingDirection MovementDirection, Vector& Position) {
 		switch (MovementDirection) {
 			using enum EFacingDirection;
 		case Down:

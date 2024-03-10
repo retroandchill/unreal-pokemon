@@ -18,13 +18,13 @@ public:
 	 * The lower 8 bits of the personality value
 	 */
 	static constexpr int32 LOWER_8_BITS = 0xFF;
-	
+
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 	/**
 	 * The lower 16 bits of the personality value
 	 */
 	static constexpr int32 LOWER_16_BITS = 0xFFFF;
-	
+
 	/**
 	 * Generate a unique personality value that can be used for a Pokémon
 	 * @return A unique 32-bit unsigned Personality value

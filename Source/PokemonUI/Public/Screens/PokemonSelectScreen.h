@@ -32,7 +32,7 @@ private:
 	 * @param bIsVisible Should the window be shown
 	 */
 	void ToggleCommandWindowVisibility(bool bIsVisible);
-	
+
 	/**
 	 * The "Window" that the player selects a Pokémon from
 	 */

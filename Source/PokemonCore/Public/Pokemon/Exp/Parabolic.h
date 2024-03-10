@@ -10,7 +10,8 @@ namespace Exp {
 	 */
 	class POKEMONCORE_API FParabolic : public IGrowthRate {
 	public:
+		~FParabolic() override = default;
 		int32 ExpForLevel(int32 Level) const override;
-		virtual TUniquePtr<IGrowthRate> Clone() const override;
+		TUniquePtr<IGrowthRate> Clone() const override;
 	};
 }

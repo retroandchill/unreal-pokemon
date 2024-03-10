@@ -73,7 +73,7 @@ private:
 	 * Automatically resize the window to match the desired number of lines
 	 */
 	void ResizeWindow();
-	
+
 	/**
 	 * Queue up the new text if the geometry information is available
 	 */
@@ -103,13 +103,13 @@ private:
 	 * Queue a new line to be added
 	 */
 	void AddNewLine();
-	
+
 	/**
 	 * The actual area where the window is drawn
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UWindow> Window;
-	
+
 	/**
 	 * The widget that contains the text displayed to the player
 	 */
@@ -121,7 +121,7 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UScrollBox> ScrollBox;
-	
+
 	/**
 	 * The size box used to control the desired height
 	 */
@@ -133,7 +133,7 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UWidget> PauseArrow;
-	
+
 	/**
 	 * Do the selection options wrap when input would exceed the end
 	 */
@@ -170,7 +170,7 @@ private:
 	 * The current timer for scrolling the window
 	 */
 	TOptional<float> ScrollTimer;
-	
+
 	/**
 	 * The desired number of lines to display to the player
 	 */
@@ -192,5 +192,4 @@ private:
 	 * Should we wait for commands at the end of the text display?
 	 */
 	bool bWaitForChoice = false;
-	
 };

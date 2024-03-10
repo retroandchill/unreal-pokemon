@@ -17,7 +17,7 @@ FDataManager::FDataManager() {
 		auto RowStruct = Table->GetRowStruct();
 		if (RowStruct == nullptr)
 			continue;
-		
+
 		auto& DataRegistry = FDataRegistry::GetInstance();
 		if (!DataRegistry.IsTypeRegistered(RowStruct))
 			continue;
@@ -34,8 +34,8 @@ FDataManager& FDataManager::GetInstance() {
 }
 
 const IGameData& FDataManager::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const {
-	check(StructType != nullptr);
+	check(StructType != nullptr)
 	auto StructName = StructType->GetFName();
-	check(DataTables.Contains(StructName));
+	check(DataTables.Contains(StructName))
 	return *DataTables[StructName];
 }

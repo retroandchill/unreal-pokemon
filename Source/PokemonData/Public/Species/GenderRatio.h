@@ -40,5 +40,4 @@ struct POKEMONDATA_API FGenderRatio : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gender Determination")
 	uint8 FemaleChance;
-	
 };
