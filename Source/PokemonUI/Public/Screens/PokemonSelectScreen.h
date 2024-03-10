@@ -3,9 +3,12 @@
 
 
 #include "CoreMinimal.h"
+#include "PartyScreen.h"
 #include "Screens/Screen.h"
 #include "PokemonSelectScreen.generated.h"
 
+class UPartyMenuHandler;
+class UCommand;
 class UCommandWindow;
 class UHelpWindow;
 class UPokemonSelectionPane;
@@ -13,11 +16,15 @@ class UPokemonSelectionPane;
  * Screen for when the player needs to select a Pokémon from the menu
  */
 UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UPokemonSelectScreen : public UScreen {
+class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
 	GENERATED_BODY()
 
 protected:
 	void NativeConstruct() override;
+
+public:
+	virtual void BeginSwitch(int32 Index) override;
+	virtual void SetHelpText(const FText& Text) override;
 
 private:
 	/**
@@ -26,6 +33,14 @@ private:
 	 */
 	UFUNCTION()
 	void OnPokemonSelected(int32 Index);
+
+	/**
+	 * Process the selected command
+	 * @param CurrentIndex The index of the command
+	 * @param SelectedCommand The command in question
+	 */
+	UFUNCTION()
+	void ProcessCommand(int32 CurrentIndex, UCommand* SelectedCommand);
 
 	/**
 	 * Callback for when the player cancels from the command window
@@ -39,6 +54,7 @@ private:
 	 */
 	void ToggleCommandWindowVisibility(bool bIsVisible);
 
+private:
 	/**
 	 * The "Window" that the player selects a Pokémon from
 	 */
@@ -56,4 +72,16 @@ private:
 	 */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UHelpWindow> CommandHelpWindow;
+
+	/**
+	 * The handlers for the command window when a Pokémon in selected
+	 */
+	UPROPERTY(EditAnywhere, Category = Commands)
+	FText CancelText;
+
+	/**
+	 * The handlers for the command window when a Pokémon in selected
+	 */
+	UPROPERTY(EditAnywhere, Instanced, Category = Commands)
+	TArray<TObjectPtr<UPartyMenuHandler>> PokemonHandlers;
 };

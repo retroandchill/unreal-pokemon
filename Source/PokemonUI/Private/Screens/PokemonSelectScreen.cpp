@@ -1,7 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/PokemonSelectScreen.h"
 
+#include "RPGPlayerController.h"
 #include "Data/Command.h"
+#include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
@@ -14,18 +16,35 @@ void UPokemonSelectScreen::NativeConstruct() {
 	SelectionPane->SetActive(true);
 	SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
 	SelectionPane->OnCancel.AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
+	CommandWindow->OnCommandSelected.AddDynamic(this, &UPokemonSelectScreen::ProcessCommand);
 	CommandWindow->OnCancel.AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
 	ToggleCommandWindowVisibility(false);
 }
 
+void UPokemonSelectScreen::BeginSwitch(int32 Index) {
+	CommandWindow->SetActive(false);
+	ToggleCommandWindowVisibility(false);
+	SelectionPane->ToggleCommandVisibility(true);
+	
+	SelectionPane->SetIndex(Index);
+	SelectionPane->BeginSwitch(Index);
+	SelectionPane->SetActive(true);
+}
+
+void UPokemonSelectScreen::SetHelpText(const FText& Text) {
+	CommandHelpWindow->SetText(Text);
+}
+
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-	auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty();
-	if (Index < Party.Num()) {
+	if (const auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty(); Index < Party.Num()) {
 		TArray<TObjectPtr<UCommand>> Commands;
-		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Summary", "Summary")));
-		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Switch", "Switch")));
-		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Item", "Item")));
-		Commands.Add(UCommand::CreateBasicCommand(NSLOCTEXT("UPokemonSelectScreen", "Commands_Cancel", "Cancel")));
+		for (UPartyMenuHandler* Handler : PokemonHandlers) {
+			if (!Handler->ShouldShow(*this, Party, Index))
+				continue;
+			
+			Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
+		}
+		Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
 		CommandWindow->SetCommands(MoveTemp(Commands));
 
 		SelectionPane->SetActive(false);
@@ -39,8 +58,17 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 	}
 }
 
+void UPokemonSelectScreen::ProcessCommand(int32 CurrentIndex, UCommand* SelectedCommand) {
+	auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
+	check(Handler != nullptr);
+
+	auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty();
+	Handler->Handle(*this, Party, SelectionPane->GetIndex());
+}
+
 void UPokemonSelectScreen::OnCommandWindowCancel() {
 	ToggleCommandWindowVisibility(false);
+		SelectionPane->ToggleCommandVisibility(true);
 	CommandWindow->SetActive(false);
 	SelectionPane->SetActive(true);
 }

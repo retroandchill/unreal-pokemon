@@ -14,6 +14,10 @@ FTrainerStub::FTrainerStub() {
 	Party.Add(MakeShared<FGamePokemon>("OSHAWOTT", 10));
 }
 
-const TArray<TSharedRef<IPokemon>>& FTrainerStub::GetParty() {
+TArray<TSharedRef<IPokemon>>& FTrainerStub::GetParty() {
+	return Party;
+}
+
+const TArray<TSharedRef<IPokemon>>& FTrainerStub::GetParty() const {
 	return Party;
 }

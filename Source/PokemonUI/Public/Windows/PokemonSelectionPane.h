@@ -31,6 +31,32 @@ public:
 	bool IsMultiSelectMode() const;
 
 	/**
+	 * Is the player actively switching Pokémon
+	 * @return The current switching state
+	 */
+	UFUNCTION(BlueprintPure, Category = Switching)
+	bool IsSwitching() const;
+
+	/**
+	 * Get if the window is actively switching Pokémon and if so what the index is
+	 * @return Is current switching index (if switching)
+	 */
+	const TOptional<int32> &GetSwitchingIndex() const;
+
+	/**
+	 * Begin the process of switching
+	 * @param StartIndex The index to start the switch at
+	 */
+	UFUNCTION(BlueprintCallable, Category = Switching)
+	void BeginSwitch(int32 StartIndex);
+
+	/**
+	 * End the process of switching
+	 */
+	UFUNCTION(BlueprintCallable, Category = Switching)
+	void CompleteSwitch();
+
+	/**
 	 * Toggle whether the bottom commands should be visible or not
 	 * @param bIsVisible Should the elements be visible
 	 */
@@ -112,6 +138,11 @@ private:
 	/**
 	 * Is this panel being used to select multiple Pokémon or just one?
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=IsMultiSelectMode, Category = Display, meta = (UIMin = 1, ClampMin =1))
+	UPROPERTY(EditAnywhere, BlueprintGetter=IsMultiSelectMode, Category = Display)
 	bool bMultiSelectMode = false;
+
+	/**
+	 * The index the player is switching from
+	 */
+	TOptional<int32> SwitchingIndex;
 };

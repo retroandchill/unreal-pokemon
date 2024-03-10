@@ -7,6 +7,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
+#include "Windows/PokemonSelectionPane.h"
 #include "Windows/SelectableWidget.h"
 
 void UPokemonPanel::SetOwner(USelectableWidget* NewOwner) {
@@ -37,13 +38,20 @@ bool UPokemonPanel::IsPanelSelected() const {
 }
 
 bool UPokemonPanel::IsSwapping() const {
-	// TODO: Actually implement the functionality for this
-	return false;
+	auto SelectionPane = Cast<UPokemonSelectionPane>(Owner);
+	if (SelectionPane == nullptr)
+		return false;
+	
+	return SelectionPane->IsSwitching() && IsPanelSelected();
 }
 
 bool UPokemonPanel::IsPreselected() const {
-	// TODO: Actually implement the functionality for this
-	return false;
+	auto SelectionPane = Cast<UPokemonSelectionPane>(Owner);
+	if (SelectionPane == nullptr)
+		return false;
+
+	auto &SwitchingIndex = SelectionPane->GetSwitchingIndex();
+	return SwitchingIndex.Get(-1) == MenuIndex;
 }
 
 void UPokemonPanel::Refresh() {

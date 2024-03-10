@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Memory/GCPointer.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
 #include "PokemonSubsystem.generated.h"
