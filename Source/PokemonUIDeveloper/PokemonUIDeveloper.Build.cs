@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class PokemonUIEditor : ModuleRules
+public class PokemonUIDeveloper : ModuleRules
 {
-    public PokemonUIEditor(ReadOnlyTargetRules Target) : base(Target)
+    public PokemonUIDeveloper(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -22,9 +22,9 @@ public class PokemonUIEditor : ModuleRules
                 "SlateCore",
                 "PokemonUI",
                 "RPGMenus",
-                "UnrealEd",
                 "BlueprintGraph",
                 "KismetCompiler",
+                "UnrealEd",
                 "ToolMenus"
             }
         );

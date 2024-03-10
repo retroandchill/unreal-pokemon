@@ -12,7 +12,7 @@ class UTextDisplayScreen;
  * Blueprint node for handling the display of a message to the player
  */
 UCLASS()
-class POKEMONUIEDITOR_API UK2Node_DisplayMessage : public UK2Node_DisplayMessageBase {
+class POKEMONUIDEVELOPER_API UK2Node_DisplayMessage : public UK2Node_DisplayMessageBase {
 	GENERATED_BODY()
 
 public:

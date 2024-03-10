@@ -3,13 +3,13 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_IsGameDataIDValid.generated.h"
+#include "K2Node_GetGameData.generated.h"
 
 /**
- * Custom Blueprint node designed to check if a GameData ID is valid or not
+ * Node to handle getting the game data out of the editor
  */
 UCLASS()
-class POKEMONDATAEDITOR_API UK2Node_IsGameDataIDValid : public UK2Node {
+class POKEMONDATADEVELOPER_API UK2Node_GetGameData : public UK2Node {
 	GENERATED_BODY()
 
 public:

@@ -4,9 +4,10 @@
 #include "Modules/ModuleManager.h"
 
 /**
- * Editor module for the Pokémon UI classes
+ * Developer modules for the RPG Menus nodes
  */
-class FPokemonUIEditorModule : public IModuleInterface {
+class FRPGMenusDeveloperModule : public IModuleInterface
+{
 public:
     void StartupModule() override;
     void ShutdownModule() override;

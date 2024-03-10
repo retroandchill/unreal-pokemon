@@ -22,8 +22,6 @@ public class RPGMenusEditor : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"BlueprintGraph",
-				"KismetCompiler",
 				"UnrealEd",
 			}
 		);

@@ -60,13 +60,18 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "PokemonDataEditor",
-			"Type": "Editor",
+			"Name": "PokemonUIDeveloper",
+			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "PokemonUIEditor",
-			"Type": "Editor",
+			"Name": "PokemonDataDeveloper",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGMenusDeveloper",
+			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
 		}
 	],

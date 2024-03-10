@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class PokemonDataEditor : ModuleRules
+public class PokemonDataDeveloper : ModuleRules
 {
-    public PokemonDataEditor(ReadOnlyTargetRules Target) : base(Target)
+    public PokemonDataDeveloper(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
