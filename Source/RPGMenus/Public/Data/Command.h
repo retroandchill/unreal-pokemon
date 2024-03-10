@@ -42,6 +42,25 @@ public:
 	static UCommand* CreateBasicCommand(const FText& Text);
 
 	/**
+	 * Create a basic command using the supplied id, text, and handler
+	 * @param ID The ID of the command
+	 * @param Text The text to display. Is normalized to serve as the name symbol.
+	 * @param Handler The handler object
+	 * @return The created command
+	 */
+	static UCommand* CreateBasicCommand(FName ID, const FText& Text, UObject* Handler = nullptr);
+
+	/**
+	 * Get the handler object for the command.
+	 * @tparam T The expected type of the handler
+	 * @return The handler (if exists and the types match, otherwise nullptr)
+	 */
+	template <typename T>
+	T* GetHandler() const {
+		return Cast<T>(Handler);
+	}
+
+	/**
 	 * Execute any special effects that this command may have associated with it
 	 * @param Controller The player controller used to execute any processing
 	 */
@@ -68,4 +87,10 @@ private:
 	*/
 	UPROPERTY(EditAnywhere, Category = Commands)
 	FText Text;
+
+	/**
+	 * The handler object associated with this class
+	 */
+	UPROPERTY()
+	TObjectPtr<UObject> Handler;
 };

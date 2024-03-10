@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Primatives/PokemonPanel.h"
 #include "Windows/SelectableWidget.h"
 #include "PokemonSelectionPane.generated.h"
 
@@ -31,6 +32,32 @@ public:
 	bool IsMultiSelectMode() const;
 
 	/**
+	 * Is the player actively switching Pokémon
+	 * @return The current switching state
+	 */
+	UFUNCTION(BlueprintPure, Category = Switching)
+	bool IsSwitching() const;
+
+	/**
+	 * Get if the window is actively switching Pokémon and if so what the index is
+	 * @return Is current switching index (if switching)
+	 */
+	const TOptional<int32> &GetSwitchingIndex() const;
+
+	/**
+	 * Begin the process of switching
+	 * @param StartIndex The index to start the switch at
+	 */
+	UFUNCTION(BlueprintCallable, Category = Switching)
+	void BeginSwitch(int32 StartIndex);
+
+	/**
+	 * End the process of switching
+	 */
+	UFUNCTION(BlueprintCallable, Category = Switching)
+	void CompleteSwitch();
+
+	/**
 	 * Toggle whether the bottom commands should be visible or not
 	 * @param bIsVisible Should the elements be visible
 	 */
@@ -47,6 +74,22 @@ protected:
 	FMargin GetPanelOffset(int32 PanelIndex);
 
 	void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+
+	/**
+	 * Perform a swap with the two panels being the targets
+	 * @param Panel1 The first panel in the swap
+	 * @param Panel2 The second panel in the swap
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Switching)
+	void PerformSwap(UPokemonPanel *Panel1, UPokemonPanel *Panel2);
+
+	/**
+	 * Actually swap the Pokémon on the panels
+	 * @param Panel1 The first panel in the swap
+	 * @param Panel2 The second panel in the swap
+	 */
+	UFUNCTION(BlueprintCallable, Category = Switching)
+	static void SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *Panel2);
 
 private:
 	/**
@@ -101,7 +144,7 @@ private:
 	 * The list of panels being displayed by this widget
 	 */
 	UPROPERTY()
-	TArray<ISelectablePanel*> ActivePanels;
+	TArray<TScriptInterface<ISelectablePanel>> ActivePanels;
 
 	/**
 	 * How many columns will the Pokémon be displayed in?
@@ -112,6 +155,11 @@ private:
 	/**
 	 * Is this panel being used to select multiple Pokémon or just one?
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=IsMultiSelectMode, Category = Display, meta = (UIMin = 1, ClampMin =1))
+	UPROPERTY(EditAnywhere, BlueprintGetter=IsMultiSelectMode, Category = Display)
 	bool bMultiSelectMode = false;
+
+	/**
+	 * The index the player is switching from
+	 */
+	TOptional<int32> SwitchingIndex;
 };
