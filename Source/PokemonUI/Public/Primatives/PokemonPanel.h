@@ -40,6 +40,12 @@ public:
 	void SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index);
 
 	/**
+	 * Swap held Pokémon with another panel
+	 * @param Other The other panel
+	 */
+	void SwapPokemon(UPokemonPanel &Other);
+
+	/**
 	* Returns if this panel represents a Pokémon that is currently active in battle
 	 * @return Is this Pokémon currently active
 	 */
@@ -74,6 +80,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "User Interface|Visuals")
 	bool IsPreselected() const;
 
+	UFUNCTION(BlueprintCallable, Category = Display)
 	void Refresh() override;
 
 protected:
