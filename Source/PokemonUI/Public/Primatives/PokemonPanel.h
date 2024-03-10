@@ -80,6 +80,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "User Interface|Visuals")
 	bool IsPreselected() const;
 
+	UFUNCTION(BlueprintCallable, Category = Display)
 	void Refresh() override;
 
 protected:
