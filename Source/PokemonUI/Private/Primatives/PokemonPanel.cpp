@@ -24,6 +24,10 @@ void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index) {
 	Refresh();
 }
 
+void UPokemonPanel::SwapPokemon(UPokemonPanel& Other) {
+	Swap(Pokemon, Other.Pokemon);
+}
+
 bool UPokemonPanel::IsActive() const {
 	// TODO: There's a bit more to this I think, but for now this will work
 	return MenuIndex == 0;

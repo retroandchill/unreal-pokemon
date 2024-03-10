@@ -74,13 +74,26 @@ void UPokemonSelectionPane::BeginSwitch(int32 StartIndex) {
 
 void UPokemonSelectionPane::CompleteSwitch() {
 	check(SwitchingIndex.IsSet());
-	// TODO: Actually perform the switch
+	auto Panel1 = CastChecked<UPokemonPanel>(ActivePanels[SwitchingIndex.GetValue()].GetObject());
+	auto Panel2 = CastChecked<UPokemonPanel>(ActivePanels[GetIndex()].GetObject());
+	SwitchingIndex.Reset();
+	PerformSwap(Panel1, Panel2);
 }
 
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
-	for (ISelectablePanel* Panel : ActivePanels) {
+	for (auto &Panel : ActivePanels) {
 		Panel->Refresh();
 	}
+}
+
+void UPokemonSelectionPane::PerformSwap_Implementation(UPokemonPanel *Panel1, UPokemonPanel *Panel2) {
+	SwitchPokemon(Panel1, Panel2);
+}
+
+void UPokemonSelectionPane::SwitchPokemon(UPokemonPanel* Panel1, UPokemonPanel* Panel2) {
+	Panel1->SwapPokemon(*Panel2);
+	Panel1->Refresh();
+	Panel2->Refresh();
 }
 
 void UPokemonSelectionPane::AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel>& Panel) {

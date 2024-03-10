@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Primatives/PokemonPanel.h"
 #include "Windows/SelectableWidget.h"
 #include "PokemonSelectionPane.generated.h"
 
@@ -74,6 +75,22 @@ protected:
 
 	void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 
+	/**
+	 * Perform a swap with the two panels being the targets
+	 * @param Panel1 The first panel in the swap
+	 * @param Panel2 The second panel in the swap
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Switching)
+	void PerformSwap(UPokemonPanel *Panel1, UPokemonPanel *Panel2);
+
+	/**
+	 * Actually swap the Pokémon on the panels
+	 * @param Panel1 The first panel in the swap
+	 * @param Panel2 The second panel in the swap
+	 */
+	UFUNCTION(BlueprintCallable, Category = Switching)
+	static void SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *Panel2);
+
 private:
 	/**
 	 * Convenience method to add a panel to the window and set the index.
@@ -127,7 +144,7 @@ private:
 	 * The list of panels being displayed by this widget
 	 */
 	UPROPERTY()
-	TArray<ISelectablePanel*> ActivePanels;
+	TArray<TScriptInterface<ISelectablePanel>> ActivePanels;
 
 	/**
 	 * How many columns will the Pokémon be displayed in?

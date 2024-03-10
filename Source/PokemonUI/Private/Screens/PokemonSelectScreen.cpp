@@ -36,23 +36,30 @@ void UPokemonSelectScreen::SetHelpText(const FText& Text) {
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-	if (const auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty(); Index < Party.Num()) {
-		TArray<TObjectPtr<UCommand>> Commands;
-		for (UPartyMenuHandler* Handler : PokemonHandlers) {
-			if (!Handler->ShouldShow(*this, Party, Index))
-				continue;
+	if (auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty(); Index < Party.Num()) {
+		if (SelectionPane->IsSwitching()) {
+			if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
+				Swap(Party[SwitchingIndex], Party[Index]);
+			}
+			SelectionPane->CompleteSwitch();
+		} else {
+			TArray<TObjectPtr<UCommand>> Commands;
+			for (UPartyMenuHandler* Handler : PokemonHandlers) {
+				if (!Handler->ShouldShow(*this, Party, Index))
+					continue;
 			
-			Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
+				Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
+			}
+			Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
+			CommandWindow->SetCommands(MoveTemp(Commands));
+
+			SelectionPane->SetActive(false);
+			CommandWindow->SetIndex(0);
+			CommandWindow->SetActive(true);
+
+			SelectionPane->ToggleCommandVisibility(false);
+			ToggleCommandWindowVisibility(true);
 		}
-		Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
-		CommandWindow->SetCommands(MoveTemp(Commands));
-
-		SelectionPane->SetActive(false);
-		CommandWindow->SetIndex(0);
-		CommandWindow->SetActive(true);
-
-		SelectionPane->ToggleCommandVisibility(false);
-		ToggleCommandWindowVisibility(true);
 	} else {
 		// TODO: Handle the additional options
 	}
