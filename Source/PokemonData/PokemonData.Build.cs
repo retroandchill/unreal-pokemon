@@ -21,10 +21,7 @@ public class PokemonData : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"UnrealEd"
+				"SlateCore"
 			}
 		);
 	}

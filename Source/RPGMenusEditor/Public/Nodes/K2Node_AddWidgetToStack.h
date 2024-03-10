@@ -10,7 +10,7 @@
  * Blueprint node for adding a menu widget to the stack
  */
 UCLASS()
-class RPGMENUS_API UK2Node_AddWidgetToStack : public UK2Node_ConstructObjectFromClass {
+class RPGMENUSEDITOR_API UK2Node_AddWidgetToStack : public UK2Node_ConstructObjectFromClass {
 	GENERATED_BODY()
 
 public:

@@ -3,13 +3,13 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_GetGameData.generated.h"
+#include "K2Node_GetAllGameDataIDs.generated.h"
 
 /**
- * Node to handle getting the game data out of the editor
+ * Custom Blueprint node to get all the IDs from a data table
  */
 UCLASS()
-class POKEMONDATA_API UK2Node_GetGameData : public UK2Node {
+class POKEMONDATAEDITOR_API UK2Node_GetAllGameDataIDs : public UK2Node {
 	GENERATED_BODY()
 
 public:

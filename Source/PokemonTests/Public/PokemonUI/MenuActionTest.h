@@ -26,7 +26,7 @@ private:
 	 * Actually run the test
 	 */
 	UFUNCTION()
-	void RunTest();
+	void ExecuteTest();
 
 	/**
 	 * The actual action used for the test
