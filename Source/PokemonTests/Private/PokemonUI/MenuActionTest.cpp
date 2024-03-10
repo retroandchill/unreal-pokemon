@@ -3,8 +3,7 @@
 
 #include "RPGPlayerController.h"
 #include "Actions/MenuAction.h"
-
-#define TEST_ASSERT(Expression) if (!(Expression)) { FinishTest(EFunctionalTestResult::Failed, TEXT("Test failed!")); return; }
+#include "TestMacros.h"
 
 AMenuActionTest::AMenuActionTest() {
 	OnTestStart.AddDynamic(this, &AMenuActionTest::RunTest);

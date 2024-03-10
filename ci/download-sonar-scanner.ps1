@@ -1,4 +1,4 @@
-﻿./set-sonar-variables.ps1
+﻿./ci/set-sonar-variables.ps1
 if (-not (Test-Path $env:SONAR_SCANNER_HOME)) {
     rm $env:SONAR_SCANNER_HOME -Force -Recurse -ErrorAction SilentlyContinue
     New-Item -path $env:SONAR_SCANNER_HOME -type directory
