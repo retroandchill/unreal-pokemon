@@ -13,6 +13,9 @@ class POKEMONCORE_API FTrainerStub : public ITrainer {
 public:
 	FTrainerStub();
 
+	FTrainerStub(FTrainerStub&& Other) noexcept = default;
+	FTrainerStub& operator=(FTrainerStub&& Other) noexcept = delete;
+
 	const TArray<TSharedRef<IPokemon>>& GetParty() override;
 
 private:

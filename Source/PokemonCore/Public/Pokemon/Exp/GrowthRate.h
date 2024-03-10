@@ -10,10 +10,9 @@ namespace Exp {
 	 * Interface to represent various Exp. grow rates
 	 */
 	class POKEMONCORE_API IGrowthRate {
-
 	public:
 		virtual ~IGrowthRate() = default;
-	
+
 		/**
 		 * Gets the amount of Exp that is required to reach a certain level 
 		 * @param Level The level in to calculate the Exp. for

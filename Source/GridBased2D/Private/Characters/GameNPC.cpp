@@ -5,9 +5,10 @@
 
 
 void AGameNPC::OnInteract_Implementation(AGameCharacter* Character) {
-	if (auto OpposingDirection = GridBased2D::GetOpposingDirection(Character->GetDirection()); OpposingDirection.IsSet()) {
+	if (auto OpposingDirection = GridBased2D::GetOpposingDirection(Character->GetDirection()); OpposingDirection.
+		IsSet()) {
 		FaceDirection(OpposingDirection.GetValue());
 	}
-	
+
 	Interact.Broadcast();
 }

@@ -18,7 +18,7 @@ bool UCharsetThumbnailRenderer::CanVisualizeAsset(UObject* Object) {
 }
 
 void UCharsetThumbnailRenderer::Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height,
-	FRenderTarget* RenderTarget, FCanvas* Canvas, bool bAdditionalViewFamily) {
+                                     FRenderTarget* RenderTarget, FCanvas* Canvas, bool bAdditionalViewFamily) {
 	auto Charset = Cast<UCharset>(Object);
 	if (Charset == nullptr)
 		return;
@@ -30,6 +30,6 @@ void UCharsetThumbnailRenderer::Draw(UObject* Object, int32 X, int32 Y, uint32 W
 	auto ThumbnailInfo = UThumbnailManager::Get().GetRenderingInfo(DownSprite);
 	if (ThumbnailInfo == nullptr || ThumbnailInfo->Renderer == nullptr)
 		return;
-	
+
 	ThumbnailInfo->Renderer->Draw(DownSprite, X, Y, Width, Height, RenderTarget, Canvas, bAdditionalViewFamily);
 }

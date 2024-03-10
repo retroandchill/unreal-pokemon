@@ -8,7 +8,7 @@ UCharsetFactory::UCharsetFactory() {
 }
 
 UCharset* UCharsetFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
-	UObject* Context, FFeedbackContext* Warn) {
+                                            UObject* Context, FFeedbackContext* Warn) {
 	return NewObject<UCharset>(InParent, InClass, InName, Flags);
 }
 

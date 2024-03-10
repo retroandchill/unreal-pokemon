@@ -9,12 +9,12 @@
  */
 class FGridBased2DEditorModule : public IModuleInterface {
 public:
-    void StartupModule() override;
+	void StartupModule() override;
 
-    /**
-     * Called after the engine is fully initialized
-     */
-    void OnPostEngineInit();
-	
-    void ShutdownModule() override;
+	/**
+	 * Called after the engine is fully initialized
+	 */
+	void OnPostEngineInit() const;
+
+	void ShutdownModule() override;
 };

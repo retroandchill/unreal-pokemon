@@ -13,7 +13,8 @@ public class PokemonUI : ModuleRules
 			{
 				"Core",
 				"PokemonCore",
-				"RPGMenus"
+				"RPGMenus",
+				"GridBased2D"
 			}
 		);
 
@@ -25,10 +26,6 @@ public class PokemonUI : ModuleRules
 				"Slate",
 				"SlateCore",
 				"UMG",
-				"UnrealEd",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"ToolMenus",
 				"DeveloperSettings"
 			}
 		);

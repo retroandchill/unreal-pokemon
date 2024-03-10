@@ -25,13 +25,13 @@ public:
 	 * @param Base The base stat of the Pokémon in question
 	 * @param Nature The Pokémon's effective nature
 	 */
-	virtual void RefreshValue(int32 Level, int32 Base, const FNature &Nature) = 0;
+	virtual void RefreshValue(int32 Level, int32 Base, const FNature& Nature) = 0;
 
 	/**
 	 * Get the information about the stat in question
 	 * @return The stat's specific information
 	 */
-	virtual const FStat &GetStat() const = 0;
+	virtual const FStat& GetStat() const = 0;
 
 	/**
 	 * Get the ID of the stat in question

@@ -7,9 +7,8 @@
 /**
  * Utility module that contains basic functionality for the Unreal Pokémon project
  */
-class FPokemonUtilitiesModule final : public IModuleInterface
-{
+class FPokemonUtilitiesModule final : public IModuleInterface {
 public:
-    void StartupModule() override;
-    void ShutdownModule() override;
+	void StartupModule() override;
+	void ShutdownModule() override;
 };

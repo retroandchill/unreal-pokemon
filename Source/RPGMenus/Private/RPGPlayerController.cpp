@@ -19,21 +19,21 @@ void ARPGPlayerController::BeginPlay() {
 UScreen* ARPGPlayerController::AddScreenToStackHelper(UObject* WorldContextObject, TSubclassOf<UScreen> ScreenType) {
 	if (ScreenType == nullptr)
 		return nullptr;
-	
+
 	if (auto ImpliedOwningPlayer = Cast<ARPGPlayerController>(WorldContextObject); ImpliedOwningPlayer != nullptr) {
 		return ImpliedOwningPlayer->AddScreenToStack(ScreenType);
 	}
 
-	if (auto OwningWidget = Cast<UUserWidget>(WorldContextObject); OwningWidget != nullptr)
-	{
-		if (auto RPGPlayerController = Cast<ARPGPlayerController>(OwningWidget->GetOwningPlayer()); RPGPlayerController != nullptr) {
+	if (auto OwningWidget = Cast<UUserWidget>(WorldContextObject); OwningWidget != nullptr) {
+		if (auto RPGPlayerController = Cast<ARPGPlayerController>(OwningWidget->GetOwningPlayer()); RPGPlayerController
+			!= nullptr) {
 			return RPGPlayerController->AddScreenToStack(ScreenType);
 		}
 	}
 
-	if (auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
-	{
-		if (auto RPGPlayerController = Cast<ARPGPlayerController>(World->GetFirstPlayerController()); RPGPlayerController != nullptr) {
+	if (auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull)) {
+		if (auto RPGPlayerController = Cast<ARPGPlayerController>(World->GetFirstPlayerController());
+			RPGPlayerController != nullptr) {
 			return RPGPlayerController->AddScreenToStack(ScreenType);
 		}
 	}
@@ -45,15 +45,15 @@ UScreen* ARPGPlayerController::RemoveScreenFromStack() {
 	if (ScreenStack.IsEmpty())
 		return nullptr;
 
-	UScreen *PoppedWidget = ScreenStack.Pop();
+	UScreen* PoppedWidget = ScreenStack.Pop();
 	PoppedWidget->RemoveFromParent();
 	if (ScreenStack.IsEmpty()) {
 		SetInputMode(FInputModeGameOnly());
 		return nullptr;
 	}
 
-	UScreen *NewTop = ScreenStack.Top();
-	NewTop->GiveMenuFocus();
+	UScreen* NewTop = ScreenStack.Top();
+	NewTop->SetKeyboardFocus();
 	return NewTop;
 }
 
@@ -62,16 +62,16 @@ UScreen* ARPGPlayerController::RemoveScreenFromStack(UObject* WorldContextObject
 		return ImpliedOwningPlayer->RemoveScreenFromStack();
 	}
 
-	if (auto OwningWidget = Cast<UUserWidget>(WorldContextObject); OwningWidget != nullptr)
-	{
-		if (auto RPGPlayerController = Cast<ARPGPlayerController>(OwningWidget->GetOwningPlayer()); RPGPlayerController != nullptr) {
+	if (auto OwningWidget = Cast<UUserWidget>(WorldContextObject); OwningWidget != nullptr) {
+		if (auto RPGPlayerController = Cast<ARPGPlayerController>(OwningWidget->GetOwningPlayer()); RPGPlayerController
+			!= nullptr) {
 			return RPGPlayerController->RemoveScreenFromStack();
 		}
 	}
 
-	if (auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
-	{
-		if (auto RPGPlayerController = Cast<ARPGPlayerController>(World->GetFirstPlayerController()); RPGPlayerController != nullptr) {
+	if (auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull)) {
+		if (auto RPGPlayerController = Cast<ARPGPlayerController>(World->GetFirstPlayerController());
+			RPGPlayerController != nullptr) {
 			return RPGPlayerController->RemoveScreenFromStack();
 		}
 	}

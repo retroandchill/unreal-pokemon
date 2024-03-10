@@ -10,7 +10,7 @@
  */
 template <typename T>
 	requires std::is_base_of_v<UObject, T>
-class TGCPointer : FGCObject {
+class TGCPointer : public FGCObject {
 public:
 	/**
 	 * Construct an empty pointer with the reference nulled out
@@ -71,7 +71,7 @@ public:
 	 * @return The object held by this pointer
 	 */
 	T& operator*() const {
-		check(HeldObject != nullptr);
+		check(HeldObject != nullptr)
 		return *HeldObject;
 	}
 

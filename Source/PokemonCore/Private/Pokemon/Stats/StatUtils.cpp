@@ -8,11 +8,11 @@
 using namespace StatUtils;
 
 POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
-	auto &DataSubsystem = FDataManager::GetInstance();
-	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
+	const auto& DataSubsystem = FDataManager::GetInstance();
+	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
 
 	TMap<FName, int32> Ret;
-	StatTable.ForEach([&Ret](const FStat &Stat) {
+	StatTable.ForEach([&Ret](const FStat& Stat) {
 		if (Stat.Type == EPokemonStatType::Battle)
 			return;
 
@@ -23,11 +23,11 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
 }
 
 POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
-	auto &DataSubsystem = FDataManager::GetInstance();
-	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
+	const auto& DataSubsystem = FDataManager::GetInstance();
+	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
 
 	TMap<FName, int32> Ret;
-	StatTable.ForEach([&Ret](const FStat &Stat) {
+	StatTable.ForEach([&Ret](const FStat& Stat) {
 		if (Stat.Type == EPokemonStatType::Battle)
 			return;
 
@@ -38,8 +38,8 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
 }
 
 POKEMONCORE_API FName StatUtils::RandomNature() {
-	auto &DataSubsystem = FDataManager::GetInstance();
-	auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
+	const auto& DataSubsystem = FDataManager::GetInstance();
+	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
 
 	auto Rows = NatureTable.GetTableRowNames().Array();
 	auto Index = FMath::RandRange(0, Rows.Num() - 1);

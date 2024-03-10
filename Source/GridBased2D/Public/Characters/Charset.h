@@ -69,7 +69,7 @@ private:
 	 * @return The Flibook Asset and set of valid stop frames
 	 */
 	const FDirectionalSprite* GetDirectionalSprite(EFacingDirection Direction) const;
-	
+
 	/**
 	 * The Flipbook Asset for when the character is facing down
 	 */

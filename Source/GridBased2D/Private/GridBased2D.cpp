@@ -8,7 +8,7 @@ void FGridBased2DModule::StartupModule() {
 }
 
 void FGridBased2DModule::ShutdownModule() {
-    // No special shutdown required
+	// No special shutdown required
 }
 
 IMPLEMENT_MODULE(FGridBased2DModule, GridBased2D)

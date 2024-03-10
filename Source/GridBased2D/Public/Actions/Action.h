@@ -18,5 +18,5 @@ public:
 	 * @param Owner The object that owns this action
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Actions)
-	void PerformAction(UObject *Owner);
+	void PerformAction(UObject* Owner);
 };

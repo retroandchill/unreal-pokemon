@@ -6,7 +6,7 @@
 #include "PokemonCoreSettings.h"
 #include "Trainers/TrainerStub.h"
 
-UPokemonSubsystem *UPokemonSubsystem::Instance = nullptr;
+UPokemonSubsystem* UPokemonSubsystem::Instance = nullptr;
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	Super::Initialize(Collection);
@@ -15,7 +15,7 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	auto Settings = GetDefault<UPokemonCoreSettings>();
 	HPStat = Settings->GetHPStat();
 	MaxPartySize = Settings->GetMaxPartySize();
-	
+
 	// TODO: Swap this instantiation with the actual trainer instantiation
 	Player = MakeUnique<FTrainerStub>();
 }
@@ -26,7 +26,7 @@ void UPokemonSubsystem::Deinitialize() {
 }
 
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
-	check(Instance != nullptr);
+	check(Instance != nullptr)
 	return *Instance;
 }
 
@@ -39,11 +39,11 @@ int32 UPokemonSubsystem::GetMaxPartySize() const {
 }
 
 ITrainer& UPokemonSubsystem::GetPlayer() {
-	check(Player != nullptr);
+	check(Player != nullptr)
 	return *Player;
 }
 
 const ITrainer& UPokemonSubsystem::GetPlayer() const {
-	check(Player != nullptr);
+	check(Player != nullptr)
 	return *Player;
 }
