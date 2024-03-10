@@ -3,7 +3,7 @@
 
 #include "RPGPlayerController.h"
 #include "Actions/MenuAction.h"
-#include "TestMacros.h"
+#include "CommonDefines.h"
 
 AMenuActionTest::AMenuActionTest() {
 	OnTestStart.AddDynamic(this, &AMenuActionTest::RunTest);

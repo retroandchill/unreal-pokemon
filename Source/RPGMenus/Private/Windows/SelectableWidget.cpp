@@ -2,7 +2,6 @@
 #include "Windows/SelectableWidget.h"
 
 #include "Data/SelectionInputs.h"
-#include "Kismet/GameplayStatics.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 	SetIsFocusable(true);
