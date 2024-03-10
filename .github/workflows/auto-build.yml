@@ -31,7 +31,7 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
-          path: coverage.xml
+          path: cpp-coverage.xml
           
       #- name: Run sonar-scanner
       #  env:
@@ -86,7 +86,7 @@ jobs:
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: coverage.xml
+          filename: artifact/*-coverage.xml
           badge: true
           fail_below_min: true
           format: markdown
