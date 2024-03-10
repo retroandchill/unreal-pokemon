@@ -29,7 +29,7 @@ jobs:
           ./ci/run_tests.ps1
           
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           path: coverage.xml
           
