@@ -16,7 +16,8 @@ public:
 	FTrainerStub(FTrainerStub&& Other) noexcept = default;
 	FTrainerStub& operator=(FTrainerStub&& Other) noexcept = delete;
 
-	const TArray<TSharedRef<IPokemon>>& GetParty() override;
+	TArray<TSharedRef<IPokemon>>& GetParty() override;
+	virtual const TArray<TSharedRef<IPokemon>>& GetParty() const override;
 
 private:
 	TArray<TSharedRef<IPokemon>> Party;

@@ -7,7 +7,7 @@
 #include "Refreshable.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(NotBlueprintable)
 class URefreshable : public UInterface {
 	GENERATED_BODY()
 };
@@ -23,5 +23,6 @@ public:
 	/**
 	 * Refresh the contents of the widget setting the values where appropriate
 	 */
+	UFUNCTION(BlueprintCallable, Category = Display)
 	virtual void Refresh() = 0;
 };
