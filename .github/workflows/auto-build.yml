@@ -16,10 +16,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           
-      - name: Restore Cached Directories
-        run:
-          |
-          
       - name: Install sonar-scanner and build-wrapper
         run: |
           ./download-sonar-scanner.ps1
@@ -27,7 +23,7 @@ jobs:
         run: |
           ./set-sonar-variables.ps1
           $Location = $(Get-Location)
-          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\DotNet\UnrealBuildTool\UnrealBuildTool.exe" "${Location}/UnrealPokemon.uproject" UnrealEditor Win64 DebugGame -StaticAnalyzer=Default
+          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\DotNet\UnrealBuildTool\UnrealBuildTool.exe" "${Location}/UnrealPokemon.uproject" UnrealEditor Win64 DebugGame
       - name: Run Tests
         run: |
           ./run_tests.ps1
