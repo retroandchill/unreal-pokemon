@@ -23,8 +23,8 @@ protected:
 	void NativeConstruct() override;
 
 public:
-	virtual void BeginSwitch(int32 Index) override;
-	virtual void SetHelpText(const FText& Text) override;
+	void BeginSwitch(int32 Index) override;
+	void SetHelpText(const FText& Text) override;
 
 private:
 	/**
