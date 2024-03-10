@@ -17,7 +17,7 @@ FDataManager::FDataManager() {
 		auto RowStruct = Table->GetRowStruct();
 		if (RowStruct == nullptr)
 			continue;
-		
+
 		auto& DataRegistry = FDataRegistry::GetInstance();
 		if (!DataRegistry.IsTypeRegistered(RowStruct))
 			continue;

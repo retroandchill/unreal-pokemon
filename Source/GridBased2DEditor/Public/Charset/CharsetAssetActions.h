@@ -10,20 +10,20 @@
  */
 class FCharsetAssetActions : public FAssetTypeActions_Base {
 public:
- /**
-  * Create an asset action for Charset assets with the specified Asset Category
-  * @param InAssetCategory 
-  */
- explicit FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory);
- 
- FText GetName() const override;
- UClass* GetSupportedClass() const override;
- FColor GetTypeColor() const override;
- uint32 GetCategories() override;
+	/**
+	 * Create an asset action for Charset assets with the specified Asset Category
+	 * @param InAssetCategory 
+	 */
+	explicit FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory);
+
+	FText GetName() const override;
+	UClass* GetSupportedClass() const override;
+	FColor GetTypeColor() const override;
+	uint32 GetCategories() override;
 
 private:
- /**
-  * The category for this asset type
-  */
- EAssetTypeCategories::Type AssetCategory;
+	/**
+	 * The category for this asset type
+	 */
+	EAssetTypeCategories::Type AssetCategory;
 };

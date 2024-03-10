@@ -26,7 +26,7 @@ void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 
 void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	
+
 	QueueUpNewText();
 
 	if (bPaused) {
@@ -36,11 +36,13 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 			return;
 		}
 	}
-	
+
 	if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
 		ScrollTimer.GetValue() += InDeltaTime;
-		ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolation(OriginalScroll.GetValue(), BottomScroll, ScrollSpeed, ScrollTimer.GetValue()));
-		
+		ScrollBox->SetScrollOffset(
+			UMathUtilities::LinearInterpolation(OriginalScroll.GetValue(), BottomScroll, ScrollSpeed,
+			                                    ScrollTimer.GetValue()));
+
 		if (FMath::IsNearlyEqual(ScrollBox->GetScrollOffset(), BottomScroll)) {
 			ScrollTimer.Reset();
 			OriginalScroll.Reset();
@@ -60,7 +62,7 @@ void UMessageWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 	TextTimer += InDeltaTime;
 	if (TextTimer < TextSpeed)
 		return;
-	
+
 	TCHAR NextChar;
 	WordToDisplay.Dequeue(NextChar);
 	auto NewText = DisplayTextWidget->GetText().ToString();
@@ -91,7 +93,7 @@ FReply UMessageWindow::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEv
 
 void UMessageWindow::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 	Super::NativeOnFocusLost(InFocusEvent);
-	
+
 	if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
 		SetKeyboardFocus();
 	}
@@ -139,15 +141,15 @@ void UMessageWindow::ResizeWindow() {
 void UMessageWindow::QueueUpNewText() {
 	if (!FullText.IsSet())
 		return;
-	
+
 	double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X * UWidgetUtilities::GetWidgetDPIScale();
 	if (FMath::IsNearlyZero(TotalTextAreaWidth))
 		return;
-	
-	auto &AsString = FullText.GetValue().ToString();
+
+	auto& AsString = FullText.GetValue().ToString();
 	TArray<FString> Lines;
 	AsString.ParseIntoArray(Lines, LINE_TERMINATOR);
-	for (const auto &Line : Lines) {
+	for (const auto& Line : Lines) {
 		QueueLine(Line, TotalTextAreaWidth);
 	}
 
@@ -172,7 +174,7 @@ void UMessageWindow::QueueIndividualWords(const FString& Line, double TotalTextA
 	TArray<FString> Words;
 	Line.ParseIntoArray(Words, TEXT(" "));
 	FString CurrentLine = "";
-	for (auto &Word : Words) {
+	for (auto& Word : Words) {
 		FString NewText = CurrentLine.IsEmpty() ? Word : FString(" ") + Word;
 		double CurrentTextWidth = DisplayTextWidget->GetTextSize(CurrentLine).X;
 		double NewTextWidth = DisplayTextWidget->GetTextSize(NewText).X;

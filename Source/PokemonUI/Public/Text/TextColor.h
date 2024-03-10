@@ -23,5 +23,4 @@ struct POKEMONUI_API FTextColor {
 	 */
 	UPROPERTY(EditAnywhere, Category = "User Interface|Text")
 	FSlateColor ShadowColor;
-	
 };

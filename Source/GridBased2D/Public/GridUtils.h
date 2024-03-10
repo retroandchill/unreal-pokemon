@@ -24,7 +24,7 @@ namespace GridBased2D {
 	 * @param Position The position struct to alter
 	 */
 	template <typename Vector>
-	void AdjustMovementPosition(EFacingDirection MovementDirection, Vector &Position) {
+	void AdjustMovementPosition(EFacingDirection MovementDirection, Vector& Position) {
 		switch (MovementDirection) {
 			using enum EFacingDirection;
 		case Down:

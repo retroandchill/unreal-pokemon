@@ -28,9 +28,11 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 	UEdGraphPin* SpawnNodeThen = CreateWidgetNode->GetThenPin();
 	UEdGraphPin* SpawnNodeResult = CreateWidgetNode->GetResultPin();
 
-	UClass* SpawnClass = ( SpawnClassPin != nullptr) ? Cast<UClass>(SpawnClassPin->DefaultObject) : nullptr;
-	if ( !SpawnClassPin || ((0 == SpawnClassPin->LinkedTo.Num()) && (nullptr == SpawnClass))) {
-		CompilerContext.MessageLog.Error(*NSLOCTEXT("UK2Node_AddWidgetToStack","CreateWidgetNodeMissingClass_Error", "Spawn node @@ must have a class specified.").ToString(), CreateWidgetNode);
+	UClass* SpawnClass = (SpawnClassPin != nullptr) ? Cast<UClass>(SpawnClassPin->DefaultObject) : nullptr;
+	if (!SpawnClassPin || ((0 == SpawnClassPin->LinkedTo.Num()) && (nullptr == SpawnClass))) {
+		CompilerContext.MessageLog.Error(*NSLOCTEXT("UK2Node_AddWidgetToStack", "CreateWidgetNodeMissingClass_Error",
+		                                            "Spawn node @@ must have a class specified.").ToString(),
+		                                 CreateWidgetNode);
 		// we break exec links so this is the only error we get, don't want the CreateWidget node being considered and giving 'unexpected node' type warnings
 		CreateWidgetNode->BreakAllNodeLinks();
 		return;
@@ -38,7 +40,8 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 
 	//////////////////////////////////////////////////////////////////////////
 	// create 'UWidgetBlueprintLibrary::Create' call node
-	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
+	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(
+		CreateWidgetNode, SourceGraph);
 	CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, ARPGPlayerController::StaticClass());
 	CallCreateNode->AllocateDefaultPins();
 
@@ -53,7 +56,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 	// Move 'exec' connection from create widget node to 'UWidgetBlueprintLibrary::Create'
 	CompilerContext.MovePinLinksToIntermediate(*SpawnNodeExec, *CallCreateExec);
 
-	if ( SpawnClassPin->LinkedTo.Num() > 0 ) {
+	if (SpawnClassPin->LinkedTo.Num() > 0) {
 		// Copy the 'blueprint' connection from the spawn node to 'UWidgetBlueprintLibrary::Create'
 		CompilerContext.MovePinLinksToIntermediate(*SpawnClassPin, *CallCreateWidgetTypePin);
 	} else {
@@ -62,7 +65,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 	}
 
 	// Copy the world context connection from the spawn node to 'UWidgetBlueprintLibrary::Create' if necessary
-	if ( SpawnWorldContextPin ) {
+	if (SpawnWorldContextPin) {
 		CompilerContext.MovePinLinksToIntermediate(*SpawnWorldContextPin, *CallCreateWorldContextPin);
 	}
 
@@ -74,7 +77,8 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 	// create 'set var' nodes
 
 	// Get 'result' pin from 'begin spawn', this is the actual actor we want to set properties on
-	UEdGraphPin* LastThen = FKismetCompilerUtilities::GenerateAssignmentNodes(CompilerContext, SourceGraph, CallCreateNode, CreateWidgetNode, CallCreateResult, ClassToSpawn);
+	UEdGraphPin* LastThen = FKismetCompilerUtilities::GenerateAssignmentNodes(
+		CompilerContext, SourceGraph, CallCreateNode, CreateWidgetNode, CallCreateResult, ClassToSpawn);
 
 	// Move 'then' connection from create widget node to the last 'then'
 	CompilerContext.MovePinLinksToIntermediate(*SpawnNodeThen, *LastThen);

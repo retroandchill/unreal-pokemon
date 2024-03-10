@@ -43,12 +43,12 @@ void UDisplayText::SetText(const FText& NewText) {
 	InitialText = NewText;
 	if (DisplayTextWidget != nullptr) {
 		DisplayTextWidget->SetText(NewText);
-		
+
 		if (SizeBox != nullptr) {
 			auto TextPadding = GetDisplayTextPadding();
 			SizeBox->SetHeightOverride(GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
 		}
-		
+
 		OnTextSet(NewText);
 	}
 }
@@ -59,7 +59,7 @@ const FSlateFontInfo& UDisplayText::GetDisplayFont() const {
 
 void UDisplayText::SetTextColor(const FSlateColor& Color) {
 	TextColor = Color;
-	
+
 	check(DisplayTextWidget != nullptr)
 	DisplayTextWidget->SetColorAndOpacity(TextColor);
 }
@@ -88,4 +88,3 @@ void UDisplayText::OnTextSet_Implementation(const FText& Text) {
 UTextBlock* UDisplayText::GetDisplayTextWidget() const {
 	return DisplayTextWidget;
 }
-

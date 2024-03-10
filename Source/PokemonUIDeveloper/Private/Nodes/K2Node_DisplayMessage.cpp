@@ -22,6 +22,6 @@ void UK2Node_DisplayMessage::ExpandNode(FKismetCompilerContext& CompilerContext,
 
 	auto OnConfirmPin = FindPinChecked(OnConfirmPinName);
 	ReconnectOutputPin(CompilerContext, OnConfirmPin);
-	
+
 	Super::ExpandNode(CompilerContext, SourceGraph);
 }

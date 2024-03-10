@@ -2,16 +2,12 @@
 
 #define LOCTEXT_NAMESPACE "FPokemonTestsModule"
 
-void FPokemonTestsModule::StartupModule()
-{
-    
+void FPokemonTestsModule::StartupModule() {
 }
 
-void FPokemonTestsModule::ShutdownModule()
-{
-    
+void FPokemonTestsModule::ShutdownModule() {
 }
 
 #undef LOCTEXT_NAMESPACE
-    
+
 IMPLEMENT_MODULE(FPokemonTestsModule, PokemonTests)

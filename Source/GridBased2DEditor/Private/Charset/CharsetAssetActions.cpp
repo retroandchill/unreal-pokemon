@@ -4,7 +4,8 @@
 #include "Characters/Charset.h"
 
 
-FCharsetAssetActions::FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory) : AssetCategory(InAssetCategory) {
+FCharsetAssetActions::FCharsetAssetActions(EAssetTypeCategories::Type InAssetCategory) : AssetCategory(
+	InAssetCategory) {
 }
 
 FText FCharsetAssetActions::GetName() const {

@@ -19,22 +19,22 @@ public:
 	 * @param Key The key that was pressed
 	 * @return The direction to move the cursor (if applicable)
 	 */
-	TOptional<ECursorDirection> ParseDirectionalInputs(const FKey &Key) const;
+	TOptional<ECursorDirection> ParseDirectionalInputs(const FKey& Key) const;
 
 	/**
 	 * Is the provided input the confirm button
 	 * @param Key The key that was pressed
 	 * @return Is this a confirm input?
 	 */
-	bool IsConfirmInput(const FKey &Key) const;
+	bool IsConfirmInput(const FKey& Key) const;
 
 	/**
 	 * Is the provided input the cancel button
 	 * @param Key The key that was pressed
 	 * @return Is this a cancel input?
 	 */
-	bool IsCancelInput(const FKey &Key) const;
-	
+	bool IsCancelInput(const FKey& Key) const;
+
 private:
 	/**
 	 * The Up Input
@@ -71,5 +71,4 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Input|Options")
 	TSet<FKey> CancelInputs;
-	
 };

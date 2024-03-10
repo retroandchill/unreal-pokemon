@@ -58,6 +58,6 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 
 	int32 NextLevel = Block.GetExpForNextLevel();
 	Passed &= TestEqual("Next Level Exp.", NextLevel, 616298);
-	
+
 	return Passed;
 }

@@ -28,7 +28,8 @@ AGameCharacter::AGameCharacter() {
 
 	GetCharacterMovement()->GravityScale = 0;
 
-	if (ConstructorHelpers::FObjectFinder<UMaterialInterface> SpriteMaterial(TEXT("/Paper2D/TranslucentUnlitSpriteMaterial.TranslucentUnlitSpriteMaterial")); SpriteMaterial.Succeeded()) {
+	if (ConstructorHelpers::FObjectFinder<UMaterialInterface> SpriteMaterial(
+		TEXT("/Paper2D/TranslucentUnlitSpriteMaterial.TranslucentUnlitSpriteMaterial")); SpriteMaterial.Succeeded()) {
 		GetSprite()->SetMaterial(0, SpriteMaterial.Object);
 	}
 }
@@ -67,7 +68,7 @@ void AGameCharacter::BeginPlay() {
 	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridBased2D::GRID_SIZE);
 
 	DesiredPosition = CurrentPosition;
-	
+
 	auto CharacterSprite = GetSprite();
 	CharacterSprite->Stop();
 	CharacterSprite->SetPlaybackPositionInFrames(0, false);
@@ -85,7 +86,7 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	FaceDirection(MovementDirection);
 	if (!CanMoveInDirection(MovementDirection))
 		return;
-	
+
 	GridBased2D::AdjustMovementPosition(MovementDirection, DesiredPosition);
 
 	MoveTimer.Emplace(0.f);
@@ -103,7 +104,7 @@ void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
 
 FHitResult AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
 	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GRID_SIZE);
-	
+
 	FVector LocalOffset(0, 0, 0);
 	GridBased2D::AdjustMovementPosition(MovementDirection, LocalOffset);
 
@@ -116,7 +117,7 @@ FHitResult AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirectio
 
 	FHitResult Result;
 	GetWorld()->SweepSingleByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
-									 ECC_Pawn, GridSquare, Params);
+	                                 ECC_Pawn, GridSquare, Params);
 
 	return Result;
 }
@@ -149,18 +150,18 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	if (!MoveTimer.IsSet())
 		return;
 
-	float &Timer = MoveTimer.GetValue();
+	float& Timer = MoveTimer.GetValue();
 	Timer += DeltaTime;
 
 	double MoveSpeed = 0.25;
-	
+
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
 		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridBased2D::GRID_SIZE,
-													  DesiredPosition.X * GridBased2D::GRID_SIZE,
-													  MoveSpeed * Distance,
-													  Timer);
+		                                                 DesiredPosition.X * GridBased2D::GRID_SIZE,
+		                                                 MoveSpeed * Distance,
+		                                                 Timer);
 
 		if (Timer >= MoveSpeed * Distance) {
 			CurrentPosition.X = DesiredPosition.X;
@@ -170,9 +171,9 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
 		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridBased2D::GRID_SIZE,
-													  DesiredPosition.Y * GridBased2D::GRID_SIZE,
-													  MoveSpeed * Distance,
-													  Timer);
+		                                                 DesiredPosition.Y * GridBased2D::GRID_SIZE,
+		                                                 MoveSpeed * Distance,
+		                                                 Timer);
 
 		if (Timer >= MoveSpeed * Distance) {
 			CurrentPosition.Y = DesiredPosition.Y;
@@ -195,7 +196,7 @@ void AGameCharacter::UpdateAnimation(float DeltaTime) {
 		CharacterSprite->PlayFromStart();
 		CharacterSprite->SetLooping(true);
 	} else if (StopTimer.IsSet()) {
-		auto &Timer = StopTimer.GetValue();
+		auto& Timer = StopTimer.GetValue();
 		Timer += DeltaTime;
 
 		if (Timer >= 0.125f && Charset->CanStopOnFrame(Direction, CharacterSprite->GetPlaybackPositionInFrames())) {

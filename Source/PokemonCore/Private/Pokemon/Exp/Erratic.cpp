@@ -10,7 +10,7 @@ int32 FErratic::ExpForLevel(int32 Level) const {
 
 	if (Level == 1)
 		return 0;
-	
+
 	if (Level <= 50)
 		return UMathUtilities::Pow(Level, 3) * (100 - Level) / 50;
 

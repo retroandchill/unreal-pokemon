@@ -78,13 +78,13 @@ void UK2Node_IsGameDataIDValid::ExpandNode(FKismetCompilerContext& CompilerConte
 	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataUtilities::StaticClass());
 	CallGetNode->AllocateDefaultPins();
-	
+
 	static const FName StructType_ParamName(TEXT("StructType"));
 	static const FName RowName_ParamName(TEXT("RowName"));
-	
+
 	auto RowNamePin = FindPinChecked(TEXT("RowName"));
 	auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-	
+
 	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
 	auto CallCreateRowNamePin = CallGetNode->FindPinChecked(RowName_ParamName);
 	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);

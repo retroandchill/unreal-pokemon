@@ -10,7 +10,6 @@
  */
 class POKEMONCORE_API FDefaultStatBlock : public IStatBlock {
 public:
-	
 	/**
 	 * Initialize a new stat block with the given level randomizing the IVs and nature
 	 * @param GrowthRateID The Exp growth rate to assign
@@ -26,16 +25,17 @@ public:
 	 * @param EVs The values of the EVs
 	 * @param Nature The nature of the Pokémon in question
 	 */
-	FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32> &IVs, const TMap<FName, int32> &EVs, FName Nature);
+	FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs, const TMap<FName, int32>& EVs,
+	                  FName Nature);
 
 	~FDefaultStatBlock() override;
-	
+
 	FDefaultStatBlock(const FDefaultStatBlock& Other);
 	FDefaultStatBlock(FDefaultStatBlock&& Other) noexcept;
-	
-	FDefaultStatBlock &operator=(const FDefaultStatBlock& Other);
-	FDefaultStatBlock &operator=(FDefaultStatBlock&& Other) noexcept;
-	
+
+	FDefaultStatBlock& operator=(const FDefaultStatBlock& Other);
+	FDefaultStatBlock& operator=(FDefaultStatBlock&& Other) noexcept;
+
 	int32 GetLevel() const override;
 	int32 GetExp() const override;
 	int32 GetExpForNextLevel() const override;

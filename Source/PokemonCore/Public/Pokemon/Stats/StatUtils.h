@@ -35,4 +35,3 @@ namespace StatUtils {
 	 */
 	POKEMONCORE_API int32 GetMaxLevel();
 }
-

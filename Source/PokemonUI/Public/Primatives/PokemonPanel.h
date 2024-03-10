@@ -25,13 +25,13 @@ class POKEMONUI_API UPokemonPanel : public UUserWidget, public ISelectablePanel 
 
 public:
 	void SetOwner(USelectableWidget* NewOwner) override;
-	
+
 	/**
 	 * Get the Pokémon that this panel displays the information for
 	 * @return The Pokémon that this panel displays the information for
 	 */
-	const TSharedPtr<IPokemon> &GetPokemon();
-	
+	const TSharedPtr<IPokemon>& GetPokemon();
+
 	/**
 	 * Set the Pokémon for the panel setting how everything is displayed
 	 * @param NewPokemon The Pokémon to set this panel to
@@ -73,7 +73,7 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "User Interface|Visuals")
 	bool IsPreselected() const;
-	
+
 	void Refresh() override;
 
 protected:
@@ -93,7 +93,7 @@ private:
 	 * The panel class that owns this one
 	 */
 	TObjectPtr<USelectableWidget> Owner;
-	
+
 	/**
 	 * The Pokémon reference that is currently being held onto
 	 */

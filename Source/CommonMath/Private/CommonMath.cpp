@@ -2,11 +2,11 @@
 #include "CommonMath.h"
 
 void FCommonMathModule::StartupModule() {
-    // No special setup needed
+	// No special setup needed
 }
 
 void FCommonMathModule::ShutdownModule() {
-    // No special teardown needed
+	// No special teardown needed
 }
-    
+
 IMPLEMENT_MODULE(FCommonMathModule, CommonMath)

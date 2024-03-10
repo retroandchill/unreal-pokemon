@@ -19,7 +19,7 @@ public:
 
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
-	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
 
@@ -41,7 +41,7 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Display")
 	TObjectPtr<UPaperTileMap> TileMap;
-	
+
 	/**
 	 * The tilemap to use for this asset
 	 */

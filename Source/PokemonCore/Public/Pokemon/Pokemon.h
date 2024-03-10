@@ -24,7 +24,7 @@ public:
 	 * Get the species information about the Pokémon in question
 	 * @return The species data
 	 */
-	virtual const FSpeciesData &GetSpecies() const = 0;
+	virtual const FSpeciesData& GetSpecies() const = 0;
 
 	/**
 	 * Get the gender of the Pokémon in question
@@ -54,6 +54,5 @@ public:
 	 * Get the stat information for this Pokémon
 	 * @return A reference to the owned stat block
 	 */
-	virtual const IStatBlock &GetStatBlock() const = 0;
-	
+	virtual const IStatBlock& GetStatBlock() const = 0;
 };

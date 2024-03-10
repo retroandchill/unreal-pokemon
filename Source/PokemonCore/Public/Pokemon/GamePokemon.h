@@ -21,8 +21,8 @@ public:
 
 	FGamePokemon(FGamePokemon&& Other) noexcept = default;
 
-	FGamePokemon &operator=(FGamePokemon&& Other) noexcept = default;
-	
+	FGamePokemon& operator=(FGamePokemon&& Other) noexcept = default;
+
 	FText GetName() const override;
 	const FSpeciesData& GetSpecies() const override;
 	EPokemonGender GetGender() const override;
@@ -42,7 +42,7 @@ private:
 	 * Pokémon if the values are not already set.
 	 */
 	uint32 PersonalityValue;
-	
+
 	/**
 	 * The nickname assigned to the Pokémon. Uses the species name if empty.
 	 */

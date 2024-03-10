@@ -11,7 +11,8 @@
  * Blueprint node for handling the display of a message to the player with optional choices
  */
 UCLASS()
-class POKEMONUIDEVELOPER_API UK2Node_DisplayMessageWithChoices : public UK2Node_DisplayMessageBase, public IK2Node_AddPinInterface {
+class POKEMONUIDEVELOPER_API UK2Node_DisplayMessageWithChoices : public UK2Node_DisplayMessageBase,
+                                                                 public IK2Node_AddPinInterface {
 	GENERATED_BODY()
 
 public:
@@ -25,7 +26,7 @@ public:
 	void GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const override;
 	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
 	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
-	
+
 	void AddInputPin() override;
 	void RemoveInputPin(UEdGraphPin* Pin) override;
 	bool CanRemovePin(const UEdGraphPin* Pin) const override;
@@ -36,7 +37,7 @@ private:
 	 * @param Index The index to set the pin for
 	 */
 	void AddInputAndOutputPin(int Index);
-	
+
 	/**
 	 * The count of how many choices are visible
 	 */

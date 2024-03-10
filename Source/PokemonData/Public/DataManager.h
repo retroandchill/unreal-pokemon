@@ -11,19 +11,19 @@ class POKEMONDATA_API FDataManager {
 	FDataManager();
 	~FDataManager();
 
-	FDataManager(const FDataManager &) = delete;
-	FDataManager(FDataManager &&) = delete;
+	FDataManager(const FDataManager&) = delete;
+	FDataManager(FDataManager&&) = delete;
 
-	FDataManager &operator=(const FDataManager&) = delete;
-	FDataManager &operator=(FDataManager&&) = delete;
+	FDataManager& operator=(const FDataManager&) = delete;
+	FDataManager& operator=(FDataManager&&) = delete;
 
 public:
 	/**
 	 * Get the singleton instance of the Data Manager
 	 * @return A reference to the data manager
 	 */
-	static FDataManager &GetInstance();
-	
+	static FDataManager& GetInstance();
+
 	/**
 	 * Get the data table that contains data of the specified type
 	 * @tparam T The type to look up the table for

@@ -9,11 +9,14 @@
 
 using namespace StatUtils;
 
-FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(RandomNature()) {
-	const auto &DataSubsystem = FDataManager::GetInstance();
-	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
-	
-	StatTable.ForEach([this](const FStat &Stat) {
+FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level),
+                                                                        GrowthRate(CreateGrowthRate(GrowthRateID)),
+                                                                        Exp(GrowthRate->ExpForLevel(Level)),
+                                                                        Nature(RandomNature()) {
+	const auto& DataSubsystem = FDataManager::GetInstance();
+	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
+
+	StatTable.ForEach([this](const FStat& Stat) {
 		using enum EPokemonStatType;
 		switch (Stat.Type) {
 		case Main:
@@ -30,15 +33,14 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Le
 }
 
 FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs,
-	const TMap<FName, int32>& EVs, FName Nature) : Level(Level), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)),  Nature(Nature) {
-	
-	auto &DataSubsystem = FDataManager::GetInstance();
-	auto &StatTable = DataSubsystem.GetDataTable<FStat>();
-	
-	StatTable.ForEach([this, &IVs, &EVs](const FStat &Stat) {
-		
+                                     const TMap<FName, int32>& EVs, FName Nature) : Level(Level),
+	GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(Nature) {
+	auto& DataSubsystem = FDataManager::GetInstance();
+	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
+
+	StatTable.ForEach([this, &IVs, &EVs](const FStat& Stat) {
 		switch (Stat.Type) {
-		using enum EPokemonStatType;
+			using enum EPokemonStatType;
 		case Main:
 			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
@@ -49,15 +51,19 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap
 			break;
 		case Battle:
 			// Skip over this stat as we don't track a value for it
-				break;
-			}
-		});
+			break;
+		}
+	});
 }
 
 FDefaultStatBlock::~FDefaultStatBlock() = default;
 
-FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level), GrowthRate(Other.GrowthRate->Clone()), Exp(FMath::Max(Other.Exp, GrowthRate->ExpForLevel(Level))), Nature(Other.Nature) {
-	for (auto &[StatID, Stat] : Other.Stats) {
+FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level),
+                                                                       GrowthRate(Other.GrowthRate->Clone()),
+                                                                       Exp(FMath::Max(
+	                                                                       Other.Exp, GrowthRate->ExpForLevel(Level))),
+                                                                       Nature(Other.Nature) {
+	for (auto& [StatID, Stat] : Other.Stats) {
 		Stats.Add(StatID, Stat->Clone());
 	}
 }
@@ -69,9 +75,9 @@ FDefaultStatBlock& FDefaultStatBlock::operator=(const FDefaultStatBlock& Other) 
 	Nature = Other.Nature;
 	GrowthRate = Other.GrowthRate->Clone();
 	Exp = FMath::Max(Other.Exp, GrowthRate->ExpForLevel(Level));
-	
+
 	Stats.Empty(Other.Stats.Num());
-	for (auto &[StatID, Stat] : Other.Stats) {
+	for (auto& [StatID, Stat] : Other.Stats) {
 		Stats.Add(StatID, Stat->Clone());
 	}
 
@@ -96,8 +102,8 @@ int32 FDefaultStatBlock::GetExpForNextLevel() const {
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {
-	const auto &DataSubsystem = FDataManager::GetInstance();
-	auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
+	const auto& DataSubsystem = FDataManager::GetInstance();
+	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
 
 	auto Ret = NatureTable.GetData(Nature);
 	check(Ret != nullptr)
@@ -115,9 +121,9 @@ const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
 }
 
 void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
-	auto &NatureData = GetNature();
-	
-	for (const auto &[StatID, Stat] : Stats) {
+	auto& NatureData = GetNature();
+
+	for (const auto& [StatID, Stat] : Stats) {
 		check(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}

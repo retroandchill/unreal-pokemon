@@ -9,9 +9,11 @@
 #include "Utilities/PersonalityValueUtils.h"
 
 // TODO: Instantiate the stat block dynamically based on a user config
-FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species), PersonalityValue(UPersonalityValueUtils::GeneratePersonalityValue()) {
-	const auto &DataManager = FDataManager::GetInstance();
-	auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
+FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species),
+                                                         PersonalityValue(
+	                                                         UPersonalityValueUtils::GeneratePersonalityValue()) {
+	const auto& DataManager = FDataManager::GetInstance();
+	auto& SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
 	auto SpeciesData = SpeciesTable.GetData(Species);
 	check(SpeciesData != nullptr)
@@ -26,11 +28,11 @@ FText FGamePokemon::GetName() const {
 
 EPokemonGender FGamePokemon::GetGender() const {
 	using enum EPokemonGender;
-	
+
 	if (Gender.IsSet())
 		return Gender.GetValue();
-	
-	auto &GenderRatio = GetSpecies().GetGenderRatio();
+
+	auto& GenderRatio = GetSpecies().GetGenderRatio();
 	if (GenderRatio.IsGenderless)
 		return Genderless;
 
@@ -50,11 +52,11 @@ bool FGamePokemon::IsFainted() const {
 }
 
 const FSpeciesData& FGamePokemon::GetSpecies() const {
-	auto &DataTable = FDataManager::GetInstance().GetDataTable<FSpeciesData>();
+	auto& DataTable = FDataManager::GetInstance().GetDataTable<FSpeciesData>();
 	auto SpeciesData = DataTable.GetData(Species);
 	check(SpeciesData != nullptr)
 
-	return  *SpeciesData;
+	return *SpeciesData;
 }
 
 const IStatBlock& FGamePokemon::GetStatBlock() const {

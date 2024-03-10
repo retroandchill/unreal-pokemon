@@ -21,11 +21,11 @@ class RPGMENUS_API ARPGPlayerController : public APlayerController {
 	GENERATED_BODY()
 
 public:
-	explicit ARPGPlayerController(const FObjectInitializer &ObjectInitializer);
-	
+	explicit ARPGPlayerController(const FObjectInitializer& ObjectInitializer);
+
 protected:
 	void BeginPlay() override;
-	
+
 public:
 	/**
 	 * Add a screen of the given class to the stack
@@ -34,12 +34,12 @@ public:
 	 * @return The created screen.
 	 */
 	template <typename T>
-	requires std::is_base_of_v<UScreen, T>
+		requires std::is_base_of_v<UScreen, T>
 	T* AddScreenToStack(TSubclassOf<T> ScreenClass = T::StaticClass()) {
 		auto Screen = CreateWidget<T>(this, ScreenClass);
-        Screen->AddToViewport();
-        ScreenStack.Add(Screen);
-		
+		Screen->AddToViewport();
+		ScreenStack.Add(Screen);
+
 		if (ScreenStack.Num() == 1) {
 			SetInputMode(FInputModeUIOnly());
 			SetShowMouseCursor(false);
@@ -48,8 +48,8 @@ public:
 		bShowMouseCursor = false;
 		bEnableClickEvents = false;
 		bEnableMouseOverEvents = false;
-		
-        return Screen;
+
+		return Screen;
 	}
 
 	/**
@@ -60,7 +60,7 @@ public:
 	 * @return The created screen
 	 */
 	template <typename T>
-	requires std::is_base_of_v<UScreen, T>
+		requires std::is_base_of_v<UScreen, T>
 	T* ConditionallyAddScreenToStack(TSubclassOf<T> ScreenClass = T::StaticClass()) {
 		if (!ScreenStack.IsEmpty() && ScreenStack.Last()->IsA(ScreenClass)) {
 			return CastChecked<T>(ScreenStack.Last());
@@ -75,7 +75,9 @@ public:
 	 * @param ScreenType The screen class to spawn
 	 * @return The created screen.
 	 */
-	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta=( WorldContext="WorldContextObject", DisplayName="Add Screen to Stack", BlueprintInternalUseOnly="true" ), Category="Widget")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic,
+		meta=( WorldContext="WorldContextObject", DisplayName="Add Screen to Stack", BlueprintInternalUseOnly="true" ),
+		Category="Widget")
 	static UScreen* AddScreenToStackHelper(UObject* WorldContextObject, TSubclassOf<UScreen> ScreenType);
 
 	/**
@@ -84,7 +86,7 @@ public:
 	 * @return The top widget on the stack (if the types match), otherwise nullptr
 	 */
 	template <typename T = UScreen>
-	requires std::is_base_of_v<UScreen, T>
+		requires std::is_base_of_v<UScreen, T>
 	T* GetTopOfStack() {
 		if (ScreenStack.IsEmpty())
 			return nullptr;
@@ -96,7 +98,7 @@ public:
 	 * Remove the current screen from the stack
 	 * @return The new top of the stack
 	 */
-	UScreen *RemoveScreenFromStack();
+	UScreen* RemoveScreenFromStack();
 
 	/**
 	 * Remove the current screen from the stack

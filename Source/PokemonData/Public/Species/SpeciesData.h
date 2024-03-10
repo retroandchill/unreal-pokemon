@@ -217,5 +217,5 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	 * Get the Pokémon's gender ratio data
 	 * @return The gender ratio data of the Pokémon in question
 	 */
-	const FGenderRatio &GetGenderRatio() const;
+	const FGenderRatio& GetGenderRatio() const;
 };

@@ -79,11 +79,11 @@ void UK2Node_GetAllGameDataIDs::ExpandNode(FKismetCompilerContext& CompilerConte
 	auto CallGetNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallGetNode->FunctionReference.SetExternalMember(FunctionName, UDataUtilities::StaticClass());
 	CallGetNode->AllocateDefaultPins();
-	
+
 	static const FName StructType_ParamName(TEXT("StructType"));
-	
+
 	auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-	
+
 	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
 	auto CallCreateReturnValuePin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 

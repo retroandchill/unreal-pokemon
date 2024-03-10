@@ -24,5 +24,4 @@ public:
 
 	void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
 	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
-	
 };

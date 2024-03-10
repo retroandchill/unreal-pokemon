@@ -27,5 +27,5 @@ class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
 	 * @return The full qualified path of the filename, 
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Editor|Filesystem")
-	static FText SelectFile(const FString &FileTypes);
+	static FText SelectFile(const FString& FileTypes);
 };

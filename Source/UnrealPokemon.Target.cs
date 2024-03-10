@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
-using System.Linq;
 using UnrealBuildTool;
 
 public class UnrealPokemonTarget : TargetRules
@@ -18,7 +17,7 @@ public class UnrealPokemonTarget : TargetRules
 		ExtraModuleNames.AddRange(new string[]
 		{
 			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
-			"RPGMenus", "PokemonUI", "RPGMenusEditor", "CommonMath", "PokemonTests", "PokemonUIDeveloper", 
+			"RPGMenus", "PokemonUI", "RPGMenusEditor", "CommonMath", "PokemonTests", "PokemonUIDeveloper",
 			"PokemonDataDeveloper", "RPGMenusDeveloper"
 		});
 	}

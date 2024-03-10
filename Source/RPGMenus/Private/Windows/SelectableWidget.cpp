@@ -14,7 +14,7 @@ int32 USelectableWidget::GetItemCount_Implementation() const {
 
 int32 USelectableWidget::GetRowCount() const {
 	int32 ColumnCount = GetColumnCount();
-	return (GetItemCount() + ColumnCount - 1) / ColumnCount; 
+	return (GetItemCount() + ColumnCount - 1) / ColumnCount;
 }
 
 int32 USelectableWidget::GetColumnCount_Implementation() const {
@@ -45,7 +45,7 @@ void USelectableWidget::SetIndex(int32 NewIndex) {
 void USelectableWidget::Deselect() {
 	if (Index == -1)
 		return;
-	
+
 	int32 OldIndex = Index;
 	Index = -1;
 	OnSelectionChange(OldIndex, Index);
@@ -58,7 +58,7 @@ bool USelectableWidget::IsActive() const {
 void USelectableWidget::SetActive(bool bNewActiveState) {
 	if (bActive == bNewActiveState)
 		return;
-	
+
 	bActive = bNewActiveState;
 	OnActiveChanged(bActive);
 }
@@ -66,7 +66,7 @@ void USelectableWidget::SetActive(bool bNewActiveState) {
 FReply USelectableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) {
 	if (!IsActive() || InputMappings == nullptr)
 		return FReply::Unhandled();
-	
+
 	bool bHandled = false;
 	auto Key = InKeyEvent.GetKey();
 	if (auto CursorDirection = InputMappings->ParseDirectionalInputs(Key); CursorDirection.IsSet()) {
@@ -79,8 +79,8 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKe
 		OnCancel.Broadcast();
 		ProcessCancel();
 	}
-	
-	
+
+
 	return bHandled ? FReply::Handled() : FReply::Unhandled();
 }
 
@@ -104,7 +104,7 @@ void USelectableWidget::ProcessCancel_Implementation() {
 
 void USelectableWidget::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 	Super::NativeOnFocusLost(InFocusEvent);
-	
+
 	if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
 		SetKeyboardFocus();
 	}
@@ -117,12 +117,16 @@ int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction)
 		using enum ECursorDirection;
 	case Up:
 		if (GetRowCount() > 1) {
-			NewIndex = bWrapSelection ? (ItemCount + NewIndex - GetColumnCount()) % ItemCount : FMath::Max(NewIndex - GetColumnCount(), 0);
+			NewIndex = bWrapSelection
+				           ? (ItemCount + NewIndex - GetColumnCount()) % ItemCount
+				           : FMath::Max(NewIndex - GetColumnCount(), 0);
 		}
 		break;
 	case Down:
 		if (GetRowCount() > 1) {
-			NewIndex = bWrapSelection ? (NewIndex + GetColumnCount()) % ItemCount : FMath::Min(NewIndex + GetColumnCount(), ItemCount - 1);
+			NewIndex = bWrapSelection
+				           ? (NewIndex + GetColumnCount()) % ItemCount
+				           : FMath::Min(NewIndex + GetColumnCount(), ItemCount - 1);
 		}
 		break;
 	case Left:
@@ -143,6 +147,6 @@ int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction)
 void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
 	if (!IsActive())
 		return;
-	
+
 	SetIndex(GetNextIndex(Direction));
 }

@@ -7,7 +7,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "Project.Core.Exp.GetGrowthR
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetGrowthRateTest::RunTest(const FString& Parameters) {
-	auto &DataSubsystem = FDataManager::GetInstance();
+	auto& DataSubsystem = FDataManager::GetInstance();
 
 	bool Passes = true;
 	auto& GrowthRateProxy = DataSubsystem.GetDataTable<FGrowthRateData>();

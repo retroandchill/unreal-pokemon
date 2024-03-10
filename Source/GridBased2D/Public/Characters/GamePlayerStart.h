@@ -18,5 +18,4 @@ public:
 	 * @param ObjectInitializer The initialization parameters of the object
 	 */
 	explicit AGamePlayerStart(const FObjectInitializer& ObjectInitializer);
-	
 };

@@ -20,7 +20,7 @@ public:
 	 * @param ObjectInitializer The Unreal provided initializer
 	 */
 	explicit UK2Node_DisplayMessageBase(const FObjectInitializer& ObjectInitializer);
-	
+
 	/**
 	 * Set up the node assigning the struct that this should be retrieving
 	 * @param NodeClass The screen type for this node
@@ -46,7 +46,6 @@ protected:
 	 */
 	void ReconnectOutputPin(FKismetCompilerContext& CompilerContext, UEdGraphPin* OutputPin);
 
-	
 private:
 	/**
 	 * The class referenced by this node

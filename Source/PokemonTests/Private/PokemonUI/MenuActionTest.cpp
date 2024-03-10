@@ -13,7 +13,8 @@ void AMenuActionTest::RunTest() {
 	TEST_ASSERT(AssertIsValid(MenuAction, TEXT("Screen class should be valid!")))
 
 	auto PlayerController = Cast<ARPGPlayerController>(GetWorld()->GetFirstPlayerController());
-	TEST_ASSERT(AssertIsValid(PlayerController, TEXT("The player should be is valid and of class RPG Player Controller!")))
+	TEST_ASSERT(
+		AssertIsValid(PlayerController, TEXT("The player should be is valid and of class RPG Player Controller!")))
 	MenuAction->PerformAction(PlayerController->GetPawn());
 
 	auto TopOfStack = PlayerController->GetTopOfStack();

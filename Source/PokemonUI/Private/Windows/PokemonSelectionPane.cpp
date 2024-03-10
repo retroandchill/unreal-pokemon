@@ -13,8 +13,8 @@ void UPokemonSelectionPane::NativeConstruct() {
 	Super::NativeConstruct();
 
 	check(ContentsArea != nullptr)
-	auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
-	auto &PlayerParty = PokemonSubsystem.GetPlayer().GetParty();
+	auto& PokemonSubsystem = UPokemonSubsystem::GetInstance();
+	auto& PlayerParty = PokemonSubsystem.GetPlayer().GetParty();
 
 	ActivePanels.Empty();
 	for (int32 i = 0; i < PokemonSubsystem.GetMaxPartySize(); i++) {
@@ -64,7 +64,7 @@ void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int
 	}
 }
 
-void UPokemonSelectionPane::AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel> &Panel) {
+void UPokemonSelectionPane::AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel>& Panel) {
 	Panel->SetMenuIndex(ActivePanels.Num());
 	ActivePanels.Add(Panel);
 }

@@ -42,7 +42,7 @@ void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText>& TextWidget, FStringV
 	SetItemText(TextWidget, FText::FromStringView(Text));
 }
 
-void UPokemonUIUtils::SetItemTextColor(TObjectPtr<UDisplayText>& TextWidget, const FTextColor &Color) {
+void UPokemonUIUtils::SetItemTextColor(TObjectPtr<UDisplayText>& TextWidget, const FTextColor& Color) {
 	if (TextWidget == nullptr)
 		return;
 

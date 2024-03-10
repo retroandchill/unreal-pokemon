@@ -15,7 +15,7 @@ class RPGMENUSDEVELOPER_API UK2Node_AddWidgetToStack : public UK2Node_ConstructO
 
 public:
 	explicit UK2Node_AddWidgetToStack(const FObjectInitializer& ObjectInitializer);
-	
+
 	void ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
 	FText GetMenuCategory() const override;
 	FName GetCornerIcon() const override;

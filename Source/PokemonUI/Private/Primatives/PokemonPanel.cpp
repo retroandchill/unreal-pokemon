@@ -58,7 +58,6 @@ void UPokemonPanel::Refresh() {
 	} else {
 		PokemonIcon->SetVisibility(ESlateVisibility::Collapsed);
 	}
-	
 }
 
 void UPokemonPanel::RefreshPokemonInfo() {
@@ -78,15 +77,15 @@ void UPokemonPanel::RefreshPokemonInfo() {
 		UPokemonUIUtils::SetItemText(GenderText, TEXT(""));
 		break;
 	}
-	
+
 	if (GenderTextColors.Contains(Gender)) {
 		UPokemonUIUtils::SetItemTextColor(GenderText, GenderTextColors[Gender]);
 	}
 
 	auto HP = FString::Format(TEXT("{CurrentHP} /{MaxHP}"), FStringFormatNamedArguments({
-		{TEXT("CurrentHP"), UPokemonUIUtils::SpacePad(Pokemon->GetCurrentHP(), 3)},
-		{TEXT("MaxHP"), UPokemonUIUtils::SpacePad(Pokemon->GetMaxHP(), 3)}
-	}));
+		                          {TEXT("CurrentHP"), UPokemonUIUtils::SpacePad(Pokemon->GetCurrentHP(), 3)},
+		                          {TEXT("MaxHP"), UPokemonUIUtils::SpacePad(Pokemon->GetMaxHP(), 3)}
+	                          }));
 
 	UPokemonUIUtils::SetItemText(HPText, HP);
 	UPokemonUIUtils::SetBarValues(HPBar, Pokemon->GetCurrentHP(), Pokemon->GetMaxHP());

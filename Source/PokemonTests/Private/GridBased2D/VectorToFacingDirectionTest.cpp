@@ -13,13 +13,13 @@ void VectorToFacingDirectionTest::GetTests(TArray<FString>& OutBeautifiedNames,
                                            TArray<FString>& OutTestCommands) const {
 	OutBeautifiedNames.Add("Up");
 	OutTestCommands.Add("0 -1 " + FString::FromInt(static_cast<uint8>(EFacingDirection::Up)));
-	
+
 	OutBeautifiedNames.Add("Left");
 	OutTestCommands.Add("-1 0 " + FString::FromInt(static_cast<uint8>(EFacingDirection::Left)));
-	
+
 	OutBeautifiedNames.Add("Right");
 	OutTestCommands.Add("1 0 " + FString::FromInt(static_cast<uint8>(EFacingDirection::Right)));
-	
+
 	OutBeautifiedNames.Add("Down");
 	OutTestCommands.Add("0 1 " + FString::FromInt(static_cast<uint8>(EFacingDirection::Down)));
 }

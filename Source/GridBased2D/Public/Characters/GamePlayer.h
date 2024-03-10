@@ -35,24 +35,24 @@ private:
 	 * Perform the movement action when receiving the input
 	 * @param Input The input information received
 	 */
-	void Move(const FInputActionInstance &Input);
+	void Move(const FInputActionInstance& Input);
 
 	/**
 	 * Perform the face direction action when receiving the input
 	 * @param Input The input information received
 	 */
-	void Turn(const FInputActionInstance &Input);
+	void Turn(const FInputActionInstance& Input);
 
 	/**
 	 * Interact with the object directly in front of the player;
 	 */
 	void Interact();
-	
+
 	/**
 	 * Pause the game and pull up the menu.
 	 */
 	void PauseGame();
-	
+
 	/**
 	 * The boom arm for holding the camera.
 	 */

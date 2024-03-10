@@ -28,10 +28,10 @@ public:
 protected:
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
-	void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
-	
+
 	void BeginPlay() override;
 
 public:
@@ -114,13 +114,12 @@ public:
 	EFacingDirection GetDirection() const;
 
 private:
-
 	/**
 	 * The character set used for displaying the sprite 
 	 */
 	UPROPERTY(EditAnywhere, Category = "Character")
 	TObjectPtr<UCharset> Charset;
-	
+
 	/**
 	 * The direction this character is facing
 	 */
@@ -138,7 +137,7 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere, Category = "Position")
 	FIntVector2 CurrentPosition;
-	
+
 	/**
 	 * The desired position of the character within the movement grid
 	 */

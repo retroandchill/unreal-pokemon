@@ -15,7 +15,7 @@ class GRIDBASED2D_API AGameNPC : public AGameCharacter, public IInteractable {
 
 public:
 	void OnInteract_Implementation(AGameCharacter* Character) override;
-	
+
 	UPROPERTY(BlueprintAssignable, Category = Interaction)
 	FOnPlayerInteraction Interact;
 };

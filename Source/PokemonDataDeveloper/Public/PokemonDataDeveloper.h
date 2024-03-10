@@ -6,9 +6,8 @@
 /**
  * Module that holds the nodes for the Pokémon Data module
  */
-class FPokemonDataDeveloperModule : public IModuleInterface
-{
+class FPokemonDataDeveloperModule : public IModuleInterface {
 public:
-    void StartupModule() override;
-    void ShutdownModule() override;
+	void StartupModule() override;
+	void ShutdownModule() override;
 };

@@ -32,7 +32,7 @@ public:
 	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
 	 */
 	explicit UCommandWindow(const FObjectInitializer& ObjectInitializer);
-	
+
 	TSharedRef<SWidget> RebuildWidget() override;
 	void SynchronizeProperties() override;
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -54,7 +54,7 @@ public:
 	 * Set the commands to the given values
 	 * @param NewCommands The commands to move into the list of commands
 	 */
-	void SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands);
+	void SetCommands(TArray<TObjectPtr<UCommand>>&& NewCommands);
 
 	/**
 	 * Callback for when a command is selected
@@ -67,7 +67,6 @@ protected:
 	void ProcessConfirm_Implementation(int32 CurrentIndex) override;
 
 private:
-	
 	/**
 	 * Get the position of a particular cell in the grid based on the given index.
 	 * @param TargetIndex The index in question to get the position of.
@@ -85,7 +84,7 @@ private:
 	 * Set the visible status of the arrows as needed
 	 */
 	void SetScrollArrowsVisible();
-	
+
 	/**
 	 * The actual area where the window is drawn
 	 */
@@ -174,5 +173,4 @@ private:
 	 * The height of a single command in the window
 	 */
 	TOptional<float> CommandHeight;
-	
 };

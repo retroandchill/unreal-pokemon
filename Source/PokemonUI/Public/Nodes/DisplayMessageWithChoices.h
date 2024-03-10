@@ -33,10 +33,12 @@ public:
 	 * @param Choices The choices available to the player
 	 * @return The node to execute the task with
 	 */
-	UFUNCTION(BlueprintCallable, DisplayName = "Display Message w/ Choices", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),Category = "Messages")
+	UFUNCTION(BlueprintCallable, DisplayName = "Display Message w/ Choices",
+		meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "Messages")
 	static UDisplayMessageWithChoices* DisplayMessageWithChoices(const UObject* WorldContextObject,
-	                                                  TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message,
-	                                                  const TArray<FText>& Choices);
+	                                                             TSubclassOf<UTextDisplayScreen> ScreenClass,
+	                                                             FText Message,
+	                                                             const TArray<FText>& Choices);
 
 	void Activate() override;
 

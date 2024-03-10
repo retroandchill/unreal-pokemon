@@ -15,4 +15,3 @@ AGamePlayerStart::AGamePlayerStart(const FObjectInitializer& ObjectInitializer) 
 	Capsule->SetCapsuleRadius(Radius);
 	Capsule->SetCapsuleHalfHeight(Radius);
 }
-

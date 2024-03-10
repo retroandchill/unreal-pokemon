@@ -42,8 +42,8 @@ using TUniqueRootPtr = TUniquePtr<T, FRootDeleter>;
  * @param Obj The UObject to add to the root
  * @return A unique reference to the object added to the root
  */
-template<typename T>
-requires std::is_base_of_v<UObject, T>
+template <typename T>
+	requires std::is_base_of_v<UObject, T>
 TUniqueRootPtr<T> MakeUniqueRoot(T* Obj) {
 	Obj->AddToRoot();
 	return TUniqueRootPtr<T>(Obj);
@@ -56,11 +56,9 @@ TUniqueRootPtr<T> MakeUniqueRoot(T* Obj) {
  * @param Obj The UObject to add to the root
  * @return A shared reference to the object added to the root
  */
-template<typename T>
-requires std::is_base_of_v<UObject, T>
+template <typename T>
+	requires std::is_base_of_v<UObject, T>
 TSharedPtr<T> MakeSharedRoot(T* Obj) {
 	Obj->AddToRoot();
 	return TSharedPtr<T>(Obj, &RemoveObjectFromRoot);
 }
-
-

@@ -9,7 +9,7 @@ void UTextDisplayScreen::NativeConstruct() {
 	Super::NativeConstruct();
 	if (MessageWindow == nullptr)
 		return;
-	
+
 	MessageWindow->OnDisplayChoices.AddDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
 	MessageWindow->OnAdvanceText.AddDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
 	MessageWindow->SetKeyboardFocus();
@@ -32,7 +32,7 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
 
 	CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
 	TArray<TObjectPtr<UCommand>> Commands;
-	for (const auto &Choice : Choices) {
+	for (const auto& Choice : Choices) {
 		Commands.Add(UCommand::CreateBasicCommand(Choice));
 	}
 	CommandWindow->SetCommands(MoveTemp(Commands));
@@ -56,7 +56,7 @@ void UTextDisplayScreen::DisplayChoicePrompt() {
 	CommandWindow->SetKeyboardFocus();
 }
 
-void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand *Choice) {
+void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand* Choice) {
 	ProcessChoice.Broadcast(Index, Choice->GetID());
 	CommandWindow->SetActive(false);
 }

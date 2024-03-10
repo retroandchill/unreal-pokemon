@@ -44,7 +44,8 @@ void AGamePlayer::BeginPlay() {
 	Super::BeginPlay();
 
 	if (const auto* const PlayerController = Cast<APlayerController>(Controller)) {
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
@@ -54,7 +55,7 @@ void AGamePlayer::BeginPlay() {
 // Called to bind functionality to input
 void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	using enum ETriggerEvent;
-	
+
 	auto Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	Input->BindAction(MoveInput.Get(), Triggered, this, &AGamePlayer::Move);
 	Input->BindAction(FaceDirectionInput.Get(), Triggered, this, &AGamePlayer::Turn);
@@ -67,7 +68,7 @@ void AGamePlayer::Move(const FInputActionInstance& Input) {
 	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
 	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
-	
+
 	MoveInDirection(Dir.GetValue());
 }
 
@@ -76,7 +77,7 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
 	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
-	
+
 	FaceDirection(Dir.GetValue());
 }
 
@@ -91,4 +92,3 @@ void AGamePlayer::Interact() {
 void AGamePlayer::PauseGame() {
 	PauseAction->PerformAction(this);
 }
-
