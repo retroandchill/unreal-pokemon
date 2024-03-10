@@ -7,10 +7,10 @@
 #define TEST_ASSERT(Expression) if (!(Expression)) { FinishTest(EFunctionalTestResult::Failed, TEXT("Test failed!")); return; }
 
 AMenuActionTest::AMenuActionTest() {
-	OnTestStart.AddDynamic(this, &AMenuActionTest::ExecuteTest);
+	OnTestStart.AddDynamic(this, &AMenuActionTest::RunTest);
 }
 
-void AMenuActionTest::ExecuteTest() {
+void AMenuActionTest::RunTest() {
 	TEST_ASSERT(AssertIsValid(MenuAction, TEXT("Screen class should be valid!")))
 
 	auto PlayerController = Cast<ARPGPlayerController>(GetWorld()->GetFirstPlayerController());
