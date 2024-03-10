@@ -1,18 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/K2Node_DisplayMessage.h"
 
-#include "BlueprintActionDatabaseRegistrar.h"
-#include "BlueprintFunctionNodeSpawner.h"
-#include "BlueprintNodeSpawner.h"
 #include "EdGraphSchema_K2.h"
 #include "K2Node_AsyncAction.h"
-#include "K2Node_CallFunction.h"
-#include "K2Node_TemporaryVariable.h"
-#include "KismetCompiler.h"
-#include "RPGPlayerController.h"
 #include "Nodes/DisplayMessage.h"
-#include "Nodes/MessageNode.h"
-#include "Screens/TextDisplayScreen.h"
 
 class UK2Node_AsyncAction;
 

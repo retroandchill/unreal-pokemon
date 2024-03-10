@@ -11,7 +11,7 @@
  * Blueprint node for handling the display of a message to the player with optional choices
  */
 UCLASS()
-class POKEMONUI_API UK2Node_DisplayMessageWithChoices : public UK2Node_DisplayMessageBase, public IK2Node_AddPinInterface {
+class POKEMONUIEDITOR_API UK2Node_DisplayMessageWithChoices : public UK2Node_DisplayMessageBase, public IK2Node_AddPinInterface {
 	GENERATED_BODY()
 
 public:

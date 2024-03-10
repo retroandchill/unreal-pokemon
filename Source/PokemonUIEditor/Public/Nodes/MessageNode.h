@@ -14,7 +14,7 @@ class UMessageNode : public UInterface {
 /**
  * Marker interface used to denote a node that contains a message.
  */
-class POKEMONUI_API IMessageNode {
+class POKEMONUIEDITOR_API IMessageNode {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
