@@ -2,12 +2,16 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
 #include "DataManager.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
+#include "Pokemon/Stats/StatBlockDTO.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "Species/Stat.h"
 
 using namespace StatUtils;
+
+IMPLEMENT_DERIVED_METATYPE(FDefaultStatBlock)
 
 /**
  * Helper function to find a nature by the given ID
@@ -23,45 +27,33 @@ TRowPointer<FNature> FindNature(FName Nature) {
 	return Ret;
 }
 
-FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level),
-                                                                        GrowthRate(CreateGrowthRate(GrowthRateID)),
-                                                                        Exp(GrowthRate->ExpForLevel(Level)),
-                                                                        Nature(RandomNature()) {
-	const auto& DataSubsystem = FDataManager::GetInstance();
-	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
-
-	StatTable.ForEach([this](const FStat& Stat) {
-		using enum EPokemonStatType;
-		switch (Stat.Type) {
-		case Main:
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
-			break;
-		case MainBattle:
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
-			break;
-		case Battle:
-			// Skip over this stat as we don't track a value for it
-			break;
-		}
-	});
+/**
+ * Helper function to find a nature by the given DTO
+ * @param DTO The DTO to get the nature from
+ * @return The found nature
+ */
+TOptional<TRowPointer<FNature>> FindNature(const FStatBlockDTO& DTO) {
+	return DTO.bOverride_Nature ? TOptional(FindNature(DTO.Nature)) : TOptional<TRowPointer<FNature>>();
 }
 
-FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs,
-                                     const TMap<FName, int32>& EVs, FName Nature) : Level(Level),
-	GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(FindNature(Nature)) {
+FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO& DTO) :
+	Level(DTO.Level),
+	PersonalityValue(PersonalityValue), GrowthRate(CreateGrowthRate(GrowthRateID)),
+	Exp(FMath::Max(GrowthRate->ExpForLevel(Level), OPTIONAL(DTO, Exp).Get(0))),
+	Nature(FindNature(DTO)) {
 	auto& DataSubsystem = FDataManager::GetInstance();
 	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
 
-	StatTable.ForEach([this, &IVs, &EVs](const FStat& Stat) {
+	StatTable.ForEach([this, PersonalityValue, &DTO](const FStat& Stat) {
+		auto IV = DTO.IVs.Contains(Stat.ID) ? TOptional<int32>(DTO.IVs[Stat.ID]) : TOptional<int32>();
+		int32 EV = DTO.EVs.Contains(Stat.ID) ? DTO.EVs[Stat.ID] : 0;
 		switch (Stat.Type) {
 			using enum EPokemonStatType;
 		case Main:
-			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, PersonalityValue, IV, EV));
 			break;
 		case MainBattle:
-			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, PersonalityValue, IV, EV));
 			break;
 		case Battle:
 			// Skip over this stat as we don't track a value for it
@@ -73,6 +65,7 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap
 FDefaultStatBlock::~FDefaultStatBlock() = default;
 
 FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level),
+                                                                       PersonalityValue(Other.PersonalityValue),
                                                                        GrowthRate(Other.GrowthRate->Clone()),
                                                                        Exp(FMath::Max(
 	                                                                       Other.Exp, GrowthRate->ExpForLevel(Level))),
@@ -116,7 +109,13 @@ int32 FDefaultStatBlock::GetExpForNextLevel() const {
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {
-	return *Nature;
+	if (Nature.IsSet())
+		return *Nature.GetValue();
+
+	auto& DataTable = FDataManager::GetInstance().GetDataTable<FNature>();
+	auto NatureRows = DataTable.GetTableRowNames();
+	auto Index = static_cast<int32>(PersonalityValue % NatureRows.Num());
+	return *DataTable.GetData(NatureRows[Index]);
 }
 
 IStatEntry& FDefaultStatBlock::GetStat(FName Stat) {
@@ -129,6 +128,12 @@ const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
 	return *Stats[Stat];
 }
 
+void FDefaultStatBlock::ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const {
+	for (const auto& [Key, Value] : Stats) {
+		Predicate(Key, *Value);
+	}
+}
+
 void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 	auto& NatureData = GetNature();
 
@@ -136,4 +141,40 @@ void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 		check(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}
+}
+
+FStatBlockDTO FDefaultStatBlock::ToDTO() const {
+	FStatBlockDTO DTO = {.Level = Level, .Exp = Exp, .bOverride_Exp = true};
+	if (Nature.IsSet()) {
+		DTO.bOverride_Nature = true;
+		DTO.Nature = Nature.GetValue()->ID;
+	}
+
+	for (auto& [StatID, Stat] : Stats) {
+		DTO.IVs.Add(StatID, Stat->GetIV());
+		DTO.EVs.Add(StatID, Stat->GetEV());
+	}
+
+	return DTO;
+}
+
+bool FDefaultStatBlock::operator==(const IStatBlock& Other) const {
+	return ClassName() == Other.GetClassName() ? *this == static_cast<const FDefaultStatBlock&>(Other) : false;
+}
+
+bool FDefaultStatBlock::operator==(const FDefaultStatBlock& Other) const {
+	if (Level != Other.Level || !OptionalsSame(Nature, Other.Nature) || Exp != Other.Exp ||
+		Stats.Num() != Other.Stats.Num()) {
+		return false;
+	}
+
+	bool bMatches = true;
+	for (const auto& [ID, Stat] : Stats) {
+		if (auto OtherStat = Other.Stats.Find(ID); OtherStat == nullptr || *Stats[ID] != **OtherStat) {
+			bMatches = false;
+			break;
+		}
+	}
+	
+	return bMatches;
 }

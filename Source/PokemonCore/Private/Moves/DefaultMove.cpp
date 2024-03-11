@@ -5,6 +5,8 @@
 
 #include "DataManager.h"
 
+IMPLEMENT_DERIVED_METATYPE(FDefaultMove)
+
 /**
  * Internal helper function for getting a move's data
  * @param MoveID The ID of the move in question
@@ -30,4 +32,12 @@ int32 FDefaultMove::GetCurrentPP() const {
 int32 FDefaultMove::GetTotalPP() const {
 	// TODO: Add support for PP ups
 	return MoveData->TotalPP;
+}
+
+bool FDefaultMove::operator==(const IMove& Other) const {
+	return ClassName() == Other.GetClassName() ? *this == static_cast<const FDefaultMove&>(Other) : false;
+}
+
+bool FDefaultMove::operator==(const FDefaultMove& Other) const {
+	return MoveData == Other.MoveData && CurrentPP == Other.CurrentPP;
 }
