@@ -7,7 +7,7 @@
 #include "PokemonPanelInfoTest.generated.h"
 
 class UPokemonSelectionPane;
-class UPokemonSelectScreen;
+
 /**
  * Test to make sure the panels gets populated correctly
  */

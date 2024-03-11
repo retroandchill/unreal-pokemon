@@ -29,6 +29,7 @@ FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level) : Species(FindSpeciesDa
 
 FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level, EPokemonGender Gender, const TMap<FName, int32>& IVs,
 	const TMap<FName, int32>& EVs, FName Nature, int32 Ability, TArray<TSharedRef<IMove>>&& Moves, bool Shiny, FName Item) : Species(FindSpeciesData(SpeciesID)), Gender(Gender), Shiny(Shiny), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level, IVs, EVs, Nature)), Moves(MoveTemp(Moves)) {
+	CommonInit();
 }
 
 FText FGamePokemon::GetName() const {

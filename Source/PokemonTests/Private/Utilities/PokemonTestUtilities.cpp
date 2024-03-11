@@ -33,8 +33,11 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 										   {"SPEED", 31}
 									   }),
 									   TMap<FName, int32>({
+										   {"HP", 31},
 										   {"ATTACK", 164},
+										   {"DEFENSE", 0},
 										   {"SPECIAL_ATTACK", 92},
+									   		{"SPECIAL_DEFENSE", 0},
 										   {"SPEED", 252},
 									   }),
 									   "Naive", 0, MoveTemp(Moves1), false, "LIFEORB"));
@@ -55,8 +58,11 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 										   {"SPEED", 31}
 									   }),
 									   TMap<FName, int32>({
+									   		{"HP", 0},
 										   {"ATTACK", 252},
 										   {"DEFENSE", 4},
+									   		{"SPECIAL_ATTACK", 0},
+									   		{"SPECIAL_DEFENSE", 0},
 										   {"SPEED", 252},
 									   }),
 									   "Jolly", 2, MoveTemp(Moves2), true, "CHOICEBAND"));
@@ -78,7 +84,10 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 									   }),
 									   TMap<FName, int32>({
 										   {"HP", 208},
+									   		{"ATTACK", 0},
 										   {"DEFENSE", 48},
+									   		{"SPECIAL_ATTACK", 0},
+									   		{"SPECIAL_DEFENSE", 0},
 										   {"SPEED", 252},
 									   }),
 									   "Timid", 2, MoveTemp(Moves3), false, "ROCKYHELMET"));

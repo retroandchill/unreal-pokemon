@@ -19,7 +19,7 @@ void APokemonPanelInfoTest::RunTest() {
 	TEST_ASSERT(AssertIsValid(ScreenClass, TEXT("Screen class should be set!")))
 	UPokemonTestUtilities::CreateMockParty(this);
 	
-	auto Screen = CreateWidget<UPokemonSelectionPane>(ScreenClass);
+	auto Screen = CreateWidget<UPokemonSelectionPane>(GetGameInstance(), ScreenClass);
 	Screen->AddToViewport();
 
 	auto ContentsArea = Screen->WidgetTree->FindWidget<UCanvasPanel>(TEXT("ContentsArea"));
@@ -35,7 +35,9 @@ void APokemonPanelInfoTest::RunTest() {
 	}
 
 	TEST_ASSERT(AssertEqual_Name(Panels[0]->GetPokemon()->GetSpecies().ID, TEXT("SAMUROTT"), TEXT("First Pokémon should be a Samurott!")))
-	TEST_ASSERT(AssertEqual_Name(Panels[1]->GetPokemon()->GetSpecies().ID, TEXT("EMBOAR"), TEXT("First Pokémon should be an Emboar!")))
-	TEST_ASSERT(AssertEqual_Name(Panels[2]->GetPokemon()->GetSpecies().ID, TEXT("SEPERIOR"), TEXT("First Pokémon should be a Serperior!")))
+	TEST_ASSERT(AssertEqual_Name(Panels[1]->GetPokemon()->GetSpecies().ID, TEXT("EMBOAR"), TEXT("Second Pokémon should be an Emboar!")))
+	TEST_ASSERT(AssertEqual_Name(Panels[2]->GetPokemon()->GetSpecies().ID, TEXT("SERPERIOR"), TEXT("Thrid Pokémon should be a Serperior!")))
+
+	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Test passed!"));
 }
 

@@ -11,7 +11,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Project.PokemonUI.PartySwitchHandlerTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Project.UI.PartyScreen",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
