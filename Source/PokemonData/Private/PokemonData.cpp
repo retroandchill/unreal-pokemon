@@ -11,7 +11,7 @@
 #include "Exp/GrowthRateData.h"
 #include "Field/EncounterType.h"
 #include "Field/Weather.h"
-#include "Moves/Move.h"
+#include "..\Public\Moves\Move.h"
 #include "Moves/Target.h"
 #include "Species/Ability.h"
 #include "Species/BodyColor.h"
@@ -47,7 +47,7 @@ void FPokemonDataModule::StartupModule() {
 
 	DataRegistry.RegisterStruct<FType>();
 	DataRegistry.RegisterStruct<FAbility>();
-	DataRegistry.RegisterStruct<FMove>();
+	DataRegistry.RegisterStruct<FMoveData>();
 	DataRegistry.RegisterStruct<FItem>();
 	DataRegistry.RegisterStruct<FSpeciesData>();
 }

@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
+#include "Memory/GCPointer.h"
 #include "Memory/RootMemoryPointers.h"
 #include "Misc/AutomationTest.h"
 #include "Screens/PartyScreen.h"
@@ -26,7 +27,7 @@ bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
 	TArray<TSharedRef<IPokemon>> Party;
 	Party.Emplace(&Pokemon1.get());
 	
-	auto Handler = MakeUniqueRoot<UPartyMenuHandler>(NewObject<UPartySwitchHandler>());
+	TGCPointer<UPartyMenuHandler> Handler(NewObject<UPartySwitchHandler>());
 	bool Passed = TestFalse(TEXT("Command should not be visible!"), Handler->ShouldShow(Screen.get(), Party, 0));
 	
 	Party.Emplace(&Pokemon2.get());
