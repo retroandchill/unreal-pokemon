@@ -8,18 +8,28 @@
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
 
-// TODO: Instantiate the stat block dynamically based on a user config
-FGamePokemon::FGamePokemon(FName Species, int32 Level) : Species(Species),
-                                                         PersonalityValue(
-	                                                         UPersonalityValueUtils::GeneratePersonalityValue()) {
+/**
+ * Helper function to locate the species that this Pokémon refers to
+ * @param Species The ID of the species to find
+ * @return The located species data
+ */
+TRowPointer<FSpeciesData> FindSpeciesData(FName Species) {
 	const auto& DataManager = FDataManager::GetInstance();
 	auto& SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
-	auto SpeciesData = SpeciesTable.GetData(Species);
+	auto SpeciesData = SpeciesTable.GetDataManaged(Species);
 	check(SpeciesData != nullptr)
-	StatBlock = MakeUnique<FDefaultStatBlock>(SpeciesData->GrowthRate, Level);
-	StatBlock->CalculateStats(SpeciesData->BaseStats);
-	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+	return SpeciesData;
+}
+
+// TODO: Instantiate the stat block dynamically based on a user config
+FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level) : Species(FindSpeciesData(SpeciesID)), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level)) {
+	CommonInit();
+}
+
+FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level, EPokemonGender Gender, const TMap<FName, int32>& IVs,
+	const TMap<FName, int32>& EVs, FName Nature, int32 Ability, TArray<TSharedRef<IMove>>&& Moves, bool Shiny, FName Item) : Species(FindSpeciesData(SpeciesID)), Gender(Gender), Shiny(Shiny), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level, IVs, EVs, Nature)), Moves(MoveTemp(Moves)) {
+	CommonInit();
 }
 
 FText FGamePokemon::GetName() const {
@@ -32,7 +42,7 @@ EPokemonGender FGamePokemon::GetGender() const {
 	if (Gender.IsSet())
 		return Gender.GetValue();
 
-	auto& GenderRatio = GetSpecies().GetGenderRatio();
+	auto& GenderRatio = Species->GetGenderRatio();
 	if (GenderRatio.IsGenderless)
 		return Genderless;
 
@@ -52,13 +62,14 @@ bool FGamePokemon::IsFainted() const {
 }
 
 const FSpeciesData& FGamePokemon::GetSpecies() const {
-	auto& DataTable = FDataManager::GetInstance().GetDataTable<FSpeciesData>();
-	auto SpeciesData = DataTable.GetData(Species);
-	check(SpeciesData != nullptr)
-
-	return *SpeciesData;
+	return *Species;
 }
 
 const IStatBlock& FGamePokemon::GetStatBlock() const {
 	return *StatBlock;
+}
+
+void FGamePokemon::CommonInit() {
+	StatBlock->CalculateStats(Species->BaseStats);
+	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
 }

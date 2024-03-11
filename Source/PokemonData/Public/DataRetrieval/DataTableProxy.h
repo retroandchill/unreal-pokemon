@@ -7,8 +7,10 @@
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it
+ * @tparam T The row type this proxy references
  */
 template <typename T>
+requires std::is_base_of_v<FTableRowBase, T>
 class POKEMONDATA_API TDataTableProxy final : public IGameData {
 public:
 	explicit TDataTableProxy(UDataTable* DataTable) : DataTable(MakeUniqueRoot(DataTable)) {
@@ -19,7 +21,16 @@ public:
 	}
 
 	T* GetData(FName ID) const override {
-		return DataTable->FindRow<T>(ID, "Failed to find the specified data!");
+		return GetDataManaged(ID).Get();
+	}
+
+	/**
+	 * Get a managed version of the stored data
+	 * @param ID The managed data
+	 * @return A managed pointer to the data
+	 */
+	TRowPointer<T> GetDataManaged(FName ID) const {
+		return TRowPointer<T>(*DataTable, ID);
 	}
 
 	TSet<FName> GetTableRowNames() const override {

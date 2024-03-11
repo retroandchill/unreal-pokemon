@@ -7,7 +7,7 @@
 
 bool UPartySwitchHandler::ShouldShow(const IPartyScreen& Screen, const TArray<TSharedRef<IPokemon>>& Party,
                                      int32 PartyIndex) const {
-	return Party.Num() > 0;
+	return Party.Num() > 1;
 }
 
 void UPartySwitchHandler::Handle(IPartyScreen& Screen, TArray<TSharedRef<IPokemon>>& Party, int32 PartyIndex) {

@@ -5,6 +5,7 @@ public class PokemonTests : ModuleRules
 	public PokemonTests(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+		bUseRTTI = true;
 
 		PublicDependencyModuleNames.AddRange(
 			new string[]

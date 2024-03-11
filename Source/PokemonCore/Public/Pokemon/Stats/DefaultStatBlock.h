@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "StatBlock.h"
+#include "Memory/RowPointer.h"
 #include "Pokemon/Exp/GrowthRate.h"
 
 /**
@@ -63,7 +64,7 @@ private:
 	/**
 	 * The Pokémon's Nature ID
 	 */
-	FName Nature;
+	TRowPointer<FNature> Nature;
 
 	/**
 	 * Map to each of the Pokémon's individual stat values
