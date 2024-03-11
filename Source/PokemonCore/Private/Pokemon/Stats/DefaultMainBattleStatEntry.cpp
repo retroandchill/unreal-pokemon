@@ -3,9 +3,10 @@
 
 #include "Species/Nature.h"
 
+IMPLEMENT_DERIVED_METATYPE(FDefaultMainBattleStatEntry)
 
-FDefaultMainBattleStatEntry::FDefaultMainBattleStatEntry(FName Stat, int32 IV, int32 EV) : FDefaultStatEntry(
-	Stat, IV, EV) {
+FDefaultMainBattleStatEntry::FDefaultMainBattleStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV) : FDefaultStatEntry(
+	Stat, PersonalityValue, IV, EV) {
 }
 
 void FDefaultMainBattleStatEntry::RefreshValue(int32 Level, int32 Base, const FNature& Nature) {

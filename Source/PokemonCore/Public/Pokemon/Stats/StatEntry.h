@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Meta/MetatypeDeclares.h"
 
 struct FStat;
 struct FNature;
@@ -10,6 +11,8 @@ struct FNature;
  * Represents an individual stat entry on a Pokémon
  */
 class POKEMONCORE_API IStatEntry {
+	DECLARE_ABSTRACT_METATYPE
+	
 public:
 	virtual ~IStatEntry() = default;
 
@@ -56,4 +59,18 @@ public:
 	 * @return A unique copy of this object
 	 */
 	virtual TUniquePtr<IStatEntry> Clone() const = 0;
+
+	/**
+	 * Compare this stat entry to another one
+	 * @param Other The other stat entry
+	 * @return Are the two objects equal?
+	 */
+	bool operator==(const IStatEntry& Other) const;
+
+	/**
+	 * Compare this stat entry to another one
+	 * @param Other The other stat entry
+	 * @return Are the two objects equal?
+	 */
+	virtual bool Equals(const IStatEntry& Other) const = 0;
 };

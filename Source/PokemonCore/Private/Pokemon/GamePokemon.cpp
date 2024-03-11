@@ -2,11 +2,15 @@
 #include "Pokemon/GamePokemon.h"
 
 #include "DataManager.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Pokemon/PokemonBuilder.h"
+#include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
+#include "Moves/Move.h"
 
 /**
  * Helper function to locate the species that this Pokémon refers to
@@ -22,14 +26,19 @@ TRowPointer<FSpeciesData> FindSpeciesData(FName Species) {
 	return SpeciesData;
 }
 
-// TODO: Instantiate the stat block dynamically based on a user config
-FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level) : Species(FindSpeciesData(SpeciesID)), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level)) {
-	CommonInit();
-}
 
-FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level, EPokemonGender Gender, const TMap<FName, int32>& IVs,
-	const TMap<FName, int32>& EVs, FName Nature, int32 Ability, TArray<TSharedRef<IMove>>&& Moves, bool Shiny, FName Item) : Species(FindSpeciesData(SpeciesID)), Gender(Gender), Shiny(Shiny), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level, IVs, EVs, Nature)), Moves(MoveTemp(Moves)) {
-	CommonInit();
+IMPLEMENT_DERIVED_METATYPE(FGamePokemon)
+
+// TODO: Instantiate the stat block dynamically based on a user config
+FGamePokemon::FGamePokemon(const FPokemonDTO& DTO) : Species(FindSpeciesData(DTO.Species)),
+	PersonalityValue(UPersonalityValueUtils::GeneratePersonalityValue(DTO)), Gender(OPTIONAL(DTO, Gender)),
+	Shiny(BOOL_OPTIONAL(DTO, Shiny)), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, PersonalityValue, DTO.StatBlock)) {
+	StatBlock->CalculateStats(Species->BaseStats);
+	
+	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+	if (DTO.bOverride_CurrentHP) {
+		CurrentHP = FMath::Clamp(DTO.CurrentHP, 0, CurrentHP);
+	}
 }
 
 FText FGamePokemon::GetName() const {
@@ -69,7 +78,38 @@ const IStatBlock& FGamePokemon::GetStatBlock() const {
 	return *StatBlock;
 }
 
-void FGamePokemon::CommonInit() {
-	StatBlock->CalculateStats(Species->BaseStats);
-	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+UPokemonBuilder* FGamePokemon::ToBuilder() const {
+	auto Builder = NewObject<UPokemonBuilder>()
+		->Species(Species->ID)
+		->PersonalityValue(PersonalityValue)
+		->CurrentHP(CurrentHP)
+		->StatBlock(StatBlock->ToDTO());
+
+	ADD_OPTIONAL(*Builder, Gender);
+	ADD_OPTIONAL(*Builder, Shiny);
+	ADD_OPTIONAL(*Builder, Nickname);
+
+	return Builder;
+	
+}
+
+bool FGamePokemon::operator==(const IPokemon& Other) const {
+	if (ClassName() == Other.GetClassName()) {
+		return *this == static_cast<const FGamePokemon&>(Other);
+	}
+	
+	return false;
+}
+
+bool FGamePokemon::operator==(const FGamePokemon& Other) const {
+	if (Species != Other.Species || !OptionalsSame(Gender, Other.Gender) || !OptionalsSame(Nickname, Other.Nickname) ||
+			!OptionalsSame(Shiny, Other.Shiny) || *StatBlock != *Other.StatBlock || Moves.Num() != Other.Moves.Num())
+		return false;
+		
+	for (int i = 0; i < Moves.Num(); i++) {
+		if (*Moves[i] != *Other.Moves[i])
+			return false;
+	}
+
+	return true;
 }
