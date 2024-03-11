@@ -83,3 +83,7 @@ LastCoverageResults.log
 .sonar
 coverage.xml
 bw-output
+conan.lock
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
