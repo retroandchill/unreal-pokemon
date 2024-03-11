@@ -55,7 +55,7 @@ public:
 	}
 
 	FString GetReferencerName() const override {
-		return FString::Format(TEXT("TGCPointer<{ClassName}>"), {{TEXT("ClassName"), T::StaticClass()->GetName()}});
+		return FString::Format(TEXT("TGCPointer<{ClassName}>"), FStringFormatNamedArguments({{TEXT("ClassName"), T::StaticClass()->GetName()}}));
 	}
 
 	/**
