@@ -29,7 +29,6 @@ void UPokemonPanel::SwapPokemon(UPokemonPanel& Other) {
 }
 
 bool UPokemonPanel::IsActive() const {
-	// TODO: There's a bit more to this I think, but for now this will work
 	return MenuIndex == 0;
 }
 

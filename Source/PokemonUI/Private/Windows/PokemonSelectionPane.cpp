@@ -19,7 +19,8 @@ void UPokemonSelectionPane::NativeConstruct() {
 	ActivePanels.Empty();
 	for (int32 i = 0; i < PokemonSubsystem.GetMaxPartySize(); i++) {
 		if (i < PlayerParty.Num()) {
-			auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass);
+			auto Name = FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}}));
+			auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass, FName(Name));
 			NewWidget->SetOwner(this);
 			NewWidget->SetPokemon(PlayerParty[i], i);
 			auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);

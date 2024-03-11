@@ -9,6 +9,20 @@
 
 using namespace StatUtils;
 
+/**
+ * Helper function to find a nature by the given ID
+ * @param Nature The nature to look up
+ * @return The found nature
+ */
+TRowPointer<FNature> FindNature(FName Nature) {
+	const auto& DataSubsystem = FDataManager::GetInstance();
+	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
+
+	auto Ret = NatureTable.GetDataManaged(Nature);
+	check(Ret != nullptr)
+	return Ret;
+}
+
 FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level),
                                                                         GrowthRate(CreateGrowthRate(GrowthRateID)),
                                                                         Exp(GrowthRate->ExpForLevel(Level)),
@@ -34,7 +48,7 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Le
 
 FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs,
                                      const TMap<FName, int32>& EVs, FName Nature) : Level(Level),
-	GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(Nature) {
+	GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(FindNature(Nature)) {
 	auto& DataSubsystem = FDataManager::GetInstance();
 	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
 
@@ -102,12 +116,7 @@ int32 FDefaultStatBlock::GetExpForNextLevel() const {
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {
-	const auto& DataSubsystem = FDataManager::GetInstance();
-	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
-
-	auto Ret = NatureTable.GetData(Nature);
-	check(Ret != nullptr)
-	return *Ret;
+	return *Nature;
 }
 
 IStatEntry& FDefaultStatBlock::GetStat(FName Stat) {

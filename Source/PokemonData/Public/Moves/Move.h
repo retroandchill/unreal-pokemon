@@ -10,7 +10,7 @@
  * Represents the data for a Move in the game
  */
 USTRUCT(BlueprintType, meta = (DatabaseType="PBS"))
-struct POKEMONDATA_API FMove : public FTableRowBase {
+struct POKEMONDATA_API FMoveData : public FTableRowBase {
 	GENERATED_BODY()
 
 	/**

@@ -2,7 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Memory/RowPointer.h"
 #include "Pokemon/Exp/GrowthRate.h"
+#include "Species/Nature.h"
 
 namespace StatUtils {
 	/**
@@ -21,7 +23,7 @@ namespace StatUtils {
 	 * Generate a random nature for the Pokémon
 	 * @return The randomized Nature for the Pokémon in question
 	 */
-	POKEMONCORE_API FName RandomNature();
+	POKEMONCORE_API TRowPointer<FNature> RandomNature();
 
 	/**
 	 * Create a new growth rate instance with the provided key
