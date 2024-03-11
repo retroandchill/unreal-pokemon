@@ -1,16 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Characters/GameCharacter.h"
 
-#include "InputAction.h"
-#include "KismetTraceUtils.h"
 #include "MathUtilities.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
-#include "Components/BoxComponent.h"
 #include "GridUtils.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
