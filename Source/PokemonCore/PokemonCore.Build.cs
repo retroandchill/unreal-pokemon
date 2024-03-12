@@ -7,7 +7,6 @@ public class PokemonCore : ModuleRules
 	public PokemonCore(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		CMakeTarget.add(Target, this, "ReflectCPP", "..", "");
 
 		PublicDependencyModuleNames.AddRange(
 			new[]
