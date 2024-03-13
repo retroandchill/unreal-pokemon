@@ -57,7 +57,7 @@ UPokemonBuilder* UPokemonBuilder::IVs(TMap<FName, int32>&& IVs) {
 }
 
 UPokemonBuilder* UPokemonBuilder::IV(FName Stat, int32 IV) {
-	DTO.StatBlock.IVs[Stat] = IV;
+	DTO.StatBlock.IVs.Add(Stat, IV);
 	return this;
 }
 
@@ -72,7 +72,7 @@ UPokemonBuilder* UPokemonBuilder::EVs(TMap<FName, int32>&& EVs) {
 }
 
 UPokemonBuilder* UPokemonBuilder::EV(FName Stat, int32 EV) {
-	DTO.StatBlock.EVs[Stat] = EV;
+	DTO.StatBlock.EVs.Add(Stat, EV);
 	return this;
 }
 
@@ -102,6 +102,10 @@ UPokemonBuilder* UPokemonBuilder::Item(FName Item) {
 	return this;
 }
 
+const FPokemonDTO& UPokemonBuilder::GetDTO() const {
+	return DTO;
+}
+
 TSharedRef<IPokemon> UPokemonBuilder::Build() const {
 	// TODO: Actually inject
 	return MakeShared<FGamePokemon>(DTO);
@@ -113,8 +117,4 @@ TSharedRef<IPokemon> UPokemonBuilder::Build(FName ClassName) const {
 	}
 
 	return Build();
-}
-
-const FPokemonDTO& UPokemonBuilder::GetDTO() const {
-	return DTO;
 }

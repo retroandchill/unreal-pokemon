@@ -48,7 +48,6 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, PersonalityValue, IV, EV));
 			break;
 		case MainBattle:
-			check(DTO.IVs.Contains(Stat.ID) && DTO.EVs.Contains(Stat.ID))
 			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, PersonalityValue, IV, EV));
 			break;
 		case Battle:
