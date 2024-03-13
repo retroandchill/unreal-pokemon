@@ -2,10 +2,13 @@
 #include "Pokemon/Stats/DefaultStatEntry.h"
 
 #include "DataManager.h"
+#include "DataTypes/OptionalUtilities.h"
+#include "Pokemon/Stats/StatUtils.h"
 #include "Species/Stat.h"
 
 
-FDefaultStatEntry::FDefaultStatEntry(FName Stat, int32 IV, int32 EV) : StatID(Stat), IV(IV), EV(EV) {
+FDefaultStatEntry::FDefaultStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV) :
+	StatID(Stat), PersonalityValue(PersonalityValue), IV(OrElseGet(IV, [] { return StatUtils::RandomizeIV(); })), EV(EV) {
 }
 
 int32 FDefaultStatEntry::GetStatValue() const {

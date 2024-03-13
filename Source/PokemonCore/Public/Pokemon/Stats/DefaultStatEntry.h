@@ -12,10 +12,11 @@ protected:
 	/**
 	 * Initialize the stat with the given IV and EV
 	 * @param Stat The stat in question to set this to
+	 * @param PersonalityValue The personality value of the owning Pokémon
 	 * @param IV The IV of the stat
 	 * @param EV The EV of the stat
 	 */
-	FDefaultStatEntry(FName Stat, int32 IV, int32 EV = 0);
+	FDefaultStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV = 0);
 
 public:
 	int32 GetStatValue() const override;
@@ -36,6 +37,11 @@ private:
 	 * The ID of the stat in question
 	 */
 	FName StatID;
+
+	/**
+	 * The personality value of the owning Pokémon
+	 */
+	uint32 PersonalityValue;
 
 	/**
 	 * The value of the stat's IV

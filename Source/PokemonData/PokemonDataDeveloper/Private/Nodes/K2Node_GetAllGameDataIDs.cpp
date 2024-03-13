@@ -11,7 +11,7 @@ void UK2Node_GetAllGameDataIDs::Initialize(const UScriptStruct* NodeStruct) {
 
 void UK2Node_GetAllGameDataIDs::AllocateDefaultPins() {
 	FCreatePinParams ReturnTypePinParams;
-	ReturnTypePinParams.ContainerType = EPinContainerType::Set;
+	ReturnTypePinParams.ContainerType = EPinContainerType::Array;
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PN_ReturnValue, ReturnTypePinParams);
 
 	Super::AllocateDefaultPins();

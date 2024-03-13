@@ -8,6 +8,7 @@
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
 
+struct FPokemonDTO;
 class IMove;
 
 /**
@@ -16,27 +17,10 @@ class IMove;
 class POKEMONCORE_API FGamePokemon : public IPokemon {
 public:
 	/**
-	 * Create a Pokémon with the following species and level information
-	 * @param SpeciesID The species of Pokémon to create
-	 * @param Level The level of the Pokémon in question
+	 * Construct a Pokémon from the DTO
+	 * @param DTO The source Pokémon DTO to initialize from
 	 */
-	explicit FGamePokemon(FName SpeciesID, int32 Level = 5);
-
-	/**
-	 * Create a new Pokémon with all of its data explicitly defined
-	 * @param SpeciesID The species of Pokémon to create
-	 * @param Level The level of the Pokémon in question
-	 * @param Gender The Pokémon's gender
-	 * @param IVs The IVs of the Pokémon
-	 * @param EVs The EVs of the Pokémon
-	 * @param Nature The Pokémon's Nature
-	 * @param Ability The index of the Pokémon's ability
-	 * @param Moves The moves the Pokémon has
-	 * @param Shiny Is the Pokémon in question shiny
-	 * @param Item The item the Pokémon is holding
-	 */
-	FGamePokemon(FName SpeciesID, int32 Level, EPokemonGender Gender, const TMap<FName, int32>& IVs, const TMap<FName, int32>& EVs,
-					  FName Nature, int32 Ability, TArray<TSharedRef<IMove>> &&Moves, bool Shiny, FName Item = FName());
+	explicit FGamePokemon(const FPokemonDTO& DTO);
 
 	FGamePokemon(FGamePokemon&& Other) noexcept = default;
 
@@ -52,11 +36,6 @@ public:
 
 private:
 	/**
-	 * Perform any common initialization steps
-	 */
-	void CommonInit();
-	
-	/**
 	 * The ID of the species of Pokémon this is
 	 */
 	TRowPointer<FSpeciesData> Species;
@@ -65,7 +44,7 @@ private:
 	 * The internal personality value of the Pokémon. Determines the default values of various aspects of the
 	 * Pokémon if the values are not already set.
 	 */
-	uint32 PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue();
+	uint32 PersonalityValue;
 
 	/**
 	 * The nickname assigned to the Pokémon. Uses the species name if empty.

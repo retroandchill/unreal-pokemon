@@ -6,28 +6,20 @@
 #include "Memory/RowPointer.h"
 #include "Pokemon/Exp/GrowthRate.h"
 
+struct FStatBlockDTO;
 /**
  * The default stat calculator, which uses the formulas from the main series games
  */
 class POKEMONCORE_API FDefaultStatBlock : public IStatBlock {
 public:
-	/**
-	 * Initialize a new stat block with the given level randomizing the IVs and nature
-	 * @param GrowthRateID The Exp growth rate to assign
-	 * @param Level The level to start at
-	 */
-	explicit FDefaultStatBlock(FName GrowthRateID, int32 Level = 5);
 
 	/**
-	 * Initialize a new stat block explicitly setting the values of all the Pokémon's stats
+	 * Initialize a new stat block with the following initializing information
 	 * @param GrowthRateID The Exp growth rate to assign
-	 * @param Level The level to start at 
-	 * @param IVs The values of the IVs
-	 * @param EVs The values of the EVs
-	 * @param Nature The nature of the Pokémon in question
+	 * @param PersonalityValue The personality value of the owning Pokémon
+	 * @param DTO The DTO for the stat block
 	 */
-	FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs, const TMap<FName, int32>& EVs,
-	                  FName Nature);
+	FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO &DTO);
 
 	~FDefaultStatBlock() override;
 
@@ -52,6 +44,11 @@ private:
 	int32 Level;
 
 	/**
+	 * The personality value of the owning Pokémon
+	 */
+	uint32 PersonalityValue;
+
+	/**
 	 * The Exp. growth rate of the Pokémon
 	 */
 	TUniquePtr<Exp::IGrowthRate> GrowthRate;
@@ -64,7 +61,7 @@ private:
 	/**
 	 * The Pokémon's Nature ID
 	 */
-	TRowPointer<FNature> Nature;
+	TOptional<TRowPointer<FNature>> Nature;
 
 	/**
 	 * Map to each of the Pokémon's individual stat values

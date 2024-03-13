@@ -7,6 +7,8 @@
 
 using namespace StatUtils;
 
+constexpr int32 IV_MAX = 31;
+
 POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
 	const auto& DataSubsystem = FDataManager::GetInstance();
 	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
@@ -16,10 +18,14 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
 		if (Stat.Type == EPokemonStatType::Battle)
 			return;
 
-		Ret[Stat.ID] = FMath::RandRange(0, 31);
+		Ret[Stat.ID] = RandomizeIV();
 	});
 
 	return Ret;
+}
+
+int32 StatUtils::RandomizeIV() {
+	return FMath::RandRange(0, IV_MAX);
 }
 
 POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
@@ -41,7 +47,7 @@ POKEMONCORE_API TRowPointer<FNature> StatUtils::RandomNature() {
 	const auto& DataSubsystem = FDataManager::GetInstance();
 	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
 
-	auto Rows = NatureTable.GetTableRowNames().Array();
+	auto Rows = NatureTable.GetTableRowNames();
 	auto Index = FMath::RandRange(0, Rows.Num() - 1);
 	return NatureTable.GetDataManaged(Rows[Index]);
 }

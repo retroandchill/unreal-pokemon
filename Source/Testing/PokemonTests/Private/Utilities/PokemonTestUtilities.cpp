@@ -5,8 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Moves/DefaultMove.h"
-#include "Pokemon/GamePokemon.h"
+#include "Pokemon/PokemonBuilder.h"
 
 void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	using enum EPokemonGender;
@@ -17,78 +16,61 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	auto& Party = PokemonSubsystem->GetPlayer().GetParty();
 	Party.Empty();
 
-	TArray<TSharedRef<IMove>> Moves1 = {
-										   MakeShared<FDefaultMove>("HYDROPUMP"),
-										   MakeShared<FDefaultMove>("KNOCKOFF"),
-										   MakeShared<FDefaultMove>("MEGAHORN"),
-										   MakeShared<FDefaultMove>("SACREDSWORD")
-									   };
-	Party.Add(MakeShared<FGamePokemon>(TEXT("SAMUROTT"), 100, Male,
-									   TMap<FName, int32>({
-										   {"HP", 31},
-										   {"ATTACK", 31},
-										   {"DEFENSE", 31},
-										   {"SPECIAL_ATTACK", 31},
-										   {"SPECIAL_DEFENSE", 31},
-										   {"SPEED", 31}
-									   }),
-									   TMap<FName, int32>({
-										   {"HP", 31},
-										   {"ATTACK", 164},
-										   {"DEFENSE", 0},
-										   {"SPECIAL_ATTACK", 92},
-									   		{"SPECIAL_DEFENSE", 0},
-										   {"SPEED", 252},
-									   }),
-									   "Naive", 0, MoveTemp(Moves1), false, "LIFEORB"));
-
-	TArray<TSharedRef<IMove>> Moves2 = {
-		MakeShared<FDefaultMove>("FLAREBLITZ"),
-		MakeShared<FDefaultMove>("SUPERPOWER"),
-		MakeShared<FDefaultMove>("WILDCHARGE"),
-		MakeShared<FDefaultMove>("EARTHQUAKE")
-	};
-	Party.Add(MakeShared<FGamePokemon>(TEXT("EMBOAR"), 100, Female,
-									   TMap<FName, int32>({
-										   {"HP", 31},
-										   {"ATTACK", 31},
-										   {"DEFENSE", 31},
-										   {"SPECIAL_ATTACK", 31},
-										   {"SPECIAL_DEFENSE", 31},
-										   {"SPEED", 31}
-									   }),
-									   TMap<FName, int32>({
-									   		{"HP", 0},
-										   {"ATTACK", 252},
-										   {"DEFENSE", 4},
-									   		{"SPECIAL_ATTACK", 0},
-									   		{"SPECIAL_DEFENSE", 0},
-										   {"SPEED", 252},
-									   }),
-									   "Jolly", 2, MoveTemp(Moves2), true, "CHOICEBAND"));
-
-	TArray<TSharedRef<IMove>> Moves3 = {
-		MakeShared<FDefaultMove>("LEAFSTORM"),
-		MakeShared<FDefaultMove>("TAUNT"),
-		MakeShared<FDefaultMove>("GLARE"),
-		MakeShared<FDefaultMove>("DEFOG")
-	};
-	Party.Add(MakeShared<FGamePokemon>(TEXT("SERPERIOR"), 100, Male,
-									   TMap<FName, int32>({
-										   {"HP", 31},
-										   {"ATTACK", 0},
-										   {"DEFENSE", 31},
-										   {"SPECIAL_ATTACK", 31},
-										   {"SPECIAL_DEFENSE", 31},
-										   {"SPEED", 31}
-									   }),
-									   TMap<FName, int32>({
-										   {"HP", 208},
-									   		{"ATTACK", 0},
-										   {"DEFENSE", 48},
-									   		{"SPECIAL_ATTACK", 0},
-									   		{"SPECIAL_DEFENSE", 0},
-										   {"SPEED", 252},
-									   }),
-									   "Timid", 2, MoveTemp(Moves3), false, "ROCKYHELMET"));
+	Party.Add(NewObject<UPokemonBuilder>()
+	          ->Species(TEXT("SAMUROTT"))
+	          ->Level(100)
+	          ->Gender(Male)
+	          ->IV("HP", 31)
+	          ->IV("ATTACK", 31)
+	          ->IV("DEFENSE", 31)
+	          ->IV("SPECIAL_ATTACK", 31)
+	          ->IV("SPECIAL_DEFENSE", 31)
+	          ->IV("SPEED", 31)
+	          ->EV("ATTACK", 164)
+	          ->EV("SPECIAL_ATTACK", 92)
+	          ->EV("SPEED", 252)
+	          ->Nature("Naive")
+	          ->Ability(0)
+	          ->Moves({"HYDROPUMP", "KNOCKOFF", "MEGAHORN", "SACREDSWORD"})
+	          ->Item("LIFEORB")
+	          ->Shiny(false)
+	          ->Build());
+	Party.Add(NewObject<UPokemonBuilder>()
+			  ->Species(TEXT("EMBOAR"))
+			  ->Level(100)
+			  ->Gender(Female)
+			  ->IV("HP", 31)
+			  ->IV("ATTACK", 31)
+			  ->IV("DEFENSE", 31)
+			  ->IV("SPECIAL_ATTACK", 31)
+			  ->IV("SPECIAL_DEFENSE", 31)
+			  ->IV("SPEED", 31)
+			  ->EV("ATTACK", 252)
+			  ->EV("DEFENSE", 4)
+			  ->EV("SPEED", 252)
+			  ->Nature("Jolly")
+			  ->Ability(2)
+			  ->Moves({"FLAREBLITZ", "SUPERPOWER", "WILDCHARGE", "EARTHQUAKE"})
+			  ->Item("CHOICEBAND")
+			  ->Shiny(true)
+			  ->Build());
+	Party.Add(NewObject<UPokemonBuilder>()
+			  ->Species(TEXT("SERPERIOR"))
+			  ->Level(100)
+			  ->Gender(Female)
+			  ->IV("HP", 31)
+			  ->IV("ATTACK", 0)
+			  ->IV("DEFENSE", 31)
+			  ->IV("SPECIAL_ATTACK", 31)
+			  ->IV("SPECIAL_DEFENSE", 31)
+			  ->IV("SPEED", 31)
+			  ->EV("HP", 208)
+			  ->EV("DEFENSE", 48)
+			  ->EV("SPEED", 252)
+			  ->Nature("Timid")
+			  ->Ability(2)
+			  ->Moves({"LEAFSTORM", "TAUNT", "GLARE", "DEFOG"})
+			  ->Item("ROCKYHELMET")
+			  ->Shiny(false)
+			  ->Build());
 }

@@ -2,7 +2,9 @@
 #include "Pokemon/GamePokemon.h"
 
 #include "DataManager.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
@@ -23,13 +25,15 @@ TRowPointer<FSpeciesData> FindSpeciesData(FName Species) {
 }
 
 // TODO: Instantiate the stat block dynamically based on a user config
-FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level) : Species(FindSpeciesData(SpeciesID)), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level)) {
-	CommonInit();
-}
-
-FGamePokemon::FGamePokemon(FName SpeciesID, int32 Level, EPokemonGender Gender, const TMap<FName, int32>& IVs,
-	const TMap<FName, int32>& EVs, FName Nature, int32 Ability, TArray<TSharedRef<IMove>>&& Moves, bool Shiny, FName Item) : Species(FindSpeciesData(SpeciesID)), Gender(Gender), Shiny(Shiny), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, Level, IVs, EVs, Nature)), Moves(MoveTemp(Moves)) {
-	CommonInit();
+FGamePokemon::FGamePokemon(const FPokemonDTO& DTO) : Species(FindSpeciesData(DTO.Species)),
+	PersonalityValue(UPersonalityValueUtils::GeneratePersonalityValue(DTO)), Gender(OPTIONAL(DTO, Gender)),
+	Shiny(BOOL_OPTIONAL(DTO, Shiny)), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, PersonalityValue, DTO.StatBlock)) {
+	StatBlock->CalculateStats(Species->BaseStats);
+	
+	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+	if (DTO.bOverride_CurrentHP) {
+		CurrentHP = FMath::Clamp(DTO.CurrentHP, 0, CurrentHP);
+	}
 }
 
 FText FGamePokemon::GetName() const {
@@ -67,9 +71,4 @@ const FSpeciesData& FGamePokemon::GetSpecies() const {
 
 const IStatBlock& FGamePokemon::GetStatBlock() const {
 	return *StatBlock;
-}
-
-void FGamePokemon::CommonInit() {
-	StatBlock->CalculateStats(Species->BaseStats);
-	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
 }

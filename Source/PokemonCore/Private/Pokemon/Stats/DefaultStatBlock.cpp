@@ -4,6 +4,7 @@
 #include "DataManager.h"
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
+#include "Pokemon/Stats/StatBlockDTO.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "Species/Stat.h"
 
@@ -23,51 +24,38 @@ TRowPointer<FNature> FindNature(FName Nature) {
 	return Ret;
 }
 
-FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level) : Level(Level),
-                                                                        GrowthRate(CreateGrowthRate(GrowthRateID)),
-                                                                        Exp(GrowthRate->ExpForLevel(Level)),
-                                                                        Nature(RandomNature()) {
-	const auto& DataSubsystem = FDataManager::GetInstance();
-	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
-
-	StatTable.ForEach([this](const FStat& Stat) {
-		using enum EPokemonStatType;
-		switch (Stat.Type) {
-		case Main:
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
-			break;
-		case MainBattle:
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, FMath::RandRange(0, 31)));
-			break;
-		case Battle:
-			// Skip over this stat as we don't track a value for it
-			break;
-		}
-	});
+/**
+ * Helper function to find a nature by the given DTO
+ * @param DTO The DTO to get the nature from
+ * @return The found nature
+ */
+TOptional<TRowPointer<FNature>> FindNature(const FStatBlockDTO& DTO) {
+	return DTO.bOverride_Nature ? TOptional(FindNature(DTO.Nature)) : TOptional<TRowPointer<FNature>>();
 }
 
-FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, int32 Level, const TMap<FName, int32>& IVs,
-                                     const TMap<FName, int32>& EVs, FName Nature) : Level(Level),
-	GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)), Nature(FindNature(Nature)) {
+FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO& DTO) : Level(DTO.Level),
+	PersonalityValue(PersonalityValue), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)),
+	Nature(FindNature(DTO)) {
 	auto& DataSubsystem = FDataManager::GetInstance();
 	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
 
-	StatTable.ForEach([this, &IVs, &EVs](const FStat& Stat) {
+	StatTable.ForEach([this, PersonalityValue, &DTO](const FStat& Stat) {
+		auto IV = DTO.IVs.Contains(Stat.ID) ? TOptional<int32>(DTO.IVs[Stat.ID]) : TOptional<int32>();
+		int32 EV = DTO.EVs.Contains(Stat.ID) ? DTO.EVs[Stat.ID] : 0;
 		switch (Stat.Type) {
 			using enum EPokemonStatType;
 		case Main:
-			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainStatEntry>(Stat.ID, PersonalityValue, IV, EV));
 			break;
 		case MainBattle:
-			check(IVs.Contains(Stat.ID) && EVs.Contains(Stat.ID))
-			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, IVs[Stat.ID], EVs[Stat.ID]));
+			check(DTO.IVs.Contains(Stat.ID) && DTO.EVs.Contains(Stat.ID))
+			Stats.Add(Stat.ID, MakeUnique<FDefaultMainBattleStatEntry>(Stat.ID, PersonalityValue, IV, EV));
 			break;
 		case Battle:
 			// Skip over this stat as we don't track a value for it
-			break;
-		}
-	});
+				break;
+			}
+		});
 }
 
 FDefaultStatBlock::~FDefaultStatBlock() = default;
@@ -116,7 +104,13 @@ int32 FDefaultStatBlock::GetExpForNextLevel() const {
 }
 
 const FNature& FDefaultStatBlock::GetNature() const {
-	return *Nature;
+	if (Nature.IsSet())
+		return *Nature.GetValue();
+
+	auto &DataTable = FDataManager::GetInstance().GetDataTable<FNature>();
+	auto NatureRows = DataTable.GetTableRowNames();
+	auto Index = static_cast<int32>(PersonalityValue % NatureRows.Num());
+	return *DataTable.GetData(NatureRows[Index]);
 }
 
 IStatEntry& FDefaultStatBlock::GetStat(FName Stat) {

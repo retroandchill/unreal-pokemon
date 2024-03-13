@@ -3,8 +3,13 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
+#include "Meta/GenericStaticRegistry.h"
+#include "Meta/GenericStaticSharedRegistry.h"
+#include "Meta/PokeRegistry.h"
+#include "Meta/SharedPokeRegistry.h"
 #include "Stats/StatBlock.h"
 
+struct FPokemonDTO;
 struct FSpeciesData;
 
 /**
@@ -56,3 +61,8 @@ public:
 	 */
 	virtual const IStatBlock& GetStatBlock() const = 0;
 };
+
+/**
+ * The static registry for all Pokémon
+ */
+using FPokemonRegistry = TGenericStaticSharedRegistry<IPokemon, const FPokemonDTO&>;
