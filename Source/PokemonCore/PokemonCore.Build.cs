@@ -22,7 +22,8 @@ public class PokemonCore : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"DeveloperSettings", "CommonMath"
+				"DeveloperSettings",
+				"CommonMath"
 			}
 		);
 	}
