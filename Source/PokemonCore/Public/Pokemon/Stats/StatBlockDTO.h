@@ -17,6 +17,18 @@ struct POKEMONCORE_API FStatBlockDTO {
 	 */
 	UPROPERTY(EditAnywhere, SaveGame, Category = Data)
 	int32 Level;
+	
+	/**
+	 * The amount of Exp the Pokémon has
+	 */
+	UPROPERTY(EditAnywhere, SaveGame, Category = Data, meta = (EditCondition=bOverride_Exp))
+	int32 Exp;
+
+	/**
+	 * The override state of the exp of the Pokémon
+	 */
+	UPROPERTY(EditAnywhere, SaveGame, Category = Data)
+	bool bOverride_Exp;
 
 	/**
 	 * The IVs of the Pokémon to explicitly set

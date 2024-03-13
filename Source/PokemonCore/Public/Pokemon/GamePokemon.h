@@ -15,6 +15,8 @@ class IMove;
  * Basic Pokémon class that holds all of the information for a complete Pokémon
  */
 class POKEMONCORE_API FGamePokemon : public IPokemon {
+	DECLARE_DERIVED_METATYPE
+	
 public:
 	/**
 	 * Construct a Pokémon from the DTO
@@ -33,6 +35,16 @@ public:
 	int32 GetMaxHP() const override;
 	bool IsFainted() const override;
 	const IStatBlock& GetStatBlock() const override;
+	UPokemonBuilder* ToBuilder() const override;
+
+	bool operator==(const IPokemon& Other) const override;
+
+	/**
+	 * Check if two Pokémon are the same
+	 * @param Other The other Pokémon
+	 * @return Are the two Pokémon the same?
+	 */
+	bool operator==(const FGamePokemon& Other) const;
 
 private:
 	/**

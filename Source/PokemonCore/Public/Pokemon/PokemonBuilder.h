@@ -16,7 +16,6 @@ class POKEMONCORE_API UPokemonBuilder : public UObject {
 	GENERATED_BODY()
 
 public:
-	
 	/**
 	 * Set the species for the new Pokémon
 	 * @param Species The ID of the species
@@ -63,6 +62,29 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Pokémon|Builder")
 	UPokemonBuilder* Shiny(bool bShiny);
+
+	/**
+	 * Set the entire state block for the Pokémon
+	 * @param StatBlock The stat block
+	 * @return A reference to this object
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Pokémon|Builder")
+	UPokemonBuilder* StatBlock(const FStatBlockDTO &StatBlock);
+
+	/**
+	 * Set the entire state block for the Pokémon
+	 * @param StatBlock The stat block
+	 * @return A reference to this object
+	 */
+	UPokemonBuilder* StatBlock(FStatBlockDTO &&StatBlock);
+
+	/**
+	 * Set the Exp. total for the new Pokémon
+	 * @param Exp The total Exp.
+	 * @return A reference to this object
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Pokémon|Builder")
+	UPokemonBuilder* Exp(int32 Exp);
 
 	/**
 	 * Set the current HP for the new Pokémon
@@ -185,3 +207,5 @@ private:
 	UPROPERTY()
 	FPokemonDTO DTO;
 };
+
+#define ADD_OPTIONAL(Builder, PropertyName) if (PropertyName.IsSet()) (Builder).PropertyName(PropertyName.GetValue())

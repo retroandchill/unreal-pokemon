@@ -2,6 +2,7 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
 #include "DataManager.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatBlockDTO.h"
@@ -9,6 +10,8 @@
 #include "Species/Stat.h"
 
 using namespace StatUtils;
+
+IMPLEMENT_DERIVED_METATYPE(FDefaultStatBlock)
 
 /**
  * Helper function to find a nature by the given ID
@@ -34,7 +37,7 @@ TOptional<TRowPointer<FNature>> FindNature(const FStatBlockDTO& DTO) {
 }
 
 FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO& DTO) : Level(DTO.Level),
-	PersonalityValue(PersonalityValue), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(GrowthRate->ExpForLevel(Level)),
+	PersonalityValue(PersonalityValue), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(FMath::Max(GrowthRate->ExpForLevel(Level), OPTIONAL(DTO, Exp).Get(0))),
 	Nature(FindNature(DTO)) {
 	auto& DataSubsystem = FDataManager::GetInstance();
 	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
@@ -60,6 +63,7 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue
 FDefaultStatBlock::~FDefaultStatBlock() = default;
 
 FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level),
+																		PersonalityValue(Other.PersonalityValue),
                                                                        GrowthRate(Other.GrowthRate->Clone()),
                                                                        Exp(FMath::Max(
 	                                                                       Other.Exp, GrowthRate->ExpForLevel(Level))),
@@ -122,6 +126,12 @@ const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
 	return *Stats[Stat];
 }
 
+void FDefaultStatBlock::ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const {
+	for (const auto &[Key, Value] : Stats) {
+		Predicate(Key, *Value);
+	}
+}
+
 void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 	auto& NatureData = GetNature();
 
@@ -129,4 +139,28 @@ void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 		check(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}
+}
+
+FStatBlockDTO FDefaultStatBlock::ToDTO() const {
+	FStatBlockDTO DTO = { .Level = Level, .Exp = Exp, .bOverride_Exp = true };
+	if (Nature.IsSet()) {
+		DTO.bOverride_Nature = true;
+		DTO.Nature = Nature.GetValue()->ID;
+	}
+	
+	for (auto& [StatID, Stat] : Stats) {
+		DTO.IVs.Add(StatID, Stat->GetIV());
+		DTO.EVs.Add(StatID, Stat->GetEV());
+	}
+
+	return DTO;
+}
+
+bool FDefaultStatBlock::operator==(const IStatBlock& Other) const {
+	return ClassName() == Other.GetClassName() ? *this == static_cast<const FDefaultStatBlock&>(Other) : false;
+}
+
+bool FDefaultStatBlock::operator==(const FDefaultStatBlock& Other) const {
+	// TODO: Finish implementing this
+	return false;
 }

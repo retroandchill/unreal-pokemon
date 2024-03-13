@@ -5,10 +5,12 @@
 #include "Breeding/PokemonGender.h"
 #include "Meta/GenericStaticRegistry.h"
 #include "Meta/GenericStaticSharedRegistry.h"
+#include "Meta/MetatypeDeclares.h"
 #include "Meta/PokeRegistry.h"
 #include "Meta/SharedPokeRegistry.h"
 #include "Stats/StatBlock.h"
 
+class UPokemonBuilder;
 struct FPokemonDTO;
 struct FSpeciesData;
 
@@ -16,6 +18,8 @@ struct FSpeciesData;
  * Abstract interface for a Pokémon object
  */
 class POKEMONCORE_API IPokemon {
+	DECLARE_ABSTRACT_METATYPE
+	
 public:
 	virtual ~IPokemon() = default;
 
@@ -60,6 +64,19 @@ public:
 	 * @return A reference to the owned stat block
 	 */
 	virtual const IStatBlock& GetStatBlock() const = 0;
+
+	/**
+	 * Convert this class into a builder object
+	 * @return The builder class to use
+	 */
+	virtual UPokemonBuilder *ToBuilder() const = 0;
+
+	/**
+	 * Check if two Pokémon are the same
+	 * @param Other The other Pokémon
+	 * @return Are the two Pokémon the same?
+	 */
+	virtual bool operator==(const IPokemon& Other) const = 0;
 };
 
 /**

@@ -11,6 +11,8 @@ struct FStatBlockDTO;
  * The default stat calculator, which uses the formulas from the main series games
  */
 class POKEMONCORE_API FDefaultStatBlock : public IStatBlock {
+	DECLARE_DERIVED_METATYPE
+	
 public:
 
 	/**
@@ -35,7 +37,18 @@ public:
 	const FNature& GetNature() const override;
 	IStatEntry& GetStat(FName Stat) override;
 	const IStatEntry& GetStat(FName Stat) const override;
+	void ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const override;
 	void CalculateStats(const TMap<FName, int32>& BaseStats) override;
+	virtual FStatBlockDTO ToDTO() const override;
+	
+	virtual bool operator==(const IStatBlock& Other) const override;
+
+	/**
+	 * Check if the two stat blocks are the same
+	 * @param Other The other stat block
+	 * @return Are these two stat blocks the same?
+	 */
+	bool operator==(const FDefaultStatBlock& Other) const;
 
 private:
 	/**

@@ -42,6 +42,34 @@ T OrElseGet(const TOptional<T> &Optional, const Functor &Supplier) {
 	return Optional.IsSet() ? Optional.GetValue() : Supplier();
 }
 
+template <typename T>
+concept overloads_equals = requires(T A, T B) {
+  A == B;
+};
+
+/**
+ * Compare two optionals to see if they're equal
+ * @tparam T The type stored within the optionals
+ * @param A The first optional to compare
+ * @param B The second optional to compare
+ * @return They they equal?
+ */
+template <overloads_equals T>
+bool OptionalsSame(const TOptional<T>& A, const TOptional<T> &B) {
+  if (A.IsSet() != B.IsSet())
+   return false;
+
+  return A.IsSet() ? A.GetValue() == B.GetValue() : true;
+}
+
+/**
+ * Compare two optionals to see if they're equal
+ * @param A The first optional to compare
+ * @param B The second optional to compare
+ * @return They they equal?
+ */
+POKEMONUTILITIES_API bool OptionalsSame(const TOptional<FText>& A, const TOptional<FText> &B);
+
 #define OPTIONAL(OwningObject, Property) CreateOptional((OwningObject).Property, (OwningObject).bOverride_##Property)
 
 #define BOOL_OPTIONAL(OwningObject, Property) CreateOptional((OwningObject).b##Property, (OwningObject).bOverride_##Property)

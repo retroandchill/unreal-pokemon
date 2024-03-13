@@ -4,7 +4,7 @@
 #include "CoreMinimal.h"
 #include "MoveDamageCategory.h"
 #include "UObject/Object.h"
-#include "Move.generated.h"
+#include "MoveData.generated.h"
 
 /**
  * Represents the data for a Move in the game

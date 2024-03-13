@@ -40,6 +40,22 @@ UPokemonBuilder* UPokemonBuilder::Shiny(bool bShiny) {
 	return this;
 }
 
+UPokemonBuilder* UPokemonBuilder::StatBlock(const FStatBlockDTO& StatBlock) {
+	DTO.StatBlock = StatBlock;
+	return this;
+}
+
+UPokemonBuilder* UPokemonBuilder::StatBlock(FStatBlockDTO&& StatBlock) {
+	DTO.StatBlock = MoveTemp(StatBlock);
+	return this;
+}
+
+UPokemonBuilder* UPokemonBuilder::Exp(int32 Exp) {
+	DTO.StatBlock.bOverride_Exp = true;
+	DTO.StatBlock.Exp = Exp;
+	return this;
+}
+
 UPokemonBuilder* UPokemonBuilder::CurrentHP(int32 CurrentHP) {
 	DTO.bOverride_CurrentHP = true;
 	DTO.CurrentHP = CurrentHP;
