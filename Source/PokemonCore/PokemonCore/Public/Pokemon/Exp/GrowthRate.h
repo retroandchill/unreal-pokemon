@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Meta/GenericStaticRegistry.h"
+#include "Meta/GenericStaticUniqueRegistry.h"
 
 
 namespace Exp {
@@ -30,5 +30,5 @@ namespace Exp {
 	/**
 	 * Static registry for the growth rate types
 	 */
-	using FGrowthRateRegistry = TGenericStaticRegistry<IGrowthRate>;
+	using FGrowthRateRegistry = TGenericStaticUniqueRegistry<IGrowthRate>;
 };
