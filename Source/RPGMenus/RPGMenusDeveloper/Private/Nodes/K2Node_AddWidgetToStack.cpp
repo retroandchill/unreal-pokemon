@@ -28,7 +28,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext& CompilerContex
 	UEdGraphPin* SpawnNodeThen = CreateWidgetNode->GetThenPin();
 	UEdGraphPin* SpawnNodeResult = CreateWidgetNode->GetResultPin();
 
-	const auto* const SpawnClass = (SpawnClassPin != nullptr) ? Cast<UClass>(SpawnClassPin->DefaultObject) : nullptr;
+	auto* SpawnClass = (SpawnClassPin != nullptr) ? Cast<UClass>(SpawnClassPin->DefaultObject) : nullptr;
 	if (!SpawnClassPin || ((0 == SpawnClassPin->LinkedTo.Num()) && (nullptr == SpawnClass))) {
 		CompilerContext.MessageLog.Error(*NSLOCTEXT("UK2Node_AddWidgetToStack", "CreateWidgetNodeMissingClass_Error",
 		                                            "Spawn node @@ must have a class specified.").ToString(),

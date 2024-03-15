@@ -11,9 +11,10 @@
  */
 class POKEMONDATADEVELOPER_API FPokemonDataGraphPinFactory : public FGraphPanelPinFactory {
 public:
+	FPokemonDataGraphPinFactory() = default;
 	FPokemonDataGraphPinFactory(const FPokemonDataGraphPinFactory&) = default;
 	FPokemonDataGraphPinFactory(FPokemonDataGraphPinFactory&&) noexcept = default;
-	~FPokemonDataGraphPinFactory() = default;
+	~FPokemonDataGraphPinFactory() override = default;
 
 	FPokemonDataGraphPinFactory& operator=(const FPokemonDataGraphPinFactory&) = default;
 	FPokemonDataGraphPinFactory& operator=(FPokemonDataGraphPinFactory&&) noexcept = default;

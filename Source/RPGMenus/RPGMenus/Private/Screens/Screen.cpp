@@ -40,7 +40,7 @@ bool UScreen::GiveMenuFocus() {
 	return FocusGranted;
 }
 
-void UScreen::CloseScreen() const {
+void UScreen::CloseScreen() {
 	auto RPGPlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
 	if (RPGPlayerController == nullptr)
 		return;

@@ -35,7 +35,7 @@ protected:
 	 * Close the screen and return to the previous one
 	 */
 	UFUNCTION(BlueprintCallable, Category = Navigation)
-	void CloseScreen() const;
+	void CloseScreen();
 
 private:
 	/**
