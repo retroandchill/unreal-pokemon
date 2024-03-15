@@ -39,3 +39,11 @@ const IGameData& FDataManager::GetDataTable(TObjectPtr<const UScriptStruct> Stru
 	check(DataTables.Contains(StructName))
 	return *DataTables[StructName];
 }
+
+TArray<UScriptStruct*> FDataManager::GetStructTypes() const {
+	TArray<UScriptStruct*> Ret;
+	for (const auto &[Key, Value] : DataTables) {
+		Ret.Add(Value->GetStructType());
+	}
+	return Ret;
+}

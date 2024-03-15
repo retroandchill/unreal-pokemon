@@ -29,7 +29,7 @@ void UDisplayText::SetTextInfo() {
 
 		if (SizeBox != nullptr) {
 			auto TextPadding = GetDisplayTextPadding();
-			SizeBox->SetHeightOverride(GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
+			SizeBox->SetHeightOverride(static_cast<float>(GetTextSize().Y) + TextPadding.Top + TextPadding.Bottom);
 		}
 	}
 }
@@ -46,7 +46,7 @@ void UDisplayText::SetText(const FText& NewText) {
 
 		if (SizeBox != nullptr) {
 			auto TextPadding = GetDisplayTextPadding();
-			SizeBox->SetHeightOverride(GetTextSize().Y + TextPadding.Top + TextPadding.Bottom);
+			SizeBox->SetHeightOverride(static_cast<float>(GetTextSize().Y) + TextPadding.Top + TextPadding.Bottom);
 		}
 
 		OnTextSet(NewText);

@@ -16,7 +16,7 @@ public:
 	explicit TDataTableProxy(UDataTable* DataTable) : DataTable(MakeUniqueRoot(DataTable)) {
 	}
 
-	UStruct* GetStructType() const override {
+	UScriptStruct* GetStructType() const override {
 		return T::StaticStruct();
 	}
 

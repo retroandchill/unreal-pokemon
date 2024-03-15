@@ -36,7 +36,7 @@ public:
 	 */
 	T& operator*() const {
 		auto Row = TableRowHandle.GetRow<T>(TEXT("Could not find row!"));
-		check(Row != nullptr);
+		check(Row != nullptr)
 		return *Row;
 	}
 
@@ -46,7 +46,7 @@ public:
 	 */
 	T* operator->() const {
 		auto Row = TableRowHandle.GetRow<T>(TEXT("Could not find row!"));
-		check(Row != nullptr);
+		check(Row != nullptr)
 		return Row;
 	}
 

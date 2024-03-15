@@ -155,7 +155,7 @@ def validate_name_field(value: str) -> str:
     :return: The validate name string
     :raises ValueError: If the provided string does not conform to the schema defined
     """
-    if re.match(r'^(?!\d)\w+$', value):
+    if not re.match(r'^(?!\d)\w+$', value):
         raise ValueError("Field '{0}' must contain only letters, digits, and underscores and can't "
                          "begin with a number.".format(value))
 
