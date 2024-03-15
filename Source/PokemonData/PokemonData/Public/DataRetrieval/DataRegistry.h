@@ -5,6 +5,7 @@
 #include "DataRetrieval/GameData.h"
 #include "DataRetrieval/DataTableProxy.h"
 #include "Meta/PokeRegistry.h"
+#include "Meta/UniquePokeRegistry.h"
 
 /**
  * Internal registry used to handle the tracking of the data table structs
@@ -23,7 +24,7 @@ public:
 	 * The internal registry used to actually retrieve the objects.
 	 * @return The registry in question to retrieve
 	 */
-	using FInternalRegistry = TPokeRegistry<IGameData, UDataTable*>;
+	using FInternalRegistry = TUniquePokeRegistry<IGameData, UDataTable*>;
 
 	/**
 	 * Get the singleton instance of the class
