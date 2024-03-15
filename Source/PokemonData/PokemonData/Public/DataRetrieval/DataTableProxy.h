@@ -33,8 +33,8 @@ public:
 		return TRowPointer<T>(*DataTable, ID);
 	}
 
-	TSet<FName> GetTableRowNames() const override {
-		return TSet(DataTable->GetRowNames());
+	TArray<FName> GetTableRowNames() const override {
+		return DataTable->GetRowNames();
 	}
 
 	bool IsRowNameValid(FName ID) const override {

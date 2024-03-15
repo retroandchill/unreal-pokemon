@@ -1,5 +1,8 @@
+// "Unreal Pokémon" created by Retro & Chill.
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Pokemon/Stats/StatBlockDTO.h"
+#include "Utilities/PersonalityValueUtils.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -14,7 +17,8 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPEED", 102}
 	};
 
-	TMap<FName, int32> IVs = {
+	FStatBlockDTO StatBlockDTO = { .Level = 78, .Nature = "ADAMANT", .bOverride_Nature = true };
+	StatBlockDTO.IVs = {
 		{"HP", 24},
 		{"ATTACK", 12},
 		{"DEFENSE", 30},
@@ -23,7 +27,7 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPEED", 5}
 	};
 
-	TMap<FName, int32> EVs = {
+	StatBlockDTO.EVs = {
 		{"HP", 74},
 		{"ATTACK", 190},
 		{"DEFENSE", 91},
@@ -32,7 +36,7 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPEED", 23}
 	};
 
-	FDefaultStatBlock Block("Slow", 78, IVs, EVs, "ADAMANT");
+	FDefaultStatBlock Block("Slow", UPersonalityValueUtils::GeneratePersonalityValue(), StatBlockDTO);
 	Block.CalculateStats(BaseStats);
 
 	int32 HP = Block.GetStat("HP").GetStatValue();

@@ -11,7 +11,7 @@
 #include "Exp/GrowthRateData.h"
 #include "Field/EncounterType.h"
 #include "Field/Weather.h"
-#include "..\Public\Moves\Move.h"
+#include "..\Public\Moves\MoveData.h"
 #include "Moves/Target.h"
 #include "Species/Ability.h"
 #include "Species/BodyColor.h"

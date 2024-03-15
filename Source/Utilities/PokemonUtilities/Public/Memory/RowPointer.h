@@ -51,6 +51,15 @@ public:
 	}
 
 	/**
+	 * Overloaded operator to allow comparisons between this data struct
+	 * @param Other The pointed object
+	 * @return Are the two pointers the same
+	 */
+	bool operator==(const TRowPointer& Other) const {
+		return TableRowHandle.RowName == Other.TableRowHandle.RowName;
+	}
+
+	/**
 	 * Overloaded operator to allow comparisons to raw pointers
 	 * @param Other The pointed object
 	 * @return Are the two pointers the same

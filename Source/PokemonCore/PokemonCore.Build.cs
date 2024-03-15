@@ -23,7 +23,8 @@ public class PokemonCore : ModuleRules
 				"Slate",
 				"SlateCore",
 				"DeveloperSettings",
-				"CommonMath"
+				"CommonMath",
+				"PokemonUtilities"
 			}
 		);
 	}

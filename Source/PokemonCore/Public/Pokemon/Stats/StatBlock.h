@@ -2,13 +2,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "StatBlockDTO.h"
 #include "StatEntry.h"
+#include "Meta/MetatypeDeclares.h"
 #include "Species/Nature.h"
 
 /**
  * Represents a the stat block for calculating the Pokémon's Stats
  */
 class POKEMONCORE_API IStatBlock {
+	DECLARE_ABSTRACT_METATYPE
+	
 public:
 	virtual ~IStatBlock() = default;
 
@@ -51,8 +55,27 @@ public:
 	virtual const IStatEntry& GetStat(FName Stat) const = 0;
 
 	/**
+	 * Iterate over the stats performing the given predicate
+	 * @param Predicate The function to perform on each iteration
+	 */
+	virtual void ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const = 0;
+
+	/**
 	 * Calculate the stats of the given Pokémon in question
 	 * @param BaseStats The base stats of the Pokémon species/form
 	 */
 	virtual void CalculateStats(const TMap<FName, int32>& BaseStats) = 0;
+
+	/**
+	 * Convert this object to its corresponding DTO
+	 * @return The created DTO
+	 */
+	virtual FStatBlockDTO ToDTO() const = 0;
+
+	/**
+	 * Check if the two stat blocks are the same
+	 * @param Other The other stat block
+	 * @return Are these two stat blocks the same?
+	 */
+	virtual bool operator==(const IStatBlock& Other) const = 0;
 };

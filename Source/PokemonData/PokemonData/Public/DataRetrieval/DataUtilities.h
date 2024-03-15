@@ -86,24 +86,20 @@ public:
 
 	/**
 	 * Get all IDs for the particular data type
-	 * @param ContextObject The context object used to retrieve the data subsystem
 	 * @param StructType The struct type to get the data from
 	 * @return The IDs used to lookup each row in the table
 	 */
-	UFUNCTION(BlueprintPure, Category = "Data Table",
-		meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
-	static TSet<FName> GetAllDataIDs(const UScriptStruct* StructType);
+	UFUNCTION(BlueprintPure, Category = "Data Table", meta=(BlueprintInternalUseOnly="true"))
+	static TArray<FName> GetAllDataIDs(const UScriptStruct* StructType);
 
 	/**
 	 * Check if the given row name in the table exists
-	 * @param ContextObject The context object used to retrieve the data subsystem
 	 * @param StructType The struct type to get the data from
 	 * @param RowName The name of the row to retrieve
 	 * @return Does the row name in question exists?
 	 */
-	UFUNCTION(BlueprintPure, Category = "Data Table",
-		meta=(WorldContext = "ContextObject", BlueprintInternalUseOnly="true"))
-	static bool IsDataRowNameValid(UObject* ContextObject, const UScriptStruct* StructType, FName RowName);
+	UFUNCTION(BlueprintPure, Category = "Data Table", meta=(BlueprintInternalUseOnly="true"))
+	static bool IsDataRowNameValid(const UScriptStruct* StructType, FName RowName);
 
 	/**
 	 * Utility method used by the K2Nodes to add all the types to the menu as needed

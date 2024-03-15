@@ -7,10 +7,10 @@ void UDataUtilities::GetData(const UScriptStruct* StructType, FName RowName,
 	check(false)
 }
 
-TSet<FName> UDataUtilities::GetAllDataIDs(const UScriptStruct* StructType) {
+TArray<FName> UDataUtilities::GetAllDataIDs(const UScriptStruct* StructType) {
 	return FDataManager::GetInstance().GetDataTable(StructType).GetTableRowNames();
 }
 
-bool UDataUtilities::IsDataRowNameValid(UObject* ContextObject, const UScriptStruct* StructType, FName RowName) {
+bool UDataUtilities::IsDataRowNameValid(const UScriptStruct* StructType, FName RowName) {
 	return FDataManager::GetInstance().GetDataTable(StructType).IsRowNameValid(RowName);
 }

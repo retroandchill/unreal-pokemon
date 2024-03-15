@@ -14,6 +14,12 @@ namespace StatUtils {
 	POKEMONCORE_API TMap<FName, int32> RandomizeIVs();
 
 	/**
+	 * Randomize the Pokémon's IV for a single stat
+	 * @return The randomized IV
+	 */
+	POKEMONCORE_API int32 RandomizeIV();
+
+	/**
 	 * Set all of the EVs to 0
 	 * @return The map of EVs all set to 0
 	 */

@@ -5,6 +5,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PersonalityValueUtils.generated.h"
 
+struct FPokemonDTO;
 /**
  * Utility class for personality value related operations
  */
@@ -30,4 +31,11 @@ public:
 	 * @return A unique 32-bit unsigned Personality value
 	 */
 	static uint32 GeneratePersonalityValue();
+
+	/**
+	 * Generate a unique personality value that can be used for a Pokémon if one is not already set
+	 * @param DTO The DTO to check for an override
+	 * @return A unique 32-bit unsigned Personality value
+	 */
+	static uint32 GeneratePersonalityValue(const FPokemonDTO &DTO);
 };

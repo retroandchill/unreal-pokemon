@@ -29,7 +29,7 @@ public:
   * Get the list of IDs in the table
   * @return A unique set of row names
   */
-	virtual TSet<FName> GetTableRowNames() const = 0;
+	virtual TArray<FName> GetTableRowNames() const = 0;
 
 	/**
   * Check if the provided row name is valid or not
