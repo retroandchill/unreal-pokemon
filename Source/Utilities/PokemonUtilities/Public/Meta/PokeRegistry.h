@@ -6,25 +6,16 @@
 /**
  * Signifies a generic static registry for different data types. Used to create a static registry that sits below
  * Unreal Engine and doesn't require the classes to be UObjects
- * @tparam T The superclass type of the registry
+ * @tparam Ptr The pointer type that gets created
  * @tparam Args The constructor arguments taken in
  */
-template <typename T, typename... Args>
+template <typename Ptr, typename... Args>
 class TPokeRegistry {
 public:
 	/**
 	 * Factory function that produces a unique pointer to referenced type
 	 */
-	using FFactoryFunction = TFunction<TUniquePtr<T>(Args...)>;
-
-	/**
-	 * Register the given class for the given key using the default constructor
-	 * @param Key The key to use for the registry
-	 */
-	template <typename Derived>
-	void RegisterClass(FName Key) {
-		RegisterFactory(Key, ConstructDerived<Derived>);
-	}
+	using FFactoryFunction = TFunction<Ptr(Args...)>;
 
 	/**
 	 * Register the given method as a factory function for the given key
@@ -41,7 +32,7 @@ public:
 	 * @param Arguments The arguments to pass to the factory function to
 	 * @return A unique reference to the factory instance
 	 */
-	TUniquePtr<T> Construct(FName Key, Args... Arguments) const {
+	Ptr Construct(FName Key, Args... Arguments) const {
 		check(RegisteredConstructors.Contains(Key))
 		return RegisteredConstructors[Key](Arguments...);
 	}
@@ -66,11 +57,6 @@ public:
 	}
 
 private:
-	template <typename Derived>
-	static TUniquePtr<T> ConstructDerived(Args... Arguments) {
-		return MakeUnique<Derived>(Arguments...);
-	}
-
 	/**
 	 * The set of registered constructors for the data table proxy types
 	 */

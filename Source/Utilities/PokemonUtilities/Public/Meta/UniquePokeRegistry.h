@@ -1,15 +1,16 @@
-﻿// "Unreal Pokémon" created by Retro & Chill.
+// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PokeRegistry.h"
 
 /**
- * Generic registry that generates TSharedRef objects
+ * Generic registry that generates TUniquePtr objects
  * @tparam T The superclass type of the registry
  * @tparam Args The constructor arguments taken in
  */
 template <typename T, typename... Args>
-class TSharedPokeRegistry : public TPokeRegistry<TSharedRef<T>, Args...> {
+class TUniquePokeRegistry : public TPokeRegistry<TUniquePtr<T>, Args...> {
 public:
 	/**
 	 * Register the given class for the given key using the default constructor
@@ -19,7 +20,7 @@ public:
 	template <typename Derived>
 	requires std::is_base_of_v<T, Derived>
 	void RegisterClass(FName Key) {
-		TPokeRegistry<TSharedRef<T>, Args...>::RegisterFactory(Key, ConstructDerived<Derived>);
+		TPokeRegistry<TUniquePtr<T>, Args...>::RegisterFactory(Key, ConstructDerived<Derived>);
 	}
 
 private:
@@ -31,7 +32,7 @@ private:
 	 */
 	template <typename Derived>
 	requires std::is_base_of_v<T, Derived>
-	static TSharedRef<T> ConstructDerived(Args... Arguments) {
-		return MakeShared<Derived>(Arguments...);
+	static TUniquePtr<T> ConstructDerived(Args... Arguments) {
+		return MakeUnique<Derived>(Arguments...);
 	}
 };
