@@ -35,7 +35,7 @@ jobs:
           pip install -r requirements.txt
           coverage run -m unittest discover -s . -p "test_*.py"
           cd ../..
-          coverage xml --omit=Content/Python/test/* -o python-coverage.xml Content/Python/src/**/*.py
+          coverage xml --omit=Content/Python/test/* coverage xml --omit=Content/Python/test/* -o python-coverage.xml Content/Python/src/**/*.py -o python-coverage.xml
           
       - name: Run sonar-scanner
         env:
@@ -50,4 +50,5 @@ jobs:
         with:
           path: |
             cpp-coverage.xml
+            python-coverage.xml
             TestResults/*
