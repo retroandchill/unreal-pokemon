@@ -74,7 +74,7 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
 
 void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext& CompilerContext,
                                                     UEdGraphPin* OutputPin) {
-	if (OutputPin->LinkedTo.ContainsByPredicate([](UEdGraphPin* Link) {
+	if (OutputPin->LinkedTo.ContainsByPredicate([](const UEdGraphPin* const Link) {
 		return Link->GetOwningNode()->GetClass()->ImplementsInterface(UMessageNode::StaticClass());
 	}))
 		return;
