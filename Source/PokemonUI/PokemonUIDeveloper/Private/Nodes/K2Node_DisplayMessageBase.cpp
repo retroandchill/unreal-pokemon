@@ -5,7 +5,9 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
+#include "PokemonUISettings.h"
 #include "RPGPlayerController.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -42,22 +44,22 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
                                                    UFunction* FactoryFunc) const {
 	auto CustomizeCallback = [](UEdGraphNode* Node, [[maybe_unused]] bool bIsTemplateNode,
 	                            TSubclassOf<UTextDisplayScreen> Subclass, TSharedRef<uint32> NodeCounter,
-	                            UFunction* FactoryFunc) {
+	                            UFunction* Factory) {
 		auto TypedNode = CastChecked<UK2Node_DisplayMessageBase>(Node);
-		auto ReturnProp = CastFieldChecked<FObjectProperty>(FactoryFunc->GetReturnProperty());
+		auto ReturnProp = CastFieldChecked<FObjectProperty>(Factory->GetReturnProperty());
 
-		TypedNode->ProxyFactoryFunctionName = FactoryFunc->GetFName();
-		TypedNode->ProxyFactoryClass = FactoryFunc->GetOuterUClass();
+		TypedNode->ProxyFactoryFunctionName = Factory->GetFName();
+		TypedNode->ProxyFactoryClass = Factory->GetOuterUClass();
 		TypedNode->ProxyClass = ReturnProp->PropertyClass;
 		TypedNode->Initialize(Subclass, MoveTemp(NodeCounter));
 	};
 
 	auto ScreenCounter = MakeShared<uint32>(0);
-	for (TObjectIterator<UClass> It; It; ++It) {
-		if (!It->IsChildOf(UTextDisplayScreen::StaticClass()) || It->HasAnyClassFlags(CLASS_Abstract))
-			continue;
-
-		if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(*It, true))
+	
+	auto Settings = GetDefault<UPokemonUISettings>();
+	for (auto &MenuClasses = Settings->GetTextScreenClasses();
+		auto MenuClass : MenuClasses) {
+		if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(*MenuClass, true))
 			continue;
 
 		auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
@@ -65,7 +67,7 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
 
 		(*ScreenCounter)++;
 		Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(
-			CustomizeCallback, TSubclassOf<UTextDisplayScreen>(*It), ScreenCounter, FactoryFunc);
+			CustomizeCallback, TSubclassOf<UTextDisplayScreen>(*MenuClass), ScreenCounter, FactoryFunc);
 		ActionRegistrar.AddBlueprintAction(GetClass(), Spawner);
 	}
 }
