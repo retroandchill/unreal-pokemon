@@ -31,7 +31,7 @@ jobs:
         working-directory: Content/Python
         run: |
           python -m venv venv
-          ./venv/Scripts.activate.ps1
+          ./venv/Scripts/activate.ps1
           pip install -r requirements.txt
           coverage run -m unittest discover -s . -p "test_*.py"
           cd ../..
