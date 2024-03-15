@@ -2,6 +2,7 @@
 #include "Pokemon/GamePokemon.h"
 
 #include "DataManager.h"
+#include "PokemonCoreSettings.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonBuilder.h"
@@ -29,10 +30,9 @@ TRowPointer<FSpeciesData> FindSpeciesData(FName Species) {
 
 IMPLEMENT_DERIVED_METATYPE(FGamePokemon)
 
-// TODO: Instantiate the stat block dynamically based on a user config
 FGamePokemon::FGamePokemon(const FPokemonDTO& DTO) : Species(FindSpeciesData(DTO.Species)),
 	PersonalityValue(UPersonalityValueUtils::GeneratePersonalityValue(DTO)), Gender(OPTIONAL(DTO, Gender)),
-	Shiny(BOOL_OPTIONAL(DTO, Shiny)), StatBlock(MakeUnique<FDefaultStatBlock>(Species->GrowthRate, PersonalityValue, DTO.StatBlock)) {
+	Shiny(BOOL_OPTIONAL(DTO, Shiny)), StatBlock(CreateStatBlock(Species->GrowthRate, PersonalityValue, DTO.StatBlock)) {
 	StatBlock->CalculateStats(Species->BaseStats);
 	
 	CurrentHP = StatBlock->GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();

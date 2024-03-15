@@ -10,7 +10,8 @@ void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
 }
 
 void UK2Node_GetGameData::AllocateDefaultPins() {
-	CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
+	auto RowNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
+	RowNamePin->DefaultValue = GetRowNames()[0].ToString();
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
 	          (StructType != nullptr ? static_cast<UStruct*>(StructType) : FTableRowBase::StaticStruct()),
 	          UEdGraphSchema_K2::PN_ReturnValue);
@@ -100,4 +101,16 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateOutRowPin);
 
 	BreakAllNodeLinks();
+}
+
+TArray<FName> UK2Node_GetGameData::GetRowNames() const {
+	if (StructType == nullptr)
+		return {};
+	
+	auto &DataTable = FDataManager::GetInstance().GetDataTable(StructType);
+	return DataTable.GetTableRowNames();
+}
+
+UEdGraphPin* UK2Node_GetGameData::GetRowPin() const {
+	return FindPinChecked(TEXT("RowName"));
 }

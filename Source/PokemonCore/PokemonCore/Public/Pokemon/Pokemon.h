@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
-#include "Meta/GenericStaticRegistry.h"
+#include "Meta/GenericStaticUniqueRegistry.h"
 #include "Meta/GenericStaticSharedRegistry.h"
 #include "Meta/MetatypeDeclares.h"
 #include "Meta/PokeRegistry.h"

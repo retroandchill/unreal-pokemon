@@ -1,12 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "PokemonCore.h"
 
+#include "Pokemon/GamePokemon.h"
 #include "Pokemon/Exp/Erratic.h"
 #include "Pokemon/Exp/Fast.h"
 #include "Pokemon/Exp/Fluctuating.h"
 #include "Pokemon/Exp/Medium.h"
 #include "Pokemon/Exp/Parabolic.h"
 #include "Pokemon/Exp/Slow.h"
+#include "Pokemon/Stats/DefaultStatBlock.h"
 
 constexpr auto GLoctextNamespace = "FPokemonCoreModule";
 
@@ -18,6 +20,12 @@ void FPokemonCoreModule::StartupModule() {
 	GrowthRateRegistry.RegisterClass<Exp::FParabolic>("Parabolic");
 	GrowthRateRegistry.RegisterClass<Exp::FFast>("Fast");
 	GrowthRateRegistry.RegisterClass<Exp::FSlow>("Slow");
+
+	auto &PokemonRegistry = FPokemonRegistry::GetInstance();
+	PokemonRegistry.RegisterClass<FGamePokemon>("GamePokemon");
+
+	auto &StatBlockRegistry = FStatBlockRegistry::GetInstance();
+	StatBlockRegistry.RegisterClass<FDefaultStatBlock>("DefaultStatBlock");
 }
 
 void FPokemonCoreModule::ShutdownModule() {

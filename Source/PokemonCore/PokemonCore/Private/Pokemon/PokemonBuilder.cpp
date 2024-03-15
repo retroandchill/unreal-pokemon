@@ -3,6 +3,7 @@
 
 #include "Pokemon/PokemonBuilder.h"
 
+#include "PokemonCoreSettings.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Pokemon.h"
 
@@ -123,7 +124,14 @@ const FPokemonDTO& UPokemonBuilder::GetDTO() const {
 }
 
 TSharedRef<IPokemon> UPokemonBuilder::Build() const {
-	// TODO: Actually inject
+	auto Settings = GetDefault<UPokemonCoreSettings>();
+	auto ClassName = Settings->GetPokemonClass();
+	if (const auto &Registry = FPokemonRegistry::GetInstance(); Registry.IsTypeRegistered(ClassName)) {
+		return Registry.Construct(ClassName, DTO);
+	}
+
+	// Fallback in case this setting is set incorrectly.
+	// Ideally we should never wind up here.
 	return MakeShared<FGamePokemon>(DTO);
 }
 
