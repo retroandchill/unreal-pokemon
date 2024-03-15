@@ -4,7 +4,9 @@
 #include "CoreMinimal.h"
 #include "StatBlockDTO.h"
 #include "StatEntry.h"
+#include "Meta/GenericStaticRegistry.h"
 #include "Meta/MetatypeDeclares.h"
+#include "Meta/PokeRegistry.h"
 #include "Species/Nature.h"
 
 /**
@@ -79,3 +81,5 @@ public:
 	 */
 	virtual bool operator==(const IStatBlock& Other) const = 0;
 };
+
+using FStatBlockRegistry = TGenericStaticRegistry<IStatBlock, FName, uint32, const FStatBlockDTO&>;

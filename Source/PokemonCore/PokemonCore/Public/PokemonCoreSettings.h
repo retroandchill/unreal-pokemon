@@ -28,7 +28,35 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
 	int32 GetMaxPartySize() const;
 
+	/**
+	 * The class used for all Pokémon objects
+	 * @return The class used for all Pokémon objects
+	 */
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+	FName GetPokemonClass() const;
+
+	/**
+	 * The class used for all Stat Block objects
+	 * @return The class used for all Stat Block objects
+	 */
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+	FName GetStatBlockClass() const;
+
 private:
+	/**
+	 * Get the list of options for the Pokémon class dropdown
+	 * @return The list of options for the dropdown
+	 */
+	UFUNCTION()
+	static TArray<FName> GetPokemonClassOptions();
+
+	/**
+	 * Get the list of options for the Stat Block class dropdown
+	 * @return The list of options for the dropdown
+	 */
+	UFUNCTION()
+	static TArray<FName> GetStatBlockClassOptions();
+	
 	/**
 	 * The stat used referring to a Pokémon's HP
 	 */
@@ -40,4 +68,16 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintGetter=GetMaxPartySize, Config, Category = Party, meta = (UIMin = 1, ClampMin = 1))
 	int32 MaxPartySize;
+
+	/**
+	 * The class used for all Pokémon objects
+	 */
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (GetOptions=GetPokemonClassOptions))
+	FName PokemonClass;
+
+	/**
+	 * The class used for all Stat Block objects
+	 */
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (GetOptions=GetStatBlockClassOptions))
+	FName StatBlockClass;
 };

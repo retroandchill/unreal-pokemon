@@ -2,3 +2,5 @@
 #include "Pokemon/Stats/StatBlock.h"
 
 IMPLEMENT_ABSTRACT_METATYPE(IStatBlock)
+
+FStatBlockRegistry FStatBlockRegistry::Instance;

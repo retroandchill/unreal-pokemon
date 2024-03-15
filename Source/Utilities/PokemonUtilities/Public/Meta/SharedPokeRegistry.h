@@ -1,4 +1,4 @@
-// "Unreal Pokémon" created by Retro & Chill.
+﻿// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -6,6 +6,8 @@
 /**
  * Signifies a generic static registry for different data types. Used to create a static registry that sits below
  * Unreal Engine and doesn't require the classes to be UObjects
+ * @tparam T The superclass type of the registry
+ * @tparam Args The constructor arguments taken in
  */
 template <typename T, typename... Args>
 class TSharedPokeRegistry {
@@ -53,8 +55,19 @@ public:
 		return RegisteredConstructors.Contains(Key);
 	}
 
+	/**
+	 * Get the list of all registered types for this registry.
+	 * @return The list of all formally registered types.
+	 */
+	TArray<FName> GetAllRegisteredTypes() const {
+		TArray<FName> Keys;
+		RegisteredConstructors.GetKeys(Keys);
+		return Keys;
+	}
+
 private:
 	template <typename Derived>
+	requires std::is_base_of_v<T, Derived>
 	static TSharedRef<T> ConstructDerived(Args... Arguments) {
 		return MakeShared<Derived>(Arguments...);
 	}
