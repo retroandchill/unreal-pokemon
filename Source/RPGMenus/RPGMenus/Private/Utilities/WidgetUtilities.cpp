@@ -27,7 +27,7 @@ FVector2D UWidgetUtilities::GetDesiredBrushSize(const FSlateBrush& Brush) {
 	return Brush.ImageSize;
 }
 
-FVector2D UWidgetUtilities::GetDesiredTextureSize(UTexture2D* Texture) {
+FVector2D UWidgetUtilities::GetDesiredTextureSize(const UTexture2D* const Texture) {
 	if (Texture == nullptr)
 		return FVector2D();
 

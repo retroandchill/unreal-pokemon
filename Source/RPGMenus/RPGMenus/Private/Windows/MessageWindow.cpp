@@ -132,7 +132,7 @@ void UMessageWindow::SetPaused(bool bPausedIn) {
 
 void UMessageWindow::ResizeWindow() {
 	if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
-		double TextHeight = DisplayTextWidget->GetTextSize("Sample").Y;
+		auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y);
 		auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
 		SizeBox->SetHeightOverride(TextHeight * LinesToShow + DisplayTextPadding.Top + DisplayTextPadding.Bottom);
 	}

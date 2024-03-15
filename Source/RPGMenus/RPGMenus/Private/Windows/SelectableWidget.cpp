@@ -24,11 +24,11 @@ int32 USelectableWidget::GetIndex() const {
 	return Index;
 }
 
-int32 USelectableWidget::GetRow(int32 IndexToCheck) {
+int32 USelectableWidget::GetRow(int32 IndexToCheck) const {
 	return IndexToCheck / GetRowCount();
 }
 
-int32 USelectableWidget::GetColumn(int32 IndexToCheck) {
+int32 USelectableWidget::GetColumn(int32 IndexToCheck) const {
 	return IndexToCheck % GetRowCount();
 }
 

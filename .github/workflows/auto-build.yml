@@ -6,36 +6,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs: 
-  python-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-
-      - name: Install Requirements
-        working-directory: Content/Python
-        run: pip install -r requirements.txt
-
-      - name: Run Tests
-        working-directory: Content/Python
-        run: coverage run -m unittest discover -s . -p "test_*.py"
-
-      - name: Generate Coverage Report
-        working-directory: Content/Python
-        run: coverage xml --omit=test/* -o python-coverage.xml
-
-      - uses: actions/upload-artifact@v3
-        with:
-          path: Content/Python/python-coverage.xml
-  
   build:
     name: Build and test
     runs-on: self-hosted
-    needs: python-test
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
     steps:
@@ -53,15 +26,16 @@ jobs:
       - name: Run Tests
         run: |
           ./ci/run_tests.ps1
-
-      - uses: actions/download-artifact@v3
           
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          path: |
-            cpp-coverage.xml
-            TestResults/*
+      - name: Run Python Tests
+        working-directory: Content/Python
+        run: |
+          python -m venv venv
+          ./venv/Scripts/activate.ps1
+          pip install -r requirements.txt
+          coverage run -m unittest discover -s . -p "test_*.py"
+          cd ../..
+          coverage xml --omit=Content/Python/test/* --data-file=Content/Python/.coverage -o python-coverage.xml
           
       - name: Run sonar-scanner
         env:
@@ -69,28 +43,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./ci/set-sonar-variables.ps1
-          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=artifacts/python-coverage.xml -X
-      
-  
-  code-coverage:
-    runs-on: ubuntu-latest
-    needs: 
-      - build
-      - python-test
-    steps:
-      - uses: actions/checkout@v3
+          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=python-coverage.xml -D sonar.cfamily.threads=3
           
-      - uses: actions/download-artifact@v3
-          
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
         with:
-          filename: artifact/*-coverage.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
+          path: |
+            cpp-coverage.xml
+            python-coverage.xml
+            TestResults/*

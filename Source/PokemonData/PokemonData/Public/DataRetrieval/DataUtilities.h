@@ -51,20 +51,20 @@ public:
 	 * @param Z_Param__Result The block of memory to save the result of the execution to
 	 */
 	DECLARE_FUNCTION(execGetData) {
-		P_GET_OBJECT(UScriptStruct, StructType);
-		P_GET_PROPERTY(FNameProperty, RowName);
+		P_GET_OBJECT(UScriptStruct, StructType)
+		P_GET_PROPERTY(FNameProperty, RowName)
 
 		Stack.StepCompiledIn<FStructProperty>(nullptr);
 		void* OutRowPtr = Stack.MostRecentPropertyAddress;
 
-		P_FINISH;
+		P_FINISH
 
 		if (const auto StructProp = CastField<FStructProperty>(Stack.MostRecentProperty); StructProp && OutRowPtr) {
 			if (auto OutputType = StructProp->Struct; (OutputType == StructType) ||
 				(OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType))) {
-				P_NATIVE_BEGIN;
+				P_NATIVE_BEGIN
 					Generic_GetData(StructType, RowName, OutRowPtr);
-				P_NATIVE_END;
+				P_NATIVE_END
 			} else {
 				FBlueprintExceptionInfo ExceptionInfo(
 					EBlueprintExceptionType::AccessViolation,
@@ -115,19 +115,16 @@ public:
 		                                           AssetData);
 
 		auto CustomizeCallback = [](UEdGraphNode* Node, [[maybe_unused]] bool bIsTemplateNode,
-		                            const UScriptStruct* Subclass) {
+		                            UScriptStruct* Subclass) {
 			auto TypedNode = CastChecked<T>(Node);
 			TypedNode->Initialize(Subclass);
 		};
 
 		if (ActionRegistrar.IsOpenForRegistration(ActionKey)) {
-			auto& DataRegistry = FDataRegistry::GetInstance();
-			for (auto& Iter : AssetData) {
-				auto Table = Cast<UDataTable>(Iter.GetAsset());
-				if (Table == nullptr)
-					continue;
-
-				auto Type = Table->GetRowStruct();
+			auto StructTypes = FDataManager::GetInstance().GetStructTypes();
+			
+			const auto& DataRegistry = FDataRegistry::GetInstance();
+			for (auto Type : StructTypes) {
 				if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Type, true) || !DataRegistry.
 					IsTypeRegistered(Type))
 					continue;

@@ -5,7 +5,7 @@
 #include "KismetCompiler.h"
 #include "DataRetrieval/DataUtilities.h"
 
-void UK2Node_GetAllGameDataIDs::Initialize(const UScriptStruct* NodeStruct) {
+void UK2Node_GetAllGameDataIDs::Initialize(UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
 }
 
@@ -87,7 +87,7 @@ void UK2Node_GetAllGameDataIDs::ExpandNode(FKismetCompilerContext& CompilerConte
 	auto CallCreateStructTypePin = CallGetNode->FindPinChecked(StructType_ParamName);
 	auto CallCreateReturnValuePin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
-	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
+	CallCreateStructTypePin->DefaultObject = StructType.Get();
 	CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateReturnValuePin);
 
 	BreakAllNodeLinks();

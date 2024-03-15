@@ -16,7 +16,7 @@ public:
 	 * Get the type of struct this proxy points to
 	 * @return The type of struct contained within the table
 	 */
-	virtual UStruct* GetStructType() const = 0;
+	virtual UScriptStruct* GetStructType() const = 0;
 
 	/**
   * Get the specified row from the data table

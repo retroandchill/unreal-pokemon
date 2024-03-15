@@ -70,7 +70,7 @@ public:
 	 * @return The row that index resides in.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
-	int32 GetRow(int32 IndexToCheck);
+	int32 GetRow(int32 IndexToCheck) const;
 
 	/**
 	 * Convenience method to get the row of a given index.
@@ -78,7 +78,7 @@ public:
 	 * @return The row that index resides in.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
-	int32 GetColumn(int32 IndexToCheck);
+	int32 GetColumn(int32 IndexToCheck) const;
 
 	/**
 	 * Set the current index of the menu

@@ -26,7 +26,7 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
 
 bool UScreen::GiveMenuFocus() {
 	bool FocusGranted = false;
-	WidgetTree->ForWidgetAndChildren(WidgetTree->RootWidget, [&FocusGranted](UWidget *Widget) {
+	UWidgetTree::ForWidgetAndChildren(WidgetTree->RootWidget, [&FocusGranted](UWidget *Widget) {
 		auto SelectableWidget = Cast<USelectableWidget>(Widget);
 		if (SelectableWidget == nullptr)
 			return;

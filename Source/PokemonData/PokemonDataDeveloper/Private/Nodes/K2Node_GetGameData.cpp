@@ -5,7 +5,7 @@
 #include "KismetCompiler.h"
 #include "DataRetrieval/DataUtilities.h"
 
-void UK2Node_GetGameData::Initialize(const UScriptStruct* NodeStruct) {
+void UK2Node_GetGameData::Initialize(UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
 }
 
@@ -93,7 +93,7 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 	auto CallCreateRowNamePin = CallGetNode->FindPinChecked(RowName_ParamName);
 	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(OutRow_ParamName);
 
-	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
+	CallCreateStructTypePin->DefaultObject = StructType.Get();
 	CompilerContext.MovePinLinksToIntermediate(*RowNamePin, *CallCreateRowNamePin);
 
 	CallCreateOutRowPin->PinType = ReturnValuePin->PinType;
