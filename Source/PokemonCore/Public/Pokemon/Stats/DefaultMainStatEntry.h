@@ -8,6 +8,8 @@
  * Represents the calculation implementation of the default main stat
  */
 class POKEMONCORE_API FDefaultMainStatEntry : public FDefaultStatEntry {
+	DECLARE_DERIVED_METATYPE
+	
 public:
 	/**
 	 * Initialize the stat with the given IV and EV
@@ -19,4 +21,5 @@ public:
 
 	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) final;
 	TUniquePtr<IStatEntry> Clone() const override;
+	
 };

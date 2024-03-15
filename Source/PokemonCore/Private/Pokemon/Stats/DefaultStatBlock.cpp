@@ -36,8 +36,10 @@ TOptional<TRowPointer<FNature>> FindNature(const FStatBlockDTO& DTO) {
 	return DTO.bOverride_Nature ? TOptional(FindNature(DTO.Nature)) : TOptional<TRowPointer<FNature>>();
 }
 
-FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO& DTO) : Level(DTO.Level),
-	PersonalityValue(PersonalityValue), GrowthRate(CreateGrowthRate(GrowthRateID)), Exp(FMath::Max(GrowthRate->ExpForLevel(Level), OPTIONAL(DTO, Exp).Get(0))),
+FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO& DTO) :
+	Level(DTO.Level),
+	PersonalityValue(PersonalityValue), GrowthRate(CreateGrowthRate(GrowthRateID)),
+	Exp(FMath::Max(GrowthRate->ExpForLevel(Level), OPTIONAL(DTO, Exp).Get(0))),
 	Nature(FindNature(DTO)) {
 	auto& DataSubsystem = FDataManager::GetInstance();
 	auto& StatTable = DataSubsystem.GetDataTable<FStat>();
@@ -55,15 +57,15 @@ FDefaultStatBlock::FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue
 			break;
 		case Battle:
 			// Skip over this stat as we don't track a value for it
-				break;
-			}
-		});
+			break;
+		}
+	});
 }
 
 FDefaultStatBlock::~FDefaultStatBlock() = default;
 
 FDefaultStatBlock::FDefaultStatBlock(const FDefaultStatBlock& Other) : Level(Other.Level),
-																		PersonalityValue(Other.PersonalityValue),
+                                                                       PersonalityValue(Other.PersonalityValue),
                                                                        GrowthRate(Other.GrowthRate->Clone()),
                                                                        Exp(FMath::Max(
 	                                                                       Other.Exp, GrowthRate->ExpForLevel(Level))),
@@ -110,7 +112,7 @@ const FNature& FDefaultStatBlock::GetNature() const {
 	if (Nature.IsSet())
 		return *Nature.GetValue();
 
-	auto &DataTable = FDataManager::GetInstance().GetDataTable<FNature>();
+	auto& DataTable = FDataManager::GetInstance().GetDataTable<FNature>();
 	auto NatureRows = DataTable.GetTableRowNames();
 	auto Index = static_cast<int32>(PersonalityValue % NatureRows.Num());
 	return *DataTable.GetData(NatureRows[Index]);
@@ -127,7 +129,7 @@ const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
 }
 
 void FDefaultStatBlock::ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const {
-	for (const auto &[Key, Value] : Stats) {
+	for (const auto& [Key, Value] : Stats) {
 		Predicate(Key, *Value);
 	}
 }
@@ -142,12 +144,12 @@ void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 }
 
 FStatBlockDTO FDefaultStatBlock::ToDTO() const {
-	FStatBlockDTO DTO = { .Level = Level, .Exp = Exp, .bOverride_Exp = true };
+	FStatBlockDTO DTO = {.Level = Level, .Exp = Exp, .bOverride_Exp = true};
 	if (Nature.IsSet()) {
 		DTO.bOverride_Nature = true;
 		DTO.Nature = Nature.GetValue()->ID;
 	}
-	
+
 	for (auto& [StatID, Stat] : Stats) {
 		DTO.IVs.Add(StatID, Stat->GetIV());
 		DTO.EVs.Add(StatID, Stat->GetEV());
@@ -161,6 +163,18 @@ bool FDefaultStatBlock::operator==(const IStatBlock& Other) const {
 }
 
 bool FDefaultStatBlock::operator==(const FDefaultStatBlock& Other) const {
-	// TODO: Finish implementing this
-	return false;
+	if (Level != Other.Level || !OptionalsSame(Nature, Other.Nature) || Exp != Other.Exp ||
+		Stats.Num() != Other.Stats.Num()) {
+		return false;
+	}
+
+	bool bMatches = true;
+	for (const auto& [ID, Stat] : Stats) {
+		if (auto OtherStat = Other.Stats.Find(ID); OtherStat == nullptr || *Stats[ID] != **OtherStat) {
+			bMatches = false;
+			break;
+		}
+	}
+	
+	return bMatches;
 }

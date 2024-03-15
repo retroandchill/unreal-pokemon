@@ -1,4 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
+#include "Memory/GCPointer.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonBuilder.h"
@@ -7,6 +8,9 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonBuilderTest, "Private.PokemonCore.Pokemo
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonBuilderTest::RunTest(const FString& Parameters) {
+	auto GameInstance = TGCPointer(NewObject<UGameInstance>());
+	GameInstance->Init();
+	
 	auto Pokemon1 = NewObject<UPokemonBuilder>()
 			  ->Species(TEXT("SAMUROTT"))
 			  ->Level(100)
@@ -27,7 +31,7 @@ bool PokemonBuilderTest::RunTest(const FString& Parameters) {
 			  ->Shiny(false)
 			  ->Build();
 
-	auto Builder = Pokemon1->ToBuilder();
+	auto Builder = TGCPointer(Pokemon1->ToBuilder());
 
 	auto Pokemon2 = Builder->Build();
 	

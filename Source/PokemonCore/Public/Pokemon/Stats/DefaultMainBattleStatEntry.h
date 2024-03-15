@@ -8,6 +8,8 @@
  * Handles the default representation of the main battle stats
  */
 class POKEMONCORE_API FDefaultMainBattleStatEntry : public FDefaultStatEntry {
+	DECLARE_DERIVED_METATYPE
+	
 public:
 	/**
 	 * Initialize the stat with the given IV and EV

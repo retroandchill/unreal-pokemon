@@ -14,7 +14,6 @@ class POKEMONCORE_API FDefaultStatBlock : public IStatBlock {
 	DECLARE_DERIVED_METATYPE
 	
 public:
-
 	/**
 	 * Initialize a new stat block with the following initializing information
 	 * @param GrowthRateID The Exp growth rate to assign

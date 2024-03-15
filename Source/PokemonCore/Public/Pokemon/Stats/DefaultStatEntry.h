@@ -8,6 +8,8 @@
  * The default setup of a Pokémon's stat calculation as defined in the main series games
  */
 class POKEMONCORE_API FDefaultStatEntry : public IStatEntry {
+	DECLARE_DERIVED_METATYPE
+	
 protected:
 	/**
 	 * Initialize the stat with the given IV and EV
@@ -24,6 +26,15 @@ public:
 	FName GetStatID() const override;
 	int32 GetIV() const override;
 	int32 GetEV() const override;
+
+	/**
+	 * Compare this stat entry to another one
+	 * @param Other The other stat entry
+	 * @return Are the two objects equal?
+	 */
+	bool operator==(const FDefaultStatEntry& Other) const;
+	
+	bool Equals(const IStatEntry& Other) const override;
 
 protected:
 	/**

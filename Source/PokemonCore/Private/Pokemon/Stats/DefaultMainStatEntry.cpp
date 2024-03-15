@@ -1,6 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 
+IMPLEMENT_DERIVED_METATYPE(FDefaultMainStatEntry)
+
 FDefaultMainStatEntry::FDefaultMainStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV) : FDefaultStatEntry(Stat, PersonalityValue, IV, EV) {
 }
 
