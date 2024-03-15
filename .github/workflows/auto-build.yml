@@ -68,7 +68,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./ci/set-sonar-variables.ps1
-          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=artifacts/python-coverage.xml -D sonar.cfamily.threads=2
+          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=artifact/python-coverage.xml -D sonar.cfamily.threads=3
       
   
   code-coverage:
