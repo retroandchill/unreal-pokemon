@@ -83,3 +83,12 @@ public:
 };
 
 using FStatBlockRegistry = TGenericStaticUniqueRegistry<IStatBlock, FName, uint32, const FStatBlockDTO&>;
+
+/**
+ * Creat the stat block based on the settings in the 
+ * @param GrowthRate The Growth Rate type of the Pokémon
+ * @param PersonalityValue The Pokémon's personality value
+ * @param DTO The DTO to copy any saved data from
+ * @return The created block
+ */
+POKEMONCORE_API TUniquePtr<IStatBlock> CreateStatBlock(FName GrowthRate, uint32 PersonalityValue, const FStatBlockDTO &DTO);

@@ -56,7 +56,7 @@ private:
 	 */
 	UFUNCTION()
 	static TArray<FName> GetStatBlockClassOptions();
-	
+
 	/**
 	 * The stat used referring to a Pokémon's HP
 	 */
@@ -72,12 +72,14 @@ private:
 	/**
 	 * The class used for all Pokémon objects
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (GetOptions=GetPokemonClassOptions))
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
+		meta = (GetOptions=GetPokemonClassOptions))
 	FName PokemonClass;
 
 	/**
 	 * The class used for all Stat Block objects
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (GetOptions=GetStatBlockClassOptions))
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
+		meta = (GetOptions=GetStatBlockClassOptions))
 	FName StatBlockClass;
 };
