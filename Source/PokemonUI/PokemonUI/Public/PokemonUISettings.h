@@ -6,6 +6,7 @@
 #include "Engine/DeveloperSettings.h"
 #include "PokemonUISettings.generated.h"
 
+class UTextDisplayScreen;
 /**
  * Global configuration settings for the Pokémon UI classes
  */
@@ -21,10 +22,23 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Search Paths")
 	const FString& GetPokemonIconsPackageName() const;
 
+	/**
+	 * Get the screen class use for the text screen
+	 * @return The screen class use for the text screen
+	 */
+	UFUNCTION(BlueprintPure, Category = "Menus")
+	const TArray<TSubclassOf<UTextDisplayScreen>> &GetTextScreenClasses() const;
+
 private:
 	/**
 	 * The name of the package that contains the Pokémon Icon graphics
 	 */
 	UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter=GetPokemonIconsPackageName, Category = "Search Paths")
 	FString PokemonIconsPackageName;
+
+	/**
+	 * The screen class use for the text screen
+	 */
+	UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter=GetTextScreenClasses, Category = "Menus")
+	TArray<TSubclassOf<UTextDisplayScreen>> TextScreenClasses;
 };
