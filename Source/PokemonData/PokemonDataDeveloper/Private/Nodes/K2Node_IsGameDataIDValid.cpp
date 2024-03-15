@@ -5,7 +5,7 @@
 #include "KismetCompiler.h"
 #include "DataRetrieval/DataUtilities.h"
 
-void UK2Node_IsGameDataIDValid::Initialize(const UScriptStruct* NodeStruct) {
+void UK2Node_IsGameDataIDValid::Initialize(UScriptStruct* NodeStruct) {
 	StructType = NodeStruct;
 }
 

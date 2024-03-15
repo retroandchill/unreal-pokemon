@@ -31,7 +31,7 @@ public:
 	 */
 	template <typename T>
 	const TDataTableProxy<T>& GetDataTable() const {
-		UScriptStruct* const StructClass = T::StaticStruct();
+		const UScriptStruct* const StructClass = T::StaticStruct();
 		auto RowName = StructClass->GetFName();
 		check(DataTables.Contains(RowName))
 
@@ -48,6 +48,12 @@ public:
 	 * @return A reference to the table proxy object
 	 */
 	const IGameData& GetDataTable(TObjectPtr<const UScriptStruct> StructType) const;
+
+	/**
+	 * Get the set of valid struct types held in this class
+	 * @return The list of struct types that have tables associated with them
+	 */
+	TArray<UScriptStruct*> GetStructTypes() const;
 
 private:
 	/**
