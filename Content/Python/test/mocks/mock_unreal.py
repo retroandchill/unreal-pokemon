@@ -1,3 +1,6 @@
+from unittest.mock import MagicMock
+
+
 class StringWrapper:
     def __init__(self, inner: str):
         self.inner = inner
@@ -10,12 +13,31 @@ Name = StringWrapper
 Text = StringWrapper
 
 
-class PokemonStatType:
+class EnumBase:
+    def __init__(self):
+        pass
+
+
+class PokemonStatType(EnumBase):
     def __init__(self, display_name: str):
+        super().__init__()
         self.display_name = display_name
 
     def get_display_name(self):
         return self.display_name
+
+    @classmethod
+    def get_static_attribute(cls, display_name: str):
+        return cls(display_name)
+
+    Main = None
+    MainBattle = None
+    Battle = None
+
+
+PokemonStatType.Main = PokemonStatType('Main')
+PokemonStatType.MainBattle = PokemonStatType('Main Battle')
+PokemonStatType.Battle = PokemonStatType('Battle')
 
 
 class Stat:
@@ -42,3 +64,13 @@ class Stat:
         self.real_name = real_name
         self.real_name_brief = real_name_brief
         self.type = type
+
+
+class DataTable:
+    def __init__(self):
+        pass
+
+
+DataTableFunctionLibrary = MagicMock()
+EditorAssetLibrary = MagicMock()
+ImportUtils = MagicMock()
