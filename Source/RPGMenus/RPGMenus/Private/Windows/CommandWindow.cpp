@@ -54,7 +54,7 @@ void UCommandWindow::NativeTick(const FGeometry& MyGeometry, float InDeltaTime) 
 		NewTopRow = FMath::Max(FMath::Min(NewTopRow, GetRowCount() - VisibleLines.GetValue()), 0);
 		if (TopRow != NewTopRow) {
 			TopRow = NewTopRow;
-			ScrollBox->SetScrollOffset(TopRow * CommandHeight.GetValue());
+			ScrollBox->SetScrollOffset(static_cast<float>(TopRow) * CommandHeight.GetValue());
 		}
 	}
 
@@ -72,7 +72,7 @@ TOptional<int32> UCommandWindow::GetPageMax() {
 	auto ScrollBoxGeometry = ScrollBox->GetCachedGeometry();
 	float Height = ScrollBoxGeometry.GetLocalSize().Y;
 	if (FMath::IsNearlyZero(Height) || !CommandHeight.IsSet())
-		return true;
+		return TOptional<int32>();
 
 	int32 VisibleLines = FMath::FloorToInt(Height / CommandHeight.GetValue());
 	if (bOverride_MaxLines) {
@@ -151,27 +151,29 @@ void UCommandWindow::AddCommands() {
 		return;
 
 	if (CommandHeight.IsSet() && bOverride_MaxLines) {
-		SizeBox->SetMaxDesiredHeight(CommandHeight.GetValue() * MaxLines);
+		SizeBox->SetMaxDesiredHeight(CommandHeight.GetValue() * static_cast<float>(MaxLines));
 	} else {
 		SizeBox->ClearMaxDesiredHeight();
 	}
 }
 
 void UCommandWindow::SetScrollArrowsVisible() {
+	using enum ESlateVisibility;
+	
 	if (ScrollBox == nullptr)
 		return;
 
 	if (TopRow > 0) {
-		UpArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		UpArrow->SetVisibility(SelfHitTestInvisible);
 	} else {
-		UpArrow->SetVisibility(ESlateVisibility::Collapsed);
+		UpArrow->SetVisibility(Collapsed);
 	}
 
 	int32 RowCount = GetRowCount();
-	int32 PageMax = GetPageMax().GetValue();
+	int32 PageMax = GetPageMax().Get(RowCount);
 	if (TopRow + PageMax < RowCount && RowCount > PageMax) {
-		DownArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		DownArrow->SetVisibility(SelfHitTestInvisible);
 	} else {
-		DownArrow->SetVisibility(ESlateVisibility::Collapsed);
+		DownArrow->SetVisibility(Collapsed);
 	}
 }

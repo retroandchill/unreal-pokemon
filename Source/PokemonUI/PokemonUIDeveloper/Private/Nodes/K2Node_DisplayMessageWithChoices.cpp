@@ -35,7 +35,7 @@ void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu* Men
                                                                   UGraphNodeContextMenuContext* Context) const {
 	Super::GetNodeContextMenuActions(Menu, Context);
 
-	static const FName DisplayMessageWithChoicesNodeName = FName("DisplayMessageWithChoices");
+	static const FName DisplayMessageWithChoicesNodeName(TEXT("DisplayMessageWithChoices"));
 	static const FText DisplayMessageWithChoicesStr = NSLOCTEXT("K2Node", "DisplayMessageWithChoices",
 	                                                            "Display Message /w Choices");
 

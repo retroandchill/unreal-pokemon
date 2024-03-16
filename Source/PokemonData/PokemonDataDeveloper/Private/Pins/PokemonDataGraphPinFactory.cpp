@@ -7,7 +7,7 @@
 #include "Nodes/SelectDataRow.h"
 
 TSharedPtr<SGraphPin> FPokemonDataGraphPinFactory::CreatePin(UEdGraphPin* Pin) const {
-	auto* Outer = Cast<ISelectDataRow>(Pin->GetOuter());
+	const auto* const Outer = Cast<ISelectDataRow>(Pin->GetOuter());
 	if (Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_Name || Outer == nullptr || Pin != Outer->GetRowPin()) {
 		return FGraphPanelPinFactory::CreatePin(Pin);
 	}

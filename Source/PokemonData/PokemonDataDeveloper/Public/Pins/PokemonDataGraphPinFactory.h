@@ -11,5 +11,13 @@
  */
 class POKEMONDATADEVELOPER_API FPokemonDataGraphPinFactory : public FGraphPanelPinFactory {
 public:
-  TSharedPtr<SGraphPin> CreatePin(UEdGraphPin* Pin) const override;
+	FPokemonDataGraphPinFactory() = default;
+	FPokemonDataGraphPinFactory(const FPokemonDataGraphPinFactory&) = default;
+	FPokemonDataGraphPinFactory(FPokemonDataGraphPinFactory&&) noexcept = default;
+	~FPokemonDataGraphPinFactory() override = default;
+
+	FPokemonDataGraphPinFactory& operator=(const FPokemonDataGraphPinFactory&) = default;
+	FPokemonDataGraphPinFactory& operator=(FPokemonDataGraphPinFactory&&) noexcept = default;
+
+	TSharedPtr<SGraphPin> CreatePin(UEdGraphPin* Pin) const override;
 };

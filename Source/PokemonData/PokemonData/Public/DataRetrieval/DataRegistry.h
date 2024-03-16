@@ -39,7 +39,7 @@ public:
 	 */
 	template <typename T>
 	bool RegisterStruct() {
-		UScriptStruct* TypeStruct = T::StaticStruct();
+		const UScriptStruct* const TypeStruct = T::StaticStruct();
 		Registry.RegisterClass<TDataTableProxy<T>>(TypeStruct->GetFName());
 		return true;
 	}

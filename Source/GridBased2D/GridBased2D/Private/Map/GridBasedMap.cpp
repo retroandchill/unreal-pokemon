@@ -66,7 +66,7 @@ void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
 	PlayerLevelLayer = FMath::Min(PlayerLevelLayer, TotalLayers - 1);
-	double LowestLayerZ = TotalLayers * TileMap->SeparationPerLayer;
+	double LowestLayerZ = static_cast<double>(TotalLayers) * TileMap->SeparationPerLayer;
 
 	MapLocation.Z = LowestLayerZ - static_cast<double>(TileMap->SeparationPerLayer) * (TotalLayers - PlayerLevelLayer) -
 		1;

@@ -22,8 +22,7 @@ def import_data(item_data: PbsIniData, table_name: str) -> None:
     :param item_data: The PBS data to import
     :param table_name: The name of the data table as seen in the Data folder of the Content browser
     """
-    eal = EditorAssetLibrary()
-    data_table = eal.load_asset('/Game/Data/{0}.{0}'.format(table_name))
+    data_table = EditorAssetLibrary.load_asset('/Game/Data/{0}.{0}'.format(table_name))
     if isinstance(data_table, DataTable):
         DataTableFunctionLibrary.fill_data_table_from_json_string(data_table, item_data.to_json())
 
@@ -33,7 +32,7 @@ def import_types(type_data: TypeData) -> None:
     Import type data into Unreal
     :param type_data: The list of types to import
     """
-    print("Importing moves...")
+    print("Importing types...")
     import_data(type_data, "Types")
 
 
