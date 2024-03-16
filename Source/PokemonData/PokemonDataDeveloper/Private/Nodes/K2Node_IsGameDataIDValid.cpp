@@ -89,7 +89,7 @@ void UK2Node_IsGameDataIDValid::ExpandNode(FKismetCompilerContext& CompilerConte
 	auto CallCreateRowNamePin = CallGetNode->FindPinChecked(RowName_ParamName);
 	auto CallCreateOutRowPin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
-	CallCreateStructTypePin->DefaultObject = const_cast<UScriptStruct*>(StructType.Get());
+	CallCreateStructTypePin->DefaultObject = StructType.Get();
 	CompilerContext.MovePinLinksToIntermediate(*RowNamePin, *CallCreateRowNamePin);
 
 	CallCreateOutRowPin->PinType = ReturnValuePin->PinType;
