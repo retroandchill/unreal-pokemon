@@ -24,8 +24,9 @@ public class RPGMenus : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"CommonMath", 
-				"Paper2D"
+				"CommonMath",
+				"Paper2D",
+				"DeveloperSettings"
 			}
 		);
 	}

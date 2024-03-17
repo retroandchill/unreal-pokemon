@@ -14,6 +14,11 @@ void UPauseMenuScreen::NativePreConstruct() {
 	CommandWindow->OnCancel.AddDynamic(this, &UPauseMenuScreen::CloseScreen);
 }
 
+void UPauseMenuScreen::NativeConstruct() {
+	Super::NativeConstruct();
+	PlaySound(OpenSound);
+}
+
 void UPauseMenuScreen::ProcessCommand(int32, UCommand* SelectedCommand) {
 	auto PlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
 	if (PlayerController == nullptr)

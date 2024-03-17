@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "FacingDirection.h"
 #include "PaperCharacter.h"
+#include "Map/WithinMap.h"
 #include "GameCharacter.generated.h"
 
 struct FInputActionInstance;
@@ -16,7 +17,7 @@ class UPaperFlipbookComponent;
  * Basic character class used to represent a character moving in 2D space
  */
 UCLASS(Blueprintable, ClassGroup=(Characters))
-class GRIDBASED2D_API AGameCharacter : public APaperCharacter {
+class GRIDBASED2D_API AGameCharacter : public APaperCharacter, public IWithinMap {
 	GENERATED_BODY()
 
 public:
@@ -94,11 +95,7 @@ protected:
 	void SetCharset(UCharset* NewCharset);
 
 public:
-	/**
-	 * Get the current grid position of this character
-	 * @return The current grid position of the character
-	 */
-	FIntVector2 GetCurrentPosition() const;
+	FIntVector2 GetCurrentPosition() const override;
 
 	/**
 	 * Get the position that this character is currently moving to
