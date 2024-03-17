@@ -1,22 +1,22 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "DataManager.h"
 
+#include "PokemonDataSettings.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "DataRetrieval/DataRegistry.h"
 
 
 FDataManager::FDataManager() {
-	auto& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-	TArray<FAssetData> AssetData;
-	AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()), AssetData);
-	for (auto& Iter : AssetData) {
-		auto Table = Cast<UDataTable>(Iter.GetAsset());
+	auto Settings = GetDefault<UPokemonDataSettings>();
+	for (auto &Tables = Settings->GetDataTables(); auto &Path : Tables) {
+		auto Table = Cast<UDataTable>(Path.ResolveObject());
 		if (Table == nullptr)
 			continue;
 
 		auto RowStruct = Table->GetRowStruct();
-		if (RowStruct == nullptr)
+		if (RowStruct == nullptr) {
 			continue;
+		}
 
 		auto& DataRegistry = FDataRegistry::GetInstance();
 		if (!DataRegistry.IsTypeRegistered(RowStruct))
