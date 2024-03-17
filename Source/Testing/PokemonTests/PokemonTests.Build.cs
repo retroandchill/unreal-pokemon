@@ -21,6 +21,10 @@ public class PokemonTests : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"BlueprintGraph",
+				"KismetCompiler",
+				"UnrealEd",
+				"GraphEditor",
 				"RPGMenus",
 				"GridBased2D",
 				"PokemonData",
@@ -30,7 +34,9 @@ public class PokemonTests : ModuleRules
 				"FunctionalTesting",
 				"AutomationDriver",
 				"UMG",
-				"InputCore", "PokemonEditorUtils"
+				"InputCore", 
+				"PokemonEditorUtils", 
+				"PokemonDataDeveloper"
 			}
 		);
 	}

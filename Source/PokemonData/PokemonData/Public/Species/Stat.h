@@ -7,7 +7,7 @@
 #include "Stat.generated.h"
 
 /**
- * Represents one of the stats in the database
+ * Represents one of the stats in the database.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType="Hardcoded"))
 struct POKEMONDATA_API FStat : public FTableRowBase {
