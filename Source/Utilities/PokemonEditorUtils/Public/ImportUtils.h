@@ -13,6 +13,7 @@ UCLASS(BlueprintType)
 class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
+public:
 	/**
 	 * Get the list of Stat elements from the table that exclude any battle stats
 	 * @param DataTable The data table to draw from

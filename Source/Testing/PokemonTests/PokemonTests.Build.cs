@@ -30,7 +30,7 @@ public class PokemonTests : ModuleRules
 				"FunctionalTesting",
 				"AutomationDriver",
 				"UMG",
-				"InputCore"
+				"InputCore", "PokemonEditorUtils"
 			}
 		);
 	}
