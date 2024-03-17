@@ -4,8 +4,8 @@
 #include "ThumbnailRendering/ThumbnailManager.h"
 #include "Data/Windowskin.h"
 
-bool UWindowskinThumbnailRenderer::AllowsRealtimeThumbnails(UObject* Object) const {
-	return true;
+EThumbnailRenderFrequency UWindowskinThumbnailRenderer::GetThumbnailRenderFrequency(UObject* Object) const {
+	return EThumbnailRenderFrequency::Realtime;
 }
 
 bool UWindowskinThumbnailRenderer::CanVisualizeAsset(UObject* Object) {
