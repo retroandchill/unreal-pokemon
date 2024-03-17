@@ -10,10 +10,7 @@ public class PokemonDataDeveloper : ModuleRules
 			new string[]
 			{
 				"Core",
-				"PokemonData",
-				"BlueprintGraph",
-				"KismetCompiler",
-				"UnrealEd"
+				"PokemonData"
 			}
 		);
 
@@ -24,7 +21,10 @@ public class PokemonDataDeveloper : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"GraphEditor"
+				"GraphEditor",
+				"BlueprintGraph",
+				"KismetCompiler",
+				"UnrealEd"
 			}
 		);
 	}

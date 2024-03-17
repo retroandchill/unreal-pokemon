@@ -10,7 +10,7 @@
  * Editor Factory for Charset objects
  */
 UCLASS(HideCategories=Object)
-class UCharsetFactory : public UFactory {
+class GRIDBASED2DEDITOR_API UCharsetFactory : public UFactory {
 	GENERATED_BODY()
 
 public:

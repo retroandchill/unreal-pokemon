@@ -1,16 +1,20 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
+
+
+#include "PokemonCore/Pokemon/PokemonBuilderTest.h"
+
+#include "CommonDefines.h"
 #include "Memory/GCPointer.h"
-#include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonBuilder.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonBuilderTest, "Private.PokemonCore.Pokemon.PokemonBuilderTest",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool PokemonBuilderTest::RunTest(const FString& Parameters) {
-	auto GameInstance = TGCPointer(NewObject<UGameInstance>());
-	GameInstance->Init();
-	
+// Sets default values
+APokemonBuilderTest::APokemonBuilderTest() {
+	OnTestStart.AddDynamic(this, &APokemonBuilderTest::RunTest);
+}
+
+void APokemonBuilderTest::RunTest() {
 	auto Pokemon1 = NewObject<UPokemonBuilder>()
 			  ->Species(TEXT("SAMUROTT"))
 			  ->Level(100)
@@ -35,5 +39,9 @@ bool PokemonBuilderTest::RunTest(const FString& Parameters) {
 
 	auto Pokemon2 = Builder->Build();
 	
-	return TestEqual(TEXT("Both Pokémon should be the same!"), *Pokemon1, *Pokemon2);
+	TEST_ASSERT(AssertTrue(*Pokemon1 == *Pokemon2, TEXT("Both Pokémon should be the same!")))
+
+	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Test passed!"));
 }
+
+

@@ -26,10 +26,6 @@ class PokemonStatType(EnumBase):
     def get_display_name(self):
         return self.display_name
 
-    @classmethod
-    def get_static_attribute(cls, display_name: str):
-        return cls(display_name)
-
     Main = None
     MainBattle = None
     Battle = None
@@ -38,6 +34,72 @@ class PokemonStatType(EnumBase):
 PokemonStatType.Main = PokemonStatType('Main')
 PokemonStatType.MainBattle = PokemonStatType('Main Battle')
 PokemonStatType.Battle = PokemonStatType('Battle')
+
+
+class FieldUse(EnumBase):
+    def __init__(self, display_name: str):
+        super().__init__()
+        self.display_name = display_name
+
+    def get_display_name(self):
+        return self.display_name
+
+    NoFieldUse = None
+    OnPokemon = None
+    Direct = None
+    TM = None
+    HM = None
+    TR = None
+
+
+FieldUse.NoFieldUse = FieldUse('No Field Use')
+FieldUse.OnPokemon = FieldUse('On Pokemon')
+FieldUse.Direct = FieldUse('Direct')
+FieldUse.TM = FieldUse('TM')
+FieldUse.HM = FieldUse('HM')
+FieldUse.TR = FieldUse('TR')
+
+
+class BattleUse(EnumBase):
+    def __init__(self, display_name: str):
+        super().__init__()
+        self.display_name = display_name
+
+    def get_display_name(self):
+        return self.display_name
+
+    NoBattleUse = None
+    OnPokemon = None
+    OnMove = None
+    OnBattler = None
+    OnFoe = None
+    Direct = None
+
+
+BattleUse.NoBattleUse = BattleUse('No Battle Use')
+BattleUse.OnPokemon = BattleUse('On Pokemon')
+BattleUse.OnMove = BattleUse('On Move')
+BattleUse.OnBattler = BattleUse('On Battler')
+BattleUse.OnFoe = BattleUse('On Foe')
+BattleUse.Direct = BattleUse('Direct')
+
+
+class MoveDamageCategory(EnumBase):
+    def __init__(self, display_name: str):
+        super().__init__()
+        self.display_name = display_name
+
+    def get_display_name(self):
+        return self.display_name
+
+    Physical = None
+    Special = None
+    Status = None
+
+
+MoveDamageCategory.Physical = MoveDamageCategory('Physical')
+MoveDamageCategory.Special = MoveDamageCategory('Special')
+MoveDamageCategory.Status = MoveDamageCategory('Status')
 
 
 class Stat:

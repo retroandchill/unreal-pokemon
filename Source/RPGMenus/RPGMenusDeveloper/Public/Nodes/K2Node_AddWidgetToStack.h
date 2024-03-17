@@ -23,5 +23,6 @@ public:
 protected:
 	FText GetBaseNodeTitle() const override;
 	FText GetNodeTitleFormat() const override;
+	FText GetDefaultNodeTitle() const override;
 	UClass* GetClassPinBaseClass() const override;
 };

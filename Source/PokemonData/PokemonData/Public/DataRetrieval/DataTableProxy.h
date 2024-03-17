@@ -41,6 +41,10 @@ public:
 		return GetTableRowNames().Contains(ID);
 	}
 
+	UDataTable* GetDataTable() const override {
+		return DataTable.Get();
+	}
+
 	/**
 	 * Iterate through the data table's rows and execute the callback on each entry
 	 * @tparam Functor The signature of the callback
