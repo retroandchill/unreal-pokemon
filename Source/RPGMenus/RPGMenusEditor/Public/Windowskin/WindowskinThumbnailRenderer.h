@@ -9,7 +9,7 @@
  * Class to handle the rendering of Windowskin thubmnails in the editor
  */
 UCLASS()
-class UWindowskinThumbnailRenderer : public UThumbnailRenderer {
+class RPGMENUSEDITOR_API UWindowskinThumbnailRenderer : public UThumbnailRenderer {
 	GENERATED_BODY()
 
 public:

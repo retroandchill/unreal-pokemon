@@ -100,7 +100,11 @@ FText UK2Node_AddWidgetToStack::GetBaseNodeTitle() const {
 }
 
 FText UK2Node_AddWidgetToStack::GetNodeTitleFormat() const {
-	return NSLOCTEXT("UK2Node_AddWidgetToStack", "CreateWidget", "Add {ClassName} to Stack");
+	return NSLOCTEXT("UK2Node_AddWidgetToStack", "AddWidgetToStack_TitleFormat", "Add {ClassName} to Stack");
+}
+
+FText UK2Node_AddWidgetToStack::GetDefaultNodeTitle() const {
+	return NSLOCTEXT("UK2Node_AddWidgetToStack", "AddWidgetToStack_DefaultTitle", "Add NONE to Stack");
 }
 
 UClass* UK2Node_AddWidgetToStack::GetClassPinBaseClass() const {
