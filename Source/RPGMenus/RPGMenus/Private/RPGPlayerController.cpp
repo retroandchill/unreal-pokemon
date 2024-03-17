@@ -41,6 +41,10 @@ UScreen* ARPGPlayerController::AddScreenToStackHelper(UObject* WorldContextObjec
 	return nullptr;
 }
 
+UScreen* ARPGPlayerController::GetTopScreenOfStack() const {
+	return GetTopOfStack<UScreen>();
+}
+
 UScreen* ARPGPlayerController::RemoveScreenFromStack() {
 	if (ScreenStack.IsEmpty())
 		return nullptr;

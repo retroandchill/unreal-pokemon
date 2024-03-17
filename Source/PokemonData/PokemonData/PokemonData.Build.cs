@@ -21,7 +21,8 @@ public class PokemonData : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore"
+				"SlateCore",
+				"DeveloperSettings"
 			}
 		);
 	}

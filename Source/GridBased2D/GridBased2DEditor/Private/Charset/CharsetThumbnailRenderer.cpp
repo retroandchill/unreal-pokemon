@@ -5,8 +5,8 @@
 #include "PaperFlipbook.h"
 #include "ThumbnailRendering/ThumbnailManager.h"
 
-bool UCharsetThumbnailRenderer::AllowsRealtimeThumbnails(UObject* Object) const {
-	return true;
+EThumbnailRenderFrequency UCharsetThumbnailRenderer::GetThumbnailRenderFrequency(UObject* Object) const {
+	return EThumbnailRenderFrequency::Realtime;
 }
 
 bool UCharsetThumbnailRenderer::CanVisualizeAsset(UObject* Object) {

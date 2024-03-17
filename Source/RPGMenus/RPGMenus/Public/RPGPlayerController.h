@@ -87,12 +87,20 @@ public:
 	 */
 	template <typename T = UScreen>
 		requires std::is_base_of_v<UScreen, T>
-	T* GetTopOfStack() {
+	T* GetTopOfStack() const {
 		if (ScreenStack.IsEmpty())
 			return nullptr;
 
 		return Cast<T>(ScreenStack.Last());
 	}
+
+	/**
+	 * Get the screen at the top of the stack and cast it to the supplied type
+	 * @tparam T The type to check for
+	 * @return The top widget on the stack, otherwise nullptr
+	 */
+	UFUNCTION(BlueprintPure, Category = "Widget")
+	UScreen* GetTopScreenOfStack() const;
 
 	/**
 	 * Remove the current screen from the stack

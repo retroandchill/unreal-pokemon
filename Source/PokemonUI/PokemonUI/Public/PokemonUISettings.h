@@ -19,14 +19,14 @@ public:
 	 * Get the name of the package that contains the Pokémon Icon graphics
 	 * @return The name of the package that contains the Pokémon Icon graphics
 	 */
-	UFUNCTION(BlueprintPure, Category = "Search Paths")
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
 	const FString& GetPokemonIconsPackageName() const;
 
 	/**
 	 * Get the screen class use for the text screen
 	 * @return The screen class use for the text screen
 	 */
-	UFUNCTION(BlueprintPure, Category = "Menus")
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Menus")
 	const TArray<TSubclassOf<UTextDisplayScreen>> &GetTextScreenClasses() const;
 
 private:

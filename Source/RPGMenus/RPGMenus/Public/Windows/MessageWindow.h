@@ -68,6 +68,13 @@ public:
 
 	void SetPaused(bool bPausedIn);
 
+	/**
+	 * Is this message window awaiting player input to advance?
+	 * @return If the window is currently awaiting input
+	 */
+	UFUNCTION(BlueprintPure, CAtegory = "Messages|Input")
+	bool IsAwaitingInput() const;
+
 private:
 	/**
 	 * Automatically resize the window to match the desired number of lines
