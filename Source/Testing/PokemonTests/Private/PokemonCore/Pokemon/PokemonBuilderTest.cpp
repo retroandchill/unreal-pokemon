@@ -40,6 +40,8 @@ void APokemonBuilderTest::RunTest() {
 	auto Pokemon2 = Builder->Build();
 	
 	TEST_ASSERT(AssertTrue(*Pokemon1 == *Pokemon2, TEXT("Both Pokémon should be the same!")))
+
+	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Test passed!"));
 }
 
 
