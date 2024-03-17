@@ -21,11 +21,10 @@ FText UK2Node_IsGameDataIDValid::GetNodeTitle(ENodeTitleType::Type TitleType) co
 		if (TitleType == ENodeTitleType::FullTitle) {
 			return StructType->GetDisplayNameText();
 		}
-
-		const FString& StructName = StructType->GetName();
+		
 		return FText::FormatNamed(
 			NSLOCTEXT("K2Node", "IsGameDataIDValid_NodeTitleFormat", "Is {ClassName} ID Valid?"), TEXT("ClassName"),
-			FText::FromString(StructName));
+			StructType->GetDisplayNameText());
 	}
 
 	return GetTooltipText();

@@ -22,14 +22,13 @@ FText UK2Node_GetAllGameDataIDs::GetNodeTitle(ENodeTitleType::Type TitleType) co
 		if (TitleType == ENodeTitleType::FullTitle) {
 			return StructType->GetDisplayNameText();
 		}
-
-		const FString& StructName = StructType->GetName();
+		
 		return FText::FormatNamed(
 			NSLOCTEXT("K2Node", "GetAllGameDataIDs_NodeTitleFormat", "Get All {ClassName} IDs"), TEXT("ClassName"),
-			FText::FromString(StructName));
+			StructType->GetDisplayNameText());
 	}
 
-	return Super::GetNodeTitle(TitleType);
+	return GetTooltipText();
 }
 
 FText UK2Node_GetAllGameDataIDs::GetTooltipText() const {
