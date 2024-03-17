@@ -4,7 +4,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonBuilder.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonBuilderTest, "Private.PokemonCore.Pokemon.PokemonBuilderTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonBuilderTest, "Project.PokemonCore.Pokemon.PokemonBuilderTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonBuilderTest::RunTest(const FString& Parameters) {
