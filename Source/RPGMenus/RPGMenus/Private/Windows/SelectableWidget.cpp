@@ -1,10 +1,16 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/SelectableWidget.h"
 
+#include "Data/RPGMenusSettings.h"
 #include "Data/SelectionInputs.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 	SetIsFocusable(true);
+
+	auto Settings = GetDefault<URPGMenusSettings>();
+	CursorSound = Settings->GetCursorSound();
+	ConfirmSound = Settings->GetConfirmSound();
+	CancelSound = Settings->GetCancelSound();
 }
 
 int32 USelectableWidget::GetItemCount_Implementation() const {
@@ -69,12 +75,15 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKe
 	bool bHandled = false;
 	auto Key = InKeyEvent.GetKey();
 	if (auto CursorDirection = InputMappings->ParseDirectionalInputs(Key); CursorDirection.IsSet()) {
+		PlaySound(CursorSound);
 		ReceiveMoveCursor(CursorDirection.GetValue());
 	} else if (InputMappings->IsConfirmInput(Key)) {
+		PlaySound(ConfirmSound);
 		int32 CurrentIndex = GetIndex();
 		OnConfirm.Broadcast(CurrentIndex);
 		ProcessConfirm(CurrentIndex);
 	} else if (InputMappings->IsCancelInput(Key)) {
+		PlaySound(CancelSound);
 		OnCancel.Broadcast();
 		ProcessCancel();
 	}
@@ -146,6 +155,6 @@ int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction)
 void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
 	if (!IsActive())
 		return;
-
+	
 	SetIndex(GetNextIndex(Direction));
 }

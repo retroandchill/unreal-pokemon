@@ -7,6 +7,8 @@
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
+class IWithinMap;
+
 UCLASS(Blueprintable, ClassGroup=(Map))
 class GRIDBASED2D_API AGridBasedMap : public AActor {
 	GENERATED_BODY()
@@ -22,6 +24,22 @@ public:
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
+
+	void BeginPlay() override;
+
+	/**
+	 * Get the bounds of the map in grid units.
+	 * @return The bounds of the map.
+	 */
+	FIntRect GetBounds() const;
+
+	/**
+	 * Check if the the current object is inside the map in question.
+	 * @param Object The object to check the position of
+	 * @return Is the object inside this bound of this map?
+	 */
+	UFUNCTION(BlueprintPure, Category = Objects)
+	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
 
 private:
 	/**
@@ -77,4 +95,11 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Display", meta = (UIMin = 0, ClampMin = 0))
 	int32 PlayerLevelLayer = 1;
+
+	/**
+	 * The audio played when the map starts
+	 */
+	UPROPERTY(EditAnywhere, Category = Audio)
+	TObjectPtr<USoundBase> BackgroundMusic;
+	
 };

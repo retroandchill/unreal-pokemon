@@ -46,6 +46,7 @@ jobs:
           & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=python-coverage.xml -D sonar.cfamily.threads=3
           
       - name: Archive code coverage results
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           path: |

@@ -189,4 +189,22 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Selection)
 	TObjectPtr<USelectionInputs> InputMappings;
+
+	/**
+	 * The sound played when the cursor moves
+	 */
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<USoundBase> CursorSound;
+
+	/**
+	 * The sound played when the player confirms a choice
+	 */
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<USoundBase> ConfirmSound;
+
+	/**
+	 * The sound played when the player cancels on selection
+	 */
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<USoundBase> CancelSound;
 };

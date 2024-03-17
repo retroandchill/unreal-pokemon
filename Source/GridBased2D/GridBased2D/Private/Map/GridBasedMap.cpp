@@ -1,7 +1,14 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Map/GridBasedMap.h"
 
+#include "GridUtils.h"
 #include "PaperTileMap.h"
+#include "Characters/GameCharacter.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Map/MapAudioUtilities.h"
+#include "Map/MapSubsystem.h"
+#include "Map/WithinMap.h"
 
 // Sets default values
 AGridBasedMap::AGridBasedMap() {
@@ -30,6 +37,7 @@ AGridBasedMap::AGridBasedMap() {
 	RightBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	RightBounds->SetupAttachment(TileMapComponent);
 	SetBoundsPositions(true);
+	
 }
 
 void AGridBasedMap::PostInitProperties() {
@@ -55,6 +63,26 @@ void AGridBasedMap::PostLoad() {
 void AGridBasedMap::PostEditMove(bool bFinished) {
 	Super::PostEditMove(bFinished);
 	SetUpMapLocation(bFinished);
+}
+
+void AGridBasedMap::BeginPlay() {
+	Super::BeginPlay();
+
+	if (auto Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)); Player != nullptr) {
+		UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
+	}
+}
+
+FIntRect AGridBasedMap::GetBounds() const {
+	auto RealLocation = GetActorLocation();
+	int32 X = FMath::FloorToInt32(RealLocation.X / GridBased2D::GRID_SIZE);
+	int32 Y = FMath::FloorToInt32(RealLocation.Y / GridBased2D::GRID_SIZE);
+	return FIntRect(X, Y, X + TileMap->MapWidth, Y + TileMap->MapHeight);
+}
+
+bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
+	auto Position = Object->GetCurrentPosition();
+	return GetBounds().Contains({Position.X, Position.Y});
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
