@@ -2,6 +2,7 @@
 #include "Map/GridBasedMap.h"
 
 #include "PaperTileMap.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AGridBasedMap::AGridBasedMap() {
@@ -30,6 +31,7 @@ AGridBasedMap::AGridBasedMap() {
 	RightBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	RightBounds->SetupAttachment(TileMapComponent);
 	SetBoundsPositions(true);
+	
 }
 
 void AGridBasedMap::PostInitProperties() {
