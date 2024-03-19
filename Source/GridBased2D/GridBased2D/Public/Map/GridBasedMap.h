@@ -25,6 +25,8 @@ public:
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
 
+	void BeginPlay() override;
+
 	/**
 	 * Get the bounds of the map in grid units.
 	 * @return The bounds of the map.
@@ -89,14 +91,15 @@ private:
 	TObjectPtr<UBoxComponent> RightBounds;
 
 	/**
-	 * The audio played when the map starts
-	 */
-	UPROPERTY(EditAnywhere, Category = Audio)
-	TObjectPtr<USoundBase> BackgroundMusic;
-
-	/**
 	 * The layer of the tilemap that is at the same level as the player
 	 */
 	UPROPERTY(EditAnywhere, Category = "Display", meta = (UIMin = 0, ClampMin = 0))
 	int32 PlayerLevelLayer = 1;
+
+	/**
+	 * The audio played when the map starts
+	 */
+	UPROPERTY(EditAnywhere, Category = Audio)
+	TObjectPtr<USoundBase> BackgroundMusic;
+	
 };

@@ -3,7 +3,10 @@
 
 #include "GridUtils.h"
 #include "PaperTileMap.h"
+#include "Characters/GameCharacter.h"
 #include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Map/MapSubsystem.h"
 #include "Map/WithinMap.h"
 
 // Sets default values
@@ -59,6 +62,14 @@ void AGridBasedMap::PostLoad() {
 void AGridBasedMap::PostEditMove(bool bFinished) {
 	Super::PostEditMove(bFinished);
 	SetUpMapLocation(bFinished);
+}
+
+void AGridBasedMap::BeginPlay() {
+	Super::BeginPlay();
+
+	if (auto Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)); Player != nullptr) {
+		GetGameInstance()->GetSubsystem<UMapSubsystem>()->PlayBackgroundMusic(BackgroundMusic);
+	}
 }
 
 FIntRect AGridBasedMap::GetBounds() const {
