@@ -7,6 +7,8 @@
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
+class IWithinMap;
+
 UCLASS(Blueprintable, ClassGroup=(Map))
 class GRIDBASED2D_API AGridBasedMap : public AActor {
 	GENERATED_BODY()
@@ -22,6 +24,19 @@ public:
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
+
+	/**
+	 * Get the bounds of the map in grid units.
+	 * @return The bounds of the map.
+	 */
+	FIntRect GetBounds() const;
+
+	/**
+	 * Check if the the current object is inside the map in question.
+	 * @param Object The object to check the position of
+	 * @return Is the object inside this bound of this map?
+	 */
+	bool IsObjectInMap(const IWithinMap& Object) const;
 
 private:
 	/**

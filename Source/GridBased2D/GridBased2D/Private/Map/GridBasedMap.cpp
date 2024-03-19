@@ -1,8 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Map/GridBasedMap.h"
 
+#include "GridUtils.h"
 #include "PaperTileMap.h"
 #include "Components/AudioComponent.h"
+#include "Map/WithinMap.h"
 
 // Sets default values
 AGridBasedMap::AGridBasedMap() {
@@ -57,6 +59,18 @@ void AGridBasedMap::PostLoad() {
 void AGridBasedMap::PostEditMove(bool bFinished) {
 	Super::PostEditMove(bFinished);
 	SetUpMapLocation(bFinished);
+}
+
+FIntRect AGridBasedMap::GetBounds() const {
+	auto RealLocation = GetActorLocation();
+	int32 X = FMath::FloorToInt32(RealLocation.X / GridBased2D::GRID_SIZE);
+	int32 Y = FMath::FloorToInt32(RealLocation.Y / GridBased2D::GRID_SIZE);
+	return FIntRect(X, Y, X + TileMap->MapWidth, Y + TileMap->MapHeight);
+}
+
+bool AGridBasedMap::IsObjectInMap(const IWithinMap& Object) const {
+	auto Position = Object.GetCurrentPosition();
+	return GetBounds().Contains({Position.X, Position.Y});
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
