@@ -8,6 +8,7 @@
 
 void UMapSubsystem::PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier, float PitchMultiplier) {
 	if (BGM == nullptr) {
+		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play null for background music! Please specify an actual asset!"))
 		return;
 	}
 
@@ -22,4 +23,57 @@ void UMapSubsystem::PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier,
 
 	CurrentBackgroundMusic = UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier,
 		0, nullptr, true);
+}
+
+void UMapSubsystem::PauseBackgroundMusic() {
+	if (CurrentBackgroundMusic == nullptr) {
+		UE_LOG(LogBlueprint, Display, TEXT("Trying to pause background music, but none is currently playing!"))
+		return;
+	}
+
+	CurrentBackgroundMusic->SetPaused(true);
+}
+
+void UMapSubsystem::ResumeBackgroundMusic() {
+	if (CurrentBackgroundMusic == nullptr) {
+		UE_LOG(LogBlueprint, Display, TEXT("Trying to resume background music, but none is currently playing!"))
+		return;
+	}
+
+	CurrentBackgroundMusic->SetPaused(false);
+}
+
+void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
+	if (CurrentBackgroundMusic == nullptr) {
+		UE_LOG(LogBlueprint, Display, TEXT("Trying to stop background music, but none is currently playing!"))
+		return;
+	}
+	
+	if (FMath::IsNearlyZero(FadeOutDuration)) {
+		CurrentBackgroundMusic->Stop();
+	} else {
+		CurrentBackgroundMusic->FadeOut(FadeOutDuration, 0.f);
+	}
+
+	CurrentBackgroundMusic = nullptr;
+}
+
+void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float PitchMultiplier) {
+	if (Jingle == nullptr) {
+		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle, but the supplied sound was null!"))
+		return;
+	}
+
+	if (CurrentJingle != nullptr) {
+		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle, but one is already playing!"))
+		return;
+	}
+
+	PauseBackgroundMusic();
+	CurrentJingle = UGameplayStatics::SpawnSound2D(this, Jingle, VolumeMultiplier, PitchMultiplier,
+		0, nullptr, true);
+	CurrentJingle->OnAudioFinishedNative.AddLambda([this](UAudioComponent* Component) {
+		CurrentJingle = nullptr;
+		ResumeBackgroundMusic();
+	});
 }

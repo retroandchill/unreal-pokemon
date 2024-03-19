@@ -22,6 +22,34 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
 	void PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier = 1, float PitchMultiplier = 1);
+
+	/**
+	 * Pause the currently playing BGM
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+	void PauseBackgroundMusic();
+
+	/**
+	 * Resume the paused BGM
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+	void ResumeBackgroundMusic();
+
+	/**
+	 * Stop the currently playing BGM
+	 * @param FadeOutDuration The amount of time it should take to fade out
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+	void StopBackgroundMusic(float FadeOutDuration);
+
+	/**
+	 * Play the specified sound as a musical jingle, pausing the background music and then resuming once it has completed.
+	 * @param Jingle The jingle to play (will warn if null)
+	 * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
+	 * @param PitchMultiplier A linear scalar multiplied with the pitch.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+	void PlayJingle(USoundBase* Jingle, float VolumeMultiplier = 1, float PitchMultiplier = 1);
 	
 private:
 	/**
@@ -29,4 +57,10 @@ private:
 	 */
 	UPROPERTY()
 	TObjectPtr<UAudioComponent> CurrentBackgroundMusic;
+
+	/**
+	 * The currently playing musical jingle
+	 */
+	UPROPERTY()
+	TObjectPtr<UAudioComponent> CurrentJingle;
 };
