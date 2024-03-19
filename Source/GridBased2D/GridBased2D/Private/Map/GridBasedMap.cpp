@@ -68,8 +68,8 @@ FIntRect AGridBasedMap::GetBounds() const {
 	return FIntRect(X, Y, X + TileMap->MapWidth, Y + TileMap->MapHeight);
 }
 
-bool AGridBasedMap::IsObjectInMap(const IWithinMap& Object) const {
-	auto Position = Object.GetCurrentPosition();
+bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
+	auto Position = Object->GetCurrentPosition();
 	return GetBounds().Contains({Position.X, Position.Y});
 }
 

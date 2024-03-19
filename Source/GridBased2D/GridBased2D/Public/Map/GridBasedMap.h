@@ -36,7 +36,8 @@ public:
 	 * @param Object The object to check the position of
 	 * @return Is the object inside this bound of this map?
 	 */
-	bool IsObjectInMap(const IWithinMap& Object) const;
+	UFUNCTION(BlueprintPure, Category = Objects)
+	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
 
 private:
 	/**
