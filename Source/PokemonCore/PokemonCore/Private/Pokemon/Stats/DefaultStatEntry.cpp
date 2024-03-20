@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatEntry.h"
 
+#include "Asserts.h"
 #include "DataManager.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Stats/StatUtils.h"
@@ -18,7 +19,7 @@ int32 FDefaultStatEntry::GetStatValue() const {
 
 const FStat& FDefaultStatEntry::GetStat() const {
 	auto Stat = FDataManager::GetInstance().GetDataTable<FStat>().GetData(StatID);
-	check(Stat != nullptr)
+	ASSERT(Stat != nullptr)
 
 	return *Stat;
 }

@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/K2Node_DisplayMessageWithChoices.h"
 
+#include "Asserts.h"
 #include "K2Node_MakeArray.h"
 #include "K2Node_Select.h"
 #include "K2Node_Switch.h"
@@ -70,7 +71,7 @@ void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu* Men
 
 void UK2Node_DisplayMessageWithChoices::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	auto FactoryFunc = UDisplayMessageWithChoices::StaticClass()->FindFunctionByName("DisplayMessageWithChoices");
-	check(FactoryFunc != nullptr)
+	ASSERT(FactoryFunc != nullptr)
 	SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 

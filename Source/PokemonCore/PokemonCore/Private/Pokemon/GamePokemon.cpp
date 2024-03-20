@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
 
+#include "Asserts.h"
 #include "DataManager.h"
 #include "PokemonCoreSettings.h"
 #include "DataTypes/OptionalUtilities.h"
@@ -23,7 +24,7 @@ TRowPointer<FSpeciesData> FindSpeciesData(FName Species) {
 	auto& SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
 	auto SpeciesData = SpeciesTable.GetDataManaged(Species);
-	check(SpeciesData != nullptr)
+	ASSERT(SpeciesData != nullptr)
 	return SpeciesData;
 }
 

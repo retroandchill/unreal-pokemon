@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/TextDisplayScreen.h"
 
+#include "Asserts.h"
 #include "Data/Command.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/MessageWindow.h"
@@ -18,7 +19,7 @@ void UTextDisplayScreen::NativeConstruct() {
 }
 
 void UTextDisplayScreen::SetText(FText TextToDisplay) {
-	check(MessageWindow != nullptr)
+	ASSERT(MessageWindow != nullptr)
 	MessageWindow->ClearDisplayText();
 	MessageWindow->SetDisplayText(TextToDisplay);
 	CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -26,7 +27,7 @@ void UTextDisplayScreen::SetText(FText TextToDisplay) {
 }
 
 void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>& Choices) {
-	check(MessageWindow != nullptr && CommandWindow != nullptr)
+	ASSERT(MessageWindow != nullptr && CommandWindow != nullptr)
 	MessageWindow->ClearDisplayText();
 	MessageWindow->SetDisplayText(TextToDisplay, true);
 
@@ -40,7 +41,7 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
 }
 
 void UTextDisplayScreen::ClearDisplayText() {
-	check(MessageWindow != nullptr)
+	ASSERT(MessageWindow != nullptr)
 	MessageWindow->ClearDisplayText();
 	CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
 }

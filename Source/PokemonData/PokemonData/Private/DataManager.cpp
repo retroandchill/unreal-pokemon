@@ -2,7 +2,6 @@
 #include "DataManager.h"
 
 #include "PokemonDataSettings.h"
-#include "AssetRegistry/AssetRegistryModule.h"
 #include "DataRetrieval/DataRegistry.h"
 
 
@@ -34,9 +33,9 @@ FDataManager& FDataManager::GetInstance() {
 }
 
 const IGameData& FDataManager::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const {
-	check(StructType != nullptr)
+	ASSERT(StructType != nullptr)
 	auto StructName = StructType->GetFName();
-	check(DataTables.Contains(StructName))
+	ASSERT(DataTables.Contains(StructName))
 	return *DataTables[StructName];
 }
 
