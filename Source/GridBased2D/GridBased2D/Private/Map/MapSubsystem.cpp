@@ -58,7 +58,7 @@ void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float
 	PauseBackgroundMusic();
 	CurrentJingle = UGameplayStatics::SpawnSound2D(this, Jingle, VolumeMultiplier, PitchMultiplier,
 		0, nullptr, true);
-	CurrentJingle->OnAudioFinishedNative.AddLambda([this](UAudioComponent* Component) {
+	CurrentJingle->OnAudioFinishedNative.AddLambda([this] {
 		CurrentJingle = nullptr;
 		ResumeBackgroundMusic();
 	});
