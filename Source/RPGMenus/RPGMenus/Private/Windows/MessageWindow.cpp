@@ -7,7 +7,7 @@
 #include "Data/SelectionInputs.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
-#include "Utilities/PokemonUtilities/Public/Asserts.h"
+#include "Asserts.h"
 
 TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
