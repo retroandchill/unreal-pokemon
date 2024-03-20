@@ -17,6 +17,7 @@ class POKEMONUI_API UPauseMenuScreen : public UScreen {
 
 protected:
 	void NativePreConstruct() override;
+	void NativeConstruct() override;
 
 private:
 	/**
@@ -32,4 +33,10 @@ private:
 	 */
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommandWindow> CommandWindow;
+
+	/**
+	 * The sound that plays when the menu is opened.
+	 */
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<USoundBase> OpenSound;
 };

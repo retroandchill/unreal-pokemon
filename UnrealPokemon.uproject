@@ -5,6 +5,11 @@
 	"Description": "",
 	"Modules": [
 		{
+			"Name": "UnrealPokemon",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "PokemonData",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
