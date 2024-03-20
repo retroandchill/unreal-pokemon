@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Text/ShadowedText.h"
 
+#include "Asserts.h"
 #include "Components/TextBlock.h"
 
 void UShadowedText::SetTextInfo() {
@@ -44,6 +45,6 @@ void UShadowedText::SetShadowTextAndFont(UTextBlock* Shadow) {
 }
 
 void UShadowedText::SetShadowText(UTextBlock* Shadow, const FText& Text) {
-	check(Shadow != nullptr)
+	ASSERT(Shadow != nullptr)
 	Shadow->SetText(Text);
 }

@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
+#include "Asserts.h"
 #include "DataManager.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
@@ -23,7 +24,7 @@ TRowPointer<FNature> FindNature(FName Nature) {
 	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
 
 	auto Ret = NatureTable.GetDataManaged(Nature);
-	check(Ret != nullptr)
+	ASSERT(Ret != nullptr)
 	return Ret;
 }
 
@@ -119,12 +120,12 @@ const FNature& FDefaultStatBlock::GetNature() const {
 }
 
 IStatEntry& FDefaultStatBlock::GetStat(FName Stat) {
-	check(Stats.Contains(Stat))
+	ASSERT(Stats.Contains(Stat))
 	return *Stats[Stat];
 }
 
 const IStatEntry& FDefaultStatBlock::GetStat(FName Stat) const {
-	check(Stats.Contains(Stat))
+	ASSERT(Stats.Contains(Stat))
 	return *Stats[Stat];
 }
 
@@ -138,7 +139,7 @@ void FDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 	auto& NatureData = GetNature();
 
 	for (const auto& [StatID, Stat] : Stats) {
-		check(BaseStats.Contains(StatID))
+		ASSERT(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}
 }

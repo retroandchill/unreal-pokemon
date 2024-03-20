@@ -3,6 +3,7 @@
 
 #include "Managers/PokemonSubsystem.h"
 
+#include "Asserts.h"
 #include "PokemonCoreSettings.h"
 #include "Trainers/TrainerStub.h"
 
@@ -26,7 +27,7 @@ void UPokemonSubsystem::Deinitialize() {
 }
 
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
-	check(Instance != nullptr)
+	ASSERT(Instance != nullptr)
 	return *Instance;
 }
 
@@ -39,11 +40,11 @@ int32 UPokemonSubsystem::GetMaxPartySize() const {
 }
 
 ITrainer& UPokemonSubsystem::GetPlayer() {
-	check(Player != nullptr)
+	ASSERT(Player != nullptr)
 	return *Player;
 }
 
 const ITrainer& UPokemonSubsystem::GetPlayer() const {
-	check(Player != nullptr)
+	ASSERT(Player != nullptr)
 	return *Player;
 }

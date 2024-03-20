@@ -3,6 +3,7 @@
 
 #include "Moves/DefaultMove.h"
 
+#include "Asserts.h"
 #include "DataManager.h"
 
 IMPLEMENT_DERIVED_METATYPE(FDefaultMove)
@@ -14,7 +15,7 @@ IMPLEMENT_DERIVED_METATYPE(FDefaultMove)
  */
 TRowPointer<FMoveData> FindMoveData(FName MoveID) {
 	auto Move = FDataManager::GetInstance().GetDataTable<FMoveData>().GetDataManaged(MoveID);
-	check(Move != nullptr);
+	ASSERT(Move != nullptr);
 	return Move;
 }
 

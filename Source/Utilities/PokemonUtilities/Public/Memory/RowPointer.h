@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Asserts.h"
 
 /**
  * Thin wrapper around FDataTableRowHandle used to allow it to behave like a pointer
@@ -36,7 +37,7 @@ public:
 	 */
 	T& operator*() const {
 		auto Row = TableRowHandle.GetRow<T>(TEXT("Could not find row!"));
-		check(Row != nullptr)
+		ASSERT(Row != nullptr)
 		return *Row;
 	}
 
@@ -46,7 +47,7 @@ public:
 	 */
 	T* operator->() const {
 		auto Row = TableRowHandle.GetRow<T>(TEXT("Could not find row!"));
-		check(Row != nullptr)
+		ASSERT(Row != nullptr)
 		return Row;
 	}
 
