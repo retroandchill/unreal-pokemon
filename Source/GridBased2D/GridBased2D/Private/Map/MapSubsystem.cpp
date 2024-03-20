@@ -3,19 +3,15 @@
 
 #include "Map/MapSubsystem.h"
 
+#include "Asserts.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void UMapSubsystem::PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier, float PitchMultiplier) {
-	if (BGM == nullptr) {
-		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play null for background music! Please specify an actual asset!"))
-		return;
-	}
+	GUARD_WARN(BGM == nullptr, ,TEXT("Trying to play null for background music! Please specify an actual asset!"))
 
 	// Don't restart the music if its already playing
-	if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) {
-		return;
-	}
+	GUARD(CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM, )
 
 	if (CurrentBackgroundMusic != nullptr) {
 		CurrentBackgroundMusic->Stop();
@@ -26,28 +22,17 @@ void UMapSubsystem::PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier,
 }
 
 void UMapSubsystem::PauseBackgroundMusic() {
-	if (CurrentBackgroundMusic == nullptr) {
-		UE_LOG(LogBlueprint, Display, TEXT("Trying to pause background music, but none is currently playing!"))
-		return;
-	}
-
+	GUARD(CurrentBackgroundMusic == nullptr, )
 	CurrentBackgroundMusic->SetPaused(true);
 }
 
 void UMapSubsystem::ResumeBackgroundMusic() {
-	if (CurrentBackgroundMusic == nullptr) {
-		UE_LOG(LogBlueprint, Display, TEXT("Trying to resume background music, but none is currently playing!"))
-		return;
-	}
-
+	GUARD(CurrentBackgroundMusic == nullptr, )
 	CurrentBackgroundMusic->SetPaused(false);
 }
 
 void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
-	if (CurrentBackgroundMusic == nullptr) {
-		UE_LOG(LogBlueprint, Display, TEXT("Trying to stop background music, but none is currently playing!"))
-		return;
-	}
+	GUARD(CurrentBackgroundMusic == nullptr, )
 	
 	if (FMath::IsNearlyZero(FadeOutDuration)) {
 		CurrentBackgroundMusic->Stop();
@@ -67,15 +52,8 @@ bool UMapSubsystem::IsMusicPaused() const {
 }
 
 void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float PitchMultiplier) {
-	if (Jingle == nullptr) {
-		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle, but the supplied sound was null!"))
-		return;
-	}
-
-	if (CurrentJingle != nullptr) {
-		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle, but one is already playing!"))
-		return;
-	}
+	GUARD_WARN(Jingle == nullptr, ,TEXT("Trying to play a jingle, but the supplied sound was null!"))
+	GUARD_WARN(CurrentJingle != nullptr, ,TEXT("Trying to play a jingle, but one is already playing!"))
 
 	PauseBackgroundMusic();
 	CurrentJingle = UGameplayStatics::SpawnSound2D(this, Jingle, VolumeMultiplier, PitchMultiplier,
