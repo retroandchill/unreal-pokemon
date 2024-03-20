@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/PokemonSelectionPane.h"
 
+#include "Asserts.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -12,7 +13,7 @@
 void UPokemonSelectionPane::NativeConstruct() {
 	Super::NativeConstruct();
 
-	check(ContentsArea != nullptr)
+	ASSERT(ContentsArea != nullptr)
 	auto& PokemonSubsystem = UPokemonSubsystem::GetInstance();
 	auto& PlayerParty = PokemonSubsystem.GetPlayer().GetParty();
 
@@ -68,13 +69,13 @@ const TOptional<int32> &UPokemonSelectionPane::GetSwitchingIndex() const {
 }
 
 void UPokemonSelectionPane::BeginSwitch(int32 StartIndex) {
-	check(!SwitchingIndex.IsSet());
+	ASSERT(!SwitchingIndex.IsSet());
 	SwitchingIndex.Emplace(StartIndex);
 	ActivePanels[StartIndex]->Refresh();
 }
 
 void UPokemonSelectionPane::CompleteSwitch() {
-	check(SwitchingIndex.IsSet());
+	ASSERT(SwitchingIndex.IsSet());
 	auto Panel1 = CastChecked<UPokemonPanel>(ActivePanels[SwitchingIndex.GetValue()].GetObject());
 	auto Panel2 = CastChecked<UPokemonPanel>(ActivePanels[GetIndex()].GetObject());
 	SwitchingIndex.Reset();

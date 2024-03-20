@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/K2Node_DisplayMessageBase.h"
 
+#include "Asserts.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -63,7 +64,7 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
 			continue;
 
 		auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
-		check(Spawner != nullptr)
+		ASSERT(Spawner != nullptr)
 
 		(*ScreenCounter)++;
 		Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(

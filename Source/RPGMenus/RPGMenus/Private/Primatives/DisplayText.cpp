@@ -6,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
+#include "Asserts.h"
 
 UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
@@ -35,7 +36,7 @@ void UDisplayText::SetTextInfo() {
 }
 
 FText UDisplayText::GetText() const {
-	check(DisplayTextWidget != nullptr)
+	ASSERT(DisplayTextWidget != nullptr)
 	return DisplayTextWidget->GetText();
 }
 
@@ -60,24 +61,24 @@ const FSlateFontInfo& UDisplayText::GetDisplayFont() const {
 void UDisplayText::SetTextColor(const FSlateColor& Color) {
 	TextColor = Color;
 
-	check(DisplayTextWidget != nullptr)
+	ASSERT(DisplayTextWidget != nullptr)
 	DisplayTextWidget->SetColorAndOpacity(TextColor);
 }
 
 FVector2D UDisplayText::GetTextSize() const {
-	check(DisplayTextWidget != nullptr)
+	ASSERT(DisplayTextWidget != nullptr)
 	return GetTextSize(DisplayTextWidget->GetText().ToString());
 }
 
 FVector2D UDisplayText::GetTextSize(const FString& Text) const {
-	check(DisplayTextWidget != nullptr)
+	ASSERT(DisplayTextWidget != nullptr)
 	auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
 	FVector2D Size = FontMeasure->Measure(Text, DisplayFont, UWidgetUtilities::GetWidgetDPIScale());
 	return Size;
 }
 
 FVector2D UDisplayText::GetTotalTextAreaSize() const {
-	check(DisplayTextWidget != nullptr)
+	ASSERT(DisplayTextWidget != nullptr)
 	return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
 }
 

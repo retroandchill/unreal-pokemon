@@ -4,7 +4,7 @@
 void UDataUtilities::GetData(const UScriptStruct* StructType, FName RowName,
                              FTableRowBase& OutRow) {
 	// We should never hit this!  stubs to avoid NoExport on the class.
-	check(false)
+	ASSERT(false)
 }
 
 TArray<FName> UDataUtilities::GetAllDataIDs(const UScriptStruct* StructType) {
