@@ -47,6 +47,22 @@ public:
 	static void StopBackgroundMusic(UObject* WorldContext, float FadeOutDuration = 0);
 
 	/**
+	 * Is there currently background music that is playing?
+	 * @param WorldContext Object used to get the Map Subsystem
+	 * @return Is there music playing?
+	 */
+	UFUNCTION(BlueprintPure, Category = "Sound|Music", meta = (WorldContext = WorldContext))
+	static bool IsMusicPlaying(UObject* WorldContext);
+
+	/**
+	 * Is there currently background music that is paused?
+	 * @param WorldContext Object used to get the Map Subsystem
+	 * @return Is there paused background music?
+	 */
+	UFUNCTION(BlueprintPure, Category = "Sound|Music", meta = (WorldContext = WorldContext))
+	static bool IsMusicPaused(UObject* WorldContext);
+
+	/**
 	 * Play the specified sound as a musical jingle, pausing the background music and then resuming once it has completed.
 	 * @param Jingle The jingle to play (will warn if null)
 	 * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
@@ -54,4 +70,12 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Sound|Music", meta = (WorldContext = WorldContext, AdvancedDisplay="VolumeMultiplier,PitchMultiplier"))
 	static void PlayJingle(UObject* WorldContext, USoundBase* Jingle, float VolumeMultiplier = 1, float PitchMultiplier = 1);
+
+	/**
+	 * Is there currently background music that is playing?
+	 * @param WorldContext Object used to get the Map Subsystem
+	 * @return Is there music playing?
+	 */
+	UFUNCTION(BlueprintPure, Category = "Sound|Music", meta = (WorldContext = WorldContext))
+	static bool IsJinglePlaying(UObject* WorldContext);
 };

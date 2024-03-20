@@ -58,6 +58,14 @@ void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
 	CurrentBackgroundMusic = nullptr;
 }
 
+bool UMapSubsystem::IsMusicPlaying() const {
+	return CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Playing;
+}
+
+bool UMapSubsystem::IsMusicPaused() const {
+	return CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Paused;
+}
+
 void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float PitchMultiplier) {
 	if (Jingle == nullptr) {
 		UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle, but the supplied sound was null!"))
@@ -76,4 +84,8 @@ void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float
 		CurrentJingle = nullptr;
 		ResumeBackgroundMusic();
 	});
+}
+
+bool UMapSubsystem::IsJinglePlaying() const {
+	return CurrentJingle != nullptr && CurrentJingle->GetPlayState() == EAudioComponentPlayState::Playing;
 }

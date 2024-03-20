@@ -6,6 +6,7 @@
 #include "Characters/GameCharacter.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Map/MapAudioUtilities.h"
 #include "Map/MapSubsystem.h"
 #include "Map/WithinMap.h"
 
@@ -68,7 +69,7 @@ void AGridBasedMap::BeginPlay() {
 	Super::BeginPlay();
 
 	if (auto Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)); Player != nullptr) {
-		GetGameInstance()->GetSubsystem<UMapSubsystem>()->PlayBackgroundMusic(BackgroundMusic);
+		UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 	}
 }
 

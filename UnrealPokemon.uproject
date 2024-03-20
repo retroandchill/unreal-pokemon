@@ -5,6 +5,11 @@
 	"Description": "",
 	"Modules": [
 		{
+			"Name": "UnrealPokemon",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "PokemonData",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
@@ -72,11 +77,6 @@
 		{
 			"Name": "RPGMenusDeveloper",
 			"Type": "UncookedOnly",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "UnrealPokemon",
-			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	],
