@@ -6,7 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
-#include "Utilities/PokemonUtilities/Public/Asserts.h"
+#include "Asserts.h"
 
 UDisplayText::UDisplayText(const FObjectInitializer& ObjectInitializer) : UUserWidget(ObjectInitializer) {
 }
