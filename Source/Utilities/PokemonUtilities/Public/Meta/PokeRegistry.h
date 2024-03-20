@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Asserts.h"
 
 /**
  * Signifies a generic static registry for different data types. Used to create a static registry that sits below
@@ -33,7 +34,7 @@ public:
 	 * @return A unique reference to the factory instance
 	 */
 	Ptr Construct(FName Key, Args... Arguments) const {
-		check(RegisteredConstructors.Contains(Key))
+		ASSERT(RegisteredConstructors.Contains(Key))
 		return RegisteredConstructors[Key](Arguments...);
 	}
 
