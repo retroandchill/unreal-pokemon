@@ -4,6 +4,7 @@
 #include "Map/MapSubsystem.h"
 
 #include "Asserts.h"
+#include "Characters/GameCharacter.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -66,4 +67,25 @@ void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float
 
 bool UMapSubsystem::IsJinglePlaying() const {
 	return CurrentJingle != nullptr && CurrentJingle->GetPlayState() == EAudioComponentPlayState::Playing;
+}
+
+void UMapSubsystem::WarpToMap(FName MapName, int32 X, int32 Y) {
+	auto PlayerCharacter = Cast<AGameCharacter>(GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator());
+	GUARD_WARN(PlayerCharacter == nullptr, , TEXT("The player character is not an instance of AGameCharacter!"))
+
+	WarpToMapWithDirection(MapName, X, Y, PlayerCharacter->GetDirection());
+}
+
+void UMapSubsystem::WarpToMapWithDirection(FName MapName, int32 X, int32 Y, EFacingDirection Direction) {
+	WarpDestination.Emplace(X, Y, Direction);
+	UGameplayStatics::OpenLevel(this, MapName);
+}
+
+void UMapSubsystem::SetPlayerLocation(AGameCharacter* PlayerCharacter) {
+	GUARD(!WarpDestination.IsSet(), )
+
+	auto [X, Y, Direction] = WarpDestination.GetValue();
+	PlayerCharacter->WarpToLocation(X, Y);
+	PlayerCharacter->FaceDirection(Direction);
+	WarpDestination.Reset();
 }

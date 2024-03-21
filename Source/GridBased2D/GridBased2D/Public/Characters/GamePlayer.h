@@ -30,6 +30,9 @@ protected:
 public:
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+protected:
+	void HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) override;
+	
 private:
 	/**
 	 * Perform the movement action when receiving the input

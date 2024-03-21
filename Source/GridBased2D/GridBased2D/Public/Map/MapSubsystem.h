@@ -6,6 +6,9 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MapSubsystem.generated.h"
 
+class AGameCharacter;
+enum class EFacingDirection : uint8;
+class IInteractable;
 /**
  * Subsystem that handles the traversal between various maps as well as the music within a given map.
  */
@@ -71,6 +74,31 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Sound|Music")
 	bool IsJinglePlaying() const;
+
+	/**
+	 * Warp to the given map name and coordinates
+	 * @param MapName The name of the map to warp to
+	 * @param X The X coordinate of the map to warp to
+	 * @param Y The Y coordinate of the map to warp to
+	 */
+	UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Retain Direction)", Category = "Maps|Warping")
+	void WarpToMap(FName MapName, int32 X, int32 Y);
+
+	/**
+	 * Warp to the given map name and coordinates
+	 * @param MapName The name of the map to warp to
+	 * @param X The X coordinate of the map to warp to
+	 * @param Y The Y coordinate of the map to warp to
+	 * @param Direction The direction the character should be facing after the warp
+	 */
+	UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Change Direction)", Category = "Maps|Warping")
+	void WarpToMapWithDirection(FName MapName, int32 X, int32 Y, EFacingDirection Direction);
+
+	/**
+	 * Set the location of the player in the world if there is a valid warp destination
+	 * @param PlayerCharacter The character to set the location of
+	 */
+	void SetPlayerLocation(AGameCharacter* PlayerCharacter);
 	
 private:
 	/**
@@ -84,4 +112,10 @@ private:
 	 */
 	UPROPERTY()
 	TObjectPtr<UAudioComponent> CurrentJingle;
+
+	/**
+	 * If set, indicates that the player warping to another location
+	 */
+	TOptional<TTuple<int32, int32, EFacingDirection>> WarpDestination;
+	
 };

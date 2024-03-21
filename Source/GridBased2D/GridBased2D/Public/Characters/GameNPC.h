@@ -14,8 +14,14 @@ class GRIDBASED2D_API AGameNPC : public AGameCharacter, public IInteractable {
 	GENERATED_BODY()
 
 public:
-	void OnInteract_Implementation(AGameCharacter* Character) override;
+	void OnInteract_Implementation(AGameCharacter* Character, EInteractionType InteractionType) override;
 
+	UFUNCTION(BlueprintPure, Category = "Interaction")
+	uint8 GetInteractionTypes() const override;
+
+	/**
+	 * Called when the player interacts with this object
+	 */
 	UPROPERTY(BlueprintAssignable, Category = Interaction)
 	FOnPlayerInteraction Interact;
 };

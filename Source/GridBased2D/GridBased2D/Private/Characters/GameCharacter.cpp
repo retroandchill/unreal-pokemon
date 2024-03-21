@@ -1,12 +1,14 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Characters/GameCharacter.h"
 
+#include "Asserts.h"
 #include "MathUtilities.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 #include "GridUtils.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interaction/Interactable.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
@@ -80,8 +82,9 @@ void AGameCharacter::Tick(float DeltaTime) {
 
 void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	FaceDirection(MovementDirection);
-	if (!CanMoveInDirection(MovementDirection))
-		return;
+	auto [bCanMove, FoundActors] = MovementCheck(MovementDirection);
+	HitInteraction(FoundActors);
+	GUARD(!bCanMove, )
 
 	GridBased2D::AdjustMovementPosition(MovementDirection, DesiredPosition);
 
@@ -89,16 +92,34 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	StopTimer.Reset();
 }
 
-bool AGameCharacter::CanMoveInDirection(EFacingDirection MovementDirection) const {
-	auto Result = HitTestOnFacingTile(MovementDirection);
-	return !Result.bBlockingHit;
+FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirection) const {
+	auto Results = HitTestOnFacingTile(MovementDirection);
+	FMoveCheckResult Ret;
+	for (auto &Result : Results) {
+		if (Result.bBlockingHit) {
+			Ret.bCanMove = false;
+		}
+
+		if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable != nullptr) {
+			Ret.FoundActors.Emplace(Result.GetActor());
+		}
+	}
+	return Ret;
 }
 
 void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
 	Direction = FacingDirection;
 }
 
-FHitResult AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
+void AGameCharacter::WarpToLocation(int32 X, int32 Y) {
+	CurrentPosition = DesiredPosition = {X, Y};
+	auto CurrentLocation = GetActorLocation();
+	CurrentLocation.X = X * GridBased2D::GRID_SIZE;
+	CurrentLocation.Y = Y * GridBased2D::GRID_SIZE;
+	SetActorLocation(CurrentLocation);
+}
+
+TArray<FHitResult> AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
 	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GRID_SIZE);
 
 	FVector LocalOffset(0, 0, 0);
@@ -111,11 +132,15 @@ FHitResult AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirectio
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
-	FHitResult Result;
-	GetWorld()->SweepSingleByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
+	TArray<FHitResult> Result;
+	GetWorld()->SweepMultiByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
 	                                 ECC_Pawn, GridSquare, Params);
 
 	return Result;
+}
+
+void AGameCharacter::HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) {
+	// No implementation in this class, only the player needs this
 }
 
 void AGameCharacter::InitCharacterData() {

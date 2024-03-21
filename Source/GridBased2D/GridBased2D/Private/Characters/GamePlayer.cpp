@@ -10,6 +10,7 @@
 #include "GridUtils.h"
 #include "Actions/Action.h"
 #include "Interaction/Interactable.h"
+#include "Map/MapSubsystem.h"
 
 
 // Sets default values
@@ -43,7 +44,11 @@ AGamePlayer::AGamePlayer() {
 void AGamePlayer::BeginPlay() {
 	Super::BeginPlay();
 
-	if (const auto* const PlayerController = Cast<APlayerController>(Controller)) {
+	if (auto MapSubsystem = GetGameInstance()->GetSubsystem<UMapSubsystem>(); MapSubsystem != nullptr) {
+		MapSubsystem->SetPlayerLocation(this);
+	}
+	
+	if (const auto* const PlayerController = Cast<APlayerController>(Controller); PlayerController != nullptr) {
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
 			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
@@ -61,6 +66,13 @@ void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Input->BindAction(FaceDirectionInput.Get(), Triggered, this, &AGamePlayer::Turn);
 	Input->BindAction(InteractInput.Get(), Triggered, this, &AGamePlayer::Interact);
 	Input->BindAction(PauseInput.Get(), Triggered, this, &AGamePlayer::PauseGame);
+}
+
+void AGamePlayer::HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) {
+	Super::HitInteraction(Interactables);
+	for (auto &Interactable : Interactables) {
+		IInteractable::Execute_OnInteract(Interactable.GetObject(), this, EInteractionType::Hit);
+	}
 }
 
 void AGamePlayer::Move(const FInputActionInstance& Input) {
@@ -82,11 +94,13 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 }
 
 void AGamePlayer::Interact() {
-	auto Result = HitTestOnFacingTile(GetDirection());
-	if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr)
-		return;
+	for (auto Results = HitTestOnFacingTile(GetDirection()); auto &Result : Results) {
+		if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr)
+			continue;
 
-	IInteractable::Execute_OnInteract(Result.GetActor(), this);
+		IInteractable::Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);
+	}
+	
 }
 
 void AGamePlayer::PauseGame() {

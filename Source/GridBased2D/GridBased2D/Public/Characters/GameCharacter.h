@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "FacingDirection.h"
+#include "MoveCheckResult.h"
 #include "PaperCharacter.h"
 #include "Map/WithinMap.h"
 #include "GameCharacter.generated.h"
@@ -48,20 +49,34 @@ public:
 	/**
 	 * Check to see if the character can move in the specified direction
 	 * @param MovementDirection The direction the character would like to move in
-	 * @return Can the character move to that tile
+	 * @return Can the character move to that tile, as well and any interactable objects found when the check is done
 	 */
 	UFUNCTION(BlueprintPure, Category = "Character|Movement")
-	bool CanMoveInDirection(EFacingDirection MovementDirection) const;
-
+	FMoveCheckResult MovementCheck(EFacingDirection MovementDirection) const;
+	
 	/**
 	 * Turn the character to face a specific direction
 	 * @param FacingDirection The direction to update the character's facing direction to
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FaceDirection(EFacingDirection FacingDirection);
+	
+	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+	void WarpToLocation(int32 X, int32 Y) override;
 
 protected:
-	FHitResult HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+	/**
+	 * Perform a hit test on the tile in the given direction.
+	 * @param MovementDirection The direction to check the file of
+	 * @return Any hits that are found
+	 */
+	TArray<FHitResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+
+	/**
+	 * Perform a hit interaction on all of the interactable objects in front of the player
+	 * @param Interactables The interactable objects in question
+	 */
+	virtual void HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables);
 
 private:
 	/**

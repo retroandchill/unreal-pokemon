@@ -55,12 +55,6 @@ private:
 	void SetBoundsPositions(bool bIsInitializing = false);
 
 	/**
-	 * The TileMap object that this map holds.
-	 */
-	UPROPERTY(EditAnywhere, Category = "Display")
-	TObjectPtr<UPaperTileMap> TileMap;
-
-	/**
 	 * The tilemap to use for this asset
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))

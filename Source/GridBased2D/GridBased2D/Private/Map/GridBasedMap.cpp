@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Map/GridBasedMap.h"
 
+#include "Asserts.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
 #include "Characters/GameCharacter.h"
@@ -77,7 +78,7 @@ FIntRect AGridBasedMap::GetBounds() const {
 	auto RealLocation = GetActorLocation();
 	int32 X = FMath::FloorToInt32(RealLocation.X / GridBased2D::GRID_SIZE);
 	int32 Y = FMath::FloorToInt32(RealLocation.Y / GridBased2D::GRID_SIZE);
-	return FIntRect(X, Y, X + TileMap->MapWidth, Y + TileMap->MapHeight);
+	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
 bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
@@ -86,10 +87,8 @@ bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
-	if (TileMap == nullptr)
-		return;
-
-	TileMapComponent->SetTileMap(TileMap);
+	UPaperTileMap* TileMap = TileMapComponent->TileMap;
+	GUARD(TileMap == nullptr, )
 
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
