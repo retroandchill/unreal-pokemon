@@ -1,7 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "GridUtils.h"
 
-TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D Vector) {
+#include "GridBasedGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
+
+TOptional<EFacingDirection> UGridUtils::VectorToFacingDirection(const FVector2D Vector) {
 	using enum EFacingDirection;
 	if (Vector.Y > 0) {
 		return Down;
@@ -22,7 +25,7 @@ TOptional<EFacingDirection> GridBased2D::VectorToFacingDirection(const FVector2D
 	return TOptional<EFacingDirection>();
 }
 
-TOptional<EFacingDirection> GridBased2D::GetOpposingDirection(EFacingDirection Direction) {
+TOptional<EFacingDirection> UGridUtils::GetOpposingDirection(EFacingDirection Direction) {
 	switch (Direction) {
 		using enum EFacingDirection;
 	case Down:
@@ -36,4 +39,10 @@ TOptional<EFacingDirection> GridBased2D::GetOpposingDirection(EFacingDirection D
 	}
 
 	return TOptional<EFacingDirection>();
+}
+
+AGridBasedGameModeBase* UGridUtils::GetGridBasedGameMode(const UObject* WorldContext) {
+	auto GameMode = Cast<AGridBasedGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
+	ASSERT(GameMode != nullptr)
+	return GameMode;
 }

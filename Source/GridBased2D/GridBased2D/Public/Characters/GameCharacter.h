@@ -3,10 +3,12 @@
 
 #include "CoreMinimal.h"
 #include "FacingDirection.h"
+#include "MoveCheckResult.h"
 #include "PaperCharacter.h"
 #include "Map/WithinMap.h"
 #include "GameCharacter.generated.h"
 
+class AGridBasedMap;
 struct FInputActionInstance;
 class UPaperFlipbook;
 class UCharset;
@@ -46,13 +48,26 @@ public:
 	void MoveInDirection(EFacingDirection MovementDirection);
 
 	/**
+	 * Move the character in the specified direction
+	 * @param MovementDirection The direction to move the character in
+	 * @param MovementCompleteCallback The functor to call when movement is completed
+	 */
+	void MoveInDirection(EFacingDirection MovementDirection, TFunction<void()> &&MovementCompleteCallback);
+
+	/**
 	 * Check to see if the character can move in the specified direction
 	 * @param MovementDirection The direction the character would like to move in
-	 * @return Can the character move to that tile
+	 * @return Can the character move to that tile, as well and any interactable objects found when the check is done
 	 */
 	UFUNCTION(BlueprintPure, Category = "Character|Movement")
-	bool CanMoveInDirection(EFacingDirection MovementDirection) const;
+	FMoveCheckResult MovementCheck(EFacingDirection MovementDirection) const;
 
+	/**
+	 * Can this character move between the various maps of the overworld
+	 * @return Can the character move between maps?
+	 */
+	virtual bool CanMoveBetweenMaps() const;
+	
 	/**
 	 * Turn the character to face a specific direction
 	 * @param FacingDirection The direction to update the character's facing direction to
@@ -60,8 +75,28 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FaceDirection(EFacingDirection FacingDirection);
 
+	/**
+	 * Warp to the given locaton and offset
+	 * @param X The X coordinate to warp to
+	 * @param Y The Y coordinate to warp to
+	 * @param Offset The physical offset of the map in the world
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+	void WarpToLocation(int32 X, int32 Y, FVector Offset) override;
+
 protected:
-	FHitResult HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+	/**
+	 * Perform a hit test on the tile in the given direction.
+	 * @param MovementDirection The direction to check the file of
+	 * @return Any hits that are found and all interactable actors on the tile
+	 */
+	TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+
+	/**
+	 * Perform a hit interaction on all of the interactable objects in front of the player
+	 * @param Interactables The interactable objects in question
+	 */
+	virtual void HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables);
 
 private:
 	/**
@@ -86,6 +121,19 @@ private:
 	 * @param DeltaTime The amount of time that has passed since the previous frame
 	 */
 	void UpdateAnimation(float DeltaTime);
+
+	/**
+	 * Called when the player completes their movement cycle
+	 */
+	void OnMoveComplete();
+
+	
+public:
+	/**
+	 * Called when the player changes maps
+	 * @param NewMap The new map the player changes to
+	 */
+	virtual void OnMapChanged(AGridBasedMap* NewMap);
 
 protected:
 	/**
@@ -147,7 +195,13 @@ private:
 	TOptional<float> MoveTimer;
 
 	/**
+	 * The callback for when movement is complete
+	 */
+	TOptional<TFunction<void()>> MoveCallback;
+
+	/**
 	 * The timer for movement used to determine where to stop animation
 	 */
 	TOptional<float> StopTimer;
+	
 };

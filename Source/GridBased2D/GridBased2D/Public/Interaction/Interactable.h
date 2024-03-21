@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InteractionType.h"
 #include "UObject/Interface.h"
 #include "Interactable.generated.h"
 
@@ -22,12 +23,20 @@ class GRIDBASED2D_API IInteractable {
 public:
 	/**
 	 * Called when this object is interacted with by the player.
+	 * @param Character The character that interacted with the object
+	 * @param InteractionType The type of interaction with this character
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Interaction)
-	void OnInteract(AGameCharacter* Character);
+	void OnInteract(AGameCharacter* Character,  EInteractionType InteractionType);
+
+	/**
+	 * Get the list of valid interaction types for this class
+	 * @return The bitmask of valid interaction types
+	 */
+	virtual uint8 GetInteractionTypes() const = 0;
 };
 
 /**
  * Callback delegate for when the player tries to interact with this component.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerInteraction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerInteraction, EInteractionType, InteractionType);
