@@ -7,9 +7,13 @@
 #include "Characters/Charset.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GridBasedGameModeBase.h"
 #include "GridUtils.h"
 #include "Actions/Action.h"
 #include "Interaction/Interactable.h"
+#include "Kismet/GameplayStatics.h"
+#include "Map/GridBasedMap.h"
+#include "Map/MapSubsystem.h"
 
 
 // Sets default values
@@ -20,7 +24,7 @@ AGamePlayer::AGamePlayer() {
 	// Create a camera boom attached to the root (capsule)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->TargetArmLength = 50.0f;
 	CameraBoom->SocketOffset = FVector(0.0f, 0.0f, 0.0f);
 	CameraBoom->SetUsingAbsoluteRotation(true);
 	CameraBoom->bDoCollisionTest = false;
@@ -43,11 +47,27 @@ AGamePlayer::AGamePlayer() {
 void AGamePlayer::BeginPlay() {
 	Super::BeginPlay();
 
-	if (const auto* const PlayerController = Cast<APlayerController>(Controller)) {
+	if (auto MapSubsystem = GetGameInstance()->GetSubsystem<UMapSubsystem>(); MapSubsystem != nullptr) {
+		MapSubsystem->SetPlayerLocation(this);
+	}
+	
+	if (const auto* const PlayerController = Cast<APlayerController>(Controller); PlayerController != nullptr) {
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
 			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+}
+
+bool AGamePlayer::CanMoveBetweenMaps() const {
+	return IsPlayerControlled();
+}
+
+void AGamePlayer::OnMapChanged(AGridBasedMap* NewMap) {
+	Super::OnMapChanged(NewMap);
+
+	if (IsPlayerControlled()) {
+		NewMap->OnPlayerEnter();
 	}
 }
 
@@ -63,9 +83,18 @@ void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Input->BindAction(PauseInput.Get(), Triggered, this, &AGamePlayer::PauseGame);
 }
 
+void AGamePlayer::HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) {
+	Super::HitInteraction(Interactables);
+	for (auto &Interactable : Interactables) {
+		if ((Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Hit)) == 0)
+			continue;
+		IInteractable::Execute_OnInteract(Interactable.GetObject(), this, EInteractionType::Hit);
+	}
+}
+
 void AGamePlayer::Move(const FInputActionInstance& Input) {
 	auto Vector = Input.GetValue().Get<FVector2D>();
-	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
+	auto Dir = UGridUtils::VectorToFacingDirection(Vector);
 	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
 
@@ -74,7 +103,7 @@ void AGamePlayer::Move(const FInputActionInstance& Input) {
 
 void AGamePlayer::Turn(const FInputActionInstance& Input) {
 	auto Vector = Input.GetValue().Get<FVector2D>();
-	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
+	auto Dir = UGridUtils::VectorToFacingDirection(Vector);
 	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
 
@@ -82,11 +111,14 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 }
 
 void AGamePlayer::Interact() {
-	auto Result = HitTestOnFacingTile(GetDirection());
-	if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr)
-		return;
-
-	IInteractable::Execute_OnInteract(Result.GetActor(), this);
+	for (auto Results = HitTestOnFacingTile(GetDirection()); auto &Result : Results) {
+		if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr ||
+			(Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Talk)) == 0)
+			continue;
+		
+		IInteractable::Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);
+	}
+	
 }
 
 void AGamePlayer::PauseGame() {
