@@ -45,7 +45,7 @@ private:
 	/**
 	 * The table used to look up tile replacements
 	 */
-	UPROPERTY(EditAnywhere, Category = "Data")
+	UPROPERTY(EditAnywhere, Category = Tiles)
 	TObjectPtr<UDataTable> TileReplacementTable;
 
 	/**

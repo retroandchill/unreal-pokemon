@@ -32,13 +32,13 @@ public:
 	/**
 	 * Refresh the tiles, replacing any tiles that need to be replaced
 	 */
-	UFUNCTION(BlueprintCallable, CallInEditor, Category = Map)
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
 	void RefreshTileData();
 
 	/**
 	 * Clear all tile replacements, restoring the original tiles to their rightful place.
 	 */
-	UFUNCTION(BlueprintCallable, CallInEditor, Category = Map)
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
 	void ClearTileReplacements();
 #endif
 
@@ -110,7 +110,7 @@ private:
 	/**
 	 * The layer of the tilemap that is at the same level as the player
 	 */
-	UPROPERTY(EditAnywhere, Category = "Display", meta = (UIMin = 0, ClampMin = 0))
+	UPROPERTY(EditAnywhere, Category = "Z-Sorting", meta = (UIMin = 0, ClampMin = 0))
 	int32 PlayerLevelLayer = 1;
 
 	/**
