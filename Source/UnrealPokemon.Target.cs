@@ -18,7 +18,7 @@ public class UnrealPokemonTarget : TargetRules
 		{
 			"PokemonData", "PokemonEditorUtils", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
 			"RPGMenus", "PokemonUI", "RPGMenusEditor", "CommonMath", "PokemonTests", "PokemonUIDeveloper",
-			"PokemonDataDeveloper", "RPGMenusDeveloper", "UnrealPokemon"
+			"PokemonDataDeveloper", "RPGMenusDeveloper", "UnrealPokemon", "TileReplacer"
 		});
 	}
 }

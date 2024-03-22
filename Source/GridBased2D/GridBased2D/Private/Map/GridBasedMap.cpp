@@ -10,6 +10,7 @@
 #include "Map/MapAudioUtilities.h"
 #include "Map/MapSubsystem.h"
 #include "Map/WithinMap.h"
+#include "Replacement/TileReplacerComponent.h"
 
 // Sets default values
 AGridBasedMap::AGridBasedMap() {
@@ -38,7 +39,10 @@ AGridBasedMap::AGridBasedMap() {
 	RightBounds->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 	RightBounds->SetupAttachment(TileMapComponent);
 	SetBoundsPositions(true);
-	
+
+#if WITH_EDITORONLY_DATA
+	TileReplacer = CreateDefaultSubobject<UTileReplacerComponent>(TEXT("TileReplacer"));
+#endif
 }
 
 void AGridBasedMap::PostInitProperties() {
@@ -69,9 +73,14 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 void AGridBasedMap::BeginPlay() {
 	Super::BeginPlay();
 
+#if WITH_EDITORONLY_DATA
+	TileReplacer->ReplaceTiles(TileMapComponent);
+#endif
+	
 	if (auto Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)); Player != nullptr) {
 		UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 	}
+	
 }
 
 FIntRect AGridBasedMap::GetBounds() const {

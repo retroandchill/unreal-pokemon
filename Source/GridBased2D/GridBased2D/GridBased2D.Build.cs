@@ -24,7 +24,8 @@ public class GridBased2D : ModuleRules
 				"SlateCore",
 				"EnhancedInput",
 				"CommonMath",
-				"PokemonUtilities"
+				"PokemonUtilities",
+				"TileReplacer"
 			}
 		);
 	}

@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
+class UTileReplacerComponent;
 class IWithinMap;
 
 UCLASS(Blueprintable, ClassGroup=(Map))
@@ -83,6 +84,14 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UBoxComponent> RightBounds;
+
+#if WITH_EDITORONLY_DATA
+	/**
+	 * 
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UTileReplacerComponent> TileReplacer;
+#endif
 
 	/**
 	 * The layer of the tilemap that is at the same level as the player
