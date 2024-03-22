@@ -9,6 +9,7 @@
 #include "Asserts.h"
 #include "PaperTileMap.h"
 #include "PaperTileSet.h"
+#include "TileReplacerSettings.h"
 #include "Replacement/PaperTileReplacement.h"
 
 #define TRIPLE_LOOP(VarA, SizeA, VarB, SizeB, VarC, SizeC) \
@@ -18,11 +19,8 @@
 
 // Sets default values for this component's properties
 UTileReplacerComponent::UTileReplacerComponent() {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	auto Settings = GetDefault<UTileReplacerSettings>();
+	TileReplacementTable = Cast<UDataTable>(Settings->GetTileReplacementsTable().TryLoad());
 }
 
 void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapComponent) {
