@@ -28,6 +28,20 @@ public:
 
 	void BeginPlay() override;
 
+#if WITH_EDITORONLY_DATA
+	/**
+	 * Refresh the tiles, replacing any tiles that need to be replaced
+	 */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = Map)
+	void RefreshTileData();
+
+	/**
+	 * Clear all tile replacements, restoring the original tiles to their rightful place.
+	 */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = Map)
+	void ClearTileReplacements();
+#endif
+
 	/**
 	 * Get the bounds of the map in grid units.
 	 * @return The bounds of the map.
@@ -87,7 +101,7 @@ private:
 
 #if WITH_EDITORONLY_DATA
 	/**
-	 * 
+	 * The component used to replace tiles with animated/autotiles
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTileReplacerComponent> TileReplacer;

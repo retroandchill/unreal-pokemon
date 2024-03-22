@@ -8,7 +8,8 @@
 #include "Replacement/TileReplacement.h"
 #include "Asserts.h"
 #include "PaperTileMap.h"
-#include "Replacement/TileReplacementActor.h"
+#include "PaperTileSet.h"
+#include "Replacement/PaperTileReplacement.h"
 
 #define TRIPLE_LOOP(VarA, SizeA, VarB, SizeB, VarC, SizeC) \
 	for (decltype(SizeA) VarA = 0; VarA < SizeA; VarA++) \
@@ -24,8 +25,8 @@ UTileReplacerComponent::UTileReplacerComponent() {
 	// ...
 }
 
-void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapComponent) const {
-	GUARD_WARN(TileReplacementClass == nullptr, , TEXT("No tile replacement class set for component: %s"), *GetName())
+void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapComponent) {
+	GUARD_WARN(TileReplacementTable == nullptr, , TEXT("No tile replacement table set for component: %s"), *GetName())
 	
 	int32 SizeX;
 	int32 SizeY;
@@ -33,49 +34,44 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapCompone
 	TilemapComponent->GetMapSize(SizeX, SizeY, SizeZ);
 
 	// Since we're already looping so much let's pre-cache all the replacements
-	TMap<UPaperTileSet*, FTileReplacement*> TileReplacements;
-	TArray<FTileReplacement*> DataRows;
-	TileReplacementTable->GetAllRows(TEXT("TileReplacement"), DataRows);
-	for (auto Replacement : DataRows) {
-		TileReplacements.Add(Replacement->SourceTileSet, Replacement);
+	TMap<FName, FTileReplacement*> TileReplacements;
+	for (auto RowNames = TileReplacementTable->GetRowNames(); auto Row : RowNames) {
+		TileReplacements.Add(Row, TileReplacementTable->FindRow<FTileReplacement>(Row, TEXT("FindRow")));
 	}
 	
 	TRIPLE_LOOP(i, SizeX, j, SizeY, k, SizeZ) {
 		auto Tile = TilemapComponent->GetTile(i, j, k);
-		if (!TileReplacements.Contains(Tile.TileSet))
+		if (!Tile.IsValid())
 			continue;
-
-		Tile.PackedTileIndex = INDEX_NONE;
-		TilemapComponent->SetTile(i, j, k, Tile);
-
-		auto ReplacementData = TileReplacements[Tile.TileSet];
-		auto Actor = GetWorld()->SpawnActor<ATileReplacementActor>(TileReplacementClass);
+		
+		auto Metadata = Tile.TileSet->GetTileMetadata(Tile.GetTileIndex());
+		if (!TileReplacements.Contains(Metadata->UserDataName))
+			continue;
+		
+		auto ReplacementData = TileReplacements[Metadata->UserDataName];
+		auto Actor = GetWorld()->SpawnActor<AActor>(ReplacementData->TileReplacement);
 		Actor->AttachToActor(TilemapComponent->GetAttachParentActor(), FAttachmentTransformRules::KeepRelativeTransform);
-		Actor->SetReplacementMaterial(ReplacementData->ReplacementMaterial, ReplacementData->bCollisionEnabled);
-		Actor->SetActorRelativeLocation(FVector(
+		IPaperTileReplacement::Execute_ConfigureReplacement(Actor, Tile, *Metadata, ReplacementData->bCollisionEnabled);
+		Actor->SetActorRelativeLocation(TilemapComponent->GetRelativeLocation() + FVector(
 			i * TilemapComponent->TileMap->TileWidth,
 			j * TilemapComponent->TileMap->TileHeight,
-			TilemapComponent->GetRelativeLocation().Z - k * TilemapComponent->TileMap->SeparationPerLayer));
+			-k * TilemapComponent->TileMap->SeparationPerLayer));
+		Actor->SetActorRelativeRotation(TilemapComponent->GetRelativeRotation());
+
+		ReplacedTiles.Emplace(Tile, i, j, k, Actor);
+		Tile.PackedTileIndex = INDEX_NONE;
+		TilemapComponent->SetTile(i, j, k, Tile);
 	}
 
 	TilemapComponent->RebuildCollision();
 }
 
+void UTileReplacerComponent::RestoreCachedTiles(UPaperTileMapComponent* TileMapComponent) {
+	GUARD_WARN(TileMapComponent == nullptr, , TEXT("No tilemap component found for: %s"), *GetName())
+	for (auto &Replacement : ReplacedTiles) {
+		TileMapComponent->SetTile(Replacement.TileX, Replacement.TileY, Replacement.TileLayer, Replacement.OriginalTileInfo);
+		Replacement.Replacement->Destroy();
+	}
 
-// Called when the game starts
-void UTileReplacerComponent::BeginPlay() {
-	Super::BeginPlay();
-
-	// ...
-	
+	ReplacedTiles.Empty();
 }
-
-
-// Called every frame
-void UTileReplacerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                           FActorComponentTickFunction* ThisTickFunction) {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-

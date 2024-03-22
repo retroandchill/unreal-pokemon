@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ReplacedTile.h"
 #include "Components/ActorComponent.h"
 #include "TileReplacerComponent.generated.h"
 
@@ -25,18 +26,20 @@ public:
 	/**
 	 * Replace all specified tiles in the tilemap with the animated material.
 	 * <p></p>
-	 * <p><b>NOTE:</b> This is very inefficient, and should not be used during runtime. This should be called in the Editor
-	 * and on cook.</p>
+	 * <p><b>NOTE:</b> This is very inefficient, and should not be used during runtime. This should be called in the
+	 * Editor</p>
 	 * @param TilemapComponent The tilemap component to use.
 	 */
-	void ReplaceTiles(UPaperTileMapComponent *TilemapComponent) const;
+	void ReplaceTiles(UPaperTileMapComponent *TilemapComponent);
 
-protected:
-	void BeginPlay() override;
-
-public:
-	void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	/**
+	 * Revert all tile replacements and insert the old ones.
+	 * <p></p>
+	 * <p><b>NOTE:</b> This is very inefficient, and should not be used during runtime. This should be called in the
+	 * Editor</p>
+	 * @param TileMapComponent The tilemap component to use.
+	 */
+	void RestoreCachedTiles(UPaperTileMapComponent *TileMapComponent);
 
 private:
 	/**
@@ -46,9 +49,9 @@ private:
 	TObjectPtr<UDataTable> TileReplacementTable;
 
 	/**
-	 * The type of the component that needs to be replaced
+	 * A cache of replaced tiles used to restore the orginal tiles
 	 */
-	UPROPERTY(EditAnywhere, Category = "Tile Replacement")
-	TSubclassOf<ATileReplacementActor> TileReplacementClass;
+	UPROPERTY()
+	TArray<FReplacedTile> ReplacedTiles;
 	
 };

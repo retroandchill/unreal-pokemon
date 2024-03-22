@@ -17,8 +17,8 @@ struct TILEREPLACER_API FTileReplacement : public FTableRowBase {
  UPROPERTY(EditAnywhere, Category = "Tile Replacement")
  TObjectPtr<UPaperTileSet> SourceTileSet;
 
- UPROPERTY(EditAnywhere, Category = "Tile Replacement")
- TObjectPtr<UMaterialInterface> ReplacementMaterial;
+ UPROPERTY(EditAnywhere, Category = "Tile Replacement", meta = (MustImplement = "PaperTileReplacement"))
+ TSubclassOf<AActor> TileReplacement;
 
  UPROPERTY(EditAnywhere, Category = "Tile Replacement")
  bool bCollisionEnabled = false;

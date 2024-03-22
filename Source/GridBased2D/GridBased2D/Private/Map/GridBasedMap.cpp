@@ -72,16 +72,23 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 
 void AGridBasedMap::BeginPlay() {
 	Super::BeginPlay();
-
-#if WITH_EDITORONLY_DATA
-	TileReplacer->ReplaceTiles(TileMapComponent);
-#endif
 	
 	if (auto Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)); Player != nullptr) {
 		UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 	}
 	
 }
+
+#if WITH_EDITORONLY_DATA
+void AGridBasedMap::RefreshTileData() {
+	TileReplacer->RestoreCachedTiles(TileMapComponent);
+	TileReplacer->ReplaceTiles(TileMapComponent);
+}
+
+void AGridBasedMap::ClearTileReplacements() {
+	TileReplacer->RestoreCachedTiles(TileMapComponent);
+}
+#endif
 
 FIntRect AGridBasedMap::GetBounds() const {
 	auto RealLocation = GetActorLocation();
