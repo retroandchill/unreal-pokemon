@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interaction/Interactable.h"
+#include "Map/GridBasedMap.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
@@ -102,9 +103,24 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection,
 }
 
 FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirection) const {
-	auto Results = HitTestOnFacingTile(MovementDirection);
 	FMoveCheckResult Ret;
-	for (auto &Result : Results) {
+	auto Maps = GridBased2D::FindAllActors<AGridBasedMap>(this);
+	auto DestinationPosition = GetCurrentPosition();
+	GridBased2D::AdjustMovementPosition(MovementDirection, DestinationPosition);
+	bool bMapFound = false;
+	for (auto Map : Maps) {
+		if (Map->IsPositionInMap(DestinationPosition)) {
+			bMapFound = true;
+			break;
+		}
+	}
+
+	if (!bMapFound) {
+		Ret.bCanMove = false;
+		return Ret;
+	}
+
+	for (auto Results = HitTestOnFacingTile(MovementDirection); auto &Result : Results) {
 		if (Result.bBlockingHit) {
 			Ret.bCanMove = false;
 		}

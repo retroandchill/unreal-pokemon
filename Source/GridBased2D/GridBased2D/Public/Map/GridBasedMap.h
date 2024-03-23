@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
+class AGameCharacter;
 class UTileReplacerComponent;
 class IWithinMap;
 
@@ -56,6 +57,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = Objects)
 	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
 
+	/**
+	 * Check if the given position is inside the map in question
+	 * @param Position The position to check
+	 * @return Is the position inside the map
+	 */
+	bool IsPositionInMap(const FIntVector2 &Position) const;
+
 private:
 	/**
 	 * Set up the location of the map based on the configured properties
@@ -64,40 +72,10 @@ private:
 	void SetUpMapLocation(bool bFinishedMoving = true);
 
 	/**
-	 * Set up the locations of the bounds relative to the tilemap
-	 * @param bIsInitializing Is this being called from the constructor
-	 */
-	void SetBoundsPositions(bool bIsInitializing = false);
-
-	/**
 	 * The tilemap to use for this asset
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPaperTileMapComponent> TileMapComponent;
-
-	/**
-	 * The bounds at the top of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> TopBounds;
-
-	/**
-	 * The bounds at the bottom of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> BottomBounds;
-
-	/**
-	 * The bounds at the left of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> LeftBounds;
-
-	/**
-	 * The bounds at the right of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> RightBounds;
 
 #if WITH_EDITORONLY_DATA
 	/**
@@ -118,5 +96,11 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Audio)
 	TObjectPtr<USoundBase> BackgroundMusic;
+
+	/**
+	 * The list of characters contained within this map
+	 */
+	UPROPERTY()
+	TArray<TObjectPtr<AGameCharacter>> Characters;
 	
 };

@@ -2,6 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Asserts.h"
+#include "EngineUtils.h"
 #include "Characters/FacingDirection.h"
 
 namespace GridBased2D {
@@ -48,4 +50,24 @@ namespace GridBased2D {
 	 * @return The opposing direction
 	 */
 	GRIDBASED2D_API TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
+
+	/**
+	 * Get a list of all actors of the given type
+	 * @tparam T The type of actor to look for
+	 * @param WorldContext The object used to obtain the world context 
+	 * @return The found actors
+	 */
+	template <typename T>
+	requires std::is_base_of_v<AActor, T>
+	TArray<T*> FindAllActors(const UObject* WorldContext) {
+		TArray<T*> Ret;
+		auto World = WorldContext->GetWorld();
+		ASSERT(World != nullptr)
+
+		for (TActorIterator<T> It(World); It; ++It) {
+			Ret.Emplace(*It);
+		}
+
+		return Ret;
+	}
 }
