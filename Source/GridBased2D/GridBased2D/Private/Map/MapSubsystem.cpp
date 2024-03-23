@@ -93,7 +93,7 @@ void UMapSubsystem::SetPlayerLocation(AGameCharacter* PlayerCharacter) {
 }
 
 void UMapSubsystem::UpdateCharacterMapPosition(AGameCharacter* Character) {
-	auto Maps = GridBased2D::FindAllActors<AGridBasedMap>(Character);
+	auto Maps = UGridUtils::FindAllActors<AGridBasedMap>(Character);
 	AGridBasedMap* OldMap = nullptr;
 	AGridBasedMap* NewMap = nullptr;
 	for (auto Map : Maps) {

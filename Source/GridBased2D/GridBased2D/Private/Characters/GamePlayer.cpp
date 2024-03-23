@@ -7,6 +7,7 @@
 #include "Characters/Charset.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GridBasedGameModeBase.h"
 #include "GridUtils.h"
 #include "Actions/Action.h"
 #include "Interaction/Interactable.h"
@@ -92,7 +93,7 @@ void AGamePlayer::HitInteraction(const TArray<TScriptInterface<IInteractable>>& 
 
 void AGamePlayer::Move(const FInputActionInstance& Input) {
 	auto Vector = Input.GetValue().Get<FVector2D>();
-	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
+	auto Dir = UGridUtils::VectorToFacingDirection(Vector);
 	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
 
@@ -101,7 +102,7 @@ void AGamePlayer::Move(const FInputActionInstance& Input) {
 
 void AGamePlayer::Turn(const FInputActionInstance& Input) {
 	auto Vector = Input.GetValue().Get<FVector2D>();
-	auto Dir = GridBased2D::VectorToFacingDirection(Vector);
+	auto Dir = UGridUtils::VectorToFacingDirection(Vector);
 	if (!Dir.IsSet() || GetCurrentPosition() != GetDesiredPosition())
 		return;
 

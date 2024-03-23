@@ -5,19 +5,27 @@
 #include "Asserts.h"
 #include "EngineUtils.h"
 #include "Characters/FacingDirection.h"
+#include "GridUtils.generated.h"
 
-namespace GridBased2D {
+class AGridBasedGameModeBase;
+/**
+ * Utility library for functions regarding the Grid system
+ */
+UCLASS()
+class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+public:
 	/**
 	 * The size of the grid according to the game
 	 */
-	constexpr double GRID_SIZE = 32.0f;
+	static constexpr double GRID_SIZE = 32.0f;
 
 	/**
 	 * Convert a vector into a facing direction
 	 * @param Vector The input vector
 	 * @return The interpreted direction
 	 */
-	GRIDBASED2D_API TOptional<EFacingDirection> VectorToFacingDirection(const FVector2D Vector);
+	 static TOptional<EFacingDirection> VectorToFacingDirection(const FVector2D Vector);
 
 	/**
 	 * Adjust the movement position based upon the given direction
@@ -26,7 +34,7 @@ namespace GridBased2D {
 	 * @param Position The position struct to alter
 	 */
 	template <typename Vector>
-	void AdjustMovementPosition(EFacingDirection MovementDirection, Vector& Position) {
+	static void AdjustMovementPosition(EFacingDirection MovementDirection, Vector& Position) {
 		switch (MovementDirection) {
 			using enum EFacingDirection;
 		case Down:
@@ -49,7 +57,7 @@ namespace GridBased2D {
 	 * @param Direction The original direction
 	 * @return The opposing direction
 	 */
-	GRIDBASED2D_API TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
+	static TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
 
 	/**
 	 * Get a list of all actors of the given type
@@ -59,7 +67,7 @@ namespace GridBased2D {
 	 */
 	template <typename T>
 	requires std::is_base_of_v<AActor, T>
-	TArray<T*> FindAllActors(const UObject* WorldContext) {
+	static TArray<T*> FindAllActors(const UObject* WorldContext) {
 		TArray<T*> Ret;
 		auto World = WorldContext->GetWorld();
 		ASSERT(World != nullptr)
@@ -70,4 +78,12 @@ namespace GridBased2D {
 
 		return Ret;
 	}
-}
+
+	/**
+	 * Returns the current Game Mode as a GridBasedGameModeBase
+	 * @param WorldContext The context object used to retrieve the game mode
+	 * @return The found game mode
+	 */
+	UFUNCTION(BlueprintPure, Category = "Game", meta=(WorldContext="WorldContext"))
+	static AGridBasedGameModeBase* GetGridBasedGameMode(UObject* WorldContext);
+};

@@ -6,7 +6,7 @@
 
 
 void AGameNPC::OnInteract_Implementation(AGameCharacter* Character, EInteractionType InteractionType) {
-	if (auto OpposingDirection = GridBased2D::GetOpposingDirection(Character->GetDirection()); OpposingDirection.
+	if (auto OpposingDirection = UGridUtils::GetOpposingDirection(Character->GetDirection()); OpposingDirection.
 		IsSet()) {
 		FaceDirection(OpposingDirection.GetValue());
 	}

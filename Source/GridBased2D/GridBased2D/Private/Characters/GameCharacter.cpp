@@ -17,7 +17,7 @@ AGameCharacter::AGameCharacter() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	float BoxSize = static_cast<float>(GridBased2D::GRID_SIZE) / 2;
+	float BoxSize = static_cast<float>(UGridUtils::GRID_SIZE) / 2;
 	auto Capsule = GetCapsuleComponent();
 	Capsule->SetCapsuleRadius(BoxSize);
 	Capsule->SetCapsuleHalfHeight(BoxSize);
@@ -64,8 +64,8 @@ void AGameCharacter::PostEditMove(bool bFinished) {
 void AGameCharacter::BeginPlay() {
 	Super::BeginPlay();
 	auto Position = GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt32(Position.X / GridBased2D::GRID_SIZE);
-	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridBased2D::GRID_SIZE);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GRID_SIZE);
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GRID_SIZE);
 
 	DesiredPosition = CurrentPosition;
 
@@ -89,7 +89,7 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 		return;
 	}
 
-	GridBased2D::AdjustMovementPosition(MovementDirection, DesiredPosition);
+	UGridUtils::AdjustMovementPosition(MovementDirection, DesiredPosition);
 
 	MoveTimer.Emplace(0.f);
 	StopTimer.Reset();
@@ -105,9 +105,9 @@ void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection,
 
 FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirection) const {
 	FMoveCheckResult Ret;
-	auto Maps = GridBased2D::FindAllActors<AGridBasedMap>(this);
+	auto Maps = UGridUtils::FindAllActors<AGridBasedMap>(this);
 	auto DestinationPosition = GetCurrentPosition();
-	GridBased2D::AdjustMovementPosition(MovementDirection, DestinationPosition);
+	UGridUtils::AdjustMovementPosition(MovementDirection, DestinationPosition);
 	bool bMapFound = false;
 	for (auto Map : Maps) {
 		if (Map->IsPositionInMap(DestinationPosition)) {
@@ -144,19 +144,19 @@ void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
 void AGameCharacter::WarpToLocation(int32 X, int32 Y) {
 	CurrentPosition = DesiredPosition = {X, Y};
 	auto CurrentLocation = GetActorLocation();
-	CurrentLocation.X = X * GridBased2D::GRID_SIZE;
-	CurrentLocation.Y = Y * GridBased2D::GRID_SIZE;
+	CurrentLocation.X = X * UGridUtils::GRID_SIZE;
+	CurrentLocation.Y = Y * UGridUtils::GRID_SIZE;
 	SetActorLocation(CurrentLocation);
 }
 
 TArray<FHitResult> AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
-	static constexpr auto FloatGridSize = static_cast<float>(GridBased2D::GRID_SIZE);
+	static constexpr auto FloatGridSize = static_cast<float>(UGridUtils::GRID_SIZE);
 
 	FVector LocalOffset(0, 0, 0);
-	GridBased2D::AdjustMovementPosition(MovementDirection, LocalOffset);
+	UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
 
 	auto Position = GetActorLocation();
-	auto GridPosition = LocalOffset * GridBased2D::GRID_SIZE + Position;
+	auto GridPosition = LocalOffset * UGridUtils::GRID_SIZE + Position;
 	FCollisionShape GridSquare;
 	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
 	FCollisionQueryParams Params;
@@ -181,8 +181,8 @@ void AGameCharacter::InitCharacterData() {
 	CharacterSprite->SetTranslucentSortPriority(static_cast<int32>(GetActorLocation().Y));
 
 	auto Position = GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt32(Position.X / GridBased2D::GRID_SIZE);
-	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridBased2D::GRID_SIZE);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GRID_SIZE);
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GRID_SIZE);
 
 	DesiredPosition = CurrentPosition;
 
@@ -209,8 +209,8 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridBased2D::GRID_SIZE,
-		                                                 DesiredPosition.X * GridBased2D::GRID_SIZE,
+		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * UGridUtils::GRID_SIZE,
+		                                                 DesiredPosition.X * UGridUtils::GRID_SIZE,
 		                                                 MoveSpeed * Distance,
 		                                                 Timer);
 
@@ -221,8 +221,8 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridBased2D::GRID_SIZE,
-		                                                 DesiredPosition.Y * GridBased2D::GRID_SIZE,
+		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * UGridUtils::GRID_SIZE,
+		                                                 DesiredPosition.Y * UGridUtils::GRID_SIZE,
 		                                                 MoveSpeed * Distance,
 		                                                 Timer);
 

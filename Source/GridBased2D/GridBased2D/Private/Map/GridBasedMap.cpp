@@ -62,7 +62,7 @@ void AGridBasedMap::BeginPlay() {
 		OnPlayerEnter();
 	}
 
-	auto InitialCharacters = GridBased2D::FindAllActors<AGameCharacter>(this);
+	auto InitialCharacters = UGridUtils::FindAllActors<AGameCharacter>(this);
 	Characters.Empty();
 	for (auto Char : InitialCharacters) {
 		Characters.Emplace(Char);
@@ -82,8 +82,8 @@ void AGridBasedMap::ClearTileReplacements() {
 
 FIntRect AGridBasedMap::GetBounds() const {
 	auto RealLocation = GetActorLocation();
-	int32 X = FMath::FloorToInt32(RealLocation.X / GridBased2D::GRID_SIZE);
-	int32 Y = FMath::FloorToInt32(RealLocation.Y / GridBased2D::GRID_SIZE);
+	int32 X = FMath::FloorToInt32(RealLocation.X / UGridUtils::GRID_SIZE);
+	int32 Y = FMath::FloorToInt32(RealLocation.Y / UGridUtils::GRID_SIZE);
 	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
