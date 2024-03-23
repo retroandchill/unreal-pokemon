@@ -82,14 +82,23 @@ void AGameCharacter::Tick(float DeltaTime) {
 
 void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	FaceDirection(MovementDirection);
-	auto [bCanMove, FoundActors] = MovementCheck(MovementDirection);
-	HitInteraction(FoundActors);
-	GUARD(!bCanMove, )
+	if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
+		HitInteraction(FoundActors);
+		return;
+	}
 
 	GridBased2D::AdjustMovementPosition(MovementDirection, DesiredPosition);
 
 	MoveTimer.Emplace(0.f);
 	StopTimer.Reset();
+}
+
+void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection,
+	TFunction<void()> &&MovementCompleteCallback) {
+	GUARD_WARN(MoveCallback.IsSet(), , TEXT("The movement timer is already set for character: %s"), *GetName())
+
+	MoveCallback.Emplace(MoveTemp(MovementCompleteCallback));
+	MoveInDirection(MovementDirection);
 }
 
 FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirection) const {
@@ -205,6 +214,10 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	if (CurrentPosition == DesiredPosition) {
 		MoveTimer.Reset();
 		StopTimer.Emplace(0.f);
+
+		if (MoveCallback.IsSet()) {
+			MoveCallback.GetValue()();
+		}
 	}
 }
 

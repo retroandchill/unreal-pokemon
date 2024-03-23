@@ -71,6 +71,8 @@ void AGamePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void AGamePlayer::HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) {
 	Super::HitInteraction(Interactables);
 	for (auto &Interactable : Interactables) {
+		if ((Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Hit)) == 0)
+			continue;
 		IInteractable::Execute_OnInteract(Interactable.GetObject(), this, EInteractionType::Hit);
 	}
 }
@@ -95,9 +97,10 @@ void AGamePlayer::Turn(const FInputActionInstance& Input) {
 
 void AGamePlayer::Interact() {
 	for (auto Results = HitTestOnFacingTile(GetDirection()); auto &Result : Results) {
-		if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr)
+		if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable == nullptr ||
+			(Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Talk)) == 0)
 			continue;
-
+		
 		IInteractable::Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);
 	}
 	

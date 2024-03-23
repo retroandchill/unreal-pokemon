@@ -47,6 +47,13 @@ public:
 	void MoveInDirection(EFacingDirection MovementDirection);
 
 	/**
+	 * Move the character in the specified direction
+	 * @param MovementDirection The direction to move the character in
+	 * @param MovementCompleteCallback The functor to call when movement is completed
+	 */
+	void MoveInDirection(EFacingDirection MovementDirection, TFunction<void()> &&MovementCompleteCallback);
+
+	/**
 	 * Check to see if the character can move in the specified direction
 	 * @param MovementDirection The direction the character would like to move in
 	 * @return Can the character move to that tile, as well and any interactable objects found when the check is done
@@ -162,7 +169,13 @@ private:
 	TOptional<float> MoveTimer;
 
 	/**
+	 * The callback for when movement is complete
+	 */
+	TOptional<TFunction<void()>> MoveCallback;
+
+	/**
 	 * The timer for movement used to determine where to stop animation
 	 */
 	TOptional<float> StopTimer;
+	
 };
