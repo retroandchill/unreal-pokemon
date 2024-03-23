@@ -73,7 +73,9 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 void AGridBasedMap::BeginPlay() {
 	Super::BeginPlay();
 	
-	if (auto Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)); Player != nullptr) {
+	if (auto Player = Cast<AGameCharacter>(
+		UGameplayStatics::GetPlayerCharacter(this, 0));
+		Player != nullptr && IsObjectInMap(Player)) {
 		UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 	}
 	
