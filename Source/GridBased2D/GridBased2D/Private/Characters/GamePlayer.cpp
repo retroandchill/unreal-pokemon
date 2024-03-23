@@ -10,6 +10,7 @@
 #include "GridUtils.h"
 #include "Actions/Action.h"
 #include "Interaction/Interactable.h"
+#include "Map/GridBasedMap.h"
 #include "Map/MapSubsystem.h"
 
 
@@ -53,6 +54,18 @@ void AGamePlayer::BeginPlay() {
 			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+}
+
+bool AGamePlayer::CanMoveBetweenMaps() const {
+	return IsPlayerControlled();
+}
+
+void AGamePlayer::OnMapChanged(AGridBasedMap* NewMap) {
+	Super::OnMapChanged(NewMap);
+
+	if (IsPlayerControlled()) {
+		NewMap->OnPlayerEnter();
 	}
 }
 

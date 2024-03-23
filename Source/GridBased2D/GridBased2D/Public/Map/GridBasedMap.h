@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
+#include "Characters/GameCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
@@ -54,8 +55,7 @@ public:
 	 * @param Object The object to check the position of
 	 * @return Is the object inside this bound of this map?
 	 */
-	UFUNCTION(BlueprintPure, Category = Objects)
-	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
+	bool IsObjectInMap(const IWithinMap* Object) const;
 
 	/**
 	 * Check if the given position is inside the map in question
@@ -63,6 +63,30 @@ public:
 	 * @return Is the position inside the map
 	 */
 	bool IsPositionInMap(const FIntVector2 &Position) const;
+
+	/**
+	 * Check if the given character is part of the map according to its list of contained characters.
+	 * @param Character The characters to check?
+	 * @return Does this map consider this character a part of itself?
+	 */
+	bool IsCharacterPartOfMap(const AGameCharacter* Character) const;
+
+	/**
+	 * Add a character to this map
+	 * @param Character The character to add
+	 */
+	void AddCharacter(AGameCharacter* Character);
+
+	/**
+	 * Remove a character from this map
+	 * @param Character The character to remove
+	 */
+	void RemoveCharacter(AGameCharacter* Character);
+
+	/**
+	 * Called when the player enters the map
+	 */
+	void OnPlayerEnter();
 
 private:
 	/**
@@ -101,6 +125,6 @@ private:
 	 * The list of characters contained within this map
 	 */
 	UPROPERTY()
-	TArray<TObjectPtr<AGameCharacter>> Characters;
+	TSet<TWeakObjectPtr<AGameCharacter>> Characters;
 	
 };

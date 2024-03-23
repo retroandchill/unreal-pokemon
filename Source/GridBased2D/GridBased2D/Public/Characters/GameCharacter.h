@@ -8,6 +8,7 @@
 #include "Map/WithinMap.h"
 #include "GameCharacter.generated.h"
 
+class AGridBasedMap;
 struct FInputActionInstance;
 class UPaperFlipbook;
 class UCharset;
@@ -60,6 +61,12 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Character|Movement")
 	FMoveCheckResult MovementCheck(EFacingDirection MovementDirection) const;
+
+	/**
+	 * Can this character move between the various maps of the overworld
+	 * @return Can the character move between maps?
+	 */
+	virtual bool CanMoveBetweenMaps() const;
 	
 	/**
 	 * Turn the character to face a specific direction
@@ -108,6 +115,19 @@ private:
 	 * @param DeltaTime The amount of time that has passed since the previous frame
 	 */
 	void UpdateAnimation(float DeltaTime);
+
+	/**
+	 * Called when the player completes their movement cycle
+	 */
+	void OnMoveComplete();
+
+	
+public:
+	/**
+	 * Called when the player changes maps
+	 * @param NewMap The new map the player changes to
+	 */
+	virtual void OnMapChanged(AGridBasedMap* NewMap);
 
 protected:
 	/**

@@ -59,10 +59,14 @@ void AGridBasedMap::BeginPlay() {
 	if (auto Player = Cast<AGameCharacter>(
 		UGameplayStatics::GetPlayerCharacter(this, 0));
 		Player != nullptr && IsObjectInMap(Player)) {
-		UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
+		OnPlayerEnter();
 	}
 
-	Characters = GridBased2D::FindAllActors<AGameCharacter>(this);
+	auto InitialCharacters = GridBased2D::FindAllActors<AGameCharacter>(this);
+	Characters.Empty();
+	for (auto Char : InitialCharacters) {
+		Characters.Emplace(Char);
+	}
 }
 
 #if WITH_EDITORONLY_DATA
@@ -83,12 +87,29 @@ FIntRect AGridBasedMap::GetBounds() const {
 	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
-bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
+bool AGridBasedMap::IsObjectInMap(const IWithinMap* Object) const {
 	return IsPositionInMap(Object->GetCurrentPosition());
 }
 
 bool AGridBasedMap::IsPositionInMap(const FIntVector2& Position) const {
 	return GetBounds().Contains({Position.X, Position.Y});
+}
+
+bool AGridBasedMap::IsCharacterPartOfMap(const AGameCharacter* Character) const {
+	return Characters.Contains(Character);
+}
+
+void AGridBasedMap::AddCharacter(AGameCharacter* Character) {
+	Characters.Emplace(Character);
+	Character->OnMapChanged(this);
+}
+
+void AGridBasedMap::RemoveCharacter(AGameCharacter* Character) {
+	Characters.Remove(Character);
+}
+
+void AGridBasedMap::OnPlayerEnter() {
+	UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {

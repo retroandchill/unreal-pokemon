@@ -4,7 +4,9 @@
 #include "Map/MapSubsystem.h"
 
 #include "Asserts.h"
+#include "GridUtils.h"
 #include "Characters/GameCharacter.h"
+#include "Map/GridBasedMap.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -88,4 +90,33 @@ void UMapSubsystem::SetPlayerLocation(AGameCharacter* PlayerCharacter) {
 	PlayerCharacter->WarpToLocation(X, Y);
 	PlayerCharacter->FaceDirection(Direction);
 	WarpDestination.Reset();
+}
+
+void UMapSubsystem::UpdateCharacterMapPosition(AGameCharacter* Character) {
+	auto Maps = GridBased2D::FindAllActors<AGridBasedMap>(Character);
+	AGridBasedMap* OldMap = nullptr;
+	AGridBasedMap* NewMap = nullptr;
+	for (auto Map : Maps) {
+		if (OldMap == nullptr && Map->IsCharacterPartOfMap(Character)) {
+			OldMap = Map;
+		}
+		
+		if (NewMap == nullptr && Map->IsPositionInMap(Character->GetCurrentPosition())) {
+			NewMap = Map;
+		}
+
+		if (OldMap != nullptr && NewMap != nullptr) {
+			break;
+		}
+	}
+
+	GUARD(OldMap == NewMap, )
+
+	if (OldMap != nullptr) {
+			OldMap->RemoveCharacter(Character);
+	}
+
+	if (NewMap != nullptr) {
+		NewMap->AddCharacter(Character);
+	}
 }

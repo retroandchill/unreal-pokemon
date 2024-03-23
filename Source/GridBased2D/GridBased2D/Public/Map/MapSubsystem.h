@@ -99,6 +99,12 @@ public:
 	 * @param PlayerCharacter The character to set the location of
 	 */
 	void SetPlayerLocation(AGameCharacter* PlayerCharacter);
+
+	/**
+	 * Update what map the player is considered to be a part of
+	 * @param Character The character in question
+	 */
+	void UpdateCharacterMapPosition(AGameCharacter* Character);
 	
 private:
 	/**

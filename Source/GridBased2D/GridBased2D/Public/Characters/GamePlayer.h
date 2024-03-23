@@ -28,6 +28,8 @@ protected:
 	void BeginPlay() override;
 
 public:
+	bool CanMoveBetweenMaps() const override;
+	void OnMapChanged(AGridBasedMap* NewMap) override;
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:

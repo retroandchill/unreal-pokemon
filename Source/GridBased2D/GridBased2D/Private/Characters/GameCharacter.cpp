@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interaction/Interactable.h"
 #include "Map/GridBasedMap.h"
+#include "Map/MapSubsystem.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
@@ -110,7 +111,7 @@ FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirectio
 	bool bMapFound = false;
 	for (auto Map : Maps) {
 		if (Map->IsPositionInMap(DestinationPosition)) {
-			bMapFound = true;
+			bMapFound = Map->IsObjectInMap(this) || CanMoveBetweenMaps();
 			break;
 		}
 	}
@@ -130,6 +131,10 @@ FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirectio
 		}
 	}
 	return Ret;
+}
+
+bool AGameCharacter::CanMoveBetweenMaps() const {
+	return false;
 }
 
 void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
@@ -228,12 +233,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 
 	SetActorLocation(Position);
 	if (CurrentPosition == DesiredPosition) {
-		MoveTimer.Reset();
-		StopTimer.Emplace(0.f);
-
-		if (MoveCallback.IsSet()) {
-			MoveCallback.GetValue()();
-		}
+		OnMoveComplete();
 	}
 }
 
@@ -257,6 +257,23 @@ void AGameCharacter::UpdateAnimation(float DeltaTime) {
 	}
 
 	CharacterSprite->SetTranslucentSortPriority(static_cast<int32>(GetActorLocation().Y));
+}
+
+void AGameCharacter::OnMoveComplete() {
+	MoveTimer.Reset();
+	StopTimer.Emplace(0.f);
+	
+	if (MoveCallback.IsSet()) {
+		MoveCallback.GetValue()();
+	}
+
+	auto MapSubsystem = GetGameInstance()->GetSubsystem<UMapSubsystem>();
+	ASSERT(MapSubsystem != nullptr)
+	MapSubsystem->UpdateCharacterMapPosition(this);
+}
+
+void AGameCharacter::OnMapChanged(AGridBasedMap* NewMap) {
+	// No implementation here for now
 }
 
 void AGameCharacter::SetCharset(UCharset* NewCharset) {
