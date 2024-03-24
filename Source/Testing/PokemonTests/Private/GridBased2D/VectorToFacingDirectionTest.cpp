@@ -32,7 +32,7 @@ bool VectorToFacingDirectionTest::RunTest(const FString& Parameters) {
 	InputStream >> X >> Y >> DirValue;
 
 	auto ExpectedDir = static_cast<EFacingDirection>(DirValue);
-	auto ActualDir = GridBased2D::VectorToFacingDirection(FVector2D(X, Y));
+	auto ActualDir = UGridUtils::VectorToFacingDirection(FVector2D(X, Y));
 	return TestTrue("Direction should be valid!", ActualDir.IsSet()) &&
 		TestEqual("Direction should match vector!", ExpectedDir, ActualDir.GetValue());
 }

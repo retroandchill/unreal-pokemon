@@ -6,11 +6,15 @@
 #include "Characters/Charset.h"
 #include "Charset/CharsetAssetActions.h"
 #include "Charset/CharsetThumbnailRenderer.h"
+#include "Details/GridBasedMapDetails.h"
 
 constexpr auto GLoctextNamespace = "FGridBased2DEditorModule";
 
 void FGridBased2DEditorModule::StartupModule() {
 	FCoreDelegates::OnPostEngineInit.AddRaw(this, &FGridBased2DEditorModule::OnPostEngineInit);
+
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	PropertyModule.RegisterCustomClassLayout("GridBasedMap", FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedMapDetails::MakeInstance));
 }
 
 void FGridBased2DEditorModule::OnPostEngineInit() const {

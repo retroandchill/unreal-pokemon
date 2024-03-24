@@ -65,5 +65,8 @@ private:
 	 */
 	FText Message;
 
+	/**
+	 * The choices to display
+	 */
 	TArray<FText> Choices;
 };

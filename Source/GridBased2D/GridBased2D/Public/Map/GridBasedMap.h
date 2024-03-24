@@ -4,9 +4,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
+#include "Characters/GameCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
+class AGameCharacter;
+class UTileReplacerComponent;
 class IWithinMap;
 
 UCLASS(Blueprintable, ClassGroup=(Map))
@@ -27,6 +30,20 @@ public:
 
 	void BeginPlay() override;
 
+#if WITH_EDITORONLY_DATA
+	/**
+	 * Refresh the tiles, replacing any tiles that need to be replaced
+	 */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
+	void RefreshTileData();
+
+	/**
+	 * Clear all tile replacements, restoring the original tiles to their rightful place.
+	 */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
+	void ClearTileReplacements();
+#endif
+
 	/**
 	 * Get the bounds of the map in grid units.
 	 * @return The bounds of the map.
@@ -38,8 +55,46 @@ public:
 	 * @param Object The object to check the position of
 	 * @return Is the object inside this bound of this map?
 	 */
-	UFUNCTION(BlueprintPure, Category = Objects)
+	bool IsObjectInMap(const IWithinMap* Object) const;
+
+	/**
+	 * Check if the the current object is inside the map in question.
+	 * @param Object The object to check the position of
+	 * @return Is the object inside this bound of this map?
+	 */
+	UFUNCTION(BlueprintPure, Category = Maps)
 	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
+
+	/**
+	 * Check if the given position is inside the map in question
+	 * @param Position The position to check
+	 * @return Is the position inside the map
+	 */
+	bool IsPositionInMap(const FIntVector2 &Position) const;
+
+	/**
+	 * Check if the given character is part of the map according to its list of contained characters.
+	 * @param Character The characters to check?
+	 * @return Does this map consider this character a part of itself?
+	 */
+	bool IsCharacterPartOfMap(const AGameCharacter* Character) const;
+
+	/**
+	 * Add a character to this map
+	 * @param Character The character to add
+	 */
+	void AddCharacter(AGameCharacter* Character);
+
+	/**
+	 * Remove a character from this map
+	 * @param Character The character to remove
+	 */
+	void RemoveCharacter(AGameCharacter* Character);
+
+	/**
+	 * Called when the player enters the map
+	 */
+	void OnPlayerEnter();
 
 private:
 	/**
@@ -49,51 +104,23 @@ private:
 	void SetUpMapLocation(bool bFinishedMoving = true);
 
 	/**
-	 * Set up the locations of the bounds relative to the tilemap
-	 * @param bIsInitializing Is this being called from the constructor
-	 */
-	void SetBoundsPositions(bool bIsInitializing = false);
-
-	/**
-	 * The TileMap object that this map holds.
-	 */
-	UPROPERTY(EditAnywhere, Category = "Display")
-	TObjectPtr<UPaperTileMap> TileMap;
-
-	/**
 	 * The tilemap to use for this asset
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPaperTileMapComponent> TileMapComponent;
 
+#if WITH_EDITORONLY_DATA
 	/**
-	 * The bounds at the top of the map
+	 * The component used to replace tiles with animated/autotiles
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> TopBounds;
-
-	/**
-	 * The bounds at the bottom of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> BottomBounds;
-
-	/**
-	 * The bounds at the left of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> LeftBounds;
-
-	/**
-	 * The bounds at the right of the map
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UBoxComponent> RightBounds;
+	TObjectPtr<UTileReplacerComponent> TileReplacer;
+#endif
 
 	/**
 	 * The layer of the tilemap that is at the same level as the player
 	 */
-	UPROPERTY(EditAnywhere, Category = "Display", meta = (UIMin = 0, ClampMin = 0))
+	UPROPERTY(EditAnywhere, Category = "Z-Sorting", meta = (UIMin = 0, ClampMin = 0))
 	int32 PlayerLevelLayer = 1;
 
 	/**
@@ -101,5 +128,11 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = Audio)
 	TObjectPtr<USoundBase> BackgroundMusic;
+
+	/**
+	 * The list of characters contained within this map
+	 */
+	UPROPERTY()
+	TSet<TWeakObjectPtr<AGameCharacter>> Characters;
 	
 };
