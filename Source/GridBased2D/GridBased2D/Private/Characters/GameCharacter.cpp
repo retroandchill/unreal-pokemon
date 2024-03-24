@@ -85,6 +85,11 @@ void AGameCharacter::Tick(float DeltaTime) {
 void AGameCharacter::MoveInDirection(EFacingDirection MovementDirection) {
 	FaceDirection(MovementDirection);
 	if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
+		if (MoveCallback.IsSet()) {
+			auto Callback = MoveTemp(MoveCallback.GetValue());
+			MoveCallback.Reset();
+			Callback();
+		}
 		HitInteraction(FoundActors);
 		return;
 	}
