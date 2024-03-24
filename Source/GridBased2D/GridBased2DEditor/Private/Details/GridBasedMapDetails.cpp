@@ -15,4 +15,5 @@ void FGridBasedMapDetails::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 	DetailBuilder.EditCategory("Audio", FText::GetEmpty(), ECategoryPriority::Important);
 	DetailBuilder.EditCategory("Tiles", FText::GetEmpty(), ECategoryPriority::Important);
 	DetailBuilder.EditCategory("Z-Sorting", FText::GetEmpty(), ECategoryPriority::Important);
+	DetailBuilder.EditCategory("Connections", FText::GetEmpty(), ECategoryPriority::Important);
 }

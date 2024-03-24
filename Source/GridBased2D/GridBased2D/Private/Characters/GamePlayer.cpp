@@ -11,6 +11,7 @@
 #include "GridUtils.h"
 #include "Actions/Action.h"
 #include "Interaction/Interactable.h"
+#include "Kismet/GameplayStatics.h"
 #include "Map/GridBasedMap.h"
 #include "Map/MapSubsystem.h"
 
@@ -23,7 +24,7 @@ AGamePlayer::AGamePlayer() {
 	// Create a camera boom attached to the root (capsule)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->TargetArmLength = 50.0f;
 	CameraBoom->SocketOffset = FVector(0.0f, 0.0f, 0.0f);
 	CameraBoom->SetUsingAbsoluteRotation(true);
 	CameraBoom->bDoCollisionTest = false;
