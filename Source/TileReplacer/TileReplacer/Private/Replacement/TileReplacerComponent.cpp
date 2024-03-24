@@ -32,9 +32,11 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapCompone
 	TilemapComponent->GetMapSize(SizeX, SizeY, SizeZ);
 
 	// Since we're already looping so much let's pre-cache all the replacements
-	TMap<FName, FTileReplacement*> TileReplacements;
-	for (auto RowNames = TileReplacementTable->GetRowNames(); auto Row : RowNames) {
-		TileReplacements.Add(Row, TileReplacementTable->FindRow<FTileReplacement>(Row, TEXT("FindRow")));
+	TMap<FPaperTileInfo, FTileReplacement*> TileReplacements;
+	TArray<FTileReplacement*> Replacements;
+	TileReplacementTable->GetAllRows<FTileReplacement>(TEXT("TileReplacements"), Replacements);
+	for (auto Replacement : Replacements) {
+		TileReplacements.Add(Replacement->SourceTile, Replacement);
 	}
 	
 	TRIPLE_LOOP(i, SizeX, j, SizeY, k, SizeZ) {
@@ -42,11 +44,11 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapCompone
 		if (!Tile.IsValid())
 			continue;
 		
-		auto Metadata = Tile.TileSet->GetTileMetadata(Tile.GetTileIndex());
-		if (!TileReplacements.Contains(Metadata->UserDataName))
+		if (!TileReplacements.Contains(Tile))
 			continue;
 		
-		auto ReplacementData = TileReplacements[Metadata->UserDataName];
+		auto ReplacementData = TileReplacements[Tile];
+		auto Metadata = Tile.TileSet->GetTileMetadata(Tile.GetTileIndex());
 		auto Actor = GetWorld()->SpawnActor<AActor>(ReplacementData->TileReplacement);
 		Actor->AttachToActor(TilemapComponent->GetAttachParentActor(), FAttachmentTransformRules::KeepRelativeTransform);
 		IPaperTileReplacement::Execute_ConfigureReplacement(Actor, Tile, *Metadata, ReplacementData->bCollisionEnabled);
