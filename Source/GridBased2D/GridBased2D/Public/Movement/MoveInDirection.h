@@ -35,7 +35,7 @@ public:
   * @param MovementDirection The direction to move the character in
   * @return The node to execute the task with
   */
- UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true"), Category = "Messages")
+ UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true"), Category = "Character|Movement")
  static UMoveInDirection* MoveInDirection(AGameCharacter* Character, EFacingDirection MovementDirection);
 
  void Activate() override;

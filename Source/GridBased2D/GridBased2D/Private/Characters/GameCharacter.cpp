@@ -201,6 +201,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	if (!MoveTimer.IsSet())
 		return;
 
+	auto Pos = CurrentPosition;
 	float& Timer = MoveTimer.GetValue();
 	Timer += DeltaTime;
 
@@ -232,7 +233,7 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	}
 
 	SetActorLocation(Position);
-	if (CurrentPosition == DesiredPosition) {
+	if (CurrentPosition != Pos && CurrentPosition == DesiredPosition) {
 		OnMoveComplete();
 	}
 }
@@ -264,8 +265,9 @@ void AGameCharacter::OnMoveComplete() {
 	StopTimer.Emplace(0.f);
 	
 	if (MoveCallback.IsSet()) {
-		MoveCallback.GetValue()();
+		auto Callback = MoveTemp(MoveCallback.GetValue());
 		MoveCallback.Reset();
+		Callback();
 	}
 
 	auto MapSubsystem = GetGameInstance()->GetSubsystem<UMapSubsystem>();

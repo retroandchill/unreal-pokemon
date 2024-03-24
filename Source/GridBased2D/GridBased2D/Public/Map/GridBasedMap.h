@@ -58,6 +58,14 @@ public:
 	bool IsObjectInMap(const IWithinMap* Object) const;
 
 	/**
+	 * Check if the the current object is inside the map in question.
+	 * @param Object The object to check the position of
+	 * @return Is the object inside this bound of this map?
+	 */
+	UFUNCTION(BlueprintPure, Category = Maps)
+	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
+
+	/**
 	 * Check if the given position is inside the map in question
 	 * @param Position The position to check
 	 * @return Is the position inside the map

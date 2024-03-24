@@ -91,6 +91,10 @@ bool AGridBasedMap::IsObjectInMap(const IWithinMap* Object) const {
 	return IsPositionInMap(Object->GetCurrentPosition());
 }
 
+bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
+	return IsObjectInMap(Object.GetInterface());
+}
+
 bool AGridBasedMap::IsPositionInMap(const FIntVector2& Position) const {
 	return GetBounds().Contains({Position.X, Position.Y});
 }
