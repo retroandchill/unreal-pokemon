@@ -25,7 +25,8 @@ public class GridBased2D : ModuleRules
 				"EnhancedInput",
 				"CommonMath",
 				"PokemonUtilities",
-				"TileReplacer"
+				"TileReplacer",
+				"DeveloperSettings"
 			}
 		);
 	}

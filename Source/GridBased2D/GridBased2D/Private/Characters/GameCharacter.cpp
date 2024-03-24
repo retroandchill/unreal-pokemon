@@ -141,15 +141,15 @@ void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
 	Direction = FacingDirection;
 }
 
-void AGameCharacter::WarpToLocation(int32 X, int32 Y) {
-	CurrentPosition = DesiredPosition = {X, Y};
-	auto CurrentLocation = GetActorLocation();
-	CurrentLocation.X = X * UGridUtils::GRID_SIZE;
-	CurrentLocation.Y = Y * UGridUtils::GRID_SIZE;
-	SetActorLocation(CurrentLocation);
+void AGameCharacter::WarpToLocation(int32 X, int32 Y, FVector Offset) {
+	CurrentPosition = DesiredPosition = {FMath::FloorToInt32(Offset.X / UGridUtils::GRID_SIZE) + X,
+		FMath::FloorToInt32(Offset.Y / UGridUtils::GRID_SIZE) + Y};
+	Offset.X += X * UGridUtils::GRID_SIZE;
+	Offset.Y += Y * UGridUtils::GRID_SIZE;
+	SetActorLocation(Offset);
 }
 
-TArray<FHitResult> AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
+TArray<FOverlapResult> AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
 	static constexpr auto FloatGridSize = static_cast<float>(UGridUtils::GRID_SIZE);
 
 	FVector LocalOffset(0, 0, 0);
@@ -162,8 +162,8 @@ TArray<FHitResult> AGameCharacter::HitTestOnFacingTile(EFacingDirection Movement
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
-	TArray<FHitResult> Result;
-	GetWorld()->SweepMultiByChannel(Result, Position, GridPosition, GetActorRotation().Quaternion(),
+	TArray<FOverlapResult> Result;
+	GetWorld()->OverlapMultiByChannel(Result, GridPosition, GetActorRotation().Quaternion(),
 	                                 ECC_Pawn, GridSquare, Params);
 
 	return Result;
@@ -265,6 +265,7 @@ void AGameCharacter::OnMoveComplete() {
 	
 	if (MoveCallback.IsSet()) {
 		MoveCallback.GetValue()();
+		MoveCallback.Reset();
 	}
 
 	auto MapSubsystem = GetGameInstance()->GetSubsystem<UMapSubsystem>();

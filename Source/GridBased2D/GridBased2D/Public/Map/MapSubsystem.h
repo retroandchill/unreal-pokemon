@@ -6,9 +6,11 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MapSubsystem.generated.h"
 
+class ULevelStreamingDynamic;
 class AGameCharacter;
 enum class EFacingDirection : uint8;
 class IInteractable;
+
 /**
  * Subsystem that handles the traversal between various maps as well as the music within a given map.
  */
@@ -17,6 +19,12 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Initialize the default object
+	 * @param Initializer The Unreal initializer
+	 */
+	explicit UMapSubsystem(const FObjectInitializer& Initializer);
+	
 	/**
 	 * Play the supplied audio file as the new BGM
 	 * @param BGM The new BGM to play. (Will be ignored if nullptr)
@@ -77,22 +85,22 @@ public:
 
 	/**
 	 * Warp to the given map name and coordinates
-	 * @param MapName The name of the map to warp to
+	 * @param Map The the map to warp to
 	 * @param X The X coordinate of the map to warp to
 	 * @param Y The Y coordinate of the map to warp to
 	 */
 	UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Retain Direction)", Category = "Maps|Warping")
-	void WarpToMap(FName MapName, int32 X, int32 Y);
+	void WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y);
 
 	/**
 	 * Warp to the given map name and coordinates
-	 * @param MapName The name of the map to warp to
+	 * @param Map The the map to warp to
 	 * @param X The X coordinate of the map to warp to
 	 * @param Y The Y coordinate of the map to warp to
 	 * @param Direction The direction the character should be facing after the warp
 	 */
 	UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Change Direction)", Category = "Maps|Warping")
-	void WarpToMapWithDirection(FName MapName, int32 X, int32 Y, EFacingDirection Direction);
+	void WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y, EFacingDirection Direction);
 
 	/**
 	 * Set the location of the player in the world if there is a valid warp destination
@@ -108,6 +116,18 @@ public:
 	
 private:
 	/**
+	 * Called when a new streaming level is loaded
+	 */
+	UFUNCTION()
+	void OnNewLevelLoaded();
+
+	/**
+	 * Called when a new streaming level is shown to update the player position
+	 */
+	UFUNCTION()
+	void UpdatePlayerCharacterPosition();
+	
+	/**
 	 * The currently playing background music component.
 	 */
 	UPROPERTY()
@@ -122,6 +142,16 @@ private:
 	/**
 	 * If set, indicates that the player warping to another location
 	 */
-	TOptional<TTuple<int32, int32, EFacingDirection>> WarpDestination;
-	
+	TOptional<TTuple<FVector, int32, int32, EFacingDirection>> WarpDestination;
+
+	/**
+	 * The offset of a dynamically loaded level
+	 */
+	FVector DynamicLevelOffset;
+
+	/**
+	 * The dynamically streamed in level
+	 */
+	UPROPERTY()
+	TSoftObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
 };

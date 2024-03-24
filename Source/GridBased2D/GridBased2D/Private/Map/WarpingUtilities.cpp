@@ -14,8 +14,8 @@ void UWarpingUtilities::WarpToMap(const UObject* WorldContext, const FWarpDestin
 	GUARD_WARN(MapSubsystem == nullptr, , TEXT("Failed to get the Map Subsystem!"))
 	
 	if (Destination.bOverride_Direction) {
-		MapSubsystem->WarpToMapWithDirection(Destination.MapName, Destination.X, Destination.Y, Destination.Direction);
+		MapSubsystem->WarpToMapWithDirection(Destination.Map, Destination.X, Destination.Y, Destination.Direction);
 	} else {
-		MapSubsystem->WarpToMap(Destination.MapName, Destination.X, Destination.Y);
+		MapSubsystem->WarpToMap(Destination.Map, Destination.X, Destination.Y);
 	}
 }

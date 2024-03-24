@@ -85,5 +85,5 @@ public:
 	 * @return The found game mode
 	 */
 	UFUNCTION(BlueprintPure, Category = "Game", meta=(WorldContext="WorldContext"))
-	static AGridBasedGameModeBase* GetGridBasedGameMode(UObject* WorldContext);
+	static AGridBasedGameModeBase* GetGridBasedGameMode(const UObject* WorldContext);
 };

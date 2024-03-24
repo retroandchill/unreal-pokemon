@@ -32,5 +32,5 @@ public:
 	 * @param Y The Y-coordinate to place the character at
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-	virtual void WarpToLocation(int32 X, int32 Y) = 0;
+	virtual void WarpToLocation(int32 X, int32 Y, FVector Offset) = 0;
 };

@@ -14,10 +14,10 @@ struct GRIDBASED2D_API FWarpDestination {
  GENERATED_BODY()
 
  /**
-  * The name of the map to warp to
+  * The map to warp to
   */
  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Warping")
- FName MapName;
+ TSoftObjectPtr<UWorld> Map;
 
  /**
   * The X-coordinate of the map to warp to

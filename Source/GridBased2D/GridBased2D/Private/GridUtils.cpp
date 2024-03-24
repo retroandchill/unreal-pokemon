@@ -41,7 +41,7 @@ TOptional<EFacingDirection> UGridUtils::GetOpposingDirection(EFacingDirection Di
 	return TOptional<EFacingDirection>();
 }
 
-AGridBasedGameModeBase* UGridUtils::GetGridBasedGameMode(UObject* WorldContext) {
+AGridBasedGameModeBase* UGridUtils::GetGridBasedGameMode(const UObject* WorldContext) {
 	auto GameMode = Cast<AGridBasedGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
 	ASSERT(GameMode != nullptr)
 	return GameMode;

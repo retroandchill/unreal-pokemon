@@ -74,17 +74,23 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FaceDirection(EFacingDirection FacingDirection);
-	
+
+	/**
+	 * Warp to the given locaton and offset
+	 * @param X The X coordinate to warp to
+	 * @param Y The Y coordinate to warp to
+	 * @param Offset The physical offset of the map in the world
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-	void WarpToLocation(int32 X, int32 Y) override;
+	void WarpToLocation(int32 X, int32 Y, FVector Offset) override;
 
 protected:
 	/**
 	 * Perform a hit test on the tile in the given direction.
 	 * @param MovementDirection The direction to check the file of
-	 * @return Any hits that are found
+	 * @return Any hits that are found and all interactable actors on the tile
 	 */
-	TArray<FHitResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+	TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
 
 	/**
 	 * Perform a hit interaction on all of the interactable objects in front of the player
