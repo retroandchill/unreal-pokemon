@@ -3,9 +3,10 @@
 
 #include "Movement/MoveInDirection.h"
 
-#include "Characters/GameCharacter.h"
+#include "Components/GridBasedMovementComponent.h"
+#include "Components/GridMovable.h"
 
-UMoveInDirection* UMoveInDirection::MoveInDirection(AGameCharacter* Character, EFacingDirection MovementDirection) {
+UMoveInDirection* UMoveInDirection::MoveInDirection(const TScriptInterface<IGridMovable> &Character, EFacingDirection MovementDirection) {
 	auto Node = NewObject<UMoveInDirection>();
 	Node->Character = Character;
 	Node->MovementDirection = MovementDirection;
@@ -13,16 +14,21 @@ UMoveInDirection* UMoveInDirection::MoveInDirection(AGameCharacter* Character, E
 }
 
 void UMoveInDirection::Activate() {
-	auto PlayerController = Cast<APlayerController>(Character->Controller);
 	bool bCanInput = false;
-	if (PlayerController != nullptr) {
-		bCanInput = PlayerController->InputEnabled();
-		Character->DisableInput(PlayerController);
+	APlayerController *PlayerController = nullptr;
+	auto Pawn = Cast<APawn>(Character.GetObject()); 
+	if (Pawn != nullptr) {
+		PlayerController = Cast<APlayerController>(Pawn->Controller);
+		if (PlayerController != nullptr) {
+			bCanInput = PlayerController->InputEnabled();
+			Pawn->DisableInput(PlayerController);
+		}
 	}
-
-	Character->MoveInDirection(MovementDirection, [this, PlayerController, bCanInput]() {
+	
+	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
+	MovementComponent->MoveInDirection(MovementDirection, [this, PlayerController, bCanInput, Pawn] {
 		if (PlayerController != nullptr && bCanInput) {
-			Character->EnableInput(PlayerController);
+			Pawn->EnableInput(PlayerController);
 		}
 		
 		OnMovementFinished.Broadcast();

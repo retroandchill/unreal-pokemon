@@ -13,13 +13,16 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	auto Settings = GetDefault<UPokemonUISettings>();
 	PokemonIconsPackageName = Settings->GetPokemonIconsPackageName();
+	PokemonIconsBaseMaterial = Cast<UMaterialInterface>(Settings->GetPokemonIconsBaseMaterial().TryLoad());
+	IconSourceTexturePropertyName = Settings->GetIconSourceTexturePropertyName();
+	IconFrameRatePropertyName = Settings->GetIconFrameRatePropertyName();
 }
 
-UObject* UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon& Pokemon) {
-	return GetPokemonIcon(Pokemon.GetSpecies().ID);
+UMaterialInstanceDynamic* UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon& Pokemon, UObject* Outer) {
+	return GetPokemonIcon(Pokemon.GetSpecies().ID, Outer);
 }
 
-UObject* UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species) {
+UMaterialInstanceDynamic* UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species, UObject* Outer) {
 	auto& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 
 	// TODO: Add support for alternate forms, gender differences, etc.
@@ -28,5 +31,10 @@ UObject* UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species) {
 		                                 {TEXT("AssetName"), Species.ToString()}
 	                                 });
 	auto AssetData = AssetRegistryModule.GetRegistry().GetAssetByObjectPath(AssetPath);
-	return AssetData.GetAsset();
+	auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
+	GUARD(Texture == nullptr, nullptr)
+
+	auto Material = UMaterialInstanceDynamic::Create(PokemonIconsBaseMaterial, Outer);
+	Material->SetTextureParameterValue(IconSourceTexturePropertyName, Texture);
+	return Material;
 }

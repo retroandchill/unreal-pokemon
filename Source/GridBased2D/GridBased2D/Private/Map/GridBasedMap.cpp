@@ -4,12 +4,7 @@
 #include "Asserts.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
-#include "Characters/GameCharacter.h"
-#include "Components/AudioComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "Map/MapAudioUtilities.h"
-#include "Map/MapSubsystem.h"
-#include "Map/WithinMap.h"
+#include "GridBased2DSettings.h"
 #include "Replacement/TileReplacerComponent.h"
 
 // Sets default values
@@ -26,6 +21,9 @@ AGridBasedMap::AGridBasedMap() {
 #if WITH_EDITORONLY_DATA
 	TileReplacer = CreateDefaultSubobject<UTileReplacerComponent>(TEXT("TileReplacer"));
 #endif
+
+	auto Settings = GetDefault<UGridBased2DSettings>();
+	TerrainTagDataTable = Cast<UDataTable>(Settings->GetTerrainTagDataTable().TryLoad());
 }
 
 void AGridBasedMap::PostInitProperties() {
@@ -53,22 +51,6 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 	SetUpMapLocation(bFinished);
 }
 
-void AGridBasedMap::BeginPlay() {
-	Super::BeginPlay();
-	
-	if (auto Player = Cast<AGameCharacter>(
-		UGameplayStatics::GetPlayerCharacter(this, 0));
-		Player != nullptr && IsObjectInMap(Player)) {
-		OnPlayerEnter();
-	}
-
-	auto InitialCharacters = UGridUtils::FindAllActors<AGameCharacter>(this);
-	Characters.Empty();
-	for (auto Char : InitialCharacters) {
-		Characters.Emplace(Char);
-	}
-}
-
 #if WITH_EDITORONLY_DATA
 void AGridBasedMap::RefreshTileData() {
 	TileReplacer->RestoreCachedTiles(TileMapComponent);
@@ -82,43 +64,14 @@ void AGridBasedMap::ClearTileReplacements() {
 
 FIntRect AGridBasedMap::GetBounds() const {
 	auto RealLocation = GetActorLocation();
-	int32 X = FMath::FloorToInt32(RealLocation.X / UGridUtils::GRID_SIZE);
-	int32 Y = FMath::FloorToInt32(RealLocation.Y / UGridUtils::GRID_SIZE);
+	int32 X = FMath::FloorToInt32(RealLocation.X / UGridUtils::GetGridSize());
+	int32 Y = FMath::FloorToInt32(RealLocation.Y / UGridUtils::GetGridSize());
 	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
-}
-
-bool AGridBasedMap::IsObjectInMap(const IWithinMap* Object) const {
-	return IsPositionInMap(Object->GetCurrentPosition());
-}
-
-bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
-	return IsObjectInMap(Object.GetInterface());
-}
-
-bool AGridBasedMap::IsPositionInMap(const FIntVector2& Position) const {
-	return GetBounds().Contains({Position.X, Position.Y});
-}
-
-bool AGridBasedMap::IsCharacterPartOfMap(const AGameCharacter* Character) const {
-	return Characters.Contains(Character);
-}
-
-void AGridBasedMap::AddCharacter(AGameCharacter* Character) {
-	Characters.Emplace(Character);
-	Character->OnMapChanged(this);
-}
-
-void AGridBasedMap::RemoveCharacter(AGameCharacter* Character) {
-	Characters.Remove(Character);
-}
-
-void AGridBasedMap::OnPlayerEnter() {
-	UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	UPaperTileMap* TileMap = TileMapComponent->TileMap;
-	GUARD(TileMap == nullptr, )
+	GUARD(TileMap == nullptr,)
 
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
