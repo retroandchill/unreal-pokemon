@@ -15,7 +15,7 @@ class GRIDBASED2D_API AInteractableActor : public AActor, public IInteractable {
 	GENERATED_BODY()
 
 public:
-	void OnInteract_Implementation(AGameCharacter* Character, EInteractionType InteractionType) override;
+	void OnInteract_Implementation(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType) override;
 
 	UFUNCTION(BlueprintPure, Category = "Interaction")
 	uint8 GetInteractionTypes() const override;

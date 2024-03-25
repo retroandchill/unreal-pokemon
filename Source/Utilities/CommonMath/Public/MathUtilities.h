@@ -48,4 +48,13 @@ public:
 	 * @return The result of the exponentiation
 	 */
 	static int32 Pow(int32 Base, int32 Exponent);
+
+	/**
+	 * Find the midpoint between two vector objects
+	 * @param Start The first vector to check
+	 * @param End The second vector to check
+	 * @return The midpoint between the two vectors
+	 */
+	UFUNCTION(BlueprintPure, Category = "Math|Vector")
+	static FVector Midpoint(const FVector &Start, const FVector &End);
 };
