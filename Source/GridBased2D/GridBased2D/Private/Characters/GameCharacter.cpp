@@ -17,7 +17,7 @@ AGameCharacter::AGameCharacter() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	float BoxSize = static_cast<float>(UGridUtils::GRID_SIZE) / 2;
+	float BoxSize = static_cast<float>(UGridUtils::GetGridSize()) / 2;
 	auto Capsule = GetCapsuleComponent();
 	Capsule->SetCapsuleRadius(BoxSize);
 	Capsule->SetCapsuleHalfHeight(BoxSize);
@@ -64,8 +64,8 @@ void AGameCharacter::PostEditMove(bool bFinished) {
 void AGameCharacter::BeginPlay() {
 	Super::BeginPlay();
 	auto Position = GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GRID_SIZE);
-	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GRID_SIZE);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GetGridSize());
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GetGridSize());
 
 	DesiredPosition = CurrentPosition;
 
@@ -147,21 +147,21 @@ void AGameCharacter::FaceDirection(EFacingDirection FacingDirection) {
 }
 
 void AGameCharacter::WarpToLocation(int32 X, int32 Y, FVector Offset) {
-	CurrentPosition = DesiredPosition = {FMath::FloorToInt32(Offset.X / UGridUtils::GRID_SIZE) + X,
-		FMath::FloorToInt32(Offset.Y / UGridUtils::GRID_SIZE) + Y};
-	Offset.X += X * UGridUtils::GRID_SIZE;
-	Offset.Y += Y * UGridUtils::GRID_SIZE;
+	CurrentPosition = DesiredPosition = {FMath::FloorToInt32(Offset.X / UGridUtils::GetGridSize()) + X,
+		FMath::FloorToInt32(Offset.Y / UGridUtils::GetGridSize()) + Y};
+	Offset.X += X * UGridUtils::GetGridSize();
+	Offset.Y += Y * UGridUtils::GetGridSize();
 	SetActorLocation(Offset);
 }
 
 TArray<FOverlapResult> AGameCharacter::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
-	static constexpr auto FloatGridSize = static_cast<float>(UGridUtils::GRID_SIZE);
+	static const auto FloatGridSize = static_cast<float>(UGridUtils::GetGridSize());
 
 	FVector LocalOffset(0, 0, 0);
 	UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
 
 	auto Position = GetActorLocation();
-	auto GridPosition = LocalOffset * UGridUtils::GRID_SIZE + Position;
+	auto GridPosition = LocalOffset * UGridUtils::GetGridSize() + Position;
 	FCollisionShape GridSquare;
 	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
 	FCollisionQueryParams Params;
@@ -186,8 +186,8 @@ void AGameCharacter::InitCharacterData() {
 	CharacterSprite->SetTranslucentSortPriority(static_cast<int32>(GetActorLocation().Y));
 
 	auto Position = GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GRID_SIZE);
-	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GRID_SIZE);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GetGridSize());
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GetGridSize());
 
 	DesiredPosition = CurrentPosition;
 
@@ -215,8 +215,8 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 	auto Position = GetActorLocation();
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * UGridUtils::GRID_SIZE,
-		                                                 DesiredPosition.X * UGridUtils::GRID_SIZE,
+		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * UGridUtils::GetGridSize(),
+		                                                 DesiredPosition.X * UGridUtils::GetGridSize(),
 		                                                 MoveSpeed * Distance,
 		                                                 Timer);
 
@@ -227,8 +227,8 @@ void AGameCharacter::UpdateMovement(float DeltaTime) {
 
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * UGridUtils::GRID_SIZE,
-		                                                 DesiredPosition.Y * UGridUtils::GRID_SIZE,
+		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * UGridUtils::GetGridSize(),
+		                                                 DesiredPosition.Y * UGridUtils::GetGridSize(),
 		                                                 MoveSpeed * Distance,
 		                                                 Timer);
 

@@ -16,9 +16,10 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 public:
 	/**
-	 * The size of the grid according to the game
+	 * Get the size of the grid in the game
+	 * @return The size of the grid according to the game
 	 */
-	static constexpr double GRID_SIZE = 32.0f;
+	static double GetGridSize();
 
 	/**
 	 * Convert a vector into a facing direction

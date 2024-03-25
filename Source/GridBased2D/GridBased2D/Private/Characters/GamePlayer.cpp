@@ -34,7 +34,7 @@ AGamePlayer::AGamePlayer() {
 	// Create an orthographic camera (no perspective) and attach it to the boom
 	TopDownCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCamera->ProjectionMode = ECameraProjectionMode::Orthographic;
-	TopDownCamera->OrthoWidth = 512.f;
+	TopDownCamera->OrthoWidth = 256.f;
 	TopDownCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
 	// Prevent all automatic rotation behavior on the camera, character, and camera component

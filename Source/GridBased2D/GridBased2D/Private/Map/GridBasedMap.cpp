@@ -82,8 +82,8 @@ void AGridBasedMap::ClearTileReplacements() {
 
 FIntRect AGridBasedMap::GetBounds() const {
 	auto RealLocation = GetActorLocation();
-	int32 X = FMath::FloorToInt32(RealLocation.X / UGridUtils::GRID_SIZE);
-	int32 Y = FMath::FloorToInt32(RealLocation.Y / UGridUtils::GRID_SIZE);
+	int32 X = FMath::FloorToInt32(RealLocation.X / UGridUtils::GetGridSize());
+	int32 Y = FMath::FloorToInt32(RealLocation.Y / UGridUtils::GetGridSize());
 	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
