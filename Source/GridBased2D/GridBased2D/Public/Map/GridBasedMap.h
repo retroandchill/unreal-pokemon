@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
+class IGridMovable;
 class AGameCharacter;
 class UTileReplacerComponent;
 class IWithinMap;
@@ -55,15 +56,8 @@ public:
 	 * @param Object The object to check the position of
 	 * @return Is the object inside this bound of this map?
 	 */
-	bool IsObjectInMap(const IWithinMap* Object) const;
-
-	/**
-	 * Check if the the current object is inside the map in question.
-	 * @param Object The object to check the position of
-	 * @return Is the object inside this bound of this map?
-	 */
 	UFUNCTION(BlueprintPure, Category = Maps)
-	bool IsObjectInMap(TScriptInterface<IWithinMap> Object) const;
+	bool IsObjectInMap(TScriptInterface<IGridMovable> Object) const;
 
 	/**
 	 * Check if the given position is inside the map in question
@@ -77,19 +71,19 @@ public:
 	 * @param Character The characters to check?
 	 * @return Does this map consider this character a part of itself?
 	 */
-	bool IsCharacterPartOfMap(const AGameCharacter* Character) const;
+	bool IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& Character) const;
 
 	/**
 	 * Add a character to this map
 	 * @param Character The character to add
 	 */
-	void AddCharacter(AGameCharacter* Character);
+	void AddCharacter(const TScriptInterface<IGridMovable>& Character);
 
 	/**
 	 * Remove a character from this map
 	 * @param Character The character to remove
 	 */
-	void RemoveCharacter(AGameCharacter* Character);
+	void RemoveCharacter(const TScriptInterface<IGridMovable>& Character);
 
 	/**
 	 * Called when the player enters the map
@@ -133,6 +127,6 @@ private:
 	 * The list of characters contained within this map
 	 */
 	UPROPERTY()
-	TSet<TWeakObjectPtr<AGameCharacter>> Characters;
+	TArray<TScriptInterface<IGridMovable>> Characters;
 	
 };

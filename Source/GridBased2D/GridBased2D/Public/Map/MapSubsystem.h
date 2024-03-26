@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MapSubsystem.generated.h"
 
+class IGridMovable;
+class UGridBasedMovementComponent;
 class ULevelStreamingDynamic;
 class AGameCharacter;
 enum class EFacingDirection : uint8;
@@ -106,13 +108,13 @@ public:
 	 * Set the location of the player in the world if there is a valid warp destination
 	 * @param PlayerCharacter The character to set the location of
 	 */
-	void SetPlayerLocation(AGameCharacter* PlayerCharacter);
+	void SetPlayerLocation(const TScriptInterface<IGridMovable>& PlayerCharacter);
 
 	/**
 	 * Update what map the player is considered to be a part of
-	 * @param Character The character in question
+	 * @param Movable The movement object in question
 	 */
-	void UpdateCharacterMapPosition(AGameCharacter* Character);
+	void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable>& Movable);
 	
 private:
 	/**

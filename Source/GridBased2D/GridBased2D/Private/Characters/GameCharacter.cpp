@@ -11,6 +11,7 @@
 #include "Interaction/Interactable.h"
 #include "Map/GridBasedMap.h"
 #include "Map/MapSubsystem.h"
+#include "Components/GridMovable.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter() {
@@ -116,7 +117,7 @@ FMoveCheckResult AGameCharacter::MovementCheck(EFacingDirection MovementDirectio
 	bool bMapFound = false;
 	for (auto Map : Maps) {
 		if (Map->IsPositionInMap(DestinationPosition)) {
-			bMapFound = Map->IsObjectInMap(this) || CanMoveBetweenMaps();
+			//bMapFound = Map->IsObjectInMap(this) || CanMoveBetweenMaps();
 			break;
 		}
 	}

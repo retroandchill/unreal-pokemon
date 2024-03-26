@@ -6,6 +6,8 @@
 #include "PaperTileMap.h"
 #include "Characters/GameCharacter.h"
 #include "Components/AudioComponent.h"
+#include "Components/GridBasedMovementComponent.h"
+#include "Components/GridMovable.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/MapAudioUtilities.h"
 #include "Map/MapSubsystem.h"
@@ -56,13 +58,13 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 void AGridBasedMap::BeginPlay() {
 	Super::BeginPlay();
 	
-	if (auto Player = Cast<AGameCharacter>(
-		UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (auto Player = UGameplayStatics::GetPlayerPawn(this, 0);
 		Player != nullptr && IsObjectInMap(Player)) {
 		OnPlayerEnter();
 	}
-
-	auto InitialCharacters = UGridUtils::FindAllActors<AGameCharacter>(this);
+	
+	TArray<AActor*> InitialCharacters;
+	UGameplayStatics::GetAllActorsWithInterface(GetGameInstance(), UGridMovable::StaticClass(), InitialCharacters);
 	Characters.Empty();
 	for (auto Char : InitialCharacters) {
 		Characters.Emplace(Char);
@@ -87,28 +89,25 @@ FIntRect AGridBasedMap::GetBounds() const {
 	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
-bool AGridBasedMap::IsObjectInMap(const IWithinMap* Object) const {
-	return IsPositionInMap(Object->GetCurrentPosition());
-}
-
-bool AGridBasedMap::IsObjectInMap(TScriptInterface<IWithinMap> Object) const {
-	return IsObjectInMap(Object.GetInterface());
+bool AGridBasedMap::IsObjectInMap(TScriptInterface<IGridMovable> Object) const {
+	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Object.GetObject());
+	return IsPositionInMap(MovementComponent->GetCurrentPosition());
 }
 
 bool AGridBasedMap::IsPositionInMap(const FIntVector2& Position) const {
 	return GetBounds().Contains({Position.X, Position.Y});
 }
 
-bool AGridBasedMap::IsCharacterPartOfMap(const AGameCharacter* Character) const {
+bool AGridBasedMap::IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& Character) const {
 	return Characters.Contains(Character);
 }
 
-void AGridBasedMap::AddCharacter(AGameCharacter* Character) {
+void AGridBasedMap::AddCharacter(const TScriptInterface<IGridMovable>& Character) {
 	Characters.Emplace(Character);
-	Character->OnMapChanged(this);
+	Character->GetGridBasedMovementComponent()->OnMapChanged(this);
 }
 
-void AGridBasedMap::RemoveCharacter(AGameCharacter* Character) {
+void AGridBasedMap::RemoveCharacter(const TScriptInterface<IGridMovable>& Character) {
 	Characters.Remove(Character);
 }
 

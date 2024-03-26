@@ -9,6 +9,8 @@
 #include "Characters/GameCharacter.h"
 #include "Map/GridBasedMap.h"
 #include "Components/AudioComponent.h"
+#include "Components/GridBasedMovementComponent.h"
+#include "Components/GridMovable.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -111,25 +113,27 @@ void UMapSubsystem::WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, 
 	}
 }
 
-void UMapSubsystem::SetPlayerLocation(AGameCharacter* PlayerCharacter) {
+void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable>& PlayerCharacter) {
 	GUARD(!WarpDestination.IsSet(),)
 
 	auto [Offset, X, Y, Direction] = WarpDestination.GetValue();
-	PlayerCharacter->WarpToLocation(X, Y, Offset);
-	PlayerCharacter->FaceDirection(Direction);
+	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter.GetObject());
+	MovementComponent->WarpToLocation(X, Y, Offset);
+	MovementComponent->FaceDirection(Direction);
 	WarpDestination.Reset();
 }
 
-void UMapSubsystem::UpdateCharacterMapPosition(AGameCharacter* Character) {
-	auto Maps = UGridUtils::FindAllActors<AGridBasedMap>(Character);
+void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable>& Movable) {
+	auto Maps = UGridUtils::FindAllActors<AGridBasedMap>(GetGameInstance());
 	AGridBasedMap* OldMap = nullptr;
 	AGridBasedMap* NewMap = nullptr;
 	for (auto Map : Maps) {
-		if (OldMap == nullptr && Map->IsCharacterPartOfMap(Character)) {
+		if (OldMap == nullptr && Map->IsCharacterPartOfMap(Movable)) {
 			OldMap = Map;
 		}
 
-		if (NewMap == nullptr && Map->IsPositionInMap(Character->GetCurrentPosition())) {
+		auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Movable.GetObject());
+		if (NewMap == nullptr && Map->IsPositionInMap(MovementComponent->GetCurrentPosition())) {
 			NewMap = Map;
 		}
 
@@ -141,23 +145,23 @@ void UMapSubsystem::UpdateCharacterMapPosition(AGameCharacter* Character) {
 	GUARD(OldMap == NewMap,)
 
 	if (OldMap != nullptr) {
-		OldMap->RemoveCharacter(Character);
+		OldMap->RemoveCharacter(Movable);
 	}
 
 	if (NewMap != nullptr) {
-		NewMap->AddCharacter(Character);
+		NewMap->AddCharacter(Movable);
 	}
 }
 
 void UMapSubsystem::OnNewLevelLoaded() {
-	auto PlayerCharacter = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	ASSERT(PlayerCharacter != nullptr)
+	auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
+	ASSERT(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
 	SetPlayerLocation(PlayerCharacter);
 	UpdateCharacterMapPosition(PlayerCharacter);
 }
 
 void UMapSubsystem::UpdatePlayerCharacterPosition() {
-	auto PlayerCharacter = Cast<AGameCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	ASSERT(PlayerCharacter != nullptr)
+	auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
+	ASSERT(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
 	UpdateCharacterMapPosition(PlayerCharacter);
 }
