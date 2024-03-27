@@ -19,7 +19,7 @@ void FRPGMenusEditorModule::OnPostEngineInit() const {
 
 	AssetTools.RegisterAssetTypeActions(MakeShared<FWindowskinAssetActions>());
 
-	// Register thubmnails
+	// Register thumbnails
 	UThumbnailManager::Get().RegisterCustomRenderer(UWindowskin::StaticClass(),
 	                                                UWindowskinThumbnailRenderer::StaticClass());
 }
