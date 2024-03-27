@@ -7,6 +7,8 @@
 #include "Components/ActorComponent.h"
 #include "CharsetAnimationComponent.generated.h"
 
+class IGridBasedMovement;
+class UGridBasedMovementComponent;
 class UPaperFlipbook;
 class UCharset;
 class UPaperFlipbookComponent;
@@ -19,7 +21,7 @@ class GRIDBASED2D_API UCharsetAnimationComponent : public UActorComponent, publi
 
 public:
 	void UpdateDirection(EFacingDirection Direction) override;
-	bool IsMoveAnimationPlaying() const override;
+	bool IsMoveAnimationPlaying() override;
 	void StartMoveAnimation() override;
 	bool CanStopMoving() override;
 	void StopMoveAnimation() override;
@@ -28,7 +30,7 @@ public:
 	 * Get the flipbook component for this actor
 	 * @return The flipbook component used
 	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Character)
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
 	UPaperFlipbookComponent *GetFlipbookComponent();
 	
 	/**
@@ -44,7 +46,14 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Character)
 	void SetCharset(UCharset* NewCharset);
-	
+
+	/**
+	 * Get the component interface for the grid based movement
+	 * @return The component interface for the grid-based movement
+	 */
+	UFUNCTION(BlueprintPure, Category = Components)
+	TScriptInterface<IGridBasedMovement> GetGridBasedMovement();
+
 private:
 
 	/**
@@ -56,8 +65,14 @@ private:
 	/**
 	  * The flipbook component for this particular actor
 	  */
-	UPROPERTY(BlueprintGetter = GetFlipbookComponent, Category = Display)
+	UPROPERTY(BlueprintGetter = GetFlipbookComponent, Category = Components)
 	TObjectPtr<UPaperFlipbookComponent> FlipbookComponent;
+
+	/**
+	 * The component for the grid based movement
+	 */
+	UPROPERTY(BlueprintGetter = GetGridBasedMovement, Category = Components)
+	TScriptInterface<IGridBasedMovement> GridBasedMovement;
 	
 	/**
 	 * The character set used for displaying the sprite 

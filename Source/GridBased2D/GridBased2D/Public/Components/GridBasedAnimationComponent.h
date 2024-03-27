@@ -31,7 +31,7 @@ public:
 	 * Check if the character's movement animation is actually playing or not
 	 * @return If the move animation is currently playing
 	 */
-	virtual bool IsMoveAnimationPlaying() const = 0;
+	virtual bool IsMoveAnimationPlaying() = 0;
 
 	/**
 	 * Start playing the character's movement animation

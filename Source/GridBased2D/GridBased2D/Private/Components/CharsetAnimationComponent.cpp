@@ -6,32 +6,40 @@
 #include "Asserts.h"
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
+#include "Components/GridBasedMovement.h"
 
 void UCharsetAnimationComponent::UpdateDirection(EFacingDirection Direction) {
 	CurrentDirection = Direction;
 	auto Flipbook = GetDesiredFlipbook();
-	GetFlipbookComponent()->SetFlipbook(Flipbook);
+	auto AnimComp = GetFlipbookComponent();
+	GUARD(AnimComp == nullptr, )
+	AnimComp->SetFlipbook(Flipbook);
 }
 
-bool UCharsetAnimationComponent::IsMoveAnimationPlaying() const {
-	ASSERT(FlipbookComponent != nullptr)
+bool UCharsetAnimationComponent::IsMoveAnimationPlaying() {
+	auto AnimComp = GetFlipbookComponent();
+	ASSERT(AnimComp != nullptr)
 	return FlipbookComponent->IsPlaying();
 }
 
 void UCharsetAnimationComponent::StartMoveAnimation() {
-	FlipbookComponent->PlayFromStart();
-	FlipbookComponent->SetLooping(true);
+	auto AnimComp = GetFlipbookComponent();
+	ASSERT(AnimComp != nullptr)
+	AnimComp->PlayFromStart();
+	AnimComp->SetLooping(true);
 }
 
 bool UCharsetAnimationComponent::CanStopMoving() {
-	ASSERT(FlipbookComponent != nullptr)
-	return Charset == nullptr || Charset->CanStopOnFrame(CurrentDirection, FlipbookComponent->GetPlaybackPositionInFrames());
+	auto AnimComp = GetFlipbookComponent();
+	ASSERT(AnimComp != nullptr)
+	return Charset == nullptr || Charset->CanStopOnFrame(CurrentDirection, AnimComp->GetPlaybackPositionInFrames());
 }
 
 void UCharsetAnimationComponent::StopMoveAnimation() {
-	ASSERT(FlipbookComponent != nullptr)
-	FlipbookComponent->Stop();
-	FlipbookComponent->SetPlaybackPositionInFrames(0, false);
+	auto AnimComp = GetFlipbookComponent();
+	ASSERT(AnimComp != nullptr)
+	AnimComp->Stop();
+	AnimComp->SetPlaybackPositionInFrames(0, false);
 }
 
 UPaperFlipbookComponent* UCharsetAnimationComponent::GetFlipbookComponent() {
@@ -42,8 +50,13 @@ UPaperFlipbookComponent* UCharsetAnimationComponent::GetFlipbookComponent() {
 	auto Owner = GetOwner();
 	GUARD(Owner == nullptr, nullptr)
 	FlipbookComponent = Owner->FindComponentByClass<UPaperFlipbookComponent>();
+
+#if WITH_EDITOR
+	// In the editor we want to set the position of the character in question
 	FlipbookComponent->Stop();
 	FlipbookComponent->SetPlaybackPositionInFrames(0, false);
+#endif
+	
 	return FlipbookComponent;
 }
 
@@ -53,7 +66,29 @@ UCharset* UCharsetAnimationComponent::GetCharset() const {
 
 void UCharsetAnimationComponent::SetCharset(UCharset* NewCharset) {
 	Charset = NewCharset;
+
+	if (auto MovementComponent = GetGridBasedMovement(); MovementComponent != nullptr) {
+		CurrentDirection = MovementComponent->GetDirection();
+	}
+	
 	UpdateDirection(CurrentDirection);
+#if WITH_EDITOR
+	// In the editor we want to set character as not animating
+	GUARD(FlipbookComponent == nullptr, )
+	FlipbookComponent->Stop();
+	FlipbookComponent->SetPlaybackPositionInFrames(0, false);
+#endif
+}
+
+TScriptInterface<IGridBasedMovement> UCharsetAnimationComponent::GetGridBasedMovement() {
+	if (GridBasedMovement != nullptr) {
+		return GridBasedMovement;
+	}
+
+	auto Owner = GetOwner();
+	GUARD(Owner == nullptr, nullptr)
+	GridBasedMovement = Owner->FindComponentByInterface(UGridBasedMovement::StaticClass());
+	return GridBasedMovement;
 }
 
 UPaperFlipbook* UCharsetAnimationComponent::GetDesiredFlipbook() const {

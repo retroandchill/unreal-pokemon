@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GridBasedAnimationComponent.h"
+#include "GridBasedMovement.h"
 #include "Characters/FacingDirection.h"
 #include "Characters/MoveCheckResult.h"
 #include "Components/ActorComponent.h"
@@ -14,20 +16,10 @@ class IInteractable;
 class AGridBasedMap;
 
 /**
- * Input action for when movement is complete
- */
-DECLARE_DYNAMIC_DELEGATE(FMoveCompleteAction);
-
-/**
- * Delegate called when the movement is completed
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMoveComplete);
-
-/**
  * Component used to handle the movement of an actor along a fixed size grid.
  */
 UCLASS(ClassGroup=(Movement), meta=(BlueprintSpawnableComponent))
-class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent, public IWithinMap {
+class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent, public IWithinMap, public IGridBasedMovement {
 	GENERATED_BODY()
 
 public:
@@ -39,8 +31,19 @@ public:
 protected:
 	void BeginPlay() override;
 
+#if WITH_EDITOR
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+
 public:
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	/**
+	 * Get the Grid-Based animation component for this actor
+	 * @return The Grid-Based animation component for this actor
+	 */
+	UFUNCTION(BlueprintPure, Category = Components)
+	TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent();
 
 	/**
 	 * Move the character in the specified direction
@@ -55,13 +58,6 @@ public:
 	 * @param MovementCompleteCallback The functor to call when movement is completed
 	 */
 	void MoveInDirection(EFacingDirection MovementDirection, TFunction<void()> &&MovementCompleteCallback);
-
-	/**
-	 * Bind an action to the move complete action
-	 * @param MoveCompleteAction The action to perform upon movement being finished
-	 */
-	UFUNCTION(BlueprintCallable, Category = Movement)
-	void BindActionToOnMoveComplete(const FMoveCompleteAction& MoveCompleteAction);
 
 	/**
 	 * Check to see if the character can move in the specified direction
@@ -106,13 +102,9 @@ public:
 	 * @return The intended grid position of the character
 	 */
 	FIntVector2 GetDesiredPosition() const;
-
-	/**
-	 * Get the direction this character is actively facing
-	 * @return The direction the character is facing.
-	 */
+	
 	UFUNCTION(BlueprintPure, Category = "Character|Movement")
-	EFacingDirection GetDirection() const;
+	EFacingDirection GetDirection() const final;
 	
 	/**
 	 * Perform a hit test on the tile in the given direction.
@@ -166,7 +158,7 @@ private:
 	/**
 	 * Component for handling the animations of the character
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Character")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintGetter = GetGridBasedAnimationComponent, Category = Components)
 	TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
 
 	/**
@@ -178,12 +170,6 @@ private:
 	 * One time callback for when movement is complete. 
 	 */
 	TOptional<TFunction<void()>> MoveCallback;
-
-	/**
-	 * Callback when the actor's movement is complete
-	 */
-	UPROPERTY(BlueprintAssignable, Category = Movement)
-	FOnMoveComplete OnMoveComplete;
 	
 	/**
 	 * The timer for movement used to determine where to stop animation

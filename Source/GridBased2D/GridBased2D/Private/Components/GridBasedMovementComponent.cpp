@@ -22,12 +22,9 @@ void UGridBasedMovementComponent::BeginPlay() {
 
 	auto Owner = GetOwner();
 	GUARD(Owner == nullptr,)
-	GridBasedAnimationComponent = Owner->FindComponentByInterface(UGridBasedAnimationComponent::StaticClass());
-
 	auto Position = Owner->GetActorLocation();
 	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GetGridSize());
 	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GetGridSize());
-
 	DesiredPosition = CurrentPosition;
 
 	auto Pawn = Cast<APawn>(Owner);
@@ -38,6 +35,15 @@ void UGridBasedMovementComponent::BeginPlay() {
 	}
 }
 
+#if WITH_EDITOR
+void UGridBasedMovementComponent::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	auto AnimationComponent = GetGridBasedAnimationComponent();
+	GUARD(AnimationComponent == nullptr, )
+	AnimationComponent->UpdateDirection(Direction);
+}
+#endif
 
 // Called every frame
 void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -46,6 +52,17 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 	UpdateMovement(DeltaTime);
 	UpdateAnimation(DeltaTime);
+}
+
+TScriptInterface<IGridBasedAnimationComponent> UGridBasedMovementComponent::GetGridBasedAnimationComponent() {
+	if (GridBasedAnimationComponent != nullptr) {
+		return GridBasedAnimationComponent;
+	}
+	
+	auto Owner = GetOwner();
+	GUARD(Owner == nullptr, nullptr)
+	GridBasedAnimationComponent = Owner->FindComponentByInterface(UGridBasedAnimationComponent::StaticClass());
+	return GridBasedAnimationComponent;
 }
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection) {
@@ -73,10 +90,6 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
 
 	MoveCallback.Emplace(MoveTemp(MovementCompleteCallback));
 	MoveInDirection(MovementDirection);
-}
-
-void UGridBasedMovementComponent::BindActionToOnMoveComplete(const FMoveCompleteAction& MoveCompleteAction) {
-	OnMoveComplete.Add(MoveCompleteAction);
 }
 
 FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection MovementDirection) const {
@@ -222,17 +235,18 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 }
 
 void UGridBasedMovementComponent::UpdateAnimation(float DeltaTime) {
-	GUARD(GridBasedAnimationComponent == nullptr,)
-	GridBasedAnimationComponent->UpdateDirection(Direction);
+	auto AnimationComponent = GetGridBasedAnimationComponent();
+	GUARD(AnimationComponent == nullptr,)
+	AnimationComponent->UpdateDirection(Direction);
 
-	if (MoveTimer.IsSet() && !GridBasedAnimationComponent->IsMoveAnimationPlaying()) {
-		GridBasedAnimationComponent->StartMoveAnimation();
+	if (MoveTimer.IsSet() && !AnimationComponent->IsMoveAnimationPlaying()) {
+		AnimationComponent->StartMoveAnimation();
 	} else if (StopTimer.IsSet()) {
 		auto& Timer = StopTimer.GetValue();
 		Timer += DeltaTime;
 
-		if (Timer >= 0.125f && GridBasedAnimationComponent->CanStopMoving()) {
-			GridBasedAnimationComponent->StopMoveAnimation();
+		if (Timer >= 0.125f && AnimationComponent->CanStopMoving()) {
+			AnimationComponent->StopMoveAnimation();
 			StopTimer.Reset();
 		}
 	}
