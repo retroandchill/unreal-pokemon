@@ -6,7 +6,6 @@
 #include "Asserts.h"
 #include "GridBased2DSettings.h"
 #include "GridUtils.h"
-#include "Characters/GameCharacter.h"
 #include "Map/GridBasedMap.h"
 #include "Components/AudioComponent.h"
 #include "Components/GridBasedMovementComponent.h"
@@ -84,10 +83,12 @@ bool UMapSubsystem::IsJinglePlaying() const {
 }
 
 void UMapSubsystem::WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y) {
-	auto PlayerCharacter = Cast<AGameCharacter>(GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator());
-	GUARD_WARN(PlayerCharacter == nullptr, , TEXT("The player character is not an instance of AGameCharacter!"))
+	auto PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator();
+	GUARD_WARN(PlayerCharacter == nullptr, , TEXT("There is no valid pawn!"))
 
-	WarpToMapWithDirection(Map, X, Y, PlayerCharacter->GetDirection());
+	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter);
+	GUARD_WARN(MovementComponent == nullptr, , TEXT("The pawn class does not implement IGridMovable!"))
+	WarpToMapWithDirection(Map, X, Y, MovementComponent->GetDirection());
 }
 
 void UMapSubsystem::WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y, EFacingDirection Direction) {

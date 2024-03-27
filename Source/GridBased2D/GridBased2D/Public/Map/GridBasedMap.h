@@ -4,8 +4,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
-#include "Characters/GameCharacter.h"
-#include "Components/BoxComponent.h"
 #include "GridBasedMap.generated.h"
 
 class IGridMovable;

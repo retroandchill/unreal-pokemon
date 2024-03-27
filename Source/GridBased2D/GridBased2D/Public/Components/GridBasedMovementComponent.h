@@ -75,7 +75,7 @@ public:
 	 * Can this character move between the various maps of the overworld
 	 * @return Can the character move between maps?
 	 */
-	virtual bool CanMoveBetweenMaps() const;
+	bool CanMoveBetweenMaps() const;
 	
 	/**
 	 * Turn the character to face a specific direction
@@ -97,7 +97,7 @@ public:
 	 * Called when the player changes maps
 	 * @param NewMap The new map the player changes to
 	 */
-	virtual void OnMapChanged(AGridBasedMap* NewMap);
+	void OnMapChanged(AGridBasedMap* NewMap);
 	
 	FIntVector2 GetCurrentPosition() const override;
 
@@ -125,7 +125,7 @@ public:
 	 * Perform a hit interaction on all of the interactable objects in front of the player
 	 * @param Interactables The interactable objects in question
 	 */
-	virtual void HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables);
+	void HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables);
 
 private:
 	/**

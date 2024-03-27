@@ -8,7 +8,7 @@
 
 class UGridBasedMovementComponent;
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(BlueprintType)
 class UGridMovable : public UInterface {
 	GENERATED_BODY()
 };

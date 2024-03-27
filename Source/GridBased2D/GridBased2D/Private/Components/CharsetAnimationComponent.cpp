@@ -7,20 +7,10 @@
 #include "PaperFlipbookComponent.h"
 #include "Characters/Charset.h"
 
-void UCharsetAnimationComponent::BeginPlay() {
-	Super::BeginPlay();
-	auto Owner = GetOwner();
-	GUARD(Owner == nullptr, )
-	FlipbookComponent = Owner->FindComponentByClass<UPaperFlipbookComponent>();
-	FlipbookComponent->Stop();
-	FlipbookComponent->SetPlaybackPositionInFrames(0, false);
-}
-
 void UCharsetAnimationComponent::UpdateDirection(EFacingDirection Direction) {
 	CurrentDirection = Direction;
-	ASSERT(FlipbookComponent != nullptr)
 	auto Flipbook = GetDesiredFlipbook();
-	FlipbookComponent->SetFlipbook(Flipbook);
+	GetFlipbookComponent()->SetFlipbook(Flipbook);
 }
 
 bool UCharsetAnimationComponent::IsMoveAnimationPlaying() const {
@@ -42,6 +32,28 @@ void UCharsetAnimationComponent::StopMoveAnimation() {
 	ASSERT(FlipbookComponent != nullptr)
 	FlipbookComponent->Stop();
 	FlipbookComponent->SetPlaybackPositionInFrames(0, false);
+}
+
+UPaperFlipbookComponent* UCharsetAnimationComponent::GetFlipbookComponent() {
+	if (FlipbookComponent != nullptr) {
+		return FlipbookComponent;
+	}
+
+	auto Owner = GetOwner();
+	GUARD(Owner == nullptr, nullptr)
+	FlipbookComponent = Owner->FindComponentByClass<UPaperFlipbookComponent>();
+	FlipbookComponent->Stop();
+	FlipbookComponent->SetPlaybackPositionInFrames(0, false);
+	return FlipbookComponent;
+}
+
+UCharset* UCharsetAnimationComponent::GetCharset() const {
+	return Charset;
+}
+
+void UCharsetAnimationComponent::SetCharset(UCharset* NewCharset) {
+	Charset = NewCharset;
+	UpdateDirection(CurrentDirection);
 }
 
 UPaperFlipbook* UCharsetAnimationComponent::GetDesiredFlipbook() const {

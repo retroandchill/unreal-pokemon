@@ -18,11 +18,6 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
 
 public:
 	/**
-	 * Initialize the GameMode to use the C++ defined classes
-	 */
-	AGridBasedGameModeBase();
-	
-	/**
 	 * Fade the screen in
 	 * @param Callback The delegate to call to when complete
 	 */

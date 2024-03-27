@@ -4,7 +4,6 @@
 #include "Asserts.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
-#include "Characters/GameCharacter.h"
 #include "Components/AudioComponent.h"
 #include "Components/GridBasedMovementComponent.h"
 #include "Components/GridMovable.h"

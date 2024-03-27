@@ -30,6 +30,8 @@ void UGridBasedMovementComponent::BeginPlay() {
 
 	DesiredPosition = CurrentPosition;
 
+	auto Pawn = Cast<APawn>(Owner);
+	GUARD(Pawn == nullptr || !Pawn->IsPlayerControlled(), )
 	if (auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>(); MapSubsystem != nullptr
 		&& Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
 		MapSubsystem->SetPlayerLocation(Owner);
@@ -47,7 +49,7 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 }
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection) {
-	FaceDirection(MovementDirection); // TODO: Change this to use an interfacce
+	FaceDirection(MovementDirection);
 	if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
 		if (MoveCallback.IsSet()) {
 			auto Callback = MoveTemp(MoveCallback.GetValue());
@@ -108,7 +110,8 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
 }
 
 bool UGridBasedMovementComponent::CanMoveBetweenMaps() const {
-	return false;
+	auto Owner = GetOwner<APawn>();
+	return Owner != nullptr && Owner->IsPlayerControlled();
 }
 
 void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection) {
@@ -126,7 +129,10 @@ void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offse
 }
 
 void UGridBasedMovementComponent::OnMapChanged(AGridBasedMap* NewMap) {
-	// No implementation here for now
+	auto Owner = GetOwner<APawn>();
+	GUARD(Owner == nullptr || !Owner->IsPlayerControlled(), )
+	
+	NewMap->OnPlayerEnter();
 }
 
 FIntVector2 UGridBasedMovementComponent::GetCurrentPosition() const {
@@ -163,7 +169,14 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) {
-	// No implementation in this class, only the player needs this
+	auto Owner = GetOwner<APawn>();
+	GUARD(Owner == nullptr || !Owner->IsPlayerControlled(), )
+
+	for (auto &Interactable : Interactables) {
+		if ((Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Hit)) == 0)
+			continue;
+		IInteractable::Execute_OnInteract(Interactable.GetObject(), GetOwner(), EInteractionType::Hit);
+	}
 }
 
 void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
