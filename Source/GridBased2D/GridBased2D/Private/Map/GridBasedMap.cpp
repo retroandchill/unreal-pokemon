@@ -91,6 +91,7 @@ FIntRect AGridBasedMap::GetBounds() const {
 
 bool AGridBasedMap::IsObjectInMap(TScriptInterface<IGridMovable> Object) const {
 	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Object.GetObject());
+	ASSERT(MovementComponent != nullptr)
 	return IsPositionInMap(MovementComponent->GetCurrentPosition());
 }
 
@@ -104,7 +105,8 @@ bool AGridBasedMap::IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& C
 
 void AGridBasedMap::AddCharacter(const TScriptInterface<IGridMovable>& Character) {
 	Characters.Emplace(Character);
-	Character->GetGridBasedMovementComponent()->OnMapChanged(this);
+	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
+	MovementComponent->OnMapChanged(this);
 }
 
 void AGridBasedMap::RemoveCharacter(const TScriptInterface<IGridMovable>& Character) {

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GridBasedAnimationComponent.h"
 #include "Components/ActorComponent.h"
-#include "CharsetComponent.generated.h"
+#include "CharsetAnimationComponent.generated.h"
 
 class UPaperFlipbook;
 class UCharset;
@@ -14,7 +14,7 @@ class UPaperFlipbookComponent;
  * Component used to manage charset animations
  */
 UCLASS(ClassGroup=(Characters), meta=(BlueprintSpawnableComponent))
-class GRIDBASED2D_API UCharsetComponent : public UActorComponent, public IGridBasedAnimationComponent {
+class GRIDBASED2D_API UCharsetAnimationComponent : public UActorComponent, public IGridBasedAnimationComponent {
 	GENERATED_BODY()
 
 protected:

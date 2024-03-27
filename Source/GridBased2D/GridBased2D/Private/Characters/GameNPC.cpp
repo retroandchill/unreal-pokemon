@@ -2,11 +2,14 @@
 #include "Characters/GameNPC.h"
 
 #include "GridUtils.h"
+#include "Components/GridBasedMovementComponent.h"
+#include "Components/GridMovable.h"
 #include "Interaction/InteractionType.h"
 
 
-void AGameNPC::OnInteract_Implementation(AGameCharacter* Character, EInteractionType InteractionType) {
-	if (auto OpposingDirection = UGridUtils::GetOpposingDirection(Character->GetDirection()); OpposingDirection.
+void AGameNPC::OnInteract_Implementation(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType) {
+	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
+	if (auto OpposingDirection = UGridUtils::GetOpposingDirection(MovementComponent->GetDirection()); OpposingDirection.
 		IsSet()) {
 		FaceDirection(OpposingDirection.GetValue());
 	}

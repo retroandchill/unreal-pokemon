@@ -30,6 +30,12 @@ UCLASS(ClassGroup=(Movement), meta=(BlueprintSpawnableComponent))
 class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent, public IWithinMap {
 	GENERATED_BODY()
 
+public:
+	/**
+	 * Construct the default object
+	 */
+	UGridBasedMovementComponent();
+
 protected:
 	void BeginPlay() override;
 
@@ -101,7 +107,13 @@ public:
 	 */
 	FIntVector2 GetDesiredPosition() const;
 
-protected:
+	/**
+	 * Get the direction this character is actively facing
+	 * @return The direction the character is facing.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Character|Movement")
+	EFacingDirection GetDirection() const;
+	
 	/**
 	 * Perform a hit test on the tile in the given direction.
 	 * @param MovementDirection The direction to check the file of
