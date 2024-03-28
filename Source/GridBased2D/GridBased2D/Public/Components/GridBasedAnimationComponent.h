@@ -31,7 +31,7 @@ public:
 	 * Check if the character's movement animation is actually playing or not
 	 * @return If the move animation is currently playing
 	 */
-	virtual bool IsMoveAnimationPlaying() = 0;
+	virtual bool IsMoveAnimationPlaying() const = 0;
 
 	/**
 	 * Start playing the character's movement animation
@@ -42,7 +42,7 @@ public:
 	 * Is the character's animation in a state where it can stop moving and it look natural?
 	 * @return If the character can stop the movement animation
 	 */
-	virtual bool CanStopMoving() = 0;
+	virtual bool CanStopMoving() const = 0;
 
 	/**
 	 * Stop playing the character's movement animation

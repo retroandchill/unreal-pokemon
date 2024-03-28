@@ -21,9 +21,9 @@ class GRIDBASED2D_API UCharsetAnimationComponent : public UActorComponent, publi
 
 public:
 	void UpdateDirection(EFacingDirection Direction) override;
-	bool IsMoveAnimationPlaying() override;
+	bool IsMoveAnimationPlaying() const override;
 	void StartMoveAnimation() override;
-	bool CanStopMoving() override;
+	bool CanStopMoving() const override;
 	void StopMoveAnimation() override;
 
 	/**
@@ -31,8 +31,29 @@ public:
 	 * @return The flipbook component used
 	 */
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
-	UPaperFlipbookComponent *GetFlipbookComponent();
+	UPaperFlipbookComponent *GetFlipbookComponent() const;
+
+	/**
+	 * Set the flipbook component for this actor
+	 * @param FlipbookComponent The flipbook component used
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
+	void SetFlipbookComponent(UPaperFlipbookComponent* FlipbookComponent);
 	
+	/**
+	 * Get the component interface for the grid based movement
+	 * @return The component interface for the grid-based movement
+	 */
+	UFUNCTION(BlueprintPure, Category = Components)
+	TScriptInterface<IGridBasedMovement> GetGridBasedMovement() const;
+
+	/**
+	 * Set the component interface for the grid based movement
+	 * @param NewGridBasedMovement The component interface for the grid-based movement
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
+	void SetGridBasedMovement(TScriptInterface<IGridBasedMovement> NewGridBasedMovement);
+
 	/**
 	 * Get the character set for the owning actor
 	 * @return The character set for this actor
@@ -47,12 +68,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Character)
 	void SetCharset(UCharset* NewCharset);
 
-	/**
-	 * Get the component interface for the grid based movement
-	 * @return The component interface for the grid-based movement
-	 */
-	UFUNCTION(BlueprintPure, Category = Components)
-	TScriptInterface<IGridBasedMovement> GetGridBasedMovement();
+	
 
 private:
 
@@ -65,13 +81,13 @@ private:
 	/**
 	  * The flipbook component for this particular actor
 	  */
-	UPROPERTY(BlueprintGetter = GetFlipbookComponent, Category = Components)
+	UPROPERTY(BlueprintGetter = GetFlipbookComponent, BlueprintSetter = SetFlipbookComponent, Category = Components)
 	TObjectPtr<UPaperFlipbookComponent> FlipbookComponent;
 
 	/**
 	 * The component for the grid based movement
 	 */
-	UPROPERTY(BlueprintGetter = GetGridBasedMovement, Category = Components)
+	UPROPERTY(BlueprintGetter = GetGridBasedMovement, BlueprintSetter = SetGridBasedMovement, Category = Components)
 	TScriptInterface<IGridBasedMovement> GridBasedMovement;
 	
 	/**

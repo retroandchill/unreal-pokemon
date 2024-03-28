@@ -42,8 +42,15 @@ public:
 	 * Get the Grid-Based animation component for this actor
 	 * @return The Grid-Based animation component for this actor
 	 */
-	UFUNCTION(BlueprintPure, Category = Components)
-	TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent();
+	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
+	TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent() const;
+
+	/**
+	 * Set the Grid-Based animation component for this actor
+	 * @param NewGridBasedAnimationComponent The Grid-Based animation component for this actor
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
+	void SetGridBasedAnimationComponent(TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent);
 
 	/**
 	 * Move the character in the specified direction
@@ -158,7 +165,7 @@ private:
 	/**
 	 * Component for handling the animations of the character
 	 */
-	UPROPERTY(VisibleDefaultsOnly, BlueprintGetter = GetGridBasedAnimationComponent, Category = Components)
+	UPROPERTY(BlueprintGetter = GetGridBasedAnimationComponent, BlueprintSetter = SetGridBasedAnimationComponent, Category = Components)
 	TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
 
 	/**

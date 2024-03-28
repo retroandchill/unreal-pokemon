@@ -26,6 +26,9 @@ void UGridBasedMovementComponent::BeginPlay() {
 	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GetGridSize());
 	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GetGridSize());
 	DesiredPosition = CurrentPosition;
+	Position.X = CurrentPosition.X * UGridUtils::GetGridSize();
+	Position.Y = CurrentPosition.Y * UGridUtils::GetGridSize();
+	GetOwner()->SetActorLocation(Position);
 
 	auto Pawn = Cast<APawn>(Owner);
 	GUARD(Pawn == nullptr || !Pawn->IsPlayerControlled(), )
@@ -54,15 +57,12 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	UpdateAnimation(DeltaTime);
 }
 
-TScriptInterface<IGridBasedAnimationComponent> UGridBasedMovementComponent::GetGridBasedAnimationComponent() {
-	if (GridBasedAnimationComponent != nullptr) {
-		return GridBasedAnimationComponent;
-	}
-	
-	auto Owner = GetOwner();
-	GUARD(Owner == nullptr, nullptr)
-	GridBasedAnimationComponent = Owner->FindComponentByInterface(UGridBasedAnimationComponent::StaticClass());
+TScriptInterface<IGridBasedAnimationComponent> UGridBasedMovementComponent::GetGridBasedAnimationComponent() const {
 	return GridBasedAnimationComponent;
+}
+
+void UGridBasedMovementComponent::SetGridBasedAnimationComponent(TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent) {
+	GridBasedAnimationComponent = NewGridBasedAnimationComponent;
 }
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection) {
@@ -235,18 +235,16 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 }
 
 void UGridBasedMovementComponent::UpdateAnimation(float DeltaTime) {
-	auto AnimationComponent = GetGridBasedAnimationComponent();
-	GUARD(AnimationComponent == nullptr,)
-	AnimationComponent->UpdateDirection(Direction);
+	GridBasedAnimationComponent->UpdateDirection(Direction);
 
-	if (MoveTimer.IsSet() && !AnimationComponent->IsMoveAnimationPlaying()) {
-		AnimationComponent->StartMoveAnimation();
+	if (MoveTimer.IsSet() && !GridBasedAnimationComponent->IsMoveAnimationPlaying()) {
+		GridBasedAnimationComponent->StartMoveAnimation();
 	} else if (StopTimer.IsSet()) {
 		auto& Timer = StopTimer.GetValue();
 		Timer += DeltaTime;
 
-		if (Timer >= 0.125f && AnimationComponent->CanStopMoving()) {
-			AnimationComponent->StopMoveAnimation();
+		if (Timer >= 0.125f && GridBasedAnimationComponent->CanStopMoving()) {
+			GridBasedAnimationComponent->StopMoveAnimation();
 			StopTimer.Reset();
 		}
 	}

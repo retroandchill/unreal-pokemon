@@ -53,6 +53,10 @@ uint8 AGridBasedPawn::GetInteractionTypes() const {
 	return InteractionTypes;
 }
 
+UGridBasedMovementComponent* AGridBasedPawn::GetGridBasedMovementComponentInternal() const {
+	return GridBasedMovementComponent;
+}
+
 void AGridBasedPawn::Move(const FInputActionInstance& Input) {
 	auto Vector = Input.GetValue().Get<FVector2D>();
 	auto Dir = UGridUtils::VectorToFacingDirection(Vector);

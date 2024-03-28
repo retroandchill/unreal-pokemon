@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Interaction")
 	uint8 GetInteractionTypes() const override;
 
+protected:
+	UGridBasedMovementComponent* GetGridBasedMovementComponentInternal() const;
+
 private:
 	/**
 	 * Perform the movement action when receiving the input
