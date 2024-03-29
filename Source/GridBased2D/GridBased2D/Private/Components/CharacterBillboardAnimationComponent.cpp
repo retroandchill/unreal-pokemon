@@ -12,6 +12,11 @@ void UCharacterBillboardAnimationComponent::UpdateDirection(EFacingDirection Dir
 		SetUpMaterialInstance();
 	}
 	MaterialInstance->SetScalarParameterValue(DirectionPropertyName, static_cast<float>(Direction));
+	if (!CurrentDirection.IsSet() || CurrentDirection.GetValue() != Direction) {
+		MaterialInstance->SetScalarParameterValue(StartTimePropertyName, GetWorld()->GetRealTimeSeconds());
+		PlayingTime.Emplace(0.0);
+		CurrentDirection.Emplace(Direction);
+	}
 }
 
 bool UCharacterBillboardAnimationComponent::IsMoveAnimationPlaying() const {
@@ -22,11 +27,21 @@ void UCharacterBillboardAnimationComponent::StartMoveAnimation() {
 	if (MaterialInstance == nullptr) {
 		SetUpMaterialInstance();
 	}
+	
 	MaterialInstance->SetScalarParameterValue(FrameRatePropertyName, OriginalFrameRate);
+	if (!PlayingTime.IsSet()) {
+		MaterialInstance->SetScalarParameterValue(StartTimePropertyName, GetWorld()->GetRealTimeSeconds());
+		PlayingTime.Emplace(0.0);
+	}
 }
 
 bool UCharacterBillboardAnimationComponent::CanStopMoving() const {
-	return true;
+	GUARD(!PlayingTime.IsSet(), true)
+
+	float FrameRate = MaterialInstance->K2_GetScalarParameterValue(FrameRatePropertyName);
+	int32 TotalFramesPlayed = FMath::FloorToInt32(PlayingTime.GetValue() / FrameRate);
+	int32 CurrentFrame = TotalFramesPlayed % TotalFrames;
+	return ValidStopFrames.Contains(CurrentFrame);
 }
 
 void UCharacterBillboardAnimationComponent::StopMoveAnimation() {
@@ -34,6 +49,7 @@ void UCharacterBillboardAnimationComponent::StopMoveAnimation() {
 		SetUpMaterialInstance();
 	}
 	MaterialInstance->SetScalarParameterValue(FrameRatePropertyName, 0);
+	PlayingTime.Reset();
 }
 
 void UCharacterBillboardAnimationComponent::BeginPlay() {
@@ -43,6 +59,15 @@ void UCharacterBillboardAnimationComponent::BeginPlay() {
 	GUARD(BillboardComponent == nullptr, )
 	BillboardComponent->Elements.Empty();
 	BillboardComponent->AddElement(MaterialInstance, nullptr, false, SourceTexture->GetSizeY() / (4 * 2), SourceTexture->GetSizeX() / (4 * 2), nullptr);
+}
+
+void UCharacterBillboardAnimationComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+	FActorComponentTickFunction* ThisTickFunction) {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	if (PlayingTime.IsSet()) {
+		PlayingTime.GetValue() += DeltaTime;
+	}
 }
 
 void UCharacterBillboardAnimationComponent::SetUpMaterialInstance() {
