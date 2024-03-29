@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/GridMovable.h"
 #include "UObject/Interface.h"
 #include "MapGrid.generated.h"
 
+enum class EFacingDirection : uint8;
 class IGridMovable;
 
 // This class does not need to be modified.

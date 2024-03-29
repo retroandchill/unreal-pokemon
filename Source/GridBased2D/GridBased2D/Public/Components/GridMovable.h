@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/MoveCheckResult.h"
 #include "UObject/Interface.h"
 #include "GridMovable.generated.h"
 
@@ -23,5 +24,16 @@ class GRIDBASED2D_API IGridMovable {
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Movement)
 	UGridBasedMovementComponent* GetGridBasedMovementComponent() const;
+
+	/**
+	 * Perform some additional checks on the specified target square. Can be used to override a previous check that
+	 * didn't turn out as desired.
+	 * movement check behavior doesn't find anything that would block movement already.
+	 * @param TargetSquare The translated world-space position of the square in question to perform the checks on
+	 * @param bBlockingHit Was this hit blocking or not
+	 * @return Should we block movement based upon what we find?
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = Movement)
+	bool PerformAdditionalMovementChecks(const FVector &TargetSquare, bool bBlockingHit);
 	
 };

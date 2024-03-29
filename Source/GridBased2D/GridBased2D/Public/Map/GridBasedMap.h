@@ -73,5 +73,11 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Z-Sorting", meta = (UIMin = 0, ClampMin = 0))
 	int32 PlayerLevelLayer = 1;
+
+	/**
+	 * The data table asset used for terrain tag mappings, for various movement types and other traits
+	 */
+	UPROPERTY(EditAnywhere, Category = "Tilesets")
+	TObjectPtr<UDataTable> TerrainTagDataTable;
 	
 };

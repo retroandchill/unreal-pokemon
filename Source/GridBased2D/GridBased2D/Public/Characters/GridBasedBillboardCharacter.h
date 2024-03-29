@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Characters/GridBasedPawn.h"
-#include "GridBasedBillboardPawn.generated.h"
+#include "Characters/GridBasedCharacter.h"
+#include "GridBasedBillboardCharacter.generated.h"
 
 
 class UCapsuleComponent;
@@ -12,22 +12,16 @@ class UMaterialBillboardComponent;
 class UCharacterBillboardAnimationComponent;
 
 UCLASS()
-class GRIDBASED2D_API AGridBasedBillboardPawn : public AGridBasedPawn {
+class GRIDBASED2D_API AGridBasedBillboardCharacter : public AGridBasedCharacter {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	AGridBasedBillboardPawn();
+	AGridBasedBillboardCharacter();
 
 	void OnConstruction(const FTransform& Transform) override;
 
 private:
-	/**
-	 * The CapsuleComponent used for collision checks within the grid.
-	 */
-	UPROPERTY(VisibleAnywhere, Category = Components, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<UCapsuleComponent> CapsuleComponent;
-	
 	/**
 	 * The component used for billboard animations
 	 */

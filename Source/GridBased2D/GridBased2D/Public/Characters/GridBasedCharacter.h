@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/GridMovable.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/Pawn.h"
 #include "Interaction/Interactable.h"
-#include "GridBasedPawn.generated.h"
+#include "GridBasedCharacter.generated.h"
 
 class UGridBasedMovementComponent;
 class UAction;
@@ -18,14 +19,14 @@ struct FInputActionInstance;
  * Abstract pawn declaration for a grid-based character
  */
 UCLASS(Abstract)
-class GRIDBASED2D_API AGridBasedPawn : public APawn, public IGridMovable, public IInteractable {
+class GRIDBASED2D_API AGridBasedCharacter : public ACharacter, public IGridMovable, public IInteractable {
 	GENERATED_BODY()
 
 public:
 	/**
 	 * Initialize the default object
 	 */
-	AGridBasedPawn();
+	AGridBasedCharacter();
 
 protected:
 	void BeginPlay() override;
@@ -40,7 +41,43 @@ public:
 	uint8 GetInteractionTypes() const override;
 
 protected:
+	/**
+	 * Internal method that sidesteps the interface event to get the movement component
+	 * @return The retrieve movement component
+	 */
 	UGridBasedMovementComponent* GetGridBasedMovementComponentInternal() const;
+
+	/**
+	 * Check if a tile is a valid floor tile
+	 * @param TargetSquare The world space location of the tile in question
+	 * @return Is there no valid floor at this height
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
+	bool InvalidFloor(const FVector &TargetSquare) const;
+
+	/**
+	 * Check if a tile is a cliff face
+	 * @param TargetSquare The world space location of the tile in question
+	 * @return Is the target tile a cliff
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
+	bool IsStandingNextToCliff(const FVector& TargetSquare) const;
+
+	/**
+	 * Find the world space position just off of a tile's edge
+	 * @param TargetSquare The world space location of the tile in question
+	 * @return What is the world space location of one pixel off of the player's current tile
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
+	FVector FindLocationJustOffTileEdge(const FVector &TargetSquare) const;
+
+	/**
+	 * Compute the distance to the ground from the current position
+	 * @param Position The position to sweep to the ground from
+	 * @return The distance to the ground
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
+	double GetDistanceToGround(const FVector &Position) const;
 
 private:
 	/**

@@ -21,6 +21,7 @@ public:
 	 * Get the size of the grid in the game
 	 * @return The size of the grid according to the game
 	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
 	static double GetGridSize();
 
 	/**
@@ -89,4 +90,6 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Game", meta=(WorldContext="WorldContext"))
 	static AGridBasedGameModeBase* GetGridBasedGameMode(const UObject* WorldContext);
+
+	
 };

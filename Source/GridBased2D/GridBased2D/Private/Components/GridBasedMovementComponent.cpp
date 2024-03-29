@@ -120,6 +120,15 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
 			Ret.FoundActors.Emplace(Result.GetActor());
 		}
 	}
+	
+	if (auto Owner = GetOwner(); Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
+		FVector LocalOffset(0, 0, 0);
+		UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
+		auto Position = Owner->GetActorLocation();
+		auto GridPosition = LocalOffset * UGridUtils::GetGridSize() + Position;
+		Ret.bCanMove = !IGridMovable::Execute_PerformAdditionalMovementChecks(Owner, GridPosition, !Ret.bCanMove);
+	}
+	
 	return Ret;
 }
 
@@ -142,7 +151,7 @@ void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offse
 	GetOwner()->SetActorLocation(Offset);
 }
 
-void UGridBasedMovementComponent::OnMapChanged(IMapGrid& NewMap) {
+void UGridBasedMovementComponent::OnMapChanged(IMapGrid& NewMap) const {
 	auto Owner = GetOwner<APawn>();
 	GUARD(Owner == nullptr || !Owner->IsPlayerControlled(), )
 	
@@ -170,6 +179,7 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 	auto Owner = GetOwner();
 	auto Position = Owner->GetActorLocation();
 	auto GridPosition = LocalOffset * UGridUtils::GetGridSize() + Position;
+	
 	FCollisionShape GridSquare;
 	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
 	FCollisionQueryParams Params;
@@ -229,7 +239,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 		}
 	}
 
-	Owner->SetActorLocation(Position);
+	Owner->SetActorLocation(Position, true);
 	if (CurrentPosition != Pos && CurrentPosition == DesiredPosition) {
 		MoveComplete();
 	}

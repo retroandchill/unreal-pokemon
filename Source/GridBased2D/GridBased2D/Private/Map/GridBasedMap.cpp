@@ -4,13 +4,7 @@
 #include "Asserts.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
-#include "Components/AudioComponent.h"
-#include "Components/GridBasedMovementComponent.h"
-#include "Components/GridMovable.h"
-#include "Kismet/GameplayStatics.h"
-#include "Map/MapAudioUtilities.h"
-#include "Map/MapSubsystem.h"
-#include "Map/WithinMap.h"
+#include "GridBased2DSettings.h"
 #include "Replacement/TileReplacerComponent.h"
 
 // Sets default values
@@ -27,6 +21,9 @@ AGridBasedMap::AGridBasedMap() {
 #if WITH_EDITORONLY_DATA
 	TileReplacer = CreateDefaultSubobject<UTileReplacerComponent>(TEXT("TileReplacer"));
 #endif
+
+	auto Settings = GetDefault<UGridBased2DSettings>();
+	TerrainTagDataTable = Cast<UDataTable>(Settings->GetTerrainTagDataTable().TryLoad());
 }
 
 void AGridBasedMap::PostInitProperties() {
@@ -74,7 +71,7 @@ FIntRect AGridBasedMap::GetBounds() const {
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	UPaperTileMap* TileMap = TileMapComponent->TileMap;
-	GUARD(TileMap == nullptr, )
+	GUARD(TileMap == nullptr,)
 
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();
