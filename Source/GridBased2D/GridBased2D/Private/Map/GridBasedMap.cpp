@@ -105,7 +105,7 @@ bool AGridBasedMap::IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& C
 void AGridBasedMap::AddCharacter(const TScriptInterface<IGridMovable>& Character) {
 	Characters.Emplace(Character);
 	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
-	MovementComponent->OnMapChanged(this);
+	MovementComponent->OnMapChanged(*this);
 }
 
 void AGridBasedMap::RemoveCharacter(const TScriptInterface<IGridMovable>& Character) {

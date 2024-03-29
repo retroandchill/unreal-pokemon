@@ -5,8 +5,10 @@
 #include "Asserts.h"
 #include "EngineUtils.h"
 #include "Characters/FacingDirection.h"
+#include "Kismet/GameplayStatics.h"
 #include "GridUtils.generated.h"
 
+class UGameplayStatics;
 class AGridBasedGameModeBase;
 /**
  * Utility library for functions regarding the Grid system

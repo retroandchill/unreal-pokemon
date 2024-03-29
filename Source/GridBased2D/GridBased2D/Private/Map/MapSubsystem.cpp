@@ -125,16 +125,18 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable>& Play
 }
 
 void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable>& Movable) {
-	auto Maps = UGridUtils::FindAllActors<AGridBasedMap>(GetGameInstance());
-	AGridBasedMap* OldMap = nullptr;
-	AGridBasedMap* NewMap = nullptr;
-	for (auto Map : Maps) {
+	TArray<AActor*> Maps;
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UMapGrid::StaticClass(), Maps);
+	TScriptInterface<IMapGrid> OldMap = nullptr;
+	TScriptInterface<IMapGrid> NewMap = nullptr;
+	for (auto Actor : Maps) {
+		TScriptInterface<IMapGrid> Map = Actor;
 		if (OldMap == nullptr && Map->IsCharacterPartOfMap(Movable)) {
 			OldMap = Map;
 		}
 
-		auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Movable.GetObject());
-		if (NewMap == nullptr && Map->IsPositionInMap(MovementComponent->GetCurrentPosition())) {
+		if (auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Movable.GetObject());
+			NewMap == nullptr && Map->IsPositionInMap(MovementComponent->GetCurrentPosition())) {
 			NewMap = Map;
 		}
 

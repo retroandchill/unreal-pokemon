@@ -11,6 +11,7 @@
 #include "Map/WithinMap.h"
 #include "GridBasedMovementComponent.generated.h"
 
+class IMapGrid;
 class IGridBasedAnimationComponent;
 class IInteractable;
 class AGridBasedMap;
@@ -100,7 +101,7 @@ public:
 	 * Called when the player changes maps
 	 * @param NewMap The new map the player changes to
 	 */
-	void OnMapChanged(AGridBasedMap* NewMap);
+	void OnMapChanged(IMapGrid& NewMap);
 	
 	FIntVector2 GetCurrentPosition() const override;
 

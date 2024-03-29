@@ -94,12 +94,13 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
 
 FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection MovementDirection) const {
 	FMoveCheckResult Ret;
-	auto Maps = UGridUtils::FindAllActors<AGridBasedMap>(this);
+	TArray<AActor*> Maps;
+	UGameplayStatics::GetAllActorsWithInterface(this, UMapGrid::StaticClass(), Maps);
 	auto DestinationPosition = GetCurrentPosition();
 	UGridUtils::AdjustMovementPosition(MovementDirection, DestinationPosition);
 	bool bMapFound = false;
-	for (auto Map : Maps) {
-		if (Map->IsPositionInMap(DestinationPosition)) {
+	for (auto Actor : Maps) {
+		if (TScriptInterface<IMapGrid> Map = Actor; Map->IsPositionInMap(DestinationPosition)) {
 			bMapFound = Map->IsObjectInMap(GetOwner()) || CanMoveBetweenMaps();
 			break;
 		}
@@ -141,11 +142,11 @@ void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offse
 	GetOwner()->SetActorLocation(Offset);
 }
 
-void UGridBasedMovementComponent::OnMapChanged(AGridBasedMap* NewMap) {
+void UGridBasedMovementComponent::OnMapChanged(IMapGrid& NewMap) {
 	auto Owner = GetOwner<APawn>();
 	GUARD(Owner == nullptr || !Owner->IsPlayerControlled(), )
 	
-	NewMap->OnPlayerEnter();
+	NewMap.OnPlayerEnter();
 }
 
 FIntVector2 UGridBasedMovementComponent::GetCurrentPosition() const {

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MapGrid.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
 #include "GridBasedMap.generated.h"
@@ -12,7 +13,7 @@ class UTileReplacerComponent;
 class IWithinMap;
 
 UCLASS(Blueprintable, ClassGroup=(Map))
-class GRIDBASED2D_API AGridBasedMap : public AActor {
+class GRIDBASED2D_API AGridBasedMap : public AActor, public IMapGrid {
 	GENERATED_BODY()
 
 public:
@@ -42,51 +43,18 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
 	void ClearTileReplacements();
 #endif
-
-	/**
-	 * Get the bounds of the map in grid units.
-	 * @return The bounds of the map.
-	 */
-	FIntRect GetBounds() const;
-
-	/**
-	 * Check if the the current object is inside the map in question.
-	 * @param Object The object to check the position of
-	 * @return Is the object inside this bound of this map?
-	 */
+	
+	FIntRect GetBounds() const override;
+	
 	UFUNCTION(BlueprintPure, Category = Maps)
-	bool IsObjectInMap(TScriptInterface<IGridMovable> Object) const;
-
-	/**
-	 * Check if the given position is inside the map in question
-	 * @param Position The position to check
-	 * @return Is the position inside the map
-	 */
-	bool IsPositionInMap(const FIntVector2 &Position) const;
-
-	/**
-	 * Check if the given character is part of the map according to its list of contained characters.
-	 * @param Character The characters to check?
-	 * @return Does this map consider this character a part of itself?
-	 */
-	bool IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& Character) const;
-
-	/**
-	 * Add a character to this map
-	 * @param Character The character to add
-	 */
-	void AddCharacter(const TScriptInterface<IGridMovable>& Character);
-
-	/**
-	 * Remove a character from this map
-	 * @param Character The character to remove
-	 */
-	void RemoveCharacter(const TScriptInterface<IGridMovable>& Character);
-
-	/**
-	 * Called when the player enters the map
-	 */
-	void OnPlayerEnter();
+	bool IsObjectInMap(TScriptInterface<IGridMovable> Object) const  override;
+	bool IsPositionInMap(const FIntVector2 &Position) const override;
+	
+	bool IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& Character) const  override;
+	void AddCharacter(const TScriptInterface<IGridMovable>& Character)  override;
+	void RemoveCharacter(const TScriptInterface<IGridMovable>& Character)  override;
+	
+	void OnPlayerEnter()  override;
 
 private:
 	/**
