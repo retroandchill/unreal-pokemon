@@ -54,22 +54,6 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
 	SetUpMapLocation(bFinished);
 }
 
-void AGridBasedMap::BeginPlay() {
-	Super::BeginPlay();
-	
-	if (auto Player = UGameplayStatics::GetPlayerPawn(this, 0);
-		Player != nullptr && IsObjectInMap(Player)) {
-		OnPlayerEnter();
-	}
-	
-	TArray<AActor*> InitialCharacters;
-	UGameplayStatics::GetAllActorsWithInterface(GetGameInstance(), UGridMovable::StaticClass(), InitialCharacters);
-	Characters.Empty();
-	for (auto Char : InitialCharacters) {
-		Characters.Emplace(Char);
-	}
-}
-
 #if WITH_EDITORONLY_DATA
 void AGridBasedMap::RefreshTileData() {
 	TileReplacer->RestoreCachedTiles(TileMapComponent);
@@ -86,34 +70,6 @@ FIntRect AGridBasedMap::GetBounds() const {
 	int32 X = FMath::FloorToInt32(RealLocation.X / UGridUtils::GetGridSize());
 	int32 Y = FMath::FloorToInt32(RealLocation.Y / UGridUtils::GetGridSize());
 	return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
-}
-
-bool AGridBasedMap::IsObjectInMap(TScriptInterface<IGridMovable> Object) const {
-	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Object.GetObject());
-	ASSERT(MovementComponent != nullptr)
-	return IsPositionInMap(MovementComponent->GetCurrentPosition());
-}
-
-bool AGridBasedMap::IsPositionInMap(const FIntVector2& Position) const {
-	return GetBounds().Contains({Position.X, Position.Y});
-}
-
-bool AGridBasedMap::IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& Character) const {
-	return Characters.Contains(Character);
-}
-
-void AGridBasedMap::AddCharacter(const TScriptInterface<IGridMovable>& Character) {
-	Characters.Emplace(Character);
-	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
-	MovementComponent->OnMapChanged(*this);
-}
-
-void AGridBasedMap::RemoveCharacter(const TScriptInterface<IGridMovable>& Character) {
-	Characters.Remove(Character);
-}
-
-void AGridBasedMap::OnPlayerEnter() {
-	UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {

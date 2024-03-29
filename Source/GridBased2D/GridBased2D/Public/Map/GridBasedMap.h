@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GridBasedMapBase.h"
 #include "MapGrid.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
@@ -13,7 +14,7 @@ class UTileReplacerComponent;
 class IWithinMap;
 
 UCLASS(Blueprintable, ClassGroup=(Map))
-class GRIDBASED2D_API AGridBasedMap : public AActor, public IMapGrid {
+class GRIDBASED2D_API AGridBasedMap : public AGridBasedMapBase {
 	GENERATED_BODY()
 
 public:
@@ -22,14 +23,14 @@ public:
 	 */
 	AGridBasedMap();
 
+protected:
 	void PostInitProperties() override;
 	void PostReinitProperties() override;
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	void PostLoad() override;
 	void PostEditMove(bool bFinished) override;
 
-	void BeginPlay() override;
-
+public:
 #if WITH_EDITORONLY_DATA
 	/**
 	 * Refresh the tiles, replacing any tiles that need to be replaced
@@ -45,16 +46,6 @@ public:
 #endif
 	
 	FIntRect GetBounds() const override;
-	
-	UFUNCTION(BlueprintPure, Category = Maps)
-	bool IsObjectInMap(TScriptInterface<IGridMovable> Object) const  override;
-	bool IsPositionInMap(const FIntVector2 &Position) const override;
-	
-	bool IsCharacterPartOfMap(const TScriptInterface<IGridMovable>& Character) const  override;
-	void AddCharacter(const TScriptInterface<IGridMovable>& Character)  override;
-	void RemoveCharacter(const TScriptInterface<IGridMovable>& Character)  override;
-	
-	void OnPlayerEnter()  override;
 
 private:
 	/**
@@ -82,17 +73,5 @@ private:
 	 */
 	UPROPERTY(EditAnywhere, Category = "Z-Sorting", meta = (UIMin = 0, ClampMin = 0))
 	int32 PlayerLevelLayer = 1;
-
-	/**
-	 * The audio played when the map starts
-	 */
-	UPROPERTY(EditAnywhere, Category = Audio)
-	TObjectPtr<USoundBase> BackgroundMusic;
-
-	/**
-	 * The list of characters contained within this map
-	 */
-	UPROPERTY()
-	TArray<TScriptInterface<IGridMovable>> Characters;
 	
 };
