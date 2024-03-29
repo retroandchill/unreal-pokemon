@@ -25,12 +25,16 @@ void UPokemonSelectionPane::NativeConstruct() {
 			NewWidget->SetOwner(this);
 			NewWidget->SetPokemon(PlayerParty[i], i);
 			auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
-			PanelSlot->SetOffsets(GetPanelOffset(i));
+			auto [Offsets, Anchors] = GetPanelOffset(i);
+			PanelSlot->SetAnchors(Anchors);
+			PanelSlot->SetOffsets(Offsets);
 			ActivePanels.Add(NewWidget);
 		} else {
 			auto NewWidget = WidgetTree->ConstructWidget<UWidget>(BlankPanelClass);
 			auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
-			PanelSlot->SetOffsets(GetPanelOffset(i));
+			auto [Offsets, Anchors] = GetPanelOffset(i);
+			PanelSlot->SetAnchors(Anchors);
+			PanelSlot->SetOffsets(Offsets);
 		}
 	}
 
@@ -80,6 +84,12 @@ void UPokemonSelectionPane::CompleteSwitch() {
 	auto Panel2 = CastChecked<UPokemonPanel>(ActivePanels[GetIndex()].GetObject());
 	SwitchingIndex.Reset();
 	PerformSwap(Panel1, Panel2);
+}
+
+TPair<FMargin, FAnchors> UPokemonSelectionPane::GetPanelOffset(int32 PanelIndex) {
+	TPair<FMargin, FAnchors> Ret;
+	GetPanelOffset(PanelIndex, Ret.Key, Ret.Value);
+	return Ret;
 }
 
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
