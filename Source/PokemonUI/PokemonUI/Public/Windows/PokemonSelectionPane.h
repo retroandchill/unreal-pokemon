@@ -12,6 +12,7 @@ class UWidgetSwitcher;
 class UCanvasPanel;
 class UUniformGridPanel;
 class UPokemonPanel;
+
 /**
  * Pane used to select Pokémon from in a grid based format
  */

@@ -20,16 +20,18 @@ public:
 	/**
 	 * Get the icon based upon the Pokémon that was passed in.
 	 * @param Pokemon The Pokémon to get the icon for
+	 * @param Outer The owner of the created material instance
 	 * @return The graphical asset that this icon refers to.
 	 */
-	UObject* GetPokemonIcon(const IPokemon& Pokemon);
+	UMaterialInstanceDynamic* GetPokemonIcon(const IPokemon& Pokemon, UObject* Outer);
 
 	/**
 	 * Get the icon based upon the Pokémon information that was passed in.
 	 * @param Species The species of Pokémon to get the icon for
+	 * @param Outer The owner of the created material instance
 	 * @return The graphical asset that this icon refers to.
 	 */
-	UObject* GetPokemonIcon(FName Species);
+	UMaterialInstanceDynamic* GetPokemonIcon(FName Species, UObject* Outer);
 
 private:
 	/**
@@ -37,4 +39,22 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
 	FString PokemonIconsPackageName;
+
+	/**
+	 * The base material used to construct Pokémon icons
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Icons")
+	TObjectPtr<UMaterialInterface> PokemonIconsBaseMaterial;
+
+	/**
+	 * The name of the material property for the source texture of the icons
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Icons")
+	FName IconSourceTexturePropertyName;
+	
+	/**
+	 * The name of the material property for the framerate of the icon animation
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Icons")
+	FName IconFrameRatePropertyName;
 };
