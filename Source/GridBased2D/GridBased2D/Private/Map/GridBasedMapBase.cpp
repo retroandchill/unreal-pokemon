@@ -13,7 +13,7 @@ void AGridBasedMapBase::BeginPlay() {
 	Super::BeginPlay();
 	
 	if (auto Player = UGameplayStatics::GetPlayerPawn(this, 0);
-		Player != nullptr && IsObjectInMap(Player)) {
+		Player != nullptr && Player->GetClass()->ImplementsInterface(UGridMovable::StaticClass()) && IsObjectInMap(Player)) {
 		OnPlayerEnter();
 		}
 	
