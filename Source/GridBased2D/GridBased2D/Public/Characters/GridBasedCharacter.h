@@ -36,6 +36,7 @@ public:
 	UGridBasedMovementComponent* GetGridBasedMovementComponent_Implementation() const override;
 
 	void OnInteract_Implementation(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType) override;
+	bool PerformAdditionalMovementChecks_Implementation(const FVector& TargetSquare, bool bBlockingHit) override;
 	
 	UFUNCTION(BlueprintPure, Category = "Interaction")
 	uint8 GetInteractionTypes() const override;

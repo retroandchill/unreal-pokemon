@@ -57,6 +57,11 @@ void AGridBasedCharacter::OnInteract_Implementation(const TScriptInterface<IGrid
 	OnInteractedWith.Broadcast(InteractionType);
 }
 
+bool AGridBasedCharacter::
+PerformAdditionalMovementChecks_Implementation(const FVector& TargetSquare, bool bBlockingHit) {
+	return bBlockingHit;
+}
+
 uint8 AGridBasedCharacter::GetInteractionTypes() const {
 	return InteractionTypes;
 }

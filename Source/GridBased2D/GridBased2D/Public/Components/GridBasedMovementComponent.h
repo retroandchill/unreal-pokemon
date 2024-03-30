@@ -184,5 +184,10 @@ private:
 	 * The timer for movement used to determine where to stop animation
 	 */
 	TOptional<float> StopTimer;
+
+	/**
+	 * Should the character perform a sweep when setting the actor to a location?
+	 */
+	bool bPerformSweep = false;
 	
 };

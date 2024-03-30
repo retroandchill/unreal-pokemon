@@ -28,7 +28,7 @@ void UGridBasedMovementComponent::BeginPlay() {
 	DesiredPosition = CurrentPosition;
 	Position.X = CurrentPosition.X * UGridUtils::GetGridSize();
 	Position.Y = CurrentPosition.Y * UGridUtils::GetGridSize();
-	GetOwner()->SetActorLocation(Position);
+	GetOwner()->SetActorLocation(Position, bPerformSweep);
 
 	auto Pawn = Cast<APawn>(Owner);
 	GUARD(Pawn == nullptr || !Pawn->IsPlayerControlled(), )
@@ -239,7 +239,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 		}
 	}
 
-	Owner->SetActorLocation(Position, true);
+	Owner->SetActorLocation(Position, bPerformSweep);
 	if (CurrentPosition != Pos && CurrentPosition == DesiredPosition) {
 		MoveComplete();
 	}
