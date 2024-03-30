@@ -6,6 +6,7 @@
 #include "Characters/Charset.h"
 #include "Charset/CharsetAssetActions.h"
 #include "Charset/CharsetThumbnailRenderer.h"
+#include "Details/GridBasedBillboardCharacterDetails.h"
 #include "Details/GridBasedMapDetails.h"
 
 constexpr auto GLoctextNamespace = "FGridBased2DEditorModule";
@@ -15,6 +16,7 @@ void FGridBased2DEditorModule::StartupModule() {
 
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 	PropertyModule.RegisterCustomClassLayout("GridBasedMap", FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedMapDetails::MakeInstance));
+	PropertyModule.RegisterCustomClassLayout("GridBasedBillboardCharacter", FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedBillboardCharacterDetails::MakeInstance));
 }
 
 void FGridBased2DEditorModule::OnPostEngineInit() const {
