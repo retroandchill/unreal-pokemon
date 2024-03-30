@@ -4,7 +4,7 @@
 #include "Interaction/InteractableActor.h"
 
 
-void AInteractableActor::OnInteract_Implementation(AGameCharacter* Character, EInteractionType InteractionType) {
+void AInteractableActor::OnInteract_Implementation(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType) {
 	Interact.Broadcast(InteractionType);
 }
 

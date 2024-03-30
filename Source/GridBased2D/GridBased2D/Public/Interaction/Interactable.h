@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "Interactable.generated.h"
 
+class IGridMovable;
 class AGameCharacter;
 // This class does not need to be modified.
 UINTERFACE()
@@ -27,7 +28,7 @@ public:
 	 * @param InteractionType The type of interaction with this character
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Interaction)
-	void OnInteract(AGameCharacter* Character,  EInteractionType InteractionType);
+	void OnInteract(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType);
 
 	/**
 	 * Get the list of valid interaction types for this class

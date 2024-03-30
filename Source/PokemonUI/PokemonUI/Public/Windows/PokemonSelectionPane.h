@@ -12,6 +12,7 @@ class UWidgetSwitcher;
 class UCanvasPanel;
 class UUniformGridPanel;
 class UPokemonPanel;
+
 /**
  * Pane used to select Pokémon from in a grid based format
  */
@@ -68,10 +69,18 @@ protected:
 	/**
 	 * Get the location in the grid to place the panel in
 	 * @param PanelIndex The index of the new panel
-	 * @return The X and Y coordinates to place the panel in
+	 * @param Offsets The positioning to place the panel in
+	 * @param Anchors The percentage anchors used to place the panel
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Placement")
-	FMargin GetPanelOffset(int32 PanelIndex);
+	void GetPanelOffset(int32 PanelIndex, FMargin &Offsets, FAnchors &Anchors);
+
+	/**
+	 * Get the location in the grid to place the panel in
+	 * @param PanelIndex The index of the new panel
+	 * @return The positioning to place the panel in and the percentage anchors used to place the panel
+	 */
+	TPair<FMargin, FAnchors> GetPanelOffset(int32 PanelIndex);
 
 	void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 

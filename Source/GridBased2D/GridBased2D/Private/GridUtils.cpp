@@ -1,8 +1,14 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "GridUtils.h"
 
+#include "GridBased2DSettings.h"
 #include "GridBasedGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+
+double UGridUtils::GetGridSize() {
+	static const double GridSize = GetDefault<UGridBased2DSettings>()->GetGridSize();
+	return GridSize;
+}
 
 TOptional<EFacingDirection> UGridUtils::VectorToFacingDirection(const FVector2D Vector) {
 	using enum EFacingDirection;

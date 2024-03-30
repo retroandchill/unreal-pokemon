@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "MoveInDirection.generated.h"
 
+class IGridMovable;
 class AGameCharacter;
 
 /**
@@ -36,7 +37,7 @@ public:
   * @return The node to execute the task with
   */
  UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true"), Category = "Character|Movement")
- static UMoveInDirection* MoveInDirection(AGameCharacter* Character, EFacingDirection MovementDirection);
+ static UMoveInDirection* MoveInDirection(const TScriptInterface<IGridMovable> &Character, EFacingDirection MovementDirection);
 
  void Activate() override;
 
@@ -46,7 +47,7 @@ private:
   * The class used to display the message to the screen
   */
  UPROPERTY()
- TObjectPtr<AGameCharacter> Character;
+ TScriptInterface<IGridMovable> Character;
 
  /**
   * The direction to move the character in

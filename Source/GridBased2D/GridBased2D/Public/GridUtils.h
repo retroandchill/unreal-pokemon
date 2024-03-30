@@ -5,8 +5,10 @@
 #include "Asserts.h"
 #include "EngineUtils.h"
 #include "Characters/FacingDirection.h"
+#include "Kismet/GameplayStatics.h"
 #include "GridUtils.generated.h"
 
+class UGameplayStatics;
 class AGridBasedGameModeBase;
 /**
  * Utility library for functions regarding the Grid system
@@ -16,9 +18,11 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 public:
 	/**
-	 * The size of the grid according to the game
+	 * Get the size of the grid in the game
+	 * @return The size of the grid according to the game
 	 */
-	static constexpr double GRID_SIZE = 32.0f;
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
+	static double GetGridSize();
 
 	/**
 	 * Convert a vector into a facing direction
@@ -86,4 +90,6 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Game", meta=(WorldContext="WorldContext"))
 	static AGridBasedGameModeBase* GetGridBasedGameMode(const UObject* WorldContext);
+
+	
 };

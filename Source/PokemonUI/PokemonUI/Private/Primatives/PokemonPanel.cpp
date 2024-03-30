@@ -65,7 +65,7 @@ void UPokemonPanel::Refresh() {
 		auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
 		ASSERT(GraphicsLoadingSubsystem != nullptr)
 		PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-		PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon));
+		PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon, this));
 	} else {
 		PokemonIcon->SetVisibility(ESlateVisibility::Collapsed);
 	}
