@@ -39,7 +39,7 @@ bool UCharacterBillboardAnimationComponent::CanStopMoving() const {
 	GUARD(!PlayingTime.IsSet(), true)
 
 	float FrameRate = MaterialInstance->K2_GetScalarParameterValue(FrameRatePropertyName);
-	int32 TotalFramesPlayed = FMath::FloorToInt32(PlayingTime.GetValue() / FrameRate);
+	int32 TotalFramesPlayed = FMath::FloorToInt32(PlayingTime.GetValue() * FrameRate);
 	int32 CurrentFrame = TotalFramesPlayed % TotalFrames;
 	return ValidStopFrames.Contains(CurrentFrame);
 }
