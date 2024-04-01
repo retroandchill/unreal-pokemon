@@ -50,10 +50,6 @@ Name = Waitress
 Gender = Female
 BaseMoney = 40
 #-------------------------------
-[WAITRESS]
-Name = Waitress
-Gender = Female
-#-------------------------------
 [POKEMONTRAINER_Chili]
 Name = Pokémon Trainer
 Gender = Male
@@ -74,14 +70,14 @@ Name = Nursery Aide
 Gender = Female
 BaseMoney = 40
 #-------------------------------
-[PRESCHOOLER_M]
-Name = Preschooler
-Gender = Male
-BaseMoney = 4
-#-------------------------------
 [PRESCHOOLER_F]
 Name = Preschooler
 Gender = Female
+BaseMoney = 4
+#-------------------------------
+[PRESCHOOLER_M]
+Name = Preschooler
+Gender = Male
 BaseMoney = 4
 #-------------------------------
 [TWINS]
@@ -838,19 +834,9 @@ Name = Masked Man
 Gender = Male
 BaseMoney = 100
 #-------------------------------
-[BATTLESHIP]
-Name = Battleship
-Gender = Unknown
-BaseMoney = 100
-#-------------------------------
 [WORLDPOLICE]
 Name = World Police
 Gender = Male
-BaseMoney = 100
-#-------------------------------
-[MYSTERIOUS]
-Name = Mysterious
-Gender = Unknown
 BaseMoney = 100
 #-------------------------------
 [INVADER]
@@ -858,39 +844,19 @@ Name = Invader
 Gender = Unknown
 BaseMoney = 100
 #-------------------------------
-[MIDNIGHT]
-Name = Midnight
-Gender = Unknown
-BaseMoney = 100
-#-------------------------------
-[HAUNTEDMAN_Janitor]
-Name = Haunted Man
-Gender = Male
-BaseMoney = 100
-#-------------------------------
-[HAUNTEDKID]
-Name = Haunted Kid
-Gender = Female
-BaseMoney = 100
-#-------------------------------
 [TREASURE]
 Name = Treasure
 Gender = Unknown
 BaseMoney = 100
 #-------------------------------
-[HAUNTEDMAN_Gentleman]
-Name = Haunted Man
-Gender = Male
+[WERIDLIGHT]
+Name = Weird Light
+Gender = Female
 BaseMoney = 100
 #-------------------------------
 [MAGICQUEEN]
 Name = Magic Queen
 Gender = Female
-BaseMoney = 100
-#-------------------------------
-[GATEKEEPER]
-Name = Gatekeeper
-Gender = Unknown
 BaseMoney = 100
 #-------------------------------
 [SUITACTOR_M]
@@ -903,20 +869,10 @@ Name = Suit Actor
 Gender = Female
 BaseMoney = 100
 #-------------------------------
-[POKEMONTRAINER_Red]
-Name = Pokémon Trainer
-Gender = Male
-BaseMoney = 200
-#-------------------------------
 [POKEMONTRAINER_Benga]
 Name = Pokémon Trainer
 Gender = Male
 BaseMoney = 200
-#-------------------------------
-[FUTUREBEING]
-Name = Future Being
-Gender = Male
-BaseMoney = 100
 #-------------------------------
 [POKEMONTRAINER_Red]
 Name = Pokémon Trainer
