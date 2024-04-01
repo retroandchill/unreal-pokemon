@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BasicTrainer.h"
 #include "Trainer.h"
 
 /**
  * Temporary stub class used to test trainer functionality before that component is fully built out.
  * TODO: Remove this class once the functionality is there.
  */
-class POKEMONCORE_API FTrainerStub : public ITrainer {
+class POKEMONCORE_API FTrainerStub : public FBasicTrainer {
 public:
 	FTrainerStub();
 

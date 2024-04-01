@@ -24,6 +24,7 @@
 #include "Species/Nature.h"
 #include "..\Public\Species\SpeciesData.h"
 #include "Species/Stat.h"
+#include "Trainers/TrainerType.h"
 
 constexpr auto GLoctextNamespace = "FPokemonDataModule";
 
@@ -51,6 +52,7 @@ void FPokemonDataModule::StartupModule() {
 	DataRegistry.RegisterStruct<FMoveData>();
 	DataRegistry.RegisterStruct<FItem>();
 	DataRegistry.RegisterStruct<FSpeciesData>();
+	DataRegistry.RegisterStruct<FTrainerType>();
 
 	auto Settings = GetDefault<UPokemonDataSettings>();
 	for (auto &DataTables = Settings->GetDataTables(); auto &Table : DataTables) {
