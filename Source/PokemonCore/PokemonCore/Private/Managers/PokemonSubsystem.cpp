@@ -5,6 +5,7 @@
 
 #include "Asserts.h"
 #include "PokemonCoreSettings.h"
+#include "Player/PlayerMetadata.h"
 #include "Trainers/TrainerStub.h"
 
 UPokemonSubsystem* UPokemonSubsystem::Instance = nullptr;
@@ -17,8 +18,7 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	HPStat = Settings->GetHPStat();
 	MaxPartySize = Settings->GetMaxPartySize();
 
-	// TODO: Swap this instantiation with the actual trainer instantiation
-	Player = MakeUnique<FTrainerStub>();
+	StartNewGame();
 }
 
 void UPokemonSubsystem::Deinitialize() {
@@ -29,6 +29,13 @@ void UPokemonSubsystem::Deinitialize() {
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
 	ASSERT(Instance != nullptr)
 	return *Instance;
+}
+
+void UPokemonSubsystem::StartNewGame() {
+	// TODO: Swap this instantiation with the actual trainer instantiation
+	Player = MakeUnique<FTrainerStub>();
+	PlayerMetadata = NewObject<UPlayerMetadata>();
+	PlayerMetadata->StartNewGame();
 }
 
 FName UPokemonSubsystem::GetHPStat() const {
@@ -47,4 +54,8 @@ ITrainer& UPokemonSubsystem::GetPlayer() {
 const ITrainer& UPokemonSubsystem::GetPlayer() const {
 	ASSERT(Player != nullptr)
 	return *Player;
+}
+
+const UPlayerMetadata& UPokemonSubsystem::GetPlayerMetadata() const {
+	return *PlayerMetadata;
 }

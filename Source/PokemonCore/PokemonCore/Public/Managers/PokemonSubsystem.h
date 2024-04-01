@@ -6,6 +6,7 @@
 #include "Trainers/Trainer.h"
 #include "PokemonSubsystem.generated.h"
 
+class UPlayerMetadata;
 /**
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
  */
@@ -22,6 +23,12 @@ public:
 	 * @return The singleton instance of the Pokémon Manager class
 	 */
 	static UPokemonSubsystem& GetInstance();
+
+	/**
+	 * Start a brand new game for the player
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Playthrough")
+	void StartNewGame();
 
 	/**
 	 * The the ID of the HP stat
@@ -49,6 +56,12 @@ public:
 	 */
 	const ITrainer& GetPlayer() const;
 
+	/**
+	 * Get the metadata about the current player
+	 * @return The metadata about the current player
+	 */
+	const UPlayerMetadata& GetPlayerMetadata() const;
+
 private:
 	/**
 	 * Singleton instance used to hold a backdoor reference to this system
@@ -71,4 +84,10 @@ private:
 	 * The trainer that represents the player character
 	 */
 	TUniquePtr<ITrainer> Player;
+
+	/**
+	 * The metadata about the player
+	 */
+	UPROPERTY()
+	TObjectPtr<UPlayerMetadata> PlayerMetadata;
 };
