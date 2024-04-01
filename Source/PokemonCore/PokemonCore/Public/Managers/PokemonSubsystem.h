@@ -48,19 +48,14 @@ public:
 	 * Get the player trainer
 	 * @return A reference to the player trainer character
 	 */
-	ITrainer& GetPlayer();
-
-	/**
-	 * Get the player trainer
-	 * @return A reference to the player trainer character
-	 */
-	const ITrainer& GetPlayer() const;
+	const TSharedPtr<ITrainer> &GetPlayer() const;
 
 	/**
 	 * Get the metadata about the current player
 	 * @return The metadata about the current player
 	 */
-	const UPlayerMetadata& GetPlayerMetadata() const;
+	UFUNCTION(BlueprintPure, Category = "Trainers|Player")
+	UPlayerMetadata* GetPlayerMetadata() const;
 
 private:
 	/**
@@ -83,7 +78,7 @@ private:
 	/**
 	 * The trainer that represents the player character
 	 */
-	TUniquePtr<ITrainer> Player;
+	TSharedPtr<ITrainer> Player;
 
 	/**
 	 * The metadata about the player

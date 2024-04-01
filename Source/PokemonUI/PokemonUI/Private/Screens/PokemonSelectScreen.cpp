@@ -37,7 +37,7 @@ void UPokemonSelectScreen::SetHelpText(const FText& Text) {
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-	if (auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty(); Index < Party.Num()) {
+	if (auto& Party = UPokemonSubsystem::GetInstance().GetPlayer()->GetParty(); Index < Party.Num()) {
 		if (SelectionPane->IsSwitching()) {
 			if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
 				Swap(Party[SwitchingIndex], Party[Index]);
@@ -70,7 +70,7 @@ void UPokemonSelectScreen::ProcessCommand(int32 CurrentIndex, UCommand* Selected
 	auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
 	ASSERT(Handler != nullptr);
 
-	auto& Party = UPokemonSubsystem::GetInstance().GetPlayer().GetParty();
+	auto& Party = UPokemonSubsystem::GetInstance().GetPlayer()->GetParty();
 	Handler->Handle(*this, Party, SelectionPane->GetIndex());
 }
 

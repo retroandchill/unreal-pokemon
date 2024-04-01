@@ -14,7 +14,7 @@ TStatId UPlayerMetadata::GetStatId() const {
 }
 
 UWorld* UPlayerMetadata::GetTickableGameObjectWorld() const {
-	return UPokemonSubsystem::GetInstance().GetGameInstance()->GetWorld();
+	return GetWorld();
 }
 
 const FDateTime& UPlayerMetadata::GetStartDate() const {
