@@ -1,11 +1,12 @@
 import unittest
 from unittest.mock import MagicMock
 
+import mocks
+
 from unreal import DataTable, EditorAssetLibrary, DataTableFunctionLibrary
 
-import mocks
 from pokemon.data_writer import import_types, import_moves, import_items, import_abilities
-from pokemon.data_writer.data_table_writer import import_species
+from pokemon.data_writer.data_table_writer import import_species, import_trainer_types
 
 assert mocks, "Something is imported for its side effects."
 
@@ -74,6 +75,17 @@ class MyTestCase(unittest.TestCase):
         species_data.to_json = MagicMock(return_value=JSON_EXAMPLE)
         import_species(species_data)
         EditorAssetLibrary.load_asset.assert_called_once_with('/Game/Data/Pokemon.Pokemon')
+        DataTableFunctionLibrary.fill_data_table_from_json_string.assert_called_once_with(test_table, JSON_EXAMPLE)
+
+    def test_import_trainer_types(self):
+        test_table = DataTable()
+        EditorAssetLibrary.load_asset = MagicMock(return_value=test_table)
+        DataTableFunctionLibrary.fill_data_table_from_json_string = MagicMock()
+
+        species_data = MagicMock()
+        species_data.to_json = MagicMock(return_value=JSON_EXAMPLE)
+        import_trainer_types(species_data)
+        EditorAssetLibrary.load_asset.assert_called_once_with('/Game/Data/TrainerTypes.TrainerTypes')
         DataTableFunctionLibrary.fill_data_table_from_json_string.assert_called_once_with(test_table, JSON_EXAMPLE)
 
 
