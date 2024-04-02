@@ -9,3 +9,7 @@ const FGenderRatio& FSpeciesData::GetGenderRatio() const {
 	ASSERT(Ret != nullptr)
 	return *Ret;
 }
+
+TArray<FName> USpeciesHelper::GetSpeciesNames() {
+	return FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetTableRowNames();
+}

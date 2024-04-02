@@ -14,6 +14,8 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
 	GENERATED_BODY()
 
 public:
+	UPokemonCoreSettings();
+	
 	/**
 	 * The the ID of the HP stat
 	 * @return The stat used referring to a Pokémon's HP
@@ -33,34 +35,21 @@ public:
 	 * @return The class used for all Pokémon objects
 	 */
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
-	FName GetPokemonClass() const;
+	TSubclassOf<UObject> GetPokemonClass() const;
 
 	/**
 	 * The class used for all Stat Block objects
 	 * @return The class used for all Stat Block objects
 	 */
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
-	FName GetStatBlockClass() const;
+	TSubclassOf<UObject> GetStatBlockClass() const;
 
 private:
-	/**
-	 * Get the list of options for the Pokémon class dropdown
-	 * @return The list of options for the dropdown
-	 */
-	UFUNCTION()
-	static TArray<FName> GetPokemonClassOptions();
-
-	/**
-	 * Get the list of options for the Stat Block class dropdown
-	 * @return The list of options for the dropdown
-	 */
-	UFUNCTION()
-	static TArray<FName> GetStatBlockClassOptions();
 
 	/**
 	 * The stat used referring to a Pokémon's HP
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names")
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names", meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
 	FName HPStat;
 
 	/**
@@ -72,14 +61,13 @@ private:
 	/**
 	 * The class used for all Pokémon objects
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
-		meta = (GetOptions=GetPokemonClassOptions))
-	FName PokemonClass;
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (MustImplement = Pokemon))
+	TSubclassOf<UObject> PokemonClass;
 
 	/**
 	 * The class used for all Stat Block objects
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
-		meta = (GetOptions=GetStatBlockClassOptions))
-	FName StatBlockClass;
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
+		meta = (MustImplement = StatBlock))
+	TSubclassOf<UObject> StatBlockClass;
 };

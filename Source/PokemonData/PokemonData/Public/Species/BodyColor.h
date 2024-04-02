@@ -23,3 +23,19 @@ struct POKEMONDATA_API FBodyColor : public FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 };
+
+/**
+ * Blueprint function library for getting body color data out.
+ */
+UCLASS()
+class POKEMONDATA_API UBodyColorHelper : public UBlueprintFunctionLibrary { 
+	GENERATED_BODY() 
+
+public:
+	/**
+	 * Get the list of all possible body color names.
+	 * @return The list of all possible body color names.
+	 */
+	UFUNCTION() 
+	static TArray<FName> GetBodyColorNames(); 
+};

@@ -44,3 +44,26 @@ struct POKEMONDATA_API FStat : public FTableRowBase {
 		meta = (EditCondition = "Type != EPokemonStatType::Battle", UIMin = 0, ClampMin = 0))
 	int32 PbsOrder;
 };
+
+/**
+ * Blueprint function library for getting stat data out.
+ */
+UCLASS()
+class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible stat names.
+	 * @return The list of all possible stat names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetStatNames();
+
+	/**
+	 * Get the list of all possible main stat names.
+	 * @return The list of all possible main stat names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetMainStatNames();
+};

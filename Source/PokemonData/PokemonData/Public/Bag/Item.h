@@ -100,7 +100,7 @@ struct POKEMONDATA_API FItem : public FTableRowBase {
 	/**
 	 * Move taught by this HM, TM or TR.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
 	FName Move;
 
 	/**
@@ -110,4 +110,20 @@ struct POKEMONDATA_API FItem : public FTableRowBase {
 	FText Description;
 
 	FItem();
+};
+
+/**
+ * Blueprint function library for getting item data out.
+ */
+UCLASS()
+class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible item names.
+	 * @return The list of all possible item names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetItemNames();
 };

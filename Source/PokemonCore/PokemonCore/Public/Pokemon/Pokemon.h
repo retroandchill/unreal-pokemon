@@ -1,85 +1,92 @@
-// "Unreal Pokémon" created by Retro & Chill.
+﻿// "Unreal Pokémon" created by Retro & Chill.
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
-#include "Meta/GenericStaticUniqueRegistry.h"
-#include "Meta/GenericStaticSharedRegistry.h"
 #include "Meta/MetatypeDeclares.h"
 #include "Meta/PokeRegistry.h"
-#include "Meta/SharedPokeRegistry.h"
-#include "Stats/StatBlock.h"
+#include "UObject/Interface.h"
+#include "Pokemon.generated.h"
 
-class UPokemonBuilder;
 struct FPokemonDTO;
+class IStatBlock;
 struct FSpeciesData;
+
+// This class does not need to be modified.
+UINTERFACE(NotBlueprintable)
+class UPokemon : public UInterface {
+	GENERATED_BODY()
+};
 
 /**
  * Abstract interface for a Pokémon object
  */
 class POKEMONCORE_API IPokemon {
-	DECLARE_ABSTRACT_METATYPE
-	
-public:
-	virtual ~IPokemon() = default;
+	GENERATED_BODY()
 
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+public:
+	/**
+	 * Construct a Pokémon from the DTO
+	 * @param DTO The source Pokémon DTO to initialize from
+	 */
+	virtual void Initialize(const FPokemonDTO& DTO) = 0;
+	
 	/**
 	 * Get the name of the Pokémon in question
 	 * @return The Pokémon's Nickname
 	 */
-	virtual FText GetName() const = 0;
+	UFUNCTION(BlueprintCallable, Category = Bio)
+	virtual FText GetNickname() const = 0;
+
+	/**
+	 * Get the Pokémon's Personality value
+	 * @return The internal personality value of the Pokémon. Determines the default values of various aspects of the
+	 * Pokémon if the values are not already set.
+	 */
+	virtual uint32 GetPersonalityValue() const = 0;
 
 	/**
 	 * Get the species information about the Pokémon in question
 	 * @return The species data
 	 */
+	UFUNCTION(BlueprintCallable, Category = Bio)
 	virtual const FSpeciesData& GetSpecies() const = 0;
 
 	/**
 	 * Get the gender of the Pokémon in question
 	 * @return The Pokémon's gender
 	 */
+	UFUNCTION(BlueprintCallable, Category = Bio)
 	virtual EPokemonGender GetGender() const = 0;
 
 	/**
 	 * Get the current HP of the Pokémon in question
 	 * @return The current HP of this particular Pokémon
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual int32 GetCurrentHP() const = 0;
 
 	/**
 	 * Get the current HP of the Pokémon in question
 	 * @return The current HP of this particular Pokémon
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual int32 GetMaxHP() const = 0;
 
 	/**
 	 * Returns if the Pokémon is currently fainted
 	 * @return Is the Pokémon currently fainted
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual bool IsFainted() const = 0;
 
 	/**
 	 * Get the stat information for this Pokémon
 	 * @return A reference to the owned stat block
 	 */
-	virtual const IStatBlock& GetStatBlock() const = 0;
-
-	/**
-	 * Convert this class into a builder object
-	 * @return The builder class to use
-	 */
-	virtual UPokemonBuilder *ToBuilder() const = 0;
-
-	/**
-	 * Check if two Pokémon are the same
-	 * @param Other The other Pokémon
-	 * @return Are the two Pokémon the same?
-	 */
-	virtual bool operator==(const IPokemon& Other) const = 0;
+	UFUNCTION(BlueprintCallable, Category = Stats)
+	virtual TScriptInterface<IStatBlock> GetStatBlock() const = 0;
+	
 };
-
-/**
- * The static registry for all Pokémon
- */
-using FPokemonRegistry = TGenericStaticSharedRegistry<IPokemon, const FPokemonDTO&>;

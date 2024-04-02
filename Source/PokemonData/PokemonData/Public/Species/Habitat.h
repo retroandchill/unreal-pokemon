@@ -23,3 +23,19 @@ struct POKEMONDATA_API FHabitat : public FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
 	FText RealName;
 };
+
+/**
+ * Blueprint function library for getting habitat data out.
+ */
+UCLASS()
+class POKEMONDATA_API UHabitatHelper : public UBlueprintFunctionLibrary { 
+	GENERATED_BODY() 
+
+public:
+	/**
+	 * Get the list of all possible habitat names.
+	 * @return The list of all possible habitat names.
+	 */
+	UFUNCTION() 
+	static TArray<FName> GetHabitatNames(); 
+};
