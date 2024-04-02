@@ -30,3 +30,19 @@ struct POKEMONDATA_API FEggGroup : public FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding")
 	EEggGroupType Type;
 };
+
+/**
+ * Blueprint function library for getting egg group data out.
+ */
+UCLASS()
+class POKEMONDATA_API UEggGroupHelper : public UBlueprintFunctionLibrary { 
+	GENERATED_BODY() 
+
+public:
+	/**
+	 * Get the list of all possible egg group names.
+	 * @return The list of all possible egg group names.
+	 */
+	UFUNCTION() 
+	static TArray<FName> GetEggGroupNames(); 
+};

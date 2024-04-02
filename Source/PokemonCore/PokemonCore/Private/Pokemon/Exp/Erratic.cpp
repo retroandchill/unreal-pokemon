@@ -23,7 +23,3 @@ int32 FErratic::ExpForLevel(int32 Level) const {
 
 	return UMathUtilities::Pow(Level, 3) * (160 - Level) / 100;
 }
-
-TUniquePtr<IGrowthRate> FErratic::Clone() const {
-	return MakeUnique<FErratic>(*this);
-}

@@ -36,13 +36,13 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * The types this Pokémon can have
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information", meta = (GetOptions = "PokemonData.TypeHelper.GetTypeNames"))
 	TArray<FName> Types;
 
 	/**
 	 * Determines a Pokémon's chance of being Male/Female
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Species Information", meta = (GetOptions = "PokemonData.GenderRatioHelper.GetGenderRatioNames"))
 	FName GenderRatio;
 
 	/**
@@ -60,13 +60,13 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * The base stats of this particular species
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats", meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames", UIMin = 1, ClampMin = 1))
 	TMap<FName, int32> BaseStats;
 
 	/**
 	 * The rate at which this Pokémon levels up from gaining Exp.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats", meta = (GetOptions = "PokemonData.GrowthRateHelper.GetGrowthRateNames"))
 	FName GrowthRate;
 
 	/**
@@ -78,19 +78,19 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * The EVs this species gives when defeated/caught
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats", meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames", UIMin = 1, ClampMin = 1))
 	TMap<FName, uint8> EVs;
 
 	/**
 	 * The normal abilities this Pokémon can have
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities", meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
 	TArray<FName> Abilities;
 
 	/**
 	 * The hidden abilities this Pokémon can have
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities", meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
 	TArray<FName> HiddenAbilities;
 
 	/**
@@ -102,13 +102,13 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * Moves that can be learned TM/HM/TR or through a Move Tutor
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Moves")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Moves", meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
 	TArray<FName> TutorMoves;
 
 	/**
 	 * Moves that can be learned through breeding or by means of a Mirror Herb
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Moves")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Moves", meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
 	TArray<FName> EggMoves;
 
 	/**
@@ -120,7 +120,7 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * What breeding egg groups is this Pokémon a part of
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding", meta = (GetOptions = "PokemonData.EggGroupHelper.GetEggGroupNames"))
 	TArray<FName> EggGroups;
 
 	/**
@@ -132,13 +132,13 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * Any Incense items used for breeding?
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding", meta = (GetOptions = "PokemonData.ItemHelper.GetItemNames"))
 	FName Incense;
 
 	/**
 	 * The species can this Pokémon produce?
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Breeding", meta = (GetOptions = "PokemonData.SpeciesHelper.GetSpeciesNames"))
 	TArray<FName> Offspring;
 
 	/**
@@ -168,37 +168,37 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	/**
 	 * The color of this Pokémon (used for Pokédex filtering)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex", meta = (GetOptions = "PokemonData.BodyColorHelper.GetBodyColorNames"))
 	FName Color;
 
 	/**
 	 * The body shape of this Pokémon (used for Pokédex filtering)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex", meta = (GetOptions = "PokemonData.BodyShapeHelper.GetBodyShapeNames"))
 	FName Shape;
 
 	/**
 	 * The habitat of this Pokémon (used for Pokédex filtering)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Pokédex", meta = (GetOptions = "PokemonData.HabitatHelper.GetHabitatNames"))
 	FName Habitat;
 
 	/**
 	 * Item(s) held 100% of the time
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems", meta = (GetOptions = "PokemonData.ItemHelper.GetItemNames"))
 	TArray<FName> WildItemCommon;
 
 	/**
 	 * Item(s) held 50% of the time
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems", meta = (GetOptions = "PokemonData.ItemHelper.GetItemNames"))
 	TArray<FName> WildItemUncommon;
 
 	/**
 	 * Item(s) held 5% of the time
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "HeldItems", meta = (GetOptions = "PokemonData.ItemHelper.GetItemNames"))
 	TArray<FName> WildItemRare;
 
 	/**
@@ -218,4 +218,20 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	 * @return The gender ratio data of the Pokémon in question
 	 */
 	const FGenderRatio& GetGenderRatio() const;
+};
+
+/**
+ * Blueprint function library for getting species data out.
+ */
+UCLASS()
+class POKEMONDATA_API USpeciesHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible species names.
+	 * @return The list of all possible species names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetSpeciesNames();
 };

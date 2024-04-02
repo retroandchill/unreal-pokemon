@@ -52,4 +52,20 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Testing|Pokémon", meta = (WorldContext="WorldContext"))
 	static void CreateMockParty(UObject* WorldContext);
+	
 };
+
+/**
+ * "Deleter" to shutdown the game instance so it doesn't cause issues when it gets garbage collected.
+ */
+struct FGameInstanceShutdown {
+	void operator()(UGameInstance* GameInstance) {
+		if (GameInstance != nullptr)
+			GameInstance->Shutdown();
+	}
+};
+
+/**
+ * An RAII container for a Game Instance that calls shutdown when the object leaves scope.
+ */
+using FGameInstancePtr = TUniquePtr<UGameInstance, FGameInstanceShutdown>;

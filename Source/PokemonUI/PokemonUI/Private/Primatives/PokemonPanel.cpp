@@ -5,6 +5,7 @@
 
 #include "Components/Image.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/Stats/StatBlock.h"
 #include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/PokemonSelectionPane.h"
@@ -14,12 +15,12 @@ void UPokemonPanel::SetOwner(USelectableWidget* NewOwner) {
 	Owner = NewOwner;
 }
 
-const TSharedPtr<IPokemon>& UPokemonPanel::GetPokemon() {
+const TScriptInterface<IPokemon>& UPokemonPanel::GetPokemon() const {
 	return Pokemon;
 }
 
-void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index) {
-	Pokemon = MoveTemp(NewPokemon);
+void UPokemonPanel::SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Index) {
+	Pokemon = NewPokemon;
 	MenuIndex = Index;
 	Refresh();
 }
@@ -72,8 +73,8 @@ void UPokemonPanel::Refresh() {
 }
 
 void UPokemonPanel::RefreshPokemonInfo() {
-	UPokemonUIUtils::SetItemText(NameText, Pokemon->GetName());
-	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock().GetLevel()));
+	UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
+	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
 
 	// TODO: Change the text color depending on the gender
 	auto Gender = Pokemon->GetGender();

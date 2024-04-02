@@ -7,47 +7,41 @@
 #include "Pokemon/Stats/StatUtils.h"
 #include "Species/Stat.h"
 
-IMPLEMENT_DERIVED_METATYPE(FDefaultStatEntry)
-
-FDefaultStatEntry::FDefaultStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV) :
-	StatID(Stat), PersonalityValue(PersonalityValue), IV(OrElseGet(IV, [] { return StatUtils::RandomizeIV(); })), EV(EV) {
+TScriptInterface<IStatEntry> UDefaultStatEntry::Initialize(
+	FName Stat, const TOptional<int32>& IVs, int32 EVs) {
+	StatID = Stat;
+	IV = OrElseGet(IVs, [] { return StatUtils::RandomizeIV(); });
+	EV = EVs;
+	return this;
 }
 
-int32 FDefaultStatEntry::GetStatValue() const {
+int32 UDefaultStatEntry::GetStatValue() const {
 	return Value;
 }
 
-const FStat& FDefaultStatEntry::GetStat() const {
+const FStat& UDefaultStatEntry::GetStat() const {
 	auto Stat = FDataManager::GetInstance().GetDataTable<FStat>().GetData(StatID);
 	ASSERT(Stat != nullptr)
 
 	return *Stat;
 }
 
-FName FDefaultStatEntry::GetStatID() const {
+FName UDefaultStatEntry::GetStatID() const {
 	return StatID;
 }
 
-int32 FDefaultStatEntry::GetIV() const {
+int32 UDefaultStatEntry::GetIV() const {
 	return IV;
 }
 
-int32 FDefaultStatEntry::GetEV() const {
+int32 UDefaultStatEntry::GetEV() const {
 	return EV;
 }
 
-bool FDefaultStatEntry::operator==(const FDefaultStatEntry& Other) const {
-	return StatID == Other.StatID && IV == Other.IV && EV == Other.EV;
+void UDefaultStatEntry::RefreshValue(int32 Level, int32 Base, const FNature& Nature) {
+	// No implementation but abstracts are not allowed so we have to put this here
 }
 
-bool FDefaultStatEntry::Equals(const IStatEntry& Other) const {
-	if (GetClassName() != Other.GetClassName()) {
-		return false;
-	}
-
-	return *this == static_cast<const FDefaultStatEntry &>(Other);
-}
-
-void FDefaultStatEntry::SetStatValue(int32 NewValue) {
+void UDefaultStatEntry::SetStatValue(int32 NewValue) {
 	Value = NewValue;
 }

@@ -14,7 +14,3 @@ int32 FSlow::ExpForLevel(int32 Level) const {
 
 	return UMathUtilities::Pow(Level, 3) * 5 / 4;
 }
-
-TUniquePtr<IGrowthRate> FSlow::Clone() const {
-	return MakeUnique<FSlow>(*this);
-}

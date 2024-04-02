@@ -14,7 +14,3 @@ int32 FFast::ExpForLevel(int32 Level) const {
 
 	return UMathUtilities::Pow(Level, 3) * 4 / 5;
 }
-
-TUniquePtr<IGrowthRate> FFast::Clone() const {
-	return MakeUnique<FFast>(*this);
-}
