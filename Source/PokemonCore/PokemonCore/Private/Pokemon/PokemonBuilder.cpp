@@ -6,6 +6,7 @@
 #include "PokemonCoreSettings.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Pokemon.h"
+#include "UObject/Initializers.h"
 
 UPokemonBuilder* UPokemonBuilder::Species(FName Species) {
 	DTO.Species = Species;
@@ -123,22 +124,6 @@ const FPokemonDTO& UPokemonBuilder::GetDTO() const {
 	return DTO;
 }
 
-TSharedRef<IPokemon> UPokemonBuilder::Build() const {
-	auto Settings = GetDefault<UPokemonCoreSettings>();
-	auto ClassName = Settings->GetPokemonClass();
-	if (const auto &Registry = FPokemonRegistry::GetInstance(); Registry.IsTypeRegistered(ClassName)) {
-		return Registry.Construct(ClassName, DTO);
-	}
-
-	// Fallback in case this setting is set incorrectly.
-	// Ideally we should never wind up here.
-	return MakeShared<FGamePokemon>(DTO);
-}
-
-TSharedRef<IPokemon> UPokemonBuilder::Build(FName ClassName) const {
-	if (const auto &Registry = FPokemonRegistry::GetInstance(); Registry.IsTypeRegistered(ClassName)) {
-		return Registry.Construct(ClassName, DTO);
-	}
-
-	return Build();
+TScriptInterface<IPokemon> UPokemonBuilder::Build(UObject* Outer) const {
+	return CreateAndInit<UGamePokemon>(Outer, DTO);
 }

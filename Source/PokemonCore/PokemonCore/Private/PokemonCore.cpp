@@ -21,9 +21,6 @@ void FPokemonCoreModule::StartupModule() {
 	GrowthRateRegistry.RegisterClass<Exp::FFast>("Fast");
 	GrowthRateRegistry.RegisterClass<Exp::FSlow>("Slow");
 
-	auto &PokemonRegistry = FPokemonRegistry::GetInstance();
-	PokemonRegistry.RegisterClass<FGamePokemon>("GamePokemon");
-
 	auto &StatBlockRegistry = FStatBlockRegistry::GetInstance();
 	StatBlockRegistry.RegisterClass<FDefaultStatBlock>("DefaultStatBlock");
 }

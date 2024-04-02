@@ -33,11 +33,11 @@ void APokemonBuilderTest::RunTest() {
 			  ->Moves({"HYDROPUMP", "KNOCKOFF", "MEGAHORN", "SACREDSWORD"})
 			  ->Item("LIFEORB")
 			  ->Shiny(false)
-			  ->Build();
+			  ->Build(this);
 
 	auto Builder = TGCPointer(Pokemon1->ToBuilder());
 
-	auto Pokemon2 = Builder->Build();
+	auto Pokemon2 = Builder->Build(this);
 	
 	TEST_ASSERT(AssertTrue(*Pokemon1 == *Pokemon2, TEXT("Both Pokémon should be the same!")))
 

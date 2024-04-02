@@ -7,6 +7,7 @@
 #include "Stats/StatBlock.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
+#include "GamePokemon.generated.h"
 
 struct FPokemonDTO;
 class IMove;
@@ -14,27 +15,40 @@ class IMove;
 /**
  * Basic Pokémon class that holds all of the information for a complete Pokémon
  */
-class POKEMONCORE_API FGamePokemon : public IPokemon {
-	DECLARE_DERIVED_METATYPE
+UCLASS()
+class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
+	GENERATED_BODY()
 	
 public:
 	/**
 	 * Construct a Pokémon from the DTO
 	 * @param DTO The source Pokémon DTO to initialize from
 	 */
-	explicit FGamePokemon(const FPokemonDTO& DTO);
+	UGamePokemon *Initialize(const FPokemonDTO& DTO);
 
-	FGamePokemon(FGamePokemon&& Other) noexcept = default;
+	
+	UFUNCTION(BlueprintPure, Category = Bio)
+	FText GetNickname() const override;
 
-	FGamePokemon& operator=(FGamePokemon&& Other) noexcept = default;
-
-	FText GetName() const override;
+	UFUNCTION(BlueprintPure, Category = Bio)
 	const FSpeciesData& GetSpecies() const override;
+
+	UFUNCTION(BlueprintPure, Category = Bio)
 	EPokemonGender GetGender() const override;
+
+	UFUNCTION(BlueprintPure, Category = Bio)
 	int32 GetCurrentHP() const override;
+	
+	UFUNCTION(BlueprintPure, Category = Bio)
 	int32 GetMaxHP() const override;
+
+	UFUNCTION(BlueprintPure, Category = Bio)
 	bool IsFainted() const override;
+
+	//UFUNCTION(BlueprintPure, Category = Bio)
 	const IStatBlock& GetStatBlock() const override;
+
+	UFUNCTION(BlueprintPure, Category = Bio)
 	UPokemonBuilder* ToBuilder() const override;
 
 	bool operator==(const IPokemon& Other) const override;
@@ -44,18 +58,20 @@ public:
 	 * @param Other The other Pokémon
 	 * @return Are the two Pokémon the same?
 	 */
-	bool operator==(const FGamePokemon& Other) const;
+	bool operator==(const UGamePokemon& Other) const;
 
 private:
 	/**
 	 * The ID of the species of Pokémon this is
 	 */
-	TRowPointer<FSpeciesData> Species;
+	UPROPERTY(SaveGame)
+	FSpeciesDataPointer Species;
 
 	/**
 	 * The internal personality value of the Pokémon. Determines the default values of various aspects of the
 	 * Pokémon if the values are not already set.
 	 */
+	UPROPERTY(SaveGame)
 	uint32 PersonalityValue;
 
 	/**

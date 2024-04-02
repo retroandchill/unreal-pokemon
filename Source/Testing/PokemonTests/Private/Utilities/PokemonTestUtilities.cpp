@@ -17,6 +17,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	auto& Party = PokemonSubsystem->GetPlayer().GetParty();
 	Party.Empty();
 
+	/**
 	Party.Add(NewObject<UPokemonBuilder>()
 	          ->Species(TEXT("SAMUROTT"))
 	          ->Level(100)
@@ -74,4 +75,5 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 			  ->Item("ROCKYHELMET")
 			  ->Shiny(false)
 			  ->Build());
+			  */
 }

@@ -14,6 +14,11 @@ requires std::is_base_of_v<FTableRowBase, T>
 class TRowPointer {
 public:
 	/**
+	 * Default constructor used to create the base pointer type
+	 */
+	TRowPointer() = default;
+	
+	/**
 	 * Create a pointer with the given data table and row name
 	 * @param DataTable The data table that contains the row
 	 * @param RowName The contained row name

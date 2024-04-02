@@ -18,7 +18,7 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	MaxPartySize = Settings->GetMaxPartySize();
 
 	// TODO: Swap this instantiation with the actual trainer instantiation
-	Player = MakeUnique<FTrainerStub>();
+	Player = NewObject<UTrainerStub>(this);
 }
 
 void UPokemonSubsystem::Deinitialize() {

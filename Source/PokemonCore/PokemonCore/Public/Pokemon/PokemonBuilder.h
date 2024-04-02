@@ -191,14 +191,7 @@ public:
 	 * Use the currently set data to build the Pokémon
 	 * @return The created Pokémon
 	 */
-	TSharedRef<IPokemon> Build() const;
-
-	/**
-	 * Use the currently set data to build the Pokémon
-	 * @param ClassName The specific class to build
-	 * @return The created Pokémon
-	 */
-	TSharedRef<IPokemon> Build(FName ClassName) const;
+	TScriptInterface<IPokemon> Build(UObject* Outer) const;
 
 private:
 	/**

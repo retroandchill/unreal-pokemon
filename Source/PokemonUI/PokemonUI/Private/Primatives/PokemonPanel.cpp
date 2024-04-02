@@ -5,6 +5,7 @@
 
 #include "Components/Image.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/Stats/StatBlock.h"
 #include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/PokemonSelectionPane.h"
@@ -72,7 +73,7 @@ void UPokemonPanel::Refresh() {
 }
 
 void UPokemonPanel::RefreshPokemonInfo() {
-	UPokemonUIUtils::SetItemText(NameText, Pokemon->GetName());
+	UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
 	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock().GetLevel()));
 
 	// TODO: Change the text color depending on the gender

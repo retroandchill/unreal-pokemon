@@ -70,5 +70,6 @@ private:
 	/**
 	 * The trainer that represents the player character
 	 */
-	TUniquePtr<ITrainer> Player;
+	UPROPERTY()
+	TScriptInterface<ITrainer> Player;
 };

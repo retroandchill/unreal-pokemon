@@ -33,7 +33,7 @@ public:
 	 * @return The class used for all Pokémon objects
 	 */
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
-	FName GetPokemonClass() const;
+	TSubclassOf<UObject> GetPokemonClass() const;
 
 	/**
 	 * The class used for all Stat Block objects
@@ -43,13 +43,6 @@ public:
 	FName GetStatBlockClass() const;
 
 private:
-	/**
-	 * Get the list of options for the Pokémon class dropdown
-	 * @return The list of options for the dropdown
-	 */
-	UFUNCTION()
-	static TArray<FName> GetPokemonClassOptions();
-
 	/**
 	 * Get the list of options for the Stat Block class dropdown
 	 * @return The list of options for the dropdown
@@ -72,14 +65,13 @@ private:
 	/**
 	 * The class used for all Pokémon objects
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
-		meta = (GetOptions=GetPokemonClassOptions))
-	FName PokemonClass;
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (MustImplement = Pokemon))
+	TSubclassOf<UObject> PokemonClass;
 
 	/**
 	 * The class used for all Stat Block objects
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
 		meta = (GetOptions=GetStatBlockClassOptions))
 	FName StatBlockClass;
 };
