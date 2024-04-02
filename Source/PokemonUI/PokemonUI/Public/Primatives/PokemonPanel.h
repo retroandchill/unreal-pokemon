@@ -30,14 +30,14 @@ public:
 	 * Get the Pokémon that this panel displays the information for
 	 * @return The Pokémon that this panel displays the information for
 	 */
-	const TSharedPtr<IPokemon>& GetPokemon();
+	const TScriptInterface<IPokemon>& GetPokemon() const;
 
 	/**
 	 * Set the Pokémon for the panel setting how everything is displayed
 	 * @param NewPokemon The Pokémon to set this panel to
 	 * @param Index The index of this particular panel
 	 */
-	void SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index);
+	void SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Index);
 
 	/**
 	 * Swap held Pokémon with another panel
@@ -104,7 +104,8 @@ private:
 	/**
 	 * The Pokémon reference that is currently being held onto
 	 */
-	TSharedPtr<IPokemon> Pokemon;
+	UPROPERTY()
+	TScriptInterface<IPokemon> Pokemon;
 
 	/**
 	 * The index of this particular panel

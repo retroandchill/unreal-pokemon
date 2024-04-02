@@ -14,5 +14,5 @@ class POKEMONUI_API USummaryHandler : public UPartyMenuHandler {
 	GENERATED_BODY()
 
 public:
-	void Handle(IPartyScreen& Screen, TArray<TSharedRef<IPokemon>>& Party, int32 PartyIndex) override;
+	void Handle(IPartyScreen& Screen, TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex) override;
 };
