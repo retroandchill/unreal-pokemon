@@ -15,14 +15,15 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Project.UI.PartyScreen
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
+	/**
 	Mock<IPartyScreen> Screen;
 	Fake(Method(Screen, BeginSwitch));
 	
 	Mock<IPokemon> Pokemon1;
-	Fake(Dtor(Pokemon1));
+	//Fake(Dtor(Pokemon1));
 	
 	Mock<IPokemon> Pokemon2;
-	Fake(Dtor(Pokemon2));
+	//Fake(Dtor(Pokemon2));
 	
 	TArray<TSharedRef<IPokemon>> Party;
 	Party.Emplace(&Pokemon1.get());
@@ -37,4 +38,6 @@ bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
 	Passed &= Verify(Method(Screen, BeginSwitch).Using(0));
 	
 	return Passed;
+	*/
+	return false;
 }
