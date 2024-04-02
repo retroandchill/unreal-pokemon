@@ -12,6 +12,8 @@
  */
 UCLASS()
 class POKEMONCORE_API UTrainerStub : public UObject, public ITrainer {
+	GENERATED_BODY()
+	
 public:
 	void Initialize();
 	

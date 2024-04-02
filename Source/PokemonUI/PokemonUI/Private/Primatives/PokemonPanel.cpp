@@ -15,12 +15,12 @@ void UPokemonPanel::SetOwner(USelectableWidget* NewOwner) {
 	Owner = NewOwner;
 }
 
-const TSharedPtr<IPokemon>& UPokemonPanel::GetPokemon() {
+const TScriptInterface<IPokemon>& UPokemonPanel::GetPokemon() const {
 	return Pokemon;
 }
 
-void UPokemonPanel::SetPokemon(TSharedPtr<IPokemon> NewPokemon, int32 Index) {
-	Pokemon = MoveTemp(NewPokemon);
+void UPokemonPanel::SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Index) {
+	Pokemon = NewPokemon;
 	MenuIndex = Index;
 	Refresh();
 }

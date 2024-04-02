@@ -35,7 +35,7 @@ public:
 	 * @param PartyIndex The index of the party that is currently selected
 	 * @return Should the command be shown?
 	 */
-	virtual bool ShouldShow(const IPartyScreen& Screen, const TArray<TSharedRef<IPokemon>> &Party, int32 PartyIndex) const;
+	virtual bool ShouldShow(const IPartyScreen& Screen, const TArray<TScriptInterface<IPokemon>> &Party, int32 PartyIndex) const;
 
 	/**
 	 * Handle the effect of the command
@@ -43,7 +43,7 @@ public:
 	 * @param Party The current player's party
 	 * @param PartyIndex The index of the party that is currently selected
 	 */
-	virtual void Handle(IPartyScreen& Screen, TArray<TSharedRef<IPokemon>> &Party, int32 PartyIndex);
+	virtual void Handle(IPartyScreen& Screen, TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex);
 	
 private:
 	/**
