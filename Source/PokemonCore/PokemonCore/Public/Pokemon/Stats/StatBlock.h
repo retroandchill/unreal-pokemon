@@ -4,13 +4,10 @@
 #include "CoreMinimal.h"
 #include "StatBlockDTO.h"
 #include "StatEntry.h"
-#include "Meta/GenericStaticUniqueRegistry.h"
-#include "Meta/MetatypeDeclares.h"
-#include "Meta/PokeRegistry.h"
-#include "Species/Nature.h"
 #include "StatBlock.generated.h"
 
 class IPokemon;
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
 class UStatBlock : public UInterface {
