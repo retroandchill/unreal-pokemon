@@ -30,4 +30,21 @@ struct POKEMONDATA_API FNature : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Stats")
 	TArray<FNatureStatChange> StatChanges;
+	
+};
+
+/**
+ * Blueprint function library for getting nature data out.
+ */
+UCLASS()
+class POKEMONDATA_API UNatureHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible nature names.
+	 * @return The list of all possible nature names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetNatureNames();
 };

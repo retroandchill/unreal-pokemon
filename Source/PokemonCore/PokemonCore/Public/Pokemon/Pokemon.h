@@ -10,7 +10,6 @@
 #include "Pokemon.generated.h"
 
 struct FPokemonDTO;
-class UPokemonBuilder;
 class IStatBlock;
 struct FSpeciesData;
 
@@ -89,13 +88,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual TScriptInterface<IStatBlock> GetStatBlock() const = 0;
-
-	/**
-	 * Convert this class into a builder object
-	 * @return The builder class to use
-	 */
-	UFUNCTION(BlueprintCallable, Category = Meta)
-	virtual UPokemonBuilder *ToBuilder() const = 0;
 
 	/**
 	 * Check if two Pokémon are the same

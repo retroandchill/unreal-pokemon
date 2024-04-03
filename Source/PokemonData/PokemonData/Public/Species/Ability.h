@@ -35,3 +35,19 @@ struct POKEMONDATA_API FAbility : public FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
 	TArray<FName> Tags;
 };
+
+/**
+ * Blueprint function library for getting ability data out.
+ */
+UCLASS()
+class POKEMONDATA_API UAbilityHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible ability names.
+	 * @return The list of all possible ability names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetAbilityNames();
+};

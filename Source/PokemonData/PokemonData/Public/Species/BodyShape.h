@@ -30,3 +30,19 @@ struct POKEMONDATA_API FBodyShape : public FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals")
 	UPaperSprite* Icon;
 };
+
+/**
+ * Blueprint function library for getting body shape data out.
+ */
+UCLASS()
+class POKEMONDATA_API UBodyShapeHelper : public UBlueprintFunctionLibrary { 
+	GENERATED_BODY() 
+
+public:
+	/**
+	 * Get the list of all possible body shape names.
+	 * @return The list of all possible body shape names.
+	 */
+	UFUNCTION() 
+	static TArray<FName> GetBodyShapeNames(); 
+};

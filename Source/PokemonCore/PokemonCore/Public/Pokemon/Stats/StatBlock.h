@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "StatBlockDTO.h"
 #include "StatEntry.h"
 #include "StatBlock.generated.h"
 
@@ -26,7 +25,7 @@ public:
 	 * @param NewOwner The Pokémon that owns this stat block
 	 * @param DTO The DTO for the stat block
 	 */
-	virtual void Initialize(const TScriptInterface<IPokemon>& NewOwner, const FStatBlockDTO &DTO) = 0;
+	virtual void Initialize(const TScriptInterface<IPokemon>& NewOwner, const FPokemonDTO& DTO) = 0;
 	
 	/**
 	 * Get the level of the Pokémon in question
@@ -85,13 +84,6 @@ public:
 	virtual void CalculateStats(const TMap<FName, int32>& BaseStats) = 0;
 
 	/**
-	 * Convert this object to its corresponding DTO
-	 * @return The created DTO
-	 */
-	UFUNCTION(BlueprintCallable, Category = Meta)
-	virtual FStatBlockDTO ToDTO() const = 0;
-
-	/**
 	 * Check if the two stat blocks are the same
 	 * @param Other The other stat block
 	 * @return Are these two stat blocks the same?
@@ -102,10 +94,8 @@ public:
 
 /**
  * Creat the stat block based on the settings in the
- * @param Outer The owner of the created object
  * @param Owner The Growth Rate type of the Pokémon
- * @param PersonalityValue The Pokémon's personality value
  * @param DTO The DTO to copy any saved data from
  * @return The created block
  */
-POKEMONCORE_API TScriptInterface<IStatBlock> CreateStatBlock(const TScriptInterface<IPokemon>& Owner, const FStatBlockDTO &DTO);
+POKEMONCORE_API TScriptInterface<IStatBlock> CreateStatBlock(const TScriptInterface<IPokemon>& Owner, const FPokemonDTO &DTO);
