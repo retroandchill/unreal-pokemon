@@ -35,16 +35,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) override;
 
-	/**
-	 * Compare this stat entry to another one
-	 * @param Other The other stat entry
-	 * @return Are the two objects equal?
-	 */
-	bool operator==(const UDefaultStatEntry& Other) const;
-
-	UFUNCTION(BlueprintPure, Category = Stats)
-	bool Equals(const TScriptInterface<IStatEntry>& Other) const override;
-
 protected:
 	/**
 	 * Set the value of the stat in question

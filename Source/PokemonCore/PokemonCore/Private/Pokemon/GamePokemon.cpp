@@ -3,21 +3,20 @@
 
 #include "Asserts.h"
 #include "DataManager.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
-#include "Moves/Move.h"
+#include "Utilities/ConstructionUtilities.h"
 
 void UGamePokemon::Initialize(const FPokemonDTO& DTO) {
 	Species = DTO.Species;
 	PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
 	Gender = DTO.Gender;
 	Shiny = DTO.Shiny;
-	StatBlock = CreateStatBlock(this, DTO);
+	StatBlock = UConstructionUtilities::CreateStatBlock(this, DTO);
 	StatBlock->CalculateStats(GetSpecies().BaseStats);
 	CurrentHP = GetMaxHP();
 }
@@ -68,29 +67,8 @@ TScriptInterface<IStatBlock> UGamePokemon::GetStatBlock() const {
 	return StatBlock;
 }
 
-bool UGamePokemon::Equals(const TScriptInterface<IPokemon>& Other) const {
-	if (Other.GetObject()->GetClass() == StaticClass()) {
-		return *this == static_cast<UGamePokemon&>(*Other);
-	}
-
-	return false;
-}
-
 UGamePokemon* UGamePokemon::Create(const FPokemonDTO& Data) {
 	auto Ret = NewObject<UGamePokemon>();
 	Ret->Initialize(Data);
 	return Ret;
-}
-
-bool UGamePokemon::operator==(const UGamePokemon& Other) const {
-	if (Species != Other.Species || !OptionalsSame(Gender, Other.Gender) || !OptionalsSame(Nickname, Other.Nickname) ||
-			!OptionalsSame(Shiny, Other.Shiny) || StatBlock->Equals(Other.StatBlock) || Moves.Num() != Other.Moves.Num())
-		return false;
-		
-	for (int i = 0; i < Moves.Num(); i++) {
-		if (Moves[i]->Equals(Other.Moves[i]))
-			return false;
-	}
-
-	return true;
 }

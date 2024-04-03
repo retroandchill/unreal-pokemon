@@ -43,9 +43,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = Stats)
 	TScriptInterface<IStatBlock> GetStatBlock() const override;
 
-	UFUNCTION(BlueprintPure, Category = Meta)
-	bool Equals(const TScriptInterface<IPokemon>& Other) const override;
-
 	/**
 	 * Create a new Pokémon from the given input data
 	 * @param Data The data to input to create the Pokémon
@@ -53,13 +50,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
 	static UGamePokemon* Create(const FPokemonDTO& Data);
-
-	/**
-	 * Check if two Pokémon are the same
-	 * @param Other The other Pokémon
-	 * @return Are the two Pokémon the same?
-	 */
-	bool operator==(const UGamePokemon& Other) const;
 
 private:
 	/**

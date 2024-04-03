@@ -37,11 +37,5 @@ public:
 	 * @return The total PP for the move
 	 */
 	virtual int32 GetTotalPP() const = 0;
-
-	/**
-	 * Check to see if two moves are the same
-	 * @param Other The other move
-	 * @return Are these two moves the same?
-	 */
-	virtual bool Equals(const TScriptInterface<IMove>& Other) const = 0;
+	
 };

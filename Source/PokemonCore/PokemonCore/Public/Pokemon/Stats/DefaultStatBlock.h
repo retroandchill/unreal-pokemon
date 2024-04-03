@@ -29,8 +29,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = Stats)
 	const FNature& GetNature() const override;
 
-	TScriptInterface<IStatEntry> GetStat(FName Stat) override;
-
 	UFUNCTION(BlueprintPure, Category = Stats)
 	TScriptInterface<IStatEntry> GetStat(FName Stat) const override;
 	
@@ -38,16 +36,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	void CalculateStats(const TMap<FName, int32>& BaseStats) override;
-
-	UFUNCTION(BlueprintPure, Category = Meta)
-	bool Equals(const TScriptInterface<IStatBlock>& Other) const override;
-
-	/**
-	 * Check if the two stat blocks are the same
-	 * @param Other The other stat block
-	 * @return Are these two stat blocks the same?
-	 */
-	bool operator==(const UDefaultStatBlock& Other) const;
 
 private:
 	/**

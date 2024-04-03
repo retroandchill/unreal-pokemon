@@ -84,11 +84,6 @@ const FNature& UDefaultStatBlock::GetNature() const {
 	return *DataTable.GetData(NatureRows[Index]);
 }
 
-TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FName Stat) {
-	ASSERT(Stats.Contains(Stat))
-	return Stats[Stat];
-}
-
 TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FName Stat) const {
 	ASSERT(Stats.Contains(Stat))
 	return Stats[Stat];
@@ -107,29 +102,4 @@ void UDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 		ASSERT(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}
-}
-
-bool UDefaultStatBlock::Equals(const TScriptInterface<IStatBlock>& Other) const {
-	if (Other.GetObject()->GetClass() == GetClass()) {
-		return *this == static_cast<UDefaultStatBlock&>(*Other);
-	}
-
-	return false;
-}
-
-bool UDefaultStatBlock::operator==(const UDefaultStatBlock& Other) const {
-	if (Level != Other.Level || !OptionalsSame(Nature, Other.Nature) || Exp != Other.Exp ||
-		Stats.Num() != Other.Stats.Num()) {
-		return false;
-	}
-
-	bool bMatches = true;
-	for (const auto& [ID, Stat] : Stats) {
-		if (auto OtherStat = Other.Stats.Find(ID); OtherStat == nullptr || Stats[ID]->Equals(*OtherStat)) {
-			bMatches = false;
-			break;
-		}
-	}
-	
-	return bMatches;
 }

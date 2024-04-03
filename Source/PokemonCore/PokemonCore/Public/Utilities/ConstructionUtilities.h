@@ -6,6 +6,7 @@
 
 #include "ConstructionUtilities.generated.h"
 
+class IStatBlock;
 struct FPokemonDTO;
 class IPokemon;
 
@@ -24,4 +25,12 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Object|Constructors")
 	static TScriptInterface<IPokemon> CreateNewPokemon(const FPokemonDTO& Data);
+
+	/**
+	 * Creat the stat block based on the settings in the
+	 * @param Owner The Growth Rate type of the Pokémon
+	 * @param DTO The DTO to copy any saved data from
+	 * @return The created block
+	 */
+	static TScriptInterface<IStatBlock> CreateStatBlock(const TScriptInterface<IPokemon>& Owner, const FPokemonDTO &DTO);
 };
