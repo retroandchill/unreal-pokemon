@@ -11,6 +11,7 @@
 #include "Species/BodyShape.h"
 #include "Species/EggGroup.h"
 #include "Species/EvolutionData.h"
+#include "Species/GenderRatio.h"
 #include "Species/Habitat.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -33,6 +34,7 @@ bool EditorHelperTest::RunTest(const FString& Parameters) {
 	ASSERT_CONTAINS(Ability, TEXT("LEVITATE"));
 	ASSERT_CONTAINS(BodyColor, TEXT("Green"));
 	ASSERT_CONTAINS(BodyShape, TEXT("Serpentine"));
+	ASSERT_CONTAINS(GenderRatio, TEXT("AlwaysMale"));
 	ASSERT_CONTAINS(EggGroup, TEXT("Monster"));
 	ASSERT_CONTAINS(Evolution, TEXT("LevelMale"));
 	ASSERT_CONTAINS(Habitat, TEXT("Grassland"));
