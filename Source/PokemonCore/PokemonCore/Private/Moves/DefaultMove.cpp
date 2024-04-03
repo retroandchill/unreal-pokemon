@@ -5,40 +5,33 @@
 
 #include "Asserts.h"
 #include "DataManager.h"
+#include "Moves/MoveData.h"
 
-IMPLEMENT_DERIVED_METATYPE(FDefaultMove)
+TScriptInterface<IMove> UDefaultMove::Initialize(FName MoveID) {
+	ID = MoveID;
+	CurrentPP = GetMoveData().TotalPP;
+	return this;
+}
 
-/**
- * Internal helper function for getting a move's data
- * @param MoveID The ID of the move in question
- * @return The moves data
- */
-TRowPointer<FMoveData> FindMoveData(FName MoveID) {
-	auto Move = FDataManager::GetInstance().GetDataTable<FMoveData>().GetDataManaged(MoveID);
+const FMoveData& UDefaultMove::GetMoveData() const {
+	auto Move = FDataManager::GetInstance().GetDataTable<FMoveData>().GetData(ID);
 	ASSERT(Move != nullptr);
-	return Move;
+	return *Move;
 }
 
-FDefaultMove::FDefaultMove(FName MoveID) : MoveData(FindMoveData(MoveID)), CurrentPP(MoveData->TotalPP) {
-}
-
-const FMoveData& FDefaultMove::GetMoveData() const {
-	return *MoveData;
-}
-
-int32 FDefaultMove::GetCurrentPP() const {
+int32 UDefaultMove::GetCurrentPP() const {
 	return CurrentPP;
 }
 
-int32 FDefaultMove::GetTotalPP() const {
+int32 UDefaultMove::GetTotalPP() const {
 	// TODO: Add support for PP ups
-	return MoveData->TotalPP;
+	return GetMoveData().TotalPP;
 }
 
-bool FDefaultMove::operator==(const IMove& Other) const {
-	return ClassName() == Other.GetClassName() ? *this == static_cast<const FDefaultMove&>(Other) : false;
+bool UDefaultMove::Equals(const TScriptInterface<IMove>& Other) const {
+	return Other.GetObject()->GetClass() == StaticClass() ? *this == static_cast<const UDefaultMove&>(*Other) : false;
 }
 
-bool FDefaultMove::operator==(const FDefaultMove& Other) const {
-	return MoveData == Other.MoveData && CurrentPP == Other.CurrentPP;
+bool UDefaultMove::operator==(const UDefaultMove& Other) const {
+	return ID == Other.ID && CurrentPP == Other.CurrentPP;
 }

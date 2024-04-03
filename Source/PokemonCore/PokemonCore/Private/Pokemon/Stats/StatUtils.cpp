@@ -43,15 +43,6 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
 	return Ret;
 }
 
-POKEMONCORE_API TRowPointer<FNature> StatUtils::RandomNature() {
-	const auto& DataSubsystem = FDataManager::GetInstance();
-	auto& NatureTable = DataSubsystem.GetDataTable<FNature>();
-
-	auto Rows = NatureTable.GetTableRowNames();
-	auto Index = FMath::RandRange(0, Rows.Num() - 1);
-	return NatureTable.GetDataManaged(Rows[Index]);
-}
-
 POKEMONCORE_API TUniquePtr<Exp::IGrowthRate> StatUtils::CreateGrowthRate(FName GrowthRate) {
 	return Exp::FGrowthRateRegistry::GetInstance().Construct(GrowthRate);
 }

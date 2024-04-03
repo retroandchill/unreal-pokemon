@@ -4,10 +4,7 @@
 #include "CoreMinimal.h"
 #include "Pokemon.h"
 #include "PokemonDTO.h"
-#include "Memory/RowPointer.h"
 #include "Stats/StatBlock.h"
-#include "Species/SpeciesData.h"
-#include "Utilities/PersonalityValueUtils.h"
 #include "GamePokemon.generated.h"
 
 struct FPokemonDTO;
@@ -114,5 +111,6 @@ private:
 	/**
 	 * The moves this Pokémon knows
 	 */
-	TArray<TSharedRef<IMove>> Moves;
+	UPROPERTY(SaveGame)
+	TArray<TScriptInterface<IMove>> Moves;
 };

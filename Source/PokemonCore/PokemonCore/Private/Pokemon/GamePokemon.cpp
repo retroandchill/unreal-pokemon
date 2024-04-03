@@ -105,7 +105,7 @@ bool UGamePokemon::operator==(const UGamePokemon& Other) const {
 		return false;
 		
 	for (int i = 0; i < Moves.Num(); i++) {
-		if (*Moves[i] != *Other.Moves[i])
+		if (Moves[i]->Equals(Other.Moves[i]))
 			return false;
 	}
 
