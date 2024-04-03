@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
+#include "Managers/PokemonSubsystem.h"
 #include "Memory/GCPointer.h"
 #include "Memory/RootMemoryPointers.h"
 #include "Misc/AutomationTest.h"
@@ -12,10 +13,16 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Project.UI.PartyScreen",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Project.PokemonUI.PartySwitchHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
+	UGameInstance* GameInstance = nullptr;
+	if (!UPokemonSubsystem::Exists()) {
+		GameInstance = NewObject<UGameInstance>();
+		GameInstance->Init();
+	}
+	
 	Mock<IPartyScreen> Screen;
 	Fake(Method(Screen, BeginSwitch));
 	
@@ -34,6 +41,9 @@ bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
 
 	Handler->Handle(Screen.get(), Party, 0);
 	Passed &= Verify(Method(Screen, BeginSwitch).Using(0));
-	
+
+	if (GameInstance != nullptr) {
+		GameInstance->Shutdown();
+	}
 	return Passed;
 }

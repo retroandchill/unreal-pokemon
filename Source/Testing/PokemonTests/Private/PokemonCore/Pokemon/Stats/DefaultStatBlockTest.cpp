@@ -1,4 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
+#include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonDTO.h"
@@ -13,8 +14,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.Defau
                                  EAutomationTestFlags::ApplicationContextMask  | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
-	auto GameInstance = NewObject<UGameInstance>();
-	GameInstance->Init();
+	UGameInstance* GameInstance = nullptr;
+	if (!UPokemonSubsystem::Exists()) {
+		GameInstance = NewObject<UGameInstance>();
+		GameInstance->Init();
+	}
 
 	FPokemonDTO PokemonDTO = { .Species = TEXT("GARCHOMP"), .Level = 78, .Nature = "ADAMANT" };
 	PokemonDTO.IVs = {
@@ -67,6 +71,8 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 	int32 NextLevel = Block->GetExpForNextLevel();
 	Passed &= TestEqual("Next Level Exp.", NextLevel, 616298);
 
-	GameInstance->Shutdown();
+	if (GameInstance != nullptr) {
+		GameInstance->Shutdown();
+	}
 	return Passed;
 }

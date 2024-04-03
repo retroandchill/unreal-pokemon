@@ -38,6 +38,10 @@ UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
 	return *Instance;
 }
 
+bool UPokemonSubsystem::Exists() {
+	return Instance != nullptr;
+}
+
 FName UPokemonSubsystem::GetHPStat() const {
 	return HPStat;
 }
