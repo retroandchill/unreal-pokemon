@@ -28,6 +28,12 @@ public:
 	static UPokemonSubsystem& GetInstance();
 
 	/**
+	 * Does the singleton instance exist?
+	 * @return Does the singleton instance exist?
+	 */
+	static bool Exists();
+
+	/**
 	 * The the ID of the HP stat
 	 * @return The stat used referring to a Pokémon's HP
 	 */
