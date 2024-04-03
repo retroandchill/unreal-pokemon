@@ -19,14 +19,6 @@ public:
 	const FMoveData& GetMoveData() const override;
 	int32 GetCurrentPP() const override;
 	int32 GetTotalPP() const override;
-	bool Equals(const TScriptInterface<IMove>& Other) const override;
-
-	/**
-	 * Check to see if two moves are the same
-	 * @param Other The other move
-	 * @return Are these two moves the same?
-	 */
-	bool operator==(const UDefaultMove& Other) const;
 
 private:
 	/**

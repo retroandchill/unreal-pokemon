@@ -75,12 +75,4 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual int32 GetEV() const = 0;
-
-	/**
-	 * Compare this stat entry to another one
-	 * @param Other The other stat entry
-	 * @return Are the two objects equal?
-	 */
-	UFUNCTION(BlueprintCallable, Category = Stats)
-	virtual bool Equals(const TScriptInterface<IStatEntry>& Other) const = 0;
 };

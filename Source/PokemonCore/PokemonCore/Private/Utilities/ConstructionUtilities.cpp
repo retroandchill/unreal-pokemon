@@ -5,6 +5,7 @@
 
 #include "PokemonCoreSettings.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/Stats/StatBlock.h"
 
 TScriptInterface<IPokemon> UConstructionUtilities::CreateNewPokemon(const FPokemonDTO& Data) {
 	auto Settings = GetDefault<UPokemonCoreSettings>();
@@ -12,4 +13,13 @@ TScriptInterface<IPokemon> UConstructionUtilities::CreateNewPokemon(const FPokem
 	TScriptInterface<IPokemon> Pokemon = NewObject<UObject>(GetTransientPackage(), PokemonClass);
 	Pokemon->Initialize(Data);
 	return Pokemon;
+}
+
+TScriptInterface<IStatBlock> UConstructionUtilities::CreateStatBlock(const TScriptInterface<IPokemon>& Owner,
+	const FPokemonDTO& DTO) {
+	auto Settings = GetDefault<UPokemonCoreSettings>();
+	auto Class = Settings->GetStatBlockClass();
+	TScriptInterface<IStatBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);
+	Ret->Initialize(Owner, DTO);
+	return Ret;
 }

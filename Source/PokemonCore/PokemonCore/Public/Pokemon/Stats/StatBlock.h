@@ -60,13 +60,6 @@ public:
 	 * @param Stat The stat ID to retrieve
 	 * @return The entry of the stat
 	 */
-	virtual TScriptInterface<IStatEntry> GetStat(FName Stat) = 0;
-
-	/**
-	 * Get the stat that corresponds to the given ID
-	 * @param Stat The stat ID to retrieve
-	 * @return The entry of the stat
-	 */
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual TScriptInterface<IStatEntry> GetStat(FName Stat) const = 0;
 
@@ -82,20 +75,5 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual void CalculateStats(const TMap<FName, int32>& BaseStats) = 0;
-
-	/**
-	 * Check if the two stat blocks are the same
-	 * @param Other The other stat block
-	 * @return Are these two stat blocks the same?
-	 */
-	UFUNCTION(BlueprintCallable, Category = Meta)
-	virtual bool Equals(const TScriptInterface<IStatBlock>& Other) const = 0;
+	
 };
-
-/**
- * Creat the stat block based on the settings in the
- * @param Owner The Growth Rate type of the Pokémon
- * @param DTO The DTO to copy any saved data from
- * @return The created block
- */
-POKEMONCORE_API TScriptInterface<IStatBlock> CreateStatBlock(const TScriptInterface<IPokemon>& Owner, const FPokemonDTO &DTO);

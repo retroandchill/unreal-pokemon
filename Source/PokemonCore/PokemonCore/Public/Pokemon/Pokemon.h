@@ -88,12 +88,5 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual TScriptInterface<IStatBlock> GetStatBlock() const = 0;
-
-	/**
-	 * Check if two Pokémon are the same
-	 * @param Other The other Pokémon
-	 * @return Are the two Pokémon the same?
-	 */
-	UFUNCTION(BlueprintCallable, Category = Meta)
-	virtual bool Equals(const TScriptInterface<IPokemon> &Other) const = 0;
+	
 };

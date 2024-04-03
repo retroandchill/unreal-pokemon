@@ -42,20 +42,6 @@ void UDefaultStatEntry::RefreshValue(int32 Level, int32 Base, const FNature& Nat
 	// No implementation but abstracts are not allowed so we have to put this here
 }
 
-bool UDefaultStatEntry::operator==(const UDefaultStatEntry& Other) const {
-	return StatID == Other.StatID && IV == Other.IV && EV == Other.EV;
-}
-
-bool UDefaultStatEntry::Equals(const TScriptInterface<IStatEntry>& Other) const {
-	/**
-	if (GetClassName() != Other.GetClassName()) {
-		return false;
-	}
-	*/
-
-	return *this == static_cast<const UDefaultStatEntry &>(*Other);
-}
-
 void UDefaultStatEntry::SetStatValue(int32 NewValue) {
 	Value = NewValue;
 }
