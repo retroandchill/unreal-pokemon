@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Pokemon.h"
+#include "PokemonDTO.h"
 #include "Memory/RowPointer.h"
 #include "Stats/StatBlock.h"
 #include "Species/SpeciesData.h"
@@ -20,12 +21,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 	GENERATED_BODY()
 	
 public:
-	/**
-	 * Construct a Pokémon from the DTO
-	 * @param DTO The source Pokémon DTO to initialize from
-	 */
-	UGamePokemon *Initialize(const FPokemonDTO& DTO);
-
+	void Initialize(const FPokemonDTO& DTO) override;
 	
 	UFUNCTION(BlueprintPure, Category = Bio)
 	FText GetNickname() const override;
@@ -33,25 +29,36 @@ public:
 	UFUNCTION(BlueprintPure, Category = Bio)
 	const FSpeciesData& GetSpecies() const override;
 
+	uint32 GetPersonalityValue() const override;
+
 	UFUNCTION(BlueprintPure, Category = Bio)
 	EPokemonGender GetGender() const override;
 
-	UFUNCTION(BlueprintPure, Category = Bio)
+	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetCurrentHP() const override;
 	
-	UFUNCTION(BlueprintPure, Category = Bio)
+	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetMaxHP() const override;
 
-	UFUNCTION(BlueprintPure, Category = Bio)
+	UFUNCTION(BlueprintPure, Category = Stats)
 	bool IsFainted() const override;
 
-	//UFUNCTION(BlueprintPure, Category = Bio)
-	const IStatBlock& GetStatBlock() const override;
+	UFUNCTION(BlueprintPure, Category = Stats)
+	TScriptInterface<IStatBlock> GetStatBlock() const override;
 
-	UFUNCTION(BlueprintPure, Category = Bio)
+	UFUNCTION(BlueprintPure, Category = Meta)
 	UPokemonBuilder* ToBuilder() const override;
 
-	bool operator==(const IPokemon& Other) const override;
+	UFUNCTION(BlueprintPure, Category = Meta)
+	bool Equals(const TScriptInterface<IPokemon>& Other) const override;
+
+	/**
+	 * Create a new Pokémon from the given input data
+	 * @param Data The data to input to create the Pokémon
+	 * @return The created Pokémon
+	 */
+	UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
+	static UGamePokemon* Create(const FPokemonDTO& Data);
 
 	/**
 	 * Check if two Pokémon are the same
@@ -65,7 +72,7 @@ private:
 	 * The ID of the species of Pokémon this is
 	 */
 	UPROPERTY(SaveGame)
-	FSpeciesDataPointer Species;
+	FName Species;
 
 	/**
 	 * The internal personality value of the Pokémon. Determines the default values of various aspects of the
@@ -77,27 +84,32 @@ private:
 	/**
 	 * The nickname assigned to the Pokémon. Uses the species name if empty.
 	 */
+	UPROPERTY(SaveGame)
 	TOptional<FText> Nickname;
 
 	/**
 	 * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
 	 */
+	UPROPERTY(SaveGame)
 	TOptional<EPokemonGender> Gender;
 
 	/**
 	 * The hardcoded shiny status of the Pokémon. Calculates using the personality value is unset.
 	 */
+	UPROPERTY(SaveGame)
 	TOptional<bool> Shiny;
 
 	/**
 	 * The current amount of HP this Pokémon has
 	 */
+	UPROPERTY(SaveGame)
 	int32 CurrentHP;
 
 	/**
 	 * The handler for calculating stats
 	 */
-	TUniquePtr<IStatBlock> StatBlock;
+	UPROPERTY(SaveGame)
+	TScriptInterface<IStatBlock> StatBlock;
 
 	/**
 	 * The moves this Pokémon knows

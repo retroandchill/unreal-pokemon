@@ -14,6 +14,8 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
 	GENERATED_BODY()
 
 public:
+	UPokemonCoreSettings();
+	
 	/**
 	 * The the ID of the HP stat
 	 * @return The stat used referring to a Pokémon's HP
@@ -40,15 +42,9 @@ public:
 	 * @return The class used for all Stat Block objects
 	 */
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
-	FName GetStatBlockClass() const;
+	TSubclassOf<UObject> GetStatBlockClass() const;
 
 private:
-	/**
-	 * Get the list of options for the Stat Block class dropdown
-	 * @return The list of options for the dropdown
-	 */
-	UFUNCTION()
-	static TArray<FName> GetStatBlockClassOptions();
 
 	/**
 	 * The stat used referring to a Pokémon's HP
@@ -72,6 +68,6 @@ private:
 	 * The class used for all Stat Block objects
 	 */
 	UPROPERTY(EditAnywhere, BlueprintGetter=GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
-		meta = (GetOptions=GetStatBlockClassOptions))
-	FName StatBlockClass;
+		meta = (MustImplement = StatBlock))
+	TSubclassOf<UObject> StatBlockClass;
 };

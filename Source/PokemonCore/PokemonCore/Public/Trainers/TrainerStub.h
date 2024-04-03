@@ -15,7 +15,7 @@ class POKEMONCORE_API UTrainerStub : public UObject, public ITrainer {
 	GENERATED_BODY()
 	
 public:
-	void Initialize();
+	UTrainerStub* Initialize();
 	
 	TArray<TScriptInterface<IPokemon>>& GetParty() override;
 	virtual const TArray<TScriptInterface<IPokemon>>& GetParty() const override;

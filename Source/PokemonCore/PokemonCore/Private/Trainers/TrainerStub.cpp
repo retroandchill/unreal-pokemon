@@ -6,12 +6,13 @@
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonBuilder.h"
 
-void UTrainerStub::Initialize() {
+UTrainerStub* UTrainerStub::Initialize() {
 	// Create the basic test party for now
 	Party.Add(NewObject<UPokemonBuilder>()->Species("RIOLU")->Level(10)->Build(this));
 	Party.Add(NewObject<UPokemonBuilder>()->Species("SNIVY")->Level(10)->Build(this));
 	Party.Add(NewObject<UPokemonBuilder>()->Species("TEPIG")->Level(10)->Build(this));
 	Party.Add(NewObject<UPokemonBuilder>()->Species("OSHAWOTT")->Level(10)->Build(this));
+	return this;
 }
 
 TArray<TScriptInterface<IPokemon>>& UTrainerStub::GetParty() {

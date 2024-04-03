@@ -3,7 +3,11 @@
 
 #include "PokemonCoreSettings.h"
 
-#include "Pokemon/Stats/StatBlock.h"
+#include "Pokemon/GamePokemon.h"
+#include "Pokemon/Stats/DefaultStatBlock.h"
+
+UPokemonCoreSettings::UPokemonCoreSettings() : PokemonClass(UGamePokemon::StaticClass()), StatBlockClass(UDefaultStatBlock::StaticClass()) {
+}
 
 FName UPokemonCoreSettings::GetHPStat() const {
 	return HPStat;
@@ -17,10 +21,6 @@ TSubclassOf<UObject> UPokemonCoreSettings::GetPokemonClass() const {
 	return PokemonClass;
 }
 
-FName UPokemonCoreSettings::GetStatBlockClass() const {
+TSubclassOf<UObject> UPokemonCoreSettings::GetStatBlockClass() const {
 	return StatBlockClass;
-}
-
-TArray<FName> UPokemonCoreSettings::GetStatBlockClassOptions() {
-	return FStatBlockRegistry::GetInstance().GetAllRegisteredTypes();
 }

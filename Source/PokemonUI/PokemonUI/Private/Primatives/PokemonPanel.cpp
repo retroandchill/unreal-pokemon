@@ -74,7 +74,7 @@ void UPokemonPanel::Refresh() {
 
 void UPokemonPanel::RefreshPokemonInfo() {
 	UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
-	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock().GetLevel()));
+	UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
 
 	// TODO: Change the text color depending on the gender
 	auto Gender = Pokemon->GetGender();

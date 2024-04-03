@@ -12,6 +12,5 @@ namespace Exp {
 	public:
 		~FFluctuating() override = default;
 		int32 ExpForLevel(int32 Level) const override;
-		TUniquePtr<IGrowthRate> Clone() const override;
 	};
 }

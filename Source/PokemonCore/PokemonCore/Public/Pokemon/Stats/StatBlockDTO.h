@@ -22,13 +22,7 @@ struct POKEMONCORE_API FStatBlockDTO {
 	 * The amount of Exp the Pokémon has
 	 */
 	UPROPERTY(EditAnywhere, SaveGame, Category = Data, meta = (EditCondition=bOverride_Exp))
-	int32 Exp;
-
-	/**
-	 * The override state of the exp of the Pokémon
-	 */
-	UPROPERTY(EditAnywhere, SaveGame, Category = Data)
-	bool bOverride_Exp;
+	TOptional<int32> Exp;
 
 	/**
 	 * The IVs of the Pokémon to explicitly set
@@ -46,11 +40,5 @@ struct POKEMONCORE_API FStatBlockDTO {
 	 * The Nature of the Pokémon in question
 	 */
 	UPROPERTY(EditAnywhere, SaveGame, Category = Data, meta = (EditCondition=bOverride_Nature))
-	FName Nature;
-
-	/**
-	 * The override state of the nature of the Pokémon
-	 */
-	UPROPERTY(EditAnywhere, SaveGame, Category = Data)
-	bool bOverride_Nature;
+	TOptional<FName> Nature;
 };

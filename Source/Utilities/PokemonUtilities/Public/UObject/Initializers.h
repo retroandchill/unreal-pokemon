@@ -26,9 +26,8 @@ T* CreateAndInit(UObject* Outer, Args... Arguments) {
  * @return The created object
  */
 template <typename T, typename... Args>
-requires std::is_base_of_v<UObject, T>
-T* CreateAndInit(UClass* Class, UObject* Outer, Args... Arguments) {
-	auto Obj = NewObject<T>(Outer, Class);
+TScriptInterface<T> CreateAndInit(UClass* Class, UObject* Outer, Args... Arguments) {
+	TScriptInterface<T> Obj = NewObject<UObject>(Outer, Class);
 	Obj->Initialize(Arguments...);
 	return Obj;
 }

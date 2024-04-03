@@ -19,25 +19,21 @@ UPokemonBuilder* UPokemonBuilder::Level(int32 Level) {
 }
 
 UPokemonBuilder* UPokemonBuilder::PersonalityValue(uint32 PersonalityValue) {
-	DTO.bOverride_PersonalityValue = true;
 	DTO.PersonalityValue = PersonalityValue;
 	return this;
 }
 
 UPokemonBuilder* UPokemonBuilder::Nickname(FText Nickname) {
-	DTO.bOverride_Nickname = true;
 	DTO.Nickname = Nickname;
 	return this;
 }
 
 UPokemonBuilder* UPokemonBuilder::Gender(EPokemonGender Gender) {
-	DTO.bOverride_Gender = true;
 	DTO.Gender = Gender;
 	return this;
 }
 
 UPokemonBuilder* UPokemonBuilder::Shiny(bool bShiny) {
-	DTO.bOverride_Shiny = true;
 	DTO.bShiny = bShiny;
 	return this;
 }
@@ -53,13 +49,11 @@ UPokemonBuilder* UPokemonBuilder::StatBlock(FStatBlockDTO&& StatBlock) {
 }
 
 UPokemonBuilder* UPokemonBuilder::Exp(int32 Exp) {
-	DTO.StatBlock.bOverride_Exp = true;
 	DTO.StatBlock.Exp = Exp;
 	return this;
 }
 
 UPokemonBuilder* UPokemonBuilder::CurrentHP(int32 CurrentHP) {
-	DTO.bOverride_CurrentHP = true;
 	DTO.CurrentHP = CurrentHP;
 	return this;
 }
@@ -95,7 +89,6 @@ UPokemonBuilder* UPokemonBuilder::EV(FName Stat, int32 EV) {
 }
 
 UPokemonBuilder* UPokemonBuilder::Nature(FName Nature) {
-	DTO.StatBlock.bOverride_Nature = true;
 	DTO.StatBlock.Nature = Nature;
 	return this;
 }
@@ -125,5 +118,11 @@ const FPokemonDTO& UPokemonBuilder::GetDTO() const {
 }
 
 TScriptInterface<IPokemon> UPokemonBuilder::Build(UObject* Outer) const {
-	return CreateAndInit<UGamePokemon>(Outer, DTO);
+	auto Settings = GetDefault<UPokemonCoreSettings>();
+	ASSERT(Settings != nullptr)
+	auto PokemonClass = Settings->GetPokemonClass();
+		
+	TScriptInterface<IPokemon> Ret = NewObject<UObject>(Outer, PokemonClass);
+	Ret->Initialize(DTO);
+	return Ret;
 }
