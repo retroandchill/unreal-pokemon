@@ -20,9 +20,6 @@ void FPokemonCoreModule::StartupModule() {
 	GrowthRateRegistry.RegisterClass<Exp::FParabolic>("Parabolic");
 	GrowthRateRegistry.RegisterClass<Exp::FFast>("Fast");
 	GrowthRateRegistry.RegisterClass<Exp::FSlow>("Slow");
-
-	auto &StatBlockRegistry = FStatBlockRegistry::GetInstance();
-	StatBlockRegistry.RegisterClass<FDefaultStatBlock>("DefaultStatBlock");
 }
 
 void FPokemonCoreModule::ShutdownModule() {

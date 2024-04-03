@@ -29,11 +29,24 @@ class POKEMONCORE_API IPokemon {
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	/**
+	 * Construct a Pokémon from the DTO
+	 * @param DTO The source Pokémon DTO to initialize from
+	 */
+	virtual void Initialize(const FPokemonDTO& DTO) = 0;
+	
+	/**
 	 * Get the name of the Pokémon in question
 	 * @return The Pokémon's Nickname
 	 */
 	UFUNCTION(BlueprintCallable, Category = Bio)
 	virtual FText GetNickname() const = 0;
+
+	/**
+	 * Get the Pokémon's Personality value
+	 * @return The internal personality value of the Pokémon. Determines the default values of various aspects of the
+	 * Pokémon if the values are not already set.
+	 */
+	virtual uint32 GetPersonalityValue() const = 0;
 
 	/**
 	 * Get the species information about the Pokémon in question
@@ -74,14 +87,14 @@ public:
 	 * Get the stat information for this Pokémon
 	 * @return A reference to the owned stat block
 	 */
-	//UFUNCTION(BlueprintCallable, Category = Stats)
-	virtual const IStatBlock& GetStatBlock() const = 0;
+	UFUNCTION(BlueprintCallable, Category = Stats)
+	virtual TScriptInterface<IStatBlock> GetStatBlock() const = 0;
 
 	/**
 	 * Convert this class into a builder object
 	 * @return The builder class to use
 	 */
-	UFUNCTION(BlueprintCallable, Category = Stats)
+	UFUNCTION(BlueprintCallable, Category = Meta)
 	virtual UPokemonBuilder *ToBuilder() const = 0;
 
 	/**
@@ -89,5 +102,6 @@ public:
 	 * @param Other The other Pokémon
 	 * @return Are the two Pokémon the same?
 	 */
-	virtual bool operator==(const IPokemon& Other) const = 0;
+	UFUNCTION(BlueprintCallable, Category = Meta)
+	virtual bool Equals(const TScriptInterface<IPokemon> &Other) const = 0;
 };

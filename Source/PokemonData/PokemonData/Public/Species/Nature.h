@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "NatureStatChange.h"
+#include "Memory/RowPointer.h"
 #include "UObject/Object.h"
 #include "Nature.generated.h"
 

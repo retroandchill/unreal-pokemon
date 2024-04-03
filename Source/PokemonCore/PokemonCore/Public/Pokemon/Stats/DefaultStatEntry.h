@@ -3,38 +3,47 @@
 
 #include "CoreMinimal.h"
 #include "StatEntry.h"
+#include "DefaultStatEntry.generated.h"
 
+class IPokemon;
 /**
  * The default setup of a Pokémon's stat calculation as defined in the main series games
  */
-class POKEMONCORE_API FDefaultStatEntry : public IStatEntry {
-	DECLARE_DERIVED_METATYPE
+UCLASS(Abstract)
+class POKEMONCORE_API UDefaultStatEntry : public UObject, public IStatEntry {
+	GENERATED_BODY()
 	
-protected:
-	/**
-	 * Initialize the stat with the given IV and EV
-	 * @param Stat The stat in question to set this to
-	 * @param PersonalityValue The personality value of the owning Pokémon
-	 * @param IV The IV of the stat
-	 * @param EV The EV of the stat
-	 */
-	FDefaultStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV = 0);
-
 public:
+	TScriptInterface<IStatEntry> Initialize(FName Stat, const TOptional<int32>& IVs, int32 EVs) override;
+
+
+	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetStatValue() const override;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
 	const FStat& GetStat() const override;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
 	FName GetStatID() const override;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetIV() const override;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetEV() const override;
+	
+	UFUNCTION(BlueprintCallable, Category = Stats)
+	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) override;
 
 	/**
 	 * Compare this stat entry to another one
 	 * @param Other The other stat entry
 	 * @return Are the two objects equal?
 	 */
-	bool operator==(const FDefaultStatEntry& Other) const;
-	
-	bool Equals(const IStatEntry& Other) const override;
+	bool operator==(const UDefaultStatEntry& Other) const;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
+	bool Equals(const TScriptInterface<IStatEntry>& Other) const override;
 
 protected:
 	/**
@@ -47,25 +56,24 @@ private:
 	/**
 	 * The ID of the stat in question
 	 */
+	UPROPERTY(SaveGame)
 	FName StatID;
-
-	/**
-	 * The personality value of the owning Pokémon
-	 */
-	uint32 PersonalityValue;
 
 	/**
 	 * The value of the stat's IV
 	 */
+	UPROPERTY(SaveGame)
 	int32 IV;
 
 	/**
 	 * The value of the stat's EV
 	 */
+	UPROPERTY(SaveGame)
 	int32 EV;
 
 	/**
 	 * The actual value of the stat in question
 	 */
+	UPROPERTY(SaveGame)
 	int32 Value = 0;
 };

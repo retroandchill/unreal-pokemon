@@ -25,62 +25,32 @@ struct POKEMONCORE_API FPokemonDTO {
 	 * The internal personality value of the Pokémon. Determines the default values of various aspects of the
 	 * Pokémon if the values are not already set.
 	 */
-	UPROPERTY(EditAnywhere, Category = Data, meta = (EditCondition=bOverride_PersonalityValue))
-	uint32 PersonalityValue;
-
-	/**
-	 * The override state of the personality value
-	 */
 	UPROPERTY(EditAnywhere, Category = Data)
-	bool bOverride_PersonalityValue;
+	TOptional<uint32> PersonalityValue;
 
 	/**
 	 * The nickname assigned to the Pokémon. Uses the species name if empty.
 	 */
-	UPROPERTY(EditAnywhere, Category = Data, meta = (EditCondition=bOverride_Nickname))
-	FText Nickname;
-
-	/**
-	 * The override state of the nickname
-	 */
 	UPROPERTY(EditAnywhere, Category = Data)
-	bool bOverride_Nickname;
+	TOptional<FText> Nickname;
 
 	/**
 	 * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
 	 */
-	UPROPERTY(EditAnywhere, Category = Data, meta = (EditCondition=bOverride_Gender))
-	EPokemonGender Gender;
-
-	/**
-	 * The override state of the gender
-	 */
 	UPROPERTY(EditAnywhere, Category = Data)
-	bool bOverride_Gender;
+	TOptional<EPokemonGender> Gender;
 
 	/**
 	 * The hardcoded shiny status of the Pokémon. Calculates using the personality value is unset.
 	 */
-	UPROPERTY(EditAnywhere, Category = Data, meta = (EditCondition=bOverride_Shiny))
-	bool bShiny;
-
-	/**
-	 * The override state of the shiny status
-	 */
 	UPROPERTY(EditAnywhere, Category = Data)
-	bool bOverride_Shiny;
+	TOptional<bool> bShiny;
 
 	/**
 	 * The current amount of HP this Pokémon has
 	 */
 	UPROPERTY(EditAnywhere, Category = Data, meta = (EditCondition=bOverride_CurrentHP))
-	int32 CurrentHP;
-
-	/**
-	 * The override state of the nickname
-	 */
-	UPROPERTY(EditAnywhere, Category = Data)
-	bool bOverride_CurrentHP;
+	TOptional<int32> CurrentHP;
 
 	/**
 	 * The current amount of HP this Pokémon has

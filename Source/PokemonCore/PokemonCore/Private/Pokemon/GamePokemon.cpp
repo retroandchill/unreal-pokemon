@@ -14,27 +14,14 @@
 #include "Utilities/PersonalityValueUtils.h"
 #include "Moves/Move.h"
 
-/**
- * Helper function to locate the species that this Pokémon refers to
- * @param Species The ID of the species to find
- * @return The located species data
- */
-TRowPointer<FSpeciesData> FindSpeciesData(FName Species) {
-	const auto& DataManager = FDataManager::GetInstance();
-	auto& SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
-
-	auto SpeciesData = SpeciesTable.GetDataManaged(Species);
-	ASSERT(SpeciesData != nullptr)
-	return SpeciesData;
-}
-
-UGamePokemon* UGamePokemon::Initialize(const FPokemonDTO& DTO) {
-	Species = FindSpeciesData(DTO.Species);
+void UGamePokemon::Initialize(const FPokemonDTO& DTO) {
+	Species = DTO.Species;
 	PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
-	Gender = OPTIONAL(DTO, Gender);
-	Shiny = BOOL_OPTIONAL(DTO, Shiny);
-	StatBlock = CreateStatBlock(Species->GrowthRate, PersonalityValue, DTO.StatBlock);
-	return this;
+	Gender = DTO.Gender;
+	Shiny = DTO.bShiny;
+	StatBlock = CreateStatBlock(this, DTO.StatBlock);
+	StatBlock->CalculateStats(GetSpecies().BaseStats);
+	CurrentHP = GetMaxHP();
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -47,7 +34,7 @@ EPokemonGender UGamePokemon::GetGender() const {
 	if (Gender.IsSet())
 		return Gender.GetValue();
 
-	auto& GenderRatio = Species->GetGenderRatio();
+	auto& GenderRatio = GetSpecies().GetGenderRatio();
 	if (GenderRatio.IsGenderless)
 		return Genderless;
 
@@ -59,7 +46,7 @@ int32 UGamePokemon::GetCurrentHP() const {
 }
 
 int32 UGamePokemon::GetMaxHP() const {
-	return GetStatBlock().GetStat(UPokemonSubsystem::GetInstance().GetHPStat()).GetStatValue();
+	return GetStatBlock()->GetStat(UPokemonSubsystem::GetInstance().GetHPStat())->GetStatValue();
 }
 
 bool UGamePokemon::IsFainted() const {
@@ -67,16 +54,25 @@ bool UGamePokemon::IsFainted() const {
 }
 
 const FSpeciesData& UGamePokemon::GetSpecies() const {
-	return *Species;
+	const auto& DataManager = FDataManager::GetInstance();
+	auto& SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
+
+	auto SpeciesData = SpeciesTable.GetData(Species);
+	ASSERT(SpeciesData != nullptr)
+	return *SpeciesData;
 }
 
-const IStatBlock& UGamePokemon::GetStatBlock() const {
-	return *StatBlock;
+uint32 UGamePokemon::GetPersonalityValue() const {
+	return PersonalityValue;
+}
+
+TScriptInterface<IStatBlock> UGamePokemon::GetStatBlock() const {
+	return StatBlock;
 }
 
 UPokemonBuilder* UGamePokemon::ToBuilder() const {
 	auto Builder = NewObject<UPokemonBuilder>()
-		->Species(Species->ID)
+		->Species(Species)
 		->PersonalityValue(PersonalityValue)
 		->CurrentHP(CurrentHP)
 		->StatBlock(StatBlock->ToDTO());
@@ -89,19 +85,23 @@ UPokemonBuilder* UGamePokemon::ToBuilder() const {
 	
 }
 
-bool UGamePokemon::operator==(const IPokemon& Other) const {
-/*
-	if (GetClass() == Other) {
-		return *this == static_cast<const UGamePokemon&>(Other);
+bool UGamePokemon::Equals(const TScriptInterface<IPokemon>& Other) const {
+	if (Other.GetObject()->GetClass() == StaticClass()) {
+		return *this == static_cast<UGamePokemon&>(*Other);
 	}
-	*/
-	
+
 	return false;
+}
+
+UGamePokemon* UGamePokemon::Create(const FPokemonDTO& Data) {
+	auto Ret = NewObject<UGamePokemon>();
+	Ret->Initialize(Data);
+	return Ret;
 }
 
 bool UGamePokemon::operator==(const UGamePokemon& Other) const {
 	if (Species != Other.Species || !OptionalsSame(Gender, Other.Gender) || !OptionalsSame(Nickname, Other.Nickname) ||
-			!OptionalsSame(Shiny, Other.Shiny) || *StatBlock != *Other.StatBlock || Moves.Num() != Other.Moves.Num())
+			!OptionalsSame(Shiny, Other.Shiny) || StatBlock->Equals(Other.StatBlock) || Moves.Num() != Other.Moves.Num())
 		return false;
 		
 	for (int i = 0; i < Moves.Num(); i++) {

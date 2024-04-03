@@ -220,22 +220,3 @@ struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
 	 */
 	const FGenderRatio& GetGenderRatio() const;
 };
-
-// Help intellisense to avoid interpreting this file's declaration of FVector etc as it assumes !CPP by default
-#ifndef CPP
-#define CPP 1
-#endif
-
-#if CPP
-using FSpeciesDataPointer = TRowPointer<FSpeciesData>;
-#endif
-
-#if !CPP
-USTRUCT(NoExport, BlueprintType)
-struct FSpeciesDataPointer {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Data|Species", SaveGame)
-	FDataTableRowHandle TableRowHandle;
-};
-#endif
