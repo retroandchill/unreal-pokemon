@@ -7,6 +7,7 @@
 #include "Species/SpeciesData.h"
 
 #include "Utilities/fakeit.hpp"
+#include "Utilities/PokemonTestUtilities.h"
 
 using namespace fakeit;
 
@@ -14,9 +15,9 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.Defau
                                  EAutomationTestFlags::ApplicationContextMask  | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
-	UGameInstance* GameInstance = nullptr;
+	FGameInstancePtr GameInstance;
 	if (!UPokemonSubsystem::Exists()) {
-		GameInstance = NewObject<UGameInstance>();
+		GameInstance.Reset(NewObject<UGameInstance>());
 		GameInstance->Init();
 	}
 
@@ -70,9 +71,6 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 
 	int32 NextLevel = Block->GetExpForNextLevel();
 	Passed &= TestEqual("Next Level Exp.", NextLevel, 616298);
-
-	if (GameInstance != nullptr) {
-		GameInstance->Shutdown();
-	}
+	
 	return Passed;
 }
