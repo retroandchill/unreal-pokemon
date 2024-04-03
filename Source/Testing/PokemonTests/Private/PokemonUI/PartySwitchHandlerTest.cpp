@@ -19,8 +19,8 @@ bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
 	Mock<IPartyScreen> Screen;
 	Fake(Method(Screen, BeginSwitch));
 	
-	auto Pokemon1 = UGamePokemon::Create({.Species = TEXT("RIOLU"), .StatBlock = { .Level = 5 }});
-	auto Pokemon2 = UGamePokemon::Create({.Species = TEXT("OSHAWOTT"), .StatBlock = { .Level = 5 }});
+	auto Pokemon1 = UGamePokemon::Create({.Species = TEXT("RIOLU"), .Level = 5 });
+	auto Pokemon2 = UGamePokemon::Create({.Species = TEXT("OSHAWOTT"), .Level = 5 });
 	//Fake(Dtor(Pokemon2));
 	
 	TArray<TScriptInterface<IPokemon>> Party;

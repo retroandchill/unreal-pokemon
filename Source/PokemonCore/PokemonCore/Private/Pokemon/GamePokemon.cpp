@@ -3,10 +3,8 @@
 
 #include "Asserts.h"
 #include "DataManager.h"
-#include "PokemonCoreSettings.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Pokemon/PokemonBuilder.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Species/GenderRatio.h"
@@ -18,8 +16,8 @@ void UGamePokemon::Initialize(const FPokemonDTO& DTO) {
 	Species = DTO.Species;
 	PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
 	Gender = DTO.Gender;
-	Shiny = DTO.bShiny;
-	StatBlock = CreateStatBlock(this, DTO.StatBlock);
+	Shiny = DTO.Shiny;
+	StatBlock = CreateStatBlock(this, DTO);
 	StatBlock->CalculateStats(GetSpecies().BaseStats);
 	CurrentHP = GetMaxHP();
 }
@@ -68,21 +66,6 @@ uint32 UGamePokemon::GetPersonalityValue() const {
 
 TScriptInterface<IStatBlock> UGamePokemon::GetStatBlock() const {
 	return StatBlock;
-}
-
-UPokemonBuilder* UGamePokemon::ToBuilder() const {
-	auto Builder = NewObject<UPokemonBuilder>()
-		->Species(Species)
-		->PersonalityValue(PersonalityValue)
-		->CurrentHP(CurrentHP)
-		->StatBlock(StatBlock->ToDTO());
-
-	ADD_OPTIONAL(*Builder, Gender);
-	ADD_OPTIONAL(*Builder, Shiny);
-	ADD_OPTIONAL(*Builder, Nickname);
-
-	return Builder;
-	
 }
 
 bool UGamePokemon::Equals(const TScriptInterface<IPokemon>& Other) const {

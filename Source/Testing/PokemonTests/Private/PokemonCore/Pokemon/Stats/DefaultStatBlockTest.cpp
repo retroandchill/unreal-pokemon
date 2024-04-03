@@ -3,7 +3,6 @@
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
-#include "Pokemon/Stats/StatBlockDTO.h"
 #include "Species/SpeciesData.h"
 
 #include "Utilities/fakeit.hpp"
@@ -16,9 +15,9 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.Defau
 bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 	auto GameInstance = NewObject<UGameInstance>();
 	GameInstance->Init();
-	
-	FStatBlockDTO StatBlockDTO = { .Level = 78, .Nature = "ADAMANT"};
-	StatBlockDTO.IVs = {
+
+	FPokemonDTO PokemonDTO = { .Species = TEXT("GARCHOMP"), .Level = 78, .Nature = "ADAMANT" };
+	PokemonDTO.IVs = {
 		{"HP", 24},
 		{"ATTACK", 12},
 		{"DEFENSE", 30},
@@ -27,7 +26,7 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPEED", 5}
 	};
 
-	StatBlockDTO.EVs = {
+	PokemonDTO.EVs = {
 		{"HP", 74},
 		{"ATTACK", 190},
 		{"DEFENSE", 91},
@@ -35,13 +34,12 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		{"SPECIAL_DEFENSE", 84},
 		{"SPEED", 23}
 	};
-
-	FPokemonDTO PokemonDTO = { .Species = TEXT("GARCHOMP"), .StatBlock = StatBlockDTO };
+	
 	auto NewPokemon = NewObject<UGamePokemon>();
 	NewPokemon->Initialize(PokemonDTO);
 
 	auto Block = NewObject<UDefaultStatBlock>();
-	Block->Initialize(NewPokemon, StatBlockDTO);
+	Block->Initialize(NewPokemon, PokemonDTO);
 	auto &Species = NewPokemon->GetSpecies();
 	Block->CalculateStats(Species.BaseStats);
 

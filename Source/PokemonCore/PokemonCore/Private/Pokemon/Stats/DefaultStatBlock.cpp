@@ -6,12 +6,13 @@
 #include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
-#include "Pokemon/Stats/StatBlockDTO.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
+#include "Species/Nature.h"
 
 using namespace StatUtils;
 
@@ -29,7 +30,7 @@ const FNature &FindNature(FName Nature) {
 	return *Ret;
 }
 
-void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon>& NewOwner, const FStatBlockDTO& DTO) {
+void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon>& NewOwner, const FPokemonDTO& DTO) {
 	Owner = NewOwner;
 	Level = DTO.Level;
 
@@ -106,20 +107,6 @@ void UDefaultStatBlock::CalculateStats(const TMap<FName, int32>& BaseStats) {
 		ASSERT(BaseStats.Contains(StatID))
 		Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
 	}
-}
-
-FStatBlockDTO UDefaultStatBlock::ToDTO() const {
-	FStatBlockDTO DTO = {.Level = Level, .Exp = Exp,};
-	if (Nature.IsSet()) {
-		DTO.Nature = GetNature().ID;
-	}
-
-	for (auto& [StatID, Stat] : Stats) {
-		DTO.IVs.Add(StatID, Stat->GetIV());
-		DTO.EVs.Add(StatID, Stat->GetEV());
-	}
-
-	return DTO;
 }
 
 bool UDefaultStatBlock::Equals(const TScriptInterface<IStatBlock>& Other) const {

@@ -44,9 +44,6 @@ public:
 	TScriptInterface<IStatBlock> GetStatBlock() const override;
 
 	UFUNCTION(BlueprintPure, Category = Meta)
-	UPokemonBuilder* ToBuilder() const override;
-
-	UFUNCTION(BlueprintPure, Category = Meta)
 	bool Equals(const TScriptInterface<IPokemon>& Other) const override;
 
 	/**

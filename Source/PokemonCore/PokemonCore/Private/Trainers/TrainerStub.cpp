@@ -4,14 +4,14 @@
 #include "Trainers/TrainerStub.h"
 
 #include "Pokemon/GamePokemon.h"
-#include "Pokemon/PokemonBuilder.h"
+#include "Utilities/ConstructionUtilities.h"
 
 UTrainerStub* UTrainerStub::Initialize() {
 	// Create the basic test party for now
-	Party.Add(NewObject<UPokemonBuilder>()->Species("RIOLU")->Level(10)->Build(this));
-	Party.Add(NewObject<UPokemonBuilder>()->Species("SNIVY")->Level(10)->Build(this));
-	Party.Add(NewObject<UPokemonBuilder>()->Species("TEPIG")->Level(10)->Build(this));
-	Party.Add(NewObject<UPokemonBuilder>()->Species("OSHAWOTT")->Level(10)->Build(this));
+	Party.Add(UConstructionUtilities::CreateNewPokemon({.Species = "RIOLU", .Level = 10}));
+	Party.Add(UConstructionUtilities::CreateNewPokemon({.Species = "SNIVY", .Level = 10}));
+	Party.Add(UConstructionUtilities::CreateNewPokemon({.Species = "TEPIG", .Level = 10}));
+	Party.Add(UConstructionUtilities::CreateNewPokemon({.Species = "OSHAWOTT", .Level = 10}));
 	return this;
 }
 

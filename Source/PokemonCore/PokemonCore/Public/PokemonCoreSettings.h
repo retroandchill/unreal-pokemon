@@ -49,7 +49,7 @@ private:
 	/**
 	 * The stat used referring to a Pokémon's HP
 	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names")
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names", meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
 	FName HPStat;
 
 	/**

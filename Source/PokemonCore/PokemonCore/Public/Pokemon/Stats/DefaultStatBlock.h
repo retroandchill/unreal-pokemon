@@ -15,7 +15,7 @@ class POKEMONCORE_API UDefaultStatBlock : public UObject, public IStatBlock {
 	GENERATED_BODY()
 	
 public:
-	void Initialize(const ::TScriptInterface<IPokemon>& NewOwner, const FStatBlockDTO& DTO) override;
+	void Initialize(const ::TScriptInterface<IPokemon>& NewOwner, const FPokemonDTO& DTO) override;
 
 	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetLevel() const override;
@@ -38,9 +38,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	void CalculateStats(const TMap<FName, int32>& BaseStats) override;
-
-	UFUNCTION(BlueprintPure, Category = Meta)
-	virtual FStatBlockDTO ToDTO() const override;
 
 	UFUNCTION(BlueprintPure, Category = Meta)
 	bool Equals(const TScriptInterface<IStatBlock>& Other) const override;
