@@ -19,7 +19,7 @@
 #define ASSERT_CONTAINS(Type, Element) auto Type##Names = U##Type##Helper::Get##Type##Names(); \
 	AUTOMATION_ASSERT(TestTrue(TEXT(""), Type##Names.Contains(Element)))
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "Private.PokemonData.EditorHelperTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "Project.PokemonData.EditorHelperTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool EditorHelperTest::RunTest(const FString& Parameters) {
