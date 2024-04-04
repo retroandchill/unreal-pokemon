@@ -6,6 +6,7 @@
 #include "Asserts.h"
 #include "PokemonCoreSettings.h"
 #include "Player/PlayerMetadata.h"
+#include "Pokemon/Exp/GrowthRate.h"
 #include "Trainers/TrainerStub.h"
 
 UPokemonSubsystem* UPokemonSubsystem::Instance = nullptr;
@@ -17,6 +18,12 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 	auto Settings = GetDefault<UPokemonCoreSettings>();
 	HPStat = Settings->GetHPStat();
 	MaxPartySize = Settings->GetMaxPartySize();
+	
+	GrowthRates.Empty();
+	for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();
+		auto Type : RegisteredTypes) {
+		GrowthRates.Add(Type, Exp::FGrowthRateRegistry::GetInstance().Construct(Type));
+	}
 
 	StartNewGame();
 }
@@ -29,6 +36,10 @@ void UPokemonSubsystem::Deinitialize() {
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
 	ASSERT(Instance != nullptr)
 	return *Instance;
+}
+
+bool UPokemonSubsystem::Exists() {
+	return Instance != nullptr;
 }
 
 void UPokemonSubsystem::StartNewGame() {
@@ -52,4 +63,9 @@ const TSharedPtr<ITrainer> &UPokemonSubsystem::GetPlayer() const {
 
 UPlayerMetadata* UPokemonSubsystem::GetPlayerMetadata() const {
 	return PlayerMetadata;
+}
+
+const Exp::IGrowthRate& UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const {
+	ASSERT(GrowthRates.Contains(GrowthRate));
+	return *GrowthRates[GrowthRate];
 }

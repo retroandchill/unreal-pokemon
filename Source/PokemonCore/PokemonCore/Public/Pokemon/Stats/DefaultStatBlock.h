@@ -3,80 +3,68 @@
 
 #include "CoreMinimal.h"
 #include "StatBlock.h"
-#include "Memory/RowPointer.h"
-#include "Pokemon/Exp/GrowthRate.h"
+#include "DefaultStatBlock.generated.h"
 
 struct FStatBlockDTO;
+
 /**
  * The default stat calculator, which uses the formulas from the main series games
  */
-class POKEMONCORE_API FDefaultStatBlock : public IStatBlock {
-	DECLARE_DERIVED_METATYPE
+UCLASS()
+class POKEMONCORE_API UDefaultStatBlock : public UObject, public IStatBlock {
+	GENERATED_BODY()
 	
 public:
-	/**
-	 * Initialize a new stat block with the following initializing information
-	 * @param GrowthRateID The Exp growth rate to assign
-	 * @param PersonalityValue The personality value of the owning Pokémon
-	 * @param DTO The DTO for the stat block
-	 */
-	FDefaultStatBlock(FName GrowthRateID, uint32 PersonalityValue, const FStatBlockDTO &DTO);
+	void Initialize(const ::TScriptInterface<IPokemon>& NewOwner, const FPokemonDTO& DTO) override;
 
-	~FDefaultStatBlock() override;
-
-	FDefaultStatBlock(const FDefaultStatBlock& Other);
-	FDefaultStatBlock(FDefaultStatBlock&& Other) noexcept;
-
-	FDefaultStatBlock& operator=(const FDefaultStatBlock& Other);
-	FDefaultStatBlock& operator=(FDefaultStatBlock&& Other) noexcept;
-
+	UFUNCTION(BlueprintPure, Category = Stats)
 	int32 GetLevel() const override;
-	int32 GetExp() const override;
-	int32 GetExpForNextLevel() const override;
-	const FNature& GetNature() const override;
-	IStatEntry& GetStat(FName Stat) override;
-	const IStatEntry& GetStat(FName Stat) const override;
-	void ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const override;
-	void CalculateStats(const TMap<FName, int32>& BaseStats) override;
-	virtual FStatBlockDTO ToDTO() const override;
 	
-	virtual bool operator==(const IStatBlock& Other) const override;
+	UFUNCTION(BlueprintPure, Category = Stats)
+	int32 GetExp() const override;
 
-	/**
-	 * Check if the two stat blocks are the same
-	 * @param Other The other stat block
-	 * @return Are these two stat blocks the same?
-	 */
-	bool operator==(const FDefaultStatBlock& Other) const;
+	UFUNCTION(BlueprintPure, Category = Stats)
+	int32 GetExpForNextLevel() const override;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
+	const FNature& GetNature() const override;
+
+	UFUNCTION(BlueprintPure, Category = Stats)
+	TScriptInterface<IStatEntry> GetStat(FName Stat) const override;
+	
+	void ForEachStat(TFunctionRef<void(FName, const IStatEntry&)> Predicate) const override;
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+	void CalculateStats(const TMap<FName, int32>& BaseStats) override;
 
 private:
 	/**
+	 * The Pokémon that owns this object
+	 */
+	UPROPERTY(SaveGame)
+	TScriptInterface<IPokemon> Owner;
+	
+	/**
 	 * The level of the Pokémon
 	 */
+	UPROPERTY(SaveGame)
 	int32 Level;
-
-	/**
-	 * The personality value of the owning Pokémon
-	 */
-	uint32 PersonalityValue;
-
-	/**
-	 * The Exp. growth rate of the Pokémon
-	 */
-	TUniquePtr<Exp::IGrowthRate> GrowthRate;
 
 	/**
 	 * The current Exp of this Pokémon
 	 */
+	UPROPERTY(SaveGame)
 	int32 Exp;
 
 	/**
 	 * The Pokémon's Nature ID
 	 */
-	TOptional<TRowPointer<FNature>> Nature;
+	UPROPERTY(SaveGame)
+	TOptional<FName> Nature;
 
 	/**
 	 * Map to each of the Pokémon's individual stat values
 	 */
-	TMap<FName, TUniquePtr<IStatEntry>> Stats;
+	UPROPERTY(SaveGame)
+	TMap<FName, TScriptInterface<IStatEntry>> Stats;
 };

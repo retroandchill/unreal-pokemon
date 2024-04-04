@@ -12,5 +12,5 @@ uint32 UPersonalityValueUtils::GeneratePersonalityValue() {
 }
 
 uint32 UPersonalityValueUtils::GeneratePersonalityValue(const FPokemonDTO& DTO) {
-	return DTO.bOverride_PersonalityValue ? DTO.PersonalityValue : GeneratePersonalityValue();
+	return DTO.PersonalityValue.IsSet() ? DTO.PersonalityValue.GetValue() : GeneratePersonalityValue();
 }

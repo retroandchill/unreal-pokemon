@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Memory/RowPointer.h"
 #include "UObject/Interface.h"
 
 /**

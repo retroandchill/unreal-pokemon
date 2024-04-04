@@ -41,3 +41,19 @@ struct POKEMONDATA_API FGenderRatio : public FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gender Determination")
 	uint8 FemaleChance;
 };
+
+/**
+ * Blueprint function library for getting gender ratio data out.
+ */
+UCLASS()
+class POKEMONDATA_API UGenderRatioHelper : public UBlueprintFunctionLibrary { 
+	GENERATED_BODY() 
+
+public:
+	/**
+	 * Get the list of all possible gender ratio names.
+	 * @return The list of all possible gender ratio names.
+	 */
+	UFUNCTION() 
+	static TArray<FName> GetGenderRatioNames(); 
+};

@@ -95,7 +95,7 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
         item["EVs"] = item.get("EVs", {})
 
         stats_in_order = list(self.__stat_ids.values())
-        stats_in_order.sort(key=lambda stat: stat.pbs_order, reverse=True)
+        stats_in_order.sort(key=lambda stat: stat.pbs_order)
 
         if isinstance(item["BaseStats"], list):
             formatted_base_stats = {}

@@ -5,21 +5,23 @@
 #include "CoreMinimal.h"
 #include "BasicTrainer.h"
 #include "Trainer.h"
+#include "TrainerStub.generated.h"
 
 /**
  * Temporary stub class used to test trainer functionality before that component is fully built out.
  * TODO: Remove this class once the functionality is there.
  */
-class POKEMONCORE_API FTrainerStub : public FBasicTrainer {
+UCLASS()
+class POKEMONCORE_API UTrainerStub : public UObject, public ITrainer {
+	GENERATED_BODY()
+	
 public:
-	FTrainerStub();
-
-	FTrainerStub(FTrainerStub&& Other) noexcept = default;
-	FTrainerStub& operator=(FTrainerStub&& Other) noexcept = delete;
-
-	TArray<TSharedRef<IPokemon>>& GetParty() override;
-	virtual const TArray<TSharedRef<IPokemon>>& GetParty() const override;
+	UTrainerStub* Initialize();
+	
+	TArray<TScriptInterface<IPokemon>>& GetParty() override;
+	virtual const TArray<TScriptInterface<IPokemon>>& GetParty() const override;
 
 private:
-	TArray<TSharedRef<IPokemon>> Party;
+	UPROPERTY()
+	TArray<TScriptInterface<IPokemon>> Party;
 };

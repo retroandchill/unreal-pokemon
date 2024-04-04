@@ -14,6 +14,6 @@ class POKEMONUI_API UPartyMenuItemHandler : public UPartyMenuHandler {
 	GENERATED_BODY()
 
 public:
-	bool ShouldShow(const IPartyScreen& Screen, const TArray<TSharedRef<IPokemon>>& Party, int32 PartyIndex) const override;
-	void Handle(IPartyScreen& Screen, TArray<TSharedRef<IPokemon>>& Party, int32 PartyIndex) override;
+	bool ShouldShow(const IPartyScreen& Screen, const TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex) const override;
+	void Handle(IPartyScreen& Screen, TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex) override;
 };

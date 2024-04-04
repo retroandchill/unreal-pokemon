@@ -3,22 +3,15 @@
 
 #include "CoreMinimal.h"
 #include "DefaultStatEntry.h"
+#include "DefaultMainBattleStatEntry.generated.h"
 
 /**
  * Handles the default representation of the main battle stats
  */
-class POKEMONCORE_API FDefaultMainBattleStatEntry : public FDefaultStatEntry {
-	DECLARE_DERIVED_METATYPE
+UCLASS()
+class POKEMONCORE_API UDefaultMainBattleStatEntry : public UDefaultStatEntry {
+	GENERATED_BODY()
 	
 public:
-	/**
-	 * Initialize the stat with the given IV and EV
-	 * @param Stat The stat in question to set this to
-	 * @param IV The IV of the stat
-	 * @param EV The EV of the stat
-	 */
-	FDefaultMainBattleStatEntry(FName Stat, uint32 PersonalityValue, const TOptional<int32>& IV, int32 EV = 0);
-
 	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) final;
-	TUniquePtr<IStatEntry> Clone() const override;
 };
