@@ -3,23 +3,40 @@
 
 #include "CoreMinimal.h"
 #include "Meta/MetatypeDeclares.h"
+#include "Pokemon/Pokemon.h"
+#include "StatEntry.generated.h"
 
 struct FStat;
 struct FNature;
+
+// This class does not need to be modified.
+UINTERFACE(NotBlueprintable)
+class UStatEntry : public UInterface {
+	GENERATED_BODY()
+};
 
 /**
  * Represents an individual stat entry on a Pokémon
  */
 class POKEMONCORE_API IStatEntry {
-	DECLARE_ABSTRACT_METATYPE
+	GENERATED_BODY()
 	
 public:
-	virtual ~IStatEntry() = default;
+	/**
+	 * Initialize the stat with the given IV and EV
+	 * @param Stat The stat in question to set this to
+	 * @param NewPersonalityValue The personality value of the owning Pokémon
+	 * @param IVs The IV of the stat
+	 * @param EVs The EV of the stat
+	 */
+	virtual TScriptInterface<IStatEntry> Initialize(FName Stat,
+	                                                const TOptional<int32>& IVs, int32 EVs = 0) = 0;
 
 	/**
 	 * Get the value of this given stat in question
 	 * @return The value of the stat
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual int32 GetStatValue() const = 0;
 
 	/**
@@ -28,49 +45,34 @@ public:
 	 * @param Base The base stat of the Pokémon in question
 	 * @param Nature The Pokémon's effective nature
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual void RefreshValue(int32 Level, int32 Base, const FNature& Nature) = 0;
 
 	/**
 	 * Get the information about the stat in question
 	 * @return The stat's specific information
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual const FStat& GetStat() const = 0;
 
 	/**
 	 * Get the ID of the stat in question
 	 * @return The ID of the stat in question
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual FName GetStatID() const = 0;
 
 	/**
 	 * Get the IV of the stat
 	 * @return The value of the Pokémon's IV
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual int32 GetIV() const = 0;
 
 	/**
 	 * Get the EV of the stat
 	 * @return The value of the Pokémon's EV
 	 */
+	UFUNCTION(BlueprintCallable, Category = Stats)
 	virtual int32 GetEV() const = 0;
-
-	/**
-	 * Create a unique copy of this object
-	 * @return A unique copy of this object
-	 */
-	virtual TUniquePtr<IStatEntry> Clone() const = 0;
-
-	/**
-	 * Compare this stat entry to another one
-	 * @param Other The other stat entry
-	 * @return Are the two objects equal?
-	 */
-	bool operator==(const IStatEntry& Other) const;
-
-	/**
-	 * Compare this stat entry to another one
-	 * @param Other The other stat entry
-	 * @return Are the two objects equal?
-	 */
-	virtual bool Equals(const IStatEntry& Other) const = 0;
 };

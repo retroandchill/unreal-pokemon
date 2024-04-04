@@ -15,13 +15,13 @@ struct POKEMONDATA_API FEvolutionMethod {
 	/**
 	 * The species the Pokémon will evolve into
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Evolution")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Evolution", meta = (GetOptions = "PokemonData.SpeciesHelper.GetSpeciesNames"))
 	FName Species;
 
 	/**
 	 * The method of evolution
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Evolution")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Evolution", meta = (GetOptions = "PokemonData.EvolutionHelper.GetEvolutionNames"))
 	FName Method;
 
 	/**

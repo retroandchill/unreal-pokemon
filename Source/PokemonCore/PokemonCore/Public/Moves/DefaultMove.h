@@ -4,38 +4,32 @@
 
 #include "CoreMinimal.h"
 #include "Moves/Move.h"
-#include "Memory/RowPointer.h"
-#include "Moves/MoveData.h"
+#include "DefaultMove.generated.h"
 
 /**
  * The default implementation for a move
  */
-class POKEMONCORE_API FDefaultMove : public IMove {
-	DECLARE_DERIVED_METATYPE
+UCLASS()
+class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
+	GENERATED_BODY()
 	
 public:
-	explicit FDefaultMove(FName MoveID);
+	TScriptInterface<IMove> Initialize(FName MoveID);
 	
 	const FMoveData& GetMoveData() const override;
 	int32 GetCurrentPP() const override;
 	int32 GetTotalPP() const override;
-	bool operator==(const IMove& Other) const override;
-
-	/**
-	 * Check to see if two moves are the same
-	 * @param Other The other move
-	 * @return Are these two moves the same?
-	 */
-	bool operator==(const FDefaultMove& Other) const;
 
 private:
 	/**
 	 * A reference to the move data struct
 	 */
-	TRowPointer<FMoveData> MoveData;
+	UPROPERTY(SaveGame)
+	FName ID;
 
 	/**
 	 * The current PP for this move
 	 */
+	UPROPERTY(SaveGame)
 	int32 CurrentPP; 
 };

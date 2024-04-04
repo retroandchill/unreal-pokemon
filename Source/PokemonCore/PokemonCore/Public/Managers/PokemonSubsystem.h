@@ -6,6 +6,10 @@
 #include "Trainers/Trainer.h"
 #include "PokemonSubsystem.generated.h"
 
+namespace Exp {
+	class IGrowthRate;
+}
+
 /**
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
  */
@@ -22,6 +26,12 @@ public:
 	 * @return The singleton instance of the Pokémon Manager class
 	 */
 	static UPokemonSubsystem& GetInstance();
+
+	/**
+	 * Does the singleton instance exist?
+	 * @return Does the singleton instance exist?
+	 */
+	static bool Exists();
 
 	/**
 	 * The the ID of the HP stat
@@ -49,6 +59,13 @@ public:
 	 */
 	const ITrainer& GetPlayer() const;
 
+	/**
+	 * Get the growth rate for the given name
+	 * @param GrowthRate The growth rate to look up
+	 * @return The found GrowthRate
+	 */
+	const Exp::IGrowthRate& GetGrowthRate(FName GrowthRate) const;
+
 private:
 	/**
 	 * Singleton instance used to hold a backdoor reference to this system
@@ -70,5 +87,11 @@ private:
 	/**
 	 * The trainer that represents the player character
 	 */
-	TUniquePtr<ITrainer> Player;
+	UPROPERTY()
+	TScriptInterface<ITrainer> Player;
+
+	/**
+	 * The list of GrowthRate objects used by the game
+	 */
+	TMap<FName, TUniquePtr<Exp::IGrowthRate>> GrowthRates;
 };

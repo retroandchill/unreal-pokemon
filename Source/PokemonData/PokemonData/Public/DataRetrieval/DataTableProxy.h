@@ -21,16 +21,7 @@ public:
 	}
 
 	T* GetData(FName ID) const override {
-		return GetDataManaged(ID).Get();
-	}
-
-	/**
-	 * Get a managed version of the stored data
-	 * @param ID The managed data
-	 * @return A managed pointer to the data
-	 */
-	TRowPointer<T> GetDataManaged(FName ID) const {
-		return TRowPointer<T>(*DataTable, ID);
+		return DataTable->FindRow<T>(ID, TEXT("Find row!"));
 	}
 
 	TArray<FName> GetTableRowNames() const override {

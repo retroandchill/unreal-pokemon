@@ -3,6 +3,6 @@
 
 #include "Handlers/PartyMenu/SummaryHandler.h"
 
-void USummaryHandler::Handle(IPartyScreen& Screen, TArray<TSharedRef<IPokemon>>& Party, int32 PartyIndex) {
+void USummaryHandler::Handle(IPartyScreen& Screen, TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex) {
 	// TODO: Implement me
 }

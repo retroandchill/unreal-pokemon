@@ -71,8 +71,8 @@ struct POKEMONDATA_API FMoveData : public FTableRowBase {
 	/**
 	 * The target of the move in question (None = the move calculates the target)
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Battle Usage")
-	FString Target;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Battle Usage", meta = (GetOptions = "PokemonData.TargetHelper.GetTargetNames"))
+	FName Target;
 
 	/**
 	 * The function code of the move used to locate the move effect during runtime
@@ -92,4 +92,20 @@ struct POKEMONDATA_API FMoveData : public FTableRowBase {
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
 	TArray<FName> Tags;
+};
+
+/**
+ * Blueprint function library for getting move data out.
+ */
+UCLASS()
+class POKEMONDATA_API UMoveHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible move names.
+	 * @return The list of all possible move names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetMoveNames();
 };

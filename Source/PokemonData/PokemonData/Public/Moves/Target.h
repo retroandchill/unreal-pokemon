@@ -55,3 +55,19 @@ struct POKEMONDATA_API FTarget : public FTableRowBase {
 	UPROPERTY(BlueprintType, EditAnywhere, Category = "Target Selection")
 	bool LongRange = false;
 };
+
+/**
+ * Blueprint function library for getting target data out.
+ */
+UCLASS()
+class POKEMONDATA_API UTargetHelper : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+public:
+	/**
+	 * Get the list of all possible target names.
+	 * @return The list of all possible target names.
+	 */
+	UFUNCTION()
+	static TArray<FName> GetTargetNames();
+};

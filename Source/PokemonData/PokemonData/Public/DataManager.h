@@ -31,6 +31,7 @@ public:
 	 * @return A reference to the table proxy object
 	 */
 	template <typename T>
+	requires std::is_base_of_v<FTableRowBase, T>
 	const TDataTableProxy<T>& GetDataTable() const {
 		const UScriptStruct* const StructClass = T::StaticStruct();
 		auto RowName = StructClass->GetFName();

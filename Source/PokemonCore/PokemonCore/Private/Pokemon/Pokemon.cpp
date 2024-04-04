@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
+
+
 #include "Pokemon/Pokemon.h"
 
-IMPLEMENT_ABSTRACT_METATYPE(IPokemon)
 
-FPokemonRegistry FPokemonRegistry::Instance;
+// Add default functionality here for any IPokemon functions that are not pure virtual.

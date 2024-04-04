@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include <string>
+
 #include "MoveCheckResult.generated.h"
 
 class IInteractable;
