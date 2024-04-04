@@ -34,7 +34,8 @@ private:
 	/**
 	 * The trainer we're displaying information for
 	 */
-	TSharedPtr<ITrainer> Trainer;
+	UPROPERTY()
+	TScriptInterface<ITrainer> Trainer;
 	
 	/**
 	 * The image used for the player's sprite

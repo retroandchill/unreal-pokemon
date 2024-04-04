@@ -5,50 +5,52 @@
 
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/Stats/StatBlock.h"
 
-/**
- * Helper function to locate the trainer type that this trainer refers to
- * @param TrainerType The ID of the trainer type to find
- * @return The located trainer typ data
- */
-TRowPointer<FTrainerType> FindTrainerType(FName TrainerType) {
+
+TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
+	TrainerType = NewTrainerType;
+	Name = NewTrainerName;
+	ID = FMath::RandRange(0, 999999);
+	SecretID = FMath::RandRange(0, 999999);
+	return this;
+}
+
+const FTrainerType& UBasicTrainer::GetTrainerType() const {
 	const auto& DataManager = FDataManager::GetInstance();
-	auto& SpeciesTable = DataManager.GetDataTable<FTrainerType>();
+	auto& TrainerTypeTable = DataManager.GetDataTable<FTrainerType>();
 
-	auto SpeciesData = SpeciesTable.GetDataManaged(TrainerType);
-	ASSERT(SpeciesData != nullptr)
-	return SpeciesData;
+	auto TrainerTypeData = TrainerTypeTable.GetData(TrainerType);
+	ASSERT(TrainerTypeData != nullptr)
+	return *TrainerTypeData;
 }
 
-FBasicTrainer::FBasicTrainer(FName TrainerType, FText Name) : TrainerType(FindTrainerType(TrainerType)), Name(Name),
-	ID(FMath::RandRange(0, 999999)), SecretID(FMath::RandRange(0, 999999)) {
-}
-
-const FTrainerType& FBasicTrainer::GetTrainerType() const {
-	return *TrainerType;
-}
-
-FText FBasicTrainer::GetName() const {
+FText UBasicTrainer::GetTrainerName() const {
 	return Name;
 }
 
-uint32 FBasicTrainer::GetPayout() const {
+int32 UBasicTrainer::GetPayout() const {
 	GUARD(Party.IsEmpty(), 0)
-	return TrainerType->BaseMoney * Party.Last()->GetStatBlock().GetLevel();
+	return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
 }
 
-TArray<TSharedRef<IPokemon>>& FBasicTrainer::GetParty() {
+const TArray<TScriptInterface<IPokemon>>& UBasicTrainer::GetParty() const {
 	return Party;
 }
 
-const TArray<TSharedRef<IPokemon>>& FBasicTrainer::GetParty() const {
-	return Party;
+void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon>& Pokemon) {
+	Party.Add(Pokemon);
 }
 
-int32 FBasicTrainer::GetIdNumber() {
+void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {
+	ASSERT(Index1 >= 0 && Index1 < Party.Num() && Index2 >= 0 && Index2 < Party.Num())
+	Swap(Party[Index1], Party[Index2]);
+}
+
+int32 UBasicTrainer::GetIdNumber() {
 	return ID;
 }
 
-int32 FBasicTrainer::GetSecretId() {
+int32 UBasicTrainer::GetSecretId() {
 	return SecretID;
 }

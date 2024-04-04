@@ -16,10 +16,9 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	auto PokemonSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>();
 	ASSERT(PokemonSubsystem != nullptr);
 
-	auto& Party = PokemonSubsystem->GetPlayer()->GetParty();
-	Party.Empty();
+	auto Player = PokemonSubsystem->GetPlayer();
 	
-	Party.Add(UConstructionUtilities::CreateNewPokemon({
+	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
 		.Species = "SAMUROTT",
 		.Level = 100,
 		.Gender = Male,
@@ -42,7 +41,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 		.Item = "LIFEORB",
 		.Moves = {"HYDROPUMP", "KNOCKOFF", "MEGAHORN", "SACREDSWORD"}
 	}));
-	Party.Add(UConstructionUtilities::CreateNewPokemon({
+	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
 		.Species = "EMBOAR",
 		.Level = 100,
 		.Gender = Female,
@@ -65,7 +64,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 		.Item = "CHOICEBAND",
 		.Moves = {"FLAREBLITZ", "SUPERPOWER", "WILDCHARGE", "EARTHQUAKE"}
 	}));
-	Party.Add(UConstructionUtilities::CreateNewPokemon({
+	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
 		.Species = "SERPERIOR",
 		.Level = 100,
 		.Gender = Female,

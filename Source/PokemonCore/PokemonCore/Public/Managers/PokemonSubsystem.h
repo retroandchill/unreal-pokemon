@@ -58,7 +58,7 @@ public:
 	 * Get the player trainer
 	 * @return A reference to the player trainer character
 	 */
-	const TSharedPtr<ITrainer> &GetPlayer() const;
+	const TScriptInterface<ITrainer> &GetPlayer() const;
 
 	/**
 	 * Get the metadata about the current player

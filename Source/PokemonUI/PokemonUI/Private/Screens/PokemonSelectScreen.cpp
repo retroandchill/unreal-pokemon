@@ -37,16 +37,16 @@ void UPokemonSelectScreen::SetHelpText(const FText& Text) {
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-	if (auto& Party = UPokemonSubsystem::GetInstance().GetPlayer()->GetParty(); Index < Party.Num()) {
+	if (auto& Trainer = *UPokemonSubsystem::GetInstance().GetPlayer(); Index < Trainer.GetParty().Num()) {
 		if (SelectionPane->IsSwitching()) {
 			if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
-				Swap(Party[SwitchingIndex], Party[Index]);
+				Trainer.SwapPositionsInParty(SwitchingIndex, Index);
 			}
 			SelectionPane->CompleteSwitch();
 		} else {
 			TArray<TObjectPtr<UCommand>> Commands;
 			for (UPartyMenuHandler* Handler : PokemonHandlers) {
-				if (!Handler->ShouldShow(*this, Party, Index))
+				if (!Handler->ShouldShow(*this, Trainer, Index))
 					continue;
 			
 				Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
@@ -69,9 +69,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 void UPokemonSelectScreen::ProcessCommand(int32 CurrentIndex, UCommand* SelectedCommand) {
 	auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
 	ASSERT(Handler != nullptr);
-
-	auto& Party = UPokemonSubsystem::GetInstance().GetPlayer()->GetParty();
-	Handler->Handle(*this, Party, SelectionPane->GetIndex());
+	Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
 }
 
 void UPokemonSelectScreen::OnCommandWindowCancel() {

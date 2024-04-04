@@ -31,5 +31,5 @@ void UTrainerCardScreen::SetTrainerSprite() {
 
 void UTrainerCardScreen::SetTrainerInfo() {
 	ASSERT(TrainerName != nullptr)
-	TrainerName->SetText(Trainer->GetName());
+	TrainerName->SetText(Trainer->GetTrainerName());
 }

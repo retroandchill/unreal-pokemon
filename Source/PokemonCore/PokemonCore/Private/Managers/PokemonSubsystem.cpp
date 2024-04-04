@@ -44,7 +44,7 @@ bool UPokemonSubsystem::Exists() {
 
 void UPokemonSubsystem::StartNewGame() {
 	// TODO: Swap this instantiation with the actual trainer instantiation
-	Player = MakeShared<FTrainerStub>();
+	Player = NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
 	PlayerMetadata = NewObject<UPlayerMetadata>();
 	PlayerMetadata->StartNewGame();
 }
@@ -57,7 +57,7 @@ int32 UPokemonSubsystem::GetMaxPartySize() const {
 	return MaxPartySize;
 }
 
-const TSharedPtr<ITrainer> &UPokemonSubsystem::GetPlayer() const {
+const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
 	return Player;
 }
 

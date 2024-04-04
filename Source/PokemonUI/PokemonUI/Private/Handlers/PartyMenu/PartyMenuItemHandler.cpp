@@ -3,12 +3,12 @@
 
 #include "Handlers/PartyMenu/PartyMenuItemHandler.h"
 
-bool UPartyMenuItemHandler::ShouldShow(const IPartyScreen& Screen, const TArray<TScriptInterface<IPokemon>>& Party,
-	int32 PartyIndex) const {
+bool UPartyMenuItemHandler::ShouldShow(const IPartyScreen& Screen, const ITrainer& Trainer,
+                                       int32 PartyIndex) const {
 	// TODO: Implement me
-	return Super::ShouldShow(Screen, Party, PartyIndex);
+	return Super::ShouldShow(Screen, Trainer, PartyIndex);
 }
 
-void UPartyMenuItemHandler::Handle(IPartyScreen& Screen, TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex) {
+void UPartyMenuItemHandler::Handle(IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) {
 	// TODO: Implement me
 }
