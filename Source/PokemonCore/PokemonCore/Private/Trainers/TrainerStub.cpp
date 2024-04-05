@@ -16,11 +16,3 @@ TScriptInterface<ITrainer> UTrainerStub::Initialize(FName NewTrainerType, FText 
 
 	return this;
 }
-
-TArray<TScriptInterface<IPokemon>>& UTrainerStub::GetParty() {
-	return Party;
-}
-
-const TArray<TScriptInterface<IPokemon>>& UTrainerStub::GetParty() const {
-	return Party;
-}
