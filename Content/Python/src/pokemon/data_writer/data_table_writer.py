@@ -1,19 +1,8 @@
-# ====================================================================================================================
-# ** Unreal Pokémon created by Retro & Chill
-# --------------------------------------------------------------------------------------------------------------------
-# This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-# from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-# property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-# --------------------------------------------------------------------------------------------------------------------
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-# THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-# ====================================================================================================================
+# "Unreal Pokémon" created by Retro & Chill.
 from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary
 
-from pokemon.data_loader.pbs_data import PbsIniData, ItemData, MoveData, TypeData, AbilityData, SpeciesData
+from pokemon.data_loader.pbs_data import PbsIniData, ItemData, MoveData, TypeData, AbilityData, SpeciesData, \
+    TrainerTypeData
 
 
 def import_data(item_data: PbsIniData, table_name: str) -> None:
@@ -70,3 +59,12 @@ def import_species(species_data: SpeciesData) -> None:
     """
     print("Importing species...")
     import_data(species_data, "Pokemon")
+
+
+def import_trainer_types(trainer_type_data: TrainerTypeData) -> None:
+    """
+    Import trainer type data into Unreal
+    :param trainer_type_data: The list of trainer types to import
+    """
+    print("Importing trainer types...")
+    import_data(trainer_type_data, "TrainerTypes")

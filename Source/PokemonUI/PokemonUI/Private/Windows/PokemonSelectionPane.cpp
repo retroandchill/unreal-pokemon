@@ -15,7 +15,7 @@ void UPokemonSelectionPane::NativeConstruct() {
 
 	ASSERT(ContentsArea != nullptr)
 	auto& PokemonSubsystem = UPokemonSubsystem::GetInstance();
-	auto& PlayerParty = PokemonSubsystem.GetPlayer().GetParty();
+	auto& PlayerParty = PokemonSubsystem.GetPlayer()->GetParty();
 
 	ActivePanels.Empty();
 	for (int32 i = 0; i < PokemonSubsystem.GetMaxPartySize(); i++) {

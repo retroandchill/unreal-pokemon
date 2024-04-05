@@ -10,6 +10,7 @@ namespace Exp {
 	class IGrowthRate;
 }
 
+class UPlayerMetadata;
 /**
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
  */
@@ -34,6 +35,12 @@ public:
 	static bool Exists();
 
 	/**
+	 * Start a brand new game for the player
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Playthrough")
+	void StartNewGame();
+
+	/**
 	 * The the ID of the HP stat
 	 * @return The stat used referring to a Pokémon's HP
 	 */
@@ -51,13 +58,14 @@ public:
 	 * Get the player trainer
 	 * @return A reference to the player trainer character
 	 */
-	ITrainer& GetPlayer();
+	const TScriptInterface<ITrainer> &GetPlayer() const;
 
 	/**
-	 * Get the player trainer
-	 * @return A reference to the player trainer character
+	 * Get the metadata about the current player
+	 * @return The metadata about the current player
 	 */
-	const ITrainer& GetPlayer() const;
+	UFUNCTION(BlueprintPure, Category = "Trainers|Player")
+	UPlayerMetadata* GetPlayerMetadata() const;
 
 	/**
 	 * Get the growth rate for the given name
@@ -89,6 +97,12 @@ private:
 	 */
 	UPROPERTY()
 	TScriptInterface<ITrainer> Player;
+
+	/**
+	 * The metadata about the player
+	 */
+	UPROPERTY()
+	TObjectPtr<UPlayerMetadata> PlayerMetadata;
 
 	/**
 	 * The list of GrowthRate objects used by the game

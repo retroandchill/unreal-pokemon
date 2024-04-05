@@ -8,6 +8,8 @@
 
 class IPartyScreen;
 class IPokemon;
+class ITrainer;
+
 /**
  * Basic abstract handlers for the party menu
  */
@@ -31,19 +33,19 @@ public:
 	/**
 	 * Should this handler show the underlying command to the player?
 	 * @param Screen The screen currently being shown to the player
-	 * @param Party The current player's party
+	 * @param Trainer The current player
 	 * @param PartyIndex The index of the party that is currently selected
 	 * @return Should the command be shown?
 	 */
-	virtual bool ShouldShow(const IPartyScreen& Screen, const TArray<TScriptInterface<IPokemon>> &Party, int32 PartyIndex) const;
+	virtual bool ShouldShow(const IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) const;
 
 	/**
 	 * Handle the effect of the command
 	 * @param Screen The screen currently being shown to the player
-	 * @param Party The current player's party
+	 * @param Trainer The current player
 	 * @param PartyIndex The index of the party that is currently selected
 	 */
-	virtual void Handle(IPartyScreen& Screen, TArray<TScriptInterface<IPokemon>>& Party, int32 PartyIndex);
+	virtual void Handle(IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex);
 	
 private:
 	/**

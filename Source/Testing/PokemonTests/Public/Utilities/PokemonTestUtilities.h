@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/Widget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PokemonTestUtilities.generated.h"
 
+class UWidget;
 /**
  * Blueprint function library used for generating mock data for testing purposes
  */
@@ -69,3 +71,20 @@ struct FGameInstanceShutdown {
  * An RAII container for a Game Instance that calls shutdown when the object leaves scope.
  */
 using FGameInstancePtr = TUniquePtr<UGameInstance, FGameInstanceShutdown>;
+
+/**
+ * "Deleter" to remove a widget from the viewport.
+ */
+struct FRemoveWidgetFromViewport {
+	void operator()(UWidget* Widget) {
+		if (Widget != nullptr)
+			Widget->RemoveFromParent();
+	}
+};
+
+/**
+ * An RAII container for a Widget that removes it from the viewport when we're done with it.
+ */
+template <typename T>
+requires std::is_base_of_v<UWidget, T>
+using TWidgetPtr = TUniquePtr<T, FRemoveWidgetFromViewport>;

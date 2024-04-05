@@ -5,6 +5,7 @@
 
 #include "Asserts.h"
 #include "PokemonCoreSettings.h"
+#include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Trainers/TrainerStub.h"
 
@@ -24,8 +25,9 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 		GrowthRates.Add(Type, Exp::FGrowthRateRegistry::GetInstance().Construct(Type));
 	}
 
-	// TODO: Swap this instantiation with the actual trainer instantiation
-	Player = NewObject<UTrainerStub>(this)->Initialize();
+#if WITH_EDITOR
+	StartNewGame();
+#endif
 }
 
 void UPokemonSubsystem::Deinitialize() {
@@ -42,6 +44,13 @@ bool UPokemonSubsystem::Exists() {
 	return Instance != nullptr;
 }
 
+void UPokemonSubsystem::StartNewGame() {
+	// TODO: Swap this instantiation with the actual trainer instantiation
+	Player = NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
+	PlayerMetadata = NewObject<UPlayerMetadata>();
+	PlayerMetadata->StartNewGame();
+}
+
 FName UPokemonSubsystem::GetHPStat() const {
 	return HPStat;
 }
@@ -50,14 +59,12 @@ int32 UPokemonSubsystem::GetMaxPartySize() const {
 	return MaxPartySize;
 }
 
-ITrainer& UPokemonSubsystem::GetPlayer() {
-	ASSERT(Player != nullptr)
-	return *Player;
+const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
+	return Player;
 }
 
-const ITrainer& UPokemonSubsystem::GetPlayer() const {
-	ASSERT(Player != nullptr)
-	return *Player;
+UPlayerMetadata* UPokemonSubsystem::GetPlayerMetadata() const {
+	return PlayerMetadata;
 }
 
 const Exp::IGrowthRate& UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const {
