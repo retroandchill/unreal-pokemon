@@ -36,8 +36,11 @@ jobs:
           coverage run -m unittest discover -s . -p "test_*.py"
       
       - name: Compile Python Coverage
-        working-directory: ../..
-        run: coverage xml --omit=Content/Python/test/* --data-file=Content/Python/.coverage -o python-coverage.xml
+        working-directory: Content/Python
+        run: |
+          ./venv/Scripts/activate.ps1
+          cd ../..
+          coverage xml --omit=Content/Python/test/* --data-file=Content/Python/.coverage -o python-coverage.xml
           
       - name: Run sonar-scanner
         env:
