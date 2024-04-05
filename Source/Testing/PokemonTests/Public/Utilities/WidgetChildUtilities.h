@@ -24,3 +24,4 @@ public:
 	UFUNCTION(BlueprintPure, Category = Widgets)
 	static UWidget* FindChildWidget(UUserWidget* Parent, FName WidgetName);
 };
+
