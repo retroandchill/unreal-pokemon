@@ -34,6 +34,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Pokémon")
 	void SwapPositionsInParty(int32 Index1, int32 Index2) override;
+
+	/**
+	 * Remove all Pokémon from the player's party
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Pokémon")
+	void ClearParty() override;
 	
 	UFUNCTION(BlueprintPure, Category = Bio)
 	int32 GetIdNumber() override;

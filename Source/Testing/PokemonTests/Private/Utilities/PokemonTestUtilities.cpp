@@ -17,6 +17,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	ASSERT(PokemonSubsystem != nullptr);
 
 	auto Player = PokemonSubsystem->GetPlayer();
+	Player->ClearParty();
 	
 	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
 		.Species = "SAMUROTT",

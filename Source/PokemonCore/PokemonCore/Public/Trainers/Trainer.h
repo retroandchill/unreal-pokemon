@@ -72,6 +72,12 @@ public:
 	virtual void SwapPositionsInParty(int32 Index1, int32 Index2) = 0;
 
 	/**
+	 * Remove all Pokémon from the player's party
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Pokémon")
+	virtual void ClearParty() = 0;
+	
+	/**
 	 * Get the trainer's ID number
 	 * @return The trainer's ID number
 	 */

@@ -7,6 +7,7 @@
 #include "Components/CanvasPanel.h"
 #include "Pokemon/Pokemon.h"
 #include "Species/SpeciesData.h"
+#include "Trainers/BasicTrainer.h"
 #include "Utilities/PokemonTestUtilities.h"
 #include "Windows/PokemonSelectionPane.h"
 

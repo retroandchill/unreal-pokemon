@@ -47,6 +47,10 @@ void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {
 	Swap(Party[Index1], Party[Index2]);
 }
 
+void UBasicTrainer::ClearParty() {
+	Party.Empty();
+}
+
 int32 UBasicTrainer::GetIdNumber() {
 	return ID;
 }
