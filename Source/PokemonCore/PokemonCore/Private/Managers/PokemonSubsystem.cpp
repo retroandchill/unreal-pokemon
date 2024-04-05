@@ -25,7 +25,9 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
 		GrowthRates.Add(Type, Exp::FGrowthRateRegistry::GetInstance().Construct(Type));
 	}
 
+#if WITH_EDITOR
 	StartNewGame();
+#endif
 }
 
 void UPokemonSubsystem::Deinitialize() {

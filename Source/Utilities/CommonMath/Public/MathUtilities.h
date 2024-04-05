@@ -14,6 +14,11 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
 
 public:
 	/**
+	 * The number of seconds in a minute.
+	 */
+	static constexpr float SECONDS_PER_MINUTE = 60.f;
+	
+	/**
 	 * Linear interpolation between two values, given the duration of the change and the time passed since the start of
 	 * the change (delta)
 	 * @param StartValue The starting value for the change
@@ -57,4 +62,5 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "Math|Vector")
 	static FVector Midpoint(const FVector &Start, const FVector &End);
+
 };

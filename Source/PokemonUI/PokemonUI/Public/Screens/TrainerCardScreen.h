@@ -6,6 +6,7 @@
 #include "Screens/Screen.h"
 #include "TrainerCardScreen.generated.h"
 
+class UPlayerMetadata;
 class ITrainer;
 class UImage;
 class UDisplayText;
@@ -30,12 +31,25 @@ private:
 	 * Set the textual information for the player
 	 */
 	void SetTrainerInfo();
+
+	/**
+	 * Set the display text for the time
+	 * @param Playtime The new playtime
+	 */
+	UFUNCTION()
+	void SetPlayerTimeInfo(float Playtime);
 	
 	/**
 	 * The trainer we're displaying information for
 	 */
 	UPROPERTY()
 	TScriptInterface<ITrainer> Trainer;
+	
+	/**
+	 * The metadata about the player we're looking at
+	 */
+	UPROPERTY()
+	TObjectPtr<UPlayerMetadata> PlayerMetadata;
 	
 	/**
 	 * The image used for the player's sprite
@@ -47,6 +61,42 @@ private:
 	 * The text used to display the player's name
 	 */
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UDisplayText> TrainerName;
+	TObjectPtr<UDisplayText> TrainerNameText;
+
+	/**
+	 * The text used to display the player's ID number
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UDisplayText> IDText;
+
+	/**
+	 * The text used to display the player's current playtime
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UDisplayText> TimeText;
+
+	/**
+	 * The text used to display the player's current Pokédex progress
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UDisplayText> PokedexText;
+
+	/**
+	 * The text used to display the player's current money
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UDisplayText> MoneyText;
+
+	/**
+	 * The text used to display the date the player started their adventure on
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UDisplayText> AdventureStartedText;
+
+	/**
+	 * The text used to display the date the player first entered the hall of fame
+	 */
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UDisplayText> FirstHallOfFameText;
 	
 };

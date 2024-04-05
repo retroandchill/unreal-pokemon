@@ -3,10 +3,16 @@
 
 #include "Player/PlayerMetadata.h"
 
-#include "Managers/PokemonSubsystem.h"
+#include "MathUtilities.h"
 
 void UPlayerMetadata::Tick(float DeltaTime) {
 	TotalPlaytime += DeltaTime;
+	LastUpdated += DeltaTime;
+
+	if (LastUpdated >= UMathUtilities::SECONDS_PER_MINUTE) {
+		OnTimeUpdated.Broadcast(TotalPlaytime);
+		LastUpdated = FMath::Fmod(LastUpdated, UMathUtilities::SECONDS_PER_MINUTE);
+	}
 }
 
 TStatId UPlayerMetadata::GetStatId() const {
@@ -23,6 +29,10 @@ const FDateTime& UPlayerMetadata::GetStartDate() const {
 
 float UPlayerMetadata::GetTotalPlaytime() const {
 	return TotalPlaytime;
+}
+
+FOnTimeUpdate& UPlayerMetadata::GetOnTimeUpdated() {
+	return OnTimeUpdated;
 }
 
 void UPlayerMetadata::StartNewGame() {

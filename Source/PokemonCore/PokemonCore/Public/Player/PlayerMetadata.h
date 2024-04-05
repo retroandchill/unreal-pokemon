@@ -7,6 +7,11 @@
 #include "PlayerMetadata.generated.h"
 
 /**
+ * Delegate for when the player 
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeUpdate, float, NewPlaytime);
+
+/**
  * Various playthrough related metadata for the player character, such as playtime.
  */
 UCLASS()
@@ -32,6 +37,12 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
 	float GetTotalPlaytime() const;
 
+	/**
+	 * Retrieves the delegate for when the time is updated
+	 * @return Called when the player's playtime is updated. Should be emitted about every minute.
+	 */
+	FOnTimeUpdate& GetOnTimeUpdated();
+
 private:
 	/**
 	 * Start a brand new game
@@ -49,6 +60,17 @@ private:
 	 */
 	UPROPERTY(BlueprintGetter = GetTotalPlaytime, Category = "Player|Metadata")
 	float TotalPlaytime;
+
+	/**
+	 * The time since the last update was called
+	 */
+	float LastUpdated = 0;
+
+	/**
+	 * Called when the player's playtime is updated. Should be emitted about every minute.
+	 */
+	UPROPERTY(BlueprintAssignable, Category = "Player|Metadata")
+	FOnTimeUpdate OnTimeUpdated;
 
 	friend class UPokemonSubsystem;
 };
