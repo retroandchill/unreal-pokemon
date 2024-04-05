@@ -1,11 +1,11 @@
 import os
 import unittest
 from unittest.mock import MagicMock
+import mocks
 
 from unreal import Text, Stat, Name, PokemonStatType
 
 import import_pbs
-import mocks
 
 assert mocks, "Something is imported for its side effects."
 
