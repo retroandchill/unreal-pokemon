@@ -1,14 +1,11 @@
+import sys
 import unittest
 from unittest.mock import MagicMock
-
-import mocks
 
 from unreal import DataTable, EditorAssetLibrary, DataTableFunctionLibrary
 
 from pokemon.data_writer import import_types, import_moves, import_items, import_abilities
 from pokemon.data_writer.data_table_writer import import_species, import_trainer_types
-
-assert mocks, "Something is imported for its side effects."
 
 JSON_EXAMPLE = '''
 {  
@@ -21,7 +18,7 @@ JSON_EXAMPLE = '''
 '''
 
 
-class MyTestCase(unittest.TestCase):
+class TestDataTableWriter(unittest.TestCase):
     def test_import_types(self):
         test_table = DataTable()
         EditorAssetLibrary.load_asset = MagicMock(return_value=test_table)
@@ -90,4 +87,5 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestDataTableWriter)
+    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)

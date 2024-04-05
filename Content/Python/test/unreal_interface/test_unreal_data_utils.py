@@ -1,18 +1,16 @@
+import sys
 import unittest
 from unittest.mock import MagicMock
 
 from unreal import PokemonStatType, DataTable, EditorAssetLibrary, DataTableFunctionLibrary, ImportUtils, Stat, Name, \
     Text
 
-import mocks
 from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values, stat_entries
-
-assert mocks, "Something is imported for its side effects."
 
 MAIN_BATTLE = 'MainBattle'
 
 
-class UnrealDataUtilsTest(unittest.TestCase):
+class TestUnrealDataUtils(unittest.TestCase):
     def test_get_enum_values(self):
         values = enum_values(PokemonStatType)
         self.assertEqual(values, {'Main', 'MainBattle', 'Battle'})
@@ -56,4 +54,5 @@ class UnrealDataUtilsTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestUnrealDataUtils)
+    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)

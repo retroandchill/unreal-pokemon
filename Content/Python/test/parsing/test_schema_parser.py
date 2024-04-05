@@ -1,9 +1,10 @@
+import sys
 import unittest
 
 from pokemon.data_loader.schema_parser import string_to_json_value
 
 
-class MyTestCase(unittest.TestCase):
+class TestSchemaParser(unittest.TestCase):
     def test_string_to_json_value(self):
         self.assertEqual(string_to_json_value('2', 'i'), 2)
 
@@ -37,4 +38,5 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestSchemaParser)
+    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)

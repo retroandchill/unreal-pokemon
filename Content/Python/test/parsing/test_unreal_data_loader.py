@@ -1,11 +1,12 @@
 # "Unreal Pokémon" created by Retro & Chill.
+import sys
 import unittest
 from unittest.mock import MagicMock
 
 from pokemon.data_loader import UnrealDataLoader
 
 
-class MyTestCase(unittest.TestCase):
+class TestUnrealDataLoader(unittest.TestCase):
     def test_load_data(self):
         data = {'item1', 'item2', 'item3'}
         create_data = MagicMock(return_value=data)
@@ -43,4 +44,5 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestUnrealDataLoader)
+    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)

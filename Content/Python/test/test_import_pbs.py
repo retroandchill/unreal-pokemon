@@ -1,18 +1,16 @@
 import os
+import sys
 import unittest
 from unittest.mock import MagicMock
-import mocks
 
 from unreal import Text, Stat, Name, PokemonStatType
 
 import import_pbs
 
-assert mocks, "Something is imported for its side effects."
-
 MAIN_BATTLE = 'MainBattle'
 
 
-class MyTestCase(unittest.TestCase):
+class TestImportPbs(unittest.TestCase):
     def test_import_pbs(self):
         stats = {
             "HP": Stat(Name("HP"), 0, Text("HP"), Text("HP"), PokemonStatType("Main")),
@@ -53,4 +51,5 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestImportPbs)
+    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
