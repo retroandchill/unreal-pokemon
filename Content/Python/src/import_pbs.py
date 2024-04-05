@@ -1,30 +1,18 @@
-# ====================================================================================================================
-# ** Unreal Pokémon created by Retro & Chill
-# --------------------------------------------------------------------------------------------------------------------
-# This project is intended as a means of learning more about how a game like Pokémon works by creating a framework
-# from the ground up, and for non-commercial applications. While this code is original, Pokémon is the intellectual
-# property of Game Freak and Nintendo, as such it is highly discouraged to use this kit to make a commercial product.
-# --------------------------------------------------------------------------------------------------------------------
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-# THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-# ====================================================================================================================
+# "Unreal Pokémon" created by Retro & Chill.
 
-from unreal import FieldUse, BattleUse, MoveDamageCategory, Text
+from unreal import FieldUse, BattleUse, MoveDamageCategory, Text, TrainerGender
 
 from pokemon.data_loader import UnrealDataLoader
-from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityData, SpeciesData
+from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityData, SpeciesData, TrainerTypeData
 from pokemon.data_writer import import_items, import_moves, import_types, import_abilities
-from pokemon.data_writer.data_table_writer import import_species
+from pokemon.data_writer.data_table_writer import import_species, import_trainer_types
 from pokemon.unreal_interface import enum_values, data_table_values
 from pokemon.unreal_interface.unreal_data_utils import stat_entries
 
 HARDCODED_DATA_DIR = "Data/Hardcoded"
 
 
-def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: Text, species_file: Text) -> None:
+def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: Text, species_file: Text, trainer_types_file: Text) -> None:
     """
     Execute the script with the given arguments
     :param type_file: The path to the types.txt
@@ -32,6 +20,7 @@ def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: T
     :param items_file: The path to items.txt
     :param ability_file: The path to abilities.txt
     :param species_file: The path to pokemon.txt
+    :param trainer_types_file: The path to trainer_types.txt
     """
     types = TypeData(str(type_file))
     import_types(types)
@@ -65,3 +54,7 @@ def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: T
                           ability_ids, move_ids, egg_group_ids, item_ids, body_color_ids, body_shape_ids, habitat_ids,
                           evolution_ids)
     import_species(species)
+
+    trainer_gender_data = enum_values(TrainerGender)
+    trainers_types = TrainerTypeData(str(trainer_types_file), trainer_gender_data)
+    import_trainer_types(trainers_types)

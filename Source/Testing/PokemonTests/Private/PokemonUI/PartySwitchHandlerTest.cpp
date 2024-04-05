@@ -8,8 +8,10 @@
 #include "Pokemon/GamePokemon.h"
 #include "Screens/PartyScreen.h"
 #include "Pokemon/Pokemon.h"
+#include "Trainers/BasicTrainer.h"
 
 #include "Utilities/fakeit.hpp"
+#include "Utilities/PokemonTestUtilities.h"
 
 using namespace fakeit;
 
@@ -17,33 +19,27 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Project.UI.PartySwitch
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartySwitchHandlerTest::RunTest(const FString& Parameters) {
-	UGameInstance* GameInstance = nullptr;
+	FGameInstancePtr GameInstance;
 	if (!UPokemonSubsystem::Exists()) {
-		GameInstance = NewObject<UGameInstance>();
+		GameInstance.Reset(NewObject<UGameInstance>());
 		GameInstance->Init();
 	}
 	
 	Mock<IPartyScreen> Screen;
 	Fake(Method(Screen, BeginSwitch));
-	
-	auto Pokemon1 = UGamePokemon::Create({.Species = TEXT("RIOLU"), .Level = 5 });
-	auto Pokemon2 = UGamePokemon::Create({.Species = TEXT("OSHAWOTT"), .Level = 5 });
-	//Fake(Dtor(Pokemon2));
-	
-	TArray<TScriptInterface<IPokemon>> Party;
-	Party.Emplace(Pokemon1);
+
+	auto Trainer = NewObject<UBasicTrainer>()
+		->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
+	Trainer->AddPokemonToParty(UGamePokemon::Create({.Species = TEXT("RIOLU"), .Level = 5 }));
 	
 	TGCPointer<UPartyMenuHandler> Handler(NewObject<UPartySwitchHandler>());
-	bool Passed = TestFalse(TEXT("Command should not be visible!"), Handler->ShouldShow(Screen.get(), Party, 0));
+	bool Passed = TestFalse(TEXT("Command should not be visible!"), Handler->ShouldShow(Screen.get(), *Trainer, 0));
 	
-	Party.Emplace(Pokemon2);
-	Passed &= TestTrue(TEXT("Command should be visible!"), Handler->ShouldShow(Screen.get(), Party, 0));
+	Trainer->AddPokemonToParty(UGamePokemon::Create({.Species = TEXT("OSHAWOTT"), .Level = 5 }));
+	Passed &= TestTrue(TEXT("Command should be visible!"), Handler->ShouldShow(Screen.get(), *Trainer, 0));
 
-	Handler->Handle(Screen.get(), Party, 0);
+	Handler->Handle(Screen.get(), *Trainer, 0);
 	Passed &= Verify(Method(Screen, BeginSwitch).Using(0));
-
-	if (GameInstance != nullptr) {
-		GameInstance->Shutdown();
-	}
+	
 	return Passed;
 }

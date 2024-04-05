@@ -128,6 +128,26 @@ class Stat:
         self.type = type
 
 
+class TrainerGender(EnumBase):
+    def __init__(self, display_name: str):
+        super().__init__()
+        self.display_name = display_name
+
+    def get_display_name(self):
+        return self.display_name
+
+    Male = None
+    Female = None
+    Unknown = None
+    Mixed = None
+
+
+TrainerGender.Male = TrainerGender('Male')
+TrainerGender.Female = TrainerGender('Female')
+TrainerGender.Unknown = TrainerGender('Unknown')
+TrainerGender.Mixed = TrainerGender('Mixed')
+
+
 class DataTable:
     def __init__(self):
         pass

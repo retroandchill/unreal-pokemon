@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BasicTrainer.h"
 #include "Trainer.h"
 #include "TrainerStub.generated.h"
 
@@ -11,16 +12,10 @@
  * TODO: Remove this class once the functionality is there.
  */
 UCLASS()
-class POKEMONCORE_API UTrainerStub : public UObject, public ITrainer {
+class POKEMONCORE_API UTrainerStub : public UBasicTrainer {
 	GENERATED_BODY()
 	
 public:
-	UTrainerStub* Initialize();
+	TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) override;
 	
-	TArray<TScriptInterface<IPokemon>>& GetParty() override;
-	virtual const TArray<TScriptInterface<IPokemon>>& GetParty() const override;
-
-private:
-	UPROPERTY()
-	TArray<TScriptInterface<IPokemon>> Party;
 };

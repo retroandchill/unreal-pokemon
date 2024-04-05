@@ -1,11 +1,11 @@
 import os
 import unittest
 from unittest.mock import MagicMock
+import mocks
 
 from unreal import Text, Stat, Name, PokemonStatType
 
 import import_pbs
-import mocks
 
 assert mocks, "Something is imported for its side effects."
 
@@ -31,6 +31,7 @@ class MyTestCase(unittest.TestCase):
         import_pbs.import_items = MagicMock()
         import_pbs.import_abilities = MagicMock()
         import_pbs.import_species = MagicMock()
+        import_pbs.import_trainer_types = MagicMock()
         import_pbs.stat_entries = MagicMock(return_value=stats)
 
         pbs_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PBS')
@@ -40,13 +41,15 @@ class MyTestCase(unittest.TestCase):
         item_file = Text(os.path.join(pbs_dir, "items.txt"))
         ability_file = Text(os.path.join(pbs_dir, "abilities.txt"))
         species_file = Text(os.path.join(pbs_dir, "pokemon.txt"))
-        import_pbs.execute(type_file, move_file, item_file, ability_file, species_file)
+        trainer_types_file = Text(os.path.join(pbs_dir, "trainer_types.txt"))
+        import_pbs.execute(type_file, move_file, item_file, ability_file, species_file, trainer_types_file)
 
         import_pbs.import_types.assert_called_once()
         import_pbs.import_moves.assert_called_once()
         import_pbs.import_items.assert_called_once()
         import_pbs.import_abilities.assert_called_once()
         import_pbs.import_species.assert_called_once()
+        import_pbs.import_trainer_types.assert_called_once()
 
 
 if __name__ == '__main__':
