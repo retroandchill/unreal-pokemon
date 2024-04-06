@@ -19,41 +19,41 @@ constexpr std::array GErraticGrowthTable = {
 	501878, 513934, 526049, 536557, 548720, 560922, 571333, 583539, 591882, 600000
 };
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateErraticTest, "Project.Core.Exp.GrowthRateErraticTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateErraticTest, "UnrealPokemon.Core.Exp.GrowthRateErraticTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateErraticTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const {
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 1");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 1");
 	OutTestCommands.Add("1");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 2-49");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 2-49");
 	OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 49)));
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 50");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 50");
 	OutTestCommands.Add("50");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 51");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 51");
 	OutTestCommands.Add("51");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 52-67");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 52-67");
 	OutTestCommands.Add(FString::FromInt(FMath::RandRange(52, 67)));
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 68");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 68");
 	OutTestCommands.Add("68");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 69");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 69");
 	OutTestCommands.Add("69");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 70-97");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 70-97");
 	OutTestCommands.Add(FString::FromInt(FMath::RandRange(70, 97)));
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 98");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 98");
 	OutTestCommands.Add("98");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 99");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 99");
 	OutTestCommands.Add("99");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateErraticTest: Level = 100");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateErraticTest: Level = 100");
 	OutTestCommands.Add("100");
 }
 

@@ -4,7 +4,7 @@
 #include "Misc/AutomationTest.h"
 #include "Species/Stat.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "Project.PokemonUtilities.TestGetMainStatsFromTable",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "UnrealPokemon.PokemonUtilities.TestGetMainStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetMainStatsFromTable::RunTest(const FString& Parameters) {

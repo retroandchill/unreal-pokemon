@@ -11,7 +11,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.DefaultStatBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "UnrealPokemon.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask  | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString& Parameters) {

@@ -5,7 +5,7 @@
 #include "Windowskin/WindowskinFactory.h"
 
 class UWindowskinFactory;
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinFactory, "Project.RPGMenus.TestWindowskinFactory",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinFactory, "UnrealPokemon.RPGMenus.TestWindowskinFactory",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestWindowskinFactory::RunTest(const FString& Parameters) {
