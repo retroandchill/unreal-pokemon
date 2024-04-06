@@ -13,12 +13,12 @@
 #include "Windows/SelectableWidget.h"
 
 
-// Sets default values
-ASelectableWindowInputTest::ASelectableWindowInputTest() {
-	OnTestStart.AddDynamic(this, &ASelectableWindowInputTest::RunTest);
+void ASelectableWindowInputTest::BeginPlay() {
+	Super::BeginPlay();
+	OnTestStart.AddDynamic(this, &ASelectableWindowInputTest::TestRun);
 }
 
-void ASelectableWindowInputTest::RunTest() {
+void ASelectableWindowInputTest::TestRun() {
 	NewIndex.Reset();
 	bCanceled = false;
 	

@@ -12,11 +12,8 @@ UCLASS()
 class POKEMONTESTS_API ATestWindowskinThumbnailRenderer : public AFunctionalTest {
 	GENERATED_BODY()
 
-public:
-	/**
-	 * Sets default values for this actor's properties
-	 */
-	ATestWindowskinThumbnailRenderer();
+protected:
+	void BeginPlay() override;
 
 
 private:
@@ -24,7 +21,7 @@ private:
 	 * Actually run the test
 	 */
 	UFUNCTION()
-	void RunTest();
+	void TestRun();
 
 	/**
 	 * The Windowskin asset to verify what to do when there is a valid texture

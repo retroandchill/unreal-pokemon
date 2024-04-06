@@ -8,7 +8,7 @@
 #include "Nodes/K2Node_AddWidgetToStack.h"
 #include "Screens/PauseMenuScreen.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAddWidgetToStack, "Project.RPGMenus.TestAddWidgetToStack.NodeInfo",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAddWidgetToStack, "UnrealPokemon.RPGMenus.TestAddWidgetToStack.NodeInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestAddWidgetToStack::RunTest(const FString& Parameters) {

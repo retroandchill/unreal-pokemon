@@ -1,9 +1,16 @@
+import os
+import sys
 import unittest
+from unittest import TestLoader, TextTestRunner
 
+from coverage import Coverage
+from unreal import Paths
+
+from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader.schema_parser import string_to_json_value
 
 
-class MyTestCase(unittest.TestCase):
+class TestSchemaParser(unittest.TestCase):
     def test_string_to_json_value(self):
         self.assertEqual(string_to_json_value('2', 'i'), 2)
 
@@ -37,4 +44,4 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    result = run_test_with_coverage(TestSchemaParser, __file__)

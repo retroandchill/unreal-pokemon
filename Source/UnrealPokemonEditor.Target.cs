@@ -1,5 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
+using System.Collections.Generic;
+using System.Linq;
 using UnrealBuildTool;
 
 public class UnrealPokemonEditorTarget : TargetRules
@@ -8,7 +10,7 @@ public class UnrealPokemonEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
 		RegisterModulesCreatedByRider();
 	}
 

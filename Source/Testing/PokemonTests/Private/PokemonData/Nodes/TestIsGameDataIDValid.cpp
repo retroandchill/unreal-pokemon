@@ -13,7 +13,7 @@
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_NodeTile, "Project.PokemonData.Nodes.TestIsGameDataIDValid.NodeTitle",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_NodeTile, "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.NodeTitle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestIsGameDataIDValid_NodeTile::RunTest(const FString& Parameters) {
@@ -35,7 +35,7 @@ bool TestIsGameDataIDValid_NodeTile::RunTest(const FString& Parameters) {
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_TooltipText, "Project.PokemonData.Nodes.TestIsGameDataIDValid.TooltipText",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_TooltipText, "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.TooltipText",
 								 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestIsGameDataIDValid_TooltipText::RunTest(const FString& Parameters) {
@@ -56,7 +56,7 @@ bool TestIsGameDataIDValid_TooltipText::RunTest(const FString& Parameters) {
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuCategory, "Project.PokemonData.Nodes.TestIsGameDataIDValid.MenuCategory",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuCategory, "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.MenuCategory",
 								 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestIsGameDataIDValid_MenuCategory::RunTest(const FString& Parameters) {
@@ -77,7 +77,7 @@ bool TestIsGameDataIDValid_MenuCategory::RunTest(const FString& Parameters) {
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_IconAndTint, "Project.PokemonData.Nodes.TestIsGameDataIDValid.IconAndTint",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_IconAndTint, "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.IconAndTint",
 								 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestIsGameDataIDValid_IconAndTint::RunTest(const FString& Parameters) {
@@ -100,7 +100,7 @@ bool TestIsGameDataIDValid_IconAndTint::RunTest(const FString& Parameters) {
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuActions, "Project.PokemonData.Nodes.TestIsGameDataIDValid.MenuActions",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuActions, "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.MenuActions",
 								 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestIsGameDataIDValid_MenuActions::RunTest(const FString& Parameters) {

@@ -4,9 +4,8 @@ from unreal import FieldUse, BattleUse, MoveDamageCategory, Text, TrainerGender
 
 from pokemon.data_loader import UnrealDataLoader
 from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityData, SpeciesData, TrainerTypeData
-from pokemon.data_writer import import_items, import_moves, import_types, import_abilities
-from pokemon.data_writer.data_table_writer import import_species, import_trainer_types
-from pokemon.unreal_interface import enum_values, data_table_values
+from pokemon.data_writer.data_table_writer import import_items, import_moves, import_types, import_abilities, import_species, import_trainer_types
+from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values
 from pokemon.unreal_interface.unreal_data_utils import stat_entries
 
 HARDCODED_DATA_DIR = "Data/Hardcoded"

@@ -13,12 +13,12 @@
 
 using namespace fakeit;
 
-// Sets default values
-ATestWindowskinThumbnailRenderer::ATestWindowskinThumbnailRenderer() {
-	OnTestStart.AddDynamic(this, &ATestWindowskinThumbnailRenderer::RunTest);
+void ATestWindowskinThumbnailRenderer::BeginPlay() {
+	Super::BeginPlay();
+	OnTestStart.AddDynamic(this, &ATestWindowskinThumbnailRenderer::TestRun);
 }
 
-void ATestWindowskinThumbnailRenderer::RunTest() {
+void ATestWindowskinThumbnailRenderer::TestRun() {
 	TGCPointer Renderer(NewObject<UWindowskinThumbnailRenderer>());
 	TGCPointer InvalidWindowskin(NewObject<UWindowskin>());
 	TEST_ASSERT(AssertIsValid(ValidWindowskin, TEXT("Valid Windowskin Must Exist")));

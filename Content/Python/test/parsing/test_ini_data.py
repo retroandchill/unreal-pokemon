@@ -2,15 +2,14 @@
 import os
 import unittest
 
-import mocks
-from mocks.mock_unreal import Stat, Name, PokemonStatType, Text
+from unreal import Stat, Name, PokemonStatType, Text
+
+from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader import IniData
 from pokemon.data_loader.pbs_data import ItemData, SpeciesData
 
 MAIN_BATTLE = "Main Battle"
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-assert mocks, "Something is imported for its side effects."
 
 class TestIniData(unittest.TestCase):
     def test_get_item(self):
@@ -54,4 +53,4 @@ class TestIniData(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    result = run_test_with_coverage(TestIniData, __file__)

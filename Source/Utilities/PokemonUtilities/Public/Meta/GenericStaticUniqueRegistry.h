@@ -19,9 +19,7 @@ public:
 	 * @return A reference to the only instance of this class
 	 */
 	static TGenericStaticUniqueRegistry& GetInstance() {
+		static TGenericStaticUniqueRegistry Instance;
 		return Instance;
 	}
-
-private:
-	static TGenericStaticUniqueRegistry Instance;
 };
