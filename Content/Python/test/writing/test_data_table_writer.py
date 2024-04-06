@@ -1,8 +1,11 @@
+import os
 import sys
 import unittest
+from unittest import TestLoader, TextTestRunner
 from unittest.mock import MagicMock
 
-from unreal import DataTable, EditorAssetLibrary, DataTableFunctionLibrary
+from coverage import Coverage
+from unreal import DataTable, EditorAssetLibrary, DataTableFunctionLibrary, Paths
 
 from pokemon.data_writer import import_types, import_moves, import_items, import_abilities
 from pokemon.data_writer.data_table_writer import import_species, import_trainer_types
@@ -87,5 +90,12 @@ class TestDataTableWriter(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestDataTableWriter)
-    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    test_file = os.path.join(Paths.project_dir(), "coverage-reports", 
+                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
+    cov = Coverage()
+    cov.start()
+    suite = TestLoader().loadTestsFromTestCase(TestDataTableWriter)
+    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    cov.stop()
+    cov.save()
+    cov.xml_report(outfile=test_file)

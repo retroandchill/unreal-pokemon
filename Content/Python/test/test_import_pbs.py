@@ -1,26 +1,26 @@
 import os
 import sys
 import unittest
+from unittest import TestLoader, TextTestRunner
 from unittest.mock import MagicMock
 
-from unreal import Text, Stat, Name, PokemonStatType
+from coverage import Coverage
+from unreal import Text, Stat, Name, PokemonStatType, Paths
 
 import import_pbs
-
-MAIN_BATTLE = 'MainBattle'
 
 
 class TestImportPbs(unittest.TestCase):
     def test_import_pbs(self):
         stats = {
-            "HP": Stat(Name("HP"), 0, Text("HP"), Text("HP"), PokemonStatType("Main")),
-            "ATTACK": Stat(Name("ATTACK"), 1, Text("Attack"), Text("Atk"), PokemonStatType(MAIN_BATTLE)),
-            "DEFENSE": Stat(Name("DEFENSE"), 2, Text("Defense"), Text("Def"), PokemonStatType(MAIN_BATTLE)),
-            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), 4, Text("Special Attack"), Text("SpAtk"),
-                                   PokemonStatType(MAIN_BATTLE)),
-            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), 5, Text("Special Defense"), Text("SpDef"),
-                                    PokemonStatType(MAIN_BATTLE)),
-            "SPEED": Stat(Name("SPEED"), 3, Text("Speed"), Text("Spd"), PokemonStatType(MAIN_BATTLE))
+            "HP": Stat(Name("HP"), Text("HP"), Text("HP"), PokemonStatType.MAIN, 0),
+            "ATTACK": Stat(Name("ATTACK"), Text("Attack"), Text("Atk"), PokemonStatType.MAIN_BATTLE, 1),
+            "DEFENSE": Stat(Name("DEFENSE"), Text("Defense"), Text("Def"), PokemonStatType.MAIN_BATTLE, 2),
+            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), Text("Special Attack"), Text("SpAtk"),
+                                   PokemonStatType.MAIN_BATTLE, 4),
+            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), Text("Special Defense"), Text("SpDef"),
+                                    PokemonStatType.MAIN_BATTLE, 5),
+            "SPEED": Stat(Name("SPEED"), Text("Speed"), Text("Spd"), PokemonStatType.MAIN_BATTLE, 3)
         }
 
         import_pbs.data_table_values = MagicMock(return_value=None)
@@ -51,5 +51,12 @@ class TestImportPbs(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestImportPbs)
-    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    test_file = os.path.join(Paths.project_dir(), "coverage-reports",
+                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
+    cov = Coverage()
+    cov.start()
+    suite = TestLoader().loadTestsFromTestCase(TestImportPbs)
+    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    cov.stop()
+    cov.save()
+    cov.xml_report(outfile=test_file)

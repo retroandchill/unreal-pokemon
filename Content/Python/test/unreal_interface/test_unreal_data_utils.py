@@ -1,9 +1,12 @@
+import os
 import sys
 import unittest
+from unittest import TestLoader, TextTestRunner
 from unittest.mock import MagicMock
 
+from coverage import Coverage
 from unreal import PokemonStatType, DataTable, EditorAssetLibrary, DataTableFunctionLibrary, ImportUtils, Stat, Name, \
-    Text
+    Text, Paths
 
 from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values, stat_entries
 
@@ -54,5 +57,12 @@ class TestUnrealDataUtils(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestUnrealDataUtils)
-    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    test_file = os.path.join(Paths.project_dir(), "coverage-reports", 
+                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
+    cov = Coverage()
+    cov.start()
+    suite = TestLoader().loadTestsFromTestCase(TestUnrealDataUtils)
+    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    cov.stop()
+    cov.save()
+    cov.xml_report(outfile=test_file)

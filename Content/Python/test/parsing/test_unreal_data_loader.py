@@ -1,7 +1,12 @@
 # "Unreal Pokémon" created by Retro & Chill.
+import os
 import sys
 import unittest
+from unittest import TestLoader, TextTestRunner
 from unittest.mock import MagicMock
+
+from coverage import Coverage
+from unreal import Paths
 
 from pokemon.data_loader import UnrealDataLoader
 
@@ -44,5 +49,12 @@ class TestUnrealDataLoader(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestUnrealDataLoader)
-    result = unittest.TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    test_file = os.path.join(Paths.project_dir(), "coverage-reports", 
+                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
+    cov = Coverage()
+    cov.start()
+    suite = TestLoader().loadTestsFromTestCase(TestUnrealDataLoader)
+    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
+    cov.stop()
+    cov.save()
+    cov.xml_report(outfile=test_file)
