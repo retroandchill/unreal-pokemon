@@ -43,5 +43,5 @@ jobs:
         with:
           path: |
             cpp-coverage.xml
-            python-coverage.xml
+            coverage-reports/*.xml
             TestResults/*
