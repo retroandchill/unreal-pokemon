@@ -1,12 +1,6 @@
 # "Unreal Pokémon" created by Retro & Chill.
-import os
-import sys
 import unittest
-from unittest import TestLoader, TextTestRunner
 from unittest.mock import MagicMock
-
-from coverage import Coverage
-from unreal import Paths
 
 from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader import UnrealDataLoader

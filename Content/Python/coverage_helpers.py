@@ -1,5 +1,6 @@
 import os
 import sys
+from logging import error
 from typing import Type, AnyStr
 from unittest import TestResult, TestLoader, TextTestRunner, TestCase
 
@@ -12,6 +13,7 @@ cov = Coverage(include=[os.path.join(Paths.project_dir(), "Content/Python/src/*"
                          os.path.join(Paths.project_dir(), "Content/Python/test/*")])
 cov.start()
 
+
 def run_test_with_coverage(test_class: Type[TestCase], test_file_name: os.PathLike[AnyStr]) -> TestResult:
     test_file = os.path.join(Paths.project_dir(), "coverage-reports",
                              f"{os.path.splitext(os.path.basename(test_file_name))[0]}.xml")
@@ -22,5 +24,8 @@ def run_test_with_coverage(test_class: Type[TestCase], test_file_name: os.PathLi
     cov.save()
     cov.xml_report(outfile=test_file)
     cov.start()
+
+    if not result.wasSuccessful():
+        error('Test run failed!')
 
     return result

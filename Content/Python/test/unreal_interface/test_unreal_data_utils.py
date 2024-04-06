@@ -4,7 +4,7 @@ import unittest
 from unreal import PokemonStatType, Stat, Name, Text
 
 from coverage_helpers import run_test_with_coverage
-from pokemon.unreal_interface.unreal_data_utils import data_table_values, enum_values, stat_entries
+from pokemon.unreal_interface.unreal_data_utils import enum_values, stat_entries
 
 MAIN_BATTLE = 'MainBattle'
 
