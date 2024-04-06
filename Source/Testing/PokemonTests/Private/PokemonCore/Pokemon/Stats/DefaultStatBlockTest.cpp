@@ -11,7 +11,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Project.Core.Stats.DefaultStatBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "UnrealPokemon.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask  | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
@@ -21,7 +21,7 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		GameInstance->Init();
 	}
 
-	FPokemonDTO PokemonDTO = { .Species = TEXT("GARCHOMP"), .Level = 78, .Nature = "ADAMANT" };
+	FPokemonDTO PokemonDTO = { .Species = FName("GARCHOMP"), .Level = 78, .Nature = FName("ADAMANT") };
 	PokemonDTO.IVs = {
 		{"HP", 24},
 		{"ATTACK", 12},

@@ -19,35 +19,35 @@ constexpr std::array GFluctuatingGrowthTable = {
 	1160499, 1214753, 1254796, 1312322, 1354652, 1415577, 1460276, 1524731, 1571884, 1640000
 };
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFluctuatingTest, "Project.Core.Exp.GrowthRateFluctuatingTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFluctuatingTest, "UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateFluctuatingTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const {
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 1");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 1");
 	OutTestCommands.Add("1");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 2-14");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 2-14");
 	OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 14)));
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 15");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 15");
 	OutTestCommands.Add("15");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 16");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 16");
 	OutTestCommands.Add("15");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 17-34");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 17-34");
 	OutTestCommands.Add(FString::FromInt(FMath::RandRange(17, 34)));
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 35");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 35");
 	OutTestCommands.Add("35");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 36");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 36");
 	OutTestCommands.Add("36");
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 37-99");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 37-99");
 	OutTestCommands.Add(FString::FromInt(FMath::RandRange(37, 99)));
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateFluctuatingTest: Level = 100");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFluctuatingTest: Level = 100");
 	OutTestCommands.Add("100");
 }
 

@@ -11,12 +11,12 @@
 #include "Utilities/PokemonTestUtilities.h"
 #include "Windows/PokemonSelectionPane.h"
 
-// Sets default values
-APokemonPanelInfoTest::APokemonPanelInfoTest() {
-	OnTestStart.AddDynamic(this, &APokemonPanelInfoTest::RunTest);
+void APokemonPanelInfoTest::BeginPlay() {
+	Super::BeginPlay();
+	OnTestStart.AddDynamic(this, &APokemonPanelInfoTest::TestRun);
 }
 
-void APokemonPanelInfoTest::RunTest() {
+void APokemonPanelInfoTest::TestRun() {
 	TEST_ASSERT(AssertIsValid(ScreenClass, TEXT("Screen class should be set!")))
 	UPokemonTestUtilities::CreateMockParty(this);
 	

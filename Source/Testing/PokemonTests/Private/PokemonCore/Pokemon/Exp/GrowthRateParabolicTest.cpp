@@ -18,20 +18,20 @@ constexpr std::array GParabolicGrowthTable = {
 	789030, 816525, 844653, 873420, 902835, 932903, 963632, 995030, 1027103, 1059860
 };
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateParabolicTest, "Project.Core.Exp.GrowthRateParabolicTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateParabolicTest, "UnrealPokemon.Core.Exp.GrowthRateParabolicTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateParabolicTest::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const {
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateParabolicTest: Level = 1");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateParabolicTest: Level = 1");
 	OutTestCommands.Add("1");
 
 	for (int i = 0; i < 3; i++) {
-		auto Fmt = FString::Printf(TEXT("Project.Core.Exp.GrowthRateParabolicTest: Level = 2-99 (Sample %d)"), i + 1);
+		auto Fmt = FString::Printf(TEXT("UnrealPokemon.Core.Exp.GrowthRateParabolicTest: Level = 2-99 (Sample %d)"), i + 1);
 		OutBeautifiedNames.Add(Fmt);
 		OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
 	}
 
-	OutBeautifiedNames.Add("Project.Core.Exp.GrowthRateParabolicTest: Level = 100");
+	OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateParabolicTest: Level = 100");
 	OutTestCommands.Add("100");
 }
 

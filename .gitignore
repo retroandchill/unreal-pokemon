@@ -87,3 +87,6 @@ conan.lock
 conanbuildinfo.txt
 conaninfo.txt
 graph_info.json
+coverage-reports
+cpp-coverage.xml
+**/__pycache__

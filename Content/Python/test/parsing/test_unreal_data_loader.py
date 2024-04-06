@@ -1,11 +1,18 @@
 # "Unreal Pokémon" created by Retro & Chill.
+import os
+import sys
 import unittest
+from unittest import TestLoader, TextTestRunner
 from unittest.mock import MagicMock
 
+from coverage import Coverage
+from unreal import Paths
+
+from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader import UnrealDataLoader
 
 
-class MyTestCase(unittest.TestCase):
+class TestUnrealDataLoader(unittest.TestCase):
     def test_load_data(self):
         data = {'item1', 'item2', 'item3'}
         create_data = MagicMock(return_value=data)
@@ -43,4 +50,4 @@ class MyTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    result = run_test_with_coverage(TestUnrealDataLoader, __file__)

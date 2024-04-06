@@ -4,7 +4,7 @@
 #include "Misc/AutomationTest.h"
 #include "Windowskin/WindowskinAssetActions.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinAssetActions, "Project.RPGMenus.TestWindowskinAssetActions",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinAssetActions, "UnrealPokemon.RPGMenus.TestWindowskinAssetActions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestWindowskinAssetActions::RunTest(const FString& Parameters) {

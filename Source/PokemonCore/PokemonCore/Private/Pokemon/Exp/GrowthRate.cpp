@@ -2,5 +2,3 @@
 #include "Pokemon/Exp/GrowthRate.h"
 
 using namespace Exp;
-
-FGrowthRateRegistry FGrowthRateRegistry::Instance;

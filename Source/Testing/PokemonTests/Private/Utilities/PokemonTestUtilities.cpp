@@ -20,7 +20,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	Player->ClearParty();
 	
 	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
-		.Species = "SAMUROTT",
+		.Species = FName("SAMUROTT"),
 		.Level = 100,
 		.Gender = Male,
 		.Shiny = false,
@@ -37,13 +37,13 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 			{"SPECIAL_ATTACK", 92},
 			{"SPEED", 252}
 		},
-		.Nature = "Naive",
+		.Nature = FName("Naive"),
 		.Ability = 0,
-		.Item = "LIFEORB",
+		.Item = FName("LIFEORB"),
 		.Moves = {"HYDROPUMP", "KNOCKOFF", "MEGAHORN", "SACREDSWORD"}
 	}));
 	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
-		.Species = "EMBOAR",
+		.Species = FName("EMBOAR"),
 		.Level = 100,
 		.Gender = Female,
 		.Shiny = true,
@@ -60,13 +60,13 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 			{"DEFENSE", 4},
 			{"SPEED", 252}
 		},
-		.Nature = "Jolly",
+		.Nature = FName("Jolly"),
 		.Ability = 2,
-		.Item = "CHOICEBAND",
+		.Item = FName("CHOICEBAND"),
 		.Moves = {"FLAREBLITZ", "SUPERPOWER", "WILDCHARGE", "EARTHQUAKE"}
 	}));
 	Player->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({
-		.Species = "SERPERIOR",
+		.Species = FName("SERPERIOR"),
 		.Level = 100,
 		.Gender = Female,
 		.Shiny = false,
@@ -83,9 +83,9 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 			{"DEFENSE", 48},
 			{"SPEED", 252}
 		},
-		.Nature = "Timid",
+		.Nature = FName("Timid"),
 		.Ability = 2,
-		.Item = "ROCKYHELMET",
+		.Item = FName("ROCKYHELMET"),
 		.Moves = {"LEAFSTORM", "TAUNT", "GLARE", "DEFOG"}
 	}));
 }
