@@ -12,16 +12,15 @@ UCLASS()
 class POKEMONTESTS_API ATrainerCardTest : public AFunctionalTest {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this actor's properties
-	ATrainerCardTest();
+protected:
+	void BeginPlay() override;
 
 private:
 	/**
 	 * Actually run the test
 	 */
 	UFUNCTION()
-	void RunTest();
+	void TestRun();
 
 	/**
 	 * The widget to create for the test

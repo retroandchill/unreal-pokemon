@@ -21,7 +21,7 @@ bool DefaultStatBlockTest::RunTest(const FString& Parameters) {
 		GameInstance->Init();
 	}
 
-	FPokemonDTO PokemonDTO = { .Species = TEXT("GARCHOMP"), .Level = 78, .Nature = "ADAMANT" };
+	FPokemonDTO PokemonDTO = { .Species = FName("GARCHOMP"), .Level = 78, .Nature = FName("ADAMANT") };
 	PokemonDTO.IVs = {
 		{"HP", 24},
 		{"ATTACK", 12},

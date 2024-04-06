@@ -5,11 +5,12 @@
 #include "Actions/MenuAction.h"
 #include "CommonDefines.h"
 
-AMenuActionTest::AMenuActionTest() {
-	OnTestStart.AddDynamic(this, &AMenuActionTest::RunTest);
+void AMenuActionTest::BeginPlay() {
+	Super::BeginPlay();
+	OnTestStart.AddDynamic(this, &AMenuActionTest::TestRun);
 }
 
-void AMenuActionTest::RunTest() {
+void AMenuActionTest::TestRun() {
 	TEST_ASSERT(AssertIsValid(MenuAction, TEXT("Screen class should be valid!")))
 
 	auto PlayerController = Cast<ARPGPlayerController>(GetWorld()->GetFirstPlayerController());

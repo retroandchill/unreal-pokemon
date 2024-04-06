@@ -11,19 +11,16 @@ class USelectableWidget;
 UCLASS()
 class POKEMONTESTS_API ASelectableWindowInputTest : public AFunctionalTest {
 	GENERATED_BODY()
-
-public:
-	/**
-	 * Sets default values for this actor's properties
-	 */
-	ASelectableWindowInputTest();
+	
+protected:
+	void BeginPlay() override;
 
 private:
 	/**
 	 * Actually run the test
 	 */
 	UFUNCTION()
-	void RunTest();
+	void TestRun();
 
 	/**
 	 * Callback for the confirm operation

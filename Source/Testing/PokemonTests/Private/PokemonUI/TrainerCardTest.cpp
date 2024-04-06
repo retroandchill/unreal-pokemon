@@ -12,13 +12,12 @@
 #include "Utilities/PokemonTestUtilities.h"
 #include "Windows/SelectableWidget.h"
 
-
-// Sets default values
-ATrainerCardTest::ATrainerCardTest() {
-	OnTestStart.AddDynamic(this, &ATrainerCardTest::RunTest);
+void ATrainerCardTest::BeginPlay() {
+	Super::BeginPlay();
+	OnTestStart.AddDynamic(this, &ATrainerCardTest::TestRun);
 }
 
-void ATrainerCardTest::RunTest() {
+void ATrainerCardTest::TestRun() {
 	TEST_ASSERT(AssertIsValid(WidgetClass, TEXT("Widget class should be valid!")))
 
 	TWidgetPtr<UTrainerCardScreen> Screen(CreateWidget<UTrainerCardScreen>(GetGameInstance(), WidgetClass));
