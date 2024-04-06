@@ -1,10 +1,4 @@
-import os
-import sys
 import unittest
-from unittest import TestLoader, TextTestRunner
-
-from coverage import Coverage
-from unreal import Paths
 
 from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader.schema_parser import string_to_json_value

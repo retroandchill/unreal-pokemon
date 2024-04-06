@@ -8,8 +8,8 @@ from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader import IniData
 from pokemon.data_loader.pbs_data import ItemData, SpeciesData
 
-MAIN_BATTLE = "Main Battle"
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 
 class TestIniData(unittest.TestCase):
     def test_get_item(self):
@@ -36,14 +36,14 @@ class TestIniData(unittest.TestCase):
 
     def test_parse_pokemon_data(self):
         stats = {
-            "HP": Stat(Name("HP"), 0, Text("HP"), Text("HP"), PokemonStatType("Main")),
-            "ATTACK": Stat(Name("ATTACK"), 1, Text("Attack"), Text("Atk"), PokemonStatType(MAIN_BATTLE)),
-            "DEFENSE": Stat(Name("DEFENSE"), 2, Text("Defense"), Text("Def"), PokemonStatType(MAIN_BATTLE)),
-            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), 4, Text("Special Attack"), Text("SpAtk"),
-                                   PokemonStatType(MAIN_BATTLE)),
-            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), 5, Text("Special Defense"), Text("SpDef"),
-                                    PokemonStatType(MAIN_BATTLE)),
-            "SPEED": Stat(Name("SPEED"), 3, Text("Speed"), Text("Spd"), PokemonStatType(MAIN_BATTLE))
+            "HP": Stat(Name("HP"), Text("HP"), Text("HP"), PokemonStatType.MAIN, 0),
+            "ATTACK": Stat(Name("ATTACK"), Text("Attack"), Text("Atk"), PokemonStatType.MAIN_BATTLE, 1),
+            "DEFENSE": Stat(Name("DEFENSE"), Text("Defense"), Text("Def"), PokemonStatType.MAIN_BATTLE, 2),
+            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), Text("Special Attack"), Text("SpAtk"),
+                                   PokemonStatType.MAIN_BATTLE, 4),
+            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), Text("Special Defense"), Text("SpDef"),
+                                    PokemonStatType.MAIN_BATTLE, 5),
+            "SPEED": Stat(Name("SPEED"), Text("Speed"), Text("Spd"), PokemonStatType.MAIN_BATTLE, 3)
         }
 
         pokemon_data = SpeciesData(os.path.join(ROOT_DIR, "resources/pokemon.txt"), None, None, None,
