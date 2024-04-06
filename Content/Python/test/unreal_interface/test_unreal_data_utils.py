@@ -8,6 +8,7 @@ from coverage import Coverage
 from unreal import PokemonStatType, DataTable, EditorAssetLibrary, DataTableFunctionLibrary, ImportUtils, Stat, Name, \
     Text, Paths
 
+from coverage_helpers import run_test_with_coverage
 from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values, stat_entries
 
 MAIN_BATTLE = 'MainBattle'
@@ -57,12 +58,4 @@ class TestUnrealDataUtils(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    test_file = os.path.join(Paths.project_dir(), "coverage-reports", 
-                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
-    cov = Coverage()
-    cov.start()
-    suite = TestLoader().loadTestsFromTestCase(TestUnrealDataUtils)
-    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
-    cov.stop()
-    cov.save()
-    cov.xml_report(outfile=test_file)
+    result = run_test_with_coverage(TestUnrealDataUtils, __file__)

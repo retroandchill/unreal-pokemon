@@ -8,6 +8,7 @@ from unittest.mock import MagicMock
 from coverage import Coverage
 from unreal import Paths
 
+from coverage_helpers import run_test_with_coverage
 from pokemon.data_loader import UnrealDataLoader
 
 
@@ -49,12 +50,4 @@ class TestUnrealDataLoader(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    test_file = os.path.join(Paths.project_dir(), "coverage-reports", 
-                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
-    cov = Coverage()
-    cov.start()
-    suite = TestLoader().loadTestsFromTestCase(TestUnrealDataLoader)
-    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
-    cov.stop()
-    cov.save()
-    cov.xml_report(outfile=test_file)
+    result = run_test_with_coverage(TestUnrealDataLoader, __file__)

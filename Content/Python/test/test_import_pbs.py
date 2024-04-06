@@ -1,13 +1,15 @@
 import os
 import sys
 import unittest
-from unittest import TestLoader, TextTestRunner
+from typing import Type, AnyStr
+from unittest import TestLoader, TextTestRunner, TestResult, TestCase
 from unittest.mock import MagicMock
 
 from coverage import Coverage
 from unreal import Text, Stat, Name, PokemonStatType, Paths
 
 import import_pbs
+from coverage_helpers import run_test_with_coverage
 
 
 class TestImportPbs(unittest.TestCase):
@@ -51,12 +53,4 @@ class TestImportPbs(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    test_file = os.path.join(Paths.project_dir(), "coverage-reports",
-                             f"{os.path.splitext(os.path.basename(__file__))[0]}.xml")
-    cov = Coverage()
-    cov.start()
-    suite = TestLoader().loadTestsFromTestCase(TestImportPbs)
-    result = TextTestRunner(stream=sys.stdout, buffer=True).run(suite)
-    cov.stop()
-    cov.save()
-    cov.xml_report(outfile=test_file)
+    result = run_test_with_coverage(TestImportPbs, __file__)
