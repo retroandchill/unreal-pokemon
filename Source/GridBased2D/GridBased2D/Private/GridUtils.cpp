@@ -5,9 +5,14 @@
 #include "GridBasedGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
-double UGridUtils::GetGridSize() {
-	static const double GridSize = GetDefault<UGridBased2DSettings>()->GetGridSize();
-	return GridSize;
+double UGridUtils::GetDefaultGridSize() {
+	static const double DefaultGridSize = GetDefault<UGridBased2DSettings>()->GetGridSize();
+	return DefaultGridSize;
+}
+
+double UGridUtils::GetGridSize(const UObject* WorldContext) {
+	auto GridBasedGameMode = CastChecked<AGridBasedGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
+	return GridBasedGameMode->GetGridSize();
 }
 
 TOptional<EFacingDirection> UGridUtils::VectorToFacingDirection(const FVector2D Vector) {

@@ -1,6 +1,13 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "GridBasedGameModeBase.h"
 
+#include "GridBased2DSettings.h"
+
+double AGridBasedGameModeBase::GetGridSize() const {
+	static const double DefaultGridSize = GetDefault<UGridBased2DSettings>()->GetGridSize();
+	return GridSize.Get(DefaultGridSize);
+}
+
 void AGridBasedGameModeBase::FadeIn(const FScreenTransitionCallback& Callback) {
 	OnScreenTransitionFinished.Clear();
 	OnScreenTransitionFinished.Add(Callback);
