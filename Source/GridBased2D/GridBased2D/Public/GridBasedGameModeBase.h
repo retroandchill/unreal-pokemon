@@ -18,6 +18,13 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
 
 public:
 	/**
+	 * Get the size of the grid in the game
+	 * @return The size of the grid according to the game
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid")
+	double GetGridSize() const;
+	
+	/**
 	 * Fade the screen in
 	 * @param Callback The delegate to call to when complete
 	 */
@@ -60,4 +67,10 @@ public:
 	 */
 	UPROPERTY(BlueprintCallable, Category = "Screen Transition")
 	FOnScreenTransitionFinished OnScreenTransitionFinished;
+
+	/**
+	 * Override of the default grid size if set.
+	 */
+	UPROPERTY(EditAnywhere, Category = "Tiles")
+	TOptional<double> GridSize;
 };

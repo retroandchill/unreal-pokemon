@@ -21,8 +21,16 @@ public:
 	 * Get the size of the grid in the game
 	 * @return The size of the grid according to the game
 	 */
-	UFUNCTION(BlueprintPure, Category = "Map|Grid")
-	static double GetGridSize();
+	UFUNCTION(BlueprintPure, Category = "Map|Grid", meta = (WorldContext = "WorldContext"))
+	static double GetDefaultGridSize();
+	
+	/**
+	 * Get the size of the grid in the game
+	 * @param WorldContext The context of the world used to get the game mode
+	 * @return The size of the grid according to the game
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map|Grid", meta = (WorldContext = "WorldContext"))
+	static double GetGridSize(const UObject* WorldContext);
 
 	/**
 	 * Convert a vector into a facing direction

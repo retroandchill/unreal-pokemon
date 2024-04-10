@@ -23,11 +23,12 @@ void UGridBasedMovementComponent::BeginPlay() {
 	auto Owner = GetOwner();
 	GUARD(Owner == nullptr,)
 	auto Position = Owner->GetActorLocation();
-	CurrentPosition.X = FMath::FloorToInt32(Position.X / UGridUtils::GetGridSize());
-	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / UGridUtils::GetGridSize());
+	auto GridSize = UGridUtils::GetGridSize(this);
+	CurrentPosition.X = FMath::FloorToInt32(Position.X / GridSize);
+	CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridSize);
 	DesiredPosition = CurrentPosition;
-	Position.X = CurrentPosition.X * UGridUtils::GetGridSize();
-	Position.Y = CurrentPosition.Y * UGridUtils::GetGridSize();
+	Position.X = CurrentPosition.X * GridSize;
+	Position.Y = CurrentPosition.Y * GridSize;
 	GetOwner()->SetActorLocation(Position, bPerformSweep);
 
 	auto Pawn = Cast<APawn>(Owner);
@@ -125,7 +126,7 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
 		FVector LocalOffset(0, 0, 0);
 		UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
 		auto Position = Owner->GetActorLocation();
-		auto GridPosition = LocalOffset * UGridUtils::GetGridSize() + Position;
+		auto GridPosition = LocalOffset * UGridUtils::GetGridSize(this) + Position;
 		Ret.bCanMove = !IGridMovable::Execute_PerformAdditionalMovementChecks(Owner, GridPosition, !Ret.bCanMove);
 	}
 	
@@ -142,12 +143,13 @@ void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection
 }
 
 void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offset) {
+	auto GridSize = UGridUtils::GetGridSize(this);
 	CurrentPosition = DesiredPosition = {
-		FMath::FloorToInt32(Offset.X / UGridUtils::GetGridSize()) + X,
-		FMath::FloorToInt32(Offset.Y / UGridUtils::GetGridSize()) + Y
+		FMath::FloorToInt32(Offset.X / GridSize) + X,
+		FMath::FloorToInt32(Offset.Y / GridSize) + Y
 	};
-	Offset.X += X * UGridUtils::GetGridSize();
-	Offset.Y += Y * UGridUtils::GetGridSize();
+	Offset.X += X * GridSize;
+	Offset.Y += Y * GridSize;
 	GetOwner()->SetActorLocation(Offset);
 }
 
@@ -171,14 +173,14 @@ EFacingDirection UGridBasedMovementComponent::GetDirection() const {
 }
 
 TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
-	static const auto FloatGridSize = static_cast<float>(UGridUtils::GetGridSize());
+	static const auto FloatGridSize = static_cast<float>(UGridUtils::GetGridSize(this));
 
 	FVector LocalOffset(0, 0, 0);
 	UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
 
 	auto Owner = GetOwner();
 	auto Position = Owner->GetActorLocation();
-	auto GridPosition = LocalOffset * UGridUtils::GetGridSize() + Position;
+	auto GridPosition = LocalOffset * FloatGridSize + Position;
 	
 	FCollisionShape GridSquare;
 	GridSquare.SetBox(FVector3f(FloatGridSize / 4 - 2, FloatGridSize / 4 - 2, FloatGridSize / 4 - 2));
@@ -215,10 +217,11 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 
 	auto Owner = GetOwner();
 	auto Position = Owner->GetActorLocation();
+	auto GridSize = UGridUtils::GetGridSize(this);
 	if (CurrentPosition.X != DesiredPosition.X) {
 		int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * UGridUtils::GetGridSize(),
-		                                                 DesiredPosition.X * UGridUtils::GetGridSize(),
+		Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridSize,
+		                                                 DesiredPosition.X * GridSize,
 		                                                 MoveSpeed * Distance,
 		                                                 Timer);
 
@@ -229,8 +232,8 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 
 	if (CurrentPosition.Y != DesiredPosition.Y) {
 		int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * UGridUtils::GetGridSize(),
-		                                                 DesiredPosition.Y * UGridUtils::GetGridSize(),
+		Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridSize,
+		                                                 DesiredPosition.Y * GridSize,
 		                                                 MoveSpeed * Distance,
 		                                                 Timer);
 

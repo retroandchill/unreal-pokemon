@@ -18,7 +18,7 @@
 AGridBasedCharacter::AGridBasedCharacter() {
 	PrimaryActorTick.bCanEverTick = true;
 
-	auto GridSize = static_cast<float>(UGridUtils::GetGridSize());
+	auto GridSize = static_cast<float>(UGridUtils::GetDefaultGridSize());
 	auto Capsule = GetCapsuleComponent();
 	Capsule->SetCapsuleRadius(GridSize / 2);
 	Capsule->SetCapsuleHalfHeight(GridSize / 2);
@@ -127,7 +127,7 @@ void AGridBasedCharacter::Interact() {
 			(Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Talk)) == 0)
 			continue;
 
-		IInteractable::Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);
+		Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);
 	}
 }
 
