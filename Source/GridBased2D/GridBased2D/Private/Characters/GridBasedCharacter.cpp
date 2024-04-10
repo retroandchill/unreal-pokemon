@@ -57,8 +57,8 @@ void AGridBasedCharacter::OnInteract_Implementation(const TScriptInterface<IGrid
 	OnInteractedWith.Broadcast(InteractionType);
 }
 
-bool AGridBasedCharacter::
-PerformAdditionalMovementChecks_Implementation(const FVector& TargetSquare, bool bBlockingHit) {
+bool AGridBasedCharacter::PerformAdditionalMovementChecks_Implementation(const FVector& TargetSquare,
+      bool bBlockingHit, UPrimitiveComponent* HitComponent) {
 	return bBlockingHit;
 }
 
@@ -70,17 +70,42 @@ UGridBasedMovementComponent* AGridBasedCharacter::GetGridBasedMovementComponentI
 	return GridBasedMovementComponent;
 }
 
-bool AGridBasedCharacter::InvalidFloor(const FVector& TargetSquare) const {
+bool AGridBasedCharacter::InvalidFloor(const FVector& TargetSquare, const UPrimitiveComponent* HitComponent) {
+	if (HitComponent != nullptr && !CanStepUpOnComponent(*HitComponent)) {
+		return true;
+	}
+	
 	auto Edge = FindLocationJustOffTileEdge(TargetSquare);
 	FFindFloorResult Result;
 	GetCharacterMovement()->FindFloor(Edge, Result, true);
 	return !Result.bWalkableFloor;
 }
 
-bool AGridBasedCharacter::IsStandingNextToCliff(const FVector& TargetSquare) const {
-	double Distance1 = GetDistanceToGround(FindLocationJustOffTileEdge(TargetSquare));
-	double Distance2 = GetDistanceToGround(UMathUtilities::Midpoint(GetActorLocation(), TargetSquare));
-	return FMath::Abs(Distance1 - Distance2) > GetCharacterMovement()->MaxStepHeight;
+bool AGridBasedCharacter::IsStandingNextToCliff(const FVector& TargetSquare) {
+	auto [Distance1, Component1] = PerformTraceToGround(FindLocationJustOffTileEdge(TargetSquare));
+	auto [Distance2, Component2] = PerformTraceToGround(UMathUtilities::Midpoint(GetActorLocation(), TargetSquare));
+
+	if (FMath::Abs(Distance1 - Distance2) > GetCharacterMovement()->MaxStepHeight) {
+		return true;
+	}
+
+	if (Component2 != nullptr) {
+		return !CanStepUpOnComponent(*Component2);
+	}
+
+	return false;
+}
+
+bool AGridBasedCharacter::CanStepUpOnComponent(const UPrimitiveComponent& Component) {
+	if (!Component.CanCharacterStepUp(this)) {
+		return false;
+	}
+
+	if (auto StaticMeshComponent = Cast<UStaticMeshComponent>(&Component); StaticMeshComponent != nullptr) {
+		return StaticMeshComponent->GetWalkableSlopeOverride().WalkableSlopeBehavior != WalkableSlope_Unwalkable;
+	}
+
+	return false;
 }
 
 FVector AGridBasedCharacter::FindLocationJustOffTileEdge(const FVector& TargetSquare) const {
@@ -91,13 +116,13 @@ FVector AGridBasedCharacter::FindLocationJustOffTileEdge(const FVector& TargetSq
 	return MidPoint + Diff;
 }
 
-double AGridBasedCharacter::GetDistanceToGround(const FVector& Position) const {
+TPair<double, UPrimitiveComponent*> AGridBasedCharacter::PerformTraceToGround(const FVector& Position) const {
 	static constexpr double TraceMax = 100.0;
 	FHitResult Result;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	auto Hit = GetWorld()->LineTraceSingleByChannel(Result, Position, Position - FVector(0, 0, TraceMax), ECC_Visibility, Params);
-	return Hit ? Result.Distance : TraceMax;
+	return { Hit ? Result.Distance : TraceMax, Result.Component.Get() };
 }
 
 void AGridBasedCharacter::Move(const FInputActionInstance& Input) {

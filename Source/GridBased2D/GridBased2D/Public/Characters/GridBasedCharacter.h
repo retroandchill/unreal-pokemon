@@ -36,7 +36,7 @@ public:
 	UGridBasedMovementComponent* GetGridBasedMovementComponent_Implementation() const override;
 
 	void OnInteract_Implementation(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType) override;
-	bool PerformAdditionalMovementChecks_Implementation(const FVector& TargetSquare, bool bBlockingHit) override;
+	bool PerformAdditionalMovementChecks_Implementation(const FVector& TargetSquare, bool bBlockingHit, UPrimitiveComponent* HitComponent) override;
 	
 	UFUNCTION(BlueprintPure, Category = "Interaction")
 	uint8 GetInteractionTypes() const override;
@@ -51,10 +51,11 @@ protected:
 	/**
 	 * Check if a tile is a valid floor tile
 	 * @param TargetSquare The world space location of the tile in question
+	 * @param HitComponent The actor component that was hit in the collision
 	 * @return Is there no valid floor at this height
 	 */
 	UFUNCTION(BlueprintPure, Category = "Map|Grid")
-	bool InvalidFloor(const FVector &TargetSquare) const;
+	bool InvalidFloor(const FVector &TargetSquare, const UPrimitiveComponent* HitComponent);
 
 	/**
 	 * Check if a tile is a cliff face
@@ -62,23 +63,28 @@ protected:
 	 * @return Is the target tile a cliff
 	 */
 	UFUNCTION(BlueprintPure, Category = "Map|Grid")
-	bool IsStandingNextToCliff(const FVector& TargetSquare) const;
+	bool IsStandingNextToCliff(const FVector& TargetSquare);
+
+	/**
+	 * Checks if the character can step up on the selected component at all
+	 * @param Component The component to check
+	 * @return Can the player step up?
+	 */
+	bool CanStepUpOnComponent(const UPrimitiveComponent& Component);
 
 	/**
 	 * Find the world space position just off of a tile's edge
 	 * @param TargetSquare The world space location of the tile in question
 	 * @return What is the world space location of one pixel off of the player's current tile
 	 */
-	UFUNCTION(BlueprintPure, Category = "Map|Grid")
 	FVector FindLocationJustOffTileEdge(const FVector &TargetSquare) const;
 
 	/**
 	 * Compute the distance to the ground from the current position
 	 * @param Position The position to sweep to the ground from
-	 * @return The distance to the ground
+	 * @return The distance to the ground and the hit component
 	 */
-	UFUNCTION(BlueprintPure, Category = "Map|Grid")
-	double GetDistanceToGround(const FVector &Position) const;
+	TPair<double, UPrimitiveComponent*> PerformTraceToGround(const FVector &Position) const;
 
 private:
 	/**
