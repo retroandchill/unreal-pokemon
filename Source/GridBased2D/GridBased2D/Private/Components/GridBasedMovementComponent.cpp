@@ -112,9 +112,11 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
 		return Ret;
 	}
 
+	UPrimitiveComponent* BlockingComponent = nullptr;
 	for (auto Results = HitTestOnFacingTile(MovementDirection); auto& Result : Results) {
 		if (Result.bBlockingHit) {
 			Ret.bCanMove = false;
+			BlockingComponent = Result.GetComponent();
 		}
 
 		if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable != nullptr) {
@@ -127,7 +129,7 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
 		UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
 		auto Position = Owner->GetActorLocation();
 		auto GridPosition = LocalOffset * UGridUtils::GetGridSize(this) + Position;
-		Ret.bCanMove = !IGridMovable::Execute_PerformAdditionalMovementChecks(Owner, GridPosition, !Ret.bCanMove);
+		Ret.bCanMove = !IGridMovable::Execute_PerformAdditionalMovementChecks(Owner, GridPosition, !Ret.bCanMove, BlockingComponent);
 	}
 	
 	return Ret;

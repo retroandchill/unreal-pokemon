@@ -31,9 +31,10 @@ public:
 	 * movement check behavior doesn't find anything that would block movement already.
 	 * @param TargetSquare The translated world-space position of the square in question to perform the checks on
 	 * @param bBlockingHit Was this hit blocking or not
+	 * @param HitComponent The actor that was hit in the event of a blocking hit
 	 * @return Should we block movement based upon what we find?
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category = Movement)
-	bool PerformAdditionalMovementChecks(const FVector &TargetSquare, bool bBlockingHit);
+	bool PerformAdditionalMovementChecks(const FVector &TargetSquare, bool bBlockingHit, UPrimitiveComponent* HitComponent);
 	
 };
