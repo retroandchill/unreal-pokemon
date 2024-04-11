@@ -2,21 +2,21 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "AutomationDriverTypeDefs.h"
+#include "CoreMinimal.h"
 
 /**
  * Handler class to work with setting up the automation driver
  */
 class POKEMONTESTS_API FAutomationDriverHandler {
-public:
-	FAutomationDriverHandler();
-	FAutomationDriverHandler(const FAutomationDriverHandler& Other) = delete;
-	FAutomationDriverHandler(FAutomationDriverHandler&& Other) noexcept = delete;
-	~FAutomationDriverHandler();
+  public:
+    FAutomationDriverHandler();
+    FAutomationDriverHandler(const FAutomationDriverHandler &Other) = delete;
+    FAutomationDriverHandler(FAutomationDriverHandler &&Other) noexcept = delete;
+    ~FAutomationDriverHandler();
 
-	FAutomationDriverHandler& operator=(const FAutomationDriverHandler& Other) = delete;
-	FAutomationDriverHandler& operator=(FAutomationDriverHandler&& Other) = delete;
+    FAutomationDriverHandler &operator=(const FAutomationDriverHandler &Other) = delete;
+    FAutomationDriverHandler &operator=(FAutomationDriverHandler &&Other) = delete;
 
-	FAutomationDriverPtr CreateDriver() const;
+    FAutomationDriverPtr CreateDriver() const;
 };

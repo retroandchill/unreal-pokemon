@@ -7,13 +7,13 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinAssetActions, "UnrealPokemon.RPGMenus.TestWindowskinAssetActions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestWindowskinAssetActions::RunTest(const FString& Parameters) {
-	FWindowskinAssetActions  AssetActions;
+bool TestWindowskinAssetActions::RunTest(const FString &Parameters) {
+    FWindowskinAssetActions AssetActions;
 
-	AUTOMATION_ASSERT(TestEqual(TEXT("Name"), AssetActions.GetName().ToString(), TEXT("Windowskin")));
-	AUTOMATION_ASSERT(TestEqual(TEXT("Asset Class"), AssetActions.GetSupportedClass(), UWindowskin::StaticClass()));
-	AUTOMATION_ASSERT(TestEqual(TEXT("Type Color"), AssetActions.GetTypeColor(), FColor::Silver));
-	AUTOMATION_ASSERT(TestEqual(TEXT("Categories"), AssetActions.GetCategories(), EAssetTypeCategories::UI));
-	
-	return true;
+    AUTOMATION_ASSERT(TestEqual(TEXT("Name"), AssetActions.GetName().ToString(), TEXT("Windowskin")));
+    AUTOMATION_ASSERT(TestEqual(TEXT("Asset Class"), AssetActions.GetSupportedClass(), UWindowskin::StaticClass()));
+    AUTOMATION_ASSERT(TestEqual(TEXT("Type Color"), AssetActions.GetTypeColor(), FColor::Silver));
+    AUTOMATION_ASSERT(TestEqual(TEXT("Categories"), AssetActions.GetCategories(), EAssetTypeCategories::UI));
+
+    return true;
 }

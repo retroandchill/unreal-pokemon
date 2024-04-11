@@ -13,21 +13,21 @@ class UScreen;
  */
 UCLASS()
 class POKEMONTESTS_API AMenuActionTest : public AFunctionalTest {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-protected:
-	void BeginPlay() override;
+  protected:
+    void BeginPlay() override;
 
-private:
-	/**
-	 * Actually run the test
-	 */
-	UFUNCTION()
-	void TestRun();
+  private:
+    /**
+     * Actually run the test
+     */
+    UFUNCTION()
+    void TestRun();
 
-	/**
-	 * The actual action used for the test
-	 */
-	UPROPERTY(EditInstanceOnly, Instanced, Category = "Test Parameters")
-	TObjectPtr<UMenuAction> MenuAction;
+    /**
+     * The actual action used for the test
+     */
+    UPROPERTY(EditInstanceOnly, Instanced, Category = "Test Parameters")
+    TObjectPtr<UMenuAction> MenuAction;
 };
