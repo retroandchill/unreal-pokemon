@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/PokemonSelectScreen.h"
 
-#include "Asserts.h"
 #include "RPGPlayerController.h"
 #include "Data/Command.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
@@ -12,7 +11,7 @@
 
 void UPokemonSelectScreen::NativeConstruct() {
 	Super::NativeConstruct();
-	ASSERT(SelectionPane != nullptr)
+	check(SelectionPane != nullptr)
 	SelectionPane->SetIndex(0);
 	SelectionPane->SetActive(true);
 	SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
@@ -68,7 +67,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 
 void UPokemonSelectScreen::ProcessCommand(int32 CurrentIndex, UCommand* SelectedCommand) {
 	auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
-	ASSERT(Handler != nullptr);
+	check(Handler != nullptr);
 	Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
 }
 

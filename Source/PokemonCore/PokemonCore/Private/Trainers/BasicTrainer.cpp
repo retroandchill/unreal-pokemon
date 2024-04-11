@@ -21,7 +21,7 @@ const FTrainerType& UBasicTrainer::GetTrainerType() const {
 	auto& TrainerTypeTable = DataManager.GetDataTable<FTrainerType>();
 
 	auto TrainerTypeData = TrainerTypeTable.GetData(TrainerType);
-	ASSERT(TrainerTypeData != nullptr)
+	check(TrainerTypeData != nullptr)
 	return *TrainerTypeData;
 }
 
@@ -30,7 +30,7 @@ FText UBasicTrainer::GetTrainerName() const {
 }
 
 int32 UBasicTrainer::GetPayout() const {
-	GUARD(Party.IsEmpty(), 0)
+	if (Party.IsEmpty()) { return 0; }
 	return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
 }
 
@@ -43,7 +43,7 @@ void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon>& Pokemon)
 }
 
 void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {
-	ASSERT(Index1 >= 0 && Index1 < Party.Num() && Index2 >= 0 && Index2 < Party.Num())
+	check(Index1 >= 0 && Index1 < Party.Num() && Index2 >= 0 && Index2 < Party.Num())
 	Swap(Party[Index1], Party[Index2]);
 }
 

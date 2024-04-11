@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Asserts.h"
 #include "DataRetrieval/DataTableProxy.h"
 
 /**
@@ -35,10 +34,10 @@ public:
 	const TDataTableProxy<T>& GetDataTable() const {
 		const UScriptStruct* const StructClass = T::StaticStruct();
 		auto RowName = StructClass->GetFName();
-		ASSERT(DataTables.Contains(RowName))
+		check(DataTables.Contains(RowName))
 
 		auto TableInterface = DataTables[RowName].Get();
-		ASSERT(StructClass->GetName() == TableInterface->GetStructType()->GetName())
+		check(StructClass->GetName() == TableInterface->GetStructType()->GetName())
 
 		auto TableOut = static_cast<TDataTableProxy<T>*>(TableInterface);
 		return *TableOut;

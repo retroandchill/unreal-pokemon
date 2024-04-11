@@ -24,7 +24,6 @@ public class GridBased2D : ModuleRules
 				"SlateCore",
 				"EnhancedInput",
 				"CommonMath",
-				"PokemonUtilities",
 				"TileReplacer",
 				"DeveloperSettings"
 			}

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Asserts.h"
 
 /**
  * Template object for a pointer held by the garbage collector
@@ -72,7 +71,7 @@ public:
 	 * @return The object held by this pointer
 	 */
 	T& operator*() const {
-		ASSERT(HeldObject != nullptr)
+		check(HeldObject != nullptr)
 		return *HeldObject;
 	}
 

@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Map/GridBasedMap.h"
 
-#include "Asserts.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
 #include "GridBased2DSettings.h"
@@ -72,7 +71,7 @@ FIntRect AGridBasedMap::GetBounds() const {
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
 	UPaperTileMap* TileMap = TileMapComponent->TileMap;
-	GUARD(TileMap == nullptr,)
+	if (TileMap == nullptr) { return ; }
 
 	FVector MapLocation(0, 0, 0);
 	int32 TotalLayers = TileMap->TileLayers.Num();

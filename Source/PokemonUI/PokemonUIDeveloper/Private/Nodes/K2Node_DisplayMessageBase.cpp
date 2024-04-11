@@ -1,14 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/K2Node_DisplayMessageBase.h"
 
-#include "Asserts.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "PokemonUISettings.h"
 #include "RPGPlayerController.h"
-#include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -64,7 +62,7 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
 			continue;
 
 		auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
-		ASSERT(Spawner != nullptr)
+		check(Spawner != nullptr)
 
 		(*ScreenCounter)++;
 		Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(

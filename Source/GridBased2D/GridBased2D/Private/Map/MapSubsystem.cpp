@@ -3,9 +3,7 @@
 
 #include "Map/MapSubsystem.h"
 
-#include "Asserts.h"
 #include "GridBased2DSettings.h"
-#include "GridUtils.h"
 #include "Map/GridBasedMap.h"
 #include "Components/AudioComponent.h"
 #include "Components/GridBasedMovementComponent.h"
@@ -20,10 +18,10 @@ UMapSubsystem::UMapSubsystem(const FObjectInitializer&) :
 }
 
 void UMapSubsystem::PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier, float PitchMultiplier) {
-	GUARD_WARN(BGM == nullptr, , TEXT("Trying to play null for background music! Please specify an actual asset!"))
+	if (BGM == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("Trying to play null for background music! Please specify an actual asset!")); return ; }
 
 	// Don't restart the music if its already playing
-	GUARD(CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM,)
+	if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) { return ; }
 
 	if (CurrentBackgroundMusic != nullptr) {
 		CurrentBackgroundMusic->Stop();
@@ -34,17 +32,17 @@ void UMapSubsystem::PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier,
 }
 
 void UMapSubsystem::PauseBackgroundMusic() {
-	GUARD(CurrentBackgroundMusic == nullptr,)
+	if (CurrentBackgroundMusic == nullptr) { return ; }
 	CurrentBackgroundMusic->SetPaused(true);
 }
 
 void UMapSubsystem::ResumeBackgroundMusic() {
-	GUARD(CurrentBackgroundMusic == nullptr,)
+	if (CurrentBackgroundMusic == nullptr) { return ; }
 	CurrentBackgroundMusic->SetPaused(false);
 }
 
 void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
-	GUARD(CurrentBackgroundMusic == nullptr,)
+	if (CurrentBackgroundMusic == nullptr) { return ; }
 
 	if (FMath::IsNearlyZero(FadeOutDuration)) {
 		CurrentBackgroundMusic->Stop();
@@ -66,8 +64,8 @@ bool UMapSubsystem::IsMusicPaused() const {
 }
 
 void UMapSubsystem::PlayJingle(USoundBase* Jingle, float VolumeMultiplier, float PitchMultiplier) {
-	GUARD_WARN(Jingle == nullptr, , TEXT("Trying to play a jingle, but the supplied sound was null!"))
-	GUARD_WARN(CurrentJingle != nullptr, , TEXT("Trying to play a jingle, but one is already playing!"))
+	if (Jingle == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle but the supplied sound was null!")); return; }
+	if (CurrentJingle != nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jinglebut one is already playing!")); return; }
 
 	PauseBackgroundMusic();
 	CurrentJingle = UGameplayStatics::SpawnSound2D(this, Jingle, VolumeMultiplier, PitchMultiplier,
@@ -84,10 +82,10 @@ bool UMapSubsystem::IsJinglePlaying() const {
 
 void UMapSubsystem::WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y) {
 	auto PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator();
-	GUARD_WARN(PlayerCharacter == nullptr, , TEXT("There is no valid pawn!"))
+	if (PlayerCharacter == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("There is no valid pawn!")); return ; }
 
 	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter);
-	GUARD_WARN(MovementComponent == nullptr, , TEXT("The pawn class does not implement IGridMovable!"))
+	if (MovementComponent == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("The pawn class does not implement IGridMovable!")); return ; }
 	WarpToMapWithDirection(Map, X, Y, MovementComponent->GetDirection());
 }
 
@@ -115,7 +113,7 @@ void UMapSubsystem::WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, 
 }
 
 void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable>& PlayerCharacter) {
-	GUARD(!WarpDestination.IsSet(),)
+	if (!WarpDestination.IsSet()) { return ; }
 
 	auto [Offset, X, Y, Direction] = WarpDestination.GetValue();
 	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter.GetObject());
@@ -145,7 +143,7 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
 		}
 	}
 
-	GUARD(OldMap == NewMap,)
+	if (OldMap == NewMap) { return ; }
 
 	if (OldMap != nullptr) {
 		OldMap->RemoveCharacter(Movable);
@@ -158,13 +156,13 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
 
 void UMapSubsystem::OnNewLevelLoaded() {
 	auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
-	ASSERT(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+	check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
 	SetPlayerLocation(PlayerCharacter);
 	UpdateCharacterMapPosition(PlayerCharacter);
 }
 
 void UMapSubsystem::UpdatePlayerCharacterPosition() {
 	auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
-	ASSERT(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+	check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
 	UpdateCharacterMapPosition(PlayerCharacter);
 }

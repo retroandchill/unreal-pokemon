@@ -3,7 +3,6 @@
 
 #include "Screens/TrainerCardScreen.h"
 
-#include "Asserts.h"
 #include "Components/Image.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
@@ -14,7 +13,7 @@ void UTrainerCardScreen::NativeConstruct() {
 	Super::NativeConstruct();
 
 	auto PokemonSubsystem = GetGameInstance()->GetSubsystem<UPokemonSubsystem>();
-	ASSERT(PokemonSubsystem != nullptr);
+	check(PokemonSubsystem != nullptr);
 	Trainer = PokemonSubsystem->GetPlayer();
 	PlayerMetadata = PokemonSubsystem->GetPlayerMetadata();
 	PlayerMetadata->GetOnTimeUpdated().AddDynamic(this, &UTrainerCardScreen::SetPlayerTimeInfo);
@@ -24,10 +23,10 @@ void UTrainerCardScreen::NativeConstruct() {
 }
 
 void UTrainerCardScreen::SetTrainerSprite() {
-	ASSERT(TrainerImage != nullptr)
+	check(TrainerImage != nullptr)
 
 	auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-	ASSERT(GraphicsLoadingSubsystem != nullptr)
+	check(GraphicsLoadingSubsystem != nullptr)
 	auto [Material, Size] = GraphicsLoadingSubsystem->GetTrainerSprite(*Trainer, this);
 	TrainerImage->SetBrushFromMaterial(Material);
 	TrainerImage->SetDesiredSizeOverride(Size);

@@ -2,8 +2,7 @@
 
 
 #include "Moves/DefaultMove.h"
-
-#include "Asserts.h"
+\
 #include "DataManager.h"
 #include "Moves/MoveData.h"
 
@@ -15,7 +14,7 @@ TScriptInterface<IMove> UDefaultMove::Initialize(FName MoveID) {
 
 const FMoveData& UDefaultMove::GetMoveData() const {
 	auto Move = FDataManager::GetInstance().GetDataTable<FMoveData>().GetData(ID);
-	ASSERT(Move != nullptr);
+	check(Move != nullptr);
 	return *Move;
 }
 

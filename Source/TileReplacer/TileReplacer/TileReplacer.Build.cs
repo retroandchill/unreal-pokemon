@@ -21,7 +21,6 @@ public class TileReplacer : ModuleRules
                 "Slate",
                 "SlateCore",
                 "Paper2D",
-                "PokemonUtilities",
                 "DeveloperSettings"
             }
         );

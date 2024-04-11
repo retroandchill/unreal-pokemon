@@ -7,7 +7,6 @@
 #include "Data/SelectionInputs.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
-#include "Asserts.h"
 
 TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
 	auto Ret = Super::RebuildWidget();
@@ -101,7 +100,7 @@ void UMessageWindow::NativeOnFocusLost(const FFocusEvent& InFocusEvent) {
 }
 
 void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
-	ASSERT(DisplayTextWidget != nullptr)
+	check(DisplayTextWidget != nullptr)
 
 	bWaitForChoice = bHasCommands;
 	if (FMath::IsNearlyZero(TextSpeed)) {
@@ -112,7 +111,7 @@ void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
 }
 
 void UMessageWindow::ClearDisplayText() {
-	ASSERT(DisplayTextWidget != nullptr)
+	check(DisplayTextWidget != nullptr)
 	DisplayTextWidget->SetText(FText::FromString(TEXT("")));
 	WordToDisplay.Empty();
 	FullText.Reset();

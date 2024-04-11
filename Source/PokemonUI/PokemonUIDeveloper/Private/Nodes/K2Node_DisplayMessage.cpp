@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/K2Node_DisplayMessage.h"
 
-#include "Asserts.h"
 #include "EdGraphSchema_K2.h"
 #include "K2Node_AsyncAction.h"
 #include "Nodes/DisplayMessage.h"
@@ -14,7 +13,7 @@ UK2Node_DisplayMessage::UK2Node_DisplayMessage(const FObjectInitializer& ObjectI
 
 void UK2Node_DisplayMessage::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const {
 	auto FactoryFunc = UDisplayMessage::StaticClass()->FindFunctionByName("DisplayMessage");
-	ASSERT(FactoryFunc != nullptr)
+	check(FactoryFunc != nullptr)
 	SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 

@@ -2,8 +2,6 @@
 
 
 #include "Components/CharacterBillboardAnimationComponent.h"
-
-#include "Asserts.h"
 #include "Components/MaterialBillboardComponent.h"
 
 
@@ -36,7 +34,9 @@ void UCharacterBillboardAnimationComponent::StartMoveAnimation() {
 }
 
 bool UCharacterBillboardAnimationComponent::CanStopMoving() const {
-	GUARD(!PlayingTime.IsSet(), true)
+	if (!PlayingTime.IsSet()) {
+		return false;
+	}
 
 	float FrameRate = MaterialInstance->K2_GetScalarParameterValue(FrameRatePropertyName);
 	int32 TotalFramesPlayed = FMath::FloorToInt32(PlayingTime.GetValue() * FrameRate);
@@ -56,7 +56,7 @@ void UCharacterBillboardAnimationComponent::BeginPlay() {
 	Super::BeginPlay();
 
 	SetUpMaterialInstance();
-	GUARD(BillboardComponent == nullptr, )
+	if (BillboardComponent == nullptr) { return ; }
 	BillboardComponent->Elements.Empty();
 	BillboardComponent->AddElement(MaterialInstance, nullptr, false, SourceTexture->GetSizeY() / (4 * 2), SourceTexture->GetSizeX() / (4 * 2), nullptr);
 }
@@ -71,13 +71,13 @@ void UCharacterBillboardAnimationComponent::TickComponent(float DeltaTime, ELeve
 }
 
 void UCharacterBillboardAnimationComponent::SetUpMaterialInstance() {
-	GUARD(BaseMaterial == nullptr || SourceTexture == nullptr, );
+	if (BaseMaterial == nullptr || SourceTexture == nullptr) { return ; };
 	MaterialInstance = UMaterialInstanceDynamic::Create(BaseMaterial, this);
 	OriginalFrameRate = MaterialInstance->K2_GetScalarParameterValue(FrameRatePropertyName);
 	MaterialInstance->SetTextureParameterValue(SourceTexturePropertyName, SourceTexture);
 	MaterialInstance->SetScalarParameterValue(FrameRatePropertyName, 0);
 
-	GUARD(BillboardComponent == nullptr, )
+	if (BillboardComponent == nullptr) { return ; }
 	BillboardComponent->Elements.Empty();
 	BillboardComponent->AddElement(MaterialInstance, nullptr, false, SourceTexture->GetSizeY() / (4 * 2), SourceTexture->GetSizeX() / (4 * 2), nullptr);
 }

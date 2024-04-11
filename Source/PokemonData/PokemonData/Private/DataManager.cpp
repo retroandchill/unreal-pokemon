@@ -33,9 +33,9 @@ FDataManager& FDataManager::GetInstance() {
 }
 
 const IGameData& FDataManager::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const {
-	ASSERT(StructType != nullptr)
+	check(StructType != nullptr)
 	auto StructName = StructType->GetFName();
-	ASSERT(DataTables.Contains(StructName))
+	check(DataTables.Contains(StructName))
 	return *DataTables[StructName];
 }
 

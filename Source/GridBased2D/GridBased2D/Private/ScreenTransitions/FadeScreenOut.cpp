@@ -13,7 +13,7 @@ UFadeScreenOut* UFadeScreenOut::FadeScreenOut(const UObject* WorldContext) {
 
 void UFadeScreenOut::Activate() {
 	auto GameMode = UGridUtils::GetGridBasedGameMode(WorldContext);
-	ASSERT(GameMode != nullptr)
+	check(GameMode != nullptr)
 
 	FScreenTransitionCallback Callback;
 	Callback.BindDynamic(this, &UFadeScreenOut::TransitionFinished);

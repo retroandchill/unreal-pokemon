@@ -38,7 +38,7 @@ UMaterialInstanceDynamic* UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
 	                                 });
 	auto AssetData = AssetRegistryModule.GetRegistry().GetAssetByObjectPath(AssetPath);
 	auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
-	GUARD(Texture == nullptr, nullptr)
+	if (Texture == nullptr) { return nullptr; }
 
 	auto Material = UMaterialInstanceDynamic::Create(PokemonIconsBaseMaterial, Outer);
 	Material->SetTextureParameterValue(IconSourceTexturePropertyName, Texture);
@@ -58,7 +58,7 @@ TPair<UMaterialInstanceDynamic*, FVector2D> UGraphicsLoadingSubsystem::GetTraine
 	});
 	auto AssetData = AssetRegistryModule.GetRegistry().GetAssetByObjectPath(AssetPath);
 	auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
-	GUARD(Texture == nullptr, {})
+	if (Texture == nullptr) { return {}; }
 
 	auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteBaseMaterial, Outer);
 	Material->SetTextureParameterValue(TrainerSpriteSourceTexturePropertyName, Texture);

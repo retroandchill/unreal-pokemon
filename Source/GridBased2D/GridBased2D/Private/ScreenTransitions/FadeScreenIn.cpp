@@ -2,8 +2,6 @@
 
 
 #include "ScreenTransitions/FadeScreenIn.h"
-
-#include "Asserts.h"
 #include "GridUtils.h"
 
 UFadeScreenIn* UFadeScreenIn::FadeScreenIn(const UObject* WorldContext) {
@@ -14,7 +12,7 @@ UFadeScreenIn* UFadeScreenIn::FadeScreenIn(const UObject* WorldContext) {
 
 void UFadeScreenIn::Activate() {
 	auto GameMode = UGridUtils::GetGridBasedGameMode(WorldContext);
-	ASSERT(GameMode != nullptr)
+	check(GameMode != nullptr)
 
 	FScreenTransitionCallback Callback;
 	Callback.BindDynamic(this, &UFadeScreenIn::TransitionFinished);

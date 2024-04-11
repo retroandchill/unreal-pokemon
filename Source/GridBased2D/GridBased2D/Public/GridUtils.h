@@ -2,10 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Asserts.h"
 #include "EngineUtils.h"
 #include "Characters/FacingDirection.h"
-#include "Kismet/GameplayStatics.h"
 #include "GridUtils.generated.h"
 
 class UGameplayStatics;
@@ -82,7 +80,7 @@ public:
 	static TArray<T*> FindAllActors(const UObject* WorldContext) {
 		TArray<T*> Ret;
 		auto World = WorldContext->GetWorld();
-		ASSERT(World != nullptr)
+		check(World != nullptr)
 
 		for (TActorIterator<T> It(World); It; ++It) {
 			Ret.Emplace(*It);

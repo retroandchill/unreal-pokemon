@@ -3,7 +3,6 @@
 
 #include "Utilities/PokemonTestUtilities.h"
 
-#include "Asserts.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Breeding/PokemonGender.h"
@@ -14,7 +13,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject* WorldContext) {
 	using enum EPokemonGender;
 
 	auto PokemonSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>();
-	ASSERT(PokemonSubsystem != nullptr);
+	check(PokemonSubsystem != nullptr);
 
 	auto Player = PokemonSubsystem->GetPlayer();
 	Player->ClearParty();

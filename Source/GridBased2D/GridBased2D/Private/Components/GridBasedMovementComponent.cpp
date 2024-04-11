@@ -9,6 +9,7 @@
 #include "Components/GridBasedAnimationComponent.h"
 #include "Components/GridMovable.h"
 #include "Interaction/Interactable.h"
+#include "Kismet/GameplayStatics.h"
 #include "Map/GridBasedMap.h"
 #include "Map/MapSubsystem.h"
 
@@ -21,7 +22,7 @@ void UGridBasedMovementComponent::BeginPlay() {
 	Super::BeginPlay();
 
 	auto Owner = GetOwner();
-	GUARD(Owner == nullptr,)
+	if (Owner == nullptr) { return ; }
 	auto Position = Owner->GetActorLocation();
 	auto GridSize = UGridUtils::GetGridSize(this);
 	CurrentPosition.X = FMath::FloorToInt32(Position.X / GridSize);
@@ -32,7 +33,7 @@ void UGridBasedMovementComponent::BeginPlay() {
 	GetOwner()->SetActorLocation(Position, bPerformSweep);
 
 	auto Pawn = Cast<APawn>(Owner);
-	GUARD(Pawn == nullptr || !Pawn->IsPlayerControlled(), )
+	if (Pawn == nullptr || !Pawn->IsPlayerControlled()) { return ; }
 	if (auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>(); MapSubsystem != nullptr
 		&& Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
 		MapSubsystem->SetPlayerLocation(Owner);
@@ -44,7 +45,7 @@ void UGridBasedMovementComponent::PostEditChangeProperty(FPropertyChangedEvent& 
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
 	auto AnimationComponent = GetGridBasedAnimationComponent();
-	GUARD(AnimationComponent == nullptr, )
+	if (AnimationComponent == nullptr) { return ; }
 	AnimationComponent->UpdateDirection(Direction);
 }
 #endif
@@ -86,8 +87,7 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection,
                                                   TFunction<void()>&& MovementCompleteCallback) {
-	GUARD_WARN(MoveCallback.IsSet(), , TEXT("The movement timer is already set for character: %s"),
-	           *GetOwner()->GetName())
+	if (MoveCallback.IsSet()) { UE_LOG(LogBlueprint, Warning, TEXT("The movement timer is already set for character: %s"), *GetOwner()->GetName()); return; }
 
 	MoveCallback.Emplace(MoveTemp(MovementCompleteCallback));
 	MoveInDirection(MovementDirection);
@@ -157,7 +157,7 @@ void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offse
 
 void UGridBasedMovementComponent::OnMapChanged(IMapGrid& NewMap) const {
 	auto Owner = GetOwner<APawn>();
-	GUARD(Owner == nullptr || !Owner->IsPlayerControlled(), )
+	if (Owner == nullptr || !Owner->IsPlayerControlled()) { return ; }
 	
 	NewMap.OnPlayerEnter();
 }
@@ -198,7 +198,7 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables) {
 	auto Owner = GetOwner<APawn>();
-	GUARD(Owner == nullptr || !Owner->IsPlayerControlled(), )
+	if (Owner == nullptr || !Owner->IsPlayerControlled()) { return ; }
 
 	for (auto &Interactable : Interactables) {
 		if ((Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Hit)) == 0)
@@ -278,8 +278,8 @@ void UGridBasedMovementComponent::MoveComplete() {
 	}
 
 	auto MapSubsystem = GetOwner()->GetGameInstance()->GetSubsystem<UMapSubsystem>();
-	ASSERT(MapSubsystem != nullptr)
+	check(MapSubsystem != nullptr)
 	auto Owner = GetOwner();
-	ASSERT(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+	check(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
 	MapSubsystem->UpdateCharacterMapPosition(Owner);
 }

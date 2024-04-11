@@ -3,7 +3,6 @@
 
 #include "Managers/PokemonSubsystem.h"
 
-#include "Asserts.h"
 #include "PokemonCoreSettings.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
@@ -36,7 +35,7 @@ void UPokemonSubsystem::Deinitialize() {
 }
 
 UPokemonSubsystem& UPokemonSubsystem::GetInstance() {
-	ASSERT(Instance != nullptr)
+	check(Instance != nullptr)
 	return *Instance;
 }
 
@@ -68,6 +67,6 @@ UPlayerMetadata* UPokemonSubsystem::GetPlayerMetadata() const {
 }
 
 const Exp::IGrowthRate& UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const {
-	ASSERT(GrowthRates.Contains(GrowthRate));
+	check(GrowthRates.Contains(GrowthRate));
 	return *GrowthRates[GrowthRate];
 }

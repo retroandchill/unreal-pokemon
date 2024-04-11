@@ -6,7 +6,6 @@
 #include "PaperTileLayer.h"
 #include "PaperTileMapComponent.h"
 #include "Replacement/TileReplacement.h"
-#include "Asserts.h"
 #include "PaperTileMap.h"
 #include "PaperTileSet.h"
 #include "TileReplacerSettings.h"
@@ -24,7 +23,7 @@ UTileReplacerComponent::UTileReplacerComponent() {
 }
 
 void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapComponent) {
-	GUARD_WARN(TileReplacementTable == nullptr, , TEXT("No tile replacement table set for component: %s"), *GetName())
+	if (TileReplacementTable == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("No tile replacement table set for component: %s"), *GetName()); return; }
 	
 	int32 SizeX;
 	int32 SizeY;
@@ -67,7 +66,7 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent* TilemapCompone
 }
 
 void UTileReplacerComponent::RestoreCachedTiles(UPaperTileMapComponent* TileMapComponent) {
-	GUARD_WARN(TileMapComponent == nullptr, , TEXT("No tilemap component found for: %s"), *GetName())
+	if (TileMapComponent == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("No tilemap component found for: %s"), *GetName()); return; }
 	for (auto &Replacement : ReplacedTiles) {
 		TileMapComponent->SetTile(Replacement.TileX, Replacement.TileY, Replacement.TileLayer, Replacement.OriginalTileInfo);
 		Replacement.Replacement->Destroy();

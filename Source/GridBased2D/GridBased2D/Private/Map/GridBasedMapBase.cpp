@@ -2,8 +2,6 @@
 
 
 #include "Map/GridBasedMapBase.h"
-
-#include "Asserts.h"
 #include "Components/GridBasedMovementComponent.h"
 #include "Components/GridMovable.h"
 #include "Kismet/GameplayStatics.h"
@@ -32,7 +30,7 @@ FIntRect AGridBasedMapBase::GetBounds() const {
 
 bool AGridBasedMapBase::IsObjectInMap(TScriptInterface<IGridMovable> Object) const {
 	auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Object.GetObject());
-	ASSERT(MovementComponent != nullptr)
+	check(MovementComponent != nullptr)
 	return IsPositionInMap(MovementComponent->GetCurrentPosition());
 }
 

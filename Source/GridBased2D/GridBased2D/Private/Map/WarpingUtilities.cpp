@@ -3,15 +3,14 @@
 
 #include "Map/WarpingUtilities.h"
 
-#include "Asserts.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/MapSubsystem.h"
 #include "Map/WarpDestination.h"
 
 void UWarpingUtilities::WarpToMap(const UObject* WorldContext, const FWarpDestination& Destination) {
-	ASSERT(WorldContext != nullptr)
+	check(WorldContext != nullptr)
 	auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
-	GUARD_WARN(MapSubsystem == nullptr, , TEXT("Failed to get the Map Subsystem!"))
+	if (MapSubsystem == nullptr) { UE_LOG(LogBlueprint, Warning, TEXT("Failed to get the Map Subsystem!")); return ; }
 	
 	if (Destination.bOverride_Direction) {
 		MapSubsystem->WarpToMapWithDirection(Destination.Map, Destination.X, Destination.Y, Destination.Direction);
