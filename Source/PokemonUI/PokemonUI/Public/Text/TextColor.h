@@ -10,17 +10,17 @@
  */
 USTRUCT(BlueprintType)
 struct POKEMONUI_API FTextColor {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	/**
-	 * The primary color of the text.
-	 */
-	UPROPERTY(EditAnywhere, Category = "User Interface|Text")
-	FSlateColor MainColor;
+    /**
+     * The primary color of the text.
+     */
+    UPROPERTY(EditAnywhere, Category = "User Interface|Text")
+    FSlateColor MainColor;
 
-	/**
-	 * The color of the text's shadow.
-	 */
-	UPROPERTY(EditAnywhere, Category = "User Interface|Text")
-	FSlateColor ShadowColor;
+    /**
+     * The color of the text's shadow.
+     */
+    UPROPERTY(EditAnywhere, Category = "User Interface|Text")
+    FSlateColor ShadowColor;
 };

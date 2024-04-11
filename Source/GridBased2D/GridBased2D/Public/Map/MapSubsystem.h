@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/GameInstanceSubsystem.h"
 #include "MapSubsystem.generated.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 
 class IGridMovable;
 class UGridBasedMovementComponent;
@@ -18,142 +18,143 @@ class IInteractable;
  */
 UCLASS()
 class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	/**
-	 * Initialize the default object
-	 * @param Initializer The Unreal initializer
-	 */
-	explicit UMapSubsystem(const FObjectInitializer& Initializer);
-	
-	/**
-	 * Play the supplied audio file as the new BGM
-	 * @param BGM The new BGM to play. (Will be ignored if nullptr)
-	 * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
-	 * @param PitchMultiplier A linear scalar multiplied with the pitch.
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
-	void PlayBackgroundMusic(USoundBase* BGM, float VolumeMultiplier = 1, float PitchMultiplier = 1);
+  public:
+    /**
+     * Initialize the default object
+     * @param Initializer The Unreal initializer
+     */
+    explicit UMapSubsystem(const FObjectInitializer &Initializer);
 
-	/**
-	 * Pause the currently playing BGM
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
-	void PauseBackgroundMusic();
+    /**
+     * Play the supplied audio file as the new BGM
+     * @param BGM The new BGM to play. (Will be ignored if nullptr)
+     * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
+     * @param PitchMultiplier A linear scalar multiplied with the pitch.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+    void PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier = 1, float PitchMultiplier = 1);
 
-	/**
-	 * Resume the paused BGM
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
-	void ResumeBackgroundMusic();
+    /**
+     * Pause the currently playing BGM
+     */
+    UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+    void PauseBackgroundMusic();
 
-	/**
-	 * Stop the currently playing BGM
-	 * @param FadeOutDuration The amount of time it should take to fade out
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
-	void StopBackgroundMusic(float FadeOutDuration);
+    /**
+     * Resume the paused BGM
+     */
+    UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+    void ResumeBackgroundMusic();
 
-	/**
-	 * Is there currently background music that is playing?
-	 * @return Is there music playing?
-	 */
-	UFUNCTION(BlueprintPure, Category = "Sound|Music")
-	bool IsMusicPlaying() const;
+    /**
+     * Stop the currently playing BGM
+     * @param FadeOutDuration The amount of time it should take to fade out
+     */
+    UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+    void StopBackgroundMusic(float FadeOutDuration);
 
-	/**
-	 * Is there currently background music that is paused?
-	 * @return Is there paused background music?
-	 */
-	UFUNCTION(BlueprintPure, Category = "Sound|Music")
-	bool IsMusicPaused() const;
+    /**
+     * Is there currently background music that is playing?
+     * @return Is there music playing?
+     */
+    UFUNCTION(BlueprintPure, Category = "Sound|Music")
+    bool IsMusicPlaying() const;
 
-	/**
-	 * Play the specified sound as a musical jingle, pausing the background music and then resuming once it has completed.
-	 * @param Jingle The jingle to play (will warn if null)
-	 * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
-	 * @param PitchMultiplier A linear scalar multiplied with the pitch.
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Sound|Music")
-	void PlayJingle(USoundBase* Jingle, float VolumeMultiplier = 1, float PitchMultiplier = 1);
+    /**
+     * Is there currently background music that is paused?
+     * @return Is there paused background music?
+     */
+    UFUNCTION(BlueprintPure, Category = "Sound|Music")
+    bool IsMusicPaused() const;
 
-	/**
-	 * Is there currently background music that is playing?
-	 * @return Is there music playing?
-	 */
-	UFUNCTION(BlueprintPure, Category = "Sound|Music")
-	bool IsJinglePlaying() const;
+    /**
+     * Play the specified sound as a musical jingle, pausing the background music and then resuming once it has
+     * completed.
+     * @param Jingle The jingle to play (will warn if null)
+     * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
+     * @param PitchMultiplier A linear scalar multiplied with the pitch.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Sound|Music")
+    void PlayJingle(USoundBase *Jingle, float VolumeMultiplier = 1, float PitchMultiplier = 1);
 
-	/**
-	 * Warp to the given map name and coordinates
-	 * @param Map The the map to warp to
-	 * @param X The X coordinate of the map to warp to
-	 * @param Y The Y coordinate of the map to warp to
-	 */
-	UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Retain Direction)", Category = "Maps|Warping")
-	void WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y);
+    /**
+     * Is there currently background music that is playing?
+     * @return Is there music playing?
+     */
+    UFUNCTION(BlueprintPure, Category = "Sound|Music")
+    bool IsJinglePlaying() const;
 
-	/**
-	 * Warp to the given map name and coordinates
-	 * @param Map The the map to warp to
-	 * @param X The X coordinate of the map to warp to
-	 * @param Y The Y coordinate of the map to warp to
-	 * @param Direction The direction the character should be facing after the warp
-	 */
-	UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Change Direction)", Category = "Maps|Warping")
-	void WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y, EFacingDirection Direction);
+    /**
+     * Warp to the given map name and coordinates
+     * @param Map The the map to warp to
+     * @param X The X coordinate of the map to warp to
+     * @param Y The Y coordinate of the map to warp to
+     */
+    UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Retain Direction)", Category = "Maps|Warping")
+    void WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y);
 
-	/**
-	 * Set the location of the player in the world if there is a valid warp destination
-	 * @param PlayerCharacter The character to set the location of
-	 */
-	void SetPlayerLocation(const TScriptInterface<IGridMovable>& PlayerCharacter);
+    /**
+     * Warp to the given map name and coordinates
+     * @param Map The the map to warp to
+     * @param X The X coordinate of the map to warp to
+     * @param Y The Y coordinate of the map to warp to
+     * @param Direction The direction the character should be facing after the warp
+     */
+    UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Change Direction)", Category = "Maps|Warping")
+    void WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y, EFacingDirection Direction);
 
-	/**
-	 * Update what map the player is considered to be a part of
-	 * @param Movable The movement object in question
-	 */
-	void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable>& Movable);
-	
-private:
-	/**
-	 * Called when a new streaming level is loaded
-	 */
-	UFUNCTION()
-	void OnNewLevelLoaded();
+    /**
+     * Set the location of the player in the world if there is a valid warp destination
+     * @param PlayerCharacter The character to set the location of
+     */
+    void SetPlayerLocation(const TScriptInterface<IGridMovable> &PlayerCharacter);
 
-	/**
-	 * Called when a new streaming level is shown to update the player position
-	 */
-	UFUNCTION()
-	void UpdatePlayerCharacterPosition();
-	
-	/**
-	 * The currently playing background music component.
-	 */
-	UPROPERTY()
-	TObjectPtr<UAudioComponent> CurrentBackgroundMusic;
+    /**
+     * Update what map the player is considered to be a part of
+     * @param Movable The movement object in question
+     */
+    void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable);
 
-	/**
-	 * The currently playing musical jingle
-	 */
-	UPROPERTY()
-	TObjectPtr<UAudioComponent> CurrentJingle;
+  private:
+    /**
+     * Called when a new streaming level is loaded
+     */
+    UFUNCTION()
+    void OnNewLevelLoaded();
 
-	/**
-	 * If set, indicates that the player warping to another location
-	 */
-	TOptional<TTuple<FVector, int32, int32, EFacingDirection>> WarpDestination;
+    /**
+     * Called when a new streaming level is shown to update the player position
+     */
+    UFUNCTION()
+    void UpdatePlayerCharacterPosition();
 
-	/**
-	 * The offset of a dynamically loaded level
-	 */
-	FVector DynamicLevelOffset;
+    /**
+     * The currently playing background music component.
+     */
+    UPROPERTY()
+    TObjectPtr<UAudioComponent> CurrentBackgroundMusic;
 
-	/**
-	 * The dynamically streamed in level
-	 */
-	UPROPERTY()
-	TSoftObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
+    /**
+     * The currently playing musical jingle
+     */
+    UPROPERTY()
+    TObjectPtr<UAudioComponent> CurrentJingle;
+
+    /**
+     * If set, indicates that the player warping to another location
+     */
+    TOptional<TTuple<FVector, int32, int32, EFacingDirection>> WarpDestination;
+
+    /**
+     * The offset of a dynamically loaded level
+     */
+    FVector DynamicLevelOffset;
+
+    /**
+     * The dynamically streamed in level
+     */
+    UPROPERTY()
+    TSoftObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
 };

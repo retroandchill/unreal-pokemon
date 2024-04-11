@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UBodyShapeHelper::GetBodyShapeNames() {
-	return FDataManager::GetInstance().GetDataTable<FBodyShape>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FBodyShape>().GetTableRowNames();
 }

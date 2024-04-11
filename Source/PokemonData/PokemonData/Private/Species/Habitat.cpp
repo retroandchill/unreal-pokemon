@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UHabitatHelper::GetHabitatNames() {
-	return FDataManager::GetInstance().GetDataTable<FHabitat>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FHabitat>().GetTableRowNames();
 }

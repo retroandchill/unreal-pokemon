@@ -6,18 +6,18 @@
  */
 UENUM(BlueprintType)
 enum class EMoveDamageCategory : uint8 {
-	/**
-	 * Uses Attack and Defense to calculate damage
-	 */
-	Physical = 0,
+    /**
+     * Uses Attack and Defense to calculate damage
+     */
+    Physical = 0,
 
-	/**
-	 * Uses SpAtk and SpDef to calculate damage
-	 */
-	Special = 1,
+    /**
+     * Uses SpAtk and SpDef to calculate damage
+     */
+    Special = 1,
 
-	/**
-	 * Does not deal any direct damage
-	 */
-	Status = 2
+    /**
+     * Does not deal any direct damage
+     */
+    Status = 2
 };

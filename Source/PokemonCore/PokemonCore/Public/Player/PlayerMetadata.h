@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
 #include "PlayerMetadata.generated.h"
+#include "UObject/Object.h"
 
 /**
- * Delegate for when the player 
+ * Delegate for when the player
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeUpdate, float, NewPlaytime);
 
@@ -16,61 +16,61 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeUpdate, float, NewPlaytime);
  */
 UCLASS()
 class POKEMONCORE_API UPlayerMetadata : public UObject, public FTickableGameObject {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	void Tick(float DeltaTime) override;
-	TStatId GetStatId() const override;
-	UWorld* GetTickableGameObjectWorld() const override;
-	
-	/**
-	 * Get the datetime the game was started on.
-	 * @return The datetime the player started the game on.
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
-	const FDateTime& GetStartDate() const;
-	
-	/**
-	 * Retrieve the player's total playtime
-	 * @return The total amount of time (in seconds) that the game has been played
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
-	float GetTotalPlaytime() const;
+  public:
+    void Tick(float DeltaTime) override;
+    TStatId GetStatId() const override;
+    UWorld *GetTickableGameObjectWorld() const override;
 
-	/**
-	 * Retrieves the delegate for when the time is updated
-	 * @return Called when the player's playtime is updated. Should be emitted about every minute.
-	 */
-	FOnTimeUpdate& GetOnTimeUpdated();
+    /**
+     * Get the datetime the game was started on.
+     * @return The datetime the player started the game on.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
+    const FDateTime &GetStartDate() const;
 
-private:
-	/**
-	 * Start a brand new game
-	 */
-	void StartNewGame();
-	
-	/**
-	 * The datetime the player started the game on.
-	 */
-	UPROPERTY(BlueprintGetter = GetStartDate, Category = "Player|Metadata")
-	FDateTime StartDate;
-	
-	/**
-	 * The total amount of time (in seconds) that the game has been played
-	 */
-	UPROPERTY(BlueprintGetter = GetTotalPlaytime, Category = "Player|Metadata")
-	float TotalPlaytime;
+    /**
+     * Retrieve the player's total playtime
+     * @return The total amount of time (in seconds) that the game has been played
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
+    float GetTotalPlaytime() const;
 
-	/**
-	 * The time since the last update was called
-	 */
-	float LastUpdated = 0;
+    /**
+     * Retrieves the delegate for when the time is updated
+     * @return Called when the player's playtime is updated. Should be emitted about every minute.
+     */
+    FOnTimeUpdate &GetOnTimeUpdated();
 
-	/**
-	 * Called when the player's playtime is updated. Should be emitted about every minute.
-	 */
-	UPROPERTY(BlueprintAssignable, Category = "Player|Metadata")
-	FOnTimeUpdate OnTimeUpdated;
+  private:
+    /**
+     * Start a brand new game
+     */
+    void StartNewGame();
 
-	friend class UPokemonSubsystem;
+    /**
+     * The datetime the player started the game on.
+     */
+    UPROPERTY(BlueprintGetter = GetStartDate, Category = "Player|Metadata")
+    FDateTime StartDate;
+
+    /**
+     * The total amount of time (in seconds) that the game has been played
+     */
+    UPROPERTY(BlueprintGetter = GetTotalPlaytime, Category = "Player|Metadata")
+    float TotalPlaytime;
+
+    /**
+     * The time since the last update was called
+     */
+    float LastUpdated = 0;
+
+    /**
+     * Called when the player's playtime is updated. Should be emitted about every minute.
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Player|Metadata")
+    FOnTimeUpdate OnTimeUpdated;
+
+    friend class UPokemonSubsystem;
 };

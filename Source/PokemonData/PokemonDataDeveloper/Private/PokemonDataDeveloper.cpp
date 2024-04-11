@@ -6,12 +6,12 @@
 #define LOCTEXT_NAMESPACE "FPokemonDataDeveloperModule"
 
 void FPokemonDataDeveloperModule::StartupModule() {
-	auto PinFactory = MakeShared<FPokemonDataGraphPinFactory>();
-	FEdGraphUtilities::RegisterVisualPinFactory(MoveTemp(PinFactory));
+    auto PinFactory = MakeShared<FPokemonDataGraphPinFactory>();
+    FEdGraphUtilities::RegisterVisualPinFactory(MoveTemp(PinFactory));
 }
 
 void FPokemonDataDeveloperModule::ShutdownModule() {
-	// No special teardown needed
+    // No special teardown needed
 }
 
 #undef LOCTEXT_NAMESPACE

@@ -8,21 +8,21 @@
  */
 UENUM(BlueprintType)
 enum class ECursorDirection : uint8 {
-	/**
-	 * Cursor UP
-	 */
-	Up,
-	/**
-	 * Cursor DOWN
-	 */
-	Down,
+    /**
+     * Cursor UP
+     */
+    Up,
+    /**
+     * Cursor DOWN
+     */
+    Down,
 
-	/**
-	 * Cursor LEFT
-	 */
-	Left,
-	/**
-	 * Cursor RIGHT
-	 */
-	Right
+    /**
+     * Cursor LEFT
+     */
+    Left,
+    /**
+     * Cursor RIGHT
+     */
+    Right
 };

@@ -1,17 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Handlers/PartyMenu/PartyDebugHandler.h"
 
-bool UPartyDebugHandler::ShouldShow(const IPartyScreen& Screen, const ITrainer& Trainer,
-                                    int32 PartyIndex) const {
+bool UPartyDebugHandler::ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const {
 #if WITH_EDITOR
-	return true;
+    return true;
 #else
-	return false;
+    return false;
 #endif
 }
 
-void UPartyDebugHandler::Handle(IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) {
-	// TODO: Implement me
+void UPartyDebugHandler::Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) {
+    // TODO: Implement me
 }

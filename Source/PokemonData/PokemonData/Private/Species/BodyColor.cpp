@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UBodyColorHelper::GetBodyColorNames() {
-	return FDataManager::GetInstance().GetDataTable<FBodyColor>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FBodyColor>().GetTableRowNames();
 }

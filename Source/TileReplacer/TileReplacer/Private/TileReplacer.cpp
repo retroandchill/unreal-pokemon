@@ -2,16 +2,10 @@
 
 #define LOCTEXT_NAMESPACE "FTileReplacerModule"
 
-void FTileReplacerModule::StartupModule()
-{
-    
-}
+void FTileReplacerModule::StartupModule() {}
 
-void FTileReplacerModule::ShutdownModule()
-{
-    
-}
+void FTileReplacerModule::ShutdownModule() {}
 
 #undef LOCTEXT_NAMESPACE
-    
+
 IMPLEMENT_MODULE(FTileReplacerModule, TileReplacer)

@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "CoreMinimal.h"
 #include "Screen.generated.h"
 
 class USelectableWidget;
@@ -13,34 +13,34 @@ struct FInputActionInstance;
  */
 UCLASS(Blueprintable, Abstract)
 class RPGMENUS_API UScreen : public UUserWidget {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	/**
-	 * Construct the default version of the screen
-	 * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-	 */
-	explicit UScreen(const FObjectInitializer& ObjectInitializer);
+  public:
+    /**
+     * Construct the default version of the screen
+     * @param ObjectInitializer The initializer used by Unreal Engine to build the object
+     */
+    explicit UScreen(const FObjectInitializer &ObjectInitializer);
 
-	TSharedRef<SWidget> RebuildWidget() override;
+    TSharedRef<SWidget> RebuildWidget() override;
 
-	/**
-	 * Grant focus to this menu when the player selects it.
-	 * @return Was focus granted to a widget.
-	 */
-	virtual bool GiveMenuFocus();
+    /**
+     * Grant focus to this menu when the player selects it.
+     * @return Was focus granted to a widget.
+     */
+    virtual bool GiveMenuFocus();
 
-protected:
-	/**
-	 * Close the screen and return to the previous one
-	 */
-	UFUNCTION(BlueprintCallable, Category = Navigation)
-	void CloseScreen();
+  protected:
+    /**
+     * Close the screen and return to the previous one
+     */
+    UFUNCTION(BlueprintCallable, Category = Navigation)
+    void CloseScreen();
 
-private:
-	/**
-	 * Get list of selectable widgets in the window
-	 */
-	UPROPERTY()
-	TArray<TObjectPtr<USelectableWidget>> SelectableWidgets;
+  private:
+    /**
+     * Get list of selectable widgets in the window
+     */
+    UPROPERTY()
+    TArray<TObjectPtr<USelectableWidget>> SelectableWidgets;
 };

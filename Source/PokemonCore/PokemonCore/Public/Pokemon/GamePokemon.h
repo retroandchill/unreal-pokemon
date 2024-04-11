@@ -2,10 +2,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GamePokemon.generated.h"
 #include "Pokemon.h"
 #include "PokemonDTO.h"
 #include "Stats/StatBlock.h"
-#include "GamePokemon.generated.h"
 
 struct FPokemonDTO;
 class IMove;
@@ -15,89 +15,89 @@ class IMove;
  */
 UCLASS()
 class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
-	GENERATED_BODY()
-	
-public:
-	void Initialize(const FPokemonDTO& DTO) override;
-	
-	UFUNCTION(BlueprintPure, Category = Bio)
-	FText GetNickname() const override;
+    GENERATED_BODY()
 
-	UFUNCTION(BlueprintPure, Category = Bio)
-	const FSpeciesData& GetSpecies() const override;
+  public:
+    void Initialize(const FPokemonDTO &DTO) override;
 
-	uint32 GetPersonalityValue() const override;
+    UFUNCTION(BlueprintPure, Category = Bio)
+    FText GetNickname() const override;
 
-	UFUNCTION(BlueprintPure, Category = Bio)
-	EPokemonGender GetGender() const override;
+    UFUNCTION(BlueprintPure, Category = Bio)
+    const FSpeciesData &GetSpecies() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	int32 GetCurrentHP() const override;
-	
-	UFUNCTION(BlueprintPure, Category = Stats)
-	int32 GetMaxHP() const override;
+    uint32 GetPersonalityValue() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	bool IsFainted() const override;
+    UFUNCTION(BlueprintPure, Category = Bio)
+    EPokemonGender GetGender() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	TScriptInterface<IStatBlock> GetStatBlock() const override;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetCurrentHP() const override;
 
-	/**
-	 * Create a new Pokémon from the given input data
-	 * @param Data The data to input to create the Pokémon
-	 * @return The created Pokémon
-	 */
-	UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
-	static UGamePokemon* Create(const FPokemonDTO& Data);
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetMaxHP() const override;
 
-private:
-	/**
-	 * The ID of the species of Pokémon this is
-	 */
-	UPROPERTY(SaveGame)
-	FName Species;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    bool IsFainted() const override;
 
-	/**
-	 * The internal personality value of the Pokémon. Determines the default values of various aspects of the
-	 * Pokémon if the values are not already set.
-	 */
-	UPROPERTY(SaveGame)
-	uint32 PersonalityValue;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    TScriptInterface<IStatBlock> GetStatBlock() const override;
 
-	/**
-	 * The nickname assigned to the Pokémon. Uses the species name if empty.
-	 */
-	UPROPERTY(SaveGame)
-	TOptional<FText> Nickname;
+    /**
+     * Create a new Pokémon from the given input data
+     * @param Data The data to input to create the Pokémon
+     * @return The created Pokémon
+     */
+    UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
+    static UGamePokemon *Create(const FPokemonDTO &Data);
 
-	/**
-	 * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
-	 */
-	UPROPERTY(SaveGame)
-	TOptional<EPokemonGender> Gender;
+  private:
+    /**
+     * The ID of the species of Pokémon this is
+     */
+    UPROPERTY(SaveGame)
+    FName Species;
 
-	/**
-	 * The hardcoded shiny status of the Pokémon. Calculates using the personality value is unset.
-	 */
-	UPROPERTY(SaveGame)
-	TOptional<bool> Shiny;
+    /**
+     * The internal personality value of the Pokémon. Determines the default values of various aspects of the
+     * Pokémon if the values are not already set.
+     */
+    UPROPERTY(SaveGame)
+    uint32 PersonalityValue;
 
-	/**
-	 * The current amount of HP this Pokémon has
-	 */
-	UPROPERTY(SaveGame)
-	int32 CurrentHP;
+    /**
+     * The nickname assigned to the Pokémon. Uses the species name if empty.
+     */
+    UPROPERTY(SaveGame)
+    TOptional<FText> Nickname;
 
-	/**
-	 * The handler for calculating stats
-	 */
-	UPROPERTY(SaveGame)
-	TScriptInterface<IStatBlock> StatBlock;
+    /**
+     * The hardcoded gender of the Pokémon. Calculates using the personality value is unset.
+     */
+    UPROPERTY(SaveGame)
+    TOptional<EPokemonGender> Gender;
 
-	/**
-	 * The moves this Pokémon knows
-	 */
-	UPROPERTY(SaveGame)
-	TArray<TScriptInterface<IMove>> Moves;
+    /**
+     * The hardcoded shiny status of the Pokémon. Calculates using the personality value is unset.
+     */
+    UPROPERTY(SaveGame)
+    TOptional<bool> Shiny;
+
+    /**
+     * The current amount of HP this Pokémon has
+     */
+    UPROPERTY(SaveGame)
+    int32 CurrentHP;
+
+    /**
+     * The handler for calculating stats
+     */
+    UPROPERTY(SaveGame)
+    TScriptInterface<IStatBlock> StatBlock;
+
+    /**
+     * The moves this Pokémon knows
+     */
+    UPROPERTY(SaveGame)
+    TArray<TScriptInterface<IMove>> Moves;
 };

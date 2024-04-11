@@ -2,147 +2,148 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "CharacterBillboardAnimationComponent.generated.h"
 #include "Components/ActorComponent.h"
 #include "Components/GridBasedAnimationComponent.h"
-#include "CharacterBillboardAnimationComponent.generated.h"
+#include "CoreMinimal.h"
 
 class UMaterialBillboardComponent;
 class IGridBasedMovement;
 /**
  * Animation component that uses a Material Billboard Component
  */
-UCLASS(ClassGroup=(Characters), meta=(BlueprintSpawnableComponent))
-class GRIDBASED2D_API UCharacterBillboardAnimationComponent : public UActorComponent, public IGridBasedAnimationComponent {
-	GENERATED_BODY()
+UCLASS(ClassGroup = (Characters), meta = (BlueprintSpawnableComponent))
+class GRIDBASED2D_API UCharacterBillboardAnimationComponent : public UActorComponent,
+                                                              public IGridBasedAnimationComponent {
+    GENERATED_BODY()
 
-public:
-	void UpdateDirection(EFacingDirection Direction) override;
-	bool IsMoveAnimationPlaying() const override;
-	void StartMoveAnimation() override;
-	bool CanStopMoving() const override;
-	void StopMoveAnimation() override;
+  public:
+    void UpdateDirection(EFacingDirection Direction) override;
+    bool IsMoveAnimationPlaying() const override;
+    void StartMoveAnimation() override;
+    bool CanStopMoving() const override;
+    void StopMoveAnimation() override;
 
-protected:
-	void BeginPlay() override;
-	
-public:
-	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+  protected:
+    void BeginPlay() override;
 
-	/**
-	 * Set up the material instance and attach it to the component
-	 */
-	UFUNCTION(BlueprintCallable, Category = Rendering)
-	void SetUpMaterialInstance();
+  public:
+    void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
-	/**
-	 * Get the component used to render the billboard
-	 * @return The component used to render the billboard
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
-	UMaterialBillboardComponent* GetBillboardComponent() const;
+    /**
+     * Set up the material instance and attach it to the component
+     */
+    UFUNCTION(BlueprintCallable, Category = Rendering)
+    void SetUpMaterialInstance();
 
-	/**
-	 * Get the component used to render the billboard
-	 * @return The component used to render the billboard
-	 */
-	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
-	void SetBillboardComponent(UMaterialBillboardComponent* NewBillboardComponent);
+    /**
+     * Get the component used to render the billboard
+     * @return The component used to render the billboard
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
+    UMaterialBillboardComponent *GetBillboardComponent() const;
 
-	/**
-	 * Get the individual material instance owned by this component
-	 * @return The individual material instance owned by this component
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
-	UMaterialInstanceDynamic* GetMaterialInstance() const;
+    /**
+     * Get the component used to render the billboard
+     * @return The component used to render the billboard
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
+    void SetBillboardComponent(UMaterialBillboardComponent *NewBillboardComponent);
 
-	/**
-	 * Set the individual material instance owned by this component
-	 * @param NewMaterialInstance The individual material instance owned by this component
-	 */
-	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
-	void SetMaterialInstance(UMaterialInstanceDynamic* NewMaterialInstance);
+    /**
+     * Get the individual material instance owned by this component
+     * @return The individual material instance owned by this component
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
+    UMaterialInstanceDynamic *GetMaterialInstance() const;
 
-private:
-	/**
-	 * The base material used for rendering the billboard
-	 */
-	UPROPERTY(EditAnywhere, Category = Rendering)
-	TObjectPtr<UMaterialInterface> BaseMaterial;
+    /**
+     * Set the individual material instance owned by this component
+     * @param NewMaterialInstance The individual material instance owned by this component
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
+    void SetMaterialInstance(UMaterialInstanceDynamic *NewMaterialInstance);
 
-	/**
-	 * The source texture for the component in question
-	 */
-	UPROPERTY(EditAnywhere, Category = Rendering)
-	TObjectPtr<UTexture2D> SourceTexture;
+  private:
+    /**
+     * The base material used for rendering the billboard
+     */
+    UPROPERTY(EditAnywhere, Category = Rendering)
+    TObjectPtr<UMaterialInterface> BaseMaterial;
 
-	/**
-	 * The component used to render the billboard
-	 */
-	UPROPERTY(BlueprintGetter = GetBillboardComponent, BlueprintSetter = SetBillboardComponent, Category = Components)
-	TObjectPtr<UMaterialBillboardComponent> BillboardComponent;
+    /**
+     * The source texture for the component in question
+     */
+    UPROPERTY(EditAnywhere, Category = Rendering)
+    TObjectPtr<UTexture2D> SourceTexture;
 
-	/**
-	 * The individual material instance owned by this component
-	 */
-	UPROPERTY(BlueprintGetter = GetMaterialInstance, BlueprintSetter = SetMaterialInstance, Category = Components)
-	TObjectPtr<UMaterialInstanceDynamic> MaterialInstance;
+    /**
+     * The component used to render the billboard
+     */
+    UPROPERTY(BlueprintGetter = GetBillboardComponent, BlueprintSetter = SetBillboardComponent, Category = Components)
+    TObjectPtr<UMaterialBillboardComponent> BillboardComponent;
 
-	/**
-	 * The original framerate of the material while it's playing
-	 */
-	UPROPERTY()
-	float OriginalFrameRate = 0.f;
+    /**
+     * The individual material instance owned by this component
+     */
+    UPROPERTY(BlueprintGetter = GetMaterialInstance, BlueprintSetter = SetMaterialInstance, Category = Components)
+    TObjectPtr<UMaterialInstanceDynamic> MaterialInstance;
 
-	/**
-	 * Is the flipbook currently playing
-	 */
-	UPROPERTY(EditAnywhere, Category = Rendering)
-	bool bIsPlaying = false;
+    /**
+     * The original framerate of the material while it's playing
+     */
+    UPROPERTY()
+    float OriginalFrameRate = 0.f;
 
-	/**
-	 * The amount of time the animation has been playing for uninterrupted
-	 */
-	TOptional<double> PlayingTime;
+    /**
+     * Is the flipbook currently playing
+     */
+    UPROPERTY(EditAnywhere, Category = Rendering)
+    bool bIsPlaying = false;
 
-	/**
-	 * The total number of animation frames
-	 */
-	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = Rendering, meta = (UIMin = 1, ClampMin = 1))
-	int32 TotalFrames = 4;
-	
-	/**
-	 * The frames that the animation can stop on
-	 */
-	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = Rendering)
-	TSet<int32> ValidStopFrames = {0, 2};
+    /**
+     * The amount of time the animation has been playing for uninterrupted
+     */
+    TOptional<double> PlayingTime;
 
-	/**
-	 * The previously cached direction for the player (if there is one)
-	 */
-	TOptional<EFacingDirection> CurrentDirection;
+    /**
+     * The total number of animation frames
+     */
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = Rendering, meta = (UIMin = 1, ClampMin = 1))
+    int32 TotalFrames = 4;
 
-	/**
-	 * The name of the SourceTexture property in the material.
-	 */
-	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
-	FName SourceTexturePropertyName = TEXT("SourceTexture");
+    /**
+     * The frames that the animation can stop on
+     */
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = Rendering)
+    TSet<int32> ValidStopFrames = {0, 2};
 
-	/**
-	 * The name of the StartTime property in the material.
-	 */
-	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
-	FName StartTimePropertyName = TEXT("StartTime");
+    /**
+     * The previously cached direction for the player (if there is one)
+     */
+    TOptional<EFacingDirection> CurrentDirection;
 
-	/**
-	 * The name of the FrameRate property in the material.
-	 */
-	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
-	FName FrameRatePropertyName = TEXT("FrameRate");
+    /**
+     * The name of the SourceTexture property in the material.
+     */
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
+    FName SourceTexturePropertyName = TEXT("SourceTexture");
 
-	/**
-	 * The name of the Direction property in the material.
-	 */
-	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
-	FName DirectionPropertyName = TEXT("Direction");
+    /**
+     * The name of the StartTime property in the material.
+     */
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
+    FName StartTimePropertyName = TEXT("StartTime");
+
+    /**
+     * The name of the FrameRate property in the material.
+     */
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
+    FName FrameRatePropertyName = TEXT("FrameRate");
+
+    /**
+     * The name of the Direction property in the material.
+     */
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rendering|Material Settings")
+    FName DirectionPropertyName = TEXT("Direction");
 };

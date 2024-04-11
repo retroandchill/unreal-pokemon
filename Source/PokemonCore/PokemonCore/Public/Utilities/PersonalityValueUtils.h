@@ -11,31 +11,31 @@ struct FPokemonDTO;
  */
 UCLASS()
 class POKEMONCORE_API UPersonalityValueUtils : public UBlueprintFunctionLibrary {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	/**
-	 * The lower 8 bits of the personality value
-	 */
-	static constexpr int32 LOWER_8_BITS = 0xFF;
+  public:
+    // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+    /**
+     * The lower 8 bits of the personality value
+     */
+    static constexpr int32 LOWER_8_BITS = 0xFF;
 
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	/**
-	 * The lower 16 bits of the personality value
-	 */
-	static constexpr int32 LOWER_16_BITS = 0xFFFF;
+    // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+    /**
+     * The lower 16 bits of the personality value
+     */
+    static constexpr int32 LOWER_16_BITS = 0xFFFF;
 
-	/**
-	 * Generate a unique personality value that can be used for a Pokémon
-	 * @return A unique 32-bit unsigned Personality value
-	 */
-	static uint32 GeneratePersonalityValue();
+    /**
+     * Generate a unique personality value that can be used for a Pokémon
+     * @return A unique 32-bit unsigned Personality value
+     */
+    static uint32 GeneratePersonalityValue();
 
-	/**
-	 * Generate a unique personality value that can be used for a Pokémon if one is not already set
-	 * @param DTO The DTO to check for an override
-	 * @return A unique 32-bit unsigned Personality value
-	 */
-	static uint32 GeneratePersonalityValue(const FPokemonDTO &DTO);
+    /**
+     * Generate a unique personality value that can be used for a Pokémon if one is not already set
+     * @param DTO The DTO to check for an override
+     * @return A unique 32-bit unsigned Personality value
+     */
+    static uint32 GeneratePersonalityValue(const FPokemonDTO &DTO);
 };

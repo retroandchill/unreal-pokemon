@@ -8,7 +8,7 @@
  * Module for the developer aspect of the Pokémon UI
  */
 class FPokemonUIDeveloperModule : public IModuleInterface {
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

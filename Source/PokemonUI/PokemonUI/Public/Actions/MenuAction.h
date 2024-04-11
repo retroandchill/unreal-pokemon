@@ -1,10 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Actions/Action.h"
-#include "UObject/Object.h"
+#include "CoreMinimal.h"
 #include "MenuAction.generated.h"
+#include "UObject/Object.h"
 
 class UScreen;
 
@@ -13,15 +13,15 @@ class UScreen;
  */
 UCLASS(Blueprintable, EditInlineNew)
 class POKEMONUI_API UMenuAction : public UAction {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	void PerformAction_Implementation(UObject* Owner) override;
+  public:
+    void PerformAction_Implementation(UObject *Owner) override;
 
-private:
-	/**
-	 * The class for the menu to bring up.
-	 */
-	UPROPERTY(EditAnywhere, Category = Menus)
-	TSubclassOf<UScreen> MenuClass;
+  private:
+    /**
+     * The class for the menu to bring up.
+     */
+    UPROPERTY(EditAnywhere, Category = Menus)
+    TSubclassOf<UScreen> MenuClass;
 };

@@ -8,7 +8,7 @@
  * Module for handling editor utility functions within the engine
  */
 class FPokemonEditorUtilsModule final : public IModuleInterface {
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

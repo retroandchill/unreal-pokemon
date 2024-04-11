@@ -9,23 +9,23 @@
  */
 UENUM(BlueprintType)
 enum class EFacingDirection : uint8 {
-	/**
-	 * The character is facing down
-	 */
-	Down,
+    /**
+     * The character is facing down
+     */
+    Down,
 
-	/**
-	 * The character is facing left
-	 */
-	Left,
+    /**
+     * The character is facing left
+     */
+    Left,
 
-	/**
-	 * The character is facing right
-	 */
-	Right,
+    /**
+     * The character is facing right
+     */
+    Right,
 
-	/**
-	 * The character is facing up
-	 */
-	Up
+    /**
+     * The character is facing up
+     */
+    Up
 };

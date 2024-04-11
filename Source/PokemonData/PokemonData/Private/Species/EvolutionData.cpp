@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UEvolutionHelper::GetEvolutionNames() {
-	return FDataManager::GetInstance().GetDataTable<FEvolutionData>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FEvolutionData>().GetTableRowNames();
 }

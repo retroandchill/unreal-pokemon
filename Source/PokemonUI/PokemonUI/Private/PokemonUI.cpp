@@ -4,11 +4,11 @@
 constexpr auto GLoctextNamespace = "FPokemonUIModule";
 
 void FPokemonUIModule::StartupModule() {
-	// No special startup needed
+    // No special startup needed
 }
 
 void FPokemonUIModule::ShutdownModule() {
-	// No special shutdown needed
+    // No special shutdown needed
 }
 
 IMPLEMENT_MODULE(FPokemonUIModule, PokemonUI)

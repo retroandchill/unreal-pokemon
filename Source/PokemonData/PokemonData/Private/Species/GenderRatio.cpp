@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UGenderRatioHelper::GetGenderRatioNames() {
-	return FDataManager::GetInstance().GetDataTable<FGenderRatio>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FGenderRatio>().GetTableRowNames();
 }

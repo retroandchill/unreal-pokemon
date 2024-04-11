@@ -12,14 +12,14 @@ struct FWarpDestination;
  */
 UCLASS()
 class GRIDBASED2D_API UWarpingUtilities : public UBlueprintFunctionLibrary {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	/**
-	 * Warp to the given location on the map
-	 * @param WorldContext The world context object used to find the GameInstance
-	 * @param Destination The destination information for the warp
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Maps|Warping", meta = (WorldContext = WorldContext))
-	static void WarpToMap(const UObject* WorldContext, const FWarpDestination& Destination);
+  public:
+    /**
+     * Warp to the given location on the map
+     * @param WorldContext The world context object used to find the GameInstance
+     * @param Destination The destination information for the warp
+     */
+    UFUNCTION(BlueprintCallable, Category = "Maps|Warping", meta = (WorldContext = WorldContext))
+    static void WarpToMap(const UObject *WorldContext, const FWarpDestination &Destination);
 };

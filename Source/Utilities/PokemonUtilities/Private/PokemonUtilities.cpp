@@ -1,13 +1,13 @@
 ﻿#include "PokemonUtilities.h"
 
-constexpr auto* GLoctextNamespace = "FPokemonUtilitiesModule";
+constexpr auto *GLoctextNamespace = "FPokemonUtilitiesModule";
 
 void FPokemonUtilitiesModule::StartupModule() {
-	// No startup needed
+    // No startup needed
 }
 
 void FPokemonUtilitiesModule::ShutdownModule() {
-	// No shutdown needed
+    // No shutdown needed
 }
 
 IMPLEMENT_MODULE(FPokemonUtilitiesModule, PokemonUtilities)

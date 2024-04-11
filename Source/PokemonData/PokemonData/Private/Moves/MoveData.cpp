@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UMoveHelper::GetMoveNames() {
-	return FDataManager::GetInstance().GetDataTable<FMoveData>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FMoveData>().GetTableRowNames();
 }

@@ -8,7 +8,7 @@
  * Module for handling the actual menu screens
  */
 class FPokemonUIModule : public IModuleInterface {
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

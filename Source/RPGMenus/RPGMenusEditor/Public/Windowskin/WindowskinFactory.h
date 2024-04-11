@@ -2,21 +2,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Factories/Factory.h"
 #include "Data/Windowskin.h"
+#include "Factories/Factory.h"
 #include "WindowskinFactory.generated.h"
 
 /**
  * Editor factory for Windowskin assets
  */
-UCLASS(HideCategories=(Object))
+UCLASS(HideCategories = (Object))
 class RPGMENUSEDITOR_API UWindowskinFactory : public UFactory {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	UWindowskinFactory();
+  public:
+    UWindowskinFactory();
 
-	UWindowskin* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
-	                              UObject* Context, FFeedbackContext* Warn) override;
-	bool ShouldShowInNewMenu() const override;
+    UWindowskin *FactoryCreateNew(UClass *InClass, UObject *InParent, FName InName, EObjectFlags Flags,
+                                  UObject *Context, FFeedbackContext *Warn) override;
+    bool ShouldShowInNewMenu() const override;
 };

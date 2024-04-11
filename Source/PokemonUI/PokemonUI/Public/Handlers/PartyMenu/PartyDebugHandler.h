@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PartyMenuHandler.h"
 #include "PartyDebugHandler.generated.h"
+#include "PartyMenuHandler.h"
 
 /**
  * Handler for showing the debug options for the Pokémon. Only appears during Play-in-Editor mode.
  */
 UCLASS()
 class POKEMONUI_API UPartyDebugHandler : public UPartyMenuHandler {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	bool ShouldShow(const IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) const override;
-	void Handle(IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) override;
+  public:
+    bool ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const override;
+    void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) override;
 };

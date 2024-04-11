@@ -8,7 +8,7 @@
  * Module for the basic types of Windows used by the UI System
  */
 class FRPGMenusModule : public IModuleInterface {
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

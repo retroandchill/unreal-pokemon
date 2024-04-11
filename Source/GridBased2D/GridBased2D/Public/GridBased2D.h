@@ -9,8 +9,8 @@
  * Module used to handle 2D top-down perspective navigation upon a grid-based system.
  */
 class FGridBased2DModule : public IModuleInterface {
-public:
-	void StartupModule() override;
+  public:
+    void StartupModule() override;
 
-	void ShutdownModule() override;
+    void ShutdownModule() override;
 };

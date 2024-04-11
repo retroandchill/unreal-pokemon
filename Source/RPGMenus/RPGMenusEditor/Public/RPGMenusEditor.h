@@ -8,13 +8,13 @@
  * Editor module for the RPG Menus module
  */
 class FRPGMenusEditorModule : public IModuleInterface {
-public:
-	void StartupModule() override;
+  public:
+    void StartupModule() override;
 
-	/**
-	 * Called after the engine is fully initialized
-	 */
-	void OnPostEngineInit() const;
+    /**
+     * Called after the engine is fully initialized
+     */
+    void OnPostEngineInit() const;
 
-	void ShutdownModule() override;
+    void ShutdownModule() override;
 };

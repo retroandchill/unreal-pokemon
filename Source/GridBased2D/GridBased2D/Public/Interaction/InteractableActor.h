@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interactable.h"
 #include "GameFramework/Actor.h"
+#include "Interactable.h"
 #include "InteractableActor.generated.h"
 
 /**
@@ -12,24 +12,25 @@
  */
 UCLASS(Abstract, Blueprintable)
 class GRIDBASED2D_API AInteractableActor : public AActor, public IInteractable {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	void OnInteract_Implementation(const TScriptInterface<IGridMovable>& Character, EInteractionType InteractionType) override;
+  public:
+    void OnInteract_Implementation(const TScriptInterface<IGridMovable> &Character,
+                                   EInteractionType InteractionType) override;
 
-	UFUNCTION(BlueprintPure, Category = "Interaction")
-	uint8 GetInteractionTypes() const override;
+    UFUNCTION(BlueprintPure, Category = "Interaction")
+    uint8 GetInteractionTypes() const override;
 
-	/**
-	 * Called when the player interacts with this object
-	 */
-	UPROPERTY(BlueprintAssignable, Category = Interaction)
-	FOnPlayerInteraction Interact;
+    /**
+     * Called when the player interacts with this object
+     */
+    UPROPERTY(BlueprintAssignable, Category = Interaction)
+    FOnPlayerInteraction Interact;
 
-private:
-	/**
-	 * The types of interaction that are allowed for this actor
-	 */
-	UPROPERTY(EditAnywhere, Category = Interaction, meta = (Bitmask, BitmaskEnum = EInteractionType))
-	uint8 InteractionTypes;
+  private:
+    /**
+     * The types of interaction that are allowed for this actor
+     */
+    UPROPERTY(EditAnywhere, Category = Interaction, meta = (Bitmask, BitmaskEnum = EInteractionType))
+    uint8 InteractionTypes;
 };

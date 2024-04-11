@@ -11,8 +11,8 @@
  */
 UCLASS(EditInlineNew)
 class POKEMONUI_API USummaryHandler : public UPartyMenuHandler {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	void Handle(IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) override;
+  public:
+    void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) override;
 };

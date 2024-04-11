@@ -10,21 +10,21 @@ class UTrainerCardScreen;
 
 UCLASS()
 class POKEMONTESTS_API ATrainerCardTest : public AFunctionalTest {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-protected:
-	void BeginPlay() override;
+  protected:
+    void BeginPlay() override;
 
-private:
-	/**
-	 * Actually run the test
-	 */
-	UFUNCTION()
-	void TestRun();
+  private:
+    /**
+     * Actually run the test
+     */
+    UFUNCTION()
+    void TestRun();
 
-	/**
-	 * The widget to create for the test
-	 */
-	UPROPERTY(EditInstanceOnly, Category = "Test Parameters")
-	TSubclassOf<UTrainerCardScreen> WidgetClass;
+    /**
+     * The widget to create for the test
+     */
+    UPROPERTY(EditInstanceOnly, Category = "Test Parameters")
+    TSubclassOf<UTrainerCardScreen> WidgetClass;
 };

@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Command.h"
+#include "CoreMinimal.h"
 #include "NewScreenCommand.generated.h"
 
 class UScreen;
@@ -13,15 +13,15 @@ class UScreen;
  */
 UCLASS()
 class RPGMENUS_API UNewScreenCommand : public UCommand {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	void ExecuteCommand_Implementation(ARPGPlayerController* Controller) override;
+  public:
+    void ExecuteCommand_Implementation(ARPGPlayerController *Controller) override;
 
-private:
-	/**
-	 * The next screen to transfer the player to
-	 */
-	UPROPERTY(EditAnywhere, Category = Effect, meta = (DisplayAfter = Text))
-	TSubclassOf<UScreen> NextScreen;
+  private:
+    /**
+     * The next screen to transfer the player to
+     */
+    UPROPERTY(EditAnywhere, Category = Effect, meta = (DisplayAfter = Text))
+    TSubclassOf<UScreen> NextScreen;
 };

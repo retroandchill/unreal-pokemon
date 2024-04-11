@@ -8,7 +8,7 @@
  * Developer modules for the RPG Menus nodes
  */
 class FRPGMenusDeveloperModule : public IModuleInterface {
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

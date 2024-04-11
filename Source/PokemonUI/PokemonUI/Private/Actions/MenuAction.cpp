@@ -3,8 +3,8 @@
 
 #include "RPGPlayerController.h"
 
-void UMenuAction::PerformAction_Implementation(UObject* Owner) {
-	auto Player = CastChecked<APawn>(Owner);
-	auto Controller = CastChecked<ARPGPlayerController>(Player->GetController());
-	Controller->AddScreenToStack(MenuClass);
+void UMenuAction::PerformAction_Implementation(UObject *Owner) {
+    auto Player = CastChecked<APawn>(Owner);
+    auto Controller = CastChecked<ARPGPlayerController>(Player->GetController());
+    Controller->AddScreenToStack(MenuClass);
 }

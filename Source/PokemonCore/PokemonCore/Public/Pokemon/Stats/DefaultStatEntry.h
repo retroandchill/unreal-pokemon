@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "StatEntry.h"
 #include "DefaultStatEntry.generated.h"
+#include "StatEntry.h"
 
 class IPokemon;
 /**
@@ -11,59 +11,58 @@ class IPokemon;
  */
 UCLASS(Abstract)
 class POKEMONCORE_API UDefaultStatEntry : public UObject, public IStatEntry {
-	GENERATED_BODY()
-	
-public:
-	TScriptInterface<IStatEntry> Initialize(FName Stat, const TOptional<int32>& IVs, int32 EVs) override;
+    GENERATED_BODY()
 
+  public:
+    TScriptInterface<IStatEntry> Initialize(FName Stat, const TOptional<int32> &IVs, int32 EVs) override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	int32 GetStatValue() const override;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetStatValue() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	const FStat& GetStat() const override;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    const FStat &GetStat() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	FName GetStatID() const override;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    FName GetStatID() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	int32 GetIV() const override;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetIV() const override;
 
-	UFUNCTION(BlueprintPure, Category = Stats)
-	int32 GetEV() const override;
-	
-	UFUNCTION(BlueprintCallable, Category = Stats)
-	void RefreshValue(int32 Level, int32 Base, const FNature& Nature) override;
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetEV() const override;
 
-protected:
-	/**
-	 * Set the value of the stat in question
-	 * @param NewValue The value of the stat
-	 */
-	void SetStatValue(int32 NewValue);
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    void RefreshValue(int32 Level, int32 Base, const FNature &Nature) override;
 
-private:
-	/**
-	 * The ID of the stat in question
-	 */
-	UPROPERTY(SaveGame)
-	FName StatID;
+  protected:
+    /**
+     * Set the value of the stat in question
+     * @param NewValue The value of the stat
+     */
+    void SetStatValue(int32 NewValue);
 
-	/**
-	 * The value of the stat's IV
-	 */
-	UPROPERTY(SaveGame)
-	int32 IV;
+  private:
+    /**
+     * The ID of the stat in question
+     */
+    UPROPERTY(SaveGame)
+    FName StatID;
 
-	/**
-	 * The value of the stat's EV
-	 */
-	UPROPERTY(SaveGame)
-	int32 EV;
+    /**
+     * The value of the stat's IV
+     */
+    UPROPERTY(SaveGame)
+    int32 IV;
 
-	/**
-	 * The actual value of the stat in question
-	 */
-	UPROPERTY(SaveGame)
-	int32 Value = 0;
+    /**
+     * The value of the stat's EV
+     */
+    UPROPERTY(SaveGame)
+    int32 EV;
+
+    /**
+     * The actual value of the stat in question
+     */
+    UPROPERTY(SaveGame)
+    int32 Value = 0;
 };

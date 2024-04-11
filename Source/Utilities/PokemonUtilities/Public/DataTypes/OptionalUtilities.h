@@ -11,9 +11,8 @@
  * @param bOverride Is the property being overriden.
  * @return An optional containing the value if bOverride is true, otherwise an empty optional
  */
-template <typename T>
-TOptional<T> CreateOptional(const T& Property, bool bOverride) {
-	return bOverride ? TOptional<T>(Property) : TOptional<T>();
+template <typename T> TOptional<T> CreateOptional(const T &Property, bool bOverride) {
+    return bOverride ? TOptional<T>(Property) : TOptional<T>();
 }
 
 /**
@@ -23,9 +22,8 @@ TOptional<T> CreateOptional(const T& Property, bool bOverride) {
  * @param bOverride Is the property being overriden.
  * @return An optional containing the value if bOverride is true, otherwise an empty optional
  */
-template <typename T>
-TOptional<T> CreateOptional(T&& Property, bool bOverride) {
-	return bOverride ? TOptional<T>(Forward(Property)) : TOptional<T>();
+template <typename T> TOptional<T> CreateOptional(T &&Property, bool bOverride) {
+    return bOverride ? TOptional<T>(Forward(Property)) : TOptional<T>();
 }
 
 /**
@@ -37,15 +35,13 @@ TOptional<T> CreateOptional(T&& Property, bool bOverride) {
  * @return The optional's value or the default supplied on
  */
 template <typename T, typename Functor>
-requires std::is_invocable_r_v<T, Functor>
+    requires std::is_invocable_r_v<T, Functor>
 T OrElseGet(const TOptional<T> &Optional, const Functor &Supplier) {
-	return Optional.IsSet() ? Optional.GetValue() : Supplier();
+    return Optional.IsSet() ? Optional.GetValue() : Supplier();
 }
 
 template <typename T>
-concept overloads_equals = requires(T A, T B) {
-  A == B;
-};
+concept overloads_equals = requires(T A, T B) { A == B; };
 
 /**
  * Compare two optionals to see if they're equal
@@ -54,12 +50,11 @@ concept overloads_equals = requires(T A, T B) {
  * @param B The second optional to compare
  * @return They they equal?
  */
-template <overloads_equals T>
-bool OptionalsSame(const TOptional<T>& A, const TOptional<T> &B) {
-  if (A.IsSet() != B.IsSet())
-   return false;
+template <overloads_equals T> bool OptionalsSame(const TOptional<T> &A, const TOptional<T> &B) {
+    if (A.IsSet() != B.IsSet())
+        return false;
 
-  return A.IsSet() ? A.GetValue() == B.GetValue() : true;
+    return A.IsSet() ? A.GetValue() == B.GetValue() : true;
 }
 
 /**
@@ -68,8 +63,9 @@ bool OptionalsSame(const TOptional<T>& A, const TOptional<T> &B) {
  * @param B The second optional to compare
  * @return They they equal?
  */
-POKEMONUTILITIES_API bool OptionalsSame(const TOptional<FText>& A, const TOptional<FText> &B);
+POKEMONUTILITIES_API bool OptionalsSame(const TOptional<FText> &A, const TOptional<FText> &B);
 
 #define OPTIONAL(OwningObject, Property) CreateOptional((OwningObject).Property, (OwningObject).bOverride_##Property)
 
-#define BOOL_OPTIONAL(OwningObject, Property) CreateOptional((OwningObject).b##Property, (OwningObject).bOverride_##Property)
+#define BOOL_OPTIONAL(OwningObject, Property)                                                                          \
+    CreateOptional((OwningObject).b##Property, (OwningObject).bOverride_##Property)

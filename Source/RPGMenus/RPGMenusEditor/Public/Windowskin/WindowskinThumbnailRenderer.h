@@ -10,11 +10,11 @@
  */
 UCLASS()
 class RPGMENUSEDITOR_API UWindowskinThumbnailRenderer : public UThumbnailRenderer {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	EThumbnailRenderFrequency GetThumbnailRenderFrequency(UObject* Object) const override;
-	bool CanVisualizeAsset(UObject* Object) override;
-	void Draw(UObject* Object, int32 X, int32 Y, uint32 Width, uint32 Height, FRenderTarget*, FCanvas* Canvas,
-	          bool bAdditionalViewFamily) override;
+  public:
+    EThumbnailRenderFrequency GetThumbnailRenderFrequency(UObject *Object) const override;
+    bool CanVisualizeAsset(UObject *Object) override;
+    void Draw(UObject *Object, int32 X, int32 Y, uint32 Width, uint32 Height, FRenderTarget *, FCanvas *Canvas,
+              bool bAdditionalViewFamily) override;
 };

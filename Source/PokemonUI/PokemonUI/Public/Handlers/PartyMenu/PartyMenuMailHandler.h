@@ -11,9 +11,9 @@
  */
 UCLASS()
 class POKEMONUI_API UPartyMenuMailHandler : public UPartyMenuHandler {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	bool ShouldShow(const IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) const override;
-	void Handle(IPartyScreen& Screen, const ITrainer& Trainer, int32 PartyIndex) override;
+  public:
+    bool ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const override;
+    void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) override;
 };

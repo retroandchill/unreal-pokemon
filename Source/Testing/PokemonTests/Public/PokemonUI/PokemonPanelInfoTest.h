@@ -13,21 +13,21 @@ class UPokemonSelectionPane;
  */
 UCLASS()
 class POKEMONTESTS_API APokemonPanelInfoTest : public AFunctionalTest {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-protected:
-	void BeginPlay() override;
+  protected:
+    void BeginPlay() override;
 
-private:
-	/**
-	 * Actually run the test
-	 */
-	UFUNCTION()
-	void TestRun();
+  private:
+    /**
+     * Actually run the test
+     */
+    UFUNCTION()
+    void TestRun();
 
-	/**
-	 * The class used for the screen
-	 */
-	UPROPERTY(EditInstanceOnly, Category = "Test Parameters")
-	TSubclassOf<UPokemonSelectionPane> ScreenClass;
+    /**
+     * The class used for the screen
+     */
+    UPROPERTY(EditInstanceOnly, Category = "Test Parameters")
+    TSubclassOf<UPokemonSelectionPane> ScreenClass;
 };

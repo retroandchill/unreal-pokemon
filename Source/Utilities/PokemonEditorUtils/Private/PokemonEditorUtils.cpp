@@ -4,11 +4,11 @@
 constexpr auto GLoctextNamespace = "FPokemonEditorUtilsModule";
 
 void FPokemonEditorUtilsModule::StartupModule() {
-	// No startup needed
+    // No startup needed
 }
 
 void FPokemonEditorUtilsModule::ShutdownModule() {
-	// No special shutdown code
+    // No special shutdown code
 }
 
 IMPLEMENT_MODULE(FPokemonEditorUtilsModule, PokemonEditorUtils)

@@ -10,12 +10,12 @@
  */
 UCLASS(Blueprintable)
 class GRIDBASED2D_API AGamePlayerStart : public APlayerStart {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	/**
-	 * Sets default values for this actor's properties
-	 * @param ObjectInitializer The initialization parameters of the object
-	 */
-	explicit AGamePlayerStart(const FObjectInitializer& ObjectInitializer);
+  public:
+    /**
+     * Sets default values for this actor's properties
+     * @param ObjectInitializer The initialization parameters of the object
+     */
+    explicit AGamePlayerStart(const FObjectInitializer &ObjectInitializer);
 };

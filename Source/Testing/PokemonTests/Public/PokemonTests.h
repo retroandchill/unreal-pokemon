@@ -7,7 +7,7 @@
  * Module for handling the new tests.
  */
 class FPokemonTestsModule : public IModuleInterface {
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

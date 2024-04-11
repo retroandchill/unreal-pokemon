@@ -7,13 +7,16 @@
 constexpr auto GLoctextNamespace = "FGridBased2DEditorModule";
 
 void FGridBased2DEditorModule::StartupModule() {
-	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-	PropertyModule.RegisterCustomClassLayout("GridBasedMap", FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedMapDetails::MakeInstance));
-	PropertyModule.RegisterCustomClassLayout("GridBasedBillboardCharacter", FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedBillboardCharacterDetails::MakeInstance));
+    FPropertyEditorModule &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+    PropertyModule.RegisterCustomClassLayout(
+        "GridBasedMap", FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedMapDetails::MakeInstance));
+    PropertyModule.RegisterCustomClassLayout(
+        "GridBasedBillboardCharacter",
+        FOnGetDetailCustomizationInstance::CreateStatic(&FGridBasedBillboardCharacterDetails::MakeInstance));
 }
 
 void FGridBased2DEditorModule::ShutdownModule() {
-	// No special shutdown required
+    // No special shutdown required
 }
 
 IMPLEMENT_MODULE(FGridBased2DEditorModule, GridBased2DEditor)

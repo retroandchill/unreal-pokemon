@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UTypeHelper::GetTypeNames() {
-	return FDataManager::GetInstance().GetDataTable<FType>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FType>().GetTableRowNames();
 }

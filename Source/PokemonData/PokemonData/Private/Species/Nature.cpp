@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UNatureHelper::GetNatureNames() {
-	return FDataManager::GetInstance().GetDataTable<FNature>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FNature>().GetTableRowNames();
 }

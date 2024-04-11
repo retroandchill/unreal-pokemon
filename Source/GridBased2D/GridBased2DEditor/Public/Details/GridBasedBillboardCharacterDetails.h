@@ -9,8 +9,8 @@
  * Details handler for the Grid-Based Billboard Character
  */
 class GRIDBASED2DEDITOR_API FGridBasedBillboardCharacterDetails : public IDetailCustomization {
-public:
- static TSharedRef<IDetailCustomization> MakeInstance();
+  public:
+    static TSharedRef<IDetailCustomization> MakeInstance();
 
- void CustomizeDetails(IDetailLayoutBuilder& DetailBuilder) override;
+    void CustomizeDetails(IDetailLayoutBuilder &DetailBuilder) override;
 };

@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UAbilityHelper::GetAbilityNames() {
-	return FDataManager::GetInstance().GetDataTable<FAbility>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FAbility>().GetTableRowNames();
 }

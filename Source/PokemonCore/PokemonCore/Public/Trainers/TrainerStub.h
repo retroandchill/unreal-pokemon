@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "BasicTrainer.h"
+#include "CoreMinimal.h"
 #include "Trainer.h"
 #include "TrainerStub.generated.h"
 
@@ -13,9 +13,8 @@
  */
 UCLASS()
 class POKEMONCORE_API UTrainerStub : public UBasicTrainer {
-	GENERATED_BODY()
-	
-public:
-	TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) override;
-	
+    GENERATED_BODY()
+
+  public:
+    TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) override;
 };

@@ -8,8 +8,8 @@
  * Editor module for GridBased 2D library
  */
 class FGridBased2DEditorModule : public IModuleInterface {
-public:
-	void StartupModule() override;
+  public:
+    void StartupModule() override;
 
-	void ShutdownModule() override;
+    void ShutdownModule() override;
 };

@@ -2,14 +2,14 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GridBasedAnimationComponent.h"
-#include "GridBasedMovement.h"
 #include "Characters/FacingDirection.h"
 #include "Characters/MoveCheckResult.h"
 #include "Components/ActorComponent.h"
-#include "Map/WithinMap.h"
+#include "CoreMinimal.h"
+#include "GridBasedAnimationComponent.h"
+#include "GridBasedMovement.h"
 #include "GridBasedMovementComponent.generated.h"
+#include "Map/WithinMap.h"
 
 class UCharacterMovementComponent;
 class IMapGrid;
@@ -20,174 +20,176 @@ class AGridBasedMap;
 /**
  * Component used to handle the movement of an actor along a fixed size grid.
  */
-UCLASS(ClassGroup=(Movement), meta=(BlueprintSpawnableComponent))
-class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent, public IWithinMap, public IGridBasedMovement {
-	GENERATED_BODY()
+UCLASS(ClassGroup = (Movement), meta = (BlueprintSpawnableComponent))
+class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
+                                                    public IWithinMap,
+                                                    public IGridBasedMovement {
+    GENERATED_BODY()
 
-public:
-	/**
-	 * Construct the default object
-	 */
-	UGridBasedMovementComponent();
+  public:
+    /**
+     * Construct the default object
+     */
+    UGridBasedMovementComponent();
 
-protected:
-	void BeginPlay() override;
+  protected:
+    void BeginPlay() override;
 
 #if WITH_EDITOR
-	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
-public:
-	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+  public:
+    void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
-	/**
-	 * Get the Grid-Based animation component for this actor
-	 * @return The Grid-Based animation component for this actor
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
-	TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent() const;
+    /**
+     * Get the Grid-Based animation component for this actor
+     * @return The Grid-Based animation component for this actor
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
+    TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent() const;
 
-	/**
-	 * Set the Grid-Based animation component for this actor
-	 * @param NewGridBasedAnimationComponent The Grid-Based animation component for this actor
-	 */
-	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
-	void SetGridBasedAnimationComponent(TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent);
+    /**
+     * Set the Grid-Based animation component for this actor
+     * @param NewGridBasedAnimationComponent The Grid-Based animation component for this actor
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
+    void SetGridBasedAnimationComponent(TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent);
 
-	/**
-	 * Move the character in the specified direction
-	 * @param MovementDirection The direction to move the character in
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-	void MoveInDirection(EFacingDirection MovementDirection);
+    /**
+     * Move the character in the specified direction
+     * @param MovementDirection The direction to move the character in
+     */
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+    void MoveInDirection(EFacingDirection MovementDirection);
 
-	/**
-	 * Move the character in the specified direction
-	 * @param MovementDirection The direction to move the character in
-	 * @param MovementCompleteCallback The functor to call when movement is completed
-	 */
-	void MoveInDirection(EFacingDirection MovementDirection, TFunction<void()> &&MovementCompleteCallback);
+    /**
+     * Move the character in the specified direction
+     * @param MovementDirection The direction to move the character in
+     * @param MovementCompleteCallback The functor to call when movement is completed
+     */
+    void MoveInDirection(EFacingDirection MovementDirection, TFunction<void()> &&MovementCompleteCallback);
 
-	/**
-	 * Check to see if the character can move in the specified direction
-	 * @param MovementDirection The direction the character would like to move in
-	 * @return Can the character move to that tile, as well and any interactable objects found when the check is done
-	 */
-	UFUNCTION(BlueprintPure, Category = "Character|Movement")
-	FMoveCheckResult MovementCheck(EFacingDirection MovementDirection) const;
+    /**
+     * Check to see if the character can move in the specified direction
+     * @param MovementDirection The direction the character would like to move in
+     * @return Can the character move to that tile, as well and any interactable objects found when the check is done
+     */
+    UFUNCTION(BlueprintPure, Category = "Character|Movement")
+    FMoveCheckResult MovementCheck(EFacingDirection MovementDirection) const;
 
-	/**
-	 * Can this character move between the various maps of the overworld
-	 * @return Can the character move between maps?
-	 */
-	bool CanMoveBetweenMaps() const;
-	
-	/**
-	 * Turn the character to face a specific direction
-	 * @param FacingDirection The direction to update the character's facing direction to
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-	void FaceDirection(EFacingDirection FacingDirection);
+    /**
+     * Can this character move between the various maps of the overworld
+     * @return Can the character move between maps?
+     */
+    bool CanMoveBetweenMaps() const;
 
-	/**
-	 * Warp to the given location and offset
-	 * @param X The X coordinate to warp to
-	 * @param Y The Y coordinate to warp to
-	 * @param Offset The physical offset of the map in the world
-	 */
-	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-	void WarpToLocation(int32 X, int32 Y, FVector Offset) override;
+    /**
+     * Turn the character to face a specific direction
+     * @param FacingDirection The direction to update the character's facing direction to
+     */
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+    void FaceDirection(EFacingDirection FacingDirection);
 
-	/**
-	 * Called when the player changes maps
-	 * @param NewMap The new map the player changes to
-	 */
-	void OnMapChanged(IMapGrid& NewMap) const;
-	
-	FIntVector2 GetCurrentPosition() const override;
+    /**
+     * Warp to the given location and offset
+     * @param X The X coordinate to warp to
+     * @param Y The Y coordinate to warp to
+     * @param Offset The physical offset of the map in the world
+     */
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+    void WarpToLocation(int32 X, int32 Y, FVector Offset) override;
 
-	/**
-	 * Get the position that this character is currently moving to
-	 * @return The intended grid position of the character
-	 */
-	FIntVector2 GetDesiredPosition() const;
-	
-	UFUNCTION(BlueprintPure, Category = "Character|Movement")
-	EFacingDirection GetDirection() const final;
-	
-	/**
-	 * Perform a hit test on the tile in the given direction.
-	 * @param MovementDirection The direction to check the file of
-	 * @return Any hits that are found and all interactable actors on the tile
-	 */
-	TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+    /**
+     * Called when the player changes maps
+     * @param NewMap The new map the player changes to
+     */
+    void OnMapChanged(IMapGrid &NewMap) const;
 
-	/**
-	 * Perform a hit interaction on all of the interactable objects in front of the player
-	 * @param Interactables The interactable objects in question
-	 */
-	void HitInteraction(const TArray<TScriptInterface<IInteractable>>& Interactables);
+    FIntVector2 GetCurrentPosition() const override;
 
-private:
-	/**
-	 * Update the character's movement upon a tick
-	 * @param DeltaTime The amount of time that has passed since the previous frame
-	 */
-	void UpdateMovement(float DeltaTime);
+    /**
+     * Get the position that this character is currently moving to
+     * @return The intended grid position of the character
+     */
+    FIntVector2 GetDesiredPosition() const;
 
-	/**
-	 * Update the character's animation state
-	 * @param DeltaTime The amount of time that has passed since the previous frame
-	 */
-	void UpdateAnimation(float DeltaTime);
+    UFUNCTION(BlueprintPure, Category = "Character|Movement")
+    EFacingDirection GetDirection() const final;
 
-	/**
-	 * Called when the player completes their movement cycle
-	 */
-	void MoveComplete();
+    /**
+     * Perform a hit test on the tile in the given direction.
+     * @param MovementDirection The direction to check the file of
+     * @return Any hits that are found and all interactable actors on the tile
+     */
+    TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
 
-	/**
-	 * The current position of the character within the movement grid
-	 */
-	UPROPERTY(VisibleAnywhere, Category = "Position")
-	FIntVector2 CurrentPosition;
+    /**
+     * Perform a hit interaction on all of the interactable objects in front of the player
+     * @param Interactables The interactable objects in question
+     */
+    void HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables);
 
-	/**
-	 * The desired position of the character within the movement grid
-	 */
-	UPROPERTY(VisibleAnywhere, Category = "Position")
-	FIntVector2 DesiredPosition;
+  private:
+    /**
+     * Update the character's movement upon a tick
+     * @param DeltaTime The amount of time that has passed since the previous frame
+     */
+    void UpdateMovement(float DeltaTime);
 
-	/**
-	 * The direction this character is facing
-	 */
-	UPROPERTY(EditAnywhere, Category = "Character")
-	EFacingDirection Direction = EFacingDirection::Down;
+    /**
+     * Update the character's animation state
+     * @param DeltaTime The amount of time that has passed since the previous frame
+     */
+    void UpdateAnimation(float DeltaTime);
 
-	/**
-	 * Component for handling the animations of the character
-	 */
-	UPROPERTY(BlueprintGetter = GetGridBasedAnimationComponent, BlueprintSetter = SetGridBasedAnimationComponent, Category = Components)
-	TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
+    /**
+     * Called when the player completes their movement cycle
+     */
+    void MoveComplete();
 
-	/**
-	 * The timer for movement used to linearly interpolate the position to the new one
-	 */
-	TOptional<float> MoveTimer;
+    /**
+     * The current position of the character within the movement grid
+     */
+    UPROPERTY(VisibleAnywhere, Category = "Position")
+    FIntVector2 CurrentPosition;
 
-	/**
-	 * One time callback for when movement is complete. 
-	 */
-	TOptional<TFunction<void()>> MoveCallback;
-	
-	/**
-	 * The timer for movement used to determine where to stop animation
-	 */
-	TOptional<float> StopTimer;
+    /**
+     * The desired position of the character within the movement grid
+     */
+    UPROPERTY(VisibleAnywhere, Category = "Position")
+    FIntVector2 DesiredPosition;
 
-	/**
-	 * Should the character perform a sweep when setting the actor to a location?
-	 */
-	bool bPerformSweep = false;
-	
+    /**
+     * The direction this character is facing
+     */
+    UPROPERTY(EditAnywhere, Category = "Character")
+    EFacingDirection Direction = EFacingDirection::Down;
+
+    /**
+     * Component for handling the animations of the character
+     */
+    UPROPERTY(BlueprintGetter = GetGridBasedAnimationComponent, BlueprintSetter = SetGridBasedAnimationComponent,
+              Category = Components)
+    TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
+
+    /**
+     * The timer for movement used to linearly interpolate the position to the new one
+     */
+    TOptional<float> MoveTimer;
+
+    /**
+     * One time callback for when movement is complete.
+     */
+    TOptional<TFunction<void()>> MoveCallback;
+
+    /**
+     * The timer for movement used to determine where to stop animation
+     */
+    TOptional<float> StopTimer;
+
+    /**
+     * Should the character perform a sweep when setting the actor to a location?
+     */
+    bool bPerformSweep = false;
 };

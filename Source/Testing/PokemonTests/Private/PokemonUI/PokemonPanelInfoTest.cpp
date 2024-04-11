@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "PokemonUI/PokemonPanelInfoTest.h"
-#include "CommonDefines.h"
+
 #include "Blueprint/WidgetTree.h"
+#include "CommonDefines.h"
 #include "Components/CanvasPanel.h"
 #include "Pokemon/Pokemon.h"
 #include "Species/SpeciesData.h"
@@ -12,33 +12,35 @@
 #include "Windows/PokemonSelectionPane.h"
 
 void APokemonPanelInfoTest::BeginPlay() {
-	Super::BeginPlay();
-	OnTestStart.AddDynamic(this, &APokemonPanelInfoTest::TestRun);
+    Super::BeginPlay();
+    OnTestStart.AddDynamic(this, &APokemonPanelInfoTest::TestRun);
 }
 
 void APokemonPanelInfoTest::TestRun() {
-	TEST_ASSERT(AssertIsValid(ScreenClass, TEXT("Screen class should be set!")))
-	UPokemonTestUtilities::CreateMockParty(this);
-	
-	auto Screen = CreateWidget<UPokemonSelectionPane>(GetGameInstance(), ScreenClass);
-	Screen->AddToViewport();
+    TEST_ASSERT(AssertIsValid(ScreenClass, TEXT("Screen class should be set!")))
+    UPokemonTestUtilities::CreateMockParty(this);
 
-	auto ContentsArea = Screen->WidgetTree->FindWidget<UCanvasPanel>(TEXT("ContentsArea"));
-	TEST_ASSERT(AssertIsValid(ContentsArea, TEXT("Contents Area should exist!")))
+    auto Screen = CreateWidget<UPokemonSelectionPane>(GetGameInstance(), ScreenClass);
+    Screen->AddToViewport();
 
-	TArray<UPokemonPanel*> Panels;
-	for (int32 i = 0; i < 3; i++) {
-		FName Name(FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}})));
-		int32 OutIndex;
-		auto Panel = Cast<UPokemonPanel>(Screen->WidgetTree->FindWidgetChild(ContentsArea, Name, OutIndex));
-		TEST_ASSERT(AssertIsValid(ContentsArea, TEXT("Panel should exist!")))
-		Panels.Add(Panel);
-	}
+    auto ContentsArea = Screen->WidgetTree->FindWidget<UCanvasPanel>(TEXT("ContentsArea"));
+    TEST_ASSERT(AssertIsValid(ContentsArea, TEXT("Contents Area should exist!")))
 
-	TEST_ASSERT(AssertEqual_Name(Panels[0]->GetPokemon()->GetSpecies().ID, TEXT("SAMUROTT"), TEXT("First Pokémon should be a Samurott!")))
-	TEST_ASSERT(AssertEqual_Name(Panels[1]->GetPokemon()->GetSpecies().ID, TEXT("EMBOAR"), TEXT("Second Pokémon should be an Emboar!")))
-	TEST_ASSERT(AssertEqual_Name(Panels[2]->GetPokemon()->GetSpecies().ID, TEXT("SERPERIOR"), TEXT("Thrid Pokémon should be a Serperior!")))
+    TArray<UPokemonPanel *> Panels;
+    for (int32 i = 0; i < 3; i++) {
+        FName Name(FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}})));
+        int32 OutIndex;
+        auto Panel = Cast<UPokemonPanel>(Screen->WidgetTree->FindWidgetChild(ContentsArea, Name, OutIndex));
+        TEST_ASSERT(AssertIsValid(ContentsArea, TEXT("Panel should exist!")))
+        Panels.Add(Panel);
+    }
 
-	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Test passed!"));
+    TEST_ASSERT(AssertEqual_Name(Panels[0]->GetPokemon()->GetSpecies().ID, TEXT("SAMUROTT"),
+                                 TEXT("First Pokémon should be a Samurott!")))
+    TEST_ASSERT(AssertEqual_Name(Panels[1]->GetPokemon()->GetSpecies().ID, TEXT("EMBOAR"),
+                                 TEXT("Second Pokémon should be an Emboar!")))
+    TEST_ASSERT(AssertEqual_Name(Panels[2]->GetPokemon()->GetSpecies().ID, TEXT("SERPERIOR"),
+                                 TEXT("Thrid Pokémon should be a Serperior!")))
+
+    FinishTest(EFunctionalTestResult::Succeeded, TEXT("Test passed!"));
 }
-

@@ -4,11 +4,11 @@
 constexpr auto GLoctextNamespace = "FRPGMenusModule";
 
 void FRPGMenusModule::StartupModule() {
-	// No special startup code needed
+    // No special startup code needed
 }
 
 void FRPGMenusModule::ShutdownModule() {
-	// No special shutdown code needed
+    // No special shutdown code needed
 }
 
 IMPLEMENT_MODULE(FRPGMenusModule, RPGMenus)

@@ -4,5 +4,5 @@
 #include "DataManager.h"
 
 TArray<FName> UGrowthRateHelper::GetGrowthRateNames() {
-	return FDataManager::GetInstance().GetDataTable<FGrowthRateData>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FGrowthRateData>().GetTableRowNames();
 }

@@ -9,65 +9,67 @@
 /**
  * Configuration class for the core Pokémon data
  */
-UCLASS(Config=Game, DefaultConfig, meta = (DisplayName = "Pokémon Core Settings"))
+UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Pokémon Core Settings"))
 class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	UPokemonCoreSettings();
-	
-	/**
-	 * The the ID of the HP stat
-	 * @return The stat used referring to a Pokémon's HP
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
-	FName GetHPStat() const;
+  public:
+    UPokemonCoreSettings();
 
-	/**
-	 * The maximum number of Pokémon a trainer can carry at any given time
-	 * @return The maximum number of Pokémon a trainer can carry at any given time
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
-	int32 GetMaxPartySize() const;
+    /**
+     * The the ID of the HP stat
+     * @return The stat used referring to a Pokémon's HP
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
+    FName GetHPStat() const;
 
-	/**
-	 * The class used for all Pokémon objects
-	 * @return The class used for all Pokémon objects
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
-	TSubclassOf<UObject> GetPokemonClass() const;
+    /**
+     * The maximum number of Pokémon a trainer can carry at any given time
+     * @return The maximum number of Pokémon a trainer can carry at any given time
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
+    int32 GetMaxPartySize() const;
 
-	/**
-	 * The class used for all Stat Block objects
-	 * @return The class used for all Stat Block objects
-	 */
-	UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
-	TSubclassOf<UObject> GetStatBlockClass() const;
+    /**
+     * The class used for all Pokémon objects
+     * @return The class used for all Pokémon objects
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+    TSubclassOf<UObject> GetPokemonClass() const;
 
-private:
+    /**
+     * The class used for all Stat Block objects
+     * @return The class used for all Stat Block objects
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+    TSubclassOf<UObject> GetStatBlockClass() const;
 
-	/**
-	 * The stat used referring to a Pokémon's HP
-	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names", meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
-	FName HPStat;
+  private:
+    /**
+     * The stat used referring to a Pokémon's HP
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names",
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
+    FName HPStat;
 
-	/**
-	 * The maximum number of Pokémon a trainer can carry at any given time
-	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetMaxPartySize, Config, Category = Party, meta = (UIMin = 1, ClampMin = 1))
-	int32 MaxPartySize;
+    /**
+     * The maximum number of Pokémon a trainer can carry at any given time
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxPartySize, Config, Category = Party,
+              meta = (UIMin = 1, ClampMin = 1))
+    int32 MaxPartySize = 6;
 
-	/**
-	 * The class used for all Pokémon objects
-	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes", meta = (MustImplement = Pokemon))
-	TSubclassOf<UObject> PokemonClass;
+    /**
+     * The class used for all Pokémon objects
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
+              meta = (MustImplement = Pokemon))
+    TSubclassOf<UObject> PokemonClass;
 
-	/**
-	 * The class used for all Stat Block objects
-	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
-		meta = (MustImplement = StatBlock))
-	TSubclassOf<UObject> StatBlockClass;
+    /**
+     * The class used for all Stat Block objects
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
+              meta = (MustImplement = StatBlock))
+    TSubclassOf<UObject> StatBlockClass;
 };

@@ -3,19 +3,12 @@
 
 #include "Data/Windowskin.h"
 
-
 FText FWindowskinAssetActions::GetName() const {
-	return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_Windowskin", "Windowskin");
+    return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_Windowskin", "Windowskin");
 }
 
-UClass* FWindowskinAssetActions::GetSupportedClass() const {
-	return UWindowskin::StaticClass();
-}
+UClass *FWindowskinAssetActions::GetSupportedClass() const { return UWindowskin::StaticClass(); }
 
-FColor FWindowskinAssetActions::GetTypeColor() const {
-	return FColor::Silver;
-}
+FColor FWindowskinAssetActions::GetTypeColor() const { return FColor::Silver; }
 
-uint32 FWindowskinAssetActions::GetCategories() {
-	return EAssetTypeCategories::UI;
-}
+uint32 FWindowskinAssetActions::GetCategories() { return EAssetTypeCategories::UI; }

@@ -6,5 +6,5 @@
 FItem::FItem() = default;
 
 TArray<FName> UItemHelper::GetItemNames() {
-	return FDataManager::GetInstance().GetDataTable<FItem>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FItem>().GetTableRowNames();
 }
