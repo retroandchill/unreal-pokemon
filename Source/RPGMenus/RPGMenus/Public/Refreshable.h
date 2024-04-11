@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Refreshable.generated.h"
 #include "UObject/Interface.h"
+#include "Refreshable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)

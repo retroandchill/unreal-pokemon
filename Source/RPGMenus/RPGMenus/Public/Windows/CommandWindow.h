@@ -1,9 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "CommandWindow.generated.h"
 #include "CoreMinimal.h"
 #include "SelectableWidget.h"
+#include "CommandWindow.generated.h"
 
 class USizeBox;
 class UScrollBox;

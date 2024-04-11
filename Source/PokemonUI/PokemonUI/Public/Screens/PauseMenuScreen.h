@@ -3,8 +3,8 @@
 
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
-#include "PauseMenuScreen.generated.h"
 #include "Screens/Screen.h"
+#include "PauseMenuScreen.generated.h"
 
 class UCommand;
 class UCommandWindow;

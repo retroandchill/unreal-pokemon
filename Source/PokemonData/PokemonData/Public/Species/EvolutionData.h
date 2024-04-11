@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EvolutionData.generated.h"
 #include "UObject/Object.h"
+#include "EvolutionData.generated.h"
 
 /**
  * The data related with how a Pokémon evolves

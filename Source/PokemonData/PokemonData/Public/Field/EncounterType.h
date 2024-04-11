@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "EncounterCategory.h"
-#include "EncounterType.generated.h"
 #include "UObject/Object.h"
+#include "EncounterType.generated.h"
 
 /**
  * Represents any of the various encounter types that may occur within the world

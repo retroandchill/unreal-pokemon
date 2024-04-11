@@ -4,8 +4,8 @@
 
 #include "Components/SlateWrapperTypes.h"
 #include "CoreMinimal.h"
-#include "InputUtilities.generated.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "InputUtilities.generated.h"
 
 class UUserWidget;
 /**

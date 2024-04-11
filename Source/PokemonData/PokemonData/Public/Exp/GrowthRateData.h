@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GrowthRateData.generated.h"
 #include "UObject/Object.h"
+#include "GrowthRateData.generated.h"
 
 /**
  * Represents the data row used to retrieve the exp growth curves

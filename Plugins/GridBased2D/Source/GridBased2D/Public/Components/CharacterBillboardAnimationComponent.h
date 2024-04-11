@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "CharacterBillboardAnimationComponent.generated.h"
 #include "Components/ActorComponent.h"
 #include "Components/GridBasedAnimationComponent.h"
 #include "CoreMinimal.h"
+#include "CharacterBillboardAnimationComponent.generated.h"
 
 class UMaterialBillboardComponent;
 class IGridBasedMovement;

@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FadeScreenIn.generated.h"
 #include "GridBasedGameModeBase.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "FadeScreenIn.generated.h"
 
 /**
  * Async Node for fading the screen in

@@ -4,8 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "RPGPlayerController.generated.h"
 #include "Screens/Screen.h"
+#include "RPGPlayerController.generated.h"
 
 struct FInputActionInstance;
 class UScreen;

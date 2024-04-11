@@ -8,9 +8,9 @@
 #include "CoreMinimal.h"
 #include "DataManager.h"
 #include "DataRegistry.h"
-#include "DataUtilities.generated.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Subsystems/SubsystemBlueprintLibrary.h"
+#include "DataUtilities.generated.h"
 
 /**
  * Utility library used for getting data for the custom nodes

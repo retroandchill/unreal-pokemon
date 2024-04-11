@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NatureStatChange.generated.h"
 #include "UObject/Object.h"
+#include "NatureStatChange.generated.h"
 
 /**
  * Stores the stat change of a Nature

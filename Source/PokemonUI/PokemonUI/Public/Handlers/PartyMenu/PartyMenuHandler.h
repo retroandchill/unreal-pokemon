@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PartyMenuHandler.generated.h"
 #include "UObject/Object.h"
+#include "PartyMenuHandler.generated.h"
 
 class IPartyScreen;
 class IPokemon;

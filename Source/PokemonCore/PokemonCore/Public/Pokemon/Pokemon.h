@@ -4,10 +4,8 @@
 
 #include "Breeding/PokemonGender.h"
 #include "CoreMinimal.h"
-#include "Meta/MetatypeDeclares.h"
-#include "Meta/PokeRegistry.h"
-#include "Pokemon.generated.h"
 #include "UObject/Interface.h"
+#include "Pokemon.generated.h"
 
 struct FPokemonDTO;
 class IStatBlock;

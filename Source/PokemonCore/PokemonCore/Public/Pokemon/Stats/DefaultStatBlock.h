@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DefaultStatBlock.generated.h"
 #include "StatBlock.h"
+#include "DefaultStatBlock.generated.h"
 
 struct FStatBlockDTO;
 

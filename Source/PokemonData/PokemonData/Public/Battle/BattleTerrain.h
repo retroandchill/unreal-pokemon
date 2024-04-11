@@ -1,9 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "BattleTerrain.generated.h"
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "BattleTerrain.generated.h"
 
 /**
  * In-battle terrain effects caused by moves like Electric Terrain.

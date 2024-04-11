@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Command.generated.h"
 #include "CoreMinimal.h"
+#include "Command.generated.h"
 
 class ARPGPlayerController;
 /**

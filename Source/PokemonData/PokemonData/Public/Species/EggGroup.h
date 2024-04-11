@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EggGroup.generated.h"
 #include "EggGroupType.h"
+#include "EggGroup.generated.h"
 
 /**
  * Represents an Egg Group for the game

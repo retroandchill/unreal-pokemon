@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PartyDebugHandler.generated.h"
 #include "PartyMenuHandler.h"
+#include "PartyDebugHandler.generated.h"
 
 /**
  * Handler for showing the debug options for the Pokémon. Only appears during Play-in-Editor mode.

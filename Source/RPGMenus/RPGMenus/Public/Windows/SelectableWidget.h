@@ -4,8 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "Data/CursorDirection.h"
-#include "SelectableWidget.generated.h"
 #include "Window.h"
+#include "SelectableWidget.generated.h"
 
 class USelectionInputs;
 struct FInputActionInstance;

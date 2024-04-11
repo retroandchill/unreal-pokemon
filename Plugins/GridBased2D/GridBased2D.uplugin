@@ -1,0 +1,28 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "GridBased2D",
+	"Description": "Library for top-down grid-based movement",
+	"Category": "Other",
+	"CreatedBy": "Retro & Chill",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "GridBased2D",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "GridBased2DEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	]
+}

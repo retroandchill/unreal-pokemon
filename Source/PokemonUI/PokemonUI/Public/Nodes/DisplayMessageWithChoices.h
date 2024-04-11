@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DisplayMessageWithChoices.generated.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "DisplayMessageWithChoices.generated.h"
 
 class UTextDisplayScreen;
 /**

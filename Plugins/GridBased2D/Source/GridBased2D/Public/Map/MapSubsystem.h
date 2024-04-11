@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MapSubsystem.generated.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "MapSubsystem.generated.h"
 
 class IGridMovable;
 class UGridBasedMovementComponent;

@@ -1,9 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "BodyShape.generated.h"
 #include "CoreMinimal.h"
 #include "PaperSprite.h"
+#include "BodyShape.generated.h"
 
 /**
  * Represents the Body Shape of a Pokémon. Used when searching in the Pokédex.

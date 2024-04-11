@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Environment.generated.h"
 #include "UObject/Object.h"
+#include "Environment.generated.h"
 
 /**
  * Represents a battle environment which is used for determining the battle base to display as well as the type of

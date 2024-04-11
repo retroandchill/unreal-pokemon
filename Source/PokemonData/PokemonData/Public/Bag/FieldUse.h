@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FieldUse.generated.h"
 #include "UObject/Object.h"
+#include "FieldUse.generated.h"
 
 /**
  * Represents the different options for how an item can be used in the field

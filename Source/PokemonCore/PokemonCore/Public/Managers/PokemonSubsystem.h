@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PokemonSubsystem.generated.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
+#include "PokemonSubsystem.generated.h"
 
 namespace Exp {
 class IGrowthRate;

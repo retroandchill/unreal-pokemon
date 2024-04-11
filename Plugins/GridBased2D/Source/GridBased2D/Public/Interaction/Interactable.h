@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interactable.generated.h"
 #include "InteractionType.h"
 #include "UObject/Interface.h"
+#include "Interactable.generated.h"
 
 class IGridMovable;
 class AGameCharacter;

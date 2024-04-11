@@ -6,8 +6,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Pawn.h"
-#include "GridBasedCharacter.generated.h"
 #include "Interaction/Interactable.h"
+#include "GridBasedCharacter.generated.h"
 
 class UGridBasedMovementComponent;
 class UAction;

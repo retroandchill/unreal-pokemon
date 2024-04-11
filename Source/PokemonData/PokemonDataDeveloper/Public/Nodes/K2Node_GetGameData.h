@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_GetGameData.generated.h"
 #include "SelectDataRow.h"
+#include "K2Node_GetGameData.generated.h"
 
 /**
  * Node to handle getting the game data out of the editor

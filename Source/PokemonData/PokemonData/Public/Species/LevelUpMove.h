@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "LevelUpMove.generated.h"
 #include "UObject/Object.h"
+#include "LevelUpMove.generated.h"
 
 /**
  * Represents a move learned upon level up

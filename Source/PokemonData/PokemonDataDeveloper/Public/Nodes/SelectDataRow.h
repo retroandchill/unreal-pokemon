@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SelectDataRow.generated.h"
 #include "UObject/Interface.h"
+#include "SelectDataRow.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()

@@ -3,8 +3,8 @@
 
 #include "Actions/Action.h"
 #include "CoreMinimal.h"
-#include "MenuAction.generated.h"
 #include "UObject/Object.h"
+#include "MenuAction.generated.h"
 
 class UScreen;
 

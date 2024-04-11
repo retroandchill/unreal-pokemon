@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GraphicsLoadingSubsystem.generated.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "GraphicsLoadingSubsystem.generated.h"
 
 class ITrainer;
 class IPokemon;

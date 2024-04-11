@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "CursorDirection.h"
-#include "SelectionInputs.generated.h"
 #include "UObject/Object.h"
+#include "SelectionInputs.generated.h"
 
 /**
  * The input data used for selection in the menus.

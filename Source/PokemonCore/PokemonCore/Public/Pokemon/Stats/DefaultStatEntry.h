@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DefaultStatEntry.generated.h"
 #include "StatEntry.h"
+#include "DefaultStatEntry.generated.h"
 
 class IPokemon;
 /**

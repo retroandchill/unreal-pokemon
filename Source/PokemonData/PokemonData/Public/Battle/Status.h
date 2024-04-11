@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "PaperSprite.h"
-#include "Status.generated.h"
 #include "UObject/Object.h"
+#include "Status.generated.h"
 
 /**
  * Represents the data for a status condition

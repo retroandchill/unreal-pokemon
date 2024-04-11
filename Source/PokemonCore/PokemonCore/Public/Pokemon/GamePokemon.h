@@ -2,10 +2,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GamePokemon.generated.h"
 #include "Pokemon.h"
 #include "PokemonDTO.h"
 #include "Stats/StatBlock.h"
+#include "GamePokemon.generated.h"
 
 struct FPokemonDTO;
 class IMove;

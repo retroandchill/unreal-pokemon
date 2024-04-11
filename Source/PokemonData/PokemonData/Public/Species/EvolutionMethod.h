@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EvolutionMethod.generated.h"
 #include "UObject/Object.h"
+#include "EvolutionMethod.generated.h"
 
 /**
  * Represents an evolution method on an individual species

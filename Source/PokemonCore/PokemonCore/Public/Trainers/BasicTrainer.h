@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "BasicTrainer.generated.h"
 #include "CoreMinimal.h"
 #include "Trainer.h"
 #include "Trainers/TrainerType.h"
+#include "BasicTrainer.generated.h"
 
 /**
  * The basic default implementation details for a trainer

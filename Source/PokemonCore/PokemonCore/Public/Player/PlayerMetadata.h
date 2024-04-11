@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerMetadata.generated.h"
 #include "UObject/Object.h"
+#include "PlayerMetadata.generated.h"
 
 /**
  * Delegate for when the player

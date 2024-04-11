@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "PokemonStatType.h"
-#include "Stat.generated.h"
 #include "UObject/Object.h"
+#include "Stat.generated.h"
 
 /**
  * Represents one of the stats in the database.

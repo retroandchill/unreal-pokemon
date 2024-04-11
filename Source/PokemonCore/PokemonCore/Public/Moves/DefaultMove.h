@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DefaultMove.generated.h"
 #include "Moves/Move.h"
+#include "DefaultMove.generated.h"
 
 /**
  * The default implementation for a move

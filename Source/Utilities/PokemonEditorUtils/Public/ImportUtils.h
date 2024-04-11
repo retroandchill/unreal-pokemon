@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ImportUtils.generated.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Species/Stat.h"
+#include "ImportUtils.generated.h"
 
 /**
  * Utility functions to handle importing data from data tables. Mainly used for the Python API

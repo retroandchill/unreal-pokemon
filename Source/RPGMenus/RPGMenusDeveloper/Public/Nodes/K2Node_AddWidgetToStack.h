@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_AddWidgetToStack.generated.h"
 #include "K2Node_ConstructObjectFromClass.h"
+#include "K2Node_AddWidgetToStack.generated.h"
 
 /**
  * Blueprint node for adding a menu widget to the stack

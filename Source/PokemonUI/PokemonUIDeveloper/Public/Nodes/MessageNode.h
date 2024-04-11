@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MessageNode.generated.h"
 #include "UObject/Interface.h"
+#include "MessageNode.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()

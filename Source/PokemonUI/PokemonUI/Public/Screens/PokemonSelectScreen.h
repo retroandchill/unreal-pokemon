@@ -3,8 +3,8 @@
 
 #include "CoreMinimal.h"
 #include "PartyScreen.h"
-#include "PokemonSelectScreen.generated.h"
 #include "Screens/Screen.h"
+#include "PokemonSelectScreen.generated.h"
 
 class UPartyMenuHandler;
 class UCommand;

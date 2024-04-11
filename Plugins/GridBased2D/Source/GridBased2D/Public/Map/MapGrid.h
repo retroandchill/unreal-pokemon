@@ -4,8 +4,8 @@
 
 #include "Components/GridMovable.h"
 #include "CoreMinimal.h"
-#include "MapGrid.generated.h"
 #include "UObject/Interface.h"
+#include "MapGrid.generated.h"
 
 enum class EFacingDirection : uint8;
 class IGridMovable;

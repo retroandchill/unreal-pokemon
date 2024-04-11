@@ -4,10 +4,10 @@
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "Pokemon/Breeding/PokemonGender.h"
-#include "PokemonPanel.generated.h"
 #include "Refreshable.h"
 #include "SelectablePanel.h"
 #include "Text/TextColor.h"
+#include "PokemonPanel.generated.h"
 
 class USelectableWidget;
 class UPokemonSelectionPane;

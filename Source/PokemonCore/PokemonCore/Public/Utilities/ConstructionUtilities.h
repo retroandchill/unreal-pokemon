@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "ConstructionUtilities.generated.h"
 #include "CoreMinimal.h"
+#include "ConstructionUtilities.generated.h"
 
 class IStatBlock;
 struct FPokemonDTO;

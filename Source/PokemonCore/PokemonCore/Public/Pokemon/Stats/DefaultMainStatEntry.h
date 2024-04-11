@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DefaultMainStatEntry.generated.h"
 #include "DefaultStatEntry.h"
+#include "DefaultMainStatEntry.generated.h"
 
 /**
  * Represents the calculation implementation of the default main stat

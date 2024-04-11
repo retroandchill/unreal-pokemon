@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Ability.generated.h"
 #include "CoreMinimal.h"
+#include "Ability.generated.h"
 
 /**
  * Represents the data for an Ability type in the game

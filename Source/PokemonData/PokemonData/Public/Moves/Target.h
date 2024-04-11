@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Target.generated.h"
 #include "TargetCount.h"
 #include "UObject/Object.h"
+#include "Target.generated.h"
 
 /**
  * Handles target processing for a move

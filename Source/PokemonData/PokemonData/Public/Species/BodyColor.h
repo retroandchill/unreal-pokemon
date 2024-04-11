@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "BodyColor.generated.h"
 #include "CoreMinimal.h"
+#include "BodyColor.generated.h"
 
 /**
  * Represents the Body Color of a Pokémon. Used when searching in the Pokédex.

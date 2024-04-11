@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Action.generated.h"
 #include "CoreMinimal.h"
+#include "Action.generated.h"
 
 /**
  * Dispatcher for an action performable by another object.

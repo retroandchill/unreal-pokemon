@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PokemonSelectionPane.generated.h"
 #include "Primatives/PokemonPanel.h"
 #include "Windows/SelectableWidget.h"
+#include "PokemonSelectionPane.generated.h"
 
 class ISelectablePanel;
 class UPartySelectCancelPanel;

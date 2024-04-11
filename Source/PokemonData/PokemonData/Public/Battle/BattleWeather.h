@@ -1,9 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "BattleWeather.generated.h"
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "BattleWeather.generated.h"
 
 /**
  * Represents the weather effects that occur in battle

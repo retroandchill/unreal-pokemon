@@ -4,8 +4,8 @@
 
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
-#include "PartySelectCancelPanel.generated.h"
 #include "SelectablePanel.h"
+#include "PartySelectCancelPanel.generated.h"
 
 /**
  * The panel for the cancel options in the window.

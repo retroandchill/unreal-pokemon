@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Nature.generated.h"
 #include "NatureStatChange.h"
 #include "UObject/Object.h"
+#include "Nature.generated.h"
 
 /**
  * Represents one of the possible Pokémon natures

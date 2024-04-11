@@ -4,8 +4,8 @@
 #include "CoreMinimal.h"
 #include "EvolutionMethod.h"
 #include "LevelUpMove.h"
-#include "SpeciesData.generated.h"
 #include "UObject/Object.h"
+#include "SpeciesData.generated.h"
 
 struct FGenderRatio;
 /**

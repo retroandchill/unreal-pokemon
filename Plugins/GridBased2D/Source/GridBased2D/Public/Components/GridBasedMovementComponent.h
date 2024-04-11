@@ -8,8 +8,8 @@
 #include "CoreMinimal.h"
 #include "GridBasedAnimationComponent.h"
 #include "GridBasedMovement.h"
-#include "GridBasedMovementComponent.generated.h"
 #include "Map/WithinMap.h"
+#include "GridBasedMovementComponent.generated.h"
 
 class UCharacterMovementComponent;
 class IMapGrid;

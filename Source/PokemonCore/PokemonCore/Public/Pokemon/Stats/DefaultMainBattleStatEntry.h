@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DefaultMainBattleStatEntry.generated.h"
 #include "DefaultStatEntry.h"
+#include "DefaultMainBattleStatEntry.generated.h"
 
 /**
  * Handles the default representation of the main battle stats

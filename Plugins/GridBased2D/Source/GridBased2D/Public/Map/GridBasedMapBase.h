@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GridBasedMapBase.generated.h"
 #include "MapGrid.h"
+#include "GridBasedMapBase.generated.h"
 
 /**
  * Abstract implementation of grid based maps that contain any common functionality used by all maps

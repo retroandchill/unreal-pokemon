@@ -3,10 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GridBasedMap.generated.h"
 #include "GridBasedMapBase.h"
-#include "MapGrid.h"
 #include "PaperTileMapComponent.h"
+#include "GridBasedMap.generated.h"
 
 class IGridMovable;
 class AGameCharacter;

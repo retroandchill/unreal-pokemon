@@ -4,8 +4,8 @@
 
 #include "Characters/FacingDirection.h"
 #include "CoreMinimal.h"
-#include "GridBasedAnimationComponent.generated.h"
 #include "UObject/Interface.h"
+#include "GridBasedAnimationComponent.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()

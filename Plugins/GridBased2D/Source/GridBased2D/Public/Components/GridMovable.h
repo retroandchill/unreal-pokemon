@@ -2,10 +2,9 @@
 
 #pragma once
 
-#include "Characters/MoveCheckResult.h"
 #include "CoreMinimal.h"
-#include "GridMovable.generated.h"
 #include "UObject/Interface.h"
+#include "GridMovable.generated.h"
 
 class UGridBasedMovementComponent;
 // This class does not need to be modified.

@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "BattleUse.generated.h"
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "BattleUse.generated.h"
 
 /**
  * Represents the different options for how an item can be used in battle

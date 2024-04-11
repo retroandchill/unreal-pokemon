@@ -30,16 +30,6 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "GridBased2D",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "GridBased2DEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "RPGMenus",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
@@ -111,6 +101,10 @@
 		{
 			"Name": "XGEController",
 			"Enabled": false
+		},
+		{
+			"Name": "GridBased2D",
+			"Enabled": true
 		}
 	]
 }

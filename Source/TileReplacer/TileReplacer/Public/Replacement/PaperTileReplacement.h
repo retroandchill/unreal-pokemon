@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PaperTileReplacement.generated.h"
 #include "UObject/Interface.h"
+#include "PaperTileReplacement.generated.h"
 
 struct FPaperTileMetadata;
 struct FPaperTileInfo;
