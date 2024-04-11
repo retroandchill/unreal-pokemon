@@ -45,11 +45,6 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "CommonMath",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "PokemonTests",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
@@ -104,6 +99,10 @@
 		},
 		{
 			"Name": "GridBased2D",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonMath",
 			"Enabled": true
 		}
 	]
