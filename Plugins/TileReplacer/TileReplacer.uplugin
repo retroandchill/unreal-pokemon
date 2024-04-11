@@ -1,10 +1,10 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.0.1",
 	"FriendlyName": "TileReplacer",
 	"Description": "Basic tile replacement plugin for replacing Paper2D tiles with other actor types.",
-	"Category": "Other",
+	"Category": "2D",
 	"CreatedBy": "Retro & Chill",
 	"CreatedByURL": "",
 	"DocsURL": "",
@@ -18,6 +18,13 @@
 			"Name": "TileReplacer",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		}
+	],
+	"SupportURL": "",
+	"Plugins": [
+		{
+			"Name": "Paper2D",
+			"Enabled": true
 		}
 	]
 }

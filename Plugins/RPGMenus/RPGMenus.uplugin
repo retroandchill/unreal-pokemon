@@ -1,15 +1,15 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.0.1",
 	"FriendlyName": "RPGMenus",
 	"Description": "Contains basic menu setup for usage in RPG projects.",
-	"Category": "Other",
+	"Category": "UI",
 	"CreatedBy": "Retro & Chill",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
-	"CanContainContent": true,
+	"CanContainContent": false,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
@@ -28,6 +28,17 @@
 			"Name": "RPGMenusEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		}
+	],
+	"SupportURL": "",
+	"Plugins": [
+		{
+			"Name": "Paper2D",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonMath",
+			"Enabled": true
 		}
 	]
 }

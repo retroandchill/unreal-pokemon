@@ -1,15 +1,15 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.0.1",
 	"FriendlyName": "CommonMath",
 	"Description": "Small utility class commonly used with C++ math functions.",
-	"Category": "Other",
+	"Category": "Utility",
 	"CreatedBy": "Retro & Chill",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
-	"CanContainContent": true,
+	"CanContainContent": false,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
@@ -19,5 +19,6 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
-	]
+	],
+	"SupportURL": ""
 }
