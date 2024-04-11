@@ -2,13 +2,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pokemon/Exp/GrowthRate.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
 #include "PokemonSubsystem.generated.h"
-
-namespace Exp {
-class IGrowthRate;
-}
 
 class UPlayerMetadata;
 /**

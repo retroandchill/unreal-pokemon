@@ -1,0 +1,28 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PokemonUtilities",
+	"Description": "Basic utility classes used throughout the Unreal Pokémon plugin suite.",
+	"Category": "Other",
+	"CreatedBy": "Retro & Chill",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "PokemonUtilities",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonEditorUtils",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	]
+}

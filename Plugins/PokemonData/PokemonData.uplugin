@@ -1,0 +1,23 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PokemonData",
+	"Description": "Contains all of the basic data definitions for the various Pokémon data that is defined.",
+	"Category": "Other",
+	"CreatedBy": "Retro & Chill",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "PokemonData",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

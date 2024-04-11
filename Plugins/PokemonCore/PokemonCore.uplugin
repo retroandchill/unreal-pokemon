@@ -1,0 +1,23 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PokemonCore",
+	"Description": "Contains the core functionality of the Unreal Pokémon systems.",
+	"Category": "Other",
+	"CreatedBy": "Retro & Chill",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "PokemonCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

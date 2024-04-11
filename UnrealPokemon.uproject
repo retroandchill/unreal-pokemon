@@ -10,63 +10,8 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "PokemonData",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonEditorUtils",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonUtilities",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonCore",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "RPGMenus",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonUI",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "RPGMenusEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "PokemonTests",
 			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonUIDeveloper",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonDataDeveloper",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "RPGMenusDeveloper",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "TileReplacer",
-			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	],
@@ -103,6 +48,30 @@
 		},
 		{
 			"Name": "CommonMath",
+			"Enabled": true
+		},
+		{
+			"Name": "RPGMenus",
+			"Enabled": true
+		},
+		{
+			"Name": "TileReplacer",
+			"Enabled": true
+		},
+		{
+			"Name": "PokemonUtilities",
+			"Enabled": true
+		},
+		{
+			"Name": "PokemonData",
+			"Enabled": true
+		},
+		{
+			"Name": "PokemonCore",
+			"Enabled": true
+		},
+		{
+			"Name": "PokemonUI",
 			"Enabled": true
 		}
 	]
