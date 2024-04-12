@@ -28,12 +28,12 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokem
 }
 
 UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species, UObject *Outer) {
-    auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+    FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 
     // TODO: Add support for alternate forms, gender differences, etc.
     auto AssetPath = FString::Format(TEXT("{Path}/{AssetName}.{AssetName}"), {{TEXT("PATH"), PokemonIconsPackageName},
                                                                               {TEXT("AssetName"), Species.ToString()}});
-    auto AssetData = AssetRegistryModule.GetRegistry().GetAssetByObjectPath(AssetPath);
+    auto AssetData = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(AssetPath);
     auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
     if (Texture == nullptr) {
         return nullptr;
@@ -45,18 +45,16 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
 }
 
 TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
-                                                                                         UObject *Outer) {
+                                                                                         UObject *Outer) const {
     return GetTrainerSprite(Trainer.GetTrainerType().ID, Outer);
 }
 
 TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
-                                                                                         UObject *Outer) {
-    auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-
+                                                                                         UObject *Outer) const {
     auto AssetPath =
         FString::Format(TEXT("{Path}/{AssetName}.{AssetName}"),
                         {{TEXT("PATH"), TrainerSpritesPackageName}, {TEXT("AssetName"), TrainerType.ToString()}});
-    auto AssetData = AssetRegistryModule.GetRegistry().GetAssetByObjectPath(AssetPath);
+    auto AssetData = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(AssetPath);
     auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
     if (Texture == nullptr) {
         return {};

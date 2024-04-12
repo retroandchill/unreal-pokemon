@@ -62,17 +62,17 @@ PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 void UPokemonPanel::RefreshPokemonInfo() {
     UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
     UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
-
-    // TODO: Change the text color depending on the gender
+    
+    using enum EPokemonGender;
     auto Gender = Pokemon->GetGender();
     switch (Gender) {
-    case EPokemonGender::Male:
+    case Male:
         UPokemonUIUtils::SetItemText(GenderText, TEXT("♂"));
         break;
-    case EPokemonGender::Female:
+    case Female:
         UPokemonUIUtils::SetItemText(GenderText, TEXT("♀"));
         break;
-    case EPokemonGender::Genderless:
+    case Genderless:
         UPokemonUIUtils::SetItemText(GenderText, TEXT(""));
         break;
     }
@@ -87,5 +87,5 @@ void UPokemonPanel::RefreshPokemonInfo() {
                                      {TEXT("MaxHP"), UPokemonUIUtils::SpacePad(Pokemon->GetMaxHP(), 3)}}));
 
     UPokemonUIUtils::SetItemText(HPText, HP);
-    UPokemonUIUtils::SetBarValues(HPBar, Pokemon->GetCurrentHP(), Pokemon->GetMaxHP());
+    UPokemonUIUtils::SetBarValues(HPBar, static_cast<float>(Pokemon->GetCurrentHP()), static_cast<float>(Pokemon->GetMaxHP()));
 }

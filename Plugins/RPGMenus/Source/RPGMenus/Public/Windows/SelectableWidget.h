@@ -107,18 +107,6 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     UFUNCTION(BlueprintCallable, Category = Selection)
     void SetActive(bool bNewActiveState);
 
-    /**
-     * The delegate bound to confirm
-     */
-    UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
-    FProcessConfirm OnConfirm;
-
-    /**
-     * The delegate bound to cancel
-     */
-    UPROPERTY(BlueprintAssignable, Category = "Selection|Cancel")
-    FProcessCancel OnCancel;
-
   protected:
     void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
     
@@ -189,6 +177,18 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      * @param Direction The received cursor input
      */
     void ReceiveMoveCursor(ECursorDirection Direction);
+
+    /**
+     * The delegate bound to confirm
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
+    FProcessConfirm OnConfirm;
+
+    /**
+     * The delegate bound to cancel
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Cancel")
+    FProcessCancel OnCancel;
 
     /**
      * The index of the menu in question

@@ -41,31 +41,35 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
             }
             SelectionPane->CompleteSwitch();
         } else {
-            TArray<TObjectPtr<UCommand>> Commands;
-            for (UPartyMenuHandler *Handler : PokemonHandlers) {
-                if (!Handler->ShouldShow(*this, Trainer, Index))
-                    continue;
-
-                Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
-            }
-            Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
-            CommandWindow->SetCommands(MoveTemp(Commands));
-
-            SelectionPane->SetActive(false);
-            CommandWindow->SetIndex(0);
-            CommandWindow->SetActive(true);
-
-            SelectionPane->ToggleCommandVisibility(false);
-            ToggleCommandWindowVisibility(true);
+            DisplayPokemonCommands(Trainer, Index);
         }
     } else {
         // TODO: Handle the additional options
     }
 }
 
-void UPokemonSelectScreen::ProcessCommand(int32 CurrentIndex, UCommand *SelectedCommand) {
+void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index) {
+    TArray<TObjectPtr<UCommand>> Commands;
+    for (UPartyMenuHandler *Handler : PokemonHandlers) {
+        if (!Handler->ShouldShow(*this, Trainer, Index))
+            continue;
+
+        Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
+    }
+    Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
+    CommandWindow->SetCommands(MoveTemp(Commands));
+
+    SelectionPane->SetActive(false);
+    CommandWindow->SetIndex(0);
+    CommandWindow->SetActive(true);
+
+    SelectionPane->ToggleCommandVisibility(false);
+    ToggleCommandWindowVisibility(true);
+}
+
+void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
     auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
-    check(Handler != nullptr);
+    check(Handler != nullptr)
     Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
 }
 
@@ -77,11 +81,12 @@ void UPokemonSelectScreen::OnCommandWindowCancel() {
 }
 
 void UPokemonSelectScreen::ToggleCommandWindowVisibility(bool bIsVisible) {
+    using enum ESlateVisibility;
     if (bIsVisible) {
-        CommandWindow->SetVisibility(ESlateVisibility::Visible);
-        CommandHelpWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+        CommandWindow->SetVisibility(Visible);
+        CommandHelpWindow->SetVisibility(SelfHitTestInvisible);
     } else {
-        CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
-        CommandHelpWindow->SetVisibility(ESlateVisibility::Collapsed);
+        CommandWindow->SetVisibility(Collapsed);
+        CommandHelpWindow->SetVisibility(Collapsed);
     }
 }
