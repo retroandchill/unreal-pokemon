@@ -67,10 +67,8 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKe
         PlaySound(CursorSound);
         ReceiveMoveCursor(CursorDirection.GetValue());
     } else if (InputMappings->IsConfirmInput(Key)) {
-        PlaySound(ConfirmSound);
         int32 CurrentIndex = GetIndex();
-        OnConfirm.Broadcast(CurrentIndex);
-        ProcessConfirm(CurrentIndex);
+        ConfirmOnIndex(CurrentIndex);
     } else if (InputMappings->IsCancelInput(Key)) {
         PlaySound(CancelSound);
         OnCancel.Broadcast();
@@ -80,15 +78,19 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKe
     return bHandled ? FReply::Handled() : FReply::Unhandled();
 }
 
+void USelectableWidget::ConfirmOnIndex(int32 CurrentIndex) {
+    PlaySound(ConfirmSound);
+    OnConfirm.Broadcast(CurrentIndex);
+    ProcessConfirm(CurrentIndex);
+}
+
 void USelectableWidget::ProcessClickedButton(USelectableOption *Option) {
     if (!IsActive()) {
         return;
     }
 
-    SetIndex(Option->GetOptionIndex());
     int32 CurrentIndex = Option->GetOptionIndex();
-    OnConfirm.Broadcast(CurrentIndex);
-    ProcessConfirm(CurrentIndex);
+    ConfirmOnIndex(CurrentIndex);
 }
 
 void USelectableWidget::ProcessHoveredButton(USelectableOption *Option) {

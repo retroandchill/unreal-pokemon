@@ -123,6 +123,14 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 
     /**
+     * A convenience method to handle additional functionality when the user confirms a selection based on the specified
+     * index. This method plays the ConfirmSound, triggers the OnConfirm event, and invokes the ProcessConfirm method.
+     *
+     * @param CurrentIndex The current index of the menu
+     */
+    void ConfirmOnIndex(int32 CurrentIndex);
+    
+    /**
      * Process the clicked button event for the Command Window
      *
      * @param Option The selectable option that was clicked
