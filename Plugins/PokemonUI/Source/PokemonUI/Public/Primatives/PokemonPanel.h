@@ -4,6 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+#include "Primatives/SelectableOption.h"
 #include "Refreshable.h"
 #include "SelectablePanel.h"
 #include "Text/TextColor.h"
@@ -20,7 +21,7 @@ class IPokemon;
  * Widget for housing a single panel of a Pokémon
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPokemonPanel : public UUserWidget, public ISelectablePanel {
+class POKEMONUI_API UPokemonPanel : public USelectableOption, public ISelectablePanel {
     GENERATED_BODY()
 
   public:
@@ -106,11 +107,6 @@ class POKEMONUI_API UPokemonPanel : public UUserWidget, public ISelectablePanel 
      */
     UPROPERTY()
     TScriptInterface<IPokemon> Pokemon;
-
-    /**
-     * The index of this particular panel
-     */
-    int32 MenuIndex;
 
     /**
      * The image that displays the icon of the Pokémon to the player

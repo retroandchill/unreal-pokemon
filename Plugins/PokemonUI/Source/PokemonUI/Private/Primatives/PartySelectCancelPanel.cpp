@@ -6,11 +6,6 @@
 
 void UPartySelectCancelPanel::SetOwner(USelectableWidget *NewOwner) { Owner = NewOwner; }
 
-void UPartySelectCancelPanel::SetMenuIndex(int32 Index) {
-    MenuIndex = Index;
-    Refresh();
-}
-
-bool UPartySelectCancelPanel::IsPanelSelected() const { return Owner != nullptr && Owner->GetIndex() == MenuIndex; }
+bool UPartySelectCancelPanel::IsPanelSelected() const { return Owner != nullptr && Owner->GetIndex() == GetOptionIndex(); }
 
 void UPartySelectCancelPanel::Refresh() { RefreshVisuals(); }

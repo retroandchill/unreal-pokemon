@@ -4,9 +4,9 @@
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "Data/CursorDirection.h"
-#include "Window.h"
 #include "SelectableWidget.generated.h"
 
+class USelectableOption;
 class USelectionInputs;
 struct FInputActionInstance;
 class UInputMappingContext;
@@ -122,6 +122,22 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
   protected:
     FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 
+    /**
+     * Process the clicked button event for the Command Window
+     *
+     * @param Option The selectable option that was clicked
+     */
+    UFUNCTION()
+    void ProcessClickedButton(USelectableOption* Option);
+
+    /**
+     * Process the hovered button event for the Command Window
+     *
+     * @param Option The selectable option that was hovered
+     */
+    UFUNCTION()
+    void ProcessHoveredButton(USelectableOption* Option);
+    
     /**
      * Called when the selection is changed
      * @param OldIndex The previous index of this widget

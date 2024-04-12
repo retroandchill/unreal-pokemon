@@ -110,22 +110,6 @@ void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
     OnCommandSelected.Broadcast(CurrentIndex, CurrentCommand);
 }
 
-void UCommandWindow::ProcessClickedButton(USelectableOption *Option) {
-    if (!IsActive()) {
-        return;
-    }
-
-    ProcessConfirm(Option->GetOptionIndex());
-}
-
-void UCommandWindow::ProcessHoveredButton(USelectableOption *Option) {
-    if (!IsActive()) {
-        return;
-    }
-    
-    SetIndex(Option->GetOptionIndex());
-}
-
 FIntVector2 UCommandWindow::GetCellPosition(int32 TargetIndex) const {
     int32 ColumnCount = GetColumnCount();
     return FIntVector2(TargetIndex % ColumnCount, TargetIndex / ColumnCount);

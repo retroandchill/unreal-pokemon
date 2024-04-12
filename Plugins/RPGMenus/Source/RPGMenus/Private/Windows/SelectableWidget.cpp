@@ -3,6 +3,7 @@
 
 #include "Data/RPGMenusSettings.h"
 #include "Data/SelectionInputs.h"
+#include "Primatives/SelectableOption.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &ObjectInitializer) : UUserWidget(ObjectInitializer) {
     SetIsFocusable(true);
@@ -77,6 +78,26 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKe
     }
 
     return bHandled ? FReply::Handled() : FReply::Unhandled();
+}
+
+void USelectableWidget::ProcessClickedButton(USelectableOption *Option) {
+    if (!IsActive()) {
+        return;
+    }
+
+    SetIndex(Option->GetOptionIndex());
+    int32 CurrentIndex = Option->GetOptionIndex();
+    OnConfirm.Broadcast(CurrentIndex);
+    ProcessConfirm(CurrentIndex);
+}
+
+void USelectableWidget::ProcessHoveredButton(USelectableOption *Option) {
+    if (!IsActive()) {
+        return;
+    }
+    
+    PlaySound(CursorSound);
+    SetIndex(Option->GetOptionIndex());
 }
 
 void USelectableWidget::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
