@@ -9,6 +9,7 @@ public class UnrealPokemonEditorTarget : TargetRules
 	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
+		bUseUnityBuild = false;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
 		RegisterModulesCreatedByRider();
