@@ -56,7 +56,9 @@ void AGridBasedMap::RefreshTileData() {
     TileReplacer->ReplaceTiles(TileMapComponent);
 }
 
-void AGridBasedMap::ClearTileReplacements() { TileReplacer->RestoreCachedTiles(TileMapComponent); }
+void AGridBasedMap::ClearTileReplacements() {
+    TileReplacer->RestoreCachedTiles(TileMapComponent);
+}
 #endif
 
 FIntRect AGridBasedMap::GetBounds() const {

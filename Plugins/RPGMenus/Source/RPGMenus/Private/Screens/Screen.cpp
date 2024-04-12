@@ -5,7 +5,9 @@
 #include "RPGPlayerController.h"
 #include "Windows/SelectableWidget.h"
 
-UScreen::UScreen(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer) { SetIsFocusable(true); }
+UScreen::UScreen(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer) {
+    SetIsFocusable(true);
+}
 
 TSharedRef<SWidget> UScreen::RebuildWidget() {
     auto Ret = Super::RebuildWidget();

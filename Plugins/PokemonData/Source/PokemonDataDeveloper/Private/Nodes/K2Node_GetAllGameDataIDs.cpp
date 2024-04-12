@@ -5,7 +5,9 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 
-void UK2Node_GetAllGameDataIDs::Initialize(UScriptStruct *NodeStruct) { StructType = NodeStruct; }
+void UK2Node_GetAllGameDataIDs::Initialize(UScriptStruct *NodeStruct) {
+    StructType = NodeStruct;
+}
 
 void UK2Node_GetAllGameDataIDs::AllocateDefaultPins() {
     FCreatePinParams ReturnTypePinParams;
@@ -39,7 +41,9 @@ FText UK2Node_GetAllGameDataIDs::GetTooltipText() const {
     return NSLOCTEXT("K2Node", "GetAllGameDataIDs_InvalidStructTypeTooltip", "Invalid Struct Type");
 }
 
-bool UK2Node_GetAllGameDataIDs::IsNodePure() const { return true; }
+bool UK2Node_GetAllGameDataIDs::IsNodePure() const {
+    return true;
+}
 
 FText UK2Node_GetAllGameDataIDs::GetMenuCategory() const {
     if (StructType == nullptr)

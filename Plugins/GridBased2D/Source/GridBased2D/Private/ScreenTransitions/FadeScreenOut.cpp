@@ -19,4 +19,6 @@ void UFadeScreenOut::Activate() {
     GameMode->FadeIn(Callback);
 }
 
-void UFadeScreenOut::TransitionFinished() { OnScreenTransitionFinished.Broadcast(); }
+void UFadeScreenOut::TransitionFinished() {
+    OnScreenTransitionFinished.Broadcast();
+}

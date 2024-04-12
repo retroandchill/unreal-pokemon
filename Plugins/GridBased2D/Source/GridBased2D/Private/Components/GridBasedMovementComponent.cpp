@@ -12,7 +12,9 @@
 #include "Map/MapSubsystem.h"
 #include "MathUtilities.h"
 
-UGridBasedMovementComponent::UGridBasedMovementComponent() { PrimaryComponentTick.bCanEverTick = true; }
+UGridBasedMovementComponent::UGridBasedMovementComponent() {
+    PrimaryComponentTick.bCanEverTick = true;
+}
 
 void UGridBasedMovementComponent::BeginPlay() {
     Super::BeginPlay();
@@ -147,7 +149,9 @@ bool UGridBasedMovementComponent::CanMoveBetweenMaps() const {
     return Owner != nullptr && Owner->IsPlayerControlled();
 }
 
-void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection) { Direction = FacingDirection; }
+void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection) {
+    Direction = FacingDirection;
+}
 
 void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offset) {
     auto GridSize = UGridUtils::GetGridSize(this);
@@ -167,11 +171,17 @@ void UGridBasedMovementComponent::OnMapChanged(IMapGrid &NewMap) const {
     NewMap.OnPlayerEnter();
 }
 
-FIntVector2 UGridBasedMovementComponent::GetCurrentPosition() const { return CurrentPosition; }
+FIntVector2 UGridBasedMovementComponent::GetCurrentPosition() const {
+    return CurrentPosition;
+}
 
-FIntVector2 UGridBasedMovementComponent::GetDesiredPosition() const { return DesiredPosition; }
+FIntVector2 UGridBasedMovementComponent::GetDesiredPosition() const {
+    return DesiredPosition;
+}
 
-EFacingDirection UGridBasedMovementComponent::GetDirection() const { return Direction; }
+EFacingDirection UGridBasedMovementComponent::GetDirection() const {
+    return Direction;
+}
 
 TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
     static const auto FloatGridSize = static_cast<float>(UGridUtils::GetGridSize(this));
@@ -201,7 +211,8 @@ void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<I
     }
 
     for (auto &Interactable : Interactables) {
-        if ((static_cast<std::byte>(Interactable->GetInteractionTypes()) & static_cast<std::byte>(EInteractionType::Hit)) == static_cast<std::byte>(0))
+        if ((static_cast<std::byte>(Interactable->GetInteractionTypes()) &
+             static_cast<std::byte>(EInteractionType::Hit)) == static_cast<std::byte>(0))
             continue;
         IInteractable::Execute_OnInteract(Interactable.GetObject(), GetOwner(), EInteractionType::Hit);
     }
@@ -276,6 +287,6 @@ void UGridBasedMovementComponent::MoveComplete() {
     auto Owner = GetOwner();
     auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>();
     check(MapSubsystem != nullptr)
-    check(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
-        MapSubsystem->UpdateCharacterMapPosition(Owner);
+        check(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+            MapSubsystem->UpdateCharacterMapPosition(Owner);
 }

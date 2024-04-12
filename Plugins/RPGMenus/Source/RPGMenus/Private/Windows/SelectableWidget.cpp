@@ -14,20 +14,30 @@ USelectableWidget::USelectableWidget(const FObjectInitializer &ObjectInitializer
     CancelSound = Settings->GetCancelSound();
 }
 
-int32 USelectableWidget::GetItemCount_Implementation() const { return 0; }
+int32 USelectableWidget::GetItemCount_Implementation() const {
+    return 0;
+}
 
 int32 USelectableWidget::GetRowCount() const {
     int32 ColumnCount = GetColumnCount();
     return (GetItemCount() + ColumnCount - 1) / ColumnCount;
 }
 
-int32 USelectableWidget::GetColumnCount_Implementation() const { return 1; }
+int32 USelectableWidget::GetColumnCount_Implementation() const {
+    return 1;
+}
 
-int32 USelectableWidget::GetIndex() const { return Index; }
+int32 USelectableWidget::GetIndex() const {
+    return Index;
+}
 
-int32 USelectableWidget::GetRow(int32 IndexToCheck) const { return IndexToCheck / GetRowCount(); }
+int32 USelectableWidget::GetRow(int32 IndexToCheck) const {
+    return IndexToCheck / GetRowCount();
+}
 
-int32 USelectableWidget::GetColumn(int32 IndexToCheck) const { return IndexToCheck % GetRowCount(); }
+int32 USelectableWidget::GetColumn(int32 IndexToCheck) const {
+    return IndexToCheck % GetRowCount();
+}
 
 void USelectableWidget::SetIndex(int32 NewIndex) {
     if (Index == NewIndex)
@@ -47,7 +57,9 @@ void USelectableWidget::Deselect() {
     OnSelectionChange(OldIndex, Index);
 }
 
-bool USelectableWidget::IsActive() const { return bActive; }
+bool USelectableWidget::IsActive() const {
+    return bActive;
+}
 
 void USelectableWidget::SetActive(bool bNewActiveState) {
     if (bActive == bNewActiveState)
@@ -57,9 +69,13 @@ void USelectableWidget::SetActive(bool bNewActiveState) {
     OnActiveChanged(bActive);
 }
 
-FProcessConfirm &USelectableWidget::GetOnConfirm() { return OnConfirm; }
+FProcessConfirm &USelectableWidget::GetOnConfirm() {
+    return OnConfirm;
+}
 
-FProcessCancel &USelectableWidget::GetOnCancel() { return OnCancel; }
+FProcessCancel &USelectableWidget::GetOnCancel() {
+    return OnCancel;
+}
 
 void USelectableWidget::NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) {
     Super::NativeOnRemovedFromFocusPath(InFocusEvent);
@@ -109,7 +125,7 @@ void USelectableWidget::ProcessHoveredButton(USelectableOption *Option) {
     if (!IsActive()) {
         return;
     }
-    
+
     PlaySound(CursorSound);
     SetIndex(Option->GetOptionIndex());
 }

@@ -54,10 +54,10 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
         Actor->AttachToActor(TilemapComponent->GetAttachParentActor(),
                              FAttachmentTransformRules::KeepRelativeTransform);
         IPaperTileReplacement::Execute_ConfigureReplacement(Actor, Tile, *Metadata, ReplacementData->bCollisionEnabled);
-        Actor->SetActorRelativeLocation(TilemapComponent->GetRelativeLocation() +
-                                        FVector(i * TilemapComponent->TileMap->TileWidth,
-                                                j * TilemapComponent->TileMap->TileHeight,
-                                                -k * static_cast<double>(TilemapComponent->TileMap->SeparationPerLayer)));
+        Actor->SetActorRelativeLocation(
+            TilemapComponent->GetRelativeLocation() +
+            FVector(i * TilemapComponent->TileMap->TileWidth, j * TilemapComponent->TileMap->TileHeight,
+                    -k * static_cast<double>(TilemapComponent->TileMap->SeparationPerLayer)));
         Actor->SetActorRelativeRotation(TilemapComponent->GetRelativeRotation());
 
         ReplacedTiles.Emplace(Tile, i, j, k, Actor);

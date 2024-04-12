@@ -129,7 +129,7 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
 
   protected:
     void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
-    
+
     FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 
     /**
@@ -139,14 +139,14 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      * @param CurrentIndex The current index of the menu
      */
     void ConfirmOnIndex(int32 CurrentIndex);
-    
+
     /**
      * Process the clicked button event for the Command Window
      *
      * @param Option The selectable option that was clicked
      */
     UFUNCTION()
-    void ProcessClickedButton(USelectableOption* Option);
+    void ProcessClickedButton(USelectableOption *Option);
 
     /**
      * Process the hovered button event for the Command Window
@@ -154,8 +154,8 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      * @param Option The selectable option that was hovered
      */
     UFUNCTION()
-    void ProcessHoveredButton(USelectableOption* Option);
-    
+    void ProcessHoveredButton(USelectableOption *Option);
+
     /**
      * Called when the selection is changed
      * @param OldIndex The previous index of this widget

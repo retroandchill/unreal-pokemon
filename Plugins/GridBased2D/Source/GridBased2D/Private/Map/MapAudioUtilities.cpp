@@ -36,14 +36,12 @@ void UMapAudioUtilities::StopBackgroundMusic(UObject *WorldContext, float FadeOu
 
 bool UMapAudioUtilities::IsMusicPlaying(UObject *WorldContext) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
-    check(MapSubsystem != nullptr)
-return MapSubsystem->IsMusicPlaying();
+    check(MapSubsystem != nullptr) return MapSubsystem->IsMusicPlaying();
 }
 
 bool UMapAudioUtilities::IsMusicPaused(UObject *WorldContext) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
-    check(MapSubsystem != nullptr)
-return MapSubsystem->IsMusicPaused();
+    check(MapSubsystem != nullptr) return MapSubsystem->IsMusicPaused();
 }
 
 void UMapAudioUtilities::PlayJingle(UObject *WorldContext, USoundBase *Jingle, float VolumeMultiplier,
@@ -56,6 +54,5 @@ void UMapAudioUtilities::PlayJingle(UObject *WorldContext, USoundBase *Jingle, f
 
 bool UMapAudioUtilities::IsJinglePlaying(UObject *WorldContext) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
-    check(MapSubsystem != nullptr)
-return MapSubsystem->IsJinglePlaying();
+    check(MapSubsystem != nullptr) return MapSubsystem->IsJinglePlaying();
 }

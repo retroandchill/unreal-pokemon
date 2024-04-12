@@ -37,7 +37,7 @@ void ASelectableWindowInputTest::TestRun() {
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetRow(4), 1, TEXT("Row for Index 4")))
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetColumn(5), 2, TEXT("Column for Index 5")))
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetRow(5), 1, TEXT("Row for Index 5")))
-    
+
     UInputUtilities::SimulateKeyPress(NewWidget, DownKey);
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetIndex(), 2, TEXT("Index should be 2!")));
 
@@ -78,20 +78,24 @@ void ASelectableWindowInputTest::TestRun() {
 
     NewWidget->SetActive(true);
     TEST_ASSERT(AssertTrue(NewWidget->IsActive(), TEXT("If the widget is active we shouldn't change states.")))
-    
+
     NewWidget->GetOnCancel().AddDynamic(this, &ASelectableWindowInputTest::OnCancel);
     UInputUtilities::SimulateKeyPress(NewWidget, CancelKey);
     TEST_ASSERT(AssertTrue(bCanceled, TEXT("Cancel should be called!")))
 
     NewWidget->Deselect();
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetIndex(), -1, TEXT("Deselection should be index -1")))
-    
+
     NewWidget->Deselect();
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetIndex(), -1, TEXT("Deselection should be index -1")))
-    
+
     FinishTest(EFunctionalTestResult::Succeeded, TEXT("Test passed!"));
 }
 
-void ASelectableWindowInputTest::OnConfirm(int32 Index) { NewIndex.Emplace(Index); }
+void ASelectableWindowInputTest::OnConfirm(int32 Index) {
+    NewIndex.Emplace(Index);
+}
 
-void ASelectableWindowInputTest::OnCancel() { bCanceled = true; }
+void ASelectableWindowInputTest::OnCancel() {
+    bCanceled = true;
+}

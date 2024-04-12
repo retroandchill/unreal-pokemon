@@ -4,9 +4,13 @@
 
 #include "IAutomationDriverModule.h"
 
-FAutomationDriverHandler::FAutomationDriverHandler() { IAutomationDriverModule::Get().Enable(); }
+FAutomationDriverHandler::FAutomationDriverHandler() {
+    IAutomationDriverModule::Get().Enable();
+}
 
-FAutomationDriverHandler::~FAutomationDriverHandler() { IAutomationDriverModule::Get().Disable(); }
+FAutomationDriverHandler::~FAutomationDriverHandler() {
+    IAutomationDriverModule::Get().Disable();
+}
 
 FAutomationDriverPtr FAutomationDriverHandler::CreateDriver() const {
     return IAutomationDriverModule::Get().CreateDriver();

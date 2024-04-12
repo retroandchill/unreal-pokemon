@@ -10,9 +10,13 @@
 #include "Windows/PokemonSelectionPane.h"
 #include "Windows/SelectableWidget.h"
 
-void UPokemonPanel::SetOwner(USelectableWidget *NewOwner) { Owner = NewOwner; }
+void UPokemonPanel::SetOwner(USelectableWidget *NewOwner) {
+    Owner = NewOwner;
+}
 
-const TScriptInterface<IPokemon> &UPokemonPanel::GetPokemon() const { return Pokemon; }
+const TScriptInterface<IPokemon> &UPokemonPanel::GetPokemon() const {
+    return Pokemon;
+}
 
 void UPokemonPanel::SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Index) {
     Pokemon = NewPokemon;
@@ -20,13 +24,21 @@ void UPokemonPanel::SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Inde
     Refresh();
 }
 
-void UPokemonPanel::SwapPokemon(UPokemonPanel &Other) { Swap(Pokemon, Other.Pokemon); }
+void UPokemonPanel::SwapPokemon(UPokemonPanel &Other) {
+    Swap(Pokemon, Other.Pokemon);
+}
 
-bool UPokemonPanel::IsActive() const { return GetOptionIndex() == 0; }
+bool UPokemonPanel::IsActive() const {
+    return GetOptionIndex() == 0;
+}
 
-bool UPokemonPanel::IsPokemonFainted() const { return Pokemon != nullptr ? Pokemon->IsFainted() : false; }
+bool UPokemonPanel::IsPokemonFainted() const {
+    return Pokemon != nullptr ? Pokemon->IsFainted() : false;
+}
 
-bool UPokemonPanel::IsPanelSelected() const { return Owner != nullptr && Owner->GetIndex() == GetOptionIndex(); }
+bool UPokemonPanel::IsPanelSelected() const {
+    return Owner != nullptr && Owner->GetIndex() == GetOptionIndex();
+}
 
 bool UPokemonPanel::IsSwapping() const {
     auto SelectionPane = Cast<UPokemonSelectionPane>(Owner);
@@ -51,8 +63,7 @@ void UPokemonPanel::Refresh() {
         RefreshPokemonInfo();
 
         auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-        check(GraphicsLoadingSubsystem != nullptr)
-PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+        check(GraphicsLoadingSubsystem != nullptr) PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
         PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon, this));
     } else {
         PokemonIcon->SetVisibility(ESlateVisibility::Collapsed);
@@ -62,7 +73,7 @@ PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 void UPokemonPanel::RefreshPokemonInfo() {
     UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
     UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
-    
+
     using enum EPokemonGender;
     auto Gender = Pokemon->GetGender();
     switch (Gender) {
@@ -87,5 +98,6 @@ void UPokemonPanel::RefreshPokemonInfo() {
                                      {TEXT("MaxHP"), UPokemonUIUtils::SpacePad(Pokemon->GetMaxHP(), 3)}}));
 
     UPokemonUIUtils::SetItemText(HPText, HP);
-    UPokemonUIUtils::SetBarValues(HPBar, static_cast<float>(Pokemon->GetCurrentHP()), static_cast<float>(Pokemon->GetMaxHP()));
+    UPokemonUIUtils::SetBarValues(HPBar, static_cast<float>(Pokemon->GetCurrentHP()),
+                                  static_cast<float>(Pokemon->GetMaxHP()));
 }

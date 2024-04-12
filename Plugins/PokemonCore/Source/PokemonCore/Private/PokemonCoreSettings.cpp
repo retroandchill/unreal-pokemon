@@ -5,10 +5,18 @@
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
-FName UPokemonCoreSettings::GetHPStat() const { return HPStat; }
+FName UPokemonCoreSettings::GetHPStat() const {
+    return HPStat;
+}
 
-int32 UPokemonCoreSettings::GetMaxPartySize() const { return MaxPartySize; }
+int32 UPokemonCoreSettings::GetMaxPartySize() const {
+    return MaxPartySize;
+}
 
-TSubclassOf<UObject> UPokemonCoreSettings::GetPokemonClass() const { return PokemonClass; }
+TSubclassOf<UObject> UPokemonCoreSettings::GetPokemonClass() const {
+    return PokemonClass;
+}
 
-TSubclassOf<UObject> UPokemonCoreSettings::GetStatBlockClass() const { return StatBlockClass; }
+TSubclassOf<UObject> UPokemonCoreSettings::GetStatBlockClass() const {
+    return StatBlockClass;
+}

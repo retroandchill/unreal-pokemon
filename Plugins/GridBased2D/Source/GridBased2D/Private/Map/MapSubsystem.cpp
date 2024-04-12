@@ -12,12 +12,12 @@
 
 DECLARE_DELEGATE(FLoadFinalized)
 
-UMapSubsystem::UMapSubsystem(const FObjectInitializer &) {}
+UMapSubsystem::UMapSubsystem(const FObjectInitializer &) {
+}
 
 void UMapSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
     if (BGM == nullptr) {
-        UE_LOG(LogBlueprint, Warning,
-               TEXT("Trying to play null for background music! Please specify an actual asset!"))
+        UE_LOG(LogBlueprint, Warning, TEXT("Trying to play null for background music! Please specify an actual asset!"))
         return;
     }
 

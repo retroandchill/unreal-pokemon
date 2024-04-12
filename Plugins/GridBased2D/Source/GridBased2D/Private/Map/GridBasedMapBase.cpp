@@ -31,8 +31,7 @@ FIntRect AGridBasedMapBase::GetBounds() const {
 
 bool AGridBasedMapBase::IsObjectInMap(TScriptInterface<IGridMovable> Object) const {
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Object.GetObject());
-    check(MovementComponent != nullptr)
-return IsPositionInMap(MovementComponent->GetCurrentPosition());
+    check(MovementComponent != nullptr) return IsPositionInMap(MovementComponent->GetCurrentPosition());
 }
 
 bool AGridBasedMapBase::IsPositionInMap(const FIntVector2 &Position) const {
@@ -53,4 +52,6 @@ void AGridBasedMapBase::RemoveCharacter(const TScriptInterface<IGridMovable> &Ch
     Characters.Remove(Character);
 }
 
-void AGridBasedMapBase::OnPlayerEnter() { UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic); }
+void AGridBasedMapBase::OnPlayerEnter() {
+    UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
+}

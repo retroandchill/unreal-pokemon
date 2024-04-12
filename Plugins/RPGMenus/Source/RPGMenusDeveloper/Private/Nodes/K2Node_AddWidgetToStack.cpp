@@ -93,7 +93,9 @@ FText UK2Node_AddWidgetToStack::GetMenuCategory() const {
     return FEditorCategoryUtils::GetCommonCategory(FCommonEditorCategory::UserInterface);
 }
 
-FName UK2Node_AddWidgetToStack::GetCornerIcon() const { return TEXT("Graph.Replication.ClientEvent"); }
+FName UK2Node_AddWidgetToStack::GetCornerIcon() const {
+    return TEXT("Graph.Replication.ClientEvent");
+}
 
 FText UK2Node_AddWidgetToStack::GetBaseNodeTitle() const {
     return NSLOCTEXT("UK2Node_AddWidgetToStack", "AddWidgetToStack_BaseTitle", "Add Screen to Stack");
@@ -107,4 +109,6 @@ FText UK2Node_AddWidgetToStack::GetDefaultNodeTitle() const {
     return NSLOCTEXT("UK2Node_AddWidgetToStack", "AddWidgetToStack_DefaultTitle", "Add NONE to Stack");
 }
 
-UClass *UK2Node_AddWidgetToStack::GetClassPinBaseClass() const { return UScreen::StaticClass(); }
+UClass *UK2Node_AddWidgetToStack::GetClassPinBaseClass() const {
+    return UScreen::StaticClass();
+}

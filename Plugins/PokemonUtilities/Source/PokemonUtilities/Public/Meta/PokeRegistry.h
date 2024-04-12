@@ -32,8 +32,7 @@ template <typename Ptr, typename... Args> class TPokeRegistry {
      * @return A unique reference to the factory instance
      */
     Ptr Construct(FName Key, Args... Arguments) const {
-        check(RegisteredConstructors.Contains(Key))
-return RegisteredConstructors[Key](Arguments...);
+        check(RegisteredConstructors.Contains(Key)) return RegisteredConstructors[Key](Arguments...);
     }
 
     /**
@@ -41,7 +40,9 @@ return RegisteredConstructors[Key](Arguments...);
      * @param Key The for the type in question
      * @return Is the type registered?
      */
-    bool IsTypeRegistered(FName Key) const { return RegisteredConstructors.Contains(Key); }
+    bool IsTypeRegistered(FName Key) const {
+        return RegisteredConstructors.Contains(Key);
+    }
 
     /**
      * Get the list of all registered types for this registry.

@@ -16,11 +16,17 @@ void UShadowedText::OnTextSet_Implementation(const FText &Text) {
     SetShadowText(Shadow3, Text);
 }
 
-UTextBlock *UShadowedText::GetShadow1() const { return Shadow1; }
+UTextBlock *UShadowedText::GetShadow1() const {
+    return Shadow1;
+}
 
-UTextBlock *UShadowedText::GetShadow2() const { return Shadow2; }
+UTextBlock *UShadowedText::GetShadow2() const {
+    return Shadow2;
+}
 
-UTextBlock *UShadowedText::GetShadow3() const { return Shadow3; }
+UTextBlock *UShadowedText::GetShadow3() const {
+    return Shadow3;
+}
 
 void UShadowedText::SetShadowColor(const FSlateColor &Color) {
     ShadowColor = Color;
@@ -38,6 +44,5 @@ void UShadowedText::SetShadowTextAndFont(UTextBlock *Shadow) {
 }
 
 void UShadowedText::SetShadowText(UTextBlock *Shadow, const FText &Text) {
-    check(Shadow != nullptr)
-Shadow->SetText(Text);
+    check(Shadow != nullptr) Shadow->SetText(Text);
 }

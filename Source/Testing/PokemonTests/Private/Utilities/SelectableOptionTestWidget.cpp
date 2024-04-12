@@ -16,8 +16,10 @@ void USelectableOptionTestWidget::CreateChildWidgets() {
     }
 }
 
-int32 USelectableOptionTestWidget::GetItemCount_Implementation() const { 
+int32 USelectableOptionTestWidget::GetItemCount_Implementation() const {
     return Options.Num();
 }
 
-const TArray<TObjectPtr<USelectableOption>> &USelectableOptionTestWidget::GetOptions() const { return Options; }
+const TArray<TObjectPtr<USelectableOption>> &USelectableOptionTestWidget::GetOptions() const {
+    return Options;
+}

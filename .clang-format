@@ -6,3 +6,16 @@ MaxEmptyLinesToKeep: 1
 TabWidth: 4
 IndentWidth: 4
 SortIncludes: false
+AllowShortFunctionsOnASingleLine: false
+IncludeBlocks: Regroup
+IncludeCategories:
+    - Regex: 'CoreMinimal.h'
+      Priority: 0
+      SortPriority: 0
+      CaseSensitive: false
+    - Regex:           '.*.generated.h'
+      Priority:        1000
+      SortPriority:    0
+    - Regex:           '.*'
+      Priority:        1
+      SortPriority:    0

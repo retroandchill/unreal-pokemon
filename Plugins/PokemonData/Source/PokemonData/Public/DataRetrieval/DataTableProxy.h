@@ -13,17 +13,28 @@ template <typename T>
     requires std::is_base_of_v<FTableRowBase, T>
 class POKEMONDATA_API TDataTableProxy final : public IGameData {
   public:
-    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(MakeUniqueRoot(DataTable)) {}
+    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(MakeUniqueRoot(DataTable)) {
+    }
 
-    UScriptStruct *GetStructType() const override { return T::StaticStruct(); }
+    UScriptStruct *GetStructType() const override {
+        return T::StaticStruct();
+    }
 
-    T *GetData(FName ID) const override { return DataTable->FindRow<T>(ID, TEXT("Find row!")); }
+    T *GetData(FName ID) const override {
+        return DataTable->FindRow<T>(ID, TEXT("Find row!"));
+    }
 
-    TArray<FName> GetTableRowNames() const override { return DataTable->GetRowNames(); }
+    TArray<FName> GetTableRowNames() const override {
+        return DataTable->GetRowNames();
+    }
 
-    bool IsRowNameValid(FName ID) const override { return GetTableRowNames().Contains(ID); }
+    bool IsRowNameValid(FName ID) const override {
+        return GetTableRowNames().Contains(ID);
+    }
 
-    UDataTable *GetDataTable() const override { return DataTable.Get(); }
+    UDataTable *GetDataTable() const override {
+        return DataTable.Get();
+    }
 
     /**
      * Iterate through the data table's rows and execute the callback on each entry

@@ -27,7 +27,7 @@ class GRIDBASED2D_API AInteractableActor : public AActor, public IInteractable {
      */
     UPROPERTY(BlueprintAssignable, Category = Interaction)
     FOnPlayerInteraction Interact;
-    
+
     /**
      * The types of interaction that are allowed for this actor
      */

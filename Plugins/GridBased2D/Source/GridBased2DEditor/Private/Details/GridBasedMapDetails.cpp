@@ -4,7 +4,9 @@
 
 #include "DetailLayoutBuilder.h"
 
-TSharedRef<IDetailCustomization> FGridBasedMapDetails::MakeInstance() { return MakeShared<FGridBasedMapDetails>(); }
+TSharedRef<IDetailCustomization> FGridBasedMapDetails::MakeInstance() {
+    return MakeShared<FGridBasedMapDetails>();
+}
 
 void FGridBasedMapDetails::CustomizeDetails(IDetailLayoutBuilder &DetailBuilder) {
     DetailBuilder.EditCategory("Tile Map", FText::GetEmpty(), ECategoryPriority::Important);

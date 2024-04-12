@@ -2,4 +2,6 @@
 
 #include "TileReplacerSettings.h"
 
-const FSoftObjectPath &UTileReplacerSettings::GetTileReplacementsTable() const { return TileReplacementsTable; }
+const FSoftObjectPath &UTileReplacerSettings::GetTileReplacementsTable() const {
+    return TileReplacementsTable;
+}

@@ -7,4 +7,6 @@ void AInteractableActor::OnInteract_Implementation(const TScriptInterface<IGridM
     Interact.Broadcast(InteractionType);
 }
 
-uint8 AInteractableActor::GetInteractionTypes() const { return InteractionTypes; }
+uint8 AInteractableActor::GetInteractionTypes() const {
+    return InteractionTypes;
+}

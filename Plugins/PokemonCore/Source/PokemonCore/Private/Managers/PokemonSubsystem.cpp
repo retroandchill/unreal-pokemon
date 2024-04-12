@@ -33,10 +33,13 @@ void UPokemonSubsystem::Deinitialize() {
     Instance = nullptr;
 }
 
-UPokemonSubsystem &UPokemonSubsystem::GetInstance() { check(Instance != nullptr)
-return *Instance; }
+UPokemonSubsystem &UPokemonSubsystem::GetInstance() {
+    check(Instance != nullptr) return *Instance;
+}
 
-bool UPokemonSubsystem::Exists() { return Instance != nullptr; }
+bool UPokemonSubsystem::Exists() {
+    return Instance != nullptr;
+}
 
 void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
@@ -46,15 +49,22 @@ void UPokemonSubsystem::StartNewGame() {
     PlayerMetadata->StartNewGame();
 }
 
-FName UPokemonSubsystem::GetHPStat() const { return HPStat; }
+FName UPokemonSubsystem::GetHPStat() const {
+    return HPStat;
+}
 
-int32 UPokemonSubsystem::GetMaxPartySize() const { return MaxPartySize; }
+int32 UPokemonSubsystem::GetMaxPartySize() const {
+    return MaxPartySize;
+}
 
-const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const { return Player; }
+const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
+    return Player;
+}
 
-UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const { return PlayerMetadata; }
+UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const {
+    return PlayerMetadata;
+}
 
 const Exp::IGrowthRate &UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const {
-    check(GrowthRates.Contains(GrowthRate))
-    return *GrowthRates[GrowthRate];
+    check(GrowthRates.Contains(GrowthRate)) return *GrowthRates[GrowthRate];
 }

@@ -110,8 +110,7 @@ void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
 }
 
 void UMessageWindow::ClearDisplayText() {
-    check(DisplayTextWidget != nullptr)
-DisplayTextWidget->SetText(FText::FromString(TEXT("")));
+    check(DisplayTextWidget != nullptr) DisplayTextWidget->SetText(FText::FromString(TEXT("")));
     WordToDisplay.Empty();
     FullText.Reset();
 }
@@ -129,17 +128,24 @@ void UMessageWindow::SetPaused(bool bPausedIn) {
     }
 }
 
-bool UMessageWindow::IsAwaitingInput() const { return bPaused; }
+bool UMessageWindow::IsAwaitingInput() const {
+    return bPaused;
+}
 
-FAdvanceText &UMessageWindow::GetOnAdvanceText() { return OnAdvanceText; }
+FAdvanceText &UMessageWindow::GetOnAdvanceText() {
+    return OnAdvanceText;
+}
 
-FDisplayChoices &UMessageWindow::GetOnDisplayChoices() { return OnDisplayChoices; }
+FDisplayChoices &UMessageWindow::GetOnDisplayChoices() {
+    return OnDisplayChoices;
+}
 
 void UMessageWindow::ResizeWindow() {
     if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
         auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y);
         auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
-        SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow) + DisplayTextPadding.Top + DisplayTextPadding.Bottom);
+        SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow) + DisplayTextPadding.Top +
+                                   DisplayTextPadding.Bottom);
     }
 }
 
@@ -197,4 +203,6 @@ void UMessageWindow::QueueIndividualWords(const FString &Line, double TotalTextA
     }
 }
 
-void UMessageWindow::AddNewLine() { QueueText(LINE_TERMINATOR); }
+void UMessageWindow::AddNewLine() {
+    QueueText(LINE_TERMINATOR);
+}
