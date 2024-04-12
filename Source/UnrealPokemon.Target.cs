@@ -7,7 +7,6 @@ public class UnrealPokemonTarget : TargetRules
 	public UnrealPokemonTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
-		bUseUnityBuild = false;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
 		RegisterModulesCreatedByRider();
