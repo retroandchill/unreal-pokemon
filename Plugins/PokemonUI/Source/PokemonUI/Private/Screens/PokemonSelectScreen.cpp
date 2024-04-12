@@ -11,7 +11,8 @@
 
 void UPokemonSelectScreen::NativeConstruct() {
     Super::NativeConstruct();
-    check(SelectionPane != nullptr) SelectionPane->SetIndex(0);
+    check(SelectionPane != nullptr)
+SelectionPane->SetIndex(0);
     SelectionPane->SetActive(true);
     SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
     SelectionPane->OnCancel.AddDynamic(this, &UPokemonSelectScreen::CloseScreen);

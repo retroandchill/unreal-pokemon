@@ -23,7 +23,7 @@ class POKEMONCORE_API UDefaultStatEntry : public UObject, public IStatEntry {
     const FStat &GetStat() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    FName GetStatID() const override;
+    FName GetID() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetIV() const override;

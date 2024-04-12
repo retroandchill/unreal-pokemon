@@ -30,8 +30,7 @@ void UGridBasedMovementComponent::BeginPlay() {
     Position.Y = CurrentPosition.Y * GridSize;
     GetOwner()->SetActorLocation(Position, bPerformSweep);
 
-    auto Pawn = Cast<APawn>(Owner);
-    if (Pawn == nullptr || !Pawn->IsPlayerControlled()) {
+    if (auto Pawn = Cast<APawn>(Owner); Pawn == nullptr || !Pawn->IsPlayerControlled()) {
         return;
     }
     if (auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>();
@@ -92,7 +91,7 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
                                                   TFunction<void()> &&MovementCompleteCallback) {
     if (MoveCallback.IsSet()) {
         UE_LOG(LogBlueprint, Warning, TEXT("The movement timer is already set for character: %s"),
-               *GetOwner()->GetName());
+               *GetOwner()->GetName())
         return;
     }
 
@@ -120,7 +119,7 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
     }
 
     UPrimitiveComponent *BlockingComponent = nullptr;
-    for (auto Results = HitTestOnFacingTile(MovementDirection); auto &Result : Results) {
+    for (auto Results = HitTestOnFacingTile(MovementDirection); const auto &Result : Results) {
         if (Result.bBlockingHit) {
             Ret.bCanMove = false;
             BlockingComponent = Result.GetComponent();
@@ -196,14 +195,13 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
     return Result;
 }
 
-void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) {
-    auto Owner = GetOwner<APawn>();
-    if (Owner == nullptr || !Owner->IsPlayerControlled()) {
+void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {
+    if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled()) {
         return;
     }
 
     for (auto &Interactable : Interactables) {
-        if ((Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Hit)) == 0)
+        if ((static_cast<std::byte>(Interactable->GetInteractionTypes()) & static_cast<std::byte>(EInteractionType::Hit)) == static_cast<std::byte>(0))
             continue;
         IInteractable::Execute_OnInteract(Interactable.GetObject(), GetOwner(), EInteractionType::Hit);
     }
@@ -275,8 +273,9 @@ void UGridBasedMovementComponent::MoveComplete() {
         Callback();
     }
 
-    auto MapSubsystem = GetOwner()->GetGameInstance()->GetSubsystem<UMapSubsystem>();
-    check(MapSubsystem != nullptr) auto Owner = GetOwner();
+    auto Owner = GetOwner();
+    auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>();
+    check(MapSubsystem != nullptr)
     check(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
         MapSubsystem->UpdateCharacterMapPosition(Owner);
 }

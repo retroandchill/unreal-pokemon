@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GridBased2DSettings.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MapSubsystem.generated.h"
 
@@ -93,7 +94,7 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      * @param Y The Y coordinate of the map to warp to
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Retain Direction)", Category = "Maps|Warping")
-    void WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y);
+    void WarpToMap(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y);
 
     /**
      * Warp to the given map name and coordinates
@@ -103,7 +104,7 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      * @param Direction The direction the character should be facing after the warp
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Change Direction)", Category = "Maps|Warping")
-    void WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y, EFacingDirection Direction);
+    void WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y, EFacingDirection Direction);
 
     /**
      * Set the location of the player in the world if there is a valid warp destination
@@ -115,7 +116,7 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      * Update what map the player is considered to be a part of
      * @param Movable The movement object in question
      */
-    void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable);
+    void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const;
 
   private:
     /**
@@ -150,7 +151,7 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
     /**
      * The offset of a dynamically loaded level
      */
-    FVector DynamicLevelOffset;
+    FVector DynamicLevelOffset = GetDefault<UGridBased2DSettings>()->GetDynamicLevelOffset();
 
     /**
      * The dynamically streamed in level

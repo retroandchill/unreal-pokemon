@@ -9,7 +9,7 @@ AGamePlayerStart::AGamePlayerStart(const FObjectInitializer &ObjectInitializer) 
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
-    float Radius = UGridUtils::GetDefaultGridSize() / 2;
+    float Radius = static_cast<float>(UGridUtils::GetDefaultGridSize()) / 2;
     auto Capsule = GetCapsuleComponent();
     Capsule->SetCapsuleRadius(Radius);
     Capsule->SetCapsuleHalfHeight(Radius);

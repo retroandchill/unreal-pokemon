@@ -32,7 +32,8 @@ void UDisplayText::SetTextInfo() {
     }
 }
 
-FText UDisplayText::GetText() const { check(DisplayTextWidget != nullptr) return DisplayTextWidget->GetText(); }
+FText UDisplayText::GetText() const { check(DisplayTextWidget != nullptr)
+return DisplayTextWidget->GetText(); }
 
 void UDisplayText::SetText(const FText &NewText) {
     InitialText = NewText;
@@ -53,11 +54,13 @@ const FSlateFontInfo &UDisplayText::GetDisplayFont() const { return DisplayFont;
 void UDisplayText::SetTextColor(const FSlateColor &Color) {
     TextColor = Color;
 
-    check(DisplayTextWidget != nullptr) DisplayTextWidget->SetColorAndOpacity(TextColor);
+    check(DisplayTextWidget != nullptr)
+DisplayTextWidget->SetColorAndOpacity(TextColor);
 }
 
 FVector2D UDisplayText::GetTextSize() const {
-    check(DisplayTextWidget != nullptr) return GetTextSize(DisplayTextWidget->GetText().ToString());
+    check(DisplayTextWidget != nullptr)
+return GetTextSize(DisplayTextWidget->GetText().ToString());
 }
 
 FVector2D UDisplayText::GetTextSize(const FString &Text) const {
@@ -68,7 +71,8 @@ FVector2D UDisplayText::GetTextSize(const FString &Text) const {
 }
 
 FVector2D UDisplayText::GetTotalTextAreaSize() const {
-    check(DisplayTextWidget != nullptr) return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
+    check(DisplayTextWidget != nullptr)
+return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
 }
 
 void UDisplayText::OnTextSet_Implementation(const FText &Text) {

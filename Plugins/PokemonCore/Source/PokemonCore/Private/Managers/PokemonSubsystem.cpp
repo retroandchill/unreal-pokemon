@@ -33,7 +33,8 @@ void UPokemonSubsystem::Deinitialize() {
     Instance = nullptr;
 }
 
-UPokemonSubsystem &UPokemonSubsystem::GetInstance() { check(Instance != nullptr) return *Instance; }
+UPokemonSubsystem &UPokemonSubsystem::GetInstance() { check(Instance != nullptr)
+return *Instance; }
 
 bool UPokemonSubsystem::Exists() { return Instance != nullptr; }
 
@@ -54,6 +55,6 @@ const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const { return 
 UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const { return PlayerMetadata; }
 
 const Exp::IGrowthRate &UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const {
-    check(GrowthRates.Contains(GrowthRate));
+    check(GrowthRates.Contains(GrowthRate))
     return *GrowthRates[GrowthRate];
 }

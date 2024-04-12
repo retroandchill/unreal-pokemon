@@ -1,9 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "DataRetrieval/DataUtilities.h"
 
-void UDataUtilities::GetData(const UScriptStruct *StructType, FName RowName,
-                             FTableRowBase &OutRow){// We should never hit this!  stubs to avoid NoExport on the class.
-                                                    check(false)}
+void UDataUtilities::GetData(const UScriptStruct *, FName,FTableRowBase &) {
+    // We should never hit this!  stubs to avoid NoExport on the class.
+    check(false)
+}
 
 TArray<FName> UDataUtilities::GetAllDataIDs(const UScriptStruct *StructType) {
     return FDataManager::GetInstance().GetDataTable(StructType).GetTableRowNames();

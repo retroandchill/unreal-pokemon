@@ -14,7 +14,7 @@ void UPlayerMetadata::Tick(float DeltaTime) {
     }
 }
 
-TStatId UPlayerMetadata::GetStatId() const { RETURN_QUICK_DECLARE_CYCLE_STAT(UPlayerMetadata, STATGROUP_Tickables); }
+TStatId UPlayerMetadata::GetStatId() const { RETURN_QUICK_DECLARE_CYCLE_STAT(UPlayerMetadata, STATGROUP_Tickables) }
 
 UWorld *UPlayerMetadata::GetTickableGameObjectWorld() const { return GetWorld(); }
 

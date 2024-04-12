@@ -19,7 +19,8 @@ const FTrainerType &UBasicTrainer::GetTrainerType() const {
     auto &TrainerTypeTable = DataManager.GetDataTable<FTrainerType>();
 
     auto TrainerTypeData = TrainerTypeTable.GetData(TrainerType);
-    check(TrainerTypeData != nullptr) return *TrainerTypeData;
+    check(TrainerTypeData != nullptr)
+return *TrainerTypeData;
 }
 
 FText UBasicTrainer::GetTrainerName() const { return Name; }

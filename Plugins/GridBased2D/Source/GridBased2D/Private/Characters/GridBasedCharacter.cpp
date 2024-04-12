@@ -145,10 +145,11 @@ void AGridBasedCharacter::Turn(const FInputActionInstance &Input) {
 
 void AGridBasedCharacter::Interact() {
     for (auto Results = GridBasedMovementComponent->HitTestOnFacingTile(GridBasedMovementComponent->GetDirection());
-         auto &Result : Results) {
+         const auto &Result : Results) {
         if (auto Interactable = Cast<IInteractable>(Result.GetActor());
             Interactable == nullptr ||
-            (Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Talk)) == 0)
+            (static_cast<std::byte>(Interactable->GetInteractionTypes()) &
+                                        static_cast<std::byte>(EInteractionType::Talk)) == static_cast<std::byte>(0))
             continue;
 
         Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);

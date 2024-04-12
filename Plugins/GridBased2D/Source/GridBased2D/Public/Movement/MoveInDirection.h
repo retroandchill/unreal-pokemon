@@ -23,13 +23,7 @@ UCLASS(meta = (HideThen))
 class GRIDBASED2D_API UMoveInDirection : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-  public:
-    /**
-     * Called when the movement is finished
-     */
-    UPROPERTY(BlueprintAssignable)
-    FOnMovementFinished OnMovementFinished;
-
+public:
     /**
      * Display a message to the player and call the following after the a choice as been selected
      * @param Character The character to move
@@ -43,6 +37,12 @@ class GRIDBASED2D_API UMoveInDirection : public UBlueprintAsyncActionBase {
     void Activate() override;
 
   private:
+    /**
+     * Called when the movement is finished
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnMovementFinished OnMovementFinished;
+    
     /**
      * The class used to display the message to the screen
      */

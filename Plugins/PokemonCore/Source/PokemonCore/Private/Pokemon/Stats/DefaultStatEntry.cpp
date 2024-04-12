@@ -22,7 +22,7 @@ const FStat &UDefaultStatEntry::GetStat() const {
         return *Stat;
 }
 
-FName UDefaultStatEntry::GetStatID() const { return StatID; }
+FName UDefaultStatEntry::GetID() const { return StatID; }
 
 int32 UDefaultStatEntry::GetIV() const { return IV; }
 

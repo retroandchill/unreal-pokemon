@@ -67,7 +67,7 @@ class POKEMONCORE_API IStatBlock {
      * Iterate over the stats performing the given predicate
      * @param Predicate The function to perform on each iteration
      */
-    virtual void ForEachStat(TFunctionRef<void(FName, const IStatEntry &)> Predicate) const = 0;
+    virtual void ForEachStat(const TFunctionRef<void(FName, const IStatEntry &)> &Predicate) const = 0;
 
     /**
      * Calculate the stats of the given Pokémon in question

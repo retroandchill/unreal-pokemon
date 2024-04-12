@@ -68,7 +68,7 @@ FIntRect AGridBasedMap::GetBounds() const {
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
-    UPaperTileMap *TileMap = TileMapComponent->TileMap;
+    const UPaperTileMap *TileMap = TileMapComponent->TileMap;
     if (TileMap == nullptr) {
         return;
     }

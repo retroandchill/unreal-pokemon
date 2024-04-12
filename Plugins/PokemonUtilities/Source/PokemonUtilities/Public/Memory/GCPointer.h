@@ -62,7 +62,8 @@ class TGCPointer : public FGCObject {
      * Dereferences the held object returning it by reference
      * @return The object held by this pointer
      */
-    T &operator*() const { check(HeldObject != nullptr) return *HeldObject; }
+    T &operator*() const { check(HeldObject != nullptr)
+return *HeldObject; }
 
     /**
      * Dereferences the held object returning it by reference

@@ -32,7 +32,8 @@ template <typename Ptr, typename... Args> class TPokeRegistry {
      * @return A unique reference to the factory instance
      */
     Ptr Construct(FName Key, Args... Arguments) const {
-        check(RegisteredConstructors.Contains(Key)) return RegisteredConstructors[Key](Arguments...);
+        check(RegisteredConstructors.Contains(Key))
+return RegisteredConstructors[Key](Arguments...);
     }
 
     /**

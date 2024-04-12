@@ -12,7 +12,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
     using enum EPokemonGender;
 
     auto PokemonSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>();
-    check(PokemonSubsystem != nullptr);
+    check(PokemonSubsystem != nullptr)
 
     auto Player = PokemonSubsystem->GetPlayer();
     Player->ClearParty();

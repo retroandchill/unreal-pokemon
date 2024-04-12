@@ -21,13 +21,13 @@ class GRIDBASED2D_API AInteractableActor : public AActor, public IInteractable {
     UFUNCTION(BlueprintPure, Category = "Interaction")
     uint8 GetInteractionTypes() const override;
 
+  private:
     /**
      * Called when the player interacts with this object
      */
     UPROPERTY(BlueprintAssignable, Category = Interaction)
     FOnPlayerInteraction Interact;
-
-  private:
+    
     /**
      * The types of interaction that are allowed for this actor
      */

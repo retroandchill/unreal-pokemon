@@ -108,7 +108,7 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
      */
     template <typename T>
     static void AddAllDataTableTypesToMenu(UClass *ActionKey, FBlueprintActionDatabaseRegistrar &ActionRegistrar) {
-        auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+        const auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
         TArray<FAssetData> AssetData;
         AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()),
                                                    AssetData);

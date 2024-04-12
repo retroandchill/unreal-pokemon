@@ -38,5 +38,6 @@ void UShadowedText::SetShadowTextAndFont(UTextBlock *Shadow) {
 }
 
 void UShadowedText::SetShadowText(UTextBlock *Shadow, const FText &Text) {
-    check(Shadow != nullptr) Shadow->SetText(Text);
+    check(Shadow != nullptr)
+Shadow->SetText(Text);
 }

@@ -13,4 +13,5 @@ class GRIDBASED2DEDITOR_API FGridBasedBillboardCharacterDetails : public IDetail
     static TSharedRef<IDetailCustomization> MakeInstance();
 
     void CustomizeDetails(IDetailLayoutBuilder &DetailBuilder) override;
+    void CustomizeDetails(const TSharedPtr<IDetailLayoutBuilder> &DetailBuilder) override;
 };
