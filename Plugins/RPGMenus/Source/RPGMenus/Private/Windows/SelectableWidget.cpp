@@ -57,6 +57,10 @@ void USelectableWidget::SetActive(bool bNewActiveState) {
     OnActiveChanged(bActive);
 }
 
+FProcessConfirm &USelectableWidget::GetOnConfirm() { return OnConfirm; }
+
+FProcessCancel &USelectableWidget::GetOnCancel() { return OnCancel; }
+
 void USelectableWidget::NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) {
     Super::NativeOnRemovedFromFocusPath(InFocusEvent);
 

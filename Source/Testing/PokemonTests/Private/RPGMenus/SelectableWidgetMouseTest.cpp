@@ -21,7 +21,7 @@ void ASelectableWidgetMouseTest::TestRun() {
     TEST_ASSERT(AssertIsValid(NewWidget, TEXT("Widget should get created should be valid!")))
     NewWidget->CreateChildWidgets();
     NewWidget->AddToViewport();
-    NewWidget->OnConfirm.AddDynamic(this, &ASelectableWidgetMouseTest::HandledConfirm);
+    NewWidget->GetOnConfirm().AddDynamic(this, &ASelectableWidgetMouseTest::HandledConfirm);
 
     auto &Options = NewWidget->GetOptions();
 

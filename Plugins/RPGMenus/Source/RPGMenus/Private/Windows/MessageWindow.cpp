@@ -131,6 +131,10 @@ void UMessageWindow::SetPaused(bool bPausedIn) {
 
 bool UMessageWindow::IsAwaitingInput() const { return bPaused; }
 
+FAdvanceText &UMessageWindow::GetOnAdvanceText() { return OnAdvanceText; }
+
+FDisplayChoices &UMessageWindow::GetOnDisplayChoices() { return OnDisplayChoices; }
+
 void UMessageWindow::ResizeWindow() {
     if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
         auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y);

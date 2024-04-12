@@ -84,6 +84,8 @@ void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands) {
     RebuildWidget();
 }
 
+FProcessCommand &UCommandWindow::GetOnCommandSelected() { return OnCommandSelected; }
+
 void UCommandWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     if (CursorWidget == nullptr)
         return;

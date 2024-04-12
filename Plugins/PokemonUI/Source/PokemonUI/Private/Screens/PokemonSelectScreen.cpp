@@ -14,10 +14,10 @@ void UPokemonSelectScreen::NativeConstruct() {
     check(SelectionPane != nullptr)
 SelectionPane->SetIndex(0);
     SelectionPane->SetActive(true);
-    SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
-    SelectionPane->OnCancel.AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
-    CommandWindow->OnCommandSelected.AddDynamic(this, &UPokemonSelectScreen::ProcessCommand);
-    CommandWindow->OnCancel.AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
+    SelectionPane->GetOnConfirm().AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
+    SelectionPane->GetOnCancel().AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
+    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UPokemonSelectScreen::ProcessCommand);
+    CommandWindow->GetOnCancel().AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
     ToggleCommandWindowVisibility(false);
 }
 

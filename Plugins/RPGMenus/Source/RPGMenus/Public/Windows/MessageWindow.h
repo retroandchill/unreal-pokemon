@@ -64,6 +64,20 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
     UFUNCTION(BlueprintPure, CAtegory = "Messages|Input")
     bool IsAwaitingInput() const;
 
+    /**
+     * Get the callback for when the text advances.
+     *
+     * @return The callback for when the text advances.
+     */
+    FAdvanceText &GetOnAdvanceText();
+
+    /**
+     * Get the callback for when choices need to be displayed to the player.
+     *
+     * @return The callback for displaying choices.
+     */
+    FDisplayChoices &GetOnDisplayChoices();
+
   private:
     /**
      * Automatically resize the window to match the desired number of lines

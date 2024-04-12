@@ -67,7 +67,7 @@ void ASelectableWindowInputTest::TestRun() {
     TEST_ASSERT(AssertEqual_Int(NewWidget->GetIndex(), 5, TEXT("Index should be 3!")));
 
     NewWidget->SetActive(false);
-    NewWidget->OnConfirm.AddDynamic(this, &ASelectableWindowInputTest::OnConfirm);
+    NewWidget->GetOnConfirm().AddDynamic(this, &ASelectableWindowInputTest::OnConfirm);
     UInputUtilities::SimulateKeyPress(NewWidget, ConfirmKey);
     TEST_ASSERT(AssertFalse(NewIndex.IsSet(), TEXT("Confirm should not be called!")))
 
@@ -79,7 +79,7 @@ void ASelectableWindowInputTest::TestRun() {
     NewWidget->SetActive(true);
     TEST_ASSERT(AssertTrue(NewWidget->IsActive(), TEXT("If the widget is active we shouldn't change states.")))
     
-    NewWidget->OnCancel.AddDynamic(this, &ASelectableWindowInputTest::OnCancel);
+    NewWidget->GetOnCancel().AddDynamic(this, &ASelectableWindowInputTest::OnCancel);
     UInputUtilities::SimulateKeyPress(NewWidget, CancelKey);
     TEST_ASSERT(AssertTrue(bCanceled, TEXT("Cancel should be called!")))
 

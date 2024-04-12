@@ -59,6 +59,12 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
      */
     void SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands);
 
+    /**
+     * Get the delegate for when a command is selected
+     * @return The delegate for when a command is selected
+     */
+    FProcessCommand &GetOnCommandSelected();
+
   protected:
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
     void ProcessConfirm_Implementation(int32 CurrentIndex) override;

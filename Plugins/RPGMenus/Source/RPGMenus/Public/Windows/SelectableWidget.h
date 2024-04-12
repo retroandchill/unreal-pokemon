@@ -23,7 +23,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProcessConfirm, int32, CurrentIndex
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
 
 /**
- * Widget for a menu that options can be selected from using the cursor
+ * \class USelectableWidget
+ *
+ * \brief A base class for selectable widgets in RPG menus.
  */
 UCLASS(BlueprintType)
 class RPGMENUS_API USelectableWidget : public UUserWidget {
@@ -106,6 +108,24 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      */
     UFUNCTION(BlueprintCallable, Category = Selection)
     void SetActive(bool bNewActiveState);
+
+    /**
+     * @brief Retrieves the reference to the delegate for when the user presses confirm.
+     *
+     * @details This method returns a reference to the FProcessConfirm delegate for when the user presses confirm
+     *          in the SelectableWidget. The delegate can be used to register callback functions to be executed
+     *          when the confirm event occurs.
+     *
+     * @return The reference to the FProcessConfirm delegate for when the user presses confirm.
+     */
+    FProcessConfirm &GetOnConfirm();
+
+    /**
+     * Retrieves the delegate for when the user cancels.
+     *
+     * @return The delegate for when the user cancels.
+     */
+    FProcessCancel &GetOnCancel();
 
   protected:
     void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
