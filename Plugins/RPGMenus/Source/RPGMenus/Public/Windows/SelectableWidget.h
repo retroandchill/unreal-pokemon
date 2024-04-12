@@ -120,6 +120,8 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     FProcessCancel OnCancel;
 
   protected:
+    void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
+    
     FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 
     /**

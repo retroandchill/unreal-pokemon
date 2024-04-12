@@ -57,6 +57,14 @@ void USelectableWidget::SetActive(bool bNewActiveState) {
     OnActiveChanged(bActive);
 }
 
+void USelectableWidget::NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) {
+    Super::NativeOnRemovedFromFocusPath(InFocusEvent);
+
+    if (InFocusEvent.GetCause() == EFocusCause::Mouse && IsActive()) {
+        SetKeyboardFocus();
+    }
+}
+
 FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) {
     if (!IsActive() || InputMappings == nullptr)
         return FReply::Unhandled();
