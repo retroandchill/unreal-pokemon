@@ -22,6 +22,8 @@ void UPokemonSelectionPane::NativeConstruct() {
             auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass, FName(Name));
             NewWidget->SetOwner(this);
             NewWidget->SetPokemon(PlayerParty[i], i);
+            NewWidget->GetOnOptionClicked().AddDynamic(this, &UPokemonSelectionPane::ProcessClickedButton);
+            NewWidget->GetOnOptionHovered().AddDynamic(this, &UPokemonSelectionPane::ProcessHoveredButton);
             auto PanelSlot = ContentsArea->AddChildToCanvas(NewWidget);
             auto [Offsets, Anchors] = GetPanelOffset(i);
             PanelSlot->SetAnchors(Anchors);
@@ -97,6 +99,9 @@ void UPokemonSelectionPane::SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *
 }
 
 void UPokemonSelectionPane::AddAdditionalPanelToOptions(TObjectPtr<UPartySelectCancelPanel> &Panel) {
-    Panel->SetMenuIndex(ActivePanels.Num());
+    Panel->SetOptionIndex(ActivePanels.Num());
+    Panel->Refresh();
+    Panel->GetOnOptionClicked().AddDynamic(this, &UPokemonSelectionPane::ProcessClickedButton);
+    Panel->GetOnOptionHovered().AddDynamic(this, &UPokemonSelectionPane::ProcessHoveredButton);
     ActivePanels.Add(Panel);
 }

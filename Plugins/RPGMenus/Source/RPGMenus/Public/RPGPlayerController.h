@@ -42,12 +42,9 @@ class RPGMENUS_API ARPGPlayerController : public APlayerController {
 
         if (ScreenStack.Num() == 1) {
             SetInputMode(FInputModeUIOnly());
-            SetShowMouseCursor(false);
+            SetShowMouseCursor(true);
         }
         Screen->GiveMenuFocus();
-        bShowMouseCursor = false;
-        bEnableClickEvents = false;
-        bEnableMouseOverEvents = false;
 
         return Screen;
     }

@@ -10,7 +10,7 @@ public class PokemonTests : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core"
+				"Core", "FunctionalTesting", "RPGMenus"
 			}
 		);
 
