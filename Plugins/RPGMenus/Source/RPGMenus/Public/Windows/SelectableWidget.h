@@ -150,8 +150,6 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     UFUNCTION(BlueprintNativeEvent, Category = "Selection|Cancel")
     void ProcessCancel();
 
-    void NativeOnFocusLost(const FFocusEvent &InFocusEvent) override;
-
     /**
      * Process the procedure for handling when the cursor moves
      * @param Direction The direction the cursor should move in

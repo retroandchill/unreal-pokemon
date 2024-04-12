@@ -5,6 +5,8 @@
 #include "SelectableWidget.h"
 #include "CommandWindow.generated.h"
 
+class USelectableOption;
+class UDisplayTextOption;
 class USizeBox;
 class UScrollBox;
 class UCommand;
@@ -67,6 +69,22 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
     void ProcessConfirm_Implementation(int32 CurrentIndex) override;
 
   private:
+    /**
+     * Process the clicked button event for the Command Window
+     *
+     * @param Option The selectable option that was clicked
+     */
+    UFUNCTION()
+    void ProcessClickedButton(USelectableOption* Option);
+
+    /**
+     * Process the hovered button event for the Command Window
+     *
+     * @param Option The selectable option that was hovered
+     */
+    UFUNCTION()
+    void ProcessHoveredButton(USelectableOption* Option);
+    
     /**
      * Get the position of a particular cell in the grid based on the given index.
      * @param TargetIndex The index in question to get the position of.
@@ -136,7 +154,7 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
      * The widget type used for the display text shown to the player
      */
     UPROPERTY(EditAnywhere, Category = Commands)
-    TSubclassOf<UDisplayText> DisplayTextWidgetClass;
+    TSubclassOf<UDisplayTextOption> DisplayTextWidgetClass;
 
     /**
      * The internal list of active commands

@@ -96,14 +96,6 @@ void USelectableWidget::ProcessCancel_Implementation() {
     // No implementation, but we cannot have an abstract method in an Unreal class
 }
 
-void USelectableWidget::NativeOnFocusLost(const FFocusEvent &InFocusEvent) {
-    Super::NativeOnFocusLost(InFocusEvent);
-
-    if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
-        SetKeyboardFocus();
-    }
-}
-
 int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction) {
     int32 NewIndex = GetIndex();
     int32 ItemCount = GetItemCount();

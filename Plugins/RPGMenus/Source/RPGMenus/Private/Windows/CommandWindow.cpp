@@ -10,6 +10,7 @@
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
 #include "Primatives/DisplayText.h"
+#include "Primatives/DisplayTextOption.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {}
 
@@ -109,6 +110,22 @@ void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
     OnCommandSelected.Broadcast(CurrentIndex, CurrentCommand);
 }
 
+void UCommandWindow::ProcessClickedButton(USelectableOption *Option) {
+    if (!IsActive()) {
+        return;
+    }
+
+    ProcessConfirm(Option->GetOptionIndex());
+}
+
+void UCommandWindow::ProcessHoveredButton(USelectableOption *Option) {
+    if (!IsActive()) {
+        return;
+    }
+    
+    SetIndex(Option->GetOptionIndex());
+}
+
 FIntVector2 UCommandWindow::GetCellPosition(int32 TargetIndex) const {
     int32 ColumnCount = GetColumnCount();
     return FIntVector2(TargetIndex % ColumnCount, TargetIndex / ColumnCount);
@@ -129,8 +146,11 @@ void UCommandWindow::AddCommands() {
         if (Command == nullptr || !Command->IsEnabled())
             continue;
 
-        auto TextWidget = WidgetTree->ConstructWidget<UDisplayText>(DisplayTextWidgetClass);
+        auto TextWidget = WidgetTree->ConstructWidget<UDisplayTextOption>(DisplayTextWidgetClass);
+        TextWidget->SetOptionIndex(CommandWidgets.Num());
         TextWidget->SetText(Command->GetText());
+        TextWidget->GetOnOptionClicked().AddDynamic(this, &UCommandWindow::ProcessClickedButton);
+        TextWidget->GetOnOptionHovered().AddDynamic(this, &UCommandWindow::ProcessHoveredButton);
 
         int32 CurrentIndex = ActiveCommands.Num();
         auto Pos = GetCellPosition(CurrentIndex);
