@@ -3,6 +3,7 @@
 
 #include "Data/RPGMenusSettings.h"
 #include "Data/SelectionInputs.h"
+#include "Primatives/SelectableOption.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &ObjectInitializer) : UUserWidget(ObjectInitializer) {
     SetIsFocusable(true);
@@ -56,6 +57,14 @@ void USelectableWidget::SetActive(bool bNewActiveState) {
     OnActiveChanged(bActive);
 }
 
+void USelectableWidget::NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) {
+    Super::NativeOnRemovedFromFocusPath(InFocusEvent);
+
+    if (InFocusEvent.GetCause() == EFocusCause::Mouse && IsActive()) {
+        SetKeyboardFocus();
+    }
+}
+
 FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) {
     if (!IsActive() || InputMappings == nullptr)
         return FReply::Unhandled();
@@ -66,10 +75,8 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKe
         PlaySound(CursorSound);
         ReceiveMoveCursor(CursorDirection.GetValue());
     } else if (InputMappings->IsConfirmInput(Key)) {
-        PlaySound(ConfirmSound);
         int32 CurrentIndex = GetIndex();
-        OnConfirm.Broadcast(CurrentIndex);
-        ProcessConfirm(CurrentIndex);
+        ConfirmOnIndex(CurrentIndex);
     } else if (InputMappings->IsCancelInput(Key)) {
         PlaySound(CancelSound);
         OnCancel.Broadcast();
@@ -77,6 +84,30 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKe
     }
 
     return bHandled ? FReply::Handled() : FReply::Unhandled();
+}
+
+void USelectableWidget::ConfirmOnIndex(int32 CurrentIndex) {
+    PlaySound(ConfirmSound);
+    OnConfirm.Broadcast(CurrentIndex);
+    ProcessConfirm(CurrentIndex);
+}
+
+void USelectableWidget::ProcessClickedButton(USelectableOption *Option) {
+    if (!IsActive()) {
+        return;
+    }
+
+    int32 CurrentIndex = Option->GetOptionIndex();
+    ConfirmOnIndex(CurrentIndex);
+}
+
+void USelectableWidget::ProcessHoveredButton(USelectableOption *Option) {
+    if (!IsActive()) {
+        return;
+    }
+    
+    PlaySound(CursorSound);
+    SetIndex(Option->GetOptionIndex());
 }
 
 void USelectableWidget::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
@@ -94,14 +125,6 @@ void USelectableWidget::ProcessConfirm_Implementation(int32 CurrentIndex) {
 
 void USelectableWidget::ProcessCancel_Implementation() {
     // No implementation, but we cannot have an abstract method in an Unreal class
-}
-
-void USelectableWidget::NativeOnFocusLost(const FFocusEvent &InFocusEvent) {
-    Super::NativeOnFocusLost(InFocusEvent);
-
-    if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
-        SetKeyboardFocus();
-    }
 }
 
 int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction) {

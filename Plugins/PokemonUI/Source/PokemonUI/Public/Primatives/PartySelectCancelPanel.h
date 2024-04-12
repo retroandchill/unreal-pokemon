@@ -4,6 +4,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
+#include "Primatives/SelectableOption.h"
 #include "SelectablePanel.h"
 #include "PartySelectCancelPanel.generated.h"
 
@@ -11,17 +12,11 @@
  * The panel for the cancel options in the window.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPartySelectCancelPanel : public UUserWidget, public ISelectablePanel {
+class POKEMONUI_API UPartySelectCancelPanel : public USelectableOption, public ISelectablePanel {
     GENERATED_BODY()
 
   public:
     void SetOwner(USelectableWidget *NewOwner) override;
-
-    /**
-     * Set the index of this panel.
-     * @param Index The index in the selection pane this panel represents
-     */
-    void SetMenuIndex(int32 Index);
 
     /**
      * Returns if this panel represents the current index of the selection
@@ -44,9 +39,4 @@ class POKEMONUI_API UPartySelectCancelPanel : public UUserWidget, public ISelect
      * The panel class that owns this one
      */
     TObjectPtr<USelectableWidget> Owner;
-
-    /**
-     * The index of this particular panel
-     */
-    int32 MenuIndex;
 };

@@ -10,6 +10,7 @@
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
 #include "Primatives/DisplayText.h"
+#include "Primatives/DisplayTextOption.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {}
 
@@ -129,8 +130,11 @@ void UCommandWindow::AddCommands() {
         if (Command == nullptr || !Command->IsEnabled())
             continue;
 
-        auto TextWidget = WidgetTree->ConstructWidget<UDisplayText>(DisplayTextWidgetClass);
+        auto TextWidget = WidgetTree->ConstructWidget<UDisplayTextOption>(DisplayTextWidgetClass);
+        TextWidget->SetOptionIndex(CommandWidgets.Num());
         TextWidget->SetText(Command->GetText());
+        TextWidget->GetOnOptionClicked().AddDynamic(this, &UCommandWindow::ProcessClickedButton);
+        TextWidget->GetOnOptionHovered().AddDynamic(this, &UCommandWindow::ProcessHoveredButton);
 
         int32 CurrentIndex = ActiveCommands.Num();
         auto Pos = GetCellPosition(CurrentIndex);

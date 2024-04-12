@@ -16,17 +16,17 @@ const TScriptInterface<IPokemon> &UPokemonPanel::GetPokemon() const { return Pok
 
 void UPokemonPanel::SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Index) {
     Pokemon = NewPokemon;
-    MenuIndex = Index;
+    SetOptionIndex(Index);
     Refresh();
 }
 
 void UPokemonPanel::SwapPokemon(UPokemonPanel &Other) { Swap(Pokemon, Other.Pokemon); }
 
-bool UPokemonPanel::IsActive() const { return MenuIndex == 0; }
+bool UPokemonPanel::IsActive() const { return GetOptionIndex() == 0; }
 
 bool UPokemonPanel::IsPokemonFainted() const { return Pokemon != nullptr ? Pokemon->IsFainted() : false; }
 
-bool UPokemonPanel::IsPanelSelected() const { return Owner != nullptr && Owner->GetIndex() == MenuIndex; }
+bool UPokemonPanel::IsPanelSelected() const { return Owner != nullptr && Owner->GetIndex() == GetOptionIndex(); }
 
 bool UPokemonPanel::IsSwapping() const {
     auto SelectionPane = Cast<UPokemonSelectionPane>(Owner);
@@ -42,7 +42,7 @@ bool UPokemonPanel::IsPreselected() const {
         return false;
 
     auto &SwitchingIndex = SelectionPane->GetSwitchingIndex();
-    return SwitchingIndex.Get(-1) == MenuIndex;
+    return SwitchingIndex.Get(-1) == GetOptionIndex();
 }
 
 void UPokemonPanel::Refresh() {

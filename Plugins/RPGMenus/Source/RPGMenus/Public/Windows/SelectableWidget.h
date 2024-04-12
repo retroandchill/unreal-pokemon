@@ -4,9 +4,9 @@
 #include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
 #include "Data/CursorDirection.h"
-#include "Window.h"
 #include "SelectableWidget.generated.h"
 
+class USelectableOption;
 class USelectionInputs;
 struct FInputActionInstance;
 class UInputMappingContext;
@@ -120,8 +120,34 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     FProcessCancel OnCancel;
 
   protected:
+    void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
+    
     FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 
+    /**
+     * A convenience method to handle additional functionality when the user confirms a selection based on the specified
+     * index. This method plays the ConfirmSound, triggers the OnConfirm event, and invokes the ProcessConfirm method.
+     *
+     * @param CurrentIndex The current index of the menu
+     */
+    void ConfirmOnIndex(int32 CurrentIndex);
+    
+    /**
+     * Process the clicked button event for the Command Window
+     *
+     * @param Option The selectable option that was clicked
+     */
+    UFUNCTION()
+    void ProcessClickedButton(USelectableOption* Option);
+
+    /**
+     * Process the hovered button event for the Command Window
+     *
+     * @param Option The selectable option that was hovered
+     */
+    UFUNCTION()
+    void ProcessHoveredButton(USelectableOption* Option);
+    
     /**
      * Called when the selection is changed
      * @param OldIndex The previous index of this widget
@@ -149,8 +175,6 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Selection|Cancel")
     void ProcessCancel();
-
-    void NativeOnFocusLost(const FFocusEvent &InFocusEvent) override;
 
     /**
      * Process the procedure for handling when the cursor moves

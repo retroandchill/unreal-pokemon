@@ -5,6 +5,9 @@
 #include "SelectableWidget.h"
 #include "CommandWindow.generated.h"
 
+class UWindow;
+class USelectableOption;
+class UDisplayTextOption;
 class USizeBox;
 class UScrollBox;
 class UCommand;
@@ -136,7 +139,7 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
      * The widget type used for the display text shown to the player
      */
     UPROPERTY(EditAnywhere, Category = Commands)
-    TSubclassOf<UDisplayText> DisplayTextWidgetClass;
+    TSubclassOf<UDisplayTextOption> DisplayTextWidgetClass;
 
     /**
      * The internal list of active commands
