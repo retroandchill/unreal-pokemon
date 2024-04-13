@@ -32,7 +32,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./ci/set-sonar-variables.ps1
-          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.llvm-cov.reportPaths=coverage.txt -D sonar.python.coverage.reportPaths=coverage-reports/*.xml -D sonar.cfamily.threads=3
+          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.llvm-cov.reportPath=coverage.txt -D sonar.python.coverage.reportPaths=coverage-reports/*.xml -D sonar.cfamily.threads=3
           
       - name: Archive code coverage results
         if: always()
