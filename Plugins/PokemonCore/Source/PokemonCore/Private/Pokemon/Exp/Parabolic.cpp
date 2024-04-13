@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Exp/Parabolic.h"
-
 #include "MathUtilities.h"
 
 using namespace Exp;

@@ -2,10 +2,11 @@
 
 #pragma once
 
-#include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "Primatives/SelectableOption.h"
 #include "SelectablePanel.h"
+
 #include "PartySelectCancelPanel.generated.h"
 
 /**

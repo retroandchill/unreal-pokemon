@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Trainers/TrainerStub.h"
-
 #include "Pokemon/GamePokemon.h"
 #include "Utilities/ConstructionUtilities.h"
 

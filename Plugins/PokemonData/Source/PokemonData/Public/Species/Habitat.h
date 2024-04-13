@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Habitat.generated.h"
 
 /**

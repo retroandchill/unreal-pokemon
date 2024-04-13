@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/WidgetChildUtilities.h"
-
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
 

@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Species/Stat.h"
-
 #include "Algo/RemoveIf.h"
 #include "DataManager.h"
 

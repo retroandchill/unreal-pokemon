@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Components/ActorComponent.h"
 #include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
 #include "ReplacedTile.h"
+
 #include "TileReplacerComponent.generated.h"
 
 class ATileReplacementActor;

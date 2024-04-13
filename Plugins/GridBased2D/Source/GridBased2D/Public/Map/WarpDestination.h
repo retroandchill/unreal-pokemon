@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "Characters/FacingDirection.h"
 #include "CoreMinimal.h"
+#include "Characters/FacingDirection.h"
+
 #include "WarpDestination.generated.h"
 
 /**

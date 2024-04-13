@@ -9,8 +9,8 @@
 #include "Pokemon/Pokemon.h"
 #include "Screens/PartyScreen.h"
 #include "Trainers/BasicTrainer.h"
-#include "Utilities/PokemonTestUtilities.h"
 #include "Utilities/fakeit.hpp"
+#include "Utilities/PokemonTestUtilities.h"
 
 using namespace fakeit;
 

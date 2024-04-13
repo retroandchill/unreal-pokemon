@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "ScreenTransitions/FadeScreenOut.h"
-
 #include "GridUtils.h"
 
 UFadeScreenOut *UFadeScreenOut::FadeScreenOut(const UObject *WorldContext) {

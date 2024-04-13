@@ -5,8 +5,8 @@
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/PokemonTestUtilities.h"
 #include "Utilities/fakeit.hpp"
+#include "Utilities/PokemonTestUtilities.h"
 
 using namespace fakeit;
 

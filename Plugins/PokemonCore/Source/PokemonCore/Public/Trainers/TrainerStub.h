@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "BasicTrainer.h"
 #include "CoreMinimal.h"
+#include "BasicTrainer.h"
 #include "Trainer.h"
+
 #include "TrainerStub.generated.h"
 
 /**

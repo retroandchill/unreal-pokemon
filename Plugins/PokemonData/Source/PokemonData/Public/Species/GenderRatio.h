@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GenderRatio.generated.h"
 
 // ReSharper disable once CppUE4CodingStandardNamingViolationWarning

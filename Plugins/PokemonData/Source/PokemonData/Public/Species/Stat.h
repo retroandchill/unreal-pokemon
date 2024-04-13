@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "PokemonStatType.h"
 #include "UObject/Object.h"
+
 #include "Stat.generated.h"
 
 /**

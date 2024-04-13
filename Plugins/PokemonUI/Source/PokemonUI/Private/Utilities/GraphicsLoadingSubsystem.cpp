@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/GraphicsLoadingSubsystem.h"
-
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonUISettings.h"

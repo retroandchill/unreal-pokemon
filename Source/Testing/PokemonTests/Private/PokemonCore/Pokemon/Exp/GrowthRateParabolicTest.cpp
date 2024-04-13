@@ -1,8 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include <array>
-
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Parabolic.h"
+#include <array>
 
 constexpr std::array GParabolicGrowthTable = {
     -1,     0,      9,      57,     96,     135,    179,    236,    314,     419,    560,    742,    973,

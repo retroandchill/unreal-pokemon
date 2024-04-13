@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RPGMenus/SelectableWidgetMouseTest.h"
-
-#include "CommonDefines.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonDefines.h"
 #include "Components/Button.h"
 #include "Primatives/SelectableOption.h"
 #include "Utilities/SelectableOptionTestWidget.h"

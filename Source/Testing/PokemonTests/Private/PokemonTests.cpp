@@ -1,5 +1,4 @@
 ﻿#include "PokemonTests.h"
-
 #include "AutomationBlueprintFunctionLibrary.h"
 #include "AutomationTestModule.h"
 #include "MessageLogModule.h"
@@ -11,14 +10,14 @@ void FPokemonTestsModule::StartupModule() {
     FCoreDelegates::OnPostEngineInit.AddRaw(this, &FPokemonTestsModule::PostEngineInit);
 
     if (FModuleManager::Get().IsModuleLoaded("MessageLog")) {
-        auto& MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
+        auto &MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
         MessageLogModule.RegisterLogListing("PokemonTests", LOCTEXT("PokemonTests", "Pokémon Tests"));
     }
 }
 
 void FPokemonTestsModule::ShutdownModule() {
     if (FModuleManager::Get().IsModuleLoaded("MessageLog")) {
-        FMessageLogModule& MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
+        FMessageLogModule &MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
         MessageLogModule.UnregisterLogListing("PokemonTests");
     }
 }
@@ -28,9 +27,8 @@ void FPokemonTestsModule::PostEngineInit() {
         IConsoleManager::Get().RegisterConsoleCommand(
             TEXT("ShutdownAfterTests"),
             TEXT("This calls for a full shutdown of the editor, so that LLVM can generate coverage profiling."),
-            FConsoleCommandDelegate::CreateLambda([]() {
-                UTestShutdownSubsystem::GetInstance().RequestExitAfterTestsComplete();
-            }));
+            FConsoleCommandDelegate::CreateLambda(
+                []() { UTestShutdownSubsystem::GetInstance().RequestExitAfterTestsComplete(); }));
     }
 }
 

@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Characters/FacingDirection.h"
 #include "CoreMinimal.h"
+#include "Characters/FacingDirection.h"
 #include "UObject/Interface.h"
+
 #include "GridBasedMovement.generated.h"
 
 // This class does not need to be modified.

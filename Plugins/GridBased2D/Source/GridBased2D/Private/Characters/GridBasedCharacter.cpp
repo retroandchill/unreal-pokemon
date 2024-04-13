@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Characters/GridBasedCharacter.h"
-
 #include "Actions/Action.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/GridBasedMovementComponent.h"

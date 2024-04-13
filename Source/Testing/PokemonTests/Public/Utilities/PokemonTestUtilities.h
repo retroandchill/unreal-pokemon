@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Components/Widget.h"
 #include "CoreMinimal.h"
+#include "Components/Widget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "PokemonTestUtilities.generated.h"
 
 class UWidget;

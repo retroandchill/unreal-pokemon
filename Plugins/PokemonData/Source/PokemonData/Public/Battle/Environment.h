@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "Environment.generated.h"
 
 /**

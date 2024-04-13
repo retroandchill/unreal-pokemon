@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "DataRetrieval/DataRegistry.h"
-
 #include "Meta/PokeRegistry.h"
 
 FDataRegistry::FDataRegistry() = default;

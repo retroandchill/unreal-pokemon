@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "PokemonUISettings.generated.h"
 
 class UTextDisplayScreen;

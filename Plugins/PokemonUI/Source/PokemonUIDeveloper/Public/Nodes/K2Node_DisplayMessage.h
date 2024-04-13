@@ -5,6 +5,7 @@
 #include "K2Node.h"
 #include "K2Node_BaseAsyncTask.h"
 #include "K2Node_DisplayMessageBase.h"
+
 #include "K2Node_DisplayMessage.generated.h"
 
 class UTextDisplayScreen;

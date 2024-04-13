@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "Characters/GridBasedCharacter.h"
 #include "CoreMinimal.h"
+#include "Characters/GridBasedCharacter.h"
+
 #include "GridBasedBillboardCharacter.generated.h"
 
 class UCapsuleComponent;

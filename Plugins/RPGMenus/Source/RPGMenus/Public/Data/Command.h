@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Command.generated.h"
 
 class ARPGPlayerController;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "TrainerGender.h"
+
 #include "TrainerType.generated.h"
 
 /**

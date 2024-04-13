@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "BlueprintGraphPanelPinFactory.h"
 #include "CoreMinimal.h"
+#include "BlueprintGraphPanelPinFactory.h"
 #include "EdGraphUtilities.h"
 
 /**

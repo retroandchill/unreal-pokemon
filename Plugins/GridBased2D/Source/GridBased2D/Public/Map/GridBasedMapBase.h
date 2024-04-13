@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MapGrid.h"
+
 #include "GridBasedMapBase.generated.h"
 
 /**

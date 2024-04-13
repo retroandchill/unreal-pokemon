@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/GameModeBase.h"
+
 #include "GridBasedGameModeBase.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FScreenTransitionCallback);

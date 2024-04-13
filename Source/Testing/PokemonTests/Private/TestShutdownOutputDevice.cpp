@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "TestShutdownOutputDevice.h"
 
 void FTestShutdownOutputDevice::Serialize(const TCHAR *V, ELogVerbosity::Type Verbosity, const FName &Category) {

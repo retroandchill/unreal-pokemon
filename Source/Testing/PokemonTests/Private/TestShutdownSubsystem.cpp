@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "TestShutdownSubsystem.h"
-
 #include "TestShutdownOutputDevice.h"
 
-UTestShutdownSubsystem* UTestShutdownSubsystem::Instance = nullptr;
-TUniquePtr<FTestShutdownOutputDevice> UTestShutdownSubsystem::ShutdownOutputDevice = MakeUnique<FTestShutdownOutputDevice>();
+UTestShutdownSubsystem *UTestShutdownSubsystem::Instance = nullptr;
+TUniquePtr<FTestShutdownOutputDevice> UTestShutdownSubsystem::ShutdownOutputDevice =
+    MakeUnique<FTestShutdownOutputDevice>();
 
 void UTestShutdownSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
@@ -19,7 +18,7 @@ void UTestShutdownSubsystem::Deinitialize() {
     Instance = this;
 }
 
-UTestShutdownSubsystem & UTestShutdownSubsystem::GetInstance() {
+UTestShutdownSubsystem &UTestShutdownSubsystem::GetInstance() {
     check(Instance != nullptr)
     return *Instance;
 }

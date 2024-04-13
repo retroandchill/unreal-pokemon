@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/InputUtilities.h"
-
 #include "Blueprint/UserWidget.h"
 #include "Utilities/accessor.hpp"
 

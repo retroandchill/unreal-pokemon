@@ -1,9 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Actions/Action.h"
 #include "CoreMinimal.h"
+#include "Actions/Action.h"
 #include "UObject/Object.h"
+
 #include "MenuAction.generated.h"
 
 class UScreen;

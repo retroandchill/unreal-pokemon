@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "EggGroupType.h"
+
 #include "EggGroup.generated.h"
 
 /**

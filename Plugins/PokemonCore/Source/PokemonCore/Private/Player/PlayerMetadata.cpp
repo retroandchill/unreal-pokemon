@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Player/PlayerMetadata.h"
-
 #include "MathUtilities.h"
 
 void UPlayerMetadata::Tick(float DeltaTime) {

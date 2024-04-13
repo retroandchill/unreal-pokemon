@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "FunctionalTest.h"
+
 #include "MenuActionTest.generated.h"
 
 class UMenuAction;

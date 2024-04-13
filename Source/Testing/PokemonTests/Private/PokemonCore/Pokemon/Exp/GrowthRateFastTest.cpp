@@ -1,8 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include <array>
-
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Fast.h"
+#include <array>
 
 constexpr std::array GFastGrowthTable = {
     -1,     0,      6,      21,     51,     100,    172,    274,    409,    583,    800,    1064,   1382,

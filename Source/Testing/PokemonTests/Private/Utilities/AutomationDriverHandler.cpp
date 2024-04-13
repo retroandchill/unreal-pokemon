@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/AutomationDriverHandler.h"
-
 #include "IAutomationDriverModule.h"
 
 FAutomationDriverHandler::FAutomationDriverHandler() {

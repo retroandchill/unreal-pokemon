@@ -20,7 +20,7 @@ UCLASS()
 class POKEMONTESTS_API UTestShutdownSubsystem : public UEditorSubsystem, public FTickableEditorObject {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
 
@@ -50,18 +50,17 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Shutdown")
     void RequestExitAfterTestsComplete();
 
-private:
+  private:
     /**
      * A pointer to the instance of the UTestShutdownSubsystem class. It is initially set to nullptr.
      * An instance of the UTestShutdownSubsystem class can be obtained by calling the GetInstance() method.
      */
-    static UTestShutdownSubsystem* Instance;
+    static UTestShutdownSubsystem *Instance;
 
     /**
      * A boolean variable indicating whether an engine shutdown has been requested or not.
      */
     bool bExitRequested = false;
-
 
     /**
      * A unique smart pointer to an instance of the FTestShutdownOutputDevice class.

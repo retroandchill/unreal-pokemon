@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
+
 #include "TextDisplayScreen.generated.h"
 
 class UCommand;

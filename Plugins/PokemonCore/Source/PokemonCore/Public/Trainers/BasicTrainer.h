@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Trainer.h"
 #include "Trainers/TrainerType.h"
+
 #include "BasicTrainer.generated.h"
 
 /**

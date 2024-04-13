@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PartyMenuHandler.h"
+
 #include "SummaryHandler.generated.h"
 
 /**

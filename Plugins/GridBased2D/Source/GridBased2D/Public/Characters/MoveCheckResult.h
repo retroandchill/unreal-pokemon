@@ -2,9 +2,9 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
 #include <string>
 
-#include "CoreMinimal.h"
 #include "MoveCheckResult.generated.h"
 
 class IInteractable;

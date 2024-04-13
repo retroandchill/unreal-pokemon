@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "GridUtils.h"
-
 #include "GridBased2DSettings.h"
 #include "GridBasedGameModeBase.h"
 #include "Kismet/GameplayStatics.h"

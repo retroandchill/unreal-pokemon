@@ -1,8 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include <array>
-
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Slow.h"
+#include <array>
 
 constexpr std::array GSlowGrowthTable = {
     -1,     0,      10,      33,      80,      156,     270,     428,     640,     911,    1250,   1663,   2160,

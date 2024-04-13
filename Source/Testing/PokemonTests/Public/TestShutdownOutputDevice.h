@@ -8,7 +8,7 @@
  * This class is a custom output device for capturing log messages.
  */
 class POKEMONTESTS_API FTestShutdownOutputDevice : public FOutputDevice {
-public:
+  public:
     void Serialize(const TCHAR *V, ELogVerbosity::Type Verbosity, const FName &Category) override;
 
     /**
@@ -21,7 +21,7 @@ public:
      */
     bool ShutdownMessageReceived() const;
 
-private:
+  private:
     /**
      * @brief Flag indicating whether the shutdown message has been received.
      *

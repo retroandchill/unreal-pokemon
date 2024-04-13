@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "ConstructionUtilities.generated.h"
 
 class IStatBlock;

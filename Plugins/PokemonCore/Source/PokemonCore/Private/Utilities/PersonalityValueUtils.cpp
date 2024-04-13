@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PersonalityValueUtils.h"
-
 #include "Pokemon/PokemonDTO.h"
 
 uint32 UPersonalityValueUtils::GeneratePersonalityValue() {

@@ -11,6 +11,6 @@ class FPokemonTestsModule : public IModuleInterface {
     void StartupModule() override;
     void ShutdownModule() override;
 
-private:
+  private:
     void PostEngineInit();
 };

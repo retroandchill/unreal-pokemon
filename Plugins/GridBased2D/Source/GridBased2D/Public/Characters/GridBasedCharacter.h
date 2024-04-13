@@ -2,11 +2,12 @@
 
 #pragma once
 
-#include "Components/GridMovable.h"
 #include "CoreMinimal.h"
+#include "Components/GridMovable.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Pawn.h"
 #include "Interaction/Interactable.h"
+
 #include "GridBasedCharacter.generated.h"
 
 class UGridBasedMovementComponent;

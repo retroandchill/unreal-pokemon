@@ -1,8 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include <array>
-
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Medium.h"
+#include <array>
 
 constexpr std::array GMediumGrowthTable = {
     -1,     0,      8,      27,     64,     125,    216,    343,    512,    729,    1000,   1331,   1728,
