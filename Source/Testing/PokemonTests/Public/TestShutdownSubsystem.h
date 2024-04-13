@@ -4,13 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "EditorSubsystem.h"
+
 #include "TestShutdownSubsystem.generated.h"
 
+class FTestShutdownOutputDevice;
 /**
- * @class UTestShutdownSubsystem
+ * @brief Initialize
  *
- * A class representing the shutdown subsystem for the automation testing. It is activated by invoking the "ShutdownAfterTests"
- * console command after after which it will wait until the automation system has concluded and then perform a full engine shutdown.
+ * Override of the Initialize method from UEditorSubsystem.
+ * Sets the instance of UTestShutdownSubsystem and calls the super method.
+ *
+ * @param Collection - A reference to the subsystem collection.
  */
 UCLASS()
 class POKEMONTESTS_API UTestShutdownSubsystem : public UEditorSubsystem, public FTickableEditorObject {
@@ -54,12 +58,15 @@ private:
     static UTestShutdownSubsystem* Instance;
 
     /**
-     * A boolean variable indicating whether the automation testing has started or not.
-     */
-    bool bAutomationStarted = false;
-
-    /**
      * A boolean variable indicating whether an engine shutdown has been requested or not.
      */
     bool bExitRequested = false;
+
+
+    /**
+     * A unique smart pointer to an instance of the FTestShutdownOutputDevice class.
+     * The ShutdownOutputDevice is used as an output device during the shutdown process.
+     * The ShutdownOutputDevice is initially set to nullptr.
+     */
+    static TUniquePtr<FTestShutdownOutputDevice> ShutdownOutputDevice;
 };

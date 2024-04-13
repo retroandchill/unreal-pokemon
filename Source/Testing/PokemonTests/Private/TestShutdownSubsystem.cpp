@@ -3,13 +3,15 @@
 
 #include "TestShutdownSubsystem.h"
 
-#include "AutomationBlueprintFunctionLibrary.h"
+#include "TestShutdownOutputDevice.h"
 
 UTestShutdownSubsystem* UTestShutdownSubsystem::Instance = nullptr;
+TUniquePtr<FTestShutdownOutputDevice> UTestShutdownSubsystem::ShutdownOutputDevice = MakeUnique<FTestShutdownOutputDevice>();
 
 void UTestShutdownSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
     Instance = this;
+    GLog->AddOutputDevice(ShutdownOutputDevice.Get());
 }
 
 void UTestShutdownSubsystem::Deinitialize() {
@@ -31,12 +33,8 @@ bool UTestShutdownSubsystem::IsTickable() const {
 }
 
 void UTestShutdownSubsystem::Tick(float DeltaTime) {
-    if (!UAutomationBlueprintFunctionLibrary::AreAutomatedTestsRunning()) {
-        if (bAutomationStarted && bExitRequested) {
-            FGenericPlatformMisc::RequestExit(false);
-        }
-    } else if (!bAutomationStarted) {
-        bAutomationStarted = true;
+    if (ShutdownOutputDevice->ShutdownMessageReceived() && bExitRequested) {
+        FGenericPlatformMisc::RequestExit(false);
     }
 }
 

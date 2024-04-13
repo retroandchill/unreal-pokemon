@@ -2,6 +2,7 @@ import glob
 import os.path
 import re
 import subprocess
+import sys
 
 
 def filter_tests_and_generated(path: str):
@@ -16,6 +17,9 @@ def get_target_dir(build_file: str) -> str:
 
 
 if __name__ == "__main__":
+    llvm_dir = sys.argv[1]
+    profdata_file = sys.argv[2]
+
     binary_files = glob.glob("./**/UnrealEditor-*-Win64-DebugGame.dll", recursive=True)
     source_targets = list(map(get_target_dir,
                               list(filter(filter_tests_and_generated,
@@ -31,8 +35,7 @@ if __name__ == "__main__":
         source_targets.insert(i * 2 + 1, "-sources")
     source_targets.pop()
 
-    cmd = ["C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/llvm-cov.exe", "show",
-           "--instr-profile=unreal.profdata"]
+    cmd = [f"{llvm_dir}/llvm-cov.exe", "show", f"--instr-profile={profdata_file}"]
     cmd += binary_files
     cmd.append("-sources")
     cmd += source_targets

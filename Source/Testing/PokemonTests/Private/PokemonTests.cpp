@@ -2,16 +2,25 @@
 
 #include "AutomationBlueprintFunctionLibrary.h"
 #include "AutomationTestModule.h"
+#include "MessageLogModule.h"
 #include "TestShutdownSubsystem.h"
 
 #define LOCTEXT_NAMESPACE "FPokemonTestsModule"
 
 void FPokemonTestsModule::StartupModule() {
     FCoreDelegates::OnPostEngineInit.AddRaw(this, &FPokemonTestsModule::PostEngineInit);
+
+    if (FModuleManager::Get().IsModuleLoaded("MessageLog")) {
+        auto& MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
+        MessageLogModule.RegisterLogListing("PokemonTests", LOCTEXT("PokemonTests", "Pokémon Tests"));
+    }
 }
 
 void FPokemonTestsModule::ShutdownModule() {
-    // No special teardown needed
+    if (FModuleManager::Get().IsModuleLoaded("MessageLog")) {
+        FMessageLogModule& MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
+        MessageLogModule.UnregisterLogListing("PokemonTests");
+    }
 }
 
 void FPokemonTestsModule::PostEngineInit() {
