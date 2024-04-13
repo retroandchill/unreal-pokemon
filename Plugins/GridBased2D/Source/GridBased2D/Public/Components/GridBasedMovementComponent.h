@@ -128,7 +128,7 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
      * Perform a hit interaction on all of the interactable objects in front of the player
      * @param Interactables The interactable objects in question
      */
-    void HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables);
+    void HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const;
 
   private:
     /**

@@ -40,7 +40,7 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
         TileReplacements.Add(Replacement->SourceTile, Replacement);
     }
 
-    TRIPLE_LOOP(i, SizeX, j, SizeY, k, SizeZ) {
+    TRIPLE_LOOP (i, SizeX, j, SizeY, k, SizeZ) {
         auto Tile = TilemapComponent->GetTile(i, j, k);
         if (!Tile.IsValid())
             continue;
@@ -54,10 +54,10 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
         Actor->AttachToActor(TilemapComponent->GetAttachParentActor(),
                              FAttachmentTransformRules::KeepRelativeTransform);
         IPaperTileReplacement::Execute_ConfigureReplacement(Actor, Tile, *Metadata, ReplacementData->bCollisionEnabled);
-        Actor->SetActorRelativeLocation(TilemapComponent->GetRelativeLocation() +
-                                        FVector(i * TilemapComponent->TileMap->TileWidth,
-                                                j * TilemapComponent->TileMap->TileHeight,
-                                                -k * TilemapComponent->TileMap->SeparationPerLayer));
+        Actor->SetActorRelativeLocation(
+            TilemapComponent->GetRelativeLocation() +
+            FVector(i * TilemapComponent->TileMap->TileWidth, j * TilemapComponent->TileMap->TileHeight,
+                    -k * static_cast<double>(TilemapComponent->TileMap->SeparationPerLayer)));
         Actor->SetActorRelativeRotation(TilemapComponent->GetRelativeRotation());
 
         ReplacedTiles.Emplace(Tile, i, j, k, Actor);
@@ -70,7 +70,7 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
 
 void UTileReplacerComponent::RestoreCachedTiles(UPaperTileMapComponent *TileMapComponent) {
     if (TileMapComponent == nullptr) {
-        UE_LOG(LogBlueprint, Warning, TEXT("No tilemap component found for: %s"), *GetName());
+        UE_LOG(LogBlueprint, Warning, TEXT("No tilemap component found for: %s"), *GetName())
         return;
     }
     for (auto &Replacement : ReplacedTiles) {

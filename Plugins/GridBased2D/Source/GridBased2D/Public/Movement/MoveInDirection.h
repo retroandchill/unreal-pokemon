@@ -25,12 +25,6 @@ class GRIDBASED2D_API UMoveInDirection : public UBlueprintAsyncActionBase {
 
   public:
     /**
-     * Called when the movement is finished
-     */
-    UPROPERTY(BlueprintAssignable)
-    FOnMovementFinished OnMovementFinished;
-
-    /**
      * Display a message to the player and call the following after the a choice as been selected
      * @param Character The character to move
      * @param MovementDirection The direction to move the character in
@@ -43,6 +37,12 @@ class GRIDBASED2D_API UMoveInDirection : public UBlueprintAsyncActionBase {
     void Activate() override;
 
   private:
+    /**
+     * Called when the movement is finished
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnMovementFinished OnMovementFinished;
+
     /**
      * The class used to display the message to the screen
      */

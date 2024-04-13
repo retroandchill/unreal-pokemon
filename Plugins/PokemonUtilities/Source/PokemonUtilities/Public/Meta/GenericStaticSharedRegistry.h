@@ -8,7 +8,8 @@
  * The generic version of the static registry that requires no additional specialized methods, and can act as a
  * singleton object all on its own
  */
-template <typename T, typename... Args> class TGenericStaticSharedRegistry : public TSharedPokeRegistry<T, Args...> {
+template <typename T, typename... Args>
+class TGenericStaticSharedRegistry : public TSharedPokeRegistry<T, Args...> {
     TGenericStaticSharedRegistry() = default;
     ~TGenericStaticSharedRegistry() = default;
 
@@ -17,7 +18,9 @@ template <typename T, typename... Args> class TGenericStaticSharedRegistry : pub
      * Get the singleton instance of the class
      * @return A reference to the only instance of this class
      */
-    static TGenericStaticSharedRegistry &GetInstance() { return Instance; }
+    static TGenericStaticSharedRegistry &GetInstance() {
+        return Instance;
+    }
 
   private:
     static TGenericStaticSharedRegistry Instance;

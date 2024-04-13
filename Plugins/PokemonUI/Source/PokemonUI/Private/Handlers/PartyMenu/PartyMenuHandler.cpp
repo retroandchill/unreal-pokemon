@@ -2,9 +2,13 @@
 
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 
-FName UPartyMenuHandler::GetID() const { return ID; }
+FName UPartyMenuHandler::GetID() const {
+    return ID;
+}
 
-const FText &UPartyMenuHandler::GetText() const { return Text; }
+const FText &UPartyMenuHandler::GetText() const {
+    return Text;
+}
 
 bool UPartyMenuHandler::ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const {
     return true;

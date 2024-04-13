@@ -7,7 +7,9 @@ UWindow::UWindow(const FObjectInitializer &ObjectInitializer) : UWidget(ObjectIn
     Brush.DrawAs = ESlateBrushDrawType::Box;
 }
 
-TSharedRef<SWidget> UWindow::RebuildWidget() { return SNew(SImage).Image(&Brush); }
+TSharedRef<SWidget> UWindow::RebuildWidget() {
+    return SNew(SImage).Image(&Brush);
+}
 
 void UWindow::SynchronizeProperties() {
     Super::SynchronizeProperties();

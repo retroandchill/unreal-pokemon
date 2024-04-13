@@ -10,22 +10,24 @@ void UTextDisplayScreen::NativeConstruct() {
     if (MessageWindow == nullptr)
         return;
 
-    MessageWindow->OnDisplayChoices.AddDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
-    MessageWindow->OnAdvanceText.AddDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
+    MessageWindow->GetOnDisplayChoices().AddDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
+    MessageWindow->GetOnAdvanceText().AddDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
     MessageWindow->SetKeyboardFocus();
 
-    CommandWindow->OnCommandSelected.AddDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
+    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
 }
 
 void UTextDisplayScreen::SetText(FText TextToDisplay) {
-    check(MessageWindow != nullptr) MessageWindow->ClearDisplayText();
+    check(MessageWindow != nullptr)
+    MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay);
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
     MessageWindow->SetKeyboardFocus();
 }
 
 void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices) {
-    check(MessageWindow != nullptr && CommandWindow != nullptr) MessageWindow->ClearDisplayText();
+    check(MessageWindow != nullptr && CommandWindow != nullptr)
+    MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay, true);
 
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -38,11 +40,14 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
 }
 
 void UTextDisplayScreen::ClearDisplayText() {
-    check(MessageWindow != nullptr) MessageWindow->ClearDisplayText();
+    check(MessageWindow != nullptr)
+    MessageWindow->ClearDisplayText();
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UTextDisplayScreen::AdvanceToNextMessage() { NextMessage.Broadcast(); }
+void UTextDisplayScreen::AdvanceToNextMessage() {
+    NextMessage.Broadcast();
+}
 
 void UTextDisplayScreen::DisplayChoicePrompt() {
     CommandWindow->SetIndex(0);

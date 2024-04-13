@@ -12,30 +12,30 @@ class UDisplayText;
  */
 UCLASS(Abstract)
 class RPGMENUS_API UDisplayTextOption : public USelectableOption {
-	GENERATED_BODY()
-	
-public:
+    GENERATED_BODY()
+
+  public:
     /**
      * Set the display text for this widget
      * @param NewText The new display text for the widget
      */
-	UFUNCTION(BlueprintCallable, Category = Display)
-	void SetText(const FText& NewText);
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void SetText(const FText &NewText);
 
     /**
      * Get the size of the current text contained within this widget
      * @return The size of the current text
      */
-	FVector2D GetTextSize() const;
+    FVector2D GetTextSize() const;
 
     /**
      * Get the padding around the display text for the player
      * @return The padding around the text
      */
-	UFUNCTION(BlueprintCallable, Category = "Text|Size")
-	FMargin GetDisplayTextPadding() const;
+    UFUNCTION(BlueprintCallable, Category = "Text|Size")
+    FMargin GetDisplayTextPadding() const;
 
-private:
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UDisplayText> DisplayText;
+  private:
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UDisplayText> DisplayText;
 };

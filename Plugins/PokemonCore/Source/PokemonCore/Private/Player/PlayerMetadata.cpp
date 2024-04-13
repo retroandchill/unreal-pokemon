@@ -14,15 +14,23 @@ void UPlayerMetadata::Tick(float DeltaTime) {
     }
 }
 
-TStatId UPlayerMetadata::GetStatId() const { RETURN_QUICK_DECLARE_CYCLE_STAT(UPlayerMetadata, STATGROUP_Tickables); }
+TStatId UPlayerMetadata::GetStatId() const {RETURN_QUICK_DECLARE_CYCLE_STAT(UPlayerMetadata, STATGROUP_Tickables)}
 
-UWorld *UPlayerMetadata::GetTickableGameObjectWorld() const { return GetWorld(); }
+UWorld *UPlayerMetadata::GetTickableGameObjectWorld() const {
+    return GetWorld();
+}
 
-const FDateTime &UPlayerMetadata::GetStartDate() const { return StartDate; }
+const FDateTime &UPlayerMetadata::GetStartDate() const {
+    return StartDate;
+}
 
-float UPlayerMetadata::GetTotalPlaytime() const { return TotalPlaytime; }
+float UPlayerMetadata::GetTotalPlaytime() const {
+    return TotalPlaytime;
+}
 
-FOnTimeUpdate &UPlayerMetadata::GetOnTimeUpdated() { return OnTimeUpdated; }
+FOnTimeUpdate &UPlayerMetadata::GetOnTimeUpdated() {
+    return OnTimeUpdated;
+}
 
 void UPlayerMetadata::StartNewGame() {
     StartDate = FDateTime::Now();

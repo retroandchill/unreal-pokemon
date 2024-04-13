@@ -12,13 +12,12 @@
 
 DECLARE_DELEGATE(FLoadFinalized)
 
-UMapSubsystem::UMapSubsystem(const FObjectInitializer &)
-    : DynamicLevelOffset(GetDefault<UGridBased2DSettings>()->GetDynamicLevelOffset()) {}
+UMapSubsystem::UMapSubsystem(const FObjectInitializer &) {
+}
 
 void UMapSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
     if (BGM == nullptr) {
-        UE_LOG(LogBlueprint, Warning,
-               TEXT("Trying to play null for background music! Please specify an actual asset!"));
+        UE_LOG(LogBlueprint, Warning, TEXT("Trying to play null for background music! Please specify an actual asset!"))
         return;
     }
 
@@ -75,11 +74,11 @@ bool UMapSubsystem::IsMusicPaused() const {
 
 void UMapSubsystem::PlayJingle(USoundBase *Jingle, float VolumeMultiplier, float PitchMultiplier) {
     if (Jingle == nullptr) {
-        UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle but the supplied sound was null!"));
+        UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jingle but the supplied sound was null!"))
         return;
     }
     if (CurrentJingle != nullptr) {
-        UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jinglebut one is already playing!"));
+        UE_LOG(LogBlueprint, Warning, TEXT("Trying to play a jinglebut one is already playing!"))
         return;
     }
 
@@ -95,22 +94,23 @@ bool UMapSubsystem::IsJinglePlaying() const {
     return CurrentJingle != nullptr && CurrentJingle->GetPlayState() == EAudioComponentPlayState::Playing;
 }
 
-void UMapSubsystem::WarpToMap(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y) {
+void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y) {
     auto PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator();
     if (PlayerCharacter == nullptr) {
-        UE_LOG(LogBlueprint, Warning, TEXT("There is no valid pawn!"));
+        UE_LOG(LogBlueprint, Warning, TEXT("There is no valid pawn!"))
         return;
     }
 
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter);
     if (MovementComponent == nullptr) {
-        UE_LOG(LogBlueprint, Warning, TEXT("The pawn class does not implement IGridMovable!"));
+        UE_LOG(LogBlueprint, Warning, TEXT("The pawn class does not implement IGridMovable!"))
         return;
     }
     WarpToMapWithDirection(Map, X, Y, MovementComponent->GetDirection());
 }
 
-void UMapSubsystem::WarpToMapWithDirection(TSoftObjectPtr<UWorld> Map, int32 X, int32 Y, EFacingDirection Direction) {
+void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y,
+                                           EFacingDirection Direction) {
     if (DynamicallyStreamedLevel != nullptr) {
         FLatentActionInfo LatentActionInfo;
         UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, DynamicallyStreamedLevel->GetWorldAsset(),
@@ -145,7 +145,7 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &Play
     WarpDestination.Reset();
 }
 
-void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) {
+void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const {
     TArray<AActor *> Maps;
     UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UMapGrid::StaticClass(), Maps);
     TScriptInterface<IMapGrid> OldMap = nullptr;
@@ -182,12 +182,12 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
 void UMapSubsystem::OnNewLevelLoaded() {
     auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
     check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
-        SetPlayerLocation(PlayerCharacter);
+    SetPlayerLocation(PlayerCharacter);
     UpdateCharacterMapPosition(PlayerCharacter);
 }
 
 void UMapSubsystem::UpdatePlayerCharacterPosition() {
     auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
     check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
-        UpdateCharacterMapPosition(PlayerCharacter);
+    UpdateCharacterMapPosition(PlayerCharacter);
 }

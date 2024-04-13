@@ -40,7 +40,7 @@ class POKEMONUI_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
-    TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(const ITrainer &Trainer, UObject *Outer);
+    TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const;
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -48,7 +48,7 @@ class POKEMONUI_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite
      */
-    TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer);
+    TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
   private:
     /**

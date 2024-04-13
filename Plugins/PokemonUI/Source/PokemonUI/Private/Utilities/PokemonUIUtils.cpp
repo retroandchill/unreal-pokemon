@@ -7,9 +7,13 @@
 #include "Text/ShadowedText.h"
 #include "Text/TextColor.h"
 
-FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) { return PadInt(Value, DesiredLength); }
+FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) {
+    return PadInt(Value, DesiredLength);
+}
 
-FString UPokemonUIUtils::SpacePad(int32 Value, int32 DesiredLength) { return PadInt(Value, DesiredLength, TEXT(' ')); }
+FString UPokemonUIUtils::SpacePad(int32 Value, int32 DesiredLength) {
+    return PadInt(Value, DesiredLength, TEXT(' '));
+}
 
 FString UPokemonUIUtils::PadInt(int32 Value, int32 DesiredLength, TCHAR PaddingCharacter) {
     auto AsString = FString::FromInt(Value);

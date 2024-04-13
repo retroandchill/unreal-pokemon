@@ -7,7 +7,9 @@
  * Remove the specified object from the root
  * @param Ptr The object to remove from the root
  */
-inline void RemoveObjectFromRoot(UObject *Ptr) { Ptr->RemoveFromRoot(); }
+inline void RemoveObjectFromRoot(UObject *Ptr) {
+    Ptr->RemoveFromRoot();
+}
 
 /**
  * Special class that handling removing a UObject from the root
@@ -20,7 +22,9 @@ class FRootDeleter {
      * Removes the pointed UObject from the root allowing it to be garbage collected
      * @param Ptr
      */
-    void operator()(UObject *Ptr) const { RemoveObjectFromRoot(Ptr); }
+    void operator()(UObject *Ptr) const {
+        RemoveObjectFromRoot(Ptr);
+    }
 };
 
 /**
@@ -29,7 +33,8 @@ class FRootDeleter {
  * when this object is destroyed.
  * @tparam T The UObject type this object points to
  */
-template <typename T> using TUniqueRootPtr = TUniquePtr<T, FRootDeleter>;
+template <typename T>
+using TUniqueRootPtr = TUniquePtr<T, FRootDeleter>;
 
 /**
  * Add the specified object to the root and place it inside a specialized Unique Pointer to remove it upon destruction

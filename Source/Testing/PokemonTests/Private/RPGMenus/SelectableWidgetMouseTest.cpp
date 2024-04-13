@@ -9,7 +9,6 @@
 #include "Utilities/SelectableOptionTestWidget.h"
 #include "Utilities/WidgetChildUtilities.h"
 
-
 void ASelectableWidgetMouseTest::BeginPlay() {
     Super::BeginPlay();
     OnTestStart.AddDynamic(this, &ASelectableWidgetMouseTest::TestRun);
@@ -21,7 +20,7 @@ void ASelectableWidgetMouseTest::TestRun() {
     TEST_ASSERT(AssertIsValid(NewWidget, TEXT("Widget should get created should be valid!")))
     NewWidget->CreateChildWidgets();
     NewWidget->AddToViewport();
-    NewWidget->OnConfirm.AddDynamic(this, &ASelectableWidgetMouseTest::HandledConfirm);
+    NewWidget->GetOnConfirm().AddDynamic(this, &ASelectableWidgetMouseTest::HandledConfirm);
 
     auto &Options = NewWidget->GetOptions();
 
@@ -37,7 +36,6 @@ void ASelectableWidgetMouseTest::TestRun() {
     auto Button2 = Cast<UButton>(UWidgetChildUtilities::FindChildWidget(Options[2], TEXT("PrimaryButton")));
     TEST_ASSERT(AssertIsValid(Button2, TEXT("Button should be locatable")))
 
-    
     NewWidget->SetActive(false);
     TEST_ASSERT(AssertFalse(SelectedIndex.IsSet(), TEXT("")))
 
@@ -51,4 +49,3 @@ void ASelectableWidgetMouseTest::TestRun() {
 void ASelectableWidgetMouseTest::HandledConfirm(int32 Index) {
     SelectedIndex.Emplace(Index);
 }
-

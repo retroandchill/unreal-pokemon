@@ -12,7 +12,8 @@
 #include "Primatives/DisplayText.h"
 #include "Primatives/DisplayTextOption.h"
 
-UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {}
+UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
+}
 
 TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
     auto Original = USelectableWidget::RebuildWidget();
@@ -61,7 +62,9 @@ void UCommandWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) 
     SetScrollArrowsVisible();
 }
 
-int32 UCommandWindow::GetItemCount_Implementation() const { return ActiveCommands.Num(); }
+int32 UCommandWindow::GetItemCount_Implementation() const {
+    return ActiveCommands.Num();
+}
 
 TOptional<int32> UCommandWindow::GetPageMax() {
     if (ScrollBox == nullptr)
@@ -82,6 +85,10 @@ TOptional<int32> UCommandWindow::GetPageMax() {
 void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands) {
     Commands = MoveTemp(NewCommands);
     RebuildWidget();
+}
+
+FProcessCommand &UCommandWindow::GetOnCommandSelected() {
+    return OnCommandSelected;
 }
 
 void UCommandWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {

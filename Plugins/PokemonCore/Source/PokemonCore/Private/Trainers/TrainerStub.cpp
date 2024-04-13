@@ -6,7 +6,7 @@
 #include "Utilities/ConstructionUtilities.h"
 
 TScriptInterface<ITrainer> UTrainerStub::Initialize(FName NewTrainerType, FText NewTrainerName) {
-    auto Ret = Super::Initialize(NewTrainerType, NewTrainerName);
+    Super::Initialize(NewTrainerType, NewTrainerName);
 
     AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({.Species = "RIOLU", .Level = 10}));
     AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({.Species = "SNIVY", .Level = 10}));

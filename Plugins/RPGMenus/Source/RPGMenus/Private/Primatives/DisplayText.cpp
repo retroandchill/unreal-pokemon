@@ -6,7 +6,8 @@
 #include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
 
-UDisplayText::UDisplayText(const FObjectInitializer &ObjectInitializer) : UUserWidget(ObjectInitializer) {}
+UDisplayText::UDisplayText(const FObjectInitializer &ObjectInitializer) : UUserWidget(ObjectInitializer) {
+}
 
 TSharedRef<SWidget> UDisplayText::RebuildWidget() {
     auto Ret = Super::RebuildWidget();
@@ -32,7 +33,10 @@ void UDisplayText::SetTextInfo() {
     }
 }
 
-FText UDisplayText::GetText() const { check(DisplayTextWidget != nullptr) return DisplayTextWidget->GetText(); }
+FText UDisplayText::GetText() const {
+    check(DisplayTextWidget != nullptr)
+    return DisplayTextWidget->GetText();
+}
 
 void UDisplayText::SetText(const FText &NewText) {
     InitialText = NewText;
@@ -48,31 +52,38 @@ void UDisplayText::SetText(const FText &NewText) {
     }
 }
 
-const FSlateFontInfo &UDisplayText::GetDisplayFont() const { return DisplayFont; }
+const FSlateFontInfo &UDisplayText::GetDisplayFont() const {
+    return DisplayFont;
+}
 
 void UDisplayText::SetTextColor(const FSlateColor &Color) {
     TextColor = Color;
 
-    check(DisplayTextWidget != nullptr) DisplayTextWidget->SetColorAndOpacity(TextColor);
+    check(DisplayTextWidget != nullptr)
+    DisplayTextWidget->SetColorAndOpacity(TextColor);
 }
 
 FVector2D UDisplayText::GetTextSize() const {
-    check(DisplayTextWidget != nullptr) return GetTextSize(DisplayTextWidget->GetText().ToString());
+    check(DisplayTextWidget != nullptr)
+    return GetTextSize(DisplayTextWidget->GetText().ToString());
 }
 
 FVector2D UDisplayText::GetTextSize(const FString &Text) const {
-    check(DisplayTextWidget != nullptr) auto FontMeasure =
-        FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+    check(DisplayTextWidget != nullptr)
+    auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
     FVector2D Size = FontMeasure->Measure(Text, DisplayFont, UWidgetUtilities::GetWidgetDPIScale());
     return Size;
 }
 
 FVector2D UDisplayText::GetTotalTextAreaSize() const {
-    check(DisplayTextWidget != nullptr) return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
+    check(DisplayTextWidget != nullptr)
+    return DisplayTextWidget->GetCachedGeometry().GetLocalSize();
 }
 
 void UDisplayText::OnTextSet_Implementation(const FText &Text) {
     // No definition needed here in this class
 }
 
-UTextBlock *UDisplayText::GetDisplayTextWidget() const { return DisplayTextWidget; }
+UTextBlock *UDisplayText::GetDisplayTextWidget() const {
+    return DisplayTextWidget;
+}

@@ -19,10 +19,13 @@ const FTrainerType &UBasicTrainer::GetTrainerType() const {
     auto &TrainerTypeTable = DataManager.GetDataTable<FTrainerType>();
 
     auto TrainerTypeData = TrainerTypeTable.GetData(TrainerType);
-    check(TrainerTypeData != nullptr) return *TrainerTypeData;
+    check(TrainerTypeData != nullptr)
+    return *TrainerTypeData;
 }
 
-FText UBasicTrainer::GetTrainerName() const { return Name; }
+FText UBasicTrainer::GetTrainerName() const {
+    return Name;
+}
 
 int32 UBasicTrainer::GetPayout() const {
     if (Party.IsEmpty()) {
@@ -31,17 +34,27 @@ int32 UBasicTrainer::GetPayout() const {
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
 }
 
-const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const { return Party; }
+const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {
+    return Party;
+}
 
-void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) { Party.Add(Pokemon); }
+void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) {
+    Party.Add(Pokemon);
+}
 
 void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {
     check(Index1 >= 0 && Index1 < Party.Num() && Index2 >= 0 && Index2 < Party.Num())
-        Swap(Party[Index1], Party[Index2]);
+    Swap(Party[Index1], Party[Index2]);
 }
 
-void UBasicTrainer::ClearParty() { Party.Empty(); }
+void UBasicTrainer::ClearParty() {
+    Party.Empty();
+}
 
-int32 UBasicTrainer::GetIdNumber() { return ID; }
+int32 UBasicTrainer::GetIdNumber() {
+    return ID;
+}
 
-int32 UBasicTrainer::GetSecretId() { return SecretID; }
+int32 UBasicTrainer::GetSecretId() {
+    return SecretID;
+}

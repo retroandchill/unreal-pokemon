@@ -23,7 +23,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProcessConfirm, int32, CurrentIndex
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
 
 /**
- * Widget for a menu that options can be selected from using the cursor
+ * \class USelectableWidget
+ *
+ * \brief A base class for selectable widgets in RPG menus.
  */
 UCLASS(BlueprintType)
 class RPGMENUS_API USelectableWidget : public UUserWidget {
@@ -108,20 +110,26 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     void SetActive(bool bNewActiveState);
 
     /**
-     * The delegate bound to confirm
+     * @brief Retrieves the reference to the delegate for when the user presses confirm.
+     *
+     * @details This method returns a reference to the FProcessConfirm delegate for when the user presses confirm
+     *          in the SelectableWidget. The delegate can be used to register callback functions to be executed
+     *          when the confirm event occurs.
+     *
+     * @return The reference to the FProcessConfirm delegate for when the user presses confirm.
      */
-    UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
-    FProcessConfirm OnConfirm;
+    FProcessConfirm &GetOnConfirm();
 
     /**
-     * The delegate bound to cancel
+     * Retrieves the delegate for when the user cancels.
+     *
+     * @return The delegate for when the user cancels.
      */
-    UPROPERTY(BlueprintAssignable, Category = "Selection|Cancel")
-    FProcessCancel OnCancel;
+    FProcessCancel &GetOnCancel();
 
   protected:
     void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
-    
+
     FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 
     /**
@@ -131,14 +139,14 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      * @param CurrentIndex The current index of the menu
      */
     void ConfirmOnIndex(int32 CurrentIndex);
-    
+
     /**
      * Process the clicked button event for the Command Window
      *
      * @param Option The selectable option that was clicked
      */
     UFUNCTION()
-    void ProcessClickedButton(USelectableOption* Option);
+    void ProcessClickedButton(USelectableOption *Option);
 
     /**
      * Process the hovered button event for the Command Window
@@ -146,8 +154,8 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      * @param Option The selectable option that was hovered
      */
     UFUNCTION()
-    void ProcessHoveredButton(USelectableOption* Option);
-    
+    void ProcessHoveredButton(USelectableOption *Option);
+
     /**
      * Called when the selection is changed
      * @param OldIndex The previous index of this widget
@@ -189,6 +197,18 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      * @param Direction The received cursor input
      */
     void ReceiveMoveCursor(ECursorDirection Direction);
+
+    /**
+     * The delegate bound to confirm
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
+    FProcessConfirm OnConfirm;
+
+    /**
+     * The delegate bound to cancel
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Cancel")
+    FProcessCancel OnCancel;
 
     /**
      * The index of the menu in question

@@ -13,23 +13,33 @@ TScriptInterface<IStatEntry> UDefaultStatEntry::Initialize(FName Stat, const TOp
     return this;
 }
 
-int32 UDefaultStatEntry::GetStatValue() const { return Value; }
+int32 UDefaultStatEntry::GetStatValue() const {
+    return Value;
+}
 
 const FStat &UDefaultStatEntry::GetStat() const {
     auto Stat = FDataManager::GetInstance().GetDataTable<FStat>().GetData(StatID);
     check(Stat != nullptr)
 
-        return *Stat;
+    return *Stat;
 }
 
-FName UDefaultStatEntry::GetStatID() const { return StatID; }
+FName UDefaultStatEntry::GetID() const {
+    return StatID;
+}
 
-int32 UDefaultStatEntry::GetIV() const { return IV; }
+int32 UDefaultStatEntry::GetIV() const {
+    return IV;
+}
 
-int32 UDefaultStatEntry::GetEV() const { return EV; }
+int32 UDefaultStatEntry::GetEV() const {
+    return EV;
+}
 
 void UDefaultStatEntry::RefreshValue(int32 Level, int32 Base, const FNature &Nature) {
     // No implementation but abstracts are not allowed so we have to put this here
 }
 
-void UDefaultStatEntry::SetStatValue(int32 NewValue) { Value = NewValue; }
+void UDefaultStatEntry::SetStatValue(int32 NewValue) {
+    Value = NewValue;
+}

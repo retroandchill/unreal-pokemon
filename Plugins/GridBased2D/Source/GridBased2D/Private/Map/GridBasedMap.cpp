@@ -56,7 +56,9 @@ void AGridBasedMap::RefreshTileData() {
     TileReplacer->ReplaceTiles(TileMapComponent);
 }
 
-void AGridBasedMap::ClearTileReplacements() { TileReplacer->RestoreCachedTiles(TileMapComponent); }
+void AGridBasedMap::ClearTileReplacements() {
+    TileReplacer->RestoreCachedTiles(TileMapComponent);
+}
 #endif
 
 FIntRect AGridBasedMap::GetBounds() const {
@@ -68,7 +70,7 @@ FIntRect AGridBasedMap::GetBounds() const {
 }
 
 void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
-    UPaperTileMap *TileMap = TileMapComponent->TileMap;
+    const UPaperTileMap *TileMap = TileMapComponent->TileMap;
     if (TileMap == nullptr) {
         return;
     }

@@ -10,7 +10,8 @@ void UCharacterBillboardAnimationComponent::UpdateDirection(EFacingDirection Dir
     }
     MaterialInstance->SetScalarParameterValue(DirectionPropertyName, static_cast<float>(Direction));
     if (!CurrentDirection.IsSet() || CurrentDirection.GetValue() != Direction) {
-        MaterialInstance->SetScalarParameterValue(StartTimePropertyName, GetWorld()->GetRealTimeSeconds());
+        MaterialInstance->SetScalarParameterValue(StartTimePropertyName,
+                                                  static_cast<float>(GetWorld()->GetRealTimeSeconds()));
         PlayingTime.Emplace(0.0);
         CurrentDirection.Emplace(Direction);
     }
@@ -27,7 +28,8 @@ void UCharacterBillboardAnimationComponent::StartMoveAnimation() {
 
     MaterialInstance->SetScalarParameterValue(FrameRatePropertyName, OriginalFrameRate);
     if (!PlayingTime.IsSet()) {
-        MaterialInstance->SetScalarParameterValue(StartTimePropertyName, GetWorld()->GetRealTimeSeconds());
+        MaterialInstance->SetScalarParameterValue(StartTimePropertyName,
+                                                  static_cast<float>(GetWorld()->GetRealTimeSeconds()));
         PlayingTime.Emplace(0.0);
     }
 }
@@ -59,8 +61,9 @@ void UCharacterBillboardAnimationComponent::BeginPlay() {
         return;
     }
     BillboardComponent->Elements.Empty();
-    BillboardComponent->AddElement(MaterialInstance, nullptr, false, SourceTexture->GetSizeY() / (4 * 2),
-                                   SourceTexture->GetSizeX() / (4 * 2), nullptr);
+    BillboardComponent->AddElement(MaterialInstance, nullptr, false,
+                                   static_cast<float>(SourceTexture->GetSizeY()) / (4 * 2),
+                                   static_cast<float>(SourceTexture->GetSizeX()) / (4 * 2), nullptr);
 }
 
 void UCharacterBillboardAnimationComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -75,7 +78,8 @@ void UCharacterBillboardAnimationComponent::TickComponent(float DeltaTime, ELeve
 void UCharacterBillboardAnimationComponent::SetUpMaterialInstance() {
     if (BaseMaterial == nullptr || SourceTexture == nullptr) {
         return;
-    };
+    }
+
     MaterialInstance = UMaterialInstanceDynamic::Create(BaseMaterial, this);
     OriginalFrameRate = MaterialInstance->K2_GetScalarParameterValue(FrameRatePropertyName);
     MaterialInstance->SetTextureParameterValue(SourceTexturePropertyName, SourceTexture);

@@ -59,7 +59,7 @@ class POKEMONCORE_API IStatEntry {
      * @return The ID of the stat in question
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FName GetStatID() const = 0;
+    virtual FName GetID() const = 0;
 
     /**
      * Get the IV of the stat

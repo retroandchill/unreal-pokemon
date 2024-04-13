@@ -19,7 +19,7 @@ class POKEMONTESTS_API ASelectableWidgetMouseTest : public AFunctionalTest {
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-private:
+  private:
     /**
      * Actually run the test
      */
@@ -32,6 +32,5 @@ private:
     UPROPERTY(EditInstanceOnly, Category = "Test Parameters", meta = (MustImplement = "SelectableOptionTestWidget"))
     TSubclassOf<USelectableOptionTestWidget> WidgetClass;
 
-    
     TOptional<int32> SelectedIndex;
 };

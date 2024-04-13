@@ -14,9 +14,11 @@ FDataRegistry &FDataRegistry::GetInstance() {
 
 TUniquePtr<IGameData> FDataRegistry::CreateDataTableProxy(const UScriptStruct *StructType,
                                                           const TObjectPtr<UDataTable> &DataTable) const {
-    check(StructType != nullptr) return Registry.Construct(StructType->GetFName(), DataTable);
+    check(StructType != nullptr)
+    return Registry.Construct(StructType->GetFName(), DataTable);
 }
 
 bool FDataRegistry::IsTypeRegistered(const UScriptStruct *StructType) const {
-    check(StructType != nullptr) return Registry.IsTypeRegistered(StructType->GetFName());
+    check(StructType != nullptr)
+    return Registry.IsTypeRegistered(StructType->GetFName());
 }

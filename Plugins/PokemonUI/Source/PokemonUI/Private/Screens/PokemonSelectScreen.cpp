@@ -11,12 +11,13 @@
 
 void UPokemonSelectScreen::NativeConstruct() {
     Super::NativeConstruct();
-    check(SelectionPane != nullptr) SelectionPane->SetIndex(0);
+    check(SelectionPane != nullptr)
+    SelectionPane->SetIndex(0);
     SelectionPane->SetActive(true);
-    SelectionPane->OnConfirm.AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
-    SelectionPane->OnCancel.AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
-    CommandWindow->OnCommandSelected.AddDynamic(this, &UPokemonSelectScreen::ProcessCommand);
-    CommandWindow->OnCancel.AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
+    SelectionPane->GetOnConfirm().AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
+    SelectionPane->GetOnCancel().AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
+    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UPokemonSelectScreen::ProcessCommand);
+    CommandWindow->GetOnCancel().AddDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
     ToggleCommandWindowVisibility(false);
 }
 
@@ -30,7 +31,9 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
     SelectionPane->SetActive(true);
 }
 
-void UPokemonSelectScreen::SetHelpText(const FText &Text) { CommandHelpWindow->SetText(Text); }
+void UPokemonSelectScreen::SetHelpText(const FText &Text) {
+    CommandHelpWindow->SetText(Text);
+}
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
     if (auto &Trainer = *UPokemonSubsystem::GetInstance().GetPlayer(); Index < Trainer.GetParty().Num()) {
@@ -40,31 +43,35 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
             }
             SelectionPane->CompleteSwitch();
         } else {
-            TArray<TObjectPtr<UCommand>> Commands;
-            for (UPartyMenuHandler *Handler : PokemonHandlers) {
-                if (!Handler->ShouldShow(*this, Trainer, Index))
-                    continue;
-
-                Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
-            }
-            Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
-            CommandWindow->SetCommands(MoveTemp(Commands));
-
-            SelectionPane->SetActive(false);
-            CommandWindow->SetIndex(0);
-            CommandWindow->SetActive(true);
-
-            SelectionPane->ToggleCommandVisibility(false);
-            ToggleCommandWindowVisibility(true);
+            DisplayPokemonCommands(Trainer, Index);
         }
     } else {
         // TODO: Handle the additional options
     }
 }
 
-void UPokemonSelectScreen::ProcessCommand(int32 CurrentIndex, UCommand *SelectedCommand) {
+void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index) {
+    TArray<TObjectPtr<UCommand>> Commands;
+    for (UPartyMenuHandler *Handler : PokemonHandlers) {
+        if (!Handler->ShouldShow(*this, Trainer, Index))
+            continue;
+
+        Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
+    }
+    Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
+    CommandWindow->SetCommands(MoveTemp(Commands));
+
+    SelectionPane->SetActive(false);
+    CommandWindow->SetIndex(0);
+    CommandWindow->SetActive(true);
+
+    SelectionPane->ToggleCommandVisibility(false);
+    ToggleCommandWindowVisibility(true);
+}
+
+void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
     auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
-    check(Handler != nullptr);
+    check(Handler != nullptr)
     Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
 }
 
@@ -76,11 +83,12 @@ void UPokemonSelectScreen::OnCommandWindowCancel() {
 }
 
 void UPokemonSelectScreen::ToggleCommandWindowVisibility(bool bIsVisible) {
+    using enum ESlateVisibility;
     if (bIsVisible) {
-        CommandWindow->SetVisibility(ESlateVisibility::Visible);
-        CommandHelpWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+        CommandWindow->SetVisibility(Visible);
+        CommandHelpWindow->SetVisibility(SelfHitTestInvisible);
     } else {
-        CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
-        CommandHelpWindow->SetVisibility(ESlateVisibility::Collapsed);
+        CommandWindow->SetVisibility(Collapsed);
+        CommandHelpWindow->SetVisibility(Collapsed);
     }
 }

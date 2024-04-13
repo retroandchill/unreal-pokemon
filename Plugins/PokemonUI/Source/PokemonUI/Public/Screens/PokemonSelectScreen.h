@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "PartyScreen.h"
 #include "Screens/Screen.h"
+#include "Trainers/Trainer.h"
 #include "PokemonSelectScreen.generated.h"
 
 class UPartyMenuHandler;
@@ -34,6 +35,13 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void OnPokemonSelected(int32 Index);
 
     /**
+     * Display the commands available for a selected Pokémon in the command window
+     * @param Trainer The trainer that owns the selected Pokémon
+     * @param Index The index of the selected Pokémon in the trainer's party
+     */
+    void DisplayPokemonCommands(ITrainer &Trainer, int32 Index);
+
+    /**
      * Process the selected command
      * @param CurrentIndex The index of the command
      * @param SelectedCommand The command in question
@@ -53,7 +61,6 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     void ToggleCommandWindowVisibility(bool bIsVisible);
 
-  private:
     /**
      * The "Window" that the player selects a Pokémon from
      */

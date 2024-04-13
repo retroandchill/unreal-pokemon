@@ -8,12 +8,11 @@
 
 class USelectableOption;
 
-
 UCLASS(Abstract)
 class USelectableOptionTestWidget : public USelectableWidget {
     GENERATED_BODY()
 
-public:
+  public:
     void CreateChildWidgets();
 
     UFUNCTION(BlueprintImplementableEvent, Category = Components)
@@ -21,13 +20,12 @@ public:
 
     int32 GetItemCount_Implementation() const override;
 
-  const TArray<TObjectPtr<USelectableOption>> &GetOptions() const;
+    const TArray<TObjectPtr<USelectableOption>> &GetOptions() const;
 
-private:
+  private:
     UPROPERTY(EditDefaultsOnly, Category = Components)
     TSubclassOf<USelectableOption> OptionWidget;
 
     UPROPERTY()
     TArray<TObjectPtr<USelectableOption>> Options;
-
 };

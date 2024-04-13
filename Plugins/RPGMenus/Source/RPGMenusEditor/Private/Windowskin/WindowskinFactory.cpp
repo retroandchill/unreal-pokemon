@@ -12,4 +12,6 @@ UWindowskin *UWindowskinFactory::FactoryCreateNew(UClass *InClass, UObject *InPa
     return NewObject<UWindowskin>(InParent, InClass, InName, Flags);
 }
 
-bool UWindowskinFactory::ShouldShowInNewMenu() const { return true; }
+bool UWindowskinFactory::ShouldShowInNewMenu() const {
+    return true;
+}
