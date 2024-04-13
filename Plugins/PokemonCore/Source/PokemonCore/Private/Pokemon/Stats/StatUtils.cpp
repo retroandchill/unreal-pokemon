@@ -24,7 +24,9 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
     return Ret;
 }
 
-int32 StatUtils::RandomizeIV() { return FMath::RandRange(0, IV_MAX); }
+int32 StatUtils::RandomizeIV() {
+    return FMath::RandRange(0, IV_MAX);
+}
 
 POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
     const auto &DataSubsystem = FDataManager::GetInstance();

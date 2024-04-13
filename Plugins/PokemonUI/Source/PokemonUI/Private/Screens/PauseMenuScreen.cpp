@@ -10,8 +10,8 @@ void UPauseMenuScreen::NativePreConstruct() {
     if (CommandWindow == nullptr)
         return;
 
-    CommandWindow->OnCommandSelected.AddDynamic(this, &UPauseMenuScreen::ProcessCommand);
-    CommandWindow->OnCancel.AddDynamic(this, &UPauseMenuScreen::CloseScreen);
+    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UPauseMenuScreen::ProcessCommand);
+    CommandWindow->GetOnCancel().AddDynamic(this, &UPauseMenuScreen::CloseScreen);
 }
 
 void UPauseMenuScreen::NativeConstruct() {

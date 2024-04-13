@@ -12,7 +12,8 @@
 void UPokemonSelectionPane::NativeConstruct() {
     Super::NativeConstruct();
 
-    check(ContentsArea != nullptr) auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
+    check(ContentsArea != nullptr)
+    const auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
     auto &PlayerParty = PokemonSubsystem.GetPlayer()->GetParty();
 
     ActivePanels.Empty();
@@ -52,24 +53,34 @@ void UPokemonSelectionPane::NativeConstruct() {
     }
 }
 
-int32 UPokemonSelectionPane::GetItemCount_Implementation() const { return ActivePanels.Num(); }
+int32 UPokemonSelectionPane::GetItemCount_Implementation() const {
+    return ActivePanels.Num();
+}
 
-int32 UPokemonSelectionPane::GetColumnCount_Implementation() const { return Columns; }
+int32 UPokemonSelectionPane::GetColumnCount_Implementation() const {
+    return Columns;
+}
 
-bool UPokemonSelectionPane::IsMultiSelectMode() const { return bMultiSelectMode; }
+bool UPokemonSelectionPane::IsMultiSelectMode() const {
+    return bMultiSelectMode;
+}
 
-bool UPokemonSelectionPane::IsSwitching() const { return SwitchingIndex.IsSet(); }
+bool UPokemonSelectionPane::IsSwitching() const {
+    return SwitchingIndex.IsSet();
+}
 
-const TOptional<int32> &UPokemonSelectionPane::GetSwitchingIndex() const { return SwitchingIndex; }
+const TOptional<int32> &UPokemonSelectionPane::GetSwitchingIndex() const {
+    return SwitchingIndex;
+}
 
 void UPokemonSelectionPane::BeginSwitch(int32 StartIndex) {
-    check(!SwitchingIndex.IsSet());
+    check(!SwitchingIndex.IsSet())
     SwitchingIndex.Emplace(StartIndex);
     ActivePanels[StartIndex]->Refresh();
 }
 
 void UPokemonSelectionPane::CompleteSwitch() {
-    check(SwitchingIndex.IsSet());
+    check(SwitchingIndex.IsSet())
     auto Panel1 = CastChecked<UPokemonPanel>(ActivePanels[SwitchingIndex.GetValue()].GetObject());
     auto Panel2 = CastChecked<UPokemonPanel>(ActivePanels[GetIndex()].GetObject());
     SwitchingIndex.Reset();
@@ -83,7 +94,7 @@ TPair<FMargin, FAnchors> UPokemonSelectionPane::GetPanelOffset(int32 PanelIndex)
 }
 
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
-    for (auto &Panel : ActivePanels) {
+    for (const auto &Panel : ActivePanels) {
         Panel->Refresh();
     }
 }

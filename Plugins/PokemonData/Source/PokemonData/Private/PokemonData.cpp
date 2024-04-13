@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "PokemonData.h"
 
-#include "..\Public\Moves\MoveData.h"
-#include "..\Public\Species\SpeciesData.h"
+#include "Moves/MoveData.h"
+#include "Species/SpeciesData.h"
 #include "Bag/Item.h"
 #include "Battle/BattleTerrain.h"
 #include "Battle/BattleWeather.h"

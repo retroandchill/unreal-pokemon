@@ -60,10 +60,10 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
     void SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands);
 
     /**
-     * Callback for when a command is selected
+     * Get the delegate for when a command is selected
+     * @return The delegate for when a command is selected
      */
-    UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
-    FProcessCommand OnCommandSelected;
+    FProcessCommand &GetOnCommandSelected();
 
   protected:
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
@@ -86,6 +86,12 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
      * Set the visible status of the arrows as needed
      */
     void SetScrollArrowsVisible();
+
+    /**
+     * Callback for when a command is selected
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
+    FProcessCommand OnCommandSelected;
 
     /**
      * The actual area where the window is drawn

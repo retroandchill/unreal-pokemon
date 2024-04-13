@@ -21,7 +21,8 @@ class TGCPointer : public FGCObject {
      * Instantiate a new pointer from the given object pointer
      * @param Object The pointer to add as a reference
      */
-    explicit TGCPointer(T *Object) : HeldObject(Object) {}
+    explicit TGCPointer(T *Object) : HeldObject(Object) {
+    }
 
     /**
      * Assign a new pointer into this object
@@ -38,14 +39,20 @@ class TGCPointer : public FGCObject {
      * @param Other The object type being pointed to
      * @return Are the two pointers equal
      */
-    bool operator==(T *Other) const { return HeldObject == Other; }
+    bool operator==(T *Other) const {
+        return HeldObject == Other;
+    }
 
     /**
      * Convert the held pointer to the type held by itself
      */
-    explicit operator T() const { return HeldObject; }
+    explicit operator T() const {
+        return HeldObject;
+    }
 
-    void AddReferencedObjects(FReferenceCollector &Collector) override { Collector.AddReferencedObject(HeldObject); }
+    void AddReferencedObjects(FReferenceCollector &Collector) override {
+        Collector.AddReferencedObject(HeldObject);
+    }
 
     FString GetReferencerName() const override {
         return FString::Format(TEXT("TGCPointer<{ClassName}>"),
@@ -56,19 +63,26 @@ class TGCPointer : public FGCObject {
      * Get a reference to this object, provided it has not been garbage collected
      * @return The object held by this pointer
      */
-    T *Get() const { return HeldObject.Get(); }
+    T *Get() const {
+        return HeldObject.Get();
+    }
 
     /**
      * Dereferences the held object returning it by reference
      * @return The object held by this pointer
      */
-    T &operator*() const { check(HeldObject != nullptr) return *HeldObject; }
+    T &operator*() const {
+        check(HeldObject != nullptr)
+        return *HeldObject;
+    }
 
     /**
      * Dereferences the held object returning it by reference
      * @return The object held by this pointer
      */
-    T *operator->() const { return HeldObject; }
+    T *operator->() const {
+        return HeldObject;
+    }
 
   private:
     TObjectPtr<T> HeldObject;

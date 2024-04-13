@@ -82,7 +82,7 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
         auto World = WorldContext->GetWorld();
         check(World != nullptr)
 
-            for (TActorIterator<T> It(World); It; ++It) {
+        for (TActorIterator<T> It(World); It; ++It) {
             Ret.Emplace(*It);
         }
 

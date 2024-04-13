@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Pokemon/GamePokemon.h"
+#include "Pokemon/Stats/DefaultStatBlock.h"
 #include "PokemonCoreSettings.generated.h"
 
 /**
@@ -14,8 +16,6 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:
-    UPokemonCoreSettings();
-
     /**
      * The the ID of the HP stat
      * @return The stat used referring to a Pokémon's HP
@@ -64,12 +64,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = Pokemon))
-    TSubclassOf<UObject> PokemonClass;
+    TSubclassOf<UObject> PokemonClass = UGamePokemon::StaticClass();
 
     /**
      * The class used for all Stat Block objects
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = StatBlock))
-    TSubclassOf<UObject> StatBlockClass;
+    TSubclassOf<UObject> StatBlockClass = UDefaultStatBlock::StaticClass();
 };

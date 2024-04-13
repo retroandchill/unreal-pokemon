@@ -6,7 +6,8 @@
 
 const FGenderRatio &FSpeciesData::GetGenderRatio() const {
     auto Ret = FDataManager::GetInstance().GetDataTable<FGenderRatio>().GetData(GenderRatio);
-    check(Ret != nullptr) return *Ret;
+    check(Ret != nullptr)
+    return *Ret;
 }
 
 TArray<FName> USpeciesHelper::GetSpeciesNames() {

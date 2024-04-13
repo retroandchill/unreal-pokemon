@@ -10,7 +10,8 @@
 #include "Nodes/DisplayMessageWithChoices.h"
 
 UK2Node_DisplayMessageWithChoices::UK2Node_DisplayMessageWithChoices(const FObjectInitializer &ObjectInitializer)
-    : Super(ObjectInitializer) {}
+    : Super(ObjectInitializer) {
+}
 
 void UK2Node_DisplayMessageWithChoices::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
@@ -58,7 +59,8 @@ void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu *Men
 
 void UK2Node_DisplayMessageWithChoices::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
     auto FactoryFunc = UDisplayMessageWithChoices::StaticClass()->FindFunctionByName("DisplayMessageWithChoices");
-    check(FactoryFunc != nullptr) SupplyMenuActions(ActionRegistrar, FactoryFunc);
+    check(FactoryFunc != nullptr)
+    SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 
 void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {

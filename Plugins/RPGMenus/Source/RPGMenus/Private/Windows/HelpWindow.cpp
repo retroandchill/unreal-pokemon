@@ -20,7 +20,9 @@ void UHelpWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedE
     SetText(Text);
 }
 
-const FText &UHelpWindow::GetText() const { return Text; }
+const FText &UHelpWindow::GetText() const {
+    return Text;
+}
 
 void UHelpWindow::SetText(const FText &NewText) {
     Text = NewText;

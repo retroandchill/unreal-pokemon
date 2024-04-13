@@ -61,7 +61,9 @@ bool AGridBasedCharacter::PerformAdditionalMovementChecks_Implementation(const F
     return bBlockingHit;
 }
 
-uint8 AGridBasedCharacter::GetInteractionTypes() const { return InteractionTypes; }
+uint8 AGridBasedCharacter::GetInteractionTypes() const {
+    return InteractionTypes;
+}
 
 UGridBasedMovementComponent *AGridBasedCharacter::GetGridBasedMovementComponentInternal() const {
     return GridBasedMovementComponent;
@@ -145,14 +147,16 @@ void AGridBasedCharacter::Turn(const FInputActionInstance &Input) {
 
 void AGridBasedCharacter::Interact() {
     for (auto Results = GridBasedMovementComponent->HitTestOnFacingTile(GridBasedMovementComponent->GetDirection());
-         auto &Result : Results) {
+         const auto &Result : Results) {
         if (auto Interactable = Cast<IInteractable>(Result.GetActor());
-            Interactable == nullptr ||
-            (Interactable->GetInteractionTypes() & static_cast<uint8>(EInteractionType::Talk)) == 0)
+            Interactable == nullptr || (static_cast<std::byte>(Interactable->GetInteractionTypes()) &
+                                        static_cast<std::byte>(EInteractionType::Talk)) == static_cast<std::byte>(0))
             continue;
 
         Execute_OnInteract(Result.GetActor(), this, EInteractionType::Talk);
     }
 }
 
-void AGridBasedCharacter::PauseGame() { PauseAction->PerformAction(this); }
+void AGridBasedCharacter::PauseGame() {
+    PauseAction->PerformAction(this);
+}

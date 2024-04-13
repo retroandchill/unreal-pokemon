@@ -8,7 +8,8 @@
  * The generic version of the static registry that requires no additional specialized methods, and can act as a
  * singleton object all on its own
  */
-template <typename T, typename... Args> class TGenericStaticUniqueRegistry : public TUniquePokeRegistry<T, Args...> {
+template <typename T, typename... Args>
+class TGenericStaticUniqueRegistry : public TUniquePokeRegistry<T, Args...> {
     TGenericStaticUniqueRegistry() = default;
     ~TGenericStaticUniqueRegistry() = default;
 

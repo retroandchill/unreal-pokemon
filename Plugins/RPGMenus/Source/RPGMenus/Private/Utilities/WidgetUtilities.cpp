@@ -34,4 +34,6 @@ FVector2D UWidgetUtilities::GetDesiredTextureSize(const UTexture2D *const Textur
     return FVector2D(Texture->GetSizeX(), Texture->GetSizeY());
 }
 
-void UWidgetUtilities::ChangeBrushSize(FSlateBrush &Brush, FVector2D NewSize) { Brush.SetImageSize(NewSize); }
+void UWidgetUtilities::ChangeBrushSize(FSlateBrush &Brush, FVector2D NewSize) {
+    Brush.SetImageSize(NewSize);
+}

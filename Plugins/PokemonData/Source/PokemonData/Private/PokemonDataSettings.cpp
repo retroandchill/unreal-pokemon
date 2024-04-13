@@ -2,4 +2,6 @@
 
 #include "PokemonDataSettings.h"
 
-const TSet<FSoftObjectPath> &UPokemonDataSettings::GetDataTables() const { return DataTables; }
+const TSet<FSoftObjectPath> &UPokemonDataSettings::GetDataTables() const {
+    return DataTables;
+}

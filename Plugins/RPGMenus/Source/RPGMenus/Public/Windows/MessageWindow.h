@@ -55,18 +55,6 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
     UFUNCTION(BlueprintCallable, Category = "Messages|Display")
     void ClearDisplayText();
 
-    /**
-     * The callback for when the text has finished displaying
-     */
-    UPROPERTY(BlueprintAssignable, Category = Events)
-    FAdvanceText OnAdvanceText;
-
-    /**
-     * Callback for when we need to display a choice to the player
-     */
-    UPROPERTY(BlueprintAssignable, Category = Events)
-    FDisplayChoices OnDisplayChoices;
-
     void SetPaused(bool bPausedIn);
 
     /**
@@ -75,6 +63,20 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
      */
     UFUNCTION(BlueprintPure, CAtegory = "Messages|Input")
     bool IsAwaitingInput() const;
+
+    /**
+     * Get the callback for when the text advances.
+     *
+     * @return The callback for when the text advances.
+     */
+    FAdvanceText &GetOnAdvanceText();
+
+    /**
+     * Get the callback for when choices need to be displayed to the player.
+     *
+     * @return The callback for displaying choices.
+     */
+    FDisplayChoices &GetOnDisplayChoices();
 
   private:
     /**
@@ -111,6 +113,18 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
      * Queue a new line to be added
      */
     void AddNewLine();
+
+    /**
+     * The callback for when the text has finished displaying
+     */
+    UPROPERTY(BlueprintAssignable, Category = Events)
+    FAdvanceText OnAdvanceText;
+
+    /**
+     * Callback for when we need to display a choice to the player
+     */
+    UPROPERTY(BlueprintAssignable, Category = Events)
+    FDisplayChoices OnDisplayChoices;
 
     /**
      * The actual area where the window is drawn

@@ -16,12 +16,6 @@ class GRIDBASED2D_API UFadeScreenIn : public UBlueprintAsyncActionBase {
 
   public:
     /**
-     * Called when the transition is finished
-     */
-    UPROPERTY(BlueprintAssignable)
-    FOnScreenTransitionFinished OnScreenTransitionFinished;
-
-    /**
      * Fade the screen in
      * @param WorldContext The object used to obtain the world information
      * @return The node to execute the task with
@@ -38,6 +32,12 @@ class GRIDBASED2D_API UFadeScreenIn : public UBlueprintAsyncActionBase {
      */
     UFUNCTION()
     void TransitionFinished();
+
+    /**
+     * Called when the transition is finished
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnScreenTransitionFinished OnScreenTransitionFinished;
 
     /**
      * The object used to obtain the world information

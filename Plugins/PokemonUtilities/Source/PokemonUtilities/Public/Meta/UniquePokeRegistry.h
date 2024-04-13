@@ -9,7 +9,8 @@
  * @tparam T The superclass type of the registry
  * @tparam Args The constructor arguments taken in
  */
-template <typename T, typename... Args> class TUniquePokeRegistry : public TPokeRegistry<TUniquePtr<T>, Args...> {
+template <typename T, typename... Args>
+class TUniquePokeRegistry : public TPokeRegistry<TUniquePtr<T>, Args...> {
   public:
     /**
      * Register the given class for the given key using the default constructor

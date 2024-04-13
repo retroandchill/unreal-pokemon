@@ -36,10 +36,10 @@ class POKEMONDATA_API FDataManager {
         auto RowName = StructClass->GetFName();
         check(DataTables.Contains(RowName))
 
-            auto TableInterface = DataTables[RowName].Get();
+        auto TableInterface = DataTables[RowName].Get();
         check(StructClass->GetName() == TableInterface->GetStructType()->GetName())
 
-            auto TableOut = static_cast<TDataTableProxy<T> *>(TableInterface);
+        auto TableOut = static_cast<TDataTableProxy<T> *>(TableInterface);
         return *TableOut;
     }
 

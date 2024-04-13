@@ -5,7 +5,9 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 
-void UK2Node_GetGameData::Initialize(UScriptStruct *NodeStruct) { StructType = NodeStruct; }
+void UK2Node_GetGameData::Initialize(UScriptStruct *NodeStruct) {
+    StructType = NodeStruct;
+}
 
 void UK2Node_GetGameData::AllocateDefaultPins() {
     auto RowNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
@@ -41,7 +43,9 @@ FText UK2Node_GetGameData::GetTooltipText() const {
     return NSLOCTEXT("K2Node", "GetGameData_InvalidStructTypeTooltip", "Invalid Struct Type");
 }
 
-bool UK2Node_GetGameData::IsNodePure() const { return true; }
+bool UK2Node_GetGameData::IsNodePure() const {
+    return true;
+}
 
 FText UK2Node_GetGameData::GetMenuCategory() const {
     if (StructType == nullptr)
@@ -105,4 +109,6 @@ TArray<FName> UK2Node_GetGameData::GetRowNames() const {
     return DataTable.GetTableRowNames();
 }
 
-UEdGraphPin *UK2Node_GetGameData::GetRowPin() const { return FindPinChecked(TEXT("RowName")); }
+UEdGraphPin *UK2Node_GetGameData::GetRowPin() const {
+    return FindPinChecked(TEXT("RowName"));
+}

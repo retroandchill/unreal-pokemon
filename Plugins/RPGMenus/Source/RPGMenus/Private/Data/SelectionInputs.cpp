@@ -22,6 +22,10 @@ TOptional<ECursorDirection> USelectionInputs::ParseDirectionalInputs(const FKey 
     return TOptional<ECursorDirection>();
 }
 
-bool USelectionInputs::IsConfirmInput(const FKey &Key) const { return ConfirmInputs.Contains(Key); }
+bool USelectionInputs::IsConfirmInput(const FKey &Key) const {
+    return ConfirmInputs.Contains(Key);
+}
 
-bool USelectionInputs::IsCancelInput(const FKey &Key) const { return CancelInputs.Contains(Key); }
+bool USelectionInputs::IsCancelInput(const FKey &Key) const {
+    return CancelInputs.Contains(Key);
+}

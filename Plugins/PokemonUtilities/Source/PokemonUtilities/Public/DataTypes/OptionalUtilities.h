@@ -11,7 +11,8 @@
  * @param bOverride Is the property being overriden.
  * @return An optional containing the value if bOverride is true, otherwise an empty optional
  */
-template <typename T> TOptional<T> CreateOptional(const T &Property, bool bOverride) {
+template <typename T>
+TOptional<T> CreateOptional(const T &Property, bool bOverride) {
     return bOverride ? TOptional<T>(Property) : TOptional<T>();
 }
 
@@ -22,7 +23,8 @@ template <typename T> TOptional<T> CreateOptional(const T &Property, bool bOverr
  * @param bOverride Is the property being overriden.
  * @return An optional containing the value if bOverride is true, otherwise an empty optional
  */
-template <typename T> TOptional<T> CreateOptional(T &&Property, bool bOverride) {
+template <typename T>
+TOptional<T> CreateOptional(T &&Property, bool bOverride) {
     return bOverride ? TOptional<T>(Forward(Property)) : TOptional<T>();
 }
 
@@ -50,7 +52,8 @@ concept overloads_equals = requires(T A, T B) { A == B; };
  * @param B The second optional to compare
  * @return They they equal?
  */
-template <overloads_equals T> bool OptionalsSame(const TOptional<T> &A, const TOptional<T> &B) {
+template <overloads_equals T>
+bool OptionalsSame(const TOptional<T> &A, const TOptional<T> &B) {
     if (A.IsSet() != B.IsSet())
         return false;
 

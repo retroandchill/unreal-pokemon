@@ -22,7 +22,9 @@
   private:
 
 #define IMPLEMENT_DERIVED_METATYPE(Class)                                                                              \
-    FName Class::GetClassName() const { return ClassName(); }                                                          \
+    FName Class::GetClassName() const {                                                                                \
+        return ClassName();                                                                                            \
+    }                                                                                                                  \
     FName Class::ClassName() {                                                                                         \
         static const FName ClassName = TEXT(#Class);                                                                   \
         return ClassName;                                                                                              \
