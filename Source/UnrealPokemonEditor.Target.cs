@@ -9,8 +9,11 @@ public class UnrealPokemonEditorTarget : TargetRules
 	public UnrealPokemonEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
+		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
+		WindowsPlatform.Compiler = WindowsCompiler.Clang;
+		bOverrideBuildEnvironment = true;
+		AdditionalCompilerArguments += "-fprofile-instr-generate -fcoverage-mapping";
 		RegisterModulesCreatedByRider();
 	}
 
