@@ -24,6 +24,7 @@ public class PokemonTests : ModuleRules
 				"BlueprintGraph",
 				"KismetCompiler",
 				"UnrealEd",
+				"EditorSubsystem",
 				"GraphEditor",
 				"RPGMenus",
 				"GridBased2D",
