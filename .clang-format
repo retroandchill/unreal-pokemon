@@ -5,8 +5,8 @@ ColumnLimit: 120
 MaxEmptyLinesToKeep: 1
 TabWidth: 4
 IndentWidth: 4
-SortIncludes: false
-AllowShortFunctionsOnASingleLine: false
+SortIncludes: CaseInsensitive
+AllowShortFunctionsOnASingleLine: None
 IncludeBlocks: Regroup
 IncludeCategories:
     - Regex: 'CoreMinimal.h'
@@ -20,7 +20,7 @@ IncludeCategories:
       Priority:        1
       SortPriority:    0
 BreakBeforeConceptDeclarations: true
-AlwaysBreakTemplateDeclarations : true
+AlwaysBreakTemplateDeclarations : Yes
 ForEachMacros: 
     - TRIPLE_LOOP
 Macros:
