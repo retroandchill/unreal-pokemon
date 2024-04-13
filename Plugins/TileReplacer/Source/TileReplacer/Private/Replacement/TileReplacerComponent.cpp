@@ -40,7 +40,7 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
         TileReplacements.Add(Replacement->SourceTile, Replacement);
     }
 
-    TRIPLE_LOOP(i, SizeX, j, SizeY, k, SizeZ) {
+    TRIPLE_LOOP (i, SizeX, j, SizeY, k, SizeZ) {
         auto Tile = TilemapComponent->GetTile(i, j, k);
         if (!Tile.IsValid())
             continue;

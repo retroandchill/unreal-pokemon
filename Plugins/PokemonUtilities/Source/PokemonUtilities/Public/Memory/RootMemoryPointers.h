@@ -33,7 +33,8 @@ class FRootDeleter {
  * when this object is destroyed.
  * @tparam T The UObject type this object points to
  */
-template <typename T> using TUniqueRootPtr = TUniquePtr<T, FRootDeleter>;
+template <typename T>
+using TUniqueRootPtr = TUniquePtr<T, FRootDeleter>;
 
 /**
  * Add the specified object to the root and place it inside a specialized Unique Pointer to remove it upon destruction

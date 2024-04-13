@@ -182,12 +182,12 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
 void UMapSubsystem::OnNewLevelLoaded() {
     auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
     check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
-        SetPlayerLocation(PlayerCharacter);
+    SetPlayerLocation(PlayerCharacter);
     UpdateCharacterMapPosition(PlayerCharacter);
 }
 
 void UMapSubsystem::UpdatePlayerCharacterPosition() {
     auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
     check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
-        UpdateCharacterMapPosition(PlayerCharacter);
+    UpdateCharacterMapPosition(PlayerCharacter);
 }

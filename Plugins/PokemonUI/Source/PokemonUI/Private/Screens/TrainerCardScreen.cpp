@@ -12,7 +12,8 @@ void UTrainerCardScreen::NativeConstruct() {
     Super::NativeConstruct();
 
     auto PokemonSubsystem = GetGameInstance()->GetSubsystem<UPokemonSubsystem>();
-    check(PokemonSubsystem != nullptr) Trainer = PokemonSubsystem->GetPlayer();
+    check(PokemonSubsystem != nullptr)
+    Trainer = PokemonSubsystem->GetPlayer();
     PlayerMetadata = PokemonSubsystem->GetPlayerMetadata();
     PlayerMetadata->GetOnTimeUpdated().AddDynamic(this, &UTrainerCardScreen::SetPlayerTimeInfo);
 
@@ -23,9 +24,9 @@ void UTrainerCardScreen::NativeConstruct() {
 void UTrainerCardScreen::SetTrainerSprite() {
     check(TrainerImage != nullptr)
 
-        auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    check(GraphicsLoadingSubsystem != nullptr) auto [Material, Size] =
-        GraphicsLoadingSubsystem->GetTrainerSprite(*Trainer, this);
+    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+    check(GraphicsLoadingSubsystem != nullptr)
+    auto [Material, Size] = GraphicsLoadingSubsystem->GetTrainerSprite(*Trainer, this);
     TrainerImage->SetBrushFromMaterial(Material);
     TrainerImage->SetDesiredSizeOverride(Size);
 }

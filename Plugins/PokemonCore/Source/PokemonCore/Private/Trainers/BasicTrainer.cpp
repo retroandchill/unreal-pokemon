@@ -19,7 +19,8 @@ const FTrainerType &UBasicTrainer::GetTrainerType() const {
     auto &TrainerTypeTable = DataManager.GetDataTable<FTrainerType>();
 
     auto TrainerTypeData = TrainerTypeTable.GetData(TrainerType);
-    check(TrainerTypeData != nullptr) return *TrainerTypeData;
+    check(TrainerTypeData != nullptr)
+    return *TrainerTypeData;
 }
 
 FText UBasicTrainer::GetTrainerName() const {
@@ -43,7 +44,7 @@ void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon)
 
 void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {
     check(Index1 >= 0 && Index1 < Party.Num() && Index2 >= 0 && Index2 < Party.Num())
-        Swap(Party[Index1], Party[Index2]);
+    Swap(Party[Index1], Party[Index2]);
 }
 
 void UBasicTrainer::ClearParty() {

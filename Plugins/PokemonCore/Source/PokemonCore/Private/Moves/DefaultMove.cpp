@@ -13,7 +13,8 @@ TScriptInterface<IMove> UDefaultMove::Initialize(FName MoveID) {
 
 const FMoveData &UDefaultMove::GetMoveData() const {
     auto Move = FDataManager::GetInstance().GetDataTable<FMoveData>().GetData(ID);
-    check(Move != nullptr) return *Move;
+    check(Move != nullptr)
+    return *Move;
 }
 
 int32 UDefaultMove::GetCurrentPP() const {

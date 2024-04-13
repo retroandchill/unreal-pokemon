@@ -11,7 +11,8 @@
 
 void UPokemonSelectScreen::NativeConstruct() {
     Super::NativeConstruct();
-    check(SelectionPane != nullptr) SelectionPane->SetIndex(0);
+    check(SelectionPane != nullptr)
+    SelectionPane->SetIndex(0);
     SelectionPane->SetActive(true);
     SelectionPane->GetOnConfirm().AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
     SelectionPane->GetOnCancel().AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
@@ -71,7 +72,7 @@ void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index
 void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
     auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
     check(Handler != nullptr)
-        Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
+    Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
 }
 
 void UPokemonSelectScreen::OnCommandWindowCancel() {

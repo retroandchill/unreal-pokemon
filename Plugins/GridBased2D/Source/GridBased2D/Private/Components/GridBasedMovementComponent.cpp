@@ -287,6 +287,6 @@ void UGridBasedMovementComponent::MoveComplete() {
     auto Owner = GetOwner();
     auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>();
     check(MapSubsystem != nullptr)
-        check(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
-            MapSubsystem->UpdateCharacterMapPosition(Owner);
+    check(Owner != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+    MapSubsystem->UpdateCharacterMapPosition(Owner);
 }

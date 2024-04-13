@@ -12,7 +12,8 @@ UK2Node_DisplayMessage::UK2Node_DisplayMessage(const FObjectInitializer &ObjectI
 
 void UK2Node_DisplayMessage::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
     auto FactoryFunc = UDisplayMessage::StaticClass()->FindFunctionByName("DisplayMessage");
-    check(FactoryFunc != nullptr) SupplyMenuActions(ActionRegistrar, FactoryFunc);
+    check(FactoryFunc != nullptr)
+    SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 
 void UK2Node_DisplayMessage::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {

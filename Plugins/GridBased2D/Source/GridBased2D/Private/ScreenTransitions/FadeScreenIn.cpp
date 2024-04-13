@@ -14,7 +14,7 @@ void UFadeScreenIn::Activate() {
     auto GameMode = UGridUtils::GetGridBasedGameMode(WorldContext);
     check(GameMode != nullptr)
 
-        FScreenTransitionCallback Callback;
+    FScreenTransitionCallback Callback;
     Callback.BindDynamic(this, &UFadeScreenIn::TransitionFinished);
     GameMode->FadeIn(Callback);
 }

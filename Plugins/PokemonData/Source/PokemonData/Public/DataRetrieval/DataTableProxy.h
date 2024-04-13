@@ -41,7 +41,8 @@ class POKEMONDATA_API TDataTableProxy final : public IGameData {
      * @tparam Functor The signature of the callback
      * @param Callback The callback method
      */
-    template <typename Functor> void ForEach(Functor Callback) const {
+    template <typename Functor>
+    void ForEach(Functor Callback) const {
         TArray<T *> Rows;
         DataTable->GetAllRows(TEXT("ForEach"), Rows);
         for (auto Row : Rows) {

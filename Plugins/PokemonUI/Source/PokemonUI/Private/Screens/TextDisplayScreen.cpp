@@ -18,14 +18,16 @@ void UTextDisplayScreen::NativeConstruct() {
 }
 
 void UTextDisplayScreen::SetText(FText TextToDisplay) {
-    check(MessageWindow != nullptr) MessageWindow->ClearDisplayText();
+    check(MessageWindow != nullptr)
+    MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay);
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
     MessageWindow->SetKeyboardFocus();
 }
 
 void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices) {
-    check(MessageWindow != nullptr && CommandWindow != nullptr) MessageWindow->ClearDisplayText();
+    check(MessageWindow != nullptr && CommandWindow != nullptr)
+    MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay, true);
 
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -38,7 +40,8 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
 }
 
 void UTextDisplayScreen::ClearDisplayText() {
-    check(MessageWindow != nullptr) MessageWindow->ClearDisplayText();
+    check(MessageWindow != nullptr)
+    MessageWindow->ClearDisplayText();
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
 }
 

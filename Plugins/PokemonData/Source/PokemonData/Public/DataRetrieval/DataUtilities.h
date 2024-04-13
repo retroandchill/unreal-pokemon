@@ -37,10 +37,11 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
      * @param RowName The name of the row to retrieve
      * @param OutRow The output struct returned to the user
      */
-    template <typename T> static void Generic_GetData(const UScriptStruct *StructType, FName RowName, T *OutRow) {
+    template <typename T>
+    static void Generic_GetData(const UScriptStruct *StructType, FName RowName, T *OutRow) {
         check(StructType != nullptr && OutRow != nullptr)
 
-            const auto Row = FDataManager::GetInstance().GetDataTable(StructType).GetData(RowName);
+        const auto Row = FDataManager::GetInstance().GetDataTable(StructType).GetData(RowName);
         StructType->CopyScriptStruct(OutRow, Row);
     }
 
@@ -131,7 +132,7 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
                 UBlueprintNodeSpawner *Spawner = UBlueprintNodeSpawner::Create(ActionKey);
                 check(Spawner)
 
-                    Spawner->CustomizeNodeDelegate =
+                Spawner->CustomizeNodeDelegate =
                     UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(CustomizeCallback, Type);
                 ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
             }

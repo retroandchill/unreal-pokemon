@@ -7,8 +7,8 @@
 #include "Map/WarpDestination.h"
 
 void UWarpingUtilities::WarpToMap(const UObject *WorldContext, const FWarpDestination &Destination) {
-    check(WorldContext != nullptr) auto MapSubsystem =
-        UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
+    check(WorldContext != nullptr)
+    auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
     if (MapSubsystem == nullptr) {
         UE_LOG(LogBlueprint, Warning, TEXT("Failed to get the Map Subsystem!"))
         return;

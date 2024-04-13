@@ -72,7 +72,8 @@ class TGCPointer : public FGCObject {
      * @return The object held by this pointer
      */
     T &operator*() const {
-        check(HeldObject != nullptr) return *HeldObject;
+        check(HeldObject != nullptr)
+        return *HeldObject;
     }
 
     /**

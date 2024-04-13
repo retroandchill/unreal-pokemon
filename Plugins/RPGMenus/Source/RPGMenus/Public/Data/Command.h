@@ -55,7 +55,8 @@ class RPGMENUS_API UCommand : public UObject {
      * @tparam T The expected type of the handler
      * @return The handler (if exists and the types match, otherwise nullptr)
      */
-    template <typename T> T *GetHandler() const {
+    template <typename T>
+    T *GetHandler() const {
         return Cast<T>(Handler);
     }
 

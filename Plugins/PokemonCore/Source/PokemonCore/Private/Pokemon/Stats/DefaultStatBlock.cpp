@@ -24,7 +24,8 @@ const FNature &FindNature(FName Nature) {
     auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
 
     auto Ret = NatureTable.GetData(Nature);
-    check(Ret != nullptr) return *Ret;
+    check(Ret != nullptr)
+    return *Ret;
 }
 
 void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, const FPokemonDTO &DTO) {
@@ -82,7 +83,8 @@ const FNature &UDefaultStatBlock::GetNature() const {
 }
 
 TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FName Stat) const {
-    check(Stats.Contains(Stat)) return Stats[Stat];
+    check(Stats.Contains(Stat))
+    return Stats[Stat];
 }
 
 void UDefaultStatBlock::ForEachStat(const TFunctionRef<void(FName, const IStatEntry &)> &Predicate) const {
@@ -95,6 +97,7 @@ void UDefaultStatBlock::CalculateStats(const TMap<FName, int32> &BaseStats) {
     auto &NatureData = GetNature();
 
     for (const auto &[StatID, Stat] : Stats) {
-        check(BaseStats.Contains(StatID)) Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
+        check(BaseStats.Contains(StatID))
+        Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
     }
 }

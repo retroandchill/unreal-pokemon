@@ -21,7 +21,7 @@ const FStat &UDefaultStatEntry::GetStat() const {
     auto Stat = FDataManager::GetInstance().GetDataTable<FStat>().GetData(StatID);
     check(Stat != nullptr)
 
-        return *Stat;
+    return *Stat;
 }
 
 FName UDefaultStatEntry::GetID() const {

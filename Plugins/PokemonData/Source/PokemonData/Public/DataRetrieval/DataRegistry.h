@@ -37,7 +37,8 @@ class POKEMONDATA_API FDataRegistry {
      * @tparam T The type that the proxy references
      * @return The registration succeeded
      */
-    template <typename T> bool RegisterStruct() {
+    template <typename T>
+    bool RegisterStruct() {
         const UScriptStruct *const TypeStruct = T::StaticStruct();
         Registry.RegisterClass<TDataTableProxy<T>>(TypeStruct->GetFName());
         return true;

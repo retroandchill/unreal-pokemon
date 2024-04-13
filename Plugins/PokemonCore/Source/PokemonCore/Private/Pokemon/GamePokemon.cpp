@@ -54,7 +54,8 @@ const FSpeciesData &UGamePokemon::GetSpecies() const {
     auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
     auto SpeciesData = SpeciesTable.GetData(Species);
-    check(SpeciesData != nullptr) return *SpeciesData;
+    check(SpeciesData != nullptr)
+    return *SpeciesData;
 }
 
 uint32 UGamePokemon::GetPersonalityValue() const {

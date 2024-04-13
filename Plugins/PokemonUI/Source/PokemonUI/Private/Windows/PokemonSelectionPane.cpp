@@ -12,7 +12,8 @@
 void UPokemonSelectionPane::NativeConstruct() {
     Super::NativeConstruct();
 
-    check(ContentsArea != nullptr) auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
+    check(ContentsArea != nullptr)
+    const auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
     auto &PlayerParty = PokemonSubsystem.GetPlayer()->GetParty();
 
     ActivePanels.Empty();
@@ -73,13 +74,14 @@ const TOptional<int32> &UPokemonSelectionPane::GetSwitchingIndex() const {
 }
 
 void UPokemonSelectionPane::BeginSwitch(int32 StartIndex) {
-    check(!SwitchingIndex.IsSet()) SwitchingIndex.Emplace(StartIndex);
+    check(!SwitchingIndex.IsSet())
+    SwitchingIndex.Emplace(StartIndex);
     ActivePanels[StartIndex]->Refresh();
 }
 
 void UPokemonSelectionPane::CompleteSwitch() {
-    check(SwitchingIndex.IsSet()) auto Panel1 =
-        CastChecked<UPokemonPanel>(ActivePanels[SwitchingIndex.GetValue()].GetObject());
+    check(SwitchingIndex.IsSet())
+    auto Panel1 = CastChecked<UPokemonPanel>(ActivePanels[SwitchingIndex.GetValue()].GetObject());
     auto Panel2 = CastChecked<UPokemonPanel>(ActivePanels[GetIndex()].GetObject());
     SwitchingIndex.Reset();
     PerformSwap(Panel1, Panel2);

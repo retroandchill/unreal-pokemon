@@ -14,7 +14,7 @@ void UPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
     auto PokemonSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>();
     check(PokemonSubsystem != nullptr)
 
-        auto Player = PokemonSubsystem->GetPlayer();
+    auto Player = PokemonSubsystem->GetPlayer();
     Player->ClearParty();
 
     Player->AddPokemonToParty(
