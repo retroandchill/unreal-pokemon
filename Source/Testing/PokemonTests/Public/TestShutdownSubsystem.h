@@ -9,7 +9,7 @@
 /**
  * @class UTestShutdownSubsystem
  *
- * A class representing the shutdown subsystem for the automation testing. It is activated by invoking the "FullShutdown"
+ * A class representing the shutdown subsystem for the automation testing. It is activated by invoking the "ShutdownAfterTests"
  * console command after after which it will wait until the automation system has concluded and then perform a full engine shutdown.
  */
 UCLASS()

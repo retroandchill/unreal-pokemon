@@ -17,7 +17,7 @@ void FPokemonTestsModule::ShutdownModule() {
 void FPokemonTestsModule::PostEngineInit() {
     if (GEngine != nullptr) {
         IConsoleManager::Get().RegisterConsoleCommand(
-            TEXT("FullShutdown"),
+            TEXT("ShutdownAfterTests"),
             TEXT("This calls for a full shutdown of the editor, so that LLVM can generate coverage profiling."),
             FConsoleCommandDelegate::CreateLambda([]() {
                 UTestShutdownSubsystem::GetInstance().RequestExitAfterTestsComplete();
