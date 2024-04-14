@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "DataManager.h"
-
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
 

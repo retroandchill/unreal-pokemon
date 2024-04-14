@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "SelectableWidget.h"
+
 #include "CommandWindow.generated.h"
 
 class UWindow;

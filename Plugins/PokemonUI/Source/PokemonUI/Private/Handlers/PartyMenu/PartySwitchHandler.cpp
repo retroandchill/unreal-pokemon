@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
-
 #include "Screens/PartyScreen.h"
 #include "Trainers/Trainer.h"
 

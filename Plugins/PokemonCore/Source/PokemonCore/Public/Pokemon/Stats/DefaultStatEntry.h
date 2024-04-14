@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "StatEntry.h"
+
 #include "DefaultStatEntry.generated.h"
 
 class IPokemon;

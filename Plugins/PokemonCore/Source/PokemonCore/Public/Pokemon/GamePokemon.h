@@ -5,6 +5,7 @@
 #include "Pokemon.h"
 #include "PokemonDTO.h"
 #include "Stats/StatBlock.h"
+
 #include "GamePokemon.generated.h"
 
 struct FPokemonDTO;

@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "K2Node.h"
 #include "SelectDataRow.h"
+
 #include "K2Node_GetGameData.generated.h"
 
 /**

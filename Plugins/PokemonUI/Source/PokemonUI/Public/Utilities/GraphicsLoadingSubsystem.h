@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "GraphicsLoadingSubsystem.generated.h"
 
 class ITrainer;

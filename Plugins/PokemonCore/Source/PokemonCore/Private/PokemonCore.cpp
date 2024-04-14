@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "PokemonCore.h"
-
 #include "Pokemon/Exp/Erratic.h"
 #include "Pokemon/Exp/Fast.h"
 #include "Pokemon/Exp/Fluctuating.h"

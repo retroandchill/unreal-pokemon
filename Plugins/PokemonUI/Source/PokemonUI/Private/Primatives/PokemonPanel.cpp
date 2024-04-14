@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 #include "Primatives/PokemonPanel.h"
-
 #include "Components/Image.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"

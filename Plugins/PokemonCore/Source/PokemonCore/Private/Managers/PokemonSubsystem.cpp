@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
-
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
 #include "PokemonCoreSettings.h"

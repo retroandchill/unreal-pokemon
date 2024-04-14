@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "FunctionalTest.h"
+
 #include "TrainerCardTest.generated.h"
 
 class UTrainerCardScreen;

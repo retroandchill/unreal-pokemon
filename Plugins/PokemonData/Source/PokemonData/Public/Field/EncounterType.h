@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "EncounterCategory.h"
 #include "UObject/Object.h"
+
 #include "EncounterType.generated.h"
 
 /**

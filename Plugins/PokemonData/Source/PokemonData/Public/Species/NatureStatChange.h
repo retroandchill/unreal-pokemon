@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "NatureStatChange.generated.h"
 
 /**

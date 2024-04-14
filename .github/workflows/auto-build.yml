@@ -18,10 +18,7 @@ jobs:
         run: |
           ./ci/download-sonar-scanner.ps1
       - name: Run build-wrapper
-        run: |
-          ./ci/set-sonar-variables.ps1
-          $Location = $(Get-Location)
-          & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output "C:\Program Files\Epic Games\UE_5.4\Engine\Binaries\DotNet\UnrealBuildTool\UnrealBuildTool.exe" "${Location}/UnrealPokemon.uproject" UnrealEditor Win64 DebugGame
+        run: ./ci/build_project.ps1
       
       - name: Install Python Dependencies
         run: ./ci/install_pip_requirements.ps1
@@ -35,13 +32,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./ci/set-sonar-variables.ps1
-          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=coverage-reports/*.xml -D sonar.cfamily.threads=3
+          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.llvm-cov.reportPath=coverage.txt -D sonar.python.coverage.reportPaths=coverage-reports/*.xml -D sonar.cfamily.threads=3
           
       - name: Archive code coverage results
         if: always()
         uses: actions/upload-artifact@v3
         with:
           path: |
-            cpp-coverage.xml
+            coverage.txt
             coverage-reports/*.xml
             TestResults/*

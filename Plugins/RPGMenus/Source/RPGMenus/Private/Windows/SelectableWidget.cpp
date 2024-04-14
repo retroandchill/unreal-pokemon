@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/SelectableWidget.h"
-
 #include "Data/RPGMenusSettings.h"
 #include "Data/SelectionInputs.h"
 #include "Primatives/SelectableOption.h"

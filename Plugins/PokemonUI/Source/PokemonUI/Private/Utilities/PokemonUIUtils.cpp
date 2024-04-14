@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PokemonUIUtils.h"
-
 #include "Components/ProgressBar.h"
 #include "Primatives/DisplayText.h"
 #include "Text/ShadowedText.h"

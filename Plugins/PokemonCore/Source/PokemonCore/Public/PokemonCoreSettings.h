@@ -6,6 +6,7 @@
 #include "Engine/DeveloperSettings.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+
 #include "PokemonCoreSettings.generated.h"
 
 /**

@@ -1,8 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include <array>
-
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Fluctuating.h"
+#include <array>
 
 constexpr std::array GFluctuatingGrowthTable = {
     -1,      0,       4,       13,      32,      65,      112,     178,     276,     393,    540,     745,     967,

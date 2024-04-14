@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RPGMenus/TestWindowskinThumbnailRenderer.h"
-
 #include "CommonDefines.h"
 #include "Data/Windowskin.h"
 #include "Memory/GCPointer.h"

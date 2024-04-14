@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "PaperSprite.h"
 #include "UObject/Object.h"
+
 #include "Status.generated.h"
 
 /**

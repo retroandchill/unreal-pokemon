@@ -5,6 +5,7 @@
 #include "PartyScreen.h"
 #include "Screens/Screen.h"
 #include "Trainers/Trainer.h"
+
 #include "PokemonSelectScreen.generated.h"
 
 class UPartyMenuHandler;

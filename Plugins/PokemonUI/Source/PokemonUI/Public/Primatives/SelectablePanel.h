@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Refreshable.h"
 #include "UObject/Interface.h"
+
 #include "SelectablePanel.generated.h"
 
 class USelectableWidget;

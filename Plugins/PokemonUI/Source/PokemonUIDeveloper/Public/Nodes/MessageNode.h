@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "MessageNode.generated.h"
 
 // This class does not need to be modified.

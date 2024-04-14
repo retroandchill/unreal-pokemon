@@ -1,9 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "Screens/Screen.h"
+
 #include "PauseMenuScreen.generated.h"
 
 class UCommand;

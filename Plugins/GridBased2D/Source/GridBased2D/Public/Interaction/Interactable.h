@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "InteractionType.h"
 #include "UObject/Interface.h"
+
 #include "Interactable.generated.h"
 
 class IGridMovable;

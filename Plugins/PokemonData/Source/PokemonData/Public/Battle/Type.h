@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperSprite.h"
+
 #include "Type.generated.h"
 
 /**

@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/CharacterBillboardAnimationComponent.h"
-
 #include "Components/MaterialBillboardComponent.h"
 
 void UCharacterBillboardAnimationComponent::UpdateDirection(EFacingDirection Direction) {

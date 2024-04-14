@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Characters/FacingDirection.h"
 #include "CoreMinimal.h"
+#include "Characters/FacingDirection.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "MoveInDirection.generated.h"
 
 class IGridMovable;

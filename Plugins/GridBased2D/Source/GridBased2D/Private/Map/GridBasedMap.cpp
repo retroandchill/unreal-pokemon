@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Map/GridBasedMap.h"
-
 #include "GridBased2DSettings.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"

@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "Command.h"
 #include "CoreMinimal.h"
+#include "Command.h"
+
 #include "NewScreenCommand.generated.h"
 
 class UScreen;

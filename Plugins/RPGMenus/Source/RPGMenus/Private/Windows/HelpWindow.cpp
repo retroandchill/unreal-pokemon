@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Windows/HelpWindow.h"
-
 #include "Primatives/DisplayText.h"
 
 TSharedRef<SWidget> UHelpWindow::RebuildWidget() {

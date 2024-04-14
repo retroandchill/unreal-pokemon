@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "PokemonUI/MenuActionTest.h"
-
 #include "Actions/MenuAction.h"
 #include "CommonDefines.h"
 #include "RPGPlayerController.h"

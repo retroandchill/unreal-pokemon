@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "GridBasedGameModeBase.h"
-
 #include "GridBased2DSettings.h"
 
 double AGridBasedGameModeBase::GetGridSize() const {

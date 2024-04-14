@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/TrainerCardScreen.h"
-
 #include "Components/Image.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"

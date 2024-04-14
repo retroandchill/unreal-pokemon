@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Breeding/PokemonGender.h"
 #include "CoreMinimal.h"
+#include "Breeding/PokemonGender.h"
 #include "UObject/Interface.h"
+
 #include "Pokemon.generated.h"
 
 struct FPokemonDTO;

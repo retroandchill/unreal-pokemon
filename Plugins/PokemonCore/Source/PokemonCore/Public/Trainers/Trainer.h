@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Trainer.generated.h"
 
 struct FTrainerType;

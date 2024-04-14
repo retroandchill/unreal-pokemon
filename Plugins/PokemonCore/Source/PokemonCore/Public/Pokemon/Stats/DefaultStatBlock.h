@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "StatBlock.h"
+
 #include "DefaultStatBlock.generated.h"
 
 struct FStatBlockDTO;

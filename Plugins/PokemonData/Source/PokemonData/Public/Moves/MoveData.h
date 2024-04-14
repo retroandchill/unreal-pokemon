@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "MoveDamageCategory.h"
 #include "UObject/Object.h"
+
 #include "MoveData.generated.h"
 
 /**

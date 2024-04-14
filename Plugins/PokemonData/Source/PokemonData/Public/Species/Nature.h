@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "NatureStatChange.h"
 #include "UObject/Object.h"
+
 #include "Nature.generated.h"
 
 /**

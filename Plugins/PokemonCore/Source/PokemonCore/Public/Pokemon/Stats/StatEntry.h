@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Meta/MetatypeDeclares.h"
 #include "Pokemon/Pokemon.h"
+
 #include "StatEntry.generated.h"
 
 struct FStat;

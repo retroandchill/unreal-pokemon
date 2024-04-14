@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "DefaultStatEntry.h"
+
 #include "DefaultMainBattleStatEntry.generated.h"
 
 /**

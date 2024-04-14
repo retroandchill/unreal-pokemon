@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windowskin/WindowskinThumbnailRenderer.h"
-
 #include "Data/Windowskin.h"
 #include "ThumbnailRendering/ThumbnailManager.h"
 

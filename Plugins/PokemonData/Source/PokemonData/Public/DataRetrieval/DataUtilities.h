@@ -1,15 +1,16 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
+#include "CoreMinimal.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Blueprint/BlueprintExceptionInfo.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
-#include "CoreMinimal.h"
 #include "DataManager.h"
 #include "DataRegistry.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Subsystems/SubsystemBlueprintLibrary.h"
+
 #include "DataUtilities.generated.h"
 
 /**

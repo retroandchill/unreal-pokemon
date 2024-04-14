@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Utilities/WidgetUtilities.h"
-
 #include "Engine/UserInterfaceSettings.h"
 #include "PaperSprite.h"
 

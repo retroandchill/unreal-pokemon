@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "Breeding/PokemonGender.h"
 #include "CoreMinimal.h"
+#include "Breeding/PokemonGender.h"
+
 #include "PokemonDTO.generated.h"
 
 /**

@@ -1,8 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "PokemonData.h"
-
-#include "Moves/MoveData.h"
-#include "Species/SpeciesData.h"
 #include "Bag/Item.h"
 #include "Battle/BattleTerrain.h"
 #include "Battle/BattleWeather.h"
@@ -13,6 +10,7 @@
 #include "Exp/GrowthRateData.h"
 #include "Field/EncounterType.h"
 #include "Field/Weather.h"
+#include "Moves/MoveData.h"
 #include "Moves/Target.h"
 #include "PokemonDataSettings.h"
 #include "Species/Ability.h"
@@ -23,6 +21,7 @@
 #include "Species/GenderRatio.h"
 #include "Species/Habitat.h"
 #include "Species/Nature.h"
+#include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include "Trainers/TrainerType.h"
 

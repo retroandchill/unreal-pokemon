@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "SelectableOption.h"
+
 #include "DisplayTextOption.generated.h"
 
 class UDisplayText;

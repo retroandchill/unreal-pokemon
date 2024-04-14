@@ -2,13 +2,14 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
 #include "Characters/FacingDirection.h"
 #include "Characters/MoveCheckResult.h"
 #include "Components/ActorComponent.h"
-#include "CoreMinimal.h"
 #include "GridBasedAnimationComponent.h"
 #include "GridBasedMovement.h"
 #include "Map/WithinMap.h"
+
 #include "GridBasedMovementComponent.generated.h"
 
 class UCharacterMovementComponent;

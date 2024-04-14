@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windowskin/WindowskinAssetActions.h"
-
 #include "Data/Windowskin.h"
 
 FText FWindowskinAssetActions::GetName() const {
