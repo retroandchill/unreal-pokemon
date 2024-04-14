@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Primatives/SelectableOption.h"
-
 #include "Components/Button.h"
 
 void USelectableOption::NativeConstruct() {

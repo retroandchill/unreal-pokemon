@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Actions/MenuAction.h"
-
 #include "RPGPlayerController.h"
 
 void UMenuAction::PerformAction_Implementation(UObject *Owner) {

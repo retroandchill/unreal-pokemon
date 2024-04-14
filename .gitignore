@@ -90,3 +90,6 @@ graph_info.json
 coverage-reports
 cpp-coverage.xml
 **/__pycache__
+*.profraw
+*.profdata
+coverage.txt

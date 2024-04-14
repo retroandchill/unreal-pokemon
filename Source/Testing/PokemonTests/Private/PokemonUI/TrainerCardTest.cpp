@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "PokemonUI/TrainerCardTest.h"
-
 #include "Blueprint/WidgetTree.h"
 #include "CommonDefines.h"
 #include "Kismet/GameplayStatics.h"

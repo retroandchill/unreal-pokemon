@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "GridBasedMapBase.h"
 #include "PaperTileMapComponent.h"
+
 #include "GridBasedMap.generated.h"
 
 class IGridMovable;

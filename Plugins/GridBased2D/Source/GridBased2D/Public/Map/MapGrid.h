@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Components/GridMovable.h"
 #include "CoreMinimal.h"
+#include "Components/GridMovable.h"
 #include "UObject/Interface.h"
+
 #include "MapGrid.generated.h"
 
 enum class EFacingDirection : uint8;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
+
 #include "TrainerCardScreen.generated.h"
 
 class UPlayerMetadata;

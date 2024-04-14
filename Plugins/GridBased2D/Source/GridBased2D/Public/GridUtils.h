@@ -1,9 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Characters/FacingDirection.h"
 #include "CoreMinimal.h"
+#include "Characters/FacingDirection.h"
 #include "EngineUtils.h"
+
 #include "GridUtils.generated.h"
 
 class UGameplayStatics;

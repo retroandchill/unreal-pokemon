@@ -1,8 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include <array>
-
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Erratic.h"
+#include <array>
 
 constexpr std::array GErraticGrowthTable = {
     -1,     0,      15,     52,     122,    237,    406,    637,    942,    1326,   1800,   2369,   3041,

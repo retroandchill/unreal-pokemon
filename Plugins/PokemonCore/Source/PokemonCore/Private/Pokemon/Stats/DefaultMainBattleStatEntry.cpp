@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
-
 #include "Species/Nature.h"
 
 void UDefaultMainBattleStatEntry::RefreshValue(int32 Level, int32 Base, const FNature &Nature) {

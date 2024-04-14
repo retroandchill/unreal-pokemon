@@ -24,6 +24,7 @@ public class PokemonTests : ModuleRules
 				"BlueprintGraph",
 				"KismetCompiler",
 				"UnrealEd",
+				"EditorSubsystem",
 				"GraphEditor",
 				"RPGMenus",
 				"GridBased2D",
@@ -36,7 +37,7 @@ public class PokemonTests : ModuleRules
 				"UMG",
 				"InputCore", 
 				"PokemonEditorUtils", 
-				"PokemonDataDeveloper", "RPGMenusDeveloper", "RPGMenusEditor", "GridBased2DEditor"
+				"PokemonDataDeveloper", "RPGMenusDeveloper", "RPGMenusEditor", "GridBased2DEditor", "MessageLog"
 			}
 		);
 	}

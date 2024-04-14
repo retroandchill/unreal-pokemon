@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GridBased2DSettings.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "MapSubsystem.generated.h"
 
 class IGridMovable;

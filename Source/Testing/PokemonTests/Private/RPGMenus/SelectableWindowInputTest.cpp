@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RPGMenus/SelectableWindowInputTest.h"
-
 #include "CommonDefines.h"
 #include "IAutomationDriver.h"
 #include "IAutomationDriverModule.h"

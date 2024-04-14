@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/SelectableOptionTestWidget.h"
-
 #include "Blueprint/WidgetTree.h"
 #include "Primatives/SelectableOption.h"
 

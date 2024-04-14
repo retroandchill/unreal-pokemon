@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "PartyMenuHandler.generated.h"
 
 class IPartyScreen;

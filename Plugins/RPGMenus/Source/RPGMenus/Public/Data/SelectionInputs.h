@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "CursorDirection.h"
 #include "UObject/Object.h"
+
 #include "SelectionInputs.generated.h"
 
 /**

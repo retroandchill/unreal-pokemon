@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "MathUtilities.generated.h"
 
 /**

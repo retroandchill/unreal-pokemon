@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Moves/Move.h"
+
 #include "DefaultMove.generated.h"
 
 /**

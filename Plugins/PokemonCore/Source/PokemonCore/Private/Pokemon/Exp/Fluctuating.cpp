@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Exp/Fluctuating.h"
-
 #include "MathUtilities.h"
 
 using namespace Exp;

@@ -5,6 +5,7 @@
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
+
 #include "PokemonSubsystem.generated.h"
 
 class UPlayerMetadata;

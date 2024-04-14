@@ -1,13 +1,14 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "Blueprint/UserWidget.h"
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "Primatives/SelectableOption.h"
 #include "Refreshable.h"
 #include "SelectablePanel.h"
 #include "Text/TextColor.h"
+
 #include "PokemonPanel.generated.h"
 
 class USelectableWidget;

@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "DisplayMessage.generated.h"
 
 class UTextDisplayScreen;

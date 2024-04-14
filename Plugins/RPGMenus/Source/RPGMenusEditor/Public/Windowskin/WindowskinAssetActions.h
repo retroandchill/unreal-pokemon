@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #pragma once
 
-#include "AssetTypeActions_Base.h"
 #include "CoreMinimal.h"
+#include "AssetTypeActions_Base.h"
 
 /**
  * The actions used for editing the Windowskin assets

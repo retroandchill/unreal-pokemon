@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "ImportUtils.h"
-
 #include "DesktopPlatformModule.h"
 
 TArray<FStat> UImportUtils::GetMainStatsFromTable(const UDataTable *const DataTable) {

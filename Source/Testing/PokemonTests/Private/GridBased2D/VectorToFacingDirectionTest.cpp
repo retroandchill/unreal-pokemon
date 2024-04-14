@@ -1,9 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
-#include <sstream>
-
 #include "Characters/FacingDirection.h"
 #include "GridUtils.h"
 #include "Misc/AutomationTest.h"
+#include <sstream>
 
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(VectorToFacingDirectionTest, "UnrealPokemon.Movement.VectorToFacingDirectionTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

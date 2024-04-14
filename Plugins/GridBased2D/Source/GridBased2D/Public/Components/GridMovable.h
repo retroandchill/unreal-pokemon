@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "GridMovable.generated.h"
 
 class UGridBasedMovementComponent;

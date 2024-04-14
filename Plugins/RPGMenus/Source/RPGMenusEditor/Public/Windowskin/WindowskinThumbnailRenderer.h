@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "ThumbnailRendering/ThumbnailRenderer.h"
+
 #include "WindowskinThumbnailRenderer.generated.h"
 
 /**

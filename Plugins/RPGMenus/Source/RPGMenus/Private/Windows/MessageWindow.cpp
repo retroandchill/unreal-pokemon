@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/MessageWindow.h"
-
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
 #include "Data/SelectionInputs.h"

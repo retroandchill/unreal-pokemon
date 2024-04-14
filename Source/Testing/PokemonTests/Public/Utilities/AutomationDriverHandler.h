@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "AutomationDriverTypeDefs.h"
 #include "CoreMinimal.h"
+#include "AutomationDriverTypeDefs.h"
 
 /**
  * Handler class to work with setting up the automation driver

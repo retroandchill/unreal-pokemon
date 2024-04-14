@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "WeatherVisuals.generated.h"
 
 // This class does not need to be modified.

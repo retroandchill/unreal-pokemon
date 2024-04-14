@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Details/GridBasedMapDetails.h"
-
 #include "DetailLayoutBuilder.h"
 
 TSharedRef<IDetailCustomization> FGridBasedMapDetails::MakeInstance() {

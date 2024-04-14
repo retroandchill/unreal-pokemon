@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Text/ShadowedText.h"
-
 #include "Components/TextBlock.h"
 
 void UShadowedText::SetTextInfo() {
