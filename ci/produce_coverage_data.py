@@ -41,4 +41,4 @@ if __name__ == "__main__":
     cmd += source_targets
 
     with open("coverage.txt", "w") as file:
-        subprocess.run(cmd, stdout=file, stderr=file)
+        subprocess.run(cmd, stdout=file)
