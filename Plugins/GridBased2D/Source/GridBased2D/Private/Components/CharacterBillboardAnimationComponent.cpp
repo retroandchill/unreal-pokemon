@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/CharacterBillboardAnimationComponent.h"
+#include "Components/MaterialBillboardComponent.h"
 
 void UCharacterBillboardAnimationComponent::UpdateDirection(EFacingDirection Direction) {
     if (MaterialInstance == nullptr) {
@@ -55,6 +56,13 @@ void UCharacterBillboardAnimationComponent::BeginPlay() {
     Super::BeginPlay();
 
     SetUpMaterialInstance();
+    if (BillboardComponent == nullptr) {
+        return;
+    }
+    BillboardComponent->Elements.Empty();
+    BillboardComponent->AddElement(MaterialInstance, nullptr, false,
+                                   static_cast<float>(SourceTexture->GetSizeY()) / (4 * 2),
+                                   static_cast<float>(SourceTexture->GetSizeX()) / (4 * 2), nullptr);
 }
 
 void UCharacterBillboardAnimationComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -79,23 +87,16 @@ void UCharacterBillboardAnimationComponent::SetUpMaterialInstance() {
     if (BillboardComponent == nullptr) {
         return;
     }
-    BillboardComponent->SetMaterial(0, MaterialInstance);
-
-    if (BillboardComponent->GetStaticMesh() == nullptr) {
-        return;
-    }
-    
-    auto MeshBoundingBox = BillboardComponent->GetStaticMesh()->GetBoundingBox();
-    BillboardComponent->SetRelativeScale3D(FVector(SourceTexture->GetSizeY() / 4 * MeshBoundingBox.GetSize().X,
-        SourceTexture->GetSizeY() / 4 * MeshBoundingBox.GetSize().Y,
-        1));
+    BillboardComponent->Elements.Empty();
+    BillboardComponent->AddElement(MaterialInstance, nullptr, false, SourceTexture->GetSizeY() / (4 * 2),
+                                   SourceTexture->GetSizeX() / (4 * 2), nullptr);
 }
 
-UStaticMeshComponent *UCharacterBillboardAnimationComponent::GetBillboardComponent() const {
+UMaterialBillboardComponent *UCharacterBillboardAnimationComponent::GetBillboardComponent() const {
     return BillboardComponent;
 }
 
-void UCharacterBillboardAnimationComponent::SetBillboardComponent(UStaticMeshComponent *NewBillboardComponent) {
+void UCharacterBillboardAnimationComponent::SetBillboardComponent(UMaterialBillboardComponent *NewBillboardComponent) {
     BillboardComponent = NewBillboardComponent;
 }
 
