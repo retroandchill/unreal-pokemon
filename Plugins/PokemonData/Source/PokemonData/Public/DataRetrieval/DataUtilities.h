@@ -3,7 +3,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/BlueprintExceptionInfo.h"
-
 #include "DataManager.h"
 #include "DataRegistry.h"
 #include "Kismet/BlueprintFunctionLibrary.h"

@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Repositories/TextureRepository.h"
 
-TMap<FName, TSoftObjectPtr<UTexture2D>> & UTextureRepository::GetAssetMap() {
+TMap<FName, TSoftObjectPtr<UTexture2D>> &UTextureRepository::GetAssetMap() {
     return TextureMap;
 }
 
-const TMap<FName, TSoftObjectPtr<UTexture2D>> & UTextureRepository::GetAssetMap() const {
+const TMap<FName, TSoftObjectPtr<UTexture2D>> &UTextureRepository::GetAssetMap() const {
     return TextureMap;
 }

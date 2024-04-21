@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
+
 #include "CameraSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCameraAngleChanged, FVector2D, Angle);
@@ -15,7 +16,7 @@ UCLASS()
 class GRIDBASED2D_API UCameraSubsystem : public UWorldSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the dispatcher called when the camera angle is changed.
      * @return The dispatcher called when the camera angle changes.
@@ -36,7 +37,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Events)
     void SetCurrentCameraAngle(FVector2D NewAngle);
 
-private:
+  private:
     /**
      * The dispatcher called when the camera angle is changed.
      */
@@ -46,7 +47,6 @@ private:
     /**
      * The currently cached camera angle.
      */
-    UPROPERTY(BlueprintGetter=GetCurrentCameraAngle, BlueprintSetter=SetCurrentCameraAngle, Category = Camera)
+    UPROPERTY(BlueprintGetter = GetCurrentCameraAngle, BlueprintSetter = SetCurrentCameraAngle, Category = Camera)
     FVector2D CurrentCameraAngle;
-    
 };

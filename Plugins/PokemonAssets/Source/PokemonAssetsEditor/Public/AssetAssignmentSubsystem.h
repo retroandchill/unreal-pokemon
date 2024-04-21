@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EditorSubsystem.h"
+
 #include "AssetAssignmentSubsystem.generated.h"
 
 class IAssetRepository;
@@ -15,15 +16,14 @@ UCLASS()
 class POKEMONASSETSEDITOR_API UAssetAssignmentSubsystem : public UEditorSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-private:
-    void HandleAssetAdded(const FAssetData& AssetData);
-    void HandleAssetRenamed(const FAssetData& AssetData, const FString& OldAssetName);
-    void HandleAssetRemoved(const FAssetData& AssetData);
-    
+  private:
+    void HandleAssetAdded(const FAssetData &AssetData);
+    void HandleAssetRenamed(const FAssetData &AssetData, const FString &OldAssetName);
+    void HandleAssetRemoved(const FAssetData &AssetData);
+
     UPROPERTY()
     TMap<FName, TScriptInterface<IAssetRepository>> AssetRepositories;
-
 };

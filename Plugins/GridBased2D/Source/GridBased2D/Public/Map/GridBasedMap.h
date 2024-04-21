@@ -38,7 +38,7 @@ class GRIDBASED2D_API AGridBasedMap : public AGridBasedMapBase {
      */
     UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
     void RefreshTileData();
-    
+
     /**
      * Clear all tile replacements, restoring the original tiles to their rightful place.
      */

@@ -64,10 +64,21 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Trainers")
     FName GetTrainerSpriteSourceTexturePropertyName() const;
 
-    [[nodiscard]] FSoftObjectPath GetPokemonIconRepository() const;
-    [[nodiscard]] FSoftObjectPath GetTrainerFrontSpriteRepository() const;
+    /**
+     * Get the path to the repository data asset used to get the icons.
+     * @return The path to the repository data asset used to get the icons.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "sset Loaders|Pokémon")
+    FSoftObjectPath GetPokemonIconRepository() const;
 
-private:
+    /**
+     * Get the path to the repository data asset used to get the trainers.
+     * @return The path to the repository data asset used to get the trainers.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "sset Loaders|Trainers")
+    FSoftObjectPath GetTrainerFrontSpriteRepository() const;
+
+  private:
     /**
      * The name of the package that contains the Pokémon Icon graphics
      */
@@ -117,13 +128,14 @@ private:
     /**
      * The path to the repository data asset used to get the icons.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|Pokémon", meta = (AllowedClasses = "TextureRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetPokemonIconRepository, Category = "Asset Loaders|Pokémon",
+              meta = (AllowedClasses = "TextureRepository"))
     FSoftObjectPath PokemonIconRepository;
 
     /**
      * The path to the repository data asset used to get the trainers.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|Trainers", meta = (AllowedClasses = "TextureRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTrainerFrontSpriteRepository,
+              Category = "Asset Loaders|Trainers", meta = (AllowedClasses = "TextureRepository"))
     FSoftObjectPath TrainerFrontSpriteRepository;
-    
 };

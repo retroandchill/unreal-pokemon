@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TypedAssetRepository.h"
 #include "Engine/DataAsset.h"
+#include "TypedAssetRepository.h"
+
 #include "TextureRepository.generated.h"
 
 /**
@@ -19,15 +20,14 @@ class POKEMONASSETS_API UTextureRepository : public UDataAsset,
 #endif
     GENERATED_BODY()
 
-protected:
-    TMap<FName, TSoftObjectPtr<UTexture2D>> & GetAssetMap() final;
-    const TMap<FName, TSoftObjectPtr<UTexture2D>> & GetAssetMap() const final;
+  protected:
+    TMap<FName, TSoftObjectPtr<UTexture2D>> &GetAssetMap() final;
+    const TMap<FName, TSoftObjectPtr<UTexture2D>> &GetAssetMap() const final;
 
-private:
+  private:
     /**
      * The map of name keys to their corresponding textures
      */
     UPROPERTY(VisibleAnywhere, Category = Lookup)
     TMap<FName, TSoftObjectPtr<UTexture2D>> TextureMap;
-
 };

@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Camera/CameraSubsystem.h"
 
-FOnCameraAngleChanged & UCameraSubsystem::GetOnCameraAngleChanged() {
+FOnCameraAngleChanged &UCameraSubsystem::GetOnCameraAngleChanged() {
     return OnCameraAngleChanged;
 }
 

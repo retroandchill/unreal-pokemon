@@ -6,8 +6,7 @@
 float UWidgetUtilities::GetWidgetDPIScale() {
     static constexpr float SlateDPI = 96.f;
 #if WITH_EDITOR
-    auto FontDPI = static_cast<float>(
-        GetDefault<UUserInterfaceSettings>()->GetFontDisplayDPI());
+    auto FontDPI = static_cast<float>(GetDefault<UUserInterfaceSettings>()->GetFontDisplayDPI());
     return SlateDPI / FontDPI;
 #else
     return SlateDPI;

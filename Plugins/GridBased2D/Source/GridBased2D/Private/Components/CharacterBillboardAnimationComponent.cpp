@@ -100,7 +100,7 @@ void UCharacterBillboardAnimationComponent::SetBillboardComponent(UMaterialBillb
     BillboardComponent = NewBillboardComponent;
 }
 
-UTexture2D * UCharacterBillboardAnimationComponent::GetSourceTexture() const {
+UTexture2D *UCharacterBillboardAnimationComponent::GetSourceTexture() const {
     return SourceTexture;
 }
 

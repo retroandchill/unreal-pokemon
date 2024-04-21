@@ -4,13 +4,13 @@
 #include "Characters/MoveCheckResult.h"
 #include "Components/GridBasedAnimationComponent.h"
 #include "Components/GridMovable.h"
+#include "GameFramework/Character.h"
 #include "GridUtils.h"
 #include "Interaction/Interactable.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/GridBasedMap.h"
 #include "Map/MapSubsystem.h"
 #include "MathUtilities.h"
-#include "GameFramework/Character.h"
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() {
     PrimaryComponentTick.bCanEverTick = true;
@@ -235,7 +235,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
         Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
                                                          MoveSpeed * Distance, Timer);
-        
+
         if (Timer >= MoveSpeed * Distance) {
             CurrentPosition.X = DesiredPosition.X;
         }

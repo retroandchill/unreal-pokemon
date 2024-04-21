@@ -59,7 +59,7 @@ void AGridBasedMap::RefreshTileData() {
 }
 
 void AGridBasedMap::ClearTileReplacements() {
-    
+
 #if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
 #endif
