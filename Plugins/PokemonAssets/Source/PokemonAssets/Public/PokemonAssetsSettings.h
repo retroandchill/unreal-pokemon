@@ -64,7 +64,10 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Trainers")
     FName GetTrainerSpriteSourceTexturePropertyName() const;
 
-  private:
+    [[nodiscard]] FSoftObjectPath GetPokemonIconRepository() const;
+    [[nodiscard]] FSoftObjectPath GetTrainerFrontSpriteRepository() const;
+
+private:
     /**
      * The name of the package that contains the Pokémon Icon graphics
      */

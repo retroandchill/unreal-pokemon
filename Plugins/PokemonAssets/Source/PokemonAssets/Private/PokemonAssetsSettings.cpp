@@ -29,3 +29,11 @@ const FSoftObjectPath &UPokemonAssetsSettings::GetTrainerSpriteBaseMaterial() co
 FName UPokemonAssetsSettings::GetTrainerSpriteSourceTexturePropertyName() const {
     return TrainerSpriteSourceTexturePropertyName;
 }
+
+FSoftObjectPath UPokemonAssetsSettings::GetPokemonIconRepository() const {
+    return PokemonIconRepository;
+}
+
+FSoftObjectPath UPokemonAssetsSettings::GetTrainerFrontSpriteRepository() const {
+    return TrainerFrontSpriteRepository;
+}

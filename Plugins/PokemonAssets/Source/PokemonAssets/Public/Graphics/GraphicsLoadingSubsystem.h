@@ -7,6 +7,7 @@
 
 #include "GraphicsLoadingSubsystem.generated.h"
 
+class UTextureRepository;
 class ITrainer;
 class IPokemon;
 /**
@@ -56,13 +57,13 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * The name of the package that contains the Pokémon Icon graphics
      */
     UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    FString PokemonIconsPackageName;
+    TSoftObjectPtr<UTextureRepository> PokemonIconsRepository;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics
      */
     UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    FString TrainerSpritesPackageName;
+    TSoftObjectPtr<UTextureRepository> TrainerSpritesRepository;
 
     /**
      * The base material used to construct Pokémon icons

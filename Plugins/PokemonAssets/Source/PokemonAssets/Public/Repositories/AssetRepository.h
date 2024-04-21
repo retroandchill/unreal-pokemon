@@ -8,7 +8,7 @@
 
 // This class does not need to be modified.
 UINTERFACE()
-class UAssetRepository : public UInterface {
+class POKEMONASSETS_API UAssetRepository : public UInterface {
     GENERATED_BODY()
 };
 

@@ -4,6 +4,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonAssetsSettings.h"
+#include "Repositories/TextureRepository.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
@@ -12,12 +13,12 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     Super::Initialize(Collection);
 
     auto Settings = GetDefault<UPokemonAssetsSettings>();
-    PokemonIconsPackageName = Settings->GetPokemonIconsPackageName();
+    PokemonIconsRepository = Settings->GetPokemonIconRepository();
     PokemonIconsBaseMaterial = Cast<UMaterialInterface>(Settings->GetPokemonIconsBaseMaterial().TryLoad());
     IconSourceTexturePropertyName = Settings->GetIconSourceTexturePropertyName();
     IconFrameRatePropertyName = Settings->GetIconFrameRatePropertyName();
 
-    TrainerSpritesPackageName = Settings->GetTrainerSpritesPackageName();
+    TrainerSpritesRepository = Settings->GetTrainerFrontSpriteRepository();
     TrainerSpriteBaseMaterial = Cast<UMaterialInterface>(Settings->GetTrainerSpriteBaseMaterial().TryLoad());
     TrainerSpriteSourceTexturePropertyName = Settings->GetTrainerSpriteSourceTexturePropertyName();
 }
@@ -30,10 +31,7 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
     FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 
     // TODO: Add support for alternate forms, gender differences, etc.
-    auto AssetPath = FString::Format(TEXT("{Path}/{AssetName}.{AssetName}"), {{TEXT("PATH"), PokemonIconsPackageName},
-                                                                              {TEXT("AssetName"), Species.ToString()}});
-    auto AssetData = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(AssetPath);
-    auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
+    auto Texture = PokemonIconsRepository.Get()->FetchAsset(Species);
     if (Texture == nullptr) {
         return nullptr;
     }
@@ -50,11 +48,7 @@ TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrain
 
 TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
                                                                                          UObject *Outer) const {
-    auto AssetPath =
-        FString::Format(TEXT("{Path}/{AssetName}.{AssetName}"),
-                        {{TEXT("PATH"), TrainerSpritesPackageName}, {TEXT("AssetName"), TrainerType.ToString()}});
-    auto AssetData = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(AssetPath);
-    auto Texture = Cast<UTexture2D>(AssetData.GetAsset());
+    auto Texture = TrainerSpritesRepository.Get()->FetchAsset(TrainerType);
     if (Texture == nullptr) {
         return {};
     }
