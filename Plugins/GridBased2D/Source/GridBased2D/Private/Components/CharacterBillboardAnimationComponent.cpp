@@ -100,6 +100,10 @@ void UCharacterBillboardAnimationComponent::SetBillboardComponent(UMaterialBillb
     BillboardComponent = NewBillboardComponent;
 }
 
+UTexture2D *UCharacterBillboardAnimationComponent::GetSourceTexture() const {
+    return SourceTexture;
+}
+
 UMaterialInstanceDynamic *UCharacterBillboardAnimationComponent::GetMaterialInstance() const {
     return MaterialInstance;
 }

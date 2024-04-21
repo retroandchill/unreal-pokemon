@@ -24,14 +24,15 @@ class GRIDBASED2D_API AGridBasedMap : public AGridBasedMapBase {
     AGridBasedMap();
 
   protected:
+#if WITH_EDITOR
     void PostInitProperties() override;
     void PostReinitProperties() override;
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
     void PostLoad() override;
     void PostEditMove(bool bFinished) override;
+#endif
 
   public:
-#if WITH_EDITORONLY_DATA
     /**
      * Refresh the tiles, replacing any tiles that need to be replaced
      */
@@ -43,7 +44,6 @@ class GRIDBASED2D_API AGridBasedMap : public AGridBasedMapBase {
      */
     UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
     void ClearTileReplacements();
-#endif
 
     FIntRect GetBounds() const override;
 

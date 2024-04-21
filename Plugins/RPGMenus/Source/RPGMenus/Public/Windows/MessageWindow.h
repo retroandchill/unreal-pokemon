@@ -35,7 +35,9 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
   public:
     TSharedRef<SWidget> RebuildWidget() override;
     void SynchronizeProperties() override;
+#if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+#endif
 
   protected:
     void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;

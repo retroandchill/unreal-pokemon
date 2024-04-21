@@ -18,10 +18,12 @@ void UMessageWindow::SynchronizeProperties() {
     ResizeWindow();
 }
 
+#if WITH_EDITOR
 void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
     Super::PostEditChangeProperty(PropertyChangedEvent);
     ResizeWindow();
 }
+#endif
 
 void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
     Super::NativeTick(MyGeometry, InDeltaTime);
