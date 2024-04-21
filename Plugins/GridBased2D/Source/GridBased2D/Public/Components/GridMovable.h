@@ -37,4 +37,10 @@ class GRIDBASED2D_API IGridMovable {
     UFUNCTION(BlueprintNativeEvent, Category = Movement)
     bool PerformAdditionalMovementChecks(const FVector &TargetSquare, bool bBlockingHit,
                                          UPrimitiveComponent *HitComponent);
+
+    /**
+     * Adjust the placement of the character render based on the desired destination.
+     */
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Movement)
+    void AdjustCharacterPlacement();
 };

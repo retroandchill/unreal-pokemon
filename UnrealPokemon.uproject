@@ -3,10 +3,6 @@
 	"EngineAssociation": "5.4",
 	"Category": "",
 	"Description": "",
-	"AdditionalCompilerArguments": [
-		"-fprofile-instr-generate",
-		"-fcoverage-mapping"
-	],
 	"Modules": [
 		{
 			"Name": "UnrealPokemon",
@@ -76,6 +72,10 @@
 		},
 		{
 			"Name": "PokemonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "PokemonAssets",
 			"Enabled": true
 		}
 	]

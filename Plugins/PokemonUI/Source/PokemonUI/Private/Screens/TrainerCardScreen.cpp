@@ -2,10 +2,10 @@
 
 #include "Screens/TrainerCardScreen.h"
 #include "Components/Image.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Primatives/DisplayText.h"
-#include "Utilities/GraphicsLoadingSubsystem.h"
 
 void UTrainerCardScreen::NativeConstruct() {
     Super::NativeConstruct();

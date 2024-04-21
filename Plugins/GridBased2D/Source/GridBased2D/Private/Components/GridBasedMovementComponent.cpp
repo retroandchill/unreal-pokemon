@@ -4,6 +4,7 @@
 #include "Characters/MoveCheckResult.h"
 #include "Components/GridBasedAnimationComponent.h"
 #include "Components/GridMovable.h"
+#include "GameFramework/Character.h"
 #include "GridUtils.h"
 #include "Interaction/Interactable.h"
 #include "Kismet/GameplayStatics.h"
@@ -251,6 +252,9 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     }
 
     Owner->SetActorLocation(Position, bPerformSweep);
+    if (Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
+        IGridMovable::Execute_AdjustCharacterPlacement(Owner);
+    }
     if (CurrentPosition != Pos && CurrentPosition == DesiredPosition) {
         MoveComplete();
     }

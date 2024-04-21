@@ -14,10 +14,12 @@ void UHelpWindow::SynchronizeProperties() {
     SetText(Text);
 }
 
+#if WITH_EDITOR
 void UHelpWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
     Super::PostEditChangeProperty(PropertyChangedEvent);
     SetText(Text);
 }
+#endif
 
 const FText &UHelpWindow::GetText() const {
     return Text;

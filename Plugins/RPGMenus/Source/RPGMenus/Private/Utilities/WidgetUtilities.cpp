@@ -5,9 +5,12 @@
 
 float UWidgetUtilities::GetWidgetDPIScale() {
     static constexpr float SlateDPI = 96.f;
-    auto FontDPI = static_cast<float>(
-        GetDefault<UUserInterfaceSettings>(UUserInterfaceSettings::StaticClass())->GetFontDisplayDPI());
+#if WITH_EDITOR
+    auto FontDPI = static_cast<float>(GetDefault<UUserInterfaceSettings>()->GetFontDisplayDPI());
     return SlateDPI / FontDPI;
+#else
+    return 1.f;
+#endif
 }
 
 FVector2D UWidgetUtilities::GetDesiredBrushSize(const FSlateBrush &Brush) {
@@ -20,7 +23,11 @@ FVector2D UWidgetUtilities::GetDesiredBrushSize(const FSlateBrush &Brush) {
     }
 
     if (auto Sprite = Cast<UPaperSprite>(ResourceObject); Sprite != nullptr) {
+#if WITH_EDITOR
         return Sprite->GetSourceSize();
+#else
+        return FVector2D(Sprite->GetBakedTexture()->GetSizeX(), Sprite->GetBakedTexture()->GetSizeY());
+#endif
     }
 
     return Brush.ImageSize;

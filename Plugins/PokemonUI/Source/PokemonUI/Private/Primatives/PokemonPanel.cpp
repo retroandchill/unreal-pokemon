@@ -2,9 +2,9 @@
 
 #include "Primatives/PokemonPanel.h"
 #include "Components/Image.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Utilities/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/PokemonSelectionPane.h"
 #include "Windows/SelectableWidget.h"
