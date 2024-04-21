@@ -251,6 +251,9 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     }
 
     Owner->SetActorLocation(Position, bPerformSweep);
+    if (Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
+        IGridMovable::Execute_AdjustCharacterPlacement(Owner);
+    }
     if (CurrentPosition != Pos && CurrentPosition == DesiredPosition) {
         MoveComplete();
     }
