@@ -13,14 +13,14 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     AssetRepositories.Emplace(Settings->GetTrainerSpritesPackageName(),
                               Settings->GetTrainerFrontSpriteRepository().TryLoad());
 
-    for (auto [Package, Repository] : AssetRepositories) {
+    for (const auto &[Package, Repository] : AssetRepositories) {
         if (!AssetRepositories.Contains(Package)) {
             continue;
         }
 
         TArray<FAssetData> Assets;
         FAssetRegistryModule::GetRegistry().GetAssetsByPath(Package, Assets);
-        for (auto &Asset : Assets) {
+        for (const auto &Asset : Assets) {
             AssetRepositories[Package]->RegisterAsset(Asset);
         }
     }
