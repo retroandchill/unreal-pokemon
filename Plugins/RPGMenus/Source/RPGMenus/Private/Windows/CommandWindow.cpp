@@ -28,6 +28,7 @@ void UCommandWindow::SynchronizeProperties() {
     RebuildWidget();
 }
 
+#if WITH_EDITOR
 void UCommandWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
@@ -39,6 +40,7 @@ void UCommandWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
         SetIndex(GetItemCount() - 1);
     }
 }
+#endif
 
 void UCommandWindow::NativeConstruct() {
     Super::NativeConstruct();

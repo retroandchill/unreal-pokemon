@@ -2,14 +2,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AssetRegistry/AssetRegistryModule.h"
 #include "Blueprint/BlueprintExceptionInfo.h"
-#include "BlueprintActionDatabaseRegistrar.h"
-#include "BlueprintNodeSpawner.h"
+
 #include "DataManager.h"
 #include "DataRegistry.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
+#if WITH_EDITOR
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "BlueprintActionDatabaseRegistrar.h"
+#include "BlueprintNodeSpawner.h"
 #include "Subsystems/SubsystemBlueprintLibrary.h"
+#endif
 
 #include "DataUtilities.generated.h"
 
@@ -102,6 +106,7 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = "Data Table", meta = (BlueprintInternalUseOnly = "true"))
     static bool IsDataRowNameValid(const UScriptStruct *StructType, FName RowName);
 
+#if WITH_EDITOR
     /**
      * Utility method used by the K2Nodes to add all the types to the menu as needed
      * @tparam T The type of the node we're registering
@@ -139,4 +144,5 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
             }
         }
     }
+#endif
 };

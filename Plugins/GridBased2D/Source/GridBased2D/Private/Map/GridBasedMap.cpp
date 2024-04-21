@@ -24,6 +24,7 @@ AGridBasedMap::AGridBasedMap() {
     TerrainTagDataTable = Cast<UDataTable>(Settings->GetTerrainTagDataTable().TryLoad());
 }
 
+#if WITH_EDITOR
 void AGridBasedMap::PostInitProperties() {
     Super::PostInitProperties();
     SetUpMapLocation();
@@ -48,17 +49,21 @@ void AGridBasedMap::PostEditMove(bool bFinished) {
     Super::PostEditMove(bFinished);
     SetUpMapLocation(bFinished);
 }
+#endif
 
-#if WITH_EDITORONLY_DATA
 void AGridBasedMap::RefreshTileData() {
+#if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
     TileReplacer->ReplaceTiles(TileMapComponent);
+#endif
 }
 
 void AGridBasedMap::ClearTileReplacements() {
+    
+#if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
-}
 #endif
+}
 
 FIntRect AGridBasedMap::GetBounds() const {
     auto RealLocation = GetActorLocation();
