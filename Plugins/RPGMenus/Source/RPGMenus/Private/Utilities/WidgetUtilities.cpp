@@ -9,7 +9,7 @@ float UWidgetUtilities::GetWidgetDPIScale() {
     auto FontDPI = static_cast<float>(GetDefault<UUserInterfaceSettings>()->GetFontDisplayDPI());
     return SlateDPI / FontDPI;
 #else
-    return SlateDPI;
+    return 1.f;
 #endif
 }
 
