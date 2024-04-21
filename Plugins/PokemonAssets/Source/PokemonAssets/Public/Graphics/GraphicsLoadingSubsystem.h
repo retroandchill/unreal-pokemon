@@ -13,7 +13,7 @@ class IPokemon;
  * Subsystem designed to handle the loading of graphical assets into memory
  */
 UCLASS()
-class POKEMONUI_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
+class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
   public:

@@ -73,6 +73,10 @@
 		{
 			"Name": "PokemonUI",
 			"Enabled": true
+		},
+		{
+			"Name": "PokemonAssets",
+			"Enabled": true
 		}
 	]
 }

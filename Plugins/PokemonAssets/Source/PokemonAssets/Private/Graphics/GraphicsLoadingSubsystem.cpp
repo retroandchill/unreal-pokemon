@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Utilities/GraphicsLoadingSubsystem.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonUISettings.h"
+#include "PokemonAssetsSettings.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
@@ -11,7 +11,7 @@
 void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    auto Settings = GetDefault<UPokemonUISettings>();
+    auto Settings = GetDefault<UPokemonAssetsSettings>();
     PokemonIconsPackageName = Settings->GetPokemonIconsPackageName();
     PokemonIconsBaseMaterial = Cast<UMaterialInterface>(Settings->GetPokemonIconsBaseMaterial().TryLoad());
     IconSourceTexturePropertyName = Settings->GetIconSourceTexturePropertyName();
