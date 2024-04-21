@@ -83,7 +83,7 @@ bool AGridBasedCharacter::IsStandingNextToCliff(const FVector &TargetSquare) {
     auto [Distance1, Component1] = PerformTraceToGround(FindLocationJustOffTileEdge(TargetSquare));
     auto [Distance2, Component2] = PerformTraceToGround(UMathUtilities::Midpoint(GetActorLocation(), TargetSquare));
 
-    if (FMath::Abs(Distance1 - Distance2) > 45.f && GetCharacterMovement()->MaxStepHeight) {
+    if (FMath::Abs(Distance1 - Distance2) > GetCharacterMovement()->MaxStepHeight) {
         return true;
     }
 
