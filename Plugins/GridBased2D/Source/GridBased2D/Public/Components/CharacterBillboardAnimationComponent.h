@@ -52,6 +52,13 @@ class GRIDBASED2D_API UCharacterBillboardAnimationComponent : public UActorCompo
     void SetBillboardComponent(UMaterialBillboardComponent *NewBillboardComponent);
 
     /**
+     * Get the source texture for the component in question.
+     * @return The source texture for the component in question
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Component)
+    UTexture2D *GetSourceTexture() const;
+
+    /**
      * Get the individual material instance owned by this component
      * @return The individual material instance owned by this component
      */
@@ -75,7 +82,7 @@ class GRIDBASED2D_API UCharacterBillboardAnimationComponent : public UActorCompo
     /**
      * The source texture for the component in question
      */
-    UPROPERTY(EditAnywhere, Category = Rendering)
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Rendering)
     TObjectPtr<UTexture2D> SourceTexture;
 
     /**
