@@ -28,5 +28,11 @@ public class GridBased2D : ModuleRules
 				"DeveloperSettings"
 			}
 		);
+		
+		if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
+		{
+			PrivateDependencyModuleNames.Add("AutomationTestHelpers");
+			PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
+		}
 	}
 }

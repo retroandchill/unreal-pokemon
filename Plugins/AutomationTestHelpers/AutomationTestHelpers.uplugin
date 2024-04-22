@@ -1,0 +1,23 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "AutomationTestHelpers",
+	"Description": "Set of helper classes and ",
+	"Category": "Other",
+	"CreatedBy": "Set of helper classes and macros used to make interacting with the automation system a bit easier.",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "AutomationTestHelpers",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

@@ -77,6 +77,10 @@
 		{
 			"Name": "PokemonAssets",
 			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true
 		}
 	]
 }
