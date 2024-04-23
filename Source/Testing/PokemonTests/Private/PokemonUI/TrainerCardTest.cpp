@@ -8,6 +8,7 @@
 #include "Primatives/DisplayText.h"
 #include "Screens/TrainerCardScreen.h"
 #include "Utilities/PokemonTestUtilities.h"
+#include "Utilities/RAII.h"
 #include "Windows/SelectableWidget.h"
 
 void ATrainerCardTest::BeginPlay() {

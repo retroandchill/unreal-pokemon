@@ -1,8 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "DataManager.h"
 #include "ImportUtils.h"
 #include "Misc/AutomationTest.h"
 #include "Species/Stat.h"
+#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "UnrealPokemon.PokemonUtilities.TestGetMainStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -11,13 +13,14 @@ bool TestGetMainStatsFromTable::RunTest(const FString &Parameters) {
     auto StatTable = FDataManager::GetInstance().GetDataTable<FStat>().GetDataTable();
     auto Stats = UImportUtils::GetMainStatsFromTable(StatTable);
 
-    bool bPassed = TestEqual(TEXT("Table should have 6 stats!"), 6, Stats.Num());
-    bPassed &= TestEqual(TEXT("HP"), FName(TEXT("HP")), Stats[0].ID);
-    bPassed &= TestEqual(TEXT("ATTACK"), FName(TEXT("ATTACK")), Stats[1].ID);
-    bPassed &= TestEqual(TEXT("DEFENSE"), FName(TEXT("DEFENSE")), Stats[2].ID);
-    bPassed &= TestEqual(TEXT("SPECIAL_ATTACK"), FName(TEXT("SPECIAL_ATTACK")), Stats[3].ID);
-    bPassed &= TestEqual(TEXT("SPECIAL_DEFENSE"), FName(TEXT("SPECIAL_DEFENSE")), Stats[4].ID);
-    bPassed &= TestEqual(TEXT("SPEED"), FName(TEXT("SPEED")), Stats[5].ID);
+    ASSERT_EQUAL(Stats.Num(), 6);
+    CHECK_EQUAL(Stats[0].ID, FName(TEXT("HP")));
+    CHECK_EQUAL(Stats[1].ID, FName(TEXT("ATTACK")));
+    CHECK_EQUAL(Stats[2].ID, FName(TEXT("DEFENSE")));
+    CHECK_EQUAL(Stats[3].ID, FName(TEXT("SPECIAL_ATTACK")));
+    CHECK_EQUAL(Stats[4].ID, FName(TEXT("SPECIAL_DEFENSE")));
+    CHECK_EQUAL(Stats[5].ID, FName(TEXT("SPEED")));
 
-    return bPassed;
+    return true;
 }
+#endif

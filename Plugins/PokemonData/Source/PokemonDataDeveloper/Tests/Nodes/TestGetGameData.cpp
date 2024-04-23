@@ -4,7 +4,7 @@
 #include "Bag/Item.h"
 #include "BlueprintActionDatabase.h"
 #include "BlueprintTypePromotion.h"
-#include "Assertions/AutomationAsserts.h"
+#include "Asserts.h"
 #include "DataManager.h"
 #include "Exp/GrowthRateData.h"
 #include "GraphEditorSettings.h"

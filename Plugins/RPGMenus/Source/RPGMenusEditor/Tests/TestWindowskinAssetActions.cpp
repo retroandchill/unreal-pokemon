@@ -1,5 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include "CommonDefines.h"
+
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "Asserts.h"
 #include "Data/Windowskin.h"
 #include "Misc/AutomationTest.h"
 #include "Windowskin/WindowskinAssetActions.h"
@@ -10,10 +12,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinAssetActions, "UnrealPokemon.RPGM
 bool TestWindowskinAssetActions::RunTest(const FString &Parameters) {
     FWindowskinAssetActions AssetActions;
 
-    AUTOMATION_ASSERT(TestEqual(TEXT("Name"), AssetActions.GetName().ToString(), TEXT("Windowskin")));
-    AUTOMATION_ASSERT(TestEqual(TEXT("Asset Class"), AssetActions.GetSupportedClass(), UWindowskin::StaticClass()));
-    AUTOMATION_ASSERT(TestEqual(TEXT("Type Color"), AssetActions.GetTypeColor(), FColor::Silver));
-    AUTOMATION_ASSERT(TestEqual(TEXT("Categories"), AssetActions.GetCategories(), EAssetTypeCategories::UI));
+    CHECK_EQUAL(TEXT("Windowskin"), AssetActions.GetName().ToString());
+    CHECK_EQUAL(UWindowskin::StaticClass(), AssetActions.GetSupportedClass());
+    CHECK_EQUAL(FColor::Silver, AssetActions.GetTypeColor());
+    CHECK_EQUAL(EAssetTypeCategories::UI, AssetActions.GetCategories());
 
     return true;
 }
+#endif

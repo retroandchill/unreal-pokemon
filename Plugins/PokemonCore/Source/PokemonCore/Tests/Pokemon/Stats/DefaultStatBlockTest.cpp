@@ -6,11 +6,8 @@
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Species/SpeciesData.h"
-#include "External/fakeit.hpp"
 #include "Utilities/RAII.h"
-#include "Assertions/AutomationAsserts.h"
-
-using namespace fakeit;
+#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "UnrealPokemon.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)

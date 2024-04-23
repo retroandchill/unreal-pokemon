@@ -3,12 +3,10 @@
 #include "RPGMenus/TestWindowskinThumbnailRenderer.h"
 #include "CommonDefines.h"
 #include "Data/Windowskin.h"
-#include "Memory/GCPointer.h"
+#include "Utilities/GCPointer.h"
 #include "ThumbnailRendering/ThumbnailRenderer.h"
-#include "Utilities/fakeit.hpp"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 
-using namespace fakeit;
 
 void ATestWindowskinThumbnailRenderer::BeginPlay() {
     Super::BeginPlay();

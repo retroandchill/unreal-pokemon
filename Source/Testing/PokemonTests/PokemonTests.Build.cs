@@ -37,7 +37,7 @@ public class PokemonTests : ModuleRules
 				"UMG",
 				"InputCore", 
 				"PokemonEditorUtils", 
-				"PokemonDataDeveloper", "RPGMenusDeveloper", "RPGMenusEditor", "GridBased2DEditor", "MessageLog"
+				"PokemonDataDeveloper", "RPGMenusDeveloper", "RPGMenusEditor", "GridBased2DEditor", "MessageLog", "AutomationTestHelpers"
 			}
 		);
 	}

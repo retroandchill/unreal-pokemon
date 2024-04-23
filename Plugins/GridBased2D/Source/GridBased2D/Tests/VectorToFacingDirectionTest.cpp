@@ -1,6 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Assertions/AutomationAsserts.h"
+#include "Asserts.h"
 #include "Characters/FacingDirection.h"
 #include "GridUtils.h"
 #include "Misc/AutomationTest.h"

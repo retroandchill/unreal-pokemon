@@ -9,6 +9,7 @@
 #include "GridBasedAnimationComponent.h"
 #include "GridBasedMovement.h"
 #include "Map/WithinMap.h"
+#include "Engine/OverlapResult.h"
 
 #include "GridBasedMovementComponent.generated.h"
 

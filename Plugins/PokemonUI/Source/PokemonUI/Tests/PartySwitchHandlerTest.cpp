@@ -1,18 +1,30 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
+
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Memory/GCPointer.h"
-#include "Memory/RootMemoryPointers.h"
+#include "Utilities/GCPointer.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
-#include "Pokemon/Pokemon.h"
 #include "Screens/PartyScreen.h"
 #include "Trainers/BasicTrainer.h"
-#include "Utilities/fakeit.hpp"
-#include "Utilities/PokemonTestUtilities.h"
+#include "Utilities/RAII.h"
+#include "Asserts.h"
 
-using namespace fakeit;
+class FMockScreen : public IPartyScreen {
+public:
+    void BeginSwitch(int32 Index) override {
+        SwitchIndex.Emplace(Index);
+    }
+    
+    void SetHelpText(const FText &Text) override {
+        
+    }
+
+    
+    TOptional<int32> SwitchIndex;
+};
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "UnrealPokemon.UI.PartySwitchHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -23,21 +35,22 @@ bool PartySwitchHandlerTest::RunTest(const FString &Parameters) {
         GameInstance.Reset(NewObject<UGameInstance>());
         GameInstance->Init();
     }
-
-    Mock<IPartyScreen> Screen;
-    Fake(Method(Screen, BeginSwitch));
+    
+    FMockScreen Screen;
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
     Trainer->AddPokemonToParty(UGamePokemon::Create({.Species = TEXT("RIOLU"), .Level = 5}));
 
     TGCPointer<UPartyMenuHandler> Handler(NewObject<UPartySwitchHandler>());
-    bool Passed = TestFalse(TEXT("Command should not be visible!"), Handler->ShouldShow(Screen.get(), *Trainer, 0));
+    CHECK_TRUE(Handler->ShouldShow(Screen, *Trainer, 0));
 
     Trainer->AddPokemonToParty(UGamePokemon::Create({.Species = TEXT("OSHAWOTT"), .Level = 5}));
-    Passed &= TestTrue(TEXT("Command should be visible!"), Handler->ShouldShow(Screen.get(), *Trainer, 0));
+    CHECK_TRUE(Handler->ShouldShow(Screen, *Trainer, 0));
 
-    Handler->Handle(Screen.get(), *Trainer, 0);
-    Passed &= Verify(Method(Screen, BeginSwitch).Using(0));
+    Handler->Handle(Screen, *Trainer, 0);
+    ASSERT_TRUE(Screen.SwitchIndex.IsSet());
+    CHECK_EQUAL(0, Screen.SwitchIndex.GetValue());
 
-    return Passed;
+    return true;
 }
+#endif

@@ -13,7 +13,7 @@
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include "Utilities/K2Nodes.h"
-#include "Assertions/AutomationAsserts.h"
+#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_NodeTile,
                                  "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.NodeTitle",

@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Assertions/AutomationAsserts.h"
+#include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Exp/Parabolic.h"
 #include <array>

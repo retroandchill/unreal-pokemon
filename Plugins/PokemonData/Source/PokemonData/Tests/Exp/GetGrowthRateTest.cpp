@@ -4,7 +4,7 @@
 #include "DataManager.h"
 #include "Exp/GrowthRateData.h"
 #include "Misc/AutomationTest.h"
-#include "Assertions/Asserts.h"
+#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "UnrealPokemon.Core.Exp.GetGrowthRateTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

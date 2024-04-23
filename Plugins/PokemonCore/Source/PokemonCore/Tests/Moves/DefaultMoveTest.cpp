@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Moves/DefaultMove.h"
-#include "Assertions/AutomationAsserts.h"
+#include "Asserts.h"
 #include "Misc/AutomationTest.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "UnrealPokemon.Core.Moves.DefaultMoveTest",

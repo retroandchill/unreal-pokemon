@@ -1,7 +1,7 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "MathUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "Assertions/AutomationAsserts.h"
+#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "UnrealPokemon.Math.LinearInterpolationTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

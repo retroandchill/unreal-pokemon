@@ -1,5 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include "Assertions/Asserts.h"
+#include "Asserts.h"
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 
 #include "Bag/Item.h"
