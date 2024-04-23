@@ -2,11 +2,6 @@
 
 #include "RPGMenus/SelectableWindowInputTest.h"
 #include "CommonDefines.h"
-#include "IAutomationDriver.h"
-#include "IAutomationDriverModule.h"
-#include "IDriverSequence.h"
-#include "LocateBy.h"
-#include "Utilities/AutomationDriverHandler.h"
 #include "Utilities/InputUtilities.h"
 #include "Windows/SelectableWidget.h"
 
