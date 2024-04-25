@@ -12,7 +12,7 @@ class UWidget;
  * Blueprint functions for getting widget children
  */
 UCLASS()
-class POKEMONTESTS_API UWidgetChildUtilities : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UWidgetChildUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
