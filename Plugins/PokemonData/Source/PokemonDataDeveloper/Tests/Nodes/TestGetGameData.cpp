@@ -1,23 +1,23 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 
+#include "Asserts.h"
 #include "Bag/Item.h"
 #include "BlueprintActionDatabase.h"
 #include "BlueprintTypePromotion.h"
-#include "Asserts.h"
 #include "DataManager.h"
+#include "Dispatchers/TestDispatcher.h"
 #include "Exp/GrowthRateData.h"
 #include "GraphEditorSettings.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Nodes/K2Node_GetGameData.h"
+#include "Species/EggGroup.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
-#include "Utilities/K2Nodes.h"
-#include "Dispatchers/TestDispatcher.h"
-#include "Species/EggGroup.h"
 #include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile, "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeTitle",
@@ -53,7 +53,8 @@ bool TestGetGameData_TooltipText::RunTest(const FString &Parameters) {
     TestNode->Initialize(FStat::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Get Stat \n\nRepresents one of the stats in the database."), TestNode->GetTooltipText().ToString());
+    ASSERT_EQUAL(TEXT("Get Stat \n\nRepresents one of the stats in the database."),
+                 TestNode->GetTooltipText().ToString());
 
     return true;
 }
@@ -115,7 +116,8 @@ bool TestGetGameData_MenuActions::RunTest(const FString &Parameters) {
 
 constexpr auto TEST_GET_GAME_DATA = TEXT("/PokemonData/Tests/Resources/GetDataDispatcher.GetDataDispatcher");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_ExecuteNode, "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeExecution",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_ExecuteNode,
+                                 "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_ExecuteNode::RunTest(const FString &Parameters) {
@@ -127,7 +129,7 @@ bool TestGetGameData_ExecuteNode::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("FIELD"), EggGroup.ID.ToString().ToUpper());
     CHECK_EQUAL(TEXT("Field"), EggGroup.RealName.ToString());
     CHECK_EQUAL(EEggGroupType::Normal, EggGroup.Type);
-    
+
     return true;
 }
 

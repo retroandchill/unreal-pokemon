@@ -5,7 +5,7 @@
 #include "Components/Widget.h"
 
 /**
-* "Deleter" to shutdown the game instance so it doesn't cause issues when it gets garbage collected.
+ * "Deleter" to shutdown the game instance so it doesn't cause issues when it gets garbage collected.
  */
 struct FGameInstanceShutdown {
     void operator()(UGameInstance *GameInstance) {

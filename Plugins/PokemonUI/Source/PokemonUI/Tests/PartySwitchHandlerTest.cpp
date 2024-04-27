@@ -2,27 +2,25 @@
 
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
+#include "Asserts.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Utilities/GCPointer.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
 #include "Screens/PartyScreen.h"
 #include "Trainers/BasicTrainer.h"
+#include "Utilities/GCPointer.h"
 #include "Utilities/RAII.h"
-#include "Asserts.h"
 
 class FMockScreen : public IPartyScreen {
-public:
+  public:
     void BeginSwitch(int32 Index) override {
         SwitchIndex.Emplace(Index);
     }
-    
+
     void SetHelpText(const FText &Text) override {
-        
     }
 
-    
     TOptional<int32> SwitchIndex;
 };
 
@@ -35,7 +33,7 @@ bool PartySwitchHandlerTest::RunTest(const FString &Parameters) {
         GameInstance.Reset(NewObject<UGameInstance>());
         GameInstance->Init();
     }
-    
+
     FMockScreen Screen;
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));

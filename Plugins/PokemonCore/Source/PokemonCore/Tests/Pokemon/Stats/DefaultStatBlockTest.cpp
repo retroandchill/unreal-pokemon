@@ -1,13 +1,13 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Asserts.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/RAII.h"
-#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Unit Tests.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)

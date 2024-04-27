@@ -1,7 +1,7 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "Asserts.h"
 #include "MathUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "Unit Tests.Math.LinearInterpolationTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

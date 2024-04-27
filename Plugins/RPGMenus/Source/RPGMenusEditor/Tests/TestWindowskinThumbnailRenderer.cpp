@@ -12,8 +12,8 @@ bool TestWindowskinThumbnailRenderer::RunTest(const FString &Parameters) {
     TGCPointer Renderer(NewObject<UWindowskinThumbnailRenderer>());
     TGCPointer InvalidWindowskin(NewObject<UWindowskin>());
 
-    auto WindowskinAsset = FAssetRegistryModule::GetRegistry()
-        .GetAssetByObjectPath(FSoftObjectPath(TEXT("/RPGMenus/Tests/Resources/choice_1_Win.choice_1_Win")));
+    auto WindowskinAsset = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(
+        FSoftObjectPath(TEXT("/RPGMenus/Tests/Resources/choice_1_Win.choice_1_Win")));
     auto ValidWindowskin = Cast<UWindowskin>(WindowskinAsset.GetAsset());
     ASSERT_NOT_NULL(ValidWindowskin);
     ASSERT_NOT_NULL(ValidWindowskin->GetSourceTexture());

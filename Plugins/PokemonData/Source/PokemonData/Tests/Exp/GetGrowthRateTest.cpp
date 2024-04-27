@@ -1,17 +1,17 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 
+#include "Asserts.h"
 #include "DataManager.h"
 #include "Exp/GrowthRateData.h"
 #include "Misc/AutomationTest.h"
-#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "Unit Tests.Core.Exp.GetGrowthRateTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetGrowthRateTest::RunTest(const FString &Parameters) {
     auto &DataSubsystem = FDataManager::GetInstance();
-    
+
     auto &GrowthRateProxy = DataSubsystem.GetDataTable<FGrowthRateData>();
     auto IdList = GrowthRateProxy.GetTableRowNames();
     ASSERT_NOT_EQUAL(IdList.Num(), 0);

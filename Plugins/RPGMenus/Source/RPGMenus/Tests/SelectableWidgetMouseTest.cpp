@@ -1,14 +1,14 @@
 ﻿
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Misc/AutomationTest.h"
 #include "Asserts.h"
 #include "Blueprint/UserWidget.h"
-#include "Windows/SelectableWidget.h"
 #include "Components/Button.h"
-#include "Utilities/WidgetTestUtilities.h"
+#include "Misc/AutomationTest.h"
 #include "Primatives/SelectableOption.h"
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
+#include "Windows/SelectableWidget.h"
 
 constexpr auto OPTION_TEST_WIDGET = TEXT("/RPGMenus/Tests/Resources/OptionTestWidget.OptionTestWidget");
 
@@ -16,14 +16,14 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetMouseTest, "Unit Tests.RPGMenus
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
-    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(OPTION_TEST_WIDGET);    
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(OPTION_TEST_WIDGET);
     ASSERT_NOT_NULL(WidgetClass);
     auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);
     ASSERT_NOT_NULL(NewWidget);
     NewWidget->AddToViewport();
 
-    auto &Options = UReflectionUtils::GetPropertyValue<TArray<USelectableOption*>>(NewWidget, TEXT("Options"));
+    auto &Options = UReflectionUtils::GetPropertyValue<TArray<USelectableOption *>>(NewWidget, TEXT("Options"));
     ASSERT_EQUAL(3, Options.Num());
 
     auto Button1 = Cast<UButton>(UWidgetTestUtilities::FindChildWidget(Options[1], TEXT("PrimaryButton")));
@@ -49,7 +49,7 @@ bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
     ASSERT_TRUE(Clicked);
     auto BroadcastIndex = UReflectionUtils::GetPropertyValue<int32>(NewWidget, TEXT("BroadcastIndex"));
     ASSERT_EQUAL(2, BroadcastIndex);
-    
+
     return true;
 }
 #endif

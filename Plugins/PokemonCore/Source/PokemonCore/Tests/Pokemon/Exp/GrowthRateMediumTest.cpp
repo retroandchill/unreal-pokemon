@@ -23,8 +23,7 @@ void GrowthRateMediumTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<
     OutTestCommands.Add("1");
 
     for (int i = 0; i < 3; i++) {
-        auto Fmt =
-            FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 2-99 (Sample %d)"), i + 1);
+        auto Fmt = FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
     }

@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "Asserts.h"
 #include "DataManager.h"
 #include "ImportUtils.h"
 #include "Misc/AutomationTest.h"
 #include "Species/Stat.h"
-#include "Asserts.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "Unit Tests.PokemonUtilities.TestGetMainStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

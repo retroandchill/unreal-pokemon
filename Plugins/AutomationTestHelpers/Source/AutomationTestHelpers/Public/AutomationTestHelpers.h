@@ -5,13 +5,12 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FAutomationTestHelpersModule : public IModuleInterface
-{
-public:
-	/** IModuleInterface implementation */
-	void StartupModule() override;
-	void ShutdownModule() override;
+class FAutomationTestHelpersModule : public IModuleInterface {
+  public:
+    /** IModuleInterface implementation */
+    void StartupModule() override;
+    void ShutdownModule() override;
 
-private:
+  private:
     void PostEngineInit();
 };

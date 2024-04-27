@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "ReflectionUtils.generated.h"
 
 /**
@@ -12,8 +13,8 @@
 UCLASS()
 class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
-    
-public:
+
+  public:
     /**
      * Extract the value of a property from the given object.
      * <p>Note: This method is unsafe, use as your own risk.</p>
@@ -23,7 +24,7 @@ public:
      * @return The value of the property
      */
     template <typename T>
-    static const T &GetPropertyValue(const UObject* TargetObject, FName PropertyName) {
+    static const T &GetPropertyValue(const UObject *TargetObject, FName PropertyName) {
         auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
         auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
         return TPropertyTypeFundamentals<T>::GetPropertyValue(PropertyContainer);
@@ -36,16 +37,14 @@ public:
      * @return If list of found classes
      */
     template <typename T>
-    requires std::is_base_of_v<UObject, T>
+        requires std::is_base_of_v<UObject, T>
     static TArray<TSubclassOf<T>> GetAllSubclassesOfClass(TSubclassOf<T> TargetClass = T::StaticClass()) {
         TArray<TSubclassOf<T>> Subclasses;
         for (TObjectIterator<UClass> It; It; ++It) {
-            if(It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract))
-            {
+            if (It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract)) {
                 Subclasses.Add(*It);
             }
         }
         return Subclasses;
     }
-
 };

@@ -1,8 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 
+#include "Asserts.h"
 #include "Bag/Item.h"
 #include "BlueprintActionDatabase.h"
+#include "DataManager.h"
+#include "Dispatchers/TestDispatcher.h"
+#include "Engine/Blueprint.h"
 #include "Exp/GrowthRateData.h"
 #include "GraphEditorSettings.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -11,12 +15,8 @@
 #include "Nodes/K2Node_GetAllGameDataIDs.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
-#include "Engine/Blueprint.h"
-#include "Utilities/K2Nodes.h"
-#include "Asserts.h"
-#include "DataManager.h"
-#include "Dispatchers/TestDispatcher.h"
 #include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_NodeTile,
@@ -54,7 +54,8 @@ bool TestGetAllGameDataIDs_TooltipText::RunTest(const FString &Parameters) {
     TestNode->Initialize(FStat::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Get All Stat IDs \n\nRepresents one of the stats in the database."), TestNode->GetTooltipText().ToString());
+    ASSERT_EQUAL(TEXT("Get All Stat IDs \n\nRepresents one of the stats in the database."),
+                 TestNode->GetTooltipText().ToString());
 
     return true;
 }
@@ -116,7 +117,8 @@ bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
 
 constexpr auto TEST_GET_GAME_DATA_IDS = TEXT("/PokemonData/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode, "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters) {
@@ -126,7 +128,7 @@ bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters) {
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     auto &GrowthRates = UReflectionUtils::GetPropertyValue<TArray<FName>>(Dispatcher, TEXT("GrowthRates"));
     ASSERT_EQUAL(6, GrowthRates.Num());
-    
+
     return true;
 }
 

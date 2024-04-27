@@ -13,7 +13,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerCardTest, "Tests.TrainerCardTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TrainerCardTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UTrainerCardScreen>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
@@ -31,7 +31,7 @@ bool TrainerCardTest::RunTest(const FString &Parameters) {
     auto IdText = Screen->WidgetTree->FindWidget<UDisplayText>(TEXT("IdText"));
     ASSERT_NOT_NULL(IdText);
     CHECK_EQUAL(Trainer->GetIdNumber(), FCString::Atoi(*IdText->GetText().ToString()));
-    
+
     return true;
 }
 #endif

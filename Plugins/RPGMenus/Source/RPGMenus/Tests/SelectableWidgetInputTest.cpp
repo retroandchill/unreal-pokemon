@@ -1,11 +1,11 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Misc/AutomationTest.h"
 #include "Asserts.h"
+#include "Misc/AutomationTest.h"
 #include "Utilities/BlueprintTestUtils.h"
-#include "Utilities/WidgetTestUtilities.h"
-#include "Windows/SelectableWidget.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
+#include "Windows/SelectableWidget.h"
 
 constexpr auto TEST_SELECTABLE = TEXT("/RPGMenus/Tests/Resources/TestSelectable.TestSelectable");
 
@@ -13,8 +13,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetInputTest, "Unit Tests.RPGMenus
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
-    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_SELECTABLE);    
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_SELECTABLE);
     ASSERT_NOT_NULL(WidgetClass);
 
     auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);

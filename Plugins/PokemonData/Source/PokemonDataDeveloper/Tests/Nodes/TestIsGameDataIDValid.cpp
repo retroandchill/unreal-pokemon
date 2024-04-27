@@ -1,9 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 
+#include "Asserts.h"
 #include "Bag/Item.h"
 #include "BlueprintActionDatabase.h"
 #include "DataManager.h"
+#include "Dispatchers/TestDispatcher.h"
 #include "Exp/GrowthRateData.h"
 #include "GraphEditorSettings.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -12,10 +14,8 @@
 #include "Nodes/K2Node_IsGameDataIDValid.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
-#include "Utilities/K2Nodes.h"
-#include "Asserts.h"
-#include "Dispatchers/TestDispatcher.h"
 #include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_NodeTile,
@@ -52,7 +52,8 @@ bool TestIsGameDataIDValid_TooltipText::RunTest(const FString &Parameters) {
     TestNode->Initialize(FStat::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Is Stat ID Valid? \n\nRepresents one of the stats in the database."), TestNode->GetTooltipText().ToString());
+    ASSERT_EQUAL(TEXT("Is Stat ID Valid? \n\nRepresents one of the stats in the database."),
+                 TestNode->GetTooltipText().ToString());
 
     return true;
 }
@@ -112,9 +113,11 @@ bool TestIsGameDataIDValid_MenuActions::RunTest(const FString &Parameters) {
     return true;
 }
 
-constexpr auto TEST_ID_GAME_DATA_ID_VALID = TEXT("/PokemonData/Tests/Resources/IsGameDataIdValidDispatcher.IsGameDataIdValidDispatcher");
+constexpr auto TEST_ID_GAME_DATA_ID_VALID =
+    TEXT("/PokemonData/Tests/Resources/IsGameDataIdValidDispatcher.IsGameDataIdValidDispatcher");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_ExecuteNode, "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.NodeExecution",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_ExecuteNode,
+                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.NodeExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestIsGameDataIDValid_ExecuteNode::RunTest(const FString &Parameters) {
@@ -126,7 +129,7 @@ bool TestIsGameDataIDValid_ExecuteNode::RunTest(const FString &Parameters) {
     bool InvalidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("InvalidName"));
     CHECK_TRUE(ValidName);
     CHECK_FALSE(InvalidName);
-    
+
     return true;
 }
 

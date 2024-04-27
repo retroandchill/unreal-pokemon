@@ -8,8 +8,8 @@
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Nodes/K2Node_AddWidgetToStack.h"
-#include "Utilities/K2Nodes.h"
 #include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/K2Nodes.h"
 
 constexpr auto TEST_SCREEN = TEXT("/RPGMenus/Tests/Resources/TestScreen.TestScreen");
 
@@ -26,7 +26,7 @@ bool TestAddWidgetToStack::RunTest(const FString &Parameters) {
     TestGraph->AddNode(TestNode);
 
     CHECK_EQUAL(FEditorCategoryUtils::GetCommonCategory(FCommonEditorCategory::UserInterface).ToString(),
-        TestNode->GetMenuCategory().ToString());
+                TestNode->GetMenuCategory().ToString());
     CHECK_EQUAL(TestNode->GetCornerIcon().ToString(), TEXT("Graph.Replication.ClientEvent"));
     CHECK_EQUAL(TEXT("Add Screen to Stack"), TestNode->GetNodeTitle(MenuTitle).ToString());
     CHECK_EQUAL(TEXT("Add NONE to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());

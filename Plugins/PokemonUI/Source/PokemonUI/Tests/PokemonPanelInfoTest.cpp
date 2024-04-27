@@ -14,7 +14,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Tests.PokemonPanelInfoTe
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSelectionPane>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto ScreenClass = Subclasses[0];
@@ -38,7 +38,7 @@ bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
     ASSERT_EQUAL(TEXT("SAMUROTT"), Panels[0]->GetPokemon()->GetSpecies().ID.ToString().ToUpper());
     ASSERT_EQUAL(TEXT("EMBOAR"), Panels[1]->GetPokemon()->GetSpecies().ID.ToString().ToUpper());
     ASSERT_EQUAL(TEXT("SERPERIOR"), Panels[2]->GetPokemon()->GetSpecies().ID.ToString().ToUpper());
-    
+
     return true;
 }
 #endif

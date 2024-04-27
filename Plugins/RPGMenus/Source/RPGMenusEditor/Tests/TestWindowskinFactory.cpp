@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
-#include "Utilities/GCPointer.h"
 #include "Misc/AutomationTest.h"
+#include "Utilities/GCPointer.h"
 #include "Windowskin/WindowskinFactory.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinFactory, "Unit Tests.RPGMenus.TestWindowskinFactory",

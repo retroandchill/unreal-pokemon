@@ -11,12 +11,24 @@
 #define CHECK_EQUAL(Expected, Actual) AssertEqual(*this, TEXT(#Actual), Expected, Actual)
 #define CHECK_NOT_EQUAL(Expected, Actual) AssertNotEqual(*this, TEXT(#Actual), Expected, Actual)
 
-#define ASSERT_TRUE(Condition) if (!CHECK_TRUE(Condition)) return ConcludeTest(*this, false)
-#define ASSERT_FALSE(Condition) if (!CHECK_FALSE(Condition)) return ConcludeTest(*this, false)
-#define ASSERT_NULL(Pointer) if (!CHECK_NULL(Pointer)) return ConcludeTest(*this, false)
-#define ASSERT_NOT_NULL(Pointer) if (!CHECK_NOT_NULL(Pointer)) return ConcludeTest(*this, false)
-#define ASSERT_EQUAL(Expected, Actual) if (!CHECK_EQUAL(Expected, Actual)) return ConcludeTest(*this, false)
-#define ASSERT_NOT_EQUAL(Expected, Actual) if (!CHECK_NOT_EQUAL(Expected, Actual)) return ConcludeTest(*this, false)
+#define ASSERT_TRUE(Condition)                                                                                         \
+    if (!CHECK_TRUE(Condition))                                                                                        \
+    return ConcludeTest(*this, false)
+#define ASSERT_FALSE(Condition)                                                                                        \
+    if (!CHECK_FALSE(Condition))                                                                                       \
+    return ConcludeTest(*this, false)
+#define ASSERT_NULL(Pointer)                                                                                           \
+    if (!CHECK_NULL(Pointer))                                                                                          \
+    return ConcludeTest(*this, false)
+#define ASSERT_NOT_NULL(Pointer)                                                                                       \
+    if (!CHECK_NOT_NULL(Pointer))                                                                                      \
+    return ConcludeTest(*this, false)
+#define ASSERT_EQUAL(Expected, Actual)                                                                                 \
+    if (!CHECK_EQUAL(Expected, Actual))                                                                                \
+    return ConcludeTest(*this, false)
+#define ASSERT_NOT_EQUAL(Expected, Actual)                                                                             \
+    if (!CHECK_NOT_EQUAL(Expected, Actual))                                                                            \
+    return ConcludeTest(*this, false)
 
 /**
  * Assert that the given statement is true.
@@ -50,7 +62,7 @@ inline bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, bool 
  * @return Did the assert succeed?
  */
 template <typename PointerType>
-requires std::is_pointer_v<PointerType>
+    requires std::is_pointer_v<PointerType>
 bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
     return TestObject.TestNull(What.GetData(), Pointer);
 }
@@ -64,7 +76,7 @@ bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType P
  * @return Did the assert succeed?
  */
 template <typename PointerType>
-requires std::is_pointer_v<PointerType>
+    requires std::is_pointer_v<PointerType>
 bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
     return TestObject.TestNotNull(What.GetData(), Pointer);
 }
@@ -80,7 +92,7 @@ bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerTyp
  * @return Did the assert succeed?
  */
 template <typename A, typename B>
-bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A& Expected, const B& Actual) {
+bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Expected, const B &Actual) {
     return TestObject.TestEqual(What.GetData(), Actual, Expected);
 }
 
@@ -92,7 +104,7 @@ bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A& Exp
  * @param Actual The test result.
  * @return Did the assert succeed?
  */
-inline bool AssertEqual(FAutomationTestBase& TestObject, FStringView What, FStringView Expected, FStringView Actual) {
+inline bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected, FStringView Actual) {
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
@@ -106,7 +118,8 @@ inline bool AssertEqual(FAutomationTestBase& TestObject, FStringView What, FStri
  * @return Did the assert succeed?
  */
 template <typename ValueType>
-bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType& Expected, const ValueType& Actual) {
+bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType &Expected,
+                    const ValueType &Actual) {
     return TestObject.TestNotEqual(What.GetData(), Actual, Expected);
 }
 
@@ -118,7 +131,8 @@ bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const Val
  * @param Actual The test result.
  * @return Did the assert succeed?
  */
-inline bool AssertNotEqual(FAutomationTestBase& TestObject, FStringView What, FStringView Expected, FStringView Actual) {
+inline bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
+                           FStringView Actual) {
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 

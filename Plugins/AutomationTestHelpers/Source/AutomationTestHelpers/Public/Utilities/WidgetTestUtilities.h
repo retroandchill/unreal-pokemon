@@ -25,6 +25,5 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
     UFUNCTION(BlueprintPure, Category = Widgets)
     static UWidget *FindChildWidget(UUserWidget *Parent, FName WidgetName);
 
-    static std::pair<TSharedRef<SOverlay>, UWorld*> CreateTestWorld();
-    
+    static std::pair<TSharedRef<SOverlay>, UWorld *> CreateTestWorld();
 };

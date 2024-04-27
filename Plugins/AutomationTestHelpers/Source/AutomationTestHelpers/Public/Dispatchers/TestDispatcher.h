@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "TestDispatcher.generated.h"
 
 // This class does not need to be modified.
@@ -19,11 +20,10 @@ class AUTOMATIONTESTHELPERS_API ITestDispatcher {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Execute the test BP code.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Testing")
     void ExecuteTest();
-
 };

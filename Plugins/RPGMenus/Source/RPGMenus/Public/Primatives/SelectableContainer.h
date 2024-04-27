@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "SelectableContainer.generated.h"
 
 class USelectableOption;
@@ -20,12 +21,11 @@ class RPGMENUS_API ISelectableContainer {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Get the list of options used by the menu.
      * @return The list of options used by the menu
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Selection)
-    TArray<USelectableOption*> GetOptions() const;
-
+    TArray<USelectableOption *> GetOptions() const;
 };
