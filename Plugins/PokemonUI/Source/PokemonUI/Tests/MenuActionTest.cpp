@@ -8,7 +8,7 @@
 
 constexpr auto TEST_MENU_ACTION = TEXT("/PokemonUI/Tests/Resources/TestMenuAction.TestMenuAction");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(MenuActionTest, "UnrealPokemon.UI.MenuActionTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(MenuActionTest, "Unit Tests.UI.MenuActionTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool MenuActionTest::RunTest(const FString &Parameters) {

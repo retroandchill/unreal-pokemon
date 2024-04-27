@@ -12,7 +12,7 @@
 
 constexpr auto OPTION_TEST_WIDGET = TEXT("/RPGMenus/Tests/Resources/OptionTestWidget.OptionTestWidget");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetMouseTest, "UnrealPokemon.RPGMenus.SelectableWidgetMouseTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetMouseTest, "Unit Tests.RPGMenus.SelectableWidgetMouseTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {

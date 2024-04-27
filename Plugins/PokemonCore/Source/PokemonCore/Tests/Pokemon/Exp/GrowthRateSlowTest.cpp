@@ -15,20 +15,20 @@ constexpr std::array GSlowGrowthTable = {
     593190, 616298, 640000,  664301,  689210,  714733,  740880,  767656,  795070,  823128, 851840, 881211, 911250,
     941963, 973360, 1005446, 1038230, 1071718, 1105920, 1140841, 1176490, 1212873, 1250000};
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateSlowTest, "UnrealPokemon.Core.Exp.GrowthRateSlowTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateSlowTest, "Unit Tests.Core.Exp.GrowthRateSlowTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateSlowTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
-    OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFastTest: Level = 1");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 1");
     OutTestCommands.Add("1");
 
     for (int i = 0; i < 3; i++) {
-        auto Fmt = FString::Printf(TEXT("UnrealPokemon.Core.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
+        auto Fmt = FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
     }
 
-    OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateFastTest: Level = 100");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 100");
     OutTestCommands.Add("100");
 }
 

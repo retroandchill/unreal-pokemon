@@ -6,7 +6,7 @@
 #include "Misc/AutomationTest.h"
 #include <sstream>
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(VectorToFacingDirectionTest, "UnrealPokemon.Movement.VectorToFacingDirectionTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(VectorToFacingDirectionTest, "Unit Tests.Movement.VectorToFacingDirectionTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void VectorToFacingDirectionTest::GetTests(TArray<FString> &OutBeautifiedNames,

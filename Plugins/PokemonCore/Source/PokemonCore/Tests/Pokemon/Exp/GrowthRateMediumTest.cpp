@@ -15,21 +15,21 @@ constexpr std::array GMediumGrowthTable = {
     474552, 493039, 512000, 531441, 551368, 571787, 592704, 614125, 636056, 658503, 681472, 704969, 729000,
     753571, 778688, 804357, 830584, 857375, 884736, 912673, 941192, 970299, 1000000};
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateMediumTest, "UnrealPokemon.Core.Exp.GrowthRateMediumTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateMediumTest, "Unit Tests.Core.Exp.GrowthRateMediumTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateMediumTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
-    OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateMediumTest: Level = 1");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 1");
     OutTestCommands.Add("1");
 
     for (int i = 0; i < 3; i++) {
         auto Fmt =
-            FString::Printf(TEXT("UnrealPokemon.Core.Exp.GrowthRateMediumTest: Level = 2-99 (Sample %d)"), i + 1);
+            FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
     }
 
-    OutBeautifiedNames.Add("UnrealPokemon.Core.Exp.GrowthRateMediumTest: Level = 100");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 100");
     OutTestCommands.Add("100");
 }
 

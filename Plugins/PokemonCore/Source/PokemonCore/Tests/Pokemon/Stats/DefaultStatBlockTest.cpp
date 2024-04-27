@@ -9,7 +9,7 @@
 #include "Utilities/RAII.h"
 #include "Asserts.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "UnrealPokemon.Core.Stats.DefaultStatBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Unit Tests.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString &Parameters) {

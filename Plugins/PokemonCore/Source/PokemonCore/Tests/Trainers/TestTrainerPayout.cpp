@@ -6,7 +6,7 @@
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/ConstructionUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTrainerPayout, "Private.PokemonCore.Trainers.TestTrainerPayout",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTrainerPayout, "Unit Tests.Core.Trainers.TestTrainerPayout",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestTrainerPayout::RunTest(const FString &Parameters) {

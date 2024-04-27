@@ -23,7 +23,7 @@
     auto Type##Names = U##Type##Helper::Get##Type##Names();                                                            \
     CHECK_TRUE(Type##Names.Contains(Element))
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "UnrealPokemon.PokemonData.EditorHelperTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "Unit Tests.PokemonData.EditorHelperTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool EditorHelperTest::RunTest(const FString &Parameters) {

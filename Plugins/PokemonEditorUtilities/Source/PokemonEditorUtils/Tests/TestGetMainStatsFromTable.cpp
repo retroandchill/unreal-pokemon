@@ -6,7 +6,7 @@
 #include "Species/Stat.h"
 #include "Asserts.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "UnrealPokemon.PokemonUtilities.TestGetMainStatsFromTable",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "Unit Tests.PokemonUtilities.TestGetMainStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetMainStatsFromTable::RunTest(const FString &Parameters) {

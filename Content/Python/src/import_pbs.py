@@ -8,7 +8,7 @@ from pokemon.data_writer.data_table_writer import import_items, import_moves, im
 from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values
 from pokemon.unreal_interface.unreal_data_utils import stat_entries
 
-HARDCODED_DATA_DIR = "Data/Hardcoded"
+HARDCODED_DATA_DIR = "/PokemonData/Data"
 
 
 def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: Text, species_file: Text, trainer_types_file: Text) -> None:

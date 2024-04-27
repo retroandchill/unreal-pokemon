@@ -20,7 +20,7 @@
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/ReflectionUtils.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile, "UnrealPokemon.PokemonData.Nodes.TestGetGameData.NodeTitle",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile, "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeTitle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_NodeTile::RunTest(const FString &Parameters) {
@@ -40,7 +40,7 @@ bool TestGetGameData_NodeTile::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_TooltipText,
-                                 "UnrealPokemon.PokemonData.Nodes.TestGetGameData.TooltipText",
+                                 "Unit Tests.PokemonData.Nodes.TestGetGameData.TooltipText",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_TooltipText::RunTest(const FString &Parameters) {
@@ -59,7 +59,7 @@ bool TestGetGameData_TooltipText::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_MenuCategory,
-                                 "UnrealPokemon.PokemonData.Nodes.TestGetGameData.MenuCategory",
+                                 "Unit Tests.PokemonData.Nodes.TestGetGameData.MenuCategory",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_MenuCategory::RunTest(const FString &Parameters) {
@@ -78,7 +78,7 @@ bool TestGetGameData_MenuCategory::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_IconAndTint,
-                                 "UnrealPokemon.PokemonData.Nodes.TestGetGameData.IconAndTint",
+                                 "Unit Tests.PokemonData.Nodes.TestGetGameData.IconAndTint",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_IconAndTint::RunTest(const FString &Parameters) {
@@ -100,7 +100,7 @@ bool TestGetGameData_IconAndTint::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_MenuActions,
-                                 "UnrealPokemon.PokemonData.Nodes.TestGetGameData.MenuActions",
+                                 "Unit Tests.PokemonData.Nodes.TestGetGameData.MenuActions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_MenuActions::RunTest(const FString &Parameters) {
@@ -115,7 +115,7 @@ bool TestGetGameData_MenuActions::RunTest(const FString &Parameters) {
 
 constexpr auto TEST_GET_GAME_DATA = TEXT("/PokemonData/Tests/Resources/GetDataDispatcher.GetDataDispatcher");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_ExecuteNode, "UnrealPokemon.PokemonData.Nodes.TestGetGameData.NodeExecution",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_ExecuteNode, "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_ExecuteNode::RunTest(const FString &Parameters) {

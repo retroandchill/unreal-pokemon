@@ -13,7 +13,7 @@
 
 constexpr auto TEST_SCREEN = TEXT("/RPGMenus/Tests/Resources/TestScreen.TestScreen");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAddWidgetToStack, "UnrealPokemon.RPGMenus.TestAddWidgetToStack.NodeInfo",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAddWidgetToStack, "Unit Tests.RPGMenus.TestAddWidgetToStack.NodeInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestAddWidgetToStack::RunTest(const FString &Parameters) {

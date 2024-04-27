@@ -6,7 +6,7 @@
 #include "Misc/AutomationTest.h"
 #include "Asserts.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "UnrealPokemon.Core.Exp.GetGrowthRateTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetGrowthRateTest, "Unit Tests.Core.Exp.GetGrowthRateTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetGrowthRateTest::RunTest(const FString &Parameters) {

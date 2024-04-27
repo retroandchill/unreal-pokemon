@@ -4,7 +4,7 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "UnrealPokemon.Core.Moves.DefaultMoveTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.DefaultMoveTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveTest::RunTest(const FString &Parameters) {

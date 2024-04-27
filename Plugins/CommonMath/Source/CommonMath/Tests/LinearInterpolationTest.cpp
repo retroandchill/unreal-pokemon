@@ -3,7 +3,7 @@
 #include "Misc/AutomationTest.h"
 #include "Asserts.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "UnrealPokemon.Math.LinearInterpolationTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "Unit Tests.Math.LinearInterpolationTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool LinearInterpolationTest::RunTest(const FString &Parameters) {
