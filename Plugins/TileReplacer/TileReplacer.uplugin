@@ -25,6 +25,11 @@
 		{
 			"Name": "Paper2D",
 			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
 		}
 	]
 }

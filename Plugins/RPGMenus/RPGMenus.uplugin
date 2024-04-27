@@ -39,6 +39,11 @@
 		{
 			"Name": "CommonMath",
 			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
 		}
 	]
 }
