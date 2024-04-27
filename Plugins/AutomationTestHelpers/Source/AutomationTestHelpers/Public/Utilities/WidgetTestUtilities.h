@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
-#include "WidgetChildUtilities.generated.h"
+#include "WidgetTestUtilities.generated.h"
 
 class UWidget;
 /**
  * Blueprint functions for getting widget children
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UWidgetChildUtilities : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
@@ -24,4 +24,5 @@ class AUTOMATIONTESTHELPERS_API UWidgetChildUtilities : public UBlueprintFunctio
      */
     UFUNCTION(BlueprintPure, Category = Widgets)
     static UWidget *FindChildWidget(UUserWidget *Parent, FName WidgetName);
+    
 };
