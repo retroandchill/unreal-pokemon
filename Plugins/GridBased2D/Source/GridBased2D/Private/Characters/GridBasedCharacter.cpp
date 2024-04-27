@@ -81,7 +81,7 @@ bool AGridBasedCharacter::InvalidFloor(const FVector &TargetSquare, const UPrimi
 
 bool AGridBasedCharacter::IsStandingNextToCliff(const FVector &TargetSquare) {
     auto [Distance1, Component1] = PerformTraceToGround(FindLocationJustOffTileEdge(TargetSquare));
-    auto [Distance2, Component2] = PerformTraceToGround(UMathUtilities::Midpoint(GetActorLocation(), TargetSquare));
+    auto [Distance2, Component2] = PerformTraceToGround(FindLocationJustBeforeTileEdge(TargetSquare));
 
     if (FMath::Abs(Distance1 - Distance2) > GetCharacterMovement()->MaxStepHeight) {
         return true;
@@ -103,7 +103,7 @@ bool AGridBasedCharacter::CanStepUpOnComponent(const UPrimitiveComponent &Compon
         return StaticMeshComponent->GetWalkableSlopeOverride().WalkableSlopeBehavior != WalkableSlope_Unwalkable;
     }
 
-    return false;
+    return true;
 }
 
 FVector AGridBasedCharacter::FindLocationJustOffTileEdge(const FVector &TargetSquare) const {
@@ -112,6 +112,14 @@ FVector AGridBasedCharacter::FindLocationJustOffTileEdge(const FVector &TargetSq
     auto Diff = TargetSquare - Location;
     Diff.Normalize();
     return MidPoint + Diff;
+}
+
+FVector AGridBasedCharacter::FindLocationJustBeforeTileEdge(const FVector &TargetSquare) const {
+    auto Location = GetActorLocation();
+    auto MidPoint = UMathUtilities::Midpoint(TargetSquare, Location);
+    auto Diff = TargetSquare - Location;
+    Diff.Normalize();
+    return MidPoint - Diff;
 }
 
 TPair<double, UPrimitiveComponent *> AGridBasedCharacter::PerformTraceToGround(const FVector &Position) const {

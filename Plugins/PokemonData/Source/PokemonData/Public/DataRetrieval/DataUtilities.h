@@ -114,11 +114,6 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
      */
     template <typename T>
     static void AddAllDataTableTypesToMenu(UClass *ActionKey, FBlueprintActionDatabaseRegistrar &ActionRegistrar) {
-        const auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-        TArray<FAssetData> AssetData;
-        AssetRegistryModule.Get().GetAssetsByClass(FTopLevelAssetPath(UDataTable::StaticClass()->GetPathName()),
-                                                   AssetData);
-
         auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
                                     UScriptStruct *Subclass) {
             auto TypedNode = CastChecked<T>(Node);

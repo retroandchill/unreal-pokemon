@@ -83,6 +83,13 @@ class GRIDBASED2D_API AGridBasedCharacter : public ACharacter, public IGridMovab
     FVector FindLocationJustOffTileEdge(const FVector &TargetSquare) const;
 
     /**
+     * Find the world space position just before a tile's edge
+     * @param TargetSquare The world space location of the tile in question
+     * @return What is the world space location of one pixel off of the player's current tile
+     */
+    FVector FindLocationJustBeforeTileEdge(const FVector &TargetSquare) const;
+
+    /**
      * Compute the distance to the ground from the current position
      * @param Position The position to sweep to the ground from
      * @return The distance to the ground and the hit component

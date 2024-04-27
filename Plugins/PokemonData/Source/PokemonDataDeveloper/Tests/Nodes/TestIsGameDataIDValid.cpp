@@ -14,6 +14,9 @@
 #include "Species/Stat.h"
 #include "Utilities/K2Nodes.h"
 #include "Asserts.h"
+#include "Dispatchers/TestDispatcher.h"
+#include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/ReflectionUtils.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_NodeTile,
                                  "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.NodeTitle",
@@ -106,6 +109,24 @@ bool TestIsGameDataIDValid_MenuActions::RunTest(const FString &Parameters) {
     auto NodeActions = Actions[UK2Node_IsGameDataIDValid::StaticClass()];
     ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
 
+    return true;
+}
+
+constexpr auto TEST_ID_GAME_DATA_ID_VALID = TEXT("/PokemonData/Tests/Resources/IsGameDataIdValidDispatcher.IsGameDataIdValidDispatcher");
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_ExecuteNode, "UnrealPokemon.PokemonData.Nodes.TestIsGameDataIDValid.NodeExecution",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool TestIsGameDataIDValid_ExecuteNode::RunTest(const FString &Parameters) {
+    auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_ID_GAME_DATA_ID_VALID);
+    ASSERT_NOT_NULL(DispatcherClass);
+    auto Dispatcher = NewObject<UObject>(GEngine, DispatcherClass);
+    ITestDispatcher::Execute_ExecuteTest(Dispatcher);
+    bool ValidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("ValidName"));
+    bool InvalidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("InvalidName"));
+    CHECK_TRUE(ValidName);
+    CHECK_FALSE(InvalidName);
+    
     return true;
 }
 

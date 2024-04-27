@@ -1,5 +1,4 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include "DataManager.h"
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 
 #include "Bag/Item.h"
@@ -15,6 +14,10 @@
 #include "Engine/Blueprint.h"
 #include "Utilities/K2Nodes.h"
 #include "Asserts.h"
+#include "DataManager.h"
+#include "Dispatchers/TestDispatcher.h"
+#include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/ReflectionUtils.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_NodeTile,
                                  "UnrealPokemon.PokemonData.Nodes.TestGetAllGameDataIDs.NodeTitle",
@@ -108,6 +111,22 @@ bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
     auto NodeActions = Actions[UK2Node_GetAllGameDataIDs::StaticClass()];
     ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
 
+    return true;
+}
+
+constexpr auto TEST_GET_GAME_DATA_IDS = TEXT("/PokemonData/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode, "UnrealPokemon.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters) {
+    auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_GET_GAME_DATA_IDS);
+    ASSERT_NOT_NULL(DispatcherClass);
+    auto Dispatcher = NewObject<UObject>(GEngine, DispatcherClass);
+    ITestDispatcher::Execute_ExecuteTest(Dispatcher);
+    auto &GrowthRates = UReflectionUtils::GetPropertyValue<TArray<FName>>(Dispatcher, TEXT("GrowthRates"));
+    ASSERT_EQUAL(6, GrowthRates.Num());
+    
     return true;
 }
 
