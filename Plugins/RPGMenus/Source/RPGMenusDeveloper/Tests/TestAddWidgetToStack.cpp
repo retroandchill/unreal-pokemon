@@ -9,6 +9,9 @@
 #include "Misc/AutomationTest.h"
 #include "Nodes/K2Node_AddWidgetToStack.h"
 #include "Utilities/K2Nodes.h"
+#include "Utilities/BlueprintTestUtils.h"
+
+constexpr auto TEST_SCREEN = TEXT("/RPGMenus/Tests/Resources/TestScreen.TestScreen");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAddWidgetToStack, "UnrealPokemon.RPGMenus.TestAddWidgetToStack.NodeInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -30,7 +33,7 @@ bool TestAddWidgetToStack::RunTest(const FString &Parameters) {
 
     TestNode->AllocateDefaultPins();
     auto StructPin = TestNode->GetPinAt(2);
-    //StructPin->DefaultObject = UTestScreen::StaticClass();
+    StructPin->DefaultObject = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_SCREEN);
     CHECK_EQUAL(TEXT("Add Test Screen to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());
 
     return true;

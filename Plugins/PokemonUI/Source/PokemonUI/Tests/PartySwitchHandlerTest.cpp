@@ -42,7 +42,7 @@ bool PartySwitchHandlerTest::RunTest(const FString &Parameters) {
     Trainer->AddPokemonToParty(UGamePokemon::Create({.Species = TEXT("RIOLU"), .Level = 5}));
 
     TGCPointer<UPartyMenuHandler> Handler(NewObject<UPartySwitchHandler>());
-    CHECK_TRUE(Handler->ShouldShow(Screen, *Trainer, 0));
+    CHECK_FALSE(Handler->ShouldShow(Screen, *Trainer, 0));
 
     Trainer->AddPokemonToParty(UGamePokemon::Create({.Species = TEXT("OSHAWOTT"), .Level = 5}));
     CHECK_TRUE(Handler->ShouldShow(Screen, *Trainer, 0));

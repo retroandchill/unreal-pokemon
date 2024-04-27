@@ -10,14 +10,14 @@
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/ReflectionUtils.h"
 
-constexpr auto BLUEPRINT_CLASS_NAME = TEXT("/RPGMenus/Tests/Resources/OptionTestWidget.OptionTestWidget");
+constexpr auto OPTION_TEST_WIDGET = TEXT("/RPGMenus/Tests/Resources/OptionTestWidget.OptionTestWidget");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetMouseTest, "UnrealPokemon.RPGMenus.SelectableWidgetMouseTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
-    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(BLUEPRINT_CLASS_NAME);    
+    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(OPTION_TEST_WIDGET);    
     ASSERT_NOT_NULL(WidgetClass);
     auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);
     ASSERT_NOT_NULL(NewWidget);

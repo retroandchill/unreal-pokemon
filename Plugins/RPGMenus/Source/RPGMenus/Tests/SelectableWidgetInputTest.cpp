@@ -7,15 +7,14 @@
 #include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 
-class USelectableWidget;
-constexpr auto BLUEPRINT_CLASS_NAME = TEXT("/RPGMenus/Tests/Resources/TestSelectable.TestSelectable");
+constexpr auto TEST_SELECTABLE = TEXT("/RPGMenus/Tests/Resources/TestSelectable.TestSelectable");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetInputTest, "UnrealPokemon.RPGMenus.SelectableWidgetInputTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
-    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(BLUEPRINT_CLASS_NAME);    
+    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_SELECTABLE);    
     ASSERT_NOT_NULL(WidgetClass);
 
     auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);
