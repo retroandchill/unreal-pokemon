@@ -14,7 +14,7 @@ UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName Widget
     return UWidgetTree::FindWidgetChild(Panel, WidgetName, Index);
 }
 
-TPair<TSharedRef<SOverlay>, UWorld *> UWidgetTestUtilities::CreateTestWorld() {
+std::pair<TSharedRef<SOverlay>, UWorld *> UWidgetTestUtilities::CreateTestWorld() {
     auto GameInstance = NewObject<UGameInstance>(GEngine);
     GameInstance->InitializeStandalone(); // creates WorldContext, UWorld?
     auto World = GameInstance->GetWorld();

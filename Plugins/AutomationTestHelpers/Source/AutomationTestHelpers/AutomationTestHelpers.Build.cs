@@ -39,7 +39,10 @@ public class AutomationTestHelpers : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"InputCore"
+				"InputCore",
+				"EditorSubsystem",
+				"MessageLog",
+				"UnrealEd"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

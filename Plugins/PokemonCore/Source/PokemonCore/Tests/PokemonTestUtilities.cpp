@@ -1,13 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Utilities/PokemonTestUtilities.h"
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "PokemonTestUtilities.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Utilities/ConstructionUtilities.h"
 
-void UPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
+void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
     using enum EPokemonGender;
 
     auto PokemonSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>();
@@ -65,3 +66,4 @@ void UPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                   .Item = FName("ROCKYHELMET"),
                                                   .Moves = {"LEAFSTORM", "TAUNT", "GLARE", "DEFOG"}}));
 }
+#endif

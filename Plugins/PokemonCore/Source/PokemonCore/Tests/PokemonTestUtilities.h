@@ -2,19 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Components/Widget.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
-
-#include "PokemonTestUtilities.generated.h"
-
-class UWidget;
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 /**
  * Blueprint function library used for generating mock data for testing purposes
  */
-UCLASS()
-class POKEMONTESTS_API UPokemonTestUtilities : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
+class POKEMONCORE_API FPokemonTestUtilities {
 
   public:
     /**
@@ -53,6 +45,6 @@ class POKEMONTESTS_API UPokemonTestUtilities : public UBlueprintFunctionLibrary 
      *
      * @param WorldContext The object used to obtain the world context
      */
-    UFUNCTION(BlueprintCallable, Category = "Testing|Pokémon", meta = (WorldContext = "WorldContext"))
     static void CreateMockParty(UObject *WorldContext);
 };
+#endif

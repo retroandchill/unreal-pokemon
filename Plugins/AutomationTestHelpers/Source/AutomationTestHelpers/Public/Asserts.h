@@ -85,6 +85,18 @@ bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A& Exp
 }
 
 /**
+ * Assert that the two given values are equal?
+ * @param TestObject The test object.
+ * @param What The string representation of what's being tested.
+ * @param Expected The value to compare the test result to.
+ * @param Actual The test result.
+ * @return Did the assert succeed?
+ */
+inline bool AssertEqual(FAutomationTestBase& TestObject, FStringView What, FStringView Expected, FStringView Actual) {
+    return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
+}
+
+/**
  * Assert that the two given values are not equal?
  * @tparam ValueType The type of data that is being compared.
  * @param TestObject The test object.
@@ -96,6 +108,18 @@ bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A& Exp
 template <typename ValueType>
 bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType& Expected, const ValueType& Actual) {
     return TestObject.TestNotEqual(What.GetData(), Actual, Expected);
+}
+
+/**
+ * Assert that the two given values are not equal?
+ * @param TestObject The test object.
+ * @param What The string representation of what's being tested.
+ * @param Expected The value to compare the test result to.
+ * @param Actual The test result.
+ * @return Did the assert succeed?
+ */
+inline bool AssertNotEqual(FAutomationTestBase& TestObject, FStringView What, FStringView Expected, FStringView Actual) {
+    return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
 /**
