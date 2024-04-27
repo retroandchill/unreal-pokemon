@@ -1,46 +1,24 @@
 ﻿
-// ReSharper disable All
-#include "Primatives/SelectableContainer.h"
-#include "UObject/UnrealTypePrivate.h"
-#include "Utilities/RAII.h"
-#include "Utilities/ReflectionUtils.h"
-#include "Widgets/SViewport.h"
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/AutomationTest.h"
 #include "Asserts.h"
 #include "Blueprint/UserWidget.h"
 #include "Windows/SelectableWidget.h"
 #include "Components/Button.h"
-#include "Misc/OutputDeviceNull.h"
-#include "Tests/AutomationEditorCommon.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Primatives/SelectableOption.h"
-#include "External/accessor.hpp"
+#include "Utilities/BlueprintTestUtils.h"
+#include "Utilities/ReflectionUtils.h"
 
-using namespace accessor;
-
-FUNCTION_ACCESSOR(UserWidgetConstruct, UUserWidget, NativeConstruct, void);
+constexpr auto BLUEPRINT_CLASS_NAME = TEXT("/RPGMenus/Tests/Resources/OptionTestWidget.OptionTestWidget");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetMouseTest, "UnrealPokemon.RPGMenus.SelectableWidgetMouseTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
-    auto WidgetBlueprintAsset = FAssetRegistryModule::GetRegistry()
-        .GetAssetByObjectPath(FSoftObjectPath(TEXT("/RPGMenus/Tests/Resources/OptionTestWidget.OptionTestWidget")));
-    auto WidgetBlueprint = Cast<UBlueprint>(WidgetBlueprintAsset.GetAsset());
-    ASSERT_NOT_NULL(WidgetBlueprint);
-    
-    auto GameInstance = NewObject<UGameInstance>(GEngine);
-    GameInstance->InitializeStandalone(); // creates WorldContext, UWorld?
-    auto World = GameInstance->GetWorld();
-    auto WorldContext = GameInstance->GetWorldContext();
-    WorldContext->GameViewport = NewObject<UGameViewportClient>(GEngine);
-    TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
-    WorldContext->GameViewport->SetViewportOverlayWidget(nullptr, DudOverlay);    
- 
-    auto WidgetClass = WidgetBlueprint->GeneratedClass.Get();
-    ASSERT_EQUAL(USelectableWidget::StaticClass(), WidgetClass->GetSuperClass());
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld(); 
+    auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(BLUEPRINT_CLASS_NAME);    
+    ASSERT_NOT_NULL(WidgetClass);
     auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);
     ASSERT_NOT_NULL(NewWidget);
     NewWidget->AddToViewport();
@@ -60,7 +38,6 @@ bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
     auto Button2 = Cast<UButton>(UWidgetTestUtilities::FindChildWidget(Options[2], TEXT("PrimaryButton")));
     ASSERT_NOT_NULL(Button2);
 
-    AddExpectedError(FString::Format(TEXT("Confirm handled on index {0}"), FStringFormatOrderedArguments({2})));
     NewWidget->SetActive(false);
     Button2->OnClicked.Broadcast();
     auto Clicked = UReflectionUtils::GetPropertyValue<bool>(NewWidget, TEXT("Clicked"));

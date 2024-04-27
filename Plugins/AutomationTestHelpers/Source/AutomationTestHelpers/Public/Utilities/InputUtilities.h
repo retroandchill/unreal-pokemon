@@ -13,7 +13,7 @@ class UUserWidget;
  * Utilities for testing things that involve user input
  */
 UCLASS()
-class POKEMONTESTS_API UInputUtilities : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UInputUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:

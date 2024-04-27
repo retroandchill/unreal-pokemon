@@ -37,5 +37,6 @@ bool GrowthRateFastTest::RunTest(const FString &Parameters) {
 
     Exp::FFast GrowthRate;
     ASSERT_EQUAL(GFastGrowthTable[Level], GrowthRate.ExpForLevel(Level));
+    return true;
 }
 #endif
