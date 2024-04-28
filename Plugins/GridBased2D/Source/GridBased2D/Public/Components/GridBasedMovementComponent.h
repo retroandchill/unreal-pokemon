@@ -6,6 +6,7 @@
 #include "Characters/FacingDirection.h"
 #include "Characters/MoveCheckResult.h"
 #include "Components/ActorComponent.h"
+#include "Engine/OverlapResult.h"
 #include "GridBasedAnimationComponent.h"
 #include "GridBasedMovement.h"
 #include "Map/WithinMap.h"

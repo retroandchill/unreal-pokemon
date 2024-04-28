@@ -8,11 +8,6 @@
 			"Name": "UnrealPokemon",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonTests",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
@@ -76,6 +71,10 @@
 		},
 		{
 			"Name": "PokemonAssets",
+			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
 			"Enabled": true
 		}
 	]

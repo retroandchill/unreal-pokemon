@@ -9,7 +9,7 @@
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
-	"CanContainContent": false,
+	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
@@ -42,6 +42,11 @@
 		{
 			"Name": "EnhancedInput",
 			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
 		}
 	]
 }

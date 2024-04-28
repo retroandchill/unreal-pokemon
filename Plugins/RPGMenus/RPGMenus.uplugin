@@ -9,7 +9,7 @@
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
-	"CanContainContent": false,
+	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
@@ -39,6 +39,11 @@
 		{
 			"Name": "CommonMath",
 			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
 		}
 	]
 }

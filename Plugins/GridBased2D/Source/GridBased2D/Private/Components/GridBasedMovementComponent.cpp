@@ -4,7 +4,6 @@
 #include "Characters/MoveCheckResult.h"
 #include "Components/GridBasedAnimationComponent.h"
 #include "Components/GridMovable.h"
-#include "GameFramework/Character.h"
 #include "GridUtils.h"
 #include "Interaction/Interactable.h"
 #include "Kismet/GameplayStatics.h"

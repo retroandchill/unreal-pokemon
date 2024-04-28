@@ -15,7 +15,7 @@ class TestUnrealDataUtils(unittest.TestCase):
         self.assertEqual(values, {'Main', 'MainBattle', 'Battle'})
 
     def test_stat_entries(self):
-        self.assertEqual(len(stat_entries('/Data/HardCoded', 'Stats')), 6)
+        self.assertEqual(len(stat_entries('/PokemonData/Data', 'Stats')), 6)
 
 
 if __name__ == '__main__':
