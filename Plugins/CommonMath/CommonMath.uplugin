@@ -20,5 +20,12 @@
 			"LoadingPhase": "Default"
 		}
 	],
-	"SupportURL": ""
+	"SupportURL": "",
+	"Plugins": [
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
+		}
+	]
 }

@@ -146,7 +146,7 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      *
      * @param Option The selectable option that was clicked
      */
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = Selection, meta = (BlueprintProtected, HideSelfPin))
     void ProcessClickedButton(USelectableOption *Option);
 
     /**
@@ -154,7 +154,7 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      *
      * @param Option The selectable option that was hovered
      */
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = Selection, meta = (BlueprintProtected, HideSelfPin))
     void ProcessHoveredButton(USelectableOption *Option);
 
     /**

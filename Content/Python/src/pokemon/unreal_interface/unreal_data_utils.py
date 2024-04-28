@@ -38,7 +38,7 @@ def data_table_values(directory_name: str, table_name: str) -> set[str]:
     :param table_name: The name of the table as seen in the editor
     :return: The unordered set of keys from the table
     """
-    data_table = EditorAssetLibrary.load_asset('/Game/{0}/{1}.{1}'.format(directory_name, table_name))
+    data_table = EditorAssetLibrary.load_asset('/{0}/{1}.{1}'.format(directory_name, table_name))
     if isinstance(data_table, DataTable):
         return set(map(convert_name, DataTableFunctionLibrary.get_data_table_row_names(data_table)))
     else:
@@ -53,7 +53,7 @@ def stat_entries(directory_name: str, table_name: str) -> dict[str, Stat]:
     :return: The map of data table row names to their entries
     """
 
-    data_table = EditorAssetLibrary.load_asset('/Game/{0}/{1}.{1}'.format(directory_name, table_name))
+    data_table = EditorAssetLibrary.load_asset('/{0}/{1}.{1}'.format(directory_name, table_name))
     if isinstance(data_table, DataTable):
         rows = ImportUtils.get_main_stats_from_table(data_table)
         ret = {}

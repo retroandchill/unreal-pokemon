@@ -26,17 +26,42 @@ class RPGMENUS_API USelectableOption : public UUserWidget {
     void NativeConstruct() override;
 
   public:
+    /**
+     * Get the index of this option in the menu.
+     * @return The index of this option
+     */
+    UFUNCTION(BlueprintPure, Category = Selelection)
     int32 GetOptionIndex() const;
+
+    /**
+     * Set the index of this option in the menu.
+     * @param NewOptionIndex The index of this option
+     */
+    UFUNCTION(BlueprintCallable, Category = Selection)
     void SetOptionIndex(int32 NewOptionIndex);
 
+    /**
+     * Get the click delegate.
+     * @return Delegate dispatched when this option is clicked on
+     */
     FProcessButtonAction &GetOnOptionClicked();
 
+    /**
+     * Get the hover delegate.
+     * @return Delegate dispatched when this option is hovered over
+     */
     FProcessButtonAction &GetOnOptionHovered();
 
   private:
+    /**
+     * Callback when this option is clicked
+     */
     UFUNCTION()
     void OnClicked();
 
+    /**
+     * Callback for when this option is hovered by the mouse
+     */
     UFUNCTION()
     void OnHovered();
 
@@ -51,9 +76,15 @@ class RPGMENUS_API USelectableOption : public UUserWidget {
      */
     int32 OptionIndex;
 
-    UPROPERTY()
+    /**
+     * Delegate dispatched when this option is clicked on
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Events")
     FProcessButtonAction OnOptionClicked;
 
-    UPROPERTY()
+    /**
+     * Delegate dispatched when this option is hovered over
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Selection|Events")
     FProcessButtonAction OnOptionHovered;
 };
