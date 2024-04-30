@@ -32,6 +32,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     int32 GetMaxPartySize() const;
 
     /**
+     * The maximum number of moves a Pokémon can know.
+     * @return The maximum number of moves a Pokémon can know.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
+    int32 GetMaxMoves() const;
+
+    /**
      * The class used for all Pokémon objects
      * @return The class used for all Pokémon objects
      */
@@ -60,6 +67,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
               meta = (UIMin = 1, ClampMin = 1))
     int32 MaxPartySize = 6;
 
+    /**
+     * The maximum number of moves a Pokémon can know.
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxMoves, Config, Category = Moves)
+    int32 MaxMoves = 4;
+    
     /**
      * The class used for all Pokémon objects
      */

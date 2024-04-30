@@ -106,5 +106,5 @@ struct POKEMONCORE_API FPokemonDTO {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
               meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
-    TSet<FName> Moves;
+    TArray<FName> Moves;
 };
