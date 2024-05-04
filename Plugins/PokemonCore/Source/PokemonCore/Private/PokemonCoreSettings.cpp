@@ -23,3 +23,7 @@ TSubclassOf<UObject> UPokemonCoreSettings::GetPokemonClass() const {
 TSubclassOf<UObject> UPokemonCoreSettings::GetStatBlockClass() const {
     return StatBlockClass;
 }
+
+TSubclassOf<UObject> UPokemonCoreSettings::GetMoveBlockClass() const {
+    return MoveBlockClass;
+}

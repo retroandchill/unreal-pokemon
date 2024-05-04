@@ -8,6 +8,7 @@
 
 #include "GamePokemon.generated.h"
 
+class IMoveBlock;
 struct FPokemonDTO;
 class IMove;
 
@@ -43,6 +44,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     UFUNCTION(BlueprintPure, Category = Stats)
     TScriptInterface<IStatBlock> GetStatBlock() const override;
+
+    UFUNCTION(BlueprintPure, Category = Moves)
+    TScriptInterface<IMoveBlock> GetMoveBlock() const override;
 
     /**
      * Create a new Pokémon from the given input data
@@ -97,8 +101,8 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     TScriptInterface<IStatBlock> StatBlock;
 
     /**
-     * The moves this Pokémon knows
+     * The block that contains the move data
      */
     UPROPERTY(SaveGame)
-    TArray<TScriptInterface<IMove>> Moves;
+    TScriptInterface<IMoveBlock> MoveBlock;
 };

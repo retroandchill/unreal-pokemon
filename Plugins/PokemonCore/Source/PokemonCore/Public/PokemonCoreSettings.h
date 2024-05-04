@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Moves/DefaultMoveBlock.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
@@ -52,6 +53,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
     TSubclassOf<UObject> GetStatBlockClass() const;
 
+    /**
+     * The class used for all Move Block objects
+     * @return The class used for all Move Block objects
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+    TSubclassOf<UObject> GetMoveBlockClass() const;
+
   private:
     /**
      * The stat used referring to a Pokémon's HP
@@ -86,4 +94,11 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = StatBlock))
     TSubclassOf<UObject> StatBlockClass = UDefaultStatBlock::StaticClass();
+
+    /**
+     * The class used for all Move Block objects
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMoveBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
+              meta = (MustImplement = MoveBlock))
+    TSubclassOf<UObject> MoveBlockClass = UDefaultMoveBlock::StaticClass();
 };

@@ -6,8 +6,10 @@
 #include "UObject/Interface.h"
 #include "MoveBlock.generated.h"
 
+class IPokemon;
 struct FPokemonDTO;
 class IMove;
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
 class UMoveBlock : public UInterface {

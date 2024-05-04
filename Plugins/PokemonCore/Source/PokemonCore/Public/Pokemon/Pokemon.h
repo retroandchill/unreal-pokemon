@@ -87,4 +87,11 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual TScriptInterface<IStatBlock> GetStatBlock() const = 0;
+
+    /**
+     * Get the move information for this Pokémon
+     * @return A reference to the owned move block
+     */
+    UFUNCTION(BlueprintCallable, Category = Moves)
+    virtual TScriptInterface<IMoveBlock> GetMoveBlock() const = 0;
 };
