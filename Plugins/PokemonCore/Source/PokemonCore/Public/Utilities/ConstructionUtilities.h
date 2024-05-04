@@ -6,6 +6,7 @@
 
 #include "ConstructionUtilities.generated.h"
 
+class IMoveBlock;
 class IStatBlock;
 struct FPokemonDTO;
 class IPokemon;
@@ -27,11 +28,20 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
     static TScriptInterface<IPokemon> CreateNewPokemon(const FPokemonDTO &Data);
 
     /**
-     * Creat the stat block based on the settings in the
-     * @param Owner The Growth Rate type of the Pokémon
+     * Create the stat block based on the settings.
+     * @param Owner The Pokémon to take ownership of the stat block
      * @param DTO The DTO to copy any saved data from
      * @return The created block
      */
     static TScriptInterface<IStatBlock> CreateStatBlock(const TScriptInterface<IPokemon> &Owner,
+                                                        const FPokemonDTO &DTO);
+
+    /**
+     * Create the move block based on the settings.
+     * @param Owner The Pokémon to take ownership of the move block
+     * @param DTO The DTO to copy any saved data from
+     * @return The created block
+     */
+    static TScriptInterface<IMoveBlock> CreateMoveBlock(const TScriptInterface<IPokemon> &Owner,
                                                         const FPokemonDTO &DTO);
 };

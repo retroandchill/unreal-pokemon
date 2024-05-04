@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Moves/DefaultMoveBlock.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
@@ -32,6 +33,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     int32 GetMaxPartySize() const;
 
     /**
+     * The maximum number of moves a Pokémon can know.
+     * @return The maximum number of moves a Pokémon can know.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
+    int32 GetMaxMoves() const;
+
+    /**
      * The class used for all Pokémon objects
      * @return The class used for all Pokémon objects
      */
@@ -44,6 +52,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
     TSubclassOf<UObject> GetStatBlockClass() const;
+
+    /**
+     * The class used for all Move Block objects
+     * @return The class used for all Move Block objects
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+    TSubclassOf<UObject> GetMoveBlockClass() const;
 
   private:
     /**
@@ -61,6 +76,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     int32 MaxPartySize = 6;
 
     /**
+     * The maximum number of moves a Pokémon can know.
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxMoves, Config, Category = Moves)
+    int32 MaxMoves = 4;
+
+    /**
      * The class used for all Pokémon objects
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
@@ -73,4 +94,11 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetStatBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = StatBlock))
     TSubclassOf<UObject> StatBlockClass = UDefaultStatBlock::StaticClass();
+
+    /**
+     * The class used for all Move Block objects
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMoveBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
+              meta = (MustImplement = MoveBlock))
+    TSubclassOf<UObject> MoveBlockClass = UDefaultMoveBlock::StaticClass();
 };

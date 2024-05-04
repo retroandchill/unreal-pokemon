@@ -12,10 +12,18 @@ int32 UPokemonCoreSettings::GetMaxPartySize() const {
     return MaxPartySize;
 }
 
+int32 UPokemonCoreSettings::GetMaxMoves() const {
+    return MaxMoves;
+}
+
 TSubclassOf<UObject> UPokemonCoreSettings::GetPokemonClass() const {
     return PokemonClass;
 }
 
 TSubclassOf<UObject> UPokemonCoreSettings::GetStatBlockClass() const {
     return StatBlockClass;
+}
+
+TSubclassOf<UObject> UPokemonCoreSettings::GetMoveBlockClass() const {
+    return MoveBlockClass;
 }
