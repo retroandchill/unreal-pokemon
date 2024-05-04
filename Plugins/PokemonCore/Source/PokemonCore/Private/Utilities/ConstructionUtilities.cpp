@@ -23,7 +23,7 @@ TScriptInterface<IStatBlock> UConstructionUtilities::CreateStatBlock(const TScri
 }
 
 TScriptInterface<IMoveBlock> UConstructionUtilities::CreateMoveBlock(const TScriptInterface<IPokemon> &Owner,
-    const FPokemonDTO &DTO) {
+                                                                     const FPokemonDTO &DTO) {
     auto Settings = GetDefault<UPokemonCoreSettings>();
     auto Class = Settings->GetMoveBlockClass();
     TScriptInterface<IMoveBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);

@@ -80,7 +80,7 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxMoves, Config, Category = Moves)
     int32 MaxMoves = 4;
-    
+
     /**
      * The class used for all Pokémon objects
      */

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "MoveBlock.h"
 #include "UObject/Object.h"
+
 #include "DefaultMoveBlock.generated.h"
 
 /**
@@ -14,13 +15,13 @@ UCLASS()
 class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     GENERATED_BODY()
 
-public:
+  public:
     TScriptInterface<IMoveBlock> Initialize(const FPokemonDTO &DTO) override;
 
     UFUNCTION(BlueprintPure, Category = Moves)
-    const TArray<TScriptInterface<IMove>> & GetMoves() const override;
+    const TArray<TScriptInterface<IMove>> &GetMoves() const override;
 
-private:
+  private:
     UPROPERTY()
     TArray<TScriptInterface<IMove>> Moves;
 
@@ -28,5 +29,4 @@ private:
      * The full move learning memory of the Pokémon presented in the order the moves were learned.
      */
     TSet<FName> MoveMemory;
-
 };

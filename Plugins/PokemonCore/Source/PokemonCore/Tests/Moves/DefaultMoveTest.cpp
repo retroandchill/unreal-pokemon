@@ -3,9 +3,9 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/PokemonDTO.h"
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Moves/DefaultMove.h"
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
+#include "Moves/DefaultMove.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.DefaultMoveTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -21,7 +21,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves, "Unit Tests.C
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
-    auto Move = NewObject<UDefaultMoveBlock>()->Initialize(TODO, {.Species = "RIOLU", .Level = 40});
+    auto Move = NewObject<UDefaultMoveBlock>()->Initialize({.Species = "RIOLU", .Level = 40});
     auto &Moves = Move->GetMoves();
     ASSERT_EQUAL(4, Moves.Num());
     CHECK_EQUAL("SCREECH", Moves[0]->GetMoveData().ID.ToString());
@@ -35,12 +35,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves, "Unit Tests.Co
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {
-    auto Move = NewObject<UDefaultMoveBlock>()
-        ->Initialize(TODO, {
-                         .Species = "RIOLU",
-                         .Level = 40,
-                         .Moves = {"WORKUP", "AURASPHERE", "FEINT"}
-                     });
+    auto Move = NewObject<UDefaultMoveBlock>()->Initialize(
+        {.Species = "RIOLU", .Level = 40, .Moves = {"WORKUP", "AURASPHERE", "FEINT"}});
     auto &Moves = Move->GetMoves();
     ASSERT_EQUAL(3, Moves.Num());
     CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());

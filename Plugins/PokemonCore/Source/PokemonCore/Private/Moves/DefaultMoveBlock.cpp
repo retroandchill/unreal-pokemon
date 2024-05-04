@@ -1,30 +1,23 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Moves/DefaultMoveBlock.h"
-#include "DataManager.h"
-#include "PokemonCoreSettings.h"
 #include "Algo/Unique.h"
+#include "DataManager.h"
 #include "Moves/DefaultMove.h"
+#include "PokemonCoreSettings.h"
 #include "Species/SpeciesData.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DTO) {
     auto Species = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetData(DTO.Species);
     check(Species != nullptr)
-    auto KnowableMoves = Species->Moves
-        .FilterByPredicate([&DTO](const FLevelUpMove& Move) {
-            return Move.Level <= DTO.Level;
-        });
+    auto KnowableMoves =
+        Species->Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
 
-    Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove& Move) {
-        return Move.Move;
-    });
+    Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove &Move) { return Move.Move; });
 
     // We want to get the last possible level a move can be learned at for our purposes
     Algo::Reverse(KnowableMoves);
-    Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove& Move) {
-        return Move.Move;
-    });
+    Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
     if (DTO.Moves.Num() > 0) {
@@ -47,6 +40,6 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     return this;
 }
 
-const TArray<TScriptInterface<IMove>> & UDefaultMoveBlock::GetMoves() const {
+const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
     return Moves;
 }

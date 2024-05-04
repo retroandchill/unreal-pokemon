@@ -42,5 +42,6 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
      * @param DTO The DTO to copy any saved data from
      * @return The created block
      */
-    static TScriptInterface<IMoveBlock> CreateMoveBlock(const TScriptInterface<IPokemon> &Owner, const FPokemonDTO &DTO);
+    static TScriptInterface<IMoveBlock> CreateMoveBlock(const TScriptInterface<IPokemon> &Owner,
+                                                        const FPokemonDTO &DTO);
 };
