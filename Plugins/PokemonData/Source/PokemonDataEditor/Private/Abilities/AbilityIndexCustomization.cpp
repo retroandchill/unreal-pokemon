@@ -14,6 +14,10 @@ void FAbilityIndexCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Pro
     Options.Empty();
     Options.Add(MakeShared<FText>(FText::FromStringView(TEXT("Option 1"))));
     Options.Add(MakeShared<FText>(FText::FromStringView(TEXT("Option 2"))));
+
+    void* IndexData;
+    PropertyHandle->GetValueData(IndexData);
+    auto &AbilityIndex = *static_cast<const FAbilityIndex*>(IndexData);
     
 	auto IndexHandle = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FAbilityIndex, Index));
     int32 StartingIndex;
@@ -29,18 +33,22 @@ void FAbilityIndexCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Pro
         +SVerticalBox::Slot()
         .Padding(FMargin(0.0f, 3.0f, 0.0f, 2.0f))
         [
-            SNew(SComboBox<TSharedPtr<FText>>)
-                .OptionsSource(&Options)
+            SNew(SComboBox<TSharedPtr<FIntTextPair>>)
+                .OptionsSource(&AbilityIndex.TextOptions)
                 .OnGenerateWidget(this, &FAbilityIndexCustomization::OnGenerateComboWidget)
                 .OnSelectionChanged(this, &FAbilityIndexCustomization::OnComboSelectionChanged, IndexHandle.ToWeakPtr())
-                .InitiallySelectedItem(Options[StartingIndex])
+                .InitiallySelectedItem(AbilityIndex.TextOptions[StartingIndex])
             [
                 SNew(STextBlock)
                 .Font(IPropertyTypeCustomizationUtils::GetRegularFont())
-                .Text_Lambda([this, IndexHandle]() {
+                .Text_Lambda([this, IndexHandle, PropertyHandle]() {
+                    void* WrapperData;
+                    PropertyHandle->GetValueData(WrapperData);
+                    auto &Wrapper = *static_cast<const FAbilityIndex*>(WrapperData);
+                    
                     int32 CurrentIndex;
                     IndexHandle->GetValue(CurrentIndex);
-                    return *Options[CurrentIndex];
+                    return Wrapper.TextOptions[CurrentIndex]->Value;
                 })
             ]
         ]
@@ -52,15 +60,13 @@ void FAbilityIndexCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> P
 	// Don't display children, as editing them directly can break the constraints
 }
 
-TSharedRef<SWidget> FAbilityIndexCustomization::OnGenerateComboWidget(TSharedPtr<FText> Option) {
-    return SNew(STextBlock).Text(*Option);
+TSharedRef<SWidget> FAbilityIndexCustomization::OnGenerateComboWidget(TSharedPtr<FIntTextPair> Option) {
+    return SNew(STextBlock).Text(Option->Value);
 }
 
-void FAbilityIndexCustomization::OnComboSelectionChanged(TSharedPtr<FText> InSelectedItem, ESelectInfo::Type SelectInfo,
+void FAbilityIndexCustomization::OnComboSelectionChanged(TSharedPtr<FIntTextPair> InSelectedItem, ESelectInfo::Type SelectInfo,
     TWeakPtr<IPropertyHandle> HandleWeakPtr) {
-    int32 OptionIndex = Options.Find(InSelectedItem);
-
-    if (auto PropertyHandle = HandleWeakPtr.Pin(); PropertyHandle != nullptr) {
-        ensure(PropertyHandle->SetValue(OptionIndex) == FPropertyAccess::Success);
+    if (auto PropertyHandle = HandleWeakPtr.Pin(); PropertyHandle != nullptr && InSelectedItem != nullptr) {
+        ensure(PropertyHandle->SetValue(InSelectedItem->Key) == FPropertyAccess::Success);
     }
 }

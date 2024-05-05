@@ -16,10 +16,6 @@ int32 UPokemonCoreSettings::GetMaxMoves() const {
     return MaxMoves;
 }
 
-int32 UPokemonCoreSettings::GetMaxDefaultAbilities() const {
-    return MaxDefaultAbilities;
-}
-
 TSubclassOf<UObject> UPokemonCoreSettings::GetPokemonClass() const {
     return PokemonClass;
 }

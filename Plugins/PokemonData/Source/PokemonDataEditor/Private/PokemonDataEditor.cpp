@@ -6,7 +6,7 @@
 void FPokemonDataEditorModule::StartupModule() {
     FPropertyEditorModule &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(TEXT("AbilityIndex"),
-        FOnGetPropertyTypeCustomizationInstance::CreateStatic( &FAbilityIndexCustomization::MakeInstance ));
+    FOnGetPropertyTypeCustomizationInstance::CreateStatic( &FAbilityIndexCustomization::MakeInstance ));
 }
 
 void FPokemonDataEditorModule::ShutdownModule() {

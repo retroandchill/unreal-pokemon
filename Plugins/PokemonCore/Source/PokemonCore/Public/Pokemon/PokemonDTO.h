@@ -8,6 +8,7 @@
 
 #include "PokemonDTO.generated.h"
 
+struct FAbilitySelector;
 /**
  * Data transfer object for a Pokémon. This is what gets serialized for both the builder and for any communication
  * over the network.

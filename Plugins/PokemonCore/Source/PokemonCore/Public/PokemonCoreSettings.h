@@ -40,13 +40,6 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     int32 GetMaxMoves() const;
 
     /**
-     * The maximum number of abilities a Pokémon can have.
-     * @return The maximum number of abilities a Pokémon can have.
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
-    int32 GetMaxDefaultAbilities() const;
-
-    /**
      * The class used for all Pokémon objects
      * @return The class used for all Pokémon objects
      */
@@ -87,15 +80,6 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxMoves, Config, Category = Moves)
     int32 MaxMoves = 4;
-
-    /**
-     * The maximum number of abilities a Pokémon can have.
-     * <p>If a Pokémon has less abilities here, the last ability in the list is duplicated.</p>
-     * <p>If the list has more than the required amount, then the list is truncated, and a warning is emitted.</p>
-     */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxDefaultAbilities, Config, Category = Abilities,
-        meta = (UIMin = 1, ClampMin = 1))
-    int32 MaxDefaultAbilities = 2;
 
     /**
      * The class used for all Pokémon objects
