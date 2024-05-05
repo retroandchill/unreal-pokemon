@@ -10,6 +10,7 @@ TSharedRef<IDetailCustomization> FGridBasedBillboardCharacterDetails::MakeInstan
 void FGridBasedBillboardCharacterDetails::CustomizeDetails(IDetailLayoutBuilder &DetailBuilder) {
     DetailBuilder.EditCategory("Rendering", FText::GetEmpty(), ECategoryPriority::Important);
 }
+
 void FGridBasedBillboardCharacterDetails::CustomizeDetails(const TSharedPtr<IDetailLayoutBuilder> &DetailBuilder) {
     CustomizeDetails(*DetailBuilder);
 }

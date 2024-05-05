@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
+#include "Utility/AbilityIndex.h"
 
 #include "PokemonDTO.generated.h"
 
@@ -92,7 +93,7 @@ struct POKEMONCORE_API FPokemonDTO {
      * The ability index of the Pokémon
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
-    TOptional<int32> Ability;
+    TOptional<FAbilityIndex> Ability;
 
     /**
      * The item held by the Pokémon

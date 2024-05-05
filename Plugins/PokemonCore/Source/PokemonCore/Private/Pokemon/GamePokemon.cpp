@@ -70,6 +70,10 @@ TScriptInterface<IMoveBlock> UGamePokemon::GetMoveBlock() const {
     return MoveBlock;
 }
 
+TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
+    return nullptr;
+}
+
 UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
     auto Ret = NewObject<UGamePokemon>();
     Ret->Initialize(Data);
