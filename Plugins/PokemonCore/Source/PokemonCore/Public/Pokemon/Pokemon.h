@@ -17,7 +17,7 @@ class IStatBlock;
 struct FSpeciesData;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UPokemon : public UInterface {
     GENERATED_BODY()
 };
@@ -105,4 +105,10 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual TScriptInterface<IAbilityBlock> GetAbility() const = 0;
+
+    /**
+     * Get the hold item used by the Pokémon.
+     * @return The held item used by the given Pokémon if it has one
+     */
+    virtual const FItem* GetHoldItem() const = 0;
 };

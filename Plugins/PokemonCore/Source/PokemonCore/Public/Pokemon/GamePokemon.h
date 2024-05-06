@@ -49,7 +49,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     TScriptInterface<IMoveBlock> GetMoveBlock() const override;
 
     UFUNCTION(BlueprintPure, Category = Abilities)
-    virtual TScriptInterface<IAbilityBlock> GetAbility() const override;
+    TScriptInterface<IAbilityBlock> GetAbility() const override;
+
+    const FItem* GetHoldItem() const override;
 
     /**
      * Create a new Pokémon from the given input data
@@ -114,4 +116,10 @@ private:
      */
     UPROPERTY(SaveGame)
     TScriptInterface<IAbilityBlock> AbilityBlock;
+
+    /**
+     * The hold item for this Pokémon.
+     */
+    UPROPERTY(SaveGame)
+    TOptional<FName> HoldItem;
 };
