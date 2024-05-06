@@ -30,3 +30,12 @@ TScriptInterface<IMoveBlock> UConstructionUtilities::CreateMoveBlock(const TScri
     Ret->Initialize(DTO);
     return Ret;
 }
+
+TScriptInterface<IAbilityBlock> UConstructionUtilities::CreateAbilityBlock(const TScriptInterface<IPokemon> &Owner,
+    const FPokemonDTO &DTO) {
+    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto Class = Settings->GetAbilityBlockClass();
+    TScriptInterface<IAbilityBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);
+    Ret->Initialize(Owner.GetObject(), DTO);
+    return Ret;
+}

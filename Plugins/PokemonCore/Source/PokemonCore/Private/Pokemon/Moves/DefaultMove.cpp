@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Moves/DefaultMove.h"
+#include "Pokemon/Moves/DefaultMove.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
 

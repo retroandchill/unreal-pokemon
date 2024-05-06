@@ -48,6 +48,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintPure, Category = Moves)
     TScriptInterface<IMoveBlock> GetMoveBlock() const override;
 
+    UFUNCTION(BlueprintPure, Category = Abilities)
+    virtual TScriptInterface<IAbilityBlock> GetAbility() const override;
+
     /**
      * Create a new Pokémon from the given input data
      * @param Data The data to input to create the Pokémon
@@ -56,7 +59,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
     static UGamePokemon *Create(const FPokemonDTO &Data);
 
-  private:
+private:
     /**
      * The ID of the species of Pokémon this is
      */
@@ -105,4 +108,10 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     TScriptInterface<IMoveBlock> MoveBlock;
+
+    /**
+     * The block that contains the move data
+     */
+    UPROPERTY(SaveGame)
+    TScriptInterface<IAbilityBlock> AbilityBlock;
 };

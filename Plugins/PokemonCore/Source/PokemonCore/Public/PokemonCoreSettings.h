@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "Moves/DefaultMoveBlock.h"
 #include "Pokemon/GamePokemon.h"
+#include "Pokemon/Abilities/DefaultAbilityBlock.h"
+#include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
 #include "PokemonCoreSettings.generated.h"
@@ -24,6 +25,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
     FName GetHPStat() const;
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
+    FText GetNoAbilityText() const;
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
+    FText GetNoAbilityDescription() const;
 
     /**
      * The maximum number of Pokémon a trainer can carry at any given time
@@ -60,6 +67,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
     TSubclassOf<UObject> GetMoveBlockClass() const;
 
+    /**
+     * The class used for all Ability Block objects
+     * @return The class used for all Ability Block objects
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+    TSubclassOf<UObject> GetAbilityBlockClass() const;
+
   private:
     /**
      * The stat used referring to a Pokémon's HP
@@ -67,6 +81,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetHPStat, Config, DisplayName = "HP Stat", Category = "Display Names",
               meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName HPStat;
+
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetNoAbilityText, Config, Category = "Display Names")
+    FText NoAbilityText;
+
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetNoAbilityDescription, Config,  Category = "Display Names")
+    FText NoAbilityDescription;
 
     /**
      * The maximum number of Pokémon a trainer can carry at any given time
@@ -101,4 +121,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMoveBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = MoveBlock))
     TSubclassOf<UObject> MoveBlockClass = UDefaultMoveBlock::StaticClass();
+
+
+    /**
+     * The class used for all Ability Block objects
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetAbilityBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
+              meta = (MustImplement = AbilityBlock))
+    TSubclassOf<UObject> AbilityBlockClass = UDefaultAbilityBlock::StaticClass();
 };
