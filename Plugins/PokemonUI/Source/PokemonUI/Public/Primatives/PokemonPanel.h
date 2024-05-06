@@ -8,6 +8,7 @@
 #include "Refreshable.h"
 #include "SelectablePanel.h"
 #include "Text/TextColor.h"
+#include "Bag/Item.h"
 
 #include "PokemonPanel.generated.h"
 
@@ -91,6 +92,9 @@ class POKEMONUI_API UPokemonPanel : public USelectableOption, public ISelectable
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Visuals")
     void RefreshVisuals();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Visuals")
+    UObject* GetHeldItemGraphic(const FItem& Item);
 
   private:
     /**

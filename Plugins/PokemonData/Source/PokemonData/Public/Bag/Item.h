@@ -111,6 +111,12 @@ struct POKEMONDATA_API FItem : public FTableRowBase {
     FText Description;
 
     FItem();
+
+    /**
+     * Get if this item is a form of mail or not.
+     * @return Is this item of form of mail?
+     */
+    bool IsMail() const;
 };
 
 /**
@@ -127,4 +133,12 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetItemNames();
+
+    /**
+     * Get if an item is a form of mail or not.
+     * @param Item The item in question
+     * @return Is the item of form of mail?
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static bool IsMail(const FItem& Item);
 };

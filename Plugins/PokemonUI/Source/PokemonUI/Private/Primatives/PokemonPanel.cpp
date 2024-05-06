@@ -57,16 +57,28 @@ bool UPokemonPanel::IsPreselected() const {
 }
 
 void UPokemonPanel::Refresh() {
+    using enum ESlateVisibility;
+    
     RefreshVisuals();
     if (Pokemon != nullptr) {
         RefreshPokemonInfo();
 
         auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
         check(GraphicsLoadingSubsystem != nullptr)
-        PokemonIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+        PokemonIcon->SetVisibility(SelfHitTestInvisible);
         PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon, this));
+
+        if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem != nullptr) {
+            HeldItemIcon->SetVisibility(SelfHitTestInvisible);
+            if (auto HeldItemGraphic = GetHeldItemGraphic(*HoldItem); HeldItemGraphic != nullptr) {
+                HeldItemIcon->SetBrushResourceObject(HeldItemGraphic);
+            }
+        } else {
+            HeldItemIcon->SetVisibility(Collapsed);
+        }
     } else {
-        PokemonIcon->SetVisibility(ESlateVisibility::Collapsed);
+        PokemonIcon->SetVisibility(Collapsed);
+        HeldItemIcon->SetVisibility(Collapsed);
     }
 }
 
