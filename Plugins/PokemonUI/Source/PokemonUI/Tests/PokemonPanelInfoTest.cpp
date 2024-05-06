@@ -10,7 +10,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/PokemonSelectionPane.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Tests.PokemonPanelInfoTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Unit Tests.UI.PokemonPanelInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {

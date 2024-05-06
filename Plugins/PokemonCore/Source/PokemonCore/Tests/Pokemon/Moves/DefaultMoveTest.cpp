@@ -2,9 +2,9 @@
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
+#include "Moves/MoveData.h"
 #include "Pokemon/Moves/DefaultMove.h"
 #include "Pokemon/Moves/DefaultMoveBlock.h"
-#include "Moves/MoveData.h"
 #include "Pokemon/PokemonDTO.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.DefaultMoveTest",

@@ -31,6 +31,21 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
     }
 
     /**
+     * Inject the given value into a variable.
+     * <p>Note: This method is unsafe, use as your own risk.</p>
+     * @tparam T The type of data being injected
+     * @param TargetObject The target object in question
+     * @param PropertyName The name of the property that is being edited
+     * @param NewValue The new value that is being added
+     */
+    template <typename T>
+    static void SetPropertyValue(UObject *TargetObject, FName PropertyName, const T &NewValue) {
+        auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
+        auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
+        TPropertyTypeFundamentals<T>::SetPropertyValue(PropertyContainer, NewValue);
+    }
+
+    /**
      * Get all non-abstract subclasses of the given object type
      * @tparam T The object type to look up
      * @param TargetClass The class to check under

@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
+#include "Bag/Item.h"
 #include "DataManager.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
@@ -19,6 +20,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
     CurrentHP = GetMaxHP();
     MoveBlock = UConstructionUtilities::CreateMoveBlock(this, DTO);
     AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
+    HoldItem = DTO.Item;
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -73,6 +75,16 @@ TScriptInterface<IMoveBlock> UGamePokemon::GetMoveBlock() const {
 
 TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
     return AbilityBlock;
+}
+
+const FItem *UGamePokemon::GetHoldItem() const {
+    if (!HoldItem.IsSet()) {
+        return nullptr;
+    }
+
+    auto ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetData(HoldItem.GetValue());
+    check(ItemData != nullptr)
+    return ItemData;
 }
 
 UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
