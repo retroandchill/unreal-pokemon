@@ -36,6 +36,8 @@ void FAbilityIndex::SetDefaultTextOptions() {
     for (int i = 0; i < AbilityCount; i++) {
         TextOptions.Add(MakeShared<FIntTextPair>(TextOptions.Num(), FText::Format(FText::FromStringView(NO_ABILITY_TEXT), i)));
     }
+    
+    Index = FMath::Clamp(Index, 0, TextOptions.Num() - 1);
 }
 
 void FAbilityIndex::UpdateTextOptions(FName Species) {
@@ -73,7 +75,6 @@ void FAbilityIndex::UpdateTextOptions(FName Species) {
         }
     }
     
-
-    
+    Index = FMath::Clamp(Index, 0, TextOptions.Num() - 1);
 }
 #endif
