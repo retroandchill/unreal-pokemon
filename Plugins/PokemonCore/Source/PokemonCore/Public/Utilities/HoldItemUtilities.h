@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
 #include "Bag/Item.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "HoldItemUtilities.generated.h"
 
 class IPokemon;
@@ -29,7 +30,7 @@ UCLASS()
 class POKEMONCORE_API UHoldItemUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get a Pokémon's held item.
      * @param Pokemon The Pokémon to get the item for
@@ -37,6 +38,5 @@ public:
      * @param Branches The enum to represent the branches that are formed
      */
     UFUNCTION(BlueprintCallable, Category = Items, meta = (ExpandEnumAsExecs = "Branches", DefaultToSelf = "Pokemon"))
-    static void GetHeldItem(const TScriptInterface<IPokemon>& Pokemon, FItem& HeldItem, EHoldItemResult& Branches);
-
+    static void GetHeldItem(const TScriptInterface<IPokemon> &Pokemon, FItem &HeldItem, EHoldItemResult &Branches);
 };

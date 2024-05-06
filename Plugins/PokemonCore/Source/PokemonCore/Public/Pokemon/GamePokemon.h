@@ -51,7 +51,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintPure, Category = Abilities)
     TScriptInterface<IAbilityBlock> GetAbility() const override;
 
-    const FItem* GetHoldItem() const override;
+    const FItem *GetHoldItem() const override;
 
     /**
      * Create a new Pokémon from the given input data
@@ -61,7 +61,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
     static UGamePokemon *Create(const FPokemonDTO &Data);
 
-private:
+  private:
     /**
      * The ID of the species of Pokémon this is
      */

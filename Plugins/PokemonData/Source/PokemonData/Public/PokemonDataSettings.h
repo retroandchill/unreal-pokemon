@@ -43,6 +43,6 @@ class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
      * <p>If the list has more than the required amount, then the list is truncated, and a warning is emitted.</p>
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxDefaultAbilities, Config, Category = Abilities,
-        meta = (UIMin = 1, ClampMin = 1))
+              meta = (UIMin = 1, ClampMin = 1))
     int32 MaxDefaultAbilities = 2;
 };

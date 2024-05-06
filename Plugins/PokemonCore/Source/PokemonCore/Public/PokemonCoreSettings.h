@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "Pokemon/GamePokemon.h"
 #include "Pokemon/Abilities/DefaultAbilityBlock.h"
+#include "Pokemon/GamePokemon.h"
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
@@ -85,7 +85,7 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetNoAbilityText, Config, Category = "Display Names")
     FText NoAbilityText;
 
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetNoAbilityDescription, Config,  Category = "Display Names")
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetNoAbilityDescription, Config, Category = "Display Names")
     FText NoAbilityDescription;
 
     /**
@@ -121,7 +121,6 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMoveBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = MoveBlock))
     TSubclassOf<UObject> MoveBlockClass = UDefaultMoveBlock::StaticClass();
-
 
     /**
      * The class used for all Ability Block objects

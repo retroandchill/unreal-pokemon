@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Breeding/PokemonGender.h"
 #include "Bag/Item.h"
+#include "Breeding/PokemonGender.h"
 #include "UObject/Interface.h"
 
 #include "Pokemon.generated.h"
@@ -110,5 +110,5 @@ class POKEMONCORE_API IPokemon {
      * Get the hold item used by the Pokémon.
      * @return The held item used by the given Pokémon if it has one
      */
-    virtual const FItem* GetHoldItem() const = 0;
+    virtual const FItem *GetHoldItem() const = 0;
 };

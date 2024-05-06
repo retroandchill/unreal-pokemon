@@ -39,7 +39,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      * @param NewValue The new value that is being added
      */
     template <typename T>
-    static void SetPropertyValue(UObject* TargetObject, FName PropertyName, const T& NewValue) {
+    static void SetPropertyValue(UObject *TargetObject, FName PropertyName, const T &NewValue) {
         auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
         auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
         TPropertyTypeFundamentals<T>::SetPropertyValue(PropertyContainer, NewValue);

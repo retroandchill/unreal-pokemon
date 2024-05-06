@@ -1,11 +1,11 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
+#include "Bag/Item.h"
 #include "DataManager.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Species/GenderRatio.h"
-#include "Bag/Item.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/ConstructionUtilities.h"
 #include "Utilities/PersonalityValueUtils.h"
@@ -77,7 +77,7 @@ TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
     return AbilityBlock;
 }
 
-const FItem * UGamePokemon::GetHoldItem() const {
+const FItem *UGamePokemon::GetHoldItem() const {
     if (!HoldItem.IsSet()) {
         return nullptr;
     }
