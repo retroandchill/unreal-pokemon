@@ -5,3 +5,7 @@
 const TSet<FSoftObjectPath> &UPokemonDataSettings::GetDataTables() const {
     return DataTables;
 }
+
+int32 UPokemonDataSettings::GetMaxDefaultAbilities() const {
+    return MaxDefaultAbilities;
+}

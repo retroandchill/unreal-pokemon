@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Moves/Move.h"
+#include "Pokemon/Moves/Move.h"
 
 #include "DefaultMove.generated.h"
 

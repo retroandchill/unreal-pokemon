@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
+#include "Bag/Item.h"
 #include "UObject/Interface.h"
 
 #include "Pokemon.generated.h"
 
+class IAbilityBlock;
+struct FAbility;
+class IMoveBlock;
 struct FPokemonDTO;
 class IStatBlock;
 struct FSpeciesData;
@@ -94,4 +98,11 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Moves)
     virtual TScriptInterface<IMoveBlock> GetMoveBlock() const = 0;
+
+    /**
+     * Get the information for the Ability possessed by this Pokémon
+     * @return The ability this Pokémon has
+     */
+    UFUNCTION(BlueprintCallable, Category = Abilities)
+    virtual TScriptInterface<IAbilityBlock> GetAbility() const = 0;
 };

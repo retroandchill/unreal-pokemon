@@ -8,6 +8,14 @@ FName UPokemonCoreSettings::GetHPStat() const {
     return HPStat;
 }
 
+FText UPokemonCoreSettings::GetNoAbilityText() const {
+    return NoAbilityText;
+}
+
+FText UPokemonCoreSettings::GetNoAbilityDescription() const {
+    return NoAbilityDescription;
+}
+
 int32 UPokemonCoreSettings::GetMaxPartySize() const {
     return MaxPartySize;
 }
@@ -26,4 +34,8 @@ TSubclassOf<UObject> UPokemonCoreSettings::GetStatBlockClass() const {
 
 TSubclassOf<UObject> UPokemonCoreSettings::GetMoveBlockClass() const {
     return MoveBlockClass;
+}
+
+TSubclassOf<UObject> UPokemonCoreSettings::GetAbilityBlockClass() const {
+    return AbilityBlockClass;
 }

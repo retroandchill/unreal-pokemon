@@ -18,6 +18,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
     StatBlock->CalculateStats(GetSpecies().BaseStats);
     CurrentHP = GetMaxHP();
     MoveBlock = UConstructionUtilities::CreateMoveBlock(this, DTO);
+    AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -68,6 +69,10 @@ TScriptInterface<IStatBlock> UGamePokemon::GetStatBlock() const {
 
 TScriptInterface<IMoveBlock> UGamePokemon::GetMoveBlock() const {
     return MoveBlock;
+}
+
+TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
+    return AbilityBlock;
 }
 
 UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {

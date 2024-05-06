@@ -89,10 +89,11 @@ struct POKEMONCORE_API FPokemonDTO {
     TOptional<FName> Nature;
 
     /**
-     * The ability index of the Pokémon
+     * The ability of the Pokémon
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
-    TOptional<int32> Ability;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
+        meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
+    TOptional<FName> Ability;
 
     /**
      * The item held by the Pokémon
