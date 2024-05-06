@@ -72,7 +72,7 @@ TScriptInterface<IMoveBlock> UGamePokemon::GetMoveBlock() const {
 }
 
 TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
-    return nullptr;
+    return AbilityBlock;
 }
 
 UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
