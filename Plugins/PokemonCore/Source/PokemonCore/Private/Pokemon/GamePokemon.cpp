@@ -18,6 +18,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
     StatBlock->CalculateStats(GetSpecies().BaseStats);
     CurrentHP = GetMaxHP();
     MoveBlock = UConstructionUtilities::CreateMoveBlock(this, DTO);
+    AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
 }
 
 FText UGamePokemon::GetNickname() const {

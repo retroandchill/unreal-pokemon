@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
-#include "Utility/AbilityIndex.h"
 
 #include "PokemonDTO.generated.h"
 
-struct FAbilitySelector;
 /**
  * Data transfer object for a Pokémon. This is what gets serialized for both the builder and for any communication
  * over the network.
@@ -91,10 +89,11 @@ struct POKEMONCORE_API FPokemonDTO {
     TOptional<FName> Nature;
 
     /**
-     * The ability index of the Pokémon
+     * The ability of the Pokémon
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
-    TOptional<FAbilityIndex> Ability;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
+        meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
+    TOptional<FName> Ability;
 
     /**
      * The item held by the Pokémon

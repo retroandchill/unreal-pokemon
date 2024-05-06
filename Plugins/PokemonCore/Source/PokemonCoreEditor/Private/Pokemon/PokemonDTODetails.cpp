@@ -58,7 +58,6 @@ void FPokemonDTODetails::CustomizeChildren(TSharedRef<IPropertyHandle> PropertyH
                                            IPropertyTypeCustomizationUtils &CustomizationUtils) {
     auto SpeciesHandle = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FPokemonDTO, Species));
     auto LevelHandle = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FPokemonDTO, Level));
-    auto AbilityHandle = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FPokemonDTO, Ability));
 
     uint32 ChildCount;
     PropertyHandle->GetNumChildren(ChildCount);
@@ -70,19 +69,4 @@ void FPokemonDTODetails::CustomizeChildren(TSharedRef<IPropertyHandle> PropertyH
         
         ChildBuilder.AddProperty(ChildHandle.ToSharedRef());
     }
-
-    auto SpeciesChangedLambda = [SpeciesHandle, AbilityHandle]() {
-        FName SpeciesID;
-        SpeciesHandle->GetValue(SpeciesID);
-
-        void* AbilityData;
-        AbilityHandle->GetValueData(AbilityData);
-        if (auto &AbilityIndex = *static_cast<TOptional<FAbilityIndex>*>(AbilityData);
-            AbilityIndex.IsSet()) {
-            AbilityIndex->UpdateTextOptions(SpeciesID);
-        }
-    };
-
-    SpeciesChangedLambda();
-    SpeciesHandle->SetOnPropertyValueChanged(FSimpleDelegate::CreateLambda(SpeciesChangedLambda));
 }

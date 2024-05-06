@@ -30,7 +30,7 @@ void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                           {"SPEED", 31}},
                                                   .EVs = {{"ATTACK", 164}, {"SPECIAL_ATTACK", 92}, {"SPEED", 252}},
                                                   .Nature = FName("Naive"),
-                                                  .Ability = FAbilityIndex(0),
+                                                  .Ability = FName("TORRENT"),
                                                   .Item = FName("LIFEORB"),
                                                   .Moves = {"HYDROPUMP", "KNOCKOFF", "MEGAHORN", "SACREDSWORD"}}));
     Player->AddPokemonToParty(
@@ -46,7 +46,7 @@ void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                           {"SPEED", 31}},
                                                   .EVs = {{"ATTACK", 252}, {"DEFENSE", 4}, {"SPEED", 252}},
                                                   .Nature = FName("Jolly"),
-                                                  .Ability = FAbilityIndex(2),
+                                                  .Ability = FName("RECKLESS"),
                                                   .Item = FName("CHOICEBAND"),
                                                   .Moves = {"FLAREBLITZ", "SUPERPOWER", "WILDCHARGE", "EARTHQUAKE"}}));
     Player->AddPokemonToParty(
@@ -62,7 +62,7 @@ void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                           {"SPEED", 31}},
                                                   .EVs = {{"HP", 208}, {"DEFENSE", 48}, {"SPEED", 252}},
                                                   .Nature = FName("Timid"),
-                                                  .Ability = FAbilityIndex(2),
+                                                  .Ability = FName("CONTRARY"),
                                                   .Item = FName("ROCKYHELMET"),
                                                   .Moves = {"LEAFSTORM", "TAUNT", "GLARE", "DEFOG"}}));
 }

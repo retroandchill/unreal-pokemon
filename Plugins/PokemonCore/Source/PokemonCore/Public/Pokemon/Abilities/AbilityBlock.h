@@ -8,7 +8,7 @@
 
 struct FPokemonDTO;
 class IPokemon;
-class UAbilityEffect;
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
 class UAbilityBlock : public UInterface {
@@ -29,6 +29,13 @@ public:
      * @param DTO The DTO for the stat block
      */
     virtual void Initialize(const TScriptInterface<IPokemon> &NewOwner, const FPokemonDTO &DTO) = 0;
+
+    /**
+     * Get the named ID of the Pokémon's ability
+     * @return The ability ID
+     */
+    UFUNCTION(BlueprintCallable, Category = Abilities)
+    virtual FName GetAbilityID() const = 0;
     
     /**
      * Get the display name of the Pokémon's ability
@@ -43,12 +50,5 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual FText GetAbilityDescription() const = 0;
-
-    /**
-     * Get the object that manages the effect for the given ability
-     * @return Handler for ability effects
-     */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual UAbilityEffect* GetAbilityEffect() const = 0;
 
 };

@@ -8,6 +8,7 @@
 #include "DefaultAbilityBlock.generated.h"
 
 class IPokemon;
+
 /**
  * The default implementation of a Pokémon's ability block.
  */
@@ -17,6 +18,9 @@ class POKEMONCORE_API UDefaultAbilityBlock : public UObject, public IAbilityBloc
 
 public:
     void Initialize(const TScriptInterface<IPokemon> &NewOwner, const FPokemonDTO &DTO) override;
+    
+    UFUNCTION(BlueprintPure, Category = Abilities)
+    FName GetAbilityID() const override;
 
     UFUNCTION(BlueprintPure, Category = Abilities)
     FText GetDisplayName() const override;
@@ -24,12 +28,12 @@ public:
     
     UFUNCTION(BlueprintPure, Category = Abilities)
     FText GetAbilityDescription() const override;
-
     
-    UFUNCTION(BlueprintPure, Category = Abilities)
-    UAbilityEffect * GetAbilityEffect() const override;
-
 private:
+    /**
+     * Get the numerical index for an ability
+     * @return The numerical index for an ability
+     */
     int32 GetAbilityIndex() const;
     
     /**
@@ -39,12 +43,9 @@ private:
     TScriptInterface<IPokemon> Owner;
 
     /**
-     * The ability that this Pokémon possesses
+     * A manual override for the default ability.
      */
     UPROPERTY(SaveGame)
     TOptional<FName> Ability;
-
-    UPROPERTY()
-    TObjectPtr<UAbilityEffect> AbilityEffect;
 
 };
