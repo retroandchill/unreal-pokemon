@@ -92,7 +92,7 @@ struct POKEMONCORE_API FPokemonDTO {
      * The ability of the Pokémon
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
-        meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
+              meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
     TOptional<FName> Ability;
 
     /**

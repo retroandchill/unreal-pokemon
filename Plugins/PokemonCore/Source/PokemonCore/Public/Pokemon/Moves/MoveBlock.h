@@ -12,7 +12,7 @@ struct FPokemonDTO;
 class IMove;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UMoveBlock : public UInterface {
     GENERATED_BODY()
 };

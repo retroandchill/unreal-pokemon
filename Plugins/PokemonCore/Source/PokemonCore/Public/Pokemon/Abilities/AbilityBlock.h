@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "AbilityBlock.generated.h"
 
 struct FPokemonDTO;
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UAbilityBlock : public UInterface {
     GENERATED_BODY()
 };
@@ -22,7 +23,7 @@ class POKEMONCORE_API IAbilityBlock {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Initialize a new ability block with the following initializing information
      * @param NewOwner The Pokémon that owns this ability block
@@ -36,7 +37,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual FName GetAbilityID() const = 0;
-    
+
     /**
      * Get the display name of the Pokémon's ability
      * @return The display name for the ability
@@ -50,5 +51,4 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual FText GetAbilityDescription() const = 0;
-
 };

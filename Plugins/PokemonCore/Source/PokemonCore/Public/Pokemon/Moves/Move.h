@@ -9,7 +9,7 @@
 struct FMoveData;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UMove : public UInterface {
     GENERATED_BODY()
 };
