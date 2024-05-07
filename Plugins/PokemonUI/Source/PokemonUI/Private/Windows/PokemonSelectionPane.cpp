@@ -5,8 +5,8 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/WidgetSwitcher.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Primatives/PartySelectCancelPanel.h"
-#include "Primatives/PokemonPanel.h"
+#include "Components/PartySelectCancelPanel.h"
+#include "Components/PokemonPanel.h"
 
 void UPokemonSelectionPane::NativeConstruct() {
     Super::NativeConstruct();
