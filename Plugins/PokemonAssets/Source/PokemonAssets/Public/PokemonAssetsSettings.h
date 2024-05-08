@@ -20,7 +20,7 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
      * @return The name of the package that contains the Pokémon Icon graphics
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
-    const FString &GetPokemonIconsPackageName() const;
+    const FString &GetPokemonSpritePackageName() const;
 
     /**
      * Get the name of the package that contains the Trainer Sprite graphics
@@ -68,22 +68,22 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
      * Get the path to the repository data asset used to get the icons.
      * @return The path to the repository data asset used to get the icons.
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "sset Loaders|Pokémon")
-    FSoftObjectPath GetPokemonIconRepository() const;
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Asset Loaders|Pokémon")
+    FSoftObjectPath GetPokemonSpriteRepository() const;
 
     /**
      * Get the path to the repository data asset used to get the trainers.
      * @return The path to the repository data asset used to get the trainers.
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "sset Loaders|Trainers")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Asset Loaders|Trainers")
     FSoftObjectPath GetTrainerFrontSpriteRepository() const;
 
   private:
     /**
      * The name of the package that contains the Pokémon Icon graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetPokemonIconsPackageName, Category = "Search Paths")
-    FString PokemonIconsPackageName;
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetPokemonSpritePackageName, Category = "Search Paths")
+    FString PokemonSpritePackageName;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics
@@ -128,9 +128,9 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
     /**
      * The path to the repository data asset used to get the icons.
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetPokemonIconRepository, Category = "Asset Loaders|Pokémon",
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetPokemonSpriteRepository, Category = "Asset Loaders|Pokémon",
               meta = (AllowedClasses = "TextureRepository"))
-    FSoftObjectPath PokemonIconRepository;
+    FSoftObjectPath PokemonSpriteRepository;
 
     /**
      * The path to the repository data asset used to get the trainers.

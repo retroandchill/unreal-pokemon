@@ -2,8 +2,8 @@
 
 #include "PokemonAssetsSettings.h"
 
-const FString &UPokemonAssetsSettings::GetPokemonIconsPackageName() const {
-    return PokemonIconsPackageName;
+const FString &UPokemonAssetsSettings::GetPokemonSpritePackageName() const {
+    return PokemonSpritePackageName;
 }
 
 const FString &UPokemonAssetsSettings::GetTrainerSpritesPackageName() const {
@@ -30,8 +30,8 @@ FName UPokemonAssetsSettings::GetTrainerSpriteSourceTexturePropertyName() const 
     return TrainerSpriteSourceTexturePropertyName;
 }
 
-FSoftObjectPath UPokemonAssetsSettings::GetPokemonIconRepository() const {
-    return PokemonIconRepository;
+FSoftObjectPath UPokemonAssetsSettings::GetPokemonSpriteRepository() const {
+    return PokemonSpriteRepository;
 }
 
 FSoftObjectPath UPokemonAssetsSettings::GetTrainerFrontSpriteRepository() const {

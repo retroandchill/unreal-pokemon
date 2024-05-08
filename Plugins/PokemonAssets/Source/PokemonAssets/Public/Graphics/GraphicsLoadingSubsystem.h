@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pokemon/Breeding/PokemonGender.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "GraphicsLoadingSubsystem.generated.h"
@@ -10,6 +11,24 @@
 class UTextureRepository;
 class ITrainer;
 class IPokemon;
+
+USTRUCT(BlueprintType)
+struct FPokemonAssetParams {
+    GENERATED_BODY()
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites, meta = (UIMin = 0, ClampMin = 0))
+    int32 Form = 0;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites)
+    EPokemonGender Gender = EPokemonGender::Male;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites)
+    bool bShiny = false;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites)
+    bool bShadow = false;
+};
+
 /**
  * Subsystem designed to handle the loading of graphical assets into memory
  */
@@ -19,6 +38,13 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
+
+    
+
+    TPair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(const IPokemon& Pokemon, UObject *Outer,  bool bBack = false);
+
+    
+    TPair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {});
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -34,7 +60,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
-    UMaterialInstanceDynamic *GetPokemonIcon(FName Species, UObject *Outer);
+    UMaterialInstanceDynamic *GetPokemonIcon(FName Species, UObject *Outer, const FPokemonAssetParams &AdditionalParams = {});
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -54,6 +80,18 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
 
   private:
     /**
+     * The base material used to construct Pokémon battle sprites
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Icons")
+    TObjectPtr<UMaterialInterface> PokemonIconsBaseMaterial;
+    
+    /**
+     * The name of the package that contains the Pokémon Icon graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
+    TSoftObjectPtr<UTextureRepository> PokemonSpriteRepository;
+    
+    /**
      * The name of the package that contains the Pokémon Icon graphics
      */
     UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
@@ -64,12 +102,6 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
     TSoftObjectPtr<UTextureRepository> TrainerSpritesRepository;
-
-    /**
-     * The base material used to construct Pokémon icons
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Icons")
-    TObjectPtr<UMaterialInterface> PokemonIconsBaseMaterial;
 
     /**
      * The name of the material property for the source texture of the icons

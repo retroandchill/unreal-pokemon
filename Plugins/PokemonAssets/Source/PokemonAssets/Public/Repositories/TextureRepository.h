@@ -30,4 +30,5 @@ class POKEMONASSETS_API UTextureRepository : public UDataAsset,
      */
     UPROPERTY(VisibleAnywhere, Category = Lookup)
     TMap<FName, TSoftObjectPtr<UTexture2D>> TextureMap;
+                                                 
 };
