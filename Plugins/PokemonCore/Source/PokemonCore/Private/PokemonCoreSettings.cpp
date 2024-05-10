@@ -39,3 +39,7 @@ TSubclassOf<UObject> UPokemonCoreSettings::GetMoveBlockClass() const {
 TSubclassOf<UObject> UPokemonCoreSettings::GetAbilityBlockClass() const {
     return AbilityBlockClass;
 }
+
+uint32 UPokemonCoreSettings::GetShinyChance() const {
+    return ShinyChance;
+}

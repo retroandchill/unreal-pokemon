@@ -5,6 +5,7 @@
 #include "Pokemon.h"
 #include "PokemonDTO.h"
 #include "Stats/StatBlock.h"
+#include "Trainers/OwnerInfo.h"
 
 #include "GamePokemon.generated.h"
 
@@ -20,7 +21,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     GENERATED_BODY()
 
   public:
-    void Initialize(const FPokemonDTO &DTO) override;
+    void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer>& Trainer) override;
 
     UFUNCTION(BlueprintPure, Category = Bio)
     FText GetNickname() const override;
@@ -32,6 +33,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     UFUNCTION(BlueprintPure, Category = Bio)
     EPokemonGender GetGender() const override;
+
+    UFUNCTION(BlueprintPure, Category = Bio)
+    bool IsShiny() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetCurrentHP() const override;
@@ -53,13 +57,23 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     const FItem *GetHoldItem() const override;
 
+    UFUNCTION(BlueprintPure, Category = Trainer)
+    const FOwnerInfo &GetOwnerInfo() const override;
+
+    /**
+     * Create a new Pokémon from the given input data
+     * @param Data The data to input to create the Pokémon
+     * @return The created Pokémon
+     */
+    static UGamePokemon *Create(const FPokemonDTO &Data);
+
     /**
      * Create a new Pokémon from the given input data
      * @param Data The data to input to create the Pokémon
      * @return The created Pokémon
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
-    static UGamePokemon *Create(const FPokemonDTO &Data);
+    static UGamePokemon *Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer>& Trainer);
 
   private:
     /**
@@ -122,4 +136,10 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     TOptional<FName> HoldItem;
+
+    /**
+     * The information about the original trainer
+     */
+    UPROPERTY(SaveGame)
+    FOwnerInfo OwnerInfo;
 };

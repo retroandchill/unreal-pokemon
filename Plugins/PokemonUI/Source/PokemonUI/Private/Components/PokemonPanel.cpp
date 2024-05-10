@@ -86,20 +86,8 @@ void UPokemonPanel::RefreshPokemonInfo() {
     UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
     UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
 
-    using enum EPokemonGender;
     auto Gender = Pokemon->GetGender();
-    switch (Gender) {
-    case Male:
-        UPokemonUIUtils::SetItemText(GenderText, TEXT("♂"));
-        break;
-    case Female:
-        UPokemonUIUtils::SetItemText(GenderText, TEXT("♀"));
-        break;
-    case Genderless:
-        UPokemonUIUtils::SetItemText(GenderText, TEXT(""));
-        break;
-    }
-
+    UPokemonUIUtils::SetPokemonGenderText(*Pokemon, GenderText);
     if (GenderTextColors.Contains(Gender)) {
         UPokemonUIUtils::SetItemTextColor(GenderText, GenderTextColors[Gender]);
     }

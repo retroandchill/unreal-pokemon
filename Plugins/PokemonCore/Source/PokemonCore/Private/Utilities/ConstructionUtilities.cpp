@@ -13,6 +13,15 @@ TScriptInterface<IPokemon> UConstructionUtilities::CreateNewPokemon(const FPokem
     return Pokemon;
 }
 
+TScriptInterface<IPokemon> UConstructionUtilities::CreateForeignPokemon(const FPokemonDTO &Data,
+    const TScriptInterface<ITrainer> &Trainer) {
+    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto PokemonClass = Settings->GetPokemonClass();
+    TScriptInterface<IPokemon> Pokemon = NewObject<UObject>(GetTransientPackage(), PokemonClass);
+    Pokemon->Initialize(Data, Trainer);
+    return Pokemon;
+}
+
 TScriptInterface<IStatBlock> UConstructionUtilities::CreateStatBlock(const TScriptInterface<IPokemon> &Owner,
                                                                      const FPokemonDTO &DTO) {
     auto Settings = GetDefault<UPokemonCoreSettings>();

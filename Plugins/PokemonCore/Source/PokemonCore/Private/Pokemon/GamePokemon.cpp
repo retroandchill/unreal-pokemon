@@ -2,6 +2,7 @@
 #include "Pokemon/GamePokemon.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "PokemonCoreSettings.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
@@ -10,7 +11,7 @@
 #include "Utilities/ConstructionUtilities.h"
 #include "Utilities/PersonalityValueUtils.h"
 
-void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
+void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer>& Trainer) {
     Species = DTO.Species;
     PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
     Gender = DTO.Gender;
@@ -21,6 +22,10 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
     MoveBlock = UConstructionUtilities::CreateMoveBlock(this, DTO);
     AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
     HoldItem = DTO.Item;
+
+    if (Trainer != nullptr) {
+        OwnerInfo = FOwnerInfo(*Trainer);
+    }
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -38,6 +43,18 @@ EPokemonGender UGamePokemon::GetGender() const {
         return Genderless;
 
     return (PersonalityValue & UPersonalityValueUtils::LOWER_8_BITS) < GenderRatio.FemaleChance ? Female : Male;
+}
+
+bool UGamePokemon::IsShiny() const {
+    if (Shiny.IsSet()) {
+        return Shiny.GetValue();
+    }
+
+    uint32 A = PersonalityValue ^ static_cast<uint32>(OwnerInfo.ID);
+    uint32 B = A & 0xFFFF;
+    uint32 C = (A >> 16) & 0xFFFF;
+    uint32 D = B ^ C;
+    return D < GetDefault<UPokemonCoreSettings>()->GetShinyChance();
 }
 
 int32 UGamePokemon::GetCurrentHP() const {
@@ -87,8 +104,16 @@ const FItem *UGamePokemon::GetHoldItem() const {
     return ItemData;
 }
 
-UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
+const FOwnerInfo & UGamePokemon::GetOwnerInfo() const {
+    return OwnerInfo;
+}
+
+UGamePokemon * UGamePokemon::Create(const FPokemonDTO &Data) {
+    return Create(Data, nullptr);
+}
+
+UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer>& Trainer) {
     auto Ret = NewObject<UGamePokemon>();
-    Ret->Initialize(Data);
+    Ret->Initialize(Data, Trainer);
     return Ret;
 }

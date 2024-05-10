@@ -74,6 +74,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
     TSubclassOf<UObject> GetAbilityBlockClass() const;
 
+    /**
+     * Get the odds of a Pokémon being shiny.
+     * @return The odds of a newly generated Pokémon being shiny (out of 65536).
+     */
+    uint32 GetShinyChance() const;
+
   private:
     /**
      * The stat used referring to a Pokémon's HP
@@ -102,6 +108,12 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     int32 MaxMoves = 4;
 
     /**
+     * The odds of a newly generated Pokémon being shiny (out of 65536).
+     */
+    UPROPERTY(EditAnywhere, Config, Category = "Pokémon")
+    uint32 ShinyChance = 16;
+
+    /**
      * The class used for all Pokémon objects
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetPokemonClass, Config, AdvancedDisplay, Category = "Data Classes",
@@ -128,4 +140,6 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetAbilityBlockClass, Config, AdvancedDisplay, Category = "Data Classes",
               meta = (MustImplement = AbilityBlock))
     TSubclassOf<UObject> AbilityBlockClass = UDefaultAbilityBlock::StaticClass();
+
+    
 };

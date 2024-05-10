@@ -27,7 +27,7 @@ bool DefaultStatBlockTest::RunTest(const FString &Parameters) {
                       {"SPEED", 23}};
 
     auto NewPokemon = NewObject<UGamePokemon>();
-    NewPokemon->Initialize(PokemonDTO);
+    NewPokemon->Initialize(PokemonDTO, nullptr);
 
     auto Block = NewObject<UDefaultStatBlock>();
     Block->Initialize(NewPokemon, PokemonDTO);

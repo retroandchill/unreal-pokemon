@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
+#include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
 
 #include "Pokemon.generated.h"
 
+struct FOwnerInfo;
 class IAbilityBlock;
 struct FAbility;
 class IMoveBlock;
@@ -33,8 +35,9 @@ class POKEMONCORE_API IPokemon {
     /**
      * Construct a Pokémon from the DTO
      * @param DTO The source Pokémon DTO to initialize from
+     * @param Trainer
      */
-    virtual void Initialize(const FPokemonDTO &DTO) = 0;
+    virtual void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer>& Trainer = nullptr) = 0;
 
     /**
      * Get the name of the Pokémon in question
@@ -63,6 +66,13 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Bio)
     virtual EPokemonGender GetGender() const = 0;
+
+    /**
+     * Get if the Pokémon is shiny or not
+     * @return Is the Pokémon shiny?
+     */
+    UFUNCTION(BlueprintCallable, Category = Abilities)
+    virtual bool IsShiny() const = 0;
 
     /**
      * Get the current HP of the Pokémon in question
@@ -111,4 +121,11 @@ class POKEMONCORE_API IPokemon {
      * @return The held item used by the given Pokémon if it has one
      */
     virtual const FItem *GetHoldItem() const = 0;
+
+    /**
+     * Get the information about the Pokémon's original trainer
+     * @return Is information about the original trainer
+     */
+    UFUNCTION(BlueprintCallable, Category = Trainer)
+    virtual const FOwnerInfo &GetOwnerInfo() const = 0;
 };

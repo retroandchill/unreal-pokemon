@@ -83,12 +83,12 @@ class POKEMONCORE_API ITrainer {
      * @return The trainer's ID number
      */
     UFUNCTION(BlueprintCallable, Category = Bio)
-    virtual int32 GetIdNumber() = 0;
+    virtual int32 GetIdNumber() const = 0;
 
     /**
      * Get the trainer's secret ID number
      * @return The trainer's secret ID number
      */
     UFUNCTION(BlueprintCallable, Category = Bio)
-    virtual int32 GetSecretId() = 0;
+    virtual int32 GetSecretId() const = 0;
 };

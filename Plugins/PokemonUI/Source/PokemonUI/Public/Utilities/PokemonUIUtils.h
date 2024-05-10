@@ -7,6 +7,7 @@
 
 #include "PokemonUIUtils.generated.h"
 
+class IPokemon;
 struct FTextColor;
 class UProgressBar;
 class UDisplayText;
@@ -73,4 +74,6 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      * @param MaxValue The maximum value
      */
     static void SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue);
+
+    static void SetPokemonGenderText(const IPokemon& Pokemon, TObjectPtr<UDisplayText>& TextWidget);
 };

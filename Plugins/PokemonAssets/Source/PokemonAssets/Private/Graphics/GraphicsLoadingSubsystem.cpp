@@ -16,15 +16,21 @@ TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
     const FPokemonAssetParams &Params, FStringView Subfolder) {
     auto SubfolderString = FString::Format(TEXT("{0}/"), {Subfolder});
     auto ShinyExtension = FString::Format(TEXT("{0}Shiny/"), {Subfolder});
-    auto SpeciesExtension = Species.ToString();
     auto FormExtension = FString::Format(TEXT("_{0}"), {{Params.Form}});
-    auto GenderExtension = Params.Gender == EPokemonGender::Female ? TEXT("_female") : TEXT("");
-    auto ShadowExtension = Params.bShadow ? TEXT("_shadow") : TEXT("");
+    auto SpeciesExtension = Species.ToString();
     TArray<std::tuple<int32, FStringView, FStringView>> Factors;
-    Factors.Emplace(4, ShinyExtension, SubfolderString);
-    Factors.Emplace(3, ShadowExtension, TEXT(""));
-    Factors.Emplace(2, GenderExtension, TEXT(""));
-    Factors.Emplace(1, FormExtension, TEXT(""));
+    if (Params.bShiny) {
+        Factors.Emplace(4, ShinyExtension, SubfolderString);
+    }
+    if (Params.bShadow) {
+        Factors.Emplace(3, TEXT("_shadow"), TEXT(""));
+    }
+    if (Params.Gender == EPokemonGender::Female) {
+        Factors.Emplace(2, TEXT("_female"), TEXT(""));
+    }
+    if (Params.Form > 0) {
+        Factors.Emplace(1, FormExtension, TEXT(""));
+    }
     Factors.Emplace(0, SpeciesExtension, TEXT("000"));
 
     TArray<FString> FormattedStrings;
@@ -92,7 +98,8 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
 TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon,
     UObject *Outer, bool bBack) {
     return GetPokemonBattleSprite(Pokemon.GetSpecies().ID, Outer, bBack, {
-        .Gender = Pokemon.GetGender()
+        .Gender = Pokemon.GetGender(),
+        .bShiny = Pokemon.IsShiny()
     });
 }
 
