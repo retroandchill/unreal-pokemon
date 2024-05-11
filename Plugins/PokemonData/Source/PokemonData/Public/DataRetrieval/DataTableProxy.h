@@ -36,14 +36,18 @@ class TDataTableProxy final : public IGameData {
         return DataTable.Get();
     }
 
+    TArray<T*> GetAllRows() const {
+        TArray<T*> Rows;
+        DataTable->GetAllRows(TEXT("ForEach"), Rows);
+        return Rows;
+    }
+
     /**
      * Iterate through the data table's rows and execute the callback on each entry
      * @param Callback The callback method
      */
     void ForEach(TFunctionRef<void(const T&)> Callback) const {
-        TArray<T*> Rows;
-        DataTable->GetAllRows(TEXT("ForEach"), Rows);
-        for (auto Row : Rows) {
+        for (auto Rows = GetAllRows(); auto Row : Rows) {
             const T &Ref = *Row;
             Callback(Ref);
         }

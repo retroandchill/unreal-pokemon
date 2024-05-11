@@ -2,6 +2,8 @@
 #include "Bag/Item.h"
 #include "DataManager.h"
 
+#include <ranges>
+
 FItem::FItem() = default;
 
 bool FItem::IsPokeBall() const {
@@ -21,14 +23,16 @@ TArray<FName> UItemHelper::GetItemNames() {
 }
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
-    auto FilteredRows = FDataManager::GetInstance().GetDataTable<FItem>()
-        .Filter([](const FItem& Item) {
-            return Item.IsPokeBall();
-        });
+    auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
+    std::span RowSpan(Rows.GetData(), Rows.Num());
+    auto FilteredView = std::views::all(RowSpan)
+        | std::views::filter([](const FItem* Item) { return Item->IsPokeBall(); })
+        | std::views::transform([](const FItem* Item) { return Item->ID; });
+    
     TArray<FName> Ret;
-    Algo::Transform(FilteredRows, Ret, [](const FItem* Item) {
-        return Item->ID;
-    });
+    for (FName Name : FilteredView) {
+        Ret.Add(Name);
+    }
     return Ret;
     
 }
