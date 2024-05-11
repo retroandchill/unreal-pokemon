@@ -12,6 +12,9 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     AssetRepositories.Emplace(Settings->GetPokemonSpritePackageName(), Settings->GetPokemonSpriteRepository().TryLoad());
     AssetRepositories.Emplace(Settings->GetTrainerSpritesPackageName(),
                               Settings->GetTrainerFrontSpriteRepository().TryLoad());
+    AssetRepositories.Emplace(Settings->GetTypeIconsPackageName(), Settings->GetTypeIconRepository().TryLoad());
+    AssetRepositories.Emplace(Settings->GetStatusIconsPackageName(), Settings->GetStatusIconRepository().TryLoad());
+    AssetRepositories.Emplace(Settings->GetSummaryBallPackageName(), Settings->GetSummaryBallRepository().TryLoad());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
         Repository->SetBasePackage(Package.ToString());

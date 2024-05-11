@@ -8,6 +8,7 @@
 
 #include "GraphicsLoadingSubsystem.generated.h"
 
+class UStaticImageRepository;
 class UTextureRepository;
 class ITrainer;
 class IPokemon;
@@ -38,8 +39,6 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-
-    
 
     TPair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(const IPokemon& Pokemon, UObject *Outer,  bool bBack = false);
 
@@ -78,6 +77,10 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
+    TArray<UObject*> GetTypeIconGraphics(TArrayView<FName> Types) const;
+
+    UObject* GetPokeBallIcon(FName PokeBall) const;
+
   private:
     /**
      * The base material used to construct Pokémon battle sprites
@@ -102,6 +105,18 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
     TSoftObjectPtr<UTextureRepository> TrainerSpritesRepository;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
+    TSoftObjectPtr<UStaticImageRepository> TypeIconRepository;
+    
+    /**
+     * The name of the package that contains the Summary Ball graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
+    TSoftObjectPtr<UStaticImageRepository> SummaryBallRepository;
 
     /**
      * The name of the material property for the source texture of the icons

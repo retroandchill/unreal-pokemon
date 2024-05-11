@@ -80,6 +80,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     uint32 GetShinyChance() const;
 
+    /**
+     * The class default Poké Ball used a Pokémon
+     * @return The item used for a Pokémon with no ball specified
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Data Classes")
+    FName GetDefaultPokeBall() const;
+
   private:
     /**
      * The stat used referring to a Pokémon's HP
@@ -112,6 +119,13 @@ class POKEMONCORE_API UPokemonCoreSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditAnywhere, Config, Category = "Pokémon")
     uint32 ShinyChance = 16;
+
+    /**
+     * The maximum number of moves a Pokémon can know.
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetDefaultPokeBall, Config, Category = "Pokémon",
+        meta = (GetOptions = "PokemonData.ItemHelper.GetPokeBallNames"))
+    FName DefaultPokeBall;
 
     /**
      * The class used for all Pokémon objects

@@ -5,6 +5,7 @@
 #include "Pokemon/Pokemon.h"
 #include "PokemonAssetsSettings.h"
 #include "Algo/Unique.h"
+#include "Repositories/StaticImageRepository.h"
 #include "Repositories/TextureRepository.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
@@ -93,6 +94,9 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     TrainerSpritesRepository = Settings->GetTrainerFrontSpriteRepository();
     TrainerSpriteBaseMaterial = Cast<UMaterialInterface>(Settings->GetTrainerSpriteBaseMaterial().TryLoad());
     TrainerSpriteSourceTexturePropertyName = Settings->GetTrainerSpriteSourceTexturePropertyName();
+
+    TypeIconRepository = Settings->GetTypeIconRepository();
+    SummaryBallRepository = Settings->GetSummaryBallRepository();
 }
 
 TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon,
@@ -151,4 +155,17 @@ TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrain
     auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteBaseMaterial, Outer);
     Material->SetTextureParameterValue(TrainerSpriteSourceTexturePropertyName, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+}
+
+TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TArrayView<FName> Types) const {
+    auto Repo = TypeIconRepository.Get();
+    TArray<UObject*> Ret;
+    Algo::Transform(Types, Ret, [Repo](FName Type) {
+        return Repo->FetchAsset(Type);
+    });
+    return Ret;
+}
+
+UObject * UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
+    return SummaryBallRepository.Get()->FetchAsset(PokeBall);
 }

@@ -43,3 +43,7 @@ TSubclassOf<UObject> UPokemonCoreSettings::GetAbilityBlockClass() const {
 uint32 UPokemonCoreSettings::GetShinyChance() const {
     return ShinyChance;
 }
+
+FName UPokemonCoreSettings::GetDefaultPokeBall() const {
+    
+}

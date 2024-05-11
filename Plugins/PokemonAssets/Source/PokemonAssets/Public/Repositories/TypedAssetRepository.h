@@ -48,13 +48,19 @@ class TTypedAssetRepository : public IAssetRepository {
     }
     
     void RegisterAsset(const FAssetData &AssetData) override {
-        if (AssetData.GetClass(EResolveClass::Yes) == T::StaticClass()) {
+        if (AssetValid(AssetData)) {
             auto FolderName = AssetData.PackagePath.ToString();
             FolderName.RemoveFromStart(BasePackageName);
             FolderName.RemoveFromStart(TEXT("/"));
             auto AssetName = FolderName.IsEmpty() ? AssetData.AssetName : FName(*FString::Format(TEXT("{0}/{1}"),
                 {FolderName, AssetData.AssetName.ToString()}));
-            GetAssetMap().Add(AssetName, AssetData.GetAsset());
+            auto TrueName = AssetName.ToString();
+            auto NamePrefix = GetNamePrefix();
+            if (!NamePrefix.IsEmpty() && !TrueName.Contains(NamePrefix)) {
+                return;
+            }
+            TrueName.RemoveFromStart(NamePrefix);
+            GetAssetMap().Add(FName(*TrueName), AssetData.GetAsset());
         }
     }
 
@@ -66,6 +72,10 @@ class TTypedAssetRepository : public IAssetRepository {
 #endif
 
   protected:
+    virtual bool AssetValid(const FAssetData& AssetData) const {
+        return AssetData.GetClass(EResolveClass::Yes) == T::StaticClass();
+    }
+    
     /**
      * Get the map of names to the actual assets.
      * @return The map of names to the actual assets.
@@ -77,6 +87,8 @@ class TTypedAssetRepository : public IAssetRepository {
      * @return The map of names to the actual assets.
      */
     virtual const TMap<FName, TSoftObjectPtr<T>> &GetAssetMap() const = 0;
+
+    virtual FStringView GetNamePrefix() const = 0;
 
 private:
 #if WITH_EDITOR

@@ -6,6 +6,7 @@
 
 #include "WidgetUtilities.generated.h"
 
+class UImage;
 /**
  * Utility class for Widget related operations
  */
@@ -45,4 +46,7 @@ class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, Category = "Slate|Images")
     static void ChangeBrushSize(UPARAM(Ref) FSlateBrush &Brush, FVector2D NewSize);
+
+    UFUNCTION(BlueprintCallable, Category = "Slate|Images")
+    static void SetBrushFromAsset(UImage* ImageWidget, UObject* Asset, bool MatchSize = false);
 };

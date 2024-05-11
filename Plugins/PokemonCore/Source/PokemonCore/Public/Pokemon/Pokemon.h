@@ -68,6 +68,13 @@ class POKEMONCORE_API IPokemon {
     virtual EPokemonGender GetGender() const = 0;
 
     /**
+     * Get the Poké Ball that the Pokémon was caught in
+     * @return The Poké Ball caught in
+     */
+    UFUNCTION(BlueprintCallable, Category = Bio)
+    virtual FName GetPokeBall() const = 0;
+
+    /**
      * Get if the Pokémon is shiny or not
      * @return Is the Pokémon shiny?
      */

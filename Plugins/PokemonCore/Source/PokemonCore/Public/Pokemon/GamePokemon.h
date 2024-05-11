@@ -35,6 +35,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     EPokemonGender GetGender() const override;
 
     UFUNCTION(BlueprintPure, Category = Bio)
+    FName GetPokeBall() const override;
+
+    UFUNCTION(BlueprintPure, Category = Bio)
     bool IsShiny() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
@@ -106,6 +109,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     TOptional<bool> Shiny;
+
+    UPROPERTY(SaveGame)
+    FName PokeBall;
 
     /**
      * The current amount of HP this Pokémon has

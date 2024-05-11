@@ -30,6 +30,27 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
     const FString &GetTrainerSpritesPackageName() const;
 
     /**
+     * Get the name of the package that contains the Type graphics
+     * @return The name of the package that contains the Type graphics
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
+    const FString &GetTypeIconsPackageName() const;
+
+    /**
+     * Get the name of the package that contains the Status graphics
+     * @return The name of the package that contains the Status graphics
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
+    const FString &GetStatusIconsPackageName() const;
+
+    /**
+     * Get the name of the package that contains the summary screen Poké Ball graphics
+     * @return The name of the package that contains the summary screen Poké Ball graphics
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
+    const FString &GetSummaryBallPackageName() const;
+
+    /**
      * Get the base material used to construct Pokémon icons
      * @return The base material used to construct Pokémon icons
      */
@@ -78,6 +99,27 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Asset Loaders|Trainers")
     FSoftObjectPath GetTrainerFrontSpriteRepository() const;
 
+    /**
+     * Get the path to the repository data asset used to get the types.
+     * @return The path to the repository data asset used to get the types.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Asset Loaders|Trainers")
+    FSoftObjectPath GetTypeIconRepository() const;
+
+    /**
+     * Get the path to the repository data asset used to get the statuses.
+     * @return The path to the repository data asset used to get the statuses.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Asset Loaders|Trainers")
+    FSoftObjectPath GetStatusIconRepository() const;
+
+    /**
+     * Get the path to the repository data asset used to get the Poké Ball icons on the summary screen.
+     * @return The path to the repository data asset used to get the Poké Ball icons on the summary screen.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Asset Loaders|Trainers")
+    FSoftObjectPath GetSummaryBallRepository() const;
+
   private:
     /**
      * The name of the package that contains the Pokémon Icon graphics
@@ -90,6 +132,24 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTrainerSpritesPackageName, Category = "Search Paths")
     FString TrainerSpritesPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTypeIconsPackageName, Category = "Search Paths")
+    FString TypeIconsPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetStatusIconsPackageName, Category = "Search Paths")
+    FString StatusIconsPackageName;
+
+    /**
+     * The name of the package that contains the summary screen Poké Ball graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetSummaryBallPackageName, Category = "Search Paths")
+    FString SummaryBallPackageName;
 
     /**
      * The base material used to construct Pokémon icons
@@ -138,4 +198,25 @@ class POKEMONASSETS_API UPokemonAssetsSettings : public UDeveloperSettings {
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTrainerFrontSpriteRepository,
               Category = "Asset Loaders|Trainers", meta = (AllowedClasses = "TextureRepository"))
     FSoftObjectPath TrainerFrontSpriteRepository;
+
+    /**
+     * The path to the repository data asset used to get the type icons.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTypeIconRepository,
+              Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    FSoftObjectPath TypeIconRepository;
+
+    /**
+     * The path to the repository data asset used to get the status icons.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetStatusIconRepository,
+              Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    FSoftObjectPath StatusIconRepository;
+
+    /**
+     * The path to the repository data asset used to get the Poké Ball icons on the summary screen.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetSummaryBallRepository,
+              Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    FSoftObjectPath SummaryBallRepository;
 };

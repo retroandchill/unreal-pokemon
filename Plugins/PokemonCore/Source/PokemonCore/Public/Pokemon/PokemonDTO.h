@@ -53,6 +53,9 @@ struct POKEMONCORE_API FPokemonDTO {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
     TOptional<bool> Shiny;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+    TOptional<FName> PokeBall;
+
     /**
      * The current amount of HP this Pokémon has
      */

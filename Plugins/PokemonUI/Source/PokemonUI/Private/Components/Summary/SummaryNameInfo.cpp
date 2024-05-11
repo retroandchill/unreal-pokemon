@@ -3,10 +3,12 @@
 
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Components/Image.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
+#include "Utilities/WidgetUtilities.h"
 
 void USummaryNameInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     using enum ESlateVisibility;
@@ -23,5 +25,7 @@ void USummaryNameInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &
     PokemonLevelText->SetText(FText::FromString(FString::FromInt(Pokemon->GetStatBlock()->GetLevel())));
     
     // TODO: Configure the status and Poké Ball
+    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+    UWidgetUtilities::SetBrushFromAsset(PokemonBallIcon, GraphicsLoadingSubsystem->GetPokeBallIcon(Pokemon->GetPokeBall()), true);
     PokemonStatusIcon->SetVisibility(Hidden);
 }

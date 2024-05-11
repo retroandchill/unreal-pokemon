@@ -11,7 +11,7 @@
  */
 template <typename T>
     requires std::is_base_of_v<FTableRowBase, T>
-class POKEMONDATA_API TDataTableProxy final : public IGameData {
+class TDataTableProxy final : public IGameData {
   public:
     explicit TDataTableProxy(UDataTable *DataTable) : DataTable(MakeUniqueRoot(DataTable)) {
     }
@@ -38,17 +38,35 @@ class POKEMONDATA_API TDataTableProxy final : public IGameData {
 
     /**
      * Iterate through the data table's rows and execute the callback on each entry
-     * @tparam Functor The signature of the callback
      * @param Callback The callback method
      */
-    template <typename Functor>
-    void ForEach(Functor Callback) const {
-        TArray<T *> Rows;
+    void ForEach(TFunctionRef<void(const T&)> Callback) const {
+        TArray<T*> Rows;
         DataTable->GetAllRows(TEXT("ForEach"), Rows);
         for (auto Row : Rows) {
             const T &Ref = *Row;
             Callback(Ref);
         }
+    }
+
+    TArray<const T*> Filter(TFunctionRef<bool(const T&)> Predicate) const {
+        TArray<const T*> Rows;
+        ForEach([&Rows, &Predicate](const T& Row) {
+            if (Predicate(Row)) {
+                Rows.Add(&Row);
+            }
+        });
+
+        return Rows;
+    }
+
+    template <typename R>
+    TArray<R> Map(TFunctionRef<R(const T&)> Mapping) const {
+        TArray<R> Ret;
+        ForEach([&Ret, &Mapping](const T& Row) {
+            Ret.Add(Mapping(Row));
+        });
+        return Ret;
     }
 
   private:

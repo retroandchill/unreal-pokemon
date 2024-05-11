@@ -2,6 +2,7 @@
 #include "Utilities/WidgetUtilities.h"
 #include "Engine/UserInterfaceSettings.h"
 #include "PaperSprite.h"
+#include "Components/Image.h"
 
 float UWidgetUtilities::GetWidgetDPIScale() {
     static constexpr float SlateDPI = 96.f;
@@ -42,4 +43,14 @@ FVector2D UWidgetUtilities::GetDesiredTextureSize(const UTexture2D *const Textur
 
 void UWidgetUtilities::ChangeBrushSize(FSlateBrush &Brush, FVector2D NewSize) {
     Brush.SetImageSize(NewSize);
+}
+
+void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bool MatchSize) {
+    if (auto Texture = Cast<UTexture2D>(Asset); Texture != nullptr) {
+        ImageWidget->SetBrushFromTexture(Texture, MatchSize);
+    } else if (auto Material = Cast<UMaterialInterface>(Asset); Material != nullptr) {
+        ImageWidget->SetBrushFromMaterial(Material);
+    } else if (Asset->Implements<USlateTextureAtlasInterface>()) {
+        ImageWidget->SetBrushFromAtlasInterface(Asset, MatchSize);
+    }
 }

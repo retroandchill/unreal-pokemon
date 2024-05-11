@@ -10,6 +10,18 @@ const FString &UPokemonAssetsSettings::GetTrainerSpritesPackageName() const {
     return TrainerSpritesPackageName;
 }
 
+const FString & UPokemonAssetsSettings::GetTypeIconsPackageName() const {
+    return TypeIconsPackageName;
+}
+
+const FString & UPokemonAssetsSettings::GetStatusIconsPackageName() const {
+    return StatusIconsPackageName;
+}
+
+const FString & UPokemonAssetsSettings::GetSummaryBallPackageName() const {
+    return SummaryBallPackageName;
+}
+
 const FSoftObjectPath &UPokemonAssetsSettings::GetPokemonIconsBaseMaterial() const {
     return PokemonIconsBaseMaterial;
 }
@@ -36,4 +48,16 @@ FSoftObjectPath UPokemonAssetsSettings::GetPokemonSpriteRepository() const {
 
 FSoftObjectPath UPokemonAssetsSettings::GetTrainerFrontSpriteRepository() const {
     return TrainerFrontSpriteRepository;
+}
+
+FSoftObjectPath UPokemonAssetsSettings::GetTypeIconRepository() const {
+    return TypeIconRepository;
+}
+
+FSoftObjectPath UPokemonAssetsSettings::GetStatusIconRepository() const {
+    return StatusIconRepository;
+}
+
+FSoftObjectPath UPokemonAssetsSettings::GetSummaryBallRepository() const {
+    return SummaryBallRepository;
 }

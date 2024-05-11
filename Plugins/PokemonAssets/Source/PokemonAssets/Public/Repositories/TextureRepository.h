@@ -12,7 +12,7 @@
  * Repository for holding a texture 2D asset.
  */
 UCLASS()
-class POKEMONASSETS_API UTextureRepository : public UDataAsset,
+class POKEMONASSETS_API UTextureRepository final : public UDataAsset,
 #if CPP
                                              public TTypedAssetRepository<UTexture2D> {
 #else
@@ -21,10 +21,14 @@ class POKEMONASSETS_API UTextureRepository : public UDataAsset,
     GENERATED_BODY()
 
   protected:
-    TMap<FName, TSoftObjectPtr<UTexture2D>> &GetAssetMap() final;
-    const TMap<FName, TSoftObjectPtr<UTexture2D>> &GetAssetMap() const final;
+    TMap<FName, TSoftObjectPtr<UTexture2D>> &GetAssetMap() override;
+    const TMap<FName, TSoftObjectPtr<UTexture2D>> &GetAssetMap() const override;
+    FStringView GetNamePrefix() const override;
 
   private:
+                                                 UPROPERTY(EditAnywhere, Category = Lookup)
+FString NamePrefix;
+                                                 
     /**
      * The map of name keys to their corresponding textures
      */

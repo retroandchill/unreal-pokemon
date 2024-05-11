@@ -23,6 +23,12 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
     HoldItem = DTO.Item;
 
+    if (DTO.PokeBall.IsSet()) {
+        PokeBall = *DTO.PokeBall;
+    } else {
+        PokeBall = GetDefault<UPokemonCoreSettings>()->GetDefaultPokeBall();
+    }
+    
     if (Trainer != nullptr) {
         OwnerInfo = FOwnerInfo(*Trainer);
     }
@@ -43,6 +49,10 @@ EPokemonGender UGamePokemon::GetGender() const {
         return Genderless;
 
     return (PersonalityValue & UPersonalityValueUtils::LOWER_8_BITS) < GenderRatio.FemaleChance ? Female : Male;
+}
+
+FName UGamePokemon::GetPokeBall() const {
+    return PokeBall;
 }
 
 bool UGamePokemon::IsShiny() const {
