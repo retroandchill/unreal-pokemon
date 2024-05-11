@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "Mainpulation/RangeHelpers.h"
 
 #include <ranges>
 
@@ -24,16 +25,10 @@ TArray<FName> UItemHelper::GetItemNames() {
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
-    std::span RowSpan(Rows.GetData(), Rows.Num());
-    auto FilteredView = std::views::all(RowSpan)
+    return RangeHelpers::CreateRange(Rows)
         | std::views::filter([](const FItem* Item) { return Item->IsPokeBall(); })
-        | std::views::transform([](const FItem* Item) { return Item->ID; });
-    
-    TArray<FName> Ret;
-    for (FName Name : FilteredView) {
-        Ret.Add(Name);
-    }
-    return Ret;
+        | std::views::transform([](const FItem* Item) { return Item->ID; })
+        | RangeHelpers::TToArray<FName>();
     
 }
 
