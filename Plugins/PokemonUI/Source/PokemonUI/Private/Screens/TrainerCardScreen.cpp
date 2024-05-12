@@ -6,6 +6,7 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Primatives/DisplayText.h"
+#include "Utilities/PokemonUIUtils.h"
 
 void UTrainerCardScreen::NativeConstruct() {
     Super::NativeConstruct();
@@ -32,7 +33,7 @@ void UTrainerCardScreen::SetTrainerSprite() {
 
 void UTrainerCardScreen::SetTrainerInfo() {
     TrainerNameText->SetText(Trainer->GetTrainerName());
-    IDText->SetText(FText::FromString(FString::FromInt(Trainer->GetIdNumber())));
+    IDText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(Trainer->GetIdNumber(), IdNumberLength)));
     SetPlayerTimeInfo(PlayerMetadata->GetTotalPlaytime());
     AdventureStartedText->SetText(FText::AsDate(PlayerMetadata->GetStartDate()));
 

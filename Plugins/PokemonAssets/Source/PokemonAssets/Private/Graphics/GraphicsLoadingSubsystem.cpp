@@ -108,7 +108,7 @@ std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetT
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
 
-TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TArrayView<FName> Types) const {
+TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView<FName> Types) const {
     auto Repo = GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository();
     TArray<UObject*> Ret;
     Algo::Transform(Types, Ret, [Repo](FName Type) {

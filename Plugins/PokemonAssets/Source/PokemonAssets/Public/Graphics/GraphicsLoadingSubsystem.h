@@ -89,7 +89,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
-    TArray<UObject*> GetTypeIconGraphics(TArrayView<FName> Types) const;
+    TArray<UObject*> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
 
     UObject* GetPokeBallIcon(FName PokeBall) const;
 
