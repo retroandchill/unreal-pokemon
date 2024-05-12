@@ -1,20 +1,24 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "AssetAssignmentSubsystem.h"
+#include "AssetAssignmentSettings.h"
 #include "AssetRegistry/AssetRegistryModule.h"
-#include "PokemonAssetsSettings.h"
 #include "Repositories/AssetRepository.h"
+#include "Repositories/StaticImageRepository.h"
+#include "Repositories/TextureRepository.h"
+#include "Settings/AssetLoaderSettings.h"
 
 void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    auto Settings = GetDefault<UPokemonAssetsSettings>();
-    AssetRepositories.Emplace(Settings->GetPokemonSpritePackageName(), Settings->GetPokemonSpriteRepository().TryLoad());
-    AssetRepositories.Emplace(Settings->GetTrainerSpritesPackageName(),
-                              Settings->GetTrainerFrontSpriteRepository().TryLoad());
-    AssetRepositories.Emplace(Settings->GetTypeIconsPackageName(), Settings->GetTypeIconRepository().TryLoad());
-    AssetRepositories.Emplace(Settings->GetStatusIconsPackageName(), Settings->GetStatusIconRepository().TryLoad());
-    AssetRepositories.Emplace(Settings->GetSummaryBallPackageName(), Settings->GetSummaryBallRepository().TryLoad());
+    auto AssetAssignmentSettings = GetDefault<UAssetAssignmentSettings>();
+    auto AssetLoaderSettings = GetDefault<UAssetLoaderSettings>();
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetPokemonSpritePackageName(), AssetLoaderSettings->GetPokemonSpriteRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetTrainerSpritesPackageName(),
+                              AssetLoaderSettings->GetTrainerFrontSpriteRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetTypeIconsPackageName(), AssetLoaderSettings->GetTypeIconRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetStatusIconsPackageName(), AssetLoaderSettings->GetStatusIconRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(), AssetLoaderSettings->GetSummaryBallRepository());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
         Repository->SetBasePackage(Package.ToString());

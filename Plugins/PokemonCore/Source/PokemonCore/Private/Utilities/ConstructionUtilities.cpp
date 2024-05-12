@@ -3,10 +3,10 @@
 #include "Utilities/ConstructionUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "PokemonCoreSettings.h"
+#include "Settings/DependencyInjectionSettings.h"
 
 TScriptInterface<IPokemon> UConstructionUtilities::CreateNewPokemon(const FPokemonDTO &Data) {
-    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto Settings = GetDefault<UDependencyInjectionSettings>();
     auto PokemonClass = Settings->GetPokemonClass();
     TScriptInterface<IPokemon> Pokemon = NewObject<UObject>(GetTransientPackage(), PokemonClass);
     Pokemon->Initialize(Data);
@@ -15,7 +15,7 @@ TScriptInterface<IPokemon> UConstructionUtilities::CreateNewPokemon(const FPokem
 
 TScriptInterface<IPokemon> UConstructionUtilities::CreateForeignPokemon(const FPokemonDTO &Data,
     const TScriptInterface<ITrainer> &Trainer) {
-    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto Settings = GetDefault<UDependencyInjectionSettings>();
     auto PokemonClass = Settings->GetPokemonClass();
     TScriptInterface<IPokemon> Pokemon = NewObject<UObject>(GetTransientPackage(), PokemonClass);
     Pokemon->Initialize(Data, Trainer);
@@ -24,7 +24,7 @@ TScriptInterface<IPokemon> UConstructionUtilities::CreateForeignPokemon(const FP
 
 TScriptInterface<IStatBlock> UConstructionUtilities::CreateStatBlock(const TScriptInterface<IPokemon> &Owner,
                                                                      const FPokemonDTO &DTO) {
-    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto Settings = GetDefault<UDependencyInjectionSettings>();
     auto Class = Settings->GetStatBlockClass();
     TScriptInterface<IStatBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);
     Ret->Initialize(Owner, DTO);
@@ -33,7 +33,7 @@ TScriptInterface<IStatBlock> UConstructionUtilities::CreateStatBlock(const TScri
 
 TScriptInterface<IMoveBlock> UConstructionUtilities::CreateMoveBlock(const TScriptInterface<IPokemon> &Owner,
                                                                      const FPokemonDTO &DTO) {
-    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto Settings = GetDefault<UDependencyInjectionSettings>();
     auto Class = Settings->GetMoveBlockClass();
     TScriptInterface<IMoveBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);
     Ret->Initialize(DTO);
@@ -42,7 +42,7 @@ TScriptInterface<IMoveBlock> UConstructionUtilities::CreateMoveBlock(const TScri
 
 TScriptInterface<IAbilityBlock> UConstructionUtilities::CreateAbilityBlock(const TScriptInterface<IPokemon> &Owner,
                                                                            const FPokemonDTO &DTO) {
-    auto Settings = GetDefault<UPokemonCoreSettings>();
+    auto Settings = GetDefault<UDependencyInjectionSettings>();
     auto Class = Settings->GetAbilityBlockClass();
     TScriptInterface<IAbilityBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);
     Ret->Initialize(Owner.GetObject(), DTO);

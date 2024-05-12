@@ -3,8 +3,9 @@
 #include "Pokemon/Abilities/DefaultAbilityBlock.h"
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonCoreSettings.h"
 #include "PokemonDataSettings.h"
+#include "Pokemon/PokemonDTO.h"
+#include "Settings/NamingSettings.h"
 #include "Species/Ability.h"
 #include "Species/SpeciesData.h"
 
@@ -36,14 +37,14 @@ FName UDefaultAbilityBlock::GetAbilityID() const {
 FText UDefaultAbilityBlock::GetDisplayName() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
-    return AbilityData != nullptr ? AbilityData->RealName : GetDefault<UPokemonCoreSettings>()->GetNoAbilityText();
+    return AbilityData != nullptr ? AbilityData->RealName : GetDefault<UNamingSettings>()->GetNoAbilityName();
 }
 
 FText UDefaultAbilityBlock::GetAbilityDescription() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
     return AbilityData != nullptr ? AbilityData->Description
-                                  : GetDefault<UPokemonCoreSettings>()->GetNoAbilityDescription();
+                                  : GetDefault<UNamingSettings>()->GetNoAbilityDescription();
 }
 
 int32 UDefaultAbilityBlock::GetAbilityIndex() const {

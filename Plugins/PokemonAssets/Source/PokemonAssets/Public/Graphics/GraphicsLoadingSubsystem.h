@@ -3,18 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SpriteMaterials.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "GraphicsLoadingSubsystem.generated.h"
 
+struct FTrainerSpriteSettings;
+struct FPokemonSpriteSettings;
 class UStaticImageRepository;
 class UTextureRepository;
 class ITrainer;
 class IPokemon;
 
 USTRUCT(BlueprintType)
-struct FPokemonAssetParams {
+struct POKEMONASSETS_API FPokemonAssetParams {
     GENERATED_BODY()
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites, meta = (UIMin = 0, ClampMin = 0))
@@ -82,63 +85,9 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     UObject* GetPokeBallIcon(FName PokeBall) const;
 
   private:
-    /**
-     * The base material used to construct Pokémon battle sprites
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Icons")
-    TObjectPtr<UMaterialInterface> PokemonIconsBaseMaterial;
-    
-    /**
-     * The name of the package that contains the Pokémon Icon graphics
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    TSoftObjectPtr<UTextureRepository> PokemonSpriteRepository;
-    
-    /**
-     * The name of the package that contains the Pokémon Icon graphics
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    TSoftObjectPtr<UTextureRepository> PokemonIconsRepository;
+    UPROPERTY()
+    FPokemonSpriteMaterials PokemonSpriteMaterials;
 
-    /**
-     * The name of the package that contains the Trainer Sprite graphics
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    TSoftObjectPtr<UTextureRepository> TrainerSpritesRepository;
-
-    /**
-     * The name of the package that contains the Trainer Sprite graphics
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    TSoftObjectPtr<UStaticImageRepository> TypeIconRepository;
-    
-    /**
-     * The name of the package that contains the Summary Ball graphics
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Search Paths")
-    TSoftObjectPtr<UStaticImageRepository> SummaryBallRepository;
-
-    /**
-     * The name of the material property for the source texture of the icons
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Icons")
-    FName IconSourceTexturePropertyName;
-
-    /**
-     * The name of the material property for the framerate of the icon animation
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Icons")
-    FName IconFrameRatePropertyName;
-
-    /**
-     * The base material used to construct Trainer sprites in the UI
-     */
-    UPROPERTY(EditDefaultsOnly, DisplayName = "Trainer Sprite Base Material (UI)", Category = "Trainers")
-    TObjectPtr<UMaterialInterface> TrainerSpriteBaseMaterial;
-
-    /**
-     * The name of the material property for the source texture of the trainer sprites
-     */
-    UPROPERTY(EditDefaultsOnly, Category = "Trainers")
-    FName TrainerSpriteSourceTexturePropertyName = TEXT("SourceTexture");
+    UPROPERTY()
+    FTrainerSpriteMaterials TrainerSpriteMaterials;
 };

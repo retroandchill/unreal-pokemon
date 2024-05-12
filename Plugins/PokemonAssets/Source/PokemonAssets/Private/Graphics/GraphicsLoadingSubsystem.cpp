@@ -1,19 +1,102 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "AssetRegistry/AssetRegistryModule.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonAssetsSettings.h"
-#include "Algo/Unique.h"
 #include "Repositories/StaticImageRepository.h"
 #include "Repositories/TextureRepository.h"
+#include "Settings/AssetLoaderSettings.h"
+#include "Settings/SpriteMaterialSettings.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 
 #include <cmath>
 
-TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
+static TArray<FName> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params, FStringView Subfolder);
+
+void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+    Super::Initialize(Collection);
+
+    auto SpriteMaterialSettings = GetDefault<USpriteMaterialSettings>();
+    PokemonSpriteMaterials = SpriteMaterialSettings->GetPokemonSpriteSettings();
+    TrainerSpriteMaterials = SpriteMaterialSettings->GetTrainerSpriteSettings();
+}
+
+TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon,
+    UObject *Outer, bool bBack) {
+    return GetPokemonBattleSprite(Pokemon.GetSpecies().ID, Outer, bBack, {
+        .Gender = Pokemon.GetGender(),
+        .bShiny = Pokemon.IsShiny()
+    });
+}
+
+TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species,
+    UObject *Outer, bool bBack, const FPokemonAssetParams &AdditionalParams) {
+    auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams,
+        bBack ? TEXT("Back") : TEXT("Front"));
+    auto Texture = GetDefault<UAssetLoaderSettings>()->GetPokemonSpriteRepository()->ResolveAsset(SpriteResolutionList);
+    if (Texture == nullptr) {
+        return {nullptr, FVector2D()};
+    }
+
+    static FName SourceTexture = "SourceTexture";
+    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.Get(), Outer);
+    Material->SetTextureParameterValue(SourceTexture, Texture);
+    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+}
+
+UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon &Pokemon, UObject *Outer) {
+    return GetPokemonIcon(Pokemon.GetSpecies().ID, Outer, {
+        .Gender = Pokemon.GetGender()
+    });
+}
+
+UMaterialInstanceDynamic * UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species, UObject *Outer,
+    const FPokemonAssetParams &AdditionalParams) {
+    auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
+    auto Texture = GetDefault<UAssetLoaderSettings>()->GetPokemonSpriteRepository()->ResolveAsset(SpriteResolutionList);
+    if (Texture == nullptr) {
+        return nullptr;
+    }
+
+    static FName SourceTexture = "SourceTexture";
+    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.IconMaterial.Get(), Outer);
+    Material->SetTextureParameterValue(SourceTexture, Texture);
+    return Material;
+}
+
+TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
+                                                                                         UObject *Outer) const {
+    return GetTrainerSprite(Trainer.GetTrainerType().ID, Outer);
+}
+
+TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
+                                                                                         UObject *Outer) const {
+    auto Texture = GetDefault<UAssetLoaderSettings>()->GetTrainerFrontSpriteRepository()->FetchAsset(TrainerType);
+    if (Texture == nullptr) {
+        return {nullptr, FVector2D()};
+    }
+
+    static FName SourceTexture = "SourceTexture";
+    auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteMaterials.FrontSpriteBaseMaterialUI.Get(), Outer);
+    Material->SetTextureParameterValue(SourceTexture, Texture);
+    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+}
+
+TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TArrayView<FName> Types) const {
+    auto Repo = GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository();
+    TArray<UObject*> Ret;
+    Algo::Transform(Types, Ret, [Repo](FName Type) {
+        return Repo->FetchAsset(Type);
+    });
+    return Ret;
+}
+
+UObject * UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
+    return GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository()->FetchAsset(PokeBall);
+}
+
+static TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
     const FPokemonAssetParams &Params, FStringView Subfolder) {
     auto SubfolderString = FString::Format(TEXT("{0}/"), {Subfolder});
     auto ShinyExtension = FString::Format(TEXT("{0}Shiny/"), {Subfolder});
@@ -41,7 +124,7 @@ TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
         FStringView TryForm;
         FStringView TryGender;
         FStringView TryShadow;
-        FStringView TrySubfolder;
+        FStringView TrySubfolder = SubfolderString;
         for (int j = 0; j < Factors.Num(); j++) {
             auto &[FactorIndex, Extension, Fallback] = Factors[j];
             auto TestValue = i / static_cast<int32>(std::pow(2, j)) % 2 == 0 ? Extension : Fallback;
@@ -80,92 +163,4 @@ TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
         Ret.Emplace(*Name);
     }
     return Ret;
-}
-
-void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
-    Super::Initialize(Collection);
-
-    auto Settings = GetDefault<UPokemonAssetsSettings>();
-    PokemonIconsRepository = Settings->GetPokemonSpriteRepository();
-    PokemonIconsBaseMaterial = Cast<UMaterialInterface>(Settings->GetPokemonIconsBaseMaterial().TryLoad());
-    IconSourceTexturePropertyName = Settings->GetIconSourceTexturePropertyName();
-    IconFrameRatePropertyName = Settings->GetIconFrameRatePropertyName();
-
-    TrainerSpritesRepository = Settings->GetTrainerFrontSpriteRepository();
-    TrainerSpriteBaseMaterial = Cast<UMaterialInterface>(Settings->GetTrainerSpriteBaseMaterial().TryLoad());
-    TrainerSpriteSourceTexturePropertyName = Settings->GetTrainerSpriteSourceTexturePropertyName();
-
-    TypeIconRepository = Settings->GetTypeIconRepository();
-    SummaryBallRepository = Settings->GetSummaryBallRepository();
-}
-
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon,
-    UObject *Outer, bool bBack) {
-    return GetPokemonBattleSprite(Pokemon.GetSpecies().ID, Outer, bBack, {
-        .Gender = Pokemon.GetGender(),
-        .bShiny = Pokemon.IsShiny()
-    });
-}
-
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species,
-    UObject *Outer, bool bBack, const FPokemonAssetParams &AdditionalParams) {
-    auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams,
-        bBack ? TEXT("Back") : TEXT("Front"));
-    auto Texture = PokemonIconsRepository.Get()->ResolveAsset(SpriteResolutionList);
-    if (Texture == nullptr) {
-        return {nullptr, FVector2D()};
-    }
-
-    auto Material = UMaterialInstanceDynamic::Create(PokemonIconsBaseMaterial, Outer);
-    Material->SetTextureParameterValue(IconSourceTexturePropertyName, Texture);
-    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
-}
-
-UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon &Pokemon, UObject *Outer) {
-    return GetPokemonIcon(Pokemon.GetSpecies().ID, Outer, {
-        .Gender = Pokemon.GetGender()
-    });
-}
-
-UMaterialInstanceDynamic * UGraphicsLoadingSubsystem::GetPokemonIcon(FName Species, UObject *Outer,
-    const FPokemonAssetParams &AdditionalParams) {
-    auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
-    auto Texture = PokemonIconsRepository.Get()->ResolveAsset(SpriteResolutionList);
-    if (Texture == nullptr) {
-        return nullptr;
-    }
-
-    auto Material = UMaterialInstanceDynamic::Create(PokemonIconsBaseMaterial, Outer);
-    Material->SetTextureParameterValue(IconSourceTexturePropertyName, Texture);
-    return Material;
-}
-
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
-                                                                                         UObject *Outer) const {
-    return GetTrainerSprite(Trainer.GetTrainerType().ID, Outer);
-}
-
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
-                                                                                         UObject *Outer) const {
-    auto Texture = TrainerSpritesRepository.Get()->FetchAsset(TrainerType);
-    if (Texture == nullptr) {
-        return {nullptr, FVector2D()};
-    }
-
-    auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteBaseMaterial, Outer);
-    Material->SetTextureParameterValue(TrainerSpriteSourceTexturePropertyName, Texture);
-    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
-}
-
-TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TArrayView<FName> Types) const {
-    auto Repo = TypeIconRepository.Get();
-    TArray<UObject*> Ret;
-    Algo::Transform(Types, Ret, [Repo](FName Type) {
-        return Repo->FetchAsset(Type);
-    });
-    return Ret;
-}
-
-UObject * UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
-    return SummaryBallRepository.Get()->FetchAsset(PokeBall);
 }

@@ -12,7 +12,7 @@ TArray<FName> UStatHelper::GetMainStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
     return RangeHelpers::CreateRange(Stats)
-        | std::views::filter([](const FStat *Stat) { return Stat->Type == EPokemonStatType::Battle; })
+        | std::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Battle; })
         | std::views::transform([](const FStat *Stat) { return Stat->ID; })
         | RangeHelpers::TToArray<FName>();
 }

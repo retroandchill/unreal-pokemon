@@ -2,10 +2,10 @@
 #include "Pokemon/GamePokemon.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "PokemonCoreSettings.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Settings/PokemonSettings.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/ConstructionUtilities.h"
@@ -26,7 +26,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     if (DTO.PokeBall.IsSet()) {
         PokeBall = *DTO.PokeBall;
     } else {
-        PokeBall = GetDefault<UPokemonCoreSettings>()->GetDefaultPokeBall();
+        PokeBall = GetDefault<UPokemonSettings>()->GetDefaultPokeBall();
     }
     
     if (Trainer != nullptr) {
@@ -64,7 +64,7 @@ bool UGamePokemon::IsShiny() const {
     uint32 B = A & 0xFFFF;
     uint32 C = (A >> 16) & 0xFFFF;
     uint32 D = B ^ C;
-    return D < GetDefault<UPokemonCoreSettings>()->GetShinyChance();
+    return D < GetDefault<UPokemonSettings>()->GetShinyChance();
 }
 
 int32 UGamePokemon::GetCurrentHP() const {
