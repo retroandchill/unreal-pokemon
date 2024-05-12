@@ -69,9 +69,14 @@ void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index
 }
 
 void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
-    auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
-    check(Handler != nullptr)
-    Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
+    static FName Cancel = "Cancel";
+    if (SelectedCommand->GetID() == Cancel) {
+        OnCommandWindowCancel();
+    } else {
+        auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
+        check(Handler != nullptr)
+        Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
+    }
 }
 
 void UPokemonSelectScreen::OnCommandWindowCancel() {
