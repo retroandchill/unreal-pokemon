@@ -49,6 +49,13 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
     const FString &GetSummaryBallPackageName() const;
 
+    /**
+     * Get the name of the package that contains the item icon graphics
+     * @return The name of the package that contains the item icon graphics
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
+    const FString &GetItemIconPackageName() const;
+
 private:
     /**
      * The name of the package that contains the Pokémon Icon graphics
@@ -79,5 +86,11 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetSummaryBallPackageName, Category = "Search Paths")
     FString SummaryBallPackageName;
+
+    /**
+     * The name of the package that contains the item icon graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetItemIconPackageName, Category = "Search Paths")
+    FString ItemIconPackageName;
 
 };

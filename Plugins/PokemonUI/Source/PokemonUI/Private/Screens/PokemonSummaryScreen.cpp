@@ -3,6 +3,7 @@
 
 #include "Screens/PokemonSummaryScreen.h"
 #include "Components/Image.h"
+#include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
@@ -23,6 +24,7 @@ void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<I
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
     NameInfo->Refresh(Pokemon);
+    ItemInfo->Refresh(Pokemon);
     SummaryPages->Refresh(Pokemon);
 
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();

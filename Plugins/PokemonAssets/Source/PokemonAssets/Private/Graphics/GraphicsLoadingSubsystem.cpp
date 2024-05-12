@@ -123,8 +123,15 @@ UObject * UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     return Asset != nullptr ? Asset : Repository->FetchAsset(GetDefault<UPokemonSettings>()->GetDefaultPokeBall());
 }
 
+UObject * UGraphicsLoadingSubsystem::GetItemIcon(FName ItemID) const {
+    static FName DefaultItem = "000";
+    auto Repository = GetDefault<UAssetLoaderSettings>()->GetItemIconRepository();
+    auto Asset = Repository->FetchAsset(ItemID);
+    return Asset != nullptr ? Asset : Repository->FetchAsset(DefaultItem);
+}
+
 static TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
-    const FPokemonAssetParams &Params, FStringView Subfolder) {
+                                                       const FPokemonAssetParams &Params, FStringView Subfolder) {
     auto SubfolderString = FString::Format(TEXT("{0}/"), {Subfolder});
     auto ShinyExtension = FString::Format(TEXT("{0}Shiny/"), {Subfolder});
     auto FormExtension = FString::Format(TEXT("_{0}"), {{Params.Form}});

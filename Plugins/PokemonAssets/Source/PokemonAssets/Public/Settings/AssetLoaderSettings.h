@@ -47,6 +47,12 @@ class POKEMONASSETS_API UAssetLoaderSettings : public UDeveloperSettings {
      */
     UStaticImageRepository *GetSummaryBallRepository() const;
 
+    /**
+     * Get the path to the repository data asset used to get the item icons used in the bag and summary screen.
+     * @return The path to the repository data asset used to get the item icons used in the bag and summary screen.
+     */
+    UStaticImageRepository *GetItemIconRepository() const;
+
   private:
     /**
      * The path to the repository data asset used to get the icons.
@@ -77,4 +83,10 @@ class POKEMONASSETS_API UAssetLoaderSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath SummaryBallRepository;
+
+    /**
+     * The path to the repository data asset used to get the item icons used in the bag and summary screen.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    FSoftObjectPath ItemIconRepository;
 };

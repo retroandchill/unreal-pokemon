@@ -87,6 +87,12 @@ private:
     TObjectPtr<UProgressBar> ExpBar;
 
     /**
+     * The length of the Pokémon's Pokédex number
+     */
+    UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
+    int32 PokedexNumberLength = 3;
+
+    /**
      * The length of the Pokémon's ID number
      */
     UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))

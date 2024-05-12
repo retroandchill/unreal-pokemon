@@ -6,6 +6,7 @@
 #include "Screens/Screen.h"
 #include "PokemonSummaryScreen.generated.h"
 
+class UHoldItemInfo;
 class IPokemon;
 class USummaryPages;
 class USummaryNameInfo;
@@ -31,6 +32,12 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USummaryNameInfo> NameInfo;
+
+    /**
+     * The widget containing the item information
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UHoldItemInfo> ItemInfo;
 
     /**
      * The widget that displays the Pokémon sprite

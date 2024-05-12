@@ -22,3 +22,7 @@ const FString & UAssetAssignmentSettings::GetStatusIconsPackageName() const {
 const FString & UAssetAssignmentSettings::GetSummaryBallPackageName() const {
     return SummaryBallPackageName;
 }
+
+const FString & UAssetAssignmentSettings::GetItemIconPackageName() const {
+    return ItemIconPackageName;
+}

@@ -23,3 +23,7 @@ UStaticImageRepository *UAssetLoaderSettings::GetStatusIconRepository() const {
 UStaticImageRepository *UAssetLoaderSettings::GetSummaryBallRepository() const {
     return CastChecked<UStaticImageRepository>(SummaryBallRepository.TryLoad());
 }
+
+UStaticImageRepository * UAssetLoaderSettings::GetItemIconRepository() const {
+    return CastChecked<UStaticImageRepository>(ItemIconRepository.TryLoad());
+}

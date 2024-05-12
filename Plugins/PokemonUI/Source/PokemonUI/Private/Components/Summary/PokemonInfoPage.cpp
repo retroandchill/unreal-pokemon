@@ -2,6 +2,7 @@
 
 
 #include "Components/Summary/PokemonInfoPage.h"
+#include "DataManager.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/ProgressBar.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
@@ -18,9 +19,10 @@
 void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::RefreshInfo_Implementation(Pokemon);
 
-    // TODO: Handle the Pokédex number
-
+    // TODO: Handle the regional Pokédex number
     auto &Species = Pokemon->GetSpecies();
+    auto Names = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetDataTable()->GetRowNames();
+    PokemonNumberText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(Names.IndexOfByKey(Species.ID), PokedexNumberLength)));
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();

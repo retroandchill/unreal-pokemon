@@ -19,6 +19,7 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     AssetRepositories.Emplace(AssetAssignmentSettings->GetTypeIconsPackageName(), AssetLoaderSettings->GetTypeIconRepository());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetStatusIconsPackageName(), AssetLoaderSettings->GetStatusIconRepository());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(), AssetLoaderSettings->GetSummaryBallRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetItemIconPackageName(), AssetLoaderSettings->GetItemIconRepository());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
         Repository->SetBasePackage(Package.ToString());

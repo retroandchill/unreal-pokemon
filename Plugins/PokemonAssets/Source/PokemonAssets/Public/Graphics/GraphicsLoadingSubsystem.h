@@ -93,6 +93,8 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
 
     UObject* GetPokeBallIcon(FName PokeBall) const;
 
+    UObject* GetItemIcon(FName ItemID) const;
+
   private:
     UPROPERTY()
     FPokemonSpriteMaterials PokemonSpriteMaterials;
