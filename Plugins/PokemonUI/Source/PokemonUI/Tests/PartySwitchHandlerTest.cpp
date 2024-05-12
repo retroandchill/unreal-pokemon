@@ -21,7 +21,13 @@ class FMockScreen : public IPartyScreen {
     void SetHelpText(const FText &Text) override {
     }
 
+    ARPGPlayerController &GetPlayerController() override {
+        return *PlayerController;
+    }
+
     TOptional<int32> SwitchIndex;
+
+    ARPGPlayerController* PlayerController = nullptr;
 };
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Unit Tests.UI.PartySwitchHandlerTest",

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
+#include "Mainpulation/CircularIterator.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
 
@@ -136,3 +137,8 @@ class POKEMONCORE_API IPokemon {
     UFUNCTION(BlueprintCallable, Category = Trainer)
     virtual const FOwnerInfo &GetOwnerInfo() const = 0;
 };
+
+/**
+ * Circular iterator specifically for Pokémon in the party or a box
+ */
+using FPokemonIterator = TCircularIterator<TScriptInterface<IPokemon>>;

@@ -49,6 +49,14 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     
     std::pair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
 
+    
+
+    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonUISprite(
+        const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
+
+    
+    std::pair<UMaterialInstanceDynamic*, FVector2D> GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
+
     /**
      * Get the icon based upon the Pokémon that was passed in.
      * @param Pokemon The Pokémon to get the icon for

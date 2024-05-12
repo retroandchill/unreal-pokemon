@@ -34,6 +34,10 @@ void UPokemonSelectScreen::SetHelpText(const FText &Text) {
     CommandHelpWindow->SetText(Text);
 }
 
+ARPGPlayerController &UPokemonSelectScreen::GetPlayerController() {
+    return *CastChecked<ARPGPlayerController>(GetOwningPlayer());
+}
+
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
     if (auto &Trainer = *UPokemonSubsystem::GetInstance().GetPlayer(); Index < Trainer.GetParty().Num()) {
         if (SelectionPane->IsSwitching()) {

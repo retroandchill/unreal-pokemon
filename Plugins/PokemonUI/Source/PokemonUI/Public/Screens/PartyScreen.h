@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 
+class ARPGPlayerController;
 /**
  * Generic screen class for any screens shown to the player
  */
@@ -23,4 +24,7 @@ class POKEMONUI_API IPartyScreen {
      * @param Text The new text for the help window
      */
     virtual void SetHelpText(const FText &Text) = 0;
+
+    virtual ARPGPlayerController& GetPlayerController() = 0;
+    
 };

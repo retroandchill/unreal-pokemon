@@ -7,6 +7,7 @@
 
 #include "SummaryHandler.generated.h"
 
+class UPokemonSummaryScreen;
 /**
  * The handler for showing a summary for a Pokémon
  */
@@ -16,4 +17,8 @@ class POKEMONUI_API USummaryHandler : public UPartyMenuHandler {
 
   public:
     void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) override;
+
+private:
+    UPROPERTY(EditAnywhere, Category = Screens)
+    TSubclassOf<UPokemonSummaryScreen> SummaryScreenClass;
 };

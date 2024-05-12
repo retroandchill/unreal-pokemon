@@ -192,13 +192,13 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
     UFUNCTION(BlueprintNativeEvent, Category = Selection)
     int32 GetNextIndex(ECursorDirection Direction);
 
-  private:
     /**
      * Function called when the cursor is moved
      * @param Direction The received cursor input
      */
-    void ReceiveMoveCursor(ECursorDirection Direction);
+    virtual void ReceiveMoveCursor(ECursorDirection Direction);
 
+private:
     /**
      * The delegate bound to confirm
      */

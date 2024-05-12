@@ -13,7 +13,7 @@ class UImage;
 /**
  * Screen for displaying a Pokémon's summary.
  */
-UCLASS()
+UCLASS(Abstract)
 class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     GENERATED_BODY()
 
@@ -21,9 +21,11 @@ protected:
     void NativeConstruct() override;
     
 public:
-    void SetPokemon(const TScriptInterface<IPokemon>& Pokemon);
+    void SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex);
 
 private:
+    void SetPokemon(const TScriptInterface<IPokemon>& Pokemon);
+    
     /**
      * The widget containing the name information
      */

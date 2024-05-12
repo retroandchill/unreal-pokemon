@@ -21,7 +21,7 @@ public:
      * @param DataIn The input data to manage
      * @param InitialIndex The initial index to set the iterator to
      */
-    explicit TCircularIterator(TArrayView<T> DataIn, int32 InitialIndex = 0) : Data(DataIn), CurrentIndex(InitialIndex) {
+    explicit TCircularIterator(TConstArrayView<T> DataIn, int32 InitialIndex = 0) : Data(DataIn), CurrentIndex(InitialIndex) {
         check(Data.Num() > CurrentIndex && CurrentIndex >= 0)
         
     }
@@ -30,7 +30,7 @@ public:
      * Dereference the data at the current index.
      * @return A reference to the current index
      */
-    T& operator*() const {
+    const T& operator*() const {
         check(Data.Num() > CurrentIndex && CurrentIndex >= 0)
         return Data[CurrentIndex];
     }
@@ -39,7 +39,7 @@ public:
      * Dereference the data at the current index.
      * @return A pointer to the current index
      */
-    T *operator->() const {
+    const T *operator->() const {
         check(Data.Num() > CurrentIndex && CurrentIndex >= 0)
         return &Data[CurrentIndex];
     }
@@ -134,7 +134,7 @@ private:
     /**
      * A reference to the contained data.
      */
-    TArrayView<T> Data;
+    TConstArrayView<T> Data;
 
     /**
      * The current index of the iterator.

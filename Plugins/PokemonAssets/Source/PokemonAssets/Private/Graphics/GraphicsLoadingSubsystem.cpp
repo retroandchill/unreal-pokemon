@@ -5,6 +5,7 @@
 #include "Repositories/StaticImageRepository.h"
 #include "Repositories/TextureRepository.h"
 #include "Settings/AssetLoaderSettings.h"
+#include "Settings/PokemonSettings.h"
 #include "Settings/SpriteMaterialSettings.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
@@ -44,6 +45,29 @@ std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetP
     auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.Get(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+}
+
+std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonUISprite(const IPokemon &Pokemon,
+    UObject *Outer, bool bBack) const {
+        return GetPokemonUISprite(Pokemon.GetSpecies().ID, Outer, bBack, {
+            .Gender = Pokemon.GetGender(),
+            .bShiny = Pokemon.IsShiny()
+        });
+}
+
+std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonUISprite(FName Species,
+    UObject *Outer, bool bBack, const FPokemonAssetParams &AdditionalParams) const {
+        auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams,
+            bBack ? TEXT("Back") : TEXT("Front"));
+        auto Texture = GetDefault<UAssetLoaderSettings>()->GetPokemonSpriteRepository()->ResolveAsset(SpriteResolutionList);
+        if (Texture == nullptr) {
+            return {nullptr, FVector2D()};
+        }
+
+        static FName SourceTexture = "SourceTexture";
+        auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.UISpritesMaterial.Get(), Outer);
+        Material->SetTextureParameterValue(SourceTexture, Texture);
+        return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
 
 UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon &Pokemon, UObject *Outer) {
@@ -94,7 +118,9 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TArrayView<FNam
 }
 
 UObject * UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
-    return GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository()->FetchAsset(PokeBall);
+    auto Repository = GetDefault<UAssetLoaderSettings>()->GetSummaryBallRepository();
+    auto Asset = Repository->FetchAsset(PokeBall);
+    return Asset != nullptr ? Asset : Repository->FetchAsset(GetDefault<UPokemonSettings>()->GetDefaultPokeBall());
 }
 
 static TArray<FName> CreatePokemonSpriteResolutionList(FName Species,
