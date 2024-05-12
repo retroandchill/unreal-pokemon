@@ -7,6 +7,12 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Windows/SummaryPages.h"
 
+void UPokemonSummaryScreen::NativeConstruct() {
+    Super::NativeConstruct();
+
+    
+}
+
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
     NameInfo->Refresh(Pokemon);
     SummaryPages->Refresh(Pokemon);

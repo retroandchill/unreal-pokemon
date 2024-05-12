@@ -17,6 +17,9 @@ UCLASS()
 class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     GENERATED_BODY()
 
+protected:
+    void NativeConstruct() override;
+    
 public:
     void SetPokemon(const TScriptInterface<IPokemon>& Pokemon);
 
