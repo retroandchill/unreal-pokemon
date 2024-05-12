@@ -43,10 +43,11 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    TPair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(const IPokemon& Pokemon, UObject *Outer,  bool bBack = false);
+    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonBattleSprite(
+        const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
 
     
-    TPair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {});
+    std::pair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -70,7 +71,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
-    TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const;
+    std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const;
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -78,7 +79,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite
      */
-    TPair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
+    std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
     TArray<UObject*> GetTypeIconGraphics(TArrayView<FName> Types) const;
 

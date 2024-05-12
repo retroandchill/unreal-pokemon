@@ -22,16 +22,17 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     TrainerSpriteMaterials = SpriteMaterialSettings->GetTrainerSpriteSettings();
 }
 
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon,
-    UObject *Outer, bool bBack) {
+std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(
+    const IPokemon &Pokemon,
+    UObject *Outer, bool bBack) const {
     return GetPokemonBattleSprite(Pokemon.GetSpecies().ID, Outer, bBack, {
         .Gender = Pokemon.GetGender(),
         .bShiny = Pokemon.IsShiny()
     });
 }
 
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species,
-    UObject *Outer, bool bBack, const FPokemonAssetParams &AdditionalParams) {
+std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species,
+    UObject *Outer, bool bBack, const FPokemonAssetParams &AdditionalParams) const {
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams,
         bBack ? TEXT("Back") : TEXT("Front"));
     auto Texture = GetDefault<UAssetLoaderSettings>()->GetPokemonSpriteRepository()->ResolveAsset(SpriteResolutionList);
@@ -65,12 +66,12 @@ UMaterialInstanceDynamic * UGraphicsLoadingSubsystem::GetPokemonIcon(FName Speci
     return Material;
 }
 
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
+std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
                                                                                          UObject *Outer) const {
     return GetTrainerSprite(Trainer.GetTrainerType().ID, Outer);
 }
 
-TPair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
+std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
                                                                                          UObject *Outer) const {
     auto Texture = GetDefault<UAssetLoaderSettings>()->GetTrainerFrontSpriteRepository()->FetchAsset(TrainerType);
     if (Texture == nullptr) {
