@@ -1,11 +1,14 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Primatives/DisplayText.h"
+#include "Components/RichTextBlock.h"
 #include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
+#include "Data/RPGMenusSettings.h"
 #include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
 
-UDisplayText::UDisplayText(const FObjectInitializer &ObjectInitializer) : UUserWidget(ObjectInitializer) {
+UDisplayText::UDisplayText(const FObjectInitializer &ObjectInitializer)
+    : UUserWidget(ObjectInitializer), TextStyles(GetDefault<URPGMenusSettings>()->GetTextStyleDataTable()) {
 }
 
 TSharedRef<SWidget> UDisplayText::RebuildWidget() {
@@ -21,9 +24,30 @@ void UDisplayText::SynchronizeProperties() {
 
 void UDisplayText::SetTextInfo() {
     if (DisplayTextWidget != nullptr) {
+        DisplayTextWidget->SetTextStyleSet(TextStyles);
         DisplayTextWidget->SetText(InitialText);
-        DisplayTextWidget->SetFont(DisplayFont);
-        DisplayTextWidget->SetColorAndOpacity(TextColor);
+
+        DisplayTextWidget->ClearAllDefaultStyleOverrides();
+        auto DefaultTextStyle = DisplayTextWidget->GetDefaultTextStyle();
+        bool bStyleChanged = false;
+        if (DisplayFont.IsSet()) {
+            DefaultTextStyle.Font = DisplayFont.GetValue();
+            bStyleChanged = true;
+        }
+
+        if (TextColor.IsSet()) {
+            DefaultTextStyle.ColorAndOpacity = TextColor.GetValue();
+            bStyleChanged = true;
+        }
+
+        if (ShadowColor.IsSet()) {
+            DefaultTextStyle.ShadowColorAndOpacity = ShadowColor.GetValue().GetSpecifiedColor();
+            bStyleChanged = true;
+        }
+
+        if (bStyleChanged) {
+            DisplayTextWidget->SetDefaultTextStyle(DefaultTextStyle);
+        }
 
         if (SizeBox != nullptr) {
             auto TextPadding = GetDisplayTextPadding();
@@ -51,15 +75,14 @@ void UDisplayText::SetText(const FText &NewText) {
     }
 }
 
-const FSlateFontInfo &UDisplayText::GetDisplayFont() const {
-    return DisplayFont;
-}
-
 void UDisplayText::SetTextColor(const FSlateColor &Color) {
     TextColor = Color;
+    SetTextInfo();
+}
 
-    check(DisplayTextWidget != nullptr)
-    DisplayTextWidget->SetColorAndOpacity(TextColor);
+void UDisplayText::SetShadowColor(const FSlateColor &Color) {
+    ShadowColor = Color;
+    SetTextInfo();
 }
 
 FVector2D UDisplayText::GetTextSize() const {
@@ -70,7 +93,8 @@ FVector2D UDisplayText::GetTextSize() const {
 FVector2D UDisplayText::GetTextSize(const FString &Text) const {
     check(DisplayTextWidget != nullptr)
     auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-    FVector2D Size = FontMeasure->Measure(Text, DisplayFont, UWidgetUtilities::GetWidgetDPIScale());
+    FVector2D Size = FontMeasure->Measure(Text, DisplayTextWidget->GetCurrentDefaultTextStyle().Font,
+                                          UWidgetUtilities::GetWidgetDPIScale());
     return Size;
 }
 
@@ -83,6 +107,6 @@ void UDisplayText::OnTextSet_Implementation(const FText &Text) {
     // No definition needed here in this class
 }
 
-UTextBlock *UDisplayText::GetDisplayTextWidget() const {
+URichTextBlock *UDisplayText::GetDisplayTextWidget() const {
     return DisplayTextWidget;
 }

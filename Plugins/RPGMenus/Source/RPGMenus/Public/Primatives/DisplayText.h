@@ -6,6 +6,7 @@
 
 #include "DisplayText.generated.h"
 
+class URichTextBlock;
 class USizeBox;
 class UMenuCommand;
 class UTextBlock;
@@ -49,18 +50,18 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
     void SetText(const FText &NewText);
 
     /**
-     * Get the font to be displayed to the player
-     * @return The font to set for the window
-     */
-    UFUNCTION(BlueprintPure, Category = Display, meta = (BlueprintInternalUseOnly = "true"))
-    const FSlateFontInfo &GetDisplayFont() const;
-
-    /**
      * Set the color of the text to the given new color
      * @param Color The new color for the text
      */
-    UFUNCTION(BlueprintCallable, Category = Display, meta = (BlueprintInternalUseOnly = "true"))
+    UFUNCTION(BlueprintCallable, Category = Display)
     void SetTextColor(const FSlateColor &Color);
+
+    /**
+     * Set the color of the text's shadow
+     * @param Color The new shadow color
+     */
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void SetShadowColor(const FSlateColor &Color);
 
     /**
      * Get the size of the current text contained within this widget
@@ -100,7 +101,7 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
      * @return The displayed text widget to the player
      */
     UFUNCTION(BlueprintPure, Category = "Widgets|Text", meta = (BlueprintInternalUseOnly = "true"))
-    UTextBlock *GetDisplayTextWidget() const;
+    URichTextBlock *GetDisplayTextWidget() const;
 
   private:
     UPROPERTY(EditAnywhere, Category = "Widgets|Text")
@@ -110,7 +111,7 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
      * The displayed text widget to the player
      */
     UPROPERTY(meta = (BindWidget), BlueprintGetter = GetDisplayTextWidget, Category = "Widgets|Text")
-    TObjectPtr<UTextBlock> DisplayTextWidget;
+    TObjectPtr<URichTextBlock> DisplayTextWidget;
 
     /**
      * The box used to constrain the size of the widget to a fixed amount
@@ -121,12 +122,21 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
     /**
      * The font to set for the window
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetDisplayFont, Category = Display, meta = (UIMin = 1, ClampMin = 1))
-    FSlateFontInfo DisplayFont;
+    UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
+    TOptional<FSlateFontInfo> DisplayFont;
 
     /**
      * The color of the text to display
      */
-    UPROPERTY(EditAnywhere, BlueprintSetter = SetTextColor, Category = Display)
-    FSlateColor TextColor;
+    UPROPERTY(EditAnywhere, Category = Display)
+    TOptional<FSlateColor> TextColor;
+
+    /**
+     * The color to set for the shadow text
+     */
+    UPROPERTY(EditAnywhere, Category = Display)
+    TOptional<FSlateColor> ShadowColor;
+
+    UPROPERTY(EditAnywhere, Category = Display)
+    TObjectPtr<UDataTable> TextStyles;
 };

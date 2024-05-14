@@ -4,7 +4,6 @@
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
 #include "Primatives/DisplayText.h"
-#include "Text/ShadowedText.h"
 #include "Text/TextColor.h"
 
 enum class EPokemonGender : uint8;
@@ -48,10 +47,7 @@ void UPokemonUIUtils::SetItemTextColor(TObjectPtr<UDisplayText> &TextWidget, con
         return;
 
     TextWidget->SetTextColor(Color.MainColor);
-
-    if (auto ShadowedText = Cast<UShadowedText>(TextWidget); ShadowedText != nullptr) {
-        ShadowedText->SetShadowColor(Color.ShadowColor);
-    }
+    TextWidget->SetShadowColor(Color.ShadowColor);
 }
 
 void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue) {

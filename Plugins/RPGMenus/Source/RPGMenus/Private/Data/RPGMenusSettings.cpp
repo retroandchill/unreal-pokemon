@@ -13,3 +13,7 @@ USoundBase *URPGMenusSettings::GetConfirmSound() const {
 USoundBase *URPGMenusSettings::GetCancelSound() const {
     return Cast<USoundBase>(CancelSound.TryLoad());
 }
+
+UDataTable *URPGMenusSettings::GetTextStyleDataTable() const {
+    return Cast<UDataTable>(TextStyleDataTable.TryLoad());
+}
