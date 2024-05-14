@@ -6,20 +6,37 @@
 #include "Widgets/Text/SRichTextBlock.h"
 #include "RenderDeferredCleanup.h"
 
-template< class ObjectType >
-struct FDeferredDeletor : FDeferredCleanupInterface
+/**
+ * Templated deleter for handling deferred deletion of memory.
+ * @tparam ObjectType The type of object that is being deleted
+ */
+template <class ObjectType>
+struct TDeferredDeleter : FDeferredCleanupInterface
 {
-    explicit FDeferredDeletor(ObjectType* InInnerObjectToDelete) : InnerObjectToDelete(InInnerObjectToDelete) {
+    /**
+     * Construct the deleter object from the memory
+     * @param InInnerObjectToDelete The memory to delete after processing is done
+     */
+    explicit TDeferredDeleter(ObjectType* InInnerObjectToDelete) : InnerObjectToDelete(InInnerObjectToDelete) {
     }
 
 private:
+    /**
+     * Unique pointer around the memory. Used to automatically handle deletion.
+     */
     TUniquePtr<ObjectType> InnerObjectToDelete;
 };
 
+/**
+ * Create a shared pointer with a custom deleter for deferred deleting.
+ * @tparam ObjectType The object type to delete.
+ * @tparam ArgsType The constructor arguments used when initializing the object.
+ * @param Args The constructor arguments
+ * @return The created pointer.
+ */
 template<class ObjectType, typename... ArgsType>
-static TSharedPtr<ObjectType> MakeShareableDeferredCleanup(ArgsType... Args)
-{
-    return MakeShareable(new ObjectType(Args...), [](ObjectType* ObjectToDelete) { BeginCleanup(new FDeferredDeletor<ObjectType>(ObjectToDelete)); });
+static TSharedPtr<ObjectType> MakeShareableDeferredCleanup(ArgsType... Args) {
+    return MakeShareable(new ObjectType(Args...), [](ObjectType* ObjectToDelete) { BeginCleanup(new TDeferredDeleter<ObjectType>(ObjectToDelete)); });
 }
 
 TSharedRef<SWidget> UShadowedRichTextBlock::RebuildWidget() {
@@ -103,7 +120,7 @@ void UShadowedRichTextBlock::GenerateStyleSets() {
     }
 }
 
-void UShadowedRichTextBlock::SetDefaultStyleOverride(FModifiedTextStyle &StyleSet, const FVector2D &ShadowMask) {
+void UShadowedRichTextBlock::SetDefaultStyleOverride(FModifiedTextStyle &StyleSet, const FVector2D &ShadowMask) const {
     StyleSet.DefaultTextStyleOverride = GetDefaultTextStyleOverride();
     StyleSet.DefaultTextStyleOverride.ShadowOffset.X *= ShadowMask.X;
     StyleSet.DefaultTextStyleOverride.ShadowOffset.Y *= ShadowMask.Y;
