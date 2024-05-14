@@ -21,7 +21,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     GENERATED_BODY()
 
   public:
-    void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer>& Trainer) override;
+    void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) override;
 
     UFUNCTION(BlueprintPure, Category = Bio)
     FText GetNickname() const override;
@@ -76,7 +76,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      * @return The created Pokémon
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
-    static UGamePokemon *Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer>& Trainer);
+    static UGamePokemon *Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer);
 
   private:
     /**

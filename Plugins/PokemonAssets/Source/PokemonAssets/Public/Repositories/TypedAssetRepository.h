@@ -46,14 +46,16 @@ class TTypedAssetRepository : public IAssetRepository {
     void SetBasePackage(FStringView PackageName) final {
         BasePackageName = PackageName;
     }
-    
+
     void RegisterAsset(const FAssetData &AssetData) override {
         if (AssetValid(AssetData)) {
             auto FolderName = AssetData.PackagePath.ToString();
             FolderName.RemoveFromStart(BasePackageName);
             FolderName.RemoveFromStart(TEXT("/"));
-            auto AssetName = FolderName.IsEmpty() ? AssetData.AssetName : FName(*FString::Format(TEXT("{0}/{1}"),
-                {FolderName, AssetData.AssetName.ToString()}));
+            auto AssetName =
+                FolderName.IsEmpty()
+                    ? AssetData.AssetName
+                    : FName(*FString::Format(TEXT("{0}/{1}"), {FolderName, AssetData.AssetName.ToString()}));
             auto TrueName = AssetName.ToString();
             auto NamePrefix = GetNamePrefix();
             if (!NamePrefix.IsEmpty() && !TrueName.Contains(NamePrefix)) {
@@ -72,10 +74,10 @@ class TTypedAssetRepository : public IAssetRepository {
 #endif
 
   protected:
-    virtual bool AssetValid(const FAssetData& AssetData) const {
+    virtual bool AssetValid(const FAssetData &AssetData) const {
         return AssetData.GetClass(EResolveClass::Yes) == T::StaticClass();
     }
-    
+
     /**
      * Get the map of names to the actual assets.
      * @return The map of names to the actual assets.
@@ -90,9 +92,8 @@ class TTypedAssetRepository : public IAssetRepository {
 
     virtual FStringView GetNamePrefix() const = 0;
 
-private:
+  private:
 #if WITH_EDITOR
     FString BasePackageName;
 #endif
-    
 };

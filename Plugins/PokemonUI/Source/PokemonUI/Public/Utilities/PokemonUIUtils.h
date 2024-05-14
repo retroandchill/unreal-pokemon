@@ -75,5 +75,5 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      */
     static void SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue);
 
-    static void SetPokemonGenderText(const IPokemon& Pokemon, TObjectPtr<UDisplayText>& TextWidget);
+    static void SetPokemonGenderText(const IPokemon &Pokemon, TObjectPtr<UDisplayText> &TextWidget);
 };

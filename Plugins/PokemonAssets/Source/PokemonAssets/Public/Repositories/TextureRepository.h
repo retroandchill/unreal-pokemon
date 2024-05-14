@@ -14,9 +14,9 @@
 UCLASS()
 class POKEMONASSETS_API UTextureRepository final : public UDataAsset,
 #if CPP
-                                             public TTypedAssetRepository<UTexture2D> {
+                                                   public TTypedAssetRepository<UTexture2D> {
 #else
-                                             public IAssetRepository {
+                                                   public IAssetRepository {
 #endif
     GENERATED_BODY()
 
@@ -26,13 +26,12 @@ class POKEMONASSETS_API UTextureRepository final : public UDataAsset,
     FStringView GetNamePrefix() const override;
 
   private:
-                                                 UPROPERTY(EditAnywhere, Category = Lookup)
-FString NamePrefix;
-                                                 
+    UPROPERTY(EditAnywhere, Category = Lookup)
+    FString NamePrefix;
+
     /**
      * The map of name keys to their corresponding textures
      */
     UPROPERTY(VisibleAnywhere, Category = Lookup)
     TMap<FName, TSoftObjectPtr<UTexture2D>> TextureMap;
-                                                 
 };

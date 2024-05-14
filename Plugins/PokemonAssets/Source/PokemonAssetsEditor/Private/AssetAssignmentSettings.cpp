@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "AssetAssignmentSettings.h"
 
 const FString &UAssetAssignmentSettings::GetPokemonSpritePackageName() const {
@@ -11,18 +10,18 @@ const FString &UAssetAssignmentSettings::GetTrainerSpritesPackageName() const {
     return TrainerSpritesPackageName;
 }
 
-const FString & UAssetAssignmentSettings::GetTypeIconsPackageName() const {
+const FString &UAssetAssignmentSettings::GetTypeIconsPackageName() const {
     return TypeIconsPackageName;
 }
 
-const FString & UAssetAssignmentSettings::GetStatusIconsPackageName() const {
+const FString &UAssetAssignmentSettings::GetStatusIconsPackageName() const {
     return StatusIconsPackageName;
 }
 
-const FString & UAssetAssignmentSettings::GetSummaryBallPackageName() const {
+const FString &UAssetAssignmentSettings::GetSummaryBallPackageName() const {
     return SummaryBallPackageName;
 }
 
-const FString & UAssetAssignmentSettings::GetItemIconPackageName() const {
+const FString &UAssetAssignmentSettings::GetItemIconPackageName() const {
     return ItemIconPackageName;
 }

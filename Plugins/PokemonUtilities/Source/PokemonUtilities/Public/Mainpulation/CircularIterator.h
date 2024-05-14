@@ -10,27 +10,27 @@
  */
 template <typename T>
 class TCircularIterator {
-public:
+  public:
     /**
      * Create an empty iterator.
      */
     explicit TCircularIterator() = default;
-    
+
     /**
      * Construct a new iterator object from the given data and initial index.
      * @param DataIn The input data to manage
      * @param InitialIndex The initial index to set the iterator to
      */
-    explicit TCircularIterator(TConstArrayView<T> DataIn, int32 InitialIndex = 0) : Data(DataIn), CurrentIndex(InitialIndex) {
+    explicit TCircularIterator(TConstArrayView<T> DataIn, int32 InitialIndex = 0)
+        : Data(DataIn), CurrentIndex(InitialIndex) {
         check(Data.Num() > CurrentIndex && CurrentIndex >= 0)
-        
     }
 
     /**
      * Dereference the data at the current index.
      * @return A reference to the current index
      */
-    const T& operator*() const {
+    const T &operator*() const {
         check(Data.Num() > CurrentIndex && CurrentIndex >= 0)
         return Data[CurrentIndex];
     }
@@ -100,7 +100,7 @@ public:
         } else {
             CurrentIndex--;
         }
-        
+
         return *this;
     }
 
@@ -130,7 +130,7 @@ public:
         return Data.Num() > 1;
     }
 
-private:
+  private:
     /**
      * A reference to the contained data.
      */

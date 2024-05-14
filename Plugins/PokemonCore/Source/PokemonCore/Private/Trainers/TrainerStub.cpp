@@ -7,12 +7,15 @@
 TScriptInterface<ITrainer> UTrainerStub::Initialize(FName NewTrainerType, FText NewTrainerName) {
     Super::Initialize(NewTrainerType, NewTrainerName);
 
-    AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "RIOLU", .Level = 10, .Shiny = true, .Item = FName("BLACKBELT")}, this));
+    AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon(
+        {.Species = "RIOLU", .Level = 10, .Shiny = true, .Item = FName("BLACKBELT")}, this));
     AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "SNIVY", .Level = 10}, this));
     AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "TEPIG", .Level = 10}, this));
     AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "OSHAWOTT", .Level = 10}, this));
-    AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "FRILLISH", .Level = 10, .Gender = EPokemonGender::Male}, this));
-    AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "FRILLISH", .Level = 10, .Gender = EPokemonGender::Female}, this));
+    AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon(
+        {.Species = "FRILLISH", .Level = 10, .Gender = EPokemonGender::Male}, this));
+    AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon(
+        {.Species = "FRILLISH", .Level = 10, .Gender = EPokemonGender::Female}, this));
 
     return this;
 }

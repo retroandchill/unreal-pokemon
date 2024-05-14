@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Settings/PokemonSettings.h"
 
 FName UPokemonSettings::GetHPStat() const {

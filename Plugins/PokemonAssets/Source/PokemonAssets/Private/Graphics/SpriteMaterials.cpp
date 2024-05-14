@@ -1,17 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Graphics/SpriteMaterials.h"
 #include "Settings/SpriteMaterialSettings.h"
 
 FPokemonSpriteMaterials::FPokemonSpriteMaterials() = default;
 
-FPokemonSpriteMaterials::FPokemonSpriteMaterials(const FPokemonSpriteSettings &Settings) :
-    BattleSpritesMaterial(Settings.BattleSpritesMaterial), UISpritesMaterial(Settings.UISpritesMaterial),
-    IconMaterial(Settings.IconMaterial) {
+FPokemonSpriteMaterials::FPokemonSpriteMaterials(const FPokemonSpriteSettings &Settings)
+    : BattleSpritesMaterial(Settings.BattleSpritesMaterial), UISpritesMaterial(Settings.UISpritesMaterial),
+      IconMaterial(Settings.IconMaterial) {
 }
 
-FPokemonSpriteMaterials & FPokemonSpriteMaterials::operator=(const FPokemonSpriteSettings &Settings) {
+FPokemonSpriteMaterials &FPokemonSpriteMaterials::operator=(const FPokemonSpriteSettings &Settings) {
     BattleSpritesMaterial = Settings.BattleSpritesMaterial;
     UISpritesMaterial = Settings.UISpritesMaterial;
     IconMaterial = Settings.IconMaterial;
@@ -20,12 +19,12 @@ FPokemonSpriteMaterials & FPokemonSpriteMaterials::operator=(const FPokemonSprit
 
 FTrainerSpriteMaterials::FTrainerSpriteMaterials() = default;
 
-FTrainerSpriteMaterials::FTrainerSpriteMaterials(const FTrainerSpriteSettings &Settings) :
-    FrontSpriteBaseMaterialBattle(Settings.FrontSpriteBaseMaterialBattle),
-    FrontSpriteBaseMaterialUI(Settings.FrontSpriteBaseMaterialUI) {
+FTrainerSpriteMaterials::FTrainerSpriteMaterials(const FTrainerSpriteSettings &Settings)
+    : FrontSpriteBaseMaterialBattle(Settings.FrontSpriteBaseMaterialBattle),
+      FrontSpriteBaseMaterialUI(Settings.FrontSpriteBaseMaterialUI) {
 }
 
-FTrainerSpriteMaterials & FTrainerSpriteMaterials::operator=(const FTrainerSpriteSettings &Settings) {
+FTrainerSpriteMaterials &FTrainerSpriteMaterials::operator=(const FTrainerSpriteSettings &Settings) {
     FrontSpriteBaseMaterialBattle = Settings.FrontSpriteBaseMaterialBattle;
     FrontSpriteBaseMaterialUI = Settings.FrontSpriteBaseMaterialUI;
     return *this;

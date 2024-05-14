@@ -1,8 +1,8 @@
 ﻿#include <array>
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "Asserts.h"
 #include "Mainpulation/CircularIterator.h"
 #include "Misc/AutomationTest.h"
-#include "Asserts.h"
 
 struct FTestStruct {
     int32 Value;
@@ -45,7 +45,7 @@ bool CircularIteratorTest::RunTest(const FString &Parameters) {
     IteratorCopy = Iterator--;
     CHECK_EQUAL(1, *IteratorCopy);
     CHECK_EQUAL(3, *Iterator);
-    
+
     // Check the += and -= operators
     Iterator += 2;
     CHECK_EQUAL(2, *Iterator);
@@ -70,7 +70,7 @@ bool CircularIteratorTest::RunTest(const FString &Parameters) {
     StructArray[2].Value = 3;
     TCircularIterator<FTestStruct> StructIterator(StructArray, 1);
     CHECK_EQUAL(2, StructIterator->Value);
-    
+
     return true;
 }
 #endif

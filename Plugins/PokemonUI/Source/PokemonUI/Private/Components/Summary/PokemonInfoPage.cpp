@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Summary/PokemonInfoPage.h"
-#include "DataManager.h"
 #include "Blueprint/WidgetTree.h"
+#include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "DataManager.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
@@ -13,8 +13,6 @@
 #include "Trainers/OwnerInfo.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
-#include "Components/Image.h"
-
 
 void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::RefreshInfo_Implementation(Pokemon);
@@ -22,7 +20,8 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     // TODO: Handle the regional Pokédex number
     auto &Species = Pokemon->GetSpecies();
     auto Names = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetDataTable()->GetRowNames();
-    PokemonNumberText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(Names.IndexOfByKey(Species.ID), PokedexNumberLength)));
+    PokemonNumberText->SetText(
+        FText::FromString(UPokemonUIUtils::ZeroPad(Names.IndexOfByKey(Species.ID), PokedexNumberLength)));
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();

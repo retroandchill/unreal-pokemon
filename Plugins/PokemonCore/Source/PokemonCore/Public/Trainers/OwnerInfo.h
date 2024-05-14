@@ -12,7 +12,7 @@ class ITrainer;
  * The owner information for a given Pokémon
  */
 USTRUCT(BlueprintType)
-struct  POKEMONCORE_API FOwnerInfo {
+struct POKEMONCORE_API FOwnerInfo {
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pokémon|Original Trainer")
@@ -29,5 +29,5 @@ struct  POKEMONCORE_API FOwnerInfo {
 
     FOwnerInfo();
 
-    explicit FOwnerInfo(const ITrainer& Trainer);
+    explicit FOwnerInfo(const ITrainer &Trainer);
 };

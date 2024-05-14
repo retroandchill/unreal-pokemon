@@ -153,5 +153,5 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      * @return Is the item of form of mail?
      */
     UFUNCTION(BlueprintPure, Category = Items)
-    static bool IsMail(const FItem& Item);
+    static bool IsMail(const FItem &Item);
 };

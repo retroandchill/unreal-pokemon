@@ -198,7 +198,7 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      */
     virtual void ReceiveMoveCursor(ECursorDirection Direction);
 
-private:
+  private:
     /**
      * The delegate bound to confirm
      */

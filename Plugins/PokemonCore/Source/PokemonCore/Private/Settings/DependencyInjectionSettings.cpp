@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Settings/DependencyInjectionSettings.h"
 
 TSubclassOf<UObject> UDependencyInjectionSettings::GetPokemonClass() const {

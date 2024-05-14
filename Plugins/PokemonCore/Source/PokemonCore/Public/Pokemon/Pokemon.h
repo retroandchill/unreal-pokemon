@@ -38,7 +38,7 @@ class POKEMONCORE_API IPokemon {
      * @param DTO The source Pokémon DTO to initialize from
      * @param Trainer
      */
-    virtual void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer>& Trainer = nullptr) = 0;
+    virtual void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer = nullptr) = 0;
 
     /**
      * Get the name of the Pokémon in question

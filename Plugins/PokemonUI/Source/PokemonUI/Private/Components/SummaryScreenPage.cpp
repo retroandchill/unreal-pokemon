@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/SummaryScreenPage.h"
 
 void USummaryScreenPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

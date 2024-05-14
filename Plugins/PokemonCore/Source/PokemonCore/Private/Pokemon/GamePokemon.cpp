@@ -11,7 +11,7 @@
 #include "Utilities/ConstructionUtilities.h"
 #include "Utilities/PersonalityValueUtils.h"
 
-void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer>& Trainer) {
+void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
     PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
     Gender = DTO.Gender;
@@ -28,7 +28,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     } else {
         PokeBall = GetDefault<UPokemonSettings>()->GetDefaultPokeBall();
     }
-    
+
     if (Trainer != nullptr) {
         OwnerInfo = FOwnerInfo(*Trainer);
     } else {
@@ -116,15 +116,15 @@ const FItem *UGamePokemon::GetHoldItem() const {
     return ItemData;
 }
 
-const FOwnerInfo & UGamePokemon::GetOwnerInfo() const {
+const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
     return OwnerInfo;
 }
 
-UGamePokemon * UGamePokemon::Create(const FPokemonDTO &Data) {
+UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
     return Create(Data, nullptr);
 }
 
-UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer>& Trainer) {
+UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer) {
     auto Ret = NewObject<UGamePokemon>();
     Ret->Initialize(Data, Trainer);
     return Ret;

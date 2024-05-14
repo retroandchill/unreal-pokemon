@@ -48,5 +48,5 @@ class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
     static void ChangeBrushSize(UPARAM(Ref) FSlateBrush &Brush, FVector2D NewSize);
 
     UFUNCTION(BlueprintCallable, Category = "Slate|Images")
-    static void SetBrushFromAsset(UImage* ImageWidget, UObject* Asset, bool MatchSize = false);
+    static void SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bool MatchSize = false);
 };

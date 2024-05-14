@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "NamingSettings.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS(Config = Game, DefaultConfig)
 class POKEMONCORE_API UNamingSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The text displayed for the name when a Pokémon has no ability.
      * @return The text displayed for the name when a Pokémon has no ability.
@@ -28,7 +29,7 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Pokémon|Abilities")
     FText GetNoAbilityDescription() const;
 
-private:
+  private:
     /**
      * The text displayed for the name when a Pokémon has no ability.
      */
@@ -40,5 +41,4 @@ private:
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetNoAbilityDescription, Config, Category = "Pokémon|Abilities")
     FText NoAbilityDescription;
-
 };

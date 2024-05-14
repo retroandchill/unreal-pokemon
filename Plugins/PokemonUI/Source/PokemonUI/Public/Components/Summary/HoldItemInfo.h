@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/PokemonInfoWidget.h"
+
 #include "HoldItemInfo.generated.h"
 
 class UImage;
@@ -16,10 +17,10 @@ UCLASS(Abstract)
 class POKEMONUI_API UHoldItemInfo : public UPokemonInfoWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
-private:
+  private:
     /**
      * The widget used to display the item's name
      */

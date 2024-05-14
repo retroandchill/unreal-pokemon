@@ -3,10 +3,10 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
-#include "Components/WidgetSwitcher.h"
-#include "Managers/PokemonSubsystem.h"
 #include "Components/PartySelectCancelPanel.h"
 #include "Components/PokemonPanel.h"
+#include "Components/WidgetSwitcher.h"
+#include "Managers/PokemonSubsystem.h"
 
 void UPokemonSelectionPane::NativeConstruct() {
     Super::NativeConstruct();

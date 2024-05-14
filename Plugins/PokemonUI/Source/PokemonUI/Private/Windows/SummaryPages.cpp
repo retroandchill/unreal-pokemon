@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Windows/SummaryPages.h"
 #include "Components/WidgetSwitcher.h"
 #include "Data/SelectionInputs.h"
@@ -12,11 +11,11 @@ void USummaryPages::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>
     }
 }
 
-FOnPokemonChange & USummaryPages::GetOnPokemonChange() {
+FOnPokemonChange &USummaryPages::GetOnPokemonChange() {
     return OnPokemonChange;
 }
 
-UWidgetSwitcher* USummaryPages::GetPageSwitcher() const {
+UWidgetSwitcher *USummaryPages::GetPageSwitcher() const {
     return PageSwitcher;
 }
 

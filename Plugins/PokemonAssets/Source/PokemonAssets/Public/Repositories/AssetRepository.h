@@ -23,7 +23,7 @@ class POKEMONASSETS_API IAssetRepository {
   public:
 #if WITH_EDITOR
     virtual void SetBasePackage(FStringView PackageName) = 0;
-    
+
     /**
      * Register the provided asset within the game
      * @param AssetData The asset in question to register

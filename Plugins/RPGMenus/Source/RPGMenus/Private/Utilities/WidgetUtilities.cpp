@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Utilities/WidgetUtilities.h"
+#include "Components/Image.h"
 #include "Engine/UserInterfaceSettings.h"
 #include "PaperSprite.h"
-#include "Components/Image.h"
 
 float UWidgetUtilities::GetWidgetDPIScale() {
     static constexpr float SlateDPI = 96.f;

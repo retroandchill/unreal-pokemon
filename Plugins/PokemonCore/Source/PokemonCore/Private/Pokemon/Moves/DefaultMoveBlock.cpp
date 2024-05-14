@@ -3,8 +3,8 @@
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Algo/Unique.h"
 #include "DataManager.h"
-#include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Moves/DefaultMove.h"
+#include "Pokemon/PokemonDTO.h"
 #include "Settings/PokemonSettings.h"
 #include "Species/SpeciesData.h"
 

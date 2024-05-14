@@ -79,7 +79,6 @@ float UDefaultStatBlock::GetExpPercent() const {
     auto ExpNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level));
     float TotalNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level + 1)) - ExpNeededForLevel;
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
-    
 }
 
 const FNature &UDefaultStatBlock::GetNature() const {

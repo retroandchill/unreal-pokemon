@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SpriteMaterials.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+#include "SpriteMaterials.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "GraphicsLoadingSubsystem.generated.h"
@@ -43,19 +43,19 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonBattleSprite(
-        const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
+    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer,
+                                                                            bool bBack = false) const;
 
-    
-    std::pair<UMaterialInstanceDynamic*, FVector2D> GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
+    std::pair<UMaterialInstanceDynamic *, FVector2D>
+    GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false,
+                           const FPokemonAssetParams &AdditionalParams = {}) const;
 
-    
+    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer,
+                                                                        bool bBack = false) const;
 
-    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonUISprite(
-        const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
-
-    
-    std::pair<UMaterialInstanceDynamic*, FVector2D> GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
+    std::pair<UMaterialInstanceDynamic *, FVector2D>
+    GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false,
+                       const FPokemonAssetParams &AdditionalParams = {}) const;
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -71,7 +71,8 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
-    UMaterialInstanceDynamic *GetPokemonIcon(FName Species, UObject *Outer, const FPokemonAssetParams &AdditionalParams = {});
+    UMaterialInstanceDynamic *GetPokemonIcon(FName Species, UObject *Outer,
+                                             const FPokemonAssetParams &AdditionalParams = {});
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -89,11 +90,11 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
-    TArray<UObject*> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
+    TArray<UObject *> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
 
-    UObject* GetPokeBallIcon(FName PokeBall) const;
+    UObject *GetPokeBallIcon(FName PokeBall) const;
 
-    UObject* GetItemIcon(FName ItemID) const;
+    UObject *GetItemIcon(FName ItemID) const;
 
   private:
     UPROPERTY()

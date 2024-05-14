@@ -27,7 +27,7 @@ class FMockScreen : public IPartyScreen {
 
     TOptional<int32> SwitchIndex;
 
-    ARPGPlayerController* PlayerController = nullptr;
+    ARPGPlayerController *PlayerController = nullptr;
 };
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Unit Tests.UI.PartySwitchHandlerTest",

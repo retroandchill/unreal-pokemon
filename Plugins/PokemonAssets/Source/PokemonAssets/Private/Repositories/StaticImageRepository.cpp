@@ -1,14 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Repositories/StaticImageRepository.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
 bool UStaticImageRepository::AssetValid(const FAssetData &AssetData) const {
     auto AssetClass = AssetData.GetClass(EResolveClass::Yes);
-    return AssetClass->IsChildOf(UTexture2D::StaticClass())
-        || AssetClass->ImplementsInterface(USlateTextureAtlasInterface::StaticClass())
-        || AssetClass->IsChildOf(UMaterialInterface::StaticClass());
+    return AssetClass->IsChildOf(UTexture2D::StaticClass()) ||
+           AssetClass->ImplementsInterface(USlateTextureAtlasInterface::StaticClass()) ||
+           AssetClass->IsChildOf(UMaterialInterface::StaticClass());
 }
 
 TMap<FName, TSoftObjectPtr<>> &UStaticImageRepository::GetAssetMap() {

@@ -26,7 +26,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
   public:
     void BeginSwitch(int32 Index) final;
     void SetHelpText(const FText &Text) final;
-    ARPGPlayerController& GetPlayerController() final;
+    ARPGPlayerController &GetPlayerController() final;
 
   private:
     /**

@@ -2,13 +2,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Bag/Item.h"
 #include "Blueprint/UserWidget.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "Primatives/SelectableOption.h"
 #include "Refreshable.h"
 #include "SelectablePanel.h"
 #include "Text/TextColor.h"
-#include "Bag/Item.h"
 
 #include "PokemonPanel.generated.h"
 
@@ -94,7 +94,7 @@ class POKEMONUI_API UPokemonPanel : public USelectableOption, public ISelectable
     void RefreshVisuals();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Visuals")
-    UObject* GetHeldItemGraphic(const FItem& Item);
+    UObject *GetHeldItemGraphic(const FItem &Item);
 
   private:
     /**

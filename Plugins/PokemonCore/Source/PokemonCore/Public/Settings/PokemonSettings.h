@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "PokemonSettings.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Pokémon Settings"))
 class POKEMONCORE_API UPokemonSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The the ID of the HP stat
      * @return The stat used referring to a Pokémon's HP
@@ -27,7 +28,7 @@ public:
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
     int32 GetMaxMoves() const;
-    
+
     /**
      * Get the odds of a Pokémon being shiny.
      * @return The odds of a newly generated Pokémon being shiny (out of 65536).
@@ -41,7 +42,7 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Miscellaneous)
     FName GetDefaultPokeBall() const;
 
-private:
+  private:
     /**
      * The stat used referring to a Pokémon's HP
      */
@@ -54,7 +55,7 @@ private:
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxMoves, Config, Category = Moves)
     int32 MaxMoves = 4;
-    
+
     /**
      * The odds of a newly generated Pokémon being shiny (out of 65536).
      */
@@ -65,7 +66,6 @@ private:
      * The maximum number of moves a Pokémon can know.
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDefaultPokeBall, Config, Category = Miscellaneous,
-        meta = (GetOptions = "PokemonData.ItemHelper.GetPokeBallNames"))
+              meta = (GetOptions = "PokemonData.ItemHelper.GetPokeBallNames"))
     FName DefaultPokeBall = "POKEBALL";
-    
 };

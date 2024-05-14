@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TypedAssetRepository.h"
 #include "Engine/DataAsset.h"
+#include "TypedAssetRepository.h"
+
 #include "StaticImageRepository.generated.h"
 
 /**
@@ -13,27 +14,26 @@
 UCLASS()
 class POKEMONASSETS_API UStaticImageRepository final : public UDataAsset,
 #if CPP
-                                                 public TTypedAssetRepository<UObject> {
+                                                       public TTypedAssetRepository<UObject> {
 #else
-                                                 public IAssetRepository {
+                                                       public IAssetRepository {
 #endif
     GENERATED_BODY()
 
-protected:
+  protected:
     bool AssetValid(const FAssetData &AssetData) const override;
 
     TMap<FName, TSoftObjectPtr<>> &GetAssetMap() override;
     const TMap<FName, TSoftObjectPtr<>> &GetAssetMap() const override;
     FStringView GetNamePrefix() const override;
 
-private:
-                                                     UPROPERTY(EditAnywhere, Category = Lookup)
-                                                     FString NamePrefix;
-                                                     
+  private:
+    UPROPERTY(EditAnywhere, Category = Lookup)
+    FString NamePrefix;
+
     /**
      * The map of name keys to their corresponding Assets
      */
     UPROPERTY(VisibleAnywhere, Category = Lookup)
     TMap<FName, TSoftObjectPtr<UObject>> AssetMap;
-
 };

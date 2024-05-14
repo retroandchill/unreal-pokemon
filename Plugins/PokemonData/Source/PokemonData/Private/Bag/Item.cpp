@@ -2,7 +2,6 @@
 #include "Bag/Item.h"
 #include "DataManager.h"
 #include "Mainpulation/RangeHelpers.h"
-
 #include <ranges>
 
 FItem::FItem() = default;
@@ -25,11 +24,8 @@ TArray<FName> UItemHelper::GetItemNames() {
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
-    return RangeHelpers::CreateRange(Rows)
-        | std::views::filter([](const FItem* Item) { return Item->IsPokeBall(); })
-        | std::views::transform([](const FItem* Item) { return Item->ID; })
-        | RangeHelpers::TToArray<FName>();
-    
+    return RangeHelpers::CreateRange(Rows) | std::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
+           std::views::transform([](const FItem *Item) { return Item->ID; }) | RangeHelpers::TToArray<FName>();
 }
 
 bool UItemHelper::IsMail(const FItem &Item) {

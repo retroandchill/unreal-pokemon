@@ -13,13 +13,18 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
 
     auto AssetAssignmentSettings = GetDefault<UAssetAssignmentSettings>();
     auto AssetLoaderSettings = GetDefault<UAssetLoaderSettings>();
-    AssetRepositories.Emplace(AssetAssignmentSettings->GetPokemonSpritePackageName(), AssetLoaderSettings->GetPokemonSpriteRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetPokemonSpritePackageName(),
+                              AssetLoaderSettings->GetPokemonSpriteRepository());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetTrainerSpritesPackageName(),
                               AssetLoaderSettings->GetTrainerFrontSpriteRepository());
-    AssetRepositories.Emplace(AssetAssignmentSettings->GetTypeIconsPackageName(), AssetLoaderSettings->GetTypeIconRepository());
-    AssetRepositories.Emplace(AssetAssignmentSettings->GetStatusIconsPackageName(), AssetLoaderSettings->GetStatusIconRepository());
-    AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(), AssetLoaderSettings->GetSummaryBallRepository());
-    AssetRepositories.Emplace(AssetAssignmentSettings->GetItemIconPackageName(), AssetLoaderSettings->GetItemIconRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetTypeIconsPackageName(),
+                              AssetLoaderSettings->GetTypeIconRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetStatusIconsPackageName(),
+                              AssetLoaderSettings->GetStatusIconRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(),
+                              AssetLoaderSettings->GetSummaryBallRepository());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetItemIconPackageName(),
+                              AssetLoaderSettings->GetItemIconRepository());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
         Repository->SetBasePackage(Package.ToString());

@@ -25,6 +25,5 @@ class POKEMONUI_API IPartyScreen {
      */
     virtual void SetHelpText(const FText &Text) = 0;
 
-    virtual ARPGPlayerController& GetPlayerController() = 0;
-    
+    virtual ARPGPlayerController &GetPlayerController() = 0;
 };

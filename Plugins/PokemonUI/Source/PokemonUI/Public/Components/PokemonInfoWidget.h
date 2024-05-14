@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
 #include "PokemonInfoWidget.generated.h"
 
 class IPokemon;
@@ -14,12 +15,11 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonInfoWidget : public UUserWidget {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Update the information about the Pokémon displayed by this widget.
      * @param Pokemon The new Pokémon to display the info for
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
-    void Refresh(const TScriptInterface<IPokemon>& Pokemon);
-
+    void Refresh(const TScriptInterface<IPokemon> &Pokemon);
 };

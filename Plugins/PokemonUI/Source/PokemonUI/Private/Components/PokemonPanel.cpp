@@ -58,7 +58,7 @@ bool UPokemonPanel::IsPreselected() const {
 
 void UPokemonPanel::Refresh() {
     using enum ESlateVisibility;
-    
+
     RefreshVisuals();
     if (Pokemon != nullptr) {
         RefreshPokemonInfo();

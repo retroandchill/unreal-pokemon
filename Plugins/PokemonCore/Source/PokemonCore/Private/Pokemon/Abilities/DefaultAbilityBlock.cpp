@@ -3,8 +3,8 @@
 #include "Pokemon/Abilities/DefaultAbilityBlock.h"
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonDataSettings.h"
 #include "Pokemon/PokemonDTO.h"
+#include "PokemonDataSettings.h"
 #include "Settings/NamingSettings.h"
 #include "Species/Ability.h"
 #include "Species/SpeciesData.h"
@@ -43,8 +43,7 @@ FText UDefaultAbilityBlock::GetDisplayName() const {
 FText UDefaultAbilityBlock::GetAbilityDescription() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
-    return AbilityData != nullptr ? AbilityData->Description
-                                  : GetDefault<UNamingSettings>()->GetNoAbilityDescription();
+    return AbilityData != nullptr ? AbilityData->Description : GetDefault<UNamingSettings>()->GetNoAbilityDescription();
 }
 
 int32 UDefaultAbilityBlock::GetAbilityIndex() const {

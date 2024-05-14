@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "SpriteMaterialSettings.generated.h"
 
 /**
@@ -16,21 +17,22 @@ struct POKEMONASSETS_API FPokemonSpriteSettings {
     /**
      * The base material used to construct Pokémon sprites in battle
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pokémon|Icons", DisplayName = "Battle Sprite Material (Battle)",
-        meta = (AllowedClasses = "MaterialInterface"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pokémon|Icons",
+              DisplayName = "Battle Sprite Material (Battle)", meta = (AllowedClasses = "MaterialInterface"))
     FSoftObjectPath BattleSpritesMaterial;
 
     /**
      * The base material used to construct Pokémon sprites in the UI (such as the summary screen and the Pokédex)
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pokémon|Icons", DisplayName = "Battle Sprite Material (UI)",
-        meta = (AllowedClasses = "MaterialInterface"))
+              meta = (AllowedClasses = "MaterialInterface"))
     FSoftObjectPath UISpritesMaterial;
 
     /**
      * The base material used to construct Pokémon icons
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pokémon|Icons", meta = (AllowedClasses = "MaterialInterface"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pokémon|Icons",
+              meta = (AllowedClasses = "MaterialInterface"))
     FSoftObjectPath IconMaterial;
 };
 
@@ -63,7 +65,7 @@ UCLASS(Config = Game, DefaultConfig)
 class POKEMONASSETS_API USpriteMaterialSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Settings for all Pokémon sprites.
      * @return Settings for all Pokémon sprites.
@@ -78,18 +80,18 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Sprites)
     const FTrainerSpriteSettings &GetTrainerSpriteSettings() const;
 
-private:
+  private:
     /**
      * Settings for all Pokémon sprites.
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetPokemonSpriteSettings, Category = Sprites,
-        DisplayName = "Pokémon")
+              DisplayName = "Pokémon")
     FPokemonSpriteSettings PokemonSprites;
 
     /**
      * Settings for all Trainer sprites.
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTrainerSpriteSettings, Category = Sprites,
-        DisplayName = "Trainers")
+              DisplayName = "Trainers")
     FTrainerSpriteSettings TrainerSprites;
 };

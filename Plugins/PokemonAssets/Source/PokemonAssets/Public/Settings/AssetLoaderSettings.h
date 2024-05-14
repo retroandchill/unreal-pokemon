@@ -57,36 +57,42 @@ class POKEMONASSETS_API UAssetLoaderSettings : public UDeveloperSettings {
     /**
      * The path to the repository data asset used to get the icons.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|Pokémon", meta = (AllowedClasses = "TextureRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|Pokémon",
+              meta = (AllowedClasses = "TextureRepository"))
     FSoftObjectPath PokemonSpriteRepository;
 
     /**
      * The path to the repository data asset used to get the trainers.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|Trainers", meta = (AllowedClasses = "TextureRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|Trainers",
+              meta = (AllowedClasses = "TextureRepository"))
     FSoftObjectPath TrainerFrontSpriteRepository;
 
     /**
      * The path to the repository data asset used to get the type icons.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI",
+              meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath TypeIconRepository;
 
     /**
      * The path to the repository data asset used to get the status icons.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI",
+              meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath StatusIconRepository;
 
     /**
      * The path to the repository data asset used to get the Poké Ball icons on the summary screen.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI",
+              meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath SummaryBallRepository;
 
     /**
      * The path to the repository data asset used to get the item icons used in the bag and summary screen.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI", meta = (AllowedClasses = "StaticImageRepository"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders|UI",
+              meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath ItemIconRepository;
 };

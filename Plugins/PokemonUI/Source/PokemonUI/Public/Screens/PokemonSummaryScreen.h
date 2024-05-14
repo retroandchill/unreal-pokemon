@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
+
 #include "PokemonSummaryScreen.generated.h"
 
 class UHoldItemInfo;
@@ -18,15 +19,15 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
-    
-public:
+
+  public:
     void SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex);
 
-private:
-    void SetPokemon(const TScriptInterface<IPokemon>& Pokemon);
-    
+  private:
+    void SetPokemon(const TScriptInterface<IPokemon> &Pokemon);
+
     /**
      * The widget containing the name information
      */

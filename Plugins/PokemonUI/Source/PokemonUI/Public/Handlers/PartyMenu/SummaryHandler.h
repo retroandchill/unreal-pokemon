@@ -18,7 +18,7 @@ class POKEMONUI_API USummaryHandler : public UPartyMenuHandler {
   public:
     void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) override;
 
-private:
+  private:
     UPROPERTY(EditAnywhere, Category = Screens)
     TSubclassOf<UPokemonSummaryScreen> SummaryScreenClass;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "AssetAssignmentSettings.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS(Config = Editor, DefaultConfig)
 class POKEMONASSETSEDITOR_API UAssetAssignmentSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the name of the package that contains the Pokémon Icon graphics
      * @return The name of the package that contains the Pokémon Icon graphics
@@ -56,7 +57,7 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
     const FString &GetItemIconPackageName() const;
 
-private:
+  private:
     /**
      * The name of the package that contains the Pokémon Icon graphics
      */
@@ -92,5 +93,4 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetItemIconPackageName, Category = "Search Paths")
     FString ItemIconPackageName;
-
 };

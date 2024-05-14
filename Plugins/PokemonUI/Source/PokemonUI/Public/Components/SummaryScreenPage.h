@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
 #include "SummaryScreenPage.generated.h"
 
 class IPokemon;
@@ -14,12 +15,11 @@ UCLASS(Abstract)
 class POKEMONUI_API USummaryScreenPage : public UUserWidget {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Refresh the pages information with information from the given Pokémon.
      * @param Pokemon The Pokémon to refresh the information for
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Summary)
-    void RefreshInfo(const TScriptInterface<IPokemon>& Pokemon);
-    
+    void RefreshInfo(const TScriptInterface<IPokemon> &Pokemon);
 };

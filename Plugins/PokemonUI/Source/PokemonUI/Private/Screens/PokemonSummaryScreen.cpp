@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Screens/PokemonSummaryScreen.h"
 #include "Components/Image.h"
 #include "Components/Summary/HoldItemInfo.h"

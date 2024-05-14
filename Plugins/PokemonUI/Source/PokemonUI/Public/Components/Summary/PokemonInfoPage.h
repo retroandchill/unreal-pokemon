@@ -21,23 +21,23 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
     GENERATED_BODY()
 
-protected:
-    void RefreshInfo_Implementation(const TScriptInterface<IPokemon>& Pokemon) override;
+  protected:
+    void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
     /**
-     * Slot the supplied type icon into the widget. 
+     * Slot the supplied type icon into the widget.
      * @param Icon The icon to slot
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Visuals|Icons")
-    void SlotTypeIcon(UImage* Icon);
+    void SlotTypeIcon(UImage *Icon);
 
     /**
      * Clear the existing type icons before drawing some new ones.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Visuals|Icons")
     void ClearTypeIcons();
-    
-private:
+
+  private:
     /**
      * The color settings for the gender text widget
      */
@@ -97,5 +97,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
     int32 IdNumberLength = 6;
-
 };

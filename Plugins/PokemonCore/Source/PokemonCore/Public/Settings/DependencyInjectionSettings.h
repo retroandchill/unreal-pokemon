@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "Pokemon/GamePokemon.h"
 #include "Pokemon/Abilities/DefaultAbilityBlock.h"
+#include "Pokemon/GamePokemon.h"
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 
@@ -18,7 +18,7 @@ UCLASS(Config = Game, DefaultConfig)
 class POKEMONCORE_API UDependencyInjectionSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The class used for all Pokémon objects
      * @return The class used for all Pokémon objects
@@ -47,7 +47,7 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection")
     TSubclassOf<UObject> GetAbilityBlockClass() const;
 
-private:
+  private:
     /**
      * The class used for all Pokémon objects
      */
@@ -75,5 +75,4 @@ private:
     UPROPERTY(EditAnywhere, BlueprintGetter = GetAbilityBlockClass, Config, Category = "Dependency Injection",
               meta = (MustImplement = AbilityBlock))
     TSubclassOf<UObject> AbilityBlockClass = UDefaultAbilityBlock::StaticClass();
-
 };

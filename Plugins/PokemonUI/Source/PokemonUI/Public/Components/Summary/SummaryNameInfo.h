@@ -18,16 +18,16 @@ UCLASS(Abstract)
 class POKEMONUI_API USummaryNameInfo : public UPokemonInfoWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
-private:
+  private:
     /**
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
     TMap<EPokemonGender, FTextColor> GenderTextColors;
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> PokemonNameText;
 
@@ -42,5 +42,4 @@ private:
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UImage> PokemonStatusIcon;
-
 };

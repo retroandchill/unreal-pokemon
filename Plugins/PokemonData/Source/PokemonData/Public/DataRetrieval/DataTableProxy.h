@@ -36,8 +36,8 @@ class TDataTableProxy final : public IGameData {
         return DataTable.Get();
     }
 
-    TArray<T*> GetAllRows() const {
-        TArray<T*> Rows;
+    TArray<T *> GetAllRows() const {
+        TArray<T *> Rows;
         DataTable->GetAllRows(TEXT("ForEach"), Rows);
         return Rows;
     }
@@ -46,16 +46,16 @@ class TDataTableProxy final : public IGameData {
      * Iterate through the data table's rows and execute the callback on each entry
      * @param Callback The callback method
      */
-    void ForEach(TFunctionRef<void(const T&)> Callback) const {
+    void ForEach(TFunctionRef<void(const T &)> Callback) const {
         for (auto Rows = GetAllRows(); auto Row : Rows) {
             const T &Ref = *Row;
             Callback(Ref);
         }
     }
 
-    TArray<const T*> Filter(TFunctionRef<bool(const T&)> Predicate) const {
-        TArray<const T*> Rows;
-        ForEach([&Rows, &Predicate](const T& Row) {
+    TArray<const T *> Filter(TFunctionRef<bool(const T &)> Predicate) const {
+        TArray<const T *> Rows;
+        ForEach([&Rows, &Predicate](const T &Row) {
             if (Predicate(Row)) {
                 Rows.Add(&Row);
             }
@@ -65,11 +65,9 @@ class TDataTableProxy final : public IGameData {
     }
 
     template <typename R>
-    TArray<R> Map(TFunctionRef<R(const T&)> Mapping) const {
+    TArray<R> Map(TFunctionRef<R(const T &)> Mapping) const {
         TArray<R> Ret;
-        ForEach([&Ret, &Mapping](const T& Row) {
-            Ret.Add(Mapping(Row));
-        });
+        ForEach([&Ret, &Mapping](const T &Row) { Ret.Add(Mapping(Row)); });
         return Ret;
     }
 

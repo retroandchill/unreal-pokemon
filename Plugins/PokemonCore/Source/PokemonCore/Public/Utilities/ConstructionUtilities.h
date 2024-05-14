@@ -36,7 +36,8 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
      * @return The created Pokémon.
      */
     UFUNCTION(BlueprintCallable, Category = "Object|Constructors")
-    static TScriptInterface<IPokemon> CreateForeignPokemon(const FPokemonDTO &Data, const TScriptInterface<ITrainer>& Trainer);
+    static TScriptInterface<IPokemon> CreateForeignPokemon(const FPokemonDTO &Data,
+                                                           const TScriptInterface<ITrainer> &Trainer);
 
     /**
      * Create the stat block based on the settings.
