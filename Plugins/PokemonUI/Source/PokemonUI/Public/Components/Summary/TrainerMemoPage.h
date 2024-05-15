@@ -6,6 +6,7 @@
 #include "Components/SummaryScreenPage.h"
 #include "Pokemon/TrainerMemo/ObtainMethod.h"
 #include "Screens/PokemonSummaryScreen.h"
+
 #include "TrainerMemoPage.generated.h"
 
 class UDisplayText;
@@ -19,8 +20,8 @@ struct FCharacteristicList {
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Characteristics")
     TArray<FText> Characteristics;
-    
-    explicit FCharacteristicList(TArray<FText>&& Characteristics);
+
+    explicit FCharacteristicList(TArray<FText> &&Characteristics);
 };
 
 /**
@@ -30,14 +31,14 @@ UCLASS(Abstract)
 class POKEMONUI_API UTrainerMemoPage : public USummaryScreenPage {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Initialize the default object.
      * @param Initializer The intializer passed on construction
      */
-    explicit UTrainerMemoPage(const FObjectInitializer& Initializer);
+    explicit UTrainerMemoPage(const FObjectInitializer &Initializer);
 
-protected:
+  protected:
     void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
     /**
@@ -46,12 +47,12 @@ protected:
      */
     UFUNCTION(BlueprintNativeEvent, Caegory = "Memo|Formatting")
     bool ShowNature() const;
-    
-private:
+
+  private:
     FText FormatDate(const FDateTime &DateTime) const;
-    
+
     FText FormatLocation(FText Location) const;
-    
+
     /**
      * The text box used to display the information memo.
      */
@@ -100,14 +101,13 @@ private:
      * The order of the stats used for tiebreakers
      */
     UPROPERTY(EditAnywhere, Category = "Memo|Formatting|Characteristic",
-        meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     TArray<FName> StatsOrder;
 
     /**
      * The order of the stats used for tiebreakers
      */
     UPROPERTY(EditAnywhere, Category = "Memo|Formatting|Characteristic",
-        meta = (GetKeyOptions = "PokemonData.StatHelper.GetMainStatNames"))
+              meta = (GetKeyOptions = "PokemonData.StatHelper.GetMainStatNames"))
     TMap<FName, FCharacteristicList> Characteristics;
-
 };

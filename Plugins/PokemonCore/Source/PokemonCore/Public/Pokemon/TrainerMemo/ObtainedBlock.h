@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ObtainMethod.h"
 #include "UObject/Interface.h"
+
 #include "ObtainedBlock.generated.h"
 
 // This class does not need to be modified.
@@ -20,7 +21,7 @@ class POKEMONCORE_API IObtainedBlock {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Get the method this Pokémon was obtained by.
      * @return The means the Pokémon was obtained by.
@@ -52,5 +53,4 @@ public:
      * @return The location of hatching.
      */
     virtual const TOptional<FText> &GetHatchedMap() = 0;
-
 };
