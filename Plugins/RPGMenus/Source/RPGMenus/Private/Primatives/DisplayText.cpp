@@ -26,6 +26,7 @@ void UDisplayText::SetTextInfo() {
     if (DisplayTextWidget != nullptr) {
         DisplayTextWidget->SetTextStyleSet(TextStyles);
         DisplayTextWidget->SetText(InitialText);
+        DisplayTextWidget->SetLineHeightPercentage(LineHeightPercentage);
 
         DisplayTextWidget->ClearAllDefaultStyleOverrides();
         auto DefaultTextStyle = DisplayTextWidget->GetDefaultTextStyle();

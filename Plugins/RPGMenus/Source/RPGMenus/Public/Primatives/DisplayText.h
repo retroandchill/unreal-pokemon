@@ -104,7 +104,7 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
     URichTextBlock *GetDisplayTextWidget() const;
 
   private:
-    UPROPERTY(EditAnywhere, Category = "Widgets|Text")
+    UPROPERTY(EditAnywhere, Category = "Widgets|Text", meta = (MultiLine))
     FText InitialText = NSLOCTEXT("PokemonUI", "DisplayText_InitialText", "Text Block");
 
     /**
@@ -137,6 +137,15 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
     UPROPERTY(EditAnywhere, Category = Display)
     TOptional<FSlateColor> ShadowColor;
 
+    /**
+     * The table used to determine the text styles.
+     */
     UPROPERTY(EditAnywhere, Category = Display)
     TObjectPtr<UDataTable> TextStyles;
+
+    /**
+     * The amount to scale each line's height by.
+     */
+    UPROPERTY(EditAnywhere, Category = Display)
+    float LineHeightPercentage = 1.f;
 };

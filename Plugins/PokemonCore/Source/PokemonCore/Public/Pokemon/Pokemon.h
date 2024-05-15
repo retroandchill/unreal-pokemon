@@ -11,6 +11,7 @@
 
 #include "Pokemon.generated.h"
 
+class IObtainedBlock;
 struct FOwnerInfo;
 class IAbilityBlock;
 struct FAbility;
@@ -136,6 +137,13 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Trainer)
     virtual const FOwnerInfo &GetOwnerInfo() const = 0;
+
+    /**
+     * Get the information about how this Pokémon was obtained.
+     * @return How was this Pokémon obtained?
+     */
+    UFUNCTION(BlueprintCallable, Category = Trainer)
+    virtual TScriptInterface<IObtainedBlock> GetObtainedInformation() const = 0;
 };
 
 /**
