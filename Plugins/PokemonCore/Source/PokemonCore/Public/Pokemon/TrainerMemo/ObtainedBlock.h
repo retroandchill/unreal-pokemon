@@ -8,6 +8,7 @@
 
 #include "ObtainedBlock.generated.h"
 
+struct FPokemonDTO;
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable)
 class UObtainedBlock : public UInterface {
@@ -22,6 +23,8 @@ class POKEMONCORE_API IObtainedBlock {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
+    virtual TScriptInterface<IObtainedBlock> Initialize(const FPokemonDTO& DTO) = 0;
+    
     /**
      * Get the method this Pokémon was obtained by.
      * @return The means the Pokémon was obtained by.
@@ -30,27 +33,33 @@ class POKEMONCORE_API IObtainedBlock {
     virtual EObtainMethod GetObtainMethod() const = 0;
 
     /**
+     * Get the level the Pokémon was met at
+     * @return The level the Pokémon was met at
+     */
+    UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
+    virtual int32 GetLevelMet() const = 0;
+
+    /**
      * Get the time this Pokémon was received
      * @return When was this Pokémon received
      */
-    UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
-    virtual FDateTime GetTimeReceived() const = 0;
+    virtual const FDateTime *GetTimeReceived() const = 0;
 
     /**
      * Get the location or other means of obtaining that this Pokémon has.
      * @return How this Pokémon was obtained
      */
-    virtual const TOptional<FText> &GetObtainText() = 0;
+    virtual TOptional<FText> GetObtainText() = 0;
 
     /**
      * Get the time this Pokémon hatched
      * @return The means the Pokémon was obtained by.
      */
-    virtual const TOptional<FDateTime> &GetTimeHatched() const = 0;
+    virtual const FDateTime *GetTimeHatched() const = 0;
 
     /**
      * Get the map this Pokémon hatched on.
      * @return The location of hatching.
      */
-    virtual const TOptional<FText> &GetHatchedMap() = 0;
+    virtual TOptional<FText> GetHatchedMap() = 0;
 };

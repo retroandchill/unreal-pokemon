@@ -21,6 +21,8 @@ struct FCharacteristicList {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Characteristics")
     TArray<FText> Characteristics;
 
+    FCharacteristicList();
+    
     explicit FCharacteristicList(TArray<FText> &&Characteristics);
 };
 
@@ -45,7 +47,7 @@ class POKEMONUI_API UTrainerMemoPage : public USummaryScreenPage {
      * Should the game show the Pokémon's nature?
      * @return Will the nature be displayed?
      */
-    UFUNCTION(BlueprintNativeEvent, Caegory = "Memo|Formatting")
+    UFUNCTION(BlueprintNativeEvent, Category = "Memo|Formatting")
     bool ShowNature() const;
 
   private:

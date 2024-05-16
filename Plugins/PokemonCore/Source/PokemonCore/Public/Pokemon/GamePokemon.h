@@ -62,6 +62,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     UFUNCTION(BlueprintPure, Category = Trainer)
     const FOwnerInfo &GetOwnerInfo() const override;
+    
+    UFUNCTION(BlueprintPure, Category = Trainer)
+    TScriptInterface<IObtainedBlock> GetObtainedInformation() const override;
 
     /**
      * Create a new Pokémon from the given input data
@@ -78,7 +81,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
     static UGamePokemon *Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer);
 
-  private:
+private:
     /**
      * The ID of the species of Pokémon this is
      */
@@ -148,4 +151,10 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     FOwnerInfo OwnerInfo;
+
+    /**
+     * The block that contains the obtained information
+     */
+    UPROPERTY(SaveGame)
+    TScriptInterface<IObtainedBlock> ObtainedBlock;
 };

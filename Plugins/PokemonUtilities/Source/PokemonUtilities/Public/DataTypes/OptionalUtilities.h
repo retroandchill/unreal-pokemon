@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 
+template <typename T>
+concept overloads_equals = requires(T A, T B) { A == B; };
+
+namespace OptionalUtilities {
 /**
  * Construct an optional from an overriden UPROPERTY value
  * @tparam T The data type of the optional
@@ -42,8 +46,10 @@ T OrElseGet(const TOptional<T> &Optional, const Functor &Supplier) {
     return Optional.IsSet() ? Optional.GetValue() : Supplier();
 }
 
-template <typename T>
-concept overloads_equals = requires(T A, T B) { A == B; };
+template <typename T, typename R>
+TOptional<R> Map(const TOptional<T> &Optional, const TFunctionRef<R(const T&)> &Mapping) {
+    return Optional.IsSet() ? Mapping(Optional.GetValue()) : TOptional<R>();
+}
 
 /**
  * Compare two optionals to see if they're equal
@@ -67,6 +73,7 @@ bool OptionalsSame(const TOptional<T> &A, const TOptional<T> &B) {
  * @return They they equal?
  */
 POKEMONUTILITIES_API bool OptionalsSame(const TOptional<FText> &A, const TOptional<FText> &B);
+}
 
 #define OPTIONAL(OwningObject, Property) CreateOptional((OwningObject).Property, (OwningObject).bOverride_##Property)
 

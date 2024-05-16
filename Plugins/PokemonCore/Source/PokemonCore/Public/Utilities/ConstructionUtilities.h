@@ -6,6 +6,7 @@
 
 #include "ConstructionUtilities.generated.h"
 
+class IObtainedBlock;
 class ITrainer;
 class IAbilityBlock;
 class IMoveBlock;
@@ -64,5 +65,14 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
      * @return The created block
      */
     static TScriptInterface<IAbilityBlock> CreateAbilityBlock(const TScriptInterface<IPokemon> &Owner,
+                                                              const FPokemonDTO &DTO);
+
+    /**
+     * Create the obtained block based on the settings.
+     * @param Owner The Pokémon to take ownership of the obtained block
+     * @param DTO The DTO to copy any saved data from
+     * @return The created block
+     */
+    static TScriptInterface<IObtainedBlock> CreateObtainedBlock(const TScriptInterface<IPokemon> &Owner,
                                                               const FPokemonDTO &DTO);
 };

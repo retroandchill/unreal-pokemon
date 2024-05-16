@@ -17,3 +17,7 @@ TSubclassOf<UObject> UDependencyInjectionSettings::GetMoveBlockClass() const {
 TSubclassOf<UObject> UDependencyInjectionSettings::GetAbilityBlockClass() const {
     return AbilityBlockClass;
 }
+
+TSubclassOf<UObject> UDependencyInjectionSettings::GetObtainedBlockClass() const {
+    return ObtainedBlockClass;
+}

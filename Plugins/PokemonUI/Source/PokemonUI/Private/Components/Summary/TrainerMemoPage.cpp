@@ -1,14 +1,18 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/TrainerMemoPage.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Mainpulation/RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
+#include "Primatives/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
 #define MEMO_TEXT(Key, Text) NSLOCTEXT("UTrainerMemoPage", Key, Text)
+
+FCharacteristicList::FCharacteristicList() = default;
 
 FCharacteristicList::FCharacteristicList(TArray<FText> &&Characteristics) : Characteristics(MoveTemp(Characteristics)) {
 }
@@ -29,9 +33,9 @@ UTrainerMemoPage::UTrainerMemoPage(const FObjectInitializer &Initializer)
                                       MEMO_TEXT("HP3", "Nods off a lot."), MEMO_TEXT("HP4", "Scatters things often."),
                                       MEMO_TEXT("HP5", "Likes to relax.")})},
           {"ATTACK", FCharacteristicList(
-                         {MEMO_TEXT("ATTACK1", "Proud of its power."), MEMO_TEXT("ATTACK2", "Likes to thrash about."),
-                          MEMO_TEXT("ATTACK3", "A little quick tempered."), MEMO_TEXT("ATTACK4", "Likes to fight."),
-                          MEMO_TEXT("ATTACK5", "Quick tempered.")})},
+           {MEMO_TEXT("ATTACK1", "Proud of its power."), MEMO_TEXT("ATTACK2", "Likes to thrash about."),
+            MEMO_TEXT("ATTACK3", "A little quick tempered."), MEMO_TEXT("ATTACK4", "Likes to fight."),
+            MEMO_TEXT("ATTACK5", "Quick tempered.")})},
           {"DEFENSE",
            FCharacteristicList({MEMO_TEXT("DEFENSE1", "Sturdy body."), MEMO_TEXT("DEFENSE2", "Capable of taking hits."),
                                 MEMO_TEXT("DEFENSE3", "Highly persistent."), MEMO_TEXT("DEFENSE4", "Good endurance."),
@@ -43,9 +47,9 @@ UTrainerMemoPage::UTrainerMemoPage(const FObjectInitializer &Initializer)
                                                   MEMO_TEXT("SPECIAL_ATTACK5", "Very finicky.")})},
           {"SPECIAL_DEFENSE",
            FCharacteristicList(
-               {MEMO_TEXT("SPECIAL_DEFENSE1", "Strong willed."), MEMO_TEXT("SPECIAL_DEFENSE2", "Somewhat vain."),
-                MEMO_TEXT("SPECIAL_DEFENSE3", "Strongly defiant."), MEMO_TEXT("SPECIAL_DEFENSE4", "Hates to lose."),
-                MEMO_TEXT("SPECIAL_DEFENSE5", "Somewhat stubborn.")})},
+           {MEMO_TEXT("SPECIAL_DEFENSE1", "Strong willed."), MEMO_TEXT("SPECIAL_DEFENSE2", "Somewhat vain."),
+            MEMO_TEXT("SPECIAL_DEFENSE3", "Strongly defiant."), MEMO_TEXT("SPECIAL_DEFENSE4", "Hates to lose."),
+            MEMO_TEXT("SPECIAL_DEFENSE5", "Somewhat stubborn.")})},
           {"SPEED",
            FCharacteristicList({MEMO_TEXT("SPEED1", "Likes to run."), MEMO_TEXT("SPEED2", "Alert to sounds."),
                                 MEMO_TEXT("SPEED3", "Impetuous and silly."),
@@ -65,8 +69,15 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     auto ObtainedInformation = Pokemon->GetObtainedInformation();
-    Lines.Emplace(FormatDate(ObtainedInformation->GetTimeReceived()));
-    auto ObtainedLocation = ObtainedInformation->GetObtainText().Get(UnknownObtainLocation);
+    if (auto TimeReceived = ObtainedInformation->GetTimeReceived(); TimeReceived != nullptr) {
+        Lines.Emplace(FormatDate(*TimeReceived));
+    }
+
+    TFunctionRef<FText(const FText &Text)> TextCheck = [this](const FText &Text) {
+        return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text;
+    };
+    auto ObtainedLocation = OptionalUtilities::Map(ObtainedInformation->GetObtainText(), TextCheck)
+        .Get(UnknownObtainLocation);
     Lines.Emplace(FormatLocation(ObtainedLocation));
 
     auto ObtainMethod = ObtainedInformation->GetObtainMethod();
@@ -75,11 +86,12 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     if (ObtainMethod == EObtainMethod::Egg) {
-        if (auto &TimeHatched = ObtainedInformation->GetTimeHatched(); TimeHatched.IsSet()) {
-            Lines.Emplace(FormatDate(TimeHatched.GetValue()));
+        if (auto TimeHatched = ObtainedInformation->GetTimeHatched(); TimeHatched != nullptr) {
+            Lines.Emplace(FormatDate(*TimeHatched));
         }
 
-        auto HatchedLocation = ObtainedInformation->GetHatchedMap().Get(UnknownObtainLocation);
+        auto HatchedLocation = OptionalUtilities::Map(ObtainedInformation->GetHatchedMap(), TextCheck)
+            .Get(UnknownObtainLocation);
         Lines.Emplace(HatchedLocation);
     } else {
         Lines.Emplace(FText::FromStringView(TEXT("")));
@@ -103,9 +115,11 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
     auto JoinedString =
         FString::Join(RangeHelpers::CreateRange(Lines) |
-                          std::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
+                      std::views::transform([](const FText &Text) -> const FString &{
+                          return Text.ToString();
+                      }),
                       TEXT("\n"));
-    auto JoinedText = FText::FromString(MoveTemp(JoinedString));
+    MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
 }
 
 FText UTrainerMemoPage::FormatDate(const FDateTime &DateTime) const {

@@ -34,6 +34,8 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     } else {
         OwnerInfo = FOwnerInfo();
     }
+
+    ObtainedBlock = UConstructionUtilities::CreateObtainedBlock(this, DTO);
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -118,6 +120,10 @@ const FItem *UGamePokemon::GetHoldItem() const {
 
 const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
     return OwnerInfo;
+}
+
+TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
+    return ObtainedBlock;
 }
 
 UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
