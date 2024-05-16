@@ -117,7 +117,7 @@ struct POKEMONCORE_API FPokemonDTO {
      * The method the Pokémon was obtained with
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
-    EObtainMethod ObtainMethod;
+    EObtainMethod ObtainMethod = EObtainMethod::Default;
 
     /**
      * Manual override of the met location (otherwise use the map they were obtained on)

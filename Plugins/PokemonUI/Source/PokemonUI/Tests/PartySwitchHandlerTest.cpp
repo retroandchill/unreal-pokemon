@@ -1,5 +1,4 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
 #include "Asserts.h"
@@ -11,24 +10,7 @@
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/GCPointer.h"
 #include "Utilities/RAII.h"
-
-class FMockScreen : public IPartyScreen {
-  public:
-    void BeginSwitch(int32 Index) override {
-        SwitchIndex.Emplace(Index);
-    }
-
-    void SetHelpText(const FText &Text) override {
-    }
-
-    ARPGPlayerController &GetPlayerController() override {
-        return *PlayerController;
-    }
-
-    TOptional<int32> SwitchIndex;
-
-    ARPGPlayerController *PlayerController = nullptr;
-};
+#include "MockScreen.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Unit Tests.UI.PartySwitchHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
