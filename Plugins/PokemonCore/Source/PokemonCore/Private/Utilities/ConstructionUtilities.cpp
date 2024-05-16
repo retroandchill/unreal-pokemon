@@ -17,7 +17,7 @@ TScriptInterface<IPokemon> UConstructionUtilities::CreateForeignPokemon(const FP
                                                                         const TScriptInterface<ITrainer> &Trainer) {
     auto Settings = GetDefault<UDependencyInjectionSettings>();
     auto PokemonClass = Settings->GetPokemonClass();
-    TScriptInterface<IPokemon> Pokemon = NewObject<UObject>(GetTransientPackage(), PokemonClass);
+    TScriptInterface<IPokemon> Pokemon = NewObject<UObject>(Trainer.GetObject(), PokemonClass);
     Pokemon->Initialize(Data, Trainer);
     return Pokemon;
 }
