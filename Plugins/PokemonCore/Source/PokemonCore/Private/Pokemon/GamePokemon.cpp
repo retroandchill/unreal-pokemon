@@ -14,6 +14,7 @@
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
     PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
+    Nickname = DTO.Nickname;
     Gender = DTO.Gender;
     Shiny = DTO.Shiny;
     StatBlock = UConstructionUtilities::CreateStatBlock(this, DTO);

@@ -1,8 +1,9 @@
 ﻿
+
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Handlers/PartyMenu/SummaryHandler.h"
 #include "Asserts.h"
-#include "MockScreen.h"
+#include "PokemonUI/Tests/MockScreen.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
 #include "Trainers/BasicTrainer.h"

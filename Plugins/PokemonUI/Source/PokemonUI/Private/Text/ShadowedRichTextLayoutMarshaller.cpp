@@ -7,6 +7,7 @@
 FShadowedRichTextLayoutMarshaller::FShadowedRichTextLayoutMarshaller(TArray<TSharedRef<ITextDecorator>> InDecorators,
                                                                      const ISlateStyle *const InDecoratorStyleSet)
     : FRichTextLayoutMarshaller(MoveTemp(InDecorators), InDecoratorStyleSet) {
+    //InlineDecorators.Add(MakeShared)
 }
 
 FShadowedRichTextLayoutMarshaller::FShadowedRichTextLayoutMarshaller(TSharedPtr<IRichTextMarkupParser> InParser,

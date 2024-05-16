@@ -10,7 +10,7 @@
 #include "Trainers/OwnerInfo.h"
 #include "Trainers/TrainerType.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerInfoTest, "Unit Tests.Pokemon.TrainerInfoTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerInfoTest, "Unit Tests.Core.Pokemon.TrainerInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TrainerInfoTest::RunTest(const FString &Parameters) {
