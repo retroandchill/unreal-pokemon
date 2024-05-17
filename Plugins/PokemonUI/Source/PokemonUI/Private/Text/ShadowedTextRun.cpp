@@ -19,19 +19,16 @@ int32 FShadowedTextRun::OnPaint(const FPaintArgs &PaintArgs, const FTextArgs &Te
                                 FSlateWindowElementList &OutDrawElements, int32 LayerId,
                                 const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const {
 #if !UE_BUILD_SHIPPING
-    static const auto CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("Slate.LogPaintedText"));
-    if (CVar->GetBool()) {
-        UE_LOG(LogSlate, Log, TEXT("FSlateTextRun: '%s'."), **Text);
+    if (const auto CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("Slate.LogPaintedText")); CVar->GetBool()) {
+        UE_LOG(LogSlate, Log, TEXT("FSlateTextRun: '%s'."), **Text)
     }
 #endif
     const ESlateDrawEffect DrawEffects = bParentEnabled ? ESlateDrawEffect::None : ESlateDrawEffect::DisabledEffect;
 
     const auto &Block = TextArgs.Block;
-    const auto &DefaultStyle = TextArgs.DefaultStyle;
     const auto &Line = TextArgs.Line;
 
     const bool ShouldDropShadow = Style.ShadowColorAndOpacity.A > 0.f && Style.ShadowOffset.SizeSquared() > 0.f;
-    const auto BlockLocationOffset = Block->GetLocationOffset();
     const auto BlockRange = Block->GetTextRange();
     const auto BlockTextContext = Block->GetTextContext();
 
@@ -91,23 +88,25 @@ int32 FShadowedTextRun::OnPaint(const FPaintArgs &PaintArgs, const FTextArgs &Te
         for (const auto &Mask : ShadowMasks) {
             FVector2D MaskedOffset(DrawShadowOffset.X * Mask.X, DrawShadowOffset.Y * Mask.Y);
             FSlateDrawElement::MakeShapedText(
-                OutDrawElements, ++LayerId,
+                OutDrawElements, LayerId,
                 AllottedGeometry.ToPaintGeometry(
                     TransformVector(InverseScale, Block->GetSize()),
                     FSlateLayoutTransform(TransformPoint(InverseScale, Block->GetLocationOffset() + MaskedOffset))),
                 ShadowShapedText, DrawEffects, InWidgetStyle.GetColorAndOpacityTint() * Style.ShadowColorAndOpacity,
                 InWidgetStyle.GetColorAndOpacityTint() * Style.Font.OutlineSettings.OutlineColor, OverflowArgs);
+            LayerId++;
         }
     }
 
     // Draw the text itself
     FSlateDrawElement::MakeShapedText(
-        OutDrawElements, ++LayerId,
+        OutDrawElements, LayerId,
         AllottedGeometry.ToPaintGeometry(
             TransformVector(InverseScale, Block->GetSize()),
             FSlateLayoutTransform(TransformPoint(InverseScale, Block->GetLocationOffset() + DrawTextOffset))),
         ShapedText, DrawEffects, InWidgetStyle.GetColorAndOpacityTint() * Style.ColorAndOpacity.GetColor(InWidgetStyle),
         InWidgetStyle.GetColorAndOpacityTint() * Style.Font.OutlineSettings.OutlineColor, OverflowArgs);
-
+    LayerId++;
+    
     return LayerId;
 }

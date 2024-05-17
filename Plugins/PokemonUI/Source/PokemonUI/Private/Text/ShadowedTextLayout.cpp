@@ -3,7 +3,7 @@
 #include "Text/ShadowedTextLayout.h"
 #include "Text/ShadowedTextRun.h"
 
-FShadowedTextLayout::FShadowedTextLayout(SWidget *InOwner, FTextBlockStyle InDefaultTextStyle)
+FShadowedTextLayout::FShadowedTextLayout(SWidget *InOwner, const FTextBlockStyle &InDefaultTextStyle)
     : FSlateTextLayout(InOwner, InDefaultTextStyle) {
 }
 

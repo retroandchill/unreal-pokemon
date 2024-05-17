@@ -22,5 +22,5 @@ class POKEMONUI_API FShadowedRichTextLayoutMarshaller : public FRichTextLayoutMa
         const FTextBlockStyle &DefaultTextStyle, const TSharedRef<FString> &InOutModelText,
         FTextLayout &TargetTextLayout, TArray<TSharedRef<IRun>> &Runs, TArray<FTextLineHighlight> &LineHighlights,
         TMap<const FTextBlockStyle *, TSharedPtr<FSlateTextUnderlineLineHighlighter>> &CachedUnderlineHighlighters,
-        TMap<const FTextBlockStyle *, TSharedPtr<FSlateTextStrikeLineHighlighter>> &CachedStrikeLineHighlighters);
+        TMap<const FTextBlockStyle *, TSharedPtr<FSlateTextStrikeLineHighlighter>> &CachedStrikeLineHighlighters) override;
 };

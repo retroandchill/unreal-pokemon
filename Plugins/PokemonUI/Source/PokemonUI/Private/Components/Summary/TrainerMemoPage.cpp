@@ -10,51 +10,9 @@
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
-#define MEMO_TEXT(Key, Text) NSLOCTEXT("UTrainerMemoPage", Key, Text)
-
 FCharacteristicList::FCharacteristicList() = default;
 
 FCharacteristicList::FCharacteristicList(TArray<FText> &&Characteristics) : Characteristics(MoveTemp(Characteristics)) {
-}
-
-UTrainerMemoPage::UTrainerMemoPage(const FObjectInitializer &Initializer)
-    : USummaryScreenPage(Initializer), NatureLineFormat(MEMO_TEXT("NatureLineFormat", "<Blue>{Nature}</> nature.")),
-      DateLineFormat(TEXT("%b %e, %Y")), UnknownObtainLocation(MEMO_TEXT("UnknownObtainLocation", "Faraway place")),
-      LocationFormatting(MEMO_TEXT("LocationFormatting", "<Red>{Location}</>")),
-      ObtainLocationFormats({{EObtainMethod::Default, MEMO_TEXT("ObtainLocationDefault", "Met at Lv. {Level}.")},
-                             {EObtainMethod::Egg, MEMO_TEXT("ObtainLocationEgg", "Egg received.")},
-                             {EObtainMethod::Trade, MEMO_TEXT("ObtainLocationTrade", "Traded at Lv. {Level}.")},
-                             {EObtainMethod::FatefulEncounter,
-                              MEMO_TEXT("ObtainLocationFatefulEncounter", "Had a fateful encounter at Lv. {Level}.")}}),
-      EggHatchedText(MEMO_TEXT("EggHatchedText", "Egg hatched.")),
-      StatsOrder({"HP", "ATTACK", "DEFENSE", "SPEED", "SPECIAL_ATTACK", "SPECIAL_DEFENSE"}),
-      Characteristics({
-          {"HP", FCharacteristicList({MEMO_TEXT("HP1", "Loves to eat."), MEMO_TEXT("HP2", "Takes plenty of siestas."),
-                                      MEMO_TEXT("HP3", "Nods off a lot."), MEMO_TEXT("HP4", "Scatters things often."),
-                                      MEMO_TEXT("HP5", "Likes to relax.")})},
-          {"ATTACK", FCharacteristicList(
-           {MEMO_TEXT("ATTACK1", "Proud of its power."), MEMO_TEXT("ATTACK2", "Likes to thrash about."),
-            MEMO_TEXT("ATTACK3", "A little quick tempered."), MEMO_TEXT("ATTACK4", "Likes to fight."),
-            MEMO_TEXT("ATTACK5", "Quick tempered.")})},
-          {"DEFENSE",
-           FCharacteristicList({MEMO_TEXT("DEFENSE1", "Sturdy body."), MEMO_TEXT("DEFENSE2", "Capable of taking hits."),
-                                MEMO_TEXT("DEFENSE3", "Highly persistent."), MEMO_TEXT("DEFENSE4", "Good endurance."),
-                                MEMO_TEXT("DEFENSE5", "Good perseverance.")})},
-          {"SPECIAL_ATTACK", FCharacteristicList({MEMO_TEXT("SPECIAL_ATTACK1", "Highly curious."),
-                                                  MEMO_TEXT("SPECIAL_ATTACK2", "Mischievous."),
-                                                  MEMO_TEXT("SPECIAL_ATTACK3", "Thoroughly cunning."),
-                                                  MEMO_TEXT("SPECIAL_ATTACK4", "Often lost in thought."),
-                                                  MEMO_TEXT("SPECIAL_ATTACK5", "Very finicky.")})},
-          {"SPECIAL_DEFENSE",
-           FCharacteristicList(
-           {MEMO_TEXT("SPECIAL_DEFENSE1", "Strong willed."), MEMO_TEXT("SPECIAL_DEFENSE2", "Somewhat vain."),
-            MEMO_TEXT("SPECIAL_DEFENSE3", "Strongly defiant."), MEMO_TEXT("SPECIAL_DEFENSE4", "Hates to lose."),
-            MEMO_TEXT("SPECIAL_DEFENSE5", "Somewhat stubborn.")})},
-          {"SPEED",
-           FCharacteristicList({MEMO_TEXT("SPEED1", "Likes to run."), MEMO_TEXT("SPEED2", "Alert to sounds."),
-                                MEMO_TEXT("SPEED3", "Impetuous and silly."),
-                                MEMO_TEXT("SPEED4", "Somewhat of a clown."), MEMO_TEXT("SPEED5", "Quick to flee.")})},
-      }) {
 }
 
 void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

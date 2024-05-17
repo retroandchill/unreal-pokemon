@@ -45,7 +45,7 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     AssetRegistry.OnAssetRemoved().AddUObject(this, &UAssetAssignmentSubsystem::HandleAssetRemoved);
 }
 
-void UAssetAssignmentSubsystem::HandleAssetAdded(const FAssetData &AssetData) {
+void UAssetAssignmentSubsystem::HandleAssetAdded(const FAssetData &AssetData) const {
     for (auto &[Package, Repository] : AssetRepositories) {
         if (AssetData.PackagePath.ToString().Contains(Package.ToString())) {
             Repository->RegisterAsset(AssetData);
@@ -54,7 +54,7 @@ void UAssetAssignmentSubsystem::HandleAssetAdded(const FAssetData &AssetData) {
     }
 }
 
-void UAssetAssignmentSubsystem::HandleAssetRenamed(const FAssetData &AssetData, const FString &) {
+void UAssetAssignmentSubsystem::HandleAssetRenamed(const FAssetData &AssetData, const FString &) const {
     for (auto &[Package, Repository] : AssetRepositories) {
         if (AssetData.PackagePath.ToString().Contains(Package.ToString())) {
             Repository->RegisterAsset(AssetData);
@@ -63,7 +63,7 @@ void UAssetAssignmentSubsystem::HandleAssetRenamed(const FAssetData &AssetData, 
     }
 }
 
-void UAssetAssignmentSubsystem::HandleAssetRemoved(const FAssetData &AssetData) {
+void UAssetAssignmentSubsystem::HandleAssetRemoved(const FAssetData &AssetData) const {
     for (auto &[Package, Repository] : AssetRepositories) {
         if (AssetData.PackagePath.ToString().Contains(Package.ToString())) {
             Repository->UnregisterAsset(AssetData);

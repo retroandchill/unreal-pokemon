@@ -153,7 +153,7 @@ static TArray<FName> CreatePokemonSpriteResolutionList(FName Species, const FPok
         FStringView TryShadow;
         FStringView TrySubfolder = SubfolderString;
         for (int j = 0; j < Factors.Num(); j++) {
-            auto &[FactorIndex, Extension, Fallback] = Factors[j];
+            const auto &[FactorIndex, Extension, Fallback] = Factors[j];
             auto TestValue = i / static_cast<int32>(std::pow(2, j)) % 2 == 0 ? Extension : Fallback;
             switch (FactorIndex) {
             case 0:

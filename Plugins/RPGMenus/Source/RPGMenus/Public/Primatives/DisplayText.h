@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Data/RPGMenusSettings.h"
 
 #include "DisplayText.generated.h"
 
@@ -17,13 +18,6 @@ class UTextBlock;
 UCLASS(Blueprintable, Abstract)
 class RPGMENUS_API UDisplayText : public UUserWidget {
     GENERATED_BODY()
-
-  public:
-    /**
-     * Construct the default version of the window
-     * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-     */
-    explicit UDisplayText(const FObjectInitializer &ObjectInitializer);
 
   protected:
     TSharedRef<SWidget> RebuildWidget() override;
@@ -141,7 +135,7 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
      * The table used to determine the text styles.
      */
     UPROPERTY(EditAnywhere, Category = Display)
-    TObjectPtr<UDataTable> TextStyles;
+    TObjectPtr<UDataTable> TextStyles = GetDefault<URPGMenusSettings>()->GetTextStyleDataTable();
 
     /**
      * The amount to scale each line's height by.

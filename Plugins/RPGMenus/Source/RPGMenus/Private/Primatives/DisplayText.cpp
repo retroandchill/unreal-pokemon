@@ -7,10 +7,6 @@
 #include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
 
-UDisplayText::UDisplayText(const FObjectInitializer &ObjectInitializer)
-    : UUserWidget(ObjectInitializer), TextStyles(GetDefault<URPGMenusSettings>()->GetTextStyleDataTable()) {
-}
-
 TSharedRef<SWidget> UDisplayText::RebuildWidget() {
     auto Ret = Super::RebuildWidget();
     SetTextInfo();
