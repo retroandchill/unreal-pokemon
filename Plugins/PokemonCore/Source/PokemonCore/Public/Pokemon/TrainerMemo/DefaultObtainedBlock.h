@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ObtainedBlock.h"
 #include "UObject/Object.h"
+
 #include "DefaultObtainedBlock.generated.h"
 
 /**
@@ -14,28 +15,28 @@ UCLASS()
 class POKEMONCORE_API UDefaultObtainedBlock : public UObject, public IObtainedBlock {
     GENERATED_BODY()
 
-public:
+  public:
     TScriptInterface<IObtainedBlock> Initialize(const FPokemonDTO &DTO) override;
-    
+
     UFUNCTION(BlueprintPure, Category = "Trainer Memo")
     EObtainMethod GetObtainMethod() const override;
 
     UFUNCTION(BlueprintPure, Category = "Trainer Memo")
     int32 GetLevelMet() const override;
-    
-    const FDateTime* GetTimeReceived() const override;
+
+    const FDateTime *GetTimeReceived() const override;
     TOptional<FText> GetObtainText() override;
-    const FDateTime* GetTimeHatched() const override;
-    
+    const FDateTime *GetTimeHatched() const override;
+
     UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
     void SetTimeHatched(const FDateTime &DateTime) override;
-    
+
     TOptional<FText> GetHatchedMap() override;
-    
+
     UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
     void SetHatchedMap(const FText &MapName) override;
 
-private:
+  private:
     UPROPERTY(SaveGame)
     EObtainMethod ObtainMethod;
 
@@ -53,5 +54,4 @@ private:
 
     UPROPERTY(SaveGame)
     TOptional<FText> HatchedMap;
-    
 };

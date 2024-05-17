@@ -3,10 +3,10 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
-#include "Utilities/ConstructionUtilities.h"
-#include "Utilities/RAII.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Settings/PokemonSettings.h"
+#include "Utilities/ConstructionUtilities.h"
+#include "Utilities/RAII.h"
 
 class UPokemonSettings;
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Unit Tests.Core.Pokemon.CaughtPokeBallTest",
@@ -24,7 +24,7 @@ bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
 
     auto Pokemon2 = UConstructionUtilities::CreateNewPokemon({.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
     CHECK_EQUAL(TEXT("MOONBALL"), Pokemon2->GetPokeBall().ToString());
-    
+
     return true;
 }
 #endif

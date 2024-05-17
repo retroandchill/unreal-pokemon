@@ -107,6 +107,6 @@ int32 FShadowedTextRun::OnPaint(const FPaintArgs &PaintArgs, const FTextArgs &Te
         ShapedText, DrawEffects, InWidgetStyle.GetColorAndOpacityTint() * Style.ColorAndOpacity.GetColor(InWidgetStyle),
         InWidgetStyle.GetColorAndOpacityTint() * Style.Font.OutlineSettings.OutlineColor, OverflowArgs);
     LayerId++;
-    
+
     return LayerId;
 }

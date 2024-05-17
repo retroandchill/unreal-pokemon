@@ -50,7 +50,7 @@ TScriptInterface<IAbilityBlock> UConstructionUtilities::CreateAbilityBlock(const
 }
 
 TScriptInterface<IObtainedBlock> UConstructionUtilities::CreateObtainedBlock(const TScriptInterface<IPokemon> &Owner,
-    const FPokemonDTO &DTO) {
+                                                                             const FPokemonDTO &DTO) {
     auto Class = GetDefault<UDependencyInjectionSettings>()->GetObtainedBlockClass();
     TScriptInterface<IObtainedBlock> Ret = NewObject<UObject>(Owner.GetObject(), Class);
     return Ret->Initialize(DTO);

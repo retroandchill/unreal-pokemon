@@ -47,7 +47,7 @@ T OrElseGet(const TOptional<T> &Optional, const Functor &Supplier) {
 }
 
 template <typename T, typename R>
-TOptional<R> Map(const TOptional<T> &Optional, const TFunctionRef<R(const T&)> &Mapping) {
+TOptional<R> Map(const TOptional<T> &Optional, const TFunctionRef<R(const T &)> &Mapping) {
     return Optional.IsSet() ? Mapping(Optional.GetValue()) : TOptional<R>();
 }
 
@@ -73,7 +73,7 @@ bool OptionalsSame(const TOptional<T> &A, const TOptional<T> &B) {
  * @return They they equal?
  */
 POKEMONUTILITIES_API bool OptionalsSame(const TOptional<FText> &A, const TOptional<FText> &B);
-}
+} // namespace OptionalUtilities
 
 #define OPTIONAL(OwningObject, Property) CreateOptional((OwningObject).Property, (OwningObject).bOverride_##Property)
 

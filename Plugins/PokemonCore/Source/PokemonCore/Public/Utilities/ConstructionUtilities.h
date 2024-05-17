@@ -74,5 +74,5 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
      * @return The created block
      */
     static TScriptInterface<IObtainedBlock> CreateObtainedBlock(const TScriptInterface<IPokemon> &Owner,
-                                                              const FPokemonDTO &DTO);
+                                                                const FPokemonDTO &DTO);
 };

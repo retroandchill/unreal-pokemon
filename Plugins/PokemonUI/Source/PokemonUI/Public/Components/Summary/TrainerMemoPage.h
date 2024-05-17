@@ -35,7 +35,7 @@ UCLASS(Abstract)
 class POKEMONUI_API UTrainerMemoPage : public USummaryScreenPage {
     GENERATED_BODY()
 
-protected:
+  protected:
     void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
     /**
@@ -45,7 +45,7 @@ protected:
     UFUNCTION(BlueprintNativeEvent, Category = "Memo|Formatting")
     bool ShowNature() const;
 
-private:
+  private:
     FText FormatDate(const FDateTime &DateTime) const;
 
     FText FormatLocation(FText Location) const;
@@ -91,8 +91,7 @@ private:
         {EObtainMethod::Egg, MEMO_TEXT("ObtainLocationEgg", "Egg received.")},
         {EObtainMethod::Trade, MEMO_TEXT("ObtainLocationTrade", "Traded at Lv. {Level}.")},
         {EObtainMethod::FatefulEncounter,
-         MEMO_TEXT("ObtainLocationFatefulEncounter", "Apparently had a fateful encounter at Lv. {Level}.")}
-    };
+         MEMO_TEXT("ObtainLocationFatefulEncounter", "Apparently had a fateful encounter at Lv. {Level}.")}};
 
     /**
      * The text used for saying the egg hatched
@@ -104,56 +103,39 @@ private:
      * The order of the stats used for tiebreakers
      */
     UPROPERTY(EditAnywhere, Category = "Memo|Formatting|Characteristic",
-        meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     TArray<FName> StatsOrder = {"HP", "ATTACK", "DEFENSE", "SPEED", "SPECIAL_ATTACK", "SPECIAL_DEFENSE"};
 
     /**
      * The order of the stats used for tiebreakers
      */
     UPROPERTY(EditAnywhere, Category = "Memo|Formatting|Characteristic",
-        meta = (GetKeyOptions = "PokemonData.StatHelper.GetMainStatNames"))
+              meta = (GetKeyOptions = "PokemonData.StatHelper.GetMainStatNames"))
     TMap<FName, FCharacteristicList> Characteristics = {
-        {"HP", FCharacteristicList({
-             MEMO_TEXT("HP1", "Loves to eat."),
-             MEMO_TEXT("HP2", "Takes plenty of siestas."),
-             MEMO_TEXT("HP3", "Nods off a lot."),
-             MEMO_TEXT("HP4", "Scatters things often."),
-             MEMO_TEXT("HP5", "Likes to relax.")
-         })},
-        {"ATTACK", FCharacteristicList({
-             MEMO_TEXT("ATTACK1", "Proud of its power."),
-             MEMO_TEXT("ATTACK2", "Likes to thrash about."),
-             MEMO_TEXT("ATTACK3", "A little quick tempered."),
-             MEMO_TEXT("ATTACK4", "Likes to fight."),
-             MEMO_TEXT("ATTACK5", "Quick tempered.")
-         })},
-        {"DEFENSE", FCharacteristicList({
-             MEMO_TEXT("DEFENSE1", "Sturdy body."),
-             MEMO_TEXT("DEFENSE2", "Capable of taking hits."),
-             MEMO_TEXT("DEFENSE3", "Highly persistent."),
-             MEMO_TEXT("DEFENSE4", "Good endurance."),
-             MEMO_TEXT("DEFENSE5", "Good perseverance.")
-         })},
-        {"SPECIAL_ATTACK", FCharacteristicList({
-             MEMO_TEXT("SPECIAL_ATTACK1", "Highly curious."),
-             MEMO_TEXT("SPECIAL_ATTACK2", "Mischievous."),
-             MEMO_TEXT("SPECIAL_ATTACK3", "Thoroughly cunning."),
-             MEMO_TEXT("SPECIAL_ATTACK4", "Often lost in thought."),
-             MEMO_TEXT("SPECIAL_ATTACK5", "Very finicky.")
-         })},
-        {"SPECIAL_DEFENSE", FCharacteristicList({
-             MEMO_TEXT("SPECIAL_DEFENSE1", "Strong willed."),
-             MEMO_TEXT("SPECIAL_DEFENSE2", "Somewhat vain."),
-             MEMO_TEXT("SPECIAL_DEFENSE3", "Strongly defiant."),
-             MEMO_TEXT("SPECIAL_DEFENSE4", "Hates to lose."),
-             MEMO_TEXT("SPECIAL_DEFENSE5", "Somewhat stubborn.")
-         })},
-        {"SPEED", FCharacteristicList({
-             MEMO_TEXT("SPEED1", "Likes to run."),
-             MEMO_TEXT("SPEED2", "Alert to sounds."),
-             MEMO_TEXT("SPEED3", "Impetuous and silly."),
-             MEMO_TEXT("SPEED4", "Somewhat of a clown."),
-             MEMO_TEXT("SPEED5", "Quick to flee.")
-         })},
+        {"HP", FCharacteristicList({MEMO_TEXT("HP1", "Loves to eat."), MEMO_TEXT("HP2", "Takes plenty of siestas."),
+                                    MEMO_TEXT("HP3", "Nods off a lot."), MEMO_TEXT("HP4", "Scatters things often."),
+                                    MEMO_TEXT("HP5", "Likes to relax.")})},
+        {"ATTACK", FCharacteristicList(
+                       {MEMO_TEXT("ATTACK1", "Proud of its power."), MEMO_TEXT("ATTACK2", "Likes to thrash about."),
+                        MEMO_TEXT("ATTACK3", "A little quick tempered."), MEMO_TEXT("ATTACK4", "Likes to fight."),
+                        MEMO_TEXT("ATTACK5", "Quick tempered.")})},
+        {"DEFENSE",
+         FCharacteristicList({MEMO_TEXT("DEFENSE1", "Sturdy body."), MEMO_TEXT("DEFENSE2", "Capable of taking hits."),
+                              MEMO_TEXT("DEFENSE3", "Highly persistent."), MEMO_TEXT("DEFENSE4", "Good endurance."),
+                              MEMO_TEXT("DEFENSE5", "Good perseverance.")})},
+        {"SPECIAL_ATTACK",
+         FCharacteristicList(
+             {MEMO_TEXT("SPECIAL_ATTACK1", "Highly curious."), MEMO_TEXT("SPECIAL_ATTACK2", "Mischievous."),
+              MEMO_TEXT("SPECIAL_ATTACK3", "Thoroughly cunning."),
+              MEMO_TEXT("SPECIAL_ATTACK4", "Often lost in thought."), MEMO_TEXT("SPECIAL_ATTACK5", "Very finicky.")})},
+        {"SPECIAL_DEFENSE",
+         FCharacteristicList(
+             {MEMO_TEXT("SPECIAL_DEFENSE1", "Strong willed."), MEMO_TEXT("SPECIAL_DEFENSE2", "Somewhat vain."),
+              MEMO_TEXT("SPECIAL_DEFENSE3", "Strongly defiant."), MEMO_TEXT("SPECIAL_DEFENSE4", "Hates to lose."),
+              MEMO_TEXT("SPECIAL_DEFENSE5", "Somewhat stubborn.")})},
+        {"SPEED",
+         FCharacteristicList({MEMO_TEXT("SPEED1", "Likes to run."), MEMO_TEXT("SPEED2", "Alert to sounds."),
+                              MEMO_TEXT("SPEED3", "Impetuous and silly."), MEMO_TEXT("SPEED4", "Somewhat of a clown."),
+                              MEMO_TEXT("SPEED5", "Quick to flee.")})},
     };
 };

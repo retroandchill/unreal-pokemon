@@ -1,16 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "PokemonUI/Tests/MockScreen.h"
-#include "Handlers/PartyMenu/PartySwitchHandler.h"
 #include "Asserts.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
+#include "Handlers/PartyMenu/PartySwitchHandler.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
+#include "PokemonUI/Tests/MockScreen.h"
 #include "Screens/PartyScreen.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/GCPointer.h"
-#include "Utilities/RAII.h"\
+#include "Utilities/RAII.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Unit Tests.UI.PartySwitchHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

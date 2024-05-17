@@ -23,8 +23,8 @@ class POKEMONCORE_API IObtainedBlock {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
-    virtual TScriptInterface<IObtainedBlock> Initialize(const FPokemonDTO& DTO) = 0;
-    
+    virtual TScriptInterface<IObtainedBlock> Initialize(const FPokemonDTO &DTO) = 0;
+
     /**
      * Get the method this Pokémon was obtained by.
      * @return The means the Pokémon was obtained by.
@@ -62,7 +62,7 @@ class POKEMONCORE_API IObtainedBlock {
      * @param DateTime The date and time the egg hatched.
      */
     UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
-    virtual void SetTimeHatched(const FDateTime& DateTime) = 0;
+    virtual void SetTimeHatched(const FDateTime &DateTime) = 0;
 
     /**
      * Get the map this Pokémon hatched on.
@@ -75,5 +75,5 @@ class POKEMONCORE_API IObtainedBlock {
      * @param MapName The location of hatching.
      */
     UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
-    virtual void SetHatchedMap(const FText& MapName) = 0;
+    virtual void SetHatchedMap(const FText &MapName) = 0;
 };

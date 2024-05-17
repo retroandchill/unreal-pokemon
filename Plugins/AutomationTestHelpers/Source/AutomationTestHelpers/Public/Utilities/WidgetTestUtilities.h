@@ -28,4 +28,5 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
     static std::pair<TSharedRef<SOverlay>, UWorld *> CreateTestWorld();
 };
 
-#define FIND_CHILD_WIDGET(Parent, Type, WidgetName) auto WidgetName = Cast<Type>(UWidgetTestUtilities::FindChildWidget(Parent, TEXT(#WidgetName)))
+#define FIND_CHILD_WIDGET(Parent, Type, WidgetName)                                                                    \
+    auto WidgetName = Cast<Type>(UWidgetTestUtilities::FindChildWidget(Parent, TEXT(#WidgetName)))

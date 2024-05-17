@@ -142,5 +142,4 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
      */
     UPROPERTY(EditAnywhere, Category = Display)
     float LineHeightPercentage = 1.f;
-    
 };

@@ -5,13 +5,12 @@
 #include "Screens/PartyScreen.h"
 
 class FMockScreen : public IPartyScreen {
-public:
+  public:
     FMockScreen() = default;
 
     explicit FMockScreen(ARPGPlayerController *PlayerController) : PlayerController(PlayerController) {
-        
     }
-    
+
     void BeginSwitch(int32 Index) override {
         SwitchIndex.Emplace(Index);
     }

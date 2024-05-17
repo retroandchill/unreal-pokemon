@@ -3,15 +3,15 @@
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Handlers/PartyMenu/SummaryHandler.h"
 #include "Asserts.h"
-#include "PokemonUI/Tests/MockScreen.h"
+#include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
+#include "PokemonUI/Tests/MockScreen.h"
+#include "Screens/PokemonSummaryScreen.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/GCPointer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Screens/PokemonSummaryScreen.h"
-#include "External/accessor.hpp"
 
 using namespace accessor;
 
@@ -25,7 +25,7 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSummaryScreen>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
-    
+
     auto PlayerController = World->SpawnActor<ARPGPlayerController>();
     auto Pawn = World->SpawnActor<APawn>();
     auto Player = NewObject<ULocalPlayer>(GEngine);

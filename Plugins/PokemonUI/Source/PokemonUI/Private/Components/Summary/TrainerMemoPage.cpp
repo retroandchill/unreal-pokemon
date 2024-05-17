@@ -34,8 +34,8 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     TFunctionRef<FText(const FText &Text)> TextCheck = [this](const FText &Text) {
         return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text;
     };
-    auto ObtainedLocation = OptionalUtilities::Map(ObtainedInformation->GetObtainText(), TextCheck)
-        .Get(UnknownObtainLocation);
+    auto ObtainedLocation =
+        OptionalUtilities::Map(ObtainedInformation->GetObtainText(), TextCheck).Get(UnknownObtainLocation);
     Lines.Emplace(FormatLocation(ObtainedLocation));
 
     auto ObtainMethod = ObtainedInformation->GetObtainMethod();
@@ -48,8 +48,8 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
             Lines.Emplace(FormatDate(*TimeHatched));
         }
 
-        auto HatchedLocation = OptionalUtilities::Map(ObtainedInformation->GetHatchedMap(), TextCheck)
-            .Get(UnknownObtainLocation);
+        auto HatchedLocation =
+            OptionalUtilities::Map(ObtainedInformation->GetHatchedMap(), TextCheck).Get(UnknownObtainLocation);
         Lines.Emplace(FormatLocation(HatchedLocation));
         Lines.Emplace(EggHatchedText);
     } else {
@@ -74,9 +74,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
     auto JoinedString =
         FString::Join(RangeHelpers::CreateRange(Lines) |
-                      std::views::transform([](const FText &Text) -> const FString &{
-                          return Text.ToString();
-                      }),
+                          std::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
                       TEXT("\n"));
     MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
 }
