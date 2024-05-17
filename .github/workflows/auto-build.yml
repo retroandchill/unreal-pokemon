@@ -24,17 +24,17 @@ jobs:
           ./ci/download-sonar-scanner.ps1
       - name: Run build-wrapper
         run: ./ci/build_project.ps1
+
+      - name: Expand Unity Build Commands
+        run: |
+          $location = $( Get-Location )
+          python ./ci/unity_build_adapter.py --file ${location}/bw-output/build-wrapper-dump.json
       
       - name: Install Python Dependencies
         run: ./ci/install_pip_requirements.ps1
       
       - name: Run Tests
         run: ./ci/run_tests.ps1
-        
-      - name: Expand Unity Build Commands
-        run: |
-          $location = $( Get-Location )
-          python ./ci/unity_build_adapter.py --file ${location}/bw-output-dump.json
           
       - name: Run sonar-scanner
         env:
