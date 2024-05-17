@@ -111,6 +111,18 @@ struct POKEMONDATA_API FItem : public FTableRowBase {
     FText Description;
 
     FItem();
+
+    /**
+     * Get if this item is a Poké Ball or not.
+     * @return Is the item in question a type of Poké Ball?
+     */
+    bool IsPokeBall() const;
+
+    /**
+     * Get if this item is a form of mail or not.
+     * @return Is this item of form of mail?
+     */
+    bool IsMail() const;
 };
 
 /**
@@ -127,4 +139,19 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetItemNames();
+
+    /**
+     * Get the list of all possible Poké Ball names.
+     * @return The list of all possible Poké Ball names.
+     */
+    UFUNCTION()
+    static TArray<FName> GetPokeBallNames();
+
+    /**
+     * Get if an item is a form of mail or not.
+     * @param Item The item in question
+     * @return Is the item of form of mail?
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static bool IsMail(const FItem &Item);
 };

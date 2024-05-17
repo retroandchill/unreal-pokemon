@@ -2,9 +2,11 @@
 
 #include "Utilities/PokemonUIUtils.h"
 #include "Components/ProgressBar.h"
+#include "Pokemon/Pokemon.h"
 #include "Primatives/DisplayText.h"
-#include "Text/ShadowedText.h"
 #include "Text/TextColor.h"
+
+enum class EPokemonGender : uint8;
 
 FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) {
     return PadInt(Value, DesiredLength);
@@ -45,10 +47,7 @@ void UPokemonUIUtils::SetItemTextColor(TObjectPtr<UDisplayText> &TextWidget, con
         return;
 
     TextWidget->SetTextColor(Color.MainColor);
-
-    if (auto ShadowedText = Cast<UShadowedText>(TextWidget); ShadowedText != nullptr) {
-        ShadowedText->SetShadowColor(Color.ShadowColor);
-    }
+    TextWidget->SetShadowColor(Color.ShadowColor);
 }
 
 void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue) {
@@ -56,4 +55,20 @@ void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float 
         return;
 
     ProgressBar->SetPercent(FMath::Clamp(CurrentValue / MaxValue, 0, 1));
+}
+
+void UPokemonUIUtils::SetPokemonGenderText(const IPokemon &Pokemon, TObjectPtr<UDisplayText> &TextWidget) {
+    using enum EPokemonGender;
+    auto Gender = Pokemon.GetGender();
+    switch (Gender) {
+    case Male:
+        SetItemText(TextWidget, TEXT("♂"));
+        break;
+    case Female:
+        SetItemText(TextWidget, TEXT("♀"));
+        break;
+    case Genderless:
+        SetItemText(TextWidget, TEXT(""));
+        break;
+    }
 }

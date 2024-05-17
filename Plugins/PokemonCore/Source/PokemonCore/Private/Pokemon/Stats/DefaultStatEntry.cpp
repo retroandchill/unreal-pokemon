@@ -7,7 +7,7 @@
 
 TScriptInterface<IStatEntry> UDefaultStatEntry::Initialize(FName Stat, const TOptional<int32> &IVs, int32 EVs) {
     StatID = Stat;
-    IV = OrElseGet(IVs, [] { return StatUtils::RandomizeIV(); });
+    IV = OptionalUtilities::OrElseGet(IVs, [] { return StatUtils::RandomizeIV(); });
     EV = EVs;
     return this;
 }

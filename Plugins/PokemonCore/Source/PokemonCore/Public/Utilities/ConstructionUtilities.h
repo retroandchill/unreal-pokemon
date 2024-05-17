@@ -6,6 +6,8 @@
 
 #include "ConstructionUtilities.generated.h"
 
+class IObtainedBlock;
+class ITrainer;
 class IAbilityBlock;
 class IMoveBlock;
 class IStatBlock;
@@ -27,6 +29,16 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
      */
     UFUNCTION(BlueprintCallable, Category = "Object|Constructors")
     static TScriptInterface<IPokemon> CreateNewPokemon(const FPokemonDTO &Data);
+
+    /**
+     * Create a new Pokémon from the provided data and a foriegn trianer ID.
+     * @param Data The data used to construct the Pokémon.
+     * @param Trainer The original trainer used to construct this trainer
+     * @return The created Pokémon.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Object|Constructors")
+    static TScriptInterface<IPokemon> CreateForeignPokemon(const FPokemonDTO &Data,
+                                                           const TScriptInterface<ITrainer> &Trainer);
 
     /**
      * Create the stat block based on the settings.
@@ -54,4 +66,13 @@ class POKEMONCORE_API UConstructionUtilities : public UBlueprintFunctionLibrary 
      */
     static TScriptInterface<IAbilityBlock> CreateAbilityBlock(const TScriptInterface<IPokemon> &Owner,
                                                               const FPokemonDTO &DTO);
+
+    /**
+     * Create the obtained block based on the settings.
+     * @param Owner The Pokémon to take ownership of the obtained block
+     * @param DTO The DTO to copy any saved data from
+     * @return The created block
+     */
+    static TScriptInterface<IObtainedBlock> CreateObtainedBlock(const TScriptInterface<IPokemon> &Owner,
+                                                                const FPokemonDTO &DTO);
 };

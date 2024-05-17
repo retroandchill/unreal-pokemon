@@ -99,4 +99,10 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> FirstHallOfFameText;
+
+    /**
+     * The length of the player's ID number
+     */
+    UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
+    int32 IdNumberLength = 6;
 };

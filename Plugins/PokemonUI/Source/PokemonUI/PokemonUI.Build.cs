@@ -28,7 +28,8 @@ public class PokemonUI : ModuleRules
 				"Slate",
 				"SlateCore",
 				"UMG",
-				"DeveloperSettings"
+				"DeveloperSettings",
+				"RenderCore"
 			}
 		);
 		

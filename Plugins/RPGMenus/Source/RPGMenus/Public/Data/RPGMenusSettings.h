@@ -36,6 +36,13 @@ class RPGMENUS_API URPGMenusSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, Category = "Settings|Sound")
     USoundBase *GetCancelSound() const;
 
+    /**
+     * Load and return the text style table.
+     * @return The default sound played when the player cancels on selection in a window.
+     */
+    UFUNCTION(BlueprintPure, Category = "Settings|Text")
+    UDataTable *GetTextStyleDataTable() const;
+
   private:
     /**
      * The default sound played when the player moves the cursor in a window.
@@ -54,4 +61,12 @@ class RPGMENUS_API URPGMenusSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditAnywhere, Config, Category = "Sound", meta = (AllowedClasses = "SoundBase"))
     FSoftObjectPath CancelSound;
+
+    /**
+     * The data table used for the text styles on all display text widgets.
+     */
+    UPROPERTY(EditAnywhere, Config, Category = "Text",
+              meta = (AllowedClasses = "DataTable",
+                      RequiredAssetDataTags = "RowStructure=/Script/UMG.RichTextStyleRow"))
+    FSoftObjectPath TextStyleDataTable;
 };

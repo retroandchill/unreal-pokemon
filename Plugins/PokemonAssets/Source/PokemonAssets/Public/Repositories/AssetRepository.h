@@ -22,6 +22,8 @@ class POKEMONASSETS_API IAssetRepository {
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
 #if WITH_EDITOR
+    virtual void SetBasePackage(FStringView PackageName) = 0;
+
     /**
      * Register the provided asset within the game
      * @param AssetData The asset in question to register

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
+#include "TrainerMemo/ObtainMethod.h"
 
 #include "PokemonDTO.generated.h"
 
@@ -52,6 +53,9 @@ struct POKEMONCORE_API FPokemonDTO {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
     TOptional<bool> Shiny;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+    TOptional<FName> PokeBall;
 
     /**
      * The current amount of HP this Pokémon has
@@ -108,4 +112,16 @@ struct POKEMONCORE_API FPokemonDTO {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
               meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
     TArray<FName> Moves;
+
+    /**
+     * The method the Pokémon was obtained with
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    EObtainMethod ObtainMethod = EObtainMethod::Default;
+
+    /**
+     * Manual override of the met location (otherwise use the map they were obtained on)
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    TOptional<FText> MetLocation;
 };

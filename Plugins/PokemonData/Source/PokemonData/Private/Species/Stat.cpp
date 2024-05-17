@@ -2,6 +2,7 @@
 #include "Species/Stat.h"
 #include "Algo/RemoveIf.h"
 #include "DataManager.h"
+#include "Mainpulation/RangeHelpers.h"
 
 TArray<FName> UStatHelper::GetStatNames() {
     return FDataManager::GetInstance().GetDataTable<FStat>().GetTableRowNames();
@@ -9,9 +10,8 @@ TArray<FName> UStatHelper::GetStatNames() {
 
 TArray<FName> UStatHelper::GetMainStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
-    auto Stats = StatTable.GetTableRowNames();
-    int32 NewSize = Algo::RemoveIf(
-        Stats, [&StatTable](FName Stat) { return StatTable.GetData(Stat)->Type == EPokemonStatType::Battle; });
-    Stats.SetNum(NewSize);
-    return Stats;
+    auto Stats = StatTable.GetAllRows();
+    return RangeHelpers::CreateRange(Stats) |
+           std::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Battle; }) |
+           std::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
 }
