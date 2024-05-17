@@ -1,8 +1,10 @@
-﻿#include "Asserts.h"
-#include "RPGPlayerController.h"
+﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "Asserts.h"
 #include "Components/Image.h"
+#include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/PokemonInfoPage.h"
 #include "Components/Summary/SummaryNameInfo.h"
+#include "Components/Summary/TrainerMemoPage.h"
 #include "Misc/AutomationTest.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/ConstructionUtilities.h"
@@ -10,6 +12,11 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Primatives/DisplayText.h"
+#include "External/accessor.hpp"
+#include "Pokemon/Pokemon.h"
+#include "Pokemon/TrainerMemo/ObtainedBlock.h"
+
+using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_NameInfo, "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.NameInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -76,6 +83,52 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     return true;
 }
 
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_HoldItemInfo, "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.HoldItemInfo",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UHoldItemInfo>();
+    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    auto WidgetClass = Subclasses[0];
+
+    auto Page = CreateWidget<UHoldItemInfo>(World, WidgetClass);
+    Page->AddToViewport();
+
+    auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon({
+        .Species = "KABUTOPS",
+        .Shiny = true,
+        .Item = FName("MYSTICWATER")
+    }, ForeignTrainer);
+
+    Page->Refresh(Pokemon1);
+
+    FIND_CHILD_WIDGET(Page, UDisplayText, ItemNameText);
+    ASSERT_NOT_NULL(ItemNameText);
+    CHECK_EQUAL(TEXT("Mystic Water"), ItemNameText->GetText().ToString());
+
+    FIND_CHILD_WIDGET(Page, UImage, ItemIcon);
+    ASSERT_NOT_NULL(ItemIcon);
+    CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ItemIcon->GetVisibility());
+    
+    FIND_CHILD_WIDGET(Page, UImage, ShinyIcon);
+    ASSERT_NOT_NULL(ShinyIcon);
+    CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ShinyIcon->GetVisibility());
+
+    auto Pokemon2 = UConstructionUtilities::CreateForeignPokemon({
+        .Species = "OMASTAR",
+        .Shiny = false
+    }, ForeignTrainer);
+    Page->Refresh(Pokemon2);
+    
+    CHECK_EQUAL(TEXT("None"), ItemNameText->GetText().ToString());
+    CHECK_EQUAL(ESlateVisibility::Hidden, ItemIcon->GetVisibility());
+    CHECK_EQUAL(ESlateVisibility::Hidden, ShinyIcon->GetVisibility());
+    
+    return true;
+}
+
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_PokemonInfo, "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.PokemonInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
@@ -109,3 +162,78 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_TrainerMemo, "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.TrainerMemo",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UTrainerMemoPage>();
+    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    auto WidgetClass = Subclasses[0];
+
+    auto Page = CreateWidget<UTrainerMemoPage>(World, WidgetClass);
+    Page->AddToViewport();
+
+    auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon({
+        .Species = "KABUTOPS",
+        .Level = 40,
+        .IVs = {
+            {"HP", 30},
+            {"ATTACK", 31},
+            {"DEFENSE", 30},
+            {"SPECIAL_ATTACK", 30},
+            {"SPECIAL_DEFENSE", 30},
+            {"SPEED", 30}
+        },
+        .Nature = FName("Adamant")
+    }, ForeignTrainer);
+    Page->RefreshInfo(Pokemon1);
+
+    FIND_CHILD_WIDGET(Page, UDisplayText, MemoBlock);
+    ASSERT_NOT_NULL(MemoBlock);
+    TArray<FString> Lines;
+    MemoBlock->GetText().ToString().ParseIntoArrayLines(Lines);
+    ASSERT_EQUAL(5, Lines.Num());
+
+    // Test what all the lines contain
+    CHECK_EQUAL(TEXT("<Blue>Adamant</> nature."), Lines[0]); // Nature
+    CHECK_EQUAL(TEXT("<Red>Faraway Place</>"), Lines[2]); // Met Location
+    CHECK_EQUAL(TEXT("Met at Lv. 40."), Lines[3]); // Met Level
+    CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[4]); // Characteristic
+
+    auto Pokemon2 = UConstructionUtilities::CreateForeignPokemon({
+        .Species = "KABUTO",
+        .Level = 1,
+        .IVs = {
+            {"HP", 30},
+            {"ATTACK", 31},
+            {"DEFENSE", 30},
+            {"SPECIAL_ATTACK", 30},
+            {"SPECIAL_DEFENSE", 30},
+            {"SPEED", 30}
+        },
+        .Nature = FName("JOLLY"),
+        .ObtainMethod = EObtainMethod::Egg,
+        .MetLocation = FText::FromStringView(TEXT("Daycare Couple"))
+    }, ForeignTrainer);
+    auto ObtainedBlock = Pokemon2->GetObtainedInformation();
+    ObtainedBlock->SetTimeHatched(FDateTime::Now());
+    ObtainedBlock->SetHatchedMap(FText::FromStringView(TEXT("Unit Test")));
+    Page->RefreshInfo(Pokemon2);
+
+    Lines.Empty();
+    MemoBlock->GetText().ToString().ParseIntoArrayLines(Lines);
+    ASSERT_EQUAL(8, Lines.Num());
+
+    CHECK_EQUAL(TEXT("<Blue>Jolly</> nature."), Lines[0]); // Nature
+    CHECK_EQUAL(TEXT("<Red>Daycare Couple</>"), Lines[2]); // Met Location
+    CHECK_EQUAL(TEXT("Egg received."), Lines[3]); // Met Level
+    CHECK_EQUAL(TEXT("<Red>Unit Test</>"), Lines[5]); // Hatched Location
+    CHECK_EQUAL(TEXT("Egg hatched."), Lines[6]); // Egg Hatched
+    CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[7]); // Characteristic
+    
+    return true;
+}
+#endif

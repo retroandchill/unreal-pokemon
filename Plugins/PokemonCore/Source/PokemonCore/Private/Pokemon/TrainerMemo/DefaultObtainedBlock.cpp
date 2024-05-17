@@ -38,6 +38,14 @@ const FDateTime * UDefaultObtainedBlock::GetTimeHatched() const {
     return TimeHatched.GetPtrOrNull();
 }
 
+void UDefaultObtainedBlock::SetTimeHatched(const FDateTime &DateTime) {
+    TimeHatched = DateTime;
+}
+
 TOptional<FText> UDefaultObtainedBlock::GetHatchedMap() {
     return HatchedMap;
+}
+
+void UDefaultObtainedBlock::SetHatchedMap(const FText &MapName) {
+    HatchedMap = MapName;
 }

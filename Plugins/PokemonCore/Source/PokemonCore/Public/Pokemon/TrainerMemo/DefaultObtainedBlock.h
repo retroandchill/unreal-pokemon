@@ -26,7 +26,14 @@ public:
     const FDateTime* GetTimeReceived() const override;
     TOptional<FText> GetObtainText() override;
     const FDateTime* GetTimeHatched() const override;
+    
+    UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
+    void SetTimeHatched(const FDateTime &DateTime) override;
+    
     TOptional<FText> GetHatchedMap() override;
+    
+    UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
+    void SetHatchedMap(const FText &MapName) override;
 
 private:
     UPROPERTY(SaveGame)

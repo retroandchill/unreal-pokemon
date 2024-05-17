@@ -50,7 +50,8 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
         auto HatchedLocation = OptionalUtilities::Map(ObtainedInformation->GetHatchedMap(), TextCheck)
             .Get(UnknownObtainLocation);
-        Lines.Emplace(HatchedLocation);
+        Lines.Emplace(FormatLocation(HatchedLocation));
+        Lines.Emplace(EggHatchedText);
     } else {
         Lines.Emplace(FText::FromStringView(TEXT("")));
     }

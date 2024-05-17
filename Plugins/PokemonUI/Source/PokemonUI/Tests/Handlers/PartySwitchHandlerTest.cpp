@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-#include "PokemonUI/Tests/MockScreen.h"
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
+#include "PokemonUI/Tests/MockScreen.h"
 #include "Handlers/PartyMenu/PartySwitchHandler.h"
 #include "Asserts.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"

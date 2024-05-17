@@ -53,13 +53,27 @@ class POKEMONCORE_API IObtainedBlock {
 
     /**
      * Get the time this Pokémon hatched
-     * @return The means the Pokémon was obtained by.
+     * @return The date and time the egg hatched.
      */
     virtual const FDateTime *GetTimeHatched() const = 0;
+
+    /**
+     * Set the this Pokémon hatched
+     * @param DateTime The date and time the egg hatched.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
+    virtual void SetTimeHatched(const FDateTime& DateTime) = 0;
 
     /**
      * Get the map this Pokémon hatched on.
      * @return The location of hatching.
      */
     virtual TOptional<FText> GetHatchedMap() = 0;
+
+    /**
+     * Set the map this Pokémon hatched on.
+     * @param MapName The location of hatching.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
+    virtual void SetHatchedMap(const FText& MapName) = 0;
 };

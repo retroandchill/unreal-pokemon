@@ -43,5 +43,5 @@ class POKEMONUI_API UHoldItemInfo : public UPokemonInfoWidget {
      * The text displayed if the Pokémon is holding no item
      */
     UPROPERTY(EditAnywhere, Category = Display)
-    FText NoItemText;
+    FText NoItemText = NSLOCTEXT("UHoldItemInfo", "NoItemText", "None");
 };
