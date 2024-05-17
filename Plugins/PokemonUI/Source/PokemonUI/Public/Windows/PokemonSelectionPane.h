@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Primatives/PokemonPanel.h"
+#include "Components/PokemonPanel.h"
 #include "Windows/SelectableWidget.h"
 
 #include "PokemonSelectionPane.generated.h"

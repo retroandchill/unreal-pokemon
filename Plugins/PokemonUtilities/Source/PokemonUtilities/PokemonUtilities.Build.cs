@@ -24,5 +24,12 @@ public class PokemonUtilities : ModuleRules
 				"SlateCore"
 			}
 		);
+		
+		if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
+		{
+			PrivateDependencyModuleNames.Add("AutomationTestHelpers");
+			PrivateDependencyModuleNames.Add("UnrealEd");
+			PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
+		}
 	}
 }

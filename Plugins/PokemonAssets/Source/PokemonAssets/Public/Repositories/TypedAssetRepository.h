@@ -23,10 +23,46 @@ class TTypedAssetRepository : public IAssetRepository {
         return Lookup != nullptr ? Lookup->Get() : nullptr;
     }
 
+    /**
+     * Fetch the first matching asset for the provided keys
+     * @param Keys The keys to use for the assets in question
+     * @return The asset (if found)
+     */
+    T *ResolveAsset(const TArray<FName> &Keys) const {
+        auto &AssetMap = GetAssetMap();
+        for (const auto &Key : Keys) {
+            auto Lookup = AssetMap.Find(Key);
+            if (Lookup == nullptr) {
+                continue;
+            }
+
+            return Lookup->Get();
+        }
+
+        return nullptr;
+    }
+
 #if WITH_EDITOR
+    void SetBasePackage(FStringView PackageName) final {
+        BasePackageName = PackageName;
+    }
+
     void RegisterAsset(const FAssetData &AssetData) override {
-        if (AssetData.GetClass(EResolveClass::Yes) == T::StaticClass()) {
-            GetAssetMap().Add(AssetData.AssetName, AssetData.GetAsset());
+        if (AssetValid(AssetData)) {
+            auto FolderName = AssetData.PackagePath.ToString();
+            FolderName.RemoveFromStart(BasePackageName);
+            FolderName.RemoveFromStart(TEXT("/"));
+            auto AssetName =
+                FolderName.IsEmpty()
+                    ? AssetData.AssetName
+                    : FName(*FString::Format(TEXT("{0}/{1}"), {FolderName, AssetData.AssetName.ToString()}));
+            auto TrueName = AssetName.ToString();
+            auto NamePrefix = GetNamePrefix();
+            if (!NamePrefix.IsEmpty() && !TrueName.Contains(NamePrefix)) {
+                return;
+            }
+            TrueName.RemoveFromStart(NamePrefix);
+            GetAssetMap().Add(FName(*TrueName), AssetData.GetAsset());
         }
     }
 
@@ -38,6 +74,10 @@ class TTypedAssetRepository : public IAssetRepository {
 #endif
 
   protected:
+    virtual bool AssetValid(const FAssetData &AssetData) const {
+        return AssetData.GetClass(EResolveClass::Yes) == T::StaticClass();
+    }
+
     /**
      * Get the map of names to the actual assets.
      * @return The map of names to the actual assets.
@@ -49,4 +89,11 @@ class TTypedAssetRepository : public IAssetRepository {
      * @return The map of names to the actual assets.
      */
     virtual const TMap<FName, TSoftObjectPtr<T>> &GetAssetMap() const = 0;
+
+    virtual FStringView GetNamePrefix() const = 0;
+
+  private:
+#if WITH_EDITOR
+    FString BasePackageName;
+#endif
 };

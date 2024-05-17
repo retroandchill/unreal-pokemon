@@ -21,7 +21,8 @@ public class PokemonAssetsEditor : ModuleRules
                 "Slate",
                 "SlateCore",
                 "PokemonAssets",
-                "EditorSubsystem"
+                "EditorSubsystem",
+                "DeveloperSettings"
             }
         );
     }

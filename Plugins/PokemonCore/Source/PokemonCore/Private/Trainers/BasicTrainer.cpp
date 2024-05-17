@@ -50,10 +50,10 @@ void UBasicTrainer::ClearParty() {
     Party.Empty();
 }
 
-int32 UBasicTrainer::GetIdNumber() {
+int32 UBasicTrainer::GetIdNumber() const {
     return ID;
 }
 
-int32 UBasicTrainer::GetSecretId() {
+int32 UBasicTrainer::GetSecretId() const {
     return SecretID;
 }

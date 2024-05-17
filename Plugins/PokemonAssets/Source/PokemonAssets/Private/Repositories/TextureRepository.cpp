@@ -9,3 +9,7 @@ TMap<FName, TSoftObjectPtr<UTexture2D>> &UTextureRepository::GetAssetMap() {
 const TMap<FName, TSoftObjectPtr<UTexture2D>> &UTextureRepository::GetAssetMap() const {
     return TextureMap;
 }
+
+FStringView UTextureRepository::GetNamePrefix() const {
+    return NamePrefix;
+}

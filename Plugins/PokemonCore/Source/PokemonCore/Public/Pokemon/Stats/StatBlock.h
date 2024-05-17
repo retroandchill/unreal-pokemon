@@ -50,6 +50,13 @@ class POKEMONCORE_API IStatBlock {
     virtual int32 GetExpForNextLevel() const = 0;
 
     /**
+     * Get the amount of Exp. required to reach the next level as a percentage of the total needed
+     * @return The exp amount required to reach the next level as a percentage of the total needed
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual float GetExpPercent() const = 0;
+
+    /**
      * Get the Pokémon's Nature value
      * @return The Nature of the Pokémon in question
      */

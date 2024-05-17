@@ -71,6 +71,16 @@ int32 UDefaultStatBlock::GetExpForNextLevel() const {
     return UPokemonSubsystem::GetInstance().GetGrowthRate(Owner->GetSpecies().GrowthRate).ExpForLevel(Level + 1);
 }
 
+float UDefaultStatBlock::GetExpPercent() const {
+    if (Level == GetMaxLevel())
+        return 0.f;
+
+    auto &GrowthRate = UPokemonSubsystem::GetInstance().GetGrowthRate(Owner->GetSpecies().GrowthRate);
+    auto ExpNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level));
+    float TotalNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level + 1)) - ExpNeededForLevel;
+    return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
+}
+
 const FNature &UDefaultStatBlock::GetNature() const {
     if (Nature.IsSet())
         return FindNature(Nature.GetValue());

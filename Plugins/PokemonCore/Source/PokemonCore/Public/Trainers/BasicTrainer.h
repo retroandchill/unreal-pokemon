@@ -43,10 +43,10 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
     void ClearParty() override;
 
     UFUNCTION(BlueprintPure, Category = Bio)
-    int32 GetIdNumber() override;
+    int32 GetIdNumber() const override;
 
     UFUNCTION(BlueprintPure, Category = Bio)
-    int32 GetSecretId() override;
+    int32 GetSecretId() const override;
 
   private:
     /**

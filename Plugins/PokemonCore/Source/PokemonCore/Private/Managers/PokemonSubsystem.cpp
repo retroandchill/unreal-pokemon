@@ -3,7 +3,8 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
-#include "PokemonCoreSettings.h"
+#include "Settings/PokemonSettings.h"
+#include "Settings/TrainerSettings.h"
 #include "Trainers/TrainerStub.h"
 
 UPokemonSubsystem *UPokemonSubsystem::Instance = nullptr;
@@ -12,9 +13,8 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
     Instance = this;
-    auto Settings = GetDefault<UPokemonCoreSettings>();
-    HPStat = Settings->GetHPStat();
-    MaxPartySize = Settings->GetMaxPartySize();
+    HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
+    MaxPartySize = GetDefault<UTrainerSettings>()->GetMaxPartySize();
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();

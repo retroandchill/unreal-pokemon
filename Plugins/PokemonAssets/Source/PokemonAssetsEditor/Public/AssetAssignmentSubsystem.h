@@ -20,9 +20,9 @@ class POKEMONASSETSEDITOR_API UAssetAssignmentSubsystem : public UEditorSubsyste
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
   private:
-    void HandleAssetAdded(const FAssetData &AssetData);
-    void HandleAssetRenamed(const FAssetData &AssetData, const FString &OldAssetName);
-    void HandleAssetRemoved(const FAssetData &AssetData);
+    void HandleAssetAdded(const FAssetData &AssetData) const;
+    void HandleAssetRenamed(const FAssetData &AssetData, const FString &OldAssetName) const;
+    void HandleAssetRemoved(const FAssetData &AssetData) const;
 
     UPROPERTY()
     TMap<FName, TScriptInterface<IAssetRepository>> AssetRepositories;

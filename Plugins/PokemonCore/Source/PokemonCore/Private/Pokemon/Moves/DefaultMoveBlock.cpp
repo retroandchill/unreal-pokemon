@@ -4,7 +4,8 @@
 #include "Algo/Unique.h"
 #include "DataManager.h"
 #include "Pokemon/Moves/DefaultMove.h"
-#include "PokemonCoreSettings.h"
+#include "Pokemon/PokemonDTO.h"
+#include "Settings/PokemonSettings.h"
 #include "Species/SpeciesData.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DTO) {
@@ -21,7 +22,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     Algo::Reverse(KnowableMoves);
 
     if (DTO.Moves.Num() > 0) {
-        int32 MoveMax = FMath::Min(GetDefault<UPokemonCoreSettings>()->GetMaxMoves(), DTO.Moves.Num());
+        int32 MoveMax = FMath::Min(GetDefault<UPokemonSettings>()->GetMaxMoves(), DTO.Moves.Num());
         for (int32 i = 0; i < MoveMax; i++) {
             auto &Move = DTO.Moves[i];
             Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(Move));
@@ -31,7 +32,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
             MoveMemory.Add(Move);
         }
     } else {
-        int32 MoveMax = FMath::Min(GetDefault<UPokemonCoreSettings>()->GetMaxMoves(), KnowableMoves.Num());
+        int32 MoveMax = FMath::Min(GetDefault<UPokemonSettings>()->GetMaxMoves(), KnowableMoves.Num());
         for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++) {
             Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(KnowableMoves[i].Move));
         }

@@ -5,14 +5,16 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Settings/PokemonSettings.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/ConstructionUtilities.h"
 #include "Utilities/PersonalityValueUtils.h"
 
-void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
+void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
     PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
+    Nickname = DTO.Nickname;
     Gender = DTO.Gender;
     Shiny = DTO.Shiny;
     StatBlock = UConstructionUtilities::CreateStatBlock(this, DTO);
@@ -21,6 +23,20 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO) {
     MoveBlock = UConstructionUtilities::CreateMoveBlock(this, DTO);
     AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
     HoldItem = DTO.Item;
+
+    if (DTO.PokeBall.IsSet()) {
+        PokeBall = *DTO.PokeBall;
+    } else {
+        PokeBall = GetDefault<UPokemonSettings>()->GetDefaultPokeBall();
+    }
+
+    if (Trainer != nullptr) {
+        OwnerInfo = FOwnerInfo(*Trainer);
+    } else {
+        OwnerInfo = FOwnerInfo();
+    }
+
+    ObtainedBlock = UConstructionUtilities::CreateObtainedBlock(this, DTO);
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -38,6 +54,22 @@ EPokemonGender UGamePokemon::GetGender() const {
         return Genderless;
 
     return (PersonalityValue & UPersonalityValueUtils::LOWER_8_BITS) < GenderRatio.FemaleChance ? Female : Male;
+}
+
+FName UGamePokemon::GetPokeBall() const {
+    return PokeBall;
+}
+
+bool UGamePokemon::IsShiny() const {
+    if (Shiny.IsSet()) {
+        return Shiny.GetValue();
+    }
+
+    uint32 A = PersonalityValue ^ static_cast<uint32>(OwnerInfo.ID);
+    uint32 B = A & 0xFFFF;
+    uint32 C = (A >> 16) & 0xFFFF;
+    uint32 D = B ^ C;
+    return D < GetDefault<UPokemonSettings>()->GetShinyChance();
 }
 
 int32 UGamePokemon::GetCurrentHP() const {
@@ -87,8 +119,20 @@ const FItem *UGamePokemon::GetHoldItem() const {
     return ItemData;
 }
 
+const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
+    return OwnerInfo;
+}
+
+TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
+    return ObtainedBlock;
+}
+
 UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
+    return Create(Data, nullptr);
+}
+
+UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer) {
     auto Ret = NewObject<UGamePokemon>();
-    Ret->Initialize(Data);
+    Ret->Initialize(Data, Trainer);
     return Ret;
 }
