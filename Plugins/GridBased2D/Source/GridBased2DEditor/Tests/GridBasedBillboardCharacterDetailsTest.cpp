@@ -1,16 +1,16 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
-#include "Misc/AutomationTest.h"
 #include "Characters/GridBasedBillboardCharacter.h"
-#include "Utilities/WidgetTestUtilities.h"
+#include "Misc/AutomationTest.h"
 #include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedBillboardCharacterDetailsTest, "Tests.GridBasedBillboardCharacterDetailsTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GridBasedBillboardCharacterDetailsTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
-    auto& EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
+    auto &EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
     FDetailsViewArgs DetailsViewArgs;
     DetailsViewArgs.NameAreaSettings = FDetailsViewArgs::HideNameArea;
     DetailsViewArgs.bHideSelectionTip = true;
@@ -22,7 +22,7 @@ bool GridBasedBillboardCharacterDetailsTest::RunTest(const FString &Parameters) 
     ASSERT_TRUE(Categories.Num() > 2);
     CHECK_EQUAL(TEXT("Transform"), Categories[0]);
     CHECK_EQUAL(TEXT("Rendering"), Categories[1]);
-    
+
     return true;
 }
 #endif

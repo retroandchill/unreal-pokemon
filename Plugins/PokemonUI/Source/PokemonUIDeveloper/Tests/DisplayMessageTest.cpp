@@ -5,9 +5,9 @@
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Nodes/K2Node_DisplayMessage.h"
+#include "Screens/TextDisplayScreen.h"
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
-#include "Screens/TextDisplayScreen.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DisplayMessageTest, "Unit Tests.Nodes.DisplayMessageTest.DisplayMessage",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -16,7 +16,7 @@ bool DisplayMessageTest::RunTest(const FString &Parameters) {
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UTextDisplayScreen>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
-    
+
     using enum ENodeTitleType::Type;
     FBlueprintActionDatabase::Get().RefreshAll();
 
@@ -29,9 +29,10 @@ bool DisplayMessageTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("Async Task: Missing Function"), TestNode->GetNodeTitle(MenuTitle).ToString());
 
     (*Count)++;
-    auto ExpandedName = FString::Format(TEXT("Async Task: Missing Function ({0})"), { WidgetClass->GetDisplayNameText().ToString() });
+    auto ExpandedName =
+        FString::Format(TEXT("Async Task: Missing Function ({0})"), {WidgetClass->GetDisplayNameText().ToString()});
     CHECK_EQUAL(ExpandedName, TestNode->GetNodeTitle(MenuTitle).ToString());
-    
+
     return true;
 }
 #endif

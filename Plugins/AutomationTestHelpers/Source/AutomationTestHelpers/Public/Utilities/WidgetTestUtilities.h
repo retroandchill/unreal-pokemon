@@ -28,8 +28,8 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
     static std::pair<TSharedRef<SOverlay>, UWorld *> CreateTestWorld();
 
     template <typename T>
-    requires std::is_base_of_v<SWidget, T>
-    static TSharedPtr<T> FindFirstChildOfType(SWidget& Widget, FName TypeName) {
+        requires std::is_base_of_v<SWidget, T>
+    static TSharedPtr<T> FindFirstChildOfType(SWidget &Widget, FName TypeName) {
         auto Children = Widget.GetChildren();
         if (Children == nullptr) {
             return nullptr;
@@ -54,4 +54,5 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
 #define FIND_CHILD_WIDGET(Parent, Type, WidgetName)                                                                    \
     auto WidgetName = Cast<Type>(UWidgetTestUtilities::FindChildWidget(Parent, TEXT(#WidgetName)))
 
-#define FIND_FIRST_CHILD_WIDGET_OF_TYPE(Parent, Type) UWidgetTestUtilities::FindFirstChildOfType<Type>(Parent, TEXT(#Type))
+#define FIND_FIRST_CHILD_WIDGET_OF_TYPE(Parent, Type)                                                                  \
+    UWidgetTestUtilities::FindFirstChildOfType<Type>(Parent, TEXT(#Type))

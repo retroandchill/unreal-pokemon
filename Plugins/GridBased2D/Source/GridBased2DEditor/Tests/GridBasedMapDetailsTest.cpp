@@ -1,7 +1,7 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
-#include "Misc/AutomationTest.h"
 #include "Map/GridBasedMap.h"
+#include "Misc/AutomationTest.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -10,7 +10,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedMapDetailsTest, "Tests.GridBasedMapDet
 
 bool GridBasedMapDetailsTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
-    auto& EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
+    auto &EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
     FDetailsViewArgs DetailsViewArgs;
     DetailsViewArgs.NameAreaSettings = FDetailsViewArgs::HideNameArea;
     DetailsViewArgs.bHideSelectionTip = true;
@@ -25,7 +25,7 @@ bool GridBasedMapDetailsTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("Audio"), Categories[2]);
     CHECK_EQUAL(TEXT("Tiles"), Categories[3]);
     CHECK_EQUAL(TEXT("Z-Sorting"), Categories[4]);
-    
+
     return true;
 }
 #endif

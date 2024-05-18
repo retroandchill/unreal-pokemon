@@ -68,5 +68,5 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      * @param DetailsView The details view in question.
      * @return The list of categories for each property
      */
-    static TArray<FString> GetPropertyCategories(IDetailsView& DetailsView);
+    static TArray<FString> GetPropertyCategories(IDetailsView &DetailsView);
 };
