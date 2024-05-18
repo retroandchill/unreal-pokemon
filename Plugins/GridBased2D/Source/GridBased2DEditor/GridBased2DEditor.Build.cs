@@ -25,5 +25,12 @@ public class GridBased2DEditor : ModuleRules
                 "Paper2DEditor"
             }
         );
+        
+        if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
+        {
+            PrivateDependencyModuleNames.Add("AutomationTestHelpers");
+            PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
+            bUseRTTI = true;
+        }
     }
 }
