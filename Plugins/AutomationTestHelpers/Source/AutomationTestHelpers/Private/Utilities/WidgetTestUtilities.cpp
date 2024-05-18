@@ -9,7 +9,7 @@ UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName Widget
     if (RootWidget->GetFName() == WidgetName) {
         return RootWidget;
     }
-    
+
     auto Panel = Cast<UPanelWidget>(RootWidget);
     if (Panel == nullptr) {
         return nullptr;

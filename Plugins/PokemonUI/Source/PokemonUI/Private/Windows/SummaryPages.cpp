@@ -15,7 +15,7 @@ FOnPokemonChange &USummaryPages::GetOnPokemonChange() {
     return OnPokemonChange;
 }
 
-const TScriptInterface<IPokemon> & USummaryPages::GetCurrentPokemon() const {
+const TScriptInterface<IPokemon> &USummaryPages::GetCurrentPokemon() const {
     return *CurrentPokemon;
 }
 

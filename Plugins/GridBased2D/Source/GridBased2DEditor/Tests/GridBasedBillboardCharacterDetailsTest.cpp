@@ -5,7 +5,8 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedBillboardCharacterDetailsTest, "Unit Tests.GridBasedBillboardCharacterDetailsTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedBillboardCharacterDetailsTest,
+                                 "Unit Tests.GridBasedBillboardCharacterDetailsTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GridBasedBillboardCharacterDetailsTest::RunTest(const FString &Parameters) {

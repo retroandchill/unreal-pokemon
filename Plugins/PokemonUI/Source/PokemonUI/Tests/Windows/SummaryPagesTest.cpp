@@ -3,15 +3,15 @@
 #include "Asserts.h"
 #include "Components/WidgetSwitcher.h"
 #include "Data/SelectionInputs.h"
+#include "External/accessor.hpp"
+#include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "PokemonCore/Tests/PokemonTestUtilities.h"
+#include "Species/SpeciesData.h"
+#include "Utilities/InputUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "External/accessor.hpp"
-#include "Managers/PokemonSubsystem.h"
-#include "Species/SpeciesData.h"
-#include "Utilities/InputUtilities.h"
 
 using namespace accessor;
 
@@ -31,7 +31,7 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     TWidgetPtr<USummaryPages> Pages(CreateWidget<USummaryPages>(World, WidgetClass));
     ASSERT_NOT_NULL(Pages.Get());
     Pages->AddToViewport();
-    
+
     FPokemonTestUtilities::CreateMockParty(World);
     auto Trainer = UPokemonSubsystem::GetInstance().GetPlayer();
     Pages->SetInitialPokemon(Trainer->GetParty(), 0);
@@ -46,15 +46,18 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     auto UpInput = *accessMember<AccessUpInput>(*InputMappings).get().CreateIterator();
     auto DownInput = *accessMember<AccessDownInput>(*InputMappings).get().CreateIterator();
 
-    CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(), Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+    CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
+                Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
     UInputUtilities::SimulateKeyPress(Pages.Get(), DownInput);
-    CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(), Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+    CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(),
+                Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
     UInputUtilities::SimulateKeyPress(Pages.Get(), UpInput);
-    CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(), Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+    CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
+                Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
 
     Pages->SetIndex(1);
     CHECK_EQUAL(1, PageSwitcher->GetActiveWidgetIndex());
-    
+
     return true;
 }
 #endif

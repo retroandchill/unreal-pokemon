@@ -162,8 +162,7 @@ void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offse
 }
 
 void UGridBasedMovementComponent::OnMapChanged(IMapGrid &NewMap) const {
-    auto Owner = GetOwner<APawn>();
-    if (Owner == nullptr || !Owner->IsPlayerControlled()) {
+    if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled()) {
         return;
     }
 
