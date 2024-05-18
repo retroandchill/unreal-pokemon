@@ -18,7 +18,7 @@
 
 using namespace accessor;
 
-MEMBER_ACCESSOR(AccessInputMappings, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
+MEMBER_ACCESSOR(AccessInputMappingsPartyScreen, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
 MEMBER_ACCESSOR(AccessConfirmInput, USelectionInputs, ConfirmInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessCancelInput, USelectionInputs, CancelInputs, TSet<FKey>)
 
@@ -49,7 +49,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
     CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
 
-    USelectionInputs *InputMappings = accessMember<AccessInputMappings>(*SelectionPane).get();
+    USelectionInputs *InputMappings = accessMember<AccessInputMappingsPartyScreen>(*SelectionPane).get();
     ASSERT_NOT_NULL(InputMappings);
     auto ConfirmButton = *accessMember<AccessConfirmInput>(*InputMappings).get().CreateIterator();
     auto Cancel = *accessMember<AccessCancelInput>(*InputMappings).get().CreateIterator();
