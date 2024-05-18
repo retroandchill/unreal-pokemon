@@ -89,6 +89,10 @@ FVector2D UDisplayText::GetTextSize() const {
 
 FVector2D UDisplayText::GetTextSize(const FString &Text) const {
     check(DisplayTextWidget != nullptr)
+    if (DisplayTextWidget->GetTextStyleSet() == nullptr) {
+        DisplayTextWidget->SetTextStyleSet(TextStyles);
+    }
+
     auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
     FVector2D Size = FontMeasure->Measure(Text, DisplayTextWidget->GetCurrentDefaultTextStyle().Font,
                                           UWidgetUtilities::GetWidgetDPIScale());

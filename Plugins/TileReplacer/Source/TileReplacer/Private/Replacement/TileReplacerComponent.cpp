@@ -22,7 +22,7 @@ UTileReplacerComponent::UTileReplacerComponent() {
 
 void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapComponent) {
     if (TileReplacementTable == nullptr) {
-        UE_LOG(LogBlueprint, Warning, TEXT("No tile replacement table set for component: %s"), *GetName());
+        UE_LOG(LogBlueprint, Warning, TEXT("No tile replacement table set for component: %s"), *GetName())
         return;
     }
 

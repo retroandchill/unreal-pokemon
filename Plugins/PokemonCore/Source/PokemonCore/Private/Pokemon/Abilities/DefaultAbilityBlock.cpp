@@ -23,7 +23,6 @@ FName UDefaultAbilityBlock::GetAbilityID() const {
     }
 
     check(Owner != nullptr)
-    ;
     auto &SpeciesData = Owner->GetSpecies();
     int32 SearchAbilityIndex = GetAbilityIndex();
 
