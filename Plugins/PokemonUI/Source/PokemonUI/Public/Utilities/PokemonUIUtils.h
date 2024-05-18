@@ -11,6 +11,7 @@ class IPokemon;
 struct FTextColor;
 class UProgressBar;
 class UDisplayText;
+
 /**
  * Blueprint function library for basic operations that the UI might require
  */

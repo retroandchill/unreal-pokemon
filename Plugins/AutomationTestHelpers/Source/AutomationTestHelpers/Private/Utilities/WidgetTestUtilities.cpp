@@ -5,7 +5,12 @@
 #include "Blueprint/WidgetTree.h"
 
 UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName WidgetName) {
-    auto Panel = Cast<UPanelWidget>(Parent->GetRootWidget());
+    auto RootWidget = Parent->GetRootWidget();
+    if (RootWidget->GetFName() == WidgetName) {
+        return RootWidget;
+    }
+    
+    auto Panel = Cast<UPanelWidget>(RootWidget);
     if (Panel == nullptr) {
         return nullptr;
     }
