@@ -16,10 +16,11 @@ class UWidgetSwitcher;
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &)
 
-    /**
-     * The widget that controls allowing the player to scroll between pages on the summary screen.
-     */
-    UCLASS(Abstract) class POKEMONUI_API USummaryPages : public USelectableWidget {
+/**
+* The widget that controls allowing the player to scroll between pages on the summary screen.
+*/
+UCLASS(Abstract)
+class POKEMONUI_API USummaryPages : public USelectableWidget {
     GENERATED_BODY()
 
   public:
@@ -42,6 +43,12 @@ DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &)
      * @return Delegate that is called when a Pokémon is changed.
      */
     FOnPokemonChange &GetOnPokemonChange();
+
+    /**
+     * Get the Pokémon that is currently being displayed.
+     * @return The currently displayed Pokémon
+     */
+    const TScriptInterface<IPokemon> &GetCurrentPokemon() const;
 
   protected:
     /**

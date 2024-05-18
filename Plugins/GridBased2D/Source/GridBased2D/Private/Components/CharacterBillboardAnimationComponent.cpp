@@ -88,8 +88,9 @@ void UCharacterBillboardAnimationComponent::SetUpMaterialInstance() {
         return;
     }
     BillboardComponent->Elements.Empty();
-    BillboardComponent->AddElement(MaterialInstance, nullptr, false, SourceTexture->GetSizeY() / (4 * 2),
-                                   SourceTexture->GetSizeX() / (4 * 2), nullptr);
+    BillboardComponent->AddElement(MaterialInstance, nullptr, false,
+                                   static_cast<float>(SourceTexture->GetSizeY() / (4 * 2)),
+                                   static_cast<float>(SourceTexture->GetSizeX() / (4 * 2)), nullptr);
 }
 
 UMaterialBillboardComponent *UCharacterBillboardAnimationComponent::GetBillboardComponent() const {

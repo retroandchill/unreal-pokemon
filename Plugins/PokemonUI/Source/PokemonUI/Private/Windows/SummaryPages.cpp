@@ -15,6 +15,10 @@ FOnPokemonChange &USummaryPages::GetOnPokemonChange() {
     return OnPokemonChange;
 }
 
+const TScriptInterface<IPokemon> &USummaryPages::GetCurrentPokemon() const {
+    return *CurrentPokemon;
+}
+
 UWidgetSwitcher *USummaryPages::GetPageSwitcher() const {
     return PageSwitcher;
 }
