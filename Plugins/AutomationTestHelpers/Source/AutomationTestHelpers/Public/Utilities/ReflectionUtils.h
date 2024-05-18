@@ -62,4 +62,11 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
         }
         return Subclasses;
     }
+
+    /**
+     * Take a details view and extract the categories in the order that they are encounted.
+     * @param DetailsView The details view in question.
+     * @return The list of categories for each property
+     */
+    static TArray<FString> GetPropertyCategories(IDetailsView& DetailsView);
 };

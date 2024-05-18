@@ -30,7 +30,6 @@ public class GridBased2DEditor : ModuleRules
         {
             PrivateDependencyModuleNames.Add("AutomationTestHelpers");
             PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-            bUseRTTI = true;
         }
     }
 }
