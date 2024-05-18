@@ -4,7 +4,7 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/PokemonDTO.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultObtainedBlockTest, "Tests.Pokemon.TrainerMemo.DefaultObtainedBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultObtainedBlockTest, "Unit Tests.Pokemon.TrainerMemo.DefaultObtainedBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultObtainedBlockTest::RunTest(const FString &Parameters) {
