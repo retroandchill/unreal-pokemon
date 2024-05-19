@@ -51,23 +51,11 @@ class RPGMENUS_API UDisplayText : public UUserWidget {
     void SetTextColor(const FSlateColor &Color);
 
     /**
-     * Reset the text color to its default value as set by the default style.
-     */
-    UFUNCTION(BlueprintCallable, Category = Display)
-    void ClearTextColor();
-
-    /**
      * Set the color of the text's shadow
      * @param Color The new shadow color
      */
     UFUNCTION(BlueprintCallable, Category = Display)
     void SetShadowColor(const FSlateColor &Color);
-
-    /**
-     * Reset the shadow color to its default value as set by the default style.
-     */
-    UFUNCTION(BlueprintCallable, Category = Display)
-    void ClearShadowColor();
 
     /**
      * Get the size of the current text contained within this widget

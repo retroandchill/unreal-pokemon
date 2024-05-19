@@ -16,8 +16,6 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonSkillsPage : public USummaryScreenPage {
     GENERATED_BODY()
 
-public:
-
 protected:
     TSharedRef<SWidget> RebuildWidget() override;
     void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;

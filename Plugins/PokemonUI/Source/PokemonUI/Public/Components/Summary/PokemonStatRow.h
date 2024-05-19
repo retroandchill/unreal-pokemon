@@ -57,18 +57,18 @@ private:
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDisplayedStat, BlueprintSetter = SetDisplayedStat, Category = "Stats", meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName DisplayedStat;
-    
-    /**
-     * The color for when a stat is boosted by a Pokémon's nature.
-     */
-    UPROPERTY(EditAnywhere, Category = "Stats|Colors")
-    FTextColorOverride BoostedStatColor;
 
     /**
-     * The color for when a stat is lowered by a Pokémon's nature.
+     * The text format for a stat that is boosted.
      */
-    UPROPERTY(EditAnywhere, Category = "Stats|Colors")
-    FTextColorOverride DecreasedStatColor;
+    UPROPERTY(EditAnywhere, Category = "Stat")
+    FText BoostedFormat = FText::FromStringView(TEXT("<Boosted>{0}</>"));
+
+    /**
+     * The text format for a stat that is decreased.
+     */
+    UPROPERTY(EditAnywhere, Category = "Stat")
+    FText DecreasedFormat = FText::FromStringView(TEXT("<Decreased>{0}</>"));
     
     /**
      * The text label for the name of the stat.

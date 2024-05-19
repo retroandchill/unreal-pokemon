@@ -18,7 +18,7 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
     }
     StatRows.Empty();
     
-    if (StatRowClass != nullptr) {
+    if (HPStatRow != nullptr && StatRowClass != nullptr) {
         auto HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
         for (auto Stat : StatsToDisplay) {
             if (Stat == HPStat) {

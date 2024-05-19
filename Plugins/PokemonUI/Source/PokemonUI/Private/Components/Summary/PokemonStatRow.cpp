@@ -8,14 +8,6 @@
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
-void ApplyColorOverride(UDisplayText& DisplayText, const TOptional<FSlateColor>& Color, TFunctionRef<void(UDisplayText*, const FSlateColor&)> SetColor, TFunctionRef<void(UDisplayText*)> ClearColor) {
-    if (Color.IsSet()) {
-        SetColor(&DisplayText, Color.GetValue());
-    } else {
-        ClearColor(&DisplayText);
-    }
-}
-
 FName UPokemonStatRow::GetDisplayedStat() const {
     return DisplayedStat;
 }
@@ -30,14 +22,15 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     auto StatBlock = Pokemon->GetStatBlock();
     auto StatInfo = StatBlock->GetStat(DisplayedStat);
     auto Stat = StatInfo->GetStat();
-    StatLabel->SetText(Stat.RealName);
     const auto& StatChanges = StatBlock->GetNature().StatChanges;
 
     auto StatMatcher = [this](const FNatureStatChange& Change) { return Change.Stat == DisplayedStat; };
-    if (auto StatChange = StatChanges.FindByPredicate(StatMatcher); StatChange != nullptr && StatChange->Change != 0) {
-        auto &[MainColor, ShadowColor] = StatChange->Change > 0 ? BoostedStatColor : DecreasedStatColor;
-        ApplyColorOverride(*StatLabel, MainColor, &UDisplayText::SetTextColor, &UDisplayText::ClearTextColor);
-        ApplyColorOverride(*StatLabel, ShadowColor, &UDisplayText::SetShadowColor, &UDisplayText::ClearShadowColor);
+    if (auto StatChange = StatChanges.FindByPredicate(StatMatcher); StatChange == nullptr || StatChange->Change == 0) {
+        StatLabel->SetText(Stat.RealNameBrief);
+    } else if (StatChange->Change > 0) {
+        StatLabel->SetText(FText::Format(BoostedFormat, Stat.RealNameBrief));
+    } else { // StatChange->Change < 0
+        StatLabel->SetText(FText::Format(DecreasedFormat, Stat.RealNameBrief));
     }
     SetStatValueText(Pokemon, StatInfo);
 }
