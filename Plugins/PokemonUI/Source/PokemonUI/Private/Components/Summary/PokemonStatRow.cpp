@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Summary/PokemonStatRow.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
@@ -22,9 +21,9 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     auto StatBlock = Pokemon->GetStatBlock();
     auto StatInfo = StatBlock->GetStat(DisplayedStat);
     auto Stat = StatInfo->GetStat();
-    const auto& StatChanges = StatBlock->GetNature().StatChanges;
+    const auto &StatChanges = StatBlock->GetNature().StatChanges;
 
-    auto StatMatcher = [this](const FNatureStatChange& Change) { return Change.Stat == DisplayedStat; };
+    auto StatMatcher = [this](const FNatureStatChange &Change) { return Change.Stat == DisplayedStat; };
     if (auto StatChange = StatChanges.FindByPredicate(StatMatcher); StatChange == nullptr || StatChange->Change == 0) {
         StatLabel->SetText(Stat.RealNameBrief);
     } else if (StatChange->Change > 0) {
@@ -35,11 +34,11 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     SetStatValueText(Pokemon, StatInfo);
 }
 
-UDisplayText * UPokemonStatRow::GetStatValue() const {
+UDisplayText *UPokemonStatRow::GetStatValue() const {
     return StatValue;
 }
 
 void UPokemonStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,
-    const TScriptInterface<IStatEntry> &StatInfo) {
+                                                      const TScriptInterface<IStatEntry> &StatInfo) {
     StatValue->SetText(FText::FromString(FString::FromInt(StatInfo->GetStatValue())));
 }

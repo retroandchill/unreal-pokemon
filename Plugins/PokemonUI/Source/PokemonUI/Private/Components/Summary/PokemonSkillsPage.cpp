@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Summary/PokemonSkillsPage.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Summary/HPStatRow.h"
 #include "Components/Summary/PokemonStatRow.h"
-#include "Pokemon/Pokemon.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
+#include "Pokemon/Pokemon.h"
 #include "Primatives/DisplayText.h"
 #include "Settings/PokemonSettings.h"
 
@@ -17,7 +16,7 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
         StatRow->RemoveFromParent();
     }
     StatRows.Empty();
-    
+
     if (HPStatRow != nullptr && StatRowClass != nullptr) {
         auto HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
         for (auto Stat : StatsToDisplay) {
@@ -32,10 +31,9 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
                 SlotStatRow(Row);
                 StatRows.Emplace(Row);
             }
-            
         }
     }
-    
+
     return Ret;
 }
 

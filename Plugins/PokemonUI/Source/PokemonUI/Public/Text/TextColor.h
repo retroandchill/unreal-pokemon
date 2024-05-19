@@ -45,5 +45,4 @@ struct POKEMONUI_API FTextColorOverride {
      */
     UPROPERTY(EditAnywhere, Category = "User Interface|Text")
     TOptional<FSlateColor> ShadowColor;
-    
 };

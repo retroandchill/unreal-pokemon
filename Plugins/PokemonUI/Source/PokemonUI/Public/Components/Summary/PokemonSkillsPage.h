@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SummaryScreenPage.h"
+
 #include "PokemonSkillsPage.generated.h"
 
 class UHPStatRow;
@@ -16,7 +17,7 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonSkillsPage : public USummaryScreenPage {
     GENERATED_BODY()
 
-protected:
+  protected:
     TSharedRef<SWidget> RebuildWidget() override;
     void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
@@ -25,22 +26,22 @@ protected:
      * @param Row The stat row to slot.
      */
     UFUNCTION(BlueprintImplementableEvent, DisplayName = "Slot HP Stat Row", Category = "Stats")
-    void SlotHPStatRow(UHPStatRow* Row);
-    
+    void SlotHPStatRow(UHPStatRow *Row);
+
     /**
      * Slot the selected stat row in the list of available stat rows.
      * @param Row The stat row to slot.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Stats")
-    void SlotStatRow(UPokemonStatRow* Row);
+    void SlotStatRow(UPokemonStatRow *Row);
 
-private:
+  private:
     /**
      * The actual class used to create the HP stat rows.
      */
     UPROPERTY(EditAnywhere, DisplayName = "HP Stat Row", Category = "Stats")
     TSubclassOf<UHPStatRow> HPStatRow;
-    
+
     /**
      * The actual class used to create the stat rows.
      */
@@ -64,7 +65,7 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> AbilityName;
-    
+
     /**
      * The widget that displays the description of the Pokémon's ability.
      */
