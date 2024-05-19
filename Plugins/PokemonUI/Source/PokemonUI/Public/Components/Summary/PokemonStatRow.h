@@ -19,13 +19,6 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
 
   public:
     /**
-     * Get the stat that this row displays.
-     * @return The actual stat that is being displayed by this element.
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Stat")
-    FName GetDisplayedStat() const;
-
-    /**
      * Set the stat that this row displays.
      * @param NewDisplayedStat The actual stat that is being displayed by this element.
      */
@@ -54,7 +47,7 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
     /**
      * The actual stat that is being displayed by this element.
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetDisplayedStat, BlueprintSetter = SetDisplayedStat, Category = "Stats",
+    UPROPERTY(EditAnywhere, BlueprintSetter = SetDisplayedStat, Category = "Stats",
               meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName DisplayedStat;
 

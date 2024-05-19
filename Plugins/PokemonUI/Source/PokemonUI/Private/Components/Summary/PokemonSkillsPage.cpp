@@ -12,7 +12,7 @@
 TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
     auto Ret = Super::RebuildWidget();
 
-    for (auto &StatRow : StatRows) {
+    for (const auto &StatRow : StatRows) {
         StatRow->RemoveFromParent();
     }
     StatRows.Empty();
@@ -39,7 +39,7 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
 
 void UPokemonSkillsPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::RefreshInfo_Implementation(Pokemon);
-    for (auto &Row : StatRows) {
+    for (const auto &Row : StatRows) {
         Row->Refresh(Pokemon);
     }
 

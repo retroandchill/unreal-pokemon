@@ -3,6 +3,8 @@
 #include "Components/Image.h"
 #include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/PokemonInfoPage.h"
+#include "Components/Summary/PokemonSkillsPage.h"
+#include "Components/Summary/PokemonStatRow.h"
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Components/Summary/TrainerMemoPage.h"
 #include "External/accessor.hpp"
@@ -15,8 +17,6 @@
 #include "Utilities/ConstructionUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Components/Summary/PokemonSkillsPage.h"
-#include "Components/Summary/PokemonStatRow.h"
 
 using namespace accessor;
 

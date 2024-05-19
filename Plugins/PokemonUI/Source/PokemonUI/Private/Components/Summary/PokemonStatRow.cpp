@@ -7,10 +7,6 @@
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
-FName UPokemonStatRow::GetDisplayedStat() const {
-    return DisplayedStat;
-}
-
 void UPokemonStatRow::SetDisplayedStat(FName NewDisplayedStat) {
     DisplayedStat = NewDisplayedStat;
 }
