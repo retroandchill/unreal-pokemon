@@ -77,8 +77,18 @@ void UDisplayText::SetTextColor(const FSlateColor &Color) {
     SetTextInfo();
 }
 
+void UDisplayText::ClearTextColor() {
+    TextColor.Reset();
+    SetTextInfo();
+}
+
 void UDisplayText::SetShadowColor(const FSlateColor &Color) {
     ShadowColor = Color;
+    SetTextInfo();
+}
+
+void UDisplayText::ClearShadowColor() {
+    ShadowColor.Reset();
     SetTextInfo();
 }
 
