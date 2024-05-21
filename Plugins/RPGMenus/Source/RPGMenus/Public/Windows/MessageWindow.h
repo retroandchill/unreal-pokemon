@@ -166,6 +166,12 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
     TObjectPtr<USelectionInputs> InputMappings;
 
     /**
+     * How much extra padding does a line have?
+     */
+    UPROPERTY(EditAnywhere, Category = Display)
+    float ExtraPadding;
+
+    /**
      * The full text to queue up for display
      */
     TOptional<FText> FullText;
