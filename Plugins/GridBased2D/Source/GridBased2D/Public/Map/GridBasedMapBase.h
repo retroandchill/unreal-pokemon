@@ -28,7 +28,13 @@ class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
     void RemoveCharacter(const TScriptInterface<IGridMovable> &Character) override;
     void OnPlayerEnter() override;
 
+    UFUNCTION(BlueprintPure, Category = "Maps|Display")
+    FText GetDisplayName() const final;
+
   private:
+    UPROPERTY(EditAnywhere, Category = Display)
+    FText DisplayName;
+    
     /**
      * The audio played when the map starts
      */

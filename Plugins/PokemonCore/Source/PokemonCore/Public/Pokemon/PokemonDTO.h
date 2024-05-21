@@ -54,7 +54,10 @@ struct POKEMONCORE_API FPokemonDTO {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
     TOptional<bool> Shiny;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+    /**
+     * The Poké Ball the Pokémon was caught in.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, meta = (GetOptions = "PokemonData.ItemHelper.GetPokeBallNames"))
     TOptional<FName> PokeBall;
 
     /**

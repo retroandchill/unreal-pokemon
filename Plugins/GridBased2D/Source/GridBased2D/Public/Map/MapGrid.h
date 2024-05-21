@@ -69,4 +69,11 @@ class GRIDBASED2D_API IMapGrid {
      * Called when the player enters the map
      */
     virtual void OnPlayerEnter() = 0;
+
+    /**
+     * Get the display name of the map.
+     * @return The display name of the map as displayed to the player
+     */
+    UFUNCTION(BlueprintCallable, Category = "Maps|Display")
+    virtual FText GetDisplayName() const = 0;
 };

@@ -141,7 +141,7 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &Play
     WarpDestination.Reset();
 }
 
-void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const {
+void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) {
     TArray<AActor *> Maps;
     UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UMapGrid::StaticClass(), Maps);
     TScriptInterface<IMapGrid> OldMap = nullptr;
@@ -173,6 +173,14 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
     if (NewMap != nullptr) {
         NewMap->AddCharacter(Movable);
     }
+}
+
+const TScriptInterface<IMapGrid>& UMapSubsystem::GetCurrentMap() const {
+    return CurrentMap;
+}
+
+void UMapSubsystem::SetCurrentMap(const TScriptInterface<IMapGrid> &MapGrid) {
+    CurrentMap = MapGrid;
 }
 
 void UMapSubsystem::OnNewLevelLoaded() {

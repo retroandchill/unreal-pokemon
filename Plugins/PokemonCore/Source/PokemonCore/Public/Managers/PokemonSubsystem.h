@@ -72,6 +72,13 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     const Exp::IGrowthRate &GetGrowthRate(FName GrowthRate) const;
 
+    /**
+     * Get the name of the player's current location
+     * @return The player's current location
+     */
+    UFUNCTION(BlueprintPure, Category = "Maps|Display")
+    FText GetCurrentLocation() const;
+
   private:
     /**
      * Singleton instance used to hold a backdoor reference to this system

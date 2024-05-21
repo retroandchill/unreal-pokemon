@@ -2,15 +2,15 @@
 
 #include "Pokemon/TrainerMemo/DefaultObtainedBlock.h"
 #include "DataTypes/OptionalUtilities.h"
+#include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.Level;
-
-    ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, []() {
-        // TODO: Get level name if level met is empty
-        return FText::FromStringView(TEXT(""));
+    
+    ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [this] {
+        return UPokemonSubsystem::GetInstance().GetCurrentLocation();
     });
 
     TimeReceived = FDateTime::Now();
