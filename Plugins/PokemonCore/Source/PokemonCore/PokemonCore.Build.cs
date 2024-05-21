@@ -24,7 +24,7 @@ public class PokemonCore : ModuleRules
 				"SlateCore",
 				"DeveloperSettings",
 				"CommonMath",
-				"PokemonUtilities", "GridBased2D"
+				"PokemonUtilities"
 			}
 		);
 		

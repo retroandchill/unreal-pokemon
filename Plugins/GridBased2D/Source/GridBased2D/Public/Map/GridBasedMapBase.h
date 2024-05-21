@@ -28,8 +28,13 @@ class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
     void RemoveCharacter(const TScriptInterface<IGridMovable> &Character) override;
     void OnPlayerEnter() override;
 
-    UFUNCTION(BlueprintPure, Category = "Maps|Display")
-    FText GetDisplayName() const final;
+protected:
+    /**
+     * Set the display name of the current map.
+     * @param MapName The display name of the current map.
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Maps|Player")
+    void SetCurrentMapName(const FText &MapName);
 
   private:
     UPROPERTY(EditAnywhere, Category = Display)

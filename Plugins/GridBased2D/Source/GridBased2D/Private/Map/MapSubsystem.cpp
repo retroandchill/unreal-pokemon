@@ -175,14 +175,6 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
     }
 }
 
-const TScriptInterface<IMapGrid>& UMapSubsystem::GetCurrentMap() const {
-    return CurrentMap;
-}
-
-void UMapSubsystem::SetCurrentMap(const TScriptInterface<IMapGrid> &MapGrid) {
-    CurrentMap = MapGrid;
-}
-
 void UMapSubsystem::OnNewLevelLoaded() {
     auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
     check(PlayerCharacter != nullptr && PlayerCharacter->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))

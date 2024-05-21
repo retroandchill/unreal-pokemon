@@ -120,19 +120,6 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      */
     void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable);
 
-    /**
-     * Get the current map that the player is on
-     * @return The player's current map
-     */
-    UFUNCTION(BlueprintPure, Category = "Maps|Display")
-    const TScriptInterface<IMapGrid>& GetCurrentMap() const;
-
-    /**
-     * Set the current map to the given map.
-     * @param MapGrid The current map to set to.
-     */
-    void SetCurrentMap(const TScriptInterface<IMapGrid>& MapGrid);
-
   private:
     /**
      * Called when a new streaming level is loaded
@@ -145,12 +132,6 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      */
     UFUNCTION()
     void UpdatePlayerCharacterPosition();
-
-    /**
-     * The map the player is currently inhabiting.
-     */
-    UPROPERTY()
-    TScriptInterface<IMapGrid> CurrentMap;
 
     /**
      * The currently playing background music component.

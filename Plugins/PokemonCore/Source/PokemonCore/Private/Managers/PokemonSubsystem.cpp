@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
-#include "Map/MapGrid.h"
-#include "Map/MapSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Settings/PokemonSettings.h"
@@ -73,11 +71,9 @@ const Exp::IGrowthRate &UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const
 }
 
 FText UPokemonSubsystem::GetCurrentLocation() const {
-    auto MapSubystem = GetGameInstance()->GetSubsystem<UMapSubsystem>();
-    auto CurrentMap = MapSubystem->GetCurrentMap();
-    if (CurrentMap == nullptr) {
-        return FText();
-    }
+    return CurrentLocation;
+}
 
-    return CurrentMap->GetDisplayName();
+void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
+    CurrentLocation = LocationName;
 }
