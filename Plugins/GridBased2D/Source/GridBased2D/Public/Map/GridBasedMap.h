@@ -13,6 +13,9 @@ class AGameCharacter;
 class UTileReplacerComponent;
 class IWithinMap;
 
+/**
+ * Actor that contains the basic information about the map
+ */
 UCLASS(Blueprintable, ClassGroup = (Map))
 class GRIDBASED2D_API AGridBasedMap : public AGridBasedMapBase {
     GENERATED_BODY()

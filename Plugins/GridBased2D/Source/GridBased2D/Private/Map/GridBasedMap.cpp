@@ -11,6 +11,7 @@ AGridBasedMap::AGridBasedMap() {
     PrimaryActorTick.bCanEverTick = true;
 
     RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+    RootComponent->SetMobility(EComponentMobility::Type::Static);
 
     TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Map"));
     TileMapComponent->SetRelativeRotation(FRotator(0, 0, -90));
