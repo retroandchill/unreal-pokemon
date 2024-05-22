@@ -19,7 +19,8 @@ class UWidgetSwitcher;
 /**
  * The widget that controls allowing the player to scroll between pages on the summary screen.
  */
-UCLASS(Abstract) class POKEMONUI_API USummaryPages : public USelectableWidget {
+UCLASS(Abstract)
+class POKEMONUI_API USummaryPages : public USelectableWidget {
     GENERATED_BODY()
 
   public:
