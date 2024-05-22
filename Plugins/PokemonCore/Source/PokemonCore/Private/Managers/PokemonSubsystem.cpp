@@ -69,3 +69,11 @@ const Exp::IGrowthRate &UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const
     check(GrowthRates.Contains(GrowthRate))
     return *GrowthRates[GrowthRate];
 }
+
+FText UPokemonSubsystem::GetCurrentLocation() const {
+    return CurrentLocation;
+}
+
+void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
+    CurrentLocation = LocationName;
+}

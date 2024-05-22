@@ -22,9 +22,10 @@ bool GridBasedMapDetailsTest::RunTest(const FString &Parameters) {
     ASSERT_TRUE(Categories.Num() > 6);
     CHECK_EQUAL(TEXT("Transform"), Categories[0]);
     CHECK_EQUAL(TEXT("Tile Map"), Categories[1]);
-    CHECK_EQUAL(TEXT("Audio"), Categories[2]);
-    CHECK_EQUAL(TEXT("Tiles"), Categories[3]);
-    CHECK_EQUAL(TEXT("Z-Sorting"), Categories[4]);
+    CHECK_EQUAL(TEXT("Display"), Categories[2]);
+    CHECK_EQUAL(TEXT("Audio"), Categories[3]);
+    CHECK_EQUAL(TEXT("Tiles"), Categories[4]);
+    CHECK_EQUAL(TEXT("Z-Sorting"), Categories[5]);
 
     return true;
 }

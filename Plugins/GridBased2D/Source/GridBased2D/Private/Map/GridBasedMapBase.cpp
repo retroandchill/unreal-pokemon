@@ -5,6 +5,7 @@
 #include "Components/GridMovable.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/MapAudioUtilities.h"
+#include "Map/MapSubsystem.h"
 
 void AGridBasedMapBase::BeginPlay() {
     Super::BeginPlay();
@@ -54,4 +55,5 @@ void AGridBasedMapBase::RemoveCharacter(const TScriptInterface<IGridMovable> &Ch
 
 void AGridBasedMapBase::OnPlayerEnter() {
     UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
+    SetCurrentMapName(DisplayName);
 }

@@ -8,6 +8,7 @@
 
 #include "MapSubsystem.generated.h"
 
+class IMapGrid;
 class IGridMovable;
 class UGridBasedMovementComponent;
 class ULevelStreamingDynamic;

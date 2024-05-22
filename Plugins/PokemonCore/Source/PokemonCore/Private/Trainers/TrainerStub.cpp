@@ -7,6 +7,7 @@
 TScriptInterface<ITrainer> UTrainerStub::Initialize(FName NewTrainerType, FText NewTrainerName) {
     Super::Initialize(NewTrainerType, NewTrainerName);
 
+    /**
     AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon({.Species = "RIOLU",
                                                                     .Level = 10,
                                                                     .Shiny = true,
@@ -24,6 +25,7 @@ TScriptInterface<ITrainer> UTrainerStub::Initialize(FName NewTrainerType, FText 
                                                      this));
     AddPokemonToParty(UConstructionUtilities::CreateForeignPokemon(
         {.Species = "FRILLISH", .Level = 10, .Gender = EPokemonGender::Female}, this));
+        */
 
     return this;
 }

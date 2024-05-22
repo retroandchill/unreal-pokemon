@@ -5,6 +5,7 @@
 
 #include "Command.generated.h"
 
+class UCommandCondition;
 class ARPGPlayerController;
 /**
  * The struct that holds the command information
@@ -32,7 +33,7 @@ class RPGMENUS_API UCommand : public UObject {
      * Get if this command should actually be added to the window
      * @return Will this command be displayed?
      */
-    UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Commands)
+    UFUNCTION(BlueprintPure, Category = Commands)
     bool IsEnabled() const;
 
     /**
@@ -88,6 +89,12 @@ class RPGMENUS_API UCommand : public UObject {
      */
     UPROPERTY(EditAnywhere, Category = Commands)
     FText Text;
+
+    /**
+     * The condition of the command in question
+     */
+    UPROPERTY(EditAnywhere, Instanced, Category = Commands)
+    TOptional<TObjectPtr<UCommandCondition>> Condition;
 
     /**
      * The handler object associated with this class
