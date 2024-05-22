@@ -118,7 +118,7 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      * Update what map the player is considered to be a part of
      * @param Movable The movement object in question
      */
-    void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable);
+    void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const;
 
   private:
     /**

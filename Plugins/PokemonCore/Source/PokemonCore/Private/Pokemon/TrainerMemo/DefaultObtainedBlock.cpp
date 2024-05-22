@@ -9,7 +9,7 @@ TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemo
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.Level;
     
-    ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [this] {
+    ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [] {
         return UPokemonSubsystem::Exists() ? UPokemonSubsystem::GetInstance().GetCurrentLocation() : FText();
     });
 
