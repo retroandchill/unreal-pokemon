@@ -72,6 +72,20 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     const Exp::IGrowthRate &GetGrowthRate(FName GrowthRate) const;
 
+    /**
+     * Get the name of the player's current location
+     * @return The player's current location
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Maps|Display")
+    FText GetCurrentLocation() const;
+
+    /**
+     * Set the name of the player's current location
+     * @param LocationName The player's current location
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Maps|Display")
+    void SetCurrentLocation(const FText &LocationName);
+
   private:
     /**
      * Singleton instance used to hold a backdoor reference to this system
@@ -106,4 +120,10 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      * The list of GrowthRate objects used by the game
      */
     TMap<FName, TUniquePtr<Exp::IGrowthRate>> GrowthRates;
+
+    /**
+     * The player's current location in the world.
+     */
+    UPROPERTY(BlueprintGetter = GetCurrentLocation, BlueprintSetter = SetCurrentLocation)
+    FText CurrentLocation;
 };

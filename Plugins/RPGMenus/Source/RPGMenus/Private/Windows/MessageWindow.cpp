@@ -144,7 +144,7 @@ FDisplayChoices &UMessageWindow::GetOnDisplayChoices() {
 
 void UMessageWindow::ResizeWindow() {
     if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
-        auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y);
+        auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y) + ExtraPadding;
         auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
         SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow) + DisplayTextPadding.Top +
                                    DisplayTextPadding.Bottom);

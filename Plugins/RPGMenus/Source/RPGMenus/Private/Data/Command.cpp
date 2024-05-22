@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Data/Command.h"
+#include "Data/CommandCondition.h"
 
 FName UCommand::GetID() const {
     return ID;
@@ -9,8 +10,8 @@ FText UCommand::GetText_Implementation() const {
     return Text;
 }
 
-bool UCommand::IsEnabled_Implementation() const {
-    return true;
+bool UCommand::IsEnabled() const {
+    return Condition.IsSet() ? Condition.GetValue()->IsEnabled() : true;
 }
 
 UCommand *UCommand::CreateBasicCommand(const FText &Text) {

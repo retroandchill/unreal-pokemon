@@ -28,7 +28,18 @@ class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
     void RemoveCharacter(const TScriptInterface<IGridMovable> &Character) override;
     void OnPlayerEnter() override;
 
+  protected:
+    /**
+     * Set the display name of the current map.
+     * @param MapName The display name of the current map.
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Maps|Player")
+    void SetCurrentMapName(const FText &MapName);
+
   private:
+    UPROPERTY(EditAnywhere, Category = Display)
+    FText DisplayName;
+
     /**
      * The audio played when the map starts
      */
