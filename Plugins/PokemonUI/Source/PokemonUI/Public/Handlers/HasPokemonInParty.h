@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Data/CommandCondition.h"
+
 #include "HasPokemonInParty.generated.h"
 
 /**
@@ -13,7 +14,6 @@ UCLASS(Blueprintable, EditInlineNew)
 class POKEMONUI_API UHasPokemonInParty : public UCommandCondition {
     GENERATED_BODY()
 
-protected:
+  protected:
     bool IsEnabled_Implementation() const override;
-
 };

@@ -8,19 +8,18 @@
 
 #include "SummaryPages.generated.h"
 
-class UPokemonInfoPage;
-class UWidgetSwitcher;
-
 /**
  * Delegate called when the Pokémon is changed by the iterator.
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &)
 
+class UPokemonInfoPage;
+class UWidgetSwitcher;
+
 /**
-* The widget that controls allowing the player to scroll between pages on the summary screen.
-*/
-UCLASS(Abstract)
-class POKEMONUI_API USummaryPages : public USelectableWidget {
+ * The widget that controls allowing the player to scroll between pages on the summary screen.
+ */
+UCLASS(Abstract) class POKEMONUI_API USummaryPages : public USelectableWidget {
     GENERATED_BODY()
 
   public:

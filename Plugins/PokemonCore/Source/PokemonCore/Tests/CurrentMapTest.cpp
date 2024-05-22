@@ -22,7 +22,7 @@ bool CurrentMapTest::RunTest(const FString &Parameters) {
     auto BlankBlock = NewObject<UDefaultObtainedBlock>()->Initialize(Blank);
     ASSERT_TRUE(BlankBlock->GetObtainText().IsSet());
     CHECK_EQUAL(TEXT("Test Map"), BlankBlock->GetObtainText()->ToString());
-    
+
     return true;
 }
 #endif

@@ -8,7 +8,7 @@
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.Level;
-    
+
     ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [] {
         return UPokemonSubsystem::Exists() ? UPokemonSubsystem::GetInstance().GetCurrentLocation() : FText();
     });

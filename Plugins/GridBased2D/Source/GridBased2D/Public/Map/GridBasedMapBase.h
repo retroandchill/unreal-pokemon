@@ -28,7 +28,7 @@ class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
     void RemoveCharacter(const TScriptInterface<IGridMovable> &Character) override;
     void OnPlayerEnter() override;
 
-protected:
+  protected:
     /**
      * Set the display name of the current map.
      * @param MapName The display name of the current map.
@@ -39,7 +39,7 @@ protected:
   private:
     UPROPERTY(EditAnywhere, Category = Display)
     FText DisplayName;
-    
+
     /**
      * The audio played when the map starts
      */

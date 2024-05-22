@@ -16,7 +16,7 @@ UCLASS()
 class POKEMONCORE_API UPartyManagementHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Add a Pokémon to the player's party.
      * @param WorldContext The world context used to retrieve the game data.
@@ -24,6 +24,5 @@ public:
      * @return The created Pokémon.
      */
     UFUNCTION(BlueprintCallable, Category = "Player|Pokémon", meta = (WorldContext = "WorldContext"))
-    static TScriptInterface<IPokemon> AddPokemonToParty(const UObject* WorldContext, const FPokemonDTO& Pokemon);
-
+    static TScriptInterface<IPokemon> AddPokemonToParty(const UObject *WorldContext, const FPokemonDTO &Pokemon);
 };

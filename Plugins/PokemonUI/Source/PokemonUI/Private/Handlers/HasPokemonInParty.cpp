@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Handlers/HasPokemonInParty.h"
 #include "Managers/PokemonSubsystem.h"
 
@@ -11,7 +10,7 @@ bool UHasPokemonInParty::IsEnabled_Implementation() const {
         return true;
     }
 #endif
-    
+
     auto Player = UPokemonSubsystem::GetInstance().GetPlayer();
     check(Player != nullptr)
     return !Player->GetParty().IsEmpty();

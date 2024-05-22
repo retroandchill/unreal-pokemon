@@ -84,7 +84,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      * @param LocationName The player's current location
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Maps|Display")
-    void SetCurrentLocation(const FText& LocationName);
+    void SetCurrentLocation(const FText &LocationName);
 
   private:
     /**

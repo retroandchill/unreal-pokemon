@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "CommandCondition.generated.h"
 
 /**
@@ -13,12 +14,11 @@ UCLASS(Abstract, Blueprintable)
 class RPGMENUS_API UCommandCondition : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     /**
-    * Get if this command should actually be added to the window
-    * @return Will this command be displayed?
-    */
+     * Get if this command should actually be added to the window
+     * @return Will this command be displayed?
+     */
     UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Commands)
     bool IsEnabled() const;
-
 };

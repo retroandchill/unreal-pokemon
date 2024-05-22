@@ -69,5 +69,4 @@ class GRIDBASED2D_API IMapGrid {
      * Called when the player enters the map
      */
     virtual void OnPlayerEnter() = 0;
-    
 };
