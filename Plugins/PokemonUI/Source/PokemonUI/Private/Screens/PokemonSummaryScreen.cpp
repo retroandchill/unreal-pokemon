@@ -2,6 +2,7 @@
 
 #include "Screens/PokemonSummaryScreen.h"
 #include "Components/Image.h"
+#include "Components/SummaryScreenPage.h"
 #include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
@@ -12,6 +13,7 @@ void UPokemonSummaryScreen::NativeConstruct() {
     Super::NativeConstruct();
 
     SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
+    SummaryPages->GetOnConfirm().AddDynamic(this, &UPokemonSummaryScreen::SummaryPageConfirm);
     SummaryPages->GetOnCancel().AddDynamic(this, &UPokemonSummaryScreen::CloseScreen);
     SummaryPages->SetActive(true);
     SummaryPages->SetIndex(0);
@@ -19,6 +21,10 @@ void UPokemonSummaryScreen::NativeConstruct() {
 
 void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex) {
     SummaryPages->SetInitialPokemon(Party, InitialIndex);
+}
+
+USummaryPages * UPokemonSummaryScreen::GetSummaryPages() const {
+    return SummaryPages;
 }
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
@@ -30,4 +36,13 @@ void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon
     auto [SpriteMaterial, Size] = GraphicsLoadingSubsystem->GetPokemonUISprite(*Pokemon, this);
     UWidgetUtilities::SetBrushFromAsset(PokemonSprite, SpriteMaterial);
     PokemonSprite->SetDesiredSizeOverride(Size);
+}
+
+void UPokemonSummaryScreen::SummaryPageConfirm(int32 Index) {
+    auto Page = SummaryPages->GetPage(Index);
+    if (Page == nullptr || !Page->CanSelectOnPage()) {
+        return;
+    }
+
+    Page->GetPageSelected().Broadcast();
 }
