@@ -10,7 +10,7 @@ TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemo
     LevelMet = DTO.Level;
     
     ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [this] {
-        return UPokemonSubsystem::GetInstance().GetCurrentLocation();
+        return UPokemonSubsystem::Exists() ? UPokemonSubsystem::GetInstance().GetCurrentLocation() : FText();
     });
 
     TimeReceived = FDateTime::Now();
