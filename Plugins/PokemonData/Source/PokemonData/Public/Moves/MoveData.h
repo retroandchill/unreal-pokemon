@@ -94,6 +94,11 @@ struct POKEMONDATA_API FMoveData : public FTableRowBase {
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
     TArray<FName> Tags;
+
+    /**
+     * Constant for a move that has variable power.
+     */
+    static constexpr int32 VARIABLE_POWER = 1;
 };
 
 /**

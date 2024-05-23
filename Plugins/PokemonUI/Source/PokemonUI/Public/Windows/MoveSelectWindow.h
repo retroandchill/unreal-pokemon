@@ -9,6 +9,12 @@
 class IMove;
 class IPokemon;
 class UMovePanel;
+
+/**
+ * Delegate for when the cursor moves to another move
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveSelectionChanged, const TScriptInterface<IMove>&, Move);
+
 /**
  * Widget that displays the Pokémon's moves in the UI.
  */
@@ -74,5 +80,11 @@ private:
      */
     UPROPERTY()
     TScriptInterface<IPokemon> CurrentPokemon;
+
+    /**
+     * Event for when the cursor moves to another move
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnMoveSelectionChanged OnMoveSelectionChanged;
 
 };

@@ -34,6 +34,7 @@ void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 N
     } else {
         CursorWidget->SetVisibility(ESlateVisibility::Visible);
         SetCursorPosition(CursorWidget, NewIndex);
+        OnMoveSelectionChanged.Broadcast(MovePanels[NewIndex]->GetMove());
     }
 }
 
