@@ -70,6 +70,13 @@ class POKEMONCORE_API IPokemon {
     virtual EPokemonGender GetGender() const = 0;
 
     /**
+     * Get the types of the Pokémon in question
+     * @return The Pokémon's type(s)
+     */
+    UFUNCTION(BlueprintCallable, Category = Bio)
+    virtual const TArray<FName>& GetTypes() const = 0;
+
+    /**
      * Get the Poké Ball that the Pokémon was caught in
      * @return The Poké Ball caught in
      */

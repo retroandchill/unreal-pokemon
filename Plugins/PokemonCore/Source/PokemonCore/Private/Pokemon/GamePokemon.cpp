@@ -56,6 +56,10 @@ EPokemonGender UGamePokemon::GetGender() const {
     return (PersonalityValue & UPersonalityValueUtils::LOWER_8_BITS) < GenderRatio.FemaleChance ? Female : Male;
 }
 
+const TArray<FName> &UGamePokemon::GetTypes() const {
+    return GetSpecies().Types;
+}
+
 FName UGamePokemon::GetPokeBall() const {
     return PokeBall;
 }
