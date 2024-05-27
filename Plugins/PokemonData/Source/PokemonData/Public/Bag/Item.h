@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "BattleUse.h"
 #include "FieldUse.h"
+#include "IndexedTableRow.h"
 
 #include "Item.generated.h"
 
@@ -11,14 +12,8 @@
  * Represents the data for an Item
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FItem : public FTableRowBase {
+struct POKEMONDATA_API FItem : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * ID of this item
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * Name of this item as displayed by the game.

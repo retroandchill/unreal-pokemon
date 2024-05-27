@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameData.h"
+#include "IndexedTableRow.h"
 #include "Memory/RootMemoryPointers.h"
 
 /**
@@ -10,7 +11,7 @@
  * @tparam T The row type this proxy references
  */
 template <typename T>
-    requires std::is_base_of_v<FTableRowBase, T>
+    requires std::is_base_of_v<FIndexedTableRow, T>
 class TDataTableProxy final : public IGameData {
   public:
     explicit TDataTableProxy(UDataTable *DataTable) : DataTable(MakeUniqueRoot(DataTable)) {

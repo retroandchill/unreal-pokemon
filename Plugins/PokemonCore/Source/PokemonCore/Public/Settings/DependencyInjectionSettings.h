@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Player/DefaultBag.h"
 #include "Pokemon/Abilities/DefaultAbilityBlock.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/Moves/DefaultMoveBlock.h"
@@ -24,70 +25,84 @@ class POKEMONCORE_API UDependencyInjectionSettings : public UDeveloperSettings {
      * The class used for all Pokémon objects
      * @return The class used for all Pokémon objects
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection|Pokémon")
     TSubclassOf<UObject> GetPokemonClass() const;
 
     /**
      * The class used for all Stat Block objects
      * @return The class used for all Stat Block objects
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection|Pokémon")
     TSubclassOf<UObject> GetStatBlockClass() const;
 
     /**
      * The class used for all Move Block objects
      * @return The class used for all Move Block objects
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection|Pokémon")
     TSubclassOf<UObject> GetMoveBlockClass() const;
 
     /**
      * The class used for all Ability Block objects
      * @return The class used for all Ability Block objects
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection|Pokémon")
     TSubclassOf<UObject> GetAbilityBlockClass() const;
 
     /**
      * The class used for all Obtained Block objects
      * @return The class used for all Obtained Block objects
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection|Pokémon")
     TSubclassOf<UObject> GetObtainedBlockClass() const;
+
+    /**
+     * The class used for the player's bag
+     * @return The class used for the player's bag
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Dependency Injection|Player")
+    TSubclassOf<UObject> GetBagClass() const;
 
   private:
     /**
      * The class used for all Pokémon objects
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetPokemonClass, Config, Category = "Dependency Injection",
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetPokemonClass, Config, Category = "Dependency Injection|Pokémon",
               meta = (MustImplement = Pokemon))
     TSubclassOf<UObject> PokemonClass = UGamePokemon::StaticClass();
 
     /**
      * The class used for all Stat Block objects
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetStatBlockClass, Config, Category = "Dependency Injection",
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetStatBlockClass, Config, Category = "Dependency Injection|Pokémon",
               meta = (MustImplement = StatBlock))
     TSubclassOf<UObject> StatBlockClass = UDefaultStatBlock::StaticClass();
 
     /**
      * The class used for all Move Block objects
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetMoveBlockClass, Config, Category = "Dependency Injection",
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMoveBlockClass, Config, Category = "Dependency Injection|Pokémon",
               meta = (MustImplement = MoveBlock))
     TSubclassOf<UObject> MoveBlockClass = UDefaultMoveBlock::StaticClass();
 
     /**
      * The class used for all Ability Block objects
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetAbilityBlockClass, Config, Category = "Dependency Injection",
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetAbilityBlockClass, Config, Category = "Dependency Injection|Pokémon",
               meta = (MustImplement = AbilityBlock))
     TSubclassOf<UObject> AbilityBlockClass = UDefaultAbilityBlock::StaticClass();
 
     /**
      * The class used for all Obtained Block objects
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetObtainedBlockClass, Config, Category = "Dependency Injection",
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetObtainedBlockClass, Config, Category = "Dependency Injection|Pokémon",
               meta = (MustImplement = ObtainedBlock))
     TSubclassOf<UObject> ObtainedBlockClass = UDefaultObtainedBlock::StaticClass();
+
+    /**
+     * The class used for the player's bag
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetBagClass, Config, Category = "Dependency Injection|Player",
+              meta = (MustImplement = Bag))
+    TSubclassOf<UObject> BagClass = UDefaultBag::StaticClass();
 };

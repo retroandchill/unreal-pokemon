@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IndexedTableRow.h"
 #include "MoveDamageCategory.h"
 #include "UObject/Object.h"
 
@@ -11,14 +12,8 @@
  * Represents the data for a Move in the game
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FMoveData : public FTableRowBase {
+struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * The internal ID used for lookup by the game
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * The name that is displayed to the player

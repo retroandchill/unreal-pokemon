@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IndexedTableRow.h"
 #include "PaperSprite.h"
 
 #include "Type.generated.h"
@@ -10,14 +11,8 @@
  * Represents the types that belong to both individual species as well as the moves used by them
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FType : public FTableRowBase {
+struct POKEMONDATA_API FType : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * The internal ID used for lookup by the game
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * The name that is displayed to the player

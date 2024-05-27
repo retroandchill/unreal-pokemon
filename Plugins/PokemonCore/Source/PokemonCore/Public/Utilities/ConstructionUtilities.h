@@ -6,6 +6,7 @@
 
 #include "ConstructionUtilities.generated.h"
 
+class IBag;
 class IObtainedBlock;
 class ITrainer;
 class IAbilityBlock;

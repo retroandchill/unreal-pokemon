@@ -1,5 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "PokemonCore.h"
+#include "Player/Sorting/BagSorter.h"
+#include "Player/Sorting/IndexedBagSorter.h"
+#include "Player/Sorting/NamedBagSorter.h"
 #include "Pokemon/Exp/Erratic.h"
 #include "Pokemon/Exp/Fast.h"
 #include "Pokemon/Exp/Fluctuating.h"
@@ -19,6 +22,10 @@ void FPokemonCoreModule::StartupModule() {
     GrowthRateRegistry.RegisterClass<Exp::FParabolic>("Parabolic");
     GrowthRateRegistry.RegisterClass<Exp::FFast>("Fast");
     GrowthRateRegistry.RegisterClass<Exp::FSlow>("Slow");
+
+    auto &BagSorterRegistry = FBagSorterRegistry::GetInstance();
+    BagSorterRegistry.RegisterClass<FIndexedBagSorter>("IndexedBagSorter");
+    BagSorterRegistry.RegisterClass<FNamedBagSorter>("NamedBagSorter");
 }
 
 void FPokemonCoreModule::ShutdownModule() {
