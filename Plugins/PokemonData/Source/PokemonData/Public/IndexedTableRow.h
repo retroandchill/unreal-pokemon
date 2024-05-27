@@ -15,14 +15,14 @@ struct POKEMONDATA_API FIndexedTableRow : public FTableRowBase {
     /**
      * The internal ID used for lookup by the game
      */
-    UPROPERTY(BlueprintReadOnly, Category = "Metadata")
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Metadata")
     FName ID;
 
     /**
      * The number of this row in the data table
      */
-    UPROPERTY(BlueprintReadOnly, Category = "Metadata")
-    int32 RowNumber;
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Metadata")
+    int32 RowID;
 
     void OnDataTableChanged(const UDataTable *InDataTable, const FName InRowName) override;
 };

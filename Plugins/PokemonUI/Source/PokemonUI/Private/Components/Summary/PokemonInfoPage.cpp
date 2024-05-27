@@ -20,7 +20,7 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     // TODO: Handle the regional Pokédex number
     auto &Species = Pokemon->GetSpecies();
     PokemonNumberText->SetText(
-        FText::FromString(UPokemonUIUtils::ZeroPad(Species.RowNumber, PokedexNumberLength)));
+        FText::FromString(UPokemonUIUtils::ZeroPad(Species.RowID, PokedexNumberLength)));
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();

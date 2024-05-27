@@ -5,5 +5,5 @@
 
 void FIndexedTableRow::OnDataTableChanged(const UDataTable *InDataTable, const FName InRowName) {
     ID = InRowName;
-    RowNumber = InDataTable->GetRowNames().IndexOfByKey(ID);
+    RowID = InDataTable->GetRowNames().IndexOfByKey(ID) + 1;
 }
