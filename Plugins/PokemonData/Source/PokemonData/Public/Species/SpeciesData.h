@@ -5,6 +5,7 @@
 #include "EvolutionMethod.h"
 #include "LevelUpMove.h"
 #include "UObject/Object.h"
+#include "IndexedTableRow.h"
 
 #include "SpeciesData.generated.h"
 
@@ -13,14 +14,8 @@ struct FGenderRatio;
  * Represents an individual species object
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FSpeciesData : public FTableRowBase {
+struct POKEMONDATA_API FSpeciesData : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * The internal ID used for lookup by the game
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * The name that is displayed to the player

@@ -14,7 +14,7 @@ void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) 
     
     Algo::ForEach(MovePanels, &UWidget::RemoveFromParent);
     int32 MoveCount = GetDefault<UPokemonSettings>()->GetMaxMoves();
-    auto& Moves = Pokemon->GetMoveBlock()->GetMoves();
+    auto Moves = Pokemon->GetMoveBlock()->GetMoves();
 
     MovePanels.Empty();
     check(PanelClass != nullptr)

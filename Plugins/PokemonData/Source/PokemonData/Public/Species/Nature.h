@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IndexedTableRow.h"
 #include "NatureStatChange.h"
 #include "UObject/Object.h"
 
@@ -11,14 +12,8 @@
  * Represents one of the possible Pokémon natures
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FNature : public FTableRowBase {
+struct POKEMONDATA_API FNature : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * The internal ID used for lookup by the game
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * The name that is displayed to the player

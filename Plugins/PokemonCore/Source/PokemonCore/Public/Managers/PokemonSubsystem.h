@@ -8,6 +8,7 @@
 
 #include "PokemonSubsystem.generated.h"
 
+class IBag;
 class UPlayerMetadata;
 /**
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
@@ -56,13 +57,21 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      * Get the player trainer
      * @return A reference to the player trainer character
      */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Player)
     const TScriptInterface<ITrainer> &GetPlayer() const;
+
+    /**
+     * Get the player's bag
+     * @return A reference to the player's bag
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Player)
+    const TScriptInterface<IBag> &GetBag() const;
 
     /**
      * Get the metadata about the current player
      * @return The metadata about the current player
      */
-    UFUNCTION(BlueprintPure, Category = "Trainers|Player")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Player)
     UPlayerMetadata *GetPlayerMetadata() const;
 
     /**
@@ -107,13 +116,19 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     /**
      * The trainer that represents the player character
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintGetter = GetPlayer, Category = Player)
     TScriptInterface<ITrainer> Player;
 
     /**
+     * The player's bag
+     */
+    UPROPERTY(BlueprintGetter = GetBag, Category = Player)
+    TScriptInterface<IBag> Bag;
+    
+    /**
      * The metadata about the player
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintGetter = GetPlayerMetadata, Category = Player)
     TObjectPtr<UPlayerMetadata> PlayerMetadata;
 
     /**

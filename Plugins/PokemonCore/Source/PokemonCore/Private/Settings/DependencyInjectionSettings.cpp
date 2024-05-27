@@ -21,3 +21,7 @@ TSubclassOf<UObject> UDependencyInjectionSettings::GetAbilityBlockClass() const 
 TSubclassOf<UObject> UDependencyInjectionSettings::GetObtainedBlockClass() const {
     return ObtainedBlockClass;
 }
+
+TSubclassOf<UObject> UDependencyInjectionSettings::GetBagClass() const {
+    return BagClass;
+}

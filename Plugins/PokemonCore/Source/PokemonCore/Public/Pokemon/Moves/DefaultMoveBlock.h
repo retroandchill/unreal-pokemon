@@ -16,12 +16,13 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     GENERATED_BODY()
 
   public:
+    
     TScriptInterface<IMoveBlock> Initialize(const FPokemonDTO &DTO) override;
 
-    UFUNCTION(BlueprintPure, Category = Moves)
-    const TArray<TScriptInterface<IMove>> &GetMoves() const override;
+    TConstArrayView<TScriptInterface<IMove>> GetMoves() const override;
 
-  private:
+
+private:
     UPROPERTY()
     TArray<TScriptInterface<IMove>> Moves;
 

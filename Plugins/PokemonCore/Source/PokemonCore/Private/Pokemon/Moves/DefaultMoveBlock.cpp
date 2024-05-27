@@ -21,8 +21,9 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
+    int32 MaxMoves = GetDefault<UPokemonSettings>()->GetMaxMoves();
     if (DTO.Moves.Num() > 0) {
-        int32 MoveMax = FMath::Min(GetDefault<UPokemonSettings>()->GetMaxMoves(), DTO.Moves.Num());
+        int32 MoveMax = FMath::Min(MaxMoves, DTO.Moves.Num());
         for (int32 i = 0; i < MoveMax; i++) {
             auto &Move = DTO.Moves[i];
             Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(Move));
@@ -32,7 +33,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
             MoveMemory.Add(Move);
         }
     } else {
-        int32 MoveMax = FMath::Min(GetDefault<UPokemonSettings>()->GetMaxMoves(), KnowableMoves.Num());
+        int32 MoveMax = FMath::Min(MaxMoves, KnowableMoves.Num());
         for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++) {
             Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(KnowableMoves[i].Move));
         }
@@ -41,6 +42,6 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     return this;
 }
 
-const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
+TConstArrayView<TScriptInterface<IMove>> UDefaultMoveBlock::GetMoves() const {
     return Moves;
 }

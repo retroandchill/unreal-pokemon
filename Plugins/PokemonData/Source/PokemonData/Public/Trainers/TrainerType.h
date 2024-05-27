@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "TrainerGender.h"
+#include "IndexedTableRow.h"
 
 #include "TrainerType.generated.h"
 
@@ -11,14 +12,8 @@
  * The data for the TrainerType class
  */
 USTRUCT(BlueprintType)
-struct POKEMONDATA_API FTrainerType : public FTableRowBase {
+struct POKEMONDATA_API FTrainerType : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * ID of this trainer type
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * Name of this trainer type as displayed by the game.
