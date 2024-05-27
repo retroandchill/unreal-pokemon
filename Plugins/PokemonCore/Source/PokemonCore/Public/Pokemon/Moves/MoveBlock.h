@@ -36,6 +36,12 @@ class POKEMONCORE_API IMoveBlock {
      * Get the list of moves usable by this Pokémon
      * @return The list of usable moves
      */
+    virtual TConstArrayView<TScriptInterface<IMove>> GetMoves() const = 0;
+
+    /**
+     * Get the maximum number of moves possible.
+     * @return The maximum number of possible moves
+     */
     UFUNCTION(BlueprintCallable, Category = "Moves")
-    virtual const TArray<TScriptInterface<IMove>> &GetMoves() const = 0;
+    virtual int32 GetMaxMoves() const = 0;
 };
