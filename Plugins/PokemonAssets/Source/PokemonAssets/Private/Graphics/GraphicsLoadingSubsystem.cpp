@@ -11,6 +11,7 @@
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>
+#include <functional>
 
 static TArray<FName> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
                                                        FStringView Subfolder);
@@ -103,10 +104,16 @@ std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetT
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
 
+UObject * UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
+    auto Repo = GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository();
+    return Repo->FetchAsset(Type);
+    
+}
+
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView<FName> Types) const {
     auto Repo = GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository();
     TArray<UObject *> Ret;
-    Algo::Transform(Types, Ret, [Repo](FName Type) { return Repo->FetchAsset(Type); });
+    Algo::Transform(Types, Ret, std::bind_front(&UStaticImageRepository::FetchAsset, Repo));
     return Ret;
 }
 

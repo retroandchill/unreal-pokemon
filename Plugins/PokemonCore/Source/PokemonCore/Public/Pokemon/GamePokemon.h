@@ -35,6 +35,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     EPokemonGender GetGender() const override;
 
     UFUNCTION(BlueprintPure, Category = Bio)
+    const TArray<FName> &GetTypes() const override;
+
+    UFUNCTION(BlueprintPure, Category = Bio)
     FName GetPokeBall() const override;
 
     UFUNCTION(BlueprintPure, Category = Bio)

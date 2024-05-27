@@ -90,16 +90,44 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
+    /**
+     * Get the icon graphic for a singular type.
+     * @param Type The type to get the icon for.
+     * @return The found icon graphic.
+     */
+    UObject * GetTypeIconGraphic(FName Type) const;
+
+    /**
+     * Get the icon graphics for multiple types.
+     * @param Types The types to get the icon for.
+     * @return The found icon graphics.
+     */
     TArray<UObject *> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
 
+    /**
+     * Get the icon for a Poké Ball as shown in the summary screen.
+     * @param PokeBall The Poké Ball
+     * @return The found icon.
+     */
     UObject *GetPokeBallIcon(FName PokeBall) const;
 
+    /**
+     * Get the icon for an item for the bag screen.
+     * @param ItemID The ID of the item
+     * @return The item's icon.
+     */
     UObject *GetItemIcon(FName ItemID) const;
 
   private:
+    /**
+     * The materials for a Pokémon sprites
+     */
     UPROPERTY()
     FPokemonSpriteMaterials PokemonSpriteMaterials;
 
+    /**
+     * The materials for trainer sprites.
+     */
     UPROPERTY()
     FTrainerSpriteMaterials TrainerSpriteMaterials;
 };
