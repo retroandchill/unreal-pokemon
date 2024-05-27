@@ -5,24 +5,26 @@
 #include "Player/ItemSlot.h"
 #include "Settings/BagSettings.h"
 
+#include <functional>
+
 /**
  * Check if the given item slot is for the given item ID.
- * @param Slot The slot to check against
  * @param ItemID The item ID to validate
+ * @param Slot The slot to check against
  * @return Is this slot for the given item
  */
-bool ItemSlotMatches(const FItemSlot& Slot, FName ItemID) {
+bool ItemSlotMatches(FName ItemID, const FItemSlot& Slot) {
     return Slot.Item == ItemID;
 }
 
 int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
-    auto ItemSlot = ItemSlots.FindByPredicate(&ItemSlotMatches);
+    auto ItemSlot = ItemSlots.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     return ItemSlot != nullptr ? ItemSlot->Quantity : 0;
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
     int32 SlotMax = GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
-    auto ItemSlot = ItemSlots.FindByPredicate(&ItemSlotMatches);
+    auto ItemSlot = ItemSlots.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     int32 QuantityBefore;
     if (ItemSlot == nullptr) {
         ItemSlot = &ItemSlots.Emplace_GetRef(ItemID, FMath::Clamp(Amount, 0, SlotMax));
@@ -37,7 +39,7 @@ int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
 
 int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
     int32 SlotMax = GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
-    auto SlotIndex = ItemSlots.IndexOfByPredicate(&ItemSlotMatches);
+    auto SlotIndex = ItemSlots.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     if (SlotIndex == INDEX_NONE) {
         return 0;
     }

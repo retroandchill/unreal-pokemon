@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "PokemonStatType.h"
 #include "UObject/Object.h"
+#include "IndexedTableRow.h"
 
 #include "Stat.generated.h"
 
@@ -11,14 +12,8 @@
  * Represents one of the stats in the database.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FStat : public FTableRowBase {
+struct POKEMONDATA_API FStat : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * The internal ID used for lookup by the game
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * The name that is displayed to the player

@@ -22,7 +22,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves, "Unit Tests.C
 
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize({.Species = "RIOLU", .Level = 40});
-    auto &Moves = Move->GetMoves();
+    auto Moves = Move->GetMoves();
     ASSERT_EQUAL(4, Moves.Num());
     CHECK_EQUAL("SCREECH", Moves[0]->GetMoveData().ID.ToString());
     CHECK_EQUAL("QUICKGUARD", Moves[1]->GetMoveData().ID.ToString());
@@ -37,7 +37,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves, "Unit Tests.Co
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize(
         {.Species = "RIOLU", .Level = 40, .Moves = {"WORKUP", "AURASPHERE", "FEINT"}});
-    auto &Moves = Move->GetMoves();
+    auto Moves = Move->GetMoves();
     ASSERT_EQUAL(3, Moves.Num());
     CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());
     CHECK_EQUAL("AURASPHERE", Moves[1]->GetMoveData().ID.ToString());

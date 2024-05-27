@@ -23,6 +23,13 @@ class POKEMONCORE_API UPokemonSettings : public UDeveloperSettings {
     FName GetHPStat() const;
 
     /**
+     * The maximum number of moves a Pokémon can know.
+     * @return The maximum number of moves a Pokémon can know.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
+    int32 GetMaxMoves() const;
+
+    /**
      * Get the odds of a Pokémon being shiny.
      * @return The odds of a newly generated Pokémon being shiny (out of 65536).
      */
@@ -42,6 +49,12 @@ class POKEMONCORE_API UPokemonSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetHPStat, Config, DisplayName = "HP Stat", Category = Stats,
               meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName HPStat = "HP";
+
+    /**
+     * The maximum number of moves a Pokémon can know.
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxMoves, Config, Category = Moves)
+    int32 MaxMoves = 4;
 
     /**
      * The odds of a newly generated Pokémon being shiny (out of 65536).

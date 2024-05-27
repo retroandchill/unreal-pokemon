@@ -19,9 +19,8 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
     // TODO: Handle the regional Pokédex number
     auto &Species = Pokemon->GetSpecies();
-    auto Names = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetDataTable()->GetRowNames();
     PokemonNumberText->SetText(
-        FText::FromString(UPokemonUIUtils::ZeroPad(Names.IndexOfByKey(Species.ID), PokedexNumberLength)));
+        FText::FromString(UPokemonUIUtils::ZeroPad(Species.RowNumber, PokedexNumberLength)));
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();

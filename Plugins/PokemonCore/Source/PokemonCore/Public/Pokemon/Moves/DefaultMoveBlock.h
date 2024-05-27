@@ -30,7 +30,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
 
 private:
     UPROPERTY()
-    TArray<TScriptInterface<IMove>, TInlineAllocator<MaxMoves>> Moves;
+    TArray<TScriptInterface<IMove>> Moves;
 
     /**
      * The full move learning memory of the Pokémon presented in the order the moves were learned.

@@ -25,7 +25,7 @@ public:
      * @param ItemID The internal ID of the item
      * @return The number the player has (0 means the player doesn't have any)
      */
-    UFUNCTION(BlueprintPure, Category = "Player|Inventory")
+    UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     virtual int32 GetItemQuantity(FName ItemID) const = 0;
     
     /**

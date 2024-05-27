@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IndexedTableRow.h"
 #include "UObject/Object.h"
 
 #include "Environment.generated.h"
@@ -11,14 +12,8 @@
  * Nature Power
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FEnvironment : public FTableRowBase {
+struct POKEMONDATA_API FEnvironment : public FIndexedTableRow {
     GENERATED_BODY()
-
-    /**
-     * The internal ID used for lookup by the game
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")
-    FName ID;
 
     /**
      * The name that is displayed to the player
