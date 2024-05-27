@@ -17,6 +17,7 @@
 #include "Utilities/ConstructionUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "Components/Summary/PokemonMovesPage.h"
 
 using namespace accessor;
 
@@ -149,6 +150,8 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     ASSERT_NOT_NULL(PokemonIDText);
     CHECK_EQUAL(ForeignTrainer->GetIdNumber(), FCString::Atoi(*PokemonIDText->GetText().ToString()));
 
+    CHECK_FALSE(Page->CanSelectOnPage());
+
     return true;
 }
 
@@ -219,6 +222,8 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("Egg hatched."), Lines[6]);           // Egg Hatched
     CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[7]); // Characteristic
 
+    CHECK_FALSE(Page->CanSelectOnPage());
+
     return true;
 }
 
@@ -268,6 +273,32 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
 
         CHECK_EQUAL(Values[i], StatLabel->GetText().ToString());
     }
+
+    CHECK_FALSE(Page->CanSelectOnPage());
+
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_Moves,
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.Moves",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonMovesPage>();
+    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    auto WidgetClass = Subclasses[0];
+
+    auto Page = CreateWidget<UPokemonMovesPage>(World, WidgetClass);
+    Page->AddToViewport();
+
+    auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon(
+        {.Species = "KABUTOPS", .Level = 40},
+        ForeignTrainer);
+    Page->RefreshInfo(Pokemon1);
+
+    CHECK_TRUE(Page->CanSelectOnPage());
 
     return true;
 }
