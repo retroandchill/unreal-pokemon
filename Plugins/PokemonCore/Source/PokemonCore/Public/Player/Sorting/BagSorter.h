@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Meta/GenericStaticUniqueRegistry.h"
-
-struct FItemSlot;
+#include "Player/ItemSlot.h"
 
 /**
  * Abstract class for handing the sorting of the player's bag.
@@ -19,7 +18,7 @@ public:
      * Sort the provided pocket.
      * @param Pocket The pocket to sort.
      */
-    void SortPocket(TArrayView<FItemSlot> Pocket);
+    void SortPocket(TArrayView<FItemSlot> Pocket) const;
 
 protected:
     /**

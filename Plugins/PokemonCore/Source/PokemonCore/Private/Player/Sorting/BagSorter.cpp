@@ -6,6 +6,6 @@
 
 IBagSorter::~IBagSorter() = default;
 
-void IBagSorter::SortPocket(TArrayView<FItemSlot> Pocket) {
+void IBagSorter::SortPocket(TArrayView<FItemSlot> Pocket) const {
     Pocket.Sort(std::bind_front(&IBagSorter::CompareItems, this));
 }

@@ -35,10 +35,14 @@ public:
     int32 GetItemQuantity(FName ItemID) const override;
     
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    int32 ObtainItem(FName ItemID, int32 Amount) override;
+    int32 ObtainItem(FName ItemID, int32 Amount = 1) override;
     
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    int32 RemoveItem(FName ItemID, int32 Amount) override;
+    int32 RemoveItem(FName ItemID, int32 Amount = 1) override;
+
+    
+    void SortPocket(uint8 Pocket, const IBagSorter &Sorter) override;
+    void ForEachInPocket(uint8 Pocket, TFunctionRef<void(FName, int32)> Callback) const override;
 
 private:
     /**
@@ -54,7 +58,7 @@ private:
      * @return The pocket the item should go in (null if so such pocket exists)
      */
     const TArray<FItemSlot> *GetPocket(FName ItemID) const;
-    
+
     /**
      * The actual representation of the items in the player's inventory.
      */

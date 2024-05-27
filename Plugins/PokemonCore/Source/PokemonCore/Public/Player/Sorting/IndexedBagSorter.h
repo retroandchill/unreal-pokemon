@@ -8,7 +8,7 @@
 /**
  * Sorter for items according to their internal index.
  */
-class POKEMONCORE_API FIndexedBagSorter : IBagSorter {
+class POKEMONCORE_API FIndexedBagSorter : public IBagSorter {
 protected:
     bool CompareItems(const FItemSlot &Item1, const FItemSlot &Item2) const override;
 

@@ -26,6 +26,6 @@ private:
      * The maximum quantity of a single item the player can hold.
      */
     UPROPERTY(BlueprintGetter = GetMaxItemsPerSlot, Category = "Player|Inventory")
-    int32 MaxItemsPerSlot;
+    int32 MaxItemsPerSlot = 999;
 
 };

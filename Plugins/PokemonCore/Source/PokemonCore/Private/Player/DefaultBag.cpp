@@ -5,6 +5,7 @@
 #include "DataManager.h"
 #include "Bag/Item.h"
 #include "Player/ItemSlot.h"
+#include "Player/Sorting/BagSorter.h"
 #include "Settings/BagSettings.h"
 
 #include <functional>
@@ -65,6 +66,21 @@ int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
     return Change;
 }
 
+void UDefaultBag::SortPocket(uint8 Pocket, const IBagSorter &Sorter) {
+    Sorter.SortPocket(ItemSlots.FindOrAdd(Pocket).Items);
+}
+
+void UDefaultBag::ForEachInPocket(uint8 Pocket, TFunctionRef<void(FName, int32)> Callback) const {
+    auto Items = ItemSlots.Find(Pocket);
+    if (Items == nullptr) {
+            return;
+    }
+
+    for (auto&[Item, Quantity] : Items->Items) {
+        Callback(Item, Quantity);
+    }
+}
+
 TArray<FItemSlot> & UDefaultBag::GetPocket(FName ItemID) {
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
     check(Item != nullptr)
@@ -75,5 +91,5 @@ const TArray<FItemSlot> * UDefaultBag::GetPocket(FName ItemID) const {
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
     check(Item != nullptr)
     auto Pocket = ItemSlots.Find(Item->Pocket);
-    return Pocket != nullptr ? Pocket->Items : nullptr;
+    return Pocket != nullptr ? &Pocket->Items : nullptr;
 }
