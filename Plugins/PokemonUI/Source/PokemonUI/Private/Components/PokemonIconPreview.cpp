@@ -18,7 +18,7 @@ void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon
     auto IconGraphics = GraphicsLoadingSubsystem->GetTypeIconGraphics(Pokemon->GetTypes());
     Algo::ForEach(TypeIcons, &UWidget::RemoveFromParent);
     TypeIcons.Empty();
-    Algo::ForEach(IconGraphics, std::bind(&UPokemonIconPreview::CreateTypeIcon, this, std::placeholders::_1));
+    Algo::ForEach(IconGraphics, std::bind_front(&UPokemonIconPreview::CreateTypeIcon, this));
 }
 
 void UPokemonIconPreview::CreateTypeIcon(UObject *Resource) {

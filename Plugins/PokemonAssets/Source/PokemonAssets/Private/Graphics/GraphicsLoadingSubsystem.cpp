@@ -105,7 +105,7 @@ std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetT
 
 UObject * UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
     auto Repo = GetDefault<UAssetLoaderSettings>()->GetTypeIconRepository();
-    return Repo->FetchAsset(Type);;
+    return Repo->FetchAsset(Type);
     
 }
 
