@@ -5,6 +5,7 @@
 #include "DataManager.h"
 #include "Pokemon/Moves/DefaultMove.h"
 #include "Pokemon/PokemonDTO.h"
+#include "Settings/PokemonSettings.h"
 #include "Species/SpeciesData.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DTO) {
@@ -20,6 +21,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
+    int32 MaxMoves = GetDefault<UPokemonSettings>()->GetMaxMoves();
     if (DTO.Moves.Num() > 0) {
         int32 MoveMax = FMath::Min(MaxMoves, DTO.Moves.Num());
         for (int32 i = 0; i < MoveMax; i++) {
@@ -42,8 +44,4 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
 
 TConstArrayView<TScriptInterface<IMove>> UDefaultMoveBlock::GetMoves() const {
     return Moves;
-}
-
-int32 UDefaultMoveBlock::GetMaxMoves() const {
-    return MaxMoves;
 }

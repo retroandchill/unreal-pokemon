@@ -16,17 +16,11 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     GENERATED_BODY()
 
   public:
-    /**
-     * Constant for the maximum number of moves for this type
-     */
-    static constexpr int32 MaxMoves = 4;
     
     TScriptInterface<IMoveBlock> Initialize(const FPokemonDTO &DTO) override;
 
     TConstArrayView<TScriptInterface<IMove>> GetMoves() const override;
-    
-    UFUNCTION(BlueprintPure, Category = Moves)
-    int32 GetMaxMoves() const override;
+
 
 private:
     UPROPERTY()
