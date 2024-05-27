@@ -3,6 +3,7 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
+#include "Settings/DependencyInjectionSettings.h"
 #include "Settings/PokemonSettings.h"
 #include "Settings/TrainerSettings.h"
 #include "Trainers/TrainerStub.h"
@@ -45,6 +46,7 @@ void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
     Player =
         NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
+    Bag = NewObject<UObject>(this, GetDefault<UDependencyInjectionSettings>()->GetBagClass());
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }
@@ -59,6 +61,10 @@ int32 UPokemonSubsystem::GetMaxPartySize() const {
 
 const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
     return Player;
+}
+
+const TScriptInterface<IBag> & UPokemonSubsystem::GetBag() const {
+    return Bag;
 }
 
 UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const {
