@@ -8,7 +8,7 @@
 #include "Primatives/DisplayText.h"
 #include "Utilities/RAII.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(MoveInfoWindowTest, "Tests.Windows.MoveInfoWindowTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(MoveInfoWindowTest, "Unit Tests.Windows.MoveInfoWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool MoveInfoWindowTest::RunTest(const FString &Parameters) {
