@@ -5,7 +5,7 @@
 #include "Player/Sorting/IndexedBagSorter.h"
 #include "Player/Sorting/NamedBagSorter.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagSorterTest_Indexed, "Tests.Player.BagSorterTest.IndexedBagSorter",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagSorterTest_Indexed, "Unit Tests.Player.BagSorterTest.IndexedBagSorter",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool BagSorterTest_Indexed::RunTest(const FString &Parameters) {
@@ -26,7 +26,7 @@ bool BagSorterTest_Indexed::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagSorterTest_Named, "Tests.Player.BagSorterTest.NamedBagSorter",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagSorterTest_Named, "Unit Tests.Player.BagSorterTest.NamedBagSorter",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool BagSorterTest_Named::RunTest(const FString &Parameters) {

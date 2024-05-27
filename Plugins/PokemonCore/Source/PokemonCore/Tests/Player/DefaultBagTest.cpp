@@ -4,7 +4,7 @@
 #include "Misc/AutomationTest.h"
 #include "Player/Sorting/IndexedBagSorter.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagTest, "Tests.Player.BagTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagTest, "Unit Tests.Player.BagTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool BagTest::RunTest(const FString &Parameters) {
