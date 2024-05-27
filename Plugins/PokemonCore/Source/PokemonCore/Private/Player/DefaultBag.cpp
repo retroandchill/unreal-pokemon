@@ -2,6 +2,8 @@
 
 
 #include "Player/DefaultBag.h"
+#include "DataManager.h"
+#include "Bag/Item.h"
 #include "Player/ItemSlot.h"
 #include "Settings/BagSettings.h"
 
@@ -18,16 +20,22 @@ bool ItemSlotMatches(FName ItemID, const FItemSlot& Slot) {
 }
 
 int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
-    auto ItemSlot = ItemSlots.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
+    auto Pocket = GetPocket(ItemID);
+    if (Pocket == nullptr) {
+        return 0;
+    }
+    
+    auto ItemSlot = Pocket->FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     return ItemSlot != nullptr ? ItemSlot->Quantity : 0;
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
+    auto &Pocket = GetPocket(ItemID);
     int32 SlotMax = GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
-    auto ItemSlot = ItemSlots.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
+    auto ItemSlot = Pocket.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     int32 QuantityBefore;
     if (ItemSlot == nullptr) {
-        ItemSlot = &ItemSlots.Emplace_GetRef(ItemID, FMath::Clamp(Amount, 0, SlotMax));
+        ItemSlot = &Pocket.Emplace_GetRef(ItemID, FMath::Clamp(Amount, 0, SlotMax));
         QuantityBefore = 0;
     } else {
         QuantityBefore = ItemSlot->Quantity;
@@ -38,20 +46,34 @@ int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
 }
 
 int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
+    auto &Pocket = GetPocket(ItemID);
     int32 SlotMax = GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
-    auto SlotIndex = ItemSlots.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
+    auto SlotIndex = Pocket.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     if (SlotIndex == INDEX_NONE) {
         return 0;
     }
 
-    int32 &Quantity = ItemSlots[SlotIndex].Quantity;
+    int32 &Quantity = Pocket[SlotIndex].Quantity;
     int32 QuantityBefore = Quantity;
     Quantity = FMath::Clamp(Quantity - Amount, 0, SlotMax);
     int32 Change = QuantityBefore - Quantity;
 
     if (Quantity == 0) {
-        ItemSlots.RemoveAt(SlotIndex);
+        Pocket.RemoveAt(SlotIndex);
     }
 
     return Change;
+}
+
+TArray<FItemSlot> & UDefaultBag::GetPocket(FName ItemID) {
+    auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
+    check(Item != nullptr)
+    return ItemSlots.FindOrAdd(Item->Pocket).Items;
+}
+
+const TArray<FItemSlot> * UDefaultBag::GetPocket(FName ItemID) const {
+    auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
+    check(Item != nullptr)
+    auto Pocket = ItemSlots.Find(Item->Pocket);
+    return Pocket != nullptr ? Pocket->Items : nullptr;
 }

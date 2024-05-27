@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Bag/Item.h"
+
 #include "ItemSlot.generated.h"
 
 /**
@@ -23,5 +25,7 @@ struct POKEMONCORE_API FItemSlot {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Inventory")
     int32 Quantity = 1;
+
+    const FItem& GetItem() const;
     
 };
