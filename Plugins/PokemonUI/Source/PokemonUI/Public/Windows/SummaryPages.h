@@ -8,6 +8,7 @@
 
 #include "SummaryPages.generated.h"
 
+class USummaryScreenPage;
 /**
  * Delegate called when the Pokémon is changed by the iterator.
  */
@@ -49,6 +50,14 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
      * @return The currently displayed Pokémon
      */
     const TScriptInterface<IPokemon> &GetCurrentPokemon() const;
+
+    /**
+     * Get the page at the given index.
+     * @param PageIndex The index to search at
+     * @return The found page
+     */
+    UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = Widgets)
+    USummaryScreenPage* GetPage(int32 PageIndex) const;
 
   protected:
     /**

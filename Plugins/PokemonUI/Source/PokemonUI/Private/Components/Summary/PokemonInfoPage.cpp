@@ -26,7 +26,7 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
     ClearTypeIcons();
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    for (auto Types = GraphicsLoadingSubsystem->GetTypeIconGraphics(Species.Types); auto Asset : Types) {
+    for (auto Types = GraphicsLoadingSubsystem->GetTypeIconGraphics(Pokemon->GetTypes()); auto Asset : Types) {
         auto Icon = WidgetTree->ConstructWidget<UImage>();
         UWidgetUtilities::SetBrushFromAsset(Icon, Asset, true);
         SlotTypeIcon(Icon);
