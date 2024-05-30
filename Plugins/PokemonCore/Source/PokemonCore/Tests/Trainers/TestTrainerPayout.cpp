@@ -5,8 +5,9 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Trainers/BasicTrainer.h"
-#include "Utilities/ConstructionUtilities.h"
 #include "Utilities/RAII.h"
+#include "Lookup/InjectionUtilities.h"
+#include "Pokemon/Pokemon.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTrainerPayout, "Unit Tests.Core.Trainers.TestTrainerPayout",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -19,8 +20,8 @@ bool TestTrainerPayout::RunTest(const FString &Parameters) {
     }
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
-    Trainer->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({.Species = "LUCARIO", .Level = 64}));
-    Trainer->AddPokemonToParty(UConstructionUtilities::CreateNewPokemon({.Species = "MIMIKYU", .Level = 44}));
+    Trainer->AddPokemonToParty(UnrealInjector::NewInjectedDependency<IPokemon>(GameInstance.Get(), FPokemonDTO{.Species = "LUCARIO", .Level = 64}));
+    Trainer->AddPokemonToParty(UnrealInjector::NewInjectedDependency<IPokemon>(GameInstance.Get(), FPokemonDTO{.Species = "MIMIKYU", .Level = 44}));
 
     ASSERT_EQUAL(2640, Trainer->GetPayout());
 

@@ -6,7 +6,6 @@
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
 #include "Mainpulation/CircularIterator.h"
-#include "Meta/InjectionRegistry.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
 
@@ -22,8 +21,8 @@ class IStatBlock;
 struct FSpeciesData;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType)
-class UPokemon : public UInterface {
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+class POKEMONCORE_API UPokemon : public UInterface {
     GENERATED_BODY()
 };
 
@@ -158,5 +157,3 @@ class POKEMONCORE_API IPokemon {
  * Circular iterator specifically for Pokémon in the party or a box
  */
 using FPokemonIterator = TCircularIterator<TScriptInterface<IPokemon>>;
-
-DECLARE_INJECTABLE_INTERFACE(Pokemon);

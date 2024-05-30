@@ -9,15 +9,15 @@
 #include "Components/Summary/TrainerMemoPage.h"
 #include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
-#include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
-#include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "Primatives/DisplayText.h"
 #include "Trainers/BasicTrainer.h"
-#include "Utilities/ConstructionUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Components/Summary/PokemonMovesPage.h"
+#include "Lookup/InjectionUtilities.h"
+#include "Pokemon/Pokemon.h"
+#include "Pokemon/TrainerMemo/ObtainedBlock.h"
 
 using namespace accessor;
 
@@ -35,8 +35,8 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon(
-        {.Species = "KABUTOPS", .Level = 30, .Gender = EPokemonGender::Female, .PokeBall = FName("ULTRABALL")},
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World,
+        FPokemonDTO{.Species = "KABUTOPS", .Level = 30, .Gender = EPokemonGender::Female, .PokeBall = FName("ULTRABALL")},
         ForeignTrainer);
 
     Page->Refresh(Pokemon1);
@@ -57,8 +57,8 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     ASSERT_NOT_NULL(PokemonStatusIcon);
     CHECK_EQUAL(ESlateVisibility::Hidden, PokemonStatusIcon->GetVisibility());
 
-    auto Pokemon2 = UConstructionUtilities::CreateForeignPokemon(
-        {.Species = "OMASTAR", .Level = 60, .Gender = EPokemonGender::Male}, ForeignTrainer);
+    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(World,
+        FPokemonDTO{.Species = "OMASTAR", .Level = 60, .Gender = EPokemonGender::Male}, ForeignTrainer);
     Page->Refresh(Pokemon2);
 
     CHECK_EQUAL(TEXT("Omastar"), PokemonNameText->GetText().ToString());
@@ -66,8 +66,8 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("♂"), PokemonGenderText->GetText().ToString());
     CHECK_EQUAL(ESlateVisibility::Hidden, PokemonStatusIcon->GetVisibility());
 
-    auto Pokemon3 = UConstructionUtilities::CreateForeignPokemon(
-        {.Species = "VOLTORB", .Level = 10, .Nickname = FText::FromStringView(TEXT("Volty"))}, ForeignTrainer);
+    auto Pokemon3 = UnrealInjector::NewInjectedDependency<IPokemon>(World,
+        FPokemonDTO{.Species = "VOLTORB", .Level = 10, .Nickname = FText::FromStringView(TEXT("Volty"))}, ForeignTrainer);
     Page->Refresh(Pokemon3);
 
     CHECK_EQUAL(TEXT("Volty"), PokemonNameText->GetText().ToString());
@@ -92,8 +92,8 @@ bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon(
-        {.Species = "KABUTOPS", .Shiny = true, .Item = FName("MYSTICWATER")}, ForeignTrainer);
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World,
+        FPokemonDTO{.Species = "KABUTOPS", .Shiny = true, .Item = FName("MYSTICWATER")}, ForeignTrainer);
 
     Page->Refresh(Pokemon1);
 
@@ -110,7 +110,7 @@ bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ShinyIcon->GetVisibility());
 
     auto Pokemon2 =
-        UConstructionUtilities::CreateForeignPokemon({.Species = "OMASTAR", .Shiny = false}, ForeignTrainer);
+        UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "OMASTAR", .Shiny = false}, ForeignTrainer);
     Page->Refresh(Pokemon2);
 
     CHECK_EQUAL(TEXT("None"), ItemNameText->GetText().ToString());
@@ -134,7 +134,7 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon = UConstructionUtilities::CreateForeignPokemon({.Species = "KABUTOPS"}, ForeignTrainer);
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "KABUTOPS"}, ForeignTrainer);
 
     Page->RefreshInfo(Pokemon);
 
@@ -169,7 +169,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon({.Species = "KABUTOPS",
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "KABUTOPS",
                                                                   .Level = 40,
                                                                   .IVs = {{"HP", 30},
                                                                           {"ATTACK", 31},
@@ -194,7 +194,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[4]);   // Characteristic
 
     auto Pokemon2 =
-        UConstructionUtilities::CreateForeignPokemon({.Species = "KABUTO",
+        UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "KABUTO",
                                                       .Level = 1,
                                                       .IVs = {{"HP", 30},
                                                               {"ATTACK", 31},
@@ -241,7 +241,7 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon({.Species = "KABUTOPS",
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "KABUTOPS",
                                                                   .Level = 40,
                                                                   .IVs = {{"HP", 30},
                                                                           {"ATTACK", 31},
@@ -293,8 +293,8 @@ bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UConstructionUtilities::CreateForeignPokemon(
-        {.Species = "KABUTOPS", .Level = 40},
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World, 
+        FPokemonDTO{.Species = "KABUTOPS", .Level = 40},
         ForeignTrainer);
     Page->RefreshInfo(Pokemon1);
 

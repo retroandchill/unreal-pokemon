@@ -9,7 +9,7 @@
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
 class UStatBlock : public UInterface {
     GENERATED_BODY()
 };

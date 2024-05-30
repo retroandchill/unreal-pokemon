@@ -8,7 +8,7 @@
 
 class IBagSorter;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable)
+UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
 class UBag : public UInterface {
     GENERATED_BODY()
 };
@@ -21,6 +21,8 @@ class POKEMONCORE_API IBag {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    virtual void Initialize() = 0;
+    
     /**
      * Get the count of a specific item.
      * @param ItemID The internal ID of the item

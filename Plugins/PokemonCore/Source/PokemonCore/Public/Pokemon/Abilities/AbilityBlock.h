@@ -11,7 +11,7 @@ struct FPokemonDTO;
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType)
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
 class UAbilityBlock : public UInterface {
     GENERATED_BODY()
 };

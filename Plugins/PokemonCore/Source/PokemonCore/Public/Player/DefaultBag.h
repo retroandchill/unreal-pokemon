@@ -31,6 +31,8 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     GENERATED_BODY()
 
 public:
+    void Initialize() override;
+    
     UFUNCTION(BlueprintPure, Category = "Player|Inventory")
     int32 GetItemQuantity(FName ItemID) const override;
     

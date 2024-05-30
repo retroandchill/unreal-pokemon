@@ -1,12 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
-#include "Settings/DependencyInjectionSettings.h"
 #include "Settings/PokemonSettings.h"
 #include "Settings/TrainerSettings.h"
 #include "Trainers/TrainerStub.h"
+#include "Player/Bag.h"
 
 UPokemonSubsystem *UPokemonSubsystem::Instance = nullptr;
 
@@ -46,7 +47,7 @@ void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
     Player =
         NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
-    Bag = NewObject<UObject>(this, GetDefault<UDependencyInjectionSettings>()->GetBagClass());
+    Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }

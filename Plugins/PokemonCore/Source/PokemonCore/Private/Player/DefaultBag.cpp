@@ -20,6 +20,10 @@ bool ItemSlotMatches(FName ItemID, const FItemSlot& Slot) {
     return Slot.Item == ItemID;
 }
 
+void UDefaultBag::Initialize() {
+    // No initialization needed
+}
+
 int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
     auto Pocket = GetPocket(ItemID);
     if (Pocket == nullptr) {

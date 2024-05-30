@@ -1,11 +1,11 @@
-﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+﻿#include "Lookup/InjectionUtilities.h"
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Settings/PokemonSettings.h"
-#include "Utilities/ConstructionUtilities.h"
 #include "Utilities/RAII.h"
 
 class UPokemonSettings;
@@ -19,10 +19,10 @@ bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
         GameInstance->Init();
     }
 
-    auto Pokemon1 = UConstructionUtilities::CreateNewPokemon({.Species = "PORYGON"});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(GameInstance.Get(), FPokemonDTO{.Species = "PORYGON"});
     CHECK_EQUAL(GetDefault<UPokemonSettings>()->GetDefaultPokeBall(), Pokemon1->GetPokeBall());
 
-    auto Pokemon2 = UConstructionUtilities::CreateNewPokemon({.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
+    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(GameInstance.Get(), FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
     CHECK_EQUAL(TEXT("MOONBALL"), Pokemon2->GetPokeBall().ToString());
 
     return true;
