@@ -33,7 +33,7 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     Pages->AddToViewport();
 
     FPokemonTestUtilities::CreateMockParty(World);
-    auto Trainer = UPokemonSubsystem::GetInstance().GetPlayer();
+    auto Trainer = UPokemonSubsystem::GetInstance(World).GetPlayer();
     Pages->SetInitialPokemon(Trainer->GetParty(), 0);
     Pages->SetActive(true);
 

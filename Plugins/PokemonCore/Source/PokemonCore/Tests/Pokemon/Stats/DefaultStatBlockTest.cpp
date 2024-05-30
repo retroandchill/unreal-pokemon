@@ -8,16 +8,13 @@
 #include "Pokemon/PokemonDTO.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/RAII.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Unit Tests.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString &Parameters) {
-    FGameInstancePtr GameInstance;
-    if (!UPokemonSubsystem::Exists()) {
-        GameInstance.Reset(NewObject<UGameInstance>());
-        GameInstance->Init();
-    }
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
 
     FPokemonDTO PokemonDTO = {.Species = FName("GARCHOMP"), .Level = 78, .Nature = FName("ADAMANT")};
     PokemonDTO.IVs = {{"HP", 24},  {"ATTACK", 12}, {"DEFENSE", 30}, {"SPECIAL_ATTACK", 16}, {"SPECIAL_DEFENSE", 23},
@@ -26,10 +23,10 @@ bool DefaultStatBlockTest::RunTest(const FString &Parameters) {
     PokemonDTO.EVs = {{"HP", 74},   {"ATTACK", 190}, {"DEFENSE", 91}, {"SPECIAL_ATTACK", 48}, {"SPECIAL_DEFENSE", 84},
                       {"SPEED", 23}};
 
-    auto NewPokemon = NewObject<UGamePokemon>();
+    auto NewPokemon = NewObject<UGamePokemon>(World);
     NewPokemon->Initialize(PokemonDTO, nullptr);
 
-    auto Block = NewObject<UDefaultStatBlock>();
+    auto Block = NewObject<UDefaultStatBlock>(World);
     Block->Initialize(NewPokemon, PokemonDTO);
     auto &Species = NewPokemon->GetSpecies();
     Block->CalculateStats(Species.BaseStats);

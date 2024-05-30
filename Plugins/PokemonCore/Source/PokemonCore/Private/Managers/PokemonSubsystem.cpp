@@ -9,12 +9,9 @@
 #include "Trainers/TrainerStub.h"
 #include "Player/Bag.h"
 
-UPokemonSubsystem *UPokemonSubsystem::Instance = nullptr;
-
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    Instance = this;
     HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
     MaxPartySize = GetDefault<UTrainerSettings>()->GetMaxPartySize();
 
@@ -29,18 +26,19 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
 #endif
 }
 
-void UPokemonSubsystem::Deinitialize() {
-    Super::Deinitialize();
-    Instance = nullptr;
+UPokemonSubsystem & UPokemonSubsystem::GetInstance(const UObject *WorldContext) {
+    auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
+    check(GameInstance != nullptr)
+    return *GameInstance->GetSubsystem<UPokemonSubsystem>();
 }
 
-UPokemonSubsystem &UPokemonSubsystem::GetInstance() {
-    check(Instance != nullptr)
-    return *Instance;
-}
+bool UPokemonSubsystem::Exists(const UObject *WorldContext) {
+    auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
+    if (GameInstance == nullptr) {
+        return false;
+    }
 
-bool UPokemonSubsystem::Exists() {
-    return Instance != nullptr;
+    return GameInstance->GetSubsystem<UPokemonSubsystem>() != nullptr;
 }
 
 void UPokemonSubsystem::StartNewGame() {

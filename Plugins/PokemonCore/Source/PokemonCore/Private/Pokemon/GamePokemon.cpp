@@ -84,7 +84,7 @@ int32 UGamePokemon::GetCurrentHP() const {
 }
 
 int32 UGamePokemon::GetMaxHP() const {
-    return GetStatBlock()->GetStat(UPokemonSubsystem::GetInstance().GetHPStat())->GetStatValue();
+    return GetStatBlock()->GetStat(UPokemonSubsystem::GetInstance(this).GetHPStat())->GetStatValue();
 }
 
 bool UGamePokemon::IsFainted() const {
@@ -134,12 +134,12 @@ TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
     return ObtainedBlock;
 }
 
-UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
-    return Create(Data, nullptr);
+UGamePokemon *UGamePokemon::Create(UObject* WorldContext, const FPokemonDTO &Data) {
+    return Create(WorldContext, Data, nullptr);
 }
 
-UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer) {
-    auto Ret = NewObject<UGamePokemon>();
+UGamePokemon *UGamePokemon::Create(UObject* WorldContext, const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer) {
+    auto Ret = NewObject<UGamePokemon>(WorldContext);
     Ret->Initialize(Data, Trainer);
     return Ret;
 }

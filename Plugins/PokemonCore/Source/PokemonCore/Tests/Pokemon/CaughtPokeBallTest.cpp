@@ -1,4 +1,5 @@
 ﻿#include "Lookup/InjectionUtilities.h"
+#include "Utilities/WidgetTestUtilities.h"
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "Managers/PokemonSubsystem.h"
@@ -13,16 +14,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Unit Tests.Core.Pokemon.Ca
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
-    FGameInstancePtr GameInstance;
-    if (!UPokemonSubsystem::Exists()) {
-        GameInstance.Reset(NewObject<UGameInstance>());
-        GameInstance->Init();
-    }
-
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(GameInstance.Get(), FPokemonDTO{.Species = "PORYGON"});
+    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "PORYGON"});
     CHECK_EQUAL(GetDefault<UPokemonSettings>()->GetDefaultPokeBall(), Pokemon1->GetPokeBall());
 
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(GameInstance.Get(), FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
+    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
     CHECK_EQUAL(TEXT("MOONBALL"), Pokemon2->GetPokeBall().ToString());
 
     return true;

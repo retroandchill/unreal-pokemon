@@ -70,7 +70,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     SelectionPane->SetIndex(1);
     UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
 
-    auto Trainer = UPokemonSubsystem::GetInstance().GetPlayer();
+    auto Trainer = UPokemonSubsystem::GetInstance(World).GetPlayer();
     CHECK_EQUAL(TEXT("EMBOAR"), Trainer->GetParty()[0]->GetSpecies().ID.ToString());
     CHECK_EQUAL(TEXT("SAMUROTT"), Trainer->GetParty()[1]->GetSpecies().ID.ToString());
 

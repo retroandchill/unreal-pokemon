@@ -22,7 +22,7 @@ bool TrainerCardTest::RunTest(const FString &Parameters) {
     ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
 
-    auto Trainer = UPokemonSubsystem::GetInstance().GetPlayer();
+    auto Trainer = UPokemonSubsystem::GetInstance(World).GetPlayer();
 
     auto TrainerNameText = Screen->WidgetTree->FindWidget<UDisplayText>(TEXT("TrainerNameText"));
     ASSERT_NOT_NULL(TrainerNameText);

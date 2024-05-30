@@ -28,6 +28,6 @@ struct POKEMONCORE_API FOwnerInfo {
     int32 SecretID = 0;
 
     FOwnerInfo();
-
+    explicit FOwnerInfo(const UObject* WorldContext);
     explicit FOwnerInfo(const ITrainer &Trainer);
 };

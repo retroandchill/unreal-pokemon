@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "DataManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
@@ -31,7 +32,7 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
     Owner = NewOwner;
     Level = DTO.Level;
 
-    auto &GrowthRate = UPokemonSubsystem::GetInstance().GetGrowthRate(Owner->GetSpecies().GrowthRate);
+    auto &GrowthRate = UPokemonSubsystem::GetInstance(this).GetGrowthRate(Owner->GetSpecies().GrowthRate);
     Exp = FMath::Max(GrowthRate.ExpForLevel(Level), DTO.Exp.Get(0));
     Nature = DTO.Nature;
 
@@ -68,14 +69,14 @@ int32 UDefaultStatBlock::GetExpForNextLevel() const {
     if (Level == GetMaxLevel())
         return 0;
 
-    return UPokemonSubsystem::GetInstance().GetGrowthRate(Owner->GetSpecies().GrowthRate).ExpForLevel(Level + 1);
+    return UPokemonSubsystem::GetInstance(this).GetGrowthRate(Owner->GetSpecies().GrowthRate).ExpForLevel(Level + 1);
 }
 
 float UDefaultStatBlock::GetExpPercent() const {
     if (Level == GetMaxLevel())
         return 0.f;
 
-    auto &GrowthRate = UPokemonSubsystem::GetInstance().GetGrowthRate(Owner->GetSpecies().GrowthRate);
+    auto &GrowthRate = UPokemonSubsystem::GetInstance(this).GetGrowthRate(Owner->GetSpecies().GrowthRate);
     auto ExpNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level));
     float TotalNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level + 1)) - ExpNeededForLevel;
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;

@@ -19,19 +19,10 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-    void Deinitialize() override;
 
-    /**
-     * Get the singleton instance of the Pokémon Manager class
-     * @return The singleton instance of the Pokémon Manager class
-     */
-    static UPokemonSubsystem &GetInstance();
+    static UPokemonSubsystem& GetInstance(const UObject* WorldContext);
 
-    /**
-     * Does the singleton instance exist?
-     * @return Does the singleton instance exist?
-     */
-    static bool Exists();
+    static bool Exists(const UObject* WorldContext);
 
     /**
      * Start a brand new game for the player
@@ -96,11 +87,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     void SetCurrentLocation(const FText &LocationName);
 
   private:
-    /**
-     * Singleton instance used to hold a backdoor reference to this system
-     */
-    static UPokemonSubsystem *Instance;
-
     /**
      * The stat used referring to a Pokémon's HP
      */

@@ -12,7 +12,7 @@ void UPokemonSelectionPane::NativeConstruct() {
     Super::NativeConstruct();
 
     check(ContentsArea != nullptr)
-    const auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
+    const auto &PokemonSubsystem = UPokemonSubsystem::GetInstance(this);
     auto &PlayerParty = PokemonSubsystem.GetPlayer()->GetParty();
 
     ActivePanels.Empty();
