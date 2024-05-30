@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
 #include "MoveInfoWindow.generated.h"
 
 struct FMoveData;
@@ -18,22 +19,22 @@ UCLASS(Abstract)
 class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Refresh the information to the given move.
      * @param Move The move to display
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
-    void RefreshMove(const TScriptInterface<IMove>& Move);
+    void RefreshMove(const TScriptInterface<IMove> &Move);
 
-protected:
+  protected:
     /**
      * Get the damage text for the given move
      * @param MoveData The data of the move to examine.
      * @return The text to display
      */
     UFUNCTION(BlueprintNativeEvent, Category = Display)
-    FText GetMoveDamageText(const FMoveData& MoveData) const;
+    FText GetMoveDamageText(const FMoveData &MoveData) const;
 
     /**
      * Get the accuracy text for the given move
@@ -41,13 +42,17 @@ protected:
      * @return The text to display
      */
     UFUNCTION(BlueprintNativeEvent, Category = Display)
-    FText GetMoveAccuracyText(const FMoveData& MoveData) const;
-    
-private:
+    FText GetMoveAccuracyText(const FMoveData &MoveData) const;
+
+  private:
     /**
      * The graphics used to display the move category
      */
-    UPROPERTY(EditAnywhere, Category = Display, meta = (AllowedClasses="/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
+    UPROPERTY(
+        EditAnywhere, Category = Display,
+        meta = (AllowedClasses =
+                    "/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface",
+                DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
     TMap<EMoveDamageCategory, TObjectPtr<UObject>> CategoryGraphics;
 
     /**
@@ -73,5 +78,4 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> DescriptionText;
-
 };

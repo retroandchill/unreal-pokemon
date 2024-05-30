@@ -14,7 +14,7 @@ class USummaryScreenPage;
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &)
 
-class UPokemonInfoPage;
+    class UPokemonInfoPage;
 class UWidgetSwitcher;
 
 /**
@@ -57,7 +57,7 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
      * @return The found page
      */
     UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = Widgets)
-    USummaryScreenPage* GetPage(int32 PageIndex) const;
+    USummaryScreenPage *GetPage(int32 PageIndex) const;
 
   protected:
     /**

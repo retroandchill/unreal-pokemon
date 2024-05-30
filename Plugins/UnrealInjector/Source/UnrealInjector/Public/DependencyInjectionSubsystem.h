@@ -5,17 +5,18 @@
 #include "CoreMinimal.h"
 #include "DependencyInjectionSettings.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "DependencyInjectionSubsystem.generated.h"
 
 class UDependencyInjectionSettings;
 /**
- * 
+ *
  */
 UCLASS()
 class UNREALINJECTOR_API UDependencyInjectionSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
     /**
@@ -26,7 +27,7 @@ public:
      * @return The created interface
      */
     template <typename T, typename... A>
-    TScriptInterface<T> InjectDependency(A&&... Args) {
+    TScriptInterface<T> InjectDependency(A &&...Args) {
         auto InterfaceClass = InjectionSettings->GetTargetInjections().Find(T::UClassType::StaticClass());
         check(InterfaceClass != nullptr)
         TScriptInterface<T> CreatedInterface = NewObject<UObject>(this, *InterfaceClass);
@@ -34,8 +35,7 @@ public:
         return CreatedInterface;
     }
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<UDependencyInjectionSettings> InjectionSettings;
-
 };

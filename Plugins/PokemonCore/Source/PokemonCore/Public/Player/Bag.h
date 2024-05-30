@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "Bag.generated.h"
 
 class IBagSorter;
@@ -20,9 +21,9 @@ class POKEMONCORE_API IBag {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     virtual void Initialize() = 0;
-    
+
     /**
      * Get the count of a specific item.
      * @param ItemID The internal ID of the item
@@ -30,7 +31,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     virtual int32 GetItemQuantity(FName ItemID) const = 0;
-    
+
     /**
      * Add an item to the player's inventory.
      * @param ItemID The internal ID of the item
@@ -54,7 +55,7 @@ public:
      * @param Pocket The pocket to sort
      * @param Sorter The sorter to use
      */
-    virtual void SortPocket(uint8 Pocket, const IBagSorter& Sorter) = 0;
+    virtual void SortPocket(uint8 Pocket, const IBagSorter &Sorter) = 0;
 
     /**
      * Iterate over each item in the given pocket
@@ -67,14 +68,14 @@ public:
      * Transform the elements in the provided pocket to a different data type
      * @tparam T The type of the resultant array
      * @param Pocket The pocket to map
-     * @param Mapping The function used to perform the mapping 
+     * @param Mapping The function used to perform the mapping
      * @return The mapped results
      */
     template <typename T>
     TArray<T> TransformPocket(uint8 Pocket, TFunctionRef<T(FName, int32)> Mapping) const {
         TArray<T> Output;
-        ForEachInPocket(Pocket, [&Output, &Mapping](FName Item, int32 Quantity) { Output.Add(Mapping(Item, Quantity)); });
+        ForEachInPocket(Pocket,
+                        [&Output, &Mapping](FName Item, int32 Quantity) { Output.Add(Mapping(Item, Quantity)); });
         return Output;
     }
-
 };

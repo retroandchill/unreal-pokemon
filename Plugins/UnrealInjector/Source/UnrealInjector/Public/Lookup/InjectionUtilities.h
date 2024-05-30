@@ -11,19 +11,19 @@ namespace UnrealInjector {
 /**
  * Lookup the first injectable object type for the given type
  * @tparam T The raw interface type.
- * @return The 
+ * @return The
  */
 template <typename T>
-UClass* GetFirstInjectableObject() {
+UClass *GetFirstInjectableObject() {
     return GetFirstInjectableObject(T::UClassType::StaticClass());
 }
 
 /**
  * Lookup the first injectable object type for the given type
  * @param InterfaceType The UInterface type.
- * @return The 
+ * @return The
  */
-UNREALINJECTOR_API UClass* GetFirstInjectableObject(TSubclassOf<UInterface> InterfaceType);
+UNREALINJECTOR_API UClass *GetFirstInjectableObject(TSubclassOf<UInterface> InterfaceType);
 
 /**
  * Call to the Dependency Injection subsystem to create a new injected dependency.
@@ -34,10 +34,11 @@ UNREALINJECTOR_API UClass* GetFirstInjectableObject(TSubclassOf<UInterface> Inte
  * @return The created interface
  */
 template <typename T, typename... A>
-TScriptInterface<T> NewInjectedDependency(const UObject* WorldContext, A&&... Args) {
+TScriptInterface<T> NewInjectedDependency(const UObject *WorldContext, A &&...Args) {
     auto Subsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UDependencyInjectionSubsystem>();
-    check(Subsystem != nullptr);
+    check(Subsystem != nullptr)
+    ;
     return Subsystem->InjectDependency<T>(Forward<A>(Args)...);
 }
 
-}
+} // namespace UnrealInjector

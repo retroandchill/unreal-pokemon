@@ -1,8 +1,8 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Misc/AutomationTest.h"
-#include "Pokemon/Abilities/DefaultAbilityBlock.h"
 #include "Asserts.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Misc/AutomationTest.h"
+#include "Pokemon/Abilities/DefaultAbilityBlock.h"
 #include "Pokemon/GamePokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Utilities/RAII.h"

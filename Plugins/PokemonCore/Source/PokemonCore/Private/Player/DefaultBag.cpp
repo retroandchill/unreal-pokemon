@@ -1,13 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Player/DefaultBag.h"
-#include "DataManager.h"
 #include "Bag/Item.h"
+#include "DataManager.h"
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "Settings/BagSettings.h"
-
 #include <functional>
 
 /**
@@ -16,7 +14,7 @@
  * @param Slot The slot to check against
  * @return Is this slot for the given item
  */
-bool ItemSlotMatches(FName ItemID, const FItemSlot& Slot) {
+bool ItemSlotMatches(FName ItemID, const FItemSlot &Slot) {
     return Slot.Item == ItemID;
 }
 
@@ -29,7 +27,7 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
     if (Pocket == nullptr) {
         return 0;
     }
-    
+
     auto ItemSlot = Pocket->FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     return ItemSlot != nullptr ? ItemSlot->Quantity : 0;
 }
@@ -77,21 +75,21 @@ void UDefaultBag::SortPocket(uint8 Pocket, const IBagSorter &Sorter) {
 void UDefaultBag::ForEachInPocket(uint8 Pocket, TFunctionRef<void(FName, int32)> Callback) const {
     auto Items = ItemSlots.Find(Pocket);
     if (Items == nullptr) {
-            return;
+        return;
     }
 
-    for (auto&[Item, Quantity] : Items->Items) {
+    for (auto &[Item, Quantity] : Items->Items) {
         Callback(Item, Quantity);
     }
 }
 
-TArray<FItemSlot> & UDefaultBag::GetPocket(FName ItemID) {
+TArray<FItemSlot> &UDefaultBag::GetPocket(FName ItemID) {
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
     check(Item != nullptr)
     return ItemSlots.FindOrAdd(Item->Pocket).Items;
 }
 
-const TArray<FItemSlot> * UDefaultBag::GetPocket(FName ItemID) const {
+const TArray<FItemSlot> *UDefaultBag::GetPocket(FName ItemID) const {
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
     check(Item != nullptr)
     auto Pocket = ItemSlots.Find(Item->Pocket);

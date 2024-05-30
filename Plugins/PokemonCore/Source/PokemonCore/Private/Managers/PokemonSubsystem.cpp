@@ -2,12 +2,12 @@
 
 #include "Managers/PokemonSubsystem.h"
 #include "Lookup/InjectionUtilities.h"
+#include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Settings/PokemonSettings.h"
 #include "Settings/TrainerSettings.h"
 #include "Trainers/TrainerStub.h"
-#include "Player/Bag.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
@@ -26,7 +26,7 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
 #endif
 }
 
-UPokemonSubsystem & UPokemonSubsystem::GetInstance(const UObject *WorldContext) {
+UPokemonSubsystem &UPokemonSubsystem::GetInstance(const UObject *WorldContext) {
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
     check(GameInstance != nullptr)
     return *GameInstance->GetSubsystem<UPokemonSubsystem>();
@@ -62,7 +62,7 @@ const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
     return Player;
 }
 
-const TScriptInterface<IBag> & UPokemonSubsystem::GetBag() const {
+const TScriptInterface<IBag> &UPokemonSubsystem::GetBag() const {
     return Bag;
 }
 

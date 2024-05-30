@@ -1,6 +1,7 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "Dispatchers/TestDispatcher.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
@@ -8,7 +9,6 @@
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
-#include "Lookup/InjectionUtilities.h"
 #include "Utilities/WidgetTestUtilities.h"
 
 constexpr auto TEST_HOLD_ITEM_EXECUTOR =
@@ -56,7 +56,8 @@ bool GetHoldItemTest_WithItem::RunTest(const FString &Parameters) {
     auto TestHelper = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_HOLD_ITEM_EXECUTOR);
     ASSERT_NOT_NULL(TestHelper);
 
-    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "PIKACHU", .Item = FName(TEXT("LIGHTBALL"))});
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World, FPokemonDTO{.Species = "PIKACHU", .Item = FName(TEXT("LIGHTBALL"))});
     auto Dispatcher = NewObject<UObject>(GetTransientPackage(), TestHelper);
     UReflectionUtils::SetPropertyValue(Dispatcher, TEXT("Pokemon"), Pokemon);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);

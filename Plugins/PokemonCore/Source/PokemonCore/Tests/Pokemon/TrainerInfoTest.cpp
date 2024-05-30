@@ -1,5 +1,6 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
@@ -8,7 +9,6 @@
 #include "Trainers/OwnerInfo.h"
 #include "Trainers/TrainerType.h"
 #include "Utilities/RAII.h"
-#include "Lookup/InjectionUtilities.h"
 #include "Utilities/WidgetTestUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerInfoTest, "Unit Tests.Core.Pokemon.TrainerInfoTest",
@@ -27,7 +27,8 @@ bool TrainerInfoTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(Player->GetSecretId(), Pokemon1->GetOwnerInfo().SecretID);
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "PORYGON"}, ForeignTrainer);
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "PORYGON"}, ForeignTrainer);
     CHECK_EQUAL(TEXT("Amy"), Pokemon2->GetOwnerInfo().OriginalTrainerName.ToString());
     CHECK_EQUAL(ETrainerGender::Female, Pokemon2->GetOwnerInfo().OriginalTrainerGender);
     CHECK_EQUAL(ForeignTrainer->GetIdNumber(), Pokemon2->GetOwnerInfo().ID);

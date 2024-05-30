@@ -37,5 +37,4 @@ class POKEMONCORE_API IMoveBlock {
      * @return The list of usable moves
      */
     virtual TConstArrayView<TScriptInterface<IMove>> GetMoves() const = 0;
-    
 };

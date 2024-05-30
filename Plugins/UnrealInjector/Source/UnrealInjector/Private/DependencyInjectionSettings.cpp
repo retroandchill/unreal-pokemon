@@ -3,10 +3,12 @@
 #include "DependencyInjectionSettings.h"
 #include "Lookup/InjectionUtilities.h"
 
-UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitializer &ObjectInitializer) : UDeveloperSettings(ObjectInitializer) {
+UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitializer &ObjectInitializer)
+    : UDeveloperSettings(ObjectInitializer) {
 #ifdef WITH_METADATA
     for (TObjectIterator<UClass> It; It; ++It) {
-        if (!It->IsChildOf(UInterface::StaticClass()) || !It->HasMetaData(TEXT("Injectable")) || TargetInjections.Contains(*It)) {
+        if (!It->IsChildOf(UInterface::StaticClass()) || !It->HasMetaData(TEXT("Injectable")) ||
+            TargetInjections.Contains(*It)) {
             continue;
         }
 
@@ -15,6 +17,6 @@ UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitiali
 #endif
 }
 
-const TMap<UClass *, TSubclassOf<UObject>> & UDependencyInjectionSettings::GetTargetInjections() const {
+const TMap<UClass *, TSubclassOf<UObject>> &UDependencyInjectionSettings::GetTargetInjections() const {
     return TargetInjections;
 }

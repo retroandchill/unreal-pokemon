@@ -4,15 +4,15 @@
 #include "DataManager.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Pokemon/Abilities/AbilityBlock.h"
+#include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "Settings/PokemonSettings.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
-#include "Pokemon/Moves/MoveBlock.h"
-#include "Pokemon/Abilities/AbilityBlock.h"
-#include "Pokemon/TrainerMemo/ObtainedBlock.h"
 
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
@@ -134,11 +134,12 @@ TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
     return ObtainedBlock;
 }
 
-UGamePokemon *UGamePokemon::Create(UObject* WorldContext, const FPokemonDTO &Data) {
+UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data) {
     return Create(WorldContext, Data, nullptr);
 }
 
-UGamePokemon *UGamePokemon::Create(UObject* WorldContext, const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer) {
+UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data,
+                                   const TScriptInterface<ITrainer> &Trainer) {
     auto Ret = NewObject<UGamePokemon>(WorldContext);
     Ret->Initialize(Data, Trainer);
     return Ret;

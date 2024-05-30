@@ -25,14 +25,14 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      * @param WorldContext The object used to get the game instance.
      * @return A reference to this subsystem
      */
-    static UPokemonSubsystem& GetInstance(const UObject* WorldContext);
+    static UPokemonSubsystem &GetInstance(const UObject *WorldContext);
 
     /**
      * Check if this subsystem exists or not.
      * @param WorldContext The object used to get the game instance.
      * @return Does this subsystem exist?
      */
-    static bool Exists(const UObject* WorldContext);
+    static bool Exists(const UObject *WorldContext);
 
     /**
      * Start a brand new game for the player
@@ -120,7 +120,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     UPROPERTY(BlueprintGetter = GetBag, Category = Player)
     TScriptInterface<IBag> Bag;
-    
+
     /**
      * The metadata about the player
      */

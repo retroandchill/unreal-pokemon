@@ -74,7 +74,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      * @param Data The data to input to create the Pokémon
      * @return The created Pokémon
      */
-    static UGamePokemon *Create(UObject* WorldContext, const FPokemonDTO &Data);
+    static UGamePokemon *Create(UObject *WorldContext, const FPokemonDTO &Data);
 
     /**
      * Create a new Pokémon from the given input data
@@ -82,7 +82,8 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      * @return The created Pokémon
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Create New Pokémon", Category = "Objects|Construction")
-    static UGamePokemon *Create(UObject* WorldContext, const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer);
+    static UGamePokemon *Create(UObject *WorldContext, const FPokemonDTO &Data,
+                                const TScriptInterface<ITrainer> &Trainer);
 
   private:
     /**

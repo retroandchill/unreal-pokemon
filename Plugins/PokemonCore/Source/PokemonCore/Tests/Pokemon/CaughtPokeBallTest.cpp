@@ -18,7 +18,8 @@ bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "PORYGON"});
     CHECK_EQUAL(GetDefault<UPokemonSettings>()->GetDefaultPokeBall(), Pokemon1->GetPokeBall());
 
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
+    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World, FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
     CHECK_EQUAL(TEXT("MOONBALL"), Pokemon2->GetPokeBall().ToString());
 
     return true;
