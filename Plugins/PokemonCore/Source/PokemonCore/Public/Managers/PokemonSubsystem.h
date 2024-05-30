@@ -20,8 +20,18 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
+    /**
+     * Get the instance of this subsystem from the provided context.
+     * @param WorldContext The object used to get the game instance.
+     * @return A reference to this subsystem
+     */
     static UPokemonSubsystem& GetInstance(const UObject* WorldContext);
 
+    /**
+     * Check if this subsystem exists or not.
+     * @param WorldContext The object used to get the game instance.
+     * @return Does this subsystem exist?
+     */
     static bool Exists(const UObject* WorldContext);
 
     /**

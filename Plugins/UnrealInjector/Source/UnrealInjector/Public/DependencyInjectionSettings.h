@@ -15,12 +15,23 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
     GENERATED_BODY()
 
   public:
+    /**
+     * Creat the default version of this object.
+     * @param ObjectInitializer The initializer for this object
+     */
     explicit UDependencyInjectionSettings(const FObjectInitializer& ObjectInitializer);
 
+    /**
+     * Get the target injections for each interface.
+     * @return The map of interface types to implementation classes
+     */
     const TMap<UClass*, TSubclassOf<UObject>>& GetTargetInjections() const;
     
 
   private:
+    /**
+     * The map of interface types to implementation classes
+     */
     UPROPERTY(EditAnywhere, Category = "Dependency Injection")
     TMap<UClass*, TSubclassOf<UObject>> TargetInjections; 
     

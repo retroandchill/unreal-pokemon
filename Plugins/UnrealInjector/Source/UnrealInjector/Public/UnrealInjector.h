@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FUnrealInjectorModule : public IModuleInterface
-{
+/**
+ * Module for handling dependency injection for classes
+ */
+class FUnrealInjectorModule : public IModuleInterface {
 public:
-
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+    
+	void StartupModule() override;
+	void ShutdownModule() override;
 };
