@@ -76,6 +76,10 @@
 		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true
+		},
+		{
+			"Name": "UnrealInjector",
+			"Enabled": true
 		}
 	]
 }

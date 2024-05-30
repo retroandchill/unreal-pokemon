@@ -5,6 +5,7 @@
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Moves/MoveData.h"
+#include "Pokemon/Pokemon.h"
 #include "Pokemon/Moves/Move.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"

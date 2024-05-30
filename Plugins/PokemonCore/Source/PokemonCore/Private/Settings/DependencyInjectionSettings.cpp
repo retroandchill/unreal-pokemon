@@ -2,6 +2,13 @@
 
 #include "Settings/DependencyInjectionSettings.h"
 
+#include <functional>
+
+UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitializer &ObjectInitializer) : UDeveloperSettings(ObjectInitializer) {
+    FInjectionRegistry::GetInstance()
+        .ForEachInjection(std::bind_front(&UDependencyInjectionSettings::AddInjection, this));
+}
+
 TSubclassOf<UObject> UDependencyInjectionSettings::GetPokemonClass() const {
     return PokemonClass;
 }
@@ -24,4 +31,11 @@ TSubclassOf<UObject> UDependencyInjectionSettings::GetObtainedBlockClass() const
 
 TSubclassOf<UObject> UDependencyInjectionSettings::GetBagClass() const {
     return BagClass;
+}
+
+void UDependencyInjectionSettings::AddInjection(const IRegisteredInjection &Injection) {
+    if (TargetInjections.Contains(Injection.GetInterfaceClass()))
+        return;
+        
+    TargetInjections.Add(Injection.GetInterfaceClass(), Injection.GetFirstInjectableClass());
 }

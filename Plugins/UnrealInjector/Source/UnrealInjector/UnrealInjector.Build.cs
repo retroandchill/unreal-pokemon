@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class PokemonAssets : ModuleRules
+public class UnrealInjector : ModuleRules
 {
-	public PokemonAssets(ReadOnlyTargetRules Target) : base(Target)
+	public UnrealInjector(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -25,7 +25,7 @@ public class PokemonAssets : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core"
+				"Core",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -38,10 +38,6 @@ public class PokemonAssets : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"PokemonCore",
-				"PokemonData",
-				"DeveloperSettings",
-				"UnrealInjector"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

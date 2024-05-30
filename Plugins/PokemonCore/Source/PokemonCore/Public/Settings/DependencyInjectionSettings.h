@@ -21,6 +21,8 @@ class POKEMONCORE_API UDependencyInjectionSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:
+    UDependencyInjectionSettings(const FObjectInitializer& ObjectInitializer);
+    
     /**
      * The class used for all Pokémon objects
      * @return The class used for all Pokémon objects
@@ -64,6 +66,11 @@ class POKEMONCORE_API UDependencyInjectionSettings : public UDeveloperSettings {
     TSubclassOf<UObject> GetBagClass() const;
 
   private:
+    void AddInjection(const IRegisteredInjection& Injection);
+    
+    UPROPERTY(EditAnywhere, Category = "Dependency Injection")
+    TMap<UClass*, TSubclassOf<UObject>> TargetInjections; 
+    
     /**
      * The class used for all Pokémon objects
      */

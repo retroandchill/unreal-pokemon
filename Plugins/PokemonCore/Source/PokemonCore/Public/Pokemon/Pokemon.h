@@ -6,6 +6,7 @@
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
 #include "Mainpulation/CircularIterator.h"
+#include "Meta/InjectionRegistry.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
 
@@ -157,3 +158,5 @@ class POKEMONCORE_API IPokemon {
  * Circular iterator specifically for Pokémon in the party or a box
  */
 using FPokemonIterator = TCircularIterator<TScriptInterface<IPokemon>>;
+
+DECLARE_INJECTABLE_INTERFACE(Pokemon);

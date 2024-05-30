@@ -29,7 +29,8 @@ public class PokemonUI : ModuleRules
 				"SlateCore",
 				"UMG",
 				"DeveloperSettings",
-				"RenderCore"
+				"RenderCore",
+				"UnrealInjector"
 			}
 		);
 		
