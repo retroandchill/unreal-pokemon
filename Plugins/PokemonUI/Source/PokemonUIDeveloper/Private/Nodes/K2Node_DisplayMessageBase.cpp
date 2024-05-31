@@ -29,10 +29,9 @@ void UK2Node_DisplayMessageBase::AllocateDefaultPins() {
 
 FText UK2Node_DisplayMessageBase::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     if (ScreenType != nullptr && *TotalScreens > 1) {
-        const auto &ScreenName = ScreenType->GetName();
         return FText::FormatNamed(NSLOCTEXT("K2Node", "DisplayMessage_NodeTitleFormat", "{OriginalName} ({ClassName})"),
                                   TEXT("OriginalName"), Super::GetNodeTitle(TitleType), TEXT("ClassName"),
-                                  FText::FromString(ScreenName));
+                                  ScreenType->GetDisplayNameText());
     }
 
     return Super::GetNodeTitle(TitleType);
