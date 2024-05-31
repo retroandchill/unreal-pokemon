@@ -95,7 +95,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Type The type to get the icon for.
      * @return The found icon graphic.
      */
-    UObject * GetTypeIconGraphic(FName Type) const;
+    UObject *GetTypeIconGraphic(FName Type) const;
 
     /**
      * Get the icon graphics for multiple types.

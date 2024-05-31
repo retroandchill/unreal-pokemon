@@ -1,19 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
+#include "Lookup/InjectionUtilities.h"
+#include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
-#include "Settings/DependencyInjectionSettings.h"
 #include "Settings/PokemonSettings.h"
 #include "Settings/TrainerSettings.h"
 #include "Trainers/TrainerStub.h"
 
-UPokemonSubsystem *UPokemonSubsystem::Instance = nullptr;
-
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    Instance = this;
     HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
     MaxPartySize = GetDefault<UTrainerSettings>()->GetMaxPartySize();
 
@@ -28,25 +26,26 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
 #endif
 }
 
-void UPokemonSubsystem::Deinitialize() {
-    Super::Deinitialize();
-    Instance = nullptr;
+UPokemonSubsystem &UPokemonSubsystem::GetInstance(const UObject *WorldContext) {
+    auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
+    check(GameInstance != nullptr)
+    return *GameInstance->GetSubsystem<UPokemonSubsystem>();
 }
 
-UPokemonSubsystem &UPokemonSubsystem::GetInstance() {
-    check(Instance != nullptr)
-    return *Instance;
-}
+bool UPokemonSubsystem::Exists(const UObject *WorldContext) {
+    auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
+    if (GameInstance == nullptr) {
+        return false;
+    }
 
-bool UPokemonSubsystem::Exists() {
-    return Instance != nullptr;
+    return GameInstance->GetSubsystem<UPokemonSubsystem>() != nullptr;
 }
 
 void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
     Player =
         NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
-    Bag = NewObject<UObject>(this, GetDefault<UDependencyInjectionSettings>()->GetBagClass());
+    Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }
@@ -63,7 +62,7 @@ const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
     return Player;
 }
 
-const TScriptInterface<IBag> & UPokemonSubsystem::GetBag() const {
+const TScriptInterface<IBag> &UPokemonSubsystem::GetBag() const {
     return Bag;
 }
 

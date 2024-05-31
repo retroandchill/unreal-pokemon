@@ -19,19 +19,20 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-    void Deinitialize() override;
 
     /**
-     * Get the singleton instance of the Pokémon Manager class
-     * @return The singleton instance of the Pokémon Manager class
+     * Get the instance of this subsystem from the provided context.
+     * @param WorldContext The object used to get the game instance.
+     * @return A reference to this subsystem
      */
-    static UPokemonSubsystem &GetInstance();
+    static UPokemonSubsystem &GetInstance(const UObject *WorldContext);
 
     /**
-     * Does the singleton instance exist?
-     * @return Does the singleton instance exist?
+     * Check if this subsystem exists or not.
+     * @param WorldContext The object used to get the game instance.
+     * @return Does this subsystem exist?
      */
-    static bool Exists();
+    static bool Exists(const UObject *WorldContext);
 
     /**
      * Start a brand new game for the player
@@ -97,11 +98,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
 
   private:
     /**
-     * Singleton instance used to hold a backdoor reference to this system
-     */
-    static UPokemonSubsystem *Instance;
-
-    /**
      * The stat used referring to a Pokémon's HP
      */
     UPROPERTY(BlueprintGetter = GetHPStat, DisplayName = "HP Stat", Category = "Display Names")
@@ -124,7 +120,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     UPROPERTY(BlueprintGetter = GetBag, Category = Player)
     TScriptInterface<IBag> Bag;
-    
+
     /**
      * The metadata about the player
      */

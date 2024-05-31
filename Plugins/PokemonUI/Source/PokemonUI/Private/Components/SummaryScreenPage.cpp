@@ -10,6 +10,6 @@ bool USummaryScreenPage::CanSelectOnPage_Implementation() const {
     return false;
 }
 
-FPageSelected & USummaryScreenPage::GetPageSelected() {
+FPageSelected &USummaryScreenPage::GetPageSelected() {
     return PageSelected;
 }

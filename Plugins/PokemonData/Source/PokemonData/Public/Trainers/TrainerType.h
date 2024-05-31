@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TrainerGender.h"
 #include "IndexedTableRow.h"
+#include "TrainerGender.h"
 
 #include "TrainerType.generated.h"
 

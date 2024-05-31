@@ -6,6 +6,7 @@
 #include "Bag.h"
 #include "ItemSlot.h"
 #include "UObject/Object.h"
+
 #include "DefaultBag.generated.h"
 
 /**
@@ -20,7 +21,6 @@ struct POKEMONCORE_API FPocket {
      */
     UPROPERTY(SaveGame)
     TArray<FItemSlot> Items;
-    
 };
 
 /**
@@ -30,21 +30,22 @@ UCLASS(Blueprintable)
 class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     GENERATED_BODY()
 
-public:
+  public:
+    void Initialize() override;
+
     UFUNCTION(BlueprintPure, Category = "Player|Inventory")
     int32 GetItemQuantity(FName ItemID) const override;
-    
+
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     int32 ObtainItem(FName ItemID, int32 Amount = 1) override;
-    
+
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     int32 RemoveItem(FName ItemID, int32 Amount = 1) override;
 
-    
     void SortPocket(uint8 Pocket, const IBagSorter &Sorter) override;
-    void ForEachInPocket(uint8 Pocket, TFunctionRef<void(FName, int32)> Callback) const override;
+    void ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)>& Callback) const override;
 
-private:
+  private:
     /**
      * Get the pocket for the given item ID, creating a new empty one if it doesn't already exist
      * @param ItemID The ID of the item in question
@@ -64,5 +65,4 @@ private:
      */
     UPROPERTY(SaveGame)
     TMap<uint8, FPocket> ItemSlots;
-
 };

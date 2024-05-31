@@ -28,13 +28,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Unit Tests.Screens.PartyScree
 bool PartyScreenTest::RunTest(const FString &Parameters) {
     using enum ESlateVisibility;
 
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSelectScreen>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
-    FPokemonTestUtilities::CreateMockParty(World);
+    FPokemonTestUtilities::CreateMockParty(World.Get());
 
-    TWidgetPtr<UPokemonSelectScreen> Screen(CreateWidget<UPokemonSelectScreen>(World, WidgetClass));
+    TWidgetPtr<UPokemonSelectScreen> Screen(CreateWidget<UPokemonSelectScreen>(World.Get(), WidgetClass));
     ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
 
@@ -70,7 +70,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     SelectionPane->SetIndex(1);
     UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
 
-    auto Trainer = UPokemonSubsystem::GetInstance().GetPlayer();
+    auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
     CHECK_EQUAL(TEXT("EMBOAR"), Trainer->GetParty()[0]->GetSpecies().ID.ToString());
     CHECK_EQUAL(TEXT("SAMUROTT"), Trainer->GetParty()[1]->GetSpecies().ID.ToString());
 

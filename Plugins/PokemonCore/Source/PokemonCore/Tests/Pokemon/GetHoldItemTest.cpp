@@ -1,14 +1,15 @@
 ﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "Dispatchers/TestDispatcher.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Utilities/BlueprintTestUtils.h"
-#include "Utilities/ConstructionUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 constexpr auto TEST_HOLD_ITEM_EXECUTOR =
     TEXT("/PokemonCore/Tests/Resources/GetHoldItemTestHelper.GetHoldItemTestHelper");
@@ -31,16 +32,12 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithNoItem, "Unit Tests.Core.Po
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetHoldItemTest_WithNoItem::RunTest(const FString &Parameters) {
-    FGameInstancePtr GameInstance;
-    if (!UPokemonSubsystem::Exists()) {
-        GameInstance.Reset(NewObject<UGameInstance>());
-        GameInstance->Init();
-    }
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     auto TestHelper = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_HOLD_ITEM_EXECUTOR);
     ASSERT_NOT_NULL(TestHelper);
 
-    auto Pokemon = UConstructionUtilities::CreateNewPokemon({.Species = "PIKACHU"});
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PIKACHU"});
     auto Dispatcher = NewObject<UObject>(GetTransientPackage(), TestHelper);
     UReflectionUtils::SetPropertyValue(Dispatcher, TEXT("Pokemon"), Pokemon);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
@@ -54,16 +51,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithItem, "Unit Tests.Core.Poke
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetHoldItemTest_WithItem::RunTest(const FString &Parameters) {
-    FGameInstancePtr GameInstance;
-    if (!UPokemonSubsystem::Exists()) {
-        GameInstance.Reset(NewObject<UGameInstance>());
-        GameInstance->Init();
-    }
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     auto TestHelper = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_HOLD_ITEM_EXECUTOR);
     ASSERT_NOT_NULL(TestHelper);
 
-    auto Pokemon = UConstructionUtilities::CreateNewPokemon({.Species = "PIKACHU", .Item = FName(TEXT("LIGHTBALL"))});
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = "PIKACHU", .Item = FName(TEXT("LIGHTBALL"))});
     auto Dispatcher = NewObject<UObject>(GetTransientPackage(), TestHelper);
     UReflectionUtils::SetPropertyValue(Dispatcher, TEXT("Pokemon"), Pokemon);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);

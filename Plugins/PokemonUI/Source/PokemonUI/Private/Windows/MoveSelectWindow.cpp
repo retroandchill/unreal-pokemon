@@ -1,17 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Windows/MoveSelectWindow.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/MovePanel.h"
-#include "Pokemon/Pokemon.h"
 #include "Pokemon/Moves/MoveBlock.h"
+#include "Pokemon/Pokemon.h"
 #include "Settings/PokemonSettings.h"
 
 void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) {
     CurrentPokemon = Pokemon;
-    
+
     Algo::ForEach(MovePanels, &UWidget::RemoveFromParent);
     int32 MoveCount = GetDefault<UPokemonSettings>()->GetMaxMoves();
     auto Moves = Pokemon->GetMoveBlock()->GetMoves();
@@ -38,7 +37,7 @@ void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 N
     }
 }
 
-UMovePanel* UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Move) {
+UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Move) {
     check(PanelClass != nullptr)
     auto Panel = WidgetTree->ConstructWidget(PanelClass);
     Panel->SetMove(Move);

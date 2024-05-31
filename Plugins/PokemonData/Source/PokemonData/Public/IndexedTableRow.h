@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "IndexedTableRow.generated.h"
 
 /**
- * 
+ *
  */
 USTRUCT(BlueprintInternalUseOnly)
 struct POKEMONDATA_API FIndexedTableRow : public FTableRowBase {

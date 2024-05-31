@@ -39,7 +39,7 @@ ARPGPlayerController &UPokemonSelectScreen::GetPlayerController() {
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-    if (auto &Trainer = *UPokemonSubsystem::GetInstance().GetPlayer(); Index < Trainer.GetParty().Num()) {
+    if (auto &Trainer = *UPokemonSubsystem::GetInstance(this).GetPlayer(); Index < Trainer.GetParty().Num()) {
         if (SelectionPane->IsSwitching()) {
             if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
                 Trainer.SwapPositionsInParty(SwitchingIndex, Index);
@@ -79,7 +79,7 @@ void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
     } else {
         auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
         check(Handler != nullptr)
-        Handler->Handle(*this, *UPokemonSubsystem::GetInstance().GetPlayer(), SelectionPane->GetIndex());
+        Handler->Handle(*this, *UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
     }
 }
 

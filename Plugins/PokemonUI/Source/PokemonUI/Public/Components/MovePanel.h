@@ -18,7 +18,7 @@ UCLASS(Abstract)
 class POKEMONUI_API UMovePanel : public USelectableOption {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the move for the panel.
      * @return The actual move that this panel is displaying.
@@ -31,22 +31,22 @@ public:
      * @param MoveIn The actual move that this panel is displaying.
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Moves)
-    void SetMove(const TScriptInterface<IMove>& MoveIn);
+    void SetMove(const TScriptInterface<IMove> &MoveIn);
 
-protected:
+  protected:
     /**
      * Get the icon for the move's type.
      * @return The move's type icon
      */
     UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "Moves|Graphics")
-    UObject* GetTypeIcon();
+    UObject *GetTypeIcon();
 
-private:
+  private:
     /**
      * Called when the move is set.
      */
     void OnMoveSet();
-    
+
     /**
      * The actual move that this panel is displaying.
      */
@@ -91,5 +91,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = Display)
     FText UnknownMovePP = FText::FromStringView(TEXT("--"));
-
 };

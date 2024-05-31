@@ -3,6 +3,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "Utilities/RAII.h"
 
 UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName WidgetName) {
     auto RootWidget = Parent->GetRootWidget();
@@ -19,14 +20,14 @@ UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName Widget
     return UWidgetTree::FindWidgetChild(Panel, WidgetName, Index);
 }
 
-std::pair<TSharedRef<SOverlay>, UWorld *> UWidgetTestUtilities::CreateTestWorld() {
-    auto GameInstance = NewObject<UGameInstance>(GEngine);
+std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTestWorld() {
+    FGameInstancePtr GameInstance(NewObject<UGameInstance>(GEngine));
     GameInstance->InitializeStandalone(); // creates WorldContext, UWorld?
-    auto World = GameInstance->GetWorld();
+    FWorldPtr World(GameInstance->GetWorld());
     auto WorldContext = GameInstance->GetWorldContext();
     WorldContext->GameViewport = NewObject<UGameViewportClient>(GEngine);
     TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
     WorldContext->GameViewport->SetViewportOverlayWidget(nullptr, DudOverlay);
 
-    return {DudOverlay, World};
+    return {DudOverlay, MoveTemp(World), MoveTemp(GameInstance)};
 }

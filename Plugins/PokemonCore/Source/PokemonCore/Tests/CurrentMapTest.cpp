@@ -5,21 +5,17 @@
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/TrainerMemo/DefaultObtainedBlock.h"
 #include "Utilities/RAII.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(CurrentMapTest, "Unit Tests.Core.CurrentMapTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CurrentMapTest::RunTest(const FString &Parameters) {
-    FGameInstancePtr GameInstance;
-    if (!UPokemonSubsystem::Exists()) {
-        GameInstance.Reset(NewObject<UGameInstance>());
-        GameInstance->Init();
-    }
-
-    auto &PokemonSubsystem = UPokemonSubsystem::GetInstance();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto &PokemonSubsystem = UPokemonSubsystem::GetInstance(World.Get());
     PokemonSubsystem.SetCurrentLocation(FText::FromStringView(TEXT("Test Map")));
     FPokemonDTO Blank;
-    auto BlankBlock = NewObject<UDefaultObtainedBlock>()->Initialize(Blank);
+    auto BlankBlock = NewObject<UDefaultObtainedBlock>(World.Get())->Initialize(Blank);
     ASSERT_TRUE(BlankBlock->GetObtainText().IsSet());
     CHECK_EQUAL(TEXT("Test Map"), BlankBlock->GetObtainText()->ToString());
 

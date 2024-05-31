@@ -5,12 +5,10 @@
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 
-FOwnerInfo::FOwnerInfo() {
-    if (!UPokemonSubsystem::Exists()) {
-        return;
-    }
+FOwnerInfo::FOwnerInfo() = default;
 
-    auto PlayerTrainer = UPokemonSubsystem::GetInstance().GetPlayer();
+FOwnerInfo::FOwnerInfo(const UObject *WorldContext) {
+    auto PlayerTrainer = UPokemonSubsystem::GetInstance(WorldContext).GetPlayer();
     if (PlayerTrainer == nullptr) {
         return;
     }

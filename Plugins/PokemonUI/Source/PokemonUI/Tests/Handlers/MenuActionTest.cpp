@@ -12,11 +12,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(MenuActionTest, "Unit Tests.UI.MenuActionTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool MenuActionTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto MenuActionClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_MENU_ACTION);
     ASSERT_NOT_NULL(MenuActionClass);
 
-    auto MenuAction = NewObject<UMenuAction>(World, MenuActionClass);
+    auto MenuAction = NewObject<UMenuAction>(World.Get(), MenuActionClass);
     ASSERT_NOT_NULL(MenuAction);
     auto PlayerController = World->SpawnActor<ARPGPlayerController>();
     auto Pawn = World->SpawnActor<APawn>();

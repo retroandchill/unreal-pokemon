@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Windows/SelectableWidget.h"
+
 #include "MoveSelectWindow.generated.h"
 
 class IMove;
@@ -13,7 +14,7 @@ class UMovePanel;
 /**
  * Delegate for when the cursor moves to another move
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveSelectionChanged, const TScriptInterface<IMove>&, Move);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveSelectionChanged, const TScriptInterface<IMove> &, Move);
 
 /**
  * Widget that displays the Pokémon's moves in the UI.
@@ -22,21 +23,21 @@ UCLASS(Abstract)
 class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Display the moves to the player.
      * @param Pokemon The Pokémon to display the moves for.
      */
     UFUNCTION(BlueprintCallable, Category = Display)
-    void DisplayMoves(const TScriptInterface<IPokemon>& Pokemon);
+    void DisplayMoves(const TScriptInterface<IPokemon> &Pokemon);
 
-protected:
+  protected:
     /**
      * Slot a created panel into this widget.
      * @param Panel The panel that was slotted
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SlotPanel(UMovePanel* Panel);
+    void SlotPanel(UMovePanel *Panel);
 
     int32 GetItemCount_Implementation() const override;
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
@@ -47,16 +48,16 @@ protected:
      * @param NewIndex The index of the cursor
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SetCursorPosition(UWidget* Widget, int32 NewIndex);
+    void SetCursorPosition(UWidget *Widget, int32 NewIndex);
 
-private:
+  private:
     /**
      * Create a new move panel
      * @param Move The move to create a panel from
      * @return The created panel
      */
-    UMovePanel* CreateMovePanel(const TScriptInterface<IMove>& Move);
-    
+    UMovePanel *CreateMovePanel(const TScriptInterface<IMove> &Move);
+
     /**
      * The class used for the move panels.
      */
@@ -86,5 +87,4 @@ private:
      */
     UPROPERTY(BlueprintAssignable)
     FOnMoveSelectionChanged OnMoveSelectionChanged;
-
 };

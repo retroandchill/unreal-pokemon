@@ -3,9 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "EvolutionMethod.h"
+#include "IndexedTableRow.h"
 #include "LevelUpMove.h"
 #include "UObject/Object.h"
-#include "IndexedTableRow.h"
 
 #include "SpeciesData.generated.h"
 

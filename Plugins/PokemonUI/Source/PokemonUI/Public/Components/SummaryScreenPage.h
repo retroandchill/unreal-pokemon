@@ -37,9 +37,9 @@ class POKEMONUI_API USummaryScreenPage : public UUserWidget {
      * Get the page selected delegate.
      * @return The delegate for when a page is selected
      */
-    FPageSelected& GetPageSelected();
-    
-private:
+    FPageSelected &GetPageSelected();
+
+  private:
     /**
      * The delegate for when a page is selected
      */

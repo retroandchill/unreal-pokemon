@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Player/Sorting/NamedBagSorter.h"
 #include "Player/ItemSlot.h"
 

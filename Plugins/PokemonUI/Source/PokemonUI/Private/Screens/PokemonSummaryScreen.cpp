@@ -2,9 +2,9 @@
 
 #include "Screens/PokemonSummaryScreen.h"
 #include "Components/Image.h"
-#include "Components/SummaryScreenPage.h"
 #include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/SummaryNameInfo.h"
+#include "Components/SummaryScreenPage.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
 #include "Windows/SummaryPages.h"
@@ -23,7 +23,7 @@ void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<I
     SummaryPages->SetInitialPokemon(Party, InitialIndex);
 }
 
-USummaryPages * UPokemonSummaryScreen::GetSummaryPages() const {
+USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const {
     return SummaryPages;
 }
 

@@ -35,3 +35,19 @@ struct FRemoveWidgetFromViewport {
 template <typename T>
     requires std::is_base_of_v<UWidget, T>
 using TWidgetPtr = TUniquePtr<T, FRemoveWidgetFromViewport>;
+
+/**
+ * "Deleter" used to clean up the world
+ */
+struct FCleanupWorld {
+    void operator()(UWorld *World) {
+        if (World != nullptr) {
+            World->CleanupWorld();
+        }
+    }
+};
+
+/**
+ * Smart pointer to the world that calls cleanup when it gets destroyed.
+ */
+using FWorldPtr = TUniquePtr<UWorld, FCleanupWorld>;

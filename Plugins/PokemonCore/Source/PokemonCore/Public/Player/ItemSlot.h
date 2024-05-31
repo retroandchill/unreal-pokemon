@@ -26,6 +26,5 @@ struct POKEMONCORE_API FItemSlot {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Inventory")
     int32 Quantity = 1;
 
-    const FItem& GetItem() const;
-    
+    const FItem &GetItem() const;
 };

@@ -13,7 +13,7 @@ bool BagTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(5, Bag->ObtainItem(TEXT("POTION"), 5));
     CHECK_EQUAL(3, Bag->ObtainItem(TEXT("POTION"), 3));
     CHECK_EQUAL(20, Bag->ObtainItem(TEXT("ORANBERRY"), 20));
-    
+
     CHECK_EQUAL(2, Bag->GetItemQuantity(TEXT("FULLHEAL")));
     CHECK_EQUAL(8, Bag->GetItemQuantity(TEXT("POTION")));
     CHECK_EQUAL(20, Bag->GetItemQuantity(TEXT("ORANBERRY")));
@@ -28,7 +28,7 @@ bool BagTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(1, Bag->RemoveItem(TEXT("POTION")));
     CHECK_EQUAL(2, Bag->RemoveItem(TEXT("FULLHEAL"), 4));
     CHECK_EQUAL(0, Bag->RemoveItem(TEXT("POKEBALL")));
-    
+
     return true;
 }
 #endif
