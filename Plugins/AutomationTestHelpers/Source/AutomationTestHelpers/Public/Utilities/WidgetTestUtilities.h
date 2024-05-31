@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RAII.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "RAII.h"
 
 #include "WidgetTestUtilities.generated.h"
 

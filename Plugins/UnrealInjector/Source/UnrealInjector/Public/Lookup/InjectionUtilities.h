@@ -37,7 +37,6 @@ template <typename T, typename... A>
 TScriptInterface<T> NewInjectedDependency(const UObject *WorldContext, A &&...Args) {
     auto Subsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UDependencyInjectionSubsystem>();
     check(Subsystem != nullptr)
-    ;
     return Subsystem->InjectDependency<T>(Forward<A>(Args)...);
 }
 

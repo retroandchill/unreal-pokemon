@@ -137,8 +137,8 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "KABUTOPS"}, ForeignTrainer);
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "KABUTOPS"},
+                                                                   ForeignTrainer);
 
     Page->RefreshInfo(Pokemon);
 

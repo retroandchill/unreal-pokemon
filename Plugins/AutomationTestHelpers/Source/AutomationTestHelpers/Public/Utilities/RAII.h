@@ -40,7 +40,7 @@ using TWidgetPtr = TUniquePtr<T, FRemoveWidgetFromViewport>;
  * "Deleter" used to clean up the world
  */
 struct FCleanupWorld {
-    void operator()(UWorld* World) {
+    void operator()(UWorld *World) {
         if (World != nullptr) {
             World->CleanupWorld();
         }

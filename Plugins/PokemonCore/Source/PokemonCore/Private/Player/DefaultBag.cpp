@@ -72,7 +72,7 @@ void UDefaultBag::SortPocket(uint8 Pocket, const IBagSorter &Sorter) {
     Sorter.SortPocket(ItemSlots.FindOrAdd(Pocket).Items);
 }
 
-void UDefaultBag::ForEachInPocket(uint8 Pocket, TFunctionRef<void(FName, int32)> Callback) const {
+void UDefaultBag::ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)>& Callback) const {
     auto Items = ItemSlots.Find(Pocket);
     if (Items == nullptr) {
         return;
