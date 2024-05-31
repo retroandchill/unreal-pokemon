@@ -11,11 +11,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(CurrentMapTest, "Unit Tests.Core.CurrentMapTest
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CurrentMapTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
-    auto &PokemonSubsystem = UPokemonSubsystem::GetInstance(World);
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto &PokemonSubsystem = UPokemonSubsystem::GetInstance(World.Get());
     PokemonSubsystem.SetCurrentLocation(FText::FromStringView(TEXT("Test Map")));
     FPokemonDTO Blank;
-    auto BlankBlock = NewObject<UDefaultObtainedBlock>()->Initialize(Blank);
+    auto BlankBlock = NewObject<UDefaultObtainedBlock>(World.Get())->Initialize(Blank);
     ASSERT_TRUE(BlankBlock->GetObtainText().IsSet());
     CHECK_EQUAL(TEXT("Test Map"), BlankBlock->GetObtainText()->ToString());
 

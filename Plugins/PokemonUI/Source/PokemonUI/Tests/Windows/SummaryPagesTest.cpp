@@ -23,17 +23,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryPagesTest, "Unit Tests.Windows.SummaryPa
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SummaryPagesTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<USummaryPages>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    TWidgetPtr<USummaryPages> Pages(CreateWidget<USummaryPages>(World, WidgetClass));
+    TWidgetPtr<USummaryPages> Pages(CreateWidget<USummaryPages>(World.Get(), WidgetClass));
     ASSERT_NOT_NULL(Pages.Get());
     Pages->AddToViewport();
 
-    FPokemonTestUtilities::CreateMockParty(World);
-    auto Trainer = UPokemonSubsystem::GetInstance(World).GetPlayer();
+    FPokemonTestUtilities::CreateMockParty(World.Get());
+    auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
     Pages->SetInitialPokemon(Trainer->GetParty(), 0);
     Pages->SetActive(true);
 

@@ -14,12 +14,12 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Unit Tests.Core.Pokemon.Ca
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "PORYGON"});
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PORYGON"});
     CHECK_EQUAL(GetDefault<UPokemonSettings>()->GetDefaultPokeBall(), Pokemon1->GetPokeBall());
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World, FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
+        World.Get(), FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});
     CHECK_EQUAL(TEXT("MOONBALL"), Pokemon2->GetPokeBall().ToString());
 
     return true;

@@ -17,17 +17,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartySwitchHandlerTest, "Unit Tests.UI.PartySwi
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartySwitchHandlerTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     FMockScreen Screen;
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
-    Trainer->AddPokemonToParty(UGamePokemon::Create(World, {.Species = TEXT("RIOLU"), .Level = 5}));
+    Trainer->AddPokemonToParty(UGamePokemon::Create(World.Get(), {.Species = TEXT("RIOLU"), .Level = 5}));
 
     TGCPointer<UPartyMenuHandler> Handler(NewObject<UPartySwitchHandler>());
     CHECK_FALSE(Handler->ShouldShow(Screen, *Trainer, 0));
 
-    Trainer->AddPokemonToParty(UGamePokemon::Create(World, {.Species = TEXT("OSHAWOTT"), .Level = 5}));
+    Trainer->AddPokemonToParty(UGamePokemon::Create(World.Get(), {.Species = TEXT("OSHAWOTT"), .Level = 5}));
     CHECK_TRUE(Handler->ShouldShow(Screen, *Trainer, 0));
 
     Handler->Handle(Screen, *Trainer, 0);

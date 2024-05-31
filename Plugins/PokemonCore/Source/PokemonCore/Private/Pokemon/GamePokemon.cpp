@@ -36,7 +36,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     if (Trainer != nullptr) {
         OwnerInfo = FOwnerInfo(*Trainer);
     } else {
-        OwnerInfo = FOwnerInfo();
+        OwnerInfo = FOwnerInfo(this);
     }
 
     ObtainedBlock = UnrealInjector::NewInjectedDependency<IObtainedBlock>(this, DTO);

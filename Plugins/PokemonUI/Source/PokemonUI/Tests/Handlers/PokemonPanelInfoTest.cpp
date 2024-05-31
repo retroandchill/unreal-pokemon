@@ -14,13 +14,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Unit Tests.UI.PokemonPan
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSelectionPane>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto ScreenClass = Subclasses[0];
-    FPokemonTestUtilities::CreateMockParty(World);
+    FPokemonTestUtilities::CreateMockParty(World.Get());
 
-    auto Screen = CreateWidget<UPokemonSelectionPane>(World, ScreenClass);
+    auto Screen = CreateWidget<UPokemonSelectionPane>(World.Get(), ScreenClass);
     Screen->AddToViewport();
 
     auto ContentsArea = Screen->WidgetTree->FindWidget<UCanvasPanel>(TEXT("ContentsArea"));

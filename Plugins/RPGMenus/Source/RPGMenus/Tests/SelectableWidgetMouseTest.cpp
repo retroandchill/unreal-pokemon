@@ -16,10 +16,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetMouseTest, "Unit Tests.RPGMenus
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(OPTION_TEST_WIDGET);
     ASSERT_NOT_NULL(WidgetClass);
-    auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);
+    auto NewWidget = CreateWidget<USelectableWidget>(World.Get(), WidgetClass);
     ASSERT_NOT_NULL(NewWidget);
     NewWidget->AddToViewport();
 

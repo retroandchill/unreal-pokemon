@@ -26,17 +26,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_NameInfo,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<USummaryNameInfo>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto Page = CreateWidget<USummaryNameInfo>(World, WidgetClass);
+    auto Page = CreateWidget<USummaryNameInfo>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World,
+        World.Get(),
         FPokemonDTO{
             .Species = "KABUTOPS", .Level = 30, .Gender = EPokemonGender::Female, .PokeBall = FName("ULTRABALL")},
         ForeignTrainer);
@@ -60,7 +60,7 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(ESlateVisibility::Hidden, PokemonStatusIcon->GetVisibility());
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World, FPokemonDTO{.Species = "OMASTAR", .Level = 60, .Gender = EPokemonGender::Male}, ForeignTrainer);
+        World.Get(), FPokemonDTO{.Species = "OMASTAR", .Level = 60, .Gender = EPokemonGender::Male}, ForeignTrainer);
     Page->Refresh(Pokemon2);
 
     CHECK_EQUAL(TEXT("Omastar"), PokemonNameText->GetText().ToString());
@@ -69,7 +69,7 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(ESlateVisibility::Hidden, PokemonStatusIcon->GetVisibility());
 
     auto Pokemon3 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World, FPokemonDTO{.Species = "VOLTORB", .Level = 10, .Nickname = FText::FromStringView(TEXT("Volty"))},
+        World.Get(), FPokemonDTO{.Species = "VOLTORB", .Level = 10, .Nickname = FText::FromStringView(TEXT("Volty"))},
         ForeignTrainer);
     Page->Refresh(Pokemon3);
 
@@ -86,17 +86,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_HoldItemInfo,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UHoldItemInfo>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto Page = CreateWidget<UHoldItemInfo>(World, WidgetClass);
+    auto Page = CreateWidget<UHoldItemInfo>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World, FPokemonDTO{.Species = "KABUTOPS", .Shiny = true, .Item = FName("MYSTICWATER")}, ForeignTrainer);
+        World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Shiny = true, .Item = FName("MYSTICWATER")}, ForeignTrainer);
 
     Page->Refresh(Pokemon1);
 
@@ -113,7 +113,7 @@ bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ShinyIcon->GetVisibility());
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World, FPokemonDTO{.Species = "OMASTAR", .Shiny = false}, ForeignTrainer);
+        World.Get(), FPokemonDTO{.Species = "OMASTAR", .Shiny = false}, ForeignTrainer);
     Page->Refresh(Pokemon2);
 
     CHECK_EQUAL(TEXT("None"), ItemNameText->GetText().ToString());
@@ -128,17 +128,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_PokemonInfo,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonInfoPage>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto Page = CreateWidget<UPokemonInfoPage>(World, WidgetClass);
+    auto Page = CreateWidget<UPokemonInfoPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World, FPokemonDTO{.Species = "KABUTOPS"}, ForeignTrainer);
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "KABUTOPS"}, ForeignTrainer);
 
     Page->RefreshInfo(Pokemon);
 
@@ -164,16 +164,16 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_TrainerMemo,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UTrainerMemoPage>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto Page = CreateWidget<UTrainerMemoPage>(World, WidgetClass);
+    auto Page = CreateWidget<UTrainerMemoPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World,
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
                                                                     FPokemonDTO{.Species = "KABUTOPS",
                                                                                 .Level = 40,
                                                                                 .IVs = {{"HP", 30},
@@ -199,7 +199,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[4]);   // Characteristic
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World,
+        World.Get(),
         FPokemonDTO{.Species = "KABUTO",
                     .Level = 1,
                     .IVs = {{"HP", 30},
@@ -238,16 +238,16 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_Skills,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSkillsPage>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto Page = CreateWidget<UPokemonSkillsPage>(World, WidgetClass);
+    auto Page = CreateWidget<UPokemonSkillsPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World,
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
                                                                     FPokemonDTO{.Species = "KABUTOPS",
                                                                                 .Level = 40,
                                                                                 .IVs = {{"HP", 30},
@@ -291,17 +291,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_Moves,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonMovesPage>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto Page = CreateWidget<UPokemonMovesPage>(World, WidgetClass);
+    auto Page = CreateWidget<UPokemonMovesPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
     auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World, FPokemonDTO{.Species = "KABUTOPS", .Level = 40}, ForeignTrainer);
+        World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Level = 40}, ForeignTrainer);
     Page->RefreshInfo(Pokemon1);
 
     CHECK_TRUE(Page->CanSelectOnPage());

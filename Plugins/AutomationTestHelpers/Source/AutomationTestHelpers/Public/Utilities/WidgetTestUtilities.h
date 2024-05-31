@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RAII.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "WidgetTestUtilities.generated.h"
@@ -25,7 +26,7 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
     UFUNCTION(BlueprintPure, Category = Widgets)
     static UWidget *FindChildWidget(UUserWidget *Parent, FName WidgetName);
 
-    static std::pair<TSharedRef<SOverlay>, UWorld *> CreateTestWorld();
+    static std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> CreateTestWorld();
 
     template <typename T>
         requires std::is_base_of_v<SWidget, T>
