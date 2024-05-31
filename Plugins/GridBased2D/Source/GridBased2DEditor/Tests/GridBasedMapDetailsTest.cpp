@@ -9,7 +9,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedMapDetailsTest, "Unit Tests.GridBasedM
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GridBasedMapDetailsTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto &EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
     FDetailsViewArgs DetailsViewArgs;
     DetailsViewArgs.NameAreaSettings = FDetailsViewArgs::HideNameArea;

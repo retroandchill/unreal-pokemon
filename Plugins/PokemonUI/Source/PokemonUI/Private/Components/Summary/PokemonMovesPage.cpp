@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Summary/PokemonMovesPage.h"
 
 void UPokemonMovesPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

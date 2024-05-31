@@ -2,13 +2,16 @@
 #include "Pokemon/GamePokemon.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Pokemon/Abilities/AbilityBlock.h"
+#include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "Settings/PokemonSettings.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/ConstructionUtilities.h"
 #include "Utilities/PersonalityValueUtils.h"
 
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
@@ -17,11 +20,11 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     Nickname = DTO.Nickname;
     Gender = DTO.Gender;
     Shiny = DTO.Shiny;
-    StatBlock = UConstructionUtilities::CreateStatBlock(this, DTO);
+    StatBlock = UnrealInjector::NewInjectedDependency<IStatBlock>(this, this, DTO);
     StatBlock->CalculateStats(GetSpecies().BaseStats);
     CurrentHP = GetMaxHP();
-    MoveBlock = UConstructionUtilities::CreateMoveBlock(this, DTO);
-    AbilityBlock = UConstructionUtilities::CreateAbilityBlock(this, DTO);
+    MoveBlock = UnrealInjector::NewInjectedDependency<IMoveBlock>(this, DTO);
+    AbilityBlock = UnrealInjector::NewInjectedDependency<IAbilityBlock>(this, this, DTO);
     HoldItem = DTO.Item;
 
     if (DTO.PokeBall.IsSet()) {
@@ -33,10 +36,10 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     if (Trainer != nullptr) {
         OwnerInfo = FOwnerInfo(*Trainer);
     } else {
-        OwnerInfo = FOwnerInfo();
+        OwnerInfo = FOwnerInfo(this);
     }
 
-    ObtainedBlock = UConstructionUtilities::CreateObtainedBlock(this, DTO);
+    ObtainedBlock = UnrealInjector::NewInjectedDependency<IObtainedBlock>(this, DTO);
 }
 
 FText UGamePokemon::GetNickname() const {
@@ -81,7 +84,7 @@ int32 UGamePokemon::GetCurrentHP() const {
 }
 
 int32 UGamePokemon::GetMaxHP() const {
-    return GetStatBlock()->GetStat(UPokemonSubsystem::GetInstance().GetHPStat())->GetStatValue();
+    return GetStatBlock()->GetStat(UPokemonSubsystem::GetInstance(this).GetHPStat())->GetStatValue();
 }
 
 bool UGamePokemon::IsFainted() const {
@@ -131,12 +134,13 @@ TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
     return ObtainedBlock;
 }
 
-UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data) {
-    return Create(Data, nullptr);
+UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data) {
+    return Create(WorldContext, Data, nullptr);
 }
 
-UGamePokemon *UGamePokemon::Create(const FPokemonDTO &Data, const TScriptInterface<ITrainer> &Trainer) {
-    auto Ret = NewObject<UGamePokemon>();
+UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data,
+                                   const TScriptInterface<ITrainer> &Trainer) {
+    auto Ret = NewObject<UGamePokemon>(WorldContext);
     Ret->Initialize(Data, Trainer);
     return Ret;
 }

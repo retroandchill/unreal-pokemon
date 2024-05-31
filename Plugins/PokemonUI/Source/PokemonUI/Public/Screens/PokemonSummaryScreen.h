@@ -35,7 +35,7 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
      * @return The summary pages widget.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    USummaryPages* GetSummaryPages() const;
+    USummaryPages *GetSummaryPages() const;
 
   private:
     /**

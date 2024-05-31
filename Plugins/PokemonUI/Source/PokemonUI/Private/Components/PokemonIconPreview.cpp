@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/PokemonIconPreview.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
@@ -8,7 +7,6 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Utilities/WidgetUtilities.h"
-
 #include <functional>
 
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

@@ -12,7 +12,7 @@ struct FPokemonDTO;
 class IMove;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType)
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
 class UMoveBlock : public UInterface {
     GENERATED_BODY()
 };
@@ -37,5 +37,4 @@ class POKEMONCORE_API IMoveBlock {
      * @return The list of usable moves
      */
     virtual TConstArrayView<TScriptInterface<IMove>> GetMoves() const = 0;
-    
 };

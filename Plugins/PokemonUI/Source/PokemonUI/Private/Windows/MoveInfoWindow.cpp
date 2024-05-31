@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Windows/MoveInfoWindow.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
@@ -32,5 +31,5 @@ FText UMoveInfoWindow::GetMoveAccuracyText_Implementation(const FMoveData &MoveD
         return FText::FromStringView(TEXT("---"));
     }
 
-    return FText::FromString(FString::Format(TEXT("{0}%"), { MoveData.Accuracy }));
+    return FText::FromString(FString::Format(TEXT("{0}%"), {MoveData.Accuracy}));
 }

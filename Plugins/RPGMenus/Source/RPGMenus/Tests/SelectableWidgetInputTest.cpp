@@ -13,11 +13,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetInputTest, "Unit Tests.RPGMenus
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto WidgetClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_SELECTABLE);
     ASSERT_NOT_NULL(WidgetClass);
 
-    auto NewWidget = CreateWidget<USelectableWidget>(World, WidgetClass);
+    auto NewWidget = CreateWidget<USelectableWidget>(World.Get(), WidgetClass);
     ASSERT_NOT_NULL(NewWidget);
     NewWidget->AddToViewport();
 

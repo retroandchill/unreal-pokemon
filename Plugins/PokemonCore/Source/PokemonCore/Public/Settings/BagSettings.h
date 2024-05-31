@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "BagSettings.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS()
 class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the maximum number of items per slot.
      * @return The maximum quantity of a single item the player can hold.
@@ -21,11 +22,10 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Inventory")
     int32 GetMaxItemsPerSlot() const;
 
-private:
+  private:
     /**
      * The maximum quantity of a single item the player can hold.
      */
     UPROPERTY(BlueprintGetter = GetMaxItemsPerSlot, Category = "Player|Inventory")
     int32 MaxItemsPerSlot = 999;
-
 };

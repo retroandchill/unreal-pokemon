@@ -21,8 +21,8 @@ class IStatBlock;
 struct FSpeciesData;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType)
-class UPokemon : public UInterface {
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+class POKEMONCORE_API UPokemon : public UInterface {
     GENERATED_BODY()
 };
 
@@ -74,7 +74,7 @@ class POKEMONCORE_API IPokemon {
      * @return The Pokémon's type(s)
      */
     UFUNCTION(BlueprintCallable, Category = Bio)
-    virtual const TArray<FName>& GetTypes() const = 0;
+    virtual const TArray<FName> &GetTypes() const = 0;
 
     /**
      * Get the Poké Ball that the Pokémon was caught in

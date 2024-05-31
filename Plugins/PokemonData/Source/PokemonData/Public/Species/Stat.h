@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IndexedTableRow.h"
 #include "PokemonStatType.h"
 #include "UObject/Object.h"
-#include "IndexedTableRow.h"
 
 #include "Stat.generated.h"
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PokemonInfoWidget.h"
+
 #include "PokemonIconPreview.generated.h"
 
 class UImage;
@@ -15,7 +16,7 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonIconPreview : public UPokemonInfoWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
 
     /**
@@ -23,11 +24,11 @@ protected:
      * @param TypeIcon The type icon to slot
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SlotTypeIcon(UImage* TypeIcon);
+    void SlotTypeIcon(UImage *TypeIcon);
 
-private:
-    void CreateTypeIcon(UObject* Resource);
-    
+  private:
+    void CreateTypeIcon(UObject *Resource);
+
     /**
      * The icon for the Pokémon
      */
@@ -36,5 +37,4 @@ private:
 
     UPROPERTY()
     TArray<TObjectPtr<UImage>> TypeIcons;
-
 };

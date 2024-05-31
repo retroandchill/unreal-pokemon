@@ -1,6 +1,9 @@
-﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+﻿#include "Nodes/DisplayMessage.h"
+#include "Utilities/WidgetTestUtilities.h"
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "BlueprintActionDatabase.h"
+#include "External/accessor.hpp"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -8,6 +11,10 @@
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
+
+using namespace accessor;
+
+MEMBER_ACCESSOR(AccessProxyFactory, UK2Node_BaseAsyncTask, ProxyFactoryClass, TObjectPtr<UClass>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DisplayMessageTest, "Unit Tests.Nodes.DisplayMessageTest.DisplayMessage",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -23,6 +30,8 @@ bool DisplayMessageTest::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_DisplayMessage>(TestGraph.Get());
+    AddExpectedError(TEXT("Was a class deleted or saved on a non promoted build?"),
+                     EAutomationExpectedErrorFlags::MatchType::Contains, 0);
 
     auto Count = MakeShared<uint32>(1);
     TestNode->Initialize(WidgetClass, Count);
