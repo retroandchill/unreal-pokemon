@@ -12,11 +12,11 @@ UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitiali
             continue;
         }
 
-        TargetInjections.Add(*It, UnrealInjector::GetFirstInjectableObject(*It));
+        TargetInjections.Emplace(*It, *It);
     }
 #endif
 }
 
-const TMap<UClass *, TSubclassOf<UObject>> &UDependencyInjectionSettings::GetTargetInjections() const {
+const TMap<UClass *, FInjectionTarget> &UDependencyInjectionSettings::GetTargetInjections() const {
     return TargetInjections;
 }

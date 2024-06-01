@@ -28,9 +28,9 @@ class UNREALINJECTOR_API UDependencyInjectionSubsystem : public UGameInstanceSub
      */
     template <typename T, typename... A>
     TScriptInterface<T> InjectDependency(A &&...Args) {
-        auto InterfaceClass = InjectionSettings->GetTargetInjections().Find(T::UClassType::StaticClass());
+        const FInjectionTarget *InterfaceClass = InjectionSettings->GetTargetInjections().Find(T::UClassType::StaticClass());
         check(InterfaceClass != nullptr)
-        TScriptInterface<T> CreatedInterface = NewObject<UObject>(this, *InterfaceClass);
+        TScriptInterface<T> CreatedInterface = NewObject<UObject>(this, InterfaceClass->InjectedClass);
         CreatedInterface->Initialize(Forward<A>(Args)...);
         return CreatedInterface;
     }

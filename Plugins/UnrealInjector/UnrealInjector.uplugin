@@ -18,6 +18,11 @@
 			"Name": "UnrealInjector",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UnrealInjectorEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }
