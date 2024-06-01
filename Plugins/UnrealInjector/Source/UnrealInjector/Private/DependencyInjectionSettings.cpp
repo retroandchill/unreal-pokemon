@@ -6,17 +6,29 @@
 UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitializer &ObjectInitializer)
     : UDeveloperSettings(ObjectInitializer) {
 #ifdef WITH_METADATA
+    if (CheckForNewInjectableInterfaces()) {
+        TryUpdateDefaultConfigFile();
+    }
+#endif
+}
+
+const TMap<UClass *, FInjectionTarget> &UDependencyInjectionSettings::GetTargetInjections() const {
+    return TargetInjections;
+}
+
+#ifdef WITH_METADATA
+bool UDependencyInjectionSettings::CheckForNewInjectableInterfaces() {
+    bool bChangeOccurred = false;
     for (TObjectIterator<UClass> It; It; ++It) {
         if (!It->IsChildOf(UInterface::StaticClass()) || !It->HasMetaData(TEXT("Injectable")) ||
             TargetInjections.Contains(*It)) {
             continue;
         }
 
-        TargetInjections.Add(*It, UnrealInjector::GetFirstInjectableObject(*It));
+        TargetInjections.Emplace(*It, *It);
+        bChangeOccurred = true;
     }
-#endif
-}
 
-const TMap<UClass *, TSubclassOf<UObject>> &UDependencyInjectionSettings::GetTargetInjections() const {
-    return TargetInjections;
+    return bChangeOccurred;
 }
+#endif

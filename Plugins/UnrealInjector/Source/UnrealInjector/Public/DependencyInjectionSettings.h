@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Lookup/InjectionTarget.h"
 
 #include "DependencyInjectionSettings.generated.h"
 
@@ -25,12 +26,20 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
      * Get the target injections for each interface.
      * @return The map of interface types to implementation classes
      */
-    const TMap<UClass *, TSubclassOf<UObject>> &GetTargetInjections() const;
+    const TMap<UClass *, FInjectionTarget> &GetTargetInjections() const;
 
   private:
+#ifdef WITH_METADATA
+    /**
+     * Run a sweep for any new interfaces that exist now and load them into the settings
+     * @return If there was a change to the data at all
+     */
+    bool CheckForNewInjectableInterfaces();
+#endif
+
     /**
      * The map of interface types to implementation classes
      */
-    UPROPERTY(EditAnywhere, Category = "Dependency Injection")
-    TMap<UClass *, TSubclassOf<UObject>> TargetInjections;
+    UPROPERTY(EditAnywhere, Config, EditFixedSize, Category = "Dependency Injection", meta = (ReadOnlyKeys))
+    TMap<UClass *, FInjectionTarget> TargetInjections;
 };

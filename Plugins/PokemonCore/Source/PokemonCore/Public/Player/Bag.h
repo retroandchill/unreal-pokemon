@@ -62,7 +62,7 @@ class POKEMONCORE_API IBag {
      * @param Pocket The pocket in question
      * @param Callback The callback for each iteration of the loop
      */
-    virtual void ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)>& Callback) const = 0;
+    virtual void ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)> &Callback) const = 0;
 
     /**
      * Transform the elements in the provided pocket to a different data type
