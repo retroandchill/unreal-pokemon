@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/PauseMenuScreen.h"
 #include "Data/Command.h"
-#include "RPGPlayerController.h"
 #include "Windows/CommandWindow.h"
 
 void UPauseMenuScreen::NativePreConstruct() {
@@ -19,9 +18,5 @@ void UPauseMenuScreen::NativeConstruct() {
 }
 
 void UPauseMenuScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
-    auto PlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
-    if (PlayerController == nullptr)
-        return;
-
-    SelectedCommand->ExecuteCommand(PlayerController);
+    SelectedCommand->ExecuteCommand(GetOwningPlayer());
 }
