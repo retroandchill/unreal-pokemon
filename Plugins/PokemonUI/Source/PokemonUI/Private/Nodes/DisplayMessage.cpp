@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessage.h"
 #include "RPGMenusSubsystem.h"
-#include "RPGPlayerController.h"
 #include "Screens/TextDisplayScreen.h"
 
 UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject,
@@ -15,7 +14,8 @@ UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObje
 
 void UDisplayMessage::Activate() {
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
+    auto Screen =
+        Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
     Screen->SetText(Message);
     Screen->NextMessage.AddDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
 }
@@ -23,7 +23,6 @@ void UDisplayMessage::Activate() {
 void UDisplayMessage::ExecuteOnConfirm() {
     OnConfirm.Broadcast();
 
-    
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
     auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UTextDisplayScreen>();
     if (Screen == nullptr)

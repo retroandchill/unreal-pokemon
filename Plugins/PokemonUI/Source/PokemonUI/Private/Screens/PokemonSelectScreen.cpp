@@ -3,7 +3,6 @@
 #include "Data/Command.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
-#include "RPGPlayerController.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
 #include "Windows/PokemonSelectionPane.h"

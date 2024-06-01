@@ -1,8 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
-#include "RPGMenusSubsystem.h"
 #include "Blueprint/WidgetTree.h"
-#include "RPGPlayerController.h"
+#include "RPGMenusSubsystem.h"
 #include "Windows/SelectableWidget.h"
 
 UScreen::UScreen(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer) {

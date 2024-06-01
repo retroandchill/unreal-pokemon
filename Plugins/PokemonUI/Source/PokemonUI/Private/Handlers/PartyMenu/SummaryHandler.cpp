@@ -2,7 +2,6 @@
 
 #include "Handlers/PartyMenu/SummaryHandler.h"
 #include "RPGMenusSubsystem.h"
-#include "RPGPlayerController.h"
 #include "Screens/PartyScreen.h"
 #include "Screens/PokemonSummaryScreen.h"
 #include "Trainers/Trainer.h"

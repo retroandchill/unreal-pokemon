@@ -2,10 +2,9 @@
 #include "Actions/MenuAction.h"
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
-#include "RPGPlayerController.h"
+#include "RPGMenusSubsystem.h"
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "RPGMenusSubsystem.h"
 
 constexpr auto TEST_MENU_ACTION = TEXT("/PokemonUI/Tests/Resources/TestMenuAction.TestMenuAction");
 
@@ -19,7 +18,7 @@ bool MenuActionTest::RunTest(const FString &Parameters) {
 
     auto MenuAction = NewObject<UMenuAction>(World.Get(), MenuActionClass);
     ASSERT_NOT_NULL(MenuAction);
-    auto PlayerController = World->SpawnActor<ARPGPlayerController>();
+    auto PlayerController = World->SpawnActor<APlayerController>();
     auto Pawn = World->SpawnActor<APawn>();
     auto Player = NewObject<ULocalPlayer>(GEngine);
     PlayerController->Possess(Pawn);

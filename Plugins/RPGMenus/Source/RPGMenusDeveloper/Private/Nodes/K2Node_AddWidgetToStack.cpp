@@ -6,7 +6,6 @@
 #include "KismetCompiler.h"
 #include "KismetCompilerMisc.h"
 #include "RPGMenusSubsystem.h"
-#include "RPGPlayerController.h"
 #include "Screens/Screen.h"
 
 UK2Node_AddWidgetToStack::UK2Node_AddWidgetToStack(const FObjectInitializer &ObjectInitializer)
@@ -44,7 +43,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext &CompilerContex
     // create 'UWidgetBlueprintLibrary::Create' call node
     UK2Node_CallFunction *CallCreateNode =
         CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
-    CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, ARPGPlayerController::StaticClass());
+    CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, URPGMenusSubsystem::StaticClass());
     CallCreateNode->AllocateDefaultPins();
 
     // store off the class to spawn before we mutate pin connections:

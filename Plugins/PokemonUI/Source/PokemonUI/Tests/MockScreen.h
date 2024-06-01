@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "RPGPlayerController.h"
 #include "Screens/PartyScreen.h"
 
 class FMockScreen : public IPartyScreen {

@@ -5,12 +5,12 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
 #include "PokemonUI/Tests/MockScreen.h"
+#include "RPGMenusSubsystem.h"
 #include "Screens/PokemonSummaryScreen.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/GCPointer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "RPGMenusSubsystem.h"
 
 using namespace accessor;
 

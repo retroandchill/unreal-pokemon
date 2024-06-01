@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Screens/Screen.h"
 #include "GameFramework/PlayerController.h"
+#include "Screens/Screen.h"
 #include "Subsystems/LocalPlayerSubsystem.h"
+
 #include "RPGMenusSubsystem.generated.h"
 
 /**
@@ -16,7 +17,7 @@ UCLASS(DisplayName = "RPG Menus Subsystem")
 class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Add a screen of the given class to the stack
      * @tparam T The screen class to spawn
@@ -105,24 +106,23 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Widget", meta = (WorldContext = "WorldContextObject"))
     static UScreen *RemoveScreenFromStack(UObject *WorldContextObject);
 
-private:
+  private:
     /**
      * Get the player controller that this subsystem underpins
      * @return The player controller that owns this subsystem
      */
-    APlayerController* GetPlayerController() const;
+    APlayerController *GetPlayerController() const;
 
     /**
      * Get the subystem from the given world context object
      * @param WorldContextObject The object used to extract the world (and utlimately the player)
      * @return The subsystem (if found)
      */
-    static URPGMenusSubsystem* GetSubsystem(UObject* WorldContextObject);
-    
+    static URPGMenusSubsystem *GetSubsystem(UObject *WorldContextObject);
+
     /**
      * The internal stack of screens used to handle the input.
      */
     UPROPERTY()
     TArray<TObjectPtr<UScreen>> ScreenStack;
-    
 };

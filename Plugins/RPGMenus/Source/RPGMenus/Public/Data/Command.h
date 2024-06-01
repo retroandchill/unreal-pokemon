@@ -66,7 +66,7 @@ class RPGMENUS_API UCommand : public UObject {
      * @param Controller The player controller used to execute any processing
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Events)
-    void ExecuteCommand(APlayerController* Controller);
+    void ExecuteCommand(APlayerController *Controller);
 
   protected:
     /**

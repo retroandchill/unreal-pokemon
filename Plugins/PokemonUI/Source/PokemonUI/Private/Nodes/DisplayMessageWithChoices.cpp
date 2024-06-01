@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessageWithChoices.h"
 #include "RPGMenusSubsystem.h"
-#include "RPGPlayerController.h"
 #include "Screens/TextDisplayScreen.h"
 
 UDisplayMessageWithChoices *
@@ -18,7 +17,8 @@ UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject *WorldContex
 
 void UDisplayMessageWithChoices::Activate() {
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
+    auto Screen =
+        Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
     Screen->DisplayChoices(Message, Choices);
     Screen->ProcessChoice.AddDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
 }

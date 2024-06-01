@@ -1,26 +1,26 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "RPGMenusSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 
-UScreen * URPGMenusSubsystem::AddScreenToStackHelper(UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
+UScreen *URPGMenusSubsystem::AddScreenToStackHelper(UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
     if (ScreenType == nullptr)
         return nullptr;
 
     if (auto Subsystem = GetSubsystem(WorldContextObject); Subsystem != nullptr) {
         return Subsystem->AddScreenToStack(ScreenType);
     }
-    
+
     return nullptr;
 }
 
-UScreen * URPGMenusSubsystem::GetTopScreenOfStack() const {
+UScreen *URPGMenusSubsystem::GetTopScreenOfStack() const {
     return GetTopOfStack<UScreen>();
 }
 
-UScreen * URPGMenusSubsystem::RemoveScreenFromStack() {if (ScreenStack.IsEmpty())
-    return nullptr;
+UScreen *URPGMenusSubsystem::RemoveScreenFromStack() {
+    if (ScreenStack.IsEmpty())
+        return nullptr;
 
     UScreen *PoppedWidget = ScreenStack.Pop();
     PoppedWidget->RemoveFromParent();
@@ -34,7 +34,7 @@ UScreen * URPGMenusSubsystem::RemoveScreenFromStack() {if (ScreenStack.IsEmpty()
     return NewTop;
 }
 
-UScreen* URPGMenusSubsystem::RemoveScreenFromStack(UObject *WorldContextObject) {
+UScreen *URPGMenusSubsystem::RemoveScreenFromStack(UObject *WorldContextObject) {
     if (auto Subsystem = GetSubsystem(WorldContextObject); Subsystem != nullptr) {
         return Subsystem->RemoveScreenFromStack();
     }
@@ -42,11 +42,11 @@ UScreen* URPGMenusSubsystem::RemoveScreenFromStack(UObject *WorldContextObject) 
     return nullptr;
 }
 
-APlayerController * URPGMenusSubsystem::GetPlayerController() const {
+APlayerController *URPGMenusSubsystem::GetPlayerController() const {
     return GetLocalPlayer()->GetPlayerController(nullptr);
 }
 
-URPGMenusSubsystem * URPGMenusSubsystem::GetSubsystem(UObject *WorldContextObject) {
+URPGMenusSubsystem *URPGMenusSubsystem::GetSubsystem(UObject *WorldContextObject) {
     if (auto ImpliedOwningPlayer = Cast<APlayerController>(WorldContextObject); ImpliedOwningPlayer != nullptr) {
         return ImpliedOwningPlayer->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
     }
