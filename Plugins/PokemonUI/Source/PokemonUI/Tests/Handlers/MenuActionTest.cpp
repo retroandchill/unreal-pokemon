@@ -4,8 +4,8 @@
 #include "Misc/AutomationTest.h"
 #include "RPGMenusSubsystem.h"
 #include "Utilities/BlueprintTestUtils.h"
-#include "Utilities/WidgetTestUtilities.h"
 #include "Utilities/PlayerUtilities.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 constexpr auto TEST_MENU_ACTION = TEXT("/PokemonUI/Tests/Resources/TestMenuAction.TestMenuAction");
 

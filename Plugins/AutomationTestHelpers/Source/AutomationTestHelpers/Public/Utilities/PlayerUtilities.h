@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RAII.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "RAII.h"
+
 #include "PlayerUtilities.generated.h"
 
 /**
@@ -14,12 +15,11 @@ UCLASS()
 class AUTOMATIONTESTHELPERS_API UPlayerUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create the test player, wrapping it in a container that will remove it upon the conclusion of the test.
      * @param World The world to create the player in
      * @return The created player and pawn in the world
      */
-    static std::pair<FPlayerPtr, APawn*> CreateTestPlayer(UWorld& World);
-
+    static std::pair<FPlayerPtr, APawn *> CreateTestPlayer(UWorld &World);
 };

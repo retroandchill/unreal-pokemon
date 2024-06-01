@@ -9,9 +9,9 @@
 #include "Screens/PokemonSummaryScreen.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/GCPointer.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Utilities/PlayerUtilities.h"
 
 using namespace accessor;
 
@@ -26,7 +26,6 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     FMockScreen Screen(Player->GetPlayerController(nullptr));
 
