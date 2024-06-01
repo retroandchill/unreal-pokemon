@@ -26,6 +26,7 @@ std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> UWidgetTestUtiliti
     FWorldPtr World(GameInstance->GetWorld());
     auto WorldContext = GameInstance->GetWorldContext();
     WorldContext->GameViewport = NewObject<UGameViewportClient>(GEngine);
+    WorldContext->GameViewport->Init(*WorldContext, GameInstance.Get(), false);
     TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
     WorldContext->GameViewport->SetViewportOverlayWidget(nullptr, DudOverlay);
 

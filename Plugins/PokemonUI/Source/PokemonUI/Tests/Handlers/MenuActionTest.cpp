@@ -1,4 +1,5 @@
-﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+﻿#include "Utilities/PlayerUtilities.h"
+#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Actions/MenuAction.h"
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
@@ -18,11 +19,7 @@ bool MenuActionTest::RunTest(const FString &Parameters) {
 
     auto MenuAction = NewObject<UMenuAction>(World.Get(), MenuActionClass);
     ASSERT_NOT_NULL(MenuAction);
-    auto PlayerController = World->SpawnActor<APlayerController>();
-    auto Pawn = World->SpawnActor<APawn>();
-    auto Player = NewObject<ULocalPlayer>(GEngine);
-    PlayerController->Possess(Pawn);
-    PlayerController->Player = Player;
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     MenuAction->PerformAction(Pawn);
     auto TopOfStack = Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack();
     ASSERT_NOT_NULL(TopOfStack);
