@@ -1,8 +1,6 @@
 ﻿#include "UnrealInjectorEditor.h"
 #include "Details/InjectionTargetCustomization.h"
 
-#define LOCTEXT_NAMESPACE "FUnrealInjectorEditorModule"
-
 void FUnrealInjectorEditorModule::StartupModule() {
     auto& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(TEXT("InjectionTarget"),
@@ -10,9 +8,7 @@ void FUnrealInjectorEditorModule::StartupModule() {
 }
 
 void FUnrealInjectorEditorModule::ShutdownModule() {
-    
+    // No shutdown code needed    
 }
-
-#undef LOCTEXT_NAMESPACE
     
 IMPLEMENT_MODULE(FUnrealInjectorEditorModule, UnrealInjectorEditor)
