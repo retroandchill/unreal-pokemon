@@ -29,9 +29,17 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
     const TMap<UClass*, FInjectionTarget> &GetTargetInjections() const;
 
   private:
+#ifdef WITH_METADATA
+    /**
+     * Run a sweep for any new interfaces that exist now and load them into the settings
+     * @return If there was a change to the data at all
+     */
+    bool CheckForNewInjectableInterfaces();
+#endif
+    
     /**
      * The map of interface types to implementation classes
      */
-    UPROPERTY(EditAnywhere, EditFixedSize, Category = "Dependency Injection", meta = (ReadOnlyKeys))
+    UPROPERTY(EditAnywhere, Config, EditFixedSize, Category = "Dependency Injection", meta = (ReadOnlyKeys))
     TMap<UClass*, FInjectionTarget> TargetInjections;
 };

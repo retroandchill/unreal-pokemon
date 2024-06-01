@@ -24,5 +24,12 @@
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
+		}
 	]
 }
