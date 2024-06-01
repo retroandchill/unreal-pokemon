@@ -1,11 +1,11 @@
-﻿#include "Utilities/PlayerUtilities.h"
-#if WITH_TESTS && HAS_AUTOMATION_HELPERS
+﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
 #include "Actions/MenuAction.h"
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "RPGMenusSubsystem.h"
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "Utilities/PlayerUtilities.h"
 
 constexpr auto TEST_MENU_ACTION = TEXT("/PokemonUI/Tests/Resources/TestMenuAction.TestMenuAction");
 
