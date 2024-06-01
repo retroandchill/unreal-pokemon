@@ -8,7 +8,7 @@ class FMockScreen : public IPartyScreen {
   public:
     FMockScreen() = default;
 
-    explicit FMockScreen(ARPGPlayerController *PlayerController) : PlayerController(PlayerController) {
+    explicit FMockScreen(APlayerController *PlayerController) : PlayerController(PlayerController) {
     }
 
     void BeginSwitch(int32 Index) override {
@@ -18,12 +18,12 @@ class FMockScreen : public IPartyScreen {
     void SetHelpText(const FText &Text) override {
     }
 
-    ARPGPlayerController &GetPlayerController() override {
+    APlayerController &GetPlayerController() override {
         return *PlayerController;
     }
 
     TOptional<int32> SwitchIndex;
 
-    ARPGPlayerController *PlayerController = nullptr;
+    APlayerController *PlayerController = nullptr;
 };
 #endif

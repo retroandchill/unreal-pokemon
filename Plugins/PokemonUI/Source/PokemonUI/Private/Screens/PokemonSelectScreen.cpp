@@ -34,8 +34,8 @@ void UPokemonSelectScreen::SetHelpText(const FText &Text) {
     CommandHelpWindow->SetText(Text);
 }
 
-ARPGPlayerController &UPokemonSelectScreen::GetPlayerController() {
-    return *CastChecked<ARPGPlayerController>(GetOwningPlayer());
+APlayerController &UPokemonSelectScreen::GetPlayerController() {
+    return *GetOwningPlayer();
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {

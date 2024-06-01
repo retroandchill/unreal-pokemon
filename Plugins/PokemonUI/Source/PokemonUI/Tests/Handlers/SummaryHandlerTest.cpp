@@ -10,6 +10,7 @@
 #include "Utilities/GCPointer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "RPGMenusSubsystem.h"
 
 using namespace accessor;
 
@@ -24,7 +25,7 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto PlayerController = World->SpawnActor<ARPGPlayerController>();
+    auto PlayerController = World->SpawnActor<APlayerController>();
     auto Pawn = World->SpawnActor<APawn>();
     auto Player = NewObject<ULocalPlayer>(GEngine);
     PlayerController->Possess(Pawn);
@@ -39,7 +40,7 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     accessor::accessMember<AccessSummaryScreen>(*Handler).get() = WidgetClass;
     Handler->Handle(Screen, *Trainer, 0);
 
-    ASSERT_NOT_NULL(PlayerController->GetTopOfStack<UPokemonSummaryScreen>());
+    ASSERT_NOT_NULL(Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UPokemonSummaryScreen>());
     return true;
 }
 #endif

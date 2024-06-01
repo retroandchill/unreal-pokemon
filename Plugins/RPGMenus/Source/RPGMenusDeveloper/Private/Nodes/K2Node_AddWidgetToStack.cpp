@@ -5,6 +5,7 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "KismetCompilerMisc.h"
+#include "RPGMenusSubsystem.h"
 #include "RPGPlayerController.h"
 #include "Screens/Screen.h"
 
@@ -16,7 +17,7 @@ UK2Node_AddWidgetToStack::UK2Node_AddWidgetToStack(const FObjectInitializer &Obj
 void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
-    static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(ARPGPlayerController, AddScreenToStackHelper);
+    static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(URPGMenusSubsystem, AddScreenToStackHelper);
     static const FName WorldContextObject_ParamName(TEXT("WorldContextObject"));
     static const FName WidgetType_ParamName(TEXT("ScreenType"));
 

@@ -6,7 +6,6 @@
 #include "Command.generated.h"
 
 class UCommandCondition;
-class ARPGPlayerController;
 /**
  * The struct that holds the command information
  */
@@ -67,7 +66,7 @@ class RPGMENUS_API UCommand : public UObject {
      * @param Controller The player controller used to execute any processing
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Events)
-    void ExecuteCommand(ARPGPlayerController *Controller);
+    void ExecuteCommand(APlayerController* Controller);
 
   protected:
     /**

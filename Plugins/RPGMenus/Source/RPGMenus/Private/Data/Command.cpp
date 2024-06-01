@@ -36,7 +36,7 @@ UCommand *UCommand::CreateBasicCommand(FName ID, const FText &Text, UObject *Han
     return Command;
 }
 
-void UCommand::ExecuteCommand_Implementation(ARPGPlayerController *Controller) {
+void UCommand::ExecuteCommand_Implementation(APlayerController* Controller) {
     // No implementation in this class, this is simply used by the child classes to handle the effects
 }
 

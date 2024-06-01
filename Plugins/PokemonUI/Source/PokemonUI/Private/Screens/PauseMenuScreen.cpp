@@ -19,9 +19,5 @@ void UPauseMenuScreen::NativeConstruct() {
 }
 
 void UPauseMenuScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
-    auto PlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
-    if (PlayerController == nullptr)
-        return;
-
-    SelectedCommand->ExecuteCommand(PlayerController);
+    SelectedCommand->ExecuteCommand(GetOwningPlayer());
 }

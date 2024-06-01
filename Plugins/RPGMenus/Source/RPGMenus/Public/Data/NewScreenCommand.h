@@ -17,7 +17,7 @@ class RPGMENUS_API UNewScreenCommand : public UCommand {
     GENERATED_BODY()
 
   public:
-    void ExecuteCommand_Implementation(ARPGPlayerController *Controller) override;
+    void ExecuteCommand_Implementation(APlayerController *Controller) override;
 
   private:
     /**

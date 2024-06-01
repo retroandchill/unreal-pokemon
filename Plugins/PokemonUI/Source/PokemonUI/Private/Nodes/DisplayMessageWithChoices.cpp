@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessageWithChoices.h"
+#include "RPGMenusSubsystem.h"
 #include "RPGPlayerController.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -16,23 +17,16 @@ UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject *WorldContex
 }
 
 void UDisplayMessageWithChoices::Activate() {
-    auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
-    if (Controller == nullptr)
-        return;
-
-    auto Screen = Controller->ConditionallyAddScreenToStack(ScreenClass);
+    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
+    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
     Screen->DisplayChoices(Message, Choices);
     Screen->ProcessChoice.AddDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
 }
 
 void UDisplayMessageWithChoices::ExecuteOnChoiceSelected(int32 ChoiceIndex, FName ChoiceID) {
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);
-
-    auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
-    if (Controller == nullptr)
-        return;
-
-    auto Screen = Controller->GetTopOfStack<UTextDisplayScreen>();
+    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
+    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UTextDisplayScreen>();
     if (Screen == nullptr)
         return;
 

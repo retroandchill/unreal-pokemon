@@ -5,6 +5,7 @@
 #include "RPGPlayerController.h"
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "RPGMenusSubsystem.h"
 
 constexpr auto TEST_MENU_ACTION = TEXT("/PokemonUI/Tests/Resources/TestMenuAction.TestMenuAction");
 
@@ -24,7 +25,7 @@ bool MenuActionTest::RunTest(const FString &Parameters) {
     PlayerController->Possess(Pawn);
     PlayerController->Player = Player;
     MenuAction->PerformAction(Pawn);
-    auto TopOfStack = PlayerController->GetTopOfStack();
+    auto TopOfStack = Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack();
     ASSERT_NOT_NULL(TopOfStack);
 
     return true;

@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "KismetCompiler.h"
 #include "PokemonUISettings.h"
+#include "RPGMenusSubsystem.h"
 #include "RPGPlayerController.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -75,7 +76,7 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
         return;
 
     const FName FunctionName =
-        GET_FUNCTION_NAME_CHECKED_OneParam(ARPGPlayerController, RemoveScreenFromStack, UObject *);
+        GET_FUNCTION_NAME_CHECKED_OneParam(URPGMenusSubsystem, RemoveScreenFromStack, UObject *);
     auto IntermediateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, GetGraph());
     IntermediateNode->FunctionReference.SetExternalMember(FunctionName, ARPGPlayerController::StaticClass());
     IntermediateNode->AllocateDefaultPins();

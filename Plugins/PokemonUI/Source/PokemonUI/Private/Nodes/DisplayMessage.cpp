@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessage.h"
+#include "RPGMenusSubsystem.h"
 #include "RPGPlayerController.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -13,11 +14,8 @@ UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObje
 }
 
 void UDisplayMessage::Activate() {
-    auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
-    if (Controller == nullptr)
-        return;
-
-    auto Screen = Controller->ConditionallyAddScreenToStack(ScreenClass);
+    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
+    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
     Screen->SetText(Message);
     Screen->NextMessage.AddDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
 }
@@ -25,11 +23,9 @@ void UDisplayMessage::Activate() {
 void UDisplayMessage::ExecuteOnConfirm() {
     OnConfirm.Broadcast();
 
-    auto Controller = Cast<ARPGPlayerController>(WorldContextObject->GetWorld()->GetFirstPlayerController());
-    if (Controller == nullptr)
-        return;
-
-    auto Screen = Controller->GetTopOfStack<UTextDisplayScreen>();
+    
+    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
+    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UTextDisplayScreen>();
     if (Screen == nullptr)
         return;
 

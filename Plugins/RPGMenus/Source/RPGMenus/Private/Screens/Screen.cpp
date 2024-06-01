@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
+#include "RPGMenusSubsystem.h"
 #include "Blueprint/WidgetTree.h"
 #include "RPGPlayerController.h"
 #include "Windows/SelectableWidget.h"
@@ -40,9 +41,5 @@ bool UScreen::GiveMenuFocus() {
 }
 
 void UScreen::CloseScreen() {
-    auto RPGPlayerController = Cast<ARPGPlayerController>(GetOwningPlayer());
-    if (RPGPlayerController == nullptr)
-        return;
-
-    RPGPlayerController->RemoveScreenFromStack();
+    GetOwningPlayer()->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->RemoveScreenFromStack();
 }
