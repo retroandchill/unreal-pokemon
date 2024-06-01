@@ -108,6 +108,24 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     FItem();
 
     /**
+     * Determine if this item is a TM?
+     * @return If this item is a TM
+     */
+    bool IsTM() const;
+
+    /**
+     * Determine if this item is an HM?
+     * @return If this item is a HM
+     */
+    bool IsHM() const;
+
+    /**
+     * Determine if this item is a TR?
+     * @return If this item is a TR
+     */
+    bool IsTR() const;
+
+    /**
      * Get if this item is a Poké Ball or not.
      * @return Is the item in question a type of Poké Ball?
      */
@@ -118,6 +136,24 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
      * @return Is this item of form of mail?
      */
     bool IsMail() const;
+
+    /**
+     * Is this item a Key Item?
+     * @return Is this item a Key Item?
+     */
+    bool IsKeyItem() const;
+
+    /**
+     * Determine if this item is important at all?
+     * @return Is this item important?
+     */
+    bool IsImportant() const;
+
+    /**
+     * Determine if the item quantity should be shown?
+     * @return Should the quantity be shown?
+     */
+    bool ShouldShowQuantity() const;
 };
 
 /**

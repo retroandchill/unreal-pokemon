@@ -6,6 +6,22 @@
 
 FItem::FItem() = default;
 
+bool FItem::IsTM() const {
+    return FieldUse == EFieldUse::TM;
+}
+
+bool FItem::IsHM() const {
+    return FieldUse == EFieldUse::HM;
+}
+
+bool FItem::IsTR() const {
+    return FieldUse == EFieldUse::TR;
+}
+
+bool FItem::IsImportant() const {
+    return IsKeyItem() || IsHM() || IsTM();
+}
+
 bool FItem::IsPokeBall() const {
     static const auto PokeBall = FName("PokeBall");
     static const auto SnagBall = FName("SnagBall");
@@ -16,6 +32,15 @@ bool FItem::IsMail() const {
     static const auto Mail = FName("Mail");
     static const auto IconMail = FName("IconMail");
     return Tags.Contains(Mail) || Tags.Contains(IconMail);
+}
+
+bool FItem::IsKeyItem() const {
+    static const auto KeyItem = FName("KeyItem");
+    return Tags.Contains(KeyItem);
+}
+
+bool FItem::ShouldShowQuantity() const {
+    return ShowQuantity && !IsImportant();
 }
 
 TArray<FName> UItemHelper::GetItemNames() {
