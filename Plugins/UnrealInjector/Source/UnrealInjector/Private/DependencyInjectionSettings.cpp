@@ -23,7 +23,7 @@ bool UDependencyInjectionSettings::CheckForNewInjectableInterfaces() {
         if (!It->IsChildOf(UInterface::StaticClass()) || !It->HasMetaData(TEXT("Injectable")) ||
             TargetInjections.Contains(*It)) {
             continue;
-            }
+        }
 
         TargetInjections.Emplace(*It, *It);
         bChangeOccurred = true;

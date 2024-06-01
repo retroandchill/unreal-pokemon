@@ -7,7 +7,7 @@
  * Module for the Editor customizations of the Unreal Injector.
  */
 class FUnrealInjectorEditorModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 };

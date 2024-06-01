@@ -6,7 +6,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDependencyInjectionSettingsCustomization,
-                                 "Tests.TestDependencyInjectionSettingsCustomization",
+                                 "Unit Tests.DependencyInjection.TestDependencyInjectionSettingsCustomization",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDependencyInjectionSettingsCustomization::RunTest(const FString &Parameters) {
