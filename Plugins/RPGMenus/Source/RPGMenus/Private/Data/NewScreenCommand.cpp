@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Data/NewScreenCommand.h"
-#include "RPGPlayerController.h"
+#include "RPGMenusSubsystem.h"
 
-void UNewScreenCommand::ExecuteCommand_Implementation(ARPGPlayerController *Controller) {
-    Controller->AddScreenToStack(NextScreen);
+void UNewScreenCommand::ExecuteCommand_Implementation(APlayerController *Controller) {
+    Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->AddScreenToStack(NextScreen);
 }

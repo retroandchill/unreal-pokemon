@@ -51,3 +51,19 @@ struct FCleanupWorld {
  * Smart pointer to the world that calls cleanup when it gets destroyed.
  */
 using FWorldPtr = TUniquePtr<UWorld, FCleanupWorld>;
+
+/**
+ * "Deleter" used to remove a local player
+ */
+struct FRemovePlayer {
+    void operator()(ULocalPlayer *Player) {
+        if (Player != nullptr) {
+            Player->PlayerRemoved();
+        }
+    }
+};
+
+/**
+ * Smart pointer to the world that calls cleanup when it gets destroyed.
+ */
+using FPlayerPtr = TUniquePtr<ULocalPlayer, FRemovePlayer>;

@@ -3,7 +3,6 @@
 #include "Data/Command.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
-#include "RPGPlayerController.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
 #include "Windows/PokemonSelectionPane.h"
@@ -34,8 +33,8 @@ void UPokemonSelectScreen::SetHelpText(const FText &Text) {
     CommandHelpWindow->SetText(Text);
 }
 
-ARPGPlayerController &UPokemonSelectScreen::GetPlayerController() {
-    return *CastChecked<ARPGPlayerController>(GetOwningPlayer());
+APlayerController &UPokemonSelectScreen::GetPlayerController() {
+    return *GetOwningPlayer();
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {

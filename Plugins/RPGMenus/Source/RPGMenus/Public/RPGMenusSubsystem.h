@@ -1,31 +1,21 @@
-// "Unreal Pokémon" created by Retro & Chill.
+﻿// "Unreal Pokémon" created by Retro & Chill.
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
 #include "Screens/Screen.h"
+#include "Subsystems/LocalPlayerSubsystem.h"
 
-#include "RPGPlayerController.generated.h"
-
-struct FInputActionInstance;
-class UScreen;
-class USelectableWidget;
-class UInputAction;
-class UInputMappingContext;
+#include "RPGMenusSubsystem.generated.h"
 
 /**
- * Player controller responsible for RPG menu related actions and behaviors.
+ * Subsystem governing the menu stack used by the game.
  */
-UCLASS(Blueprintable)
-class RPGMENUS_API ARPGPlayerController : public APlayerController {
+UCLASS(DisplayName = "RPG Menus Subsystem")
+class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
     GENERATED_BODY()
-
-  public:
-    explicit ARPGPlayerController(const FObjectInitializer &ObjectInitializer);
-
-  protected:
-    void BeginPlay() override;
 
   public:
     /**
@@ -37,13 +27,14 @@ class RPGMENUS_API ARPGPlayerController : public APlayerController {
     template <typename T>
         requires std::is_base_of_v<UScreen, T>
     T *AddScreenToStack(TSubclassOf<T> ScreenClass = T::StaticClass()) {
-        auto Screen = CreateWidget<T>(this, ScreenClass);
+        auto PlayerController = GetPlayerController();
+        auto Screen = CreateWidget<T>(PlayerController, ScreenClass);
         Screen->AddToViewport();
         ScreenStack.Add(Screen);
 
         if (ScreenStack.Num() == 1) {
-            SetInputMode(FInputModeUIOnly());
-            SetShowMouseCursor(true);
+            PlayerController->SetInputMode(FInputModeUIOnly());
+            PlayerController->SetShowMouseCursor(true);
         }
         Screen->GiveMenuFocus();
 
@@ -116,6 +107,19 @@ class RPGMENUS_API ARPGPlayerController : public APlayerController {
     static UScreen *RemoveScreenFromStack(UObject *WorldContextObject);
 
   private:
+    /**
+     * Get the player controller that this subsystem underpins
+     * @return The player controller that owns this subsystem
+     */
+    APlayerController *GetPlayerController() const;
+
+    /**
+     * Get the subystem from the given world context object
+     * @param WorldContextObject The object used to extract the world (and utlimately the player)
+     * @return The subsystem (if found)
+     */
+    static URPGMenusSubsystem *GetSubsystem(UObject *WorldContextObject);
+
     /**
      * The internal stack of screens used to handle the input.
      */

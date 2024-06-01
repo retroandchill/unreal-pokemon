@@ -5,7 +5,7 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "KismetCompilerMisc.h"
-#include "RPGPlayerController.h"
+#include "RPGMenusSubsystem.h"
 #include "Screens/Screen.h"
 
 UK2Node_AddWidgetToStack::UK2Node_AddWidgetToStack(const FObjectInitializer &ObjectInitializer)
@@ -16,7 +16,7 @@ UK2Node_AddWidgetToStack::UK2Node_AddWidgetToStack(const FObjectInitializer &Obj
 void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
-    static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(ARPGPlayerController, AddScreenToStackHelper);
+    static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(URPGMenusSubsystem, AddScreenToStackHelper);
     static const FName WorldContextObject_ParamName(TEXT("WorldContextObject"));
     static const FName WidgetType_ParamName(TEXT("ScreenType"));
 
@@ -43,7 +43,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext &CompilerContex
     // create 'UWidgetBlueprintLibrary::Create' call node
     UK2Node_CallFunction *CallCreateNode =
         CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
-    CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, ARPGPlayerController::StaticClass());
+    CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, URPGMenusSubsystem::StaticClass());
     CallCreateNode->AllocateDefaultPins();
 
     // store off the class to spawn before we mutate pin connections:
