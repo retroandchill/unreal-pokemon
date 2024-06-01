@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
 #include "ItemInfoWindow.generated.h"
 
 class UItemSelectionWindow;
@@ -12,13 +13,12 @@ class UImage;
 /**
  * Window for displaying the information about an item.
  */
-UCLASS(Abstract)
+UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UItemInfoWindow : public UUserWidget {
     GENERATED_BODY()
 
-public:
-
-private:
+  public:
+  private:
     /**
      * The graphic for the icon of the item.
      */
@@ -36,5 +36,4 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UItemInfoWindow> HelpWindow;
-
 };

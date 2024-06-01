@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Primatives/SelectableOption.h"
+
 #include "ItemOption.generated.h"
 
 struct FItem;
@@ -13,11 +14,18 @@ class UDisplayText;
 /**
  * An option that represents and item in the player's inventory.
  */
-UCLASS(Abstract)
+UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UItemOption : public USelectableOption {
     GENERATED_BODY()
 
-public:
+  public:
+    /**
+     * Get the underlying item held by this widget
+     * @return The item held by this widget.
+     */
+    UFUNCTION(BlueprintPure, Category = Inventory)
+    const FItem &GetItem() const;
+
     /**
      * Set the item to the one held within the given slot
      * @param Item The ID of the item in question
@@ -26,18 +34,12 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     void SetItem(FName Item, int32 Quantity);
 
-private:
-    /**
-     * Get the underlying item held by this widget
-     * @return The item held by this widget.
-     */
-    const FItem& GetItem() const;
-    
+  private:
     /**
      * Represents the current item held by this option
      */
     FName CurrentItem;
-    
+
     /**
      * Text that displays an item's name
      */
@@ -49,5 +51,4 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> ItemQuantityText;
-
 };

@@ -10,7 +10,7 @@
 class IBagSorter;
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
-class UBag : public UInterface {
+class POKEMONCORE_API UBag : public UInterface {
     GENERATED_BODY()
 };
 

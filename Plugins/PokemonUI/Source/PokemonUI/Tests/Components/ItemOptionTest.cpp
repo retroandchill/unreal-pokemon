@@ -28,11 +28,10 @@ bool ItemOptionTest::RunTest(const FString &Parameters) {
     ASSERT_NOT_NULL(ItemQuantityText);
     CHECK_EQUAL(TEXT("×5"), ItemQuantityText->GetText().ToString());
 
-    
     Option->SetItem(TEXT("OLDROD"), 1);
     CHECK_EQUAL(TEXT("Old Rod"), ItemNameText->GetText().ToString());
     CHECK_EQUAL(TEXT(""), ItemQuantityText->GetText().ToString());
-    
+
     return true;
 }
 #endif
