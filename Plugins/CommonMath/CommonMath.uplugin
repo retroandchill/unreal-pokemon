@@ -18,6 +18,11 @@
 			"Name": "CommonMath",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "CommonMathTests",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"SupportURL": "",

@@ -33,11 +33,5 @@ public class PokemonUI : ModuleRules
 				"UnrealInjector"
 			}
 		);
-		
-		if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
-		{
-			PrivateDependencyModuleNames.Add("AutomationTestHelpers");
-			PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-		}
 	}
 }
