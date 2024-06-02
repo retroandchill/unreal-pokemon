@@ -37,9 +37,16 @@ FOnPocketChanged & UItemSelectionWindow::GetOnPocketChanged() {
     return OnPocketChanged;
 }
 
+FOnItemChanged & UItemSelectionWindow::GetOnItemChanged() {
+    return OnItemChanged;
+}
+
 void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     PocketMemory[*PocketIterator] = NewIndex;
+    if (auto Item = GetCurrentItem(); Item != nullptr) {
+        OnItemChanged.Broadcast(*Item, Options[NewIndex]->GetQuantity());
+    }
 }
 
 void UItemSelectionWindow::ReceiveMoveCursor(ECursorDirection Direction) {

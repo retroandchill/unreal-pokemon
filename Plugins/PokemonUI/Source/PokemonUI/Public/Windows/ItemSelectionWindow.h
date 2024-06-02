@@ -18,6 +18,11 @@ class UItemOption;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPocketChanged, FName, Pocket);
 
 /**
+ * Delegate called when the player selects a new item in the bag screen.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemChanged, const FItem&, Item, int32, Quantity);
+
+/**
  * Window for selecting an item from a particular pocket.
  */
 UCLASS(Abstract, Blueprintable)
@@ -48,6 +53,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * @return Callback for when the pocket is changed.
      */
     FOnPocketChanged& GetOnPocketChanged();
+
+    /**
+     * Get the item changed dispatcher
+     * @return Callback for when the item is changed.
+     */
+    FOnItemChanged &GetOnItemChanged();
 
   protected:
     /**
@@ -100,6 +111,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
     FOnPocketChanged OnPocketChanged;
+
+    /**
+     * Callback for when the selected item changed.
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
+    FOnItemChanged OnItemChanged;
 
     /**
      * Class that is used to spawn options into the window

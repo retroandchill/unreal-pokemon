@@ -27,6 +27,13 @@ class POKEMONUI_API UItemOption : public USelectableOption {
     const FItem &GetItem() const;
 
     /**
+     * Get the quantity of the item in question
+     * @return The quantity held
+     */
+    UFUNCTION(BlueprintPure, Category = Inventory)
+    int32 GetQuantity() const;
+
+    /**
      * Set the item to the one held within the given slot
      * @param Item The ID of the item in question
      * @param Quantity The quantity of the item
@@ -39,6 +46,11 @@ class POKEMONUI_API UItemOption : public USelectableOption {
      * Represents the current item held by this option
      */
     FName CurrentItem;
+
+    /**
+     * Represents the quantity held
+     */
+    int32 QuantityHeld;
 
     /**
      * Text that displays an item's name

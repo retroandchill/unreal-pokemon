@@ -6,6 +6,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/ItemSelectionWindow.h"
+#include "ItemSlotDispatcher.h"
 #include "PocketNameDispatcher.h"
 #include "Data/SelectionInputs.h"
 #include "External/accessor.hpp"
@@ -34,14 +35,23 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("FULLHEAL"), 10);
     Bag->ObtainItem(TEXT("BURNHEAL"), 20);
 
+    auto Dispatcher = NewObject<UItemSlotDispatcher>(World.Get());
+    ItemSelection->GetOnItemChanged().AddDynamic(Dispatcher, &UItemSlotDispatcher::ReceiveItem);
+
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     ItemSelection->SetIndex(0);
+    CHECK_EQUAL(TEXT("POTION"), Dispatcher->ItemID.ToString());
+    CHECK_EQUAL(5, Dispatcher->Quantity);
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     CHECK_EQUAL(TEXT("POTION"), ItemSelection->GetCurrentItem()->ID.ToString());
     ItemSelection->SetIndex(1);
+    CHECK_EQUAL(TEXT("FULLHEAL"), Dispatcher->ItemID.ToString());
+    CHECK_EQUAL(10, Dispatcher->Quantity);
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
     ItemSelection->SetIndex(2);
+    CHECK_EQUAL(TEXT("BURNHEAL"), Dispatcher->ItemID.ToString());
+    CHECK_EQUAL(20, Dispatcher->Quantity);
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     CHECK_EQUAL(TEXT("BURNHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
 
@@ -68,7 +78,7 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("SUPERREPEL"), 100);
 
     auto Dispatcher = NewObject<UPocketNameDispatcher>(World.Get());
-    ItemSelection->GetOnPocketChanged().AddDynamic(Dispatcher, &UPocketNameDispatcher::UPocketNameDispatcher::OnReceivePocket);
+    ItemSelection->GetOnPocketChanged().AddDynamic(Dispatcher, &UPocketNameDispatcher::OnReceivePocket);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());

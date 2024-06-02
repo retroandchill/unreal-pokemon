@@ -11,8 +11,13 @@ const FItem &UItemOption::GetItem() const {
     return *ItemData;
 }
 
+int32 UItemOption::GetQuantity() const {
+    return QuantityHeld;
+}
+
 void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {
     CurrentItem = Item;
+    QuantityHeld = Quantity;
 
     auto &ItemData = GetItem();
     ItemNameText->SetText(ItemData.RealName);
