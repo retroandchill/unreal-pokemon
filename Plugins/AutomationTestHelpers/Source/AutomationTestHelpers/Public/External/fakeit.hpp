@@ -198,6 +198,8 @@ namespace fakeit {
     };
 }
 
+
+
 namespace fakeit {
 
     struct Invocation : Destructible {
