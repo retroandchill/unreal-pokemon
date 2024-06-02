@@ -26,7 +26,8 @@ public class AutomationTestHelpers : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "UMG",
+				"Core", 
+				"UMG"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
