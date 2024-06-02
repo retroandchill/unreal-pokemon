@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Bag/Item.h"
+#include "Mainpulation/CircularIterator.h"
 #include "Windows/SelectableWidget.h"
 
 #include "ItemSelectionWindow.generated.h"
 
-struct FItem;
 class IBag;
 class UItemOption;
 
@@ -19,6 +20,8 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     GENERATED_BODY()
 
   public:
+    UItemSelectionWindow();
+    
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.
@@ -61,7 +64,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     /**
      * The current pocket that exists within the bag that we're viewing.
      */
-    FName CurrentPocket;
+    TArray<FName> PocketNames = UItemHelper::GetPocketNames();
+
+    /**
+     * Iterator used to cycle through the pockets
+     */
+    TCircularIterator<FName> PocketIterator;
 
     /**
      * Class that is used to spawn options into the window

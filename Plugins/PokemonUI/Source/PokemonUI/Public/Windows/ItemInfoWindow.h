@@ -18,6 +18,8 @@ class POKEMONUI_API UItemInfoWindow : public UUserWidget {
     GENERATED_BODY()
 
   public:
+
+    
   private:
     /**
      * The graphic for the icon of the item.

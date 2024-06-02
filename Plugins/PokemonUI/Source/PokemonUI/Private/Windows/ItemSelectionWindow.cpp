@@ -2,6 +2,7 @@
 
 #include "Windows/ItemSelectionWindow.h"
 #include "Algo/ForEach.h"
+#include "Bag/Item.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
 #include "Player/Bag.h"
@@ -9,10 +10,11 @@
 
 void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
     CurrentBag = Bag;
-    CurrentPocket = Pocket;
+    int32 PocketIndex = PocketNames.IndexOfByKey(Pocket);
+    PocketIterator = TCircularIterator<FName>(PocketNames, PocketIndex);
     Algo::ForEach(Options, &UWidget::RemoveFromParent);
     Options.Empty();
-    Bag->ForEachInPocket(CurrentPocket, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
+    Bag->ForEachInPocket(*PocketIterator, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
 }
 
 const FItem *UItemSelectionWindow::GetCurrentItem() const {
