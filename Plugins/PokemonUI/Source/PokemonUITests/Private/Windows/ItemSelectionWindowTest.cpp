@@ -1,5 +1,4 @@
-﻿#if WITH_TESTS && HAS_AUTOMATION_HELPERS
-#include "Asserts.h"
+﻿#include "Asserts.h"
 #include "Bag/Item.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -38,4 +37,3 @@ bool ItemSelectionWindowTest::RunTest(const FString &Parameters) {
 
     return true;
 }
-#endif
