@@ -28,6 +28,11 @@
 			"Name": "RPGMenusEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGMenusTests",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"SupportURL": "",

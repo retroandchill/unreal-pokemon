@@ -26,11 +26,5 @@ public class PokemonEditorUtils : ModuleRules
                 "DesktopPlatform"
             }
         );
-        
-        if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
-        {
-            PrivateDependencyModuleNames.Add("AutomationTestHelpers");
-            PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-        }
     }
 }
