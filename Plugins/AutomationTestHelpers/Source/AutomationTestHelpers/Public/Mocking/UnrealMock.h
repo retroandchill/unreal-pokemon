@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InterfaceShim.h"
+#include "MockedObject.h"
 #include "External/fakeit.hpp"
 
 namespace UnrealMock {
@@ -17,7 +18,7 @@ namespace UnrealMock {
 template <typename T>
 std::pair<TScriptInterface<T>, fakeit::Mock<TInterfaceShim<T>>> CreateMock(UObject* Outer = GetTransientPackage()) {
     std::pair<TScriptInterface<T>, fakeit::Mock<TInterfaceShim<T>>> Ret;
-    Ret.first = NewObject<UObject>(Outer);
+    Ret.first = NewObject<UMockedObject>(Outer);
     Ret.first.SetInterface(&Ret.second.get());
     return Ret;
 } 
