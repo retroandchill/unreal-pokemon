@@ -42,8 +42,8 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     /**
      * Pocket in the Bag where this item is stored.
      */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere)
-    uint8 Pocket;
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    FName Pocket;
 
     /**
      * Purchase price of this item.
@@ -177,6 +177,13 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetPokeBallNames();
+
+    /**
+     * Get the names of the pockets used by the game
+     * @return The names of the pockets
+     */
+    UFUNCTION()
+    static TArray<FName> GetPocketNames();
 
     /**
      * Get if an item is a form of mail or not.

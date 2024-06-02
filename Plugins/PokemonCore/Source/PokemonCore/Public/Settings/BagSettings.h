@@ -10,7 +10,7 @@
 /**
  * Settings related to the player inventory management.
  */
-UCLASS()
+UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Bag Settings"))
 class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
@@ -26,6 +26,6 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     /**
      * The maximum quantity of a single item the player can hold.
      */
-    UPROPERTY(BlueprintGetter = GetMaxItemsPerSlot, Category = "Player|Inventory")
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxItemsPerSlot, Config, Category = "Player|Inventory")
     int32 MaxItemsPerSlot = 999;
 };

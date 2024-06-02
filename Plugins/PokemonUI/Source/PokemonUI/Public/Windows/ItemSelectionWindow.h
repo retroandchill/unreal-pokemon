@@ -25,7 +25,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * @param Pocket The pocket to view
      */
     UFUNCTION(BlueprintCallable, Category = Inventory)
-    void SetBag(const TScriptInterface<IBag> &Bag, uint8 Pocket);
+    void SetBag(const TScriptInterface<IBag> &Bag, FName Pocket);
 
     /**
      * Get the window's currently selected item.
@@ -61,7 +61,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     /**
      * The current pocket that exists within the bag that we're viewing.
      */
-    uint8 CurrentPocket;
+    FName CurrentPocket;
 
     /**
      * Class that is used to spawn options into the window

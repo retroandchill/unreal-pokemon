@@ -19,8 +19,8 @@ bool BagTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(20, Bag->GetItemQuantity(TEXT("ORANBERRY")));
 
     FIndexedBagSorter Sorter;
-    Bag->SortPocket(2, Sorter);
-    auto PocketContents = Bag->TransformPocket<FString>(2, [](FName Item, int32) { return Item.ToString(); });
+    Bag->SortPocket(TEXT("Medicine"), Sorter);
+    auto PocketContents = Bag->TransformPocket<FString>(TEXT("Medicine"), [](FName Item, int32) { return Item.ToString(); });
     ASSERT_EQUAL(2, PocketContents.Num());
     CHECK_EQUAL(TEXT("POTION"), PocketContents[0]);
     CHECK_EQUAL(TEXT("FULLHEAL"), PocketContents[1]);

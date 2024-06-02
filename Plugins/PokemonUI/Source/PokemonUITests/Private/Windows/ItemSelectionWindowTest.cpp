@@ -24,7 +24,7 @@ bool ItemSelectionWindowTest::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("FULLHEAL"), 10);
     Bag->ObtainItem(TEXT("BURNHEAL"), 20);
 
-    ItemSelection->SetBag(Bag, 2);
+    ItemSelection->SetBag(Bag, TEXT("Medicine"));
     ItemSelection->SetIndex(0);
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     CHECK_EQUAL(TEXT("POTION"), ItemSelection->GetCurrentItem()->ID.ToString());

@@ -55,14 +55,14 @@ class POKEMONCORE_API IBag {
      * @param Pocket The pocket to sort
      * @param Sorter The sorter to use
      */
-    virtual void SortPocket(uint8 Pocket, const IBagSorter &Sorter) = 0;
+    virtual void SortPocket(FName Pocket, const IBagSorter &Sorter) = 0;
 
     /**
      * Iterate over each item in the given pocket
      * @param Pocket The pocket in question
      * @param Callback The callback for each iteration of the loop
      */
-    virtual void ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)> &Callback) const = 0;
+    virtual void ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const = 0;
 
     /**
      * Transform the elements in the provided pocket to a different data type
@@ -72,7 +72,7 @@ class POKEMONCORE_API IBag {
      * @return The mapped results
      */
     template <typename T>
-    TArray<T> TransformPocket(uint8 Pocket, TFunctionRef<T(FName, int32)> Mapping) const {
+    TArray<T> TransformPocket(FName Pocket, TFunctionRef<T(FName, int32)> Mapping) const {
         TArray<T> Output;
         ForEachInPocket(Pocket,
                         [&Output, &Mapping](FName Item, int32 Quantity) { Output.Add(Mapping(Item, Quantity)); });

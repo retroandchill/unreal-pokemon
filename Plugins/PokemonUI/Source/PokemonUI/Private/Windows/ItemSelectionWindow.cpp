@@ -7,7 +7,7 @@
 #include "Player/Bag.h"
 #include <functional>
 
-void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, uint8 Pocket) {
+void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
     CurrentBag = Bag;
     CurrentPocket = Pocket;
     Algo::ForEach(Options, &UWidget::RemoveFromParent);
