@@ -7,6 +7,7 @@
 
 #include "ItemInfoWindow.generated.h"
 
+class UDisplayText;
 class UItemSelectionWindow;
 class UImage;
 
@@ -18,7 +19,7 @@ class POKEMONUI_API UItemInfoWindow : public UUserWidget {
     GENERATED_BODY()
 
   public:
-
+    
     
   private:
     /**
@@ -28,14 +29,8 @@ class POKEMONUI_API UItemInfoWindow : public UUserWidget {
     TObjectPtr<UImage> ItemIcon;
 
     /**
-     * The window used to actually select items
+     * The text used to show the item's description
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UItemSelectionWindow> SelectionWindow;
-
-    /**
-     * The window used to display information about the item in question
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UItemInfoWindow> HelpWindow;
+    TObjectPtr<UDisplayText> ItemDescription;
 };

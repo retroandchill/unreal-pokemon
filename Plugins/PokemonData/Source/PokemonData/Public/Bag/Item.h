@@ -193,3 +193,26 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = Items)
     static bool IsMail(const FItem &Item);
 };
+
+/**
+ * Thin wrapper around a Pocket name, that forces the user to select a pocket name.
+ */
+USTRUCT(BlueprintType)
+struct POKEMONDATA_API FPocketKey {
+    GENERATED_BODY()
+
+    /**
+     * The name of the pocket.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    FName PocketName;
+};
+
+/**
+ * Function used to get the type hash of the pocket key, making it identical to the wrapped property.
+ * @param Key The key structure
+ * @return The return type in question
+ */
+inline uint32 GetTypeHash(const FPocketKey& Key) {
+    return GetTypeHash(Key.PocketName);
+}
