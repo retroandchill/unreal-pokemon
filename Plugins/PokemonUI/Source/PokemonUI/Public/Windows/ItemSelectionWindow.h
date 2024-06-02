@@ -13,6 +13,11 @@ class IBag;
 class UItemOption;
 
 /**
+ * Delegate called when the player changes pockets in the bag screen
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPocketChanged, FName, Pocket);
+
+/**
  * Window for selecting an item from a particular pocket.
  */
 UCLASS(Abstract, Blueprintable)
@@ -20,7 +25,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     GENERATED_BODY()
 
   public:
-    UItemSelectionWindow();
+    explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
     
     /**
      * Set the bag and starting pocket to view.
@@ -38,6 +43,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
     int32 GetItemCount_Implementation() const override;
 
+    /**
+     * Get the pocket changed dispatcher
+     * @return Callback for when the pocket is changed.
+     */
+    FOnPocketChanged& GetOnPocketChanged();
+
   protected:
     /**
      * Slot an item entry into the window
@@ -47,7 +58,15 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
     void SlotItem(UItemOption *Option, int32 ItemIndex);
 
+    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void ReceiveMoveCursor(ECursorDirection Direction) override;
+
   private:
+    /**
+     * Update the pocket that is being displayed
+     */
+    void UpdatePocket();
+    
     /**
      * Add an item to the window with the given name and quantity
      * @param ItemName The identifier of the item
@@ -67,9 +86,20 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     TArray<FName> PocketNames = UItemHelper::GetPocketNames();
 
     /**
+     * The memory of the current index on each pocket.
+     */
+    TMap<FName, int32> PocketMemory;
+
+    /**
      * Iterator used to cycle through the pockets
      */
     TCircularIterator<FName> PocketIterator;
+
+    /**
+     * Callback for when the pocket is changed.
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
+    FOnPocketChanged OnPocketChanged;
 
     /**
      * Class that is used to spawn options into the window
