@@ -27,11 +27,5 @@ public class PokemonDataDeveloper : ModuleRules
 				"UnrealEd"
 			}
 		);
-		
-		if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
-		{
-			PrivateDependencyModuleNames.Add("AutomationTestHelpers");
-			PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-		}
 	}
 }

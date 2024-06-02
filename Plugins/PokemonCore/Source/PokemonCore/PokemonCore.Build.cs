@@ -11,7 +11,11 @@ public class PokemonCore : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{
-				"Core", "PokemonData",
+				"Core", 
+				"PokemonData",
+				"CommonMath",
+				"PokemonUtilities",
+				"UnrealInjector"
 			}
 		);
 
@@ -23,16 +27,7 @@ public class PokemonCore : ModuleRules
 				"Slate",
 				"SlateCore",
 				"DeveloperSettings",
-				"CommonMath",
-				"PokemonUtilities",
-				"UnrealInjector"
 			}
 		);
-		
-		if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
-		{
-			PrivateDependencyModuleNames.Add("AutomationTestHelpers");
-			PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-		}
 	}
 }
