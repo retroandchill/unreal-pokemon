@@ -42,8 +42,8 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     int32 RemoveItem(FName ItemID, int32 Amount = 1) override;
 
-    void SortPocket(uint8 Pocket, const IBagSorter &Sorter) override;
-    void ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)> &Callback) const override;
+    void SortPocket(FName Pocket, const IBagSorter &Sorter) override;
+    void ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const override;
 
   private:
     /**
@@ -64,5 +64,5 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
      * The actual representation of the items in the player's inventory.
      */
     UPROPERTY(SaveGame)
-    TMap<uint8, FPocket> ItemSlots;
+    TMap<FName, FPocket> ItemSlots;
 };

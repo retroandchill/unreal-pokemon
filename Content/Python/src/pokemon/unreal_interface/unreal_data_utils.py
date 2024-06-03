@@ -63,3 +63,14 @@ def stat_entries(directory_name: str, table_name: str) -> dict[str, Stat]:
         return ret
     else:
         raise ValueError("Unexpected data table name")
+
+
+def pocket_names() -> dict[int, str]:
+    """
+    Get out the map of pocket names from Unreal and convert them to a dictionary
+    :return: The map of pocket IDs to pocket names
+    """
+    ret = {}
+    for key, value in ImportUtils.get_pocket_names().items():
+        ret[key] = str(value)
+    return ret

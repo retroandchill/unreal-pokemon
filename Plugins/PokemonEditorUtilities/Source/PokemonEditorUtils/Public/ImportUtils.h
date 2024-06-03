@@ -30,4 +30,11 @@ class POKEMONEDITORUTILS_API UImportUtils : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, Category = "Editor|Filesystem")
     static FText SelectFile(const FString &FileTypes);
+
+    /**
+     * Get the list of pocket names used to transform the imported data from the Python code
+     * @return The map of PBS numbers to pocket names
+     */
+    UFUNCTION(BlueprintPure, Category = "Editor|Data")
+    static const TMap<uint8, FName> &GetPocketNames();
 };

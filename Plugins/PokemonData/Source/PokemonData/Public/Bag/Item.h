@@ -42,8 +42,8 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     /**
      * Pocket in the Bag where this item is stored.
      */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere)
-    uint8 Pocket;
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    FName Pocket;
 
     /**
      * Purchase price of this item.
@@ -108,6 +108,24 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     FItem();
 
     /**
+     * Determine if this item is a TM?
+     * @return If this item is a TM
+     */
+    bool IsTM() const;
+
+    /**
+     * Determine if this item is an HM?
+     * @return If this item is a HM
+     */
+    bool IsHM() const;
+
+    /**
+     * Determine if this item is a TR?
+     * @return If this item is a TR
+     */
+    bool IsTR() const;
+
+    /**
      * Get if this item is a Poké Ball or not.
      * @return Is the item in question a type of Poké Ball?
      */
@@ -118,6 +136,24 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
      * @return Is this item of form of mail?
      */
     bool IsMail() const;
+
+    /**
+     * Is this item a Key Item?
+     * @return Is this item a Key Item?
+     */
+    bool IsKeyItem() const;
+
+    /**
+     * Determine if this item is important at all?
+     * @return Is this item important?
+     */
+    bool IsImportant() const;
+
+    /**
+     * Determine if the item quantity should be shown?
+     * @return Should the quantity be shown?
+     */
+    bool ShouldShowQuantity() const;
 };
 
 /**
@@ -143,6 +179,13 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetPokeBallNames();
 
     /**
+     * Get the names of the pockets used by the game
+     * @return The names of the pockets
+     */
+    UFUNCTION()
+    static TArray<FName> GetPocketNames();
+
+    /**
      * Get if an item is a form of mail or not.
      * @param Item The item in question
      * @return Is the item of form of mail?
@@ -150,3 +193,26 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = Items)
     static bool IsMail(const FItem &Item);
 };
+
+/**
+ * Thin wrapper around a Pocket name, that forces the user to select a pocket name.
+ */
+USTRUCT(BlueprintType)
+struct POKEMONDATA_API FPocketKey {
+    GENERATED_BODY()
+
+    /**
+     * The name of the pocket.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    FName PocketName;
+};
+
+/**
+ * Function used to get the type hash of the pocket key, making it identical to the wrapped property.
+ * @param Key The key structure
+ * @return The return type in question
+ */
+inline uint32 GetTypeHash(const FPocketKey& Key) {
+    return GetTypeHash(Key.PocketName);
+}

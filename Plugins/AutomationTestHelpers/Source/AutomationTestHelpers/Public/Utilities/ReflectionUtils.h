@@ -7,6 +7,7 @@
 
 #include "ReflectionUtils.generated.h"
 
+class UObjectLibrary;
 /**
  * Utility library used to aid in getting reflection properties by name.
  */
@@ -54,6 +55,11 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     static TArray<TSubclassOf<T>> GetAllSubclassesOfClass(TSubclassOf<T> TargetClass = T::StaticClass()) {
+        if (!LoadedBlueprints) {
+            LoadBlueprints();
+            LoadedBlueprints = true;
+        }
+        
         TArray<TSubclassOf<T>> Subclasses;
         for (TObjectIterator<UClass> It; It; ++It) {
             if (It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract)) {
@@ -69,4 +75,20 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      * @return The list of categories for each property
      */
     static TArray<FString> GetPropertyCategories(IDetailsView &DetailsView);
+
+    /**
+     * Load in all blueprints into memory so all blueprint classes can be located.
+     */
+    static void LoadBlueprints();
+
+private:
+    /**
+     * Flag to determine if the
+     */
+    static bool LoadedBlueprints;
+
+    /**
+     *  Pointer to the blueprint classes that are loaded and won't be released from memory
+     */
+    static TStrongObjectPtr<UObjectLibrary> ClassLibrary;
 };
