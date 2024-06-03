@@ -15,6 +15,8 @@ class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:
+    UPokemonDataSettings();
+    
     /**
      * The list of data tables used by the module
      * @return The list of data tables used by the module
@@ -28,6 +30,13 @@ class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
     int32 GetMaxDefaultAbilities() const;
+
+    /**
+     * Map of pocket id numbers to their actual names
+     * @return Map of pocket id numbers to their actual names
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Bag)
+    const TMap<uint8, FName>& GetPocketNames() const;
 
   private:
     /**
@@ -45,4 +54,10 @@ class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetMaxDefaultAbilities, Config, Category = Abilities,
               meta = (UIMin = 1, ClampMin = 1))
     int32 MaxDefaultAbilities = 2;
+
+    /**
+     * Map of pocket id numbers found in the imported PBS files to their actual names.
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetPocketNames, Config, Category = "Player|Inventory")
+    TMap<uint8, FName> PocketNames;
 };

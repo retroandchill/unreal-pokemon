@@ -68,11 +68,11 @@ int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
     return Change;
 }
 
-void UDefaultBag::SortPocket(uint8 Pocket, const IBagSorter &Sorter) {
+void UDefaultBag::SortPocket(FName Pocket, const IBagSorter &Sorter) {
     Sorter.SortPocket(ItemSlots.FindOrAdd(Pocket).Items);
 }
 
-void UDefaultBag::ForEachInPocket(uint8 Pocket, const TFunctionRef<void(FName, int32)> &Callback) const {
+void UDefaultBag::ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const {
     auto Items = ItemSlots.Find(Pocket);
     if (Items == nullptr) {
         return;

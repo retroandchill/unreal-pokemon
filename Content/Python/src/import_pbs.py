@@ -5,8 +5,7 @@ from unreal import FieldUse, BattleUse, MoveDamageCategory, Text, TrainerGender
 from pokemon.data_loader import UnrealDataLoader
 from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityData, SpeciesData, TrainerTypeData
 from pokemon.data_writer.data_table_writer import import_items, import_moves, import_types, import_abilities, import_species, import_trainer_types
-from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values
-from pokemon.unreal_interface.unreal_data_utils import stat_entries
+from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values, pocket_names, stat_entries
 
 HARDCODED_DATA_DIR = "/PokemonData/Data"
 
@@ -33,7 +32,8 @@ def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: T
     field_use_enum = enum_values(FieldUse)
     battle_use_enum = enum_values(BattleUse)
     move_ids = UnrealDataLoader(moves.get_keys)
-    items = ItemData(str(items_file), field_use_enum, battle_use_enum, move_ids)
+    pockets = pocket_names()
+    items = ItemData(str(items_file), field_use_enum, battle_use_enum, move_ids, pockets)
     import_items(items)
 
     abilities = AbilityData(str(ability_file))

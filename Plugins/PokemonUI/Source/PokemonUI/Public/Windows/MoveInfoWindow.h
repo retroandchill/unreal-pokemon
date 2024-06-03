@@ -12,6 +12,7 @@ class UDisplayText;
 class UImage;
 class IMove;
 enum class EMoveDamageCategory : uint8;
+
 /**
  * Widget that displays information about a particular move.
  */

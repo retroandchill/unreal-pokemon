@@ -15,7 +15,7 @@
 
 using namespace accessor;
 
-MEMBER_ACCESSOR(AccessInputMappings, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
+MEMBER_ACCESSOR(AccessInputMappingsPages, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
 MEMBER_ACCESSOR(AccessUpInput, USelectionInputs, UpInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessDownInput, USelectionInputs, DownInputs, TSet<FKey>)
 
@@ -41,7 +41,7 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     ASSERT_NOT_NULL(PageSwitcher);
     CHECK_EQUAL(0, PageSwitcher->GetActiveWidgetIndex());
 
-    USelectionInputs *InputMappings = accessMember<AccessInputMappings>(*Pages).get();
+    USelectionInputs *InputMappings = accessMember<AccessInputMappingsPages>(*Pages).get();
     ASSERT_NOT_NULL(InputMappings);
     auto UpInput = *accessMember<AccessUpInput>(*InputMappings).get().CreateIterator();
     auto DownInput = *accessMember<AccessDownInput>(*InputMappings).get().CreateIterator();

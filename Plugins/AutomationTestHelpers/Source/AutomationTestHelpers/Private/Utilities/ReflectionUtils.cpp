@@ -5,7 +5,11 @@
 #include "Editor/PropertyEditor/Private/DetailCategoryBuilderImpl.h"
 #include "IDetailTreeNode.h"
 #include "PropertyPath.h"
+#include "Engine/ObjectLibrary.h"
 #include "Utilities/WidgetTestUtilities.h"
+
+bool UReflectionUtils::LoadedBlueprints = false;
+TStrongObjectPtr<UObjectLibrary> UReflectionUtils::ClassLibrary;
 
 TArray<FString> UReflectionUtils::GetPropertyCategories(IDetailsView &DetailsView) {
     TArray<FString> Categories;
@@ -27,4 +31,9 @@ TArray<FString> UReflectionUtils::GetPropertyCategories(IDetailsView &DetailsVie
     }
 
     return Categories;
+}
+
+void UReflectionUtils::LoadBlueprints() {
+    ClassLibrary.Reset(UObjectLibrary::CreateLibrary(UBlueprintGeneratedClass::StaticClass(), true, GIsEditor));
+    ClassLibrary->LoadBlueprintsFromPath(TEXT("/Game"));
 }

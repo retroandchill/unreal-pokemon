@@ -11,7 +11,8 @@ class ItemData(PbsIniData[ItemArgs]):
     """Represents the translated item data imported from items.txt"""
 
     def __init__(self, config_path: str, field_use_enum: DataContainer,
-                 battle_use_enum: DataContainer, move_type_enum: DataContainer):
+                 battle_use_enum: DataContainer, move_type_enum: DataContainer, pockets: dict[int, str]):
+        self.__pockets = pockets
         super().__init__(config_path, (field_use_enum, battle_use_enum, move_type_enum))
 
     def _preprocess_data(self, section_name: str, data: dict[str, str]):
@@ -46,7 +47,7 @@ class ItemData(PbsIniData[ItemArgs]):
         item["RealNamePlural"] = item.get("RealNamePlural", "Unnamed")
         item["RealPortionName"] = item.get("RealPortionName", "")
         item["RealPortionNamePlural"] = item.get("RealPortionNamePlural", "")
-        item["Pocket"] = item.get("Pocket", 1)
+        item["Pocket"] = self.__pockets[item.get("Pocket", 1)]
         item["Price"] = item.get("Price", 0)
         item["SellPrice"] = item.get("SellPrice", int(item["Price"] / 2))
         item["BPPrice"] = item.get("BPPrice", 1)
