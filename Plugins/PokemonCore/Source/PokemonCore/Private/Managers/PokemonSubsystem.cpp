@@ -46,6 +46,15 @@ void UPokemonSubsystem::StartNewGame() {
     Player =
         NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
+
+    // TODO: Remove this temp inventory stuff
+#if WITH_EDITOR
+    Bag->ObtainItem(TEXT("REPEL"), 50);
+    Bag->ObtainItem(TEXT("POTION"), 20);
+    Bag->ObtainItem(TEXT("ANTIDOTE"), 10);
+    Bag->ObtainItem(TEXT("POKEBALL"), 10);
+#endif
+    
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }

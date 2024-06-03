@@ -39,18 +39,12 @@ int32 USelectableWidget::GetColumn(int32 IndexToCheck) const {
 }
 
 void USelectableWidget::SetIndex(int32 NewIndex) {
-    if (Index == NewIndex)
-        return;
-
     int32 OldIndex = Index;
     Index = FMath::Clamp(NewIndex, -1, GetItemCount() - 1);
     OnSelectionChange(OldIndex, Index);
 }
 
 void USelectableWidget::Deselect() {
-    if (Index == -1)
-        return;
-
     int32 OldIndex = Index;
     Index = -1;
     OnSelectionChange(OldIndex, Index);
