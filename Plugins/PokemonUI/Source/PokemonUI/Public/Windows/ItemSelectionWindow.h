@@ -23,6 +23,11 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPocketChanged, FName, Pocket);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemChanged, const FItem&, Item, int32, Quantity);
 
 /**
+ * Delegate called when the player is not selecting any items.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNoItemSelected);
+
+/**
  * Window for selecting an item from a particular pocket.
  */
 UCLASS(Abstract, Blueprintable)
@@ -59,6 +64,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * @return Callback for when the item is changed.
      */
     FOnItemChanged &GetOnItemChanged();
+
+    /**
+     * Get the item changed dispatcher for no item
+     * @return Callback for when no item is selected.
+     */
+    FOnNoItemSelected &GetOnNoItemSelected();
 
   protected:
     /**
@@ -117,6 +128,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
     FOnItemChanged OnItemChanged;
+
+    /**
+     * Callback for when no item is selected.
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
+    FOnNoItemSelected OnNoItemSelected;
 
     /**
      * Class that is used to spawn options into the window

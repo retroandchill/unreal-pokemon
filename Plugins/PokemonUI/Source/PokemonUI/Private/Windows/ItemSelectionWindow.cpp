@@ -41,11 +41,17 @@ FOnItemChanged & UItemSelectionWindow::GetOnItemChanged() {
     return OnItemChanged;
 }
 
+FOnNoItemSelected & UItemSelectionWindow::GetOnNoItemSelected() {
+    return OnNoItemSelected;
+}
+
 void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     PocketMemory[*PocketIterator] = NewIndex;
     if (auto Item = GetCurrentItem(); Item != nullptr) {
         OnItemChanged.Broadcast(*Item, Options[NewIndex]->GetQuantity());
+    } else {
+        OnNoItemSelected.Broadcast();
     }
 }
 

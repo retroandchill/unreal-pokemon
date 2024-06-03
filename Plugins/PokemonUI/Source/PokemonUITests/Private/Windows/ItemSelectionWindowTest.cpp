@@ -7,6 +7,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/ItemSelectionWindow.h"
 #include "ItemSlotDispatcher.h"
+#include "NoItemSelectedDispatcher.h"
 #include "PocketNameDispatcher.h"
 #include "Data/SelectionInputs.h"
 #include "External/accessor.hpp"
@@ -54,6 +55,28 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     CHECK_EQUAL(20, Dispatcher->Quantity);
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     CHECK_EQUAL(TEXT("BURNHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
+
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems, "Unit Tests.Windows.ItemSelectionWindowTest.NoItems",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UItemSelectionWindow>();
+    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    auto WidgetClass = Subclasses[0];
+
+    TWidgetPtr<UItemSelectionWindow> ItemSelection(CreateWidget<UItemSelectionWindow>(World.Get(), WidgetClass));
+    ASSERT_NULL(ItemSelection->GetCurrentItem());
+
+    auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
+    auto Dispatcher = NewObject<UNoItemSelectedDispatcher>(World.Get());
+    ItemSelection->GetOnNoItemSelected().AddDynamic(Dispatcher, &UNoItemSelectedDispatcher::OnReceive);
+
+    ItemSelection->SetBag(Bag, TEXT("Medicine"));
+    ASSERT_TRUE(Dispatcher->bCalled);
 
     return true;
 }
