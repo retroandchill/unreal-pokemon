@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 /**
- * 
+ * Customization info about the pocket key wrapper struct.
  */
 class POKEMONDATAEDITOR_API FPocketKeyCustomization : public IPropertyTypeCustomization {
 public:
