@@ -103,16 +103,6 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     TScriptInterface<IBag> CurrentBag;
 
     /**
-     * The current pocket that exists within the bag that we're viewing.
-     */
-    TArray<FName> PocketNames = UItemHelper::GetPocketNames();
-
-    /**
-     * The memory of the current index on each pocket.
-     */
-    TMap<FName, int32> PocketMemory;
-
-    /**
      * Iterator used to cycle through the pockets
      */
     TCircularIterator<FName> PocketIterator;

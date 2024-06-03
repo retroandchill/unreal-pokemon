@@ -5,16 +5,16 @@
 #include "Bag/Item.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
+#include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
 
 UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
-    for (auto Pocket : PocketNames) {
-        PocketMemory.Add(Pocket, 0);
-    }
+    
 }
 
 void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
+    auto &PocketNames = GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketNames();
     CurrentBag = Bag;
     int32 PocketIndex = PocketNames.IndexOfByKey(Pocket);
     PocketIterator = TCircularIterator<FName>(PocketNames, PocketIndex);
@@ -47,7 +47,7 @@ FOnNoItemSelected & UItemSelectionWindow::GetOnNoItemSelected() {
 
 void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
-    PocketMemory[*PocketIterator] = NewIndex;
+    GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->UpdatePocketMemory(*PocketIterator, NewIndex);
     if (auto Item = GetCurrentItem(); Item != nullptr) {
         OnItemChanged.Broadcast(*Item, Options[NewIndex]->GetQuantity());
     } else {
@@ -80,7 +80,7 @@ void UItemSelectionWindow::UpdatePocket() {
     Algo::ForEach(Options, &UWidget::RemoveFromParent);
     Options.Empty();
     CurrentBag->ForEachInPocket(*PocketIterator, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
-    SetIndex(PocketMemory[*PocketIterator]);
+    SetIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[*PocketIterator]);
     OnPocketChanged.Broadcast(*PocketIterator);
 }
 
