@@ -25,9 +25,19 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
 
   public:
     void BeginSwitch(int32 Index) final;
-    void SetHelpText(const FText &Text) final;
+    void SetCommandHelpText(const FText &Text) final;
     APlayerController &GetPlayerController() final;
     FOnPokemonSelected & GetOnPokemonSelect() override;
+
+    /**
+     * Set the help text for the regular help window
+     * @param Text The text to set to the window
+     */
+    UFUNCTION(BlueprintCallable, Category = "Display")
+    void SetHelpText(FText Text);
+    
+    UFUNCTION(BlueprintCallable, Category = Navigation)
+    void RemoveFromStack() override;
 
   private:
     /**
@@ -71,6 +81,12 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UPokemonSelectionPane> SelectionPane;
+
+    /**
+     * The help window used for when the commands are shown.
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UHelpWindow> HelpWindow;
 
     /**
      * The window that contains the command to call on a Pokémon

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Screens/ScreenInterface.h"
+#include "Handlers/PartyMenu/RemovableScreen.h"
 #include "UObject/Interface.h"
 #include "InventoryScreen.generated.h"
 
@@ -23,12 +23,7 @@ class UInventoryScreen : public UInterface {
 /**
  * Abstract declaration of the inventory screen used by the game
  */
-class POKEMONUI_API IInventoryScreen 
-#if CPP
-    : public virtual IScreenInterface {
-#else
-    : public IScreenInterface {
-#endif
+class POKEMONUI_API IInventoryScreen : public IRemovableScreen {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

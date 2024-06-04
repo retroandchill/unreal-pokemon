@@ -33,6 +33,10 @@ void UBagScreen::ToggleItemSelection(bool bCanSelect) {
     ItemSelectionWindow->SetActive(bCanSelect);
 }
 
+void UBagScreen::RemoveFromStack() {
+    CloseScreen();
+}
+
 void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
     if (OnItemSelected.IsBound()) {
         OnItemSelected.Execute(this, Item, Quantity);

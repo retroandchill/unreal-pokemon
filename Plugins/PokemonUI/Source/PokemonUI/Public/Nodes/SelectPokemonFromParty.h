@@ -19,7 +19,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPokemonCancel);
 /**
  * Open the menu to select a Pokémon from the party
  */
-UCLASS()
+UCLASS(meta = (HideThen))
 class POKEMONUI_API USelectPokemonFromParty : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
@@ -28,11 +28,12 @@ public:
      * Open the menu to select a Pokémon from the party
      * @param WorldContextObject The object used to obtain the state of the world
      * @param ScreenClass The class used to display the selection screen
+     * @param HelpText The text used to serve as the prompt to the player
      * @return The node to execute the task with
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static USelectPokemonFromParty* SelectPokemonFromParty(const UObject *WorldContextObject, TSubclassOf<UPokemonSelectScreen> ScreenClass);
+    static USelectPokemonFromParty* SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText, TSubclassOf<UPokemonSelectScreen> ScreenClass);
     
     void Activate() override;
 
@@ -72,4 +73,9 @@ private:
      */
     UPROPERTY()
     TSubclassOf<UPokemonSelectScreen> ScreenClass;
+
+    /**
+     * The text used to serve as the prompt to the player
+     */
+    FText HelpText;
 };

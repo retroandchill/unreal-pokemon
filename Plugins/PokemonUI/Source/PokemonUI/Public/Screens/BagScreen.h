@@ -28,7 +28,10 @@ public:
     FOnItemSelected& GetOnItemSelected() final;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
-    void ToggleItemSelection(bool bCanSelect) final; 
+    void ToggleItemSelection(bool bCanSelect) final;
+
+    UFUNCTION(BlueprintCallable, Category = Navigation)
+    void RemoveFromStack() override;
 
 private:
     /**

@@ -14,7 +14,7 @@ class FMockScreen : public IPartyScreen {
         SwitchIndex.Emplace(Index);
     }
 
-    void SetHelpText(const FText &Text) override {
+    void SetCommandHelpText(const FText &Text) override {
     }
 
     APlayerController &GetPlayerController() override {
@@ -23,6 +23,10 @@ class FMockScreen : public IPartyScreen {
 
     FOnPokemonSelected& GetOnPokemonSelect() override {
         return OnPokemonSelected;
+    }
+
+    void RemoveFromStack() override {
+        
     }
 
     TOptional<int32> SwitchIndex;

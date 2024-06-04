@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Handlers/PartyMenu/RemovableScreen.h"
 #include "UObject/Interface.h"
 
 #include "PartyScreen.generated.h"
@@ -23,7 +24,7 @@ class UPartyScreen : public UInterface {
 /**
  * Generic screen class for any screens shown to the player
  */
-class POKEMONUI_API IPartyScreen {
+class POKEMONUI_API IPartyScreen : public IRemovableScreen {
     GENERATED_BODY()
     
   public:
@@ -37,7 +38,7 @@ class POKEMONUI_API IPartyScreen {
      * Set the text of the help window
      * @param Text The new text for the help window
      */
-    virtual void SetHelpText(const FText &Text) = 0;
+    virtual void SetCommandHelpText(const FText &Text) = 0;
 
     /**
      * Get the player controller held by this class

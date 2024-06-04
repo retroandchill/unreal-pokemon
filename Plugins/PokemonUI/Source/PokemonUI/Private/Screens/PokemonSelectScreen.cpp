@@ -29,7 +29,7 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
     SelectionPane->SetActive(true);
 }
 
-void UPokemonSelectScreen::SetHelpText(const FText &Text) {
+void UPokemonSelectScreen::SetCommandHelpText(const FText &Text) {
     CommandHelpWindow->SetText(Text);
 }
 
@@ -39,6 +39,14 @@ APlayerController &UPokemonSelectScreen::GetPlayerController() {
 
 FOnPokemonSelected & UPokemonSelectScreen::GetOnPokemonSelect() {
     return PokemonSelected;
+}
+
+void UPokemonSelectScreen::SetHelpText(FText Text) {
+    HelpWindow->SetText(Text);
+}
+
+void UPokemonSelectScreen::RemoveFromStack() {
+    CloseScreen();
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
