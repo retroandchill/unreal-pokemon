@@ -2,6 +2,7 @@
 
 #include "Screens/BagScreen.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Windows/CommandWindow.h"
 #include "Windows/ItemInfoWindow.h"
 #include "Windows/ItemSelectionWindow.h"
 #include "Windows/PocketWindow.h"
@@ -10,14 +11,42 @@ void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
 
     // TODO: Add handler for when you confirm an item
+    ItemSelectionWindow->GetOnItemSelected().AddDynamic(this, &UBagScreen::SelectItem);
     ItemSelectionWindow->GetOnCancel().AddDynamic(this, &UBagScreen::CloseScreen);
     ItemSelectionWindow->GetOnItemChanged().AddDynamic(ItemInfoWindow, &UItemInfoWindow::Refresh);
     ItemSelectionWindow->GetOnNoItemSelected().AddDynamic(ItemInfoWindow, &UItemInfoWindow::ClearItem);
     ItemSelectionWindow->GetOnPocketChanged().AddDynamic(PocketWindow, &UPocketWindow::SetCurrentPocket);
+    CommandWindow->GetOnCancel().AddDynamic(this, &UBagScreen::OnItemCommandCanceled);
 
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
     auto PocketName = UItemHelper::GetPocketNames()[0];
     ItemSelectionWindow->SetBag(Bag, PocketName);
     ItemSelectionWindow->SetActive(true);
     ItemSelectionWindow->SetIndex(0);
+}
+
+FOnItemSelected & UBagScreen::GetOnItemSelected() {
+    return OnItemSelected;
+}
+
+void UBagScreen::ToggleItemSelection(bool bCanSelect) {
+    ItemSelectionWindow->SetActive(bCanSelect);
+}
+
+void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
+    if (OnItemSelected.IsBound()) {
+        OnItemSelected.Execute(this, Item, Quantity);
+        return;
+    }
+
+    ToggleItemSelection(false);
+    CommandWindow->SetIndex(0);
+    CommandWindow->SetActive(true);
+    CommandWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+}
+
+void UBagScreen::OnItemCommandCanceled() {
+    CommandWindow->SetActive(false);
+    CommandWindow->SetVisibility(ESlateVisibility::Hidden);
+    ToggleItemSelection(true);
 }

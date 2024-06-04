@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ScreenInterface.h"
 #include "Blueprint/UserWidget.h"
 
 #include "Screen.generated.h"
@@ -13,7 +14,12 @@ struct FInputActionInstance;
  * of the other.
  */
 UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UScreen : public UUserWidget {
+class RPGMENUS_API UScreen : public UUserWidget,
+#if CPP
+    public virtual IScreenInterface {
+#else
+    public IScreenInterface {
+#endif
     GENERATED_BODY()
 
   public:
@@ -30,13 +36,9 @@ class RPGMENUS_API UScreen : public UUserWidget {
      * @return Was focus granted to a widget.
      */
     virtual bool GiveMenuFocus();
-
-  protected:
-    /**
-     * Close the screen and return to the previous one
-     */
+    
     UFUNCTION(BlueprintCallable, Category = Navigation)
-    void CloseScreen();
+    void CloseScreen() final;
 
   private:
     /**

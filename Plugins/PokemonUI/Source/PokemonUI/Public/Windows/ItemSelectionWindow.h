@@ -54,6 +54,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     int32 GetItemCount_Implementation() const override;
 
     /**
+     * Get the item selected callback
+     * @return Callback for when an item is actually selected
+     */
+    FOnItemChanged& GetOnItemSelected();
+
+    /**
      * Get the pocket changed dispatcher
      * @return Callback for when the pocket is changed.
      */
@@ -106,6 +112,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * Iterator used to cycle through the pockets
      */
     TCircularIterator<FName> PocketIterator;
+
+    /**
+     * Callback for when an item is actually selected
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
+    FOnItemChanged OnItemSelected;
 
     /**
      * Callback for when the pocket is changed.

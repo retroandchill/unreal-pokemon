@@ -33,6 +33,10 @@ int32 UItemSelectionWindow::GetItemCount_Implementation() const {
     return Options.Num();
 }
 
+FOnItemChanged & UItemSelectionWindow::GetOnItemSelected() {
+    return OnItemSelected;
+}
+
 FOnPocketChanged & UItemSelectionWindow::GetOnPocketChanged() {
     return OnPocketChanged;
 }

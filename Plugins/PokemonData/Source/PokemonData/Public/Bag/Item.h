@@ -154,6 +154,12 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
      * @return Should the quantity be shown?
      */
     bool ShouldShowQuantity() const;
+
+    /**
+     * Can the item in question be held?
+     * @return Can the item in question be held?
+     */
+    bool CanHold() const;
 };
 
 /**

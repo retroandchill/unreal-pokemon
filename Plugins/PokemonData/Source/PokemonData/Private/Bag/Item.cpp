@@ -44,6 +44,10 @@ bool FItem::ShouldShowQuantity() const {
     return ShowQuantity && !IsImportant();
 }
 
+bool FItem::CanHold() const {
+    return !IsImportant();
+}
+
 TArray<FName> UItemHelper::GetItemNames() {
     return FDataManager::GetInstance().GetDataTable<FItem>().GetTableRowNames();
 }

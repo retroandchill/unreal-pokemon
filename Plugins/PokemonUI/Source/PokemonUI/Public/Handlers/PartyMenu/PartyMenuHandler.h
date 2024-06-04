@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Handlers/MenuHandler.h"
 #include "UObject/Object.h"
 
 #include "PartyMenuHandler.generated.h"
@@ -15,22 +16,10 @@ class ITrainer;
  * Basic abstract handlers for the party menu
  */
 UCLASS(Blueprintable, Abstract, EditInlineNew)
-class POKEMONUI_API UPartyMenuHandler : public UObject {
+class POKEMONUI_API UPartyMenuHandler : public UMenuHandler {
     GENERATED_BODY()
 
   public:
-    /**
-     * Get the ID of the command
-     * @return The ID of the command
-     */
-    FName GetID() const;
-
-    /**
-     * Get the text displayed to the player
-     * @return The text displayed to the player
-     */
-    const FText &GetText() const;
-
     /**
      * Should this handler show the underlying command to the player?
      * @param Screen The screen currently being shown to the player
@@ -47,17 +36,5 @@ class POKEMONUI_API UPartyMenuHandler : public UObject {
      * @param PartyIndex The index of the party that is currently selected
      */
     virtual void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex);
-
-  private:
-    /**
-     * The ID of the command
-     */
-    UPROPERTY(EditAnywhere, Category = "Menu Handlers")
-    FName ID;
-
-    /**
-     * The text displayed to the player
-     */
-    UPROPERTY(EditAnywhere, Category = "Menu Handlers")
-    FText Text;
+    
 };
