@@ -21,7 +21,13 @@ class FMockScreen : public IPartyScreen {
         return *PlayerController;
     }
 
+    FOnPokemonSelected& GetOnPokemonSelect() override {
+        return OnPokemonSelected;
+    }
+
     TOptional<int32> SwitchIndex;
 
     APlayerController *PlayerController = nullptr;
+
+    FOnPokemonSelected OnPokemonSelected;
 };

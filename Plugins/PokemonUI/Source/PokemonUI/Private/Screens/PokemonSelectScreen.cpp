@@ -37,15 +37,24 @@ APlayerController &UPokemonSelectScreen::GetPlayerController() {
     return *GetOwningPlayer();
 }
 
+FOnPokemonSelected & UPokemonSelectScreen::GetOnPokemonSelect() {
+    return PokemonSelected;
+}
+
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-    if (auto &Trainer = *UPokemonSubsystem::GetInstance(this).GetPlayer(); Index < Trainer.GetParty().Num()) {
+    if (auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer(); Index < Trainer->GetParty().Num()) {
+        if (PokemonSelected.IsBound()) {
+            PokemonSelected.Execute(this, Trainer, Index);
+            return;
+        }
+        
         if (SelectionPane->IsSwitching()) {
             if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
-                Trainer.SwapPositionsInParty(SwitchingIndex, Index);
+                Trainer->SwapPositionsInParty(SwitchingIndex, Index);
             }
             SelectionPane->CompleteSwitch();
         } else {
-            DisplayPokemonCommands(Trainer, Index);
+            DisplayPokemonCommands(*Trainer, Index);
         }
     } else {
         // TODO: Handle the additional options

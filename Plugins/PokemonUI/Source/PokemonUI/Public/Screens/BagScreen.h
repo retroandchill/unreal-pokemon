@@ -28,7 +28,7 @@ public:
     FOnItemSelected& GetOnItemSelected() final;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
-    void ToggleItemSelection(bool bCanSelect) final;
+    void ToggleItemSelection(bool bCanSelect) final; 
 
 private:
     /**
@@ -69,6 +69,5 @@ private:
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UCommandWindow> CommandWindow;
 
-    UPROPERTY()
     FOnItemSelected OnItemSelected;
 };

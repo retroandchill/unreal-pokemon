@@ -3,6 +3,8 @@
 
 #include "Handlers/BagMenu/GiveItemHandler.h"
 #include "Bag/Item.h"
+#include "Trainers/Trainer.h"
+#include "Utilities/MenuSelectionCommands.h"
 
 bool UGiveItemHandler::ShouldShow_Implementation(const TScriptInterface<IInventoryScreen>& Screen, const FItem &Item, int32 Quantity) const {
     return Item.CanHold();
@@ -10,4 +12,5 @@ bool UGiveItemHandler::ShouldShow_Implementation(const TScriptInterface<IInvento
 
 void UGiveItemHandler::Handle_Implementation(const TScriptInterface<IInventoryScreen>& Screen, const FItem &Item, int32 Quantity) {
     // TODO: Implement selecting a Pokémon from the menu
+    
 }

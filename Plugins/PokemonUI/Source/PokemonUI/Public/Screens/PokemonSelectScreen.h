@@ -27,6 +27,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void BeginSwitch(int32 Index) final;
     void SetHelpText(const FText &Text) final;
     APlayerController &GetPlayerController() final;
+    FOnPokemonSelected & GetOnPokemonSelect() override;
 
   private:
     /**
@@ -63,6 +64,8 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     void ToggleCommandWindowVisibility(bool bIsVisible);
 
+    FOnPokemonSelected PokemonSelected;
+    
     /**
      * The "Window" that the player selects a Pokémon from
      */
