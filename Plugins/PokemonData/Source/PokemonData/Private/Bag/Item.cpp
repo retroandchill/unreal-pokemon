@@ -71,3 +71,7 @@ TArray<FName> UItemHelper::GetPocketNames() {
 bool UItemHelper::IsMail(const FItem &Item) {
     return Item.IsMail();
 }
+
+bool UItemHelper::CanHold(const FItem &Item) {
+    return Item.CanHold();
+}

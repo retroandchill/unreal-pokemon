@@ -198,6 +198,14 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = Items)
     static bool IsMail(const FItem &Item);
+
+    /**
+     * Can the item in question be held?
+     * @param Item The item in question
+     * @return Can the item in question be held?
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static bool CanHold(const FItem &Item);
 };
 
 /**

@@ -3,7 +3,7 @@
 #include "RPGMenusSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 
-UScreen *URPGMenusSubsystem::AddScreenToStackHelper(UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
+UScreen *URPGMenusSubsystem::AddScreenToStackHelper(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
     if (ScreenType == nullptr)
         return nullptr;
 
@@ -34,7 +34,7 @@ UScreen *URPGMenusSubsystem::RemoveScreenFromStack() {
     return NewTop;
 }
 
-UScreen *URPGMenusSubsystem::RemoveScreenFromStack(UObject *WorldContextObject) {
+UScreen *URPGMenusSubsystem::RemoveScreenFromStack(const UObject *WorldContextObject) {
     if (auto Subsystem = GetSubsystem(WorldContextObject); Subsystem != nullptr) {
         return Subsystem->RemoveScreenFromStack();
     }
@@ -46,7 +46,7 @@ APlayerController *URPGMenusSubsystem::GetPlayerController() const {
     return GetLocalPlayer()->GetPlayerController(nullptr);
 }
 
-URPGMenusSubsystem *URPGMenusSubsystem::GetSubsystem(UObject *WorldContextObject) {
+URPGMenusSubsystem *URPGMenusSubsystem::GetSubsystem(const UObject *WorldContextObject) {
     if (auto ImpliedOwningPlayer = Cast<APlayerController>(WorldContextObject); ImpliedOwningPlayer != nullptr) {
         return ImpliedOwningPlayer->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
     }

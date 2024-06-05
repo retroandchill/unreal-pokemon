@@ -37,6 +37,14 @@ const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {
     return Party;
 }
 
+TScriptInterface<IPokemon> UBasicTrainer::GetPokemon(int32 Index) const {
+    if (!Party.IsValidIndex(Index)) {
+        return nullptr;
+    }
+
+    return Party[Index];
+}
+
 void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) {
     Party.Add(Pokemon);
 }
