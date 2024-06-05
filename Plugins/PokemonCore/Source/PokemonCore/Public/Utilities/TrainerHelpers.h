@@ -7,6 +7,7 @@
 
 #include "TrainerHelpers.generated.h"
 
+class IBag;
 class ITrainer;
 
 /**
@@ -24,4 +25,7 @@ class POKEMONCORE_API UTrainerHelpers : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = "Player", meta = (WorldContext = "WorldContext"))
     static const TScriptInterface<ITrainer> &GetPlayerCharacter(const UObject *WorldContext);
+
+    UFUNCTION(BlueprintPure, Category = "Player", meta = (WorldContext = "WorldContext"))
+    static const TScriptInterface<IBag>& GetBag(const UObject *WorldContext);
 };

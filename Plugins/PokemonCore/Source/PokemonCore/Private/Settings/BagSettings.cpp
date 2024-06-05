@@ -9,3 +9,7 @@ int32 UBagSettings::GetMaxItemsPerSlot() const {
 const TMap<FName, FPocketInfo> & UBagSettings::GetPocketInfo() const {
     return PocketInfo;
 }
+
+TSubclassOf<UObject> UBagSettings::GetItemUtilitiesClass() const {
+    return ItemUtilitiesClass;
+}

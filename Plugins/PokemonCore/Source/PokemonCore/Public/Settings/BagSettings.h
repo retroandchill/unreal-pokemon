@@ -55,6 +55,9 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Inventory")
     const TMap<FName, FPocketInfo>& GetPocketInfo() const;
 
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Inventory")
+    TSubclassOf<UObject> GetItemUtilitiesClass() const;
+
   private:
     /**
      * The maximum quantity of a single item the player can hold.
@@ -68,4 +71,7 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     UPROPERTY(EditAnywhere, BlueprintGetter = GetPocketInfo, Config, Category = "Player|Inventory",
         meta = (GetKeyOptions = "PokemonData.ItemHelper.GetPocketNames"))
     TMap<FName, FPocketInfo> PocketInfo;
+
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetItemUtilitiesClass, Config, Category = "Player|Inventory", meta = (MustImplement = "ItemUtilities"))
+    TSubclassOf<UObject> ItemUtilitiesClass;
 };
