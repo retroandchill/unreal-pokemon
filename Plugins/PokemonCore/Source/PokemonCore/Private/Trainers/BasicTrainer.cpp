@@ -27,9 +27,7 @@ FText UBasicTrainer::GetTrainerName() const {
 }
 
 int32 UBasicTrainer::GetPayout() const {
-    if (Party.IsEmpty()) {
-        return 0;
-    }
+    check(!Party.IsEmpty())
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
 }
 
