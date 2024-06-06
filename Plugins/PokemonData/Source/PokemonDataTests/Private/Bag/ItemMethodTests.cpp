@@ -7,6 +7,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemMethodTests, "Private.Bag.ItemMethodTests",
 
 bool ItemMethodTests::RunTest(const FString &Parameters) {
     FItem FakeItem;
+    
+    FakeItem.ShowQuantity = false;
+    CHECK_FALSE(FakeItem.ShouldShowQuantity());
+    FakeItem.ShowQuantity = true;
+    CHECK_TRUE(FakeItem.ShouldShowQuantity());
 
     // Portion Name
     FakeItem.RealName = FText::FromStringView(TEXT("Fake Item"));
@@ -21,10 +26,16 @@ bool ItemMethodTests::RunTest(const FString &Parameters) {
     CHECK_FALSE(FakeItem.IsTR());
     FakeItem.FieldUse = EFieldUse::TM;
     CHECK_TRUE(FakeItem.IsTM());
+    CHECK_FALSE(FakeItem.CanHold());
+    CHECK_FALSE(FakeItem.ShouldShowQuantity());
     FakeItem.FieldUse = EFieldUse::HM;
     CHECK_TRUE(FakeItem.IsHM());
+    CHECK_FALSE(FakeItem.CanHold());
+    CHECK_FALSE(FakeItem.ShouldShowQuantity());
     FakeItem.FieldUse = EFieldUse::TR;
     CHECK_TRUE(FakeItem.IsTR());
+    CHECK_TRUE(FakeItem.CanHold());
+    CHECK_TRUE(FakeItem.ShouldShowQuantity());
 
     // Types of Item
     FakeItem.Tags.Empty();
@@ -42,6 +53,21 @@ bool ItemMethodTests::RunTest(const FString &Parameters) {
     CHECK_TRUE(FakeItem.IsMail());
     FakeItem.Tags = { TEXT("Mail"), TEXT("IconMail") };
     CHECK_TRUE(FakeItem.IsMail());
+    CHECK_TRUE(UItemHelper::IsMail(FakeItem));
+
+    // Key Item/Is Important
+    FakeItem.Tags.Empty();
+    CHECK_FALSE(FakeItem.IsKeyItem());
+    CHECK_FALSE(FakeItem.IsImportant());
+    CHECK_TRUE(FakeItem.CanHold());
+    CHECK_TRUE(FakeItem.ShouldShowQuantity());
+    FakeItem.Tags = { TEXT("KeyItem") };
+    CHECK_TRUE(FakeItem.IsKeyItem());
+    CHECK_TRUE(FakeItem.IsImportant());
+    CHECK_FALSE(FakeItem.CanHold());
+    CHECK_FALSE(FakeItem.ShouldShowQuantity());
+    CHECK_FALSE(UItemHelper::CanHold(FakeItem));
+    
     
     return true;
 }
