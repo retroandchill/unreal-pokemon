@@ -8,8 +8,9 @@
 #include "Bag.generated.h"
 
 class IBagSorter;
+
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
 class POKEMONCORE_API UBag : public UInterface {
     GENERATED_BODY()
 };
@@ -63,19 +64,4 @@ class POKEMONCORE_API IBag {
      * @param Callback The callback for each iteration of the loop
      */
     virtual void ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const = 0;
-
-    /**
-     * Transform the elements in the provided pocket to a different data type
-     * @tparam T The type of the resultant array
-     * @param Pocket The pocket to map
-     * @param Mapping The function used to perform the mapping
-     * @return The mapped results
-     */
-    template <typename T>
-    TArray<T> TransformPocket(FName Pocket, TFunctionRef<T(FName, int32)> Mapping) const {
-        TArray<T> Output;
-        ForEachInPocket(Pocket,
-                        [&Output, &Mapping](FName Item, int32 Quantity) { Output.Add(Mapping(Item, Quantity)); });
-        return Output;
-    }
 };

@@ -9,6 +9,6 @@
  */
 template <typename T>
 class TInterfaceShim : public T {
-public:
+  public:
     ~TInterfaceShim() override = default;
 };

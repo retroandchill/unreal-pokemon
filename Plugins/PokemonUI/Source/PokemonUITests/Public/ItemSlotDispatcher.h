@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "ItemSlotDispatcher.generated.h"
 
 struct FItem;
@@ -14,9 +15,9 @@ UCLASS()
 class POKEMONUITESTS_API UItemSlotDispatcher : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION()
-    void ReceiveItem(const FItem& Item, int32 ItemQuantity);
+    void ReceiveItem(const FItem &Item, int32 ItemQuantity);
 
     FName ItemID;
     int32 Quantity;

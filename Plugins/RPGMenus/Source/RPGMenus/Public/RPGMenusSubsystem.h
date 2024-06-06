@@ -60,7 +60,7 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
 
     /**
      * Helper function used to create a screen on the stack from Blueprints
-     * @param WorldContextObject The world context object needed to get the controller
+     * @param WorldContextObject The world context object needed to get the subsystem
      * @param ScreenType The screen class to spawn
      * @return The created screen.
      */
@@ -68,7 +68,27 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
               meta = (WorldContext = "WorldContextObject", DisplayName = "Add Screen to Stack",
                       BlueprintInternalUseOnly = "true"),
               Category = "Widget")
-    static UScreen *AddScreenToStackHelper(UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType);
+    static UScreen *AddScreenToStackHelper(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType);
+
+    /**
+     * Add a screen of the given class to the stack
+     * @tparam T The screen class to spawn
+     * @param WorldContextObject The world context object needed to get the subsystem
+     * @param ScreenClass The actually class object to spawn
+     * @return
+     */
+    template <typename T>
+        requires std::is_base_of_v<UScreen, T>
+    static T *AddScreenToStack(const UObject *WorldContextObject, TSubclassOf<T> ScreenClass) {
+        if (ScreenClass == nullptr)
+            return nullptr;
+
+        if (auto Subsystem = GetSubsystem(WorldContextObject); Subsystem != nullptr) {
+            return Subsystem->AddScreenToStack(ScreenClass);
+        }
+
+        return nullptr;
+    }
 
     /**
      * Get the screen at the top of the stack and cast it to the supplied type
@@ -100,11 +120,11 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
 
     /**
      * Remove the current screen from the stack
-     * @param WorldContextObject The world context object needed to get the controller
+     * @param WorldContextObject The world context object needed to get the subsystem
      * @return The screen to remove from the stack
      */
     UFUNCTION(BlueprintCallable, Category = "Widget", meta = (WorldContext = "WorldContextObject"))
-    static UScreen *RemoveScreenFromStack(UObject *WorldContextObject);
+    static UScreen *RemoveScreenFromStack(const UObject *WorldContextObject);
 
   private:
     /**
@@ -115,10 +135,10 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
 
     /**
      * Get the subystem from the given world context object
-     * @param WorldContextObject The object used to extract the world (and utlimately the player)
+     * @param WorldContextObject The object used to extract the world (and ultimately the player)
      * @return The subsystem (if found)
      */
-    static URPGMenusSubsystem *GetSubsystem(UObject *WorldContextObject);
+    static URPGMenusSubsystem *GetSubsystem(const UObject *WorldContextObject);
 
     /**
      * The internal stack of screens used to handle the input.

@@ -1,17 +1,17 @@
 ﻿#include "Asserts.h"
 #include "Bag/Item.h"
+#include "Data/SelectionInputs.h"
+#include "External/accessor.hpp"
+#include "ItemSlotDispatcher.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
+#include "NoItemSelectedDispatcher.h"
 #include "Player/Bag.h"
+#include "PocketNameDispatcher.h"
+#include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/ItemSelectionWindow.h"
-#include "ItemSlotDispatcher.h"
-#include "NoItemSelectedDispatcher.h"
-#include "PocketNameDispatcher.h"
-#include "Data/SelectionInputs.h"
-#include "External/accessor.hpp"
-#include "Utilities/InputUtilities.h"
 
 using namespace accessor;
 
@@ -19,7 +19,8 @@ MEMBER_ACCESSOR(AccessInputMappings, USelectableWidget, InputMappings, TObjectPt
 MEMBER_ACCESSOR(AccessLeftInputs, USelectionInputs, LeftInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessRightInputs, USelectionInputs, RightInputs, TSet<FKey>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic, "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
+                                 "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
@@ -81,7 +82,8 @@ bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Pockets, "Unit Tests.Windows.ItemSelectionWindowTest.PocketCycling",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Pockets,
+                                 "Unit Tests.Windows.ItemSelectionWindowTest.PocketCycling",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
@@ -125,7 +127,7 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     ItemSelection->SetIndex(1);
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     CHECK_EQUAL(TEXT("SUPERREPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
-    
+
     UInputUtilities::SimulateKeyPress(ItemSelection.Get(), RightInput);
     CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());
     ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());

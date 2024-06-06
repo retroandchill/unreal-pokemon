@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "PocketNameDispatcher.generated.h"
 
 /**
@@ -13,10 +14,9 @@ UCLASS()
 class POKEMONUITESTS_API UPocketNameDispatcher : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION()
     void OnReceivePocket(FName Pocket);
 
     FName CurrentPocket;
-
 };

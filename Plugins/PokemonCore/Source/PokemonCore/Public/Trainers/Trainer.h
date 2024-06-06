@@ -58,6 +58,14 @@ class POKEMONCORE_API ITrainer {
     virtual const TArray<TScriptInterface<IPokemon>> &GetParty() const = 0;
 
     /**
+     * Get the Pokémon at the given index
+     * @param Index The index to search for
+     * @return The Pokémon at that index (nullptr if invalid)
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual TScriptInterface<IPokemon> GetPokemon(int32 Index) const = 0;
+
+    /**
      * Add a Pokémon to the trainer's party
      * @param Pokemon The Pokémon to add to the party
      */

@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 /**
  * Blueprint function library used for generating mock data for testing purposes
  */

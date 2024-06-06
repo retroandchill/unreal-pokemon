@@ -24,9 +24,29 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void NativeConstruct() override;
 
   public:
+    UFUNCTION(BlueprintCallable, Category = Switching)
     void BeginSwitch(int32 Index) final;
-    void SetHelpText(const FText &Text) final;
-    APlayerController &GetPlayerController() final;
+    
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void SetCommandHelpText(FText Text) final;
+    
+    UFUNCTION(BlueprintPure, Category = Owner)
+    APlayerController *GetPlayerController() const final;
+    
+    FOnPokemonSelected &GetOnPokemonSelect() override;
+
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void RefreshScene() override;
+
+    /**
+     * Set the help text for the regular help window
+     * @param Text The text to set to the window
+     */
+    UFUNCTION(BlueprintCallable, Category = "Display")
+    void SetHelpText(FText Text);
+
+    UFUNCTION(BlueprintCallable, Category = Navigation)
+    void RemoveFromStack() override;
 
   private:
     /**
@@ -41,7 +61,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      * @param Trainer The trainer that owns the selected Pokémon
      * @param Index The index of the selected Pokémon in the trainer's party
      */
-    void DisplayPokemonCommands(ITrainer &Trainer, int32 Index);
+    void DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index);
 
     /**
      * Process the selected command
@@ -64,10 +84,21 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void ToggleCommandWindowVisibility(bool bIsVisible);
 
     /**
+     * Delegate for when a Pokémon is selected
+     */
+    FOnPokemonSelected PokemonSelected;
+
+    /**
      * The "Window" that the player selects a Pokémon from
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UPokemonSelectionPane> SelectionPane;
+
+    /**
+     * The help window used for when the commands are shown.
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UHelpWindow> HelpWindow;
 
     /**
      * The window that contains the command to call on a Pokémon
@@ -85,7 +116,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      * The handlers for the command window when a Pokémon in selected
      */
     UPROPERTY(EditAnywhere, Category = Commands)
-    FText CancelText;
+    TOptional<FText> CancelText;
 
     /**
      * The handlers for the command window when a Pokémon in selected

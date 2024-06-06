@@ -20,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPocketChanged, FName, Pocket);
 /**
  * Delegate called when the player selects a new item in the bag screen.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemChanged, const FItem&, Item, int32, Quantity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemChanged, const FItem &, Item, int32, Quantity);
 
 /**
  * Delegate called when the player is not selecting any items.
@@ -36,7 +36,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
   public:
     explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
-    
+
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.
@@ -51,13 +51,23 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     const FItem *GetCurrentItem() const;
 
+    int32 GetItemQuantity() const;
+
     int32 GetItemCount_Implementation() const override;
+
+    void RefreshWindow();
+
+    /**
+     * Get the item selected callback
+     * @return Callback for when an item is actually selected
+     */
+    FOnItemChanged &GetOnItemSelected();
 
     /**
      * Get the pocket changed dispatcher
      * @return Callback for when the pocket is changed.
      */
-    FOnPocketChanged& GetOnPocketChanged();
+    FOnPocketChanged &GetOnPocketChanged();
 
     /**
      * Get the item changed dispatcher
@@ -81,6 +91,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     void SlotItem(UItemOption *Option, int32 ItemIndex);
 
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void ProcessConfirm_Implementation(int32 CurrentIndex) override;
     void ReceiveMoveCursor(ECursorDirection Direction) override;
 
   private:
@@ -88,7 +99,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * Update the pocket that is being displayed
      */
     void UpdatePocket();
-    
+
     /**
      * Add an item to the window with the given name and quantity
      * @param ItemName The identifier of the item
@@ -103,19 +114,15 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     TScriptInterface<IBag> CurrentBag;
 
     /**
-     * The current pocket that exists within the bag that we're viewing.
-     */
-    TArray<FName> PocketNames = UItemHelper::GetPocketNames();
-
-    /**
-     * The memory of the current index on each pocket.
-     */
-    TMap<FName, int32> PocketMemory;
-
-    /**
      * Iterator used to cycle through the pockets
      */
     TCircularIterator<FName> PocketIterator;
+
+    /**
+     * Callback for when an item is actually selected
+     */
+    UPROPERTY(BlueprintAssignable, Category = "Events|Inventory")
+    FOnItemChanged OnItemSelected;
 
     /**
      * Callback for when the pocket is changed.

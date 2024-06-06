@@ -1,11 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "PokemonDataSettings.h"
 #include "Mainpulation/RangeHelpers.h"
+#include "PokemonDataSettings.h"
 #include <ranges>
 
 FItem::FItem() = default;
+
+const FText &FItem::GetPortionName() const {
+    return RealPortionName.IsEmpty() ? RealName : RealPortionName;
+}
 
 bool FItem::IsTM() const {
     return FieldUse == EFieldUse::TM;
@@ -44,6 +48,10 @@ bool FItem::ShouldShowQuantity() const {
     return ShowQuantity && !IsImportant();
 }
 
+bool FItem::CanHold() const {
+    return !IsImportant();
+}
+
 TArray<FName> UItemHelper::GetItemNames() {
     return FDataManager::GetInstance().GetDataTable<FItem>().GetTableRowNames();
 }
@@ -60,10 +68,18 @@ TArray<FName> UItemHelper::GetPocketNames() {
     for (const auto &[Key, Value] : Pockets) {
         Names.Add(Value);
     }
-    
+
     return Names;
+}
+
+const FText &UItemHelper::GetPortionName(const FItem &Item) {
+    return Item.GetPortionName();
 }
 
 bool UItemHelper::IsMail(const FItem &Item) {
     return Item.IsMail();
+}
+
+bool UItemHelper::CanHold(const FItem &Item) {
+    return Item.CanHold();
 }

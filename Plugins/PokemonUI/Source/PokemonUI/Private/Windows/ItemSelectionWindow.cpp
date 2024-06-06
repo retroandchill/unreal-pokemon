@@ -5,16 +5,16 @@
 #include "Bag/Item.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
+#include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
 
-UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
-    for (auto Pocket : PocketNames) {
-        PocketMemory.Add(Pocket, 0);
-    }
+UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer)
+    : USelectableWidget(ObjectInitializer) {
 }
 
 void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
+    auto &PocketNames = GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketNames();
     CurrentBag = Bag;
     int32 PocketIndex = PocketNames.IndexOfByKey(Pocket);
     PocketIterator = TCircularIterator<FName>(PocketNames, PocketIndex);
@@ -29,30 +29,52 @@ const FItem *UItemSelectionWindow::GetCurrentItem() const {
     return nullptr;
 }
 
+int32 UItemSelectionWindow::GetItemQuantity() const {
+    if (Options.IsValidIndex(GetIndex())) {
+        return Options[GetIndex()]->GetQuantity();
+    }
+
+    return 0;
+}
+
 int32 UItemSelectionWindow::GetItemCount_Implementation() const {
     return Options.Num();
 }
 
-FOnPocketChanged & UItemSelectionWindow::GetOnPocketChanged() {
+void UItemSelectionWindow::RefreshWindow() {
+    UpdatePocket();
+}
+
+FOnItemChanged &UItemSelectionWindow::GetOnItemSelected() {
+    return OnItemSelected;
+}
+
+FOnPocketChanged &UItemSelectionWindow::GetOnPocketChanged() {
     return OnPocketChanged;
 }
 
-FOnItemChanged & UItemSelectionWindow::GetOnItemChanged() {
+FOnItemChanged &UItemSelectionWindow::GetOnItemChanged() {
     return OnItemChanged;
 }
 
-FOnNoItemSelected & UItemSelectionWindow::GetOnNoItemSelected() {
+FOnNoItemSelected &UItemSelectionWindow::GetOnNoItemSelected() {
     return OnNoItemSelected;
 }
 
 void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
-    PocketMemory[*PocketIterator] = NewIndex;
+    GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->UpdatePocketMemory(*PocketIterator, NewIndex);
     if (auto Item = GetCurrentItem(); Item != nullptr) {
         OnItemChanged.Broadcast(*Item, Options[NewIndex]->GetQuantity());
     } else {
         OnNoItemSelected.Broadcast();
     }
+}
+
+void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
+    check(Options.IsValidIndex(CurrentIndex))
+    UItemOption *Option = Options[CurrentIndex];
+    OnItemSelected.Broadcast(Option->GetItem(), Option->GetQuantity());
 }
 
 void UItemSelectionWindow::ReceiveMoveCursor(ECursorDirection Direction) {
@@ -80,7 +102,7 @@ void UItemSelectionWindow::UpdatePocket() {
     Algo::ForEach(Options, &UWidget::RemoveFromParent);
     Options.Empty();
     CurrentBag->ForEachInPocket(*PocketIterator, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
-    SetIndex(PocketMemory[*PocketIterator]);
+    SetIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[*PocketIterator]);
     OnPocketChanged.Broadcast(*PocketIterator);
 }
 

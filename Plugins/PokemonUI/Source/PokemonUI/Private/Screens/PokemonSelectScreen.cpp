@@ -3,6 +3,7 @@
 #include "Data/Command.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Utilities/PokemonUIUtils.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
 #include "Windows/PokemonSelectionPane.h"
@@ -29,19 +30,40 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
     SelectionPane->SetActive(true);
 }
 
-void UPokemonSelectScreen::SetHelpText(const FText &Text) {
+void UPokemonSelectScreen::SetCommandHelpText(FText Text) {
     CommandHelpWindow->SetText(Text);
 }
 
-APlayerController &UPokemonSelectScreen::GetPlayerController() {
-    return *GetOwningPlayer();
+APlayerController *UPokemonSelectScreen::GetPlayerController() const {
+    return GetOwningPlayer();
+}
+
+FOnPokemonSelected &UPokemonSelectScreen::GetOnPokemonSelect() {
+    return PokemonSelected;
+}
+
+void UPokemonSelectScreen::RefreshScene() {
+    SelectionPane->RefreshWindow();
+}
+
+void UPokemonSelectScreen::SetHelpText(FText Text) {
+    HelpWindow->SetText(Text);
+}
+
+void UPokemonSelectScreen::RemoveFromStack() {
+    CloseScreen();
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-    if (auto &Trainer = *UPokemonSubsystem::GetInstance(this).GetPlayer(); Index < Trainer.GetParty().Num()) {
+    if (auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer(); Index < Trainer->GetParty().Num()) {
+        if (PokemonSelected.IsBound()) {
+            PokemonSelected.Execute(this, Trainer, Index);
+            return;
+        }
+
         if (SelectionPane->IsSwitching()) {
             if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
-                Trainer.SwapPositionsInParty(SwitchingIndex, Index);
+                Trainer->SwapPositionsInParty(SwitchingIndex, Index);
             }
             SelectionPane->CompleteSwitch();
         } else {
@@ -52,15 +74,8 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
     }
 }
 
-void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index) {
-    TArray<TObjectPtr<UCommand>> Commands;
-    for (UPartyMenuHandler *Handler : PokemonHandlers) {
-        if (!Handler->ShouldShow(*this, Trainer, Index))
-            continue;
-
-        Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
-    }
-    Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
+void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index) {
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, CancelText, this, Trainer, Index);
     CommandWindow->SetCommands(MoveTemp(Commands));
 
     SelectionPane->SetActive(false);
@@ -78,7 +93,7 @@ void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
     } else {
         auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
         check(Handler != nullptr)
-        Handler->Handle(*this, *UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
+        Handler->Handle(this, UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
     }
 }
 

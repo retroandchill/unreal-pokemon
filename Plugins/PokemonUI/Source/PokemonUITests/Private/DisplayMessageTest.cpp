@@ -1,6 +1,4 @@
 ﻿#include "Nodes/DisplayMessage.h"
-#include "Utilities/WidgetTestUtilities.h"
-
 #include "Asserts.h"
 #include "BlueprintActionDatabase.h"
 #include "External/accessor.hpp"
@@ -11,6 +9,7 @@
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 using namespace accessor;
 

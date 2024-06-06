@@ -41,4 +41,9 @@ bool UScreen::GiveMenuFocus() {
 
 void UScreen::CloseScreen() {
     GetOwningPlayer()->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->RemoveScreenFromStack();
+    OnScreenClosed.Broadcast();
+}
+
+FOnScreenClosed &UScreen::GetOnScreenClosed() {
+    return OnScreenClosed;
 }

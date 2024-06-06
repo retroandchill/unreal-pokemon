@@ -4,16 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "NoItemSelectedDispatcher.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONUITESTS_API UNoItemSelectedDispatcher : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION()
     void OnReceive();
 
