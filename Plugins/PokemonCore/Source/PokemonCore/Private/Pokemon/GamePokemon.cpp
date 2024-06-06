@@ -130,6 +130,10 @@ void UGamePokemon::SetHoldItem(FName Item) {
     HoldItem.Emplace(Item);
 }
 
+void UGamePokemon::RemoveHoldItem() {
+    HoldItem.Reset();
+}
+
 const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
     return OwnerInfo;
 }

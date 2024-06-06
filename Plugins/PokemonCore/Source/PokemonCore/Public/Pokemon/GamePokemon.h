@@ -60,11 +60,14 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     UFUNCTION(BlueprintPure, Category = Abilities)
     TScriptInterface<IAbilityBlock> GetAbility() const override;
-
+    
     const FItem *GetHoldItem() const override;
 
     UFUNCTION(BlueprintCallable, Category = Items)
     void SetHoldItem(FName Item) override;
+
+    UFUNCTION(BlueprintCallable, Category = Items)
+    void RemoveHoldItem() override;
 
     UFUNCTION(BlueprintPure, Category = Trainer)
     const FOwnerInfo &GetOwnerInfo() const override;

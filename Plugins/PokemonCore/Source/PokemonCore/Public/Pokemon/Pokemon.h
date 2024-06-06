@@ -138,8 +138,18 @@ class POKEMONCORE_API IPokemon {
      */
     virtual const FItem *GetHoldItem() const = 0;
 
+    /**
+     * Set the item that the Pokémon is currently holding
+     * @param Item The currently held item
+     */
     UFUNCTION(BlueprintCallable, Category = Items)
     virtual void SetHoldItem(FName Item) = 0;
+
+    /**
+     * Remove the Pokémon's held item if it has one
+     */
+    UFUNCTION(BlueprintCallable, Category = Items)
+    virtual void RemoveHoldItem() = 0;
 
     /**
      * Get the information about the Pokémon's original trainer
