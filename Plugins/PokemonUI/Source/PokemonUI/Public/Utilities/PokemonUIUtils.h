@@ -81,17 +81,31 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      */
     static void SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue);
 
+    /**
+     * Set the text for a Pokémon's gender in the screen
+     * @param Pokemon The Pokémon to process
+     * @param TextWidget The widget to set the text for
+     */
     static void SetPokemonGenderText(const IPokemon &Pokemon, TObjectPtr<UDisplayText> &TextWidget);
 
+    /**
+     * Create the command list from the given list of provided handlers
+     * @tparam T The type of the handler class
+     * @tparam A The types of the arguments to the ShouldShow() method in the handlers
+     * @param Handlers The array of handler to process
+     * @param CancelText The text to display to the player (doesn't show if not set)
+     * @param Args The arguments to the ShouldShow() method in the handlers
+     * @return The list of commands that was created
+     */
     template <typename T, typename... A>
     static TArray<TObjectPtr<UCommand>> CreateCommandListFromHandlers(const TArray<T> &Handlers,
-                                                                      const FText *CancelText, A &&...Args) {
+                                                                      const TOptional<FText> &CancelText, A &&...Args) {
         auto Commands = RangeHelpers::CreateRange(Handlers) |
                         std::views::filter([&Args...](T Handler) { return Handler->ShouldShow(Forward<A>(Args)...); }) |
                         std::views::transform(&UMenuHandler::CreateCommand) |
                         RangeHelpers::TToArray<TObjectPtr<UCommand>>();
 
-        if (CancelText != nullptr) {
+        if (CancelText.IsSet()) {
             static FName CancelName = TEXT("Cancel");
             Commands.Add(UCommand::CreateBasicCommand(CancelName, *CancelText));
         }

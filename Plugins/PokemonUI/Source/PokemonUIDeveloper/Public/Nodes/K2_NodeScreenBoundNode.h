@@ -16,6 +16,10 @@ class POKEMONUIDEVELOPER_API UK2_NodeScreenBoundNode : public UK2Node_BaseAsyncT
     GENERATED_BODY()
 
   public:
+    /**
+     * Create the default object
+     * @param Initializer The UE provided initializer
+     */
     explicit UK2_NodeScreenBoundNode(const FObjectInitializer &Initializer);
 
     /**
@@ -36,6 +40,10 @@ class POKEMONUIDEVELOPER_API UK2_NodeScreenBoundNode : public UK2Node_BaseAsyncT
      */
     void SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar, UFunction *FactoryFunc) const;
 
+    /**
+     * Iterate over each valid screen and perform the provided action
+     * @param Action The invokable action to perform
+     */
     virtual void ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const;
 
   private:

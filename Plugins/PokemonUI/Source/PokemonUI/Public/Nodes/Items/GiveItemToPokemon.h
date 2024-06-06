@@ -49,9 +49,15 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     UFUNCTION()
     void ExecuteItemRejected();
 
+    /**
+     * Called when the item is given to the Pokémon
+     */
     UPROPERTY(BlueprintAssignable)
     FItemResult ItemGiven;
 
+    /**
+     * Called when the player backs out (or the item cannot be given)
+     */
     UPROPERTY(BlueprintAssignable)
     FItemResult ItemRejected;
 
@@ -77,6 +83,9 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
      */
     int32 PokemonIndex;
 
+    /**
+     * The utility object used to call special macros
+     */
     UPROPERTY()
     TObjectPtr<UObject> ItemUtilities;
 };
