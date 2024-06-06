@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2_NodeScreenBoundNode.h"
+#include "K2Node_ScreenBoundNode.h"
 #include "MessageNode.h"
 
 #include "K2Node_DisplayMessageBase.generated.h"
@@ -12,7 +12,7 @@ class UTextDisplayScreen;
  * Basic template of any async node that requires the display of a message
  */
 UCLASS(Abstract)
-class POKEMONUIDEVELOPER_API UK2Node_DisplayMessageBase : public UK2_NodeScreenBoundNode, public IMessageNode {
+class POKEMONUIDEVELOPER_API UK2Node_DisplayMessageBase : public UK2Node_ScreenBoundNode, public IMessageNode {
     GENERATED_BODY()
 
   protected:

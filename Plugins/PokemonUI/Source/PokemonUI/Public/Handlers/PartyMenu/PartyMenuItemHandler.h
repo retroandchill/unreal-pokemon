@@ -1,4 +1,4 @@
-// "Unreal Pokémon" created by Retro & Chill.
+﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #pragma once
 
@@ -28,6 +28,6 @@ private:
     /**
      * The handlers for the sub-commands for items
      */
-    UPROPERTY(EditAnywhere, Category = Prompt)
+    UPROPERTY(EditAnywhere, Instanced, Category = Prompt)
     TArray<TObjectPtr<UPartyMenuHandler>> SubCommands;
 };

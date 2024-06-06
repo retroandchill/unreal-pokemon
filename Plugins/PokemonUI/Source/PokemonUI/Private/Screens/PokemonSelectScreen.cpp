@@ -31,9 +31,14 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
 }
 
 void UPokemonSelectScreen::ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
+    if (!CommandStack.IsEmpty()) {
+        CommandStack.Last().Index = SelectionPane->GetIndex();
+    }
+    
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
-    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, CancelText, this, Trainer, SelectionPane->GetIndex());
-    CommandWindow->SetCommands(MoveTemp(Commands));
+    auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, CancelText, this, Trainer, SelectionPane->GetIndex());
+    CommandWindow->SetCommands(Commands);
     CommandWindow->SetIndex(0);
 }
 
@@ -82,8 +87,9 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 }
 
 void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index) {
-    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, CancelText, this, Trainer, Index);
-    CommandWindow->SetCommands(MoveTemp(Commands));
+    auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, CancelText, this, Trainer, Index);
+    CommandWindow->SetCommands(Commands);
 
     SelectionPane->SetActive(false);
     CommandWindow->SetIndex(0);
@@ -105,10 +111,18 @@ void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
 }
 
 void UPokemonSelectScreen::OnCommandWindowCancel() {
-    ToggleCommandWindowVisibility(false);
-    SelectionPane->ToggleCommandVisibility(true);
-    CommandWindow->SetActive(false);
-    SelectionPane->SetActive(true);
+    CommandStack.Pop();
+    if (CommandStack.IsEmpty()) {
+        ToggleCommandWindowVisibility(false);
+        SelectionPane->ToggleCommandVisibility(true);
+        CommandWindow->SetActive(false);
+        SelectionPane->SetActive(true);
+    } else {
+        auto &[Commands, FrameIndex] = CommandStack.Last();
+        CommandWindow->SetCommands(Commands);
+        CommandWindow->SetIndex(FrameIndex);
+    }
+    
 }
 
 void UPokemonSelectScreen::ToggleCommandWindowVisibility(bool bIsVisible) {

@@ -5,6 +5,7 @@
 #include "PartyScreen.h"
 #include "Screens/Screen.h"
 #include "Trainers/Trainer.h"
+#include "Utilities/CommandStack.h"
 
 #include "PokemonSelectScreen.generated.h"
 
@@ -13,6 +14,7 @@ class UCommand;
 class UCommandWindow;
 class UHelpWindow;
 class UPokemonSelectionPane;
+
 /**
  * Screen for when the player needs to select a Pokémon from the menu
  */
@@ -125,4 +127,10 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     UPROPERTY(EditAnywhere, Instanced, Category = Commands)
     TArray<TObjectPtr<UPartyMenuHandler>> PokemonHandlers;
+
+    /**
+     * The stack frame used to track the commands being held
+     */
+    UPROPERTY()
+    TArray<FCommandStackFrame> CommandStack;
 };

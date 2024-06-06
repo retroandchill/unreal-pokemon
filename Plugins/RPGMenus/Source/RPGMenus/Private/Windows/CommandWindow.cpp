@@ -83,6 +83,11 @@ TOptional<int32> UCommandWindow::GetPageMax() {
     return VisibleLines;
 }
 
+void UCommandWindow::SetCommands(const TArray<TObjectPtr<UCommand>> &NewCommands) {
+    Commands = NewCommands;
+    RebuildWidget();
+}
+
 void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands) {
     Commands = MoveTemp(NewCommands);
     RebuildWidget();
