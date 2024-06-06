@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Handlers/PartyMenu/RemovableScreen.h"
 #include "UObject/Interface.h"
 
 #include "InventoryScreen.generated.h"
@@ -24,7 +23,7 @@ class UInventoryScreen : public UInterface {
 /**
  * Abstract declaration of the inventory screen used by the game
  */
-class POKEMONUI_API IInventoryScreen : public IRemovableScreen {
+class POKEMONUI_API IInventoryScreen {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
@@ -43,9 +42,15 @@ class POKEMONUI_API IInventoryScreen : public IRemovableScreen {
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
     virtual void ToggleItemSelection(bool bCanSelect) = 0;
 
+    /**
+     * Remove the screen from the stack
+     */
     UFUNCTION(BlueprintCallable, Category = Navigation)
-    virtual void RemoveFromStack() override = 0;
+    virtual void RemoveFromStack() = 0;
 
+    /**
+     * Refresh the display of the scene 
+     */
     UFUNCTION(BlueprintCallable, Category = Display)
     virtual void RefreshScene() = 0;
 };

@@ -24,9 +24,15 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void NativeConstruct() override;
 
   public:
+    UFUNCTION(BlueprintCallable, Category = Switching)
     void BeginSwitch(int32 Index) final;
-    void SetCommandHelpText(const FText &Text) final;
-    APlayerController &GetPlayerController() final;
+    
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void SetCommandHelpText(FText Text) final;
+    
+    UFUNCTION(BlueprintPure, Category = Owner)
+    APlayerController *GetPlayerController() const final;
+    
     FOnPokemonSelected &GetOnPokemonSelect() override;
 
     UFUNCTION(BlueprintCallable, Category = Display)
@@ -55,7 +61,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      * @param Trainer The trainer that owns the selected Pokémon
      * @param Index The index of the selected Pokémon in the trainer's party
      */
-    void DisplayPokemonCommands(ITrainer &Trainer, int32 Index);
+    void DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index);
 
     /**
      * Process the selected command
@@ -77,6 +83,9 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     void ToggleCommandWindowVisibility(bool bIsVisible);
 
+    /**
+     * Delegate for when a Pokémon is selected
+     */
     FOnPokemonSelected PokemonSelected;
 
     /**

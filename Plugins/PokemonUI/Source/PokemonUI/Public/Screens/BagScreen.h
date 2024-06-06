@@ -27,6 +27,10 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     void NativeConstruct() override;
 
   public:
+    /**
+     * Get the item selected delegate
+     * @return Callback for when an item is selected
+     */
     FOnItemSelected &GetOnItemSelected() final;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
@@ -39,6 +43,11 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     void RefreshScene() override;
 
   private:
+    /**
+     * Create the commands for the given item
+     * @param Item The selected item
+     * @param Quantity How many of the item you have
+     */
     void CreateCommands(const FItem &Item, int32 Quantity);
 
     /**
@@ -49,6 +58,11 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION()
     void SelectItem(const FItem &Item, int32 Quantity);
 
+    /**
+     * Called when a command is selected.
+     * @param CommandIndex The index of the command
+     * @param Command The command object
+     */
     UFUNCTION()
     void OnItemCommandSelected(int32 CommandIndex, UCommand *Command);
 
@@ -88,8 +102,14 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UPROPERTY(EditAnywhere, Instanced, Category = Selection)
     TArray<TObjectPtr<UBagMenuHandler>> CommandHandlers;
 
+    /**
+     * The text that is displayed when the player hits cancel
+     */
     UPROPERTY(EditAnywhere, Category = Selection)
     TOptional<FText> CancelText;
 
+    /**
+     * Callback for when an item is selected
+     */
     FOnItemSelected OnItemSelected;
 };

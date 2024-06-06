@@ -30,12 +30,12 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
     SelectionPane->SetActive(true);
 }
 
-void UPokemonSelectScreen::SetCommandHelpText(const FText &Text) {
+void UPokemonSelectScreen::SetCommandHelpText(FText Text) {
     CommandHelpWindow->SetText(Text);
 }
 
-APlayerController &UPokemonSelectScreen::GetPlayerController() {
-    return *GetOwningPlayer();
+APlayerController *UPokemonSelectScreen::GetPlayerController() const {
+    return GetOwningPlayer();
 }
 
 FOnPokemonSelected &UPokemonSelectScreen::GetOnPokemonSelect() {
@@ -67,15 +67,15 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
             }
             SelectionPane->CompleteSwitch();
         } else {
-            DisplayPokemonCommands(*Trainer, Index);
+            DisplayPokemonCommands(Trainer, Index);
         }
     } else {
         // TODO: Handle the additional options
     }
 }
 
-void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index) {
-    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, &CancelText, *this, Trainer, Index);
+void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index) {
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, &CancelText, this, Trainer, Index);
     CommandWindow->SetCommands(MoveTemp(Commands));
 
     SelectionPane->SetActive(false);
@@ -93,7 +93,7 @@ void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
     } else {
         auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
         check(Handler != nullptr)
-        Handler->Handle(*this, *UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
+        Handler->Handle(this, UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
     }
 }
 

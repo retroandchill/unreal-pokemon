@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Handlers/PartyMenu/RemovableScreen.h"
 #include "UObject/Interface.h"
 
 #include "PartyScreen.generated.h"
@@ -18,14 +17,14 @@ DECLARE_DELEGATE_ThreeParams(FOnPokemonSelected, const TScriptInterface<class IP
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UPartyScreen : public UInterface {
+class POKEMONUI_API UPartyScreen : public UInterface {
     GENERATED_BODY()
 };
 
 /**
  * Generic screen class for any screens shown to the player
  */
-class POKEMONUI_API IPartyScreen : public IRemovableScreen {
+class POKEMONUI_API IPartyScreen {
     GENERATED_BODY()
 
   public:
@@ -33,22 +32,22 @@ class POKEMONUI_API IPartyScreen : public IRemovableScreen {
      * Begin the switching process.
      * @param Index The index to start the switch at.
      */
+    UFUNCTION(BlueprintCallable, Category = Switching)
     virtual void BeginSwitch(int32 Index) = 0;
 
     /**
      * Set the text of the help window
      * @param Text The new text for the help window
      */
-    virtual void SetCommandHelpText(const FText &Text) = 0;
+    UFUNCTION(BlueprintCallable, Category = Display)
+    virtual void SetCommandHelpText(FText Text) = 0;
 
     /**
      * Get the player controller held by this class
      * @return The player controller currently held
      */
-    virtual APlayerController &GetPlayerController() = 0;
-
-    UFUNCTION(BlueprintCallable, Category = Display)
-    virtual void RefreshScene() = 0;
+    UFUNCTION(BlueprintCallable, Category = Owner)
+    virtual APlayerController *GetPlayerController() const = 0;
 
     /**
      * Get the callback override for when a Pokémon is selected
@@ -56,6 +55,15 @@ class POKEMONUI_API IPartyScreen : public IRemovableScreen {
      */
     virtual FOnPokemonSelected &GetOnPokemonSelect() = 0;
 
+    /**
+     * Remove the screen from the stack
+     */
     UFUNCTION(BlueprintCallable, Category = Navigation)
-    virtual void RemoveFromStack() override = 0;
+    virtual void RemoveFromStack() = 0;
+
+    /**
+     * Refresh the display of the scene 
+     */
+    UFUNCTION(BlueprintCallable, Category = Display)
+    virtual void RefreshScene() = 0;
 };
