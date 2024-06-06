@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Utilities/GCPointer.h"

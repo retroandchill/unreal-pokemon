@@ -24,5 +24,5 @@ class POKEMONUIDEVELOPER_API UK2Node_DisplayMessage : public UK2Node_DisplayMess
     explicit UK2Node_DisplayMessage(const FObjectInitializer &ObjectInitializer);
 
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
-    void ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
+    void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 };

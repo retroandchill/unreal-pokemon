@@ -3,9 +3,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FPokemonDataEditorModule : public IModuleInterface
-{
-public:
+class FPokemonDataEditorModule : public IModuleInterface {
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 };

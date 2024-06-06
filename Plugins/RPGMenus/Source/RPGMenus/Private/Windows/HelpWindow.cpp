@@ -25,7 +25,7 @@ const FText &UHelpWindow::GetText() const {
     return Text;
 }
 
-void UHelpWindow::SetText(const FText &NewText) {
+void UHelpWindow::SetText(FText NewText) {
     Text = NewText;
     if (HelpText != nullptr) {
         HelpText->SetText(Text);

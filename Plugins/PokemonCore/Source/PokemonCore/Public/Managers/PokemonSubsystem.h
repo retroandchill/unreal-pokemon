@@ -10,6 +10,7 @@
 
 class IBag;
 class UPlayerMetadata;
+
 /**
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
  */

@@ -1,14 +1,14 @@
 ﻿#include "Windows/ItemInfoWindow.h"
 #include "Asserts.h"
-#include "DataManager.h"
+#include "Bag/Item.h"
 #include "Components/Image.h"
+#include "DataManager.h"
 #include "Misc/AutomationTest.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Bag/Item.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemInfoWindowTest, "Private.Windows.ItemInfoWindowTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemInfoWindowTest, "Unit Tests.Windows.ItemInfoWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemInfoWindowTest::RunTest(const FString &Parameters) {
@@ -32,6 +32,6 @@ bool ItemInfoWindowTest::RunTest(const FString &Parameters) {
     ItemInfo->ClearItem();
     CHECK_EQUAL(TEXT(""), ItemDescription->GetText().ToString());
     CHECK_EQUAL(ESlateVisibility::Hidden, ItemIcon->GetVisibility());
-    
+
     return true;
 }

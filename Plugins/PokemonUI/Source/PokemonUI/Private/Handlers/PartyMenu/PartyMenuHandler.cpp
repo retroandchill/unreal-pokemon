@@ -2,18 +2,10 @@
 
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 
-FName UPartyMenuHandler::GetID() const {
-    return ID;
-}
-
-const FText &UPartyMenuHandler::GetText() const {
-    return Text;
-}
-
-bool UPartyMenuHandler::ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const {
+bool UPartyMenuHandler::ShouldShow_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) const {
     return true;
 }
 
-void UPartyMenuHandler::Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) {
+void UPartyMenuHandler::Handle_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) {
     // No effect by default, must implement to utilize
 }

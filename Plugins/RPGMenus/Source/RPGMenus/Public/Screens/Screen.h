@@ -8,6 +8,9 @@
 
 class USelectableWidget;
 struct FInputActionInstance;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
+
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
  * of the other.
@@ -31,12 +34,17 @@ class RPGMENUS_API UScreen : public UUserWidget {
      */
     virtual bool GiveMenuFocus();
 
-  protected:
     /**
      * Close the screen and return to the previous one
      */
     UFUNCTION(BlueprintCallable, Category = Navigation)
     void CloseScreen();
+
+    /**
+     * Callback to bind additional functionality to when CloseScreen() gets called
+     * @return Callback for when the screen is closed
+     */
+    FOnScreenClosed &GetOnScreenClosed();
 
   private:
     /**
@@ -44,4 +52,10 @@ class RPGMENUS_API UScreen : public UUserWidget {
      */
     UPROPERTY()
     TArray<TObjectPtr<USelectableWidget>> SelectableWidgets;
+
+    /**
+     * Callback for when the screen is closed
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnScreenClosed OnScreenClosed;
 };

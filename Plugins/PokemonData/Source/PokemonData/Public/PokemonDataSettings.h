@@ -16,7 +16,7 @@ class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
 
   public:
     UPokemonDataSettings();
-    
+
     /**
      * The list of data tables used by the module
      * @return The list of data tables used by the module
@@ -36,7 +36,7 @@ class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
      * @return Map of pocket id numbers to their actual names
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Bag)
-    const TMap<uint8, FName>& GetPocketNames() const;
+    const TMap<uint8, FName> &GetPocketNames() const;
 
   private:
     /**

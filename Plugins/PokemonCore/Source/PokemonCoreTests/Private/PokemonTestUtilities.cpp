@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "PokemonTestUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Breeding/PokemonGender.h"

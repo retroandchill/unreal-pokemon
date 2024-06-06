@@ -15,8 +15,8 @@ UCLASS(EditInlineNew)
 class POKEMONUI_API USummaryHandler : public UPartyMenuHandler {
     GENERATED_BODY()
 
-  public:
-    void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) override;
+  protected:
+    void Handle_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) override;
 
   private:
     UPROPERTY(EditAnywhere, Category = Screens)

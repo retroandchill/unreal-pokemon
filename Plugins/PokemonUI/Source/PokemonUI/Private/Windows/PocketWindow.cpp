@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Windows/PocketWindow.h"
 #include "Primatives/DisplayText.h"
 #include "Settings/BagSettings.h"

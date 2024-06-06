@@ -19,10 +19,10 @@ bool PocketWindowTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(PocketWindow.Get(), UDisplayText, PocketName);
     ASSERT_NOT_NULL(PocketName);
 
-    for (auto& PocketSettings = GetDefault<UBagSettings>()->GetPocketInfo(); auto &[Key, Value] : PocketSettings) {
+    for (auto &PocketSettings = GetDefault<UBagSettings>()->GetPocketInfo(); auto &[Key, Value] : PocketSettings) {
         PocketWindow->SetCurrentPocket(Key);
         CHECK_EQUAL(Value.DisplayName.ToString(), PocketName->GetText().ToString());
     }
-    
+
     return true;
 }

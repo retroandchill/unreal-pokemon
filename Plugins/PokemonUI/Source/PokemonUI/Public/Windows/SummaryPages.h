@@ -12,7 +12,7 @@ class USummaryScreenPage;
 /**
  * Delegate called when the Pokémon is changed by the iterator.
  */
-DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &)
+DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &);
 
     class UPokemonInfoPage;
 class UWidgetSwitcher;

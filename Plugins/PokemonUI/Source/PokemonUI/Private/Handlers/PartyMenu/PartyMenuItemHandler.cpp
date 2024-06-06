@@ -2,11 +2,11 @@
 
 #include "Handlers/PartyMenu/PartyMenuItemHandler.h"
 
-bool UPartyMenuItemHandler::ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const {
+bool UPartyMenuItemHandler::ShouldShow_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) const {
     // TODO: Implement me
-    return Super::ShouldShow(Screen, Trainer, PartyIndex);
+    return Super::ShouldShow_Implementation(Screen, Trainer, PartyIndex);
 }
 
-void UPartyMenuItemHandler::Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) {
+void UPartyMenuItemHandler::Handle_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) {
     // TODO: Implement me
 }

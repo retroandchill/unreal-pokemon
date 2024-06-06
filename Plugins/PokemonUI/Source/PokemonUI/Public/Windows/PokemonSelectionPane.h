@@ -21,10 +21,13 @@ UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
     GENERATED_BODY()
 
-  public:
+  protected:
     void NativeConstruct() override;
     int32 GetItemCount_Implementation() const override;
     int32 GetColumnCount_Implementation() const override;
+
+  public:
+    void RefreshWindow();
 
     /**
      * Is this panel currently in multi-select mode?

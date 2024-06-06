@@ -8,7 +8,7 @@
  * Customization info about the pocket key wrapper struct.
  */
 class POKEMONDATAEDITOR_API FPocketKeyCustomization : public IPropertyTypeCustomization {
-public:
+  public:
     static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 
     void CustomizeHeader(TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow &HeaderRow,

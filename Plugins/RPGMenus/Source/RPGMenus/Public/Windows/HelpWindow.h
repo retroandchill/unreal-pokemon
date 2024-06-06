@@ -37,7 +37,7 @@ class RPGMENUS_API UHelpWindow : public UUserWidget {
      * @param NewText The text to display
      */
     UFUNCTION(BlueprintCallable, Category = Display, BlueprintInternalUseOnly)
-    void SetText(const FText &NewText);
+    void SetText(FText NewText);
 
   private:
     /**

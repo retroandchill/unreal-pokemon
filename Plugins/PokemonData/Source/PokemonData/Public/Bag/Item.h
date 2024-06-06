@@ -108,6 +108,12 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     FItem();
 
     /**
+     * Get the name given to a portion of an item (when obtained or held)
+     * @return The text to display
+     */
+    const FText &GetPortionName() const;
+
+    /**
      * Determine if this item is a TM?
      * @return If this item is a TM
      */
@@ -154,6 +160,12 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
      * @return Should the quantity be shown?
      */
     bool ShouldShowQuantity() const;
+
+    /**
+     * Can the item in question be held?
+     * @return Can the item in question be held?
+     */
+    bool CanHold() const;
 };
 
 /**
@@ -186,12 +198,28 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetPocketNames();
 
     /**
+     * Get the name given to a portion of an item (when obtained or held)
+     * @param Item The item in question
+     * @return The text to display
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static const FText &GetPortionName(const FItem &Item);
+
+    /**
      * Get if an item is a form of mail or not.
      * @param Item The item in question
      * @return Is the item of form of mail?
      */
     UFUNCTION(BlueprintPure, Category = Items)
     static bool IsMail(const FItem &Item);
+
+    /**
+     * Can the item in question be held?
+     * @param Item The item in question
+     * @return Can the item in question be held?
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static bool CanHold(const FItem &Item);
 };
 
 /**
@@ -204,7 +232,8 @@ struct POKEMONDATA_API FPocketKey {
     /**
      * The name of the pocket.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
     FName PocketName;
 };
 
@@ -213,6 +242,6 @@ struct POKEMONDATA_API FPocketKey {
  * @param Key The key structure
  * @return The return type in question
  */
-inline uint32 GetTypeHash(const FPocketKey& Key) {
+inline uint32 GetTypeHash(const FPocketKey &Key) {
     return GetTypeHash(Key.PocketName);
 }

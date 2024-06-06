@@ -4,10 +4,10 @@
 #include "Screens/PartyScreen.h"
 #include "Trainers/Trainer.h"
 
-bool UPartySwitchHandler::ShouldShow(const IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) const {
-    return Trainer.GetParty().Num() > 1;
+bool UPartySwitchHandler::ShouldShow_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) const {
+    return Trainer->GetParty().Num() > 1;
 }
 
-void UPartySwitchHandler::Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex) {
-    Screen.BeginSwitch(PartyIndex);
+void UPartySwitchHandler::Handle_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) {
+    Screen->BeginSwitch(PartyIndex);
 }
