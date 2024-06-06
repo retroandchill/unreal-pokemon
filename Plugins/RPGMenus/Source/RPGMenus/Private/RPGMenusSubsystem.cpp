@@ -3,7 +3,8 @@
 #include "RPGMenusSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 
-UScreen *URPGMenusSubsystem::AddScreenToStackHelper(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
+UScreen *URPGMenusSubsystem::AddScreenToStackHelper(const UObject *WorldContextObject,
+                                                    TSubclassOf<UScreen> ScreenType) {
     if (ScreenType == nullptr)
         return nullptr;
 

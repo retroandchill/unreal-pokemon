@@ -36,5 +36,4 @@ class POKEMONUI_API UPartyMenuHandler : public UMenuHandler {
      * @param PartyIndex The index of the party that is currently selected
      */
     virtual void Handle(IPartyScreen &Screen, const ITrainer &Trainer, int32 PartyIndex);
-    
 };

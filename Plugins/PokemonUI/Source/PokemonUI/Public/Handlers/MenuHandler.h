@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "MenuHandler.generated.h"
 
 class UCommand;
@@ -14,7 +15,7 @@ UCLASS(Blueprintable, Abstract, EditInlineNew)
 class POKEMONUI_API UMenuHandler : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the ID of the command
      * @return The ID of the command
@@ -31,9 +32,9 @@ public:
      * Create a command object from this handler.
      * @return The created command
      */
-    UCommand* CreateCommand();
+    UCommand *CreateCommand();
 
-private:
+  private:
     /**
      * The ID of the command
      */
@@ -45,5 +46,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = "Menu Handlers")
     FText Text;
-
 };

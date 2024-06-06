@@ -20,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPocketChanged, FName, Pocket);
 /**
  * Delegate called when the player selects a new item in the bag screen.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemChanged, const FItem&, Item, int32, Quantity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemChanged, const FItem &, Item, int32, Quantity);
 
 /**
  * Delegate called when the player is not selecting any items.
@@ -36,7 +36,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
   public:
     explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
-    
+
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.
@@ -61,13 +61,13 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * Get the item selected callback
      * @return Callback for when an item is actually selected
      */
-    FOnItemChanged& GetOnItemSelected();
+    FOnItemChanged &GetOnItemSelected();
 
     /**
      * Get the pocket changed dispatcher
      * @return Callback for when the pocket is changed.
      */
-    FOnPocketChanged& GetOnPocketChanged();
+    FOnPocketChanged &GetOnPocketChanged();
 
     /**
      * Get the item changed dispatcher
@@ -99,7 +99,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * Update the pocket that is being displayed
      */
     void UpdatePocket();
-    
+
     /**
      * Add an item to the window with the given name and quantity
      * @param ItemName The identifier of the item

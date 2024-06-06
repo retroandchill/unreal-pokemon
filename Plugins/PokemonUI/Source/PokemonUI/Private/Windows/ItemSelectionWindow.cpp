@@ -9,8 +9,8 @@
 #include "Player/Bag.h"
 #include <functional>
 
-UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
-    
+UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer)
+    : USelectableWidget(ObjectInitializer) {
 }
 
 void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
@@ -45,19 +45,19 @@ void UItemSelectionWindow::RefreshWindow() {
     UpdatePocket();
 }
 
-FOnItemChanged & UItemSelectionWindow::GetOnItemSelected() {
+FOnItemChanged &UItemSelectionWindow::GetOnItemSelected() {
     return OnItemSelected;
 }
 
-FOnPocketChanged & UItemSelectionWindow::GetOnPocketChanged() {
+FOnPocketChanged &UItemSelectionWindow::GetOnPocketChanged() {
     return OnPocketChanged;
 }
 
-FOnItemChanged & UItemSelectionWindow::GetOnItemChanged() {
+FOnItemChanged &UItemSelectionWindow::GetOnItemChanged() {
     return OnItemChanged;
 }
 
-FOnNoItemSelected & UItemSelectionWindow::GetOnNoItemSelected() {
+FOnNoItemSelected &UItemSelectionWindow::GetOnNoItemSelected() {
     return OnNoItemSelected;
 }
 

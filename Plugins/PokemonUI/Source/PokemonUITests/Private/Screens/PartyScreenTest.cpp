@@ -1,11 +1,11 @@
 ﻿
-#include "PokemonTestUtilities.h"
 #include "Asserts.h"
 #include "Data/SelectionInputs.h"
 #include "External/accessor.hpp"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
+#include "PokemonTestUtilities.h"
 #include "Screens/PokemonSelectScreen.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/InputUtilities.h"

@@ -27,5 +27,5 @@ class POKEMONCORE_API UTrainerHelpers : public UBlueprintFunctionLibrary {
     static const TScriptInterface<ITrainer> &GetPlayerCharacter(const UObject *WorldContextObject);
 
     UFUNCTION(BlueprintPure, Category = "Player", meta = (WorldContext = "WorldContextObject"))
-    static const TScriptInterface<IBag>& GetBag(const UObject *WorldContextObject);
+    static const TScriptInterface<IBag> &GetBag(const UObject *WorldContextObject);
 };

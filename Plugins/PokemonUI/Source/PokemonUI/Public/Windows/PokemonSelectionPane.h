@@ -26,7 +26,7 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
     int32 GetItemCount_Implementation() const override;
     int32 GetColumnCount_Implementation() const override;
 
-public:
+  public:
     void RefreshWindow();
 
     /**

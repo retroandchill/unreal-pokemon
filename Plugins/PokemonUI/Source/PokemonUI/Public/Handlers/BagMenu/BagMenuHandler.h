@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Handlers/MenuHandler.h"
 #include "UObject/Object.h"
+
 #include "BagMenuHandler.generated.h"
 
 class IInventoryScreen;
@@ -16,7 +17,7 @@ UCLASS(Blueprintable, Abstract, EditInlineNew)
 class POKEMONUI_API UBagMenuHandler : public UMenuHandler {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Should this handler show the underlying command to the player?
      * @param Screen The screen that this is on
@@ -25,7 +26,7 @@ public:
      * @return Should the command be shown?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Menu Handlers")
-    bool ShouldShow(const TScriptInterface<IInventoryScreen>& Screen, const FItem& Item, int32 Quantity) const;
+    bool ShouldShow(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item, int32 Quantity) const;
 
     /**
      * Handle the effect of the command
@@ -34,6 +35,5 @@ public:
      * @param Quantity How many copies are being held
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Menu Handlers")
-    void Handle(const TScriptInterface<IInventoryScreen>& Screen, const FItem& Item, int32 Quantity);
-
+    void Handle(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item, int32 Quantity);
 };

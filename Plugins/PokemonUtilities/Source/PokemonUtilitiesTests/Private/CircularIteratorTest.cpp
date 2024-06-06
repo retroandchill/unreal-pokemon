@@ -1,8 +1,7 @@
-﻿#include <array>
-
-#include "Asserts.h"
+﻿#include "Asserts.h"
 #include "Mainpulation/CircularIterator.h"
 #include "Misc/AutomationTest.h"
+#include <array>
 
 struct FTestStruct {
     int32 Value;

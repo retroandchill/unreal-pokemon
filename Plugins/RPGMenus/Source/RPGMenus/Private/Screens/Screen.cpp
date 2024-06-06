@@ -44,6 +44,6 @@ void UScreen::CloseScreen() {
     OnScreenClosed.Broadcast();
 }
 
-FOnScreenClosed & UScreen::GetOnScreenClosed() {
+FOnScreenClosed &UScreen::GetOnScreenClosed() {
     return OnScreenClosed;
 }

@@ -27,7 +27,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void BeginSwitch(int32 Index) final;
     void SetCommandHelpText(const FText &Text) final;
     APlayerController &GetPlayerController() final;
-    FOnPokemonSelected & GetOnPokemonSelect() override;
+    FOnPokemonSelected &GetOnPokemonSelect() override;
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
@@ -38,7 +38,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     UFUNCTION(BlueprintCallable, Category = "Display")
     void SetHelpText(FText Text);
-    
+
     UFUNCTION(BlueprintCallable, Category = Navigation)
     void RemoveFromStack() override;
 
@@ -78,7 +78,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void ToggleCommandWindowVisibility(bool bIsVisible);
 
     FOnPokemonSelected PokemonSelected;
-    
+
     /**
      * The "Window" that the player selects a Pokémon from
      */

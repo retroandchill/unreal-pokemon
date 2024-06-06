@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "K2Node_BaseAsyncTask.h"
+
 #include "K2_NodeScreenBoundNode.generated.h"
 
 class UScreen;
@@ -14,8 +15,8 @@ UCLASS(Abstract)
 class POKEMONUIDEVELOPER_API UK2_NodeScreenBoundNode : public UK2Node_BaseAsyncTask {
     GENERATED_BODY()
 
-public:
-    explicit UK2_NodeScreenBoundNode(const FObjectInitializer& Initializer);
+  public:
+    explicit UK2_NodeScreenBoundNode(const FObjectInitializer &Initializer);
 
     /**
      * Set up the node assigning the struct that this should be retrieving
@@ -27,7 +28,7 @@ public:
     void AllocateDefaultPins() override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 
-protected:
+  protected:
     /**
      * Add the supplied menu actions for each Display Text Screen subclass
      * @param ActionRegistrar Used to register nodes
@@ -35,15 +36,15 @@ protected:
      */
     void SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar, UFunction *FactoryFunc) const;
 
-    virtual void ForEachValidScreen(const TFunctionRef<void(UClass*)>& Action) const;
+    virtual void ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const;
 
-private:
+  private:
     /**
      * The class referenced by this node
      */
     UPROPERTY()
     TSubclassOf<UScreen> ScreenType;
-    
+
     /**
      * How many total screens are there
      */

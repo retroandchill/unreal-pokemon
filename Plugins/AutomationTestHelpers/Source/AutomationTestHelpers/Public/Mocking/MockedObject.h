@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "MockedObject.generated.h"
 
 /**
@@ -12,6 +13,4 @@
 UCLASS()
 class AUTOMATIONTESTHELPERS_API UMockedObject : public UObject {
     GENERATED_BODY()
-
-
 };

@@ -44,7 +44,7 @@ class RPGMENUS_API UScreen : public UUserWidget {
      * Callback to bind additional functionality to when CloseScreen() gets called
      * @return Callback for when the screen is closed
      */
-    FOnScreenClosed& GetOnScreenClosed();
+    FOnScreenClosed &GetOnScreenClosed();
 
   private:
     /**
@@ -57,5 +57,5 @@ class RPGMENUS_API UScreen : public UUserWidget {
      * Callback for when the screen is closed
      */
     UPROPERTY(BlueprintAssignable)
-        FOnScreenClosed OnScreenClosed;
+    FOnScreenClosed OnScreenClosed;
 };

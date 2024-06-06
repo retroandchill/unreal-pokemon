@@ -16,8 +16,8 @@ class POKEMONUIDEVELOPER_API UK2Node_DisplayMessageBase : public UK2_NodeScreenB
     GENERATED_BODY()
 
   protected:
-    void ForEachValidScreen(const TFunctionRef<void(UClass*)>& Action) const final;
-    
+    void ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const final;
+
     /**
      * Check if the supplied pin is connected to another message related node, and if not, add a node to close the
      * window

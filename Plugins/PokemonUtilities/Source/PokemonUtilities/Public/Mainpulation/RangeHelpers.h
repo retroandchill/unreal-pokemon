@@ -35,7 +35,6 @@ TArray<T> ToArray(RangeType Range) {
     return Ret;
 }
 
-
 /**
  * Converter object used to transform a range into an array.
  * @tparam T The type of data the array will hold

@@ -232,7 +232,8 @@ struct POKEMONDATA_API FPocketKey {
     /**
      * The name of the pocket.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
     FName PocketName;
 };
 
@@ -241,6 +242,6 @@ struct POKEMONDATA_API FPocketKey {
  * @param Key The key structure
  * @return The return type in question
  */
-inline uint32 GetTypeHash(const FPocketKey& Key) {
+inline uint32 GetTypeHash(const FPocketKey &Key) {
     return GetTypeHash(Key.PocketName);
 }

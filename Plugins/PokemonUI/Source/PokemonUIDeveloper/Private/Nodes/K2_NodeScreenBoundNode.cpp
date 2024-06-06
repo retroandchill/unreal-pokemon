@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/K2_NodeScreenBoundNode.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
@@ -26,19 +25,18 @@ void UK2_NodeScreenBoundNode::AllocateDefaultPins() {
 
 FText UK2_NodeScreenBoundNode::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     if (ScreenType != nullptr && *TotalScreens > 1) {
-        return FText::FormatNamed(NSLOCTEXT("K2Node", "NodeScreenBoundNode_NodeTitleFormat", "{OriginalName} ({ClassName})"),
-                                  TEXT("OriginalName"), Super::GetNodeTitle(TitleType), TEXT("ClassName"),
-                                  ScreenType->GetDisplayNameText());
+        return FText::FormatNamed(
+            NSLOCTEXT("K2Node", "NodeScreenBoundNode_NodeTitleFormat", "{OriginalName} ({ClassName})"),
+            TEXT("OriginalName"), Super::GetNodeTitle(TitleType), TEXT("ClassName"), ScreenType->GetDisplayNameText());
     }
 
     return Super::GetNodeTitle(TitleType);
 }
 
 void UK2_NodeScreenBoundNode::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-    UFunction *FactoryFunc) const {
+                                                UFunction *FactoryFunc) const {
     auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
-                                TSubclassOf<UScreen> Subclass, TSharedRef<uint32> NodeCounter,
-                                UFunction *Factory) {
+                                TSubclassOf<UScreen> Subclass, TSharedRef<uint32> NodeCounter, UFunction *Factory) {
         auto TypedNode = CastChecked<UK2_NodeScreenBoundNode>(Node);
         auto ReturnProp = CastFieldChecked<FObjectProperty>(Factory->GetReturnProperty());
 
@@ -49,7 +47,7 @@ void UK2_NodeScreenBoundNode::SupplyMenuActions(FBlueprintActionDatabaseRegistra
     };
 
     auto ScreenCounter = MakeShared<uint32>(0);
-    ForEachValidScreen([this, &ScreenCounter, &CustomizeCallback, &FactoryFunc, &ActionRegistrar](UClass* MenuClass) {
+    ForEachValidScreen([this, &ScreenCounter, &CustomizeCallback, &FactoryFunc, &ActionRegistrar](UClass *MenuClass) {
         if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(MenuClass, true)) {
             return;
         }

@@ -38,7 +38,7 @@ APlayerController &UPokemonSelectScreen::GetPlayerController() {
     return *GetOwningPlayer();
 }
 
-FOnPokemonSelected & UPokemonSelectScreen::GetOnPokemonSelect() {
+FOnPokemonSelected &UPokemonSelectScreen::GetOnPokemonSelect() {
     return PokemonSelected;
 }
 
@@ -60,7 +60,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
             PokemonSelected.Execute(this, Trainer, Index);
             return;
         }
-        
+
         if (SelectionPane->IsSwitching()) {
             if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
                 Trainer->SwapPositionsInParty(SwitchingIndex, Index);

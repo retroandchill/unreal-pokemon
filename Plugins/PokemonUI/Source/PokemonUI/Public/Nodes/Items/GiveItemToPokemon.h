@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "GiveItemToPokemon.generated.h"
 
 class IPokemon;
@@ -19,7 +20,7 @@ UCLASS(meta = (HideThen))
 class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * ive an item to a Pokémon to hold, and take a held item from a Pokémon
      * @param WorldContextObject The object used to obtain the state of the world
@@ -30,12 +31,12 @@ public:
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UGiveItemToPokemon* GiveItemToPokemon(const UObject *WorldContextObject, FName Item,
-        const TScriptInterface<IPokemon>& Pokemon, int32 PokemonIndex = 0);
+    static UGiveItemToPokemon *GiveItemToPokemon(const UObject *WorldContextObject, FName Item,
+                                                 const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex = 0);
 
     void Activate() override;
 
-private:
+  private:
     /**
      * Function called to execute the item given pin
      */
@@ -53,7 +54,7 @@ private:
 
     UPROPERTY(BlueprintAssignable)
     FItemResult ItemRejected;
-    
+
     /**
      * The object used to obtain the state of the world to open the menu with
      */
@@ -78,5 +79,4 @@ private:
 
     UPROPERTY()
     TObjectPtr<UObject> ItemUtilities;
-
 };

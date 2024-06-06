@@ -59,7 +59,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
             LoadBlueprints();
             LoadedBlueprints = true;
         }
-        
+
         TArray<TSubclassOf<T>> Subclasses;
         for (TObjectIterator<UClass> It; It; ++It) {
             if (It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract)) {
@@ -81,7 +81,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      */
     static void LoadBlueprints();
 
-private:
+  private:
     /**
      * Flag to determine if the
      */

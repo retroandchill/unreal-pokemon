@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "CursorMemorySubsystem.generated.h"
 
 /**
@@ -14,14 +15,14 @@ UCLASS()
 class POKEMONUI_API UCursorMemorySubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-    
+
     /**
      * Get the bag pocket cursor memory
      * @return The memory of the cursor position within the pockets of the bag
      */
-    const TMap<FName, int32>& GetBagPocketMemory() const;
+    const TMap<FName, int32> &GetBagPocketMemory() const;
 
     /**
      * Update the new position of the index for the pocket
@@ -36,7 +37,7 @@ public:
      */
     const TArray<FName> &GetBagPocketNames() const;
 
-private:
+  private:
     /**
      * The memory of the cursor position within the pockets of the bag
      */
@@ -46,5 +47,4 @@ private:
      * The list of names for each pocket in question
      */
     TArray<FName> PocketNames;
-
 };

@@ -75,11 +75,11 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
      * @tparam T The screen class to spawn
      * @param WorldContextObject The world context object needed to get the subsystem
      * @param ScreenClass The actually class object to spawn
-     * @return 
+     * @return
      */
     template <typename T>
-    requires std::is_base_of_v<UScreen, T>
-    static T* AddScreenToStack(const UObject* WorldContextObject, TSubclassOf<T> ScreenClass) {
+        requires std::is_base_of_v<UScreen, T>
+    static T *AddScreenToStack(const UObject *WorldContextObject, TSubclassOf<T> ScreenClass) {
         if (ScreenClass == nullptr)
             return nullptr;
 

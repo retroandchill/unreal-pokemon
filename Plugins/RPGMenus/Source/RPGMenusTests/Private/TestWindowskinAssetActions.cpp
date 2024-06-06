@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Asserts.h"
 #include "Data/Windowskin.h"
 #include "Misc/AutomationTest.h"

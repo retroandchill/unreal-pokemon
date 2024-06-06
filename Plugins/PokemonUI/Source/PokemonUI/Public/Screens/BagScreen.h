@@ -23,11 +23,11 @@ UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
 
-public:
-    FOnItemSelected& GetOnItemSelected() final;
+  public:
+    FOnItemSelected &GetOnItemSelected() final;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
     void ToggleItemSelection(bool bCanSelect) final;
@@ -38,26 +38,26 @@ public:
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
 
-private:
-    void CreateCommands(const FItem& Item, int32 Quantity);
-    
+  private:
+    void CreateCommands(const FItem &Item, int32 Quantity);
+
     /**
      * Called when an item is selected by the player
      * @param Item The item that has been selected.
      * @param Quantity The quantity that has been selected
      */
     UFUNCTION()
-    void SelectItem(const FItem& Item, int32 Quantity);
+    void SelectItem(const FItem &Item, int32 Quantity);
 
     UFUNCTION()
-    void OnItemCommandSelected(int32 CommandIndex, UCommand* Command);
+    void OnItemCommandSelected(int32 CommandIndex, UCommand *Command);
 
     /**
      * Called then the player cancels in the item command window
      */
     UFUNCTION()
     void OnItemCommandCanceled();
-    
+
     /**
      * The window that displays the pockets
      */

@@ -53,7 +53,7 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
      * @return Information about the various Bag Pockets.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Inventory")
-    const TMap<FName, FPocketInfo>& GetPocketInfo() const;
+    const TMap<FName, FPocketInfo> &GetPocketInfo() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Inventory")
     const FSoftClassPath &GetItemUtilitiesClass() const;
@@ -69,9 +69,10 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
      * Information about the various Bag Pockets.
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetPocketInfo, Config, Category = "Player|Inventory",
-        meta = (GetKeyOptions = "PokemonData.ItemHelper.GetPocketNames"))
+              meta = (GetKeyOptions = "PokemonData.ItemHelper.GetPocketNames"))
     TMap<FName, FPocketInfo> PocketInfo;
 
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetItemUtilitiesClass, Config, Category = "Player|Inventory", meta = (MustImplement = "ItemUtilities"))
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetItemUtilitiesClass, Config, Category = "Player|Inventory",
+              meta = (MustImplement = "ItemUtilities"))
     FSoftClassPath ItemUtilitiesClass;
 };

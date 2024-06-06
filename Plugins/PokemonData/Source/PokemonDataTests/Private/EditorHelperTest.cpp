@@ -1,7 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Asserts.h"
-
-
 #include "Bag/Item.h"
 #include "Battle/Type.h"
 #include "Exp/GrowthRateData.h"

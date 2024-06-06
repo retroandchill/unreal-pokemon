@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include "Screens/PartyScreen.h"
 
 class FMockScreen : public IPartyScreen {
@@ -21,16 +20,14 @@ class FMockScreen : public IPartyScreen {
         return *PlayerController;
     }
 
-    FOnPokemonSelected& GetOnPokemonSelect() override {
+    FOnPokemonSelected &GetOnPokemonSelect() override {
         return OnPokemonSelected;
     }
 
     void RemoveFromStack() override {
-        
     }
 
     virtual void RefreshScene() override {
-        
     }
 
     TOptional<int32> SwitchIndex;

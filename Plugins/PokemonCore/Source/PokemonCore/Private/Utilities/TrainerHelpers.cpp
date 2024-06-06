@@ -8,6 +8,6 @@ const TScriptInterface<ITrainer> &UTrainerHelpers::GetPlayerCharacter(const UObj
     return UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UPokemonSubsystem>()->GetPlayer();
 }
 
-const TScriptInterface<IBag> & UTrainerHelpers::GetBag(const UObject *WorldContextObject) {
+const TScriptInterface<IBag> &UTrainerHelpers::GetBag(const UObject *WorldContextObject) {
     return UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UPokemonSubsystem>()->GetBag();
 }

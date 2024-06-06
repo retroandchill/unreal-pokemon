@@ -54,7 +54,7 @@ void UPokemonSubsystem::StartNewGame() {
     Bag->ObtainItem(TEXT("ANTIDOTE"), 10);
     Bag->ObtainItem(TEXT("POKEBALL"), 10);
 #endif
-    
+
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }

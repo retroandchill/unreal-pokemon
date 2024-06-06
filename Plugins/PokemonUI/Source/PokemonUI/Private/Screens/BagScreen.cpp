@@ -1,13 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/BagScreen.h"
+#include "Handlers/BagMenu/BagMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/ItemInfoWindow.h"
 #include "Windows/ItemSelectionWindow.h"
 #include "Windows/PocketWindow.h"
-#include "Handlers/BagMenu/BagMenuHandler.h"
 
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
@@ -28,7 +28,7 @@ void UBagScreen::NativeConstruct() {
     ItemSelectionWindow->SetIndex(0);
 }
 
-FOnItemSelected & UBagScreen::GetOnItemSelected() {
+FOnItemSelected &UBagScreen::GetOnItemSelected() {
     return OnItemSelected;
 }
 
@@ -45,7 +45,8 @@ void UBagScreen::RefreshScene() {
 }
 
 void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {
-    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers, CancelText.GetPtrOrNull(), this, Item, Quantity);
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers, CancelText.GetPtrOrNull(), this,
+                                                                   Item, Quantity);
     CommandWindow->SetCommands(MoveTemp(Commands));
 }
 

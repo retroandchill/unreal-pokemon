@@ -3,9 +3,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FRPGMenusTestsModule : public IModuleInterface
-{
-public:
+class FRPGMenusTestsModule : public IModuleInterface {
+  public:
     virtual void StartupModule() override;
     virtual void ShutdownModule() override;
 };

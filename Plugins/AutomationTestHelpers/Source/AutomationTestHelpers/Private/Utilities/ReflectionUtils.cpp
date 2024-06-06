@@ -3,9 +3,9 @@
 #include "Utilities/ReflectionUtils.h"
 #include "AutomationTestModule.h"
 #include "Editor/PropertyEditor/Private/DetailCategoryBuilderImpl.h"
+#include "Engine/ObjectLibrary.h"
 #include "IDetailTreeNode.h"
 #include "PropertyPath.h"
-#include "Engine/ObjectLibrary.h"
 #include "Utilities/WidgetTestUtilities.h"
 
 bool UReflectionUtils::LoadedBlueprints = false;

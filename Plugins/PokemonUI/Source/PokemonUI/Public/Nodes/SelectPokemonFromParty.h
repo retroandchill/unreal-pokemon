@@ -12,8 +12,8 @@ class UPokemonSelectScreen;
 class ITrainer;
 class IPartyScreen;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPokemonSelectedDynamic, const TScriptInterface<IPartyScreen>&, Screen,
-                                     const TScriptInterface<ITrainer>&, Trainer, int32, Index);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPokemonSelectedDynamic, const TScriptInterface<IPartyScreen> &, Screen,
+                                               const TScriptInterface<ITrainer> &, Trainer, int32, Index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPokemonCancel);
 
 /**
@@ -23,7 +23,7 @@ UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
 class POKEMONUI_API USelectPokemonFromParty : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Open the menu to select a Pokémon from the party
      * @param WorldContextObject The object used to obtain the state of the world
@@ -33,23 +33,25 @@ public:
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static USelectPokemonFromParty* SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText, TSubclassOf<UPokemonSelectScreen> ScreenClass);
-    
+    static USelectPokemonFromParty *SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText,
+                                                           TSubclassOf<UPokemonSelectScreen> ScreenClass);
+
     void Activate() override;
 
-private:
+  private:
     /**
      * Function called to execute the on selected pin
      */
     UFUNCTION()
-    void ExecuteOnSelected(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 Index);
+    void ExecuteOnSelected(const TScriptInterface<IPartyScreen> &Screen, const TScriptInterface<ITrainer> &Trainer,
+                           int32 Index);
 
     /**
      * Function called to execute the on cancelled pin
      */
     UFUNCTION()
     void ExecuteOnCanceled();
-    
+
     /**
      * Called when the player selects a Pokémon
      */
@@ -61,7 +63,7 @@ private:
      */
     UPROPERTY(BlueprintAssignable)
     FOnPokemonCancel OnCanceled;
-    
+
     /**
      * The object used to obtain the state of the world to open the menu with
      */
