@@ -2,7 +2,7 @@
 #include "Bag/Item.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemMethodTests, "Private.Bag.ItemMethodTests",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemMethodTests, "Unit Tests.Data.Bag.ItemMethodTests",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemMethodTests::RunTest(const FString &Parameters) {

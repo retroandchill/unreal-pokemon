@@ -2,7 +2,7 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(StringUtilitiesTest, "Private.StringUtilitiesTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(StringUtilitiesTest, "Unit Tests.Utilities.StringUtilitiesTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool StringUtilitiesTest::RunTest(const FString &Parameters) {
