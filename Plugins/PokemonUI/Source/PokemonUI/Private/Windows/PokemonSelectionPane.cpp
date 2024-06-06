@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/PokemonSelectionPane.h"
+#include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -58,6 +59,10 @@ int32 UPokemonSelectionPane::GetItemCount_Implementation() const {
 
 int32 UPokemonSelectionPane::GetColumnCount_Implementation() const {
     return Columns;
+}
+
+void UPokemonSelectionPane::RefreshWindow() {
+    Algo::ForEach(ActivePanels, &ISelectablePanel::Refresh);
 }
 
 bool UPokemonSelectionPane::IsMultiSelectMode() const {

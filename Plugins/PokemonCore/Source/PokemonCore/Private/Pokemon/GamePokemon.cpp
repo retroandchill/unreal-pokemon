@@ -126,6 +126,10 @@ const FItem *UGamePokemon::GetHoldItem() const {
     return ItemData;
 }
 
+void UGamePokemon::SetHoldItem(FName Item) {
+    HoldItem.Emplace(Item);
+}
+
 const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
     return OwnerInfo;
 }

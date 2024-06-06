@@ -7,6 +7,10 @@
 
 FItem::FItem() = default;
 
+const FText &FItem::GetPortionName() const {
+    return RealPortionName.IsEmpty() ? RealName : RealPortionName;
+}
+
 bool FItem::IsTM() const {
     return FieldUse == EFieldUse::TM;
 }
@@ -66,6 +70,10 @@ TArray<FName> UItemHelper::GetPocketNames() {
     }
     
     return Names;
+}
+
+const FText & UItemHelper::GetPortionName(const FItem &Item) {
+    return Item.GetPortionName();
 }
 
 bool UItemHelper::IsMail(const FItem &Item) {

@@ -16,7 +16,7 @@ class ITrainer;
 DECLARE_DELEGATE_ThreeParams(FOnPokemonSelected, const TScriptInterface<class IPartyScreen>&, const TScriptInterface<ITrainer>&, int32);
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UPartyScreen : public UInterface {
     GENERATED_BODY()
 };
@@ -46,9 +46,15 @@ class POKEMONUI_API IPartyScreen : public IRemovableScreen {
      */
     virtual APlayerController &GetPlayerController() = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Display)
+    virtual void RefreshScene() = 0;
+
     /**
      * Get the callback override for when a Pokémon is selected
      * @return Override to the Pokémon selection callback
      */
     virtual FOnPokemonSelected& GetOnPokemonSelect() = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Navigation)
+    virtual void RemoveFromStack() override = 0;
 };

@@ -10,6 +10,6 @@ const TMap<FName, FPocketInfo> & UBagSettings::GetPocketInfo() const {
     return PocketInfo;
 }
 
-TSubclassOf<UObject> UBagSettings::GetItemUtilitiesClass() const {
+const FSoftClassPath &UBagSettings::GetItemUtilitiesClass() const {
     return ItemUtilitiesClass;
 }

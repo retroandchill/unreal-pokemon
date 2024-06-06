@@ -108,6 +108,12 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     FItem();
 
     /**
+     * Get the name given to a portion of an item (when obtained or held)
+     * @return The text to display
+     */
+    const FText &GetPortionName() const;
+
+    /**
      * Determine if this item is a TM?
      * @return If this item is a TM
      */
@@ -190,6 +196,14 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetPocketNames();
+
+    /**
+     * Get the name given to a portion of an item (when obtained or held)
+     * @param Item The item in question
+     * @return The text to display
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static const FText &GetPortionName(const FItem &Item);
 
     /**
      * Get if an item is a form of mail or not.

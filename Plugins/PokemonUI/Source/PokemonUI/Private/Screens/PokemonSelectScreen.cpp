@@ -3,6 +3,7 @@
 #include "Data/Command.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Utilities/PokemonUIUtils.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
 #include "Windows/PokemonSelectionPane.h"
@@ -41,6 +42,10 @@ FOnPokemonSelected & UPokemonSelectScreen::GetOnPokemonSelect() {
     return PokemonSelected;
 }
 
+void UPokemonSelectScreen::RefreshScene() {
+    SelectionPane->RefreshWindow();
+}
+
 void UPokemonSelectScreen::SetHelpText(FText Text) {
     HelpWindow->SetText(Text);
 }
@@ -70,14 +75,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 }
 
 void UPokemonSelectScreen::DisplayPokemonCommands(ITrainer &Trainer, int32 Index) {
-    TArray<TObjectPtr<UCommand>> Commands;
-    for (UPartyMenuHandler *Handler : PokemonHandlers) {
-        if (!Handler->ShouldShow(*this, Trainer, Index))
-            continue;
-
-        Commands.Add(UCommand::CreateBasicCommand(Handler->GetID(), Handler->GetText(), Handler));
-    }
-    Commands.Add(UCommand::CreateBasicCommand(TEXT("Cancel"), CancelText));
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, &CancelText, *this, Trainer, Index);
     CommandWindow->SetCommands(MoveTemp(Commands));
 
     SelectionPane->SetActive(false);

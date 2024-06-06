@@ -20,7 +20,8 @@ bool BagTest::RunTest(const FString &Parameters) {
 
     FIndexedBagSorter Sorter;
     Bag->SortPocket(TEXT("Medicine"), Sorter);
-    auto PocketContents = Bag->TransformPocket<FString>(TEXT("Medicine"), [](FName Item, int32) { return Item.ToString(); });
+    TArray<FString> PocketContents;
+    Bag->ForEachInPocket(TEXT("Medicine"), [&PocketContents](FName Item, int32) { PocketContents.Add(Item.ToString()); });
     ASSERT_EQUAL(2, PocketContents.Num());
     CHECK_EQUAL(TEXT("POTION"), PocketContents[0]);
     CHECK_EQUAL(TEXT("FULLHEAL"), PocketContents[1]);

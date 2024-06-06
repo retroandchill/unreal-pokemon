@@ -2,6 +2,7 @@
 
 
 #include "Handlers/MenuHandler.h"
+#include "Data/Command.h"
 
 FName UMenuHandler::GetID() const {
     return ID;
@@ -9,4 +10,8 @@ FName UMenuHandler::GetID() const {
 
 const FText &UMenuHandler::GetText() const {
     return Text;
+}
+
+UCommand * UMenuHandler::CreateCommand() {
+    return UCommand::CreateBasicCommand(ID, Text, this);
 }

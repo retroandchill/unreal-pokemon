@@ -3,10 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/Command.h"
+#include "Handlers/MenuHandler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Mainpulation/RangeHelpers.h"
 
 #include "PokemonUIUtils.generated.h"
 
+class UCommand;
+class UMenuHandler;
 class IPokemon;
 struct FTextColor;
 class UProgressBar;
@@ -77,4 +82,19 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
     static void SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue);
 
     static void SetPokemonGenderText(const IPokemon &Pokemon, TObjectPtr<UDisplayText> &TextWidget);
+
+    template <typename T, typename... A>
+    static TArray<TObjectPtr<UCommand>> CreateCommandListFromHandlers(const TArray<T>& Handlers, const FText* CancelText,  A&&... Args) {
+        auto Commands = RangeHelpers::CreateRange(Handlers)
+        | std::views::filter([&Args...](T Handler) { return Handler->ShouldShow(Forward<A>(Args)...); })
+        | std::views::transform(&UMenuHandler::CreateCommand)
+        | RangeHelpers::TToArray<TObjectPtr<UCommand>>();
+
+        if (CancelText != nullptr) {
+            static FName CancelName = TEXT("Cancel");
+            Commands.Add(UCommand::CreateBasicCommand(CancelName, *CancelText));
+        }
+        
+        return Commands;
+    }
 };

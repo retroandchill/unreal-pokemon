@@ -138,6 +138,9 @@ class POKEMONCORE_API IPokemon {
      */
     virtual const FItem *GetHoldItem() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Items)
+    virtual void SetHoldItem(FName Item) = 0;
+
     /**
      * Get the information about the Pokémon's original trainer
      * @return Is information about the original trainer

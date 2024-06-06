@@ -51,7 +51,11 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     const FItem *GetCurrentItem() const;
 
+    int32 GetItemQuantity() const;
+
     int32 GetItemCount_Implementation() const override;
+
+    void RefreshWindow();
 
     /**
      * Get the item selected callback
@@ -87,6 +91,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     void SlotItem(UItemOption *Option, int32 ItemIndex);
 
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void ProcessConfirm_Implementation(int32 CurrentIndex) override;
     void ReceiveMoveCursor(ECursorDirection Direction) override;
 
   private:

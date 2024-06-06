@@ -29,6 +29,9 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     APlayerController &GetPlayerController() final;
     FOnPokemonSelected & GetOnPokemonSelect() override;
 
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void RefreshScene() override;
+
     /**
      * Set the help text for the regular help window
      * @param Text The text to set to the window

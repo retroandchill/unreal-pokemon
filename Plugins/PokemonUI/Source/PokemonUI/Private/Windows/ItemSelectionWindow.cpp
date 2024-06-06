@@ -29,8 +29,20 @@ const FItem *UItemSelectionWindow::GetCurrentItem() const {
     return nullptr;
 }
 
+int32 UItemSelectionWindow::GetItemQuantity() const {
+    if (Options.IsValidIndex(GetIndex())) {
+        return Options[GetIndex()]->GetQuantity();
+    }
+
+    return 0;
+}
+
 int32 UItemSelectionWindow::GetItemCount_Implementation() const {
     return Options.Num();
+}
+
+void UItemSelectionWindow::RefreshWindow() {
+    UpdatePocket();
 }
 
 FOnItemChanged & UItemSelectionWindow::GetOnItemSelected() {
@@ -57,6 +69,12 @@ void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int3
     } else {
         OnNoItemSelected.Broadcast();
     }
+}
+
+void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
+    check(Options.IsValidIndex(CurrentIndex))
+    UItemOption *Option = Options[CurrentIndex];
+    OnItemSelected.Broadcast(Option->GetItem(), Option->GetQuantity());
 }
 
 void UItemSelectionWindow::ReceiveMoveCursor(ECursorDirection Direction) {

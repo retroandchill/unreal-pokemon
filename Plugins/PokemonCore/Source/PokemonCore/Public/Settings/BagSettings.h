@@ -56,7 +56,7 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     const TMap<FName, FPocketInfo>& GetPocketInfo() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Inventory")
-    TSubclassOf<UObject> GetItemUtilitiesClass() const;
+    const FSoftClassPath &GetItemUtilitiesClass() const;
 
   private:
     /**
@@ -73,5 +73,5 @@ class POKEMONCORE_API UBagSettings : public UDeveloperSettings {
     TMap<FName, FPocketInfo> PocketInfo;
 
     UPROPERTY(EditAnywhere, BlueprintGetter = GetItemUtilitiesClass, Config, Category = "Player|Inventory", meta = (MustImplement = "ItemUtilities"))
-    TSubclassOf<UObject> ItemUtilitiesClass;
+    FSoftClassPath ItemUtilitiesClass;
 };

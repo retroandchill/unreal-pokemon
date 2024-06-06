@@ -8,6 +8,8 @@
 
 #include "BagScreen.generated.h"
 
+class UCommand;
+class UBagMenuHandler;
 class UCommandWindow;
 struct FItem;
 class UPocketWindow;
@@ -33,7 +35,12 @@ public:
     UFUNCTION(BlueprintCallable, Category = Navigation)
     void RemoveFromStack() override;
 
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void RefreshScene() override;
+
 private:
+    void CreateCommands(const FItem& Item, int32 Quantity);
+    
     /**
      * Called when an item is selected by the player
      * @param Item The item that has been selected.
@@ -41,6 +48,9 @@ private:
      */
     UFUNCTION()
     void SelectItem(const FItem& Item, int32 Quantity);
+
+    UFUNCTION()
+    void OnItemCommandSelected(int32 CommandIndex, UCommand* Command);
 
     /**
      * Called then the player cancels in the item command window
@@ -71,6 +81,15 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UCommandWindow> CommandWindow;
+
+    /**
+     * The handlers in the menu to apply to item selections
+     */
+    UPROPERTY(EditAnywhere, Instanced, Category = Selection)
+    TArray<TObjectPtr<UBagMenuHandler>> CommandHandlers;
+
+    UPROPERTY(EditAnywhere, Category = Selection)
+    TOptional<FText> CancelText;
 
     FOnItemSelected OnItemSelected;
 };

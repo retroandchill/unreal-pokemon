@@ -29,6 +29,10 @@ class FMockScreen : public IPartyScreen {
         
     }
 
+    virtual void RefreshScene() override {
+        
+    }
+
     TOptional<int32> SwitchIndex;
 
     APlayerController *PlayerController = nullptr;

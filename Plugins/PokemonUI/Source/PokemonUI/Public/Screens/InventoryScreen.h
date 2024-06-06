@@ -15,7 +15,7 @@ struct FItem;
 DECLARE_DELEGATE_ThreeParams(FOnItemSelected, const TScriptInterface<class IInventoryScreen>&, const FItem&, int32);
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UInventoryScreen : public UInterface {
     GENERATED_BODY()
 };
@@ -42,8 +42,10 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
     virtual void ToggleItemSelection(bool bCanSelect) = 0;
 
-        virtual void UseItemOnPokemon(const FItem& Item, int32 Quantity, const TScriptInterface<IPokemon>& Pokemon) {
-            
-        }
+    UFUNCTION(BlueprintCallable, Category = Navigation)
+    virtual void RemoveFromStack() override = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Display)
+    virtual void RefreshScene() = 0;
 
 };
