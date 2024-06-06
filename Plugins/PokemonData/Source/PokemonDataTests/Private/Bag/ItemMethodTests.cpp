@@ -16,8 +16,10 @@ bool ItemMethodTests::RunTest(const FString &Parameters) {
     // Portion Name
     FakeItem.RealName = FText::FromStringView(TEXT("Fake Item"));
     CHECK_EQUAL(TEXT("Fake Item"), FakeItem.GetPortionName().ToString());
+    CHECK_EQUAL(TEXT("Fake Item"), UItemHelper::GetPortionName(FakeItem).ToString());
     FakeItem.RealPortionName = FText::FromStringView(TEXT("Fake Portion"));
     CHECK_EQUAL(TEXT("Fake Portion"), FakeItem.GetPortionName().ToString());
+    CHECK_EQUAL(TEXT("Fake Portion"), UItemHelper::GetPortionName(FakeItem).ToString());
 
     // TM/HM/TR
     FakeItem.FieldUse = EFieldUse::Direct;
