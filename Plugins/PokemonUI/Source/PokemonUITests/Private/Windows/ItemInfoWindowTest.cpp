@@ -8,7 +8,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemInfoWindowTest, "Private.Windows.ItemInfoWindowTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemInfoWindowTest, "Unit Tests.Windows.ItemInfoWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemInfoWindowTest::RunTest(const FString &Parameters) {
