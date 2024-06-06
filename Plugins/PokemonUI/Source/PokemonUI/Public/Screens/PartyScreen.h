@@ -7,6 +7,7 @@
 
 #include "PartyScreen.generated.h"
 
+class UPartyMenuHandler;
 class ITrainer;
 
 /**
@@ -34,6 +35,12 @@ class POKEMONUI_API IPartyScreen {
      */
     UFUNCTION(BlueprintCallable, Category = Switching)
     virtual void BeginSwitch(int32 Index) = 0;
+
+    /**
+     * Show a list of commands taking in the provided handlers to generate the list.
+     * @param Handlers The handlers to take in for the party menu
+     */
+    virtual void ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) = 0;
 
     /**
      * Set the text of the help window

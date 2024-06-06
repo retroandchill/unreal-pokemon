@@ -27,6 +27,8 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     UFUNCTION(BlueprintCallable, Category = Switching)
     void BeginSwitch(int32 Index) final;
     
+    void ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) override;
+    
     UFUNCTION(BlueprintCallable, Category = Display)
     void SetCommandHelpText(FText Text) final;
     

@@ -30,6 +30,13 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
     SelectionPane->SetActive(true);
 }
 
+void UPokemonSelectScreen::ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
+    auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, CancelText, this, Trainer, SelectionPane->GetIndex());
+    CommandWindow->SetCommands(MoveTemp(Commands));
+    CommandWindow->SetIndex(0);
+}
+
 void UPokemonSelectScreen::SetCommandHelpText(FText Text) {
     CommandHelpWindow->SetText(Text);
 }
