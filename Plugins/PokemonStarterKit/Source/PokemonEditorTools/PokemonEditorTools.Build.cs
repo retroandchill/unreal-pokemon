@@ -9,7 +9,8 @@ public class PokemonEditorTools : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", 
+                "PokemonData",
             }
         );
 
@@ -19,7 +20,8 @@ public class PokemonEditorTools : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore", 
+                "PokemonSettings"
             }
         );
     }

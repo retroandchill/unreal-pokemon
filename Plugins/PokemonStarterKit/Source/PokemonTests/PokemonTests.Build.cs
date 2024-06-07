@@ -26,7 +26,8 @@ public class PokemonTests : ModuleRules
                 "BlueprintGraph",
                 "GraphEditor",
                 "KismetCompiler",
-                "UnrealEd"
+                "UnrealEd",
+                "PokemonEditorTools"
             }
         );
         
