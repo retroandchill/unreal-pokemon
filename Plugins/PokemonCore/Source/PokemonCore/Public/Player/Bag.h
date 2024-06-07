@@ -34,6 +34,14 @@ class POKEMONCORE_API IBag {
     virtual int32 GetItemQuantity(FName ItemID) const = 0;
 
     /**
+     * Is the player able to obtain an item of this type.
+     * @param ItemID The ID of the item to check against
+     * @return Can the item be added.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
+    virtual bool CanObtainItem(FName ItemID) const = 0;
+
+    /**
      * Add an item to the player's inventory.
      * @param ItemID The internal ID of the item
      * @param Amount The quantity of items to add

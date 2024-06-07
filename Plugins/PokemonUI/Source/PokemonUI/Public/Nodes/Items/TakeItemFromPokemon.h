@@ -3,64 +3,57 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GiveItemToPokemon.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-
-#include "GiveItemToPokemon.generated.h"
+#include "TakeItemFromPokemon.generated.h"
 
 class IPokemon;
 
 /**
- * Delegate for the result of the item in question
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FItemResult);
-
-/**
- * Give an item to a Pokémon to hold, and take a held item from a Pokémon.
+ * Take a Pokémon's hold item and return it to the bag
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-  public:
+public:
     /**
      * Give an item to a Pokémon to hold, and take a held item from a Pokémon
      * @param WorldContextObject The object used to obtain the state of the world
-     * @param Item The new item to give
      * @param Pokemon The Pokémon receiving the item
-     * @param PokemonIndex The index of the Pokémon in question
      * @return The node to execute the task with
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UGiveItemToPokemon *GiveItemToPokemon(const UObject *WorldContextObject, FName Item,
-                                                 const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex = 0);
+    static UTakeItemFromPokemon *TakeItemFromPokemon(const UObject *WorldContextObject, const TScriptInterface<IPokemon> &Pokemon);
 
+    
     void Activate() override;
 
-  private:
+private:
     /**
-     * Function called to execute the item given pin
+     * Function called to execute the item taken pin
      */
     UFUNCTION()
-    void ExecuteItemGiven();
+    void ExecuteItemTaken();
 
     /**
-     * Function called to execute the item rejected pin
+     * Function called to execute the item not taken pin
      */
     UFUNCTION()
-    void ExecuteItemRejected();
+    void ExecuteItemNotTaken();
 
     /**
-     * Called when the item is given to the Pokémon
+     * Called when the item is taken from the Pokémon
      */
     UPROPERTY(BlueprintAssignable)
-    FItemResult ItemGiven;
+    FItemResult ItemTaken;
 
     /**
-     * Called when the player backs out (or the item cannot be given)
+     * Called when the player backs out (or the item cannot be taken)
      */
     UPROPERTY(BlueprintAssignable)
-    FItemResult ItemRejected;
+    FItemResult ItemNotTaken;
 
     /**
      * The object used to obtain the state of the world to open the menu with
@@ -69,24 +62,15 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     TObjectPtr<const UObject> WorldContextObject;
 
     /**
-     * The new item to give
-     */
-    FName Item;
-
-    /**
      * The Pokémon receiving the item
      */
     UPROPERTY()
     TScriptInterface<IPokemon> Pokemon;
 
     /**
-     * The index of the Pokémon in question
-     */
-    int32 PokemonIndex;
-
-    /**
      * The utility object used to call special macros
      */
     UPROPERTY()
     TObjectPtr<UObject> ItemUtilities;
+
 };
