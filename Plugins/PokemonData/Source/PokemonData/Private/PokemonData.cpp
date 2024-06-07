@@ -12,7 +12,8 @@
 #include "Field/Weather.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
-#include "PokemonDataSettings.h"
+#include "PokemonSettings/Private/Settings/PokemonKitSettings.h"
+#include "Settings/BaseSettings.h"
 #include "Species/Ability.h"
 #include "Species/BodyColor.h"
 #include "Species/BodyShape.h"
@@ -53,10 +54,7 @@ void FPokemonDataModule::StartupModule() {
     DataRegistry.RegisterStruct<FSpeciesData>();
     DataRegistry.RegisterStruct<FTrainerType>();
 
-    auto Settings = GetDefault<UPokemonDataSettings>();
-    for (auto &DataTables = Settings->GetDataTables(); auto &Table : DataTables) {
-        Table.TryLoad();
-    }
+    Pokemon::FBaseSettings::Get().LoadDataTables();
 }
 
 void FPokemonDataModule::ShutdownModule() {

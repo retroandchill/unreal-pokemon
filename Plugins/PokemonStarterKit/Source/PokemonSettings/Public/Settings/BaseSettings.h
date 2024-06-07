@@ -5,15 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameSettings.h"
 
-class UPokemonKitSettings;
-
 namespace Pokemon {
 /**
  * The singleton used to retrieve the kit's settings.
  */
 class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     FBaseSettings();
-    ~FBaseSettings() override = default;
+    ~FBaseSettings() override;
 
 public:
     /**
@@ -27,6 +25,7 @@ public:
     
     int32 GetMaximumLevel() const final;
     int32 GetEggLevel() const final;
+    int32 GetMaxDefaultAbilities() const final;
     int32 GetShinyPokemonChance() const final;
     
     int32 GetMaxPartySize() const final;
@@ -35,7 +34,18 @@ public:
     const TMap<FName, FPocketInfo> & GetPocketInfo() const final;
     int32 GetMaxItemsPerSlot() const final;
 
+    /**
+     * Iterate over each data table in settings, load them, and process each one
+     * @param Callback The callback to be handled by the loop
+     */
+    void ForEachDataTable(const TFunctionRef<void(UDataTable*)>& Callback) const;
+
+    /**
+     * Preemptively load all the data tables
+     */
+    void LoadDataTables() const;
+
 private:
-    TStrongObjectPtr<const UPokemonKitSettings> KitSettings;
+    TUniquePtr<struct FBaseSettingsPrivate> InternalData;
 };
 }

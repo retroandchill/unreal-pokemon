@@ -3,6 +3,7 @@
 #include "Windows/PocketWindow.h"
 #include "Primatives/DisplayText.h"
 #include "Settings/BagSettings.h"
+#include "Settings/BaseSettings.h"
 
 FName UPocketWindow::GetCurrentPocket() const {
     return CurrentPocket;
@@ -14,6 +15,7 @@ void UPocketWindow::SetCurrentPocket(FName Pocket) {
 }
 
 void UPocketWindow::UpdatePocketInfo_Implementation() {
-    auto &PocketInfo = GetDefault<UBagSettings>()->GetPocketInfo().FindChecked(CurrentPocket);
+    auto &Settings = Pokemon::FBaseSettings::Get();
+    auto &PocketInfo = Settings.GetPocketInfo().FindChecked(CurrentPocket);
     PocketName->SetText(PocketInfo.DisplayName);
 }

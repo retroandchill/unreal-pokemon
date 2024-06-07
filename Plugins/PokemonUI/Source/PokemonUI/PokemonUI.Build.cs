@@ -30,7 +30,7 @@ public class PokemonUI : ModuleRules
 				"UMG",
 				"DeveloperSettings",
 				"RenderCore",
-				"UnrealInjector"
+				"UnrealInjector", "PokemonSettings"
 			}
 		);
 	}

@@ -33,7 +33,7 @@ public class PokemonUITests : ModuleRules
                 "PokemonData",
                 "UMG",
                 "PokemonCore",
-                "GridBased2D"
+                "GridBased2D", "PokemonSettings"
             }
         );
 

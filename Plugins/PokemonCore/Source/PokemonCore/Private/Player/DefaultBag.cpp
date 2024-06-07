@@ -7,6 +7,7 @@
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "Settings/BagSettings.h"
+#include "Settings/BaseSettings.h"
 #include <functional>
 
 /**
@@ -34,8 +35,9 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
 }
 
 bool UDefaultBag::CanObtainItem(FName ItemID) const {
+    auto &Settings = Pokemon::FBaseSettings::Get();
     if (auto ItemQuantity = GetItemQuantity(ItemID); ItemQuantity > 0) {
-        return ItemQuantity < GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
+        return ItemQuantity < Settings.GetMaxItemsPerSlot();
     }
 
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
@@ -45,16 +47,16 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
         return false;
     }
 
-    const auto &[DisplayName, MaxPocketSize, bAutoSort] =
-        GetDefault<UBagSettings>()->GetPocketInfo().FindChecked(Item->Pocket);
+    const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings.GetPocketInfo().FindChecked(Item->Pocket);
     auto HasRoom =
         OptionalUtilities::Map<bool, int32>(MaxPocketSize, [&Pocket](int32 Max) { return Pocket->Items.Num() < Max; });
     return HasRoom.Get(true);
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
+    auto &Settings = Pokemon::FBaseSettings::Get();
     auto &Pocket = GetPocket(ItemID);
-    int32 SlotMax = GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
+    int32 SlotMax = Settings.GetMaxItemsPerSlot();
     auto ItemSlot = Pocket.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     int32 QuantityBefore;
     if (ItemSlot == nullptr) {
@@ -69,8 +71,9 @@ int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
 }
 
 int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
+    auto &Settings = Pokemon::FBaseSettings::Get();
     auto &Pocket = GetPocket(ItemID);
-    int32 SlotMax = GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
+    int32 SlotMax = Settings.GetMaxItemsPerSlot();
     auto SlotIndex = Pocket.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     if (SlotIndex == INDEX_NONE) {
         return 0;

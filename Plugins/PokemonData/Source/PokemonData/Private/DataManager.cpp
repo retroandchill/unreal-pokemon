@@ -1,26 +1,21 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "DataManager.h"
 #include "DataRetrieval/DataRegistry.h"
-#include "PokemonDataSettings.h"
+#include "Settings/BaseSettings.h"
 
 FDataManager::FDataManager() {
-    auto Settings = GetDefault<UPokemonDataSettings>();
-    for (auto &Tables = Settings->GetDataTables(); auto &Path : Tables) {
-        auto Table = Cast<UDataTable>(Path.ResolveObject());
-        if (Table == nullptr)
-            continue;
-
+    Pokemon::FBaseSettings::Get().ForEachDataTable([this](UDataTable* Table) {
         auto RowStruct = Table->GetRowStruct();
-        if (RowStruct == nullptr) {
-            continue;
-        }
+         if (RowStruct == nullptr) {
+             return;
+         }
 
-        const auto &DataRegistry = FDataRegistry::GetInstance();
-        if (!DataRegistry.IsTypeRegistered(RowStruct))
-            continue;
+         const auto &DataRegistry = FDataRegistry::GetInstance();
+         if (!DataRegistry.IsTypeRegistered(RowStruct))
+             return;
 
-        DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table));
-    }
+         DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table)); 
+    });
 }
 
 FDataManager::~FDataManager() = default;

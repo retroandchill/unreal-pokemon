@@ -2,7 +2,7 @@
 #include "Bag/Item.h"
 #include "DataManager.h"
 #include "Mainpulation/RangeHelpers.h"
-#include "PokemonDataSettings.h"
+#include "Settings/BaseSettings.h"
 #include <ranges>
 
 FItem::FItem() = default;
@@ -63,7 +63,7 @@ TArray<FName> UItemHelper::GetPokeBallNames() {
 }
 
 TArray<FName> UItemHelper::GetPocketNames() {
-    auto &Pockets = GetDefault<UPokemonDataSettings>()->GetPocketNames();
+    auto &Pockets = Pokemon::FBaseSettings::Get().GetPocketNames();
     TArray<FName> Names;
     for (const auto &[Key, Value] : Pockets) {
         Names.Add(Value);

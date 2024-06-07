@@ -20,7 +20,8 @@ public class PokemonSettings : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "DeveloperSettings"
+                "DeveloperSettings",
+                "PokemonUtilities"
             }
         );
     }

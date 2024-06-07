@@ -23,7 +23,7 @@ public class PokemonEditorUtils : ModuleRules
                 "Slate",
                 "SlateCore",
                 "UnrealEd",
-                "DesktopPlatform"
+                "DesktopPlatform", "PokemonSettings"
             }
         );
     }

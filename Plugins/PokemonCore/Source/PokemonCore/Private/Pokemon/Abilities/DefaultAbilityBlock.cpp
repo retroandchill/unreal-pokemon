@@ -4,7 +4,7 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
-#include "PokemonDataSettings.h"
+#include "Settings/BaseSettings.h"
 #include "Settings/NamingSettings.h"
 #include "Species/Ability.h"
 #include "Species/SpeciesData.h"
@@ -47,6 +47,6 @@ FText UDefaultAbilityBlock::GetAbilityDescription() const {
 
 int32 UDefaultAbilityBlock::GetAbilityIndex() const {
     check(Owner != nullptr)
-    int32 NormalAbilityCount = GetDefault<UPokemonDataSettings>()->GetMaxDefaultAbilities();
+    int32 NormalAbilityCount = Pokemon::FBaseSettings::Get().GetMaxDefaultAbilities();
     return static_cast<int32>(Owner->GetPersonalityValue() % NormalAbilityCount);
 }

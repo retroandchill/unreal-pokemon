@@ -3,6 +3,7 @@
 #include "Misc/AutomationTest.h"
 #include "Primatives/DisplayText.h"
 #include "Settings/BagSettings.h"
+#include "Settings/BaseSettings.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -19,7 +20,8 @@ bool PocketWindowTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(PocketWindow.Get(), UDisplayText, PocketName);
     ASSERT_NOT_NULL(PocketName);
 
-    for (auto &PocketSettings = GetDefault<UBagSettings>()->GetPocketInfo(); auto &[Key, Value] : PocketSettings) {
+    auto &Settings = Pokemon::FBaseSettings::Get();
+    for (auto &PocketSettings = Settings.GetPocketInfo(); auto &[Key, Value] : PocketSettings) {
         PocketWindow->SetCurrentPocket(Key);
         CHECK_EQUAL(Value.DisplayName.ToString(), PocketName->GetText().ToString());
     }

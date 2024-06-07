@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+#include "SettingsStructs.generated.h"
+
 /**
  * Meta info about a pocket in the bag.
  */

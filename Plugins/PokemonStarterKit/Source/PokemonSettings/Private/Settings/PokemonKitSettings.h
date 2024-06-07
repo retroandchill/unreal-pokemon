@@ -52,6 +52,14 @@ private:
     int32 EggLevel = 0;
 
     /**
+     * The maximum number of abilities a Pokémon can have.
+     * <p>If a Pokémon has less abilities here, the last ability in the list is duplicated.</p>
+     * <p>If the list has more than the required amount, then the list is truncated, and a warning is emitted.</p>
+     */
+    UPROPERTY(EditAnywhere, Config, Category = "Pokémon", meta = (UIMin = 1, ClampMin = 1))
+    int32 MaxDefaultAbilities = 2;
+
+    /**
      * The odds of a newly generated Pokémon being shiny (out of 65536).
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Pokémon",
@@ -82,4 +90,10 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Bag", meta = (UIMin = 1, UIMax = 1))
     int32 MaxItemsPerSlot = 0;
+
+    /**
+     * The set of data tables used by the game.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Data Tables", meta = (AllowedClasses = "DataTable"))
+    TArray<FSoftObjectPath> DataTables;
 };

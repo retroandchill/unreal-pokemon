@@ -52,6 +52,13 @@ public:
     virtual int32 GetEggLevel() const = 0;
 
     /**
+     * The maximum number of abilities a Pokémon can have.
+     * @return The maximum number of abilities a Pokémon can have.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual int32 GetMaxDefaultAbilities() const = 0;
+
+    /**
      * The odds of a newly generated Pokémon being shiny (out of 65536).
      * @return The odds of a newly generated Pokémon being shiny (out of 65536).
      */
