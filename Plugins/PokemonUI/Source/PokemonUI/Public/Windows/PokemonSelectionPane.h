@@ -30,13 +30,6 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
     void RefreshWindow();
 
     /**
-     * Is this panel currently in multi-select mode?
-     * @return Is this panel in single select mode or multi-select mode?
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Display)
-    bool IsMultiSelectMode() const;
-
-    /**
      * Is the player actively switching Pokémon
      * @return The current switching state
      */
@@ -118,30 +111,6 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
     TObjectPtr<UCanvasPanel> ContentsArea;
 
     /**
-     * The switcher used to toggle the buttons shown to the player when in multi-select mode.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UWidgetSwitcher> ConfirmCancelSwitcher;
-
-    /**
-     * The switcher used to toggle the buttons shown to the player when in multi-select mode.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UPartySelectCancelPanel> CancelPanel;
-
-    /**
-     * The switcher used to toggle the buttons shown to the player when in multi-select mode.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UPartySelectCancelPanel> MultiSelectConfirmPanel;
-
-    /**
-     * The switcher used to toggle the buttons shown to the player when in multi-select mode.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UPartySelectCancelPanel> MultiSelectCancelPanel;
-
-    /**
      * The class used for the panels that house the 6 Pokémon
      */
     UPROPERTY(EditAnywhere, Category = Display)
@@ -164,12 +133,6 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
      */
     UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
     int32 Columns = 2;
-
-    /**
-     * Is this panel being used to select multiple Pokémon or just one?
-     */
-    UPROPERTY(EditAnywhere, BlueprintGetter = IsMultiSelectMode, Category = Display)
-    bool bMultiSelectMode = false;
 
     /**
      * The index the player is switching from

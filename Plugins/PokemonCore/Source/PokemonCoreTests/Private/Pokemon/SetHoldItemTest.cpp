@@ -21,6 +21,6 @@ bool SetHoldItemTest::RunTest(const FString &Parameters) {
     CHECK_EQUAL(TEXT("REPEL"), Pokemon->GetHoldItem()->ID.ToString());
     Pokemon->RemoveHoldItem();
     CHECK_NULL(Pokemon->GetHoldItem());
-    
+
     return true;
 }

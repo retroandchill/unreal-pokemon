@@ -1,8 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Items/GiveItemToPokemon.h"
-#include "Settings/BagSettings.h"
+#include "Kismet/GameplayStatics.h"
 #include "Utilities/ItemUtilities.h"
+#include "Utilities/ItemUtilitiesSubsystem.h"
 
 UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FName Item,
                                                           const TScriptInterface<IPokemon> &Pokemon,
@@ -12,12 +13,11 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
     Node->Item = Item;
     Node->Pokemon = Pokemon;
     Node->PokemonIndex = PokemonIndex;
-    Node->ItemUtilities =
-        NewObject<UObject>(Node, GetDefault<UBagSettings>()->GetItemUtilitiesClass().TryLoadClass<UObject>());
     return Node;
 }
 
 void UGiveItemToPokemon::Activate() {
+    auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UItemUtilitiesSubsystem>()->GetItemUtilities();
     check(ItemUtilities != nullptr)
     FItemResultNoRetValue OnSuccess;
     OnSuccess.BindDynamic(this, &UGiveItemToPokemon::ExecuteItemGiven);

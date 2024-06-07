@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "K2Node_ScreenBoundNode.h"
 
-#include "K2Node_SelectPokemonFromParty.generated.h"
+#include "K2Node_ChooseItemFromBag.generated.h"
 
 /**
- *
+ * Custom async node for choosing an item from the bag.
  */
 UCLASS()
-class POKEMONUIDEVELOPER_API UK2Node_SelectPokemonFromParty : public UK2Node_ScreenBoundNode {
+class POKEMONUIDEVELOPER_API UK2Node_ChooseItemFromBag : public UK2Node_ScreenBoundNode {
     GENERATED_BODY()
 
   public:

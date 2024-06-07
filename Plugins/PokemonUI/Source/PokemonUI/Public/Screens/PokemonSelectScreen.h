@@ -5,6 +5,7 @@
 #include "PartyScreen.h"
 #include "Screens/Screen.h"
 #include "Trainers/Trainer.h"
+#include "Utilities/CommandStack.h"
 
 #include "PokemonSelectScreen.generated.h"
 
@@ -13,6 +14,7 @@ class UCommand;
 class UCommandWindow;
 class UHelpWindow;
 class UPokemonSelectionPane;
+
 /**
  * Screen for when the player needs to select a Pokémon from the menu
  */
@@ -26,18 +28,27 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
   public:
     UFUNCTION(BlueprintCallable, Category = Switching)
     void BeginSwitch(int32 Index) final;
-    
+
+    void ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) override;
+
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void ClearCommandStack() override;
+
     UFUNCTION(BlueprintCallable, Category = Display)
     void SetCommandHelpText(FText Text) final;
-    
+
     UFUNCTION(BlueprintPure, Category = Owner)
     APlayerController *GetPlayerController() const final;
-    
+
     FOnPokemonSelected &GetOnPokemonSelect() override;
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
 
+  protected:
+    void RefreshSelf_Implementation() override;
+
+  public:
     /**
      * Set the help text for the regular help window
      * @param Text The text to set to the window
@@ -61,7 +72,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      * @param Trainer The trainer that owns the selected Pokémon
      * @param Index The index of the selected Pokémon in the trainer's party
      */
-    void DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index);
+    void DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index);
 
     /**
      * Process the selected command
@@ -123,4 +134,10 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      */
     UPROPERTY(EditAnywhere, Instanced, Category = Commands)
     TArray<TObjectPtr<UPartyMenuHandler>> PokemonHandlers;
+
+    /**
+     * The stack frame used to track the commands being held
+     */
+    UPROPERTY()
+    TArray<FCommandStackFrame> CommandStack;
 };

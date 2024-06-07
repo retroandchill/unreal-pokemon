@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "K2Node_BaseAsyncTask.h"
 
-#include "K2_NodeScreenBoundNode.generated.h"
+#include "K2Node_ScreenBoundNode.generated.h"
 
 class UScreen;
 /**
  * Abstract declaration of a node that creates a separate version for each screen.
  */
 UCLASS(Abstract)
-class POKEMONUIDEVELOPER_API UK2_NodeScreenBoundNode : public UK2Node_BaseAsyncTask {
+class POKEMONUIDEVELOPER_API UK2Node_ScreenBoundNode : public UK2Node_BaseAsyncTask {
     GENERATED_BODY()
 
   public:
@@ -20,7 +20,7 @@ class POKEMONUIDEVELOPER_API UK2_NodeScreenBoundNode : public UK2Node_BaseAsyncT
      * Create the default object
      * @param Initializer The UE provided initializer
      */
-    explicit UK2_NodeScreenBoundNode(const FObjectInitializer &Initializer);
+    explicit UK2Node_ScreenBoundNode(const FObjectInitializer &Initializer);
 
     /**
      * Set up the node assigning the struct that this should be retrieving
