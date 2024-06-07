@@ -13,7 +13,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerPartyTest, "Unit Tests.Core.Trainers.Tra
 bool TrainerPartyTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
-    auto Trainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
+    auto Trainer =
+        NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
     Trainer->AddPokemonToParty(
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "LUCARIO", .Level = 64}));
     Trainer->AddPokemonToParty(
@@ -22,6 +23,6 @@ bool TrainerPartyTest::RunTest(const FString &Parameters) {
     ASSERT_EQUAL(2, Trainer->GetParty().Num());
     CHECK_EQUAL(TEXT("LUCARIO"), Trainer->GetPokemon(0)->GetSpecies().ID.ToString());
     CHECK_EQUAL(TEXT("MIMIKYU"), Trainer->GetPokemon(1)->GetSpecies().ID.ToString());
-    
+
     return true;
 }

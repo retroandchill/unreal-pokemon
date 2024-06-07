@@ -28,8 +28,8 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
 
   public:
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
-    virtual void ApplyItemFilter(const FItemFilter& ItemFilter) override;
-    
+    virtual void ApplyItemFilter(const FItemFilter &ItemFilter) override;
+
     FOnItemSelected &GetOnItemSelected() final;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
@@ -41,7 +41,7 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
 
-protected:
+  protected:
     void RefreshSelf_Implementation() override;
 
   private:

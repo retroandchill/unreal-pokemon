@@ -13,7 +13,7 @@ struct FItem;
  * Delegate for when an item is selected
  */
 DECLARE_DELEGATE_ThreeParams(FOnItemSelected, const TScriptInterface<class IInventoryScreen> &, const FItem &, int32);
-DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FItemFilter, const FItem&, Item);
+DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FItemFilter, const FItem &, Item);
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -34,8 +34,8 @@ class POKEMONUI_API IInventoryScreen {
      * @param ItemFilter The filter to apply to the list of items
      */
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
-    virtual void ApplyItemFilter(const FItemFilter& ItemFilter) = 0;
-    
+    virtual void ApplyItemFilter(const FItemFilter &ItemFilter) = 0;
+
     /**
      * Callback override for when an item is selected. When this is bound it will override the default behavior
      * for when an item is selected.
@@ -57,7 +57,7 @@ class POKEMONUI_API IInventoryScreen {
     virtual void RemoveFromStack() = 0;
 
     /**
-     * Refresh the display of the scene 
+     * Refresh the display of the scene
      */
     UFUNCTION(BlueprintCallable, Category = Display)
     virtual void RefreshScene() = 0;

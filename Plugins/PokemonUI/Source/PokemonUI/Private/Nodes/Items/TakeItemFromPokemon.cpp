@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/Items/TakeItemFromPokemon.h"
 #include "Settings/BagSettings.h"
 #include "Utilities/ItemUtilities.h"
 
-UTakeItemFromPokemon * UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *WorldContextObject,
-                                                                 const TScriptInterface<IPokemon> &Pokemon) {
+UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *WorldContextObject,
+                                                                const TScriptInterface<IPokemon> &Pokemon) {
     auto Node = NewObject<UTakeItemFromPokemon>();
     Node->WorldContextObject = WorldContextObject;
     Node->Pokemon = Pokemon;

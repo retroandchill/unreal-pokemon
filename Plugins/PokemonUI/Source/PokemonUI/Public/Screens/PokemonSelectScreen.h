@@ -28,28 +28,27 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
   public:
     UFUNCTION(BlueprintCallable, Category = Switching)
     void BeginSwitch(int32 Index) final;
-    
+
     void ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) override;
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void ClearCommandStack() override;
-    
+
     UFUNCTION(BlueprintCallable, Category = Display)
     void SetCommandHelpText(FText Text) final;
-    
+
     UFUNCTION(BlueprintPure, Category = Owner)
     APlayerController *GetPlayerController() const final;
-    
+
     FOnPokemonSelected &GetOnPokemonSelect() override;
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
 
-protected:
+  protected:
     void RefreshSelf_Implementation() override;
-    
-public:
 
+  public:
     /**
      * Set the help text for the regular help window
      * @param Text The text to set to the window
@@ -73,7 +72,7 @@ public:
      * @param Trainer The trainer that owns the selected Pokémon
      * @param Index The index of the selected Pokémon in the trainer's party
      */
-    void DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index);
+    void DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index);
 
     /**
      * Process the selected command

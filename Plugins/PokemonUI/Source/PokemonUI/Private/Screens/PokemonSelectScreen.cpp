@@ -34,10 +34,11 @@ void UPokemonSelectScreen::ShowCommands(const TArray<TObjectPtr<UPartyMenuHandle
     if (!CommandStack.IsEmpty()) {
         CommandStack.Last().Index = SelectionPane->GetIndex();
     }
-    
+
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
-    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, CancelText, this, Trainer, SelectionPane->GetIndex());
+    Commands =
+        UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, CancelText, this, Trainer, SelectionPane->GetIndex());
     CommandWindow->SetCommands(Commands);
     CommandWindow->SetIndex(0);
 }
@@ -99,7 +100,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
     }
 }
 
-void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer>& Trainer, int32 Index) {
+void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index) {
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
     Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, CancelText, this, Trainer, Index);
     CommandWindow->SetCommands(Commands);
@@ -135,7 +136,6 @@ void UPokemonSelectScreen::OnCommandWindowCancel() {
         CommandWindow->SetCommands(Commands);
         CommandWindow->SetIndex(FrameIndex);
     }
-    
 }
 
 void UPokemonSelectScreen::ToggleCommandWindowVisibility(bool bIsVisible) {

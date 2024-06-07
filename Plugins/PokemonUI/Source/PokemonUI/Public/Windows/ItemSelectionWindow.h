@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Mainpulation/CircularIterator.h"
-#include "Windows/SelectableWidget.h"
 #include "Screens/InventoryScreen.h"
+#include "Windows/SelectableWidget.h"
 
 #include "ItemSelectionWindow.generated.h"
 
@@ -63,7 +63,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      * @param ItemFilter The filter to apply to the list of items
      */
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
-    void ApplyItemFilter(const FItemFilter& ItemFilter);
+    void ApplyItemFilter(const FItemFilter &ItemFilter);
 
     /**
      * Get the item selected callback

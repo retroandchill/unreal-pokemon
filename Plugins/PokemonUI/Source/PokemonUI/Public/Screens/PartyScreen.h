@@ -75,7 +75,7 @@ class POKEMONUI_API IPartyScreen {
     virtual void RemoveFromStack() = 0;
 
     /**
-     * Refresh the display of the scene 
+     * Refresh the display of the scene
      */
     UFUNCTION(BlueprintCallable, Category = Display)
     virtual void RefreshScene() = 0;

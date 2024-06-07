@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GiveItemToPokemon.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "TakeItemFromPokemon.generated.h"
 
 class IPokemon;
@@ -16,7 +17,7 @@ UCLASS(meta = (HideThen))
 class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Give an item to a Pokémon to hold, and take a held item from a Pokémon
      * @param WorldContextObject The object used to obtain the state of the world
@@ -25,12 +26,12 @@ public:
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UTakeItemFromPokemon *TakeItemFromPokemon(const UObject *WorldContextObject, const TScriptInterface<IPokemon> &Pokemon);
+    static UTakeItemFromPokemon *TakeItemFromPokemon(const UObject *WorldContextObject,
+                                                     const TScriptInterface<IPokemon> &Pokemon);
 
-    
     void Activate() override;
 
-private:
+  private:
     /**
      * Function called to execute the item taken pin
      */
@@ -72,5 +73,4 @@ private:
      */
     UPROPERTY()
     TObjectPtr<UObject> ItemUtilities;
-
 };

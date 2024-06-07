@@ -37,16 +37,18 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
     if (auto ItemQuantity = GetItemQuantity(ItemID); ItemQuantity > 0) {
         return ItemQuantity < GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
     }
-    
+
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
     check(Item != nullptr)
     auto Pocket = ItemSlots.Find(Item->Pocket);
     if (Pocket == nullptr) {
         return false;
     }
-    
-    const auto &[DisplayName, MaxPocketSize, bAutoSort] = GetDefault<UBagSettings>()->GetPocketInfo().FindChecked(Item->Pocket);
-    auto HasRoom = OptionalUtilities::Map<bool, int32>(MaxPocketSize, [&Pocket](int32 Max) { return Pocket->Items.Num() < Max; });
+
+    const auto &[DisplayName, MaxPocketSize, bAutoSort] =
+        GetDefault<UBagSettings>()->GetPocketInfo().FindChecked(Item->Pocket);
+    auto HasRoom =
+        OptionalUtilities::Map<bool, int32>(MaxPocketSize, [&Pocket](int32 Max) { return Pocket->Items.Num() < Max; });
     return HasRoom.Get(true);
 }
 

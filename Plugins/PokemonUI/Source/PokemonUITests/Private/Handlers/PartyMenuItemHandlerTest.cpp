@@ -32,16 +32,18 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
 
     accessMember<AccessHandlerHelpText>(*Handler).get() = FText::FromStringView(TEXT("Sample help text"));
-    accessMember<AccessHandlerSubCommands>(*Handler).get() = { Handler };
+    accessMember<AccessHandlerSubCommands>(*Handler).get() = {Handler};
     FText HelpTextOut;
     TArray<TObjectPtr<UPartyMenuHandler>> HandlersOut;
     When(Method(MockScreen, SetCommandHelpText)).Do([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
-    When(Method(MockScreen, ShowCommands)).Do([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>>& Handlers) { HandlersOut = Handlers; });
+    When(Method(MockScreen, ShowCommands)).Do([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
+        HandlersOut = Handlers;
+    });
 
     Handler->Handle(Screen, Trainer, 0);
     CHECK_EQUAL(TEXT("Sample help text"), HelpTextOut.ToString());
     ASSERT_EQUAL(1, HandlersOut.Num());
     CHECK_TRUE(HandlersOut[0] == Handler);
-    
+
     return true;
 }

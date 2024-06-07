@@ -14,7 +14,7 @@ class USummaryScreenPage;
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &);
 
-    class UPokemonInfoPage;
+class UPokemonInfoPage;
 class UWidgetSwitcher;
 
 /**

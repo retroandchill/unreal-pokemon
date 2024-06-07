@@ -47,5 +47,5 @@ class POKEMONCORE_API IItemUtilities {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Utilities|Items")
     void TakeItemFromPokemon(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon,
-        const FItemResultNoRetValue &ItemTaken, const FItemResultNoRetValue &ItemNotTaken);
+                             const FItemResultNoRetValue &ItemTaken, const FItemResultNoRetValue &ItemNotTaken);
 };

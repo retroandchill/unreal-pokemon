@@ -5,12 +5,15 @@
 #include "Screens/PartyScreen.h"
 #include "Trainers/Trainer.h"
 
-bool UPartyMenuItemHandler::ShouldShow_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) const {
+bool UPartyMenuItemHandler::ShouldShow_Implementation(const TScriptInterface<IPartyScreen> &Screen,
+                                                      const TScriptInterface<ITrainer> &Trainer,
+                                                      int32 PartyIndex) const {
     auto HoldItem = Trainer->GetPokemon(PartyIndex)->GetHoldItem();
     return HoldItem == nullptr || !HoldItem->IsMail();
 }
 
-void UPartyMenuItemHandler::Handle_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) {
+void UPartyMenuItemHandler::Handle_Implementation(const TScriptInterface<IPartyScreen> &Screen,
+                                                  const TScriptInterface<ITrainer> &Trainer, int32 PartyIndex) {
     Screen->SetCommandHelpText(HelpText);
     Screen->ShowCommands(SubCommands);
 }

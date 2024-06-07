@@ -7,7 +7,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemMethodTests, "Unit Tests.Data.Bag.ItemMetho
 
 bool ItemMethodTests::RunTest(const FString &Parameters) {
     FItem FakeItem;
-    
+
     FakeItem.ShowQuantity = false;
     CHECK_FALSE(FakeItem.ShouldShowQuantity());
     FakeItem.ShowQuantity = true;
@@ -43,17 +43,17 @@ bool ItemMethodTests::RunTest(const FString &Parameters) {
     FakeItem.Tags.Empty();
     CHECK_FALSE(FakeItem.IsPokeBall());
     CHECK_FALSE(FakeItem.IsMail());
-    FakeItem.Tags = { TEXT("PokeBall") };
+    FakeItem.Tags = {TEXT("PokeBall")};
     CHECK_TRUE(FakeItem.IsPokeBall());
-    FakeItem.Tags = { TEXT("SnagBall") };
+    FakeItem.Tags = {TEXT("SnagBall")};
     CHECK_TRUE(FakeItem.IsPokeBall());
-    FakeItem.Tags = { TEXT("PokeBall"), TEXT("SnagBall") };
+    FakeItem.Tags = {TEXT("PokeBall"), TEXT("SnagBall")};
     CHECK_TRUE(FakeItem.IsPokeBall());
-    FakeItem.Tags = { TEXT("Mail") };
+    FakeItem.Tags = {TEXT("Mail")};
     CHECK_TRUE(FakeItem.IsMail());
-    FakeItem.Tags = { TEXT("IconMail") };
+    FakeItem.Tags = {TEXT("IconMail")};
     CHECK_TRUE(FakeItem.IsMail());
-    FakeItem.Tags = { TEXT("Mail"), TEXT("IconMail") };
+    FakeItem.Tags = {TEXT("Mail"), TEXT("IconMail")};
     CHECK_TRUE(FakeItem.IsMail());
     CHECK_TRUE(UItemHelper::IsMail(FakeItem));
 
@@ -63,13 +63,12 @@ bool ItemMethodTests::RunTest(const FString &Parameters) {
     CHECK_FALSE(FakeItem.IsImportant());
     CHECK_TRUE(FakeItem.CanHold());
     CHECK_TRUE(FakeItem.ShouldShowQuantity());
-    FakeItem.Tags = { TEXT("KeyItem") };
+    FakeItem.Tags = {TEXT("KeyItem")};
     CHECK_TRUE(FakeItem.IsKeyItem());
     CHECK_TRUE(FakeItem.IsImportant());
     CHECK_FALSE(FakeItem.CanHold());
     CHECK_FALSE(FakeItem.ShouldShowQuantity());
     CHECK_FALSE(UItemHelper::CanHold(FakeItem));
-    
-    
+
     return true;
 }

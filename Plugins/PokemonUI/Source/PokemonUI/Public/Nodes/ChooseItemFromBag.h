@@ -12,7 +12,7 @@ class UBagScreen;
 struct FItem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FItemSelectedDynamic, const TScriptInterface<IInventoryScreen> &, Screen,
-                                               const FItem&, Item, int32, Quantity);
+                                               const FItem &, Item, int32, Quantity);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnItemCancel);
 
 /**
@@ -22,7 +22,7 @@ UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
 class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Open the menu to select a Pokémon from the party
      * @param WorldContextObject The object used to obtain the state of the world
@@ -32,11 +32,12 @@ public:
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, TSubclassOf<UBagScreen> ScreenClass, const FItemFilter& ItemFilter);
+    static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, TSubclassOf<UBagScreen> ScreenClass,
+                                                 const FItemFilter &ItemFilter);
 
     void Activate() override;
-    
-private:
+
+  private:
     /**
      * Function called to execute the on selected pin
      * @param Screen The screen displayed
@@ -44,14 +45,14 @@ private:
      * @param Quantity The quantity of items held
      */
     UFUNCTION()
-    void ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem& Item, int32 Quantity) const;
+    void ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item, int32 Quantity) const;
 
     /**
      * Function called to execute the on cancelled pin
      */
     UFUNCTION()
     void ExecuteOnCanceled();
-    
+
     /**
      * Called when the player selects an item
      */
@@ -63,7 +64,7 @@ private:
      */
     UPROPERTY(BlueprintAssignable)
     FOnItemCancel OnCanceled;
-    
+
     /**
      * The object used to obtain the state of the world to open the menu with
      */
@@ -81,5 +82,4 @@ private:
      */
     UPROPERTY()
     FItemFilter ItemFilter;
-
 };

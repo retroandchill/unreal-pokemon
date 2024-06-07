@@ -15,10 +15,12 @@ class POKEMONUI_API UPartyMenuItemHandler : public UPartyMenuHandler {
     GENERATED_BODY()
 
   protected:
-    bool ShouldShow_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) const override;
-    void Handle_Implementation(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) override;
+    bool ShouldShow_Implementation(const TScriptInterface<IPartyScreen> &Screen,
+                                   const TScriptInterface<ITrainer> &Trainer, int32 PartyIndex) const override;
+    void Handle_Implementation(const TScriptInterface<IPartyScreen> &Screen, const TScriptInterface<ITrainer> &Trainer,
+                               int32 PartyIndex) override;
 
-private:
+  private:
     /**
      * The text the help window is changed to during this handler's execution.
      */

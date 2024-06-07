@@ -22,7 +22,6 @@ bool PartySwitchHandlerTest::RunTest(const FString &Parameters) {
     auto [Screen, Mock] = UnrealMock::CreateMock<IPartyScreen>(World.Get());
     TOptional<int32> SwitchIndex;
     When(Method(Mock, BeginSwitch)).Do([&SwitchIndex](int32 Index) { SwitchIndex.Emplace(Index); });
-    
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
     Trainer->AddPokemonToParty(UGamePokemon::Create(World.Get(), {.Species = TEXT("RIOLU"), .Level = 5}));

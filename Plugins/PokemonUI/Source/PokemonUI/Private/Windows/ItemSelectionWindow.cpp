@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Windows/ItemSelectionWindow.h"
-#include "DataManager.h"
 #include "Algo/ForEach.h"
 #include "Bag/Item.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
+#include "DataManager.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
@@ -117,7 +117,7 @@ void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {
     if (ItemListFilter.IsBound() && !ItemListFilter.Execute(*Item)) {
         return;
     }
-    
+
     auto Option = WidgetTree->ConstructWidget(ItemEntryClass);
     Option->SetItem(ItemName, Quantity);
     SlotItem(Option, Options.Num());
