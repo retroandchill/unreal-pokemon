@@ -35,13 +35,23 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "PokemonEditorTools",
+			"Name": "PokemonUI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonUtilities",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
 			"Name": "PokemonBlueprintNodes",
 			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonEditorTools",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{

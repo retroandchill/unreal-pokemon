@@ -30,7 +30,12 @@ public class PokemonTests : ModuleRules
                 "PokemonEditorTools",
                 "PokemonCore",
                 "PokemonSettings",
-                "UnrealInjector"
+                "UnrealInjector",
+                "PokemonUtilities",
+                "PokemonUI",
+                "RPGMenus",
+                "UMG",
+                "GridBased2D"
             }
         );
         

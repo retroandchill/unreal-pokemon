@@ -24,7 +24,11 @@ public class PokemonBlueprintNodes : ModuleRules
                 "Slate",
                 "SlateCore",
                 "KismetCompiler",
-                "GraphEditor"
+                "GraphEditor",
+                "PokemonUI",
+                "RPGMenus",
+                "UMG",
+                "ToolMenus"
             }
         );
     }
