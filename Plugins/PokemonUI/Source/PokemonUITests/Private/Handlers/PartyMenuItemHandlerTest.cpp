@@ -12,7 +12,7 @@ using namespace accessor;
 MEMBER_ACCESSOR(AccessHandlerHelpText, UPartyMenuItemHandler, HelpText, FText)
 MEMBER_ACCESSOR(AccessHandlerSubCommands, UPartyMenuItemHandler, SubCommands, TArray<TObjectPtr<UPartyMenuHandler>>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyMenuItemHandlerTest, "Private.Handlers.PartyMenuItemHandlerTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyMenuItemHandlerTest, "Unit Tests.Handlers.PartyMenuItemHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
