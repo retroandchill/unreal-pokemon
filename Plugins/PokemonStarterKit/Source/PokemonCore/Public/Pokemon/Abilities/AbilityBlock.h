@@ -43,12 +43,12 @@ class POKEMONCORE_API IAbilityBlock {
      * @return The display name for the ability
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual FText GetDisplayName() const = 0;
+    virtual const FText &GetDisplayName() const = 0;
 
     /**
      * Get the description of the given ability
      * @return The description of the ability to display
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual FText GetAbilityDescription() const = 0;
+    virtual const FText &GetAbilityDescription() const = 0;
 };

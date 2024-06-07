@@ -36,6 +36,15 @@ public:
     const TMap<uint8, FName> & GetPocketNames() const final;
     const TMap<FName, FPocketInfo> & GetPocketInfo() const final;
     int32 GetMaxItemsPerSlot() const final;
+    
+    const FText &GetNoAbilityName() const final;
+    const FText &GetNoAbilityDescription() const final;
+
+    /**
+     * Get the class that represents the item utilities
+     * @return The class to instantiate the object from
+     */
+    UClass *GetItemUtilitiesClass() const;
 
     /**
      * Iterate over each data table in settings, load them, and process each one
@@ -47,6 +56,24 @@ public:
      * Preemptively load all the data tables
      */
     void LoadDataTables() const;
+
+    /**
+     * Settings for all Pokémon sprites.
+     * @return Settings for all Pokémon sprites.
+     */
+    const FPokemonSpriteSettings &GetPokemonSpriteSettings() const;
+
+    /**
+     * Settings for all Trainer sprites.
+     * @return Settings for all Trainer sprites.
+     */
+    const FTrainerSpriteSettings &GetTrainerSpriteSettings() const;
+
+    /**
+     * The repositories for all the different sprites
+     * @return The repositories for all the different sprites
+     */
+    const FSpriteRepositories &GetSpriteRepositories() const;
 
 private:
     TUniquePtr<struct FBaseSettingsPrivate> InternalData;

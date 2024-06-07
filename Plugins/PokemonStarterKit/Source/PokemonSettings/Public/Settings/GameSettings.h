@@ -113,6 +113,20 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Bag")
     virtual int32 GetMaxItemsPerSlot() const = 0;
 
+    /**
+     * The text displayed for the name when a Pokémon has no ability.
+     * @return The text displayed for the name when a Pokémon has no ability.
+     */
+    UFUNCTION(BlueprintCallable, Category = UI)
+    virtual const FText &GetNoAbilityName() const = 0;
+
+    /**
+     * The text displayed for the description when a Pokémon has no ability.
+     * @return The text displayed for the description when a Pokémon has no ability.
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = UI)
+    virtual const FText &GetNoAbilityDescription() const = 0;
+
 };
 
 /**

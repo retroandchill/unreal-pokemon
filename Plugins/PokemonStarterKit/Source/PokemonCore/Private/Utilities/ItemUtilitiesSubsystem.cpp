@@ -2,11 +2,11 @@
 
 
 #include "Utilities/ItemUtilitiesSubsystem.h"
-#include "Settings/BagSettings.h"
+#include "Settings/BaseSettings.h"
 
 void UItemUtilitiesSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    ItemUtilities = NewObject<UObject>(this, GetDefault<UBagSettings>()->GetItemUtilitiesClass().TryLoadClass<UObject>());
+    ItemUtilities = NewObject<UObject>(this, Pokemon::FBaseSettings::Get().GetItemUtilitiesClass());
 }
 
 void UItemUtilitiesSubsystem::Deinitialize() {

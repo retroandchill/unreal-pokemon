@@ -5,7 +5,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Settings/BaseSettings.h"
-#include "Settings/NamingSettings.h"
 #include "Species/Ability.h"
 #include "Species/SpeciesData.h"
 
@@ -33,16 +32,16 @@ FName UDefaultAbilityBlock::GetAbilityID() const {
     return SpeciesData.Abilities[FMath::Clamp(SearchAbilityIndex, 0, SpeciesData.Abilities.Num() - 1)];
 }
 
-FText UDefaultAbilityBlock::GetDisplayName() const {
+const FText &UDefaultAbilityBlock::GetDisplayName() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
-    return AbilityData != nullptr ? AbilityData->RealName : GetDefault<UNamingSettings>()->GetNoAbilityName();
+    return AbilityData != nullptr ? AbilityData->RealName : Pokemon::FBaseSettings::Get().GetNoAbilityName();
 }
 
-FText UDefaultAbilityBlock::GetAbilityDescription() const {
+const FText &UDefaultAbilityBlock::GetAbilityDescription() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
-    return AbilityData != nullptr ? AbilityData->Description : GetDefault<UNamingSettings>()->GetNoAbilityDescription();
+    return AbilityData != nullptr ? AbilityData->Description : Pokemon::FBaseSettings::Get().GetNoAbilityDescription();
 }
 
 int32 UDefaultAbilityBlock::GetAbilityIndex() const {

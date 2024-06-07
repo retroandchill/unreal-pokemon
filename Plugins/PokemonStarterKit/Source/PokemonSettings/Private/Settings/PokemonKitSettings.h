@@ -109,9 +109,45 @@ private:
     int32 MaxItemsPerSlot = 0;
 
     /**
+     * The text displayed for the name when a Pokémon has no ability.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = UI)
+    FText NoAbilityName;
+
+    /**
+     * The text displayed for the description when a Pokémon has no ability.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = UI)
+    FText NoAbilityDescription;
+
+    /**
      * The set of data tables used by the game.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Data Tables", meta = (AllowedClasses = "DataTable"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Data", meta = (AllowedClasses = "DataTable"))
     TArray<FSoftObjectPath> DataTables;
+
+    /**
+     * The blueprint class that contains the item utilities information
+     */
+    UPROPERTY(EditAnywhere, Config, Category = "Utility Classes", meta = (MustImplement = "ItemUtilities"))
+    FSoftClassPath ItemUtilitiesClass;
+
+    /**
+     * Settings for all Pokémon sprites.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Sprites)
+    FPokemonSpriteSettings PokemonSprites;
+
+    /**
+     * Settings for all Trainer sprites.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Sprites)
+    FTrainerSpriteSettings TrainerSprites;
+
+    /**
+     * The repositories for all the different sprites
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Sprites)
+    FSpriteRepositories SpriteRepositories;
     
 };

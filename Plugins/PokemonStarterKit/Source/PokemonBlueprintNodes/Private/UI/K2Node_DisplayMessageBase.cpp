@@ -5,14 +5,15 @@
 #include "K2Node_CallFunction.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "KismetCompiler.h"
-#include "PokemonUISettings.h"
 #include "RPGMenusSubsystem.h"
 #include "Screens/TextDisplayScreen.h"
 
 void UK2Node_DisplayMessageBase::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
-    auto Settings = GetDefault<UPokemonUISettings>();
-    for (auto &MenuClasses = Settings->GetTextScreenClasses(); auto MenuClass : MenuClasses) {
-        Action(*MenuClass);
+    for (TObjectIterator<UClass> It; It; ++It) {
+        if (!It->IsChildOf(UTextDisplayScreen::StaticClass()) || It->HasAnyClassFlags(CLASS_Abstract)) {
+            continue;
+        }
+        Action(*It);
     }
 }
 

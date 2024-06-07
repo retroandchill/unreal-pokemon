@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/SpriteMaterials.h"
-#include "Settings/SpriteMaterialSettings.h"
+#include "Settings/SettingsStructs.h"
 
 FPokemonSpriteMaterials::FPokemonSpriteMaterials() = default;
 

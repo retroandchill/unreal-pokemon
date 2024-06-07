@@ -76,6 +76,18 @@ int32 Pokemon::FBaseSettings::GetMaxItemsPerSlot() const {
     return InternalData->KitSettings->MaxItemsPerSlot;
 }
 
+const FText &Pokemon::FBaseSettings::GetNoAbilityName() const {
+    return InternalData->KitSettings->NoAbilityName;
+}
+
+const FText &Pokemon::FBaseSettings::GetNoAbilityDescription() const {
+    return InternalData->KitSettings->NoAbilityDescription;
+}
+
+UClass * Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
+    return InternalData->KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
+}
+
 void Pokemon::FBaseSettings::ForEachDataTable(const TFunctionRef<void(UDataTable*)>& Callback) const {
     auto Range = RangeHelpers::CreateRange(InternalData->KitSettings->DataTables)
         | std::views::transform([](const FSoftObjectPath& Path) { return Path.TryLoad(); })
@@ -86,3 +98,16 @@ void Pokemon::FBaseSettings::ForEachDataTable(const TFunctionRef<void(UDataTable
 void Pokemon::FBaseSettings::LoadDataTables() const {
     return Algo::ForEach(InternalData->KitSettings->DataTables, [](const FSoftObjectPath& Path) { return Path.TryLoad(); });
 }
+
+const FPokemonSpriteSettings & Pokemon::FBaseSettings::GetPokemonSpriteSettings() const {
+    return InternalData->KitSettings->PokemonSprites;
+}
+
+const FTrainerSpriteSettings & Pokemon::FBaseSettings::GetTrainerSpriteSettings() const {
+    return InternalData->KitSettings->TrainerSprites;
+}
+
+const FSpriteRepositories & Pokemon::FBaseSettings::GetSpriteRepositories() const {
+    return InternalData->KitSettings->SpriteRepositories;
+}
+

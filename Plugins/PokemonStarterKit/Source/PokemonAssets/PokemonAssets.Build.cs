@@ -40,8 +40,8 @@ public class PokemonAssets : ModuleRules
 				"SlateCore",
 				"PokemonCore",
 				"PokemonData",
-				"DeveloperSettings",
-				"UnrealInjector", "PokemonSettings"
+				"UnrealInjector", 
+				"PokemonSettings"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

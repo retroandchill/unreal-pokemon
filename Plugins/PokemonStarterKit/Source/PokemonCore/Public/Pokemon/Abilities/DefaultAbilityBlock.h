@@ -24,10 +24,10 @@ class POKEMONCORE_API UDefaultAbilityBlock : public UObject, public IAbilityBloc
     FName GetAbilityID() const override;
 
     UFUNCTION(BlueprintPure, Category = Abilities)
-    FText GetDisplayName() const override;
+    const FText &GetDisplayName() const override;
 
     UFUNCTION(BlueprintPure, Category = Abilities)
-    FText GetAbilityDescription() const override;
+    const FText &GetAbilityDescription() const override;
 
   private:
     /**

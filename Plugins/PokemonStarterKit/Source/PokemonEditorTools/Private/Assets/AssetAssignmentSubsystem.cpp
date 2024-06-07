@@ -6,25 +6,25 @@
 #include "Repositories/AssetRepository.h"
 #include "Repositories/StaticImageRepository.h"
 #include "Repositories/TextureRepository.h"
-#include "Settings/AssetLoaderSettings.h"
+#include "Settings/BaseSettings.h"
 
 void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
     auto AssetAssignmentSettings = GetDefault<UAssetAssignmentSettings>();
-    auto AssetLoaderSettings = GetDefault<UAssetLoaderSettings>();
+    auto &Settings = Pokemon::FBaseSettings::Get().GetSpriteRepositories();
     AssetRepositories.Emplace(AssetAssignmentSettings->GetPokemonSpritePackageName(),
-                              AssetLoaderSettings->GetPokemonSpriteRepository());
+                              Settings.PokemonSpriteRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetTrainerSpritesPackageName(),
-                              AssetLoaderSettings->GetTrainerFrontSpriteRepository());
+                              Settings.TrainerFrontSpriteRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetTypeIconsPackageName(),
-                              AssetLoaderSettings->GetTypeIconRepository());
+                              Settings.TypeIconRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetStatusIconsPackageName(),
-                              AssetLoaderSettings->GetStatusIconRepository());
+                              Settings.StatusIconRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(),
-                              AssetLoaderSettings->GetSummaryBallRepository());
+                              Settings.SummaryBallRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetItemIconPackageName(),
-                              AssetLoaderSettings->GetItemIconRepository());
+                              Settings.ItemIconRepository.TryLoad());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
         Repository->SetBasePackage(Package.ToString());

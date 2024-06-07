@@ -2,7 +2,6 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Primatives/DisplayText.h"
-#include "Settings/BagSettings.h"
 #include "Settings/BaseSettings.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

@@ -6,7 +6,6 @@
 #include "DataTypes/OptionalUtilities.h"
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
-#include "Settings/BagSettings.h"
 #include "Settings/BaseSettings.h"
 #include <functional>
 

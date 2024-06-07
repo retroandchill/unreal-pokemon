@@ -2,7 +2,6 @@
 
 #include "Windows/PocketWindow.h"
 #include "Primatives/DisplayText.h"
-#include "Settings/BagSettings.h"
 #include "Settings/BaseSettings.h"
 
 FName UPocketWindow::GetCurrentPocket() const {

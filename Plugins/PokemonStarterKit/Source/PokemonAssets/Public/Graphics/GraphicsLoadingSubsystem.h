@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SpriteLoaders.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "SpriteMaterials.h"
 #include "Subsystems/GameInstanceSubsystem.h"
@@ -130,4 +131,10 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     UPROPERTY()
     FTrainerSpriteMaterials TrainerSpriteMaterials;
+
+    /**
+     * The actual sprite loader data
+     */
+    UPROPERTY()
+    FSpriteLoaders SpriteLoaders;
 };
