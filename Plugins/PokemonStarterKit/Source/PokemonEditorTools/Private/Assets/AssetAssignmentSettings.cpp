@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "AssetAssignmentSettings.h"
+#include "Assets/AssetAssignmentSettings.h"
 
 const FString &UAssetAssignmentSettings::GetPokemonSpritePackageName() const {
     return PokemonSpritePackageName;

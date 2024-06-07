@@ -5,7 +5,7 @@
 /**
  * Blueprint function library used for generating mock data for testing purposes
  */
-class POKEMONCORETESTS_API FPokemonTestUtilities {
+class POKEMONTESTS_API FPokemonTestUtilities {
 
   public:
     /**

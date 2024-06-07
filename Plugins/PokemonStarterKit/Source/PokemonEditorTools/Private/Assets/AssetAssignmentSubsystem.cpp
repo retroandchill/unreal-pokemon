@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "AssetAssignmentSubsystem.h"
-#include "AssetAssignmentSettings.h"
+#include "Assets/AssetAssignmentSubsystem.h"
+#include "Assets/AssetAssignmentSettings.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Repositories/AssetRepository.h"
 #include "Repositories/StaticImageRepository.h"

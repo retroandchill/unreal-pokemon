@@ -25,6 +25,21 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "PokemonAssets",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonEditorTools",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "PokemonBlueprintNodes",
 			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
@@ -32,11 +47,6 @@
 		{
 			"Name": "PokemonTests",
 			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "PokemonEditorTools",
-			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	]

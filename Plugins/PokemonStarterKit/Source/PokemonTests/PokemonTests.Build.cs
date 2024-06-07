@@ -27,7 +27,10 @@ public class PokemonTests : ModuleRules
                 "GraphEditor",
                 "KismetCompiler",
                 "UnrealEd",
-                "PokemonEditorTools"
+                "PokemonEditorTools",
+                "PokemonCore",
+                "PokemonSettings",
+                "UnrealInjector"
             }
         );
         

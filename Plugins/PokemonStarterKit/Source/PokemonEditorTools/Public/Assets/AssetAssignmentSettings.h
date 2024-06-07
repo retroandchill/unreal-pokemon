@@ -11,7 +11,7 @@
  * Settings related to the assignment of assets into the asset loaders
  */
 UCLASS(Config = Editor, DefaultConfig)
-class POKEMONASSETSEDITOR_API UAssetAssignmentSettings : public UDeveloperSettings {
+class POKEMONEDITORTOOLS_API UAssetAssignmentSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:

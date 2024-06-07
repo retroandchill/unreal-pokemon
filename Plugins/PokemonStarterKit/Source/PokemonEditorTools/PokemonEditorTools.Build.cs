@@ -21,7 +21,11 @@ public class PokemonEditorTools : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore", 
-                "PokemonSettings"
+                "PokemonSettings",
+                "PokemonAssets",
+                "DeveloperSettings",
+                "EditorSubsystem",
+                "UnrealInjector"
             }
         );
     }

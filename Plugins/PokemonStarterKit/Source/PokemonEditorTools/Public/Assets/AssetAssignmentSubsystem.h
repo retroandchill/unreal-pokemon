@@ -13,7 +13,7 @@ class UTextureRepository;
  * Editor subsystem used to categorize assets into their appropriate bins.
  */
 UCLASS()
-class POKEMONASSETSEDITOR_API UAssetAssignmentSubsystem : public UEditorSubsystem {
+class POKEMONEDITORTOOLS_API UAssetAssignmentSubsystem : public UEditorSubsystem {
     GENERATED_BODY()
 
   public:
