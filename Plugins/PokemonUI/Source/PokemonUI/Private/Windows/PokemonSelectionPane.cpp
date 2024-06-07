@@ -38,6 +38,19 @@ void UPokemonSelectionPane::NativeConstruct() {
             PanelSlot->SetOffsets(Offsets);
         }
     }
+
+    MultiSelectConfirmPanel->SetOwner(this);
+    MultiSelectCancelPanel->SetOwner(this);
+    CancelPanel->SetOwner(this);
+
+    if (bMultiSelectMode) {
+        ConfirmCancelSwitcher->SetActiveWidgetIndex(1);
+        AddAdditionalPanelToOptions(MultiSelectConfirmPanel);
+        AddAdditionalPanelToOptions(MultiSelectCancelPanel);
+    } else {
+        ConfirmCancelSwitcher->SetActiveWidgetIndex(0);
+        AddAdditionalPanelToOptions(CancelPanel);
+    }
 }
 
 int32 UPokemonSelectionPane::GetItemCount_Implementation() const {
@@ -50,6 +63,10 @@ int32 UPokemonSelectionPane::GetColumnCount_Implementation() const {
 
 void UPokemonSelectionPane::RefreshWindow() {
     Algo::ForEach(ActivePanels, &ISelectablePanel::Refresh);
+}
+
+bool UPokemonSelectionPane::IsMultiSelectMode() const {
+    return bMultiSelectMode;
 }
 
 bool UPokemonSelectionPane::IsSwitching() const {
