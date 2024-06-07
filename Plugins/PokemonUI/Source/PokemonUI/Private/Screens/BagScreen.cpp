@@ -28,6 +28,10 @@ void UBagScreen::NativeConstruct() {
     ItemSelectionWindow->SetIndex(0);
 }
 
+void UBagScreen::ApplyItemFilter(const FItemFilter &ItemFilter) {
+    RefreshScene();
+}
+
 FOnItemSelected &UBagScreen::GetOnItemSelected() {
     return OnItemSelected;
 }
@@ -42,6 +46,11 @@ void UBagScreen::RemoveFromStack() {
 
 void UBagScreen::RefreshScene() {
     ItemSelectionWindow->RefreshWindow();
+}
+
+void UBagScreen::RefreshSelf_Implementation() {
+    Super::RefreshSelf_Implementation();
+    RefreshScene();
 }
 
 void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {

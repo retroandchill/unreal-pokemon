@@ -43,6 +43,12 @@ class POKEMONUI_API IPartyScreen {
     virtual void ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) = 0;
 
     /**
+     * Clear out the stack of commands reverting back to how things normally look
+     */
+    UFUNCTION(BlueprintCallable, Category = Display)
+    virtual void ClearCommandStack() = 0;
+
+    /**
      * Set the text of the help window
      * @param Text The new text for the help window
      */

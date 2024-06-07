@@ -15,7 +15,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
  * of the other.
  */
-UCLASS(Blueprintable, Abstract)
+UCLASS(Blueprintable, BlueprintType, Abstract)
 class RPGMENUS_API UScreen : public UUserWidget {
     GENERATED_BODY()
 
@@ -33,6 +33,12 @@ class RPGMENUS_API UScreen : public UUserWidget {
      * @return Was focus granted to a widget.
      */
     virtual bool GiveMenuFocus();
+
+    /**
+     * Refresh the display of this screen to the player
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
+    void RefreshSelf();
 
     /**
      * Close the screen and return to the previous one

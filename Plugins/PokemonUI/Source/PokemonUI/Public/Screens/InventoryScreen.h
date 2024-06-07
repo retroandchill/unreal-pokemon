@@ -13,6 +13,7 @@ struct FItem;
  * Delegate for when an item is selected
  */
 DECLARE_DELEGATE_ThreeParams(FOnItemSelected, const TScriptInterface<class IInventoryScreen> &, const FItem &, int32);
+DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FItemFilter, const FItem&, Item);
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -28,6 +29,13 @@ class POKEMONUI_API IInventoryScreen {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
+    /**
+     * Apply the provided filter to the item list
+     * @param ItemFilter The filter to apply to the list of items
+     */
+    UFUNCTION(BlueprintCallable, Category = "Items|Selection")
+    virtual void ApplyItemFilter(const FItemFilter& ItemFilter) = 0;
+    
     /**
      * Callback override for when an item is selected. When this is bound it will override the default behavior
      * for when an item is selected.

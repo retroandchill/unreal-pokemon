@@ -9,7 +9,6 @@
 #include "ChooseItemFromBag.generated.h"
 
 class UBagScreen;
-class IInventoryScreen;
 struct FItem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FItemSelectedDynamic, const TScriptInterface<IInventoryScreen> &, Screen,
@@ -28,11 +27,12 @@ public:
      * Open the menu to select a Pokémon from the party
      * @param WorldContextObject The object used to obtain the state of the world
      * @param ScreenClass The class used to display the selection screen
+     * @param ItemFilter The filter used for the item list
      * @return The node to execute the task with
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, TSubclassOf<UBagScreen> ScreenClass);
+    static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, TSubclassOf<UBagScreen> ScreenClass, const FItemFilter& ItemFilter);
 
     void Activate() override;
     
@@ -75,5 +75,11 @@ private:
      */
     UPROPERTY()
     TSubclassOf<UBagScreen> ScreenClass;
+
+    /**
+     * The filter used for the item list
+     */
+    UPROPERTY()
+    FItemFilter ItemFilter;
 
 };

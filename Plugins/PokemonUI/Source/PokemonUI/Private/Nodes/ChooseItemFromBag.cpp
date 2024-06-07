@@ -6,16 +6,18 @@
 #include "Screens/BagScreen.h"
 
 UChooseItemFromBag * UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldContextObject,
-                                                           TSubclassOf<UBagScreen> ScreenClass) {
+    TSubclassOf<UBagScreen> ScreenClass, const FItemFilter &ItemFilter) {
     auto Node = NewObject<UChooseItemFromBag>();
     Node->WorldContextObject = WorldContextObject;
     Node->ScreenClass = ScreenClass;
+    Node->ItemFilter = ItemFilter;
     return Node;
 }
 
 void UChooseItemFromBag::Activate() {
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
     auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->AddScreenToStack(ScreenClass);
+    Screen->ApplyItemFilter(ItemFilter);
     Screen->GetOnItemSelected().BindUObject(this, &UChooseItemFromBag::ExecuteOnSelected);
     Screen->GetOnScreenClosed().AddDynamic(this, &UChooseItemFromBag::ExecuteOnCanceled);
 }
