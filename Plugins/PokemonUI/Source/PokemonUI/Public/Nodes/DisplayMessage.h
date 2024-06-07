@@ -57,10 +57,12 @@ class POKEMONUI_API UDisplayMessage : public UBlueprintAsyncActionBase {
     /**
      * The class used to display the message to the screen
      */
+    UPROPERTY()
     TSubclassOf<UTextDisplayScreen> ScreenClass;
 
     /**
      * The message to display to the player
      */
+    UPROPERTY()
     FText Message;
 };

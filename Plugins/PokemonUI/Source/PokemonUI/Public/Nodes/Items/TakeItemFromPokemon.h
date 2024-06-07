@@ -67,10 +67,4 @@ class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintAsyncActionBase {
      */
     UPROPERTY()
     TScriptInterface<IPokemon> Pokemon;
-
-    /**
-     * The utility object used to call special macros
-     */
-    UPROPERTY()
-    TObjectPtr<UObject> ItemUtilities;
 };

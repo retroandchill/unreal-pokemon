@@ -79,5 +79,6 @@ class POKEMONUI_API USelectPokemonFromParty : public UBlueprintAsyncActionBase {
     /**
      * The text used to serve as the prompt to the player
      */
+    UPROPERTY()
     FText HelpText;
 };

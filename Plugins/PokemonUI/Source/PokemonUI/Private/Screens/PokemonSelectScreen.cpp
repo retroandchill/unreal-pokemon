@@ -81,22 +81,19 @@ void UPokemonSelectScreen::RemoveFromStack() {
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
-    if (auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer(); Index < Trainer->GetParty().Num()) {
-        if (PokemonSelected.IsBound()) {
-            PokemonSelected.Execute(this, Trainer, Index);
-            return;
-        }
+    auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
+    if (PokemonSelected.IsBound()) {
+        PokemonSelected.Execute(this, Trainer, Index);
+        return;
+    }
 
-        if (SelectionPane->IsSwitching()) {
-            if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
-                Trainer->SwapPositionsInParty(SwitchingIndex, Index);
-            }
-            SelectionPane->CompleteSwitch();
-        } else {
-            DisplayPokemonCommands(Trainer, Index);
+    if (SelectionPane->IsSwitching()) {
+        if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
+            Trainer->SwapPositionsInParty(SwitchingIndex, Index);
         }
+        SelectionPane->CompleteSwitch();
     } else {
-        // TODO: Handle the additional options
+        DisplayPokemonCommands(Trainer, Index);
     }
 }
 

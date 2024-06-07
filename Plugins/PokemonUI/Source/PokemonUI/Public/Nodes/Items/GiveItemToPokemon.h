@@ -71,6 +71,7 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     /**
      * The new item to give
      */
+    UPROPERTY()
     FName Item;
 
     /**
@@ -82,11 +83,6 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     /**
      * The index of the Pokémon in question
      */
-    int32 PokemonIndex;
-
-    /**
-     * The utility object used to call special macros
-     */
     UPROPERTY()
-    TObjectPtr<UObject> ItemUtilities;
+    int32 PokemonIndex;
 };

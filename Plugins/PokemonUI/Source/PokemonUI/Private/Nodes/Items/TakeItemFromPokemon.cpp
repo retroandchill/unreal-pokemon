@@ -1,20 +1,20 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Items/TakeItemFromPokemon.h"
-#include "Settings/BagSettings.h"
+#include "Kismet/GameplayStatics.h"
 #include "Utilities/ItemUtilities.h"
+#include "Utilities/ItemUtilitiesSubsystem.h"
 
 UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *WorldContextObject,
                                                                 const TScriptInterface<IPokemon> &Pokemon) {
     auto Node = NewObject<UTakeItemFromPokemon>();
     Node->WorldContextObject = WorldContextObject;
     Node->Pokemon = Pokemon;
-    Node->ItemUtilities =
-        NewObject<UObject>(Node, GetDefault<UBagSettings>()->GetItemUtilitiesClass().TryLoadClass<UObject>());
     return Node;
 }
 
 void UTakeItemFromPokemon::Activate() {
+    auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UItemUtilitiesSubsystem>()->GetItemUtilities();
     check(ItemUtilities != nullptr)
     FItemResultNoRetValue OnSuccess;
     OnSuccess.BindDynamic(this, &UTakeItemFromPokemon::ExecuteItemTaken);
