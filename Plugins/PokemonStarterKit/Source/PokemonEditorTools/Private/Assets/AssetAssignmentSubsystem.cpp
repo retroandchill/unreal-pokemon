@@ -27,6 +27,9 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
                               Settings.ItemIconRepository.TryLoad());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
+        if (Repository == nullptr) {
+            continue;
+        }
         Repository->SetBasePackage(Package.ToString());
         if (!AssetRepositories.Contains(Package)) {
             continue;

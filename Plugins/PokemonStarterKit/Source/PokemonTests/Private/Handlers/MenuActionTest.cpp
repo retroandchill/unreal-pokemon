@@ -7,7 +7,7 @@
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-constexpr auto TEST_MENU_ACTION = TEXT("/PokemonUI/Tests/Resources/TestMenuAction.TestMenuAction");
+constexpr auto TEST_MENU_ACTION = TEXT("/PokemonStarterKit/Tests/Resources/TestMenuAction.TestMenuAction");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(MenuActionTest, "Unit Tests.UI.MenuActionTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

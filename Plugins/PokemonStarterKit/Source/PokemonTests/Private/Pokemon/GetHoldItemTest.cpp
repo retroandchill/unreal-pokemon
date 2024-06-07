@@ -12,7 +12,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 
 constexpr auto TEST_HOLD_ITEM_EXECUTOR =
-    TEXT("/PokemonCore/Tests/Resources/GetHoldItemTestHelper.GetHoldItemTestHelper");
+    TEXT("/PokemonStarterKit/Tests/Resources/GetHoldItemTestHelper.GetHoldItemTestHelper");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_Null, "Unit Tests.Core.Pokemon.GetHoldItemTest.InvalidPokemon",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

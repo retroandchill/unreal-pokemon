@@ -114,7 +114,7 @@ bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
     return true;
 }
 
-constexpr auto TEST_GET_GAME_DATA_IDS = TEXT("/PokemonData/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
+constexpr auto TEST_GET_GAME_DATA_IDS = TEXT("/PokemonStarterKit/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",

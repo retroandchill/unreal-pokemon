@@ -113,7 +113,7 @@ bool TestIsGameDataIDValid_MenuActions::RunTest(const FString &Parameters) {
 }
 
 constexpr auto TEST_ID_GAME_DATA_ID_VALID =
-    TEXT("/PokemonData/Tests/Resources/IsGameDataIdValidDispatcher.IsGameDataIdValidDispatcher");
+    TEXT("/PokemonStarterKit/Tests/Resources/IsGameDataIdValidDispatcher.IsGameDataIdValidDispatcher");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_ExecuteNode,
                                  "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.NodeExecution",
