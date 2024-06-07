@@ -7,6 +7,7 @@
 
 #include "PartyMenuItemHandler.generated.h"
 
+class UPartyMenuHandlerSet;
 /**
  * Handling the item controls of the party menu
  */
@@ -30,6 +31,6 @@ class POKEMONUI_API UPartyMenuItemHandler : public UPartyMenuHandler {
     /**
      * The handlers for the sub-commands for items
      */
-    UPROPERTY(EditAnywhere, Instanced, Category = Prompt)
-    TArray<TObjectPtr<UPartyMenuHandler>> SubCommands;
+    UPROPERTY(EditAnywhere, Category = Prompt)
+    TObjectPtr<UPartyMenuHandlerSet> SubCommands;
 };

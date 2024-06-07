@@ -2,6 +2,7 @@
 #include "Screens/PokemonSelectScreen.h"
 #include "Data/Command.h"
 #include "Handlers/PartyMenu/PartyMenuHandler.h"
+#include "Handlers/PartyMenu/PartyMenuHandlerSet.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/CommandWindow.h"
@@ -99,7 +100,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 
 void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index) {
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
-    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers, CancelText, this, Trainer, Index);
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), CancelText, this, Trainer, Index);
     CommandWindow->SetCommands(Commands);
 
     SelectionPane->SetActive(false);

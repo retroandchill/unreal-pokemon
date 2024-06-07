@@ -9,6 +9,7 @@
 
 #include "PokemonSelectScreen.generated.h"
 
+class UPartyMenuHandlerSet;
 class UPartyMenuHandler;
 class UCommand;
 class UCommandWindow;
@@ -132,8 +133,8 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     /**
      * The handlers for the command window when a Pokémon in selected
      */
-    UPROPERTY(EditAnywhere, Instanced, Category = Commands)
-    TArray<TObjectPtr<UPartyMenuHandler>> PokemonHandlers;
+    UPROPERTY(EditAnywhere, Category = Commands)
+    TObjectPtr<UPartyMenuHandlerSet> PokemonHandlers;
 
     /**
      * The stack frame used to track the commands being held

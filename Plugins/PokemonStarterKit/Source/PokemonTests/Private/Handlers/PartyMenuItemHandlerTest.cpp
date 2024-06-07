@@ -1,6 +1,7 @@
 ﻿#include "Handlers/PartyMenu/PartyMenuItemHandler.h"
 #include "Asserts.h"
 #include "External/accessor.hpp"
+#include "Handlers/PartyMenu/PartyMenuHandlerSet.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Pokemon.h"
@@ -10,7 +11,8 @@ using namespace fakeit;
 using namespace accessor;
 
 MEMBER_ACCESSOR(AccessHandlerHelpText, UPartyMenuItemHandler, HelpText, FText)
-MEMBER_ACCESSOR(AccessHandlerSubCommands, UPartyMenuItemHandler, SubCommands, TArray<TObjectPtr<UPartyMenuHandler>>)
+MEMBER_ACCESSOR(AccessHandlerSubCommands, UPartyMenuItemHandler, SubCommands, TObjectPtr<UPartyMenuHandlerSet>)
+MEMBER_ACCESSOR(AccessHandlerSetHandlers, UPartyMenuHandlerSet, Handlers, TArray<TObjectPtr<UPartyMenuHandler>>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyMenuItemHandlerTest, "Unit Tests.Handlers.PartyMenuItemHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -32,7 +34,9 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
 
     accessMember<AccessHandlerHelpText>(*Handler).get() = FText::FromStringView(TEXT("Sample help text"));
-    accessMember<AccessHandlerSubCommands>(*Handler).get() = {Handler};
+    auto& HandlerSet = accessMember<AccessHandlerSubCommands>(*Handler).get();
+    HandlerSet = NewObject<UPartyMenuHandlerSet>();
+    accessMember<AccessHandlerSetHandlers>(*HandlerSet).get() = {Handler};
     FText HelpTextOut;
     TArray<TObjectPtr<UPartyMenuHandler>> HandlersOut;
     When(Method(MockScreen, SetCommandHelpText)).Do([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
