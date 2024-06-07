@@ -10,7 +10,7 @@
  * Custom Blueprint node designed to check if a GameData ID is valid or not
  */
 UCLASS()
-class POKEMONDATADEVELOPER_API UK2Node_IsGameDataIDValid : public UK2Node {
+class POKEMONBLUEPRINTNODES_API UK2Node_IsGameDataIDValid : public UK2Node {
     GENERATED_BODY()
 
   public:

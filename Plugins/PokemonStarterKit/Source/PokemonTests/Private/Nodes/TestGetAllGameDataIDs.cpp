@@ -5,68 +5,70 @@
 #include "BlueprintActionDatabase.h"
 #include "DataManager.h"
 #include "Dispatchers/TestDispatcher.h"
+#include "Engine/Blueprint.h"
 #include "Exp/GrowthRateData.h"
 #include "GraphEditorSettings.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "Nodes/K2Node_IsGameDataIDValid.h"
+#include "Data/K2Node_GetAllGameDataIDs.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_NodeTile,
-                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.NodeTitle",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_NodeTile,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeTitle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestIsGameDataIDValid_NodeTile::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_NodeTile::RunTest(const FString &Parameters) {
     using enum ENodeTitleType::Type;
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
 
-    auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
+    auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
     ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetNodeTitle(MenuTitle).ToString());
     TestNode->Initialize(FGrowthRateData::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Is Growth Rate Data ID Valid?"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    ASSERT_EQUAL(TEXT("Get All Growth Rate Data IDs"), TestNode->GetNodeTitle(MenuTitle).ToString());
     ASSERT_EQUAL(TEXT("Growth Rate Data"), TestNode->GetNodeTitle(FullTitle).ToString());
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_TooltipText,
-                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.TooltipText",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_TooltipText,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.TooltipText",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestIsGameDataIDValid_TooltipText::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_TooltipText::RunTest(const FString &Parameters) {
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
 
-    auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
+    auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
     ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetTooltipText().ToString());
     TestNode->Initialize(FStat::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Is Stat ID Valid? \n\nRepresents one of the stats in the database."),
+    ASSERT_EQUAL(TEXT("Get All Stat IDs \n\nRepresents one of the stats in the database."),
                  TestNode->GetTooltipText().ToString());
 
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuCategory,
-                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.MenuCategory",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_MenuCategory,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.MenuCategory",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestIsGameDataIDValid_MenuCategory::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_MenuCategory::RunTest(const FString &Parameters) {
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
 
-    auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
+    auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
     ASSERT_EQUAL(FText::GetEmpty().ToString(), TestNode->GetMenuCategory().ToString());
     TestNode->Initialize(FSpeciesData::StaticStruct());
     TestGraph->AddNode(TestNode);
@@ -76,16 +78,16 @@ bool TestIsGameDataIDValid_MenuCategory::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_IconAndTint,
-                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.IconAndTint",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_IconAndTint,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.IconAndTint",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestIsGameDataIDValid_IconAndTint::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_IconAndTint::RunTest(const FString &Parameters) {
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
 
-    auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
+    auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
     TestNode->Initialize(FItem::StaticStruct());
     TestGraph->AddNode(TestNode);
 
@@ -98,36 +100,33 @@ bool TestIsGameDataIDValid_IconAndTint::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuActions,
-                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.MenuActions",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_MenuActions,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.MenuActions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestIsGameDataIDValid_MenuActions::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
     FBlueprintActionDatabase::Get().RefreshAll();
     auto Actions = FBlueprintActionDatabase::Get().GetAllActions();
-    ASSERT_TRUE(Actions.Contains(UK2Node_IsGameDataIDValid::StaticClass()));
-    auto NodeActions = Actions[UK2Node_IsGameDataIDValid::StaticClass()];
+    ASSERT_TRUE(Actions.Contains(UK2Node_GetAllGameDataIDs::StaticClass()));
+    auto NodeActions = Actions[UK2Node_GetAllGameDataIDs::StaticClass()];
     ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
 
     return true;
 }
 
-constexpr auto TEST_ID_GAME_DATA_ID_VALID =
-    TEXT("/PokemonData/Tests/Resources/IsGameDataIdValidDispatcher.IsGameDataIdValidDispatcher");
+constexpr auto TEST_GET_GAME_DATA_IDS = TEXT("/PokemonData/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_ExecuteNode,
-                                 "Unit Tests.PokemonData.Nodes.TestIsGameDataIDValid.NodeExecution",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode,
+                                 "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestIsGameDataIDValid_ExecuteNode::RunTest(const FString &Parameters) {
-    auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_ID_GAME_DATA_ID_VALID);
+bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters) {
+    auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_GET_GAME_DATA_IDS);
     ASSERT_NOT_NULL(DispatcherClass);
     auto Dispatcher = NewObject<UObject>(GEngine, DispatcherClass);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
-    bool ValidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("ValidName"));
-    bool InvalidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("InvalidName"));
-    CHECK_TRUE(ValidName);
-    CHECK_FALSE(InvalidName);
+    auto &GrowthRates = UReflectionUtils::GetPropertyValue<TArray<FName>>(Dispatcher, TEXT("GrowthRates"));
+    ASSERT_EQUAL(6, GrowthRates.Num());
 
     return true;
 }

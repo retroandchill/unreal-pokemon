@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Pins/PokemonDataGraphPinFactory.h"
-#include "Nodes/SelectDataRow.h"
+#include "Data/PokemonDataGraphPinFactory.h"
+#include "Data/SelectDataRow.h"
 #include "SGraphPinNameList.h"
 
 TSharedPtr<SGraphPin> FPokemonDataGraphPinFactory::CreatePin(UEdGraphPin *Pin) const {

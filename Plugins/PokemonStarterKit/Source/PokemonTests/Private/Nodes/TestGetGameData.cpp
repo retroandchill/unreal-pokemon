@@ -11,7 +11,7 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "Nodes/K2Node_GetGameData.h"
+#include "Data/K2Node_GetGameData.h"
 #include "Species/EggGroup.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"

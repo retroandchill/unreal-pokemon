@@ -7,7 +7,7 @@
 /**
  * Customization info about the pocket key wrapper struct.
  */
-class POKEMONDATAEDITOR_API FPocketKeyCustomization : public IPropertyTypeCustomization {
+class POKEMONEDITORTOOLS_API FPocketKeyCustomization : public IPropertyTypeCustomization {
   public:
     static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 

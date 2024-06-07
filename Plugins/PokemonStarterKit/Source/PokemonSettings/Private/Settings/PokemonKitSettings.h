@@ -113,4 +113,5 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Data Tables", meta = (AllowedClasses = "DataTable"))
     TArray<FSoftObjectPath> DataTables;
+    
 };

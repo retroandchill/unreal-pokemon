@@ -3,14 +3,15 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
+#include "SelectDataRow.h"
 
-#include "K2Node_GetAllGameDataIDs.generated.h"
+#include "K2Node_GetGameData.generated.h"
 
 /**
- * Custom Blueprint node to get all the IDs from a data table
+ * Node to handle getting the game data out of the editor
  */
 UCLASS()
-class POKEMONDATADEVELOPER_API UK2Node_GetAllGameDataIDs : public UK2Node {
+class POKEMONBLUEPRINTNODES_API UK2Node_GetGameData : public UK2Node, public ISelectDataRow {
     GENERATED_BODY()
 
   public:
@@ -29,6 +30,9 @@ class POKEMONDATADEVELOPER_API UK2Node_GetAllGameDataIDs : public UK2Node {
 
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
     void ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
+
+    TArray<FName> GetRowNames() const override;
+    UEdGraphPin *GetRowPin() const override;
 
   private:
     /**

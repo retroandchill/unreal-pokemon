@@ -23,6 +23,21 @@
 			"Name": "PokemonSettings",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonBlueprintNodes",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonTests",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonEditorTools",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	]
 }

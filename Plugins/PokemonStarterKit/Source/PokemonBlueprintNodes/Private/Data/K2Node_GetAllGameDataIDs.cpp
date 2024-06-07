@@ -1,5 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
-#include "Nodes/K2Node_GetAllGameDataIDs.h"
+#include "Data/K2Node_GetAllGameDataIDs.h"
 #include "DataRetrieval/DataUtilities.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"

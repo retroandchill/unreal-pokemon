@@ -16,7 +16,7 @@ class USelectDataRow : public UInterface {
 /**
  * Interface for handling the selection of a row from a data object in the game.
  */
-class POKEMONDATADEVELOPER_API ISelectDataRow {
+class POKEMONBLUEPRINTNODES_API ISelectDataRow {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

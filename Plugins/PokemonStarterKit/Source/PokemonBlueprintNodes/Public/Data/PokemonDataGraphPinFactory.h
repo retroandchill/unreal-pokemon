@@ -9,7 +9,7 @@
 /**
  * Factory class to handling the visuals of pins for the Pokémon Data module
  */
-class POKEMONDATADEVELOPER_API FPokemonDataGraphPinFactory : public FGraphPanelPinFactory {
+class POKEMONBLUEPRINTNODES_API FPokemonDataGraphPinFactory : public FGraphPanelPinFactory {
   public:
     FPokemonDataGraphPinFactory() = default;
     FPokemonDataGraphPinFactory(const FPokemonDataGraphPinFactory &) = default;
