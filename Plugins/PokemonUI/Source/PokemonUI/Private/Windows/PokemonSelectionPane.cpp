@@ -8,6 +8,7 @@
 #include "Components/PokemonPanel.h"
 #include "Components/WidgetSwitcher.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Settings/BaseSettings.h"
 
 void UPokemonSelectionPane::NativeConstruct() {
     Super::NativeConstruct();
@@ -17,7 +18,7 @@ void UPokemonSelectionPane::NativeConstruct() {
     auto &PlayerParty = PokemonSubsystem.GetPlayer()->GetParty();
 
     ActivePanels.Empty();
-    for (int32 i = 0; i < PokemonSubsystem.GetMaxPartySize(); i++) {
+    for (int32 i = 0; i < Pokemon::FBaseSettings::Get().GetMaxPartySize(); i++) {
         if (i < PlayerParty.Num()) {
             auto Name = FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}}));
             auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass, FName(Name));

@@ -25,8 +25,11 @@ public:
     
     int32 GetMaximumLevel() const final;
     int32 GetEggLevel() const final;
+    FName GetHPStat() const final;
+    int32 GetMaxMoves() const final;
     int32 GetMaxDefaultAbilities() const final;
     int32 GetShinyPokemonChance() const final;
+    FName GetDefaultPokeBall() const final;
     
     int32 GetMaxPartySize() const final;
     

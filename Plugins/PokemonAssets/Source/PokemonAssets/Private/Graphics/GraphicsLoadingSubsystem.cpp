@@ -5,7 +5,7 @@
 #include "Repositories/StaticImageRepository.h"
 #include "Repositories/TextureRepository.h"
 #include "Settings/AssetLoaderSettings.h"
-#include "Settings/PokemonSettings.h"
+#include "Settings/BaseSettings.h"
 #include "Settings/SpriteMaterialSettings.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
@@ -119,7 +119,8 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView
 UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     auto Repository = GetDefault<UAssetLoaderSettings>()->GetSummaryBallRepository();
     auto Asset = Repository->FetchAsset(PokeBall);
-    return Asset != nullptr ? Asset : Repository->FetchAsset(GetDefault<UPokemonSettings>()->GetDefaultPokeBall());
+    auto &Settings = Pokemon::FBaseSettings::Get();
+    return Asset != nullptr ? Asset : Repository->FetchAsset(Settings.GetDefaultPokeBall());
 }
 
 UObject *UGraphicsLoadingSubsystem::GetItemIcon(FName ItemID) const {

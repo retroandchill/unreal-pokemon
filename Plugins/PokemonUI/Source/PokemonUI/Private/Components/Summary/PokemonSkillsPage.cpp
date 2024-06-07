@@ -7,7 +7,7 @@
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Primatives/DisplayText.h"
-#include "Settings/PokemonSettings.h"
+#include "Settings/BaseSettings.h"
 
 TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
     auto Ret = Super::RebuildWidget();
@@ -18,7 +18,7 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
     StatRows.Empty();
 
     if (HPStatRow != nullptr && StatRowClass != nullptr) {
-        auto HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
+        auto HPStat = Pokemon::FBaseSettings::Get().GetHPStat();
         for (auto Stat : StatsToDisplay) {
             if (Stat == HPStat) {
                 auto Row = WidgetTree->ConstructWidget(HPStatRow);

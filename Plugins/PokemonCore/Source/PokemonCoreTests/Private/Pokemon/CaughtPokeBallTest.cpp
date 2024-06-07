@@ -4,7 +4,7 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
-#include "Settings/PokemonSettings.h"
+#include "Settings/BaseSettings.h"
 #include "Utilities/RAII.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -15,7 +15,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Unit Tests.Core.Pokemon.Ca
 bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PORYGON"});
-    CHECK_EQUAL(GetDefault<UPokemonSettings>()->GetDefaultPokeBall(), Pokemon1->GetPokeBall());
+    auto &Settings = Pokemon::FBaseSettings::Get();
+    CHECK_EQUAL(Settings.GetDefaultPokeBall(), Pokemon1->GetPokeBall());
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "MIMIKYU", .PokeBall = FName("MOONBALL")});

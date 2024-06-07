@@ -6,13 +6,13 @@
 #include "Components/MovePanel.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
-#include "Settings/PokemonSettings.h"
+#include "Settings/BaseSettings.h"
 
 void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) {
     CurrentPokemon = Pokemon;
 
     Algo::ForEach(MovePanels, &UWidget::RemoveFromParent);
-    int32 MoveCount = GetDefault<UPokemonSettings>()->GetMaxMoves();
+    int32 MoveCount = Pokemon::FBaseSettings::Get().GetMaxMoves();
     auto Moves = Pokemon->GetMoveBlock()->GetMoves();
 
     MovePanels.Empty();

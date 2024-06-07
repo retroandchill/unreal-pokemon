@@ -23,7 +23,7 @@ public class PokemonCoreTests : ModuleRules
                 "PokemonCore",
                 "UnrealInjector",
                 "AutomationTestHelpers",
-                "PokemonData"
+                "PokemonData", "PokemonSettings"
             }
         );
         

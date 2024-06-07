@@ -51,6 +51,10 @@ private:
     UPROPERTY(EditDefaultsOnly, Config, Category = "Pokémon", meta = (UIMin = 1, ClampMin = 1))
     int32 EggLevel = 0;
 
+    UPROPERTY(EditAnywhere, Config, DisplayName = "HP Stat", Category = "Pokémon",
+        meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
+    FName HPStat = TEXT("HP");
+
     /**
      * The maximum number of abilities a Pokémon can have.
      * <p>If a Pokémon has less abilities here, the last ability in the list is duplicated.</p>
@@ -60,11 +64,24 @@ private:
     int32 MaxDefaultAbilities = 2;
 
     /**
+     * The maximum number of moves a Pokémon can know.
+     */
+    UPROPERTY(EditAnywhere, Config, Category = "Pokémon", meta = (UIMin = 1, ClampMin = 1))
+    int32 MaxMoves = 4;
+
+    /**
      * The odds of a newly generated Pokémon being shiny (out of 65536).
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Pokémon",
         meta = (UIMin = 0, ClampMin = 0, UIMax = 65536, ClampMax = 65536))
     int32 ShinyPokemonChance = 0;
+
+    /**
+     * The default Poké Ball a Pokémon is housed in
+     */
+    UPROPERTY(EditAnywhere, Config, Category = "Pokémon",
+              meta = (GetOptions = "PokemonData.ItemHelper.GetPokeBallNames"))
+    FName DefaultPokeBall = TEXT("POKEBALL");
 
     /**
      * The maximum number of Pokémon that can be in the party.

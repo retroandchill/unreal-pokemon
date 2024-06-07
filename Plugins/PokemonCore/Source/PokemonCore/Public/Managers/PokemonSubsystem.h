@@ -42,20 +42,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     void StartNewGame();
 
     /**
-     * The the ID of the HP stat
-     * @return The stat used referring to a Pokémon's HP
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Display Names")
-    FName GetHPStat() const;
-
-    /**
-     * The maximum number of Pokémon a trainer can carry at any given time
-     * @return The maximum number of Pokémon a trainer can carry at any given time
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Party)
-    int32 GetMaxPartySize() const;
-
-    /**
      * Get the player trainer
      * @return A reference to the player trainer character
      */
@@ -98,18 +84,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     void SetCurrentLocation(const FText &LocationName);
 
   private:
-    /**
-     * The stat used referring to a Pokémon's HP
-     */
-    UPROPERTY(BlueprintGetter = GetHPStat, DisplayName = "HP Stat", Category = "Display Names")
-    FName HPStat;
-
-    /**
-     * The maximum number of Pokémon a trainer can carry at any given time
-     */
-    UPROPERTY(BlueprintGetter = GetMaxPartySize, Category = Party)
-    int32 MaxPartySize;
-
     /**
      * The trainer that represents the player character
      */

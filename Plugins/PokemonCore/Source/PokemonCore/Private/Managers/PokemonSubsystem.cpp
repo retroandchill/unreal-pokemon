@@ -5,15 +5,10 @@
 #include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
-#include "Settings/PokemonSettings.h"
-#include "Settings/TrainerSettings.h"
 #include "Trainers/TrainerStub.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-
-    HPStat = GetDefault<UPokemonSettings>()->GetHPStat();
-    MaxPartySize = GetDefault<UTrainerSettings>()->GetMaxPartySize();
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();
@@ -57,14 +52,6 @@ void UPokemonSubsystem::StartNewGame() {
 
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
-}
-
-FName UPokemonSubsystem::GetHPStat() const {
-    return HPStat;
-}
-
-int32 UPokemonSubsystem::GetMaxPartySize() const {
-    return MaxPartySize;
 }
 
 const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {

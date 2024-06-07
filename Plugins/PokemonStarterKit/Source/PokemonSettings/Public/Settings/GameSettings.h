@@ -52,6 +52,13 @@ public:
     virtual int32 GetEggLevel() const = 0;
 
     /**
+     * The the ID of the HP stat
+     * @return The stat used referring to a Pokémon's HP
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual FName GetHPStat() const = 0;
+
+    /**
      * The maximum number of abilities a Pokémon can have.
      * @return The maximum number of abilities a Pokémon can have.
      */
@@ -59,11 +66,25 @@ public:
     virtual int32 GetMaxDefaultAbilities() const = 0;
 
     /**
+     * The maximum number of moves a Pokémon can know.
+     * @return The maximum number of moves a Pokémon can know.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual int32 GetMaxMoves() const = 0;
+
+    /**
      * The odds of a newly generated Pokémon being shiny (out of 65536).
      * @return The odds of a newly generated Pokémon being shiny (out of 65536).
      */
     UFUNCTION(BlueprintCallable, Category = "Pokémon")
     virtual int32 GetShinyPokemonChance() const = 0;
+
+    /**
+     * The default Poké Ball a Pokémon is housed in
+     * @return The default Poké Ball a Pokémon is housed in
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual FName GetDefaultPokeBall() const = 0;
 
     /**
      * The maximum number of Pokémon that can be in the party.

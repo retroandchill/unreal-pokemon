@@ -40,12 +40,24 @@ int32 Pokemon::FBaseSettings::GetEggLevel() const {
     return InternalData->KitSettings->EggLevel;
 }
 
+FName Pokemon::FBaseSettings::GetHPStat() const {
+    return InternalData->KitSettings->HPStat;
+}
+
+int32 Pokemon::FBaseSettings::GetMaxMoves() const {
+    return InternalData->KitSettings->MaxMoves;
+}
+
 int32 Pokemon::FBaseSettings::GetMaxDefaultAbilities() const {
     return InternalData->KitSettings->MaxDefaultAbilities;
 }
 
 int32 Pokemon::FBaseSettings::GetShinyPokemonChance() const {
     return InternalData->KitSettings->ShinyPokemonChance;
+}
+
+FName Pokemon::FBaseSettings::GetDefaultPokeBall() const {
+    return InternalData->KitSettings->DefaultPokeBall;
 }
 
 int32 Pokemon::FBaseSettings::GetMaxPartySize() const {

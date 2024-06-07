@@ -9,7 +9,7 @@
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
-#include "Settings/PokemonSettings.h"
+#include "Settings/BaseSettings.h"
 #include "Species/GenderRatio.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
@@ -30,7 +30,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     if (DTO.PokeBall.IsSet()) {
         PokeBall = *DTO.PokeBall;
     } else {
-        PokeBall = GetDefault<UPokemonSettings>()->GetDefaultPokeBall();
+        PokeBall = Pokemon::FBaseSettings::Get().GetDefaultPokeBall();
     }
 
     if (Trainer != nullptr) {
@@ -76,7 +76,7 @@ bool UGamePokemon::IsShiny() const {
     uint32 B = A & 0xFFFF;
     uint32 C = (A >> 16) & 0xFFFF;
     uint32 D = B ^ C;
-    return D < GetDefault<UPokemonSettings>()->GetShinyChance();
+    return D < Pokemon::FBaseSettings::Get().GetShinyPokemonChance();
 }
 
 int32 UGamePokemon::GetCurrentHP() const {
@@ -84,7 +84,7 @@ int32 UGamePokemon::GetCurrentHP() const {
 }
 
 int32 UGamePokemon::GetMaxHP() const {
-    return GetStatBlock()->GetStat(UPokemonSubsystem::GetInstance(this).GetHPStat())->GetStatValue();
+    return GetStatBlock()->GetStat(Pokemon::FBaseSettings::Get().GetHPStat())->GetStatValue();
 }
 
 bool UGamePokemon::IsFainted() const {
