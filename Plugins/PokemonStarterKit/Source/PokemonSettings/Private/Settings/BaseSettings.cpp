@@ -7,7 +7,7 @@
 Pokemon::FBaseSettings::FBaseSettings() : KitSettings(NewObject<UPokemonKitSettings>()) {
 }
 
-const Pokemon::FBaseSettings & Pokemon::FBaseSettings::Get() {
+Pokemon::FBaseSettings & Pokemon::FBaseSettings::Get() {
     static FBaseSettings Instance;
     return Instance;
 }

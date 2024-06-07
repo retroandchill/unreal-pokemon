@@ -86,3 +86,19 @@ public:
     virtual int32 GetMaxItemsPerSlot() const = 0;
 
 };
+
+/**
+ * Function library used to retrieve the settings used by the game itself.
+ */
+UCLASS()
+class POKEMONSETTINGS_API UGameSettingsFunctionLibrary : public UBlueprintFunctionLibrary {
+    GENERATED_BODY()
+
+public:
+    /**
+     * Get the game settings interface.
+     * @return The wrapped settings interface
+     */
+    UFUNCTION(BlueprintPure, Category = "Settings")
+    static const TScriptInterface<IGameSettings> &GetGameSettings();
+};

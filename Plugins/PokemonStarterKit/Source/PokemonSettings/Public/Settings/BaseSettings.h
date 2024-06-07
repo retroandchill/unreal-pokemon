@@ -9,7 +9,7 @@ class UPokemonKitSettings;
 
 namespace Pokemon {
 /**
- * The singleton used to retrieve all of the settings in the game
+ * The singleton used to retrieve the kit's settings.
  */
 class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     FBaseSettings();
@@ -20,7 +20,7 @@ public:
      * Get the singleton instance that contains all the settings used by the game.
      * @return The settings that are retrieved.
      */
-    static const FBaseSettings& Get();
+    static FBaseSettings& Get();
 
     int32 GetMaxMoney() const final;
     uint8 GetMaxPlayerNameSize() const final;

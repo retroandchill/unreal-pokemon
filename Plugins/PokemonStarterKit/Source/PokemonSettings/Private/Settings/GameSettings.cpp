@@ -2,6 +2,15 @@
 
 
 #include "Settings/GameSettings.h"
+#include "Settings/BaseSettings.h"
 
+TScriptInterface<IGameSettings> CreateGameSettingsWrapper() {
+    TScriptInterface<IGameSettings> Interface = UGameSettings::StaticClass();
+    Interface.SetInterface(&Pokemon::FBaseSettings::Get());
+    return Interface;
+}
 
-// Add default functionality here for any IGameSettings functions that are not pure virtual.
+const TScriptInterface<IGameSettings> &UGameSettingsFunctionLibrary::GetGameSettings() {
+    static auto Interface = CreateGameSettingsWrapper();
+    return Interface;
+}
