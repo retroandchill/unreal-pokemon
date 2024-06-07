@@ -46,7 +46,7 @@ T OrElseGet(const TOptional<T> &Optional, const Functor &Supplier) {
     return Optional.IsSet() ? Optional.GetValue() : Supplier();
 }
 
-template <typename T, typename R>
+template <typename R, typename T>
 TOptional<R> Map(const TOptional<T> &Optional, const TFunctionRef<R(const T &)> &Mapping) {
     return Optional.IsSet() ? Mapping(Optional.GetValue()) : TOptional<R>();
 }

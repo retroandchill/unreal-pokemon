@@ -3,6 +3,7 @@
 #include "Player/DefaultBag.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "Settings/BagSettings.h"
@@ -30,6 +31,25 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
 
     auto ItemSlot = Pocket->FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     return ItemSlot != nullptr ? ItemSlot->Quantity : 0;
+}
+
+bool UDefaultBag::CanObtainItem(FName ItemID) const {
+    if (auto ItemQuantity = GetItemQuantity(ItemID); ItemQuantity > 0) {
+        return ItemQuantity < GetDefault<UBagSettings>()->GetMaxItemsPerSlot();
+    }
+
+    auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
+    check(Item != nullptr)
+    auto Pocket = ItemSlots.Find(Item->Pocket);
+    if (Pocket == nullptr) {
+        return false;
+    }
+
+    const auto &[DisplayName, MaxPocketSize, bAutoSort] =
+        GetDefault<UBagSettings>()->GetPocketInfo().FindChecked(Item->Pocket);
+    auto HasRoom =
+        OptionalUtilities::Map<bool, int32>(MaxPocketSize, [&Pocket](int32 Max) { return Pocket->Items.Num() < Max; });
+    return HasRoom.Get(true);
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {

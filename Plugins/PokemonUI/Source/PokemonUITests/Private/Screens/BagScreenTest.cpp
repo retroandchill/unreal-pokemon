@@ -1,21 +1,21 @@
 ﻿#include "Screens/BagScreen.h"
 #include "Asserts.h"
-#include "DependencyInjectionSubsystem.h"
-#include "RPGMenusSubsystem.h"
-#include "SampleHandler.h"
 #include "Data/SelectionInputs.h"
+#include "DependencyInjectionSubsystem.h"
+#include "External/accessor.hpp"
+#include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
+#include "Player/Bag.h"
+#include "RPGMenusSubsystem.h"
+#include "SampleHandler.h"
+#include "Utilities/InputUtilities.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
 #include "Windows/ItemSelectionWindow.h"
-#include "External/accessor.hpp"
-#include "Lookup/InjectionUtilities.h"
-#include "Player/Bag.h"
-#include "Utilities/InputUtilities.h"
-#include "Utilities/PlayerUtilities.h"
 
 using namespace accessor;
 
@@ -38,7 +38,7 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("REPEL"));
     auto &Subsystem = UPokemonSubsystem::GetInstance(World.Get());
     accessMember<AccessBag>(Subsystem).get() = Bag;
-    
+
     TWidgetPtr<UBagScreen> Screen(CreateWidget<UBagScreen>(World.Get(), WidgetClass));
     ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
@@ -57,7 +57,7 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     ASSERT_NOT_NULL(InputMappings);
     auto ConfirmButton = *accessMember<AccessConfirmInputBag>(*InputMappings).get().CreateIterator();
     auto CancelButton = *accessMember<AccessCancelInputBag>(*InputMappings).get().CreateIterator();
-    
+
     using enum ESlateVisibility;
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
     CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
@@ -83,13 +83,14 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
 
     FName ItemID;
     int32 ItemQuantity;
-    Screen->GetOnItemSelected().BindLambda([&ItemID, &ItemQuantity](const TScriptInterface<IInventoryScreen>&, const FItem& Item, int32 Quantity) {
-        ItemID = Item.ID;
-        ItemQuantity = Quantity;
-    });
+    Screen->GetOnItemSelected().BindLambda(
+        [&ItemID, &ItemQuantity](const TScriptInterface<IInventoryScreen> &, const FItem &Item, int32 Quantity) {
+            ItemID = Item.ID;
+            ItemQuantity = Quantity;
+        });
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
     CHECK_EQUAL(TEXT("REPEL"), ItemID.ToString());
     CHECK_EQUAL(1, ItemQuantity);
-    
+
     return true;
 }

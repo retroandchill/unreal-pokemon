@@ -39,6 +39,10 @@ bool UScreen::GiveMenuFocus() {
     return FocusGranted;
 }
 
+void UScreen::RefreshSelf_Implementation() {
+    // No base implementation
+}
+
 void UScreen::CloseScreen() {
     GetOwningPlayer()->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->RemoveScreenFromStack();
     OnScreenClosed.Broadcast();

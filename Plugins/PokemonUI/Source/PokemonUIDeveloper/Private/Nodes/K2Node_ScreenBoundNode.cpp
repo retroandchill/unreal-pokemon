@@ -1,21 +1,21 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Nodes/K2_NodeScreenBoundNode.h"
+#include "Nodes/K2Node_ScreenBoundNode.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Screens/Screen.h"
 
-UK2_NodeScreenBoundNode::UK2_NodeScreenBoundNode(const FObjectInitializer &Initializer) : Super(Initializer) {
+UK2Node_ScreenBoundNode::UK2Node_ScreenBoundNode(const FObjectInitializer &Initializer) : Super(Initializer) {
     ProxyActivateFunctionName = GET_FUNCTION_NAME_CHECKED(UBlueprintAsyncActionBase, Activate);
 }
 
-void UK2_NodeScreenBoundNode::Initialize(TSubclassOf<UScreen> NodeClass, TSharedRef<uint32> NodeCounter) {
+void UK2Node_ScreenBoundNode::Initialize(TSubclassOf<UScreen> NodeClass, TSharedRef<uint32> NodeCounter) {
     ScreenType = NodeClass;
     TotalScreens = MoveTemp(NodeCounter);
 }
 
-void UK2_NodeScreenBoundNode::AllocateDefaultPins() {
+void UK2Node_ScreenBoundNode::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
     static const FName ScreenType_ParamName(TEXT("ScreenClass"));
     auto ScreenClassPin = FindPinChecked(ScreenType_ParamName);
@@ -23,7 +23,7 @@ void UK2_NodeScreenBoundNode::AllocateDefaultPins() {
     ScreenClassPin->bHidden = true;
 }
 
-FText UK2_NodeScreenBoundNode::GetNodeTitle(ENodeTitleType::Type TitleType) const {
+FText UK2Node_ScreenBoundNode::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     if (ScreenType != nullptr && *TotalScreens > 1) {
         return FText::FormatNamed(
             NSLOCTEXT("K2Node", "NodeScreenBoundNode_NodeTitleFormat", "{OriginalName} ({ClassName})"),
@@ -33,11 +33,11 @@ FText UK2_NodeScreenBoundNode::GetNodeTitle(ENodeTitleType::Type TitleType) cons
     return Super::GetNodeTitle(TitleType);
 }
 
-void UK2_NodeScreenBoundNode::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+void UK2Node_ScreenBoundNode::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
                                                 UFunction *FactoryFunc) const {
     auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
                                 TSubclassOf<UScreen> Subclass, TSharedRef<uint32> NodeCounter, UFunction *Factory) {
-        auto TypedNode = CastChecked<UK2_NodeScreenBoundNode>(Node);
+        auto TypedNode = CastChecked<UK2Node_ScreenBoundNode>(Node);
         auto ReturnProp = CastFieldChecked<FObjectProperty>(Factory->GetReturnProperty());
 
         TypedNode->ProxyFactoryFunctionName = Factory->GetFName();
@@ -62,6 +62,6 @@ void UK2_NodeScreenBoundNode::SupplyMenuActions(FBlueprintActionDatabaseRegistra
     });
 }
 
-void UK2_NodeScreenBoundNode::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
+void UK2Node_ScreenBoundNode::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
     // No action by default
 }

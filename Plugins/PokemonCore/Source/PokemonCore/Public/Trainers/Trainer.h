@@ -10,7 +10,7 @@ class IPokemon;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UTrainer : public UInterface {
+class POKEMONCORE_API UTrainer : public UInterface {
     GENERATED_BODY()
 };
 

@@ -5,6 +5,7 @@
 #include "Bag/Item.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
+#include "DataManager.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
@@ -43,6 +44,10 @@ int32 UItemSelectionWindow::GetItemCount_Implementation() const {
 
 void UItemSelectionWindow::RefreshWindow() {
     UpdatePocket();
+}
+
+void UItemSelectionWindow::ApplyItemFilter(const FItemFilter &ItemFilter) {
+    ItemListFilter = ItemFilter;
 }
 
 FOnItemChanged &UItemSelectionWindow::GetOnItemSelected() {
@@ -107,6 +112,12 @@ void UItemSelectionWindow::UpdatePocket() {
 }
 
 void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {
+    auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemName);
+    check(Item != nullptr)
+    if (ItemListFilter.IsBound() && !ItemListFilter.Execute(*Item)) {
+        return;
+    }
+
     auto Option = WidgetTree->ConstructWidget(ItemEntryClass);
     Option->SetItem(ItemName, Quantity);
     SlotItem(Option, Options.Num());

@@ -28,7 +28,8 @@ class POKEMONUI_API UPartyMenuHandler : public UMenuHandler {
      * @return Should the command be shown?
      */
     UFUNCTION(BlueprintNativeEvent, Category = Display)
-    bool ShouldShow(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex) const;
+    bool ShouldShow(const TScriptInterface<IPartyScreen> &Screen, const TScriptInterface<ITrainer> &Trainer,
+                    int32 PartyIndex) const;
 
     /**
      * Handle the effect of the command
@@ -37,5 +38,6 @@ class POKEMONUI_API UPartyMenuHandler : public UMenuHandler {
      * @param PartyIndex The index of the party that is currently selected
      */
     UFUNCTION(BlueprintNativeEvent, Category = Action)
-    void Handle(const TScriptInterface<IPartyScreen>& Screen, const TScriptInterface<ITrainer>& Trainer, int32 PartyIndex);
+    void Handle(const TScriptInterface<IPartyScreen> &Screen, const TScriptInterface<ITrainer> &Trainer,
+                int32 PartyIndex);
 };

@@ -8,6 +8,7 @@
 #include "GiveItemToPokemon.generated.h"
 
 class IPokemon;
+
 /**
  * Delegate for the result of the item in question
  */
@@ -22,7 +23,7 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
 
   public:
     /**
-     * ive an item to a Pokémon to hold, and take a held item from a Pokémon
+     * Give an item to a Pokémon to hold, and take a held item from a Pokémon
      * @param WorldContextObject The object used to obtain the state of the world
      * @param Item The new item to give
      * @param Pokemon The Pokémon receiving the item
@@ -70,6 +71,7 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     /**
      * The new item to give
      */
+    UPROPERTY()
     FName Item;
 
     /**
@@ -81,11 +83,6 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     /**
      * The index of the Pokémon in question
      */
-    int32 PokemonIndex;
-
-    /**
-     * The utility object used to call special macros
-     */
     UPROPERTY()
-    TObjectPtr<UObject> ItemUtilities;
+    int32 PokemonIndex;
 };

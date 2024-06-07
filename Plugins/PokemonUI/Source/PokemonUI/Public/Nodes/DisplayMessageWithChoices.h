@@ -58,15 +58,18 @@ class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintAsyncActionBas
     /**
      * The class used to display the message to the screen
      */
+    UPROPERTY()
     TSubclassOf<UTextDisplayScreen> ScreenClass;
 
     /**
      * The message to display to the player
      */
+    UPROPERTY()
     FText Message;
 
     /**
      * The choices to display
      */
+    UPROPERTY()
     TArray<FText> Choices;
 };

@@ -27,10 +27,9 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     void NativeConstruct() override;
 
   public:
-    /**
-     * Get the item selected delegate
-     * @return Callback for when an item is selected
-     */
+    UFUNCTION(BlueprintCallable, Category = "Items|Selection")
+    virtual void ApplyItemFilter(const FItemFilter &ItemFilter) override;
+
     FOnItemSelected &GetOnItemSelected() final;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
@@ -41,6 +40,9 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
+
+  protected:
+    void RefreshSelf_Implementation() override;
 
   private:
     /**
