@@ -105,8 +105,8 @@ private:
     /**
      * The maximum number of items each slot in the Bag can hold.
      */
-    UPROPERTY(EditDefaultsOnly, Config, Category = "Bag", meta = (UIMin = 1, UIMax = 1))
-    int32 MaxItemsPerSlot = 0;
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Bag", meta = (UIMin = 1, ClampMin = 1))
+    int32 MaxItemsPerSlot = 999;
 
     /**
      * The text displayed for the name when a Pokémon has no ability.

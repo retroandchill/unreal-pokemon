@@ -2,6 +2,7 @@
 
 #include "Screens/BagScreen.h"
 #include "Handlers/BagMenu/BagMenuHandler.h"
+#include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/CommandWindow.h"
@@ -54,7 +55,7 @@ void UBagScreen::RefreshSelf_Implementation() {
 }
 
 void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {
-    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers, CancelText, this, Item, Quantity);
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers->GetHandlers(), CancelText, this, Item, Quantity);
     CommandWindow->SetCommands(MoveTemp(Commands));
 }
 

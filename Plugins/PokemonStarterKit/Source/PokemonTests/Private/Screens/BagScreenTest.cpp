@@ -9,6 +9,7 @@
 #include "Player/Bag.h"
 #include "RPGMenusSubsystem.h"
 #include "SampleHandler.h"
+#include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
@@ -21,7 +22,8 @@ using namespace accessor;
 
 MEMBER_ACCESSOR(AccessInputMappingsBag, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
 MEMBER_ACCESSOR(AccessBag, UPokemonSubsystem, Bag, TScriptInterface<IBag>)
-MEMBER_ACCESSOR(AccessHandler, UBagScreen, CommandHandlers, TArray<TObjectPtr<UBagMenuHandler>>)
+MEMBER_ACCESSOR(AccessHandler, UBagScreen, CommandHandlers, TObjectPtr<UBagMenuHandlerSet>)
+MEMBER_ACCESSOR(AccessBagHandlers, UBagMenuHandlerSet, Handlers, TArray<TObjectPtr<UBagMenuHandler>>)
 MEMBER_ACCESSOR(AccessConfirmInputBag, USelectionInputs, ConfirmInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessCancelInputBag, USelectionInputs, CancelInputs, TSet<FKey>)
 
@@ -48,7 +50,9 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
     ASSERT_NOT_NULL(CommandWindow);
 
-    auto &Handlers = accessMember<AccessHandler>(*Screen).get();
+    auto &HandlerSet = accessMember<AccessHandler>(*Screen).get();
+    HandlerSet = NewObject<UBagMenuHandlerSet>(Screen.Get());
+    auto &Handlers = accessMember<AccessBagHandlers>(*HandlerSet).get();
     Handlers.Empty();
     auto SampleHandler = NewObject<USampleHandler>(Screen.Get());
     Handlers.Emplace(SampleHandler);

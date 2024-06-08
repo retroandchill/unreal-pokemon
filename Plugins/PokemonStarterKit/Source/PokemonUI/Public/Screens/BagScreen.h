@@ -8,6 +8,7 @@
 
 #include "BagScreen.generated.h"
 
+class UBagMenuHandlerSet;
 class UCommand;
 class UBagMenuHandler;
 class UCommandWindow;
@@ -101,8 +102,8 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     /**
      * The handlers in the menu to apply to item selections
      */
-    UPROPERTY(EditAnywhere, Instanced, Category = Selection)
-    TArray<TObjectPtr<UBagMenuHandler>> CommandHandlers;
+    UPROPERTY(EditAnywhere, Category = Selection)
+    TObjectPtr<UBagMenuHandlerSet> CommandHandlers;
 
     /**
      * The text that is displayed when the player hits cancel
