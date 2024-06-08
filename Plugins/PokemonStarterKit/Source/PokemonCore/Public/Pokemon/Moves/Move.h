@@ -29,6 +29,12 @@ class POKEMONCORE_API IMove {
     virtual const FMoveData &GetMoveData() const = 0;
 
     /**
+     * Get the type of the move
+     * @return The move's type
+     */
+    virtual FName GetType() const = 0;
+    
+    /**
      * Get the damage category of the move
      * @return The damage category for the given move
      */

@@ -16,6 +16,10 @@ const FMoveData &UDefaultMove::GetMoveData() const {
     return *Move;
 }
 
+FName UDefaultMove::GetType() const {
+    return GetMoveData().Type;
+}
+
 EMoveDamageCategory UDefaultMove::GetDamageCategory() const {
     return GetMoveData().Category;
 }

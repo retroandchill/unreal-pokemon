@@ -55,4 +55,11 @@ public:
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetSpecialDefense() const = 0;
 
+    /**
+     * Get the Pokémon's current type
+     * @return The type of the Pokémon
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual TArray<FName> GetTypes() const = 0;
+
 };

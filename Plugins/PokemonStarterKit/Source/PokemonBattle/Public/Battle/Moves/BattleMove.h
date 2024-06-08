@@ -7,6 +7,7 @@
 #include "UObject/Interface.h"
 #include "BattleMove.generated.h"
 
+struct FType;
 class IMove;
 class IBattler;
 
@@ -30,6 +31,8 @@ public:
      * @return The initialized interface
      */
     virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IMove>& Move) = 0;
+
+    
     
     /**
      * Calculate the total damage the move will deal.
@@ -39,33 +42,10 @@ public:
      * @return The amount of damage dealt 
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1);
+    FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1) const;
 
-    /**
-     * Calculate the base damage of the particular move before any modifiers are applied
-     * @param User The user of the move
-     * @param Target The target of the move
-     * @return The base damage, pre-modification
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    int32 CalculateBaseDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    
 
-    /**
-     * Calculate the true power of the move, pulled from the move's base damage
-     * @param User The user of the move
-     * @param Target The target of the move
-     * @return The actual power value to use
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    int32 CalculateTruePower(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
-
-    /**
-     * Fetch the attack and defense stats to use for damage
-     * @param User The user of the move
-     * @param Target The target of the move
-     * @return The values of the stats to use
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    FAttackAndDefense GetAttackAndDefense(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    
     
 };

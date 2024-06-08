@@ -59,6 +59,26 @@ struct FBattleDamage {
 };
 
 /**
+ * Represents a damage modifier for a move
+ */
+USTRUCT(BlueprintType)
+struct FModifiedDamage {
+    GENERATED_BODY()
+    
+    /**
+     * The modifier to apply to the move
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    float Modifier = 0;
+
+    /**
+     * The effectiveness of the damage.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    EDamageEffectiveness Effectiveness = EDamageEffectiveness::NonDamaging;
+};
+
+/**
  * Represents the attack and defense to use for a damage calculation.
  */
 USTRUCT(BlueprintType)

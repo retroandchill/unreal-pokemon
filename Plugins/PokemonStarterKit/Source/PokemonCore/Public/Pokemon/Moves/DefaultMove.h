@@ -18,6 +18,7 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     TScriptInterface<IMove> Initialize(FName MoveID);
 
     const FMoveData &GetMoveData() const override;
+    FName GetType() const override;
     EMoveDamageCategory GetDamageCategory() const override;
     int32 GetBasePower() const override;
     int32 GetCurrentPP() const override;
