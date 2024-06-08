@@ -17,7 +17,7 @@ static TArray<FName> CreatePokemonSpriteResolutionList(FName Species, const FPok
 void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    auto &Settings = Pokemon::FBaseSettings::Get();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
     PokemonSpriteMaterials = Settings.GetPokemonSpriteSettings();
     TrainerSpriteMaterials = Settings.GetTrainerSpriteSettings();
     SpriteLoaders = Settings.GetSpriteRepositories();
@@ -116,7 +116,7 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView
 
 UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     auto Asset = SpriteLoaders.SummaryBallRepository->FetchAsset(PokeBall);
-    auto &Settings = Pokemon::FBaseSettings::Get();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
     return Asset != nullptr ? Asset : SpriteLoaders.SummaryBallRepository->FetchAsset(Settings.GetDefaultPokeBall());
 }
 

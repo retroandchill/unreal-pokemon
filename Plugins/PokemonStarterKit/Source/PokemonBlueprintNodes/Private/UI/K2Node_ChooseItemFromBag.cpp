@@ -10,10 +10,6 @@ void UK2Node_ChooseItemFromBag::GetMenuActions(FBlueprintActionDatabaseRegistrar
     SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 
-void UK2Node_ChooseItemFromBag::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
-    Super::ExpandNode(CompilerContext, SourceGraph);
-}
-
 void UK2Node_ChooseItemFromBag::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
     for (TObjectIterator<UClass> It; It; ++It) {
         if (!It->IsChildOf(UBagScreen::StaticClass()) || It->HasAnyClassFlags(CLASS_Abstract)) {

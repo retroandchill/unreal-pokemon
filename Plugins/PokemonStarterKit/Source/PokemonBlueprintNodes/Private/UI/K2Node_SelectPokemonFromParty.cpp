@@ -10,10 +10,6 @@ void UK2Node_SelectPokemonFromParty::GetMenuActions(FBlueprintActionDatabaseRegi
     SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 
-void UK2Node_SelectPokemonFromParty::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
-    Super::ExpandNode(CompilerContext, SourceGraph);
-}
-
 void UK2Node_SelectPokemonFromParty::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
     for (TObjectIterator<UClass> It; It; ++It) {
         if (!It->IsChildOf(UPokemonSelectScreen::StaticClass()) || It->HasAnyClassFlags(CLASS_Abstract)) {

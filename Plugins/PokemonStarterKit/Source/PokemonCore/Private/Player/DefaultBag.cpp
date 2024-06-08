@@ -34,7 +34,7 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
 }
 
 bool UDefaultBag::CanObtainItem(FName ItemID) const {
-    auto &Settings = Pokemon::FBaseSettings::Get();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
     if (auto ItemQuantity = GetItemQuantity(ItemID); ItemQuantity > 0) {
         return ItemQuantity < Settings.GetMaxItemsPerSlot();
     }
@@ -53,7 +53,7 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
-    auto &Settings = Pokemon::FBaseSettings::Get();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
     auto &Pocket = GetPocket(ItemID);
     int32 SlotMax = Settings.GetMaxItemsPerSlot();
     auto ItemSlot = Pocket.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
@@ -70,7 +70,7 @@ int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
 }
 
 int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
-    auto &Settings = Pokemon::FBaseSettings::Get();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
     auto &Pocket = GetPocket(ItemID);
     int32 SlotMax = Settings.GetMaxItemsPerSlot();
     auto SlotIndex = Pocket.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
