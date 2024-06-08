@@ -72,6 +72,5 @@ void UBaseBattleMove::ApplyAdditionalDamageModifiers_Implementation(FModifiedDam
 }
 
 void UBaseBattleMove::ApplyDamageSwing_Implementation(FModifiedDamage &Damage) const {
-    int32 RandomValue = 85 + FMath::Rand() % 16;
-    Damage.Modifier *= RandomValue / 100.f;
+    Damage.Modifier *= FMath::RandRange(85, 100) / 100.f;
 }
