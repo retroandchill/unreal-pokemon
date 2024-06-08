@@ -10,6 +10,8 @@ public class PokemonBattle : ModuleRules
             new string[]
             {
                 "Core",
+                "PokemonData",
+                "PokemonCore"
             }
         );
 

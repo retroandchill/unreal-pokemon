@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Moves/MoveDamageCategory.h"
 
 #include "Move.generated.h"
 
@@ -10,7 +11,7 @@ struct FMoveData;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UMove : public UInterface {
+class POKEMONCORE_API UMove : public UInterface {
     GENERATED_BODY()
 };
 
@@ -26,6 +27,18 @@ class POKEMONCORE_API IMove {
      * @return The data for this move
      */
     virtual const FMoveData &GetMoveData() const = 0;
+
+    /**
+     * Get the damage category of the move
+     * @return The damage category for the given move
+     */
+    virtual EMoveDamageCategory GetDamageCategory() const = 0;
+
+    /**
+     * Get the base power for the move in question
+     * @return The move's base power
+     */
+    virtual int32 GetBasePower() const = 0;
 
     /**
      * Get the current PP for the move
