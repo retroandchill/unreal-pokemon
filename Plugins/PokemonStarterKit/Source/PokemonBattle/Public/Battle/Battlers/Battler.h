@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "Battler.generated.h"
 
+class IMoveModifier;
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
 class POKEMONBATTLE_API UBattler : public UInterface {

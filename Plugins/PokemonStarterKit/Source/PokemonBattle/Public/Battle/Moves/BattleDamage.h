@@ -55,28 +55,41 @@ struct FBattleDamage {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     EDamageEffectiveness Effectiveness = EDamageEffectiveness::NonDamaging;
+
+    /**
+     * Did this move score a critical hit
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    bool bCriticalHit;
     
 };
 
 /**
- * Represents a damage modifier for a move
+ * Represents any calculated move effect modifiers
  */
 USTRUCT(BlueprintType)
-struct FModifiedDamage {
+struct FDamageEffects {
     GENERATED_BODY()
-    
+
     /**
-     * The modifier to apply to the move
+     * The actual type matchup value
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
-    float Modifier = 0;
-
+    float TypeMatchUp = 1.0f;
+    
     /**
      * The effectiveness of the damage.
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
-    EDamageEffectiveness Effectiveness = EDamageEffectiveness::NonDamaging;
+    EDamageEffectiveness Effectiveness = EDamageEffectiveness::Normal;
+
+    /**
+     * Did this move score a critical hit
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    bool bCriticalHit = false;
 };
+
 
 /**
  * Represents the attack and defense to use for a damage calculation.
@@ -96,5 +109,38 @@ struct FAttackAndDefense {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     int32 Defense;
+    
+};
+
+/**
+ * Represents the damage multipliers for moves
+ */
+USTRUCT(BlueprintType)
+struct FDamageMultipliers {
+    GENERATED_BODY()
+
+    /**
+     * The factor to multiply the move's power by
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    float PowerMultiplier = 1.0f;
+
+    /**
+     * The factor to multiply the user's attack by
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    float AttackMultiplier = 1.0f;
+
+    /**
+     * The factor to multiply the user's defense by
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    float DefenseMultiplier = 1.0f;
+
+    /**
+     * The factor to multiply the final damage output by
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+    float FinalDamageMultiplier = 1.0f;
     
 };
