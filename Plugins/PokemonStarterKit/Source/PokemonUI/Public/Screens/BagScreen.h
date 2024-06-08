@@ -29,7 +29,7 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
 
   public:
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
-    virtual void ApplyItemFilter(const FItemFilter &ItemFilter) override;
+    void ApplyItemFilter(const FItemFilter &ItemFilter) override;
 
     FOnItemSelected &GetOnItemSelected() final;
 
