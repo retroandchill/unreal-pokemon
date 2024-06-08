@@ -18,12 +18,12 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     GENERATED_BODY()
 
 public:
-    TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IMove> &Move) override;
+    TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove> &Move) override;
 
 protected:
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target,
-                                                 int32 TargetCount) const override;
+                                                 int32 TargetCount) override;
 
     /**
      * Apply any modifiers related to type matchups
@@ -32,14 +32,14 @@ protected:
      * @param MoveType The type of the move
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void CalculateTypeMatchups(UPARAM(Ref) FDamageEffects &Effects, const TScriptInterface<IBattler>& Target, FName MoveType) const;
+    void CalculateTypeMatchups(UPARAM(Ref) FDamageEffects &Effects, const TScriptInterface<IBattler>& Target, FName MoveType);
 
     /**
      * Determine the type of the move to be used
      * @return The particular move type to use
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    FName DetermineType() const;
+    FName DetermineType();
 
     /**
      * Calculate the base power of the move applying any necessary modifications
@@ -49,7 +49,7 @@ protected:
      * @return 
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    int32 CalculateBasePower(int32 MovePower, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
+    int32 CalculateBasePower(int32 MovePower, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Calculate the base damage of the particular move before any modifiers are applied
@@ -60,7 +60,7 @@ protected:
      * @return The base damage
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    int32 CalculateBaseDamage(int32 Power, int32 Level, int32 Attack, int32 Defense) const;
+    int32 CalculateBaseDamage(int32 Power, int32 Level, int32 Attack, int32 Defense);
 
     /**
      * Fetch the attack and defense stats to use for damage
@@ -70,11 +70,23 @@ protected:
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     FAttackAndDefense GetAttackAndDefense(const TScriptInterface<IBattler> &User,
-                                          const TScriptInterface<IBattler> &Target) const;
+                                          const TScriptInterface<IBattler> &Target);
 
 private:
-    void CalculateDamageMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, FName Type, int32 BaseDamage, const FDamageEffects& Effects) const;
+    void CalculateDamageMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, FName Type, int32 BaseDamage, const FDamageEffects& Effects);
 
+    void ApplyAbilityMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+                                 Type, int32 BaseDamage);
+
+    void ApplyHoldItemMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+                                 Type, int32 BaseDamage);
+
+    static void ApplyBattlerEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+                                    Type, int32 BaseDamage);
+
+    void ApplyFieldEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+                                    Type, int32 BaseDamage) const;
+    
 protected:
     /**
     * Apply the modifer for a multi-target move
@@ -82,7 +94,7 @@ protected:
     * @param Effects The pre-computed damage effects
     */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyCriticalHitModifier(UPARAM(Ref) FDamageMultipliers& Multipliers, const FDamageEffects &Effects) const;
+    void ApplyCriticalHitModifier(UPARAM(Ref) FDamageMultipliers& Multipliers, const FDamageEffects &Effects);
     
     /**
      * Apply the modifer for a multi-target move
@@ -90,14 +102,14 @@ protected:
      * @param TargetCount The number of targets
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyMultiTargetModifier(UPARAM(Ref) FDamageMultipliers& Multipliers, int32 TargetCount) const;
+    void ApplyMultiTargetModifier(UPARAM(Ref) FDamageMultipliers& Multipliers, int32 TargetCount);
     
     /**
      * Apply the damage swing the damage at the end of the calculation
      * @param Multipliers The damage that has currently been calculated
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyDamageSwing(UPARAM(Ref) FDamageMultipliers &Multipliers) const;
+    void ApplyDamageSwing(UPARAM(Ref) FDamageMultipliers &Multipliers);
 
     /**
      * Apply any modifiers related to Same-Type Attack Bonus (STAB)
@@ -106,7 +118,7 @@ protected:
      * @param MoveType The type of the move
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyStabModifiers(UPARAM(Ref) FDamageMultipliers &Multipliers, const TScriptInterface<IBattler>& User, FName MoveType) const;
+    void ApplyStabModifiers(UPARAM(Ref) FDamageMultipliers &Multipliers, const TScriptInterface<IBattler>& User, FName MoveType);
 
     /**
      * Apply any modifiers related to Same-Type Attack Bonus (STAB)
@@ -114,7 +126,7 @@ protected:
      * @param Effects The pre-computed damage effects
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyTypeMatchUps(FDamageMultipliers &Multipliers, const FDamageEffects& Effects) const;
+    void ApplyTypeMatchUps(FDamageMultipliers &Multipliers, const FDamageEffects& Effects);
 
     /**
      * Apply any additional damage modifiers that need to be applied
@@ -126,9 +138,15 @@ protected:
      * @param BaseDamage The base damage of the move
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyAdditionalDamageModifiers(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, FName Type, int32 BaseDamage) const;
+    void ApplyAdditionalDamageModifiers(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, FName Type, int32 BaseDamage);
 
 private:
+    /**
+     * The current battle that is on-going
+     */
+    UPROPERTY()
+    TScriptInterface<IBattle> CurrentBattle;
+    
     /**
      * The move that is actively being wrapped around
      */

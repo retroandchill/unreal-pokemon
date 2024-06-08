@@ -10,6 +10,7 @@
 struct FType;
 class IMove;
 class IBattler;
+class IBattle;
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
@@ -27,10 +28,11 @@ class POKEMONBATTLE_API IBattleMove {
 public:
     /**
      * Initialize the move from the given owned move.
+     * @param Battle
      * @param Move The move that is currently owned by the user. 
      * @return The initialized interface
      */
-    virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IMove>& Move) = 0;
+    virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove>& Move) = 0;
 
     
     
@@ -42,7 +44,7 @@ public:
      * @return The amount of damage dealt 
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1) const;
+    FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1);
 
     
 
