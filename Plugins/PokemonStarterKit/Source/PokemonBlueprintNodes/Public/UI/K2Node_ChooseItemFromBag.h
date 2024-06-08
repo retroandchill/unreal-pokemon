@@ -16,7 +16,6 @@ class POKEMONBLUEPRINTNODES_API UK2Node_ChooseItemFromBag : public UK2Node_Scree
 
   public:
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
-    void ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
   protected:
     void ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const final;
