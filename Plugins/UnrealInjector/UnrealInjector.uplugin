@@ -1,10 +1,10 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "1.0.0",
 	"FriendlyName": "UnrealInjector",
 	"Description": "Dependency injection plugin for UInterfaces and UObjects.",
-	"Category": "Other",
+	"Category": "Utility",
 	"CreatedBy": "Retro & Chill",
 	"CreatedByURL": "",
 	"DocsURL": "",
@@ -31,5 +31,6 @@
 			"Enabled": true,
 			"Optional": true
 		}
-	]
+	],
+	"SupportURL": ""
 }

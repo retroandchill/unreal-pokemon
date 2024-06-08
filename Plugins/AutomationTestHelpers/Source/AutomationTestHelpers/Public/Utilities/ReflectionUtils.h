@@ -62,7 +62,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
 
         TArray<TSubclassOf<T>> Subclasses;
         for (TObjectIterator<UClass> It; It; ++It) {
-            if (It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract)) {
+            if (It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract) && !It->GetName().StartsWith("SKEL_")) {
                 Subclasses.Add(*It);
             }
         }

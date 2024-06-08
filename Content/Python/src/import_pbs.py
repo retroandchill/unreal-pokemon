@@ -7,7 +7,7 @@ from pokemon.data_loader.pbs_data import ItemData, MoveData, TypeData, AbilityDa
 from pokemon.data_writer.data_table_writer import import_items, import_moves, import_types, import_abilities, import_species, import_trainer_types
 from pokemon.unreal_interface.unreal_data_utils import enum_values, data_table_values, pocket_names, stat_entries
 
-HARDCODED_DATA_DIR = "/PokemonData/Data"
+HARDCODED_DATA_DIR = "/PokemonStarterKit/Data"
 
 
 def execute(type_file: Text, moves_file: Text, items_file: Text, ability_file: Text, species_file: Text, trainer_types_file: Text) -> None:

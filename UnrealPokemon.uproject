@@ -54,31 +54,15 @@
 			"Enabled": true
 		},
 		{
-			"Name": "PokemonUtilities",
-			"Enabled": true
-		},
-		{
-			"Name": "PokemonData",
-			"Enabled": true
-		},
-		{
-			"Name": "PokemonCore",
-			"Enabled": true
-		},
-		{
-			"Name": "PokemonUI",
-			"Enabled": true
-		},
-		{
-			"Name": "PokemonAssets",
-			"Enabled": true
-		},
-		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true
 		},
 		{
 			"Name": "UnrealInjector",
+			"Enabled": true
+		},
+		{
+			"Name": "PokemonStarterKit",
 			"Enabled": true
 		}
 	]
