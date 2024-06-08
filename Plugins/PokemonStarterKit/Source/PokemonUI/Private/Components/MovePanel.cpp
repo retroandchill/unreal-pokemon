@@ -21,7 +21,7 @@ void UMovePanel::SetMove(const TScriptInterface<IMove> &MoveIn) {
 UObject *UMovePanel::GetTypeIcon_Implementation() {
     check(Move != nullptr)
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    return GraphicsSubsystem->GetTypeIconGraphic(Move->GetMoveData().Type);
+    return GraphicsSubsystem->GetTypeIconGraphic(Move->GetType());
 }
 
 void UMovePanel::OnMoveSet() {
