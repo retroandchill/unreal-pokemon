@@ -38,7 +38,7 @@ UCLASS()
 class POKEMONBATTLE_API UEffectHelpingHand : public UObject, public IBattlerEffect {
     GENERATED_BODY()
 
-public:
+protected:
     void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType) override;
 
 };
@@ -50,7 +50,7 @@ UCLASS()
 class POKEMONBATTLE_API UEffectCharge : public UObject, public IBattlerEffect {
     GENERATED_BODY()
 
-public:
+protected:
     void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType) override;
 
 };
