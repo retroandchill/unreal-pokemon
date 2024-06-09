@@ -16,6 +16,18 @@ const FMoveData &UDefaultMove::GetMoveData() const {
     return *Move;
 }
 
+FName UDefaultMove::GetType() const {
+    return GetMoveData().Type;
+}
+
+EMoveDamageCategory UDefaultMove::GetDamageCategory() const {
+    return GetMoveData().Category;
+}
+
+int32 UDefaultMove::GetBasePower() const {
+    return GetMoveData().Power;
+}
+
 int32 UDefaultMove::GetCurrentPP() const {
     return CurrentPP;
 }
