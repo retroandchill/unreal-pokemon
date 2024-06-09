@@ -13,7 +13,7 @@
 #include "Pokemon/Moves/Move.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
-    return FMath::Max(FMath::RoundToInt32(Base * Multiplier), 1);
+    return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
 }
 
 TScriptInterface<IBattleMove> UBaseBattleMove::Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove> &Move) {
@@ -98,7 +98,7 @@ int32 UBaseBattleMove::CalculateBasePower_Implementation(int32 MovePower, const 
 }
 
 int32 UBaseBattleMove::CalculateBaseDamage_Implementation(int32 Power, int32 Level, int32 Attack, int32 Defense) {
-    return FMath::FloorToInt32(2.0f * Level / 5 + 2) * Power * Attack / Defense / 50 + 2;
+    return FMath::FloorToInt32(2.0f * static_cast<float>(Level) / 5 + 2) * Power * Attack / Defense / 50 + 2;
 }
 
 FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScriptInterface<IBattler> &User,
@@ -221,7 +221,7 @@ void UBaseBattleMove::ApplyMultiTargetModifier_Implementation(FDamageMultipliers
 }
 
 void UBaseBattleMove::ApplyDamageSwing_Implementation(FDamageMultipliers &Multipliers) {
-    Multipliers.FinalDamageMultiplier *= FMath::RandRange(85, 100) / 100.0f;
+    Multipliers.FinalDamageMultiplier *= static_cast<float>(FMath::RandRange(85, 100)) / 100.0f;
 }
 
 void UBaseBattleMove::ApplyStabModifiers_Implementation(FDamageMultipliers &Multipliers,
