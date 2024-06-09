@@ -10,6 +10,7 @@
 #include "Battle/Effects/BattlerEffect.h"
 #include "Battle/Effects/FieldEffect.h"
 #include "Battle/Items/HoldItemBattleEffect.h"
+#include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
@@ -29,6 +30,11 @@ TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() cons
 bool UBaseBattleMove::IsConfusionAttack() const {
     return false;
 }
+
+bool UBaseBattleMove::HasTag(FName Tag) const {
+    return WrappedMove->GetMoveData().Tags.Contains(Tag);
+}
+
 
 FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                               const TScriptInterface<IBattler> &Target, int32 TargetCount) {
@@ -115,7 +121,7 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
                                                  int32 BaseDamage, const FDamageEffects &Effects) {
     ApplyAbilityMultipliers(Multipliers, User, Target, Type, BaseDamage);
     ApplyHoldItemMultipliers(Multipliers, User, Target, Type, BaseDamage);
-    ApplyBattlerEffects(Multipliers, User, Target, Type, BaseDamage);
+    ApplyUserEffects(Multipliers, User, Target, Type, BaseDamage);
     ApplyFieldEffects(Multipliers, User, Target, Type, BaseDamage);
     // TODO: Terrain Moves
     // TODO: Badge Multipliers
@@ -130,7 +136,7 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
     // TODO: Status Effects (Burn)
     
     // TODO: Aurora Veil, Reflect, Light Screen
-    // TODO: Minimize
+    ApplyTargetEffects(Multipliers, User, Target, Type, BaseDamage);
     
     ApplyAdditionalDamageModifiers(Multipliers, User, Target, TargetCount, Type, BaseDamage);
 }
@@ -193,15 +199,22 @@ void UBaseBattleMove::ApplyHoldItemMultipliers(FDamageMultipliers &Multipliers, 
     }
 }
 
-void UBaseBattleMove::ApplyBattlerEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+void UBaseBattleMove::ApplyUserEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
     User->ForEachBattleEffect([&](const TScriptInterface<IBattlerEffect>& Effect) {
         IBattlerEffect::Execute_ModifyDamageForUser(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
     });
 }
 
-void UBaseBattleMove::ApplyFieldEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+void UBaseBattleMove::ApplyTargetEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
+    Target->ForEachBattleEffect([&](const TScriptInterface<IBattlerEffect>& Effect) {
+        IBattlerEffect::Execute_ModifyDamageForUser(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
+    });
+}
+
+void UBaseBattleMove::ApplyFieldEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                        const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
     CurrentBattle->ForEachFieldEffect([&](const TScriptInterface<IFieldEffect>& Effect) {
         IFieldEffect::Execute_ModifyDamage(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
     });
@@ -221,7 +234,9 @@ void UBaseBattleMove::ApplyMultiTargetModifier_Implementation(FDamageMultipliers
 }
 
 void UBaseBattleMove::ApplyDamageSwing_Implementation(FDamageMultipliers &Multipliers) {
-    Multipliers.FinalDamageMultiplier *= static_cast<float>(FMath::RandRange(85, 100)) / 100.0f;
+    if (!IsConfusionAttack()) {
+        Multipliers.FinalDamageMultiplier *= static_cast<float>(FMath::RandRange(85, 100)) / 100.0f;
+    }
 }
 
 void UBaseBattleMove::ApplyStabModifiers_Implementation(FDamageMultipliers &Multipliers,

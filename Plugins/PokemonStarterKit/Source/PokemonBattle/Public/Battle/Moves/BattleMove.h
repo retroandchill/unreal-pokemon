@@ -41,7 +41,18 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
     TScriptInterface<IBattle> GetOwningBattle() const;
 
+    /**
+     * Is this attack the one from the Confusion effect?
+     * @return Is this the typeless confusion attack
+     */
     virtual bool IsConfusionAttack() const = 0;
+
+    /**
+     * Does the move possess the given tag?
+     * @param Tag The tag to check for
+     * @return Does the move have the given tag
+     */
+    virtual bool HasTag(FName Tag) const = 0;
     
     /**
      * Calculate the total damage the move will deal.
@@ -53,6 +64,5 @@ public:
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1);
 
-    
     
 };

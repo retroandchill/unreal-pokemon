@@ -25,6 +25,7 @@ protected:
 
 public:
     bool IsConfusionAttack() const override;
+    bool HasTag(FName Tag) const;
     
 protected:
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
@@ -80,16 +81,14 @@ protected:
 
 private:
     void CalculateDamageMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, FName Type, int32 BaseDamage, const FDamageEffects& Effects);
-
     void ApplyAbilityMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
                                  Type, int32 BaseDamage);
-
     void ApplyHoldItemMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
                                  Type, int32 BaseDamage);
-
-    void ApplyBattlerEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+    void ApplyUserEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
                                     Type, int32 BaseDamage);
-
+    void ApplyTargetEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+                                    Type, int32 BaseDamage);
     void ApplyFieldEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
                                     Type, int32 BaseDamage);
     

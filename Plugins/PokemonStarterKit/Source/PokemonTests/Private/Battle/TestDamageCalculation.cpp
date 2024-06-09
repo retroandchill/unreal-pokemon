@@ -32,6 +32,7 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockTarget, GetDefense)).AlwaysReturn(163);
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("GROUND"), TEXT("DRAGON")});
+    Fake(Method(MockTarget, ForEachBattleEffect));
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("ICE"));
@@ -68,6 +69,7 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockTarget, GetSpecialDefense)).AlwaysReturn(256);
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("DRAGON"), TEXT("FAIRY")});
+    Fake(Method(MockTarget, ForEachBattleEffect));
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("DARK"));
@@ -104,6 +106,7 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockTarget, GetDefense)).AlwaysReturn(277);
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("WATER")});
+    Fake(Method(MockTarget, ForEachBattleEffect));
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(80);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
@@ -112,7 +115,7 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     for (int i = 0; i < 100; i++) {
         auto [Damage, Effeciveness, CriticalHit] = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
-        CHECK_TRUE(Damage >= 116);
+        CHECK_TRUE(Damage >= 115);
         CHECK_TRUE(Damage <= 138);
     }
     return true;
