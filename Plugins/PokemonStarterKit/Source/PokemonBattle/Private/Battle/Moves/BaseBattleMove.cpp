@@ -22,8 +22,12 @@ TScriptInterface<IBattleMove> UBaseBattleMove::Initialize(const TScriptInterface
     return this;
 }
 
+TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {
+    return CurrentBattle;
+}
+
 FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target, int32 TargetCount) {
+                                                              const TScriptInterface<IBattler> &Target, int32 TargetCount) {
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
             return { .Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging };
     }

@@ -16,7 +16,7 @@ class UAbilityBattleEffect : public UInterface {
 };
 
 /**
- * 
+ * The effect of a given ability in battle.
  */
 class POKEMONBATTLE_API IAbilityBattleEffect {
     GENERATED_BODY()
@@ -33,7 +33,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void TriggerDamageCalcFromGlobal(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
+    void TriggerDamageCalcFromGlobal(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
         const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove>& Move, int32 BaseDamage,
         FName MoveType);
     
@@ -47,7 +47,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void TriggerDamageCalcFromUser(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
+    void TriggerDamageCalcFromUser(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
         const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove>&  Move, int32 BaseDamage,
         FName MoveType);
 
@@ -61,7 +61,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void TriggerDamageCalcFromAlly(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
+    void TriggerDamageCalcFromAlly(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
         const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove>& Move, int32 BaseDamage,
         FName MoveType);
     
@@ -75,7 +75,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void TriggerDamageCalcFromTarget(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
+    void TriggerDamageCalcFromTarget(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
         const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove>&  Move, int32 BaseDamage,
         FName MoveType);
 
@@ -89,7 +89,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, DisplayName = "Trigger Damage Calc from Target (Non-Ignorable)", Category = Damage)
-    void TriggerDamageCalcFromTargetNonIgnorable(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
+    void TriggerDamageCalcFromTargetNonIgnorable(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
         const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove>&  Move, int32 BaseDamage,
         FName MoveType);
 
@@ -103,7 +103,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void TriggerDamageCalcFromTargetAlly(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
+    void TriggerDamageCalcFromTargetAlly(UPARAM(Ref) FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
         const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove>&  Move, int32 BaseDamage,
         FName MoveType);
 

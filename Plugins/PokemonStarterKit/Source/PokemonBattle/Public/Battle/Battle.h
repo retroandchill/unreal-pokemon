@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "Battle.generated.h"
 
+class IAbilityBattleEffect;
 class IFieldEffect;
 class IBattler;
 // This class does not need to be modified.
@@ -39,5 +40,12 @@ public:
      * @param Callback The callback to perform
      */
     virtual void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect>&)> Callback) const = 0;
+
+    /**
+     * Check to see if there is a Pokémon on the field with a given ability that is not actively supressed.
+     * @param AbilityID The ID of the ability in question
+     * @return Was the ability found
+     */
+    virtual bool FindGlobalAbility(FName AbilityID) const = 0;
 
 };

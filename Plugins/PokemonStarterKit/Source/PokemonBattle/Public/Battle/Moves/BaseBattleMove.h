@@ -21,6 +21,8 @@ public:
     TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove> &Move) override;
 
 protected:
+    TScriptInterface<IBattle> GetOwningBattle_Implementation() const override;
+    
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target,
                                                  int32 TargetCount) override;

@@ -34,7 +34,12 @@ public:
      */
     virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove>& Move) = 0;
 
-    
+    /**
+     * Get the active battle that owns this one
+     * @return The current owning battle for this move
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
+    TScriptInterface<IBattle> GetOwningBattle() const;
     
     /**
      * Calculate the total damage the move will deal.
