@@ -14,7 +14,7 @@ void UEffectParentalBond::ModifyDamageForUser_Implementation(FDamageMultipliers 
 void UEffectMeFirst::ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers,
                                                         const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage,
                                                         FName MoveType) {
-    Multipliers.PowerMultiplier *= 1.5;
+    Multipliers.PowerMultiplier *= 1.5f;
 }
 
 void UEffectHelpingHand::ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers,
@@ -24,7 +24,7 @@ void UEffectHelpingHand::ModifyDamageForUser_Implementation(FDamageMultipliers &
         return;
     }
 
-    Multipliers.PowerMultiplier *= 1.5;
+    Multipliers.PowerMultiplier *= 1.5f;
 }
 
 void UEffectCharge::ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers,
