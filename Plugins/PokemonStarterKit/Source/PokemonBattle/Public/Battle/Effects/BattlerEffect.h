@@ -9,6 +9,7 @@
 class IBattler;
 class IBattleMove;
 struct FDamageMultipliers;
+
 // This class does not need to be modified.
 UINTERFACE()
 class UBattlerEffect : public UInterface {
@@ -34,6 +35,6 @@ public:
          */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     void ModifyDamageForUser(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
-        const TScriptInterface<IBattler>& Target, int32 BaseDamage, FName MoveType);
+        const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType);
 
 };

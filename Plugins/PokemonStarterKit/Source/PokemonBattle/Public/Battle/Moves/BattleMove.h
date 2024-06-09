@@ -14,7 +14,7 @@ class IBattle;
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
-class UBattleMove : public UInterface {
+class POKEMONBATTLE_API UBattleMove : public UInterface {
     GENERATED_BODY()
 };
 
@@ -40,6 +40,8 @@ public:
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
     TScriptInterface<IBattle> GetOwningBattle() const;
+
+    virtual bool IsConfusionAttack() const = 0;
     
     /**
      * Calculate the total damage the move will deal.
@@ -50,8 +52,6 @@ public:
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1);
-
-    
 
     
     

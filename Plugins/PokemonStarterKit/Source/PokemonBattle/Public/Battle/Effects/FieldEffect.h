@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "FieldEffect.generated.h"
 
+class IBattleMove;
 class IBattler;
 struct FDamageMultipliers;
 
@@ -33,6 +34,6 @@ public:
          */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     void ModifyDamage(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
-        const TScriptInterface<IBattler>& Target, int32 BaseDamage, FName MoveType);
+        const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType);
 
 };

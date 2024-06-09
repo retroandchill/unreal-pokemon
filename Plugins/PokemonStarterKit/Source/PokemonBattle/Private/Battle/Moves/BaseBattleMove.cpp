@@ -26,6 +26,10 @@ TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() cons
     return CurrentBattle;
 }
 
+bool UBaseBattleMove::IsConfusionAttack() const {
+    return false;
+}
+
 FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                               const TScriptInterface<IBattler> &Target, int32 TargetCount) {
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
@@ -192,14 +196,14 @@ void UBaseBattleMove::ApplyHoldItemMultipliers(FDamageMultipliers &Multipliers, 
 void UBaseBattleMove::ApplyBattlerEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
     User->ForEachBattleEffect([&](const TScriptInterface<IBattlerEffect>& Effect) {
-        IBattlerEffect::Execute_ModifyDamageForUser(Effect.GetObject(), Multipliers, User, Target, BaseDamage, Type);
+        IBattlerEffect::Execute_ModifyDamageForUser(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
     });
 }
 
 void UBaseBattleMove::ApplyFieldEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) const {
+    const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
     CurrentBattle->ForEachFieldEffect([&](const TScriptInterface<IFieldEffect>& Effect) {
-        IFieldEffect::Execute_ModifyDamage(Effect.GetObject(), Multipliers, User, Target, BaseDamage, Type);
+        IFieldEffect::Execute_ModifyDamage(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
     });
 }
 

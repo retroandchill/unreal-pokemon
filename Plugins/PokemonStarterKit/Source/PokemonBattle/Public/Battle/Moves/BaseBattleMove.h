@@ -22,7 +22,11 @@ public:
 
 protected:
     TScriptInterface<IBattle> GetOwningBattle_Implementation() const override;
+
+public:
+    bool IsConfusionAttack() const override;
     
+protected:
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target,
                                                  int32 TargetCount) override;
@@ -83,11 +87,11 @@ private:
     void ApplyHoldItemMultipliers(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
                                  Type, int32 BaseDamage);
 
-    static void ApplyBattlerEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
+    void ApplyBattlerEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
                                     Type, int32 BaseDamage);
 
     void ApplyFieldEffects(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, FName
-                                    Type, int32 BaseDamage) const;
+                                    Type, int32 BaseDamage);
     
 protected:
     /**
