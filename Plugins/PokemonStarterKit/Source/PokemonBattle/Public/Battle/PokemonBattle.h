@@ -20,15 +20,20 @@ class POKEMONBATTLE_API UPokemonBattle : public UObject, public IBattle {
     GENERATED_BODY()
 
 public:
+    TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>>&& SidesIn) override;
     void StartBattle() override;
     void QueueAction(const TScriptInterface<IBattleAction> &Action) override;
     bool ActionSelectionFinished() const override;
 
+    bool ShouldIgnoreAbilities() const override;
     void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
+    void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const override;
+    bool FindGlobalAbility(FName AbilityID) const override;
 
 private:
     void StartTurn();
-    
+
+private:
     uint32 TurnCount = 0;
     
     /**

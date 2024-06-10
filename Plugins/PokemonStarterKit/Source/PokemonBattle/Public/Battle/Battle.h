@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "Battle.generated.h"
 
+class IBattleSide;
 class IBattleAction;
 class IAbilityBattleEffect;
 class IFieldEffect;
@@ -25,6 +26,8 @@ class POKEMONBATTLE_API IBattle {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    virtual TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>>&& SidesIn) = 0;
+    
     /**
      * This is to be called after all pre-battle setup has been completed (i.e. intro animations, sending out Pokémon,
      * etc.)

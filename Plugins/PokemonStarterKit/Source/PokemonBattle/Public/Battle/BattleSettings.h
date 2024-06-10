@@ -8,7 +8,7 @@
 /**
  * Represents the side of the battlefield for a created battle.
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FBattlefieldSize {
     GENERATED_BODY()
 
@@ -28,7 +28,7 @@ struct POKEMONBATTLE_API FBattlefieldSize {
 /**
  * Represents the various settings for a battle.
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FBattleSettings {
     GENERATED_BODY()
 

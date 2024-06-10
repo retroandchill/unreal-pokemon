@@ -10,7 +10,7 @@ class UBattleEffect;
 class IBattler;
 // This class does not need to be modified.
 UINTERFACE()
-class UBattleSide : public UInterface {
+class POKEMONBATTLE_API UBattleSide : public UInterface {
     GENERATED_BODY()
 };
 

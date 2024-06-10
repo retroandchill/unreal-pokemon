@@ -108,7 +108,7 @@ public:
      * <p>Note: Messages like "Pikachu cannot move" or "Snorlax must recharge" count as actions</p>
      * @return The number of actions that can be taken 
      */
-    virtual uint8 ActionCount() const = 0;
+    virtual uint8 GetActionCount() const = 0;
 
     /**
      * Iterate over all of the battler's allies and apply the callback to them
