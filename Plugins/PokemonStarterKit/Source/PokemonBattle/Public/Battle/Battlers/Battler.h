@@ -24,6 +24,10 @@ class POKEMONBATTLE_API IBattler {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    virtual FGuid GetInternalId() const = 0;
+
+    virtual FText GetNickname() const = 0;
+    
     /**
      * Get the Pokémon's level
      * @return The level of the Pokémon in question
@@ -93,6 +97,18 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual const TScriptInterface<IHoldItemBattleEffect>& GetHoldItem() const = 0;
+
+    /**
+     * Select the actions for this battler
+     */
+    virtual void SelectActions() const = 0;
+
+    /**
+     * How many actions a Pokémon may take in a turn.
+     * <p>Note: Messages like "Pikachu cannot move" or "Snorlax must recharge" count as actions</p>
+     * @return The number of actions that can be taken 
+     */
+    virtual uint8 ActionCount() const = 0;
 
     /**
      * Iterate over all of the battler's allies and apply the callback to them

@@ -6,9 +6,11 @@
 #include "UObject/Interface.h"
 #include "Battle.generated.h"
 
+class IBattleAction;
 class IAbilityBattleEffect;
 class IFieldEffect;
 class IBattler;
+
 // This class does not need to be modified.
 UINTERFACE()
 class POKEMONBATTLE_API UBattle : public UInterface {
@@ -23,6 +25,16 @@ class POKEMONBATTLE_API IBattle {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    /**
+     * This is to be called after all pre-battle setup has been completed (i.e. intro animations, sending out Pokémon,
+     * etc.)
+     */
+    virtual void StartBattle() = 0;
+
+    virtual void QueueAction(const TScriptInterface<IBattleAction>& Action) = 0;
+
+    virtual bool ActionSelectionFinished() const = 0;
+    
     /**
      * Should this battle actively ignore abilities
      * @return Should abilities be ignored
