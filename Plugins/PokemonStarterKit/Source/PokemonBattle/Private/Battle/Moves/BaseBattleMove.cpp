@@ -23,6 +23,10 @@ TScriptInterface<IBattleMove> UBaseBattleMove::Initialize(const TScriptInterface
     return this;
 }
 
+bool UBaseBattleMove::IsUsable_Implementation() const {
+    return WrappedMove->GetCurrentPP() > 0;
+}
+
 TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {
     return CurrentBattle;
 }

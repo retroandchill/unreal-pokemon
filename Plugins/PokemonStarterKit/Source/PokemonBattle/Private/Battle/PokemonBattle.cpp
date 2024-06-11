@@ -20,7 +20,7 @@ void UPokemonBattle::StartBattle() {
     StartTurn();
 }
 
-void UPokemonBattle::QueueAction(const TScriptInterface<IBattleAction> &Action) {
+void UPokemonBattle::QueueAction(TUniquePtr<IBattleAction>&& Action) {
     auto &Battler = Action->GetBattler();
     auto BattlerId = Battler->GetInternalId();
     auto &ActionCount = CurrentActionCount.FindChecked(BattlerId);
@@ -31,7 +31,7 @@ void UPokemonBattle::QueueAction(const TScriptInterface<IBattleAction> &Action) 
     }
     
     FScopeLock Lock(&ActionMutex);
-    ActionQueue.Add(Action);
+    ActionQueue.Add(MoveTemp(Action));
     ActionCount++;
 }
 

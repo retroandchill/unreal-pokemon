@@ -34,6 +34,9 @@ public:
      */
     virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove>& Move) = 0;
 
+    UFUNCTION(BlueprintNativeEvent, Category = Usability)
+    bool IsUsable() const;
+    
     /**
      * Get the active battle that owns this one
      * @return The current owning battle for this move

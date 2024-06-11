@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "Battler.generated.h"
 
+class IBattleMove;
 class IBattlerEffect;
 class IHoldItemBattleEffect;
 class IAbilityBattleEffect;
@@ -97,6 +98,21 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual const TScriptInterface<IHoldItemBattleEffect>& GetHoldItem() const = 0;
+
+    /**
+     * Get the Pokémon's currently usable moves.
+     * @return The Pokémon's usable moves.
+     */
+    UFUNCTION(BlueprintCallable, Category = Moves)
+    virtual const TArray<TScriptInterface<IBattleMove>>& GetMoves() const = 0;
+
+    /**
+     * Get the move on the Pokémon that is used essentially as a last resort option when there are no remaining options
+     * to choose from.
+     * @return The move of last resort to use in battle
+     */
+    UFUNCTION(BlueprintCallable, Category = Moves)
+    virtual const TScriptInterface<IBattleMove>& GetMoveOfLastResort() const = 0;
 
     /**
      * Select the actions for this battler

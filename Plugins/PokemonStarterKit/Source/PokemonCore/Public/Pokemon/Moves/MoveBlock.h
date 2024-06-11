@@ -37,4 +37,11 @@ class POKEMONCORE_API IMoveBlock {
      * @return The list of usable moves
      */
     virtual TConstArrayView<TScriptInterface<IMove>> GetMoves() const = 0;
+
+    /**
+     * Get the move on the Pokémon that is used essentially as a last resort option when there are no remaining options
+     * to choose from.
+     * @return The move of last resort to use in battle
+     */
+    virtual const TScriptInterface<IMove>& GetMoveOfLastResort() const = 0;
 };

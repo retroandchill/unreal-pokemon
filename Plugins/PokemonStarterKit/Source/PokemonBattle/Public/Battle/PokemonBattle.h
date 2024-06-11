@@ -22,7 +22,7 @@ class POKEMONBATTLE_API UPokemonBattle : public UObject, public IBattle {
 public:
     TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>>&& SidesIn) override;
     void StartBattle() override;
-    void QueueAction(const TScriptInterface<IBattleAction> &Action) override;
+    void QueueAction(TUniquePtr<IBattleAction>&& Action) override;
     bool ActionSelectionFinished() const override;
 
     bool ShouldIgnoreAbilities() const override;
@@ -33,7 +33,6 @@ public:
 private:
     void StartTurn();
 
-private:
     uint32 TurnCount = 0;
     
     /**
@@ -53,13 +52,10 @@ private:
     /**
      * Collection used to serve as the queue for actions.
      */
-    UPROPERTY()
-    TArray<TScriptInterface<IBattleAction>> ActionQueue;
+    TArray<TUniquePtr<IBattleAction>> ActionQueue;
 
-    UPROPERTY()
     TMap<FGuid, uint8> CurrentActionCount;
     
-    UPROPERTY()
     TMap<FGuid, uint8> ExpectedActionCount;
     
 };

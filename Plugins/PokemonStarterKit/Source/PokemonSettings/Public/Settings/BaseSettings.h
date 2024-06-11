@@ -39,6 +39,8 @@ public:
     
     const FText &GetNoAbilityName() const final;
     const FText &GetNoAbilityDescription() const final;
+    
+    virtual FName GetMoveOfLastResort() const final;
 
     /**
      * Get the class that represents the item utilities

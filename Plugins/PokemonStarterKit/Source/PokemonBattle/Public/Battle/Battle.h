@@ -34,7 +34,7 @@ public:
      */
     virtual void StartBattle() = 0;
 
-    virtual void QueueAction(const TScriptInterface<IBattleAction>& Action) = 0;
+    virtual void QueueAction(TUniquePtr<IBattleAction>&& Action) = 0;
 
     virtual bool ActionSelectionFinished() const = 0;
     

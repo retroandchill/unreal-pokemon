@@ -21,6 +21,7 @@ public:
     TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove> &Move) override;
 
 protected:
+    bool IsUsable_Implementation() const override;
     TScriptInterface<IBattle> GetOwningBattle_Implementation() const override;
 
 public:

@@ -17,11 +17,11 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
 
     auto Battle = NewObject<UPokemonBattle>()->Initialize({Side1, Side2});
 
-    TArray<decltype(UnrealMock::CreateMock<IBattleAction>())> Actions;
+    TArray<TUniquePtr<Mock<IBattleAction>>> Actions;
     auto QueueBattleAction = [&Actions, &Battle](const TScriptInterface<IBattler>& Battler) {
-        auto [Action, MockAction] = UnrealMock::CreateMock<IBattleAction>();
-        When(Method(MockAction, GetBattler)).AlwaysReturn(Battler);
-        Battle->QueueAction(Action);
+        auto& MockAction = Actions.Emplace_GetRef();
+        When(Method(*MockAction, GetBattler)).AlwaysReturn(Battler);
+        Battle->QueueAction(TUniquePtr<IBattleAction>(&MockAction->get()));
     };
 
     TArray<TScriptInterface<IBattler>> Side1Battlers;
