@@ -55,8 +55,23 @@ public:
      */
     virtual uint8 GetSideSize() const = 0;
 
+    /**
+     * Get the intro text for the side to display to the player.
+     * @return The intro text in question
+     */
+    virtual const FText &GetIntroText() const = 0;
+
+    /**
+     * Get the text that corresponds to Pokémon being sent out. This is skipped over if the optional is empty.
+     * @return The text to display on a Pokémon send out
+     */
+    virtual const TOptional<FText> &GetSendOutText() const = 0;
+
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     virtual bool ShowBackSprites() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    virtual void SendOutBattlers() const = 0;
     
     virtual const TArray<TScriptInterface<IBattler>>& GetBattlers() const = 0;
 

@@ -24,9 +24,14 @@ public:
 
     TScriptInterface<IBattle> GetOwningBattle() const override;
     uint8 GetSideSize() const override;
+    const FText &GetIntroText() const override;
+    const TOptional<FText>& GetSendOutText() const override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     bool ShowBackSprites() const override;
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void SendOutBattlers() const override;
     
     const TArray<TScriptInterface<IBattler>> & GetBattlers() const override;
 
@@ -55,5 +60,27 @@ private:
      */
     UPROPERTY()
     TArray<TScriptInterface<IBattler>> Battlers;
+
+    /**
+     * The list of trainers (if any exist)
+     */
+    UPROPERTY()
+    TArray<TScriptInterface<ITrainer>> Trainers;
+
+    FText IntroMessageText;
+
+    UPROPERTY(EditAnywhere, Category = Battle)
+    FText WildBattleTextFormat = NSLOCTEXT("PokemonBattles", "WildBattleTextFormat", "A wild {Pkmn} appeared!");
+
+    UPROPERTY(EditAnywhere, Category = Battle)
+    FText TrainerBattleTextFormat = NSLOCTEXT("PokemonBattles", "TrainerBattleTextFormat", "You are challenged by {Names}!");
+
+    TOptional<FText> SendOutText;
+
+    UPROPERTY(EditAnywhere, Category = Battle)
+    FText PlayerSendOutTextFormat = NSLOCTEXT("PokemonBattles", "PlayerSendOutTextFormat", "Go  {Pkmn}!");
+
+    UPROPERTY(EditAnywhere, Category = Battle)
+    FText OpponentSendOutTextFormat = NSLOCTEXT("PokemonBattles", "OpponentSendOutTextFormat", "{Named} sent out {Pkmn}!");
 
 };

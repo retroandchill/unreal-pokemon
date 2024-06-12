@@ -8,6 +8,7 @@
 
 #include "BattlerActor.generated.h"
 
+class IBattlerSprite;
 class IBattleSide;
 class IPokemon;
 /**
@@ -66,6 +67,8 @@ public:
     void ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
     void ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const override;
 
+    void ShowSprite() const override;
+
 private:
     /**
      * Spawn the underlying sprite actor into the world
@@ -94,5 +97,8 @@ private:
 
     UPROPERTY()
     TArray<TScriptInterface<IBattleMove>> Moves;
+
+    UPROPERTY()
+    TObjectPtr<AActor> Sprite;
     
 };

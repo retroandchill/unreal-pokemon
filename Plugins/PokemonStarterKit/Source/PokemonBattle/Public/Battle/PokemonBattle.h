@@ -62,10 +62,40 @@ protected:
      * Display the intro message for the battle.
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void DisplayBattleIntroMessage() const;
+    void DisplayBattleIntroMessage();
+
+    /**
+     * The helper function used to display the intro message to the player
+     * @param Message The message to display
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void ProcessBattleIntroMessage(const FText& Message);
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
+    void OpponentSendOut();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void ProcessOpponentSendOutMessage(const FText& Message);
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void OpponentSendOutAnimation();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void ProcessOpponentSendOutAnimation(const TScriptInterface<IBattleSide> &OpponentSide);
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
+    void PlayerSendOut();
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void PlayerSendOutAnimation();
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void ProcessPlayerSendOutMessage(const FText& Message);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void ProcessPlayerSendOutAnimation(const TScriptInterface<IBattleSide> &PlayerSide);
 
 private:
-    void SetUpSides();
     void StartTurn();
 
     uint32 TurnCount = 0;

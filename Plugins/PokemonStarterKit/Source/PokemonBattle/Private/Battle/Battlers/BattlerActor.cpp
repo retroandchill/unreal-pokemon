@@ -108,12 +108,16 @@ void ABattlerActor::ForEachAlly(const TFunctionRef<void(const TScriptInterface<I
 void ABattlerActor::ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const {
 }
 
+void ABattlerActor::ShowSprite() const {
+    check(Sprite != nullptr)
+    Sprite->SetActorHiddenInGame(false);
+}
+
 void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
-    auto SpriteActor = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetTransform());
-    SpriteActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+    Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetTransform());
+    Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    IBattlerSprite::Execute_SetBattleSprite(SpriteActor, GraphicsSubsystem->GetPokemonBattleSprite(*WrappedPokemon, this, OwningSide->ShowBackSprites()));
-    SpriteActor->SetHidden(!ShouldShow);
-    
+    IBattlerSprite::Execute_SetBattleSprite(Sprite, GraphicsSubsystem->GetPokemonBattleSprite(*WrappedPokemon, this, OwningSide->ShowBackSprites()));
+    Sprite->SetActorHiddenInGame(!ShouldShow);
 }

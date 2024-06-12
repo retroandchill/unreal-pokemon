@@ -136,4 +136,6 @@ public:
      */
     virtual void ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect>&)>& Callback) const = 0;
 
+    virtual void ShowSprite() const = 0;
+
 };

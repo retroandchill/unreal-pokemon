@@ -38,7 +38,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FNam
     }
 
     static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.Get(), Outer);
+    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
@@ -59,7 +59,7 @@ UGraphicsLoadingSubsystem::GetPokemonUISprite(FName Species, UObject *Outer, boo
     }
 
     static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.UISpritesMaterial.Get(), Outer);
+    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.UISpritesMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
@@ -77,7 +77,7 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
     }
 
     static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.IconMaterial.Get(), Outer);
+    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.IconMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return Material;
 }
@@ -95,7 +95,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName Trai
     }
 
     static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteMaterials.FrontSpriteBaseMaterialUI.Get(), Outer);
+    auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteMaterials.FrontSpriteBaseMaterialUI.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }

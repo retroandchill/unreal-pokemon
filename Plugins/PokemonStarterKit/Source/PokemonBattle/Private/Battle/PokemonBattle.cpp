@@ -5,6 +5,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
+#include "DataTypes/OptionalUtilities.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Mainpulation/RangeHelpers.h"
 #include "Managers/PokemonSubsystem.h"
@@ -88,11 +89,42 @@ APawn * APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
 
-void APokemonBattle::DisplayBattleIntroMessage() const {
+void APokemonBattle::DisplayBattleIntroMessage() {
+    check(Sides.IsValidIndex(1))
+    ProcessBattleIntroMessage(Sides[1]->GetIntroText());
 }
 
-void APokemonBattle::SetUpSides() {
+void APokemonBattle::OpponentSendOut() {
+    check(Sides.IsValidIndex(1))
+    const auto &Side = Sides[1];
+    if (auto &SendOutText = Side->GetSendOutText(); SendOutText.IsSet()) {
+        ProcessOpponentSendOutMessage(SendOutText.GetValue());
+    } else {
+        ProcessOpponentSendOutAnimation(Side);
+    }
+}
+
+void APokemonBattle::OpponentSendOutAnimation() {
+    check(Sides.IsValidIndex(1))
+    const auto &Side = Sides[1];
+    ProcessOpponentSendOutAnimation(Side);
     
+}
+
+void APokemonBattle::PlayerSendOut() {
+    check(Sides.IsValidIndex(0))
+    const auto &Side = Sides[0];
+    if (auto &SendOutText = Side->GetSendOutText(); SendOutText.IsSet()) {
+        ProcessPlayerSendOutMessage(SendOutText.GetValue());
+    } else {
+        ProcessPlayerSendOutAnimation(Side);
+    }
+}
+
+void APokemonBattle::PlayerSendOutAnimation() {
+    check(Sides.IsValidIndex(0))
+    const auto &Side = Sides[0];
+    ProcessPlayerSendOutAnimation(Side);
 }
 
 void APokemonBattle::StartTurn() {
