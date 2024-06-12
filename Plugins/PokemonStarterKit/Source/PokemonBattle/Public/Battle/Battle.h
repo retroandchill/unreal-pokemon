@@ -27,6 +27,13 @@ class POKEMONBATTLE_API IBattle {
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
     virtual TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>>&& SidesIn) = 0;
+
+    /**
+     * Have the player take possession of the battle pawn and begin the battle intro.
+     * @param PlayerController The player controller to shift control over to the battle pawn
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Battle|Flow")
+    void JumpToBattleScene(APlayerController* PlayerController);
     
     /**
      * This is to be called after all pre-battle setup has been completed (i.e. intro animations, sending out Pokémon,
@@ -43,6 +50,12 @@ public:
      * @return Should abilities be ignored
      */
     virtual bool ShouldIgnoreAbilities() const = 0;
+
+    /**
+     * Get the battle pawn used in battle
+     * @return The pawn used in battle
+     */
+    virtual APawn* GetBattlePawn() const = 0;
 
     /**
      * Perform a sweep over each of the battlers and perform a callback on each one

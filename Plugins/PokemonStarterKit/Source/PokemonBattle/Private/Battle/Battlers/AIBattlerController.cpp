@@ -21,8 +21,8 @@ void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattl
     AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChooseAction, this, Battler));
 }
 
-void UAIBattlerController::BindOnActionReady(const FQueueAction &QueueAction) {
-    ActionReady.Add(QueueAction);
+void UAIBattlerController::BindOnActionReady(FActionReady&& QueueAction) {
+    ActionReady = MoveTemp(QueueAction);
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
@@ -35,6 +35,5 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // be best to store a map or a list in a Data Asset that has all of the checks that would be applied and the minimum
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
-    ActionReady.Broadcast(MakeUnique<FBattleActionUseMove>(Battler,
-        PossibleMoves.IsEmpty() ? Battler->GetMoveOfLastResort() : PossibleMoves[FMath::Rand() % PossibleMoves.Num()]));
+    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, PossibleMoves[FMath::Rand() % PossibleMoves.Num()]));
 }

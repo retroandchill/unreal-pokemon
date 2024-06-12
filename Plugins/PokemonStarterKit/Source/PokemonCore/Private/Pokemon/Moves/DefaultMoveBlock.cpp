@@ -40,15 +40,9 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
         }
     }
 
-    MoveOfLastResort = NewObject<UDefaultMove>(this)->Initialize(Settings.GetMoveOfLastResort());
-
     return this;
 }
 
-TConstArrayView<TScriptInterface<IMove>> UDefaultMoveBlock::GetMoves() const {
+const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
     return Moves;
-}
-
-const TScriptInterface<IMove> & UDefaultMoveBlock::GetMoveOfLastResort() const {
-    return MoveOfLastResort;
 }

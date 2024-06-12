@@ -34,6 +34,17 @@ struct POKEMONASSETS_API FPokemonAssetParams {
     bool bShadow = false;
 };
 
+USTRUCT(BlueprintType)
+struct POKEMONASSETS_API FMaterialInstanceWithSize {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Graphics")
+    TObjectPtr<UMaterialInstanceDynamic> Material;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Graphics")
+    FVector2D Size;
+};
+
 /**
  * Subsystem designed to handle the loading of graphical assets into memory
  */
@@ -44,19 +55,15 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer,
-                                                                            bool bBack = false) const;
+    FMaterialInstanceWithSize GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer,
+                                                     bool bBack = false) const;
 
-    std::pair<UMaterialInstanceDynamic *, FVector2D>
-    GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false,
-                           const FPokemonAssetParams &AdditionalParams = {}) const;
+    FMaterialInstanceWithSize GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
 
-    std::pair<UMaterialInstanceDynamic *, FVector2D> GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer,
-                                                                        bool bBack = false) const;
+    FMaterialInstanceWithSize GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer,
+                                                 bool bBack = false) const;
 
-    std::pair<UMaterialInstanceDynamic *, FVector2D>
-    GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false,
-                       const FPokemonAssetParams &AdditionalParams = {}) const;
+    FMaterialInstanceWithSize GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -81,7 +88,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
-    std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const;
+    FMaterialInstanceWithSize GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const;
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -89,7 +96,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite
      */
-    std::pair<UMaterialInstanceDynamic *, FVector2D> GetTrainerSprite(FName TrainerType, UObject *Outer) const;
+    FMaterialInstanceWithSize GetTrainerSprite(FName TrainerType, UObject *Outer) const;
 
     /**
      * Get the icon graphic for a singular type.

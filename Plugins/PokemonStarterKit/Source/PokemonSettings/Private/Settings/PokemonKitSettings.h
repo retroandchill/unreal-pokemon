@@ -121,12 +121,6 @@ private:
     FText NoAbilityDescription;
 
     /**
-     * The move used when a Pokémon has no other move options to use
-     */
-    UPROPERTY(EditDefaultsOnly, Config, Category = Battle, meta = (GetKeyOptions = "PokemonData.MoveHelper.GetMoveNames"))
-    FName MoveOfLastResort = TEXT("STRUGGLE");
-
-    /**
      * The set of data tables used by the game.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Data", meta = (AllowedClasses = "DataTable"))

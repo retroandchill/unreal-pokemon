@@ -127,13 +127,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = UI)
     virtual const FText &GetNoAbilityDescription() const = 0;
 
-    /**
-     * The move used when a Pokémon has no other move options to use
-     * @return The move used when a Pokémon has no other move options to use
-     */
-    UFUNCTION(BlueprintCallable, Category = Battle)
-    virtual FName GetMoveOfLastResort() const = 0;
-
 };
 
 /**

@@ -84,10 +84,6 @@ const FText &Pokemon::FBaseSettings::GetNoAbilityDescription() const {
     return InternalData->KitSettings->NoAbilityDescription;
 }
 
-FName Pokemon::FBaseSettings::GetMoveOfLastResort() const {
-    return InternalData->KitSettings->MoveOfLastResort;
-}
-
 UClass * Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
     return InternalData->KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
 }

@@ -15,7 +15,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     auto [Side1, MockSide1] = UnrealMock::CreateMock<IBattleSide>();
     auto [Side2, MockSide2] = UnrealMock::CreateMock<IBattleSide>();
 
-    auto Battle = NewObject<UPokemonBattle>()->Initialize({Side1, Side2});
+    auto Battle = NewObject<APokemonBattle>()->Initialize({Side1, Side2});
 
     TArray<TUniquePtr<Mock<IBattleAction>>> Actions;
     auto QueueBattleAction = [&Actions, &Battle](const TScriptInterface<IBattler>& Battler) {

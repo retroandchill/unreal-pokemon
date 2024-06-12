@@ -9,8 +9,7 @@
 class IBattler;
 class IBattleAction;
 
-DECLARE_DELEGATE_OneParam(FQueueAction, TUniquePtr<IBattleAction>&&);
-DECLARE_MULTICAST_DELEGATE_OneParam(FActionReady, TUniquePtr<IBattleAction>&&);
+DECLARE_DELEGATE_OneParam(FActionReady, TUniquePtr<IBattleAction>&&);
 
 // This class does not need to be modified.
 UINTERFACE()
@@ -28,5 +27,5 @@ class POKEMONBATTLE_API IBattlerController {
 public:
     virtual void InitiateActionSelection(const TScriptInterface<IBattler>& Battler) const = 0; 
 
-    virtual void BindOnActionReady(const FQueueAction& QueueAction) = 0;;
+    virtual void BindOnActionReady(FActionReady&& QueueAction) = 0;;
 };

@@ -62,7 +62,7 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     BasePower = ModifiedParameter(BasePower, Multipliers.PowerMultiplier);
     Attack = ModifiedParameter(Attack, Multipliers.AttackMultiplier);
     Defense = ModifiedParameter(Defense, Multipliers.DefenseMultiplier);
-    int32 Damage = CalculateBaseDamage(BasePower, User->GetLevel(), Attack, Defense);
+    int32 Damage = CalculateBaseDamage(BasePower, User->GetPokemonLevel(), Attack, Defense);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
     return {.Damage = Damage, .Effectiveness = Effects.Effectiveness, .bCriticalHit = Effects.bCriticalHit };

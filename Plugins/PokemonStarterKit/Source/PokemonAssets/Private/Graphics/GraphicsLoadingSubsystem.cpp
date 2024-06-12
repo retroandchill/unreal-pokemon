@@ -23,14 +23,12 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     SpriteLoaders = Settings.GetSpriteRepositories();
 }
 
-std::pair<UMaterialInstanceDynamic *, FVector2D>
-UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer, bool bBack) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer, bool bBack) const {
     return GetPokemonBattleSprite(Pokemon.GetSpecies().ID, Outer, bBack,
                                   {.Gender = Pokemon.GetGender(), .bShiny = Pokemon.IsShiny()});
 }
 
-std::pair<UMaterialInstanceDynamic *, FVector2D>
-UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack,
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack,
                                                   const FPokemonAssetParams &AdditionalParams) const {
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
@@ -45,13 +43,12 @@ UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer,
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
 
-std::pair<UMaterialInstanceDynamic *, FVector2D>
-UGraphicsLoadingSubsystem::GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer, bool bBack) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer, bool bBack) const {
     return GetPokemonUISprite(Pokemon.GetSpecies().ID, Outer, bBack,
                               {.Gender = Pokemon.GetGender(), .bShiny = Pokemon.IsShiny()});
 }
 
-std::pair<UMaterialInstanceDynamic *, FVector2D>
+FMaterialInstanceWithSize
 UGraphicsLoadingSubsystem::GetPokemonUISprite(FName Species, UObject *Outer, bool bBack,
                                               const FPokemonAssetParams &AdditionalParams) const {
     auto SpriteResolutionList =
@@ -85,13 +82,13 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
     return Material;
 }
 
-std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
-                                                                                             UObject *Outer) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
+                                                                      UObject *Outer) const {
     return GetTrainerSprite(Trainer.GetTrainerType().ID, Outer);
 }
 
-std::pair<UMaterialInstanceDynamic *, FVector2D> UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
-                                                                                             UObject *Outer) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
+                                                                      UObject *Outer) const {
     auto Texture = SpriteLoaders.TrainerFrontSpriteRepository->FetchAsset(TrainerType);
     if (Texture == nullptr) {
         return {nullptr, FVector2D()};

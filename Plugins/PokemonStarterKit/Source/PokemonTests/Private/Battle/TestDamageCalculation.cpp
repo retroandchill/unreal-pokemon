@@ -25,7 +25,7 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
     Fake(Method(MockUser, ForEachBattleEffect));
-    When(Method(MockUser, GetLevel)).AlwaysReturn(75);
+    When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(75);
     When(Method(MockUser, GetAttack)).AlwaysReturn(123);
     When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("ICE")});
     When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
@@ -62,7 +62,7 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
     Fake(Method(MockUser, ForEachBattleEffect));
-    When(Method(MockUser, GetLevel)).AlwaysReturn(100);
+    When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(100);
     When(Method(MockUser, GetSpecialAttack)).AlwaysReturn(359);
     When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("DARK")});
     When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
@@ -99,7 +99,7 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
     Fake(Method(MockUser, ForEachBattleEffect));
-    When(Method(MockUser, GetLevel)).AlwaysReturn(100);
+    When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(100);
     When(Method(MockUser, GetAttack)).AlwaysReturn(319);
     When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("FIGHTING"), TEXT("STEEL")});
     When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);

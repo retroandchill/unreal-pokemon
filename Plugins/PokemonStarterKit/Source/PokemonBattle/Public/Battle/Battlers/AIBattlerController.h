@@ -19,7 +19,7 @@ class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerCo
 public:
     void InitiateActionSelection(const TScriptInterface<IBattler>& Battler) const override;
 
-    void BindOnActionReady(const FQueueAction &QueueAction) override;
+    void BindOnActionReady(FActionReady&& QueueAction) override;
 
 private:
     /**

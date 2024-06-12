@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "Battler.generated.h"
 
+class IPokemon;
+class IBattleSide;
 class IBattleMove;
 class IBattlerEffect;
 class IHoldItemBattleEffect;
@@ -25,7 +27,11 @@ class POKEMONBATTLE_API IBattler {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side, const TScriptInterface<IPokemon>& Pokemon = nullptr, bool ShowImmediately = false) = 0;
+    
     virtual FGuid GetInternalId() const = 0;
+
+    virtual TScriptInterface<IBattleSide> GetOwningSide() const = 0;
 
     virtual FText GetNickname() const = 0;
     
@@ -34,7 +40,7 @@ public:
      * @return The level of the Pokémon in question
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetLevel() const = 0;
+    virtual int32 GetPokemonLevel() const = 0;
 
     /**
      * Get the value of the Pokémon's physical attack.
@@ -82,14 +88,14 @@ public:
      * Get the Pokémon's current ability effect
      * @return The effect of the ability in question
      */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
+    UFUNCTION(BlueprintCallable, Category = Items)
     virtual const TScriptInterface<IAbilityBattleEffect>& GetAbility() const = 0;
 
     /**
      * Get if the target's current hold item is active
      * @return Is the target's hold item active?
      */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
+    UFUNCTION(BlueprintCallable, Category = Items)
     virtual bool IsHoldItemActive() const = 0;
 
     /**
@@ -105,14 +111,6 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Moves)
     virtual const TArray<TScriptInterface<IBattleMove>>& GetMoves() const = 0;
-
-    /**
-     * Get the move on the Pokémon that is used essentially as a last resort option when there are no remaining options
-     * to choose from.
-     * @return The move of last resort to use in battle
-     */
-    UFUNCTION(BlueprintCallable, Category = Moves)
-    virtual const TScriptInterface<IBattleMove>& GetMoveOfLastResort() const = 0;
 
     /**
      * Select the actions for this battler

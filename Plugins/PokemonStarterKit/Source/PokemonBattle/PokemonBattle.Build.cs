@@ -21,7 +21,9 @@ public class PokemonBattle : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore",
+                "UnrealInjector",
+                "PokemonAssets"
             }
         );
     }

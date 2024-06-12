@@ -18,16 +18,11 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
   public:
     TScriptInterface<IMoveBlock> Initialize(const FPokemonDTO &DTO) override;
 
-    TConstArrayView<TScriptInterface<IMove>> GetMoves() const override;
-
-    const TScriptInterface<IMove>& GetMoveOfLastResort() const override;
+    const TArray<TScriptInterface<IMove>> &GetMoves() const override;
 
   private:
     UPROPERTY()
     TArray<TScriptInterface<IMove>> Moves;
-
-    UPROPERTY()
-    TScriptInterface<IMove> MoveOfLastResort;
 
     /**
      * The full move learning memory of the Pokémon presented in the order the moves were learned.
