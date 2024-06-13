@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pokemon/Breeding/PokemonGender.h"
 #include "UObject/Interface.h"
 #include "Battler.generated.h"
-
+\
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
@@ -13,6 +14,7 @@ class IBattlerEffect;
 class IHoldItemBattleEffect;
 class IAbilityBattleEffect;
 class IMoveModifier;
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
 class POKEMONBATTLE_API UBattler : public UInterface {
@@ -34,6 +36,8 @@ public:
     virtual TScriptInterface<IBattleSide> GetOwningSide() const = 0;
 
     virtual FText GetNickname() const = 0;
+
+    virtual EPokemonGender GetGender() const = 0;
     
     /**
      * Get the Pokémon's level
@@ -41,6 +45,27 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetPokemonLevel() const = 0;
+
+    /**
+     * Get the value of the Pokémon's current HP
+     * @return The Pokémon's current HP
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 GetHP() const = 0;
+
+    /**
+     * Get the value of the Pokémon's Max HP.
+     * @return The Pokémon's Max HP
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 GetMaxHP() const = 0;
+
+    /**
+     * Get the value of the Pokémon's Max HP.
+     * @return The Pokémon's Max HP
+     */
+    UFUNCTION(BlueprintCallable, DisplayName = "Get HP Percent", Category = Stats)
+    virtual float GetHPPercent() const = 0;
 
     /**
      * Get the value of the Pokémon's physical attack.
@@ -69,6 +94,13 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetSpecialDefense() const = 0;
+
+    /**
+     * Get the percent value of Exp to a level up
+     * @return The Pokémon's exp to level up percentage
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual float GetExpPercent() const = 0;
 
     /**
      * Get the Pokémon's current type

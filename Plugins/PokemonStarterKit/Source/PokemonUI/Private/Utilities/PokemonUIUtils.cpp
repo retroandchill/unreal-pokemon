@@ -57,9 +57,8 @@ void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float 
     ProgressBar->SetPercent(FMath::Clamp(CurrentValue / MaxValue, 0, 1));
 }
 
-void UPokemonUIUtils::SetPokemonGenderText(const IPokemon &Pokemon, TObjectPtr<UDisplayText> &TextWidget) {
+void UPokemonUIUtils::SetPokemonGenderText(EPokemonGender Gender, TObjectPtr<UDisplayText> &TextWidget) {
     using enum EPokemonGender;
-    auto Gender = Pokemon.GetGender();
     switch (Gender) {
     case Male:
         SetItemText(TextWidget, TEXT("♂"));

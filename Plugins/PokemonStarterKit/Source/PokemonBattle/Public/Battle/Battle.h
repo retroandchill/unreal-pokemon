@@ -58,6 +58,12 @@ public:
     virtual APawn* GetBattlePawn() const = 0;
 
     /**
+     * Iterate over each side of the battle and perform the given callback on said side
+     * @param Callback The callback to execute on each iteration
+     */
+    virtual void ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide>&)>& Callback) const = 0;
+
+    /**
      * Perform a sweep over each of the battlers and perform a callback on each one
      * @param Callback The callback to perform
      */

@@ -28,9 +28,22 @@ public:
     
     UFUNCTION(BlueprintPure, Category = Stats)
     FText GetNickname() const override;
+
+    UFUNCTION(BlueprintPure, Category = Stats)
+    EPokemonGender GetGender() const override;
     
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetPokemonLevel() const override;
+    
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetHP() const override;
+    
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetMaxHP() const override;
+    
+    UFUNCTION(BlueprintPure, DisplayName = "Get HP Percent", Category = Stats)
+    float GetHPPercent() const override;
+    
     
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetAttack() const override;
@@ -43,6 +56,9 @@ public:
     
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetSpecialDefense() const override;
+
+    UFUNCTION(BlueprintPure, Category = Stats)
+    float GetExpPercent() const override;
     
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;

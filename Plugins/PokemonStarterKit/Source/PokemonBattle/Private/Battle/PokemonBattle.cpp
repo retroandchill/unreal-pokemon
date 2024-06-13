@@ -40,6 +40,7 @@ void APokemonBattle::JumpToBattleScene_Implementation(APlayerController* PlayerC
 }
 
 void APokemonBattle::StartBattle() {
+    CreateBattleHUD();
     StartTurn();
 }
 
@@ -70,6 +71,12 @@ bool APokemonBattle::ActionSelectionFinished() const {
 
 bool APokemonBattle::ShouldIgnoreAbilities() const {
     return false;
+}
+
+void APokemonBattle::ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const {
+    for (int32 i = 0; i < Sides.Num(); i++) {
+        Callback(i, Sides[i]);
+    }
 }
 
 void APokemonBattle::ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {

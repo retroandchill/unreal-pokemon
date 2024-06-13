@@ -43,8 +43,24 @@ FText ABattlerActor::GetNickname() const {
     return WrappedPokemon->GetNickname();
 }
 
+EPokemonGender ABattlerActor::GetGender() const {
+    return WrappedPokemon->GetGender();
+}
+
 int32 ABattlerActor::GetPokemonLevel() const {
     return WrappedPokemon->GetStatBlock()->GetLevel();
+}
+
+int32 ABattlerActor::GetHP() const {
+    return WrappedPokemon->GetCurrentHP();
+}
+
+int32 ABattlerActor::GetMaxHP() const {
+    return WrappedPokemon->GetMaxHP();
+}
+
+float ABattlerActor::GetHPPercent() const {
+    return static_cast<float>(WrappedPokemon->GetCurrentHP()) / static_cast<float>(WrappedPokemon->GetMaxHP());
 }
 
 int32 ABattlerActor::GetAttack() const {
@@ -62,6 +78,10 @@ int32 ABattlerActor::GetSpecialAttack() const {
 
 int32 ABattlerActor::GetSpecialDefense() const {
     return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue();
+}
+
+float ABattlerActor::GetExpPercent() const {
+    return WrappedPokemon->GetStatBlock()->GetExpPercent();
 }
 
 TArray<FName> ABattlerActor::GetTypes() const {

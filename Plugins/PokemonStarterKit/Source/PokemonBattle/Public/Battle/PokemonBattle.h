@@ -30,19 +30,20 @@ protected:
     void JumpToBattleScene_Implementation(APlayerController* PlayerController) override;
     
 public:
+    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void StartBattle() override;
     
     void QueueAction(TUniquePtr<IBattleAction>&& Action) override;
     bool ActionSelectionFinished() const override;
-
-    bool ShouldIgnoreAbilities() const override;
-    void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
-    void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const override;
-    bool FindGlobalAbility(FName AbilityID) const override;
-
     
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn* GetBattlePawn() const final;
+
+    bool ShouldIgnoreAbilities() const override;
+    void ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide>&)>& Callback) const;
+    void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
+    void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const override;
+    bool FindGlobalAbility(FName AbilityID) const override;
 
 protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
@@ -94,6 +95,9 @@ protected:
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void ProcessPlayerSendOutAnimation(const TScriptInterface<IBattleSide> &PlayerSide);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void CreateBattleHUD();
 
 private:
     void StartTurn();
