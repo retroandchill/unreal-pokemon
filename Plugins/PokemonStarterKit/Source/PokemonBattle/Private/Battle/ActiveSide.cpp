@@ -3,7 +3,9 @@
 #include "Battle/ActiveSide.h"
 #include "Algo/ForEach.h"
 #include "Battle/Battle.h"
+#include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Battlers/PlayerBattlerController.h"
 #include "Pokemon/Pokemon.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
@@ -16,8 +18,9 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Battlers.Reset();
     Trainers.Reset();
     TScriptInterface<IBattleSide> Side = this;
+    TScriptInterface<IBattlerController> Controller = NewObject<UAIBattlerController>(this);
     auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), GetBattlerSpawnPosition(0));
-    Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pokemon, true);
+    Battlers.Emplace_GetRef(Battler)->Initialize(Side, Controller, Pokemon, true);
     Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
     IntroMessageText = FText::FormatNamed(WildBattleTextFormat, TEXT("Pkmn"), Pokemon->GetNickname());
@@ -35,10 +38,16 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Trainers.Reset();
     Trainers.Emplace(Trainer);
     TScriptInterface<IBattleSide> Side = this;
+    TScriptInterface<IBattlerController> Controller;
+    if (ShowBackSprites) {
+        Controller = NewObject<UPlayerBattlerController>(this)->SetBattle(Battle);
+    } else {
+        Controller = NewObject<UAIBattlerController>(this);
+    }
     auto &Party = Trainer->GetParty();
     for (uint8 i = 0; i < PokemonCount; i++) {
         auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), GetBattlerSpawnPosition(i));
-        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Controller, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 

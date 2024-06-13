@@ -26,9 +26,22 @@ int32 UPokemonActionOptions::GetItemCount_Implementation() const {
     return MenuActions.Num();
 }
 
+void UPokemonActionOptions::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
+    Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
+    if (Options.IsValidIndex(OldIndex)) {
+        Options[OldIndex]->OnUnselected();
+    }
+
+    if (Options.IsValidIndex(NewIndex)) {
+        Options[NewIndex]->OnSelected();
+    }
+}
+
 TObjectPtr<UBattleMenuOption> UPokemonActionOptions::CreateMenuOption(const UBattleMenuHandler* MenuHandler) {
     TObjectPtr<UBattleMenuOption> Option = WidgetTree->ConstructWidget(OptionClass);
     Option->InitFromHandler(MenuHandler);
     SlotOption(Option);
+    Option->GetOnOptionClicked().AddDynamic(this, &UPokemonActionOptions::ProcessClickedButton);
+    Option->GetOnOptionHovered().AddDynamic(this, &UPokemonActionOptions::ProcessHoveredButton);
     return Option;
 }

@@ -21,6 +21,7 @@ public:
 
 protected:
     int32 GetItemCount_Implementation() const override;
+    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 
     /**
      * Slot an option into the menu

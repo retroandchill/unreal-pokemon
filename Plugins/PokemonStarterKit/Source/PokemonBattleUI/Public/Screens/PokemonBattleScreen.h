@@ -9,6 +9,7 @@
 
 #include "PokemonBattleScreen.generated.h"
 
+class UPokemonActionOptions;
 class IBattleSide;
 class IBattle;
 
@@ -26,6 +27,13 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     void SetBattle(const TScriptInterface<IBattle> &Battle);
+
+    /**
+     * Have a battler select an action from the HUD.
+     * @param Battler The battler who is selecting an action.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
+    void SelectAction(const TScriptInterface<IBattler>& Battler);
 
   protected:
     /**
@@ -52,6 +60,12 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     void CreateBattlePanel(int32 Side, const TScriptInterface<IBattler> &Battler);
 
     /**
+     * The widget that is used to select the options from the menu
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UPokemonActionOptions> ActionSelect;
+    
+    /**
      * The battle that this screen is showing the information for
      */
     UPROPERTY()
@@ -63,10 +77,23 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPROPERTY(EditAnywhere, Category = "Battle|Visuals")
     TArray<TSoftClassPtr<UPokemonBattlePanel>> PanelClasses;
+    
 
     /**
      * The panels that were dynamically added to the widget
      */
     UPROPERTY()
     TArray<TObjectPtr<UPokemonBattlePanel>> Panels;
+
+    /**
+     * A list of battlers who are currently selecting actions.
+     */
+    UPROPERTY()
+    TArray<TScriptInterface<IBattler>> SelectingBattlers;
+
+    /**
+     * The index in the selection list we are currently on.
+     */
+    UPROPERTY()
+    TOptional<int32> SelectionIndex;
 };

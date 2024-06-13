@@ -15,6 +15,7 @@ class IBattlerEffect;
 class IHoldItemBattleEffect;
 class IAbilityBattleEffect;
 class IMoveModifier;
+class IBattlerController;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -33,13 +34,14 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Create this battler with the given parameters
      * @param Side The side that owns this battler
+     * @param ControllerIn The controller that is used to select actions
      * @param Pokemon The Pokémon this wraps around
      * @param ShowImmediately Whether or not this battler should be visible immediately upon being spawned
      * @return
      */
     virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                                  const TScriptInterface<IPokemon> &Pokemon = nullptr,
-                                                  bool ShowImmediately = false) = 0;
+                                                  const TScriptInterface<IBattlerController>& ControllerIn,
+                                                  const TScriptInterface<IPokemon> &Pokemon = nullptr, bool ShowImmediately = false) = 0;
 
     /**
      * Get the internal ID for this battler
@@ -175,7 +177,7 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Select the actions for this battler
      */
-    virtual void SelectActions() const = 0;
+    virtual void SelectActions() = 0;
 
     /**
      * How many actions a Pokémon may take in a turn.

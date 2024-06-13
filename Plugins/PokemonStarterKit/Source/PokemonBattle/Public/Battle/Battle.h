@@ -92,4 +92,10 @@ class POKEMONBATTLE_API IBattle {
      * @return Was the ability found
      */
     virtual bool FindGlobalAbility(FName AbilityID) const = 0;
+
+    /**
+     * Initiate the process of selecting actions for the given battler.
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
+    void BeginActionSelection(const TScriptInterface<IBattler>& Battler);
 };

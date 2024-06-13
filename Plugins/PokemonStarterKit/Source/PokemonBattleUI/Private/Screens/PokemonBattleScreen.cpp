@@ -5,6 +5,7 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
+#include "Windows/PokemonActionOptions.h"
 #include <functional>
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
@@ -12,6 +13,19 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);
     Panels.Reset();
     Battle->ForEachSide(std::bind_front(&UPokemonBattleScreen::AddPanelsForSide, this));
+}
+
+void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler) {
+    SelectingBattlers.Emplace(Battler);
+    if (!SelectionIndex.IsSet()) {
+        SelectionIndex.Emplace(0);
+    }
+
+    if (!ActionSelect->IsVisible()) {
+        ActionSelect->SetVisibility(ESlateVisibility::HitTestInvisible);
+        ActionSelect->SetIndex(0);
+        ActionSelect->SetActive(true);
+    }
 }
 
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {

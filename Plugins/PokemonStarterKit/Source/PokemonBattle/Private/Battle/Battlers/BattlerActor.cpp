@@ -4,6 +4,7 @@
 #include "Algo/ForEach.h"
 #include "Battle/Battlers/BattlerSprite.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Battlers/BattlerController.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Mainpulation/RangeHelpers.h"
@@ -16,9 +17,10 @@ TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TSc
     return NewObject<UBaseBattleMove>(Battler)->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
 }
 
-TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
+TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side, const TScriptInterface<IBattlerController>& ControllerIn, 
                                                      const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately) {
     OwningSide = Side;
+    Controller = ControllerIn;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
     auto MoveBlock = Pokemon->GetMoveBlock();
@@ -106,7 +108,8 @@ const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {
     return Moves;
 }
 
-void ABattlerActor::SelectActions() const {
+void ABattlerActor::SelectActions() {
+    Controller->InitiateActionSelection(this);
 }
 
 uint8 ABattlerActor::GetActionCount() const {

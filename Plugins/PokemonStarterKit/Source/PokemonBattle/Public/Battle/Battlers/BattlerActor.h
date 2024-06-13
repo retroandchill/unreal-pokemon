@@ -8,6 +8,7 @@
 
 #include "BattlerActor.generated.h"
 
+class IBattlerController;
 class IBattlerSprite;
 class IBattleSide;
 class IPokemon;
@@ -21,8 +22,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
   public:
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                          const TScriptInterface<IPokemon> &Pokemon,
-                                          bool ShowImmediately = false) override;
+                                          const TScriptInterface<IBattlerController>& ControllerIn,
+                                          const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately = false) override;
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)
@@ -79,7 +80,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Moves)
     const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;
 
-    void SelectActions() const override;
+    void SelectActions() override;
     uint8 GetActionCount() const override;
     void ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
     void
@@ -139,4 +140,10 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TObjectPtr<AActor> Sprite;
+
+    /**
+     * The actor that serves as the controller for selecting actions.
+     */
+    UPROPERTY()
+    TScriptInterface<IBattlerController> Controller;
 };
