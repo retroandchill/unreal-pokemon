@@ -14,7 +14,9 @@ UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *W
 }
 
 void UTakeItemFromPokemon::Activate() {
-    auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UItemUtilitiesSubsystem>()->GetItemUtilities();
+    auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)
+                             ->GetSubsystem<UItemUtilitiesSubsystem>()
+                             ->GetItemUtilities();
     check(ItemUtilities != nullptr)
     FItemResultNoRetValue OnSuccess;
     OnSuccess.BindDynamic(this, &UTakeItemFromPokemon::ExecuteItemTaken);

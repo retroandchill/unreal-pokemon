@@ -4,17 +4,17 @@
 #include "Settings/BaseSettings.h"
 
 FDataManager::FDataManager() {
-    Pokemon::FBaseSettings::Get().ForEachDataTable([this](UDataTable* Table) {
+    Pokemon::FBaseSettings::Get().ForEachDataTable([this](UDataTable *Table) {
         auto RowStruct = Table->GetRowStruct();
-         if (RowStruct == nullptr) {
-             return;
-         }
+        if (RowStruct == nullptr) {
+            return;
+        }
 
-         const auto &DataRegistry = FDataRegistry::GetInstance();
-         if (!DataRegistry.IsTypeRegistered(RowStruct))
-             return;
+        const auto &DataRegistry = FDataRegistry::GetInstance();
+        if (!DataRegistry.IsTypeRegistered(RowStruct))
+            return;
 
-         DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table)); 
+        DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table));
     });
 }
 

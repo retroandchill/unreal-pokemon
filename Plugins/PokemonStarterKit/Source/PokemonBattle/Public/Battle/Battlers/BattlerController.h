@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "BattlerController.generated.h"
 
 class IBattler;
 class IBattleAction;
 
-DECLARE_DELEGATE_OneParam(FActionReady, TUniquePtr<IBattleAction>&&);
+DECLARE_DELEGATE_OneParam(FActionReady, TUniquePtr<IBattleAction> &&);
 
 // This class does not need to be modified.
 UINTERFACE()
@@ -24,16 +25,16 @@ class POKEMONBATTLE_API IBattlerController {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Initiate the selection process for this battler
-     * @param Battler 
+     * @param Battler
      */
-    virtual void InitiateActionSelection(const TScriptInterface<IBattler>& Battler) const = 0;
+    virtual void InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const = 0;
 
     /**
      * Bind a callback to when an action is ready
      * @param QueueAction The action to take when ready to act
      */
-    virtual void BindOnActionReady(FActionReady&& QueueAction) = 0;
+    virtual void BindOnActionReady(FActionReady &&QueueAction) = 0;
 };

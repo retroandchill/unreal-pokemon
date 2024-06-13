@@ -12,79 +12,82 @@ class IBattlerSprite;
 class IBattleSide;
 class IPokemon;
 /**
- * This is the actor that represents the Pokémon in battle. It acts as a bridge between the Pokémon and the rendered sprite.
+ * This is the actor that represents the Pokémon in battle. It acts as a bridge between the Pokémon and the rendered
+ * sprite.
  */
 UCLASS()
 class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     GENERATED_BODY()
 
-public:
+  public:
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                          const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately = false) override;
+                                          const TScriptInterface<IPokemon> &Pokemon,
+                                          bool ShowImmediately = false) override;
     FGuid GetInternalId() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Context)
     TScriptInterface<IBattleSide> GetOwningSide() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     FText GetNickname() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     EPokemonGender GetGender() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetPokemonLevel() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetHP() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetMaxHP() const override;
-    
+
     UFUNCTION(BlueprintPure, DisplayName = "Get HP Percent", Category = Stats)
     float GetHPPercent() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetAttack() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetDefense() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetSpecialAttack() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetSpecialDefense() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Ability)
     bool IsAbilityActive() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Ability)
-    const TScriptInterface<IAbilityBattleEffect> & GetAbility() const override;
-    
+    const TScriptInterface<IAbilityBattleEffect> &GetAbility() const override;
+
     UFUNCTION(BlueprintPure, Category = Items)
     bool IsHoldItemActive() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Items)
-    const TScriptInterface<IHoldItemBattleEffect> & GetHoldItem() const override;
-    
+    const TScriptInterface<IHoldItemBattleEffect> &GetHoldItem() const override;
+
     UFUNCTION(BlueprintPure, Category = Moves)
-    const TArray<TScriptInterface<IBattleMove>> & GetMoves() const override;
-    
+    const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;
+
     void SelectActions() const override;
     uint8 GetActionCount() const override;
     void ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
-    void ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const override;
+    void
+    ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const override;
 
     void ShowSprite() const override;
 
-private:
+  private:
     /**
      * Spawn the underlying sprite actor into the world
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)
@@ -136,5 +139,4 @@ private:
      */
     UPROPERTY()
     TObjectPtr<AActor> Sprite;
-    
 };

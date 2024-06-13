@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+
 #include "PartyMenuHandlerSet.generated.h"
 
 class UPartyMenuHandler;
@@ -15,18 +16,17 @@ UCLASS()
 class POKEMONUI_API UPartyMenuHandlerSet : public UDataAsset {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the list of handlers to use
      * @return The list of handlers to use
      */
-    const TArray<TObjectPtr<UPartyMenuHandler>>& GetHandlers() const;
+    const TArray<TObjectPtr<UPartyMenuHandler>> &GetHandlers() const;
 
-private:
+  private:
     /**
      * The list of handlers to use
      */
     UPROPERTY(EditAnywhere, Instanced, Category = "Handlers")
     TArray<TObjectPtr<UPartyMenuHandler>> Handlers;
-
 };

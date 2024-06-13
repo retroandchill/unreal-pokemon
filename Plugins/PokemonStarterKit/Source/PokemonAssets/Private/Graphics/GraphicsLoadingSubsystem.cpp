@@ -23,12 +23,14 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     SpriteLoaders = Settings.GetSpriteRepositories();
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer, bool bBack) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer,
+                                                                            bool bBack) const {
     return GetPokemonBattleSprite(Pokemon.GetSpecies().ID, Outer, bBack,
                                   {.Gender = Pokemon.GetGender(), .bShiny = Pokemon.IsShiny()});
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack,
+FMaterialInstanceWithSize
+UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack,
                                                   const FPokemonAssetParams &AdditionalParams) const {
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
@@ -38,12 +40,14 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FNam
     }
 
     static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.LoadSynchronous(), Outer);
+    auto Material =
+        UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer, bool bBack) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer,
+                                                                        bool bBack) const {
     return GetPokemonUISprite(Pokemon.GetSpecies().ID, Outer, bBack,
                               {.Gender = Pokemon.GetGender(), .bShiny = Pokemon.IsShiny()});
 }
@@ -82,20 +86,19 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
     return Material;
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer,
-                                                                      UObject *Outer) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const {
     return GetTrainerSprite(Trainer.GetTrainerType().ID, Outer);
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType,
-                                                                      UObject *Outer) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName TrainerType, UObject *Outer) const {
     auto Texture = SpriteLoaders.TrainerFrontSpriteRepository->FetchAsset(TrainerType);
     if (Texture == nullptr) {
         return {nullptr, FVector2D()};
     }
 
     static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(TrainerSpriteMaterials.FrontSpriteBaseMaterialUI.LoadSynchronous(), Outer);
+    auto Material =
+        UMaterialInstanceDynamic::Create(TrainerSpriteMaterials.FrontSpriteBaseMaterialUI.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
     return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
 }

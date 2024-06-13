@@ -12,7 +12,7 @@ class UTextureRepository;
  */
 USTRUCT(BlueprintType)
 struct POKEMONASSETS_API FSpriteLoaders {
-GENERATED_BODY()
+    GENERATED_BODY()
 
     /**
      * The path to the repository data asset used to get the icons.
@@ -67,5 +67,4 @@ GENERATED_BODY()
      * @return A reference to the target object
      */
     FSpriteLoaders &operator=(const FSpriteRepositories &Settings);
-    
 };

@@ -55,7 +55,8 @@ void UBagScreen::RefreshSelf_Implementation() {
 }
 
 void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {
-    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers->GetHandlers(), CancelText, this, Item, Quantity);
+    auto Commands = UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers->GetHandlers(), CancelText, this,
+                                                                   Item, Quantity);
     CommandWindow->SetCommands(MoveTemp(Commands));
 }
 

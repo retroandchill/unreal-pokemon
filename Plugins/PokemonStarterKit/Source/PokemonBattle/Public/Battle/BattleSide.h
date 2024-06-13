@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "BattleSide.generated.h"
 
 class IPokemon;
@@ -25,7 +26,7 @@ class POKEMONBATTLE_API IBattleSide {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Create a side containing a single-wild Pokémon
      * @param Battle The battle to take ownership of this side
@@ -34,7 +35,8 @@ public:
      * @return This side post-initialization
      */
     virtual TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                                     const TScriptInterface<IPokemon> &Pokemon, bool ShowBackSprites = false) = 0;
+                                                     const TScriptInterface<IPokemon> &Pokemon,
+                                                     bool ShowBackSprites = false) = 0;
 
     /**
      * Create a side containing a single-wild Pokémon
@@ -45,7 +47,8 @@ public:
      * @return This side post-initialization
      */
     virtual TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                                     const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount = 1, bool ShowBackSprites = false) = 0;
+                                                     const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount = 1,
+                                                     bool ShowBackSprites = false) = 0;
 
     /**
      * Get the battle that owns this particular side
@@ -89,6 +92,5 @@ public:
      * Get the list of battlers for this side
      * @return The battlers for this side.
      */
-    virtual const TArray<TScriptInterface<IBattler>>& GetBattlers() const = 0;
-
+    virtual const TArray<TScriptInterface<IBattler>> &GetBattlers() const = 0;
 };

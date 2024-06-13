@@ -19,18 +19,17 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = "Battle|Display")
-    void SetBattler(const TScriptInterface<IBattler>& Battler);
-    
+    void SetBattler(const TScriptInterface<IBattler> &Battler);
+
     UFUNCTION(BlueprintCallable, Category = "Battle|Display")
     virtual void Refresh();
 
-protected:
-    const TScriptInterface<IBattler>& GetCurrentBattler() const;
-    
-private:
-    
+  protected:
+    const TScriptInterface<IBattler> &GetCurrentBattler() const;
+
+  private:
     /**
      * The widget to display the Pokémon's name
      */
@@ -66,5 +65,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
     TMap<EPokemonGender, FTextColor> GenderTextColors;
-
 };

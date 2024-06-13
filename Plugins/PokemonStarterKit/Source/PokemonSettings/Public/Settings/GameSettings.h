@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "SettingsStructs.h"
 #include "UObject/Interface.h"
+
 #include "GameSettings.generated.h"
 
 struct FRivalName;
@@ -21,8 +22,7 @@ class POKEMONSETTINGS_API IGameSettings {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
-
+  public:
     /**
      * The maximum amount of money the player can have.
      * @return The maximum amount of money the player can have.
@@ -97,14 +97,14 @@ public:
      * Map of pocket id numbers found in the imported PBS files to their actual names.
      * @return Map of pocket id numbers found in the imported PBS files to their actual names.
      */
-     UFUNCTION(BlueprintCallable,  Category = "Bag")
-     virtual const TMap<uint8, FName> &GetPocketNames() const = 0;
+    UFUNCTION(BlueprintCallable, Category = "Bag")
+    virtual const TMap<uint8, FName> &GetPocketNames() const = 0;
 
     /**
      * Information about the various Bag Pockets.
      */
-     UFUNCTION(BlueprintCallable,  Category = "Bag")
-     virtual const TMap<FName, FPocketInfo> &GetPocketInfo() const = 0;
+    UFUNCTION(BlueprintCallable, Category = "Bag")
+    virtual const TMap<FName, FPocketInfo> &GetPocketInfo() const = 0;
 
     /**
      * The maximum number of items each slot in the Bag can hold.
@@ -126,7 +126,6 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = UI)
     virtual const FText &GetNoAbilityDescription() const = 0;
-
 };
 
 /**
@@ -136,7 +135,7 @@ UCLASS()
 class POKEMONSETTINGS_API UGameSettingsFunctionLibrary : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the game settings interface.
      * @return The wrapped settings interface

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "BattlerEffect.generated.h"
 
 class IBattler;
@@ -23,7 +24,7 @@ class POKEMONBATTLE_API IBattlerEffect {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Trigger a damage related modification for this effect on the user
      * @param Multipliers The multipliers for the move damage
@@ -49,7 +50,6 @@ public:
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     void ModifyDamageForTarget(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                             const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,
-                             int32 BaseDamage, FName MoveType);
-
+                               const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,
+                               int32 BaseDamage, FName MoveType);
 };

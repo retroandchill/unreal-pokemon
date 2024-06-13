@@ -7,6 +7,7 @@
 #include "BattleSettings.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
+
 #include "PokemonBattle.generated.h"
 
 class IBattleAction;
@@ -20,36 +21,36 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create a wild Pokémon battle with the given settings
      * @param Pokemon The Pokémon to generate from
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Initiation")
-    void CreateWildBattle(const FPokemonDTO& Pokemon);
-    
-    TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>>&& SidesIn) override;
+    void CreateWildBattle(const FPokemonDTO &Pokemon);
 
-protected:
-    void JumpToBattleScene_Implementation(APlayerController* PlayerController) override;
-    
-public:
+    TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) override;
+
+  protected:
+    void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
+
+  public:
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void StartBattle() override;
-    
-    void QueueAction(TUniquePtr<IBattleAction>&& Action) override;
+
+    void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
-    
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
-    APawn* GetBattlePawn() const final;
+    APawn *GetBattlePawn() const final;
 
     bool ShouldIgnoreAbilities() const override;
-    void ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide>&)>& Callback) const override;
+    void ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const override;
     void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
     void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const override;
     bool FindGlobalAbility(FName AbilityID) const override;
 
-protected:
+  protected:
     /**
      * Get the position of the player's side of the field
      * @return The player's primary spawn position
@@ -63,7 +64,7 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     FTransform GetOpponentSidePosition() const;
-    
+
     /**
      * Play the intro sequence for the battle. This sequence ends upon calling DisplayBattleIntroMessage from the
      * Blueprint Graph.
@@ -82,7 +83,7 @@ protected:
      * @param Message The message to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessBattleIntroMessage(const FText& Message);
+    void ProcessBattleIntroMessage(const FText &Message);
 
     /**
      * Send out the opposing side Pokémon
@@ -95,7 +96,7 @@ protected:
      * @param Message The message to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessOpponentSendOutMessage(const FText& Message);
+    void ProcessOpponentSendOutMessage(const FText &Message);
 
     /**
      * Play the animation to send out an opponent's Pokémon
@@ -115,9 +116,9 @@ protected:
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void PlayerSendOut();
-    
+
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessPlayerSendOutMessage(const FText& Message);
+    void ProcessPlayerSendOutMessage(const FText &Message);
 
     /**
      * Play the actual animation to
@@ -138,7 +139,7 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void CreateBattleHUD();
 
-private:
+  private:
     /**
      * Run at the head of every turn. Increments the turn count and initiates action selection.
      */
@@ -148,7 +149,7 @@ private:
      * The current turn number that we're on in battle.
      */
     uint32 TurnCount = 0;
-    
+
     /**
      * The settings for the battle used to determine a large number of things about combat.
      */
@@ -192,11 +193,10 @@ private:
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetBattlePawn, Category = "Battle|Context")
     TObjectPtr<APawn> BattlePawn;
-    
+
     /**
      * A reference to the current player pawn so that control can be relinquished to that pawn after battle is complete
      */
     UPROPERTY()
     TObjectPtr<APawn> StoredPlayerPawn;
-    
 };

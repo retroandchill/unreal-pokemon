@@ -7,7 +7,7 @@
  * Module for handling the UI of the battle system.
  */
 class FPokemonBattleUIModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 };

@@ -7,7 +7,7 @@
  * The module that underpins all the basic settings in the starter kit.
  */
 class FPokemonSettingsModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 };

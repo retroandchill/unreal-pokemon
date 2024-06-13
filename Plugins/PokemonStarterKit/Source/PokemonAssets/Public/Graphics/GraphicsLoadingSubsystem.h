@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SpriteLoaders.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+#include "SpriteLoaders.h"
 #include "SpriteMaterials.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
@@ -55,15 +55,15 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    FMaterialInstanceWithSize GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer,
-                                                     bool bBack = false) const;
+    FMaterialInstanceWithSize GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
 
-    FMaterialInstanceWithSize GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
+    FMaterialInstanceWithSize GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false,
+                                                     const FPokemonAssetParams &AdditionalParams = {}) const;
 
-    FMaterialInstanceWithSize GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer,
-                                                 bool bBack = false) const;
+    FMaterialInstanceWithSize GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
 
-    FMaterialInstanceWithSize GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false, const FPokemonAssetParams &AdditionalParams = {}) const;
+    FMaterialInstanceWithSize GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false,
+                                                 const FPokemonAssetParams &AdditionalParams = {}) const;
 
     /**
      * Get the icon based upon the Pokémon that was passed in.

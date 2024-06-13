@@ -13,6 +13,4 @@
 UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonActionOptions : public USelectableWidget {
     GENERATED_BODY()
-
-
 };

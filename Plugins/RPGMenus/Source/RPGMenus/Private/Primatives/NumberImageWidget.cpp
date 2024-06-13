@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Primatives/NumberImageWidget.h"
 
 UNumberImageWidget::UNumberImageWidget() {
@@ -19,19 +18,10 @@ TSharedRef<SWidget> UNumberImageWidget::RebuildWidget() {
     for (auto AsString = FString::FromInt(Number); auto Digit : AsString) {
         int32 Index = TChar<TCHAR>::ConvertCharDigitToInt(Digit);
         auto &Brush = NumberImages[Index];
-        ImageBox->AddSlot()
-            .SizeParam(FAuto())
-            .HAlign(HAlign_Left)
-            .VAlign(VAlign_Top)
-            [
-                SNew(SImage)
-                    .Image(&Brush)
-            ];
+        ImageBox->AddSlot().SizeParam(FAuto()).HAlign(HAlign_Left).VAlign(VAlign_Top)[SNew(SImage).Image(&Brush)];
     }
-    
-    
+
     return ImageBox.ToSharedRef();
-    
 }
 
 void UNumberImageWidget::ReleaseSlateResources(bool bReleaseChildren) {

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ProgressBar.h"
+
 #include "HPBar.generated.h"
 
 /**
@@ -13,18 +14,18 @@ UCLASS()
 class POKEMONUI_API UHPBar : public UProgressBar {
     GENERATED_BODY()
 
-protected:
+  protected:
     TSharedRef<SWidget> RebuildWidget() override;
 
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
-    
+
     void SynchronizeProperties() override;
 
-private:
+  private:
     void UpdateBarMaterial();
-    
+
     /**
      * The base material used to generate the HP Bar Dynamic Material
      */
@@ -41,7 +42,7 @@ private:
      * The thresholds used to drop the state down to a lower number
      */
     UPROPERTY(EditAnywhere, Category = "Style|Fill")
-    TArray<float> PercentThresholds = { 0.5f, 0.25f };
+    TArray<float> PercentThresholds = {0.5f, 0.25f};
 
     /**
      * The actual material held by the widget. This is used to dynamically update it during runtime without needing

@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Assets/AssetAssignmentSubsystem.h"
-#include "Assets/AssetAssignmentSettings.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "Assets/AssetAssignmentSettings.h"
 #include "Repositories/AssetRepository.h"
 #include "Repositories/StaticImageRepository.h"
 #include "Repositories/TextureRepository.h"
@@ -23,8 +23,7 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
                               Settings.StatusIconRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(),
                               Settings.SummaryBallRepository.TryLoad());
-    AssetRepositories.Emplace(AssetAssignmentSettings->GetItemIconPackageName(),
-                              Settings.ItemIconRepository.TryLoad());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetItemIconPackageName(), Settings.ItemIconRepository.TryLoad());
 
     for (const auto &[Package, Repository] : AssetRepositories) {
         if (Repository == nullptr) {

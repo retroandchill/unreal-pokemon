@@ -1,10 +1,10 @@
-﻿#include "Battle/BattleSide.h"
+﻿#include "Asserts.h"
+#include "Battle/Actions/BattleAction.h"
+#include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "Battle/PokemonBattle.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
-#include "Battle/Actions/BattleAction.h"
-#include "Battle/Battlers/Battler.h"
-#include "Asserts.h"
 
 using namespace fakeit;
 
@@ -18,8 +18,8 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     auto Battle = NewObject<APokemonBattle>()->Initialize({Side1, Side2});
 
     TArray<TUniquePtr<Mock<IBattleAction>>> Actions;
-    auto QueueBattleAction = [&Actions, &Battle](const TScriptInterface<IBattler>& Battler) {
-        auto& MockAction = Actions.Emplace_GetRef();
+    auto QueueBattleAction = [&Actions, &Battle](const TScriptInterface<IBattler> &Battler) {
+        auto &MockAction = Actions.Emplace_GetRef();
         When(Method(*MockAction, GetBattler)).AlwaysReturn(Battler);
         Battle->QueueAction(TUniquePtr<IBattleAction>(&MockAction->get()));
     };
@@ -58,6 +58,6 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ASSERT_FALSE(Battle->ActionSelectionFinished());
     QueueBattleAction(Battler3);
     ASSERT_TRUE(Battle->ActionSelectionFinished());
-    
+
     return true;
 }

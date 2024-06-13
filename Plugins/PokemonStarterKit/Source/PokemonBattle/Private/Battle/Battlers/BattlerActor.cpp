@@ -1,32 +1,30 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Battlers/BattlerActor.h"
 #include "Algo/ForEach.h"
-#include "Battle/BattleSide.h"
 #include "Battle/Battlers/BattlerSprite.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Mainpulation/RangeHelpers.h"
-#include "Pokemon/Pokemon.h"
 #include "Pokemon/Moves/MoveBlock.h"
+#include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-
 #include <functional>
 
-TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor* Battler, const TScriptInterface<IMove>& Move) {
+TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     return NewObject<UBaseBattleMove>(Battler)->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
 }
 
-
-TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side, const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately) {
+TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
+                                                     const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately) {
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves())
-        | std::views::transform(std::bind_front(&CreateBattleMove, this))
-        | RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
+    Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
+            std::views::transform(std::bind_front(&CreateBattleMove, this)) |
+            RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
     SpawnSpriteActor(ShowImmediately);
     return this;
 }
@@ -92,7 +90,7 @@ bool ABattlerActor::IsAbilityActive() const {
     return true;
 }
 
-const TScriptInterface<IAbilityBattleEffect> & ABattlerActor::GetAbility() const {
+const TScriptInterface<IAbilityBattleEffect> &ABattlerActor::GetAbility() const {
     return Ability;
 }
 
@@ -100,11 +98,11 @@ bool ABattlerActor::IsHoldItemActive() const {
     return true;
 }
 
-const TScriptInterface<IHoldItemBattleEffect> & ABattlerActor::GetHoldItem() const {
+const TScriptInterface<IHoldItemBattleEffect> &ABattlerActor::GetHoldItem() const {
     return HoldItem;
 }
 
-const TArray<TScriptInterface<IBattleMove>> & ABattlerActor::GetMoves() const {
+const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {
     return Moves;
 }
 
@@ -116,7 +114,7 @@ uint8 ABattlerActor::GetActionCount() const {
 }
 
 void ABattlerActor::ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
-    Algo::ForEach(OwningSide->GetBattlers(), [this, &Callback](const TScriptInterface<IBattler>& Battler) {
+    Algo::ForEach(OwningSide->GetBattlers(), [this, &Callback](const TScriptInterface<IBattler> &Battler) {
         if (Battler->GetInternalId() == InternalId) {
             return;
         }
@@ -125,7 +123,8 @@ void ABattlerActor::ForEachAlly(const TFunctionRef<void(const TScriptInterface<I
     });
 }
 
-void ABattlerActor::ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const {
+void ABattlerActor::ForEachBattleEffect(
+    const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const {
 }
 
 void ABattlerActor::ShowSprite() const {
@@ -138,6 +137,7 @@ void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    IBattlerSprite::Execute_SetBattleSprite(Sprite, GraphicsSubsystem->GetPokemonBattleSprite(*WrappedPokemon, this, OwningSide->ShowBackSprites()));
+    IBattlerSprite::Execute_SetBattleSprite(
+        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(*WrappedPokemon, this, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

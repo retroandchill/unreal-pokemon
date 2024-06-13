@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BattlerController.h"
 #include "UObject/Object.h"
+
 #include "AIBattlerController.generated.h"
 
 class IBattler;
@@ -16,11 +17,11 @@ UCLASS(meta = (DisplayName = "AI Battler Controller"))
 class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerController {
     GENERATED_BODY()
 
-public:
-    void InitiateActionSelection(const TScriptInterface<IBattler>& Battler) const override;
-    void BindOnActionReady(FActionReady&& QueueAction) override;
+  public:
+    void InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const override;
+    void BindOnActionReady(FActionReady &&QueueAction) override;
 
-private:
+  private:
     /**
      * Perform an asynchronous action selection process
      */

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/Widget.h"
+
 #include "NumberImageWidget.generated.h"
 
 /**
@@ -13,12 +14,12 @@ UCLASS()
 class RPGMENUS_API UNumberImageWidget : public UWidget {
     GENERATED_BODY()
 
-public:
+  public:
     UNumberImageWidget();
 
     void SetNumber(uint32 NewNumber);
 
-protected:
+  protected:
     TSharedRef<SWidget> RebuildWidget() override;
     void ReleaseSlateResources(bool bReleaseChildren) override;
 
@@ -27,8 +28,7 @@ protected:
     void PostEditChangeChainProperty(FPropertyChangedChainEvent &PropertyChangedEvent) override;
 #endif
 
-private:
-    
+  private:
     /**
      * The number to display in the widget.
      */
@@ -45,5 +45,4 @@ private:
      * The box that serves as the widget contents
      */
     TSharedPtr<SHorizontalBox> ImageBox;
-    
 };

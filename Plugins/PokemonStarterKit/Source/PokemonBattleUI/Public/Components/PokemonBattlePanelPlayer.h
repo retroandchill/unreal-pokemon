@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PokemonBattlePanel.h"
+
 #include "PokemonBattlePanelPlayer.generated.h"
 
 class UNumberImageWidget;
@@ -14,10 +15,10 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattlePanelPlayer : public UPokemonBattlePanel {
     GENERATED_BODY()
 
-public:
+  public:
     void Refresh() override;
 
-private:
+  private:
     /**
      * The widget for displaying the current HP of the battler
      */
@@ -35,5 +36,4 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UProgressBar> ExpBar;
-
 };

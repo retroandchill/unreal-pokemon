@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/PokemonBattlePanel.h"
 #include "Battle/Battlers/Battler.h"
 #include "Components/ProgressBar.h"
@@ -25,6 +24,6 @@ void UPokemonBattlePanel::Refresh() {
     }
 }
 
-const TScriptInterface<IBattler> & UPokemonBattlePanel::GetCurrentBattler() const {
+const TScriptInterface<IBattler> &UPokemonBattlePanel::GetCurrentBattler() const {
     return CurrentBattler;
 }

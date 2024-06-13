@@ -1,12 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Screens/PokemonBattleScreen.h"
 #include "Algo/ForEach.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
-
 #include <functional>
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {

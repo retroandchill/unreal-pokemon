@@ -13,13 +13,12 @@ class IBattler;
 class POKEMONBATTLE_API IBattleAction {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     virtual ~IBattleAction() = default;
 
     /**
      * Get the battler that owns the given battle action
      * @return The owning battler
      */
-    virtual const TScriptInterface<IBattler>& GetBattler() const = 0;
-
+    virtual const TScriptInterface<IBattler> &GetBattler() const = 0;
 };

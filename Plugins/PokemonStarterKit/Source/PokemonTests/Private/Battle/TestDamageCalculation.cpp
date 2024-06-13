@@ -1,16 +1,17 @@
 ﻿#include "Asserts.h"
+#include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Moves/Move.h"
-#include "Battle/Battle.h"
 
 using namespace fakeit;
 using namespace accessor;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak, "Unit Tests.Battle.TestDamageCalculation.PhysicalQuadWeak",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak,
+                                 "Unit Tests.Battle.TestDamageCalculation.PhysicalQuadWeak",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
@@ -36,10 +37,11 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("ICE"));
-    
+
     auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+        auto [Damage, Effeciveness, CriticalHit] =
+            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::SuperEffective, Effeciveness);
         CHECK_TRUE(Damage >= 168);
         CHECK_TRUE(Damage <= 198);
@@ -47,7 +49,8 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialResisted, "Unit Tests.Battle.TestDamageCalculation.SpecialResisted",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialResisted,
+                                 "Unit Tests.Battle.TestDamageCalculation.SpecialResisted",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
@@ -73,10 +76,11 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("DARK"));
-    
+
     auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+        auto [Damage, Effeciveness, CriticalHit] =
+            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::NotVeryEffective, Effeciveness);
         CHECK_TRUE(Damage >= 49);
         CHECK_TRUE(Damage <= 59);
@@ -84,7 +88,8 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab, "Unit Tests.Battle.TestDamageCalculation.PhysicalNoStab",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab,
+                                 "Unit Tests.Battle.TestDamageCalculation.PhysicalNoStab",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
@@ -110,10 +115,11 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(80);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
-    
+
     auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+        auto [Damage, Effeciveness, CriticalHit] =
+            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
         CHECK_TRUE(Damage >= 115);
         CHECK_TRUE(Damage <= 138);
@@ -121,7 +127,8 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialImmune, "Unit Tests.Battle.TestDamageCalculation.PhysicalNoStab",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialImmune,
+                                 "Unit Tests.Battle.TestDamageCalculation.PhysicalNoStab",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
@@ -129,14 +136,15 @@ bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
-    
+
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("GHOST")});
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
-    
+
     auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+        auto [Damage, Effeciveness, CriticalHit] =
+            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::NoEffect, Effeciveness);
         CHECK_EQUAL(0, Damage);
     }
@@ -151,12 +159,13 @@ bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
-    
+
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Status);
-    
+
     auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+        auto [Damage, Effeciveness, CriticalHit] =
+            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::NonDamaging, Effeciveness);
         CHECK_EQUAL(0, Damage);
     }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "BattlerSprite.generated.h"
 
 struct FMaterialInstanceWithSize;
@@ -20,12 +21,11 @@ class POKEMONBATTLE_API IBattlerSprite {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Set the battle sprite to the given material
      * @param Material The material to use for the battle sprite
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void SetBattleSprite(const FMaterialInstanceWithSize& Material);
-
+    void SetBattleSprite(const FMaterialInstanceWithSize &Material);
 };

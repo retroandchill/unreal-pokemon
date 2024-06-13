@@ -34,7 +34,7 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
 
     accessMember<AccessHandlerHelpText>(*Handler).get() = FText::FromStringView(TEXT("Sample help text"));
-    auto& HandlerSet = accessMember<AccessHandlerSubCommands>(*Handler).get();
+    auto &HandlerSet = accessMember<AccessHandlerSubCommands>(*Handler).get();
     HandlerSet = NewObject<UPartyMenuHandlerSet>();
     accessMember<AccessHandlerSetHandlers>(*HandlerSet).get() = {Handler};
     FText HelpTextOut;

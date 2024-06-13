@@ -19,38 +19,38 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set the battle that this screen holds
      * @param Battle The battle in question
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void SetBattle(const TScriptInterface<IBattle>& Battle);
-    
-protected:
+    void SetBattle(const TScriptInterface<IBattle> &Battle);
+
+  protected:
     /**
      * Slot a panel into the widget
      * @param Panel The panel being slotted
      * @param Side The side of battle that the panel is for (0 generally means the player, while 1 is the opponent)
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals", meta = (ForceAsFunctions))
-    void SlotPanel(UPokemonBattlePanel* Panel, int32 Side);
+    void SlotPanel(UPokemonBattlePanel *Panel, int32 Side);
 
-private:
+  private:
     /**
      * Add panels for a given side
      * @param Index The index of the side
      * @param Side The actual side itself
      */
-    void AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide>& Side);
+    void AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side);
 
     /**
      * Create the actual battle panel and slot it into the widget
      * @param Side The side of battle that we're adding to
      * @param Battler The battler to create the panel for
      */
-    void CreateBattlePanel(int32 Side, const TScriptInterface<IBattler>& Battler);
-    
+    void CreateBattlePanel(int32 Side, const TScriptInterface<IBattler> &Battler);
+
     /**
      * The battle that this screen is showing the information for
      */
@@ -69,6 +69,4 @@ private:
      */
     UPROPERTY()
     TArray<TObjectPtr<UPokemonBattlePanel>> Panels;
-    
-
 };

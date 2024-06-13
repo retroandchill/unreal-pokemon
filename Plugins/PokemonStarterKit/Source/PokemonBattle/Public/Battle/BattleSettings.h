@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "BattleSettings.generated.h"
 
 /**
@@ -37,5 +38,4 @@ struct POKEMONBATTLE_API FBattleSettings {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FBattlefieldSize BattlefieldSize;
-    
 };

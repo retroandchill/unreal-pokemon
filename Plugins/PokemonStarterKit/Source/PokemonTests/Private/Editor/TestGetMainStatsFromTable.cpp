@@ -2,8 +2,8 @@
 
 #include "Asserts.h"
 #include "DataManager.h"
-#include "PBS/ImportUtils.h"
 #include "Misc/AutomationTest.h"
+#include "PBS/ImportUtils.h"
 #include "Species/Stat.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "Unit Tests.PokemonUtilities.TestGetMainStatsFromTable",

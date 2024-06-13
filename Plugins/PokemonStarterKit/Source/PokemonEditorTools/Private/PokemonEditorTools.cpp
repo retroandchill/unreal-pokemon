@@ -8,9 +8,8 @@ void FPokemonEditorToolsModule::StartupModule() {
         FOnGetPropertyTypeCustomizationInstance::CreateLambda(&FPocketKeyCustomization::MakeInstance));
 }
 
-void FPokemonEditorToolsModule::ShutdownModule()
-{
+void FPokemonEditorToolsModule::ShutdownModule() {
     // No shutdown required
 }
-    
+
 IMPLEMENT_MODULE(FPokemonEditorToolsModule, PokemonEditorTools)

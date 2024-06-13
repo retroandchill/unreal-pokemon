@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/PokemonBattle.h"
-#include "Battle/BattleSide.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Mainpulation/RangeHelpers.h"
@@ -15,14 +14,17 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
 }
 
-void APokemonBattle::CreateWildBattle(const FPokemonDTO& Pokemon) {
+void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
     TScriptInterface<IBattle> Self = this;
     auto PlayerSide = GetWorld()->SpawnActor<AActor>(BattleSideClass.LoadSynchronous(), GetPlayerSidePosition());
-    Sides.Emplace_GetRef(PlayerSide)->Initialize(Self, UPokemonSubsystem::GetInstance(this).GetPlayer(), BattleSettings.BattlefieldSize.PlayerSide, true);
+    Sides.Emplace_GetRef(PlayerSide)
+        ->Initialize(Self, UPokemonSubsystem::GetInstance(this).GetPlayer(), BattleSettings.BattlefieldSize.PlayerSide,
+                     true);
     PlayerSide->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-    
+
     auto OpponentSide = GetWorld()->SpawnActor<AActor>(BattleSideClass.LoadSynchronous(), GetOpponentSidePosition());
-    Sides.Emplace_GetRef(OpponentSide)->Initialize(Self, UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon));
+    Sides.Emplace_GetRef(OpponentSide)
+        ->Initialize(Self, UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon));
     OpponentSide->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     IBattle::Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
 }
@@ -32,7 +34,7 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBa
     return this;
 }
 
-void APokemonBattle::JumpToBattleScene_Implementation(APlayerController* PlayerController) {
+void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
@@ -44,16 +46,16 @@ void APokemonBattle::StartBattle() {
     StartTurn();
 }
 
-void APokemonBattle::QueueAction(TUniquePtr<IBattleAction>&& Action) {
+void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
     auto &Battler = Action->GetBattler();
     auto BattlerId = Battler->GetInternalId();
     auto &ActionCount = CurrentActionCount.FindChecked(BattlerId);
     if (ExpectedActionCount.FindChecked(BattlerId) <= ActionCount) {
         UE_LOG(LogTemp, Error, TEXT("%s attempted to queue an action, but is already at capacity!"),
-            *Battler->GetNickname().ToString());
+               *Battler->GetNickname().ToString());
         return;
     }
-    
+
     FScopeLock Lock(&ActionMutex);
     ActionQueue.Add(MoveTemp(Action));
     ActionCount++;
@@ -63,7 +65,7 @@ bool APokemonBattle::ActionSelectionFinished() const {
     for (auto [ID, Count] : ExpectedActionCount) {
         if (CurrentActionCount[ID] < Count) {
             return false;
-        }    
+        }
     }
 
     return true;
@@ -73,26 +75,28 @@ bool APokemonBattle::ShouldIgnoreAbilities() const {
     return false;
 }
 
-void APokemonBattle::ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const {
+void APokemonBattle::ForEachSide(
+    const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const {
     for (int32 i = 0; i < Sides.Num(); i++) {
         Callback(i, Sides[i]);
     }
 }
 
-void APokemonBattle::ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
-    std::ranges::for_each(RangeHelpers::CreateRange(Sides)
-        | std::views::transform(&GetBattlers)
-        | std::ranges::views::join, Callback);
+void APokemonBattle::ForEachActiveBattler(
+    const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
+    std::ranges::for_each(
+        RangeHelpers::CreateRange(Sides) | std::views::transform(&GetBattlers) | std::ranges::views::join, Callback);
 }
 
-void APokemonBattle::ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const {
+void APokemonBattle::ForEachFieldEffect(
+    const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const {
 }
 
 bool APokemonBattle::FindGlobalAbility(FName AbilityID) const {
     return false;
 }
 
-APawn * APokemonBattle::GetBattlePawn() const {
+APawn *APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
 
@@ -115,7 +119,6 @@ void APokemonBattle::OpponentSendOutAnimation() {
     check(Sides.IsValidIndex(1))
     const auto &Side = Sides[1];
     ProcessOpponentSendOutAnimation(Side);
-    
 }
 
 void APokemonBattle::PlayerSendOut() {
@@ -138,10 +141,10 @@ void APokemonBattle::StartTurn() {
     TurnCount++;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
-    ForEachActiveBattler([this](const TScriptInterface<IBattler>& Battler) {
-            auto BattlerId = Battler->GetInternalId();
-            CurrentActionCount.Add(BattlerId, 0);
-            ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
-            Battler->SelectActions();
-        });
+    ForEachActiveBattler([this](const TScriptInterface<IBattler> &Battler) {
+        auto BattlerId = Battler->GetInternalId();
+        CurrentActionCount.Add(BattlerId, 0);
+        ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
+        Battler->SelectActions();
+    });
 }
