@@ -25,7 +25,15 @@ class POKEMONBATTLE_API IBattlerController {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-    virtual void InitiateActionSelection(const TScriptInterface<IBattler>& Battler) const = 0; 
+    /**
+     * Initiate the selection process for this battler
+     * @param Battler 
+     */
+    virtual void InitiateActionSelection(const TScriptInterface<IBattler>& Battler) const = 0;
 
-    virtual void BindOnActionReady(FActionReady&& QueueAction) = 0;;
+    /**
+     * Bind a callback to when an action is ready
+     * @param QueueAction The action to take when ready to act
+     */
+    virtual void BindOnActionReady(FActionReady&& QueueAction) = 0;
 };

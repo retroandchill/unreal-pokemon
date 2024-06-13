@@ -41,8 +41,16 @@ public:
      */
     virtual void StartBattle() = 0;
 
+    /**
+     * Add an action to the pending queue
+     * @param Action The action to take
+     */
     virtual void QueueAction(TUniquePtr<IBattleAction>&& Action) = 0;
 
+    /**
+     * Check if action selection is completed
+     * @return Is action selection done
+     */
     virtual bool ActionSelectionFinished() const = 0;
     
     /**

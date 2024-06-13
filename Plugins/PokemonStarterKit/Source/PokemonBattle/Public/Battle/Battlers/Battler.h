@@ -29,14 +29,39 @@ class POKEMONBATTLE_API IBattler {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    /**
+     * Create this battler with the given parameters
+     * @param Side The side that owns this battler
+     * @param Pokemon The Pokémon this wraps around
+     * @param ShowImmediately Whether or not this battler should be visible immediately upon being spawned
+     * @return 
+     */
     virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side, const TScriptInterface<IPokemon>& Pokemon = nullptr, bool ShowImmediately = false) = 0;
-    
+
+    /**
+     * Get the internal ID for this battler
+     * @return The unique ID of the battler
+     */
     virtual FGuid GetInternalId() const = 0;
 
+    /**
+     * Get the side that this battler is a part of
+     * @return The battler's side
+     */
     virtual TScriptInterface<IBattleSide> GetOwningSide() const = 0;
 
+    /**
+     * Get the battler's display name
+     * @return The display name of the battler
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
     virtual FText GetNickname() const = 0;
 
+    /**
+     * Get the Pokémon's gender
+     * @return The Pokémon's gender
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
     virtual EPokemonGender GetGender() const = 0;
     
     /**
@@ -168,6 +193,9 @@ public:
      */
     virtual void ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect>&)>& Callback) const = 0;
 
+    /**
+     * Show the battler's sprite in battle
+     */
     virtual void ShowSprite() const = 0;
 
 };

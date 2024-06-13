@@ -47,6 +47,10 @@ public:
     virtual TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
                                                      const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount = 1, bool ShowBackSprites = false) = 0;
 
+    /**
+     * Get the battle that owns this particular side
+     * @return The battle context for this side of combat
+     */
     virtual TScriptInterface<IBattle> GetOwningBattle() const = 0;
 
     /**
@@ -67,12 +71,24 @@ public:
      */
     virtual const TOptional<FText> &GetSendOutText() const = 0;
 
+    /**
+     * Is this side positioned to where the backsprites should be shown
+     * @return Should we show backsprites
+     */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     virtual bool ShowBackSprites() const = 0;
 
+    /**
+     * Make any hidden battler sprites visible. This should be called from the point in the animation where the Pokémon
+     * are shown emerging from their Poké Balls.
+     */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     virtual void SendOutBattlers() const = 0;
-    
+
+    /**
+     * Get the list of battlers for this side
+     * @return The battlers for this side.
+     */
     virtual const TArray<TScriptInterface<IBattler>>& GetBattlers() const = 0;
 
 };

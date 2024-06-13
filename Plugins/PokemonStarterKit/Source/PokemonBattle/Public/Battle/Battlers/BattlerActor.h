@@ -44,7 +44,6 @@ public:
     UFUNCTION(BlueprintPure, DisplayName = "Get HP Percent", Category = Stats)
     float GetHPPercent() const override;
     
-    
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetAttack() const override;
     
@@ -91,9 +90,15 @@ private:
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)
      */
     void SpawnSpriteActor(bool ShouldShow = false);
-    
+
+    /**
+     * The internal ID of the battler
+     */
     FGuid InternalId;
 
+    /**
+     * The side that owns this battler
+     */
     TWeakInterfacePtr<IBattleSide> OwningSide;
 
     /**
@@ -101,19 +106,34 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = "Battle|Classes", meta = (MustImplement = "BattlerSprite"))
     TSoftClassPtr<AActor> BattlerSpriteClass;
-    
+
+    /**
+     * The Pokémon that this battler wraps around
+     */
     UPROPERTY()
     TScriptInterface<IPokemon> WrappedPokemon;
 
+    /**
+     * The ability that this battler has
+     */
     UPROPERTY()
     TScriptInterface<IAbilityBattleEffect> Ability;
 
+    /**
+     * The hold item that this battler has
+     */
     UPROPERTY()
     TScriptInterface<IHoldItemBattleEffect> HoldItem;
 
+    /**
+     * The moves this battler knowns
+     */
     UPROPERTY()
     TArray<TScriptInterface<IBattleMove>> Moves;
 
+    /**
+     * The actor that creates the battler's sprite
+     */
     UPROPERTY()
     TObjectPtr<AActor> Sprite;
     

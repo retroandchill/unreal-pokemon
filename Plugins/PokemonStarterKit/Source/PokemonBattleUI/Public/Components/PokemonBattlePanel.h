@@ -43,12 +43,21 @@ private:
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> PokemonGender;
 
+    /**
+     * The widget to display the Pokémon's level
+     */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> PokemonLevel;
 
+    /**
+     * The widget that display's the HP percentage
+     */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UProgressBar> HPBar;
 
+    /**
+     * The battler this widget displays the information for
+     */
     UPROPERTY()
     TScriptInterface<IBattler> CurrentBattler;
 

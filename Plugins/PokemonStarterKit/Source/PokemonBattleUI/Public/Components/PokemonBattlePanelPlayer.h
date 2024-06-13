@@ -8,7 +8,7 @@
 
 class UNumberImageWidget;
 /**
- * The battle pannel for the player. Displays more information than the regular one.
+ * The battle panel for the player. Displays more information than the regular one.
  */
 UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattlePanelPlayer : public UPokemonBattlePanel {
@@ -18,12 +18,21 @@ public:
     void Refresh() override;
 
 private:
+    /**
+     * The widget for displaying the current HP of the battler
+     */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UNumberImageWidget> CurrentHP;
 
+    /**
+     * The widget for displaying the max HP of the battler
+     */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UNumberImageWidget> MaxHP;
 
+    /**
+     * The widget for display the Exp percentage of the battler
+     */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UProgressBar> ExpBar;
 
