@@ -3,6 +3,7 @@
 #include "Components/HPBar.h"
 
 TSharedRef<SWidget> UHPBar::RebuildWidget() {
+    bSetUp = true;
     UpdateBarMaterial();
     return Super::RebuildWidget();
 }
@@ -17,6 +18,24 @@ void UHPBar::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
 void UHPBar::SynchronizeProperties() {
     UpdateBarMaterial();
     Super::SynchronizeProperties();
+}
+
+void UHPBar::Tick(float DeltaTime) {
+    if (!bSetUp) {
+        return;    
+    }
+    
+    float Percent = GetPercent();
+    if (Percent == PreviousPercent) {
+        return;
+    }
+
+    PreviousPercent = Percent;
+    UpdateBarMaterial();
+}
+
+TStatId UHPBar::GetStatId() const {
+    RETURN_QUICK_DECLARE_CYCLE_STAT(UHPBar, STATGROUP_Tickables)
 }
 
 void UHPBar::UpdateBarMaterial() {

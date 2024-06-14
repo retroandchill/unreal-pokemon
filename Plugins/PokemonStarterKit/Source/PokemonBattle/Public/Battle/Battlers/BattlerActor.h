@@ -46,6 +46,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, DisplayName = "Get HP Percent", Category = Stats)
     float GetHPPercent() const override;
 
+    void TakeBattleDamage(int32 Damage) override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetAttack() const override;
 

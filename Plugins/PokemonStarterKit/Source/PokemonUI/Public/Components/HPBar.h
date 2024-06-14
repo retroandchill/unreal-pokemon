@@ -11,7 +11,7 @@
  * Progress Bar Widget that uses a special material instance to change the color of the bar based on the percent.
  */
 UCLASS()
-class POKEMONUI_API UHPBar : public UProgressBar {
+class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
     GENERATED_BODY()
 
   protected:
@@ -23,7 +23,11 @@ class POKEMONUI_API UHPBar : public UProgressBar {
 
     void SynchronizeProperties() override;
 
-  private:
+public:
+    void Tick(float DeltaTime) override;
+    TStatId GetStatId() const override;
+
+private:
     void UpdateBarMaterial();
 
     /**
@@ -43,6 +47,16 @@ class POKEMONUI_API UHPBar : public UProgressBar {
      */
     UPROPERTY(EditAnywhere, Category = "Style|Fill")
     TArray<float> PercentThresholds = {0.5f, 0.25f};
+
+    /**
+     * Get the previous percentage value for this object
+     */
+    float PreviousPercent = 0.f;
+
+    /**
+     * Flag that tells the game that the widget has been set up and can now tick
+     */
+    bool bSetUp = false;
 
     /**
      * The actual material held by the widget. This is used to dynamically update it during runtime without needing

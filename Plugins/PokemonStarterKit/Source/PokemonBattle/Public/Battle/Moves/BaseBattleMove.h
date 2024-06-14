@@ -24,6 +24,7 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
 
   protected:
     bool IsUsable_Implementation() const override;
+    TArray<TScriptInterface<IBattler>> GetAllPossibleTargets_Implementation(const TScriptInterface<IBattler> &User) const override;
     FText GetDisplayName_Implementation() const override;
     int32 GetCurrentPP_Implementation() const override;
     int32 GetMaxPP_Implementation() const override;

@@ -26,8 +26,10 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
     int32 GetPriority() const override;
     virtual FText GetActionMessage() const override;
 
+protected:
+    FActionResult ComputeResult() override;
+
 private:
-    
     /**
      * The move that this action owns
      */

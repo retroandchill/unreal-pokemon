@@ -9,6 +9,7 @@
 #include "Battle/Items/HoldItemBattleEffect.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
+#include "Battle/BattleSide.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 
@@ -25,6 +26,21 @@ TScriptInterface<IBattleMove> UBaseBattleMove::Initialize(const TScriptInterface
 
 bool UBaseBattleMove::IsUsable_Implementation() const {
     return WrappedMove->GetCurrentPP() > 0;
+}
+
+TArray<TScriptInterface<IBattler>> UBaseBattleMove::GetAllPossibleTargets_Implementation(
+    const TScriptInterface<IBattler> &User) const {
+    TArray<TScriptInterface<IBattler>> Targets;
+    auto UserSide = User->GetOwningSide();
+    auto UserId = User->GetInternalId();
+    auto &Battle = UserSide->GetOwningBattle();
+    Battle->ForEachActiveBattler([&Targets, &UserId](const TScriptInterface<IBattler>& Battler) {
+       if (Battler->GetInternalId() == UserId) {
+           return;
+       }
+        Targets.Emplace(Battler);
+    });
+    return Targets;
 }
 
 FText UBaseBattleMove::GetDisplayName_Implementation() const {
@@ -144,10 +160,10 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
                                                  const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target, int32 TargetCount,
                                                  FName Type, int32 BaseDamage, const FDamageEffects &Effects) {
-    ApplyAbilityMultipliers(Multipliers, User, Target, Type, BaseDamage);
-    ApplyHoldItemMultipliers(Multipliers, User, Target, Type, BaseDamage);
-    ApplyUserEffects(Multipliers, User, Target, Type, BaseDamage);
-    ApplyFieldEffects(Multipliers, User, Target, Type, BaseDamage);
+    //ApplyAbilityMultipliers(Multipliers, User, Target, Type, BaseDamage);
+    //ApplyHoldItemMultipliers(Multipliers, User, Target, Type, BaseDamage);
+    //ApplyUserEffects(Multipliers, User, Target, Type, BaseDamage);
+    //ApplyFieldEffects(Multipliers, User, Target, Type, BaseDamage);
     // TODO: Terrain Moves
     // TODO: Badge Multipliers
     ApplyMultiTargetModifier(Multipliers, TargetCount);
@@ -161,7 +177,7 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
     // TODO: Status Effects (Burn)
 
     // TODO: Aurora Veil, Reflect, Light Screen
-    ApplyTargetEffects(Multipliers, User, Target, Type, BaseDamage);
+    //ApplyTargetEffects(Multipliers, User, Target, Type, BaseDamage);
 
     ApplyAdditionalDamageModifiers(Multipliers, User, Target, TargetCount, Type, BaseDamage);
 }

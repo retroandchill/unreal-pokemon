@@ -52,8 +52,17 @@ void APokemonBattle::Tick(float DeltaSeconds) {
         if (ActionQueue.IsEmpty()) {
             Phase = Judging;
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting()) {
+            bActionMessagesDisplayed = false;
             DisplayAction(Action->GetActionMessage());
             Action->Execute();
+        } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult(); bActionMessagesDisplayed && ResultFuture.IsReady()) {
+            auto Result = ResultFuture.Consume();
+            for (auto &[Target, bHit, Damage] : Result.TargetResults) {
+                Target->TakeBattleDamage(Damage.Damage);
+            }
+
+            RefreshBattleHUD();
+            NextAction();
         }
     } else if (Phase == Judging) {
         // TODO: Actually judge the battle
@@ -162,7 +171,7 @@ void APokemonBattle::PlayerSendOutAnimation() {
 }
 
 void APokemonBattle::ApplyActionResult() {
-    NextAction();
+    bActionMessagesDisplayed = true;
 }
 
 void APokemonBattle::StartTurn() {

@@ -50,6 +50,8 @@ class POKEMONBATTLE_API IBattleSide {
                                                      const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount = 1,
                                                      bool ShowBackSprites = false) = 0;
 
+    virtual const FGuid& GetInternalId() const = 0;
+
     /**
      * Get the battle that owns this particular side
      * @return The battle context for this side of combat

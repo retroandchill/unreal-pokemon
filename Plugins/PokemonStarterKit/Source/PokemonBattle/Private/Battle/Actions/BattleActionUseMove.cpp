@@ -26,3 +26,18 @@ FText FBattleActionUseMove::GetActionMessage() const {
         IBattleMove::Execute_GetDisplayName(Move.GetObject())
     });
 }
+
+FActionResult FBattleActionUseMove::ComputeResult() {
+    FActionResult Result;
+
+    auto &User = GetBattler();
+    int32 TargetCount = Targets.Num();
+    for (auto &Target : Targets) {
+        auto &TargetResult = Result.TargetResults.Emplace_GetRef();
+        TargetResult.Target = Target;
+        TargetResult.bHit = true; // Everything will hit for now
+        TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
+    }
+    
+    return Result;
+}

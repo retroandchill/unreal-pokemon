@@ -36,6 +36,14 @@ class POKEMONBATTLE_API IBattleMove {
     virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle> &Battle,
                                                      const TScriptInterface<IMove> &Move) = 0;
 
+    /**
+     * Compute all possible targets for the move based on the given user information
+     * @param User The user of the move in question
+     * @return The found list of targets
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Usability)
+    TArray<TScriptInterface<IBattler>> GetAllPossibleTargets(const TScriptInterface<IBattler>& User) const;
+
     UFUNCTION(BlueprintNativeEvent, Category = Usability)
     bool IsUsable() const;
 

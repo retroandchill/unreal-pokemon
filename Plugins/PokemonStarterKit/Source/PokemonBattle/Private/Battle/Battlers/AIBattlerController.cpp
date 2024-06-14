@@ -32,6 +32,7 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // be best to store a map or a list in a Data Asset that has all of the checks that would be applied and the minimum
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
-    ActionReady.ExecuteIfBound(
-        MakeUnique<FBattleActionUseMove>(Battler, PossibleMoves[FMath::Rand() % PossibleMoves.Num()], TArray<TScriptInterface<IBattler>>()));
+    auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
+    auto Targets = IBattleMove::Execute_GetAllPossibleTargets(Move.GetObject(), Battler);
+    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
 }

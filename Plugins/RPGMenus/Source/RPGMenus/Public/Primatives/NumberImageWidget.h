@@ -29,6 +29,8 @@ class RPGMENUS_API UNumberImageWidget : public UWidget {
 #endif
 
   private:
+    void RefreshNumber();
+    
     /**
      * The number to display in the widget.
      */
@@ -45,4 +47,9 @@ class RPGMENUS_API UNumberImageWidget : public UWidget {
      * The box that serves as the widget contents
      */
     TSharedPtr<SHorizontalBox> ImageBox;
+
+    /**
+     * The actual images held by this widget
+     */
+    TArray<TSharedPtr<SImage>> Images;
 };

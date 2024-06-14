@@ -12,6 +12,7 @@
 
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
                                                       const TScriptInterface<IPokemon> &Pokemon, bool ShowBackSprites) {
+    InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;
     bShowBackSprites = ShowBackSprites;
@@ -30,6 +31,7 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
                                                       const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount,
                                                       bool ShowBackSprites) {
+    InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = PokemonCount;
     bShowBackSprites = ShowBackSprites;
@@ -52,6 +54,10 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     SendOutText = FText::FormatNamed(ShowBackSprites ? PlayerSendOutTextFormat : OpponentSendOutTextFormat,
                                      TEXT("Names"), TrainerName, TEXT("Pkmn"), Battlers[0]->GetNickname());
     return Side;
+}
+
+const FGuid & AActiveSide::GetInternalId() const {
+    return InternalId;
 }
 
 const TScriptInterface<IBattle> &AActiveSide::GetOwningBattle() const {

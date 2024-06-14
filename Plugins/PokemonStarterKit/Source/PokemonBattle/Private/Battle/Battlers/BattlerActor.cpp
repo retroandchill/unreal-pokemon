@@ -74,6 +74,10 @@ float ABattlerActor::GetHPPercent() const {
     return static_cast<float>(WrappedPokemon->GetCurrentHP()) / static_cast<float>(WrappedPokemon->GetMaxHP());
 }
 
+void ABattlerActor::TakeBattleDamage(int32 Damage) {
+    WrappedPokemon->SetCurrentHP(WrappedPokemon->GetCurrentHP() - Damage);
+}
+
 int32 ABattlerActor::GetAttack() const {
     // TODO: Don't use hard-coded string literals for these
     return WrappedPokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue();

@@ -9,7 +9,7 @@ UNumberImageWidget::UNumberImageWidget() {
 
 void UNumberImageWidget::SetNumber(uint32 NewNumber) {
     Number = NewNumber;
-    RebuildWidget();
+    RefreshNumber();   
 }
 
 TSharedRef<SWidget> UNumberImageWidget::RebuildWidget() {
@@ -18,7 +18,9 @@ TSharedRef<SWidget> UNumberImageWidget::RebuildWidget() {
     for (auto AsString = FString::FromInt(Number); auto Digit : AsString) {
         int32 Index = TChar<TCHAR>::ConvertCharDigitToInt(Digit);
         auto &Brush = NumberImages[Index];
-        ImageBox->AddSlot().SizeParam(FAuto()).HAlign(HAlign_Left).VAlign(VAlign_Top)[SNew(SImage).Image(&Brush)];
+        auto Image = SNew(SImage).Image(&Brush);
+        ImageBox->AddSlot().SizeParam(FAuto()).HAlign(HAlign_Left).VAlign(VAlign_Top)[Image];
+        Images.Emplace(Image);
     }
 
     return ImageBox.ToSharedRef();
@@ -37,4 +39,30 @@ void UNumberImageWidget::PostEditChangeProperty(FPropertyChangedEvent &PropertyC
 void UNumberImageWidget::PostEditChangeChainProperty(FPropertyChangedChainEvent &PropertyChangedEvent) {
     Super::PostEditChangeChainProperty(PropertyChangedEvent);
     RebuildWidget();
+}
+
+void UNumberImageWidget::RefreshNumber() {
+    if (ImageBox == nullptr) {
+        return;
+    }
+
+    auto AsString = FString::FromInt(Number);
+    while (Images.Num() > AsString.Len()) {
+        ImageBox->RemoveSlot(Images.Last().ToSharedRef());
+        Images.Pop();
+    }
+    
+    for (int32 i = 0; i < AsString.Len(); i++) {
+        auto Digit = AsString[i];
+        int32 Index = TChar<TCHAR>::ConvertCharDigitToInt(Digit);
+        auto &Brush = NumberImages[Index];
+
+        if (Images.IsValidIndex(i)) {
+            Images[i]->SetImage(&Brush);
+        } else {
+            auto Image = SNew(SImage).Image(&Brush);
+            ImageBox->AddSlot().SizeParam(FAuto()).HAlign(HAlign_Left).VAlign(VAlign_Top)[Image];
+            Images.Emplace(Image);
+        }
+    }
 }

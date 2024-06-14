@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActionResult.h"
 #include "UObject/Interface.h"
 
 class IBattler;
@@ -55,4 +56,10 @@ class POKEMONBATTLE_API IBattleAction {
      * @param Delegate The delegate to bind
      */
     virtual void BindToActionFinished(FOnActionFinished&& Delegate) = 0;
+
+    /**
+     * Get the pending result of the action once it is complete
+     * @return The result of the action once calculation has been completed
+     */
+    virtual TFuture<FActionResult> &GetActionResult() = 0;
 };

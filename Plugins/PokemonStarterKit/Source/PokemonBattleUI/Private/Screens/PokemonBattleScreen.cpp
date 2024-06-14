@@ -5,6 +5,7 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Actions/BattleActionUseMove.h"
+#include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Windows/BattleMoveSelect.h"
 #include "Windows/PokemonActionOptions.h"
@@ -51,6 +52,12 @@ void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler)
     MoveSelect->SetActive(true);
 }
 
+void UPokemonBattleScreen::Refresh() {
+    for (auto &Panel : Panels) {
+        Panel->Refresh();
+    }
+}
+
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
     Algo::ForEach(Side->GetBattlers(), std::bind_front(&UPokemonBattleScreen::CreateBattlePanel, this, Index));
 }
@@ -69,7 +76,8 @@ void UPokemonBattleScreen::OnActionSelected(int32) {
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
     const TScriptInterface<IBattleMove> &Move) {
-    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, TArray<TScriptInterface<IBattler>>()));
+    auto Targets = IBattleMove::Execute_GetAllPossibleTargets(Move.GetObject(), Battler);
+    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->SetActive(false);
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     check(SelectionIndex.IsSet())

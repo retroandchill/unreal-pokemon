@@ -22,6 +22,7 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     void Execute() override;
     bool IsExecuting() const override;
     void BindToActionFinished(FOnActionFinished&& Delegate) override;
+    TFuture<FActionResult> &GetActionResult() override;
 
 protected:
     /**
@@ -29,6 +30,12 @@ protected:
      * @return Delegate called when action execution is complete
      */
     FOnActionFinished &GetOnActionFinished();
+
+    /**
+     * Compute the actual result of the action on the targets
+     * @return 
+     */
+    virtual FActionResult ComputeResult() = 0;
     
   private:
     /**
@@ -45,4 +52,9 @@ protected:
      * Delegate called when action execution is complete
      */
     FOnActionFinished OnActionFinished;
+
+    /**
+     * The future for the result determination
+     */
+    TFuture<FActionResult> Result;
 };

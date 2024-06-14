@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/PokemonBattlePanel.h"
 #include "Screens/Screen.h"
-#include "Utilities/PokemonUIUtils.h"
 
 #include "PokemonBattleScreen.generated.h"
 
@@ -48,6 +47,12 @@ protected:
     UPokemonActionOptions* GetActionSelect() const;
 
     void SelectMove(const TScriptInterface<IBattler>& Battler);
+
+    /**
+     * Refresh the battle HUD
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void Refresh();
 
   protected:
     /**

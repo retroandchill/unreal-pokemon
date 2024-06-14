@@ -2,6 +2,8 @@
 
 #include "Battle/Actions/BattleActionBase.h"
 
+#include <functional>
+
 FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {
 }
 
@@ -15,6 +17,7 @@ const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const {
 
 void FBattleActionBase::Execute() {
     Executing = true;
+    Result = AsyncThread(std::bind_front(&FBattleActionBase::ComputeResult, this));
 }
 
 bool FBattleActionBase::IsExecuting() const {
@@ -23,6 +26,10 @@ bool FBattleActionBase::IsExecuting() const {
 
 void FBattleActionBase::BindToActionFinished(FOnActionFinished &&Delegate) {
     OnActionFinished = MoveTemp(Delegate);
+}
+
+TFuture<FActionResult> &FBattleActionBase::GetActionResult() {
+    return Result;
 }
 
 FOnActionFinished & FBattleActionBase::GetOnActionFinished() {

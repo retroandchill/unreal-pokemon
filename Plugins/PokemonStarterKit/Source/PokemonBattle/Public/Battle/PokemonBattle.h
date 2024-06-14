@@ -175,6 +175,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void CreateBattleHUD();
 
     /**
+     * Refresh the battle HUD so that it is up to date
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void RefreshBattleHUD();
+
+    /**
      * Display an action usage message with the given text
      * @param MessageText The text of the message to display
      */
@@ -267,4 +273,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * The current phase of battle
      */
     EBattlePhase Phase = EBattlePhase::Setup;
+
+    /**
+     * Have the action messages for the current action been displayed
+     */
+    bool bActionMessagesDisplayed = false;
 };

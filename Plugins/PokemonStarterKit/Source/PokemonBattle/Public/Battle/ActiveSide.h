@@ -24,6 +24,7 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
                                              const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount,
                                              bool ShowBackSprites) override;
 
+    const FGuid& GetInternalId() const override;
     const TScriptInterface<IBattle> &GetOwningBattle() const override;
     uint8 GetSideSize() const override;
     const FText &GetIntroText() const override;
@@ -42,6 +43,8 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
     FTransform GetBattlerSpawnPosition(uint8 Index);
 
   private:
+    FGuid InternalId;
+    
     /**
      * The class used to create the actual battler actors
      */

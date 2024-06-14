@@ -96,6 +96,12 @@ class POKEMONBATTLE_API IBattler {
     virtual float GetHPPercent() const = 0;
 
     /**
+     * Take damage and apply that change to the Pokémon's current HP
+     * @param Damage The damage that was taken
+     */
+    virtual void TakeBattleDamage(int32 Damage) = 0;
+
+    /**
      * Get the value of the Pokémon's physical attack.
      * @return The Pokémon's physical attack
      */
