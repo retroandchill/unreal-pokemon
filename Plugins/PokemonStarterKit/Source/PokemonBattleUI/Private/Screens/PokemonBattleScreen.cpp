@@ -5,8 +5,14 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
+#include "Windows/BattleMoveSelect.h"
 #include "Windows/PokemonActionOptions.h"
 #include <functional>
+
+void UPokemonBattleScreen::NativeConstruct() {
+    Super::NativeConstruct();
+    ActionSelect->GetOnConfirm().AddDynamic(this, &UPokemonBattleScreen::OnActionSelected);
+}
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     CurrentBattle = Battle;
@@ -22,10 +28,24 @@ void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battle
     }
 
     if (!ActionSelect->IsVisible()) {
-        ActionSelect->SetVisibility(ESlateVisibility::HitTestInvisible);
+        ActionSelect->SetBattler(Battler);
+        ActionSelect->SetVisibility(ESlateVisibility::Visible);
         ActionSelect->SetIndex(0);
         ActionSelect->SetActive(true);
     }
+}
+
+UPokemonActionOptions * UPokemonBattleScreen::GetActionSelect() const {
+    return ActionSelect;
+}
+
+void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler) {
+    ActionSelect->SetActive(true);
+    ActionSelect->SetVisibility(ESlateVisibility::Hidden);
+    MoveSelect->SetBattler(Battler);
+    MoveSelect->SetVisibility(ESlateVisibility::Visible);
+    MoveSelect->SetIndex(0);
+    MoveSelect->SetActive(true);
 }
 
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
@@ -38,4 +58,8 @@ void UPokemonBattleScreen::CreateBattlePanel(int32 Side, const TScriptInterface<
     Panel->SetBattler(Battler);
     SlotPanel(Panel, Side);
     Panels.Emplace(Panel);
+}
+
+void UPokemonBattleScreen::OnActionSelected(int32) {
+    ActionSelect->ExecuteCurrentHandler(this);
 }

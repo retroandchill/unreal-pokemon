@@ -27,6 +27,22 @@ bool UBaseBattleMove::IsUsable_Implementation() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
+FText UBaseBattleMove::GetDisplayName_Implementation() const {
+    return WrappedMove->GetMoveData().RealName;
+}
+
+int32 UBaseBattleMove::GetCurrentPP_Implementation() const {
+    return WrappedMove->GetCurrentPP();
+}
+
+int32 UBaseBattleMove::GetMaxPP_Implementation() const {
+    return WrappedMove->GetTotalPP();
+}
+
+FName UBaseBattleMove::GetDisplayType_Implementation() const {
+    return WrappedMove->GetType();
+}
+
 TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {
     return CurrentBattle;
 }

@@ -14,6 +14,10 @@ const FString &UAssetAssignmentSettings::GetTypeIconsPackageName() const {
     return TypeIconsPackageName;
 }
 
+const FString & UAssetAssignmentSettings::GetTypePanelsPackageName() const {
+    return TypePanelsPackageName;
+}
+
 const FString &UAssetAssignmentSettings::GetStatusIconsPackageName() const {
     return StatusIconsPackageName;
 }

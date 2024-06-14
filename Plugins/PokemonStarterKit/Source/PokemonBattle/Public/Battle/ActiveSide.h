@@ -24,7 +24,7 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
                                              const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount,
                                              bool ShowBackSprites) override;
 
-    TScriptInterface<IBattle> GetOwningBattle() const override;
+    const TScriptInterface<IBattle> &GetOwningBattle() const override;
     uint8 GetSideSize() const override;
     const FText &GetIntroText() const override;
     const TOptional<FText> &GetSendOutText() const override;
@@ -51,7 +51,8 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
     /**
      * The battle that owns this one
      */
-    TWeakInterfacePtr<IBattle> OwningBattle;
+    UPROPERTY()
+    TScriptInterface<IBattle> OwningBattle;
 
     uint8 SideSize = 1;
 

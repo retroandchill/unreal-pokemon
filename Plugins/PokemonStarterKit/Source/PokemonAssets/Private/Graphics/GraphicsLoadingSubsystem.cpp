@@ -104,7 +104,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName Trai
 }
 
 UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
-    return SpriteLoaders.TypeIconRepository->FetchAsset(Type);
+    return SpriteLoaders.TypeIconRepository.LoadSynchronous()->FetchAsset(Type);
 }
 
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView<FName> Types) const {
@@ -112,6 +112,10 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView
     TArray<UObject *> Ret;
     Algo::Transform(Types, Ret, std::bind_front(&UStaticImageRepository::FetchAsset, Repo));
     return Ret;
+}
+
+UObject * UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
+    return SpriteLoaders.TypePanelRepository.LoadSynchronous()->FetchAsset(Type);
 }
 
 UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {

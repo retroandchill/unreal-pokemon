@@ -6,14 +6,16 @@ FSpriteLoaders::FSpriteLoaders() = default;
 FSpriteLoaders::FSpriteLoaders(const FSpriteRepositories &Settings)
     : PokemonSpriteRepository(Settings.PokemonSpriteRepository),
       TrainerFrontSpriteRepository(Settings.TrainerFrontSpriteRepository),
-      TypeIconRepository(Settings.TypeIconRepository), StatusIconRepository(Settings.StatusIconRepository),
-      SummaryBallRepository(Settings.SummaryBallRepository), ItemIconRepository(Settings.ItemIconRepository) {
+      TypeIconRepository(Settings.TypeIconRepository), TypePanelRepository(Settings.TypePanelRepository),
+      StatusIconRepository(Settings.StatusIconRepository), SummaryBallRepository(Settings.SummaryBallRepository),
+      ItemIconRepository(Settings.ItemIconRepository) {
 }
 
 FSpriteLoaders &FSpriteLoaders::operator=(const FSpriteRepositories &Settings) {
     PokemonSpriteRepository = Settings.PokemonSpriteRepository;
     TrainerFrontSpriteRepository = Settings.TrainerFrontSpriteRepository;
     TypeIconRepository = Settings.TypeIconRepository;
+    TypePanelRepository = Settings.TypePanelRepository;
     StatusIconRepository = Settings.StatusIconRepository;
     SummaryBallRepository = Settings.SummaryBallRepository;
     ItemIconRepository = Settings.ItemIconRepository;

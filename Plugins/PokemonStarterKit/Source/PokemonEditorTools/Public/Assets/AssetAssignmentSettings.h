@@ -37,6 +37,13 @@ class POKEMONEDITORTOOLS_API UAssetAssignmentSettings : public UDeveloperSetting
     const FString &GetTypeIconsPackageName() const;
 
     /**
+     * Get the name of the package that contains the Type graphics
+     * @return The name of the package that contains the Type graphics
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Search Paths")
+    const FString &GetTypePanelsPackageName() const;
+
+    /**
      * Get the name of the package that contains the Status graphics
      * @return The name of the package that contains the Status graphics
      */
@@ -75,6 +82,12 @@ class POKEMONEDITORTOOLS_API UAssetAssignmentSettings : public UDeveloperSetting
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTypeIconsPackageName, Category = "Search Paths")
     FString TypeIconsPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintGetter = GetTypePanelsPackageName, Category = "Search Paths")
+    FString TypePanelsPackageName;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics

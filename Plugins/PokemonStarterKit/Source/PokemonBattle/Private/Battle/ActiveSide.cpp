@@ -18,9 +18,8 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Battlers.Reset();
     Trainers.Reset();
     TScriptInterface<IBattleSide> Side = this;
-    TScriptInterface<IBattlerController> Controller = NewObject<UAIBattlerController>(this);
     auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), GetBattlerSpawnPosition(0));
-    Battlers.Emplace_GetRef(Battler)->Initialize(Side, Controller, Pokemon, true);
+    Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pokemon, true);
     Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
     IntroMessageText = FText::FormatNamed(WildBattleTextFormat, TEXT("Pkmn"), Pokemon->GetNickname());
@@ -38,16 +37,10 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Trainers.Reset();
     Trainers.Emplace(Trainer);
     TScriptInterface<IBattleSide> Side = this;
-    TScriptInterface<IBattlerController> Controller;
-    if (ShowBackSprites) {
-        Controller = NewObject<UPlayerBattlerController>(this)->SetBattle(Battle);
-    } else {
-        Controller = NewObject<UAIBattlerController>(this);
-    }
     auto &Party = Trainer->GetParty();
     for (uint8 i = 0; i < PokemonCount; i++) {
         auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), GetBattlerSpawnPosition(i));
-        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Controller, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 
@@ -61,8 +54,8 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     return Side;
 }
 
-TScriptInterface<IBattle> AActiveSide::GetOwningBattle() const {
-    return OwningBattle.ToScriptInterface();
+const TScriptInterface<IBattle> &AActiveSide::GetOwningBattle() const {
+    return OwningBattle;
 }
 
 uint8 AActiveSide::GetSideSize() const {

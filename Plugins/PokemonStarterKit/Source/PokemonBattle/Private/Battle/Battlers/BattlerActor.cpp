@@ -2,9 +2,12 @@
 
 #include "Battle/Battlers/BattlerActor.h"
 #include "Algo/ForEach.h"
+#include "Battle/Battle.h"
 #include "Battle/Battlers/BattlerSprite.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/BattlerController.h"
+#include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Mainpulation/RangeHelpers.h"
@@ -17,10 +20,9 @@ TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TSc
     return NewObject<UBaseBattleMove>(Battler)->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
 }
 
-TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side, const TScriptInterface<IBattlerController>& ControllerIn, 
+TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
                                                      const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately) {
     OwningSide = Side;
-    Controller = ControllerIn;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
     auto MoveBlock = Pokemon->GetMoveBlock();
@@ -28,6 +30,15 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
             std::views::transform(std::bind_front(&CreateBattleMove, this)) |
             RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
     SpawnSpriteActor(ShowImmediately);
+
+    auto &Battle = OwningSide->GetOwningBattle();
+    if (OwningSide->ShowBackSprites()) {
+        Controller = NewObject<UPlayerBattlerController>(this)->SetBattle(Battle);
+    } else {
+        Controller = NewObject<UAIBattlerController>(this);
+    }
+    Controller->BindOnActionReady(FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
+    
     return this;
 }
 

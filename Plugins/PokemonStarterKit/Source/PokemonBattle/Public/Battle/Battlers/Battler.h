@@ -34,13 +34,11 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Create this battler with the given parameters
      * @param Side The side that owns this battler
-     * @param ControllerIn The controller that is used to select actions
      * @param Pokemon The Pokémon this wraps around
      * @param ShowImmediately Whether or not this battler should be visible immediately upon being spawned
      * @return
      */
     virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                                  const TScriptInterface<IBattlerController>& ControllerIn,
                                                   const TScriptInterface<IPokemon> &Pokemon = nullptr, bool ShowImmediately = false) = 0;
 
     /**

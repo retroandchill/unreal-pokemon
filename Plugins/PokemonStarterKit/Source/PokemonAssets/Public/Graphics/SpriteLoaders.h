@@ -33,6 +33,12 @@ struct POKEMONASSETS_API FSpriteLoaders {
     TSoftObjectPtr<UStaticImageRepository> TypeIconRepository;
 
     /**
+     * The path to the repository data asset used to get the information for move selection buttons.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders")
+    TSoftObjectPtr<UStaticImageRepository> TypePanelRepository;
+
+    /**
      * The path to the repository data asset used to get the status icons.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders")

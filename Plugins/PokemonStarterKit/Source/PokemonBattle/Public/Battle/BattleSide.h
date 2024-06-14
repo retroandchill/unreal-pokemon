@@ -54,7 +54,7 @@ class POKEMONBATTLE_API IBattleSide {
      * Get the battle that owns this particular side
      * @return The battle context for this side of combat
      */
-    virtual TScriptInterface<IBattle> GetOwningBattle() const = 0;
+    virtual const TScriptInterface<IBattle> &GetOwningBattle() const = 0;
 
     /**
      * The capacity for battlers on a given side.

@@ -113,6 +113,13 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     TArray<UObject *> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
 
     /**
+     * Get the panel graphic for a singular type.
+     * @param Type The type to get the panel for.
+     * @return The found panel graphic.
+     */
+    UObject *GetTypePanelGraphic(FName Type) const;
+
+    /**
      * Get the icon for a Poké Ball as shown in the summary screen.
      * @param PokeBall The Poké Ball
      * @return The found icon.

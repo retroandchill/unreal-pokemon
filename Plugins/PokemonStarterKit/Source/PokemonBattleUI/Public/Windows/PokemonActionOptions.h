@@ -7,6 +7,8 @@
 
 #include "PokemonActionOptions.generated.h"
 
+class UPokemonBattleScreen;
+class IBattler;
 class UBattleMenuOption;
 class UBattleMenuHandler;
 /**
@@ -18,6 +20,21 @@ class POKEMONBATTLEUI_API UPokemonActionOptions : public USelectableWidget {
 
 public:
     TSharedRef<SWidget> RebuildWidget() override;
+
+    const TScriptInterface<IBattler> &GetCurrentBattler() const;
+
+    /**
+     * Set the current battler for this widget
+     * @param Battler The current battler 
+     */
+    void SetBattler(const TScriptInterface<IBattler>& Battler);
+
+    
+    /**
+     * Execute the handler at the current index
+     * @param Screen The battle context to invoke for the handler
+     */
+    void ExecuteCurrentHandler(UPokemonBattleScreen* Screen);
 
 protected:
     int32 GetItemCount_Implementation() const override;
@@ -36,7 +53,13 @@ private:
      * @param MenuHandler The handler to use as the blueprint for making the option
      * @return The created option
      */
-    TObjectPtr<UBattleMenuOption> CreateMenuOption(const UBattleMenuHandler* MenuHandler);
+    void CreateMenuOption(const UBattleMenuHandler *MenuHandler);
+
+    /**
+     * The current battler who is selecting
+     */
+    UPROPERTY()
+    TScriptInterface<IBattler> CurrentBattler;
     
     /**
      * The class used to spawn options into the menu

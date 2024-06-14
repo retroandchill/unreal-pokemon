@@ -40,6 +40,26 @@ class POKEMONBATTLE_API IBattleMove {
     bool IsUsable() const;
 
     /**
+     * Get the display name for the move
+     * @return The name to show to the user
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    FText GetDisplayName() const;
+
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    int32 GetCurrentPP() const;
+
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    int32 GetMaxPP() const;
+
+    /**
+     * Get the display type for the move
+     * @return The type to show to the user
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    FName GetDisplayType() const;
+
+    /**
      * Get the active battle that owns this one
      * @return The current owning battle for this move
      */

@@ -13,5 +13,7 @@ UCLASS()
 class POKEMONBATTLEUI_API UFightHandler : public UBattleMenuHandler {
     GENERATED_BODY()
 
+protected:
+    void OnSelected_Implementation(UPokemonBattleScreen *BattleScreen) override;
 
 };

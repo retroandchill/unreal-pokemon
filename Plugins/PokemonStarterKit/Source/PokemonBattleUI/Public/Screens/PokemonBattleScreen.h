@@ -9,6 +9,7 @@
 
 #include "PokemonBattleScreen.generated.h"
 
+class UBattleMoveSelect;
 class UPokemonActionOptions;
 class IBattleSide;
 class IBattle;
@@ -20,6 +21,9 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
+protected:
+    void NativeConstruct() override;
+    
   public:
     /**
      * Set the battle that this screen holds
@@ -34,6 +38,15 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void SelectAction(const TScriptInterface<IBattler>& Battler);
+
+    /**
+     * Get the action select widget 
+     * @return Get the action select widget
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Selection")
+    UPokemonActionOptions* GetActionSelect() const;
+
+    void SelectMove(const TScriptInterface<IBattler>& Battler);
 
   protected:
     /**
@@ -60,10 +73,23 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     void CreateBattlePanel(int32 Side, const TScriptInterface<IBattler> &Battler);
 
     /**
+     * Called when the fight command is selected
+     * @param Index The selected index
+     */
+    UFUNCTION()
+    void OnActionSelected(int32 Index);
+
+    /**
      * The widget that is used to select the options from the menu
      */
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintGetter = GetActionSelect, Category = "Widgets", meta = (BindWidget))
     TObjectPtr<UPokemonActionOptions> ActionSelect;
+
+    /**
+     * The widget that is used to select moves from
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UBattleMoveSelect> MoveSelect;
     
     /**
      * The battle that this screen is showing the information for

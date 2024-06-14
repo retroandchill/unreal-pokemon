@@ -109,6 +109,12 @@ struct FSpriteRepositories {
     FSoftObjectPath TypeIconRepository;
 
     /**
+     * The path to the repository data asset used to get the information for move selection buttons.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders", meta = (AllowedClasses = "StaticImageRepository"))
+    FSoftObjectPath TypePanelRepository;
+
+    /**
      * The path to the repository data asset used to get the status icons.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders", meta = (AllowedClasses = "StaticImageRepository"))

@@ -18,7 +18,9 @@ void UAssetAssignmentSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     AssetRepositories.Emplace(AssetAssignmentSettings->GetTrainerSpritesPackageName(),
                               Settings.TrainerFrontSpriteRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetTypeIconsPackageName(),
-                              Settings.TypeIconRepository.TryLoad());
+    Settings.TypeIconRepository.TryLoad());
+    AssetRepositories.Emplace(AssetAssignmentSettings->GetTypePanelsPackageName(),
+                              Settings.TypePanelRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetStatusIconsPackageName(),
                               Settings.StatusIconRepository.TryLoad());
     AssetRepositories.Emplace(AssetAssignmentSettings->GetSummaryBallPackageName(),
