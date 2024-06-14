@@ -28,4 +28,11 @@ class POKEMONBATTLE_API IBattlerSprite {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void SetBattleSprite(const FMaterialInstanceWithSize &Material);
+
+    /**
+     * Faint the battler
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void Faint();
+    
 };

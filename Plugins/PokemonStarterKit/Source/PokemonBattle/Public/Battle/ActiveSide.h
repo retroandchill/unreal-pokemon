@@ -38,6 +38,8 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
 
     const TArray<TScriptInterface<IBattler>> &GetBattlers() const override;
 
+    bool CanBattle() const override;
+
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     FTransform GetBattlerSpawnPosition(uint8 Index);

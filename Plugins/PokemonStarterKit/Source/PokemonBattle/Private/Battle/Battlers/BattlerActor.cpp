@@ -78,6 +78,14 @@ void ABattlerActor::TakeBattleDamage(int32 Damage) {
     WrappedPokemon->SetCurrentHP(WrappedPokemon->GetCurrentHP() - Damage);
 }
 
+bool ABattlerActor::IsFainted() const {
+    return WrappedPokemon->IsFainted();
+}
+
+void ABattlerActor::Faint() const {
+    IBattlerSprite::Execute_Faint(Sprite);
+}
+
 int32 ABattlerActor::GetAttack() const {
     // TODO: Don't use hard-coded string literals for these
     return WrappedPokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue();

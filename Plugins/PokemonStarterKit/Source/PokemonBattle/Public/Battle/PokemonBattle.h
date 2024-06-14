@@ -193,11 +193,36 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     void ApplyActionResult();
 
+    /**
+     * Process the player's victory in battle
+     * @param IsTrainerBattle Is the battle a trainer battle
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
+    void ProcessPlayerVictory(bool IsTrainerBattle);
+
+    /**
+     * Process the player's loss in battle
+     * @param IsTrainerBattle Is the battle a trainer battle
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
+    void ProcessPlayerLoss(bool IsTrainerBattle);
+
+    /**
+     * Exit the battle scene and return to the map
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void ExitBattleScene();
+
   private:
     /**
      * Run at the head of every turn. Increments the turn count and initiates action selection.
      */
     void StartTurn();
+
+    /**
+     * Run all checks that need to be handled at the end of the turn
+     */
+    void EndTurn();
 
     /**
      * Process all of the actions about to be performed
@@ -208,6 +233,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     * Proceed to the next action in the queue
     */
     void NextAction();
+
+    /**
+     * Decide the battle for the side with the given index
+     * @param SideIndex The index for the battle side that cannot continue
+     */
+    void DecideBattle(int32 SideIndex);
 
     /**
      * The current turn number that we're on in battle.

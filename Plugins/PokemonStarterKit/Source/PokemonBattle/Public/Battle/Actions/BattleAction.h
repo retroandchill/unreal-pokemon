@@ -29,6 +29,12 @@ class POKEMONBATTLE_API IBattleAction {
     virtual const TScriptInterface<IBattler> &GetBattler() const = 0;
 
     /**
+     * Can this action actually be executed?
+     * @return Is the action still usable
+     */
+    virtual bool CanExecute() const = 0;
+
+    /**
      * Execute the action in question
      */
     virtual void Execute() = 0;

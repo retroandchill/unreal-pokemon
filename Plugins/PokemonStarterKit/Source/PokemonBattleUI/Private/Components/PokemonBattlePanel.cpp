@@ -13,6 +13,12 @@ void UPokemonBattlePanel::SetBattler(const TScriptInterface<IBattler> &Battler) 
 
 void UPokemonBattlePanel::Refresh() {
     check(CurrentBattler != nullptr)
+    if (CurrentBattler->IsFainted()) {
+        SetVisibility(ESlateVisibility::Hidden);
+    } else {
+        SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    }
+    
     PokemonName->SetText(CurrentBattler->GetNickname());
     PokemonLevel->SetText(FText::FromString(FString::FromInt(CurrentBattler->GetPokemonLevel())));
     HPBar->SetPercent(CurrentBattler->GetHPPercent());

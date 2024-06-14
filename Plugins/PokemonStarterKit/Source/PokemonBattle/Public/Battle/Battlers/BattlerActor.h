@@ -49,6 +49,11 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void TakeBattleDamage(int32 Damage) override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
+    bool IsFainted() const override;
+
+    virtual void Faint() const;
+
+    UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetAttack() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)

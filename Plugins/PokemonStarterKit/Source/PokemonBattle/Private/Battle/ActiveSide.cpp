@@ -6,6 +6,7 @@
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
+#include "Mainpulation/RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
@@ -86,4 +87,14 @@ void AActiveSide::SendOutBattlers() const {
 
 const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
     return Battlers;
+}
+
+bool AActiveSide::CanBattle() const {
+    for (const auto& Battler : Battlers) {
+        if (!Battler->IsFainted()) {
+            return true;
+        }
+    }
+
+    return false;
 }

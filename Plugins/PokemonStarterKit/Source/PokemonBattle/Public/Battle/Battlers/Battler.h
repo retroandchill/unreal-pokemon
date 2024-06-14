@@ -102,6 +102,18 @@ class POKEMONBATTLE_API IBattler {
     virtual void TakeBattleDamage(int32 Damage) = 0;
 
     /**
+     * Check to see if the battler in question has fainted
+     * @return Has the Pokémon fainted
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual bool IsFainted() const = 0;
+
+    /**
+     * Visually faint the battler
+     */
+    virtual void Faint() const = 0;
+
+    /**
      * Get the value of the Pokémon's physical attack.
      * @return The Pokémon's physical attack
      */

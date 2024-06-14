@@ -14,6 +14,10 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
 }
 
+static bool IsNotFainted(const TScriptInterface<IBattler>& Battler) {
+    return !Battler->IsFainted();
+}
+
 void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
     TScriptInterface<IBattle> Self = this;
     auto PlayerSide = GetWorld()->SpawnActor<AActor>(BattleSideClass.LoadSynchronous(), GetPlayerSidePosition());
@@ -52,21 +56,27 @@ void APokemonBattle::Tick(float DeltaSeconds) {
         if (ActionQueue.IsEmpty()) {
             Phase = Judging;
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting()) {
-            bActionMessagesDisplayed = false;
-            DisplayAction(Action->GetActionMessage());
-            Action->Execute();
+            if (Action->CanExecute()) {
+                bActionMessagesDisplayed = false;
+                DisplayAction(Action->GetActionMessage());
+                Action->Execute();
+            } else {
+                ActionQueue.Pop();
+            }
         } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult(); bActionMessagesDisplayed && ResultFuture.IsReady()) {
             auto Result = ResultFuture.Consume();
             for (auto &[Target, bHit, Damage] : Result.TargetResults) {
                 Target->TakeBattleDamage(Damage.Damage);
+                if (Target->IsFainted()) {
+                    Target->Faint();
+                }
             }
 
             RefreshBattleHUD();
             NextAction();
         }
     } else if (Phase == Judging) {
-        // TODO: Actually judge the battle
-        StartTurn();
+        EndTurn();
     }
 }
 
@@ -113,8 +123,10 @@ void APokemonBattle::ForEachSide(
 
 void APokemonBattle::ForEachActiveBattler(
     const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
-    std::ranges::for_each(
-        RangeHelpers::CreateRange(Sides) | std::views::transform(&GetBattlers) | std::ranges::views::join, Callback);
+    std::ranges::for_each(RangeHelpers::CreateRange(Sides)
+        | std::views::transform(&GetBattlers)
+        | std::ranges::views::join
+        | std::views::filter(&IsNotFainted), Callback);
 }
 
 void APokemonBattle::ForEachFieldEffect(
@@ -174,6 +186,11 @@ void APokemonBattle::ApplyActionResult() {
     bActionMessagesDisplayed = true;
 }
 
+void APokemonBattle::ExitBattleScene() {
+    auto PlayerController = BattlePawn->GetController();
+    PlayerController->Possess(StoredPlayerPawn);
+}
+
 void APokemonBattle::StartTurn() {
     TurnCount++;
     ExpectedActionCount.Reset();
@@ -185,6 +202,16 @@ void APokemonBattle::StartTurn() {
         ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
         Battler->SelectActions();
     });
+}
+
+void APokemonBattle::EndTurn() {
+    for (int32 i = 0; i < Sides.Num(); i++) {
+        if (!Sides[i]->CanBattle()) {
+            DecideBattle(i);
+            return;
+        }
+    }
+    StartTurn();
 }
 
 void APokemonBattle::BeginActionProcessing() {
@@ -213,4 +240,13 @@ void APokemonBattle::BeginActionProcessing() {
 
 void APokemonBattle::NextAction() {
     ActionQueue.Pop();
+}
+
+void APokemonBattle::DecideBattle(int32 SideIndex) {
+    Phase = EBattlePhase::Decided;
+    if (SideIndex == 0) {
+        ProcessPlayerLoss(false);
+    } else {
+        ProcessPlayerVictory(false);
+    }
 }

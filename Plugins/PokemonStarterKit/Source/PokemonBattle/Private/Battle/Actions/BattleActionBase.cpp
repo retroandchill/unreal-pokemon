@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Actions/BattleActionBase.h"
+#include "Battle/Battlers/Battler.h"
 
 #include <functional>
 
@@ -13,6 +14,10 @@ void FBattleActionBase::AddReferencedObjects(FReferenceCollector &Collector) {
 
 const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const {
     return Battler;
+}
+
+bool FBattleActionBase::CanExecute() const {
+    return !Battler->IsFainted();
 }
 
 void FBattleActionBase::Execute() {

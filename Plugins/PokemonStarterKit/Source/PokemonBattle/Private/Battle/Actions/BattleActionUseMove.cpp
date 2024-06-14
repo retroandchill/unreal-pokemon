@@ -33,6 +33,10 @@ FActionResult FBattleActionUseMove::ComputeResult() {
     auto &User = GetBattler();
     int32 TargetCount = Targets.Num();
     for (auto &Target : Targets) {
+        if (Target->IsFainted()) {
+            continue;
+        }
+        
         auto &TargetResult = Result.TargetResults.Emplace_GetRef();
         TargetResult.Target = Target;
         TargetResult.bHit = true; // Everything will hit for now
