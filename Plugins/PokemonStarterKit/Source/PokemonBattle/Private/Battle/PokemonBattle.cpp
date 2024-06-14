@@ -4,11 +4,11 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Mainpulation/RangeHelpers.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
+#include <functional>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -26,7 +26,7 @@ void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
     Sides.Emplace_GetRef(OpponentSide)
         ->Initialize(Self, UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon));
     OpponentSide->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-    IBattle::Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
+    Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
 }
 
 TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) {
@@ -35,10 +35,27 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBa
 }
 
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
+    Phase = EBattlePhase::Setup;
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
     PlayBattleIntro();
+}
+
+void APokemonBattle::Tick(float DeltaSeconds) {
+    using enum EBattlePhase;
+    Super::Tick(DeltaSeconds);
+
+    if (Phase == Selecting && ActionSelectionFinished()) {
+        GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("Action selection complete!"));
+        BeginActionProcessing();
+    } else if (Phase == Actions) {
+        if (ActionQueue.IsEmpty()) {
+            
+        } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting()) {
+            Action->Execute();
+        }
+    }
 }
 
 void APokemonBattle::StartBattle() {
@@ -57,7 +74,7 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
     }
 
     FScopeLock Lock(&ActionMutex);
-    ActionQueue.Add(MoveTemp(Action));
+    SelectedActions.Add(MoveTemp(Action));
     ActionCount++;
 }
 
@@ -141,10 +158,39 @@ void APokemonBattle::StartTurn() {
     TurnCount++;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
+    Phase = EBattlePhase::Selecting;
     ForEachActiveBattler([this](const TScriptInterface<IBattler> &Battler) {
         auto BattlerId = Battler->GetInternalId();
         CurrentActionCount.Add(BattlerId, 0);
         ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
         Battler->SelectActions();
     });
+}
+
+void APokemonBattle::BeginActionProcessing() {
+    Phase = EBattlePhase::Actions;
+    SelectedActions.Sort([](const TUniquePtr<IBattleAction>& A, const TUniquePtr<IBattleAction>& B) {
+        if (A->GetPriority() > B->GetPriority()) {
+            return true;
+        }
+
+        int32 SpeedA = A->GetBattler()->GetSpeed();
+        int32 SpeedB = B->GetBattler()->GetSpeed();
+        if (SpeedA == SpeedB) {
+            return FMath::RandBool();
+        }
+        
+        return SpeedA > SpeedB;
+    });
+    
+    for (auto& Action : SelectedActions) {
+        Action->BindToActionFinished(FOnActionFinished::CreateLambda(std::bind_front(&APokemonBattle::NextAction, this)));
+        ActionQueue.Enqueue(MoveTemp(Action));
+    }
+    SelectedActions.Reset();
+    
+}
+
+void APokemonBattle::NextAction() {
+    ActionQueue.Pop();
 }

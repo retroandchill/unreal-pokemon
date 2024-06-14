@@ -60,6 +60,13 @@ class POKEMONBATTLE_API IBattleMove {
     FName GetDisplayType() const;
 
     /**
+     * Get the priority for the move
+     * @return The priority of the move
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    int32 GetPriority() const;
+
+    /**
      * Get the active battle that owns this one
      * @return The current owning battle for this move
      */

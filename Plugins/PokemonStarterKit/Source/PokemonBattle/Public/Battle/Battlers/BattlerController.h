@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Actions/BattleAction.h"
 #include "UObject/Interface.h"
 
 #include "BattlerController.generated.h"
 
 class IBattler;
-class IBattleAction;
 
 DECLARE_DELEGATE_OneParam(FActionReady, TUniquePtr<IBattleAction> &&);
 

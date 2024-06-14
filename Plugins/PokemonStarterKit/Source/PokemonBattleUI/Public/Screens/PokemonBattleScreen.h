@@ -9,6 +9,7 @@
 
 #include "PokemonBattleScreen.generated.h"
 
+class IBattleMove;
 class UBattleMoveSelect;
 class UPokemonActionOptions;
 class IBattleSide;
@@ -78,6 +79,20 @@ protected:
      */
     UFUNCTION()
     void OnActionSelected(int32 Index);
+
+    /**
+     * Called when a move is selected on a battler
+     * @param Battler The battler to use the move
+     * @param Move The selected move
+     */
+    UFUNCTION()
+    void OnMoveSelected(const TScriptInterface<IBattler>& Battler, const TScriptInterface<IBattleMove>& Move);
+
+    /**
+     * Called when the player cancels move selection
+     */
+    UFUNCTION()
+    void OnMoveCanceled();
 
     /**
      * The widget that is used to select the options from the menu

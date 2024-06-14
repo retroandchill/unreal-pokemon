@@ -59,6 +59,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     int32 GetSpecialDefense() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetSpeed() const override;
+
+    UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)

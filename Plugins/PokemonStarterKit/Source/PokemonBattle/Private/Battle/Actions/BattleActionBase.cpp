@@ -12,3 +12,19 @@ void FBattleActionBase::AddReferencedObjects(FReferenceCollector &Collector) {
 const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const {
     return Battler;
 }
+
+void FBattleActionBase::Execute() {
+    Executing = true;
+}
+
+bool FBattleActionBase::IsExecuting() const {
+    return Executing;
+}
+
+void FBattleActionBase::BindToActionFinished(FOnActionFinished &&Delegate) {
+    OnActionFinished = MoveTemp(Delegate);
+}
+
+FOnActionFinished & FBattleActionBase::GetOnActionFinished() {
+    return OnActionFinished;
+}

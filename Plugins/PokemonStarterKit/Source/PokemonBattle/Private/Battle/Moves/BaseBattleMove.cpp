@@ -43,6 +43,10 @@ FName UBaseBattleMove::GetDisplayType_Implementation() const {
     return WrappedMove->GetType();
 }
 
+int32 UBaseBattleMove::GetPriority_Implementation() const {
+    return WrappedMove->GetMoveData().Priority;
+}
+
 TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {
     return CurrentBattle;
 }

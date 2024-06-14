@@ -9,9 +9,14 @@
 #include <functional>
 
 void UBattleMoveSelect::SetBattler(const TScriptInterface<IBattler> &NewBattler) {
+    CurrentBattler = NewBattler;
     Algo::ForEach(MovePanels, &UWidget::RemoveFromParent);
     MovePanels.Reset();
     Algo::ForEach(NewBattler->GetMoves(), std::bind_front(&UBattleMoveSelect::CreateMovePanel, this));
+}
+
+FOnMoveSelected & UBattleMoveSelect::GetOnMoveSelected() {
+    return OnMoveSelected;
 }
 
 int32 UBattleMoveSelect::GetItemCount_Implementation() const {
@@ -27,6 +32,12 @@ void UBattleMoveSelect::OnSelectionChange_Implementation(int32 OldIndex, int32 N
     if (MovePanels.IsValidIndex(NewIndex)) {
         MovePanels[NewIndex]->OnSelected();
     }
+}
+
+void UBattleMoveSelect::ProcessConfirm_Implementation(int32 CurrentIndex) {
+    Super::ProcessConfirm_Implementation(CurrentIndex);
+    check(MovePanels.IsValidIndex(CurrentIndex))
+    OnMoveSelected.Broadcast(CurrentBattler, MovePanels[CurrentIndex]->GetMove());
 }
 
 void UBattleMoveSelect::CreateMovePanel(const TScriptInterface<IBattleMove> &Move) {

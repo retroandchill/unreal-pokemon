@@ -15,6 +15,38 @@ class IBattleSide;
 class ITrainer;
 
 /**
+ * Enum for the various phases of battle
+ */
+UENUM(BlueprintType)
+enum class EBattlePhase : uint8 {
+    /**
+     * The battle is still being set up
+     */
+    Setup,
+
+    /**
+     * Moves are currently being selected
+     */
+    Selecting,
+
+    /**
+     * Actions are currently being executed
+     */
+    Actions,
+
+    /**
+     * The field is being evaluated to check if an outcome can be decided or if the battle needs to go on for another
+     * turn
+     */
+    Judging,
+
+    /**
+     * The battle has been decided, tear down must now take place
+     */
+    Decided
+};
+
+/**
  * The actual battle class used for battle flow.
  */
 UCLASS(Abstract)
@@ -33,6 +65,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
   protected:
     void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
+
+    void Tick(float DeltaSeconds) override;
 
   public:
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
@@ -146,6 +180,16 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void StartTurn();
 
     /**
+     * Process all of the actions about to be performed
+     */
+    void BeginActionProcessing();
+
+    /**
+     * Proceed to the next action in the queue
+     */
+    void NextAction();
+
+    /**
      * The current turn number that we're on in battle.
      */
     uint32 TurnCount = 0;
@@ -174,9 +218,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     FCriticalSection ActionMutex;
 
     /**
-     * Collection used to serve as the queue for actions.
+     * Collection used to serve as the holding container for pending.
      */
-    TArray<TUniquePtr<IBattleAction>> ActionQueue;
+    TArray<TUniquePtr<IBattleAction>> SelectedActions;
 
     /**
      * The current number of actions that have been submitted
@@ -189,6 +233,11 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     TMap<FGuid, uint8> ExpectedActionCount;
 
     /**
+     * The actual queue of actions to be executed
+     */
+    TQueue<TUniquePtr<IBattleAction>> ActionQueue;
+
+    /**
      * This is the pawn to take control of when the battle is initiated.
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetBattlePawn, Category = "Battle|Context")
@@ -199,4 +248,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UPROPERTY()
     TObjectPtr<APawn> StoredPlayerPawn;
+
+    /**
+     * The current phase of battle
+     */
+    EBattlePhase Phase = EBattlePhase::Setup;
 };

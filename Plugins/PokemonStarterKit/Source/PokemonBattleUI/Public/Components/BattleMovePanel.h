@@ -18,6 +18,12 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public USelectableOption {
 
 public:
     /**
+     * Get the move for this panel
+     * @return The move that this panel represents
+     */
+    const TScriptInterface<IBattleMove>& GetMove() const;
+    
+    /**
      * Set the move this panel represents
      * @param MoveIn The move to select
      */

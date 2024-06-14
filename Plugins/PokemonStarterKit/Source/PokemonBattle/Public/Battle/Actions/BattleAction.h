@@ -8,6 +8,11 @@
 class IBattler;
 
 /**
+ * Delegate called when an action is finished
+ */
+DECLARE_DELEGATE(FOnActionFinished);
+
+/**
  * Represents an action to be taken in battle.
  */
 class POKEMONBATTLE_API IBattleAction {
@@ -21,4 +26,27 @@ class POKEMONBATTLE_API IBattleAction {
      * @return The owning battler
      */
     virtual const TScriptInterface<IBattler> &GetBattler() const = 0;
+
+    /**
+     * Execute the action in question
+     */
+    virtual void Execute() = 0;
+
+    /**
+     * Is this action currently executing?
+     * @return Is the action currently executing?
+     */
+    virtual bool IsExecuting() const = 0;
+
+    /**
+     * Get the action's priority in battle
+     * @return The priority of the action
+     */
+    virtual int32 GetPriority() const = 0;
+
+    /**
+     * Bind a delegate to the completion of the action
+     * @param Delegate The delegate to bind
+     */
+    virtual void BindToActionFinished(FOnActionFinished&& Delegate) = 0;
 };

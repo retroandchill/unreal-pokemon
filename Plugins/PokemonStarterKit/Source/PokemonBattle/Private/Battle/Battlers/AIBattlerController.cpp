@@ -33,5 +33,5 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
     ActionReady.ExecuteIfBound(
-        MakeUnique<FBattleActionUseMove>(Battler, PossibleMoves[FMath::Rand() % PossibleMoves.Num()]));
+        MakeUnique<FBattleActionUseMove>(Battler, PossibleMoves[FMath::Rand() % PossibleMoves.Num()], TArray<TScriptInterface<IBattler>>()));
 }

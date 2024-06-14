@@ -124,6 +124,13 @@ class POKEMONBATTLE_API IBattler {
     virtual int32 GetSpecialDefense() const = 0;
 
     /**
+     * Get the value of the Pokémon's speed
+     * @return The Pokémon's speed
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 GetSpeed() const = 0;
+
+    /**
      * Get the percent value of Exp to a level up
      * @return The Pokémon's exp to level up percentage
      */

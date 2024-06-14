@@ -19,10 +19,30 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
 
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     const TScriptInterface<IBattler> &GetBattler() const override;
+    void Execute() override;
+    bool IsExecuting() const override;
+    void BindToActionFinished(FOnActionFinished&& Delegate) override;
 
+protected:
+    /**
+     * Get the on action finished delegate
+     * @return Delegate called when action execution is complete
+     */
+    FOnActionFinished &GetOnActionFinished();
+    
   private:
     /**
      * The battler that owns this action
      */
     TScriptInterface<IBattler> Battler;
+
+    /**
+     * The current state of execution for a given action
+     */
+    bool Executing = false;
+
+    /**
+     * Delegate called when action execution is complete
+     */
+    FOnActionFinished OnActionFinished;
 };

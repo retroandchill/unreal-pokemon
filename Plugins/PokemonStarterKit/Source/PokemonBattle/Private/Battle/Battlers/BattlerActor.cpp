@@ -91,6 +91,10 @@ int32 ABattlerActor::GetSpecialDefense() const {
     return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue();
 }
 
+int32 ABattlerActor::GetSpeed() const {
+    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPEED"))->GetStatValue();
+}
+
 float ABattlerActor::GetExpPercent() const {
     return WrappedPokemon->GetStatBlock()->GetExpPercent();
 }

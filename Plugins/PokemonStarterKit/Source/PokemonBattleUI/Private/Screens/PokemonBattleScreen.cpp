@@ -4,6 +4,7 @@
 #include "Algo/ForEach.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Actions/BattleActionUseMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Windows/BattleMoveSelect.h"
 #include "Windows/PokemonActionOptions.h"
@@ -12,6 +13,8 @@
 void UPokemonBattleScreen::NativeConstruct() {
     Super::NativeConstruct();
     ActionSelect->GetOnConfirm().AddDynamic(this, &UPokemonBattleScreen::OnActionSelected);
+    MoveSelect->GetOnMoveSelected().AddDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
+    MoveSelect->GetOnCancel().AddDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
 }
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
@@ -62,4 +65,24 @@ void UPokemonBattleScreen::CreateBattlePanel(int32 Side, const TScriptInterface<
 
 void UPokemonBattleScreen::OnActionSelected(int32) {
     ActionSelect->ExecuteCurrentHandler(this);
+}
+
+void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
+    const TScriptInterface<IBattleMove> &Move) {
+    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, TArray<TScriptInterface<IBattler>>()));
+    MoveSelect->SetActive(false);
+    MoveSelect->SetVisibility(ESlateVisibility::Hidden);
+    check(SelectionIndex.IsSet())
+    auto &SelIndex = SelectionIndex.GetValue();
+    SelIndex++;
+    if (SelectingBattlers.IsValidIndex(SelIndex)) {
+        SelectAction(SelectingBattlers[SelIndex]);
+    } 
+}
+
+void UPokemonBattleScreen::OnMoveCanceled() {
+    MoveSelect->SetActive(false);
+    MoveSelect->SetVisibility(ESlateVisibility::Hidden);
+    ActionSelect->SetActive(true);
+    ActionSelect->SetVisibility(ESlateVisibility::Visible);
 }

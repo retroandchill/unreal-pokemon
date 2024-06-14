@@ -9,6 +9,10 @@
 #include "Utilities/WidgetUtilities.h"
 
 
+const TScriptInterface<IBattleMove> & UBattleMovePanel::GetMove() const {
+    return Move;
+}
+
 void UBattleMovePanel::SetMove(const TScriptInterface<IBattleMove> &MoveIn) {
     Move = MoveIn;
     OnMoveSet();

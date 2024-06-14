@@ -12,6 +12,12 @@ class IBattleMove;
 class UBattleMovePanel;
 class IBattler;
 class UMovePanel;
+
+/**
+ * Dynamic delegate for when a move is selected from the window.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMoveSelected, const TScriptInterface<IBattler>&, Battler, const TScriptInterface<IBattleMove>&, Move);
+
 /**
  * Selection window for picking moves to use in combat.
  */
@@ -26,9 +32,16 @@ public:
      */
     void SetBattler(const TScriptInterface<IBattler>& NewBattler);
 
+    /**
+     * Get the move selection delegate
+     * @return Delegate called when a move is selected
+     */
+    FOnMoveSelected &GetOnMoveSelected();
+
 protected:
     int32 GetItemCount_Implementation() const override;
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void ProcessConfirm_Implementation(int32 CurrentIndex) override;
     
     /**
      * Slot a move panel into this widget
@@ -62,5 +75,11 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = "Battle|Selection")
     TSubclassOf<UBattleMovePanel> MovePanelClass;
+
+    /**
+     * Delegate called when a move is selected
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnMoveSelected OnMoveSelected;
 
 };
