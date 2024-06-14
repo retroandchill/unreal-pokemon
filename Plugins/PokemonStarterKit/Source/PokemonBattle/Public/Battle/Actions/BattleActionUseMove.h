@@ -24,7 +24,7 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     FString GetReferencerName() const override;
     int32 GetPriority() const override;
-    virtual FText GetActionMessage() const override;
+    FText GetActionMessage() const override;
     void Execute() override;
 
 protected:

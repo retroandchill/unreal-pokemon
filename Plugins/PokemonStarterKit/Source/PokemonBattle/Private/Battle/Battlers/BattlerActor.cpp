@@ -155,6 +155,7 @@ void ABattlerActor::ForEachAlly(const TFunctionRef<void(const TScriptInterface<I
 
 void ABattlerActor::ForEachBattleEffect(
     const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const {
+    // TODO: Not implemented yet, probably going to remove this and replace it with the GAS
 }
 
 void ABattlerActor::ShowSprite() const {

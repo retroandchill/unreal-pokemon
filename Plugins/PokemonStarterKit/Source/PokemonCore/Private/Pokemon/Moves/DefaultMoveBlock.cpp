@@ -21,7 +21,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
-    auto &Settings = Pokemon::FBaseSettings::Get();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
     int32 MaxMoves = Settings.GetMaxMoves();
     if (DTO.Moves.Num() > 0) {
         int32 MoveMax = FMath::Min(MaxMoves, DTO.Moves.Num());

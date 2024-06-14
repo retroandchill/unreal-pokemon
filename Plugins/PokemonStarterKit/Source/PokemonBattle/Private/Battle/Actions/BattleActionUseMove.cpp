@@ -37,7 +37,7 @@ FActionResult FBattleActionUseMove::ComputeResult() {
 
     auto &User = GetBattler();
     int32 TargetCount = Targets.Num();
-    for (auto &Target : Targets) {
+    for (const auto &Target : Targets) {
         if (Target->IsFainted()) {
             continue;
         }

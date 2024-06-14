@@ -164,107 +164,12 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
                                                  const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target, int32 TargetCount,
                                                  FName Type, int32 BaseDamage, const FDamageEffects &Effects) {
-    //ApplyAbilityMultipliers(Multipliers, User, Target, Type, BaseDamage);
-    //ApplyHoldItemMultipliers(Multipliers, User, Target, Type, BaseDamage);
-    //ApplyUserEffects(Multipliers, User, Target, Type, BaseDamage);
-    //ApplyFieldEffects(Multipliers, User, Target, Type, BaseDamage);
-    // TODO: Terrain Moves
-    // TODO: Badge Multipliers
     ApplyMultiTargetModifier(Multipliers, TargetCount);
-    // TODO: Weather
-
     ApplyCriticalHitModifier(Multipliers, Effects);
     ApplyDamageSwing(Multipliers);
-
     ApplyStabModifiers(Multipliers, User, Type);
     ApplyTypeMatchUps(Multipliers, Effects);
-    // TODO: Status Effects (Burn)
-
-    // TODO: Aurora Veil, Reflect, Light Screen
-    //ApplyTargetEffects(Multipliers, User, Target, Type, BaseDamage);
-
     ApplyAdditionalDamageModifiers(Multipliers, User, Target, TargetCount, Type, BaseDamage);
-}
-
-void UBaseBattleMove::ApplyAbilityMultipliers(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                                              const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
-    CurrentBattle->ForEachActiveBattler([&](const TScriptInterface<IBattler> &Battler) {
-        IAbilityBattleEffect::Execute_TriggerDamageCalcFromGlobal(Battler->GetAbility().GetObject(), Multipliers, User,
-                                                                  Target, this, BaseDamage, Type);
-    });
-
-    if (User->IsAbilityActive()) {
-        IAbilityBattleEffect::Execute_TriggerDamageCalcFromUser(User->GetAbility().GetObject(), Multipliers, User,
-                                                                Target, this, BaseDamage, Type);
-    }
-
-    if (!CurrentBattle->ShouldIgnoreAbilities()) {
-        User->ForEachAlly([&](const TScriptInterface<IBattler> &Ally) {
-            if (!Ally->IsAbilityActive()) {
-                return;
-            }
-
-            IAbilityBattleEffect::Execute_TriggerDamageCalcFromAlly(Ally->GetAbility().GetObject(), Multipliers, User,
-                                                                    Target, this, BaseDamage, Type);
-        });
-
-        if (Target->IsAbilityActive()) {
-            IAbilityBattleEffect::Execute_TriggerDamageCalcFromTarget(Target->GetAbility().GetObject(), Multipliers,
-                                                                      User, Target, this, BaseDamage, Type);
-        }
-    }
-
-    if (Target->IsAbilityActive()) {
-        IAbilityBattleEffect::Execute_TriggerDamageCalcFromTargetNonIgnorable(
-            Target->GetAbility().GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
-    }
-
-    if (!CurrentBattle->ShouldIgnoreAbilities()) {
-        Target->ForEachAlly([&](const TScriptInterface<IBattler> &Ally) {
-            if (!Ally->IsAbilityActive()) {
-                return;
-            }
-
-            IAbilityBattleEffect::Execute_TriggerDamageCalcFromTargetAlly(Ally->GetAbility().GetObject(), Multipliers,
-                                                                          User, Target, this, BaseDamage, Type);
-        });
-    }
-}
-
-void UBaseBattleMove::ApplyHoldItemMultipliers(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                                               const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
-    if (User->IsHoldItemActive()) {
-        IHoldItemBattleEffect::Execute_TriggerDamageCalcFromUser(User->GetHoldItem().GetObject(), Multipliers, User,
-                                                                 Target, this, BaseDamage, Type);
-    }
-
-    if (Target->IsHoldItemActive()) {
-        IHoldItemBattleEffect::Execute_TriggerDamageCalcFromTarget(Target->GetHoldItem().GetObject(), Multipliers, User,
-                                                                   Target, this, BaseDamage, Type);
-    }
-}
-
-void UBaseBattleMove::ApplyUserEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                                       const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
-    User->ForEachBattleEffect([&](const TScriptInterface<IBattlerEffect> &Effect) {
-        IBattlerEffect::Execute_ModifyDamageForUser(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage,
-                                                    Type);
-    });
-}
-
-void UBaseBattleMove::ApplyTargetEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                                         const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
-    Target->ForEachBattleEffect([&](const TScriptInterface<IBattlerEffect> &Effect) {
-        IBattlerEffect::Execute_ModifyDamageForUser(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage,
-                                                    Type);
-    });
-}
-
-void UBaseBattleMove::ApplyFieldEffects(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                                        const TScriptInterface<IBattler> &Target, FName Type, int32 BaseDamage) {
-    CurrentBattle->ForEachFieldEffect([&](const TScriptInterface<IFieldEffect> &Effect) {
-        IFieldEffect::Execute_ModifyDamage(Effect.GetObject(), Multipliers, User, Target, this, BaseDamage, Type);
-    });
 }
 
 void UBaseBattleMove::ApplyCriticalHitModifier_Implementation(FDamageMultipliers &Multipliers,

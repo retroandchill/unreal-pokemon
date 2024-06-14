@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/PokemonBattle.h"
+#include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
@@ -88,7 +89,7 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
     auto &ActionCount = CurrentActionCount.FindChecked(BattlerId);
     if (ExpectedActionCount.FindChecked(BattlerId) <= ActionCount) {
         UE_LOG(LogTemp, Error, TEXT("%s attempted to queue an action, but is already at capacity!"),
-               *Battler->GetNickname().ToString());
+               *Battler->GetNickname().ToString())
         return;
     }
 
@@ -98,13 +99,9 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
 }
 
 bool APokemonBattle::ActionSelectionFinished() const {
-    for (auto [ID, Count] : ExpectedActionCount) {
-        if (CurrentActionCount[ID] < Count) {
-            return false;
-        }
-    }
-
-    return true;
+    return Algo::NoneOf(ExpectedActionCount, [this](const TPair<FGuid, uint8>& Pair) {
+        return CurrentActionCount[Pair.Key] < Pair.Value;
+    });
 }
 
 bool APokemonBattle::ShouldIgnoreAbilities() const {
@@ -127,7 +124,8 @@ void APokemonBattle::ForEachActiveBattler(
 }
 
 void APokemonBattle::ForEachFieldEffect(
-    const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const {
+    const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)>& Callback) const {
+    // TODO: Probably going to remove this
 }
 
 bool APokemonBattle::FindGlobalAbility(FName AbilityID) const {
@@ -188,7 +186,7 @@ void APokemonBattle::OnActionResultDisplayFinished() {
     NextAction();
 }
 
-void APokemonBattle::ExitBattleScene() {
+void APokemonBattle::ExitBattleScene() const {
     auto PlayerController = BattlePawn->GetController();
     PlayerController->Possess(StoredPlayerPawn);
 }

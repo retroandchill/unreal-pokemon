@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/ActiveSide.h"
+#include "Algo/AnyOf.h"
 #include "Algo/ForEach.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
@@ -90,11 +91,7 @@ const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
 }
 
 bool AActiveSide::CanBattle() const {
-    for (const auto& Battler : Battlers) {
-        if (!Battler->IsFainted()) {
-            return true;
-        }
-    }
-
-    return false;
+    return Algo::AnyOf(Battlers, [](const TScriptInterface<IBattler>& Battler) {
+        return Battler->IsFainted();
+    });
 }

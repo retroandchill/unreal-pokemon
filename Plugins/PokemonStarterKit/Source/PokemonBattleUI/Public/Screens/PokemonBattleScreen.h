@@ -52,7 +52,7 @@ protected:
      * Refresh the battle HUD
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void Refresh();
+    void Refresh() const;
 
   protected:
     /**

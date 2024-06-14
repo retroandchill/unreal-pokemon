@@ -52,7 +52,7 @@ void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler)
     MoveSelect->SetActive(true);
 }
 
-void UPokemonBattleScreen::Refresh() {
+void UPokemonBattleScreen::Refresh() const {
     for (auto &Panel : Panels) {
         Panel->Refresh();
     }
