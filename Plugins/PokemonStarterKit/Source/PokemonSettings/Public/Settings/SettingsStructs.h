@@ -181,4 +181,29 @@ struct FDynamicAssetPaths {
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
     FDirectoryPath ItemIconPackageName;
+    
+    /**
+     * The prefix that is placed before a type icon when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString TypeIconPrefix;
+
+    /**
+     * The prefix that is placed before a type panel when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString TypePanelPrefix;
+
+    /**
+     * The prefix that is placed before a status icon when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString StatusIconPrefix;
+
+
+    /**
+     * The prefix that is placed before a summary ball when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString SummaryBallPrefix;
 };

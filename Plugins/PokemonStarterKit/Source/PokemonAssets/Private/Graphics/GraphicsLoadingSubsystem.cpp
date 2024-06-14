@@ -28,6 +28,10 @@ static T* LookupAssetByName(FStringView BasePackageName, FName AssetName) {
     return LookupAssetByName<T>(BasePackageName, AssetName.ToString());
 }
 
+static FString GetFullAssetName(FStringView Prefix, FName Identifier) {
+    return FString::Format(TEXT("{0}{1}"), {Prefix, Identifier.ToString()});
+}
+
 /**
  * Fetch the first matching asset for the provided keys
  * @tparam T The type of asset we're looking for
@@ -146,26 +150,34 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName Trai
 }
 
 UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().TypeIconsPackageName;
-    return LookupAssetByName<UObject>(AssetPath, Type.ToString());
+    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &[AssetPath] = PathSettings.TypeIconsPackageName;
+    auto FullName = GetFullAssetName(PathSettings.TypeIconPrefix, Type);
+    return LookupAssetByName<UObject>(AssetPath, FullName);
 }
 
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView<FName> Types) const {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().TypeIconsPackageName;
+    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &[AssetPath] = PathSettings.TypeIconsPackageName;
     return RangeHelpers::CreateRange(Types)
-        | std::views::transform([&AssetPath](FName Name) { return LookupAssetByName<UObject>(AssetPath, Name); })
+        | std::views::transform([&PathSettings](FName Type) { return GetFullAssetName(PathSettings.TypeIconPrefix, Type); })
+        | std::views::transform([&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); })
         | RangeHelpers::TToArray<UObject*>();
 }
 
 UObject * UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().TypePanelsPackageName;
-    return LookupAssetByName<UObject>(AssetPath, Type);
+    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &[AssetPath] = PathSettings.TypePanelsPackageName;
+    auto FullName = GetFullAssetName(PathSettings.TypePanelPrefix, Type);
+    return LookupAssetByName<UObject>(AssetPath, FullName);
 }
 
 UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     const auto &Settings = Pokemon::FBaseSettings::Get();
-    auto &[AssetPath] = Settings.GetDynamicAssetPaths().SummaryBallPackageName;
-    auto Asset = LookupAssetByName<UObject>(AssetPath, PokeBall);
+    auto &PathSettings = Settings.GetDynamicAssetPaths();
+    auto &[AssetPath] = PathSettings.SummaryBallPackageName;
+    auto FullName = GetFullAssetName(PathSettings.SummaryBallPrefix, PokeBall);
+    auto Asset = LookupAssetByName<UObject>(AssetPath, FullName);
     return Asset != nullptr ? Asset : LookupAssetByName<UObject>(AssetPath, Settings.GetDefaultPokeBall().ToString());
 }
 
