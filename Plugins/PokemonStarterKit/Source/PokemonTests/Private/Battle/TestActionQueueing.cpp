@@ -1,10 +1,12 @@
 ﻿#include "Asserts.h"
+#include "TestPokemonBattle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/PokemonBattle.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 using namespace fakeit;
 
@@ -12,14 +14,15 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestActionQueueing, "Unit Tests.Battle.TestActi
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestActionQueueing::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto [Side1, MockSide1] = UnrealMock::CreateMock<IBattleSide>();
     auto [Side2, MockSide2] = UnrealMock::CreateMock<IBattleSide>();
 
-    auto Battle = NewObject<APokemonBattle>()->Initialize({Side1, Side2});
+    auto Battle = World->SpawnActor<ATestPokemonBattle>()->Initialize({Side1, Side2});
 
     TArray<TUniquePtr<Mock<IBattleAction>>> Actions;
     auto QueueBattleAction = [&Actions, &Battle](const TScriptInterface<IBattler> &Battler) {
-        auto &MockAction = Actions.Emplace_GetRef();
+        auto &MockAction = Actions.Emplace_GetRef(MakeUnique<Mock<IBattleAction>>());
         When(Method(*MockAction, GetBattler)).AlwaysReturn(Battler);
         Battle->QueueAction(TUniquePtr<IBattleAction>(&MockAction->get()));
     };
@@ -30,6 +33,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     When(Method(MockBattler1, GetInternalId)).AlwaysReturn(Battler1ID);
     When(Method(MockBattler1, SelectActions)).Do(std::bind_front(QueueBattleAction, Battler1));
     When(Method(MockBattler1, GetActionCount)).AlwaysReturn(1);
+    When(Method(MockBattler1, IsFainted)).AlwaysReturn(false);
     When(Method(MockBattler1, GetNickname)).AlwaysReturn(FText::FromStringView(TEXT("Battler 1")));
     Side1Battlers.Add(Battler1);
     auto [Battler2, MockBattler2] = UnrealMock::CreateMock<IBattler>();
@@ -37,6 +41,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     When(Method(MockBattler2, GetInternalId)).AlwaysReturn(Battler2ID);
     When(Method(MockBattler2, SelectActions)).Do(std::bind_front(QueueBattleAction, Battler2));
     When(Method(MockBattler2, GetActionCount)).AlwaysReturn(1);
+    When(Method(MockBattler2, IsFainted)).AlwaysReturn(false);
     When(Method(MockBattler2, GetNickname)).AlwaysReturn(FText::FromStringView(TEXT("Battler 2")));
     Side1Battlers.Add(Battler2);
     When(Method(MockSide1, GetBattlers)).AlwaysReturn(Side1Battlers);
@@ -47,6 +52,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     When(Method(MockBattler3, GetInternalId)).AlwaysReturn(Battler3ID);
     When(Method(MockBattler3, SelectActions)).Do(std::bind_front(QueueBattleAction, Battler3));
     When(Method(MockBattler3, GetActionCount)).AlwaysReturn(2);
+    When(Method(MockBattler3, IsFainted)).AlwaysReturn(false);
     When(Method(MockBattler3, GetNickname)).AlwaysReturn(FText::FromStringView(TEXT("Battler 3")));
     Side2Battlers.Add(Battler3);
     When(Method(MockSide2, GetBattlers)).AlwaysReturn(Side2Battlers);
