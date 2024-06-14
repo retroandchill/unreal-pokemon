@@ -45,6 +45,12 @@ class POKEMONBATTLE_API IBattleAction {
     virtual int32 GetPriority() const = 0;
 
     /**
+     * Get the usage message to display for the action
+     * @return The usage message to display for the given action
+     */
+    virtual FText GetActionMessage() const = 0;
+
+    /**
      * Bind a delegate to the completion of the action
      * @param Delegate The delegate to bind
      */

@@ -23,10 +23,10 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
 
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     FString GetReferencerName() const override;
-    void Execute() override;
     int32 GetPriority() const override;
+    virtual FText GetActionMessage() const override;
 
-  private:
+private:
     
     /**
      * The move that this action owns

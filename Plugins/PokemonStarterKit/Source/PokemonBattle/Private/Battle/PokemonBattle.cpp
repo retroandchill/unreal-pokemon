@@ -47,14 +47,17 @@ void APokemonBattle::Tick(float DeltaSeconds) {
     Super::Tick(DeltaSeconds);
 
     if (Phase == Selecting && ActionSelectionFinished()) {
-        GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("Action selection complete!"));
         BeginActionProcessing();
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
-            
+            Phase = Judging;
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting()) {
+            DisplayAction(Action->GetActionMessage());
             Action->Execute();
         }
+    } else if (Phase == Judging) {
+        // TODO: Actually judge the battle
+        StartTurn();
     }
 }
 
@@ -113,6 +116,10 @@ bool APokemonBattle::FindGlobalAbility(FName AbilityID) const {
     return false;
 }
 
+void APokemonBattle::ExecuteAction(IBattleAction &Action) {
+    DisplayAction(Action.GetActionMessage());
+}
+
 APawn *APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
@@ -152,6 +159,10 @@ void APokemonBattle::PlayerSendOutAnimation() {
     check(Sides.IsValidIndex(0))
     const auto &Side = Sides[0];
     ProcessPlayerSendOutAnimation(Side);
+}
+
+void APokemonBattle::ApplyActionResult() {
+    NextAction();
 }
 
 void APokemonBattle::StartTurn() {

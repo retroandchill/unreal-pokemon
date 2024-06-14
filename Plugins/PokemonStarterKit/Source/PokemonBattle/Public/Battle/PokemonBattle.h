@@ -83,6 +83,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
     void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> Callback) const override;
     bool FindGlobalAbility(FName AbilityID) const override;
+    void ExecuteAction(IBattleAction &Action) override;
 
   protected:
     /**
@@ -173,6 +174,19 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void CreateBattleHUD();
 
+    /**
+     * Display an action usage message with the given text
+     * @param MessageText The text of the message to display
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void DisplayAction(const FText &MessageText);
+
+    /**
+     * Apply the result of the current action
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void ApplyActionResult();
+
   private:
     /**
      * Run at the head of every turn. Increments the turn count and initiates action selection.
@@ -183,10 +197,10 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * Process all of the actions about to be performed
      */
     void BeginActionProcessing();
-
+    
     /**
-     * Proceed to the next action in the queue
-     */
+    * Proceed to the next action in the queue
+    */
     void NextAction();
 
     /**

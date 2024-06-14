@@ -16,16 +16,13 @@ FString FBattleActionUseMove::GetReferencerName() const {
     return TEXT("FBattleActionUseMove");
 }
 
-void FBattleActionUseMove::Execute() {
-    FBattleActionBase::Execute();
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
-        FString::Format(TEXT("{0} used {1}!"), {
-            GetBattler()->GetNickname().ToString(),
-            IBattleMove::Execute_GetDisplayName(Move.GetObject()).ToString()
-        }));
-    GetOnActionFinished().ExecuteIfBound();
-}
-
 int32 FBattleActionUseMove::GetPriority() const {
     return IBattleMove::Execute_GetPriority(Move.GetObject());
+}
+
+FText FBattleActionUseMove::GetActionMessage() const {
+    return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")), {
+        GetBattler()->GetNickname(),
+        IBattleMove::Execute_GetDisplayName(Move.GetObject())
+    });
 }

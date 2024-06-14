@@ -98,4 +98,10 @@ class POKEMONBATTLE_API IBattle {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
     void BeginActionSelection(const TScriptInterface<IBattler>& Battler);
+
+    /**
+     * Execute the bound action in battle
+     * @param Action The action to execute
+     */
+    virtual void ExecuteAction(IBattleAction& Action) = 0;
 };
