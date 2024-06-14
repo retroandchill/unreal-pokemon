@@ -9,7 +9,7 @@ public class PokemonTests : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "PokemonBattle",
             }
         );
 
@@ -35,7 +35,7 @@ public class PokemonTests : ModuleRules
                 "PokemonUI",
                 "RPGMenus",
                 "UMG",
-                "GridBased2D", "PokemonBattle"
+                "GridBased2D"
             }
         );
         

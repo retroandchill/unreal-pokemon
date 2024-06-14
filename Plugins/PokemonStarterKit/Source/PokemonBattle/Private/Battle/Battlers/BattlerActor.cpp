@@ -17,6 +17,9 @@
 #include <functional>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
+    check(Battler != nullptr)
+    check(Battler->GetOwningSide() != nullptr)
+    check(Move != nullptr)
     return NewObject<UBaseBattleMove>(Battler)->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
 }
 
@@ -46,8 +49,8 @@ FGuid ABattlerActor::GetInternalId() const {
     return InternalId;
 }
 
-TScriptInterface<IBattleSide> ABattlerActor::GetOwningSide() const {
-    return OwningSide.ToScriptInterface();
+const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
+    return OwningSide;
 }
 
 FText ABattlerActor::GetNickname() const {
@@ -100,7 +103,7 @@ int32 ABattlerActor::GetSpecialAttack() const {
 }
 
 int32 ABattlerActor::GetSpecialDefense() const {
-    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue();
+    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue();
 }
 
 int32 ABattlerActor::GetSpeed() const {

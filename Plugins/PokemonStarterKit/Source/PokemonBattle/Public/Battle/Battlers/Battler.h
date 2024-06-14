@@ -51,7 +51,7 @@ class POKEMONBATTLE_API IBattler {
      * Get the side that this battler is a part of
      * @return The battler's side
      */
-    virtual TScriptInterface<IBattleSide> GetOwningSide() const = 0;
+    virtual const TScriptInterface<IBattleSide> &GetOwningSide() const = 0;
 
     /**
      * Get the battler's display name

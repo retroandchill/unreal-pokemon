@@ -26,7 +26,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)
-    TScriptInterface<IBattleSide> GetOwningSide() const override;
+    const TScriptInterface<IBattleSide> &GetOwningSide() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     FText GetNickname() const override;
@@ -113,7 +113,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     /**
      * The side that owns this battler
      */
-    TWeakInterfacePtr<IBattleSide> OwningSide;
+    UPROPERTY()
+    TScriptInterface<IBattleSide> OwningSide;
 
     /**
      * The actual class used for the battler's sprite.
