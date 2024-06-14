@@ -19,7 +19,7 @@ struct FTargetResult {
     /**
      * The actual target of the move
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintReadWrite, Category = "Battle|Actions")
     TScriptInterface<IBattler> Target;
 
     /**

@@ -75,6 +75,12 @@ class POKEMONBATTLE_API IBattleMove {
     int32 GetPriority() const;
 
     /**
+     * Pay the move's PP cost to use
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    void PayCost();
+
+    /**
      * Get the active battle that owns this one
      * @return The current owning battle for this move
      */

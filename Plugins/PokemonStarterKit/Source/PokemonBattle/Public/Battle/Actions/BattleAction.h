@@ -67,5 +67,5 @@ class POKEMONBATTLE_API IBattleAction {
      * Get the pending result of the action once it is complete
      * @return The result of the action once calculation has been completed
      */
-    virtual TFuture<FActionResult> &GetActionResult() = 0;
+    virtual const TFuture<FActionResult> &GetActionResult() const = 0;
 };

@@ -23,7 +23,7 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     void Execute() override;
     bool IsExecuting() const override;
     void BindToActionFinished(FOnActionFinished&& Delegate) override;
-    TFuture<FActionResult> &GetActionResult() override;
+    const TFuture<FActionResult> &GetActionResult() const override;
 
 protected:
     /**

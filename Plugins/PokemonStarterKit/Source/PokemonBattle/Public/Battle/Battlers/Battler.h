@@ -111,6 +111,7 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Visually faint the battler
      */
+    UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void Faint() const = 0;
 
     /**

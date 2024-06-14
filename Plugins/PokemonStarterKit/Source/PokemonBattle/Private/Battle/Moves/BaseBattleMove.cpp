@@ -63,6 +63,10 @@ int32 UBaseBattleMove::GetPriority_Implementation() const {
     return WrappedMove->GetMoveData().Priority;
 }
 
+void UBaseBattleMove::PayCost_Implementation() {
+    WrappedMove->DecrementPP();
+}
+
 TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {
     return CurrentBattle;
 }

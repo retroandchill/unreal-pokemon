@@ -27,6 +27,11 @@ FText FBattleActionUseMove::GetActionMessage() const {
     });
 }
 
+void FBattleActionUseMove::Execute() {
+    FBattleActionBase::Execute();
+    IBattleMove::Execute_PayCost(Move.GetObject());
+}
+
 FActionResult FBattleActionUseMove::ComputeResult() {
     FActionResult Result;
 

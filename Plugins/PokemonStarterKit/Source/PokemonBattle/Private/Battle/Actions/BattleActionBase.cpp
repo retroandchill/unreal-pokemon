@@ -33,7 +33,7 @@ void FBattleActionBase::BindToActionFinished(FOnActionFinished &&Delegate) {
     OnActionFinished = MoveTemp(Delegate);
 }
 
-TFuture<FActionResult> &FBattleActionBase::GetActionResult() {
+const TFuture<FActionResult> &FBattleActionBase::GetActionResult() const {
     return Result;
 }
 

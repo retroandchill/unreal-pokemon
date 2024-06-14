@@ -51,6 +51,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Stats)
     bool IsFainted() const override;
 
+    UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void Faint() const;
 
     UFUNCTION(BlueprintPure, Category = Stats)
