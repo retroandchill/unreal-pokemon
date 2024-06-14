@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameSettings.h"
 
+class UPokemonKitSettings;
+
 namespace Pokemon {
 /**
  * The singleton used to retrieve the kit's settings.
@@ -75,7 +77,13 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
      */
     const FSpriteRepositories &GetSpriteRepositories() const;
 
+    /**
+     * The paths used to dynamically load assets in the game
+     * @return The paths used to dynamically load assets in the game
+     */
+    const FDynamicAssetPaths& GetDynamicAssetPaths() const;
+
   private:
-    TUniquePtr<struct FBaseSettingsPrivate> InternalData;
+    TObjectPtr<const UPokemonKitSettings> KitSettings;
 };
 } // namespace Pokemon

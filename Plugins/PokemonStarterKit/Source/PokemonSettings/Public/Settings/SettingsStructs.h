@@ -132,3 +132,53 @@ struct FSpriteRepositories {
     UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders", meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath ItemIconRepository;
 };
+
+/**
+ * Contains the paths of dynamic assets within the system
+ */
+USTRUCT(BlueprintType)
+struct FDynamicAssetPaths {
+    GENERATED_BODY()
+
+    /**
+     * The name of the package that contains the Pokémon Icon graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath PokemonSpritePackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath TrainerSpritesPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath TypeIconsPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath TypePanelsPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath StatusIconsPackageName;
+
+    /**
+     * The name of the package that contains the summary screen Poké Ball graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath SummaryBallPackageName;
+
+    /**
+     * The name of the package that contains the item icon graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    FDirectoryPath ItemIconPackageName;
+};

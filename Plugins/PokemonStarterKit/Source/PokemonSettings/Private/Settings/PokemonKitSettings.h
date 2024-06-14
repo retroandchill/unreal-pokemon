@@ -149,4 +149,12 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = Sprites)
     FSpriteRepositories SpriteRepositories;
+
+    /**
+     * The paths used to dynamically load assets in the game.
+     * <p><b>NOTE:</b> These paths need to be configured as additional directories to cook otherwise they won't be
+     * available in a packaged build</p>
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Assets)
+    FDynamicAssetPaths DynamicAssetPaths;
 };
