@@ -33,7 +33,7 @@ class POKEMONCORE_API IMove {
      * @return The move's type
      */
     virtual FName GetType() const = 0;
-    
+
     /**
      * Get the damage category of the move
      * @return The damage category for the given move
@@ -57,4 +57,10 @@ class POKEMONCORE_API IMove {
      * @return The total PP for the move
      */
     virtual int32 GetTotalPP() const = 0;
+
+    /**
+     * Reduce the amount of PP a move has by the given amount
+     * @param Amount The amount of PP to reduce by
+     */
+    virtual void DecrementPP(int32 Amount = 1) = 0;
 };

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Effects/FieldEffect.h"
 #include "UObject/Object.h"
+
 #include "SportMoves.generated.h"
 
 /**
@@ -14,9 +15,11 @@ UCLASS()
 class POKEMONBATTLE_API UEffectMudSport : public UObject, public IFieldEffect {
     GENERATED_BODY()
 
-protected:
-    void ModifyDamage_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move, int32 BaseDamage, FName MoveType) override;
-
+  protected:
+    void ModifyDamage_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                     const TScriptInterface<IBattler> &Target,
+                                     const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
+                                     FName MoveType) override;
 };
 
 /**
@@ -26,7 +29,9 @@ UCLASS()
 class POKEMONBATTLE_API UEffectWaterSport : public UObject, public IFieldEffect {
     GENERATED_BODY()
 
-protected:
-    void ModifyDamage_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move, int32 BaseDamage, FName MoveType) override;
-
+  protected:
+    void ModifyDamage_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                     const TScriptInterface<IBattler> &Target,
+                                     const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
+                                     FName MoveType) override;
 };

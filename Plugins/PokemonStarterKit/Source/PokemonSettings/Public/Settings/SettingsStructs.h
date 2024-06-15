@@ -109,6 +109,12 @@ struct FSpriteRepositories {
     FSoftObjectPath TypeIconRepository;
 
     /**
+     * The path to the repository data asset used to get the information for move selection buttons.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders", meta = (AllowedClasses = "StaticImageRepository"))
+    FSoftObjectPath TypePanelRepository;
+
+    /**
      * The path to the repository data asset used to get the status icons.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders", meta = (AllowedClasses = "StaticImageRepository"))
@@ -125,4 +131,78 @@ struct FSpriteRepositories {
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Asset Loaders", meta = (AllowedClasses = "StaticImageRepository"))
     FSoftObjectPath ItemIconRepository;
+};
+
+/**
+ * Contains the paths of dynamic assets within the system
+ */
+USTRUCT(BlueprintType)
+struct FDynamicAssetPaths {
+    GENERATED_BODY()
+
+    /**
+     * The name of the package that contains the Pokémon Icon graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath PokemonSpritePackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath TrainerSpritesPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath TypeIconsPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath TypePanelsPackageName;
+
+    /**
+     * The name of the package that contains the Trainer Sprite graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath StatusIconsPackageName;
+
+    /**
+     * The name of the package that contains the summary screen Poké Ball graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath SummaryBallPackageName;
+
+    /**
+     * The name of the package that contains the item icon graphics
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath ItemIconPackageName;
+
+    /**
+     * The prefix that is placed before a type icon when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString TypeIconPrefix;
+
+    /**
+     * The prefix that is placed before a type panel when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString TypePanelPrefix;
+
+    /**
+     * The prefix that is placed before a status icon when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString StatusIconPrefix;
+
+    /**
+     * The prefix that is placed before a summary ball when searching
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString SummaryBallPrefix;
 };

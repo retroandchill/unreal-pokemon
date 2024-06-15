@@ -98,6 +98,13 @@ class POKEMONCORE_API IPokemon {
     virtual int32 GetCurrentHP() const = 0;
 
     /**
+     * Set the Pokémon's current HP to the given value
+     * @param Value The value of HP for the Pokémon
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual void SetCurrentHP(int32 Value) = 0;
+
+    /**
      * Get the current HP of the Pokémon in question
      * @return The current HP of this particular Pokémon
      */

@@ -3,13 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Functional/FunctionalShorthands.h"
+#include "Pokemon/Breeding/PokemonGender.h"
 #include "UObject/Interface.h"
+
 #include "Battler.generated.h"
 
+class IPokemon;
+class IBattleSide;
+class IBattleMove;
 class IBattlerEffect;
 class IHoldItemBattleEffect;
 class IAbilityBattleEffect;
 class IMoveModifier;
+class IBattlerController;
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
 class POKEMONBATTLE_API UBattler : public UInterface {
@@ -23,13 +31,90 @@ class POKEMONBATTLE_API IBattler {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
+    /**
+     * Create this battler with the given parameters
+     * @param Side The side that owns this battler
+     * @param Pokemon The Pokémon this wraps around
+     * @param ShowImmediately Whether or not this battler should be visible immediately upon being spawned
+     * @return
+     */
+    virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
+                                                  const TScriptInterface<IPokemon> &Pokemon = nullptr,
+                                                  bool ShowImmediately = false) = 0;
+
+    /**
+     * Get the internal ID for this battler
+     * @return The unique ID of the battler
+     */
+    virtual FGuid GetInternalId() const = 0;
+
+    /**
+     * Get the side that this battler is a part of
+     * @return The battler's side
+     */
+    virtual const TScriptInterface<IBattleSide> &GetOwningSide() const = 0;
+
+    /**
+     * Get the battler's display name
+     * @return The display name of the battler
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual FText GetNickname() const = 0;
+
+    /**
+     * Get the Pokémon's gender
+     * @return The Pokémon's gender
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual EPokemonGender GetGender() const = 0;
+
     /**
      * Get the Pokémon's level
      * @return The level of the Pokémon in question
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetLevel() const = 0;
+    virtual int32 GetPokemonLevel() const = 0;
+
+    /**
+     * Get the value of the Pokémon's current HP
+     * @return The Pokémon's current HP
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 GetHP() const = 0;
+
+    /**
+     * Get the value of the Pokémon's Max HP.
+     * @return The Pokémon's Max HP
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 GetMaxHP() const = 0;
+
+    /**
+     * Get the value of the Pokémon's Max HP.
+     * @return The Pokémon's Max HP
+     */
+    UFUNCTION(BlueprintCallable, DisplayName = "Get HP Percent", Category = Stats)
+    virtual float GetHPPercent() const = 0;
+
+    /**
+     * Take damage and apply that change to the Pokémon's current HP
+     * @param Damage The damage that was taken
+     */
+    virtual void TakeBattleDamage(int32 Damage) = 0;
+
+    /**
+     * Check to see if the battler in question has fainted
+     * @return Has the Pokémon fainted
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual bool IsFainted() const = 0;
+
+    /**
+     * Visually faint the battler
+     */
+    UFUNCTION(BlueprintCallable, Category = Visuals)
+    virtual void Faint() const = 0;
 
     /**
      * Get the value of the Pokémon's physical attack.
@@ -60,6 +145,20 @@ public:
     virtual int32 GetSpecialDefense() const = 0;
 
     /**
+     * Get the value of the Pokémon's speed
+     * @return The Pokémon's speed
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 GetSpeed() const = 0;
+
+    /**
+     * Get the percent value of Exp to a level up
+     * @return The Pokémon's exp to level up percentage
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual float GetExpPercent() const = 0;
+
+    /**
      * Get the Pokémon's current type
      * @return The type of the Pokémon
      */
@@ -77,14 +176,14 @@ public:
      * Get the Pokémon's current ability effect
      * @return The effect of the ability in question
      */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual const TScriptInterface<IAbilityBattleEffect>& GetAbility() const = 0;
+    UFUNCTION(BlueprintCallable, Category = Items)
+    virtual const TScriptInterface<IAbilityBattleEffect> &GetAbility() const = 0;
 
     /**
      * Get if the target's current hold item is active
      * @return Is the target's hold item active?
      */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
+    UFUNCTION(BlueprintCallable, Category = Items)
     virtual bool IsHoldItemActive() const = 0;
 
     /**
@@ -92,18 +191,41 @@ public:
      * @return The effect of the hold item in question
      */
     UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual const TScriptInterface<IHoldItemBattleEffect>& GetHoldItem() const = 0;
+    virtual const TScriptInterface<IHoldItemBattleEffect> &GetHoldItem() const = 0;
+
+    /**
+     * Get the Pokémon's currently usable moves.
+     * @return The Pokémon's usable moves.
+     */
+    UFUNCTION(BlueprintCallable, Category = Moves)
+    virtual const TArray<TScriptInterface<IBattleMove>> &GetMoves() const = 0;
+
+    /**
+     * Select the actions for this battler
+     */
+    virtual void SelectActions() = 0;
+
+    /**
+     * How many actions a Pokémon may take in a turn.
+     * <p>Note: Messages like "Pikachu cannot move" or "Snorlax must recharge" count as actions</p>
+     * @return The number of actions that can be taken
+     */
+    virtual uint8 GetActionCount() const = 0;
 
     /**
      * Iterate over all of the battler's allies and apply the callback to them
      * @param Callback The callback to apply to the battlers
      */
-    virtual void ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler>&)>& Callback) const = 0;
+    virtual void ForEachAlly(TInterfaceCallback<IBattler> Callback) const = 0;
 
     /**
      * Iterate over each battle effect active on the user and apply said effect to the callback
      * @param Callback The callback to run on each effect
      */
-    virtual void ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect>&)>& Callback) const = 0;
+    virtual void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const = 0;
 
+    /**
+     * Show the battler's sprite in battle
+     */
+    virtual void ShowSprite() const = 0;
 };

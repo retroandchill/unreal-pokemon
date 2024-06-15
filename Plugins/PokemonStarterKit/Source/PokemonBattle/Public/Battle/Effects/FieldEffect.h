@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "FieldEffect.generated.h"
 
 class IBattleMove;
@@ -23,7 +24,7 @@ class POKEMONBATTLE_API IFieldEffect {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Trigger a damage related modification for this effect
      * @param Multipliers The multipliers for the move damage
@@ -34,7 +35,7 @@ public:
      * @param MoveType The type of the move in question
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ModifyDamage(FDamageMultipliers& Multipliers, const TScriptInterface<IBattler>& User,
-        const TScriptInterface<IBattler>& Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType);
-
+    void ModifyDamage(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                      const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,
+                      int32 BaseDamage, FName MoveType);
 };

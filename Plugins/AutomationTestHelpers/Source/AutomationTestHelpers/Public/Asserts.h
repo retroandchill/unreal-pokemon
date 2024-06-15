@@ -37,7 +37,7 @@
  * @param Condition The condition that is being evaluated.
  * @return Did the assert succeed?
  */
-inline bool AssertTrue(FAutomationTestBase &TestObject, FStringView What, bool Condition) {
+FORCEINLINE bool AssertTrue(FAutomationTestBase &TestObject, FStringView What, bool Condition) {
     return TestObject.TestTrue(What.GetData(), Condition);
 }
 
@@ -49,7 +49,7 @@ inline bool AssertTrue(FAutomationTestBase &TestObject, FStringView What, bool C
  * @param Condition The condition that is being evaluated.
  * @return Did the assert succeed?
  */
-inline bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, bool Condition) {
+FORCEINLINE bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, bool Condition) {
     return TestObject.TestFalse(What.GetData(), Condition);
 }
 
@@ -63,7 +63,7 @@ inline bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, bool 
  */
 template <typename PointerType>
     requires std::is_pointer_v<PointerType>
-bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
+FORCEINLINE bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
     return TestObject.TestNull(What.GetData(), Pointer);
 }
 
@@ -77,7 +77,7 @@ bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType P
  */
 template <typename PointerType>
     requires std::is_pointer_v<PointerType>
-bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
+FORCEINLINE bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
     return TestObject.TestNotNull(What.GetData(), Pointer);
 }
 
@@ -92,7 +92,7 @@ bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerTyp
  * @return Did the assert succeed?
  */
 template <typename A, typename B>
-bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Expected, const B &Actual) {
+FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Expected, const B &Actual) {
     return TestObject.TestEqual(What.GetData(), Actual, Expected);
 }
 
@@ -104,7 +104,8 @@ bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Exp
  * @param Actual The test result.
  * @return Did the assert succeed?
  */
-inline bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected, FStringView Actual) {
+FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
+                             FStringView Actual) {
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
@@ -118,8 +119,8 @@ inline bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStri
  * @return Did the assert succeed?
  */
 template <typename ValueType>
-bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType &Expected,
-                    const ValueType &Actual) {
+FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType &Expected,
+                                const ValueType &Actual) {
     return TestObject.TestNotEqual(What.GetData(), Actual, Expected);
 }
 
@@ -131,8 +132,8 @@ bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const Val
  * @param Actual The test result.
  * @return Did the assert succeed?
  */
-inline bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
-                           FStringView Actual) {
+FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
+                                FStringView Actual) {
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
@@ -142,6 +143,6 @@ inline bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, FS
  * @param bSuccess Did the test succeed.
  * @return The necessary return value of the test.
  */
-inline bool ConcludeTest(FAutomationTestBase &TestObject, bool bSuccess) {
+FORCEINLINE bool ConcludeTest(FAutomationTestBase &TestObject, bool bSuccess) {
     return bSuccess;
 }

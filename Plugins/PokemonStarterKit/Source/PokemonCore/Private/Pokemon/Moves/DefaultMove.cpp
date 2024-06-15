@@ -36,3 +36,7 @@ int32 UDefaultMove::GetTotalPP() const {
     // TODO: Add support for PP ups
     return GetMoveData().TotalPP;
 }
+
+void UDefaultMove::DecrementPP(int32 Amount) {
+    CurrentPP = FMath::Clamp(CurrentPP - Amount, 0, GetTotalPP());
+}

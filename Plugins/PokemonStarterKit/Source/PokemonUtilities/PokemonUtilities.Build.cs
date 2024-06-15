@@ -11,7 +11,7 @@ public class PokemonUtilities : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core"
 			}
 		);
 

@@ -7,5 +7,5 @@ void FPokemonBattleModule::StartupModule() {
 void FPokemonBattleModule::ShutdownModule() {
     // No shutdown code required
 }
-    
+
 IMPLEMENT_MODULE(FPokemonBattleModule, PokemonBattle)

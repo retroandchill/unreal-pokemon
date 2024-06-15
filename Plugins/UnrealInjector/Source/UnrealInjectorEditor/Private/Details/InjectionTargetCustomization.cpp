@@ -13,7 +13,9 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
     UObject *InterfaceObject;
     PropertyHandle->GetChildHandle(TEXT("TargetInterface"))->GetValue(InterfaceObject);
     auto WrappedProperty = PropertyHandle->GetChildHandle(TEXT("InjectedClass"));
-    WrappedProperty->GetProperty()->SetMetaData(TEXT("MustImplement"), InterfaceObject->GetName());
+    if (InterfaceObject != nullptr) {
+        WrappedProperty->GetProperty()->SetMetaData(TEXT("MustImplement"), InterfaceObject->GetName());
+    }
     HeaderRow.NameContent()[PropertyHandle->CreatePropertyNameWidget()]
         .ValueContent()[WrappedProperty->CreatePropertyValueWidget(false)];
     WrappedProperty->GetProperty()->RemoveMetaData(TEXT("MustImplement"));

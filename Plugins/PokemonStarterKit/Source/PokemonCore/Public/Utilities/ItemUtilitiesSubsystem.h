@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "ItemUtilitiesSubsystem.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS()
 class POKEMONCORE_API UItemUtilitiesSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
 
@@ -21,13 +22,12 @@ public:
      * Get the item utilities object
      * @return The object in question
      */
-    UObject* GetItemUtilities() const;
+    UObject *GetItemUtilities() const;
 
-private:
+  private:
     /**
      * The item utilities class object
      */
     UPROPERTY()
     TObjectPtr<UObject> ItemUtilities;
-
 };

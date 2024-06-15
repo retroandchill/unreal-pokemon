@@ -38,7 +38,6 @@ bool TestBattleEffects::RunTest(const FString &Parameters) {
     Multipliers.PowerMultiplier = 1.f;
     IBattlerEffect::Execute_ModifyDamageForUser(Charge, Multipliers, nullptr, nullptr, Move, 0, TEXT("FIRE"));
     CHECK_EQUAL(1.0f, Multipliers.PowerMultiplier);
-    
-    
+
     return true;
 }

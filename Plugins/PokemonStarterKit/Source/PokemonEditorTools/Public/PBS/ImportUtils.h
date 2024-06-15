@@ -4,7 +4,6 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Species/Stat.h"
-#include "Species/Stat.h"
 
 #include "ImportUtils.generated.h"
 
