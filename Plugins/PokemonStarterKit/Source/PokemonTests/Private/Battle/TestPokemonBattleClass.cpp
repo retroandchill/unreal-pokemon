@@ -70,6 +70,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ActionQueue.Pop();
 
     CHECK_TRUE(ActionQueue.IsEmpty());
+    Actions.Empty();
     return true;
 }
 
