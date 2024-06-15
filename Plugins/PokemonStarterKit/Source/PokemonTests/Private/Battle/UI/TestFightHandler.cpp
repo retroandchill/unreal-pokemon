@@ -1,22 +1,22 @@
 ﻿#include "Asserts.h"
-#include "TestBattlerActor.h"
-#include "TestSpriteActor.h"
+#include "Battle/Battle.h"
+#include "Battle/BattleSide.h"
+#include "Data/SelectionInputs.h"
 #include "External/accessor.hpp"
+#include "Handlers/FightHandler.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Screens/PokemonBattleScreen.h"
+#include "TestBattlerActor.h"
+#include "TestSpriteActor.h"
+#include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/BattleMoveSelect.h"
 #include "Windows/PokemonActionOptions.h"
-#include "Battle/BattleSide.h"
-#include "Handlers/FightHandler.h"
-#include "Battle/Battle.h"
-#include "Data/SelectionInputs.h"
-#include "Pokemon/Pokemon.h"
-#include "Utilities/InputUtilities.h"
 
 using namespace accessor;
 using namespace fakeit;
@@ -35,7 +35,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonBattleScreen>();
     ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
-    
+
     TWidgetPtr<UPokemonBattleScreen> Screen(CreateWidget<UPokemonBattleScreen>(World.Get(), WidgetClass));
     Screen->AddToViewport();
 
@@ -50,9 +50,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     Fake(Method(MockBattle, QueueAction));
     When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
     When(Method(MockSide, ShowBackSprites)).AlwaysReturn(false);
-    When(Method(MockBattle, ForEachSide)).AlwaysDo([&Side](FSideWithIndexCallback Callback) {
-        Callback(0, Side);
-    });
+    When(Method(MockBattle, ForEachSide)).AlwaysDo([&Side](FSideWithIndexCallback Callback) { Callback(0, Side); });
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),
         FPokemonDTO{.Species = TEXT("MIMIKYU"),
@@ -71,7 +69,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     accessMember<AccessBattleSpriteActorScreen>(*Battler2).get() = ATestSpriteActor::StaticClass();
     Battler2->Initialize(Side, Pokemon2);
 
-    TArray<TScriptInterface<IBattler>> Battlers = { Battler1, Battler2 };
+    TArray<TScriptInterface<IBattler>> Battlers = {Battler1, Battler2};
     When(Method(MockSide, GetBattlers)).AlwaysReturn(Battlers);
     Screen->SetBattle(Battle);
 
@@ -85,7 +83,8 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     auto CancelButton = *accessMember<AccessCancelInputBattleScreen>(*InputMappings).get().CreateIterator();
 
     auto &Options = accessMember<AccessFightHandlers>(*ActionSelect).get();
-    int32 FightHandlerIndex = Options.IndexOfByPredicate([](UBattleMenuHandler* Handler) { return Handler->IsA<UFightHandler>(); });
+    int32 FightHandlerIndex =
+        Options.IndexOfByPredicate([](UBattleMenuHandler *Handler) { return Handler->IsA<UFightHandler>(); });
     ActionSelect->SetIndex(FightHandlerIndex);
     UInputUtilities::SimulateKeyPress(ActionSelect, ConfirmButton);
     CHECK_EQUAL(ESlateVisibility::Visible, MoveSelect->GetVisibility());
@@ -94,7 +93,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     UInputUtilities::SimulateKeyPress(MoveSelect, CancelButton);
     CHECK_EQUAL(ESlateVisibility::Hidden, MoveSelect->GetVisibility());
     CHECK_EQUAL(ESlateVisibility::Visible, ActionSelect->GetVisibility());
-    
+
     ActionSelect->SetIndex(FightHandlerIndex);
     UInputUtilities::SimulateKeyPress(ActionSelect, ConfirmButton);
     CHECK_EQUAL(ESlateVisibility::Visible, MoveSelect->GetVisibility());
@@ -112,6 +111,6 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     UInputUtilities::SimulateKeyPress(MoveSelect, ConfirmButton);
     CHECK_EQUAL(ESlateVisibility::Hidden, MoveSelect->GetVisibility());
     CHECK_EQUAL(ESlateVisibility::Hidden, ActionSelect->GetVisibility());
-    
+
     return true;
 }

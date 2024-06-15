@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Functional/FunctionalShorthands.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "UObject/Interface.h"
-#include "Functional/FunctionalShorthands.h"
 
 #include "Battler.generated.h"
 
@@ -222,8 +222,7 @@ class POKEMONBATTLE_API IBattler {
      * Iterate over each battle effect active on the user and apply said effect to the callback
      * @param Callback The callback to run on each effect
      */
-    virtual void
-    ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const = 0;
+    virtual void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const = 0;
 
     /**
      * Show the battler's sprite in battle

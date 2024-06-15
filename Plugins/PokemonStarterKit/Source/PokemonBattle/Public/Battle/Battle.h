@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "Functional/FunctionalShorthands.h"
+#include "UObject/Interface.h"
 
 #include "Battle.generated.h"
 

@@ -82,7 +82,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      * Advance to the next battler in the window
      * @param Battler The battler to move on to
      */
-    void NextBattler(const TScriptInterface<IBattler>& Battler);
+    void NextBattler(const TScriptInterface<IBattler> &Battler);
 
     /**
      * Called when the fight command is selected

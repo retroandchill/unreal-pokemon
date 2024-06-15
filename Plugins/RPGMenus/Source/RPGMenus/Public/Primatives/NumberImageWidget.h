@@ -22,7 +22,7 @@ class RPGMENUS_API UNumberImageWidget : public UWidget {
 
     /**
      * Get the value of the number in question
-     * @return The value of the number 
+     * @return The value of the number
      */
     uint32 GetNumber() const;
 

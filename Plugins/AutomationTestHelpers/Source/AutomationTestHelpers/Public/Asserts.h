@@ -104,7 +104,8 @@ FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, 
  * @param Actual The test result.
  * @return Did the assert succeed?
  */
-FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected, FStringView Actual) {
+FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
+                             FStringView Actual) {
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
@@ -119,7 +120,7 @@ FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, 
  */
 template <typename ValueType>
 FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType &Expected,
-                    const ValueType &Actual) {
+                                const ValueType &Actual) {
     return TestObject.TestNotEqual(What.GetData(), Actual, Expected);
 }
 
@@ -132,7 +133,7 @@ FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView Wha
  * @return Did the assert succeed?
  */
 FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
-                           FStringView Actual) {
+                                FStringView Actual) {
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 

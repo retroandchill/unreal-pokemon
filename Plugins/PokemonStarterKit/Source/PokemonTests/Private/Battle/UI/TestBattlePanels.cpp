@@ -1,14 +1,14 @@
 ﻿#include "Asserts.h"
+#include "Battle/Battlers/Battler.h"
 #include "Components/PokemonBattlePanel.h"
 #include "Components/PokemonBattlePanelPlayer.h"
+#include "Components/ProgressBar.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
-#include "Utilities/ReflectionUtils.h"
-#include "Utilities/WidgetTestUtilities.h"
-#include "Battle/Battlers/Battler.h"
-#include "Components/ProgressBar.h"
 #include "Primatives/DisplayText.h"
 #include "Primatives/NumberImageWidget.h"
+#include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 using namespace fakeit;
 
@@ -78,6 +78,6 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     CHECK_EQUAL(0, CurrentHP->GetNumber());
     CHECK_EQUAL(100, MaxHP->GetNumber());
     CHECK_EQUAL(0.25f, ExpBar->GetPercent());
-    
+
     return true;
 }

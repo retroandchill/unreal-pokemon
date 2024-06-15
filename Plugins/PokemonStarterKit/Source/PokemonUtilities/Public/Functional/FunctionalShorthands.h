@@ -9,4 +9,4 @@
  * @tparam T The interface type we're looking for
  */
 template <typename T>
-using TInterfaceCallback = const TFunctionRef<void(const TScriptInterface<T>&)>&;
+using TInterfaceCallback = const TFunctionRef<void(const TScriptInterface<T> &)> &;
