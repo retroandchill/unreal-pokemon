@@ -35,7 +35,7 @@ public class PokemonTests : ModuleRules
                 "PokemonUI",
                 "RPGMenus",
                 "UMG",
-                "GridBased2D"
+                "GridBased2D", "PokemonBattleUI"
             }
         );
         

@@ -41,10 +41,11 @@ void UBattleMoveSelect::ProcessConfirm_Implementation(int32 CurrentIndex) {
 }
 
 void UBattleMoveSelect::CreateMovePanel(const TScriptInterface<IBattleMove> &Move) {
-    auto Panel = WidgetTree->ConstructWidget(MovePanelClass);
+    int32 OptionIndex = MovePanels.Num();
+    auto Panel = WidgetTree->ConstructWidget(MovePanelClass, *FString::Format(TEXT("MovePanel{0}"), { OptionIndex }));
     Panel->SetMove(Move);
     SlotWidget(Panel);
-    Panel->SetOptionIndex(MovePanels.Num());
+    Panel->SetOptionIndex(OptionIndex);
     Panel->GetOnOptionClicked().AddDynamic(this, &UBattleMoveSelect::ProcessClickedButton);
     Panel->GetOnOptionHovered().AddDynamic(this, &UBattleMoveSelect::ProcessHoveredButton);
     MovePanels.Emplace(Panel);
