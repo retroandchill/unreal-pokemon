@@ -14,7 +14,7 @@ class IFieldEffect;
 class IBattler;
 
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(BlueprintType)
 class POKEMONBATTLE_API UBattle : public UInterface {
     GENERATED_BODY()
 };
