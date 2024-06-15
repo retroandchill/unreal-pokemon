@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Primatives/SelectableOption.h"
+
 #include "BattleMovePanel.generated.h"
 
 class UDisplayText;
@@ -16,20 +17,20 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UBattleMovePanel : public USelectableOption {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the move for this panel
      * @return The move that this panel represents
      */
-    const TScriptInterface<IBattleMove>& GetMove() const;
-    
+    const TScriptInterface<IBattleMove> &GetMove() const;
+
     /**
      * Set the move this panel represents
      * @param MoveIn The move to select
      */
-    void SetMove(const TScriptInterface<IBattleMove>& MoveIn);
+    void SetMove(const TScriptInterface<IBattleMove> &MoveIn);
 
-protected:
+  protected:
     /**
      * Get the icon for the move's type.
      * @return The move's type icon
@@ -37,7 +38,7 @@ protected:
     UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "Moves|Graphics")
     UObject *GetTypeIcon();
 
-private:
+  private:
     /**
      * Called when the move is set.
      */

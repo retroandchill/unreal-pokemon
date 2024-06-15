@@ -22,7 +22,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
   public:
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                          const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately = false) override;
+                                          const TScriptInterface<IPokemon> &Pokemon,
+                                          bool ShowImmediately = false) override;
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)

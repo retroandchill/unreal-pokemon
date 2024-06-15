@@ -1,18 +1,18 @@
 ﻿#include "Asserts.h"
-#include "TestBattlerActor.h"
-#include "TestSpriteActor.h"
+#include "Battle/Actions/BattleAction.h"
 #include "Battle/Battle.h"
+#include "Battle/BattleSide.h"
+#include "Battle/Moves/BattleMove.h"
+#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
-#include "Pokemon/PokemonDTO.h"
-#include "Utilities/WidgetTestUtilities.h"
-#include "Battle/BattleSide.h"
-#include "Battle/Actions/BattleAction.h"
-#include "Battle/Moves/BattleMove.h"
-#include "External/accessor.hpp"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "TestBattlerActor.h"
+#include "TestSpriteActor.h"
+#include "Utilities/WidgetTestUtilities.h"
 #include <thread>
 
 using namespace accessor;
@@ -30,8 +30,9 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
     When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
     When(Method(MockSide, ShowBackSprites)).AlwaysReturn(true);
-    
-    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"), .Level = 50});
+
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"), .Level = 50});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     accessMember<AccessBattleSpriteActor>(*Battler).get() = ATestSpriteActor::StaticClass();
     Battler->Initialize(Side, Pokemon);
@@ -47,7 +48,8 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue(), Battler->GetAttack());
     CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("DEFENSE"))->GetStatValue(), Battler->GetDefense());
     CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue(), Battler->GetSpecialAttack());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue(), Battler->GetSpecialDefense());
+    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue(),
+                Battler->GetSpecialDefense());
     CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPEED"))->GetStatValue(), Battler->GetSpeed());
     CHECK_EQUAL(Pokemon->GetStatBlock()->GetExpPercent(), Battler->GetExpPercent());
 
@@ -57,7 +59,7 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     for (int32 i = 0; i < BattlerTypes.Num(); i++) {
         CHECK_EQUAL(PokemonTypes[i], BattlerTypes[i]);
     }
-    
+
     return true;
 }
 
@@ -77,13 +79,12 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
         SelectedAction = Action->GetActionMessage().ToString();
     });
     Fake(Method(MockBattle, ForEachActiveBattler));
-    
-    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("MIMIKYU"),
-            .Level = 50,
-            .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}
-        });
+
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(),
+        FPokemonDTO{.Species = TEXT("MIMIKYU"),
+                    .Level = 50,
+                    .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     accessor::accessMember<AccessBattleSpriteActor>(*Battler).get() = ATestSpriteActor::StaticClass();
     Battler->Initialize(Side, Pokemon);
@@ -103,6 +104,6 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
         TEXT("Mimikyu used Shadow Claw!"),
     };
     CHECK_TRUE(PossibleMessages.Contains(SelectedAction));
-    
+
     return true;
 }

@@ -72,7 +72,7 @@ FProcessCancel &USelectableWidget::GetOnCancel() {
 
 void USelectableWidget::NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) {
     Super::NativeOnRemovedFromFocusPath(InFocusEvent);
-    
+
     if (InFocusEvent.GetCause() == EFocusCause::Mouse && IsActive()) {
         SetKeyboardFocus();
     }

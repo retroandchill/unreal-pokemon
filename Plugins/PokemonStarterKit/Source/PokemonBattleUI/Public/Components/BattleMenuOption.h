@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Primatives/SelectableOption.h"
+
 #include "BattleMenuOption.generated.h"
 
 class UBattleMenuHandler;
@@ -16,14 +17,14 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UBattleMenuOption : public USelectableOption {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Init the properties of this option with the given handler
      * @param Handler The handler to use for initialization
      */
-    void InitFromHandler(const UBattleMenuHandler* Handler);
+    void InitFromHandler(const UBattleMenuHandler *Handler);
 
-private:
+  private:
     /**
      * The widget that displays the option text
      */
@@ -35,5 +36,4 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UImage> BackgroundImage;
-
 };

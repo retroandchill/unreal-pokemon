@@ -1,13 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Handlers/BattleMenuHandler.h"
 
-const FText & UBattleMenuHandler::GetOptionText() const {
+const FText &UBattleMenuHandler::GetOptionText() const {
     return OptionText;
 }
 
-const FSlateBrush & UBattleMenuHandler::GetBackgroundImage() const {
+const FSlateBrush &UBattleMenuHandler::GetBackgroundImage() const {
     return BackgroundImage;
 }
 

@@ -22,9 +22,9 @@ void UHPBar::SynchronizeProperties() {
 
 void UHPBar::Tick(float DeltaTime) {
     if (!bSetUp) {
-        return;    
+        return;
     }
-    
+
     float Percent = GetPercent();
     if (Percent == PreviousPercent) {
         return;

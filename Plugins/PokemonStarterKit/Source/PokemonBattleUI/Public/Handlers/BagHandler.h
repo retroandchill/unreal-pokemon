@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleMenuHandler.h"
+
 #include "BagHandler.generated.h"
 
 /**
@@ -12,6 +13,4 @@
 UCLASS()
 class POKEMONBATTLEUI_API UBagHandler : public UBattleMenuHandler {
     GENERATED_BODY()
-
-
 };

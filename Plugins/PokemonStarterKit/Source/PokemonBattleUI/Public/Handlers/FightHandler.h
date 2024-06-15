@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleMenuHandler.h"
+
 #include "FightHandler.generated.h"
 
 /**
@@ -13,7 +14,6 @@ UCLASS()
 class POKEMONBATTLEUI_API UFightHandler : public UBattleMenuHandler {
     GENERATED_BODY()
 
-protected:
+  protected:
     void OnSelected_Implementation(UPokemonBattleScreen *BattleScreen) override;
-
 };

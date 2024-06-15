@@ -24,13 +24,13 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     bool IsExecuting() const override;
     const TFuture<FActionResult> &GetActionResult() const override;
 
-protected:
+  protected:
     /**
      * Compute the actual result of the action on the targets
-     * @return 
+     * @return
      */
     virtual FActionResult ComputeResult() = 0;
-    
+
   private:
     /**
      * The battler that owns this action

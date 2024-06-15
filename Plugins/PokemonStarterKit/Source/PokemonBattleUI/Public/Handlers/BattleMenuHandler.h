@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "BattleMenuHandler.generated.h"
 
 class UPokemonBattleScreen;
@@ -14,27 +15,27 @@ UCLASS(Abstract, EditInlineNew)
 class POKEMONBATTLEUI_API UBattleMenuHandler : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The text for the option in question.
      * @return The text used for the option
      */
-    const FText& GetOptionText() const;
+    const FText &GetOptionText() const;
 
     /**
      * The visuals for the background of the option
      * @return The image to draw behind the text
      */
-    const FSlateBrush& GetBackgroundImage() const;
+    const FSlateBrush &GetBackgroundImage() const;
 
     /**
      * Called when this option is selected.
      * @param BattleScreen The screen that this command takes place in the context of
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Battle|Selection")
-    void OnSelected(UPokemonBattleScreen* BattleScreen);
+    void OnSelected(UPokemonBattleScreen *BattleScreen);
 
-private:
+  private:
     /**
      * The text used for the option
      */
@@ -46,5 +47,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = Option)
     FSlateBrush BackgroundImage;
-    
 };

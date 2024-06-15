@@ -2,7 +2,6 @@
 
 #include "Battle/Actions/BattleActionBase.h"
 #include "Battle/Battlers/Battler.h"
-
 #include <functional>
 
 FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {

@@ -3,11 +3,11 @@
 #include "Battle/Battlers/BattlerActor.h"
 #include "Algo/ForEach.h"
 #include "Battle/Battle.h"
-#include "Battle/Battlers/BattlerSprite.h"
-#include "Battle/BattleSide.h"
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/BattlerController.h"
+#include "Battle/Battlers/BattlerSprite.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Mainpulation/RangeHelpers.h"
@@ -40,8 +40,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     } else {
         Controller = NewObject<UAIBattlerController>(this);
     }
-    Controller->BindOnActionReady(FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
-    
+    Controller->BindOnActionReady(
+        FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
+
     return this;
 }
 

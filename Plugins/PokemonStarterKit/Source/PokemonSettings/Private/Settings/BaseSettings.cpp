@@ -87,8 +87,7 @@ void Pokemon::FBaseSettings::ForEachDataTable(const TFunctionRef<void(UDataTable
 }
 
 void Pokemon::FBaseSettings::LoadDataTables() const {
-    return Algo::ForEach(KitSettings->DataTables,
-                         [](const FSoftObjectPath &Path) { return Path.TryLoad(); });
+    return Algo::ForEach(KitSettings->DataTables, [](const FSoftObjectPath &Path) { return Path.TryLoad(); });
 }
 
 const FPokemonSpriteSettings &Pokemon::FBaseSettings::GetPokemonSpriteSettings() const {
@@ -103,6 +102,6 @@ const FSpriteRepositories &Pokemon::FBaseSettings::GetSpriteRepositories() const
     return KitSettings->SpriteRepositories;
 }
 
-const FDynamicAssetPaths & Pokemon::FBaseSettings::GetDynamicAssetPaths() const {
+const FDynamicAssetPaths &Pokemon::FBaseSettings::GetDynamicAssetPaths() const {
     return KitSettings->DynamicAssetPaths;
 }

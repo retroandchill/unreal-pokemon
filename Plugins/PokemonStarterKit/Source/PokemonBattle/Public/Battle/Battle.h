@@ -84,7 +84,7 @@ class POKEMONBATTLE_API IBattle {
      * @param Callback The callback to perform
      */
     virtual void
-    ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)>& Callback) const = 0;
+    ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> &Callback) const = 0;
 
     /**
      * Check to see if there is a Pokémon on the field with a given ability that is not actively supressed.
@@ -97,11 +97,11 @@ class POKEMONBATTLE_API IBattle {
      * Initiate the process of selecting actions for the given battler.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
-    void BeginActionSelection(const TScriptInterface<IBattler>& Battler);
+    void BeginActionSelection(const TScriptInterface<IBattler> &Battler);
 
     /**
      * Execute the bound action in battle
      * @param Action The action to execute
      */
-    virtual void ExecuteAction(IBattleAction& Action) = 0;
+    virtual void ExecuteAction(IBattleAction &Action) = 0;
 };

@@ -18,7 +18,7 @@ void UPokemonBattlePanel::Refresh() {
     } else {
         SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     }
-    
+
     PokemonName->SetText(CurrentBattler->GetNickname());
     PokemonLevel->SetText(FText::FromString(FString::FromInt(CurrentBattler->GetPokemonLevel())));
     HPBar->SetPercent(CurrentBattler->GetHPPercent());

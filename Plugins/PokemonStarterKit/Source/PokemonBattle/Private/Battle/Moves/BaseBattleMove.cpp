@@ -4,12 +4,12 @@
 #include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Effects/BattlerEffect.h"
 #include "Battle/Effects/FieldEffect.h"
 #include "Battle/Items/HoldItemBattleEffect.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
-#include "Battle/BattleSide.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 
@@ -28,16 +28,16 @@ bool UBaseBattleMove::IsUsable_Implementation() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-TArray<TScriptInterface<IBattler>> UBaseBattleMove::GetAllPossibleTargets_Implementation(
-    const TScriptInterface<IBattler> &User) const {
+TArray<TScriptInterface<IBattler>>
+UBaseBattleMove::GetAllPossibleTargets_Implementation(const TScriptInterface<IBattler> &User) const {
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = User->GetOwningSide();
     auto UserId = User->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    Battle->ForEachActiveBattler([&Targets, &UserId](const TScriptInterface<IBattler>& Battler) {
-       if (Battler->GetInternalId() == UserId) {
-           return;
-       }
+    Battle->ForEachActiveBattler([&Targets, &UserId](const TScriptInterface<IBattler> &Battler) {
+        if (Battler->GetInternalId() == UserId) {
+            return;
+        }
         Targets.Emplace(Battler);
     });
     return Targets;

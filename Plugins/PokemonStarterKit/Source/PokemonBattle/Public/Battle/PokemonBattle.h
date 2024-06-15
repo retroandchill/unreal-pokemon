@@ -82,7 +82,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     bool ShouldIgnoreAbilities() const override;
     void ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const override;
     void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
-    void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)>& Callback) const override;
+    void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> &Callback) const override;
     bool FindGlobalAbility(FName AbilityID) const override;
     void ExecuteAction(IBattleAction &Action) override;
 
@@ -199,7 +199,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * @param Result The actual result of the action in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void DisplayActionResult(const FActionResult& Result);
+    void DisplayActionResult(const FActionResult &Result);
 
     /**
      * Called when the display of the results of an action is complete
@@ -242,10 +242,10 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * Process all of the actions about to be performed
      */
     void BeginActionProcessing();
-    
+
     /**
-    * Proceed to the next action in the queue
-    */
+     * Proceed to the next action in the queue
+     */
     void NextAction();
 
     /**

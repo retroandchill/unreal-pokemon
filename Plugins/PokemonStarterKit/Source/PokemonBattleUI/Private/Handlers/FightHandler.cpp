@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Handlers/FightHandler.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Windows/PokemonActionOptions.h"

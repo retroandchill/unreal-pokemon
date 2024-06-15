@@ -15,7 +15,7 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
 }
 
-static bool IsNotFainted(const TScriptInterface<IBattler>& Battler) {
+static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
     return !Battler->IsFainted();
 }
 
@@ -65,7 +65,8 @@ void APokemonBattle::Tick(float DeltaSeconds) {
             } else {
                 ActionQueue.Pop();
             }
-        } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult(); bActionMessagesDisplayed && ResultFuture.IsReady() && !bActionResultDisplaying) {
+        } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult();
+                   bActionMessagesDisplayed && ResultFuture.IsReady() && !bActionResultDisplaying) {
             auto &Result = ResultFuture.Get();
             for (auto &[Target, bHit, Damage] : Result.TargetResults) {
                 Target->TakeBattleDamage(Damage.Damage);
@@ -99,9 +100,8 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
 }
 
 bool APokemonBattle::ActionSelectionFinished() const {
-    return Algo::NoneOf(ExpectedActionCount, [this](const TPair<FGuid, uint8>& Pair) {
-        return CurrentActionCount[Pair.Key] < Pair.Value;
-    });
+    return Algo::NoneOf(ExpectedActionCount,
+                        [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
 bool APokemonBattle::ShouldIgnoreAbilities() const {
@@ -117,14 +117,13 @@ void APokemonBattle::ForEachSide(
 
 void APokemonBattle::ForEachActiveBattler(
     const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
-    std::ranges::for_each(RangeHelpers::CreateRange(Sides)
-        | std::views::transform(&GetBattlers)
-        | std::ranges::views::join
-        | std::views::filter(&IsNotFainted), Callback);
+    std::ranges::for_each(RangeHelpers::CreateRange(Sides) | std::views::transform(&GetBattlers) |
+                              std::ranges::views::join | std::views::filter(&IsNotFainted),
+                          Callback);
 }
 
 void APokemonBattle::ForEachFieldEffect(
-    const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)>& Callback) const {
+    const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> &Callback) const {
     // TODO: Probably going to remove this
 }
 
@@ -216,7 +215,7 @@ void APokemonBattle::EndTurn() {
 
 void APokemonBattle::BeginActionProcessing() {
     Phase = EBattlePhase::Actions;
-    SelectedActions.Sort([](const TUniquePtr<IBattleAction>& A, const TUniquePtr<IBattleAction>& B) {
+    SelectedActions.Sort([](const TUniquePtr<IBattleAction> &A, const TUniquePtr<IBattleAction> &B) {
         if (A->GetPriority() > B->GetPriority()) {
             return true;
         }
@@ -226,15 +225,14 @@ void APokemonBattle::BeginActionProcessing() {
         if (SpeedA == SpeedB) {
             return FMath::RandBool();
         }
-        
+
         return SpeedA > SpeedB;
     });
-    
-    for (auto& Action : SelectedActions) {
+
+    for (auto &Action : SelectedActions) {
         ActionQueue.Enqueue(MoveTemp(Action));
     }
     SelectedActions.Reset();
-    
 }
 
 void APokemonBattle::NextAction() {

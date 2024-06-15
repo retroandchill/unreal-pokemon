@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "TestPokemonBattle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
@@ -7,6 +6,7 @@
 #include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "TestPokemonBattle.h"
 #include "Utilities/WidgetTestUtilities.h"
 
 using namespace fakeit;

@@ -23,11 +23,11 @@ class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
 
     void SynchronizeProperties() override;
 
-public:
+  public:
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;
 
-private:
+  private:
     void UpdateBarMaterial();
 
     /**

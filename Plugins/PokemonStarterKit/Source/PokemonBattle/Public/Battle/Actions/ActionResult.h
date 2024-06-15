@@ -35,7 +35,6 @@ struct FTargetResult {
     FBattleDamage Damage;
 };
 
-
 /**
  * Represents the information about an action.
  */
@@ -48,5 +47,4 @@ struct POKEMONBATTLE_API FActionResult {
      */
     UPROPERTY(BlueprintReadWrite, Category = "Battle|Actions")
     TArray<FTargetResult> TargetResults;
-    
 };

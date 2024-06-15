@@ -9,7 +9,7 @@ UNumberImageWidget::UNumberImageWidget() {
 
 void UNumberImageWidget::SetNumber(uint32 NewNumber) {
     Number = NewNumber;
-    RefreshNumber();   
+    RefreshNumber();
 }
 
 TSharedRef<SWidget> UNumberImageWidget::RebuildWidget() {
@@ -51,7 +51,7 @@ void UNumberImageWidget::RefreshNumber() {
         ImageBox->RemoveSlot(Images.Last().ToSharedRef());
         Images.Pop();
     }
-    
+
     for (int32 i = 0; i < AsString.Len(); i++) {
         auto Digit = AsString[i];
         int32 Index = TChar<TCHAR>::ConvertCharDigitToInt(Digit);

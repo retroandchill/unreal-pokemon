@@ -30,7 +30,7 @@ class RPGMENUS_API UNumberImageWidget : public UWidget {
 
   private:
     void RefreshNumber();
-    
+
     /**
      * The number to display in the widget.
      */

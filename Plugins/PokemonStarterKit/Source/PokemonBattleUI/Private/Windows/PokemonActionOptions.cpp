@@ -6,7 +6,6 @@
 #include "Components/BattleMenuOption.h"
 #include "Handlers/BattleMenuHandler.h"
 #include "Mainpulation/RangeHelpers.h"
-
 #include <functional>
 
 TSharedRef<SWidget> UPokemonActionOptions::RebuildWidget() {
@@ -17,7 +16,7 @@ TSharedRef<SWidget> UPokemonActionOptions::RebuildWidget() {
     if (OptionClass != nullptr) {
         Algo::ForEach(MenuActions, std::bind_front(&UPokemonActionOptions::CreateMenuOption, this));
     }
-    
+
     return Ret;
 }
 

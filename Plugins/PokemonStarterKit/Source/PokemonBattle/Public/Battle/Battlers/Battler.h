@@ -39,7 +39,8 @@ class POKEMONBATTLE_API IBattler {
      * @return
      */
     virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                                  const TScriptInterface<IPokemon> &Pokemon = nullptr, bool ShowImmediately = false) = 0;
+                                                  const TScriptInterface<IPokemon> &Pokemon = nullptr,
+                                                  bool ShowImmediately = false) = 0;
 
     /**
      * Get the internal ID for this battler

@@ -1,18 +1,18 @@
 ﻿#include "Asserts.h"
-#include "TestBattlerActor.h"
-#include "TestSpriteActor.h"
-#include "Battle/BattleSide.h"
-#include "Misc/AutomationTest.h"
-#include "Mocking/UnrealMock.h"
-#include "Utilities/WidgetTestUtilities.h"
 #include "Battle/Battle.h"
+#include "Battle/BattleSide.h"
 #include "Components/BattleMovePanel.h"
 #include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
-#include "Primatives/DisplayText.h"
-#include "Utilities/ReflectionUtils.h"
-#include "Pokemon/PokemonDTO.h"
+#include "Misc/AutomationTest.h"
+#include "Mocking/UnrealMock.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/PokemonDTO.h"
+#include "Primatives/DisplayText.h"
+#include "TestBattlerActor.h"
+#include "TestSpriteActor.h"
+#include "Utilities/ReflectionUtils.h"
+#include "Utilities/WidgetTestUtilities.h"
 #include "Windows/BattleMoveSelect.h"
 
 using namespace fakeit;
@@ -33,13 +33,12 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
     When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
     When(Method(MockSide, ShowBackSprites)).AlwaysReturn(false);
-    
-    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("MIMIKYU"),
-            .Level = 50,
-            .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}
-        });
+
+    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(),
+        FPokemonDTO{.Species = TEXT("MIMIKYU"),
+                    .Level = 50,
+                    .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     accessMember<AccessBattleSpriteActorUI>(*Battler).get() = ATestSpriteActor::StaticClass();
     Battler->Initialize(Side, Pokemon);
@@ -64,6 +63,6 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
 
     CHECK_EQUAL(TEXT("Shadow Sneak"), MoveNameText->GetText().ToString());
     CHECK_EQUAL(TEXT("30/30"), MovePPText->GetText().ToString());
-    
+
     return true;
 }

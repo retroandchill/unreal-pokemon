@@ -4,7 +4,10 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BattleMove.h"
 
-FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn, const TScriptInterface<IBattleMove> &MoveIn, TArray<TScriptInterface<IBattler>> &&TargetsIn) : FBattleActionBase(BattlerIn),Move(MoveIn), Targets(MoveTemp(TargetsIn)) {
+FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
+                                           const TScriptInterface<IBattleMove> &MoveIn,
+                                           TArray<TScriptInterface<IBattler>> &&TargetsIn)
+    : FBattleActionBase(BattlerIn), Move(MoveIn), Targets(MoveTemp(TargetsIn)) {
 }
 
 void FBattleActionUseMove::AddReferencedObjects(FReferenceCollector &Collector) {
@@ -21,10 +24,8 @@ int32 FBattleActionUseMove::GetPriority() const {
 }
 
 FText FBattleActionUseMove::GetActionMessage() const {
-    return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")), {
-        GetBattler()->GetNickname(),
-        IBattleMove::Execute_GetDisplayName(Move.GetObject())
-    });
+    return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
+                         {GetBattler()->GetNickname(), IBattleMove::Execute_GetDisplayName(Move.GetObject())});
 }
 
 void FBattleActionUseMove::Execute() {
@@ -41,12 +42,12 @@ FActionResult FBattleActionUseMove::ComputeResult() {
         if (Target->IsFainted()) {
             continue;
         }
-        
+
         auto &TargetResult = Result.TargetResults.Emplace_GetRef();
         TargetResult.Target = Target;
         TargetResult.bHit = true; // Everything will hit for now
         TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
     }
-    
+
     return Result;
 }

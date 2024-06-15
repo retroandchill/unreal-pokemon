@@ -81,7 +81,7 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
      * The paths used to dynamically load assets in the game
      * @return The paths used to dynamically load assets in the game
      */
-    const FDynamicAssetPaths& GetDynamicAssetPaths() const;
+    const FDynamicAssetPaths &GetDynamicAssetPaths() const;
 
   private:
     TObjectPtr<const UPokemonKitSettings> KitSettings;

@@ -143,45 +143,45 @@ struct FDynamicAssetPaths {
     /**
      * The name of the package that contains the Pokémon Icon graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath PokemonSpritePackageName;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath TrainerSpritesPackageName;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath TypeIconsPackageName;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath TypePanelsPackageName;
 
     /**
      * The name of the package that contains the Trainer Sprite graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath StatusIconsPackageName;
 
     /**
      * The name of the package that contains the summary screen Poké Ball graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath SummaryBallPackageName;
 
     /**
      * The name of the package that contains the item icon graphics
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta=(ContentDir))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath ItemIconPackageName;
-    
+
     /**
      * The prefix that is placed before a type icon when searching
      */
@@ -199,7 +199,6 @@ struct FDynamicAssetPaths {
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString StatusIconPrefix;
-
 
     /**
      * The prefix that is placed before a summary ball when searching

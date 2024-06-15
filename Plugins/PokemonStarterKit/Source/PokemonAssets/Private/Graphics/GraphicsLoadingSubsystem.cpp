@@ -10,21 +10,21 @@
 #include <cmath>
 
 template <typename T>
-requires std::is_base_of_v<UObject, T>
-static T* LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
+    requires std::is_base_of_v<UObject, T>
+static T *LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
     FStringView Prefix;
     if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
         int32 PrefixLength = CharIndex + 1;
         Prefix = AssetName.SubStr(0, PrefixLength);
         AssetName = AssetName.RightChop(PrefixLength);
     }
-    auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), { BasePackageName, Prefix, AssetName});
+    auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
     return Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey));
 }
 
 template <typename T>
-requires std::is_base_of_v<UObject, T>
-static T* LookupAssetByName(FStringView BasePackageName, FName AssetName) {
+    requires std::is_base_of_v<UObject, T>
+static T *LookupAssetByName(FStringView BasePackageName, FName AssetName) {
     return LookupAssetByName<T>(BasePackageName, AssetName.ToString());
 }
 
@@ -40,7 +40,7 @@ static FString GetFullAssetName(FStringView Prefix, FName Identifier) {
  * @return The found asset, if it exists
  */
 template <typename T>
-requires std::is_base_of_v<UObject, T>
+    requires std::is_base_of_v<UObject, T>
 static T *ResolveAsset(FStringView BasePackageName, const TArray<FString> &Keys) {
     for (const auto &Key : Keys) {
         auto Lookup = LookupAssetByName<T>(BasePackageName, Key);
@@ -159,13 +159,15 @@ UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView<FName> Types) const {
     auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
-    return RangeHelpers::CreateRange(Types)
-        | std::views::transform([&PathSettings](FName Type) { return GetFullAssetName(PathSettings.TypeIconPrefix, Type); })
-        | std::views::transform([&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); })
-        | RangeHelpers::TToArray<UObject*>();
+    return RangeHelpers::CreateRange(Types) | std::views::transform([&PathSettings](FName Type) {
+               return GetFullAssetName(PathSettings.TypeIconPrefix, Type);
+           }) |
+           std::views::transform(
+               [&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); }) |
+           RangeHelpers::TToArray<UObject *>();
 }
 
-UObject * UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
+UObject *UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
     auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     auto &[AssetPath] = PathSettings.TypePanelsPackageName;
     auto FullName = GetFullAssetName(PathSettings.TypePanelPrefix, Type);
@@ -242,6 +244,6 @@ static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FP
             FString::Format(TEXT("{0}{1}{2}{3}{4}"), {TrySubfolder, TrySpecies, TryForm, TryGender, TryShadow});
         FormattedStrings.Add(MoveTemp(FormattedName));
     }
-    
+
     return FormattedStrings;
 }

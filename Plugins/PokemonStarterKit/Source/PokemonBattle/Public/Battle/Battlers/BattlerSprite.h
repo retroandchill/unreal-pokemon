@@ -34,5 +34,4 @@ class POKEMONBATTLE_API IBattlerSprite {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void Faint();
-    
 };

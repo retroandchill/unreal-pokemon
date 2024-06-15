@@ -21,9 +21,9 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
-    
+
   public:
     /**
      * Set the battle that this screen holds
@@ -37,16 +37,16 @@ protected:
      * @param Battler The battler who is selecting an action.
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void SelectAction(const TScriptInterface<IBattler>& Battler);
+    void SelectAction(const TScriptInterface<IBattler> &Battler);
 
     /**
-     * Get the action select widget 
+     * Get the action select widget
      * @return Get the action select widget
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Selection")
-    UPokemonActionOptions* GetActionSelect() const;
+    UPokemonActionOptions *GetActionSelect() const;
 
-    void SelectMove(const TScriptInterface<IBattler>& Battler);
+    void SelectMove(const TScriptInterface<IBattler> &Battler);
 
     /**
      * Refresh the battle HUD
@@ -91,7 +91,7 @@ protected:
      * @param Move The selected move
      */
     UFUNCTION()
-    void OnMoveSelected(const TScriptInterface<IBattler>& Battler, const TScriptInterface<IBattleMove>& Move);
+    void OnMoveSelected(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IBattleMove> &Move);
 
     /**
      * Called when the player cancels move selection
@@ -110,7 +110,7 @@ protected:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UBattleMoveSelect> MoveSelect;
-    
+
     /**
      * The battle that this screen is showing the information for
      */
@@ -123,7 +123,6 @@ protected:
      */
     UPROPERTY(EditAnywhere, Category = "Battle|Visuals")
     TArray<TSoftClassPtr<UPokemonBattlePanel>> PanelClasses;
-    
 
     /**
      * The panels that were dynamically added to the widget

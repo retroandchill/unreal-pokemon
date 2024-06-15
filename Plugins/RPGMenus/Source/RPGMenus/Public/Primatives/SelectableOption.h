@@ -99,5 +99,4 @@ class RPGMENUS_API USelectableOption : public UUserWidget {
      */
     UPROPERTY(BlueprintAssignable, Category = "Selection|Events")
     FProcessButtonAction OnOptionHovered;
-    
 };

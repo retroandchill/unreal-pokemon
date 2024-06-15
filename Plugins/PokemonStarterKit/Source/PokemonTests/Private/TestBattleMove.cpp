@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "TestBattleMove.h"
 
 TScriptInterface<IBattleMove> UTestBattleMove::Initialize(const TScriptInterface<IBattle> &Battle,
-    const TScriptInterface<IMove> &Move) {
+                                                          const TScriptInterface<IMove> &Move) {
     return this;
 }
 
@@ -25,6 +24,7 @@ void UTestBattleMove::PayCost_Implementation() {
 }
 
 FBattleDamage UTestBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target, int32 TargetCount) {
-    return { .Damage = 20 };
+                                                              const TScriptInterface<IBattler> &Target,
+                                                              int32 TargetCount) {
+    return {.Damage = 20};
 }

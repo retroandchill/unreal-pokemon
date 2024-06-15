@@ -2,9 +2,9 @@
 
 #include "Screens/PokemonBattleScreen.h"
 #include "Algo/ForEach.h"
+#include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Windows/BattleMoveSelect.h"
@@ -39,7 +39,7 @@ void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battle
     }
 }
 
-UPokemonActionOptions * UPokemonBattleScreen::GetActionSelect() const {
+UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
     return ActionSelect;
 }
 
@@ -75,7 +75,7 @@ void UPokemonBattleScreen::OnActionSelected(int32) {
 }
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
-    const TScriptInterface<IBattleMove> &Move) {
+                                          const TScriptInterface<IBattleMove> &Move) {
     auto Targets = IBattleMove::Execute_GetAllPossibleTargets(Move.GetObject(), Battler);
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->SetActive(false);
@@ -85,7 +85,7 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
     SelIndex++;
     if (SelectingBattlers.IsValidIndex(SelIndex)) {
         SelectAction(SelectingBattlers[SelIndex]);
-    } 
+    }
 }
 
 void UPokemonBattleScreen::OnMoveCanceled() {
