@@ -6,5 +6,5 @@
 void UActorUtilities::GetAllChildActorsWithInterface(const AActor *Actor, TSubclassOf<UInterface> Interface,
     bool bIncludeDescendants, TArray<AActor *> &OutActors) {
     Actor->GetAttachedActors(OutActors, true, bIncludeDescendants);
-    OutActors.FilterByPredicate([&Interface](const AActor* ChildActor) { return ChildActor->GetClass()->ImplementsInterface(Interface); });
+    OutActors = OutActors.FilterByPredicate([&Interface](const AActor* ChildActor) { return ChildActor->GetClass()->ImplementsInterface(Interface); });
 }

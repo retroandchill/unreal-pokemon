@@ -15,8 +15,21 @@ class RPGMENUS_API UNumberImageWidget : public UWidget {
     GENERATED_BODY()
 
   public:
+    /**
+     * Create the CDO for this object
+     */
     UNumberImageWidget();
 
+    /**
+     * Get the value of the number in question
+     * @return The value of the number 
+     */
+    uint32 GetNumber() const;
+
+    /**
+     * Set the value of the number
+     * @param NewNumber The new value of the number
+     */
     void SetNumber(uint32 NewNumber);
 
   protected:
@@ -29,6 +42,9 @@ class RPGMENUS_API UNumberImageWidget : public UWidget {
 #endif
 
   private:
+    /**
+     * Refresh the display of the number
+     */
     void RefreshNumber();
 
     /**

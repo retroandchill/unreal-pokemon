@@ -7,6 +7,10 @@ UNumberImageWidget::UNumberImageWidget() {
     NumberImages.SetNum(10);
 }
 
+uint32 UNumberImageWidget::GetNumber() const {
+    return Number;
+}
+
 void UNumberImageWidget::SetNumber(uint32 NewNumber) {
     Number = NewNumber;
     RefreshNumber();
