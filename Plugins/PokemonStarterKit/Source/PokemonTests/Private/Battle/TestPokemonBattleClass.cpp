@@ -29,12 +29,15 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
 
+    auto &ActionQueue = accessMember<AccessActionQueue>(*Battle).get();
     auto &Actions = accessMember<AccessActions>(*Battle).get();
     auto MockAction1 = Mock<IBattleAction>();
+    Fake(Dtor(MockAction1));
     When(Method(MockAction1, GetPriority)).AlwaysReturn(2);
     Actions.Emplace(&MockAction1.get());
     
     auto MockAction2 = Mock<IBattleAction>();
+    Fake(Dtor(MockAction2));
     auto [Battler2, MockBattler2] = UnrealMock::CreateMock<IBattler>();
     When(Method(MockAction2, GetPriority)).AlwaysReturn(0);
     When(Method(MockAction2, GetBattler)).AlwaysReturn(Battler2);
@@ -42,6 +45,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     Actions.Emplace(&MockAction2.get());
     
     auto MockAction3 = Mock<IBattleAction>();
+    Fake(Dtor(MockAction3));
     auto [Battler3, MockBattler3] = UnrealMock::CreateMock<IBattler>();
     When(Method(MockAction3, GetPriority)).AlwaysReturn(0);
     When(Method(MockAction3, GetBattler)).AlwaysReturn(Battler3);
@@ -53,7 +57,6 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     callFunction<AccessBattleTick>(*Battle, 1);
     CHECK_EQUAL(EBattlePhase::Actions, Phase);
 
-    auto &ActionQueue = accessMember<AccessActionQueue>(*Battle).get();
     auto &Action1 = *ActionQueue.Peek();
     CHECK_TRUE(Action1.Get() == &MockAction1.get());
     ActionQueue.Pop();
@@ -89,12 +92,14 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     Phase = EBattlePhase::Actions;
     auto &ActionQueue = accessMember<AccessActionQueue>(*Battle).get();
     auto MockAction1 = Mock<IBattleAction>();
+    Fake(Dtor(MockAction1));
     When(Method(MockAction1, CanExecute)).AlwaysReturn(false);
     When(Method(MockAction1, IsExecuting)).AlwaysReturn(false);
     ActionQueue.Enqueue(TUniquePtr<IBattleAction>(&MockAction1.get()));
     
     auto &bActionMessagesDisplayed = accessMember<AccessActionMessagesDisplayed>(*Battle).get();
     auto MockAction2 = Mock<IBattleAction>();
+    Fake(Dtor(MockAction2));
     When(Method(MockAction2, CanExecute)).AlwaysReturn(true);
     When(Method(MockAction2, IsExecuting)).Return(false).Return(true);
     When(Method(MockAction2, GetActionMessage)).AlwaysReturn(FText::GetEmpty());
@@ -121,5 +126,6 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     auto &bActionResultDisplaying = accessMember<AccessActionResultDisplaying>(*Battle).get();
     CHECK_TRUE(bActionResultDisplaying);
 
+    ActionQueue.Empty();
     return true;
 }
