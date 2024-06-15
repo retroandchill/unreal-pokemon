@@ -147,7 +147,7 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-void ABattlerActor::ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
+void ABattlerActor::ForEachAlly(TInterfaceCallback<IBattler> Callback) const {
     Algo::ForEach(OwningSide->GetBattlers(), [this, &Callback](const TScriptInterface<IBattler> &Battler) {
         if (Battler->GetInternalId() == InternalId) {
             return;
@@ -157,8 +157,7 @@ void ABattlerActor::ForEachAlly(const TFunctionRef<void(const TScriptInterface<I
     });
 }
 
-void ABattlerActor::ForEachBattleEffect(
-    const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const {
+void ABattlerActor::ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const {
     // TODO: Not implemented yet, probably going to remove this and replace it with the GAS
 }
 

@@ -80,9 +80,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     APawn *GetBattlePawn() const final;
 
     bool ShouldIgnoreAbilities() const override;
-    void ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const override;
-    void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
-    void ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> &Callback) const override;
+    void ForEachSide(FSideWithIndexCallback Callback) const override;
+    void ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const override;
+    void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const override;
     bool FindGlobalAbility(FName AbilityID) const override;
     void ExecuteAction(IBattleAction &Action) override;
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Functional/FunctionalShorthands.h"
 
 #include "Battle.generated.h"
 
@@ -12,6 +13,8 @@ class IBattleAction;
 class IAbilityBattleEffect;
 class IFieldEffect;
 class IBattler;
+
+using FSideWithIndexCallback = const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &;
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
@@ -70,21 +73,19 @@ class POKEMONBATTLE_API IBattle {
      * Iterate over each side of the battle and perform the given callback on said side
      * @param Callback The callback to execute on each iteration
      */
-    virtual void
-    ForEachSide(const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const = 0;
+    virtual void ForEachSide(FSideWithIndexCallback Callback) const = 0;
 
     /**
      * Perform a sweep over each of the battlers and perform a callback on each one
      * @param Callback The callback to perform
      */
-    virtual void ForEachActiveBattler(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const = 0;
+    virtual void ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const = 0;
 
     /**
      * Perform a sweep over each of the active field effects and perform a callback on each one
      * @param Callback The callback to perform
      */
-    virtual void
-    ForEachFieldEffect(const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> &Callback) const = 0;
+    virtual void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const = 0;
 
     /**
      * Check to see if there is a Pokémon on the field with a given ability that is not actively supressed.

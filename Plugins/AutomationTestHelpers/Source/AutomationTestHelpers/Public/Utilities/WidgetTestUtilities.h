@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RAII.h"
+#include "Blueprint/WidgetTree.h"
 
 #include "WidgetTestUtilities.generated.h"
 
@@ -25,6 +26,21 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
      */
     UFUNCTION(BlueprintPure, Category = Widgets)
     static UWidget *FindChildWidget(UUserWidget *Parent, FName WidgetName);
+
+    template <typename T>
+        requires std::is_base_of_v<UWidget, T>
+    static TArray<T*> FindAllChildWidgetsOfType(UUserWidget* Parent) {
+        TArray<UWidget*> AllChildren;
+        UWidgetTree::GetChildWidgets(Parent, AllChildren);
+
+        TArray<T*> Ret;
+        for (auto Child : AllChildren) {
+            if (Child->IsA<T>()) {
+                Ret.Add(CastChecked<T>(Child));
+            }
+        }
+        return Ret;
+    }
 
     static std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> CreateTestWorld();
 

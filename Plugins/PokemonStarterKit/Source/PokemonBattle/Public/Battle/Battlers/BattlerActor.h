@@ -93,9 +93,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
     void SelectActions() override;
     uint8 GetActionCount() const override;
-    void ForEachAlly(const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const override;
+    void ForEachAlly(TInterfaceCallback<IBattler> Callback) const override;
     void
-    ForEachBattleEffect(const TFunctionRef<void(const TScriptInterface<IBattlerEffect> &)> &Callback) const override;
+    ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const override;
 
     void ShowSprite() const override;
 

@@ -108,22 +108,19 @@ bool APokemonBattle::ShouldIgnoreAbilities() const {
     return false;
 }
 
-void APokemonBattle::ForEachSide(
-    const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &Callback) const {
+void APokemonBattle::ForEachSide(FSideWithIndexCallback Callback) const {
     for (int32 i = 0; i < Sides.Num(); i++) {
         Callback(i, Sides[i]);
     }
 }
 
-void APokemonBattle::ForEachActiveBattler(
-    const TFunctionRef<void(const TScriptInterface<IBattler> &)> &Callback) const {
+void APokemonBattle::ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const {
     std::ranges::for_each(RangeHelpers::CreateRange(Sides) | std::views::transform(&GetBattlers) |
                               std::ranges::views::join | std::views::filter(&IsNotFainted),
                           Callback);
 }
 
-void APokemonBattle::ForEachFieldEffect(
-    const TFunctionRef<void(const TScriptInterface<IFieldEffect> &)> &Callback) const {
+void APokemonBattle::ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const {
     // TODO: Probably going to remove this
 }
 
