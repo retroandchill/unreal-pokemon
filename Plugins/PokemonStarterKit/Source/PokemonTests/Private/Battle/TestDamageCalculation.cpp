@@ -121,7 +121,6 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
         auto [Damage, Effeciveness, CriticalHit] =
             IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
-        UE_LOG(LogTemp, Warning, TEXT("Damage: %d"), Damage);
         CHECK_TRUE(Damage >= 67);
         CHECK_TRUE(Damage <= 79);
     }
