@@ -21,7 +21,8 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
-    int32 MaxMoves = Pokemon::FBaseSettings::Get().GetMaxMoves();
+    const auto &Settings = Pokemon::FBaseSettings::Get();
+    int32 MaxMoves = Settings.GetMaxMoves();
     if (DTO.Moves.Num() > 0) {
         int32 MoveMax = FMath::Min(MaxMoves, DTO.Moves.Num());
         for (int32 i = 0; i < MoveMax; i++) {
@@ -42,6 +43,6 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const FPokemonDTO &DT
     return this;
 }
 
-TConstArrayView<TScriptInterface<IMove>> UDefaultMoveBlock::GetMoves() const {
+const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
     return Moves;
 }

@@ -20,6 +20,18 @@ auto CreateRange(const TArray<T> &View) {
 }
 
 /**
+ * Create a new range from the provided array.
+ * @tparam T The type of data the array holds
+ * @param View The array view to create the view from.
+ * @return The created view
+ */
+template <typename T>
+auto CreateRange(TConstArrayView<T> &View) {
+    std::span Span(View.GetData(), View.Num());
+    return std::views::all(Span);
+}
+
+/**
  * Convert the elements in the range into an array
  * @tparam T The type of data the array will hold
  * @tparam RangeType The input range type

@@ -100,7 +100,8 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 
 void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index) {
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
-    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), CancelText, this, Trainer, Index);
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), CancelText, this, Trainer,
+                                                              Index);
     CommandWindow->SetCommands(Commands);
 
     SelectionPane->SetActive(false);

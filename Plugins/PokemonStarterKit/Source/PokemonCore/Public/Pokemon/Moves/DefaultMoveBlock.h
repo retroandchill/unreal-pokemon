@@ -18,7 +18,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
   public:
     TScriptInterface<IMoveBlock> Initialize(const FPokemonDTO &DTO) override;
 
-    TConstArrayView<TScriptInterface<IMove>> GetMoves() const override;
+    const TArray<TScriptInterface<IMove>> &GetMoves() const override;
 
   private:
     UPROPERTY()

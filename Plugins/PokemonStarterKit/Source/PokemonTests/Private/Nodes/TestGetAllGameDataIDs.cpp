@@ -3,6 +3,7 @@
 #include "Asserts.h"
 #include "Bag/Item.h"
 #include "BlueprintActionDatabase.h"
+#include "Data/K2Node_GetAllGameDataIDs.h"
 #include "DataManager.h"
 #include "Dispatchers/TestDispatcher.h"
 #include "Engine/Blueprint.h"
@@ -11,7 +12,6 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "Data/K2Node_GetAllGameDataIDs.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include "Utilities/BlueprintTestUtils.h"
@@ -114,7 +114,8 @@ bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
     return true;
 }
 
-constexpr auto TEST_GET_GAME_DATA_IDS = TEXT("/PokemonStarterKit/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
+constexpr auto TEST_GET_GAME_DATA_IDS =
+    TEXT("/PokemonStarterKit/Tests/Resources/GetDataIdsDispatcher.GetDataIdsDispatcher");
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",

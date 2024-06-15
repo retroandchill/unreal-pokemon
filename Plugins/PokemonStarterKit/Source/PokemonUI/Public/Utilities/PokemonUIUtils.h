@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/Widget.h"
 #include "Data/Command.h"
 #include "Handlers/MenuHandler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Mainpulation/RangeHelpers.h"
+#include "Pokemon/Breeding/PokemonGender.h"
 
 #include "PokemonUIUtils.generated.h"
 
@@ -83,10 +85,10 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
 
     /**
      * Set the text for a Pokémon's gender in the screen
-     * @param Pokemon The Pokémon to process
+     * @param Gender The Pokémon to process
      * @param TextWidget The widget to set the text for
      */
-    static void SetPokemonGenderText(const IPokemon &Pokemon, TObjectPtr<UDisplayText> &TextWidget);
+    static void SetPokemonGenderText(EPokemonGender Gender, TObjectPtr<UDisplayText> &TextWidget);
 
     /**
      * Create the command list from the given list of provided handlers

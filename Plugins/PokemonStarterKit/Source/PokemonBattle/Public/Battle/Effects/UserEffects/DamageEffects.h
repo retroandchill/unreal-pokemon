@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Effects/BattlerEffect.h"
 #include "UObject/Object.h"
+
 #include "DamageEffects.generated.h"
 
 /**
@@ -14,9 +15,11 @@ UCLASS()
 class POKEMONBATTLE_API UEffectParentalBond : public UObject, public IBattlerEffect {
     GENERATED_BODY()
 
-public:
-    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType) override;
-
+  public:
+    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                            const TScriptInterface<IBattler> &Target,
+                                            const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
+                                            FName MoveType) override;
 };
 
 /**
@@ -26,9 +29,11 @@ UCLASS()
 class POKEMONBATTLE_API UEffectMeFirst : public UObject, public IBattlerEffect {
     GENERATED_BODY()
 
-public:
-    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType) override;
-
+  public:
+    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                            const TScriptInterface<IBattler> &Target,
+                                            const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
+                                            FName MoveType) override;
 };
 
 /**
@@ -38,9 +43,11 @@ UCLASS()
 class POKEMONBATTLE_API UEffectHelpingHand : public UObject, public IBattlerEffect {
     GENERATED_BODY()
 
-protected:
-    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType) override;
-
+  protected:
+    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                            const TScriptInterface<IBattler> &Target,
+                                            const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
+                                            FName MoveType) override;
 };
 
 /**
@@ -50,7 +57,9 @@ UCLASS()
 class POKEMONBATTLE_API UEffectCharge : public UObject, public IBattlerEffect {
     GENERATED_BODY()
 
-protected:
-    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const TScriptInterface<IBattleMove> &Move,  int32 BaseDamage, FName MoveType) override;
-
+  protected:
+    void ModifyDamageForUser_Implementation(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
+                                            const TScriptInterface<IBattler> &Target,
+                                            const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
+                                            FName MoveType) override;
 };

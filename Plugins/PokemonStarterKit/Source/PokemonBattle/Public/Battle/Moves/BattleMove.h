@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BattleDamage.h"
 #include "UObject/Interface.h"
+
 #include "BattleMove.generated.h"
 
 struct FType;
@@ -25,14 +26,59 @@ class POKEMONBATTLE_API IBattleMove {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Initialize the move from the given owned move.
      * @param Battle
-     * @param Move The move that is currently owned by the user. 
+     * @param Move The move that is currently owned by the user.
      * @return The initialized interface
      */
-    virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle>& Battle, const TScriptInterface<IMove>& Move) = 0;
+    virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle> &Battle,
+                                                     const TScriptInterface<IMove> &Move) = 0;
+
+    /**
+     * Compute all possible targets for the move based on the given user information
+     * @param User The user of the move in question
+     * @return The found list of targets
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Usability)
+    TArray<TScriptInterface<IBattler>> GetAllPossibleTargets(const TScriptInterface<IBattler> &User) const;
+
+    UFUNCTION(BlueprintNativeEvent, Category = Usability)
+    bool IsUsable() const;
+
+    /**
+     * Get the display name for the move
+     * @return The name to show to the user
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    FText GetDisplayName() const;
+
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    int32 GetCurrentPP() const;
+
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    int32 GetMaxPP() const;
+
+    /**
+     * Get the display type for the move
+     * @return The type to show to the user
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    FName GetDisplayType() const;
+
+    /**
+     * Get the priority for the move
+     * @return The priority of the move
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    int32 GetPriority() const;
+
+    /**
+     * Pay the move's PP cost to use
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    void PayCost();
 
     /**
      * Get the active battle that owns this one
@@ -53,16 +99,15 @@ public:
      * @return Does the move have the given tag
      */
     virtual bool HasTag(FName Tag) const = 0;
-    
+
     /**
      * Calculate the total damage the move will deal.
      * @param User The user of the move.
      * @param Target The target the move is being hit by.
      * @param TargetCount The number of targets being hit.
-     * @return The amount of damage dealt 
+     * @return The amount of damage dealt
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    FBattleDamage CalculateDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1);
-
-    
+    FBattleDamage CalculateDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                                  int32 TargetCount = 1);
 };

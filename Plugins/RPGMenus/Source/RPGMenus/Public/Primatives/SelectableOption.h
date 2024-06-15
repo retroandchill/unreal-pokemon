@@ -52,6 +52,18 @@ class RPGMENUS_API USelectableOption : public UUserWidget {
      */
     FProcessButtonAction &GetOnOptionHovered();
 
+    /**
+     * Visual cue called when the option is selected
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = Selection)
+    void OnSelected();
+
+    /**
+     * Visual cue called when the option isn't selected anymore
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = Selection)
+    void OnUnselected();
+
   private:
     /**
      * Callback when this option is clicked

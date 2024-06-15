@@ -14,7 +14,7 @@ bool TestMinimize::RunTest(const FString &Parameters) {
 
     auto TackleBattle = NewObject<UBaseBattleMove>()->Initialize(nullptr, Tackle);
     auto StompBattle = NewObject<UBaseBattleMove>()->Initialize(nullptr, Stomp);
-    
+
     FDamageMultipliers Multipliers;
     auto Minimize = NewObject<UEffectMinimize>();
     IBattlerEffect::Execute_ModifyDamageForTarget(Minimize, Multipliers, nullptr, nullptr, TackleBattle, 0, TEXT(""));
@@ -22,6 +22,6 @@ bool TestMinimize::RunTest(const FString &Parameters) {
     Multipliers.FinalDamageMultiplier = 1.f;
     IBattlerEffect::Execute_ModifyDamageForTarget(Minimize, Multipliers, nullptr, nullptr, StompBattle, 0, TEXT(""));
     CHECK_EQUAL(2.f, Multipliers.FinalDamageMultiplier);
-    
+
     return true;
 }

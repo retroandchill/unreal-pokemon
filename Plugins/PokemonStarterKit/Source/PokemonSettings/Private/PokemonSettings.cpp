@@ -7,5 +7,5 @@ void FPokemonSettingsModule::StartupModule() {
 void FPokemonSettingsModule::ShutdownModule() {
     // No shutdown procedure needed
 }
-    
+
 IMPLEMENT_MODULE(FPokemonSettingsModule, PokemonSettings)

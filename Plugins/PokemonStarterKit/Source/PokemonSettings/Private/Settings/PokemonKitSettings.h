@@ -19,14 +19,14 @@ UCLASS(NotBlueprintable, NotBlueprintType, Config = Game, DefaultConfig, Display
 class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-protected:
+  protected:
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
-    
-private:
+
+  private:
     friend Pokemon::FBaseSettings;
-    
+
     /**
      * The maximum amount of money the player can have.
      */
@@ -38,7 +38,7 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Trainers|Player", meta = (UIMin = 1, ClampMin = 1))
     uint8 MaxPlayerNameSize = 12;
-    
+
     /**
      * The maximum level Pokémon can reach.
      */
@@ -52,7 +52,7 @@ private:
     int32 EggLevel = 0;
 
     UPROPERTY(EditAnywhere, Config, DisplayName = "HP Stat", Category = "Pokémon",
-        meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName HPStat = TEXT("HP");
 
     /**
@@ -73,7 +73,7 @@ private:
      * The odds of a newly generated Pokémon being shiny (out of 65536).
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Pokémon",
-        meta = (UIMin = 0, ClampMin = 0, UIMax = 65536, ClampMax = 65536))
+              meta = (UIMin = 0, ClampMin = 0, UIMax = 65536, ClampMax = 65536))
     int32 ShinyPokemonChance = 0;
 
     /**
@@ -99,7 +99,7 @@ private:
      * Information about the various Bag Pockets.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Bag",
-        meta = (GetKeyOptions = "PokemonData.ItemHelper.GetPocketNames"))
+              meta = (GetKeyOptions = "PokemonData.ItemHelper.GetPocketNames"))
     TMap<FName, FPocketInfo> PocketInfo;
 
     /**
@@ -149,5 +149,12 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = Sprites)
     FSpriteRepositories SpriteRepositories;
-    
+
+    /**
+     * The paths used to dynamically load assets in the game.
+     * <p><b>NOTE:</b> These paths need to be configured as additional directories to cook otherwise they won't be
+     * available in a packaged build</p>
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Assets)
+    FDynamicAssetPaths DynamicAssetPaths;
 };

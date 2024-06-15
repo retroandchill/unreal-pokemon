@@ -83,6 +83,10 @@ int32 UGamePokemon::GetCurrentHP() const {
     return CurrentHP;
 }
 
+void UGamePokemon::SetCurrentHP(int32 Value) {
+    CurrentHP = FMath::Clamp(Value, 0, GetMaxHP());
+}
+
 int32 UGamePokemon::GetMaxHP() const {
     return GetStatBlock()->GetStat(Pokemon::FBaseSettings::Get().GetHPStat())->GetStatValue();
 }

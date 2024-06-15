@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "BattleDamage.generated.h"
 
 /**
@@ -15,7 +16,7 @@ enum class EDamageEffectiveness : uint8 {
      * Move deals no damage, but was also non-damaging to begin with
      */
     NonDamaging,
-    
+
     /**
      * The move deals normal damage
      */
@@ -61,7 +62,6 @@ struct FBattleDamage {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     bool bCriticalHit;
-    
 };
 
 /**
@@ -76,7 +76,7 @@ struct FDamageEffects {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     float TypeMatchUp = 1.0f;
-    
+
     /**
      * The effectiveness of the damage.
      */
@@ -89,7 +89,6 @@ struct FDamageEffects {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     bool bCriticalHit = false;
 };
-
 
 /**
  * Represents the attack and defense to use for a damage calculation.
@@ -109,7 +108,6 @@ struct FAttackAndDefense {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     int32 Defense;
-    
 };
 
 /**
@@ -142,5 +140,4 @@ struct FDamageMultipliers {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     float FinalDamageMultiplier = 1.0f;
-    
 };

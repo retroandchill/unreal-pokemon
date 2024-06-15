@@ -7,7 +7,7 @@
  * Module that handles all battle related code
  */
 class FPokemonBattleModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 };

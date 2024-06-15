@@ -87,7 +87,7 @@ void UPokemonPanel::RefreshPokemonInfo() {
     UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
 
     auto Gender = Pokemon->GetGender();
-    UPokemonUIUtils::SetPokemonGenderText(*Pokemon, GenderText);
+    UPokemonUIUtils::SetPokemonGenderText(Gender, GenderText);
     if (GenderTextColors.Contains(Gender)) {
         UPokemonUIUtils::SetItemTextColor(GenderText, GenderTextColors[Gender]);
     }

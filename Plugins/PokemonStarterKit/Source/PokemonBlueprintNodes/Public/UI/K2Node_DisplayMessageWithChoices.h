@@ -13,7 +13,7 @@
  */
 UCLASS()
 class POKEMONBLUEPRINTNODES_API UK2Node_DisplayMessageWithChoices : public UK2Node_DisplayMessageBase,
-                                                                 public IK2Node_AddPinInterface {
+                                                                    public IK2Node_AddPinInterface {
     GENERATED_BODY()
 
   public:

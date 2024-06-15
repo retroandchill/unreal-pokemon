@@ -46,6 +46,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetCurrentHP() const override;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    void SetCurrentHP(int32 Value) override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetMaxHP() const override;
 
