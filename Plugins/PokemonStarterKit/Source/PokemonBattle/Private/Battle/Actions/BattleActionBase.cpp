@@ -29,14 +29,6 @@ bool FBattleActionBase::IsExecuting() const {
     return Executing;
 }
 
-void FBattleActionBase::BindToActionFinished(FOnActionFinished &&Delegate) {
-    OnActionFinished = MoveTemp(Delegate);
-}
-
 const TFuture<FActionResult> &FBattleActionBase::GetActionResult() const {
     return Result;
-}
-
-FOnActionFinished & FBattleActionBase::GetOnActionFinished() {
-    return OnActionFinished;
 }

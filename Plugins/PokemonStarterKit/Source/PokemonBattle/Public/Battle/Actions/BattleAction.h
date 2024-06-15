@@ -9,11 +9,6 @@
 class IBattler;
 
 /**
- * Delegate called when an action is finished
- */
-DECLARE_DELEGATE(FOnActionFinished);
-
-/**
  * Represents an action to be taken in battle.
  */
 class POKEMONBATTLE_API IBattleAction {
@@ -56,12 +51,6 @@ class POKEMONBATTLE_API IBattleAction {
      * @return The usage message to display for the given action
      */
     virtual FText GetActionMessage() const = 0;
-
-    /**
-     * Bind a delegate to the completion of the action
-     * @param Delegate The delegate to bind
-     */
-    virtual void BindToActionFinished(FOnActionFinished&& Delegate) = 0;
 
     /**
      * Get the pending result of the action once it is complete

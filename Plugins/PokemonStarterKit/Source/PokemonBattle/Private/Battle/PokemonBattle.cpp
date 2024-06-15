@@ -231,7 +231,6 @@ void APokemonBattle::BeginActionProcessing() {
     });
     
     for (auto& Action : SelectedActions) {
-        Action->BindToActionFinished(FOnActionFinished::CreateLambda(std::bind_front(&APokemonBattle::NextAction, this)));
         ActionQueue.Enqueue(MoveTemp(Action));
     }
     SelectedActions.Reset();
