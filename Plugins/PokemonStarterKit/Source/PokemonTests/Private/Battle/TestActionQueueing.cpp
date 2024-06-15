@@ -4,11 +4,16 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/PokemonBattle.h"
+#include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Utilities/WidgetTestUtilities.h"
 
 using namespace fakeit;
+using namespace accessor;
+
+MEMBER_ACCESSOR(AccessActionsQueueing, APokemonBattle, SelectedActions, TArray<TUniquePtr<IBattleAction>>)
+MEMBER_ACCESSOR(AccessActionQueueQueueing, APokemonBattle, ActionQueue, TQueue<TUniquePtr<IBattleAction>>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestActionQueueing, "Unit Tests.Battle.TestActionQueueing",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -18,7 +23,8 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     auto [Side1, MockSide1] = UnrealMock::CreateMock<IBattleSide>();
     auto [Side2, MockSide2] = UnrealMock::CreateMock<IBattleSide>();
 
-    auto Battle = World->SpawnActor<ATestPokemonBattle>()->Initialize({Side1, Side2});
+    auto Battle = World->SpawnActor<ATestPokemonBattle>();
+    Battle->Initialize({Side1, Side2});
 
     TArray<TUniquePtr<Mock<IBattleAction>>> Actions;
     auto QueueBattleAction = [&Actions, &Battle](const TScriptInterface<IBattler> &Battler) {
@@ -65,5 +71,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     QueueBattleAction(Battler3);
     ASSERT_TRUE(Battle->ActionSelectionFinished());
 
+    accessMember<AccessActionsQueueing>(*Battle).get().Empty();
+    accessMember<AccessActionQueueQueueing>(*Battle).get().Empty();
     return true;
 }
