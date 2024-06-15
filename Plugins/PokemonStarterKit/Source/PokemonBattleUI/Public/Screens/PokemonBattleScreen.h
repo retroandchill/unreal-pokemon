@@ -79,6 +79,12 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     void CreateBattlePanel(int32 Side, const TScriptInterface<IBattler> &Battler);
 
     /**
+     * Advance to the next battler in the window
+     * @param Battler The battler to move on to
+     */
+    void NextBattler(const TScriptInterface<IBattler>& Battler);
+
+    /**
      * Called when the fight command is selected
      * @param Index The selected index
      */

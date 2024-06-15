@@ -32,10 +32,7 @@ void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battle
     }
 
     if (!ActionSelect->IsVisible()) {
-        ActionSelect->SetBattler(Battler);
-        ActionSelect->SetVisibility(ESlateVisibility::Visible);
-        ActionSelect->SetIndex(0);
-        ActionSelect->SetActive(true);
+        NextBattler(Battler);
     }
 }
 
@@ -70,6 +67,13 @@ void UPokemonBattleScreen::CreateBattlePanel(int32 Side, const TScriptInterface<
     Panels.Emplace(Panel);
 }
 
+void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler) {
+    ActionSelect->SetBattler(Battler);
+    ActionSelect->SetVisibility(ESlateVisibility::Visible);
+    ActionSelect->SetIndex(0);
+    ActionSelect->SetActive(true);
+}
+
 void UPokemonBattleScreen::OnActionSelected(int32) {
     ActionSelect->ExecuteCurrentHandler(this);
 }
@@ -84,7 +88,7 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
     auto &SelIndex = SelectionIndex.GetValue();
     SelIndex++;
     if (SelectingBattlers.IsValidIndex(SelIndex)) {
-        SelectAction(SelectingBattlers[SelIndex]);
+        NextBattler(SelectingBattlers[SelIndex]);
     }
 }
 
