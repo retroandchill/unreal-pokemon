@@ -20,8 +20,6 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
 
-    Fake(Method(MockBattle, ForEachActiveBattler));
-    Fake(Method(MockBattle, ForEachFieldEffect));
     When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
@@ -58,9 +56,7 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
-
-    Fake(Method(MockBattle, ForEachActiveBattler));
-    Fake(Method(MockBattle, ForEachFieldEffect));
+    
     When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
@@ -97,9 +93,7 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
-
-    Fake(Method(MockBattle, ForEachActiveBattler));
-    Fake(Method(MockBattle, ForEachFieldEffect));
+    
     When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);

@@ -10,13 +10,13 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Screens/PokemonBattleScreen.h"
-#include "TestBattlerActor.h"
-#include "TestSpriteActor.h"
+#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/BattleMoveSelect.h"
 #include "Windows/PokemonActionOptions.h"
+#include <range/v3/view/single.hpp>
 
 using namespace accessor;
 using namespace fakeit;
@@ -45,11 +45,11 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
 
     auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
     auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    Fake(Method(MockBattle, ForEachActiveBattler));
+    Fake(Method(MockBattle, GetActiveBattlers));
     Fake(Method(MockBattle, QueueAction));
     When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
     When(Method(MockSide, ShowBackSprites)).AlwaysReturn(false);
-    When(Method(MockBattle, ForEachSide)).AlwaysDo([&Side](FSideWithIndexCallback Callback) { Callback(0, Side); });
+    When(Method(MockBattle, GetSides)).AlwaysReturn(ranges::views::single(Side));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),
         FPokemonDTO{.Species = TEXT("MIMIKYU"),

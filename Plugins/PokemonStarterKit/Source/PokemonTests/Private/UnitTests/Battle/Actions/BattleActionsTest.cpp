@@ -3,7 +3,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
-#include "TestBattleMove.h"
+#include "UtilityClasses/BattleActors/TestBattleMove.h"
 
 using namespace fakeit;
 

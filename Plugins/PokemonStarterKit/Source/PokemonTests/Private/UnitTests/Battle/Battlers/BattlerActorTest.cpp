@@ -2,7 +2,6 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Moves/BattleMove.h"
 #include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -10,8 +9,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "TestBattlerActor.h"
-#include "TestSpriteActor.h"
+#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include <thread>
 
@@ -74,7 +72,7 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
     When(Method(MockBattle, QueueAction)).AlwaysDo([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
         SelectedAction = Action->GetActionMessage().ToString();
     });
-    Fake(Method(MockBattle, ForEachActiveBattler));
+    Fake(Method(MockBattle, GetActiveBattlers));
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),

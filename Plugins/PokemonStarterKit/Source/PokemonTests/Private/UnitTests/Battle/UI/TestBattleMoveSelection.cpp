@@ -2,21 +2,18 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Components/BattleMovePanel.h"
-#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Primatives/DisplayText.h"
-#include "TestBattlerActor.h"
-#include "TestSpriteActor.h"
+#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/BattleMoveSelect.h"
 
 using namespace fakeit;
-using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleMoveSelection, "Private.UnitTests.Battle.UI.TestBattleMoveSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

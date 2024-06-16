@@ -22,7 +22,12 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     CurrentBattle = Battle;
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);
     Panels.Reset();
-    Battle->ForEachSide(std::bind_front(&UPokemonBattleScreen::AddPanelsForSide, this));
+    
+    int32 Index = 0;
+    std::ranges::for_each(Battle->GetSides(), [this, &Index](const TScriptInterface<IBattleSide>& Side) {
+        AddPanelsForSide(Index, Side);
+        Index++;
+    });
 }
 
 void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler) {

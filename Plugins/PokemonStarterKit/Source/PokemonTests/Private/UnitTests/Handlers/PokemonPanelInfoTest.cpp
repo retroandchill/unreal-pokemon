@@ -4,7 +4,7 @@
 #include "Components/CanvasPanel.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonTestUtilities.h"
+#include "UtilityClasses/PokemonTestUtilities.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

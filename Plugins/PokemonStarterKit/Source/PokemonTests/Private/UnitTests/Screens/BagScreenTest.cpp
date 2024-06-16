@@ -9,7 +9,7 @@
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
 #include "RPGMenusSubsystem.h"
-#include "SampleHandler.h"
+#include "UtilityClasses/Dispatchers/SampleHandler.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"

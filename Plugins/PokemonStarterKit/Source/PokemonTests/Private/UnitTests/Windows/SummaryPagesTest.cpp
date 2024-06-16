@@ -6,7 +6,7 @@
 #include "External/accessor.hpp"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
-#include "PokemonTestUtilities.h"
+#include "UtilityClasses/PokemonTestUtilities.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/RAII.h"

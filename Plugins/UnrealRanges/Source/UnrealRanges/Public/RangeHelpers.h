@@ -39,7 +39,25 @@ auto CreateRange(TConstArrayView<T> &View) {
  * @return The range values as an array
  */
 template <typename T, typename RangeType>
+    requires std::is_copy_constructible_v<RangeType>
 TArray<T> ToArray(RangeType Range) {
+    TArray<T> Ret;
+    for (const auto &Value : Range) {
+        Ret.Add(Value);
+    }
+    return Ret;
+}
+
+/**
+ * Convert the elements in the range into an array
+ * @tparam T The type of data the array will hold
+ * @tparam RangeType The input range type
+ * @param Range The range to process
+ * @return The range values as an array
+ */
+template <typename T, typename RangeType>
+    requires (!std::is_copy_constructible_v<RangeType>)
+TArray<T> ToArray(RangeType &Range) {
     TArray<T> Ret;
     for (const auto &Value : Range) {
         Ret.Add(Value);
