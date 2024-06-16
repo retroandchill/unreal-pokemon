@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "Functional/FunctionalShorthands.h"
 #include "UObject/Interface.h"
+#include <range/v3/view/any_view.hpp>
 
 #include "Battle.generated.h"
 
+class ITraitHolder;
 class IBattleSide;
 class IBattleAction;
 class IAbilityBattleEffect;
@@ -58,41 +60,28 @@ class POKEMONBATTLE_API IBattle {
     virtual bool ActionSelectionFinished() const = 0;
 
     /**
-     * Should this battle actively ignore abilities
-     * @return Should abilities be ignored
-     */
-    virtual bool ShouldIgnoreAbilities() const = 0;
-
-    /**
      * Get the battle pawn used in battle
      * @return The pawn used in battle
      */
     virtual APawn *GetBattlePawn() const = 0;
 
     /**
-     * Iterate over each side of the battle and perform the given callback on said side
-     * @param Callback The callback to execute on each iteration
+     * Get all sides in the current battle
+     * @return A view of all sides in the battle
      */
-    virtual void ForEachSide(FSideWithIndexCallback Callback) const = 0;
+    virtual ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const = 0;
 
     /**
-     * Perform a sweep over each of the battlers and perform a callback on each one
-     * @param Callback The callback to perform
+     * Get all active battlers in the battle
+     * @return A view of all active battlers
      */
-    virtual void ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const = 0;
+    virtual ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
 
     /**
-     * Perform a sweep over each of the active field effects and perform a callback on each one
-     * @param Callback The callback to perform
+     * Get the list of trait holders in the battle that are currently active
+     * @return A view of all trait holders in battle
      */
-    virtual void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const = 0;
-
-    /**
-     * Check to see if there is a Pokémon on the field with a given ability that is not actively supressed.
-     * @param AbilityID The ID of the ability in question
-     * @return Was the ability found
-     */
-    virtual bool FindGlobalAbility(FName AbilityID) const = 0;
+    virtual ranges::any_view<ITraitHolder *const &> GetTraitHolders() const = 0;
 
     /**
      * Initiate the process of selecting actions for the given battler.

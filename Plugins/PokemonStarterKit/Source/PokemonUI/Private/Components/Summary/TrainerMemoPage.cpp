@@ -2,13 +2,14 @@
 
 #include "Components/Summary/TrainerMemoPage.h"
 #include "DataTypes/OptionalUtilities.h"
-#include "Mainpulation/RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "Primatives/DisplayText.h"
+#include "RangeHelpers.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
+#include <range/v3/view/transform.hpp>
 
 FCharacteristicList::FCharacteristicList() = default;
 
@@ -72,10 +73,10 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(CharacteristicList[BestIV % CharacteristicList.Num()]);
     }
 
-    auto JoinedString =
-        FString::Join(RangeHelpers::CreateRange(Lines) |
-                          std::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
-                      TEXT("\n"));
+    auto JoinedString = FString::Join(
+        RangeHelpers::CreateRange(Lines) |
+            ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
+        TEXT("\n"));
     MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
 }
 

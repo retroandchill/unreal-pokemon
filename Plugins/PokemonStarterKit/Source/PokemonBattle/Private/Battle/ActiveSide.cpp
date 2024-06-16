@@ -7,8 +7,8 @@
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
-#include "Mainpulation/RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
+#include "RangeHelpers.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 

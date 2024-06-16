@@ -30,20 +30,30 @@ class TestIniData(unittest.TestCase):
         self.assertGreater(len(names), 0)
 
     def test_parse_items(self):
-        item_data = ItemData(os.path.join(ROOT_DIR, "resources/items.txt"), None, None, None)
+        pockets = {
+            1: "Medicine",
+            2: "Medicine",
+            3: "Medicine",
+            4: "Medicine",
+            5: "Medicine",
+            6: "Medicine",
+            7: "Medicine",
+            8: "Medicine"
+        }
+        item_data = ItemData(os.path.join(ROOT_DIR, "resources/items.txt"), None, None, None, pockets)
         print(item_data.to_json())
         self.assertNotEqual('', item_data.to_json())
 
     def test_parse_pokemon_data(self):
         stats = {
-            "HP": Stat(Name("HP"), Text("HP"), Text("HP"), PokemonStatType.MAIN, 0),
-            "ATTACK": Stat(Name("ATTACK"), Text("Attack"), Text("Atk"), PokemonStatType.MAIN_BATTLE, 1),
-            "DEFENSE": Stat(Name("DEFENSE"), Text("Defense"), Text("Def"), PokemonStatType.MAIN_BATTLE, 2),
-            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), Text("Special Attack"), Text("SpAtk"),
-                                   PokemonStatType.MAIN_BATTLE, 4),
-            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), Text("Special Defense"), Text("SpDef"),
+            "HP": Stat(Name("HP"), 1, Text("HP"), Text("HP"), PokemonStatType.MAIN, 0),
+            "ATTACK": Stat(Name("ATTACK"), 2, Text("Attack"), Text("Atk"), PokemonStatType.MAIN_BATTLE, 1),
+            "DEFENSE": Stat(Name("DEFENSE"), 3, Text("Defense"), Text("Def"), PokemonStatType.MAIN_BATTLE, 2),
+            "SPECIAL_ATTACK": Stat(Name("SPECIAL_ATTACK"), 4, Text("Special Attack"), Text("SpAtk"),
+                                   PokemonStatType.MAIN_BATTLE, 5),
+            "SPECIAL_DEFENSE": Stat(Name("SPECIAL_DEFENSE"), 5, Text("Special Defense"), Text("SpDef"),
                                     PokemonStatType.MAIN_BATTLE, 5),
-            "SPEED": Stat(Name("SPEED"), Text("Speed"), Text("Spd"), PokemonStatType.MAIN_BATTLE, 3)
+            "SPEED": Stat(Name("SPEED"), 6, Text("Speed"), Text("Spd"), PokemonStatType.MAIN_BATTLE, 3)
         }
 
         pokemon_data = SpeciesData(os.path.join(ROOT_DIR, "resources/pokemon.txt"), None, None, None,

@@ -1,9 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "range/v3/view/filter.hpp"
+#include "range/v3/view/transform.hpp"
+#include "RangeHelpers.h"
 #include "Settings/BaseSettings.h"
-#include <ranges>
 
 FItem::FItem() = default;
 
@@ -58,8 +59,9 @@ TArray<FName> UItemHelper::GetItemNames() {
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
-    return RangeHelpers::CreateRange(Rows) | std::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
-           std::views::transform([](const FItem *Item) { return Item->ID; }) | RangeHelpers::TToArray<FName>();
+    return RangeHelpers::CreateRange(Rows) |
+           ranges::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
+           ranges::views::transform([](const FItem *Item) { return Item->ID; }) | RangeHelpers::TToArray<FName>();
 }
 
 TArray<FName> UItemHelper::GetPocketNames() {

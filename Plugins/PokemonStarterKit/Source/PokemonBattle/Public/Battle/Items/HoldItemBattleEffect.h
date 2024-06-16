@@ -10,6 +10,7 @@
 class IBattleMove;
 struct FDamageMultipliers;
 class IBattler;
+
 // This class does not need to be modified.
 UINTERFACE()
 class UHoldItemBattleEffect : public UInterface {
