@@ -1,17 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Moves/BaseBattleMove.h"
-#include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Effects/BattlerEffect.h"
-#include "Battle/Effects/FieldEffect.h"
-#include "Battle/Items/HoldItemBattleEffect.h"
+#include "Battle/Traits/Damage/DamageModificationTrait.h"
+#include "Battle/Traits/TraitUtilities.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
+#include "RangeHelpers.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
@@ -34,13 +33,10 @@ UBaseBattleMove::GetAllPossibleTargets_Implementation(const TScriptInterface<IBa
     auto UserSide = User->GetOwningSide();
     auto UserId = User->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    Battle->ForEachActiveBattler([&Targets, &UserId](const TScriptInterface<IBattler> &Battler) {
-        if (Battler->GetInternalId() == UserId) {
-            return;
-        }
-        Targets.Emplace(Battler);
-    });
-    return Targets;
+    return Battle->GetActiveBattlers() |
+           ranges::views::filter(
+               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == UserId; }) |
+           RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }
 
 FText UBaseBattleMove::GetDisplayName_Implementation() const {
@@ -85,27 +81,28 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging};
     }
+    FMoveDamageInfo Context = {.User = User, .Target = Target, .TargetCount = TargetCount};
 
-    auto MoveType = DetermineType();
-    FDamageEffects Effects;
-    CalculateTypeMatchups(Effects, Target, MoveType);
-    if (Effects.Effectiveness == EDamageEffectiveness::NoEffect) {
+    Context.Type = DetermineType();
+    CalculateTypeMatchups(Context.Effects, Target, Context.Type);
+    if (Context.Effects.Effectiveness == EDamageEffectiveness::NoEffect) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NoEffect};
     }
 
     // TODO: Roll crit
-    int32 BasePower = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
+    Context.BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
     FDamageMultipliers Multipliers;
-    CalculateDamageMultipliers(Multipliers, User, Target, TargetCount, MoveType, BasePower, Effects);
-    BasePower = ModifiedParameter(BasePower, Multipliers.PowerMultiplier);
+    CalculateDamageMultipliers(Multipliers, Context);
+    Context.BaseDamage = ModifiedParameter(Context.BaseDamage, Multipliers.PowerMultiplier);
     Attack = ModifiedParameter(Attack, Multipliers.AttackMultiplier);
     Defense = ModifiedParameter(Defense, Multipliers.DefenseMultiplier);
-    int32 Damage = CalculateBaseDamage(BasePower, User->GetPokemonLevel(), Attack, Defense);
+    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), Attack, Defense);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
-    return {.Damage = Damage, .Effectiveness = Effects.Effectiveness, .bCriticalHit = Effects.bCriticalHit};
+    return {
+        .Damage = Damage, .Effectiveness = Context.Effects.Effectiveness, .bCriticalHit = Context.Effects.bCriticalHit};
 }
 
 void UBaseBattleMove::CalculateTypeMatchups_Implementation(FDamageEffects &Effects,
@@ -160,16 +157,14 @@ FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScr
                : FAttackAndDefense{.Attack = User->GetAttack(), .Defense = Target->GetDefense()};
 }
 
-void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers,
-                                                 const TScriptInterface<IBattler> &User,
-                                                 const TScriptInterface<IBattler> &Target, int32 TargetCount,
-                                                 FName Type, int32 BaseDamage, const FDamageEffects &Effects) {
-    ApplyMultiTargetModifier(Multipliers, TargetCount);
-    ApplyCriticalHitModifier(Multipliers, Effects);
+void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) {
+    Traits::ApplyIndividualDamageModifications(Multipliers, Context);
+    ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
+    ApplyCriticalHitModifier(Multipliers, Context.Effects);
     ApplyDamageSwing(Multipliers);
-    ApplyStabModifiers(Multipliers, User, Type);
-    ApplyTypeMatchUps(Multipliers, Effects);
-    ApplyAdditionalDamageModifiers(Multipliers, User, Target, TargetCount, Type, BaseDamage);
+    ApplyStabModifiers(Multipliers, Context.User, Context.Type);
+    ApplyTypeMatchUps(Multipliers, Context.Effects);
+    ApplyAdditionalDamageModifiers(Multipliers, Context);
 }
 
 void UBaseBattleMove::ApplyCriticalHitModifier_Implementation(FDamageMultipliers &Multipliers,
@@ -204,8 +199,6 @@ void UBaseBattleMove::ApplyTypeMatchUps_Implementation(FDamageMultipliers &Multi
 }
 
 void UBaseBattleMove::ApplyAdditionalDamageModifiers_Implementation(FDamageMultipliers &Multipliers,
-                                                                    const TScriptInterface<IBattler> &User,
-                                                                    const TScriptInterface<IBattler> &Target,
-                                                                    int32 TargetCount, FName Type, int32 BaseDamage) {
+                                                                    const FMoveDamageInfo &Context) {
     // Currently there are no additional modifiers that need to be applied
 }

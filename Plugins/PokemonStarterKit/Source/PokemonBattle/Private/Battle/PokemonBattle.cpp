@@ -1,15 +1,21 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/PokemonBattle.h"
+#include "Algo/AnyOf.h"
+#include "Algo/ForEach.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Traits/IndividualTraitHolder.h"
 #include "Lookup/InjectionUtilities.h"
-#include "Mainpulation/RangeHelpers.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
+#include "range/v3/view/join.hpp"
+#include "range/v3/view/transform.hpp"
+#include "RangeHelpers.h"
 #include <functional>
+#include <range/v3/view/filter.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -104,28 +110,23 @@ bool APokemonBattle::ActionSelectionFinished() const {
                         [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
-bool APokemonBattle::ShouldIgnoreAbilities() const {
-    return false;
+ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
+    return RangeHelpers::CreateRange(Sides);
 }
 
-void APokemonBattle::ForEachSide(FSideWithIndexCallback Callback) const {
-    for (int32 i = 0; i < Sides.Num(); i++) {
-        Callback(i, Sides[i]);
-    }
+ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
+    return RangeHelpers::CreateRange(Sides) | ranges::views::transform(&GetBattlers) | ranges::views::join |
+           ranges::views::filter(&IsNotFainted);
 }
 
-void APokemonBattle::ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const {
-    std::ranges::for_each(RangeHelpers::CreateRange(Sides) | std::views::transform(&GetBattlers) |
-                              std::ranges::views::join | std::views::filter(&IsNotFainted),
-                          Callback);
-}
-
-void APokemonBattle::ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const {
-    // TODO: Probably going to remove this
-}
-
-bool APokemonBattle::FindGlobalAbility(FName AbilityID) const {
-    return false;
+ranges::any_view<ITraitHolder *const &> APokemonBattle::GetTraitHolders() const {
+    return RangeHelpers::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
+               return RangeHelpers::CreateRange(Side->GetBattlers());
+           }) |
+           ranges::views::join | ranges::views::transform([](const TScriptInterface<IBattler> &Battler) {
+               return Battler->GetTraitHolders();
+           }) |
+           ranges::views::join;
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
@@ -192,7 +193,7 @@ void APokemonBattle::StartTurn() {
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
     Phase = EBattlePhase::Selecting;
-    ForEachActiveBattler([this](const TScriptInterface<IBattler> &Battler) {
+    std::ranges::for_each(GetActiveBattlers(), [this](const TScriptInterface<IBattler> &Battler) {
         auto BattlerId = Battler->GetInternalId();
         CurrentActionCount.Add(BattlerId, 0);
         ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());

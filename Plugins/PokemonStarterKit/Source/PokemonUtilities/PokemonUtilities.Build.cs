@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 using UnrealBuildTool;
+using System.IO;
 
 public class PokemonUtilities : ModuleRules
 {
@@ -11,7 +12,8 @@ public class PokemonUtilities : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core"
+				"Core",
+				"UnrealRanges"
 			}
 		);
 
@@ -24,12 +26,5 @@ public class PokemonUtilities : ModuleRules
 				"SlateCore"
 			}
 		);
-		
-		if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
-		{
-			PrivateDependencyModuleNames.Add("AutomationTestHelpers");
-			PrivateDependencyModuleNames.Add("UnrealEd");
-			PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-		}
 	}
 }

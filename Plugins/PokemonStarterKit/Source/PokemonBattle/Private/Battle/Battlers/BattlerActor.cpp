@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerActor.h"
-#include "Algo/ForEach.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/BattlerController.h"
@@ -10,11 +9,15 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "range/v3/view/filter.hpp"
+#include "RangeHelpers.h"
 #include <functional>
+#include <range/v3/view/single.hpp>
+#include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
@@ -30,7 +33,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     InternalId = FGuid::NewGuid();
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
-            std::views::transform(std::bind_front(&CreateBattleMove, this)) |
+            ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
             RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
     SpawnSpriteActor(ShowImmediately);
 
@@ -42,6 +45,8 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     }
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
+
+    Ability.SetID(Pokemon->GetAbility()->GetAbilityID());
 
     return this;
 }
@@ -123,8 +128,8 @@ bool ABattlerActor::IsAbilityActive() const {
     return true;
 }
 
-const TScriptInterface<IAbilityBattleEffect> &ABattlerActor::GetAbility() const {
-    return Ability;
+UAbilityBattleEffect *ABattlerActor::GetAbility() const {
+    return Ability.Get();
 }
 
 bool ABattlerActor::IsHoldItemActive() const {
@@ -147,18 +152,16 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-void ABattlerActor::ForEachAlly(TInterfaceCallback<IBattler> Callback) const {
-    Algo::ForEach(OwningSide->GetBattlers(), [this, &Callback](const TScriptInterface<IBattler> &Battler) {
-        if (Battler->GetInternalId() == InternalId) {
-            return;
-        }
-
-        Callback(Battler);
-    });
+ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+    return RangeHelpers::CreateRange(OwningSide->GetBattlers()) |
+           ranges::views::filter(
+               [this](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == InternalId; });
 }
 
-void ABattlerActor::ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const {
-    // TODO: Not implemented yet, probably going to remove this and replace it with the GAS
+ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
+    auto AbilityRange = ranges::views::single(Ability.Get());
+    return AbilityRange |
+           ranges::views::filter([](const IIndividualTraitHolder *TraitHolder) { return TraitHolder != nullptr; });
 }
 
 void ABattlerActor::ShowSprite() const {

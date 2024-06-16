@@ -5,7 +5,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMenuOption.h"
 #include "Handlers/BattleMenuHandler.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include <functional>
 
 TSharedRef<SWidget> UPokemonActionOptions::RebuildWidget() {

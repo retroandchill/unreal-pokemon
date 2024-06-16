@@ -2,4 +2,10 @@
 
 #include "Battle/Abilities/AbilityBattleEffect.h"
 
-// Add default functionality here for any IAbilityBattleEffect functions that are not pure virtual.
+const FIndividualDamageModifierTraits &UAbilityBattleEffect::GetDamageModifiers() const {
+    return DamageModifiers;
+}
+
+bool UAbilityBattleEffect::HasTag(FName Tag) const {
+    return Tags.Contains(Tag);
+}

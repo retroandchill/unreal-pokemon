@@ -4,8 +4,9 @@
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BattleMove.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include <functional>
+#include <range/v3/view/filter.hpp>
 
 static bool IsMoveUsable(const TScriptInterface<IBattleMove> &Move) {
     return IBattleMove::Execute_IsUsable(Move.GetObject());
@@ -24,7 +25,7 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    auto PossibleMoves = RangeHelpers::CreateRange(Battler->GetMoves()) | std::views::filter(&IsMoveUsable) |
+    auto PossibleMoves = RangeHelpers::CreateRange(Battler->GetMoves()) | ranges::views::filter(&IsMoveUsable) |
                          RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want

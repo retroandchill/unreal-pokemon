@@ -9,8 +9,9 @@
  */
 struct FGameInstanceShutdown {
     void operator()(UGameInstance *GameInstance) {
-        if (GameInstance != nullptr)
+        if (GameInstance != nullptr) {
             GameInstance->Shutdown();
+        }
     }
 };
 
@@ -24,8 +25,9 @@ using FGameInstancePtr = TUniquePtr<UGameInstance, FGameInstanceShutdown>;
  */
 struct FRemoveWidgetFromViewport {
     void operator()(UWidget *Widget) {
-        if (Widget != nullptr)
+        if (Widget != nullptr) {
             Widget->RemoveFromParent();
+        }
     }
 };
 
@@ -42,7 +44,7 @@ using TWidgetPtr = TUniquePtr<T, FRemoveWidgetFromViewport>;
 struct FCleanupWorld {
     void operator()(UWorld *World) {
         if (World != nullptr) {
-            World->CleanupWorld();
+            World->DestroyWorld(false);
         }
     }
 };

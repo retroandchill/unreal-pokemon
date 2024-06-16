@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
-#include "Mainpulation/CircularIterator.h"
+#include "Manipulation/CircularIterator.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
 

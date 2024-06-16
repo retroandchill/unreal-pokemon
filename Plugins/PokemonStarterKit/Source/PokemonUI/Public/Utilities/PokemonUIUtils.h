@@ -7,8 +7,10 @@
 #include "Data/Command.h"
 #include "Handlers/MenuHandler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Mainpulation/RangeHelpers.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+#include "RangeHelpers.h"
+#include <range/v3/view/filter.hpp>
+#include <range/v3/view/transform.hpp>
 
 #include "PokemonUIUtils.generated.h"
 
@@ -102,10 +104,10 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
     template <typename T, typename... A>
     static TArray<TObjectPtr<UCommand>> CreateCommandListFromHandlers(const TArray<T> &Handlers,
                                                                       const TOptional<FText> &CancelText, A &&...Args) {
-        auto Commands = RangeHelpers::CreateRange(Handlers) |
-                        std::views::filter([&Args...](T Handler) { return Handler->ShouldShow(Forward<A>(Args)...); }) |
-                        std::views::transform(&UMenuHandler::CreateCommand) |
-                        RangeHelpers::TToArray<TObjectPtr<UCommand>>();
+        auto Commands =
+            RangeHelpers::CreateRange(Handlers) |
+            ranges::views::filter([&Args...](T Handler) { return Handler->ShouldShow(Forward<A>(Args)...); }) |
+            ranges::views::transform(&UMenuHandler::CreateCommand) | RangeHelpers::TToArray<TObjectPtr<UCommand>>();
 
         if (CancelText.IsSet()) {
             static FName CancelName = TEXT("Cancel");

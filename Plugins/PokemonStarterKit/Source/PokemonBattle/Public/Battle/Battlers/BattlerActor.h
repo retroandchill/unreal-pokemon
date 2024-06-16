@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battler.h"
 #include "GameFramework/Actor.h"
 
@@ -80,7 +81,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     bool IsAbilityActive() const override;
 
     UFUNCTION(BlueprintPure, Category = Ability)
-    const TScriptInterface<IAbilityBattleEffect> &GetAbility() const override;
+    UAbilityBattleEffect *GetAbility() const override;
 
     UFUNCTION(BlueprintPure, Category = Items)
     bool IsHoldItemActive() const override;
@@ -93,8 +94,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
     void SelectActions() override;
     uint8 GetActionCount() const override;
-    void ForEachAlly(TInterfaceCallback<IBattler> Callback) const override;
-    void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const override;
+    ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
+    ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const override;
 
     void ShowSprite() const override;
 
@@ -131,8 +132,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     /**
      * The ability that this battler has
      */
-    UPROPERTY()
-    TScriptInterface<IAbilityBattleEffect> Ability;
+    FManagedBattleAbility Ability;
 
     /**
      * The hold item that this battler has
