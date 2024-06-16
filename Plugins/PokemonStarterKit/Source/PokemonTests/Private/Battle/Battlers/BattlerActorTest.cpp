@@ -15,10 +15,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include <thread>
 
-using namespace accessor;
 using namespace fakeit;
-
-MEMBER_ACCESSOR(AccessBattleSpriteActor, ABattlerActor, BattlerSpriteClass, TSoftClassPtr<AActor>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerActorTest_Stats, "Unit Tests.Battle.Battlers.BattlerActorTest.Stats",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
