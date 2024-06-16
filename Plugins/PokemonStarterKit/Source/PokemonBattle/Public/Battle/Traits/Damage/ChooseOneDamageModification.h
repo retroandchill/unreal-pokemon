@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageModificationTrait.h"
+
 #include "ChooseOneDamageModification.generated.h"
 
 /**
@@ -13,14 +14,13 @@ UCLASS()
 class POKEMONBATTLE_API UChooseOneDamageModification : public UDamageModificationTrait {
     GENERATED_BODY()
 
-protected:
-    void Apply_Implementation(FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context) const override;
+  protected:
+    void Apply_Implementation(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) const override;
 
-private:
+  private:
     /**
      * The list of traits to consider before applying one
      */
     UPROPERTY(EditAnywhere, Instanced, Category = Damage)
     TArray<TObjectPtr<UDamageModificationTrait>> Traits;
-
 };

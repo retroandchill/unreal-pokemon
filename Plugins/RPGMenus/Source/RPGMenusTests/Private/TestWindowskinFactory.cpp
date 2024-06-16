@@ -5,7 +5,7 @@
 #include "Utilities/GCPointer.h"
 #include "Windowskin/WindowskinFactory.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinFactory, "Unit Tests.RPGMenus.TestWindowskinFactory",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinFactory, "Private.UnitTests.RPGMenus.TestWindowskinFactory",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestWindowskinFactory::RunTest(const FString &Parameters) {

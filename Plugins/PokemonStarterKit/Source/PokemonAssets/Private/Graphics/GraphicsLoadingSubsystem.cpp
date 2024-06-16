@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
+#include "RangeHelpers.h"
 #include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"

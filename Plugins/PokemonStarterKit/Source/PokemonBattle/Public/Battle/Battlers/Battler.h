@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Functional/FunctionalShorthands.h"
 #include "Pokemon/Breeding/PokemonGender.h"
-#include "UObject/Interface.h"
 #include "range/v3/view/any_view.hpp"
+#include "UObject/Interface.h"
 
 #include "Battler.generated.h"
 
@@ -23,11 +23,10 @@ class IAbilityBattleEffect;
 class IMoveModifier;
 class IBattlerController;
 
-DECLARE_DELEGATE_OneParam(FProcessIndividualTrait, const IIndividualTraitHolder&)
+DECLARE_DELEGATE_OneParam(FProcessIndividualTrait, const IIndividualTraitHolder &)
 
-// This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType)
-class POKEMONBATTLE_API UBattler : public UInterface {
+    // This class does not need to be modified.
+    UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
     GENERATED_BODY()
 };
 
@@ -184,7 +183,7 @@ class POKEMONBATTLE_API IBattler {
      * @return The effect of the ability in question
      */
     UFUNCTION(BlueprintCallable, Category = Items)
-    virtual UAbilityBattleEffect* GetAbility() const = 0;
+    virtual UAbilityBattleEffect *GetAbility() const = 0;
 
     /**
      * Get if the target's current hold item is active
@@ -233,7 +232,8 @@ class POKEMONBATTLE_API IBattler {
 
     virtual void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const = 0;
 
-    virtual bool ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const = 0;
+    virtual bool
+    ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder &)> Predicate) const = 0;
 
     virtual ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const = 0;
 

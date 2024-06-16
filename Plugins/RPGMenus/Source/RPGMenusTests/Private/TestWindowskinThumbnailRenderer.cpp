@@ -5,7 +5,7 @@
 #include "Utilities/GCPointer.h"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinThumbnailRenderer, "Unit Tests.RPGMenus.TestWindowskinThumbnailRenderer",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinThumbnailRenderer, "Private.UnitTests.RPGMenus.TestWindowskinThumbnailRenderer",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestWindowskinThumbnailRenderer::RunTest(const FString &Parameters) {

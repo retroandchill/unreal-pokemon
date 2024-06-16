@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Traits/Damage/DamageModificationTraits.h"
 #include "Battle/Traits/IndividualTraitHolder.h"
 #include "Battle/Traits/ManagedTraitHolder.h"
-#include "Battle/Traits/Damage/DamageModificationTraits.h"
 #include "Engine/DataAsset.h"
+
 #include "AbilityBattleEffect.generated.h"
 
 /**
@@ -16,17 +17,17 @@ UCLASS()
 class POKEMONBATTLE_API UAbilityBattleEffect : public UDataAsset, public IIndividualTraitHolder {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the damage modifier traits
      * @return Traits that apply to modify the damage value of a move
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
-    const FIndividualDamageModifierTraits& GetDamageModifiers() const final;
-    
+    const FIndividualDamageModifierTraits &GetDamageModifiers() const final;
+
     bool HasTag(FName Tag) const final;
 
-private:
+  private:
     /**
      * Traits that apply to modify the damage value of a move
      */
@@ -38,7 +39,6 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = Metadata)
     TSet<FName> Tags;
-
 };
 
 using FManagedBattleAbility = TManagedTraitHolder<UAbilityBattleEffect, TEXT("/Game/Data/Effects/Abilities/Battle")>;

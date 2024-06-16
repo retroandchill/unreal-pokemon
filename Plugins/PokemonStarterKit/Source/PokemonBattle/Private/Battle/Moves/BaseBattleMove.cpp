@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Moves/BaseBattleMove.h"
+#include "Algo/ForEach.h"
 #include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
@@ -8,14 +9,13 @@
 #include "Battle/Effects/BattlerEffect.h"
 #include "Battle/Effects/FieldEffect.h"
 #include "Battle/Items/HoldItemBattleEffect.h"
+#include "Battle/Traits/Damage/DamageModificationTrait.h"
+#include "Battle/Traits/TraitUtilities.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
-#include "Algo/ForEach.h"
-#include "Battle/Traits/TraitUtilities.h"
-#include "Battle/Traits/Damage/DamageModificationTrait.h"
-#include "RangeHelpers.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
+#include "RangeHelpers.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
@@ -89,7 +89,7 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging};
     }
-    FMoveDamageInfo Context = {.User = User, .Target = Target, .TargetCount = TargetCount };
+    FMoveDamageInfo Context = {.User = User, .Target = Target, .TargetCount = TargetCount};
 
     Context.Type = DetermineType();
     CalculateTypeMatchups(Context.Effects, Target, Context.Type);
@@ -109,7 +109,8 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), Attack, Defense);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
-    return {.Damage = Damage, .Effectiveness = Context.Effects.Effectiveness, .bCriticalHit = Context.Effects.bCriticalHit};
+    return {
+        .Damage = Damage, .Effectiveness = Context.Effects.Effectiveness, .bCriticalHit = Context.Effects.bCriticalHit};
 }
 
 void UBaseBattleMove::CalculateTypeMatchups_Implementation(FDamageEffects &Effects,
@@ -164,7 +165,7 @@ FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScr
                : FAttackAndDefense{.Attack = User->GetAttack(), .Defense = Target->GetDefense()};
 }
 
-void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context) {
+void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) {
     Traits::ApplyIndividualDamageModifications(Multipliers, Context);
     ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
     ApplyCriticalHitModifier(Multipliers, Context.Effects);
@@ -205,9 +206,7 @@ void UBaseBattleMove::ApplyTypeMatchUps_Implementation(FDamageMultipliers &Multi
     Multipliers.FinalDamageMultiplier *= Effects.TypeMatchUp;
 }
 
-
-
 void UBaseBattleMove::ApplyAdditionalDamageModifiers_Implementation(FDamageMultipliers &Multipliers,
-    const FMoveDamageInfo &Context) {
+                                                                    const FMoveDamageInfo &Context) {
     // Currently there are no additional modifiers that need to be applied
 }

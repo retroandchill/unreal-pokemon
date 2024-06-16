@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battler.h"
 #include "GameFramework/Actor.h"
-#include "Battle/Abilities/AbilityBattleEffect.h"
 
 #include "BattlerActor.generated.h"
 
@@ -81,7 +81,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     bool IsAbilityActive() const override;
 
     UFUNCTION(BlueprintPure, Category = Ability)
-    UAbilityBattleEffect* GetAbility() const override;
+    UAbilityBattleEffect *GetAbility() const override;
 
     UFUNCTION(BlueprintPure, Category = Items)
     bool IsHoldItemActive() const override;
@@ -97,7 +97,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void ForEachAlly(TInterfaceCallback<IBattler> Callback) const override;
     void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const override;
     void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const override;
-    bool ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const override;
+    bool ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder &)> Predicate) const override;
     ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const override;
 
     void ShowSprite() const override;
@@ -160,5 +160,4 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IBattlerController> Controller;
-    
 };

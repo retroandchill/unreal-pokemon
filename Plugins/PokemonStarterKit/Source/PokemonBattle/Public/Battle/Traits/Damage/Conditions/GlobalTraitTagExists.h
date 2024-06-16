@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageModificationCondition.h"
+
 #include "GlobalTraitTagExists.generated.h"
 
 /**
@@ -13,10 +14,10 @@ UCLASS()
 class POKEMONBATTLE_API UGlobalTraitTagExists : public UDamageModificationCondition {
     GENERATED_BODY()
 
-protected:
+  protected:
     bool Evaluate_Implementation(const FMoveDamageInfo &Context) const override;
 
-private:
+  private:
     /**
      * The tag to match
      */

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
+
 #include "SimpleDamageModificationTrait.generated.h"
 
 /**
@@ -13,14 +14,13 @@ UCLASS()
 class POKEMONBATTLE_API USimpleDamageModificationTrait : public UDamageModificationTrait {
     GENERATED_BODY()
 
-protected:
-    void Apply_Implementation(FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context) const override;
+  protected:
+    void Apply_Implementation(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) const override;
 
-private:
+  private:
     /**
      * The multipliers to apply when calculating damage
      */
     UPROPERTY(EditAnywhere, Category = Damage)
     FDamageMultipliers DamageMultipliers;
-
 };

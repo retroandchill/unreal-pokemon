@@ -10,15 +10,15 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "RangeHelpers.h"
+#include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
-#include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include <functional>
 #include "range/v3/view/filter.hpp"
-#include <range/v3/view/transform.hpp>
+#include "RangeHelpers.h"
+#include <functional>
 #include <range/v3/view/single.hpp>
+#include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
@@ -48,7 +48,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
     Ability.SetID(Pokemon->GetAbility()->GetAbilityID());
-    
+
     return this;
 }
 
@@ -129,7 +129,7 @@ bool ABattlerActor::IsAbilityActive() const {
     return true;
 }
 
-UAbilityBattleEffect* ABattlerActor::GetAbility() const {
+UAbilityBattleEffect *ABattlerActor::GetAbility() const {
     return Ability.Get();
 }
 
@@ -173,7 +173,8 @@ void ABattlerActor::ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualT
     }
 }
 
-bool ABattlerActor::ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const {
+bool ABattlerActor::ForAnyIndividualTraitHolder(
+    const TFunctionRef<bool(const IIndividualTraitHolder &)> Predicate) const {
     if (auto AbilityEffect = Ability.Get(); AbilityEffect != nullptr && Predicate(*AbilityEffect)) {
         return true;
     }
@@ -183,8 +184,8 @@ bool ABattlerActor::ForAnyIndividualTraitHolder(const TFunctionRef<bool(const II
 
 ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
     auto AbilityRange = ranges::views::single(Ability.Get());
-    return AbilityRange
-        | ranges::views::filter([](const IIndividualTraitHolder* TraitHolder) { return TraitHolder != nullptr; });
+    return AbilityRange |
+           ranges::views::filter([](const IIndividualTraitHolder *TraitHolder) { return TraitHolder != nullptr; });
 }
 
 void ABattlerActor::ShowSprite() const {

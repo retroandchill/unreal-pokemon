@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "TraitHolder.h"
 #include "UObject/Interface.h"
+
 #include "IndividualTraitHolder.generated.h"
 
 struct FIndividualDamageModifierTraits;
@@ -22,11 +23,10 @@ class POKEMONBATTLE_API IIndividualTraitHolder : public ITraitHolder {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Get the damage modifier traits
      * @return Traits that apply to modify the damage value of a move
      */
-    virtual const FIndividualDamageModifierTraits& GetDamageModifiers() const = 0;
-
+    virtual const FIndividualDamageModifierTraits &GetDamageModifiers() const = 0;
 };

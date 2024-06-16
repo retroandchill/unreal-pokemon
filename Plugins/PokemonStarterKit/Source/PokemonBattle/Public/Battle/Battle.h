@@ -90,11 +90,10 @@ class POKEMONBATTLE_API IBattle {
      * @param Callback The callback to perform
      */
     virtual void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const = 0;
-    
-    virtual bool AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &)>& Predicate) const = 0;
 
-    virtual ranges::any_view<ITraitHolder * const&> GetTraitHolders() const = 0;
+    virtual bool AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &)> &Predicate) const = 0;
 
+    virtual ranges::any_view<ITraitHolder *const &> GetTraitHolders() const = 0;
 
     /**
      * Check to see if there is a Pokémon on the field with a given ability that is not actively supressed.

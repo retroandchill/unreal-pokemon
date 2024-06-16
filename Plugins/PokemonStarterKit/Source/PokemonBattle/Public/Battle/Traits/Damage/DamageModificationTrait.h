@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Battle/Moves/BattleDamage.h"
 #include "UObject/Object.h"
-#include "DamageModificationTrait.generated.h"
 
+#include "DamageModificationTrait.generated.h"
 
 class UDamageModificationCondition;
 
@@ -17,13 +17,13 @@ UCLASS(Abstract, EditInlineNew)
 class POKEMONBATTLE_API UDamageModificationTrait : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Does the trait meet the conditions
      * @param Context The context of the move being used
      * @return Will the trait be applied.
      */
-    bool MeetsConditions(const FMoveDamageInfo& Context) const;
+    bool MeetsConditions(const FMoveDamageInfo &Context) const;
 
     /**
      * Apply the trait to the existing multipliers
@@ -31,13 +31,12 @@ public:
      * @param Context The context of the move being used
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void Apply(FDamageMultipliers& Multipliers, const FMoveDamageInfo& Context) const;
-    
-private:
+    void Apply(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) const;
+
+  private:
     /**
      * Any conditions that must be met to apply this trait. Having no conditions means the trait is always active.
      */
     UPROPERTY(EditAnywhere, Instanced, Category = Damage)
     TArray<TObjectPtr<UDamageModificationCondition>> Conditions;
-
 };

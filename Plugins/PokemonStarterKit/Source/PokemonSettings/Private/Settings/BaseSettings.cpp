@@ -2,8 +2,8 @@
 
 #include "Settings/BaseSettings.h"
 #include "Algo/ForEach.h"
-#include "RangeHelpers.h"
 #include "PokemonKitSettings.h"
+#include "RangeHelpers.h"
 
 Pokemon::FBaseSettings::FBaseSettings() : KitSettings(GetDefault<UPokemonKitSettings>()) {
 }

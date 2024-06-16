@@ -145,16 +145,15 @@ struct FDamageMultipliers {
     /**
      * Multiplies each individual multiplier by each other
      * @param Other The other multiplier to apply this towards
-     * @return 
+     * @return
      */
-    FORCEINLINE FDamageMultipliers& operator*=(const FDamageMultipliers& Other) {
+    FORCEINLINE FDamageMultipliers &operator*=(const FDamageMultipliers &Other) {
         PowerMultiplier *= Other.PowerMultiplier;
         AttackMultiplier *= Other.AttackMultiplier;
         DefenseMultiplier *= Other.DefenseMultiplier;
         FinalDamageMultiplier *= Other.FinalDamageMultiplier;
         return *this;
     }
-    
 };
 
 /**

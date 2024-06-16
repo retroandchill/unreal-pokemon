@@ -9,7 +9,7 @@
 
 constexpr auto TEST_SELECTABLE = TEXT("/RPGMenus/Tests/Resources/TestSelectable.TestSelectable");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetInputTest, "Unit Tests.RPGMenus.SelectableWidgetInputTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(SelectableWidgetInputTest, "Private.UnitTests.RPGMenus.SelectableWidgetInputTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {

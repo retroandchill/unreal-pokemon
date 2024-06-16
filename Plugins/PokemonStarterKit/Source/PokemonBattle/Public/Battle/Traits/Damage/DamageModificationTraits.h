@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "DamageModificationTraits.generated.h"
 
 class UDamageModificationTrait;
@@ -44,5 +45,4 @@ struct POKEMONBATTLE_API FIndividualDamageModifierTraits {
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = Damage)
     TArray<TObjectPtr<UDamageModificationTrait>> TargetAllies;
-    
 };

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include <array>
 
 /**
@@ -33,7 +32,7 @@ struct TStringLiteral {
  */
 template <typename T, TStringLiteral Path>
 class TManagedTraitHolder : public FGCObject {
-public:
+  public:
     /**
      * Constructs an empty manager with no ID assigned
      */
@@ -44,14 +43,13 @@ public:
      * @param IdIn The ID to assign
      */
     explicit TManagedTraitHolder(FName IdIn) : ID(IdIn) {
-        
     }
 
     /**
      * Attempt to get the object, lazily loading if it has not been set
      * @return The object that this holder contains.
      */
-    T* Get() const {
+    T *Get() const {
         return GetRef();
     }
 
@@ -59,12 +57,12 @@ public:
      * Get a reference to the object that is managed by this trait holder
      * @return A reference to the managed object
      */
-    const TObjectPtr<T>& GetRef() const {
+    const TObjectPtr<T> &GetRef() const {
         if (bLoaded) {
             return Object.Get();
         }
 
-        auto Format = FString::Format(TEXT("{0}/{1}.{1}"), { Path.Value.data(), ID.ToString() });
+        auto Format = FString::Format(TEXT("{0}/{1}.{1}"), {Path.Value.data(), ID.ToString()});
         Object = Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Format));
         bLoaded = true;
         return Object;
@@ -74,7 +72,7 @@ public:
      * Dereference operator for the managed resource
      * @return The object that this holder contains.
      */
-    T& operator*() const {
+    T &operator*() const {
         return *Get();
     }
 
@@ -82,7 +80,7 @@ public:
      * Pointer member access operator for the managed resource
      * @return The object that this holder contains.
      */
-    T* operator->() const {
+    T *operator->() const {
         return Get();
     }
 
@@ -99,17 +97,17 @@ public:
     void AddReferencedObjects(FReferenceCollector &Collector) override {
         Collector.AddReferencedObject(Object);
     }
-    
+
     FString GetReferencerName() const override {
         return TEXT("TManagedTraitHolder");
     }
 
-private:
+  private:
     /**
      * The current ID of the loaded asset
      */
     FName ID;
-    
+
     /**
      * The actual managed object
      */

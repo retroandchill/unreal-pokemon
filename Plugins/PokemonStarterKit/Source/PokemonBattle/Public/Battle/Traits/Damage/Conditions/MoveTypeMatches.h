@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageModificationCondition.h"
+
 #include "MoveTypeMatches.generated.h"
 
 /**
@@ -13,10 +14,10 @@ UCLASS()
 class POKEMONBATTLE_API UMoveTypeMatches : public UDamageModificationCondition {
     GENERATED_BODY()
 
-public:
+  public:
     bool Evaluate_Implementation(const FMoveDamageInfo &Context) const override;
 
-private:
+  private:
     /**
      * The type that needs to match the move's type
      */
