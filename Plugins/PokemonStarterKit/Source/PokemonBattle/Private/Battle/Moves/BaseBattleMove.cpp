@@ -85,27 +85,27 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging};
     }
+    FMoveDamageInfo Context = {.User = User, .Target = Target, .TargetCount = TargetCount };
 
-    auto MoveType = DetermineType();
-    FDamageEffects Effects;
-    CalculateTypeMatchups(Effects, Target, MoveType);
-    if (Effects.Effectiveness == EDamageEffectiveness::NoEffect) {
+    Context.Type = DetermineType();
+    CalculateTypeMatchups(Context.Effects, Target, Context.Type);
+    if (Context.Effects.Effectiveness == EDamageEffectiveness::NoEffect) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NoEffect};
     }
 
     // TODO: Roll crit
-    int32 BasePower = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
+    Context.BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
     FDamageMultipliers Multipliers;
-    CalculateDamageMultipliers(Multipliers, User, Target, TargetCount, MoveType, BasePower, Effects);
-    BasePower = ModifiedParameter(BasePower, Multipliers.PowerMultiplier);
+    CalculateDamageMultipliers(Multipliers, Context);
+    Context.BaseDamage = ModifiedParameter(Context.BaseDamage, Multipliers.PowerMultiplier);
     Attack = ModifiedParameter(Attack, Multipliers.AttackMultiplier);
     Defense = ModifiedParameter(Defense, Multipliers.DefenseMultiplier);
-    int32 Damage = CalculateBaseDamage(BasePower, User->GetPokemonLevel(), Attack, Defense);
+    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), Attack, Defense);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
-    return {.Damage = Damage, .Effectiveness = Effects.Effectiveness, .bCriticalHit = Effects.bCriticalHit};
+    return {.Damage = Damage, .Effectiveness = Context.Effects.Effectiveness, .bCriticalHit = Context.Effects.bCriticalHit};
 }
 
 void UBaseBattleMove::CalculateTypeMatchups_Implementation(FDamageEffects &Effects,
@@ -160,16 +160,13 @@ FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScr
                : FAttackAndDefense{.Attack = User->GetAttack(), .Defense = Target->GetDefense()};
 }
 
-void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers,
-                                                 const TScriptInterface<IBattler> &User,
-                                                 const TScriptInterface<IBattler> &Target, int32 TargetCount,
-                                                 FName Type, int32 BaseDamage, const FDamageEffects &Effects) {
-    ApplyMultiTargetModifier(Multipliers, TargetCount);
-    ApplyCriticalHitModifier(Multipliers, Effects);
+void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context) {
+    ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
+    ApplyCriticalHitModifier(Multipliers, Context.Effects);
     ApplyDamageSwing(Multipliers);
-    ApplyStabModifiers(Multipliers, User, Type);
-    ApplyTypeMatchUps(Multipliers, Effects);
-    ApplyAdditionalDamageModifiers(Multipliers, User, Target, TargetCount, Type, BaseDamage);
+    ApplyStabModifiers(Multipliers, Context.User, Context.Type);
+    ApplyTypeMatchUps(Multipliers, Context.Effects);
+    ApplyAdditionalDamageModifiers(Multipliers, Context);
 }
 
 void UBaseBattleMove::ApplyCriticalHitModifier_Implementation(FDamageMultipliers &Multipliers,
@@ -203,9 +200,9 @@ void UBaseBattleMove::ApplyTypeMatchUps_Implementation(FDamageMultipliers &Multi
     Multipliers.FinalDamageMultiplier *= Effects.TypeMatchUp;
 }
 
+
+
 void UBaseBattleMove::ApplyAdditionalDamageModifiers_Implementation(FDamageMultipliers &Multipliers,
-                                                                    const TScriptInterface<IBattler> &User,
-                                                                    const TScriptInterface<IBattler> &Target,
-                                                                    int32 TargetCount, FName Type, int32 BaseDamage) {
+    const FMoveDamageInfo &Context) {
     // Currently there are no additional modifiers that need to be applied
 }

@@ -7,6 +7,7 @@
 
 #include "BattleDamage.generated.h"
 
+class IBattler;
 /**
  * The various damage effectivenesses that there are. Used to determine what message to show to the player.
  */
@@ -140,4 +141,62 @@ struct FDamageMultipliers {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     float FinalDamageMultiplier = 1.0f;
+
+    /**
+     * Multiplies each individual multiplier by each other
+     * @param Other The other multiplier to apply this towards
+     * @return 
+     */
+    FORCEINLINE FDamageMultipliers& operator*=(const FDamageMultipliers& Other) {
+        PowerMultiplier *= Other.PowerMultiplier;
+        AttackMultiplier *= Other.AttackMultiplier;
+        DefenseMultiplier *= Other.DefenseMultiplier;
+        FinalDamageMultiplier *= Other.FinalDamageMultiplier;
+        return *this;
+    }
+    
+};
+
+/**
+ * Information about a move during damage modification
+ */
+USTRUCT(BlueprintType)
+struct FMoveDamageInfo {
+    GENERATED_BODY()
+
+    /**
+     * The user of the move
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Damage)
+    TScriptInterface<IBattler> User;
+
+    /**
+     * The target of the move
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Damage)
+    TScriptInterface<IBattler> Target;
+
+    /**
+     * The total number of targets being hit
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Damage)
+    int32 TargetCount = 1;
+
+    /**
+     * The calculated type of the move
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Damage)
+    FName Type;
+
+    /**
+     * The calculated base damage value of the move
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Damage)
+    int32 BaseDamage;
+
+    /**
+     * Additional information about the damage that has been accounted for
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Damage)
+    FDamageEffects Effects;
 };

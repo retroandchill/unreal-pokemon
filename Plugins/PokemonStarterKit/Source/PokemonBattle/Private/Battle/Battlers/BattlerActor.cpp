@@ -13,6 +13,7 @@
 #include "Mainpulation/RangeHelpers.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
+#include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include <functional>
 
@@ -43,6 +44,8 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
+    Ability.SetID(Pokemon->GetAbility()->GetAbilityID());
+    
     return this;
 }
 
@@ -123,8 +126,8 @@ bool ABattlerActor::IsAbilityActive() const {
     return true;
 }
 
-const TScriptInterface<IAbilityBattleEffect> &ABattlerActor::GetAbility() const {
-    return Ability;
+UAbilityBattleEffect* ABattlerActor::GetAbility() const {
+    return Ability.Get();
 }
 
 bool ABattlerActor::IsHoldItemActive() const {

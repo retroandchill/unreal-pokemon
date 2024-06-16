@@ -92,9 +92,7 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
                                           const TScriptInterface<IBattler> &Target);
 
   private:
-    void CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                                    const TScriptInterface<IBattler> &Target, int32 TargetCount, FName Type,
-                                    int32 BaseDamage, const FDamageEffects &Effects);
+    void CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context);
 
   protected:
     /**
@@ -141,17 +139,10 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     /**
      * Apply any additional damage modifiers that need to be applied
      * @param Multipliers multipliers to apply
-     * @param User The user of the move
-     * @param Target The target of the move
-     * @param TargetCount The target count of the move
-     * @param Type The type of the move
-     * @param BaseDamage The base damage of the move
+     * @param Context The context in which this move is being used
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyAdditionalDamageModifiers(UPARAM(Ref) FDamageMultipliers &Multipliers,
-                                        const TScriptInterface<IBattler> &User,
-                                        const TScriptInterface<IBattler> &Target, int32 TargetCount, FName Type,
-                                        int32 BaseDamage);
+    void ApplyAdditionalDamageModifiers(UPARAM(Ref) FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context);
 
   private:
     /**

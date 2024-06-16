@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battler.h"
 #include "GameFramework/Actor.h"
+#include "Battle/Abilities/AbilityBattleEffect.h"
 
 #include "BattlerActor.generated.h"
 
@@ -80,7 +81,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     bool IsAbilityActive() const override;
 
     UFUNCTION(BlueprintPure, Category = Ability)
-    const TScriptInterface<IAbilityBattleEffect> &GetAbility() const override;
+    UAbilityBattleEffect* GetAbility() const override;
 
     UFUNCTION(BlueprintPure, Category = Items)
     bool IsHoldItemActive() const override;
@@ -131,8 +132,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     /**
      * The ability that this battler has
      */
-    UPROPERTY()
-    TScriptInterface<IAbilityBattleEffect> Ability;
+    FManagedBattleAbility Ability;
 
     /**
      * The hold item that this battler has
@@ -157,4 +157,5 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IBattlerController> Controller;
+    
 };

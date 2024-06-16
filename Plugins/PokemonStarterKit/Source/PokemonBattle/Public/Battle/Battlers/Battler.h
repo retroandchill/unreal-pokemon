@@ -9,6 +9,7 @@
 
 #include "Battler.generated.h"
 
+class UAbilityBattleEffect;
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
@@ -177,7 +178,7 @@ class POKEMONBATTLE_API IBattler {
      * @return The effect of the ability in question
      */
     UFUNCTION(BlueprintCallable, Category = Items)
-    virtual const TScriptInterface<IAbilityBattleEffect> &GetAbility() const = 0;
+    virtual UAbilityBattleEffect* GetAbility() const = 0;
 
     /**
      * Get if the target's current hold item is active
