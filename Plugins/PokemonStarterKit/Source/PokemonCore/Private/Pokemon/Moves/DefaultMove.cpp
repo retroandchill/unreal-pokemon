@@ -28,6 +28,10 @@ int32 UDefaultMove::GetBasePower() const {
     return GetMoveData().Power;
 }
 
+int32 UDefaultMove::GetAccuracy() const {
+    return GetMoveData().Accuracy;
+}
+
 int32 UDefaultMove::GetCurrentPP() const {
     return CurrentPP;
 }

@@ -101,6 +101,15 @@ class POKEMONBATTLE_API IBattleMove {
     virtual bool HasTag(FName Tag) const = 0;
 
     /**
+     * Roll to see if this move hits or not.
+     * @param User The user of the move.
+     * @param Target The target the move is being hit by.
+     * @return Did the move successfully hit its target
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Success Checking")
+    bool PerformHitCheck(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+
+    /**
      * Calculate the total damage the move will deal.
      * @param User The user of the move.
      * @param Target The target the move is being hit by.

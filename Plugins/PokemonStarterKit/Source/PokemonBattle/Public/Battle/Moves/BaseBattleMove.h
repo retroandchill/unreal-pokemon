@@ -39,6 +39,7 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     bool HasTag(FName Tag) const;
 
   protected:
+    bool PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) override;
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target, int32 TargetCount) override;
 
@@ -69,6 +70,16 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     int32 CalculateBasePower(int32 MovePower, const TScriptInterface<IBattler> &User,
                              const TScriptInterface<IBattler> &Target);
+
+    /**
+     * Calculate the base accuracy of the move in question
+     * @param Accuracy The stated accuracy of the move
+     * @param User The user of the move in question
+     * @param Target The target of the move
+     * @return The calculated move accuracy
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Success Checking")
+    int32 CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
 
     /**
      * Calculate the base damage of the particular move before any modifiers are applied

@@ -75,6 +75,18 @@ bool UBaseBattleMove::HasTag(FName Tag) const {
     return WrappedMove->GetMoveData().Tags.Contains(Tag);
 }
 
+bool UBaseBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User,
+    const TScriptInterface<IBattler> &Target) {
+    auto BaseAccuracy = CalculateBaseAccuracy(WrappedMove->GetAccuracy(), User, Target);
+    if (BaseAccuracy == FMoveData::GuaranteedHit) {
+        return true;
+    }
+
+    int32 Threshold = BaseAccuracy;
+    int32 Roll = FMath::Rand() % 100;
+    return Roll < Threshold;
+}
+
 FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                               const TScriptInterface<IBattler> &Target,
                                                               int32 TargetCount) {
@@ -155,6 +167,11 @@ FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScr
     return Category == Special
                ? FAttackAndDefense{.Attack = User->GetSpecialAttack(), .Defense = Target->GetSpecialDefense()}
                : FAttackAndDefense{.Attack = User->GetAttack(), .Defense = Target->GetDefense()};
+}
+
+int32 UBaseBattleMove::CalculateBaseAccuracy_Implementation(int32 Accuracy, const TScriptInterface<IBattler> &User,
+    const TScriptInterface<IBattler> &Target) const {
+    return Accuracy;
 }
 
 void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) {
