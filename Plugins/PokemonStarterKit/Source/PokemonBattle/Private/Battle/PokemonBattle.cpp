@@ -7,11 +7,13 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Lookup/InjectionUtilities.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Battle/Traits/IndividualTraitHolder.h"
 #include <functional>
+#include "range/v3/view/transform.hpp"
+#include "range/v3/view/join.hpp"
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -131,8 +133,17 @@ bool APokemonBattle::AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &
         | std::views::transform([](const TScriptInterface<IBattleSide>& Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); })
         | std::ranges::views::join;
     return std::ranges::any_of(BattlerTraits, [&Predicate](const TScriptInterface<IBattler>& Battler) {
-        return Battler->ForAnyIndividualTraitHolder([&Predicate](const IIndividualTraitHolder& TraitHolder) { return Predicate(TraitHolder); });
+        return std::ranges::any_of(Battler->GetTraitHolders(),
+            [&Predicate](const IIndividualTraitHolder* TraitHolder) { return Predicate(*TraitHolder); });
     });
+}
+
+ranges::any_view<ITraitHolder * const &> APokemonBattle::GetTraitHolders() const {
+    return RangeHelpers::CreateRange(Sides)
+        | ranges::views::transform([](const TScriptInterface<IBattleSide>& Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); })
+        | ranges::views::join
+        | ranges::views::transform([](const TScriptInterface<IBattler>& Battler) { return Battler->GetTraitHolders(); })
+        | ranges::views::join;
 }
 
 bool APokemonBattle::FindGlobalAbility(FName AbilityID) const {

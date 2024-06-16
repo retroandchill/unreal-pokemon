@@ -10,12 +10,13 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include <functional>
+#include "range/v3/view/filter.hpp"
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
@@ -176,6 +177,12 @@ bool ABattlerActor::ForAnyIndividualTraitHolder(const TFunctionRef<bool(const II
     }
 
     return false;
+}
+
+ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
+    auto AbilitySpan = std::span(&Ability.GetRef(), 1)
+        | ranges::views::filter([](IIndividualTraitHolder* TraitHolder) { return TraitHolder; });
+    return AbilitySpan | ranges::views::filter([](const IIndividualTraitHolder* TraitHolder) { return TraitHolder != nullptr; });
 }
 
 void ABattlerActor::ShowSprite() const {

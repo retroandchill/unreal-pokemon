@@ -98,6 +98,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const override;
     void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const override;
     bool ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const override;
+    ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const override;
 
     void ShowSprite() const override;
 

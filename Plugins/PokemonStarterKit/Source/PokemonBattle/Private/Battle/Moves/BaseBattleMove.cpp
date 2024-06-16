@@ -13,7 +13,7 @@
 #include "Algo/ForEach.h"
 #include "Battle/Traits/TraitUtilities.h"
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 

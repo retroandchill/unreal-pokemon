@@ -2,7 +2,7 @@
 #include "Species/Stat.h"
 #include "Algo/RemoveIf.h"
 #include "DataManager.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 
 TArray<FName> UStatHelper::GetStatNames() {
     return FDataManager::GetInstance().GetDataTable<FStat>().GetTableRowNames();

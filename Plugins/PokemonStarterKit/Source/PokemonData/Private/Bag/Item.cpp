@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include "Settings/BaseSettings.h"
 #include <ranges>
 

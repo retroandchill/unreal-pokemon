@@ -32,7 +32,7 @@ struct TStringLiteral {
  * @tparam Path The path that the assets are loaded from
  */
 template <typename T, TStringLiteral Path>
-class TManagedTraitHolder {
+class TManagedTraitHolder : public FGCObject {
 public:
     /**
      * Constructs an empty manager with no ID assigned
@@ -52,14 +52,22 @@ public:
      * @return The object that this holder contains.
      */
     T* Get() const {
+        return GetRef();
+    }
+
+    /**
+     * Get a reference to the object that is managed by this trait holder
+     * @return A reference to the managed object
+     */
+    const TObjectPtr<T>& GetRef() const {
         if (bLoaded) {
             return Object.Get();
         }
 
         auto Format = FString::Format(TEXT("{0}/{1}.{1}"), { Path.Value.data(), ID.ToString() });
-        Object.Reset(Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Format)));
+        Object = Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Format));
         bLoaded = true;
-        return Object.Get();
+        return Object;
     }
 
     /**
@@ -84,8 +92,16 @@ public:
      */
     void SetID(FName NewID) {
         ID = NewID;
-        Object.Reset();
+        Object = nullptr;
         bLoaded = false;
+    }
+
+    void AddReferencedObjects(FReferenceCollector &Collector) override {
+        Collector.AddReferencedObject(Object);
+    }
+    
+    FString GetReferencerName() const override {
+        return TEXT("TManagedTraitHolder");
     }
 
 private:
@@ -97,7 +113,7 @@ private:
     /**
      * The actual managed object
      */
-    mutable TStrongObjectPtr<T> Object;
+    mutable TObjectPtr<T> Object;
 
     /**
      * Has there been an attempt to load the object yet

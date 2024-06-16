@@ -6,6 +6,7 @@
 #include "Functional/FunctionalShorthands.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "UObject/Interface.h"
+#include "range/v3/view/any_view.hpp"
 
 #include "Battler.generated.h"
 
@@ -233,6 +234,8 @@ class POKEMONBATTLE_API IBattler {
     virtual void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const = 0;
 
     virtual bool ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const = 0;
+
+    virtual ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const = 0;
 
     /**
      * Show the battler's sprite in battle

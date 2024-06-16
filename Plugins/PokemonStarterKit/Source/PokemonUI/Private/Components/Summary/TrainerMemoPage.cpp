@@ -2,7 +2,7 @@
 
 #include "Components/Summary/TrainerMemoPage.h"
 #include "DataTypes/OptionalUtilities.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"

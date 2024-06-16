@@ -9,7 +9,7 @@
 #include "Battle/Moves/BattleDamage.h"
 #include "Damage/DamageModificationTrait.h"
 #include "Damage/DamageModificationTraits.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 
 /**
  * Apply the damage modification traits with the given trait information

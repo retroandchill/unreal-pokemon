@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Functional/FunctionalShorthands.h"
 #include "UObject/Interface.h"
+#include <range/v3/view/any_view.hpp>
 
 #include "Battle.generated.h"
 
@@ -89,6 +90,8 @@ class POKEMONBATTLE_API IBattle {
     virtual void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const = 0;
     
     virtual bool AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &)>& Predicate) const = 0;
+
+    virtual ranges::any_view<ITraitHolder * const&> GetTraitHolders() const = 0;
 
 
     /**

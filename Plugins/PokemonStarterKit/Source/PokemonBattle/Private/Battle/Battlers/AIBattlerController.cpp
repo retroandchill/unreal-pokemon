@@ -4,7 +4,7 @@
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BattleMove.h"
-#include "Mainpulation/RangeHelpers.h"
+#include "RangeHelpers.h"
 #include <functional>
 
 static bool IsMoveUsable(const TScriptInterface<IBattleMove> &Move) {
