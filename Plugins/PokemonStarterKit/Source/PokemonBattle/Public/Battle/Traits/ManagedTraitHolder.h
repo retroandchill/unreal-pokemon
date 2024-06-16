@@ -32,7 +32,7 @@ struct TStringLiteral {
  */
 template <typename T, TStringLiteral Path>
 class TManagedTraitHolder : public FGCObject {
-  public:
+public:
     /**
      * Constructs an empty manager with no ID assigned
      */
@@ -50,16 +50,8 @@ class TManagedTraitHolder : public FGCObject {
      * @return The object that this holder contains.
      */
     T *Get() const {
-        return GetRef();
-    }
-
-    /**
-     * Get a reference to the object that is managed by this trait holder
-     * @return A reference to the managed object
-     */
-    const TObjectPtr<T> &GetRef() const {
         if (bLoaded) {
-            return Object.Get();
+            return Object;
         }
 
         auto Format = FString::Format(TEXT("{0}/{1}.{1}"), {Path.Value.data(), ID.ToString()});
@@ -102,7 +94,7 @@ class TManagedTraitHolder : public FGCObject {
         return TEXT("TManagedTraitHolder");
     }
 
-  private:
+private:
     /**
      * The current ID of the loaded asset
      */
