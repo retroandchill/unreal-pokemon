@@ -56,7 +56,7 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
-    
+
     When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
@@ -93,7 +93,7 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
-    
+
     When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
@@ -145,7 +145,8 @@ bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_StatusMove, "Private.UnitTests.Battle.TestDamageCalculation.StatusMove",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_StatusMove,
+                                 "Private.UnitTests.Battle.TestDamageCalculation.StatusMove",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {

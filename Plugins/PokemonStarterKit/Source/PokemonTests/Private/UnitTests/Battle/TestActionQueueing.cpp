@@ -6,8 +6,8 @@
 #include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
-#include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
 using namespace fakeit;
 using namespace accessor;

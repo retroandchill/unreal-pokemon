@@ -19,7 +19,8 @@
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile, "Private.UnitTests.PokemonData.Nodes.TestGetGameData.NodeTitle",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile,
+                                 "Private.UnitTests.PokemonData.Nodes.TestGetGameData.NodeTitle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_NodeTile::RunTest(const FString &Parameters) {

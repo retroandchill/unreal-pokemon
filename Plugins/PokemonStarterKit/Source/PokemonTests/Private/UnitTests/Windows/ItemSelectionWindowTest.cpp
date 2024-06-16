@@ -2,15 +2,15 @@
 #include "Bag/Item.h"
 #include "Data/SelectionInputs.h"
 #include "External/accessor.hpp"
-#include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
 #include "Player/Bag.h"
-#include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
+#include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
+#include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
 #include "Windows/ItemSelectionWindow.h"
 
 using namespace accessor;
@@ -60,7 +60,8 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems, "Private.UnitTests.Windows.ItemSelectionWindowTest.NoItems",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems,
+                                 "Private.UnitTests.Windows.ItemSelectionWindowTest.NoItems",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {

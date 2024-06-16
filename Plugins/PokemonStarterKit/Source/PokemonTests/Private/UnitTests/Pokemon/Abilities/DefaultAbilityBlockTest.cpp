@@ -8,7 +8,8 @@
 #include "Utilities/RAII.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultAbilityBlockTest, "Private.UnitTests.Core.Pokemon.Abilities.DefaultAbilityBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultAbilityBlockTest,
+                                 "Private.UnitTests.Core.Pokemon.Abilities.DefaultAbilityBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultAbilityBlockTest::RunTest(const FString &Parameters) {

@@ -9,8 +9,8 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include <thread>
 
 using namespace fakeit;

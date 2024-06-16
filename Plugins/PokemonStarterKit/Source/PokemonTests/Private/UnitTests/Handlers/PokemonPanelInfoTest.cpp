@@ -4,10 +4,10 @@
 #include "Components/CanvasPanel.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
-#include "UtilityClasses/PokemonTestUtilities.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/PokemonTestUtilities.h"
 #include "Windows/PokemonSelectionPane.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Private.UnitTests.UI.PokemonPanelInfoTest",

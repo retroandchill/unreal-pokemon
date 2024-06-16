@@ -2,6 +2,7 @@
 
 #include "Battle/PokemonBattle.h"
 #include "Algo/AnyOf.h"
+#include "Algo/ForEach.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
@@ -13,7 +14,6 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
-#include "Algo/ForEach.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 

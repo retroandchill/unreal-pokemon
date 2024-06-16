@@ -56,7 +56,7 @@ TArray<T> ToArray(RangeType Range) {
  * @return The range values as an array
  */
 template <typename T, typename RangeType>
-    requires (!std::is_copy_constructible_v<RangeType>)
+    requires(!std::is_copy_constructible_v<RangeType>)
 TArray<T> ToArray(RangeType &Range) {
     TArray<T> Ret;
     for (const auto &Value : Range) {

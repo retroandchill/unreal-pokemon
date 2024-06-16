@@ -17,7 +17,8 @@ bool DefaultMoveTest::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves, "Private.UnitTests.Core.Moves.DefaultMoveBlockTest.Default",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves,
+                                 "Private.UnitTests.Core.Moves.DefaultMoveBlockTest.Default",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
@@ -31,7 +32,8 @@ bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves, "Private.UnitTests.Core.Moves.DefaultMoveBlockTest.Manual",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves,
+                                 "Private.UnitTests.Core.Moves.DefaultMoveBlockTest.Manual",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {

@@ -38,9 +38,10 @@ UBaseBattleMove::GetAllPossibleTargets_Implementation(const TScriptInterface<IBa
     auto UserSide = User->GetOwningSide();
     auto UserId = User->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    return Battle->GetActiveBattlers()
-        | std::ranges::views::filter([&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == UserId; })
-        | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+    return Battle->GetActiveBattlers() |
+           std::ranges::views::filter(
+               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == UserId; }) |
+           RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }
 
 FText UBaseBattleMove::GetDisplayName_Implementation() const {

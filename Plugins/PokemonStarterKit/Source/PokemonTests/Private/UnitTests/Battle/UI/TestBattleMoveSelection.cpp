@@ -8,9 +8,9 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Primatives/DisplayText.h"
-#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Windows/BattleMoveSelect.h"
 
 using namespace fakeit;

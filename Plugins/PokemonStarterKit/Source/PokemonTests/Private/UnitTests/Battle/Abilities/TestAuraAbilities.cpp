@@ -8,8 +8,8 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
-#include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
 using namespace accessor;
 

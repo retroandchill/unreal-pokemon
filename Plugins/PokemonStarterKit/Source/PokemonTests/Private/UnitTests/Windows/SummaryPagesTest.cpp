@@ -6,12 +6,12 @@
 #include "External/accessor.hpp"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
-#include "UtilityClasses/PokemonTestUtilities.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/PokemonTestUtilities.h"
 
 using namespace accessor;
 

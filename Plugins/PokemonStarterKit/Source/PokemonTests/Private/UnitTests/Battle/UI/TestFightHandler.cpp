@@ -10,10 +10,10 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Screens/PokemonBattleScreen.h"
-#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Windows/BattleMoveSelect.h"
 #include "Windows/PokemonActionOptions.h"
 #include <range/v3/view/single.hpp>
