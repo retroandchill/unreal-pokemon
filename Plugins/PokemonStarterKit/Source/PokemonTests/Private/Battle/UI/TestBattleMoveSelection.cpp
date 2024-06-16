@@ -18,8 +18,6 @@
 using namespace fakeit;
 using namespace accessor;
 
-MEMBER_ACCESSOR(AccessBattleSpriteActorUI, ABattlerActor, BattlerSpriteClass, TSoftClassPtr<AActor>)
-
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleMoveSelection, "Unit Tests.Battle.UI.TestBattleMoveSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
@@ -40,7 +38,6 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
                     .Level = 50,
                     .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
-    accessMember<AccessBattleSpriteActorUI>(*Battler).get() = ATestSpriteActor::StaticClass();
     Battler->Initialize(Side, Pokemon);
 
     TWidgetPtr<UBattleMoveSelect> BattleMoveSelect(CreateWidget<UBattleMoveSelect>(World.Get(), WidgetClass));

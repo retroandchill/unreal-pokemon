@@ -34,7 +34,6 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"), .Level = 50});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
-    accessMember<AccessBattleSpriteActor>(*Battler).get() = ATestSpriteActor::StaticClass();
     Battler->Initialize(Side, Pokemon);
 
     CHECK_TRUE(Battler->GetOwningSide() == Side);
@@ -86,7 +85,6 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
                     .Level = 50,
                     .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
-    accessor::accessMember<AccessBattleSpriteActor>(*Battler).get() = ATestSpriteActor::StaticClass();
     Battler->Initialize(Side, Pokemon);
 
     Battler->SelectActions();

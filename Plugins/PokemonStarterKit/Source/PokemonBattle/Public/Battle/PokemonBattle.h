@@ -82,6 +82,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     bool ShouldIgnoreAbilities() const override;
     void ForEachSide(FSideWithIndexCallback Callback) const override;
     void ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const override;
+    ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const override;
     bool AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &)>& Predicate) const override;
     ranges::any_view<ITraitHolder * const&> GetTraitHolders() const override;

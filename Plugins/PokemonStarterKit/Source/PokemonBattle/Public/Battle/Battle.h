@@ -83,6 +83,8 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual void ForEachActiveBattler(TInterfaceCallback<IBattler> Callback) const = 0;
 
+    virtual ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
+
     /**
      * Perform a sweep over each of the active field effects and perform a callback on each one
      * @param Callback The callback to perform

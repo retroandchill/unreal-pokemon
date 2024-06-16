@@ -17,6 +17,8 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include <functional>
 #include "range/v3/view/filter.hpp"
+#include <range/v3/view/transform.hpp>
+#include <range/v3/view/single.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
@@ -180,9 +182,9 @@ bool ABattlerActor::ForAnyIndividualTraitHolder(const TFunctionRef<bool(const II
 }
 
 ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
-    auto AbilitySpan = std::span(&Ability.GetRef(), 1)
-        | ranges::views::filter([](IIndividualTraitHolder* TraitHolder) { return TraitHolder; });
-    return AbilitySpan | ranges::views::filter([](const IIndividualTraitHolder* TraitHolder) { return TraitHolder != nullptr; });
+    auto AbilityRange = ranges::views::single(Ability.Get());
+    return AbilityRange
+        | ranges::views::filter([](const IIndividualTraitHolder* TraitHolder) { return TraitHolder != nullptr; });
 }
 
 void ABattlerActor::ShowSprite() const {

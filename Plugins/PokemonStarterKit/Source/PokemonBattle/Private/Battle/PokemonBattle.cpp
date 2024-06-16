@@ -14,6 +14,7 @@
 #include <functional>
 #include "range/v3/view/transform.hpp"
 #include "range/v3/view/join.hpp"
+#include <range/v3/view/filter.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -122,6 +123,13 @@ void APokemonBattle::ForEachActiveBattler(TInterfaceCallback<IBattler> Callback)
     std::ranges::for_each(RangeHelpers::CreateRange(Sides) | std::views::transform(&GetBattlers) |
                               std::ranges::views::join | std::views::filter(&IsNotFainted),
                           Callback);
+}
+
+ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
+    return RangeHelpers::CreateRange(Sides)
+        | ranges::views::transform(&GetBattlers)
+        | ranges::views::join
+        | ranges::views::filter(&IsNotFainted);
 }
 
 void APokemonBattle::ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const {
