@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
-#include "Mainpulation/CircularIterator.h"
+#include "Manipulation/CircularIterator.h"
 #include "Screens/InventoryScreen.h"
 #include "Windows/SelectableWidget.h"
 

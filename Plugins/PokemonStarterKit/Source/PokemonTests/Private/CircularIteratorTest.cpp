@@ -1,5 +1,5 @@
 ﻿#include "Asserts.h"
-#include "Mainpulation/CircularIterator.h"
+#include "Manipulation/CircularIterator.h"
 #include "Misc/AutomationTest.h"
 #include <array>
 
