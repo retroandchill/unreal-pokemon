@@ -23,6 +23,8 @@ public:
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
     const FIndividualDamageModifierTraits& GetDamageModifiers() const final;
+    
+    bool HasTag(FName Tag) const final;
 
 private:
     /**
@@ -30,6 +32,12 @@ private:
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDamageModifiers, Category = Moves)
     FIndividualDamageModifierTraits DamageModifiers;
+
+    /**
+     * The set of metadata tags associated with the ability
+     */
+    UPROPERTY(EditAnywhere, Category = Metadata)
+    TSet<FName> Tags;
 
 };
 

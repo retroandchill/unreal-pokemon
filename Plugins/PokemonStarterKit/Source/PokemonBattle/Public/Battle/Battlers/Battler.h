@@ -232,6 +232,8 @@ class POKEMONBATTLE_API IBattler {
 
     virtual void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const = 0;
 
+    virtual bool ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const = 0;
+
     /**
      * Show the battler's sprite in battle
      */

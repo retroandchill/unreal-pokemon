@@ -87,6 +87,8 @@ class POKEMONBATTLE_API IBattle {
      * @param Callback The callback to perform
      */
     virtual void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const = 0;
+    
+    virtual bool AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &)>& Predicate) const = 0;
 
 
     /**

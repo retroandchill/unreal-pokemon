@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/PokemonBattle.h"
+#include "Algo/AnyOf.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
@@ -9,6 +10,7 @@
 #include "Mainpulation/RangeHelpers.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
+#include "Battle/Traits/IndividualTraitHolder.h"
 #include <functional>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
@@ -122,6 +124,15 @@ void APokemonBattle::ForEachActiveBattler(TInterfaceCallback<IBattler> Callback)
 
 void APokemonBattle::ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const {
     // TODO: Probably going to remove this
+}
+
+bool APokemonBattle::AnyTraitHolder(const TFunctionRef<bool(const ITraitHolder &)>& Predicate) const {
+    auto BattlerTraits = RangeHelpers::CreateRange(Sides)
+        | std::views::transform([](const TScriptInterface<IBattleSide>& Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); })
+        | std::ranges::views::join;
+    return std::ranges::any_of(BattlerTraits, [&Predicate](const TScriptInterface<IBattler>& Battler) {
+        return Battler->ForAnyIndividualTraitHolder([&Predicate](const IIndividualTraitHolder& TraitHolder) { return Predicate(TraitHolder); });
+    });
 }
 
 bool APokemonBattle::FindGlobalAbility(FName AbilityID) const {

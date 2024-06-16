@@ -170,6 +170,14 @@ void ABattlerActor::ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualT
     }
 }
 
+bool ABattlerActor::ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder&)> Predicate) const {
+    if (auto AbilityEffect = Ability.Get(); AbilityEffect != nullptr && Predicate(*AbilityEffect)) {
+        return true;
+    }
+
+    return false;
+}
+
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);
