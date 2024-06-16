@@ -60,12 +60,6 @@ class POKEMONBATTLE_API IBattle {
     virtual bool ActionSelectionFinished() const = 0;
 
     /**
-     * Should this battle actively ignore abilities
-     * @return Should abilities be ignored
-     */
-    virtual bool ShouldIgnoreAbilities() const = 0;
-
-    /**
      * Get the battle pawn used in battle
      * @return The pawn used in battle
      */

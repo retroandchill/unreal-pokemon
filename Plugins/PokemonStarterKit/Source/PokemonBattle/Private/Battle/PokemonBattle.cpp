@@ -110,10 +110,6 @@ bool APokemonBattle::ActionSelectionFinished() const {
                         [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
-bool APokemonBattle::ShouldIgnoreAbilities() const {
-    return false;
-}
-
 ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
     return RangeHelpers::CreateRange(Sides);
 }

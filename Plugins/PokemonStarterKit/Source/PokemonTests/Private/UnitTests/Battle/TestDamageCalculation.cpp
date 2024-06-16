@@ -20,16 +20,19 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
 
-    When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(75);
     When(Method(MockUser, GetAttack)).AlwaysReturn(123);
     When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("ICE")});
+    Fake(Method(MockUser, GetTraitHolders));
+    Fake(Method(MockUser, GetAllies));
     When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockTarget, GetDefense)).AlwaysReturn(163);
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("GROUND"), TEXT("DRAGON")});
+    Fake(Method(MockTarget, GetTraitHolders));
+    Fake(Method(MockTarget, GetAllies));
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("ICE"));
@@ -55,16 +58,19 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
 
-    When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(100);
     When(Method(MockUser, GetSpecialAttack)).AlwaysReturn(359);
     When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("DARK")});
+    Fake(Method(MockUser, GetTraitHolders));
+    Fake(Method(MockUser, GetAllies));
     When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockTarget, GetSpecialDefense)).AlwaysReturn(256);
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("DRAGON"), TEXT("FAIRY")});
+    Fake(Method(MockTarget, GetTraitHolders));
+    Fake(Method(MockTarget, GetAllies));
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("DARK"));
@@ -90,16 +96,17 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
 
-    When(Method(MockBattle, ShouldIgnoreAbilities)).AlwaysReturn(true);
     When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
     When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
     When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(100);
     When(Method(MockUser, GetAttack)).AlwaysReturn(319);
     When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("FIGHTING"), TEXT("STEEL")});
-    When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
-    When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
+    Fake(Method(MockUser, GetTraitHolders));
+    Fake(Method(MockUser, GetAllies));
     When(Method(MockTarget, GetDefense)).AlwaysReturn(277);
     When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("WATER")});
+    Fake(Method(MockTarget, GetTraitHolders));
+    Fake(Method(MockTarget, GetAllies));
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
     When(Method(MockMove, GetBasePower)).AlwaysReturn(80);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
