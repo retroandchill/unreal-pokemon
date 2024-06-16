@@ -8,7 +8,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/MoveInfoWindow.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(MoveInfoWindowTest, "Private.UnitTests.Windows.MoveInfoWindowTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(MoveInfoWindowTest, "Unit Tests.Windows.MoveInfoWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool MoveInfoWindowTest::RunTest(const FString &Parameters) {

@@ -8,7 +8,7 @@
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTrainerPayout, "Private.UnitTests.Core.Trainers.TestTrainerPayout",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTrainerPayout, "Unit Tests.Core.Trainers.TestTrainerPayout",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestTrainerPayout::RunTest(const FString &Parameters) {

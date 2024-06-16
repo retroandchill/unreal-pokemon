@@ -19,7 +19,7 @@ MEMBER_ACCESSOR(AccessInputMappingsPages, USelectableWidget, InputMappings, TObj
 MEMBER_ACCESSOR(AccessUpInput, USelectionInputs, UpInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessDownInput, USelectionInputs, DownInputs, TSet<FKey>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryPagesTest, "Private.UnitTests.Windows.SummaryPagesTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryPagesTest, "Unit Tests.Windows.SummaryPagesTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SummaryPagesTest::RunTest(const FString &Parameters) {

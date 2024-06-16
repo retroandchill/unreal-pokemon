@@ -19,7 +19,7 @@ MEMBER_ACCESSOR(AccessActionResultDisplaying, APokemonBattle, bActionResultDispl
 FUNCTION_ACCESSOR(AccessBattleTick, AActor, Tick, void, float)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionSorting,
-                                 "Private.UnitTests.Battle.TestPokemonBattleClass.ActionSorting",
+                                 "Unit Tests.Battle.TestPokemonBattleClass.ActionSorting",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
@@ -75,7 +75,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionExecution,
-                                 "Private.UnitTests.Battle.TestPokemonBattleClass.ActionExecution",
+                                 "Unit Tests.Battle.TestPokemonBattleClass.ActionExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) {

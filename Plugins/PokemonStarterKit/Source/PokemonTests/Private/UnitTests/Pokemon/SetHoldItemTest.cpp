@@ -4,7 +4,7 @@
 #include "Pokemon/GamePokemon.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(SetHoldItemTest, "Private.UnitTests.Core.Pokemon.SetHoldItemTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(SetHoldItemTest, "Unit Tests.Core.Pokemon.SetHoldItemTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SetHoldItemTest::RunTest(const FString &Parameters) {

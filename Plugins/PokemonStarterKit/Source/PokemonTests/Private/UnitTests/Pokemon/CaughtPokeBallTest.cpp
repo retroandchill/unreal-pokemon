@@ -9,7 +9,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 
 class UPokemonSettings;
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Private.UnitTests.Core.Pokemon.CaughtPokeBallTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Unit Tests.Core.Pokemon.CaughtPokeBallTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CaughtPokeBallTest::RunTest(const FString &Parameters) {

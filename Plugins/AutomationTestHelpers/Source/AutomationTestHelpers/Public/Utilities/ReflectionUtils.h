@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/AssetManager.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "ReflectionUtils.generated.h"
 
 class UObjectLibrary;
+
 /**
  * Utility library used to aid in getting reflection properties by name.
  */
@@ -47,7 +49,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
     }
 
     /**
-     * Get all non-abstract subclasses of the given object type
+     * Get all blueprint subclasses of the given object type
      * @tparam T The object type to look up
      * @param TargetClass The class to check under
      * @return If list of found classes
@@ -55,19 +57,30 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     static TArray<TSubclassOf<T>> GetAllSubclassesOfClass(TSubclassOf<T> TargetClass = T::StaticClass()) {
-        if (!LoadedBlueprints) {
-            LoadBlueprints();
-            LoadedBlueprints = true;
+        auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+        auto& AssetRegistry = AssetRegistryModule.Get();
+        TArray<FString> PathsToScan;
+        PathsToScan.Add("/Game/Blueprints/");
+        AssetRegistry.ScanPathsSynchronous(PathsToScan);
+        
+        TArray<FAssetData> ScriptAssetList;
+        AssetRegistry.GetAssetsByPath(FName("/Game/Blueprints/"), ScriptAssetList, true);
+
+        TArray<TSubclassOf<T>> Classes;
+        for (const auto& Asset : ScriptAssetList) {
+            auto Blueprint = Cast<UBlueprint>(Asset.GetAsset());
+            if (Blueprint == nullptr) {
+                continue;
+            }
+
+            auto BlueprintClass = Blueprint->GeneratedClass;
+            if (BlueprintClass == nullptr || !BlueprintClass->IsChildOf(T::StaticClass()))
+                continue;
+
+            Classes.Emplace(BlueprintClass);
         }
 
-        TArray<TSubclassOf<T>> Subclasses;
-        for (TObjectIterator<UClass> It; It; ++It) {
-            if (It->IsChildOf(TargetClass) && !It->HasAnyClassFlags(CLASS_Abstract) &&
-                !It->GetName().StartsWith("SKEL_")) {
-                Subclasses.Add(*It);
-            }
-        }
-        return Subclasses;
+        return Classes;
     }
 
     /**
@@ -80,16 +93,5 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
     /**
      * Load in all blueprints into memory so all blueprint classes can be located.
      */
-    static void LoadBlueprints();
-
-  private:
-    /**
-     * Flag to determine if the
-     */
-    static bool LoadedBlueprints;
-
-    /**
-     *  Pointer to the blueprint classes that are loaded and won't be released from memory
-     */
-    static TStrongObjectPtr<UObjectLibrary> ClassLibrary;
+    static TStrongObjectPtr<UObjectLibrary> LoadBlueprints();
 };

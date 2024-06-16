@@ -2,7 +2,7 @@
 #include "MathUtilities.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "Private.UnitTests.Math.LinearInterpolationTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(LinearInterpolationTest, "Unit Tests.Math.LinearInterpolationTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool LinearInterpolationTest::RunTest(const FString &Parameters) {

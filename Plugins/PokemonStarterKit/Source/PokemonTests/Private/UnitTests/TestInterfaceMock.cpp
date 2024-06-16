@@ -5,7 +5,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestInterfaceMock, "Private.UnitTests.Core.TestInterfaceMock",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestInterfaceMock, "Unit Tests.Core.TestInterfaceMock",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestInterfaceMock::RunTest(const FString &Parameters) {

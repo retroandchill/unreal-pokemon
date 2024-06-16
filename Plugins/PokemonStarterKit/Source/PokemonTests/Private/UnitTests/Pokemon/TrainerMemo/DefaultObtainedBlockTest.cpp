@@ -6,7 +6,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultObtainedBlockTest,
-                                 "Private.UnitTests.Pokemon.TrainerMemo.DefaultObtainedBlockTest",
+                                 "Unit Tests.Pokemon.TrainerMemo.DefaultObtainedBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultObtainedBlockTest::RunTest(const FString &Parameters) {

@@ -8,9 +8,6 @@
 #include "PropertyPath.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-bool UReflectionUtils::LoadedBlueprints = false;
-TStrongObjectPtr<UObjectLibrary> UReflectionUtils::ClassLibrary;
-
 TArray<FString> UReflectionUtils::GetPropertyCategories(IDetailsView &DetailsView) {
     TArray<FString> Categories;
     auto DetailTree = UWidgetTestUtilities::FindFirstChildOfType<STreeView<TSharedRef<FDetailTreeNode>>>(
@@ -33,7 +30,8 @@ TArray<FString> UReflectionUtils::GetPropertyCategories(IDetailsView &DetailsVie
     return Categories;
 }
 
-void UReflectionUtils::LoadBlueprints() {
-    ClassLibrary.Reset(UObjectLibrary::CreateLibrary(UBlueprintGeneratedClass::StaticClass(), true, GIsEditor));
+TStrongObjectPtr<UObjectLibrary> UReflectionUtils::LoadBlueprints() {
+    TStrongObjectPtr ClassLibrary(UObjectLibrary::CreateLibrary(UBlueprintGeneratedClass::StaticClass(), true, GIsEditor));
     ClassLibrary->LoadBlueprintsFromPath(TEXT("/Game"));
+    return ClassLibrary;
 }

@@ -11,7 +11,7 @@
 #include "Utilities/RAII.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerInfoTest, "Private.UnitTests.Core.Pokemon.TrainerInfoTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerInfoTest, "Unit Tests.Core.Pokemon.TrainerInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TrainerInfoTest::RunTest(const FString &Parameters) {

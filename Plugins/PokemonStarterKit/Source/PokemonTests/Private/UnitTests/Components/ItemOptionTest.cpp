@@ -5,7 +5,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemOptionTest, "Private.UnitTests.UI.Components.ItemOptionTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemOptionTest, "Unit Tests.UI.Components.ItemOptionTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemOptionTest::RunTest(const FString &Parameters) {

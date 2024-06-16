@@ -19,7 +19,7 @@ using namespace fakeit;
 
 MEMBER_ACCESSOR(AccessSummaryScreen, USummaryHandler, SummaryScreenClass, TSubclassOf<UPokemonSummaryScreen>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryHandlerTest, "Private.UnitTests.SummaryHandlerTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryHandlerTest, "Unit Tests.SummaryHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool SummaryHandlerTest::RunTest(const FString &Parameters) {

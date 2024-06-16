@@ -6,7 +6,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PocketWindowTest, "Private.UnitTests.Windows.PocketWindowTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PocketWindowTest, "Unit Tests.Windows.PocketWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PocketWindowTest::RunTest(const FString &Parameters) {

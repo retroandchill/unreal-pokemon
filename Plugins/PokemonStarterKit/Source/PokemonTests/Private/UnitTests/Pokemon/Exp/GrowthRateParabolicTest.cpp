@@ -15,21 +15,21 @@ constexpr std::array GParabolicGrowthTable = {
     485862, 505791, 526260, 547274, 568841, 590969, 613664, 636935, 660787,  685228, 710266, 735907, 762160,
     789030, 816525, 844653, 873420, 902835, 932903, 963632, 995030, 1027103, 1059860};
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateParabolicTest, "Private.UnitTests.Core.Exp.GrowthRateParabolicTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateParabolicTest, "Unit Tests.Core.Exp.GrowthRateParabolicTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateParabolicTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateParabolicTest: Level = 1");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateParabolicTest: Level = 1");
     OutTestCommands.Add("1");
 
     for (int i = 0; i < 3; i++) {
-        auto Fmt = FString::Printf(TEXT("Private.UnitTests.Core.Exp.GrowthRateParabolicTest: Level = 2-99 (Sample %d)"),
+        auto Fmt = FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateParabolicTest: Level = 2-99 (Sample %d)"),
                                    i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
     }
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateParabolicTest: Level = 100");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateParabolicTest: Level = 100");
     OutTestCommands.Add("100");
 }
 

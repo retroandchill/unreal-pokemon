@@ -6,7 +6,7 @@
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinThumbnailRenderer,
-                                 "Private.UnitTests.RPGMenus.TestWindowskinThumbnailRenderer",
+                                 "Unit Tests.RPGMenus.TestWindowskinThumbnailRenderer",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestWindowskinThumbnailRenderer::RunTest(const FString &Parameters) {

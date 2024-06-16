@@ -7,7 +7,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/PokemonActionOptions.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonActionOptions, "Private.UnitTests.Battle.UI.TestPokemonActionOptions",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonActionOptions, "Unit Tests.Battle.UI.TestPokemonActionOptions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestPokemonActionOptions::RunTest(const FString &Parameters) {

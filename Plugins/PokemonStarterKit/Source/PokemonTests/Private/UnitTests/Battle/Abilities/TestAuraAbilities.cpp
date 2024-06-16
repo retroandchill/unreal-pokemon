@@ -13,7 +13,7 @@
 
 using namespace accessor;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAuraAbilities, "Private.UnitTests.Battle.Abilities.TestAuraAbilities",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAuraAbilities, "Unit Tests.Battle.Abilities.TestAuraAbilities",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestAuraAbilities::RunTest(const FString &Parameters) {

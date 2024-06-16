@@ -20,7 +20,7 @@ MEMBER_ACCESSOR(AccessLeftInputs, USelectionInputs, LeftInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessRightInputs, USelectionInputs, RightInputs, TSet<FKey>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
-                                 "Private.UnitTests.Windows.ItemSelectionWindowTest.BasicSelection",
+                                 "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
@@ -61,7 +61,7 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems,
-                                 "Private.UnitTests.Windows.ItemSelectionWindowTest.NoItems",
+                                 "Unit Tests.Windows.ItemSelectionWindowTest.NoItems",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
@@ -84,7 +84,7 @@ bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Pockets,
-                                 "Private.UnitTests.Windows.ItemSelectionWindowTest.PocketCycling",
+                                 "Unit Tests.Windows.ItemSelectionWindowTest.PocketCycling",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {

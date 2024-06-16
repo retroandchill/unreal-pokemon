@@ -11,7 +11,7 @@ using namespace fakeit;
 using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak,
-                                 "Private.UnitTests.Battle.TestDamageCalculation.PhysicalQuadWeak",
+                                 "Unit Tests.Battle.TestDamageCalculation.PhysicalQuadWeak",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
@@ -49,7 +49,7 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialResisted,
-                                 "Private.UnitTests.Battle.TestDamageCalculation.SpecialResisted",
+                                 "Unit Tests.Battle.TestDamageCalculation.SpecialResisted",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
@@ -87,7 +87,7 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab,
-                                 "Private.UnitTests.Battle.TestDamageCalculation.PhysicalNoStab",
+                                 "Unit Tests.Battle.TestDamageCalculation.PhysicalNoStab",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
@@ -123,7 +123,7 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialImmune,
-                                 "Private.UnitTests.Battle.TestDamageCalculation.SpecialImmune",
+                                 "Unit Tests.Battle.TestDamageCalculation.SpecialImmune",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
@@ -147,7 +147,7 @@ bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_StatusMove,
-                                 "Private.UnitTests.Battle.TestDamageCalculation.StatusMove",
+                                 "Unit Tests.Battle.TestDamageCalculation.StatusMove",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {

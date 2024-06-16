@@ -9,7 +9,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerCardTest, "Private.UnitTests.UI.TrainerCardTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerCardTest, "Unit Tests.UI.TrainerCardTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TrainerCardTest::RunTest(const FString &Parameters) {

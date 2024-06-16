@@ -26,7 +26,7 @@ MEMBER_ACCESSOR(AccessConfirmInputBattleScreen, USelectionInputs, ConfirmInputs,
 MEMBER_ACCESSOR(AccessCancelInputBattleScreen, USelectionInputs, CancelInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessFightHandlers, UPokemonActionOptions, MenuActions, TArray<TObjectPtr<UBattleMenuHandler>>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestFightHandler, "Private.UnitTests.Battle.UI.TestFightHandler",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestFightHandler, "Unit Tests.Battle.UI.TestFightHandler",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestFightHandler::RunTest(const FString &Parameters) {

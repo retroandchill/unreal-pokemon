@@ -9,7 +9,7 @@
 #include "Utilities/RAII.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GenderRatioTest, "Private.UnitTests.Core.Pokemon.GenderRatioTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GenderRatioTest, "Unit Tests.Core.Pokemon.GenderRatioTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GenderRatioTest::RunTest(const FString &Parameters) {

@@ -8,7 +8,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAbilityLoading, "Private.UnitTests.Battle.Abilities.TestAbilityLoading",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAbilityLoading, "Unit Tests.Battle.Abilities.TestAbilityLoading",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestAbilityLoading::RunTest(const FString &Parameters) {

@@ -6,7 +6,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleEffects, "Private.UnitTests.Battle.Effects.TestBattlerEffects",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleEffects, "Unit Tests.Battle.Effects.TestBattlerEffects",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestBattleEffects::RunTest(const FString &Parameters) {

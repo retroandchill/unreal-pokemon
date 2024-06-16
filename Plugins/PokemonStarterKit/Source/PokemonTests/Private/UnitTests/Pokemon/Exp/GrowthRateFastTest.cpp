@@ -15,21 +15,21 @@ constexpr std::array GFastGrowthTable = {
     379641, 394431, 409600, 425152, 441094, 457429, 474163, 491300, 508844, 526802, 545177, 563975, 583200,
     602856, 622950, 643485, 664467, 685900, 707788, 730138, 752953, 776239, 800000};
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFastTest, "Private.UnitTests.Core.Exp.GrowthRateFastTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFastTest, "Unit Tests.Core.Exp.GrowthRateFastTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateFastTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFastTest: Level = 1");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 1");
     OutTestCommands.Add("1");
 
     for (int i = 0; i < 3; i++) {
         auto Fmt =
-            FString::Printf(TEXT("Private.UnitTests.Core.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
+            FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
     }
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFastTest: Level = 100");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 100");
     OutTestCommands.Add("100");
 }
 

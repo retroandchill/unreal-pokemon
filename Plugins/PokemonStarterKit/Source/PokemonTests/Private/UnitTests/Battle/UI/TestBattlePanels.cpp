@@ -12,7 +12,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattlePanels, "Private.UnitTests.Battle.UI.TestBattlePanels",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattlePanels, "Unit Tests.Battle.UI.TestBattlePanels",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestBattlePanels::RunTest(const FString &Parameters) {

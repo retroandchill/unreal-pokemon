@@ -7,7 +7,7 @@ struct FTestStruct {
     int32 Value;
 };
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(CircularIteratorTest, "Private.UnitTests.Utilities.CircularIteratorTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(CircularIteratorTest, "Unit Tests.Utilities.CircularIteratorTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CircularIteratorTest::RunTest(const FString &Parameters) {

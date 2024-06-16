@@ -15,7 +15,7 @@ using namespace accessor;
 MEMBER_ACCESSOR(AccessActionsQueueing, APokemonBattle, SelectedActions, TArray<TUniquePtr<IBattleAction>>)
 MEMBER_ACCESSOR(AccessActionQueueQueueing, APokemonBattle, ActionQueue, TQueue<TUniquePtr<IBattleAction>>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestActionQueueing, "Private.UnitTests.Battle.TestActionQueueing",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestActionQueueing, "Unit Tests.Battle.TestActionQueueing",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestActionQueueing::RunTest(const FString &Parameters) {

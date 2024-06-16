@@ -3,7 +3,7 @@
 #include "Battle/Moves/BattleDamage.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestSportEffects, "Private.UnitTests.Battle.Effects.TestSportEffects",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestSportEffects, "Unit Tests.Battle.Effects.TestSportEffects",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestSportEffects::RunTest(const FString &Parameters) {

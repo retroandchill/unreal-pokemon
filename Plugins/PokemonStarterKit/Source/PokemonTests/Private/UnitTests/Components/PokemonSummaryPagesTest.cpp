@@ -22,7 +22,7 @@
 using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_NameInfo,
-                                 "Private.UnitTests.UI.Summary.Components.PokemonSummaryPagesTest.NameInfo",
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.NameInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
@@ -82,7 +82,7 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_HoldItemInfo,
-                                 "Private.UnitTests.UI.Summary.Components.PokemonSummaryPagesTest.HoldItemInfo",
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.HoldItemInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
@@ -124,7 +124,7 @@ bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_PokemonInfo,
-                                 "Private.UnitTests.UI.Summary.Components.PokemonSummaryPagesTest.PokemonInfo",
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.PokemonInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
@@ -160,7 +160,7 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_TrainerMemo,
-                                 "Private.UnitTests.UI.Summary.Components.PokemonSummaryPagesTest.TrainerMemo",
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.TrainerMemo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
@@ -234,7 +234,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_Skills,
-                                 "Private.UnitTests.UI.Summary.Components.PokemonSummaryPagesTest.Skills",
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.Skills",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
@@ -287,7 +287,7 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_Moves,
-                                 "Private.UnitTests.UI.Summary.Components.PokemonSummaryPagesTest.Moves",
+                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.Moves",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {

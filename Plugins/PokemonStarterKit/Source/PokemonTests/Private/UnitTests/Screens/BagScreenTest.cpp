@@ -27,7 +27,7 @@ MEMBER_ACCESSOR(AccessBagHandlers, UBagMenuHandlerSet, Handlers, TArray<TObjectP
 MEMBER_ACCESSOR(AccessConfirmInputBag, USelectionInputs, ConfirmInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessCancelInputBag, USelectionInputs, CancelInputs, TSet<FKey>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Private.UnitTests.Screens.BagScreenTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool BagScreenTest::RunTest(const FString &Parameters) {

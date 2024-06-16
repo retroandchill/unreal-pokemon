@@ -15,35 +15,35 @@ constexpr std::array GFluctuatingGrowthTable = {
     673863,  700115,  737280,  765275,  804997,  834809,  877201,  908905,  954084,  987754, 1035837, 1071552, 1122660,
     1160499, 1214753, 1254796, 1312322, 1354652, 1415577, 1460276, 1524731, 1571884, 1640000};
 
-IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFluctuatingTest, "Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFluctuatingTest, "Unit Tests.Core.Exp.GrowthRateFluctuatingTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 void GrowthRateFluctuatingTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 1");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 1");
     OutTestCommands.Add("1");
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 2-14");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 2-14");
     OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 14)));
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 15");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 15");
     OutTestCommands.Add("15");
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 16");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 16");
     OutTestCommands.Add("15");
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 17-34");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 17-34");
     OutTestCommands.Add(FString::FromInt(FMath::RandRange(17, 34)));
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 35");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 35");
     OutTestCommands.Add("35");
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 36");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 36");
     OutTestCommands.Add("36");
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 37-99");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 37-99");
     OutTestCommands.Add(FString::FromInt(FMath::RandRange(37, 99)));
 
-    OutBeautifiedNames.Add("Private.UnitTests.Core.Exp.GrowthRateFluctuatingTest: Level = 100");
+    OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 100");
     OutTestCommands.Add("100");
 }
 

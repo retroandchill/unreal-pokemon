@@ -22,7 +22,7 @@ MEMBER_ACCESSOR(AccessInputMappingsPartyScreen, USelectableWidget, InputMappings
 MEMBER_ACCESSOR(AccessConfirmInput, USelectionInputs, ConfirmInputs, TSet<FKey>)
 MEMBER_ACCESSOR(AccessCancelInput, USelectionInputs, CancelInputs, TSet<FKey>)
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Private.UnitTests.Screens.PartyScreenTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Unit Tests.Screens.PartyScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool PartyScreenTest::RunTest(const FString &Parameters) {

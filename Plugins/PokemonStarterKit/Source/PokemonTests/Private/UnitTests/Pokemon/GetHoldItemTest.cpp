@@ -14,7 +14,7 @@
 constexpr auto TEST_HOLD_ITEM_EXECUTOR =
     TEXT("/PokemonStarterKit/Tests/Resources/GetHoldItemTestHelper.GetHoldItemTestHelper");
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_Null, "Private.UnitTests.Core.Pokemon.GetHoldItemTest.InvalidPokemon",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_Null, "Unit Tests.Core.Pokemon.GetHoldItemTest.InvalidPokemon",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetHoldItemTest_Null::RunTest(const FString &Parameters) {
@@ -29,7 +29,7 @@ bool GetHoldItemTest_Null::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithNoItem,
-                                 "Private.UnitTests.Core.Pokemon.GetHoldItemTest.WithNoItem",
+                                 "Unit Tests.Core.Pokemon.GetHoldItemTest.WithNoItem",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetHoldItemTest_WithNoItem::RunTest(const FString &Parameters) {
@@ -48,7 +48,7 @@ bool GetHoldItemTest_WithNoItem::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithItem, "Private.UnitTests.Core.Pokemon.GetHoldItemTest.WithItem",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithItem, "Unit Tests.Core.Pokemon.GetHoldItemTest.WithItem",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetHoldItemTest_WithItem::RunTest(const FString &Parameters) {

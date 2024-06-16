@@ -7,7 +7,7 @@
 #include "Utilities/RAII.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(CurrentMapTest, "Private.UnitTests.Core.CurrentMapTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(CurrentMapTest, "Unit Tests.Core.CurrentMapTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool CurrentMapTest::RunTest(const FString &Parameters) {

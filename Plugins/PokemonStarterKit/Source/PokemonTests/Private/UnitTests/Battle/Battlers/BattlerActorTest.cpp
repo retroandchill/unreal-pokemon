@@ -15,7 +15,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerActorTest_Stats, "Private.UnitTests.Battle.Battlers.BattlerActorTest.Stats",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerActorTest_Stats, "Unit Tests.Battle.Battlers.BattlerActorTest.Stats",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
@@ -57,7 +57,7 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAiBattlerController, "Private.UnitTests.Battle.Battlers.TestAiBattlerController",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAiBattlerController, "Unit Tests.Battle.Battlers.TestAiBattlerController",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestAiBattlerController::RunTest(const FString &Parameters) {

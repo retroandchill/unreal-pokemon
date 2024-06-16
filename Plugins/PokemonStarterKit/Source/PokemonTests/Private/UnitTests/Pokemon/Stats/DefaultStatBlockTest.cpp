@@ -10,7 +10,7 @@
 #include "Utilities/RAII.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Private.UnitTests.Core.Stats.DefaultStatBlockTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Unit Tests.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
 bool DefaultStatBlockTest::RunTest(const FString &Parameters) {

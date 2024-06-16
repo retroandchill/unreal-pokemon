@@ -4,7 +4,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedMapDetailsTest, "Private.UnitTests.GridBasedMapDetailsTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedMapDetailsTest, "Unit Tests.GridBasedMapDetailsTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GridBasedMapDetailsTest::RunTest(const FString &Parameters) {

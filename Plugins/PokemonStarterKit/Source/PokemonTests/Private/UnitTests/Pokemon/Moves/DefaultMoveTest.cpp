@@ -7,7 +7,7 @@
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Pokemon/PokemonDTO.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Private.UnitTests.Core.Moves.DefaultMoveTest",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.DefaultMoveTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveTest::RunTest(const FString &Parameters) {
@@ -18,7 +18,7 @@ bool DefaultMoveTest::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves,
-                                 "Private.UnitTests.Core.Moves.DefaultMoveBlockTest.Default",
+                                 "Unit Tests.Core.Moves.DefaultMoveBlockTest.Default",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
@@ -33,7 +33,7 @@ bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves,
-                                 "Private.UnitTests.Core.Moves.DefaultMoveBlockTest.Manual",
+                                 "Unit Tests.Core.Moves.DefaultMoveBlockTest.Manual",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {

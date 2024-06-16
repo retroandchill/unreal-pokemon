@@ -15,7 +15,7 @@
 
 using namespace fakeit;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleMoveSelection, "Private.UnitTests.Battle.UI.TestBattleMoveSelection",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleMoveSelection, "Unit Tests.Battle.UI.TestBattleMoveSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestBattleMoveSelection::RunTest(const FString &Parameters) {

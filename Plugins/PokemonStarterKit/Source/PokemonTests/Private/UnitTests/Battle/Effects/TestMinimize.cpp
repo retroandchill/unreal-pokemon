@@ -5,7 +5,7 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Moves/DefaultMove.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMinimize, "Private.UnitTests.Battle.Effects.TestMinimize",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMinimize, "Unit Tests.Battle.Effects.TestMinimize",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestMinimize::RunTest(const FString &Parameters) {
