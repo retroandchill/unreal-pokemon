@@ -11,6 +11,14 @@
 #include "IndividualTraitHolder.h"
 #include "RangeHelpers.h"
 
+#define DMOD_TRAITS(Type) &FIndividualDamageModifierTraits::Type
+
+#define APPLY_DMOD(Type) &Traits::ApplyDamageModificationTraits<DMOD_TRAITS(Type)>
+
+#define MAKE_DMOD_PAIR(Type) [](const IIndividualTraitHolder* TraitHolder) { \
+return std::make_pair(Traits::FTraitCallback(APPLY_DMOD(Type)), TraitHolder); \
+   }
+
 /**
  * Apply the damage modification traits with the given trait information
  * @param Type The member of the damage modification traits struct to pull from
@@ -28,23 +36,16 @@
  * @param Context The context of the move usage
  */
 #define DAMAGE_MODIFICATION_CALLBACK(Type, Multipliers, Context)                                                       \
-    [&Multipliers, &Context](const TScriptInterface<IIndividualTraitHolder> &TraitHolder) {                            \
+    [&Multipliers, &Context](IIndividualTraitHolder *TraitHolder) {                            \
         APPLY_DAMAGE_MODIFICATION(Global, Multipliers, Context, TraitHolder);                                          \
         APPLY_DAMAGE_MODIFICATION(Type, Multipliers, Context, TraitHolder);                                            \
     }
 
-/**
- * Shorthand to handle processing over allies
- * @param Type The member of the damage modification traits struct to pull from
- * @param Multipliers The multipliers that have already been applied and will be modified further
- * @param Context The context of the move usage
- */
-#define ALLY_DAMAGE_MODIFICATION_CALLBACK(Type, Multipliers, Context)                                                  \
-    [&Multipliers, &Context](const TScriptInterface<IBattler> &Ally) {                                                 \
-        Ally->ForEachIndividualTraitHolder(DAMAGE_MODIFICATION_CALLBACK(Type, Multipliers, Context));                  \
-    }
-
 namespace Traits {
+
+using FTraitCallback = TFunctionRef<void(FDamageMultipliers &, const FMoveDamageInfo &, const IIndividualTraitHolder* TraitHolder)>;
+
+using FTraitPair = std::pair<FTraitCallback, const IIndividualTraitHolder*>;
 
 /**
  * Apply the damage modification traits with the given trait information
@@ -55,7 +56,7 @@ namespace Traits {
  */
 template <auto Member>
 void ApplyDamageModificationTraits(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context,
-                                   const TScriptInterface<IIndividualTraitHolder> &TraitHolder) {
+                                   const IIndividualTraitHolder* TraitHolder) {
     auto MatchingTraits = RangeHelpers::CreateRange(TraitHolder->GetDamageModifiers().*Member) |
                           std::views::filter([&Context](const UDamageModificationTrait *Trait) {
                               return Trait->MeetsConditions(Context);

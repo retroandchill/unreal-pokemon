@@ -219,22 +219,15 @@ class POKEMONBATTLE_API IBattler {
     virtual uint8 GetActionCount() const = 0;
 
     /**
-     * Iterate over all of the battler's allies and apply the callback to them
-     * @param Callback The callback to apply to the battlers
+     * Get all allies in battle
+     * @return A view of all allies
      */
-    virtual void ForEachAlly(TInterfaceCallback<IBattler> Callback) const = 0;
+    virtual ranges::any_view<TScriptInterface<IBattler>> GetAllies() const = 0;
 
     /**
-     * Iterate over each battle effect active on the user and apply said effect to the callback
-     * @param Callback The callback to run on each effect
+     * Get all the battler's trait holders
+     * @return A view of all trait holders
      */
-    virtual void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const = 0;
-
-    virtual void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const = 0;
-
-    virtual bool
-    ForAnyIndividualTraitHolder(const TFunctionRef<bool(const IIndividualTraitHolder &)> Predicate) const = 0;
-
     virtual ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const = 0;
 
     /**

@@ -153,33 +153,11 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-void ABattlerActor::ForEachAlly(TInterfaceCallback<IBattler> Callback) const {
-    Algo::ForEach(OwningSide->GetBattlers(), [this, &Callback](const TScriptInterface<IBattler> &Battler) {
-        if (Battler->GetInternalId() == InternalId) {
-            return;
-        }
-
-        Callback(Battler);
-    });
-}
-
-void ABattlerActor::ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const {
-    // TODO: Not implemented yet, probably going to remove this and replace it with the GAS
-}
-
-void ABattlerActor::ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const {
-    if (auto AbilityEffect = Ability.Get(); AbilityEffect != nullptr) {
-        Callback(AbilityEffect);
-    }
-}
-
-bool ABattlerActor::ForAnyIndividualTraitHolder(
-    const TFunctionRef<bool(const IIndividualTraitHolder &)> Predicate) const {
-    if (auto AbilityEffect = Ability.Get(); AbilityEffect != nullptr && Predicate(*AbilityEffect)) {
-        return true;
-    }
-
-    return false;
+ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+    return RangeHelpers::CreateRange(OwningSide->GetBattlers())
+        | ranges::views::filter([this](const TScriptInterface<IBattler> &Battler) {
+            return Battler->GetInternalId() == InternalId;
+        });
 }
 
 ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
