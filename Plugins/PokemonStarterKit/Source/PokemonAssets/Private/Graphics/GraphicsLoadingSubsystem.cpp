@@ -2,6 +2,8 @@
 
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
+#include "range/v3/view/filter.hpp"
+#include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
 #include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
@@ -159,10 +161,10 @@ UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView<FName> Types) const {
     auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
-    return RangeHelpers::CreateRange(Types) | std::views::transform([&PathSettings](FName Type) {
+    return RangeHelpers::CreateRange(Types) | ranges::views::transform([&PathSettings](FName Type) {
                return GetFullAssetName(PathSettings.TypeIconPrefix, Type);
            }) |
-           std::views::transform(
+           ranges::views::transform(
                [&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); }) |
            RangeHelpers::TToArray<UObject *>();
 }

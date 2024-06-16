@@ -7,17 +7,18 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BattleDamage.h"
 #include "Damage/DamageModificationTrait.h"
-#include "Damage/DamageModificationTraits.h"
 #include "IndividualTraitHolder.h"
+#include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
 
 #define DMOD_TRAITS(Type) &FIndividualDamageModifierTraits::Type
 
 #define APPLY_DMOD(Type) &Traits::ApplyDamageModificationTraits<DMOD_TRAITS(Type)>
 
-#define MAKE_DMOD_PAIR(Type) [](const IIndividualTraitHolder* TraitHolder) { \
-return std::make_pair(Traits::FTraitCallback(APPLY_DMOD(Type)), TraitHolder); \
-   }
+#define MAKE_DMOD_PAIR(Type)                                                                                           \
+    [](const IIndividualTraitHolder *TraitHolder) {                                                                    \
+        return std::make_pair(Traits::FTraitCallback(APPLY_DMOD(Type)), TraitHolder);                                  \
+    }
 
 /**
  * Apply the damage modification traits with the given trait information
@@ -36,16 +37,17 @@ return std::make_pair(Traits::FTraitCallback(APPLY_DMOD(Type)), TraitHolder); \
  * @param Context The context of the move usage
  */
 #define DAMAGE_MODIFICATION_CALLBACK(Type, Multipliers, Context)                                                       \
-    [&Multipliers, &Context](IIndividualTraitHolder *TraitHolder) {                            \
+    [&Multipliers, &Context](IIndividualTraitHolder *TraitHolder) {                                                    \
         APPLY_DAMAGE_MODIFICATION(Global, Multipliers, Context, TraitHolder);                                          \
         APPLY_DAMAGE_MODIFICATION(Type, Multipliers, Context, TraitHolder);                                            \
     }
 
 namespace Traits {
 
-using FTraitCallback = TFunctionRef<void(FDamageMultipliers &, const FMoveDamageInfo &, const IIndividualTraitHolder* TraitHolder)>;
+using FTraitCallback =
+    TFunctionRef<void(FDamageMultipliers &, const FMoveDamageInfo &, const IIndividualTraitHolder *TraitHolder)>;
 
-using FTraitPair = std::pair<FTraitCallback, const IIndividualTraitHolder*>;
+using FTraitPair = std::pair<FTraitCallback, const IIndividualTraitHolder *>;
 
 /**
  * Apply the damage modification traits with the given trait information
@@ -56,9 +58,9 @@ using FTraitPair = std::pair<FTraitCallback, const IIndividualTraitHolder*>;
  */
 template <auto Member>
 void ApplyDamageModificationTraits(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context,
-                                   const IIndividualTraitHolder* TraitHolder) {
+                                   const IIndividualTraitHolder *TraitHolder) {
     auto MatchingTraits = RangeHelpers::CreateRange(TraitHolder->GetDamageModifiers().*Member) |
-                          std::views::filter([&Context](const UDamageModificationTrait *Trait) {
+                          ranges::views::filter([&Context](const UDamageModificationTrait *Trait) {
                               return Trait->MeetsConditions(Context);
                           });
     Algo::ForEach(MatchingTraits, [&Multipliers, &Context](const UDamageModificationTrait *Trait) {

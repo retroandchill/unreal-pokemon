@@ -6,7 +6,6 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleDamage.h"
 #include "Battle/Traits/TraitHolder.h"
-#include <ranges>
 
 bool UGlobalTraitTagExists::Evaluate_Implementation(const FMoveDamageInfo &Context) const {
     auto &Battle = Context.User->GetOwningSide()->GetOwningBattle();

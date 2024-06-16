@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <ranges>
+#include "range/v3/view/all.hpp"
+#include "range/v3/view/span.hpp"
 
 namespace RangeHelpers {
 
@@ -15,8 +16,8 @@ namespace RangeHelpers {
  */
 template <typename T>
 auto CreateRange(const TArray<T> &View) {
-    std::span Span(View.GetData(), View.Num());
-    return std::views::all(Span);
+    ranges::span Span(View.GetData(), View.Num());
+    return ranges::views::all(Span);
 }
 
 /**
@@ -27,8 +28,8 @@ auto CreateRange(const TArray<T> &View) {
  */
 template <typename T>
 auto CreateRange(TConstArrayView<T> &View) {
-    std::span Span(View.GetData(), View.Num());
-    return std::views::all(Span);
+    ranges::span Span(View.GetData(), View.Num());
+    return ranges::views::all(Span);
 }
 
 /**

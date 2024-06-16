@@ -4,6 +4,7 @@
 #include "Algo/ForEach.h"
 #include "PokemonKitSettings.h"
 #include "RangeHelpers.h"
+#include <range/v3/view/transform.hpp>
 
 Pokemon::FBaseSettings::FBaseSettings() : KitSettings(GetDefault<UPokemonKitSettings>()) {
 }
@@ -81,8 +82,8 @@ UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
 
 void Pokemon::FBaseSettings::ForEachDataTable(const TFunctionRef<void(UDataTable *)> &Callback) const {
     auto Range = RangeHelpers::CreateRange(KitSettings->DataTables) |
-                 std::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
-                 std::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); });
+                 ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
+                 ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); });
     std::ranges::for_each(Range, Callback);
 }
 

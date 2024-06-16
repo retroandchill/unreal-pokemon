@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerActor.h"
-#include "Algo/ForEach.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/BattlerController.h"
@@ -34,7 +33,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     InternalId = FGuid::NewGuid();
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
-            std::views::transform(std::bind_front(&CreateBattleMove, this)) |
+            ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
             RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
     SpawnSpriteActor(ShowImmediately);
 
@@ -154,10 +153,9 @@ uint8 ABattlerActor::GetActionCount() const {
 }
 
 ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
-    return RangeHelpers::CreateRange(OwningSide->GetBattlers())
-        | ranges::views::filter([this](const TScriptInterface<IBattler> &Battler) {
-            return Battler->GetInternalId() == InternalId;
-        });
+    return RangeHelpers::CreateRange(OwningSide->GetBattlers()) |
+           ranges::views::filter(
+               [this](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == InternalId; });
 }
 
 ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {

@@ -1,14 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Moves/BaseBattleMove.h"
-#include "Algo/ForEach.h"
-#include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Effects/BattlerEffect.h"
-#include "Battle/Effects/FieldEffect.h"
-#include "Battle/Items/HoldItemBattleEffect.h"
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
 #include "Battle/Traits/TraitUtilities.h"
 #include "Battle/Type.h"
@@ -39,7 +34,7 @@ UBaseBattleMove::GetAllPossibleTargets_Implementation(const TScriptInterface<IBa
     auto UserId = User->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
     return Battle->GetActiveBattlers() |
-           std::ranges::views::filter(
+           ranges::views::filter(
                [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == UserId; }) |
            RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }
