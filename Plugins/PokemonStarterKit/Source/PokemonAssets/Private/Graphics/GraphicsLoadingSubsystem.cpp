@@ -21,7 +21,7 @@ static T *LookupAssetByName(FStringView BasePackageName, FStringView AssetName) 
         AssetName = AssetName.RightChop(PrefixLength);
     }
     auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
-    return Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey));
+    return Cast<T>(StaticFindObject(T::StaticClass(), nullptr, *SearchKey));
 }
 
 template <typename T>
