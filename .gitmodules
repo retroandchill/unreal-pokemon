@@ -1,0 +1,3 @@
+[submodule "Plugins/External/UE4CMake"]
+	path = Plugins/External/UE4CMake
+	url = https://github.com/caseymcc/UE4CMake.git
