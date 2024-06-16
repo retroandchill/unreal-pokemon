@@ -9,6 +9,7 @@
 
 
 class UDamageModificationCondition;
+
 /**
  * Definition of a trait to modify damage in some manner.
  */

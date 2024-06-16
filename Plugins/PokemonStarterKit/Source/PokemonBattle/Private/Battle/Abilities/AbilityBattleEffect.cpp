@@ -3,6 +3,6 @@
 
 #include "Battle/Abilities/AbilityBattleEffect.h"
 
-const FAbilityDamageModifiers & UAbilityBattleEffect::GetDamageModifiers() const {
+const FIndividualDamageModifierTraits & UAbilityBattleEffect::GetDamageModifiers() const {
     return DamageModifiers;
 }

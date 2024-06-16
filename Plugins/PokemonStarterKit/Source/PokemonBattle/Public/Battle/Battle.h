@@ -8,6 +8,7 @@
 
 #include "Battle.generated.h"
 
+class ITraitHolder;
 class IBattleSide;
 class IBattleAction;
 class IAbilityBattleEffect;
@@ -86,6 +87,7 @@ class POKEMONBATTLE_API IBattle {
      * @param Callback The callback to perform
      */
     virtual void ForEachFieldEffect(TInterfaceCallback<IFieldEffect> Callback) const = 0;
+
 
     /**
      * Check to see if there is a Pokémon on the field with a given ability that is not actively supressed.

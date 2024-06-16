@@ -164,6 +164,12 @@ void ABattlerActor::ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callb
     // TODO: Not implemented yet, probably going to remove this and replace it with the GAS
 }
 
+void ABattlerActor::ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const {
+    if (auto AbilityEffect = Ability.Get(); AbilityEffect != nullptr) {
+        Callback(AbilityEffect);
+    }
+}
+
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);

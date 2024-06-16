@@ -9,6 +9,9 @@
 
 #include "Battler.generated.h"
 
+class IIndividualTraitHolder;
+class UDamageModificationTrait;
+class ITraitHolder;
 class UAbilityBattleEffect;
 class IPokemon;
 class IBattleSide;
@@ -18,6 +21,8 @@ class IHoldItemBattleEffect;
 class IAbilityBattleEffect;
 class IMoveModifier;
 class IBattlerController;
+
+DECLARE_DELEGATE_OneParam(FProcessIndividualTrait, const IIndividualTraitHolder&)
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -224,6 +229,8 @@ class POKEMONBATTLE_API IBattler {
      * @param Callback The callback to run on each effect
      */
     virtual void ForEachBattleEffect(TInterfaceCallback<IBattlerEffect> Callback) const = 0;
+
+    virtual void ForEachIndividualTraitHolder(TInterfaceCallback<IIndividualTraitHolder> Callback) const = 0;
 
     /**
      * Show the battler's sprite in battle

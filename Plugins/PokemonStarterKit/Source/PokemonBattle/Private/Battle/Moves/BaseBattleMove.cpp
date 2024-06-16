@@ -10,6 +10,10 @@
 #include "Battle/Items/HoldItemBattleEffect.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
+#include "Algo/ForEach.h"
+#include "Battle/Traits/TraitUtilities.h"
+#include "Battle/Traits/Damage/DamageModificationTrait.h"
+#include "Mainpulation/RangeHelpers.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 
@@ -161,6 +165,7 @@ FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScr
 }
 
 void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo& Context) {
+    Traits::ApplyIndividualDamageModifications(Multipliers, Context);
     ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
     ApplyCriticalHitModifier(Multipliers, Context.Effects);
     ApplyDamageSwing(Multipliers);

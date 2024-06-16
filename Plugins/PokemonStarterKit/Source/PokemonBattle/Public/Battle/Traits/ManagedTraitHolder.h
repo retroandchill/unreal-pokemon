@@ -12,10 +12,17 @@
  */
 template <auto N>
 struct TStringLiteral {
+    /**
+     * Implicit constructor from a string literal
+     * @param Str The string to copy the data in from
+     */
     constexpr explicit(false) TStringLiteral(const TCHAR (&Str)[N]) {
         std::copy_n(Str, N, Value.data());
     }
 
+    /**
+     * Array that holds the characters of the string
+     */
     std::array<TCHAR, N> Value;
 };
 
