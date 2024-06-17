@@ -9,8 +9,13 @@
 #include "Damage/DamageModificationTrait.h"
 #include "IndividualTraitHolder.h"
 #include "range/v3/view/filter.hpp"
+#include "range/v3/view/join.hpp"
+#include "range/v3/view/transform.hpp"
+#include "range/v3/view/concat.hpp"
 #include "RangeHelpers.h"
+#include "TraitScopes.h"
 #include "CriticalHits/CriticalHitRateModificationTrait.h"
+#include "Damage/DamageModificationTraits.h"
 
 #define DMOD_TRAITS(Type) &FIndividualDamageModifierTraits::Type
 
@@ -91,6 +96,39 @@ int32 ApplyCriticalHitRateModificationTraits(const TScriptInterface<IBattler>& U
     return Algo::Accumulate(MatchingTraits, 0, [&User, Target](const UCriticalHitRateModificationTrait *Trait) {
         return Trait->Apply(User, Target);
     });
+}
+
+template <typename T, EIndividualTraitScope Scope>
+FORCEINLINE auto GetTraitsForScope(const T& Traits) {
+    return ranges::views::concat(
+        RangeHelpers::CreateRange(Traits.template GetTraitsForScope<EIndividualTraitScope::Global>()),
+        RangeHelpers::CreateRange(Traits.template GetTraitsForScope<Scope>())
+    );
+}
+
+template <typename T>
+auto GetIndividualTraitModifiers(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target) {
+    auto BattlerTraitHolders = [](const TScriptInterface<IBattler> &Battler) { return Battler->GetTraitHolders(); };
+    auto UserTraits = User->GetTraitHolders()
+    | ranges::views::transform(&IIndividualTraitHolder::GetIndividualTraits<T>)
+    | ranges::views::transform(&GetTraitsForScope<T, EIndividualTraitScope::User>);
+    auto UserAllyTraits =
+        User->GetAllies() |
+        ranges::views::transform(BattlerTraitHolders)
+        | ranges::views::join
+        | ranges::views::transform(&IIndividualTraitHolder::GetIndividualTraits<T>)
+        | ranges::views::transform(&GetTraitsForScope<T, EIndividualTraitScope::UserAlly>);
+
+    auto TargetTraits = Target->GetTraitHolders()
+    | ranges::views::transform(&IIndividualTraitHolder::GetIndividualTraits<T>)
+    | ranges::views::transform(&GetTraitsForScope<T, EIndividualTraitScope::TargetAlly>);
+    auto TargetAllyTraits =
+        Target->GetAllies() |
+            ranges::views::transform(BattlerTraitHolders) 
+            | ranges::views::join | ranges::views::transform(&IIndividualTraitHolder::GetIndividualTraits<T>)
+            | ranges::views::transform(&GetTraitsForScope<T, EIndividualTraitScope::TargetAlly>);
+    
+    return ranges::views::concat(UserTraits, UserAllyTraits, TargetTraits, TargetAllyTraits);
 }
 
 POKEMONBATTLE_API int32 ApplyIndividualCriticalHitRateModifications(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);

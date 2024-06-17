@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Traits/TraitScopes.h"
 #include "UObject/Interface.h"
 
 #include "DamageModificationTraits.generated.h"
@@ -45,4 +46,19 @@ struct POKEMONBATTLE_API FIndividualDamageModifierTraits {
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = Damage)
     TArray<TObjectPtr<UDamageModificationTrait>> TargetAllies;
+
+    template <EIndividualTraitScope Scope>
+    FORCEINLINE const TArray<TObjectPtr<UDamageModificationTrait>>& GetTraitsForScope() const {
+        if constexpr (Scope == EIndividualTraitScope::User) {
+            return User;
+        } else if constexpr (Scope == EIndividualTraitScope::UserAlly) {
+            return UserAllies;
+        } else if constexpr (Scope == EIndividualTraitScope::Target) {
+            return Target;
+        } else if constexpr (Scope == EIndividualTraitScope::TargetAlly) {
+            return TargetAllies;
+        } else { // Assume Global for invalid enum literals
+            return Global;
+        }
+    }
 };
