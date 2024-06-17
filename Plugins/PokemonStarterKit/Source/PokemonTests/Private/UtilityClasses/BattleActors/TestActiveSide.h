@@ -11,6 +11,6 @@ UCLASS()
 class POKEMONTESTS_API ATestActiveSide : public AActiveSide {
     GENERATED_BODY()
 
-  public:
-    ATestActiveSide();
+  protected:
+    void BeginPlay() override;
 };
