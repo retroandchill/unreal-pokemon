@@ -10,6 +10,7 @@
 #include "IndividualTraitHolder.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
+#include "CriticalHits/CriticalHitRateModificationTrait.h"
 
 #define DMOD_TRAITS(Type) &FIndividualDamageModifierTraits::Type
 
@@ -17,7 +18,7 @@
 
 #define MAKE_DMOD_PAIR(Type)                                                                                           \
     [](const IIndividualTraitHolder *TraitHolder) {                                                                    \
-        return std::make_pair(Traits::FTraitCallback(APPLY_DMOD(Type)), TraitHolder);                                  \
+        return std::make_pair(Traits::FTraitDamageCallback(APPLY_DMOD(Type)), TraitHolder);                                  \
     }
 
 /**
@@ -30,24 +31,26 @@
 #define APPLY_DAMAGE_MODIFICATION(Type, Multipliers, Context, TraitHolder)                                             \
     Traits::ApplyDamageModificationTraits<&FIndividualDamageModifierTraits::Type>(Multipliers, Context, TraitHolder)
 
-/**
- * Shorthand to create a macro for iterating over trait holders
- * @param Type The member of the damage modification traits struct to pull from
- * @param Multipliers The multipliers that have already been applied and will be modified further
- * @param Context The context of the move usage
- */
-#define DAMAGE_MODIFICATION_CALLBACK(Type, Multipliers, Context)                                                       \
-    [&Multipliers, &Context](IIndividualTraitHolder *TraitHolder) {                                                    \
-        APPLY_DAMAGE_MODIFICATION(Global, Multipliers, Context, TraitHolder);                                          \
-        APPLY_DAMAGE_MODIFICATION(Type, Multipliers, Context, TraitHolder);                                            \
+#define CMOD_TRAITS(Type) &FIndividualCriticalHitRateModifierTraits::Type
+
+#define APPLY_CMOD(Type) &Traits::ApplyCriticalHitRateModificationTraits<CMOD_TRAITS(Type)>
+
+#define MAKE_CMOD_PAIR(Type)                                                                                           \
+    [](const IIndividualTraitHolder *TraitHolder) {                                                                    \
+        return std::make_pair(Traits::FTraitCriticalCallback(APPLY_CMOD(Type)), TraitHolder);                                  \
     }
 
 namespace Traits {
 
-using FTraitCallback =
+using FTraitDamageCallback =
     TFunctionRef<void(FDamageMultipliers &, const FMoveDamageInfo &, const IIndividualTraitHolder *TraitHolder)>;
 
-using FTraitPair = std::pair<FTraitCallback, const IIndividualTraitHolder *>;
+using FTraitDamagePair = std::pair<FTraitDamageCallback, const IIndividualTraitHolder *>;
+
+using FTraitCriticalCallback =
+    TFunctionRef<int32(const TScriptInterface<IBattler>&, const TScriptInterface<IBattler>&, const IIndividualTraitHolder *TraitHolder)>;
+
+using FTraitCriticalPair = std::pair<FTraitCriticalCallback, const IIndividualTraitHolder *>;
 
 /**
  * Apply the damage modification traits with the given trait information
@@ -75,4 +78,21 @@ void ApplyDamageModificationTraits(FDamageMultipliers &Multipliers, const FMoveD
  */
 POKEMONBATTLE_API void ApplyIndividualDamageModifications(FDamageMultipliers &Multipliers,
                                                           const FMoveDamageInfo &Context);
+
+
+template <auto Member>
+int32 ApplyCriticalHitRateModificationTraits(const TScriptInterface<IBattler>& User,
+                                   const TScriptInterface<IBattler>& Target, const IIndividualTraitHolder *TraitHolder) {
+    auto MatchingTraits = RangeHelpers::CreateRange(TraitHolder->GetCriticalHitRateModifiers().*Member) |
+                          ranges::views::filter([&User, &Target](const UCriticalHitRateModificationTrait *Trait) {
+                              return Trait->MeetsConditions(User, Target);
+                          });
+
+    return Algo::Accumulate(MatchingTraits, 0, [&User, Target](const UCriticalHitRateModificationTrait *Trait) {
+        return Trait->Apply(User, Target);
+    });
+}
+
+POKEMONBATTLE_API int32 ApplyIndividualCriticalHitRateModifications(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
 } // namespace Traits

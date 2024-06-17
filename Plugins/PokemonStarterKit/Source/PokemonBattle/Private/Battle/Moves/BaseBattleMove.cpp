@@ -125,9 +125,8 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
 
 bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target) const {
-    int32 Stage = 0;
-    auto Override = GetCriticalOverride(User, Target);
-    switch (Override) {
+    int32 Stage = Traits::ApplyIndividualCriticalHitRateModifications(User, Target);
+    switch (GetCriticalOverride(User, Target)) {
     case ECriticalOverride::Always:
         return true;
     case ECriticalOverride::Never:

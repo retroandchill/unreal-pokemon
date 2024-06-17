@@ -8,6 +8,7 @@
 
 #include "IndividualTraitHolder.generated.h"
 
+struct FIndividualCriticalHitRateModifierTraits;
 struct FIndividualDamageModifierTraits;
 
 // This class does not need to be modified.
@@ -29,4 +30,10 @@ class POKEMONBATTLE_API IIndividualTraitHolder : public ITraitHolder {
      * @return Traits that apply to modify the damage value of a move
      */
     virtual const FIndividualDamageModifierTraits &GetDamageModifiers() const = 0;
+
+    /**
+     * Get the critical hit rate modifier traits
+     * @return Traits that apply to modify the critical hit rate of a move
+     */
+    virtual const FIndividualCriticalHitRateModifierTraits &GetCriticalHitRateModifiers() const = 0;
 };

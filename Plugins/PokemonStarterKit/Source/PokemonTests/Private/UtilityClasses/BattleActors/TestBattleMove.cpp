@@ -8,7 +8,11 @@ TScriptInterface<IBattleMove> UTestBattleMove::Initialize(const TScriptInterface
 }
 
 bool UTestBattleMove::IsConfusionAttack() const {
-    return true;
+    return false;
+}
+
+bool UTestBattleMove::HasHighCriticalHitRate() const {
+    return false;
 }
 
 bool UTestBattleMove::HasTag(FName Tag) const {

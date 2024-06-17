@@ -31,7 +31,7 @@ class POKEMONBATTLE_API UDamageModificationTrait : public UObject {
      * @param Context The context of the move being used
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void Apply(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) const;
+    void Apply(UPARAM(Ref) FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) const;
 
   private:
     /**
