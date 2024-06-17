@@ -45,7 +45,12 @@ FActionResult FBattleActionUseMove::ComputeResult() {
 
         auto &TargetResult = Result.TargetResults.Emplace_GetRef();
         TargetResult.Target = Target;
-        TargetResult.bHit = true; // Everything will hit for now
+        TargetResult.bHit = IBattleMove::Execute_PerformHitCheck(Move.GetObject(), User, Target);
+        if (!TargetResult.bHit) {
+            // If the move misses then we don't want to apply any other effects
+            continue;
+        }
+        
         TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
     }
 

@@ -23,7 +23,8 @@ public class PokemonBattle : ModuleRules
                 "Slate",
                 "SlateCore",
                 "UnrealInjector",
-                "PokemonAssets"
+                "PokemonAssets", 
+                "PokemonSettings"
             }
         );
     }

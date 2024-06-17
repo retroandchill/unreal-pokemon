@@ -126,6 +126,12 @@ class POKEMONSETTINGS_API IGameSettings {
      */
     UFUNCTION(BlueprintCallable, Category = UI)
     virtual const FText &GetNoAbilityDescription() const = 0;
+
+    /**
+     * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
+     * @return The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
+     */
+    virtual const TArray<int32> &GetCriticalHitRatios() const = 0;
 };
 
 /**

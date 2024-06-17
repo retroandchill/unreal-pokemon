@@ -36,12 +36,32 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
 
   public:
     bool IsConfusionAttack() const override;
+    bool HasHighCriticalHitRate() const override;
     bool HasTag(FName Tag) const;
 
   protected:
     bool PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) override;
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target, int32 TargetCount) override;
+
+private:
+    /**
+     * Roll for a critical hit
+     * @param User The user of the move
+     * @param Target The target for the move
+     * @return Does the move result in a critical hit
+     */
+    bool IsCritical(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
+
+protected:
+    /**
+     * Determine the critical override state of the move
+     * @param User The user of the move
+     * @param Target The target for the move
+     * @return What is the critical override state
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Damage")
+    ECriticalOverride GetCriticalOverride(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
 
     /**
      * Apply any modifiers related to type matchups

@@ -11,6 +11,7 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "RangeHelpers.h"
+#include "Settings/BaseSettings.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
@@ -71,6 +72,11 @@ bool UBaseBattleMove::IsConfusionAttack() const {
     return false;
 }
 
+bool UBaseBattleMove::HasHighCriticalHitRate() const {
+    static const FName HighCriticalHitRate = TEXT("HighCriticalHitRate");
+    return HasTag(HighCriticalHitRate);
+}
+
 bool UBaseBattleMove::HasTag(FName Tag) const {
     return WrappedMove->GetMoveData().Tags.Contains(Tag);
 }
@@ -101,7 +107,7 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NoEffect};
     }
 
-    // TODO: Roll crit
+    Context.Effects.bCriticalHit = IsCritical(User, Target);
     Context.BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
@@ -115,6 +121,40 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
 
     return {
         .Damage = Damage, .Effectiveness = Context.Effects.Effectiveness, .bCriticalHit = Context.Effects.bCriticalHit};
+}
+
+bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
+    const TScriptInterface<IBattler> &Target) const {
+    int32 Stage = 0;
+    auto Override = GetCriticalOverride(User, Target);
+    switch (Override) {
+    case ECriticalOverride::Always:
+        return true;
+    case ECriticalOverride::Never:
+        return false;
+    default:
+        // Fallthrough and do nothing
+        break;
+    }
+
+    if (HasHighCriticalHitRate()) {
+        Stage += 1;
+    }
+
+    auto &Ratios = Pokemon::FBaseSettings::Get().GetCriticalHitRatios();
+    Stage = FMath::Min(Stage, Ratios.Num() - 1);
+
+    int32 Rate = Ratios[Stage];
+    check(Rate > 0)
+    if (Rate == 1) {
+        return true;
+    }
+    int32 Roll = FMath::Rand() % Rate;
+    return Roll == 0;    
+}
+
+ECriticalOverride UBaseBattleMove::GetCriticalOverride_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const {
+    return ECriticalOverride::Normal;
 }
 
 void UBaseBattleMove::CalculateTypeMatchups_Implementation(FDamageEffects &Effects,

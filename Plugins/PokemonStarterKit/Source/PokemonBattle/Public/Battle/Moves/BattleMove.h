@@ -71,13 +71,13 @@ class POKEMONBATTLE_API IBattleMove {
      * Get the priority for the move
      * @return The priority of the move
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintNativeEvent, Category = Execution)
     int32 GetPriority() const;
 
     /**
      * Pay the move's PP cost to use
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintNativeEvent, Category = Execution)
     void PayCost();
 
     /**
@@ -92,6 +92,12 @@ class POKEMONBATTLE_API IBattleMove {
      * @return Is this the typeless confusion attack
      */
     virtual bool IsConfusionAttack() const = 0;
+
+    /**
+     * Does this move have a high critical hit rate?
+     * @return If the move has a high critical hit rate
+     */
+    virtual bool HasHighCriticalHitRate() const = 0;
 
     /**
      * Does the move possess the given tag?
