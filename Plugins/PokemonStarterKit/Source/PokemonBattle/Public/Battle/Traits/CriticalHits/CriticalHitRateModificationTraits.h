@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Traits/TraitScopes.h"
 
 #include "CriticalHitRateModificationTraits.generated.h"
 
@@ -43,4 +44,19 @@ struct POKEMONBATTLE_API FIndividualCriticalHitRateModifierTraits {
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = Damage)
     TArray<TObjectPtr<UCriticalHitRateModificationTrait>> TargetAllies;
+
+    template <EIndividualTraitScope Scope>
+    FORCEINLINE const TArray<TObjectPtr<UCriticalHitRateModificationTrait>>& GetTraitsForScope() const {
+        if constexpr (Scope == EIndividualTraitScope::User) {
+            return User;
+        } else if constexpr (Scope == EIndividualTraitScope::UserAlly) {
+            return UserAllies;
+        } else if constexpr (Scope == EIndividualTraitScope::Target) {
+            return Target;
+        } else if constexpr (Scope == EIndividualTraitScope::TargetAlly) {
+            return TargetAllies;
+        } else { // Assume Global for invalid enum literals
+            return Global;
+        }
+    }
 };

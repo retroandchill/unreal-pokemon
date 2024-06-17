@@ -17,7 +17,8 @@ bool UCriticalHitRateModificationTrait::MeetsConditions(const TScriptInterface<I
     return Algo::AllOf(Conditions, std::bind_front(&EvaluateCondition, User, Target));
 }
 
-int32 UCriticalHitRateModificationTrait::Apply_Implementation(const TScriptInterface<IBattler>& User,
-                                                              const TScriptInterface<IBattler> &Target) const {
-    return 0;
+void UCriticalHitRateModificationTrait::Apply_Implementation(int32 &Stages,
+                                                             ECriticalOverride& Override,
+                                                             const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const {
+    // Do nothing
 }

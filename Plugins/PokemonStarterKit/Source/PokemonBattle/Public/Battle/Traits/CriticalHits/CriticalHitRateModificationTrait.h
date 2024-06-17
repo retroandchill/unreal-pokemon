@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Moves/BattleDamage.h"
 #include "UObject/Object.h"
 #include "CriticalHitRateModificationTrait.generated.h"
 
@@ -27,12 +28,14 @@ public:
 
     /**
      * Apply the trait to the existing multipliers
+     * @param Stages
+     * @param Override
      * @param User The user of the move
      * @param Target The target of the move
      * @return The amount to add or subtract from the rate
      */
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    int32 Apply(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target) const;
+    void Apply(UPARAM(Ref) int32 &Stages, UPARAM(Ref) ECriticalOverride& Override, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
 
 private:
     /**

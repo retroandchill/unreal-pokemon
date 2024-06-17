@@ -12,6 +12,7 @@
 #include "Pokemon/Moves/Move.h"
 #include "RangeHelpers.h"
 #include "Settings/BaseSettings.h"
+#include <range/v3/view/filter.hpp>
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
@@ -125,8 +126,10 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
 
 bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target) const {
-    int32 Stage = Traits::ApplyIndividualCriticalHitRateModifications(User, Target);
-    switch (GetCriticalOverride(User, Target)) {
+    int32 Stage = 0;
+    auto Override = GetCriticalOverride(User, Target);
+    Traits::ApplyIndividualCriticalHitRateModifications(Stage, Override, User, Target);
+    switch (Override) {
     case ECriticalOverride::Always:
         return true;
     case ECriticalOverride::Never:
@@ -141,7 +144,7 @@ bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
     }
 
     auto &Ratios = Pokemon::FBaseSettings::Get().GetCriticalHitRatios();
-    Stage = FMath::Min(Stage, Ratios.Num() - 1);
+    Stage = FMath::Clamp(Stage, 0, Ratios.Num() - 1);
 
     int32 Rate = Ratios[Stage];
     check(Rate > 0)

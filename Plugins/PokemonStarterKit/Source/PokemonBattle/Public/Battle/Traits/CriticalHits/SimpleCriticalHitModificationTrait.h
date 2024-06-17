@@ -14,7 +14,7 @@ class POKEMONBATTLE_API USimpleCriticalHitModificationTrait : public UCriticalHi
     GENERATED_BODY()
 
 protected:
-    int32 Apply_Implementation(TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const override;
+    void Apply_Implementation(int32 &Value, ECriticalOverride& Override, TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const override;
 
 private:
     UPROPERTY(EditAnywhere, Category = Damage)
