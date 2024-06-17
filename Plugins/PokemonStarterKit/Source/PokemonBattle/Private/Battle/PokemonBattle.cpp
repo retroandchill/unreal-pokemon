@@ -16,6 +16,7 @@
 #include "RangeHelpers.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/view/empty.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -119,7 +120,7 @@ ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers()
            ranges::views::filter(&IsNotFainted);
 }
 
-ranges::any_view<ITraitHolder *const &> APokemonBattle::GetTraitHolders() const {
+ranges::any_view<ITraitHolder *> APokemonBattle::GetTraitHolders() const {
     return RangeHelpers::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
                return RangeHelpers::CreateRange(Side->GetBattlers());
            }) |

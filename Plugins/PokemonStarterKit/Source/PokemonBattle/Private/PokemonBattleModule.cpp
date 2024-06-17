@@ -1,4 +1,4 @@
-﻿#include "PokemonBattle.h"
+﻿#include "PokemonBattleModule.h"
 
 void FPokemonBattleModule::StartupModule() {
     // No startup code required

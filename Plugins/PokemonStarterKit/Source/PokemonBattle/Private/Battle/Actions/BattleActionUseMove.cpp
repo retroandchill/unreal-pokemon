@@ -34,7 +34,7 @@ void FBattleActionUseMove::Execute() {
 }
 
 FActionResult FBattleActionUseMove::ComputeResult() {
-    FActionResult Result;
+    FActionResult ActionResult;
 
     auto &User = GetBattler();
     int32 TargetCount = Targets.Num();
@@ -43,7 +43,7 @@ FActionResult FBattleActionUseMove::ComputeResult() {
             continue;
         }
 
-        auto &TargetResult = Result.TargetResults.Emplace_GetRef();
+        auto &TargetResult = ActionResult.TargetResults.Emplace_GetRef();
         TargetResult.Target = Target;
         TargetResult.bHit = IBattleMove::Execute_PerformHitCheck(Move.GetObject(), User, Target);
         if (!TargetResult.bHit) {
@@ -54,5 +54,5 @@ FActionResult FBattleActionUseMove::ComputeResult() {
         TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
     }
 
-    return Result;
+    return ActionResult;
 }

@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Battle.h"
 #include "BattleSettings.h"
+#include "Battle/Actions/BattleAction.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"
 
 struct FActionResult;
-class IBattleAction;
 class IBattleSide;
 class ITrainer;
 
@@ -81,7 +81,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
-    ranges::any_view<ITraitHolder *const &> GetTraitHolders() const override;
+    ranges::any_view<ITraitHolder *> GetTraitHolders() const override;
     void ExecuteAction(IBattleAction &Action) override;
 
   protected:

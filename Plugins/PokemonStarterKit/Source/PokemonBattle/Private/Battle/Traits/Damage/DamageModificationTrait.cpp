@@ -3,14 +3,16 @@
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
 #include "Algo/AllOf.h"
 #include "Battle/Traits/Damage/Conditions/DamageModificationCondition.h"
-#include <functional>
 
 bool EvaluateCondition(const FMoveDamageInfo &Context, const UDamageModificationCondition *Condition) {
     return Condition->Evaluate(Context);
 }
 
 bool UDamageModificationTrait::MeetsConditions(const FMoveDamageInfo &Context) const {
-    return Algo::AllOf(Conditions, std::bind_front(&EvaluateCondition, Context));
+    auto Predicate = [&Context](const UDamageModificationCondition* Condition) {
+        return Condition->Evaluate(Context);
+    };
+    return Algo::AllOf(Conditions, Predicate);
 }
 
 void UDamageModificationTrait::Apply_Implementation(FDamageMultipliers &Multipliers,

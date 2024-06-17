@@ -57,5 +57,12 @@ public class UnrealRanges : ModuleRules
 				Path.Combine(ModuleDirectory, "../../Deps/range-v3/include")
 			}
 			);
+		
+		PublicDefinitions.AddRange(
+			new string[]
+			{
+				// This is a hack used to get ranges-v3 to compile without that 'unrecognized definition' warning
+				"__SIZEOF_INT128__=0"
+			});
 	}
 }

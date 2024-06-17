@@ -35,9 +35,9 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
     /**
      * Set the initial Pokémon to use with this iterator.
      * @param Pokemon The Pokémon in question to look at.
-     * @param Index The index of said Pokémon.
+     * @param PartyIndex The index of said Pokémon.
      */
-    void SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Pokemon, int32 Index);
+    void SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Pokemon, int32 PartyIndex);
 
     /**
      * Get the delegate that is called when a Pokémon is changed.
