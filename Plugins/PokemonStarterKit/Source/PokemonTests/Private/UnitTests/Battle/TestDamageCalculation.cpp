@@ -6,6 +6,7 @@
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Moves/Move.h"
+#include "UtilityClasses/BattleActors/CriticalTestMove.h"
 
 using namespace fakeit;
 using namespace accessor;
@@ -37,10 +38,12 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("ICE"));
 
-    auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
+    auto Move = NewObject<UCriticalTestMove>();
+    Move->CriticalOverride = ECriticalOverride::Never;
+    Move->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
         auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::SuperEffective, Effeciveness);
         CHECK_TRUE(Damage >= 168);
         CHECK_TRUE(Damage <= 198);
@@ -75,10 +78,12 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("DARK"));
 
-    auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
+    auto Move = NewObject<UCriticalTestMove>();
+    Move->CriticalOverride = ECriticalOverride::Never;
+    Move->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
         auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::NotVeryEffective, Effeciveness);
         CHECK_TRUE(Damage >= 49);
         CHECK_TRUE(Damage <= 59);
@@ -111,10 +116,12 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetBasePower)).AlwaysReturn(80);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
 
-    auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
+    auto Move = NewObject<UCriticalTestMove>();
+    Move->CriticalOverride = ECriticalOverride::Never;
+    Move->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
         auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
         CHECK_TRUE(Damage >= 67);
         CHECK_TRUE(Damage <= 79);
@@ -136,10 +143,12 @@ bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
     When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
 
-    auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
+    auto Move = NewObject<UCriticalTestMove>();
+    Move->CriticalOverride = ECriticalOverride::Never;
+    Move->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
         auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::NoEffect, Effeciveness);
         CHECK_EQUAL(0, Damage);
     }
@@ -158,10 +167,12 @@ bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
 
     When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Status);
 
-    auto Move = NewObject<UBaseBattleMove>()->Initialize(Battle, BaseMove);
+    auto Move = NewObject<UCriticalTestMove>();
+    Move->CriticalOverride = ECriticalOverride::Never;
+    Move->Initialize(Battle, BaseMove);
     for (int i = 0; i < 100; i++) {
         auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, 1);
+            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
         CHECK_EQUAL(EDamageEffectiveness::NonDamaging, Effeciveness);
         CHECK_EQUAL(0, Damage);
     }
