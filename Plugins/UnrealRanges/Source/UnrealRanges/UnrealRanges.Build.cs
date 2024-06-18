@@ -57,8 +57,8 @@ public class UnrealRanges : ModuleRules
 				Path.Combine(ModuleDirectory, "../../Deps/range-v3/include")
 			}
 			);
-
-		if (Target.Platform == UnrealTargetPlatform.Win64)
+		
+		if (Target.Platform == UnrealTargetPlatform.Win64 && Target.WindowsPlatform.Compiler == WindowsCompiler.VisualStudio2022)
 		{
 			// This is a hack used to get ranges-v3 to compile without that 'unrecognized definition' warning
 			PublicDefinitions.Add("__SIZEOF_INT128__=0");
