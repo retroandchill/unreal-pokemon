@@ -10,7 +10,6 @@ MEMBER_ACCESSOR(AccessBattlerClass, AActiveSide, BattlerClass, TSoftClassPtr<AAc
 
 // Sets default values
 
-void ATestActiveSide::BeginPlay() {
-    Super::BeginPlay();
+ATestActiveSide::ATestActiveSide() {
     accessMember<AccessBattlerClass>(*this).get() = ATestBattlerActor::StaticClass();
 }

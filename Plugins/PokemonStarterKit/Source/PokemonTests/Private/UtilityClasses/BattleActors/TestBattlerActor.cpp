@@ -8,7 +8,6 @@ using namespace accessor;
 
 MEMBER_ACCESSOR(AccessBattleSpriteActor, ABattlerActor, BattlerSpriteClass, TSoftClassPtr<AActor>)
 
-void ATestBattlerActor::BeginPlay() {
-    Super::BeginPlay();
+ATestBattlerActor::ATestBattlerActor() {
     accessMember<AccessBattleSpriteActor>(*this).get() = ATestSpriteActor::StaticClass();
 }

@@ -11,6 +11,6 @@ UCLASS(BlueprintInternalUseOnly)
 class POKEMONTESTS_API ATestPokemonBattle : public APokemonBattle {
     GENERATED_BODY()
 
-  protected:
-    void BeginPlay() override;
+  public:
+    ATestPokemonBattle();
 };

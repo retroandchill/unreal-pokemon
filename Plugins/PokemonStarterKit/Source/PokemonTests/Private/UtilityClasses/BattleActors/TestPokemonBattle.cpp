@@ -8,7 +8,6 @@ using namespace accessor;
 
 MEMBER_ACCESSOR(AccessSideClass, APokemonBattle, BattleSideClass, TSoftClassPtr<AActor>)
 
-void ATestPokemonBattle::BeginPlay() {
-    Super::BeginPlay();
+ATestPokemonBattle::ATestPokemonBattle() {
     accessMember<AccessSideClass>(*this).get() = ATestActiveSide::StaticClass();
 }
