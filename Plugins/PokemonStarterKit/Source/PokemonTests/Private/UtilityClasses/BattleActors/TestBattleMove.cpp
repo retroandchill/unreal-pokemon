@@ -27,6 +27,11 @@ void UTestBattleMove::PayCost_Implementation() {
     CostsPaid += 1;
 }
 
+bool UTestBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User,
+    const TScriptInterface<IBattler> &Target) {
+    return true;
+}
+
 FBattleDamage UTestBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                               const TScriptInterface<IBattler> &Target,
                                                               int32 TargetCount) {

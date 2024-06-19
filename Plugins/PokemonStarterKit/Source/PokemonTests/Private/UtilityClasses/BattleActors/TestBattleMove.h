@@ -28,6 +28,7 @@ class POKEMONTESTS_API UTestBattleMove : public UObject, public IBattleMove {
     FText GetDisplayName_Implementation() const override;
     int32 GetPriority_Implementation() const override;
     void PayCost_Implementation() override;
+    bool PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) override;
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target, int32 TargetCount) override;
 };
