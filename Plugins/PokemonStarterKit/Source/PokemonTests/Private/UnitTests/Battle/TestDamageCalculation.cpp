@@ -3,40 +3,43 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "External/accessor.hpp"
+#include "External/fakeit.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Moves/Move.h"
 #include "UtilityClasses/BattleActors/CriticalTestMove.h"
+#include "Mocks/MockBattle.h"
+#include "Mocks/MockBattler.h"
 
-using namespace fakeit;
 using namespace accessor;
+using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak,
                                  "Unit Tests.Battle.TestDamageCalculation.PhysicalQuadWeak",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
+    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
+    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
+    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
 
-    When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
-    When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
-    When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(75);
-    When(Method(MockUser, GetAttack)).AlwaysReturn(123);
-    When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("ICE")});
-    Fake(Method(MockUser, GetTraitHolders));
-    Fake(Method(MockUser, GetAllies));
-    When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
-    When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
-    When(Method(MockTarget, GetDefense)).AlwaysReturn(163);
-    When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("GROUND"), TEXT("DRAGON")});
-    Fake(Method(MockTarget, GetTraitHolders));
-    Fake(Method(MockTarget, GetAllies));
-    When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
-    When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
-    When(Method(MockMove, GetType)).AlwaysReturn(TEXT("ICE"));
+    EXPECT_CALL(MockUser, IsAbilityActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockUser, IsHoldItemActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockUser, GetPokemonLevel).WillRepeatedly(Return(75));
+    EXPECT_CALL(MockUser, GetAttack).WillRepeatedly(Return(123));
+    EXPECT_CALL(MockUser, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("ICE")}));
+    //Fake(Method(MockUser, GetTraitHolders));
+    //Fake(Method(MockUser, GetAllies));
+    EXPECT_CALL(MockTarget, IsAbilityActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockTarget, IsHoldItemActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockTarget, GetDefense).WillRepeatedly(Return(163));
+    EXPECT_CALL(MockTarget, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));
+    //Fake(Method(MockTarget, GetTraitHolders));
+    //Fake(Method(MockTarget, GetAllies));
+    EXPECT_CALL(MockMove, GetDamageCategory).WillRepeatedly(Return(EMoveDamageCategory::Physical));
+    EXPECT_CALL(MockMove, GetBasePower).WillRepeatedly(Return(65));
+    EXPECT_CALL(MockMove, GetType).WillRepeatedly(Return(TEXT("ICE")));
 
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;
@@ -56,27 +59,27 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialResisted,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
+    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
+    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
+    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
 
-    When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
-    When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
-    When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(100);
-    When(Method(MockUser, GetSpecialAttack)).AlwaysReturn(359);
-    When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("DARK")});
-    Fake(Method(MockUser, GetTraitHolders));
-    Fake(Method(MockUser, GetAllies));
-    When(Method(MockTarget, IsAbilityActive)).AlwaysReturn(false);
-    When(Method(MockTarget, IsHoldItemActive)).AlwaysReturn(false);
-    When(Method(MockTarget, GetSpecialDefense)).AlwaysReturn(256);
-    When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("DRAGON"), TEXT("FAIRY")});
-    Fake(Method(MockTarget, GetTraitHolders));
-    Fake(Method(MockTarget, GetAllies));
-    When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
-    When(Method(MockMove, GetBasePower)).AlwaysReturn(65);
-    When(Method(MockMove, GetType)).AlwaysReturn(TEXT("DARK"));
+    EXPECT_CALL(MockUser, IsAbilityActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockUser, IsHoldItemActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockUser, GetPokemonLevel).WillRepeatedly(Return(100));
+    EXPECT_CALL(MockUser, GetSpecialAttack).WillRepeatedly(Return(359));
+    EXPECT_CALL(MockUser, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("DARK")}));
+    //Fake(Method(MockUser, GetTraitHolders));
+    //Fake(Method(MockUser, GetAllies));
+    EXPECT_CALL(MockTarget, IsAbilityActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockTarget, IsHoldItemActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockTarget, GetSpecialDefense).WillRepeatedly(Return(256));
+    EXPECT_CALL(MockTarget, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("DRAGON"), TEXT("FAIRY")}));
+    //Fake(Method(MockTarget, GetTraitHolders));
+    //Fake(Method(MockTarget, GetAllies));
+    EXPECT_CALL(MockMove, GetDamageCategory).WillRepeatedly(Return(EMoveDamageCategory::Special));
+    EXPECT_CALL(MockMove, GetBasePower).WillRepeatedly(Return(65));
+    EXPECT_CALL(MockMove, GetType).WillRepeatedly(Return(TEXT("DARK")));
 
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;
@@ -96,25 +99,25 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
+    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
+    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
+    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
 
-    When(Method(MockUser, IsAbilityActive)).AlwaysReturn(false);
-    When(Method(MockUser, IsHoldItemActive)).AlwaysReturn(false);
-    When(Method(MockUser, GetPokemonLevel)).AlwaysReturn(100);
-    When(Method(MockUser, GetAttack)).AlwaysReturn(319);
-    When(Method(MockUser, GetTypes)).AlwaysReturn({TEXT("FIGHTING"), TEXT("STEEL")});
-    Fake(Method(MockUser, GetTraitHolders));
-    Fake(Method(MockUser, GetAllies));
-    When(Method(MockTarget, GetDefense)).AlwaysReturn(277);
-    When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("WATER")});
-    Fake(Method(MockTarget, GetTraitHolders));
-    Fake(Method(MockTarget, GetAllies));
-    When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Physical);
-    When(Method(MockMove, GetBasePower)).AlwaysReturn(80);
-    When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
+    EXPECT_CALL(MockUser, IsAbilityActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockUser, IsHoldItemActive).WillRepeatedly(Return(false));
+    EXPECT_CALL(MockUser, GetPokemonLevel).WillRepeatedly(Return(100));
+    EXPECT_CALL(MockUser, GetAttack).WillRepeatedly(Return(319));
+    EXPECT_CALL(MockUser, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("FIGHTING"), TEXT("STEEL")}));
+    //Fake(Method(MockUser, GetTraitHolders));
+    //Fake(Method(MockUser, GetAllies));
+    EXPECT_CALL(MockTarget, GetDefense).WillRepeatedly(Return(277));
+    EXPECT_CALL(MockTarget, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("WATER")}));
+    //Fake(Method(MockTarget, GetTraitHolders));
+    //Fake(Method(MockTarget, GetAllies));
+    EXPECT_CALL(MockMove, GetDamageCategory).WillRepeatedly(Return(EMoveDamageCategory::Physical));
+    EXPECT_CALL(MockMove, GetBasePower).WillRepeatedly(Return(80));
+    EXPECT_CALL(MockMove, GetType).WillRepeatedly(Return(TEXT("NORMAL")));
 
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;
@@ -134,14 +137,14 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialImmune,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
+    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
+    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
+    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
 
-    When(Method(MockTarget, GetTypes)).AlwaysReturn({TEXT("GHOST")});
-    When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Special);
-    When(Method(MockMove, GetType)).AlwaysReturn(TEXT("NORMAL"));
+    EXPECT_CALL(MockTarget, GetTypes).WillRepeatedly(Return<TArray<FName>>({TEXT("GHOST")}));
+    EXPECT_CALL(MockMove, GetDamageCategory).WillRepeatedly(Return(EMoveDamageCategory::Special));
+    EXPECT_CALL(MockMove, GetType).WillRepeatedly(Return(TEXT("NORMAL")));
 
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;
@@ -160,12 +163,12 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_StatusMove,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
+    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
+    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
     auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
+    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
 
-    When(Method(MockMove, GetDamageCategory)).AlwaysReturn(EMoveDamageCategory::Status);
+    EXPECT_CALL(MockMove, GetDamageCategory).WillRepeatedly(Return(EMoveDamageCategory::Status));
 
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;

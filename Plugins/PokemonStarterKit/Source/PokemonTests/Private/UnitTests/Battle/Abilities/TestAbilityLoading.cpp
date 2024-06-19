@@ -5,8 +5,9 @@
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattler.h"
 
-using namespace fakeit;
+using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAbilityLoading, "Unit Tests.Battle.Abilities.TestAbilityLoading",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -16,8 +17,10 @@ bool TestAbilityLoading::RunTest(const FString &Parameters) {
     auto &Effect = *Ability;
     auto &DamageModifiers = Effect.GetDamageModifiers();
 
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
-    When(Method(MockUser, GetHPPercent)).Return(0.5f, 0.25f);
+    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    EXPECT_CALL(MockUser, GetHPPercent)
+        .WillOnce(Return(0.5f))
+        .WillRepeatedly(Return(0.25f));
 
     FMoveDamageInfo Context = {.User = User, .Type = TEXT("WATER")};
     ASSERT_FALSE(DamageModifiers.User.IsEmpty());

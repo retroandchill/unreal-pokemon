@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "External/fakeit.hpp"
 #include "InterfaceShim.h"
 #include "MockedObject.h"
 
@@ -15,9 +14,9 @@ namespace UnrealMock {
  * @param Outer The owning object for the created mock
  * @return The created script interface object (for passing to methods) and the actual mock (for mocking the methods of)
  */
-template <typename T>
-std::pair<TScriptInterface<T>, fakeit::Mock<TInterfaceShim<T>>> CreateMock(UObject *Outer = GetTransientPackage()) {
-    std::pair<TScriptInterface<T>, fakeit::Mock<TInterfaceShim<T>>> Ret;
+template <typename T, typename M>
+std::pair<TScriptInterface<T>, M> CreateMock(UObject *Outer = GetTransientPackage()) {
+    std::pair<TScriptInterface<T>, M> Ret;
     Ret.first = NewObject<UMockedObject>(Outer);
     Ret.first.SetInterface(&Ret.second.get());
     return Ret;
