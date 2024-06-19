@@ -24,14 +24,14 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     auto [Pokemon, MockPokemon] = UnrealMock::CreateMock<IPokemon>();
 
     FItem FakeItem;
-    When(Method(MockTrainer, GetPokemon)).AlwaysReturn(Pokemon);
-    When(Method(MockPokemon, GetHoldItem)).Return(nullptr).AlwaysReturn(&FakeItem);
+    ON_CALL(MockTrainer, GetPokemon).WillByDefault(Return(Pokemon));
+    ON_CALL(MockPokemon, GetHoldItem).Return(nullptr).WillByDefault(Return(&FakeItem));
 
     auto Handler = NewObject<UPartyMenuItemHandler>();
-    CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
-    CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
+    UE_CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
+    UE_CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
     FakeItem.Tags.Add(TEXT("Mail"));
-    CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
+    UE_CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
 
     accessMember<AccessHandlerHelpText>(*Handler).get() = FText::FromStringView(TEXT("Sample help text"));
     auto &HandlerSet = accessMember<AccessHandlerSubCommands>(*Handler).get();
@@ -39,15 +39,15 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     accessMember<AccessHandlerSetHandlers>(*HandlerSet).get() = {Handler};
     FText HelpTextOut;
     TArray<TObjectPtr<UPartyMenuHandler>> HandlersOut;
-    When(Method(MockScreen, SetCommandHelpText)).Do([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
-    When(Method(MockScreen, ShowCommands)).Do([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
+    ON_CALL(MockScreen, SetCommandHelpText).Do([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
+    ON_CALL(MockScreen, ShowCommands).Do([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
         HandlersOut = Handlers;
     });
 
     Handler->Handle(Screen, Trainer, 0);
-    CHECK_EQUAL(TEXT("Sample help text"), HelpTextOut.ToString());
-    ASSERT_EQUAL(1, HandlersOut.Num());
-    CHECK_TRUE(HandlersOut[0] == Handler);
+    UE_CHECK_EQUAL(TEXT("Sample help text"), HelpTextOut.ToString());
+    UE_ASSERT_EQUAL(1, HandlersOut.Num());
+    UE_CHECK_TRUE(HandlersOut[0] == Handler);
 
     return true;
 }

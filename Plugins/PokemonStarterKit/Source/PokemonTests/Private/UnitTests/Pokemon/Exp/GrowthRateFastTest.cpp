@@ -37,6 +37,6 @@ bool GrowthRateFastTest::RunTest(const FString &Parameters) {
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FFast GrowthRate;
-    ASSERT_EQUAL(GFastGrowthTable[Level], GrowthRate.ExpForLevel(Level));
+    UE_ASSERT_EQUAL(GFastGrowthTable[Level], GrowthRate.ExpForLevel(Level));
     return true;
 }

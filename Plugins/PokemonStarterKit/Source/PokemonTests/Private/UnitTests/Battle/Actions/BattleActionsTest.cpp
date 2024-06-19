@@ -16,28 +16,28 @@ bool BattleActionsTest_Moves::RunTest(const FString &Parameters) {
     auto [Target1, MockTarget1] = UnrealMock::CreateMock<IBattler>();
     auto [Target2, MockTarget2] = UnrealMock::CreateMock<IBattler>();
 
-    When(Method(MockUser, GetNickname)).AlwaysReturn(FText::FromStringView(TEXT("Mock User")));
-    When(Method(MockTarget1, IsFainted)).AlwaysReturn(true);
-    When(Method(MockTarget2, IsFainted)).AlwaysReturn(false);
+    ON_CALL(MockUser, GetNickname)).WillByDefault(Return(FText::FromStringView(TEXT("Mock User")));
+    ON_CALL(MockTarget1, IsFainted).WillByDefault(Return(true));
+    ON_CALL(MockTarget2, IsFainted).WillByDefault(Return(false));
 
     FBattleActionUseMove Action(User, Move, {Target1, Target2});
-    CHECK_EQUAL(TEXT("FBattleActionUseMove"), Action.GetReferencerName());
-    CHECK_EQUAL(1, Action.GetPriority());
-    CHECK_EQUAL(TEXT("Mock User used Test Move!"), Action.GetActionMessage().ToString());
+    UE_CHECK_EQUAL(TEXT("FBattleActionUseMove"), Action.GetReferencerName());
+    UE_CHECK_EQUAL(1, Action.GetPriority());
+    UE_CHECK_EQUAL(TEXT("Mock User used Test Move!"), Action.GetActionMessage().ToString());
 
-    CHECK_FALSE(Action.IsExecuting());
+    UE_CHECK_FALSE(Action.IsExecuting());
     Action.Execute();
-    CHECK_TRUE(Action.IsExecuting());
-    CHECK_EQUAL(1, Move->CostsPaid);
+    UE_CHECK_TRUE(Action.IsExecuting());
+    UE_CHECK_EQUAL(1, Move->CostsPaid);
 
     auto &Result = Action.GetActionResult();
     Result.WaitFor(FTimespan::FromMinutes(1));
-    ASSERT_TRUE(Result.IsReady());
+    UE_ASSERT_TRUE(Result.IsReady());
 
     auto &ResultValue = Result.Get();
-    ASSERT_EQUAL(1, ResultValue.TargetResults.Num());
-    CHECK_TRUE(ResultValue.TargetResults[0].Target == Target2);
-    CHECK_EQUAL(20, ResultValue.TargetResults[0].Damage.Damage);
+    UE_ASSERT_EQUAL(1, ResultValue.TargetResults.Num());
+    UE_CHECK_TRUE(ResultValue.TargetResults[0].Target == Target2);
+    UE_CHECK_EQUAL(20, ResultValue.TargetResults[0].Damage.Damage);
 
     return true;
 }

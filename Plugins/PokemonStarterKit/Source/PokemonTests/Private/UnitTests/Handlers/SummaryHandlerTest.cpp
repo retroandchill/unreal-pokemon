@@ -25,21 +25,21 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryHandlerTest, "Unit Tests.SummaryHandlerT
 bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSummaryScreen>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     auto [Screen, Mock] = UnrealMock::CreateMock<IPartyScreen>(World.Get());
-    When(Method(Mock, GetPlayerController)).Return(Player->GetPlayerController(nullptr));
+    ON_CALL(Mock, GetPlayerController)).Return(Player->GetPlayerController(nullptr);
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
     Trainer->AddPokemonToParty(UGamePokemon::Create(World.Get(), {.Species = TEXT("RIOLU"), .Level = 5}));
 
     TGCPointer Handler(NewObject<USummaryHandler>());
-    CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
+    UE_CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
     accessor::accessMember<AccessSummaryScreen>(*Handler).get() = WidgetClass;
     Handler->Handle(Screen, Trainer, 0);
 
-    ASSERT_NOT_NULL(Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UPokemonSummaryScreen>());
+    UE_ASSERT_NOT_NULL(Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UPokemonSummaryScreen>());
     return true;
 }

@@ -13,7 +13,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonActionOptions, "Unit Tests.Battle.UI
 bool TestPokemonActionOptions::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonActionOptions>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     auto [Battler, MockBattler] = UnrealMock::CreateMock<IBattler>();
@@ -23,7 +23,7 @@ bool TestPokemonActionOptions::RunTest(const FString &Parameters) {
     Window->SetBattler(Battler);
 
     auto Children = UWidgetTestUtilities::FindAllChildWidgetsOfType<UBattleMenuOption>(Window.Get());
-    CHECK_EQUAL(Window->GetItemCount(), Children.Num());
+    UE_CHECK_EQUAL(Window->GetItemCount(), Children.Num());
 
     return true;
 }

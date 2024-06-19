@@ -3,12 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Moves/BattleMove.h"
 #include <gmock/gmock.h>
 
-class FMockBattleMove : public IBattleMove {
+class FMockMove : public IMove {
 public:
-    ~FMockBattleMove() override = default;
+    ~FMockMove() override = default;
 
-    // TODO: Mock the rest of the moves
+    MOCK_METHOD(const FMoveData &, GetMoveData, (), (const override));
+    MOCK_METHOD(FName, GetType, (), (const override));
+    MOCK_METHOD(EMoveDamageCategory, GetDamageCategory, (), (const override));
+    MOCK_METHOD(int32, GetBasePower, (), (const override));
+    MOCK_METHOD(int32, GetAccuracy, (), (const override));
+    MOCK_METHOD(int32, GetCurrentPP, (), (const override));
+    MOCK_METHOD(int32, GetTotalPP, (), (const override));
+    MOCK_METHOD(void, DecrementPP, (int32 Amount), (const override));
 };

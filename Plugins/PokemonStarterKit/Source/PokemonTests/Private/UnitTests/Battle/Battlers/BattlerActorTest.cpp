@@ -23,35 +23,35 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
 
     auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
     auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
-    When(Method(MockSide, ShowBackSprites)).AlwaysReturn(true);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(Return(Battle));
+    ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(true));
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"), .Level = 50});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     Battler->Initialize(Side, Pokemon);
 
-    CHECK_TRUE(Battler->GetOwningSide() == Side);
-    CHECK_EQUAL(Pokemon->GetNickname().ToString(), Battler->GetNickname().ToString());
-    CHECK_EQUAL(Pokemon->GetGender(), Battler->GetGender());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetLevel(), Battler->GetPokemonLevel());
-    CHECK_EQUAL(Pokemon->GetCurrentHP(), Battler->GetHP());
-    CHECK_EQUAL(Pokemon->GetMaxHP(), Battler->GetMaxHP());
-    CHECK_EQUAL(1.f, Battler->GetHPPercent());
-    CHECK_FALSE(Battler->IsFainted());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue(), Battler->GetAttack());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("DEFENSE"))->GetStatValue(), Battler->GetDefense());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue(), Battler->GetSpecialAttack());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue(),
+    UE_CHECK_TRUE(Battler->GetOwningSide() == Side);
+    UE_CHECK_EQUAL(Pokemon->GetNickname().ToString(), Battler->GetNickname().ToString());
+    UE_CHECK_EQUAL(Pokemon->GetGender(), Battler->GetGender());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetLevel(), Battler->GetPokemonLevel());
+    UE_CHECK_EQUAL(Pokemon->GetCurrentHP(), Battler->GetHP());
+    UE_CHECK_EQUAL(Pokemon->GetMaxHP(), Battler->GetMaxHP());
+    UE_CHECK_EQUAL(1.f, Battler->GetHPPercent());
+    UE_CHECK_FALSE(Battler->IsFainted());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue(), Battler->GetAttack());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("DEFENSE"))->GetStatValue(), Battler->GetDefense());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue(), Battler->GetSpecialAttack());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue(),
                 Battler->GetSpecialDefense());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPEED"))->GetStatValue(), Battler->GetSpeed());
-    CHECK_EQUAL(Pokemon->GetStatBlock()->GetExpPercent(), Battler->GetExpPercent());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPEED"))->GetStatValue(), Battler->GetSpeed());
+    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetExpPercent(), Battler->GetExpPercent());
 
     auto &PokemonTypes = Pokemon->GetTypes();
     auto BattlerTypes = Battler->GetTypes();
-    ASSERT_EQUAL(PokemonTypes.Num(), BattlerTypes.Num());
+    UE_ASSERT_EQUAL(PokemonTypes.Num(), BattlerTypes.Num());
     for (int32 i = 0; i < BattlerTypes.Num(); i++) {
-        CHECK_EQUAL(PokemonTypes[i], BattlerTypes[i]);
+        UE_CHECK_EQUAL(PokemonTypes[i], BattlerTypes[i]);
     }
 
     return true;
@@ -65,11 +65,11 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
 
     auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
     auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
-    When(Method(MockSide, ShowBackSprites)).AlwaysReturn(false);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(Return(Battle));
+    ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
 
     FString SelectedAction;
-    When(Method(MockBattle, QueueAction)).AlwaysDo([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
+    ON_CALL(MockBattle, QueueAction).AlwaysDo([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
         SelectedAction = Action->GetActionMessage().ToString();
     });
     Fake(Method(MockBattle, GetActiveBattlers));
@@ -89,14 +89,14 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
         }
     });
 
-    ASSERT_TRUE(BusyWait.WaitFor(FTimespan::FromMinutes(2)));
+    UE_ASSERT_TRUE(BusyWait.WaitFor(FTimespan::FromMinutes(2)));
     TArray<FString> PossibleMessages = {
         TEXT("Mimikyu used Shadow Sneak!"),
         TEXT("Mimikyu used Play Rough!"),
         TEXT("Mimikyu used Swords Dance!"),
         TEXT("Mimikyu used Shadow Claw!"),
     };
-    CHECK_TRUE(PossibleMessages.Contains(SelectedAction));
+    UE_CHECK_TRUE(PossibleMessages.Contains(SelectedAction));
 
     return true;
 }

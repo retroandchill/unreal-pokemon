@@ -33,7 +33,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTes
 bool BagScreenTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UBagScreen>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
@@ -42,13 +42,13 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     accessMember<AccessBag>(Subsystem).get() = Bag;
 
     TWidgetPtr<UBagScreen> Screen(CreateWidget<UBagScreen>(World.Get(), WidgetClass));
-    ASSERT_NOT_NULL(Screen.Get());
+    UE_ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
 
     FIND_CHILD_WIDGET(Screen.Get(), UItemSelectionWindow, ItemSelectionWindow);
-    ASSERT_NOT_NULL(ItemSelectionWindow);
+    UE_ASSERT_NOT_NULL(ItemSelectionWindow);
     FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
-    ASSERT_NOT_NULL(CommandWindow);
+    UE_ASSERT_NOT_NULL(CommandWindow);
 
     auto &HandlerSet = accessMember<AccessHandler>(*Screen).get();
     HandlerSet = NewObject<UBagMenuHandlerSet>(Screen.Get());
@@ -58,32 +58,32 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     Handlers.Emplace(SampleHandler);
 
     USelectionInputs *InputMappings = accessMember<AccessInputMappingsBag>(*ItemSelectionWindow).get();
-    ASSERT_NOT_NULL(InputMappings);
+    UE_ASSERT_NOT_NULL(InputMappings);
     auto ConfirmButton = *accessMember<AccessConfirmInputBag>(*InputMappings).get().CreateIterator();
     auto CancelButton = *accessMember<AccessCancelInputBag>(*InputMappings).get().CreateIterator();
 
     using enum ESlateVisibility;
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
-    CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
-    CHECK_FALSE(ItemSelectionWindow->IsActive());
-    ASSERT_TRUE(CommandWindow->IsActive());
+    UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
+    UE_CHECK_FALSE(ItemSelectionWindow->IsActive());
+    UE_ASSERT_TRUE(CommandWindow->IsActive());
     UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
-    CHECK_EQUAL(TEXT("REPEL"), SampleHandler->ItemID.ToString());
-    CHECK_EQUAL(1, SampleHandler->ItemQuantity);
+    UE_CHECK_EQUAL(TEXT("REPEL"), SampleHandler->ItemID.ToString());
+    UE_CHECK_EQUAL(1, SampleHandler->ItemQuantity);
 
     UInputUtilities::SimulateKeyPress(CommandWindow, CancelButton);
-    CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
-    CHECK_FALSE(CommandWindow->IsActive());
-    ASSERT_TRUE(ItemSelectionWindow->IsActive());
+    UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
+    UE_CHECK_FALSE(CommandWindow->IsActive());
+    UE_ASSERT_TRUE(ItemSelectionWindow->IsActive());
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
-    CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
-    CHECK_FALSE(ItemSelectionWindow->IsActive());
-    ASSERT_TRUE(CommandWindow->IsActive());
+    UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
+    UE_CHECK_FALSE(ItemSelectionWindow->IsActive());
+    UE_ASSERT_TRUE(CommandWindow->IsActive());
     CommandWindow->SetIndex(1);
     UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
-    CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
-    CHECK_FALSE(CommandWindow->IsActive());
-    ASSERT_TRUE(ItemSelectionWindow->IsActive());
+    UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
+    UE_CHECK_FALSE(CommandWindow->IsActive());
+    UE_ASSERT_TRUE(ItemSelectionWindow->IsActive());
 
     FName ItemID;
     int32 ItemQuantity;
@@ -93,8 +93,8 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
             ItemQuantity = Quantity;
         });
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
-    CHECK_EQUAL(TEXT("REPEL"), ItemID.ToString());
-    CHECK_EQUAL(1, ItemQuantity);
+    UE_CHECK_EQUAL(TEXT("REPEL"), ItemID.ToString());
+    UE_CHECK_EQUAL(1, ItemQuantity);
 
     return true;
 }

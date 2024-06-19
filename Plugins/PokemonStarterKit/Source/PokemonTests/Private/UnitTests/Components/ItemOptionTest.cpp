@@ -11,7 +11,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemOptionTest, "Unit Tests.UI.Components.ItemO
 bool ItemOptionTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UItemOption>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     auto Option = CreateWidget<UItemOption>(World.Get(), WidgetClass);
@@ -20,16 +20,16 @@ bool ItemOptionTest::RunTest(const FString &Parameters) {
     Option->SetItem(TEXT("POTION"), 5);
 
     FIND_CHILD_WIDGET(Option, UDisplayText, ItemNameText);
-    ASSERT_NOT_NULL(ItemNameText);
-    CHECK_EQUAL(TEXT("Potion"), ItemNameText->GetText().ToString());
+    UE_ASSERT_NOT_NULL(ItemNameText);
+    UE_CHECK_EQUAL(TEXT("Potion"), ItemNameText->GetText().ToString());
 
     FIND_CHILD_WIDGET(Option, UDisplayText, ItemQuantityText);
-    ASSERT_NOT_NULL(ItemQuantityText);
-    CHECK_EQUAL(TEXT("×5"), ItemQuantityText->GetText().ToString());
+    UE_ASSERT_NOT_NULL(ItemQuantityText);
+    UE_CHECK_EQUAL(TEXT("×5"), ItemQuantityText->GetText().ToString());
 
     Option->SetItem(TEXT("OLDROD"), 1);
-    CHECK_EQUAL(TEXT("Old Rod"), ItemNameText->GetText().ToString());
-    CHECK_EQUAL(TEXT(""), ItemQuantityText->GetText().ToString());
+    UE_CHECK_EQUAL(TEXT("Old Rod"), ItemNameText->GetText().ToString());
+    UE_CHECK_EQUAL(TEXT(""), ItemQuantityText->GetText().ToString());
 
     return true;
 }

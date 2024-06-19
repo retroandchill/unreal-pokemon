@@ -21,7 +21,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DisplayMessageTest, "Unit Tests.Nodes.DisplayMe
 
 bool DisplayMessageTest::RunTest(const FString &Parameters) {
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UTextDisplayScreen>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     using enum ENodeTitleType::Type;
@@ -35,12 +35,12 @@ bool DisplayMessageTest::RunTest(const FString &Parameters) {
 
     auto Count = MakeShared<uint32>(1);
     TestNode->Initialize(WidgetClass, Count);
-    CHECK_EQUAL(TEXT("Async Task: Missing Function"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_CHECK_EQUAL(TEXT("Async Task: Missing Function"), TestNode->GetNodeTitle(MenuTitle).ToString());
 
     (*Count)++;
     auto ExpandedName =
         FString::Format(TEXT("Async Task: Missing Function ({0})"), {WidgetClass->GetDisplayNameText().ToString()});
-    CHECK_EQUAL(ExpandedName, TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_CHECK_EQUAL(ExpandedName, TestNode->GetNodeTitle(MenuTitle).ToString());
     
     return true;
 }

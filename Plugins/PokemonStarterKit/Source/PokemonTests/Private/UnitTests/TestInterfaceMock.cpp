@@ -10,8 +10,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestInterfaceMock, "Unit Tests.Core.TestInterfa
 
 bool TestInterfaceMock::RunTest(const FString &Parameters) {
     auto [Pokemon, Mock] = UnrealMock::CreateMock<IPokemon>();
-    When(Method(Mock, GetPersonalityValue)).Return(3);
-    CHECK_EQUAL(3, Pokemon->GetPersonalityValue());
+    ON_CALL(Mock, GetPersonalityValue).Return(3);
+    UE_CHECK_EQUAL(3, Pokemon->GetPersonalityValue());
 
     return true;
 }

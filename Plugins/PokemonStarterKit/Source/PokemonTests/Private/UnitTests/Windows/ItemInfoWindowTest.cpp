@@ -14,24 +14,24 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemInfoWindowTest, "Unit Tests.Windows.ItemInf
 bool ItemInfoWindowTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UItemInfoWindow>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     TWidgetPtr<UItemInfoWindow> ItemInfo(CreateWidget<UItemInfoWindow>(World.Get(), WidgetClass));
     FIND_CHILD_WIDGET(ItemInfo.Get(), UDisplayText, ItemDescription);
-    ASSERT_NOT_NULL(ItemDescription);
+    UE_ASSERT_NOT_NULL(ItemDescription);
     FIND_CHILD_WIDGET(ItemInfo.Get(), UImage, ItemIcon);
-    ASSERT_NOT_NULL(ItemIcon);
+    UE_ASSERT_NOT_NULL(ItemIcon);
 
     auto ExistingItem = FDataManager::GetInstance().GetDataTable<FItem>().GetData(TEXT("POTION"));
-    ASSERT_NOT_NULL(ExistingItem);
+    UE_ASSERT_NOT_NULL(ExistingItem);
     ItemInfo->Refresh(*ExistingItem, 10);
-    CHECK_EQUAL(ExistingItem->Description.ToString(), ItemDescription->GetText().ToString());
-    CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ItemIcon->GetVisibility());
+    UE_CHECK_EQUAL(ExistingItem->Description.ToString(), ItemDescription->GetText().ToString());
+    UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ItemIcon->GetVisibility());
 
     ItemInfo->ClearItem();
-    CHECK_EQUAL(TEXT(""), ItemDescription->GetText().ToString());
-    CHECK_EQUAL(ESlateVisibility::Hidden, ItemIcon->GetVisibility());
+    UE_CHECK_EQUAL(TEXT(""), ItemDescription->GetText().ToString());
+    UE_CHECK_EQUAL(ESlateVisibility::Hidden, ItemIcon->GetVisibility());
 
     return true;
 }

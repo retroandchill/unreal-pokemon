@@ -14,7 +14,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveHits_Certain, "Unit Tests.Battle.TestMo
 bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
     auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
     auto [Move, MockMove] = UnrealMock::CreateMock<IMove>();
-    When(Method(MockMove, GetAccuracy)).AlwaysReturn(0);
+    ON_CALL(MockMove, GetAccuracy).WillByDefault(Return(0));
 
     auto BattleMove = NewObject<UBaseBattleMove>();
     BattleMove->Initialize(Battle, Move);
@@ -22,7 +22,7 @@ bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
     for (int i = 0; i < 100; i++) {
-        CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
+        UE_CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
     }
     
     return true;
@@ -36,7 +36,7 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     FMath::RandInit(6412);
     auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
     auto [Move, MockMove] = UnrealMock::CreateMock<IMove>();
-    When(Method(MockMove, GetAccuracy)).AlwaysReturn(80);
+    ON_CALL(MockMove, GetAccuracy).WillByDefault(Return(80));
 
     auto BattleMove = NewObject<UBaseBattleMove>();
     BattleMove->Initialize(Battle, Move);
@@ -44,11 +44,11 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
     auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler>();
     
-    CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
-    CHECK_FALSE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
-    CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
-    CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
-    CHECK_FALSE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
+    UE_CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
+    UE_CHECK_FALSE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
+    UE_CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
+    UE_CHECK_TRUE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
+    UE_CHECK_FALSE(IBattleMove::Execute_PerformHitCheck(BattleMove, User, Target));
     
     return true;
 }

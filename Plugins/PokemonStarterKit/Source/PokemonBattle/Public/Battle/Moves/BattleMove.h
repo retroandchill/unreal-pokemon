@@ -44,6 +44,10 @@ class POKEMONBATTLE_API IBattleMove {
     UFUNCTION(BlueprintNativeEvent, Category = Usability)
     TArray<TScriptInterface<IBattler>> GetAllPossibleTargets(const TScriptInterface<IBattler> &User) const;
 
+    /**
+     * Is the move usable
+     * @return Is the move usable
+     */
     UFUNCTION(BlueprintNativeEvent, Category = Usability)
     bool IsUsable() const;
 

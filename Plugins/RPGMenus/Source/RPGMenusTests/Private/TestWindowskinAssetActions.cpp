@@ -11,10 +11,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinAssetActions, "Unit Tests.RPGMenu
 bool TestWindowskinAssetActions::RunTest(const FString &Parameters) {
     FWindowskinAssetActions AssetActions;
 
-    CHECK_EQUAL(TEXT("Windowskin"), AssetActions.GetName().ToString());
-    CHECK_EQUAL(UWindowskin::StaticClass(), AssetActions.GetSupportedClass());
-    CHECK_EQUAL(FColor::Silver, AssetActions.GetTypeColor());
-    CHECK_EQUAL(EAssetTypeCategories::UI, AssetActions.GetCategories());
+    UE_CHECK_EQUAL(TEXT("Windowskin"), AssetActions.GetName().ToString());
+    UE_CHECK_EQUAL(UWindowskin::StaticClass(), AssetActions.GetSupportedClass());
+    UE_CHECK_EQUAL(FColor::Silver, AssetActions.GetTypeColor());
+    UE_CHECK_EQUAL(EAssetTypeCategories::UI, AssetActions.GetCategories());
 
     return true;
 }

@@ -12,17 +12,17 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PocketWindowTest, "Unit Tests.Windows.PocketWin
 bool PocketWindowTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPocketWindow>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
     TWidgetPtr<UPocketWindow> PocketWindow(CreateWidget<UPocketWindow>(World.Get(), WidgetClass));
     FIND_CHILD_WIDGET(PocketWindow.Get(), UDisplayText, PocketName);
-    ASSERT_NOT_NULL(PocketName);
+    UE_ASSERT_NOT_NULL(PocketName);
 
     auto &Settings = Pokemon::FBaseSettings::Get();
     for (auto &PocketSettings = Settings.GetPocketInfo(); auto &[Key, Value] : PocketSettings) {
         PocketWindow->SetCurrentPocket(Key);
-        CHECK_EQUAL(Value.DisplayName.ToString(), PocketName->GetText().ToString());
+        UE_CHECK_EQUAL(Value.DisplayName.ToString(), PocketName->GetText().ToString());
     }
 
     return true;

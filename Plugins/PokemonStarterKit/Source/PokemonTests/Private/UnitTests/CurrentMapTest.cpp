@@ -16,8 +16,8 @@ bool CurrentMapTest::RunTest(const FString &Parameters) {
     PokemonSubsystem.SetCurrentLocation(FText::FromStringView(TEXT("Test Map")));
     FPokemonDTO Blank;
     auto BlankBlock = NewObject<UDefaultObtainedBlock>(World.Get())->Initialize(Blank);
-    ASSERT_TRUE(BlankBlock->GetObtainText().IsSet());
-    CHECK_EQUAL(TEXT("Test Map"), BlankBlock->GetObtainText()->ToString());
+    UE_ASSERT_TRUE(BlankBlock->GetObtainText().IsSet());
+    UE_CHECK_EQUAL(TEXT("Test Map"), BlankBlock->GetObtainText()->ToString());
 
     return true;
 }

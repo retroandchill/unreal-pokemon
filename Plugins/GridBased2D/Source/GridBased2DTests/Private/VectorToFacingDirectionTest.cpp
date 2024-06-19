@@ -32,7 +32,7 @@ bool VectorToFacingDirectionTest::RunTest(const FString &Parameters) {
 
     auto ExpectedDir = static_cast<EFacingDirection>(DirValue);
     auto ActualDir = UGridUtils::VectorToFacingDirection(FVector2D(X, Y));
-    CHECK_TRUE(ActualDir.IsSet());
-    CHECK_EQUAL(ExpectedDir, ActualDir.GetValue());
+    UE_CHECK_TRUE(ActualDir.IsSet());
+    UE_CHECK_EQUAL(ExpectedDir, ActualDir.GetValue());
     return true;
 }

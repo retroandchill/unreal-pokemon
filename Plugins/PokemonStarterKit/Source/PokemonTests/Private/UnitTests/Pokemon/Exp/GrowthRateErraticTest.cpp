@@ -56,6 +56,6 @@ void GrowthRateErraticTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray
 bool GrowthRateErraticTest::RunTest(const FString &Parameters) {
     const int32 Level = FCString::Atoi(GetData(Parameters));
     Exp::FErratic GrowthRate;
-    ASSERT_EQUAL(GrowthRate.ExpForLevel(Level), GErraticGrowthTable[Level]);
+    UE_ASSERT_EQUAL(GrowthRate.ExpForLevel(Level), GErraticGrowthTable[Level]);
     return true;
 }

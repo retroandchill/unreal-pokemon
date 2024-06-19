@@ -28,12 +28,12 @@ bool TestIsGameDataIDValid_NodeTile::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
-    ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetNodeTitle(MenuTitle).ToString());
     TestNode->Initialize(FGrowthRateData::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Is Growth Rate Data ID Valid?"), TestNode->GetNodeTitle(MenuTitle).ToString());
-    ASSERT_EQUAL(TEXT("Growth Rate Data"), TestNode->GetNodeTitle(FullTitle).ToString());
+    UE_ASSERT_EQUAL(TEXT("Is Growth Rate Data ID Valid?"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_ASSERT_EQUAL(TEXT("Growth Rate Data"), TestNode->GetNodeTitle(FullTitle).ToString());
     return true;
 }
 
@@ -47,11 +47,11 @@ bool TestIsGameDataIDValid_TooltipText::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
-    ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetTooltipText().ToString());
+    UE_ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetTooltipText().ToString());
     TestNode->Initialize(FStat::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Is Stat ID Valid? \n\nRepresents one of the stats in the database."),
+    UE_ASSERT_EQUAL(TEXT("Is Stat ID Valid? \n\nRepresents one of the stats in the database."),
                  TestNode->GetTooltipText().ToString());
 
     return true;
@@ -67,11 +67,11 @@ bool TestIsGameDataIDValid_MenuCategory::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_IsGameDataIDValid>(TestGraph.Get());
-    ASSERT_EQUAL(FText::GetEmpty().ToString(), TestNode->GetMenuCategory().ToString());
+    UE_ASSERT_EQUAL(FText::GetEmpty().ToString(), TestNode->GetMenuCategory().ToString());
     TestNode->Initialize(FSpeciesData::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Data|PBS|Species Data"), TestNode->GetMenuCategory().ToString());
+    UE_ASSERT_EQUAL(TEXT("Data|PBS|Species Data"), TestNode->GetMenuCategory().ToString());
 
     return true;
 }
@@ -92,8 +92,8 @@ bool TestIsGameDataIDValid_IconAndTint::RunTest(const FString &Parameters) {
     FLinearColor Color;
     auto Icon = TestNode->GetIconAndTint(Color);
 
-    ASSERT_EQUAL(GetDefault<UGraphEditorSettings>()->PureFunctionCallNodeTitleColor, Color);
-    ASSERT_EQUAL(FSlateIcon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon"), Icon);
+    UE_ASSERT_EQUAL(GetDefault<UGraphEditorSettings>()->PureFunctionCallNodeTitleColor, Color);
+    UE_ASSERT_EQUAL(FSlateIcon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon"), Icon);
 
     return true;
 }
@@ -105,9 +105,9 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_MenuActions,
 bool TestIsGameDataIDValid_MenuActions::RunTest(const FString &Parameters) {
     FBlueprintActionDatabase::Get().RefreshAll();
     auto Actions = FBlueprintActionDatabase::Get().GetAllActions();
-    ASSERT_TRUE(Actions.Contains(UK2Node_IsGameDataIDValid::StaticClass()));
+    UE_ASSERT_TRUE(Actions.Contains(UK2Node_IsGameDataIDValid::StaticClass()));
     auto NodeActions = Actions[UK2Node_IsGameDataIDValid::StaticClass()];
-    ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
+    UE_ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
 
     return true;
 }
@@ -121,13 +121,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestIsGameDataIDValid_ExecuteNode,
 
 bool TestIsGameDataIDValid_ExecuteNode::RunTest(const FString &Parameters) {
     auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_ID_GAME_DATA_ID_VALID);
-    ASSERT_NOT_NULL(DispatcherClass);
+    UE_ASSERT_NOT_NULL(DispatcherClass);
     auto Dispatcher = NewObject<UObject>(GEngine, DispatcherClass);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     bool ValidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("ValidName"));
     bool InvalidName = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("InvalidName"));
-    CHECK_TRUE(ValidName);
-    CHECK_FALSE(InvalidName);
+    UE_CHECK_TRUE(ValidName);
+    UE_CHECK_FALSE(InvalidName);
 
     return true;
 }

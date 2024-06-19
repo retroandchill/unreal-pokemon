@@ -24,16 +24,16 @@ bool TestAddWidgetToStack::RunTest(const FString &Parameters) {
     auto TestNode = NewObject<UK2Node_AddWidgetToStack>(TestGraph.Get());
     TestGraph->AddNode(TestNode);
 
-    CHECK_EQUAL(FEditorCategoryUtils::GetCommonCategory(FCommonEditorCategory::UserInterface).ToString(),
+    UE_CHECK_EQUAL(FEditorCategoryUtils::GetCommonCategory(FCommonEditorCategory::UserInterface).ToString(),
                 TestNode->GetMenuCategory().ToString());
-    CHECK_EQUAL(TestNode->GetCornerIcon().ToString(), TEXT("Graph.Replication.ClientEvent"));
-    CHECK_EQUAL(TEXT("Add Screen to Stack"), TestNode->GetNodeTitle(MenuTitle).ToString());
-    CHECK_EQUAL(TEXT("Add NONE to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());
+    UE_CHECK_EQUAL(TestNode->GetCornerIcon().ToString(), TEXT("Graph.Replication.ClientEvent"));
+    UE_CHECK_EQUAL(TEXT("Add Screen to Stack"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_CHECK_EQUAL(TEXT("Add NONE to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());
 
     TestNode->AllocateDefaultPins();
     auto StructPin = TestNode->GetPinAt(2);
     StructPin->DefaultObject = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_SCREEN);
-    CHECK_EQUAL(TEXT("Add Test Screen to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());
+    UE_CHECK_EQUAL(TEXT("Add Test Screen to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());
 
     return true;
 }

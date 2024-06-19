@@ -801,7 +801,7 @@ namespace fakeit {
     };
 
 }
-#ifdef FAKEIT_ASSERT_ON_UNEXPECTED_METHOD_INVOCATION
+#ifdef FAKEIT_UE_ASSERT_ON_UNEXPECTED_METHOD_INVOCATION
 #include <cassert>
 #endif
 
@@ -814,7 +814,7 @@ namespace fakeit {
         void handle(const UnexpectedMethodCallEvent &e) override {
             fireEvent(e);
             auto &eh = getTestingFrameworkAdapter();
-            #ifdef FAKEIT_ASSERT_ON_UNEXPECTED_METHOD_INVOCATION
+            #ifdef FAKEIT_UE_ASSERT_ON_UNEXPECTED_METHOD_INVOCATION
             assert(!"Unexpected method invocation");
             #endif
             eh.handle(e);
@@ -7637,13 +7637,13 @@ namespace fakeit {
 
         template<typename U = R>
         typename std::enable_if<!std::is_reference<U>::value, void>::type
-        AlwaysReturn(const R &r) {
+        WillByDefault(Return(const R &r)) {
             return AlwaysDo([r](const typename fakeit::test_arg<arglist>::type...) -> R { return r; });
         }
 
         template<typename U = R>
         typename std::enable_if<std::is_reference<U>::value, void>::type
-        AlwaysReturn(const R &r) {
+        WillByDefault(Return(const R &r)) {
             return AlwaysDo([&r](const typename fakeit::test_arg<arglist>::type...) -> R { return r; });
         }
 
@@ -7652,7 +7652,7 @@ namespace fakeit {
             return Do([](const typename fakeit::test_arg<arglist>::type...) -> R { return DefaultValue<R>::value(); });
         }
 
-        void AlwaysReturn() {
+        void WillByDefault(Return()) {
             return AlwaysDo([](const typename fakeit::test_arg<arglist>::type...) -> R { return DefaultValue<R>::value(); });
         }
 
@@ -7797,7 +7797,7 @@ namespace fakeit {
         }
 
 
-        void AlwaysReturn() {
+        void WillByDefault(Return()) {
             return AlwaysDo([](const typename fakeit::test_arg<arglist>::type...) -> void { return DefaultValue<void>::value(); });
         }
 

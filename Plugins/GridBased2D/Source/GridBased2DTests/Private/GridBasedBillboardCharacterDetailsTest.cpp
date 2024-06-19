@@ -19,9 +19,9 @@ bool GridBasedBillboardCharacterDetailsTest::RunTest(const FString &Parameters) 
     auto Character = World->SpawnActor<AGridBasedBillboardCharacter>();
     DetailsView->SetObject(Character);
     auto Categories = UReflectionUtils::GetPropertyCategories(*DetailsView);
-    ASSERT_TRUE(Categories.Num() > 2);
-    CHECK_EQUAL(TEXT("Transform"), Categories[0]);
-    CHECK_EQUAL(TEXT("Rendering"), Categories[1]);
+    UE_ASSERT_TRUE(Categories.Num() > 2);
+    UE_CHECK_EQUAL(TEXT("Transform"), Categories[0]);
+    UE_CHECK_EQUAL(TEXT("Rendering"), Categories[1]);
 
     return true;
 }
