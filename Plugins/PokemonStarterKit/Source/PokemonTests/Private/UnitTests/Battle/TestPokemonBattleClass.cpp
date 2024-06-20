@@ -8,18 +8,15 @@
 #include "Mocks/MockBattleAction.h"
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockBattleSide.h"
+#include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
 using namespace testing;
 using namespace accessor;
 
-MEMBER_ACCESSOR(AccessPhase, APokemonBattle, Phase, EBattlePhase)
 MEMBER_ACCESSOR(AccessActions, APokemonBattle, SelectedActions, TArray<TUniquePtr<IBattleAction>>)
 MEMBER_ACCESSOR(AccessActionQueue, APokemonBattle, ActionQueue, TQueue<TUniquePtr<IBattleAction>>)
-MEMBER_ACCESSOR(AccessActionMessagesDisplayed, APokemonBattle, bActionMessagesDisplayed, bool)
-MEMBER_ACCESSOR(AccessActionResultDisplaying, APokemonBattle, bActionResultDisplaying, bool)
-FUNCTION_ACCESSOR(AccessBattleTick, AActor, Tick, void, float)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionSorting,
                                  "Unit Tests.Battle.TestPokemonBattleClass.ActionSorting",
@@ -57,9 +54,11 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ActionPointers.Add(MockAction3.Get());
     Actions.Emplace(MoveTemp(MockAction3));
 
-    auto &Phase = accessMember<AccessPhase>(*Battle).get();
+    auto& Phase = UReflectionUtils::GetMutablePropertyValue<EBattlePhase>(Battle, "Phase");
     Phase = EBattlePhase::Selecting;
-    callFunction<AccessBattleTick>(*Battle, 1);
+    FActorTickFunction TickFunction;
+    Battle->TickActor(1, LEVELTICK_All, TickFunction);
+    Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_CHECK_EQUAL(EBattlePhase::Actions, Phase);
 
     auto &Action1 = *ActionQueue.Peek();
@@ -90,9 +89,10 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
 
-    auto &Phase = accessMember<AccessPhase>(*Battle).get();
+    auto& Phase = UReflectionUtils::GetMutablePropertyValue<EBattlePhase>(Battle, "Phase");
     Phase = EBattlePhase::Actions;
-    callFunction<AccessBattleTick>(*Battle, 1);
+    FActorTickFunction TickFunction;
+    Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_CHECK_EQUAL(EBattlePhase::Judging, Phase);
 
     Phase = EBattlePhase::Actions;
@@ -102,7 +102,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     ON_CALL(*MockAction1, IsExecuting).WillByDefault(Return(false));
     ActionQueue.Enqueue(MoveTemp(MockAction1));
 
-    auto &bActionMessagesDisplayed = accessMember<AccessActionMessagesDisplayed>(*Battle).get();
+    auto &bActionMessagesDisplayed = UReflectionUtils::GetMutablePropertyValue<bool>(Battle, "bActionMessagesDisplayed");
     auto MockAction2 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction2, CanExecute).WillByDefault(Return(true));
     EXPECT_CALL(*MockAction2, IsExecuting).WillOnce(Return(false)).WillRepeatedly(Return(true));
@@ -117,13 +117,13 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     auto Action2 = MockAction2.Get();
     ActionQueue.Enqueue(MoveTemp(MockAction2));
 
-    callFunction<AccessBattleTick>(*Battle, 1);
+    Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_ASSERT_TRUE(ActionQueue.Peek()->Get() == Action2);
-    callFunction<AccessBattleTick>(*Battle, 1);
+    Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_CHECK_TRUE(bActionMessagesDisplayed);
 
-    callFunction<AccessBattleTick>(*Battle, 1);
-    auto &bActionResultDisplaying = accessMember<AccessActionResultDisplaying>(*Battle).get();
+    Battle->TickActor(1, LEVELTICK_All, TickFunction);
+    auto bActionResultDisplaying = UReflectionUtils::GetPropertyValue<bool>(Battle, bActionResultDisplaying);
     UE_CHECK_TRUE(bActionResultDisplaying);
 
     ActionQueue.Empty();

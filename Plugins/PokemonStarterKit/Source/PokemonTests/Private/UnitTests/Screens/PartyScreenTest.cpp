@@ -1,7 +1,6 @@
 ﻿
 #include "Asserts.h"
 #include "Data/SelectionInputs.h"
-#include "External/accessor.hpp"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
@@ -15,12 +14,6 @@
 #include "Windows/CommandWindow.h"
 #include "Windows/HelpWindow.h"
 #include "Windows/PokemonSelectionPane.h"
-
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessInputMappingsPartyScreen, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
-MEMBER_ACCESSOR(AccessConfirmInput, USelectionInputs, ConfirmInputs, TSet<FKey>)
-MEMBER_ACCESSOR(AccessCancelInput, USelectionInputs, CancelInputs, TSet<FKey>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Unit Tests.Screens.PartyScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -48,11 +41,12 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     UE_ASSERT_TRUE(SelectionPane->IsActive());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
-
-    USelectionInputs *InputMappings = accessMember<AccessInputMappingsPartyScreen>(*SelectionPane).get();
-    UE_ASSERT_NOT_NULL(InputMappings);
-    auto ConfirmButton = *accessMember<AccessConfirmInput>(*InputMappings).get().CreateIterator();
-    auto Cancel = *accessMember<AccessCancelInput>(*InputMappings).get().CreateIterator();
+    
+    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(SelectionPane, "InputMappings");
+    UE_ASSERT_NOT_NULL(InputMappings.Get());
+    
+    auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
+    auto Cancel = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
     UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
     UE_ASSERT_FALSE(SelectionPane->IsActive());
     UE_ASSERT_TRUE(CommandWindow->IsActive());

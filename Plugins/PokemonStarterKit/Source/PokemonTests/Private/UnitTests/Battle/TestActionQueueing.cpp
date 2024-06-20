@@ -1,9 +1,7 @@
 ﻿#include "Asserts.h"
-#include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/PokemonBattle.h"
-#include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattleAction.h"
@@ -16,10 +14,6 @@ class FMockBattleAction;
 class FMockBattleSide;
 
 using namespace testing;
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessActionsQueueing, APokemonBattle, SelectedActions, TArray<TUniquePtr<IBattleAction>>)
-MEMBER_ACCESSOR(AccessActionQueueQueueing, APokemonBattle, ActionQueue, TQueue<TUniquePtr<IBattleAction>>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestActionQueueing, "Unit Tests.Battle.TestActionQueueing",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -75,8 +69,6 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     UE_ASSERT_FALSE(Battle->ActionSelectionFinished());
     QueueBattleAction(Battler3);
     UE_ASSERT_TRUE(Battle->ActionSelectionFinished());
-
-    accessMember<AccessActionsQueueing>(*Battle).get().Empty();
-    accessMember<AccessActionQueueQueueing>(*Battle).get().Empty();
+    
     return true;
 }

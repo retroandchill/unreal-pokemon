@@ -315,12 +315,15 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * The current phase of battle
      */
+    UPROPERTY()
     EBattlePhase Phase = EBattlePhase::Setup;
 
     /**
      * Have the action messages for the current action been displayed
      */
+    UPROPERTY()
     bool bActionMessagesDisplayed = false;
 
+    UPROPERTY()
     bool bActionResultDisplaying = false;
 };

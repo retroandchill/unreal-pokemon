@@ -13,12 +13,6 @@
 #include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
 #include "Windows/ItemSelectionWindow.h"
 
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessInputMappings, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
-MEMBER_ACCESSOR(AccessLeftInputs, USelectionInputs, LeftInputs, TSet<FKey>)
-MEMBER_ACCESSOR(AccessRightInputs, USelectionInputs, RightInputs, TSet<FKey>)
-
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
                                  "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -115,10 +109,11 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
 
-    USelectionInputs *InputMappings = accessMember<AccessInputMappings>(*ItemSelection).get();
-    UE_ASSERT_NOT_NULL(InputMappings);
-    auto LeftInput = *accessMember<AccessLeftInputs>(*InputMappings).get().CreateIterator();
-    auto RightInput = *accessMember<AccessRightInputs>(*InputMappings).get().CreateIterator();
+    
+    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(ItemSelection.Get(), "InputMappings");
+    UE_ASSERT_NOT_NULL(InputMappings.Get());
+    auto LeftInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "LeftInputs").begin();
+    auto RightInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "RightInputs").begin();
 
     ItemSelection->SetActive(true);
     UInputUtilities::SimulateKeyPress(ItemSelection.Get(), LeftInput);

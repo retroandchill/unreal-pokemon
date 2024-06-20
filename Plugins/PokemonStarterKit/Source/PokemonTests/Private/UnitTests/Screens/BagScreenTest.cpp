@@ -1,8 +1,6 @@
 ﻿#include "Screens/BagScreen.h"
 #include "Asserts.h"
 #include "Data/SelectionInputs.h"
-#include "DependencyInjectionSubsystem.h"
-#include "External/accessor.hpp"
 #include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
@@ -10,22 +8,12 @@
 #include "Player/Bag.h"
 #include "RPGMenusSubsystem.h"
 #include "Utilities/InputUtilities.h"
-#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/Dispatchers/SampleHandler.h"
 #include "Windows/CommandWindow.h"
-#include "Windows/HelpWindow.h"
 #include "Windows/ItemSelectionWindow.h"
 
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessInputMappingsBag, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
-MEMBER_ACCESSOR(AccessBag, UPokemonSubsystem, Bag, TScriptInterface<IBag>)
-MEMBER_ACCESSOR(AccessHandler, UBagScreen, CommandHandlers, TObjectPtr<UBagMenuHandlerSet>)
-MEMBER_ACCESSOR(AccessBagHandlers, UBagMenuHandlerSet, Handlers, TArray<TObjectPtr<UBagMenuHandler>>)
-MEMBER_ACCESSOR(AccessConfirmInputBag, USelectionInputs, ConfirmInputs, TSet<FKey>)
-MEMBER_ACCESSOR(AccessCancelInputBag, USelectionInputs, CancelInputs, TSet<FKey>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -39,7 +27,8 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
     Bag->ObtainItem(TEXT("REPEL"));
     auto &Subsystem = UPokemonSubsystem::GetInstance(World.Get());
-    accessMember<AccessBag>(Subsystem).get() = Bag;
+    UReflectionUtils::SetPropertyValue<TScriptInterface<IBag>>(&Subsystem, "Bag", Bag);
+    
 
     TWidgetPtr<UBagScreen> Screen(CreateWidget<UBagScreen>(World.Get(), WidgetClass));
     UE_ASSERT_NOT_NULL(Screen.Get());
@@ -50,17 +39,17 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
     UE_ASSERT_NOT_NULL(CommandWindow);
 
-    auto &HandlerSet = accessMember<AccessHandler>(*Screen).get();
+    auto &HandlerSet = UReflectionUtils::GetMutablePropertyValue<TObjectPtr<UBagMenuHandlerSet>>(Screen.Get(), "CommandHandlers");
     HandlerSet = NewObject<UBagMenuHandlerSet>(Screen.Get());
-    auto &Handlers = accessMember<AccessBagHandlers>(*HandlerSet).get();
+    auto &Handlers = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBagMenuHandler>>>(HandlerSet, "Handlers");
     Handlers.Empty();
     auto SampleHandler = NewObject<USampleHandler>(Screen.Get());
     Handlers.Emplace(SampleHandler);
 
-    USelectionInputs *InputMappings = accessMember<AccessInputMappingsBag>(*ItemSelectionWindow).get();
-    UE_ASSERT_NOT_NULL(InputMappings);
-    auto ConfirmButton = *accessMember<AccessConfirmInputBag>(*InputMappings).get().CreateIterator();
-    auto CancelButton = *accessMember<AccessCancelInputBag>(*InputMappings).get().CreateIterator();
+    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(ItemSelectionWindow, "InputMappings");
+    UE_ASSERT_NOT_NULL(InputMappings.Get());
+    auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
+    auto CancelButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
 
     using enum ESlateVisibility;
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);

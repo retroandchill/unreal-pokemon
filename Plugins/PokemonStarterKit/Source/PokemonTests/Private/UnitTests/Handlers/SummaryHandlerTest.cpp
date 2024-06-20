@@ -1,7 +1,6 @@
 ﻿
 #include "Handlers/PartyMenu/SummaryHandler.h"
 #include "Asserts.h"
-#include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/GamePokemon.h"
@@ -15,10 +14,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-using namespace accessor;
 using namespace testing;
-
-MEMBER_ACCESSOR(AccessSummaryScreen, USummaryHandler, SummaryScreenClass, TSubclassOf<UPokemonSummaryScreen>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryHandlerTest, "Unit Tests.SummaryHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -38,7 +34,7 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
 
     TGCPointer Handler(NewObject<USummaryHandler>());
     UE_CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
-    accessor::accessMember<AccessSummaryScreen>(*Handler).get() = WidgetClass;
+    UReflectionUtils::SetPropertyValue<TSubclassOf<UPokemonSummaryScreen>>(Handler.Get(), "SummaryScreenClass", WidgetClass);
     Handler->Handle(Screen, Trainer, 0);
 
     UE_ASSERT_NOT_NULL(Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UPokemonSummaryScreen>());

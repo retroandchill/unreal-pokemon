@@ -1,8 +1,5 @@
-﻿#include "Nodes/DisplayMessage.h"
-#include "Asserts.h"
+﻿#include "Asserts.h"
 #include "BlueprintActionDatabase.h"
-#include "BlueprintTypePromotion.h"
-#include "External/accessor.hpp"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -10,11 +7,6 @@
 #include "UI/K2Node_DisplayMessage.h"
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
-#include "Utilities/WidgetTestUtilities.h"
-
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessProxyFactory, UK2Node_BaseAsyncTask, ProxyFactoryClass, TObjectPtr<UClass>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DisplayMessageTest, "Unit Tests.Nodes.DisplayMessageTest.DisplayMessage",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

@@ -9,13 +9,9 @@
 #include "Mocks/MockTrainer.h"
 #include "Pokemon/Pokemon.h"
 #include "Screens/PartyScreen.h"
+#include "Utilities/ReflectionUtils.h"
 
 using namespace testing;
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessHandlerHelpText, UPartyMenuItemHandler, HelpText, FText)
-MEMBER_ACCESSOR(AccessHandlerSubCommands, UPartyMenuItemHandler, SubCommands, TObjectPtr<UPartyMenuHandlerSet>)
-MEMBER_ACCESSOR(AccessHandlerSetHandlers, UPartyMenuHandlerSet, Handlers, TArray<TObjectPtr<UPartyMenuHandler>>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyMenuItemHandlerTest, "Unit Tests.Handlers.PartyMenuItemHandlerTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -36,10 +32,10 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     FakeItem.Tags.Add(TEXT("Mail"));
     UE_CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
 
-    accessMember<AccessHandlerHelpText>(*Handler).get() = FText::FromStringView(TEXT("Sample help text"));
-    auto &HandlerSet = accessMember<AccessHandlerSubCommands>(*Handler).get();
-    HandlerSet = NewObject<UPartyMenuHandlerSet>();
-    accessMember<AccessHandlerSetHandlers>(*HandlerSet).get() = {Handler};
+    UReflectionUtils::SetPropertyValue(Handler, "HelpText", FText::FromStringView(TEXT("Sample help text")));
+    auto& HandlerSet = UReflectionUtils::GetPropertyValue<TObjectPtr<UPartyMenuHandlerSet>>(Handler, "SubCommands");
+    UReflectionUtils::SetPropertyValue<TObjectPtr<UPartyMenuHandlerSet>>(Handler, "SubCommands", NewObject<UPartyMenuHandlerSet>());
+    UReflectionUtils::SetPropertyValue<TArray<TObjectPtr<UPartyMenuHandler>>>(HandlerSet, "Handlers", {Handler});
     FText HelpTextOut;
     TArray<TObjectPtr<UPartyMenuHandler>> HandlersOut;
     ON_CALL(MockScreen, SetCommandHelpText).WillByDefault([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });

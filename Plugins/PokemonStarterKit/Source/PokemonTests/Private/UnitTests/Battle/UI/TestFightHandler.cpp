@@ -20,13 +20,7 @@
 #include "Windows/PokemonActionOptions.h"
 #include <range/v3/view/single.hpp>
 
-using namespace accessor;
 using namespace testing;
-
-MEMBER_ACCESSOR(AccessInputMappingsBattleScreen, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
-MEMBER_ACCESSOR(AccessConfirmInputBattleScreen, USelectionInputs, ConfirmInputs, TSet<FKey>)
-MEMBER_ACCESSOR(AccessCancelInputBattleScreen, USelectionInputs, CancelInputs, TSet<FKey>)
-MEMBER_ACCESSOR(AccessFightHandlers, UPokemonActionOptions, MenuActions, TArray<TObjectPtr<UBattleMenuHandler>>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestFightHandler, "Unit Tests.Battle.UI.TestFightHandler",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -74,12 +68,12 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     Screen->SelectAction(Battler2);
     UE_CHECK_EQUAL(ESlateVisibility::Visible, ActionSelect->GetVisibility());
 
-    USelectionInputs *InputMappings = accessMember<AccessInputMappingsBattleScreen>(*ActionSelect).get();
-    UE_ASSERT_NOT_NULL(InputMappings);
-    auto ConfirmButton = *accessMember<AccessConfirmInputBattleScreen>(*InputMappings).get().CreateIterator();
-    auto CancelButton = *accessMember<AccessCancelInputBattleScreen>(*InputMappings).get().CreateIterator();
+    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(ActionSelect, "InputMappings");
+    UE_ASSERT_NOT_NULL(InputMappings.Get());
+    auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
+    auto CancelButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
 
-    auto &Options = accessMember<AccessFightHandlers>(*ActionSelect).get();
+    auto &Options = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBattleMenuHandler>>>(ActionSelect, "MenuHandlers");
     int32 FightHandlerIndex =
         Options.IndexOfByPredicate([](UBattleMenuHandler *Handler) { return Handler->IsA<UFightHandler>(); });
     ActionSelect->SetIndex(FightHandlerIndex);

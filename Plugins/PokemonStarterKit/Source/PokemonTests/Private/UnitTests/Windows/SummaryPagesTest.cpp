@@ -13,12 +13,6 @@
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/PokemonTestUtilities.h"
 
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessInputMappingsPages, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
-MEMBER_ACCESSOR(AccessUpInput, USelectionInputs, UpInputs, TSet<FKey>)
-MEMBER_ACCESSOR(AccessDownInput, USelectionInputs, DownInputs, TSet<FKey>)
-
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryPagesTest, "Unit Tests.Windows.SummaryPagesTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
@@ -41,10 +35,10 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(PageSwitcher);
     UE_CHECK_EQUAL(0, PageSwitcher->GetActiveWidgetIndex());
 
-    USelectionInputs *InputMappings = accessMember<AccessInputMappingsPages>(*Pages).get();
-    UE_ASSERT_NOT_NULL(InputMappings);
-    auto UpInput = *accessMember<AccessUpInput>(*InputMappings).get().CreateIterator();
-    auto DownInput = *accessMember<AccessDownInput>(*InputMappings).get().CreateIterator();
+    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(Pages.Get(), "InputMappings");
+    UE_ASSERT_NOT_NULL(InputMappings.Get());
+    auto UpInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "UpInputs").begin();
+    auto DownInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "DownInputs").begin();
 
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
                 Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());

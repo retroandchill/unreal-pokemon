@@ -32,6 +32,21 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
         auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
         return TPropertyTypeFundamentals<T>::GetPropertyValue(PropertyContainer);
     }
+    
+    /**
+     * Extract the value of a property from the given object.
+     * <p>Note: This method is unsafe, use as your own risk.</p>
+     * @tparam T The type of the property in question.
+     * @param TargetObject The object to get the property of
+     * @param PropertyName The name of the property to extract
+     * @return The value of the property
+     */
+    template <typename T>
+    static T &GetMutablePropertyValue(const UObject *TargetObject, FName PropertyName) {
+        auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
+        auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
+        return TPropertyTypeFundamentals<T>::GetPropertyValue(PropertyContainer);
+    }
 
     /**
      * Inject the given value into a variable.

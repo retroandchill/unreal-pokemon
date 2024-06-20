@@ -1,13 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "TestBattlerActor.h"
-#include "External/accessor.hpp"
 #include "TestSpriteActor.h"
-
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessBattleSpriteActor, ABattlerActor, BattlerSpriteClass, TSoftClassPtr<AActor>)
+#include "Utilities/ReflectionUtils.h"
 
 ATestBattlerActor::ATestBattlerActor() {
-    accessMember<AccessBattleSpriteActor>(*this).get() = ATestSpriteActor::StaticClass();
+    UReflectionUtils::SetPropertyValue<TSoftClassPtr<AActor>>(this, TEXT("BattlerSpriteClass"), ATestSpriteActor::StaticClass());
 }
