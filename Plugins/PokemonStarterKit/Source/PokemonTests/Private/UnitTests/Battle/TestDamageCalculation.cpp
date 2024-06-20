@@ -179,3 +179,45 @@ bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
     }
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestCriticalHits, "Unit Tests.UnitTests.Battle.TestDamageCalculation.CriticalHit",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool TestCriticalHits::RunTest(const FString &Parameters) {
+    // Make the test pass by returning true, or fail by returning false.
+    FMath::RandInit(151566);
+
+    // Roll 23 random numbers so that the next one %25 is 0
+    for (int32 i = 0; i < 30; i++) {
+        int32 Unused = FMath::Rand() % 24;
+    }
+
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
+
+    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
+    ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
+    ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(75));
+    ON_CALL(MockUser, GetAttack).WillByDefault(Return(123));
+    ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("ICE")}));
+    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
+    ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
+    ON_CALL(MockTarget, GetDefense).WillByDefault(Return(163));
+    ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));
+    ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Physical));
+    ON_CALL(MockMove, GetBasePower).WillByDefault(Return(65));
+    ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("ICE")));
+    FMoveData MoveData;
+    ON_CALL(MockMove, GetMoveData).WillByDefault(ReturnRef(MoveData));
+
+    auto Move = NewObject<UCriticalTestMove>();
+    Move->Initialize(Battle, BaseMove);
+    auto [Damage, Effeciveness, CriticalHit] =
+            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
+    UE_CHECK_EQUAL(EDamageEffectiveness::SuperEffective, Effeciveness);
+    UE_CHECK_EQUAL(273, Damage);
+    
+    return true;
+}
