@@ -25,7 +25,5 @@ public class GridBased2DTests : ModuleRules
                 "AutomationTestHelpers"
             }
         );
-
-        bUseRTTI = true;
     }
 }
