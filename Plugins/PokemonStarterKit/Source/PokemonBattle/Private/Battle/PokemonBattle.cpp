@@ -111,6 +111,18 @@ bool APokemonBattle::ActionSelectionFinished() const {
                         [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
+#if WITH_EDITOR
+const TArray<TUniquePtr<IBattleAction>> & APokemonBattle::GetActions() const {
+    return SelectedActions;
+}
+
+const TQueue<TUniquePtr<IBattleAction>> & APokemonBattle::GetActionQueue() const {
+    return ActionQueue;
+}
+
+
+#endif
+
 ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
     return RangeHelpers::CreateRange(Sides);
 }

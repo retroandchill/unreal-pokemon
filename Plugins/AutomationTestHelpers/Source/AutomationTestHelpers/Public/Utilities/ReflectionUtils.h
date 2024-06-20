@@ -43,9 +43,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      */
     template <typename T>
     static T &GetMutablePropertyValue(const UObject *TargetObject, FName PropertyName) {
-        auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
-        auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
-        return TPropertyTypeFundamentals<T>::GetPropertyValue(PropertyContainer);
+        return const_cast<T&>(GetPropertyValue<T>(TargetObject, PropertyName));
     }
 
     /**

@@ -1,6 +1,5 @@
 ﻿#include "Handlers/PartyMenu/PartyMenuItemHandler.h"
 #include "Asserts.h"
-#include "External/accessor.hpp"
 #include "Handlers/PartyMenu/PartyMenuHandlerSet.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"

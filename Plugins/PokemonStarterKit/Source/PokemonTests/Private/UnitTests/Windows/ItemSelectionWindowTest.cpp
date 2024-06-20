@@ -1,7 +1,6 @@
 ﻿#include "Asserts.h"
 #include "Bag/Item.h"
 #include "Data/SelectionInputs.h"
-#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"

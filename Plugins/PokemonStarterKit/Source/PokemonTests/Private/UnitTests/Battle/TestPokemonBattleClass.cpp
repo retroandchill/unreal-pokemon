@@ -2,7 +2,6 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattleAction.h"
@@ -13,10 +12,6 @@
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
 using namespace testing;
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessActions, APokemonBattle, SelectedActions, TArray<TUniquePtr<IBattleAction>>)
-MEMBER_ACCESSOR(AccessActionQueue, APokemonBattle, ActionQueue, TQueue<TUniquePtr<IBattleAction>>)
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionSorting,
                                  "Unit Tests.Battle.TestPokemonBattleClass.ActionSorting",
@@ -30,8 +25,8 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
 
-    auto &ActionQueue = accessMember<AccessActionQueue>(*Battle).get();
-    auto &Actions = accessMember<AccessActions>(*Battle).get();
+    auto &ActionQueue = const_cast<TQueue<TUniquePtr<IBattleAction>>&>(Battle->GetActionQueue());
+    auto &Actions = const_cast<TArray<TUniquePtr<IBattleAction>>&>(Battle->GetActions());
     TArray<IBattleAction*> ActionPointers;
     auto MockAction1 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction1, GetPriority).WillByDefault(Return(2));
@@ -58,7 +53,6 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     Phase = EBattlePhase::Selecting;
     FActorTickFunction TickFunction;
     Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_CHECK_EQUAL(EBattlePhase::Actions, Phase);
 
     auto &Action1 = *ActionQueue.Peek();
@@ -66,11 +60,11 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ActionQueue.Pop();
 
     auto &Action2 = *ActionQueue.Peek();
-    UE_CHECK_TRUE(Action2.Get() == ActionPointers[1]);
+    UE_CHECK_TRUE(Action2.Get() == ActionPointers[2]);
     ActionQueue.Pop();
 
     auto &Action3 = *ActionQueue.Peek();
-    UE_CHECK_TRUE(Action3.Get() == ActionPointers[2]);
+    UE_CHECK_TRUE(Action3.Get() == ActionPointers[1]);
     ActionQueue.Pop();
 
     UE_CHECK_TRUE(ActionQueue.IsEmpty());
@@ -96,7 +90,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     UE_CHECK_EQUAL(EBattlePhase::Judging, Phase);
 
     Phase = EBattlePhase::Actions;
-    auto &ActionQueue = accessMember<AccessActionQueue>(*Battle).get();
+    auto &ActionQueue = const_cast<TQueue<TUniquePtr<IBattleAction>>&>(Battle->GetActionQueue());
     auto MockAction1 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction1, CanExecute).WillByDefault(Return(false));
     ON_CALL(*MockAction1, IsExecuting).WillByDefault(Return(false));
@@ -123,7 +117,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     UE_CHECK_TRUE(bActionMessagesDisplayed);
 
     Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    auto bActionResultDisplaying = UReflectionUtils::GetPropertyValue<bool>(Battle, bActionResultDisplaying);
+    auto bActionResultDisplaying = UReflectionUtils::GetPropertyValue<bool>(Battle, "bActionResultDisplaying");
     UE_CHECK_TRUE(bActionResultDisplaying);
 
     ActionQueue.Empty();

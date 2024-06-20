@@ -3,7 +3,6 @@
 #include "Asserts.h"
 #include "Components/WidgetSwitcher.h"
 #include "Data/SelectionInputs.h"
-#include "External/accessor.hpp"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Species/SpeciesData.h"

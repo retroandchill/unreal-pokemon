@@ -8,7 +8,6 @@
 #include "Components/Summary/PokemonStatRow.h"
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Components/Summary/TrainerMemoPage.h"
-#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
@@ -18,8 +17,6 @@
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-
-using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_NameInfo,
                                  "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.NameInfo",

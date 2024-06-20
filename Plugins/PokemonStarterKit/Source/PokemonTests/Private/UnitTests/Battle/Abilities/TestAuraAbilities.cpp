@@ -3,15 +3,12 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BattleDamage.h"
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
-#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
-
-using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAuraAbilities, "Unit Tests.Battle.Abilities.TestAuraAbilities",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

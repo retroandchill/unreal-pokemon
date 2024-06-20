@@ -2,7 +2,6 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"

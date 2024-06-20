@@ -2,7 +2,6 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Data/SelectionInputs.h"
-#include "External/accessor.hpp"
 #include "Handlers/FightHandler.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -73,7 +72,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
     auto CancelButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
 
-    auto &Options = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBattleMenuHandler>>>(ActionSelect, "MenuHandlers");
+    auto &Options = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBattleMenuHandler>>>(ActionSelect, "MenuActions");
     int32 FightHandlerIndex =
         Options.IndexOfByPredicate([](UBattleMenuHandler *Handler) { return Handler->IsA<UFightHandler>(); });
     ActionSelect->SetIndex(FightHandlerIndex);

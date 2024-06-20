@@ -2,7 +2,6 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BaseBattleMove.h"
-#include "External/accessor.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Moves/Move.h"
@@ -11,7 +10,6 @@
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockMove.h"
 
-using namespace accessor;
 using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak,

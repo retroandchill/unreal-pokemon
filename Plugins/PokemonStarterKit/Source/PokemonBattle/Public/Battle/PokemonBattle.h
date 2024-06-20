@@ -76,6 +76,20 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
 
+#if WITH_EDITOR
+    /**
+     * Get the list of actions that are to be queued up and executed. Mainly used for logging as needed.
+     * @return The list of actions
+     */
+    const TArray<TUniquePtr<IBattleAction>> &GetActions() const;
+
+    /**
+     * Get the queue of actions that about to or currently being executed. Mainly used for logging as needed.
+     * @return The queue of actions
+     */
+    const TQueue<TUniquePtr<IBattleAction>> &GetActionQueue() const;
+#endif
+    
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn *GetBattlePawn() const final;
 

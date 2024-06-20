@@ -8,5 +8,6 @@ FEventReply UInputUtilities::SimulateKeyPress(UUserWidget *Widget, const FKey &K
     FKeyEvent Event(Key, FModifierKeysState(), 0, false, 0, 0);
     auto ObjectWidget = MakeShared<SObjectWidget>();
     ObjectWidget->Construct({}, Widget);
-    return Widget->OnKeyDown(FGeometry(), Event);
+    auto Reply = ObjectWidget->OnKeyDown(FGeometry(), Event);
+    return FEventReply(Reply.IsEventHandled());
 }
