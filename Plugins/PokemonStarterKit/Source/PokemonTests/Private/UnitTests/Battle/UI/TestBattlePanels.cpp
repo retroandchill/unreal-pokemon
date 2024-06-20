@@ -22,13 +22,13 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto [Battler, MockBattler] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattler, Battler, FMockBattler, MockBattler);
     EXPECT_CALL(MockBattler, IsFainted).WillOnce(Return(false)).WillOnce(Return(false)).WillRepeatedly(Return(true));
     ON_CALL(MockBattler, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Lucario"))));
     ON_CALL(MockBattler, GetPokemonLevel).WillByDefault(Return(50));
-    ON_CALL(MockBattler, GetHP).Return(100, 50, 0);
+    EXPECT_CALL(MockBattler, GetHP).WillOnce(Return(100)).WillOnce(Return(50)).WillRepeatedly(Return(0));
     ON_CALL(MockBattler, GetMaxHP).WillByDefault(Return(100));
-    ON_CALL(MockBattler, GetHPPercent).Return(1, 0.5f, 0.f);
+    EXPECT_CALL(MockBattler, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f)).WillRepeatedly(Return(0.f));
     ON_CALL(MockBattler, GetGender).WillByDefault(Return(EPokemonGender::Male));
     ON_CALL(MockBattler, GetExpPercent).WillByDefault(Return(0.25f));
 

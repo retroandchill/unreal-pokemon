@@ -26,9 +26,9 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
-    auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide, FMockBattleSide>();
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(Return(Battle));
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
     ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(

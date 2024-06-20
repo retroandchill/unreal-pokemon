@@ -4,10 +4,13 @@
 #include "Handlers/PartyMenu/PartyMenuHandlerSet.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockPartyScreen.h"
+#include "Mocks/MockPokemon.h"
+#include "Mocks/MockTrainer.h"
 #include "Pokemon/Pokemon.h"
 #include "Screens/PartyScreen.h"
 
-using namespace fakeit;
+using namespace testing;
 using namespace accessor;
 
 MEMBER_ACCESSOR(AccessHandlerHelpText, UPartyMenuItemHandler, HelpText, FText)
@@ -19,13 +22,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyMenuItemHandlerTest, "Unit Tests.Handlers.
 
 bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     // Make the test pass by returning true, or fail by returning false.
-    auto [Screen, MockScreen] = UnrealMock::CreateMock<IPartyScreen>();
-    auto [Trainer, MockTrainer] = UnrealMock::CreateMock<ITrainer>();
-    auto [Pokemon, MockPokemon] = UnrealMock::CreateMock<IPokemon>();
+    CREATE_MOCK(IPartyScreen, Screen, FMockPartyScreen, MockScreen);
+    CREATE_MOCK(ITrainer, Trainer, FMockTrainer, MockTrainer);
+    CREATE_MOCK(IPokemon, Pokemon, FMockPokemon, MockPokemon);
 
     FItem FakeItem;
     ON_CALL(MockTrainer, GetPokemon).WillByDefault(Return(Pokemon));
-    ON_CALL(MockPokemon, GetHoldItem).Return(nullptr).WillByDefault(Return(&FakeItem));
+    EXPECT_CALL(MockPokemon, GetHoldItem).WillOnce(Return(nullptr)).WillRepeatedly(Return(&FakeItem));
 
     auto Handler = NewObject<UPartyMenuItemHandler>();
     UE_CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
@@ -39,8 +42,8 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     accessMember<AccessHandlerSetHandlers>(*HandlerSet).get() = {Handler};
     FText HelpTextOut;
     TArray<TObjectPtr<UPartyMenuHandler>> HandlersOut;
-    ON_CALL(MockScreen, SetCommandHelpText).Do([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
-    ON_CALL(MockScreen, ShowCommands).Do([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
+    ON_CALL(MockScreen, SetCommandHelpText).WillByDefault([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
+    ON_CALL(MockScreen, ShowCommands).WillByDefault([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
         HandlersOut = Handlers;
     });
 

@@ -17,10 +17,10 @@ bool TestAbilityLoading::RunTest(const FString &Parameters) {
     auto &Effect = *Ability;
     auto &DamageModifiers = Effect.GetDamageModifiers();
 
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
-    ON_CALL(MockUser, GetHPPercent)
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    EXPECT_CALL(MockUser, GetHPPercent)
         .WillOnce(Return(0.5f))
-        .WillByDefault(Return(0.25f));
+        .WillRepeatedly(Return(0.25f));
 
     FMoveDamageInfo Context = {.User = User, .Type = TEXT("WATER")};
     UE_ASSERT_FALSE(DamageModifiers.User.IsEmpty());

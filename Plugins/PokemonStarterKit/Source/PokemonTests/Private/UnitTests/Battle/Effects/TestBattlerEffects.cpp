@@ -3,15 +3,16 @@
 #include "Battle/Moves/BattleMove.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattleMove.h"
 
-using namespace fakeit;
+using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleEffects, "Unit Tests.Battle.Effects.TestBattlerEffects",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestBattleEffects::RunTest(const FString &Parameters) {
-    auto [Move, MockMove] = UnrealMock::CreateMock<IBattleMove>();
-    ON_CALL(MockMove, IsConfusionAttack).Return(false).Return(true);
+    CREATE_MOCK(IBattleMove, Move, FMockBattleMove, MockMove);
+    EXPECT_CALL(MockMove, IsConfusionAttack).WillOnce(Return(false)).WillRepeatedly(Return(true));
 
     FDamageMultipliers Multipliers;
     auto ParentalBond = NewObject<UEffectParentalBond>();

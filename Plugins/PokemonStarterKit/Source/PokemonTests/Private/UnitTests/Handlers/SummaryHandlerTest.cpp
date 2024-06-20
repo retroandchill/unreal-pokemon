@@ -6,6 +6,7 @@
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/GamePokemon.h"
 #include "RPGMenusSubsystem.h"
+#include "Mocks/MockPartyScreen.h"
 #include "Screens/PartyScreen.h"
 #include "Screens/PokemonSummaryScreen.h"
 #include "Trainers/BasicTrainer.h"
@@ -15,7 +16,7 @@
 #include "Utilities/WidgetTestUtilities.h"
 
 using namespace accessor;
-using namespace fakeit;
+using namespace testing;
 
 MEMBER_ACCESSOR(AccessSummaryScreen, USummaryHandler, SummaryScreenClass, TSubclassOf<UPokemonSummaryScreen>)
 
@@ -29,8 +30,8 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     auto WidgetClass = Subclasses[0];
 
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
-    auto [Screen, Mock] = UnrealMock::CreateMock<IPartyScreen>(World.Get());
-    ON_CALL(Mock, GetPlayerController)).Return(Player->GetPlayerController(nullptr);
+    CREATE_MOCK(IPartyScreen, Screen, FMockPartyScreen, Mock);
+    ON_CALL(Mock, GetPlayerController).WillByDefault(Return(Player->GetPlayerController(nullptr)));
 
     auto Trainer = NewObject<UBasicTrainer>()->Initialize(TEXT("POKEMONRANGER_M"), FText::FromStringView(TEXT("Test")));
     Trainer->AddPokemonToParty(UGamePokemon::Create(World.Get(), {.Species = TEXT("RIOLU"), .Level = 5}));

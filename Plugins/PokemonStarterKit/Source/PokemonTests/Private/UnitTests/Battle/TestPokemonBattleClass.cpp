@@ -27,8 +27,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionSorting,
 
 bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto [Side1, MockSide1] = UnrealMock::CreateMock<IBattleSide, FMockBattleSide>();
-    auto [Side2, MockSide2] = UnrealMock::CreateMock<IBattleSide, FMockBattleSide>();
+    CREATE_MOCK(IBattleSide, Side1, FMockBattleSide, MockSide1);
+    CREATE_MOCK(IBattleSide, Side2, FMockBattleSide, MockSide2);
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
@@ -42,17 +42,17 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     Actions.Emplace(MoveTemp(MockAction1));
 
     auto MockAction2 = MakeUnique<FMockBattleAction>();
-    auto [Battler2, MockBattler2] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattler, Battler2, FMockBattler, MockBattler2);
     ON_CALL(*MockAction2, GetPriority).WillByDefault(Return(0));
-    ON_CALL(*MockAction2, GetBattler).WillByDefault(Return(Battler2));
+    ON_CALL(*MockAction2, GetBattler).WillByDefault(ReturnRef(Battler2));
     ON_CALL(MockBattler2, GetSpeed).WillByDefault(Return(20));
     ActionPointers.Add(MockAction2.Get());
     Actions.Emplace(MoveTemp(MockAction2));
 
     auto MockAction3 = MakeUnique<FMockBattleAction>();
-    auto [Battler3, MockBattler3] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattler, Battler3, FMockBattler, MockBattler3);
     ON_CALL(*MockAction3, GetPriority).WillByDefault(Return(0));
-    ON_CALL(*MockAction3, GetBattler).WillByDefault(Return(Battler3));
+    ON_CALL(*MockAction3, GetBattler).WillByDefault(ReturnRef(Battler3));
     ON_CALL(MockBattler3, GetSpeed).WillByDefault(Return(60));
     ActionPointers.Add(MockAction3.Get());
     Actions.Emplace(MoveTemp(MockAction3));
@@ -84,8 +84,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionExecution,
 
 bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto [Side1, MockSide1] = UnrealMock::CreateMock<IBattleSide, FMockBattleSide>();
-    auto [Side2, MockSide2] = UnrealMock::CreateMock<IBattleSide, FMockBattleSide>();
+    CREATE_MOCK(IBattleSide, Side1, FMockBattleSide, MockSide1);
+    CREATE_MOCK(IBattleSide, Side2, FMockBattleSide, MockSide2);
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
@@ -109,7 +109,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     ON_CALL(*MockAction2, GetActionMessage).WillByDefault(Return(FText::GetEmpty()));
     ON_CALL(*MockAction2, Execute).WillByDefault([&bActionMessagesDisplayed] { bActionMessagesDisplayed = true; });
 
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
     FActionResult Result;
     Result.TargetResults.Add({.Target = Target});
     auto ResultFuture = AsyncThread([&Result] { return Result; });

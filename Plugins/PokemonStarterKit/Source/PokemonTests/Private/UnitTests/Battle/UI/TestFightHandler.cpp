@@ -7,6 +7,8 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattle.h"
+#include "Mocks/MockBattleSide.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Screens/PokemonBattleScreen.h"
@@ -19,7 +21,7 @@
 #include <range/v3/view/single.hpp>
 
 using namespace accessor;
-using namespace fakeit;
+using namespace testing;
 
 MEMBER_ACCESSOR(AccessInputMappingsBattleScreen, USelectableWidget, InputMappings, TObjectPtr<USelectionInputs>)
 MEMBER_ACCESSOR(AccessConfirmInputBattleScreen, USelectionInputs, ConfirmInputs, TSet<FKey>)
@@ -43,13 +45,11 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UBattleMoveSelect, MoveSelect);
     UE_ASSERT_NOT_NULL(MoveSelect);
 
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    Fake(Method(MockBattle, GetActiveBattlers));
-    Fake(Method(MockBattle, QueueAction));
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(Return(Battle));
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
     ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
-    ON_CALL(MockBattle, GetSides)).WillByDefault(Return(ranges::views::single(Side));
+    ON_CALL(MockBattle, GetSides).WillByDefault(Return(ranges::views::single(Side)));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),
         FPokemonDTO{.Species = TEXT("MIMIKYU"),
@@ -67,7 +67,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     Battler2->Initialize(Side, Pokemon2);
 
     TArray<TScriptInterface<IBattler>> Battlers = {Battler1, Battler2};
-    ON_CALL(MockSide, GetBattlers).WillByDefault(Return(Battlers));
+    ON_CALL(MockSide, GetBattlers).WillByDefault(ReturnRef(Battlers));
     Screen->SetBattle(Battle);
 
     Screen->SelectAction(Battler1);

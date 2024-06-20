@@ -56,7 +56,5 @@ public class AutomationTestHelpers : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-
-		bUseRTTI = true;
 	}
 }

@@ -3,6 +3,7 @@
 #include "Components/BattleMenuOption.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattler.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/PokemonActionOptions.h"
@@ -16,7 +17,7 @@ bool TestPokemonActionOptions::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto [Battler, MockBattler] = UnrealMock::CreateMock<IBattler>();
+    CREATE_MOCK(IBattler, Battler, FMockBattler, MockBattler);
 
     TWidgetPtr<UPokemonActionOptions> Window(CreateWidget<UPokemonActionOptions>(World.Get(), WidgetClass));
     Window->AddToViewport();

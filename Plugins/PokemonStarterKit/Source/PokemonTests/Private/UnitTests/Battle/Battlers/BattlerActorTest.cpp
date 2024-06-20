@@ -6,6 +6,9 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattle.h"
+#include "Mocks/MockBattler.h"
+#include "Mocks/MockBattleSide.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/StatBlock.h"
@@ -13,7 +16,7 @@
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include <thread>
 
-using namespace fakeit;
+using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerActorTest_Stats, "Unit Tests.Battle.Battlers.BattlerActorTest.Stats",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -21,9 +24,9 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerActorTest_Stats, "Unit Tests.Battle.Batt
 bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(Return(Battle));
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
     ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(true));
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
@@ -63,16 +66,15 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAiBattlerController, "Unit Tests.Battle.Bat
 bool TestAiBattlerController::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(Return(Battle));
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
     ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
 
     FString SelectedAction;
-    ON_CALL(MockBattle, QueueAction).AlwaysDo([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
+    ON_CALL(MockBattle, QueueAction).WillByDefault([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
         SelectedAction = Action->GetActionMessage().ToString();
     });
-    Fake(Method(MockBattle, GetActiveBattlers));
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),

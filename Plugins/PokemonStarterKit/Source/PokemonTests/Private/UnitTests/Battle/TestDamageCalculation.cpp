@@ -3,7 +3,6 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "External/accessor.hpp"
-#include "External/fakeit.hpp"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Moves/Move.h"
@@ -20,10 +19,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
-    auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove, FMockMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
     ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
@@ -60,10 +59,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialResisted,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
-    auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove, FMockMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
     ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
@@ -100,10 +99,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
-    auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove, FMockMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
     ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
@@ -138,10 +137,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialImmune,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
-    auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove, FMockMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GHOST")}));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Special));
@@ -164,10 +163,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_StatusMove,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle, FMockBattle>();
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler, FMockBattler>();
-    auto [BaseMove, MockMove] = UnrealMock::CreateMock<IMove, FMockMove>();
-    auto [Target, MockTarget] = UnrealMock::CreateMock<IBattler, FMockBattler>();
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
+    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Status));
 

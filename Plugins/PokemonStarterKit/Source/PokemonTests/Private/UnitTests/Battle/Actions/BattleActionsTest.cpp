@@ -3,20 +3,21 @@
 #include "Battle/Battlers/Battler.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattler.h"
 #include "UtilityClasses/BattleActors/TestBattleMove.h"
 
-using namespace fakeit;
+using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattleActionsTest_Moves, "Unit Tests.Battle.Actions.BattleActionsTest.Moves",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool BattleActionsTest_Moves::RunTest(const FString &Parameters) {
-    auto [User, MockUser] = UnrealMock::CreateMock<IBattler>();
+    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
     auto Move = NewObject<UTestBattleMove>();
-    auto [Target1, MockTarget1] = UnrealMock::CreateMock<IBattler>();
-    auto [Target2, MockTarget2] = UnrealMock::CreateMock<IBattler>();
+    CREATE_MOCK(IBattler, Target1, FMockBattler, MockTarget1);
+    CREATE_MOCK(IBattler, Target2, FMockBattler, MockTarget2);
 
-    ON_CALL(MockUser, GetNickname)).WillByDefault(Return(FText::FromStringView(TEXT("Mock User")));
+    ON_CALL(MockUser, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Mock User"))));
     ON_CALL(MockTarget1, IsFainted).WillByDefault(Return(true));
     ON_CALL(MockTarget2, IsFainted).WillByDefault(Return(false));
 

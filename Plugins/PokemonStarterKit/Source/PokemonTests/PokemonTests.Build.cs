@@ -40,7 +40,5 @@ public class PokemonTests : ModuleRules
                 "GoogleTest"
             }
         );
-        
-        bUseRTTI = true;
     }
 }
