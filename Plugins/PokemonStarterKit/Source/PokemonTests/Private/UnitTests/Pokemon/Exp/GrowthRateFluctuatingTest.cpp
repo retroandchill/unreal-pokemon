@@ -51,6 +51,6 @@ bool GrowthRateFluctuatingTest::RunTest(const FString &Parameters) {
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FFluctuating GrowthRate;
-    ASSERT_EQUAL(GFluctuatingGrowthTable[Level], GrowthRate.ExpForLevel(Level));
+    UE_ASSERT_EQUAL(GFluctuatingGrowthTable[Level], GrowthRate.ExpForLevel(Level));
     return true;
 }

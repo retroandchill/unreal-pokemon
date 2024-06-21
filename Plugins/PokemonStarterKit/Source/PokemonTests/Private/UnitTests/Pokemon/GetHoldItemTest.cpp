@@ -19,12 +19,12 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_Null, "Unit Tests.Core.Pokemon.
 
 bool GetHoldItemTest_Null::RunTest(const FString &Parameters) {
     auto TestHelper = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_HOLD_ITEM_EXECUTOR);
-    ASSERT_NOT_NULL(TestHelper);
+    UE_ASSERT_NOT_NULL(TestHelper);
     auto Dispatcher = NewObject<UObject>(GetTransientPackage(), TestHelper);
     AddExpectedError(TEXT("Get Held Item called on an invalid Pokémon reference!"));
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     bool HasItem = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("HasItem"));
-    CHECK_FALSE(HasItem);
+    UE_CHECK_FALSE(HasItem);
     return true;
 }
 
@@ -36,15 +36,15 @@ bool GetHoldItemTest_WithNoItem::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     auto TestHelper = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_HOLD_ITEM_EXECUTOR);
-    ASSERT_NOT_NULL(TestHelper);
+    UE_ASSERT_NOT_NULL(TestHelper);
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PIKACHU"});
     auto Dispatcher = NewObject<UObject>(GetTransientPackage(), TestHelper);
     UReflectionUtils::SetPropertyValue(Dispatcher, TEXT("Pokemon"), Pokemon);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     bool HasItem = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("HasItem"));
-    CHECK_FALSE(HasItem);
-    CHECK_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_FALSE(HasItem);
+    UE_CHECK_NULL(Pokemon->GetHoldItem());
     return true;
 }
 
@@ -55,7 +55,7 @@ bool GetHoldItemTest_WithItem::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     auto TestHelper = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_HOLD_ITEM_EXECUTOR);
-    ASSERT_NOT_NULL(TestHelper);
+    UE_ASSERT_NOT_NULL(TestHelper);
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "PIKACHU", .Item = FName(TEXT("LIGHTBALL"))});
@@ -63,13 +63,13 @@ bool GetHoldItemTest_WithItem::RunTest(const FString &Parameters) {
     UReflectionUtils::SetPropertyValue(Dispatcher, TEXT("Pokemon"), Pokemon);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     bool HasItem = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("HasItem"));
-    CHECK_TRUE(HasItem);
-    CHECK_NOT_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_TRUE(HasItem);
+    UE_CHECK_NOT_NULL(Pokemon->GetHoldItem());
 
     auto &HoldItem = UReflectionUtils::GetPropertyValue<FItem>(Dispatcher, TEXT("HoldItem"));
-    CHECK_EQUAL(TEXT("LIGHTBALL"), HoldItem.ID.ToString());
-    ASSERT_NOT_NULL(Pokemon->GetHoldItem());
-    CHECK_EQUAL(TEXT("LIGHTBALL"), Pokemon->GetHoldItem()->ID.ToString());
+    UE_CHECK_EQUAL(TEXT("LIGHTBALL"), HoldItem.ID.ToString());
+    UE_ASSERT_NOT_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_EQUAL(TEXT("LIGHTBALL"), Pokemon->GetHoldItem()->ID.ToString());
 
     return true;
 }

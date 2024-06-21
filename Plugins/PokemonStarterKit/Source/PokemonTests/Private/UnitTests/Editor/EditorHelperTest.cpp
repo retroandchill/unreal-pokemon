@@ -17,9 +17,9 @@
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 
-#define ASSERT_CONTAINS(Type, Element)                                                                                 \
+#define UE_ASSERT_CONTAINS(Type, Element)                                                                                 \
     auto Type##Names = U##Type##Helper::Get##Type##Names();                                                            \
-    CHECK_TRUE(Type##Names.Contains(Element))
+    UE_CHECK_TRUE(Type##Names.Contains(Element))
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "Unit Tests.PokemonData.EditorHelperTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -27,25 +27,25 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "Unit Tests.PokemonData.Edito
 bool EditorHelperTest::RunTest(const FString &Parameters) {
     // Make the test pass by returning true, or fail by returning false.
 
-    ASSERT_CONTAINS(Item, TEXT("POTION"));
-    ASSERT_CONTAINS(Type, TEXT("NORMAL"));
-    ASSERT_CONTAINS(GrowthRate, TEXT("Slow"));
-    ASSERT_CONTAINS(Move, TEXT("TACKLE"));
-    ASSERT_CONTAINS(Target, TEXT("User"));
-    ASSERT_CONTAINS(Ability, TEXT("LEVITATE"));
-    ASSERT_CONTAINS(BodyColor, TEXT("Green"));
-    ASSERT_CONTAINS(BodyShape, TEXT("Serpentine"));
-    ASSERT_CONTAINS(GenderRatio, TEXT("AlwaysMale"));
-    ASSERT_CONTAINS(EggGroup, TEXT("Monster"));
-    ASSERT_CONTAINS(Evolution, TEXT("LevelMale"));
-    ASSERT_CONTAINS(Habitat, TEXT("Grassland"));
-    ASSERT_CONTAINS(Nature, TEXT("Quirky"));
-    ASSERT_CONTAINS(Species, TEXT("RIOLU"));
-    ASSERT_CONTAINS(Stat, TEXT("ACCURACY"));
+    UE_ASSERT_CONTAINS(Item, TEXT("POTION"));
+    UE_ASSERT_CONTAINS(Type, TEXT("NORMAL"));
+    UE_ASSERT_CONTAINS(GrowthRate, TEXT("Slow"));
+    UE_ASSERT_CONTAINS(Move, TEXT("TACKLE"));
+    UE_ASSERT_CONTAINS(Target, TEXT("User"));
+    UE_ASSERT_CONTAINS(Ability, TEXT("LEVITATE"));
+    UE_ASSERT_CONTAINS(BodyColor, TEXT("Green"));
+    UE_ASSERT_CONTAINS(BodyShape, TEXT("Serpentine"));
+    UE_ASSERT_CONTAINS(GenderRatio, TEXT("AlwaysMale"));
+    UE_ASSERT_CONTAINS(EggGroup, TEXT("Monster"));
+    UE_ASSERT_CONTAINS(Evolution, TEXT("LevelMale"));
+    UE_ASSERT_CONTAINS(Habitat, TEXT("Grassland"));
+    UE_ASSERT_CONTAINS(Nature, TEXT("Quirky"));
+    UE_ASSERT_CONTAINS(Species, TEXT("RIOLU"));
+    UE_ASSERT_CONTAINS(Stat, TEXT("ACCURACY"));
 
     auto MainStatNames = UStatHelper::GetMainStatNames();
-    CHECK_TRUE(MainStatNames.Contains(TEXT("HP")));
-    CHECK_FALSE(MainStatNames.Contains(TEXT("ACCURACY")));
+    UE_CHECK_TRUE(MainStatNames.Contains(TEXT("HP")));
+    UE_CHECK_FALSE(MainStatNames.Contains(TEXT("ACCURACY")));
 
     return true;
 }

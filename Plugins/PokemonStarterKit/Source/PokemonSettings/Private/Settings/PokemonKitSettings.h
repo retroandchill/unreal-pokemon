@@ -121,6 +121,12 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     FText NoAbilityDescription;
 
     /**
+     * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))
+    TArray<int32> CriticalHitRatios = { 24, 8, 2, 1 };
+
+    /**
      * The set of data tables used by the game.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Data", meta = (AllowedClasses = "DataTable"))

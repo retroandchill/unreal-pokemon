@@ -21,6 +21,7 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     FName GetType() const override;
     EMoveDamageCategory GetDamageCategory() const override;
     int32 GetBasePower() const override;
+    int32 GetAccuracy() const override;
     int32 GetCurrentPP() const override;
     int32 GetTotalPP() const override;
     void DecrementPP(int32 Amount) override;

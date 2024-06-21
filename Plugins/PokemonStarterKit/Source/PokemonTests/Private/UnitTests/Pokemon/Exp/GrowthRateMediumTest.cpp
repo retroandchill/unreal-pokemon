@@ -37,6 +37,6 @@ bool GrowthRateMediumTest::RunTest(const FString &Parameters) {
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FMedium GrowthRate;
-    ASSERT_EQUAL(GMediumGrowthTable[Level], GrowthRate.ExpForLevel(Level));
+    UE_ASSERT_EQUAL(GMediumGrowthTable[Level], GrowthRate.ExpForLevel(Level));
     return true;
 }

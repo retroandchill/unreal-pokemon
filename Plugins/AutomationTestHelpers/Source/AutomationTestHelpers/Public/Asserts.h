@@ -4,30 +4,30 @@
 
 #include "CoreMinimal.h"
 
-#define CHECK_TRUE(Condition) AssertTrue(*this, TEXT(#Condition), Condition)
-#define CHECK_FALSE(Condition) AssertFalse(*this, TEXT(#Condition), Condition)
-#define CHECK_NULL(Pointer) AssertNull(*this, TEXT(#Pointer), Pointer)
-#define CHECK_NOT_NULL(Pointer) AssertNotNull(*this, TEXT(#Pointer), Pointer)
-#define CHECK_EQUAL(Expected, Actual) AssertEqual(*this, TEXT(#Actual), Expected, Actual)
-#define CHECK_NOT_EQUAL(Expected, Actual) AssertNotEqual(*this, TEXT(#Actual), Expected, Actual)
+#define UE_CHECK_TRUE(Condition) AssertTrue(*this, TEXT(#Condition), Condition)
+#define UE_CHECK_FALSE(Condition) AssertFalse(*this, TEXT(#Condition), Condition)
+#define UE_CHECK_NULL(Pointer) AssertNull(*this, TEXT(#Pointer), Pointer)
+#define UE_CHECK_NOT_NULL(Pointer) AssertNotNull(*this, TEXT(#Pointer), Pointer)
+#define UE_CHECK_EQUAL(Expected, Actual) AssertEqual(*this, TEXT(#Actual), Expected, Actual)
+#define UE_CHECK_NOT_EQUAL(Expected, Actual) AssertNotEqual(*this, TEXT(#Actual), Expected, Actual)
 
-#define ASSERT_TRUE(Condition)                                                                                         \
-    if (!CHECK_TRUE(Condition))                                                                                        \
+#define UE_ASSERT_TRUE(Condition)                                                                                         \
+    if (!UE_CHECK_TRUE(Condition))                                                                                        \
     return ConcludeTest(*this, false)
-#define ASSERT_FALSE(Condition)                                                                                        \
-    if (!CHECK_FALSE(Condition))                                                                                       \
+#define UE_ASSERT_FALSE(Condition)                                                                                        \
+    if (!UE_CHECK_FALSE(Condition))                                                                                       \
     return ConcludeTest(*this, false)
-#define ASSERT_NULL(Pointer)                                                                                           \
-    if (!CHECK_NULL(Pointer))                                                                                          \
+#define UE_ASSERT_NULL(Pointer)                                                                                           \
+    if (!UE_CHECK_NULL(Pointer))                                                                                          \
     return ConcludeTest(*this, false)
-#define ASSERT_NOT_NULL(Pointer)                                                                                       \
-    if (!CHECK_NOT_NULL(Pointer))                                                                                      \
+#define UE_ASSERT_NOT_NULL(Pointer)                                                                                       \
+    if (!UE_CHECK_NOT_NULL(Pointer))                                                                                      \
     return ConcludeTest(*this, false)
-#define ASSERT_EQUAL(Expected, Actual)                                                                                 \
-    if (!CHECK_EQUAL(Expected, Actual))                                                                                \
+#define UE_ASSERT_EQUAL(Expected, Actual)                                                                                 \
+    if (!UE_CHECK_EQUAL(Expected, Actual))                                                                                \
     return ConcludeTest(*this, false)
-#define ASSERT_NOT_EQUAL(Expected, Actual)                                                                             \
-    if (!CHECK_NOT_EQUAL(Expected, Actual))                                                                            \
+#define UE_ASSERT_NOT_EQUAL(Expected, Actual)                                                                             \
+    if (!UE_CHECK_NOT_EQUAL(Expected, Actual))                                                                            \
     return ConcludeTest(*this, false)
 
 /**

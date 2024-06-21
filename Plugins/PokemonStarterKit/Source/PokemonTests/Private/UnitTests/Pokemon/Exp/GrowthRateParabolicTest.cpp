@@ -37,6 +37,6 @@ bool GrowthRateParabolicTest::RunTest(const FString &Parameters) {
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FParabolic GrowthRate;
-    ASSERT_EQUAL(GParabolicGrowthTable[Level], GrowthRate.ExpForLevel(Level));
+    UE_ASSERT_EQUAL(GParabolicGrowthTable[Level], GrowthRate.ExpForLevel(Level));
     return true;
 }

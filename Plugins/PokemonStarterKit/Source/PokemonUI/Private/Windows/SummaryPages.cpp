@@ -4,8 +4,8 @@
 #include "Components/WidgetSwitcher.h"
 #include "Data/SelectionInputs.h"
 
-void USummaryPages::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Pokemon, int32 Index) {
-    CurrentPokemon = FPokemonIterator(Pokemon, Index);
+void USummaryPages::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Pokemon, int32 PartyIndex) {
+    CurrentPokemon = FPokemonIterator(Pokemon, PartyIndex);
     if (OnPokemonChange.IsBound()) {
         OnPokemonChange.Execute(*CurrentPokemon);
     }

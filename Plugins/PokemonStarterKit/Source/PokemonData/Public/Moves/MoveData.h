@@ -16,6 +16,11 @@ struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
     GENERATED_BODY()
 
     /**
+     * The value for an accuracy that always hits
+     */
+    static constexpr int32 GuaranteedHit = 0;
+
+    /**
      * The name that is displayed to the player
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Basic")

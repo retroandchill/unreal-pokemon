@@ -29,12 +29,12 @@ bool TestGetAllGameDataIDs_NodeTile::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
-    ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetNodeTitle(MenuTitle).ToString());
     TestNode->Initialize(FGrowthRateData::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Get All Growth Rate Data IDs"), TestNode->GetNodeTitle(MenuTitle).ToString());
-    ASSERT_EQUAL(TEXT("Growth Rate Data"), TestNode->GetNodeTitle(FullTitle).ToString());
+    UE_ASSERT_EQUAL(TEXT("Get All Growth Rate Data IDs"), TestNode->GetNodeTitle(MenuTitle).ToString());
+    UE_ASSERT_EQUAL(TEXT("Growth Rate Data"), TestNode->GetNodeTitle(FullTitle).ToString());
 
     return true;
 }
@@ -49,11 +49,11 @@ bool TestGetAllGameDataIDs_TooltipText::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
-    ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetTooltipText().ToString());
+    UE_ASSERT_EQUAL(TEXT("Invalid Struct Type"), TestNode->GetTooltipText().ToString());
     TestNode->Initialize(FStat::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Get All Stat IDs \n\nRepresents one of the stats in the database."),
+    UE_ASSERT_EQUAL(TEXT("Get All Stat IDs \n\nRepresents one of the stats in the database."),
                  TestNode->GetTooltipText().ToString());
 
     return true;
@@ -69,11 +69,11 @@ bool TestGetAllGameDataIDs_MenuCategory::RunTest(const FString &Parameters) {
     MakeTestableBP(TestBP, TestGraph);
 
     auto TestNode = NewObject<UK2Node_GetAllGameDataIDs>(TestGraph.Get());
-    ASSERT_EQUAL(FText::GetEmpty().ToString(), TestNode->GetMenuCategory().ToString());
+    UE_ASSERT_EQUAL(FText::GetEmpty().ToString(), TestNode->GetMenuCategory().ToString());
     TestNode->Initialize(FSpeciesData::StaticStruct());
     TestGraph->AddNode(TestNode);
 
-    ASSERT_EQUAL(TEXT("Data|PBS|Species Data"), TestNode->GetMenuCategory().ToString());
+    UE_ASSERT_EQUAL(TEXT("Data|PBS|Species Data"), TestNode->GetMenuCategory().ToString());
 
     return true;
 }
@@ -94,8 +94,8 @@ bool TestGetAllGameDataIDs_IconAndTint::RunTest(const FString &Parameters) {
     FLinearColor Color;
     auto Icon = TestNode->GetIconAndTint(Color);
 
-    ASSERT_EQUAL(GetDefault<UGraphEditorSettings>()->PureFunctionCallNodeTitleColor, Color);
-    ASSERT_EQUAL(FSlateIcon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon"), Icon);
+    UE_ASSERT_EQUAL(GetDefault<UGraphEditorSettings>()->PureFunctionCallNodeTitleColor, Color);
+    UE_ASSERT_EQUAL(FSlateIcon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon"), Icon);
 
     return true;
 }
@@ -107,9 +107,9 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_MenuActions,
 bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
     FBlueprintActionDatabase::Get().RefreshAll();
     auto Actions = FBlueprintActionDatabase::Get().GetAllActions();
-    ASSERT_TRUE(Actions.Contains(UK2Node_GetAllGameDataIDs::StaticClass()));
+    UE_ASSERT_TRUE(Actions.Contains(UK2Node_GetAllGameDataIDs::StaticClass()));
     auto NodeActions = Actions[UK2Node_GetAllGameDataIDs::StaticClass()];
-    ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
+    UE_ASSERT_EQUAL(FDataManager::GetInstance().GetStructTypes().Num(), NodeActions.Num());
 
     return true;
 }
@@ -123,11 +123,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode,
 
 bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters) {
     auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_GET_GAME_DATA_IDS);
-    ASSERT_NOT_NULL(DispatcherClass);
+    UE_ASSERT_NOT_NULL(DispatcherClass);
     auto Dispatcher = NewObject<UObject>(GEngine, DispatcherClass);
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     auto &GrowthRates = UReflectionUtils::GetPropertyValue<TArray<FName>>(Dispatcher, TEXT("GrowthRates"));
-    ASSERT_EQUAL(6, GrowthRates.Num());
+    UE_ASSERT_EQUAL(6, GrowthRates.Num());
 
     return true;
 }

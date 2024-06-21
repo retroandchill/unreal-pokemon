@@ -6,6 +6,10 @@ const FIndividualDamageModifierTraits &UAbilityBattleEffect::GetDamageModifiers(
     return DamageModifiers;
 }
 
+const FIndividualCriticalHitRateModifierTraits & UAbilityBattleEffect::GetCriticalHitRateModifiers() const {
+    return CriticalHitRateModifiers;
+}
+
 bool UAbilityBattleEffect::HasTag(FName Tag) const {
     return Tags.Contains(Tag);
 }

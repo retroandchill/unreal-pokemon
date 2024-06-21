@@ -31,7 +31,5 @@ public class RPGMenusTests : ModuleRules
                 "KismetCompiler"
             }
         );
-
-        bUseRTTI = true;
     }
 }

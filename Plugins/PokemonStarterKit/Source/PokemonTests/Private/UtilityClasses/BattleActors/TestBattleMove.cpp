@@ -8,7 +8,11 @@ TScriptInterface<IBattleMove> UTestBattleMove::Initialize(const TScriptInterface
 }
 
 bool UTestBattleMove::IsConfusionAttack() const {
-    return true;
+    return false;
+}
+
+bool UTestBattleMove::HasHighCriticalHitRate() const {
+    return false;
 }
 
 bool UTestBattleMove::HasTag(FName Tag) const {
@@ -21,6 +25,11 @@ FText UTestBattleMove::GetDisplayName_Implementation() const {
 
 void UTestBattleMove::PayCost_Implementation() {
     CostsPaid += 1;
+}
+
+bool UTestBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User,
+    const TScriptInterface<IBattler> &Target) {
+    return true;
 }
 
 FBattleDamage UTestBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,

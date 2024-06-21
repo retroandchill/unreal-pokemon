@@ -199,3 +199,22 @@ struct FMoveDamageInfo {
     UPROPERTY(BlueprintReadOnly, Category = Damage)
     FDamageEffects Effects;
 };
+
+UENUM()
+enum class ECriticalOverride : uint8 {
+    /**
+     * Roll a critical hit normally.
+     */
+    Normal,
+
+    /**
+     * The move always rolls a critical hit
+     */
+    Always,
+
+    /**
+     * The move can never land a crit.
+*/
+    Never
+    
+};
