@@ -24,7 +24,5 @@ public class CommonMathTests : ModuleRules
                 "AutomationTestHelpers"
             }
         );
-
-        bUseRTTI = true;
     }
 }

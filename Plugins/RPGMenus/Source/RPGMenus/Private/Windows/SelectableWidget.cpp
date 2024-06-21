@@ -82,21 +82,27 @@ FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKe
     if (!IsActive() || InputMappings == nullptr)
         return FReply::Unhandled();
 
-    bool bHandled = false;
     auto Key = InKeyEvent.GetKey();
     if (auto CursorDirection = InputMappings->ParseDirectionalInputs(Key); CursorDirection.IsSet()) {
         PlaySound(CursorSound);
         ReceiveMoveCursor(CursorDirection.GetValue());
-    } else if (InputMappings->IsConfirmInput(Key)) {
+        return FReply::Handled();
+    }
+
+    if (InputMappings->IsConfirmInput(Key)) {
         int32 CurrentIndex = GetIndex();
         ConfirmOnIndex(CurrentIndex);
-    } else if (InputMappings->IsCancelInput(Key)) {
+        return FReply::Handled();
+    }
+
+    if (InputMappings->IsCancelInput(Key)) {
         PlaySound(CancelSound);
         OnCancel.Broadcast();
         ProcessCancel();
+        return FReply::Handled();
     }
 
-    return bHandled ? FReply::Handled() : FReply::Unhandled();
+    return FReply::Unhandled();
 }
 
 void USelectableWidget::ConfirmOnIndex(int32 CurrentIndex) {

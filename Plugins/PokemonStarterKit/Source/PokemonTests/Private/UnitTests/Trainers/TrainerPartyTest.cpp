@@ -20,9 +20,9 @@ bool TrainerPartyTest::RunTest(const FString &Parameters) {
     Trainer->AddPokemonToParty(
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "MIMIKYU", .Level = 44}));
 
-    ASSERT_EQUAL(2, Trainer->GetParty().Num());
-    CHECK_EQUAL(TEXT("LUCARIO"), Trainer->GetPokemon(0)->GetSpecies().ID.ToString());
-    CHECK_EQUAL(TEXT("MIMIKYU"), Trainer->GetPokemon(1)->GetSpecies().ID.ToString());
+    UE_ASSERT_EQUAL(2, Trainer->GetParty().Num());
+    UE_CHECK_EQUAL(TEXT("LUCARIO"), Trainer->GetPokemon(0)->GetSpecies().ID.ToString());
+    UE_CHECK_EQUAL(TEXT("MIMIKYU"), Trainer->GetPokemon(1)->GetSpecies().ID.ToString());
 
     return true;
 }

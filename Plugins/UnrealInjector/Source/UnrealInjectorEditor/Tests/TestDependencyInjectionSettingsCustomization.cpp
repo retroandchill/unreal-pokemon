@@ -20,8 +20,8 @@ bool TestDependencyInjectionSettingsCustomization::RunTest(const FString &Parame
     auto Settings = NewObject<UDependencyInjectionSettings>(World.Get());
     DetailsView->SetObject(Settings);
     auto Categories = UReflectionUtils::GetPropertyCategories(*DetailsView);
-    ASSERT_TRUE(Categories.Num() > 0);
-    CHECK_EQUAL(TEXT("Dependency Injection"), Categories[0]);
+    UE_ASSERT_TRUE(Categories.Num() > 0);
+    UE_CHECK_EQUAL(TEXT("Dependency Injection"), Categories[0]);
 
     return true;
 }

@@ -16,6 +16,7 @@
 #include "RangeHelpers.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/view/empty.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -110,6 +111,18 @@ bool APokemonBattle::ActionSelectionFinished() const {
                         [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
+#if WITH_EDITOR
+const TArray<TUniquePtr<IBattleAction>> & APokemonBattle::GetActions() const {
+    return SelectedActions;
+}
+
+const TQueue<TUniquePtr<IBattleAction>> & APokemonBattle::GetActionQueue() const {
+    return ActionQueue;
+}
+
+
+#endif
+
 ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
     return RangeHelpers::CreateRange(Sides);
 }
@@ -119,7 +132,7 @@ ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers()
            ranges::views::filter(&IsNotFainted);
 }
 
-ranges::any_view<ITraitHolder *const &> APokemonBattle::GetTraitHolders() const {
+ranges::any_view<ITraitHolder *> APokemonBattle::GetTraitHolders() const {
     return RangeHelpers::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
                return RangeHelpers::CreateRange(Side->GetBattlers());
            }) |

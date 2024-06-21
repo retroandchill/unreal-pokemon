@@ -6,6 +6,7 @@
 #include "Battle/Traits/Damage/DamageModificationTraits.h"
 #include "Battle/Traits/IndividualTraitHolder.h"
 #include "Battle/Traits/ManagedTraitHolder.h"
+#include "Battle/Traits/CriticalHits/CriticalHitRateModificationTraits.h"
 #include "Engine/DataAsset.h"
 
 #include "AbilityBattleEffect.generated.h"
@@ -18,12 +19,11 @@ class POKEMONBATTLE_API UAbilityBattleEffect : public UDataAsset, public IIndivi
     GENERATED_BODY()
 
   public:
-    /**
-     * Get the damage modifier traits
-     * @return Traits that apply to modify the damage value of a move
-     */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
     const FIndividualDamageModifierTraits &GetDamageModifiers() const final;
+    
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
+    const FIndividualCriticalHitRateModifierTraits &GetCriticalHitRateModifiers() const final;
 
     bool HasTag(FName Tag) const final;
 
@@ -33,6 +33,12 @@ class POKEMONBATTLE_API UAbilityBattleEffect : public UDataAsset, public IIndivi
      */
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDamageModifiers, Category = Moves)
     FIndividualDamageModifierTraits DamageModifiers;
+
+    /**
+     * Traits that apply to modify the critical hit rate of a move
+     */
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetCriticalHitRateModifiers, Category = Moves)
+    FIndividualCriticalHitRateModifierTraits CriticalHitRateModifiers;
 
     /**
      * The set of metadata tags associated with the ability

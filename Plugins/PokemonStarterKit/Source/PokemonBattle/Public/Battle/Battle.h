@@ -81,7 +81,7 @@ class POKEMONBATTLE_API IBattle {
      * Get the list of trait holders in the battle that are currently active
      * @return A view of all trait holders in battle
      */
-    virtual ranges::any_view<ITraitHolder *const &> GetTraitHolders() const = 0;
+    virtual ranges::any_view<ITraitHolder *> GetTraitHolders() const = 0;
 
     /**
      * Initiate the process of selecting actions for the given battler.

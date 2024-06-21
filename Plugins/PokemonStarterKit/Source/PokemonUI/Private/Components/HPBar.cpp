@@ -25,12 +25,12 @@ void UHPBar::Tick(float DeltaTime) {
         return;
     }
 
-    float Percent = GetPercent();
-    if (Percent == PreviousPercent) {
+    float CurrentPercent = GetPercent();
+    if (CurrentPercent == PreviousPercent) {
         return;
     }
 
-    PreviousPercent = Percent;
+    PreviousPercent = CurrentPercent;
     UpdateBarMaterial();
 }
 
@@ -45,7 +45,7 @@ void UHPBar::UpdateBarMaterial() {
         bMaterialChanged = true;
     }
     uint32 State = 0;
-    for (uint32 i = 0; i < PercentThresholds.Num(); i++) {
+    for (int32 i = 0; i < PercentThresholds.Num(); i++) {
         if (GetPercent() > PercentThresholds[i]) {
             break;
         }

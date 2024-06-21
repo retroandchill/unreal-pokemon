@@ -1,15 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "TestActiveSide.h"
-#include "External/accessor.hpp"
 #include "TestBattlerActor.h"
-
-using namespace accessor;
-
-MEMBER_ACCESSOR(AccessBattlerClass, AActiveSide, BattlerClass, TSoftClassPtr<AActor>)
+#include "Utilities/ReflectionUtils.h"
 
 // Sets default values
 
 ATestActiveSide::ATestActiveSide() {
-    accessMember<AccessBattlerClass>(*this).get() = ATestBattlerActor::StaticClass();
+    UReflectionUtils::SetPropertyValue<TSoftClassPtr<AActor>>(this, TEXT("BattlerClass"), ATestBattlerActor::StaticClass());
 }

@@ -76,6 +76,10 @@ const FText &Pokemon::FBaseSettings::GetNoAbilityDescription() const {
     return KitSettings->NoAbilityDescription;
 }
 
+const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
+    return KitSettings->CriticalHitRatios;
+}
+
 UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
     return KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
 }

@@ -15,12 +15,12 @@ bool SetHoldItemTest::RunTest(const FString &Parameters) {
     auto Pokemon = NewObject<UGamePokemon>(World.Get());
     Pokemon->Initialize({.Species = TEXT("PIKACHU"), .Level = 20}, Player);
 
-    CHECK_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_NULL(Pokemon->GetHoldItem());
     Pokemon->SetHoldItem(TEXT("REPEL"));
-    ASSERT_NOT_NULL(Pokemon->GetHoldItem());
-    CHECK_EQUAL(TEXT("REPEL"), Pokemon->GetHoldItem()->ID.ToString());
+    UE_ASSERT_NOT_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_EQUAL(TEXT("REPEL"), Pokemon->GetHoldItem()->ID.ToString());
     Pokemon->RemoveHoldItem();
-    CHECK_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_NULL(Pokemon->GetHoldItem());
 
     return true;
 }

@@ -12,8 +12,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.Default
 
 bool DefaultMoveTest::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMove>()->Initialize(TEXT("SWORDSDANCE"));
-    CHECK_EQUAL(20, Move->GetCurrentPP());
-    CHECK_EQUAL(20, Move->GetTotalPP());
+    UE_CHECK_EQUAL(20, Move->GetCurrentPP());
+    UE_CHECK_EQUAL(20, Move->GetTotalPP());
     return true;
 }
 
@@ -24,11 +24,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves,
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize({.Species = "RIOLU", .Level = 40});
     auto Moves = Move->GetMoves();
-    ASSERT_EQUAL(4, Moves.Num());
-    CHECK_EQUAL("SCREECH", Moves[0]->GetMoveData().ID.ToString());
-    CHECK_EQUAL("QUICKGUARD", Moves[1]->GetMoveData().ID.ToString());
-    CHECK_EQUAL("FORCEPALM", Moves[2]->GetMoveData().ID.ToString());
-    CHECK_EQUAL("SWORDSDANCE", Moves[3]->GetMoveData().ID.ToString());
+    UE_ASSERT_EQUAL(4, Moves.Num());
+    UE_CHECK_EQUAL("SCREECH", Moves[0]->GetMoveData().ID.ToString());
+    UE_CHECK_EQUAL("QUICKGUARD", Moves[1]->GetMoveData().ID.ToString());
+    UE_CHECK_EQUAL("FORCEPALM", Moves[2]->GetMoveData().ID.ToString());
+    UE_CHECK_EQUAL("SWORDSDANCE", Moves[3]->GetMoveData().ID.ToString());
     return true;
 }
 
@@ -40,9 +40,9 @@ bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize(
         {.Species = "RIOLU", .Level = 40, .Moves = {"WORKUP", "AURASPHERE", "FEINT"}});
     auto Moves = Move->GetMoves();
-    ASSERT_EQUAL(3, Moves.Num());
-    CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());
-    CHECK_EQUAL("AURASPHERE", Moves[1]->GetMoveData().ID.ToString());
-    CHECK_EQUAL("FEINT", Moves[2]->GetMoveData().ID.ToString());
+    UE_ASSERT_EQUAL(3, Moves.Num());
+    UE_CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());
+    UE_CHECK_EQUAL("AURASPHERE", Moves[1]->GetMoveData().ID.ToString());
+    UE_CHECK_EQUAL("FEINT", Moves[2]->GetMoveData().ID.ToString());
     return true;
 }

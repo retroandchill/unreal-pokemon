@@ -15,14 +15,14 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(MenuActionTest, "Unit Tests.UI.MenuActionTest",
 bool MenuActionTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto MenuActionClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_MENU_ACTION);
-    ASSERT_NOT_NULL(MenuActionClass);
+    UE_ASSERT_NOT_NULL(MenuActionClass);
 
     auto MenuAction = NewObject<UMenuAction>(World.Get(), MenuActionClass);
-    ASSERT_NOT_NULL(MenuAction);
+    UE_ASSERT_NOT_NULL(MenuAction);
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     MenuAction->PerformAction(Pawn);
     auto TopOfStack = Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack();
-    ASSERT_NOT_NULL(TopOfStack);
+    UE_ASSERT_NOT_NULL(TopOfStack);
 
     return true;
 }

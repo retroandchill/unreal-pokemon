@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Battle.h"
 #include "BattleSettings.h"
+#include "Battle/Actions/BattleAction.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"
 
 struct FActionResult;
-class IBattleAction;
 class IBattleSide;
 class ITrainer;
 
@@ -76,12 +76,26 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
 
+#if WITH_EDITOR
+    /**
+     * Get the list of actions that are to be queued up and executed. Mainly used for logging as needed.
+     * @return The list of actions
+     */
+    const TArray<TUniquePtr<IBattleAction>> &GetActions() const;
+
+    /**
+     * Get the queue of actions that about to or currently being executed. Mainly used for logging as needed.
+     * @return The queue of actions
+     */
+    const TQueue<TUniquePtr<IBattleAction>> &GetActionQueue() const;
+#endif
+    
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn *GetBattlePawn() const final;
 
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
-    ranges::any_view<ITraitHolder *const &> GetTraitHolders() const override;
+    ranges::any_view<ITraitHolder *> GetTraitHolders() const override;
     void ExecuteAction(IBattleAction &Action) override;
 
   protected:
@@ -315,12 +329,15 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * The current phase of battle
      */
+    UPROPERTY()
     EBattlePhase Phase = EBattlePhase::Setup;
 
     /**
      * Have the action messages for the current action been displayed
      */
+    UPROPERTY()
     bool bActionMessagesDisplayed = false;
 
+    UPROPERTY()
     bool bActionResultDisplaying = false;
 };

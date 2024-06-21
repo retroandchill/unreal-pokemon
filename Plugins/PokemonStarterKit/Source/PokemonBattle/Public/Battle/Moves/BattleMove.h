@@ -44,6 +44,10 @@ class POKEMONBATTLE_API IBattleMove {
     UFUNCTION(BlueprintNativeEvent, Category = Usability)
     TArray<TScriptInterface<IBattler>> GetAllPossibleTargets(const TScriptInterface<IBattler> &User) const;
 
+    /**
+     * Is the move usable
+     * @return Is the move usable
+     */
     UFUNCTION(BlueprintNativeEvent, Category = Usability)
     bool IsUsable() const;
 
@@ -71,13 +75,13 @@ class POKEMONBATTLE_API IBattleMove {
      * Get the priority for the move
      * @return The priority of the move
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintNativeEvent, Category = Execution)
     int32 GetPriority() const;
 
     /**
      * Pay the move's PP cost to use
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintNativeEvent, Category = Execution)
     void PayCost();
 
     /**
@@ -94,11 +98,26 @@ class POKEMONBATTLE_API IBattleMove {
     virtual bool IsConfusionAttack() const = 0;
 
     /**
+     * Does this move have a high critical hit rate?
+     * @return If the move has a high critical hit rate
+     */
+    virtual bool HasHighCriticalHitRate() const = 0;
+
+    /**
      * Does the move possess the given tag?
      * @param Tag The tag to check for
      * @return Does the move have the given tag
      */
     virtual bool HasTag(FName Tag) const = 0;
+
+    /**
+     * Roll to see if this move hits or not.
+     * @param User The user of the move.
+     * @param Target The target the move is being hit by.
+     * @return Did the move successfully hit its target
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Success Checking")
+    bool PerformHitCheck(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Calculate the total damage the move will deal.

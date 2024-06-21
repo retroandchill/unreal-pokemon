@@ -2,14 +2,12 @@
 
 #include "Utilities/InputUtilities.h"
 #include "Blueprint/UserWidget.h"
-#include "External/accessor.hpp"
-
-using namespace accessor;
-
-FUNCTION_ACCESSOR(UserWidgetOnKeyDown, UUserWidget, NativeOnKeyDown, FReply, const FGeometry &, const FKeyEvent &);
+#include "Slate/SObjectWidget.h"
 
 FEventReply UInputUtilities::SimulateKeyPress(UUserWidget *Widget, const FKey &Key) {
     FKeyEvent Event(Key, FModifierKeysState(), 0, false, 0, 0);
-    auto Reply = callFunction<UserWidgetOnKeyDown>(*Widget, Widget->GetCachedGeometry(), Event);
+    auto ObjectWidget = MakeShared<SObjectWidget>();
+    ObjectWidget->Construct({}, Widget);
+    auto Reply = ObjectWidget->OnKeyDown(FGeometry(), Event);
     return FEventReply(Reply.IsEventHandled());
 }

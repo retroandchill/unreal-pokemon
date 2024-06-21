@@ -20,7 +20,7 @@ bool TestTrainerPayout::RunTest(const FString &Parameters) {
     Trainer->AddPokemonToParty(
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "MIMIKYU", .Level = 44}));
 
-    ASSERT_EQUAL(2640, Trainer->GetPayout());
+    UE_ASSERT_EQUAL(2640, Trainer->GetPayout());
 
     return true;
 }

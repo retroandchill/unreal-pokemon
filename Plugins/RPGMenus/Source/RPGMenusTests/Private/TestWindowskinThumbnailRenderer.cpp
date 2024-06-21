@@ -16,16 +16,16 @@ bool TestWindowskinThumbnailRenderer::RunTest(const FString &Parameters) {
     auto WindowskinAsset = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(
         FSoftObjectPath(TEXT("/RPGMenus/Tests/Resources/choice_1_Win.choice_1_Win")));
     auto ValidWindowskin = Cast<UWindowskin>(WindowskinAsset.GetAsset());
-    ASSERT_NOT_NULL(ValidWindowskin);
-    ASSERT_NOT_NULL(ValidWindowskin->GetSourceTexture());
+    UE_ASSERT_NOT_NULL(ValidWindowskin);
+    UE_ASSERT_NOT_NULL(ValidWindowskin->GetSourceTexture());
 
-    CHECK_EQUAL(EThumbnailRenderFrequency::Realtime, Renderer->GetThumbnailRenderFrequency(nullptr));
-    CHECK_EQUAL(EThumbnailRenderFrequency::Realtime, Renderer->GetThumbnailRenderFrequency(InvalidWindowskin.Get()));
-    CHECK_EQUAL(EThumbnailRenderFrequency::Realtime, Renderer->GetThumbnailRenderFrequency(ValidWindowskin));
+    UE_CHECK_EQUAL(EThumbnailRenderFrequency::Realtime, Renderer->GetThumbnailRenderFrequency(nullptr));
+    UE_CHECK_EQUAL(EThumbnailRenderFrequency::Realtime, Renderer->GetThumbnailRenderFrequency(InvalidWindowskin.Get()));
+    UE_CHECK_EQUAL(EThumbnailRenderFrequency::Realtime, Renderer->GetThumbnailRenderFrequency(ValidWindowskin));
 
-    CHECK_FALSE(Renderer->CanVisualizeAsset(nullptr));
-    CHECK_FALSE(Renderer->CanVisualizeAsset(InvalidWindowskin.Get()));
-    CHECK_TRUE(Renderer->CanVisualizeAsset(ValidWindowskin));
+    UE_CHECK_FALSE(Renderer->CanVisualizeAsset(nullptr));
+    UE_CHECK_FALSE(Renderer->CanVisualizeAsset(InvalidWindowskin.Get()));
+    UE_CHECK_TRUE(Renderer->CanVisualizeAsset(ValidWindowskin));
 
     // TODO: Figure out a way to test draw
 

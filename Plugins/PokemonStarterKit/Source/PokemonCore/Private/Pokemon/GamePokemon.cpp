@@ -76,7 +76,7 @@ bool UGamePokemon::IsShiny() const {
     uint32 B = A & 0xFFFF;
     uint32 C = (A >> 16) & 0xFFFF;
     uint32 D = B ^ C;
-    return D < Pokemon::FBaseSettings::Get().GetShinyPokemonChance();
+    return D < static_cast<uint32>(Pokemon::FBaseSettings::Get().GetShinyPokemonChance());
 }
 
 int32 UGamePokemon::GetCurrentHP() const {

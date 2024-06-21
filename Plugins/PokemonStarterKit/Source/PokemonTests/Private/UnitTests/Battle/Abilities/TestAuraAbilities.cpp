@@ -3,15 +3,12 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Moves/BattleDamage.h"
 #include "Battle/Traits/Damage/DamageModificationTrait.h"
-#include "External/accessor.hpp"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
-
-using namespace accessor;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAuraAbilities, "Unit Tests.Battle.Abilities.TestAuraAbilities",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -37,23 +34,23 @@ bool TestAuraAbilities::RunTest(const FString &Parameters) {
             Opponent = Battler;
         }
     }
-    ASSERT_NOT_NULL(Xerneas.GetObject());
-    ASSERT_NOT_NULL(Opponent.GetObject());
+    UE_ASSERT_NOT_NULL(Xerneas.GetObject());
+    UE_ASSERT_NOT_NULL(Opponent.GetObject());
 
     FDamageMultipliers Multipliers;
     auto AbilityModifiers = Xerneas->GetAbility()->GetDamageModifiers().Global;
-    ASSERT_FALSE(AbilityModifiers.IsEmpty());
+    UE_ASSERT_FALSE(AbilityModifiers.IsEmpty());
 
     FMoveDamageInfo Context = {.User = Xerneas, .Type = TEXT("FAIRY")};
     AbilityModifiers[0]->Apply(Multipliers, Context);
-    CHECK_EQUAL(4.f / 3.f, Multipliers.PowerMultiplier);
+    UE_CHECK_EQUAL(4.f / 3.f, Multipliers.PowerMultiplier);
     Multipliers.PowerMultiplier = 1.f;
 
     auto Zygarde = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = TEXT("ZYGARDE"), .Level = 50, .Ability = FName(TEXT("AURABREAK"))});
     Opponent->Initialize(Opponent->GetOwningSide(), Zygarde);
     AbilityModifiers[0]->Apply(Multipliers, Context);
-    CHECK_EQUAL(0.75f, Multipliers.PowerMultiplier);
+    UE_CHECK_EQUAL(0.75f, Multipliers.PowerMultiplier);
 
     return true;
 }

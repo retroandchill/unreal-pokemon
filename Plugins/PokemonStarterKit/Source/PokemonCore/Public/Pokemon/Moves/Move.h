@@ -47,6 +47,12 @@ class POKEMONCORE_API IMove {
     virtual int32 GetBasePower() const = 0;
 
     /**
+     * Get the accuracy of the move in question
+     * @return The move's accuracy
+     */
+    virtual int32 GetAccuracy() const = 0;
+
+    /**
      * Get the current PP for the move
      * @return The current PP for the move
      */

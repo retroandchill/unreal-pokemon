@@ -16,10 +16,10 @@ bool BagSorterTest_Indexed::RunTest(const FString &Parameters) {
 
     FIndexedBagSorter Sorter;
     Sorter.SortPocket(Pocket);
-    ASSERT_EQUAL(TEXT("POTION"), Pocket[0].Item.ToString());
-    ASSERT_EQUAL(TEXT("SUPERPOTION"), Pocket[1].Item.ToString());
-    ASSERT_EQUAL(TEXT("HYPERPOTION"), Pocket[2].Item.ToString());
-    ASSERT_EQUAL(TEXT("MAXPOTION"), Pocket[3].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("POTION"), Pocket[0].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("SUPERPOTION"), Pocket[1].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("HYPERPOTION"), Pocket[2].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("MAXPOTION"), Pocket[3].Item.ToString());
 
     return true;
 }
@@ -35,10 +35,10 @@ bool BagSorterTest_Named::RunTest(const FString &Parameters) {
 
     FNamedBagSorter Sorter;
     Sorter.SortPocket(Pocket);
-    ASSERT_EQUAL(TEXT("HYPERPOTION"), Pocket[0].Item.ToString());
-    ASSERT_EQUAL(TEXT("MAXPOTION"), Pocket[1].Item.ToString());
-    ASSERT_EQUAL(TEXT("POTION"), Pocket[2].Item.ToString());
-    ASSERT_EQUAL(TEXT("SUPERPOTION"), Pocket[3].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("HYPERPOTION"), Pocket[0].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("MAXPOTION"), Pocket[1].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("POTION"), Pocket[2].Item.ToString());
+    UE_ASSERT_EQUAL(TEXT("SUPERPOTION"), Pocket[3].Item.ToString());
 
     return true;
 }

@@ -17,15 +17,15 @@ bool GenderRatioTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PORYGON"});
-    ASSERT_EQUAL(Pokemon1->GetGender(), Genderless);
+    UE_ASSERT_EQUAL(Pokemon1->GetGender(), Genderless);
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "LUCARIO", .PersonalityValue = 0x39593A01});
-    ASSERT_EQUAL(Pokemon2->GetGender(), Female);
+    UE_ASSERT_EQUAL(Pokemon2->GetGender(), Female);
 
     auto Pokemon3 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "OSHAWOTT", .PersonalityValue = 0x39593AA3});
-    ASSERT_EQUAL(Pokemon3->GetGender(), Male);
+    UE_ASSERT_EQUAL(Pokemon3->GetGender(), Male);
 
     return true;
 }

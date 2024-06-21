@@ -43,7 +43,8 @@ public class AutomationTestHelpers : ModuleRules
 				"InputCore",
 				"EditorSubsystem",
 				"MessageLog",
-				"UnrealEd"
+				"UnrealEd",
+				"GoogleTest"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
@@ -55,7 +56,5 @@ public class AutomationTestHelpers : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-
-		bUseRTTI = true;
 	}
 }

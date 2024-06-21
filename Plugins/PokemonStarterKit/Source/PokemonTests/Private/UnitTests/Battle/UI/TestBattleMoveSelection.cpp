@@ -5,6 +5,8 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
+#include "Mocks/MockBattle.h"
+#include "Mocks/MockBattleSide.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Primatives/DisplayText.h"
@@ -13,7 +15,7 @@
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "Windows/BattleMoveSelect.h"
 
-using namespace fakeit;
+using namespace testing;
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleMoveSelection, "Unit Tests.Battle.UI.TestBattleMoveSelection",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -21,13 +23,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattleMoveSelection, "Unit Tests.Battle.UI.
 bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UBattleMoveSelect>();
-    ASSERT_NOT_EQUAL(0, Subclasses.Num());
+    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
-    auto [Battle, MockBattle] = UnrealMock::CreateMock<IBattle>();
-    auto [Side, MockSide] = UnrealMock::CreateMock<IBattleSide>();
-    When(Method(MockSide, GetOwningBattle)).AlwaysReturn(Battle);
-    When(Method(MockSide, ShowBackSprites)).AlwaysReturn(false);
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
+    ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),
@@ -42,21 +44,21 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     BattleMoveSelect->SetBattler(Battler);
 
     FIND_CHILD_WIDGET(BattleMoveSelect.Get(), UBattleMovePanel, MovePanel0);
-    ASSERT_NOT_NULL(MovePanel0);
+    UE_ASSERT_NOT_NULL(MovePanel0);
     FIND_CHILD_WIDGET(BattleMoveSelect.Get(), UBattleMovePanel, MovePanel1);
-    ASSERT_NOT_NULL(MovePanel1);
+    UE_ASSERT_NOT_NULL(MovePanel1);
     FIND_CHILD_WIDGET(BattleMoveSelect.Get(), UBattleMovePanel, MovePanel2);
-    ASSERT_NOT_NULL(MovePanel2);
+    UE_ASSERT_NOT_NULL(MovePanel2);
     FIND_CHILD_WIDGET(BattleMoveSelect.Get(), UBattleMovePanel, MovePanel3);
-    ASSERT_NOT_NULL(MovePanel3);
+    UE_ASSERT_NOT_NULL(MovePanel3);
 
     FIND_CHILD_WIDGET(MovePanel0, UDisplayText, MoveNameText);
-    ASSERT_NOT_NULL(MoveNameText);
+    UE_ASSERT_NOT_NULL(MoveNameText);
     FIND_CHILD_WIDGET(MovePanel0, UDisplayText, MovePPText);
-    ASSERT_NOT_NULL(MovePPText);
+    UE_ASSERT_NOT_NULL(MovePPText);
 
-    CHECK_EQUAL(TEXT("Shadow Sneak"), MoveNameText->GetText().ToString());
-    CHECK_EQUAL(TEXT("30/30"), MovePPText->GetText().ToString());
+    UE_CHECK_EQUAL(TEXT("Shadow Sneak"), MoveNameText->GetText().ToString());
+    UE_CHECK_EQUAL(TEXT("30/30"), MovePPText->GetText().ToString());
 
     return true;
 }
