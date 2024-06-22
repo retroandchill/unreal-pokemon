@@ -112,6 +112,12 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     Context.BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
+    // If a critical hit is scored ignore any negative attack stages or positive defense stages
+    if (Context.Effects.bCriticalHit) {
+        Attack.Stages = FMath::Max(0, Attack.Stages);
+        Defense.Stages = FMath::Min(0, Defense.Stages);
+    }
+
     FDamageMultipliers Multipliers;
     CalculateDamageMultipliers(Multipliers, Context);
     Context.BaseDamage = ModifiedParameter(Context.BaseDamage, Multipliers.PowerMultiplier);
