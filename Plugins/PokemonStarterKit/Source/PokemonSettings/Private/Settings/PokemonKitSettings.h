@@ -121,6 +121,19 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     FText NoAbilityDescription;
 
     /**
+     * The information about how stat stages are altered
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Battle)
+    TArray<FStatStageInfo> StatStages = {
+        {3.f / 2.f, 2.f / 3.f, 4.f / 3.f, 3.f / 4.f},
+        {4.f / 2.f, 2.f / 4.f, 5.f / 3.f, 3.f / 5.f},
+        {5.f / 2.f, 2.f / 5.f, 6.f / 3.f, 3.f / 6.f},
+        {6.f / 2.f, 2.f / 6.f, 7.f / 3.f, 3.f / 7.f},
+        {7.f / 2.f, 2.f / 7.f, 8.f / 3.f, 3.f / 8.f},
+        {8.f / 2.f, 2.f / 8.f, 9.f / 3.f, 3.f / 9.f},
+    };
+
+    /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))

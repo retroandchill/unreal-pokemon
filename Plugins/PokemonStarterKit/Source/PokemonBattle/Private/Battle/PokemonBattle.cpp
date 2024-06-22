@@ -231,8 +231,8 @@ void APokemonBattle::BeginActionProcessing() {
             return true;
         }
 
-        int32 SpeedA = A->GetBattler()->GetSpeed();
-        int32 SpeedB = B->GetBattler()->GetSpeed();
+        int32 SpeedA = A->GetBattler()->GetSpeed().GetModifiedValue();
+        int32 SpeedB = B->GetBattler()->GetSpeed().GetModifiedValue();
         if (SpeedA == SpeedB) {
             return FMath::RandBool();
         }

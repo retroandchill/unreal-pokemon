@@ -57,19 +57,25 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void Faint() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetAttack() const override;
+    FMainBattleStat GetAttack() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetDefense() const override;
+    FMainBattleStat GetDefense() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetSpecialAttack() const override;
+    FMainBattleStat GetSpecialAttack() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetSpecialDefense() const override;
+    FMainBattleStat GetSpecialDefense() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetSpeed() const override;
+    FMainBattleStat GetSpeed() const override;
+
+    /**
+     * @copydoc IBattler::GetStatStages
+     */
+    UFUNCTION(BlueprintPure, Category = Stats)
+    int32 GetStatStage(FName Stat) const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
@@ -128,6 +134,11 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IPokemon> WrappedPokemon;
+
+    /**
+     * The stats for the given Pokémon in battle
+     */
+    TMap<FName, int32> StatStages;
 
     /**
      * The ability that this battler has

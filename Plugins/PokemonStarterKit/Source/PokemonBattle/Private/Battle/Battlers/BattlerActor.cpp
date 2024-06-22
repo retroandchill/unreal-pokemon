@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerActor.h"
+#include "DataManager.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/BattlerController.h"
@@ -16,7 +17,10 @@
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
 #include "Battle/Moves/MoveLookup.h"
+#include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
+#include "Species/PokemonStatType.h"
+#include "Species/Stat.h"
 #include <functional>
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
@@ -36,6 +40,18 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
+
+    auto& DataSubsystem = FDataManager::GetInstance();
+    auto &StatTable = DataSubsystem.GetDataTable<FStat>();
+
+    StatStages.Reset();
+    StatTable.ForEach([this](const FStat &Stat) {
+        if (Stat.Type == EPokemonStatType::Main)
+            return;
+
+        StatStages.Emplace(Stat.ID, 0);
+    });
+    
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
             ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
@@ -100,25 +116,34 @@ void ABattlerActor::Faint() const {
     IBattlerSprite::Execute_Faint(Sprite);
 }
 
-int32 ABattlerActor::GetAttack() const {
-    // TODO: Don't use hard-coded string literals for these
-    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue();
+FMainBattleStat ABattlerActor::GetAttack() const {
+    static const FName Attack = TEXT("ATTACK");
+    return { WrappedPokemon->GetStatBlock()->GetStat(Attack)->GetStatValue(), GetStatStage(Attack) };
 }
 
-int32 ABattlerActor::GetDefense() const {
-    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("DEFENSE"))->GetStatValue();
+FMainBattleStat ABattlerActor::GetDefense() const {
+    static const FName Defense = TEXT("DEFENSE");
+    return { WrappedPokemon->GetStatBlock()->GetStat(Defense)->GetStatValue(), GetStatStage(Defense) };
 }
 
-int32 ABattlerActor::GetSpecialAttack() const {
-    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue();
+FMainBattleStat ABattlerActor::GetSpecialAttack() const {
+    static const FName SpecialAttack = TEXT("SPECIAL_ATTACK");
+    return { WrappedPokemon->GetStatBlock()->GetStat(SpecialAttack)->GetStatValue(), GetStatStage(SpecialAttack) };
 }
 
-int32 ABattlerActor::GetSpecialDefense() const {
-    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue();
+FMainBattleStat ABattlerActor::GetSpecialDefense() const {
+    static const FName SpecialDefense = TEXT("SPECIAL_DEFENSE");
+    return { WrappedPokemon->GetStatBlock()->GetStat(SpecialDefense)->GetStatValue(), GetStatStage(SpecialDefense) };
 }
 
-int32 ABattlerActor::GetSpeed() const {
-    return WrappedPokemon->GetStatBlock()->GetStat(TEXT("SPEED"))->GetStatValue();
+FMainBattleStat ABattlerActor::GetSpeed() const {
+    static const FName Speed = TEXT("SPEED");
+    return { WrappedPokemon->GetStatBlock()->GetStat(Speed)->GetStatValue(), GetStatStage(Speed) };
+}
+
+int32 ABattlerActor::GetStatStage(FName Stat) const {
+    check(StatStages.Contains(Stat))
+    return StatStages[Stat];
 }
 
 float ABattlerActor::GetExpPercent() const {

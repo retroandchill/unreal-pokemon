@@ -218,3 +218,37 @@ struct FDynamicAssetPaths {
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString MoveFunctionCodePrefix;
 };
+
+/**
+ * The information for a stage of stat alteration.
+ */
+USTRUCT(BlueprintType)
+struct FStatStageInfo {
+    GENERATED_BODY()
+
+    /**
+     * The amount of the stat will be multiplied by for a positive stage
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
+    float PositiveStatMultiplier;
+
+    /**
+     * The amount of the stat will be multiplied by for a negative stage
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
+    float NegativeStatMultiplier;
+
+    /**
+     * The amount of the accuracy/evasion will be multiplied by for a positive stage
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, DisplayName = "Positive Accuracy/Evasion Multiplier",
+        Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
+    float PositiveAccEvaMultiplier;
+
+    /**
+     * The amount of the accuracy/evasion will be multiplied by for a negative stage
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly,  DisplayName = "Negative Accuracy/Evasion Multiplier",
+        Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
+    float NegativeAccEvaMultiplier;
+};

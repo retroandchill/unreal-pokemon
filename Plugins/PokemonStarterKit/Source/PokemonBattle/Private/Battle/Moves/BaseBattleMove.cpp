@@ -112,12 +112,18 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     Context.BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
+    // If a critical hit is scored ignore any negative attack stages or positive defense stages
+    if (Context.Effects.bCriticalHit) {
+        Attack.Stages = FMath::Max(0, Attack.Stages);
+        Defense.Stages = FMath::Min(0, Defense.Stages);
+    }
+
     FDamageMultipliers Multipliers;
     CalculateDamageMultipliers(Multipliers, Context);
     Context.BaseDamage = ModifiedParameter(Context.BaseDamage, Multipliers.PowerMultiplier);
-    Attack = ModifiedParameter(Attack, Multipliers.AttackMultiplier);
-    Defense = ModifiedParameter(Defense, Multipliers.DefenseMultiplier);
-    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), Attack, Defense);
+    int32 AttackValue = ModifiedParameter(Attack.GetModifiedValue(), Multipliers.AttackMultiplier);
+    int32 DefenseValue = ModifiedParameter(Defense.GetModifiedValue(), Multipliers.DefenseMultiplier);
+    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), AttackValue, DefenseValue);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
     return {
