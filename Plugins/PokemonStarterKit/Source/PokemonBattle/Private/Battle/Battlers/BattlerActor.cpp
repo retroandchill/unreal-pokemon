@@ -15,6 +15,8 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
+#include "Battle/Moves/MoveLookup.h"
+#include "Pokemon/Moves/Move.h"
 #include <functional>
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
@@ -23,7 +25,10 @@ TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TSc
     check(Battler != nullptr)
     check(Battler->GetOwningSide() != nullptr)
     check(Move != nullptr)
-    return NewObject<UBaseBattleMove>(Battler)->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
+    auto MoveClass = Battle::Moves::LookupMoveEffectClass(Move->GetFunctionCode());
+    TScriptInterface<IBattleMove> BattleMove = NewObject<UObject>(Battler, MoveClass);
+    BattleMove->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
+    return BattleMove;
 }
 
 TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
