@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Battlers/BattlerStats.h"
 #include "UObject/Interface.h"
 
 #include "BattleDamage.generated.h"
@@ -102,13 +103,13 @@ struct FAttackAndDefense {
      * The attack stat to use
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
-    int32 Attack;
+    FMainBattleStat Attack;
 
     /**
      * The defense stat to use
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
-    int32 Defense;
+    FMainBattleStat Defense;
 };
 
 /**
