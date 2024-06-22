@@ -183,6 +183,12 @@ struct FDynamicAssetPaths {
     FDirectoryPath ItemIconPackageName;
 
     /**
+     * The name of the package that contains the move effect Blueprints
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath MoveFunctionCodePackageName;
+
+    /**
      * The prefix that is placed before a type icon when searching
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
@@ -205,4 +211,10 @@ struct FDynamicAssetPaths {
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString SummaryBallPrefix;
+
+    /**
+     * The prefix that is placed before a move effect when looking it up
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString MoveFunctionCodePrefix;
 };

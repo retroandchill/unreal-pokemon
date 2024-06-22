@@ -14,7 +14,7 @@ struct FModifiedDamage;
 /**
  * The base class used for all battle moves used by the game.
  */
-UCLASS()
+UCLASS(Blueprintable)
 class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     GENERATED_BODY()
 

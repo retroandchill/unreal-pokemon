@@ -65,6 +65,12 @@ class POKEMONCORE_API IMove {
     virtual int32 GetTotalPP() const = 0;
 
     /**
+     * Lookup the function code of the move in question.
+     * @return The string used to denote the move's effect 
+     */
+    virtual FName GetFunctionCode() const = 0;
+
+    /**
      * Reduce the amount of PP a move has by the given amount
      * @param Amount The amount of PP to reduce by
      */

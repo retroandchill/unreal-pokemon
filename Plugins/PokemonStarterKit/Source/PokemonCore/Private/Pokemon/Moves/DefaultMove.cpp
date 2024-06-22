@@ -41,6 +41,10 @@ int32 UDefaultMove::GetTotalPP() const {
     return GetMoveData().TotalPP;
 }
 
+FName UDefaultMove::GetFunctionCode() const {
+    return GetMoveData().FunctionCode;
+}
+
 void UDefaultMove::DecrementPP(int32 Amount) {
     CurrentPP = FMath::Clamp(CurrentPP - Amount, 0, GetTotalPP());
 }
