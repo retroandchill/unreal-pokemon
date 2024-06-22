@@ -200,11 +200,11 @@ bool TestCriticalHits::RunTest(const FString &Parameters) {
     ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(75));
-    ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{123, 0}));
+    ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{123, -3}));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("ICE")}));
     ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
-    ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{163, 0}));
+    ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{163, 4}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Physical));
     ON_CALL(MockMove, GetBasePower).WillByDefault(Return(65));
