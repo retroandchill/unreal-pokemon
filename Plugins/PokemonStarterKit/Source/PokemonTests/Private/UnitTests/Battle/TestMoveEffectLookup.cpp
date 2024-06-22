@@ -11,5 +11,8 @@ bool TestMoveEffectLookup::RunTest(const FString &Parameters) {
 
     MoveClass = Battle::Moves::LookupMoveEffectClass("NotARealMoveEffect");
     UE_CHECK_EQUAL(TEXT("BaseBattleMove"), MoveClass->GetName());
+
+    MoveClass = Battle::Moves::LookupMoveEffectClass(NAME_None);
+    UE_CHECK_EQUAL(TEXT("BaseBattleMove"), MoveClass->GetName());
     return true;
 }

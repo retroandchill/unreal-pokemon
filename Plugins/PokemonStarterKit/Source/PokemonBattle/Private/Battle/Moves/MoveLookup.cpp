@@ -8,6 +8,10 @@
 
 
 UClass * Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
+    if (FunctionCode.IsNone()) {
+        return UBaseBattleMove::StaticClass();
+    }
+    
     auto& AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     const auto &[ClassPath] = AssetPaths.MoveFunctionCodePackageName;
     auto &ClassPrefix = AssetPaths.MoveFunctionCodePrefix;
