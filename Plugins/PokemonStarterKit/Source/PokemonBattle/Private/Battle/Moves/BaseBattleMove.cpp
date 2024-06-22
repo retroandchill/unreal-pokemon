@@ -115,9 +115,9 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     FDamageMultipliers Multipliers;
     CalculateDamageMultipliers(Multipliers, Context);
     Context.BaseDamage = ModifiedParameter(Context.BaseDamage, Multipliers.PowerMultiplier);
-    Attack = ModifiedParameter(Attack, Multipliers.AttackMultiplier);
-    Defense = ModifiedParameter(Defense, Multipliers.DefenseMultiplier);
-    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), Attack, Defense);
+    int32 AttackValue = ModifiedParameter(Attack.GetModifiedValue(), Multipliers.AttackMultiplier);
+    int32 DefenseValue = ModifiedParameter(Defense.GetModifiedValue(), Multipliers.DefenseMultiplier);
+    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), AttackValue, DefenseValue);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
     return {

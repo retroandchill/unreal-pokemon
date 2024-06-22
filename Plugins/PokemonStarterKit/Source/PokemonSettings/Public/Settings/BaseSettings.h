@@ -42,6 +42,7 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const FText &GetNoAbilityName() const final;
     const FText &GetNoAbilityDescription() const final;
 
+    const TArray<FStatStageInfo> &GetStatStages() const final;
     const TArray<int32> &GetCriticalHitRatios() const final;
 
     /**

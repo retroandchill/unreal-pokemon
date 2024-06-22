@@ -128,6 +128,12 @@ class POKEMONSETTINGS_API IGameSettings {
     virtual const FText &GetNoAbilityDescription() const = 0;
 
     /**
+     * The information about how stat stages are altered
+     * @return The information about how stat stages are altered
+     */
+    virtual const TArray<FStatStageInfo> &GetStatStages() const = 0;
+
+    /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      * @return The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */

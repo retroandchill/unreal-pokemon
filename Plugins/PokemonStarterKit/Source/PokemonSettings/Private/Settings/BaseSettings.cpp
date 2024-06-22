@@ -76,6 +76,10 @@ const FText &Pokemon::FBaseSettings::GetNoAbilityDescription() const {
     return KitSettings->NoAbilityDescription;
 }
 
+const TArray<FStatStageInfo> & Pokemon::FBaseSettings::GetStatStages() const {
+    return KitSettings->StatStages;
+}
+
 const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
 }
