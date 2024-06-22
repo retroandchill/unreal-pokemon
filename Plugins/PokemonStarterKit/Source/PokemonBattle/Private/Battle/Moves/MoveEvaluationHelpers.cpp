@@ -18,6 +18,6 @@ ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOver
     return Old;
 }
 
-void UMoveEvaluationHelpers::AlterStatStages(const TScriptInterface<IBattler> &Battler, FAdditionalMoveEffects& Effects, const FBattleStat& Stat, int32 Stages) {
-    Effects.AlterStatStage(*Battler, Stat.Stat, Stages);
+void UMoveEvaluationHelpers::AlterStatStages(const TScriptInterface<IBattler> &Battler, const FSecondaryEffectHandle& Effects, const FBattleStat& Stat, int32 Stages) {
+    Effects.Effects->AlterStatStage(*Battler, Stat.Stat, Stages);
 }

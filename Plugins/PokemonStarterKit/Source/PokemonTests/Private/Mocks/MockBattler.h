@@ -28,6 +28,8 @@ public:
     MOCK_METHOD(FMainBattleStat, GetSpecialDefense, (), (const, override));
     MOCK_METHOD(FMainBattleStat, GetSpeed, (), (const, override));
     MOCK_METHOD(int32, GetStatStage, (FName Stat), (const, override));
+    MOCK_CONST_METHOD2(CanChangeStatStage, bool(FName Stat, int32 Change));
+    MOCK_METHOD2(ChangeStatStage, void(FName Stat, int32 Change));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(bool, IsAbilityActive, (), (const, override));

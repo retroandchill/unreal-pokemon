@@ -29,3 +29,13 @@ struct POKEMONBATTLE_API FAdditionalMoveEffects {
      */
     void AlterStatStage(const IBattler& Battler, FName Stat, int32 StatChange);
 };
+
+/**
+ * Thin wrapper around a secondary effect used to alter its value
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FSecondaryEffectHandle {
+    GENERATED_BODY()
+
+    TSharedPtr<FAdditionalMoveEffects> Effects;
+};

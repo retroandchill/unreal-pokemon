@@ -8,6 +8,7 @@
 #include "MoveEvaluationHelpers.generated.h"
 
 struct FAdditionalMoveEffects;
+struct FSecondaryEffectHandle;
 
 /**
  * Struct that wraps around a battle stat selection
@@ -58,7 +59,7 @@ public:
      * @param Stages The change to the stat value
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Stats")
-    static void AlterStatStages(const TScriptInterface<IBattler>& Battler, UPARAM(Ref) FAdditionalMoveEffects& Effects, const FBattleStat& Stat, int32
+    static void AlterStatStages(const TScriptInterface<IBattler>& Battler, const FSecondaryEffectHandle& Effects, const FBattleStat& Stat, int32
                                 Stages);
 
 };

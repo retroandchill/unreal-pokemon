@@ -77,6 +77,18 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetStatStage(FName Stat) const override;
 
+    /**
+     * @copydoc IBattler::CanChangeStatStage
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    bool CanChangeStatStage(FName Stat, int32 Change) const override;
+
+    /**
+     * @copydoc IBattler::ChangeStatStage
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    void ChangeStatStage(FName Stat, int32 Change) override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
 

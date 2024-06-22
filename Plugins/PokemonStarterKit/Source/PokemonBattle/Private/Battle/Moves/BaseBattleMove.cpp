@@ -37,7 +37,7 @@ UBaseBattleMove::GetAllPossibleTargets_Implementation(const TScriptInterface<IBa
     auto &Battle = UserSide->GetOwningBattle();
     return Battle->GetActiveBattlers() |
            ranges::views::filter(
-               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == UserId; }) |
+               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() != UserId; }) |
            RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }
 

@@ -9,6 +9,7 @@
 #include "BattleMove.generated.h"
 
 struct FAdditionalMoveEffects;
+struct FSecondaryEffectHandle;
 struct FType;
 class IMove;
 class IBattler;
@@ -160,7 +161,7 @@ class POKEMONBATTLE_API IBattleMove {
      * @param Effects The effects to write the result to
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Secondary Effects")
-    void ApplySecondaryEffectsOnUser(const TScriptInterface<IBattler>& User, UPARAM(Ref) FAdditionalMoveEffects& Effects);
+    void ApplySecondaryEffectsOnUser(const TScriptInterface<IBattler>& User, const FSecondaryEffectHandle& Effects);
 
     /**
      * Apply the secondary effects of the given move on the target
@@ -168,6 +169,6 @@ class POKEMONBATTLE_API IBattleMove {
      * @param Effects The effects to write the result to
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Secondary Effects")
-    void ApplySecondaryEffectsOnTarget(const TScriptInterface<IBattler>& Target, UPARAM(Ref) FAdditionalMoveEffects& Effects);
+    void ApplySecondaryEffectsOnTarget(const TScriptInterface<IBattler>& Target, const FSecondaryEffectHandle& Effects);
     
 };

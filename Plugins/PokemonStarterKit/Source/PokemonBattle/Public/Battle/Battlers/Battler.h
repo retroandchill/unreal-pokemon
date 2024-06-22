@@ -166,6 +166,23 @@ class POKEMONBATTLE_API IBattler {
     virtual int32 GetStatStage(FName Stat) const = 0;
 
     /**
+     * Check if a stat can be changed the desired number of stages
+     * @param Stat The stat to alter the stage of
+     * @param Change The change to make to the stat
+     * @return Can a chance be made?
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual bool CanChangeStatStage(FName Stat, int32 Change) const = 0;
+
+    /**
+     * Change the stages of a stat
+     * @param Stat The stat to alter the stage of
+     * @param Change The change to make to the stat
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual void ChangeStatStage(FName Stat, int32 Change) = 0;
+
+    /**
      * Get the percent value of Exp to a level up
      * @return The Pokémon's exp to level up percentage
      */

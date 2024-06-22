@@ -19,6 +19,7 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
+#include "Settings/BaseSettings.h"
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
 #include <functional>
@@ -145,6 +146,19 @@ int32 ABattlerActor::GetStatStage(FName Stat) const {
     check(StatStages.Contains(Stat))
     return StatStages[Stat];
 }
+
+bool ABattlerActor::CanChangeStatStage(FName Stat, int32 Change) const {
+    static const int32 StatStageBound = Pokemon::FBaseSettings::Get().GetStatStages().Num();
+    int32 StatStage = GetStatStage(Stat);
+    return FMath::Clamp(StatStage + Change, -StatStageBound, StatStageBound) != StatStage;
+}
+
+void ABattlerActor::ChangeStatStage(FName Stat, int32 Change) {
+    static const int32 StatStageBound = Pokemon::FBaseSettings::Get().GetStatStages().Num();
+    int32 StatStage = GetStatStage(Stat);
+    StatStages[Stat] = FMath::Clamp(StatStage + Change, -StatStageBound, StatStageBound);
+}
+
 
 float ABattlerActor::GetExpPercent() const {
     return WrappedPokemon->GetStatBlock()->GetExpPercent();

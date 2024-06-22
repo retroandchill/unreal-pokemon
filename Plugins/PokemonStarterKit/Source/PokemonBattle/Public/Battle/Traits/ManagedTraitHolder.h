@@ -42,7 +42,7 @@ public:
      * Constructs a new instance with the given ID
      * @param IdIn The ID to assign
      */
-    explicit TManagedTraitHolder(FName IdIn) : ID(IdIn) {
+    explicit TManagedTraitHolder(FName IdIn) : ID(IdIn), Object(LoadAsset()) {
     }
 
     /**
@@ -50,13 +50,6 @@ public:
      * @return The object that this holder contains.
      */
     T *Get() const {
-        if (bLoaded) {
-            return Object;
-        }
-
-        auto Format = FString::Format(TEXT("{0}/{1}.{1}"), {Path.Value.data(), ID.ToString()});
-        Object = Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Format));
-        bLoaded = true;
         return Object;
     }
 
@@ -65,7 +58,7 @@ public:
      * @return The object that this holder contains.
      */
     T &operator*() const {
-        return *Get();
+        return *Object;
     }
 
     /**
@@ -73,7 +66,7 @@ public:
      * @return The object that this holder contains.
      */
     T *operator->() const {
-        return Get();
+        return Object;
     }
 
     /**
@@ -82,8 +75,7 @@ public:
      */
     void SetID(FName NewID) {
         ID = NewID;
-        Object = nullptr;
-        bLoaded = false;
+        Object = LoadAsset();
     }
 
     void AddReferencedObjects(FReferenceCollector &Collector) override {
@@ -95,6 +87,11 @@ public:
     }
 
 private:
+    T* LoadAsset() const {
+        auto Format = FString::Format(TEXT("{0}/{1}.{1}"), {Path.Value.data(), ID.ToString()});
+        return Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Format));
+    }
+    
     /**
      * The current ID of the loaded asset
      */
@@ -103,10 +100,5 @@ private:
     /**
      * The actual managed object
      */
-    mutable TObjectPtr<T> Object;
-
-    /**
-     * Has there been an attempt to load the object yet
-     */
-    mutable bool bLoaded = false;
+    TObjectPtr<T> Object;
 };

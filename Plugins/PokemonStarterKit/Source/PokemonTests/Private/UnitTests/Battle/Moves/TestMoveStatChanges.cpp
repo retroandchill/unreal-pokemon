@@ -15,10 +15,10 @@ bool TestMoveStatChanges_NoExisting::RunTest(const FString &Parameters) {
     CREATE_MOCK(IBattler, Battler, FMockBattler, MockBattler);
     ON_CALL(MockBattler, GetStatStage).WillByDefault(Return(0));
 
-    FAdditionalMoveEffects MoveEffects;
+    FSecondaryEffectHandle MoveEffects = { MakeShared<FAdditionalMoveEffects>() };
     UMoveEvaluationHelpers::AlterStatStages(Battler, MoveEffects, {"ATTACK"}, 2);
-    UE_ASSERT_TRUE(MoveEffects.StatStageChanges.Contains("ATTACK"));
-    UE_CHECK_EQUAL(2, MoveEffects.StatStageChanges["ATTACK"]);
+    UE_ASSERT_TRUE(MoveEffects.Effects->StatStageChanges.Contains("ATTACK"));
+    UE_CHECK_EQUAL(2, MoveEffects.Effects->StatStageChanges["ATTACK"]);
     
     return true;
 }
@@ -30,10 +30,10 @@ bool TestMoveStatChanges_TooHigh::RunTest(const FString &Parameters) {
     CREATE_MOCK(IBattler, Battler, FMockBattler, MockBattler);
     ON_CALL(MockBattler, GetStatStage).WillByDefault(Return(5));
 
-    FAdditionalMoveEffects MoveEffects;
+    FSecondaryEffectHandle MoveEffects = { MakeShared<FAdditionalMoveEffects>() };
     UMoveEvaluationHelpers::AlterStatStages(Battler, MoveEffects, {"ATTACK"}, 2);
-    UE_ASSERT_TRUE(MoveEffects.StatStageChanges.Contains("ATTACK"));
-    UE_CHECK_EQUAL(1, MoveEffects.StatStageChanges["ATTACK"]);
+    UE_ASSERT_TRUE(MoveEffects.Effects->StatStageChanges.Contains("ATTACK"));
+    UE_CHECK_EQUAL(1, MoveEffects.Effects->StatStageChanges["ATTACK"]);
     
     return true;
 }
@@ -45,10 +45,10 @@ bool TestMoveStatChanges_TooLow::RunTest(const FString &Parameters) {
     CREATE_MOCK(IBattler, Battler, FMockBattler, MockBattler);
     ON_CALL(MockBattler, GetStatStage).WillByDefault(Return(-5));
 
-    FAdditionalMoveEffects MoveEffects;
+    FSecondaryEffectHandle MoveEffects = { MakeShared<FAdditionalMoveEffects>() };
     UMoveEvaluationHelpers::AlterStatStages(Battler, MoveEffects, {"ATTACK"}, -2);
-    UE_ASSERT_TRUE(MoveEffects.StatStageChanges.Contains("ATTACK"));
-    UE_CHECK_EQUAL(-1, MoveEffects.StatStageChanges["ATTACK"]);
+    UE_ASSERT_TRUE(MoveEffects.Effects->StatStageChanges.Contains("ATTACK"));
+    UE_CHECK_EQUAL(-1, MoveEffects.Effects->StatStageChanges["ATTACK"]);
     
     return true;
 }

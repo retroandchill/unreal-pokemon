@@ -51,13 +51,17 @@ FActionResult FBattleActionUseMove::ComputeResult() {
 
         Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), ActionResult.User, Target, TargetCount);
 
-        if (int32 EffectChance = IBattleMove::Execute_GetSecondaryEffectChance(Move.GetObject()); FMath::Rand() % 100 < EffectChance) {
-            IBattleMove::Execute_ApplySecondaryEffectsOnTarget(Move.GetObject(), Target, SecondaryEffects);
+        if (int32 EffectChance = IBattleMove::Execute_GetSecondaryEffectChance(Move.GetObject()); EffectChance == 0 || FMath::Rand() % 100 < EffectChance) {
+            FSecondaryEffectHandle EffectHandle = {MakeShared<FAdditionalMoveEffects>()};
+            IBattleMove::Execute_ApplySecondaryEffectsOnTarget(Move.GetObject(), Target, EffectHandle);
+            SecondaryEffects = MoveTemp(*EffectHandle.Effects);
         }
     }
 
-    if (int32 EffectChance = IBattleMove::Execute_GetSecondaryEffectChance(Move.GetObject()); FMath::Rand() % 100 < EffectChance) {
-        IBattleMove::Execute_ApplySecondaryEffectsOnUser(Move.GetObject(), ActionResult.User, ActionResult.UserSecondaryEffects);
+    if (int32 EffectChance = IBattleMove::Execute_GetSecondaryEffectChance(Move.GetObject()); EffectChance == 0 || FMath::Rand() % 100 < EffectChance) {
+        FSecondaryEffectHandle EffectHandle = {MakeShared<FAdditionalMoveEffects>()};
+        IBattleMove::Execute_ApplySecondaryEffectsOnUser(Move.GetObject(), ActionResult.User, EffectHandle);
+        ActionResult.UserSecondaryEffects = MoveTemp(*EffectHandle.Effects);
     }
     
 
