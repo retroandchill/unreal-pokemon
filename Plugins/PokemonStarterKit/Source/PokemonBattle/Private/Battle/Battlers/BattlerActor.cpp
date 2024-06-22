@@ -49,7 +49,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         if (Stat.Type == EPokemonStatType::Main)
             return;
 
-        StatStages[Stat.ID] = 0;
+        StatStages.Emplace(Stat.ID, 0);
     });
     
     auto MoveBlock = Pokemon->GetMoveBlock();
