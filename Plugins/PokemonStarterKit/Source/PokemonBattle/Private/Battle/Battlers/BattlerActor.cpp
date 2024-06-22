@@ -143,7 +143,7 @@ FMainBattleStat ABattlerActor::GetSpeed() const {
 
 int32 ABattlerActor::GetStatStage(FName Stat) const {
     check(StatStages.Contains(Stat))
-    return GetStatStage(Stat);
+    return StatStages[Stat];
 }
 
 float ABattlerActor::GetExpPercent() const {
