@@ -31,15 +31,18 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     int32 GetMaxPP_Implementation() const override;
     FName GetDisplayType_Implementation() const override;
     int32 GetPriority_Implementation() const override;
+    int32 GetSecondaryEffectChance_Implementation() const override;
     void PayCost_Implementation() override;
     TScriptInterface<IBattle> GetOwningBattle_Implementation() const override;
-
+    bool CanEffectsBeStolen_Implementation() const override;
+    
   public:
     bool IsConfusionAttack() const override;
     bool HasHighCriticalHitRate() const override;
     bool HasTag(FName Tag) const;
 
   protected:
+    bool MoveFailed_Implementation(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets) const override;
     bool PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) override;
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                  const TScriptInterface<IBattler> &Target, int32 TargetCount) override;

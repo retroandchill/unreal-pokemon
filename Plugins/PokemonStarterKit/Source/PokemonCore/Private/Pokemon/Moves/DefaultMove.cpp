@@ -45,6 +45,10 @@ FName UDefaultMove::GetFunctionCode() const {
     return GetMoveData().FunctionCode;
 }
 
+int32 UDefaultMove::GetSecondaryEffectChance() const {
+    return GetMoveData().EffectChance;
+}
+
 void UDefaultMove::DecrementPP(int32 Amount) {
     CurrentPP = FMath::Clamp(CurrentPP - Amount, 0, GetTotalPP());
 }

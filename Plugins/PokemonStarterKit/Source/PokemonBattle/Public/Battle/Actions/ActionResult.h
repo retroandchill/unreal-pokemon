@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Moves/BattleDamage.h"
+#include "Battle/Moves/SecondaryEffects.h"
 
 #include "ActionResult.generated.h"
 
@@ -19,20 +20,26 @@ struct FTargetResult {
     /**
      * The actual target of the move
      */
-    UPROPERTY(BlueprintReadWrite, Category = "Battle|Actions")
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
     TScriptInterface<IBattler> Target;
 
     /**
      * Did the move actually hit its target
      */
-    UPROPERTY(BlueprintReadWrite, Category = "Battle|Actions")
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
     bool bHit;
 
     /**
      * Information about the move's damage
      */
-    UPROPERTY(BlueprintReadWrite, Category = "Battle|Actions")
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
     FBattleDamage Damage;
+
+    /**
+     * The secondary effects applied to the target
+     */
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
+    FAdditionalMoveEffects SecondaryEffects;
 };
 
 /**
@@ -42,9 +49,15 @@ USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FActionResult {
     GENERATED_BODY()
 
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
+    TScriptInterface<IBattler> User;
+
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
+    FAdditionalMoveEffects UserSecondaryEffects;
+
     /**
      * The results in each individual target
      */
-    UPROPERTY(BlueprintReadWrite, Category = "Battle|Actions")
+    UPROPERTY(BlueprintReadOnly, Category = "Battle|Actions")
     TArray<FTargetResult> TargetResults;
 };

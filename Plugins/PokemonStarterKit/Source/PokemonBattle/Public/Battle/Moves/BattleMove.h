@@ -8,6 +8,7 @@
 
 #include "BattleMove.generated.h"
 
+struct FAdditionalMoveEffects;
 struct FType;
 class IMove;
 class IBattler;
@@ -79,6 +80,13 @@ class POKEMONBATTLE_API IBattleMove {
     int32 GetPriority() const;
 
     /**
+     * Get the chance of the move's secondary effect going off
+     * @return The change of the move's secondary effect going off
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Execution)
+    int32 GetSecondaryEffectChance() const;
+
+    /**
      * Pay the move's PP cost to use
      */
     UFUNCTION(BlueprintNativeEvent, Category = Execution)
@@ -90,6 +98,13 @@ class POKEMONBATTLE_API IBattleMove {
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
     TScriptInterface<IBattle> GetOwningBattle() const;
+
+    /**
+     * Can the effects of a move be stolen to effect the stats of the user.
+     * @return Can the effects be stolen
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
+    bool CanEffectsBeStolen() const;
 
     /**
      * Is this attack the one from the Confusion effect?
@@ -111,6 +126,15 @@ class POKEMONBATTLE_API IBattleMove {
     virtual bool HasTag(FName Tag) const = 0;
 
     /**
+     * Check if the move fails completely against the given target
+     * @param User The user of the move
+     * @param Targets The list of all targets of the move
+     * @return Did the move fail
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Success Checking")
+    bool MoveFailed(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets) const;
+
+    /**
      * Roll to see if this move hits or not.
      * @param User The user of the move.
      * @param Target The target the move is being hit by.
@@ -129,4 +153,21 @@ class POKEMONBATTLE_API IBattleMove {
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     FBattleDamage CalculateDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
                                   int32 TargetCount = 1);
+
+    /**
+     * Apply the secondary effects of the given move on the user
+     * @param User The user of the move
+     * @param Effects The effects to write the result to
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Secondary Effects")
+    void ApplySecondaryEffectsOnUser(const TScriptInterface<IBattler>& User, UPARAM(Ref) FAdditionalMoveEffects& Effects);
+
+    /**
+     * Apply the secondary effects of the given move on the target
+     * @param Target The target of the move
+     * @param Effects The effects to write the result to
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Secondary Effects")
+    void ApplySecondaryEffectsOnTarget(const TScriptInterface<IBattler>& Target, UPARAM(Ref) FAdditionalMoveEffects& Effects);
+    
 };

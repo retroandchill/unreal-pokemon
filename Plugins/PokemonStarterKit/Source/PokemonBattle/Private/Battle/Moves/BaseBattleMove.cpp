@@ -61,12 +61,20 @@ int32 UBaseBattleMove::GetPriority_Implementation() const {
     return WrappedMove->GetMoveData().Priority;
 }
 
+int32 UBaseBattleMove::GetSecondaryEffectChance_Implementation() const {
+    return IBattleMove::GetSecondaryEffectChance_Implementation();
+}
+
 void UBaseBattleMove::PayCost_Implementation() {
     WrappedMove->DecrementPP();
 }
 
 TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {
     return CurrentBattle;
+}
+
+bool UBaseBattleMove::CanEffectsBeStolen_Implementation() const {
+    return false;
 }
 
 bool UBaseBattleMove::IsConfusionAttack() const {
@@ -82,8 +90,15 @@ bool UBaseBattleMove::HasTag(FName Tag) const {
     return WrappedMove->GetMoveData().Tags.Contains(Tag);
 }
 
+bool UBaseBattleMove::MoveFailed_Implementation(const TScriptInterface<IBattler> &User,
+    const TArray<TScriptInterface<IBattler>> &Targets) const {
+    // This is the base class for all move types that have either no secondary effect or one that is not defined.
+    // As such if the move doesn't deal damage, it automatically fails.
+    return WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status;
+}
+
 bool UBaseBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
+                                                     const TScriptInterface<IBattler> &Target) {
     auto BaseAccuracy = CalculateBaseAccuracy(WrappedMove->GetAccuracy(), User, Target);
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
         return true;

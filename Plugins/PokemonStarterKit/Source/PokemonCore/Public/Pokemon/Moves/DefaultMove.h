@@ -25,6 +25,7 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     int32 GetCurrentPP() const override;
     int32 GetTotalPP() const override;
     FName GetFunctionCode() const override;
+    int32 GetSecondaryEffectChance() const override;
     void DecrementPP(int32 Amount) override;
 
   private:

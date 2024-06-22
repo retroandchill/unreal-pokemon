@@ -71,6 +71,12 @@ class POKEMONCORE_API IMove {
     virtual FName GetFunctionCode() const = 0;
 
     /**
+     * Get the chance of the move's secondary effect firing.
+     * @return The chance of the secondary effect happening
+     */
+    virtual int32 GetSecondaryEffectChance() const = 0;
+
+    /**
      * Reduce the amount of PP a move has by the given amount
      * @param Amount The amount of PP to reduce by
      */

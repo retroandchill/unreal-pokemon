@@ -7,6 +7,32 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MoveEvaluationHelpers.generated.h"
 
+struct FAdditionalMoveEffects;
+
+/**
+ * Struct that wraps around a battle stat selection
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FBattleStat {
+    GENERATED_BODY()
+
+    /**
+     * The actual value of the stat change in the editor
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats",
+        meta = (GetOptions = "PokemonData.StatHelper.GetBattleStatNames"))
+    FName Stat;
+};
+
+/**
+ * Function used to get the type hash of the battle stat, making it identical to the wrapped property.
+ * @param Key The key structure
+ * @return The return type in question
+ */
+inline uint32 GetTypeHash(const FBattleStat &Key) {
+    return GetTypeHash(Key.Stat);
+}
+
 /**
  * Helper library for move related evaluation.
  */
@@ -23,5 +49,16 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
     static ECriticalOverride ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New);
+
+    /**
+     * Alter the stat stages of the user.
+     * @param Battler The battler the effect is being applied to
+     * @param Effects The result to write the change to.
+     * @param Stat The stat that is being altered
+     * @param Stages The change to the stat value
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Stats")
+    static void AlterStatStages(const TScriptInterface<IBattler>& Battler, UPARAM(Ref) FAdditionalMoveEffects& Effects, const FBattleStat& Stat, int32
+                                Stages);
 
 };

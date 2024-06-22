@@ -75,7 +75,7 @@ void APokemonBattle::Tick(float DeltaSeconds) {
         } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult();
                    bActionMessagesDisplayed && ResultFuture.IsReady() && !bActionResultDisplaying) {
             auto &Result = ResultFuture.Get();
-            for (auto &[Target, bHit, Damage] : Result.TargetResults) {
+            for (auto &[Target, bHit, Damage, AdditionalEffects] : Result.TargetResults) {
                 Target->TakeBattleDamage(Damage.Damage);
             }
             DisplayActionResult(Result);

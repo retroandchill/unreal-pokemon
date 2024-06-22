@@ -2,6 +2,7 @@
 
 
 #include "Battle/Moves/MoveEvaluationHelpers.h"
+#include "Battle/Actions/ActionResult.h"
 
 ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New) {
     using enum ECriticalOverride;
@@ -15,4 +16,8 @@ ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOver
 
     // If the old value is set to Never, then we go with that, no questions asked
     return Old;
+}
+
+void UMoveEvaluationHelpers::AlterStatStages(const TScriptInterface<IBattler> &Battler, FAdditionalMoveEffects& Effects, const FBattleStat& Stat, int32 Stages) {
+    Effects.AlterStatStage(*Battler, Stat.Stat, Stages);
 }
