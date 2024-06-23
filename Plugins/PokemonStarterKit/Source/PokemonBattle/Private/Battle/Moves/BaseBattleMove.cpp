@@ -11,8 +11,14 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "RangeHelpers.h"
+#include "Algo/ForEach.h"
+#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/GameplayAbilities/Attributes/DamageModificationAttributeSet.h"
+#include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Settings/BaseSettings.h"
 #include <range/v3/view/filter.hpp>
+#include <range/v3/algorithm/for_each.hpp>
+#include <range/v3/view/transform.hpp>
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
@@ -83,7 +89,7 @@ bool UBaseBattleMove::HasTag(FName Tag) const {
 }
 
 bool UBaseBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
+                                                     const TScriptInterface<IBattler> &Target) {
     auto BaseAccuracy = CalculateBaseAccuracy(WrappedMove->GetAccuracy(), User, Target);
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
         return true;
@@ -100,34 +106,46 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging};
     }
-    FMoveDamageInfo Context = {.User = User, .Target = Target, .TargetCount = TargetCount};
 
-    Context.Type = DetermineType();
-    CalculateTypeMatchups(Context.Effects, Target, Context.Type);
-    if (Context.Effects.Effectiveness == EDamageEffectiveness::NoEffect) {
+    auto Context = MakeShared<FMoveDamageInfo>(User, Target, TargetCount);
+    Context->Type = DetermineType();
+
+    CalculateTypeMatchups(Context->Effects, Target, Context->Type);
+    if (Context->Effects.Effectiveness == EDamageEffectiveness::NoEffect) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NoEffect};
     }
 
-    Context.Effects.bCriticalHit = IsCritical(User, Target);
-    Context.BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
+    auto MoveContext = NewObject<UMoveEffectContext>();
+    MoveContext->SetDamageInfo(Context);
+    SendOutUsageEvents(MoveContext);
+
+    Context->Effects.bCriticalHit = IsCritical(User, Target);
+    Context->BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
     // If a critical hit is scored ignore any negative attack stages or positive defense stages
-    if (Context.Effects.bCriticalHit) {
+    if (Context->Effects.bCriticalHit) {
         Attack.Stages = FMath::Max(0, Attack.Stages);
         Defense.Stages = FMath::Min(0, Defense.Stages);
     }
 
-    FDamageMultipliers Multipliers;
-    CalculateDamageMultipliers(Multipliers, Context);
-    Context.BaseDamage = ModifiedParameter(Context.BaseDamage, Multipliers.PowerMultiplier);
+    auto UserAbilities = User->GetAbilityComponent();
+    auto DamageModificationAttributes = UserAbilities->GetDamageModificationAttributes();
+    FDamageMultipliers Multipliers = {
+        .PowerMultiplier = DamageModificationAttributes->GetPowerMultiplier(),
+        .AttackMultiplier = DamageModificationAttributes->GetAttackMultiplier(),
+        .DefenseMultiplier = DamageModificationAttributes->GetDefenseMultiplier(),
+        .FinalDamageMultiplier = DamageModificationAttributes->GetFinalDamageMultiplier()
+    };
+    CalculateDamageMultipliers(Multipliers, *Context);
+    Context->BaseDamage = ModifiedParameter(Context->BaseDamage, Multipliers.PowerMultiplier);
     int32 AttackValue = ModifiedParameter(Attack.GetModifiedValue(), Multipliers.AttackMultiplier);
     int32 DefenseValue = ModifiedParameter(Defense.GetModifiedValue(), Multipliers.DefenseMultiplier);
-    int32 Damage = CalculateBaseDamage(Context.BaseDamage, User->GetPokemonLevel(), AttackValue, DefenseValue);
+    int32 Damage = CalculateBaseDamage(Context->BaseDamage, User->GetPokemonLevel(), AttackValue, DefenseValue);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
 
     return {
-        .Damage = Damage, .Effectiveness = Context.Effects.Effectiveness, .bCriticalHit = Context.Effects.bCriticalHit};
+        .Damage = Damage, .Effectiveness = Context->Effects.Effectiveness, .bCriticalHit = Context->Effects.bCriticalHit};
 }
 
 bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
@@ -159,6 +177,44 @@ bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
     }
     int32 Roll = FMath::Rand() % Rate;
     return Roll == 0;    
+}
+
+void UBaseBattleMove::SendOutUsageEvents(UMoveEffectContext *MoveEffectContext) {
+    using namespace ranges::views;
+    const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.User");
+    const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.UserAlly");
+    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Target");
+    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.TargetAlly");
+    
+    auto &DamageInfo = MoveEffectContext->GetDamageInfo();
+    auto UserActor = CastChecked<AActor>(DamageInfo.User.GetObject());
+    FGameplayEventData EventData;
+    EventData.OptionalObject = MoveEffectContext;
+    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
+    TargetData->TargetActorArray.Add(UserActor);
+    EventData.TargetData.Data.Emplace(MoveTemp(TargetData));
+
+    auto ConvertToActor = [](const TScriptInterface<IBattler>& Battler) {
+        return CastChecked<AActor>(Battler.GetObject());
+    };
+    auto AllyNotFainted = [](const TScriptInterface<IBattler>& Battler) {
+        return !Battler->IsFainted();
+    };
+    
+    SendOutEventForBattler(UserTag, EventData, UserActor);
+    for (const AActor *Ally : DamageInfo.User->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
+        SendOutEventForBattler(UserAllyTag, EventData, Ally);
+    }
+    SendOutEventForBattler(TargetTag, EventData, CastChecked<AActor>(DamageInfo.Target.GetObject()));
+    for (const AActor *Ally : DamageInfo.Target->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
+        SendOutEventForBattler(TargetAllyTag, EventData, Ally);
+    }
+}
+
+void UBaseBattleMove::SendOutEventForBattler(const FGameplayTag &Tag, FGameplayEventData &EventData,
+    const AActor *BattlerActor) {
+    EventData.Target = BattlerActor;
+    SendGameplayEvent(Tag, EventData);
 }
 
 ECriticalOverride UBaseBattleMove::GetCriticalOverride_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const {
@@ -223,7 +279,7 @@ int32 UBaseBattleMove::CalculateBaseAccuracy_Implementation(int32 Accuracy, cons
 }
 
 void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) {
-    Traits::ApplyIndividualDamageModifications(Multipliers, Context);
+    //Traits::ApplyIndividualDamageModifications(Multipliers, Context);
     ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
     ApplyCriticalHitModifier(Multipliers, Context.Effects);
     ApplyDamageSwing(Multipliers);

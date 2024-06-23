@@ -22,7 +22,9 @@ bool TestAbilityLoading::RunTest(const FString &Parameters) {
         .WillOnce(Return(0.5f))
         .WillRepeatedly(Return(0.25f));
 
-    FMoveDamageInfo Context = {.User = User, .Type = TEXT("WATER")};
+    FMoveDamageInfo Context;
+    Context.User = User;
+    Context.Type = TEXT("WATER");
     UE_ASSERT_FALSE(DamageModifiers.User.IsEmpty());
     UE_CHECK_FALSE(DamageModifiers.User[0]->MeetsConditions(Context));
     UE_CHECK_TRUE(DamageModifiers.User[0]->MeetsConditions(Context));

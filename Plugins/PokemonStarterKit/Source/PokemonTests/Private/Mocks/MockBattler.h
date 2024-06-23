@@ -30,6 +30,7 @@ public:
     MOCK_METHOD(int32, GetStatStage, (FName Stat), (const, override));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
+    MOCK_METHOD(UBattlerAbilityComponent*, GetAbilityComponent, (), (const, override));
     MOCK_METHOD(bool, IsAbilityActive, (), (const, override));
     MOCK_METHOD(UAbilityBattleEffect *, GetAbility, (), (const, override));
     MOCK_METHOD(bool, IsHoldItemActive, (), (const, override));

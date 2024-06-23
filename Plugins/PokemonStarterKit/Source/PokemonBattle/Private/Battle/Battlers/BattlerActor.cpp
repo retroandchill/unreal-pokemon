@@ -16,12 +16,15 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
+#include "Battle/Abilities/AbilityLookup.h"
+#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
 #include <functional>
+#include <range/v3/view/empty.hpp>
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -33,6 +36,10 @@ TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TSc
     TScriptInterface<IBattleMove> BattleMove = NewObject<UObject>(Battler, MoveClass);
     BattleMove->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
     return BattleMove;
+}
+
+ABattlerActor::ABattlerActor() {
+    BattlerAbilityComponent = CreateDefaultSubobject<UBattlerAbilityComponent>("BattlerAbilityComponent");
 }
 
 TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
@@ -67,7 +74,11 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
-    Ability.SetID(Pokemon->GetAbility()->GetAbilityID());
+    if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID(), this); AbilityClass != nullptr) {
+        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
+    } else {
+        Ability = FGameplayAbilitySpecHandle();
+    }
 
     return this;
 }
@@ -154,12 +165,8 @@ TArray<FName> ABattlerActor::GetTypes() const {
     return WrappedPokemon->GetTypes();
 }
 
-bool ABattlerActor::IsAbilityActive() const {
-    return true;
-}
-
-UAbilityBattleEffect *ABattlerActor::GetAbility() const {
-    return Ability.Get();
+UBattlerAbilityComponent * ABattlerActor::GetAbilityComponent() const {
+    return BattlerAbilityComponent;
 }
 
 bool ABattlerActor::IsHoldItemActive() const {
@@ -189,9 +196,7 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 }
 
 ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
-    auto AbilityRange = ranges::views::single(Ability.Get());
-    return AbilityRange |
-           ranges::views::filter([](const IIndividualTraitHolder *TraitHolder) { return TraitHolder != nullptr; });
+    return ranges::views::empty;
 }
 
 void ABattlerActor::ShowSprite() const {

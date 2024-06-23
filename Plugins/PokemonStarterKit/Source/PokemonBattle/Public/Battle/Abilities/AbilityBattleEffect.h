@@ -11,6 +11,7 @@
 
 #include "AbilityBattleEffect.generated.h"
 
+class UGameplayEffect;
 /**
  * The effect of an ability in battle
  */

@@ -10,6 +10,7 @@
 
 #include "Battler.generated.h"
 
+class UBattlerAbilityComponent;
 class IIndividualTraitHolder;
 class UDamageModificationTrait;
 class ITraitHolder;
@@ -180,18 +181,10 @@ class POKEMONBATTLE_API IBattler {
     virtual TArray<FName> GetTypes() const = 0;
 
     /**
-     * Get if the target's current ability is active
-     * @return Is the target's ability active?
+     * Get the gameplay ability component used by this battler
+     * @return The held battler ability component
      */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual bool IsAbilityActive() const = 0;
-
-    /**
-     * Get the Pokémon's current ability effect
-     * @return The effect of the ability in question
-     */
-    UFUNCTION(BlueprintCallable, Category = Items)
-    virtual UAbilityBattleEffect *GetAbility() const = 0;
+    virtual UBattlerAbilityComponent* GetAbilityComponent() const = 0;
 
     /**
      * Get if the target's current hold item is active

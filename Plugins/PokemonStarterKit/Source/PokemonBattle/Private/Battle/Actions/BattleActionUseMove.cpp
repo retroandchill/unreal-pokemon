@@ -1,7 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Actions/BattleActionUseMove.h"
+#include "Abilities/GameplayAbility.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Battle/Moves/BattleMove.h"
 
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
@@ -35,14 +37,14 @@ void FBattleActionUseMove::Execute() {
 
 FActionResult FBattleActionUseMove::ComputeResult() {
     FActionResult ActionResult;
-
+    
     auto &User = GetBattler();
     int32 TargetCount = Targets.Num();
     for (const auto &Target : Targets) {
         if (Target->IsFainted()) {
             continue;
         }
-
+        
         auto &TargetResult = ActionResult.TargetResults.Emplace_GetRef();
         TargetResult.Target = Target;
         TargetResult.bHit = IBattleMove::Execute_PerformHitCheck(Move.GetObject(), User, Target);

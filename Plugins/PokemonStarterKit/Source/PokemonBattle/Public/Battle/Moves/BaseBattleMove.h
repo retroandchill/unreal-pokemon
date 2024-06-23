@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "BattleMove.h"
-#include "UObject/Object.h"
+#include "Abilities/GameplayAbility.h"
 
 #include "BaseBattleMove.generated.h"
 
+class UMoveEffectContext;
 struct FDamageMultipliers;
 struct FModifiedDamage;
 
@@ -15,7 +16,7 @@ struct FModifiedDamage;
  * The base class used for all battle moves used by the game.
  */
 UCLASS(Blueprintable)
-class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
+class POKEMONBATTLE_API UBaseBattleMove : public UGameplayAbility, public IBattleMove {
     GENERATED_BODY()
 
   public:
@@ -37,8 +38,8 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
   public:
     bool IsConfusionAttack() const override;
     bool HasHighCriticalHitRate() const override;
-    bool HasTag(FName Tag) const;
-
+    bool HasTag(FName Tag) const override;
+    
   protected:
     bool PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) override;
     FBattleDamage CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
@@ -52,6 +53,9 @@ private:
      * @return Does the move result in a critical hit
      */
     bool IsCritical(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
+
+    void SendOutUsageEvents(UMoveEffectContext* MoveEffectContext);
+    void SendOutEventForBattler(const FGameplayTag& Tag, FGameplayEventData& EventData, const AActor* BattlerActor);
 
 protected:
     /**

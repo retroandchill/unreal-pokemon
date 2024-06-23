@@ -41,7 +41,9 @@ bool TestAuraAbilities::RunTest(const FString &Parameters) {
     auto AbilityModifiers = Xerneas->GetAbility()->GetDamageModifiers().Global;
     UE_ASSERT_FALSE(AbilityModifiers.IsEmpty());
 
-    FMoveDamageInfo Context = {.User = Xerneas, .Type = TEXT("FAIRY")};
+    FMoveDamageInfo Context;
+    Context.User = Xerneas;
+    Context.Type = TEXT("FAIRY");
     AbilityModifiers[0]->Apply(Multipliers, Context);
     UE_CHECK_EQUAL(4.f / 3.f, Multipliers.PowerMultiplier);
     Multipliers.PowerMultiplier = 1.f;
