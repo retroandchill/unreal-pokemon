@@ -33,6 +33,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
                                           const TScriptInterface<IPokemon> &Pokemon,
                                           bool ShowImmediately = false) override;
+    
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)
@@ -149,6 +150,12 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      * The stats for the given Pokémon in battle
      */
     TMap<FName, int32> StatStages;
+
+    /**
+     * The list of gameplay abilities that should be activated immediately upon 
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
+    TArray<TSubclassOf<UGameplayAbility>> InnateAbilities;
 
     /**
      * The ability that this battler has

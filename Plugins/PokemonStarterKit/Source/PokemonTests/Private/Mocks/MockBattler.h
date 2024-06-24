@@ -31,8 +31,6 @@ public:
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent*, GetAbilityComponent, (), (const, override));
-    MOCK_METHOD(bool, IsAbilityActive, (), (const, override));
-    MOCK_METHOD(UAbilityBattleEffect *, GetAbility, (), (const, override));
     MOCK_METHOD(bool, IsHoldItemActive, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IHoldItemBattleEffect> &, GetHoldItem, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));

@@ -17,11 +17,49 @@
 #include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Settings/BaseSettings.h"
 #include <range/v3/view/filter.hpp>
-#include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/transform.hpp>
+#include "AbilitySystemBlueprintLibrary.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
+}
+
+static void SendOutEventForBattler(const FGameplayTag &Tag, FGameplayEventData &EventData,
+                                             AActor* BattlerActor) {
+    EventData.Target = BattlerActor;
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(BattlerActor, Tag, EventData);
+}
+
+static void SendOutUsageEvents(UMoveEffectContext *MoveEffectContext) {
+    using namespace ranges::views;
+    const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.User");
+    const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.UserAlly");
+    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Target");
+    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.TargetAlly");
+    
+    auto &DamageInfo = MoveEffectContext->GetDamageInfo();
+    auto UserActor = CastChecked<AActor>(DamageInfo.User.GetObject());
+    FGameplayEventData EventData;
+    EventData.OptionalObject = MoveEffectContext;
+    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
+    TargetData->TargetActorArray.Add(UserActor);
+    EventData.TargetData.Data.Emplace(MoveTemp(TargetData));
+
+    auto ConvertToActor = [](const TScriptInterface<IBattler>& Battler) {
+        return CastChecked<AActor>(Battler.GetObject());
+    };
+    auto AllyNotFainted = [](const TScriptInterface<IBattler>& Battler) {
+        return !Battler->IsFainted();
+    };
+    
+    SendOutEventForBattler(UserTag, EventData, UserActor);
+    for (AActor *Ally : DamageInfo.User->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
+        SendOutEventForBattler(UserAllyTag, EventData, Ally);
+    }
+    SendOutEventForBattler(TargetTag, EventData, CastChecked<AActor>(DamageInfo.Target.GetObject()));
+    for (AActor *Ally : DamageInfo.Target->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
+        SendOutEventForBattler(TargetAllyTag, EventData, Ally);
+    }
 }
 
 TScriptInterface<IBattleMove> UBaseBattleMove::Initialize(const TScriptInterface<IBattle> &Battle,
@@ -43,7 +81,7 @@ UBaseBattleMove::GetAllPossibleTargets_Implementation(const TScriptInterface<IBa
     auto &Battle = UserSide->GetOwningBattle();
     return Battle->GetActiveBattlers() |
            ranges::views::filter(
-               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == UserId; }) |
+               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() != UserId; }) |
            RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }
 
@@ -177,44 +215,6 @@ bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
     }
     int32 Roll = FMath::Rand() % Rate;
     return Roll == 0;    
-}
-
-void UBaseBattleMove::SendOutUsageEvents(UMoveEffectContext *MoveEffectContext) {
-    using namespace ranges::views;
-    const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.User");
-    const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.UserAlly");
-    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Target");
-    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.TargetAlly");
-    
-    auto &DamageInfo = MoveEffectContext->GetDamageInfo();
-    auto UserActor = CastChecked<AActor>(DamageInfo.User.GetObject());
-    FGameplayEventData EventData;
-    EventData.OptionalObject = MoveEffectContext;
-    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
-    TargetData->TargetActorArray.Add(UserActor);
-    EventData.TargetData.Data.Emplace(MoveTemp(TargetData));
-
-    auto ConvertToActor = [](const TScriptInterface<IBattler>& Battler) {
-        return CastChecked<AActor>(Battler.GetObject());
-    };
-    auto AllyNotFainted = [](const TScriptInterface<IBattler>& Battler) {
-        return !Battler->IsFainted();
-    };
-    
-    SendOutEventForBattler(UserTag, EventData, UserActor);
-    for (const AActor *Ally : DamageInfo.User->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
-        SendOutEventForBattler(UserAllyTag, EventData, Ally);
-    }
-    SendOutEventForBattler(TargetTag, EventData, CastChecked<AActor>(DamageInfo.Target.GetObject()));
-    for (const AActor *Ally : DamageInfo.Target->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
-        SendOutEventForBattler(TargetAllyTag, EventData, Ally);
-    }
-}
-
-void UBaseBattleMove::SendOutEventForBattler(const FGameplayTag &Tag, FGameplayEventData &EventData,
-    const AActor *BattlerActor) {
-    EventData.Target = BattlerActor;
-    SendGameplayEvent(Tag, EventData);
 }
 
 ECriticalOverride UBaseBattleMove::GetCriticalOverride_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const {

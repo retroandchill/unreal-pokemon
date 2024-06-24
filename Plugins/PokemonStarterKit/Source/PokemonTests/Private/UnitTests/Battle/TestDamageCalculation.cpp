@@ -22,19 +22,13 @@ bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(75));
     ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{ 123, 0 }));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("ICE")}));
-    //Fake(Method(MockUser, GetTraitHolders));
-    //Fake(Method(MockUser, GetAllies));
-    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{163, 0}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));
-    //Fake(Method(MockTarget, GetTraitHolders));
-    //Fake(Method(MockTarget, GetAllies));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Physical));
     ON_CALL(MockMove, GetBasePower).WillByDefault(Return(65));
     ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("ICE")));
@@ -62,19 +56,13 @@ bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(100));
     ON_CALL(MockUser, GetSpecialAttack).WillByDefault(Return(FMainBattleStat{359, 0}));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("DARK")}));
-    //Fake(Method(MockUser, GetTraitHolders));
-    //Fake(Method(MockUser, GetAllies));
-    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, GetSpecialDefense).WillByDefault(Return(FMainBattleStat{256, 0}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("DRAGON"), TEXT("FAIRY")}));
-    //Fake(Method(MockTarget, GetTraitHolders));
-    //Fake(Method(MockTarget, GetAllies));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Special));
     ON_CALL(MockMove, GetBasePower).WillByDefault(Return(65));
     ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("DARK")));
@@ -102,17 +90,12 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(100));
     ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{319, 0}));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("FIGHTING"), TEXT("STEEL")}));
-    //Fake(Method(MockUser, GetTraitHolders));
-    //Fake(Method(MockUser, GetAllies));
     ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{277, 0}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("WATER")}));
-    //Fake(Method(MockTarget, GetTraitHolders));
-    //Fake(Method(MockTarget, GetAllies));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Physical));
     ON_CALL(MockMove, GetBasePower).WillByDefault(Return(80));
     ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("NORMAL")));
@@ -197,12 +180,10 @@ bool TestCriticalHits::RunTest(const FString &Parameters) {
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
 
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(75));
     ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{123, -3}));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("ICE")}));
-    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{163, 4}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));

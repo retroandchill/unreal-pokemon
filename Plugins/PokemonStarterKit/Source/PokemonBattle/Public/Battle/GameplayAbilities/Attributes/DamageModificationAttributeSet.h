@@ -46,6 +46,5 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData FinalDamageMultiplier = 1.f;
-    
 
 };

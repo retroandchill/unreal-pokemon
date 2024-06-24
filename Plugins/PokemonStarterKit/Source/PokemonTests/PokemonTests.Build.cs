@@ -40,7 +40,7 @@ public class PokemonTests : ModuleRules
                 "GoogleTest", 
                 "GameplayAbilities", 
                 "GameplayTags", 
-                "GameplayTasks"
+                "GameplayTasks",
             }
         );
     }

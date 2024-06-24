@@ -2,11 +2,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "IndexedTableRow.h"
 #include "PaperSprite.h"
 
 #include "Type.generated.h"
 
+struct FGameplayTag;
 /**
  * Represents the types that belong to both individual species as well as the moves used by them
  */
@@ -66,6 +68,20 @@ struct POKEMONDATA_API FType : public FIndexedTableRow {
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
     TArray<FName> Tags;
+
+    /**
+     * The tag applied when using a move of this type.
+     */
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
+    FGameplayTag UseMoveTag;
+
+    /**
+     * The tag applied to any battler of this type.
+     */
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
+    FGameplayTag BattlerTag;
+
+    void OnDataTableChanged(const UDataTable *InDataTable, const FName InRowName) override;
 };
 
 /**

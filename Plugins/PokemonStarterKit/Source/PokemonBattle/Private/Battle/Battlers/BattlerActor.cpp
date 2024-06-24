@@ -75,7 +75,8 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
     if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID(), this); AbilityClass != nullptr) {
-        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
+        auto AbilityEffect = NewObject<UGameplayAbility>(this, AbilityClass);
+        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityEffect, 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
@@ -196,7 +197,7 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 }
 
 ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
-    return ranges::views::empty;
+    return ranges::views::empty<IIndividualTraitHolder *>;
 }
 
 void ABattlerActor::ShowSprite() const {

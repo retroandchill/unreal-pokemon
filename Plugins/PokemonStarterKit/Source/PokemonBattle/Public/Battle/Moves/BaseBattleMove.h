@@ -16,7 +16,7 @@ struct FModifiedDamage;
  * The base class used for all battle moves used by the game.
  */
 UCLASS(Blueprintable)
-class POKEMONBATTLE_API UBaseBattleMove : public UGameplayAbility, public IBattleMove {
+class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     GENERATED_BODY()
 
   public:
@@ -53,9 +53,6 @@ private:
      * @return Does the move result in a critical hit
      */
     bool IsCritical(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
-
-    void SendOutUsageEvents(UMoveEffectContext* MoveEffectContext);
-    void SendOutEventForBattler(const FGameplayTag& Tag, FGameplayEventData& EventData, const AActor* BattlerActor);
 
 protected:
     /**
