@@ -75,13 +75,30 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
     if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID(), this); AbilityClass != nullptr) {
-        auto AbilityEffect = NewObject<UGameplayAbility>(this, AbilityClass);
-        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityEffect, 1, INDEX_NONE, this));
+        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
 
     return this;
+}
+
+void ABattlerActor::BeginPlay() {
+    Super::BeginPlay();
+    BattlerAbilityComponent->InitAbilityActorInfo(this, this);
+    InnateAbilityHandles = RangeHelpers::CreateRange(InnateAbilities)
+        | ranges::views::transform([this](TSubclassOf<UGameplayAbility> Type) {
+            return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
+        })
+        | RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
+}
+
+void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    Super::EndPlay(EndPlayReason);
+    BattlerAbilityComponent->ClearAbility(Ability);
+    for (auto Innate : InnateAbilityHandles) {
+        BattlerAbilityComponent->ClearAbility(Innate);
+    }
 }
 
 FGuid ABattlerActor::GetInternalId() const {

@@ -9,6 +9,7 @@ void UBattlerAbilityComponent::BeginPlay() {
     Super::BeginPlay();
     if (DamageModificationAttributes == nullptr) {
         DamageModificationAttributes = NewObject<UDamageModificationAttributeSet>(this);
+        AddAttributeSetSubobject(DamageModificationAttributes.Get());
     }
 }
 

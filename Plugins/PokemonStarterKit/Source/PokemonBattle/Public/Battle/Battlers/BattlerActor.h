@@ -33,6 +33,12 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
                                           const TScriptInterface<IPokemon> &Pokemon,
                                           bool ShowImmediately = false) override;
+
+protected:
+    void BeginPlay() override;
+    void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    
+public:
     
     FGuid GetInternalId() const override;
 
@@ -156,6 +162,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
     TArray<TSubclassOf<UGameplayAbility>> InnateAbilities;
+
+    TArray<FGameplayAbilitySpecHandle> InnateAbilityHandles;
 
     /**
      * The ability that this battler has

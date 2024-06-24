@@ -3,6 +3,7 @@
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
 #include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Battle/Moves/BattleMove.h"
 
@@ -36,9 +37,10 @@ void FBattleActionUseMove::Execute() {
 }
 
 FActionResult FBattleActionUseMove::ComputeResult() {
+    const static auto UseMoveTag = FGameplayTag::RequestGameplayTag("Battle.UsingMove");
     FActionResult ActionResult;
-    
     auto &User = GetBattler();
+    User->GetAbilityComponent()->AddLooseGameplayTag(UseMoveTag);
     int32 TargetCount = Targets.Num();
     for (const auto &Target : Targets) {
         if (Target->IsFainted()) {
@@ -56,5 +58,6 @@ FActionResult FBattleActionUseMove::ComputeResult() {
         TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
     }
 
+    User->GetAbilityComponent()->RemoveLooseGameplayTag(UseMoveTag);
     return ActionResult;
 }

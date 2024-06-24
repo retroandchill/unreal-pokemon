@@ -283,7 +283,6 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
     ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
     ApplyCriticalHitModifier(Multipliers, Context.Effects);
     ApplyDamageSwing(Multipliers);
-    ApplyStabModifiers(Multipliers, Context.User, Context.Type);
     ApplyTypeMatchUps(Multipliers, Context.Effects);
     ApplyAdditionalDamageModifiers(Multipliers, Context);
 }
