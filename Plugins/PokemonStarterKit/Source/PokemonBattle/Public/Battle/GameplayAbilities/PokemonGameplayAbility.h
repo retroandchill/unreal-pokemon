@@ -12,8 +12,6 @@
 UCLASS(Abstract)
 class POKEMONBATTLE_API UPokemonGameplayAbility : public UGameplayAbility {
     GENERATED_BODY()
-
-public:
     
 
 };

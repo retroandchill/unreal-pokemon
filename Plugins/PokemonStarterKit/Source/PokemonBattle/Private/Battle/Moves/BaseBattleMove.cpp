@@ -19,6 +19,8 @@
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Battle/GameplayAbilities/Attributes/CriticalHitRateModificationAttributeSet.h"
+#include "Battle/Moves/MoveEvaluationHelpers.h"
 
 static int32 ModifiedParameter(int32 Base, float Multiplier) {
     return FMath::Max(FMath::RoundToInt32(static_cast<float>(Base) * Multiplier), 1);
@@ -78,8 +80,8 @@ static void SendOutDamageEvents(UMoveEffectContext *MoveEffectContext) {
     const static auto GlobalTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.Global");
     const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.User");
     const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.UserAlly");
-    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Damage.Target");
-    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Damage.TargetAlly");
+    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.Target");
+    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.TargetAlly");
     SendOutMoveEvents(MoveEffectContext, GlobalTag, UserTag, UserAllyTag, TargetTag, TargetAllyTag);
 }
 
@@ -163,8 +165,6 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
                                                               const TScriptInterface<IBattler> &Target,
                                                               int32 TargetCount) {
     auto UserAbilities = User->GetAbilityComponent();
-    auto DamageModificationAttributes = UserAbilities->GetDamageModificationAttributes();
-    DamageModificationAttributes->Reset();
     
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging};
@@ -180,6 +180,8 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
 
     auto MoveContext = NewObject<UMoveEffectContext>();
     MoveContext->SetDamageInfo(Context);
+    auto CriticalHitRateAttributes = NewObject<UCriticalHitRateModificationAttributeSet>(UserAbilities);
+    UserAbilities->AddSpawnedAttribute(CriticalHitRateAttributes);
     SendOutCriticalHitRateEvents(MoveContext);
     
     static const auto CriticalHitTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.CriticalHit");
@@ -197,21 +199,22 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
         Defense.Stages = FMath::Min(0, Defense.Stages);
     }
     
+    auto DamageModificationAttributes = NewObject<UDamageModificationAttributeSet>(UserAbilities);
+    UserAbilities->AddSpawnedAttribute(DamageModificationAttributes);
     SendOutDamageEvents(MoveContext);
-    
-    FDamageMultipliers Multipliers;
-        Multipliers.PowerMultiplier = DamageModificationAttributes->GetPowerMultiplier();
-        Multipliers.AttackMultiplier = DamageModificationAttributes->GetAttackMultiplier();
-        Multipliers.DefenseMultiplier = DamageModificationAttributes->GetDefenseMultiplier();
-        Multipliers.FinalDamageMultiplier = DamageModificationAttributes->GetFinalDamageMultiplier();
-    CalculateDamageMultipliers(Multipliers, *Context);
-    Context->BaseDamage = ModifiedParameter(Context->BaseDamage, Multipliers.PowerMultiplier);
-    int32 AttackValue = ModifiedParameter(Attack.GetModifiedValue(), Multipliers.AttackMultiplier);
-    int32 DefenseValue = ModifiedParameter(Defense.GetModifiedValue(), Multipliers.DefenseMultiplier);
+
+    FDamageMultiplierHandler MultiplierHandler(*DamageModificationAttributes);
+    const auto &[PowerMultiplier, AttackMultiplier, DefenseMultiplier, FinalDamageMultiplier] = *MultiplierHandler.Multipliers;
+    ApplyAdditionalDamageModifiers(MultiplierHandler, *Context);
+    Context->BaseDamage = ModifiedParameter(Context->BaseDamage, PowerMultiplier);
+    int32 AttackValue = ModifiedParameter(Attack.GetModifiedValue(), AttackMultiplier);
+    int32 DefenseValue = ModifiedParameter(Defense.GetModifiedValue(), DefenseMultiplier);
     int32 Damage = CalculateBaseDamage(Context->BaseDamage, User->GetPokemonLevel(), AttackValue, DefenseValue);
-    Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
+    Damage = ModifiedParameter(Damage, FinalDamageMultiplier);
     
     UserAbilities->RemoveLooseGameplayTag(CriticalHitTag);
+    UserAbilities->RemoveSpawnedAttribute(CriticalHitRateAttributes);
+    UserAbilities->RemoveSpawnedAttribute(DamageModificationAttributes);
     return {
         .Damage = Damage,
         .Effectiveness = Context->Effects.Effectiveness,
@@ -221,9 +224,12 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
 
 bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target) const {
-    int32 Stage = 0;
+    auto CriticalHitRateAttributes = CastChecked<UCriticalHitRateModificationAttributeSet>(User->GetAbilityComponent()
+            ->GetAttributeSet(UCriticalHitRateModificationAttributeSet::StaticClass()));
+    
     auto Override = GetCriticalOverride(User, Target);
-    Traits::ApplyIndividualCriticalHitRateModifications(Stage, Override, User, Target);
+    Override = UMoveEvaluationHelpers::ApplyCriticalHitOverride(Override,
+        UMoveEvaluationHelpers::AttributeValueToOverride(CriticalHitRateAttributes->GetCriticalHitRateOverride()));
     switch (Override) {
     case ECriticalOverride::Always:
         return true;
@@ -234,6 +240,7 @@ bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
         break;
     }
 
+    auto Stage = static_cast<int32>(CriticalHitRateAttributes->GetCriticalHitStages());
     if (HasHighCriticalHitRate()) {
         Stage += 1;
     }
@@ -309,49 +316,4 @@ FAttackAndDefense UBaseBattleMove::GetAttackAndDefense_Implementation(const TScr
 int32 UBaseBattleMove::CalculateBaseAccuracy_Implementation(int32 Accuracy, const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target) const {
     return Accuracy;
-}
-
-void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context) {
-    //Traits::ApplyIndividualDamageModifications(Multipliers, Context);
-    ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
-    ApplyCriticalHitModifier(Multipliers, Context.Effects);
-    ApplyDamageSwing(Multipliers);
-    //ApplyTypeMatchUps(Multipliers, Context.Effects);
-    ApplyAdditionalDamageModifiers(Multipliers, Context);
-}
-
-void UBaseBattleMove::ApplyCriticalHitModifier_Implementation(FDamageMultipliers &Multipliers,
-                                                              const FDamageEffects &Effects) {
-    if (Effects.bCriticalHit) {
-        Multipliers.FinalDamageMultiplier *= 1.5f;
-    }
-}
-
-void UBaseBattleMove::ApplyMultiTargetModifier_Implementation(FDamageMultipliers &Multipliers, int32 TargetCount) {
-    if (TargetCount > 1) {
-        Multipliers.FinalDamageMultiplier *= 0.75f;
-    }
-}
-
-void UBaseBattleMove::ApplyDamageSwing_Implementation(FDamageMultipliers &Multipliers) {
-    if (!IsConfusionAttack()) {
-        Multipliers.FinalDamageMultiplier *= static_cast<float>(FMath::RandRange(85, 100)) / 100.0f;
-    }
-}
-
-void UBaseBattleMove::ApplyStabModifiers_Implementation(FDamageMultipliers &Multipliers,
-                                                        const TScriptInterface<IBattler> &User, FName MoveType) {
-    if (User->GetTypes().Contains(MoveType)) {
-        // TODO: Account for adaptability/terrastilization
-        Multipliers.FinalDamageMultiplier *= 1.5f;
-    }
-}
-
-void UBaseBattleMove::ApplyTypeMatchUps_Implementation(FDamageMultipliers &Multipliers, const FDamageEffects &Effects) {
-    Multipliers.FinalDamageMultiplier *= Effects.TypeMatchUp;
-}
-
-void UBaseBattleMove::ApplyAdditionalDamageModifiers_Implementation(FDamageMultipliers &Multipliers,
-                                                                    const FMoveDamageInfo &Context) {
-    // Currently there are no additional modifiers that need to be applied
 }

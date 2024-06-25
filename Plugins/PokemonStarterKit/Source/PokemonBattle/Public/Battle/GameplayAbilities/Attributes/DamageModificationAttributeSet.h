@@ -24,11 +24,6 @@ public:
     ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, DefenseMultiplier)
     ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, FinalDamageMultiplier)
     ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, CriticalHitMultiplier)
-
-    /**
-     * Resets all values on this attribute set to their original values prior to damage calculation
-     */
-    void Reset();
     
 private:
     /**

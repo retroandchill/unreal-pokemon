@@ -21,7 +21,7 @@ bool FBattleActionBase::CanExecute() const {
 
 void FBattleActionBase::Execute() {
     Executing = true;
-    Result = AsyncThread(std::bind_front(&FBattleActionBase::ComputeResult, this));
+    Result = Async(EAsyncExecution::TaskGraphMainThread, std::bind_front(&FBattleActionBase::ComputeResult, this));
 }
 
 bool FBattleActionBase::IsExecuting() const {

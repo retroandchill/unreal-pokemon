@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Battlers/BattlerStats.h"
-#include "Battle/GameplayAbilities/Events/BattleEvent.h"
 #include "UObject/Interface.h"
 
 #include "BattleDamage.generated.h"
 
+class UDamageModificationAttributeSet;
 class IBattler;
 /**
  * The various damage effectivenesses that there are. Used to determine what message to show to the player.
@@ -117,7 +117,7 @@ struct FAttackAndDefense {
  * Represents the damage multipliers for moves
  */
 USTRUCT(BlueprintType)
-struct FDamageMultipliers : public FBattleEventValues {
+struct FDamageMultipliers {
     GENERATED_BODY()
 
     /**
@@ -156,6 +156,17 @@ struct FDamageMultipliers : public FBattleEventValues {
         FinalDamageMultiplier *= Other.FinalDamageMultiplier;
         return *this;
     }
+};
+
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FDamageMultiplierHandler {
+    GENERATED_BODY()
+
+    TSharedRef<FDamageMultipliers> Multipliers = MakeShared<FDamageMultipliers>();
+
+    FDamageMultiplierHandler();
+
+    explicit FDamageMultiplierHandler(const UDamageModificationAttributeSet& Attributes);
 };
 
 /**

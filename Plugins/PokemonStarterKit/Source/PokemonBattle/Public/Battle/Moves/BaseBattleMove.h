@@ -122,59 +122,14 @@ protected:
     UFUNCTION(BlueprintNativeEvent, Category = Damage)
     FAttackAndDefense GetAttackAndDefense(const TScriptInterface<IBattler> &User,
                                           const TScriptInterface<IBattler> &Target);
-
-  private:
-    void CalculateDamageMultipliers(FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context);
-
-  protected:
-    /**
-     * Apply the modifer for a multi-target move
-     * @param Multipliers The multipliers to apply the effect to
-     * @param Effects The pre-computed damage effects
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyCriticalHitModifier(UPARAM(Ref) FDamageMultipliers &Multipliers, const FDamageEffects &Effects);
-
-    /**
-     * Apply the modifer for a multi-target move
-     * @param Multipliers The multipliers to apply the effect to
-     * @param TargetCount The number of targets
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyMultiTargetModifier(UPARAM(Ref) FDamageMultipliers &Multipliers, int32 TargetCount);
-
-    /**
-     * Apply the damage swing the damage at the end of the calculation
-     * @param Multipliers The damage that has currently been calculated
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyDamageSwing(UPARAM(Ref) FDamageMultipliers &Multipliers);
-
-    /**
-     * Apply any modifiers related to Same-Type Attack Bonus (STAB)
-     * @param Multipliers The damage multipliers to apply
-     * @param User The user of the move
-     * @param MoveType The type of the move
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyStabModifiers(UPARAM(Ref) FDamageMultipliers &Multipliers, const TScriptInterface<IBattler> &User,
-                            FName MoveType);
-
-    /**
-     * Apply any modifiers related to Same-Type Attack Bonus (STAB)
-     * @param Multipliers The damage multipliers to apply
-     * @param Effects The pre-computed damage effects
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyTypeMatchUps(FDamageMultipliers &Multipliers, const FDamageEffects &Effects);
-
+    
     /**
      * Apply any additional damage modifiers that need to be applied
      * @param Multipliers multipliers to apply
      * @param Context The context in which this move is being used
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Damage)
-    void ApplyAdditionalDamageModifiers(UPARAM(Ref) FDamageMultipliers &Multipliers, const FMoveDamageInfo &Context);
+    UFUNCTION(BlueprintImplementableEvent, Category = Damage)
+    void ApplyAdditionalDamageModifiers(const FDamageMultiplierHandler &Multipliers, const FMoveDamageInfo &Context);
 
   private:
     /**
