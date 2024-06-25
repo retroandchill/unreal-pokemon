@@ -75,6 +75,32 @@ struct POKEMONBATTLE_API FBattleEventValues {
 };
 
 /**
+ * Attribute for handling a of a context struct
+ */
+USTRUCT(BlueprintType)
+struct FContextValue {
+    GENERATED_BODY()
+
+    /**
+     * The type of the attribute that is held by the owner.
+     */
+    UPROPERTY(Category = GameplayAttribute, VisibleAnywhere)
+    TObjectPtr<UScriptStruct> AttributeOwner;
+
+    /**
+     * The property that is pointed to in this event
+     */
+    UPROPERTY(Category = GameplayAttribute, EditAnywhere)
+    TFieldPath<FProperty> Attribute;
+
+    /**
+     * The name of the attribute as held by the game
+     */
+    UPROPERTY(Category = GameplayAttribute, EditAnywhere)
+    FString AttributeName;
+};
+
+/**
  * Wrapper around a property for an event property on 
  */
 USTRUCT(BlueprintType)
@@ -98,6 +124,8 @@ struct POKEMONBATTLE_API FEventValue {
      */
     UPROPERTY(Category = GameplayAttribute, EditAnywhere)
     FString AttributeName;
-
-    static TArray<FProperty*> GetAllViableProperties();
 };
+
+namespace Pokemon::Battle::Events {
+POKEMONBATTLE_API TArray<FProperty*> GetAllViableProperties(const UScriptStruct* StructType);
+}

@@ -7,10 +7,10 @@
 IMPLEMENT_POLYMORPHIC_STRUCT(FBattleEventContext)
 IMPLEMENT_POLYMORPHIC_STRUCT(FBattleEventValues)
 
-TArray<FProperty *> FEventValue::GetAllViableProperties() {
+TArray<FProperty*> Pokemon::Battle::Events::GetAllViableProperties(const UScriptStruct* StructType) {
     TArray<FProperty*> Ret;
     for (TObjectIterator<UScriptStruct> It; It; ++It) {
-        if (!It->IsChildOf(FBattleEventValues::StaticStruct())) {
+        if (!It->IsChildOf(StructType)) {
             continue;
         }
 

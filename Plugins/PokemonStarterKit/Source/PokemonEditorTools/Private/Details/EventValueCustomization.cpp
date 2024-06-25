@@ -25,7 +25,7 @@ void FEventValueCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Prope
     PropertyOptions.Empty();
     PropertyOptions.Add(MakeShareable(new FString("None")));
 
-    auto PropertiesToAdd = FEventValue::GetAllViableProperties();
+    auto PropertiesToAdd = Pokemon::Battle::Events::GetAllViableProperties(StructType);
 
     for ( auto* Property : PropertiesToAdd ) {
         PropertyOptions.Add(MakeShareable(new FString(FString::Printf(TEXT("%s.%s"), *Property->GetOwnerVariant().GetName(), *Property->GetName()))));
