@@ -26,7 +26,6 @@ public:
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Attributes")
     UDamageModificationAttributeSet* GetDamageModificationAttributes() const;
-    
 
 private:
     /**

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Battlers/BattlerStats.h"
+#include "Battle/GameplayAbilities/Events/BattleEvent.h"
 #include "UObject/Interface.h"
 
 #include "BattleDamage.generated.h"
@@ -116,7 +117,7 @@ struct FAttackAndDefense {
  * Represents the damage multipliers for moves
  */
 USTRUCT(BlueprintType)
-struct FDamageMultipliers {
+struct FDamageMultipliers : public FBattleEventValues {
     GENERATED_BODY()
 
     /**

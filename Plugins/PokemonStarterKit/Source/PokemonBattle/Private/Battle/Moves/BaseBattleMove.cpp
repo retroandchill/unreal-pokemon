@@ -30,13 +30,10 @@ static void SendOutEventForBattler(const FGameplayTag &Tag, FGameplayEventData &
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(BattlerActor, Tag, EventData);
 }
 
-static void SendOutUsageEvents(UMoveEffectContext *MoveEffectContext) {
+static void SendOutMoveEvents(UMoveEffectContext *MoveEffectContext, const FGameplayTag& GlobalTag,
+    const FGameplayTag& UserTag, const FGameplayTag& UserAllyTag, const FGameplayTag& TargetTag,
+    const FGameplayTag& TargetAllyTag) {
     using namespace ranges::views;
-    const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.User");
-    const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.UserAlly");
-    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Target");
-    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.TargetAlly");
-    
     auto &DamageInfo = MoveEffectContext->GetDamageInfo();
     auto UserActor = CastChecked<AActor>(DamageInfo.User.GetObject());
     FGameplayEventData EventData;
@@ -52,14 +49,38 @@ static void SendOutUsageEvents(UMoveEffectContext *MoveEffectContext) {
         return !Battler->IsFainted();
     };
     
+    SendOutEventForBattler(GlobalTag, EventData, UserActor);
     SendOutEventForBattler(UserTag, EventData, UserActor);
     for (AActor *Ally : DamageInfo.User->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
+    SendOutEventForBattler(GlobalTag, EventData, Ally);
         SendOutEventForBattler(UserAllyTag, EventData, Ally);
     }
-    SendOutEventForBattler(TargetTag, EventData, CastChecked<AActor>(DamageInfo.Target.GetObject()));
+
+    auto TargetActor = CastChecked<AActor>(DamageInfo.Target.GetObject());
+    SendOutEventForBattler(GlobalTag, EventData, TargetActor);
+    SendOutEventForBattler(TargetTag, EventData, TargetActor);
     for (AActor *Ally : DamageInfo.Target->GetAllies() | filter(AllyNotFainted) | transform(ConvertToActor)) {
+        SendOutEventForBattler(GlobalTag, EventData, Ally);
         SendOutEventForBattler(TargetAllyTag, EventData, Ally);
     }
+}
+
+static void SendOutCriticalHitRateEvents(UMoveEffectContext *MoveEffectContext) {
+    const static auto GlobalTag = FGameplayTag::RequestGameplayTag("Battle.Moves.CriticalHits.Scope.Global");
+    const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.CriticalHits.Scope.User");
+    const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.CriticalHits.Scope.UserAlly");
+    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.CriticalHits.Scope.Target");
+    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.CriticalHits.Scope.TargetAlly");
+    SendOutMoveEvents(MoveEffectContext, GlobalTag, UserTag, UserAllyTag, TargetTag, TargetAllyTag);
+}
+
+static void SendOutDamageEvents(UMoveEffectContext *MoveEffectContext) {
+    const static auto GlobalTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.Global");
+    const static auto UserTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.User");
+    const static auto UserAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.Scope.UserAlly");
+    const static auto TargetTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Damage.Target");
+    const static auto TargetAllyTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Scope.Damage.TargetAlly");
+    SendOutMoveEvents(MoveEffectContext, GlobalTag, UserTag, UserAllyTag, TargetTag, TargetAllyTag);
 }
 
 TScriptInterface<IBattleMove> UBaseBattleMove::Initialize(const TScriptInterface<IBattle> &Battle,
@@ -141,6 +162,10 @@ bool UBaseBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBat
 FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInterface<IBattler> &User,
                                                               const TScriptInterface<IBattler> &Target,
                                                               int32 TargetCount) {
+    auto UserAbilities = User->GetAbilityComponent();
+    auto DamageModificationAttributes = UserAbilities->GetDamageModificationAttributes();
+    DamageModificationAttributes->Reset();
+    
     if (WrappedMove->GetDamageCategory() == EMoveDamageCategory::Status) {
         return {.Damage = 0, .Effectiveness = EDamageEffectiveness::NonDamaging};
     }
@@ -155,9 +180,14 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
 
     auto MoveContext = NewObject<UMoveEffectContext>();
     MoveContext->SetDamageInfo(Context);
-    SendOutUsageEvents(MoveContext);
-
-    Context->Effects.bCriticalHit = IsCritical(User, Target);
+    SendOutCriticalHitRateEvents(MoveContext);
+    
+    static const auto CriticalHitTag = FGameplayTag::RequestGameplayTag("Battle.Moves.Damage.CriticalHit");
+    if (IsCritical(User, Target)) {
+        Context->Effects.bCriticalHit = true;
+        UserAbilities->AddLooseGameplayTag(CriticalHitTag);
+    }
+    
     Context->BaseDamage = CalculateBasePower(WrappedMove->GetBasePower(), User, Target);
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
@@ -166,24 +196,27 @@ FBattleDamage UBaseBattleMove::CalculateDamage_Implementation(const TScriptInter
         Attack.Stages = FMath::Max(0, Attack.Stages);
         Defense.Stages = FMath::Min(0, Defense.Stages);
     }
-
-    auto UserAbilities = User->GetAbilityComponent();
-    auto DamageModificationAttributes = UserAbilities->GetDamageModificationAttributes();
-    FDamageMultipliers Multipliers = {
-        .PowerMultiplier = DamageModificationAttributes->GetPowerMultiplier(),
-        .AttackMultiplier = DamageModificationAttributes->GetAttackMultiplier(),
-        .DefenseMultiplier = DamageModificationAttributes->GetDefenseMultiplier(),
-        .FinalDamageMultiplier = DamageModificationAttributes->GetFinalDamageMultiplier()
-    };
+    
+    SendOutDamageEvents(MoveContext);
+    
+    FDamageMultipliers Multipliers;
+        Multipliers.PowerMultiplier = DamageModificationAttributes->GetPowerMultiplier();
+        Multipliers.AttackMultiplier = DamageModificationAttributes->GetAttackMultiplier();
+        Multipliers.DefenseMultiplier = DamageModificationAttributes->GetDefenseMultiplier();
+        Multipliers.FinalDamageMultiplier = DamageModificationAttributes->GetFinalDamageMultiplier();
     CalculateDamageMultipliers(Multipliers, *Context);
     Context->BaseDamage = ModifiedParameter(Context->BaseDamage, Multipliers.PowerMultiplier);
     int32 AttackValue = ModifiedParameter(Attack.GetModifiedValue(), Multipliers.AttackMultiplier);
     int32 DefenseValue = ModifiedParameter(Defense.GetModifiedValue(), Multipliers.DefenseMultiplier);
     int32 Damage = CalculateBaseDamage(Context->BaseDamage, User->GetPokemonLevel(), AttackValue, DefenseValue);
     Damage = ModifiedParameter(Damage, Multipliers.FinalDamageMultiplier);
-
+    
+    UserAbilities->RemoveLooseGameplayTag(CriticalHitTag);
     return {
-        .Damage = Damage, .Effectiveness = Context->Effects.Effectiveness, .bCriticalHit = Context->Effects.bCriticalHit};
+        .Damage = Damage,
+        .Effectiveness = Context->Effects.Effectiveness,
+        .bCriticalHit = Context->Effects.bCriticalHit
+    };
 }
 
 bool UBaseBattleMove::IsCritical(const TScriptInterface<IBattler> &User,
@@ -283,7 +316,7 @@ void UBaseBattleMove::CalculateDamageMultipliers(FDamageMultipliers &Multipliers
     ApplyMultiTargetModifier(Multipliers, Context.TargetCount);
     ApplyCriticalHitModifier(Multipliers, Context.Effects);
     ApplyDamageSwing(Multipliers);
-    ApplyTypeMatchUps(Multipliers, Context.Effects);
+    //ApplyTypeMatchUps(Multipliers, Context.Effects);
     ApplyAdditionalDamageModifiers(Multipliers, Context);
 }
 

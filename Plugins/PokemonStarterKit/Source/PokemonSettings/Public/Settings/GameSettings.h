@@ -131,13 +131,22 @@ class POKEMONSETTINGS_API IGameSettings {
      * The information about how stat stages are altered
      * @return The information about how stat stages are altered
      */
+    UFUNCTION(BlueprintCallable, Category = Battle)
     virtual const TArray<FStatStageInfo> &GetStatStages() const = 0;
 
     /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      * @return The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */
+    UFUNCTION(BlueprintCallable, Category = Battle)
     virtual const TArray<int32> &GetCriticalHitRatios() const = 0;
+
+    /**
+     * The base damage multiplication from when a critical hit is scored.
+     * @return The base damage multiplication from when a critical hit is scored.
+     */
+    UFUNCTION(BlueprintCallable, Category = Battle)
+    virtual float GetCriticalHitDamageMod() const = 0;
 };
 
 /**

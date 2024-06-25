@@ -140,6 +140,12 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     TArray<int32> CriticalHitRatios = { 24, 8, 2, 1 };
 
     /**
+     * The base damage multiplication from when a critical hit is scored.
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))
+    float CriticalHitDamageMod = 1.5f;
+
+    /**
      * The set of data tables used by the game.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = "Data", meta = (AllowedClasses = "DataTable"))
