@@ -71,18 +71,19 @@ TArray<T> ToArray(RangeType &Range) {
  * @tparam T The type of data the array will hold
  */
 template <typename T>
-struct TToArray {};
-
-/**
- * Operator overload so that converting to an Unreal data type can be chained into the ranges stream operator
- * @tparam T The type of data the array will hold
- * @tparam RangeType The input range type
- * @param Range The range to process
- * @return The range values as an array
- */
-template <typename T, typename RangeType>
-TArray<T> operator|(RangeType Range, TToArray<T>) {
-    return ToArray<T, RangeType>(Range);
-}
+struct TToArray {
+    
+    /**
+     * Operator overload so that converting to an Unreal data type can be chained into the ranges stream operator
+     * @tparam T The type of data the array will hold
+     * @tparam RangeType The input range type
+     * @param Range The range to process
+     * @return The range values as an array
+     */
+    template <typename RangeType>
+    friend TArray<T> operator|(RangeType Range, TToArray) {
+        return ToArray<T, RangeType>(Range);
+    }
+};
 
 } // namespace RangeHelpers
