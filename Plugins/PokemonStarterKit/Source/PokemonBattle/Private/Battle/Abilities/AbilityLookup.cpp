@@ -6,7 +6,7 @@
 #include "Settings/BaseSettings.h"
 
 
-TSubclassOf<UGameplayAbility> Battle::Abilities::CreateAbilityEffect(FName ID, UObject *Outer) {
+TSubclassOf<UGameplayAbility> Battle::Abilities::CreateAbilityEffect(FName ID) {
     if (ID.IsNone()) {
         return nullptr;
     }
