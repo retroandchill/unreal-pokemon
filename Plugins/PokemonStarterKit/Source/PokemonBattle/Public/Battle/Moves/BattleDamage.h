@@ -8,6 +8,7 @@
 
 #include "BattleDamage.generated.h"
 
+class UDamageModificationAttributeSet;
 class IBattler;
 /**
  * The various damage effectivenesses that there are. Used to determine what message to show to the player.
@@ -157,11 +158,22 @@ struct FDamageMultipliers {
     }
 };
 
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FDamageMultiplierHandler {
+    GENERATED_BODY()
+
+    TSharedRef<FDamageMultipliers> Multipliers = MakeShared<FDamageMultipliers>();
+
+    FDamageMultiplierHandler();
+
+    explicit FDamageMultiplierHandler(const UDamageModificationAttributeSet& Attributes);
+};
+
 /**
  * Information about a move during damage modification
  */
 USTRUCT(BlueprintType)
-struct FMoveDamageInfo {
+struct POKEMONBATTLE_API FMoveDamageInfo {
     GENERATED_BODY()
 
     /**
@@ -192,13 +204,26 @@ struct FMoveDamageInfo {
      * The calculated base damage value of the move
      */
     UPROPERTY(BlueprintReadOnly, Category = Damage)
-    int32 BaseDamage;
+    int32 BaseDamage = 0;
 
     /**
      * Additional information about the damage that has been accounted for
      */
     UPROPERTY(BlueprintReadOnly, Category = Damage)
     FDamageEffects Effects;
+
+    /**
+     * Default constructor for the struct
+     */
+    FMoveDamageInfo();
+
+    /**
+     * Create a basic structure with the specified values
+     * @param User The user of the move
+     * @param Target The target of the move
+     * @param TargetCount The total number of available targets
+     */
+    FMoveDamageInfo(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount = 1);
 };
 
 UENUM()

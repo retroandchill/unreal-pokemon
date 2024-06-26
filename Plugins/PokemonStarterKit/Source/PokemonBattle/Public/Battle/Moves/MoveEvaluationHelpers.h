@@ -21,7 +21,15 @@ public:
      * @param New The new value to attempt to assign to
      * @return The result after evaluation
      */
-    UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
+    UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
     static ECriticalOverride ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New);
+    
+    UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
+    static float OverrideToAttributeValue(ECriticalOverride Override);
 
+    UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
+    static ECriticalOverride AttributeValueToOverride(float Value);
+
+    UFUNCTION(BlueprintPure, Category = "Moves|Damage Calculation")
+    static FDamageMultipliers& GetDamageMultipliers(const FDamageMultiplierHandler& Handler);
 };

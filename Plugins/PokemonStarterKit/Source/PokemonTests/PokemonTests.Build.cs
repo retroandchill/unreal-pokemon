@@ -37,7 +37,10 @@ public class PokemonTests : ModuleRules
                 "UMG",
                 "GridBased2D", 
                 "PokemonBattleUI",
-                "GoogleTest"
+                "GoogleTest", 
+                "GameplayAbilities", 
+                "GameplayTags", 
+                "GameplayTasks",
             }
         );
     }

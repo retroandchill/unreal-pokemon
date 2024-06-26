@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battler.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "GameFramework/Actor.h"
 
 #include "BattlerActor.generated.h"
 
+class UGameplayAbility;
+class UBattlerAbilityComponent;
 class IBattlerController;
 class IBattlerSprite;
 class IBattleSide;
@@ -22,9 +24,21 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     GENERATED_BODY()
 
   public:
+    /**
+     * Initialize the default object for the game
+     */
+    ABattlerActor();
+    
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
                                           const TScriptInterface<IPokemon> &Pokemon,
                                           bool ShowImmediately = false) override;
+
+protected:
+    void BeginPlay() override;
+    void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    
+public:
+    
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)
@@ -83,11 +97,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;
 
-    UFUNCTION(BlueprintPure, Category = Ability)
-    bool IsAbilityActive() const override;
-
-    UFUNCTION(BlueprintPure, Category = Ability)
-    UAbilityBattleEffect *GetAbility() const override;
+    UBattlerAbilityComponent* GetAbilityComponent() const override;
 
     UFUNCTION(BlueprintPure, Category = Items)
     bool IsHoldItemActive() const override;
@@ -101,7 +111,6 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void SelectActions() override;
     uint8 GetActionCount() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
-    ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const override;
 
     void ShowSprite() const override;
 
@@ -111,6 +120,12 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)
      */
     void SpawnSpriteActor(bool ShouldShow = false);
+
+    /**
+     * The ability component for the battler
+     */
+    UPROPERTY()
+    TObjectPtr<UBattlerAbilityComponent> BattlerAbilityComponent;
 
     /**
      * The internal ID of the battler
@@ -141,9 +156,17 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     TMap<FName, int32> StatStages;
 
     /**
+     * The list of gameplay abilities that should be activated immediately upon 
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
+    TArray<TSubclassOf<UGameplayAbility>> InnateAbilities;
+
+    TArray<FGameplayAbilitySpecHandle> InnateAbilityHandles;
+
+    /**
      * The ability that this battler has
      */
-    FManagedBattleAbility Ability;
+    FGameplayAbilitySpecHandle Ability;
 
     /**
      * The hold item that this battler has
