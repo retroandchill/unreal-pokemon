@@ -31,8 +31,8 @@ FText FBattleActionUseMove::GetActionMessage() const {
                          {GetBattler()->GetNickname(), IBattleMove::Execute_GetDisplayName(Move.GetObject())});
 }
 
-void FBattleActionUseMove::Execute() {
-    FBattleActionBase::Execute();
+void FBattleActionUseMove::Execute(bool bPerformAsync) {
+    FBattleActionBase::Execute(bPerformAsync);
     IBattleMove::Execute_PayCost(Move.GetObject());
 }
 

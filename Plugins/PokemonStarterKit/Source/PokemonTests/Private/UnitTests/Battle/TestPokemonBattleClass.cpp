@@ -101,7 +101,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     ON_CALL(*MockAction2, CanExecute).WillByDefault(Return(true));
     EXPECT_CALL(*MockAction2, IsExecuting).WillOnce(Return(false)).WillRepeatedly(Return(true));
     ON_CALL(*MockAction2, GetActionMessage).WillByDefault(Return(FText::GetEmpty()));
-    ON_CALL(*MockAction2, Execute).WillByDefault([&bActionMessagesDisplayed] { bActionMessagesDisplayed = true; });
+    ON_CALL(*MockAction2, Execute).WillByDefault([&bActionMessagesDisplayed](bool) { bActionMessagesDisplayed = true; });
 
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
     FActionResult Result;

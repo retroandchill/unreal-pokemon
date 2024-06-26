@@ -11,20 +11,12 @@
 #include "Battler.generated.h"
 
 class UBattlerAbilityComponent;
-class IIndividualTraitHolder;
-class UDamageModificationTrait;
-class ITraitHolder;
-class UAbilityBattleEffect;
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
 class IBattlerEffect;
 class IHoldItemBattleEffect;
-class IAbilityBattleEffect;
-class IMoveModifier;
 class IBattlerController;
-
-DECLARE_DELEGATE_OneParam(FProcessIndividualTrait, const IIndividualTraitHolder &)
 
     // This class does not need to be modified.
     UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
@@ -224,12 +216,6 @@ class POKEMONBATTLE_API IBattler {
      * @return A view of all allies
      */
     virtual ranges::any_view<TScriptInterface<IBattler>> GetAllies() const = 0;
-
-    /**
-     * Get all the battler's trait holders
-     * @return A view of all trait holders
-     */
-    virtual ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const = 0;
 
     /**
      * Show the battler's sprite in battle

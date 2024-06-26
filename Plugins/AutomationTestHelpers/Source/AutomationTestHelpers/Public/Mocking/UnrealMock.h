@@ -14,8 +14,20 @@ TScriptInterface<T> CreateMockedWrapper(T& Mock, UObject *Outer = GetTransientPa
     return Ret;
 }
 
+template <typename T>
+TScriptInterface<T> CreateMockedActor(T& Mock, UWorld *World) {
+    auto Actor = World->SpawnActor<AActor>();
+    TScriptInterface<T> Ret = Actor;
+    Ret.SetInterface(&Mock);
+    return Ret;
+}
+
 } // namespace UnrealMock
 
 #define CREATE_MOCK(InterfaceType, InterfaceName, MockType, MockName) \
     MockType MockName; \
     auto InterfaceName = UnrealMock::CreateMockedWrapper<InterfaceType>(MockName)
+
+#define CREATE_MOCK_ACTOR(World, InterfaceType, InterfaceName, MockType, MockName) \
+    MockType MockName; \
+    auto InterfaceName = UnrealMock::CreateMockedActor<InterfaceType>(MockName, World)

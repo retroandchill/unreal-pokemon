@@ -140,13 +140,6 @@ class POKEMONSETTINGS_API IGameSettings {
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
     virtual const TArray<int32> &GetCriticalHitRatios() const = 0;
-
-    /**
-     * The base damage multiplication from when a critical hit is scored.
-     * @return The base damage multiplication from when a critical hit is scored.
-     */
-    UFUNCTION(BlueprintCallable, Category = Battle)
-    virtual float GetCriticalHitDamageMod() const = 0;
 };
 
 /**

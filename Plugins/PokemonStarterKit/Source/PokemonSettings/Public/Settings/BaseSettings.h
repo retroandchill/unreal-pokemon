@@ -44,7 +44,6 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
 
     const TArray<FStatStageInfo> &GetStatStages() const final;
     const TArray<int32> &GetCriticalHitRatios() const final;
-    float GetCriticalHitDamageMod() const final;
 
     /**
      * Get the class that represents the item utilities

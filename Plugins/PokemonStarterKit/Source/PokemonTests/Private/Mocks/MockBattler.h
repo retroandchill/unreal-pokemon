@@ -37,6 +37,5 @@ public:
     MOCK_METHOD(void, SelectActions, (), (override));
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
-    MOCK_METHOD(ranges::any_view<IIndividualTraitHolder *>, GetTraitHolders, (), (const, override));
     MOCK_METHOD(void, ShowSprite, (), (const, override));
 };

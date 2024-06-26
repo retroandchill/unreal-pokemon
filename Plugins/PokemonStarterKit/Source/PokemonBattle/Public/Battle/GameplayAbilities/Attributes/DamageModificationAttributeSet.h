@@ -23,7 +23,6 @@ public:
     ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, AttackMultiplier)
     ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, DefenseMultiplier)
     ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, FinalDamageMultiplier)
-    ATTRIBUTE_ACCESSORS(UDamageModificationAttributeSet, CriticalHitMultiplier)
     
 private:
     /**
@@ -49,11 +48,5 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData FinalDamageMultiplier = 1.f;
-
-    /**
-     * The factor to multiply the damage by in the event of a critical hit
-     */
-    UPROPERTY()
-    FGameplayAttributeData CriticalHitMultiplier = Pokemon::FBaseSettings::Get().GetCriticalHitDamageMod();
 
 };

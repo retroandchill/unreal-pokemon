@@ -213,10 +213,6 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
                [this](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == InternalId; });
 }
 
-ranges::any_view<IIndividualTraitHolder *> ABattlerActor::GetTraitHolders() const {
-    return ranges::views::empty<IIndividualTraitHolder *>;
-}
-
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);

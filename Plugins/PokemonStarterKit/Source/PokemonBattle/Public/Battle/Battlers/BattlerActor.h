@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Abilities/AbilityBattleEffect.h"
 #include "Battler.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GameFramework/Actor.h"
@@ -112,7 +111,6 @@ public:
     void SelectActions() override;
     uint8 GetActionCount() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
-    ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const override;
 
     void ShowSprite() const override;
 

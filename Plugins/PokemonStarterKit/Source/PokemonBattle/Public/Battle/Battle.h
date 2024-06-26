@@ -9,7 +9,6 @@
 
 #include "Battle.generated.h"
 
-class ITraitHolder;
 class IBattleSide;
 class IBattleAction;
 class IAbilityBattleEffect;
@@ -76,12 +75,6 @@ class POKEMONBATTLE_API IBattle {
      * @return A view of all active battlers
      */
     virtual ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
-
-    /**
-     * Get the list of trait holders in the battle that are currently active
-     * @return A view of all trait holders in battle
-     */
-    virtual ranges::any_view<ITraitHolder *> GetTraitHolders() const = 0;
 
     /**
      * Initiate the process of selecting actions for the given battler.

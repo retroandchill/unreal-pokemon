@@ -84,10 +84,6 @@ const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
 }
 
-float Pokemon::FBaseSettings::GetCriticalHitDamageMod() const {
-    return KitSettings->CriticalHitDamageMod;
-}
-
 UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
     return KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
 }

@@ -31,8 +31,9 @@ class POKEMONBATTLE_API IBattleAction {
 
     /**
      * Execute the action in question
+     * @param bPerformAsync Should action computation be performed asynchronously
      */
-    virtual void Execute() = 0;
+    virtual void Execute(bool bPerformAsync = true) = 0;
 
     /**
      * Is this action currently executing?
