@@ -7,7 +7,6 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Traits/IndividualTraitHolder.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -130,16 +129,6 @@ ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const
 ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     return RangeHelpers::CreateRange(Sides) | ranges::views::transform(&GetBattlers) | ranges::views::join |
            ranges::views::filter(&IsNotFainted);
-}
-
-ranges::any_view<ITraitHolder *> APokemonBattle::GetTraitHolders() const {
-    return RangeHelpers::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
-               return RangeHelpers::CreateRange(Side->GetBattlers());
-           }) |
-           ranges::views::join | ranges::views::transform([](const TScriptInterface<IBattler> &Battler) {
-               return Battler->GetTraitHolders();
-           }) |
-           ranges::views::join;
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {

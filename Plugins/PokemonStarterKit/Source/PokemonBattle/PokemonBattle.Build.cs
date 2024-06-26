@@ -11,7 +11,11 @@ public class PokemonBattle : ModuleRules
             {
                 "Core",
                 "PokemonData",
-                "PokemonCore"
+                "PokemonCore", 
+                "GameplayAbilities", 
+                "GameplayTags", 
+                "GameplayTasks", 
+                "PokemonSettings"
             }
         );
 
@@ -23,8 +27,7 @@ public class PokemonBattle : ModuleRules
                 "Slate",
                 "SlateCore",
                 "UnrealInjector",
-                "PokemonAssets", 
-                "PokemonSettings"
+                "PokemonAssets"
             }
         );
     }

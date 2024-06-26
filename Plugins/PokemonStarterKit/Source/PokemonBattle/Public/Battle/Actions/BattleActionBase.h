@@ -20,7 +20,7 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     const TScriptInterface<IBattler> &GetBattler() const override;
     bool CanExecute() const override;
-    void Execute() override;
+    void Execute(bool bPerformAsync) override;
     bool IsExecuting() const override;
     const TFuture<FActionResult> &GetActionResult() const override;
 

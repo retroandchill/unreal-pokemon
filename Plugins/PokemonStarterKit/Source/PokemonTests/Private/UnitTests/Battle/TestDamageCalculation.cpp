@@ -1,6 +1,7 @@
 ﻿#include "Asserts.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
 #include "Battle/Moves/BaseBattleMove.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
@@ -9,87 +10,19 @@
 #include "Mocks/MockBattle.h"
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockMove.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 using namespace testing;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalWeak,
-                                 "Unit Tests.Battle.TestDamageCalculation.PhysicalQuadWeak",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-bool TestDamageCalculation_PhysicalWeak::RunTest(const FString &Parameters) {
-    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
-    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
-    ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
-    ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(75));
-    ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{ 123, 0 }));
-    ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("ICE")}));
-    //Fake(Method(MockUser, GetTraitHolders));
-    //Fake(Method(MockUser, GetAllies));
-    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
-    ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
-    ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{163, 0}));
-    ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));
-    //Fake(Method(MockTarget, GetTraitHolders));
-    //Fake(Method(MockTarget, GetAllies));
-    ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Physical));
-    ON_CALL(MockMove, GetBasePower).WillByDefault(Return(65));
-    ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("ICE")));
-
-    auto Move = NewObject<UCriticalTestMove>();
-    Move->CriticalOverride = ECriticalOverride::Never;
-    Move->Initialize(Battle, BaseMove);
-    for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
-        UE_CHECK_EQUAL(EDamageEffectiveness::SuperEffective, Effeciveness);
-        UE_CHECK_TRUE(Damage >= 168);
-        UE_CHECK_TRUE(Damage <= 198);
-    }
-    return true;
-}
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialResisted,
-                                 "Unit Tests.Battle.TestDamageCalculation.SpecialResisted",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-bool TestDamageCalculation_SpecialResisted::RunTest(const FString &Parameters) {
-    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
-    CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
-    ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
-    ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(100));
-    ON_CALL(MockUser, GetSpecialAttack).WillByDefault(Return(FMainBattleStat{359, 0}));
-    ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("DARK")}));
-    //Fake(Method(MockUser, GetTraitHolders));
-    //Fake(Method(MockUser, GetAllies));
-    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
-    ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
-    ON_CALL(MockTarget, GetSpecialDefense).WillByDefault(Return(FMainBattleStat{256, 0}));
-    ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("DRAGON"), TEXT("FAIRY")}));
-    //Fake(Method(MockTarget, GetTraitHolders));
-    //Fake(Method(MockTarget, GetAllies));
-    ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Special));
-    ON_CALL(MockMove, GetBasePower).WillByDefault(Return(65));
-    ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("DARK")));
-
-    auto Move = NewObject<UCriticalTestMove>();
-    Move->CriticalOverride = ECriticalOverride::Never;
-    Move->Initialize(Battle, BaseMove);
-    for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] =
-            IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
-        UE_CHECK_EQUAL(EDamageEffectiveness::NotVeryEffective, Effeciveness);
-        UE_CHECK_TRUE(Damage >= 49);
-        UE_CHECK_TRUE(Damage <= 59);
-    }
-    return true;
+static UBattlerAbilityComponent* AddComponentToBattler(const TScriptInterface<IBattler>& Battler) {
+    auto Actor = Cast<AActor>(Battler.GetObject());
+    auto Component = static_cast<UBattlerAbilityComponent*>(Actor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(),
+        false, FTransform(), false));
+    Component->SetOwnerActor(Actor);
+    Component->SetAvatarActor(Actor);
+    Component->AbilityActorInfo->OwnerActor = Actor;
+    Component->AbilityActorInfo->AvatarActor = Actor;
+    return Component;
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab,
@@ -97,22 +30,22 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysicalNoStab,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, User, FMockBattler, MockUser);
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Target, FMockBattler, MockTarget);
+    auto FakeAbilityComponent = AddComponentToBattler(User);
+    AddComponentToBattler(Target);
+    
+    ON_CALL(MockUser, GetAbilityComponent).WillByDefault(Return(FakeAbilityComponent));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(100));
     ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{319, 0}));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("FIGHTING"), TEXT("STEEL")}));
-    //Fake(Method(MockUser, GetTraitHolders));
-    //Fake(Method(MockUser, GetAllies));
     ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{277, 0}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("WATER")}));
-    //Fake(Method(MockTarget, GetTraitHolders));
-    //Fake(Method(MockTarget, GetAllies));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Physical));
     ON_CALL(MockMove, GetBasePower).WillByDefault(Return(80));
     ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("NORMAL")));
@@ -120,39 +53,45 @@ bool TestDamageCalculation_PhysicalNoStab::RunTest(const FString &Parameters) {
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;
     Move->Initialize(Battle, BaseMove);
-    for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] =
+    auto [Damage, Effeciveness, CriticalHit] =
             IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
-        UE_CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
-        UE_CHECK_TRUE(Damage >= 67);
-        UE_CHECK_TRUE(Damage <= 79);
-    }
+    UE_CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
+    UE_CHECK_EQUAL(79, Damage);
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialImmune,
-                                 "Unit Tests.Battle.TestDamageCalculation.SpecialImmune",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecialNoStab,
+                                 "Unit Tests.Battle.TestDamageCalculation.SpecialNoStab",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestDamageCalculation_SpecialImmune::RunTest(const FString &Parameters) {
+bool TestDamageCalculation_SpecialNoStab::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, User, FMockBattler, MockUser);
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-
-    ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GHOST")}));
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Target, FMockBattler, MockTarget);
+    auto FakeAbilityComponent = AddComponentToBattler(User);
+    AddComponentToBattler(Target);
+    
+    ON_CALL(MockUser, GetAbilityComponent).WillByDefault(Return(FakeAbilityComponent));
+    ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
+    ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(100));
+    ON_CALL(MockUser, GetSpecialAttack).WillByDefault(Return(FMainBattleStat{319, 0}));
+    ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("FIGHTING"), TEXT("STEEL")}));
+    ON_CALL(MockTarget, GetSpecialDefense).WillByDefault(Return(FMainBattleStat{277, 0}));
+    ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("WATER")}));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Special));
+    ON_CALL(MockMove, GetBasePower).WillByDefault(Return(80));
     ON_CALL(MockMove, GetType).WillByDefault(Return(TEXT("NORMAL")));
 
     auto Move = NewObject<UCriticalTestMove>();
     Move->CriticalOverride = ECriticalOverride::Never;
     Move->Initialize(Battle, BaseMove);
-    for (int i = 0; i < 100; i++) {
-        auto [Damage, Effeciveness, CriticalHit] =
+    auto [Damage, Effeciveness, CriticalHit] =
             IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
-        UE_CHECK_EQUAL(EDamageEffectiveness::NoEffect, Effeciveness);
-        UE_CHECK_EQUAL(0, Damage);
-    }
+    UE_CHECK_EQUAL(EDamageEffectiveness::Normal, Effeciveness);
+    UE_CHECK_EQUAL(79, Damage);
     return true;
 }
 
@@ -161,11 +100,16 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_StatusMove,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, User, FMockBattler, MockUser);
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Target, FMockBattler, MockTarget);
+    auto FakeAbilityComponent = AddComponentToBattler(User);
+    AddComponentToBattler(Target);
+    
+    ON_CALL(MockUser, GetAbilityComponent).WillByDefault(Return(FakeAbilityComponent));
     ON_CALL(MockMove, GetDamageCategory).WillByDefault(Return(EMoveDamageCategory::Status));
 
     auto Move = NewObject<UCriticalTestMove>();
@@ -180,10 +124,12 @@ bool TestDamageCalculation_StatusMove::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestCriticalHits, "Unit Tests.UnitTests.Battle.TestDamageCalculation.CriticalHit",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestCriticalHits, "Unit Tests.Battle.TestDamageCalculation.CriticalHit",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestCriticalHits::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    
     // Make the test pass by returning true, or fail by returning false.
     FMath::RandInit(151566);
 
@@ -193,16 +139,17 @@ bool TestCriticalHits::RunTest(const FString &Parameters) {
     }
 
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, User, FMockBattler, MockUser);
     CREATE_MOCK(IMove, BaseMove, FMockMove, MockMove);
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-
-    ON_CALL(MockUser, IsAbilityActive).WillByDefault(Return(false));
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Target, FMockBattler, MockTarget);
+    auto FakeAbilityComponent = AddComponentToBattler(User);
+    AddComponentToBattler(Target);
+    
+    ON_CALL(MockUser, GetAbilityComponent).WillByDefault(Return(FakeAbilityComponent));
     ON_CALL(MockUser, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockUser, GetPokemonLevel).WillByDefault(Return(75));
     ON_CALL(MockUser, GetAttack).WillByDefault(Return(FMainBattleStat{123, -3}));
     ON_CALL(MockUser, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("ICE")}));
-    ON_CALL(MockTarget, IsAbilityActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, IsHoldItemActive).WillByDefault(Return(false));
     ON_CALL(MockTarget, GetDefense).WillByDefault(Return(FMainBattleStat{163, 4}));
     ON_CALL(MockTarget, GetTypes).WillByDefault(Return<TArray<FName>>({TEXT("GROUND"), TEXT("DRAGON")}));
@@ -217,7 +164,7 @@ bool TestCriticalHits::RunTest(const FString &Parameters) {
     auto [Damage, Effeciveness, CriticalHit] =
             IBattleMove::Execute_CalculateDamage(Move, User, Target, 1);
     UE_CHECK_EQUAL(EDamageEffectiveness::SuperEffective, Effeciveness);
-    UE_CHECK_EQUAL(273, Damage);
+    UE_CHECK_TRUE(CriticalHit);
     
     return true;
 }

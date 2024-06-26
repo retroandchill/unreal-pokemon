@@ -1,7 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Actions/BattleActionUseMove.h"
+#include "Abilities/GameplayAbility.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Battle/Moves/BattleMove.h"
 
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
@@ -28,21 +31,22 @@ FText FBattleActionUseMove::GetActionMessage() const {
                          {GetBattler()->GetNickname(), IBattleMove::Execute_GetDisplayName(Move.GetObject())});
 }
 
-void FBattleActionUseMove::Execute() {
-    FBattleActionBase::Execute();
+void FBattleActionUseMove::Execute(bool bPerformAsync) {
+    FBattleActionBase::Execute(bPerformAsync);
     IBattleMove::Execute_PayCost(Move.GetObject());
 }
 
 FActionResult FBattleActionUseMove::ComputeResult() {
+    const static auto UseMoveTag = FGameplayTag::RequestGameplayTag("Battle.UsingMove");
     FActionResult ActionResult;
-
     auto &User = GetBattler();
+    User->GetAbilityComponent()->AddLooseGameplayTag(UseMoveTag);
     int32 TargetCount = Targets.Num();
     for (const auto &Target : Targets) {
         if (Target->IsFainted()) {
             continue;
         }
-
+        
         auto &TargetResult = ActionResult.TargetResults.Emplace_GetRef();
         TargetResult.Target = Target;
         TargetResult.bHit = IBattleMove::Execute_PerformHitCheck(Move.GetObject(), User, Target);
@@ -54,5 +58,6 @@ FActionResult FBattleActionUseMove::ComputeResult() {
         TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
     }
 
+    User->GetAbilityComponent()->RemoveLooseGameplayTag(UseMoveTag);
     return ActionResult;
 }

@@ -10,20 +10,13 @@
 
 #include "Battler.generated.h"
 
-class IIndividualTraitHolder;
-class UDamageModificationTrait;
-class ITraitHolder;
-class UAbilityBattleEffect;
+class UBattlerAbilityComponent;
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
 class IBattlerEffect;
 class IHoldItemBattleEffect;
-class IAbilityBattleEffect;
-class IMoveModifier;
 class IBattlerController;
-
-DECLARE_DELEGATE_OneParam(FProcessIndividualTrait, const IIndividualTraitHolder &)
 
     // This class does not need to be modified.
     UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
@@ -180,18 +173,10 @@ class POKEMONBATTLE_API IBattler {
     virtual TArray<FName> GetTypes() const = 0;
 
     /**
-     * Get if the target's current ability is active
-     * @return Is the target's ability active?
+     * Get the gameplay ability component used by this battler
+     * @return The held battler ability component
      */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual bool IsAbilityActive() const = 0;
-
-    /**
-     * Get the Pokémon's current ability effect
-     * @return The effect of the ability in question
-     */
-    UFUNCTION(BlueprintCallable, Category = Items)
-    virtual UAbilityBattleEffect *GetAbility() const = 0;
+    virtual UBattlerAbilityComponent* GetAbilityComponent() const = 0;
 
     /**
      * Get if the target's current hold item is active
@@ -231,12 +216,6 @@ class POKEMONBATTLE_API IBattler {
      * @return A view of all allies
      */
     virtual ranges::any_view<TScriptInterface<IBattler>> GetAllies() const = 0;
-
-    /**
-     * Get all the battler's trait holders
-     * @return A view of all trait holders
-     */
-    virtual ranges::any_view<IIndividualTraitHolder *> GetTraitHolders() const = 0;
 
     /**
      * Show the battler's sprite in battle

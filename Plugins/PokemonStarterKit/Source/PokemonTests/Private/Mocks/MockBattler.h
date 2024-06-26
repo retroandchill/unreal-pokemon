@@ -30,14 +30,12 @@ public:
     MOCK_METHOD(int32, GetStatStage, (FName Stat), (const, override));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
-    MOCK_METHOD(bool, IsAbilityActive, (), (const, override));
-    MOCK_METHOD(UAbilityBattleEffect *, GetAbility, (), (const, override));
+    MOCK_METHOD(UBattlerAbilityComponent*, GetAbilityComponent, (), (const, override));
     MOCK_METHOD(bool, IsHoldItemActive, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IHoldItemBattleEffect> &, GetHoldItem, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));
     MOCK_METHOD(void, SelectActions, (), (override));
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
-    MOCK_METHOD(ranges::any_view<IIndividualTraitHolder *>, GetTraitHolders, (), (const, override));
     MOCK_METHOD(void, ShowSprite, (), (const, override));
 };

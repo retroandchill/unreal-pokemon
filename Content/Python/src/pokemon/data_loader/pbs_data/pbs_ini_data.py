@@ -70,3 +70,6 @@ class PbsIniData(Generic[T], abc.ABC):
         :return: A JSON representation of the data
         """
         return json.dumps(self.__data)
+
+    def __iter__(self):
+        return self.__data.__iter__()

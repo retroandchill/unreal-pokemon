@@ -25,7 +25,9 @@ public class PokemonEditorTools : ModuleRules
                 "PokemonAssets",
                 "DeveloperSettings",
                 "EditorSubsystem",
-                "UnrealInjector"
+                "UnrealInjector", 
+                "PokemonBattle",
+                "InputCore"
             }
         );
     }

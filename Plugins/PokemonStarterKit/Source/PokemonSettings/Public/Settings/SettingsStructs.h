@@ -189,6 +189,12 @@ struct FDynamicAssetPaths {
     FDirectoryPath MoveFunctionCodePackageName;
 
     /**
+     * The name of the package that contains the ability effect Blueprints
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath AbilityBattleEffectPackageName;
+
+    /**
      * The prefix that is placed before a type icon when searching
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
@@ -217,6 +223,12 @@ struct FDynamicAssetPaths {
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString MoveFunctionCodePrefix;
+
+    /**
+     * The prefix that is placed before a move effect when looking it up
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString AbilityEffectPrefix;
 };
 
 /**

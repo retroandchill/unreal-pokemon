@@ -19,9 +19,16 @@ bool FBattleActionBase::CanExecute() const {
     return !Battler->IsFainted();
 }
 
-void FBattleActionBase::Execute() {
+void FBattleActionBase::Execute(bool bPerformAsync) {
     Executing = true;
-    Result = AsyncThread(std::bind_front(&FBattleActionBase::ComputeResult, this));
+    if (bPerformAsync) {
+        Result = Async(EAsyncExecution::TaskGraphMainThread, std::bind_front(&FBattleActionBase::ComputeResult, this));
+    } else {
+        TPromise<FActionResult> Promise;
+        Promise.EmplaceValue(ComputeResult());
+        Result = Promise.GetFuture();
+    }
+    
 }
 
 bool FBattleActionBase::IsExecuting() const {
