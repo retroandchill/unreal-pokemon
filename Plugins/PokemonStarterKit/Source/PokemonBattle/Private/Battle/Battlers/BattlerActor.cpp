@@ -18,6 +18,7 @@
 #include "RangeHelpers.h"
 #include "Battle/Abilities/AbilityLookup.h"
 #include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
@@ -51,13 +52,32 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     auto& DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
-    StatStages.Reset();
-    StatTable.ForEach([this](const FStat &Stat) {
-        if (Stat.Type == EPokemonStatType::Main)
-            return;
+    
+    TMap<UClass*, UAttributeSet*> Attributes;
+    for (auto AttributeSets = BattlerAbilityComponent->GetSpawnedAttributes(); auto Attribute : AttributeSets) {
+        Attributes.Add(Attribute->GetClass(), Attribute);
+    }
 
-        StatStages.Emplace(Stat.ID, 0);
+    StatStages.Reset();
+    auto StatBlock = WrappedPokemon->GetStatBlock();
+    StatTable.ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
+        if (Stat.BaseAttribute.IsValid()) {
+            auto AttributeSetClass = Stat.BaseAttribute.GetAttributeSetClass();
+            check(Attributes.Contains(AttributeSetClass))
+            auto AttributeData = Stat.BaseAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
+            auto StatValue = StatBlock->GetStat(Stat.ID);
+            AttributeData->SetBaseValue(static_cast<float>(StatValue->GetStatValue()));
+        }
+        
+        if (Stat.StagesAttribute.IsValid()) {
+            auto AttributeSetClass = Stat.StagesAttribute.GetAttributeSetClass();
+            check(Attributes.Contains(AttributeSetClass))
+            auto AttributeData = Stat.StagesAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
+            AttributeData->SetBaseValue(0.f);
+        }
     });
+
+    BattlerAbilityComponent->GetCoreAttributes()->InitHP(static_cast<float>(WrappedPokemon->GetCurrentHP()));
     
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
