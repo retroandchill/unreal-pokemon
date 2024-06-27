@@ -49,30 +49,34 @@ class POKEMONBATTLE_API IBattleMove {
      * Is the move usable
      * @return Is the move usable
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Usability)
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Usability)
     bool IsUsable() const;
 
     /**
      * Get the display name for the move
      * @return The name to show to the user
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     FText GetDisplayName() const;
 
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     int32 GetCurrentPP() const;
 
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     int32 GetMaxPP() const;
 
     /**
      * Get the display type for the move
      * @return The type to show to the user
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     FName GetDisplayType() const;
     
-    virtual EMoveDamageCategory GetCategory() const = 0;
+    /**
+     * Get the category of the move's damage capabilities
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
+    EMoveDamageCategory GetCategory() const;
 
     /**
      * Get the priority for the move

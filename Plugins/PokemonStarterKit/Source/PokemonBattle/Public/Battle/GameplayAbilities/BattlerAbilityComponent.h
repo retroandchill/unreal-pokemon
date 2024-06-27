@@ -26,4 +26,6 @@ private:
 
     UPROPERTY()
     TObjectPtr<UStatStagesAttributeSet> StatStagesAttributeSet;
+
+    
 };

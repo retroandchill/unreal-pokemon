@@ -61,7 +61,7 @@ template <typename T, typename RangeType>
 TArray<T> ToArray(RangeType &Range) {
     TArray<T> Ret;
     for (const auto &Value : Range) {
-        Ret.Add(Value);
+        Ret.Emplace(Value);
     }
     return Ret;
 }

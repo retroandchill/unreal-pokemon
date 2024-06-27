@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+class AMoveExecutor;
+
 namespace Battle::Moves {
 
 /**
