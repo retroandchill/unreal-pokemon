@@ -14,8 +14,8 @@ namespace RangeHelpers {
  * @param View The array view to create the view from.
  * @return The created view
  */
-template <typename T>
-auto CreateRange(const TArray<T> &View) {
+template <typename T, typename Alloc>
+auto CreateRange(const TArray<T, Alloc> &View) {
     ranges::span Span(View.GetData(), View.Num());
     return ranges::views::all(Span);
 }

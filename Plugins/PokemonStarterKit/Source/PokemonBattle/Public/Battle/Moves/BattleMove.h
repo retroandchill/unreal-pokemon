@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleDamage.h"
+#include "Moves/MoveDamageCategory.h"
 #include "UObject/Interface.h"
 
 #include "BattleMove.generated.h"
@@ -70,6 +71,8 @@ class POKEMONBATTLE_API IBattleMove {
      */
     UFUNCTION(BlueprintNativeEvent, Category = Display)
     FName GetDisplayType() const;
+    
+    virtual EMoveDamageCategory GetCategory() const = 0;
 
     /**
      * Get the priority for the move
@@ -82,7 +85,7 @@ class POKEMONBATTLE_API IBattleMove {
      * Pay the move's PP cost to use
      */
     UFUNCTION(BlueprintNativeEvent, Category = Execution)
-    void PayCost();
+    void PayCost(int32 Amount = 1);
 
     /**
      * Get the active battle that owns this one

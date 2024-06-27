@@ -125,8 +125,8 @@ int32 UBaseBattleMove::GetPriority_Implementation() const {
     return WrappedMove->GetMoveData().Priority;
 }
 
-void UBaseBattleMove::PayCost_Implementation() {
-    WrappedMove->DecrementPP();
+void UBaseBattleMove::PayCost_Implementation(int32 Amount) {
+    WrappedMove->DecrementPP(Amount);
 }
 
 TScriptInterface<IBattle> UBaseBattleMove::GetOwningBattle_Implementation() const {

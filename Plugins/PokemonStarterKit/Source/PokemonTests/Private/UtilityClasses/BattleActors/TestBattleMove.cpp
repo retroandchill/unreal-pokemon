@@ -23,8 +23,8 @@ FText UTestBattleMove::GetDisplayName_Implementation() const {
     return FText::FromStringView(TEXT("Test Move"));
 }
 
-void UTestBattleMove::PayCost_Implementation() {
-    CostsPaid += 1;
+void UTestBattleMove::PayCost_Implementation(int32 Amount) {
+    CostsPaid += Amount;
 }
 
 bool UTestBattleMove::PerformHitCheck_Implementation(const TScriptInterface<IBattler> &User,

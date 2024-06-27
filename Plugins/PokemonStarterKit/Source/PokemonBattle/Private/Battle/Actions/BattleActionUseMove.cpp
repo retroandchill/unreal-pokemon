@@ -33,7 +33,7 @@ FText FBattleActionUseMove::GetActionMessage() const {
 
 void FBattleActionUseMove::Execute(bool bPerformAsync) {
     FBattleActionBase::Execute(bPerformAsync);
-    IBattleMove::Execute_PayCost(Move.GetObject());
+    IBattleMove::Execute_PayCost(Move.GetObject(), 1);
 }
 
 FActionResult FBattleActionUseMove::ComputeResult() {

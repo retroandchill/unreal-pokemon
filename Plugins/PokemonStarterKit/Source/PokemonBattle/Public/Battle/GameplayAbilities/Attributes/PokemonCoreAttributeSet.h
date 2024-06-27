@@ -23,6 +23,7 @@ public:
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialAttack)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialDefense)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Speed)
+    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, MoveCost)
 
 private:
     UPROPERTY()
@@ -46,4 +47,9 @@ private:
     UPROPERTY()
     FGameplayAttributeData Speed;
 
+    /**
+     * The amount of PP that a move costs to use.
+     */
+    UPROPERTY()
+    FGameplayAttributeData MoveCost = 1.f;
 };

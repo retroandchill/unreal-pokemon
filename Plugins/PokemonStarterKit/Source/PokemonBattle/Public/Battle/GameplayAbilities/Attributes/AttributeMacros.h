@@ -18,3 +18,8 @@
     GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
     GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
     GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+
+namespace Pokemon::Battle::Attributes {
+constexpr float True = 1.f;
+constexpr float False = 0.f;
+}
