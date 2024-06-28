@@ -25,6 +25,9 @@ public:
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Speed)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, MoveCost)
 
+    void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
+    void PostAttributeChange(const FGameplayAttribute &Attribute, float OldValue, float NewValue) override;
+
 private:
     UPROPERTY()
     FGameplayAttributeData HP;
@@ -46,6 +49,12 @@ private:
 
     UPROPERTY()
     FGameplayAttributeData Speed;
+    
+    UPROPERTY()
+    FGameplayAttributeData Accuracy;
+
+    UPROPERTY()
+    FGameplayAttributeData Evasion;
 
     /**
      * The amount of PP that a move costs to use.

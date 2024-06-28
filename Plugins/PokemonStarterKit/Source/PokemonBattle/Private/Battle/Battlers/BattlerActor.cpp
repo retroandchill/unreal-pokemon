@@ -61,7 +61,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     StatStages.Reset();
     auto StatBlock = WrappedPokemon->GetStatBlock();
     StatTable.ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
-        if (Stat.BaseAttribute.IsValid()) {
+        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
             auto AttributeSetClass = Stat.BaseAttribute.GetAttributeSetClass();
             check(Attributes.Contains(AttributeSetClass))
             auto AttributeData = Stat.BaseAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
