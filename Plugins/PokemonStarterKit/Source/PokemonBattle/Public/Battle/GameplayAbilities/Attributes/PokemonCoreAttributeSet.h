@@ -7,7 +7,6 @@
 #include "AttributeSet.h"
 #include "PokemonCoreAttributeSet.generated.h"
 
-class IPokemon;
 /**
  * Represents the core attributes that are present on a Pokémon.
  */
@@ -23,6 +22,9 @@ public:
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialAttack)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialDefense)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Speed)
+
+    void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
+    void PostAttributeChange(const FGameplayAttribute &Attribute, float OldValue, float NewValue) override;
 
 private:
     UPROPERTY()
@@ -45,5 +47,11 @@ private:
 
     UPROPERTY()
     FGameplayAttributeData Speed;
+
+    UPROPERTY()
+    FGameplayAttributeData Accuracy;
+
+    UPROPERTY()
+    FGameplayAttributeData Evasion;
 
 };

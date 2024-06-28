@@ -23,6 +23,8 @@ public:
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, AccuracyStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, EvasionStages)
 
+    void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
+
 private:
     UPROPERTY()
     FGameplayAttributeData AttackStages;

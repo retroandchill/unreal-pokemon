@@ -19,6 +19,7 @@ protected:
 
 public:
     UPokemonCoreAttributeSet *GetCoreAttributes() const;
+    UStatStagesAttributeSet *GetStatStages() const;
 
 private:
     UPROPERTY()
