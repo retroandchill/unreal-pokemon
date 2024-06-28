@@ -74,6 +74,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
             check(Attributes.Contains(AttributeSetClass))
             auto AttributeData = Stat.StagesAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
             AttributeData->SetBaseValue(0.f);
+            StatStages.Add(Stat.ID, 0);
         }
     });
 

@@ -20,6 +20,7 @@ class POKEMONTESTS_API UTestBattleMove : public UObject, public IBattleMove {
 
     TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattle> &Battle,
                                              const TScriptInterface<IMove> &Move) override;
+    const FMoveTarget& GetTargetType() const override;
     bool IsConfusionAttack() const override;
     bool HasHighCriticalHitRate() const override;
     bool HasTag(FName Tag) const override;

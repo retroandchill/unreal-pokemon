@@ -121,6 +121,10 @@ FName UBaseBattleMove::GetDisplayType_Implementation() const {
     return WrappedMove->GetType();
 }
 
+const FMoveTarget & UBaseBattleMove::GetTargetType() const {
+    return WrappedMove->GetTargetType();
+}
+
 int32 UBaseBattleMove::GetPriority_Implementation() const {
     return WrappedMove->GetMoveData().Priority;
 }

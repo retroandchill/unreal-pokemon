@@ -53,7 +53,7 @@ void FPokemonDataModule::OnPostEngineInit() {
     DataRegistry.RegisterStruct<FEnvironment>();
     DataRegistry.RegisterStruct<FBattleWeather>();
     DataRegistry.RegisterStruct<FBattleTerrain>();
-    DataRegistry.RegisterStruct<FTarget>();
+    DataRegistry.RegisterStruct<FMoveTarget>();
 
     DataRegistry.RegisterStruct<FType>();
     DataRegistry.RegisterStruct<FAbility>();

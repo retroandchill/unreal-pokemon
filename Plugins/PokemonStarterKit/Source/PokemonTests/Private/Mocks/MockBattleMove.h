@@ -14,6 +14,7 @@ public:
     ~FMockBattleMove() override = default;
 
     MOCK_METHOD2(Initialize, TScriptInterface<IBattleMove>(const TScriptInterface<IBattle> &Battle, const TScriptInterface<IMove> &Move));
+    MOCK_METHOD(const FMoveTarget&, GetTargetType, (), (const, override));
     MOCK_METHOD(bool, IsConfusionAttack, (), (const, override));
     MOCK_METHOD(bool, HasHighCriticalHitRate, (), (const, override));
     MOCK_METHOD(bool, HasTag, (FName Tag), (const, override));

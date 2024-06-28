@@ -18,5 +18,6 @@ public:
     MOCK_METHOD(int32, GetCurrentPP, (), (const, override));
     MOCK_METHOD(int32, GetTotalPP, (), (const, override));
     MOCK_METHOD(FName, GetFunctionCode, (), (const, override));
+    MOCK_METHOD(const FMoveTarget &, GetTargetType, (), (const, override));
     MOCK_METHOD(void, DecrementPP, (int32 Amount), (override));
 };

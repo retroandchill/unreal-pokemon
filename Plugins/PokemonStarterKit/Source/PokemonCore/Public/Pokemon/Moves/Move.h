@@ -7,6 +7,7 @@
 
 #include "Move.generated.h"
 
+struct FMoveTarget;
 struct FMoveData;
 
 // This class does not need to be modified.
@@ -69,6 +70,8 @@ class POKEMONCORE_API IMove {
      * @return The string used to denote the move's effect 
      */
     virtual FName GetFunctionCode() const = 0;
+    
+    virtual const FMoveTarget &GetTargetType() const = 0;
 
     /**
      * Reduce the amount of PP a move has by the given amount

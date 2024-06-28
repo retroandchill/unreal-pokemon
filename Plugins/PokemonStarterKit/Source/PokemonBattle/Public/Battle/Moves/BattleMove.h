@@ -9,6 +9,7 @@
 
 #include "BattleMove.generated.h"
 
+struct FMoveTarget;
 struct FType;
 class IMove;
 class IBattler;
@@ -77,6 +78,11 @@ class POKEMONBATTLE_API IBattleMove {
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
     EMoveDamageCategory GetCategory() const;
+
+    /**
+     * Get the category of the move's damage capabilities
+     */
+    virtual const FMoveTarget& GetTargetType() const = 0;
 
     /**
      * Get the priority for the move

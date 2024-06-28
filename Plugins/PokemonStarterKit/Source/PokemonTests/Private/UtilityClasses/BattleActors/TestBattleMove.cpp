@@ -1,10 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "TestBattleMove.h"
+#include "Moves/Target.h"
 
 TScriptInterface<IBattleMove> UTestBattleMove::Initialize(const TScriptInterface<IBattle> &Battle,
                                                           const TScriptInterface<IMove> &Move) {
     return this;
+}
+
+const FMoveTarget & UTestBattleMove::GetTargetType() const {
+    static FMoveTarget Target;
+    return Target;
 }
 
 bool UTestBattleMove::IsConfusionAttack() const {
