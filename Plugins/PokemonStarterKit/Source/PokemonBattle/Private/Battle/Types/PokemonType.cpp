@@ -20,12 +20,12 @@ void UPokemonType::PostEditChangeProperty(FPropertyChangedEvent &PropertyChanged
     }
 
     auto &Lookup = Pokemon::Battle::Types::FLookup::GetInstance();
-    AttackingTag = Lookup.GetAttackingTag(SourceType, false);
+    AttackingTag = Lookup.GetAttackingTag(SourceType);
     if (AttackingTag.IsValid()) {
         AbilityTags.AddTag(AttackingTag);
     }
     
-    DefendingTag = Lookup.GetDefendingTag(SourceType, false);
+    DefendingTag = Lookup.GetDefendingTag(SourceType);
     if (DefendingTag.IsValid()) {
         AbilityTags.AddTag(DefendingTag);
     }

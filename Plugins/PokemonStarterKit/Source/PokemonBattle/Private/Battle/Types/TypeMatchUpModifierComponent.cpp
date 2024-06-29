@@ -16,7 +16,8 @@ bool UTypeMatchUpModifierComponent::OnActiveGameplayEffectAdded(FActiveGameplayE
     auto ASC = ActiveGEContainer.Owner;
     check(ASC != nullptr)
     FGameplayTagContainer TagFilter(Pokemon::Battle::Types::SingleTypeModifierEvent);
-    auto EventHandler = ASC->AddGameplayEventTagContainerDelegate(TagFilter, FEventDelegate::CreateUObject(this, &OnEventReceived));
+    auto EventHandler = ASC->AddGameplayEventTagContainerDelegate(TagFilter,
+        FEventDelegate::CreateUObject(this, &UTypeMatchUpModifierComponent::OnEventReceived));
     auto EventSet = ASC->GetActiveEffectEventSet(ActiveGE.Handle);
     check(EventSet != nullptr)
     EventSet->OnEffectRemoved.AddUObject(this, &UTypeMatchUpModifierComponent::OnGameplayEffectRemoved, ASC, MoveTemp(TagFilter), EventHandler);
@@ -24,11 +25,11 @@ bool UTypeMatchUpModifierComponent::OnActiveGameplayEffectAdded(FActiveGameplayE
 }
 
 void UTypeMatchUpModifierComponent::OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo& GERemovalInfo, UAbilitySystemComponent *ASC,
-    FGameplayTagContainer Container, FDelegateHandle DelegateHandle) {
+    FGameplayTagContainer Container, FDelegateHandle DelegateHandle) const {
     ASC->RemoveGameplayEventTagContainerDelegate(Container, DelegateHandle);
 }
 
-void UTypeMatchUpModifierComponent::OnEventReceived(FGameplayTag Tag, const FGameplayEventData *EventData) {
+void UTypeMatchUpModifierComponent::OnEventReceived(FGameplayTag Tag, const FGameplayEventData *EventData) const {
     using namespace Pokemon::TypeEffectiveness;
     auto Payload = CastChecked<USingleTypeModPayload>(EventData->OptionalObject);
     auto &[AttackingType, DefendingType, Multiplier] = Payload->GetData();
@@ -38,7 +39,7 @@ void UTypeMatchUpModifierComponent::OnEventReceived(FGameplayTag Tag, const FGam
         return;
     }
 
-    if (auto Effectiveness = static_cast<uint8>(GetEffectivenessFromMultiplier(Multiplier)); Effectiveness & ApplyFor == 0) {
+    if (auto Effectiveness = static_cast<uint8>(GetEffectivenessFromMultiplier(Multiplier)); (Effectiveness & ApplyFor) == 0) {
         return;
     }
 

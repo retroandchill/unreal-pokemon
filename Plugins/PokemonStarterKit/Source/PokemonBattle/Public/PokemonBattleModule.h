@@ -15,4 +15,5 @@ class FPokemonBattleModule : public IModuleInterface {
 
 private:
     void OnPostEngineInit();
+    
 };

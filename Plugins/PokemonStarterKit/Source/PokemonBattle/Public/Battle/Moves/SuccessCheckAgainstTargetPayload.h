@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
-#include "TargetSuccessCheckPayload.generated.h"
+#include "SuccessCheckAgainstTargetPayload.generated.h"
 
 class IBattleMove;
 
@@ -40,7 +40,7 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
     /**
      * Default constructor
      */
-    FTargetSuccessCheckPayload();
+    FTargetSuccessCheckPayload() = default;
 
     /**
      * Construct a new payload from the given data
@@ -56,7 +56,7 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
  * Payload object for performing a success check against a target
  */
 UCLASS()
-class POKEMONBATTLE_API UTargetSuccessCheckPayload : public UObject {
+class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject {
     GENERATED_BODY()
 
 public:
@@ -67,7 +67,7 @@ public:
      * @param bShowMessages Should messages be shown?
      * @return The created payload
      */
-    static UTargetSuccessCheckPayload* Create(const TScriptInterface<IBattleMove> &Move, const FRunningMessageSet& Messages, bool bShowMessages = true);
+    static USuccessCheckAgainstTargetPayload* Create(const TScriptInterface<IBattleMove> &Move, const FRunningMessageSet& Messages, bool bShowMessages = true);
     
     /**
      * Get the wrapped payload struct

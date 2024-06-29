@@ -15,7 +15,7 @@
 #include "Battle/Moves/MoveEvaluationHelpers.h"
 #include "Battle/Moves/MoveExecutor.h"
 #include "Battle/Moves/MoveTags.h"
-#include "Battle/Moves/TargetSuccessCheckPayload.h"
+#include "Battle/Moves/SuccessCheckAgainstTargetPayload.h"
 #include "Battle/Moves/UseMovePayload.h"
 #include "Battle/Types/SingleTypeModPayload.h"
 #include "Battle/Types/TypeMatchUpModPayload.h"
@@ -227,7 +227,7 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget(const TScriptInterface<I
         return false;
     }
 
-    auto Payload = UTargetSuccessCheckPayload::Create(BattleMove, PreDamageMessages);
+    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, PreDamageMessages);
     FGameplayEventData EventData = CurrentEventData;
     EventData.Target = CastChecked<AActor>(Target.GetObject());
     EventData.OptionalObject = Payload;

@@ -2,6 +2,8 @@
 
 
 #include "Battle/Types/TypeTags.h"
+#include "DataManager.h"
+#include "Battle/Type.h"
 
 namespace Pokemon::Battle::Types {
 
@@ -9,16 +11,25 @@ UE_DEFINE_GAMEPLAY_TAG(SingleTypeModifierEvent, "Battle.Damage.TypeMatchup.Singl
 UE_DEFINE_GAMEPLAY_TAG(FullTypeMatchUpEvent, "Battle.Damage.TypeMatchup.Full")
 UE_DEFINE_GAMEPLAY_TAG(BattlerTypes, "Battle.Battler.Types")
 
-static const FGameplayTag &GetOrLookupTag(TMap<FName, FGameplayTag>& Map, FName TagName, FStringView NameFormat, bool bErrorOnFail) {
-    if (auto Existing = Map.Find(TagName); Existing != nullptr) {
-        return *Existing;
-    }
-
-    auto TagString = FString::Format(NameFormat.GetData(), { TagName.ToString() });
-    return Map.Add(TagName, FGameplayTag::RequestGameplayTag(*TagString, bErrorOnFail));
+static void AddDynamicGameplayTag(TMap<FName, TSharedRef<FNativeGameplayTag>>& Tags, FStringView Format, FName ID) {
+    auto TagName = FString::Format(Format.GetData(), { ID.ToString() });
+    auto Tag = MakeShared<FNativeGameplayTag>(UE_PLUGIN_NAME, UE_MODULE_NAME, *TagName, TEXT(""), ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD);
+    Tags.Emplace(ID, MoveTemp(Tag));
 }
 
-FLookup::FLookup() = default;
+FLookup::FLookup() {
+    auto &DataManager = FDataManager::GetInstance();
+    auto& TypeTable = DataManager.GetDataTable<FType>();
+    TypeTable.ForEach([this](const FType& Type) {
+        // Add the tags for the types you attack from and defend from
+        if (!Type.IsPseudoType) {
+            AddDynamicGameplayTag(AttackingTags, AttackingTagsFormat, Type.ID);
+            AddDynamicGameplayTag(DefendingTags, DefendingTagsFormat, Type.ID);
+        }
+
+        AddDynamicGameplayTag(MoveTypeUserTags, MoveTypeUserFormat, Type.ID);
+    });
+}
 
 FLookup::~FLookup() = default;
 
@@ -27,27 +38,4 @@ FLookup & FLookup::GetInstance() {
     return Lookup;
 }
 
-const FGameplayTag &FLookup::GetAttackingTag(FName TagName, bool bErrorOnFail) {
-    return GetOrLookupTag(AttackingTags, TagName, AttackingTagsFormat, bErrorOnFail);
-}
-
-const FGameplayTag &FLookup::GetDefendingTag(FName TagName, bool bErrorOnFail) {
-    return GetOrLookupTag(DefendingTags, TagName, DefendingTagsFormat, bErrorOnFail);
-}
-
-const FGameplayTag &FLookup::GetMoveTypeUserTag(FName TagName, bool bErrorOnFail) {
-    return GetOrLookupTag(MoveTypeUserTags, TagName, MoveTypeUserFormat, bErrorOnFail);
-}
-
-const FGameplayTag & FLookup::GetWeaknessTag(FName TagName, bool bErrorOnFail) {
-    return GetOrLookupTag(WeaknessTags, TagName, WeakMatchUpFormat, bErrorOnFail);
-}
-
-const FGameplayTag & FLookup::GetResistanceTag(FName TagName, bool bErrorOnFail) {
-    return GetOrLookupTag(ResistanceTags, TagName, ResistMatchUpFormat, bErrorOnFail);
-}
-
-const FGameplayTag & FLookup::GetImmunityTag(FName TagName, bool bErrorOnFail) {
-    return GetOrLookupTag(ImmunityTags, TagName, ImmuneMatchUpFormat, bErrorOnFail);
-}
 }

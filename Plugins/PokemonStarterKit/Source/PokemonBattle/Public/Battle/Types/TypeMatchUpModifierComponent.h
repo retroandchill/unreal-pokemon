@@ -20,8 +20,8 @@ public:
     bool OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &ActiveGEContainer, FActiveGameplayEffect &ActiveGE) const override;
     
 private:
-    void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo& GERemovalInfo, UAbilitySystemComponent* ASC, FGameplayTagContainer Container, FDelegateHandle DelegateHandle);
-    void OnEventReceived(FGameplayTag Tag, const FGameplayEventData* EventData);
+    void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo& GERemovalInfo, UAbilitySystemComponent* ASC, FGameplayTagContainer Container, FDelegateHandle DelegateHandle) const;
+    void OnEventReceived(FGameplayTag Tag, const FGameplayEventData* EventData) const;
     
     /**
      * Optional filter of types this should be applied to. (If left empty apply to all types so long as the match up

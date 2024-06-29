@@ -86,7 +86,7 @@ protected:
     float CalculateSingleTypeMod(FName AttackingType, FName DefendingType, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
 
 private:
-    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet &PreDamageMessages)
+    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet &PreDamageMessages);
     
     bool HitCheck(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& FailureMessages);
 
