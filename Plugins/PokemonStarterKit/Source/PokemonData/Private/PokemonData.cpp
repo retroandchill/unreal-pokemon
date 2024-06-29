@@ -29,14 +29,6 @@
 constexpr auto GLoctextNamespace = "FPokemonDataModule";
 
 void FPokemonDataModule::StartupModule() {
-    FCoreDelegates::OnPostEngineInit.AddRaw(this, &FPokemonDataModule::OnPostEngineInit);
-}
-
-void FPokemonDataModule::ShutdownModule() {
-    // No custom shutdown needed
-}
-
-void FPokemonDataModule::OnPostEngineInit() {
     auto &DataRegistry = FDataRegistry::GetInstance();
     DataRegistry.RegisterStruct<FGrowthRateData>();
     DataRegistry.RegisterStruct<FGenderRatio>();
@@ -61,8 +53,10 @@ void FPokemonDataModule::OnPostEngineInit() {
     DataRegistry.RegisterStruct<FItem>();
     DataRegistry.RegisterStruct<FSpeciesData>();
     DataRegistry.RegisterStruct<FTrainerType>();
+}
 
-    Pokemon::FBaseSettings::Get().LoadDataTables();
+void FPokemonDataModule::ShutdownModule() {
+    // No custom shutdown needed
 }
 
 IMPLEMENT_MODULE(FPokemonDataModule, PokemonData)

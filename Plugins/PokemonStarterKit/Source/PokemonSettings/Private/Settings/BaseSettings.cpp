@@ -95,10 +95,6 @@ void Pokemon::FBaseSettings::ForEachDataTable(const TFunctionRef<void(UDataTable
     std::ranges::for_each(Range, Callback);
 }
 
-void Pokemon::FBaseSettings::LoadDataTables() const {
-    return Algo::ForEach(KitSettings->DataTables, [](const FSoftObjectPath &Path) { return Path.TryLoad(); });
-}
-
 const FPokemonSpriteSettings &Pokemon::FBaseSettings::GetPokemonSpriteSettings() const {
     return KitSettings->PokemonSprites;
 }

@@ -6,6 +6,7 @@
 #include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
 #include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Battle/Moves/BattleMove.h"
+#include "Battle/Moves/MoveTags.h"
 
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
                                            const TScriptInterface<IBattleMove> &MoveIn,
@@ -37,10 +38,9 @@ void FBattleActionUseMove::Execute(bool bPerformAsync) {
 }
 
 FActionResult FBattleActionUseMove::ComputeResult() {
-    const static auto UseMoveTag = FGameplayTag::RequestGameplayTag("Battle.UsingMove");
     FActionResult ActionResult;
     auto &User = GetBattler();
-    User->GetAbilityComponent()->AddLooseGameplayTag(UseMoveTag);
+    User->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::UsingMove);
     int32 TargetCount = Targets.Num();
     for (const auto &Target : Targets) {
         if (Target->IsFainted()) {
@@ -58,6 +58,6 @@ FActionResult FBattleActionUseMove::ComputeResult() {
         TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
     }
 
-    User->GetAbilityComponent()->RemoveLooseGameplayTag(UseMoveTag);
+    User->GetAbilityComponent()->RemoveLooseGameplayTag(Pokemon::Battle::Moves::UsingMove);
     return ActionResult;
 }

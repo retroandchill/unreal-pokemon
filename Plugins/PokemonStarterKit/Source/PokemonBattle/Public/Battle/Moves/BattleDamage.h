@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Type.h"
 #include "Battle/Battlers/BattlerStats.h"
 #include "UObject/Interface.h"
 
@@ -10,36 +11,6 @@
 
 class UDamageModificationAttributeSet;
 class IBattler;
-/**
- * The various damage effectivenesses that there are. Used to determine what message to show to the player.
- */
-UENUM(BlueprintType)
-enum class EDamageEffectiveness : uint8 {
-    /**
-     * Move deals no damage, but was also non-damaging to begin with
-     */
-    NonDamaging,
-
-    /**
-     * The move deals normal damage
-     */
-    Normal,
-
-    /**
-     * The move deals more damage.
-     */
-    SuperEffective,
-
-    /**
-     * The move deals less damage
-     */
-    NotVeryEffective,
-
-    /**
-     * The move deals no damage
-     */
-    NoEffect
-};
 
 /**
  * Struct that contains the results of the damage calculation
@@ -65,6 +36,13 @@ struct FBattleDamage {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
     bool bCriticalHit;
+};
+
+USTRUCT()
+struct POKEMONBATTLE_API FDamageResult {
+    GENERATED_BODY()
+
+    TSharedPtr<int32> Damage = MakeShared<int32>(0);
 };
 
 /**

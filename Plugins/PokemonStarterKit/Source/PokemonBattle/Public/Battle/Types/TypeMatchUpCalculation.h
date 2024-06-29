@@ -4,20 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameplayModMagnitudeCalculation.h"
-#include "TestModifierMagnitudeCalculation.generated.h"
+#include "TypeMatchUpCalculation.generated.h"
 
 /**
- * 
+ * This serves as the base match-up calculation for types
  */
 UCLASS()
-class POKEMONBATTLE_API UTestModifierMagnitudeCalculation : public UGameplayModMagnitudeCalculation {
+class POKEMONBATTLE_API UTypeMatchUpCalculation : public UGameplayModMagnitudeCalculation {
     GENERATED_BODY()
 
 public:
-    UTestModifierMagnitudeCalculation();
-    
     float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const override;
 
 private:
-    FGameplayEffectAttributeCaptureDefinition PowerMultiplierAttribute;
+    
+
 };

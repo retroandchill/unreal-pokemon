@@ -4,6 +4,7 @@
 #include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
 #include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/GameplayAbilities/Attributes/StatStagesAttributeSet.h"
+#include "Battle/GameplayAbilities/Attributes/TargetDamageStateAttributeSet.h"
 
 void UBattlerAbilityComponent::BeginPlay() {
     Super::BeginPlay();
@@ -13,6 +14,9 @@ void UBattlerAbilityComponent::BeginPlay() {
 
     StatStagesAttributeSet = NewObject<UStatStagesAttributeSet>(this);
     AddSpawnedAttribute(StatStagesAttributeSet);
+
+    TargetDamageStateAttributeSet = NewObject<UTargetDamageStateAttributeSet>(this);
+    AddSpawnedAttribute(TargetDamageStateAttributeSet);
 }
 
 UPokemonCoreAttributeSet *UBattlerAbilityComponent::GetCoreAttributes() const {
@@ -23,8 +27,16 @@ UStatStagesAttributeSet * UBattlerAbilityComponent::GetStatStages() const {
     return StatStagesAttributeSet;
 }
 
+UMoveUsageAttributeSet * UBattlerAbilityComponent::GetMoveUsageAttributeSet() const {
+    return MoveUsageAttributeSet;
+}
+
+UTargetDamageStateAttributeSet * UBattlerAbilityComponent::GetTargetDamageStateAttributeSet() const {
+    return TargetDamageStateAttributeSet;
+}
+
 FGameplayEffectSpecHandle UBattlerAbilityComponent::MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass,
-    float Level, FGameplayEffectContextHandle Context) const {
+                                                                     float Level, FGameplayEffectContextHandle Context) const {
     if (Context.IsValid() == false) {
         Context = MakeEffectContext();
     }

@@ -9,6 +9,8 @@
 #include "BattlerAbilityComponent.generated.h"
 
 
+class UMoveUsageAttributeSet;
+class UTargetDamageStateAttributeSet;
 class UStatStagesAttributeSet;
 class UPokemonCoreAttributeSet;
 
@@ -33,9 +35,11 @@ protected:
 public:
     UPokemonCoreAttributeSet *GetCoreAttributes() const;
     UStatStagesAttributeSet *GetStatStages() const;
+    UMoveUsageAttributeSet *GetMoveUsageAttributeSet() const;
+    UTargetDamageStateAttributeSet *GetTargetDamageStateAttributeSet() const;
 
     FGameplayEffectSpecHandle MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level, FGameplayEffectContextHandle Context) const override;
-
+    
 private:
     UGameplayEffect* CreateGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level, const FGameplayEffectContextHandle& Context) const;
     
@@ -44,6 +48,12 @@ private:
 
     UPROPERTY()
     TObjectPtr<UStatStagesAttributeSet> StatStagesAttributeSet;
+
+    UPROPERTY()
+    TObjectPtr<UMoveUsageAttributeSet> MoveUsageAttributeSet;
+    
+    UPROPERTY()
+    TObjectPtr<UTargetDamageStateAttributeSet> TargetDamageStateAttributeSet;
 
     TUniquePtr<FModifierInformation> ModifierInfo = MakeUnique<FModifierInformation>();
     

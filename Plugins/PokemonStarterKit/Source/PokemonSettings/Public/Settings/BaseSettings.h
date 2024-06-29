@@ -58,11 +58,6 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     void ForEachDataTable(const TFunctionRef<void(UDataTable *)> &Callback) const;
 
     /**
-     * Preemptively load all the data tables
-     */
-    void LoadDataTables() const;
-
-    /**
      * Settings for all Pokémon sprites.
      * @return Settings for all Pokémon sprites.
      */
