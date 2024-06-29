@@ -30,7 +30,10 @@ class POKEMONBATTLE_API UBaseBattleMove : public UObject, public IBattleMove {
     int32 GetCurrentPP_Implementation() const override;
     int32 GetMaxPP_Implementation() const override;
     FName GetDisplayType_Implementation() const override;
+    int32 GetBasePower() const override;
+    int32 GetAccuracy() const override;
     const FMoveTarget &GetTargetType() const override;
+    const TArray<FName> &GetTags() const override;
     int32 GetPriority_Implementation() const override;
     void PayCost_Implementation(int32 Amount) override;
     TScriptInterface<IBattle> GetOwningBattle_Implementation() const override;

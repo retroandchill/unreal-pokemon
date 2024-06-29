@@ -121,8 +121,20 @@ FName UBaseBattleMove::GetDisplayType_Implementation() const {
     return WrappedMove->GetType();
 }
 
+int32 UBaseBattleMove::GetBasePower() const {
+    return WrappedMove->GetBasePower();
+}
+
+int32 UBaseBattleMove::GetAccuracy() const {
+    return WrappedMove->GetAccuracy();
+}
+
 const FMoveTarget & UBaseBattleMove::GetTargetType() const {
     return WrappedMove->GetTargetType();
+}
+
+const TArray<FName> & UBaseBattleMove::GetTags() const {
+    return WrappedMove->GetTags();
 }
 
 int32 UBaseBattleMove::GetPriority_Implementation() const {

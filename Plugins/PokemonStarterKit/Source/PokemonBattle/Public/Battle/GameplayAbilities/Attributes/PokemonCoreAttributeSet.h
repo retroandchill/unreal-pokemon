@@ -23,6 +23,8 @@ public:
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialAttack)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialDefense)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Speed)
+    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Accuracy)
+    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Evasion)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, MoveCost)
 
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;

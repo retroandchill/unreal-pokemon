@@ -25,6 +25,19 @@ bool UTestBattleMove::HasTag(FName Tag) const {
     return false;
 }
 
+int32 UTestBattleMove::GetBasePower() const {
+    return 0;
+}
+
+int32 UTestBattleMove::GetAccuracy() const {
+    return 0;
+}
+
+const TArray<FName> & UTestBattleMove::GetTags() const {
+    static TArray<FName> Names;
+    return Names;
+}
+
 FText UTestBattleMove::GetDisplayName_Implementation() const {
     return FText::FromStringView(TEXT("Test Move"));
 }

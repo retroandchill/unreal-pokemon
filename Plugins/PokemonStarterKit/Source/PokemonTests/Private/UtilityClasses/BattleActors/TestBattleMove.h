@@ -24,6 +24,9 @@ class POKEMONTESTS_API UTestBattleMove : public UObject, public IBattleMove {
     bool IsConfusionAttack() const override;
     bool HasHighCriticalHitRate() const override;
     bool HasTag(FName Tag) const override;
+    virtual int32 GetBasePower() const override;
+    virtual int32 GetAccuracy() const override;
+    virtual const TArray<FName> & GetTags() const override;
 
   protected:
     FText GetDisplayName_Implementation() const override;

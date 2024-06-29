@@ -79,6 +79,10 @@ class POKEMONBATTLE_API IBattleMove {
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Context)
     EMoveDamageCategory GetCategory() const;
 
+    virtual int32 GetBasePower() const = 0;
+
+    virtual int32 GetAccuracy() const = 0;
+
     /**
      * Get the category of the move's damage capabilities
      */
@@ -90,6 +94,11 @@ class POKEMONBATTLE_API IBattleMove {
      */
     UFUNCTION(BlueprintNativeEvent, Category = Execution)
     int32 GetPriority() const;
+
+    /**
+     * Get the category of the move's damage capabilities
+     */
+    virtual const TArray<FName>& GetTags() const = 0;
 
     /**
      * Pay the move's PP cost to use

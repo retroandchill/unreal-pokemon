@@ -70,8 +70,18 @@ class POKEMONCORE_API IMove {
      * @return The string used to denote the move's effect 
      */
     virtual FName GetFunctionCode() const = 0;
-    
+
+    /**
+     * Get the target type of the move
+     * @return The target of the move in question (None = the move calculates the target)
+     */
     virtual const FMoveTarget &GetTargetType() const = 0;
+
+    /**
+     * Get the tags of the move
+     * @return Words/phrases that can be used to group certain kinds of moves.
+     */
+    virtual const TArray<FName>& GetTags() const = 0;
 
     /**
      * Reduce the amount of PP a move has by the given amount

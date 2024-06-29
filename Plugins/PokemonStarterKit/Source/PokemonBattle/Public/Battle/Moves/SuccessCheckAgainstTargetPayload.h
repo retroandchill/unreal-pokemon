@@ -57,6 +57,8 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
     /**
      * Construct a new payload from the given data
      * @param Move The invoking move
+     * @param User The user of the move
+     * @param Target The target of the move
      * @param Messages Any messages to be down after processing.
      * @param bShowMessages Should messages be shown?
      */
@@ -74,7 +76,9 @@ class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject {
 public:
     /**
      * Create a new payload with the provided event data
-    ** @param Move The invoking move
+     * @param Move The invoking move
+     * @param User The user of the move
+     * @param Target The target of the move
      * @param Messages Any messages to be down after processing.
      * @param bShowMessages Should messages be shown?
      * @return The created payload

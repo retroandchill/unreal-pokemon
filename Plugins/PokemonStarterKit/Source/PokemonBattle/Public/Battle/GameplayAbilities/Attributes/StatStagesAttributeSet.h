@@ -22,6 +22,7 @@ public:
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, SpeedStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, AccuracyStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, EvasionStages)
+    ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, CriticalHitStages)
 
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
 
@@ -47,4 +48,9 @@ private:
     UPROPERTY()
     FGameplayAttributeData EvasionStages;
 
+    /**
+     * The number of stages the critical hit rate has been raised by
+     */
+    UPROPERTY()
+    FGameplayAttributeData CriticalHitStages = 0.f;
 };

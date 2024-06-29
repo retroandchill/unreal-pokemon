@@ -1,4 +1,5 @@
 ﻿#include "PokemonBattleModule.h"
+#include "Battle/Moves/MoveTags.h"
 #include "Battle/Types/TypeTags.h"
 
 DEFINE_LOG_CATEGORY(LogBattle)
@@ -13,6 +14,7 @@ void FPokemonBattleModule::ShutdownModule() {
 
 void FPokemonBattleModule::OnPostEngineInit() {
     // We basically need to force the singleton to construct itself
+    Pokemon::Battle::Moves::FLookup::GetInstance();
     Pokemon::Battle::Types::FLookup::GetInstance();
 }
 

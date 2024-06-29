@@ -26,6 +26,26 @@ struct POKEMONBATTLE_API FRunningMessageSet {
 };
 
 /**
+ * The structure for the attack and defense stats used in damage calculation
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FAttackAndDefenseStats {
+    GENERATED_BODY()
+
+    /**
+     * The attack stat to use (generally from the user)
+     */
+    UPROPERTY(BlueprintReadOnly, Category = "Moves|Damage")
+    int32 Attack;
+
+    /**
+     * The defense stat to use (generally from the target)
+     */
+    UPROPERTY(BlueprintReadOnly, Category = "Moves|Damage")
+    int32 Defense;
+};
+
+/**
  * The gameplay ability for using a move.
  */
 UCLASS()
@@ -43,7 +63,7 @@ public:
     void ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
 
     void CommitExecute(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
-
+    void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
     
     
 private:
@@ -63,7 +83,16 @@ protected:
     bool WorksWithNoTargets();
 
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
+    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet &PreDamageMessages);
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
     bool FailsAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& FailureMessages) const;
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
+    bool HitCheck(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
+    int32 CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
     
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
     void DisplayMessagesAndAnimation(const TScriptInterface<IBattler> &User,
@@ -77,6 +106,15 @@ protected:
                                       int32 TargetCount, const FRunningMessageSet &PreDamageMessages);
 
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
+    int32 CalculateBasePower(int32 Power, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
+    FAttackAndDefenseStats GetAttackAndDefense(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
+    bool IsCritical(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
     ECriticalOverride GetCriticalOverride(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
     
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
@@ -86,17 +124,13 @@ protected:
     float CalculateSingleTypeMod(FName AttackingType, FName DefendingType, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
 
 private:
-    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet &PreDamageMessages);
-    
-    bool HitCheck(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& FailureMessages);
-
-    bool IsCritical(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
-    
     UPROPERTY(BlueprintGetter = GetMove, Category = Context)
     TScriptInterface<IBattleMove> BattleMove;
 
     UPROPERTY()
     TSubclassOf<UGameplayEffect> DamageEffect;
+
+    FGameplayTagContainer AddedTags;
 
     bool bSucceededAgainstTarget = false;
 
