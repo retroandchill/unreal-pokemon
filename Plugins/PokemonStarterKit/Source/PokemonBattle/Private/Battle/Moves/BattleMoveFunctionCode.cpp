@@ -6,6 +6,7 @@
 #include "PokemonBattleModule.h"
 #include "RangeHelpers.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Events/TargetedEvents.h"
 #include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
 #include "Battle/GameplayAbilities/Attributes/AccuracyModifiersAttributeSet.h"
 #include "Battle/GameplayAbilities/Attributes/MoveUsageAttributeSet.h"
@@ -194,11 +195,8 @@ float UBattleMoveFunctionCode::CalculateTypeMatchUp_Implementation(FName MoveTyp
         Effectiveness *= CalculateSingleTypeMod(MoveType, DefendingType, User, Target);
     }
 
-    auto Payload = UTypeMatchUpModPayload::Create(MoveType, Effectiveness);
-    FGameplayEventData EventData = CurrentEventData;
-    EventData.Target = CastChecked<AActor>(Target.GetObject());
-    EventData.OptionalObject = Payload;
-    SendGameplayEvent(Pokemon::Battle::Types::FullTypeMatchUpEvent, EventData);
+    auto Payload = UTypeMatchUpModPayload::Create(User, Target, MoveType, Effectiveness);
+    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Types::FullTypeMatchUpEvents);
     return Payload->GetData().Multiplier;
 }
 
@@ -206,11 +204,8 @@ float UBattleMoveFunctionCode::CalculateSingleTypeMod_Implementation(FName Attac
                                                                      const TScriptInterface<IBattler> &User,
                                                                      const TScriptInterface<IBattler> &Target) {
     float Effectiveness = UTypeHelper::GetTypeEffectiveness(AttackingType, DefendingType);
-    auto Payload = USingleTypeModPayload::Create(AttackingType, DefendingType, Effectiveness);
-    FGameplayEventData EventData = CurrentEventData;
-    EventData.Target = CastChecked<AActor>(Target.GetObject());
-    EventData.OptionalObject = Payload;
-    SendGameplayEvent(Pokemon::Battle::Types::SingleTypeModifierEvent, EventData);
+    auto Payload = USingleTypeModPayload::Create(User, Target, AttackingType, DefendingType, Effectiveness);
+    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Types::SingleTypeModifierEvents);
     return Payload->GetData().Multiplier;
 }
 
@@ -227,11 +222,8 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget(const TScriptInterface<I
         return false;
     }
 
-    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, PreDamageMessages);
-    FGameplayEventData EventData = CurrentEventData;
-    EventData.Target = CastChecked<AActor>(Target.GetObject());
-    EventData.OptionalObject = Payload;
-    SendGameplayEvent(Pokemon::Battle::Moves::SuccessCheckAgainstTarget, EventData);
+    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target, PreDamageMessages);
+    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::SuccessCheckAgainstTarget);
     return true;
 }
 

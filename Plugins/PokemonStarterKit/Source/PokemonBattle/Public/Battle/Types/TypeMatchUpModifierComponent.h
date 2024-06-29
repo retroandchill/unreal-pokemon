@@ -6,6 +6,7 @@
 #include "GameplayEffect.h"
 #include "GameplayEffectComponent.h"
 #include "GameplayEffectTypes.h"
+#include "Battle/Events/TargetedEvents.h"
 
 #include "TypeMatchUpModifierComponent.generated.h"
 
@@ -36,6 +37,12 @@ private:
      */
     UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.TypeHelper.GetTypeNames"))
     TSet<FName> DefendingTypes;
+
+    /**
+     * The scope(s) that must be accounted for. Must contain at least one element or this will never trigger.
+     */
+    UPROPERTY(EditAnywhere)
+    TArray<ETargetedEventScope> Scope;
     
     /**
      * What effectiveness(es) should this be applied to?

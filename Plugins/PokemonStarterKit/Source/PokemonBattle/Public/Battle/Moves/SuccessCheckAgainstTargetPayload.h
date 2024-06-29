@@ -20,6 +20,18 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
     TScriptInterface<IBattleMove> Move;
 
     /**
+     * The user of the move
+     */
+    UPROPERTY(BlueprintReadOnly, Category = TypeEffectiveness)
+    TScriptInterface<IBattler> User;
+
+    /**
+     * The target of the move
+     */
+    UPROPERTY(BlueprintReadOnly, Category = TypeEffectiveness)
+    TScriptInterface<IBattler> Target;
+
+    /**
      * Any messages to be down after processing.
      */
     UPROPERTY(BlueprintReadWrite, Category = GameplayEvents)
@@ -48,7 +60,7 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
      * @param Messages Any messages to be down after processing.
      * @param bShowMessages Should messages be shown?
      */
-    FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move, const FRunningMessageSet& Messages, bool bShowMessages = true);
+    FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,  const FRunningMessageSet& Messages, bool bShowMessages = true);
     
 };
 
@@ -67,14 +79,21 @@ public:
      * @param bShowMessages Should messages be shown?
      * @return The created payload
      */
-    static USuccessCheckAgainstTargetPayload* Create(const TScriptInterface<IBattleMove> &Move, const FRunningMessageSet& Messages, bool bShowMessages = true);
+    static USuccessCheckAgainstTargetPayload* Create(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const FRunningMessageSet& Messages, bool bShowMessages = true);
     
     /**
      * Get the wrapped payload struct
      * @return The wrapped struct for the payload
      */
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
-    FTargetSuccessCheckPayload& GetData() const;
+    const FTargetSuccessCheckPayload &GetData() const;
+
+    /**
+     * Set the new success state of the move to the given value
+     * @param bSuccess The new success state of the move
+     */
+    UFUNCTION(BlueprintCallable, Category = GameplayEvents)
+    void SetSuccess(bool bSuccess) const;
 
 private:
     /**

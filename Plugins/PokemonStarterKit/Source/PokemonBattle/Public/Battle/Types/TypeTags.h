@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
+#include "Battle/Events/TargetedEvents.h"
 
 namespace Pokemon::Battle::Types {
 
-POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(SingleTypeModifierEvent)
-POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FullTypeMatchUpEvent)
+POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(SingleTypeModifierEvents)
+POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(FullTypeMatchUpEvents)
 POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(BattlerTypes)
 
 constexpr auto AttackingTagsFormat = TEXT("Battle.Battler.Types.Attacking.{0}");

@@ -4,18 +4,27 @@
 #include "Battle/Types/TypeMatchUpModifierComponent.h"
 #include "AbilitySystemComponent.h"
 #include "PokemonBattleModule.h"
+#include "RangeHelpers.h"
 #include "Battle/Type.h"
-#include "Battle/GameplayAbilities/Attributes/MoveUsageAttributeSet.h"
 #include "Battle/Types/SingleTypeModPayload.h"
 #include "Battle/Types/TypeTags.h"
+#include <range/v3/view/transform.hpp>
 
 using FEventDelegate = FGameplayEventTagMulticastDelegate::FDelegate;
+
+static FGameplayTag GetTagForScope(ETargetedEventScope Scope) {
+    using namespace Pokemon::Battle::Types;
+    return SingleTypeModifierEvents.GetTagForScope(Scope);
+}
 
 bool UTypeMatchUpModifierComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &ActiveGEContainer,
                                                                 FActiveGameplayEffect &ActiveGE) const {
     auto ASC = ActiveGEContainer.Owner;
     check(ASC != nullptr)
-    FGameplayTagContainer TagFilter(Pokemon::Battle::Types::SingleTypeModifierEvent);
+    auto GameplayTags = RangeHelpers::CreateRange(Scope)
+        | ranges::views::transform(&GetTagForScope)
+        | RangeHelpers::TToArray<FGameplayTag>();
+    auto TagFilter = FGameplayTagContainer::CreateFromArray(GameplayTags);
     auto EventHandler = ASC->AddGameplayEventTagContainerDelegate(TagFilter,
         FEventDelegate::CreateUObject(this, &UTypeMatchUpModifierComponent::OnEventReceived));
     auto EventSet = ASC->GetActiveEffectEventSet(ActiveGE.Handle);
@@ -32,32 +41,32 @@ void UTypeMatchUpModifierComponent::OnGameplayEffectRemoved(const FGameplayEffec
 void UTypeMatchUpModifierComponent::OnEventReceived(FGameplayTag Tag, const FGameplayEventData *EventData) const {
     using namespace Pokemon::TypeEffectiveness;
     auto Payload = CastChecked<USingleTypeModPayload>(EventData->OptionalObject);
-    auto &[AttackingType, DefendingType, Multiplier] = Payload->GetData();
+    auto &Data = Payload->GetData();
 
-    if ((!AttackingTypes.IsEmpty() && !AttackingTypes.Contains(AttackingType)) ||
-        (!DefendingTypes.IsEmpty() && !DefendingTypes.Contains(DefendingType))) {
+    if ((!AttackingTypes.IsEmpty() && !AttackingTypes.Contains(Data.AttackingType)) ||
+        (!DefendingTypes.IsEmpty() && !DefendingTypes.Contains(Data.DefendingType))) {
         return;
     }
 
-    if (auto Effectiveness = static_cast<uint8>(GetEffectivenessFromMultiplier(Multiplier)); (Effectiveness & ApplyFor) == 0) {
+    if (auto Effectiveness = static_cast<uint8>(GetEffectivenessFromMultiplier(Data.Multiplier)); (Effectiveness & ApplyFor) == 0) {
         return;
     }
 
     switch (ModifierOp) {
     case EGameplayModOp::Additive:
-        Multiplier += Modifier;
+        Payload->SetMultiplier(Data.Multiplier + Modifier);
         break;
     case EGameplayModOp::Multiplicitive:
-        Multiplier *= Modifier;
+        Payload->SetMultiplier(Data.Multiplier * Modifier);
         break;
     case EGameplayModOp::Division:
-        Multiplier /= Modifier;
+        Payload->SetMultiplier(Data.Multiplier / Modifier);
         break;
     case EGameplayModOp::Override:
-        Multiplier = Modifier;
+        Payload->SetMultiplier(Modifier);
         break;
     case EGameplayModOp::Max:
-        Multiplier = FMath::Max(Multiplier, Modifier);
+        Payload->SetMultiplier(FMath::Max(Data.Multiplier, Modifier));
         break;
     default:
         UE_LOG(LogBattle, Warning, TEXT("The provided modifier operator '%s', was invalid for type modification!"),

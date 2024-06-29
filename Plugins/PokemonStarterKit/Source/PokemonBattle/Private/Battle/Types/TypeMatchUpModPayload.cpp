@@ -3,16 +3,21 @@
 
 #include "Battle/Types/TypeMatchUpModPayload.h"
 
-FTypeMatchUpModData::FTypeMatchUpModData(FName AttackingType, float Multiplier) : AttackingType(AttackingType), Multiplier(Multiplier) {
+FTypeMatchUpModData::FTypeMatchUpModData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FName AttackingType, float Multiplier) : User(User), Target(Target), AttackingType(AttackingType), Multiplier(Multiplier) {
 }
 
-UTypeMatchUpModPayload * UTypeMatchUpModPayload::Create(FName AttackingType, float Multiplier) {
+UTypeMatchUpModPayload * UTypeMatchUpModPayload::Create(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FName AttackingType, float Multiplier) {
     auto Ret = NewObject<UTypeMatchUpModPayload>();
-    Ret->Data = MakeShared<FTypeMatchUpModData>(AttackingType, Multiplier);
+    Ret->Data = MakeShared<FTypeMatchUpModData>(User, Target, AttackingType, Multiplier);
     return Ret;
 }
 
-FTypeMatchUpModData & UTypeMatchUpModPayload::GetData() const {
+const FTypeMatchUpModData &UTypeMatchUpModPayload::GetData() const {
     check(Data != nullptr)
     return *Data;
+}
+
+void UTypeMatchUpModPayload::SetMultiplier(float Multiplier) const {
+    check(Data != nullptr)
+    Data->Multiplier = Multiplier;
 }
