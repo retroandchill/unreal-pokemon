@@ -186,7 +186,7 @@ bool UBattleMoveFunctionCode::MoveFailed_Implementation(const TScriptInterface<I
 }
 
 bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target, const FRunningMessageSet &PreDamageMessages) {
+                                                                       const TScriptInterface<IBattler> &Target, const FRunningMessageSet &FailureMessages) {
     float TypeMod = CalculateTypeMatchUp(DeterminedType, User, Target);
     auto &DamageState = *Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet();
     DamageState.SetTypeMod(TypeMod);
@@ -194,11 +194,11 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TSc
         return true;
     }
 
-    if (FailsAgainstTarget(User, Target, PreDamageMessages)) {
+    if (FailsAgainstTarget(User, Target, FailureMessages)) {
         return false;
     }
 
-    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target, PreDamageMessages);
+    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target, FailureMessages);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::SuccessCheckAgainstTarget);
     return true;
 }
@@ -247,7 +247,22 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
         Pokemon::Battle::Moves::MoveTarget_Unaffected,
         Pokemon::Battle::Moves::MoveTarget_NoDamage
     });
-    
+
+    check(DealDamageEffect != nullptr)
+    auto Handle = GetCurrentAbilitySpecHandle();
+    auto ActorInfo = GetActorInfo();
+    auto &ActivationInfo = GetCurrentActivationInfoRef();
+    for (auto &Target : Targets) {
+        auto TargetAbilities = Target->GetAbilityComponent();
+        if (TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter)) {
+            continue;
+        }
+
+        auto TargetData = MakeUnique<FGameplayAbilityTargetData_ActorArray>();
+        TargetData->SetActors({CastChecked<AActor>(Target.GetObject())});
+        FGameplayAbilityTargetDataHandle TargetDataHandle(TargetData.Release());
+        auto EffectHandle = ApplyGameplayEffectToTarget(Handle, &ActorInfo, ActivationInfo, TargetDataHandle, DealDamageEffect, 1);
+    }
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,
