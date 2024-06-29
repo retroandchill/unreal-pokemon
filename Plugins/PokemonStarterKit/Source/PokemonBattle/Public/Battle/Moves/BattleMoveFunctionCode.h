@@ -60,11 +60,12 @@ public:
 
     /**
      * Get the underlying move that this class wraps around.
-     * @return 
+     * @return The underlying move that this class wraps around.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Context)
     const TScriptInterface<IBattleMove>& GetMove() const;
-    
+
+    bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo, const FGameplayEventData *Payload) const override;
     void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
     bool CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, FGameplayTagContainer *OptionalRelevantTags) const override;
     void ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;

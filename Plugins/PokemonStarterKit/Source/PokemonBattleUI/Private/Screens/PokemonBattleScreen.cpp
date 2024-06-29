@@ -85,7 +85,7 @@ void UPokemonBattleScreen::OnActionSelected(int32) {
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = IBattleMove::Execute_GetAllPossibleTargets(Move.GetObject(), Battler);
+    auto Targets = Move->GetAllPossibleTargets();
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->SetActive(false);
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);

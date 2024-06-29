@@ -25,9 +25,11 @@ void UEffectHelpingHand::ModifyDamageForUser_Implementation(FDamageMultipliers &
                                                             const TScriptInterface<IBattler> &Target,
                                                             const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
                                                             FName MoveType) {
+    /*
     if (Move->IsConfusionAttack()) {
         return;
     }
+    */
 
     Multipliers.PowerMultiplier *= 1.5f;
 }

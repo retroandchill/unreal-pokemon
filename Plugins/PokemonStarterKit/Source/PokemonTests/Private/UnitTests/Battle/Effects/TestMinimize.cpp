@@ -1,6 +1,6 @@
 ﻿#include "Asserts.h"
 #include "Battle/Effects/TargetEffects/EffectMinimize.h"
-#include "Battle/Moves/BaseBattleMove.h"
+#include "Battle/Moves/PokemonBattleMove.h"
 #include "Battle/Moves/BattleDamage.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Moves/DefaultMove.h"
@@ -12,8 +12,8 @@ bool TestMinimize::RunTest(const FString &Parameters) {
     auto Tackle = NewObject<UDefaultMove>()->Initialize(TEXT("TACKLE"));
     auto Stomp = NewObject<UDefaultMove>()->Initialize(TEXT("STOMP"));
 
-    auto TackleBattle = NewObject<UBaseBattleMove>()->Initialize(nullptr, Tackle);
-    auto StompBattle = NewObject<UBaseBattleMove>()->Initialize(nullptr, Stomp);
+    auto TackleBattle = NewObject<UPokemonBattleMove>()->Initialize(nullptr, Tackle);
+    auto StompBattle = NewObject<UPokemonBattleMove>()->Initialize(nullptr, Stomp);
 
     FDamageMultipliers Multipliers;
     auto Minimize = NewObject<UEffectMinimize>();

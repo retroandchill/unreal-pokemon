@@ -8,7 +8,7 @@
 #include "Battle/Battlers/BattlerSprite.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Moves/BaseBattleMove.h"
+#include "Battle/Moves/PokemonBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Moves/MoveBlock.h"
@@ -33,9 +33,8 @@ TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TSc
     check(Battler != nullptr)
     check(Battler->GetOwningSide() != nullptr)
     check(Move != nullptr)
-    auto MoveClass = Battle::Moves::LookupMoveEffectClass(Move->GetFunctionCode());
-    TScriptInterface<IBattleMove> BattleMove = NewObject<UObject>(Battler, MoveClass);
-    BattleMove->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
+    TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
+    BattleMove->Initialize(Battler, Move);
     return BattleMove;
 }
 

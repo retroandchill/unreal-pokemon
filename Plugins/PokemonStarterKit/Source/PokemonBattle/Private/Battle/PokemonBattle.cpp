@@ -67,18 +67,14 @@ void APokemonBattle::Tick(float DeltaSeconds) {
                 bActionMessagesDisplayed = false;
                 bActionResultDisplaying = false;
                 DisplayAction(Action->GetActionMessage());
-                Action->Execute();
             } else {
                 ActionQueue.Pop();
             }
-        } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult();
-                   bActionMessagesDisplayed && ResultFuture.IsReady() && !bActionResultDisplaying) {
-            auto &Result = ResultFuture.Get();
-            for (auto &[Target, bHit, Damage] : Result.TargetResults) {
-                Target->TakeBattleDamage(Damage.Damage);
-            }
-            DisplayActionResult(Result);
-            bActionResultDisplaying = true;
+        } else if (bActionMessagesDisplayed) {
+                Action->Execute();
+        } else if (ActionQueue.Peek()->Get()->IsComplete()) {
+            RefreshBattleHUD();
+            NextAction();
         }
     } else if (Phase == Judging) {
         EndTurn();
@@ -174,15 +170,6 @@ void APokemonBattle::PlayerSendOutAnimation() {
     check(Sides.IsValidIndex(0))
     const auto &Side = Sides[0];
     ProcessPlayerSendOutAnimation(Side);
-}
-
-void APokemonBattle::ApplyActionResult() {
-    bActionMessagesDisplayed = true;
-}
-
-void APokemonBattle::OnActionResultDisplayFinished() {
-    RefreshBattleHUD();
-    NextAction();
 }
 
 void APokemonBattle::ExitBattleScene() const {

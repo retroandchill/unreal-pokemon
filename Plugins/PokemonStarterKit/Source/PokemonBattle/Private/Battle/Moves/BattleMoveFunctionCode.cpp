@@ -3,22 +3,16 @@
 
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "PokemonBattleModule.h"
 #include "RangeHelpers.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Attributes/AccuracyModifiersAttributeSet.h"
-#include "Battle/GameplayAbilities/Attributes/MoveUsageAttributeSet.h"
 #include "Battle/GameplayAbilities/Attributes/StatStagesAttributeSet.h"
 #include "Battle/GameplayAbilities/Attributes/TargetDamageStateAttributeSet.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Battle/Moves/CriticalHitRateCalculationPayload.h"
 #include "Battle/Moves/DamageModificationPayload.h"
 #include "Battle/Moves/HitCheckPayload.h"
-#include "Battle/Moves/MoveAnimation.h"
-#include "Battle/Moves/MoveEvaluationHelpers.h"
-#include "Battle/Moves/MoveExecutor.h"
 #include "Battle/Moves/MoveTags.h"
 #include "Battle/Moves/SuccessCheckAgainstTargetPayload.h"
 #include "Battle/Moves/UseMovePayload.h"
@@ -39,6 +33,12 @@ UBattleMoveFunctionCode::UBattleMoveFunctionCode() {
 
 const TScriptInterface<IBattleMove> &UBattleMoveFunctionCode::GetMove() const {
     return BattleMove;
+}
+
+bool UBattleMoveFunctionCode::ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
+    const FGameplayEventData *Payload) const {
+    auto MovePayload = CastChecked<UUseMovePayload>(Payload->OptionalObject);
+    return MovePayload->Ability == this;
 }
 
 void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

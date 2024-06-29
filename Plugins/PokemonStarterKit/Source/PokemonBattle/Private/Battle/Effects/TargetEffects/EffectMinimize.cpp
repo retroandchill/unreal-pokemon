@@ -9,7 +9,9 @@ void UEffectMinimize::ModifyDamageForTarget_Implementation(FDamageMultipliers &M
                                                            const TScriptInterface<IBattleMove> &Move, int32 BaseDamage,
                                                            FName MoveType) {
     static const FName TramplesMinimize = TEXT("TramplesMinimize");
+    /*
     if (Move->HasTag(TramplesMinimize)) {
         Multipliers.FinalDamageMultiplier *= 2;
     }
+    */
 }

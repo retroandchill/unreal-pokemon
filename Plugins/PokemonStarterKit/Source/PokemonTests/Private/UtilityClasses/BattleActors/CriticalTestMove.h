@@ -3,20 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Moves/BaseBattleMove.h"
+#include "Battle/Moves/PokemonBattleMove.h"
 #include "CriticalTestMove.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class POKEMONTESTS_API UCriticalTestMove : public UBaseBattleMove {
+class POKEMONTESTS_API UCriticalTestMove : public UPokemonBattleMove {
     GENERATED_BODY()
 
 public:
     ECriticalOverride CriticalOverride = ECriticalOverride::Normal;
-
-protected:
-    ECriticalOverride GetCriticalOverride_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const override;
 
 };

@@ -200,25 +200,6 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void DisplayAction(const FText &MessageText);
 
     /**
-     * Apply the result of the current action
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void ApplyActionResult();
-
-    /**
-     * Display the result of an action
-     * @param Result The actual result of the action in question
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void DisplayActionResult(const FActionResult &Result);
-
-    /**
-     * Called when the display of the results of an action is complete
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void OnActionResultDisplayFinished();
-
-    /**
      * Process the player's victory in battle
      * @param IsTrainerBattle Is the battle a trainer battle
      */

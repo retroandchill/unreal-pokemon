@@ -175,7 +175,7 @@ public:
     TScriptInterface<IHoldItemBattleEffect> HoldItem;
 
     /**
-     * The moves this battler knowns
+     * The moves this battler knows
      */
     UPROPERTY()
     TArray<TScriptInterface<IBattleMove>> Moves;

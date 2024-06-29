@@ -24,40 +24,14 @@ FString FBattleActionUseMove::GetReferencerName() const {
 }
 
 int32 FBattleActionUseMove::GetPriority() const {
-    return IBattleMove::Execute_GetPriority(Move.GetObject());
+    return Move->GetPriority();
 }
 
 FText FBattleActionUseMove::GetActionMessage() const {
     return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
-                         {GetBattler()->GetNickname(), IBattleMove::Execute_GetDisplayName(Move.GetObject())});
+                         {GetBattler()->GetNickname(), Move->GetDisplayName()});
 }
 
-void FBattleActionUseMove::Execute(bool bPerformAsync) {
-    FBattleActionBase::Execute(bPerformAsync);
-    IBattleMove::Execute_PayCost(Move.GetObject(), 1);
-}
-
-FActionResult FBattleActionUseMove::ComputeResult() {
-    FActionResult ActionResult;
-    auto &User = GetBattler();
-    User->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::UsingMove);
-    int32 TargetCount = Targets.Num();
-    for (const auto &Target : Targets) {
-        if (Target->IsFainted()) {
-            continue;
-        }
-        
-        auto &TargetResult = ActionResult.TargetResults.Emplace_GetRef();
-        TargetResult.Target = Target;
-        TargetResult.bHit = IBattleMove::Execute_PerformHitCheck(Move.GetObject(), User, Target);
-        if (!TargetResult.bHit) {
-            // If the move misses then we don't want to apply any other effects
-            continue;
-        }
-        
-        TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
-    }
-
-    User->GetAbilityComponent()->RemoveLooseGameplayTag(Pokemon::Battle::Moves::UsingMove);
-    return ActionResult;
+FGameplayAbilitySpecHandle FBattleActionUseMove::ActivateAbility() {
+    return Move->TryActivateMove(Targets);
 }

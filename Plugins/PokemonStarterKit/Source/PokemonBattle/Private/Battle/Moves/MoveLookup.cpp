@@ -2,14 +2,14 @@
 
 
 #include "Battle/Moves/MoveLookup.h"
-#include "Battle/Moves/BaseBattleMove.h"
+#include "Battle/Moves/PokemonBattleMove.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Settings/BaseSettings.h"
 
 
-UClass * Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
+TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     if (FunctionCode.IsNone()) {
-        return UBaseBattleMove::StaticClass();
+        return UPokemonBattleMove::StaticClass();
     }
     
     auto& AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
@@ -22,5 +22,5 @@ UClass * Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
         return MoveClass;
     }
 
-    return UBaseBattleMove::StaticClass();
+    return UPokemonBattleMove::StaticClass();
 }

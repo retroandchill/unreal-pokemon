@@ -7,6 +7,7 @@
 #include "UseMovePayload.generated.h"
 
 class IBattleMove;
+class UGameplayAbility;
 
 /**
  * 
@@ -19,4 +20,6 @@ public:
     UPROPERTY()
     TScriptInterface<IBattleMove> Move;
 
+    UPROPERTY()
+    TObjectPtr<const UGameplayAbility> Ability;
 };

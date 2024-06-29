@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Moves/MoveData.h"
+#include "Moves/Target.h"
 #include <gmock/gmock.h>
 
 class FMockMove : public IMove {
