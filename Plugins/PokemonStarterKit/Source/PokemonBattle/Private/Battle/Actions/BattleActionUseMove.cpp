@@ -4,6 +4,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Battle/Moves/MoveTags.h"
@@ -30,6 +31,14 @@ int32 FBattleActionUseMove::GetPriority() const {
 FText FBattleActionUseMove::GetActionMessage() const {
     return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
                          {GetBattler()->GetNickname(), Move->GetDisplayName()});
+}
+
+void FBattleActionUseMove::Execute() {
+    FBattleActionBase::Execute();
+    
+    auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
+    check(AttributeSet != nullptr)
+    Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));
 }
 
 FGameplayAbilitySpecHandle FBattleActionUseMove::ActivateAbility() {

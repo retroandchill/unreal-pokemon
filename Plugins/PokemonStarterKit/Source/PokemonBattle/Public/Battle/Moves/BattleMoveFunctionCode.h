@@ -67,10 +67,6 @@ public:
 
     bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo, const FGameplayEventData *Payload) const override;
     void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
-    bool CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, FGameplayTagContainer *OptionalRelevantTags) const override;
-    void ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
-
-    void CommitExecute(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
     void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
     
     
@@ -79,10 +75,11 @@ private:
      * Filter out any invalid targets from this move
      * @param Handle The handle for this ability
      * @param ActorInfo The information about the owning actor
+     * @param TriggerEventData
      * @return The array of filtered target actors
      */
     static TArray<AActor *> FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
-                                                 const FGameplayAbilityActorInfo &ActorInfo);
+                                                 const FGameplayAbilityActorInfo &ActorInfo, const FGameplayEventData* TriggerEventData);
 
     /**
      * Use the move on the given targets

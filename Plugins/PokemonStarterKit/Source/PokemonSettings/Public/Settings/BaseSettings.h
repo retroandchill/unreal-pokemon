@@ -45,6 +45,8 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const TArray<FStatStageInfo> &GetStatStages() const final;
     const TArray<int32> &GetCriticalHitRatios() const final;
 
+    const FSoftClassPath& GetDefaultMoveAbility() const;
+
     /**
      * Get the class that represents the item utilities
      * @return The class to instantiate the object from

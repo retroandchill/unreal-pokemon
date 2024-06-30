@@ -22,5 +22,7 @@ TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FNam
         return MoveClass;
     }
 
-    return UPokemonBattleMove::StaticClass();
+    auto MoveClass = FBaseSettings::Get().GetDefaultMoveAbility().TryLoadClass<UGameplayAbility>();
+    check(MoveClass != nullptr)
+    return MoveClass;
 }

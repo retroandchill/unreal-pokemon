@@ -199,6 +199,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void DisplayAction(const FText &MessageText);
 
+    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
+    void ExecuteAction();
+
     /**
      * Process the player's victory in battle
      * @param IsTrainerBattle Is the battle a trainer battle
@@ -294,6 +297,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     TQueue<TUniquePtr<IBattleAction>> ActionQueue;
 
+    bool bActionTextDisplayed = false;
+
     /**
      * This is the pawn to take control of when the battle is initiated.
      */
@@ -311,13 +316,4 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UPROPERTY()
     EBattlePhase Phase = EBattlePhase::Setup;
-
-    /**
-     * Have the action messages for the current action been displayed
-     */
-    UPROPERTY()
-    bool bActionMessagesDisplayed = false;
-
-    UPROPERTY()
-    bool bActionResultDisplaying = false;
 };

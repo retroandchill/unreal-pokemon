@@ -107,6 +107,11 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<TScr
     bool bIsInstanced;
     Payload->Ability = UAbilitySystemBlueprintLibrary::GetGameplayAbilityFromSpecHandle(AbilityComponent, FunctionCode, bIsInstanced);
     EventData.OptionalObject = Payload;
+    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
+    TargetData->SetActors(RangeHelpers::CreateRange(Targets)
+        | ranges::views::transform([](const TScriptInterface<IBattler>& Battler) { return CastChecked<AActor>(Battler.GetObject()); })
+        | RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
+    EventData.TargetData.Data.Emplace(TargetData);
     
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);
     return FunctionCode;

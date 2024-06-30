@@ -9,13 +9,13 @@
 void UBattlerAbilityComponent::BeginPlay() {
     Super::BeginPlay();
 
-    CoreAttributes = NewObject<UPokemonCoreAttributeSet>(this);
+    CoreAttributes = NewObject<UPokemonCoreAttributeSet>(GetOwner());
     AddSpawnedAttribute(CoreAttributes);
 
-    StatStagesAttributeSet = NewObject<UStatStagesAttributeSet>(this);
+    StatStagesAttributeSet = NewObject<UStatStagesAttributeSet>(GetOwner());
     AddSpawnedAttribute(StatStagesAttributeSet);
 
-    TargetDamageStateAttributeSet = NewObject<UTargetDamageStateAttributeSet>(this);
+    TargetDamageStateAttributeSet = NewObject<UTargetDamageStateAttributeSet>(GetOwner());
     AddSpawnedAttribute(TargetDamageStateAttributeSet);
 }
 

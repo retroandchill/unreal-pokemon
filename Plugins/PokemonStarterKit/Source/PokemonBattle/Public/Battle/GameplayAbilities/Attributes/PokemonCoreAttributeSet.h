@@ -53,10 +53,10 @@ private:
     FGameplayAttributeData Speed;
     
     UPROPERTY()
-    FGameplayAttributeData Accuracy;
+    FGameplayAttributeData Accuracy = 100.f;
 
     UPROPERTY()
-    FGameplayAttributeData Evasion;
+    FGameplayAttributeData Evasion = 100.f;
 
     /**
      * The amount of PP that a move costs to use.

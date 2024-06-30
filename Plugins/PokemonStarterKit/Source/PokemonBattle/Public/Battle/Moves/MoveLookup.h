@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Abilities/GameplayAbility.h"
 
-class UGameplayAbility;
 
 namespace Pokemon::Battle::Moves {
 

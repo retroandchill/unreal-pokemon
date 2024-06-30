@@ -84,6 +84,10 @@ const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
 }
 
+const FSoftClassPath & Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
+    return KitSettings->DefaultMoveAbility;
+}
+
 UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
     return KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
 }

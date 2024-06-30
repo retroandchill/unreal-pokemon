@@ -56,31 +56,9 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
         | RangeHelpers::TToArray<FGameplayTag>();
     AddedTags = FGameplayTagContainer::CreateFromArray(TagsList);
     ActorInfo->AbilitySystemComponent->AddLooseGameplayTags(AddedTags);
-}
-
-bool UBattleMoveFunctionCode::CheckCost(const FGameplayAbilitySpecHandle Handle,
-                                        const FGameplayAbilityActorInfo *ActorInfo,
-                                        FGameplayTagContainer *OptionalRelevantTags) const {
-    return BattleMove->GetCurrentPP() > 0 && Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags);
-}
-
-void UBattleMoveFunctionCode::ApplyCost(const FGameplayAbilitySpecHandle Handle,
-                                        const FGameplayAbilityActorInfo *ActorInfo,
-                                        const FGameplayAbilityActivationInfo ActivationInfo) const {
-    Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
-
-    auto AttributeSet = ActorInfo->AbilitySystemComponent->GetAttributeSet(CostAttribute.GetAttributeSetClass());
-    check(AttributeSet != nullptr)
-    BattleMove->PayCost(FMath::FloorToInt32(CostAttribute.GetNumericValue(AttributeSet)));
-}
-
-void UBattleMoveFunctionCode::CommitExecute(const FGameplayAbilitySpecHandle Handle,
-                                            const FGameplayAbilityActorInfo *ActorInfo,
-                                            const FGameplayAbilityActivationInfo ActivationInfo) {
-    Super::CommitExecute(Handle, ActorInfo, ActivationInfo);
 
     check(ActorInfo != nullptr)
-    auto TargetsActors = FilterInvalidTargets(Handle, *ActorInfo);
+    auto TargetsActors = FilterInvalidTargets(Handle, *ActorInfo, TriggerEventData);
 
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
     check(User.GetObject()->Implements<UBattler>())
@@ -101,19 +79,20 @@ void UBattleMoveFunctionCode::EndAbility(const FGameplayAbilitySpecHandle Handle
 }
 
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
-                                                               const FGameplayAbilityActorInfo &ActorInfo) {
-    auto AbilitySystemComponent = ActorInfo.AbilitySystemComponent.Get();
-    auto AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromHandle(Handle);
-
-    check(AbilitySpec->GameplayEventData != nullptr)
-    return RangeHelpers::CreateRange(AbilitySpec->GameplayEventData->TargetData.Data)
+                                                               const FGameplayAbilityActorInfo &ActorInfo, const FGameplayEventData* TriggerEventData) {
+    auto ActorLists = RangeHelpers::CreateRange(TriggerEventData->TargetData.Data)
            | ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) {
-               return RangeHelpers::CreateRange(Ptr->GetActors());
+               return Ptr->GetActors();
            })
+            | RangeHelpers::TToArray<TArray<TWeakObjectPtr<AActor>>>();
+
+    return RangeHelpers::CreateRange(ActorLists)
+           | ranges::views::transform([](const TArray<TWeakObjectPtr<AActor>>& List) { return RangeHelpers::CreateRange(List); })
            | ranges::views::join
            | ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) {
                return Actor.Get();
            })
+           | ranges::views::filter([](const AActor* Actor) { return Actor != nullptr; })
            | ranges::views::filter(&AActor::Implements<UBattler>)
            | ranges::views::filter([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;

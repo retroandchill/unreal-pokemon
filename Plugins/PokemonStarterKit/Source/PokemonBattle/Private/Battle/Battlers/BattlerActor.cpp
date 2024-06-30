@@ -66,6 +66,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
             auto AttributeData = Stat.BaseAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
             auto StatValue = StatBlock->GetStat(Stat.ID);
             AttributeData->SetBaseValue(static_cast<float>(StatValue->GetStatValue()));
+            AttributeData->SetCurrentValue(AttributeData->GetBaseValue());
         }
         
         if (Stat.StagesAttribute.IsValid()) {
@@ -73,6 +74,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
             check(Attributes.Contains(AttributeSetClass))
             auto AttributeData = Stat.StagesAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
             AttributeData->SetBaseValue(0.f);
+            AttributeData->SetCurrentValue(0.f);
             StatStages.Add(Stat.ID, 0);
         }
     });

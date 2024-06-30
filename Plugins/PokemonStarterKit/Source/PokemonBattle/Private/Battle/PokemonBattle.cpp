@@ -62,16 +62,13 @@ void APokemonBattle::Tick(float DeltaSeconds) {
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
             Phase = Judging;
-        } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting()) {
+        } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
-                bActionMessagesDisplayed = false;
-                bActionResultDisplaying = false;
                 DisplayAction(Action->GetActionMessage());
+                bActionTextDisplayed = true;
             } else {
                 ActionQueue.Pop();
             }
-        } else if (bActionMessagesDisplayed) {
-                Action->Execute();
         } else if (ActionQueue.Peek()->Get()->IsComplete()) {
             RefreshBattleHUD();
             NextAction();
@@ -172,6 +169,11 @@ void APokemonBattle::PlayerSendOutAnimation() {
     ProcessPlayerSendOutAnimation(Side);
 }
 
+void APokemonBattle::ExecuteAction() {
+    check(!ActionQueue.IsEmpty())
+    ActionQueue.Peek()->Get()->Execute();
+}
+
 void APokemonBattle::ExitBattleScene() const {
     auto PlayerController = BattlePawn->GetController();
     PlayerController->Possess(StoredPlayerPawn);
@@ -202,6 +204,7 @@ void APokemonBattle::EndTurn() {
 
 void APokemonBattle::BeginActionProcessing() {
     Phase = EBattlePhase::Actions;
+    bActionTextDisplayed = false;
     SelectedActions.Sort([](const TUniquePtr<IBattleAction> &A, const TUniquePtr<IBattleAction> &B) {
         if (A->GetPriority() > B->GetPriority()) {
             return true;
@@ -224,6 +227,7 @@ void APokemonBattle::BeginActionProcessing() {
 
 void APokemonBattle::NextAction() {
     ActionQueue.Pop();
+    bActionTextDisplayed = false;
 }
 
 void APokemonBattle::DecideBattle(int32 SideIndex) {
