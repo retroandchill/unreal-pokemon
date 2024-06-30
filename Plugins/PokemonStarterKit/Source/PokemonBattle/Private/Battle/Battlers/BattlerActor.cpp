@@ -152,7 +152,8 @@ int32 ABattlerActor::GetMaxHP() const {
 }
 
 float ABattlerActor::GetHPPercent() const {
-    return static_cast<float>(WrappedPokemon->GetCurrentHP()) / static_cast<float>(WrappedPokemon->GetMaxHP());
+    auto CoreAttributes = BattlerAbilityComponent->GetCoreAttributes();
+    return CoreAttributes->GetHP() / CoreAttributes->GetMaxHP();
 }
 
 void ABattlerActor::TakeBattleDamage(int32 Damage) {

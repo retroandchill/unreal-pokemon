@@ -16,3 +16,17 @@ void UPokemonBattlePanelPlayer::Refresh() {
     MaxHP->SetNumber(static_cast<uint32>(CoreAttributes->GetMaxHP()));
     ExpBar->SetPercent(Battler->GetExpPercent());
 }
+
+void UPokemonBattlePanelPlayer::UpdateHPPercent(float NewPercent) {
+    Super::UpdateHPPercent(NewPercent);
+    auto CoreAttributes = GetCurrentBattler()->GetAbilityComponent()->GetCoreAttributes();
+    auto CurrentHPValue = static_cast<uint32>(FMath::RoundToFloat(CoreAttributes->GetMaxHP() * NewPercent));
+    CurrentHP->SetNumber(CurrentHPValue);
+}
+
+void UPokemonBattlePanelPlayer::HPPercentUpdateComplete() const {
+    // We need to make sure the correct HP number is displayed
+    auto CoreAttributes = GetCurrentBattler()->GetAbilityComponent()->GetCoreAttributes();
+    CurrentHP->SetNumber(static_cast<uint32>(CoreAttributes->GetHP()));
+    Super::HPPercentUpdateComplete();
+}

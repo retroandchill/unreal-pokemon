@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Animations/ProgressBarAnimation.h"
 #include "Components/ProgressBar.h"
 
 #include "HPBar.generated.h"
@@ -49,11 +50,6 @@ class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
     TArray<float> PercentThresholds = {0.5f, 0.25f};
 
     /**
-     * Get the previous percentage value for this object
-     */
-    float PreviousPercent = 0.f;
-
-    /**
      * Flag that tells the game that the widget has been set up and can now tick
      */
     bool bSetUp = false;
@@ -64,4 +60,5 @@ class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
      */
     UPROPERTY()
     TObjectPtr<UMaterialInstanceDynamic> BarMaterial;
+    
 };

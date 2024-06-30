@@ -239,6 +239,13 @@ protected:
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
     float CalculateSingleTypeMod(FName AttackingType, FName DefendingType, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
 
+    /**
+     * Display any damage to the user from the 
+     * @param User The user of the move
+     * @param Targets The targets of the move in question
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
+    void DisplayDamage(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
 private:
     /**
      * The underlying move that this ability wraps
