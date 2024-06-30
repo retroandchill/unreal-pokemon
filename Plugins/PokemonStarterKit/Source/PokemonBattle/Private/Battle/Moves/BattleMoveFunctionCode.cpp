@@ -117,6 +117,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     }
 
     auto TargetFailureCheckCallback = [this, &Messages, &User](const TScriptInterface<IBattler> &Target) {
+        Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->Reset();
         bool bSuccess = SuccessCheckAgainstTarget(User, Target, Messages);
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
@@ -241,6 +242,8 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
         FGameplayAbilityTargetDataHandle TargetDataHandle(TargetData.Release());
         auto EffectHandle = ApplyGameplayEffectToTarget(Handle, &ActorInfo, ActivationInfo, TargetDataHandle, DealDamageEffect, 1);
     }
+
+    DisplayDamage(User, Targets);
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,

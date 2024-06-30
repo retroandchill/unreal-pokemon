@@ -46,6 +46,7 @@ class POKEMONBATTLE_API IBattler {
      * Get the internal ID for this battler
      * @return The unique ID of the battler
      */
+    UFUNCTION(BlueprintCallable, Category = Metadata)
     virtual FGuid GetInternalId() const = 0;
 
     /**

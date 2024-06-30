@@ -37,6 +37,7 @@ void FProgressBarAnimation::Tick(float DeltaTime) {
     SetNewPercent.Broadcast(FMath::Lerp(StartingPercentage, EndPercentage, CurrentTime / AnimationDuration));
     if (CurrentTime >= AnimationDuration) {
         AnimationData.Reset();
+        OnAnimationComplete.Broadcast();
     }
 }
 

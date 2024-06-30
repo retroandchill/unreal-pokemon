@@ -38,7 +38,7 @@ protected:
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
     
 public:
-    
+    UFUNCTION(BlueprintPure, Category = Metadata)
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)

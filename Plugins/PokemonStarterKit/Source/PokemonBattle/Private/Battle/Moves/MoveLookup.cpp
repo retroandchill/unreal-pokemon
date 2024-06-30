@@ -9,7 +9,9 @@
 
 TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     if (FunctionCode.IsNone()) {
-        return UPokemonBattleMove::StaticClass();
+        auto MoveClass = FBaseSettings::Get().GetDefaultMoveAbility().TryLoadClass<UGameplayAbility>();
+        check(MoveClass != nullptr)
+        return MoveClass;
     }
     
     auto& AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
