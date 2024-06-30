@@ -15,6 +15,11 @@ class UProgressBar;
 class UDisplayText;
 
 /**
+ * Dynamic delegate called when a progress bar is updated
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnProgresBarUpdateComplete);
+
+/**
  * The panel that displays the battle information about a Pokémon.
  */
 UCLASS(Abstract)
@@ -55,7 +60,14 @@ protected:
      * Get the delegate used for updating the progress bar
      * @param Binding The desired action 
      */
-    void BindToOnProgressBarUpdated(const FOnProgressBarUpdated::FDelegate& Binding);
+    void BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate& Binding);
+
+    /**
+     * Unbind all dynamic delegates from the HP update callback
+     * @param Object The object to unbind the delegate sfor
+     */
+    UFUNCTION()
+    void UnbindAllHPUpdateDelegates(UObject* Object);
 
 protected:
     /**
@@ -115,5 +127,5 @@ private:
      * Callback for when the HP bar is finished animating
      */
     UPROPERTY()
-    FOnProgressBarUpdated OnHPBarUpdated;
+    FOnProgresBarUpdateComplete OnHPBarUpdated;
 };

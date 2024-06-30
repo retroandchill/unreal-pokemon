@@ -60,6 +60,12 @@ void UPokemonBattleScreen::Refresh() const {
     }
 }
 
+UPokemonBattlePanel * UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const {
+    auto Find = Panels.FindByPredicate([&Battler](const UPokemonBattlePanel* Panel)
+        { return Panel->GetCurrentBattler() == Battler; });
+    return Find != nullptr ? *Find : nullptr;
+}
+
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
     Algo::ForEach(Side->GetBattlers(), std::bind_front(&UPokemonBattleScreen::CreateBattlePanel, this, Index));
 }

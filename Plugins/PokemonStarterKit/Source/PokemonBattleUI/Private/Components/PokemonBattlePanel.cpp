@@ -18,8 +18,8 @@ constexpr float AnimationDrainSpeed = 2.f / 60.f;
 
 void UPokemonBattlePanel::NativeConstruct() {
     Super::NativeConstruct();
-    HPBarUpdateAnimation.BindActionToPercentDelegate(FUpdatePercent::CreateUObject(this, &UpdateHPPercent));
-    HPBarUpdateAnimation.BindActionToCompleteDelegate(FUpdateComplete::CreateUObject(this, &HPPercentUpdateComplete));
+    HPBarUpdateAnimation.BindActionToPercentDelegate(FUpdatePercent::CreateUObject(this, &UPokemonBattlePanel::UpdateHPPercent));
+    HPBarUpdateAnimation.BindActionToCompleteDelegate(FUpdateComplete::CreateUObject(this, &UPokemonBattlePanel::HPPercentUpdateComplete));
 }
 
 const TScriptInterface<IBattler> &UPokemonBattlePanel::GetCurrentBattler() const {
@@ -50,8 +50,12 @@ void UPokemonBattlePanel::Refresh() {
     }
 }
 
-void UPokemonBattlePanel::BindToOnProgressBarUpdated(const FOnProgressBarUpdated::FDelegate& Binding) {
+void UPokemonBattlePanel::BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate& Binding) {
     OnHPBarUpdated.Add(Binding);
+}
+
+void UPokemonBattlePanel::UnbindAllHPUpdateDelegates(UObject* Object) {
+    OnHPBarUpdated.RemoveAll(Object);
 }
 
 void UPokemonBattlePanel::AnimateHP(float MaxDuration) {

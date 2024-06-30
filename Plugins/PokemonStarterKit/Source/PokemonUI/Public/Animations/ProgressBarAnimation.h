@@ -4,11 +4,6 @@
 
 #include "CoreMinimal.h"
 
-/**
- * Dynamic delegate called when a progress bar is updated
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnProgressBarUpdated);
-
 namespace Pokemon::UI {
 
 /**
