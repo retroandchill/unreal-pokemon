@@ -232,8 +232,7 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
     auto ActorInfo = GetActorInfo();
     auto &ActivationInfo = GetCurrentActivationInfoRef();
     for (auto &Target : Targets) {
-        auto TargetAbilities = Target->GetAbilityComponent();
-        if (TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter)) {
+        if (auto TargetAbilities = Target->GetAbilityComponent(); TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter)) {
             continue;
         }
 

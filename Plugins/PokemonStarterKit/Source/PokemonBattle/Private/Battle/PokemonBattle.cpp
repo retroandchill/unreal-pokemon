@@ -13,6 +13,8 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
+#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/empty.hpp>
@@ -210,8 +212,8 @@ void APokemonBattle::BeginActionProcessing() {
             return true;
         }
 
-        int32 SpeedA = A->GetBattler()->GetSpeed().GetModifiedValue();
-        int32 SpeedB = B->GetBattler()->GetSpeed().GetModifiedValue();
+        int32 SpeedA = FMath::FloorToInt32(A->GetBattler()->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
+        int32 SpeedB = FMath::FloorToInt32(B->GetBattler()->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         if (SpeedA == SpeedB) {
             return FMath::RandBool();
         }
