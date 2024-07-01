@@ -4,6 +4,7 @@
 #include "Misc/AutomationTest.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/DefaultMove.h"
+#include "Moves/Target.h"
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Pokemon/PokemonDTO.h"
 
@@ -11,9 +12,18 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.Default
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveTest::RunTest(const FString &Parameters) {
-    auto Move = NewObject<UDefaultMove>()->Initialize(TEXT("SWORDSDANCE"));
-    UE_CHECK_EQUAL(20, Move->GetCurrentPP());
-    UE_CHECK_EQUAL(20, Move->GetTotalPP());
+    auto Move = NewObject<UDefaultMove>()->Initialize(TEXT("FLAMETHROWER"));
+    UE_CHECK_EQUAL(90, Move->GetBasePower());
+    UE_CHECK_EQUAL(100, Move->GetAccuracy());
+    UE_CHECK_EQUAL(EMoveDamageCategory::Special, Move->GetDamageCategory());
+    UE_CHECK_EQUAL(TEXT("BurnTarget"), Move->GetFunctionCode().ToString());
+    UE_CHECK_EQUAL(TEXT("NearOther"), Move->GetTargetType().ID.ToString());
+    UE_CHECK_EQUAL(15, Move->GetCurrentPP());
+    UE_CHECK_EQUAL(15, Move->GetTotalPP());
+
+    Move->DecrementPP(2);
+    UE_CHECK_EQUAL(13, Move->GetCurrentPP());
+    
     return true;
 }
 
