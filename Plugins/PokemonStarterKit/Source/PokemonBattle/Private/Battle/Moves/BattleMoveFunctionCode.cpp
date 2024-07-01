@@ -51,10 +51,18 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     // If this is not triggered by an event throw an exception
     check(TriggerEventData != nullptr)
     BattleMove = CastChecked<UUseMovePayload>(TriggerEventData->OptionalObject)->Move;
+    
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
     auto TagsList = RangeHelpers::CreateRange(BattleMove->GetTags())
         | ranges::views::transform([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); })
         | RangeHelpers::TToArray<FGameplayTag>();
+    TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
+    TagsList.Emplace(Pokemon::Battle::Moves::GetUserCategoryTag(BattleMove->GetCategory()));
+
+    DeterminedType = DetermineType();
+    static auto &TypeLookup = Pokemon::Battle::Types::FLookup::GetInstance();
+    TagsList.Emplace(TypeLookup.GetMoveTypeUserTag(DeterminedType));
+    
     AddedTags = FGameplayTagContainer::CreateFromArray(TagsList);
     ActorInfo->AbilitySystemComponent->AddLooseGameplayTags(AddedTags);
 
@@ -66,7 +74,12 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     TArray<TScriptInterface<IBattler>> Targets;
     Targets.Reserve(TargetsActors.Num());
     for (auto Actor : TargetsActors) {
-        Targets.Emplace(Actor);
+        auto &Battler = Targets.Emplace_GetRef(Actor);
+        auto &Tags = AddedTargetTags.Emplace(Actor);
+        Tags.AddTag(Pokemon::Battle::Moves::MoveTarget);
+        Tags.AddTag(TypeLookup.GetMoveTypeTargetTag(DeterminedType));
+        Tags.AddTag(Pokemon::Battle::Moves::GetTargetCategoryTag(BattleMove->GetCategory()));
+        Battler->GetAbilityComponent()->AddLooseGameplayTags(Tags);
     }
 
     UseMove(User, Targets);
@@ -77,6 +90,16 @@ void UBattleMoveFunctionCode::EndAbility(const FGameplayAbilitySpecHandle Handle
     bool bReplicateEndAbility, bool bWasCancelled) {
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTags(AddedTags);
+    for (auto &[Actor, Tags] : AddedTargetTags) {
+        TScriptInterface<IBattler> Battler = Actor;
+        auto AbilityComponent = Battler->GetAbilityComponent();
+        AbilityComponent->RemoveLooseGameplayTags(Tags);
+        AbilityComponent->GetTargetDamageStateAttributeSet()->Reset();
+    }
+}
+
+FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
+    return BattleMove->GetDisplayType();
 }
 
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,

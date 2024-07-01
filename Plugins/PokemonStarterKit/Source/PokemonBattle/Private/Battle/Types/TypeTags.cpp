@@ -23,6 +23,7 @@ FLookup::FLookup() {
         }
 
         AddDynamicGameplayTag(MoveTypeUserTags, MoveTypeUserFormat, Type.ID);
+        AddDynamicGameplayTag(MoveTypeTargetTags, MoveTypeTargetFormat, Type.ID);
     });
 }
 

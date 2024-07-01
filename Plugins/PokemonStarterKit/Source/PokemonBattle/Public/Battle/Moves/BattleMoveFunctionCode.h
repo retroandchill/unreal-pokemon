@@ -87,7 +87,14 @@ public:
     bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo, const FGameplayEventData *Payload) const override;
     void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
     void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
-    
+
+protected:
+    /**
+     * Determine the type of the move.
+     * @return The calculated type
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Types")
+    FName DetermineType() const;
     
 private:
     /**
@@ -276,6 +283,12 @@ private:
      * Any gameplay tags that were added to the user
      */
     FGameplayTagContainer AddedTags;
+
+    /**
+     * The added tags to the targets
+     */
+    UPROPERTY()
+    TMap<TObjectPtr<AActor>, FGameplayTagContainer> AddedTargetTags;
 
     /**
      * Type that was determined for the move
