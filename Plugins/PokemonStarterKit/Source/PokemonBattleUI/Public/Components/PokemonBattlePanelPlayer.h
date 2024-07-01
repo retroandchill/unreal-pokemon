@@ -19,16 +19,8 @@ class POKEMONBATTLEUI_API UPokemonBattlePanelPlayer : public UPokemonBattlePanel
     void Refresh() override;
 
 protected:
-    /**
-     * The function used to callback to the depleted HP.
-     * @param NewPercent The new HP percentage
-     */
-    virtual void UpdateHPPercent(float NewPercent);
-
-    /**
-     * Called when the HP percentage update is complete
-     */
-    virtual void HPPercentUpdateComplete() const;
+    void UpdateHPPercent(float NewPercent) override;
+    void HPPercentUpdateComplete() const override;
 
   private:
     /**

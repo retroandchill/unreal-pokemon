@@ -20,7 +20,7 @@ void UPlayBattlerHPAnimation::Activate() {
     check(PlayerController != nullptr)
     auto MenuSubsystem = PlayerController->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
     auto Screen = MenuSubsystem->FindFirstInStack<UPokemonBattleScreen>();
-    check(Screen != nullptr);
+    check(Screen != nullptr)
     auto Panel = Screen->FindPanelForBattler(Battler);
     if (Panel == nullptr) {
         ExecuteOnComplete();
