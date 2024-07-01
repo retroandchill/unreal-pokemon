@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
-#include "Battle/GameplayAbilities/Attributes/StatStagesAttributeSet.h"
-#include "Battle/GameplayAbilities/Attributes/TargetDamageStateAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Attributes/StatStagesAttributeSet.h"
+#include "Battle/Attributes/TargetDamageStateAttributeSet.h"
 
 void UBattlerAbilityComponent::BeginPlay() {
     Super::BeginPlay();
@@ -25,10 +25,6 @@ UPokemonCoreAttributeSet *UBattlerAbilityComponent::GetCoreAttributes() const {
 
 UStatStagesAttributeSet * UBattlerAbilityComponent::GetStatStages() const {
     return StatStagesAttributeSet;
-}
-
-UMoveUsageAttributeSet * UBattlerAbilityComponent::GetMoveUsageAttributeSet() const {
-    return MoveUsageAttributeSet;
 }
 
 UTargetDamageStateAttributeSet * UBattlerAbilityComponent::GetTargetDamageStateAttributeSet() const {

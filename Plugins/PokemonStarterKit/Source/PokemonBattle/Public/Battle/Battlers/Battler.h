@@ -123,20 +123,6 @@ class POKEMONBATTLE_API IBattler {
     virtual UBattlerAbilityComponent* GetAbilityComponent() const = 0;
 
     /**
-     * Get if the target's current hold item is active
-     * @return Is the target's hold item active?
-     */
-    UFUNCTION(BlueprintCallable, Category = Items)
-    virtual bool IsHoldItemActive() const = 0;
-
-    /**
-     * Get the Pokémon's current hold item effect
-     * @return The effect of the hold item in question
-     */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual const TScriptInterface<IHoldItemBattleEffect> &GetHoldItem() const = 0;
-
-    /**
      * Get the Pokémon's currently usable moves.
      * @return The Pokémon's usable moves.
      */

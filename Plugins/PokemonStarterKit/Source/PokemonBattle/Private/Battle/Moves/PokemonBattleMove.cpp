@@ -8,7 +8,7 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "RangeHelpers.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 #include "Battle/Moves/BattleMoveFunctionCode.h"

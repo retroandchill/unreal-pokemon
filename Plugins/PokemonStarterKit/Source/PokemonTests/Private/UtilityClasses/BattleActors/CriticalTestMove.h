@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "Battle/Moves/PokemonBattleMove.h"
 #include "CriticalTestMove.generated.h"
 

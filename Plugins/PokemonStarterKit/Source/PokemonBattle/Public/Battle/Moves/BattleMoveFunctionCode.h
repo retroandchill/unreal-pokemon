@@ -3,11 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleDamage.h"
 #include "Abilities/GameplayAbility.h"
-#include "Battle/GameplayAbilities/Attributes/AccuracyModifiersAttributeSet.h"
-#include "Battle/GameplayAbilities/Attributes/MoveUsageAttributeSet.h"
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 
 #include "BattleMoveFunctionCode.generated.h"
 
@@ -16,6 +13,28 @@ class AMoveExecutor;
 class IBattler;
 class IBattleMove;
 class IMove;
+
+/**
+ * The override state for a critical hit.
+ */
+UENUM(BlueprintType)
+enum class ECriticalOverride : uint8 {
+    /**
+     * Roll a critical hit normally.
+     */
+    Normal,
+
+    /**
+     * The move always rolls a critical hit
+     */
+    Always,
+
+    /**
+     * The move can never land a crit.
+*/
+    Never
+    
+};
 
 USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FRunningMessageSet {

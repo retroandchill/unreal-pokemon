@@ -2,7 +2,7 @@
 
 #include "Battle/Actions/BattleActionBase.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include <functional>
 
 FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {

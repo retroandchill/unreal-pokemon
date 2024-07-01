@@ -17,16 +17,14 @@
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
 #include "Battle/Abilities/AbilityLookup.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
 #include <functional>
-#include <range/v3/view/empty.hpp>
-#include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
@@ -103,6 +101,8 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         Ability = FGameplayAbilitySpecHandle();
     }
 
+    
+
     return this;
 }
 
@@ -171,14 +171,6 @@ TArray<FName> ABattlerActor::GetTypes() const {
 
 UBattlerAbilityComponent * ABattlerActor::GetAbilityComponent() const {
     return BattlerAbilityComponent;
-}
-
-bool ABattlerActor::IsHoldItemActive() const {
-    return true;
-}
-
-const TScriptInterface<IHoldItemBattleEffect> &ABattlerActor::GetHoldItem() const {
-    return HoldItem;
 }
 
 const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {

@@ -35,7 +35,6 @@ protected:
 public:
     UPokemonCoreAttributeSet *GetCoreAttributes() const;
     UStatStagesAttributeSet *GetStatStages() const;
-    UMoveUsageAttributeSet *GetMoveUsageAttributeSet() const;
     UTargetDamageStateAttributeSet *GetTargetDamageStateAttributeSet() const;
 
     FGameplayEffectSpecHandle MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level, FGameplayEffectContextHandle Context) const override;
@@ -48,9 +47,6 @@ private:
 
     UPROPERTY()
     TObjectPtr<UStatStagesAttributeSet> StatStagesAttributeSet;
-
-    UPROPERTY()
-    TObjectPtr<UMoveUsageAttributeSet> MoveUsageAttributeSet;
     
     UPROPERTY()
     TObjectPtr<UTargetDamageStateAttributeSet> TargetDamageStateAttributeSet;

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleDamage.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "Moves/MoveDamageCategory.h"
 #include "UObject/Interface.h"

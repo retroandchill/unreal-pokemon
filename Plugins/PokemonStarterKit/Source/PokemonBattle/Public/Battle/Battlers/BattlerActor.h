@@ -9,6 +9,7 @@
 
 #include "BattlerActor.generated.h"
 
+class UGameplayEffect;
 struct FOnAttributeChangeData;
 class UGameplayAbility;
 class UBattlerAbilityComponent;
@@ -72,12 +73,6 @@ public:
     TArray<FName> GetTypes() const override;
 
     UBattlerAbilityComponent* GetAbilityComponent() const override;
-
-    UFUNCTION(BlueprintPure, Category = Items)
-    bool IsHoldItemActive() const override;
-
-    UFUNCTION(BlueprintPure, Category = Items)
-    const TScriptInterface<IHoldItemBattleEffect> &GetHoldItem() const override;
 
     UFUNCTION(BlueprintPure, Category = Moves)
     const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;
@@ -145,12 +140,6 @@ public:
      * The ability that this battler has
      */
     FGameplayAbilitySpecHandle Ability;
-
-    /**
-     * The hold item that this battler has
-     */
-    UPROPERTY()
-    TScriptInterface<IHoldItemBattleEffect> HoldItem;
 
     /**
      * The moves this battler knows

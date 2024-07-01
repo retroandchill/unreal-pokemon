@@ -1,7 +1,7 @@
 ﻿#include "Asserts.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattleMove.h"

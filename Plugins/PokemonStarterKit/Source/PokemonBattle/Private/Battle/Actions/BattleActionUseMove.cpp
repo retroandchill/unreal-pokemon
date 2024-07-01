@@ -3,9 +3,8 @@
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
-#include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Battle/Moves/MoveTags.h"
 

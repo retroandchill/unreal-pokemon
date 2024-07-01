@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ActionResult.h"
 #include "UObject/Interface.h"
 
 class IBattler;

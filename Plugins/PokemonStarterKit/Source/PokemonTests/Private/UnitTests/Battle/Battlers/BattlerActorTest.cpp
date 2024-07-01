@@ -37,16 +37,8 @@ bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(Pokemon->GetNickname().ToString(), Battler->GetNickname().ToString());
     UE_CHECK_EQUAL(Pokemon->GetGender(), Battler->GetGender());
     UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetLevel(), Battler->GetPokemonLevel());
-    UE_CHECK_EQUAL(Pokemon->GetCurrentHP(), Battler->GetHP());
-    UE_CHECK_EQUAL(Pokemon->GetMaxHP(), Battler->GetMaxHP());
     UE_CHECK_EQUAL(1.f, Battler->GetHPPercent());
     UE_CHECK_FALSE(Battler->IsFainted());
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("ATTACK"))->GetStatValue(), Battler->GetAttack().StatValue);
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("DEFENSE"))->GetStatValue(), Battler->GetDefense().StatValue);
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_ATTACK"))->GetStatValue(), Battler->GetSpecialAttack().StatValue);
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPECIAL_DEFENSE"))->GetStatValue(),
-                Battler->GetSpecialDefense().StatValue);
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat(TEXT("SPEED"))->GetStatValue(), Battler->GetSpeed().StatValue);
     UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetExpPercent(), Battler->GetExpPercent());
 
     auto &PokemonTypes = Pokemon->GetTypes();

@@ -13,8 +13,8 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/empty.hpp>

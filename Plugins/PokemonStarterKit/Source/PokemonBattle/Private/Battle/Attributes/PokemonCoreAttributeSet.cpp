@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 
 void UPokemonCoreAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     NewValue = FMath::RoundHalfToZero(FMath::Max(NewValue, 0.f));

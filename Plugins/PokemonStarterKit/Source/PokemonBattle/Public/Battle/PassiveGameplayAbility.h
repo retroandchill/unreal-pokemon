@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "PassiveAbility.generated.h"
+#include "PassiveGameplayAbility.generated.h"
 
 /**
- * Basic passive ability definition, for an ability that is activated the second it is applied.
+ * Gameplay ability that activates immediately upon the battler being created.
  */
 UCLASS()
-class POKEMONBATTLE_API UPassiveAbility : public UGameplayAbility {
+class POKEMONBATTLE_API UPassiveGameplayAbility : public UGameplayAbility {
     GENERATED_BODY()
 
 public:

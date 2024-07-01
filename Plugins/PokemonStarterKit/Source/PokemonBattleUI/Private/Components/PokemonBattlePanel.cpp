@@ -2,8 +2,8 @@
 
 #include "Components/PokemonBattlePanel.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Components/ProgressBar.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"

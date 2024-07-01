@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/GameplayAbilities/Effects/StatStageEffect.h"
+#include "Battle/Effects/StatStageEffect.h"
 #include "DataManager.h"
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
