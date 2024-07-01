@@ -233,14 +233,18 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
     auto ActorInfo = GetActorInfo();
     auto &ActivationInfo = GetCurrentActivationInfoRef();
     for (auto &Target : Targets) {
-        if (auto TargetAbilities = Target->GetAbilityComponent(); TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter)) {
+        auto TargetAbilities = Target->GetAbilityComponent(); 
+        if (TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter)) {
             continue;
         }
 
         auto TargetData = MakeUnique<FGameplayAbilityTargetData_ActorArray>();
         TargetData->SetActors({CastChecked<AActor>(Target.GetObject())});
         FGameplayAbilityTargetDataHandle TargetDataHandle(TargetData.Release());
-        auto EffectHandle = ApplyGameplayEffectToTarget(Handle, &ActorInfo, ActivationInfo, TargetDataHandle, DealDamageEffect, 1);
+        auto EffectSpec = MakeOutgoingGameplayEffectSpec(Handle, &ActorInfo, ActivationInfo, DealDamageEffect);
+        auto DamageState = TargetAbilities->GetTargetDamageStateAttributeSet();
+        EffectSpec.Data->SetSetByCallerMagnitude(Pokemon::Battle::Moves::DamageDealtValue, -DamageState->GetCalculatedDamage());
+        auto Applied = ApplyGameplayEffectSpecToTarget(Handle, &ActorInfo, ActivationInfo, EffectSpec, TargetDataHandle);
     }
 
     DisplayDamage(User, Targets);
