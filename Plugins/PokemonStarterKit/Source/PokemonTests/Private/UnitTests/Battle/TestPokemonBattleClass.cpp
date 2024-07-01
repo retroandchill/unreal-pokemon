@@ -43,7 +43,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler2, GetAbilityComponent).WillByDefault(Return(Battler2Abilities));
     ON_CALL(*MockAction2, GetPriority).WillByDefault(Return(0));
     ON_CALL(*MockAction2, GetBattler).WillByDefault(ReturnRef(Battler2));
-    Battler2Abilities->GetCoreAttributes()->SetSpeed(20);
+    Battler2Abilities->GetCoreAttributes()->InitSpeed(20);
     ActionPointers.Add(MockAction2.Get());
     Actions.Emplace(MoveTemp(MockAction2));
 
@@ -55,7 +55,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler3, GetAbilityComponent).WillByDefault(Return(Battler3Abilities));
     ON_CALL(*MockAction3, GetPriority).WillByDefault(Return(0));
     ON_CALL(*MockAction3, GetBattler).WillByDefault(ReturnRef(Battler3));
-    Battler3Abilities->GetCoreAttributes()->SetSpeed(60);
+    Battler3Abilities->GetCoreAttributes()->InitSpeed(60);
     ActionPointers.Add(MockAction3.Get());
     Actions.Emplace(MoveTemp(MockAction3));
 

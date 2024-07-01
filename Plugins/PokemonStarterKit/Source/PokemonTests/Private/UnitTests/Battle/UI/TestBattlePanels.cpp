@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -43,8 +42,8 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     auto CoreAttributes = NewObject<UPokemonCoreAttributeSet>(BattlerActor);
     UReflectionUtils::SetPropertyValue<TObjectPtr<UPokemonCoreAttributeSet>>(BattlerAbilityComponent, "CoreAttributes", CoreAttributes);
     BattlerAbilityComponent->AddSpawnedAttribute(CoreAttributes);
-    CoreAttributes->SetMaxHP(100);
-    CoreAttributes->SetHP(100);
+    CoreAttributes->InitMaxHP(100);
+    CoreAttributes->InitHP(100);
     Panel->SetBattler(Battler);
 
     FIND_CHILD_WIDGET(Panel.Get(), UDisplayText, PokemonName);
@@ -71,7 +70,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
 
-    CoreAttributes->SetHP(50);
+    CoreAttributes->InitHP(50);
     Panel->Refresh();
     UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, Panel->GetVisibility());
     UE_CHECK_EQUAL(TEXT("Lucario"), PokemonName->GetText().ToString());
@@ -82,7 +81,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
 
-    CoreAttributes->SetHP(0);
+    CoreAttributes->InitHP(0);
     Panel->Refresh();
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, Panel->GetVisibility());
     UE_CHECK_EQUAL(TEXT("Lucario"), PokemonName->GetText().ToString());
