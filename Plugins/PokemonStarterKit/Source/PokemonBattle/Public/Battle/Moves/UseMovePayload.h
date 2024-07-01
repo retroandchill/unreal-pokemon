@@ -12,7 +12,7 @@ class UGameplayAbility;
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class POKEMONBATTLE_API UUseMovePayload : public UObject {
     GENERATED_BODY()
 

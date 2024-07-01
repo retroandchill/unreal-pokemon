@@ -29,10 +29,9 @@ UCLASS(ClassGroup=("Gameplay Abilities"), meta=(BlueprintSpawnableComponent))
 class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponent {
     GENERATED_BODY()
     
-protected:
+public:
     void BeginPlay() override;
 
-public:
     UPokemonCoreAttributeSet *GetCoreAttributes() const;
     UStatStagesAttributeSet *GetStatStages() const;
     UTargetDamageStateAttributeSet *GetTargetDamageStateAttributeSet() const;

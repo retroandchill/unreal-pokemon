@@ -68,7 +68,7 @@ struct POKEMONBATTLE_API FCriticalHitRateCalculationData {
 /**
  * Event payload object for handling the critical hit calculations.
  */
-UCLASS()
+UCLASS(BlueprintType)
 class POKEMONBATTLE_API UCriticalHitRateCalculationPayload : public UObject {
     GENERATED_BODY()
 

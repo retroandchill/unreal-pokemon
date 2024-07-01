@@ -69,7 +69,7 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
 /**
  * Payload object for performing a success check against a target
  */
-UCLASS()
+UCLASS(BlueprintType)
 class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject {
     GENERATED_BODY()
 

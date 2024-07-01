@@ -58,7 +58,7 @@ struct POKEMONBATTLE_API FHitCheckData {
 /**
  * The event payload for a hit check.
  */
-UCLASS()
+UCLASS(BlueprintType)
 class POKEMONBATTLE_API UHitCheckPayload : public UObject {
     GENERATED_BODY()
 

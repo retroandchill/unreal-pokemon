@@ -94,7 +94,7 @@ struct POKEMONBATTLE_API FDamageCalculationData {
 /**
  * The payload used during damage modification.
  */
-UCLASS()
+UCLASS(BlueprintType)
 class POKEMONBATTLE_API UDamageModificationPayload : public UObject {
     GENERATED_BODY()
 
