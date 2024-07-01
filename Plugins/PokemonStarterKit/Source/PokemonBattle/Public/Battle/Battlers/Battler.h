@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "range/v3/view/any_view.hpp"
-#include "BattlerStats.h"
 #include "UObject/Interface.h"
 
 #include "Battler.generated.h"
@@ -14,12 +13,10 @@ class UBattlerAbilityComponent;
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
-class IBattlerEffect;
-class IHoldItemBattleEffect;
 class IBattlerController;
 
-    // This class does not need to be modified.
-    UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
+// This class does not need to be modified.
+UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
     GENERATED_BODY()
 };
 
