@@ -9,6 +9,7 @@
 
 #include "BattlerActor.generated.h"
 
+struct FOnAttributeChangeData;
 class UGameplayAbility;
 class UBattlerAbilityComponent;
 class IBattlerController;
@@ -53,12 +54,6 @@ public:
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetPokemonLevel() const override;
 
-    UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetHP() const override;
-
-    UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetMaxHP() const override;
-
     UFUNCTION(BlueprintPure, DisplayName = "Get HP Percent", Category = Stats)
     float GetHPPercent() const override;
 
@@ -69,27 +64,6 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = Visuals)
     void Faint() const override;
-
-    UFUNCTION(BlueprintPure, Category = Stats)
-    FMainBattleStat GetAttack() const override;
-
-    UFUNCTION(BlueprintPure, Category = Stats)
-    FMainBattleStat GetDefense() const override;
-
-    UFUNCTION(BlueprintPure, Category = Stats)
-    FMainBattleStat GetSpecialAttack() const override;
-
-    UFUNCTION(BlueprintPure, Category = Stats)
-    FMainBattleStat GetSpecialDefense() const override;
-
-    UFUNCTION(BlueprintPure, Category = Stats)
-    FMainBattleStat GetSpeed() const override;
-
-    /**
-     * @copydoc IBattler::GetStatStages
-     */
-    UFUNCTION(BlueprintPure, Category = Stats)
-    int32 GetStatStage(FName Stat) const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
@@ -115,6 +89,12 @@ public:
     void ShowSprite() const override;
 
   private:
+    /**
+     * Take a change in the Battler's HP and propagate that to the base HP as needed.
+     * @param Data The data about the HP change
+     */
+    void UpdateHPValue(const FOnAttributeChangeData& Data) const;
+    
     /**
      * Spawn the underlying sprite actor into the world
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)
@@ -151,16 +131,14 @@ public:
     TScriptInterface<IPokemon> WrappedPokemon;
 
     /**
-     * The stats for the given Pokémon in battle
-     */
-    TMap<FName, int32> StatStages;
-
-    /**
-     * The list of gameplay abilities that should be activated immediately upon 
+     * The list of gameplay abilities that should be activated immediately upon the actor being spawned.
      */
     UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
     TArray<TSubclassOf<UGameplayAbility>> InnateAbilities;
 
+    /**
+     * The handles for the Pokémon's innate abilities that have been created
+     */
     TArray<FGameplayAbilitySpecHandle> InnateAbilityHandles;
 
     /**

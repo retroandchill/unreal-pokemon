@@ -77,20 +77,6 @@ class POKEMONBATTLE_API IBattler {
     virtual int32 GetPokemonLevel() const = 0;
 
     /**
-     * Get the value of the Pokémon's current HP
-     * @return The Pokémon's current HP
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetHP() const = 0;
-
-    /**
-     * Get the value of the Pokémon's Max HP.
-     * @return The Pokémon's Max HP
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetMaxHP() const = 0;
-
-    /**
      * Get the value of the Pokémon's Max HP.
      * @return The Pokémon's Max HP
      */
@@ -115,49 +101,6 @@ class POKEMONBATTLE_API IBattler {
      */
     UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void Faint() const = 0;
-
-    /**
-     * Get the value of the Pokémon's physical attack.
-     * @return The Pokémon's physical attack
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetAttack() const = 0;
-
-    /**
-     * Get the value of the Pokémon's physical defense.
-     * @return The Pokémon's physical defense
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetDefense() const = 0;
-
-    /**
-     * Get the value of the Pokémon's special attack.
-     * @return The Pokémon's special attack
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetSpecialAttack() const = 0;
-
-    /**
-     * Get the value of the Pokémon's special defense.
-     * @return The Pokémon's special defense
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetSpecialDefense() const = 0;
-
-    /**
-     * Get the value of the Pokémon's speed
-     * @return The Pokémon's speed
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetSpeed() const = 0;
-
-    /**
-     * Get the stat stage for the given value
-     * @param Stat The stat to look up
-     * @return The number of stages in the given stat
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetStatStage(FName Stat) const = 0;
 
     /**
      * Get the percent value of Exp to a level up

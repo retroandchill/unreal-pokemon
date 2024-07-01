@@ -16,18 +16,10 @@ public:
     MOCK_METHOD(FText, GetNickname, (), (const, override));
     MOCK_METHOD(EPokemonGender, GetGender, (), (const, override));
     MOCK_METHOD(int32, GetPokemonLevel, (), (const, override));
-    MOCK_METHOD(int32, GetHP, (), (const, override));
-    MOCK_METHOD(int32, GetMaxHP, (), (const, override));
     MOCK_METHOD(float, GetHPPercent, (), (const, override));
     MOCK_METHOD(void, TakeBattleDamage, (int32 Damage), (override));
     MOCK_METHOD(bool, IsFainted, (), (const, override));
     MOCK_METHOD(void, Faint, (), (const, override));
-    MOCK_METHOD(FMainBattleStat, GetAttack, (), (const, override));
-    MOCK_METHOD(FMainBattleStat, GetDefense, (), (const, override));
-    MOCK_METHOD(FMainBattleStat, GetSpecialAttack, (), (const, override));
-    MOCK_METHOD(FMainBattleStat, GetSpecialDefense, (), (const, override));
-    MOCK_METHOD(FMainBattleStat, GetSpeed, (), (const, override));
-    MOCK_METHOD(int32, GetStatStage, (FName Stat), (const, override));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent*, GetAbilityComponent, (), (const, override));
