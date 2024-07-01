@@ -11,6 +11,7 @@
 
 #include "PokemonBattle.generated.h"
 
+class UBattleAbilitySystemComponent;
 struct FActionResult;
 class IBattleSide;
 class ITrainer;
@@ -55,6 +56,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     GENERATED_BODY()
 
   public:
+    APokemonBattle();
+    
     /**
      * Create a wild Pokémon battle with the given settings
      * @param Pokemon The Pokémon to generate from
@@ -65,6 +68,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) override;
 
   protected:
+    void BeginPlay() override;
+    
     void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
 
     void Tick(float DeltaSeconds) override;
@@ -248,6 +253,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * @param SideIndex The index for the battle side that cannot continue
      */
     void DecideBattle(int32 SideIndex);
+
+    /**
+     * The ability system component used for this actor
+     */
+    UPROPERTY()
+    TObjectPtr<UBattleAbilitySystemComponent> AbilitySystemComponent;
 
     /**
      * The current turn number that we're on in battle.

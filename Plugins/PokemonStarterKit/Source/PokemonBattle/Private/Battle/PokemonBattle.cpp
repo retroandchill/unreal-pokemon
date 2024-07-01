@@ -13,6 +13,7 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
+#include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include <functional>
@@ -25,6 +26,10 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
 
 static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
     return !Battler->IsFainted();
+}
+
+APokemonBattle::APokemonBattle() {
+    AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
 }
 
 void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
@@ -45,6 +50,11 @@ void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
 TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) {
     Sides = MoveTemp(SidesIn);
     return this;
+}
+
+void APokemonBattle::BeginPlay() {
+    Super::BeginPlay();
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
