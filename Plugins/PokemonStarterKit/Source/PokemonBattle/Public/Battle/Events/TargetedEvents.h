@@ -141,6 +141,14 @@ struct POKEMONBATTLE_API FTargetedEvent {
 namespace Pokemon::Battle::Events {
 
 /**
+ * Send out a single event to the user of a move
+ * @param User The user of the move in question
+ * @param Payload The payload data for the event
+ * @param EventTag The event tag to send out for this event
+ */
+POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler>& User, const UObject* Payload, const FNativeGameplayTag& EventTag);
+
+/**
  * Send out a set of events to the battlefield.
  * @param User The user of the move in question
  * @param Target The target of the move in question

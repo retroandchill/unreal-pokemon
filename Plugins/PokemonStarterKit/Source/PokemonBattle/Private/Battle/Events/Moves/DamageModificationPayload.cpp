@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/Moves/DamageModificationPayload.h"
+#include "Battle//Events/Moves/DamageModificationPayload.h"
 
 FDamageCalculationData::FDamageCalculationData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
     int32 TargetCount, const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower) : User(User), Target(Target), TargetCount(TargetCount), PreDamageMessages(PreDamageMessages), Type(Type), BasePower(BasePower) {

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleMoveFunctionCode.h"
+#include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
 #include "DamageModificationPayload.generated.h"
 

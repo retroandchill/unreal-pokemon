@@ -43,6 +43,17 @@ static void SendOutEventForActor(const FGameplayTag &Tag, FGameplayEventData &Ev
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, Tag, EventData);
 }
 
+void Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
+    const FNativeGameplayTag &EventTag) {
+    auto UserActor = CastChecked<AActor>(User.GetObject());
+    FGameplayEventData EventData;
+    EventData.OptionalObject = Payload;
+    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
+    TargetData->TargetActorArray.Add(UserActor);
+    EventData.TargetData.Data.Emplace(MoveTemp(TargetData));
+    SendOutEventForActor(EventTag, EventData, UserActor);
+}
+
 void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler> &User,
                                                 const TScriptInterface<IBattler> &Target, const UObject* Payload, const FTargetedEvent &EventTags) {
     using namespace ranges::views;

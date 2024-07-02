@@ -3,6 +3,7 @@
 
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "PokemonBattleModule.h"
 #include "RangeHelpers.h"
 #include "Battle/Type.h"
 #include "Battle/Battlers/Battler.h"
@@ -11,12 +12,13 @@
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
 #include "Battle/Moves/BattleMove.h"
-#include "Battle/Moves/CriticalHitRateCalculationPayload.h"
-#include "Battle/Moves/DamageModificationPayload.h"
-#include "Battle/Moves/HitCheckPayload.h"
+#include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
+#include "Battle/Events/Moves/DamageModificationPayload.h"
+#include "Battle/Events/Moves/HitCheckPayload.h"
+#include "Battle/Events/Moves/MoveTypeDeterminedPayload.h"
 #include "Battle/Moves/MoveTags.h"
-#include "Battle/Moves/SuccessCheckAgainstTargetPayload.h"
-#include "Battle/Moves/UseMovePayload.h"
+#include "Battle/Events/Moves/SuccessCheckAgainstTargetPayload.h"
+#include "Battle/Events/Moves/UseMovePayload.h"
 #include "Battle/Types/SingleTypeModPayload.h"
 #include "Battle/Types/TypeMatchUpModPayload.h"
 #include "Battle/Types/TypeTags.h"
@@ -68,9 +70,8 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
 
     check(ActorInfo != nullptr)
     auto TargetsActors = FilterInvalidTargets(Handle, *ActorInfo, TriggerEventData);
-
+    
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
-    check(User.GetObject()->Implements<UBattler>())
     TArray<TScriptInterface<IBattler>> Targets;
     Targets.Reserve(TargetsActors.Num());
     for (auto Actor : TargetsActors) {
@@ -82,6 +83,12 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
         Battler->GetAbilityComponent()->AddLooseGameplayTags(Tags);
     }
 
+    check(User.GetObject()->Implements<UBattler>())
+    auto TypePayload = NewObject<UMoveTypeDeterminedPayload>();
+    TypePayload->User = User;
+    TypePayload->Type = DeterminedType;
+    Pokemon::Battle::Events::SendOutMoveEvent(User, TypePayload, Pokemon::Battle::Moves::TypeDetermined);
+    
     UseMove(User, Targets);
 }
 
@@ -275,7 +282,7 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
+                                                                 const TScriptInterface<IBattler> &Target) {
     return Power;
 }
 
@@ -292,10 +299,15 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
     int32 BasePower = CalculateBasePower(BattleMove->GetBasePower(), User, Target);
     auto Payload = UDamageModificationPayload::Create(User, Target, TargetCount, PreDamageMessages, DeterminedType, BasePower);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::DamageModificationEvents);
-
+    auto &PayloadData = Payload->GetData();
+    float NewFinal = PayloadData.FinalDamageMultiplier;
+    NewFinal *= User->GetAbilityComponent()->GetStatStages()->GetSameTypeAttackBonus();
+    NewFinal *= DamageState.GetTypeMod();
+    Payload->SetFinalDamageMultiplier(NewFinal);
+    ApplyAdditionalDamageMultipliers(Payload);
+    
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
     
-    auto &PayloadData = Payload->GetData();
     BasePower = FMath::Max(FMath::RoundToInt32(BasePower * PayloadData.PowerMultiplier), 1);
     Attack = FMath::Max(FMath::RoundToInt32(Attack * PayloadData.AttackMultiplier), 1);
     Defense = FMath::Max(FMath::RoundToInt32(Defense * PayloadData.DefenseMultiplier), 1);
@@ -304,6 +316,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
     int32 Damage = FMath::FloorToInt32(2.0f * static_cast<float>(Level) / 5 + 2) * BasePower * Attack / Defense / 50 + 2;
     Damage = FMath::Max(FMath::RoundToInt32(Damage * PayloadData.FinalDamageMultiplier), 1);
     DamageState.SetCalculatedDamage(static_cast<float>(Damage));
+    UE_LOG(LogBattle, Display, TEXT("%s calculated to take %d damage"), *Target->GetNickname().ToString(), Damage);
 }
 
 FAttackAndDefenseStats UBattleMoveFunctionCode::GetAttackAndDefense_Implementation(const TScriptInterface<IBattler> &User,

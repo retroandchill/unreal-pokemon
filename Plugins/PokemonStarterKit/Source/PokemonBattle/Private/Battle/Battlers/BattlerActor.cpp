@@ -19,6 +19,9 @@
 #include "Battle/Abilities/AbilityLookup.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
+#include "Battle/Battlers/Innate/Innate_DamageSwing.h"
+#include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
@@ -38,6 +41,9 @@ TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TSc
 
 ABattlerActor::ABattlerActor() {
     BattlerAbilityComponent = CreateDefaultSubobject<UBattlerAbilityComponent>("BattlerAbilityComponent");
+    InnateAbilities.Add(UInnate_CriticalHitDamage::StaticClass());
+    InnateAbilities.Add(UInnate_MultiTargetDamageSplit::StaticClass());
+    InnateAbilities.Add(UInnate_DamageSwing::StaticClass());
 }
 
 TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,

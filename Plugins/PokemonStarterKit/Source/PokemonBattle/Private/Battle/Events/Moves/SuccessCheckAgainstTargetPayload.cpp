@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/Moves/SuccessCheckAgainstTargetPayload.h"
+#include "Battle//Events/Moves/SuccessCheckAgainstTargetPayload.h"
 
 FTargetSuccessCheckPayload::FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
                                                        const FRunningMessageSet &Messages,

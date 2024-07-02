@@ -115,5 +115,11 @@ class POKEMONBATTLE_API IBattleMove {
     UFUNCTION(BlueprintCallable, Category = Context)
     virtual const TScriptInterface<IBattler> &GetOwningBattler() const = 0;
 
+    /*
+     * Try to activate the move returning the spec handle for the move execution
+     */
     virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<TScriptInterface<IBattler>> &Targets) = 0;
+
+    
+    
 };

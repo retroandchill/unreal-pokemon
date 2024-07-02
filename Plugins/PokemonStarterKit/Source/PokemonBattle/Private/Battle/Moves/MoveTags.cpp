@@ -9,6 +9,7 @@
 namespace Pokemon::Battle::Moves {
 
 UE_DEFINE_GAMEPLAY_TAG(UsingMove, "Battle.UsingMove");
+UE_DEFINE_GAMEPLAY_TAG(TypeDetermined, "Battle.Moves.TypeDetermined");
 UE_DEFINE_GAMEPLAY_TAG(UsingMove_Physical, "Battle.UsingMove.Category.Physical");
 UE_DEFINE_GAMEPLAY_TAG(UsingMove_Special, "Battle.UsingMove.Category.Special");
 UE_DEFINE_GAMEPLAY_TAG(UsingMove_Status, "Battle.UsingMove.Category.Status");

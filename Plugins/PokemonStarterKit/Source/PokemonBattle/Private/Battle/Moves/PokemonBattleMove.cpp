@@ -14,7 +14,7 @@
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/MoveTags.h"
-#include "Battle/Moves/UseMovePayload.h"
+#include "Battle/Events/Moves/UseMovePayload.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler>& Battler,
                                                              const TScriptInterface<IMove> &Move) {

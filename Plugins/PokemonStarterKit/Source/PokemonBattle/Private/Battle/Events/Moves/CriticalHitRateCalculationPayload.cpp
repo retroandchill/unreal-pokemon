@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/Moves/CriticalHitRateCalculationPayload.h"
+#include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Battle/Moves/MoveEvaluationHelpers.h"
 
 FCriticalHitRateCalculationData::FCriticalHitRateCalculationData(const TScriptInterface<IBattleMove> &Move,

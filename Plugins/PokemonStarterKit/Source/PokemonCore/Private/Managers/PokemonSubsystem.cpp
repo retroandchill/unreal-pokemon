@@ -9,13 +9,14 @@
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
+    Collection.InitializeDependency(UDependencyInjectionSubsystem::StaticClass());
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();
          auto Type : RegisteredTypes) {
         GrowthRates.Add(Type, Exp::FGrowthRateRegistry::GetInstance().Construct(Type));
          }
-
+    
 #if WITH_EDITOR
     StartNewGame();
 #endif

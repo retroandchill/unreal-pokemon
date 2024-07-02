@@ -8,6 +8,7 @@
 
 #include "BattleMoveFunctionCode.generated.h"
 
+class UDamageModificationPayload;
 class AMoveAnimation;
 class AMoveExecutor;
 class IBattler;
@@ -206,6 +207,13 @@ protected:
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
     void CalculateDamageAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
                                       int32 TargetCount, const FRunningMessageSet &PreDamageMessages);
+
+    /**
+     * Apply any move-specifc damage multipliers
+     * @param Payload The event payload that can be further modified
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
+    void ApplyAdditionalDamageMultipliers(UDamageModificationPayload* Payload);
 
     /**
      * Calculate the base power of the move

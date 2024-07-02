@@ -43,6 +43,7 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const FText &GetNoAbilityDescription() const final;
 
     const TArray<FStatStageInfo> &GetStatStages() const final;
+    float GetCriticalHitMultiplier() const final;
     const TArray<int32> &GetCriticalHitRatios() const final;
 
     const FSoftClassPath& GetDefaultMoveAbility() const;

@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Battle/Moves/HitCheckPayload.h"
+#include "Battle//Events/Moves/HitCheckPayload.h"
 
 FHitCheckData::FHitCheckData(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target, int32 BaseAccuracy) : Move(Move), User(User), Target(Target), BaseAccuracy(BaseAccuracy) {

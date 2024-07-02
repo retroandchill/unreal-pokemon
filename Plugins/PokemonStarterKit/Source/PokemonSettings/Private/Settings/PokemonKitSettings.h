@@ -140,6 +140,12 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     FSoftClassPath DefaultMoveAbility;
 
     /**
+     * The damage multiplier for a critical hit
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Battle)
+    float CriticalHitMultiplier = 1.5f;
+    
+    /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))

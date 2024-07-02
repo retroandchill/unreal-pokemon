@@ -4,7 +4,7 @@
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 
 void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
-    if (Attribute == GetCriticalHitStagesAttribute()) {
+    if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute()) {
         return;
     }
     

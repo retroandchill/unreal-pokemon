@@ -80,6 +80,10 @@ const TArray<FStatStageInfo> & Pokemon::FBaseSettings::GetStatStages() const {
     return KitSettings->StatStages;
 }
 
+float Pokemon::FBaseSettings::GetCriticalHitMultiplier() const {
+    return KitSettings->CriticalHitMultiplier;
+}
+
 const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
 }

@@ -38,5 +38,5 @@ class UNREALINJECTOR_API UDependencyInjectionSubsystem : public UGameInstanceSub
 
   private:
     UPROPERTY()
-    TObjectPtr<UDependencyInjectionSettings> InjectionSettings;
+    TObjectPtr<const UDependencyInjectionSettings> InjectionSettings;
 };

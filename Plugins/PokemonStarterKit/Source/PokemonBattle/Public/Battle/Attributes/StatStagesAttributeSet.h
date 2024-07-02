@@ -23,6 +23,7 @@ public:
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, AccuracyStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, EvasionStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, CriticalHitStages)
+    ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, SameTypeAttackBonus)
 
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
 
@@ -53,4 +54,11 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData CriticalHitStages = 0.f;
+
+    /**
+     * The property that is multiplied to apply the Same-Type Attack Bonus (STAB). This will be 1, when the move
+     * type does not match.
+     */
+    UPROPERTY()
+    FGameplayAttributeData SameTypeAttackBonus = 1.f;
 };
