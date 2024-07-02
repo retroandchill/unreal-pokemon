@@ -43,7 +43,10 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const FText &GetNoAbilityDescription() const final;
 
     const TArray<FStatStageInfo> &GetStatStages() const final;
+    float GetCriticalHitMultiplier() const final;
     const TArray<int32> &GetCriticalHitRatios() const final;
+
+    const FSoftClassPath& GetDefaultMoveAbility() const;
 
     /**
      * Get the class that represents the item utilities
@@ -56,11 +59,6 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
      * @param Callback The callback to be handled by the loop
      */
     void ForEachDataTable(const TFunctionRef<void(UDataTable *)> &Callback) const;
-
-    /**
-     * Preemptively load all the data tables
-     */
-    void LoadDataTables() const;
 
     /**
      * Settings for all Pokémon sprites.

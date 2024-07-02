@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AttributeSet.h"
 #include "IndexedTableRow.h"
 #include "PokemonStatType.h"
 #include "UObject/Object.h"
@@ -39,6 +40,20 @@ struct POKEMONDATA_API FStat : public FIndexedTableRow {
     UPROPERTY(DisplayName = "PBS Order", BlueprintReadOnly, EditAnywhere, Category = "Metadata",
               meta = (EditCondition = "Type != EPokemonStatType::Battle", UIMin = 0, ClampMin = 0))
     int32 PbsOrder;
+
+    /**
+     * The field used to initialize attributes during battle. This is also what updates the base values during a
+     * level-up or a form change.
+     */
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
+    FGameplayAttribute BaseAttribute;
+
+    /**
+     * The field used to initialize attributes during battle. This is also what updates the base values during a
+     * level-up or a form change.
+     */
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata", meta = (EditCondition = "Type != EPokemonStatType::Main"))
+    FGameplayAttribute StagesAttribute;
 };
 
 /**

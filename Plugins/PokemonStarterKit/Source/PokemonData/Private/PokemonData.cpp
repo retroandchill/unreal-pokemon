@@ -45,7 +45,7 @@ void FPokemonDataModule::StartupModule() {
     DataRegistry.RegisterStruct<FEnvironment>();
     DataRegistry.RegisterStruct<FBattleWeather>();
     DataRegistry.RegisterStruct<FBattleTerrain>();
-    DataRegistry.RegisterStruct<FTarget>();
+    DataRegistry.RegisterStruct<FMoveTarget>();
 
     DataRegistry.RegisterStruct<FType>();
     DataRegistry.RegisterStruct<FAbility>();
@@ -53,8 +53,6 @@ void FPokemonDataModule::StartupModule() {
     DataRegistry.RegisterStruct<FItem>();
     DataRegistry.RegisterStruct<FSpeciesData>();
     DataRegistry.RegisterStruct<FTrainerType>();
-
-    Pokemon::FBaseSettings::Get().LoadDataTables();
 }
 
 void FPokemonDataModule::ShutdownModule() {

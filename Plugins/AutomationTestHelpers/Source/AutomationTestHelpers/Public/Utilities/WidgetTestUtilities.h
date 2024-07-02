@@ -52,7 +52,7 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
      * Create the context for a test that requires a world
      * @return A tuple containing the overlay for widgets, a pointer to the world, and a pointer to the game instance
      */
-    static std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> CreateTestWorld();
+    static std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> CreateTestWorld(bool bBeginPlay = true);
 
     /**
      * Find the first child of a given type in a slate hirearchy

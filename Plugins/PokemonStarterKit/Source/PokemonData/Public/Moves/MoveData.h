@@ -90,7 +90,7 @@ struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
     int32 EffectChance;
 
     /**
-     * Words/phrases that can be used to group certain kinds of moves."
+     * Words/phrases that can be used to group certain kinds of moves.
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
     TArray<FName> Tags;

@@ -8,7 +8,7 @@
 #include "Battle/Battlers/BattlerSprite.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Moves/BaseBattleMove.h"
+#include "Battle/Moves/PokemonBattleMove.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Moves/MoveBlock.h"
@@ -17,29 +17,34 @@
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
 #include "Battle/Abilities/AbilityLookup.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
+#include "Battle/Battlers/Innate/Innate_DamageSwing.h"
+#include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
+#include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
 #include <functional>
-#include <range/v3/view/empty.hpp>
-#include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
     check(Battler->GetOwningSide() != nullptr)
     check(Move != nullptr)
-    auto MoveClass = Battle::Moves::LookupMoveEffectClass(Move->GetFunctionCode());
-    TScriptInterface<IBattleMove> BattleMove = NewObject<UObject>(Battler, MoveClass);
-    BattleMove->Initialize(Battler->GetOwningSide()->GetOwningBattle(), Move);
+    TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
+    BattleMove->Initialize(Battler, Move);
     return BattleMove;
 }
 
 ABattlerActor::ABattlerActor() {
     BattlerAbilityComponent = CreateDefaultSubobject<UBattlerAbilityComponent>("BattlerAbilityComponent");
+    InnateAbilities.Add(UInnate_CriticalHitDamage::StaticClass());
+    InnateAbilities.Add(UInnate_MultiTargetDamageSplit::StaticClass());
+    InnateAbilities.Add(UInnate_DamageSwing::StaticClass());
 }
 
 TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
@@ -51,13 +56,36 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     auto& DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
-    StatStages.Reset();
-    StatTable.ForEach([this](const FStat &Stat) {
-        if (Stat.Type == EPokemonStatType::Main)
-            return;
+    
+    TMap<UClass*, UAttributeSet*> Attributes;
+    for (auto AttributeSets = BattlerAbilityComponent->GetSpawnedAttributes(); auto Attribute : AttributeSets) {
+        Attributes.Add(Attribute->GetClass(), Attribute);
+    }
 
-        StatStages.Emplace(Stat.ID, 0);
+    auto StatBlock = WrappedPokemon->GetStatBlock();
+    StatTable.ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
+        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
+            auto AttributeSetClass = Stat.BaseAttribute.GetAttributeSetClass();
+            check(Attributes.Contains(AttributeSetClass))
+            auto AttributeData = Stat.BaseAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
+            auto StatValue = StatBlock->GetStat(Stat.ID);
+            AttributeData->SetBaseValue(static_cast<float>(StatValue->GetStatValue()));
+            AttributeData->SetCurrentValue(AttributeData->GetBaseValue());
+        }
+        
+        if (Stat.StagesAttribute.IsValid()) {
+            auto AttributeSetClass = Stat.StagesAttribute.GetAttributeSetClass();
+            check(Attributes.Contains(AttributeSetClass))
+            auto AttributeData = Stat.StagesAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
+            AttributeData->SetBaseValue(0.f);
+            AttributeData->SetCurrentValue(0.f);
+        }
     });
+
+    BattlerAbilityComponent->GetCoreAttributes()->InitHP(static_cast<float>(WrappedPokemon->GetCurrentHP()));
+    auto &HPChangedDelegate = BattlerAbilityComponent->GetGameplayAttributeValueChangeDelegate(UPokemonCoreAttributeSet::GetHPAttribute());
+    HPChangedDelegate.Clear();
+    HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
     
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
@@ -78,6 +106,12 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
+    }
+    
+    if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem()); HoldItemClass != nullptr) {
+        HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
+    } else {
+        HoldItem = FGameplayAbilitySpecHandle();
     }
 
     return this;
@@ -121,16 +155,9 @@ int32 ABattlerActor::GetPokemonLevel() const {
     return WrappedPokemon->GetStatBlock()->GetLevel();
 }
 
-int32 ABattlerActor::GetHP() const {
-    return WrappedPokemon->GetCurrentHP();
-}
-
-int32 ABattlerActor::GetMaxHP() const {
-    return WrappedPokemon->GetMaxHP();
-}
-
 float ABattlerActor::GetHPPercent() const {
-    return static_cast<float>(WrappedPokemon->GetCurrentHP()) / static_cast<float>(WrappedPokemon->GetMaxHP());
+    auto CoreAttributes = BattlerAbilityComponent->GetCoreAttributes();
+    return CoreAttributes->GetHP() / CoreAttributes->GetMaxHP();
 }
 
 void ABattlerActor::TakeBattleDamage(int32 Damage) {
@@ -145,36 +172,6 @@ void ABattlerActor::Faint() const {
     IBattlerSprite::Execute_Faint(Sprite);
 }
 
-FMainBattleStat ABattlerActor::GetAttack() const {
-    static const FName Attack = TEXT("ATTACK");
-    return { WrappedPokemon->GetStatBlock()->GetStat(Attack)->GetStatValue(), GetStatStage(Attack) };
-}
-
-FMainBattleStat ABattlerActor::GetDefense() const {
-    static const FName Defense = TEXT("DEFENSE");
-    return { WrappedPokemon->GetStatBlock()->GetStat(Defense)->GetStatValue(), GetStatStage(Defense) };
-}
-
-FMainBattleStat ABattlerActor::GetSpecialAttack() const {
-    static const FName SpecialAttack = TEXT("SPECIAL_ATTACK");
-    return { WrappedPokemon->GetStatBlock()->GetStat(SpecialAttack)->GetStatValue(), GetStatStage(SpecialAttack) };
-}
-
-FMainBattleStat ABattlerActor::GetSpecialDefense() const {
-    static const FName SpecialDefense = TEXT("SPECIAL_DEFENSE");
-    return { WrappedPokemon->GetStatBlock()->GetStat(SpecialDefense)->GetStatValue(), GetStatStage(SpecialDefense) };
-}
-
-FMainBattleStat ABattlerActor::GetSpeed() const {
-    static const FName Speed = TEXT("SPEED");
-    return { WrappedPokemon->GetStatBlock()->GetStat(Speed)->GetStatValue(), GetStatStage(Speed) };
-}
-
-int32 ABattlerActor::GetStatStage(FName Stat) const {
-    check(StatStages.Contains(Stat))
-    return StatStages[Stat];
-}
-
 float ABattlerActor::GetExpPercent() const {
     return WrappedPokemon->GetStatBlock()->GetExpPercent();
 }
@@ -185,14 +182,6 @@ TArray<FName> ABattlerActor::GetTypes() const {
 
 UBattlerAbilityComponent * ABattlerActor::GetAbilityComponent() const {
     return BattlerAbilityComponent;
-}
-
-bool ABattlerActor::IsHoldItemActive() const {
-    return true;
-}
-
-const TScriptInterface<IHoldItemBattleEffect> &ABattlerActor::GetHoldItem() const {
-    return HoldItem;
 }
 
 const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {
@@ -216,6 +205,10 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);
+}
+
+void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
+    WrappedPokemon->SetCurrentHP(FMath::FloorToInt32(Data.NewValue));
 }
 
 void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {

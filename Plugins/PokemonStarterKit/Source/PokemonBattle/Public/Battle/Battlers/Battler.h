@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "range/v3/view/any_view.hpp"
-#include "BattlerStats.h"
 #include "UObject/Interface.h"
 
 #include "Battler.generated.h"
@@ -14,12 +13,10 @@ class UBattlerAbilityComponent;
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
-class IBattlerEffect;
-class IHoldItemBattleEffect;
 class IBattlerController;
 
-    // This class does not need to be modified.
-    UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
+// This class does not need to be modified.
+UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
     GENERATED_BODY()
 };
 
@@ -46,6 +43,7 @@ class POKEMONBATTLE_API IBattler {
      * Get the internal ID for this battler
      * @return The unique ID of the battler
      */
+    UFUNCTION(BlueprintCallable, Category = Metadata)
     virtual FGuid GetInternalId() const = 0;
 
     /**
@@ -76,20 +74,6 @@ class POKEMONBATTLE_API IBattler {
     virtual int32 GetPokemonLevel() const = 0;
 
     /**
-     * Get the value of the Pokémon's current HP
-     * @return The Pokémon's current HP
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetHP() const = 0;
-
-    /**
-     * Get the value of the Pokémon's Max HP.
-     * @return The Pokémon's Max HP
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetMaxHP() const = 0;
-
-    /**
      * Get the value of the Pokémon's Max HP.
      * @return The Pokémon's Max HP
      */
@@ -116,49 +100,6 @@ class POKEMONBATTLE_API IBattler {
     virtual void Faint() const = 0;
 
     /**
-     * Get the value of the Pokémon's physical attack.
-     * @return The Pokémon's physical attack
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetAttack() const = 0;
-
-    /**
-     * Get the value of the Pokémon's physical defense.
-     * @return The Pokémon's physical defense
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetDefense() const = 0;
-
-    /**
-     * Get the value of the Pokémon's special attack.
-     * @return The Pokémon's special attack
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetSpecialAttack() const = 0;
-
-    /**
-     * Get the value of the Pokémon's special defense.
-     * @return The Pokémon's special defense
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetSpecialDefense() const = 0;
-
-    /**
-     * Get the value of the Pokémon's speed
-     * @return The Pokémon's speed
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FMainBattleStat GetSpeed() const = 0;
-
-    /**
-     * Get the stat stage for the given value
-     * @param Stat The stat to look up
-     * @return The number of stages in the given stat
-     */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual int32 GetStatStage(FName Stat) const = 0;
-
-    /**
      * Get the percent value of Exp to a level up
      * @return The Pokémon's exp to level up percentage
      */
@@ -176,21 +117,8 @@ class POKEMONBATTLE_API IBattler {
      * Get the gameplay ability component used by this battler
      * @return The held battler ability component
      */
+    UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
     virtual UBattlerAbilityComponent* GetAbilityComponent() const = 0;
-
-    /**
-     * Get if the target's current hold item is active
-     * @return Is the target's hold item active?
-     */
-    UFUNCTION(BlueprintCallable, Category = Items)
-    virtual bool IsHoldItemActive() const = 0;
-
-    /**
-     * Get the Pokémon's current hold item effect
-     * @return The effect of the hold item in question
-     */
-    UFUNCTION(BlueprintCallable, Category = Abilities)
-    virtual const TScriptInterface<IHoldItemBattleEffect> &GetHoldItem() const = 0;
 
     /**
      * Get the Pokémon's currently usable moves.

@@ -9,7 +9,7 @@
 #include <range/v3/view/filter.hpp>
 
 static bool IsMoveUsable(const TScriptInterface<IBattleMove> &Move) {
-    return IBattleMove::Execute_IsUsable(Move.GetObject());
+    return Move->IsUsable();
 }
 
 void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const {
@@ -34,6 +34,6 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
-    auto Targets = IBattleMove::Execute_GetAllPossibleTargets(Move.GetObject(), Battler);
+    auto Targets = Move->GetAllPossibleTargets();
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
 }

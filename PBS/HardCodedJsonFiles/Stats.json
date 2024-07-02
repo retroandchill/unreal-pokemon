@@ -1,66 +1,170 @@
 [
-  {
-    "ID": "HP",
-    "Name": "HP",
-    "RealName": "HP",
-    "RealNameBrief": "HP",
-    "Type": "main",
-    "PbsOrder": 0
-  },
-  {
-    "ID": "ATTACK",
-    "Name": "ATTACK",
-    "RealName": "Attack",
-    "RealNameBrief": "Atk",
-    "Type": "main_battle",
-    "PbsOrder": 1
-  },
-  {
-    "ID": "DEFENSE",
-    "Name": "DEFENSE",
-    "RealName": "Defense",
-    "RealNameBrief": "Def",
-    "Type": "main_battle",
-    "PbsOrder": 2
-  },
-  {
-    "ID": "SPECIAL_ATTACK",
-    "Name": "SPECIAL_ATTACK",
-    "RealName": "Special Attack",
-    "RealNameBrief": "SpAtk",
-    "Type": "main_battle",
-    "PbsOrder": 4
-  },
-  {
-    "ID": "SPECIAL_DEFENSE",
-    "Name": "SPECIAL_DEFENSE",
-    "RealName": "Special Defense",
-    "RealNameBrief": "SpDef",
-    "Type": "main_battle",
-    "PbsOrder": 5
-  },
-  {
-    "ID": "SPEED",
-    "Name": "SPEED",
-    "RealName": "Speed",
-    "RealNameBrief": "Spd",
-    "Type": "main_battle",
-    "PbsOrder": 3
-  },
-  {
-    "ID": "ACCURACY",
-    "Name": "ACCURACY",
-    "RealName": "accuracy",
-    "RealNameBrief": "Acc",
-    "Type": "battle",
-    "PbsOrder": -1
-  },
-  {
-    "ID": "EVASION",
-    "Name": "EVASION",
-    "RealName": "evasiveness",
-    "RealNameBrief": "Eva",
-    "Type": "battle",
-    "PbsOrder": -1
-  }
+	{
+		"Name": "HP",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"HP_RealName\", \"HP\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"HP_RealNameBrief\", \"HP\")",
+		"Type": "Main",
+		"PbsOrder": 0,
+		"BaseAttribute":
+		{
+			"AttributeName": "MaxHP",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:MaxHP",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "",
+			"Attribute": "",
+			"AttributeOwner": "None"
+		},
+		"ID": "HP",
+		"RowID": 1
+	},
+	{
+		"Name": "ATTACK",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"ATTACK_RealName\", \"Attack\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"ATTACK_RealNameBrief\", \"Atk\")",
+		"Type": "MainBattle",
+		"PbsOrder": 1,
+		"BaseAttribute":
+		{
+			"AttributeName": "Attack",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:Attack",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "AttackStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:AttackStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "ATTACK",
+		"RowID": 2
+	},
+	{
+		"Name": "DEFENSE",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"DEFENSE_RealName\", \"Defense\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"DEFENSE_RealNameBrief\", \"Def\")",
+		"Type": "MainBattle",
+		"PbsOrder": 2,
+		"BaseAttribute":
+		{
+			"AttributeName": "Defense",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:Defense",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "DefenseStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:DefenseStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "DEFENSE",
+		"RowID": 3
+	},
+	{
+		"Name": "SPECIAL_ATTACK",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"SPECIAL_ATTACK_RealName\", \"Special Attack\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"SPECIAL_ATTACK_RealNameBrief\", \"SpAtk\")",
+		"Type": "MainBattle",
+		"PbsOrder": 4,
+		"BaseAttribute":
+		{
+			"AttributeName": "SpecialAttack",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:SpecialAttack",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "SpecialAttackStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:SpecialAttackStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "SPECIAL_ATTACK",
+		"RowID": 4
+	},
+	{
+		"Name": "SPECIAL_DEFENSE",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"SPECIAL_DEFENSE_RealName\", \"Special Defense\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"SPECIAL_DEFENSE_RealNameBrief\", \"SpDef\")",
+		"Type": "MainBattle",
+		"PbsOrder": 5,
+		"BaseAttribute":
+		{
+			"AttributeName": "SpecialDefense",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:SpecialDefense",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "SpecialDefenseStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:SpecialDefenseStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "SPECIAL_DEFENSE",
+		"RowID": 5
+	},
+	{
+		"Name": "SPEED",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"SPEED_RealName\", \"Speed\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"SPEED_RealNameBrief\", \"Spd\")",
+		"Type": "MainBattle",
+		"PbsOrder": 3,
+		"BaseAttribute":
+		{
+			"AttributeName": "SpeedStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:SpeedStages",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "SpeedStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:SpeedStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "SPEED",
+		"RowID": 6
+	},
+	{
+		"Name": "ACCURACY",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"ACCURACY_RealName\", \"accuracy\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"ACCURACY_RealNameBrief\", \"Acc\")",
+		"Type": "Battle",
+		"PbsOrder": -1,
+		"BaseAttribute":
+		{
+			"AttributeName": "Accuracy",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:Accuracy",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "AccuracyStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:AccuracyStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "ACCURACY",
+		"RowID": 7
+	},
+	{
+		"Name": "EVASION",
+		"RealName": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"EVASION_RealName\", \"evasiveness\")",
+		"RealNameBrief": "NSLOCTEXT(\"Stats [516845E1D453E13B7025C941A13F1483]\", \"EVASION_RealNameBrief\", \"Eva\")",
+		"Type": "Battle",
+		"PbsOrder": -1,
+		"BaseAttribute":
+		{
+			"AttributeName": "Evasion",
+			"Attribute": "/Script/PokemonBattle.PokemonCoreAttributeSet:Evasion",
+			"AttributeOwner": "None"
+		},
+		"StagesAttribute":
+		{
+			"AttributeName": "EvasionStages",
+			"Attribute": "/Script/PokemonBattle.StatStagesAttributeSet:EvasionStages",
+			"AttributeOwner": "None"
+		},
+		"ID": "EVASION",
+		"RowID": 8
+	}
 ]
