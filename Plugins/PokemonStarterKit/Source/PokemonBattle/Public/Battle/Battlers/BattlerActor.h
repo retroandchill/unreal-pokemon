@@ -72,6 +72,7 @@ public:
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;
 
+    UFUNCTION(BlueprintPure, Category = GameplayAbilities)
     UBattlerAbilityComponent* GetAbilityComponent() const override;
 
     UFUNCTION(BlueprintPure, Category = Moves)
@@ -140,6 +141,11 @@ public:
      * The ability that this battler has
      */
     FGameplayAbilitySpecHandle Ability;
+
+    /**
+     * The item the battler is holding
+     */
+    FGameplayAbilitySpecHandle HoldItem;
 
     /**
      * The moves this battler knows

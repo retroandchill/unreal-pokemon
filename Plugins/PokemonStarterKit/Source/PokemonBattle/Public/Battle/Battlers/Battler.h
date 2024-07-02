@@ -117,6 +117,7 @@ class POKEMONBATTLE_API IBattler {
      * Get the gameplay ability component used by this battler
      * @return The held battler ability component
      */
+    UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
     virtual UBattlerAbilityComponent* GetAbilityComponent() const = 0;
 
     /**

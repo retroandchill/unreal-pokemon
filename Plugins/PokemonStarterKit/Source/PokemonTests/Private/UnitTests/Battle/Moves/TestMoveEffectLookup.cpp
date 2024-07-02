@@ -3,7 +3,7 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Misc/AutomationTest.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveEffectLookup, "Unit Tests.Battle.TestMoveEffectLookup",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveEffectLookup, "Unit Tests.Battle.Moves.TestMoveEffectLookup",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestMoveEffectLookup::RunTest(const FString &Parameters) {

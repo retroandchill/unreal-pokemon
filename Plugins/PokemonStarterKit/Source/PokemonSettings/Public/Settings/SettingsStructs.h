@@ -195,6 +195,12 @@ struct FDynamicAssetPaths {
     FDirectoryPath AbilityBattleEffectPackageName;
 
     /**
+     * The name of the package that contains the hold item effect Blueprints
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath HoldItemBattleEffectPackageName;
+
+    /**
      * The prefix that is placed before a type icon when searching
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
@@ -225,10 +231,16 @@ struct FDynamicAssetPaths {
     FString MoveFunctionCodePrefix;
 
     /**
-     * The prefix that is placed before a move effect when looking it up
+     * The prefix that is placed before an ability effect when looking it up
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString AbilityEffectPrefix;
+
+    /**
+     * The prefix that is placed before a hold item effect when looking it up
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString HoldItemEffectPrefix;
 };
 
 /**

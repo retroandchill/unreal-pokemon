@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleMoveFunctionCode.h"
+#include "Battle/Events/Moves/DamageModificationPayload.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MoveEvaluationHelpers.generated.h"
 
@@ -23,4 +24,13 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
     static ECriticalOverride ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New);
+
+    /**
+     * Boost the power of a move if the user of the move has the specified gameplay tag.
+     * @param Context The payload that contains all the move information
+     * @param Tag The tag to search for
+     * @param Multiplier The multiplier to apply if the tag is found
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
+    static void BoostPowerIfUserHasTag(const UDamageModificationPayload* Context, FGameplayTag Tag, float Multiplier = 1.f);
 };

@@ -22,6 +22,7 @@
 #include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
 #include "Battle/Battlers/Innate/Innate_DamageSwing.h"
 #include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
+#include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
@@ -106,8 +107,12 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
-
     
+    if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem()); HoldItemClass != nullptr) {
+        HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
+    } else {
+        HoldItem = FGameplayAbilitySpecHandle();
+    }
 
     return this;
 }
