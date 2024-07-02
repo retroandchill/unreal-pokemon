@@ -9,17 +9,6 @@ void UPokemonCoreAttributeSet::PreAttributeChange(const FGameplayAttribute &Attr
 
     if (Attribute == GetHPAttribute()) {
         NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHP());
-
-        float HPPercent = GetHP() / GetMaxHP();
-        auto Owner = GetOwningAbilitySystemComponent();
-        static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
-        for (auto &[Threshold, Tag] : HPStateTags) {
-            if (HPPercent <= Threshold) {
-                Owner->AddLooseGameplayTag(Tag);
-            } else if (Owner->HasMatchingGameplayTag(Tag)) {
-                Owner->RemoveLooseGameplayTag(Tag);
-            }
-        }
     }
 }
 
@@ -30,5 +19,16 @@ void UPokemonCoreAttributeSet::PostAttributeChange(const FGameplayAttribute &Att
     // This is the behavior we see when a Pokémon Dynamaxes and when Zygarde transforms into its Complete Forme.
     if (Attribute == GetMaxHPAttribute()) {
         SetHP(GetHP() * NewValue / OldValue);
+    } else if (Attribute == GetHPAttribute()) {
+        float HPPercent = GetHP() / GetMaxHP();
+        auto Owner = GetOwningAbilitySystemComponent();
+        static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
+        for (auto &[Threshold, Tag] : HPStateTags) {
+            if (HPPercent <= Threshold) {
+                Owner->AddLooseGameplayTag(Tag);
+            } else if (Owner->HasMatchingGameplayTag(Tag)) {
+                Owner->RemoveLooseGameplayTag(Tag);
+            }
+        }
     }
 }
