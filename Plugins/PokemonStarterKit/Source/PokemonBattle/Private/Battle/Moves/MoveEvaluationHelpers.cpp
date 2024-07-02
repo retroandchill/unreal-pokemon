@@ -7,6 +7,17 @@
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Species/SpeciesData.h"
 
+void UMoveEvaluationHelpers::IncrementCriticalHitRate(const UCriticalHitRateCalculationPayload *Context, int32 Amount) {
+    Context->SetCriticalHitRateStages(Context->GetData().CriticalHitRateStages + Amount);
+}
+
+void UMoveEvaluationHelpers::IncrementCriticalHitRateIfUserHasTag(const UCriticalHitRateCalculationPayload *Context,
+    FGameplayTag Tag, int32 Amount) {
+    if (Context->GetUser()->GetAbilityComponent()->HasMatchingGameplayTag(Tag)) {
+        Context->SetCriticalHitRateStages(Context->GetData().CriticalHitRateStages + Amount);
+    }
+}
+
 ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New) {
     using enum ECriticalOverride;
     if (Old == Normal) {
@@ -33,24 +44,21 @@ bool UMoveEvaluationHelpers::UserIsSpecies(const TScriptInterface<IMoveEventPayl
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasTag(const UDamageModificationPayload *Context, FGameplayTag Tag,
                                                     float Multiplier) {
-    auto &Data = Context->GetData();
-    if (Data.User->GetAbilityComponent()->HasMatchingGameplayTag(Tag)) {
-        Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
+    if (Context->GetUser()->GetAbilityComponent()->HasMatchingGameplayTag(Tag)) {
+        Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
     }
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasAllTags(const UDamageModificationPayload *Context,
     FGameplayTagContainer Tags, float Multiplier) {
-    auto &Data = Context->GetData();
-    if (Data.User->GetAbilityComponent()->HasAllMatchingGameplayTags(Tags)) {
-        Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
+    if (Context->GetUser()->GetAbilityComponent()->HasAllMatchingGameplayTags(Tags)) {
+        Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
     }
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context,
     FGameplayTagContainer Tags, float Multiplier) {
-        auto &Data = Context->GetData();
-        if (Data.User->GetAbilityComponent()->HasAnyMatchingGameplayTags(Tags)) {
-            Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
+        if (Context->GetUser()->GetAbilityComponent()->HasAnyMatchingGameplayTags(Tags)) {
+            Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
         }
 }

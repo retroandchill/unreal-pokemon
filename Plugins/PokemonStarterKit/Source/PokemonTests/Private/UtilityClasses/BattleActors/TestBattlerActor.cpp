@@ -17,4 +17,7 @@ void ATestBattlerActor::PostActorCreated() {
     auto StabEffect = LoadClass<UGameplayAbility>(nullptr, TEXT("/Game/Blueprints/Battle/Innate/Innate_SameTypeAttackBonus.Innate_SameTypeAttackBonus_C"));
     check(StabEffect != nullptr)
     Abilities.Emplace(StabEffect);
+    auto HighCritMoveEffect = LoadClass<UGameplayAbility>(nullptr, TEXT("/Game/Blueprints/Battle/Innate/Innate_HighCriticalHitRate.Innate_HighCriticalHitRate_C"));
+    check(HighCritMoveEffect != nullptr)
+    Abilities.Emplace(HighCritMoveEffect);
 }

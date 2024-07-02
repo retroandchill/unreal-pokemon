@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleMoveFunctionCode.h"
+#include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MoveEvaluationHelpers.generated.h"
@@ -17,6 +18,23 @@ class POKEMONBATTLE_API UMoveEvaluationHelpers : public UBlueprintFunctionLibrar
     GENERATED_BODY()
 
 public:
+    /**
+     * Up the critical hit stages by the specified amount
+     * @param Context The context for the move being used
+     * @param Amount The amount to increment the stages by
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
+    static void IncrementCriticalHitRate(const UCriticalHitRateCalculationPayload* Context, int32 Amount = 1);
+
+    /**
+     * Up the critical hit stages by the specified amount if the user has the specified tag
+     * @param Context The context for the move being used
+     * @param Tag The tag that is required to perform the increment
+     * @param Amount The amount to increment the stages by
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
+    static void IncrementCriticalHitRateIfUserHasTag(const UCriticalHitRateCalculationPayload* Context, FGameplayTag Tag, int32 Amount = 1);
+    
     /**
      * Take an existing critical override value and change it based on the new value and the existing rules for precedence.
      * @param Old The old value
