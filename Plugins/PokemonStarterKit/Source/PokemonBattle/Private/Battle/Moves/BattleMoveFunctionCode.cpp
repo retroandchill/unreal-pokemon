@@ -293,6 +293,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
     auto TargetAbilityComponent = Target->GetAbilityComponent();
     auto &DamageState = *TargetAbilityComponent->GetTargetDamageStateAttributeSet();
     if (IsCritical(User, Target)) {
+        UE_LOG(LogBattle, Display, TEXT("Critical hit against %s!"), *Target->GetNickname().ToString());
         TargetAbilityComponent->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit);
     }
 

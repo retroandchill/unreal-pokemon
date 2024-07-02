@@ -8,6 +8,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MoveEvaluationHelpers.generated.h"
 
+class UCriticalHitRateCalculationPayload;
 /**
  * Helper library for move related evaluation.
  */
@@ -24,6 +25,14 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
     static ECriticalOverride ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New);
+
+    /**
+     * Take an existing critical override value and change it based on the new value and the existing rules for precedence.
+     * @param Context The context object that contains the old value
+     * @param Override The new value to attempt to assign to[]
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
+    static void SetCriticalHitOverride(const UCriticalHitRateCalculationPayload* Context, ECriticalOverride Override);
 
     /**
      * Boost the power of a move if the user of the move has the specified gameplay tag.
