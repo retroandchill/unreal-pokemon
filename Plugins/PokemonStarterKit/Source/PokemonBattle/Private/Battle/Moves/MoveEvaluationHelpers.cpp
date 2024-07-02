@@ -5,6 +5,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
+#include "Species/SpeciesData.h"
 
 ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New) {
     using enum ECriticalOverride;
@@ -24,6 +25,10 @@ void UMoveEvaluationHelpers::SetCriticalHitOverride(const UCriticalHitRateCalcul
                                                     ECriticalOverride Override) {
     auto &Data = Context->GetData();
     Context->SetCriticalHitRateOverride(ApplyCriticalHitOverride(Data.Override, Override));
+}
+
+bool UMoveEvaluationHelpers::UserIsSpecies(const TScriptInterface<IMoveEventPayload> &Context, FName Species) {
+    return Context->GetUser()->GetSpecies().ID == Species;
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasTag(const UDamageModificationPayload *Context, FGameplayTag Tag,

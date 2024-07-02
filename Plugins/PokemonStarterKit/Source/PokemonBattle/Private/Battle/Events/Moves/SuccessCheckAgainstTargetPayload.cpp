@@ -21,6 +21,16 @@ const FTargetSuccessCheckPayload &USuccessCheckAgainstTargetPayload::GetData() c
     return *Data;
 }
 
+const TScriptInterface<IBattler> & USuccessCheckAgainstTargetPayload::GetUser() const {
+    check(Data != nullptr)
+    return Data->User;
+}
+
+const TScriptInterface<IBattler> & USuccessCheckAgainstTargetPayload::GetTarget() const {
+    check(Data != nullptr)
+    return Data->Target;
+}
+
 void USuccessCheckAgainstTargetPayload::SetSuccess(bool bSuccess) const {
     check(Data != nullptr)
     Data->bSuccess =bSuccess;

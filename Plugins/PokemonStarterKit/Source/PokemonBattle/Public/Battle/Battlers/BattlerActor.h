@@ -46,6 +46,8 @@ public:
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattleSide> &GetOwningSide() const override;
 
+    const FSpeciesData& GetSpecies() const override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     FText GetNickname() const override;
 

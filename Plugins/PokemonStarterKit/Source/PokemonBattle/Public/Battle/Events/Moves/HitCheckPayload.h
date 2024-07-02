@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Events/TargetedMoveEventPayload.h"
 #include "UObject/Object.h"
 #include "HitCheckPayload.generated.h"
 
@@ -59,7 +60,7 @@ struct POKEMONBATTLE_API FHitCheckData {
  * The event payload for a hit check.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UHitCheckPayload : public UObject {
+class POKEMONBATTLE_API UHitCheckPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
 public:
@@ -79,6 +80,9 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FHitCheckData &GetData() const;
+
+    const TScriptInterface<IBattler>& GetUser() const final;
+    const TScriptInterface<IBattler>& GetTarget() const final;
 
     /**
      * Set the base accuracy to the given amount

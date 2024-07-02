@@ -9,6 +9,7 @@
 
 #include "Battler.generated.h"
 
+struct FSpeciesData;
 class UBattlerAbilityComponent;
 class IPokemon;
 class IBattleSide;
@@ -51,6 +52,12 @@ class POKEMONBATTLE_API IBattler {
      * @return The battler's side
      */
     virtual const TScriptInterface<IBattleSide> &GetOwningSide() const = 0;
+
+    /**
+     * Get the species that this battler represents
+     * @return The species of this battler
+     */
+    virtual const FSpeciesData& GetSpecies() const = 0;
 
     /**
      * Get the battler's display name

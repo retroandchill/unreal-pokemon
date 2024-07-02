@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
 #include "CriticalHitRateCalculationPayload.generated.h"
@@ -69,7 +70,7 @@ struct POKEMONBATTLE_API FCriticalHitRateCalculationData {
  * Event payload object for handling the critical hit calculations.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UCriticalHitRateCalculationPayload : public UObject {
+class POKEMONBATTLE_API UCriticalHitRateCalculationPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
 public:
@@ -90,6 +91,9 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FCriticalHitRateCalculationData &GetData() const;
+
+    const TScriptInterface<IBattler>& GetUser() const final;
+    const TScriptInterface<IBattler>& GetTarget() const final;
 
     /**
      * Set the new override state of the move. Applies the in-built priority system for the override.

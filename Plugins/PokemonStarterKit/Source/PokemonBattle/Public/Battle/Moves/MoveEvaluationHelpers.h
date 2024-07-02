@@ -35,6 +35,15 @@ public:
     static void SetCriticalHitOverride(const UCriticalHitRateCalculationPayload *Context, ECriticalOverride Override);
 
     /**
+     * Is the user of the move of the specified species
+     * @param Context The payload that contains all the move information
+     * @param Species The species to verify
+     * @return Is the user of the specified species
+     */
+    UFUNCTION(BlueprintPure, Category = "Moves|Context")
+    static bool UserIsSpecies(const TScriptInterface<IMoveEventPayload>& Context, FName Species);
+    
+    /**
      * Boost the power of a move if the user of the move has the specified gameplay tag.
      * @param Context The payload that contains all the move information
      * @param Tag The tag to search for
