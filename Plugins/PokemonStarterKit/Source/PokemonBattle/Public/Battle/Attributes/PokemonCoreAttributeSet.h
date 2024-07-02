@@ -16,7 +16,7 @@ class POKEMONBATTLE_API UPokemonCoreAttributeSet : public UAttributeSet {
     GENERATED_BODY()
 
 public:
-    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, HP)
+    ATTRIBUTE_ACCESSORS_CUSTOM_INITTER(UPokemonCoreAttributeSet, HP);
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, MaxHP)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Attack)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Defense)
@@ -31,6 +31,11 @@ public:
     void PostAttributeChange(const FGameplayAttribute &Attribute, float OldValue, float NewValue) override;
 
 private:
+    /**
+     * Called to update the Pokémon's tags based on its current HP
+     */
+    void UpdateHPTags() const;
+    
     UPROPERTY()
     FGameplayAttributeData HP;
     

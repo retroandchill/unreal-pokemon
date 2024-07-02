@@ -4,6 +4,12 @@
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Settings/BaseSettings.h"
 
+void UPokemonCoreAttributeSet::InitHP(float NewVal) {
+    HP.SetBaseValue(NewVal);
+    HP.SetCurrentValue(NewVal);
+    UpdateHPTags();
+}
+
 void UPokemonCoreAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     NewValue = FMath::RoundHalfToZero(FMath::Max(NewValue, 0.f));
 
@@ -20,15 +26,19 @@ void UPokemonCoreAttributeSet::PostAttributeChange(const FGameplayAttribute &Att
     if (Attribute == GetMaxHPAttribute()) {
         SetHP(GetHP() * NewValue / OldValue);
     } else if (Attribute == GetHPAttribute()) {
-        float HPPercent = GetHP() / GetMaxHP();
-        auto Owner = GetOwningAbilitySystemComponent();
-        static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
-        for (auto &[Threshold, Tag] : HPStateTags) {
-            if (HPPercent <= Threshold) {
-                Owner->AddLooseGameplayTag(Tag);
-            } else if (Owner->HasMatchingGameplayTag(Tag)) {
-                Owner->RemoveLooseGameplayTag(Tag);
-            }
+        UpdateHPTags();
+    }
+}
+
+void UPokemonCoreAttributeSet::UpdateHPTags() const {
+    float HPPercent = GetHP() / GetMaxHP();
+    auto Owner = GetOwningAbilitySystemComponent();
+    static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
+    for (auto &[Threshold, Tag] : HPStateTags) {
+        if (HPPercent <= Threshold) {
+            Owner->AddLooseGameplayTag(Tag);
+        } else if (Owner->HasMatchingGameplayTag(Tag)) {
+            Owner->RemoveLooseGameplayTag(Tag);
         }
     }
 }
