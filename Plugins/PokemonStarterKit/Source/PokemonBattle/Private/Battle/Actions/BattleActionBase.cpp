@@ -2,6 +2,7 @@
 
 #include "Battle/Actions/BattleActionBase.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include <functional>
 
 FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {
@@ -19,22 +20,16 @@ bool FBattleActionBase::CanExecute() const {
     return !Battler->IsFainted();
 }
 
-void FBattleActionBase::Execute(bool bPerformAsync) {
+void FBattleActionBase::Execute() {
     Executing = true;
-    if (bPerformAsync) {
-        Result = Async(EAsyncExecution::TaskGraphMainThread, std::bind_front(&FBattleActionBase::ComputeResult, this));
-    } else {
-        TPromise<FActionResult> Promise;
-        Promise.EmplaceValue(ComputeResult());
-        Result = Promise.GetFuture();
-    }
-    
+    SpecHandle = ActivateAbility();
 }
 
 bool FBattleActionBase::IsExecuting() const {
     return Executing;
 }
 
-const TFuture<FActionResult> &FBattleActionBase::GetActionResult() const {
-    return Result;
+bool FBattleActionBase::IsComplete() const {
+    auto Spec = Battler->GetAbilityComponent()->FindAbilitySpecFromHandle(SpecHandle);
+    return Executing && Spec != nullptr && !Spec->IsActive();
 }

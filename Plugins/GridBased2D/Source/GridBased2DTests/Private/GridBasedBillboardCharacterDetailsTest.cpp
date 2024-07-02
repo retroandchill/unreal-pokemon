@@ -1,4 +1,5 @@
 ﻿#include "Asserts.h"
+#include "GridBasedGameModeBase.h"
 #include "Characters/GridBasedBillboardCharacter.h"
 #include "Misc/AutomationTest.h"
 #include "Utilities/ReflectionUtils.h"
@@ -9,7 +10,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(GridBasedBillboardCharacterDetailsTest,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GridBasedBillboardCharacterDetailsTest::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld(false);
     auto &EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
     FDetailsViewArgs DetailsViewArgs;
     DetailsViewArgs.NameAreaSettings = FDetailsViewArgs::HideNameArea;

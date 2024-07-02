@@ -20,7 +20,7 @@ UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName Widget
     return UWidgetTree::FindWidgetChild(Panel, WidgetName, Index);
 }
 
-std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTestWorld() {
+std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTestWorld(bool bBeginPlay) {
     FGameInstancePtr GameInstance(NewObject<UGameInstance>(GEngine));
     GameInstance->InitializeStandalone(); // creates WorldContext, UWorld?
     FWorldPtr World(GameInstance->GetWorld());
@@ -30,5 +30,11 @@ std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> UWidgetTestUtiliti
     TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
     WorldContext->GameViewport->SetViewportOverlayWidget(nullptr, DudOverlay);
 
+    if (bBeginPlay) {
+        World->InitializeActorsForPlay(World->URL);
+        World->BeginPlay();
+        World->SetBegunPlay(true);
+    }
+    
     return {DudOverlay, MoveTemp(World), MoveTemp(GameInstance)};
 }

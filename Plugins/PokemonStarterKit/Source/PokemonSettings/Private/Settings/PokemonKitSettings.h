@@ -134,6 +134,18 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     };
 
     /**
+     * The default ability used for using moves
+     */
+    UPROPERTY(EditAnywhere, Config, Category = Battle, meta = (MetaClass="BattleMoveFunctionCode"))
+    FSoftClassPath DefaultMoveAbility;
+
+    /**
+     * The damage multiplier for a critical hit
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = Battle)
+    float CriticalHitMultiplier = 1.5f;
+    
+    /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))

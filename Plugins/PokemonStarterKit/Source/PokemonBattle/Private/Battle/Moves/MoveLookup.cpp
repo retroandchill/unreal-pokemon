@@ -2,14 +2,15 @@
 
 
 #include "Battle/Moves/MoveLookup.h"
-#include "Battle/Moves/BaseBattleMove.h"
-#include "Battle/Moves/BattleMove.h"
 #include "Settings/BaseSettings.h"
+#include "Abilities/GameplayAbility.h"
 
 
-UClass * Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
+TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     if (FunctionCode.IsNone()) {
-        return UBaseBattleMove::StaticClass();
+        auto MoveClass = FBaseSettings::Get().GetDefaultMoveAbility().TryLoadClass<UGameplayAbility>();
+        check(MoveClass != nullptr)
+        return MoveClass;
     }
     
     auto& AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
@@ -17,10 +18,11 @@ UClass * Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     auto &ClassPrefix = AssetPaths.MoveFunctionCodePrefix;
     auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"),
         { ClassPath, ClassPrefix, FunctionCode.ToString() });
-    if (auto MoveClass = LoadObject<UClass>(nullptr, *FullPackage);
-        MoveClass != nullptr && MoveClass->ImplementsInterface(UBattleMove::StaticClass())) {
+    if (auto MoveClass = LoadObject<UClass>(nullptr, *FullPackage); MoveClass != nullptr && MoveClass->IsChildOf(UGameplayAbility::StaticClass())) {
         return MoveClass;
     }
 
-    return UBaseBattleMove::StaticClass();
+    auto MoveClass = FBaseSettings::Get().GetDefaultMoveAbility().TryLoadClass<UGameplayAbility>();
+    check(MoveClass != nullptr)
+    return MoveClass;
 }

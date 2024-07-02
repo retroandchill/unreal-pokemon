@@ -2,7 +2,9 @@
 
 
 #include "Battle/Moves/MoveEvaluationHelpers.h"
-#include "Battle/GameplayAbilities/Attributes/CriticalHitRateModificationAttributeSet.h"
+#include "Battle/Battlers/Battler.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 
 ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New) {
     using enum ECriticalOverride;
@@ -18,29 +20,16 @@ ECriticalOverride UMoveEvaluationHelpers::ApplyCriticalHitOverride(ECriticalOver
     return Old;
 }
 
-float UMoveEvaluationHelpers::OverrideToAttributeValue(ECriticalOverride Override) {
-    switch (Override) {
-    case ECriticalOverride::Always:
-        return CriticalHits::Always;
-    case ECriticalOverride::Never:
-        return CriticalHits::Never;
-    default:
-        return CriticalHits::Normal;        
-    }
+void UMoveEvaluationHelpers::SetCriticalHitOverride(const UCriticalHitRateCalculationPayload *Context,
+                                                    ECriticalOverride Override) {
+    auto &Data = Context->GetData();
+    Context->SetCriticalHitRateOverride(ApplyCriticalHitOverride(Data.Override, Override));
 }
 
-ECriticalOverride UMoveEvaluationHelpers::AttributeValueToOverride(float Value) {
-    if (Value >= CriticalHits::Always) {
-        return ECriticalOverride::Always;
+void UMoveEvaluationHelpers::BoostPowerIfUserHasTag(const UDamageModificationPayload *Context, FGameplayTag Tag,
+                                                    float Multiplier) {
+    auto &Data = Context->GetData();
+    if (Data.User->GetAbilityComponent()->HasMatchingGameplayTag(Tag)) {
+        Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
     }
-
-    if (Value <= CriticalHits::Never) {
-        return ECriticalOverride::Never;
-    }
-
-    return ECriticalOverride::Normal;
-}
-
-FDamageMultipliers & UMoveEvaluationHelpers::GetDamageMultipliers(const FDamageMultiplierHandler &Handler) {
-    return *Handler.Multipliers;
 }

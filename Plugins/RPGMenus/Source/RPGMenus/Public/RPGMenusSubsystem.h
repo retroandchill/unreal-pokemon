@@ -105,6 +105,18 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
     }
 
     /**
+     * Find the topmost screen in the stack of the given type
+     * @tparam T The type of screen to search for
+     * @return The corresponding widget (if found), otherwise nullptr
+     */
+    template <typename T = UScreen>
+        requires std::is_base_of_v<UScreen, T>
+    T* FindFirstInStack() const {
+        int32 FoundIndex = ScreenStack.FindLastByPredicate([](const UScreen* Screen) { return Screen->IsA<T>(); });
+        return FoundIndex != INDEX_NONE ?  static_cast<T*>(ScreenStack[FoundIndex]) : nullptr;
+    }
+
+    /**
      * Get the screen at the top of the stack and cast it to the supplied type
      * @tparam T The type to check for
      * @return The top widget on the stack, otherwise nullptr

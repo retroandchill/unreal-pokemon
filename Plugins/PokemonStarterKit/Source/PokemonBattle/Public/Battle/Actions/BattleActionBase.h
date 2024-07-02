@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleAction.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "UObject/Interface.h"
 
 /**
@@ -20,16 +21,16 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     const TScriptInterface<IBattler> &GetBattler() const override;
     bool CanExecute() const override;
-    void Execute(bool bPerformAsync) override;
+    void Execute() override;
     bool IsExecuting() const override;
-    const TFuture<FActionResult> &GetActionResult() const override;
+    bool IsComplete() const override;
 
-  protected:
+protected:
     /**
-     * Compute the actual result of the action on the targets
-     * @return
+     * Try to activate the underlying ability for this action
+     * @return The underlying ability for this action
      */
-    virtual FActionResult ComputeResult() = 0;
+    virtual FGameplayAbilitySpecHandle ActivateAbility() = 0;
 
   private:
     /**
@@ -43,7 +44,7 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     bool Executing = false;
 
     /**
-     * The future for the result determination
+     * The spec for the active gameplay ability
      */
-    TFuture<FActionResult> Result;
+    FGameplayAbilitySpecHandle SpecHandle;
 };
