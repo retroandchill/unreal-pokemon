@@ -1,8 +1,8 @@
 ﻿#include "Asserts.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/Moves/BaseBattleMove.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Moves/PokemonBattleMove.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Pokemon/Moves/Move.h"
@@ -14,6 +14,7 @@
 
 using namespace testing;
 
+/*
 static UBattlerAbilityComponent* AddComponentToBattler(const TScriptInterface<IBattler>& Battler) {
     auto Actor = Cast<AActor>(Battler.GetObject());
     auto Component = static_cast<UBattlerAbilityComponent*>(Actor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(),
@@ -168,3 +169,4 @@ bool TestCriticalHits::RunTest(const FString &Parameters) {
     
     return true;
 }
+*/

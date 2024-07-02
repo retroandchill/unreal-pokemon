@@ -19,16 +19,14 @@ void UBattleMovePanel::SetMove(const TScriptInterface<IBattleMove> &MoveIn) {
 UObject *UBattleMovePanel::GetTypeIcon_Implementation() {
     check(Move != nullptr)
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    return GraphicsSubsystem->GetTypePanelGraphic(IBattleMove::Execute_GetDisplayType(Move.GetObject()));
+    return GraphicsSubsystem->GetTypePanelGraphic(Move->GetDisplayType());
 }
 
 void UBattleMovePanel::OnMoveSet() {
     using enum ESlateVisibility;
     check(Move != nullptr)
-    auto MoveObject = Move.GetObject();
-    MoveNameText->SetText(IBattleMove::Execute_GetDisplayName(MoveObject));
-    MovePPText->SetText(FText::Format(
-        MovePPFormat, {IBattleMove::Execute_GetCurrentPP(MoveObject), IBattleMove::Execute_GetMaxPP(MoveObject)}));
+    MoveNameText->SetText(Move->GetDisplayName());
+    MovePPText->SetText(FText::Format(MovePPFormat, {Move->GetCurrentPP(), Move->GetMaxPP()}));
     TypeIcon->SetVisibility(SelfHitTestInvisible);
     UWidgetUtilities::SetBrushFromAsset(TypeIcon, GetTypeIcon(), true);
 }

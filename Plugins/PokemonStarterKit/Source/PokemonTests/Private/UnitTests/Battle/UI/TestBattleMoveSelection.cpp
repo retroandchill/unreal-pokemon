@@ -37,6 +37,7 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
                     .Level = 50,
                     .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
+    Battler->DispatchBeginPlay();
     Battler->Initialize(Side, Pokemon);
 
     TWidgetPtr<UBattleMoveSelect> BattleMoveSelect(CreateWidget<UBattleMoveSelect>(World.Get(), WidgetClass));

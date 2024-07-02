@@ -9,6 +9,7 @@ std::pair<FPlayerPtr, APawn *> UPlayerUtilities::CreateTestPlayer(UWorld &World)
     PlayerController->Possess(Pawn);
     PlayerController->SetPlayer(Player.Get());
     Player->PlayerAdded(World.GetGameViewport(), 0);
+    World.AddController(PlayerController);
 
     return {MoveTemp(Player), Pawn};
 }

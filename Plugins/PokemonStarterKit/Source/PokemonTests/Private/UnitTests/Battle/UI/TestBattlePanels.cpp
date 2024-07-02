@@ -1,5 +1,7 @@
 ﻿#include "Asserts.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Components/PokemonBattlePanel.h"
 #include "Components/PokemonBattlePanelPlayer.h"
 #include "Components/ProgressBar.h"
@@ -21,19 +23,27 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonBattlePanelPlayer>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
-
-    CREATE_MOCK(IBattler, Battler, FMockBattler, MockBattler);
+    
+    
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler, FMockBattler, MockBattler);
+    auto BattlerActor = Cast<AActor>(Battler.GetObject());
+    auto BattlerAbilityComponent = static_cast<UBattlerAbilityComponent*>(BattlerActor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+    ON_CALL(MockBattler, GetAbilityComponent).WillByDefault(Return(BattlerAbilityComponent));
     EXPECT_CALL(MockBattler, IsFainted).WillOnce(Return(false)).WillOnce(Return(false)).WillRepeatedly(Return(true));
     ON_CALL(MockBattler, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Lucario"))));
     ON_CALL(MockBattler, GetPokemonLevel).WillByDefault(Return(50));
-    EXPECT_CALL(MockBattler, GetHP).WillOnce(Return(100)).WillOnce(Return(50)).WillRepeatedly(Return(0));
-    ON_CALL(MockBattler, GetMaxHP).WillByDefault(Return(100));
     EXPECT_CALL(MockBattler, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f)).WillRepeatedly(Return(0.f));
     ON_CALL(MockBattler, GetGender).WillByDefault(Return(EPokemonGender::Male));
     ON_CALL(MockBattler, GetExpPercent).WillByDefault(Return(0.25f));
 
     TWidgetPtr<UPokemonBattlePanelPlayer> Panel(CreateWidget<UPokemonBattlePanelPlayer>(World.Get(), WidgetClass));
     Panel->AddToViewport();
+    
+    auto CoreAttributes = NewObject<UPokemonCoreAttributeSet>(BattlerActor);
+    UReflectionUtils::SetPropertyValue<TObjectPtr<UPokemonCoreAttributeSet>>(BattlerAbilityComponent, "CoreAttributes", CoreAttributes);
+    BattlerAbilityComponent->AddSpawnedAttribute(CoreAttributes);
+    CoreAttributes->InitMaxHP(100);
+    CoreAttributes->InitHP(100);
     Panel->SetBattler(Battler);
 
     FIND_CHILD_WIDGET(Panel.Get(), UDisplayText, PokemonName);
@@ -60,6 +70,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
 
+    CoreAttributes->InitHP(50);
     Panel->Refresh();
     UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, Panel->GetVisibility());
     UE_CHECK_EQUAL(TEXT("Lucario"), PokemonName->GetText().ToString());
@@ -70,6 +81,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
 
+    CoreAttributes->InitHP(0);
     Panel->Refresh();
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, Panel->GetVisibility());
     UE_CHECK_EQUAL(TEXT("Lucario"), PokemonName->GetText().ToString());

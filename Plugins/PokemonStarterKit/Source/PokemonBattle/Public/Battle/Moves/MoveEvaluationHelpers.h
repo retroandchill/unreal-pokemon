@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleDamage.h"
+#include "BattleMoveFunctionCode.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MoveEvaluationHelpers.generated.h"
 
@@ -23,13 +23,4 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
     static ECriticalOverride ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New);
-    
-    UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
-    static float OverrideToAttributeValue(ECriticalOverride Override);
-
-    UFUNCTION(BlueprintPure, Category = "Moves|Critical Hits")
-    static ECriticalOverride AttributeValueToOverride(float Value);
-
-    UFUNCTION(BlueprintPure, Category = "Moves|Damage Calculation")
-    static FDamageMultipliers& GetDamageMultipliers(const FDamageMultiplierHandler& Handler);
 };

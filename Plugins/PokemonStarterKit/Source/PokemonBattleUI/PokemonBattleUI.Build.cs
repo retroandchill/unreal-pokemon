@@ -26,7 +26,8 @@ public class PokemonBattleUI : ModuleRules
                 "Slate",
                 "SlateCore",
                 "UMG",
-                "PokemonAssets"
+                "PokemonAssets",
+                "GameplayAbilities"
             }
         );
     }

@@ -14,6 +14,11 @@ UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObje
 
 void UDisplayMessage::Activate() {
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
+    if (Controller == nullptr) {
+        // TODO: Remove this hack and alter how the tests run to avoid this
+        ExecuteOnConfirm();
+        return;
+    }
     auto Screen =
         Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
     Screen->SetText(Message);

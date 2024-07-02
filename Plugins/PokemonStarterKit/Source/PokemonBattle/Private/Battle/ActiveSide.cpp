@@ -9,8 +9,13 @@
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Pokemon/Pokemon.h"
 #include "RangeHelpers.h"
+#include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
+
+AActiveSide::AActiveSide() {
+    AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));
+}
 
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
                                                       const TScriptInterface<IPokemon> &Pokemon, bool ShowBackSprites) {
@@ -56,6 +61,11 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     SendOutText = FText::FormatNamed(ShowBackSprites ? PlayerSendOutTextFormat : OpponentSendOutTextFormat,
                                      TEXT("Names"), TrainerName, TEXT("Pkmn"), Battlers[0]->GetNickname());
     return Side;
+}
+
+void AActiveSide::BeginPlay() {
+    Super::BeginPlay();
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 const FGuid &AActiveSide::GetInternalId() const {

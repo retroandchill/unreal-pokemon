@@ -3,9 +3,10 @@
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/GameplayAbilities/BattlerAbilityComponent.h"
-#include "Battle/GameplayAbilities/Context/MoveEffectContext.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Moves/BattleMove.h"
+#include "Battle/Moves/MoveTags.h"
 
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
                                            const TScriptInterface<IBattleMove> &MoveIn,
@@ -23,41 +24,22 @@ FString FBattleActionUseMove::GetReferencerName() const {
 }
 
 int32 FBattleActionUseMove::GetPriority() const {
-    return IBattleMove::Execute_GetPriority(Move.GetObject());
+    return Move->GetPriority();
 }
 
 FText FBattleActionUseMove::GetActionMessage() const {
     return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
-                         {GetBattler()->GetNickname(), IBattleMove::Execute_GetDisplayName(Move.GetObject())});
+                         {GetBattler()->GetNickname(), Move->GetDisplayName()});
 }
 
-void FBattleActionUseMove::Execute(bool bPerformAsync) {
-    FBattleActionBase::Execute(bPerformAsync);
-    IBattleMove::Execute_PayCost(Move.GetObject());
+void FBattleActionUseMove::Execute() {
+    FBattleActionBase::Execute();
+    
+    auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
+    check(AttributeSet != nullptr)
+    Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));
 }
 
-FActionResult FBattleActionUseMove::ComputeResult() {
-    const static auto UseMoveTag = FGameplayTag::RequestGameplayTag("Battle.UsingMove");
-    FActionResult ActionResult;
-    auto &User = GetBattler();
-    User->GetAbilityComponent()->AddLooseGameplayTag(UseMoveTag);
-    int32 TargetCount = Targets.Num();
-    for (const auto &Target : Targets) {
-        if (Target->IsFainted()) {
-            continue;
-        }
-        
-        auto &TargetResult = ActionResult.TargetResults.Emplace_GetRef();
-        TargetResult.Target = Target;
-        TargetResult.bHit = IBattleMove::Execute_PerformHitCheck(Move.GetObject(), User, Target);
-        if (!TargetResult.bHit) {
-            // If the move misses then we don't want to apply any other effects
-            continue;
-        }
-        
-        TargetResult.Damage = IBattleMove::Execute_CalculateDamage(Move.GetObject(), User, Target, TargetCount);
-    }
-
-    User->GetAbilityComponent()->RemoveLooseGameplayTag(UseMoveTag);
-    return ActionResult;
+FGameplayAbilitySpecHandle FBattleActionUseMove::ActivateAbility() {
+    return Move->TryActivateMove(Targets);
 }

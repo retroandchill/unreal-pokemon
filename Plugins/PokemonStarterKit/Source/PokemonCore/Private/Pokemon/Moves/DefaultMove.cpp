@@ -3,6 +3,7 @@
 #include "Pokemon/Moves/DefaultMove.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
+#include "Moves/Target.h"
 
 TScriptInterface<IMove> UDefaultMove::Initialize(FName MoveID) {
     ID = MoveID;
@@ -43,6 +44,17 @@ int32 UDefaultMove::GetTotalPP() const {
 
 FName UDefaultMove::GetFunctionCode() const {
     return GetMoveData().FunctionCode;
+}
+
+const FMoveTarget & UDefaultMove::GetTargetType() const {
+    static const auto &TargetTable = FDataManager::GetInstance().GetDataTable<FMoveTarget>();
+    auto Target = TargetTable.GetData(GetMoveData().Target);
+    check(Target != nullptr)
+    return *Target;
+}
+
+const TArray<FName> & UDefaultMove::GetTags() const {
+    return GetMoveData().Tags;
 }
 
 void UDefaultMove::DecrementPP(int32 Amount) {

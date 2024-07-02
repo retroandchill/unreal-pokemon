@@ -2,6 +2,8 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattleAction.h"
@@ -34,18 +36,26 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     Actions.Emplace(MoveTemp(MockAction1));
 
     auto MockAction2 = MakeUnique<FMockBattleAction>();
-    CREATE_MOCK(IBattler, Battler2, FMockBattler, MockBattler2);
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler2, FMockBattler, MockBattler2);
+    auto Battler2Actor = static_cast<AActor*>(Battler2.GetObject());
+    auto Battler2Abilities = static_cast<UBattlerAbilityComponent*>(Battler2Actor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+    Battler2Actor->DispatchBeginPlay();
+    ON_CALL(MockBattler2, GetAbilityComponent).WillByDefault(Return(Battler2Abilities));
     ON_CALL(*MockAction2, GetPriority).WillByDefault(Return(0));
     ON_CALL(*MockAction2, GetBattler).WillByDefault(ReturnRef(Battler2));
-    ON_CALL(MockBattler2, GetSpeed).WillByDefault(Return(FMainBattleStat{20, 0}));
+    Battler2Abilities->GetCoreAttributes()->InitSpeed(20);
     ActionPointers.Add(MockAction2.Get());
     Actions.Emplace(MoveTemp(MockAction2));
 
     auto MockAction3 = MakeUnique<FMockBattleAction>();
-    CREATE_MOCK(IBattler, Battler3, FMockBattler, MockBattler3);
+    CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler3, FMockBattler, MockBattler3);
+    auto Battler3Actor = static_cast<AActor*>(Battler3.GetObject());
+    auto Battler3Abilities = static_cast<UBattlerAbilityComponent*>(Battler3Actor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+    Battler3Actor->DispatchBeginPlay();
+    ON_CALL(MockBattler3, GetAbilityComponent).WillByDefault(Return(Battler3Abilities));
     ON_CALL(*MockAction3, GetPriority).WillByDefault(Return(0));
     ON_CALL(*MockAction3, GetBattler).WillByDefault(ReturnRef(Battler3));
-    ON_CALL(MockBattler3, GetSpeed).WillByDefault(Return(FMainBattleStat{60, 0}));
+    Battler3Abilities->GetCoreAttributes()->InitSpeed(60);
     ActionPointers.Add(MockAction3.Get());
     Actions.Emplace(MoveTemp(MockAction3));
 
@@ -96,29 +106,21 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     ON_CALL(*MockAction1, IsExecuting).WillByDefault(Return(false));
     ActionQueue.Enqueue(MoveTemp(MockAction1));
 
-    auto &bActionMessagesDisplayed = UReflectionUtils::GetMutablePropertyValue<bool>(Battle, "bActionMessagesDisplayed");
-    auto MockAction2 = MakeUnique<FMockBattleAction>();
+   auto MockAction2 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction2, CanExecute).WillByDefault(Return(true));
     EXPECT_CALL(*MockAction2, IsExecuting).WillOnce(Return(false)).WillRepeatedly(Return(true));
     ON_CALL(*MockAction2, GetActionMessage).WillByDefault(Return(FText::GetEmpty()));
-    ON_CALL(*MockAction2, Execute).WillByDefault([&bActionMessagesDisplayed](bool) { bActionMessagesDisplayed = true; });
 
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-    FActionResult Result;
-    Result.TargetResults.Add({.Target = Target});
-    auto ResultFuture = AsyncThread([&Result] { return Result; });
-    ON_CALL(*MockAction2, GetActionResult).WillByDefault(ReturnRef(ResultFuture));
+    ON_CALL(*MockAction2, IsComplete).WillByDefault(Return(true));
     auto Action2 = MockAction2.Get();
     ActionQueue.Enqueue(MoveTemp(MockAction2));
 
     Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_ASSERT_TRUE(ActionQueue.Peek()->Get() == Action2);
     Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    UE_CHECK_TRUE(bActionMessagesDisplayed);
-
     Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    auto bActionResultDisplaying = UReflectionUtils::GetPropertyValue<bool>(Battle, "bActionResultDisplaying");
-    UE_CHECK_TRUE(bActionResultDisplaying);
+    UE_CHECK_TRUE(ActionQueue.IsEmpty());
 
     ActionQueue.Empty();
     return true;

@@ -13,6 +13,9 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
+#include "Battle/BattleAbilitySystemComponent.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/empty.hpp>
@@ -23,6 +26,10 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
 
 static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
     return !Battler->IsFainted();
+}
+
+APokemonBattle::APokemonBattle() {
+    AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
 }
 
 void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
@@ -45,6 +52,11 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBa
     return this;
 }
 
+void APokemonBattle::BeginPlay() {
+    Super::BeginPlay();
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
     Phase = EBattlePhase::Setup;
     check(BattlePawn != nullptr && PlayerController != nullptr)
@@ -62,23 +74,16 @@ void APokemonBattle::Tick(float DeltaSeconds) {
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
             Phase = Judging;
-        } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting()) {
+        } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
-                bActionMessagesDisplayed = false;
-                bActionResultDisplaying = false;
                 DisplayAction(Action->GetActionMessage());
-                Action->Execute();
+                bActionTextDisplayed = true;
             } else {
                 ActionQueue.Pop();
             }
-        } else if (auto &ResultFuture = ActionQueue.Peek()->Get()->GetActionResult();
-                   bActionMessagesDisplayed && ResultFuture.IsReady() && !bActionResultDisplaying) {
-            auto &Result = ResultFuture.Get();
-            for (auto &[Target, bHit, Damage] : Result.TargetResults) {
-                Target->TakeBattleDamage(Damage.Damage);
-            }
-            DisplayActionResult(Result);
-            bActionResultDisplaying = true;
+        } else if (ActionQueue.Peek()->Get()->IsComplete()) {
+            RefreshBattleHUD();
+            NextAction();
         }
     } else if (Phase == Judging) {
         EndTurn();
@@ -176,13 +181,9 @@ void APokemonBattle::PlayerSendOutAnimation() {
     ProcessPlayerSendOutAnimation(Side);
 }
 
-void APokemonBattle::ApplyActionResult() {
-    bActionMessagesDisplayed = true;
-}
-
-void APokemonBattle::OnActionResultDisplayFinished() {
-    RefreshBattleHUD();
-    NextAction();
+void APokemonBattle::ExecuteAction() {
+    check(!ActionQueue.IsEmpty())
+    ActionQueue.Peek()->Get()->Execute();
 }
 
 void APokemonBattle::ExitBattleScene() const {
@@ -215,13 +216,14 @@ void APokemonBattle::EndTurn() {
 
 void APokemonBattle::BeginActionProcessing() {
     Phase = EBattlePhase::Actions;
+    bActionTextDisplayed = false;
     SelectedActions.Sort([](const TUniquePtr<IBattleAction> &A, const TUniquePtr<IBattleAction> &B) {
         if (A->GetPriority() > B->GetPriority()) {
             return true;
         }
 
-        int32 SpeedA = A->GetBattler()->GetSpeed().GetModifiedValue();
-        int32 SpeedB = B->GetBattler()->GetSpeed().GetModifiedValue();
+        int32 SpeedA = FMath::FloorToInt32(A->GetBattler()->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
+        int32 SpeedB = FMath::FloorToInt32(B->GetBattler()->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         if (SpeedA == SpeedB) {
             return FMath::RandBool();
         }
@@ -237,6 +239,7 @@ void APokemonBattle::BeginActionProcessing() {
 
 void APokemonBattle::NextAction() {
     ActionQueue.Pop();
+    bActionTextDisplayed = false;
 }
 
 void APokemonBattle::DecideBattle(int32 SideIndex) {

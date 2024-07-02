@@ -80,8 +80,16 @@ const TArray<FStatStageInfo> & Pokemon::FBaseSettings::GetStatStages() const {
     return KitSettings->StatStages;
 }
 
+float Pokemon::FBaseSettings::GetCriticalHitMultiplier() const {
+    return KitSettings->CriticalHitMultiplier;
+}
+
 const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
+}
+
+const FSoftClassPath & Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
+    return KitSettings->DefaultMoveAbility;
 }
 
 UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
@@ -93,10 +101,6 @@ void Pokemon::FBaseSettings::ForEachDataTable(const TFunctionRef<void(UDataTable
                  ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
                  ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); });
     std::ranges::for_each(Range, Callback);
-}
-
-void Pokemon::FBaseSettings::LoadDataTables() const {
-    return Algo::ForEach(KitSettings->DataTables, [](const FSoftObjectPath &Path) { return Path.TryLoad(); });
 }
 
 const FPokemonSpriteSettings &Pokemon::FBaseSettings::GetPokemonSpriteSettings() const {

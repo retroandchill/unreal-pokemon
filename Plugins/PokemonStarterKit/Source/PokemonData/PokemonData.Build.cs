@@ -11,7 +11,7 @@ public class PokemonData : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{
-				"Core", "Paper2D", "PokemonUtilities", "GameplayTags"
+				"Core", "Paper2D", "PokemonUtilities", "GameplayTags", "GameplayAbilities"
 			}
 		);
 

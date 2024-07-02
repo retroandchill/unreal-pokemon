@@ -49,6 +49,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
                     .Level = 50,
                     .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
     auto Battler1 = World->SpawnActor<ATestBattlerActor>();
+    Battler1->DispatchBeginPlay();
     Battler1->Initialize(Side, Pokemon1);
 
     auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
@@ -57,6 +58,7 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
                     .Level = 50,
                     .Moves = {TEXT("AURASPHERE"), TEXT("DRAGONPULSE"), TEXT("FLASHCANNON"), TEXT("NASTYPLOT")}});
     auto Battler2 = World->SpawnActor<ATestBattlerActor>();
+    Battler2->DispatchBeginPlay();
     Battler2->Initialize(Side, Pokemon2);
 
     TArray<TScriptInterface<IBattler>> Battlers = {Battler1, Battler2};

@@ -13,4 +13,5 @@ class POKEMONTESTS_API ATestBattlerActor : public ABattlerActor {
 
   public:
     ATestBattlerActor();
+    void PostActorCreated() override;
 };

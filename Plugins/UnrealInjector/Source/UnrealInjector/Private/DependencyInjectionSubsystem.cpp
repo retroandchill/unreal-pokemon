@@ -6,5 +6,5 @@
 void UDependencyInjectionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    InjectionSettings = NewObject<UDependencyInjectionSettings>(this);
+    InjectionSettings = GetDefault<UDependencyInjectionSettings>();
 }

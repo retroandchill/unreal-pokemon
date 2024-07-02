@@ -18,6 +18,10 @@ class POKEMONBATTLEUI_API UPokemonBattlePanelPlayer : public UPokemonBattlePanel
   public:
     void Refresh() override;
 
+protected:
+    void UpdateHPPercent(float NewPercent) override;
+    void HPPercentUpdateComplete() const override;
+
   private:
     /**
      * The widget for displaying the current HP of the battler

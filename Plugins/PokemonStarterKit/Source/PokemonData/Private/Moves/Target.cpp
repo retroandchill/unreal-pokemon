@@ -3,5 +3,5 @@
 #include "DataManager.h"
 
 TArray<FName> UTargetHelper::GetTargetNames() {
-    return FDataManager::GetInstance().GetDataTable<FTarget>().GetTableRowNames();
+    return FDataManager::GetInstance().GetDataTable<FMoveTarget>().GetTableRowNames();
 }

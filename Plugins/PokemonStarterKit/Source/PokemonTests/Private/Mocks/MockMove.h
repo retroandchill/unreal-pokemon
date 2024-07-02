@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Moves/MoveData.h"
+#include "Moves/Target.h"
 #include <gmock/gmock.h>
 
 class FMockMove : public IMove {
@@ -18,5 +19,7 @@ public:
     MOCK_METHOD(int32, GetCurrentPP, (), (const, override));
     MOCK_METHOD(int32, GetTotalPP, (), (const, override));
     MOCK_METHOD(FName, GetFunctionCode, (), (const, override));
+    MOCK_METHOD(const FMoveTarget &, GetTargetType, (), (const, override));
+    MOCK_METHOD(const TArray<FName> &, GetTags, (), (const, override));
     MOCK_METHOD(void, DecrementPP, (int32 Amount), (override));
 };

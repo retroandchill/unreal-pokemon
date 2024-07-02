@@ -135,6 +135,13 @@ class POKEMONSETTINGS_API IGameSettings {
     virtual const TArray<FStatStageInfo> &GetStatStages() const = 0;
 
     /**
+     * The damage multiplier for a critical hit
+     * @return The damage multiplier for a critical hit
+     */
+    UFUNCTION(BlueprintCallable, Category = Battle)
+    virtual float GetCriticalHitMultiplier() const = 0;
+    
+    /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      * @return The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */

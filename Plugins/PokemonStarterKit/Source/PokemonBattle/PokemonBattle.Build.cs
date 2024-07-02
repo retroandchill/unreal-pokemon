@@ -15,7 +15,8 @@ public class PokemonBattle : ModuleRules
                 "GameplayAbilities", 
                 "GameplayTags", 
                 "GameplayTasks", 
-                "PokemonSettings"
+                "PokemonSettings",
+                "PokemonUtilities"
             }
         );
 

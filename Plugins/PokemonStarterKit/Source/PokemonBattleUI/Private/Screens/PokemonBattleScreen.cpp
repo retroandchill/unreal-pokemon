@@ -60,6 +60,12 @@ void UPokemonBattleScreen::Refresh() const {
     }
 }
 
+UPokemonBattlePanel * UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const {
+    auto Find = Panels.FindByPredicate([&Battler](const UPokemonBattlePanel* Panel)
+        { return Panel->GetCurrentBattler() == Battler; });
+    return Find != nullptr ? *Find : nullptr;
+}
+
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
     Algo::ForEach(Side->GetBattlers(), std::bind_front(&UPokemonBattleScreen::CreateBattlePanel, this, Index));
 }
@@ -85,7 +91,7 @@ void UPokemonBattleScreen::OnActionSelected(int32) {
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = IBattleMove::Execute_GetAllPossibleTargets(Move.GetObject(), Battler);
+    auto Targets = Move->GetAllPossibleTargets();
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->SetActive(false);
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);

@@ -54,6 +54,13 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     void Refresh() const;
 
+    /**
+     * Attempt to find the panel for a battler
+     * @param Battler The battler so check for the panel of
+     * @return The found panel
+     */
+    UPokemonBattlePanel* FindPanelForBattler(const TScriptInterface<IBattler>& Battler) const;
+
   protected:
     /**
      * Slot a panel into the widget

@@ -11,6 +11,7 @@
 
 #include "PokemonBattle.generated.h"
 
+class UBattleAbilitySystemComponent;
 struct FActionResult;
 class IBattleSide;
 class ITrainer;
@@ -55,6 +56,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     GENERATED_BODY()
 
   public:
+    APokemonBattle();
+    
     /**
      * Create a wild Pokémon battle with the given settings
      * @param Pokemon The Pokémon to generate from
@@ -65,6 +68,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) override;
 
   protected:
+    void BeginPlay() override;
+    
     void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
 
     void Tick(float DeltaSeconds) override;
@@ -199,24 +204,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void DisplayAction(const FText &MessageText);
 
-    /**
-     * Apply the result of the current action
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void ApplyActionResult();
-
-    /**
-     * Display the result of an action
-     * @param Result The actual result of the action in question
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void DisplayActionResult(const FActionResult &Result);
-
-    /**
-     * Called when the display of the results of an action is complete
-     */
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void OnActionResultDisplayFinished();
+    void ExecuteAction();
 
     /**
      * Process the player's victory in battle
@@ -266,6 +255,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void DecideBattle(int32 SideIndex);
 
     /**
+     * The ability system component used for this actor
+     */
+    UPROPERTY()
+    TObjectPtr<UBattleAbilitySystemComponent> AbilitySystemComponent;
+
+    /**
      * The current turn number that we're on in battle.
      */
     uint32 TurnCount = 0;
@@ -313,6 +308,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     TQueue<TUniquePtr<IBattleAction>> ActionQueue;
 
+    bool bActionTextDisplayed = false;
+
     /**
      * This is the pawn to take control of when the battle is initiated.
      */
@@ -330,13 +327,4 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UPROPERTY()
     EBattlePhase Phase = EBattlePhase::Setup;
-
-    /**
-     * Have the action messages for the current action been displayed
-     */
-    UPROPERTY()
-    bool bActionMessagesDisplayed = false;
-
-    UPROPERTY()
-    bool bActionResultDisplaying = false;
 };

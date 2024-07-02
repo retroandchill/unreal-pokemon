@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ActionResult.h"
 #include "UObject/Interface.h"
 
 class IBattler;
@@ -31,15 +30,20 @@ class POKEMONBATTLE_API IBattleAction {
 
     /**
      * Execute the action in question
-     * @param bPerformAsync Should action computation be performed asynchronously
      */
-    virtual void Execute(bool bPerformAsync = true) = 0;
+    virtual void Execute() = 0;
 
     /**
      * Is this action currently executing?
      * @return Is the action currently executing?
      */
     virtual bool IsExecuting() const = 0;
+
+    /**
+     * Is this action's execution complete?
+     * @return Is the action's execution complete?
+     */
+    virtual bool IsComplete() const = 0;
 
     /**
      * Get the action's priority in battle
@@ -52,10 +56,4 @@ class POKEMONBATTLE_API IBattleAction {
      * @return The usage message to display for the given action
      */
     virtual FText GetActionMessage() const = 0;
-
-    /**
-     * Get the pending result of the action once it is complete
-     * @return The result of the action once calculation has been completed
-     */
-    virtual const TFuture<FActionResult> &GetActionResult() const = 0;
 };
