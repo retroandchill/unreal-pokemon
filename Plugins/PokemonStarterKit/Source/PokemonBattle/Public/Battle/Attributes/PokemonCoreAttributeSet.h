@@ -35,31 +35,58 @@ private:
      * Called to update the Pokémon's tags based on its current HP
      */
     void UpdateHPTags() const;
-    
+
+    /**
+     * The current HP of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData HP;
-    
+
+    /**
+     * The maximum possible HP of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData MaxHP;
-    
+
+    /**
+     * The physical attack of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData Attack;
-    
+
+    /**
+     * The physical attack of the defense
+     */
     UPROPERTY()
     FGameplayAttributeData Defense;
 
+    /**
+     * The special attack of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData SpecialAttack;
 
+    /**
+     * The special defense of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData SpecialDefense;
 
+    /**
+     * The speed of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData Speed;
-    
+
+    /**
+     * The accuracy of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData Accuracy = 100.f;
 
+    /**
+     * The evasion rate of the battler
+     */
     UPROPERTY()
     FGameplayAttributeData Evasion = 100.f;
 
