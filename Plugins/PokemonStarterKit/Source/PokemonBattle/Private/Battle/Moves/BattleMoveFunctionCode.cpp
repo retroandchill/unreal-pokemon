@@ -199,10 +199,17 @@ bool UBattleMoveFunctionCode::MoveFailed_Implementation(const TScriptInterface<I
 bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TScriptInterface<IBattler> &User,
                                                                        const TScriptInterface<IBattler> &Target, const FRunningMessageSet &FailureMessages) {
     float TypeMod = CalculateTypeMatchUp(DeterminedType, User, Target);
-    auto &DamageState = *Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet();
+    auto &TargetAbilities = *Target->GetAbilityComponent();
+    auto &DamageState = *TargetAbilities.GetTargetDamageStateAttributeSet();
     DamageState.SetTypeMod(TypeMod);
     if (User->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::TwoTurnAttack)) {
         return true;
+    }
+
+    if (BattleMove->GetCategory() != EMoveDamageCategory::Status && FMath::IsNearlyZero(TypeMod)) {
+        TargetAbilities.AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
+        UE_LOG(LogBattle, Display, TEXT("%s is unaffected by %s!"), *Target->GetNickname().ToString(), *BattleMove->GetDisplayName().ToString())
+        return false;
     }
 
     if (FailsAgainstTarget(User, Target, FailureMessages)) {

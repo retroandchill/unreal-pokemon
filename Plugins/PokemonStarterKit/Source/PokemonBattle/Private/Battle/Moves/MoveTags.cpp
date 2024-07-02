@@ -17,6 +17,7 @@ UE_DEFINE_GAMEPLAY_TAG(MoveTarget, "Battle.MoveTarget");
 UE_DEFINE_GAMEPLAY_TAG(MoveTarget_Unaffected, "Battle.MoveTarget.Unaffected");
 UE_DEFINE_GAMEPLAY_TAG(MoveTarget_Unaffected_Missed, "Battle.MoveTarget.Unaffected.Missed");
 UE_DEFINE_GAMEPLAY_TAG(MoveTarget_Unaffected_Failed, "Battle.MoveTarget.Unaffected.Failed");
+UE_DEFINE_GAMEPLAY_TAG(MoveTarget_Unaffected_NoEffect, "Battle.MoveTarget.Unaffected.NoEffect");
 UE_DEFINE_GAMEPLAY_TAG(MoveTarget_NoDamage, "Battle.MoveTarget.NoDamage");
 UE_DEFINE_GAMEPLAY_TAG(MoveTarget_CriticalHit, "Battle.MoveTarget.CriticalHit");
 UE_DEFINE_GAMEPLAY_TAG(MoveTarget_Physical, "Battle.MoveTarget.Category.Physical");

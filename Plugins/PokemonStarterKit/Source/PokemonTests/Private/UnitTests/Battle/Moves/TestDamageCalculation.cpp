@@ -200,3 +200,50 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
     
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_NoEffect, "Unit Tests.Battle.Moves.TestDamageCalculation.NoEffect",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(),
+        FPokemonDTO{
+            .Species = TEXT("LATIOS"),
+            .Level = 100,
+            .IVs = {{"SPECIAL_ATTACK", 31}},
+            .EVs = {{"SPECIAL_ATTACK", 252}},
+            .Nature = FName("TIMID"),
+            .Moves = { TEXT("DRACOMETEOR") }
+        });
+    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(),
+        FPokemonDTO{
+            .Species = TEXT("SYLVEON"),
+            .Level = 100,
+            .IVs = {{"SPECIAL_DEFENSE", 31}},
+            .EVs = {{"SPECIAL_DEFENSE", 0}},
+            .Nature = FName("HARDY")
+        });
+
+    FTemporarySeed Seed(151261);
+
+    auto Battle = World->SpawnActor<ATestPokemonBattle>();
+    auto Side1 = World->SpawnActor<ATestActiveSide>();
+    Side1->Initialize(Battle, Pokemon1, false);
+    auto Side2 = World->SpawnActor<ATestActiveSide>();
+    Side2->Initialize(Battle, Pokemon2, false);
+    Battle->Initialize({Side1, Side2});
+
+    auto Battler1 = Side1->GetBattlers()[0];
+    auto Battler2 = Side2->GetBattlers()[0];
+
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    AddExpectedMessage(TEXT("Sylveon is unaffected by Draco Meteor!"), ELogVerbosity::Display);
+    Action.Execute();
+    
+    UE_CHECK_TRUE(Action.IsComplete());
+    UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
+    
+    return true;
+}
