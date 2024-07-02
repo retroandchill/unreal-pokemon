@@ -46,6 +46,12 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     float GetCriticalHitMultiplier() const final;
     const TArray<int32> &GetCriticalHitRatios() const final;
 
+    /**
+     * Get the tags for the HP state of the a battler
+     * @return The array of HP states
+     */
+    const TArray<FHPStateTag>& GetHPStateTags() const;
+    
     const FSoftClassPath& GetDefaultMoveAbility() const;
 
     /**

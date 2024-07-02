@@ -33,3 +33,19 @@ void UMoveEvaluationHelpers::BoostPowerIfUserHasTag(const UDamageModificationPay
         Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
     }
 }
+
+void UMoveEvaluationHelpers::BoostPowerIfUserHasAllTags(const UDamageModificationPayload *Context,
+    FGameplayTagContainer Tags, float Multiplier) {
+    auto &Data = Context->GetData();
+    if (Data.User->GetAbilityComponent()->HasAllMatchingGameplayTags(Tags)) {
+        Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
+    }
+}
+
+void UMoveEvaluationHelpers::BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context,
+    FGameplayTagContainer Tags, float Multiplier) {
+        auto &Data = Context->GetData();
+        if (Data.User->GetAbilityComponent()->HasAnyMatchingGameplayTags(Tags)) {
+            Context->SetPowerMultiplier(Data.PowerMultiplier * Multiplier);
+        }
+}

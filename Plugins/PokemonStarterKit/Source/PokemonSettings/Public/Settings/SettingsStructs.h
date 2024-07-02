@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 
 #include "SettingsStructs.generated.h"
 
@@ -275,4 +276,24 @@ struct FStatStageInfo {
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly,  DisplayName = "Negative Accuracy/Evasion Multiplier",
         Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
     float NegativeAccEvaMultiplier;
+};
+
+/**
+ * Struct that contains information for Gameplay Tags that are applied when HP dips below a certain amount.
+ */
+USTRUCT(BlueprintType, DisplayName = "HP State Tag")
+struct POKEMONSETTINGS_API FHPStateTag {
+    GENERATED_BODY()
+
+    /**
+     * The threshold to apply the tag if HP is under.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|HP", meta = (UIMin = 0.f, ClampMin = 0.f, UIMax = 1.f, ClampMax = 1.f))
+    float Threshold;
+
+    /**
+     * The tag to apply
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|HP")
+    FGameplayTag Tag;
 };

@@ -2,12 +2,24 @@
 
 
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Settings/BaseSettings.h"
 
 void UPokemonCoreAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     NewValue = FMath::RoundHalfToZero(FMath::Max(NewValue, 0.f));
 
     if (Attribute == GetHPAttribute()) {
         NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHP());
+
+        float HPPercent = GetHP() / GetMaxHP();
+        auto Owner = GetOwningAbilitySystemComponent();
+        static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
+        for (auto &[Threshold, Tag] : HPStateTags) {
+            if (HPPercent <= Threshold) {
+                Owner->AddLooseGameplayTag(Tag);
+            } else if (Owner->HasMatchingGameplayTag(Tag)) {
+                Owner->RemoveLooseGameplayTag(Tag);
+            }
+        }
     }
 }
 

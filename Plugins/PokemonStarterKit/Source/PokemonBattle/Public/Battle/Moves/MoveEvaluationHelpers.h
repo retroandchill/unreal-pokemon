@@ -32,7 +32,7 @@ public:
      * @param Override The new value to attempt to assign to[]
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
-    static void SetCriticalHitOverride(const UCriticalHitRateCalculationPayload* Context, ECriticalOverride Override);
+    static void SetCriticalHitOverride(const UCriticalHitRateCalculationPayload *Context, ECriticalOverride Override);
 
     /**
      * Boost the power of a move if the user of the move has the specified gameplay tag.
@@ -41,5 +41,26 @@ public:
      * @param Multiplier The multiplier to apply if the tag is found
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
-    static void BoostPowerIfUserHasTag(const UDamageModificationPayload* Context, FGameplayTag Tag, float Multiplier = 1.f);
+    static void BoostPowerIfUserHasTag(const UDamageModificationPayload *Context, FGameplayTag Tag,
+                                       float Multiplier = 1.f);
+
+    /**
+     * Boost the power of a move if the user of the move has all of the specified gameplay tags.
+     * @param Context The payload that contains all the move information
+     * @param Tags The tags to search for
+     * @param Multiplier The multiplier to apply if the tag is found
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
+    static void BoostPowerIfUserHasAllTags(const UDamageModificationPayload *Context, FGameplayTagContainer Tags,
+                                       float Multiplier = 1.f);
+
+    /**
+     * Boost the power of a move if the user of the move has any of the specified gameplay tags.
+     * @param Context The payload that contains all the move information
+     * @param Tags The tags to search for
+     * @param Multiplier The multiplier to apply if the tag is found
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
+    static void BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context, FGameplayTagContainer Tags,
+                                       float Multiplier = 1.f);
 };
