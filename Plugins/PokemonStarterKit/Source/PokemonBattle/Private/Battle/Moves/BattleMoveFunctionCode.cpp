@@ -11,6 +11,7 @@
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
+#include "Battle/Events/Moves/AdditionalEffectChanceModificationPayload.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
@@ -412,6 +413,46 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
     }
     int32 Roll = FMath::Rand() % Rate;
     return Roll == 0;
+}
+
+void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
+    const TArray<TScriptInterface<IBattler>> &Targets) {
+    for (auto &Target : Targets) {
+        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
+            continue;
+        }
+
+        ApplyEffectAgainstTarget(User, Target);
+    }
+
+    ApplyGeneralEffect(User);
+    FaintCheck(User, Targets);
+}
+
+void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
+    const TArray<TScriptInterface<IBattler>> &Targets) {
+    for (auto &Target : Targets) {
+        int32 Chance = CalculateAdditionalEffectChance(User, Target);
+        if (Chance <= 0) {
+            continue;
+        }
+
+        if (int32 Roll = FMath::Rand() % 100; Roll < Chance) {
+            ApplyAdditionalEffect(User, Target);
+        }
+    }
+
+    // TODO: Apparently flinching is done after additional effects
+
+    DisplayMoveEffectsAndEndMove(User, Targets);
+}
+
+int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(const TScriptInterface<IBattler> &User,
+    const TScriptInterface<IBattler> &Target) {
+    auto Payload = UAdditionalEffectChanceModificationPayload::Create(User, Target, BattleMove->GetAdditionalEffectChance());
+    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::AdditionalEffectChanceEvents);
+    return FMath::RoundToInt32(Payload->GetData().AdditionalEffectChance);
+    
 }
 
 TArray<FText> &UBattleMoveFunctionCodeHelper::GetMessages(const FRunningMessageSet &Messages) {

@@ -15,30 +15,13 @@ UQueueDisplayAndWaitForTurn * UQueueDisplayAndWaitForTurn::QueueDisplayAndWaitFo
 }
 
 void UQueueDisplayAndWaitForTurn::Activate() {
-    auto AbilityDisplayComponent = FindAbilityDisplayComponent();
+    auto AbilityDisplayComponent = IAbilityDisplayComponent::FindAbilityDisplayComponent(GameplayAbility);
     check(AbilityDisplayComponent != nullptr)
 
     auto AbilitySpecHandle = GameplayAbility->GetCurrentAbilitySpecHandle();
     auto OwningAbilitySystemComponent = GameplayAbility->GetAbilitySystemComponentFromActorInfo();
     AbilityDisplayComponent->QueueAbilityToDisplay(AbilitySpecHandle, OwningAbilitySystemComponent,
         FOnGameplayAbilityDisplay::CreateUObject(this, &UQueueDisplayAndWaitForTurn::ExecuteOnTurn));
-}
-
-TScriptInterface<IAbilityDisplayComponent> UQueueDisplayAndWaitForTurn::FindAbilityDisplayComponent() const {
-    auto OwningActor = GameplayAbility->GetOwningActorFromActorInfo();
-    if (auto Battle = Cast<IBattle>(OwningActor); Battle != nullptr) {
-        return Battle->GetAbilityDisplayComponent();
-    }
-
-    if (auto BattleSide = Cast<IBattleSide>(OwningActor); BattleSide != nullptr) {
-        return BattleSide->GetOwningBattle()->GetAbilityDisplayComponent();
-    }
-
-    if (auto Battler = Cast<IBattler>(OwningActor); Battler != nullptr) {
-        return Battler->GetOwningSide()->GetOwningBattle()->GetAbilityDisplayComponent();
-    }
-
-    return nullptr;
 }
 
 void UQueueDisplayAndWaitForTurn::ExecuteOnTurn() const {

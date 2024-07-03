@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "BattlerHelpers.generated.h"
 
+class IBattler;
 struct FGameplayAbilityActorInfo;
 /**
  * Library of helper functions used for battlers

@@ -60,6 +60,8 @@ public:
     void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
     void QueueAbilityToDisplay(FGameplayAbilitySpecHandle Handle, UAbilitySystemComponent* AbilitySystemComponent, FOnGameplayAbilityDisplay &&ContinueDelegate) override;
     bool IsAbilityDisplaying() const override;
+    FDelegateHandle BindToDisplayQueueEmpty(FDisplayQueueEmpty::FDelegate&& Delegate) override;
+    void RemoveQueueEmptyBinding(FDelegateHandle DelegateHandle) override;
 
 private:
     /**
@@ -71,5 +73,10 @@ private:
      * The queue of callbacks to apply to the ability in question
      */
     TQueue<FAbilityDisplay> AbilitiesToDisplay;
+
+    /**
+     * Called when the queue is empty
+     */
+    FDisplayQueueEmpty OnQueueEmpty;
 
 };

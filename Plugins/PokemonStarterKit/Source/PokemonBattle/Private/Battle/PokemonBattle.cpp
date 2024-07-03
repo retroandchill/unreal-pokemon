@@ -151,7 +151,7 @@ void APokemonBattle::ExecuteAction(IBattleAction &Action) {
 }
 
 TScriptInterface<IAbilityDisplayComponent> APokemonBattle::GetAbilityDisplayComponent() const {
-    return AbilitySystemComponent;
+    return GameplayAbilityDisplayComponent;
 }
 
 APawn *APokemonBattle::GetBattlePawn() const {

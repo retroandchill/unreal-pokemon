@@ -7,12 +7,18 @@
 #include "GameplayAbilitySpecHandle.h"
 #include "AbilityDisplayComponent.generated.h"
 
+class UGameplayAbility;
+class UAbilitySystemComponent;
+
 /**
  * The delegate to signal to the ability it can display and is safe to continue executing.
  */
 DECLARE_DELEGATE(FOnGameplayAbilityDisplay);
 
-class UAbilitySystemComponent;
+/**
+ * Delegate called when the display queue is empty
+ */
+DECLARE_MULTICAST_DELEGATE(FDisplayQueueEmpty);
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -42,5 +48,25 @@ public:
      * @return Is an ability being displayed?
      */
     virtual bool IsAbilityDisplaying() const = 0;
+
+    /**
+     * Bind an action to the displaying delegate
+     * @param Delegate the delegate to call
+     * @return The handle for the bound delegate
+     */
+    virtual FDelegateHandle BindToDisplayQueueEmpty(FDisplayQueueEmpty::FDelegate&& Delegate) = 0;
+
+    /**
+     * Bind remove a bound action for the queue completion callback
+     * @param DelegateHandle the delegate handle to remove
+     */
+    virtual void RemoveQueueEmptyBinding(FDelegateHandle DelegateHandle) = 0;
+
+    /**
+     * Perform a search for the ability display component
+     * @param Ability The ability to check against
+     * @return The found component
+     */
+    static TScriptInterface<IAbilityDisplayComponent> FindAbilityDisplayComponent(const UGameplayAbility* Ability);
 
 };

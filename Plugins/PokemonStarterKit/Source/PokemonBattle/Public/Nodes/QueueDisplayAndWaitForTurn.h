@@ -33,12 +33,6 @@ public:
     
 private:
     /**
-     * Perform a search for the ability display component
-     * @return The found component
-     */
-    TScriptInterface<IAbilityDisplayComponent> FindAbilityDisplayComponent() const;
-
-    /**
      * Execute the process called when it's the specified ability's turn
      */
     void ExecuteOnTurn() const;

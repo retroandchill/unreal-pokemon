@@ -97,6 +97,13 @@ class POKEMONBATTLE_API IBattleMove {
     virtual int32 GetPriority() const = 0;
 
     /**
+     * Get the move's additional effect chance
+     * @return The move's additional effect chance
+     */
+    UFUNCTION(BlueprintCallable, Category = Effects)
+    virtual int32 GetAdditionalEffectChance() const = 0;
+
+    /**
      * Get the category of the move's damage capabilities
      */
     UFUNCTION(BlueprintCallable, Category = Metadata)

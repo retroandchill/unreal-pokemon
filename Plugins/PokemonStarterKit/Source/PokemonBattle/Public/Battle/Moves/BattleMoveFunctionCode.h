@@ -280,6 +280,71 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
     void DisplayDamage(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+
+    /**
+     * Apply any move effects to the targets
+     * @param User The user of the move
+     * @param Targets The targets of the move
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
+    void ApplyMoveEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    
+    /**
+     * Apply any guaranteed effects against a target
+     * @param User The user of the move
+     * @param Target The target of the move
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
+    /**
+     * Apply any generate effects that don't depend on any targets
+     * @param User The user of the move
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User);
+
+    /**
+     * Perform a faint check on the user and targets before applying the additional effects
+     * @param User The user of the move
+     * @param Targets the targets of the move
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+
+    /**
+     * Apply additional effects against the user
+     * @param User The user of the move
+     * @param Targets The targets of the move
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
+    void ApplyAdditionalEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    
+    /**
+     * Apply any additional effect to a target
+     * @param User The user of the move
+     * @param Target The target of the move
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyAdditionalEffect(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
+    /**
+     * Calculate the value of a move's additional effect chance
+     * @param User The user of the move in question
+     * @param Target The target of the move
+     * @return The chance of the additional effect occurring
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Effects")
+    int32 CalculateAdditionalEffectChance(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
+    /**
+     * Display the move effects to the player and end the move
+     * @param User The user of the move
+     * @param Targets The targets of the move
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
+    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+
 private:
     /**
      * The underlying move that this ability wraps

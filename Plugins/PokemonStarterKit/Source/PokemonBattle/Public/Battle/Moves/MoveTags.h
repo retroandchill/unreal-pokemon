@@ -110,6 +110,11 @@ POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(DamageModificationEvents)
 POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(DamageDealtValue)
 
 /**
+ * Event tags used when performing additional effect chance calculation
+ */
+POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(AdditionalEffectChanceEvents)
+
+/**
  * Tag applied to a battler when they are using a two-turn attack
  */
 POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TwoTurnAttack)
