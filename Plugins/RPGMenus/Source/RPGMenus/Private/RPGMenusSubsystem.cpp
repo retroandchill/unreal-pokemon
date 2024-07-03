@@ -59,7 +59,9 @@ URPGMenusSubsystem *URPGMenusSubsystem::GetSubsystem(const UObject *WorldContext
 
     if (auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull)) {
         auto PlayerController = World->GetFirstPlayerController();
-        return PlayerController->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
+        if (PlayerController != nullptr) {
+            return PlayerController->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
+        }
     }
 
     return nullptr;

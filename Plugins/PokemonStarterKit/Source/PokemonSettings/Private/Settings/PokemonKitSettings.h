@@ -140,6 +140,12 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     FSoftClassPath DefaultMoveAbility;
 
     /**
+     * The tags for the HP state of the battler
+     */
+    UPROPERTY(EditAnywhere, Config, DisplayName = "HP State Tags", Category = Battle)
+    TArray<FHPStateTag> HPStateTags;
+
+    /**
      * The damage multiplier for a critical hit
      */
     UPROPERTY(EditDefaultsOnly, Config, Category = Battle)

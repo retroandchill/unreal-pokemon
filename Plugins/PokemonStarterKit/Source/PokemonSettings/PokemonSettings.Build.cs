@@ -21,7 +21,8 @@ public class PokemonSettings : ModuleRules
                 "Slate",
                 "SlateCore",
                 "DeveloperSettings",
-                "PokemonUtilities"
+                "PokemonUtilities",
+                "GameplayTags"
             }
         );
     }

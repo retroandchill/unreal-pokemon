@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
 #include "SuccessCheckAgainstTargetPayload.generated.h"
@@ -70,7 +71,7 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
  * Payload object for performing a success check against a target
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject {
+class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
 public:
@@ -91,6 +92,9 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FTargetSuccessCheckPayload &GetData() const;
+
+    const TScriptInterface<IBattler>& GetUser() const final;
+    const TScriptInterface<IBattler>& GetTarget() const final;
 
     /**
      * Set the new success state of the move to the given value

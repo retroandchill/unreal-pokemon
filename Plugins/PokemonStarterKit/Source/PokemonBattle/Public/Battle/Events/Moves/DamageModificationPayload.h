@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
 #include "DamageModificationPayload.generated.h"
@@ -95,7 +96,7 @@ struct POKEMONBATTLE_API FDamageCalculationData {
  * The payload used during damage modification.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UDamageModificationPayload : public UObject {
+class POKEMONBATTLE_API UDamageModificationPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
 public:
@@ -116,6 +117,9 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FDamageCalculationData &GetData() const;
+
+    const TScriptInterface<IBattler>& GetUser() const final;
+    const TScriptInterface<IBattler>& GetTarget() const final;
 
     /**
      * Set the power multiplier

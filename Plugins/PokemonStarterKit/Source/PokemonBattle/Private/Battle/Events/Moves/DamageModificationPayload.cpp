@@ -19,6 +19,16 @@ const FDamageCalculationData & UDamageModificationPayload::GetData() const {
     return *Data;
 }
 
+const TScriptInterface<IBattler> & UDamageModificationPayload::GetUser() const {
+    check(Data != nullptr)
+    return Data->User;
+}
+
+const TScriptInterface<IBattler> & UDamageModificationPayload::GetTarget() const {
+    check(Data != nullptr)
+    return Data->Target;
+}
+
 void UDamageModificationPayload::SetPowerMultiplier(float Amount) const {
     check(Data != nullptr)
     Data->PowerMultiplier = Amount;

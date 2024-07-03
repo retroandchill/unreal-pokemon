@@ -19,7 +19,13 @@
     GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
     GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-namespace Pokemon::Battle::Attributes {
-constexpr float True = 1.f;
-constexpr float False = 0.f;
-}
+/**
+ * Define all the information necessary to initialize a gameplay attribute with a custom initter process
+ * @param ClassName The name of the class that owns the attribute
+ * @param PropertyName The name of the property on the attribute
+ */
+#define ATTRIBUTE_ACCESSORS_CUSTOM_INITTER(ClassName, PropertyName) \
+    GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
+    GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
+    GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
+    void Init##PropertyName(float NewVal)

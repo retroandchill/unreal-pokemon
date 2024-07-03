@@ -19,6 +19,16 @@ const FHitCheckData & UHitCheckPayload::GetData() const {
     return *Data;
 }
 
+const TScriptInterface<IBattler> & UHitCheckPayload::GetUser() const {
+    check(Data != nullptr)
+    return Data->User;
+}
+
+const TScriptInterface<IBattler> & UHitCheckPayload::GetTarget() const {
+    check(Data != nullptr)
+    return Data->Target;
+}
+
 void UHitCheckPayload::SetBaseAccuracy(int32 Amount) const {
     check(Data != nullptr)
     Data->BaseAccuracy = Amount;

@@ -167,6 +167,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     auto HitCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
         bool bHitResult = HitCheck(User, Target);
         if (!bHitResult) {
+            UE_LOG(LogBattle, Display, TEXT("%s missed %s!"), *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
         }
         return bHitResult;
@@ -234,6 +235,8 @@ bool UBattleMoveFunctionCode::WorksWithNoTargets_Implementation() {
 bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) {
     auto BaseAccuracy = CalculateBaseAccuracy(BattleMove->GetAccuracy(), User, Target);
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
+        UE_LOG(LogBattle, Display, TEXT("%s always hits, bypassing accuracy check against %s"),
+            *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
         return true;
     }
     

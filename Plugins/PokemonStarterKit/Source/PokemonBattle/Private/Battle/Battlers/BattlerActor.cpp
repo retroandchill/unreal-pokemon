@@ -143,6 +143,10 @@ const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
     return OwningSide;
 }
 
+const FSpeciesData & ABattlerActor::GetSpecies() const {
+    return WrappedPokemon->GetSpecies();
+}
+
 FText ABattlerActor::GetNickname() const {
     return WrappedPokemon->GetNickname();
 }

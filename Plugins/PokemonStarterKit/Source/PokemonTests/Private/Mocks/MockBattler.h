@@ -13,6 +13,7 @@ public:
     MOCK_METHOD3(Initialize, TScriptInterface<IBattler>(const TScriptInterface<IBattleSide> &Side, const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately));
     MOCK_METHOD(FGuid, GetInternalId, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IBattleSide> &, GetOwningSide, (), (const, override));
+    MOCK_METHOD(const FSpeciesData &, GetSpecies, (), (const, override));
     MOCK_METHOD(FText, GetNickname, (), (const, override));
     MOCK_METHOD(EPokemonGender, GetGender, (), (const, override));
     MOCK_METHOD(int32, GetPokemonLevel, (), (const, override));
