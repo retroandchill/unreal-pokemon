@@ -60,6 +60,14 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = "Moves|Context")
     static bool UserIsSpecies(const TScriptInterface<IMoveEventPayload>& Context, FName Species);
+
+    /**
+     * Boost the power of a move
+     * @param Context The payload that contains all the move information
+     * @param Multiplier The multiplier to apply if the tag is found
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
+    static void BoostPower(const UDamageModificationPayload *Context, float Multiplier = 1.f);
     
     /**
      * Boost the power of a move if the user of the move has the specified gameplay tag.
@@ -90,4 +98,12 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
     static void BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context, FGameplayTagContainer Tags,
                                        float Multiplier = 1.f);
+
+    /**
+     * Boost the damage of a move if the user of the move has the specified gameplay tag.
+     * @param Context The payload that contains all the move information=
+     * @param Multiplier The multiplier to apply if the tag is found
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
+    static void BoostFinalDamageMultiplier(const UDamageModificationPayload *Context, float Multiplier = 1.f);
 };
