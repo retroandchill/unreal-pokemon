@@ -211,6 +211,20 @@ void ABattlerActor::ShowSprite() const {
     Sprite->SetActorHiddenInGame(false);
 }
 
+const TOptional<FStatusEffectInfo> & ABattlerActor::GetStatusEffect() const {
+    return StatusEffect;
+}
+
+void ABattlerActor::InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
+    check(!StatusEffect.IsSet())
+    StatusEffect.Emplace(StatusEffectID, EffectHandle);
+}
+
+void ABattlerActor::CureStatusEffect() {
+    check(StatusEffect.IsSet())
+    StatusEffect.Reset();
+}
+
 void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
     WrappedPokemon->SetCurrentHP(FMath::FloorToInt32(Data.NewValue));
 }

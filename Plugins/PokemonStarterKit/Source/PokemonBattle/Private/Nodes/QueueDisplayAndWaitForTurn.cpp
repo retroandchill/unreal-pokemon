@@ -8,24 +8,24 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Effects/AbilityDisplayComponent.h"
 
-UQueueDisplayAndWaitForTurn * UQueueDisplayAndWaitForTurn::QueueDisplayAndWaitForTurn(
-    UAbilitySystemComponent *OwningAbilitySystemComponent, FGameplayAbilitySpecHandle AbilitySpecHandle) {
-    auto Node = NewObject<UQueueDisplayAndWaitForTurn>();
-    Node->AbilitySpecHandle = AbilitySpecHandle;
-    Node->OwningAbilitySystemComponent = OwningAbilitySystemComponent;
-    return Node;
+UQueueDisplayAndWaitForTurn * UQueueDisplayAndWaitForTurn::QueueDisplayAndWaitForTurn(UGameplayAbility *Ability) {
+        auto Node = NewObject<UQueueDisplayAndWaitForTurn>();
+        Node->GameplayAbility = Ability;
+        return Node;
 }
 
 void UQueueDisplayAndWaitForTurn::Activate() {
     auto AbilityDisplayComponent = FindAbilityDisplayComponent();
     check(AbilityDisplayComponent != nullptr)
 
+    auto AbilitySpecHandle = GameplayAbility->GetCurrentAbilitySpecHandle();
+    auto OwningAbilitySystemComponent = GameplayAbility->GetAbilitySystemComponentFromActorInfo();
     AbilityDisplayComponent->QueueAbilityToDisplay(AbilitySpecHandle, OwningAbilitySystemComponent,
         FOnGameplayAbilityDisplay::CreateUObject(this, &UQueueDisplayAndWaitForTurn::ExecuteOnTurn));
 }
 
 TScriptInterface<IAbilityDisplayComponent> UQueueDisplayAndWaitForTurn::FindAbilityDisplayComponent() const {
-    auto OwningActor = OwningAbilitySystemComponent->GetOwnerActor();
+    auto OwningActor = GameplayAbility->GetOwningActorFromActorInfo();
     if (auto Battle = Cast<IBattle>(OwningActor); Battle != nullptr) {
         return Battle->GetAbilityDisplayComponent();
     }

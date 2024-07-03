@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "QueueDisplayAndWaitForTurn.generated.h"
 
+class UGameplayAbility;
 class IAbilityDisplayComponent;
 class UAbilitySystemComponent;
 
@@ -22,13 +23,11 @@ class POKEMONBATTLE_API UQueueDisplayAndWaitForTurn : public UBlueprintAsyncActi
 public:
     /**
      * Queue a gameplay ability display and wait for the Ability Display Component to queue up this actor
-     * @param OwningAbilitySystemComponent The ability system component that owns this ability
-     * @param AbilitySpecHandle The spec handle held by the ability in question
+     * @param Ability The gameplay ability that is being displayed
      * @return The created node
      */
-    UFUNCTION(BlueprintCallable, DisplayName = "Play Battler HP Animation", meta = (BlueprintInternalUseOnly = "true",
-              WorldContext = "WorldContextObject"), Category = "Battle|Animations")
-    static UQueueDisplayAndWaitForTurn *QueueDisplayAndWaitForTurn(UAbilitySystemComponent* OwningAbilitySystemComponent, FGameplayAbilitySpecHandle AbilitySpecHandle);
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Display", meta = (DefaultToSelf = Ability))
+    static UQueueDisplayAndWaitForTurn *QueueDisplayAndWaitForTurn(UGameplayAbility* Ability);
 
     void Activate() override;
     
@@ -51,15 +50,9 @@ private:
     FOnTurnToDisplay OnTurnToDisplay;
     
     /**
-     * The ability system component that owns this ability
+     * The ability to display for
      */
     UPROPERTY()
-    TObjectPtr<UAbilitySystemComponent> OwningAbilitySystemComponent;
-
-    /**
-     * The spec handle held by the ability in question
-     */
-    UPROPERTY()
-    FGameplayAbilitySpecHandle AbilitySpecHandle;
+    TObjectPtr<UGameplayAbility> GameplayAbility;
 
 };
