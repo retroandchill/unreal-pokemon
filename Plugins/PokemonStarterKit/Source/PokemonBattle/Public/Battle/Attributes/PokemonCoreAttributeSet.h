@@ -17,7 +17,7 @@ class POKEMONBATTLE_API UPokemonCoreAttributeSet : public UAttributeSet {
 
 public:
     ATTRIBUTE_ACCESSORS_CUSTOM_INITTER(UPokemonCoreAttributeSet, HP);
-    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, MaxHP)
+    ATTRIBUTE_ACCESSORS_CUSTOM_INITTER(UPokemonCoreAttributeSet, MaxHP);
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Attack)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Defense)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialAttack)

@@ -10,6 +10,12 @@ void UPokemonCoreAttributeSet::InitHP(float NewVal) {
     UpdateHPTags();
 }
 
+void UPokemonCoreAttributeSet::InitMaxHP(float NewVal) {
+    MaxHP.SetBaseValue(NewVal);
+    MaxHP.SetCurrentValue(NewVal);
+    UpdateHPTags();
+}
+
 void UPokemonCoreAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     NewValue = FMath::RoundHalfToZero(FMath::Max(NewValue, 0.f));
 
@@ -31,7 +37,12 @@ void UPokemonCoreAttributeSet::PostAttributeChange(const FGameplayAttribute &Att
 }
 
 void UPokemonCoreAttributeSet::UpdateHPTags() const {
-    float HPPercent = GetHP() / GetMaxHP();
+    float MaxHPValue = GetMaxHP();
+    if (MaxHPValue == 0.f) {
+        return;
+    }
+    
+    float HPPercent = GetHP() / MaxHPValue;
     auto Owner = GetOwningAbilitySystemComponent();
     static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
     for (auto &[Threshold, Tag] : HPStateTags) {
