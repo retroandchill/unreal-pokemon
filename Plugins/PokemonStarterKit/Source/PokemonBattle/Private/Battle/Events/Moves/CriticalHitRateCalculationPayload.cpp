@@ -22,6 +22,16 @@ const FCriticalHitRateCalculationData & UCriticalHitRateCalculationPayload::GetD
     return *Data;
 }
 
+const TScriptInterface<IBattler> & UCriticalHitRateCalculationPayload::GetUser() const {
+    check(Data != nullptr)
+    return Data->User;
+}
+
+const TScriptInterface<IBattler> & UCriticalHitRateCalculationPayload::GetTarget() const {
+    check(Data != nullptr)
+    return Data->Target;
+}
+
 void UCriticalHitRateCalculationPayload::SetCriticalHitRateOverride(ECriticalOverride Override) const {
     check(Data != nullptr)
     Data->Override = UMoveEvaluationHelpers::ApplyCriticalHitOverride(Data->Override, Override);

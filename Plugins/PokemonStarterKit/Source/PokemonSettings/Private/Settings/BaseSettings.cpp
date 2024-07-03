@@ -88,6 +88,10 @@ const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
 }
 
+const TArray<FHPStateTag> & Pokemon::FBaseSettings::GetHPStateTags() const {
+    return KitSettings->HPStateTags;
+}
+
 const FSoftClassPath & Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
     return KitSettings->DefaultMoveAbility;
 }

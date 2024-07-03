@@ -16,7 +16,7 @@ void UDisplayMessage::Activate() {
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
     if (Controller == nullptr) {
         // TODO: Remove this hack and alter how the tests run to avoid this
-        ExecuteOnConfirm();
+        OnConfirm.Broadcast();
         return;
     }
     auto Screen =
