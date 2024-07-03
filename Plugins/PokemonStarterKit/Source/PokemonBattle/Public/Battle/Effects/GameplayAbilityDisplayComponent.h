@@ -57,6 +57,7 @@ class POKEMONBATTLE_API UGameplayAbilityDisplayComponent : public UActorComponen
     GENERATED_BODY()
 
 public:
+    UGameplayAbilityDisplayComponent();
     void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
     void QueueAbilityToDisplay(FGameplayAbilitySpecHandle Handle, UAbilitySystemComponent* AbilitySystemComponent, FOnGameplayAbilityDisplay &&ContinueDelegate) override;
     bool IsAbilityDisplaying() const override;

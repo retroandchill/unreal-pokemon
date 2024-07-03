@@ -97,11 +97,11 @@ void UBattleMoveFunctionCode::EndAbility(const FGameplayAbilitySpecHandle Handle
     const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
     bool bReplicateEndAbility, bool bWasCancelled) {
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-    ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTags(AddedTags);
+    ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTags(AddedTags, TNumericLimits<int32>::Max());
     for (auto &[Actor, Tags] : AddedTargetTags) {
         TScriptInterface<IBattler> Battler = Actor;
         auto AbilityComponent = Battler->GetAbilityComponent();
-        AbilityComponent->RemoveLooseGameplayTags(Tags);
+        AbilityComponent->RemoveLooseGameplayTags(Tags, TNumericLimits<int32>::Max());
         AbilityComponent->GetTargetDamageStateAttributeSet()->Reset();
     }
 }
@@ -417,20 +417,22 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 
 void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
     const TArray<TScriptInterface<IBattler>> &Targets) {
+    FRunningMessageSet RunningMessages;
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
             continue;
         }
 
-        ApplyEffectAgainstTarget(User, Target);
+        ApplyEffectAgainstTarget(User, Target, RunningMessages);
     }
 
-    ApplyGeneralEffect(User);
-    FaintCheck(User, Targets);
+    ApplyGeneralEffect(User, RunningMessages);
+    FaintCheck(User, Targets, *RunningMessages.Messages);
 }
 
 void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
     const TArray<TScriptInterface<IBattler>> &Targets) {
+    FRunningMessageSet RunningMessages;
     for (auto &Target : Targets) {
         int32 Chance = CalculateAdditionalEffectChance(User, Target);
         if (Chance <= 0) {
@@ -438,13 +440,13 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
         }
 
         if (int32 Roll = FMath::Rand() % 100; Roll < Chance) {
-            ApplyAdditionalEffect(User, Target);
+            ApplyAdditionalEffect(User, Target, RunningMessages);
         }
     }
 
     // TODO: Apparently flinching is done after additional effects
 
-    DisplayMoveEffectsAndEndMove(User, Targets);
+    DisplayMoveEffectsAndEndMove(User, Targets, *RunningMessages.Messages);
 }
 
 int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(const TScriptInterface<IBattler> &User,
@@ -464,6 +466,10 @@ TArray<FActiveGameplayEffectHandle> UBattleMoveFunctionCode::ApplyGameplayEffect
         EffectClass, Level, Stacks);
 }
 
-TArray<FText> &UBattleMoveFunctionCodeHelper::GetMessages(const FRunningMessageSet &Messages) {
+TArray<FBattleMessage> &UBattleMoveFunctionCodeHelper::GetMessages(const FRunningMessageSet &Messages) {
     return *Messages.Messages;
+}
+
+void UBattleMoveFunctionCodeHelper::AppendMessage(const FRunningMessageSet &Messages, FText Message) {
+    Messages.Messages->Emplace(MoveTemp(Message));
 }

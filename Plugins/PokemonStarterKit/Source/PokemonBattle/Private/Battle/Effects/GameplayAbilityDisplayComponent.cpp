@@ -9,6 +9,10 @@ FAbilityDisplay::FAbilityDisplay(FGameplayAbilitySpecHandle AbilitySpecHandle,
     UAbilitySystemComponent *AbilitySystemComponent, FOnGameplayAbilityDisplay &&ContinueDelegate) : Ability(AbilitySpecHandle), AbilitySystemComponent(AbilitySystemComponent), ContinueDelegate(MoveTemp(ContinueDelegate)) {
 }
 
+UGameplayAbilityDisplayComponent::UGameplayAbilityDisplayComponent() {
+    PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UGameplayAbilityDisplayComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                                      FActorComponentTickFunction *ThisTickFunction) {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

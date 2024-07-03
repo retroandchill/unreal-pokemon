@@ -10,6 +10,7 @@
 
 #include "PokemonBattlePanel.generated.h"
 
+class UImage;
 class IBattler;
 class UProgressBar;
 class UDisplayText;
@@ -105,6 +106,12 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UProgressBar> HPBar;
+
+    /**
+     * The widget that display's the status condition if the battler has a status condition
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UImage> StatusIcon;
 
     /**
      * The battler this widget displays the information for

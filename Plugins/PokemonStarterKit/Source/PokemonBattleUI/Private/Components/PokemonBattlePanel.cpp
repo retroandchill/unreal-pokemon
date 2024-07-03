@@ -4,9 +4,12 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
+#include "Utilities/WidgetUtilities.h"
 
 using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
 using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
@@ -47,6 +50,15 @@ void UPokemonBattlePanel::Refresh() {
     UPokemonUIUtils::SetPokemonGenderText(Gender, PokemonGender);
     if (GenderTextColors.Contains(Gender)) {
         UPokemonUIUtils::SetItemTextColor(PokemonGender, GenderTextColors[Gender]);
+    }
+
+    auto &Status = CurrentBattler->GetStatusEffect();
+    if (Status.IsSet()) {
+        auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+        auto Icon = GraphicsSubsystem->GetStatusIconGraphic(Status.GetValue().StatusEffectID);
+        UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
+    } else {
+        StatusIcon->SetVisibility(ESlateVisibility::Hidden);
     }
 }
 

@@ -3,9 +3,6 @@
 
 #include "Nodes/QueueDisplayAndWaitForTurn.h"
 #include "AbilitySystemComponent.h"
-#include "Battle/Battle.h"
-#include "Battle/BattleSide.h"
-#include "Battle/Battlers/Battler.h"
 #include "Battle/Effects/AbilityDisplayComponent.h"
 
 UQueueDisplayAndWaitForTurn * UQueueDisplayAndWaitForTurn::QueueDisplayAndWaitForTurn(UGameplayAbility *Ability) {

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Events/BattleMessage.h"
 
 #include "BattleMoveFunctionCode.generated.h"
 
@@ -41,7 +42,7 @@ USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FRunningMessageSet {
     GENERATED_BODY()
 
-    TSharedRef<TArray<FText>> Messages = MakeShared<TArray<FText>>();
+    TSharedRef<TArray<FBattleMessage>> Messages = MakeShared<TArray<FBattleMessage>>();
     
 };
 
@@ -131,7 +132,7 @@ protected:
      * @param FailureMessages The messages display to the player
      */
     UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void ProcessMoveFailure(const TArray<FText>& FailureMessages);
+    void ProcessMoveFailure(const TArray<FBattleMessage>& FailureMessages);
 
     /**
      * Can this move be used without any targets?
@@ -187,7 +188,7 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
     void DisplayMessagesAndAnimation(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets, const TArray<FText> &Messages);
+                                     const TArray<TScriptInterface<IBattler>> &Targets, const TArray<FBattleMessage>& Messages);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -293,24 +294,29 @@ protected:
      * Apply any guaranteed effects against a target
      * @param User The user of the move
      * @param Target The target of the move
+     * @param RunningMessages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
+                                  RunningMessages);
 
     /**
      * Apply any generate effects that don't depend on any targets
      * @param User The user of the move
+     * @param RunningMessages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User);
+    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& RunningMessages);
 
     /**
      * Perform a faint check on the user and targets before applying the additional effects
      * @param User The user of the move
      * @param Targets the targets of the move
+     * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const TArray<FBattleMessage>
+                    & Messages);
 
     /**
      * Apply additional effects against the user
@@ -324,9 +330,11 @@ protected:
      * Apply any additional effect to a target
      * @param User The user of the move
      * @param Target The target of the move
+     * @param RunningMessages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyAdditionalEffect(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    void ApplyAdditionalEffect(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
+                               RunningMessages);
 
     /**
      * Calculate the value of a move's additional effect chance
@@ -341,9 +349,11 @@ protected:
      * Display the move effects to the player and end the move
      * @param User The user of the move
      * @param Targets The targets of the move
+     * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const TArray<FBattleMessage>
+                                      & Messages);
 
     UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = GameplayEffects)
     TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler, TSubclassOf<UGameplayEffect> EffectClass, int32 Level, int32 Stacks) const;
@@ -399,6 +409,14 @@ public:
      * @return The messages inside the message set
      */
     UFUNCTION(BlueprintPure, Category = "Moves|Messages")
-    static TArray<FText>& GetMessages(const FRunningMessageSet& Messages);
+    static TArray<FBattleMessage> &GetMessages(const FRunningMessageSet &Messages);
+
+    /**
+     * Add a new stand-alone message to the list of running messages
+     * @param Messages The messages to append
+     * @param Message The message to append to the list
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Messages")
+    static void AppendMessage(const FRunningMessageSet& Messages, FText Message);
     
 };
