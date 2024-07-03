@@ -345,6 +345,9 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
     void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
 
+    UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = GameplayEffects)
+    TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler, TSubclassOf<UGameplayEffect> EffectClass, int32 Level, int32 Stacks) const;
+    
 private:
     /**
      * The underlying move that this ability wraps

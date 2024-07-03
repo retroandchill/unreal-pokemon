@@ -448,11 +448,20 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
 }
 
 int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
+                                                                              const TScriptInterface<IBattler> &Target) {
     auto Payload = UAdditionalEffectChanceModificationPayload::Create(User, Target, BattleMove->GetAdditionalEffectChance());
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::AdditionalEffectChanceEvents);
     return FMath::RoundToInt32(Payload->GetData().AdditionalEffectChance);
     
+}
+
+TArray<FActiveGameplayEffectHandle> UBattleMoveFunctionCode::ApplyGameplayEffectToBattler(
+    const TScriptInterface<IBattler> &Battler, TSubclassOf<UGameplayEffect> EffectClass, int32 Level, int32 Stacks) const {
+    FGameplayAbilityTargetDataHandle TargetDataHandle;
+    auto &TargetData = TargetDataHandle.Data.Emplace_GetRef(MakeShared<FGameplayAbilityTargetData_ActorArray>());
+    TargetData->SetActors({CastChecked<AActor>(Battler.GetObject())});
+    return ApplyGameplayEffectToTarget(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), TargetDataHandle,
+        EffectClass, Level, Stacks);
 }
 
 TArray<FText> &UBattleMoveFunctionCodeHelper::GetMessages(const FRunningMessageSet &Messages) {
