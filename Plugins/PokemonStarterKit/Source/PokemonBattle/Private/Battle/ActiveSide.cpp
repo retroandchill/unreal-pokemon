@@ -12,6 +12,11 @@
 #include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
+#include <range/v3/view/filter.hpp>
+#include <range/v3/view/single.hpp>
+#include <range/v3/view/transform.hpp>
+#include <range/v3/view/concat.hpp>
+#include <range/v3/view/join.hpp>
 
 AActiveSide::AActiveSide() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));

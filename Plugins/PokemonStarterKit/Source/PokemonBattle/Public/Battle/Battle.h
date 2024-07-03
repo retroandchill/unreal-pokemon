@@ -9,6 +9,8 @@
 
 #include "Battle.generated.h"
 
+class IAbilityDisplayComponent;
+struct FGameplayEffectSpecHandle;
 class IBattleSide;
 class IBattleAction;
 class IAbilityBattleEffect;
@@ -87,4 +89,10 @@ class POKEMONBATTLE_API IBattle {
      * @param Action The action to execute
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
+
+    /**
+     * Get the ability display component for this battle
+     * @return The ability display component interface
+     */
+    virtual TScriptInterface<IAbilityDisplayComponent> GetAbilityDisplayComponent() const = 0;
 };

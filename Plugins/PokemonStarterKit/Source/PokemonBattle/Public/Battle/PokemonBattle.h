@@ -5,12 +5,15 @@
 #include "CoreMinimal.h"
 #include "Battle.h"
 #include "BattleSettings.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"
 
+struct FGameplayTag;
+class UGameplayAbilityDisplayComponent;
 class UBattleAbilitySystemComponent;
 struct FActionResult;
 class IBattleSide;
@@ -101,6 +104,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
+    TScriptInterface<IAbilityDisplayComponent> GetAbilityDisplayComponent() const override;
 
   protected:
     /**
@@ -259,6 +263,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UPROPERTY()
     TObjectPtr<UBattleAbilitySystemComponent> AbilitySystemComponent;
+
+    /**
+     * The component used to handle the display of gameplay abilities
+     */
+    UPROPERTY()
+    TObjectPtr<UGameplayAbilityDisplayComponent> GameplayAbilityDisplayComponent;
 
     /**
      * The current turn number that we're on in battle.

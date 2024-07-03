@@ -14,9 +14,13 @@
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
 #include "Battle/BattleAbilitySystemComponent.h"
+#include "Battle/Tags.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Effects/GameplayAbilityDisplayComponent.h"
+#include "Battle/Events/TargetedEvents.h"
 #include <functional>
+#include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/empty.hpp>
 
@@ -30,6 +34,7 @@ static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
+    GameplayAbilityDisplayComponent = CreateDefaultSubobject<UGameplayAbilityDisplayComponent>(FName("GameplayAbilityDisplayComponent"));
 }
 
 void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
@@ -69,10 +74,15 @@ void APokemonBattle::Tick(float DeltaSeconds) {
     using enum EBattlePhase;
     Super::Tick(DeltaSeconds);
 
+    if (GameplayAbilityDisplayComponent->IsAbilityDisplaying()) {
+        return;
+    }
+
     if (Phase == Selecting && ActionSelectionFinished()) {
         BeginActionProcessing();
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
+            Pokemon::Battle::Events::SendOutBattleEvent(this, Pokemon::Battle::EndTurn);
             Phase = Judging;
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
@@ -138,6 +148,10 @@ ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers()
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
     DisplayAction(Action.GetActionMessage());
+}
+
+TScriptInterface<IAbilityDisplayComponent> APokemonBattle::GetAbilityDisplayComponent() const {
+    return AbilitySystemComponent;
 }
 
 APawn *APokemonBattle::GetBattlePawn() const {

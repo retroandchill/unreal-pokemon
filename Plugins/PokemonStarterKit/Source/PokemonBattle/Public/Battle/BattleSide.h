@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include <range/v3/view/any_view.hpp>
 
 #include "BattleSide.generated.h"
 
+class UAbilitySystemComponent;
 class IPokemon;
 class ITrainer;
 struct FPokemonDTO;
