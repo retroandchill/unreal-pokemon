@@ -26,7 +26,7 @@ private:
      * @param GERemovalInfo The remove info for the gameplay effect
      * @param Battler The battler to apply the effect to
      */
-    static void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo& GERemovalInfo, TScriptInterface<IBattler> Battler);
+    void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo& GERemovalInfo, TScriptInterface<IBattler> Battler) const;
 
     /**
      * The ID of the status effect that this effect represents
