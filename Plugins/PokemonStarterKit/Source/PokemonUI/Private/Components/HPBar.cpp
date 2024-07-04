@@ -39,24 +39,26 @@ TStatId UHPBar::GetStatId() const {
 }
 
 void UHPBar::UpdateBarMaterial() {
-    bool bMaterialChanged = false;
-    if (BarMaterial == nullptr || BarMaterial->GetBaseMaterial() != BaseMaterial) {
-        BarMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, this);
-        bMaterialChanged = true;
-    }
-    uint32 State = 0;
+    int32 State = INDEX_NONE;
     for (int32 i = 0; i < PercentThresholds.Num(); i++) {
-        if (GetPercent() > PercentThresholds[i]) {
+        if (GetPercent() > PercentThresholds[i].Threshold) {
             break;
         }
 
-        State++;
+        State = i;
     }
 
-    BarMaterial->SetScalarParameterValue(StateParameterName, static_cast<float>(State));
-    if (bMaterialChanged) {
-        auto Style = GetWidgetStyle();
-        Style.FillImage.SetResourceObject(BarMaterial);
-        SetWidgetStyle(Style);
+    if (CurrentState.IsSet() && *CurrentState == State) {
+        return;
     }
+
+    
+    auto Style = GetWidgetStyle();
+    if (State == INDEX_NONE) {
+        Style.FillImage = DefaultStyle;
+    } else {
+        Style.FillImage = PercentThresholds[State].Style;
+    }
+    SetWidgetStyle(Style);
+    CurrentState.Emplace(State);
 }
