@@ -5,6 +5,7 @@
 #include "RPGMenusSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Screens/PokemonBattleScreen.h"
+#include "Utilities/BattleScreenHelpers.h"
 
 UPlayBattlerHPAnimation * UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const UObject *WorldContextObject,
                                                                           const TScriptInterface<IBattler> &Battler, float MaxDuration) {
@@ -16,16 +17,7 @@ UPlayBattlerHPAnimation * UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const 
 }
 
 void UPlayBattlerHPAnimation::Activate() {
-    auto PlayerController = UGameplayStatics::GetPlayerController(WorldContextObject, 0);
-    if (PlayerController == nullptr) {
-        // TODO: Remove this hack and alter how the tests run to avoid this
-        ExecuteOnComplete();
-        return;
-    }
-    auto MenuSubsystem = PlayerController->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
-    auto Screen = MenuSubsystem->FindFirstInStack<UPokemonBattleScreen>();
-    check(Screen != nullptr)
-    auto Panel = Screen->FindPanelForBattler(Battler);
+    auto Panel = UBattleScreenHelpers::FindPokemonBattlePanel(WorldContextObject, Battler);
     if (Panel == nullptr) {
         ExecuteOnComplete();
         return;

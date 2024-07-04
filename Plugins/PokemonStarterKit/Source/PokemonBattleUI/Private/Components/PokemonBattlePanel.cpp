@@ -52,14 +52,7 @@ void UPokemonBattlePanel::Refresh() {
         UPokemonUIUtils::SetItemTextColor(PokemonGender, GenderTextColors[Gender]);
     }
 
-    auto &Status = CurrentBattler->GetStatusEffect();
-    if (Status.IsSet()) {
-        auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-        auto Icon = GraphicsSubsystem->GetStatusIconGraphic(Status.GetValue().StatusEffectID);
-        UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
-    } else {
-        StatusIcon->SetVisibility(ESlateVisibility::Hidden);
-    }
+    RefreshStatusEffect();
 }
 
 void UPokemonBattlePanel::BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate& Binding) {
@@ -77,6 +70,16 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
     float DrainRate = FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * AnimationDrainSpeed, MaxDuration);
     
     HPBarUpdateAnimation.PlayAnimation(HPPercent, CurrentBattler->GetHPPercent(), DrainRate);
+}
+
+void UPokemonBattlePanel::RefreshStatusEffect() {
+    if (auto &Status = CurrentBattler->GetStatusEffect(); Status.IsSet()) {
+        auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+        auto Icon = GraphicsSubsystem->GetStatusIconGraphic(Status.GetValue().StatusEffectID);
+        UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
+    } else {
+        StatusIcon->SetVisibility(ESlateVisibility::Hidden);
+    }
 }
 
 void UPokemonBattlePanel::UpdateHPPercent(float NewPercent) {

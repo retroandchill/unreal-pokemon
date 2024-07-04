@@ -58,6 +58,12 @@ protected:
     void AnimateHP(float MaxDuration);
 
     /**
+     * Refresh the displayed status condition of the contained Pokémon
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Display")
+    void RefreshStatusEffect();
+
+    /**
      * Get the delegate used for updating the progress bar
      * @param Binding The desired action 
      */
@@ -65,7 +71,7 @@ protected:
 
     /**
      * Unbind all dynamic delegates from the HP update callback
-     * @param Object The object to unbind the delegate sfor
+     * @param Object The object to unbind the delegate for
      */
     UFUNCTION()
     void UnbindAllHPUpdateDelegates(UObject* Object);

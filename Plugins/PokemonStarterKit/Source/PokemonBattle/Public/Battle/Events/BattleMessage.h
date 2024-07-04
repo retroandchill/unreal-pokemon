@@ -77,7 +77,7 @@ struct POKEMONBATTLE_API FRunningMessageSet {
     GENERATED_BODY()
 
     /**
-     * The containted messages in the set
+     * The contained messages in the set
      */
     TSharedRef<TArray<FBattleMessage>> Messages = MakeShared<TArray<FBattleMessage>>();
     
