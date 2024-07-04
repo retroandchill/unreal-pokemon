@@ -93,7 +93,7 @@ UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer,
     auto Material =
         UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
-    float Height = Texture->GetSizeY();
+    int32 Height = Texture->GetSizeY();
     return {Material, FVector2D(Height, Height)};
 }
 
@@ -121,7 +121,8 @@ UGraphicsLoadingSubsystem::GetPokemonUISprite(FName Species, UObject *Outer, boo
     static FName SourceTexture = "SourceTexture";
     auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.UISpritesMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
-    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+    int32 Height = Texture->GetSizeY();
+    return {Material, FVector2D(Height, Height)};
 }
 
 UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const IPokemon &Pokemon, UObject *Outer) {
@@ -166,7 +167,8 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName Trai
     auto Material =
         UMaterialInstanceDynamic::Create(TrainerSpriteMaterials.FrontSpriteBaseMaterialUI.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
-    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+    int32 Height = Texture->GetSizeY();
+    return {Material, FVector2D(Height, Height)};
 }
 
 UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
