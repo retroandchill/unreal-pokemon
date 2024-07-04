@@ -21,5 +21,4 @@ public:
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattleSide>>, GetSides, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
     MOCK_METHOD(void, ExecuteAction, (IBattleAction &Action), (override));
-    MOCK_METHOD(TScriptInterface<IAbilityDisplayComponent>, GetAbilityDisplayComponent, (), (const, override));
 };

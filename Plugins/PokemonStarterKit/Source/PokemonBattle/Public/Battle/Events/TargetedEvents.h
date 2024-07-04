@@ -144,9 +144,10 @@ namespace Pokemon::Battle::Events {
 /**
  * Send out an event to the entire battle
  * @param Battle The battle in question
+ * @param Payload The payload data for the event
  * @param Tag the tag to apply to the event
  */
-POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle>& Battle, const FGameplayTag& Tag);
+POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle>& Battle, const UObject* Payload, const FGameplayTag& Tag);
 
 /**
  * Send out a single event to the user of a move

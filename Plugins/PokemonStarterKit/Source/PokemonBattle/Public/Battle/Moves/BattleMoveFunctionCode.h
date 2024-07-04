@@ -38,14 +38,6 @@ enum class ECriticalOverride : uint8 {
     
 };
 
-USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FRunningMessageSet {
-    GENERATED_BODY()
-
-    TSharedRef<TArray<FBattleMessage>> Messages = MakeShared<TArray<FBattleMessage>>();
-    
-};
-
 /**
  * The structure for the attack and defense stats used in damage calculation
  */
@@ -132,7 +124,7 @@ protected:
      * @param FailureMessages The messages display to the player
      */
     UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void ProcessMoveFailure(const TArray<FBattleMessage>& FailureMessages);
+    void ProcessMoveFailure(const FRunningMessageSet& FailureMessages);
 
     /**
      * Can this move be used without any targets?
@@ -188,7 +180,7 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
     void DisplayMessagesAndAnimation(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets, const TArray<FBattleMessage>& Messages);
+                                     const TArray<TScriptInterface<IBattler>> &Targets, const FRunningMessageSet& Messages);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -315,7 +307,7 @@ protected:
      * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const TArray<FBattleMessage>
+    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
                     & Messages);
 
     /**
@@ -352,7 +344,7 @@ protected:
      * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const TArray<FBattleMessage>
+    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
                                       & Messages);
 
     UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = GameplayEffects)
@@ -393,30 +385,4 @@ private:
     UPROPERTY()
     FGameplayAttribute CostAttribute = UPokemonCoreAttributeSet::GetMoveCostAttribute();
 
-};
-
-/**
- * Blueprint function library for any functions that are needed while a move is being used.
- */
-UCLASS()
-class UBattleMoveFunctionCodeHelper : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
-
-public:
-    /**
-     * Get the messages from the given message set
-     * @param Messages The source message set
-     * @return The messages inside the message set
-     */
-    UFUNCTION(BlueprintPure, Category = "Moves|Messages")
-    static TArray<FBattleMessage> &GetMessages(const FRunningMessageSet &Messages);
-
-    /**
-     * Add a new stand-alone message to the list of running messages
-     * @param Messages The messages to append
-     * @param Message The message to append to the list
-     */
-    UFUNCTION(BlueprintCallable, Category = "Moves|Messages")
-    static void AppendMessage(const FRunningMessageSet& Messages, FText Message);
-    
 };

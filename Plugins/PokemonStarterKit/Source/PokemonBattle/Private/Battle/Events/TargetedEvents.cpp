@@ -59,10 +59,11 @@ static void SendOutEventForActor(const FGameplayTag &Tag, FGameplayEventData &Ev
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, Tag, EventData);
 }
 
-void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const FGameplayTag &Tag) {
+void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject* Payload, const FGameplayTag &Tag) {
     auto BattleActor = CastChecked<AActor>(Battle.GetObject());
     FGameplayEventData EventData;
     EventData.Instigator = BattleActor;
+    EventData.OptionalObject = Payload;
     EventData.EventTag = Tag;
     SendOutEventForActor(Tag, EventData, BattleActor);
     auto Children = Battle->GetSides()

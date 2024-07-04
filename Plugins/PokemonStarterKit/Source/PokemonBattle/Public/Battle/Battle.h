@@ -90,9 +90,4 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
 
-    /**
-     * Get the ability display component for this battle
-     * @return The ability display component interface
-     */
-    virtual TScriptInterface<IAbilityDisplayComponent> GetAbilityDisplayComponent() const = 0;
 };

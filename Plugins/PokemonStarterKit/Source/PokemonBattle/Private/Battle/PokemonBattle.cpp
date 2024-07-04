@@ -17,7 +17,7 @@
 #include "Battle/Tags.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "Battle/Effects/GameplayAbilityDisplayComponent.h"
+#include "Battle/Events/BattleMessagePayload.h"
 #include "Battle/Events/TargetedEvents.h"
 #include <functional>
 #include <range/v3/view/concat.hpp>
@@ -34,7 +34,6 @@ static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
-    GameplayAbilityDisplayComponent = CreateDefaultSubobject<UGameplayAbilityDisplayComponent>(FName("GameplayAbilityDisplayComponent"));
 }
 
 void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
@@ -74,16 +73,14 @@ void APokemonBattle::Tick(float DeltaSeconds) {
     using enum EBattlePhase;
     Super::Tick(DeltaSeconds);
 
-    if (GameplayAbilityDisplayComponent->IsAbilityDisplaying()) {
-        return;
-    }
-
     if (Phase == Selecting && ActionSelectionFinished()) {
         BeginActionProcessing();
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
-            Pokemon::Battle::Events::SendOutBattleEvent(this, Pokemon::Battle::EndTurn);
+            auto Payload = NewObject<UBattleMessagePayload>();
+            Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
             Phase = Judging;
+            ProcessTurnEndMessages(Payload->Messages);
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
                 DisplayAction(Action->GetActionMessage());
@@ -95,8 +92,6 @@ void APokemonBattle::Tick(float DeltaSeconds) {
             RefreshBattleHUD();
             NextAction();
         }
-    } else if (Phase == Judging) {
-        EndTurn();
     }
 }
 
@@ -148,10 +143,6 @@ ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers()
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
     DisplayAction(Action.GetActionMessage());
-}
-
-TScriptInterface<IAbilityDisplayComponent> APokemonBattle::GetAbilityDisplayComponent() const {
-    return GameplayAbilityDisplayComponent;
 }
 
 APawn *APokemonBattle::GetBattlePawn() const {

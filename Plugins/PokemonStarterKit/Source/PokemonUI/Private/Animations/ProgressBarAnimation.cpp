@@ -16,7 +16,11 @@ void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, 
         return;
     }
 
-    AnimationData.Emplace(StartPercent, EndPercent, Duration);
+    if (FMath::IsNearlyEqual(StartPercent, EndPercent)) {
+        OnAnimationComplete.Broadcast();
+    } else {
+        AnimationData.Emplace(StartPercent, EndPercent, Duration);
+    }
 }
 
 void FProgressBarAnimation::BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding) {
