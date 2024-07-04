@@ -13,6 +13,7 @@ FLookup::FLookup() {
     auto& TypeTable = DataManager.GetDataTable<FStatus>();
     TypeTable.ForEach([this](const FStatus& Status) {
         AddDynamicGameplayTag(Tags, StatusEffectTagFormat, Status.ID);
+        AddDynamicGameplayTag(ImmunityTags, StatusEffectImmunityTagFormat, Status.ID);
     });
 }
 

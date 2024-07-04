@@ -9,17 +9,11 @@
 
 bool UGameplayCue_ApplyMessage::PerformMessageAppend(AActor *MyTarget, const FGameplayCueParameters &Parameters) const {
     auto CausedAbility = Parameters.EffectContext.GetAbilityInstance_NotReplicated();
-    if (auto EventData = CausedAbility->GetCurrentAbilitySpec()->GameplayEventData; EventData != nullptr) {
-        if (auto MessagePayload = Cast<IRunningMessageSetPayload>(EventData->OptionalObject); MessagePayload != nullptr) {
-            AppendMessage(MyTarget, MessagePayload->GetRunningMessageSet());
-            return true;
-        }
-    }
-
-    if (auto FunctionCode = Cast<UBattleMoveFunctionCode>(CausedAbility); FunctionCode != nullptr) {
-        AppendMessage(MyTarget, FunctionCode->GetRunningMessage());
-        return true;
+    auto Messages = UBattleMessageHelper::FindRunningMessageSet(CausedAbility);
+    if (Messages == nullptr) {
+        return false;
     }
     
-    return false;
+    AppendMessage(MyTarget, *Messages);
+    return true;
 }

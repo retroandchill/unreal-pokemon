@@ -6,6 +6,7 @@
 #include "UObject/Object.h"
 #include "BattleMessage.generated.h"
 
+class UGameplayAbility;
 class IBattleAnimation;
 
 /**
@@ -124,5 +125,11 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Messages")
     static void AppendMessageWithAnimation(const FRunningMessageSet& Messages, FText Message, const TScriptInterface<IBattleAnimation>& Animation, EAnimationPlacement AnimationPlacement = EAnimationPlacement::Before);
-    
+
+    /**
+     * Find the running message said for the activated ability
+     * @param Ability The ability in question
+     * @return The running message set (or nullptr if not found)
+     */
+    static const FRunningMessageSet *FindRunningMessageSet(const UGameplayAbility *Ability);
 };

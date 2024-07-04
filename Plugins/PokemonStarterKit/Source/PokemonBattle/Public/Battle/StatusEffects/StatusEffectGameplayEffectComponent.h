@@ -34,4 +34,16 @@ private:
     UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
     FName StatusEffectID;
 
+    /**
+     * The message to display when the status effect is already applied
+     */
+    UPROPERTY(EditAnywhere)
+    FText AlreadyAppliedFormat;
+
+    /**
+     * The message to display when the status effect is already applied
+     */
+    UPROPERTY(EditAnywhere)
+    FText HasOtherStatusFormat = NSLOCTEXT("StatusGameplayEffect", "HasOtherStatusFormat", "It doesn't affect {Pkmn}...");
+
 };
