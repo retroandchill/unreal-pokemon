@@ -9,6 +9,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MoveEvaluationHelpers.generated.h"
 
+class UAdditionalEffectChanceModificationPayload;
 class UCriticalHitRateCalculationPayload;
 /**
  * Helper library for move related evaluation.
@@ -101,9 +102,17 @@ public:
 
     /**
      * Boost the damage of a move if the user of the move has the specified gameplay tag.
-     * @param Context The payload that contains all the move information=
+     * @param Context The payload that contains all the move information
      * @param Multiplier The multiplier to apply if the tag is found
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
     static void BoostFinalDamageMultiplier(const UDamageModificationPayload *Context, float Multiplier = 1.f);
+
+    /**
+     * Multiply the additional effect chance by the supplied multiplier
+     * @param Context The payload that contains the move information
+     * @param Multiplier The multiplier to apply
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
+    static void BoostAdditionalEffectChance(const UAdditionalEffectChanceModificationPayload* Context, float Multiplier = 1.f);
 };

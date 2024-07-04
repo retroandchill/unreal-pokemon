@@ -4,6 +4,7 @@
 #include "Battle/Moves/MoveEvaluationHelpers.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Events/Moves/AdditionalEffectChanceModificationPayload.h"
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Species/SpeciesData.h"
 
@@ -69,4 +70,9 @@ void UMoveEvaluationHelpers::BoostPowerIfUserHasAnyTags(const UDamageModificatio
 
 void UMoveEvaluationHelpers::BoostFinalDamageMultiplier(const UDamageModificationPayload *Context, float Multiplier) {
     Context->SetPowerMultiplier(Context->GetData().FinalDamageMultiplier * Multiplier);
+}
+
+void UMoveEvaluationHelpers::BoostAdditionalEffectChance(const UAdditionalEffectChanceModificationPayload *Context,
+    float Multiplier) {
+    Context->SetAdditionalEffectChance(Context->GetData().AdditionalEffectChance * Multiplier);
 }

@@ -463,12 +463,16 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
         }
         
         int32 Chance = CalculateAdditionalEffectChance(User, Target);
+        UE_LOG(LogBattle, Display, TEXT("%s's additional effect chance against %s calculated to be %d"),
+            *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString(),
+            Chance)
         if (Chance <= 0) {
             UE_LOG(LogBattle, Display, TEXT("%s's additional effect chance is 0, skipping!"), *BattleMove->GetDisplayName().ToString())
             continue;
         }
 
-        if (int32 Roll = FMath::Rand() % 100; Roll < Chance) {
+        int32 Roll = FMath::Rand() % 100;
+        if (Roll < Chance) {
             UE_LOG(LogBattle, Display, TEXT("Applying additional effect of %s to %s!"), *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
             ApplyAdditionalEffect(User, Target, RunningMessages);
         }

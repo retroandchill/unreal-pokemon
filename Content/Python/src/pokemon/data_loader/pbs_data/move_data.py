@@ -47,5 +47,5 @@ class MoveData(PbsIniData[MoveArgs]):
         item["Priority"] = item.get("Priority", 0)
         item["FunctionCode"] = item.get("FunctionCode", "")
         item["Tags"] = item.get("Tags", [])
-        item["EffectChance"] = item.get("Consumable", 0)
+        item["EffectChance"] = item.get("EffectChance", 0)
         item["Description"] = item.get("Description", "???")
