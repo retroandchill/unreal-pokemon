@@ -5,6 +5,7 @@
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
+#include "TextureCompiler.h"
 #include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/Trainer.h"
@@ -84,11 +85,16 @@ UGraphicsLoadingSubsystem::GetPokemonBattleSprite(FName Species, UObject *Outer,
         return {nullptr, FVector2D()};
     }
 
+#if WITH_EDITOR
+    FTextureCompilingManager::Get().FinishCompilation({Texture});
+#endif
+
     static FName SourceTexture = "SourceTexture";
     auto Material =
         UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.BattleSpritesMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
-    return {Material, FVector2D(Texture->GetSizeY(), Texture->GetSizeY())};
+    float Height = Texture->GetSizeY();
+    return {Material, FVector2D(Height, Height)};
 }
 
 FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer,
@@ -107,6 +113,10 @@ UGraphicsLoadingSubsystem::GetPokemonUISprite(FName Species, UObject *Outer, boo
     if (Texture == nullptr) {
         return {nullptr, FVector2D()};
     }
+
+#if WITH_EDITOR
+    FTextureCompilingManager::Get().FinishCompilation({Texture});
+#endif
 
     static FName SourceTexture = "SourceTexture";
     auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.UISpritesMaterial.LoadSynchronous(), Outer);
@@ -127,6 +137,10 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(FName Specie
         return nullptr;
     }
 
+#if WITH_EDITOR
+    FTextureCompilingManager::Get().FinishCompilation({Texture});
+#endif
+
     static FName SourceTexture = "SourceTexture";
     auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.IconMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
@@ -143,6 +157,10 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(FName Trai
     if (Texture == nullptr) {
         return {nullptr, FVector2D()};
     }
+
+#if WITH_EDITOR
+    FTextureCompilingManager::Get().FinishCompilation({Texture});
+#endif
 
     static FName SourceTexture = "SourceTexture";
     auto Material =
