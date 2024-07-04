@@ -82,6 +82,11 @@ public:
     void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
     void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+    /**
+     * Get the running messages for this ability
+     * @return The running messages of this ability
+     */
+    const FRunningMessageSet &GetRunningMessage() const;
 protected:
     /**
      * Determine the type of the move.
@@ -286,19 +291,19 @@ protected:
      * Apply any guaranteed effects against a target
      * @param User The user of the move
      * @param Target The target of the move
-     * @param RunningMessages
+     * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
-                                  RunningMessages);
+                                  Messages);
 
     /**
      * Apply any generate effects that don't depend on any targets
      * @param User The user of the move
-     * @param RunningMessages
+     * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& RunningMessages);
+    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& Messages);
 
     /**
      * Perform a faint check on the user and targets before applying the additional effects
@@ -322,11 +327,11 @@ protected:
      * Apply any additional effect to a target
      * @param User The user of the move
      * @param Target The target of the move
-     * @param RunningMessages
+     * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void ApplyAdditionalEffect(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
-                               RunningMessages);
+                               Messages);
 
     /**
      * Calculate the value of a move's additional effect chance
@@ -385,4 +390,10 @@ private:
     UPROPERTY()
     FGameplayAttribute CostAttribute = UPokemonCoreAttributeSet::GetMoveCostAttribute();
 
+    /**
+     * Get the running messages for the move's execution. This is periodically cleared between the Blueprint events used
+     * to print them.
+     */
+    UPROPERTY()
+    FRunningMessageSet RunningMessages;
 };

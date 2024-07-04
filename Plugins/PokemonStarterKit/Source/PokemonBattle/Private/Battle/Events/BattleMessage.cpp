@@ -10,6 +10,14 @@ FBattleMessage::FBattleMessage(FText &&Message, const TScriptInterface<IBattleAn
     EAnimationPlacement AnimationPlacement) : Message(MoveTemp(Message)), Animation(Animation), AnimationPlacement(AnimationPlacement) {
 }
 
+void FBattleMessage::AddReferencedObjects(FReferenceCollector &Collector) {
+    Collector.AddReferencedObject(Animation.GetObjectRef());
+}
+
+FString FBattleMessage::GetReferencerName() const {
+    return TEXT("FBattleMessage");
+}
+
 const TArray<FBattleMessage> &UBattleMessageHelper::GetMessages(const FRunningMessageSet &Messages) {
     return *Messages.Messages;
 }

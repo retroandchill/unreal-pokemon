@@ -105,6 +105,14 @@ void UBattleMoveFunctionCode::EndAbility(const FGameplayAbilitySpecHandle Handle
         AbilityComponent->RemoveLooseGameplayTags(Tags, TNumericLimits<int32>::Max());
         AbilityComponent->GetTargetDamageStateAttributeSet()->Reset();
     }
+
+    // This ability is done, so we'll deallocate the running message memory to free up some space before the GC comes and
+    // cleans up the rest of this object
+    RunningMessages.Messages->Empty();
+}
+
+const FRunningMessageSet &UBattleMoveFunctionCode::GetRunningMessage() const {
+    return RunningMessages;
 }
 
 FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
@@ -136,25 +144,25 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
 
 void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                                       const TArray<TScriptInterface<IBattler>> &Targets) {
-    FRunningMessageSet Messages;
+    RunningMessages.Messages->Reset();
     UE_LOG(LogBattle, Display, TEXT("%s is using move %s!"), *User->GetNickname().ToString(), *BattleMove->GetDisplayName().ToString())
-    if (MoveFailed(User, Targets, Messages)) {
+    if (MoveFailed(User, Targets, RunningMessages)) {
         UE_LOG(LogBattle, Display, TEXT("%s failed!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure(Messages);
+        ProcessMoveFailure(RunningMessages);
         return;
     }
 
     if (Targets.IsEmpty() && BattleMove->GetTargetType().NumTargets != ETargetCount::NoneOrSelf && !
         WorksWithNoTargets()) {
-        Messages.Messages->Emplace(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
+        RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
         UE_LOG(LogBattle, Display, TEXT("%s has no targets!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure(Messages);
+        ProcessMoveFailure(RunningMessages);
         return;
     }
 
-    auto TargetFailureCheckCallback = [this, &Messages, &User](const TScriptInterface<IBattler> &Target) {
+    auto TargetFailureCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
         Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->Reset();
-        bool bSuccess = SuccessCheckAgainstTarget(User, Target, Messages);
+        bool bSuccess = SuccessCheckAgainstTarget(User, Target, RunningMessages);
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject())).AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
@@ -167,7 +175,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
 
     if (FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure(Messages);
+        ProcessMoveFailure(RunningMessages);
         return;
     }
 
@@ -186,18 +194,18 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
 
     if (SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
-        Messages.Messages->Emplace(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
-        ProcessMoveFailure(Messages);
+        RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
+        ProcessMoveFailure(RunningMessages);
         return;
     }
 
     if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
         for (auto &Target : SuccessfulHits) {
-            CalculateDamageAgainstTarget(User, Target, SuccessfulHits.Num(), Messages);
+            CalculateDamageAgainstTarget(User, Target, SuccessfulHits.Num(), RunningMessages);
         }
     }
 
-    DisplayMessagesAndAnimation(User, SuccessfulHits, Messages);
+    DisplayMessagesAndAnimation(User, SuccessfulHits, RunningMessages);
 }
 
 bool UBattleMoveFunctionCode::MoveFailed_Implementation(const TScriptInterface<IBattler> &User,
@@ -428,7 +436,7 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 
 void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
     const TArray<TScriptInterface<IBattler>> &Targets) {
-    FRunningMessageSet RunningMessages;
+    RunningMessages.Messages->Reset();
     UE_LOG(LogBattle, Display, TEXT("Applying effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
@@ -447,7 +455,7 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
 void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
     const TArray<TScriptInterface<IBattler>> &Targets) {
     UE_LOG(LogBattle, Display, TEXT("Applying additional effects of %s!"), *BattleMove->GetDisplayName().ToString())
-    FRunningMessageSet RunningMessages;
+    RunningMessages.Messages->Reset();
     for (auto &Target : Targets) {
         int32 Chance = CalculateAdditionalEffectChance(User, Target);
         if (Chance <= 0) {

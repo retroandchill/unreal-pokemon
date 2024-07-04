@@ -76,6 +76,7 @@ void UPokemonBattlePanel::RefreshStatusEffect() {
     if (auto &Status = CurrentBattler->GetStatusEffect(); Status.IsSet()) {
         auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
         auto Icon = GraphicsSubsystem->GetStatusIconGraphic(Status.GetValue().StatusEffectID);
+        StatusIcon->SetVisibility(ESlateVisibility::HitTestInvisible);
         UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
     } else {
         StatusIcon->SetVisibility(ESlateVisibility::Hidden);

@@ -28,7 +28,12 @@ enum class EAnimationPlacement : uint8 {
  * Struct that contains a message as well as optional visual sequence that can be played.
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FBattleMessage {
+struct POKEMONBATTLE_API FBattleMessage
+#if CPP
+    : public FGCObject {
+#else
+    {
+#endif
     GENERATED_BODY()
 
     /**
@@ -67,6 +72,9 @@ struct POKEMONBATTLE_API FBattleMessage {
      * @param AnimationPlacement When in relation should the message should the animation play
      */
     explicit FBattleMessage(FText &&Message, const TScriptInterface<IBattleAnimation>& Animation, EAnimationPlacement AnimationPlacement);
+
+    void AddReferencedObjects(FReferenceCollector &Collector) override;
+    FString GetReferencerName() const override;
 };
 
 /**
