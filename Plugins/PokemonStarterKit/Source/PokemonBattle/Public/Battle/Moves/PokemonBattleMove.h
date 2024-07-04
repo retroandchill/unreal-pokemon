@@ -59,6 +59,9 @@ class POKEMONBATTLE_API UPokemonBattleMove : public UObject, public IBattleMove 
     
     UFUNCTION(BlueprintPure, Category = Usability)
     int32 GetPriority() const override;
+
+    UFUNCTION(BlueprintPure, Category = Effects)
+    int32 GetAdditionalEffectChance() const override;
     
     UFUNCTION(BlueprintCallable, Category = Usability)
     void PayCost(int32 Amount) override;

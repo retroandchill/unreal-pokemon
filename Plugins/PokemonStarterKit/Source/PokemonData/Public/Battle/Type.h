@@ -242,4 +242,13 @@ class POKEMONDATA_API UTypeHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = "Types|Effectiveness")
     static float GetTypeEffectiveness(FName AttackType, FName DefendType);
+
+    /**
+     * Get the damage effectiveness for the given multiplier
+     * @param Multiplier The multiplier to process
+     * @return The resulant effectiveness
+     */
+    UFUNCTION(BlueprintPure, Category = "Types|Effectiveness")
+    static EDamageEffectiveness GetEffectivenessForMultiplier(float Multiplier);
+    
 };

@@ -88,6 +88,10 @@ int32 UPokemonBattleMove::GetPriority() const {
     return WrappedMove->GetMoveData().Priority;
 }
 
+int32 UPokemonBattleMove::GetAdditionalEffectChance() const {
+    return WrappedMove->GetAdditionalEffectChance();
+}
+
 void UPokemonBattleMove::PayCost(int32 Amount) {
     WrappedMove->DecrementPP(Amount);
 }

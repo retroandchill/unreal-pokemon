@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogBattleUI, Log, All)
+
 /**
  * Module for handling the UI of the battle system.
  */

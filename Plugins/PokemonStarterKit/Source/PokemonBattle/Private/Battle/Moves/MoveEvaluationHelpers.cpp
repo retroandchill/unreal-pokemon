@@ -4,6 +4,7 @@
 #include "Battle/Moves/MoveEvaluationHelpers.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Events/Moves/AdditionalEffectChanceModificationPayload.h"
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Species/SpeciesData.h"
 
@@ -42,23 +43,36 @@ bool UMoveEvaluationHelpers::UserIsSpecies(const TScriptInterface<IMoveEventPayl
     return Context->GetUser()->GetSpecies().ID == Species;
 }
 
+void UMoveEvaluationHelpers::BoostPower(const UDamageModificationPayload *Context, float Multiplier) {
+    Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
+}
+
 void UMoveEvaluationHelpers::BoostPowerIfUserHasTag(const UDamageModificationPayload *Context, FGameplayTag Tag,
                                                     float Multiplier) {
     if (Context->GetUser()->GetAbilityComponent()->HasMatchingGameplayTag(Tag)) {
-        Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
+        BoostPower(Context, Multiplier);
     }
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasAllTags(const UDamageModificationPayload *Context,
     FGameplayTagContainer Tags, float Multiplier) {
     if (Context->GetUser()->GetAbilityComponent()->HasAllMatchingGameplayTags(Tags)) {
-        Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
+        BoostPower(Context, Multiplier);
     }
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context,
     FGameplayTagContainer Tags, float Multiplier) {
         if (Context->GetUser()->GetAbilityComponent()->HasAnyMatchingGameplayTags(Tags)) {
-            Context->SetPowerMultiplier(Context->GetData().PowerMultiplier * Multiplier);
+            BoostPower(Context, Multiplier);
         }
+}
+
+void UMoveEvaluationHelpers::BoostFinalDamageMultiplier(const UDamageModificationPayload *Context, float Multiplier) {
+    Context->SetPowerMultiplier(Context->GetData().FinalDamageMultiplier * Multiplier);
+}
+
+void UMoveEvaluationHelpers::BoostAdditionalEffectChance(const UAdditionalEffectChanceModificationPayload *Context,
+    float Multiplier) {
+    Context->SetAdditionalEffectChance(Context->GetData().AdditionalEffectChance * Multiplier);
 }

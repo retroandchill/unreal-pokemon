@@ -2,6 +2,7 @@
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Components/Image.h"
 #include "Components/PokemonBattlePanel.h"
 #include "Components/PokemonBattlePanelPlayer.h"
 #include "Components/ProgressBar.h"
@@ -12,6 +13,7 @@
 #include "Primatives/NumberImageWidget.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "Species/SpeciesData.h"
 
 using namespace testing;
 
@@ -35,6 +37,8 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     EXPECT_CALL(MockBattler, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f)).WillRepeatedly(Return(0.f));
     ON_CALL(MockBattler, GetGender).WillByDefault(Return(EPokemonGender::Male));
     ON_CALL(MockBattler, GetExpPercent).WillByDefault(Return(0.25f));
+    TOptional<FStatusEffectInfo> StatusEffectInfo;
+    ON_CALL(MockBattler, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
 
     TWidgetPtr<UPokemonBattlePanelPlayer> Panel(CreateWidget<UPokemonBattlePanelPlayer>(World.Get(), WidgetClass));
     Panel->AddToViewport();
@@ -60,6 +64,8 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(MaxHP);
     FIND_CHILD_WIDGET(Panel.Get(), UProgressBar, ExpBar);
     UE_ASSERT_NOT_NULL(ExpBar);
+    FIND_CHILD_WIDGET(Panel.Get(), UImage, StatusIcon);
+    UE_ASSERT_NOT_NULL(StatusIcon);
 
     UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, Panel->GetVisibility());
     UE_CHECK_EQUAL(TEXT("Lucario"), PokemonName->GetText().ToString());
@@ -69,8 +75,10 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(100, CurrentHP->GetNumber());
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
+    UE_CHECK_EQUAL(ESlateVisibility::Hidden, StatusIcon->GetVisibility());
 
     CoreAttributes->InitHP(50);
+    StatusEffectInfo.Emplace("BURN", FActiveGameplayEffectHandle());
     Panel->Refresh();
     UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, Panel->GetVisibility());
     UE_CHECK_EQUAL(TEXT("Lucario"), PokemonName->GetText().ToString());
@@ -80,6 +88,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(50, CurrentHP->GetNumber());
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
+    UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, StatusIcon->GetVisibility());
 
     CoreAttributes->InitHP(0);
     Panel->Refresh();
@@ -91,6 +100,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(0, CurrentHP->GetNumber());
     UE_CHECK_EQUAL(100, MaxHP->GetNumber());
     UE_CHECK_EQUAL(0.25f, ExpBar->GetPercent());
+    UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, StatusIcon->GetVisibility());
 
     return true;
 }

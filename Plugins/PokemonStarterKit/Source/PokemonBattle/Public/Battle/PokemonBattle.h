@@ -5,12 +5,16 @@
 #include "CoreMinimal.h"
 #include "Battle.h"
 #include "BattleSettings.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Events/BattleMessage.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"
 
+struct FGameplayTag;
+class UGameplayAbilityDisplayComponent;
 class UBattleAbilitySystemComponent;
 struct FActionResult;
 class IBattleSide;
@@ -102,7 +106,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
 
-  protected:
+protected:
     /**
      * Get the position of the player's side of the field
      * @return The player's primary spawn position
@@ -233,11 +237,21 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     void StartTurn();
 
+protected:
+    /**
+     * Display any messages for the end of a battle
+     * @param Messages The messages to display
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
+    void ProcessTurnEndMessages(const FRunningMessageSet& Messages);
+    
     /**
      * Run all checks that need to be handled at the end of the turn
      */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void EndTurn();
 
+private:
     /**
      * Process all of the actions about to be performed
      */
@@ -259,7 +273,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UPROPERTY()
     TObjectPtr<UBattleAbilitySystemComponent> AbilitySystemComponent;
-
+    
     /**
      * The current turn number that we're on in battle.
      */

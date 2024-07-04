@@ -53,6 +53,10 @@ const FMoveTarget & UDefaultMove::GetTargetType() const {
     return *Target;
 }
 
+int32 UDefaultMove::GetAdditionalEffectChance() const {
+    return GetMoveData().EffectChance;
+}
+
 const TArray<FName> & UDefaultMove::GetTags() const {
     return GetMoveData().Tags;
 }

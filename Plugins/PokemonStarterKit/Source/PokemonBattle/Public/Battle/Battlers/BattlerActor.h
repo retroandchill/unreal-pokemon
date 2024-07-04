@@ -86,6 +86,10 @@ public:
 
     void ShowSprite() const override;
 
+    const TOptional<FStatusEffectInfo>& GetStatusEffect() const override;
+    void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
+    void CureStatusEffect() override;
+
   private:
     /**
      * Take a change in the Battler's HP and propagate that to the base HP as needed.
@@ -148,6 +152,11 @@ public:
      * The item the battler is holding
      */
     FGameplayAbilitySpecHandle HoldItem;
+
+    /**
+     * The status effect that battler has
+     */
+    TOptional<FStatusEffectInfo> StatusEffect;
 
     /**
      * The moves this battler knows

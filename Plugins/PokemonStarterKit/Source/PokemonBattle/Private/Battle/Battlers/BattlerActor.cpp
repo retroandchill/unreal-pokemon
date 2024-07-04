@@ -33,7 +33,6 @@
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
-    check(Battler->GetOwningSide() != nullptr)
     check(Move != nullptr)
     TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
     BattleMove->Initialize(Battler, Move);
@@ -209,6 +208,20 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);
+}
+
+const TOptional<FStatusEffectInfo> & ABattlerActor::GetStatusEffect() const {
+    return StatusEffect;
+}
+
+void ABattlerActor::InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
+    check(!StatusEffect.IsSet())
+    StatusEffect.Emplace(StatusEffectID, EffectHandle);
+}
+
+void ABattlerActor::CureStatusEffect() {
+    check(StatusEffect.IsSet())
+    StatusEffect.Reset();
 }
 
 void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {

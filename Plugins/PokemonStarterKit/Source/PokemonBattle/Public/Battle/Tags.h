@@ -8,6 +8,22 @@
 namespace Pokemon::Battle {
 
 /**
+ * The tag used for abilities whose activation should require the battle to hold until they complete. This is mainly
+ * used for effects that play animations/display messages.
+ */
+POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(HoldForComplete)
+
+/**
+ * The tag used for events fired at the start of a battler's action
+ */
+POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StartAction)
+
+/**
+ * The tag used for events fired at the end of the turn
+ */
+POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EndTurn)
+
+/**
  * Add a dynamic tag to the game
  * @param Tags The map of the native names to the tag
  * @param Format The format to place the tag into

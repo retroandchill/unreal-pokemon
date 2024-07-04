@@ -10,6 +10,7 @@
 
 #include "PokemonBattlePanel.generated.h"
 
+class UImage;
 class IBattler;
 class UProgressBar;
 class UDisplayText;
@@ -57,6 +58,12 @@ protected:
     void AnimateHP(float MaxDuration);
 
     /**
+     * Refresh the displayed status condition of the contained Pokémon
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Display")
+    void RefreshStatusEffect();
+
+    /**
      * Get the delegate used for updating the progress bar
      * @param Binding The desired action 
      */
@@ -64,7 +71,7 @@ protected:
 
     /**
      * Unbind all dynamic delegates from the HP update callback
-     * @param Object The object to unbind the delegate sfor
+     * @param Object The object to unbind the delegate for
      */
     UFUNCTION()
     void UnbindAllHPUpdateDelegates(UObject* Object);
@@ -105,6 +112,12 @@ private:
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UProgressBar> HPBar;
+
+    /**
+     * The widget that display's the status condition if the battler has a status condition
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UImage> StatusIcon;
 
     /**
      * The battler this widget displays the information for

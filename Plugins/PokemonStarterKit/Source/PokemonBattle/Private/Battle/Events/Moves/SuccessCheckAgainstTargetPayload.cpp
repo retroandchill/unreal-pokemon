@@ -31,6 +31,11 @@ const TScriptInterface<IBattler> & USuccessCheckAgainstTargetPayload::GetTarget(
     return Data->Target;
 }
 
+const FRunningMessageSet & USuccessCheckAgainstTargetPayload::GetRunningMessageSet() const {
+    check(Data != nullptr)
+    return Data->Messages;
+}
+
 void USuccessCheckAgainstTargetPayload::SetSuccess(bool bSuccess) const {
     check(Data != nullptr)
     Data->bSuccess =bSuccess;

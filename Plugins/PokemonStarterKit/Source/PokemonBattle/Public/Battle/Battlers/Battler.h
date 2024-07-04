@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "range/v3/view/any_view.hpp"
 #include "UObject/Interface.h"
@@ -15,6 +16,38 @@ class IPokemon;
 class IBattleSide;
 class IBattleMove;
 class IBattlerController;
+
+/**
+ * Information about a status effect inflicted upon the battler
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FStatusEffectInfo {
+    GENERATED_BODY()
+
+    /**
+     * The ID of the inflicted status effect
+     */
+    UPROPERTY(BlueprintReadOnly, Category = StatusEffects)
+    FName StatusEffectID;
+
+    /**
+     * The gameplay effect that represents the status effect
+     */
+    UPROPERTY(BlueprintReadOnly, Category = StatusEffects)
+    FActiveGameplayEffectHandle EffectHandle;
+
+    /**
+     * Default constructor
+     */
+    FStatusEffectInfo() = default;
+
+    /**
+     * Create a new effect object with the provided arguments
+     * @param StatusEffectID The ID of the inflicted status effect
+     * @param EffectHandle The gameplay effect that represents the status effect
+     */
+    FStatusEffectInfo(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle);
+};
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
@@ -156,4 +189,22 @@ class POKEMONBATTLE_API IBattler {
      * Show the battler's sprite in battle
      */
     virtual void ShowSprite() const = 0;
+
+    /**
+     * Get the status effect held by this battler
+     * @return The status effect held by the battler
+     */
+    virtual const TOptional<FStatusEffectInfo>& GetStatusEffect() const = 0;
+
+    /**
+     * Inflict a status effect onto the battler
+     * @param StatusEffectID The ID of the status effect to inflict
+     * @param EffectHandle The handle for the corresponding gameplay effect
+     */
+    virtual void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) = 0;
+
+    /**
+     * Remove the battler's status effect
+     */
+    virtual void CureStatusEffect() = 0;
 };

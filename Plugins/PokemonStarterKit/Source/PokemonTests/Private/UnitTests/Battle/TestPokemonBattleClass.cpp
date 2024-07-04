@@ -2,6 +2,7 @@
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
+#include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Misc/AutomationTest.h"
@@ -12,6 +13,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
+#include "Species/SpeciesData.h"
 
 using namespace testing;
 
@@ -87,8 +89,18 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionExecution,
 
 bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    CREATE_MOCK(IBattleSide, Side1, FMockBattleSide, MockSide1);
-    CREATE_MOCK(IBattleSide, Side2, FMockBattleSide, MockSide2);
+    CREATE_MOCK_ACTOR(World.Get(), IBattleSide, Side1, FMockBattleSide, MockSide1);
+    CREATE_MOCK_ACTOR(World.Get(), IBattleSide, Side2, FMockBattleSide, MockSide2);
+
+    auto Side1Actor = CastChecked<AActor>(Side1.GetObject());
+    Side1Actor->AddComponentByClass(UBattleSideAbilitySystemComponent::StaticClass(), false, FTransform(), false);
+    auto Side2Actor = CastChecked<AActor>(Side2.GetObject());
+    Side2Actor->AddComponentByClass(UBattleSideAbilitySystemComponent::StaticClass(), false, FTransform(), false);
+
+    
+    TArray<TScriptInterface<IBattler>> EmptyBattlers;
+    ON_CALL(MockSide1, GetBattlers).WillByDefault(ReturnRef(EmptyBattlers));
+    ON_CALL(MockSide2, GetBattlers).WillByDefault(ReturnRef(EmptyBattlers));
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
