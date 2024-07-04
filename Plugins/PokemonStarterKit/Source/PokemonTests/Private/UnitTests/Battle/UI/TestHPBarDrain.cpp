@@ -15,6 +15,7 @@
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "Species/SpeciesData.h"
 
 using namespace testing;
 
@@ -37,7 +38,8 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     CREATE_MOCK(IBattleSide, Side2, FMockBattleSide, MockSide2);
     TArray<TScriptInterface<IBattleSide>, TInlineAllocator<2>> Sides = { Side1, Side2 };
     ON_CALL(MockBattle, GetSides).WillByDefault(Return(RangeHelpers::CreateRange(Sides)));
-    
+
+    TOptional<FStatusEffectInfo> StatusEffectInfo;
     
     CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler1, FMockBattler, MockBattler1);
     auto Battler1Actor = Cast<AActor>(Battler1.GetObject());
@@ -49,6 +51,7 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     EXPECT_CALL(MockBattler1, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f));
     ON_CALL(MockBattler1, GetGender).WillByDefault(Return(EPokemonGender::Male));
     ON_CALL(MockBattler1, GetExpPercent).WillByDefault(Return(0.25f));
+    ON_CALL(MockBattler1, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
     TArray Side1Battlers = { Battler1 };
     ON_CALL(MockSide1, GetBattlers).WillByDefault(ReturnRef(Side1Battlers));
 
@@ -62,6 +65,7 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     EXPECT_CALL(MockBattler2, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f));
     ON_CALL(MockBattler2, GetGender).WillByDefault(Return(EPokemonGender::Male));
     ON_CALL(MockBattler2, GetExpPercent).WillByDefault(Return(0.25f));
+    ON_CALL(MockBattler2, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
     TArray Side2Battlers = { Battler2 };
     ON_CALL(MockSide2, GetBattlers).WillByDefault(ReturnRef(Side2Battlers));
 
