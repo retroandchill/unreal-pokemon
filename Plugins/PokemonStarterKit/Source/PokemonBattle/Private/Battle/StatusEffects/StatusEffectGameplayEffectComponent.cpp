@@ -4,20 +4,15 @@
 #include "Battle/StatusEffects/StatusEffectGameplayEffectComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "Battle/Status.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
-#include "Battle/Events/BattleMessage.h"
-#include "Battle/StatusEffects/BattleStatusEffectUtils.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
 
 bool UStatusEffectGameplayEffectComponent::CanGameplayEffectApply(
     const FActiveGameplayEffectsContainer &ActiveGEContainer, const FGameplayEffectSpec &GESpec) const {
     TScriptInterface<IBattler> Battler = ActiveGEContainer.Owner->GetOwnerActor();
     check(Battler != nullptr)
-    auto Ability = GESpec.GetEffectContext().GetAbilityInstance_NotReplicated();
-    return UBattleStatusEffectUtils::CanStatusEffectBeInflicted(StatusEffectID, Ability, Battler,
-        AlreadyAppliedFormat, HasOtherStatusFormat);
+    return !Battler->GetStatusEffect().IsSet();
 }
 
 bool UStatusEffectGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
