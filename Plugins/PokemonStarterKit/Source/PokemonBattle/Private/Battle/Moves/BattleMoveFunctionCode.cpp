@@ -457,6 +457,11 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
     UE_LOG(LogBattle, Display, TEXT("Applying additional effects of %s!"), *BattleMove->GetDisplayName().ToString())
     RunningMessages.Messages->Reset();
     for (auto &Target : Targets) {
+        if (Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->GetCalculatedDamage() == 0.f) {
+            UE_LOG(LogBattle, Display, TEXT("%s didn't take any damage, skipping the additional effect chance!"), *Target->GetNickname().ToString())
+            continue;
+        }
+        
         int32 Chance = CalculateAdditionalEffectChance(User, Target);
         if (Chance <= 0) {
             UE_LOG(LogBattle, Display, TEXT("%s's additional effect chance is 0, skipping!"), *BattleMove->GetDisplayName().ToString())

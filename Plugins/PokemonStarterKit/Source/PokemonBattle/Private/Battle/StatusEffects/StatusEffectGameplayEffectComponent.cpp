@@ -4,9 +4,11 @@
 #include "Battle/StatusEffects/StatusEffectGameplayEffectComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Battle/Status.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/BattleMessage.h"
+#include "Battle/StatusEffects/BattleStatusEffectUtils.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
 
 bool UStatusEffectGameplayEffectComponent::CanGameplayEffectApply(
@@ -14,27 +16,8 @@ bool UStatusEffectGameplayEffectComponent::CanGameplayEffectApply(
     TScriptInterface<IBattler> Battler = ActiveGEContainer.Owner->GetOwnerActor();
     check(Battler != nullptr)
     auto Ability = GESpec.GetEffectContext().GetAbilityInstance_NotReplicated();
-    auto Messages = UBattleMessageHelper::FindRunningMessageSet(Ability);
-    if (auto &StatusEffect = Battler->GetStatusEffect(); StatusEffect.IsSet()) {
-        auto &Status = StatusEffect.GetValue();
-        if (Messages != nullptr) {
-            if (Status.StatusEffectID == StatusEffectID) {
-                auto AppliedAlreadyText = FText::Format(AlreadyAppliedFormat, {
-                    {"Pkmn", Battler->GetNickname()}
-                });
-                UBattleMessageHelper::AppendMessage(*Messages, AppliedAlreadyText);
-            } else {
-                auto HasAnotherStatusText = FText::Format(HasOtherStatusFormat, {
-                    {"Pkmn", Battler->GetNickname()}
-                });
-                UBattleMessageHelper::AppendMessage(*Messages, HasAnotherStatusText);
-            }
-        }
-        
-        return false;
-    }
-
-    return true;
+    return UBattleStatusEffectUtils::CanStatusEffectBeInflicted(StatusEffectID, Ability, Battler,
+        AlreadyAppliedFormat, HasOtherStatusFormat);
 }
 
 bool UStatusEffectGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
