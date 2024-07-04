@@ -2,11 +2,18 @@
 
 #include "Battle/Events/TargetedEvents.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "RangeHelpers.h"
 #include "Abilities/GameplayAbilityTypes.h"
+#include "Algo/ForEach.h"
+#include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Battlers/Battler.h"
+#include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/view/join.hpp>
+#include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
+#include <range/v3/algorithm/for_each.hpp>
 
 const FNativeGameplayTag & FTargetedEvent::GetTagForScope(ETargetedEventScope Scope) {
     switch (Scope) {
@@ -29,18 +36,42 @@ const FNativeGameplayTag & FTargetedEvent::GetTagForScope(ETargetedEventScope Sc
     }
 }
 
-static AActor* ConvertToActor(const TScriptInterface<IBattler>& Battler) {
-    return CastChecked<AActor>(Battler.GetObject());
+static AActor* ConvertToActor(const FScriptInterface& Interface) {
+    return CastChecked<AActor>(Interface.GetObject());
 }
 
 static bool AllyNotFainted(const TScriptInterface<IBattler>& Battler) {
     return !Battler->IsFainted();
 }
 
+static auto UnrollBattleSide(const TScriptInterface<IBattleSide>& Side) {
+    auto SideView = ranges::views::single(Side)
+        | ranges::views::transform(&ConvertToActor);
+    auto ActiveBattlers = RangeHelpers::CreateRange(Side->GetBattlers())
+        | ranges::views::filter(&AllyNotFainted)
+        | ranges::views::transform(&ConvertToActor);
+    return ranges::views::concat(SideView, ActiveBattlers);
+}
+
 static void SendOutEventForActor(const FGameplayTag &Tag, FGameplayEventData &EventData,
                                              AActor* Actor) {
     EventData.Target = Actor;
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, Tag, EventData);
+}
+
+void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject* Payload, const FGameplayTag &Tag) {
+    auto BattleActor = CastChecked<AActor>(Battle.GetObject());
+    FGameplayEventData EventData;
+    EventData.Instigator = BattleActor;
+    EventData.OptionalObject = Payload;
+    EventData.EventTag = Tag;
+    SendOutEventForActor(Tag, EventData, BattleActor);
+    auto Children = Battle->GetSides()
+        | ranges::views::transform(&UnrollBattleSide)
+        | ranges::views::join;
+    ranges::for_each(Children, [&Tag, &EventData](AActor* Actor) {
+       SendOutEventForActor(Tag, EventData, Actor); 
+    });
 }
 
 void Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,

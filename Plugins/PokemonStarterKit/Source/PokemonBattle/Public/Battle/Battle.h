@@ -9,6 +9,8 @@
 
 #include "Battle.generated.h"
 
+class IAbilityDisplayComponent;
+struct FGameplayEffectSpecHandle;
 class IBattleSide;
 class IBattleAction;
 class IAbilityBattleEffect;
@@ -87,4 +89,5 @@ class POKEMONBATTLE_API IBattle {
      * @param Action The action to execute
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
+
 };

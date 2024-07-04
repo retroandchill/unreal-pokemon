@@ -138,19 +138,19 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
     UFUNCTION(BlueprintCallable, Category = "Widget", meta = (WorldContext = "WorldContextObject"))
     static UScreen *RemoveScreenFromStack(const UObject *WorldContextObject);
 
-  private:
-    /**
-     * Get the player controller that this subsystem underpins
-     * @return The player controller that owns this subsystem
-     */
-    APlayerController *GetPlayerController() const;
-
     /**
      * Get the subystem from the given world context object
      * @param WorldContextObject The object used to extract the world (and ultimately the player)
      * @return The subsystem (if found)
      */
     static URPGMenusSubsystem *GetSubsystem(const UObject *WorldContextObject);
+    
+  private:
+    /**
+     * Get the player controller that this subsystem underpins
+     * @return The player controller that owns this subsystem
+     */
+    APlayerController *GetPlayerController() const;
 
     /**
      * The internal stack of screens used to handle the input.

@@ -29,6 +29,11 @@ const TScriptInterface<IBattler> & UDamageModificationPayload::GetTarget() const
     return Data->Target;
 }
 
+const FRunningMessageSet & UDamageModificationPayload::GetRunningMessageSet() const {
+    check(Data != nullptr)
+    return Data->PreDamageMessages;
+}
+
 void UDamageModificationPayload::SetPowerMultiplier(float Amount) const {
     check(Data != nullptr)
     Data->PowerMultiplier = Amount;

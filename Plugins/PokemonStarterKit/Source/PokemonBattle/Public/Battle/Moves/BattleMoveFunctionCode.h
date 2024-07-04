@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Events/BattleMessage.h"
 
 #include "BattleMoveFunctionCode.generated.h"
 
@@ -34,14 +35,6 @@ enum class ECriticalOverride : uint8 {
      * The move can never land a crit.
 */
     Never
-    
-};
-
-USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FRunningMessageSet {
-    GENERATED_BODY()
-
-    TSharedRef<TArray<FText>> Messages = MakeShared<TArray<FText>>();
     
 };
 
@@ -89,6 +82,11 @@ public:
     void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
     void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+    /**
+     * Get the running messages for this ability
+     * @return The running messages of this ability
+     */
+    const FRunningMessageSet &GetRunningMessage() const;
 protected:
     /**
      * Determine the type of the move.
@@ -131,7 +129,7 @@ protected:
      * @param FailureMessages The messages display to the player
      */
     UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void ProcessMoveFailure(const TArray<FText>& FailureMessages);
+    void ProcessMoveFailure(const FRunningMessageSet& FailureMessages);
 
     /**
      * Can this move be used without any targets?
@@ -187,7 +185,7 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
     void DisplayMessagesAndAnimation(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets, const TArray<FText> &Messages);
+                                     const TArray<TScriptInterface<IBattler>> &Targets, const FRunningMessageSet& Messages);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -280,6 +278,83 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
     void DisplayDamage(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+
+    /**
+     * Apply any move effects to the targets
+     * @param User The user of the move
+     * @param Targets The targets of the move
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
+    void ApplyMoveEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    
+    /**
+     * Apply any guaranteed effects against a target
+     * @param User The user of the move
+     * @param Target The target of the move
+     * @param Messages
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
+                                  Messages);
+
+    /**
+     * Apply any generate effects that don't depend on any targets
+     * @param User The user of the move
+     * @param Messages
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& Messages);
+
+    /**
+     * Perform a faint check on the user and targets before applying the additional effects
+     * @param User The user of the move
+     * @param Targets the targets of the move
+     * @param Messages
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
+                    & Messages);
+
+    /**
+     * Apply additional effects against the user
+     * @param User The user of the move
+     * @param Targets The targets of the move
+     */
+    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
+    void ApplyAdditionalEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    
+    /**
+     * Apply any additional effect to a target
+     * @param User The user of the move
+     * @param Target The target of the move
+     * @param Messages
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyAdditionalEffect(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
+                               Messages);
+
+    /**
+     * Calculate the value of a move's additional effect chance
+     * @param User The user of the move in question
+     * @param Target The target of the move
+     * @return The chance of the additional effect occurring
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Effects")
+    int32 CalculateAdditionalEffectChance(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+
+    /**
+     * Display the move effects to the player and end the move
+     * @param User The user of the move
+     * @param Targets The targets of the move
+     * @param Messages
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
+    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
+                                      & Messages);
+
+    UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = GameplayEffects)
+    TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler, TSubclassOf<UGameplayEffect> EffectClass, int32 Level, int32 Stacks) const;
+    
 private:
     /**
      * The underlying move that this ability wraps
@@ -315,22 +390,10 @@ private:
     UPROPERTY()
     FGameplayAttribute CostAttribute = UPokemonCoreAttributeSet::GetMoveCostAttribute();
 
-};
-
-/**
- * Blueprint function library for any functions that are needed while a move is being used.
- */
-UCLASS()
-class UBattleMoveFunctionCodeHelper : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
-
-public:
     /**
-     * Get the messages from the given message set
-     * @param Messages The source message set
-     * @return The messages inside the message set
+     * Get the running messages for the move's execution. This is periodically cleared between the Blueprint events used
+     * to print them.
      */
-    UFUNCTION(BlueprintPure, Category = "Moves|Messages")
-    static TArray<FText>& GetMessages(const FRunningMessageSet& Messages);
-    
+    UPROPERTY()
+    FRunningMessageSet RunningMessages;
 };

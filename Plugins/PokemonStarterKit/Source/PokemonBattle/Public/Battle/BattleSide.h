@@ -7,6 +7,7 @@
 
 #include "BattleSide.generated.h"
 
+class UAbilitySystemComponent;
 class IPokemon;
 class ITrainer;
 struct FPokemonDTO;

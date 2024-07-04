@@ -78,6 +78,12 @@ class POKEMONCORE_API IMove {
     virtual const FMoveTarget &GetTargetType() const = 0;
 
     /**
+     * Get the move's additional effect chance
+     * @return The move's additional effect chance
+     */
+    virtual int32 GetAdditionalEffectChance() const = 0;
+
+    /**
      * Get the tags of the move
      * @return Words/phrases that can be used to group certain kinds of moves.
      */

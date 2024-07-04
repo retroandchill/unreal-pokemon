@@ -169,6 +169,13 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(TConstArrayView
            RangeHelpers::TToArray<UObject *>();
 }
 
+UObject * UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {
+    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &[AssetPath] = PathSettings.StatusIconsPackageName;
+    auto FullName = GetFullAssetName(PathSettings.StatusIconPrefix, Status);
+    return LookupAssetByName<UObject>(AssetPath, FullName);
+}
+
 UObject *UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
     auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     auto &[AssetPath] = PathSettings.TypePanelsPackageName;

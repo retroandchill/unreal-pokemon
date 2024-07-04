@@ -112,6 +112,13 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     TArray<UObject *> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
 
     /**
+     * Get the icon graphic for a status condition type.
+     * @param Status The status to get the icon for.
+     * @return The found icon graphic.
+     */
+    UObject *GetStatusIconGraphic(FName Status) const;
+
+    /**
      * Get the panel graphic for a singular type.
      * @param Type The type to get the panel for.
      * @return The found panel graphic.

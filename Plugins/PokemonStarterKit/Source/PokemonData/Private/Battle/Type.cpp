@@ -28,3 +28,7 @@ float UTypeHelper::GetTypeEffectiveness(FName AttackType, FName DefendType) {
     check(Type != nullptr)
     return Type->Effectiveness(AttackType);
 }
+
+EDamageEffectiveness UTypeHelper::GetEffectivenessForMultiplier(float Multiplier) {
+    return Pokemon::TypeEffectiveness::GetEffectivenessFromMultiplier(Multiplier);
+}

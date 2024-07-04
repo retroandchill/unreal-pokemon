@@ -28,6 +28,7 @@ DEFINE_TARGETED_EVENT_TYPE(HitCheckEvents, "Battle.Moves.AccuracyCheck.Scope");
 DEFINE_TARGETED_EVENT_TYPE(CriticalHitRateModEvents, "Battle.Moves.CriticalHits.Scope");
 DEFINE_TARGETED_EVENT_TYPE(DamageModificationEvents, "Battle.Moves.Damage.Scope");
 UE_DEFINE_GAMEPLAY_TAG(DamageDealtValue, "Battle.Moves.Damage.Value");
+DEFINE_TARGETED_EVENT_TYPE(AdditionalEffectChanceEvents, "Battle.Moves.Effects.Additional.Scope");
 
 UE_DEFINE_GAMEPLAY_TAG(TwoTurnAttack, "Battle.Moves.TwoTurnAttack");
 

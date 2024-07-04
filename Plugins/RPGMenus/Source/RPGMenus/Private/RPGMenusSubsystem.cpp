@@ -35,18 +35,6 @@ UScreen *URPGMenusSubsystem::RemoveScreenFromStack() {
     return NewTop;
 }
 
-UScreen *URPGMenusSubsystem::RemoveScreenFromStack(const UObject *WorldContextObject) {
-    if (auto Subsystem = GetSubsystem(WorldContextObject); Subsystem != nullptr) {
-        return Subsystem->RemoveScreenFromStack();
-    }
-
-    return nullptr;
-}
-
-APlayerController *URPGMenusSubsystem::GetPlayerController() const {
-    return GetLocalPlayer()->GetPlayerController(nullptr);
-}
-
 URPGMenusSubsystem *URPGMenusSubsystem::GetSubsystem(const UObject *WorldContextObject) {
     if (auto ImpliedOwningPlayer = Cast<APlayerController>(WorldContextObject); ImpliedOwningPlayer != nullptr) {
         return ImpliedOwningPlayer->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
@@ -65,4 +53,16 @@ URPGMenusSubsystem *URPGMenusSubsystem::GetSubsystem(const UObject *WorldContext
     }
 
     return nullptr;
+}
+
+UScreen *URPGMenusSubsystem::RemoveScreenFromStack(const UObject *WorldContextObject) {
+    if (auto Subsystem = GetSubsystem(WorldContextObject); Subsystem != nullptr) {
+        return Subsystem->RemoveScreenFromStack();
+    }
+
+    return nullptr;
+}
+
+APlayerController *URPGMenusSubsystem::GetPlayerController() const {
+    return GetLocalPlayer()->GetPlayerController(nullptr);
 }

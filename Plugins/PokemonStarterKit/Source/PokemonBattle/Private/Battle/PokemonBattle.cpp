@@ -14,9 +14,13 @@
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
 #include "Battle/BattleAbilitySystemComponent.h"
+#include "Battle/Tags.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Events/BattleMessagePayload.h"
+#include "Battle/Events/TargetedEvents.h"
 #include <functional>
+#include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/empty.hpp>
 
@@ -73,7 +77,10 @@ void APokemonBattle::Tick(float DeltaSeconds) {
         BeginActionProcessing();
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
+            auto Payload = NewObject<UBattleMessagePayload>();
+            Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
             Phase = Judging;
+            ProcessTurnEndMessages(Payload->Messages);
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
                 DisplayAction(Action->GetActionMessage());
@@ -85,8 +92,6 @@ void APokemonBattle::Tick(float DeltaSeconds) {
             RefreshBattleHUD();
             NextAction();
         }
-    } else if (Phase == Judging) {
-        EndTurn();
     }
 }
 

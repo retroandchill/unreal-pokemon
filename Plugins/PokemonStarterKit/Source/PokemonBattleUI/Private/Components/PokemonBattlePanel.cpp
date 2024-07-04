@@ -4,9 +4,12 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
+#include "Utilities/WidgetUtilities.h"
 
 using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
 using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
@@ -48,6 +51,8 @@ void UPokemonBattlePanel::Refresh() {
     if (GenderTextColors.Contains(Gender)) {
         UPokemonUIUtils::SetItemTextColor(PokemonGender, GenderTextColors[Gender]);
     }
+
+    RefreshStatusEffect();
 }
 
 void UPokemonBattlePanel::BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate& Binding) {
@@ -65,6 +70,17 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
     float DrainRate = FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * AnimationDrainSpeed, MaxDuration);
     
     HPBarUpdateAnimation.PlayAnimation(HPPercent, CurrentBattler->GetHPPercent(), DrainRate);
+}
+
+void UPokemonBattlePanel::RefreshStatusEffect() {
+    if (auto &Status = CurrentBattler->GetStatusEffect(); Status.IsSet()) {
+        auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+        auto Icon = GraphicsSubsystem->GetStatusIconGraphic(Status.GetValue().StatusEffectID);
+        StatusIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+        UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
+    } else {
+        StatusIcon->SetVisibility(ESlateVisibility::Hidden);
+    }
 }
 
 void UPokemonBattlePanel::UpdateHPPercent(float NewPercent) {

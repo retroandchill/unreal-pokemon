@@ -3,7 +3,6 @@
 
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
-#include "PaperSprite.h"
 #include "UObject/Object.h"
 
 #include "Status.generated.h"
@@ -26,4 +25,20 @@ struct POKEMONDATA_API FStatus : public FIndexedTableRow {
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Visuals", meta = (MustImplement = "AnimationBase"))
     TSubclassOf<AActor> Animation;
+};
+
+/**
+ * Helper functions for status effects
+ */
+UCLASS()
+class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
+    GENERATED_BODY()
+
+public:
+    /**
+     * Get the names of all status effects
+     * @return The array of all inflictable status effects
+     */
+    UFUNCTION()
+    static TArray<FName> GetStatusEffectNames();
 };
