@@ -8,6 +8,26 @@
 #include "HPBar.generated.h"
 
 /**
+ * The style information for the HP bar
+ */
+USTRUCT(BlueprintType, DisplayName = "HP Bar Style")
+struct FHPBarStyle {
+    GENERATED_BODY()
+
+    /**
+     * The threshold that the percent needs to be under to use this style
+     */
+    UPROPERTY(EditAnywhere, Category = "Style|Fill", meta = (ClampMin = 0.f, UIMIn = 0.f, ClampMax = 1.f, UIMax = 1.f))
+    float Threshold;
+
+    /**
+     * The image to use for the bar
+     */
+    UPROPERTY(EditAnywhere, Category = "Style|Fill")
+    FSlateBrush Style;
+};
+
+/**
  * Progress Bar Widget that uses a special material instance to change the color of the bar based on the percent.
  */
 UCLASS()
@@ -28,13 +48,10 @@ class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
     TStatId GetStatId() const override;
 
   private:
-    void UpdateBarMaterial();
-
     /**
-     * The base material used to generate the HP Bar Dynamic Material
+     * Update the bar material to the new one
      */
-    UPROPERTY(EditAnywhere, Category = "Style|Fill")
-    TObjectPtr<UMaterialInterface> BaseMaterial;
+    void UpdateBarMaterial();
 
     /**
      * The name of the parameter on the base material to substitute in for the state
@@ -43,10 +60,21 @@ class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
     FName StateParameterName = TEXT("State");
 
     /**
+     * The default style to use if none of the thresholds are met
+     */
+    UPROPERTY(EditAnywhere, Category = "Style|Fill")
+    FSlateBrush DefaultStyle;
+
+    /**
      * The thresholds used to drop the state down to a lower number
      */
     UPROPERTY(EditAnywhere, Category = "Style|Fill")
-    TArray<float> PercentThresholds = {0.5f, 0.25f};
+    TArray<FHPBarStyle> PercentThresholds;
+
+    /**
+     * The current state of the menu
+     */
+    TOptional<int32> CurrentState;
 
     /**
      * Get the previous percentage value for this object
@@ -57,11 +85,4 @@ class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
      * Flag that tells the game that the widget has been set up and can now tick
      */
     bool bSetUp = false;
-
-    /**
-     * The actual material held by the widget. This is used to dynamically update it during runtime without needing
-     * to create a new one on each change
-     */
-    UPROPERTY()
-    TObjectPtr<UMaterialInstanceDynamic> BarMaterial;
 };
