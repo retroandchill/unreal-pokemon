@@ -1,12 +1,16 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "UnrealInjector.h"
+#include "DependencyInjectionSettings.h"
 
 #define LOCTEXT_NAMESPACE "FUnrealInjectorModule"
 
 void FUnrealInjectorModule::StartupModule() {
-    // This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin
-    // file per-module
+#if WITH_METADATA
+    FCoreDelegates::OnPostEngineInit.AddLambda([] {
+        GetMutableDefault<UDependencyInjectionSettings>()->RefreshDependencies();
+    });
+#endif
 }
 
 void FUnrealInjectorModule::ShutdownModule() {

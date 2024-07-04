@@ -3,14 +3,13 @@
 #include "DependencyInjectionSettings.h"
 #include "Lookup/InjectionUtilities.h"
 
-UDependencyInjectionSettings::UDependencyInjectionSettings(const FObjectInitializer &ObjectInitializer)
-    : UDeveloperSettings(ObjectInitializer) {
 #ifdef WITH_METADATA
+void UDependencyInjectionSettings::RefreshDependencies() {
     if (CheckForNewInjectableInterfaces()) {
         TryUpdateDefaultConfigFile();
     }
-#endif
 }
+#endif
 
 const TMap<UClass *, FInjectionTarget> &UDependencyInjectionSettings::GetTargetInjections() const {
     return TargetInjections;

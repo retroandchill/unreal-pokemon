@@ -16,12 +16,13 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
     GENERATED_BODY()
 
   public:
+#if WITH_METADATA
     /**
-     * Creat the default version of this object.
-     * @param ObjectInitializer The initializer for this object
+     * Refresh the default dependencies from the list of classes
      */
-    explicit UDependencyInjectionSettings(const FObjectInitializer &ObjectInitializer);
-
+    void RefreshDependencies();
+#endif
+    
     /**
      * Get the target injections for each interface.
      * @return The map of interface types to implementation classes
