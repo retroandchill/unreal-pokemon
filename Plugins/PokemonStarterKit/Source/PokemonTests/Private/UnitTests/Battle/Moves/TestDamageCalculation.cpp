@@ -10,8 +10,6 @@
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 #include "Pokemon/Pokemon.h"
 
-class IPokemon;
-
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysWeakNoCrit, "Unit Tests.Battle.Moves.TestDamageCalculation.PhysicalWeakNoCrit",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 

@@ -35,6 +35,10 @@ void UBattleMessageHelper::AppendMessageWithAnimation(const FRunningMessageSet &
 }
 
 const FRunningMessageSet *UBattleMessageHelper::FindRunningMessageSet(const UGameplayAbility *Ability) {
+    if (Ability == nullptr) {
+        return nullptr;
+    }
+    
     if (auto EventData = Ability->GetCurrentAbilitySpec()->GameplayEventData; EventData != nullptr) {
         if (auto MessagePayload = Cast<IRunningMessageSetPayload>(EventData->OptionalObject); MessagePayload != nullptr) {
             return &MessagePayload->GetRunningMessageSet();

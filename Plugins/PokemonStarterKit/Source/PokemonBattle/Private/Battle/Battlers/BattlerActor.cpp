@@ -33,7 +33,6 @@
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
     check(Battler != nullptr)
-    check(Battler->GetOwningSide() != nullptr)
     check(Move != nullptr)
     TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
     BattleMove->Initialize(Battler, Move);
