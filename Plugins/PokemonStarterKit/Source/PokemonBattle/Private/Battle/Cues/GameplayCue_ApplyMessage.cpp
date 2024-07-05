@@ -14,6 +14,6 @@ bool UGameplayCue_ApplyMessage::PerformMessageAppend(AActor *MyTarget, const FGa
         return false;
     }
     
-    AppendMessage(MyTarget, *Messages);
+    AppendMessage(MyTarget, Parameters, *Messages);
     return true;
 }

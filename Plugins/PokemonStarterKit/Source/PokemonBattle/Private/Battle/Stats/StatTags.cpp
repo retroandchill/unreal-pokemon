@@ -8,6 +8,9 @@
 
 namespace Pokemon::Battle::Stats {
 
+UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
+UE_DEFINE_GAMEPLAY_TAG(StatStagesInvertTag, "Battle.Battler.Stats.Stages.InvertChanges")
+
 FLookup::FLookup() {
     auto &DataManager = FDataManager::GetInstance();
     auto& TypeTable = DataManager.GetDataTable<FStat>();
@@ -18,6 +21,7 @@ FLookup::FLookup() {
         
         AddDynamicGameplayTag(IgnorePositiveTags, IgnorePositiveStatsFormat, Stat.ID);
         AddDynamicGameplayTag(IgnoreNegativeTags, IgnoreNegativeStatsFormat, Stat.ID);
+        AddDynamicGameplayTag(GameplayCueTags, GameplayCueTagFormat, Stat.ID);
     });
 }
 
@@ -26,6 +30,19 @@ FLookup::~FLookup() = default;
 FLookup & FLookup::Get() {
     static FLookup Lookup;
     return Lookup;
+}
+
+FText FLookup::FindStatNameFromGameplayCueTag(const FGameplayTag &Tag) const {
+    static auto &TypeTable = FDataManager::GetInstance().GetDataTable<FStat>();
+    for (auto &[ID, NativeTag] : GameplayCueTags) {
+        if (Tag == *NativeTag) {
+            auto Stat = TypeTable.GetData(ID);
+            check(Stat != nullptr)
+            return Stat->RealName;
+        }
+    }
+
+    return FText::FromStringView(TEXT("???"));
 }
 
 }
