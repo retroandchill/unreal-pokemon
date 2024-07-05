@@ -13,11 +13,6 @@ namespace Pokemon::Battle::Stats {
 POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StagesTag)
 
 /**
- * The gameplay tag used to handle stat inversion
- */
-POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StatStagesInvertTag)
-
-/**
  * The tag format for ignoring positive stat stages
  */
 constexpr auto IgnorePositiveStatsFormat = TEXT("Battle.Battler.Stats.Stages.Ignore.Positive.{0}");

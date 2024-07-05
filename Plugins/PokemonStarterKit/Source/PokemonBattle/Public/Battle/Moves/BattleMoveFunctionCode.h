@@ -39,6 +39,33 @@ enum class ECriticalOverride : uint8 {
 };
 
 /**
+ * Information about a captured stat
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FCapturedBattleStat {
+    GENERATED_BODY()
+    
+    /**
+     * The battler that owns the stat in question
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Moves|Damage");
+    TScriptInterface<IBattler> OwningBattler;
+
+    /**
+     * The attribute that underpins the stat
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Moves|Damage")
+    FName StatID;
+
+    /**
+     * Get the value of the stat for the battler
+     * @return The value of the stat
+     */
+    int32 GetStatValue() const;
+    
+};
+
+/**
  * The structure for the attack and defense stats used in damage calculation
  */
 USTRUCT(BlueprintType)
@@ -49,13 +76,13 @@ struct POKEMONBATTLE_API FAttackAndDefenseStats {
      * The attack stat to use (generally from the user)
      */
     UPROPERTY(BlueprintReadOnly, Category = "Moves|Damage")
-    int32 Attack;
+    FCapturedBattleStat Attack;
 
     /**
      * The defense stat to use (generally from the target)
      */
     UPROPERTY(BlueprintReadOnly, Category = "Moves|Damage")
-    int32 Defense;
+    FCapturedBattleStat Defense;
 };
 
 /**

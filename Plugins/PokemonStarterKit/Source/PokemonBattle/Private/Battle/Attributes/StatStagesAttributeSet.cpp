@@ -5,7 +5,7 @@
 #include "Settings/BaseSettings.h"
 
 void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
-    if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute()) {
+    if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute() || Attribute == GetStatStageMultiplierAttribute()) {
         return;
     }
     

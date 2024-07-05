@@ -3,6 +3,7 @@
 
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "DataManager.h"
 #include "PokemonBattleModule.h"
 #include "RangeHelpers.h"
 #include "Battle/Type.h"
@@ -20,15 +21,25 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Battle/Events/Moves/SuccessCheckAgainstTargetPayload.h"
 #include "Battle/Events/Moves/UseMovePayload.h"
+#include "Battle/Stats/StatTags.h"
 #include "Battle/Types/SingleTypeModPayload.h"
 #include "Battle/Types/TypeMatchUpModPayload.h"
 #include "Battle/Types/TypeTags.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
 #include "Settings/BaseSettings.h"
+#include "Species/Stat.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
+
+int32 FCapturedBattleStat::GetStatValue() const {
+    static auto& StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
+    auto Stat = StatTable.GetData(StatID);
+    check(Stat != nullptr)
+    check(Stat->BaseAttribute.IsValid())
+    return FMath::FloorToInt32(OwningBattler->GetAbilityComponent()->GetNumericAttribute(Stat->BaseAttribute));
+}
 
 UBattleMoveFunctionCode::UBattleMoveFunctionCode() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -349,16 +360,27 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
     ApplyAdditionalDamageMultipliers(Payload);
     
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
+
+    static auto& Lookup = Pokemon::Battle::Stats::FLookup::Get();
+    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+        Attack.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
+        Defense.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnorePositiveTag(Attack.StatID));
+    }
     
     BasePower = FMath::Max(FMath::RoundToInt32(BasePower * PayloadData.PowerMultiplier), 1);
-    Attack = FMath::Max(FMath::RoundToInt32(Attack * PayloadData.AttackMultiplier), 1);
-    Defense = FMath::Max(FMath::RoundToInt32(Defense * PayloadData.DefenseMultiplier), 1);
+    int32 AttackValue = FMath::Max(FMath::RoundToInt32(Attack.GetStatValue() * PayloadData.AttackMultiplier), 1);
+    int32 DefenseValue = FMath::Max(FMath::RoundToInt32(Defense.GetStatValue() * PayloadData.DefenseMultiplier), 1);
 
     int32 Level = User->GetPokemonLevel();
-    int32 Damage = FMath::FloorToInt32(2.0f * static_cast<float>(Level) / 5 + 2) * BasePower * Attack / Defense / 50 + 2;
+    int32 Damage = FMath::FloorToInt32(2.0f * static_cast<float>(Level) / 5 + 2) * BasePower * AttackValue / DefenseValue / 50 + 2;
     Damage = FMath::Max(FMath::RoundToInt32(Damage * PayloadData.FinalDamageMultiplier), 1);
     DamageState.SetCalculatedDamage(static_cast<float>(Damage));
     UE_LOG(LogBattle, Display, TEXT("%s calculated to take %d damage"), *Target->GetNickname().ToString(), Damage);
+
+    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+        Attack.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
+        Defense.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnorePositiveTag(Attack.StatID));
+    }
 }
 
 FAttackAndDefenseStats UBattleMoveFunctionCode::GetAttackAndDefense_Implementation(const TScriptInterface<IBattler> &User,
@@ -368,15 +390,20 @@ FAttackAndDefenseStats UBattleMoveFunctionCode::GetAttackAndDefense_Implementati
     check(Category != Status)
 
     if (Category == Special) {
+        static FName SpecialAttack = "SPECIAL_ATTACK";
+        static FName SpecialDefense = "SPECIAL_DEFENSE";
         return {
-            FMath::FloorToInt32(User->GetAbilityComponent()->GetCoreAttributes()->GetSpecialAttack()),
-            FMath::FloorToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetSpecialDefense())
+            {User, SpecialAttack},
+            {Target, SpecialDefense}
         };
     }
+
     
+    static FName Attack = "ATTACK";
+    static FName Defense = "DEFENSE";
     return {
-        FMath::FloorToInt32(User->GetAbilityComponent()->GetCoreAttributes()->GetAttack()),
-        FMath::FloorToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetDefense())
+                {User, Attack},
+                {Target, Defense}
     };
 }
 

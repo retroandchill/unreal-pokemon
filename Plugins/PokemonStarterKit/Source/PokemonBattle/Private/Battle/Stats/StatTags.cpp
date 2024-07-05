@@ -9,7 +9,6 @@
 namespace Pokemon::Battle::Stats {
 
 UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
-UE_DEFINE_GAMEPLAY_TAG(StatStagesInvertTag, "Battle.Battler.Stats.Stages.InvertChanges")
 
 FLookup::FLookup() {
     auto &DataManager = FDataManager::GetInstance();
