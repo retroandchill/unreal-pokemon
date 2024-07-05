@@ -17,3 +17,11 @@ TArray<FName> UStatHelper::GetMainStatNames() {
            ranges::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Battle; }) |
            ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
 }
+
+TArray<FName> UStatHelper::GetMainBattleStatNames() {
+    auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
+    auto Stats = StatTable.GetAllRows();
+    return RangeHelpers::CreateRange(Stats) |
+           ranges::views::filter([](const FStat *Stat) { return Stat->Type == EPokemonStatType::MainBattle; }) |
+           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
+}

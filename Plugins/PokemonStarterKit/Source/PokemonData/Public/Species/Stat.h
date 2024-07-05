@@ -77,4 +77,11 @@ class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetMainStatNames();
+
+    /**
+     * Get the list of all possible main/battle stat names.
+     * @return The list of all possible main/battle stat names.
+     */
+    UFUNCTION()
+    static TArray<FName> GetMainBattleStatNames();
 };

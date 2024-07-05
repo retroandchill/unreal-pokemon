@@ -2,6 +2,7 @@
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Stats/StatTags.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
@@ -58,6 +59,58 @@ bool TestStatChanges::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(194.f, CoreAttributes->GetSpeed());
     AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetSpeedStagesAttribute(), 1);
     UE_CHECK_EQUAL(436.f, CoreAttributes->GetSpeed());
+    
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChanges_IgnoreTags, "Unit Tests.Battle.Battlers.TestStatChanges.IgnoreTags",
+                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool TestStatChanges_IgnoreTags::RunTest(const FString &Parameters) {
+    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(),
+        FPokemonDTO{
+            .Species = TEXT("MIMIKYU"),
+            .Level = 100,
+            .IVs = {
+                {"HP", 31},
+                {"ATTACK", 31},
+                {"DEFENSE", 31},
+                {"SPECIAL_ATTACK", 31},
+                {"SPECIAL_DEFENSE", 31},
+                {"SPEED", 31}
+            },
+            .EVs = {
+                {"HP", 4},
+                {"ATTACK", 252},
+                {"SPEED", 252}
+            },
+            .Nature = FName("ADAMANT")
+        });
+
+    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
+    
+    auto Battler = World->SpawnActor<ATestBattlerActor>();
+    Battler->Initialize(Side, Pokemon1);
+
+    auto AbilityComponent = Battler->GetAbilityComponent();
+    auto CoreAttributes = AbilityComponent->GetCoreAttributes();
+    UE_CHECK_EQUAL(306.f, CoreAttributes->GetAttack());
+    AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), -2);
+    UE_CHECK_EQUAL(153.f, CoreAttributes->GetAttack());
+
+    auto &Lookup = Pokemon::Battle::Stats::FLookup::Get();
+    AbilityComponent->AddLooseGameplayTag(Lookup.GetIgnoreNegativeTag("ATTACK"));
+    UE_CHECK_EQUAL(306.f, CoreAttributes->GetAttack());
+
+    UE_CHECK_EQUAL(196.f, CoreAttributes->GetDefense());
+    AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetDefenseStagesAttribute(), 2);
+    UE_CHECK_EQUAL(392.f, CoreAttributes->GetDefense());
+    AbilityComponent->AddLooseGameplayTag(Lookup.GetIgnorePositiveTag("DEFENSE"));
+    UE_CHECK_EQUAL(196.f, CoreAttributes->GetDefense());
     
     return true;
 }

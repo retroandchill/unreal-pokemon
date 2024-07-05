@@ -24,8 +24,15 @@ public:
 
 private:
     /**
+     * The ID of the stat in question
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Battle|Stats",
+        meta = (GetOptions = "PokemonData.StatHelper.GetMainBattleStatNames"))
+    FName StatID;
+    
+    /**
      * The captured attribute for the stages.
      */
-    UPROPERTY(EditDefaultsOnly, Category = "Battle|Stats")
+    UPROPERTY(VisibleDefaultsOnly, Category = "Battle|Stats")
     FGameplayEffectAttributeCaptureDefinition StagesAttribute;
 };
