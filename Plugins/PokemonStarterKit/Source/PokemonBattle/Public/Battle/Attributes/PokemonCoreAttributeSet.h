@@ -23,8 +23,6 @@ public:
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialAttack)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, SpecialDefense)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Speed)
-    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Accuracy)
-    ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Evasion)
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, MoveCost)
 
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
@@ -77,18 +75,6 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData Speed;
-
-    /**
-     * The accuracy of the battler
-     */
-    UPROPERTY()
-    FGameplayAttributeData Accuracy = 100.f;
-
-    /**
-     * The evasion rate of the battler
-     */
-    UPROPERTY()
-    FGameplayAttributeData Evasion = 100.f;
 
     /**
      * The amount of PP that a move costs to use.

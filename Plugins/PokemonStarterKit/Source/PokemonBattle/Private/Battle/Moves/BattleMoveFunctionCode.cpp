@@ -264,12 +264,23 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
         return true;
     }
+
+    static auto &StageInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    int32 StatStageBound = StageInfo.Num();
+    int32 AccuracyStages = FMath::RoundToInt32(User->GetAbilityComponent()->GetStatStages()->GetAccuracyStages());
+    int32 EvasionStages = FMath::RoundToInt32(Target->GetAbilityComponent()->GetStatStages()->GetEvasionStages());
+    int32 CompositeStages = FMath::Clamp(AccuracyStages - EvasionStages, -StatStageBound, StatStageBound);
+    float AccuracyMultiplier;
+    if (CompositeStages > 0) {
+        AccuracyMultiplier = StageInfo[CompositeStages - 1].PositiveAccEvaMultiplier;
+    } else if (CompositeStages < 0) {
+        AccuracyMultiplier = StageInfo[-CompositeStages - 1].NegativeAccEvaMultiplier;
+    } else {
+        AccuracyMultiplier = 1.f;
+    }
     
-    int32 Accuracy = FMath::RoundToInt32(User->GetAbilityComponent()->GetCoreAttributes()->GetAccuracy());
-    int32 Evasion = FMath::RoundToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetEvasion());
-    Evasion = FMath::Max(Evasion, 1);
-    
-    int32 Threshold = BaseAccuracy * Accuracy / Evasion;
+    int32 Threshold = FMath::RoundToInt32(BaseAccuracy * AccuracyMultiplier);
+    UE_LOG(LogBattle, Display, TEXT("Accuracy threshold for %s is %d"), *Target->GetNickname().ToString(), Threshold)
     int32 Roll = FMath::Rand() % 100;
     return Roll < Threshold;
 }

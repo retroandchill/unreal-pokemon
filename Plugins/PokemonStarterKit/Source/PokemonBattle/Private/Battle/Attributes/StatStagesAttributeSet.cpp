@@ -2,6 +2,7 @@
 
 
 #include "Battle/Attributes/StatStagesAttributeSet.h"
+#include "Settings/BaseSettings.h"
 
 void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute()) {
@@ -9,5 +10,7 @@ void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attri
     }
     
     // TODO: Change this to be more customizable
-    NewValue = FMath::Floor(FMath::Clamp(NewValue, -6.f, 6.f));
+    static auto &StageInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    float StageLimit = static_cast<float>(StageInfo.Num());
+    NewValue = FMath::Floor(FMath::Clamp(NewValue, -StageLimit, StageLimit));
 }

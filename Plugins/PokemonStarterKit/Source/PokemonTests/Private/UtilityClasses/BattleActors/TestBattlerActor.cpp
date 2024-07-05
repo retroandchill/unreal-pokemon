@@ -20,4 +20,9 @@ void ATestBattlerActor::PostActorCreated() {
     auto HighCritMoveEffect = LoadClass<UGameplayAbility>(nullptr, TEXT("/Game/Blueprints/Battle/Innate/Innate_HighCriticalHitRate.Innate_HighCriticalHitRate_C"));
     check(HighCritMoveEffect != nullptr)
     Abilities.Emplace(HighCritMoveEffect);
+
+    auto &Effects = UReflectionUtils::GetMutablePropertyValue<TArray<TSubclassOf<UGameplayEffect>>>(this, "InnateEffects");
+    auto StatStages = LoadClass<UGameplayEffect>(nullptr, TEXT("/Game/Blueprints/Battle/Effects/Effect_StatStages.Effect_StatStages_C"));
+    check(StatStages != nullptr)
+    Effects.Emplace(StatStages);
 }

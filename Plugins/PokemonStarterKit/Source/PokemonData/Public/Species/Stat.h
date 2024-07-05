@@ -45,7 +45,7 @@ struct POKEMONDATA_API FStat : public FIndexedTableRow {
      * The field used to initialize attributes during battle. This is also what updates the base values during a
      * level-up or a form change.
      */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata", meta = (EditCondition = "Type != EPokemonStatType::Battle"))
     FGameplayAttribute BaseAttribute;
 
     /**

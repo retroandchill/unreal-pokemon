@@ -6,7 +6,7 @@
 #include "Battle/Moves/MoveTags.h"
 
 void UTargetDamageStateAttributeSet::Reset() {
-    TypeMod = Pokemon::TypeEffectiveness::IneffectiveMultiplier;
-    CalculatedDamage = 0.f;
+    SetTypeMod(Pokemon::TypeEffectiveness::IneffectiveMultiplier);
+    SetCalculatedDamage(0.f);
     GetOwningAbilitySystemComponent()->RemoveLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget);
 }
