@@ -73,4 +73,14 @@ public:
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
     static bool StatStageAtMin(const TScriptInterface<IBattler>& Battler, FName Stat);
 
+    /**
+     * Perform a change to a battler's stat stages
+     * @param Battler The battler in question to change the stats of
+     * @param Stat The stat that was changed
+     * @param Stages The number of stages to change the amount by
+     * @return The actual number of stages that were changed
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Stat")
+    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler>& Battler, FName Stat, int32 Stages);
+
 };

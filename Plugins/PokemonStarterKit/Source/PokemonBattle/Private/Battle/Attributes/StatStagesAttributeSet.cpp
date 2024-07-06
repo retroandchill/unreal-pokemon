@@ -9,7 +9,6 @@ void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attri
         return;
     }
     
-    // TODO: Change this to be more customizable
     static auto &StageInfo = Pokemon::FBaseSettings::Get().GetStatStages();
     float StageLimit = static_cast<float>(StageInfo.Num());
     NewValue = FMath::Floor(FMath::Clamp(NewValue, -StageLimit, StageLimit));
