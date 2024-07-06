@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BattleInfo.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "BattleTransitionSubsystem.generated.h"
 
-struct FPokemonDTO;
+class ULevelStreamingDynamic;
 class IBattle;
 
 /**
@@ -25,16 +26,25 @@ public:
 
     /**
      * Initialize a wild battle with the provided Pokémon information
-     * @param Pokemon The Pokémon information that should be battled against
+     * @param Info The Pokémon information that should be battled against
      * @param BattleMap The information for the battle in question
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
-    void InitiateWildBattle(const FPokemonDTO &Pokemon, const TSoftObjectPtr<UWorld>& BattleMap);
+    void InitiateWildBattle(const FBattleInfo& Info, const TSoftObjectPtr<UWorld>& BattleMap);
 
 private:
+    UFUNCTION()
+    void SetUpBattle();
+
+    void ExitBattle();
+    
     /**
      * The registered battle object for this subsystem
      */
     TWeakInterfacePtr<IBattle> RegisteredBattle;
 
+    UPROPERTY()
+    TObjectPtr<ULevelStreamingDynamic> Battlefield;
+
+    TOptional<FBattleInfo> BattleInfo;
 };

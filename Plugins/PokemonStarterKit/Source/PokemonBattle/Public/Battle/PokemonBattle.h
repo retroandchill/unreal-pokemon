@@ -99,6 +99,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
+    void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
 
 protected:
     /**
@@ -335,4 +336,9 @@ private:
      */
     UPROPERTY()
     EBattlePhase Phase = EBattlePhase::Setup;
+
+    /**
+     * Delegate that is invoked when the battle ends
+     */
+    FOnBattleEnd OnBattleEnd;
 };

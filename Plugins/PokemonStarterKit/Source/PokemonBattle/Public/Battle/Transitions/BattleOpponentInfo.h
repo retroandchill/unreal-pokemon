@@ -18,13 +18,13 @@ public:
 
     /**
      * Create the opposing side of battle with this information
-     * @param Battle
+     * @param Battle The battle that will take ownership of the side
      * @param SideClass The class for the side that is being spawned in
      * @param Transform The transform to spawn the side at
-     * @param ActivePokemonCount
+     * @param ActivePokemonCount The number of Pokémon to spawn
      * @return The created side
      */
-    virtual TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, TSubclassOf<AActor> SideClass, const FTransform& Transform, int32  ActivePokemonCount = 1);
+    virtual TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, const TSubclassOf<AActor>& SideClass, const FTransform& Transform, int32  ActivePokemonCount = 1) = 0;
 };
 
 /**
@@ -32,6 +32,7 @@ public:
  */
 USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
+    GENERATED_BODY()
 
     /**
      * The wrapped data that underlies this object
@@ -40,13 +41,10 @@ struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
 
     /**
      * Create the opposing side of battle with this information
-     * @tparam A The argument types that are passed to the proxied object
-     * @param Args The arguments that are passed to the proxied object
      * @return The created side
      */
-    template <typename... A>
-    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(A&&... Args) const {
-        return Data->CreateOpposingSide(Forward<A...>(Args)...);
+    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, TSubclassOf<AActor> SideClass, const FTransform& Transform, int32  ActivePokemonCount = 1) const {
+        return Data->CreateOpposingSide(Battle, SideClass, Transform, ActivePokemonCount);
     }
     
 };

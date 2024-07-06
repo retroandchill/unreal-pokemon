@@ -45,13 +45,8 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBa
 
 TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleInfo) {
     TScriptInterface<IBattle> Self = this;
-    auto PlayerSide = GetWorld()->SpawnActor<AActor>(BattleSideClass.LoadSynchronous(), GetPlayerSidePosition());
-    Sides.Emplace_GetRef(PlayerSide)
-        ->Initialize(Self, UPokemonSubsystem::GetInstance(this).GetPlayer(), BattleSettings.BattlefieldSize.PlayerSide,
-                     true);
-    PlayerSide->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-    
-    auto OpponentSide = Sides.Emplace_GetRef(BattleInfo.CreateOpposingSide(GetWorld(), BattleSideClass.LoadSynchronous(), GetOpponentSidePosition(), Self));
+    Sides.Emplace(BattleInfo.CreatePlayerSide(Self, BattleSideClass.LoadSynchronous(), GetPlayerSidePosition()));
+    Sides.Emplace(BattleInfo.CreateOpposingSide(Self, BattleSideClass.LoadSynchronous(), GetOpponentSidePosition()));
     Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
     return Self;
 }
@@ -148,6 +143,10 @@ void APokemonBattle::ExecuteAction(IBattleAction &Action) {
     DisplayAction(Action.GetActionMessage());
 }
 
+void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
+    OnBattleEnd.Add(MoveTemp(Callback));
+}
+
 APawn *APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
@@ -197,6 +196,7 @@ void APokemonBattle::ExecuteAction() {
 void APokemonBattle::ExitBattleScene() const {
     auto PlayerController = BattlePawn->GetController();
     PlayerController->Possess(StoredPlayerPawn);
+    OnBattleEnd.Broadcast();
 }
 
 void APokemonBattle::StartTurn() {

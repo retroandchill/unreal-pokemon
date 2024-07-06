@@ -10,6 +10,11 @@
 #include "Settings/BaseSettings.h"
 #include "Species/Stat.h"
 
+FText UStatChangeHelpers::ExtractStatNameFromTag(FGameplayTag Tag) {
+    static auto &Lookup = Pokemon::Battle::Stats::FLookup::Get();
+    return Lookup.FindStatNameFromGameplayCueTag(Tag);
+}
+
 int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat) {
     static auto& StatTable = FDataManager::GetInstance().GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);

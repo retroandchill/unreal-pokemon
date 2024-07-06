@@ -20,6 +20,11 @@ class IBattler;
 
 using FSideWithIndexCallback = const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &;
 
+/**
+ * Delegate called when the battle ends
+ */
+DECLARE_MULTICAST_DELEGATE(FOnBattleEnd)
+
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
 class POKEMONBATTLE_API UBattle : public UInterface {
@@ -97,5 +102,11 @@ class POKEMONBATTLE_API IBattle {
      * @param Action The action to execute
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
+
+    /**
+     * Bind a delegate for when the battle ends
+     * @param Callback The callback to invoke when the battle ends
+     */
+    virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate&& Callback) = 0;
 
 };

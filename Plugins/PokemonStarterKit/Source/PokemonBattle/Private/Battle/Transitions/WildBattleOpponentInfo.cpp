@@ -5,7 +5,7 @@
 #include "RangeHelpers.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "Kismet/GameplayStatics.h"
+#include "Pokemon/Pokemon.h"
 #include "Lookup/InjectionUtilities.h"
 #include <range/v3/view/transform.hpp>
 
@@ -15,7 +15,7 @@ FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &
 }
 
 TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const TScriptInterface<IBattle>& Battle,
-                                                                          TSubclassOf<AActor> SideClass, const FTransform &Transform, int32 ActivePokemonCount) {
+                                                                          const TSubclassOf<AActor>& SideClass, const FTransform &Transform, int32 ActivePokemonCount) {
     auto World = Battle.GetObject()->GetWorld();
     check(World != nullptr);
     

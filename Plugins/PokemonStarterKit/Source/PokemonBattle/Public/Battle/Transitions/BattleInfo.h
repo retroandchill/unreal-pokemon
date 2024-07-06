@@ -32,14 +32,16 @@ struct POKEMONBATTLE_API FBattleInfo {
     UPROPERTY(BlueprintReadWrite, Category = Battle)
     FBattleOpponentInfoHandle OpponentInfo;
 
+    TScriptInterface<IBattleSide> CreatePlayerSide(const TScriptInterface<IBattle>& Battle, const TSubclassOf<AActor>& SideClass, const FTransform& Transform) const;
+
     /**
      * Create the opposing side of battle with this information
-     * @tparam A The argument types that are passed to the proxied object
-     * @param Args The arguments that are passed to the proxied object
+     * @param Battle The battle that will take ownership of the side
+     * @param SideClass The class for the side that is being spawned in
+     * @param Transform The transform to spawn the side at
      * @return The created side
      */
-    template <typename... A>
-    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(A&&... Args) const {
-        return OpponentInfo.CreateOpposingSide<A...>(Forward<A...>(Args)..., OpponentSideCount);
+    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, const TSubclassOf<AActor>& SideClass, const FTransform& Transform) const {
+        return OpponentInfo.CreateOpposingSide(Battle, SideClass, Transform, OpponentSideCount);
     }
 };
