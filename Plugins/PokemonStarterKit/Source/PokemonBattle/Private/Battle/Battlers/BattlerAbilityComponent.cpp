@@ -39,8 +39,8 @@ FGameplayEffectSpecHandle UBattlerAbilityComponent::MakeOutgoingSpec(TSubclassOf
 
     if (GameplayEffectClass) {
         auto GameplayEffect = CreateGameplayEffect(GameplayEffectClass, Level, Context);
-        auto NewSpec = new FGameplayEffectSpec(GameplayEffect, Context, Level);
-        return FGameplayEffectSpecHandle(NewSpec);
+        auto NewSpec = MakeUnique<FGameplayEffectSpec>(GameplayEffect, Context, Level);
+        return FGameplayEffectSpecHandle(NewSpec.Release());
     }
 
     return FGameplayEffectSpecHandle(nullptr);

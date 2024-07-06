@@ -64,20 +64,12 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     auto StatBlock = WrappedPokemon->GetStatBlock();
     StatTable.ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
         if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
-            auto AttributeSetClass = Stat.BaseAttribute.GetAttributeSetClass();
-            check(Attributes.Contains(AttributeSetClass))
-            auto AttributeData = Stat.BaseAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
             auto StatValue = StatBlock->GetStat(Stat.ID);
-            AttributeData->SetBaseValue(static_cast<float>(StatValue->GetStatValue()));
-            AttributeData->SetCurrentValue(AttributeData->GetBaseValue());
+            BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute, static_cast<float>(StatValue->GetStatValue()));
         }
         
         if (Stat.StagesAttribute.IsValid()) {
-            auto AttributeSetClass = Stat.StagesAttribute.GetAttributeSetClass();
-            check(Attributes.Contains(AttributeSetClass))
-            auto AttributeData = Stat.StagesAttribute.GetGameplayAttributeDataChecked(Attributes[AttributeSetClass]);
-            AttributeData->SetBaseValue(0.f);
-            AttributeData->SetCurrentValue(0.f);
+            BattlerAbilityComponent->SetNumericAttributeBase(Stat.StagesAttribute, 0.f);
         }
     });
 
@@ -120,10 +112,17 @@ void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     InnateAbilityHandles = RangeHelpers::CreateRange(InnateAbilities)
-        | ranges::views::transform([this](TSubclassOf<UGameplayAbility> Type) {
+        | ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
             return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
         })
         | RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
+    InnateEffectHandles = RangeHelpers::CreateRange(InnateEffects)
+        | ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
+            auto Context = BattlerAbilityComponent->MakeEffectContext();
+            auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
+            return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+        })
+        | RangeHelpers::TToArray<FActiveGameplayEffectHandle>();
 }
 
 void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {

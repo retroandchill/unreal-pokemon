@@ -45,7 +45,7 @@ struct POKEMONDATA_API FStat : public FIndexedTableRow {
      * The field used to initialize attributes during battle. This is also what updates the base values during a
      * level-up or a form change.
      */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata")
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Metadata", meta = (EditCondition = "Type != EPokemonStatType::Battle"))
     FGameplayAttribute BaseAttribute;
 
     /**
@@ -77,4 +77,42 @@ class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetMainStatNames();
+
+    /**
+     * Get the list of all possible main/battle stat names.
+     * @return The list of all possible main/battle stat names.
+     */
+    UFUNCTION()
+    static TArray<FName> GetMainBattleStatNames();
+
+    /**
+     * Get the list of all possible battle stat names.
+     * @return The list of all possible battle stat names.
+     */
+    UFUNCTION()
+    static TArray<FName> GetBattleStatNames();
 };
+
+/**
+ * Thin wrapper around a battle stat name, that forces the user to select a battle stat.
+ */
+USTRUCT(BlueprintType)
+struct POKEMONDATA_API FBattleStat {
+    GENERATED_BODY()
+
+    /**
+     * The name of the battle stat.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.StatHelper.GetBattleStatNames"))
+    FName Stat;
+};
+
+/**
+ * Function used to get the type hash of the battle, making it identical to the wrapped property.
+ * @param Key The key structure
+ * @return The return type in question
+ */
+inline uint32 GetTypeHash(const FBattleStat &Key) {
+    return GetTypeHash(Key.Stat);
+}

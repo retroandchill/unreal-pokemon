@@ -144,6 +144,17 @@ public:
     TArray<FGameplayAbilitySpecHandle> InnateAbilityHandles;
 
     /**
+     * The list of gameplay effects that should be activated immediately upon the actor being spawned.
+     */
+    UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
+    TArray<TSubclassOf<UGameplayEffect>> InnateEffects;
+
+    /**
+     * Handles for the Pokémon's innate effects that have been created
+     */
+    TArray<FActiveGameplayEffectHandle> InnateEffectHandles;
+
+    /**
      * The ability that this battler has
      */
     FGameplayAbilitySpecHandle Ability;
