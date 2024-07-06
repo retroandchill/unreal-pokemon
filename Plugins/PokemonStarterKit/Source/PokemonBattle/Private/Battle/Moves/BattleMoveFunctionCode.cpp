@@ -184,7 +184,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                            | ranges::views::filter(TargetFailureCheckCallback)
                            | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 
-    if (FilteredTargets.IsEmpty()) {
+    if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
         ProcessMoveFailure(RunningMessages);
         return;
@@ -203,7 +203,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                           | ranges::views::filter(HitCheckCallback)
                           | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 
-    if (SuccessfulHits.IsEmpty()) {
+    if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
         RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
         ProcessMoveFailure(RunningMessages);
@@ -475,6 +475,17 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
     const TArray<TScriptInterface<IBattler>> &Targets) {
     RunningMessages.Messages->Reset();
+    UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s!"), *BattleMove->GetDisplayName().ToString())
+    for (auto &Target : Targets) {
+        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
+            UE_LOG(LogBattle, Display, TEXT("%s is unaffected by the move, skipping post-damage effect application!"), *Target->GetNickname().ToString())
+            continue;
+        }
+
+        UE_LOG(LogBattle, Display, TEXT("Applying effects of %s to %s!"), *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
+        ApplyEffectWhenDealingDamage(User, Target, RunningMessages);
+    }
+    
     UE_LOG(LogBattle, Display, TEXT("Applying effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {

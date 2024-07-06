@@ -313,21 +313,29 @@ protected:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
     void ApplyMoveEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+
+    /**
+     * Effect applied to a target that took damage from a move
+     * @param User The user of the move
+     * @param Target the target of the move
+     * @param Messages The running set of messages to be displayed after the effects are applied
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& Messages);
     
     /**
      * Apply any guaranteed effects against a target
      * @param User The user of the move
      * @param Target The target of the move
-     * @param Messages
+     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
-                                  Messages);
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& Messages);
 
     /**
      * Apply any generate effects that don't depend on any targets
      * @param User The user of the move
-     * @param Messages
+     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& Messages);
@@ -336,7 +344,7 @@ protected:
      * Perform a faint check on the user and targets before applying the additional effects
      * @param User The user of the move
      * @param Targets the targets of the move
-     * @param Messages
+     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
