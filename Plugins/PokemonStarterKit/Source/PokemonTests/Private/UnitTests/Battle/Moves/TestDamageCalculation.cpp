@@ -1,5 +1,7 @@
 ﻿#include "Asserts.h"
 #include "Battle/Actions/BattleActionUseMove.h"
+#include "Battle/Attributes/StatStagesAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/PokemonDTO.h"
@@ -95,7 +97,9 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
+    Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), -2.f);
     auto Battler2 = Side2->GetBattlers()[0];
+    Battler2->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetDefenseStagesAttribute(), 2.f);
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
     AddExpectedMessage(TEXT("Critical hit against Garchomp!"), ELogVerbosity::Display);

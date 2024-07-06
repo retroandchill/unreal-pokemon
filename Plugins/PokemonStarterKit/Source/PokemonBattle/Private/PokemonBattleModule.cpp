@@ -1,5 +1,6 @@
 ﻿#include "PokemonBattleModule.h"
 #include "Battle/Moves/MoveTags.h"
+#include "Battle/Stats/StatTags.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
 #include "Battle/Types/TypeTags.h"
 
@@ -18,6 +19,7 @@ void FPokemonBattleModule::OnPostEngineInit() {
     Pokemon::Battle::Moves::FLookup::GetInstance();
     Pokemon::Battle::Types::FLookup::GetInstance();
     Pokemon::Battle::StatusEffects::FLookup::GetInstance();
+    Pokemon::Battle::Stats::FLookup::Get();
 }
 
 IMPLEMENT_MODULE(FPokemonBattleModule, PokemonBattle)

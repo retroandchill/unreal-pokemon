@@ -39,6 +39,33 @@ enum class ECriticalOverride : uint8 {
 };
 
 /**
+ * Information about a captured stat
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FCapturedBattleStat {
+    GENERATED_BODY()
+    
+    /**
+     * The battler that owns the stat in question
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Moves|Damage");
+    TScriptInterface<IBattler> OwningBattler;
+
+    /**
+     * The attribute that underpins the stat
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Moves|Damage")
+    FName StatID;
+
+    /**
+     * Get the value of the stat for the battler
+     * @return The value of the stat
+     */
+    int32 GetStatValue() const;
+    
+};
+
+/**
  * The structure for the attack and defense stats used in damage calculation
  */
 USTRUCT(BlueprintType)
@@ -49,13 +76,13 @@ struct POKEMONBATTLE_API FAttackAndDefenseStats {
      * The attack stat to use (generally from the user)
      */
     UPROPERTY(BlueprintReadOnly, Category = "Moves|Damage")
-    int32 Attack;
+    FCapturedBattleStat Attack;
 
     /**
      * The defense stat to use (generally from the target)
      */
     UPROPERTY(BlueprintReadOnly, Category = "Moves|Damage")
-    int32 Defense;
+    FCapturedBattleStat Defense;
 };
 
 /**
@@ -286,21 +313,29 @@ protected:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
     void ApplyMoveEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+
+    /**
+     * Effect applied to a target that took damage from a move
+     * @param User The user of the move
+     * @param Target the target of the move
+     * @param Messages The running set of messages to be displayed after the effects are applied
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& Messages);
     
     /**
      * Apply any guaranteed effects against a target
      * @param User The user of the move
      * @param Target The target of the move
-     * @param Messages
+     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
-                                  Messages);
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& Messages);
 
     /**
      * Apply any generate effects that don't depend on any targets
      * @param User The user of the move
-     * @param Messages
+     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& Messages);
@@ -309,7 +344,7 @@ protected:
      * Perform a faint check on the user and targets before applying the additional effects
      * @param User The user of the move
      * @param Targets the targets of the move
-     * @param Messages
+     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet

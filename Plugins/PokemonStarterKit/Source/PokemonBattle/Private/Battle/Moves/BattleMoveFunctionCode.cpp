@@ -3,6 +3,7 @@
 
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "DataManager.h"
 #include "PokemonBattleModule.h"
 #include "RangeHelpers.h"
 #include "Battle/Type.h"
@@ -20,15 +21,25 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Battle/Events/Moves/SuccessCheckAgainstTargetPayload.h"
 #include "Battle/Events/Moves/UseMovePayload.h"
+#include "Battle/Stats/StatTags.h"
 #include "Battle/Types/SingleTypeModPayload.h"
 #include "Battle/Types/TypeMatchUpModPayload.h"
 #include "Battle/Types/TypeTags.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
 #include "Settings/BaseSettings.h"
+#include "Species/Stat.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
+
+int32 FCapturedBattleStat::GetStatValue() const {
+    static auto& StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
+    auto Stat = StatTable.GetData(StatID);
+    check(Stat != nullptr)
+    check(Stat->BaseAttribute.IsValid())
+    return FMath::FloorToInt32(OwningBattler->GetAbilityComponent()->GetNumericAttribute(Stat->BaseAttribute));
+}
 
 UBattleMoveFunctionCode::UBattleMoveFunctionCode() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -173,7 +184,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                            | ranges::views::filter(TargetFailureCheckCallback)
                            | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 
-    if (FilteredTargets.IsEmpty()) {
+    if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
         ProcessMoveFailure(RunningMessages);
         return;
@@ -192,7 +203,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                           | ranges::views::filter(HitCheckCallback)
                           | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 
-    if (SuccessfulHits.IsEmpty()) {
+    if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
         RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
         ProcessMoveFailure(RunningMessages);
@@ -264,12 +275,23 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
         return true;
     }
+
+    static auto &StageInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    int32 StatStageBound = StageInfo.Num();
+    int32 AccuracyStages = FMath::RoundToInt32(User->GetAbilityComponent()->GetStatStages()->GetAccuracyStages());
+    int32 EvasionStages = FMath::RoundToInt32(Target->GetAbilityComponent()->GetStatStages()->GetEvasionStages());
+    int32 CompositeStages = FMath::Clamp(AccuracyStages - EvasionStages, -StatStageBound, StatStageBound);
+    float AccuracyMultiplier;
+    if (CompositeStages > 0) {
+        AccuracyMultiplier = StageInfo[CompositeStages - 1].PositiveAccEvaMultiplier;
+    } else if (CompositeStages < 0) {
+        AccuracyMultiplier = StageInfo[-CompositeStages - 1].NegativeAccEvaMultiplier;
+    } else {
+        AccuracyMultiplier = 1.f;
+    }
     
-    int32 Accuracy = FMath::RoundToInt32(User->GetAbilityComponent()->GetCoreAttributes()->GetAccuracy());
-    int32 Evasion = FMath::RoundToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetEvasion());
-    Evasion = FMath::Max(Evasion, 1);
-    
-    int32 Threshold = BaseAccuracy * Accuracy / Evasion;
+    int32 Threshold = FMath::RoundToInt32(BaseAccuracy * AccuracyMultiplier);
+    UE_LOG(LogBattle, Display, TEXT("Accuracy threshold for %s is %d"), *Target->GetNickname().ToString(), Threshold)
     int32 Roll = FMath::Rand() % 100;
     return Roll < Threshold;
 }
@@ -338,16 +360,27 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
     ApplyAdditionalDamageMultipliers(Payload);
     
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
+
+    static auto& Lookup = Pokemon::Battle::Stats::FLookup::Get();
+    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+        Attack.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
+        Defense.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnorePositiveTag(Defense.StatID));
+    }
     
     BasePower = FMath::Max(FMath::RoundToInt32(BasePower * PayloadData.PowerMultiplier), 1);
-    Attack = FMath::Max(FMath::RoundToInt32(Attack * PayloadData.AttackMultiplier), 1);
-    Defense = FMath::Max(FMath::RoundToInt32(Defense * PayloadData.DefenseMultiplier), 1);
+    int32 AttackValue = FMath::Max(FMath::RoundToInt32(Attack.GetStatValue() * PayloadData.AttackMultiplier), 1);
+    int32 DefenseValue = FMath::Max(FMath::RoundToInt32(Defense.GetStatValue() * PayloadData.DefenseMultiplier), 1);
 
     int32 Level = User->GetPokemonLevel();
-    int32 Damage = FMath::FloorToInt32(2.0f * static_cast<float>(Level) / 5 + 2) * BasePower * Attack / Defense / 50 + 2;
+    int32 Damage = FMath::FloorToInt32(2.0f * static_cast<float>(Level) / 5 + 2) * BasePower * AttackValue / DefenseValue / 50 + 2;
     Damage = FMath::Max(FMath::RoundToInt32(Damage * PayloadData.FinalDamageMultiplier), 1);
     DamageState.SetCalculatedDamage(static_cast<float>(Damage));
     UE_LOG(LogBattle, Display, TEXT("%s calculated to take %d damage"), *Target->GetNickname().ToString(), Damage);
+
+    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+        Attack.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
+        Defense.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnorePositiveTag(Defense.StatID));
+    }
 }
 
 FAttackAndDefenseStats UBattleMoveFunctionCode::GetAttackAndDefense_Implementation(const TScriptInterface<IBattler> &User,
@@ -357,15 +390,20 @@ FAttackAndDefenseStats UBattleMoveFunctionCode::GetAttackAndDefense_Implementati
     check(Category != Status)
 
     if (Category == Special) {
+        static FName SpecialAttack = "SPECIAL_ATTACK";
+        static FName SpecialDefense = "SPECIAL_DEFENSE";
         return {
-            FMath::FloorToInt32(User->GetAbilityComponent()->GetCoreAttributes()->GetSpecialAttack()),
-            FMath::FloorToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetSpecialDefense())
+            {User, SpecialAttack},
+            {Target, SpecialDefense}
         };
     }
+
     
+    static FName Attack = "ATTACK";
+    static FName Defense = "DEFENSE";
     return {
-        FMath::FloorToInt32(User->GetAbilityComponent()->GetCoreAttributes()->GetAttack()),
-        FMath::FloorToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetDefense())
+                {User, Attack},
+                {Target, Defense}
     };
 }
 
@@ -437,6 +475,17 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
     const TArray<TScriptInterface<IBattler>> &Targets) {
     RunningMessages.Messages->Reset();
+    UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s!"), *BattleMove->GetDisplayName().ToString())
+    for (auto &Target : Targets) {
+        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
+            UE_LOG(LogBattle, Display, TEXT("%s is unaffected by the move, skipping post-damage effect application!"), *Target->GetNickname().ToString())
+            continue;
+        }
+
+        UE_LOG(LogBattle, Display, TEXT("Applying effects of %s to %s!"), *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
+        ApplyEffectWhenDealingDamage(User, Target, RunningMessages);
+    }
+    
     UE_LOG(LogBattle, Display, TEXT("Applying effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {

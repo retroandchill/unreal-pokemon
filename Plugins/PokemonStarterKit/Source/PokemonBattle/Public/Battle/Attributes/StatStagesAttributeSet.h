@@ -24,6 +24,7 @@ public:
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, EvasionStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, CriticalHitStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, SameTypeAttackBonus)
+    ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, StatStageMultiplier)
 
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
 
@@ -61,4 +62,10 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData SameTypeAttackBonus = 1.f;
+
+    /**
+     * The amount to multiply any state stage changes by
+     */
+    UPROPERTY()
+    FGameplayAttributeData StatStageMultiplier = 1.f;
 };

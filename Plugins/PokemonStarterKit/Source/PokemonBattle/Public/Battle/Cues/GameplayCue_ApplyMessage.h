@@ -28,8 +28,9 @@ protected:
     /**
      * Append a new message to the list of selected messages
      * @param TargetActor The actor that is being targed by the effect
+     * @param Parameters The parameters passed to the gameplay cue
      * @param Messages The message to append
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Display")
-    void AppendMessage(AActor* TargetActor, const FRunningMessageSet& Messages) const;
+    void AppendMessage(AActor* TargetActor, const FGameplayCueParameters& Parameters, const FRunningMessageSet& Messages) const;
 };
