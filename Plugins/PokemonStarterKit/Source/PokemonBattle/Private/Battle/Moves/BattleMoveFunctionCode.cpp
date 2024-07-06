@@ -364,7 +364,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
     static auto& Lookup = Pokemon::Battle::Stats::FLookup::Get();
     if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
         Attack.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
-        Defense.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnorePositiveTag(Attack.StatID));
+        Defense.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnorePositiveTag(Defense.StatID));
     }
     
     BasePower = FMath::Max(FMath::RoundToInt32(BasePower * PayloadData.PowerMultiplier), 1);
@@ -379,7 +379,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(
 
     if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
         Attack.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
-        Defense.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnorePositiveTag(Attack.StatID));
+        Defense.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnorePositiveTag(Defense.StatID));
     }
 }
 
