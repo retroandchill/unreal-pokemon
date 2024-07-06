@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Battle.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Battle/Transitions/BattleInfo.h"
 #include <gmock/gmock.h>
 
 class FMockBattle : public IBattle {
@@ -14,6 +15,7 @@ public:
     ~FMockBattle() override = default;
 
     MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (TArray<TScriptInterface<IBattleSide>> &&SidesIn), (override));
+    MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (const FBattleInfo& BattleInfo), (override));
     MOCK_METHOD(void, StartBattle, (), (override));
     MOCK_METHOD(void, QueueAction, (TUniquePtr<IBattleAction> &&Action), (override));
     MOCK_METHOD(bool, ActionSelectionFinished, (), (const, override));

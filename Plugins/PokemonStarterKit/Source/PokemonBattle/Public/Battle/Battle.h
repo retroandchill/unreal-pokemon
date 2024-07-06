@@ -9,6 +9,7 @@
 
 #include "Battle.generated.h"
 
+struct FBattleInfo;
 class IAbilityDisplayComponent;
 struct FGameplayEffectSpecHandle;
 class IBattleSide;
@@ -34,6 +35,13 @@ class POKEMONBATTLE_API IBattle {
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
     virtual TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) = 0;
+
+    /**
+     * Initialize a new battle with the given battle information
+     * @param BattleInfo The information about the battle to use when initializing the battle
+     * @return A reference to this object
+     */
+    virtual TScriptInterface<IBattle> Initialize(const FBattleInfo& BattleInfo) = 0;
 
     /**
      * Have the player take possession of the battle pawn and begin the battle intro.

@@ -61,15 +61,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
   public:
     APokemonBattle();
-    
-    /**
-     * Create a wild Pokémon battle with the given settings
-     * @param Pokemon The Pokémon to generate from
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Initiation")
-    void CreateWildBattle(const FPokemonDTO &Pokemon);
 
     TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) override;
+    TScriptInterface<IBattle> Initialize(const FBattleInfo &BattleInfo) override;
 
   protected:
     void BeginPlay() override;

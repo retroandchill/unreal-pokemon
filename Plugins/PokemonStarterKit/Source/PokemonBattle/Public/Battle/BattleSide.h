@@ -36,7 +36,7 @@ class POKEMONBATTLE_API IBattleSide {
      * @return This side post-initialization
      */
     virtual TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                                     const TScriptInterface<IPokemon> &Pokemon,
+                                                     const TArray<TScriptInterface<IPokemon>>& Pokemon,
                                                      bool ShowBackSprites = false) = 0;
 
     /**

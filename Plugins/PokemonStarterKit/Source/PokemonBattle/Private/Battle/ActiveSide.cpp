@@ -10,6 +10,7 @@
 #include "Pokemon/Pokemon.h"
 #include "RangeHelpers.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
+#include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <range/v3/view/filter.hpp>
@@ -23,7 +24,7 @@ AActiveSide::AActiveSide() {
 }
 
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
-                                                      const TScriptInterface<IPokemon> &Pokemon, bool ShowBackSprites) {
+                                                      const TArray<TScriptInterface<IPokemon>>& Pokemon, bool ShowBackSprites) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;
@@ -31,11 +32,19 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Battlers.Reset();
     Trainers.Reset();
     TScriptInterface<IBattleSide> Side = this;
-    auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), GetBattlerSpawnPosition(0));
-    Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pokemon, true);
-    Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
-    IntroMessageText = FText::FormatNamed(WildBattleTextFormat, TEXT("Pkmn"), Pokemon->GetNickname());
+    auto BattlerActorClass = BattlerClass.LoadSynchronous();
+    TArray<FText> Nicknames;
+    for (auto &Pkmn : Pokemon) {
+        auto Battler = GetWorld()->SpawnActor<AActor>(BattlerActorClass, GetBattlerSpawnPosition(0));
+        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pkmn, true);
+        Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+        Nicknames.Add(Pkmn->GetNickname());
+    }
+
+    static auto Contraction = NSLOCTEXT("PokemonBattle_ActiveSide", "IntroContraction", "and");
+    auto FullOpponentName = UStringUtilities::GenerateList(Nicknames, Contraction);
+    IntroMessageText = FText::FormatNamed(WildBattleTextFormat, TEXT("Pkmn"), FullOpponentName);
     SendOutText.Reset();
     return Side;
 }
