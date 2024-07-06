@@ -39,14 +39,6 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
 
 public:
     /**
-     * Extract the name of a stat from the supplied tag
-     * @param Tag The tag to get the stat name for
-     * @return The name of the stat (or "???" if the tag is invalid)
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Stats")
-    static FText ExtractStatNameFromTag(FGameplayTag Tag);
-
-    /**
      * Get the value of a stat's stage
      * @param Battler The battler to check against
      * @param Stat The stat to check
