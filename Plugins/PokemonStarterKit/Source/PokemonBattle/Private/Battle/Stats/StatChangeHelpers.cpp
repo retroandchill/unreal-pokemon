@@ -29,7 +29,7 @@ bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battle
     return GetStatStageValue(Battler, Stat) <= -StatInfo.Num();
 }
 
-int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages) {
+int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages, UGameplayAbility* Ability) {
     static auto& StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);
     check(StatData != nullptr)
@@ -55,9 +55,15 @@ int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattle
     Modifier.ModifierMagnitude = FGameplayEffectModifierMagnitude(Calculation);
 
     static auto& Lookup = Pokemon::Battle::Stats::FLookup::Get();
-    StatChangeEffect->GameplayCues.Emplace(Lookup.GetGameplayCueTag(Stat), 0.f, 0.f);
+    auto& Cue = StatChangeEffect->GameplayCues.Emplace_GetRef(Lookup.GetGameplayCueTag(Stat), 0.f, 0.f);
+    Cue.MagnitudeAttribute = StatData->StagesAttribute;
 
-    auto Context = AbilityComponent->MakeEffectContext();
+    FGameplayEffectContextHandle Context;
+    if (Ability != nullptr) {
+        Context = Ability->MakeEffectContext(Ability->GetCurrentAbilitySpecHandle(), Ability->GetCurrentActorInfo());
+    } else {
+        Context = AbilityComponent->MakeEffectContext();
+    }
     FGameplayEffectSpec NewSpec(StatChangeEffect, Context, 1);
     NewSpec.SetSetByCallerMagnitude(Pokemon::Battle::Stats::StagesTag, static_cast<float>(ActualChange));
     AbilityComponent->ApplyGameplayEffectSpecToSelf(NewSpec);

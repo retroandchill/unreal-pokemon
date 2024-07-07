@@ -41,9 +41,9 @@ bool TestMoveInflictStatusEffect_MainEffect::RunTest(const FString &Parameters) 
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -90,9 +90,9 @@ bool TestMoveInflictStatusEffect_AlreadyHas::RunTest(const FString &Parameters) 
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -143,9 +143,9 @@ bool TestMoveInflictStatusEffect_AdditionalEffect::RunTest(const FString &Parame
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -201,9 +201,9 @@ bool TestMoveInflictStatusEffect_AdditionalEffectBlocked::RunTest(const FString 
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];

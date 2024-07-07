@@ -9,6 +9,7 @@
 
 #include "Battle.generated.h"
 
+struct FBattleInfo;
 class IAbilityDisplayComponent;
 struct FGameplayEffectSpecHandle;
 class IBattleSide;
@@ -17,7 +18,36 @@ class IAbilityBattleEffect;
 class IFieldEffect;
 class IBattler;
 
-using FSideWithIndexCallback = const TFunctionRef<void(int32, const TScriptInterface<IBattleSide> &)> &;
+/**
+ * Enum for the result of the battle in question
+ */
+UENUM(BlueprintType)
+enum class EBattleResult : uint8 {
+    /**
+     * The player won the battle in question
+     */
+    Victory,
+
+    /**
+     * The player was defeated in battle
+     */
+    Defeat,
+
+    /**
+     * The battle ended in a draw
+     */
+    Draw,
+
+    /**
+     * The battle ended early (typically for event purposes)
+     */
+    Inconclusive
+};
+
+/**
+ * Delegate called when the battle ends
+ */
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnBattleEnd, EBattleResult)
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
@@ -34,6 +64,13 @@ class POKEMONBATTLE_API IBattle {
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
     virtual TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) = 0;
+
+    /**
+     * Initialize a new battle with the given battle information
+     * @param BattleInfo ThFSideWithIndexCallbacke information about the battle to use when initializing the battle
+     * @return A reference to this object
+     */
+    virtual TScriptInterface<IBattle> Initialize(const FBattleInfo& BattleInfo) = 0;
 
     /**
      * Have the player take possession of the battle pawn and begin the battle intro.
@@ -89,5 +126,11 @@ class POKEMONBATTLE_API IBattle {
      * @param Action The action to execute
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
+
+    /**
+     * Bind a delegate for when the battle ends
+     * @param Callback The callback to invoke when the battle ends
+     */
+    virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate&& Callback) = 0;
 
 };

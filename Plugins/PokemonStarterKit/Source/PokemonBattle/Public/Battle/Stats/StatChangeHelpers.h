@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "Abilities/GameplayAbility.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "StatChangeHelpers.generated.h"
 
@@ -70,9 +71,10 @@ public:
      * @param Battler The battler in question to change the stats of
      * @param Stat The stat that was changed
      * @param Stages The number of stages to change the amount by
+     * @param Ability
      * @return The actual number of stages that were changed
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Stat")
-    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler>& Battler, FName Stat, int32 Stages);
+    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler>& Battler, FName Stat, int32 Stages, UGameplayAbility* Ability = nullptr);
 
 };
