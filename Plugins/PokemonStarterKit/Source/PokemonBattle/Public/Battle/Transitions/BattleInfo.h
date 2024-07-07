@@ -25,6 +25,12 @@ struct POKEMONBATTLE_API FBattleInfo {
      */
     UPROPERTY(BlueprintReadWrite, Category = Battle)
     int32 OpponentSideCount = 1;
+
+    /**
+     * Is the player allowed to lose this battle
+     */
+    UPROPERTY(BlueprintReadWrite, Category = Battle)
+    bool bLossAllowed = false;
     
     /**
      * The information about the opponent in battle

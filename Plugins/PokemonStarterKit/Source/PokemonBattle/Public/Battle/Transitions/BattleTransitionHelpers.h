@@ -20,10 +20,11 @@ public:
     /**
      * Make a wild battle spec for a single Pokémon
      * @param Species The Pokémon to battle against
-     * @param Level
+     * @param Level The level of the wild Pokémon
+     * @param bLossAllowed Is the player allowed to lose this battle
      * @return The created battle information
      */
     UFUNCTION(BlueprintPure, Category = Battle)
-    static FBattleInfo MakeSingleWildBattle(FName Species, int32 Level);
+    static FBattleInfo MakeSingleWildBattle(FName Species, int32 Level = 5, bool bLossAllowed = false);
 
 };

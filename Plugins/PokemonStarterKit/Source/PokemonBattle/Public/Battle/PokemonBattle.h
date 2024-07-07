@@ -221,9 +221,10 @@ protected:
 
     /**
      * Exit the battle scene and return to the map
+     * @param Result the result of the battle in question
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void ExitBattleScene() const;
+    void ExitBattleScene(EBattleResult Result) const;
 
   private:
     /**

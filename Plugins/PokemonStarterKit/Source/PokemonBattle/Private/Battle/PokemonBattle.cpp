@@ -193,10 +193,10 @@ void APokemonBattle::ExecuteAction() {
     ActionQueue.Peek()->Get()->Execute();
 }
 
-void APokemonBattle::ExitBattleScene() const {
+void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     auto PlayerController = BattlePawn->GetController();
     PlayerController->Possess(StoredPlayerPawn);
-    OnBattleEnd.Broadcast();
+    OnBattleEnd.Broadcast(Result);
 }
 
 void APokemonBattle::StartTurn() {

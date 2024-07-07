@@ -4,11 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "BattleInfo.h"
+#include "Battle/Battle.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "BattleTransitionSubsystem.generated.h"
 
 class ULevelStreamingDynamic;
 class IBattle;
+
+/**
+ * Delegate called when the battle is finished and the player is allowed to continue on
+ */
+DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
 
 /**
  * Subsystem used to control transitions to and from the battle scene
@@ -40,6 +46,19 @@ public:
     UFUNCTION(BlueprintCallable, Category = Battle)
     void InitiateBattle(const FBattleInfo& Info);
 
+    /**
+     * Bind an action to when the battle finished delegate
+     * @param Callback The callback to dispatch
+     * @return The handle for the bound delegate
+     */
+    FDelegateHandle BindToBattleFinished(FBattleFinished::FDelegate&& Callback);
+
+    /**
+     * Remove the given binding from the battle finished delegate
+     * @param Handle The handle to callback when battle is complete
+     */
+    void RemoveFromBattleFinished(const FDelegateHandle& Handle);
+    
 private:
     /**
      * Set up the jump into battle
@@ -50,7 +69,7 @@ private:
     /**
      * Exit the current battle and return to the field
      */
-    void ExitBattle();
+    void ExitBattle(EBattleResult Result);
 
     /**
      * The map to jump to for battle
@@ -73,4 +92,10 @@ private:
      * The information about the battle in question
      */
     TOptional<FBattleInfo> BattleInfo;
+
+    /**
+     * Delegate dispatched when a battle is complete and scripts should continue (i.e. this doesn't continue if the
+     * player loses and loss is not allowed).
+     */
+    FBattleFinished BattleFinished;
 };

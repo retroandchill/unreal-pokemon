@@ -30,17 +30,33 @@ void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo& Info) {
     Battlefield->OnLevelShown.AddDynamic(this, &UBattleTransitionSubsystem::SetUpBattle);
 }
 
+FDelegateHandle UBattleTransitionSubsystem::BindToBattleFinished(FBattleFinished::FDelegate &&Callback) {
+    return BattleFinished.Add(MoveTemp(Callback));
+}
+
+void UBattleTransitionSubsystem::RemoveFromBattleFinished(const FDelegateHandle &Handle) {
+    BattleFinished.Remove(Handle);
+}
+
 void UBattleTransitionSubsystem::SetUpBattle() {
     check(RegisteredBattle.IsValid())
     check(BattleInfo.IsSet())
     RegisteredBattle->Initialize(BattleInfo.GetValue());
-    BattleInfo.Reset();
 }
 
-void UBattleTransitionSubsystem::ExitBattle() {
+void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(),
                                                            LatentActionInfo, false);
+    check(BattleInfo.IsSet())
+    if (Result == EBattleResult::Victory || Result == EBattleResult::Inconclusive || BattleInfo->bLossAllowed) {
+        BattleFinished.Broadcast(Result);
+    } else {
+        // If the player loses we want all script callbacks to be removed
+        BattleFinished.Clear();
+    }
+    
     Battlefield = nullptr;
+    BattleInfo.Reset();
 }
