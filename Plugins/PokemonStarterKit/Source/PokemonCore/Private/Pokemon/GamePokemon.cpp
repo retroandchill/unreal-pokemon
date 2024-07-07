@@ -23,7 +23,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     StatBlock = UnrealInjector::NewInjectedDependency<IStatBlock>(this, this, DTO);
     StatBlock->CalculateStats(GetSpecies().BaseStats);
     CurrentHP = GetMaxHP();
-    MoveBlock = UnrealInjector::NewInjectedDependency<IMoveBlock>(this, DTO);
+    MoveBlock = UnrealInjector::NewInjectedDependency<IMoveBlock>(this, this, DTO);
     AbilityBlock = UnrealInjector::NewInjectedDependency<IAbilityBlock>(this, this, DTO);
     HoldItem = DTO.Item;
 

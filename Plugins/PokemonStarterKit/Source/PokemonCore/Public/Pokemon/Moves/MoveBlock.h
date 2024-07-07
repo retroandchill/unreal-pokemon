@@ -27,14 +27,24 @@ class POKEMONCORE_API IMoveBlock {
   public:
     /**
      * Construct a move block from the DTO
+     * @param Pokemon
      * @param DTO The source Pokémon DTO to initialize from
      * @return The created move block
      */
-    virtual TScriptInterface<IMoveBlock> Initialize(const FPokemonDTO &DTO) = 0;
+    virtual TScriptInterface<IMoveBlock> Initialize(const TScriptInterface<IPokemon>& Pokemon, const FPokemonDTO &DTO) = 0;
 
     /**
      * Get the list of moves usable by this Pokémon
      * @return The list of usable moves
      */
     virtual const TArray<TScriptInterface<IMove>> &GetMoves() const = 0;
+
+    /**
+     * Get the level up moves that are learned betwen level ups
+     * @param InitialLevel The level that leveling started at
+     * @param CurrentLevel The current level of the Pokémon
+     * @return The moves that will be learned
+     */
+    UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = "Pokémon|Moves")
+    virtual TArray<FName> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const = 0;
 };
