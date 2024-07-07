@@ -11,6 +11,7 @@
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
+#include "Utilities/UtilitiesSubsystem.h"
 
 using namespace StatUtils;
 
@@ -40,7 +41,7 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
     StatTable.ForEach([this, &DTO](const FStat &Stat) {
-        auto IV = DTO.IVs.Contains(Stat.ID) ? TOptional<int32>(DTO.IVs[Stat.ID]) : TOptional<int32>();
+        auto IV = DTO.IVs.Contains(Stat.ID) ? TOptional(DTO.IVs[Stat.ID]) : TOptional<int32>();
         int32 EV = DTO.EVs.Contains(Stat.ID) ? DTO.EVs[Stat.ID] : 0;
         switch (Stat.Type) {
             using enum EPokemonStatType;
@@ -80,6 +81,30 @@ float UDefaultStatBlock::GetExpPercent() const {
     auto ExpNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level));
     float TotalNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level + 1)) - ExpNeededForLevel;
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
+}
+
+void UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd& OnEnd) {
+    Exp += Change;
+
+    FLevelUpStatChanges Changes;
+    Changes.LevelChange.Before = Level;
+    for (auto &[ID, Stat] : Stats) {
+        Changes.StatChanges.Emplace(ID, {.Before = Stat->GetStatValue()});
+    }
+    while (Exp >= GetExpForNextLevel()) {
+        Level++;
+    }
+
+    if (Level > Changes.LevelChange.Before) {
+        Changes.LevelChange.After = Level;
+        CalculateStats(Owner->GetSpecies().BaseStats);
+        for (auto &[ID, Stat] : Stats) {
+            Changes.StatChanges[ID].After = Stat->GetStatValue();
+        }
+
+        auto Utilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
+        IPokemonUtilities::Execute_ProcessLevelUp(Utilities, this, Owner, Changes, bShowMessages, OnEnd);
+    }
 }
 
 const FNature &UDefaultStatBlock::GetNature() const {

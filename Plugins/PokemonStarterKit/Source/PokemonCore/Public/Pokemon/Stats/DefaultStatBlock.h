@@ -30,6 +30,9 @@ class POKEMONCORE_API UDefaultStatBlock : public UObject, public IStatBlock {
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    void GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd& OnEnd) override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     const FNature &GetNature() const override;
 

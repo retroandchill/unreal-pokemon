@@ -104,6 +104,10 @@ const FSoftClassPath & Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
     return KitSettings->DefaultMoveAbility;
 }
 
+UClass * Pokemon::FBaseSettings::GetPokemonUtilitiesClass() const {
+    return KitSettings->PokemonUtilitiesClass.TryLoadClass<UObject>();
+}
+
 UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
     return KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
 }

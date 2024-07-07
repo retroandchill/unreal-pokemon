@@ -57,6 +57,12 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const FSoftClassPath& GetDefaultMoveAbility() const;
 
     /**
+     * Get the class that represents the Pokémon utilities
+     * @return The class to instantiate the object from
+     */
+    UClass *GetPokemonUtilitiesClass() const;
+    
+    /**
      * Get the class that represents the item utilities
      * @return The class to instantiate the object from
      */

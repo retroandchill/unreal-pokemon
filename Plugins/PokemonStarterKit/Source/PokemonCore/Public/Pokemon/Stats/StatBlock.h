@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "StatEntry.h"
+#include "Utilities/PokemonUtilities.h"
 
 #include "StatBlock.generated.h"
 
@@ -55,6 +56,19 @@ class POKEMONCORE_API IStatBlock {
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual float GetExpPercent() const = 0;
+    
+    /**
+     * Gain exp for the Pokémon in question
+     * @param Change The change in experience
+     * @param bShowMessages Should the messages be shown to the player
+     * @param OnEnd What to call after all the messages have been shown
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+#if CPP
+    virtual void GainExp(int32 Change, bool bShowMessages = false, const FLevelUpEnd& OnEnd = FLevelUpEnd()) = 0;
+#else
+    virtual void GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd& OnEnd) = 0;
+#endif
 
     /**
      * Get the Pokémon's Nature value

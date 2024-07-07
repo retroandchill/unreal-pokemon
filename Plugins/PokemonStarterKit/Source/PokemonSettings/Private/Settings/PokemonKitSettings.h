@@ -176,6 +176,12 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     TArray<FSoftObjectPath> DataTables;
 
     /**
+     * The class for the Pokémon utilities
+     */
+    UPROPERTY(EditDefaultsOnly, Config, Category = "Untility Classes", meta = (MustImplement = "PokemonUtilities"))
+    FSoftClassPath PokemonUtilitiesClass;
+
+    /**
      * The blueprint class that contains the item utilities information
      */
     UPROPERTY(EditAnywhere, Config, Category = "Utility Classes", meta = (MustImplement = "ItemUtilities"))
