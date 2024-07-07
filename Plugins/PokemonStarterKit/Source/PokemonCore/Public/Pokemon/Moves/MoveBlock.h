@@ -7,6 +7,7 @@
 
 #include "MoveBlock.generated.h"
 
+class FMoveLearnEnd;
 class IPokemon;
 struct FPokemonDTO;
 class IMove;
@@ -40,11 +41,40 @@ class POKEMONCORE_API IMoveBlock {
     virtual const TArray<TScriptInterface<IMove>> &GetMoves() const = 0;
 
     /**
-     * Get the level up moves that are learned betwen level ups
+     * Does this Pokémon have an open move slot to learn a move in
+     * @return Does this Pokémon have an open move slot
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    virtual bool HasOpenMoveSlot() const = 0;
+
+    /**
+     * Place the newly learned move into an open move slot
+     * @param Move The move to be learned
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    virtual void PlaceMoveInOpenSlot(FName Move) = 0;
+
+    /**
+     * Overwrite an existing move
+     * @param Move The move to be learned
+     * @param SlotIndex The index of the move to replace
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    virtual void OverwriteMoveSlot(FName Move, int32 SlotIndex) = 0;
+
+    /**
+     * Get the level up moves that are learned between level ups
      * @param InitialLevel The level that leveling started at
      * @param CurrentLevel The current level of the Pokémon
      * @return The moves that will be learned
      */
-    UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = "Pokémon|Moves")
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
     virtual TArray<FName> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const = 0;
+
+    /**
+     * Teach a move to this Pokémon
+     * @param Move The move to learn
+     * @param AfterMoveLearned This is called after the move learning prompt is done
+     */
+    virtual void LearnMove(FName Move, const FMoveLearnEnd& AfterMoveLearned) = 0;
 };

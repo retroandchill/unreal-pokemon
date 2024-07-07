@@ -7,6 +7,7 @@
 #include "GainExp.generated.h"
 
 class IPokemon;
+
 /**
  * Delegate called after exp gain and level up processing ended
  */

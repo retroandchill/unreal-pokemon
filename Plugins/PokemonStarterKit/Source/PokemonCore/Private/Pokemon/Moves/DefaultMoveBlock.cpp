@@ -10,6 +10,8 @@
 #include "Pokemon/PokemonDTO.h"
 #include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
+#include "Utilities/PokemonUtilities.h"
+#include "Utilities/UtilitiesSubsystem.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -52,6 +54,20 @@ const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
     return Moves;
 }
 
+bool UDefaultMoveBlock::HasOpenMoveSlot() const {
+    return Moves.Num() < Pokemon::FBaseSettings::Get().GetMaxMoves();
+}
+
+void UDefaultMoveBlock::PlaceMoveInOpenSlot(FName Move) {
+    check(HasOpenMoveSlot())
+    Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(Move));
+}
+
+void UDefaultMoveBlock::OverwriteMoveSlot(FName Move, int32 SlotIndex) {
+    check(Moves.IsValidIndex(SlotIndex))
+    Moves[SlotIndex] = NewObject<UDefaultMove>(this)->Initialize(Move);
+}
+
 TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
     auto &Species = Owner->GetSpecies();
 
@@ -69,4 +85,9 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
         | ranges::views::filter(DoesNotKnowMove)
         | ranges::views::transform([](const FLevelUpMove& Move) { return Move.Move; })
         | RangeHelpers::TToArray<FName>();
+}
+
+void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {
+    auto PokemonUtilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
+    IPokemonUtilities::Execute_LearnMove(PokemonUtilities, this, Owner, Move, AfterMoveLearned);
 }

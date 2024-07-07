@@ -13,6 +13,12 @@
 DECLARE_DYNAMIC_DELEGATE(FLevelUpEnd);
 
 /**
+ * The delegate called when the move learn procedure ends
+ */
+DECLARE_DYNAMIC_DELEGATE_OneParam(FMoveLearnEnd, bool, bMoveLearned);
+
+
+/**
  * The change to a single stat for a Pokémon
  */
 USTRUCT(BlueprintType)
@@ -75,5 +81,15 @@ public:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Utilities|Pokémon")
     void ProcessLevelUp(const UObject* WorldContext, const TScriptInterface<IPokemon>& Pokemon, const FLevelUpStatChanges& StatChanges, bool bShowMessage, const FLevelUpEnd& OnEnd);
+
+    /**
+     * Teach a move to a Pokémon
+     * @param WorldContext The object used to obtain the world context information
+     * @param Pokemon The Pokémon to learn the move
+     * @param Move The move to learn
+     * @param OnEnd What is called after all messages are displayed
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Utilities|Pokémon")
+    void LearnMove(const UObject* WorldContext, const TScriptInterface<IPokemon>& Pokemon, FName Move, const FMoveLearnEnd& OnEnd);
 
 };
