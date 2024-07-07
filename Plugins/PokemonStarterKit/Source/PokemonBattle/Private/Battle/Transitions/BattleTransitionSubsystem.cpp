@@ -5,14 +5,24 @@
 #include "Battle/Battle.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Kismet/GameplayStatics.h"
+#include "Settings/BaseSettings.h"
+
+void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+    Super::Initialize(Collection);
+    BattleMap = Pokemon::FBaseSettings::Get().GetDefaultBattleScene();
+}
+
+void UBattleTransitionSubsystem::SetBattleMap(const TSoftObjectPtr<UWorld> &NewBattleMap) {
+    BattleMap = NewBattleMap;
+}
 
 void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBattle> &Battle) {
     RegisteredBattle = Battle;
     Battle->BindToOnBattleEnd(FOnBattleEnd::FDelegate::CreateUObject(this, &UBattleTransitionSubsystem::ExitBattle));
 }
 
-void UBattleTransitionSubsystem::InitiateWildBattle(const FBattleInfo& Info, const TSoftObjectPtr<UWorld>& BattleMap) {
-    static FVector BattleLevelOffset(0, 0, -5000);
+void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo& Info) {
+    static auto &BattleLevelOffset = Pokemon::FBaseSettings::Get().GetBattleSceneOffset();
     bool bSuccess;
     Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset, FRotator(), bSuccess);
     check(bSuccess)

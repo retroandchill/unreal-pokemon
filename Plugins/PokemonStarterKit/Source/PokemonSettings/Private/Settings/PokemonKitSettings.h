@@ -140,6 +140,18 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     FSoftClassPath DefaultMoveAbility;
 
     /**
+     * The default level that is streamed in when starting a battle
+     */
+    UPROPERTY(EditAnywhere, Config, Category = Battle, meta = (AllowedClasses = "/Script/Engine.World"))
+    FSoftObjectPath DefaultBattleScene;
+
+    /**
+     * The offset of the streamed in battle scene
+     */
+    UPROPERTY(EditAnywhere, Config, Category = Battle)
+    FVector BattleSceneOffset = FVector(0, 0, -5000);
+
+    /**
      * The tags for the HP state of the battler
      */
     UPROPERTY(EditAnywhere, Config, DisplayName = "HP State Tags", Category = Battle)

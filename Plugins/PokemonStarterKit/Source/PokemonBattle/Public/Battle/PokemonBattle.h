@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Battle.h"
-#include "BattleSettings.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Events/BattleMessage.h"
@@ -273,12 +272,6 @@ private:
      * The current turn number that we're on in battle.
      */
     uint32 TurnCount = 0;
-
-    /**
-     * The settings for the battle used to determine a large number of things about combat.
-     */
-    UPROPERTY()
-    FBattleSettings BattleSettings;
 
     /**
      * The list of sides in battle

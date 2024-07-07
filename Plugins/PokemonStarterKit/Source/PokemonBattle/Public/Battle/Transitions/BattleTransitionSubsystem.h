@@ -18,6 +18,15 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     GENERATED_BODY()
 
 public:
+    void Initialize(FSubsystemCollectionBase &Collection) override;
+    
+    /**
+     * Set the battle map to the new map in question
+     * @param NewBattleMap The battle map to jump to
+     */
+    UFUNCTION(BlueprintCallable, Category = Battle)
+    void SetBattleMap(const TSoftObjectPtr<UWorld>& NewBattleMap);
+    
     /**
      * Set the battle that is registered to this subystem
      * @param Battle The new battle actor
@@ -27,24 +36,41 @@ public:
     /**
      * Initialize a wild battle with the provided Pokémon information
      * @param Info The Pokémon information that should be battled against
-     * @param BattleMap The information for the battle in question
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
-    void InitiateWildBattle(const FBattleInfo& Info, const TSoftObjectPtr<UWorld>& BattleMap);
+    void InitiateBattle(const FBattleInfo& Info);
 
 private:
+    /**
+     * Set up the jump into battle
+     */
     UFUNCTION()
     void SetUpBattle();
 
+    /**
+     * Exit the current battle and return to the field
+     */
     void ExitBattle();
+
+    /**
+     * The map to jump to for battle
+     */
+    UPROPERTY()
+    TSoftObjectPtr<UWorld> BattleMap;
     
     /**
      * The registered battle object for this subsystem
      */
     TWeakInterfacePtr<IBattle> RegisteredBattle;
 
+    /**
+     * The streamed level for the battlefield
+     */
     UPROPERTY()
     TObjectPtr<ULevelStreamingDynamic> Battlefield;
 
+    /**
+     * The information about the battle in question
+     */
     TOptional<FBattleInfo> BattleInfo;
 };
