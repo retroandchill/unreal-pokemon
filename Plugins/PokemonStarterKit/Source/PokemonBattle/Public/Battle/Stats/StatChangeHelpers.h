@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "Abilities/GameplayAbility.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "StatChangeHelpers.generated.h"
 
@@ -39,14 +40,6 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
 
 public:
     /**
-     * Extract the name of a stat from the supplied tag
-     * @param Tag The tag to get the stat name for
-     * @return The name of the stat (or "???" if the tag is invalid)
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Stats")
-    static FText ExtractStatNameFromTag(FGameplayTag Tag);
-
-    /**
      * Get the value of a stat's stage
      * @param Battler The battler to check against
      * @param Stat The stat to check
@@ -78,9 +71,10 @@ public:
      * @param Battler The battler in question to change the stats of
      * @param Stat The stat that was changed
      * @param Stages The number of stages to change the amount by
+     * @param Ability
      * @return The actual number of stages that were changed
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Stat")
-    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler>& Battler, FName Stat, int32 Stages);
+    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler>& Battler, FName Stat, int32 Stages, UGameplayAbility* Ability = nullptr);
 
 };
