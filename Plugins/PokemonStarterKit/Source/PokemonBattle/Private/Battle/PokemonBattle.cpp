@@ -14,11 +14,13 @@
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
 #include "Battle/BattleAbilitySystemComponent.h"
+#include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Battle/Tags.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Events/BattleMessagePayload.h"
 #include "Battle/Events/TargetedEvents.h"
+#include "Battle/Transitions/BattleInfo.h"
 #include <functional>
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>
@@ -36,29 +38,25 @@ APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
 }
 
-void APokemonBattle::CreateWildBattle(const FPokemonDTO &Pokemon) {
-    TScriptInterface<IBattle> Self = this;
-    auto PlayerSide = GetWorld()->SpawnActor<AActor>(BattleSideClass.LoadSynchronous(), GetPlayerSidePosition());
-    Sides.Emplace_GetRef(PlayerSide)
-        ->Initialize(Self, UPokemonSubsystem::GetInstance(this).GetPlayer(), BattleSettings.BattlefieldSize.PlayerSide,
-                     true);
-    PlayerSide->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-    auto OpponentSide = GetWorld()->SpawnActor<AActor>(BattleSideClass.LoadSynchronous(), GetOpponentSidePosition());
-    Sides.Emplace_GetRef(OpponentSide)
-        ->Initialize(Self, UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon));
-    OpponentSide->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-    Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
-}
-
 TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) {
     Sides = MoveTemp(SidesIn);
     return this;
 }
 
+TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleInfo) {
+    TScriptInterface<IBattle> Self = this;
+    Sides.Emplace(BattleInfo.CreatePlayerSide(Self, BattleSideClass.LoadSynchronous(), GetPlayerSidePosition()));
+    Sides.Emplace(BattleInfo.CreateOpposingSide(Self, BattleSideClass.LoadSynchronous(), GetOpponentSidePosition()));
+    Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
+    return Self;
+}
+
 void APokemonBattle::BeginPlay() {
     Super::BeginPlay();
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
+    check(TransitionSubsystem != nullptr)
+    TransitionSubsystem->SetRegisteredBattle(this);
 }
 
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
@@ -145,6 +143,10 @@ void APokemonBattle::ExecuteAction(IBattleAction &Action) {
     DisplayAction(Action.GetActionMessage());
 }
 
+void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
+    OnBattleEnd.Add(MoveTemp(Callback));
+}
+
 APawn *APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
@@ -191,9 +193,10 @@ void APokemonBattle::ExecuteAction() {
     ActionQueue.Peek()->Get()->Execute();
 }
 
-void APokemonBattle::ExitBattleScene() const {
+void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     auto PlayerController = BattlePawn->GetController();
     PlayerController->Possess(StoredPlayerPawn);
+    OnBattleEnd.Broadcast(Result);
 }
 
 void APokemonBattle::StartTurn() {

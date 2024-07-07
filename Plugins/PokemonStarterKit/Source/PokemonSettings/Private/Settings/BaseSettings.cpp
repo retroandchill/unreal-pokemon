@@ -76,6 +76,14 @@ const FText &Pokemon::FBaseSettings::GetNoAbilityDescription() const {
     return KitSettings->NoAbilityDescription;
 }
 
+const FSoftObjectPath & Pokemon::FBaseSettings::GetDefaultBattleScene() const {
+    return KitSettings->DefaultBattleScene;
+}
+
+const FVector & Pokemon::FBaseSettings::GetBattleSceneOffset() const {
+    return KitSettings->BattleSceneOffset;
+}
+
 const TArray<FStatStageInfo> & Pokemon::FBaseSettings::GetStatStages() const {
     return KitSettings->StatStages;
 }

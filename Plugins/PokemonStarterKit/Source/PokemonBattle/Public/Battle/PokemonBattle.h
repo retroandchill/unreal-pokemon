@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Battle.h"
-#include "BattleSettings.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Events/BattleMessage.h"
@@ -61,15 +60,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
   public:
     APokemonBattle();
-    
-    /**
-     * Create a wild Pokémon battle with the given settings
-     * @param Pokemon The Pokémon to generate from
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Initiation")
-    void CreateWildBattle(const FPokemonDTO &Pokemon);
 
     TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) override;
+    TScriptInterface<IBattle> Initialize(const FBattleInfo &BattleInfo) override;
 
   protected:
     void BeginPlay() override;
@@ -105,6 +98,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
+    void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
 
 protected:
     /**
@@ -227,9 +221,10 @@ protected:
 
     /**
      * Exit the battle scene and return to the map
+     * @param Result the result of the battle in question
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void ExitBattleScene() const;
+    void ExitBattleScene(EBattleResult Result) const;
 
   private:
     /**
@@ -278,12 +273,6 @@ private:
      * The current turn number that we're on in battle.
      */
     uint32 TurnCount = 0;
-
-    /**
-     * The settings for the battle used to determine a large number of things about combat.
-     */
-    UPROPERTY()
-    FBattleSettings BattleSettings;
 
     /**
      * The list of sides in battle
@@ -341,4 +330,9 @@ private:
      */
     UPROPERTY()
     EBattlePhase Phase = EBattlePhase::Setup;
+
+    /**
+     * Delegate that is invoked when the battle ends
+     */
+    FOnBattleEnd OnBattleEnd;
 };

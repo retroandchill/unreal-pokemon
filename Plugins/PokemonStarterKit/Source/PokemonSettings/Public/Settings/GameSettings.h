@@ -128,6 +128,20 @@ class POKEMONSETTINGS_API IGameSettings {
     virtual const FText &GetNoAbilityDescription() const = 0;
 
     /**
+     * The default level that is streamed in when starting a battle
+     * @return The default level that is streamed in when starting a battle
+     */
+    UFUNCTION(BlueprintCallable, Category = Battle)
+    virtual const FSoftObjectPath& GetDefaultBattleScene() const = 0;
+
+    /**
+     * The offset of the streamed in battle scene
+     * @return The offset of the streamed in battle scene
+     */
+    UFUNCTION(BlueprintCallable, Category = Battle)
+    virtual const FVector &GetBattleSceneOffset() const = 0;
+
+    /**
      * The information about how stat stages are altered
      * @return The information about how stat stages are altered
      */

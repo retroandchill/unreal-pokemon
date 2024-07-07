@@ -41,9 +41,9 @@ bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -85,9 +85,9 @@ bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Paramet
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -130,9 +130,9 @@ bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -176,9 +176,9 @@ bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) 
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -221,9 +221,9 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];

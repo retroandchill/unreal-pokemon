@@ -41,9 +41,9 @@ bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -91,9 +91,9 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -139,9 +139,9 @@ bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -187,9 +187,9 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -233,9 +233,9 @@ bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -281,9 +281,9 @@ bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Paramete
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
@@ -329,9 +329,9 @@ bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameter
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, Pokemon1, false);
+    Side1->Initialize(Battle, {Pokemon1}, false);
     auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, Pokemon2, false);
+    Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
 
     auto Battler1 = Side1->GetBattlers()[0];
