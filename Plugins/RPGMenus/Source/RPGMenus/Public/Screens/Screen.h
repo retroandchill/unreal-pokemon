@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 #include "Blueprint/UserWidget.h"
 
 #include "Screen.generated.h"
@@ -16,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
  * of the other.
  */
 UCLASS(Blueprintable, BlueprintType, Abstract)
-class RPGMENUS_API UScreen : public UUserWidget {
+class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     GENERATED_BODY()
 
   public:

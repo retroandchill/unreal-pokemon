@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RPGMenusSubsystem.h"
-#include "Kismet/GameplayStatics.h"
 
 UScreen *URPGMenusSubsystem::AddScreenToStackHelper(const UObject *WorldContextObject,
                                                     TSubclassOf<UScreen> ScreenType) {
@@ -31,7 +30,7 @@ UScreen *URPGMenusSubsystem::RemoveScreenFromStack() {
     }
 
     UScreen *NewTop = ScreenStack.Top();
-    NewTop->GiveMenuFocus();
+    NewTop->ActivateWidget();
     return NewTop;
 }
 

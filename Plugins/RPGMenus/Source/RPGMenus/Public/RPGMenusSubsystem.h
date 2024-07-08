@@ -30,14 +30,16 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
         auto PlayerController = GetPlayerController();
         auto Screen = CreateWidget<T>(PlayerController, ScreenClass);
         Screen->AddToViewport();
-        ScreenStack.Add(Screen);
 
-        if (ScreenStack.Num() == 1) {
+        if (!ScreenStack.IsEmpty()) {
+            ScreenStack.Last()->DeactivateWidget();    
+        } else {
             PlayerController->SetInputMode(FInputModeUIOnly());
             PlayerController->SetShowMouseCursor(true);
         }
-        Screen->GiveMenuFocus();
-
+        
+        ScreenStack.Add(Screen);
+        Screen->ActivateWidget();
         return Screen;
     }
 

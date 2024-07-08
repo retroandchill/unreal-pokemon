@@ -13,7 +13,8 @@ public class RPGMenus : ModuleRules
 			{
 				"Core",
 				"UMG",
-				"InputCore"
+				"InputCore", 
+				"CommonUI"
 			}
 		);
 
