@@ -34,7 +34,7 @@ class RPGMENUS_API URPGMenusSubsystem : public ULocalPlayerSubsystem {
         if (!ScreenStack.IsEmpty()) {
             ScreenStack.Last()->DeactivateWidget();    
         } else {
-            PlayerController->SetInputMode(FInputModeGameAndUI());
+            PlayerController->SetInputMode(FInputModeUIOnly());
             PlayerController->SetShowMouseCursor(true);
         }
         
