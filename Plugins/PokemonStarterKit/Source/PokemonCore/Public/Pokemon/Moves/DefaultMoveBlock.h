@@ -18,6 +18,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
   public:
     TScriptInterface<IMoveBlock> Initialize(const TScriptInterface<IPokemon>& Pokemon, const FPokemonDTO &DTO) override;
 
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     const TArray<TScriptInterface<IMove>> &GetMoves() const override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
@@ -33,6 +34,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     virtual TArray<FName> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
     
     void LearnMove(FName Move, const FMoveLearnEnd& AfterMoveLearned) override;
+    TScriptInterface<IMove> CreateNewMove(FName MoveID) override;
 
   private:
     UPROPERTY()

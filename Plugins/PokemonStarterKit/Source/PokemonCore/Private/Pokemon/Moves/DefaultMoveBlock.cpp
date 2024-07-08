@@ -16,10 +16,10 @@
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon>& Pokemon, const FPokemonDTO &DTO) {
-    auto Species = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetData(DTO.Species);
-    check(Species != nullptr)
+    Owner = Pokemon;
+    auto &Species = Pokemon->GetSpecies();
     auto KnowableMoves =
-        Species->Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
+        Species.Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
 
     Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove &Move) { return Move.Move; });
 
@@ -43,7 +43,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
     } else {
         int32 MoveMax = FMath::Min(MaxMoves, KnowableMoves.Num());
         for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++) {
-            Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(KnowableMoves[i].Move));
+            Moves.Emplace(CreateNewMove(KnowableMoves[i].Move));
         }
     }
 
@@ -60,12 +60,12 @@ bool UDefaultMoveBlock::HasOpenMoveSlot() const {
 
 void UDefaultMoveBlock::PlaceMoveInOpenSlot(FName Move) {
     check(HasOpenMoveSlot())
-    Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(Move));
+    Moves.Emplace(CreateNewMove(Move));
 }
 
 void UDefaultMoveBlock::OverwriteMoveSlot(FName Move, int32 SlotIndex) {
     check(Moves.IsValidIndex(SlotIndex))
-    Moves[SlotIndex] = NewObject<UDefaultMove>(this)->Initialize(Move);
+    Moves[SlotIndex] = CreateNewMove(Move);
 }
 
 TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
@@ -90,4 +90,8 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
 void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {
     auto PokemonUtilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
     IPokemonUtilities::Execute_LearnMove(PokemonUtilities, this, Owner, Move, AfterMoveLearned);
+}
+
+TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(FName MoveID) {
+    return NewObject<UDefaultMove>(this)->Initialize(MoveID);
 }

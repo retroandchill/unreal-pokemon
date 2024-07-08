@@ -134,3 +134,7 @@ const FSpriteRepositories &Pokemon::FBaseSettings::GetSpriteRepositories() const
 const FDynamicAssetPaths &Pokemon::FBaseSettings::GetDynamicAssetPaths() const {
     return KitSettings->DynamicAssetPaths;
 }
+
+const FDefaultScreens & Pokemon::FBaseSettings::GetDefaultScreenPaths() const {
+    return KitSettings->DefaultScreenPaths;
+}

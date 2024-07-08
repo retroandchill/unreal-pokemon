@@ -17,6 +17,10 @@ const FMoveData &UDefaultMove::GetMoveData() const {
     return *Move;
 }
 
+const FText & UDefaultMove::GetDisplayName() const {
+    return GetMoveData().RealName;
+}
+
 FName UDefaultMove::GetType() const {
     return GetMoveData().Type;
 }

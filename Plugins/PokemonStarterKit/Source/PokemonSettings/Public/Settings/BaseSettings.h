@@ -98,6 +98,8 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
      */
     const FDynamicAssetPaths &GetDynamicAssetPaths() const;
 
+    const FDefaultScreens &GetDefaultScreenPaths() const;
+
   private:
     TObjectPtr<const UPokemonKitSettings> KitSettings;
 };

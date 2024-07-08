@@ -211,4 +211,10 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Assets)
     FDynamicAssetPaths DynamicAssetPaths;
+
+    /**
+     * The paths to the UI classes used to load the screens
+     */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Assets)
+    FDefaultScreens DefaultScreenPaths;
 };

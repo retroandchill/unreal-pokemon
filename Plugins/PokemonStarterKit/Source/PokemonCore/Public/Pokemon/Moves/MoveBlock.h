@@ -38,6 +38,7 @@ class POKEMONCORE_API IMoveBlock {
      * Get the list of moves usable by this Pokémon
      * @return The list of usable moves
      */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     virtual const TArray<TScriptInterface<IMove>> &GetMoves() const = 0;
 
     /**
@@ -77,4 +78,11 @@ class POKEMONCORE_API IMoveBlock {
      * @param AfterMoveLearned This is called after the move learning prompt is done
      */
     virtual void LearnMove(FName Move, const FMoveLearnEnd& AfterMoveLearned) = 0;
+
+    /**
+     * Create a new move interface object. This is typically a temporary used for the move learn screen)
+     * @param MoveID The ID of the move to learn
+     * @return The created move object
+     */
+    virtual TScriptInterface<IMove> CreateNewMove(FName MoveID) = 0;
 };
