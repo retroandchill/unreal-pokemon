@@ -19,7 +19,7 @@ void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemo
     OwnedPokemon = Pokemon;
     RefreshLayout(OwnedPokemon, false);
     MoveSelectWindow->DisplayMoves(Pokemon);
-    MoveSelectWindow->SetActive(true);
+    MoveSelectWindow->ActivateWidget();
     MoveSelectWindow->SetIndex(0);
     
 }
@@ -29,7 +29,7 @@ void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemo
     MoveToLearn.Emplace(Move);
     RefreshLayout(OwnedPokemon, true);
     MoveSelectWindow->BeginMoveLearnDisplay(Pokemon, Move);
-    MoveSelectWindow->SetActive(true);
+    MoveSelectWindow->ActivateWidget();
     MoveSelectWindow->SetIndex(0);
 }
 
