@@ -18,7 +18,7 @@ TSharedRef<SWidget> UCommandWindow::RebuildWidget() {
     auto Original = USelectableWidget::RebuildWidget();
     AddCommands();
     OnSelectionChange(GetIndex(), GetIndex());
-    OnActiveChanged(IsActive());
+    OnActiveChanged(IsActivated());
     SetScrollArrowsVisible();
     return Original;
 }

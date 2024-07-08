@@ -31,19 +31,19 @@ bool SelectableWidgetMouseTest::RunTest(const FString &Parameters) {
     Button1->OnHovered.Broadcast();
     UE_ASSERT_EQUAL(-1, NewWidget->GetIndex());
 
-    NewWidget->SetActive(true);
+    NewWidget->ActivateWidget();
     Button1->OnHovered.Broadcast();
     UE_ASSERT_EQUAL(1, NewWidget->GetIndex());
 
     auto Button2 = Cast<UButton>(UWidgetTestUtilities::FindChildWidget(Options[2], TEXT("PrimaryButton")));
     UE_ASSERT_NOT_NULL(Button2);
 
-    NewWidget->SetActive(false);
+    NewWidget->DeactivateWidget();
     Button2->OnClicked.Broadcast();
     auto Clicked = UReflectionUtils::GetPropertyValue<bool>(NewWidget, TEXT("Clicked"));
     UE_ASSERT_FALSE(Clicked);
 
-    NewWidget->SetActive(true);
+    NewWidget->ActivateWidget();
     Button2->OnClicked.Broadcast();
     Clicked = UReflectionUtils::GetPropertyValue<bool>(NewWidget, TEXT("Clicked"));
     UE_ASSERT_TRUE(Clicked);

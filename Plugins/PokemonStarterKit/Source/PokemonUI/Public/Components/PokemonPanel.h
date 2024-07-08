@@ -53,7 +53,7 @@ class POKEMONUI_API UPokemonPanel : public USelectableOption, public ISelectable
      * @return Is this Pokémon currently active
      */
     UFUNCTION(BlueprintPure, Category = "User Interface|Visuals")
-    bool IsActive() const;
+    bool IsActivated() const;
 
     /**
      * Returns if the current Pokémon is fainted or not?
