@@ -60,5 +60,6 @@ UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Mo
     SlotPanel(Panel, bIsMoveToLearn);
     Panel->GetOnOptionClicked().AddDynamic(this, &UMoveSelectWindow::ProcessClickedButton);
     Panel->GetOnOptionHovered().AddDynamic(this, &UMoveSelectWindow::ProcessHoveredButton);
+    Panel->SetOptionIndex(MovePanels.Num());
     return Panel;
 }
