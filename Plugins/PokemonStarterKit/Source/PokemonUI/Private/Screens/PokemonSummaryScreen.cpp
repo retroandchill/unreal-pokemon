@@ -15,7 +15,7 @@ void UPokemonSummaryScreen::NativeConstruct() {
     SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
     SummaryPages->GetOnConfirm().AddDynamic(this, &UPokemonSummaryScreen::SummaryPageConfirm);
     SummaryPages->GetOnCancel().AddDynamic(this, &UPokemonSummaryScreen::CloseScreen);
-    SummaryPages->SetActive(true);
+    SummaryPages->ActivateWidget();
     SummaryPages->SetIndex(0);
 }
 

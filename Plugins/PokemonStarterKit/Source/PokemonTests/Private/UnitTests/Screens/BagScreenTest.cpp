@@ -54,25 +54,25 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     using enum ESlateVisibility;
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(ItemSelectionWindow->IsActive());
-    UE_ASSERT_TRUE(CommandWindow->IsActive());
+    UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
+    UE_ASSERT_TRUE(CommandWindow->IsActivated());
     UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
     UE_CHECK_EQUAL(TEXT("REPEL"), SampleHandler->ItemID.ToString());
     UE_CHECK_EQUAL(1, SampleHandler->ItemQuantity);
 
     UInputUtilities::SimulateKeyPress(CommandWindow, CancelButton);
     UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(CommandWindow->IsActive());
-    UE_ASSERT_TRUE(ItemSelectionWindow->IsActive());
+    UE_CHECK_FALSE(CommandWindow->IsActivated());
+    UE_ASSERT_TRUE(ItemSelectionWindow->IsActivated());
     UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(ItemSelectionWindow->IsActive());
-    UE_ASSERT_TRUE(CommandWindow->IsActive());
+    UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
+    UE_ASSERT_TRUE(CommandWindow->IsActivated());
     CommandWindow->SetIndex(1);
     UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
     UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(CommandWindow->IsActive());
-    UE_ASSERT_TRUE(ItemSelectionWindow->IsActive());
+    UE_CHECK_FALSE(CommandWindow->IsActivated());
+    UE_ASSERT_TRUE(ItemSelectionWindow->IsActivated());
 
     FName ItemID;
     int32 ItemQuantity;

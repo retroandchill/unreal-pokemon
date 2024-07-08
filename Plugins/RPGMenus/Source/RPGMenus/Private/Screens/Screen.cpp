@@ -30,7 +30,7 @@ bool UScreen::GiveMenuFocus() {
         if (SelectableWidget == nullptr)
             return;
 
-        if (SelectableWidget->IsActive()) {
+        if (SelectableWidget->IsActivated()) {
             FocusGranted = true;
             SelectableWidget->SetKeyboardFocus();
         }

@@ -114,7 +114,7 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     auto LeftInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "LeftInputs").begin();
     auto RightInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "RightInputs").begin();
 
-    ItemSelection->SetActive(true);
+    ItemSelection->ActivateWidget();
     UInputUtilities::SimulateKeyPress(ItemSelection.Get(), LeftInput);
     UE_CHECK_EQUAL(TEXT("Items"), Dispatcher->CurrentPocket.ToString());
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());

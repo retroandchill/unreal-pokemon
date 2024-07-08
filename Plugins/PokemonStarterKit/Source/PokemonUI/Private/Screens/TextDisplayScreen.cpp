@@ -51,11 +51,11 @@ void UTextDisplayScreen::AdvanceToNextMessage() {
 void UTextDisplayScreen::DisplayChoicePrompt() {
     CommandWindow->SetIndex(0);
     CommandWindow->SetVisibility(ESlateVisibility::Visible);
-    CommandWindow->SetActive(true);
+    CommandWindow->ActivateWidget();
     CommandWindow->SetKeyboardFocus();
 }
 
 void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand *Choice) {
     ProcessChoice.Broadcast(Index, Choice->GetID());
-    CommandWindow->SetActive(false);
+    CommandWindow->DeactivateWidget();
 }
