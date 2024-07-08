@@ -13,6 +13,13 @@ USelectableWidget::USelectableWidget(const FObjectInitializer &ObjectInitializer
     CancelSound = Settings->GetCancelSound();
 }
 
+void USelectableWidget::NativeConstruct() {
+    Super::NativeConstruct();
+    if (bActive) {
+        ActivateWidget();
+    }
+}
+
 int32 USelectableWidget::GetItemCount_Implementation() const {
     return 0;
 }
