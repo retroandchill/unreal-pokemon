@@ -46,6 +46,10 @@
 			"Enabled": true
 		},
 		{
+			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
 			"Optional": true
