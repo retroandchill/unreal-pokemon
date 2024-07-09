@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Data/CursorDirection.h"
 
@@ -29,7 +30,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
  * \brief A base class for selectable widgets in RPG menus.
  */
 UCLASS(BlueprintType)
-class RPGMENUS_API USelectableWidget : public UUserWidget {
+class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     GENERATED_BODY()
 
   public:
@@ -39,6 +40,11 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      */
     explicit USelectableWidget(const FObjectInitializer &ObjectInitializer);
 
+protected:
+    void NativeConstruct() override;
+    
+public:
+    
     /**
      * Get the number of items in the menu that can be selected
      * @return The total number of items
@@ -95,20 +101,6 @@ class RPGMENUS_API USelectableWidget : public UUserWidget {
      */
     UFUNCTION(BlueprintCallable, Category = Selection)
     void Deselect();
-
-    /**
-     * Is this menu actively selectable
-     * @return Can the player change selections in the menu
-     */
-    UFUNCTION(BlueprintPure, Category = Selection)
-    bool IsActive() const;
-
-    /**
-     * Set the selectability status of the menu
-     * @param bNewActiveState The new selectability status
-     */
-    UFUNCTION(BlueprintCallable, Category = Selection)
-    void SetActive(bool bNewActiveState);
 
     /**
      * @brief Retrieves the reference to the delegate for when the user presses confirm.

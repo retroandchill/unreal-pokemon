@@ -13,7 +13,7 @@ void UPokemonSelectScreen::NativeConstruct() {
     Super::NativeConstruct();
     check(SelectionPane != nullptr)
     SelectionPane->SetIndex(0);
-    SelectionPane->SetActive(true);
+    SelectionPane->ActivateWidget();
     SelectionPane->GetOnConfirm().AddDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
     SelectionPane->GetOnCancel().AddDynamic(this, &UPokemonSelectScreen::CloseScreen);
     CommandWindow->GetOnCommandSelected().AddDynamic(this, &UPokemonSelectScreen::ProcessCommand);
@@ -22,13 +22,13 @@ void UPokemonSelectScreen::NativeConstruct() {
 }
 
 void UPokemonSelectScreen::BeginSwitch(int32 Index) {
-    CommandWindow->SetActive(false);
+    CommandWindow->DeactivateWidget();
     ToggleCommandWindowVisibility(false);
     SelectionPane->ToggleCommandVisibility(true);
 
     SelectionPane->SetIndex(Index);
     SelectionPane->BeginSwitch(Index);
-    SelectionPane->SetActive(true);
+    SelectionPane->ActivateWidget();
 }
 
 void UPokemonSelectScreen::ShowCommands(const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
@@ -48,8 +48,8 @@ void UPokemonSelectScreen::ClearCommandStack() {
     CommandStack.Empty();
     ToggleCommandWindowVisibility(false);
     SelectionPane->ToggleCommandVisibility(true);
-    CommandWindow->SetActive(false);
-    SelectionPane->SetActive(true);
+    CommandWindow->DeactivateWidget();
+    SelectionPane->ActivateWidget();
 }
 
 void UPokemonSelectScreen::SetCommandHelpText(FText Text) {
@@ -104,9 +104,9 @@ void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITraine
                                                               Index);
     CommandWindow->SetCommands(Commands);
 
-    SelectionPane->SetActive(false);
+    SelectionPane->DeactivateWidget();
     CommandWindow->SetIndex(0);
-    CommandWindow->SetActive(true);
+    CommandWindow->ActivateWidget();
 
     SelectionPane->ToggleCommandVisibility(false);
     ToggleCommandWindowVisibility(true);
@@ -128,8 +128,8 @@ void UPokemonSelectScreen::OnCommandWindowCancel() {
     if (CommandStack.IsEmpty()) {
         ToggleCommandWindowVisibility(false);
         SelectionPane->ToggleCommandVisibility(true);
-        CommandWindow->SetActive(false);
-        SelectionPane->SetActive(true);
+        CommandWindow->DeactivateWidget();
+        SelectionPane->ActivateWidget();
     } else {
         auto &[Commands, FrameIndex] = CommandStack.Last();
         CommandWindow->SetCommands(Commands);

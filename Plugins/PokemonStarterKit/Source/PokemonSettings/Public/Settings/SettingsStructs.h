@@ -297,3 +297,32 @@ struct POKEMONSETTINGS_API FHPStateTag {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|HP")
     FGameplayTag Tag;
 };
+
+USTRUCT(BlueprintType)
+struct POKEMONSETTINGS_API FDefaultScreens {
+    GENERATED_BODY()
+
+    /**
+     * The screen displayed when showing a messages
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "TextDisplayScreen"))
+    FSoftClassPath TextScreenClass;
+
+    /**
+     * The screen displayed when showing the party screen
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "PokemonSelectScreen"))
+    FSoftClassPath PartyScreenClass;
+
+    /**
+     * The screen displayed when showing the party screen
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "BagScreen"))
+    FSoftClassPath BagScreenClass;
+
+    /**
+     * The screen displayed when showing the party screen
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "MoveForgetScreen"))
+    FSoftClassPath MoveForgetScreenClass;
+};

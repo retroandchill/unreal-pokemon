@@ -28,7 +28,7 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     FPokemonTestUtilities::CreateMockParty(World.Get());
     auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
     Pages->SetInitialPokemon(Trainer->GetParty(), 0);
-    Pages->SetActive(true);
+    Pages->ActivateWidget();
 
     FIND_CHILD_WIDGET(Pages.Get(), UWidgetSwitcher, PageSwitcher);
     UE_ASSERT_NOT_NULL(PageSwitcher);

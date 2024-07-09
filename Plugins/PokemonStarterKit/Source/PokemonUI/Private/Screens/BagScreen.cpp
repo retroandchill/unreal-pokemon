@@ -25,7 +25,7 @@ void UBagScreen::NativeConstruct() {
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
     auto PocketName = UItemHelper::GetPocketNames()[0];
     ItemSelectionWindow->SetBag(Bag, PocketName);
-    ItemSelectionWindow->SetActive(true);
+    ItemSelectionWindow->ActivateWidget();
     ItemSelectionWindow->SetIndex(0);
 }
 
@@ -38,7 +38,11 @@ FOnItemSelected &UBagScreen::GetOnItemSelected() {
 }
 
 void UBagScreen::ToggleItemSelection(bool bCanSelect) {
-    ItemSelectionWindow->SetActive(bCanSelect);
+    if (bCanSelect) {
+        ItemSelectionWindow->ActivateWidget();
+    } else {
+        ItemSelectionWindow->DeactivateWidget();
+    }
 }
 
 void UBagScreen::RemoveFromStack() {
@@ -69,7 +73,7 @@ void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
     ToggleItemSelection(false);
     CreateCommands(Item, Quantity);
     CommandWindow->SetIndex(0);
-    CommandWindow->SetActive(true);
+    CommandWindow->ActivateWidget();
     CommandWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
@@ -85,7 +89,7 @@ void UBagScreen::OnItemCommandSelected(int32, UCommand *Command) {
 }
 
 void UBagScreen::OnItemCommandCanceled() {
-    CommandWindow->SetActive(false);
+    CommandWindow->DeactivateWidget();
     CommandWindow->SetVisibility(ESlateVisibility::Hidden);
     ToggleItemSelection(true);
 }

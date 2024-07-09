@@ -5,18 +5,24 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
-#include "ItemUtilitiesSubsystem.generated.h"
+#include "UtilitiesSubsystem.generated.h"
 
 /**
- * Subsystem that is used to get the item utilities object.
+ * Subsystem that is used to get the utilities objects.
  */
 UCLASS()
-class POKEMONCORE_API UItemUtilitiesSubsystem : public UGameInstanceSubsystem {
+class POKEMONCORE_API UUtilitiesSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
+
+    /**
+     * Get the Pokémon utilities object
+     * @return The object in question
+     */
+    UObject *GetPokemonUtilities() const;
 
     /**
      * Get the item utilities object
@@ -25,6 +31,12 @@ class POKEMONCORE_API UItemUtilitiesSubsystem : public UGameInstanceSubsystem {
     UObject *GetItemUtilities() const;
 
   private:
+    /**
+     * The Pokémon utilities class object
+     */
+    UPROPERTY()
+    TObjectPtr<UObject> PokemonUtilities;
+    
     /**
      * The item utilities class object
      */

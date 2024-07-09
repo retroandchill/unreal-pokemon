@@ -3,7 +3,7 @@
 #include "Nodes/Items/TakeItemFromPokemon.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utilities/ItemUtilities.h"
-#include "Utilities/ItemUtilitiesSubsystem.h"
+#include "Utilities/UtilitiesSubsystem.h"
 
 UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *WorldContextObject,
                                                                 const TScriptInterface<IPokemon> &Pokemon) {
@@ -15,7 +15,7 @@ UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *W
 
 void UTakeItemFromPokemon::Activate() {
     auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)
-                             ->GetSubsystem<UItemUtilitiesSubsystem>()
+                             ->GetSubsystem<UUtilitiesSubsystem>()
                              ->GetItemUtilities();
     check(ItemUtilities != nullptr)
     FItemResultNoRetValue OnSuccess;

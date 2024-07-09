@@ -19,16 +19,41 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     TScriptInterface<IMove> Initialize(FName MoveID);
 
     const FMoveData &GetMoveData() const override;
+
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    const FText &GetDisplayName() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     FName GetType() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     EMoveDamageCategory GetDamageCategory() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetBasePower() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetAccuracy() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetCurrentPP() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetTotalPP() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     FName GetFunctionCode() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     const FMoveTarget &GetTargetType() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetAdditionalEffectChance() const override;
+    
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     const TArray<FName>& GetTags() const override;
+    
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     void DecrementPP(int32 Amount) override;
 
   private:

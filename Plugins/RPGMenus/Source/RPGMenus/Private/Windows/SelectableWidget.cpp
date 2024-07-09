@@ -4,13 +4,20 @@
 #include "Data/SelectionInputs.h"
 #include "Primatives/SelectableOption.h"
 
-USelectableWidget::USelectableWidget(const FObjectInitializer &ObjectInitializer) : UUserWidget(ObjectInitializer) {
+USelectableWidget::USelectableWidget(const FObjectInitializer &ObjectInitializer) : UCommonActivatableWidget(ObjectInitializer) {
     SetIsFocusable(true);
 
     auto Settings = GetDefault<URPGMenusSettings>();
     CursorSound = Settings->GetCursorSound();
     ConfirmSound = Settings->GetConfirmSound();
     CancelSound = Settings->GetCancelSound();
+}
+
+void USelectableWidget::NativeConstruct() {
+    Super::NativeConstruct();
+    if (bActive) {
+        ActivateWidget();
+    }
 }
 
 int32 USelectableWidget::GetItemCount_Implementation() const {
@@ -50,18 +57,6 @@ void USelectableWidget::Deselect() {
     OnSelectionChange(OldIndex, Index);
 }
 
-bool USelectableWidget::IsActive() const {
-    return bActive;
-}
-
-void USelectableWidget::SetActive(bool bNewActiveState) {
-    if (bActive == bNewActiveState)
-        return;
-
-    bActive = bNewActiveState;
-    OnActiveChanged(bActive);
-}
-
 FProcessConfirm &USelectableWidget::GetOnConfirm() {
     return OnConfirm;
 }
@@ -73,13 +68,13 @@ FProcessCancel &USelectableWidget::GetOnCancel() {
 void USelectableWidget::NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) {
     Super::NativeOnRemovedFromFocusPath(InFocusEvent);
 
-    if (InFocusEvent.GetCause() == EFocusCause::Mouse && IsActive()) {
+    if (InFocusEvent.GetCause() == EFocusCause::Mouse && IsActivated()) {
         SetKeyboardFocus();
     }
 }
 
 FReply USelectableWidget::NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) {
-    if (!IsActive() || InputMappings == nullptr)
+    if (!IsActivated() || InputMappings == nullptr)
         return FReply::Unhandled();
 
     auto Key = InKeyEvent.GetKey();
@@ -112,7 +107,7 @@ void USelectableWidget::ConfirmOnIndex(int32 CurrentIndex) {
 }
 
 void USelectableWidget::ProcessClickedButton(USelectableOption *Option) {
-    if (!IsActive()) {
+    if (!IsActivated()) {
         return;
     }
 
@@ -121,7 +116,7 @@ void USelectableWidget::ProcessClickedButton(USelectableOption *Option) {
 }
 
 void USelectableWidget::ProcessHoveredButton(USelectableOption *Option) {
-    if (!IsActive()) {
+    if (!IsActivated()) {
         return;
     }
 
@@ -179,7 +174,7 @@ int32 USelectableWidget::GetNextIndex_Implementation(ECursorDirection Direction)
 }
 
 void USelectableWidget::ReceiveMoveCursor(ECursorDirection Direction) {
-    if (!IsActive())
+    if (!IsActivated())
         return;
 
     SetIndex(GetNextIndex(Direction));

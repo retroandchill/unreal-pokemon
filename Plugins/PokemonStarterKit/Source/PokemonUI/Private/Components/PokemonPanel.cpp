@@ -27,7 +27,7 @@ void UPokemonPanel::SwapPokemon(UPokemonPanel &Other) {
     Swap(Pokemon, Other.Pokemon);
 }
 
-bool UPokemonPanel::IsActive() const {
+bool UPokemonPanel::IsActivated() const {
     return GetOptionIndex() == 0;
 }
 
