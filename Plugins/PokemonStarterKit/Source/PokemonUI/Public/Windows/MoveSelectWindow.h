@@ -31,13 +31,35 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
     UFUNCTION(BlueprintCallable, Category = Display)
     void DisplayMoves(const TScriptInterface<IPokemon> &Pokemon);
 
+    /**
+     * Display the moves to the player.
+     * @param Pokemon The Pokémon to display the moves for.
+     * @param Move The move that is attempting to be taught
+     */
+    UFUNCTION(BlueprintCallable, Category = Display)
+    void BeginMoveLearnDisplay(const TScriptInterface<IPokemon> &Pokemon, FName Move);
+
+    /**
+     * Bind an action to when a move selection is changed
+     * @param Callback The callback to when the selection is changed
+     */
+    void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate& Callback);
+
   protected:
+    /**
+     * Refresh the layout of this scene for if the Pokémon is trying to learn a move
+     * @param bLearningMove Is the player trying to learn a move
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = Display)
+    void RefreshLayout(bool bLearningMove);
+    
     /**
      * Slot a created panel into this widget.
      * @param Panel The panel that was slotted
+     * @param bIsMoveToLearn Is this move the move to be learned by the player
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SlotPanel(UMovePanel *Panel);
+    void SlotPanel(UMovePanel *Panel, bool bIsMoveToLearn = false);
 
     int32 GetItemCount_Implementation() const override;
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
@@ -54,9 +76,10 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
     /**
      * Create a new move panel
      * @param Move The move to create a panel from
+     * @param bIsMoveToLearn
      * @return The created panel
      */
-    UMovePanel *CreateMovePanel(const TScriptInterface<IMove> &Move);
+    UMovePanel *CreateMovePanel(const TScriptInterface<IMove> &Move, bool bIsMoveToLearn = false);
 
     /**
      * The class used for the move panels.
@@ -81,6 +104,12 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
      */
     UPROPERTY()
     TScriptInterface<IPokemon> CurrentPokemon;
+
+    /**
+     * Optional move that is attempting to be taught to a Pokémon
+     */
+    UPROPERTY()
+    TOptional<FName> MoveToLearn;
 
     /**
      * Event for when the cursor moves to another move

@@ -10,6 +10,7 @@
 
 void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) {
     CurrentPokemon = Pokemon;
+    RefreshLayout(MoveToLearn.IsSet());
 
     Algo::ForEach(MovePanels, &UWidget::RemoveFromParent);
     int32 MoveCount = Pokemon::FBaseSettings::Get().GetMaxMoves();
@@ -20,10 +21,25 @@ void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) 
     for (int i = 0; i < MoveCount; i++) {
         MovePanels.Emplace(CreateMovePanel(i < Moves.Num() ? Moves[i] : nullptr));
     }
+
+    if (MoveToLearn.IsSet()) {
+        auto TempMove = CurrentPokemon->GetMoveBlock()->CreateNewMove(*MoveToLearn);
+        MovePanels.Emplace(CreateMovePanel(TempMove, true));
+    }
+}
+
+void UMoveSelectWindow::BeginMoveLearnDisplay(const TScriptInterface<IPokemon> &Pokemon, FName Move) {
+    MoveToLearn.Emplace(Move);
+    DisplayMoves(Pokemon);
+}
+
+void UMoveSelectWindow::BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback) {
+    OnMoveSelectionChanged.Add(Callback);
 }
 
 int32 UMoveSelectWindow::GetItemCount_Implementation() const {
-    return CurrentPokemon->GetMoveBlock()->GetMoves().Num();
+    int32 MoveCount = CurrentPokemon->GetMoveBlock()->GetMoves().Num();
+    return MoveToLearn.IsSet() ? MoveCount + 1 : MoveCount;
 }
 
 void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
@@ -37,12 +53,13 @@ void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 N
     }
 }
 
-UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Move) {
+UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Move, bool bIsMoveToLearn) {
     check(PanelClass != nullptr)
     auto Panel = WidgetTree->ConstructWidget(PanelClass);
     Panel->SetMove(Move);
-    SlotPanel(Panel);
+    SlotPanel(Panel, bIsMoveToLearn);
     Panel->GetOnOptionClicked().AddDynamic(this, &UMoveSelectWindow::ProcessClickedButton);
     Panel->GetOnOptionHovered().AddDynamic(this, &UMoveSelectWindow::ProcessHoveredButton);
+    Panel->SetOptionIndex(MovePanels.Num());
     return Panel;
 }

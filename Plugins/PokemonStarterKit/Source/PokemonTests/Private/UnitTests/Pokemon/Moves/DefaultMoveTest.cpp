@@ -32,7 +32,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves,
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
-    auto Move = NewObject<UDefaultMoveBlock>()->Initialize({.Species = "RIOLU", .Level = 40});
+    auto Move = NewObject<UDefaultMoveBlock>()->Initialize(nullptr, {.Species = "RIOLU", .Level = 40});
     auto Moves = Move->GetMoves();
     UE_ASSERT_EQUAL(4, Moves.Num());
     UE_CHECK_EQUAL("SCREECH", Moves[0]->GetMoveData().ID.ToString());
@@ -48,7 +48,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves,
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize(
-        {.Species = "RIOLU", .Level = 40, .Moves = {"WORKUP", "AURASPHERE", "FEINT"}});
+        nullptr, {.Species = "RIOLU", .Level = 40, .Moves = {"WORKUP", "AURASPHERE", "FEINT"}});
     auto Moves = Move->GetMoves();
     UE_ASSERT_EQUAL(3, Moves.Num());
     UE_CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());

@@ -49,7 +49,7 @@ TArray<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() c
 }
 
 FText UPokemonBattleMove::GetDisplayName() const {
-    return WrappedMove->GetMoveData().RealName;
+    return WrappedMove->GetDisplayName();
 }
 
 int32 UPokemonBattleMove::GetCurrentPP() const {

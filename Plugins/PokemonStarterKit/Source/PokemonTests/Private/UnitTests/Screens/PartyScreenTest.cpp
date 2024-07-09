@@ -38,7 +38,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UHelpWindow, CommandHelpWindow);
     UE_ASSERT_NOT_NULL(CommandHelpWindow);
 
-    UE_ASSERT_TRUE(SelectionPane->IsActive());
+    UE_ASSERT_TRUE(SelectionPane->IsActivated());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
     
@@ -48,15 +48,15 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
     auto Cancel = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
     UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
-    UE_ASSERT_FALSE(SelectionPane->IsActive());
-    UE_ASSERT_TRUE(CommandWindow->IsActive());
+    UE_ASSERT_FALSE(SelectionPane->IsActivated());
+    UE_ASSERT_TRUE(CommandWindow->IsActivated());
     UE_CHECK_EQUAL(Visible, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandHelpWindow->GetVisibility());
 
     CommandWindow->SetIndex(CommandWindow->GetItemCount() - 1);
     UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
-    UE_ASSERT_TRUE(SelectionPane->IsActive());
-    UE_ASSERT_FALSE(CommandWindow->IsActive());
+    UE_ASSERT_TRUE(SelectionPane->IsActivated());
+    UE_ASSERT_FALSE(CommandWindow->IsActivated());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
 

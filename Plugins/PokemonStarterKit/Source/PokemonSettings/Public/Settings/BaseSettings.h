@@ -57,6 +57,12 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const FSoftClassPath& GetDefaultMoveAbility() const;
 
     /**
+     * Get the class that represents the Pokémon utilities
+     * @return The class to instantiate the object from
+     */
+    UClass *GetPokemonUtilitiesClass() const;
+    
+    /**
      * Get the class that represents the item utilities
      * @return The class to instantiate the object from
      */
@@ -91,6 +97,8 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
      * @return The paths used to dynamically load assets in the game
      */
     const FDynamicAssetPaths &GetDynamicAssetPaths() const;
+
+    const FDefaultScreens &GetDefaultScreenPaths() const;
 
   private:
     TObjectPtr<const UPokemonKitSettings> KitSettings;

@@ -28,7 +28,8 @@ public class RPGMenusTests : ModuleRules
                 "InputCore",
                 "UnrealEd",
                 "BlueprintGraph",
-                "KismetCompiler"
+                "KismetCompiler",
+                "CommonUI"
             }
         );
     }

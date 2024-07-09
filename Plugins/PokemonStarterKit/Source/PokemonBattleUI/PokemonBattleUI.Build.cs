@@ -14,7 +14,8 @@ public class PokemonBattleUI : ModuleRules
                 "PokemonBattle",
                 "PokemonUI",
                 "PokemonData",
-                "PokemonCore"
+                "PokemonCore",
+                "CommonUI"
             }
         );
 

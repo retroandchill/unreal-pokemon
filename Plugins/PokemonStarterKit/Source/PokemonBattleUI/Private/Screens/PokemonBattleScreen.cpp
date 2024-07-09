@@ -46,12 +46,12 @@ UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
 }
 
 void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler) {
-    ActionSelect->SetActive(true);
+    ActionSelect->ActivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Hidden);
     MoveSelect->SetBattler(Battler);
     MoveSelect->SetVisibility(ESlateVisibility::Visible);
     MoveSelect->SetIndex(0);
-    MoveSelect->SetActive(true);
+    MoveSelect->ActivateWidget();
 }
 
 void UPokemonBattleScreen::Refresh() const {
@@ -82,7 +82,7 @@ void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler
     ActionSelect->SetBattler(Battler);
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
     ActionSelect->SetIndex(0);
-    ActionSelect->SetActive(true);
+    ActionSelect->ActivateWidget();
 }
 
 void UPokemonBattleScreen::OnActionSelected(int32) {
@@ -93,7 +93,7 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
                                           const TScriptInterface<IBattleMove> &Move) {
     auto Targets = Move->GetAllPossibleTargets();
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
-    MoveSelect->SetActive(false);
+    MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     check(SelectionIndex.IsSet())
     auto &SelIndex = SelectionIndex.GetValue();
@@ -104,8 +104,8 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
 }
 
 void UPokemonBattleScreen::OnMoveCanceled() {
-    MoveSelect->SetActive(false);
+    MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
-    ActionSelect->SetActive(true);
+    ActionSelect->ActivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
 }

@@ -21,7 +21,7 @@ bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(NewWidget);
     NewWidget->AddToViewport();
 
-    NewWidget->SetActive(true);
+    NewWidget->ActivateWidget();
     NewWidget->SetIndex(0);
 
     UE_ASSERT_EQUAL(6, NewWidget->GetItemCount());
@@ -67,20 +67,20 @@ bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {
     UInputUtilities::SimulateKeyPress(NewWidget, LeftKey);
     UE_ASSERT_EQUAL(5, NewWidget->GetIndex());
 
-    NewWidget->SetActive(false);
+    NewWidget->DeactivateWidget();
     UInputUtilities::SimulateKeyPress(NewWidget, ConfirmKey);
     auto IndexSet = UReflectionUtils::GetPropertyValue<bool>(NewWidget, TEXT("ConfirmCalled"));
     UE_ASSERT_FALSE(IndexSet);
 
-    NewWidget->SetActive(true);
+    NewWidget->ActivateWidget();
     UInputUtilities::SimulateKeyPress(NewWidget, ConfirmKey);
     IndexSet = UReflectionUtils::GetPropertyValue<bool>(NewWidget, TEXT("ConfirmCalled"));
     UE_ASSERT_TRUE(IndexSet);
     auto CalledIndex = UReflectionUtils::GetPropertyValue<int32>(NewWidget, TEXT("CalledIndex"));
     UE_ASSERT_EQUAL(5, CalledIndex);
 
-    NewWidget->SetActive(true);
-    UE_ASSERT_TRUE(NewWidget->IsActive());
+    NewWidget->ActivateWidget();
+    UE_ASSERT_TRUE(NewWidget->IsActivated());
 
     UInputUtilities::SimulateKeyPress(NewWidget, CancelKey);
     auto bCanceled = UReflectionUtils::GetPropertyValue<bool>(NewWidget, TEXT("CancelCalled"));

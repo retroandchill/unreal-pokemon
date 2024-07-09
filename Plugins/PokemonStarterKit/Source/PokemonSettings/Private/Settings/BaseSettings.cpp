@@ -104,6 +104,10 @@ const FSoftClassPath & Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
     return KitSettings->DefaultMoveAbility;
 }
 
+UClass * Pokemon::FBaseSettings::GetPokemonUtilitiesClass() const {
+    return KitSettings->PokemonUtilitiesClass.TryLoadClass<UObject>();
+}
+
 UClass *Pokemon::FBaseSettings::GetItemUtilitiesClass() const {
     return KitSettings->ItemUtilitiesClass.TryLoadClass<UObject>();
 }
@@ -129,4 +133,8 @@ const FSpriteRepositories &Pokemon::FBaseSettings::GetSpriteRepositories() const
 
 const FDynamicAssetPaths &Pokemon::FBaseSettings::GetDynamicAssetPaths() const {
     return KitSettings->DynamicAssetPaths;
+}
+
+const FDefaultScreens & Pokemon::FBaseSettings::GetDefaultScreenPaths() const {
+    return KitSettings->DefaultScreenPaths;
 }
