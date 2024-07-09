@@ -17,9 +17,10 @@
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon>& Pokemon, const FPokemonDTO &DTO) {
     Owner = Pokemon;
-    auto &Species = Pokemon->GetSpecies();
+    auto Species = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetData(DTO.Species);
+    check(Species != nullptr)
     auto KnowableMoves =
-        Species.Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
+        Species->Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
 
     Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove &Move) { return Move.Move; });
 

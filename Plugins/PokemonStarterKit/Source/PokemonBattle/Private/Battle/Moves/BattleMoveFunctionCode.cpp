@@ -482,7 +482,7 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
             continue;
         }
 
-        UE_LOG(LogBattle, Display, TEXT("Applying effects of %s to %s!"), *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
+        UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s to %s!"), *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
         ApplyEffectWhenDealingDamage(User, Target, RunningMessages);
     }
     

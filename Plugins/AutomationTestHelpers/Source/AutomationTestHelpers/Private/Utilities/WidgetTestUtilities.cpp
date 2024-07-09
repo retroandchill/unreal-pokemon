@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/WidgetTestUtilities.h"
+#include "GeneralEngineSettings.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Utilities/RAII.h"
@@ -25,7 +26,7 @@ std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> UWidgetTestUtiliti
     GameInstance->InitializeStandalone(); // creates WorldContext, UWorld?
     FWorldPtr World(GameInstance->GetWorld());
     auto WorldContext = GameInstance->GetWorldContext();
-    WorldContext->GameViewport = NewObject<UGameViewportClient>(GEngine);
+    WorldContext->GameViewport = NewObject<UGameViewportClient>(GEngine, GEngine->GameViewportClientClass);
     WorldContext->GameViewport->Init(*WorldContext, GameInstance.Get(), false);
     TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
     WorldContext->GameViewport->SetViewportOverlayWidget(nullptr, DudOverlay);
