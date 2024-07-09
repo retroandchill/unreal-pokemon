@@ -23,22 +23,6 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
     return Ret;
 }
 
-bool UScreen::GiveMenuFocus() {
-    bool FocusGranted = false;
-    UWidgetTree::ForWidgetAndChildren(WidgetTree->RootWidget, [&FocusGranted](UWidget *Widget) {
-        auto SelectableWidget = Cast<USelectableWidget>(Widget);
-        if (SelectableWidget == nullptr)
-            return;
-
-        if (SelectableWidget->IsActivated()) {
-            FocusGranted = true;
-            SelectableWidget->SetKeyboardFocus();
-        }
-    });
-
-    return FocusGranted;
-}
-
 void UScreen::RefreshSelf_Implementation() {
     // No base implementation
 }

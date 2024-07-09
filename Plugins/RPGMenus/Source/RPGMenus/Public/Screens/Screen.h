@@ -30,12 +30,6 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     TSharedRef<SWidget> RebuildWidget() override;
 
     /**
-     * Grant focus to this menu when the player selects it.
-     * @return Was focus granted to a widget.
-     */
-    virtual bool GiveMenuFocus();
-
-    /**
      * Refresh the display of this screen to the player
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
