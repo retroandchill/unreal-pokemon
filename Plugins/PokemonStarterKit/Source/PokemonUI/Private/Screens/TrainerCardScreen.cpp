@@ -26,7 +26,7 @@ void UTrainerCardScreen::SetTrainerSprite() {
 
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
     check(GraphicsLoadingSubsystem != nullptr)
-    auto [Material, Size] = GraphicsLoadingSubsystem->GetTrainerSprite(*Trainer, this);
+    auto [Material, Size] = GraphicsLoadingSubsystem->GetTrainerSprite(Trainer, this);
     TrainerImage->SetBrushFromMaterial(Material);
     TrainerImage->SetDesiredSizeOverride(Size);
 }

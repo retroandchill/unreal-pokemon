@@ -66,7 +66,7 @@ void UPokemonPanel::Refresh() {
         auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
         check(GraphicsLoadingSubsystem != nullptr)
         PokemonIcon->SetVisibility(SelfHitTestInvisible);
-        PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon, this));
+        PokemonIcon->SetBrushResourceObject(GraphicsLoadingSubsystem->GetPokemonIcon(Pokemon, this));
 
         if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem != nullptr) {
             HeldItemIcon->SetVisibility(SelfHitTestInvisible);

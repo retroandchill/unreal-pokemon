@@ -233,6 +233,6 @@ void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
 
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
     IBattlerSprite::Execute_SetBattleSprite(
-        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(*WrappedPokemon, this, OwningSide->ShowBackSprites()));
+        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(WrappedPokemon, this, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

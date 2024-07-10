@@ -12,7 +12,7 @@
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::Refresh_Implementation(Pokemon);
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    UWidgetUtilities::SetBrushFromAsset(PokemonIcon, GraphicsLoadingSubsystem->GetPokemonIcon(*Pokemon, this));
+    UWidgetUtilities::SetBrushFromAsset(PokemonIcon, GraphicsLoadingSubsystem->GetPokemonIcon(Pokemon, this));
     auto IconGraphics = GraphicsLoadingSubsystem->GetTypeIconGraphics(Pokemon->GetTypes());
     Algo::ForEach(TypeIcons, &UWidget::RemoveFromParent);
     TypeIcons.Empty();

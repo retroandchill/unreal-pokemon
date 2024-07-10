@@ -33,7 +33,7 @@ void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon
     SummaryPages->Refresh(Pokemon);
 
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    auto [SpriteMaterial, Size] = GraphicsLoadingSubsystem->GetPokemonUISprite(*Pokemon, this);
+    auto [SpriteMaterial, Size] = GraphicsLoadingSubsystem->GetPokemonUISprite(Pokemon, this);
     UWidgetUtilities::SetBrushFromAsset(PokemonSprite, SpriteMaterial);
     PokemonSprite->SetDesiredSizeOverride(Size);
 }
