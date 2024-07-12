@@ -33,7 +33,8 @@ public class PokemonUI : ModuleRules
 				"UMG",
 				"RenderCore",
 				"UnrealInjector", 
-				"PokemonSettings"
+				"PokemonSettings",
+				"CommonInput"
 			}
 		);
 	}
