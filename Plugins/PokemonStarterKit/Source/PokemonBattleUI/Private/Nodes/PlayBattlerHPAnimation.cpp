@@ -33,4 +33,5 @@ void UPlayBattlerHPAnimation::Activate() {
 void UPlayBattlerHPAnimation::ExecuteOnComplete() {
     OnSelected.Broadcast();
     UnbindActions.ExecuteIfBound();
+    SetReadyToDestroy();
 }

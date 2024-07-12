@@ -31,8 +31,10 @@ void UGiveItemToPokemon::Activate() {
 
 void UGiveItemToPokemon::ExecuteItemGiven() {
     ItemGiven.Broadcast();
+    SetReadyToDestroy();
 }
 
 void UGiveItemToPokemon::ExecuteItemRejected() {
     ItemRejected.Broadcast();
+    SetReadyToDestroy();
 }

@@ -14,6 +14,7 @@
 
 #include "PokemonUIUtils.generated.h"
 
+class UPokemonMenuBase;
 class UCommand;
 class UMenuHandler;
 class IPokemon;
@@ -29,6 +30,14 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
+    /**
+     * Remove the provided menu from the stack
+     * @param WorldContextObject The object used to obtain the world state information
+     * @param Menu The menu to remove
+     */
+    UFUNCTION(BlueprintCallable, Category = UI, meta = (WorldContext = WorldContextObject))
+    static void RemoveMenuFromStack(const UObject* WorldContextObject, UPokemonMenuBase* Menu);
+    
     /**
      * Take a number and pad it with the required number of leading 0s
      * @param Value The number to pad with 0s

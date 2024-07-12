@@ -27,8 +27,10 @@ void UTakeItemFromPokemon::Activate() {
 
 void UTakeItemFromPokemon::ExecuteItemTaken() {
     ItemTaken.Broadcast();
+    SetReadyToDestroy();
 }
 
 void UTakeItemFromPokemon::ExecuteItemNotTaken() {
     ItemNotTaken.Broadcast();
+    SetReadyToDestroy();
 }

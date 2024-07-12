@@ -17,7 +17,9 @@ public class PokemonUI : ModuleRules
 				"RPGMenus",
 				"GridBased2D",
 				"PokemonAssets",
-				"CommonUI"
+				"CommonUI",
+				"CommonGame",
+				"GameplayTags"
 			}
 		);
 

@@ -31,4 +31,5 @@ void UDisplayMessageWithChoices::ExecuteOnChoiceSelected(int32 ChoiceIndex, FNam
         return;
 
     Screen->ProcessChoice.RemoveDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
+    SetReadyToDestroy();
 }

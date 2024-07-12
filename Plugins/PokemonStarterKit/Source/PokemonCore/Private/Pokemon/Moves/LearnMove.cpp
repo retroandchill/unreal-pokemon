@@ -24,4 +24,5 @@ void ULearnMove::ExecuteMoveLearnedOrRejected(bool bMoveLearned) {
     } else {
         MoveRejected.Broadcast();
     }
+    SetReadyToDestroy();
 }

@@ -29,4 +29,5 @@ void UPromptReplaceMove::OnMoveSelectionComplete(bool bMoveReplaced) {
     } else {
         MoveNotLearned.Broadcast();
     }
+    SetReadyToDestroy();
 }

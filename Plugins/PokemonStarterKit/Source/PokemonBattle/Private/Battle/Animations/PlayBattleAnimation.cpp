@@ -20,4 +20,5 @@ void UPlayBattleAnimation::OnAnimationComplete() {
     AnimationComplete.Broadcast();
     IBattleAnimation::Execute_RemoveDelegateFromAnimationComplete(Animation.GetObject(), *AnimationDelegate);
     AnimationDelegate.Reset();
+    SetReadyToDestroy();
 }

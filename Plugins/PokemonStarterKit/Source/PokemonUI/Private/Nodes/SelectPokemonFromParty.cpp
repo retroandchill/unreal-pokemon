@@ -25,8 +25,10 @@ void USelectPokemonFromParty::Activate() {
 void USelectPokemonFromParty::ExecuteOnSelected(const TScriptInterface<IPartyScreen> &Screen,
                                                 const TScriptInterface<ITrainer> &Trainer, int32 Index) {
     OnSelected.Broadcast(Screen, Trainer, Index);
+    SetReadyToDestroy();
 }
 
 void USelectPokemonFromParty::ExecuteOnCanceled() {
     OnCanceled.Broadcast();
+    SetReadyToDestroy();
 }

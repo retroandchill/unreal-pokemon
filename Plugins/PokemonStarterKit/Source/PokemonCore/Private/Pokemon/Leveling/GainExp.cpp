@@ -21,4 +21,5 @@ void UGainExp::Activate() {
 
 void UGainExp::ExecuteAfterExpGain() {
     AfterExpGain.Broadcast();
+    SetReadyToDestroy();
 }

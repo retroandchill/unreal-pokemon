@@ -25,5 +25,6 @@ void UInitiateBattle::OnBattleComplete(EBattleResult Result) {
     check(OutputExecHandle.IsSet());
     Subsystem->RemoveFromBattleFinished(*OutputExecHandle);
     OutputExecHandle.Reset();
+    SetReadyToDestroy();
 }
 
