@@ -14,6 +14,7 @@
 void UPauseMenuBase::NativeConstruct() {
     Super::NativeConstruct();
 
+    /*
     auto Player = UTrainerHelpers::GetPlayerCharacter(this);
     auto &Party = Player->GetParty();
     Algo::ForEach(PokemonPanels, &UWidget::RemoveFromParent);
@@ -22,6 +23,7 @@ void UPauseMenuBase::NativeConstruct() {
     PokemonPanels = RangeHelpers::CreateRange(Player->GetParty())
         | ranges::views::transform(std::bind_front(&UPauseMenuBase::CreatePokemonPanel, this))
         | RangeHelpers::TToArray<TObjectPtr<UPokemonInfoButtonBase>>();
+        */
 }
 
 UPokemonInfoButtonBase * UPauseMenuBase::CreatePokemonPanel(const TScriptInterface<IPokemon> &Pokemon) {
