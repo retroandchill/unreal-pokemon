@@ -13,10 +13,6 @@ void UPokemonActionBoundButton::NativeConstruct() {
     }
 }
 
-void UPokemonActionBoundButton::NativeConstruct() {
-    Super::NativeConstruct();
-}
-
 void UPokemonActionBoundButton::HandleInputMethodChanged(ECommonInputType NewInputMethod) {
     using enum ECommonInputType;
     
