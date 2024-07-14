@@ -35,7 +35,7 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
      * @return The text widget for the value of the stat.
      */
     UFUNCTION(BlueprintPure, Category = "Stats")
-    UCommonNumericTextBlock *GetStatValue() const;
+    UCommonTextBlock *GetStatValue() const;
 
     /**
      * Set the value text of the given stat information
@@ -75,5 +75,5 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
      * The text widget for the value of the stat.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonNumericTextBlock> StatValue;
+    TObjectPtr<UCommonTextBlock> StatValue;
 };

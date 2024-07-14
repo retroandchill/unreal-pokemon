@@ -18,8 +18,12 @@ int32 UItemOption::GetQuantity() const {
 void UItemOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
     auto TextStyle = GetCurrentTextStyleClass();
-    ItemNameText->SetStyle(TextStyle);
-    ItemQuantityText->SetStyle(TextStyle);
+    if (ItemNameText != nullptr) {
+        ItemNameText->SetStyle(TextStyle);
+    }
+    if (ItemQuantityText != nullptr) {
+        ItemQuantityText->SetStyle(TextStyle);
+    }
 }
 
 void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {

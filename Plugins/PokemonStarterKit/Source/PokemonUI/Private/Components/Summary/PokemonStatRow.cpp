@@ -31,11 +31,11 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     SetStatValueText(Pokemon, StatInfo);
 }
 
-UCommonNumericTextBlock *UPokemonStatRow::GetStatValue() const {
+UCommonTextBlock *UPokemonStatRow::GetStatValue() const {
     return StatValue;
 }
 
 void UPokemonStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,
                                                       const TScriptInterface<IStatEntry> &StatInfo) {
-    StatValue->SetCurrentValue(static_cast<float>(StatInfo->GetStatValue()));
+    StatValue->SetText(FText::FromString(FString::FromInt(StatInfo->GetStatValue())));
 }

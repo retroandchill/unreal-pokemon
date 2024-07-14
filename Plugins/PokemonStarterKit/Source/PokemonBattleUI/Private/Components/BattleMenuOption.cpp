@@ -12,5 +12,7 @@ void UBattleMenuOption::InitFromHandler(const UBattleMenuHandler *Handler) {
 
 void UBattleMenuOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
-    OptionText->SetStyle(GetCurrentTextStyleClass());
+    if (OptionText != nullptr) {
+        OptionText->SetStyle(GetCurrentTextStyleClass());
+    }
 }
