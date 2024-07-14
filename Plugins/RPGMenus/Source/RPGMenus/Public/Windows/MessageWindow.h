@@ -2,11 +2,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Containers/Deque.h"
 
 #include "MessageWindow.generated.h"
 
+class UInputAction;
 class UCommonTextBlock;
 class UCommandWindow;
 class UScrollBox;
@@ -30,17 +32,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdvanceText);
  * Window for display text to the player
  */
 UCLASS()
-class RPGMENUS_API UMessageWindow : public UUserWidget {
+class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
     GENERATED_BODY()
 
   public:
     void NativePreConstruct() override;
+    void NativeConstruct() override;
+    void NativeDestruct() override;
 
   protected:
     void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
-    FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
-    void NativeOnFocusLost(const FFocusEvent &InFocusEvent) override;
-
   public:
     /**
      * Set the text to display to the player
@@ -220,4 +221,15 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
      * Should we wait for commands at the end of the text display?
      */
     bool bWaitForChoice = false;
+
+    /**
+     * The input that when pressed will create a binding to the action
+     */
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> AdvanceActionInput;
+
+    /**
+     * The handle used to hold the advance action
+     */
+    FUIActionBindingHandle AdvanceAction;
 };

@@ -6,11 +6,32 @@
 #include "Data/SelectionInputs.h"
 #include "MathUtilities.h"
 #include "Fonts/FontMeasure.h"
+#include "Input/CommonUIInputTypes.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UMessageWindow::NativePreConstruct() {
     Super::NativePreConstruct();
     ResizeWindow();
+}
+
+void UMessageWindow::NativeConstruct() {
+    Super::NativeConstruct();
+    FBindUIActionArgs BindArgs(AdvanceActionInput, FSimpleDelegate::CreateWeakLambda(this, [this] {
+        if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
+            OnAdvanceText.Broadcast();
+        } else if (bPaused) {
+            SetPaused(false);
+        }
+    }));
+    BindArgs.bDisplayInActionBar = false;
+    AdvanceAction = RegisterUIActionBinding(BindArgs);
+}
+
+void UMessageWindow::NativeDestruct() {
+    if (AdvanceAction.IsValid()) {
+        AdvanceAction.Unregister();
+    }
+    Super::NativeDestruct();
 }
 
 void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
@@ -67,26 +88,6 @@ void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) 
     }
 }
 
-FReply UMessageWindow::NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) {
-    if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()) || !bPaused)
-        return FReply::Unhandled();
-
-    if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
-        OnAdvanceText.Broadcast();
-    } else if (bPaused) {
-        SetPaused(false);
-    }
-    return FReply::Handled();
-}
-
-void UMessageWindow::NativeOnFocusLost(const FFocusEvent &InFocusEvent) {
-    Super::NativeOnFocusLost(InFocusEvent);
-
-    if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
-        SetKeyboardFocus();
-    }
-}
-
 void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
     check(DisplayTextWidget != nullptr)
 
@@ -107,6 +108,7 @@ void UMessageWindow::ClearDisplayText() {
 
 void UMessageWindow::SetPaused(bool bPausedIn) {
     bPaused = bPausedIn;
+    AdvanceAction.SetDisplayInActionBar(bPaused);
 
     if (PauseArrow == nullptr)
         return;
