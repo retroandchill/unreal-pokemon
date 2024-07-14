@@ -31,7 +31,7 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("BURNHEAL"), 20);
 
     auto Dispatcher = NewObject<UItemSlotDispatcher>(World.Get());
-    ItemSelection->GetOnItemChanged().AddDynamic(Dispatcher, &UItemSlotDispatcher::ReceiveItem);
+    ItemSelection->GetOnItemChanged().AddUniqueDynamic(fDispatcher, &UItemSlotDispatcher::ReceiveItem);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     ItemSelection->SetIndex(0);
@@ -68,7 +68,7 @@ bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
 
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
     auto Dispatcher = NewObject<UNoItemSelectedDispatcher>(World.Get());
-    ItemSelection->GetOnNoItemSelected().AddDynamic(Dispatcher, &UNoItemSelectedDispatcher::OnReceive);
+    ItemSelection->GetOnNoItemSelected().AddUniqueDynamic(fDispatcher, &UNoItemSelectedDispatcher::OnReceive);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     UE_ASSERT_TRUE(Dispatcher->bCalled);
@@ -97,7 +97,7 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("SUPERREPEL"), 100);
 
     auto Dispatcher = NewObject<UPocketNameDispatcher>(World.Get());
-    ItemSelection->GetOnPocketChanged().AddDynamic(Dispatcher, &UPocketNameDispatcher::OnReceivePocket);
+    ItemSelection->GetOnPocketChanged().AddUniqueDynamic(fDispatcher, &UPocketNameDispatcher::OnReceivePocket);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     UE_CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());

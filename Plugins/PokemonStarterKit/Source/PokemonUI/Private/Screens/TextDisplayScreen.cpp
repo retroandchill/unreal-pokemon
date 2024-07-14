@@ -9,11 +9,11 @@ void UTextDisplayScreen::NativeConstruct() {
     if (MessageWindow == nullptr)
         return;
 
-    MessageWindow->GetOnDisplayChoices().AddDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
-    MessageWindow->GetOnAdvanceText().AddDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
+    MessageWindow->GetOnDisplayChoices().AddUniqueDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
+    MessageWindow->GetOnAdvanceText().AddUniqueDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
     MessageWindow->ActivateWidget();
 
-    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
+    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
 }
 
 void UTextDisplayScreen::SetText(FText TextToDisplay) {

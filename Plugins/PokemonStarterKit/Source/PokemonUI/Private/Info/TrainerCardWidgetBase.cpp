@@ -19,7 +19,7 @@ void UTrainerCardWidgetBase::NativeConstruct() {
     check(PokemonSubsystem != nullptr)
     Trainer = PokemonSubsystem->GetPlayer();
     PlayerMetadata = PokemonSubsystem->GetPlayerMetadata();
-    PlayerMetadata->GetOnTimeUpdated().AddDynamic(this, &UTrainerCardWidgetBase::SetPlayerTimeInfo);
+    PlayerMetadata->GetOnTimeUpdated().AddUniqueDynamic(fthis, &UTrainerCardWidgetBase::SetPlayerTimeInfo);
 
     SetTrainerSprite();
     SetTrainerInfo();

@@ -14,13 +14,13 @@ void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
 
     // TODO: Add handler for when you confirm an item
-    ItemSelectionWindow->GetOnItemSelected().AddDynamic(this, &UBagScreen::SelectItem);
-    ItemSelectionWindow->GetOnCancel().AddDynamic(this, &UBagScreen::CloseScreen);
-    ItemSelectionWindow->GetOnItemChanged().AddDynamic(ItemInfoWindow, &UItemInfoWindow::Refresh);
-    ItemSelectionWindow->GetOnNoItemSelected().AddDynamic(ItemInfoWindow, &UItemInfoWindow::ClearItem);
-    ItemSelectionWindow->GetOnPocketChanged().AddDynamic(PocketWindow, &UPocketWindow::SetCurrentPocket);
-    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UBagScreen::UBagScreen::OnItemCommandSelected);
-    CommandWindow->GetOnCancel().AddDynamic(this, &UBagScreen::OnItemCommandCanceled);
+    ItemSelectionWindow->GetOnItemSelected().AddUniqueDynamic(fthis, &UBagScreen::SelectItem);
+    ItemSelectionWindow->GetOnCancel().AddUniqueDynamic(fthis, &UBagScreen::CloseScreen);
+    ItemSelectionWindow->GetOnItemChanged().AddUniqueDynamic(fItemInfoWindow, &UItemInfoWindow::Refresh);
+    ItemSelectionWindow->GetOnNoItemSelected().AddUniqueDynamic(fItemInfoWindow, &UItemInfoWindow::ClearItem);
+    ItemSelectionWindow->GetOnPocketChanged().AddUniqueDynamic(fPocketWindow, &UPocketWindow::SetCurrentPocket);
+    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(fthis, &UBagScreen::UBagScreen::OnItemCommandSelected);
+    CommandWindow->GetOnCancel().AddUniqueDynamic(fthis, &UBagScreen::OnItemCommandCanceled);
 
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
     auto PocketName = UItemHelper::GetPocketNames()[0];
