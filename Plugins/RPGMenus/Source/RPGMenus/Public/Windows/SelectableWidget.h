@@ -37,6 +37,8 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     GENERATED_BODY()
 
   public:
+    explicit USelectableWidget(const FObjectInitializer& Initializer);
+    
     /**
      * Get the number of items in the menu that can be selected
      * @return The total number of items
@@ -84,6 +86,8 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
 
   protected:
     UWidget* NativeGetDesiredFocusTarget() const override;
+    void NativeOnActivated() override;
+    void NativeOnDeactivated() override;
     
     /**
      * A convenience method to handle additional functionality when the user confirms a selection based on the specified

@@ -39,7 +39,7 @@ void UPokemonSelectScreen::ShowCommands(const TArray<TObjectPtr<UPartyMenuHandle
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
     Commands =
-        UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, CancelText, this, Trainer, SelectionPane->GetIndex());
+        UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, this, Trainer, SelectionPane->GetIndex());
     CommandWindow->SetCommands(Commands);
     CommandWindow->SetIndex(0);
 }
@@ -100,7 +100,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 
 void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index) {
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
-    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), CancelText, this, Trainer,
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), this, Trainer,
                                                               Index);
     CommandWindow->SetCommands(Commands);
 
@@ -113,14 +113,9 @@ void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITraine
 }
 
 void UPokemonSelectScreen::ProcessCommand(int32, UCommand *SelectedCommand) {
-    static FName Cancel = "Cancel";
-    if (SelectedCommand->GetID() == Cancel) {
-        OnCommandWindowCancel();
-    } else {
-        auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
-        check(Handler != nullptr)
-        Handler->Handle(this, UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
-    }
+    auto Handler = SelectedCommand->GetHandler<UPartyMenuHandler>();
+    check(Handler != nullptr)
+    Handler->Handle(this, UPokemonSubsystem::GetInstance(this).GetPlayer(), SelectionPane->GetIndex());
 }
 
 void UPokemonSelectScreen::OnCommandWindowCancel() {

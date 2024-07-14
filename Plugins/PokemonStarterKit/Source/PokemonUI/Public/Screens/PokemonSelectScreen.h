@@ -128,12 +128,6 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
      * The handlers for the command window when a Pokémon in selected
      */
     UPROPERTY(EditAnywhere, Category = Commands)
-    TOptional<FText> CancelText;
-
-    /**
-     * The handlers for the command window when a Pokémon in selected
-     */
-    UPROPERTY(EditAnywhere, Category = Commands)
     TObjectPtr<UPartyMenuHandlerSet> PokemonHandlers;
 
     /**

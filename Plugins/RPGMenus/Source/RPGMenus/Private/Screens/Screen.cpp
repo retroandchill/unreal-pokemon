@@ -4,10 +4,6 @@
 #include "RPGMenusSubsystem.h"
 #include "Windows/SelectableWidget.h"
 
-UScreen::UScreen(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer) {
-    SetIsFocusable(true);
-}
-
 TSharedRef<SWidget> UScreen::RebuildWidget() {
     auto Ret = Super::RebuildWidget();
 
@@ -34,4 +30,18 @@ void UScreen::CloseScreen() {
 
 FOnScreenClosed &UScreen::GetOnScreenClosed() {
     return OnScreenClosed;
+}
+
+void UScreen::NativeOnActivated() {
+    Super::NativeOnActivated();
+    if (GetVisibility() == ESlateVisibility::HitTestInvisible) {
+        SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    }
+}
+
+void UScreen::NativeOnDeactivated() {
+    Super::NativeOnDeactivated();
+    if (IsVisible()) {
+        SetVisibility(ESlateVisibility::HitTestInvisible);
+    }
 }

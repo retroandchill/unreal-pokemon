@@ -21,12 +21,6 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     GENERATED_BODY()
 
   public:
-    /**
-     * Construct the default version of the screen
-     * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-     */
-    explicit UScreen(const FObjectInitializer &ObjectInitializer);
-
     TSharedRef<SWidget> RebuildWidget() override;
 
     /**
@@ -46,6 +40,10 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
      * @return Callback for when the screen is closed
      */
     FOnScreenClosed &GetOnScreenClosed();
+
+protected:
+    void NativeOnActivated() override;
+    void NativeOnDeactivated() override;
 
   private:
     /**

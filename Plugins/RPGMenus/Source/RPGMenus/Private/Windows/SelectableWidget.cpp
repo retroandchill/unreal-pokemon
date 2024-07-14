@@ -2,9 +2,11 @@
 #include "Windows/SelectableWidget.h"
 #include "CommonButtonBase.h"
 #include "Algo/ForEach.h"
-#include "Data/RPGMenusSettings.h"
-#include "Data/SelectionInputs.h"
-#include "Primatives/SelectableOption.h"
+
+USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
+    bIsBackHandler = true;
+    bIsBackActionDisplayedInActionBar = true;
+}
 
 int32 USelectableWidget::GetItemCount() const {
     return SelectableButtons.Num();
@@ -40,6 +42,20 @@ UWidget * USelectableWidget::NativeGetDesiredFocusTarget() const {
     }
     
     return SelectableButtons[Index];
+}
+
+void USelectableWidget::NativeOnActivated() {
+    Super::NativeOnActivated();
+    if (GetVisibility() == ESlateVisibility::HitTestInvisible) {
+        SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    }
+}
+
+void USelectableWidget::NativeOnDeactivated() {
+    Super::NativeOnDeactivated();
+    if (IsVisible()) {
+        SetVisibility(ESlateVisibility::HitTestInvisible);
+    }
 }
 
 void USelectableWidget::ConfirmOnIndex(int32 CurrentIndex) {
