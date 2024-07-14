@@ -1,7 +1,7 @@
 ﻿#include "Components/Bag/ItemOption.h"
 #include "Asserts.h"
+#include "CommonTextBlock.h"
 #include "Misc/AutomationTest.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -19,11 +19,11 @@ bool ItemOptionTest::RunTest(const FString &Parameters) {
 
     Option->SetItem(TEXT("POTION"), 5);
 
-    FIND_CHILD_WIDGET(Option, UDisplayText, ItemNameText);
+    FIND_CHILD_WIDGET(Option, UCommonTextBlock, ItemNameText);
     UE_ASSERT_NOT_NULL(ItemNameText);
     UE_CHECK_EQUAL(TEXT("Potion"), ItemNameText->GetText().ToString());
 
-    FIND_CHILD_WIDGET(Option, UDisplayText, ItemQuantityText);
+    FIND_CHILD_WIDGET(Option, UCommonTextBlock, ItemQuantityText);
     UE_ASSERT_NOT_NULL(ItemQuantityText);
     UE_CHECK_EQUAL(TEXT("×5"), ItemQuantityText->GetText().ToString());
 

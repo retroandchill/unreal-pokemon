@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PokemonUIUtils.h"
+#include "CommonTextBlock.h"
 #include "PokemonMenuBase.h"
 #include "PrimaryGameLayout.h"
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
-#include "Text/TextColor.h"
 
 enum class EPokemonGender : uint8;
 
@@ -37,25 +36,6 @@ FString UPokemonUIUtils::PadInt(int32 Value, int32 DesiredLength, TCHAR PaddingC
     return Output;
 }
 
-void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText> &TextWidget, const FText &Text) {
-    if (TextWidget == nullptr)
-        return;
-
-    TextWidget->SetText(Text);
-}
-
-void UPokemonUIUtils::SetItemText(TObjectPtr<UDisplayText> &TextWidget, FStringView Text) {
-    SetItemText(TextWidget, FText::FromStringView(Text));
-}
-
-void UPokemonUIUtils::SetItemTextColor(TObjectPtr<UDisplayText> &TextWidget, const FTextColor &Color) {
-    if (TextWidget == nullptr)
-        return;
-
-    TextWidget->SetTextColor(Color.MainColor);
-    TextWidget->SetShadowColor(Color.ShadowColor);
-}
-
 void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue) {
     if (ProgressBar == nullptr)
         return;
@@ -63,17 +43,17 @@ void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float 
     ProgressBar->SetPercent(FMath::Clamp(CurrentValue / MaxValue, 0, 1));
 }
 
-void UPokemonUIUtils::SetPokemonGenderText(EPokemonGender Gender, TObjectPtr<UDisplayText> &TextWidget) {
+void UPokemonUIUtils::SetPokemonGenderText(EPokemonGender Gender, UCommonTextBlock* TextWidget) {
     using enum EPokemonGender;
     switch (Gender) {
     case Male:
-        SetItemText(TextWidget, TEXT("♂"));
+        TextWidget->SetText(FText::FromStringView(TEXT("♂")));
         break;
     case Female:
-        SetItemText(TextWidget, TEXT("♀"));
+        TextWidget->SetText(FText::FromStringView(TEXT("♀")));
         break;
     case Genderless:
-        SetItemText(TextWidget, TEXT(""));
+        TextWidget->SetText(FText::FromStringView(TEXT("")));
         break;
     }
 }

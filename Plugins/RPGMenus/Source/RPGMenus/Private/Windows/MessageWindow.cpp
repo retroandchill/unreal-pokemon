@@ -1,29 +1,17 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/MessageWindow.h"
+#include "CommonTextBlock.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
 #include "Data/SelectionInputs.h"
 #include "MathUtilities.h"
-#include "Primatives/DisplayText.h"
+#include "Fonts/FontMeasure.h"
 #include "Utilities/WidgetUtilities.h"
 
-TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
-    auto Ret = Super::RebuildWidget();
-    ResizeWindow();
-    return Ret;
-}
-
-void UMessageWindow::SynchronizeProperties() {
-    Super::SynchronizeProperties();
+void UMessageWindow::NativePreConstruct() {
+    Super::NativePreConstruct();
     ResizeWindow();
 }
-
-#if WITH_EDITOR
-void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
-    Super::PostEditChangeProperty(PropertyChangedEvent);
-    ResizeWindow();
-}
-#endif
 
 void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
     Super::NativeTick(MyGeometry, InDeltaTime);
@@ -144,10 +132,11 @@ FDisplayChoices &UMessageWindow::GetOnDisplayChoices() {
 
 void UMessageWindow::ResizeWindow() {
     if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
-        auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y) + ExtraPadding;
-        auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
-        SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow) + DisplayTextPadding.Top +
-                                   DisplayTextPadding.Bottom);
+        auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+        FVector2D Size = FontMeasure->Measure(TEXT("Sample"), DisplayTextWidget->GetFont(),
+                                              UWidgetUtilities::GetWidgetDPIScale());
+        auto TextHeight = static_cast<float>(Size.Y) + ExtraPadding;
+        SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow));
     }
 }
 
@@ -155,7 +144,7 @@ void UMessageWindow::QueueUpNewText() {
     if (!FullText.IsSet())
         return;
 
-    double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X * UWidgetUtilities::GetWidgetDPIScale();
+    double TotalTextAreaWidth = DisplayTextWidget->GetCachedGeometry().Size.X * UWidgetUtilities::GetWidgetDPIScale();
     if (FMath::IsNearlyZero(TotalTextAreaWidth))
         return;
 
@@ -170,7 +159,10 @@ void UMessageWindow::QueueUpNewText() {
 }
 
 void UMessageWindow::QueueLine(const FString &Line, double TotalTextAreaWidth) {
-    if (double LineWidth = DisplayTextWidget->GetTextSize(Line).X; TotalTextAreaWidth >= LineWidth) {
+    auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+    FVector2D Size = FontMeasure->Measure(Line, DisplayTextWidget->GetFont(),
+                                          UWidgetUtilities::GetWidgetDPIScale());
+    if (double LineWidth = Size.X; TotalTextAreaWidth >= LineWidth) {
         QueueText(Line);
     } else {
         QueueIndividualWords(Line, TotalTextAreaWidth);
@@ -189,8 +181,12 @@ void UMessageWindow::QueueIndividualWords(const FString &Line, double TotalTextA
     FString CurrentLine = "";
     for (auto &Word : Words) {
         FString NewText = CurrentLine.IsEmpty() ? Word : FString(" ") + Word;
-        double CurrentTextWidth = DisplayTextWidget->GetTextSize(CurrentLine).X;
-        double NewTextWidth = DisplayTextWidget->GetTextSize(NewText).X;
+        
+        auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+        double CurrentTextWidth = FontMeasure->Measure(CurrentLine, DisplayTextWidget->GetFont(),
+                                              UWidgetUtilities::GetWidgetDPIScale()).X;
+        double NewTextWidth = FontMeasure->Measure(NewText, DisplayTextWidget->GetFont(),
+                                              UWidgetUtilities::GetWidgetDPIScale()).X;
 
         if (double FullTextWidth = CurrentTextWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {
             AddNewLine();

@@ -8,7 +8,7 @@
 #include "HelpWindow.generated.h"
 
 class UWindow;
-class UDisplayText;
+class UCommonTextBlock;
 
 /**
  * Window used for displaying some basic help text to the player.
@@ -18,11 +18,7 @@ class RPGMENUS_API UHelpWindow : public UUserWidget {
     GENERATED_BODY()
 
   protected:
-    TSharedRef<SWidget> RebuildWidget() override;
-    void SynchronizeProperties() override;
-#if WITH_EDITOR
-    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
-#endif
+    void NativePreConstruct() override;
 
   public:
     /**
@@ -50,7 +46,7 @@ class RPGMENUS_API UHelpWindow : public UUserWidget {
      * The text displayed to the player in the window.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> HelpText;
+    TObjectPtr<UCommonTextBlock> HelpText;
 
     /**
      * The text displayed to the player in the window.

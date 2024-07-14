@@ -1,7 +1,7 @@
 ﻿#include "Windows/PocketWindow.h"
 #include "Asserts.h"
+#include "CommonTextBlock.h"
 #include "Misc/AutomationTest.h"
-#include "Primatives/DisplayText.h"
 #include "Settings/BaseSettings.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -16,7 +16,7 @@ bool PocketWindowTest::RunTest(const FString &Parameters) {
     auto WidgetClass = Subclasses[0];
 
     TWidgetPtr<UPocketWindow> PocketWindow(CreateWidget<UPocketWindow>(World.Get(), WidgetClass));
-    FIND_CHILD_WIDGET(PocketWindow.Get(), UDisplayText, PocketName);
+    FIND_CHILD_WIDGET(PocketWindow.Get(), UCommonTextBlock, PocketName);
     UE_ASSERT_NOT_NULL(PocketName);
 
     auto &Settings = Pokemon::FBaseSettings::Get();

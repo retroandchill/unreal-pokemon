@@ -7,6 +7,7 @@
 
 #include "MessageWindow.generated.h"
 
+class UCommonTextBlock;
 class UCommandWindow;
 class UScrollBox;
 class UWindow;
@@ -33,11 +34,7 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
     GENERATED_BODY()
 
   public:
-    TSharedRef<SWidget> RebuildWidget() override;
-    void SynchronizeProperties() override;
-#if WITH_EDITOR
-    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
-#endif
+    void NativePreConstruct() override;
 
   protected:
     void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
@@ -139,7 +136,7 @@ class RPGMENUS_API UMessageWindow : public UUserWidget {
      * The widget that contains the text displayed to the player
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> DisplayTextWidget;
+    TObjectPtr<UCommonTextBlock> DisplayTextWidget;
 
     /**
      * The scroll box used to keep the text visible on screen

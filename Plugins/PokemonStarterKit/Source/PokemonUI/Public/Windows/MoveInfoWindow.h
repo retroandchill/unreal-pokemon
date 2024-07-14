@@ -7,8 +7,8 @@
 
 #include "MoveInfoWindow.generated.h"
 
+class UCommonTextBlock;
 struct FMoveData;
-class UDisplayText;
 class UImage;
 class IMove;
 enum class EMoveDamageCategory : uint8;
@@ -66,17 +66,17 @@ class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
      * The widget used for the move's power
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PowerText;
+    TObjectPtr<UCommonTextBlock> PowerText;
 
     /**
      * The widget used for the move's accuracy
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> AccuracyText;
+    TObjectPtr<UCommonTextBlock> AccuracyText;
 
     /**
      * The widget used for the move's description
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> DescriptionText;
+    TObjectPtr<UCommonTextBlock> DescriptionText;
 };

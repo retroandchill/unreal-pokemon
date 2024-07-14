@@ -4,20 +4,17 @@
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
 #include "Bag/Item.h"
-#include "Blueprint/UserWidget.h"
 #include "Pokemon/Breeding/PokemonGender.h"
-#include "Primatives/SelectableOption.h"
-#include "Refreshable.h"
 #include "SelectablePanel.h"
-#include "Text/TextColor.h"
 
 #include "PokemonPanel.generated.h"
 
+class UCommonNumericTextBlock;
+class UCommonTextBlock;
 class USelectableWidget;
 class UPokemonSelectionPane;
 class UProgressBar;
 class UImage;
-class UDisplayText;
 class IPokemon;
 
 /**
@@ -132,31 +129,31 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
      * The text that displays the name for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> NameText;
+    TObjectPtr<UCommonTextBlock> NameText;
 
     /**
      * The text block that displays the level for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> LevelText;
+    TObjectPtr<UCommonNumericTextBlock> LevelText;
 
     /**
      * The text block that displays the gender symbol for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> GenderText;
+    TObjectPtr<UCommonTextBlock> GenderText;
 
     /**
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<EPokemonGender, FTextColor> GenderTextColors;
+    TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     /**
      * The text block that displays the current and total HP of the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> HPText;
+    TObjectPtr<UCommonTextBlock> HPText;
 
     /**
      * The image that displays the HP bar when necessary

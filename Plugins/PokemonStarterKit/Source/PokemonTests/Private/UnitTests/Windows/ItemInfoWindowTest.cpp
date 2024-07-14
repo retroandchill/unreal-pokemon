@@ -1,10 +1,10 @@
 ﻿#include "Windows/ItemInfoWindow.h"
 #include "Asserts.h"
+#include "CommonTextBlock.h"
 #include "Bag/Item.h"
 #include "Components/Image.h"
 #include "DataManager.h"
 #include "Misc/AutomationTest.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -18,7 +18,7 @@ bool ItemInfoWindowTest::RunTest(const FString &Parameters) {
     auto WidgetClass = Subclasses[0];
 
     TWidgetPtr<UItemInfoWindow> ItemInfo(CreateWidget<UItemInfoWindow>(World.Get(), WidgetClass));
-    FIND_CHILD_WIDGET(ItemInfo.Get(), UDisplayText, ItemDescription);
+    FIND_CHILD_WIDGET(ItemInfo.Get(), UCommonTextBlock, ItemDescription);
     UE_ASSERT_NOT_NULL(ItemDescription);
     FIND_CHILD_WIDGET(ItemInfo.Get(), UImage, ItemIcon);
     UE_ASSERT_NOT_NULL(ItemIcon);

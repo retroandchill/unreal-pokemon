@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/BattleMovePanel.h"
+#include "CommonTextBlock.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IBattleMove> &UBattleMovePanel::GetMove() const {

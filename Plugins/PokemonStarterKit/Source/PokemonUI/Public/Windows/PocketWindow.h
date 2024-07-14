@@ -8,6 +8,7 @@
 
 #include "PocketWindow.generated.h"
 
+class UCommonTextBlock;
 class UPocketGraphic;
 class UDisplayText;
 
@@ -51,5 +52,5 @@ class POKEMONUI_API UPocketWindow : public UUserWidget {
      * The widget that holds the pocket being shown.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PocketName;
+    TObjectPtr<UCommonTextBlock> PocketName;
 };

@@ -5,7 +5,7 @@
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Components/ProgressBar.h"
-#include "Primatives/NumberImageWidget.h"
+#include "Components/NumberImageWidget.h"
 
 void UPokemonBattlePanelPlayer::Refresh() {
     Super::Refresh();

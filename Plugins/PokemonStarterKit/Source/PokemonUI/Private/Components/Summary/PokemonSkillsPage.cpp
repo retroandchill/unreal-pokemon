@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/PokemonSkillsPage.h"
+#include "CommonTextBlock.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Summary/HPStatRow.h"
 #include "Components/Summary/PokemonStatRow.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
 #include "Settings/BaseSettings.h"
 
 TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {

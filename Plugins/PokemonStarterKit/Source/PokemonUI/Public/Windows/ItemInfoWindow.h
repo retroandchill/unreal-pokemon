@@ -7,6 +7,7 @@
 
 #include "ItemInfoWindow.generated.h"
 
+class UCommonTextBlock;
 class UDisplayText;
 class UItemSelectionWindow;
 class UImage;
@@ -45,5 +46,5 @@ class POKEMONUI_API UItemInfoWindow : public UUserWidget {
      * The text used to show the item's description
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemDescription;
+    TObjectPtr<UCommonTextBlock> ItemDescription;
 };

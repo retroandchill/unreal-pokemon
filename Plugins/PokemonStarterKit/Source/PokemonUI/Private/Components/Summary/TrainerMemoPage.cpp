@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/TrainerMemoPage.h"
+#include "CommonRichTextBlock.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
-#include "Primatives/DisplayText.h"
 #include "RangeHelpers.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"

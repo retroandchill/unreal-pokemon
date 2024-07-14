@@ -8,6 +8,8 @@
 
 #include "PokemonStatRow.generated.h"
 
+class UCommonNumericTextBlock;
+class UCommonRichTextBlock;
 class IStatEntry;
 
 /**
@@ -33,7 +35,7 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
      * @return The text widget for the value of the stat.
      */
     UFUNCTION(BlueprintPure, Category = "Stats")
-    UDisplayText *GetStatValue() const;
+    UCommonNumericTextBlock *GetStatValue() const;
 
     /**
      * Set the value text of the given stat information
@@ -67,11 +69,11 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
      * The text label for the name of the stat.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> StatLabel;
+    TObjectPtr<UCommonRichTextBlock> StatLabel;
 
     /**
      * The text widget for the value of the stat.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> StatValue;
+    TObjectPtr<UCommonNumericTextBlock> StatValue;
 };

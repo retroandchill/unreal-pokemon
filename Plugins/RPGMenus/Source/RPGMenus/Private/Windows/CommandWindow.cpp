@@ -9,8 +9,7 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
-#include "Primatives/DisplayText.h"
-#include "Primatives/DisplayTextOption.h"
+#include "Components/DisplayTextOption.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }

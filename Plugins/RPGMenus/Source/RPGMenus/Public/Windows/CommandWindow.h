@@ -7,7 +7,6 @@
 #include "CommandWindow.generated.h"
 
 class UWindow;
-class USelectableOption;
 class UDisplayTextOption;
 class USizeBox;
 class UScrollBox;
@@ -16,7 +15,6 @@ class UGridPanel;
 class SUniformGridPanel;
 class UMenuCommand;
 class UUniformGridPanel;
-class UDisplayText;
 
 /**
  * Delegate for when the user presses confirm

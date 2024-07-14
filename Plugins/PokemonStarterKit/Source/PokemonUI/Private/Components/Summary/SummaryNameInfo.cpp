@@ -1,11 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/SummaryNameInfo.h"
+#include "CommonNumericTextBlock.h"
+#include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
 
@@ -18,10 +19,10 @@ void USummaryNameInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &
     auto Gender = Pokemon->GetGender();
     UPokemonUIUtils::SetPokemonGenderText(Gender, PokemonGenderText);
     if (GenderTextColors.Contains(Gender)) {
-        UPokemonUIUtils::SetItemTextColor(PokemonGenderText, GenderTextColors[Gender]);
+        PokemonGenderText->SetStyle(GenderTextColors[Gender]);
     }
 
-    PokemonLevelText->SetText(FText::FromString(FString::FromInt(Pokemon->GetStatBlock()->GetLevel())));
+    PokemonLevelText->SetCurrentValue(static_cast<float>(Pokemon->GetStatBlock()->GetLevel()));
 
     // TODO: Configure the status and Poké Ball
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();

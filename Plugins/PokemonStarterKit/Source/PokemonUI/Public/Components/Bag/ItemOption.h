@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
-#include "Primatives/SelectableOption.h"
 
 #include "ItemOption.generated.h"
 
@@ -12,7 +11,6 @@ class UCommonNumericTextBlock;
 class UCommonTextBlock;
 struct FItem;
 struct FItemSlot;
-class UDisplayText;
 
 /**
  * An option that represents and item in the player's inventory.

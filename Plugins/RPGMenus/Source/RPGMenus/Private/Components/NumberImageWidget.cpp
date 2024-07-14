@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Primatives/NumberImageWidget.h"
+#include "Components/NumberImageWidget.h"
 
 UNumberImageWidget::UNumberImageWidget() {
     // We want an image for all 9 digits

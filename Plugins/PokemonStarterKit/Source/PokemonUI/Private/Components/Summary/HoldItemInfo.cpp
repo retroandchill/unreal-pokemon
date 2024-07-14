@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/HoldItemInfo.h"
+#include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UHoldItemInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

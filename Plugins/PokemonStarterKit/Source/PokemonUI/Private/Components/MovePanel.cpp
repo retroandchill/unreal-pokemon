@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/MovePanel.h"
+#include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IMove> &UMovePanel::GetMove() {

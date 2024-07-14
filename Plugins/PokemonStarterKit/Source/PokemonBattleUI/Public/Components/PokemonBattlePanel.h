@@ -6,14 +6,15 @@
 #include "Animations/ProgressBarAnimation.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "PokemonUI/Public/Components/PokemonInfoWidget.h"
-#include "Text/TextColor.h"
 
 #include "PokemonBattlePanel.generated.h"
 
+class UCommonTextStyle;
+class UCommonNumericTextBlock;
+class UCommonTextBlock;
 class UImage;
 class IBattler;
 class UProgressBar;
-class UDisplayText;
 
 /**
  * Dynamic delegate called when a progress bar is updated
@@ -93,19 +94,19 @@ private:
      * The widget to display the Pokémon's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonName;
+    TObjectPtr<UCommonTextBlock> PokemonName;
 
     /**
      * The widget to display the Pokémon's gender
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonGender;
+    TObjectPtr<UCommonTextBlock> PokemonGender;
 
     /**
      * The widget to display the Pokémon's level
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonLevel;
+    TObjectPtr<UCommonNumericTextBlock> PokemonLevel;
 
     /**
      * The widget that display's the HP percentage
@@ -129,7 +130,7 @@ private:
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<EPokemonGender, FTextColor> GenderTextColors;
+    TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     /**
      * The animation for updating the HP bar

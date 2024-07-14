@@ -1,6 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/PokemonInfoPage.h"
+#include "CommonNumericTextBlock.h"
+#include "CommonTextBlock.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
@@ -8,7 +10,6 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Primatives/DisplayText.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/OwnerInfo.h"
 #include "Utilities/PokemonUIUtils.h"
@@ -33,12 +34,12 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     auto &OwnerInfo = Pokemon->GetOwnerInfo();
     OTNameText->SetText(OwnerInfo.OriginalTrainerName);
     if (auto Color = GenderTextColors.Find(OwnerInfo.OriginalTrainerGender); Color != nullptr) {
-        UPokemonUIUtils::SetItemTextColor(OTNameText, *Color);
+        OTNameText->SetStyle(*Color);
     }
     PokemonIDText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(OwnerInfo.ID, IdNumberLength)));
 
     auto StatBlock = Pokemon->GetStatBlock();
-    ExpTotalText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExp())));
-    NextLevelUpCountText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExpForNextLevel())));
+    ExpTotalText->SetCurrentValue(static_cast<float>(StatBlock->GetExp()));
+    NextLevelUpCountText->SetCurrentValue(static_cast<float>(StatBlock->GetExpForNextLevel()));
     ExpBar->SetPercent(StatBlock->GetExpPercent());
 }

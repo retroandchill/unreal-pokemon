@@ -1,6 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/PokemonPanel.h"
+#include "CommonNumericTextBlock.h"
+#include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -83,13 +85,12 @@ void UPokemonPanel::Refresh() {
 }
 
 void UPokemonPanel::RefreshPokemonInfo() {
-    UPokemonUIUtils::SetItemText(NameText, Pokemon->GetNickname());
-    UPokemonUIUtils::SetItemText(LevelText, FString::FromInt(Pokemon->GetStatBlock()->GetLevel()));
+    NameText->SetText(Pokemon->GetNickname());
+    LevelText->SetCurrentValue(static_cast<float>(Pokemon->GetStatBlock()->GetLevel()));
 
     auto Gender = Pokemon->GetGender();
     UPokemonUIUtils::SetPokemonGenderText(Gender, GenderText);
     if (GenderTextColors.Contains(Gender)) {
-        UPokemonUIUtils::SetItemTextColor(GenderText, GenderTextColors[Gender]);
     }
 
     auto HP = FString::Format(
@@ -97,7 +98,7 @@ void UPokemonPanel::RefreshPokemonInfo() {
         FStringFormatNamedArguments({{TEXT("CurrentHP"), UPokemonUIUtils::SpacePad(Pokemon->GetCurrentHP(), 3)},
                                      {TEXT("MaxHP"), UPokemonUIUtils::SpacePad(Pokemon->GetMaxHP(), 3)}}));
 
-    UPokemonUIUtils::SetItemText(HPText, HP);
+    HPText->SetText(FText::FromString(MoveTemp(HP)));
     UPokemonUIUtils::SetBarValues(HPBar, static_cast<float>(Pokemon->GetCurrentHP()),
                                   static_cast<float>(Pokemon->GetMaxHP()));
 }

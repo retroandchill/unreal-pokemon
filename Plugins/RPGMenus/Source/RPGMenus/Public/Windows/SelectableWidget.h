@@ -11,7 +11,6 @@
 #include "SelectableWidget.generated.h"
 
 class UCommonButtonBase;
-class USelectableOption;
 class USelectionInputs;
 struct FInputActionInstance;
 class UInputMappingContext;

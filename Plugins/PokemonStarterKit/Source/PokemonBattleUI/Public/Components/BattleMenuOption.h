@@ -4,14 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
-#include "Primatives/SelectableOption.h"
 
 #include "BattleMenuOption.generated.h"
 
 class UCommonTextBlock;
 class UBattleMenuHandler;
 class UImage;
-class UDisplayText;
 /**
  * The actual option widget for the move selection.
  */

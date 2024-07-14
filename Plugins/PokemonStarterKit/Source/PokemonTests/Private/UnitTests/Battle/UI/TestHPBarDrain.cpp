@@ -10,7 +10,7 @@
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockBattleSide.h"
 #include "Nodes/PlayBattlerHPAnimation.h"
-#include "Primatives/NumberImageWidget.h"
+#include "Components/NumberImageWidget.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"

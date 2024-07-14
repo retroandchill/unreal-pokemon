@@ -1,9 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/PokemonStatRow.h"
+#include "CommonNumericTextBlock.h"
+#include "CommonRichTextBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Primatives/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
@@ -30,11 +31,11 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     SetStatValueText(Pokemon, StatInfo);
 }
 
-UDisplayText *UPokemonStatRow::GetStatValue() const {
+UCommonNumericTextBlock *UPokemonStatRow::GetStatValue() const {
     return StatValue;
 }
 
 void UPokemonStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,
                                                       const TScriptInterface<IStatEntry> &StatInfo) {
-    StatValue->SetText(FText::FromString(FString::FromInt(StatInfo->GetStatValue())));
+    StatValue->SetCurrentValue(static_cast<float>(StatInfo->GetStatValue()));
 }

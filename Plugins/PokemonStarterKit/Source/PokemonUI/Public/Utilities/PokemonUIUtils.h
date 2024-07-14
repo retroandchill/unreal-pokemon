@@ -18,9 +18,8 @@ class UPokemonMenuBase;
 class UCommand;
 class UMenuHandler;
 class IPokemon;
-struct FTextColor;
 class UProgressBar;
-class UDisplayText;
+class UCommonTextBlock;
 
 /**
  * Blueprint function library for basic operations that the UI might require
@@ -66,27 +65,6 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
     static FString PadInt(int32 Value, int32 DesiredLength, TCHAR PaddingCharacter = TEXT('0'));
 
     /**
-     * Set the text for the item if it is not null
-     * @param TextWidget The item to set the text of
-     * @param Text The text to set everything to
-     */
-    static void SetItemText(TObjectPtr<UDisplayText> &TextWidget, const FText &Text);
-
-    /**
-     * Set the text for the item if it is not null
-     * @param TextWidget The item to set the text of
-     * @param Text The text to set everything to
-     */
-    static void SetItemText(TObjectPtr<UDisplayText> &TextWidget, FStringView Text);
-
-    /**
-     * Set the color of the text if it is not null
-     * @param TextWidget The item to set the color of
-     * @param Color The color to set everything to
-     */
-    static void SetItemTextColor(TObjectPtr<UDisplayText> &TextWidget, const FTextColor &Color);
-
-    /**
      * Set the values in the given progres bar to percentage given the provided values
      * @param ProgressBar The progress bar to set the percent of
      * @param CurrentValue The current value
@@ -99,7 +77,7 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      * @param Gender The Pokémon to process
      * @param TextWidget The widget to set the text for
      */
-    static void SetPokemonGenderText(EPokemonGender Gender, TObjectPtr<UDisplayText> &TextWidget);
+    static void SetPokemonGenderText(EPokemonGender Gender, UCommonTextBlock* TextWidget);
 
     /**
      * Create the command list from the given list of provided handlers

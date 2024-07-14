@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Components/SummaryScreenPage.h"
-#include "Pokemon/Breeding/PokemonGender.h"
-#include "Text/TextColor.h"
 #include "Trainers/TrainerGender.h"
 
 #include "PokemonInfoPage.generated.h"
 
+class UCommonTextStyle;
+class UCommonNumericTextBlock;
+class UCommonTextBlock;
 class UImage;
 class UProgressBar;
-class UDisplayText;
 
 /**
  * The page used to display the Pokémon info.
@@ -42,43 +42,43 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<ETrainerGender, FTextColor> GenderTextColors;
+    TMap<ETrainerGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     /**
      * The widget used to display the Pokédex number.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonNumberText;
+    TObjectPtr<UCommonTextBlock> PokemonNumberText;
 
     /**
      * The widget used to display the Pokémon's species.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> SpeciesNameText;
+    TObjectPtr<UCommonTextBlock> SpeciesNameText;
 
     /**
      * The widget used to display the Pokémon's OT name.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> OTNameText;
+    TObjectPtr<UCommonTextBlock> OTNameText;
 
     /**
      * The widget used to display the Pokémon's ID.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonIDText;
+    TObjectPtr<UCommonTextBlock> PokemonIDText;
 
     /**
      * The widget used to display the Pokémon's total Exp.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ExpTotalText;
+    TObjectPtr<UCommonNumericTextBlock> ExpTotalText;
 
     /**
      * The widget used to display the amount of Exp. needed for the Pokémon to level up.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> NextLevelUpCountText;
+    TObjectPtr<UCommonNumericTextBlock> NextLevelUpCountText;
 
     /**
      * The widget used to visually display the amount of Exp. needed for the Pokémon to level up.

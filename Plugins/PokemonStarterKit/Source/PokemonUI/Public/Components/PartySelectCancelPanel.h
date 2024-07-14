@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
-#include "Blueprint/UserWidget.h"
-#include "Primatives/SelectableOption.h"
 #include "SelectablePanel.h"
 
 #include "PartySelectCancelPanel.generated.h"

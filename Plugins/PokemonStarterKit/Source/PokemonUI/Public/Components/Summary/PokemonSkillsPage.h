@@ -7,8 +7,8 @@
 
 #include "PokemonSkillsPage.generated.h"
 
+class UCommonTextBlock;
 class UHPStatRow;
-class UDisplayText;
 class UPokemonStatRow;
 /**
  * The page that displays a Pokémon's stats and ability information.
@@ -64,11 +64,11 @@ class POKEMONUI_API UPokemonSkillsPage : public USummaryScreenPage {
      * The widget that displays the name of the Pokémon's ability.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> AbilityName;
+    TObjectPtr<UCommonTextBlock> AbilityName;
 
     /**
      * The widget that displays the description of the Pokémon's ability.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> AbilityDescription;
+    TObjectPtr<UCommonTextBlock> AbilityDescription;
 };
