@@ -16,7 +16,8 @@ public class RPGMenus : ModuleRules
 				"InputCore", 
 				"CommonUI", 
 				"UnrealRanges",
-				"CommonGame"
+				"CommonGame",
+				"GameplayTags"
 			}
 		);
 

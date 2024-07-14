@@ -1,6 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessageWithChoices.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/TextDisplayScreen.h"
 
 UDisplayMessageWithChoices *
@@ -16,17 +16,19 @@ UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject *WorldContex
 }
 
 void UDisplayMessageWithChoices::Activate() {
-    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen =
-        Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
+    if (Screen == nullptr) {
+        Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
+    }
     Screen->DisplayChoices(Message, Choices);
     Screen->ProcessChoice.AddDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
 }
 
 void UDisplayMessageWithChoices::ExecuteOnChoiceSelected(int32 ChoiceIndex, FName ChoiceID) {
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);
-    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UTextDisplayScreen>();
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr)
         return;
 

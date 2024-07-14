@@ -1,12 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "UI/K2Node_DisplayMessageBase.h"
-#include "BlueprintActionDatabaseRegistrar.h"
-#include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
-#include "Kismet/BlueprintAsyncActionBase.h"
 #include "KismetCompiler.h"
-#include "RPGMenusSubsystem.h"
 #include "Screens/TextDisplayScreen.h"
+#include "Utilities/RPGMenuUtilities.h"
 
 void UK2Node_DisplayMessageBase::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
     for (TObjectIterator<UClass> It; It; ++It) {
@@ -23,9 +20,9 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
         }))
         return;
 
-    const FName FunctionName = GET_FUNCTION_NAME_CHECKED_OneParam(URPGMenusSubsystem, RemoveScreenFromStack, UObject *);
+    const FName FunctionName = GET_FUNCTION_NAME_CHECKED_OneParam(URPGMenuUtilities, RemoveTopScreenFromOverlay, UObject *);
     auto IntermediateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, GetGraph());
-    IntermediateNode->FunctionReference.SetExternalMember(FunctionName, URPGMenusSubsystem::StaticClass());
+    IntermediateNode->FunctionReference.SetExternalMember(FunctionName, URPGMenuUtilities::StaticClass());
     IntermediateNode->AllocateDefaultPins();
 
     if (auto This_WorldContextPin = FindPin(TEXT("WorldContextObject")); This_WorldContextPin != nullptr) {

@@ -1,6 +1,6 @@
 ﻿#include "Asserts.h"
+#include "PrimaryGameLayout.h"
 #include "RangeHelpers.h"
-#include "RPGMenusSubsystem.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Components/ProgressBar.h"
@@ -29,8 +29,8 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     auto WidgetClass = Subclasses[0];
 
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
-    auto MenuSubsystem = Player->GetSubsystem<URPGMenusSubsystem>();
-    auto Screen = MenuSubsystem->AddScreenToStack<UPokemonBattleScreen>(WidgetClass);
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayout(Player.Get());
+    auto Screen = Layout->PushWidgetToLayerStack<UPokemonBattleScreen>(RPG::Menus::PrimaryMenuLayerTag, WidgetClass);
 
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
 

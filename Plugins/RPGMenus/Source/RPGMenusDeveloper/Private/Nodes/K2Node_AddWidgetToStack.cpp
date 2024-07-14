@@ -1,12 +1,11 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/K2Node_AddWidgetToStack.h"
-#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "EditorCategoryUtils.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "KismetCompilerMisc.h"
-#include "RPGMenusSubsystem.h"
 #include "Screens/Screen.h"
+#include "Utilities/RPGMenuUtilities.h"
 
 UK2Node_AddWidgetToStack::UK2Node_AddWidgetToStack(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer) {
@@ -16,7 +15,7 @@ UK2Node_AddWidgetToStack::UK2Node_AddWidgetToStack(const FObjectInitializer &Obj
 void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
-    static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(URPGMenusSubsystem, AddScreenToStackHelper);
+    static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(URPGMenuUtilities, PushScreenToStack);
     static const FName WorldContextObject_ParamName(TEXT("WorldContextObject"));
     static const FName WidgetType_ParamName(TEXT("ScreenType"));
 
@@ -43,7 +42,7 @@ void UK2Node_AddWidgetToStack::ExpandNode(FKismetCompilerContext &CompilerContex
     // create 'UWidgetBlueprintLibrary::Create' call node
     UK2Node_CallFunction *CallCreateNode =
         CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
-    CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, URPGMenusSubsystem::StaticClass());
+    CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, URPGMenuUtilities::StaticClass());
     CallCreateNode->AllocateDefaultPins();
 
     // store off the class to spawn before we mutate pin connections:

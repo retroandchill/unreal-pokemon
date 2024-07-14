@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/SelectPokemonFromParty.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/PokemonSelectScreen.h"
 
 USelectPokemonFromParty *
@@ -16,7 +16,8 @@ USelectPokemonFromParty::SelectPokemonFromParty(const UObject *WorldContextObjec
 
 void USelectPokemonFromParty::Activate() {
     auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->AddScreenToStack(ScreenClass);
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Layout->PushWidgetToLayerStack<UPokemonSelectScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
     Screen->GetOnPokemonSelect().BindUObject(this, &USelectPokemonFromParty::ExecuteOnSelected);
     Screen->GetOnScreenClosed().AddDynamic(this, &USelectPokemonFromParty::ExecuteOnCanceled);
     Screen->SetHelpText(HelpText);

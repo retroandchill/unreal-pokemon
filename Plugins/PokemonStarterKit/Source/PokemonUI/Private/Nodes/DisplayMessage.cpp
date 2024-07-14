@@ -1,6 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessage.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/TextDisplayScreen.h"
 
 UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject,
@@ -19,8 +19,11 @@ void UDisplayMessage::Activate() {
         OnConfirm.Broadcast();
         return;
     }
-    auto Screen =
-        Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->ConditionallyAddScreenToStack(ScreenClass);
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
+    if (Screen == nullptr) {
+        Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
+    }
     Screen->SetText(Message);
     Screen->NextMessage.AddDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
 }
@@ -28,8 +31,8 @@ void UDisplayMessage::Activate() {
 void UDisplayMessage::ExecuteOnConfirm() {
     OnConfirm.Broadcast();
 
-    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UTextDisplayScreen>();
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr)
         return;
 

@@ -1,8 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
+#include "PrimaryGameLayout.h"
 #include "Blueprint/WidgetTree.h"
-#include "RPGMenusSubsystem.h"
 #include "Windows/SelectableWidget.h"
+
+
+UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");
+UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::OverlayMenuLayerTag, "UI.Layer.Overlay");
 
 TSharedRef<SWidget> UScreen::RebuildWidget() {
     auto Ret = Super::RebuildWidget();
@@ -24,7 +28,7 @@ void UScreen::RefreshSelf_Implementation() {
 }
 
 void UScreen::CloseScreen() {
-    GetOwningPlayer()->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->RemoveScreenFromStack();
+    UPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer())->FindAndRemoveWidgetFromLayer(this);
     OnScreenClosed.Broadcast();
 }
 

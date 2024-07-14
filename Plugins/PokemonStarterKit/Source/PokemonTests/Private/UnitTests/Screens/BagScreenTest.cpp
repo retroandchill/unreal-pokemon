@@ -6,7 +6,6 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
-#include "RPGMenusSubsystem.h"
 #include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

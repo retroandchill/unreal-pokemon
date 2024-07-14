@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonActivatableWidget.h"
+#include "NativeGameplayTags.h"
 #include "Blueprint/UserWidget.h"
 
 #include "Screen.generated.h"
@@ -11,6 +12,21 @@ class USelectableWidget;
 struct FInputActionInstance;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
+
+
+namespace RPG::Menus {
+
+/**
+ * The native tag assigned the primary layer for display
+ */
+RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(PrimaryMenuLayerTag)
+
+/**
+ * The native tag assigned to any overlay layers layer for display
+ */
+RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag)
+
+}
 
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top

@@ -3,18 +3,19 @@
 
 #include "Utilities/BattleScreenHelpers.h"
 #include "PokemonBattleUI.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Battle/Battlers/Battler.h"
 #include "Screens/PokemonBattleScreen.h"
 
 UPokemonBattleScreen * UBattleScreenHelpers::FindBattleScreen(const UObject *WorldContextObject) {
-    auto MenuSubsystem = URPGMenusSubsystem::GetSubsystem(WorldContextObject);
-    if (MenuSubsystem == nullptr) {
-        UE_LOG(LogBattleUI, Warning, TEXT("No menu subsystem found, can't update battle HUD."))
+    auto PrimaryLayout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    if (PrimaryLayout == nullptr) {
+        UE_LOG(LogBattleUI, Warning, TEXT("No layout found, can't update battle HUD."))
         return nullptr;
     }
 
-    return MenuSubsystem->FindFirstInStack<UPokemonBattleScreen>();
+    auto ActiveWidget = PrimaryLayout->GetLayerWidget(RPG::Menus::PrimaryMenuLayerTag)->GetActiveWidget();
+    return Cast<UPokemonBattleScreen>(ActiveWidget);
 }
 
 UPokemonBattlePanel * UBattleScreenHelpers::FindPokemonBattlePanel(const UObject *WorldContextObject,

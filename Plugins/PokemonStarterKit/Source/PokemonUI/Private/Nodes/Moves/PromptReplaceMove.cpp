@@ -2,7 +2,7 @@
 
 
 #include "Nodes/Moves/PromptReplaceMove.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/MoveForgetScreen.h"
 #include "Settings/BaseSettings.h"
 
@@ -16,9 +16,9 @@ UPromptReplaceMove * UPromptReplaceMove::PromptReplaceMove(const UObject *WorldC
 
 void UPromptReplaceMove::Activate() {
     auto &ScreenPaths = Pokemon::FBaseSettings::Get().GetDefaultScreenPaths();
-    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Subsystem = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>();
-    auto Screen = Subsystem->AddScreenToStack<UMoveForgetScreen>(ScreenPaths.MoveForgetScreenClass.TryLoadClass<UMoveForgetScreen>());
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Layout->PushWidgetToLayerStack<UMoveForgetScreen>(RPG::Menus::PrimaryMenuLayerTag,
+        ScreenPaths.MoveForgetScreenClass.TryLoadClass<UMoveForgetScreen>());
     Screen->InitializeScene(Pokemon, Move);
     Screen->BindToOnMoveForgetComplete(FOnMoveForgetComplete::FDelegate::CreateUObject(this, &UPromptReplaceMove::OnMoveSelectionComplete));
 }
