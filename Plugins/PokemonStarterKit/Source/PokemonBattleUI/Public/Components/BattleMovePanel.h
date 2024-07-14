@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonButtonBase.h"
 #include "Primatives/SelectableOption.h"
 
 #include "BattleMovePanel.generated.h"
@@ -14,7 +15,7 @@ class IBattleMove;
  * The panel used to select a move from a battler
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleMovePanel : public USelectableOption {
+class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
     GENERATED_BODY()
 
   public:

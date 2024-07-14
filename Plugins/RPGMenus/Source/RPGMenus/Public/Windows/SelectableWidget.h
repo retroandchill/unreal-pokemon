@@ -3,11 +3,14 @@
 
 #include "CoreMinimal.h"
 #include "CommonActivatableWidget.h"
+#include "RangeHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "Data/CursorDirection.h"
+#include <range/v3/view/transform.hpp>
 
 #include "SelectableWidget.generated.h"
 
+class UCommonButtonBase;
 class USelectableOption;
 class USelectionInputs;
 struct FInputActionInstance;
@@ -25,9 +28,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProcessConfirm, int32, CurrentIndex
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
 
 /**
- * \class USelectableWidget
+ * @class USelectableWidget
  *
- * \brief A base class for selectable widgets in RPG menus.
+ * @brief A base class for selectable widgets in RPG menus.
  */
 UCLASS(BlueprintType)
 class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
@@ -35,36 +38,11 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
 
   public:
     /**
-     * Construct the default version of the widget
-     * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-     */
-    explicit USelectableWidget(const FObjectInitializer &ObjectInitializer);
-
-protected:
-    void NativeConstruct() override;
-    
-public:
-    
-    /**
      * Get the number of items in the menu that can be selected
      * @return The total number of items
      */
-    UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Selection)
-    int32 GetItemCount() const;
-
-    /**
-     * Get the number of rows in the menu
-     * @return The total number of items
-     */
     UFUNCTION(BlueprintPure, Category = Selection)
-    int32 GetRowCount() const;
-
-    /**
-     * Get the number of columns in the menu
-     * @return The total number of items
-     */
-    UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Selection)
-    int32 GetColumnCount() const;
+    int32 GetItemCount() const;
 
     /**
      * Get the current index of the menu
@@ -72,22 +50,6 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = Selection)
     int32 GetIndex() const;
-
-    /**
-     * Convenience method to get the row of a given index.
-     * @param IndexToCheck The index to get the row of.
-     * @return The row that index resides in.
-     */
-    UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
-    int32 GetRow(int32 IndexToCheck) const;
-
-    /**
-     * Convenience method to get the row of a given index.
-     * @param IndexToCheck The index to get the row of.
-     * @return The row that index resides in.
-     */
-    UFUNCTION(BlueprintPure, Category = "Selection|Utilities")
-    int32 GetColumn(int32 IndexToCheck) const;
 
     /**
      * Set the current index of the menu
@@ -121,33 +83,22 @@ public:
     FProcessCancel &GetOnCancel();
 
   protected:
-    void NativeOnRemovedFromFocusPath(const FFocusEvent &InFocusEvent) override;
-
-    FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
-
+    UWidget* NativeGetDesiredFocusTarget() const override;
+    
     /**
      * A convenience method to handle additional functionality when the user confirms a selection based on the specified
-     * index. This method plays the ConfirmSound, triggers the OnConfirm event, and invokes the ProcessConfirm method.
+     * index.
      *
      * @param CurrentIndex The current index of the menu
      */
     void ConfirmOnIndex(int32 CurrentIndex);
 
     /**
-     * Process the clicked button event for the Command Window
-     *
-     * @param Option The selectable option that was clicked
+     * Method used to invoke the cancel operation for this widget
      */
-    UFUNCTION(BlueprintCallable, Category = Selection, meta = (BlueprintProtected, HideSelfPin))
-    void ProcessClickedButton(USelectableOption *Option);
+    void Cancel();
 
-    /**
-     * Process the hovered button event for the Command Window
-     *
-     * @param Option The selectable option that was hovered
-     */
-    UFUNCTION(BlueprintCallable, Category = Selection, meta = (BlueprintProtected, HideSelfPin))
-    void ProcessHoveredButton(USelectableOption *Option);
+    bool NativeOnHandleBackAction() override;
 
     /**
      * Called when the selection is changed
@@ -156,13 +107,6 @@ public:
      */
     UFUNCTION(BlueprintNativeEvent, Category = Selection)
     void OnSelectionChange(int32 OldIndex, int32 NewIndex);
-
-    /**
-     * Called when the active state is changed
-     * @param bNewActiveState The new active state of the widget
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Selection)
-    void OnActiveChanged(bool bNewActiveState);
 
     /**
      * Additional functionality for when confirm is selected
@@ -178,17 +122,56 @@ public:
     void ProcessCancel();
 
     /**
-     * Process the procedure for handling when the cursor moves
-     * @param Direction The direction the cursor should move in
+     * Get the full list of selectable options for this widget
+     * @tparam T The type of option to expect
+     * @return A view of the options that will cast to the given type
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Selection)
-    int32 GetNextIndex(ECursorDirection Direction);
+    template <typename T>
+    auto GetSelectableOptions() const {
+        return RangeHelpers::CreateRange(SelectableButtons)
+            | ranges::views::transform([](UCommonButtonBase* Button) { return CastChecked<T>(Button); });
+    }
+    
+    /**
+     * Get the selectable option for this widget of the given type
+     * @tparam T The type of widget to get
+     * @param OptionIndex The index of the option to look for
+     * @return The found widget
+     */
+    template <typename T>
+    T* GetSelectableOption(int32 OptionIndex) const {
+        if (!SelectableButtons.IsValidIndex(OptionIndex)) {
+            return nullptr;
+        }
+
+        return CastChecked<T>(GetSelectableOption(OptionIndex));
+    }
 
     /**
-     * Function called when the cursor is moved
-     * @param Direction The received cursor input
+     * Get the selectable option for this widget
+     * @param OptionIndex The index of the option to look for
+     * @return The found widget
      */
-    virtual void ReceiveMoveCursor(ECursorDirection Direction);
+    UFUNCTION(BlueprintPure, Category = "Selection|Options")
+    UCommonButtonBase* GetSelectableOption(int32 OptionIndex) const;
+
+    UFUNCTION(BlueprintCallable, Category = "Selection|Options")
+    void ClearSelectableOptions();
+
+    /**
+     * Slot an option into the widget
+     * @param Option The option to be slotted
+     * @param OptionIndex The index of the option to slot
+     */
+    void SlotOption(UCommonButtonBase* Option, int32 OptionIndex);
+
+    /**
+     * The actual method called to slot the option into the UMG widget
+     * @param Option The option to be slotted
+     * @param OptionIndex The index of the option to slot
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Selection|Options")
+    void PlaceOptionIntoWidget(UWidget* Option, int32 OptionIndex);
 
   private:
     /**
@@ -207,41 +190,11 @@ public:
      * The index of the menu in question
      */
     UPROPERTY(EditAnywhere, Category = Selection)
-    int32 Index = -1;
+    int32 Index = INDEX_NONE;
 
     /**
-     * Is this menu actively selectable
+     * The child buttons that are part of this object
      */
-    UPROPERTY(EditAnywhere, Category = Selection)
-    bool bActive = false;
-
-    /**
-     * Do the selection options wrap when input would exceed the end
-     */
-    UPROPERTY(EditAnywhere, Category = Selection)
-    bool bWrapSelection = true;
-
-    /**
-     * Do the selection options wrap when input would exceed the end
-     */
-    UPROPERTY(EditAnywhere, Category = Selection)
-    TObjectPtr<USelectionInputs> InputMappings;
-
-    /**
-     * The sound played when the cursor moves
-     */
-    UPROPERTY(EditAnywhere, Category = Sound)
-    TObjectPtr<USoundBase> CursorSound;
-
-    /**
-     * The sound played when the player confirms a choice
-     */
-    UPROPERTY(EditAnywhere, Category = Sound)
-    TObjectPtr<USoundBase> ConfirmSound;
-
-    /**
-     * The sound played when the player cancels on selection
-     */
-    UPROPERTY(EditAnywhere, Category = Sound)
-    TObjectPtr<USoundBase> CancelSound;
+    UPROPERTY()
+    TArray<TObjectPtr<UCommonButtonBase>> SelectableButtons;
 };

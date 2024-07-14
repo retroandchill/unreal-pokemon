@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonButtonBase.h"
 #include "Blueprint/UserWidget.h"
 #include "Primatives/SelectableOption.h"
 #include "SelectablePanel.h"
@@ -13,7 +14,7 @@
  * The panel for the cancel options in the window.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPartySelectCancelPanel : public USelectableOption, public ISelectablePanel {
+class POKEMONUI_API UPartySelectCancelPanel : public UCommonButtonBase, public ISelectablePanel {
     GENERATED_BODY()
 
   public:

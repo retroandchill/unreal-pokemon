@@ -18,9 +18,10 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonActionOptions : public USelectableWidget {
     GENERATED_BODY()
 
-  public:
-    TSharedRef<SWidget> RebuildWidget() override;
+protected:
+    void NativePreConstruct() override;
 
+public:
     const TScriptInterface<IBattler> &GetCurrentBattler() const;
 
     /**
@@ -34,17 +35,6 @@ class POKEMONBATTLEUI_API UPokemonActionOptions : public USelectableWidget {
      * @param Screen The battle context to invoke for the handler
      */
     void ExecuteCurrentHandler(UPokemonBattleScreen *Screen);
-
-  protected:
-    int32 GetItemCount_Implementation() const override;
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
-
-    /**
-     * Slot an option into the menu
-     * @param Option The option to slot
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
-    void SlotOption(UBattleMenuOption *Option);
 
   private:
     /**
@@ -71,10 +61,4 @@ class POKEMONBATTLEUI_API UPokemonActionOptions : public USelectableWidget {
      */
     UPROPERTY(EditAnywhere, Instanced, Category = Selection)
     TArray<TObjectPtr<UBattleMenuHandler>> MenuActions;
-
-    /**
-     * The actual options in the menu
-     */
-    UPROPERTY()
-    TArray<TObjectPtr<UBattleMenuOption>> Options;
 };

@@ -18,6 +18,14 @@ void UMovePanel::SetMove(const TScriptInterface<IMove> &MoveIn) {
     OnMoveSet();
 }
 
+bool UMovePanel::IsMoveToLearn() const {
+    return bIsMoveToLearn;
+}
+
+void UMovePanel::SetIsMoveToLearn(bool bIsBeingLearned) {
+    bIsMoveToLearn = bIsBeingLearned;
+}
+
 UObject *UMovePanel::GetTypeIcon_Implementation() {
     check(Move != nullptr)
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();

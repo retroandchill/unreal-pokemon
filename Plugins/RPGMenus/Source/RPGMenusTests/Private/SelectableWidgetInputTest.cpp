@@ -25,12 +25,6 @@ bool SelectableWidgetInputTest::RunTest(const FString &Parameters) {
     NewWidget->SetIndex(0);
 
     UE_ASSERT_EQUAL(6, NewWidget->GetItemCount());
-    UE_ASSERT_EQUAL(3, NewWidget->GetRowCount());
-    UE_ASSERT_EQUAL(2, NewWidget->GetColumnCount());
-    UE_ASSERT_EQUAL(1, NewWidget->GetColumn(4));
-    UE_ASSERT_EQUAL(1, NewWidget->GetRow(4));
-    UE_ASSERT_EQUAL(2, NewWidget->GetColumn(5));
-    UE_ASSERT_EQUAL(1, NewWidget->GetRow(5));
 
     auto &UpKey = EKeys::W;
     auto &LeftKey = EKeys::A;

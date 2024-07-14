@@ -54,8 +54,6 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
     int32 GetItemQuantity() const;
 
-    int32 GetItemCount_Implementation() const override;
-
     void RefreshWindow();
 
     /**
@@ -90,17 +88,8 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     FOnNoItemSelected &GetOnNoItemSelected();
 
   protected:
-    /**
-     * Slot an item entry into the window
-     * @param Option The option that represents an item in the player's inventory
-     * @param ItemIndex The index of the item being slotted
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SlotItem(UItemOption *Option, int32 ItemIndex);
-
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
     void ProcessConfirm_Implementation(int32 CurrentIndex) override;
-    void ReceiveMoveCursor(ECursorDirection Direction) override;
 
   private:
     /**
@@ -160,10 +149,4 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     UPROPERTY(EditAnywhere, Category = "Display")
     TSubclassOf<UItemOption> ItemEntryClass;
-
-    /**
-     * The list of option widgets in the window.
-     */
-    UPROPERTY()
-    TArray<TObjectPtr<UItemOption>> Options;
 };

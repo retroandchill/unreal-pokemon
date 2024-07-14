@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonButtonBase.h"
 #include "Primatives/SelectableOption.h"
 
 #include "ItemOption.generated.h"
 
+class UCommonNumericTextBlock;
+class UCommonTextBlock;
 struct FItem;
 struct FItemSlot;
 class UDisplayText;
@@ -15,7 +18,7 @@ class UDisplayText;
  * An option that represents and item in the player's inventory.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UItemOption : public USelectableOption {
+class POKEMONUI_API UItemOption : public UCommonButtonBase {
     GENERATED_BODY()
 
   public:
@@ -41,6 +44,9 @@ class POKEMONUI_API UItemOption : public USelectableOption {
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     void SetItem(FName Item, int32 Quantity);
 
+protected:
+    void NativeOnCurrentTextStyleChanged() override;
+
   private:
     /**
      * Represents the current item held by this option
@@ -56,11 +62,11 @@ class POKEMONUI_API UItemOption : public USelectableOption {
      * Text that displays an item's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemNameText;
+    TObjectPtr<UCommonTextBlock> ItemNameText;
 
     /**
      * Text that displays the item's quantity.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemQuantityText;
+    TObjectPtr<UCommonTextBlock> ItemQuantityText;
 };

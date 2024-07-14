@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonButtonBase.h"
 #include "Bag/Item.h"
 #include "Blueprint/UserWidget.h"
 #include "Pokemon/Breeding/PokemonGender.h"
@@ -23,7 +24,7 @@ class IPokemon;
  * Widget for housing a single panel of a Pokémon
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPokemonPanel : public USelectableOption, public ISelectablePanel {
+class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectablePanel {
     GENERATED_BODY()
 
   public:
@@ -112,6 +113,8 @@ class POKEMONUI_API UPokemonPanel : public USelectableOption, public ISelectable
      */
     UPROPERTY()
     TScriptInterface<IPokemon> Pokemon;
+
+    int32 PokemonIndex;
 
     /**
      * The image that displays the icon of the Pokémon to the player

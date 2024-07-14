@@ -8,7 +8,7 @@ void UPartySelectCancelPanel::SetOwner(USelectableWidget *NewOwner) {
 }
 
 bool UPartySelectCancelPanel::IsPanelSelected() const {
-    return Owner != nullptr && Owner->GetIndex() == GetOptionIndex();
+    return IsHovered();
 }
 
 void UPartySelectCancelPanel::Refresh() {

@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonButtonBase.h"
 #include "Primatives/SelectableOption.h"
 
 #include "BattleMenuOption.generated.h"
 
+class UCommonTextBlock;
 class UBattleMenuHandler;
 class UImage;
 class UDisplayText;
@@ -14,7 +16,7 @@ class UDisplayText;
  * The actual option widget for the move selection.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleMenuOption : public USelectableOption {
+class POKEMONBATTLEUI_API UBattleMenuOption : public UCommonButtonBase {
     GENERATED_BODY()
 
   public:
@@ -24,12 +26,15 @@ class POKEMONBATTLEUI_API UBattleMenuOption : public USelectableOption {
      */
     void InitFromHandler(const UBattleMenuHandler *Handler);
 
+protected:
+    void NativeOnCurrentTextStyleChanged() override;
+
   private:
     /**
      * The widget that displays the option text
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> OptionText;
+    TObjectPtr<UCommonTextBlock> OptionText;
 
     /**
      * The widget that displays the background widget

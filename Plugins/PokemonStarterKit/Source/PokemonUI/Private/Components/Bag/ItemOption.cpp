@@ -1,6 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Bag/ItemOption.h"
+#include "CommonNumericTextBlock.h"
+#include "CommonTextBlock.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
 #include "Primatives/DisplayText.h"
@@ -13,6 +15,13 @@ const FItem &UItemOption::GetItem() const {
 
 int32 UItemOption::GetQuantity() const {
     return QuantityHeld;
+}
+
+void UItemOption::NativeOnCurrentTextStyleChanged() {
+    Super::NativeOnCurrentTextStyleChanged();
+    auto TextStyle = GetCurrentTextStyleClass();
+    ItemNameText->SetStyle(TextStyle);
+    ItemQuantityText->SetStyle(TextStyle);
 }
 
 void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {

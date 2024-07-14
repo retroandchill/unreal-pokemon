@@ -66,11 +66,8 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     UWidgetSwitcher *GetPageSwitcher() const;
-
-    int32 GetItemCount_Implementation() const override;
-    int32 GetColumnCount_Implementation() const override;
+    
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
-    void ReceiveMoveCursor(ECursorDirection Direction) override;
 
   private:
     /**
