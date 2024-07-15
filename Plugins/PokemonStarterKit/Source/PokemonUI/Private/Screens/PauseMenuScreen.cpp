@@ -8,8 +8,8 @@ void UPauseMenuScreen::NativePreConstruct() {
     if (CommandWindow == nullptr)
         return;
 
-    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(fthis, &UPauseMenuScreen::ProcessCommand);
-    CommandWindow->GetOnCancel().AddUniqueDynamic(fthis, &UPauseMenuScreen::CloseScreen);
+    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UPauseMenuScreen::ProcessCommand);
+    CommandWindow->GetOnCancel().AddUniqueDynamic(this, &UPauseMenuScreen::CloseScreen);
     CommandWindow->SetIndex(0);
     CommandWindow->ActivateWidget();
 }

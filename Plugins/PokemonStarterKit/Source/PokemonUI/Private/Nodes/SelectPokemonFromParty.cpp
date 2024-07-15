@@ -19,7 +19,7 @@ void USelectPokemonFromParty::Activate() {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     auto Screen = Layout->PushWidgetToLayerStack<UPokemonSelectScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
     Screen->GetOnPokemonSelect().BindUObject(this, &USelectPokemonFromParty::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddUniqueDynamic(fthis, &USelectPokemonFromParty::ExecuteOnCanceled);
+    Screen->GetOnScreenClosed().AddUniqueDynamic(this, &USelectPokemonFromParty::ExecuteOnCanceled);
     Screen->SetHelpText(HelpText);
 }
 

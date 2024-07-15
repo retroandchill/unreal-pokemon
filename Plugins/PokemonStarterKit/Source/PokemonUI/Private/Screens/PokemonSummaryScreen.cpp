@@ -13,8 +13,8 @@ void UPokemonSummaryScreen::NativeConstruct() {
     Super::NativeConstruct();
 
     SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
-    SummaryPages->GetOnConfirm().AddUniqueDynamic(fthis, &UPokemonSummaryScreen::SummaryPageConfirm);
-    SummaryPages->GetOnCancel().AddUniqueDynamic(fthis, &UPokemonSummaryScreen::CloseScreen);
+    SummaryPages->GetOnConfirm().AddUniqueDynamic(this, &UPokemonSummaryScreen::SummaryPageConfirm);
+    SummaryPages->GetOnCancel().AddUniqueDynamic(this, &UPokemonSummaryScreen::CloseScreen);
     SummaryPages->ActivateWidget();
     SummaryPages->SetIndex(0);
 }

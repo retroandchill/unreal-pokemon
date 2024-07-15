@@ -10,8 +10,8 @@ void UMoveForgetScreen::NativeConstruct() {
     FOnMoveSelectionChanged::FDelegate Binding;
     Binding.BindDynamic(MoveInfoWindow, &UMoveInfoWindow::RefreshMove);
     MoveSelectWindow->BindToOnMoveSelectionChanged(Binding);
-    MoveSelectWindow->GetOnConfirm().AddUniqueDynamic(fthis, &UMoveForgetScreen::OnMoveSelected);
-    MoveSelectWindow->GetOnCancel().AddUniqueDynamic(fthis, &UMoveForgetScreen::OnCanceled);
+    MoveSelectWindow->GetOnConfirm().AddUniqueDynamic(this, &UMoveForgetScreen::OnMoveSelected);
+    MoveSelectWindow->GetOnCancel().AddUniqueDynamic(this, &UMoveForgetScreen::OnCanceled);
 }
 
 void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemon) {

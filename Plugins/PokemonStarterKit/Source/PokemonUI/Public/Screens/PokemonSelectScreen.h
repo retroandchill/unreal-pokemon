@@ -49,6 +49,9 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
   protected:
     void RefreshSelf_Implementation() override;
 
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
+    UHelpWindow* GetHelpWindow() const;
+
   public:
     /**
      * Set the help text for the regular help window
@@ -109,7 +112,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     /**
      * The help window used for when the commands are shown.
      */
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintGetter = GetHelpWindow, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UHelpWindow> HelpWindow;
 
     /**

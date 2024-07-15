@@ -15,7 +15,7 @@ void UTrainerCardScreen::NativeConstruct() {
     check(PokemonSubsystem != nullptr)
     Trainer = PokemonSubsystem->GetPlayer();
     PlayerMetadata = PokemonSubsystem->GetPlayerMetadata();
-    PlayerMetadata->GetOnTimeUpdated().AddUniqueDynamic(fthis, &UTrainerCardScreen::SetPlayerTimeInfo);
+    PlayerMetadata->GetOnTimeUpdated().AddUniqueDynamic(this, &UTrainerCardScreen::SetPlayerTimeInfo);
 
     SetTrainerSprite();
     SetTrainerInfo();

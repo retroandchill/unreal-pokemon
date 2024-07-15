@@ -27,7 +27,7 @@ void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo& Info) {
     Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset, FRotator(), bSuccess);
     check(bSuccess)
     BattleInfo.Emplace(Info);
-    Battlefield->OnLevelShown.AddUniqueDynamic(fthis, &UBattleTransitionSubsystem::SetUpBattle);
+    Battlefield->OnLevelShown.AddUniqueDynamic(this, &UBattleTransitionSubsystem::SetUpBattle);
 }
 
 FDelegateHandle UBattleTransitionSubsystem::BindToBattleFinished(FBattleFinished::FDelegate &&Callback) {

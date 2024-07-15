@@ -14,10 +14,10 @@ void UPokemonSelectScreen::NativeConstruct() {
     check(SelectionPane != nullptr)
     SelectionPane->SetIndex(0);
     SelectionPane->ActivateWidget();
-    SelectionPane->GetOnConfirm().AddUniqueDynamic(fthis, &UPokemonSelectScreen::OnPokemonSelected);
-    SelectionPane->GetOnCancel().AddUniqueDynamic(fthis, &UPokemonSelectScreen::CloseScreen);
-    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(fthis, &UPokemonSelectScreen::ProcessCommand);
-    CommandWindow->GetOnCancel().AddUniqueDynamic(fthis, &UPokemonSelectScreen::OnCommandWindowCancel);
+    SelectionPane->GetOnConfirm().AddUniqueDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
+    SelectionPane->GetOnCancel().AddUniqueDynamic(this, &UPokemonSelectScreen::CloseScreen);
+    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UPokemonSelectScreen::ProcessCommand);
+    CommandWindow->GetOnCancel().AddUniqueDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
     ToggleCommandWindowVisibility(false);
 }
 
@@ -71,6 +71,10 @@ void UPokemonSelectScreen::RefreshScene() {
 void UPokemonSelectScreen::RefreshSelf_Implementation() {
     Super::RefreshSelf_Implementation();
     RefreshScene();
+}
+
+UHelpWindow * UPokemonSelectScreen::GetHelpWindow() const {
+    return HelpWindow;
 }
 
 void UPokemonSelectScreen::SetHelpText(FText Text) {

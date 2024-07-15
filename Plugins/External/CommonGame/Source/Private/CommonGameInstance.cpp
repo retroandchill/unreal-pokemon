@@ -90,9 +90,9 @@ void UCommonGameInstance::Init()
 	if (ensure(UserSubsystem))
 	{
 		UserSubsystem->SetTraitTags(PlatformTraits);
-		UserSubsystem->OnHandleSystemMessage.AddUniqueDynamic(fthis, &UCommonGameInstance::HandleSystemMessage);
-		UserSubsystem->OnUserPrivilegeChanged.AddUniqueDynamic(fthis, &UCommonGameInstance::HandlePrivilegeChanged);
-		UserSubsystem->OnUserInitializeComplete.AddUniqueDynamic(fthis, &UCommonGameInstance::HandlerUserInitialized);
+		UserSubsystem->OnHandleSystemMessage.AddUniqueDynamic(this, &UCommonGameInstance::HandleSystemMessage);
+		UserSubsystem->OnUserPrivilegeChanged.AddUniqueDynamic(this, &UCommonGameInstance::HandlePrivilegeChanged);
+		UserSubsystem->OnUserInitializeComplete.AddUniqueDynamic(this, &UCommonGameInstance::HandlerUserInitialized);
 	}
 
 	UCommonSessionSubsystem* SessionSubsystem = GetSubsystem<UCommonSessionSubsystem>();

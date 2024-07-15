@@ -22,7 +22,7 @@ void UDisplayMessageWithChoices::Activate() {
         Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
     }
     Screen->DisplayChoices(Message, Choices);
-    Screen->ProcessChoice.AddUniqueDynamic(fthis, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
+    Screen->ProcessChoice.AddUniqueDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
 }
 
 void UDisplayMessageWithChoices::ExecuteOnChoiceSelected(int32 ChoiceIndex, FName ChoiceID) {

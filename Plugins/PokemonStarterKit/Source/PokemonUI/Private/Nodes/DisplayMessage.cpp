@@ -25,7 +25,7 @@ void UDisplayMessage::Activate() {
         Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
     }
     Screen->SetText(Message);
-    Screen->NextMessage.AddUniqueDynamic(fthis, &UDisplayMessage::ExecuteOnConfirm);
+    Screen->NextMessage.AddUniqueDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
 }
 
 void UDisplayMessage::ExecuteOnConfirm() {

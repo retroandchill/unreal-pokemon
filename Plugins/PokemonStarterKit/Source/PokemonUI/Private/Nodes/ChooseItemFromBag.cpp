@@ -19,7 +19,7 @@ void UChooseItemFromBag::Activate() {
     auto Screen = Layout->PushWidgetToLayerStack<UBagScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
     Screen->ApplyItemFilter(ItemFilter);
     Screen->GetOnItemSelected().BindUObject(this, &UChooseItemFromBag::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddUniqueDynamic(fthis, &UChooseItemFromBag::ExecuteOnCanceled);
+    Screen->GetOnScreenClosed().AddUniqueDynamic(this, &UChooseItemFromBag::ExecuteOnCanceled);
 }
 
 void UChooseItemFromBag::ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item,
