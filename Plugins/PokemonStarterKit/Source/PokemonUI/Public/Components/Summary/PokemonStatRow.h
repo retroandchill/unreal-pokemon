@@ -51,18 +51,24 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
     UPROPERTY(EditAnywhere, BlueprintSetter = SetDisplayedStat, Category = "Stats",
               meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName DisplayedStat;
+    
+    /**
+     * The text format for a stat that is not altered
+     */
+    UPROPERTY(EditAnywhere, Category = "Stat")
+    TSubclassOf<UCommonTextStyle> DefaultStyle;
 
     /**
      * The text format for a stat that is boosted.
      */
     UPROPERTY(EditAnywhere, Category = "Stat")
-    FText BoostedFormat = FText::FromStringView(TEXT("<Boosted>{0}</>"));
+    TSubclassOf<UCommonTextStyle> BoostedStyle;
 
     /**
      * The text format for a stat that is decreased.
      */
     UPROPERTY(EditAnywhere, Category = "Stat")
-    FText DecreasedFormat = FText::FromStringView(TEXT("<Decreased>{0}</>"));
+    TSubclassOf<UCommonTextStyle> DecreasedStyle;
 
     /**
      * The text label for the name of the stat.
