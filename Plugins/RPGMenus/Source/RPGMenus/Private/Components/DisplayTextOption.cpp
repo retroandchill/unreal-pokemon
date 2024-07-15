@@ -9,5 +9,7 @@ void UDisplayTextOption::SetText(const FText &NewText) {
 
 void UDisplayTextOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
-    //DisplayText->SetTextStyle(GetCurrentTextStyleClass());
+    if (DisplayText != nullptr) {
+        DisplayText->SetTextStyle(GetCurrentTextStyleClass());
+    }
 }

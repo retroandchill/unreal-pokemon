@@ -134,7 +134,7 @@ FDisplayChoices &UMessageWindow::GetOnDisplayChoices() {
 }
 
 void UMessageWindow::ResizeWindow() {
-    if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
+    if (SizeBox != nullptr && DisplayTextWidget != nullptr && DisplayTextWidget->GetTextStyle() != nullptr) {
         auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
         FSlateFontInfo Font;
         GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
