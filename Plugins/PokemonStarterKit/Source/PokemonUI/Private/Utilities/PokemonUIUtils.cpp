@@ -6,7 +6,7 @@
 #include "PrimaryGameLayout.h"
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 
 enum class EPokemonGender : uint8;
 

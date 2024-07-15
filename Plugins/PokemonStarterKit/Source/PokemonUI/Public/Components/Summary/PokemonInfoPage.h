@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/SummaryScreenPage.h"
+#include "Components/Summary/SummaryScreenPage.h"
 #include "Trainers/TrainerGender.h"
 
 #include "PokemonInfoPage.generated.h"

@@ -4,7 +4,7 @@
 #include "Components/Image.h"
 #include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/SummaryNameInfo.h"
-#include "Components/SummaryScreenPage.h"
+#include "Components/Summary/SummaryScreenPage.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
 #include "Windows/SummaryPages.h"

@@ -6,7 +6,7 @@
 #include "Data/SelectionInputs.h"
 #include "MathUtilities.h"
 #include "Fonts/FontMeasure.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Utilities/WidgetUtilities.h"
 

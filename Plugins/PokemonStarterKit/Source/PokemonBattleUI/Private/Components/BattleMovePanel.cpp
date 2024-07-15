@@ -4,7 +4,7 @@
 #include "Battle/Moves/BattleMove.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IBattleMove> &UBattleMovePanel::GetMove() const {

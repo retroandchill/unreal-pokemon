@@ -7,7 +7,7 @@
 #include "Components/Summary/PokemonStatRow.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Pokemon.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Settings/BaseSettings.h"
 
 TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {

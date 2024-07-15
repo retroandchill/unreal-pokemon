@@ -5,7 +5,7 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 
 void UTrainerCardScreen::NativeConstruct() {

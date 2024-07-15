@@ -1,13 +1,13 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
-#include "Components/PokemonPanel.h"
+#include "Components/Party/PokemonPanel.h"
 #include "CommonNumericTextBlock.h"
 #include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/PokemonSelectionPane.h"
 #include "Windows/SelectableWidget.h"

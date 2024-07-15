@@ -5,7 +5,7 @@
 #include "CommonRichTextBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 

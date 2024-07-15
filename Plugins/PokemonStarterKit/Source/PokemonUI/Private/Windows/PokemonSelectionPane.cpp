@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/PokemonSelectionPane.h"
 #include "Blueprint/WidgetTree.h"
-#include "Components/PartySelectCancelPanel.h"
-#include "Components/PokemonPanel.h"
+#include "Components/Party/PartySelectCancelPanel.h"
+#include "Components/Party/PokemonPanel.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Settings/BaseSettings.h"
 #include <range/v3/algorithm/for_each.hpp>

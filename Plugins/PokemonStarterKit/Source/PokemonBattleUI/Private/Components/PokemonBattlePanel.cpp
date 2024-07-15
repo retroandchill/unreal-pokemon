@@ -7,7 +7,7 @@
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
 

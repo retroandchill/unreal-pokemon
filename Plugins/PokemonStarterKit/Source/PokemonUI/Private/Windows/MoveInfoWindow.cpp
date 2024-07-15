@@ -3,7 +3,7 @@
 #include "Windows/MoveInfoWindow.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UMoveInfoWindow::RefreshMove_Implementation(const TScriptInterface<IMove> &Move) {

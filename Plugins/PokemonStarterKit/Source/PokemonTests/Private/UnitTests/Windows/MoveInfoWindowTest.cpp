@@ -2,7 +2,7 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Moves/DefaultMove.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

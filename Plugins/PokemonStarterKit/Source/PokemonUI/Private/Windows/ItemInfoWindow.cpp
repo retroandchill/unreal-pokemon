@@ -4,7 +4,7 @@
 #include "Bag/Item.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UItemInfoWindow::Refresh_Implementation(const FItem &Item, int32 Quantity) {

@@ -9,7 +9,7 @@
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattler.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Components/NumberImageWidget.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

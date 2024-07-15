@@ -13,7 +13,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
-#include "Primatives/DisplayText.h"
+#include "Components/DisplayText.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
