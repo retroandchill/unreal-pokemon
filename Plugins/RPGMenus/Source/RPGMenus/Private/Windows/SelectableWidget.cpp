@@ -28,6 +28,14 @@ void USelectableWidget::Deselect() {
     OnSelectionChange(OldIndex, Index);
 }
 
+UCommonButtonBase * USelectableWidget::GetSelectedOption() const {
+    if (!SelectableButtons.IsValidIndex(Index)) {
+        return nullptr;
+    }
+
+    return SelectableButtons[Index];
+}
+
 FProcessConfirm &USelectableWidget::GetOnConfirm() {
     return OnConfirm;
 }

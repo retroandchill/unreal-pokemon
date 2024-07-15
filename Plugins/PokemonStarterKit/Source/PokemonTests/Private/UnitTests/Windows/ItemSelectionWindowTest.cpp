@@ -4,13 +4,13 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
-#include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
 #include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
 #include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
 #include "Windows/ItemSelectionWindow.h"
+#include "Input/UIActionBinding.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
                                  "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
@@ -107,15 +107,22 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     ItemSelection->SetIndex(1);
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
-
     
-    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(ItemSelection.Get(), "InputMappings");
-    UE_ASSERT_NOT_NULL(InputMappings.Get());
-    auto LeftInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "LeftInputs").begin();
-    auto RightInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "RightInputs").begin();
-
+    auto PreviousActionHandle = ItemSelection->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
+        return BindingHandle.GetActionName() == "Previous";
+    });
+    UE_ASSERT_NOT_NULL(PreviousActionHandle);
+    auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
+    UE_ASSERT_NOT_NULL(PreviousAction.Get());
+    auto NextActionHandle = ItemSelection->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
+        return BindingHandle.GetActionName() == "Next";
+    });
+    UE_ASSERT_NOT_NULL(NextActionHandle);
+    auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
+    UE_ASSERT_NOT_NULL(NextAction.Get());
+    
     ItemSelection->ActivateWidget();
-    UInputUtilities::SimulateKeyPress(ItemSelection.Get(), LeftInput);
+    UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Items"), Dispatcher->CurrentPocket.ToString());
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("REPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
@@ -123,12 +130,12 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("SUPERREPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
 
-    UInputUtilities::SimulateKeyPress(ItemSelection.Get(), RightInput);
+    UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
     ItemSelection->SetIndex(0);
-    UInputUtilities::SimulateKeyPress(ItemSelection.Get(), LeftInput);
+    UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Items"), Dispatcher->CurrentPocket.ToString());
     UE_CHECK_EQUAL(TEXT("SUPERREPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
 

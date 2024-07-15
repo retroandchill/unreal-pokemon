@@ -65,6 +65,9 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     UFUNCTION(BlueprintCallable, Category = Selection)
     void Deselect();
 
+    UFUNCTION(BlueprintPure, Category = Selection)
+    UCommonButtonBase* GetSelectedOption() const;
+
     /**
      * @brief Retrieves the reference to the delegate for when the user presses confirm.
      *

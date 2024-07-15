@@ -3,10 +3,10 @@
 #include "Asserts.h"
 #include "Components/WidgetSwitcher.h"
 #include "Data/SelectionInputs.h"
+#include "Input/UIActionBinding.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/InputUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -34,17 +34,25 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(PageSwitcher);
     UE_CHECK_EQUAL(0, PageSwitcher->GetActiveWidgetIndex());
 
-    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(Pages.Get(), "InputMappings");
-    UE_ASSERT_NOT_NULL(InputMappings.Get());
-    auto UpInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "UpInputs").begin();
-    auto DownInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "DownInputs").begin();
+    auto PreviousActionHandle = Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
+        return BindingHandle.GetActionName() == "PreviousPokemon";
+    });
+    UE_ASSERT_NOT_NULL(PreviousActionHandle);
+    auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
+    UE_ASSERT_NOT_NULL(PreviousAction.Get());
+    auto NextActionHandle = Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
+        return BindingHandle.GetActionName() == "NextPokemon";
+    });
+    UE_ASSERT_NOT_NULL(NextActionHandle);
+    auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
+    UE_ASSERT_NOT_NULL(NextAction.Get());
 
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
                 Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
-    UInputUtilities::SimulateKeyPress(Pages.Get(), DownInput);
+    UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(),
                 Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
-    UInputUtilities::SimulateKeyPress(Pages.Get(), UpInput);
+    UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
                 Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
 

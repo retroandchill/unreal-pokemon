@@ -1,4 +1,5 @@
 ﻿#include "Asserts.h"
+#include "CommonButtonBase.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Data/SelectionInputs.h"
@@ -11,7 +12,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Screens/PokemonBattleScreen.h"
-#include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
@@ -78,29 +78,29 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     int32 FightHandlerIndex =
         Options.IndexOfByPredicate([](UBattleMenuHandler *Handler) { return Handler->IsA<UFightHandler>(); });
     ActionSelect->SetIndex(FightHandlerIndex);
-    UInputUtilities::SimulateKeyPress(ActionSelect, ConfirmButton);
+    ActionSelect->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(ESlateVisibility::Visible, MoveSelect->GetVisibility());
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, ActionSelect->GetVisibility());
 
-    UInputUtilities::SimulateKeyPress(MoveSelect, CancelButton);
+    MoveSelect->GetOnCancel().Broadcast();
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, MoveSelect->GetVisibility());
     UE_CHECK_EQUAL(ESlateVisibility::Visible, ActionSelect->GetVisibility());
 
     ActionSelect->SetIndex(FightHandlerIndex);
-    UInputUtilities::SimulateKeyPress(ActionSelect, ConfirmButton);
+    ActionSelect->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(ESlateVisibility::Visible, MoveSelect->GetVisibility());
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, ActionSelect->GetVisibility());
 
-    UInputUtilities::SimulateKeyPress(MoveSelect, ConfirmButton);
+    MoveSelect->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, MoveSelect->GetVisibility());
     UE_CHECK_EQUAL(ESlateVisibility::Visible, ActionSelect->GetVisibility());
 
     ActionSelect->SetIndex(FightHandlerIndex);
-    UInputUtilities::SimulateKeyPress(ActionSelect, ConfirmButton);
+    ActionSelect->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(ESlateVisibility::Visible, MoveSelect->GetVisibility());
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, ActionSelect->GetVisibility());
 
-    UInputUtilities::SimulateKeyPress(MoveSelect, ConfirmButton);
+    MoveSelect->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, MoveSelect->GetVisibility());
     UE_CHECK_EQUAL(ESlateVisibility::Hidden, ActionSelect->GetVisibility());
 

@@ -1,12 +1,12 @@
 ﻿#include "Screens/BagScreen.h"
 #include "Asserts.h"
+#include "CommonButtonBase.h"
 #include "Data/SelectionInputs.h"
 #include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
-#include "Utilities/InputUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/Dispatchers/SampleHandler.h"
@@ -51,24 +51,24 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     auto CancelButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
 
     using enum ESlateVisibility;
-    UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
+    ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
     UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
     UE_ASSERT_TRUE(CommandWindow->IsActivated());
-    UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
+    CommandWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(TEXT("REPEL"), SampleHandler->ItemID.ToString());
     UE_CHECK_EQUAL(1, SampleHandler->ItemQuantity);
 
-    UInputUtilities::SimulateKeyPress(CommandWindow, CancelButton);
+    CommandWindow->GetOnCancel().Broadcast();
     UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
     UE_CHECK_FALSE(CommandWindow->IsActivated());
     UE_ASSERT_TRUE(ItemSelectionWindow->IsActivated());
-    UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
+    ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
     UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
     UE_ASSERT_TRUE(CommandWindow->IsActivated());
     CommandWindow->SetIndex(1);
-    UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
+    CommandWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
     UE_CHECK_FALSE(CommandWindow->IsActivated());
     UE_ASSERT_TRUE(ItemSelectionWindow->IsActivated());
@@ -80,7 +80,7 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
             ItemID = Item.ID;
             ItemQuantity = Quantity;
         });
-    UInputUtilities::SimulateKeyPress(ItemSelectionWindow, ConfirmButton);
+    ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(TEXT("REPEL"), ItemID.ToString());
     UE_CHECK_EQUAL(1, ItemQuantity);
 

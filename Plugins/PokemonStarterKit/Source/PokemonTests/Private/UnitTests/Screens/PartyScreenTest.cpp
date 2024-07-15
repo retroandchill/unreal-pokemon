@@ -6,7 +6,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Screens/PokemonSelectScreen.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/InputUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -47,14 +46,14 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     
     auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
     auto Cancel = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
-    UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
+    SelectionPane->GetSelectedOption()->OnClicked().Broadcast();
     UE_ASSERT_FALSE(SelectionPane->IsActivated());
     UE_ASSERT_TRUE(CommandWindow->IsActivated());
     UE_CHECK_EQUAL(Visible, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandHelpWindow->GetVisibility());
 
     CommandWindow->SetIndex(CommandWindow->GetItemCount() - 1);
-    UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
+    CommandWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_ASSERT_TRUE(SelectionPane->IsActivated());
     UE_ASSERT_FALSE(CommandWindow->IsActivated());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
@@ -62,7 +61,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
 
     SelectionPane->BeginSwitch(SelectionPane->GetIndex());
     SelectionPane->SetIndex(1);
-    UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
+    SelectionPane->GetSelectedOption()->OnClicked().Broadcast();
 
     auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
     UE_CHECK_EQUAL(TEXT("EMBOAR"), Trainer->GetParty()[0]->GetSpecies().ID.ToString());
