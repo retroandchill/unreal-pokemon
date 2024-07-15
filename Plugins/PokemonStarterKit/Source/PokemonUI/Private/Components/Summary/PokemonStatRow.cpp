@@ -5,6 +5,7 @@
 #include "CommonRichTextBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "Primatives/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
@@ -31,7 +32,7 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     SetStatValueText(Pokemon, StatInfo);
 }
 
-UCommonTextBlock *UPokemonStatRow::GetStatValue() const {
+UDisplayText *UPokemonStatRow::GetStatValue() const {
     return StatValue;
 }
 

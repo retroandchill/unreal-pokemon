@@ -9,7 +9,7 @@
 #include "MessageWindow.generated.h"
 
 class UInputAction;
-class UCommonTextBlock;
+class UDisplayText;
 class UCommandWindow;
 class UScrollBox;
 class UWindow;
@@ -137,7 +137,7 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
      * The widget that contains the text displayed to the player
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> DisplayTextWidget;
+    TObjectPtr<UDisplayText> DisplayTextWidget;
 
     /**
      * The scroll box used to keep the text visible on screen

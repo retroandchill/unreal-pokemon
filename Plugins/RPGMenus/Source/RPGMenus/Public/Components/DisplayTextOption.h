@@ -7,7 +7,6 @@
 
 #include "DisplayTextOption.generated.h"
 
-class UCommonTextBlock;
 class UDisplayText;
 /**
  * Selectable option that contains a display text that can be updated
@@ -29,5 +28,5 @@ protected:
 
   private:
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> DisplayText;
+    TObjectPtr<UDisplayText> DisplayText;
 };

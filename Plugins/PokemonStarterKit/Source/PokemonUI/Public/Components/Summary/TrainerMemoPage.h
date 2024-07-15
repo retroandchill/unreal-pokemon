@@ -11,7 +11,8 @@
 
 #define MEMO_TEXT(Key, Text) NSLOCTEXT("UTrainerMemoPage", Key, Text)
 
-class UCommonRichTextBlock;
+class UDisplayText;
+
 /**
  * Struct that contains a list of characteristics.
  */
@@ -53,7 +54,7 @@ class POKEMONUI_API UTrainerMemoPage : public USummaryScreenPage {
      * The text box used to display the information memo.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonRichTextBlock> MemoBlock;
+    TObjectPtr<UDisplayText> MemoBlock;
 
     /**
      * The format used for the nature line.

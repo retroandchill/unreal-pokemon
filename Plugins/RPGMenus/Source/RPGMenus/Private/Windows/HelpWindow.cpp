@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Windows/HelpWindow.h"
-#include "CommonTextBlock.h"
+#include "Primatives/DisplayText.h"
 
 void UHelpWindow::NativePreConstruct() {
     Super::NativePreConstruct();

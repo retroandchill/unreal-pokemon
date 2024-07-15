@@ -7,9 +7,9 @@
 
 #include "BattleMenuOption.generated.h"
 
-class UCommonTextBlock;
 class UBattleMenuHandler;
 class UImage;
+class UDisplayText;
 /**
  * The actual option widget for the move selection.
  */
@@ -32,7 +32,7 @@ protected:
      * The widget that displays the option text
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> OptionText;
+    TObjectPtr<UDisplayText> OptionText;
 
     /**
      * The widget that displays the background widget

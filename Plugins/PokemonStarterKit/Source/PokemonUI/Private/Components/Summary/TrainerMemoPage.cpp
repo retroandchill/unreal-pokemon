@@ -7,6 +7,7 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "RangeHelpers.h"
+#include "Primatives/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 #include <range/v3/view/transform.hpp>

@@ -1,7 +1,5 @@
 ﻿
 #include "Asserts.h"
-#include "CommonRichTextBlock.h"
-#include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/PokemonInfoPage.h"
@@ -15,6 +13,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
+#include "Primatives/DisplayText.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -41,15 +40,15 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
 
     Page->Refresh(Pokemon1);
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, PokemonNameText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, PokemonNameText);
     UE_ASSERT_NOT_NULL(PokemonNameText);
     UE_CHECK_EQUAL(TEXT("Kabutops"), PokemonNameText->GetText().ToString());
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, PokemonLevelText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, PokemonLevelText);
     UE_ASSERT_NOT_NULL(PokemonLevelText);
     UE_CHECK_EQUAL(TEXT("30"), PokemonLevelText->GetText().ToString());
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, PokemonGenderText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, PokemonGenderText);
     UE_ASSERT_NOT_NULL(PokemonGenderText);
     UE_CHECK_EQUAL(TEXT("♀"), PokemonGenderText->GetText().ToString());
 
@@ -98,7 +97,7 @@ bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
 
     Page->Refresh(Pokemon1);
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, ItemNameText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, ItemNameText);
     UE_ASSERT_NOT_NULL(ItemNameText);
     UE_CHECK_EQUAL(TEXT("Mystic Water"), ItemNameText->GetText().ToString());
 
@@ -140,15 +139,15 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
 
     Page->RefreshInfo(Pokemon);
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, SpeciesNameText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, SpeciesNameText);
     UE_ASSERT_NOT_NULL(SpeciesNameText);
     UE_CHECK_EQUAL(TEXT("Kabutops"), SpeciesNameText->GetText().ToString());
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, OTNameText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, OTNameText);
     UE_ASSERT_NOT_NULL(OTNameText);
     UE_CHECK_EQUAL(ForeignTrainer->GetTrainerName().ToString(), OTNameText->GetText().ToString());
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, PokemonIDText);
+    FIND_CHILD_WIDGET(Page, UDisplayText, PokemonIDText);
     UE_ASSERT_NOT_NULL(PokemonIDText);
     UE_CHECK_EQUAL(ForeignTrainer->GetIdNumber(), FCString::Atoi(*PokemonIDText->GetText().ToString()));
 
@@ -184,7 +183,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
                                                                     ForeignTrainer);
     Page->RefreshInfo(Pokemon1);
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, MemoBlock);
+    FIND_CHILD_WIDGET(Page, UDisplayText, MemoBlock);
     UE_ASSERT_NOT_NULL(MemoBlock);
     TArray<FString> Lines;
     MemoBlock->GetText().ToString().ParseIntoArrayLines(Lines);
@@ -259,9 +258,9 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
                                                                     ForeignTrainer);
     Page->RefreshInfo(Pokemon1);
 
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, AbilityName);
+    FIND_CHILD_WIDGET(Page, UDisplayText, AbilityName);
     UE_ASSERT_NOT_NULL(AbilityName);
-    FIND_CHILD_WIDGET(Page, UCommonTextBlock, AbilityDescription);
+    FIND_CHILD_WIDGET(Page, UDisplayText, AbilityDescription);
     UE_ASSERT_NOT_NULL(AbilityDescription);
 
     UE_CHECK_EQUAL(TEXT("Battle Armor"), AbilityName->GetText().ToString());
@@ -273,7 +272,7 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
     TArray<FString> Values = {
         TEXT("HP"), TEXT("<Boosted>Atk</>"), TEXT("Def"), TEXT("<Decreased>SpAtk</>"), TEXT("SpDef"), TEXT("Spd")};
     for (int i = 0; i < Values.Num(); i++) {
-        FIND_CHILD_WIDGET(StatValues[i], UCommonRichTextBlock, StatLabel);
+        FIND_CHILD_WIDGET(StatValues[i], UDisplayText, StatLabel);
         UE_ASSERT_NOT_NULL(StatLabel);
 
         UE_CHECK_EQUAL(Values[i], StatLabel->GetText().ToString());

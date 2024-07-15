@@ -7,10 +7,9 @@
 
 #include "ItemOption.generated.h"
 
-class UCommonNumericTextBlock;
-class UCommonTextBlock;
 struct FItem;
 struct FItemSlot;
+class UDisplayText;
 
 /**
  * An option that represents and item in the player's inventory.
@@ -60,11 +59,11 @@ protected:
      * Text that displays an item's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> ItemNameText;
+    TObjectPtr<UDisplayText> ItemNameText;
 
     /**
      * Text that displays the item's quantity.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> ItemQuantityText;
+    TObjectPtr<UDisplayText> ItemQuantityText;
 };

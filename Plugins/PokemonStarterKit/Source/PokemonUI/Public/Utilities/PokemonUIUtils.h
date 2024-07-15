@@ -20,6 +20,7 @@ class UMenuHandler;
 class IPokemon;
 class UProgressBar;
 class UCommonTextBlock;
+class UDisplayText;
 
 /**
  * Blueprint function library for basic operations that the UI might require
@@ -77,7 +78,7 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      * @param Gender The Pokémon to process
      * @param TextWidget The widget to set the text for
      */
-    static void SetPokemonGenderText(EPokemonGender Gender, UCommonTextBlock* TextWidget);
+    static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText* TextWidget);
 
     /**
      * Create the command list from the given list of provided handlers

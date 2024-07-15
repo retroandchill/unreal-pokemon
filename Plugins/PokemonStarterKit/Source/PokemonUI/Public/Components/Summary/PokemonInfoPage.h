@@ -9,10 +9,9 @@
 #include "PokemonInfoPage.generated.h"
 
 class UCommonTextStyle;
-class UCommonNumericTextBlock;
-class UCommonTextBlock;
 class UImage;
 class UProgressBar;
+class UDisplayText;
 
 /**
  * The page used to display the Pokémon info.
@@ -48,37 +47,37 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
      * The widget used to display the Pokédex number.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> PokemonNumberText;
+    TObjectPtr<UDisplayText> PokemonNumberText;
 
     /**
      * The widget used to display the Pokémon's species.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> SpeciesNameText;
+    TObjectPtr<UDisplayText> SpeciesNameText;
 
     /**
      * The widget used to display the Pokémon's OT name.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> OTNameText;
+    TObjectPtr<UDisplayText> OTNameText;
 
     /**
      * The widget used to display the Pokémon's ID.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> PokemonIDText;
+    TObjectPtr<UDisplayText> PokemonIDText;
 
     /**
      * The widget used to display the Pokémon's total Exp.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonNumericTextBlock> ExpTotalText;
+    TObjectPtr<UDisplayText> ExpTotalText;
 
     /**
      * The widget used to display the amount of Exp. needed for the Pokémon to level up.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonNumericTextBlock> NextLevelUpCountText;
+    TObjectPtr<UDisplayText> NextLevelUpCountText;
 
     /**
      * The widget used to visually display the amount of Exp. needed for the Pokémon to level up.

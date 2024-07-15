@@ -10,6 +10,7 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "Primatives/DisplayText.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/OwnerInfo.h"
 #include "Utilities/PokemonUIUtils.h"
@@ -34,12 +35,12 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     auto &OwnerInfo = Pokemon->GetOwnerInfo();
     OTNameText->SetText(OwnerInfo.OriginalTrainerName);
     if (auto Color = GenderTextColors.Find(OwnerInfo.OriginalTrainerGender); Color != nullptr) {
-        OTNameText->SetStyle(*Color);
+        OTNameText->SetTextStyle(*Color);
     }
     PokemonIDText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(OwnerInfo.ID, IdNumberLength)));
 
     auto StatBlock = Pokemon->GetStatBlock();
-    ExpTotalText->SetCurrentValue(static_cast<float>(StatBlock->GetExp()));
-    NextLevelUpCountText->SetCurrentValue(static_cast<float>(StatBlock->GetExpForNextLevel()));
+    ExpTotalText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExp())));
+    NextLevelUpCountText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExpForNextLevel())));
     ExpBar->SetPercent(StatBlock->GetExpPercent());
 }

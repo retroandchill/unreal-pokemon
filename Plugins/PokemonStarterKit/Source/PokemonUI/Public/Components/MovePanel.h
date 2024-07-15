@@ -7,7 +7,7 @@
 
 #include "MovePanel.generated.h"
 
-class UCommonTextBlock;
+class UDisplayText;
 class UImage;
 class IMove;
 /**
@@ -71,16 +71,16 @@ class POKEMONUI_API UMovePanel : public UCommonButtonBase {
      * Text for a move's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> MoveNameText;
+    TObjectPtr<UDisplayText> MoveNameText;
 
     /**
      * Text for the move's PP
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> MovePPText;
+    TObjectPtr<UDisplayText> MovePPText;
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> PPLabel;
+    TObjectPtr<UDisplayText> PPLabel;
 
     /**
      * The format used to print a move's PP.

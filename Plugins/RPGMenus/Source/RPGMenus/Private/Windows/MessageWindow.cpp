@@ -6,6 +6,7 @@
 #include "Data/SelectionInputs.h"
 #include "MathUtilities.h"
 #include "Fonts/FontMeasure.h"
+#include "Primatives/DisplayText.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Utilities/WidgetUtilities.h"
 
@@ -135,7 +136,9 @@ FDisplayChoices &UMessageWindow::GetOnDisplayChoices() {
 void UMessageWindow::ResizeWindow() {
     if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
         auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-        FVector2D Size = FontMeasure->Measure(TEXT("Sample"), DisplayTextWidget->GetFont(),
+        FSlateFontInfo Font;
+        GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
+        FVector2D Size = FontMeasure->Measure(TEXT("Sample"), Font,
                                               UWidgetUtilities::GetWidgetDPIScale());
         auto TextHeight = static_cast<float>(Size.Y) + ExtraPadding;
         SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow));
@@ -162,7 +165,9 @@ void UMessageWindow::QueueUpNewText() {
 
 void UMessageWindow::QueueLine(const FString &Line, double TotalTextAreaWidth) {
     auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-    FVector2D Size = FontMeasure->Measure(Line, DisplayTextWidget->GetFont(),
+    FSlateFontInfo Font;
+    GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
+    FVector2D Size = FontMeasure->Measure(Line, Font,
                                           UWidgetUtilities::GetWidgetDPIScale());
     if (double LineWidth = Size.X; TotalTextAreaWidth >= LineWidth) {
         QueueText(Line);
@@ -185,9 +190,11 @@ void UMessageWindow::QueueIndividualWords(const FString &Line, double TotalTextA
         FString NewText = CurrentLine.IsEmpty() ? Word : FString(" ") + Word;
         
         auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-        double CurrentTextWidth = FontMeasure->Measure(CurrentLine, DisplayTextWidget->GetFont(),
+        FSlateFontInfo Font;
+        GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
+        double CurrentTextWidth = FontMeasure->Measure(CurrentLine, Font,
                                               UWidgetUtilities::GetWidgetDPIScale()).X;
-        double NewTextWidth = FontMeasure->Measure(NewText, DisplayTextWidget->GetFont(),
+        double NewTextWidth = FontMeasure->Measure(NewText, Font,
                                               UWidgetUtilities::GetWidgetDPIScale()).X;
 
         if (double FullTextWidth = CurrentTextWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {

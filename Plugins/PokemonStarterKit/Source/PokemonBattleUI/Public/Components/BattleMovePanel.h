@@ -7,7 +7,7 @@
 
 #include "BattleMovePanel.generated.h"
 
-class UCommonTextBlock;
+class UDisplayText;
 class UImage;
 class IBattleMove;
 /**
@@ -60,13 +60,13 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * Text for a move's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> MoveNameText;
+    TObjectPtr<UDisplayText> MoveNameText;
 
     /**
      * Text for the move's PP
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> MovePPText;
+    TObjectPtr<UDisplayText> MovePPText;
 
     /**
      * The format used to print a move's PP.

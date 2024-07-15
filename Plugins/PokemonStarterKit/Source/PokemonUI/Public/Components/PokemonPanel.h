@@ -9,12 +9,11 @@
 
 #include "PokemonPanel.generated.h"
 
-class UCommonNumericTextBlock;
-class UCommonTextBlock;
 class USelectableWidget;
 class UPokemonSelectionPane;
 class UProgressBar;
 class UImage;
+class UDisplayText;
 class IPokemon;
 
 /**
@@ -129,19 +128,19 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
      * The text that displays the name for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> NameText;
+    TObjectPtr<UDisplayText> NameText;
 
     /**
      * The text block that displays the level for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonNumericTextBlock> LevelText;
+    TObjectPtr<UDisplayText> LevelText;
 
     /**
      * The text block that displays the gender symbol for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> GenderText;
+    TObjectPtr<UDisplayText> GenderText;
 
     /**
      * The color settings for the gender text widget
@@ -153,7 +152,7 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
      * The text block that displays the current and total HP of the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> HPText;
+    TObjectPtr<UDisplayText> HPText;
 
     /**
      * The image that displays the HP bar when necessary

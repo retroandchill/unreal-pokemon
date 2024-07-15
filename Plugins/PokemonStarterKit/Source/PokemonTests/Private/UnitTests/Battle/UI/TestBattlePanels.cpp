@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "CommonTextBlock.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -10,6 +9,7 @@
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattler.h"
+#include "Primatives/DisplayText.h"
 #include "Components/NumberImageWidget.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -50,11 +50,11 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     CoreAttributes->InitHP(100);
     Panel->SetBattler(Battler);
 
-    FIND_CHILD_WIDGET(Panel.Get(), UCommonTextBlock, PokemonName);
+    FIND_CHILD_WIDGET(Panel.Get(), UDisplayText, PokemonName);
     UE_ASSERT_NOT_NULL(PokemonName);
-    FIND_CHILD_WIDGET(Panel.Get(), UCommonTextBlock, PokemonGender);
+    FIND_CHILD_WIDGET(Panel.Get(), UDisplayText, PokemonGender);
     UE_ASSERT_NOT_NULL(PokemonGender);
-    FIND_CHILD_WIDGET(Panel.Get(), UCommonTextBlock, PokemonLevel);
+    FIND_CHILD_WIDGET(Panel.Get(), UDisplayText, PokemonLevel);
     UE_ASSERT_NOT_NULL(PokemonLevel);
     FIND_CHILD_WIDGET(Panel.Get(), UProgressBar, HPBar);
     UE_ASSERT_NOT_NULL(HPBar);

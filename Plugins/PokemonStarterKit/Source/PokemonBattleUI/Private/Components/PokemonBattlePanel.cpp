@@ -1,14 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/PokemonBattlePanel.h"
-#include "CommonNumericTextBlock.h"
-#include "CommonTextBlock.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
 
@@ -44,13 +43,13 @@ void UPokemonBattlePanel::Refresh() {
     }
 
     PokemonName->SetText(CurrentBattler->GetNickname());
-    PokemonLevel->SetCurrentValue(static_cast<float>(CurrentBattler->GetPokemonLevel()));
+    PokemonLevel->SetText(FText::FromString(FString::FromInt(CurrentBattler->GetPokemonLevel())));
     HPBar->SetPercent(CurrentBattler->GetHPPercent());
 
     auto Gender = CurrentBattler->GetGender();
     UPokemonUIUtils::SetPokemonGenderText(Gender, PokemonGender);
     if (GenderTextColors.Contains(Gender)) {
-        PokemonGender->SetStyle(GenderTextColors[Gender]);
+        PokemonGender->SetTextStyle(GenderTextColors[Gender]);
     }
 
     RefreshStatusEffect();

@@ -8,7 +8,7 @@
 #include "HelpWindow.generated.h"
 
 class UWindow;
-class UCommonTextBlock;
+class UDisplayText;
 
 /**
  * Window used for displaying some basic help text to the player.
@@ -46,7 +46,7 @@ class RPGMENUS_API UHelpWindow : public UUserWidget {
      * The text displayed to the player in the window.
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> HelpText;
+    TObjectPtr<UDisplayText> HelpText;
 
     /**
      * The text displayed to the player in the window.

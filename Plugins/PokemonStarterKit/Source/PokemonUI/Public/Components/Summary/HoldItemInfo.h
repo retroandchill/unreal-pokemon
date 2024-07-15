@@ -7,8 +7,8 @@
 
 #include "HoldItemInfo.generated.h"
 
-class UCommonTextBlock;
 class UImage;
+class UDisplayText;
 
 /**
  * Display's information about the Pokémon's hold item.
@@ -25,7 +25,7 @@ class POKEMONUI_API UHoldItemInfo : public UPokemonInfoWidget {
      * The widget used to display the item's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> ItemNameText;
+    TObjectPtr<UDisplayText> ItemNameText;
 
     /**
      * The image used to display the item's icon

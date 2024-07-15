@@ -2,11 +2,11 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Moves/DefaultMove.h"
+#include "Primatives/DisplayText.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "Windows/MoveInfoWindow.h"
-#include "CommonTextBlock.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(MoveInfoWindowTest, "Unit Tests.Windows.MoveInfoWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -21,11 +21,11 @@ bool MoveInfoWindowTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(MoveInfo.Get());
     MoveInfo->AddToViewport();
 
-    FIND_CHILD_WIDGET(MoveInfo.Get(), UCommonTextBlock, PowerText);
+    FIND_CHILD_WIDGET(MoveInfo.Get(), UDisplayText, PowerText);
     UE_ASSERT_NOT_NULL(PowerText);
-    FIND_CHILD_WIDGET(MoveInfo.Get(), UCommonTextBlock, AccuracyText);
+    FIND_CHILD_WIDGET(MoveInfo.Get(), UDisplayText, AccuracyText);
     UE_ASSERT_NOT_NULL(AccuracyText);
-    FIND_CHILD_WIDGET(MoveInfo.Get(), UCommonTextBlock, DescriptionText);
+    FIND_CHILD_WIDGET(MoveInfo.Get(), UDisplayText, DescriptionText);
     UE_ASSERT_NOT_NULL(DescriptionText);
 
     auto Move1 = NewObject<UDefaultMove>(World.Get())->Initialize(TEXT("AURASPHERE"));

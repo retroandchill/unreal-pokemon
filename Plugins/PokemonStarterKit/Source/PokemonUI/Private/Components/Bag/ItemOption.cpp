@@ -4,6 +4,7 @@
 #include "CommonTextBlock.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "Primatives/DisplayText.h"
 
 const FItem &UItemOption::GetItem() const {
     auto ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetData(CurrentItem);
@@ -19,10 +20,10 @@ void UItemOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
     auto TextStyle = GetCurrentTextStyleClass();
     if (ItemNameText != nullptr) {
-        ItemNameText->SetStyle(TextStyle);
+        //ItemNameText->SetTextStyle(TextStyle);
     }
     if (ItemQuantityText != nullptr) {
-        ItemQuantityText->SetStyle(TextStyle);
+        //ItemQuantityText->SetTextStyle(TextStyle);
     }
 }
 

@@ -9,8 +9,6 @@
 #include "SummaryNameInfo.generated.h"
 
 class UCommonTextStyle;
-class UCommonNumericTextBlock;
-class UCommonTextBlock;
 class UImage;
 class UDisplayText;
 /**
@@ -31,13 +29,13 @@ class POKEMONUI_API USummaryNameInfo : public UPokemonInfoWidget {
     TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> PokemonNameText;
+    TObjectPtr<UDisplayText> PokemonNameText;
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonNumericTextBlock> PokemonLevelText;
+    TObjectPtr<UDisplayText> PokemonLevelText;
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> PokemonGenderText;
+    TObjectPtr<UDisplayText> PokemonGenderText;
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UImage> PokemonBallIcon;

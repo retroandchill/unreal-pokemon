@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "CommonTextBlock.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Components/BattleMovePanel.h"
@@ -10,6 +9,7 @@
 #include "Mocks/MockBattleSide.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "Primatives/DisplayText.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
@@ -53,9 +53,9 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(BattleMoveSelect.Get(), UBattleMovePanel, MovePanel3);
     UE_ASSERT_NOT_NULL(MovePanel3);
 
-    FIND_CHILD_WIDGET(MovePanel0, UCommonTextBlock, MoveNameText);
+    FIND_CHILD_WIDGET(MovePanel0, UDisplayText, MoveNameText);
     UE_ASSERT_NOT_NULL(MoveNameText);
-    FIND_CHILD_WIDGET(MovePanel0, UCommonTextBlock, MovePPText);
+    FIND_CHILD_WIDGET(MovePanel0, UDisplayText, MovePPText);
     UE_ASSERT_NOT_NULL(MovePPText);
 
     UE_CHECK_EQUAL(TEXT("Shadow Sneak"), MoveNameText->GetText().ToString());

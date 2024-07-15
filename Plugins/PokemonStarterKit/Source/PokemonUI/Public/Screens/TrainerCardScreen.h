@@ -7,11 +7,10 @@
 
 #include "TrainerCardScreen.generated.h"
 
-class UCommonNumericTextBlock;
-class UCommonTextBlock;
 class UPlayerMetadata;
 class ITrainer;
 class UImage;
+class UDisplayText;
 
 /**
  * The screen used to bring up the trainer card.
@@ -63,43 +62,43 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
      * The text used to display the player's name
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> TrainerNameText;
+    TObjectPtr<UDisplayText> TrainerNameText;
 
     /**
      * The text used to display the player's ID number
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> IDText;
+    TObjectPtr<UDisplayText> IDText;
 
     /**
      * The text used to display the player's current playtime
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> TimeText;
+    TObjectPtr<UDisplayText> TimeText;
 
     /**
      * The text used to display the player's current Pokédex progress
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonNumericTextBlock> PokedexText;
+    TObjectPtr<UDisplayText> PokedexText;
 
     /**
      * The text used to display the player's current money
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> MoneyText;
+    TObjectPtr<UDisplayText> MoneyText;
 
     /**
      * The text used to display the date the player started their adventure on
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> AdventureStartedText;
+    TObjectPtr<UDisplayText> AdventureStartedText;
 
     /**
      * The text used to display the date the player first entered the hall of fame
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UCommonTextBlock> FirstHallOfFameText;
+    TObjectPtr<UDisplayText> FirstHallOfFameText;
 
     /**
      * The length of the player's ID number

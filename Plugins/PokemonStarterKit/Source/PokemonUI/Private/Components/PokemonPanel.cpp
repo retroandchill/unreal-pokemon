@@ -7,6 +7,7 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Windows/PokemonSelectionPane.h"
 #include "Windows/SelectableWidget.h"
@@ -86,7 +87,7 @@ void UPokemonPanel::Refresh() {
 
 void UPokemonPanel::RefreshPokemonInfo() {
     NameText->SetText(Pokemon->GetNickname());
-    LevelText->SetCurrentValue(static_cast<float>(Pokemon->GetStatBlock()->GetLevel()));
+    LevelText->SetText(FText::FromString(FString::FromInt(Pokemon->GetStatBlock()->GetLevel())));
 
     auto Gender = Pokemon->GetGender();
     UPokemonUIUtils::SetPokemonGenderText(Gender, GenderText);

@@ -1,9 +1,9 @@
 ﻿
 #include "Asserts.h"
-#include "CommonTextBlock.h"
 #include "Blueprint/WidgetTree.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
+#include "Primatives/DisplayText.h"
 #include "Screens/TrainerCardScreen.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
@@ -24,11 +24,11 @@ bool TrainerCardTest::RunTest(const FString &Parameters) {
 
     auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
 
-    auto TrainerNameText = Screen->WidgetTree->FindWidget<UCommonTextBlock>(TEXT("TrainerNameText"));
+    auto TrainerNameText = Screen->WidgetTree->FindWidget<UDisplayText>(TEXT("TrainerNameText"));
     UE_ASSERT_NOT_NULL(TrainerNameText);
     UE_CHECK_EQUAL(Trainer->GetTrainerName().ToString(), TrainerNameText->GetText().ToString());
 
-    auto IdText = Screen->WidgetTree->FindWidget<UCommonTextBlock>(TEXT("IdText"));
+    auto IdText = Screen->WidgetTree->FindWidget<UDisplayText>(TEXT("IdText"));
     UE_ASSERT_NOT_NULL(IdText);
     UE_CHECK_EQUAL(Trainer->GetIdNumber(), FCString::Atoi(*IdText->GetText().ToString()));
 
