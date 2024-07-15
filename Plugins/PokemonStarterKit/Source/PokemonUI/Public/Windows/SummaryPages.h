@@ -14,6 +14,9 @@ class USummaryScreenPage;
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &);
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelected, int32);
+DECLARE_MULTICAST_DELEGATE(FOnScreenBackOut);
+
 class UPokemonInfoPage;
 class UWidgetSwitcher;
 
@@ -21,9 +24,15 @@ class UWidgetSwitcher;
  * The widget that controls allowing the player to scroll between pages on the summary screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryPages : public USelectableWidget {
+class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     GENERATED_BODY()
 
+public:
+    explicit USummaryPages(const FObjectInitializer& Initializer);
+    
+protected:
+    void NativeConstruct() override;
+    
   public:
     /**
      * Refresh any of the child pages added to this widget.
@@ -59,6 +68,12 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
     UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = Widgets)
     USummaryScreenPage *GetPage(int32 PageIndex) const;
 
+    UFUNCTION(BlueprintCallable, Category = Widgets)
+    void SetPage(int32 PageIndex);
+
+    FOnSelected& GetOnSelected();
+    FOnScreenBackOut& GetOnScreenBackOut();
+
   protected:
     /**
      * Get the page switching widget.
@@ -66,10 +81,16 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     UWidgetSwitcher *GetPageSwitcher() const;
-    
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+
+    bool NativeOnHandleBackAction() override;
 
   private:
+    void Select();
+    void NextPage();
+    void PreviousPage();
+    void NextPokemon();
+    void PreviousPokemon();
+    
     /**
      * Iterator used to cycle through the part
      */
@@ -85,4 +106,28 @@ class POKEMONUI_API USummaryPages : public USelectableWidget {
      */
     UPROPERTY(BlueprintGetter = GetPageSwitcher, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UWidgetSwitcher> PageSwitcher;
+
+    FOnSelected OnSelected;
+    FOnScreenBackOut OnScreenBackOut;
+    
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> SelectionAction;
+
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> NextPageAction;
+
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> PreviousPageAction;
+
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> NextPokemonAction;
+
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> PreviousPokemonAction;
+
+    FUIActionBindingHandle InspectActionHandler;
+    FUIActionBindingHandle NextPageActionHandle;
+    FUIActionBindingHandle PreviousPageActionHandle;
+    FUIActionBindingHandle NextPokemonActionHandle;
+    FUIActionBindingHandle PreviousPokemonActionHandle;
 };

@@ -19,7 +19,8 @@ public class PokemonUI : ModuleRules
 				"PokemonAssets",
 				"CommonUI",
 				"CommonGame",
-				"GameplayTags"
+				"GameplayTags",
+				"EnhancedInput"
 			}
 		);
 

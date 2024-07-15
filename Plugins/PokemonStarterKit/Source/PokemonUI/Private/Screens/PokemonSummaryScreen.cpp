@@ -13,10 +13,10 @@ void UPokemonSummaryScreen::NativeConstruct() {
     Super::NativeConstruct();
 
     SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
-    SummaryPages->GetOnConfirm().AddUniqueDynamic(this, &UPokemonSummaryScreen::SummaryPageConfirm);
-    SummaryPages->GetOnCancel().AddUniqueDynamic(this, &UPokemonSummaryScreen::CloseScreen);
+    SummaryPages->GetOnSelected().AddUObject(this, &UPokemonSummaryScreen::SummaryPageConfirm);
+    SummaryPages->GetOnScreenBackOut().AddUObject(this, &UPokemonSummaryScreen::CloseScreen);
     SummaryPages->ActivateWidget();
-    SummaryPages->SetIndex(0);
+    SummaryPages->SetPage(0);
 }
 
 void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex) {

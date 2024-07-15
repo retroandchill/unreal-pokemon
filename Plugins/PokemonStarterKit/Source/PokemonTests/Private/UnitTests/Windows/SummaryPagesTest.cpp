@@ -48,7 +48,7 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
                 Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
 
-    Pages->SetIndex(1);
+    Pages->SetPage(1);
     UE_CHECK_EQUAL(1, PageSwitcher->GetActiveWidgetIndex());
 
     return true;
