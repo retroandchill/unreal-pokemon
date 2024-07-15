@@ -6,12 +6,27 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
 #include "DataManager.h"
+#include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
 
 UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer)
     : USelectableWidget(ObjectInitializer) {
+}
+
+void UItemSelectionWindow::NativeConstruct() {
+    Super::NativeConstruct();
+
+    auto CreateBindArgs = [this](UInputAction *Action, auto Function, bool bDisplayInActionBar = false) {
+        FBindUIActionArgs BindArgs(Action, FSimpleDelegate::CreateUObject(this, Function));
+        BindArgs.bDisplayInActionBar = bDisplayInActionBar;
+        return BindArgs;
+    };
+    
+    NextPocketActionHandle = RegisterUIActionBinding(CreateBindArgs(NextPocketAction, &UItemSelectionWindow::NextPocket));
+    PreviousPocketActionHandle =
+        RegisterUIActionBinding(CreateBindArgs(PreviousPocketAction, &UItemSelectionWindow::PreviousPocket));
 }
 
 void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
@@ -83,6 +98,16 @@ void UItemSelectionWindow::UpdatePocket() {
     CurrentBag->ForEachInPocket(*PocketIterator, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
     SetIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[*PocketIterator]);
     OnPocketChanged.Broadcast(*PocketIterator);
+}
+
+void UItemSelectionWindow::NextPocket() {
+    --PocketIterator;
+    UpdatePocket();
+}
+
+void UItemSelectionWindow::PreviousPocket() {
+    ++PocketIterator;
+    UpdatePocket();
 }
 
 void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {

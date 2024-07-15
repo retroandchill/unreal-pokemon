@@ -12,9 +12,9 @@ USummaryPages::USummaryPages(const FObjectInitializer &Initializer) : UCommonAct
 void USummaryPages::NativeConstruct() {
     Super::NativeConstruct();
 
-    auto CreateBindArgs = [this](UInputAction *Action, auto Function) {
+    auto CreateBindArgs = [this](UInputAction *Action, auto Function, bool bDisplayInActionBar = false) {
         FBindUIActionArgs BindArgs(Action, FSimpleDelegate::CreateUObject(this, Function));
-        BindArgs.bDisplayInActionBar = false;
+        BindArgs.bDisplayInActionBar = bDisplayInActionBar;
         return BindArgs;
     };
 
