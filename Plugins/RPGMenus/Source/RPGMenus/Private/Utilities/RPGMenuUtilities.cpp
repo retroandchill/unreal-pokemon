@@ -10,17 +10,24 @@ UScreen * URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject
     return Layout->PushWidgetToLayerStack<UScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenType);
 }
 
-UScreen * URPGMenuUtilities::RemoveTopScreenFromOverlay(const UObject *WorldContextObject) {
+UScreen * URPGMenuUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag) {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     if (Layout == nullptr) {
         return nullptr;
     }
-    auto Layer = Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag);
-    auto Screen = Cast<UScreen>(Layer->GetActiveWidget());
+    auto Layer = Layout->GetLayerWidget(Tag);
 
-    if (Screen != nullptr) {
+    if (auto Screen = Cast<UScreen>(Layer->GetActiveWidget()); Screen != nullptr) {
         Layer->RemoveWidget(*Screen);
     }
 
-    return Screen;
+    return Cast<UScreen>(Layer->GetActiveWidget());
+}
+
+UScreen * URPGMenuUtilities::RemoveTopScreenFromStack(const UObject *WorldContextObject) {
+    return RemoveTopScreenFromStackLayer(WorldContextObject, RPG::Menus::PrimaryMenuLayerTag);
+}
+
+UScreen * URPGMenuUtilities::RemoveTopScreenFromOverlay(const UObject *WorldContextObject) {
+    return RemoveTopScreenFromStackLayer(WorldContextObject, RPG::Menus::OverlayMenuLayerTag);
 }

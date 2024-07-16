@@ -18,4 +18,7 @@ public:
     UFUNCTION(BlueprintPure, Category = Screens)
     UScreen* GetTopScreenOfStack() const;
 
+    UFUNCTION(BlueprintPure, Category = Screens)
+    UScreen* GetTopScreenOfOverlay() const;
+
 };

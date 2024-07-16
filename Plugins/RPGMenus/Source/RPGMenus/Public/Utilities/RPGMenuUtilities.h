@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGMenuUtilities.generated.h"
 
+struct FGameplayTag;
 class UScreen;
 /**
  * 
@@ -23,6 +24,12 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
     static UScreen *PushScreenToStack(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType);
+
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
+    static UScreen* RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag);
+    
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
+    static UScreen* RemoveTopScreenFromStack(const UObject *WorldContextObject);
     
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
     static UScreen* RemoveTopScreenFromOverlay(const UObject *WorldContextObject);
