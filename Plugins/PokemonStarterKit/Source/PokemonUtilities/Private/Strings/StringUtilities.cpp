@@ -26,16 +26,14 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, FText Contracti
         return FText::GetEmpty();
     }
 
-    auto ExtractString = [](const FText& Text) -> const FString& { return Text.ToString(); };
+    auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
-        auto StringItems = RangeHelpers::CreateRange(Items)
-            | ranges::views::transform(ExtractString);
+        auto StringItems = RangeHelpers::CreateRange(Items) | ranges::views::transform(ExtractString);
         return FText::FromString(FString::Join(StringItems, *Contraction.ToString()));
     }
 
-    auto CommaSeparatedItems = ranges::span(Items.GetData(), Items.Num() - 1)
-        | ranges::views::transform(ExtractString);
+    auto CommaSeparatedItems = ranges::span(Items.GetData(), Items.Num() - 1) | ranges::views::transform(ExtractString);
     auto JoinedItems = FString::Join(CommaSeparatedItems, TEXT(", "));
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));

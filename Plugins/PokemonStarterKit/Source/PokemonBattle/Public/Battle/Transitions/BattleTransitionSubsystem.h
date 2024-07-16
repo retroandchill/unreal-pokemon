@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleInfo.h"
 #include "Battle/Battle.h"
+#include "BattleInfo.h"
 #include "Subsystems/WorldSubsystem.h"
+
 #include "BattleTransitionSubsystem.generated.h"
 
 class ULevelStreamingDynamic;
@@ -16,50 +17,49 @@ class IBattle;
  */
 DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
 
-/**
- * Subsystem used to control transitions to and from the battle scene
- */
-UCLASS()
-class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
+    /**
+     * Subsystem used to control transitions to and from the battle scene
+     */
+    UCLASS() class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-    
+
     /**
      * Set the battle map to the new map in question
      * @param NewBattleMap The battle map to jump to
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
-    void SetBattleMap(const TSoftObjectPtr<UWorld>& NewBattleMap);
-    
+    void SetBattleMap(const TSoftObjectPtr<UWorld> &NewBattleMap);
+
     /**
      * Set the battle that is registered to this subystem
      * @param Battle The new battle actor
      */
-    void SetRegisteredBattle(const TScriptInterface<IBattle>& Battle);
+    void SetRegisteredBattle(const TScriptInterface<IBattle> &Battle);
 
     /**
      * Initialize a wild battle with the provided Pokémon information
      * @param Info The Pokémon information that should be battled against
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
-    void InitiateBattle(const FBattleInfo& Info);
+    void InitiateBattle(const FBattleInfo &Info);
 
     /**
      * Bind an action to when the battle finished delegate
      * @param Callback The callback to dispatch
      * @return The handle for the bound delegate
      */
-    FDelegateHandle BindToBattleFinished(FBattleFinished::FDelegate&& Callback);
+    FDelegateHandle BindToBattleFinished(FBattleFinished::FDelegate &&Callback);
 
     /**
      * Remove the given binding from the battle finished delegate
      * @param Handle The handle to callback when battle is complete
      */
-    void RemoveFromBattleFinished(const FDelegateHandle& Handle);
-    
-private:
+    void RemoveFromBattleFinished(const FDelegateHandle &Handle);
+
+  private:
     /**
      * Set up the jump into battle
      */
@@ -76,7 +76,7 @@ private:
      */
     UPROPERTY()
     TSoftObjectPtr<UWorld> BattleMap;
-    
+
     /**
      * The registered battle object for this subsystem
      */

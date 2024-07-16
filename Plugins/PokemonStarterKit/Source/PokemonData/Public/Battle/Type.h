@@ -22,12 +22,12 @@ enum class EDamageEffectiveness : uint8 {
      * The move deals no damage
      */
     NoEffect = 0x1 << 0,
-    
+
     /**
      * The move deals less damage
      */
     NotVeryEffective = 0x1 << 1,
-    
+
     /**
      * The move deals normal damage
      */
@@ -148,7 +148,7 @@ constexpr EDamageEffectiveness GetEffectivenessFromMultiplier(float Multiplier) 
     return Normal;
 }
 
-}
+} // namespace Pokemon::TypeEffectiveness
 
 /**
  * Represents the types that belong to both individual species as well as the moves used by them
@@ -216,7 +216,6 @@ struct POKEMONDATA_API FType : public FIndexedTableRow {
      * @return The effectiveness against the other type
      */
     float Effectiveness(FName OtherType) const;
-    
 };
 
 /**
@@ -250,5 +249,4 @@ class POKEMONDATA_API UTypeHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = "Types|Effectiveness")
     static EDamageEffectiveness GetEffectivenessForMultiplier(float Multiplier);
-    
 };

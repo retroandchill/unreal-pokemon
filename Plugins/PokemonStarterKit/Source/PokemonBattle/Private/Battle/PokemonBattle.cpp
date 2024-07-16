@@ -5,26 +5,26 @@
 #include "Algo/ForEach.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Events/BattleMessagePayload.h"
+#include "Battle/Events/TargetedEvents.h"
+#include "Battle/Tags.h"
+#include "Battle/Transitions/BattleInfo.h"
+#include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
-#include "Battle/BattleAbilitySystemComponent.h"
-#include "Battle/Transitions/BattleTransitionSubsystem.h"
-#include "Battle/Tags.h"
-#include "Battle/Battlers/BattlerAbilityComponent.h"
-#include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "Battle/Events/BattleMessagePayload.h"
-#include "Battle/Events/TargetedEvents.h"
-#include "Battle/Transitions/BattleInfo.h"
 #include <functional>
 #include <range/v3/view/concat.hpp>
-#include <range/v3/view/filter.hpp>
 #include <range/v3/view/empty.hpp>
+#include <range/v3/view/filter.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -119,14 +119,13 @@ bool APokemonBattle::ActionSelectionFinished() const {
 }
 
 #if WITH_EDITOR
-const TArray<TUniquePtr<IBattleAction>> & APokemonBattle::GetActions() const {
+const TArray<TUniquePtr<IBattleAction>> &APokemonBattle::GetActions() const {
     return SelectedActions;
 }
 
-const TQueue<TUniquePtr<IBattleAction>> & APokemonBattle::GetActionQueue() const {
+const TQueue<TUniquePtr<IBattleAction>> &APokemonBattle::GetActionQueue() const {
     return ActionQueue;
 }
-
 
 #endif
 

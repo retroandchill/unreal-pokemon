@@ -1,31 +1,31 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerActor.h"
-#include "DataManager.h"
+#include "Battle/Abilities/AbilityLookup.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Battlers/BattlerController.h"
 #include "Battle/Battlers/BattlerSprite.h"
+#include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
+#include "Battle/Battlers/Innate/Innate_DamageSwing.h"
+#include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Items/ItemLookup.h"
+#include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
+#include "DataManager.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Moves/MoveData.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
+#include "Pokemon/Moves/Move.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
-#include "Battle/Abilities/AbilityLookup.h"
-#include "Battle/Battlers/BattlerAbilityComponent.h"
-#include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
-#include "Battle/Battlers/Innate/Innate_DamageSwing.h"
-#include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
-#include "Battle/Items/ItemLookup.h"
-#include "Battle/Moves/MoveLookup.h"
-#include "Moves/MoveData.h"
-#include "Pokemon/Moves/Move.h"
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
 #include <functional>
@@ -52,11 +52,10 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
 
-    auto& DataSubsystem = FDataManager::GetInstance();
+    auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
-    
-    TMap<UClass*, UAttributeSet*> Attributes;
+    TMap<UClass *, UAttributeSet *> Attributes;
     for (auto AttributeSets = BattlerAbilityComponent->GetSpawnedAttributes(); auto Attribute : AttributeSets) {
         Attributes.Add(Attribute->GetClass(), Attribute);
     }
@@ -65,19 +64,21 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     StatTable.ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
         if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
             auto StatValue = StatBlock->GetStat(Stat.ID);
-            BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute, static_cast<float>(StatValue->GetStatValue()));
+            BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
+                                                             static_cast<float>(StatValue->GetStatValue()));
         }
-        
+
         if (Stat.StagesAttribute.IsValid()) {
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.StagesAttribute, 0.f);
         }
     });
 
     BattlerAbilityComponent->GetCoreAttributes()->InitHP(static_cast<float>(WrappedPokemon->GetCurrentHP()));
-    auto &HPChangedDelegate = BattlerAbilityComponent->GetGameplayAttributeValueChangeDelegate(UPokemonCoreAttributeSet::GetHPAttribute());
+    auto &HPChangedDelegate =
+        BattlerAbilityComponent->GetGameplayAttributeValueChangeDelegate(UPokemonCoreAttributeSet::GetHPAttribute());
     HPChangedDelegate.Clear();
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
-    
+
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
             ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
@@ -93,13 +94,15 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
-    if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID()); AbilityClass != nullptr) {
+    if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
+        AbilityClass != nullptr) {
         Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
-    
-    if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem()); HoldItemClass != nullptr) {
+
+    if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem());
+        HoldItemClass != nullptr) {
         HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
     } else {
         HoldItem = FGameplayAbilitySpecHandle();
@@ -111,18 +114,19 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
-    InnateAbilityHandles = RangeHelpers::CreateRange(InnateAbilities)
-        | ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
+    InnateAbilityHandles =
+        RangeHelpers::CreateRange(InnateAbilities) |
+        ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
             return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
-        })
-        | RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
-    InnateEffectHandles = RangeHelpers::CreateRange(InnateEffects)
-        | ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
-            auto Context = BattlerAbilityComponent->MakeEffectContext();
-            auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
-            return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
-        })
-        | RangeHelpers::TToArray<FActiveGameplayEffectHandle>();
+        }) |
+        RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
+    InnateEffectHandles = RangeHelpers::CreateRange(InnateEffects) |
+                          ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
+                              auto Context = BattlerAbilityComponent->MakeEffectContext();
+                              auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
+                              return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+                          }) |
+                          RangeHelpers::TToArray<FActiveGameplayEffectHandle>();
 }
 
 void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
@@ -141,7 +145,7 @@ const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
     return OwningSide;
 }
 
-const FSpeciesData & ABattlerActor::GetSpecies() const {
+const FSpeciesData &ABattlerActor::GetSpecies() const {
     return WrappedPokemon->GetSpecies();
 }
 
@@ -182,7 +186,7 @@ TArray<FName> ABattlerActor::GetTypes() const {
     return WrappedPokemon->GetTypes();
 }
 
-UBattlerAbilityComponent * ABattlerActor::GetAbilityComponent() const {
+UBattlerAbilityComponent *ABattlerActor::GetAbilityComponent() const {
     return BattlerAbilityComponent;
 }
 
@@ -209,7 +213,7 @@ void ABattlerActor::ShowSprite() const {
     Sprite->SetActorHiddenInGame(false);
 }
 
-const TOptional<FStatusEffectInfo> & ABattlerActor::GetStatusEffect() const {
+const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {
     return StatusEffect;
 }
 
@@ -233,6 +237,6 @@ void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
 
     auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
     IBattlerSprite::Execute_SetBattleSprite(
-        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(*WrappedPokemon, this, OwningSide->ShowBackSprites()));
+        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(WrappedPokemon, this, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

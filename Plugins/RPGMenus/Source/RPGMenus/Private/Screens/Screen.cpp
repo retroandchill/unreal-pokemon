@@ -1,15 +1,18 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
 #include "Blueprint/WidgetTree.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Windows/SelectableWidget.h"
 
-UScreen::UScreen(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer) {
-    SetIsFocusable(true);
+const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");
+const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::OverlayMenuLayerTag, "UI.Layer.Overlay");
+
+void UScreen::RefreshSelf_Implementation() {
+    // No base implementation
 }
 
-TSharedRef<SWidget> UScreen::RebuildWidget() {
-    auto Ret = Super::RebuildWidget();
+void UScreen::NativeConstruct() {
+    Super::NativeConstruct();
 
     SelectableWidgets.Empty();
     WidgetTree->ForEachWidget([this](UWidget *Widget) {
@@ -19,19 +22,27 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
 
         SelectableWidgets.Emplace(SelectableWidget);
     });
-
-    return Ret;
-}
-
-void UScreen::RefreshSelf_Implementation() {
-    // No base implementation
 }
 
 void UScreen::CloseScreen() {
-    GetOwningPlayer()->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->RemoveScreenFromStack();
+    UPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer())->FindAndRemoveWidgetFromLayer(this);
     OnScreenClosed.Broadcast();
 }
 
 FOnScreenClosed &UScreen::GetOnScreenClosed() {
     return OnScreenClosed;
+}
+
+void UScreen::NativeOnActivated() {
+    Super::NativeOnActivated();
+    if (GetVisibility() == ESlateVisibility::HitTestInvisible) {
+        SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    }
+}
+
+void UScreen::NativeOnDeactivated() {
+    Super::NativeOnDeactivated();
+    if (IsVisible()) {
+        SetVisibility(ESlateVisibility::HitTestInvisible);
+    }
 }

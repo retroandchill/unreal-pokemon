@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "BattleMessage.generated.h"
 
 class UGameplayAbility;
@@ -33,7 +34,7 @@ struct POKEMONBATTLE_API FBattleMessage
 #if CPP
     : public FGCObject {
 #else
-    {
+{
 #endif
     GENERATED_BODY()
 
@@ -72,7 +73,8 @@ struct POKEMONBATTLE_API FBattleMessage
      * @param Animation The animation to play
      * @param AnimationPlacement When in relation should the message should the animation play
      */
-    explicit FBattleMessage(FText &&Message, const TScriptInterface<IBattleAnimation>& Animation, EAnimationPlacement AnimationPlacement);
+    explicit FBattleMessage(FText &&Message, const TScriptInterface<IBattleAnimation> &Animation,
+                            EAnimationPlacement AnimationPlacement);
 
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     FString GetReferencerName() const override;
@@ -89,7 +91,6 @@ struct POKEMONBATTLE_API FRunningMessageSet {
      * The contained messages in the set
      */
     TSharedRef<TArray<FBattleMessage>> Messages = MakeShared<TArray<FBattleMessage>>();
-    
 };
 
 /**
@@ -99,7 +100,7 @@ UCLASS()
 class UBattleMessageHelper : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the messages from the given message set
      * @param Messages The source message set
@@ -114,7 +115,7 @@ public:
      * @param Message The message to append to the list
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Messages")
-    static void AppendMessage(const FRunningMessageSet& Messages, FText Message);
+    static void AppendMessage(const FRunningMessageSet &Messages, FText Message);
 
     /**
      * Add a new stand-alone message to the list of running messages
@@ -124,7 +125,9 @@ public:
      * @param AnimationPlacement When in relation should the message should the animation play
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Messages")
-    static void AppendMessageWithAnimation(const FRunningMessageSet& Messages, FText Message, const TScriptInterface<IBattleAnimation>& Animation, EAnimationPlacement AnimationPlacement = EAnimationPlacement::Before);
+    static void AppendMessageWithAnimation(const FRunningMessageSet &Messages, FText Message,
+                                           const TScriptInterface<IBattleAnimation> &Animation,
+                                           EAnimationPlacement AnimationPlacement = EAnimationPlacement::Before);
 
     /**
      * Find the running message said for the activated ability

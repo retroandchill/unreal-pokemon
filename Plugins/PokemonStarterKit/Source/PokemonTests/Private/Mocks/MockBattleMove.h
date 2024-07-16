@@ -8,17 +8,17 @@
 #include <gmock/gmock.h>
 
 /**
- * 
+ *
  */
 class FMockBattleMove : public IBattleMove {
-public:
-
+  public:
     ~FMockBattleMove() override = default;
 
-    MOCK_METHOD2(Initialize, TScriptInterface<IBattleMove>(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IMove> &Move));
+    MOCK_METHOD2(Initialize, TScriptInterface<IBattleMove>(const TScriptInterface<IBattler> &Battler,
+                                                           const TScriptInterface<IMove> &Move));
     MOCK_METHOD(int32, GetBasePower, (), (const, override));
     MOCK_METHOD(int32, GetAccuracy, (), (const, override));
-    MOCK_METHOD(const FMoveTarget&, GetTargetType, (), (const, override));
+    MOCK_METHOD(const FMoveTarget &, GetTargetType, (), (const, override));
     MOCK_METHOD(const TArray<FName> &, GetTags, (), (const, override));
     MOCK_METHOD(TArray<TScriptInterface<IBattler>>, GetAllPossibleTargets, (), (const, override));
     MOCK_METHOD(bool, IsUsable, (), (const, override));
@@ -31,5 +31,6 @@ public:
     MOCK_METHOD(int32, GetAdditionalEffectChance, (), (const override));
     MOCK_METHOD(void, PayCost, (int32 Amount), (override));
     MOCK_METHOD(const TScriptInterface<IBattler> &, GetOwningBattler, (), (const, override));
-    MOCK_METHOD(FGameplayAbilitySpecHandle, TryActivateMove, (const TArray<TScriptInterface<IBattler>> &Targets), (override));
+    MOCK_METHOD(FGameplayAbilitySpecHandle, TryActivateMove, (const TArray<TScriptInterface<IBattler>> &Targets),
+                (override));
 };

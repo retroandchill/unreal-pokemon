@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/TrainerCardScreen.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 
 void UTrainerCardScreen::NativeConstruct() {
@@ -15,7 +15,7 @@ void UTrainerCardScreen::NativeConstruct() {
     check(PokemonSubsystem != nullptr)
     Trainer = PokemonSubsystem->GetPlayer();
     PlayerMetadata = PokemonSubsystem->GetPlayerMetadata();
-    PlayerMetadata->GetOnTimeUpdated().AddDynamic(this, &UTrainerCardScreen::SetPlayerTimeInfo);
+    PlayerMetadata->GetOnTimeUpdated().AddUniqueDynamic(this, &UTrainerCardScreen::SetPlayerTimeInfo);
 
     SetTrainerSprite();
     SetTrainerInfo();
@@ -26,7 +26,7 @@ void UTrainerCardScreen::SetTrainerSprite() {
 
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
     check(GraphicsLoadingSubsystem != nullptr)
-    auto [Material, Size] = GraphicsLoadingSubsystem->GetTrainerSprite(*Trainer, this);
+    auto [Material, Size] = GraphicsLoadingSubsystem->GetTrainerSprite(Trainer, this);
     TrainerImage->SetBrushFromMaterial(Material);
     TrainerImage->SetDesiredSizeOverride(Size);
 }

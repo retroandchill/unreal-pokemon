@@ -18,11 +18,7 @@ class RPGMENUS_API UHelpWindow : public UUserWidget {
     GENERATED_BODY()
 
   protected:
-    TSharedRef<SWidget> RebuildWidget() override;
-    void SynchronizeProperties() override;
-#if WITH_EDITOR
-    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
-#endif
+    void NativePreConstruct() override;
 
   public:
     /**

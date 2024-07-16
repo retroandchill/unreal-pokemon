@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Settings/BaseSettings.h"
 
@@ -24,7 +23,8 @@ void UPokemonCoreAttributeSet::PreAttributeChange(const FGameplayAttribute &Attr
     }
 }
 
-void UPokemonCoreAttributeSet::PostAttributeChange(const FGameplayAttribute &Attribute, float OldValue, float NewValue) {
+void UPokemonCoreAttributeSet::PostAttributeChange(const FGameplayAttribute &Attribute, float OldValue,
+                                                   float NewValue) {
     // When the maximum HP changes we want to set the current value to the ratio between the new value and old value.
     // This is the behavior we see when a Pokémon Dynamaxes and when Zygarde transforms into its Complete Forme.
     if (Attribute == GetMaxHPAttribute()) {
@@ -39,7 +39,7 @@ void UPokemonCoreAttributeSet::UpdateHPTags() const {
     if (MaxHPValue == 0.f) {
         return;
     }
-    
+
     float HPPercent = GetHP() / MaxHPValue;
     auto Owner = GetOwningAbilitySystemComponent();
     static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();

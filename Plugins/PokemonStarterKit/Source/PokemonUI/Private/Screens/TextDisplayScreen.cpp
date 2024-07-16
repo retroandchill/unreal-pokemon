@@ -9,11 +9,12 @@ void UTextDisplayScreen::NativeConstruct() {
     if (MessageWindow == nullptr)
         return;
 
-    MessageWindow->GetOnDisplayChoices().AddDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
-    MessageWindow->GetOnAdvanceText().AddDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
-    MessageWindow->SetKeyboardFocus();
+    MessageWindow->GetOnDisplayChoices().AddUniqueDynamic(this,
+                                                          &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
+    MessageWindow->GetOnAdvanceText().AddUniqueDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
+    MessageWindow->ActivateWidget();
 
-    CommandWindow->GetOnCommandSelected().AddDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
+    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
 }
 
 void UTextDisplayScreen::SetText(FText TextToDisplay) {
@@ -21,7 +22,7 @@ void UTextDisplayScreen::SetText(FText TextToDisplay) {
     MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay);
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
-    MessageWindow->SetKeyboardFocus();
+    MessageWindow->ActivateWidget();
 }
 
 void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices) {
@@ -35,7 +36,7 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
         Commands.Add(UCommand::CreateBasicCommand(Choice));
     }
     CommandWindow->SetCommands(MoveTemp(Commands));
-    MessageWindow->SetKeyboardFocus();
+    MessageWindow->ActivateWidget();
 }
 
 void UTextDisplayScreen::ClearDisplayText() {
@@ -52,7 +53,7 @@ void UTextDisplayScreen::DisplayChoicePrompt() {
     CommandWindow->SetIndex(0);
     CommandWindow->SetVisibility(ESlateVisibility::Visible);
     CommandWindow->ActivateWidget();
-    CommandWindow->SetKeyboardFocus();
+    MessageWindow->DeactivateWidget();
 }
 
 void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand *Choice) {

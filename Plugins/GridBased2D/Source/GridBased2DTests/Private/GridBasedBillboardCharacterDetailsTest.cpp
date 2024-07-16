@@ -1,6 +1,6 @@
 ﻿#include "Asserts.h"
-#include "GridBasedGameModeBase.h"
 #include "Characters/GridBasedBillboardCharacter.h"
+#include "GridBasedGameModeBase.h"
 #include "Misc/AutomationTest.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

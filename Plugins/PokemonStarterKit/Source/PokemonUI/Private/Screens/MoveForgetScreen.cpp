@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Screens/MoveForgetScreen.h"
-#include "RPGMenusSubsystem.h"
 #include "Windows/MoveInfoWindow.h"
 #include "Windows/MoveSelectWindow.h"
 
@@ -11,8 +9,8 @@ void UMoveForgetScreen::NativeConstruct() {
     FOnMoveSelectionChanged::FDelegate Binding;
     Binding.BindDynamic(MoveInfoWindow, &UMoveInfoWindow::RefreshMove);
     MoveSelectWindow->BindToOnMoveSelectionChanged(Binding);
-    MoveSelectWindow->GetOnConfirm().AddDynamic(this, &UMoveForgetScreen::OnMoveSelected);
-    MoveSelectWindow->GetOnCancel().AddDynamic(this, &UMoveForgetScreen::OnCanceled);
+    MoveSelectWindow->GetOnConfirm().AddUniqueDynamic(this, &UMoveForgetScreen::OnMoveSelected);
+    MoveSelectWindow->GetOnCancel().AddUniqueDynamic(this, &UMoveForgetScreen::OnCanceled);
 }
 
 void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemon) {
@@ -21,7 +19,6 @@ void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemo
     MoveSelectWindow->DisplayMoves(Pokemon);
     MoveSelectWindow->ActivateWidget();
     MoveSelectWindow->SetIndex(0);
-    
 }
 
 void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemon, FName Move) {
@@ -42,11 +39,11 @@ void UMoveForgetScreen::MoveForgetComplete(bool bMoveForgotten) {
     OnMoveForgetComplete.Broadcast(bMoveForgotten);
 }
 
-UMoveSelectWindow * UMoveForgetScreen::GetMoveSelectWindow() const {
+UMoveSelectWindow *UMoveForgetScreen::GetMoveSelectWindow() const {
     return MoveSelectWindow;
 }
 
-UMoveInfoWindow * UMoveForgetScreen::GetMoveInfoWindow() const {
+UMoveInfoWindow *UMoveForgetScreen::GetMoveInfoWindow() const {
     return MoveInfoWindow;
 }
 

@@ -1,18 +1,18 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Animations/ProgressBarAnimation.h"
 #include "PokemonUI.h"
 
 using namespace Pokemon::UI;
 
-
-FBarAnimationData::FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration) : StartingPercentage(StartingPercentage), EndPercentage(EndingPercentage), AnimationDuration(AnimationDuration) {
+FBarAnimationData::FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration)
+    : StartingPercentage(StartingPercentage), EndPercentage(EndingPercentage), AnimationDuration(AnimationDuration) {
 }
 
 void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, float Duration) {
     if (AnimationData.IsSet()) {
-        UE_LOG(LogPokemonUI, Warning, TEXT("Attempted to animate a progress bar that already had an animation in progress!"))
+        UE_LOG(LogPokemonUI, Warning,
+               TEXT("Attempted to animate a progress bar that already had an animation in progress!"))
         return;
     }
 

@@ -9,7 +9,7 @@ public class RPGMenusTests : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "RPGMenus",
             }
         );
 
@@ -29,7 +29,8 @@ public class RPGMenusTests : ModuleRules
                 "UnrealEd",
                 "BlueprintGraph",
                 "KismetCompiler",
-                "CommonUI"
+                "CommonUI",
+                "GameplayTags"
             }
         );
     }

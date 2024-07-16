@@ -10,7 +10,6 @@
 
 #include "RefreshStatsOnTagChangeGameplayEffectComponent.generated.h"
 
-
 struct FGameplayEffectRemovalInfo;
 
 /**
@@ -31,7 +30,6 @@ struct POKEMONBATTLE_API FStatUpdateInfo {
      */
     UPROPERTY(EditAnywhere, Category = "Battle|Stats")
     FGameplayTagContainer AffectingTags;
-    
 };
 
 /**
@@ -41,10 +39,11 @@ UCLASS(DisplayName = "Refresh Stats on Tag Change")
 class POKEMONBATTLE_API URefreshStatsOnTagChangeGameplayEffectComponent : public UGameplayEffectComponent {
     GENERATED_BODY()
 
-public:
-    bool OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &ActiveGEContainer, FActiveGameplayEffect &ActiveGE) const override;
-    
-private:
+  public:
+    bool OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &ActiveGEContainer,
+                                     FActiveGameplayEffect &ActiveGE) const override;
+
+  private:
     /**
      * Called when a gameplay tag is changed, used to force a refresh of the owned stat
      * @param GameplayTag The gameplay tag that changed
@@ -59,12 +58,12 @@ private:
      * @param ASC The ability system component that needs to be unbound from
      * @param AllBoundEvents The bound events to release
      */
-    void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo& GERemovalInfo, UAbilitySystemComponent* ASC, TArray<TTuple<FGameplayTag, FDelegateHandle>> AllBoundEvents) const;
-    
+    void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &GERemovalInfo, UAbilitySystemComponent *ASC,
+                                 TArray<TTuple<FGameplayTag, FDelegateHandle>> AllBoundEvents) const;
+
     /**
      * The stats that need to have update data
      */
     UPROPERTY(EditAnywhere)
     TArray<FStatUpdateInfo> StatsToUpdate;
-
 };

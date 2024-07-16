@@ -2,8 +2,9 @@
 
 #include "Components/Bag/ItemOption.h"
 #include "Bag/Item.h"
+#include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "DataManager.h"
-#include "Primatives/DisplayText.h"
 
 const FItem &UItemOption::GetItem() const {
     auto ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetData(CurrentItem);
@@ -13,6 +14,17 @@ const FItem &UItemOption::GetItem() const {
 
 int32 UItemOption::GetQuantity() const {
     return QuantityHeld;
+}
+
+void UItemOption::NativeOnCurrentTextStyleChanged() {
+    Super::NativeOnCurrentTextStyleChanged();
+    auto TextStyle = GetCurrentTextStyleClass();
+    if (ItemNameText != nullptr) {
+        // ItemNameText->SetTextStyle(TextStyle);
+    }
+    if (ItemQuantityText != nullptr) {
+        // ItemQuantityText->SetTextStyle(TextStyle);
+    }
 }
 
 void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {

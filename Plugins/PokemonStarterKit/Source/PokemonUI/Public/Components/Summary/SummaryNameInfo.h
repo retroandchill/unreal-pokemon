@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "Components/PokemonInfoWidget.h"
 #include "Pokemon/Breeding/PokemonGender.h"
-#include "Text/TextColor.h"
 
 #include "SummaryNameInfo.generated.h"
 
+class UCommonTextStyle;
 class UImage;
 class UDisplayText;
 /**
@@ -26,7 +26,7 @@ class POKEMONUI_API USummaryNameInfo : public UPokemonInfoWidget {
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<EPokemonGender, FTextColor> GenderTextColors;
+    TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> PokemonNameText;

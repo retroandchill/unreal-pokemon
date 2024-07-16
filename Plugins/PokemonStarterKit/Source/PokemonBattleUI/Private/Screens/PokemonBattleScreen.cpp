@@ -13,9 +13,9 @@
 
 void UPokemonBattleScreen::NativeConstruct() {
     Super::NativeConstruct();
-    ActionSelect->GetOnConfirm().AddDynamic(this, &UPokemonBattleScreen::OnActionSelected);
-    MoveSelect->GetOnMoveSelected().AddDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
-    MoveSelect->GetOnCancel().AddDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
+    ActionSelect->GetOnConfirm().AddUniqueDynamic(this, &UPokemonBattleScreen::OnActionSelected);
+    MoveSelect->GetOnMoveSelected().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
+    MoveSelect->GetOnCancel().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
 }
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
@@ -60,9 +60,9 @@ void UPokemonBattleScreen::Refresh() const {
     }
 }
 
-UPokemonBattlePanel * UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const {
-    auto Find = Panels.FindByPredicate([&Battler](const UPokemonBattlePanel* Panel)
-        { return Panel->GetCurrentBattler() == Battler; });
+UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const {
+    auto Find = Panels.FindByPredicate(
+        [&Battler](const UPokemonBattlePanel *Panel) { return Panel->GetCurrentBattler() == Battler; });
     return Find != nullptr ? *Find : nullptr;
 }
 

@@ -16,7 +16,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     GENERATED_BODY()
 
   public:
-    TScriptInterface<IMoveBlock> Initialize(const TScriptInterface<IPokemon>& Pokemon, const FPokemonDTO &DTO) override;
+    TScriptInterface<IMoveBlock> Initialize(const TScriptInterface<IPokemon> &Pokemon, const FPokemonDTO &DTO) override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     const TArray<TScriptInterface<IMove>> &GetMoves() const override;
@@ -26,20 +26,20 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
 
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     void PlaceMoveInOpenSlot(FName Move) override;
-    
+
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     void OverwriteMoveSlot(FName Move, int32 SlotIndex) override;
-    
+
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
     virtual TArray<FName> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
-    
-    void LearnMove(FName Move, const FMoveLearnEnd& AfterMoveLearned) override;
+
+    void LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) override;
     TScriptInterface<IMove> CreateNewMove(FName MoveID) override;
 
   private:
     UPROPERTY()
     TScriptInterface<IPokemon> Owner;
-    
+
     UPROPERTY()
     TArray<TScriptInterface<IMove>> Moves;
 

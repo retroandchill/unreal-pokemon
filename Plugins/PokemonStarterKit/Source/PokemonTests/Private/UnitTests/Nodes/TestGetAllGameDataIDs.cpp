@@ -54,7 +54,7 @@ bool TestGetAllGameDataIDs_TooltipText::RunTest(const FString &Parameters) {
     TestGraph->AddNode(TestNode);
 
     UE_ASSERT_EQUAL(TEXT("Get All Stat IDs \n\nRepresents one of the stats in the database."),
-                 TestNode->GetTooltipText().ToString());
+                    TestNode->GetTooltipText().ToString());
 
     return true;
 }

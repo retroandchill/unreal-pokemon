@@ -7,10 +7,10 @@
 #include <gmock/gmock.h>
 
 /**
- * 
+ *
  */
 class FMockBattleAction : public IBattleAction {
-public:
+  public:
     ~FMockBattleAction() override = default;
 
     MOCK_METHOD(const TScriptInterface<IBattler> &, GetBattler, (), (const, override));

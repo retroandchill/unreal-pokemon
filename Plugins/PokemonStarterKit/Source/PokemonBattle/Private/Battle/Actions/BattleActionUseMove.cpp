@@ -2,9 +2,9 @@
 
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Abilities/GameplayAbility.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
-#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Battle/Moves/MoveTags.h"
 
@@ -34,7 +34,7 @@ FText FBattleActionUseMove::GetActionMessage() const {
 
 void FBattleActionUseMove::Execute() {
     FBattleActionBase::Execute();
-    
+
     auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
     check(AttributeSet != nullptr)
     Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -14,14 +13,16 @@ UInnate_CriticalHitDamage::UInnate_CriticalHitDamage() {
 }
 
 void UInnate_CriticalHitDamage::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-    const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-    const FGameplayEventData *TriggerEventData) {
+                                                const FGameplayAbilityActorInfo *ActorInfo,
+                                                const FGameplayAbilityActivationInfo ActivationInfo,
+                                                const FGameplayEventData *TriggerEventData) {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<UDamageModificationPayload>(TriggerEventData->OptionalObject);
     auto &Data = Payload->GetData();
     if (Data.Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
-        Payload->SetFinalDamageMultiplier(Data.FinalDamageMultiplier * Pokemon::FBaseSettings::Get().GetCriticalHitMultiplier());
+        Payload->SetFinalDamageMultiplier(Data.FinalDamageMultiplier *
+                                          Pokemon::FBaseSettings::Get().GetCriticalHitMultiplier());
     }
     EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
 }

@@ -54,15 +54,23 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    FMaterialInstanceWithSize GetPokemonBattleSprite(const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    FMaterialInstanceWithSize GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer,
+                                                     bool bBack = false) const;
 
-    FMaterialInstanceWithSize GetPokemonBattleSprite(FName Species, UObject *Outer, bool bBack = false,
-                                                     const FPokemonAssetParams &AdditionalParams = {}) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    FMaterialInstanceWithSize
+    GetSpeciesBattleSprite(FName Species, UObject *Outer, bool bBack = false,
+                           const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams()) const;
 
-    FMaterialInstanceWithSize GetPokemonUISprite(const IPokemon &Pokemon, UObject *Outer, bool bBack = false) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    FMaterialInstanceWithSize GetPokemonUISprite(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer,
+                                                 bool bBack = false) const;
 
-    FMaterialInstanceWithSize GetPokemonUISprite(FName Species, UObject *Outer, bool bBack = false,
-                                                 const FPokemonAssetParams &AdditionalParams = {}) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    FMaterialInstanceWithSize
+    GetSpeciesUISprite(FName Species, UObject *Outer, bool bBack = false,
+                       const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams()) const;
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -70,7 +78,8 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
-    UMaterialInstanceDynamic *GetPokemonIcon(const IPokemon &Pokemon, UObject *Outer);
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    UMaterialInstanceDynamic *GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
@@ -78,8 +87,9 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
-    UMaterialInstanceDynamic *GetPokemonIcon(FName Species, UObject *Outer,
-                                             const FPokemonAssetParams &AdditionalParams = {});
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    UMaterialInstanceDynamic *GetSpeciesIcon(FName Species, UObject *Outer,
+                                             const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -87,7 +97,8 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
-    FMaterialInstanceWithSize GetTrainerSprite(const ITrainer &Trainer, UObject *Outer) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    FMaterialInstanceWithSize GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, UObject *Outer) const;
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -95,13 +106,15 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite
      */
-    FMaterialInstanceWithSize GetTrainerSprite(FName TrainerType, UObject *Outer) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    FMaterialInstanceWithSize GetTrainerTypeSprite(FName TrainerType, UObject *Outer) const;
 
     /**
      * Get the icon graphic for a singular type.
      * @param Type The type to get the icon for.
      * @return The found icon graphic.
      */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UObject *GetTypeIconGraphic(FName Type) const;
 
     /**
@@ -109,13 +122,15 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Types The types to get the icon for.
      * @return The found icon graphics.
      */
-    TArray<UObject *> GetTypeIconGraphics(TConstArrayView<FName> Types) const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
+    TArray<UObject *> GetTypeIconGraphics(const TArray<FName> &Types) const;
 
     /**
      * Get the icon graphic for a status condition type.
      * @param Status The status to get the icon for.
      * @return The found icon graphic.
      */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UObject *GetStatusIconGraphic(FName Status) const;
 
     /**
@@ -123,6 +138,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param Type The type to get the panel for.
      * @return The found panel graphic.
      */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UObject *GetTypePanelGraphic(FName Type) const;
 
     /**
@@ -130,6 +146,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param PokeBall The Poké Ball
      * @return The found icon.
      */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UObject *GetPokeBallIcon(FName PokeBall) const;
 
     /**
@@ -137,6 +154,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @param ItemID The ID of the item
      * @return The item's icon.
      */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UObject *GetItemIcon(FName ItemID) const;
 
   private:

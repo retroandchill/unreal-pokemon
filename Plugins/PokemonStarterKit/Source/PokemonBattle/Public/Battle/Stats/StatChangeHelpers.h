@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "Abilities/GameplayAbility.h"
+#include "GameplayTagContainer.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "StatChangeHelpers.generated.h"
 
 class IBattler;
@@ -28,7 +29,6 @@ struct FBattleStatChangeValue {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Battle|Stats", meta = (UIMin = 1, ClampMin = 1))
     int32 Change = 1;
-    
 };
 
 /**
@@ -38,7 +38,7 @@ UCLASS()
 class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the value of a stat's stage
      * @param Battler The battler to check against
@@ -46,7 +46,7 @@ public:
      * @return The value of the stat's stage
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static int32 GetStatStageValue(const TScriptInterface<IBattler>& Battler, FName Stat);
+    static int32 GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat);
 
     /**
      * Check if a stat stage is at its maximum value
@@ -55,8 +55,8 @@ public:
      * @return Is this stat maxed out
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static bool StatStageAtMax(const TScriptInterface<IBattler>& Battler, FName Stat);
-    
+    static bool StatStageAtMax(const TScriptInterface<IBattler> &Battler, FName Stat);
+
     /**
      * Check if a stat stage is at its minimum value
      * @param Battler The battler to check against
@@ -64,7 +64,7 @@ public:
      * @return Is this stat maxed out
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static bool StatStageAtMin(const TScriptInterface<IBattler>& Battler, FName Stat);
+    static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FName Stat);
 
     /**
      * Perform a change to a battler's stat stages
@@ -75,6 +75,6 @@ public:
      * @return The actual number of stages that were changed
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Stat")
-    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler>& Battler, FName Stat, int32 Stages, UGameplayAbility* Ability = nullptr);
-
+    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages,
+                                         UGameplayAbility *Ability = nullptr);
 };

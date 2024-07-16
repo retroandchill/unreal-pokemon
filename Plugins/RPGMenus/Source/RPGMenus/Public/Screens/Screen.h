@@ -2,8 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonActivatableWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonActivatableWidget.h"
+#include "NativeGameplayTags.h"
 
 #include "Screen.generated.h"
 
@@ -11,6 +12,20 @@ class USelectableWidget;
 struct FInputActionInstance;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
+
+namespace RPG::Menus {
+
+/**
+ * The native tag assigned the primary layer for display
+ */
+RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(PrimaryMenuLayerTag);
+
+/**
+ * The native tag assigned to any overlay layers layer for display
+ */
+RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag);
+
+} // namespace RPG::Menus
 
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
@@ -20,15 +35,10 @@ UCLASS(Blueprintable, BlueprintType, Abstract)
 class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     GENERATED_BODY()
 
+  protected:
+    void NativeConstruct() override;
+
   public:
-    /**
-     * Construct the default version of the screen
-     * @param ObjectInitializer The initializer used by Unreal Engine to build the object
-     */
-    explicit UScreen(const FObjectInitializer &ObjectInitializer);
-
-    TSharedRef<SWidget> RebuildWidget() override;
-
     /**
      * Refresh the display of this screen to the player
      */
@@ -46,6 +56,10 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
      * @return Callback for when the screen is closed
      */
     FOnScreenClosed &GetOnScreenClosed();
+
+  protected:
+    void NativeOnActivated() override;
+    void NativeOnDeactivated() override;
 
   private:
     /**

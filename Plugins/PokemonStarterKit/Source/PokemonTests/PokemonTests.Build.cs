@@ -41,7 +41,8 @@ public class PokemonTests : ModuleRules
                 "GameplayAbilities", 
                 "GameplayTags", 
                 "GameplayTasks",
-                "CommonUI"
+                "CommonUI",
+                "CommonGame"
             }
         );
     }

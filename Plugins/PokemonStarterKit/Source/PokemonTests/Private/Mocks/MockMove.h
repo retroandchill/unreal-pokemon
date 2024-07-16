@@ -8,7 +8,7 @@
 #include <gmock/gmock.h>
 
 class FMockMove : public IMove {
-public:
+  public:
     ~FMockMove() override = default;
 
     MOCK_METHOD(const FMoveData &, GetMoveData, (), (const, override));

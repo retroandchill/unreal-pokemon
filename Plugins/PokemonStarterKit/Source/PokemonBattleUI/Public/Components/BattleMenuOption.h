@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Primatives/SelectableOption.h"
+#include "CommonButtonBase.h"
 
 #include "BattleMenuOption.generated.h"
 
@@ -14,7 +14,7 @@ class UDisplayText;
  * The actual option widget for the move selection.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleMenuOption : public USelectableOption {
+class POKEMONBATTLEUI_API UBattleMenuOption : public UCommonButtonBase {
     GENERATED_BODY()
 
   public:
@@ -23,6 +23,9 @@ class POKEMONBATTLEUI_API UBattleMenuOption : public USelectableOption {
      * @param Handler The handler to use for initialization
      */
     void InitFromHandler(const UBattleMenuHandler *Handler);
+
+  protected:
+    void NativeOnCurrentTextStyleChanged() override;
 
   private:
     /**

@@ -2,13 +2,15 @@
 
 #include "Components/Summary/PokemonInfoPage.h"
 #include "Blueprint/WidgetTree.h"
+#include "CommonNumericTextBlock.h"
+#include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "DataManager.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Primatives/DisplayText.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/OwnerInfo.h"
 #include "Utilities/PokemonUIUtils.h"
@@ -33,7 +35,7 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     auto &OwnerInfo = Pokemon->GetOwnerInfo();
     OTNameText->SetText(OwnerInfo.OriginalTrainerName);
     if (auto Color = GenderTextColors.Find(OwnerInfo.OriginalTrainerGender); Color != nullptr) {
-        UPokemonUIUtils::SetItemTextColor(OTNameText, *Color);
+        OTNameText->SetTextStyle(*Color);
     }
     PokemonIDText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(OwnerInfo.ID, IdNumberLength)));
 

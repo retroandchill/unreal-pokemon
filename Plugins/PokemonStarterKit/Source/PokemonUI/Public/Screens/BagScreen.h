@@ -106,12 +106,6 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     TObjectPtr<UBagMenuHandlerSet> CommandHandlers;
 
     /**
-     * The text that is displayed when the player hits cancel
-     */
-    UPROPERTY(EditAnywhere, Category = Selection)
-    TOptional<FText> CancelText;
-
-    /**
      * Callback for when an item is selected
      */
     FOnItemSelected OnItemSelected;

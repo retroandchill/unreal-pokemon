@@ -72,7 +72,7 @@ TArray<T> ToArray(RangeType &Range) {
  */
 template <typename T>
 struct TToArray {
-    
+
     /**
      * Operator overload so that converting to an Unreal data type can be chained into the ranges stream operator
      * @tparam T The type of data the array will hold

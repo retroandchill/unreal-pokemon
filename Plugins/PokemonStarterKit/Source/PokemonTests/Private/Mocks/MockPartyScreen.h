@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <gmock/gmock.h>
 #include "Screens/PartyScreen.h"
 #include "UObject/Interface.h"
+#include <gmock/gmock.h>
 
 class FMockPartyScreen : public IPartyScreen {
-public:
+  public:
     ~FMockPartyScreen() override = default;
 
     MOCK_METHOD(void, BeginSwitch, (int32 Index), (override));

@@ -22,7 +22,7 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
      */
     void RefreshDependencies();
 #endif
-    
+
     /**
      * Get the target injections for each interface.
      * @return The map of interface types to implementation classes

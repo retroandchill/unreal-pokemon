@@ -53,6 +53,14 @@
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
 			"Optional": true
+		},
+		{
+			"Name": "CommonGame",
+			"Enabled": true
+		},
+		{
+			"Name": "UnrealRanges",
+			"Enabled": true
 		}
 	]
 }

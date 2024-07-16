@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Battlers/Innate/Innate_DamageSwing.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
 #include "Battle/Moves/MoveTags.h"
@@ -14,8 +13,9 @@ UInnate_DamageSwing::UInnate_DamageSwing() {
 }
 
 void UInnate_DamageSwing::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-    const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-    const FGameplayEventData *TriggerEventData) {
+                                          const FGameplayAbilityActorInfo *ActorInfo,
+                                          const FGameplayAbilityActivationInfo ActivationInfo,
+                                          const FGameplayEventData *TriggerEventData) {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<UDamageModificationPayload>(TriggerEventData->OptionalObject);

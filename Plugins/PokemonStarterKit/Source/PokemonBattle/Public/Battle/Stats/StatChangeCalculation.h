@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayModMagnitudeCalculation.h"
+
 #include "StatChangeCalculation.generated.h"
 
 /**
@@ -13,15 +14,15 @@ UCLASS(Blueprintable)
 class POKEMONBATTLE_API UStatChangeCalculation : public UGameplayModMagnitudeCalculation {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Construct the CDO for this class
      */
     UStatChangeCalculation();
-    
+
     float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const override;
 
-private:
+  private:
     /**
      * The captured attribute for the stages multiplier.
      */

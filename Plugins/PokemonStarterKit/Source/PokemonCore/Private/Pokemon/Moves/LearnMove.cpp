@@ -1,11 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Pokemon/Moves/LearnMove.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Utilities/PokemonUtilities.h"
 
-ULearnMove * ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FName Move) {
+ULearnMove *ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FName Move) {
     auto Node = NewObject<ULearnMove>();
     Node->Pokemon = Pokemon;
     Node->Move = Move;
@@ -24,4 +23,5 @@ void ULearnMove::ExecuteMoveLearnedOrRejected(bool bMoveLearned) {
     } else {
         MoveRejected.Broadcast();
     }
+    SetReadyToDestroy();
 }

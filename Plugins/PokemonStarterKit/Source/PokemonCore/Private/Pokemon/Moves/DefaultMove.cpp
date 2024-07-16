@@ -17,7 +17,7 @@ const FMoveData &UDefaultMove::GetMoveData() const {
     return *Move;
 }
 
-const FText & UDefaultMove::GetDisplayName() const {
+const FText &UDefaultMove::GetDisplayName() const {
     return GetMoveData().RealName;
 }
 
@@ -50,7 +50,7 @@ FName UDefaultMove::GetFunctionCode() const {
     return GetMoveData().FunctionCode;
 }
 
-const FMoveTarget & UDefaultMove::GetTargetType() const {
+const FMoveTarget &UDefaultMove::GetTargetType() const {
     static const auto &TargetTable = FDataManager::GetInstance().GetDataTable<FMoveTarget>();
     auto Target = TargetTable.GetData(GetMoveData().Target);
     check(Target != nullptr)
@@ -61,7 +61,7 @@ int32 UDefaultMove::GetAdditionalEffectChance() const {
     return GetMoveData().EffectChance;
 }
 
-const TArray<FName> & UDefaultMove::GetTags() const {
+const TArray<FName> &UDefaultMove::GetTags() const {
     return GetMoveData().Tags;
 }
 

@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Battle.h"
-#include "GameplayAbilitySpecHandle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Events/BattleMessage.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
 
@@ -66,7 +66,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
   protected:
     void BeginPlay() override;
-    
+
     void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
 
     void Tick(float DeltaSeconds) override;
@@ -91,7 +91,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     const TQueue<TUniquePtr<IBattleAction>> &GetActionQueue() const;
 #endif
-    
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn *GetBattlePawn() const final;
 
@@ -100,7 +100,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void ExecuteAction(IBattleAction &Action) override;
     void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
 
-protected:
+  protected:
     /**
      * Get the position of the player's side of the field
      * @return The player's primary spawn position
@@ -232,21 +232,21 @@ protected:
      */
     void StartTurn();
 
-protected:
+  protected:
     /**
      * Display any messages for the end of a battle
      * @param Messages The messages to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
-    void ProcessTurnEndMessages(const FRunningMessageSet& Messages);
-    
+    void ProcessTurnEndMessages(const FRunningMessageSet &Messages);
+
     /**
      * Run all checks that need to be handled at the end of the turn
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void EndTurn();
 
-private:
+  private:
     /**
      * Process all of the actions about to be performed
      */
@@ -268,7 +268,7 @@ private:
      */
     UPROPERTY()
     TObjectPtr<UBattleAbilitySystemComponent> AbilitySystemComponent;
-    
+
     /**
      * The current turn number that we're on in battle.
      */

@@ -1,29 +1,38 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/MessageWindow.h"
+#include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
-#include "Data/SelectionInputs.h"
+#include "Fonts/FontMeasure.h"
+#include "Input/CommonUIInputTypes.h"
 #include "MathUtilities.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
-TSharedRef<SWidget> UMessageWindow::RebuildWidget() {
-    auto Ret = Super::RebuildWidget();
-    ResizeWindow();
-    return Ret;
-}
-
-void UMessageWindow::SynchronizeProperties() {
-    Super::SynchronizeProperties();
+void UMessageWindow::NativePreConstruct() {
+    Super::NativePreConstruct();
     ResizeWindow();
 }
 
-#if WITH_EDITOR
-void UMessageWindow::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
-    Super::PostEditChangeProperty(PropertyChangedEvent);
-    ResizeWindow();
+void UMessageWindow::NativeConstruct() {
+    Super::NativeConstruct();
+    FBindUIActionArgs BindArgs(AdvanceActionInput, FSimpleDelegate::CreateWeakLambda(this, [this] {
+                                   if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
+                                       OnAdvanceText.Broadcast();
+                                   } else if (bPaused) {
+                                       SetPaused(false);
+                                   }
+                               }));
+    BindArgs.bDisplayInActionBar = false;
+    AdvanceAction = RegisterUIActionBinding(BindArgs);
 }
-#endif
+
+void UMessageWindow::NativeDestruct() {
+    if (AdvanceAction.IsValid()) {
+        AdvanceAction.Unregister();
+    }
+    Super::NativeDestruct();
+}
 
 void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
     Super::NativeTick(MyGeometry, InDeltaTime);
@@ -79,26 +88,6 @@ void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) 
     }
 }
 
-FReply UMessageWindow::NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) {
-    if (InputMappings == nullptr || !InputMappings->IsConfirmInput(InKeyEvent.GetKey()) || !bPaused)
-        return FReply::Unhandled();
-
-    if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
-        OnAdvanceText.Broadcast();
-    } else if (bPaused) {
-        SetPaused(false);
-    }
-    return FReply::Handled();
-}
-
-void UMessageWindow::NativeOnFocusLost(const FFocusEvent &InFocusEvent) {
-    Super::NativeOnFocusLost(InFocusEvent);
-
-    if (InFocusEvent.GetCause() == EFocusCause::Mouse) {
-        SetKeyboardFocus();
-    }
-}
-
 void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
     check(DisplayTextWidget != nullptr)
 
@@ -119,6 +108,7 @@ void UMessageWindow::ClearDisplayText() {
 
 void UMessageWindow::SetPaused(bool bPausedIn) {
     bPaused = bPausedIn;
+    AdvanceAction.SetDisplayInActionBar(bPaused);
 
     if (PauseArrow == nullptr)
         return;
@@ -143,11 +133,13 @@ FDisplayChoices &UMessageWindow::GetOnDisplayChoices() {
 }
 
 void UMessageWindow::ResizeWindow() {
-    if (SizeBox != nullptr && DisplayTextWidget != nullptr) {
-        auto TextHeight = static_cast<float>(DisplayTextWidget->GetTextSize("Sample").Y) + ExtraPadding;
-        auto DisplayTextPadding = DisplayTextWidget->GetDisplayTextPadding();
-        SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow) + DisplayTextPadding.Top +
-                                   DisplayTextPadding.Bottom);
+    if (SizeBox != nullptr && DisplayTextWidget != nullptr && DisplayTextWidget->GetTextStyle() != nullptr) {
+        auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+        FSlateFontInfo Font;
+        GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
+        FVector2D Size = FontMeasure->Measure(TEXT("Sample"), Font, UWidgetUtilities::GetWidgetDPIScale());
+        auto TextHeight = static_cast<float>(Size.Y) + ExtraPadding;
+        SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow));
     }
 }
 
@@ -155,7 +147,7 @@ void UMessageWindow::QueueUpNewText() {
     if (!FullText.IsSet())
         return;
 
-    double TotalTextAreaWidth = DisplayTextWidget->GetTotalTextAreaSize().X * UWidgetUtilities::GetWidgetDPIScale();
+    double TotalTextAreaWidth = DisplayTextWidget->GetCachedGeometry().Size.X * UWidgetUtilities::GetWidgetDPIScale();
     if (FMath::IsNearlyZero(TotalTextAreaWidth))
         return;
 
@@ -170,7 +162,11 @@ void UMessageWindow::QueueUpNewText() {
 }
 
 void UMessageWindow::QueueLine(const FString &Line, double TotalTextAreaWidth) {
-    if (double LineWidth = DisplayTextWidget->GetTextSize(Line).X; TotalTextAreaWidth >= LineWidth) {
+    auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+    FSlateFontInfo Font;
+    GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
+    FVector2D Size = FontMeasure->Measure(Line, Font, UWidgetUtilities::GetWidgetDPIScale());
+    if (double LineWidth = Size.X; TotalTextAreaWidth >= LineWidth) {
         QueueText(Line);
     } else {
         QueueIndividualWords(Line, TotalTextAreaWidth);
@@ -189,8 +185,12 @@ void UMessageWindow::QueueIndividualWords(const FString &Line, double TotalTextA
     FString CurrentLine = "";
     for (auto &Word : Words) {
         FString NewText = CurrentLine.IsEmpty() ? Word : FString(" ") + Word;
-        double CurrentTextWidth = DisplayTextWidget->GetTextSize(CurrentLine).X;
-        double NewTextWidth = DisplayTextWidget->GetTextSize(NewText).X;
+
+        auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+        FSlateFontInfo Font;
+        GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
+        double CurrentTextWidth = FontMeasure->Measure(CurrentLine, Font, UWidgetUtilities::GetWidgetDPIScale()).X;
+        double NewTextWidth = FontMeasure->Measure(NewText, Font, UWidgetUtilities::GetWidgetDPIScale()).X;
 
         if (double FullTextWidth = CurrentTextWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {
             AddNewLine();

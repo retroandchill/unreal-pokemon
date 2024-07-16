@@ -83,7 +83,7 @@ float UDefaultStatBlock::GetExpPercent() const {
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
 }
 
-void UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd& OnEnd) {
+void UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) {
     Exp += Change;
 
     FLevelUpStatChanges Changes;

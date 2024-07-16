@@ -59,7 +59,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      * @param Battler The battler so check for the panel of
      * @return The found panel
      */
-    UPokemonBattlePanel* FindPanelForBattler(const TScriptInterface<IBattler>& Battler) const;
+    UPokemonBattlePanel *FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const;
 
   protected:
     /**

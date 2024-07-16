@@ -2,7 +2,8 @@
 #include "Actions/MenuAction.h"
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
+#include "Screens/Screen.h"
 #include "Utilities/BlueprintTestUtils.h"
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -21,7 +22,9 @@ bool MenuActionTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(MenuAction);
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     MenuAction->PerformAction(Pawn);
-    auto TopOfStack = Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack();
+    auto Layer =
+        UPrimaryGameLayout::GetPrimaryGameLayout(Player.Get())->GetLayerWidget(RPG::Menus::PrimaryMenuLayerTag);
+    auto TopOfStack = Layer->GetActiveWidget();
     UE_ASSERT_NOT_NULL(TopOfStack);
 
     return true;

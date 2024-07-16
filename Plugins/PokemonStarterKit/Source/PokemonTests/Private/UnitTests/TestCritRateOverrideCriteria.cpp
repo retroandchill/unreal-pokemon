@@ -11,7 +11,7 @@ bool TestCritRateOverrideCriteria::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(Normal, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Normal, Normal));
     UE_CHECK_EQUAL(Always, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Normal, Always));
     UE_CHECK_EQUAL(Never, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Normal, Never));
-    
+
     UE_CHECK_EQUAL(Always, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Always, Normal));
     UE_CHECK_EQUAL(Always, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Always, Always));
     UE_CHECK_EQUAL(Never, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Always, Never));
@@ -19,6 +19,6 @@ bool TestCritRateOverrideCriteria::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(Never, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Never, Normal));
     UE_CHECK_EQUAL(Never, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Never, Always));
     UE_CHECK_EQUAL(Never, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Never, Never));
-    
+
     return true;
 }

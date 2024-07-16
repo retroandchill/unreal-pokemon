@@ -33,6 +33,6 @@ bool DisplayMessageTest::RunTest(const FString &Parameters) {
     auto ExpandedName =
         FString::Format(TEXT("Async Task: Missing Function ({0})"), {WidgetClass->GetDisplayNameText().ToString()});
     UE_CHECK_EQUAL(ExpandedName, TestNode->GetNodeTitle(MenuTitle).ToString());
-    
+
     return true;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "BattleOpponentInfo.generated.h"
 
 class IBattle;
@@ -13,7 +14,7 @@ class IBattleSide;
  */
 class POKEMONBATTLE_API IBattleOpponentInfo {
 
-public:
+  public:
     virtual ~IBattleOpponentInfo() = default;
 
     /**
@@ -24,7 +25,10 @@ public:
      * @param ActivePokemonCount The number of Pokémon to spawn
      * @return The created side
      */
-    virtual TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, const TSubclassOf<AActor>& SideClass, const FTransform& Transform, int32  ActivePokemonCount = 1) = 0;
+    virtual TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
+                                                             const TSubclassOf<AActor> &SideClass,
+                                                             const FTransform &Transform,
+                                                             int32 ActivePokemonCount = 1) = 0;
 };
 
 /**
@@ -43,8 +47,10 @@ struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
      * Create the opposing side of battle with this information
      * @return The created side
      */
-    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, TSubclassOf<AActor> SideClass, const FTransform& Transform, int32  ActivePokemonCount = 1) const {
+    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
+                                                                 TSubclassOf<AActor> SideClass,
+                                                                 const FTransform &Transform,
+                                                                 int32 ActivePokemonCount = 1) const {
         return Data->CreateOpposingSide(Battle, SideClass, Transform, ActivePokemonCount);
     }
-    
 };

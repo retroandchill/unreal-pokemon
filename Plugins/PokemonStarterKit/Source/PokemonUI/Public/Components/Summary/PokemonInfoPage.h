@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/SummaryScreenPage.h"
-#include "Pokemon/Breeding/PokemonGender.h"
-#include "Text/TextColor.h"
+#include "Components/Summary/SummaryScreenPage.h"
 #include "Trainers/TrainerGender.h"
 
 #include "PokemonInfoPage.generated.h"
 
+class UCommonTextStyle;
 class UImage;
 class UProgressBar;
 class UDisplayText;
@@ -42,7 +41,7 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<ETrainerGender, FTextColor> GenderTextColors;
+    TMap<ETrainerGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     /**
      * The widget used to display the Pokédex number.

@@ -38,6 +38,10 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
   public:
     explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
 
+  protected:
+    void NativeConstruct() override;
+
+  public:
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.
@@ -53,8 +57,6 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     const FItem *GetCurrentItem() const;
 
     int32 GetItemQuantity() const;
-
-    int32 GetItemCount_Implementation() const override;
 
     void RefreshWindow();
 
@@ -90,23 +92,18 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     FOnNoItemSelected &GetOnNoItemSelected();
 
   protected:
-    /**
-     * Slot an item entry into the window
-     * @param Option The option that represents an item in the player's inventory
-     * @param ItemIndex The index of the item being slotted
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SlotItem(UItemOption *Option, int32 ItemIndex);
-
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
     void ProcessConfirm_Implementation(int32 CurrentIndex) override;
-    void ReceiveMoveCursor(ECursorDirection Direction) override;
 
   private:
     /**
      * Update the pocket that is being displayed
      */
     void UpdatePocket();
+
+    void NextPocket();
+
+    void PreviousPocket();
 
     /**
      * Add an item to the window with the given name and quantity
@@ -161,9 +158,12 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     UPROPERTY(EditAnywhere, Category = "Display")
     TSubclassOf<UItemOption> ItemEntryClass;
 
-    /**
-     * The list of option widgets in the window.
-     */
-    UPROPERTY()
-    TArray<TObjectPtr<UItemOption>> Options;
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> NextPocketAction;
+
+    UPROPERTY(EditAnywhere, Category = Input)
+    TObjectPtr<UInputAction> PreviousPocketAction;
+
+    FUIActionBindingHandle NextPocketActionHandle;
+    FUIActionBindingHandle PreviousPocketActionHandle;
 };

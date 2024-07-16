@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "Primatives/SelectableOption.h"
+#include "CommonButtonBase.h"
 
 #include "MovePanel.generated.h"
 
@@ -15,7 +14,7 @@ class IMove;
  * Abstract panel that displays information about a Pokémon's moves.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UMovePanel : public USelectableOption {
+class POKEMONUI_API UMovePanel : public UCommonButtonBase {
     GENERATED_BODY()
 
   public:
@@ -32,6 +31,12 @@ class POKEMONUI_API UMovePanel : public USelectableOption {
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Moves)
     void SetMove(const TScriptInterface<IMove> &MoveIn);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Moves)
+    bool IsMoveToLearn() const;
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Moves)
+    void SetIsMoveToLearn(bool bIsBeingLearned);
 
   protected:
     /**
@@ -52,6 +57,9 @@ class POKEMONUI_API UMovePanel : public USelectableOption {
      */
     UPROPERTY(BlueprintGetter = GetMove, BlueprintSetter = SetMove, Category = Moves)
     TScriptInterface<IMove> Move;
+
+    UPROPERTY(BlueprintGetter = IsMoveToLearn, BlueprintSetter = SetIsMoveToLearn, Category = Moves)
+    bool bIsMoveToLearn;
 
     /**
      * Image icon for a move's type

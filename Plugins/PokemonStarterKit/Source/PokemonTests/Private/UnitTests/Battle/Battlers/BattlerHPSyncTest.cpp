@@ -20,45 +20,35 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerHPSyncTest, "Unit Tests.Battle.Battlers.
 bool BattlerHPSyncTest::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("MIMIKYU"),
-            .Level = 100,
-            .IVs = {
-                {"HP", 31},
-                {"ATTACK", 31},
-                {"DEFENSE", 31},
-                {"SPECIAL_ATTACK", 31},
-                {"SPECIAL_DEFENSE", 31},
-                {"SPEED", 31}
-            },
-            .EVs = {
-                {"HP", 4},
-                {"ATTACK", 252},
-                {"SPEED", 252}
-            },
-            .Nature = FName("ADAMANT")
-        });
+        World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
+                                 .Level = 100,
+                                 .IVs = {{"HP", 31},
+                                         {"ATTACK", 31},
+                                         {"DEFENSE", 31},
+                                         {"SPECIAL_ATTACK", 31},
+                                         {"SPECIAL_DEFENSE", 31},
+                                         {"SPEED", 31}},
+                                 .EVs = {{"HP", 4}, {"ATTACK", 252}, {"SPEED", 252}},
+                                 .Nature = FName("ADAMANT")});
 
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
     CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
     ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
-    
+
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     Battler->Initialize(Side, Pokemon);
 
     auto AbilityComponent = Battler->GetAbilityComponent();
     AbilityComponent->SetNumericAttributeBase(UPokemonCoreAttributeSet::GetHPAttribute(), 200.f);
     UE_CHECK_EQUAL(200, Pokemon->GetCurrentHP());
-    
+
     AbilityComponent->SetNumericAttributeBase(UPokemonCoreAttributeSet::GetHPAttribute(), 300.f);
     UE_CHECK_EQUAL(252.f, AbilityComponent->GetCoreAttributes()->GetHP());
     UE_CHECK_EQUAL(252, Pokemon->GetCurrentHP());
 
-    
     AbilityComponent->SetNumericAttributeBase(UPokemonCoreAttributeSet::GetHPAttribute(), -1.f);
     UE_CHECK_EQUAL(0.f, AbilityComponent->GetCoreAttributes()->GetHP());
     UE_CHECK_EQUAL(0, Pokemon->GetCurrentHP());
-    
+
     return true;
 }

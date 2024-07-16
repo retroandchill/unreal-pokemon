@@ -43,7 +43,7 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
      * Bind an action to when a move selection is changed
      * @param Callback The callback to when the selection is changed
      */
-    void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate& Callback);
+    void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback);
 
   protected:
     /**
@@ -52,16 +52,7 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
     void RefreshLayout(bool bLearningMove);
-    
-    /**
-     * Slot a created panel into this widget.
-     * @param Panel The panel that was slotted
-     * @param bIsMoveToLearn Is this move the move to be learned by the player
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SlotPanel(UMovePanel *Panel, bool bIsMoveToLearn = false);
 
-    int32 GetItemCount_Implementation() const override;
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 
     /**
