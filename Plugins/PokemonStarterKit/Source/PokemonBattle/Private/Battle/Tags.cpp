@@ -4,8 +4,8 @@
 
 namespace Pokemon::Battle {
 
-UE_DEFINE_GAMEPLAY_TAG(HoldForComplete, "Battle.HoldForComplete");
-UE_DEFINE_GAMEPLAY_TAG(StartAction, "Battle.Phase.Actions.StartAction");
-UE_DEFINE_GAMEPLAY_TAG(EndTurn, "Battle.Phase.EndTurn");
+const UE_DEFINE_GAMEPLAY_TAG(HoldForComplete, "Battle.HoldForComplete");
+const UE_DEFINE_GAMEPLAY_TAG(StartAction, "Battle.Phase.Actions.StartAction");
+const UE_DEFINE_GAMEPLAY_TAG(EndTurn, "Battle.Phase.EndTurn");
 
 } // namespace Pokemon::Battle

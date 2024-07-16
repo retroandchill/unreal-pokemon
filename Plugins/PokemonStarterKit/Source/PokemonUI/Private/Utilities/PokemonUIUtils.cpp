@@ -1,18 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PokemonUIUtils.h"
-#include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonMenuBase.h"
-#include "PrimaryGameLayout.h"
 
 enum class EPokemonGender : uint8;
-
-void UPokemonUIUtils::RemoveMenuFromStack(const UObject *WorldContextObject, UPokemonMenuBase *Menu) {
-    UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject)->FindAndRemoveWidgetFromLayer(Menu);
-}
 
 FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) {
     return PadInt(Value, DesiredLength);

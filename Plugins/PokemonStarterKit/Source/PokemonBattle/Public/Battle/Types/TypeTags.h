@@ -8,10 +8,11 @@
 
 namespace Pokemon::Battle::Types {
 
-POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(SingleTypeModifierEvents) POKEMONBATTLE_API
-    DECLARE_TARGETED_EVENT_TYPE(FullTypeMatchUpEvents) POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(BattlerTypes)
+POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(SingleTypeModifierEvents);
+POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(FullTypeMatchUpEvents);
+POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(BattlerTypes);
 
-        constexpr auto AttackingTagsFormat = TEXT("Battle.Battler.Types.Attacking.{0}");
+constexpr auto AttackingTagsFormat = TEXT("Battle.Battler.Types.Attacking.{0}");
 constexpr auto DefendingTagsFormat = TEXT("Battle.Battler.Types.Defending.{0}");
 constexpr auto MoveTypeUserFormat = TEXT("Battle.UsingMove.Type.{0}");
 constexpr auto MoveTypeTargetFormat = TEXT("Battle.MoveTarget.Type.{0}");

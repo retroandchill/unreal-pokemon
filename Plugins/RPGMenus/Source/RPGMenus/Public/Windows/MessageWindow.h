@@ -14,8 +14,6 @@ class UCommandWindow;
 class UScrollBox;
 class UWindow;
 class USizeBox;
-class UDisplayText;
-class USelectionInputs;
 
 /**
  * Delegate to what happens when the text finishes displaying and we need some type of user input (such as a command

@@ -329,9 +329,9 @@ void UCommonSessionSubsystem::BindOnlineDelegatesOSSv1() {
     //	TWO_PARAM(OnSessionSettingsUpdated, FName, const FOnlineSessionSettings&);
     //	THREE_PARAM(OnSessionParticipantSettingsUpdated, FName, const FUniqueNetId&, const FOnlineSessionSettings&);
     //	FOUR_PARAM(OnSessionInviteReceived, const FUniqueNetId& /*UserId*/, const FUniqueNetId& /*FromId*/, const
-    //FString& /*AppId*/, const FOnlineSessionSearchResult& /*InviteResult*/); 	THREE_PARAM(OnRegisterPlayersComplete,
-    //FName, const TArray< FUniqueNetIdRef >&, bool); 	THREE_PARAM(OnUnregisterPlayersComplete, FName, const TArray<
-    //FUniqueNetIdRef >&, bool);
+    // FString& /*AppId*/, const FOnlineSessionSearchResult& /*InviteResult*/);
+    // THREE_PARAM(OnRegisterPlayersComplete, FName, const TArray< FUniqueNetIdRef >&, bool);
+    // THREE_PARAM(OnUnregisterPlayersComplete, FName, const TArray< FUniqueNetIdRef >&, bool);
 
     SessionInterface->AddOnSessionUserInviteAcceptedDelegate_Handle(
         FOnSessionUserInviteAcceptedDelegate::CreateUObject(this, &ThisClass::HandleSessionUserInviteAccepted));
@@ -491,7 +491,7 @@ void UCommonSessionSubsystem::CreateOnlineSessionInternalOSSv1(ULocalPlayer *Loc
                           EOnlineDataAdvertisementType::ViaOnlineService);
         HostSettings->Set(SETTING_MAPNAME, Request->GetMapName(), EOnlineDataAdvertisementType::ViaOnlineService);
         //@TODO: HostSettings->Set(SETTING_MATCHING_HOPPER, FString("TeamDeathmatch"),
-        //EOnlineDataAdvertisementType::DontAdvertise);
+        // EOnlineDataAdvertisementType::DontAdvertise);
         HostSettings->Set(SETTING_MATCHING_TIMEOUT, 120.0f, EOnlineDataAdvertisementType::ViaOnlineService);
         HostSettings->Set(SETTING_SESSION_TEMPLATE_NAME, FString(TEXT("GameSession")),
                           EOnlineDataAdvertisementType::DontAdvertise);
@@ -860,12 +860,12 @@ void UCommonSessionSubsystem::HandleQuickPlaySearchFinished(
            bSucceeded ? TEXT("Success") : TEXT("Failed"), ResultCount, *ErrorMessage.ToString());
 
     //@TODO: We have to check if the error message is empty because some OSS layers report a failure just because there
-    //are no sessions.  Please fix with OSS 2.0.
+    // are no sessions.  Please fix with OSS 2.0.
     if (bSucceeded || ErrorMessage.IsEmpty()) {
         // Join the best search result.
         if (ResultCount > 0) {
             //@TODO: We should probably look at ping?  maybe some other factors to find the best.  Idk if they come
-            //pre-sorted or not.
+            // pre-sorted or not.
             for (UCommonSession_SearchResult *Result : SearchSettings->SearchRequest->Results) {
                 JoinSession(JoiningOrHostingPlayer.Get(), Result);
                 return;
@@ -1197,7 +1197,7 @@ UE::Online::FLobbyId UCommonSessionSubsystem::GetLobbyId(const FName SessionName
 
 void UCommonSessionSubsystem::InternalTravelToSession(const FName SessionName) {
     //@TODO: Ideally we'd use triggering player instead of first (they're all gonna go at once so it probably doesn't
-    //matter)
+    // matter)
     APlayerController *const PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
     if (PlayerController == nullptr) {
         FText ReturnReason = NSLOCTEXT("NetworkErrors", "InvalidPlayerController", "Invalid Player Controller");

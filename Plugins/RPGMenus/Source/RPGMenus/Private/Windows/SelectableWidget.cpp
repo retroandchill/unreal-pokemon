@@ -18,7 +18,7 @@ int32 USelectableWidget::GetIndex() const {
 
 void USelectableWidget::SetIndex(int32 NewIndex) {
     int32 OldIndex = Index;
-    Index = FMath::Clamp(NewIndex, INDEX_NONE, GetItemCount() - 1);
+    Index = FMath::Clamp(NewIndex, static_cast<int32>(INDEX_NONE), GetItemCount() - 1);
     OnSelectionChange(OldIndex, Index);
 }
 

@@ -7,7 +7,7 @@
 
 namespace Pokemon::Battle::Stats {
 
-UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
+const UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
 
 FLookup::FLookup() {
     auto &DataManager = FDataManager::GetInstance();

@@ -10,12 +10,12 @@ namespace Pokemon::Battle::Stats {
 /**
  * The gameplay tag used to set the stages
  */
-POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StagesTag)
+POKEMONBATTLE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(StagesTag);
 
-    /**
-     * The tag format for ignoring positive stat stages
-     */
-    constexpr auto IgnorePositiveStatsFormat = TEXT("Battle.Battler.Stats.Stages.Ignore.Positive.{0}");
+/**
+ * The tag format for ignoring positive stat stages
+ */
+constexpr auto IgnorePositiveStatsFormat = TEXT("Battle.Battler.Stats.Stages.Ignore.Positive.{0}");
 
 /**
  * The tag format for ignoring negative stat stages

@@ -18,12 +18,12 @@ namespace RPG::Menus {
 /**
  * The native tag assigned the primary layer for display
  */
-RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(PrimaryMenuLayerTag)
+RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(PrimaryMenuLayerTag);
 
-    /**
-     * The native tag assigned to any overlay layers layer for display
-     */
-    RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag)
+/**
+ * The native tag assigned to any overlay layers layer for display
+ */
+RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag);
 
 } // namespace RPG::Menus
 
