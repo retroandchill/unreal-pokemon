@@ -7,5 +7,6 @@
 // Sets default values
 
 ATestActiveSide::ATestActiveSide() {
-    UReflectionUtils::SetPropertyValue<TSoftClassPtr<AActor>>(this, TEXT("BattlerClass"), ATestBattlerActor::StaticClass());
+    UReflectionUtils::SetPropertyValue<TSoftClassPtr<AActor>>(this, TEXT("BattlerClass"),
+                                                              ATestBattlerActor::StaticClass());
 }

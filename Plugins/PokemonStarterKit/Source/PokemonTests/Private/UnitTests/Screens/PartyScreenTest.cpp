@@ -25,7 +25,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
     FPokemonTestUtilities::CreateMockParty(World.Get());
-    
+
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UPokemonSelectScreen> Screen(CreateWidget<UPokemonSelectScreen>(World.Get(), WidgetClass));
     UE_ASSERT_NOT_NULL(Screen.Get());
@@ -41,7 +41,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     UE_ASSERT_TRUE(SelectionPane->IsActivated());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
-    
+
     SelectionPane->GetSelectedOption()->OnClicked().Broadcast();
     UE_ASSERT_FALSE(SelectionPane->IsActivated());
     UE_ASSERT_TRUE(CommandWindow->IsActivated());

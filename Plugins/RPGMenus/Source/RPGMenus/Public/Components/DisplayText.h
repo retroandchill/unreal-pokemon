@@ -20,9 +20,9 @@ UCLASS(Blueprintable, Abstract)
 class RPGMENUS_API UDisplayText : public UUserWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
-    
+
   public:
     /**
      * Get the display text as shown to the player
@@ -66,10 +66,10 @@ protected:
     void OnTextStyleSet(TSubclassOf<UCommonTextStyle> SetStyle);
 
   private:
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetText, BlueprintSetter = SetText, Category = Content, meta = (MultiLine))
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetText, BlueprintSetter = SetText, Category = Content,
+              meta = (MultiLine))
     FText Text = NSLOCTEXT("PokemonUI", "DisplayText_InitialText", "Text Block");
 
     UPROPERTY(EditAnywhere, BlueprintGetter = GetTextStyle, BlueprintSetter = SetTextStyle, Category = Style)
     TSubclassOf<UCommonTextStyle> TextStyle;
-    
 };

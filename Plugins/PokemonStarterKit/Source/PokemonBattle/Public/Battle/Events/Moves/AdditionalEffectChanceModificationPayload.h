@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "AdditionalEffectChanceModificationPayload.generated.h"
 
 class IBattler;
@@ -32,7 +33,6 @@ struct POKEMONBATTLE_API FAdditionalEffectChanceModificationData {
      */
     UPROPERTY(BlueprintReadOnly, Category = AdditionalEffects)
     float AdditionalEffectChance;
-    
 
     /**
      * Default constructor
@@ -45,8 +45,8 @@ struct POKEMONBATTLE_API FAdditionalEffectChanceModificationData {
      * @param Target The target of the move
      * @param AdditionalEffectChance The chance of the effect occurring
      */
-    FAdditionalEffectChanceModificationData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, int32 AdditionalEffectChance);
-    
+    FAdditionalEffectChanceModificationData(const TScriptInterface<IBattler> &User,
+                                            const TScriptInterface<IBattler> &Target, int32 AdditionalEffectChance);
 };
 
 /**
@@ -56,21 +56,23 @@ UCLASS(BlueprintType)
 class POKEMONBATTLE_API UAdditionalEffectChanceModificationPayload : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Construct a new payload from the given data
      * @param User The user of the move
      * @param Target The target of the move
      * @param AdditionalEffectChance The chance of the effect occurring
      */
-    static UAdditionalEffectChanceModificationPayload* Create(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, int32 AdditionalEffectChance);
+    static UAdditionalEffectChanceModificationPayload *Create(const TScriptInterface<IBattler> &User,
+                                                              const TScriptInterface<IBattler> &Target,
+                                                              int32 AdditionalEffectChance);
 
     /**
      * Get the housed payload data
      * @return The contained payload data
      */
     UFUNCTION(BlueprintPure, Category = AdditionalEffects)
-    const FAdditionalEffectChanceModificationData& GetData() const;
+    const FAdditionalEffectChanceModificationData &GetData() const;
 
     /**
      * Set the move's additional effect chance to the new value
@@ -78,11 +80,10 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = AdditionalEffects)
     void SetAdditionalEffectChance(float AdditionalEffectChance) const;
-    
-private:
+
+  private:
     /**
      * The contained payload data
      */
     TSharedPtr<FAdditionalEffectChanceModificationData> Data;
-
 };

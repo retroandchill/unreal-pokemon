@@ -3,11 +3,11 @@
 #include "Components/Summary/SummaryNameInfo.h"
 #include "CommonNumericTextBlock.h"
 #include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Components/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
 

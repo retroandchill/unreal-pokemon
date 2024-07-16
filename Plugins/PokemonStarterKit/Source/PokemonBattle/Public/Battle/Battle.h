@@ -49,9 +49,8 @@ enum class EBattleResult : uint8 {
  */
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnBattleEnd, EBattleResult)
 
-// This class does not need to be modified.
-UINTERFACE(BlueprintType)
-class POKEMONBATTLE_API UBattle : public UInterface {
+    // This class does not need to be modified.
+    UINTERFACE(BlueprintType) class POKEMONBATTLE_API UBattle : public UInterface {
     GENERATED_BODY()
 };
 
@@ -70,7 +69,7 @@ class POKEMONBATTLE_API IBattle {
      * @param BattleInfo ThFSideWithIndexCallbacke information about the battle to use when initializing the battle
      * @return A reference to this object
      */
-    virtual TScriptInterface<IBattle> Initialize(const FBattleInfo& BattleInfo) = 0;
+    virtual TScriptInterface<IBattle> Initialize(const FBattleInfo &BattleInfo) = 0;
 
     /**
      * Have the player take possession of the battle pawn and begin the battle intro.
@@ -131,6 +130,5 @@ class POKEMONBATTLE_API IBattle {
      * Bind a delegate for when the battle ends
      * @param Callback The callback to invoke when the battle ends
      */
-    virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate&& Callback) = 0;
-
+    virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) = 0;
 };

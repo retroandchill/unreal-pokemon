@@ -14,38 +14,40 @@ class UObject;
 struct FFrame;
 struct FStreamableHandle;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPushContentToLayerForPlayerAsyncDelegate, UCommonActivatableWidget*, UserWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPushContentToLayerForPlayerAsyncDelegate, UCommonActivatableWidget *,
+                                            UserWidget);
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType)
-class COMMONGAME_API UAsyncAction_PushContentToLayerForPlayer : public UCancellableAsyncAction
-{
-	GENERATED_UCLASS_BODY()
+class COMMONGAME_API UAsyncAction_PushContentToLayerForPlayer : public UCancellableAsyncAction {
+    GENERATED_UCLASS_BODY()
 
-public:
-	virtual void Cancel() override;
+  public:
+    virtual void Cancel() override;
 
-	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta=(WorldContext = "WorldContextObject", BlueprintInternalUseOnly="true"))
-	static UAsyncAction_PushContentToLayerForPlayer* PushContentToLayerForPlayer(APlayerController* OwningPlayer, UPARAM(meta = (AllowAbstract=false)) TSoftClassPtr<UCommonActivatableWidget> WidgetClass, UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName, bool bSuspendInputUntilComplete = true);
+    UFUNCTION(BlueprintCallable, BlueprintCosmetic,
+              meta = (WorldContext = "WorldContextObject", BlueprintInternalUseOnly = "true"))
+    static UAsyncAction_PushContentToLayerForPlayer *PushContentToLayerForPlayer(
+        APlayerController *OwningPlayer,
+        UPARAM(meta = (AllowAbstract = false)) TSoftClassPtr<UCommonActivatableWidget> WidgetClass,
+        UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName, bool bSuspendInputUntilComplete = true);
 
-	virtual void Activate() override;
+    virtual void Activate() override;
 
-public:
+  public:
+    UPROPERTY(BlueprintAssignable)
+    FPushContentToLayerForPlayerAsyncDelegate BeforePush;
 
-	UPROPERTY(BlueprintAssignable)
-	FPushContentToLayerForPlayerAsyncDelegate BeforePush;
+    UPROPERTY(BlueprintAssignable)
+    FPushContentToLayerForPlayerAsyncDelegate AfterPush;
 
-	UPROPERTY(BlueprintAssignable)
-	FPushContentToLayerForPlayerAsyncDelegate AfterPush;
+  private:
+    FGameplayTag LayerName;
+    bool bSuspendInputUntilComplete = false;
+    TWeakObjectPtr<APlayerController> OwningPlayerPtr;
+    TSoftClassPtr<UCommonActivatableWidget> WidgetClass;
 
-private:
-
-	FGameplayTag LayerName;
-	bool bSuspendInputUntilComplete = false;
-	TWeakObjectPtr<APlayerController> OwningPlayerPtr;
-	TSoftClassPtr<UCommonActivatableWidget> WidgetClass;
-
-	TSharedPtr<FStreamableHandle> StreamingHandle;
+    TSharedPtr<FStreamableHandle> StreamingHandle;
 };

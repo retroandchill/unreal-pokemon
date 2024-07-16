@@ -1,15 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Battle/Moves/MoveEvaluationHelpers.h"
 
 FCriticalHitRateCalculationData::FCriticalHitRateCalculationData(const TScriptInterface<IBattleMove> &Move,
-                                                                 const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, ECriticalOverride Override,
-                                                                 int32 CriticalHitRateStages) : Move(Move), User(User), Target(Target), Override(Override), CriticalHitRateStages(CriticalHitRateStages) {
+                                                                 const TScriptInterface<IBattler> &User,
+                                                                 const TScriptInterface<IBattler> &Target,
+                                                                 ECriticalOverride Override,
+                                                                 int32 CriticalHitRateStages)
+    : Move(Move), User(User), Target(Target), Override(Override), CriticalHitRateStages(CriticalHitRateStages) {
 }
 
-UCriticalHitRateCalculationPayload * UCriticalHitRateCalculationPayload::Create(
+UCriticalHitRateCalculationPayload *UCriticalHitRateCalculationPayload::Create(
     const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
     const TScriptInterface<IBattler> &Target, ECriticalOverride Override, int32 CriticalHitRateStages) {
     auto Ret = NewObject<UCriticalHitRateCalculationPayload>();
@@ -17,17 +19,17 @@ UCriticalHitRateCalculationPayload * UCriticalHitRateCalculationPayload::Create(
     return Ret;
 }
 
-const FCriticalHitRateCalculationData & UCriticalHitRateCalculationPayload::GetData() const {
+const FCriticalHitRateCalculationData &UCriticalHitRateCalculationPayload::GetData() const {
     check(Data != nullptr)
     return *Data;
 }
 
-const TScriptInterface<IBattler> & UCriticalHitRateCalculationPayload::GetUser() const {
+const TScriptInterface<IBattler> &UCriticalHitRateCalculationPayload::GetUser() const {
     check(Data != nullptr)
     return Data->User;
 }
 
-const TScriptInterface<IBattler> & UCriticalHitRateCalculationPayload::GetTarget() const {
+const TScriptInterface<IBattler> &UCriticalHitRateCalculationPayload::GetTarget() const {
     check(Data != nullptr)
     return Data->Target;
 }

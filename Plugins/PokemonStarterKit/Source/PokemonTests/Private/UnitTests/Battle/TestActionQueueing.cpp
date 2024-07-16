@@ -69,6 +69,6 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     UE_ASSERT_FALSE(Battle->ActionSelectionFinished());
     QueueBattleAction(Battler3);
     UE_ASSERT_TRUE(Battle->ActionSelectionFinished());
-    
+
     return true;
 }

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Screens/MoveForgetScreen.h"
 #include "Windows/MoveInfoWindow.h"
 #include "Windows/MoveSelectWindow.h"
@@ -20,7 +19,6 @@ void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemo
     MoveSelectWindow->DisplayMoves(Pokemon);
     MoveSelectWindow->ActivateWidget();
     MoveSelectWindow->SetIndex(0);
-    
 }
 
 void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemon, FName Move) {
@@ -41,11 +39,11 @@ void UMoveForgetScreen::MoveForgetComplete(bool bMoveForgotten) {
     OnMoveForgetComplete.Broadcast(bMoveForgotten);
 }
 
-UMoveSelectWindow * UMoveForgetScreen::GetMoveSelectWindow() const {
+UMoveSelectWindow *UMoveForgetScreen::GetMoveSelectWindow() const {
     return MoveSelectWindow;
 }
 
-UMoveInfoWindow * UMoveForgetScreen::GetMoveInfoWindow() const {
+UMoveInfoWindow *UMoveForgetScreen::GetMoveInfoWindow() const {
     return MoveInfoWindow;
 }
 

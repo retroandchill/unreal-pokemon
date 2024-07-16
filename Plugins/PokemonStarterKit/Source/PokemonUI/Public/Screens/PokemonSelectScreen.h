@@ -50,7 +50,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     void RefreshSelf_Implementation() override;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UHelpWindow* GetHelpWindow() const;
+    UHelpWindow *GetHelpWindow() const;
 
   public:
     /**

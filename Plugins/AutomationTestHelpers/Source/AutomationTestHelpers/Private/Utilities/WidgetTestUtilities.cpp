@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/WidgetTestUtilities.h"
-#include "CommonGameViewportClient.h"
-#include "GameMapsSettings.h"
-#include "GeneralEngineSettings.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "CommonGameViewportClient.h"
 #include "Engine/GameEngine.h"
+#include "GameMapsSettings.h"
+#include "GeneralEngineSettings.h"
 #include "Utilities/RAII.h"
 
 class UGameMapsSettings;
@@ -44,6 +44,6 @@ TTuple<FDudWidgets, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTes
         World->BeginPlay();
         World->SetBegunPlay(true);
     }
-    
+
     return {DudWidgets, MoveTemp(World), MoveTemp(GameInstance)};
 }

@@ -7,24 +7,25 @@
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
+#include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Pokemon/Pokemon.h"
 #include "RangeHelpers.h"
-#include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
+#include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/view/join.hpp>
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
-#include <range/v3/view/concat.hpp>
-#include <range/v3/view/join.hpp>
 
 AActiveSide::AActiveSide() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));
 }
 
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
-                                                      const TArray<TScriptInterface<IPokemon>>& Pokemon, bool ShowBackSprites) {
+                                                      const TArray<TScriptInterface<IPokemon>> &Pokemon,
+                                                      bool ShowBackSprites) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;

@@ -34,7 +34,7 @@ UCLASS()
 class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the names of all status effects
      * @return The array of all inflictable status effects

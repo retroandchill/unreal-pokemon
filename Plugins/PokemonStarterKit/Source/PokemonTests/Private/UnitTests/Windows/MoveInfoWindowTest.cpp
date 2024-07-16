@@ -1,8 +1,8 @@
 ﻿
 #include "Asserts.h"
+#include "Components/DisplayText.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Moves/DefaultMove.h"
-#include "Components/DisplayText.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -32,15 +32,16 @@ bool MoveInfoWindowTest::RunTest(const FString &Parameters) {
     MoveInfo->RefreshMove(Move1);
     UE_ASSERT_EQUAL(TEXT("80"), PowerText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("---"), AccuracyText->GetText().ToString());
-    UE_ASSERT_EQUAL(TEXT("The user looses a blast of aura power from deep within its body. This move is certain to hit."),
-                 DescriptionText->GetText().ToString());
+    UE_ASSERT_EQUAL(
+        TEXT("The user looses a blast of aura power from deep within its body. This move is certain to hit."),
+        DescriptionText->GetText().ToString());
 
     auto Move2 = NewObject<UDefaultMove>(World.Get())->Initialize(TEXT("PSYWAVE"));
     MoveInfo->RefreshMove(Move2);
     UE_ASSERT_EQUAL(TEXT("???"), PowerText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("100%"), AccuracyText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("The target is attacked with an odd psychic wave. The attack varies in intensity."),
-                 DescriptionText->GetText().ToString());
+                    DescriptionText->GetText().ToString());
 
     auto Move3 = NewObject<UDefaultMove>(World.Get())->Initialize(TEXT("GROWL"));
     MoveInfo->RefreshMove(Move3);

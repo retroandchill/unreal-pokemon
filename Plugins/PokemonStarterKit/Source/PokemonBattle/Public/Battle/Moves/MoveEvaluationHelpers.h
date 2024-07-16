@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleMoveFunctionCode.h"
 #include "Battle/Events/Moves/CriticalHitRateCalculationPayload.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
+#include "BattleMoveFunctionCode.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "MoveEvaluationHelpers.generated.h"
 
 class UAdditionalEffectChanceModificationPayload;
@@ -18,14 +19,14 @@ UCLASS()
 class POKEMONBATTLE_API UMoveEvaluationHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Up the critical hit stages by the specified amount
      * @param Context The context for the move being used
      * @param Amount The amount to increment the stages by
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
-    static void IncrementCriticalHitRate(const UCriticalHitRateCalculationPayload* Context, int32 Amount = 1);
+    static void IncrementCriticalHitRate(const UCriticalHitRateCalculationPayload *Context, int32 Amount = 1);
 
     /**
      * Up the critical hit stages by the specified amount if the user has the specified tag
@@ -34,10 +35,12 @@ public:
      * @param Amount The amount to increment the stages by
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Critical Hits")
-    static void IncrementCriticalHitRateIfUserHasTag(const UCriticalHitRateCalculationPayload* Context, FGameplayTag Tag, int32 Amount = 1);
-    
+    static void IncrementCriticalHitRateIfUserHasTag(const UCriticalHitRateCalculationPayload *Context,
+                                                     FGameplayTag Tag, int32 Amount = 1);
+
     /**
-     * Take an existing critical override value and change it based on the new value and the existing rules for precedence.
+     * Take an existing critical override value and change it based on the new value and the existing rules for
+     * precedence.
      * @param Old The old value
      * @param New The new value to attempt to assign to
      * @return The result after evaluation
@@ -46,7 +49,8 @@ public:
     static ECriticalOverride ApplyCriticalHitOverride(ECriticalOverride Old, ECriticalOverride New);
 
     /**
-     * Take an existing critical override value and change it based on the new value and the existing rules for precedence.
+     * Take an existing critical override value and change it based on the new value and the existing rules for
+     * precedence.
      * @param Context The context object that contains the old value
      * @param Override The new value to attempt to assign to[]
      */
@@ -60,7 +64,7 @@ public:
      * @return Is the user of the specified species
      */
     UFUNCTION(BlueprintPure, Category = "Moves|Context")
-    static bool UserIsSpecies(const TScriptInterface<IMoveEventPayload>& Context, FName Species);
+    static bool UserIsSpecies(const TScriptInterface<IMoveEventPayload> &Context, FName Species);
 
     /**
      * Boost the power of a move
@@ -69,7 +73,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
     static void BoostPower(const UDamageModificationPayload *Context, float Multiplier = 1.f);
-    
+
     /**
      * Boost the power of a move if the user of the move has the specified gameplay tag.
      * @param Context The payload that contains all the move information
@@ -88,7 +92,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
     static void BoostPowerIfUserHasAllTags(const UDamageModificationPayload *Context, FGameplayTagContainer Tags,
-                                       float Multiplier = 1.f);
+                                           float Multiplier = 1.f);
 
     /**
      * Boost the power of a move if the user of the move has any of the specified gameplay tags.
@@ -98,7 +102,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
     static void BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context, FGameplayTagContainer Tags,
-                                       float Multiplier = 1.f);
+                                           float Multiplier = 1.f);
 
     /**
      * Boost the damage of a move if the user of the move has the specified gameplay tag.
@@ -114,5 +118,6 @@ public:
      * @param Multiplier The multiplier to apply
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
-    static void BoostAdditionalEffectChance(const UAdditionalEffectChanceModificationPayload* Context, float Multiplier = 1.f);
+    static void BoostAdditionalEffectChance(const UAdditionalEffectChanceModificationPayload *Context,
+                                            float Multiplier = 1.f);
 };

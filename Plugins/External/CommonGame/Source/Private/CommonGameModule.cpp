@@ -5,28 +5,22 @@
 /**
  * Implements the FCommonGameModule module.
  */
-class FCommonGameModule : public IModuleInterface
-{
-public:
-	FCommonGameModule();
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+class FCommonGameModule : public IModuleInterface {
+  public:
+    FCommonGameModule();
+    virtual void StartupModule() override;
+    virtual void ShutdownModule() override;
 
-private:
-
+  private:
 };
 
-
-FCommonGameModule::FCommonGameModule()
-{
+FCommonGameModule::FCommonGameModule() {
 }
 
-void FCommonGameModule::StartupModule()
-{
+void FCommonGameModule::StartupModule() {
 }
 
-void FCommonGameModule::ShutdownModule()
-{
+void FCommonGameModule::ShutdownModule() {
 }
 
 IMPLEMENT_MODULE(FCommonGameModule, CommonGame);

@@ -25,7 +25,7 @@ bool TestAddWidgetToStack::RunTest(const FString &Parameters) {
     TestGraph->AddNode(TestNode);
 
     UE_CHECK_EQUAL(FEditorCategoryUtils::GetCommonCategory(FCommonEditorCategory::UserInterface).ToString(),
-                TestNode->GetMenuCategory().ToString());
+                   TestNode->GetMenuCategory().ToString());
     UE_CHECK_EQUAL(TestNode->GetCornerIcon().ToString(), TEXT("Graph.Replication.ClientEvent"));
     UE_CHECK_EQUAL(TEXT("Add Screen to Stack"), TestNode->GetNodeTitle(MenuTitle).ToString());
     UE_CHECK_EQUAL(TEXT("Add NONE to Stack"), TestNode->GetNodeTitle(FullTitle).ToString());

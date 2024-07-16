@@ -43,7 +43,7 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
      * Bind an action to when a move selection is changed
      * @param Callback The callback to when the selection is changed
      */
-    void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate& Callback);
+    void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback);
 
   protected:
     /**

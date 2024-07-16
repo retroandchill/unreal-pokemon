@@ -13,7 +13,6 @@
 #include "Windows/CommandWindow.h"
 #include "Windows/ItemSelectionWindow.h"
 
-
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
@@ -27,7 +26,7 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("REPEL"));
     auto &Subsystem = UPokemonSubsystem::GetInstance(World.Get());
     UReflectionUtils::SetPropertyValue<TScriptInterface<IBag>>(&Subsystem, "Bag", Bag);
-    
+
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UBagScreen> Screen(CreateWidget<UBagScreen>(World.Get(), WidgetClass));
     UE_ASSERT_NOT_NULL(Screen.Get());
@@ -38,9 +37,11 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
     UE_ASSERT_NOT_NULL(CommandWindow);
 
-    auto &HandlerSet = UReflectionUtils::GetMutablePropertyValue<TObjectPtr<UBagMenuHandlerSet>>(Screen.Get(), "CommandHandlers");
+    auto &HandlerSet =
+        UReflectionUtils::GetMutablePropertyValue<TObjectPtr<UBagMenuHandlerSet>>(Screen.Get(), "CommandHandlers");
     HandlerSet = NewObject<UBagMenuHandlerSet>(Screen.Get());
-    auto &Handlers = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBagMenuHandler>>>(HandlerSet, "Handlers");
+    auto &Handlers =
+        UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBagMenuHandler>>>(HandlerSet, "Handlers");
     Handlers.Empty();
     auto SampleHandler = NewObject<USampleHandler>(Screen.Get());
     Handlers.Emplace(SampleHandler);

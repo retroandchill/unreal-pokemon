@@ -1,49 +1,43 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ModularPlayerController.h"
-
 #include "Components/ControllerComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(ModularPlayerController)
 
-void AModularPlayerController::PreInitializeComponents()
-{
-	Super::PreInitializeComponents();
+void AModularPlayerController::PreInitializeComponents() {
+    Super::PreInitializeComponents();
 
-	UGameFrameworkComponentManager::AddGameFrameworkComponentReceiver(this);
+    UGameFrameworkComponentManager::AddGameFrameworkComponentReceiver(this);
 }
 
-void AModularPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	UGameFrameworkComponentManager::RemoveGameFrameworkComponentReceiver(this);
+void AModularPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    UGameFrameworkComponentManager::RemoveGameFrameworkComponentReceiver(this);
 
-	Super::EndPlay(EndPlayReason);
+    Super::EndPlay(EndPlayReason);
 }
 
-void AModularPlayerController::ReceivedPlayer()
-{
-	// Player controllers always get assigned a player and can't do much until then
-	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, UGameFrameworkComponentManager::NAME_GameActorReady);
+void AModularPlayerController::ReceivedPlayer() {
+    // Player controllers always get assigned a player and can't do much until then
+    UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(
+        this, UGameFrameworkComponentManager::NAME_GameActorReady);
 
-	Super::ReceivedPlayer();
+    Super::ReceivedPlayer();
 
-	TArray<UControllerComponent*> ModularComponents;
-	GetComponents(ModularComponents);
-	for (UControllerComponent* Component : ModularComponents)
-	{
-		Component->ReceivedPlayer();
-	}
+    TArray<UControllerComponent *> ModularComponents;
+    GetComponents(ModularComponents);
+    for (UControllerComponent *Component : ModularComponents) {
+        Component->ReceivedPlayer();
+    }
 }
 
-void AModularPlayerController::PlayerTick(float DeltaTime)
-{
-	Super::PlayerTick(DeltaTime);
+void AModularPlayerController::PlayerTick(float DeltaTime) {
+    Super::PlayerTick(DeltaTime);
 
-	TArray<UControllerComponent*> ModularComponents;
-	GetComponents(ModularComponents);
-	for (UControllerComponent* Component : ModularComponents)
-	{
-		Component->PlayerTick(DeltaTime);
-	}
+    TArray<UControllerComponent *> ModularComponents;
+    GetComponents(ModularComponents);
+    for (UControllerComponent *Component : ModularComponents) {
+        Component->PlayerTick(DeltaTime);
+    }
 }

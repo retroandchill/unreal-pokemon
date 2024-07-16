@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonActivatableWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonActivatableWidget.h"
 #include "Containers/Deque.h"
 
 #include "MessageWindow.generated.h"
@@ -42,6 +42,7 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
 
   protected:
     void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
+
   public:
     /**
      * Set the text to display to the player

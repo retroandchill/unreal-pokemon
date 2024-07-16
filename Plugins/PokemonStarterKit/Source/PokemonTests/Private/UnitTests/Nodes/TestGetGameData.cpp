@@ -19,8 +19,7 @@
 #include "Utilities/K2Nodes.h"
 #include "Utilities/ReflectionUtils.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile,
-                                 "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeTitle",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetGameData_NodeTile, "Unit Tests.PokemonData.Nodes.TestGetGameData.NodeTitle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetGameData_NodeTile::RunTest(const FString &Parameters) {
@@ -54,7 +53,7 @@ bool TestGetGameData_TooltipText::RunTest(const FString &Parameters) {
     TestGraph->AddNode(TestNode);
 
     UE_ASSERT_EQUAL(TEXT("Get Stat \n\nRepresents one of the stats in the database."),
-                 TestNode->GetTooltipText().ToString());
+                    TestNode->GetTooltipText().ToString());
 
     return true;
 }

@@ -24,7 +24,7 @@ class POKEMONBATTLEUI_API UBattleMenuOption : public UCommonButtonBase {
      */
     void InitFromHandler(const UBattleMenuHandler *Handler);
 
-protected:
+  protected:
     void NativeOnCurrentTextStyleChanged() override;
 
   private:

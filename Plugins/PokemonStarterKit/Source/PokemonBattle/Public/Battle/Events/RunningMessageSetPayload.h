@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "RunningMessageSetPayload.generated.h"
 
 struct FRunningMessageSet;
@@ -20,11 +21,10 @@ class POKEMONBATTLE_API IRunningMessageSetPayload {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Get the running message set passed to the event in question
      * @return The running message set passed to the event
      */
-    virtual const FRunningMessageSet& GetRunningMessageSet() const = 0;
-
+    virtual const FRunningMessageSet &GetRunningMessageSet() const = 0;
 };

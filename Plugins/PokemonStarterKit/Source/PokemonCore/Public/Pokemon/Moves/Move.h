@@ -80,7 +80,7 @@ class POKEMONCORE_API IMove {
 
     /**
      * Lookup the function code of the move in question.
-     * @return The string used to denote the move's effect 
+     * @return The string used to denote the move's effect
      */
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     virtual FName GetFunctionCode() const = 0;
@@ -104,7 +104,7 @@ class POKEMONCORE_API IMove {
      * @return Words/phrases that can be used to group certain kinds of moves.
      */
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
-    virtual const TArray<FName>& GetTags() const = 0;
+    virtual const TArray<FName> &GetTags() const = 0;
 
     /**
      * Reduce the amount of PP a move has by the given amount

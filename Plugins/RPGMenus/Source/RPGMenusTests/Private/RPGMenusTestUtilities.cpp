@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "RPGMenusTestUtilities.h"
 #include "CommonButtonBase.h"
 #include "Input/UIActionBinding.h"
@@ -15,9 +14,8 @@ void URPGMenusTestUtilities::CancelOnWidget(USelectableWidget *SelectableWidget)
 }
 
 void URPGMenusTestUtilities::ForceAdvanceText(UMessageWindow *MessageWindow, FName InputName) {
-    auto MenuActionHandle = MessageWindow->GetActionBindings().FindByPredicate([InputName](const FUIActionBindingHandle &Handle) {
-        return Handle.GetActionName() == InputName;
-    });
+    auto MenuActionHandle = MessageWindow->GetActionBindings().FindByPredicate(
+        [InputName](const FUIActionBindingHandle &Handle) { return Handle.GetActionName() == InputName; });
     if (MenuActionHandle == nullptr) {
         return;
     }

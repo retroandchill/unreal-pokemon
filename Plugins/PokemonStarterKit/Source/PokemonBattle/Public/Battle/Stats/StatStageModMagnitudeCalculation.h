@@ -15,21 +15,21 @@ UCLASS(Abstract, Blueprintable, HideCategories = "Attributes")
 class POKEMONBATTLE_API UStatStageModMagnitudeCalculation : public UGameplayModMagnitudeCalculation {
     GENERATED_BODY()
 
-public:
+  public:
     float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const override;
 
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
-private:
+  private:
     /**
      * The ID of the stat in question
      */
     UPROPERTY(EditDefaultsOnly, Category = "Battle|Stats",
-        meta = (GetOptions = "PokemonData.StatHelper.GetMainBattleStatNames"))
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainBattleStatNames"))
     FName StatID;
-    
+
     /**
      * The captured attribute for the stages.
      */

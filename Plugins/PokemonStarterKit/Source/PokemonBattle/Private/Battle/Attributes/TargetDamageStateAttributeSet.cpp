@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
-#include "Battle/Type.h"
 #include "Battle/Moves/MoveTags.h"
+#include "Battle/Type.h"
 
 void UTargetDamageStateAttributeSet::Reset() {
     SetTypeMod(Pokemon::TypeEffectiveness::IneffectiveMultiplier);

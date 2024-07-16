@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Moves/MoveTags.h"
-#include "DataManager.h"
 #include "Battle/Tags.h"
+#include "DataManager.h"
 #include "Moves/MoveData.h"
 
 namespace Pokemon::Battle::Moves {
@@ -32,34 +31,34 @@ DEFINE_TARGETED_EVENT_TYPE(AdditionalEffectChanceEvents, "Battle.Moves.Effects.A
 
 UE_DEFINE_GAMEPLAY_TAG(TwoTurnAttack, "Battle.Moves.TwoTurnAttack");
 
-const FNativeGameplayTag & GetUserCategoryTag(EMoveDamageCategory Category) {
+const FNativeGameplayTag &GetUserCategoryTag(EMoveDamageCategory Category) {
     using enum EMoveDamageCategory;
     switch (Category) {
     case Physical:
-        return UsingMove_Physical;    
+        return UsingMove_Physical;
     case Special:
-        return UsingMove_Special;    
+        return UsingMove_Special;
     default: // Status
-        return UsingMove_Status;    
+        return UsingMove_Status;
     }
 }
 
-const FNativeGameplayTag & GetTargetCategoryTag(EMoveDamageCategory Category) {
+const FNativeGameplayTag &GetTargetCategoryTag(EMoveDamageCategory Category) {
     using enum EMoveDamageCategory;
     switch (Category) {
     case Physical:
-        return MoveTarget_Physical;    
+        return MoveTarget_Physical;
     case Special:
-        return MoveTarget_Special;    
+        return MoveTarget_Special;
     default: // Status
-        return MoveTarget_Status;    
+        return MoveTarget_Status;
     }
 }
 
 FLookup::FLookup() {
     auto &DataManager = FDataManager::GetInstance();
-    auto& TypeTable = DataManager.GetDataTable<FMoveData>();
-    TypeTable.ForEach([this](const FMoveData& Move) {
+    auto &TypeTable = DataManager.GetDataTable<FMoveData>();
+    TypeTable.ForEach([this](const FMoveData &Move) {
         for (auto Tag : Move.Tags) {
             if (Tags.Contains(Tag)) {
                 continue;
@@ -72,8 +71,8 @@ FLookup::FLookup() {
 
 FLookup::~FLookup() = default;
 
-FLookup & FLookup::GetInstance() {
+FLookup &FLookup::GetInstance() {
     static FLookup Lookup;
     return Lookup;
 }
-}
+} // namespace Pokemon::Battle::Moves

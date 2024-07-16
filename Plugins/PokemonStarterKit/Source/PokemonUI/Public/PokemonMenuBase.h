@@ -14,6 +14,4 @@
 UCLASS()
 class POKEMONUI_API UPokemonMenuBase : public UCommonActivatableWidget {
     GENERATED_BODY()
-
-
 };

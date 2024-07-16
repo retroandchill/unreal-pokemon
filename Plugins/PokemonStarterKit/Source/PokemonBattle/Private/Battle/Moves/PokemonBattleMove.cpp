@@ -4,23 +4,23 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/BattleSide.h"
-#include "Moves/MoveData.h"
-#include "Pokemon/Moves/Move.h"
-#include "RangeHelpers.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Battle/BattleSide.h"
+#include "Battle/Events/Moves/UseMovePayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/MoveTags.h"
-#include "Battle/Events/Moves/UseMovePayload.h"
+#include "Moves/MoveData.h"
+#include "Pokemon/Moves/Move.h"
+#include "RangeHelpers.h"
+#include <range/v3/view/filter.hpp>
+#include <range/v3/view/transform.hpp>
 
-TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler>& Battler,
+TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
                                                              const TScriptInterface<IMove> &Move) {
     Owner = Battler;
     WrappedMove = Move;
-    
+
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto FunctionCodeClass = Pokemon::Battle::Moves::LookupMoveEffectClass(WrappedMove->GetFunctionCode());
     if (auto AbilityObject = AbilityComponent->FindAbilitySpecFromClass(FunctionCodeClass); AbilityObject != nullptr) {
@@ -29,7 +29,7 @@ TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterf
         FGameplayAbilitySpec Spec(FunctionCodeClass, 1, INDEX_NONE, this);
         FunctionCode = AbilityComponent->GiveAbility(Spec);
     }
-    
+
     return this;
 }
 
@@ -42,9 +42,9 @@ TArray<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() c
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    return Battle->GetActiveBattlers() |
-           ranges::views::filter(
-               [&UserId](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() != UserId; }) |
+    return Battle->GetActiveBattlers() | ranges::views::filter([&UserId](const TScriptInterface<IBattler> &Battler) {
+               return Battler->GetInternalId() != UserId;
+           }) |
            RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }
 
@@ -76,11 +76,11 @@ EMoveDamageCategory UPokemonBattleMove::GetCategory() const {
     return WrappedMove->GetDamageCategory();
 }
 
-const FMoveTarget & UPokemonBattleMove::GetTargetType() const {
+const FMoveTarget &UPokemonBattleMove::GetTargetType() const {
     return WrappedMove->GetTargetType();
 }
 
-const TArray<FName> & UPokemonBattleMove::GetTags() const {
+const TArray<FName> &UPokemonBattleMove::GetTags() const {
     return WrappedMove->GetTags();
 }
 
@@ -109,14 +109,17 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<TScr
     auto Payload = NewObject<UUseMovePayload>();
     Payload->Move = this;
     bool bIsInstanced;
-    Payload->Ability = UAbilitySystemBlueprintLibrary::GetGameplayAbilityFromSpecHandle(AbilityComponent, FunctionCode, bIsInstanced);
+    Payload->Ability =
+        UAbilitySystemBlueprintLibrary::GetGameplayAbilityFromSpecHandle(AbilityComponent, FunctionCode, bIsInstanced);
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
-    TargetData->SetActors(RangeHelpers::CreateRange(Targets)
-        | ranges::views::transform([](const TScriptInterface<IBattler>& Battler) { return CastChecked<AActor>(Battler.GetObject()); })
-        | RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
+    TargetData->SetActors(RangeHelpers::CreateRange(Targets) |
+                          ranges::views::transform([](const TScriptInterface<IBattler> &Battler) {
+                              return CastChecked<AActor>(Battler.GetObject());
+                          }) |
+                          RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
     EventData.TargetData.Data.Emplace(TargetData);
-    
+
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);
     return FunctionCode;
 }

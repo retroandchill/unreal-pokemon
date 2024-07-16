@@ -2,12 +2,12 @@
 
 #include "Components/Summary/TrainerMemoPage.h"
 #include "CommonRichTextBlock.h"
+#include "Components/DisplayText.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "RangeHelpers.h"
-#include "Components/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 #include <range/v3/view/transform.hpp>

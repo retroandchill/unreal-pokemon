@@ -7,6 +7,7 @@
 #include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
+
 #include "DamageModificationPayload.generated.h"
 
 /**
@@ -90,17 +91,20 @@ struct POKEMONBATTLE_API FDamageCalculationData {
      * @param Type The determined type of the move
      * @param BasePower The base power of the move
      */
-    FDamageCalculationData(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, const FRunningMessageSet& PreDamageMessages, FName Type, int32 BasePower);
+    FDamageCalculationData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                           int32 TargetCount, const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower);
 };
 
 /**
  * The payload used during damage modification.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UDamageModificationPayload : public UObject, public ITargetedMoveEventPayload, public IRunningMessageSetPayload {
+class POKEMONBATTLE_API UDamageModificationPayload : public UObject,
+                                                     public ITargetedMoveEventPayload,
+                                                     public IRunningMessageSetPayload {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create a new payload with the provided event data
      * @param User The user of the move
@@ -110,8 +114,10 @@ public:
      * @param Type The determined type of the move
      * @param BasePower The base power of the move
      */
-    static UDamageModificationPayload* Create(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, int32 TargetCount, const FRunningMessageSet& PreDamageMessages, FName Type, int32 BasePower);
-    
+    static UDamageModificationPayload *Create(const TScriptInterface<IBattler> &User,
+                                              const TScriptInterface<IBattler> &Target, int32 TargetCount,
+                                              const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower);
+
     /**
      * Get the wrapped payload struct
      * @return The wrapped struct for the payload
@@ -119,9 +125,9 @@ public:
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FDamageCalculationData &GetData() const;
 
-    const TScriptInterface<IBattler>& GetUser() const final;
-    const TScriptInterface<IBattler>& GetTarget() const final;
-    const FRunningMessageSet & GetRunningMessageSet() const override;
+    const TScriptInterface<IBattler> &GetUser() const final;
+    const TScriptInterface<IBattler> &GetTarget() const final;
+    const FRunningMessageSet &GetRunningMessageSet() const override;
 
     /**
      * Set the power multiplier
@@ -151,10 +157,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = GameplayEvents)
     void SetFinalDamageMultiplier(float Amount) const;
 
-private:
+  private:
     /**
      * The wrapped struct for the payload
      */
     TSharedPtr<FDamageCalculationData> Data;
-
 };

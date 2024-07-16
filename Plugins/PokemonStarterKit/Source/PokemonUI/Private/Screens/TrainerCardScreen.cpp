@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/TrainerCardScreen.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
-#include "Components/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 
 void UTrainerCardScreen::NativeConstruct() {

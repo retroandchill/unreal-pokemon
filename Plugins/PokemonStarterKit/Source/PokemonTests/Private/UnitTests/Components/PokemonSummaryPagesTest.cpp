@@ -1,5 +1,6 @@
 ﻿
 #include "Asserts.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/PokemonInfoPage.h"
@@ -13,7 +14,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
-#include "Components/DisplayText.h"
 #include "Trainers/BasicTrainer.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

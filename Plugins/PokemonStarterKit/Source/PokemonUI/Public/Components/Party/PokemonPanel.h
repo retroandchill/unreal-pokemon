@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonButtonBase.h"
 #include "Bag/Item.h"
+#include "CommonButtonBase.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "SelectablePanel.h"
 

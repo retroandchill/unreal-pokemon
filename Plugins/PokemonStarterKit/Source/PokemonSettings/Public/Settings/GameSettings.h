@@ -132,7 +132,7 @@ class POKEMONSETTINGS_API IGameSettings {
      * @return The default level that is streamed in when starting a battle
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
-    virtual const FSoftObjectPath& GetDefaultBattleScene() const = 0;
+    virtual const FSoftObjectPath &GetDefaultBattleScene() const = 0;
 
     /**
      * The offset of the streamed in battle scene
@@ -154,7 +154,7 @@ class POKEMONSETTINGS_API IGameSettings {
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
     virtual float GetCriticalHitMultiplier() const = 0;
-    
+
     /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      * @return The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.

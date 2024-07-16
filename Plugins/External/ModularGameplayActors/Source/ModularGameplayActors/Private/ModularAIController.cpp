@@ -5,23 +5,21 @@
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(ModularAIController)
 
-void AModularAIController::PreInitializeComponents()
-{
-	Super::PreInitializeComponents();
+void AModularAIController::PreInitializeComponents() {
+    Super::PreInitializeComponents();
 
-	UGameFrameworkComponentManager::AddGameFrameworkComponentReceiver(this);
+    UGameFrameworkComponentManager::AddGameFrameworkComponentReceiver(this);
 }
 
-void AModularAIController::BeginPlay()
-{
-	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, UGameFrameworkComponentManager::NAME_GameActorReady);
+void AModularAIController::BeginPlay() {
+    UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(
+        this, UGameFrameworkComponentManager::NAME_GameActorReady);
 
-	Super::BeginPlay();
+    Super::BeginPlay();
 }
 
-void AModularAIController::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	UGameFrameworkComponentManager::RemoveGameFrameworkComponentReceiver(this);
+void AModularAIController::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    UGameFrameworkComponentManager::RemoveGameFrameworkComponentReceiver(this);
 
-	Super::EndPlay(EndPlayReason);
+    Super::EndPlay(EndPlayReason);
 }

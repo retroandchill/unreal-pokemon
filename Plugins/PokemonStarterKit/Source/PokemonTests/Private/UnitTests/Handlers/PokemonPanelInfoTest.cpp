@@ -20,7 +20,7 @@ bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto ScreenClass = Subclasses[0];
     FPokemonTestUtilities::CreateMockParty(World.Get());
-    
+
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     auto Screen = CreateWidget<UPokemonSelectionPane>(World.Get(), ScreenClass);
     Screen->AddToViewport();

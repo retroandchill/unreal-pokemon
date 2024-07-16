@@ -23,8 +23,9 @@ void UItemSelectionWindow::NativeConstruct() {
         BindArgs.bDisplayInActionBar = bDisplayInActionBar;
         return BindArgs;
     };
-    
-    NextPocketActionHandle = RegisterUIActionBinding(CreateBindArgs(NextPocketAction, &UItemSelectionWindow::NextPocket));
+
+    NextPocketActionHandle =
+        RegisterUIActionBinding(CreateBindArgs(NextPocketAction, &UItemSelectionWindow::NextPocket));
     PreviousPocketActionHandle =
         RegisterUIActionBinding(CreateBindArgs(PreviousPocketAction, &UItemSelectionWindow::PreviousPocket));
 }

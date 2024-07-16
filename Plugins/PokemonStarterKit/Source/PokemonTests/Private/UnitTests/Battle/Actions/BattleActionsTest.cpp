@@ -15,7 +15,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattleActionsTest_Moves, "Unit Tests.Battle.Act
 bool BattleActionsTest_Moves::RunTest(const FString &Parameters) {
     /*
     auto FakeAbilityComponent = NewObject<UBattlerAbilityComponent>();
-    
+
     CREATE_MOCK(IBattler, User, FMockBattler, MockUser);
     CREATE_MOCK(IBattleMove, Move, FMockBattleMove, MockMove);
     CREATE_MOCK(IBattler, Target1, FMockBattler, MockTarget1);

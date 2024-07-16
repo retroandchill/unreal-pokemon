@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/PokemonBattlePanelPlayer.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
-#include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "Components/ProgressBar.h"
 #include "Components/NumberImageWidget.h"
+#include "Components/ProgressBar.h"
 
 void UPokemonBattlePanelPlayer::Refresh() {
     Super::Refresh();

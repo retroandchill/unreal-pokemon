@@ -32,7 +32,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
         auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
         return TPropertyTypeFundamentals<T>::GetPropertyValue(PropertyContainer);
     }
-    
+
     /**
      * Extract the value of a property from the given object.
      * <p>Note: This method is unsafe, use as your own risk.</p>
@@ -43,7 +43,7 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      */
     template <typename T>
     static T &GetMutablePropertyValue(const UObject *TargetObject, FName PropertyName) {
-        return const_cast<T&>(GetPropertyValue<T>(TargetObject, PropertyName));
+        return const_cast<T &>(GetPropertyValue<T>(TargetObject, PropertyName));
     }
 
     /**
@@ -71,16 +71,16 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
         requires std::is_base_of_v<UObject, T>
     static TArray<TSubclassOf<T>> GetAllSubclassesOfClass(TSubclassOf<T> TargetClass = T::StaticClass()) {
         auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
-        auto& AssetRegistry = AssetRegistryModule.Get();
+        auto &AssetRegistry = AssetRegistryModule.Get();
         TArray<FString> PathsToScan;
         PathsToScan.Add("/Game/Blueprints/");
         AssetRegistry.ScanPathsSynchronous(PathsToScan);
-        
+
         TArray<FAssetData> ScriptAssetList;
         AssetRegistry.GetAssetsByPath(FName("/Game/Blueprints/"), ScriptAssetList, true);
 
         TArray<TSubclassOf<T>> Classes;
-        for (const auto& Asset : ScriptAssetList) {
+        for (const auto &Asset : ScriptAssetList) {
             auto Blueprint = Cast<UBlueprint>(Asset.GetAsset());
             if (Blueprint == nullptr) {
                 continue;

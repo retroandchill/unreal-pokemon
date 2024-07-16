@@ -6,6 +6,7 @@
 #include "BattleMessage.h"
 #include "RunningMessageSetPayload.h"
 #include "UObject/Object.h"
+
 #include "BattleMessagePayload.generated.h"
 
 /**
@@ -15,13 +16,12 @@ UCLASS(BlueprintType)
 class POKEMONBATTLE_API UBattleMessagePayload : public UObject, public IRunningMessageSetPayload {
     GENERATED_BODY()
 
-public:
-    const FRunningMessageSet & GetRunningMessageSet() const override;
+  public:
+    const FRunningMessageSet &GetRunningMessageSet() const override;
 
     /**
      * The messages held inside the payload
      */
     UPROPERTY(BlueprintReadOnly, Category = BattleEvents)
     FRunningMessageSet Messages;
-
 };

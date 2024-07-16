@@ -52,7 +52,7 @@ bool TestIsGameDataIDValid_TooltipText::RunTest(const FString &Parameters) {
     TestGraph->AddNode(TestNode);
 
     UE_ASSERT_EQUAL(TEXT("Is Stat ID Valid? \n\nRepresents one of the stats in the database."),
-                 TestNode->GetTooltipText().ToString());
+                    TestNode->GetTooltipText().ToString());
 
     return true;
 }

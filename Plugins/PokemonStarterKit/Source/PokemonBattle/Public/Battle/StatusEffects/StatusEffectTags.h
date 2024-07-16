@@ -24,19 +24,19 @@ class POKEMONBATTLE_API FLookup {
     FLookup();
     ~FLookup();
 
-public:
+  public:
     /**
      * Get the singleton instance of this class
      * @return The sole instance of the class
      */
-    static FLookup& GetInstance();
+    static FLookup &GetInstance();
 
     /**
      * Get the tag for the battler having the status condition
      * @param ID The ID of the status condition
      * @return The corresponding tag
      */
-    FORCEINLINE const FNativeGameplayTag& GetTag(FName ID) {
+    FORCEINLINE const FNativeGameplayTag &GetTag(FName ID) {
         return *Tags.FindChecked(ID);
     }
 
@@ -45,11 +45,11 @@ public:
      * @param ID The ID of the status condition
      * @return The corresponding tag
      */
-    FORCEINLINE const FNativeGameplayTag& GetImmunityTag(FName ID) {
+    FORCEINLINE const FNativeGameplayTag &GetImmunityTag(FName ID) {
         return *Tags.FindChecked(ID);
     }
 
-private:
+  private:
     /**
      * The map of status effect IDs to native gameplay tags.
      */
@@ -61,4 +61,4 @@ private:
     TMap<FName, TSharedRef<FNativeGameplayTag>> ImmunityTags;
 };
 
-}
+} // namespace Pokemon::Battle::StatusEffects

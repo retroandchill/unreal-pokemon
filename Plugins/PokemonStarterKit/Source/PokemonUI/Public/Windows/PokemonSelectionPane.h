@@ -84,7 +84,7 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
      * Convenience method to add a panel to the window and set the index.
      * @param Panel The panel to add.
      */
-    void AddAdditionalPanelToOptions(UPartySelectCancelPanel* Panel);
+    void AddAdditionalPanelToOptions(UPartySelectCancelPanel *Panel);
 
     /**
      * The class used for the panels that house the 6 Pokémon

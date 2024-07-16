@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Bag/ItemOption.h"
-#include "CommonTextBlock.h"
 #include "Bag/Item.h"
-#include "DataManager.h"
+#include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
+#include "DataManager.h"
 
 const FItem &UItemOption::GetItem() const {
     auto ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetData(CurrentItem);
@@ -20,10 +20,10 @@ void UItemOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
     auto TextStyle = GetCurrentTextStyleClass();
     if (ItemNameText != nullptr) {
-        //ItemNameText->SetTextStyle(TextStyle);
+        // ItemNameText->SetTextStyle(TextStyle);
     }
     if (ItemQuantityText != nullptr) {
-        //ItemQuantityText->SetTextStyle(TextStyle);
+        // ItemQuantityText->SetTextStyle(TextStyle);
     }
 }
 

@@ -7,9 +7,8 @@
 
 void FUnrealInjectorModule::StartupModule() {
 #if WITH_METADATA
-    FCoreDelegates::OnPostEngineInit.AddLambda([] {
-        GetMutableDefault<UDependencyInjectionSettings>()->RefreshDependencies();
-    });
+    FCoreDelegates::OnPostEngineInit.AddLambda(
+        [] { GetMutableDefault<UDependencyInjectionSettings>()->RefreshDependencies(); });
 #endif
 }
 

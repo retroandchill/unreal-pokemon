@@ -3,15 +3,14 @@
 #include "CommonUserTypes.h"
 #include "OnlineError.h"
 
-void FOnlineResultInformation::FromOnlineError(const FOnlineErrorType& InOnlineError)
-{
+void FOnlineResultInformation::FromOnlineError(const FOnlineErrorType &InOnlineError) {
 #if COMMONUSER_OSSV1
-	bWasSuccessful = InOnlineError.WasSuccessful();
-	ErrorId = InOnlineError.GetErrorCode();
-	ErrorText = InOnlineError.GetErrorMessage();
+    bWasSuccessful = InOnlineError.WasSuccessful();
+    ErrorId = InOnlineError.GetErrorCode();
+    ErrorText = InOnlineError.GetErrorMessage();
 #else
-	bWasSuccessful = InOnlineError != UE::Online::Errors::Success();
-	ErrorId = InOnlineError.GetErrorId();
-	ErrorText = InOnlineError.GetText();
+    bWasSuccessful = InOnlineError != UE::Online::Errors::Success();
+    ErrorId = InOnlineError.GetErrorId();
+    ErrorText = InOnlineError.GetText();
 #endif
 }

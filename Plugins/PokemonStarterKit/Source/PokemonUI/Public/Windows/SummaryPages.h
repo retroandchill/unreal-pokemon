@@ -27,12 +27,12 @@ UCLASS(Abstract)
 class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     GENERATED_BODY()
 
-public:
-    explicit USummaryPages(const FObjectInitializer& Initializer);
-    
-protected:
+  public:
+    explicit USummaryPages(const FObjectInitializer &Initializer);
+
+  protected:
     void NativeConstruct() override;
-    
+
   public:
     /**
      * Refresh any of the child pages added to this widget.
@@ -71,8 +71,8 @@ protected:
     UFUNCTION(BlueprintCallable, Category = Widgets)
     void SetPage(int32 PageIndex);
 
-    FOnSelected& GetOnSelected();
-    FOnScreenBackOut& GetOnScreenBackOut();
+    FOnSelected &GetOnSelected();
+    FOnScreenBackOut &GetOnScreenBackOut();
 
   protected:
     /**
@@ -90,7 +90,7 @@ protected:
     void PreviousPage();
     void NextPokemon();
     void PreviousPokemon();
-    
+
     /**
      * Iterator used to cycle through the part
      */
@@ -109,7 +109,7 @@ protected:
 
     FOnSelected OnSelected;
     FOnScreenBackOut OnScreenBackOut;
-    
+
     UPROPERTY(EditAnywhere, Category = Input)
     TObjectPtr<UInputAction> SelectionAction;
 

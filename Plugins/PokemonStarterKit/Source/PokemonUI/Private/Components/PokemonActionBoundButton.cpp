@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/PokemonActionBoundButton.h"
 #include "CommonActionWidget.h"
 #include "CommonInputSubsystem.h"
@@ -45,36 +44,37 @@ void UPokemonActionBoundButton::NativeOnCurrentTextStyleChanged() {
 }
 
 void UPokemonActionBoundButton::UpdateInputActionWidget() {
-    if (InputActionWidget != nullptr) { //optional bound widget
+    if (InputActionWidget != nullptr) { // optional bound widget
         InputActionWidget->SetInputActionBinding(BindingHandle);
-		
+
         auto ActionDisplayName = BindingHandle.GetDisplayName();
         if (BindingHandle.IsValid()) {
             const auto BoundWidget = BindingHandle.GetBoundWidget();
-            if (auto BindingOwner = BoundWidget ? BoundWidget->GetOwningLocalPlayer() : nullptr; ensure(BindingOwner != nullptr) && BindingOwner != GetOwningLocalPlayer()) {
-                int32 BoundPlayerIndex = FSlateApplication::Get().GetUserIndexForController(BindingOwner->GetControllerId());
+            if (auto BindingOwner = BoundWidget ? BoundWidget->GetOwningLocalPlayer() : nullptr;
+                ensure(BindingOwner != nullptr) && BindingOwner != GetOwningLocalPlayer()) {
+                int32 BoundPlayerIndex =
+                    FSlateApplication::Get().GetUserIndexForController(BindingOwner->GetControllerId());
                 ActionDisplayName = FText::FormatNamed(
                     NSLOCTEXT("PokemonActionBoundButton", "OtherPlayerActionFormat", "[P{PlayerNum}] {ActionName}"),
-                        TEXT("PlayerNum"), FText::AsNumber(BoundPlayerIndex + 1),
-                        TEXT("ActionName"), ActionDisplayName);
+                    TEXT("PlayerNum"), FText::AsNumber(BoundPlayerIndex + 1), TEXT("ActionName"), ActionDisplayName);
             }
         }
 
         if (Text_ActionName != nullptr) {
             Text_ActionName->SetText(ActionDisplayName);
         }
-		
+
         OnUpdateInputAction();
     }
 }
 
-UDisplayText * UPokemonActionBoundButton::GetActionNameText() const {
+UDisplayText *UPokemonActionBoundButton::GetActionNameText() const {
     return Text_ActionName;
 }
 
 void UPokemonActionBoundButton::HandleInputMethodChanged(ECommonInputType NewInputMethod) {
     using enum ECommonInputType;
-    
+
     TSubclassOf<UCommonButtonStyle> NewStyle;
     switch (NewInputMethod) {
     case Gamepad:
@@ -83,7 +83,7 @@ void UPokemonActionBoundButton::HandleInputMethodChanged(ECommonInputType NewInp
     case Touch:
         NewStyle = TouchStyle;
         break;
-    default: 
+    default:
         NewStyle = KeyboardStyle;
         break;
     }

@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Battler.h"
-#include "GameplayAbilitySpecHandle.h"
 #include "GameFramework/Actor.h"
+#include "GameplayAbilitySpecHandle.h"
 
 #include "BattlerActor.generated.h"
 
@@ -30,23 +30,23 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      * Initialize the default object for the game
      */
     ABattlerActor();
-    
+
     TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
                                           const TScriptInterface<IPokemon> &Pokemon,
                                           bool ShowImmediately = false) override;
 
-protected:
+  protected:
     void BeginPlay() override;
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-    
-public:
+
+  public:
     UFUNCTION(BlueprintPure, Category = Metadata)
     FGuid GetInternalId() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattleSide> &GetOwningSide() const override;
 
-    const FSpeciesData& GetSpecies() const override;
+    const FSpeciesData &GetSpecies() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     FText GetNickname() const override;
@@ -75,7 +75,7 @@ public:
     TArray<FName> GetTypes() const override;
 
     UFUNCTION(BlueprintPure, Category = GameplayAbilities)
-    UBattlerAbilityComponent* GetAbilityComponent() const override;
+    UBattlerAbilityComponent *GetAbilityComponent() const override;
 
     UFUNCTION(BlueprintPure, Category = Moves)
     const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;
@@ -86,7 +86,7 @@ public:
 
     void ShowSprite() const override;
 
-    const TOptional<FStatusEffectInfo>& GetStatusEffect() const override;
+    const TOptional<FStatusEffectInfo> &GetStatusEffect() const override;
     void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
     void CureStatusEffect() override;
 
@@ -95,8 +95,8 @@ public:
      * Take a change in the Battler's HP and propagate that to the base HP as needed.
      * @param Data The data about the HP change
      */
-    void UpdateHPValue(const FOnAttributeChangeData& Data) const;
-    
+    void UpdateHPValue(const FOnAttributeChangeData &Data) const;
+
     /**
      * Spawn the underlying sprite actor into the world
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)

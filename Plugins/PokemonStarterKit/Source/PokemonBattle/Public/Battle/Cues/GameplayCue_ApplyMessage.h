@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayCueNotify_Static.h"
+
 #include "GameplayCue_ApplyMessage.generated.h"
 
 struct FRunningMessageSet;
@@ -15,14 +16,14 @@ UCLASS(Abstract, Blueprintable)
 class POKEMONBATTLE_API UGameplayCue_ApplyMessage : public UGameplayCueNotify_Static {
     GENERATED_BODY()
 
-protected:
+  protected:
     /**
      * Perform the message append for whatever trigger is desired
      * @param MyTarget The target of the gameplay cue
      * @param Parameters The parameters of the cue call
      * @return Did the application of the cue succeed?
      */
-    UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = "Battle|Display")
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Battle|Display")
     bool PerformMessageAppend(AActor *MyTarget, const FGameplayCueParameters &Parameters) const;
 
     /**
@@ -32,5 +33,6 @@ protected:
      * @param Messages The message to append
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Display")
-    void AppendMessage(AActor* TargetActor, const FGameplayCueParameters& Parameters, const FRunningMessageSet& Messages) const;
+    void AppendMessage(AActor *TargetActor, const FGameplayCueParameters &Parameters,
+                       const FRunningMessageSet &Messages) const;
 };

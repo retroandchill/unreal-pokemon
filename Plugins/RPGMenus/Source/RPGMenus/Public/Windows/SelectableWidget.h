@@ -2,10 +2,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonActivatableWidget.h"
-#include "RangeHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonActivatableWidget.h"
 #include "Data/CursorDirection.h"
+#include "RangeHelpers.h"
 #include <range/v3/view/transform.hpp>
 
 #include "SelectableWidget.generated.h"
@@ -36,8 +36,8 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     GENERATED_BODY()
 
   public:
-    explicit USelectableWidget(const FObjectInitializer& Initializer);
-    
+    explicit USelectableWidget(const FObjectInitializer &Initializer);
+
     /**
      * Get the number of items in the menu that can be selected
      * @return The total number of items
@@ -66,7 +66,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     void Deselect();
 
     UFUNCTION(BlueprintPure, Category = Selection)
-    UCommonButtonBase* GetSelectedOption() const;
+    UCommonButtonBase *GetSelectedOption() const;
 
     /**
      * @brief Retrieves the reference to the delegate for when the user presses confirm.
@@ -87,10 +87,10 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     FProcessCancel &GetOnCancel();
 
   protected:
-    UWidget* NativeGetDesiredFocusTarget() const override;
+    UWidget *NativeGetDesiredFocusTarget() const override;
     void NativeOnActivated() override;
     void NativeOnDeactivated() override;
-    
+
     /**
      * A convenience method to handle additional functionality when the user confirms a selection based on the specified
      * index.
@@ -134,10 +134,10 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      */
     template <typename T>
     auto GetSelectableOptions() const {
-        return RangeHelpers::CreateRange(SelectableButtons)
-            | ranges::views::transform([](UCommonButtonBase* Button) { return CastChecked<T>(Button); });
+        return RangeHelpers::CreateRange(SelectableButtons) |
+               ranges::views::transform([](UCommonButtonBase *Button) { return CastChecked<T>(Button); });
     }
-    
+
     /**
      * Get the selectable option for this widget of the given type
      * @tparam T The type of widget to get
@@ -145,7 +145,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      * @return The found widget
      */
     template <typename T>
-    T* GetSelectableOption(int32 OptionIndex) const {
+    T *GetSelectableOption(int32 OptionIndex) const {
         if (!SelectableButtons.IsValidIndex(OptionIndex)) {
             return nullptr;
         }
@@ -159,7 +159,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      * @return The found widget
      */
     UFUNCTION(BlueprintPure, Category = "Selection|Options")
-    UCommonButtonBase* GetSelectableOption(int32 OptionIndex) const;
+    UCommonButtonBase *GetSelectableOption(int32 OptionIndex) const;
 
     UFUNCTION(BlueprintCallable, Category = "Selection|Options")
     void ClearSelectableOptions();
@@ -169,7 +169,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      * @param Option The option to be slotted
      * @param OptionIndex The index of the option to slot
      */
-    void SlotOption(UCommonButtonBase* Option, int32 OptionIndex);
+    void SlotOption(UCommonButtonBase *Option, int32 OptionIndex);
 
     /**
      * The actual method called to slot the option into the UMG widget
@@ -177,7 +177,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      * @param OptionIndex The index of the option to slot
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Selection|Options")
-    void PlaceOptionIntoWidget(UWidget* Option, int32 OptionIndex);
+    void PlaceOptionIntoWidget(UWidget *Option, int32 OptionIndex);
 
   private:
     /**

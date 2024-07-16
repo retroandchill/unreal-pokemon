@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Animations/PlayBattleAnimation.h"
 
-UPlayBattleAnimation * UPlayBattleAnimation::PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation) {
+UPlayBattleAnimation *UPlayBattleAnimation::PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation) {
     auto Node = NewObject<UPlayBattleAnimation>();
     Node->Animation = Animation;
     return Node;

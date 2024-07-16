@@ -12,10 +12,10 @@ namespace Pokemon::Battle::Stats {
  */
 POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StagesTag)
 
-/**
- * The tag format for ignoring positive stat stages
- */
-constexpr auto IgnorePositiveStatsFormat = TEXT("Battle.Battler.Stats.Stages.Ignore.Positive.{0}");
+    /**
+     * The tag format for ignoring positive stat stages
+     */
+    constexpr auto IgnorePositiveStatsFormat = TEXT("Battle.Battler.Stats.Stages.Ignore.Positive.{0}");
 
 /**
  * The tag format for ignoring negative stat stages
@@ -34,7 +34,7 @@ class POKEMONBATTLE_API FLookup {
     FLookup();
     ~FLookup();
 
-public:
+  public:
     /**
      * Get the singleton instance of this class
      * @return The sole instance of this class
@@ -46,7 +46,7 @@ public:
      * @param Stat The stat to look up the value for
      * @return The tag for ignoring a positive stat change
      */
-    FORCEINLINE FNativeGameplayTag& GetIgnorePositiveTag(FName Stat) const {
+    FORCEINLINE FNativeGameplayTag &GetIgnorePositiveTag(FName Stat) const {
         return *IgnorePositiveTags.FindChecked(Stat);
     }
 
@@ -55,7 +55,7 @@ public:
      * @param Stat The stat to look up the value for
      * @return The tag for ignoring a negative stat change
      */
-    FORCEINLINE FNativeGameplayTag& GetIgnoreNegativeTag(FName Stat) const {
+    FORCEINLINE FNativeGameplayTag &GetIgnoreNegativeTag(FName Stat) const {
         return *IgnoreNegativeTags.FindChecked(Stat);
     }
 
@@ -64,7 +64,7 @@ public:
      * @param Stat The stat to look up the value for
      * @return The tag for the stat change gameplay cue
      */
-    FORCEINLINE FNativeGameplayTag& GetGameplayCueTag(FName Stat) const {
+    FORCEINLINE FNativeGameplayTag &GetGameplayCueTag(FName Stat) const {
         return *GameplayCueTags.FindChecked(Stat);
     }
 
@@ -75,12 +75,12 @@ public:
      */
     FText FindStatNameFromGameplayCueTag(const FGameplayTag &Tag) const;
 
-private:
+  private:
     /**
      * The tags for ignoring positive stat changes
      */
     TMap<FName, TSharedRef<FNativeGameplayTag>> IgnorePositiveTags;
-    
+
     /**
      * The tags for ignoring negative stat changes
      */
@@ -90,7 +90,6 @@ private:
      * The tags for gameplay cue changes
      */
     TMap<FName, TSharedRef<FNativeGameplayTag>> GameplayCueTags;
-    
 };
 
-}
+} // namespace Pokemon::Battle::Stats

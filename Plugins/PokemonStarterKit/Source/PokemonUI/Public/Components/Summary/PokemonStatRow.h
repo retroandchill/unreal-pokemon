@@ -51,7 +51,7 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
     UPROPERTY(EditAnywhere, BlueprintSetter = SetDisplayedStat, Category = "Stats",
               meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
     FName DisplayedStat;
-    
+
     /**
      * The text format for a stat that is not altered
      */

@@ -1,16 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/PokemonInfoPage.h"
+#include "Blueprint/WidgetTree.h"
 #include "CommonNumericTextBlock.h"
 #include "CommonTextBlock.h"
-#include "Blueprint/WidgetTree.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "DataManager.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Components/DisplayText.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/OwnerInfo.h"
 #include "Utilities/PokemonUIUtils.h"

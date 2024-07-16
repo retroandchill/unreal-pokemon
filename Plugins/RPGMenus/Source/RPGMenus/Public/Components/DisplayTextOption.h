@@ -23,7 +23,7 @@ class RPGMENUS_API UDisplayTextOption : public UCommonButtonBase {
     UFUNCTION(BlueprintCallable, Category = Display)
     void SetText(const FText &NewText);
 
-protected:
+  protected:
     void NativeOnCurrentTextStyleChanged() override;
 
   private:

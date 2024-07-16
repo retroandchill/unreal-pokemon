@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameUIManagerSubsystem.h"
+
 #include "RPGUIManagerSubsystem.generated.h"
 
 class UScreen;
@@ -14,11 +15,10 @@ UCLASS(DisplayName = "RPG UI Manager Subsystem")
 class RPGMENUS_API URPGUIManagerSubsystem : public UGameUIManagerSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintPure, Category = Screens)
-    UScreen* GetTopScreenOfStack() const;
+    UScreen *GetTopScreenOfStack() const;
 
     UFUNCTION(BlueprintPure, Category = Screens)
-    UScreen* GetTopScreenOfOverlay() const;
-
+    UScreen *GetTopScreenOfOverlay() const;
 };

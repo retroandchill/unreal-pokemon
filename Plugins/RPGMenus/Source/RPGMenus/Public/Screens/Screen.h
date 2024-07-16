@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 #include "NativeGameplayTags.h"
-#include "Blueprint/UserWidget.h"
 
 #include "Screen.generated.h"
 
@@ -13,7 +13,6 @@ struct FInputActionInstance;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
 
-
 namespace RPG::Menus {
 
 /**
@@ -21,12 +20,12 @@ namespace RPG::Menus {
  */
 RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(PrimaryMenuLayerTag)
 
-/**
- * The native tag assigned to any overlay layers layer for display
- */
-RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag)
+    /**
+     * The native tag assigned to any overlay layers layer for display
+     */
+    RPGMENUS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag)
 
-}
+} // namespace RPG::Menus
 
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
@@ -36,9 +35,9 @@ UCLASS(Blueprintable, BlueprintType, Abstract)
 class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
-    
+
   public:
     /**
      * Refresh the display of this screen to the player
@@ -58,7 +57,7 @@ protected:
      */
     FOnScreenClosed &GetOnScreenClosed();
 
-protected:
+  protected:
     void NativeOnActivated() override;
     void NativeOnDeactivated() override;
 

@@ -38,8 +38,7 @@ void UPokemonSelectScreen::ShowCommands(const TArray<TObjectPtr<UPartyMenuHandle
 
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
-    Commands =
-        UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, this, Trainer, SelectionPane->GetIndex());
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(Handlers, this, Trainer, SelectionPane->GetIndex());
     CommandWindow->SetCommands(Commands);
     CommandWindow->SetIndex(0);
 }
@@ -73,7 +72,7 @@ void UPokemonSelectScreen::RefreshSelf_Implementation() {
     RefreshScene();
 }
 
-UHelpWindow * UPokemonSelectScreen::GetHelpWindow() const {
+UHelpWindow *UPokemonSelectScreen::GetHelpWindow() const {
     return HelpWindow;
 }
 
@@ -104,8 +103,7 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
 
 void UPokemonSelectScreen::DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index) {
     auto &[Commands, FrameIndex] = CommandStack.AddDefaulted_GetRef();
-    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), this, Trainer,
-                                                              Index);
+    Commands = UPokemonUIUtils::CreateCommandListFromHandlers(PokemonHandlers->GetHandlers(), this, Trainer, Index);
     CommandWindow->SetCommands(Commands);
 
     SelectionPane->DeactivateWidget();

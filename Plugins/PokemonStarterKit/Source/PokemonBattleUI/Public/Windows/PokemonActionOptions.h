@@ -18,10 +18,10 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonActionOptions : public USelectableWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
 
-public:
+  public:
     const TScriptInterface<IBattler> &GetCurrentBattler() const;
 
     /**

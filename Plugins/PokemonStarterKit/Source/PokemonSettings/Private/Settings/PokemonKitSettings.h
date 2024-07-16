@@ -24,18 +24,19 @@ class POKEMONSETTINGS_API UPokemonKitSettings : public UDeveloperSettings {
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
-public:
-
+  public:
     /**
      * The maximum amount of money the player can have.
      */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Trainers|Player", meta = (UIMin = 1, ClampMin = 1))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Trainers|Player",
+              meta = (UIMin = 1, ClampMin = 1))
     int32 MaxMoney = 999999;
 
     /**
      * The maximum length, in characters, that the player's name can be.
      */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Trainers|Player", meta = (UIMin = 1, ClampMin = 1))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Trainers|Player",
+              meta = (UIMin = 1, ClampMin = 1))
     uint8 MaxPlayerNameSize = 12;
 
     /**
@@ -85,7 +86,8 @@ public:
     /**
      * The maximum number of Pokémon that can be in the party.
      */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Party and Pokémon storage", meta = (UIMin = 1, ClampMin = 1))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Party and Pokémon storage",
+              meta = (UIMin = 1, ClampMin = 1))
     int32 MaxPartySize = 0;
 
     /**
@@ -124,24 +126,22 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle)
     TArray<FStatStageInfo> StatStages = {
-        {3.f / 2.f, 2.f / 3.f, 4.f / 3.f, 3.f / 4.f},
-        {4.f / 2.f, 2.f / 4.f, 5.f / 3.f, 3.f / 5.f},
-        {5.f / 2.f, 2.f / 5.f, 6.f / 3.f, 3.f / 6.f},
-        {6.f / 2.f, 2.f / 6.f, 7.f / 3.f, 3.f / 7.f},
-        {7.f / 2.f, 2.f / 7.f, 8.f / 3.f, 3.f / 8.f},
-        {8.f / 2.f, 2.f / 8.f, 9.f / 3.f, 3.f / 9.f},
+        {3.f / 2.f, 2.f / 3.f, 4.f / 3.f, 3.f / 4.f}, {4.f / 2.f, 2.f / 4.f, 5.f / 3.f, 3.f / 5.f},
+        {5.f / 2.f, 2.f / 5.f, 6.f / 3.f, 3.f / 6.f}, {6.f / 2.f, 2.f / 6.f, 7.f / 3.f, 3.f / 7.f},
+        {7.f / 2.f, 2.f / 7.f, 8.f / 3.f, 3.f / 8.f}, {8.f / 2.f, 2.f / 8.f, 9.f / 3.f, 3.f / 9.f},
     };
 
     /**
      * The default ability used for using moves
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass="BattleMoveFunctionCode"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass = "BattleMoveFunctionCode"))
     FSoftClassPath DefaultMoveAbility;
 
     /**
      * The default level that is streamed in when starting a battle
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (AllowedClasses = "/Script/Engine.World"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle,
+              meta = (AllowedClasses = "/Script/Engine.World"))
     FSoftObjectPath DefaultBattleScene;
 
     /**
@@ -161,12 +161,12 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle)
     float CriticalHitMultiplier = 1.5f;
-    
+
     /**
      * The critical hit ratios in battle expressed as 1 / the specified value for each number of boosts.
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))
-    TArray<int32> CriticalHitRatios = { 24, 8, 2, 1 };
+    TArray<int32> CriticalHitRatios = {24, 8, 2, 1};
 
     /**
      * The set of data tables used by the game.
@@ -177,13 +177,15 @@ public:
     /**
      * The class for the Pokémon utilities
      */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Untility Classes", meta = (MustImplement = "PokemonUtilities"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Untility Classes",
+              meta = (MustImplement = "PokemonUtilities"))
     FSoftClassPath PokemonUtilitiesClass;
 
     /**
      * The blueprint class that contains the item utilities information
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Utility Classes", meta = (MustImplement = "ItemUtilities"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Utility Classes",
+              meta = (MustImplement = "ItemUtilities"))
     FSoftClassPath ItemUtilitiesClass;
 
     /**

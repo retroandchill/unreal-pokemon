@@ -9,7 +9,8 @@ void UTextDisplayScreen::NativeConstruct() {
     if (MessageWindow == nullptr)
         return;
 
-    MessageWindow->GetOnDisplayChoices().AddUniqueDynamic(this, &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
+    MessageWindow->GetOnDisplayChoices().AddUniqueDynamic(this,
+                                                          &UTextDisplayScreen::UTextDisplayScreen::DisplayChoicePrompt);
     MessageWindow->GetOnAdvanceText().AddUniqueDynamic(this, &UTextDisplayScreen::AdvanceToNextMessage);
     MessageWindow->ActivateWidget();
 

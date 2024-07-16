@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "SingleTypeModPayload.generated.h"
 
 class IBattler;
@@ -57,7 +58,8 @@ struct POKEMONBATTLE_API FSingleTypeModData {
      * @param DefendingType The type of the defending Pokémon
      * @param Multiplier The multiplier determined by the above types
      */
-    FSingleTypeModData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FName AttackingType, FName DefendingType, float Multiplier);
+    FSingleTypeModData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                       FName AttackingType, FName DefendingType, float Multiplier);
 };
 
 /**
@@ -68,7 +70,7 @@ UCLASS()
 class POKEMONBATTLE_API USingleTypeModPayload : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create a new payload with the provided event data
      * @param User The user of the move
@@ -78,8 +80,10 @@ public:
      * @param Multiplier The multiplier determined by the above types
      * @return The created payload
      */
-    static USingleTypeModPayload* Create(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FName AttackingType, FName DefendingType, float Multiplier);
-    
+    static USingleTypeModPayload *Create(const TScriptInterface<IBattler> &User,
+                                         const TScriptInterface<IBattler> &Target, FName AttackingType,
+                                         FName DefendingType, float Multiplier);
+
     /**
      * Get the wrapped payload struct
      * @return The wrapped struct for the payload
@@ -94,10 +98,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = GameplayEvents)
     void SetMultiplier(float Multiplier) const;
 
-private:
+  private:
     /**
      * The wrapped struct for the payload
      */
     TSharedPtr<FSingleTypeModData> Data;
-
 };

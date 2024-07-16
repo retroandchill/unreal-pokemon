@@ -13,7 +13,6 @@ class FPokemonBattleModule : public IModuleInterface {
     void StartupModule() override;
     void ShutdownModule() override;
 
-private:
+  private:
     void OnPostEngineInit();
-    
 };

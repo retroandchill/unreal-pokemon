@@ -1,16 +1,16 @@
 ﻿#include "Asserts.h"
 #include "Bag/Item.h"
+#include "Input/UIActionBinding.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
 #include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
 #include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
 #include "Windows/ItemSelectionWindow.h"
-#include "Input/UIActionBinding.h"
-#include "Utilities/PlayerUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
                                  "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
@@ -53,8 +53,7 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems,
-                                 "Unit Tests.Windows.ItemSelectionWindowTest.NoItems",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems, "Unit Tests.Windows.ItemSelectionWindowTest.NoItems",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
@@ -109,20 +108,18 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     ItemSelection->SetIndex(1);
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
-    
-    auto PreviousActionHandle = ItemSelection->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "MenuPrevious";
-    });
+
+    auto PreviousActionHandle = ItemSelection->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuPrevious"; });
     UE_ASSERT_NOT_NULL(PreviousActionHandle);
     auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
     UE_ASSERT_NOT_NULL(PreviousAction.Get());
-    auto NextActionHandle = ItemSelection->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "MenuNext";
-    });
+    auto NextActionHandle = ItemSelection->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuNext"; });
     UE_ASSERT_NOT_NULL(NextActionHandle);
     auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
     UE_ASSERT_NOT_NULL(NextAction.Get());
-    
+
     ItemSelection->ActivateWidget();
     UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Items"), Dispatcher->CurrentPocket.ToString());

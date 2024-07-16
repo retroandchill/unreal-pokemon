@@ -2,11 +2,11 @@
 
 #include "Utilities/PokemonUIUtils.h"
 #include "CommonTextBlock.h"
-#include "PokemonMenuBase.h"
-#include "PrimaryGameLayout.h"
+#include "Components/DisplayText.h"
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
-#include "Components/DisplayText.h"
+#include "PokemonMenuBase.h"
+#include "PrimaryGameLayout.h"
 
 enum class EPokemonGender : uint8;
 
@@ -44,7 +44,7 @@ void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float 
     ProgressBar->SetPercent(FMath::Clamp(CurrentValue / MaxValue, 0, 1));
 }
 
-void UPokemonUIUtils::SetPokemonGenderText(EPokemonGender Gender, UDisplayText* TextWidget) {
+void UPokemonUIUtils::SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget) {
     using enum EPokemonGender;
     switch (Gender) {
     case Male:

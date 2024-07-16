@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Battle/Battle.h"
 #include "Engine/LevelStreamingDynamic.h"
@@ -21,10 +20,11 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
     Battle->BindToOnBattleEnd(FOnBattleEnd::FDelegate::CreateUObject(this, &UBattleTransitionSubsystem::ExitBattle));
 }
 
-void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo& Info) {
+void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info) {
     static auto &BattleLevelOffset = Pokemon::FBaseSettings::Get().GetBattleSceneOffset();
     bool bSuccess;
-    Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset, FRotator(), bSuccess);
+    Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset,
+                                                                           FRotator(), bSuccess);
     check(bSuccess)
     BattleInfo.Emplace(Info);
     Battlefield->OnLevelShown.AddUniqueDynamic(this, &UBattleTransitionSubsystem::SetUpBattle);
@@ -47,8 +47,7 @@ void UBattleTransitionSubsystem::SetUpBattle() {
 void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
-    UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(),
-                                                           LatentActionInfo, false);
+    UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
     check(BattleInfo.IsSet())
     if (Result == EBattleResult::Victory || Result == EBattleResult::Inconclusive || BattleInfo->bLossAllowed) {
         BattleFinished.Broadcast(Result);
@@ -56,7 +55,7 @@ void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
         // If the player loses we want all script callbacks to be removed
         BattleFinished.Clear();
     }
-    
+
     Battlefield = nullptr;
     BattleInfo.Reset();
 }

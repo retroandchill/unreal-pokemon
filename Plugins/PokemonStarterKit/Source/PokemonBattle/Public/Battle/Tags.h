@@ -13,26 +13,28 @@ namespace Pokemon::Battle {
  */
 POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(HoldForComplete)
 
-/**
- * The tag used for events fired at the start of a battler's action
- */
-POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StartAction)
+    /**
+     * The tag used for events fired at the start of a battler's action
+     */
+    POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(StartAction)
 
-/**
- * The tag used for events fired at the end of the turn
- */
-POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EndTurn)
+    /**
+     * The tag used for events fired at the end of the turn
+     */
+    POKEMONBATTLE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EndTurn)
 
-/**
- * Add a dynamic tag to the game
- * @param Tags The map of the native names to the tag
- * @param Format The format to place the tag into
- * @param TagName The actual tag name to apply
- */
-inline void AddDynamicGameplayTag(TMap<FName, TSharedRef<FNativeGameplayTag>>& Tags, FStringView Format, FName TagName) {
-    auto FullTag = FString::Format(Format.GetData(), { TagName.ToString() });
-    auto Tag = MakeShared<FNativeGameplayTag>(UE_PLUGIN_NAME, UE_MODULE_NAME, *FullTag, TEXT(""), ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD);
+    /**
+     * Add a dynamic tag to the game
+     * @param Tags The map of the native names to the tag
+     * @param Format The format to place the tag into
+     * @param TagName The actual tag name to apply
+     */
+    inline void AddDynamicGameplayTag(TMap<FName, TSharedRef<FNativeGameplayTag>> &Tags, FStringView Format,
+                                      FName TagName) {
+    auto FullTag = FString::Format(Format.GetData(), {TagName.ToString()});
+    auto Tag = MakeShared<FNativeGameplayTag>(UE_PLUGIN_NAME, UE_MODULE_NAME, *FullTag, TEXT(""),
+                                              ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD);
     Tags.Emplace(TagName, MoveTemp(Tag));
 }
 
-}
+} // namespace Pokemon::Battle

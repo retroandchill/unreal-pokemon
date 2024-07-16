@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/SelectableWidget.h"
-#include "CommonButtonBase.h"
 #include "Algo/ForEach.h"
+#include "CommonButtonBase.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
     bIsBackHandler = true;
@@ -28,7 +28,7 @@ void USelectableWidget::Deselect() {
     OnSelectionChange(OldIndex, Index);
 }
 
-UCommonButtonBase * USelectableWidget::GetSelectedOption() const {
+UCommonButtonBase *USelectableWidget::GetSelectedOption() const {
     if (!SelectableButtons.IsValidIndex(Index)) {
         return nullptr;
     }
@@ -44,11 +44,11 @@ FProcessCancel &USelectableWidget::GetOnCancel() {
     return OnCancel;
 }
 
-UWidget * USelectableWidget::NativeGetDesiredFocusTarget() const {
+UWidget *USelectableWidget::NativeGetDesiredFocusTarget() const {
     if (!SelectableButtons.IsValidIndex(Index)) {
         return nullptr;
     }
-    
+
     return SelectableButtons[Index];
 }
 
@@ -81,7 +81,7 @@ bool USelectableWidget::NativeOnHandleBackAction() {
     return true;
 }
 
-UCommonButtonBase * USelectableWidget::GetSelectableOption(int32 OptionIndex) const {
+UCommonButtonBase *USelectableWidget::GetSelectableOption(int32 OptionIndex) const {
     if (!SelectableButtons.IsValidIndex(OptionIndex)) {
         return nullptr;
     }
@@ -96,12 +96,8 @@ void USelectableWidget::ClearSelectableOptions() {
 
 void USelectableWidget::SlotOption(UCommonButtonBase *Option, int32 OptionIndex) {
     SelectableButtons.Emplace(Option);
-    Option->OnClicked().AddWeakLambda(this, [this, OptionIndex] {
-       ConfirmOnIndex(OptionIndex); 
-    });
-    Option->OnHovered().AddWeakLambda(this, [this, OptionIndex] {
-       SetIndex(OptionIndex); 
-    });
+    Option->OnClicked().AddWeakLambda(this, [this, OptionIndex] { ConfirmOnIndex(OptionIndex); });
+    Option->OnHovered().AddWeakLambda(this, [this, OptionIndex] { SetIndex(OptionIndex); });
     PlaceOptionIntoWidget(Option, OptionIndex);
 }
 

@@ -2,10 +2,10 @@
 
 #include "Components/Summary/HoldItemInfo.h"
 #include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
-#include "Components/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UHoldItemInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

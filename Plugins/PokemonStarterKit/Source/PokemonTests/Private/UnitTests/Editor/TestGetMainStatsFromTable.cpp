@@ -6,8 +6,7 @@
 #include "PBS/ImportUtils.h"
 #include "Species/Stat.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable,
-                                 "Unit Tests.PokemonUtilities.TestGetMainStatsFromTable",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "Unit Tests.PokemonUtilities.TestGetMainStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestGetMainStatsFromTable::RunTest(const FString &Parameters) {

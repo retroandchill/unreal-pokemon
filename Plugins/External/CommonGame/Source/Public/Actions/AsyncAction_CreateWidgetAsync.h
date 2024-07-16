@@ -14,38 +14,40 @@ class UWorld;
 struct FFrame;
 struct FStreamableHandle;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCreateWidgetAsyncDelegate, UUserWidget*, UserWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCreateWidgetAsyncDelegate, UUserWidget *, UserWidget);
 
 /**
- * Load the widget class asynchronously, the instance the widget after the loading completes, and return it on OnComplete.
+ * Load the widget class asynchronously, the instance the widget after the loading completes, and return it on
+ * OnComplete.
  */
 UCLASS(BlueprintType)
-class COMMONGAME_API UAsyncAction_CreateWidgetAsync : public UCancellableAsyncAction
-{
-	GENERATED_UCLASS_BODY()
+class COMMONGAME_API UAsyncAction_CreateWidgetAsync : public UCancellableAsyncAction {
+    GENERATED_UCLASS_BODY()
 
-public:
-	virtual void Cancel() override;
+  public:
+    virtual void Cancel() override;
 
-	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta=(WorldContext = "WorldContextObject", BlueprintInternalUseOnly="true"))
-	static UAsyncAction_CreateWidgetAsync* CreateWidgetAsync(UObject* WorldContextObject, TSoftClassPtr<UUserWidget> UserWidgetSoftClass, APlayerController* OwningPlayer, bool bSuspendInputUntilComplete = true);
+    UFUNCTION(BlueprintCallable, BlueprintCosmetic,
+              meta = (WorldContext = "WorldContextObject", BlueprintInternalUseOnly = "true"))
+    static UAsyncAction_CreateWidgetAsync *CreateWidgetAsync(UObject *WorldContextObject,
+                                                             TSoftClassPtr<UUserWidget> UserWidgetSoftClass,
+                                                             APlayerController *OwningPlayer,
+                                                             bool bSuspendInputUntilComplete = true);
 
-	virtual void Activate() override;
+    virtual void Activate() override;
 
-public:
+  public:
+    UPROPERTY(BlueprintAssignable)
+    FCreateWidgetAsyncDelegate OnComplete;
 
-	UPROPERTY(BlueprintAssignable)
-	FCreateWidgetAsyncDelegate OnComplete;
+  private:
+    void OnWidgetLoaded();
 
-private:
-	
-	void OnWidgetLoaded();
-
-	FName SuspendInputToken;
-	TWeakObjectPtr<APlayerController> OwningPlayer;
-	TWeakObjectPtr<UWorld> World;
-	TWeakObjectPtr<UGameInstance> GameInstance;
-	bool bSuspendInputUntilComplete;
-	TSoftClassPtr<UUserWidget> UserWidgetSoftClass;
-	TSharedPtr<FStreamableHandle> StreamingHandle;
+    FName SuspendInputToken;
+    TWeakObjectPtr<APlayerController> OwningPlayer;
+    TWeakObjectPtr<UWorld> World;
+    TWeakObjectPtr<UGameInstance> GameInstance;
+    bool bSuspendInputUntilComplete;
+    TSoftClassPtr<UUserWidget> UserWidgetSoftClass;
+    TSharedPtr<FStreamableHandle> StreamingHandle;
 };

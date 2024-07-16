@@ -2,8 +2,8 @@
 
 #include "Components/Summary/HPStatRow.h"
 #include "CommonNumericTextBlock.h"
-#include "Pokemon/Stats/StatEntry.h"
 #include "Components/DisplayText.h"
+#include "Pokemon/Stats/StatEntry.h"
 #include "Utilities/PokemonUIUtils.h"
 
 void UHPStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,

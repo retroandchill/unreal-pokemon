@@ -117,7 +117,8 @@ void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, in
             [&Map](const ULevelStreaming *Level) { return Level->GetWorldAsset().GetUniqueID() == Map.GetUniqueID(); });
         StreamedLevel != nullptr) {
         (*StreamedLevel)->OnLevelShown.Clear();
-        (*StreamedLevel)->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::UMapSubsystem::UpdatePlayerCharacterPosition);
+        (*StreamedLevel)
+            ->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::UMapSubsystem::UpdatePlayerCharacterPosition);
         WarpDestination.Emplace((*StreamedLevel)->LevelTransform.GetLocation(), X, Y, Direction);
         OnNewLevelLoaded();
     } else {

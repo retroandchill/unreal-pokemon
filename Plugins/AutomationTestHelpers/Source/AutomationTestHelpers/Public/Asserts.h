@@ -11,23 +11,23 @@
 #define UE_CHECK_EQUAL(Expected, Actual) AssertEqual(*this, TEXT(#Actual), Expected, Actual)
 #define UE_CHECK_NOT_EQUAL(Expected, Actual) AssertNotEqual(*this, TEXT(#Actual), Expected, Actual)
 
-#define UE_ASSERT_TRUE(Condition)                                                                                         \
-    if (!UE_CHECK_TRUE(Condition))                                                                                        \
+#define UE_ASSERT_TRUE(Condition)                                                                                      \
+    if (!UE_CHECK_TRUE(Condition))                                                                                     \
     return ConcludeTest(*this, false)
-#define UE_ASSERT_FALSE(Condition)                                                                                        \
-    if (!UE_CHECK_FALSE(Condition))                                                                                       \
+#define UE_ASSERT_FALSE(Condition)                                                                                     \
+    if (!UE_CHECK_FALSE(Condition))                                                                                    \
     return ConcludeTest(*this, false)
-#define UE_ASSERT_NULL(Pointer)                                                                                           \
-    if (!UE_CHECK_NULL(Pointer))                                                                                          \
+#define UE_ASSERT_NULL(Pointer)                                                                                        \
+    if (!UE_CHECK_NULL(Pointer))                                                                                       \
     return ConcludeTest(*this, false)
-#define UE_ASSERT_NOT_NULL(Pointer)                                                                                       \
-    if (!UE_CHECK_NOT_NULL(Pointer))                                                                                      \
+#define UE_ASSERT_NOT_NULL(Pointer)                                                                                    \
+    if (!UE_CHECK_NOT_NULL(Pointer))                                                                                   \
     return ConcludeTest(*this, false)
-#define UE_ASSERT_EQUAL(Expected, Actual)                                                                                 \
-    if (!UE_CHECK_EQUAL(Expected, Actual))                                                                                \
+#define UE_ASSERT_EQUAL(Expected, Actual)                                                                              \
+    if (!UE_CHECK_EQUAL(Expected, Actual))                                                                             \
     return ConcludeTest(*this, false)
-#define UE_ASSERT_NOT_EQUAL(Expected, Actual)                                                                             \
-    if (!UE_CHECK_NOT_EQUAL(Expected, Actual))                                                                            \
+#define UE_ASSERT_NOT_EQUAL(Expected, Actual)                                                                          \
+    if (!UE_CHECK_NOT_EQUAL(Expected, Actual))                                                                         \
     return ConcludeTest(*this, false)
 
 /**

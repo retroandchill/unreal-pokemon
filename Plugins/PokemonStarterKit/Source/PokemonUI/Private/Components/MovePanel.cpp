@@ -2,11 +2,11 @@
 
 #include "Components/MovePanel.h"
 #include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "Components/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IMove> &UMovePanel::GetMove() {

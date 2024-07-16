@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Input/CommonBoundActionButton.h"
+
 #include "PokemonActionBoundButton.generated.h"
 
 class UDisplayText;
@@ -14,13 +15,13 @@ UCLASS(Abstract, meta = (DisableNativeTick))
 class POKEMONUI_API UPokemonActionBoundButton : public UCommonButtonBase, public ICommonBoundActionButtonInterface {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
 
-public:
+  public:
     virtual void SetRepresentedAction(FUIActionBindingHandle InBindingHandle) override;
 
-protected:
+  protected:
     void NativeOnClicked() override;
     void NativeOnCurrentTextStyleChanged() override;
 
@@ -30,9 +31,9 @@ protected:
     void OnUpdateInputAction();
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Text Block")
-    UDisplayText* GetActionNameText() const;
-    
-private:
+    UDisplayText *GetActionNameText() const;
+
+  private:
     /**
      * Handle the appearance when the layout changes
      * @param NewInputMethod The new method of input to use

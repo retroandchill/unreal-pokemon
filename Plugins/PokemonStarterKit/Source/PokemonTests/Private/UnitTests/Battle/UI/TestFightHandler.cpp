@@ -1,7 +1,7 @@
 ﻿#include "Asserts.h"
-#include "CommonButtonBase.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
+#include "CommonButtonBase.h"
 #include "Handlers/FightHandler.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -68,7 +68,8 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     Screen->SelectAction(Battler2);
     UE_CHECK_EQUAL(ESlateVisibility::Visible, ActionSelect->GetVisibility());
 
-    auto &Options = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBattleMenuHandler>>>(ActionSelect, "MenuActions");
+    auto &Options =
+        UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBattleMenuHandler>>>(ActionSelect, "MenuActions");
     int32 FightHandlerIndex =
         Options.IndexOfByPredicate([](UBattleMenuHandler *Handler) { return Handler->IsA<UFightHandler>(); });
     ActionSelect->SetIndex(FightHandlerIndex);

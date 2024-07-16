@@ -1,9 +1,9 @@
 ﻿
 #include "Asserts.h"
 #include "Blueprint/WidgetTree.h"
+#include "Components/DisplayText.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
-#include "Components/DisplayText.h"
 #include "Screens/TrainerCardScreen.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"

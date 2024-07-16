@@ -1,16 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/RPGMenuUtilities.h"
 #include "PrimaryGameLayout.h"
 #include "Screens/Screen.h"
 
-UScreen * URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
+UScreen *URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     return Layout->PushWidgetToLayerStack<UScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenType);
 }
 
-UScreen * URPGMenuUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag) {
+UScreen *URPGMenuUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag) {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     if (Layout == nullptr) {
         return nullptr;
@@ -24,10 +23,10 @@ UScreen * URPGMenuUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldC
     return Cast<UScreen>(Layer->GetActiveWidget());
 }
 
-UScreen * URPGMenuUtilities::RemoveTopScreenFromStack(const UObject *WorldContextObject) {
+UScreen *URPGMenuUtilities::RemoveTopScreenFromStack(const UObject *WorldContextObject) {
     return RemoveTopScreenFromStackLayer(WorldContextObject, RPG::Menus::PrimaryMenuLayerTag);
 }
 
-UScreen * URPGMenuUtilities::RemoveTopScreenFromOverlay(const UObject *WorldContextObject) {
+UScreen *URPGMenuUtilities::RemoveTopScreenFromOverlay(const UObject *WorldContextObject) {
     return RemoveTopScreenFromStackLayer(WorldContextObject, RPG::Menus::OverlayMenuLayerTag);
 }

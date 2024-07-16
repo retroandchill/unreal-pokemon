@@ -4,38 +4,33 @@
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
+#include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Utilities/TemporarySeed.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestActiveSide.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
-#include "Pokemon/Pokemon.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysWeakNoCrit, "Unit Tests.Battle.Moves.TestDamageCalculation.PhysicalWeakNoCrit",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysWeakNoCrit,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.PhysicalWeakNoCrit",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("GLACEON"),
-            .Level = 75,
-            .IVs = {{"ATTACK", 31}},
-            .EVs = {{"ATTACK", 104}},
-            .Nature = FName("TIMID"),
-            .Moves = { TEXT("ICEFANG") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("GARCHOMP"),
-            .Level = 65,
-            .IVs = {{"DEFENSE", 31}},
-            .EVs = {{"DEFENSE", 92}},
-            .Nature = FName("JOLLY")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
+                                                                                 .Level = 75,
+                                                                                 .IVs = {{"ATTACK", 31}},
+                                                                                 .EVs = {{"ATTACK", 104}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Moves = {TEXT("ICEFANG")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
+                                                                                 .Level = 65,
+                                                                                 .IVs = {{"DEFENSE", 31}},
+                                                                                 .EVs = {{"DEFENSE", 92}},
+                                                                                 .Nature = FName("JOLLY")});
 
     FTemporarySeed Seed(5661526);
 
@@ -53,35 +48,30 @@ bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Garchomp calculated to take 170 damage"), ELogVerbosity::Display);
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysWeakWithCrit, "Unit Tests.Battle.Moves.TestDamageCalculation.PhysicalWeakWithCrit",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_PhysWeakWithCrit,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.PhysicalWeakWithCrit",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("GLACEON"),
-            .Level = 75,
-            .IVs = {{"ATTACK", 31}},
-            .EVs = {{"ATTACK", 104}},
-            .Nature = FName("TIMID"),
-            .Item  = FName("MUSCLEBAND"),
-            .Moves = { TEXT("ICEFANG") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("GARCHOMP"),
-            .Level = 65,
-            .IVs = {{"DEFENSE", 31}},
-            .EVs = {{"DEFENSE", 92}},
-            .Nature = FName("JOLLY")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
+                                                                                 .Level = 75,
+                                                                                 .IVs = {{"ATTACK", 31}},
+                                                                                 .EVs = {{"ATTACK", 104}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Item = FName("MUSCLEBAND"),
+                                                                                 .Moves = {TEXT("ICEFANG")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
+                                                                                 .Level = 65,
+                                                                                 .IVs = {{"DEFENSE", 31}},
+                                                                                 .EVs = {{"DEFENSE", 92}},
+                                                                                 .Nature = FName("JOLLY")});
 
     FTemporarySeed Seed(151566);
     // Roll 29 random numbers so that the next one %25 is 0
@@ -106,34 +96,29 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
     AddExpectedMessage(TEXT("Garchomp calculated to take 279 damage"), ELogVerbosity::Display);
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecResistCrit, "Unit Tests.Battle.Moves.TestDamageCalculation.SpecialResistWithCrit",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecResistCrit,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.SpecialResistWithCrit",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("MEW"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_ATTACK", 31}},
-            .EVs = {{"SPECIAL_ATTACK", 252}},
-            .Nature = FName("TIMID"),
-            .Moves = { TEXT("FROSTBREATH") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("MILOTIC"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_DEFENSE", 31}},
-            .EVs = {{"SPECIAL_DEFENSE", 140}},
-            .Nature = FName("CALM")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("MEW"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Moves = {TEXT("FROSTBREATH")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("MILOTIC"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                 .EVs = {{"SPECIAL_DEFENSE", 140}},
+                                                                                 .Nature = FName("CALM")});
 
     FTemporarySeed Seed(48612);
 
@@ -152,36 +137,31 @@ bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Milotic calculated to take 28 damage"), ELogVerbosity::Display);
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecNormalCritBlocked, "Unit Tests.Battle.Moves.TestDamageCalculation.SpecialWithBlockedCrit",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpecNormalCritBlocked,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.SpecialWithBlockedCrit",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("MEW"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_ATTACK", 31}},
-            .EVs = {{"SPECIAL_ATTACK", 252}},
-            .Nature = FName("TIMID"),
-            .Item = FName("TWISTEDSPOON"),
-            .Moves = { TEXT("FROSTBREATH") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("DRAPION"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_DEFENSE", 31}},
-            .EVs = {{"SPECIAL_DEFENSE", 0}},
-            .Nature = FName("HARDY"),
-            .Ability =  FName("BATTLEARMOR")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("MEW"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Item = FName("TWISTEDSPOON"),
+                                                                                 .Moves = {TEXT("FROSTBREATH")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("DRAPION"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                 .EVs = {{"SPECIAL_DEFENSE", 0}},
+                                                                                 .Nature = FName("HARDY"),
+                                                                                 .Ability = FName("BATTLEARMOR")});
 
     FTemporarySeed Seed(5512562);
 
@@ -198,36 +178,31 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
     AddExpectedMessage(TEXT("Drapion calculated to take 79 damage"), ELogVerbosity::Display);
     Action.Execute();
-    
+
     UE_CHECK_TRUE(Action.IsComplete());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_NoEffect, "Unit Tests.Battle.Moves.TestDamageCalculation.NoEffect",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_NoEffect,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.NoEffect",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("LATIOS"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_ATTACK", 31}},
-            .EVs = {{"SPECIAL_ATTACK", 252}},
-            .Nature = FName("TIMID"),
-            .Moves = { TEXT("DRACOMETEOR") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("SYLVEON"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_DEFENSE", 31}},
-            .EVs = {{"SPECIAL_DEFENSE", 0}},
-            .Nature = FName("HARDY")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LATIOS"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Moves = {TEXT("DRACOMETEOR")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SYLVEON"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                 .EVs = {{"SPECIAL_DEFENSE", 0}},
+                                                                                 .Nature = FName("HARDY")});
 
     FTemporarySeed Seed(151261);
 
@@ -244,38 +219,33 @@ bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
     AddExpectedMessage(TEXT("Sylveon is unaffected by Draco Meteor!"), ELogVerbosity::Display);
     Action.Execute();
-    
+
     UE_CHECK_TRUE(Action.IsComplete());
     UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpeciesSpecificBoost, "Unit Tests.Battle.Moves.TestDamageCalculation.SpeciesSpecificBoost",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_SpeciesSpecificBoost,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.SpeciesSpecificBoost",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("LATIOS"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_ATTACK", 31}},
-            .EVs = {{"SPECIAL_ATTACK", 252}},
-            .Nature = FName("TIMID"),
-            .Item = FName("SOULDEW"),
-            .Moves = { TEXT("DRACOMETEOR") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("DRUDDIGON"),
-            .Level = 100,
-            .IVs = {{"SPECIAL_DEFENSE", 31}},
-            .EVs = {{"SPECIAL_DEFENSE", 0}},
-            .Nature = FName("HARDY")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LATIOS"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Item = FName("SOULDEW"),
+                                                                                 .Moves = {TEXT("DRACOMETEOR")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("DRUDDIGON"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                 .EVs = {{"SPECIAL_DEFENSE", 0}},
+                                                                                 .Nature = FName("HARDY")});
 
     FTemporarySeed Seed(82513);
 
@@ -292,38 +262,33 @@ bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Paramete
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
     AddExpectedMessage(TEXT("Druddigon calculated to take 631"), ELogVerbosity::Display);
     Action.Execute();
-    
+
     UE_CHECK_TRUE(Action.IsComplete());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_HighCriticalHitRate, "Unit Tests.Battle.Moves.TestDamageCalculation.HighCriticalHitRate",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDamageCalculation_HighCriticalHitRate,
+                                 "Unit Tests.Battle.Moves.TestDamageCalculation.HighCriticalHitRate",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("HONCHKROW"),
-            .Level = 100,
-            .IVs = {{"ATTACK", 31}},
-            .EVs = {{"ATTACK", 252}},
-            .Nature = FName("TIMID"),
-            .Ability = FName("SUPERLUCK"),
-            .Item = FName("SCOPELENS"),
-            .Moves = { TEXT("NIGHTSLASH") }
-        });
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{
-            .Species = TEXT("ALAKAZAM"),
-            .Level = 100,
-            .IVs = {{"DEFENSE", 31}},
-            .EVs = {{"DEFENSE", 0}},
-            .Nature = FName("HARDY")
-        });
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("HONCHKROW"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"ATTACK", 31}},
+                                                                                 .EVs = {{"ATTACK", 252}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Ability = FName("SUPERLUCK"),
+                                                                                 .Item = FName("SCOPELENS"),
+                                                                                 .Moves = {TEXT("NIGHTSLASH")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("ALAKAZAM"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"DEFENSE", 31}},
+                                                                                 .EVs = {{"DEFENSE", 0}},
+                                                                                 .Nature = FName("HARDY")});
 
     FTemporarySeed Seed(155612);
 
@@ -340,8 +305,8 @@ bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameter
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
     AddExpectedMessage(TEXT("Critical hit against Alakazam!"), ELogVerbosity::Display);
     Action.Execute();
-    
+
     UE_CHECK_TRUE(Action.IsComplete());
-    
+
     return true;
 }

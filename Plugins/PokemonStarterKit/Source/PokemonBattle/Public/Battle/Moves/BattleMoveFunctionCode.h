@@ -33,9 +33,9 @@ enum class ECriticalOverride : uint8 {
 
     /**
      * The move can never land a crit.
-*/
+     */
     Never
-    
+
 };
 
 /**
@@ -44,7 +44,7 @@ enum class ECriticalOverride : uint8 {
 USTRUCT(BlueprintType)
 struct POKEMONBATTLE_API FCapturedBattleStat {
     GENERATED_BODY()
-    
+
     /**
      * The battler that owns the stat in question
      */
@@ -62,7 +62,6 @@ struct POKEMONBATTLE_API FCapturedBattleStat {
      * @return The value of the stat
      */
     int32 GetStatValue() const;
-    
 };
 
 /**
@@ -92,7 +91,7 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create the CDO for this class
      */
@@ -103,26 +102,32 @@ public:
      * @return The underlying move that this class wraps around.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Context)
-    const TScriptInterface<IBattleMove>& GetMove() const;
+    const TScriptInterface<IBattleMove> &GetMove() const;
 
-    bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo, const FGameplayEventData *Payload) const override;
-    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
-    void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
+    bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
+                                     const FGameplayEventData *Payload) const override;
+    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
+                         const FGameplayAbilityActivationInfo ActivationInfo,
+                         const FGameplayEventData *TriggerEventData) override;
+    void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
+                    const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
+                    bool bWasCancelled) override;
 
     /**
      * Get the running messages for this ability
      * @return The running messages of this ability
      */
     const FRunningMessageSet &GetRunningMessage() const;
-protected:
+
+  protected:
     /**
      * Determine the type of the move.
      * @return The calculated type
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Types")
     FName DetermineType() const;
-    
-private:
+
+  private:
     /**
      * Filter out any invalid targets from this move
      * @param Handle The handle for this ability
@@ -131,16 +136,17 @@ private:
      * @return The array of filtered target actors
      */
     static TArray<AActor *> FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
-                                                 const FGameplayAbilityActorInfo &ActorInfo, const FGameplayEventData* TriggerEventData);
+                                                 const FGameplayAbilityActorInfo &ActorInfo,
+                                                 const FGameplayEventData *TriggerEventData);
 
     /**
      * Use the move on the given targets
      * @param User The user of the move
      * @param Targets The targets of the move
      */
-    void UseMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    void UseMove(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
-protected:
+  protected:
     /**
      * Check if the move failed completely
      * @param User The user of the move
@@ -149,14 +155,15 @@ protected:
      * @return Did the move fail?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool MoveFailed(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet& FailureMessages) const;
+    bool MoveFailed(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets,
+                    const FRunningMessageSet &FailureMessages) const;
 
     /**
      * Process that happens when a move fails.
      * @param FailureMessages The messages display to the player
      */
     UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void ProcessMoveFailure(const FRunningMessageSet& FailureMessages);
+    void ProcessMoveFailure(const FRunningMessageSet &FailureMessages);
 
     /**
      * Can this move be used without any targets?
@@ -173,7 +180,8 @@ protected:
      * @return Did the move succeed against the target
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet &FailureMessages);
+    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                                   const FRunningMessageSet &FailureMessages);
 
     /**
      * Check if this move fails against a target
@@ -183,7 +191,8 @@ protected:
      * @return Did the move fail?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool FailsAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& FailureMessages) const;
+    bool FailsAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                            const FRunningMessageSet &FailureMessages) const;
 
     /**
      * Perform a hit check against the target
@@ -192,7 +201,7 @@ protected:
      * @return Did the move hit?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool HitCheck(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    bool HitCheck(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Calculate the base accuracy of the move
@@ -202,7 +211,8 @@ protected:
      * @return The base accuracy to use in the hit check
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    int32 CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    int32 CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler> &User,
+                                const TScriptInterface<IBattler> &Target);
 
     /**
      * Display the given messages and play the animation of the move
@@ -212,7 +222,8 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
     void DisplayMessagesAndAnimation(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets, const FRunningMessageSet& Messages);
+                                     const TArray<TScriptInterface<IBattler>> &Targets,
+                                     const FRunningMessageSet &Messages);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -220,7 +231,7 @@ protected:
      * @param Targets The targets to deal damage to
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
-    void DealDamage(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    void DealDamage(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Calculate the damage dealt to a single target
@@ -238,7 +249,7 @@ protected:
      * @param Payload The event payload that can be further modified
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
-    void ApplyAdditionalDamageMultipliers(UDamageModificationPayload* Payload);
+    void ApplyAdditionalDamageMultipliers(UDamageModificationPayload *Payload);
 
     /**
      * Calculate the base power of the move
@@ -248,7 +259,8 @@ protected:
      * @return The base power to use in damage calculation
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
-    int32 CalculateBasePower(int32 Power, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    int32 CalculateBasePower(int32 Power, const TScriptInterface<IBattler> &User,
+                             const TScriptInterface<IBattler> &Target);
 
     /**
      * Get the attack and defense stat of the use
@@ -257,7 +269,8 @@ protected:
      * @return The attack and defense stat to use in calculation
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
-    FAttackAndDefenseStats GetAttackAndDefense(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    FAttackAndDefenseStats GetAttackAndDefense(const TScriptInterface<IBattler> &User,
+                                               const TScriptInterface<IBattler> &Target);
 
     /**
      * Check if the move scored a critical hit
@@ -266,7 +279,7 @@ protected:
      * @return Did the move score a crit?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
-    bool IsCritical(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    bool IsCritical(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Get the critical override state of the move.
@@ -275,7 +288,8 @@ protected:
      * @return The new critical override state
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
-    ECriticalOverride GetCriticalOverride(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    ECriticalOverride GetCriticalOverride(const TScriptInterface<IBattler> &User,
+                                          const TScriptInterface<IBattler> &Target);
 
     /**
      * Calculate the type match-up against a target
@@ -285,7 +299,8 @@ protected:
      * @return The multiplier for the matchup
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
-    float CalculateTypeMatchUp(FName MoveType, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    float CalculateTypeMatchUp(FName MoveType, const TScriptInterface<IBattler> &User,
+                               const TScriptInterface<IBattler> &Target);
 
     /**
      * Calculate the type modifier for a single type
@@ -296,15 +311,16 @@ protected:
      * @return The multiplier for the given type
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
-    float CalculateSingleTypeMod(FName AttackingType, FName DefendingType, const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    float CalculateSingleTypeMod(FName AttackingType, FName DefendingType, const TScriptInterface<IBattler> &User,
+                                 const TScriptInterface<IBattler> &Target);
 
     /**
-     * Display any damage to the user from the 
+     * Display any damage to the user from the
      * @param User The user of the move
      * @param Targets The targets of the move in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
-    void DisplayDamage(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    void DisplayDamage(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Apply any move effects to the targets
@@ -312,7 +328,7 @@ protected:
      * @param Targets The targets of the move
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
-    void ApplyMoveEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
+    void ApplyMoveEffects(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Effect applied to a target that took damage from a move
@@ -321,8 +337,9 @@ protected:
      * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& Messages);
-    
+    void ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                                      const FRunningMessageSet &Messages);
+
     /**
      * Apply any guaranteed effects against a target
      * @param User The user of the move
@@ -330,7 +347,8 @@ protected:
      * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet& Messages);
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                                  const FRunningMessageSet &Messages);
 
     /**
      * Apply any generate effects that don't depend on any targets
@@ -338,7 +356,7 @@ protected:
      * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyGeneralEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet& Messages);
+    void ApplyGeneralEffect(const TScriptInterface<IBattler> &User, const FRunningMessageSet &Messages);
 
     /**
      * Perform a faint check on the user and targets before applying the additional effects
@@ -347,8 +365,8 @@ protected:
      * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void FaintCheck(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
-                    & Messages);
+    void FaintCheck(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets,
+                    const FRunningMessageSet &Messages);
 
     /**
      * Apply additional effects against the user
@@ -356,8 +374,9 @@ protected:
      * @param Targets The targets of the move
      */
     UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
-    void ApplyAdditionalEffects(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets);
-    
+    void ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
+                                const TArray<TScriptInterface<IBattler>> &Targets);
+
     /**
      * Apply any additional effect to a target
      * @param User The user of the move
@@ -365,8 +384,8 @@ protected:
      * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyAdditionalEffect(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet&
-                               Messages);
+    void ApplyAdditionalEffect(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                               const FRunningMessageSet &Messages);
 
     /**
      * Calculate the value of a move's additional effect chance
@@ -375,7 +394,8 @@ protected:
      * @return The chance of the additional effect occurring
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Effects")
-    int32 CalculateAdditionalEffectChance(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target);
+    int32 CalculateAdditionalEffectChance(const TScriptInterface<IBattler> &User,
+                                          const TScriptInterface<IBattler> &Target);
 
     /**
      * Display the move effects to the player and end the move
@@ -384,13 +404,16 @@ protected:
      * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler>& User, const TArray<TScriptInterface<IBattler>>& Targets, const FRunningMessageSet
-                                      & Messages);
+    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler> &User,
+                                      const TArray<TScriptInterface<IBattler>> &Targets,
+                                      const FRunningMessageSet &Messages);
 
-    UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = GameplayEffects)
-    TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler, TSubclassOf<UGameplayEffect> EffectClass, int32 Level, int32 Stacks) const;
-    
-private:
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = GameplayEffects)
+    TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler,
+                                                                     TSubclassOf<UGameplayEffect> EffectClass,
+                                                                     int32 Level, int32 Stacks) const;
+
+  private:
     /**
      * The underlying move that this ability wraps
      */
@@ -418,7 +441,7 @@ private:
      */
     UPROPERTY(EditDefaultsOnly, Category = GameplayEffects)
     TSubclassOf<UGameplayEffect> DealDamageEffect;
-    
+
     /**
      * The attribute that is used to determine the amount of PP a move should be reduced by
      */

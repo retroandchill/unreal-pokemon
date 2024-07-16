@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "GainExp.generated.h"
 
 class IPokemon;
@@ -20,32 +21,33 @@ UCLASS(meta = (HideThen))
 class POKEMONCORE_API UGainExp : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Gain the specified amount of experience for a Pokémon
      * @param Pokemon The Pokémon to gain exp
      * @param ExpAmount The amount of Exp. to gain
-     * @param bShowMessages Should level up messages be show? (Hiding messages does not allow Pokémon to learn moves on level up)
+     * @param bShowMessages Should level up messages be show? (Hiding messages does not allow Pokémon to learn moves on
+     * level up)
      * @return The created node
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Pokémon|Stats")
-    static UGainExp* GainExp(const TScriptInterface<IPokemon>& Pokemon, int32 ExpAmount, bool bShowMessages);
+    static UGainExp *GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 ExpAmount, bool bShowMessages);
 
     void Activate() override;
 
-private:
+  private:
     /**
      * Execute the callback after exp gain is completed
      */
     UFUNCTION()
     void ExecuteAfterExpGain();
-    
+
     /**
      * Called after level up messages are shown
      */
     UPROPERTY(BlueprintAssignable)
     FAfterExpGain AfterExpGain;
-    
+
     /**
      * The Pokémon to gain exp
      */
@@ -63,5 +65,4 @@ private:
      */
     UPROPERTY()
     bool bShowMessages;
-
 };

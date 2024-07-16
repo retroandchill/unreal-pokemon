@@ -35,7 +35,7 @@ class POKEMONBATTLE_API IBattleMove {
      * @param Move The move that is currently owned by the user.
      * @return The initialized interface
      */
-    virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattler>& Battler,
+    virtual TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattler> &Battler,
                                                      const TScriptInterface<IMove> &Move) = 0;
 
     /**
@@ -70,7 +70,7 @@ class POKEMONBATTLE_API IBattleMove {
      */
     UFUNCTION(BlueprintCallable, Category = Display)
     virtual FName GetDisplayType() const = 0;
-    
+
     /**
      * Get the category of the move's damage capabilities
      */
@@ -87,7 +87,7 @@ class POKEMONBATTLE_API IBattleMove {
      * Get the category of the move's damage capabilities
      */
     UFUNCTION(BlueprintCallable, Category = Usability)
-    virtual const FMoveTarget& GetTargetType() const = 0;
+    virtual const FMoveTarget &GetTargetType() const = 0;
 
     /**
      * Get the priority for the move
@@ -107,7 +107,7 @@ class POKEMONBATTLE_API IBattleMove {
      * Get the category of the move's damage capabilities
      */
     UFUNCTION(BlueprintCallable, Category = Metadata)
-    virtual const TArray<FName>& GetTags() const = 0;
+    virtual const TArray<FName> &GetTags() const = 0;
 
     /**
      * Pay the move's PP cost to use
@@ -126,7 +126,4 @@ class POKEMONBATTLE_API IBattleMove {
      * Try to activate the move returning the spec handle for the move execution
      */
     virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<TScriptInterface<IBattler>> &Targets) = 0;
-
-    
-    
 };

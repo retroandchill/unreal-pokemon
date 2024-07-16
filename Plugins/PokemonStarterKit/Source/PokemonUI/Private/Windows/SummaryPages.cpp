@@ -23,8 +23,8 @@ void USummaryPages::NativeConstruct() {
     PreviousPageActionHandle =
         RegisterUIActionBinding(CreateBindArgs(PreviousPageAction, &USummaryPages::PreviousPage));
     NextPokemonActionHandle = RegisterUIActionBinding(CreateBindArgs(NextPokemonAction, &USummaryPages::NextPokemon));
-    PreviousPokemonActionHandle = RegisterUIActionBinding(
-        CreateBindArgs(PreviousPokemonAction, &USummaryPages::PreviousPokemon));
+    PreviousPokemonActionHandle =
+        RegisterUIActionBinding(CreateBindArgs(PreviousPokemonAction, &USummaryPages::PreviousPokemon));
 }
 
 void USummaryPages::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Pokemon, int32 PartyIndex) {
@@ -46,11 +46,11 @@ void USummaryPages::SetPage(int32 PageIndex) {
     PageSwitcher->SetActiveWidgetIndex(PageIndex);
 }
 
-FOnSelected & USummaryPages::GetOnSelected() {
+FOnSelected &USummaryPages::GetOnSelected() {
     return OnSelected;
 }
 
-FOnScreenBackOut & USummaryPages::GetOnScreenBackOut() {
+FOnScreenBackOut &USummaryPages::GetOnScreenBackOut() {
     return OnScreenBackOut;
 }
 
@@ -68,8 +68,8 @@ void USummaryPages::Select() {
 }
 
 void USummaryPages::NextPage() {
-    PageSwitcher->SetActiveWidgetIndex(FMath::Min(PageSwitcher->GetActiveWidgetIndex() + 1,
-                                                  PageSwitcher->GetNumWidgets() - 1));
+    PageSwitcher->SetActiveWidgetIndex(
+        FMath::Min(PageSwitcher->GetActiveWidgetIndex() + 1, PageSwitcher->GetNumWidgets() - 1));
 }
 
 void USummaryPages::PreviousPage() {

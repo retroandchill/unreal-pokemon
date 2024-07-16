@@ -14,7 +14,7 @@ void UUtilitiesSubsystem::Deinitialize() {
     ItemUtilities = nullptr;
 }
 
-UObject * UUtilitiesSubsystem::GetPokemonUtilities() const {
+UObject *UUtilitiesSubsystem::GetPokemonUtilities() const {
     return PokemonUtilities;
 }
 

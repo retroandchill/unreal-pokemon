@@ -36,8 +36,8 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      * @param Menu The menu to remove
      */
     UFUNCTION(BlueprintCallable, Category = UI, meta = (WorldContext = WorldContextObject))
-    static void RemoveMenuFromStack(const UObject* WorldContextObject, UPokemonMenuBase* Menu);
-    
+    static void RemoveMenuFromStack(const UObject *WorldContextObject, UPokemonMenuBase *Menu);
+
     /**
      * Take a number and pad it with the required number of leading 0s
      * @param Value The number to pad with 0s
@@ -78,7 +78,7 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      * @param Gender The Pokémon to process
      * @param TextWidget The widget to set the text for
      */
-    static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText* TextWidget);
+    static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget);
 
     /**
      * Create the command list from the given list of provided handlers

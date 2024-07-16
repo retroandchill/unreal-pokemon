@@ -10,20 +10,19 @@
 
 class UMessageWindow;
 /**
- * 
+ *
  */
 UCLASS(DisplayName = "RPG Menus Test Utilities")
 class RPGMENUSTESTS_API URPGMenusTestUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Selection)
-    static void SelectCurrentOption(USelectableWidget* SelectableWidget);
-    
+    static void SelectCurrentOption(USelectableWidget *SelectableWidget);
+
     UFUNCTION(BlueprintCallable, Category = Selection)
-    static void CancelOnWidget(USelectableWidget* SelectableWidget);
+    static void CancelOnWidget(USelectableWidget *SelectableWidget);
 
     UFUNCTION(BlueprintCallable, Category = Messages)
-    static void ForceAdvanceText(UMessageWindow* MessageWindow, FName InputName = "MenuConfirm");
-
+    static void ForceAdvanceText(UMessageWindow *MessageWindow, FName InputName = "MenuConfirm");
 };

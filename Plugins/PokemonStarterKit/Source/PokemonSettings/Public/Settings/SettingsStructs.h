@@ -267,14 +267,14 @@ struct FStatStageInfo {
      * The amount of the accuracy/evasion will be multiplied by for a positive stage
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, DisplayName = "Positive Accuracy/Evasion Multiplier",
-        Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
+              Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
     float PositiveAccEvaMultiplier;
 
     /**
      * The amount of the accuracy/evasion will be multiplied by for a negative stage
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly,  DisplayName = "Negative Accuracy/Evasion Multiplier",
-        Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, DisplayName = "Negative Accuracy/Evasion Multiplier",
+              Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
     float NegativeAccEvaMultiplier;
 };
 
@@ -288,7 +288,8 @@ struct POKEMONSETTINGS_API FHPStateTag {
     /**
      * The threshold to apply the tag if HP is under.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|HP", meta = (UIMin = 0.f, ClampMin = 0.f, UIMax = 1.f, ClampMax = 1.f))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats|HP",
+              meta = (UIMin = 0.f, ClampMin = 0.f, UIMax = 1.f, ClampMax = 1.f))
     float Threshold;
 
     /**

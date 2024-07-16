@@ -3,9 +3,9 @@
 #include "Components/Summary/PokemonStatRow.h"
 #include "CommonNumericTextBlock.h"
 #include "CommonRichTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Components/DisplayText.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 

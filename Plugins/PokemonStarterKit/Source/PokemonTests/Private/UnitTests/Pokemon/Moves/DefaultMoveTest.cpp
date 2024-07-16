@@ -3,8 +3,8 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Moves/MoveData.h"
-#include "Pokemon/Moves/DefaultMove.h"
 #include "Moves/Target.h"
+#include "Pokemon/Moves/DefaultMove.h"
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Pokemon/PokemonDTO.h"
 
@@ -23,12 +23,11 @@ bool DefaultMoveTest::RunTest(const FString &Parameters) {
 
     Move->DecrementPP(2);
     UE_CHECK_EQUAL(13, Move->GetCurrentPP());
-    
+
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves,
-                                 "Unit Tests.Core.Moves.DefaultMoveBlockTest.Default",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestDefaultMoves, "Unit Tests.Core.Moves.DefaultMoveBlockTest.Default",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
@@ -42,8 +41,7 @@ bool DefaultMoveBlockTestDefaultMoves::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves,
-                                 "Unit Tests.Core.Moves.DefaultMoveBlockTest.Manual",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves, "Unit Tests.Core.Moves.DefaultMoveBlockTest.Manual",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {

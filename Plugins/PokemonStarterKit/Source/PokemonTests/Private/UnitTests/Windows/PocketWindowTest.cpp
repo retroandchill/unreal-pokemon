@@ -1,7 +1,7 @@
 ﻿#include "Windows/PocketWindow.h"
 #include "Asserts.h"
-#include "Misc/AutomationTest.h"
 #include "Components/DisplayText.h"
+#include "Misc/AutomationTest.h"
 #include "Settings/BaseSettings.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"

@@ -49,5 +49,4 @@ class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
 
     UFUNCTION(BlueprintCallable, Category = "Slate|Images")
     static void SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bool MatchSize = false);
-
 };

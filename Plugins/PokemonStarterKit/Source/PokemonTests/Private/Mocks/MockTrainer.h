@@ -8,10 +8,10 @@
 #include <gmock/gmock.h>
 
 /**
- * 
+ *
  */
 class FMockTrainer : public ITrainer {
-public:
+  public:
     ~FMockTrainer() override = default;
 
     MOCK_METHOD2(Initialize, TScriptInterface<ITrainer>(FName NewTrainerType, FText NewTrainerName));

@@ -25,7 +25,7 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     bool IsExecuting() const override;
     bool IsComplete() const override;
 
-protected:
+  protected:
     /**
      * Try to activate the underlying ability for this action
      * @return The underlying ability for this action

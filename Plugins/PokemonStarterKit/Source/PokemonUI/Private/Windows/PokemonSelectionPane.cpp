@@ -68,7 +68,7 @@ void UPokemonSelectionPane::SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *
     Panel2->Refresh();
 }
 
-void UPokemonSelectionPane::AddAdditionalPanelToOptions(UPartySelectCancelPanel* Panel) {
+void UPokemonSelectionPane::AddAdditionalPanelToOptions(UPartySelectCancelPanel *Panel) {
     Panel->Refresh();
     SlotOption(Panel, GetItemCount());
 }

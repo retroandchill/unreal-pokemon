@@ -35,27 +35,27 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(PageSwitcher);
     UE_CHECK_EQUAL(0, PageSwitcher->GetActiveWidgetIndex());
 
-    auto PreviousActionHandle = Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "MenuPreviousPokemon";
-    });
+    auto PreviousActionHandle =
+        Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle &BindingHandle) {
+            return BindingHandle.GetActionName() == "MenuPreviousPokemon";
+        });
     UE_ASSERT_NOT_NULL(PreviousActionHandle);
     auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
     UE_ASSERT_NOT_NULL(PreviousAction.Get());
-    auto NextActionHandle = Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "MenuNextPokemon";
-    });
+    auto NextActionHandle = Pages->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuNextPokemon"; });
     UE_ASSERT_NOT_NULL(NextActionHandle);
     auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
     UE_ASSERT_NOT_NULL(NextAction.Get());
 
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
-                Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+                   Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
     UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(),
-                Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+                   Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
     UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
-                Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+                   Pages->GetCurrentPokemon()->GetSpecies().ID.ToString());
 
     Pages->SetPage(1);
     UE_CHECK_EQUAL(1, PageSwitcher->GetActiveWidgetIndex());

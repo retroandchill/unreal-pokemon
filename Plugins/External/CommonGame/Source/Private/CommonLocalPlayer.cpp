@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "CommonLocalPlayer.h"
-
 #include "Engine/GameInstance.h"
 #include "GameFramework/PlayerController.h"
 #include "GameUIManagerSubsystem.h"
@@ -14,68 +13,57 @@ class APlayerState;
 class FViewport;
 struct FSceneViewProjectionData;
 
-UCommonLocalPlayer::UCommonLocalPlayer()
-	: Super(FObjectInitializer::Get())
-{
+UCommonLocalPlayer::UCommonLocalPlayer() : Super(FObjectInitializer::Get()) {
 }
 
-FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerControllerSet(FPlayerControllerSetDelegate::FDelegate Delegate)
-{
-	APlayerController* PC = GetPlayerController(GetWorld());
+FDelegateHandle
+UCommonLocalPlayer::CallAndRegister_OnPlayerControllerSet(FPlayerControllerSetDelegate::FDelegate Delegate) {
+    APlayerController *PC = GetPlayerController(GetWorld());
 
-	if (PC)
-	{
-		Delegate.Execute(this, PC);
-	}
+    if (PC) {
+        Delegate.Execute(this, PC);
+    }
 
-	return OnPlayerControllerSet.Add(Delegate);
+    return OnPlayerControllerSet.Add(Delegate);
 }
 
-FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerStateSet(FPlayerStateSetDelegate::FDelegate Delegate)
-{
-	APlayerController* PC = GetPlayerController(GetWorld());
-	APlayerState* PlayerState = PC ? PC->PlayerState : nullptr;
+FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerStateSet(FPlayerStateSetDelegate::FDelegate Delegate) {
+    APlayerController *PC = GetPlayerController(GetWorld());
+    APlayerState *PlayerState = PC ? PC->PlayerState : nullptr;
 
-	if (PlayerState)
-	{
-		Delegate.Execute(this, PlayerState);
-	}
-	
-	return OnPlayerStateSet.Add(Delegate);
+    if (PlayerState) {
+        Delegate.Execute(this, PlayerState);
+    }
+
+    return OnPlayerStateSet.Add(Delegate);
 }
 
-FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerPawnSet(FPlayerPawnSetDelegate::FDelegate Delegate)
-{
-	APlayerController* PC = GetPlayerController(GetWorld());
-	APawn* Pawn = PC ? PC->GetPawn() : nullptr;
+FDelegateHandle UCommonLocalPlayer::CallAndRegister_OnPlayerPawnSet(FPlayerPawnSetDelegate::FDelegate Delegate) {
+    APlayerController *PC = GetPlayerController(GetWorld());
+    APawn *Pawn = PC ? PC->GetPawn() : nullptr;
 
-	if (Pawn)
-	{
-		Delegate.Execute(this, Pawn);
-	}
+    if (Pawn) {
+        Delegate.Execute(this, Pawn);
+    }
 
-	return OnPlayerPawnSet.Add(Delegate);
+    return OnPlayerPawnSet.Add(Delegate);
 }
 
-bool UCommonLocalPlayer::GetProjectionData(FViewport* Viewport, FSceneViewProjectionData& ProjectionData, int32 StereoViewIndex) const
-{
-	if (!bIsPlayerViewEnabled)
-	{
-		return false;
-	}
+bool UCommonLocalPlayer::GetProjectionData(FViewport *Viewport, FSceneViewProjectionData &ProjectionData,
+                                           int32 StereoViewIndex) const {
+    if (!bIsPlayerViewEnabled) {
+        return false;
+    }
 
-	return Super::GetProjectionData(Viewport, ProjectionData, StereoViewIndex);
+    return Super::GetProjectionData(Viewport, ProjectionData, StereoViewIndex);
 }
 
-UPrimaryGameLayout* UCommonLocalPlayer::GetRootUILayout() const
-{
-	if (UGameUIManagerSubsystem* UIManager = GetGameInstance()->GetSubsystem<UGameUIManagerSubsystem>())
-	{
-		if (UGameUIPolicy* Policy = UIManager->GetCurrentUIPolicy())
-		{
-			return Policy->GetRootLayout(this);
-		}
-	}
+UPrimaryGameLayout *UCommonLocalPlayer::GetRootUILayout() const {
+    if (UGameUIManagerSubsystem *UIManager = GetGameInstance()->GetSubsystem<UGameUIManagerSubsystem>()) {
+        if (UGameUIPolicy *Policy = UIManager->GetCurrentUIPolicy()) {
+            return Policy->GetRootLayout(this);
+        }
+    }
 
-	return nullptr;
+    return nullptr;
 }

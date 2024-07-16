@@ -2,6 +2,7 @@
 #include "Windows/CommandWindow.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
+#include "Components/DisplayTextOption.h"
 #include "Components/GridPanel.h"
 #include "Components/GridSlot.h"
 #include "Components/ScrollBox.h"
@@ -9,7 +10,6 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
-#include "Components/DisplayTextOption.h"
 
 UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
 }

@@ -20,7 +20,8 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
         }))
         return;
 
-    const FName FunctionName = GET_FUNCTION_NAME_CHECKED_OneParam(URPGMenuUtilities, RemoveTopScreenFromOverlay, UObject *);
+    const FName FunctionName =
+        GET_FUNCTION_NAME_CHECKED_OneParam(URPGMenuUtilities, RemoveTopScreenFromOverlay, UObject *);
     auto IntermediateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, GetGraph());
     IntermediateNode->FunctionReference.SetExternalMember(FunctionName, URPGMenuUtilities::StaticClass());
     IntermediateNode->AllocateDefaultPins();

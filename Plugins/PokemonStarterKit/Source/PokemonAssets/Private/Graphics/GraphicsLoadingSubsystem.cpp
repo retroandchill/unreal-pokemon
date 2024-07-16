@@ -5,9 +5,9 @@
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
-#include "TextureCompiler.h"
 #include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
+#include "TextureCompiler.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>
@@ -68,8 +68,8 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     TrainerSpriteMaterials = Settings.GetTrainerSpriteSettings();
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const TScriptInterface<IPokemon>& Pokemon, UObject *Outer,
-                                                                            bool bBack) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
+                                                                            UObject *Outer, bool bBack) const {
     return GetSpeciesBattleSprite(Pokemon->GetSpecies().ID, Outer, bBack,
                                   {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
 }
@@ -97,8 +97,8 @@ UGraphicsLoadingSubsystem::GetSpeciesBattleSprite(FName Species, UObject *Outer,
     return {Material, FVector2D(Height, Height)};
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const TScriptInterface<IPokemon>& Pokemon, UObject *Outer,
-                                                                        bool bBack) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const TScriptInterface<IPokemon> &Pokemon,
+                                                                        UObject *Outer, bool bBack) const {
     return GetSpeciesUISprite(Pokemon->GetSpecies().ID, Outer, bBack,
                               {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
 }
@@ -125,7 +125,8 @@ UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, boo
     return {Material, FVector2D(Height, Height)};
 }
 
-UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const TScriptInterface<IPokemon>& Pokemon, UObject *Outer) {
+UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon,
+                                                                    UObject *Outer) {
     return GetSpeciesIcon(Pokemon->GetSpecies().ID, Outer, {.Gender = Pokemon->GetGender()});
 }
 
@@ -148,7 +149,8 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Specie
     return Material;
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer, UObject *Outer) const {
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer,
+                                                                      UObject *Outer) const {
     return GetTrainerTypeSprite(Trainer->GetTrainerType().ID, Outer);
 }
 
@@ -178,7 +180,7 @@ UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
     return LookupAssetByName<UObject>(AssetPath, FullName);
 }
 
-TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FName>& Types) const {
+TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FName> &Types) const {
     auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
     return RangeHelpers::CreateRange(Types) | ranges::views::transform([&PathSettings](FName Type) {
@@ -189,7 +191,7 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FN
            RangeHelpers::TToArray<UObject *>();
 }
 
-UObject * UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {
+UObject *UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {
     auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
     auto &[AssetPath] = PathSettings.StatusIconsPackageName;
     auto FullName = GetFullAssetName(PathSettings.StatusIconPrefix, Status);

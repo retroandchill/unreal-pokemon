@@ -1,17 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Stats/StatChangeHelpers.h"
-#include "DataManager.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Stats/StatChangeCalculation.h"
 #include "Battle/Stats/StatTags.h"
+#include "DataManager.h"
 #include "Settings/BaseSettings.h"
 #include "Species/Stat.h"
 
 int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat) {
-    static auto& StatTable = FDataManager::GetInstance().GetInstance().GetDataTable<FStat>();
+    static auto &StatTable = FDataManager::GetInstance().GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);
     check(StatData != nullptr)
     check(StatData->StagesAttribute.IsValid())
@@ -29,8 +28,9 @@ bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battle
     return GetStatStageValue(Battler, Stat) <= -StatInfo.Num();
 }
 
-int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages, UGameplayAbility* Ability) {
-    static auto& StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
+int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages,
+                                                  UGameplayAbility *Ability) {
+    static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);
     check(StatData != nullptr)
     check(StatData->StagesAttribute.IsValid())
@@ -45,8 +45,8 @@ int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattle
 
     auto StatChangeEffect = NewObject<UGameplayEffect>();
     StatChangeEffect->DurationPolicy = EGameplayEffectDurationType::Instant;
-    
-    auto& Modifier = StatChangeEffect->Modifiers.Emplace_GetRef();
+
+    auto &Modifier = StatChangeEffect->Modifiers.Emplace_GetRef();
     Modifier.Attribute = StatData->StagesAttribute;
     Modifier.ModifierOp = EGameplayModOp::Additive;
 
@@ -54,8 +54,8 @@ int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattle
     Calculation.CalculationClassMagnitude = UStatChangeCalculation::StaticClass();
     Modifier.ModifierMagnitude = FGameplayEffectModifierMagnitude(Calculation);
 
-    static auto& Lookup = Pokemon::Battle::Stats::FLookup::Get();
-    auto& Cue = StatChangeEffect->GameplayCues.Emplace_GetRef(Lookup.GetGameplayCueTag(Stat), 0.f, 0.f);
+    static auto &Lookup = Pokemon::Battle::Stats::FLookup::Get();
+    auto &Cue = StatChangeEffect->GameplayCues.Emplace_GetRef(Lookup.GetGameplayCueTag(Stat), 0.f, 0.f);
     Cue.MagnitudeAttribute = StatData->StagesAttribute;
 
     FGameplayEffectContextHandle Context;

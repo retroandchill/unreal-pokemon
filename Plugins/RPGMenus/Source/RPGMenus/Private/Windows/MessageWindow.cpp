@@ -1,12 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Windows/MessageWindow.h"
 #include "CommonTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
-#include "MathUtilities.h"
 #include "Fonts/FontMeasure.h"
-#include "Components/DisplayText.h"
 #include "Input/CommonUIInputTypes.h"
+#include "MathUtilities.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UMessageWindow::NativePreConstruct() {
@@ -17,12 +17,12 @@ void UMessageWindow::NativePreConstruct() {
 void UMessageWindow::NativeConstruct() {
     Super::NativeConstruct();
     FBindUIActionArgs BindArgs(AdvanceActionInput, FSimpleDelegate::CreateWeakLambda(this, [this] {
-        if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
-            OnAdvanceText.Broadcast();
-        } else if (bPaused) {
-            SetPaused(false);
-        }
-    }));
+                                   if (WordToDisplay.IsEmpty() && !bWaitForChoice) {
+                                       OnAdvanceText.Broadcast();
+                                   } else if (bPaused) {
+                                       SetPaused(false);
+                                   }
+                               }));
     BindArgs.bDisplayInActionBar = false;
     AdvanceAction = RegisterUIActionBinding(BindArgs);
 }
@@ -137,8 +137,7 @@ void UMessageWindow::ResizeWindow() {
         auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
         FSlateFontInfo Font;
         GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
-        FVector2D Size = FontMeasure->Measure(TEXT("Sample"), Font,
-                                              UWidgetUtilities::GetWidgetDPIScale());
+        FVector2D Size = FontMeasure->Measure(TEXT("Sample"), Font, UWidgetUtilities::GetWidgetDPIScale());
         auto TextHeight = static_cast<float>(Size.Y) + ExtraPadding;
         SizeBox->SetHeightOverride(TextHeight * static_cast<float>(LinesToShow));
     }
@@ -166,8 +165,7 @@ void UMessageWindow::QueueLine(const FString &Line, double TotalTextAreaWidth) {
     auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
     FSlateFontInfo Font;
     GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
-    FVector2D Size = FontMeasure->Measure(Line, Font,
-                                          UWidgetUtilities::GetWidgetDPIScale());
+    FVector2D Size = FontMeasure->Measure(Line, Font, UWidgetUtilities::GetWidgetDPIScale());
     if (double LineWidth = Size.X; TotalTextAreaWidth >= LineWidth) {
         QueueText(Line);
     } else {
@@ -187,14 +185,12 @@ void UMessageWindow::QueueIndividualWords(const FString &Line, double TotalTextA
     FString CurrentLine = "";
     for (auto &Word : Words) {
         FString NewText = CurrentLine.IsEmpty() ? Word : FString(" ") + Word;
-        
+
         auto FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
         FSlateFontInfo Font;
         GetDefault<UCommonTextStyle>(DisplayTextWidget->GetTextStyle())->GetFont(Font);
-        double CurrentTextWidth = FontMeasure->Measure(CurrentLine, Font,
-                                              UWidgetUtilities::GetWidgetDPIScale()).X;
-        double NewTextWidth = FontMeasure->Measure(NewText, Font,
-                                              UWidgetUtilities::GetWidgetDPIScale()).X;
+        double CurrentTextWidth = FontMeasure->Measure(CurrentLine, Font, UWidgetUtilities::GetWidgetDPIScale()).X;
+        double NewTextWidth = FontMeasure->Measure(NewText, Font, UWidgetUtilities::GetWidgetDPIScale()).X;
 
         if (double FullTextWidth = CurrentTextWidth + NewTextWidth; FullTextWidth > TotalTextAreaWidth) {
             AddNewLine();
