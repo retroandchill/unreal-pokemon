@@ -12,6 +12,9 @@ UScreen * URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject
 
 UScreen * URPGMenuUtilities::RemoveTopScreenFromOverlay(const UObject *WorldContextObject) {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    if (Layout == nullptr) {
+        return nullptr;
+    }
     auto Layer = Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag);
     auto Screen = Cast<UScreen>(Layer->GetActiveWidget());
 

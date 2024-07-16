@@ -30,6 +30,7 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
 
     auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayout(Player.Get());
+    UE_ASSERT_NOT_NULL(Layout);
     auto Screen = Layout->PushWidgetToLayerStack<UPokemonBattleScreen>(RPG::Menus::PrimaryMenuLayerTag, WidgetClass);
 
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);

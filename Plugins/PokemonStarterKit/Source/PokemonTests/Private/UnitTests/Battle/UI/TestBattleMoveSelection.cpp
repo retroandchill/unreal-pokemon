@@ -10,6 +10,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Components/DisplayText.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
@@ -39,7 +40,8 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     Battler->DispatchBeginPlay();
     Battler->Initialize(Side, Pokemon);
-
+    
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UBattleMoveSelect> BattleMoveSelect(CreateWidget<UBattleMoveSelect>(World.Get(), WidgetClass));
     BattleMoveSelect->AddToViewport();
     BattleMoveSelect->SetBattler(Battler);

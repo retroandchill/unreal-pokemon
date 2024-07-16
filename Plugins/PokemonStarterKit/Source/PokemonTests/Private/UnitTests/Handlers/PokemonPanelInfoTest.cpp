@@ -5,6 +5,7 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Species/SpeciesData.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/PokemonTestUtilities.h"
@@ -19,19 +20,16 @@ bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto ScreenClass = Subclasses[0];
     FPokemonTestUtilities::CreateMockParty(World.Get());
-
+    
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     auto Screen = CreateWidget<UPokemonSelectionPane>(World.Get(), ScreenClass);
     Screen->AddToViewport();
-
-    auto ContentsArea = Screen->WidgetTree->FindWidget<UCanvasPanel>(TEXT("ContentsArea"));
-    UE_ASSERT_NOT_NULL(ContentsArea);
 
     TArray<UPokemonPanel *> Panels;
     for (int32 i = 0; i < 3; i++) {
         FName Name(FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}})));
-        int32 OutIndex;
-        auto Panel = Cast<UPokemonPanel>(Screen->WidgetTree->FindWidgetChild(ContentsArea, Name, OutIndex));
-        UE_ASSERT_NOT_NULL(ContentsArea);
+        auto Panel = Screen->WidgetTree->FindWidget<UPokemonPanel>(Name);
+        UE_ASSERT_NOT_NULL(Panel);
         Panels.Add(Panel);
     }
 

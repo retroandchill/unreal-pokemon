@@ -36,9 +36,10 @@ UCLASS(Blueprintable, BlueprintType, Abstract)
 class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     GENERATED_BODY()
 
+protected:
+    void NativeConstruct() override;
+    
   public:
-    TSharedRef<SWidget> RebuildWidget() override;
-
     /**
      * Refresh the display of this screen to the player
      */

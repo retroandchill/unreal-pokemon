@@ -101,12 +101,12 @@ void UItemSelectionWindow::UpdatePocket() {
 }
 
 void UItemSelectionWindow::NextPocket() {
-    --PocketIterator;
+    ++PocketIterator;
     UpdatePocket();
 }
 
 void UItemSelectionWindow::PreviousPocket() {
-    ++PocketIterator;
+    --PocketIterator;
     UpdatePocket();
 }
 

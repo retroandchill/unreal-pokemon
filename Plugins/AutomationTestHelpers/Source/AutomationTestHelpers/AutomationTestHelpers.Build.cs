@@ -44,7 +44,10 @@ public class AutomationTestHelpers : ModuleRules
 				"EditorSubsystem",
 				"MessageLog",
 				"UnrealEd",
-				"GoogleTest"
+				"GoogleTest", 
+				"CommonGame",
+				"CommonUI",
+				"EngineSettings"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

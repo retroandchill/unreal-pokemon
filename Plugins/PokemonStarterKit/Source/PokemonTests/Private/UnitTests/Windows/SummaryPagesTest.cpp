@@ -2,11 +2,11 @@
 #include "Windows/SummaryPages.h"
 #include "Asserts.h"
 #include "Components/WidgetSwitcher.h"
-#include "Data/SelectionInputs.h"
 #include "Input/UIActionBinding.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Species/SpeciesData.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -21,6 +21,7 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<USummaryPages> Pages(CreateWidget<USummaryPages>(World.Get(), WidgetClass));
     UE_ASSERT_NOT_NULL(Pages.Get());
     Pages->AddToViewport();
@@ -35,13 +36,13 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(0, PageSwitcher->GetActiveWidgetIndex());
 
     auto PreviousActionHandle = Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "PreviousPokemon";
+        return BindingHandle.GetActionName() == "MenuPreviousPokemon";
     });
     UE_ASSERT_NOT_NULL(PreviousActionHandle);
     auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
     UE_ASSERT_NOT_NULL(PreviousAction.Get());
     auto NextActionHandle = Pages->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "NextPokemon";
+        return BindingHandle.GetActionName() == "MenuNextPokemon";
     });
     UE_ASSERT_NOT_NULL(NextActionHandle);
     auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);

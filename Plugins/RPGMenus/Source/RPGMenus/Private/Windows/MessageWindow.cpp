@@ -3,7 +3,6 @@
 #include "CommonTextBlock.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
-#include "Data/SelectionInputs.h"
 #include "MathUtilities.h"
 #include "Fonts/FontMeasure.h"
 #include "Components/DisplayText.h"

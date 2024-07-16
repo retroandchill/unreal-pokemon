@@ -1,6 +1,5 @@
 ﻿#include "Asserts.h"
 #include "Bag/Item.h"
-#include "Data/SelectionInputs.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
@@ -11,6 +10,7 @@
 #include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
 #include "Windows/ItemSelectionWindow.h"
 #include "Input/UIActionBinding.h"
+#include "Utilities/PlayerUtilities.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
                                  "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",
@@ -86,8 +86,10 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UItemSelectionWindow> ItemSelection(CreateWidget<UItemSelectionWindow>(World.Get(), WidgetClass));
     UE_ASSERT_NULL(ItemSelection->GetCurrentItem());
+    ItemSelection->AddToViewport();
 
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
     Bag->ObtainItem(TEXT("POTION"), 5);
@@ -109,13 +111,13 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
     
     auto PreviousActionHandle = ItemSelection->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "Previous";
+        return BindingHandle.GetActionName() == "MenuPrevious";
     });
     UE_ASSERT_NOT_NULL(PreviousActionHandle);
     auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
     UE_ASSERT_NOT_NULL(PreviousAction.Get());
     auto NextActionHandle = ItemSelection->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle& BindingHandle) {
-        return BindingHandle.GetActionName() == "Next";
+        return BindingHandle.GetActionName() == "MenuNext";
     });
     UE_ASSERT_NOT_NULL(NextActionHandle);
     auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);

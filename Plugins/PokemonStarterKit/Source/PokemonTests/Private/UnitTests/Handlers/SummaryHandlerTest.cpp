@@ -38,7 +38,7 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
     Handler->Handle(Screen, Trainer, 0);
 
     auto PrimaryLayout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(World.Get());
-    auto Active = PrimaryLayout->GetLayerWidget(RPG::Menus::PrimaryMenuLayerTag);
+    auto Active = PrimaryLayout->GetLayerWidget(RPG::Menus::PrimaryMenuLayerTag)->GetActiveWidget();
     UE_ASSERT_NOT_NULL(Cast<UPokemonSummaryScreen>(Active));
     return true;
 }

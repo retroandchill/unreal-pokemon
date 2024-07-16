@@ -8,9 +8,13 @@
 UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");
 UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::OverlayMenuLayerTag, "UI.Layer.Overlay");
 
-TSharedRef<SWidget> UScreen::RebuildWidget() {
-    auto Ret = Super::RebuildWidget();
+void UScreen::RefreshSelf_Implementation() {
+    // No base implementation
+}
 
+void UScreen::NativeConstruct() {
+    Super::NativeConstruct();
+    
     SelectableWidgets.Empty();
     WidgetTree->ForEachWidget([this](UWidget *Widget) {
         auto SelectableWidget = Cast<USelectableWidget>(Widget);
@@ -19,12 +23,6 @@ TSharedRef<SWidget> UScreen::RebuildWidget() {
 
         SelectableWidgets.Emplace(SelectableWidget);
     });
-
-    return Ret;
-}
-
-void UScreen::RefreshSelf_Implementation() {
-    // No base implementation
 }
 
 void UScreen::CloseScreen() {

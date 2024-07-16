@@ -2,7 +2,6 @@
 #include "CommonButtonBase.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "Data/SelectionInputs.h"
 #include "Handlers/FightHandler.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -68,11 +67,6 @@ bool TestFightHandler::RunTest(const FString &Parameters) {
     Screen->SelectAction(Battler1);
     Screen->SelectAction(Battler2);
     UE_CHECK_EQUAL(ESlateVisibility::Visible, ActionSelect->GetVisibility());
-
-    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(ActionSelect, "InputMappings");
-    UE_ASSERT_NOT_NULL(InputMappings.Get());
-    auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
-    auto CancelButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
 
     auto &Options = UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBattleMenuHandler>>>(ActionSelect, "MenuActions");
     int32 FightHandlerIndex =

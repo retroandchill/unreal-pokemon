@@ -158,12 +158,6 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
     TObjectPtr<UWidget> PauseArrow;
 
     /**
-     * Do the selection options wrap when input would exceed the end
-     */
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<USelectionInputs> InputMappings;
-
-    /**
      * How much extra padding does a line have?
      */
     UPROPERTY(EditAnywhere, Category = Display)
