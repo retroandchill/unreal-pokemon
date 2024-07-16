@@ -20,5 +20,15 @@
 			"LoadingPhase": "Default"
 		}
 	],
-	"SupportURL": ""
+	"SupportURL": "",
+	"Plugins": [
+		{
+			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonGame",
+			"Enabled": true
+		}
+	]
 }
