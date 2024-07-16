@@ -3,9 +3,9 @@
 #include "Asserts.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
-#include "Pokemon/GamePokemon.h"
-#include "RPGMenusSubsystem.h"
 #include "Mocks/MockPartyScreen.h"
+#include "Pokemon/GamePokemon.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/PartyScreen.h"
 #include "Screens/PokemonSummaryScreen.h"
 #include "Trainers/BasicTrainer.h"
@@ -34,9 +34,12 @@ bool SummaryHandlerTest::RunTest(const FString &Parameters) {
 
     TGCPointer Handler(NewObject<USummaryHandler>());
     UE_CHECK_TRUE(Handler->ShouldShow(Screen, Trainer, 0));
-    UReflectionUtils::SetPropertyValue<TSubclassOf<UPokemonSummaryScreen>>(Handler.Get(), "SummaryScreenClass", WidgetClass);
+    UReflectionUtils::SetPropertyValue<TSubclassOf<UPokemonSummaryScreen>>(Handler.Get(), "SummaryScreenClass",
+                                                                           WidgetClass);
     Handler->Handle(Screen, Trainer, 0);
 
-    UE_ASSERT_NOT_NULL(Player->GetSubsystem<URPGMenusSubsystem>()->GetTopOfStack<UPokemonSummaryScreen>());
+    auto PrimaryLayout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(World.Get());
+    auto Active = PrimaryLayout->GetLayerWidget(RPG::Menus::PrimaryMenuLayerTag)->GetActiveWidget();
+    UE_ASSERT_NOT_NULL(Cast<UPokemonSummaryScreen>(Active));
     return true;
 }

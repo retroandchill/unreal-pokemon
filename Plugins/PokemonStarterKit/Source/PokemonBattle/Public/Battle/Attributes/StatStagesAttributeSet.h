@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeMacros.h"
 #include "AttributeSet.h"
+
 #include "StatStagesAttributeSet.generated.h"
 
 /**
@@ -14,7 +15,7 @@ UCLASS()
 class POKEMONBATTLE_API UStatStagesAttributeSet : public UAttributeSet {
     GENERATED_BODY()
 
-public:
+  public:
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, AttackStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, DefenseStages)
     ATTRIBUTE_ACCESSORS(UStatStagesAttributeSet, SpecialAttackStages)
@@ -28,10 +29,10 @@ public:
 
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
 
-private:
+  private:
     UPROPERTY()
     FGameplayAttributeData AttackStages;
-    
+
     UPROPERTY()
     FGameplayAttributeData DefenseStages;
 
@@ -43,10 +44,10 @@ private:
 
     UPROPERTY()
     FGameplayAttributeData SpeedStages;
-    
+
     UPROPERTY()
     FGameplayAttributeData AccuracyStages;
-    
+
     UPROPERTY()
     FGameplayAttributeData EvasionStages;
 

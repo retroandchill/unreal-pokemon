@@ -1,8 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/HPStatRow.h"
+#include "CommonNumericTextBlock.h"
+#include "Components/DisplayText.h"
 #include "Pokemon/Stats/StatEntry.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/PokemonUIUtils.h"
 
 void UHPStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,

@@ -1,23 +1,22 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Stats/StatTags.h"
-#include "DataManager.h"
 #include "Battle/Tags.h"
+#include "DataManager.h"
 #include "Species/Stat.h"
 
 namespace Pokemon::Battle::Stats {
 
-UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
+const UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
 
 FLookup::FLookup() {
     auto &DataManager = FDataManager::GetInstance();
-    auto& TypeTable = DataManager.GetDataTable<FStat>();
-    TypeTable.ForEach([this](const FStat& Stat) {
+    auto &TypeTable = DataManager.GetDataTable<FStat>();
+    TypeTable.ForEach([this](const FStat &Stat) {
         if (Stat.Type == EPokemonStatType::Main) {
             return;
         }
-        
+
         AddDynamicGameplayTag(IgnorePositiveTags, IgnorePositiveStatsFormat, Stat.ID);
         AddDynamicGameplayTag(IgnoreNegativeTags, IgnoreNegativeStatsFormat, Stat.ID);
         AddDynamicGameplayTag(GameplayCueTags, GameplayCueTagFormat, Stat.ID);
@@ -26,7 +25,7 @@ FLookup::FLookup() {
 
 FLookup::~FLookup() = default;
 
-FLookup & FLookup::Get() {
+FLookup &FLookup::Get() {
     static FLookup Lookup;
     return Lookup;
 }
@@ -44,4 +43,4 @@ FText FLookup::FindStatNameFromGameplayCueTag(const FGameplayTag &Tag) const {
     return FText::FromStringView(TEXT("???"));
 }
 
-}
+} // namespace Pokemon::Battle::Stats

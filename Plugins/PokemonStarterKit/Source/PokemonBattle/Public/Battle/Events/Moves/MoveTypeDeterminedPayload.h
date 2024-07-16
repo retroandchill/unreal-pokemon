@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Events/MoveEventPayload.h"
 #include "UObject/Object.h"
+
 #include "MoveTypeDeterminedPayload.generated.h"
 
 class IBattler;
@@ -15,19 +16,18 @@ UCLASS(BlueprintType)
 class POKEMONBATTLE_API UMoveTypeDeterminedPayload : public UObject, public IMoveEventPayload {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The user of the move
      */
     UPROPERTY(BlueprintReadOnly, Category = "Moves|Context")
     TScriptInterface<IBattler> User;
-    
+
     /**
      * The type of the move in question
      */
     UPROPERTY(BlueprintReadOnly, Category = "Moves|Typing")
     FName Type;
-    
-    const TScriptInterface<IBattler> & GetUser() const override;
 
+    const TScriptInterface<IBattler> &GetUser() const override;
 };

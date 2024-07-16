@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "BattlerHelpers.generated.h"
 
 class IBattler;
@@ -16,7 +17,7 @@ UCLASS()
 class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the value of a battler's stat for the given attribute
      * @param ActorInfo The information about the actor in question
@@ -25,6 +26,5 @@ public:
      * @return The value of the attribute
      */
     UFUNCTION(BlueprintPure, Category = "Battler|Stats")
-    static float GetBattlerStat(const FGameplayAbilityActorInfo& ActorInfo, FGameplayAttribute Attribute, bool& bFound);
-
+    static float GetBattlerStat(const FGameplayAbilityActorInfo &ActorInfo, FGameplayAttribute Attribute, bool &bFound);
 };

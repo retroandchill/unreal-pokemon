@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "UseMovePayload.generated.h"
 
 class IBattleMove;
 class UGameplayAbility;
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType)
 class POKEMONBATTLE_API UUseMovePayload : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     UPROPERTY()
     TScriptInterface<IBattleMove> Move;
 

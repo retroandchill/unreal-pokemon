@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "PromptReplaceMove.generated.h"
 
 class IPokemon;
@@ -21,7 +22,7 @@ UCLASS(meta = (HideThen))
 class POKEMONUI_API UPromptReplaceMove : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Prompt to forget a move and replace it with a new one
      * @param WorldContextObject The object used to obtain the context about the world
@@ -29,12 +30,14 @@ public:
      * @param Move The move to learn
      * @return The created node
      */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Selection", meta = (WorldContext = "WorldContextObject"))
-    static UPromptReplaceMove *PromptReplaceMove(const UObject *WorldContextObject, const TScriptInterface<IPokemon>& Pokemon, FName Move);
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Selection",
+              meta = (WorldContext = "WorldContextObject"))
+    static UPromptReplaceMove *PromptReplaceMove(const UObject *WorldContextObject,
+                                                 const TScriptInterface<IPokemon> &Pokemon, FName Move);
 
     void Activate() override;
-    
-private:
+
+  private:
     /**
      * Called when the window is closed
      * @param bMoveReplaced Was the move replaced
@@ -52,7 +55,7 @@ private:
      */
     UPROPERTY(BlueprintAssignable)
     FMoveLearnComplete MoveNotLearned;
-    
+
     /**
      * The object used to obtain the context about the world
      */

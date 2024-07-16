@@ -1,10 +1,10 @@
 ﻿#include "Asserts.h"
 #include "Bag/Item.h"
-#include "Data/SelectionInputs.h"
+#include "Input/UIActionBinding.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Player/Bag.h"
-#include "Utilities/InputUtilities.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
@@ -31,7 +31,7 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("BURNHEAL"), 20);
 
     auto Dispatcher = NewObject<UItemSlotDispatcher>(World.Get());
-    ItemSelection->GetOnItemChanged().AddDynamic(Dispatcher, &UItemSlotDispatcher::ReceiveItem);
+    ItemSelection->GetOnItemChanged().AddUniqueDynamic(Dispatcher, &UItemSlotDispatcher::ReceiveItem);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     ItemSelection->SetIndex(0);
@@ -53,8 +53,7 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems,
-                                 "Unit Tests.Windows.ItemSelectionWindowTest.NoItems",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_NoItems, "Unit Tests.Windows.ItemSelectionWindowTest.NoItems",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
@@ -68,7 +67,7 @@ bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
 
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
     auto Dispatcher = NewObject<UNoItemSelectedDispatcher>(World.Get());
-    ItemSelection->GetOnNoItemSelected().AddDynamic(Dispatcher, &UNoItemSelectedDispatcher::OnReceive);
+    ItemSelection->GetOnNoItemSelected().AddUniqueDynamic(Dispatcher, &UNoItemSelectedDispatcher::OnReceive);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     UE_ASSERT_TRUE(Dispatcher->bCalled);
@@ -86,8 +85,10 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UItemSelectionWindow> ItemSelection(CreateWidget<UItemSelectionWindow>(World.Get(), WidgetClass));
     UE_ASSERT_NULL(ItemSelection->GetCurrentItem());
+    ItemSelection->AddToViewport();
 
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
     Bag->ObtainItem(TEXT("POTION"), 5);
@@ -97,7 +98,7 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     Bag->ObtainItem(TEXT("SUPERREPEL"), 100);
 
     auto Dispatcher = NewObject<UPocketNameDispatcher>(World.Get());
-    ItemSelection->GetOnPocketChanged().AddDynamic(Dispatcher, &UPocketNameDispatcher::OnReceivePocket);
+    ItemSelection->GetOnPocketChanged().AddUniqueDynamic(Dispatcher, &UPocketNameDispatcher::OnReceivePocket);
 
     ItemSelection->SetBag(Bag, TEXT("Medicine"));
     UE_CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());
@@ -108,14 +109,19 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
 
-    
-    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(ItemSelection.Get(), "InputMappings");
-    UE_ASSERT_NOT_NULL(InputMappings.Get());
-    auto LeftInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "LeftInputs").begin();
-    auto RightInput = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "RightInputs").begin();
+    auto PreviousActionHandle = ItemSelection->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuPrevious"; });
+    UE_ASSERT_NOT_NULL(PreviousActionHandle);
+    auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
+    UE_ASSERT_NOT_NULL(PreviousAction.Get());
+    auto NextActionHandle = ItemSelection->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuNext"; });
+    UE_ASSERT_NOT_NULL(NextActionHandle);
+    auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
+    UE_ASSERT_NOT_NULL(NextAction.Get());
 
     ItemSelection->ActivateWidget();
-    UInputUtilities::SimulateKeyPress(ItemSelection.Get(), LeftInput);
+    UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Items"), Dispatcher->CurrentPocket.ToString());
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("REPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
@@ -123,12 +129,12 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("SUPERREPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
 
-    UInputUtilities::SimulateKeyPress(ItemSelection.Get(), RightInput);
+    UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());
     UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelection->GetCurrentItem()->ID.ToString());
     ItemSelection->SetIndex(0);
-    UInputUtilities::SimulateKeyPress(ItemSelection.Get(), LeftInput);
+    UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(TEXT("Items"), Dispatcher->CurrentPocket.ToString());
     UE_CHECK_EQUAL(TEXT("SUPERREPEL"), ItemSelection->GetCurrentItem()->ID.ToString());
 

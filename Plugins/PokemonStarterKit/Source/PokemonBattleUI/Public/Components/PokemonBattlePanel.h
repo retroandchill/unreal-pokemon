@@ -6,10 +6,10 @@
 #include "Animations/ProgressBarAnimation.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "PokemonUI/Public/Components/PokemonInfoWidget.h"
-#include "Text/TextColor.h"
 
 #include "PokemonBattlePanel.generated.h"
 
+class UCommonTextStyle;
 class UImage;
 class IBattler;
 class UProgressBar;
@@ -27,16 +27,16 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
-    
+
   public:
     /**
      * Get the currently displayed battler
      * @return The battler whose information is being displayed
      */
     const TScriptInterface<IBattler> &GetCurrentBattler() const;
-    
+
     /**
      * Set the displayed battler
      * @param Battler The currently displayed battler
@@ -65,18 +65,18 @@ protected:
 
     /**
      * Get the delegate used for updating the progress bar
-     * @param Binding The desired action 
+     * @param Binding The desired action
      */
-    void BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate& Binding);
+    void BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate &Binding);
 
     /**
      * Unbind all dynamic delegates from the HP update callback
      * @param Object The object to unbind the delegate for
      */
     UFUNCTION()
-    void UnbindAllHPUpdateDelegates(UObject* Object);
+    void UnbindAllHPUpdateDelegates(UObject *Object);
 
-protected:
+  protected:
     /**
      * The function used to callback to the depleted HP.
      * @param NewPercent The new HP percentage
@@ -88,7 +88,7 @@ protected:
      */
     virtual void HPPercentUpdateComplete() const;
 
-private:
+  private:
     /**
      * The widget to display the Pokémon's name
      */
@@ -129,7 +129,7 @@ private:
      * The color settings for the gender text widget
      */
     UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<EPokemonGender, FTextColor> GenderTextColors;
+    TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     /**
      * The animation for updating the HP bar

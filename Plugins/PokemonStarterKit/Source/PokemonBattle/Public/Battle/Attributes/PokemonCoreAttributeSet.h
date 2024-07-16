@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeMacros.h"
 #include "AttributeSet.h"
+
 #include "PokemonCoreAttributeSet.generated.h"
 
 class IPokemon;
@@ -15,7 +16,7 @@ UCLASS()
 class POKEMONBATTLE_API UPokemonCoreAttributeSet : public UAttributeSet {
     GENERATED_BODY()
 
-public:
+  public:
     ATTRIBUTE_ACCESSORS_CUSTOM_INITTER(UPokemonCoreAttributeSet, HP);
     ATTRIBUTE_ACCESSORS_CUSTOM_INITTER(UPokemonCoreAttributeSet, MaxHP);
     ATTRIBUTE_ACCESSORS(UPokemonCoreAttributeSet, Attack)
@@ -28,7 +29,7 @@ public:
     void PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) override;
     void PostAttributeChange(const FGameplayAttribute &Attribute, float OldValue, float NewValue) override;
 
-private:
+  private:
     /**
      * Called to update the Pokémon's tags based on its current HP
      */

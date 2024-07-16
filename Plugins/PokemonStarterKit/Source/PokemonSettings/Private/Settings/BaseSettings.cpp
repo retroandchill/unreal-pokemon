@@ -76,15 +76,15 @@ const FText &Pokemon::FBaseSettings::GetNoAbilityDescription() const {
     return KitSettings->NoAbilityDescription;
 }
 
-const FSoftObjectPath & Pokemon::FBaseSettings::GetDefaultBattleScene() const {
+const FSoftObjectPath &Pokemon::FBaseSettings::GetDefaultBattleScene() const {
     return KitSettings->DefaultBattleScene;
 }
 
-const FVector & Pokemon::FBaseSettings::GetBattleSceneOffset() const {
+const FVector &Pokemon::FBaseSettings::GetBattleSceneOffset() const {
     return KitSettings->BattleSceneOffset;
 }
 
-const TArray<FStatStageInfo> & Pokemon::FBaseSettings::GetStatStages() const {
+const TArray<FStatStageInfo> &Pokemon::FBaseSettings::GetStatStages() const {
     return KitSettings->StatStages;
 }
 
@@ -92,19 +92,19 @@ float Pokemon::FBaseSettings::GetCriticalHitMultiplier() const {
     return KitSettings->CriticalHitMultiplier;
 }
 
-const TArray<int32> & Pokemon::FBaseSettings::GetCriticalHitRatios() const {
+const TArray<int32> &Pokemon::FBaseSettings::GetCriticalHitRatios() const {
     return KitSettings->CriticalHitRatios;
 }
 
-const TArray<FHPStateTag> & Pokemon::FBaseSettings::GetHPStateTags() const {
+const TArray<FHPStateTag> &Pokemon::FBaseSettings::GetHPStateTags() const {
     return KitSettings->HPStateTags;
 }
 
-const FSoftClassPath & Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
+const FSoftClassPath &Pokemon::FBaseSettings::GetDefaultMoveAbility() const {
     return KitSettings->DefaultMoveAbility;
 }
 
-UClass * Pokemon::FBaseSettings::GetPokemonUtilitiesClass() const {
+UClass *Pokemon::FBaseSettings::GetPokemonUtilitiesClass() const {
     return KitSettings->PokemonUtilitiesClass.TryLoadClass<UObject>();
 }
 
@@ -135,6 +135,6 @@ const FDynamicAssetPaths &Pokemon::FBaseSettings::GetDynamicAssetPaths() const {
     return KitSettings->DynamicAssetPaths;
 }
 
-const FDefaultScreens & Pokemon::FBaseSettings::GetDefaultScreenPaths() const {
+const FDefaultScreens &Pokemon::FBaseSettings::GetDefaultScreenPaths() const {
     return KitSettings->DefaultScreenPaths;
 }

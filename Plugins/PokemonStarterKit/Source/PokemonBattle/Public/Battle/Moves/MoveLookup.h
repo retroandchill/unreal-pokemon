@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 
-
 namespace Pokemon::Battle::Moves {
 
 /**
@@ -15,4 +14,4 @@ namespace Pokemon::Battle::Moves {
  */
 POKEMONBATTLE_API TSubclassOf<UGameplayAbility> LookupMoveEffectClass(FName FunctionCode);
 
-}
+} // namespace Pokemon::Battle::Moves

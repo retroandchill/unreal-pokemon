@@ -21,6 +21,6 @@ POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindHoldItemEffect(FName ID);
  * @param Item The hold item's data struct
  * @return The gameplay ability class for that item (if an effect exists)
  */
-POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindHoldItemEffect(const FItem* Item);
+POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindHoldItemEffect(const FItem *Item);
 
-}
+} // namespace Pokemon::Battle::Items

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintAsyncActionBase.h"
 #include "Battle/Animations/BattleAnimation.h"
+#include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "PlayBattleAnimation.generated.h"
 
 /**
@@ -14,18 +15,18 @@ UCLASS(meta = (HideThen))
 class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Play the given battle animation
      * @param Animation The animation to play
      * @return The created animation node
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Animations")
-    static UPlayBattleAnimation* PlayBattleAnimation(const TScriptInterface<IBattleAnimation>& Animation);
+    static UPlayBattleAnimation *PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation);
 
     void Activate() override;
-    
-private:
+
+  private:
     /**
      * Called when the animation is complete
      */
@@ -37,7 +38,7 @@ private:
      */
     UPROPERTY(BlueprintAssignable)
     FOnBattleAnimationComplete AnimationComplete;
-    
+
     /**
      * The animation to play
      */

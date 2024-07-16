@@ -28,8 +28,7 @@ bool GetHoldItemTest_Null::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithNoItem,
-                                 "Unit Tests.Core.Pokemon.GetHoldItemTest.WithNoItem",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetHoldItemTest_WithNoItem, "Unit Tests.Core.Pokemon.GetHoldItemTest.WithNoItem",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool GetHoldItemTest_WithNoItem::RunTest(const FString &Parameters) {

@@ -32,15 +32,16 @@ bool PartyMenuItemHandlerTest::RunTest(const FString &Parameters) {
     UE_CHECK_FALSE(Handler->ShouldShow(Screen, Trainer, 0));
 
     UReflectionUtils::SetPropertyValue(Handler, "HelpText", FText::FromStringView(TEXT("Sample help text")));
-    auto& HandlerSet = UReflectionUtils::GetPropertyValue<TObjectPtr<UPartyMenuHandlerSet>>(Handler, "SubCommands");
-    UReflectionUtils::SetPropertyValue<TObjectPtr<UPartyMenuHandlerSet>>(Handler, "SubCommands", NewObject<UPartyMenuHandlerSet>());
+    auto &HandlerSet = UReflectionUtils::GetPropertyValue<TObjectPtr<UPartyMenuHandlerSet>>(Handler, "SubCommands");
+    UReflectionUtils::SetPropertyValue<TObjectPtr<UPartyMenuHandlerSet>>(Handler, "SubCommands",
+                                                                         NewObject<UPartyMenuHandlerSet>());
     UReflectionUtils::SetPropertyValue<TArray<TObjectPtr<UPartyMenuHandler>>>(HandlerSet, "Handlers", {Handler});
     FText HelpTextOut;
     TArray<TObjectPtr<UPartyMenuHandler>> HandlersOut;
     ON_CALL(MockScreen, SetCommandHelpText).WillByDefault([&HelpTextOut](FText Text) { HelpTextOut = MoveTemp(Text); });
-    ON_CALL(MockScreen, ShowCommands).WillByDefault([&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) {
-        HandlersOut = Handlers;
-    });
+    ON_CALL(MockScreen, ShowCommands)
+        .WillByDefault(
+            [&HandlersOut](const TArray<TObjectPtr<UPartyMenuHandler>> &Handlers) { HandlersOut = Handlers; });
 
     Handler->Handle(Screen, Trainer, 0);
     UE_CHECK_EQUAL(TEXT("Sample help text"), HelpTextOut.ToString());

@@ -3,5 +3,6 @@
 #include "Battle/Battlers/Battler.h"
 
 // Add default functionality here for any IBattler functions that are not pure virtual.
-FStatusEffectInfo::FStatusEffectInfo(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) : StatusEffectID(StatusEffectID), EffectHandle(EffectHandle) {
+FStatusEffectInfo::FStatusEffectInfo(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle)
+    : StatusEffectID(StatusEffectID), EffectHandle(EffectHandle) {
 }

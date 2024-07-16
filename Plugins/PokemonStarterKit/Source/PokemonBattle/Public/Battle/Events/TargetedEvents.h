@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
+
 #include "TargetedEvents.generated.h"
 
 class IBattle;
@@ -38,7 +39,7 @@ enum class ETargetedEventScope : uint8 {
      * The tag for abilities/effects that are activated by the target of a move
      */
     Target,
-    
+
     /**
      * The tag for abilities/effects that are activated by an ally to the target of a move
      */
@@ -105,8 +106,7 @@ struct POKEMONBATTLE_API FTargetedEvent {
      * @param Scope The scope of the tag to look up
      * @return The found tag
      */
-    const FNativeGameplayTag& GetTagForScope(ETargetedEventScope Scope);
-    
+    const FNativeGameplayTag &GetTagForScope(ETargetedEventScope Scope);
 };
 
 /**
@@ -120,23 +120,24 @@ struct POKEMONBATTLE_API FTargetedEvent {
  * @param Name The name of the variable that is being defined
  * @param Prefix The prefix to append the scope names to create the tag
  */
-#define DEFINE_TARGETED_EVENT_TYPE(Name, Prefix) FTargetedEvent Name { \
-    .GlobalTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Global", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .UserTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".User", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .UserAllyTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".UserAlly", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .UserSideTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".UserSide", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .TargetTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Target", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .TargetAllyTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".TargetAlly", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .TargetSideTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".TargetSide", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD), \
-    .BattlefieldTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Field", TEXT(""), \
-        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD) \
+#define DEFINE_TARGETED_EVENT_TYPE(Name, Prefix)                                                                       \
+    FTargetedEvent Name {                                                                                              \
+        .GlobalTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Global", TEXT(""),                    \
+                                        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                           \
+        .UserTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".User", TEXT(""),                        \
+                                      ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                             \
+        .UserAllyTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".UserAlly", TEXT(""),                \
+                                          ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                         \
+        .UserSideTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".UserSide", TEXT(""),                \
+                                          ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                         \
+        .TargetTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Target", TEXT(""),                    \
+                                        ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                           \
+        .TargetAllyTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".TargetAlly", TEXT(""),            \
+                                            ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                       \
+        .TargetSideTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".TargetSide", TEXT(""),            \
+                                            ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                       \
+        .BattlefieldTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Field", TEXT(""),                \
+                                             ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD)                       \
     }
 
 namespace Pokemon::Battle::Events {
@@ -147,7 +148,8 @@ namespace Pokemon::Battle::Events {
  * @param Payload The payload data for the event
  * @param Tag the tag to apply to the event
  */
-POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle>& Battle, const UObject* Payload, const FGameplayTag& Tag);
+POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject *Payload,
+                                          const FGameplayTag &Tag);
 
 /**
  * Send out a single event to the user of a move
@@ -155,7 +157,8 @@ POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle>& Battl
  * @param Payload The payload data for the event
  * @param EventTag The event tag to send out for this event
  */
-POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler>& User, const UObject* Payload, const FNativeGameplayTag& EventTag);
+POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
+                                        const FNativeGameplayTag &EventTag);
 
 /**
  * Send out a set of events to the battlefield.
@@ -164,7 +167,8 @@ POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler>& User, 
  * @param Payload The payload data for the event
  * @param EventTags The event tags to send out for this event
  */
-POKEMONBATTLE_API void SendOutMoveEvents(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target,
-                                         const UObject* Payload, const FTargetedEvent& EventTags);
+POKEMONBATTLE_API void SendOutMoveEvents(const TScriptInterface<IBattler> &User,
+                                         const TScriptInterface<IBattler> &Target, const UObject *Payload,
+                                         const FTargetedEvent &EventTags);
 
-}
+} // namespace Pokemon::Battle::Events

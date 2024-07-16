@@ -2,18 +2,18 @@
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
+#include "Components/NumberImageWidget.h"
 #include "Components/PokemonBattlePanel.h"
 #include "Components/PokemonBattlePanelPlayer.h"
 #include "Components/ProgressBar.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattler.h"
-#include "Primatives/DisplayText.h"
-#include "Primatives/NumberImageWidget.h"
+#include "Species/SpeciesData.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Species/SpeciesData.h"
 
 using namespace testing;
 
@@ -25,11 +25,11 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonBattlePanelPlayer>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
-    
-    
+
     CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler, FMockBattler, MockBattler);
     auto BattlerActor = Cast<AActor>(Battler.GetObject());
-    auto BattlerAbilityComponent = static_cast<UBattlerAbilityComponent*>(BattlerActor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+    auto BattlerAbilityComponent = static_cast<UBattlerAbilityComponent *>(
+        BattlerActor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
     ON_CALL(MockBattler, GetAbilityComponent).WillByDefault(Return(BattlerAbilityComponent));
     EXPECT_CALL(MockBattler, IsFainted).WillOnce(Return(false)).WillOnce(Return(false)).WillRepeatedly(Return(true));
     ON_CALL(MockBattler, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Lucario"))));
@@ -42,9 +42,10 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
 
     TWidgetPtr<UPokemonBattlePanelPlayer> Panel(CreateWidget<UPokemonBattlePanelPlayer>(World.Get(), WidgetClass));
     Panel->AddToViewport();
-    
+
     auto CoreAttributes = NewObject<UPokemonCoreAttributeSet>(BattlerActor);
-    UReflectionUtils::SetPropertyValue<TObjectPtr<UPokemonCoreAttributeSet>>(BattlerAbilityComponent, "CoreAttributes", CoreAttributes);
+    UReflectionUtils::SetPropertyValue<TObjectPtr<UPokemonCoreAttributeSet>>(BattlerAbilityComponent, "CoreAttributes",
+                                                                             CoreAttributes);
     BattlerAbilityComponent->AddSpawnedAttribute(CoreAttributes);
     CoreAttributes->InitMaxHP(100);
     CoreAttributes->InitHP(100);

@@ -41,16 +41,7 @@ class POKEMONBATTLEUI_API UBattleMoveSelect : public USelectableWidget {
     FOnMoveSelected &GetOnMoveSelected();
 
   protected:
-    int32 GetItemCount_Implementation() const override;
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
     void ProcessConfirm_Implementation(int32 CurrentIndex) override;
-
-    /**
-     * Slot a move panel into this widget
-     * @param MovePanel The move panel to slot
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void SlotWidget(UBattleMovePanel *MovePanel);
 
   private:
     /**
@@ -64,12 +55,6 @@ class POKEMONBATTLEUI_API UBattleMoveSelect : public USelectableWidget {
      */
     UPROPERTY()
     TScriptInterface<IBattler> CurrentBattler;
-
-    /**
-     * The created move panel widgets
-     */
-    UPROPERTY()
-    TArray<TObjectPtr<UBattleMovePanel>> MovePanels;
 
     /**
      * The subclass of move panel used to select

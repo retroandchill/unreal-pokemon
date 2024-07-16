@@ -18,7 +18,7 @@ class POKEMONBATTLEUI_API UPokemonBattlePanelPlayer : public UPokemonBattlePanel
   public:
     void Refresh() override;
 
-protected:
+  protected:
     void UpdateHPPercent(float NewPercent) override;
     void HPPercentUpdateComplete() const override;
 

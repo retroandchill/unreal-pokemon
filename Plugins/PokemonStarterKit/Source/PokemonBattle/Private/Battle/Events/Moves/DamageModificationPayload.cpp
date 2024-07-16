@@ -1,35 +1,40 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle//Events/Moves/DamageModificationPayload.h"
 
-FDamageCalculationData::FDamageCalculationData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-    int32 TargetCount, const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower) : User(User), Target(Target), TargetCount(TargetCount), PreDamageMessages(PreDamageMessages), Type(Type), BasePower(BasePower) {
+FDamageCalculationData::FDamageCalculationData(const TScriptInterface<IBattler> &User,
+                                               const TScriptInterface<IBattler> &Target, int32 TargetCount,
+                                               const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower)
+    : User(User), Target(Target), TargetCount(TargetCount), PreDamageMessages(PreDamageMessages), Type(Type),
+      BasePower(BasePower) {
 }
 
-UDamageModificationPayload * UDamageModificationPayload::Create(const TScriptInterface<IBattler> &User,
-                                                                const TScriptInterface<IBattler> &Target, int32 TargetCount, const FRunningMessageSet& PreDamageMessages, FName Type, int32 BasePower) {
+UDamageModificationPayload *UDamageModificationPayload::Create(const TScriptInterface<IBattler> &User,
+                                                               const TScriptInterface<IBattler> &Target,
+                                                               int32 TargetCount,
+                                                               const FRunningMessageSet &PreDamageMessages, FName Type,
+                                                               int32 BasePower) {
     auto Ret = NewObject<UDamageModificationPayload>();
     Ret->Data = MakeShared<FDamageCalculationData>(User, Target, TargetCount, PreDamageMessages, Type, BasePower);
     return Ret;
 }
 
-const FDamageCalculationData & UDamageModificationPayload::GetData() const {
+const FDamageCalculationData &UDamageModificationPayload::GetData() const {
     check(Data != nullptr)
     return *Data;
 }
 
-const TScriptInterface<IBattler> & UDamageModificationPayload::GetUser() const {
+const TScriptInterface<IBattler> &UDamageModificationPayload::GetUser() const {
     check(Data != nullptr)
     return Data->User;
 }
 
-const TScriptInterface<IBattler> & UDamageModificationPayload::GetTarget() const {
+const TScriptInterface<IBattler> &UDamageModificationPayload::GetTarget() const {
     check(Data != nullptr)
     return Data->Target;
 }
 
-const FRunningMessageSet & UDamageModificationPayload::GetRunningMessageSet() const {
+const FRunningMessageSet &UDamageModificationPayload::GetRunningMessageSet() const {
     check(Data != nullptr)
     return Data->PreDamageMessages;
 }

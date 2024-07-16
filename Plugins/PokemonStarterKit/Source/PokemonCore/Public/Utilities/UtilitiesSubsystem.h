@@ -36,7 +36,7 @@ class POKEMONCORE_API UUtilitiesSubsystem : public UGameInstanceSubsystem {
      */
     UPROPERTY()
     TObjectPtr<UObject> PokemonUtilities;
-    
+
     /**
      * The item utilities class object
      */

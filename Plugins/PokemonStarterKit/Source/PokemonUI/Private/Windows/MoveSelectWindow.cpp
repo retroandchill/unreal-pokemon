@@ -37,17 +37,12 @@ void UMoveSelectWindow::BindToOnMoveSelectionChanged(const FOnMoveSelectionChang
     OnMoveSelectionChanged.Add(Callback);
 }
 
-int32 UMoveSelectWindow::GetItemCount_Implementation() const {
-    int32 MoveCount = CurrentPokemon->GetMoveBlock()->GetMoves().Num();
-    return MoveToLearn.IsSet() ? MoveCount + 1 : MoveCount;
-}
-
 void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     if (NewIndex == -1) {
         CursorWidget->SetVisibility(ESlateVisibility::Hidden);
     } else {
-        CursorWidget->SetVisibility(ESlateVisibility::Visible);
+        CursorWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
         SetCursorPosition(CursorWidget, NewIndex);
         OnMoveSelectionChanged.Broadcast(MovePanels[NewIndex]->GetMove());
     }
@@ -57,9 +52,7 @@ UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Mo
     check(PanelClass != nullptr)
     auto Panel = WidgetTree->ConstructWidget(PanelClass);
     Panel->SetMove(Move);
-    SlotPanel(Panel, bIsMoveToLearn);
-    Panel->GetOnOptionClicked().AddDynamic(this, &UMoveSelectWindow::ProcessClickedButton);
-    Panel->GetOnOptionHovered().AddDynamic(this, &UMoveSelectWindow::ProcessHoveredButton);
-    Panel->SetOptionIndex(MovePanels.Num());
+    Panel->SetIsMoveToLearn(bIsMoveToLearn);
+    SlotOption(Panel, GetItemCount());
     return Panel;
 }

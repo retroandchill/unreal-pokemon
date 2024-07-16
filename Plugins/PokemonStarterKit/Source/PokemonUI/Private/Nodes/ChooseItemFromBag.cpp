@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/ChooseItemFromBag.h"
-#include "RPGMenusSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/BagScreen.h"
 
 UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldContextObject,
@@ -15,11 +15,11 @@ UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldCo
 }
 
 void UChooseItemFromBag::Activate() {
-    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    auto Screen = Controller->GetLocalPlayer()->GetSubsystem<URPGMenusSubsystem>()->AddScreenToStack(ScreenClass);
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Screen = Layout->PushWidgetToLayerStack<UBagScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
     Screen->ApplyItemFilter(ItemFilter);
     Screen->GetOnItemSelected().BindUObject(this, &UChooseItemFromBag::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddDynamic(this, &UChooseItemFromBag::ExecuteOnCanceled);
+    Screen->GetOnScreenClosed().AddUniqueDynamic(this, &UChooseItemFromBag::ExecuteOnCanceled);
 }
 
 void UChooseItemFromBag::ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item,

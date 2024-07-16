@@ -31,5 +31,6 @@ void UMoveInDirection::Activate() {
         }
 
         OnMovementFinished.Broadcast();
+        SetReadyToDestroy();
     });
 }

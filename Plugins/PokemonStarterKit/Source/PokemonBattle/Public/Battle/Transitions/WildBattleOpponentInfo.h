@@ -11,18 +11,18 @@ struct FPokemonDTO;
  * Information about a wild battle in the game
  */
 class POKEMONBATTLE_API FWildBattleOpponentInfo : public IBattleOpponentInfo {
-public:
+  public:
     /**
      * Construct a new wild battle against a single Pokémon
      * @param PokemonInfo The information about the Pokémon that is being fought
      */
-    explicit FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO>& PokemonInfo);
+    explicit FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo);
 
-    TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle>& Battle, const TSubclassOf<AActor>& SideClass, const FTransform &Transform, int32
-                                                     ActivePokemonCount = 1) override;
+    TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
+                                                     const TSubclassOf<AActor> &SideClass, const FTransform &Transform,
+                                                     int32 ActivePokemonCount = 1) override;
 
-
-private:
+  private:
     /**
      * The info about the owning Pokémon
      */

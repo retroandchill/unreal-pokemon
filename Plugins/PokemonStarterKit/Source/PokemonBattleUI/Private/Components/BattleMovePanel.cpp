@@ -2,9 +2,9 @@
 
 #include "Components/BattleMovePanel.h"
 #include "Battle/Moves/BattleMove.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IBattleMove> &UBattleMovePanel::GetMove() const {

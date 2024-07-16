@@ -32,7 +32,8 @@ class POKEMONCORE_API IMoveBlock {
      * @param DTO The source Pokémon DTO to initialize from
      * @return The created move block
      */
-    virtual TScriptInterface<IMoveBlock> Initialize(const TScriptInterface<IPokemon>& Pokemon, const FPokemonDTO &DTO) = 0;
+    virtual TScriptInterface<IMoveBlock> Initialize(const TScriptInterface<IPokemon> &Pokemon,
+                                                    const FPokemonDTO &DTO) = 0;
 
     /**
      * Get the list of moves usable by this Pokémon
@@ -77,7 +78,7 @@ class POKEMONCORE_API IMoveBlock {
      * @param Move The move to learn
      * @param AfterMoveLearned This is called after the move learning prompt is done
      */
-    virtual void LearnMove(FName Move, const FMoveLearnEnd& AfterMoveLearned) = 0;
+    virtual void LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) = 0;
 
     /**
      * Create a new move interface object. This is typically a temporary used for the move learn screen)

@@ -1,14 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/PlayBattlerHPAnimation.h"
-#include "RPGMenusSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Utilities/BattleScreenHelpers.h"
 
-UPlayBattlerHPAnimation * UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const UObject *WorldContextObject,
-                                                                          const TScriptInterface<IBattler> &Battler, float MaxDuration) {
+UPlayBattlerHPAnimation *UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const UObject *WorldContextObject,
+                                                                         const TScriptInterface<IBattler> &Battler,
+                                                                         float MaxDuration) {
     auto Node = NewObject<UPlayBattlerHPAnimation>();
     Node->WorldContextObject = WorldContextObject;
     Node->Battler = Battler;
@@ -33,4 +32,5 @@ void UPlayBattlerHPAnimation::Activate() {
 void UPlayBattlerHPAnimation::ExecuteOnComplete() {
     OnSelected.Broadcast();
     UnbindActions.ExecuteIfBound();
+    SetReadyToDestroy();
 }

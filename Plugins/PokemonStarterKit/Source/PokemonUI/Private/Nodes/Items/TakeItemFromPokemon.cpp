@@ -14,9 +14,8 @@ UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *W
 }
 
 void UTakeItemFromPokemon::Activate() {
-    auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)
-                             ->GetSubsystem<UUtilitiesSubsystem>()
-                             ->GetItemUtilities();
+    auto ItemUtilities =
+        UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilitiesSubsystem>()->GetItemUtilities();
     check(ItemUtilities != nullptr)
     FItemResultNoRetValue OnSuccess;
     OnSuccess.BindDynamic(this, &UTakeItemFromPokemon::ExecuteItemTaken);
@@ -27,8 +26,10 @@ void UTakeItemFromPokemon::Activate() {
 
 void UTakeItemFromPokemon::ExecuteItemTaken() {
     ItemTaken.Broadcast();
+    SetReadyToDestroy();
 }
 
 void UTakeItemFromPokemon::ExecuteItemNotTaken() {
     ItemNotTaken.Broadcast();
+    SetReadyToDestroy();
 }

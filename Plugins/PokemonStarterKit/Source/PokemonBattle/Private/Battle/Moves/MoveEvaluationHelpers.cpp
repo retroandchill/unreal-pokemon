@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Moves/MoveEvaluationHelpers.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -13,7 +12,7 @@ void UMoveEvaluationHelpers::IncrementCriticalHitRate(const UCriticalHitRateCalc
 }
 
 void UMoveEvaluationHelpers::IncrementCriticalHitRateIfUserHasTag(const UCriticalHitRateCalculationPayload *Context,
-    FGameplayTag Tag, int32 Amount) {
+                                                                  FGameplayTag Tag, int32 Amount) {
     if (Context->GetUser()->GetAbilityComponent()->HasMatchingGameplayTag(Tag)) {
         Context->SetCriticalHitRateStages(Context->GetData().CriticalHitRateStages + Amount);
     }
@@ -55,17 +54,17 @@ void UMoveEvaluationHelpers::BoostPowerIfUserHasTag(const UDamageModificationPay
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasAllTags(const UDamageModificationPayload *Context,
-    FGameplayTagContainer Tags, float Multiplier) {
+                                                        FGameplayTagContainer Tags, float Multiplier) {
     if (Context->GetUser()->GetAbilityComponent()->HasAllMatchingGameplayTags(Tags)) {
         BoostPower(Context, Multiplier);
     }
 }
 
 void UMoveEvaluationHelpers::BoostPowerIfUserHasAnyTags(const UDamageModificationPayload *Context,
-    FGameplayTagContainer Tags, float Multiplier) {
-        if (Context->GetUser()->GetAbilityComponent()->HasAnyMatchingGameplayTags(Tags)) {
-            BoostPower(Context, Multiplier);
-        }
+                                                        FGameplayTagContainer Tags, float Multiplier) {
+    if (Context->GetUser()->GetAbilityComponent()->HasAnyMatchingGameplayTags(Tags)) {
+        BoostPower(Context, Multiplier);
+    }
 }
 
 void UMoveEvaluationHelpers::BoostFinalDamageMultiplier(const UDamageModificationPayload *Context, float Multiplier) {
@@ -73,6 +72,6 @@ void UMoveEvaluationHelpers::BoostFinalDamageMultiplier(const UDamageModificatio
 }
 
 void UMoveEvaluationHelpers::BoostAdditionalEffectChance(const UAdditionalEffectChanceModificationPayload *Context,
-    float Multiplier) {
+                                                         float Multiplier) {
     Context->SetAdditionalEffectChance(Context->GetData().AdditionalEffectChance * Multiplier);
 }

@@ -2,6 +2,7 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Components/BattleMovePanel.h"
+#include "Components/DisplayText.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
@@ -9,7 +10,7 @@
 #include "Mocks/MockBattleSide.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
-#include "Primatives/DisplayText.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
@@ -40,6 +41,7 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
     Battler->DispatchBeginPlay();
     Battler->Initialize(Side, Pokemon);
 
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UBattleMoveSelect> BattleMoveSelect(CreateWidget<UBattleMoveSelect>(World.Get(), WidgetClass));
     BattleMoveSelect->AddToViewport();
     BattleMoveSelect->SetBattler(Battler);

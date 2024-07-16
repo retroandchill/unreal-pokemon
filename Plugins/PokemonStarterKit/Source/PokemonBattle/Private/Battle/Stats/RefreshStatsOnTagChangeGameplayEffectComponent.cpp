@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Stats/RefreshStatsOnTagChangeGameplayEffectComponent.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayEffect.h"
@@ -38,14 +37,16 @@ bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdde
 
     TArray<TTuple<FGameplayTag, FDelegateHandle>> AllBoundEvents;
     for (const FGameplayTag &Tag : GameplayTagsToBind) {
-        FOnGameplayEffectTagCountChanged &OnTagEvent = ASC->RegisterGameplayTagEvent(Tag, EGameplayTagEventType::NewOrRemoved);
-        FDelegateHandle Handle = OnTagEvent.AddUObject(this, &URefreshStatsOnTagChangeGameplayEffectComponent::OnTagChanged, ActiveGEHandle);
+        FOnGameplayEffectTagCountChanged &OnTagEvent =
+            ASC->RegisterGameplayTagEvent(Tag, EGameplayTagEventType::NewOrRemoved);
+        FDelegateHandle Handle =
+            OnTagEvent.AddUObject(this, &URefreshStatsOnTagChangeGameplayEffectComponent::OnTagChanged, ActiveGEHandle);
         AllBoundEvents.Emplace(Tag, Handle);
     }
 
     // Now when this Effect is removed, we should remove all of our registered callbacks.
-    EventSet->OnEffectRemoved.AddUObject(this, &URefreshStatsOnTagChangeGameplayEffectComponent::OnGameplayEffectRemoved,
-        ASC, MoveTemp(AllBoundEvents));
+    EventSet->OnEffectRemoved.AddUObject(
+        this, &URefreshStatsOnTagChangeGameplayEffectComponent::OnGameplayEffectRemoved, ASC, MoveTemp(AllBoundEvents));
 
     return true;
 }

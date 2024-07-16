@@ -17,9 +17,8 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
 }
 
 void UGiveItemToPokemon::Activate() {
-    auto ItemUtilities = UGameplayStatics::GetGameInstance(WorldContextObject)
-                             ->GetSubsystem<UUtilitiesSubsystem>()
-                             ->GetItemUtilities();
+    auto ItemUtilities =
+        UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilitiesSubsystem>()->GetItemUtilities();
     check(ItemUtilities != nullptr)
     FItemResultNoRetValue OnSuccess;
     OnSuccess.BindDynamic(this, &UGiveItemToPokemon::ExecuteItemGiven);
@@ -31,8 +30,10 @@ void UGiveItemToPokemon::Activate() {
 
 void UGiveItemToPokemon::ExecuteItemGiven() {
     ItemGiven.Broadcast();
+    SetReadyToDestroy();
 }
 
 void UGiveItemToPokemon::ExecuteItemRejected() {
     ItemRejected.Broadcast();
+    SetReadyToDestroy();
 }

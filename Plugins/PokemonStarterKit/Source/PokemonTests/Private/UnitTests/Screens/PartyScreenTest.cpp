@@ -1,12 +1,11 @@
 ﻿
 #include "Asserts.h"
-#include "Data/SelectionInputs.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Screens/PokemonSelectScreen.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/InputUtilities.h"
+#include "Utilities/PlayerUtilities.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -27,6 +26,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     auto WidgetClass = Subclasses[0];
     FPokemonTestUtilities::CreateMockParty(World.Get());
 
+    auto [Player, Pawn] = UPlayerUtilities::CreateTestPlayer(*World);
     TWidgetPtr<UPokemonSelectScreen> Screen(CreateWidget<UPokemonSelectScreen>(World.Get(), WidgetClass));
     UE_ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
@@ -41,20 +41,14 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
     UE_ASSERT_TRUE(SelectionPane->IsActivated());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
-    
-    auto InputMappings = UReflectionUtils::GetPropertyValue<TObjectPtr<USelectionInputs>>(SelectionPane, "InputMappings");
-    UE_ASSERT_NOT_NULL(InputMappings.Get());
-    
-    auto ConfirmButton = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "ConfirmInputs").begin();
-    auto Cancel = *UReflectionUtils::GetPropertyValue<TSet<FKey>>(InputMappings, "CancelInputs").begin();
-    UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
+
+    SelectionPane->GetSelectedOption()->OnClicked().Broadcast();
     UE_ASSERT_FALSE(SelectionPane->IsActivated());
     UE_ASSERT_TRUE(CommandWindow->IsActivated());
     UE_CHECK_EQUAL(Visible, CommandWindow->GetVisibility());
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandHelpWindow->GetVisibility());
 
-    CommandWindow->SetIndex(CommandWindow->GetItemCount() - 1);
-    UInputUtilities::SimulateKeyPress(CommandWindow, ConfirmButton);
+    CommandWindow->GetOnCancel().Broadcast();
     UE_ASSERT_TRUE(SelectionPane->IsActivated());
     UE_ASSERT_FALSE(CommandWindow->IsActivated());
     UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
@@ -62,7 +56,7 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
 
     SelectionPane->BeginSwitch(SelectionPane->GetIndex());
     SelectionPane->SetIndex(1);
-    UInputUtilities::SimulateKeyPress(SelectionPane, ConfirmButton);
+    SelectionPane->GetSelectedOption()->OnClicked().Broadcast();
 
     auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
     UE_CHECK_EQUAL(TEXT("EMBOAR"), Trainer->GetParty()[0]->GetSpecies().ID.ToString());

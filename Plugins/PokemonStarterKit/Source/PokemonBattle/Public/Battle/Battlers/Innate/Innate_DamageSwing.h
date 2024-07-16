@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+
 #include "Innate_DamageSwing.generated.h"
 
 /**
@@ -13,8 +14,9 @@ UCLASS()
 class POKEMONBATTLE_API UInnate_DamageSwing : public UGameplayAbility {
     GENERATED_BODY()
 
-public:
+  public:
     UInnate_DamageSwing();
-    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData *TriggerEventData) override;
-
+    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
+                         const FGameplayAbilityActivationInfo ActivationInfo,
+                         const FGameplayEventData *TriggerEventData) override;
 };

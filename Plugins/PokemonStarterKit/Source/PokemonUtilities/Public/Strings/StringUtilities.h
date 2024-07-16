@@ -46,5 +46,5 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
      * @return The generated list string
      */
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings")
-    static FText GenerateList(const TArray<FText>& Items, FText Contraction, bool bOxfordComma = true);
+    static FText GenerateList(const TArray<FText> &Items, FText Contraction, bool bOxfordComma = true);
 };

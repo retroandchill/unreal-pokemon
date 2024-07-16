@@ -1,5 +1,5 @@
-﻿#include "Asserts.h"
-#include "Abilities/GameplayAbility.h"
+﻿#include "Abilities/GameplayAbility.h"
+#include "Asserts.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Misc/AutomationTest.h"
 

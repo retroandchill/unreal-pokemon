@@ -22,56 +22,56 @@ class POKEMONBATTLE_API UPokemonBattleMove : public UObject, public IBattleMove 
     GENERATED_BODY()
 
   public:
-    TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattler>& Battler,
+    TScriptInterface<IBattleMove> Initialize(const TScriptInterface<IBattler> &Battler,
                                              const TScriptInterface<IMove> &Move) override;
-    
+
     UFUNCTION(BlueprintPure, Category = Usability)
     bool IsUsable() const override;
-    
+
     TArray<TScriptInterface<IBattler>> GetAllPossibleTargets() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     FText GetDisplayName() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     int32 GetCurrentPP() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     int32 GetMaxPP() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     FName GetDisplayType() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     int32 GetBasePower() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     int32 GetAccuracy() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Display)
     virtual EMoveDamageCategory GetCategory() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Usability)
     const FMoveTarget &GetTargetType() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Metadata)
     const TArray<FName> &GetTags() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Usability)
     int32 GetPriority() const override;
 
     UFUNCTION(BlueprintPure, Category = Effects)
     int32 GetAdditionalEffectChance() const override;
-    
+
     UFUNCTION(BlueprintCallable, Category = Usability)
     void PayCost(int32 Amount) override;
-    
+
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattler> &GetOwningBattler() const override;
 
     FGameplayAbilitySpecHandle TryActivateMove(const TArray<TScriptInterface<IBattler>> &Targets) override;
 
-private:
+  private:
     /**
      * The current battle that is ongoing
      */

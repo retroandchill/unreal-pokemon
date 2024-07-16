@@ -6,12 +6,28 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
 #include "DataManager.h"
+#include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
 
 UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer)
     : USelectableWidget(ObjectInitializer) {
+}
+
+void UItemSelectionWindow::NativeConstruct() {
+    Super::NativeConstruct();
+
+    auto CreateBindArgs = [this](UInputAction *Action, auto Function, bool bDisplayInActionBar = false) {
+        FBindUIActionArgs BindArgs(Action, FSimpleDelegate::CreateUObject(this, Function));
+        BindArgs.bDisplayInActionBar = bDisplayInActionBar;
+        return BindArgs;
+    };
+
+    NextPocketActionHandle =
+        RegisterUIActionBinding(CreateBindArgs(NextPocketAction, &UItemSelectionWindow::NextPocket));
+    PreviousPocketActionHandle =
+        RegisterUIActionBinding(CreateBindArgs(PreviousPocketAction, &UItemSelectionWindow::PreviousPocket));
 }
 
 void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocket) {
@@ -23,23 +39,19 @@ void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag, FName Pocke
 }
 
 const FItem *UItemSelectionWindow::GetCurrentItem() const {
-    if (Options.IsValidIndex(GetIndex())) {
-        return &Options[GetIndex()]->GetItem();
+    if (auto Option = GetSelectableOption<UItemOption>(GetIndex()); Option != nullptr) {
+        return &Option->GetItem();
     }
 
     return nullptr;
 }
 
 int32 UItemSelectionWindow::GetItemQuantity() const {
-    if (Options.IsValidIndex(GetIndex())) {
-        return Options[GetIndex()]->GetQuantity();
+    if (auto Option = GetSelectableOption<UItemOption>(GetIndex()); Option != nullptr) {
+        return Option->GetQuantity();
     }
 
     return 0;
-}
-
-int32 UItemSelectionWindow::GetItemCount_Implementation() const {
-    return Options.Num();
 }
 
 void UItemSelectionWindow::RefreshWindow() {
@@ -70,45 +82,33 @@ void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int3
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->UpdatePocketMemory(*PocketIterator, NewIndex);
     if (auto Item = GetCurrentItem(); Item != nullptr) {
-        OnItemChanged.Broadcast(*Item, Options[NewIndex]->GetQuantity());
+        OnItemChanged.Broadcast(*Item, GetSelectableOption<UItemOption>(NewIndex)->GetQuantity());
     } else {
         OnNoItemSelected.Broadcast();
     }
 }
 
 void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
-    check(Options.IsValidIndex(CurrentIndex))
-    UItemOption *Option = Options[CurrentIndex];
+    UItemOption *Option = GetSelectableOption<UItemOption>(CurrentIndex);
+    check(Option != nullptr)
     OnItemSelected.Broadcast(Option->GetItem(), Option->GetQuantity());
 }
 
-void UItemSelectionWindow::ReceiveMoveCursor(ECursorDirection Direction) {
-    Super::ReceiveMoveCursor(Direction);
-    if (!PocketIterator.CanCycle()) {
-        return;
-    }
-
-    using enum ECursorDirection;
-    bool bPocketChanged = false;
-    if (Direction == Left) {
-        --PocketIterator;
-        bPocketChanged = true;
-    } else if (Direction == Right) {
-        ++PocketIterator;
-        bPocketChanged = true;
-    }
-
-    if (bPocketChanged) {
-        UpdatePocket();
-    }
-}
-
 void UItemSelectionWindow::UpdatePocket() {
-    Algo::ForEach(Options, &UWidget::RemoveFromParent);
-    Options.Empty();
+    ClearSelectableOptions();
     CurrentBag->ForEachInPocket(*PocketIterator, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
     SetIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[*PocketIterator]);
     OnPocketChanged.Broadcast(*PocketIterator);
+}
+
+void UItemSelectionWindow::NextPocket() {
+    ++PocketIterator;
+    UpdatePocket();
+}
+
+void UItemSelectionWindow::PreviousPocket() {
+    --PocketIterator;
+    UpdatePocket();
 }
 
 void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {
@@ -120,6 +120,5 @@ void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {
 
     auto Option = WidgetTree->ConstructWidget(ItemEntryClass);
     Option->SetItem(ItemName, Quantity);
-    SlotItem(Option, Options.Num());
-    Options.Emplace(Option);
+    SlotOption(Option, GetItemCount());
 }

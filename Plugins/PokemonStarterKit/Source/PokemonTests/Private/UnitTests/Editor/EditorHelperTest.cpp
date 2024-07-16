@@ -17,7 +17,7 @@
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 
-#define UE_ASSERT_CONTAINS(Type, Element)                                                                                 \
+#define UE_ASSERT_CONTAINS(Type, Element)                                                                              \
     auto Type##Names = U##Type##Helper::Get##Type##Names();                                                            \
     UE_CHECK_TRUE(Type##Names.Contains(Element))
 

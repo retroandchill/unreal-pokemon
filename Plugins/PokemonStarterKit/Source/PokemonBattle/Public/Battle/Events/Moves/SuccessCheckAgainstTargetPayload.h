@@ -7,6 +7,7 @@
 #include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
+
 #include "SuccessCheckAgainstTargetPayload.generated.h"
 
 class IBattleMove;
@@ -64,18 +65,21 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
      * @param Messages Any messages to be down after processing.
      * @param bShowMessages Should messages be shown?
      */
-    FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,  const FRunningMessageSet& Messages, bool bShowMessages = true);
-    
+    FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
+                               const TScriptInterface<IBattler> &Target, const FRunningMessageSet &Messages,
+                               bool bShowMessages = true);
 };
 
 /**
  * Payload object for performing a success check against a target
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject, public ITargetedMoveEventPayload, public IRunningMessageSetPayload {
+class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject,
+                                                            public ITargetedMoveEventPayload,
+                                                            public IRunningMessageSetPayload {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create a new payload with the provided event data
      * @param Move The invoking move
@@ -85,8 +89,11 @@ public:
      * @param bShowMessages Should messages be shown?
      * @return The created payload
      */
-    static USuccessCheckAgainstTargetPayload* Create(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, const FRunningMessageSet& Messages, bool bShowMessages = true);
-    
+    static USuccessCheckAgainstTargetPayload *Create(const TScriptInterface<IBattleMove> &Move,
+                                                     const TScriptInterface<IBattler> &User,
+                                                     const TScriptInterface<IBattler> &Target,
+                                                     const FRunningMessageSet &Messages, bool bShowMessages = true);
+
     /**
      * Get the wrapped payload struct
      * @return The wrapped struct for the payload
@@ -94,9 +101,9 @@ public:
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FTargetSuccessCheckPayload &GetData() const;
 
-    const TScriptInterface<IBattler>& GetUser() const final;
-    const TScriptInterface<IBattler>& GetTarget() const final;
-    const FRunningMessageSet & GetRunningMessageSet() const override;
+    const TScriptInterface<IBattler> &GetUser() const final;
+    const TScriptInterface<IBattler> &GetTarget() const final;
+    const FRunningMessageSet &GetRunningMessageSet() const override;
 
     /**
      * Set the new success state of the move to the given value
@@ -105,10 +112,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = GameplayEvents)
     void SetSuccess(bool bSuccess) const;
 
-private:
+  private:
     /**
      * The wrapped struct for the payload
      */
     TSharedPtr<FTargetSuccessCheckPayload> Data;
-
 };

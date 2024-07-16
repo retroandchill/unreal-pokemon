@@ -6,6 +6,7 @@
 #include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
+
 #include "CriticalHitRateCalculationPayload.generated.h"
 
 enum class ECriticalOverride : uint8;
@@ -62,8 +63,9 @@ struct POKEMONBATTLE_API FCriticalHitRateCalculationData {
      * @param Override Any messages to be down after processing.
      * @param CriticalHitRateStages Should messages be shown?
      */
-    FCriticalHitRateCalculationData(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,  ECriticalOverride Override, int32 CriticalHitRateStages = 0);
-    
+    FCriticalHitRateCalculationData(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
+                                    const TScriptInterface<IBattler> &Target, ECriticalOverride Override,
+                                    int32 CriticalHitRateStages = 0);
 };
 
 /**
@@ -73,7 +75,7 @@ UCLASS(BlueprintType)
 class POKEMONBATTLE_API UCriticalHitRateCalculationPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create a new payload with the provided event data
      * @param Move The invoking move
@@ -83,8 +85,11 @@ public:
      * @param CriticalHitRateStages Should messages be shown?
      * @return The created payload
      */
-    static UCriticalHitRateCalculationPayload* Create(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,  ECriticalOverride Override, int32 CriticalHitRateStages = 0);
-    
+    static UCriticalHitRateCalculationPayload *Create(const TScriptInterface<IBattleMove> &Move,
+                                                      const TScriptInterface<IBattler> &User,
+                                                      const TScriptInterface<IBattler> &Target,
+                                                      ECriticalOverride Override, int32 CriticalHitRateStages = 0);
+
     /**
      * Get the wrapped payload struct
      * @return The wrapped struct for the payload
@@ -92,8 +97,8 @@ public:
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FCriticalHitRateCalculationData &GetData() const;
 
-    const TScriptInterface<IBattler>& GetUser() const final;
-    const TScriptInterface<IBattler>& GetTarget() const final;
+    const TScriptInterface<IBattler> &GetUser() const final;
+    const TScriptInterface<IBattler> &GetTarget() const final;
 
     /**
      * Set the new override state of the move. Applies the in-built priority system for the override.
@@ -109,10 +114,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = GameplayEvents)
     void SetCriticalHitRateStages(int32 Stages) const;
 
-private:
+  private:
     /**
      * The wrapped struct for the payload
      */
     TSharedPtr<FCriticalHitRateCalculationData> Data;
-
 };

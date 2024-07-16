@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/StatusEffects/StatusEffectGameplayEffectComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
@@ -16,20 +15,21 @@ bool UStatusEffectGameplayEffectComponent::CanGameplayEffectApply(
 }
 
 bool UStatusEffectGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
-    FActiveGameplayEffect &ActiveGE) const {
+                                                                       FActiveGameplayEffect &ActiveGE) const {
     TScriptInterface<IBattler> Battler = GEContainer.Owner->GetOwnerActor();
     check(Battler != nullptr)
     Battler->InflictStatusEffect(StatusEffectID, ActiveGE.Handle);
     auto EventSet = GEContainer.Owner->GetActiveEffectEventSet(ActiveGE.Handle);
-    static auto& Lookup = Pokemon::Battle::StatusEffects::FLookup::GetInstance();
+    static auto &Lookup = Pokemon::Battle::StatusEffects::FLookup::GetInstance();
     EventSet->OnEffectRemoved.AddUObject(this, &UStatusEffectGameplayEffectComponent::OnGameplayEffectRemoved, Battler);
     Battler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetTag(StatusEffectID));
     return Super::OnActiveGameplayEffectAdded(GEContainer, ActiveGE);
 }
 
-void UStatusEffectGameplayEffectComponent::OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo&, TScriptInterface<IBattler> Battler) const {
+void UStatusEffectGameplayEffectComponent::OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &,
+                                                                   TScriptInterface<IBattler> Battler) const {
     check(Battler->GetStatusEffect().IsSet())
     Battler->CureStatusEffect();
-    static auto& Lookup = Pokemon::Battle::StatusEffects::FLookup::GetInstance();
+    static auto &Lookup = Pokemon::Battle::StatusEffects::FLookup::GetInstance();
     Battler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetTag(StatusEffectID));
 }

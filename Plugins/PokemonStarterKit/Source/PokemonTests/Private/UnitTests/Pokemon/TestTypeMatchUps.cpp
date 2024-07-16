@@ -41,6 +41,6 @@ bool TestTypeMatchUps::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(EDamageEffectiveness::Normal, GetEffectivenessFromMultiplier(1.f));
     UE_CHECK_EQUAL(EDamageEffectiveness::NotVeryEffective, GetEffectivenessFromMultiplier(0.5f));
     UE_CHECK_EQUAL(EDamageEffectiveness::SuperEffective, GetEffectivenessFromMultiplier(2.f));
-    
+
     return true;
 }

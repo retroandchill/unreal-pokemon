@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeMacros.h"
 #include "AttributeSet.h"
+
 #include "TargetDamageStateAttributeSet.generated.h"
 
 /**
@@ -14,13 +15,13 @@ UCLASS()
 class POKEMONBATTLE_API UTargetDamageStateAttributeSet : public UAttributeSet {
     GENERATED_BODY()
 
-public:
+  public:
     ATTRIBUTE_ACCESSORS(UTargetDamageStateAttributeSet, TypeMod)
     ATTRIBUTE_ACCESSORS(UTargetDamageStateAttributeSet, CalculatedDamage)
 
     void Reset();
-    
-private:
+
+  private:
     UPROPERTY()
     FGameplayAttributeData TypeMod;
 

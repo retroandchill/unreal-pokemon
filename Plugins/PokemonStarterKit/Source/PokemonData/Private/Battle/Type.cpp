@@ -23,7 +23,7 @@ TArray<FName> UTypeHelper::GetTypeNames() {
 }
 
 float UTypeHelper::GetTypeEffectiveness(FName AttackType, FName DefendType) {
-    static auto& TypeTable = FDataManager::GetInstance().GetDataTable<FType>();
+    static auto &TypeTable = FDataManager::GetInstance().GetDataTable<FType>();
     auto Type = TypeTable.GetData(DefendType);
     check(Type != nullptr)
     return Type->Effectiveness(AttackType);

@@ -8,7 +8,7 @@
 /**
  * Dispatcher for an action performable by another object.
  */
-UCLASS(Blueprintable, Abstract)
+UCLASS(Blueprintable, Abstract, EditInlineNew, meta = (ShowWorldContextPin))
 class GRIDBASED2D_API UAction : public UObject {
     GENERATED_BODY()
 

@@ -14,7 +14,7 @@ class POKEMONEDITORTOOLS_API FWrappedKeyCustomization : public IPropertyTypeCust
      * @param Property The wrapped property in question
      */
     explicit FWrappedKeyCustomization(FName Property);
-    
+
     static TSharedRef<IPropertyTypeCustomization> MakeInstance(FName PropertyName);
 
     void CustomizeHeader(TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow &HeaderRow,
@@ -22,7 +22,7 @@ class POKEMONEDITORTOOLS_API FWrappedKeyCustomization : public IPropertyTypeCust
     void CustomizeChildren(TSharedRef<IPropertyHandle> PropertyHandle, IDetailChildrenBuilder &ChildBuilder,
                            IPropertyTypeCustomizationUtils &CustomizationUtils) override;
 
-private:
+  private:
     /**
      * The name of the property used by the wrapped struct
      */

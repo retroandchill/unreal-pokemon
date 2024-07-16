@@ -42,7 +42,7 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
     const FText &GetNoAbilityName() const final;
     const FText &GetNoAbilityDescription() const final;
 
-    const FSoftObjectPath& GetDefaultBattleScene() const final;
+    const FSoftObjectPath &GetDefaultBattleScene() const final;
     const FVector &GetBattleSceneOffset() const final;
     const TArray<FStatStageInfo> &GetStatStages() const final;
     float GetCriticalHitMultiplier() const final;
@@ -52,16 +52,16 @@ class POKEMONSETTINGS_API FBaseSettings : public IGameSettings {
      * Get the tags for the HP state of the a battler
      * @return The array of HP states
      */
-    const TArray<FHPStateTag>& GetHPStateTags() const;
-    
-    const FSoftClassPath& GetDefaultMoveAbility() const;
+    const TArray<FHPStateTag> &GetHPStateTags() const;
+
+    const FSoftClassPath &GetDefaultMoveAbility() const;
 
     /**
      * Get the class that represents the Pokémon utilities
      * @return The class to instantiate the object from
      */
     UClass *GetPokemonUtilitiesClass() const;
-    
+
     /**
      * Get the class that represents the item utilities
      * @return The class to instantiate the object from

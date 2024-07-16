@@ -52,7 +52,6 @@ void UHPBar::UpdateBarMaterial() {
         return;
     }
 
-    
     auto Style = GetWidgetStyle();
     if (State == INDEX_NONE) {
         Style.FillImage = DefaultStyle;

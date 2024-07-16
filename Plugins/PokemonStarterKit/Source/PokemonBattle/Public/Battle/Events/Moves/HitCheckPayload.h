@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Events/TargetedMoveEventPayload.h"
 #include "UObject/Object.h"
+
 #include "HitCheckPayload.generated.h"
 
 class IBattler;
@@ -52,8 +53,8 @@ struct POKEMONBATTLE_API FHitCheckData {
      * @param Target The target of the move
      * @param BaseAccuracy The base accuracy of the move.
      */
-    FHitCheckData(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,  int32 BaseAccuracy);
-    
+    FHitCheckData(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
+                  const TScriptInterface<IBattler> &Target, int32 BaseAccuracy);
 };
 
 /**
@@ -63,7 +64,7 @@ UCLASS(BlueprintType)
 class POKEMONBATTLE_API UHitCheckPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create a new payload with the provided event data
      * @param Move The invoking move
@@ -72,8 +73,9 @@ public:
      * @param BaseAccuracy The base accuracy of the move.
      * @return The created payload
      */
-    static UHitCheckPayload* Create(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,  int32 BaseAccuracy);
-    
+    static UHitCheckPayload *Create(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
+                                    const TScriptInterface<IBattler> &Target, int32 BaseAccuracy);
+
     /**
      * Get the wrapped payload struct
      * @return The wrapped struct for the payload
@@ -81,8 +83,8 @@ public:
     UFUNCTION(BlueprintPure, Category = GameplayEvents)
     const FHitCheckData &GetData() const;
 
-    const TScriptInterface<IBattler>& GetUser() const final;
-    const TScriptInterface<IBattler>& GetTarget() const final;
+    const TScriptInterface<IBattler> &GetUser() const final;
+    const TScriptInterface<IBattler> &GetTarget() const final;
 
     /**
      * Set the base accuracy to the given amount
@@ -91,10 +93,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = GameplayEvents)
     void SetBaseAccuracy(int32 Amount) const;
 
-private:
+  private:
     /**
      * The wrapped struct for the payload
      */
     TSharedPtr<FHitCheckData> Data;
-
 };

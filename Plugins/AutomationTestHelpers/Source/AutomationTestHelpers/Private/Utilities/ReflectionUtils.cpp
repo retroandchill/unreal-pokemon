@@ -31,7 +31,8 @@ TArray<FString> UReflectionUtils::GetPropertyCategories(IDetailsView &DetailsVie
 }
 
 TStrongObjectPtr<UObjectLibrary> UReflectionUtils::LoadBlueprints() {
-    TStrongObjectPtr ClassLibrary(UObjectLibrary::CreateLibrary(UBlueprintGeneratedClass::StaticClass(), true, GIsEditor));
+    TStrongObjectPtr ClassLibrary(
+        UObjectLibrary::CreateLibrary(UBlueprintGeneratedClass::StaticClass(), true, GIsEditor));
     ClassLibrary->LoadBlueprintsFromPath(TEXT("/Game"));
     return ClassLibrary;
 }

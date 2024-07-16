@@ -20,4 +20,5 @@ void UFadeScreenIn::Activate() {
 
 void UFadeScreenIn::TransitionFinished() {
     OnScreenTransitionFinished.Broadcast();
+    SetReadyToDestroy();
 }

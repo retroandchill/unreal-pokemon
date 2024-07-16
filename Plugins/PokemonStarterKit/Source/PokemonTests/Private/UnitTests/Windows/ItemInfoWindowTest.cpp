@@ -1,10 +1,10 @@
 ﻿#include "Windows/ItemInfoWindow.h"
 #include "Asserts.h"
 #include "Bag/Item.h"
+#include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "DataManager.h"
 #include "Misc/AutomationTest.h"
-#include "Primatives/DisplayText.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 

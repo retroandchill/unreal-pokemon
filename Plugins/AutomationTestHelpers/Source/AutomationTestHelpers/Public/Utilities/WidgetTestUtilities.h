@@ -6,10 +6,17 @@
 #include "Blueprint/WidgetTree.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RAII.h"
+#include "Slate/SGameLayerManager.h"
 
 #include "WidgetTestUtilities.generated.h"
 
 class UWidget;
+
+struct FDudWidgets {
+    TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
+    TSharedRef<SGameLayerManager> GameLayerManager = SNew(SGameLayerManager);
+};
+
 /**
  * Blueprint functions for getting widget children
  */
@@ -52,7 +59,7 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
      * Create the context for a test that requires a world
      * @return A tuple containing the overlay for widgets, a pointer to the world, and a pointer to the game instance
      */
-    static std::tuple<TSharedRef<SOverlay>, FWorldPtr, FGameInstancePtr> CreateTestWorld(bool bBeginPlay = true);
+    static TTuple<FDudWidgets, FWorldPtr, FGameInstancePtr> CreateTestWorld(bool bBeginPlay = true);
 
     /**
      * Find the first child of a given type in a slate hirearchy

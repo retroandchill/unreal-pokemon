@@ -90,7 +90,7 @@ class POKEMONBATTLE_API IBattler {
      * Get the species that this battler represents
      * @return The species of this battler
      */
-    virtual const FSpeciesData& GetSpecies() const = 0;
+    virtual const FSpeciesData &GetSpecies() const = 0;
 
     /**
      * Get the battler's display name
@@ -158,7 +158,7 @@ class POKEMONBATTLE_API IBattler {
      * @return The held battler ability component
      */
     UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
-    virtual UBattlerAbilityComponent* GetAbilityComponent() const = 0;
+    virtual UBattlerAbilityComponent *GetAbilityComponent() const = 0;
 
     /**
      * Get the Pokémon's currently usable moves.
@@ -194,7 +194,7 @@ class POKEMONBATTLE_API IBattler {
      * Get the status effect held by this battler
      * @return The status effect held by the battler
      */
-    virtual const TOptional<FStatusEffectInfo>& GetStatusEffect() const = 0;
+    virtual const TOptional<FStatusEffectInfo> &GetStatusEffect() const = 0;
 
     /**
      * Inflict a status effect onto the battler
