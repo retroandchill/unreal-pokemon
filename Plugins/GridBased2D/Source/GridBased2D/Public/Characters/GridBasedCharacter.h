@@ -51,51 +51,6 @@ class GRIDBASED2D_API AGridBasedCharacter : public ACharacter, public IGridMovab
      */
     UGridBasedMovementComponent *GetGridBasedMovementComponentInternal() const;
 
-    /**
-     * Check if a tile is a valid floor tile
-     * @param TargetSquare The world space location of the tile in question
-     * @param HitComponent The actor component that was hit in the collision
-     * @return Is there no valid floor at this height
-     */
-    UFUNCTION(BlueprintPure, Category = "Map|Grid")
-    bool InvalidFloor(const FVector &TargetSquare, const UPrimitiveComponent *HitComponent);
-
-    /**
-     * Check if a tile is a cliff face
-     * @param TargetSquare The world space location of the tile in question
-     * @return Is the target tile a cliff
-     */
-    UFUNCTION(BlueprintPure, Category = "Map|Grid")
-    bool IsStandingNextToCliff(const FVector &TargetSquare);
-
-    /**
-     * Checks if the character can step up on the selected component at all
-     * @param Component The component to check
-     * @return Can the player step up?
-     */
-    bool CanStepUpOnComponent(const UPrimitiveComponent &Component);
-
-    /**
-     * Find the world space position just off of a tile's edge
-     * @param TargetSquare The world space location of the tile in question
-     * @return What is the world space location of one pixel off of the player's current tile
-     */
-    FVector FindLocationJustOffTileEdge(const FVector &TargetSquare) const;
-
-    /**
-     * Find the world space position just before a tile's edge
-     * @param TargetSquare The world space location of the tile in question
-     * @return What is the world space location of one pixel off of the player's current tile
-     */
-    FVector FindLocationJustBeforeTileEdge(const FVector &TargetSquare) const;
-
-    /**
-     * Compute the distance to the ground from the current position
-     * @param Position The position to sweep to the ground from
-     * @return The distance to the ground and the hit component
-     */
-    TPair<double, UPrimitiveComponent *> PerformTraceToGround(const FVector &Position) const;
-
   private:
     /**
      * Perform the movement action when receiving the input
