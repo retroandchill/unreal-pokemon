@@ -9,6 +9,13 @@
 
 class UGameplayStatics;
 class AGridBasedGameModeBase;
+
+UENUM(BlueprintType)
+enum class EValidDirection : uint8 {
+    HasDirection,
+    NoDirection
+};
+
 /**
  * Utility library for functions regarding the Grid system
  */
@@ -37,6 +44,17 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
      * @return The interpreted direction
      */
     static TOptional<EFacingDirection> VectorToFacingDirection(const FVector2D Vector);
+
+    /**
+     * Convert a vector into a facing direction
+     * @param Vector The input vector
+     * @param Direction The direction of the output
+     * @param Execs The way the execution should flow
+     * @return The interpreted direction
+     */
+    UFUNCTION(BlueprintCallable, Category = "Map|Grid",
+        meta = (AutoCreateRefTerm = Vector, ExpandEnumAsExecs = Execs))
+    static void VectorToFacingDirection(const FVector2D& Vector, EFacingDirection& Direction, EValidDirection &Execs);
 
     /**
      * Adjust the movement position based upon the given direction
@@ -68,7 +86,8 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
      * @param Direction The original direction
      * @return The opposing direction
      */
-    static TOptional<EFacingDirection> GetOpposingDirection(EFacingDirection Direction);
+    UFUNCTION(BlueprintPure, Category = "Character|Movement")
+    static EFacingDirection GetOpposingDirection(EFacingDirection Direction);
 
     /**
      * Get a list of all actors of the given type

@@ -9,7 +9,7 @@
 #include "GridBasedMovement.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UGridBasedMovement : public UInterface {
     GENERATED_BODY()
 };
@@ -28,4 +28,25 @@ class GRIDBASED2D_API IGridBasedMovement {
      */
     UFUNCTION(BlueprintCallable, Category = "Character|Movement")
     virtual EFacingDirection GetDirection() const = 0;
+
+    /**
+     * Get if the character is actively moving or not
+     * @return Is the character actively moving?
+     */
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+    virtual bool IsMoving() const = 0;
+
+    /**
+     * Perform the movement action when receiving the input
+     * @param MovementVector The input information received
+     */
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    virtual void MoveInput(const FVector2D& MovementVector) = 0;
+
+    /**
+     * Perform the face direction action when receiving the input
+     * @param MovementVector The input information received
+     */
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    virtual void TurnInput(const FVector2D& MovementVector) = 0;
 };

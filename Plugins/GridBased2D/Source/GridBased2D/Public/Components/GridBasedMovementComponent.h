@@ -7,7 +7,6 @@
 #include "Characters/MoveCheckResult.h"
 #include "Components/ActorComponent.h"
 #include "Engine/OverlapResult.h"
-#include "GridBasedAnimationComponent.h"
 #include "GridBasedMovement.h"
 #include "Map/WithinMap.h"
 
@@ -15,9 +14,11 @@
 
 class UCharacterMovementComponent;
 class IMapGrid;
-class IGridBasedAnimationComponent;
 class IInteractable;
 class AGridBasedMap;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDirectionChange, EFacingDirection, Direction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterMovementStateChange, bool, bIsMoving);
 
 /**
  * Component used to handle the movement of an actor along a fixed size grid.
@@ -37,26 +38,8 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
   protected:
     void BeginPlay() override;
 
-#if WITH_EDITOR
-    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
-#endif
-
   public:
     void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
-
-    /**
-     * Get the Grid-Based animation component for this actor
-     * @return The Grid-Based animation component for this actor
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
-    TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent() const;
-
-    /**
-     * Set the Grid-Based animation component for this actor
-     * @param NewGridBasedAnimationComponent The Grid-Based animation component for this actor
-     */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
-    void SetGridBasedAnimationComponent(TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent);
 
     /**
      * Move the character in the specified direction
@@ -119,12 +102,24 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     UFUNCTION(BlueprintPure, Category = "Character|Movement")
     EFacingDirection GetDirection() const final;
 
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+    bool IsMoving() const override;
+
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    void MoveInput(const FVector2D& InputVector) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    void TurnInput(const FVector2D& InputVector) override;
+
     /**
      * Perform a hit test on the tile in the given direction.
      * @param MovementDirection The direction to check the file of
      * @return Any hits that are found and all interactable actors on the tile
      */
     TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    TArray<TScriptInterface<IInteractable>> InteractTestOnFacingTile(EFacingDirection MovementDirection) const;
 
     /**
      * Perform a hit interaction on all of the interactable objects in front of the player
@@ -169,11 +164,13 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     EFacingDirection Direction = EFacingDirection::Down;
 
     /**
-     * Component for handling the animations of the character
+     * Called when the character changes direction
      */
-    UPROPERTY(BlueprintGetter = GetGridBasedAnimationComponent, BlueprintSetter = SetGridBasedAnimationComponent,
-              Category = Components)
-    TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
+    UPROPERTY(BlueprintAssignable)
+    FOnCharacterDirectionChange OnDirectionChange;
+
+    UPROPERTY(BlueprintAssignable)
+    FOnCharacterMovementStateChange OnMovementStateChange;
 
     /**
      * The timer for movement used to linearly interpolate the position to the new one
@@ -194,4 +191,6 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
      * Should the character perform a sweep when setting the actor to a location?
      */
     bool bPerformSweep = false;
+
+    bool bIsMoving = false;
 };
