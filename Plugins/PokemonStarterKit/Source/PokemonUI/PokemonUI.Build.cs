@@ -15,7 +15,6 @@ public class PokemonUI : ModuleRules
 				"PokemonData",
 				"PokemonCore",
 				"RPGMenus",
-				"GridBased2D",
 				"PokemonAssets",
 				"CommonUI",
 				"CommonGame",
