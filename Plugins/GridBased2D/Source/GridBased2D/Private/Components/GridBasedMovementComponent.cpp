@@ -2,7 +2,6 @@
 
 #include "Components/GridBasedMovementComponent.h"
 #include "Characters/MoveCheckResult.h"
-#include "Components/GridBasedAnimationComponent.h"
 #include "Components/GridMovable.h"
 #include "GridUtils.h"
 #include "Interaction/Interactable.h"
@@ -43,18 +42,6 @@ void UGridBasedMovementComponent::BeginPlay() {
     }
 }
 
-#if WITH_EDITOR
-void UGridBasedMovementComponent::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
-    Super::PostEditChangeProperty(PropertyChangedEvent);
-
-    auto AnimationComponent = GetGridBasedAnimationComponent();
-    if (AnimationComponent == nullptr) {
-        return;
-    }
-    AnimationComponent->UpdateDirection(Direction);
-}
-#endif
-
 // Called every frame
 void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                                 FActorComponentTickFunction *ThisTickFunction) {
@@ -62,15 +49,6 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
     UpdateMovement(DeltaTime);
     UpdateAnimation(DeltaTime);
-}
-
-TScriptInterface<IGridBasedAnimationComponent> UGridBasedMovementComponent::GetGridBasedAnimationComponent() const {
-    return GridBasedAnimationComponent;
-}
-
-void UGridBasedMovementComponent::SetGridBasedAnimationComponent(
-    TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent) {
-    GridBasedAnimationComponent = NewGridBasedAnimationComponent;
 }
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection) {

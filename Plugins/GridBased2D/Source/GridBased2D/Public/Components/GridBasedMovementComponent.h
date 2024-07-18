@@ -7,7 +7,6 @@
 #include "Characters/MoveCheckResult.h"
 #include "Components/ActorComponent.h"
 #include "Engine/OverlapResult.h"
-#include "GridBasedAnimationComponent.h"
 #include "GridBasedMovement.h"
 #include "Map/WithinMap.h"
 
@@ -15,7 +14,6 @@
 
 class UCharacterMovementComponent;
 class IMapGrid;
-class IGridBasedAnimationComponent;
 class IInteractable;
 class AGridBasedMap;
 
@@ -40,26 +38,8 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
   protected:
     void BeginPlay() override;
 
-#if WITH_EDITOR
-    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
-#endif
-
   public:
     void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
-
-    /**
-     * Get the Grid-Based animation component for this actor
-     * @return The Grid-Based animation component for this actor
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Components)
-    TScriptInterface<IGridBasedAnimationComponent> GetGridBasedAnimationComponent() const;
-
-    /**
-     * Set the Grid-Based animation component for this actor
-     * @param NewGridBasedAnimationComponent The Grid-Based animation component for this actor
-     */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Components)
-    void SetGridBasedAnimationComponent(TScriptInterface<IGridBasedAnimationComponent> NewGridBasedAnimationComponent);
 
     /**
      * Move the character in the specified direction
@@ -182,13 +162,6 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
      */
     UPROPERTY(EditAnywhere, Category = "Character")
     EFacingDirection Direction = EFacingDirection::Down;
-
-    /**
-     * Component for handling the animations of the character
-     */
-    UPROPERTY(BlueprintGetter = GetGridBasedAnimationComponent, BlueprintSetter = SetGridBasedAnimationComponent,
-              Category = Components)
-    TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
 
     /**
      * Called when the character changes direction
