@@ -10,8 +10,11 @@
 #include "Map/GridBasedMap.h"
 #include "Map/MapSubsystem.h"
 #include "MathUtilities.h"
+#include "RangeHelpers.h"
+#include <range/v3/view/filter.hpp>
+#include <range/v3/view/transform.hpp>
 
-UGridBasedMovementComponent::UGridBasedMovementComponent() {
+UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
     PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -86,6 +89,8 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
 
     MoveTimer.Emplace(0.f);
     StopTimer.Reset();
+    bIsMoving = true;
+    OnMovementStateChange.Broadcast(true);
 }
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection,
@@ -150,6 +155,7 @@ bool UGridBasedMovementComponent::CanMoveBetweenMaps() const {
 
 void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection) {
     Direction = FacingDirection;
+    OnDirectionChange.Broadcast(Direction);
 }
 
 void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offset) {
@@ -181,6 +187,26 @@ EFacingDirection UGridBasedMovementComponent::GetDirection() const {
     return Direction;
 }
 
+bool UGridBasedMovementComponent::IsMoving() const {
+    return bIsMoving;
+}
+
+void UGridBasedMovementComponent::MoveInput(const FVector2D &InputVector) {
+    auto Dir = UGridUtils::VectorToFacingDirection(InputVector);
+    if (!Dir.IsSet() || CurrentPosition != DesiredPosition)
+        return;
+
+    MoveInDirection(Dir.GetValue());
+}
+
+void UGridBasedMovementComponent::TurnInput(const FVector2D &InputVector) {
+    auto Dir = UGridUtils::VectorToFacingDirection(InputVector);
+    if (!Dir.IsSet() || CurrentPosition != DesiredPosition)
+        return;
+
+    FaceDirection(Dir.GetValue());
+}
+
 TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
     static const auto FloatGridSize = static_cast<float>(UGridUtils::GetGridSize(this));
 
@@ -203,13 +229,20 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
     return Result;
 }
 
+TArray<TScriptInterface<IInteractable>> UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
+    return RangeHelpers::CreateRange(HitTestOnFacingTile(MovementDirection))
+        | ranges::views::transform([](const FOverlapResult& Result) { return Result.GetActor(); })
+        | ranges::views::filter(&AActor::Implements<UInteractable>)
+        | RangeHelpers::TToArray<TScriptInterface<IInteractable>>();
+}
+
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {
     if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled()) {
         return;
     }
 
     for (auto &Interactable : Interactables) {
-        if ((static_cast<std::byte>(Interactable->GetInteractionTypes()) &
+        if ((static_cast<std::byte>(IInteractable::Execute_GetInteractionTypes(Interactable.GetObject())) &
              static_cast<std::byte>(EInteractionType::Hit)) == static_cast<std::byte>(0))
             continue;
         IInteractable::Execute_OnInteract(Interactable.GetObject(), GetOwner(), EInteractionType::Hit);
@@ -259,16 +292,13 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 }
 
 void UGridBasedMovementComponent::UpdateAnimation(float DeltaTime) {
-    GridBasedAnimationComponent->UpdateDirection(Direction);
-
-    if (MoveTimer.IsSet() && !GridBasedAnimationComponent->IsMoveAnimationPlaying()) {
-        GridBasedAnimationComponent->StartMoveAnimation();
-    } else if (StopTimer.IsSet()) {
+    if (StopTimer.IsSet()) {
         auto &Timer = StopTimer.GetValue();
         Timer += DeltaTime;
 
-        if (Timer >= 0.125f && GridBasedAnimationComponent->CanStopMoving()) {
-            GridBasedAnimationComponent->StopMoveAnimation();
+        if (Timer >= 0.125f) {
+            bIsMoving = false;
+            OnMovementStateChange.Broadcast(false);
             StopTimer.Reset();
         }
     }

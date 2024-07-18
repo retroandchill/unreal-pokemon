@@ -35,7 +35,16 @@ TOptional<EFacingDirection> UGridUtils::VectorToFacingDirection(const FVector2D 
     return TOptional<EFacingDirection>();
 }
 
-TOptional<EFacingDirection> UGridUtils::GetOpposingDirection(EFacingDirection Direction) {
+void UGridUtils::VectorToFacingDirection(const FVector2D &Vector, EFacingDirection &Direction, EValidDirection &Execs) {
+    if (auto ParsedDir = VectorToFacingDirection(Vector); ParsedDir.IsSet()) {
+        Direction = ParsedDir.GetValue();
+        Execs = EValidDirection::HasDirection;
+    } else {
+        Execs = EValidDirection::NoDirection;
+    }
+}
+
+EFacingDirection UGridUtils::GetOpposingDirection(EFacingDirection Direction) {
     switch (Direction) {
         using enum EFacingDirection;
     case Down:
@@ -48,7 +57,8 @@ TOptional<EFacingDirection> UGridUtils::GetOpposingDirection(EFacingDirection Di
         return Down;
     }
 
-    return TOptional<EFacingDirection>();
+    
+    return Direction;
 }
 
 AGridBasedGameModeBase *UGridUtils::GetGridBasedGameMode(const UObject *WorldContext) {

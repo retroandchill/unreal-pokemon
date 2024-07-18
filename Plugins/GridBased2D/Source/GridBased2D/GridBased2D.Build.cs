@@ -25,7 +25,8 @@ public class GridBased2D : ModuleRules
 				"EnhancedInput",
 				"CommonMath",
 				"TileReplacer",
-				"DeveloperSettings"
+				"DeveloperSettings", 
+				"UnrealRanges"
 			}
 		);
 	}

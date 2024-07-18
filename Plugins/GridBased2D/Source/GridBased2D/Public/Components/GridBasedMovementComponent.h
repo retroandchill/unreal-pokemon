@@ -19,6 +19,9 @@ class IGridBasedAnimationComponent;
 class IInteractable;
 class AGridBasedMap;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDirectionChange, EFacingDirection, Direction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterMovementStateChange, bool, bIsMoving);
+
 /**
  * Component used to handle the movement of an actor along a fixed size grid.
  */
@@ -119,12 +122,24 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     UFUNCTION(BlueprintPure, Category = "Character|Movement")
     EFacingDirection GetDirection() const final;
 
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement")
+    bool IsMoving() const override;
+
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    void MoveInput(const FVector2D& InputVector) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    void TurnInput(const FVector2D& InputVector) override;
+
     /**
      * Perform a hit test on the tile in the given direction.
      * @param MovementDirection The direction to check the file of
      * @return Any hits that are found and all interactable actors on the tile
      */
     TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
+
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    TArray<TScriptInterface<IInteractable>> InteractTestOnFacingTile(EFacingDirection MovementDirection) const;
 
     /**
      * Perform a hit interaction on all of the interactable objects in front of the player
@@ -176,6 +191,15 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     TScriptInterface<IGridBasedAnimationComponent> GridBasedAnimationComponent;
 
     /**
+     * Called when the character changes direction
+     */
+    UPROPERTY(BlueprintAssignable)
+    FOnCharacterDirectionChange OnDirectionChange;
+
+    UPROPERTY(BlueprintAssignable)
+    FOnCharacterMovementStateChange OnMovementStateChange;
+
+    /**
      * The timer for movement used to linearly interpolate the position to the new one
      */
     TOptional<float> MoveTimer;
@@ -194,4 +218,6 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
      * Should the character perform a sweep when setting the actor to a location?
      */
     bool bPerformSweep = false;
+
+    bool bIsMoving = false;
 };

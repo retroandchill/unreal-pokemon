@@ -60,7 +60,7 @@ bool AGridBasedCharacter::PerformAdditionalMovementChecks_Implementation(const F
     return bBlockingHit;
 }
 
-uint8 AGridBasedCharacter::GetInteractionTypes() const {
+int32 AGridBasedCharacter::GetInteractionTypes_Implementation() const {
     return InteractionTypes;
 }
 
@@ -92,7 +92,7 @@ void AGridBasedCharacter::Interact() {
     for (auto Results = GridBasedMovementComponent->HitTestOnFacingTile(GridBasedMovementComponent->GetDirection());
          const auto &Result : Results) {
         if (auto Interactable = Cast<IInteractable>(Result.GetActor());
-            Interactable == nullptr || (static_cast<std::byte>(Interactable->GetInteractionTypes()) &
+            Interactable == nullptr || (static_cast<std::byte>(Execute_GetInteractionTypes(Result.GetActor())) &
                                         static_cast<std::byte>(EInteractionType::Talk)) == static_cast<std::byte>(0))
             continue;
 

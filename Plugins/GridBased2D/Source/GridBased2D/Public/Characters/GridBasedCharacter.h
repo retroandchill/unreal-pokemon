@@ -42,7 +42,7 @@ class GRIDBASED2D_API AGridBasedCharacter : public ACharacter, public IGridMovab
                                                         UPrimitiveComponent *HitComponent) override;
 
     UFUNCTION(BlueprintPure, Category = "Interaction")
-    uint8 GetInteractionTypes() const override;
+    int32 GetInteractionTypes_Implementation() const override;
 
   protected:
     /**
