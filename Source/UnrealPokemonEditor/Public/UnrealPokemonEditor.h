@@ -9,4 +9,10 @@ class FUnrealPokemonEditorModule : public IModuleInterface {
 public:
     void StartupModule() override;
     void ShutdownModule() override;
+
+private:
+    /**
+     * Called after the engine is fully initialized
+     */
+    void OnPostEngineInit() const;
 };

@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Helpers/PaperZDHelpers.h"
+#include "Helpers/PaperZDEditorHelpers.h"
 #include "UnrealPokemonEditor.h"
 
-bool UPaperZDHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource) {
+bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource) {
     static FName TargetAnimSource = "TargetAnimSource";
     auto Property = Factory->GetClass()->FindPropertyByName(TargetAnimSource);
     if (Property == nullptr) {

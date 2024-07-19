@@ -4,14 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "PaperZDHelpers.generated.h"
+#include "PaperZDEditorHelpers.generated.h"
 
-class UPaperZDAnimationSource;
+class UPaperFlipbook;class UPaperZDAnimationSource;
+
 /**
  * 
  */
 UCLASS()
-class UNREALPOKEMONEDITOR_API UPaperZDHelpers : public UBlueprintFunctionLibrary {
+class UNREALPOKEMONEDITOR_API UPaperZDEditorHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
 public:
