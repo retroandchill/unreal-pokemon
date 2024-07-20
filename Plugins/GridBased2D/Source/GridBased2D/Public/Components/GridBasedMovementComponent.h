@@ -41,6 +41,8 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
   public:
     void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
+    void SetPositionInGrid(FVector Position);
+
     /**
      * Move the character in the specified direction
      * @param MovementDirection The direction to move the character in

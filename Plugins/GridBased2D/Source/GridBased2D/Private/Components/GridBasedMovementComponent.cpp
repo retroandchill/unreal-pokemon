@@ -17,6 +17,16 @@ UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 
     PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UGridBasedMovementComponent::SetPositionInGrid(FVector Position) {
+    auto GridSize = UGridUtils::GetGridSize(this);
+    CurrentPosition.X = FMath::FloorToInt32(Position.X / GridSize);
+    CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridSize);
+    DesiredPosition = CurrentPosition;
+    Position.X = CurrentPosition.X * GridSize;
+    Position.Y = CurrentPosition.Y * GridSize;
+    GetOwner()->SetActorLocation(Position, bPerformSweep);
+}
+
 void UGridBasedMovementComponent::BeginPlay() {
     Super::BeginPlay();
 
@@ -25,13 +35,7 @@ void UGridBasedMovementComponent::BeginPlay() {
         return;
     }
     auto Position = Owner->GetActorLocation();
-    auto GridSize = UGridUtils::GetGridSize(this);
-    CurrentPosition.X = FMath::FloorToInt32(Position.X / GridSize);
-    CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridSize);
-    DesiredPosition = CurrentPosition;
-    Position.X = CurrentPosition.X * GridSize;
-    Position.Y = CurrentPosition.Y * GridSize;
-    GetOwner()->SetActorLocation(Position, bPerformSweep);
+    SetPositionInGrid(Position);
 
     if (auto Pawn = Cast<APawn>(Owner); Pawn == nullptr || !Pawn->IsPlayerControlled()) {
         return;
