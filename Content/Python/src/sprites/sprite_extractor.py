@@ -1,6 +1,6 @@
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
-    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDHelpers, Name
+    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
 
 DIRECTIONS = [2, 4, 6, 8]
 
@@ -69,7 +69,7 @@ def place_flipbooks_in_animation_source(source_texture: Texture2D, flipbooks: li
     factory = PaperZDAnimSequenceFactory()
     sequence_package = f'{get_package_name(animation_source)}/AnimSequences'
     factory.set_editor_property('supported_class', PaperZDAnimSequence_Flipbook)
-    PaperZDHelpers.set_target_anim_source(factory, animation_source)
+    PaperZDEditorHelpers.set_target_anim_source(factory, animation_source)
 
     anim_sequence = asset_tools.create_asset(f'{source_texture.get_name()}', sequence_package,
                                              PaperZDAnimSequence_Flipbook.static_class(), factory)
