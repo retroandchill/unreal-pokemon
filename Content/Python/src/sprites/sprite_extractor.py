@@ -2,6 +2,8 @@ from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
     Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
 
+INVALID_ASSET_ERROR = 'Invalid asset type created'
+
 DIRECTIONS = [2, 4, 6, 8]
 
 
@@ -22,7 +24,7 @@ def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_si
             new_sprite = asset_tools.create_asset(f'{source_texture.get_name()}_Sprite_{len(sprites)}',
                                                   texture_package, PaperSprite.static_class(), factory)
             if not isinstance(new_sprite, PaperSprite):
-                raise RuntimeError('Invalid asset type created')
+                raise RuntimeError(INVALID_ASSET_ERROR)
 
             offset = Vector2D(j * cell_size.x, i * cell_size.y)
 

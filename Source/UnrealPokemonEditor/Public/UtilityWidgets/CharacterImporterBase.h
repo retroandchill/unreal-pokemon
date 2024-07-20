@@ -15,9 +15,6 @@ UCLASS()
 class UNREALPOKEMONEDITOR_API UCharacterImporterBase : public UEditorUtilityWidget {
     GENERATED_BODY()
 
-public:
-    
-
 private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Output", meta = (AllowPrivateAccess))
     TObjectPtr<UPaperZDAnimationSource> AnimationSource;

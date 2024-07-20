@@ -8,16 +8,17 @@ UPaperFlipbook * UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequenc
                                                              EFacingDirection Direction) {
     float RenderOrientation = 0.f;
     switch (Direction) {
-    case EFacingDirection::Down:
+    using enum EFacingDirection;
+    case Down:
         RenderOrientation = 180.f;
         break;
-    case EFacingDirection::Left:
+    case Left:
         RenderOrientation = -90.f;
         break;
-    case EFacingDirection::Right:
+    case Right:
         RenderOrientation = 90.f;
         break;
-    case EFacingDirection::Up:
+    case Up:
         RenderOrientation = 0.f;
         break;
     }
