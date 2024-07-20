@@ -50,7 +50,7 @@ def compile_sprites_into_flipbooks(source_texture: Texture2D, sprites: list[Pape
         new_flipbook = asset_tools.create_asset(f'{source_texture.get_name()}_D{direction}', texture_package,
                                                 PaperFlipbook.static_class(), factory)
         if not isinstance(new_flipbook, PaperFlipbook):
-            raise RuntimeError('Invalid asset type created')
+            raise RuntimeError(INVALID_ASSET_ERROR)
 
         key_frames: Array[PaperFlipbookKeyFrame] = Array(PaperFlipbookKeyFrame)
         for j in range(columns * i, columns * (i + 1)):
@@ -76,7 +76,7 @@ def place_flipbooks_in_animation_source(source_texture: Texture2D, flipbooks: li
     anim_sequence = asset_tools.create_asset(f'{source_texture.get_name()}', sequence_package,
                                              PaperZDAnimSequence_Flipbook.static_class(), factory)
     if not isinstance(anim_sequence, PaperZDAnimSequence):
-        raise RuntimeError('Invalid asset type created')
+        raise RuntimeError(INVALID_ASSET_ERROR)
 
     anim_data_source = Array(PaperFlipbook)
     anim_data_source.append(flipbooks[3])
