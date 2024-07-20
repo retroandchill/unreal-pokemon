@@ -1,12 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
-#include "Map/GridBasedMap.h"
+#include "Map/TileMapGridBasedMap.h"
 #include "GridBased2DSettings.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
 #include "Replacement/TileReplacerComponent.h"
 
 // Sets default values
-AGridBasedMap::AGridBasedMap() {
+ATileMapGridBasedMap::ATileMapGridBasedMap() {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
@@ -26,47 +26,47 @@ AGridBasedMap::AGridBasedMap() {
 }
 
 #if WITH_EDITOR
-void AGridBasedMap::PostInitProperties() {
+void ATileMapGridBasedMap::PostInitProperties() {
     Super::PostInitProperties();
     SetUpMapLocation();
 }
 
-void AGridBasedMap::PostReinitProperties() {
+void ATileMapGridBasedMap::PostReinitProperties() {
     Super::PostReinitProperties();
     SetUpMapLocation();
 }
 
-void AGridBasedMap::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
+void ATileMapGridBasedMap::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
     Super::PostEditChangeProperty(PropertyChangedEvent);
     SetUpMapLocation();
 }
 
-void AGridBasedMap::PostLoad() {
+void ATileMapGridBasedMap::PostLoad() {
     Super::PostLoad();
     SetUpMapLocation();
 }
 
-void AGridBasedMap::PostEditMove(bool bFinished) {
+void ATileMapGridBasedMap::PostEditMove(bool bFinished) {
     Super::PostEditMove(bFinished);
     SetUpMapLocation(bFinished);
 }
 #endif
 
-void AGridBasedMap::RefreshTileData() {
+void ATileMapGridBasedMap::RefreshTileData() {
 #if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
     TileReplacer->ReplaceTiles(TileMapComponent);
 #endif
 }
 
-void AGridBasedMap::ClearTileReplacements() {
+void ATileMapGridBasedMap::ClearTileReplacements() {
 
 #if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
 #endif
 }
 
-FIntRect AGridBasedMap::GetBounds() const {
+FIntRect ATileMapGridBasedMap::GetBounds() const {
     auto RealLocation = GetActorLocation();
     auto GridSize = UGridUtils::GetGridSize(this);
     int32 X = FMath::FloorToInt32(RealLocation.X / GridSize);
@@ -74,7 +74,7 @@ FIntRect AGridBasedMap::GetBounds() const {
     return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
-void AGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
+void ATileMapGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
     const UPaperTileMap *TileMap = TileMapComponent->TileMap;
     if (TileMap == nullptr) {
         return;

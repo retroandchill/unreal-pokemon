@@ -15,7 +15,7 @@
 class UCharacterMovementComponent;
 class IMapGrid;
 class IInteractable;
-class AGridBasedMap;
+class ATileMapGridBasedMap;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDirectionChange, EFacingDirection, Direction);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterMovementStateChange, bool, bIsMoving);

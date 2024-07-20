@@ -6,7 +6,7 @@
 #include "GridUtils.h"
 #include "Interaction/Interactable.h"
 #include "Kismet/GameplayStatics.h"
-#include "Map/GridBasedMap.h"
+#include "Map/TileMapGridBasedMap.h"
 #include "Map/MapSubsystem.h"
 #include "MathUtilities.h"
 #include "RangeHelpers.h"

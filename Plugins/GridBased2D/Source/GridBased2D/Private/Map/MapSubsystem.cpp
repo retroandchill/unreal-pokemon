@@ -7,7 +7,7 @@
 #include "Engine/LevelStreamingDynamic.h"
 #include "GridBased2DSettings.h"
 #include "Kismet/GameplayStatics.h"
-#include "Map/GridBasedMap.h"
+#include "Map/TileMapGridBasedMap.h"
 
 DECLARE_DELEGATE(FLoadFinalized)
 

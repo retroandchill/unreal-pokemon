@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "GridBased2D.h"
 
-constexpr auto GLoctextNamespace = "FGridBased2DModule";
+DEFINE_LOG_CATEGORY(LogGridBased2D)
 
 void FGridBased2DModule::StartupModule() {
     // No special startup required
