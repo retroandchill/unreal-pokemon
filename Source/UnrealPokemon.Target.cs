@@ -17,7 +17,7 @@ public class UnrealPokemonTarget : TargetRules
 		ExtraModuleNames.AddRange(new string[]
 		{
 			"PokemonData", "PokemonUtilities", "PokemonCore", "GridBased2D",
-			"RPGMenus", "PokemonUI", "CommonMath", "UnrealPokemon", "TileReplacer"
+			"RPGMenus", "PokemonUI", "CommonMath", "UnrealPokemon", "TileReplacer", "UnrealPokemonEditor", "PaperZDHelpers"
 		});
 	}
 }

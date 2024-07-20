@@ -20,7 +20,7 @@ public class UnrealPokemonEditorTarget : TargetRules
 		{
 			"PokemonData", "PokemonUtilities", "PokemonCore", "GridBased2D", "GridBased2DEditor",
 			"RPGMenus", "PokemonUI", "RPGMenusEditor", "CommonMath",
-			 "RPGMenusDeveloper", "UnrealPokemon", "TileReplacer"
+			 "RPGMenusDeveloper", "UnrealPokemon", "TileReplacer", "UnrealPokemonEditor", "PaperZDHelpers"
 		});
 	}
 }
