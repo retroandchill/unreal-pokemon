@@ -142,7 +142,7 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &Play
 
     auto [DestinationMap, WarpTag, Direction] = WarpDestination.GetValue();
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter.GetObject());
-    APlayerStart* PlayerStart = nullptr;
+    const APlayerStart* PlayerStart = nullptr;
     for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It) {
         if (It->PlayerStartTag == WarpTag && It->GetLevel() == DestinationMap->GetLoadedLevel()) {
             PlayerStart = *It;

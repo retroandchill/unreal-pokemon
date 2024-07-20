@@ -20,9 +20,9 @@ FIntRect ALevelBoundsGridBasedMap::GetBounds() const {
     auto Center = BoundingBox.GetCenter();
     auto Extent = BoundingBox.GetExtent();
     return FIntRect(
-        FMath::RoundToZero((Center.X - Extent.X + GridSize / 2) / GridSize),
-        FMath::RoundToZero((Center.Y - Extent.Y + GridSize / 2) / GridSize),
-        FMath::RoundToZero((Center.X + Extent.X + GridSize / 2) / GridSize),
-        FMath::RoundToZero((Center.Y + Extent.Y + GridSize / 2) / GridSize)
+        static_cast<int32>(FMath::RoundToZero((Center.X - Extent.X + GridSize / 2) / GridSize)),
+        static_cast<int32>(FMath::RoundToZero((Center.Y - Extent.Y + GridSize / 2) / GridSize)),
+        static_cast<int32>(FMath::RoundToZero((Center.X + Extent.X + GridSize / 2) / GridSize)),
+        static_cast<int32>(FMath::RoundToZero((Center.Y + Extent.Y + GridSize / 2) / GridSize))
     );
 }
