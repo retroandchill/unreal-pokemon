@@ -118,21 +118,8 @@ void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, FN
                                                            LatentActionInfo, false);
     }
 
-    if (auto StreamedLevel = GetWorld()->GetStreamingLevels().FindByPredicate(
-            [&Map](const ULevelStreaming *Level) { return Level->GetWorldAsset().GetUniqueID() == Map.GetUniqueID(); });
-        StreamedLevel != nullptr) {
-        (*StreamedLevel)->OnLevelShown.Clear();
-        (*StreamedLevel)->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::UMapSubsystem::OnNewLevelLoaded);
-        WarpDestination.Emplace(*StreamedLevel, WarpTag, Direction);
-        auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
-        PlayerCharacter->SetActorLocation((*StreamedLevel)->GetStreamingVolumeBounds().GetCenter());
-    } else {
-        bool bSuccess;
-        DynamicallyStreamedLevel = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
-            this, Map, DynamicLevelOffset, FRotator(), bSuccess);
-        DynamicallyStreamedLevel->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::OnNewLevelLoaded);
-        WarpDestination.Emplace(DynamicallyStreamedLevel, WarpTag, Direction);
-    }
+    WarpDestination.Emplace(WarpTag, Direction);
+    UGameplayStatics::OpenLevelBySoftObjectPtr(this, Map);
 }
 
 void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &PlayerCharacter) {
@@ -140,17 +127,8 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &Play
         return;
     }
 
-    auto [DestinationMap, WarpTag, Direction] = WarpDestination.GetValue();
+    auto [WarpTag, Direction] = WarpDestination.GetValue();
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter.GetObject());
-    const APlayerStart* PlayerStart = nullptr;
-    for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It) {
-        if (It->PlayerStartTag == WarpTag && It->GetLevel() == DestinationMap->GetLoadedLevel()) {
-            PlayerStart = *It;
-            break;
-        }
-    }
-    check(PlayerStart != nullptr)
-    MovementComponent->SetPositionInGrid(PlayerStart->GetActorLocation());
     MovementComponent->FaceDirection(Direction);
     WarpDestination.Reset();
 }
@@ -187,6 +165,10 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
     if (NewMap != nullptr) {
         NewMap->AddCharacter(Movable);
     }
+}
+
+const TOptional<TPair<FName, EFacingDirection>> & UMapSubsystem::GetWarpDestination() const {
+    return WarpDestination;
 }
 
 void UMapSubsystem::OnNewLevelLoaded() {
