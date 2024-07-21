@@ -15,7 +15,7 @@
 class UCharacterMovementComponent;
 class IMapGrid;
 class IInteractable;
-class AGridBasedMap;
+class ATileMapGridBasedMap;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDirectionChange, EFacingDirection, Direction);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterMovementStateChange, bool, bIsMoving);
@@ -40,6 +40,8 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
 
   public:
     void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+    void SetPositionInGrid(FVector Position);
 
     /**
      * Move the character in the specified direction

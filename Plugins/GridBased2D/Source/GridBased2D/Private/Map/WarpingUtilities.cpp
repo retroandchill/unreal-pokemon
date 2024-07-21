@@ -14,8 +14,8 @@ void UWarpingUtilities::WarpToMap(const UObject *WorldContext, const FWarpDestin
     }
 
     if (Destination.bOverride_Direction) {
-        MapSubsystem->WarpToMapWithDirection(Destination.Map, Destination.X, Destination.Y, Destination.Direction);
+        MapSubsystem->WarpToMapWithDirection(Destination.Map, Destination.PlayerStartTag, Destination.Direction);
     } else {
-        MapSubsystem->WarpToMap(Destination.Map, Destination.X, Destination.Y);
+        MapSubsystem->WarpToMap(Destination.Map, Destination.PlayerStartTag);
     }
 }

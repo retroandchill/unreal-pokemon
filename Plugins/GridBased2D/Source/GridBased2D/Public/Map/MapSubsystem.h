@@ -92,21 +92,19 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
     /**
      * Warp to the given map name and coordinates
      * @param Map The the map to warp to
-     * @param X The X coordinate of the map to warp to
-     * @param Y The Y coordinate of the map to warp to
+     * @param WarpTag The X coordinate of the map to warp to
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Retain Direction)", Category = "Maps|Warping")
-    void WarpToMap(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y);
+    void WarpToMap(const TSoftObjectPtr<UWorld> &Map, FName WarpTag);
 
     /**
      * Warp to the given map name and coordinates
      * @param Map The the map to warp to
-     * @param X The X coordinate of the map to warp to
-     * @param Y The Y coordinate of the map to warp to
+     * @param WarpTag The X coordinate of the map to warp to
      * @param Direction The direction the character should be facing after the warp
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Warp to Map (Change Direction)", Category = "Maps|Warping")
-    void WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y, EFacingDirection Direction);
+    void WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, FName WarpTag, EFacingDirection Direction);
 
     /**
      * Set the location of the player in the world if there is a valid warp destination
@@ -148,7 +146,7 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
     /**
      * If set, indicates that the player warping to another location
      */
-    TOptional<TTuple<FVector, int32, int32, EFacingDirection>> WarpDestination;
+    TOptional<TTuple<TWeakObjectPtr<ULevelStreaming>, FName, EFacingDirection>> WarpDestination;
 
     /**
      * The offset of a dynamically loaded level
@@ -159,5 +157,5 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      * The dynamically streamed in level
      */
     UPROPERTY()
-    TSoftObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
+    TObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
 };

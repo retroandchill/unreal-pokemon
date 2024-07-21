@@ -1,5 +1,5 @@
 ﻿#include "Asserts.h"
-#include "Map/GridBasedMap.h"
+#include "Map/TileMapGridBasedMap.h"
 #include "Misc/AutomationTest.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -15,7 +15,7 @@ bool GridBasedMapDetailsTest::RunTest(const FString &Parameters) {
     DetailsViewArgs.bHideSelectionTip = true;
     auto DetailsView = EditModule.CreateDetailView(DetailsViewArgs);
 
-    auto Character = World->SpawnActor<AGridBasedMap>();
+    auto Character = World->SpawnActor<ATileMapGridBasedMap>();
     DetailsView->SetObject(Character);
     auto Categories = UReflectionUtils::GetPropertyCategories(*DetailsView);
     UE_ASSERT_TRUE(Categories.Num() > 6);
