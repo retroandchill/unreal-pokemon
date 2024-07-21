@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Map/GridBasedMapBase.h"
+#include "AudioPlaybackManagerSubsystem.h"
 #include "Components/GridBasedMovementComponent.h"
 #include "Components/GridMovable.h"
 #include "Kismet/GameplayStatics.h"
@@ -54,7 +55,9 @@ void AGridBasedMapBase::RemoveCharacter(const TScriptInterface<IGridMovable> &Ch
 }
 
 void AGridBasedMapBase::OnPlayerEnter() {
-    UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
+    auto Subsystem = GetGameInstance()->GetSubsystem<UAudioPlaybackManagerSubsystem>();
+    Subsystem->PlayAudioOnChannel(BackgroundMusicChannelName, BackgroundMusic);
+    //UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
     SetCurrentMapName(DisplayName);
     OnPlayerEnteredMap();
 }
