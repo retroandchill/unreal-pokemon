@@ -19,3 +19,20 @@ void UGameClockSubsystem::Deinitialize() {
 const TScriptInterface<IGameClock> & UGameClockSubsystem::GetGameClock() const {
     return GameClock;
 }
+
+bool UGameClockSubsystem::IsDay() const {
+    auto CurrentTime = IGameClock::Execute_GetCurrentTime(GameClock.GetObject());
+    float CurrentHour = CurrentTime.GetTimeOfDay().GetTotalHours();
+    return GetDefault<UDayNightCycleSettings>()->DayRange.Contains(CurrentHour);
+}
+
+float UGameClockSubsystem::GetDayCoefficient() const {
+    if (!IsDay()) {
+        return 0.f;
+    }
+    
+    auto CurrentTime = IGameClock::Execute_GetCurrentTime(GameClock.GetObject());
+    float CurrentHour = CurrentTime.GetTimeOfDay().GetTotalHours();
+    auto &DayRange = GetDefault<UDayNightCycleSettings>()->DayRange;
+    return (CurrentHour - DayRange.GetLowerBoundValue()) / (DayRange.GetUpperBoundValue() - DayRange.GetLowerBoundValue());
+}

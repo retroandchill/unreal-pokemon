@@ -7,6 +7,7 @@
 #include "GameClockSubsystem.generated.h"
 
 class IGameClock;
+
 /**
  * Subsystem used for managing the game's clock and emitting events related to the time change.
  */
@@ -24,6 +25,20 @@ public:
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Clock)
     const TScriptInterface<IGameClock>& GetGameClock() const;
+
+    /**
+     * Check if the current time is presently daytime
+     * @return Is the current time in the day?
+     */
+    UFUNCTION(BlueprintPure, Category = Clock)
+    bool IsDay() const;
+
+    /**
+     * Get the coefficient for the day span, which can be used to lerp the position of the sun as needed
+     * @return The coefficient of hour far into the day it is (or 0 if it is night)
+     */
+    UFUNCTION(BlueprintPure, Category = Clock)
+    float GetDayCoefficient() const;
     
 private:
     /**

@@ -21,4 +21,11 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Clock, meta = (MustImplement = "GameClock"))
     TSubclassOf<UObject> ClockClass = URealTimeClock::StaticClass();
 
+    /**
+     * The span of time (in hours on a 24-hour clock) that is used to determine the day.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Clock,
+        meta = (UIMin = 0.f, UIMax = 24.f, ClampMin = 0.f, ClampMax = 24.f))
+    FFloatRange DayRange = FFloatRange(4.f, 20.f);
+
 };
