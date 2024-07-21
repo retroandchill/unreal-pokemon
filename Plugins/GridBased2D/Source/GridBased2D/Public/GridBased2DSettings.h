@@ -26,13 +26,6 @@ class GRIDBASED2D_API UGridBased2DSettings : public UDeveloperSettings {
      * Get the dynamic offset of a level in the game
      * @return The dynamic offset of a level in the game
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Level Streaming")
-    FVector GetDynamicLevelOffset() const;
-
-    /**
-     * Get the dynamic offset of a level in the game
-     * @return The dynamic offset of a level in the game
-     */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Tilesets")
     const FSoftObjectPath &GetTerrainTagDataTable() const;
 
@@ -42,12 +35,6 @@ class GRIDBASED2D_API UGridBased2DSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetGridSize, Config, Category = "Scale")
     double GridSize = 32;
-
-    /**
-     * The dynamic offset of a level in the game
-     */
-    UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetDynamicLevelOffset, Config, Category = "Level Streaming")
-    FVector DynamicLevelOffset;
 
     /**
      * The data table asset used for terrain tag mappings, for various movement types and other traits
