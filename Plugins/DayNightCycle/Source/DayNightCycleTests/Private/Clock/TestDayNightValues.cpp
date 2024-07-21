@@ -16,6 +16,7 @@ bool TestDayNightValues::RunTest(const FString &Parameters) {
 
     auto Clock = NewObject<UTickBasedClock>();
     UReflectionUtils::SetPropertyValue<TScriptInterface<IGameClock>>(Subsystem, "GameClock", Clock);
+    UE_ASSERT_TRUE(Subsystem->GetGameClock() == Clock);
 
     auto &DayLength = GetDefault<UDayNightCycleSettings>()->DayRange;
     Clock->SetCurrentTime(FDateTime(2000, 1, 1, static_cast<int32>(DayLength.GetLowerBoundValue()) - 1));
