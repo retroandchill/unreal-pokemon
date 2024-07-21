@@ -23,6 +23,7 @@ void UInitiateBattle::OnBattleComplete(EBattleResult Result) {
     auto Subsystem = WorldContext->GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(Subsystem != nullptr)
     check(OutputExecHandle.IsSet())
+    ;
     Subsystem->RemoveFromBattleFinished(*OutputExecHandle);
     OutputExecHandle.Reset();
     SetReadyToDestroy();

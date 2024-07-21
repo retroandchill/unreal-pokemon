@@ -53,12 +53,6 @@ class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
     TObjectPtr<USoundBase> BackgroundMusic;
 
     /**
-     * The channel to play the background music on
-     */
-    UPROPERTY(EditAnywhere, Category = Audio)
-    FName BackgroundMusicChannelName = "BGM";
-
-    /**
      * The list of characters contained within this map
      */
     UPROPERTY()

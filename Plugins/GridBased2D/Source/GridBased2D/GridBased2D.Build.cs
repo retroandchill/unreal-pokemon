@@ -26,7 +26,7 @@ public class GridBased2D : ModuleRules
 				"CommonMath",
 				"TileReplacer",
 				"DeveloperSettings", 
-				"UnrealRanges", "AudioPlaybackManager"
+				"UnrealRanges"
 			}
 		);
 	}
