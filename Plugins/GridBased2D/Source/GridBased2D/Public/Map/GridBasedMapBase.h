@@ -36,6 +36,12 @@ class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
     UFUNCTION(BlueprintImplementableEvent, Category = "Maps|Player")
     void SetCurrentMapName(const FText &MapName);
 
+    /**
+     * Called when the player enters the map
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Maps|Player")
+    void OnPlayerEnteredMap();
+
   private:
     UPROPERTY(EditAnywhere, Category = Display)
     FText DisplayName;
