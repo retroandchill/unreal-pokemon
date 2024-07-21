@@ -56,4 +56,5 @@ void AGridBasedMapBase::RemoveCharacter(const TScriptInterface<IGridMovable> &Ch
 void AGridBasedMapBase::OnPlayerEnter() {
     UMapAudioUtilities::PlayBackgroundMusic(this, BackgroundMusic);
     SetCurrentMapName(DisplayName);
+    OnPlayerEnteredMap();
 }
