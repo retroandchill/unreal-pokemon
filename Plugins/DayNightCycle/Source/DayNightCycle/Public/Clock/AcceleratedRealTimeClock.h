@@ -15,7 +15,7 @@ UCLASS(Config = Game)
 class DAYNIGHTCYCLE_API UAcceleratedRealTimeClock : public UObject, public IGameClock {
     GENERATED_BODY()
 
-public:
+protected:
     FDateTime GetCurrentTime_Implementation() const override;
 
 private:

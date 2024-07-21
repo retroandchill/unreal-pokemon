@@ -18,6 +18,7 @@ public:
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;
 
+protected:
     FDateTime GetCurrentTime_Implementation() const override;
 
 private:
