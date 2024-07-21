@@ -21,16 +21,10 @@ struct GRIDBASED2D_API FWarpDestination {
     TSoftObjectPtr<UWorld> Map;
 
     /**
-     * The X-coordinate of the map to warp to
+     * The tag of the player start object use as the warp destination
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Warping")
-    int32 X;
-
-    /**
-     * The Y-coordinate of the map to warp to
-     */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Warping")
-    int32 Y;
+    FName PlayerStartTag;
 
     /**
      * The direction to face when warping. (Retain the current direction if not overriden.)

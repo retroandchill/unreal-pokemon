@@ -6,7 +6,7 @@
 #include "GridBasedMapBase.h"
 #include "PaperTileMapComponent.h"
 
-#include "GridBasedMap.generated.h"
+#include "TileMapGridBasedMap.generated.h"
 
 class IGridMovable;
 class AGameCharacter;
@@ -17,14 +17,14 @@ class IWithinMap;
  * Actor that contains the basic information about the map
  */
 UCLASS(Blueprintable, ClassGroup = (Map))
-class GRIDBASED2D_API AGridBasedMap : public AGridBasedMapBase {
+class GRIDBASED2D_API ATileMapGridBasedMap : public AGridBasedMapBase {
     GENERATED_BODY()
 
   public:
     /**
      * Sets default values for this actor's properties
      */
-    AGridBasedMap();
+    ATileMapGridBasedMap();
 
   protected:
 #if WITH_EDITOR

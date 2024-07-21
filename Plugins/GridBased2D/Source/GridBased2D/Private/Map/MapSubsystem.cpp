@@ -1,13 +1,18 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Map/MapSubsystem.h"
+#include "EngineUtils.h"
+#include "GridBased2D.h"
 #include "Components/AudioComponent.h"
 #include "Components/GridBasedMovementComponent.h"
 #include "Components/GridMovable.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "GridBased2DSettings.h"
+#include "RangeHelpers.h"
+#include "Characters/GamePlayerStart.h"
 #include "Kismet/GameplayStatics.h"
-#include "Map/GridBasedMap.h"
+#include "Map/TileMapGridBasedMap.h"
+#include <range/v3/view/filter.hpp>
 
 DECLARE_DELEGATE(FLoadFinalized)
 
@@ -90,7 +95,7 @@ bool UMapSubsystem::IsJinglePlaying() const {
     return CurrentJingle != nullptr && CurrentJingle->GetPlayState() == EAudioComponentPlayState::Playing;
 }
 
-void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y) {
+void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, FName WarpTag) {
     auto PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator();
     if (PlayerCharacter == nullptr) {
         UE_LOG(LogBlueprint, Warning, TEXT("There is no valid pawn!"))
@@ -102,10 +107,10 @@ void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 
         UE_LOG(LogBlueprint, Warning, TEXT("The pawn class does not implement IGridMovable!"))
         return;
     }
-    WarpToMapWithDirection(Map, X, Y, MovementComponent->GetDirection());
+    WarpToMapWithDirection(Map, WarpTag, MovementComponent->GetDirection());
 }
 
-void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, int32 X, int32 Y,
+void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, FName WarpTag,
                                            EFacingDirection Direction) {
     if (DynamicallyStreamedLevel != nullptr) {
         FLatentActionInfo LatentActionInfo;
@@ -117,16 +122,16 @@ void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, in
             [&Map](const ULevelStreaming *Level) { return Level->GetWorldAsset().GetUniqueID() == Map.GetUniqueID(); });
         StreamedLevel != nullptr) {
         (*StreamedLevel)->OnLevelShown.Clear();
-        (*StreamedLevel)
-            ->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::UMapSubsystem::UpdatePlayerCharacterPosition);
-        WarpDestination.Emplace((*StreamedLevel)->LevelTransform.GetLocation(), X, Y, Direction);
-        OnNewLevelLoaded();
+        (*StreamedLevel)->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::UMapSubsystem::OnNewLevelLoaded);
+        WarpDestination.Emplace(*StreamedLevel, WarpTag, Direction);
+        auto PlayerCharacter = UGameplayStatics::GetPlayerPawn(this, 0);
+        PlayerCharacter->SetActorLocation((*StreamedLevel)->GetStreamingVolumeBounds().GetCenter());
     } else {
         bool bSuccess;
         DynamicallyStreamedLevel = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
             this, Map, DynamicLevelOffset, FRotator(), bSuccess);
         DynamicallyStreamedLevel->OnLevelShown.AddUniqueDynamic(this, &UMapSubsystem::OnNewLevelLoaded);
-        WarpDestination.Emplace(DynamicLevelOffset, X, Y, Direction);
+        WarpDestination.Emplace(DynamicallyStreamedLevel, WarpTag, Direction);
     }
 }
 
@@ -135,9 +140,17 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &Play
         return;
     }
 
-    auto [Offset, X, Y, Direction] = WarpDestination.GetValue();
+    auto [DestinationMap, WarpTag, Direction] = WarpDestination.GetValue();
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter.GetObject());
-    MovementComponent->WarpToLocation(X, Y, Offset);
+    const APlayerStart* PlayerStart = nullptr;
+    for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It) {
+        if (It->PlayerStartTag == WarpTag && It->GetLevel() == DestinationMap->GetLoadedLevel()) {
+            PlayerStart = *It;
+            break;
+        }
+    }
+    check(PlayerStart != nullptr)
+    MovementComponent->SetPositionInGrid(PlayerStart->GetActorLocation());
     MovementComponent->FaceDirection(Direction);
     WarpDestination.Reset();
 }
