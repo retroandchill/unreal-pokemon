@@ -12,6 +12,14 @@ void UMapAudioUtilities::PlayBackgroundMusic(UObject *WorldContext, USoundBase *
     MapSubsystem->PlayBackgroundMusic(BGM, VolumeMultiplier, PitchMultiplier);
 }
 
+void UMapAudioUtilities::PlayTempBackgroundMusic(UObject *WorldContext, USoundBase *BGM, float VolumeMultiplier,
+    float PitchMultiplier) {
+    auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
+    check(MapSubsystem != nullptr)
+
+    MapSubsystem->PlayTempBackgroundMusic(BGM, VolumeMultiplier, PitchMultiplier);
+}
+
 void UMapAudioUtilities::PauseBackgroundMusic(UObject *WorldContext) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UMapSubsystem>();
     check(MapSubsystem != nullptr)

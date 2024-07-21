@@ -2,6 +2,7 @@
 
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Battle/Battle.h"
+#include "Battle/Transitions/BattleTransitionActor.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Kismet/GameplayStatics.h"
 #include "Settings/BaseSettings.h"
@@ -20,8 +21,24 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
     Battle->BindToOnBattleEnd(FOnBattleEnd::FDelegate::CreateUObject(this, &UBattleTransitionSubsystem::ExitBattle));
 }
 
-void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info) {
+void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubclassOf<ABattleTransitionActor> Transition) {
     static auto &BattleLevelOffset = Pokemon::FBaseSettings::Get().GetBattleSceneOffset();
+    if (Transition != nullptr) {
+        using FTransitionBinding = FOnBattleTransitionComplete::FDelegate;
+        
+        bBattleInitialized = false;
+        CurrentTransition = GetWorld()->SpawnActor<ABattleTransitionActor>(Transition);
+        CurrentTransition->BindToOnComplete(FTransitionBinding::CreateWeakLambda(this, [this] {
+            if (RegisteredBattle.IsValid() && !bBattleInitialized) {
+                RegisteredBattle->Initialize(BattleInfo.GetValue());
+                bBattleInitialized = true;
+            }
+
+            CurrentTransition = nullptr;
+        }));
+        CurrentTransition->TransitionToBattle();
+    }
+    
     bool bSuccess;
     Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset,
                                                                            FRotator(), bSuccess);
@@ -41,7 +58,11 @@ void UBattleTransitionSubsystem::RemoveFromBattleFinished(const FDelegateHandle 
 void UBattleTransitionSubsystem::SetUpBattle() {
     check(RegisteredBattle.IsValid())
     check(BattleInfo.IsSet())
-    RegisteredBattle->Initialize(BattleInfo.GetValue());
+
+    if (CurrentTransition == nullptr && !bBattleInitialized) {
+        RegisteredBattle->Initialize(BattleInfo.GetValue());
+        bBattleInitialized = true;
+    }
 }
 
 void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {

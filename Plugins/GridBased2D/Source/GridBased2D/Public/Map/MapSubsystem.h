@@ -40,6 +40,15 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
     void PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier = 1, float PitchMultiplier = 1);
 
     /**
+     * Play the supplied audio file as the new BGM
+     * @param BGM The new BGM to play. (Will be ignored if nullptr)
+     * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
+     * @param PitchMultiplier A linear scalar multiplied with the pitch.
+     */
+    UFUNCTION(BlueprintCallable, DisplayName = "Play Background Music (Temporary Suspend)", Category = "Sound|Music")
+    void PlayTempBackgroundMusic(USoundBase *BGM, float VolumeMultiplier = 1, float PitchMultiplier = 1);
+
+    /**
      * Pause the currently playing BGM
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music")
@@ -126,6 +135,9 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      */
     UPROPERTY()
     TObjectPtr<UAudioComponent> CurrentBackgroundMusic;
+
+    UPROPERTY()
+    TArray<TObjectPtr<UAudioComponent>> SuspendedBackgroundMusic;
 
     /**
      * The currently playing musical jingle

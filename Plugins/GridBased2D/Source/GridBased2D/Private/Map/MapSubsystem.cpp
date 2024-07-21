@@ -37,6 +37,25 @@ void UMapSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier,
         UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
 }
 
+void UMapSubsystem::PlayTempBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
+    if (BGM == nullptr) {
+        return;
+    }
+
+    // Don't restart the music if its already playing
+    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) {
+        return;
+    }
+
+    if (CurrentBackgroundMusic != nullptr) {
+        CurrentBackgroundMusic->SetPaused(true);
+        SuspendedBackgroundMusic.Emplace(CurrentBackgroundMusic);
+    }
+
+    CurrentBackgroundMusic =
+        UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
+}
+
 void UMapSubsystem::PauseBackgroundMusic() {
     if (CurrentBackgroundMusic == nullptr) {
         return;
@@ -55,8 +74,15 @@ void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
     if (CurrentBackgroundMusic == nullptr) {
         return;
     }
+    
+    CurrentBackgroundMusic->OnAudioFinishedNative.AddWeakLambda(this, [this](const UAudioComponent *) {
+        if (!SuspendedBackgroundMusic.IsEmpty()) {
+            CurrentBackgroundMusic = SuspendedBackgroundMusic.Pop();
+            CurrentBackgroundMusic->SetPaused(!IsJinglePlaying());
+        }
+    });
 
-    if (FMath::IsNearlyZero(FadeOutDuration)) {
+    if (FMath::IsNearlyZero(FadeOutDuration) || IsJinglePlaying()) {
         CurrentBackgroundMusic->Stop();
     } else {
         CurrentBackgroundMusic->FadeOut(FadeOutDuration, 0.f);

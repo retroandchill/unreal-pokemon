@@ -30,6 +30,7 @@ void UDisplayMessage::Activate() {
 
 void UDisplayMessage::ExecuteOnConfirm() {
     OnConfirm.Broadcast();
+    OnConfirm.Clear();
 
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
