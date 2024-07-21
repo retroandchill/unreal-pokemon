@@ -16,3 +16,7 @@ TStatId UTickBasedClock::GetStatId() const {
 FDateTime UTickBasedClock::GetCurrentTime_Implementation() const {
     return CurrentTime;
 }
+
+void UTickBasedClock::SetCurrentTime(const FDateTime &DateTime) {
+    CurrentTime = DateTime;
+}

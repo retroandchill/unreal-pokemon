@@ -21,6 +21,14 @@ public:
 protected:
     FDateTime GetCurrentTime_Implementation() const override;
 
+public:
+    /**
+     * Set the current time to the new value
+     * @param DateTime The new time value to set the clock to
+     */
+    UFUNCTION(BlueprintCallable, Category = Clock)
+    void SetCurrentTime(const FDateTime& DateTime);
+
 private:
     /**
      * The span of time (in seconds) than an in-game day should last
