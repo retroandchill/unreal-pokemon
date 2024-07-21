@@ -122,18 +122,6 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
 
   private:
     /**
-     * Called when a new streaming level is loaded
-     */
-    UFUNCTION()
-    void OnNewLevelLoaded();
-
-    /**
-     * Called when a new streaming level is shown to update the player position
-     */
-    UFUNCTION()
-    void UpdatePlayerCharacterPosition();
-
-    /**
      * The currently playing background music component.
      */
     UPROPERTY()
@@ -149,15 +137,4 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      * If set, indicates that the player warping to another location
      */
     TOptional<TPair<FName, EFacingDirection>> WarpDestination;
-
-    /**
-     * The offset of a dynamically loaded level
-     */
-    FVector DynamicLevelOffset = GetDefault<UGridBased2DSettings>()->GetDynamicLevelOffset();
-
-    /**
-     * The dynamically streamed in level
-     */
-    UPROPERTY()
-    TObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
 };
