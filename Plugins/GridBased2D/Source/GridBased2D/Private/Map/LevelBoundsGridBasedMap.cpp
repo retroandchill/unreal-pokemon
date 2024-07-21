@@ -4,7 +4,6 @@
 #include "Map/LevelBoundsGridBasedMap.h"
 #include "GridBased2D.h"
 #include "GridUtils.h"
-#include "Engine/LevelBounds.h"
 
 FIntRect ALevelBoundsGridBasedMap::GetBounds() const {
 #if WITH_EDITOR

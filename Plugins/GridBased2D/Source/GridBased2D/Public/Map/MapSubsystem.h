@@ -118,19 +118,9 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      */
     void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const;
 
+    const TOptional<TPair<FName, EFacingDirection>> &GetWarpDestination() const;
+
   private:
-    /**
-     * Called when a new streaming level is loaded
-     */
-    UFUNCTION()
-    void OnNewLevelLoaded();
-
-    /**
-     * Called when a new streaming level is shown to update the player position
-     */
-    UFUNCTION()
-    void UpdatePlayerCharacterPosition();
-
     /**
      * The currently playing background music component.
      */
@@ -146,16 +136,5 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
     /**
      * If set, indicates that the player warping to another location
      */
-    TOptional<TTuple<TWeakObjectPtr<ULevelStreaming>, FName, EFacingDirection>> WarpDestination;
-
-    /**
-     * The offset of a dynamically loaded level
-     */
-    FVector DynamicLevelOffset = GetDefault<UGridBased2DSettings>()->GetDynamicLevelOffset();
-
-    /**
-     * The dynamically streamed in level
-     */
-    UPROPERTY()
-    TObjectPtr<ULevelStreamingDynamic> DynamicallyStreamedLevel;
+    TOptional<TPair<FName, EFacingDirection>> WarpDestination;
 };

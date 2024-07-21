@@ -22,7 +22,8 @@ public class GridBased2DTests : ModuleRules
                 "SlateCore",
                 "GridBased2D",
                 "GridBased2DEditor",
-                "AutomationTestHelpers"
+                "AutomationTestHelpers",
+                "FunctionalTesting"
             }
         );
     }

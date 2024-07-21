@@ -5,9 +5,9 @@
 #include "CommonPlayerController.h"
 #include "GameFramework/PlayerState.h"
 
-std::pair<FPlayerPtr, APawn *> UPlayerUtilities::CreateTestPlayer(UWorld &World) {
+std::pair<FPlayerPtr, APawn *> UPlayerUtilities::CreateTestPlayer(UWorld &World, const TSubclassOf<APawn> &PawnClass) {
     auto PlayerController = World.SpawnActor<ACommonPlayerController>();
-    auto Pawn = World.SpawnActor<APawn>();
+    auto Pawn = World.SpawnActor<APawn>(PawnClass);
     FPlayerPtr Player(NewObject<UCommonLocalPlayer>(GEngine));
     World.GetGameInstance()->AddLocalPlayer(Player.Get(), FPlatformUserId::CreateFromInternalId(0));
     PlayerController->SetPlayer(Player.Get());
