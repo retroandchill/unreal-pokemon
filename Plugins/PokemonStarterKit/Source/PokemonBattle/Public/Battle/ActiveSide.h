@@ -30,6 +30,7 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
 
   protected:
     void BeginPlay() override;
+    void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
   public:
     const FGuid &GetInternalId() const override;

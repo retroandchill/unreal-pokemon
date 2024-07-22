@@ -21,7 +21,9 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
+#include "Chaos/ChaosPerfTest.h"
 #include <functional>
+#include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/empty.hpp>
 #include <range/v3/view/filter.hpp>
@@ -57,6 +59,13 @@ void APokemonBattle::BeginPlay() {
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
     TransitionSubsystem->SetRegisteredBattle(this);
+}
+
+void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    Super::EndPlay(EndPlayReason);
+    auto AllSides = RangeHelpers::CreateRange(Sides)
+        | ranges::views::transform([](const TScriptInterface<IBattleSide>& Side) { return CastChecked<AActor>(Side.GetObject()); });
+    ranges::for_each(AllSides, [](AActor* Actor) { Actor->Destroy(); });
 }
 
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {

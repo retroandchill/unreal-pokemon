@@ -135,6 +135,9 @@ void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     for (auto Innate : InnateAbilityHandles) {
         BattlerAbilityComponent->ClearAbility(Innate);
     }
+    if (Sprite != nullptr) {
+        Sprite->Destroy();
+    }
 }
 
 FGuid ABattlerActor::GetInternalId() const {

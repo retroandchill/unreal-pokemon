@@ -66,6 +66,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
   protected:
     void BeginPlay() override;
+    void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
     void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
 

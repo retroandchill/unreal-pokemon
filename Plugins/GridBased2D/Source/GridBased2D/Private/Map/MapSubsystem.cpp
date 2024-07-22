@@ -6,13 +6,8 @@
 #include "Components/AudioComponent.h"
 #include "Components/GridBasedMovementComponent.h"
 #include "Components/GridMovable.h"
-#include "Engine/LevelStreamingDynamic.h"
-#include "GridBased2DSettings.h"
-#include "RangeHelpers.h"
-#include "Characters/GamePlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/TileMapGridBasedMap.h"
-#include <range/v3/view/filter.hpp>
 
 DECLARE_DELEGATE(FLoadFinalized)
 
@@ -78,7 +73,7 @@ void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
     CurrentBackgroundMusic->OnAudioFinishedNative.AddWeakLambda(this, [this](const UAudioComponent *) {
         if (!SuspendedBackgroundMusic.IsEmpty()) {
             CurrentBackgroundMusic = SuspendedBackgroundMusic.Pop();
-            CurrentBackgroundMusic->SetPaused(!IsJinglePlaying());
+            CurrentBackgroundMusic->SetPaused(IsJinglePlaying());
         }
     });
 
