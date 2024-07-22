@@ -96,6 +96,10 @@ bool UMapSubsystem::IsMusicPaused() const {
            CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Paused;
 }
 
+UAudioComponent * UMapSubsystem::GetCurrentMusic() const {
+    return CurrentBackgroundMusic;
+}
+
 void UMapSubsystem::PlayJingle(USoundBase *Jingle, float VolumeMultiplier, float PitchMultiplier) {
     if (Jingle == nullptr) {
         return;

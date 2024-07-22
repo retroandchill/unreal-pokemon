@@ -81,6 +81,9 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
     UFUNCTION(BlueprintPure, Category = "Sound|Music")
     bool IsMusicPaused() const;
 
+    UFUNCTION(BlueprintPure, Category = "Sound|Music")
+    UAudioComponent* GetCurrentMusic() const;
+
     /**
      * Play the specified sound as a musical jingle, pausing the background music and then resuming once it has
      * completed.
