@@ -1,9 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Map/MapSubsystem.h"
-#include "EngineUtils.h"
-#include "GridBased2D.h"
-#include "Components/AudioComponent.h"
 #include "Components/GridBasedMovementComponent.h"
 #include "Components/GridMovable.h"
 #include "Kismet/GameplayStatics.h"
@@ -12,112 +9,6 @@
 DECLARE_DELEGATE(FLoadFinalized)
 
 UMapSubsystem::UMapSubsystem(const FObjectInitializer &) {
-}
-
-void UMapSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
-    if (BGM == nullptr) {
-        return;
-    }
-
-    // Don't restart the music if its already playing
-    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) {
-        return;
-    }
-
-    if (CurrentBackgroundMusic != nullptr) {
-        CurrentBackgroundMusic->Stop();
-    }
-
-    CurrentBackgroundMusic =
-        UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
-}
-
-void UMapSubsystem::PlayTempBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
-    if (BGM == nullptr) {
-        return;
-    }
-
-    // Don't restart the music if its already playing
-    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) {
-        return;
-    }
-
-    if (CurrentBackgroundMusic != nullptr) {
-        CurrentBackgroundMusic->SetPaused(true);
-        SuspendedBackgroundMusic.Emplace(CurrentBackgroundMusic);
-    }
-
-    CurrentBackgroundMusic =
-        UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
-}
-
-void UMapSubsystem::PauseBackgroundMusic() {
-    if (CurrentBackgroundMusic == nullptr) {
-        return;
-    }
-    CurrentBackgroundMusic->SetPaused(true);
-}
-
-void UMapSubsystem::ResumeBackgroundMusic() {
-    if (CurrentBackgroundMusic == nullptr) {
-        return;
-    }
-    CurrentBackgroundMusic->SetPaused(false);
-}
-
-void UMapSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
-    if (CurrentBackgroundMusic == nullptr) {
-        return;
-    }
-    
-    CurrentBackgroundMusic->OnAudioFinishedNative.AddWeakLambda(this, [this](const UAudioComponent *) {
-        if (!SuspendedBackgroundMusic.IsEmpty()) {
-            CurrentBackgroundMusic = SuspendedBackgroundMusic.Pop();
-            CurrentBackgroundMusic->SetPaused(IsJinglePlaying());
-        }
-    });
-
-    if (FMath::IsNearlyZero(FadeOutDuration) || IsJinglePlaying()) {
-        CurrentBackgroundMusic->Stop();
-    } else {
-        CurrentBackgroundMusic->FadeOut(FadeOutDuration, 0.f);
-    }
-
-    CurrentBackgroundMusic = nullptr;
-}
-
-bool UMapSubsystem::IsMusicPlaying() const {
-    return CurrentBackgroundMusic != nullptr &&
-           CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Playing;
-}
-
-bool UMapSubsystem::IsMusicPaused() const {
-    return CurrentBackgroundMusic != nullptr &&
-           CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Paused;
-}
-
-UAudioComponent * UMapSubsystem::GetCurrentMusic() const {
-    return CurrentBackgroundMusic;
-}
-
-void UMapSubsystem::PlayJingle(USoundBase *Jingle, float VolumeMultiplier, float PitchMultiplier) {
-    if (Jingle == nullptr) {
-        return;
-    }
-    if (CurrentJingle != nullptr) {
-        return;
-    }
-
-    PauseBackgroundMusic();
-    CurrentJingle = UGameplayStatics::SpawnSound2D(this, Jingle, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
-    CurrentJingle->OnAudioFinishedNative.AddLambda([this](const UAudioComponent *const) {
-        CurrentJingle = nullptr;
-        ResumeBackgroundMusic();
-    });
-}
-
-bool UMapSubsystem::IsJinglePlaying() const {
-    return CurrentJingle != nullptr && CurrentJingle->GetPlayState() == EAudioComponentPlayState::Playing;
 }
 
 void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, FName WarpTag) {
