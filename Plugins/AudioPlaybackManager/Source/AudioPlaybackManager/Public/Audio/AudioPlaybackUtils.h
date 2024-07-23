@@ -4,16 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "AudioPlaybackUtils.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class AUDIOPLAYBACKMANAGER_API UAudioPlaybackUtils : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Play the supplied audio file as the new BGM
      * @param WorldContext Object used to get the Map Subsystem
@@ -23,7 +24,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music",
               meta = (WorldContext = WorldContext, AdvancedDisplay = "VolumeMultiplier,PitchMultiplier"))
-    static void PlayBackgroundMusic(const UObject* WorldContext, USoundBase *BGM, float VolumeMultiplier = 1,
+    static void PlayBackgroundMusic(const UObject *WorldContext, USoundBase *BGM, float VolumeMultiplier = 1,
                                     float PitchMultiplier = 1);
 
     /**
@@ -35,7 +36,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music", DisplayName = "Play Background Music (Temporary Suspend)",
               meta = (WorldContext = WorldContext, AdvancedDisplay = "VolumeMultiplier,PitchMultiplier"))
-    static void PlayTempBackgroundMusic(const UObject* WorldContext, USoundBase *BGM, float VolumeMultiplier = 1,
+    static void PlayTempBackgroundMusic(const UObject *WorldContext, USoundBase *BGM, float VolumeMultiplier = 1,
                                         float PitchMultiplier = 1);
 
     /**
@@ -43,14 +44,14 @@ public:
      * @param WorldContext Object used to get the Map Subsystem
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music", meta = (WorldContext = WorldContext))
-    static void PauseBackgroundMusic(const UObject* WorldContext);
+    static void PauseBackgroundMusic(const UObject *WorldContext);
 
     /**
      * Resume the paused BGM
      * @param WorldContext Object used to get the Map Subsystem
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music", meta = (WorldContext = WorldContext))
-    static void ResumeBackgroundMusic(const UObject* WorldContext);
+    static void ResumeBackgroundMusic(const UObject *WorldContext);
 
     /**
      * Stop the currently playing BGM
@@ -59,7 +60,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music",
               meta = (WorldContext = WorldContext, AdvancedDisplay = "FadeOutDuration"))
-    static void StopBackgroundMusic(const UObject* WorldContext, float FadeOutDuration = 0);
+    static void StopBackgroundMusic(const UObject *WorldContext, float FadeOutDuration = 0);
 
     /**
      * Is there currently background music that is playing?
@@ -86,7 +87,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "Sound|Music",
               meta = (WorldContext = WorldContext, AdvancedDisplay = "VolumeMultiplier,PitchMultiplier"))
-    static void PlayJingle(const UObject* WorldContext, USoundBase *Jingle, float VolumeMultiplier = 1,
+    static void PlayJingle(const UObject *WorldContext, USoundBase *Jingle, float VolumeMultiplier = 1,
                            float PitchMultiplier = 1);
 
     /**
@@ -96,5 +97,4 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = "Sound|Music", meta = (WorldContext = WorldContext))
     static bool IsJinglePlaying(const UObject *WorldContext);
-
 };

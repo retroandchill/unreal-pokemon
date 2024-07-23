@@ -62,7 +62,7 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
     UFUNCTION(BlueprintImplementableEvent, Category = "Screen Transitions")
     void ScreenFadeOut();
 
-    AActor* ChoosePlayerStart_Implementation(AController *Player) override;
+    AActor *ChoosePlayerStart_Implementation(AController *Player) override;
 
   public:
     /**

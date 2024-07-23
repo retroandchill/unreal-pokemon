@@ -32,7 +32,8 @@ class POKEMONBATTLE_API UInitiateBattle : public UBlueprintAsyncActionBase {
      * @return The created async node
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Battle, meta = (WorldContext = "WorldContext"))
-    static UInitiateBattle *InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo, TSubclassOf<ABattleTransitionActor> Transition);
+    static UInitiateBattle *InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo,
+                                           TSubclassOf<ABattleTransitionActor> Transition);
 
     void Activate() override;
 

@@ -77,6 +77,6 @@ void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovab
     }
 }
 
-const TOptional<TPair<FName, EFacingDirection>> & UMapSubsystem::GetWarpDestination() const {
+const TOptional<TPair<FName, EFacingDirection>> &UMapSubsystem::GetWarpDestination() const {
     return WarpDestination;
 }

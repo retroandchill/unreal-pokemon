@@ -57,7 +57,6 @@ EFacingDirection UGridUtils::GetOpposingDirection(EFacingDirection Direction) {
         return Down;
     }
 
-    
     return Direction;
 }
 

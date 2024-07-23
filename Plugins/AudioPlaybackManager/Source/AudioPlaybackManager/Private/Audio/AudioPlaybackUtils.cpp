@@ -1,11 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Audio/AudioPlaybackUtils.h"
 #include "Audio/AudioPlaybackSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 
-void UAudioPlaybackUtils::PlayBackgroundMusic(const UObject* WorldContext, USoundBase *BGM, float VolumeMultiplier,
+void UAudioPlaybackUtils::PlayBackgroundMusic(const UObject *WorldContext, USoundBase *BGM, float VolumeMultiplier,
                                               float PitchMultiplier) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UAudioPlaybackSubsystem>();
     check(MapSubsystem != nullptr)
@@ -13,7 +12,7 @@ void UAudioPlaybackUtils::PlayBackgroundMusic(const UObject* WorldContext, USoun
     MapSubsystem->PlayBackgroundMusic(BGM, VolumeMultiplier, PitchMultiplier);
 }
 
-void UAudioPlaybackUtils::PlayTempBackgroundMusic(const UObject* WorldContext, USoundBase *BGM, float VolumeMultiplier,
+void UAudioPlaybackUtils::PlayTempBackgroundMusic(const UObject *WorldContext, USoundBase *BGM, float VolumeMultiplier,
                                                   float PitchMultiplier) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UAudioPlaybackSubsystem>();
     check(MapSubsystem != nullptr)
@@ -21,21 +20,21 @@ void UAudioPlaybackUtils::PlayTempBackgroundMusic(const UObject* WorldContext, U
     MapSubsystem->PlayTempBackgroundMusic(BGM, VolumeMultiplier, PitchMultiplier);
 }
 
-void UAudioPlaybackUtils::PauseBackgroundMusic(const UObject* WorldContext) {
+void UAudioPlaybackUtils::PauseBackgroundMusic(const UObject *WorldContext) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UAudioPlaybackSubsystem>();
     check(MapSubsystem != nullptr)
 
     MapSubsystem->PauseBackgroundMusic();
 }
 
-void UAudioPlaybackUtils::ResumeBackgroundMusic(const UObject* WorldContext) {
+void UAudioPlaybackUtils::ResumeBackgroundMusic(const UObject *WorldContext) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UAudioPlaybackSubsystem>();
     check(MapSubsystem != nullptr)
 
     MapSubsystem->ResumeBackgroundMusic();
 }
 
-void UAudioPlaybackUtils::StopBackgroundMusic(const UObject* WorldContext, float FadeOutDuration) {
+void UAudioPlaybackUtils::StopBackgroundMusic(const UObject *WorldContext, float FadeOutDuration) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UAudioPlaybackSubsystem>();
     check(MapSubsystem != nullptr)
 
@@ -54,7 +53,7 @@ bool UAudioPlaybackUtils::IsMusicPaused(const UObject *WorldContext) {
     return MapSubsystem->IsMusicPaused();
 }
 
-void UAudioPlaybackUtils::PlayJingle(const UObject* WorldContext, USoundBase *Jingle, float VolumeMultiplier,
+void UAudioPlaybackUtils::PlayJingle(const UObject *WorldContext, USoundBase *Jingle, float VolumeMultiplier,
                                      float PitchMultiplier) {
     auto MapSubsystem = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UAudioPlaybackSubsystem>();
     check(MapSubsystem != nullptr)

@@ -1,7 +1,7 @@
 ﻿#include "UnrealPokemonEditor.h"
-#include "AssetToolsModule.h"
 #include "AnimSequences/PaperZDAnimSequence_Flipbook.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "AssetToolsModule.h"
 #include "Thumbnails/PaperZDAnimSequenceFlipbookThumbnailRenderer.h"
 
 DEFINE_LOG_CATEGORY(LogUnrealPokemonEditor)

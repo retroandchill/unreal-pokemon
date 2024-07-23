@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "BattleTransitionActor.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnBattleTransitionComplete)
@@ -15,18 +16,16 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Transitions")
     void TransitionToBattle();
 
-    FDelegateHandle BindToOnComplete(FOnBattleTransitionComplete::FDelegate&& Binding);
+    FDelegateHandle BindToOnComplete(FOnBattleTransitionComplete::FDelegate &&Binding);
 
-protected:
+  protected:
     UFUNCTION(BlueprintCallable, Category = "Battle|Transitions")
     void CompleteTransition();
 
-private:
+  private:
     FOnBattleTransitionComplete OnBattleTransitionComplete;
-
-
 };

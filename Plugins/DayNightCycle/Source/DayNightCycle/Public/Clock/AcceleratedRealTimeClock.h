@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameClock.h"
 #include "UObject/Object.h"
+
 #include "AcceleratedRealTimeClock.generated.h"
 
 /**
@@ -15,10 +16,10 @@ UCLASS(Config = Game)
 class DAYNIGHTCYCLE_API UAcceleratedRealTimeClock : public UObject, public IGameClock {
     GENERATED_BODY()
 
-protected:
+  protected:
     FDateTime GetCurrentTime_Implementation() const override;
 
-private:
+  private:
     /**
      * How many in-game days make up a real day?
      */
@@ -30,5 +31,4 @@ private:
      */
     UPROPERTY(Config)
     FDateTime InitialTime = FDateTime(2000, 1, 1, 4);
-
 };

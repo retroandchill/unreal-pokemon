@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameClock.h"
 #include "UObject/Object.h"
+
 #include "RealTimeClock.generated.h"
 
 /**
@@ -14,7 +15,6 @@ UCLASS()
 class DAYNIGHTCYCLE_API URealTimeClock : public UObject, public IGameClock {
     GENERATED_BODY()
 
-protected:
+  protected:
     FDateTime GetCurrentTime_Implementation() const override;
-
 };

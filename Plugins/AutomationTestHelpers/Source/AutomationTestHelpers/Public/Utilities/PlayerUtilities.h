@@ -22,5 +22,6 @@ class AUTOMATIONTESTHELPERS_API UPlayerUtilities : public UBlueprintFunctionLibr
      * @param PawnClass
      * @return The created player and pawn in the world
      */
-    static std::pair<FPlayerPtr, APawn *> CreateTestPlayer(UWorld &World, const TSubclassOf<APawn> &PawnClass = APawn::StaticClass());
+    static std::pair<FPlayerPtr, APawn *> CreateTestPlayer(UWorld &World,
+                                                           const TSubclassOf<APawn> &PawnClass = APawn::StaticClass());
 };

@@ -40,8 +40,6 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
   public:
-    
-    
     UFUNCTION(BlueprintPure, Category = Metadata)
     FGuid GetInternalId() const override;
 

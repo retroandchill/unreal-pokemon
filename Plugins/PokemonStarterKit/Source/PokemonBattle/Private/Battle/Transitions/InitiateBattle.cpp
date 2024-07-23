@@ -3,7 +3,8 @@
 #include "Battle/Transitions/InitiateBattle.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 
-UInitiateBattle *UInitiateBattle::InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo, TSubclassOf<ABattleTransitionActor> Transition) {
+UInitiateBattle *UInitiateBattle::InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo,
+                                                 TSubclassOf<ABattleTransitionActor> Transition) {
     auto Node = NewObject<UInitiateBattle>();
     Node->WorldContext = WorldContext;
     Node->BattleInfo = BattleInfo;

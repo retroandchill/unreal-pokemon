@@ -21,11 +21,12 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
     Battle->BindToOnBattleEnd(FOnBattleEnd::FDelegate::CreateUObject(this, &UBattleTransitionSubsystem::ExitBattle));
 }
 
-void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubclassOf<ABattleTransitionActor> Transition) {
+void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
+                                                TSubclassOf<ABattleTransitionActor> Transition) {
     static auto &BattleLevelOffset = Pokemon::FBaseSettings::Get().GetBattleSceneOffset();
     if (Transition != nullptr) {
         using FTransitionBinding = FOnBattleTransitionComplete::FDelegate;
-        
+
         bBattleInitialized = false;
         CurrentTransition = GetWorld()->SpawnActor<ABattleTransitionActor>(Transition);
         CurrentTransition->BindToOnComplete(FTransitionBinding::CreateWeakLambda(this, [this] {
@@ -38,7 +39,7 @@ void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubcla
         }));
         CurrentTransition->TransitionToBattle();
     }
-    
+
     bool bSuccess;
     Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset,
                                                                            FRotator(), bSuccess);

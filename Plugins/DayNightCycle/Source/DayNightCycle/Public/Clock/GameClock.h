@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "GameClock.generated.h"
 
 // This class does not need to be modified.
@@ -19,12 +20,11 @@ class DAYNIGHTCYCLE_API IGameClock {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Get the current time to be used by the game.
      * @return The current time in the game
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Clock)
     FDateTime GetCurrentTime() const;
-
 };

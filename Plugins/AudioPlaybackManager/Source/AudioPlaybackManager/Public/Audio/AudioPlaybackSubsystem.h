@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "AudioPlaybackSubsystem.generated.h"
 
 /**
@@ -13,8 +14,8 @@ UCLASS()
 class AUDIOPLAYBACKMANAGER_API UAudioPlaybackSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
-/**
+  public:
+    /**
      * Play the supplied audio file as the new BGM
      * @param BGM The new BGM to play. (Will be ignored if nullptr)
      * @param VolumeMultiplier A linear scalar multiplied with the volume, in order to make the sound louder or softer.
@@ -70,7 +71,7 @@ public:
      * @return The audio component for the background music
      */
     UFUNCTION(BlueprintPure, Category = "Sound|Music")
-    UAudioComponent* GetCurrentMusic() const;
+    UAudioComponent *GetCurrentMusic() const;
 
     /**
      * Play the specified sound as a musical jingle, pausing the background music and then resuming once it has
@@ -89,7 +90,7 @@ public:
     UFUNCTION(BlueprintPure, Category = "Sound|Music")
     bool IsJinglePlaying() const;
 
-private:
+  private:
     /**
      * The currently playing background music component.
      */
@@ -108,5 +109,4 @@ private:
      */
     UPROPERTY()
     TObjectPtr<UAudioComponent> CurrentJingle;
-
 };

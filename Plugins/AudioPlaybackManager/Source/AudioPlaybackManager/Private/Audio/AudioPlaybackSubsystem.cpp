@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Audio/AudioPlaybackSubsystem.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -60,7 +59,7 @@ void UAudioPlaybackSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
     if (CurrentBackgroundMusic == nullptr) {
         return;
     }
-    
+
     CurrentBackgroundMusic->OnAudioFinishedNative.AddWeakLambda(this, [this](const UAudioComponent *) {
         if (!SuspendedBackgroundMusic.IsEmpty()) {
             CurrentBackgroundMusic = SuspendedBackgroundMusic.Pop();
@@ -87,7 +86,7 @@ bool UAudioPlaybackSubsystem::IsMusicPaused() const {
            CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Paused;
 }
 
-UAudioComponent * UAudioPlaybackSubsystem::GetCurrentMusic() const {
+UAudioComponent *UAudioPlaybackSubsystem::GetCurrentMusic() const {
     return CurrentBackgroundMusic;
 }
 
