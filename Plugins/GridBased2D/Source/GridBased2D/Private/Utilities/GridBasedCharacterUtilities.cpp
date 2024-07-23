@@ -1,11 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/GridBasedCharacterUtilities.h"
 #include "CharacterMovementComponentAsync.h"
-#include "MathUtilities.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MathUtilities.h"
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {
@@ -20,8 +19,10 @@ bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVe
 }
 
 bool UGridBasedCharacterUtilities::IsStandingNextToCliff(ACharacter *Character, const FVector &TargetSquare) {
-    auto [Distance1, Component1] = PerformTraceToGround(Character, FindLocationJustOffTileEdge(Character, TargetSquare));
-    auto [Distance2, Component2] = PerformTraceToGround(Character, FindLocationJustBeforeTileEdge(Character, TargetSquare));
+    auto [Distance1, Component1] =
+        PerformTraceToGround(Character, FindLocationJustOffTileEdge(Character, TargetSquare));
+    auto [Distance2, Component2] =
+        PerformTraceToGround(Character, FindLocationJustBeforeTileEdge(Character, TargetSquare));
 
     if (FMath::Abs(Distance1 - Distance2) > Character->GetCharacterMovement()->MaxStepHeight) {
         return true;
@@ -55,7 +56,7 @@ FVector UGridBasedCharacterUtilities::FindLocationJustOffTileEdge(ACharacter *Ch
 }
 
 FVector UGridBasedCharacterUtilities::FindLocationJustBeforeTileEdge(ACharacter *Character,
-    const FVector &TargetSquare) {
+                                                                     const FVector &TargetSquare) {
     auto Location = Character->GetActorLocation();
     auto MidPoint = UMathUtilities::Midpoint(TargetSquare, Location);
     auto Diff = TargetSquare - Location;
@@ -64,12 +65,12 @@ FVector UGridBasedCharacterUtilities::FindLocationJustBeforeTileEdge(ACharacter 
 }
 
 TPair<double, UPrimitiveComponent *> UGridBasedCharacterUtilities::PerformTraceToGround(ACharacter *Character,
-    const FVector &Position) {
+                                                                                        const FVector &Position) {
     static constexpr double TraceMax = 100.0;
     FHitResult Result;
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(Character);
     auto Hit = Character->GetWorld()->LineTraceSingleByChannel(Result, Position, Position - FVector(0, 0, TraceMax),
-                                                    ECC_Visibility, Params);
+                                                               ECC_Visibility, Params);
     return {Hit ? Result.Distance : TraceMax, Result.Component.Get()};
 }

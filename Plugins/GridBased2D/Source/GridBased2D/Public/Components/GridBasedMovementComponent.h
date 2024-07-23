@@ -108,10 +108,10 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     bool IsMoving() const override;
 
     UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
-    void MoveInput(const FVector2D& InputVector) override;
+    void MoveInput(const FVector2D &InputVector) override;
 
     UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
-    void TurnInput(const FVector2D& InputVector) override;
+    void TurnInput(const FVector2D &InputVector) override;
 
     /**
      * Perform a hit test on the tile in the given direction.
@@ -120,7 +120,8 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
      */
     TArray<FOverlapResult> HitTestOnFacingTile(EFacingDirection MovementDirection) const;
 
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Character|Movement",
+              meta = (AutoCreateRefTerm = MovementVector))
     TArray<TScriptInterface<IInteractable>> InteractTestOnFacingTile(EFacingDirection MovementDirection) const;
 
     /**

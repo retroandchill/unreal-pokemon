@@ -4,18 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "PaperZDEditorHelpers.generated.h"
 
-class UPaperFlipbook;class UPaperZDAnimationSource;
+class UPaperFlipbook;
+class UPaperZDAnimationSource;
 
 /**
- * 
+ *
  */
 UCLASS()
 class UNREALPOKEMONEDITOR_API UPaperZDEditorHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set the target animation source for the given factory.
      * <p><b>NOTE</b>: This function is incredibly unsafe, call at your own risk.</p>
@@ -24,6 +26,5 @@ public:
      * @return Did this operation succeed?
      */
     UFUNCTION(BlueprintCallable, Category = "PaperZD|Utilties")
-    static bool SetTargetAnimSource(UFactory* Factory, UPaperZDAnimationSource* AnimationSource);
-
+    static bool SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource);
 };

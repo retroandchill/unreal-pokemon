@@ -6,8 +6,8 @@
 #include "GridUtils.h"
 #include "Interaction/Interactable.h"
 #include "Kismet/GameplayStatics.h"
-#include "Map/TileMapGridBasedMap.h"
 #include "Map/MapSubsystem.h"
+#include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
 #include "RangeHelpers.h"
 #include <range/v3/view/filter.hpp>
@@ -211,11 +211,12 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
     return Result;
 }
 
-TArray<TScriptInterface<IInteractable>> UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
-    return RangeHelpers::CreateRange(HitTestOnFacingTile(MovementDirection))
-        | ranges::views::transform([](const FOverlapResult& Result) { return Result.GetActor(); })
-        | ranges::views::filter(&AActor::Implements<UInteractable>)
-        | RangeHelpers::TToArray<TScriptInterface<IInteractable>>();
+TArray<TScriptInterface<IInteractable>>
+UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
+    return RangeHelpers::CreateRange(HitTestOnFacingTile(MovementDirection)) |
+           ranges::views::transform([](const FOverlapResult &Result) { return Result.GetActor(); }) |
+           ranges::views::filter(&AActor::Implements<UInteractable>) |
+           RangeHelpers::TToArray<TScriptInterface<IInteractable>>();
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {

@@ -6,11 +6,11 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogUnrealPokemonEditor, Log, All)
 
 class FUnrealPokemonEditorModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 
-private:
+  private:
     /**
      * Called after the engine is fully initialized
      */

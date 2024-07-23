@@ -1,14 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "PaperZDFlipbookHelpers.h"
 #include "AnimSequences/PaperZDAnimSequence_Flipbook.h"
 
-UPaperFlipbook * UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequence *Sequence,
-                                                             EFacingDirection Direction) {
+UPaperFlipbook *UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequence *Sequence,
+                                                            EFacingDirection Direction) {
     float RenderOrientation = 0.f;
     switch (Direction) {
-    using enum EFacingDirection;
+        using enum EFacingDirection;
     case Down:
         RenderOrientation = 180.f;
         break;
@@ -28,5 +27,5 @@ UPaperFlipbook * UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequenc
         return nullptr;
     }
 
-    return FlipbookSequence->GetAnimationData<UPaperFlipbook*>(RenderOrientation);
+    return FlipbookSequence->GetAnimationData<UPaperFlipbook *>(RenderOrientation);
 }

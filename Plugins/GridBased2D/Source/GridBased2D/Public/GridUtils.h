@@ -11,10 +11,7 @@ class UGameplayStatics;
 class AGridBasedGameModeBase;
 
 UENUM(BlueprintType)
-enum class EValidDirection : uint8 {
-    HasDirection,
-    NoDirection
-};
+enum class EValidDirection : uint8 { HasDirection, NoDirection };
 
 /**
  * Utility library for functions regarding the Grid system
@@ -52,9 +49,8 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
      * @param Execs The way the execution should flow
      * @return The interpreted direction
      */
-    UFUNCTION(BlueprintCallable, Category = "Map|Grid",
-        meta = (AutoCreateRefTerm = Vector, ExpandEnumAsExecs = Execs))
-    static void VectorToFacingDirection(const FVector2D& Vector, EFacingDirection& Direction, EValidDirection &Execs);
+    UFUNCTION(BlueprintCallable, Category = "Map|Grid", meta = (AutoCreateRefTerm = Vector, ExpandEnumAsExecs = Execs))
+    static void VectorToFacingDirection(const FVector2D &Vector, EFacingDirection &Direction, EValidDirection &Execs);
 
     /**
      * Adjust the movement position based upon the given direction

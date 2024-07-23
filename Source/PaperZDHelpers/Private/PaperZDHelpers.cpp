@@ -7,5 +7,5 @@ void FPaperZDHelpersModule::StartupModule() {
 void FPaperZDHelpersModule::ShutdownModule() {
     // No shutdown needed
 }
-    
+
 IMPLEMENT_MODULE(FPaperZDHelpersModule, PaperZDHelpers)

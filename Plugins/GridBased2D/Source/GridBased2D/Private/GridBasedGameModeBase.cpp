@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "GridBasedGameModeBase.h"
 #include "EngineUtils.h"
-#include "GridBased2DSettings.h"
 #include "GameFramework/PlayerStart.h"
+#include "GridBased2DSettings.h"
 #include "Map/MapSubsystem.h"
 
 double AGridBasedGameModeBase::GetGridSize() const {
@@ -32,7 +32,7 @@ void AGridBasedGameModeBase::FadeOut() {
     ScreenFadeOut();
 }
 
-AActor * AGridBasedGameModeBase::ChoosePlayerStart_Implementation(AController *Player) {
+AActor *AGridBasedGameModeBase::ChoosePlayerStart_Implementation(AController *Player) {
     auto Subsystem = GetGameInstance()->GetSubsystem<UMapSubsystem>();
     check(Subsystem != nullptr)
 
