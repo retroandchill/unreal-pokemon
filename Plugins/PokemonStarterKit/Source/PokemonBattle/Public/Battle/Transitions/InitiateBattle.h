@@ -9,6 +9,8 @@
 
 #include "InitiateBattle.generated.h"
 
+class ABattleTransitionActor;
+
 /**
  * Delegate that is dispatched after battle is complete
  */
@@ -26,10 +28,12 @@ class POKEMONBATTLE_API UInitiateBattle : public UBlueprintAsyncActionBase {
      * Initiate a battler with the provided settings then after the battle continue script processing
      * @param WorldContext The object used to obtain the world
      * @param BattleInfo The information about the battle in question
+     * @param Transition
      * @return The created async node
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Battle, meta = (WorldContext = "WorldContext"))
-    static UInitiateBattle *InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo);
+    static UInitiateBattle *InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo,
+                                           TSubclassOf<ABattleTransitionActor> Transition);
 
     void Activate() override;
 
@@ -57,6 +61,9 @@ class POKEMONBATTLE_API UInitiateBattle : public UBlueprintAsyncActionBase {
      */
     UPROPERTY()
     FBattleInfo BattleInfo;
+
+    UPROPERTY()
+    TSubclassOf<ABattleTransitionActor> Transition;
 
     /**
      * The handle tied to the output exec pin

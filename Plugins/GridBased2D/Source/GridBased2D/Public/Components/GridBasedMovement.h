@@ -41,12 +41,12 @@ class GRIDBASED2D_API IGridBasedMovement {
      * @param MovementVector The input information received
      */
     UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
-    virtual void MoveInput(const FVector2D& MovementVector) = 0;
+    virtual void MoveInput(const FVector2D &MovementVector) = 0;
 
     /**
      * Perform the face direction action when receiving the input
      * @param MovementVector The input information received
      */
     UFUNCTION(BlueprintCallable, Category = "Character|Movement", meta = (AutoCreateRefTerm = MovementVector))
-    virtual void TurnInput(const FVector2D& MovementVector) = 0;
+    virtual void TurnInput(const FVector2D &MovementVector) = 0;
 };

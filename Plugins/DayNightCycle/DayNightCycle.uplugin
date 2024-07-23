@@ -1,10 +1,10 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
 	"FriendlyName": "DayNightCycle",
 	"Description": "Adds the capability to handle a day night cycle inside a map",
-	"Category": "Other",
+	"Category": "Gameplay",
 	"CreatedBy": "Retro & Chill",
 	"CreatedByURL": "",
 	"DocsURL": "",
@@ -24,5 +24,6 @@
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
-	]
+	],
+	"SupportURL": ""
 }

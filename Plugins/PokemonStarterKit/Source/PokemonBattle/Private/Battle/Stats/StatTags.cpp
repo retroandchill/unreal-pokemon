@@ -9,7 +9,7 @@ namespace Pokemon::Battle::Stats {
 
 const UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
 
-FLookup::FLookup() {
+    FLookup::FLookup() {
     auto &DataManager = FDataManager::GetInstance();
     auto &TypeTable = DataManager.GetDataTable<FStat>();
     TypeTable.ForEach([this](const FStat &Stat) {

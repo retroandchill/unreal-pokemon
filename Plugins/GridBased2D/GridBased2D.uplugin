@@ -53,6 +53,10 @@
 			"Enabled": true
 		},
 		{
+			"Name": "AudioPlaybackManager",
+			"Enabled": true
+		},
+		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
 			"Optional": true

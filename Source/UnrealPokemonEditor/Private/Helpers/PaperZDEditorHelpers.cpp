@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Helpers/PaperZDEditorHelpers.h"
 #include "UnrealPokemonEditor.h"
 
@@ -13,6 +12,7 @@ bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnima
     }
 
     auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(Factory);
-    TPropertyTypeFundamentals<TObjectPtr<UPaperZDAnimationSource>>::SetPropertyValue(PropertyContainer, AnimationSource);
+    TPropertyTypeFundamentals<TObjectPtr<UPaperZDAnimationSource>>::SetPropertyValue(PropertyContainer,
+                                                                                     AnimationSource);
     return true;
 }

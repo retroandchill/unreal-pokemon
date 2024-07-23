@@ -15,6 +15,7 @@
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
+#include "Chaos/ChaosPerfTest.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -22,6 +23,7 @@
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
 #include <functional>
+#include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/empty.hpp>
 #include <range/v3/view/filter.hpp>
@@ -57,6 +59,15 @@ void APokemonBattle::BeginPlay() {
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
     TransitionSubsystem->SetRegisteredBattle(this);
+}
+
+void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+    Super::EndPlay(EndPlayReason);
+    auto AllSides =
+        RangeHelpers::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
+            return CastChecked<AActor>(Side.GetObject());
+        });
+    ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
 }
 
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {

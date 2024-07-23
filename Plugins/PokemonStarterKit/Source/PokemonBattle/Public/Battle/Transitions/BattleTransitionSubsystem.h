@@ -9,6 +9,7 @@
 
 #include "BattleTransitionSubsystem.generated.h"
 
+class ABattleTransitionActor;
 class ULevelStreamingDynamic;
 class IBattle;
 
@@ -42,9 +43,10 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
     /**
      * Initialize a wild battle with the provided Pokémon information
      * @param Info The Pokémon information that should be battled against
+     * @param Transition
      */
     UFUNCTION(BlueprintCallable, Category = Battle)
-    void InitiateBattle(const FBattleInfo &Info);
+    void InitiateBattle(const FBattleInfo &Info, TSubclassOf<ABattleTransitionActor> Transition);
 
     /**
      * Bind an action to when the battle finished delegate
@@ -87,6 +89,11 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
      */
     UPROPERTY()
     TObjectPtr<ULevelStreamingDynamic> Battlefield;
+
+    UPROPERTY()
+    TObjectPtr<ABattleTransitionActor> CurrentTransition;
+
+    bool bBattleInitialized = false;
 
     /**
      * The information about the battle in question

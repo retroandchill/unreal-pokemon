@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "GameClockSubsystem.generated.h"
 
 class IGameClock;
@@ -15,16 +16,16 @@ UCLASS()
 class DAYNIGHTCYCLE_API UGameClockSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
-    
+
     /**
      * Get the clock interface object
      * @return The clock object used to handle the current time
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Clock)
-    const TScriptInterface<IGameClock>& GetGameClock() const;
+    const TScriptInterface<IGameClock> &GetGameClock() const;
 
     /**
      * Check if the current time is presently daytime
@@ -39,12 +40,11 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = Clock)
     float GetDayCoefficient() const;
-    
-private:
+
+  private:
     /**
      * The clock object used to handle the current time
      */
     UPROPERTY(BlueprintGetter = GetGameClock, Category = Clock)
     TScriptInterface<IGameClock> GameClock;
-
 };

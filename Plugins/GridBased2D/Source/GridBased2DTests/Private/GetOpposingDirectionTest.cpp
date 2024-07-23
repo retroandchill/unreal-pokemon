@@ -1,6 +1,6 @@
 ﻿#include "Asserts.h"
-#include "GridUtils.h"
 #include "Characters/FacingDirection.h"
+#include "GridUtils.h"
 #include "Misc/AutomationTest.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GetOpposingDirectionTest, "Unit Tests.GridBased2D.GetOpposingDirectionTest",

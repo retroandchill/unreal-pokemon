@@ -1,7 +1,7 @@
 ﻿#include "Asserts.h"
-#include "DayNightCycleSettings.h"
 #include "Clock/GameClockSubsystem.h"
 #include "Clock/TickBasedClock.h"
+#include "DayNightCycleSettings.h"
 #include "Misc/AutomationTest.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
@@ -23,11 +23,11 @@ bool TestDayNightValues::RunTest(const FString &Parameters) {
 
     UE_ASSERT_FALSE(Subsystem->IsDay());
     UE_ASSERT_EQUAL(0.f, Subsystem->GetDayCoefficient());
-    
+
     Clock->SetCurrentTime(FDateTime(2000, 1, 1, static_cast<int32>(DayLength.GetUpperBoundValue()) - 1));
     UE_ASSERT_TRUE(Subsystem->IsDay());
     UE_ASSERT_TRUE(Subsystem->GetDayCoefficient() >= 0.f);
     UE_ASSERT_TRUE(Subsystem->GetDayCoefficient() <= 1.f);
-    
+
     return true;
 }

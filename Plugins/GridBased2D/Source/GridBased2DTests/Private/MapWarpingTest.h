@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "FunctionalTest.h"
+
 #include "MapWarpingTest.generated.h"
 
 UCLASS(Abstract)
 class GRIDBASED2DTESTS_API AMapWarpingTest : public AFunctionalTest {
     GENERATED_BODY()
 
-public:
+  public:
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
 };
