@@ -33,7 +33,7 @@ bool ItemSelectionWindowTest_Basic::RunTest(const FString &Parameters) {
     auto Dispatcher = NewObject<UItemSlotDispatcher>(World.Get());
     ItemSelection->GetOnItemChanged().AddUniqueDynamic(Dispatcher, &UItemSlotDispatcher::ReceiveItem);
 
-    ItemSelection->SetBag(Bag, TEXT("Medicine"));
+    ItemSelection->SetBag(Bag);
     ItemSelection->SetIndex(0);
     UE_CHECK_EQUAL(TEXT("POTION"), Dispatcher->ItemID.ToString());
     UE_CHECK_EQUAL(5, Dispatcher->Quantity);
@@ -69,7 +69,7 @@ bool ItemSelectionWindowTest_NoItems::RunTest(const FString &Parameters) {
     auto Dispatcher = NewObject<UNoItemSelectedDispatcher>(World.Get());
     ItemSelection->GetOnNoItemSelected().AddUniqueDynamic(Dispatcher, &UNoItemSelectedDispatcher::OnReceive);
 
-    ItemSelection->SetBag(Bag, TEXT("Medicine"));
+    ItemSelection->SetBag(Bag);
     UE_ASSERT_TRUE(Dispatcher->bCalled);
 
     return true;
@@ -100,7 +100,7 @@ bool ItemSelectionWindowTest_Pockets::RunTest(const FString &Parameters) {
     auto Dispatcher = NewObject<UPocketNameDispatcher>(World.Get());
     ItemSelection->GetOnPocketChanged().AddUniqueDynamic(Dispatcher, &UPocketNameDispatcher::OnReceivePocket);
 
-    ItemSelection->SetBag(Bag, TEXT("Medicine"));
+    ItemSelection->SetBag(Bag);
     UE_CHECK_EQUAL(TEXT("Medicine"), Dispatcher->CurrentPocket.ToString());
     ItemSelection->SetIndex(0);
     UE_ASSERT_NOT_NULL(ItemSelection->GetCurrentItem());

@@ -37,18 +37,14 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
   public:
     explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
-
-  protected:
-    void NativeConstruct() override;
-
-  public:
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.
-     * @param Pocket The pocket to view
      */
     UFUNCTION(BlueprintCallable, Category = Inventory)
-    void SetBag(const TScriptInterface<IBag> &Bag, FName Pocket);
+    void SetBag(const TScriptInterface<IBag> &Bag);
+
+    void SetPocket(FName Pocket);
 
     /**
      * Get the window's currently selected item.
@@ -101,10 +97,6 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     void UpdatePocket();
 
-    void NextPocket();
-
-    void PreviousPocket();
-
     /**
      * Add an item to the window with the given name and quantity
      * @param ItemName The identifier of the item
@@ -118,10 +110,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
     UPROPERTY()
     TScriptInterface<IBag> CurrentBag;
 
-    /**
-     * Iterator used to cycle through the pockets
-     */
-    TCircularIterator<FName> PocketIterator;
+    FName CurrentPocket;
 
     /**
      * Filter to apply to the item list
@@ -157,13 +146,5 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     UPROPERTY(EditAnywhere, Category = "Display")
     TSubclassOf<UItemOption> ItemEntryClass;
-
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> NextPocketAction;
-
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> PreviousPocketAction;
-
-    FUIActionBindingHandle NextPocketActionHandle;
-    FUIActionBindingHandle PreviousPocketActionHandle;
+    
 };

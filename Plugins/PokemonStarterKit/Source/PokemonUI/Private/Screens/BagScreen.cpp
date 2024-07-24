@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/BagScreen.h"
+#include "Components/Bag/PocketTabWidget.h"
 #include "Handlers/BagMenu/BagMenuHandler.h"
 #include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Managers/PokemonSubsystem.h"
@@ -13,7 +14,7 @@
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
 
-    // TODO: Add handler for when you confirm an item
+    
     ItemSelectionWindow->GetOnItemSelected().AddUniqueDynamic(this, &UBagScreen::SelectItem);
     ItemSelectionWindow->GetOnCancel().AddUniqueDynamic(this, &UBagScreen::CloseScreen);
     ItemSelectionWindow->GetOnItemChanged().AddUniqueDynamic(ItemInfoWindow, &UItemInfoWindow::Refresh);
@@ -23,10 +24,9 @@ void UBagScreen::NativeConstruct() {
     CommandWindow->GetOnCancel().AddUniqueDynamic(this, &UBagScreen::OnItemCommandCanceled);
 
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
-    auto PocketName = UItemHelper::GetPocketNames()[0];
-    ItemSelectionWindow->SetBag(Bag, PocketName);
+    ItemSelectionWindow->SetBag(Bag);
+    PocketTabWidget->SetItemSelectionWindow(ItemSelectionWindow);
     ItemSelectionWindow->ActivateWidget();
-    ItemSelectionWindow->SetIndex(0);
 }
 
 void UBagScreen::ApplyItemFilter(const FItemFilter &ItemFilter) {

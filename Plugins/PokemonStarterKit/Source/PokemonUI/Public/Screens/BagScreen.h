@@ -8,6 +8,7 @@
 
 #include "BagScreen.generated.h"
 
+class UPocketTabWidget;
 class UBagMenuHandlerSet;
 class UCommand;
 class UBagMenuHandler;
@@ -92,6 +93,9 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UItemInfoWindow> ItemInfoWindow;
+
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UPocketTabWidget> PocketTabWidget;
 
     /**
      * The window that contains the command to call on an item
