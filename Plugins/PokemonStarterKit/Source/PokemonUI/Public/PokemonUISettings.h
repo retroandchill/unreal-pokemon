@@ -17,25 +17,25 @@ public:
     /**
      * The screen displayed when showing a messages
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "TextDisplayScreen"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "TextDisplayScreen"))
     FSoftClassPath TextScreenClass;
 
     /**
      * The screen displayed when showing the party screen
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "PokemonSelectScreen"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "PokemonSelectScreen"))
     FSoftClassPath PartyScreenClass;
 
     /**
      * The screen displayed when showing the party screen
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "BagScreen"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "BagScreen"))
     FSoftClassPath BagScreenClass;
 
     /**
      * The screen displayed when showing the party screen
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (MetaClass = "MoveForgetScreen"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "MoveForgetScreen"))
     FSoftClassPath MoveForgetScreenClass;
 
 };
