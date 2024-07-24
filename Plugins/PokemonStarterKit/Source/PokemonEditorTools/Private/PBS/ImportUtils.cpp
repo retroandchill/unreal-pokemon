@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "PBS/ImportUtils.h"
 #include "DesktopPlatformModule.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonDataSettings.h"
 
 TArray<FStat> UImportUtils::GetMainStatsFromTable(const UDataTable *const DataTable) {
     TArray<FStat *> References;
@@ -35,5 +35,5 @@ FText UImportUtils::SelectFile(const FString &FileTypes) {
 }
 
 const TMap<uint8, FName> &UImportUtils::GetPocketNames() {
-    return Pokemon::FBaseSettings::Get().GetPocketNames();
+    return GetDefault<UPokemonDataSettings>()->PocketNames;
 }

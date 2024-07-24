@@ -10,7 +10,7 @@
 /**
  * The settings class for the RPG Menus module.
  */
-UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "RPG Menus Settings"))
+UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "RPG Menus"))
 class RPGMENUS_API URPGMenusSettings : public UDeveloperSettings {
     GENERATED_BODY()
 

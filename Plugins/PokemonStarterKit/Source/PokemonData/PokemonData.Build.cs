@@ -22,7 +22,7 @@ public class PokemonData : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"DeveloperSettings", "PokemonSettings"
+				"DeveloperSettings"
 			}
 		);
 	}

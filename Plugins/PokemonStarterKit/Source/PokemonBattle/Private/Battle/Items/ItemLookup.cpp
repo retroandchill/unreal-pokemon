@@ -3,14 +3,14 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Abilities/GameplayAbility.h"
 #include "Bag/Item.h"
-#include "Settings/BaseSettings.h"
+#include "DynamicAssetLoadingSettings.h"
 
 TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindHoldItemEffect(FName ID) {
     if (ID.IsNone()) {
         return nullptr;
     }
 
-    auto &AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
     const auto &[ClassPath] = AssetPaths.HoldItemBattleEffectPackageName;
     auto &ClassPrefix = AssetPaths.HoldItemEffectPrefix;
     auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, ID.ToString()});

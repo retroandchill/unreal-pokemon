@@ -7,8 +7,8 @@
 #include "Pokemon/Moves/DefaultMove.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "PokemonDataSettings.h"
 #include "RangeHelpers.h"
-#include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"
@@ -30,8 +30,8 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
     Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
-    const auto &Settings = Pokemon::FBaseSettings::Get();
-    int32 MaxMoves = Settings.GetMaxMoves();
+    const auto &Settings = *GetDefault<UPokemonDataSettings>();
+    int32 MaxMoves = Settings.MaxMoves;
     if (DTO.Moves.Num() > 0) {
         int32 MoveMax = FMath::Min(MaxMoves, DTO.Moves.Num());
         for (int32 i = 0; i < MoveMax; i++) {
@@ -57,7 +57,7 @@ const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
 }
 
 bool UDefaultMoveBlock::HasOpenMoveSlot() const {
-    return Moves.Num() < Pokemon::FBaseSettings::Get().GetMaxMoves();
+    return Moves.Num() < GetDefault<UPokemonDataSettings>()->MaxMoves;
 }
 
 void UDefaultMoveBlock::PlaceMoveInOpenSlot(FName Move) {

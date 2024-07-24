@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonBattleSettings.h"
 
 void UPokemonCoreAttributeSet::InitHP(float NewVal) {
     HP.SetBaseValue(NewVal);
@@ -42,7 +42,7 @@ void UPokemonCoreAttributeSet::UpdateHPTags() const {
 
     float HPPercent = GetHP() / MaxHPValue;
     auto Owner = GetOwningAbilitySystemComponent();
-    static auto &HPStateTags = Pokemon::FBaseSettings::Get().GetHPStateTags();
+    static auto &HPStateTags = GetDefault<UPokemonBattleSettings>()->HPStateTags;
     for (auto &[Threshold, Tag] : HPStateTags) {
         if (HPPercent <= Threshold) {
             Owner->AddLooseGameplayTag(Tag);

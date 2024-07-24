@@ -4,7 +4,7 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonDataSettings.h"
 #include "Species/Ability.h"
 #include "Species/SpeciesData.h"
 
@@ -35,17 +35,17 @@ FName UDefaultAbilityBlock::GetAbilityID() const {
 const FText &UDefaultAbilityBlock::GetDisplayName() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
-    return AbilityData != nullptr ? AbilityData->RealName : Pokemon::FBaseSettings::Get().GetNoAbilityName();
+    return AbilityData != nullptr ? AbilityData->RealName : GetDefault<UPokemonDataSettings>()->NoAbilityName;
 }
 
 const FText &UDefaultAbilityBlock::GetAbilityDescription() const {
     auto AbilityID = GetAbilityID();
     auto AbilityData = FDataManager::GetInstance().GetDataTable<FAbility>().GetData(AbilityID);
-    return AbilityData != nullptr ? AbilityData->Description : Pokemon::FBaseSettings::Get().GetNoAbilityDescription();
+    return AbilityData != nullptr ? AbilityData->Description : GetDefault<UPokemonDataSettings>()->NoAbilityDescription;
 }
 
 int32 UDefaultAbilityBlock::GetAbilityIndex() const {
     check(Owner != nullptr)
-    int32 NormalAbilityCount = Pokemon::FBaseSettings::Get().GetMaxDefaultAbilities();
+    int32 NormalAbilityCount = GetDefault<UPokemonDataSettings>()->MaxDefaultAbilities;
     return static_cast<int32>(Owner->GetPersonalityValue() % NormalAbilityCount);
 }

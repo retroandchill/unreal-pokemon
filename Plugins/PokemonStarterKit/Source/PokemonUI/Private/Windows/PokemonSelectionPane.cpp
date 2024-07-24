@@ -4,7 +4,7 @@
 #include "Components/Party/PartySelectCancelPanel.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonDataSettings.h"
 #include <range/v3/algorithm/for_each.hpp>
 
 void UPokemonSelectionPane::NativeConstruct() {
@@ -14,7 +14,8 @@ void UPokemonSelectionPane::NativeConstruct() {
     auto &PlayerParty = PokemonSubsystem.GetPlayer()->GetParty();
 
     ClearSelectableOptions();
-    for (int32 i = 0; i < Pokemon::FBaseSettings::Get().GetMaxPartySize(); i++) {
+    auto MaxPartySize = GetDefault<UPokemonDataSettings>()->MaxPartySize;
+    for (int32 i = 0; i < MaxPartySize; i++) {
         if (i < PlayerParty.Num()) {
             auto Name = FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}}));
             auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass, FName(Name));

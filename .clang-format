@@ -25,3 +25,4 @@ ForEachMacros:
     - TRIPLE_LOOP
 Macros:
     - check(x)=assert(x);
+    - verify(x)=x;
