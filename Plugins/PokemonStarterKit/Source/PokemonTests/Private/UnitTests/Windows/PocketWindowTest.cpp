@@ -1,8 +1,8 @@
 ﻿#include "Windows/PocketWindow.h"
 #include "Asserts.h"
+#include "PokemonDataSettings.h"
 #include "Components/DisplayText.h"
 #include "Misc/AutomationTest.h"
-#include "Settings/BaseSettings.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -19,8 +19,8 @@ bool PocketWindowTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(PocketWindow.Get(), UDisplayText, PocketName);
     UE_ASSERT_NOT_NULL(PocketName);
 
-    auto &Settings = Pokemon::FBaseSettings::Get();
-    for (auto &PocketSettings = Settings.GetPocketInfo(); auto &[Key, Value] : PocketSettings) {
+    auto &Settings = *GetDefault<UPokemonDataSettings>();
+    for (auto &PocketSettings = Settings.PocketInfo; auto &[Key, Value] : PocketSettings) {
         PocketWindow->SetCurrentPocket(Key);
         UE_CHECK_EQUAL(Value.DisplayName.ToString(), PocketName->GetText().ToString());
     }

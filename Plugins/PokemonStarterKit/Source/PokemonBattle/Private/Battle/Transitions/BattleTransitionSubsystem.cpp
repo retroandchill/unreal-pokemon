@@ -1,15 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
+#include "PokemonBattleSettings.h"
 #include "Battle/Battle.h"
 #include "Battle/Transitions/BattleTransitionActor.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Kismet/GameplayStatics.h"
-#include "Settings/BaseSettings.h"
 
 void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    BattleMap = Pokemon::FBaseSettings::Get().GetDefaultBattleScene();
+    BattleMap = GetDefault<UPokemonBattleSettings>()->DefaultBattleScene;
 }
 
 void UBattleTransitionSubsystem::SetBattleMap(const TSoftObjectPtr<UWorld> &NewBattleMap) {
@@ -23,7 +23,7 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
 
 void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
                                                 TSubclassOf<ABattleTransitionActor> Transition) {
-    static auto &BattleLevelOffset = Pokemon::FBaseSettings::Get().GetBattleSceneOffset();
+    static auto &BattleLevelOffset = GetDefault<UPokemonBattleSettings>()->BattleSceneOffset;
     if (Transition != nullptr) {
         using FTransitionBinding = FOnBattleTransitionComplete::FDelegate;
 

@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Attributes/StatStagesAttributeSet.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonBattleSettings.h"
 
 void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute() ||
@@ -9,7 +9,7 @@ void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attri
         return;
     }
 
-    static auto &StageInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    static auto &StageInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     float StageLimit = static_cast<float>(StageInfo.Num());
     NewValue = FMath::Floor(FMath::Clamp(NewValue, -StageLimit, StageLimit));
 }

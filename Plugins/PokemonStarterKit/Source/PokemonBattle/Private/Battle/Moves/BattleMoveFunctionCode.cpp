@@ -25,8 +25,8 @@
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
+#include "PokemonBattleSettings.h"
 #include "RangeHelpers.h"
-#include "Settings/BaseSettings.h"
 #include "Species/Stat.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
@@ -281,8 +281,8 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
         return true;
     }
-
-    static auto &StageInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    
+    static auto &StageInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     int32 StatStageBound = StageInfo.Num();
     int32 AccuracyStages = FMath::RoundToInt32(User->GetAbilityComponent()->GetStatStages()->GetAccuracyStages());
     int32 EvasionStages = FMath::RoundToInt32(Target->GetAbilityComponent()->GetStatStages()->GetEvasionStages());
@@ -466,7 +466,7 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
         break;
     }
 
-    auto &Ratios = Pokemon::FBaseSettings::Get().GetCriticalHitRatios();
+    auto &Ratios = GetDefault<UPokemonBattleSettings>()->CriticalHitRatios;
     Stage = FMath::Clamp(Stage, 0, Ratios.Num() - 1);
 
     int32 Rate = Ratios[Stage];

@@ -11,6 +11,7 @@ public class PokemonEditorTools : ModuleRules
             {
                 "Core", 
                 "PokemonData",
+                "DeveloperSettings"
             }
         );
 
@@ -21,7 +22,6 @@ public class PokemonEditorTools : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore", 
-                "PokemonSettings",
                 "PokemonAssets",
                 "DeveloperSettings",
                 "EditorSubsystem",

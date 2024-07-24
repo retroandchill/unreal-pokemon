@@ -25,7 +25,8 @@ public class PokemonAssets : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core"
+				"Core",
+				"DeveloperSettings"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -40,8 +41,7 @@ public class PokemonAssets : ModuleRules
 				"SlateCore",
 				"PokemonCore",
 				"PokemonData",
-				"UnrealInjector", 
-				"PokemonSettings"
+				"UnrealInjector"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

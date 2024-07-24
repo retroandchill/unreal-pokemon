@@ -1,12 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/UtilitiesSubsystem.h"
-#include "Settings/BaseSettings.h"
+#include "Settings/PokemonUtilityClassSettings.h"
 
 void UUtilitiesSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    ItemUtilities = NewObject<UObject>(this, Pokemon::FBaseSettings::Get().GetItemUtilitiesClass());
-    PokemonUtilities = NewObject<UObject>(this, Pokemon::FBaseSettings::Get().GetPokemonUtilitiesClass());
+    auto &Settings = *GetDefault<UPokemonUtilityClassSettings>();
+    ItemUtilities = NewObject<UObject>(this, Settings.ItemUtilitiesClass.TryLoadClass<UObject>());
+    PokemonUtilities = NewObject<UObject>(this, Settings.PokemonUtilitiesClass.TryLoadClass<UObject>());
 }
 
 void UUtilitiesSubsystem::Deinitialize() {

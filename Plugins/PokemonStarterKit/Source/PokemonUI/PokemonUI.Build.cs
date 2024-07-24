@@ -19,7 +19,8 @@ public class PokemonUI : ModuleRules
 				"CommonUI",
 				"CommonGame",
 				"GameplayTags",
-				"EnhancedInput"
+				"EnhancedInput",
+				"DeveloperSettings"
 			}
 		);
 
@@ -33,7 +34,6 @@ public class PokemonUI : ModuleRules
 				"UMG",
 				"RenderCore",
 				"UnrealInjector", 
-				"PokemonSettings",
 				"CommonInput"
 			}
 		);

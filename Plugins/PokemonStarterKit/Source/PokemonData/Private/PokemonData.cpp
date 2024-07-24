@@ -12,8 +12,6 @@
 #include "Field/Weather.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
-#include "PokemonSettings/Private/Settings/PokemonKitSettings.h"
-#include "Settings/BaseSettings.h"
 #include "Species/Ability.h"
 #include "Species/BodyColor.h"
 #include "Species/BodyShape.h"

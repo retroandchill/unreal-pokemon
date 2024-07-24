@@ -3,10 +3,10 @@
 #include "Player/DefaultBag.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "PokemonDataSettings.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
-#include "Settings/BaseSettings.h"
 #include <functional>
 
 /**
@@ -34,9 +34,9 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
 }
 
 bool UDefaultBag::CanObtainItem(FName ItemID) const {
-    const auto &Settings = Pokemon::FBaseSettings::Get();
+    auto Settings = GetDefault<UPokemonDataSettings>();
     if (auto ItemQuantity = GetItemQuantity(ItemID); ItemQuantity > 0) {
-        return ItemQuantity < Settings.GetMaxItemsPerSlot();
+        return ItemQuantity < Settings->MaxItemsPerSlot;
     }
 
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemID);
@@ -46,16 +46,16 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
         return false;
     }
 
-    const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings.GetPocketInfo().FindChecked(Item->Pocket);
+    const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings->PocketInfo.FindChecked(Item->Pocket);
     auto HasRoom =
         OptionalUtilities::Map<bool, int32>(MaxPocketSize, [&Pocket](int32 Max) { return Pocket->Items.Num() < Max; });
     return HasRoom.Get(true);
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
-    const auto &Settings = Pokemon::FBaseSettings::Get();
+    auto Settings = GetDefault<UPokemonDataSettings>();
     auto &Pocket = GetPocket(ItemID);
-    int32 SlotMax = Settings.GetMaxItemsPerSlot();
+    int32 SlotMax = Settings->MaxItemsPerSlot;
     auto ItemSlot = Pocket.FindByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     int32 QuantityBefore;
     if (ItemSlot == nullptr) {
@@ -70,9 +70,8 @@ int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
 }
 
 int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
-    const auto &Settings = Pokemon::FBaseSettings::Get();
+    auto Settings = GetDefault<UPokemonDataSettings>();
     auto &Pocket = GetPocket(ItemID);
-    int32 SlotMax = Settings.GetMaxItemsPerSlot();
     auto SlotIndex = Pocket.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));
     if (SlotIndex == INDEX_NONE) {
         return 0;
@@ -80,7 +79,7 @@ int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
 
     int32 &Quantity = Pocket[SlotIndex].Quantity;
     int32 QuantityBefore = Quantity;
-    Quantity = FMath::Clamp(Quantity - Amount, 0, SlotMax);
+    Quantity = FMath::Clamp(Quantity - Amount, 0, Settings->MaxItemsPerSlot);
     int32 Change = QuantityBefore - Quantity;
 
     if (Quantity == 0) {
