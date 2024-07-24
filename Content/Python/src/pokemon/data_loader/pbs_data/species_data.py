@@ -7,9 +7,8 @@ from .pbs_ini_data import DataContainer, PbsIniData
 from ..ini_data import IniData
 from ..unreal_data_loader import UnrealDataLoader
 
-SpeciesArgs = tuple[
-    DataContainer, DataContainer, DataContainer, dict[
-        str, Stat], DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer]
+SpeciesArgs = tuple[DataContainer, DataContainer, DataContainer, dict[str, Stat], DataContainer, DataContainer,
+                    DataContainer, DataContainer, DataContainer, DataContainer, DataContainer]
 
 
 class SpeciesData(PbsIniData[SpeciesArgs]):
