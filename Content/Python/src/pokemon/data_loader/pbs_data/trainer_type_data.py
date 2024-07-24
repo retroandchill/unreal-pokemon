@@ -7,8 +7,11 @@ from pokemon.data_loader.unreal_data_loader import DataContainer
 
 TrainerTypeArgs = tuple[DataContainer]
 
+
 class TrainerTypeData(PbsIniData[TrainerTypeArgs]):
     """Represents the translated trainer type data imported from trainer_types.txt"""
+
+    SchemaData = dict[str, tuple[str, str, Optional[DataContainer]]]
 
     def __init__(self, config_path: str, trainer_genders: DataContainer):
         super().__init__(config_path, (trainer_genders,))
@@ -17,7 +20,7 @@ class TrainerTypeData(PbsIniData[TrainerTypeArgs]):
         # No additional processing needed on abilities
         pass
 
-    def get_schema(self, ini_data: IniData, args: TrainerTypeArgs) -> dict[str, tuple[str, str, Optional[DataContainer]]]:
+    def get_schema(self, ini_data: IniData, args: TrainerTypeArgs) -> SchemaData:
         gender_data = args[0]
         return {
             "SectionName": ("ID", "m", None),
@@ -26,8 +29,8 @@ class TrainerTypeData(PbsIniData[TrainerTypeArgs]):
             "BaseMoney": ("BaseMoney", "u", None),
             "SkillLevel": ("SkillLevel", "u", None),
             "Flags": ("Tags", "*e", None),
-            "IntroBGM": ("IntroMusic",   "s", None),
-            "BattleBGM": ("BattleMusic",  "s", None),
+            "IntroBGM": ("IntroMusic", "s", None),
+            "BattleBGM": ("BattleMusic", "s", None),
             "VictoryBGM": ("VictoryMusic", "s", None)
         }
 

@@ -1,7 +1,6 @@
-
 import unittest
 
-from unreal import PokemonStatType, Stat, Name, Text
+from unreal import PokemonStatType
 
 from coverage_helpers import run_test_with_coverage
 from pokemon.unreal_interface.unreal_data_utils import enum_values, stat_entries

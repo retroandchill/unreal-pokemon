@@ -8,6 +8,7 @@ MoveArgs = tuple[DataContainer, DataContainer, DataContainer]
 
 class MoveData(PbsIniData[MoveArgs]):
     """Represents the translated move data imported from moves.txt"""
+
     def __init__(self, config_path: str, type_ids: DataContainer, damage_category_enum: DataContainer,
                  target_ids: DataContainer):
         super().__init__(config_path, (type_ids, damage_category_enum, target_ids))
