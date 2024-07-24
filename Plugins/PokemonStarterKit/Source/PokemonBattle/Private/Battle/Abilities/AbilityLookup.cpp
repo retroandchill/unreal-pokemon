@@ -2,14 +2,14 @@
 
 #include "Battle/Abilities/AbilityLookup.h"
 #include "Abilities/GameplayAbility.h"
-#include "Settings/BaseSettings.h"
+#include "DynamicAssetLoadingSettings.h"
 
 TSubclassOf<UGameplayAbility> Battle::Abilities::CreateAbilityEffect(FName ID) {
     if (ID.IsNone()) {
         return nullptr;
     }
 
-    auto &AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
     const auto &[ClassPath] = AssetPaths.AbilityBattleEffectPackageName;
     auto &ClassPrefix = AssetPaths.AbilityEffectPrefix;
     auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, ID.ToString()});

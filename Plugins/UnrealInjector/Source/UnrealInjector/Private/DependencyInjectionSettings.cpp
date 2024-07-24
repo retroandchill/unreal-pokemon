@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "DependencyInjectionSettings.h"
-#include "Lookup/InjectionUtilities.h"
 
 #ifdef WITH_METADATA
 void UDependencyInjectionSettings::RefreshDependencies() {

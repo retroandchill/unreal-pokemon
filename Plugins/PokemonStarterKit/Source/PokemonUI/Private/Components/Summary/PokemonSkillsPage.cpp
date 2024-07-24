@@ -2,16 +2,15 @@
 
 #include "Components/Summary/PokemonSkillsPage.h"
 #include "Blueprint/WidgetTree.h"
-#include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/Summary/HPStatRow.h"
 #include "Components/Summary/PokemonStatRow.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Pokemon.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonDataSettings.h"
 
-TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
-    auto Ret = Super::RebuildWidget();
+void UPokemonSkillsPage::NativePreConstruct() {
+    Super::NativePreConstruct();
 
     for (const auto &StatRow : StatRows) {
         StatRow->RemoveFromParent();
@@ -19,7 +18,7 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
     StatRows.Empty();
 
     if (HPStatRow != nullptr && StatRowClass != nullptr) {
-        auto HPStat = Pokemon::FBaseSettings::Get().GetHPStat();
+        auto HPStat = GetDefault<UPokemonDataSettings>()->HPStat;
         for (auto Stat : StatsToDisplay) {
             if (Stat == HPStat) {
                 auto Row = WidgetTree->ConstructWidget(HPStatRow);
@@ -34,8 +33,6 @@ TSharedRef<SWidget> UPokemonSkillsPage::RebuildWidget() {
             }
         }
     }
-
-    return Ret;
 }
 
 void UPokemonSkillsPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

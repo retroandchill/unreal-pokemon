@@ -1,10 +1,17 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "DataManager.h"
 #include "DataRetrieval/DataRegistry.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonDataSettings.h"
+#include "RangeHelpers.h"
+#include <range/v3/algorithm/for_each.hpp>
+#include <range/v3/view/transform.hpp>
 
 FDataManager::FDataManager() {
-    Pokemon::FBaseSettings::Get().ForEachDataTable([this](UDataTable *Table) {
+    auto Settings = GetDefault<UPokemonDataSettings>();
+    auto DataTableView = RangeHelpers::CreateRange(Settings->DataTables) |
+                         ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
+                         ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); });
+    ranges::for_each(DataTableView, [this](UDataTable *Table) {
         auto RowStruct = Table->GetRowStruct();
         if (RowStruct == nullptr) {
             return;

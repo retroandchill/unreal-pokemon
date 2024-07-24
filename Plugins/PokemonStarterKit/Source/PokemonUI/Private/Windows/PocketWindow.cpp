@@ -2,7 +2,7 @@
 
 #include "Windows/PocketWindow.h"
 #include "Components/DisplayText.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonDataSettings.h"
 
 FName UPocketWindow::GetCurrentPocket() const {
     return CurrentPocket;
@@ -14,7 +14,7 @@ void UPocketWindow::SetCurrentPocket(FName Pocket) {
 }
 
 void UPocketWindow::UpdatePocketInfo_Implementation() {
-    auto &Settings = Pokemon::FBaseSettings::Get();
-    auto &PocketInfo = Settings.GetPocketInfo().FindChecked(CurrentPocket);
-    PocketName->SetText(PocketInfo.DisplayName);
+    auto &Settings = *GetDefault<UPokemonDataSettings>();
+    const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings.PocketInfo.FindChecked(CurrentPocket);
+    PocketName->SetText(DisplayName);
 }

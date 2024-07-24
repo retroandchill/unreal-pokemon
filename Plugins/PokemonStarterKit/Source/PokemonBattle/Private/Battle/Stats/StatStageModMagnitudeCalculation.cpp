@@ -3,7 +3,7 @@
 #include "Battle/Stats//StatStageModMagnitudeCalculation.h"
 #include "AbilitySystemComponent.h"
 #include "Battle/Stats/StatTags.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonBattleSettings.h"
 #include "Species/Stat.h"
 
 float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const {
@@ -18,9 +18,8 @@ float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(c
     EvaluationParameters.TargetTags = TargetTags;
 
     float FloatStages = 0.f;
-    verify(GetCapturedAttributeMagnitude(StagesAttribute, Spec, EvaluationParameters,
-                                         FloatStages)) static auto &StageInfo =
-        Pokemon::FBaseSettings::Get().GetStatStages();
+    verify(GetCapturedAttributeMagnitude(StagesAttribute, Spec, EvaluationParameters, FloatStages))
+    static auto &StageInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     int32 StagesLimit = StageInfo.Num();
     int32 Stages = FMath::Clamp(FMath::RoundToInt32(FloatStages), -StagesLimit, StagesLimit);
 

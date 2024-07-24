@@ -21,8 +21,7 @@ float UStatChangeCalculation::CalculateBaseMagnitude_Implementation(const FGamep
     EvaluationParameters.TargetTags = TargetTags;
 
     float Multiplier;
-    verify(
-        GetCapturedAttributeMagnitude(StatChangeRateAttribute, Spec, EvaluationParameters, Multiplier)) float Change =
-        Spec.GetSetByCallerMagnitude(Pokemon::Battle::Stats::StagesTag);
+    verify(GetCapturedAttributeMagnitude(StatChangeRateAttribute, Spec, EvaluationParameters, Multiplier))
+    float Change = Spec.GetSetByCallerMagnitude(Pokemon::Battle::Stats::StagesTag);
     return Change * Multiplier;
 }

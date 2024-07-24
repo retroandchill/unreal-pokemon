@@ -6,7 +6,7 @@
 #include "Battle/Stats/StatChangeCalculation.h"
 #include "Battle/Stats/StatTags.h"
 #include "DataManager.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonBattleSettings.h"
 #include "Species/Stat.h"
 
 int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat) {
@@ -19,12 +19,12 @@ int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Ba
 }
 
 bool UStatChangeHelpers::StatStageAtMax(const TScriptInterface<IBattler> &Battler, FName Stat) {
-    static auto &StatInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     return GetStatStageValue(Battler, Stat) >= StatInfo.Num();
 }
 
 bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battler, FName Stat) {
-    static auto &StatInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     return GetStatStageValue(Battler, Stat) <= -StatInfo.Num();
 }
 
@@ -39,7 +39,7 @@ int32 UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattle
     int32 CurrentStages = FMath::FloorToInt32(AbilityComponent->GetNumericAttribute(StatData->StagesAttribute));
     int32 ActualChange = CurrentStages + Stages;
 
-    static auto &StatInfo = Pokemon::FBaseSettings::Get().GetStatStages();
+    static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     int32 Bound = StatInfo.Num();
     ActualChange = FMath::Clamp(ActualChange, -Bound, Bound) - CurrentStages;
 

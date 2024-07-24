@@ -1,11 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/GraphicsLoadingSubsystem.h"
+#include "DynamicAssetLoadingSettings.h"
 #include "Pokemon/Pokemon.h"
+#include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
-#include "Settings/BaseSettings.h"
 #include "Species/SpeciesData.h"
 #include "TextureCompiler.h"
 #include "Trainers/Trainer.h"
@@ -63,9 +64,9 @@ static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FP
 void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    const auto &Settings = Pokemon::FBaseSettings::Get();
-    PokemonSpriteMaterials = Settings.GetPokemonSpriteSettings();
-    TrainerSpriteMaterials = Settings.GetTrainerSpriteSettings();
+    auto Settings = GetDefault<UDynamicAssetLoadingSettings>();
+    PokemonSpriteMaterials = Settings->PokemonSprites;
+    TrainerSpriteMaterials = Settings->TrainerSprites;
 }
 
 FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
@@ -77,7 +78,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(cons
 FMaterialInstanceWithSize
 UGraphicsLoadingSubsystem::GetSpeciesBattleSprite(FName Species, UObject *Outer, bool bBack,
                                                   const FPokemonAssetParams &AdditionalParams) const {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().PokemonSpritePackageName;
+    auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
     auto Texture = ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList);
@@ -106,7 +107,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const TS
 FMaterialInstanceWithSize
 UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, bool bBack,
                                               const FPokemonAssetParams &AdditionalParams) const {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().PokemonSpritePackageName;
+    auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
     auto Texture = ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList);
@@ -132,7 +133,7 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const TScrip
 
 UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species, UObject *Outer,
                                                                     const FPokemonAssetParams &AdditionalParams) {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().PokemonSpritePackageName;
+    auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
     auto Texture = ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList);
     if (Texture == nullptr) {
@@ -155,7 +156,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScr
 }
 
 FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerTypeSprite(FName TrainerType, UObject *Outer) const {
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().TrainerSpritesPackageName;
+    auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->TrainerSpritesPackageName;
     auto Texture = LookupAssetByName<UTexture2D>(AssetPath, TrainerType.ToString());
     if (Texture == nullptr) {
         return {nullptr, FVector2D()};
@@ -174,14 +175,14 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerTypeSprite(FName 
 }
 
 UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
-    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
     auto FullName = GetFullAssetName(PathSettings.TypeIconPrefix, Type);
     return LookupAssetByName<UObject>(AssetPath, FullName);
 }
 
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FName> &Types) const {
-    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
     return RangeHelpers::CreateRange(Types) | ranges::views::transform([&PathSettings](FName Type) {
                return GetFullAssetName(PathSettings.TypeIconPrefix, Type);
@@ -192,31 +193,32 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FN
 }
 
 UObject *UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {
-    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.StatusIconsPackageName;
     auto FullName = GetFullAssetName(PathSettings.StatusIconPrefix, Status);
     return LookupAssetByName<UObject>(AssetPath, FullName);
 }
 
 UObject *UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
-    auto &PathSettings = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypePanelsPackageName;
     auto FullName = GetFullAssetName(PathSettings.TypePanelPrefix, Type);
     return LookupAssetByName<UObject>(AssetPath, FullName);
 }
 
 UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
-    const auto &Settings = Pokemon::FBaseSettings::Get();
-    auto &PathSettings = Settings.GetDynamicAssetPaths();
+    auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.SummaryBallPackageName;
     auto FullName = GetFullAssetName(PathSettings.SummaryBallPrefix, PokeBall);
     auto Asset = LookupAssetByName<UObject>(AssetPath, FullName);
-    return Asset != nullptr ? Asset : LookupAssetByName<UObject>(AssetPath, Settings.GetDefaultPokeBall().ToString());
+    return Asset != nullptr
+               ? Asset
+               : LookupAssetByName<UObject>(AssetPath, GetDefault<UPokemonDataSettings>()->DefaultPokeBall.ToString());
 }
 
 UObject *UGraphicsLoadingSubsystem::GetItemIcon(FName ItemID) const {
     static FName DefaultItem = "000";
-    auto &[AssetPath] = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths().ItemIconPackageName;
+    auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->ItemIconPackageName;
     auto Asset = LookupAssetByName<UObject>(AssetPath, ItemID);
     return Asset != nullptr ? Asset : LookupAssetByName<UObject>(AssetPath, DefaultItem);
 }

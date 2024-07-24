@@ -1,10 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
-#include "Settings/BaseSettings.h"
 
 FItem::FItem() = default;
 
@@ -65,7 +65,7 @@ TArray<FName> UItemHelper::GetPokeBallNames() {
 }
 
 TArray<FName> UItemHelper::GetPocketNames() {
-    auto &Pockets = Pokemon::FBaseSettings::Get().GetPocketNames();
+    auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames;
     TArray<FName> Names;
     for (const auto &[Key, Value] : Pockets) {
         Names.Add(Value);

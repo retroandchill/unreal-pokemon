@@ -5,7 +5,7 @@
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
 #include "Battle/Moves/MoveTags.h"
-#include "Settings/BaseSettings.h"
+#include "PokemonBattleSettings.h"
 
 UInnate_CriticalHitDamage::UInnate_CriticalHitDamage() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -22,7 +22,7 @@ void UInnate_CriticalHitDamage::ActivateAbility(const FGameplayAbilitySpecHandle
     auto &Data = Payload->GetData();
     if (Data.Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
         Payload->SetFinalDamageMultiplier(Data.FinalDamageMultiplier *
-                                          Pokemon::FBaseSettings::Get().GetCriticalHitMultiplier());
+                                          GetDefault<UPokemonBattleSettings>()->CriticalHitMultiplier);
     }
     EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
 }

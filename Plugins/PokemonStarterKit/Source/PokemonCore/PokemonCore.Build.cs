@@ -15,7 +15,8 @@ public class PokemonCore : ModuleRules
 				"PokemonData",
 				"CommonMath",
 				"PokemonUtilities",
-				"UnrealInjector"
+				"UnrealInjector",
+				"DeveloperSettings"
 			}
 		);
 
@@ -26,7 +27,6 @@ public class PokemonCore : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"PokemonSettings",
 			}
 		);
 	}

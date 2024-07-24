@@ -2,16 +2,17 @@
 
 #include "Battle/Moves/MoveLookup.h"
 #include "Abilities/GameplayAbility.h"
-#include "Settings/BaseSettings.h"
+#include "DynamicAssetLoadingSettings.h"
+#include "PokemonBattleSettings.h"
 
 TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     if (FunctionCode.IsNone()) {
-        auto MoveClass = FBaseSettings::Get().GetDefaultMoveAbility().TryLoadClass<UGameplayAbility>();
+        auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultMoveAbility.TryLoadClass<UGameplayAbility>();
         check(MoveClass != nullptr)
         return MoveClass;
     }
 
-    auto &AssetPaths = Pokemon::FBaseSettings::Get().GetDynamicAssetPaths();
+    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
     const auto &[ClassPath] = AssetPaths.MoveFunctionCodePackageName;
     auto &ClassPrefix = AssetPaths.MoveFunctionCodePrefix;
     auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, FunctionCode.ToString()});
@@ -20,7 +21,7 @@ TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FNam
         return MoveClass;
     }
 
-    auto MoveClass = FBaseSettings::Get().GetDefaultMoveAbility().TryLoadClass<UGameplayAbility>();
+    auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultMoveAbility.TryLoadClass<UGameplayAbility>();
     check(MoveClass != nullptr)
     return MoveClass;
 }

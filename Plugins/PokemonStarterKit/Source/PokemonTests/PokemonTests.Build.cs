@@ -29,7 +29,6 @@ public class PokemonTests : ModuleRules
                 "UnrealEd",
                 "PokemonEditorTools",
                 "PokemonCore",
-                "PokemonSettings",
                 "UnrealInjector",
                 "PokemonUtilities",
                 "PokemonUI",
@@ -41,7 +40,8 @@ public class PokemonTests : ModuleRules
                 "GameplayTags", 
                 "GameplayTasks",
                 "CommonUI",
-                "CommonGame"
+                "CommonGame",
+                "DeveloperSettings"
             }
         );
     }
