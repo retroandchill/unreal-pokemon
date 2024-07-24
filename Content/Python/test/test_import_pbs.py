@@ -2,9 +2,9 @@ import os
 import unittest
 
 from unreal import Text, Paths
-from coverage_helpers import run_test_with_coverage
 
 import import_pbs
+from coverage_helpers import run_test_with_coverage
 
 
 class TestImportPbs(unittest.TestCase):

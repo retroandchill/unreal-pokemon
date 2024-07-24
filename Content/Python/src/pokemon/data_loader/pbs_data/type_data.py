@@ -10,6 +10,7 @@ TypeArgs = tuple
 
 class TypeData(PbsIniData[TypeArgs]):
     """Represents the translated type data imported from typestxt"""
+
     def __init__(self, config_path: str):
         super().__init__(config_path, ())
 

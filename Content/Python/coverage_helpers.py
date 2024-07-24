@@ -8,9 +8,9 @@ from coverage import Coverage
 from unreal import Paths
 
 cov = Coverage(include=[os.path.join(Paths.project_dir(), "Content/Python/src/*")],
-                    omit=[os.path.join(Paths.engine_dir(),
-                                      "Plugins/Experimental/PythonScriptPlugin/Content/Python/*"),
-                         os.path.join(Paths.project_dir(), "Content/Python/test/*")])
+               omit=[os.path.join(Paths.engine_dir(),
+                                  "Plugins/Experimental/PythonScriptPlugin/Content/Python/*"),
+                     os.path.join(Paths.project_dir(), "Content/Python/test/*")])
 cov.start()
 
 

@@ -24,5 +24,6 @@ class TestExtractSprites(unittest.TestCase):
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/AnimSequences/NPC01.NPC01'))
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/AnimSequences/NPC02.NPC02'))
 
+
 if __name__ == '__main__':
     result = run_test_with_coverage(TestExtractSprites, __file__)

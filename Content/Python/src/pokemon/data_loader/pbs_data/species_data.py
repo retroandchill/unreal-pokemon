@@ -151,7 +151,7 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
                 "Parameter": evolution[2],
             })
         item["Evolutions"] = formatted_evolutions
-        
+
         item["Height"] = item.get("Height", 1.0)
         item["Weight"] = item.get("Weight", 1.0)
         item["Color"] = item.get("Color", "Red")
