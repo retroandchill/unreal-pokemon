@@ -23,3 +23,14 @@ jobs:
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
         run: exit 1
+  pep8:
+    name: Check Python Code Style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+        ref: ${{ github.event.pull_request.head.sha }}
+      - name: 'Run PEP8'
+        uses: quentinguidee/pep8-action@v1
+        with:
+          arguments: '--max-line-length=120'
