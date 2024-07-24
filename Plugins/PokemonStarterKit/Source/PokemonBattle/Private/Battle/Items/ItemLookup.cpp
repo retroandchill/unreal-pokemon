@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Items/ItemLookup.h"
-#include "DynamicAssetLoadingSettings.h"
 #include "Abilities/GameplayAbility.h"
 #include "Bag/Item.h"
+#include "DynamicAssetLoadingSettings.h"
 
 TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindHoldItemEffect(FName ID) {
     if (ID.IsNone()) {

@@ -1,8 +1,8 @@
 ﻿#include "Windows/PocketWindow.h"
 #include "Asserts.h"
-#include "PokemonDataSettings.h"
 #include "Components/DisplayText.h"
 #include "Misc/AutomationTest.h"
+#include "PokemonDataSettings.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 

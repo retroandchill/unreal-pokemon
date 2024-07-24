@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
-#include "PokemonBattleSettings.h"
 #include "Battle/Battle.h"
 #include "Battle/Transitions/BattleTransitionActor.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Kismet/GameplayStatics.h"
+#include "PokemonBattleSettings.h"
 
 void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);

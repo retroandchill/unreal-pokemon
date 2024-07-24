@@ -2,8 +2,8 @@
 
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "DynamicAssetLoadingSettings.h"
-#include "PokemonDataSettings.h"
 #include "Pokemon/Pokemon.h"
+#include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
@@ -211,7 +211,9 @@ UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     auto &[AssetPath] = PathSettings.SummaryBallPackageName;
     auto FullName = GetFullAssetName(PathSettings.SummaryBallPrefix, PokeBall);
     auto Asset = LookupAssetByName<UObject>(AssetPath, FullName);
-    return Asset != nullptr ? Asset : LookupAssetByName<UObject>(AssetPath, GetDefault<UPokemonDataSettings>()->DefaultPokeBall.ToString());
+    return Asset != nullptr
+               ? Asset
+               : LookupAssetByName<UObject>(AssetPath, GetDefault<UPokemonDataSettings>()->DefaultPokeBall.ToString());
 }
 
 UObject *UGraphicsLoadingSubsystem::GetItemIcon(FName ItemID) const {

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "PokemonUtilityClassSettings.generated.h"
 
 /**
@@ -14,7 +15,7 @@ UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Utility Functions")
 class POKEMONCORE_API UPokemonUtilityClassSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The class for the Pokémon utilities
      */
@@ -28,5 +29,4 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Utility Classes",
               meta = (MustImplement = "ItemUtilities"))
     FSoftClassPath ItemUtilitiesClass;
-
 };

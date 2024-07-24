@@ -3,10 +3,10 @@
 #include "Player/DefaultBag.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "PokemonDataSettings.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
+#include "PokemonDataSettings.h"
 #include <functional>
 
 /**

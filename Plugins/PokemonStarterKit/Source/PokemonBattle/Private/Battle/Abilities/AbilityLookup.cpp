@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Abilities/AbilityLookup.h"
-#include "DynamicAssetLoadingSettings.h"
 #include "Abilities/GameplayAbility.h"
+#include "DynamicAssetLoadingSettings.h"
 
 TSubclassOf<UGameplayAbility> Battle::Abilities::CreateAbilityEffect(FName ID) {
     if (ID.IsNone()) {

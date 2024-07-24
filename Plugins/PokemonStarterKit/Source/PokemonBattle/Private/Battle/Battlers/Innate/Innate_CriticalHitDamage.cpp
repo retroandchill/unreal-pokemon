@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/Innate/Innate_CriticalHitDamage.h"
-#include "PokemonBattleSettings.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
 #include "Battle/Moves/MoveTags.h"
+#include "PokemonBattleSettings.h"
 
 UInnate_CriticalHitDamage::UInnate_CriticalHitDamage() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();

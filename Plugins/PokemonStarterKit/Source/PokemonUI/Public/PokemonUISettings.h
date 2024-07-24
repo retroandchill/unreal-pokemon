@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "PokemonUISettings.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon UI")
 class POKEMONUI_API UPokemonUISettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The screen displayed when showing a messages
      */
@@ -37,5 +38,4 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "MoveForgetScreen"))
     FSoftClassPath MoveForgetScreenClass;
-
 };

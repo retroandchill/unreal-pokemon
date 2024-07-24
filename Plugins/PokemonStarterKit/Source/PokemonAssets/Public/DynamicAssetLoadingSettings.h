@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "DynamicAssetLoadingSettings.generated.h"
 
 /**
@@ -58,13 +59,13 @@ struct POKEMONASSETS_API FTrainerSpriteSettings {
 };
 
 /**
- * Settings related to the dynamic loading of assets 
+ * Settings related to the dynamic loading of assets
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Dynamic Asset Loading")
 class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Settings for all Pokémon sprites.
      */
@@ -76,7 +77,7 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Sprites)
     FTrainerSpriteSettings TrainerSprites;
-    
+
     /**
      * The name of the package that contains the Pokémon Icon graphics
      */
@@ -178,5 +179,4 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString HoldItemEffectPrefix;
-
 };

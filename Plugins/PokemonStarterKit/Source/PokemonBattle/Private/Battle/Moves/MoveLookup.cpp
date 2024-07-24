@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Moves/MoveLookup.h"
+#include "Abilities/GameplayAbility.h"
 #include "DynamicAssetLoadingSettings.h"
 #include "PokemonBattleSettings.h"
-#include "Abilities/GameplayAbility.h"
 
 TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     if (FunctionCode.IsNone()) {

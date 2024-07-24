@@ -2,12 +2,12 @@
 
 #include "Components/Summary/PokemonSkillsPage.h"
 #include "Blueprint/WidgetTree.h"
-#include "PokemonDataSettings.h"
 #include "Components/DisplayText.h"
 #include "Components/Summary/HPStatRow.h"
 #include "Components/Summary/PokemonStatRow.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Pokemon.h"
+#include "PokemonDataSettings.h"
 
 void UPokemonSkillsPage::NativePreConstruct() {
     Super::NativePreConstruct();

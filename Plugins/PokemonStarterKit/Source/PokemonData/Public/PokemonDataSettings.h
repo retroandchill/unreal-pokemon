@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "PokemonDataSettings.generated.h"
 
 /**
@@ -39,7 +40,7 @@ UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Data")
 class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The maximum amount of money the player can have.
      */
@@ -104,7 +105,7 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Party and Pokémon storage",
               meta = (UIMin = 1, ClampMin = 1))
     int32 MaxPartySize = 6;
-    
+
     /**
      * Map of pocket id numbers found in the imported PBS files to their actual names.
      */
@@ -135,11 +136,10 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Abilities)
     FText NoAbilityDescription;
-    
+
     /**
      * The set of data tables used by the game.
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Data", meta = (AllowedClasses = "DataTable"))
     TArray<FSoftObjectPath> DataTables;
-
 };

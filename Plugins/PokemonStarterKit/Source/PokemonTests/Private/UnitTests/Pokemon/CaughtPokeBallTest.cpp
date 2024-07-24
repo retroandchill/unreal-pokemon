@@ -1,9 +1,9 @@
 ﻿#include "Asserts.h"
-#include "PokemonDataSettings.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "PokemonDataSettings.h"
 #include "Utilities/WidgetTestUtilities.h"
 
 class UPokemonSettings;

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "Engine/DeveloperSettings.h"
+#include "GameplayTagContainer.h"
+
 #include "PokemonBattleSettings.generated.h"
 
 /**
@@ -63,13 +64,13 @@ struct POKEMONBATTLE_API FHPStateTag {
 };
 
 /**
- * 
+ *
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Battle System")
 class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The information about how stat stages are altered
      */
@@ -116,5 +117,4 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))
     TArray<int32> CriticalHitRatios = {24, 8, 2, 1};
-
 };

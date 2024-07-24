@@ -281,7 +281,7 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
     if (BaseAccuracy == FMoveData::GuaranteedHit) {
         return true;
     }
-    
+
     static auto &StageInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     int32 StatStageBound = StageInfo.Num();
     int32 AccuracyStages = FMath::RoundToInt32(User->GetAbilityComponent()->GetStatStages()->GetAccuracyStages());

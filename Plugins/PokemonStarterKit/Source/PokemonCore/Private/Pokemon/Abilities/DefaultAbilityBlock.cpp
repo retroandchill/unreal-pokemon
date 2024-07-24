@@ -2,9 +2,9 @@
 
 #include "Pokemon/Abilities/DefaultAbilityBlock.h"
 #include "DataManager.h"
-#include "PokemonDataSettings.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "PokemonDataSettings.h"
 #include "Species/Ability.h"
 #include "Species/SpeciesData.h"
 
