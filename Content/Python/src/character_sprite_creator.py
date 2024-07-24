@@ -1,4 +1,4 @@
-from unreal import Set, Texture2D, Array, PaperZDAnimationSource, ScopedSlowTask
+from unreal import Texture2D, Array, PaperZDAnimationSource, ScopedSlowTask
 
 from sprites.sprite_extractor import create_sprites_from_texture, compile_sprites_into_flipbooks, \
     place_flipbooks_in_animation_source
@@ -6,7 +6,15 @@ from sprites.sprite_extractor import create_sprites_from_texture, compile_sprite
 
 def execute(textures: Array[Texture2D], columns: int, grid_size: int, frame_rate: float,
             anim_source: PaperZDAnimationSource):
-    with ScopedSlowTask(len(textures), "Importing Charactgers") as slow_task:
+    """
+    Execute the script importing the provided textures into character set animation data
+    :param textures: The textures to import the sprites from.
+    :param columns: The number of frames in the walk animation
+    :param grid_size: The size of a grid square
+    :param frame_rate: The frame rate of the flipbooks to set
+    :param anim_source: The animation source to associate the created sequences with
+    """
+    with ScopedSlowTask(len(textures), "Importing Characters") as slow_task:
         slow_task.make_dialog(True)
         for texture in textures:
             if slow_task.should_cancel():

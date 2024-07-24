@@ -1,6 +1,6 @@
 # "Unreal Pokémon" created by Retro & Chill.
 import unreal
-from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary, ScriptStruct, GameplayTagTableRow
+from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary, ScriptStruct
 
 from pokemon.data_loader.pbs_data import PbsIniData, ItemData, MoveData, TypeData, AbilityData, SpeciesData, \
     TrainerTypeData

@@ -40,7 +40,7 @@ def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_si
 
 
 def compile_sprites_into_flipbooks(source_texture: Texture2D, sprites: list[PaperSprite], columns: int,
-                                    frame_rate: float) -> list[PaperFlipbook]:
+                                   frame_rate: float) -> list[PaperFlipbook]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperFlipbookFactory()
     texture_package = get_package_name(source_texture)

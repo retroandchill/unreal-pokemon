@@ -32,7 +32,8 @@ def create_stat_stage_object(bp_factory: BlueprintFactory, prefix: str, stat_id:
 
 
 def create_stat_stage_classes(prefix: str, base_class: str):
-    parent_class = EditorAssetLibrary.load_blueprint_class('/Game/Blueprints/Battle/Moves/Base/{0}.{0}'.format(base_class))
+    parent_class = EditorAssetLibrary.load_blueprint_class(
+        '/Game/Blueprints/Battle/Moves/Base/{0}.{0}'.format(base_class))
 
     factory = BlueprintFactory()
     factory.set_editor_property('ParentClass', parent_class)
@@ -45,6 +46,3 @@ if __name__ == '__main__':
     create_stat_stage_classes('RaiseUser', 'Move_StatUp')
     create_stat_stage_classes('LowerUser', 'Move_StatDown')
     create_stat_stage_classes('LowerTarget', 'Move_TargetStatDown')
-
-
-

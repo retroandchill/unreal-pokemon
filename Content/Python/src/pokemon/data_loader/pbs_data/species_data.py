@@ -7,9 +7,8 @@ from .pbs_ini_data import DataContainer, PbsIniData
 from ..ini_data import IniData
 from ..unreal_data_loader import UnrealDataLoader
 
-SpeciesArgs = tuple[
-    DataContainer, DataContainer, DataContainer, dict[
-        str, Stat], DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer, DataContainer]
+SpeciesArgs = tuple[DataContainer, DataContainer, DataContainer, dict[str, Stat], DataContainer, DataContainer,
+                    DataContainer, DataContainer, DataContainer, DataContainer, DataContainer]
 
 
 class SpeciesData(PbsIniData[SpeciesArgs]):
@@ -151,7 +150,7 @@ class SpeciesData(PbsIniData[SpeciesArgs]):
                 "Parameter": evolution[2],
             })
         item["Evolutions"] = formatted_evolutions
-        
+
         item["Height"] = item.get("Height", 1.0)
         item["Weight"] = item.get("Weight", 1.0)
         item["Color"] = item.get("Color", "Red")

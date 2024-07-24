@@ -5,6 +5,7 @@ from typing import Optional, Iterator, TextIO
 
 class IniData:
     """Represents a raw parse of a PBS file that resembles the .ini format"""
+
     def __init__(self, config_path: str):
         with open(config_path, 'r', encoding='utf') as file:
             self.__parse_config(file)

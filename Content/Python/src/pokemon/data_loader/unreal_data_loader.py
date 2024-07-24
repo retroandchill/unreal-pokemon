@@ -4,6 +4,7 @@ from typing import Callable, Optional, Union
 
 class UnrealDataLoader:
     """Lazy loader for Unreal data"""
+
     def __init__(self, getter: Optional[Callable[[], set[str]]] = None):
         self.__getter = getter
         self.__data: Optional[set[str]] = None
