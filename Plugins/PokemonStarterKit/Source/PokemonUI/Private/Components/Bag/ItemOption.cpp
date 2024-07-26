@@ -39,4 +39,6 @@ void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {
     } else {
         ItemQuantityText->SetText(FText::FromStringView(TEXT("")));
     }
+
+    OnItemSet(Item, Quantity);
 }

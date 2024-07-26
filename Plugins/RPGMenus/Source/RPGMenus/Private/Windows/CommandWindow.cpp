@@ -57,7 +57,7 @@ void UCommandWindow::AddCommands() {
         TextWidget->SetText(Command->GetText());
 
         int32 CurrentIndex = ActiveCommands.Num();
-        SlotOption(TextWidget, CurrentIndex);
+        SlotOption(TextWidget);
         ActiveCommands.Add(Command);
     }
 }

@@ -53,6 +53,6 @@ UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Mo
     auto Panel = WidgetTree->ConstructWidget(PanelClass);
     Panel->SetMove(Move);
     Panel->SetIsMoveToLearn(bIsMoveToLearn);
-    SlotOption(Panel, GetItemCount());
+    SlotOption(Panel);
     return Panel;
 }

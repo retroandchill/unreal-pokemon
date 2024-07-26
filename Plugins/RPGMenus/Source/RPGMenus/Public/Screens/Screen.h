@@ -27,6 +27,15 @@ RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag);
 
 } // namespace RPG::Menus
 
+UENUM(BlueprintType)
+enum class ERPGWidgetInputMode : uint8
+{
+    Default,
+    GameAndMenu,
+    Game,
+    Menu
+};
+
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
  * of the other.
@@ -44,6 +53,8 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
     void RefreshSelf();
+
+    TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
 
     /**
      * Close the screen and return to the previous one
@@ -63,14 +74,22 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
 
   private:
     /**
-     * Get list of selectable widgets in the window
-     */
-    UPROPERTY()
-    TArray<TObjectPtr<USelectableWidget>> SelectableWidgets;
-
-    /**
      * Callback for when the screen is closed
      */
     UPROPERTY(BlueprintAssignable)
     FOnScreenClosed OnScreenClosed;
+
+    /**
+     * The desired input mode to use while this UI is activated, for example do you want key presses to still reach
+     * the game/player controller?
+     */
+    UPROPERTY(EditDefaultsOnly, Category = Input)
+    ERPGWidgetInputMode InputConfig = ERPGWidgetInputMode::Default;
+
+    /**
+     * The desired mouse behavior when the game gets input.
+
+     */
+    UPROPERTY(EditDefaultsOnly, Category = Input)
+    EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::CapturePermanently;
 };

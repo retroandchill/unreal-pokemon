@@ -21,7 +21,7 @@ void UPokemonSelectionPane::NativeConstruct() {
             auto NewWidget = WidgetTree->ConstructWidget<UPokemonPanel>(PanelClass, FName(Name));
             NewWidget->SetOwner(this);
             NewWidget->SetPokemon(PlayerParty[i], i);
-            SlotOption(NewWidget, i);
+            SlotOption(NewWidget);
         } else {
             auto NewWidget = WidgetTree->ConstructWidget<UWidget>(BlankPanelClass);
             PlaceOptionIntoWidget(NewWidget, i);
@@ -71,5 +71,5 @@ void UPokemonSelectionPane::SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *
 
 void UPokemonSelectionPane::AddAdditionalPanelToOptions(UPartySelectCancelPanel *Panel) {
     Panel->Refresh();
-    SlotOption(Panel, GetItemCount());
+    SlotOption(Panel);
 }

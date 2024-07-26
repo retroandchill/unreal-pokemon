@@ -1,9 +1,15 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
+#include "CommonUITypes.h"
+#include "EnhancedInputSubsystems.h"
 #include "Blueprint/WidgetTree.h"
 #include "PrimaryGameLayout.h"
+#include "Algo/ForEach.h"
 #include "Windows/SelectableWidget.h"
+#include <range/v3/view/filter.hpp>
+#include <range/v3/view/unique.hpp>
 
+class UEnhancedInputLocalPlayerSubsystem;
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::OverlayMenuLayerTag, "UI.Layer.Overlay");
 
@@ -24,8 +30,25 @@ void UScreen::NativeConstruct() {
     });
 }
 
+TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const {
+    using enum ERPGWidgetInputMode;
+    
+    switch (InputConfig) {
+    case GameAndMenu:
+        return FUIInputConfig(ECommonInputMode::All, GameMouseCaptureMode);
+    case Game:
+        return FUIInputConfig(ECommonInputMode::Game, GameMouseCaptureMode);
+    case Menu:
+        return FUIInputConfig(ECommonInputMode::Menu, EMouseCaptureMode::NoCapture);
+    default:
+        return TOptional<FUIInputConfig>();
+    }
+}
+
 void UScreen::CloseScreen() {
-    UPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer())->FindAndRemoveWidgetFromLayer(this);
+    DeactivateWidget();
+    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer());
+    Layout->FindAndRemoveWidgetFromLayer(this);
     OnScreenClosed.Broadcast();
 }
 

@@ -167,9 +167,11 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     /**
      * Slot an option into the widget
      * @param Option The option to be slotted
-     * @param OptionIndex The index of the option to slot
      */
-    void SlotOption(UCommonButtonBase *Option, int32 OptionIndex);
+    void SlotOption(UCommonButtonBase *Option);
+
+    UFUNCTION(BlueprintCallable, Category = "Selection|Options")
+    int32 AddOptionToWidget(UCommonButtonBase *Option);
 
     /**
      * The actual method called to slot the option into the UMG widget

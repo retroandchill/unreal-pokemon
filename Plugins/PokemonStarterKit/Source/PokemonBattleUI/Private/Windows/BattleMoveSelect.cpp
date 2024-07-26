@@ -26,5 +26,5 @@ void UBattleMoveSelect::CreateMovePanel(const TScriptInterface<IBattleMove> &Mov
     int32 OptionIndex = GetItemCount();
     auto Panel = WidgetTree->ConstructWidget(MovePanelClass, *FString::Format(TEXT("MovePanel{0}"), {OptionIndex}));
     Panel->SetMove(Move);
-    SlotOption(Panel, OptionIndex);
+    SlotOption(Panel);
 }

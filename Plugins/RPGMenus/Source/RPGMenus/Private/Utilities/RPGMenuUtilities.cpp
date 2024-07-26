@@ -4,9 +4,9 @@
 #include "PrimaryGameLayout.h"
 #include "Screens/Screen.h"
 
-UScreen *URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType) {
+UScreen *URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject, const TSoftClassPtr<UScreen>& ScreenType) {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    return Layout->PushWidgetToLayerStack<UScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenType);
+    return Layout->PushWidgetToLayerStack<UScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenType.LoadSynchronous());
 }
 
 UScreen *URPGMenuUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag) {

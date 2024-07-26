@@ -32,5 +32,5 @@ void UPokemonActionOptions::ExecuteCurrentHandler(UPokemonBattleScreen *Screen) 
 void UPokemonActionOptions::CreateMenuOption(const UBattleMenuHandler *MenuHandler) {
     TObjectPtr<UBattleMenuOption> Option = WidgetTree->ConstructWidget(OptionClass);
     Option->InitFromHandler(MenuHandler);
-    SlotOption(Option, GetItemCount());
+    SlotOption(Option);
 }

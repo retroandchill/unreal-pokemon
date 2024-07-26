@@ -22,6 +22,10 @@ void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag) {
 void UItemSelectionWindow::SetPocket(FName Pocket) {
     CurrentPocket = Pocket;
     UpdatePocket();
+
+    if (auto DesiredFocusTarget = GetDesiredFocusTarget(); DesiredFocusTarget != nullptr) {
+        DesiredFocusTarget->SetFocus();
+    }
 }
 
 const FItem *UItemSelectionWindow::GetCurrentItem() const {
@@ -96,5 +100,5 @@ void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {
 
     auto Option = WidgetTree->ConstructWidget(ItemEntryClass);
     Option->SetItem(ItemName, Quantity);
-    SlotOption(Option, GetItemCount());
+    SlotOption(Option);
 }

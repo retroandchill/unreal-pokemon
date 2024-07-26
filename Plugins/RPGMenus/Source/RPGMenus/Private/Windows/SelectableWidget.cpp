@@ -94,11 +94,16 @@ void USelectableWidget::ClearSelectableOptions() {
     SelectableButtons.Reset();
 }
 
-void USelectableWidget::SlotOption(UCommonButtonBase *Option, int32 OptionIndex) {
-    SelectableButtons.Emplace(Option);
+void USelectableWidget::SlotOption(UCommonButtonBase *Option) {
+    int32 OptionIndex = AddOptionToWidget(Option);
+    PlaceOptionIntoWidget(Option, OptionIndex);
+}
+
+int32 USelectableWidget::AddOptionToWidget(UCommonButtonBase *Option) {
+    int32 OptionIndex = SelectableButtons.Emplace(Option);
     Option->OnClicked().AddWeakLambda(this, [this, OptionIndex] { ConfirmOnIndex(OptionIndex); });
     Option->OnHovered().AddWeakLambda(this, [this, OptionIndex] { SetIndex(OptionIndex); });
-    PlaceOptionIntoWidget(Option, OptionIndex);
+    return OptionIndex;
 }
 
 void USelectableWidget::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {

@@ -92,6 +92,7 @@ void UPokemonPanel::RefreshPokemonInfo() {
     auto Gender = Pokemon->GetGender();
     UPokemonUIUtils::SetPokemonGenderText(Gender, GenderText);
     if (GenderTextColors.Contains(Gender)) {
+        GenderText->SetTextStyle(GenderTextColors[Gender]);
     }
 
     auto HP = FString::Format(
