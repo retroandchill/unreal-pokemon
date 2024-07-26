@@ -74,6 +74,12 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
 
   private:
     /**
+     * Get list of selectable widgets in the window
+     */
+    UPROPERTY()
+    TArray<TObjectPtr<USelectableWidget>> SelectableWidgets;
+
+    /**
      * Callback for when the screen is closed
      */
     UPROPERTY(BlueprintAssignable)
