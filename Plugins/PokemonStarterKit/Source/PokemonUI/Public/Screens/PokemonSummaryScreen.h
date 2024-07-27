@@ -7,6 +7,7 @@
 
 #include "PokemonSummaryScreen.generated.h"
 
+class ITrainer;
 class UHoldItemInfo;
 class IPokemon;
 class USummaryPages;
@@ -23,6 +24,14 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     void NativeConstruct() override;
 
   public:
+    /**
+     * Set the initial position in the party for cycling
+     * @param Trainer The party to display the summaries of
+     * @param InitialIndex The index to start at
+     */
+    UFUNCTION(BlueprintCallable, Category = Pokemon)
+    void SetInitialPokemon(const TScriptInterface<ITrainer>& Trainer, int32 InitialIndex);
+    
     /**
      * Set the initial position in the party for cycling
      * @param Party The party to display the summaries of

@@ -17,7 +17,12 @@ class RPGMENUS_API UNamedSlotSelectableWidget : public USelectableWidget {
 protected:
     void NativePreConstruct() override;
 
+public:
+    UFUNCTION(BlueprintCallable, Category = Selection)
+    void UpdateOptions();
+    
 private:
+    
     /**
      * The slot that will contain the window's content
      */

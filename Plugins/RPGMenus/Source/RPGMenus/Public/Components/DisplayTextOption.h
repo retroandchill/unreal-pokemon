@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
+#include "RPGButtonBase.h"
 
 #include "DisplayTextOption.generated.h"
 
@@ -12,7 +13,7 @@ class UDisplayText;
  * Selectable option that contains a display text that can be updated
  */
 UCLASS(Abstract)
-class RPGMENUS_API UDisplayTextOption : public UCommonButtonBase {
+class RPGMENUS_API UDisplayTextOption : public URPGButtonBase {
     GENERATED_BODY()
 
 protected:

@@ -19,6 +19,10 @@ void UPokemonSummaryScreen::NativeConstruct() {
     SummaryPages->SetPage(0);
 }
 
+void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex) {
+    SetInitialPokemon(Trainer->GetParty(), InitialIndex);
+}
+
 void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex) {
     SummaryPages->SetInitialPokemon(Party, InitialIndex);
 }

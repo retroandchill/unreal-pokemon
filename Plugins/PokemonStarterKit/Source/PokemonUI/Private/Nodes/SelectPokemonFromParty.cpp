@@ -18,7 +18,6 @@ void USelectPokemonFromParty::Activate() {
     auto Screen = Layout->PushWidgetToLayerStack<UPokemonSelectScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
     Screen->GetOnPokemonSelect().BindUObject(this, &USelectPokemonFromParty::ExecuteOnSelected);
     Screen->GetOnScreenClosed().AddUniqueDynamic(this, &USelectPokemonFromParty::ExecuteOnCanceled);
-    Screen->SetHelpText(HelpText);
 }
 
 void USelectPokemonFromParty::ExecuteOnSelected(const TScriptInterface<IPartyScreen> &Screen,
