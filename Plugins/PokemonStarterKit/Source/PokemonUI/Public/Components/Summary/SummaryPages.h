@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Pokemon/Pokemon.h"
 #include "Components/SelectableWidget.h"
+#include <range/v3/view/any_view.hpp>
 
 #include "SummaryPages.generated.h"
 
@@ -71,6 +72,16 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     UFUNCTION(BlueprintCallable, Category = Widgets)
     void SetPage(int32 PageIndex);
 
+    TArray<USummaryScreenPage *> GetPages() const;
+
+    int32 GetCurrentPageIndex() const;
+
+    void Select() const;
+    void NextPage();
+    void PreviousPage();
+    void NextPokemon();
+    void PreviousPokemon();
+
     FOnSelected &GetOnSelected();
     FOnScreenBackOut &GetOnScreenBackOut();
 
@@ -85,12 +96,6 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     bool NativeOnHandleBackAction() override;
 
   private:
-    void Select();
-    void NextPage();
-    void PreviousPage();
-    void NextPokemon();
-    void PreviousPokemon();
-
     /**
      * Iterator used to cycle through the part
      */
@@ -114,20 +119,12 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     TObjectPtr<UInputAction> SelectionAction;
 
     UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> NextPageAction;
-
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> PreviousPageAction;
-
-    UPROPERTY(EditAnywhere, Category = Input)
     TObjectPtr<UInputAction> NextPokemonAction;
 
     UPROPERTY(EditAnywhere, Category = Input)
     TObjectPtr<UInputAction> PreviousPokemonAction;
 
     FUIActionBindingHandle InspectActionHandler;
-    FUIActionBindingHandle NextPageActionHandle;
-    FUIActionBindingHandle PreviousPageActionHandle;
     FUIActionBindingHandle NextPokemonActionHandle;
     FUIActionBindingHandle PreviousPokemonActionHandle;
 };

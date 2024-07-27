@@ -7,6 +7,7 @@
 
 #include "PokemonSummaryScreen.generated.h"
 
+class USummaryTabWidget;
 class ITrainer;
 class UHoldItemInfo;
 class IPokemon;
@@ -21,6 +22,7 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     GENERATED_BODY()
 
   protected:
+    void NativePreConstruct() override;
     void NativeConstruct() override;
 
   public:
@@ -83,4 +85,7 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
      */
     UPROPERTY(BlueprintGetter = GetSummaryPages, Category = Widgets, meta = (BindWidget))
     TObjectPtr<USummaryPages> SummaryPages;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<USummaryTabWidget> SummaryTabs;
 };

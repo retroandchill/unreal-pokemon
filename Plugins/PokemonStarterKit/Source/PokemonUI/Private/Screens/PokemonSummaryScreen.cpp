@@ -8,6 +8,15 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
 #include "Components/Summary/SummaryPages.h"
+#include "Components/Summary/SummaryTabWidget.h"
+
+void UPokemonSummaryScreen::NativePreConstruct() {
+    Super::NativePreConstruct();
+
+    if (SummaryTabs != nullptr && SummaryPages != nullptr) {
+        SummaryTabs->SetSummaryPages(SummaryPages);
+    }
+}
 
 void UPokemonSummaryScreen::NativeConstruct() {
     Super::NativeConstruct();

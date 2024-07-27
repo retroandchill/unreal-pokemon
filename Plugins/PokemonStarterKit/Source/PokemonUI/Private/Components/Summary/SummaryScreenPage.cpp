@@ -13,3 +13,7 @@ bool USummaryScreenPage::CanSelectOnPage_Implementation() const {
 FPageSelected &USummaryScreenPage::GetPageSelected() {
     return PageSelected;
 }
+
+TSubclassOf<UCommonButtonStyle> USummaryScreenPage::GetTabButtonStyle() const {
+    return TabButtonStyle;
+}

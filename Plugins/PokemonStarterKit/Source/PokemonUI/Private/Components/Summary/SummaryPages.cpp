@@ -2,6 +2,7 @@
 
 #include "Components/Summary/SummaryPages.h"
 #include "Components/WidgetSwitcher.h"
+#include "Components/Summary/SummaryScreenPage.h"
 #include "Input/CommonUIInputTypes.h"
 
 USummaryPages::USummaryPages(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
@@ -19,9 +20,6 @@ void USummaryPages::NativeConstruct() {
     };
 
     InspectActionHandler = RegisterUIActionBinding(CreateBindArgs(SelectionAction, &USummaryPages::Select));
-    NextPageActionHandle = RegisterUIActionBinding(CreateBindArgs(NextPageAction, &USummaryPages::NextPage));
-    PreviousPageActionHandle =
-        RegisterUIActionBinding(CreateBindArgs(PreviousPageAction, &USummaryPages::PreviousPage));
     NextPokemonActionHandle = RegisterUIActionBinding(CreateBindArgs(NextPokemonAction, &USummaryPages::NextPokemon));
     PreviousPokemonActionHandle =
         RegisterUIActionBinding(CreateBindArgs(PreviousPokemonAction, &USummaryPages::PreviousPokemon));
@@ -46,24 +44,19 @@ void USummaryPages::SetPage(int32 PageIndex) {
     PageSwitcher->SetActiveWidgetIndex(PageIndex);
 }
 
-FOnSelected &USummaryPages::GetOnSelected() {
-    return OnSelected;
+TArray<USummaryScreenPage *> USummaryPages::GetPages() const {
+    TArray<USummaryScreenPage *> Pages;
+    for (int32 i = 0; i < PageSwitcher->GetNumWidgets(); i++) {
+        Pages.Add(CastChecked<USummaryScreenPage>(PageSwitcher->GetWidgetAtIndex(i)));
+    }
+    return Pages;
 }
 
-FOnScreenBackOut &USummaryPages::GetOnScreenBackOut() {
-    return OnScreenBackOut;
+int32 USummaryPages::GetCurrentPageIndex() const {
+    return PageSwitcher->GetActiveWidgetIndex();
 }
 
-UWidgetSwitcher *USummaryPages::GetPageSwitcher() const {
-    return PageSwitcher;
-}
-
-bool USummaryPages::NativeOnHandleBackAction() {
-    OnScreenBackOut.Broadcast();
-    return true;
-}
-
-void USummaryPages::Select() {
+void USummaryPages::Select() const {
     OnSelected.Broadcast(PageSwitcher->GetActiveWidgetIndex());
 }
 
@@ -84,4 +77,21 @@ void USummaryPages::NextPokemon() {
 void USummaryPages::PreviousPokemon() {
     --CurrentPokemon;
     OnPokemonChange.ExecuteIfBound(*CurrentPokemon);
+}
+
+FOnSelected &USummaryPages::GetOnSelected() {
+    return OnSelected;
+}
+
+FOnScreenBackOut &USummaryPages::GetOnScreenBackOut() {
+    return OnScreenBackOut;
+}
+
+UWidgetSwitcher *USummaryPages::GetPageSwitcher() const {
+    return PageSwitcher;
+}
+
+bool USummaryPages::NativeOnHandleBackAction() {
+    OnScreenBackOut.Broadcast();
+    return true;
 }

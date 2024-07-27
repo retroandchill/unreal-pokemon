@@ -7,6 +7,7 @@
 
 #include "SummaryScreenPage.generated.h"
 
+class UCommonButtonStyle;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPageSelected);
 
 class IPokemon;
@@ -39,10 +40,18 @@ class POKEMONUI_API USummaryScreenPage : public UUserWidget {
      */
     FPageSelected &GetPageSelected();
 
-  private:
+    TSubclassOf<UCommonButtonStyle> GetTabButtonStyle() const;
+
+private:
     /**
      * The delegate for when a page is selected
      */
     UPROPERTY(BlueprintAssignable)
     FPageSelected PageSelected;
+
+    /**
+     * The style applied to the button in the tab widget in the screen
+     */
+    UPROPERTY(EditAnywhere, Category = Selection)
+    TSubclassOf<UCommonButtonStyle> TabButtonStyle;
 };
