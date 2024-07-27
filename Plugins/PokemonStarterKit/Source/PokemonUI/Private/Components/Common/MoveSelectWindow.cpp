@@ -12,19 +12,18 @@ void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) 
     CurrentPokemon = Pokemon;
     RefreshLayout(MoveToLearn.IsSet());
 
-    Algo::ForEach(MovePanels, &UWidget::RemoveFromParent);
+    ClearSelectableOptions();
     int32 MoveCount = GetDefault<UPokemonDataSettings>()->MaxMoves;
     auto Moves = Pokemon->GetMoveBlock()->GetMoves();
 
-    MovePanels.Empty();
     check(PanelClass != nullptr)
     for (int i = 0; i < MoveCount; i++) {
-        MovePanels.Emplace(CreateMovePanel(i < Moves.Num() ? Moves[i] : nullptr));
+        CreateMovePanel(i < Moves.Num() ? Moves[i] : nullptr);
     }
 
     if (MoveToLearn.IsSet()) {
         auto TempMove = CurrentPokemon->GetMoveBlock()->CreateNewMove(*MoveToLearn);
-        MovePanels.Emplace(CreateMovePanel(TempMove, true));
+        CreateMovePanel(TempMove, true);
     }
 }
 
@@ -44,7 +43,7 @@ void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 N
     } else {
         CursorWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
         SetCursorPosition(CursorWidget, NewIndex);
-        OnMoveSelectionChanged.Broadcast(MovePanels[NewIndex]->GetMove());
+        OnMoveSelectionChanged.Broadcast(GetSelectableOption<UMovePanel>(NewIndex)->GetMove());
     }
 }
 

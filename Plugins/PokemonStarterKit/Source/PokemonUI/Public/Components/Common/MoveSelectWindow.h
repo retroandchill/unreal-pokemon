@@ -79,12 +79,6 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
     TSubclassOf<UMovePanel> PanelClass;
 
     /**
-     * The created move panels.
-     */
-    UPROPERTY()
-    TArray<TObjectPtr<UMovePanel>> MovePanels;
-
-    /**
      * The widget that acts as the cursor for the window
      */
     UPROPERTY(meta = (BindWidget))
