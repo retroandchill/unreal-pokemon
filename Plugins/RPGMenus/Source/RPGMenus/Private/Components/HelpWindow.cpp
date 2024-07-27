@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Windows/HelpWindow.h"
+#include "Components/HelpWindow.h"
 #include "Components/DisplayText.h"
 
 void UHelpWindow::NativePreConstruct() {

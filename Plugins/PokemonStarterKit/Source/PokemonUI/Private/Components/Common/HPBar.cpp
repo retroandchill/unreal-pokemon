@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Components/HPBar.h"
+#include "Components/Common/HPBar.h"
 
 TSharedRef<SWidget> UHPBar::RebuildWidget() {
     bSetUp = true;

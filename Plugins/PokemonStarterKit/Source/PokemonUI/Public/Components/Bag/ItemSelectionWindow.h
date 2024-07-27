@@ -6,7 +6,7 @@
 #include "Bag/Item.h"
 #include "Manipulation/CircularIterator.h"
 #include "Screens/InventoryScreen.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 
 #include "ItemSelectionWindow.generated.h"
 

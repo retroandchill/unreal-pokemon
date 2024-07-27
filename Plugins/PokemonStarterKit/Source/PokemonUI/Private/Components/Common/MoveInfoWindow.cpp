@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Windows/MoveInfoWindow.h"
+#include "Components/Common/MoveInfoWindow.h"
 #include "Components/DisplayText.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"

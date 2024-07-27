@@ -7,7 +7,7 @@
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
-#include "Windows/SummaryPages.h"
+#include "Components/Summary/SummaryPages.h"
 
 void UPokemonSummaryScreen::NativeConstruct() {
     Super::NativeConstruct();

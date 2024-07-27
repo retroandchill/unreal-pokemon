@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 
 #include "RPGMenusTestUtilities.generated.h"
 

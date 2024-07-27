@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Windows/SummaryPages.h"
+#include "Components/Summary/SummaryPages.h"
 #include "Components/WidgetSwitcher.h"
 #include "Input/CommonUIInputTypes.h"
 

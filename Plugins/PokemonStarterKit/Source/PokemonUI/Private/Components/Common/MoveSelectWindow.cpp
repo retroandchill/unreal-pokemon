@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Windows/MoveSelectWindow.h"
+#include "Components/Common/MoveSelectWindow.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
-#include "Components/MovePanel.h"
+#include "Components/Common/MovePanel.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonDataSettings.h"

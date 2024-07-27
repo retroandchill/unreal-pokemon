@@ -10,7 +10,7 @@
 #include "Groups/CommonButtonGroupBase.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
-#include "Windows/ItemSelectionWindow.h"
+#include "Components/Bag/ItemSelectionWindow.h"
 #include <range/v3/view/transform.hpp>
 
 UPocketTabWidget::UPocketTabWidget() {

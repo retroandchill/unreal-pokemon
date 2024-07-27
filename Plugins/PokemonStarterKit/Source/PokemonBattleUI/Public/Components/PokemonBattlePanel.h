@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animations/ProgressBarAnimation.h"
 #include "Pokemon/Breeding/PokemonGender.h"
-#include "PokemonUI/Public/Components/PokemonInfoWidget.h"
+#include "Components/Common/PokemonInfoWidget.h"
 
 #include "PokemonBattlePanel.generated.h"
 

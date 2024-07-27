@@ -10,8 +10,8 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/Dispatchers/SampleHandler.h"
-#include "Windows/CommandWindow.h"
-#include "Windows/ItemSelectionWindow.h"
+#include "Components/CommandWindow.h"
+#include "Components/Bag/ItemSelectionWindow.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

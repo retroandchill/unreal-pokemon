@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Components/PokemonActionBoundButton.h"
+#include "Components/Common/PokemonActionBoundButton.h"
 #include "CommonActionWidget.h"
 #include "CommonInputSubsystem.h"
 #include "Components/DisplayText.h"

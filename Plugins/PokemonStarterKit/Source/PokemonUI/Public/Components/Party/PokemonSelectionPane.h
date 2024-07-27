@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/Party/PokemonPanel.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 
 #include "PokemonSelectionPane.generated.h"
 

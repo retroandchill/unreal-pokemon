@@ -9,7 +9,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/PokemonTestUtilities.h"
-#include "Windows/PokemonSelectionPane.h"
+#include "Components/Party/PokemonSelectionPane.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Unit Tests.UI.PokemonPanelInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

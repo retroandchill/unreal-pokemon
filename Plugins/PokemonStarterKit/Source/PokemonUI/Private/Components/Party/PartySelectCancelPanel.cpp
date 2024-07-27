@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Party/PartySelectCancelPanel.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 
 void UPartySelectCancelPanel::SetOwner(USelectableWidget *NewOwner) {
     Owner = NewOwner;

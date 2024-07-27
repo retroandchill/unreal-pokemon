@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/PokemonInfoWidget.h"
+#include "Components/Common/PokemonInfoWidget.h"
 
 #include "HoldItemInfo.generated.h"
 

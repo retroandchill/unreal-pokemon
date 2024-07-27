@@ -5,9 +5,9 @@
 #include "Handlers/PartyMenu/PartyMenuHandlerSet.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
-#include "Windows/CommandWindow.h"
-#include "Windows/HelpWindow.h"
-#include "Windows/PokemonSelectionPane.h"
+#include "Components/CommandWindow.h"
+#include "Components/HelpWindow.h"
+#include "Components/Party/PokemonSelectionPane.h"
 
 void UPokemonSelectScreen::NativeConstruct() {
     Super::NativeConstruct();

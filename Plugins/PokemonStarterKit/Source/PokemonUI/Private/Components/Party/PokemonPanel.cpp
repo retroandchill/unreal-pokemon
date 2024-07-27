@@ -2,8 +2,8 @@
 
 #include "Components/Party/PokemonPanel.h"
 #include "Pokemon/Pokemon.h"
-#include "Windows/PokemonSelectionPane.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/Party/PokemonSelectionPane.h"
+#include "Components/SelectableWidget.h"
 
 void UPokemonPanel::SetOwner(USelectableWidget *NewOwner) {
     Owner = NewOwner;

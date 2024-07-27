@@ -6,11 +6,10 @@
 #include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
-#include "Windows/CommandWindow.h"
-#include "Windows/ItemInfoWindow.h"
-#include "Windows/ItemSelectionWindow.h"
-#include "Windows/PocketWindow.h"
-#include "Windows/PokemonSelectionPane.h"
+#include "Components/CommandWindow.h"
+#include "Components/Bag/ItemInfoWindow.h"
+#include "Components/Bag/ItemSelectionWindow.h"
+#include "Components/Bag/PocketWindow.h"
 
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();

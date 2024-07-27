@@ -1,5 +1,5 @@
 ﻿
-#include "Windows/SummaryPages.h"
+#include "Components/Summary/SummaryPages.h"
 #include "Asserts.h"
 #include "Components/WidgetSwitcher.h"
 #include "Input/UIActionBinding.h"

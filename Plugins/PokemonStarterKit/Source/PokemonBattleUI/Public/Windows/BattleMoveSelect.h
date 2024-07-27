@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 
 #include "BattleMoveSelect.generated.h"
 

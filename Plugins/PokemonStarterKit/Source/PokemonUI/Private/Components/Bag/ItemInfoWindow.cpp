@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Windows/ItemInfoWindow.h"
+#include "Components/Bag/ItemInfoWindow.h"
 #include "Bag/Item.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"

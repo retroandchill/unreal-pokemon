@@ -10,7 +10,7 @@
 #include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
 #include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
 #include "UtilityClasses/Dispatchers/PocketNameDispatcher.h"
-#include "Windows/ItemSelectionWindow.h"
+#include "Components/Bag/ItemSelectionWindow.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemSelectionWindowTest_Basic,
                                  "Unit Tests.Windows.ItemSelectionWindowTest.BasicSelection",

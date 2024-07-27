@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Components/MovePanel.h"
+#include "Components/Common/MovePanel.h"
 #include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"

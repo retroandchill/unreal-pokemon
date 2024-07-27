@@ -6,7 +6,7 @@
 #include "PrimaryGameLayout.h"
 #include "RPGUIManagerSubsystem.h"
 #include "Algo/ForEach.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/unique.hpp>
 

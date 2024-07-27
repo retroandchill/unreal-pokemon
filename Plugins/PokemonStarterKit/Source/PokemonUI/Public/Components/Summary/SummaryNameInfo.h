@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/PokemonInfoWidget.h"
+#include "Components/Common/PokemonInfoWidget.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 
 #include "SummaryNameInfo.generated.h"

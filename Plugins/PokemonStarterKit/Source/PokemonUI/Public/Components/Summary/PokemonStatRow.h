@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/PokemonInfoWidget.h"
 #include "PokemonInfoPage.h"
+#include "Components/Common/PokemonInfoWidget.h"
 
 #include "PokemonStatRow.generated.h"
 

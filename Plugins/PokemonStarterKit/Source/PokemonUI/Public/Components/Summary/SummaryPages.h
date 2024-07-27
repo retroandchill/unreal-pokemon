@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pokemon/Pokemon.h"
-#include "Windows/SelectableWidget.h"
+#include "Components/SelectableWidget.h"
 
 #include "SummaryPages.generated.h"
 
