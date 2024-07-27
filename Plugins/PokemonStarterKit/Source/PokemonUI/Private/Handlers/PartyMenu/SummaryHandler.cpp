@@ -11,6 +11,6 @@ void USummaryHandler::Handle_Implementation(const TScriptInterface<IPartyScreen>
     check(SummaryScreenClass != nullptr)
     auto Overlay = UPrimaryGameLayout::GetPrimaryGameLayout(Screen->GetPlayerController());
     auto NewScreen =
-        Overlay->PushWidgetToLayerStack<UPokemonSummaryScreen>(RPG::Menus::PrimaryMenuLayerTag, SummaryScreenClass);
+        Overlay->PushWidgetToLayerStack<UPokemonSummaryScreen>(RPG::Menus::PrimaryMenuLayerTag, SummaryScreenClass.LoadSynchronous());
     NewScreen->SetInitialPokemon(Trainer->GetParty(), PartyIndex);
 }

@@ -15,7 +15,7 @@ void UPokemonSelectScreen::NativeConstruct() {
     SelectionPane->SetIndex(0);
     SelectionPane->ActivateWidget();
     SelectionPane->GetOnConfirm().AddUniqueDynamic(this, &UPokemonSelectScreen::OnPokemonSelected);
-    SelectionPane->GetOnCancel().AddUniqueDynamic(this, &UPokemonSelectScreen::CloseScreen);
+    SelectionPane->GetOnCancel().AddUniqueDynamic(this, &UPokemonSelectScreen::OnPokemonCancel);
     CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UPokemonSelectScreen::ProcessCommand);
     CommandWindow->GetOnCancel().AddUniqueDynamic(this, &UPokemonSelectScreen::OnCommandWindowCancel);
     ToggleCommandWindowVisibility(false);
@@ -98,6 +98,14 @@ void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
         SelectionPane->CompleteSwitch();
     } else {
         DisplayPokemonCommands(Trainer, Index);
+    }
+}
+
+void UPokemonSelectScreen::OnPokemonCancel() {
+    if (SelectionPane->IsSwitching()) {
+        SelectionPane->CancelSwitch();
+    } else {
+        CloseScreen();
     }
 }
 

@@ -47,7 +47,7 @@ bool UPokemonPanel::IsSwapping() const {
     if (SelectionPane == nullptr)
         return false;
 
-    return SelectionPane->IsSwitching() && IsPanelSelected();
+    return SelectionPane->IsSwitching();
 }
 
 bool UPokemonPanel::IsPreselected() const {

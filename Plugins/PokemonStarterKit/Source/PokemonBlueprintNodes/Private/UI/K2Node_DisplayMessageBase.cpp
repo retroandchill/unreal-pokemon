@@ -1,17 +1,15 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "UI/K2Node_DisplayMessageBase.h"
+#include "BlueprintActionDatabaseRegistrar.h"
+#include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
+#include "Kismet/BlueprintAsyncActionBase.h"
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/RPGMenuUtilities.h"
 
-void UK2Node_DisplayMessageBase::ForEachValidScreen(const TFunctionRef<void(UClass *)> &Action) const {
-    for (TObjectIterator<UClass> It; It; ++It) {
-        if (!It->IsChildOf(UTextDisplayScreen::StaticClass()) || It->HasAnyClassFlags(CLASS_Abstract)) {
-            continue;
-        }
-        Action(*It);
-    }
+UK2Node_DisplayMessageBase::UK2Node_DisplayMessageBase(const FObjectInitializer &Initializer) : Super(Initializer) {
+    ProxyActivateFunctionName = GET_FUNCTION_NAME_CHECKED(UBlueprintAsyncActionBase, Activate);
 }
 
 void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &CompilerContext, UEdGraphPin *OutputPin) {
@@ -36,4 +34,21 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
 
     CompilerContext.MovePinLinksToIntermediate(*OutputPin, *ThenPin);
     OutputPin->MakeLinkTo(InputPin);
+}
+
+void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar, UFunction *FactoryFunc) const {
+    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode, UFunction *Factory) {
+        auto TypedNode = CastChecked<UK2Node_DisplayMessageBase>(Node);
+        auto ReturnProp = CastFieldChecked<FObjectProperty>(Factory->GetReturnProperty());
+
+        TypedNode->ProxyFactoryFunctionName = Factory->GetFName();
+        TypedNode->ProxyFactoryClass = Factory->GetOuterUClass();
+        TypedNode->ProxyClass = ReturnProp->PropertyClass;
+    };
+
+    auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
+    check(Spawner != nullptr)
+
+    Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateLambda(CustomizeCallback, FactoryFunc);
+    ActionRegistrar.AddBlueprintAction(GetClass(), Spawner);
 }

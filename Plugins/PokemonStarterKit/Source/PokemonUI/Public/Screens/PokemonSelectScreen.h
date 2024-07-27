@@ -71,6 +71,9 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     UFUNCTION()
     void OnPokemonSelected(int32 Index);
 
+    UFUNCTION()
+    void OnPokemonCancel();
+
     /**
      * Display the commands available for a selected Pokémon in the command window
      * @param Trainer The trainer that owns the selected Pokémon

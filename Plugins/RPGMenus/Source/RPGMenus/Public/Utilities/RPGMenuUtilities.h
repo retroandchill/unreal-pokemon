@@ -25,7 +25,7 @@ class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject",
         AutoCreateRefTerm = ScreenType))
-    static UScreen *PushScreenToStack(const UObject *WorldContextObject, const TSoftClassPtr<UScreen>& ScreenType);
+    static UScreen *PushScreenToStack(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType);
 
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
     static UScreen *RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag);

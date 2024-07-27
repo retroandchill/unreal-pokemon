@@ -55,6 +55,15 @@ void UPokemonSelectionPane::CompleteSwitch() {
     PerformSwap(Panel1, Panel2);
 }
 
+void UPokemonSelectionPane::CancelSwitch() {
+    check(SwitchingIndex.IsSet())
+    auto Panel1 = GetSelectableOption<UPokemonPanel>(SwitchingIndex.GetValue());
+    auto Panel2 = GetSelectableOption<UPokemonPanel>(GetIndex());
+    SwitchingIndex.Reset();
+    Panel1->Refresh();
+    Panel2->Refresh();
+}
+
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     RefreshWindow();
 }

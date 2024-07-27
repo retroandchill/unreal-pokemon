@@ -53,6 +53,8 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
     UFUNCTION(BlueprintCallable, Category = Switching)
     void CompleteSwitch();
 
+    void CancelSwitch();
+
     /**
      * Toggle whether the bottom commands should be visible or not
      * @param bIsVisible Should the elements be visible
