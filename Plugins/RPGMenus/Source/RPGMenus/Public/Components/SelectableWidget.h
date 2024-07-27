@@ -162,7 +162,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     UCommonButtonBase *GetSelectableOption(int32 OptionIndex) const;
 
     UFUNCTION(BlueprintCallable, Category = "Selection|Options")
-    void ClearSelectableOptions();
+    void ClearSelectableOptions(bool bRemoveWidgets = true);
 
     /**
      * Slot an option into the widget

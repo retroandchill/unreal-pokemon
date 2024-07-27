@@ -89,8 +89,11 @@ UCommonButtonBase *USelectableWidget::GetSelectableOption(int32 OptionIndex) con
     return SelectableButtons[OptionIndex];
 }
 
-void USelectableWidget::ClearSelectableOptions() {
-    Algo::ForEach(SelectableButtons, &UWidget::RemoveFromParent);
+void USelectableWidget::ClearSelectableOptions(bool bRemoveWidgets) {
+    if (bRemoveWidgets) {
+        Algo::ForEach(SelectableButtons, &UWidget::RemoveFromParent);
+    }
+    
     SelectableButtons.Reset();
 }
 
