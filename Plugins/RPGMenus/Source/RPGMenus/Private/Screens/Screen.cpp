@@ -4,6 +4,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/WidgetTree.h"
 #include "PrimaryGameLayout.h"
+#include "RPGUIManagerSubsystem.h"
 #include "Algo/ForEach.h"
 #include "Windows/SelectableWidget.h"
 #include <range/v3/view/filter.hpp>
@@ -61,6 +62,8 @@ void UScreen::NativeOnActivated() {
     if (GetVisibility() == ESlateVisibility::HitTestInvisible) {
         SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     }
+
+    GetGameInstance()->GetSubsystem<URPGUIManagerSubsystem>()->OnScreenActivated(this);
 }
 
 void UScreen::NativeOnDeactivated() {
@@ -68,4 +71,6 @@ void UScreen::NativeOnDeactivated() {
     if (IsVisible()) {
         SetVisibility(ESlateVisibility::HitTestInvisible);
     }
+    
+    GetGameInstance()->GetSubsystem<URPGUIManagerSubsystem>()->OnScreenDeactivated(this);
 }
