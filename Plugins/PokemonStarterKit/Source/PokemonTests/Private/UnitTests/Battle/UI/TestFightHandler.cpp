@@ -14,8 +14,8 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
-#include "Windows/BattleMoveSelect.h"
-#include "Windows/PokemonActionOptions.h"
+#include "Components/BattleMoveSelect.h"
+#include "Components/PokemonActionOptions.h"
 #include <range/v3/view/single.hpp>
 
 using namespace testing;

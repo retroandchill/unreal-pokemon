@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Windows/BattleMoveSelect.h"
+#include "Components/BattleMoveSelect.h"
 #include "Algo/ForEach.h"
 #include "Battle/Battlers/Battler.h"
 #include "Blueprint/WidgetTree.h"

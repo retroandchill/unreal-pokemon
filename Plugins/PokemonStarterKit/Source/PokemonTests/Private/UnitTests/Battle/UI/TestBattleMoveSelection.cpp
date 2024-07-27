@@ -14,7 +14,7 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
-#include "Windows/BattleMoveSelect.h"
+#include "Components/BattleMoveSelect.h"
 
 using namespace testing;
 

@@ -2,7 +2,7 @@
 
 #include "Handlers/FightHandler.h"
 #include "Screens/PokemonBattleScreen.h"
-#include "Windows/PokemonActionOptions.h"
+#include "Components/PokemonActionOptions.h"
 
 void UFightHandler::OnSelected_Implementation(UPokemonBattleScreen *BattleScreen) {
     auto ActionSelect = BattleScreen->GetActionSelect();

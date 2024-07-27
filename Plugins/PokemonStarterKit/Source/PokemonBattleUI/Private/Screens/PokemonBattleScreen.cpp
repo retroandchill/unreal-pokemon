@@ -7,8 +7,8 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
-#include "Windows/BattleMoveSelect.h"
-#include "Windows/PokemonActionOptions.h"
+#include "Components/BattleMoveSelect.h"
+#include "Components/PokemonActionOptions.h"
 #include <functional>
 
 void UPokemonBattleScreen::NativeConstruct() {
