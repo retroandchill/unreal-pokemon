@@ -8,6 +8,7 @@
 
 #include "BagScreen.generated.h"
 
+class UPokemonSelectionPane;
 class UPocketTabWidget;
 class UBagMenuHandlerSet;
 class UCommand;
@@ -40,11 +41,16 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION(BlueprintCallable, Category = Navigation)
     void RemoveFromStack() override;
 
+    void CloseScreen() override;
+
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
 
   protected:
     void RefreshSelf_Implementation() override;
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
+    UItemSelectionWindow* GetItemSelectionWindow() const;
 
   private:
     /**
@@ -85,7 +91,7 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     /**
      * The window that displays the item list
      */
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintGetter = GetItemSelectionWindow, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UItemSelectionWindow> ItemSelectionWindow;
 
     /**

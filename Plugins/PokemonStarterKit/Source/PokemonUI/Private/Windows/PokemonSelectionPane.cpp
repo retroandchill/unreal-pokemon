@@ -66,6 +66,7 @@ void UPokemonSelectionPane::CancelSwitch() {
 
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     RefreshWindow();
+    OnPokemonSelected.Broadcast(GetSelectableOption<UPokemonPanel>(NewIndex)->GetPokemon());
 }
 
 void UPokemonSelectionPane::PerformSwap_Implementation(UPokemonPanel *Panel1, UPokemonPanel *Panel2) {
@@ -76,6 +77,8 @@ void UPokemonSelectionPane::SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *
     Panel1->SwapPokemon(*Panel2);
     Panel1->Refresh();
     Panel2->Refresh();
+    
+    OnPokemonSelected.Broadcast(GetSelectableOption<UPokemonPanel>(GetIndex())->GetPokemon());
 }
 
 void UPokemonSelectionPane::AddAdditionalPanelToOptions(UPartySelectCancelPanel *Panel) {

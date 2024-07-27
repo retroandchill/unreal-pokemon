@@ -104,8 +104,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const TS
                               {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
 }
 
-FMaterialInstanceWithSize
-UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, bool bBack,
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, bool bBack,
                                               const FPokemonAssetParams &AdditionalParams) const {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList =
@@ -126,18 +125,18 @@ UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, boo
     return {Material, FVector2D(Height, Height)};
 }
 
-UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon,
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon,
                                                                     UObject *Outer) {
     return GetSpeciesIcon(Pokemon->GetSpecies().ID, Outer, {.Gender = Pokemon->GetGender()});
 }
 
-UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species, UObject *Outer,
+FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species, UObject *Outer,
                                                                     const FPokemonAssetParams &AdditionalParams) {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
     auto Texture = ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList);
     if (Texture == nullptr) {
-        return nullptr;
+        return { nullptr, FVector2D() };
     }
 
 #if WITH_EDITOR
@@ -147,7 +146,8 @@ UMaterialInstanceDynamic *UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Specie
     static FName SourceTexture = "SourceTexture";
     auto Material = UMaterialInstanceDynamic::Create(PokemonSpriteMaterials.IconMaterial.LoadSynchronous(), Outer);
     Material->SetTextureParameterValue(SourceTexture, Texture);
-    return Material;
+    int32 Height = Texture->GetSizeY();
+    return { Material, FVector2D(Height, Height) };
 }
 
 FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer,

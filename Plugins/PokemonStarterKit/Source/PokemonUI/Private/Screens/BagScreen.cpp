@@ -10,19 +10,19 @@
 #include "Windows/ItemInfoWindow.h"
 #include "Windows/ItemSelectionWindow.h"
 #include "Windows/PocketWindow.h"
+#include "Windows/PokemonSelectionPane.h"
 
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
-
     
     ItemSelectionWindow->GetOnItemSelected().AddUniqueDynamic(this, &UBagScreen::SelectItem);
-    ItemSelectionWindow->GetOnCancel().AddUniqueDynamic(this, &UBagScreen::CloseScreen);
+    ItemSelectionWindow->GetOnCancel().AddUniqueDynamic(this, &UScreen::CloseScreen);
     ItemSelectionWindow->GetOnItemChanged().AddUniqueDynamic(ItemInfoWindow, &UItemInfoWindow::Refresh);
     ItemSelectionWindow->GetOnNoItemSelected().AddUniqueDynamic(ItemInfoWindow, &UItemInfoWindow::ClearItem);
     ItemSelectionWindow->GetOnPocketChanged().AddUniqueDynamic(PocketWindow, &UPocketWindow::SetCurrentPocket);
     CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UBagScreen::UBagScreen::OnItemCommandSelected);
     CommandWindow->GetOnCancel().AddUniqueDynamic(this, &UBagScreen::OnItemCommandCanceled);
-
+    
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
     ItemSelectionWindow->SetBag(Bag);
     PocketTabWidget->SetItemSelectionWindow(ItemSelectionWindow);
@@ -49,6 +49,11 @@ void UBagScreen::RemoveFromStack() {
     CloseScreen();
 }
 
+void UBagScreen::CloseScreen() {
+    Super::CloseScreen();
+    OnItemSelected.Unbind();
+}
+
 void UBagScreen::RefreshScene() {
     ItemSelectionWindow->RefreshWindow();
 }
@@ -56,6 +61,10 @@ void UBagScreen::RefreshScene() {
 void UBagScreen::RefreshSelf_Implementation() {
     Super::RefreshSelf_Implementation();
     RefreshScene();
+}
+
+UItemSelectionWindow * UBagScreen::GetItemSelectionWindow() const {
+    return ItemSelectionWindow;
 }
 
 void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {
@@ -67,6 +76,7 @@ void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {
 void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
     if (OnItemSelected.IsBound()) {
         OnItemSelected.Execute(this, Item, Quantity);
+        OnItemSelected.Unbind();
         return;
     }
 

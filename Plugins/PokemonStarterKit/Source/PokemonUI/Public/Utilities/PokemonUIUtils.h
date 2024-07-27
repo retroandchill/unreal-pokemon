@@ -70,6 +70,7 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      * @param Gender The Pokémon to process
      * @param TextWidget The widget to set the text for
      */
+    UFUNCTION(BlueprintCallable, Category = Content)
     static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget);
 
     /**

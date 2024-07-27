@@ -79,7 +79,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @return The graphical asset that this icon refers to.
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    UMaterialInstanceDynamic *GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer);
+    FMaterialInstanceWithSize GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
@@ -88,7 +88,7 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      * @return The graphical asset that this icon refers to.
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    UMaterialInstanceDynamic *GetSpeciesIcon(FName Species, UObject *Outer,
+    FMaterialInstanceWithSize GetSpeciesIcon(FName Species, UObject *Outer,
                                              const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**

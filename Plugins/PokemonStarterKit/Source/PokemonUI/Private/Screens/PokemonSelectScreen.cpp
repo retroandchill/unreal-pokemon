@@ -84,10 +84,16 @@ void UPokemonSelectScreen::RemoveFromStack() {
     CloseScreen();
 }
 
+void UPokemonSelectScreen::CloseScreen() {
+    Super::CloseScreen();
+    PokemonSelected.Unbind();
+}
+
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
     if (PokemonSelected.IsBound()) {
         PokemonSelected.Execute(this, Trainer, Index);
+        PokemonSelected.Unbind();
         return;
     }
 

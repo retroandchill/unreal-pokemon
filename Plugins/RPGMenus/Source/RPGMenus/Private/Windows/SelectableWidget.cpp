@@ -102,7 +102,11 @@ void USelectableWidget::SlotOption(UCommonButtonBase *Option) {
 int32 USelectableWidget::AddOptionToWidget(UCommonButtonBase *Option) {
     int32 OptionIndex = SelectableButtons.Emplace(Option);
     Option->OnClicked().AddWeakLambda(this, [this, OptionIndex] { ConfirmOnIndex(OptionIndex); });
-    Option->OnHovered().AddWeakLambda(this, [this, OptionIndex] { SetIndex(OptionIndex); });
+    Option->OnHovered().AddWeakLambda(this, [this, OptionIndex] {
+        if (IsActivated()) {
+            SetIndex(OptionIndex);
+        }
+    });
     return OptionIndex;
 }
 

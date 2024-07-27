@@ -63,6 +63,8 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     UFUNCTION(BlueprintCallable, Category = Navigation)
     void RemoveFromStack() override;
 
+    void CloseScreen() override;
+
   private:
     /**
      * Callback for when a Pokémon in selected

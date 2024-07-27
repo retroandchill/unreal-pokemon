@@ -14,6 +14,8 @@ class UCanvasPanel;
 class UUniformGridPanel;
 class UPokemonPanel;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPokemonPanelSelected, const TScriptInterface<IPokemon>&, Pokemon);
+
 /**
  * Pane used to select Pokémon from in a grid based format
  */
@@ -79,7 +81,7 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
      * @param Panel2 The second panel in the swap
      */
     UFUNCTION(BlueprintCallable, Category = Switching)
-    static void SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *Panel2);
+    void SwitchPokemon(UPokemonPanel *Panel1, UPokemonPanel *Panel2);
 
   private:
     /**
@@ -104,4 +106,7 @@ class POKEMONUI_API UPokemonSelectionPane : public USelectableWidget {
      * The index the player is switching from
      */
     TOptional<int32> SwitchingIndex;
+
+    UPROPERTY(BlueprintAssignable, Category = Selection)
+    FOnPokemonPanelSelected OnPokemonSelected;
 };

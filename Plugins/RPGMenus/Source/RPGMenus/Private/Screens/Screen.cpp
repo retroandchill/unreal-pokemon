@@ -31,6 +31,11 @@ void UScreen::NativeConstruct() {
     });
 }
 
+UWidget * UScreen::NativeGetDesiredFocusTarget() const {
+    auto Widget = SelectableWidgets.FindByPredicate(&UCommonActivatableWidget::IsActivated);
+    return Widget != nullptr ? *Widget : nullptr;
+}
+
 TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const {
     using enum ERPGWidgetInputMode;
     

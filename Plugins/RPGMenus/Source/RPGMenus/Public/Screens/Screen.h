@@ -47,6 +47,8 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
   protected:
     void NativeConstruct() override;
 
+    UWidget* NativeGetDesiredFocusTarget() const override;
+
   public:
     /**
      * Refresh the display of this screen to the player
@@ -60,7 +62,7 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
      * Close the screen and return to the previous one
      */
     UFUNCTION(BlueprintCallable, Category = Navigation)
-    void CloseScreen();
+    virtual void CloseScreen();
 
     /**
      * Callback to bind additional functionality to when CloseScreen() gets called
