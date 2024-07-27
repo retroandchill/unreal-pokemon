@@ -66,7 +66,9 @@ void UPokemonSelectionPane::CancelSwitch() {
 
 void UPokemonSelectionPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     RefreshWindow();
-    OnPokemonSelected.Broadcast(GetSelectableOption<UPokemonPanel>(NewIndex)->GetPokemon());
+    if (NewIndex != INDEX_NONE) {
+        OnPokemonSelected.Broadcast(GetSelectableOption<UPokemonPanel>(NewIndex)->GetPokemon());
+    }
 }
 
 void UPokemonSelectionPane::PerformSwap_Implementation(UPokemonPanel *Panel1, UPokemonPanel *Panel2) {

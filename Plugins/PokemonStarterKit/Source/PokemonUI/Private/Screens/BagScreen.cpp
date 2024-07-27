@@ -14,14 +14,6 @@
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
     
-    ItemSelectionWindow->GetOnItemSelected().AddUniqueDynamic(this, &UBagScreen::SelectItem);
-    ItemSelectionWindow->GetOnCancel().AddUniqueDynamic(this, &UScreen::CloseScreen);
-    ItemSelectionWindow->GetOnItemChanged().AddUniqueDynamic(ItemInfoWindow, &UItemInfoWindow::Refresh);
-    ItemSelectionWindow->GetOnNoItemSelected().AddUniqueDynamic(ItemInfoWindow, &UItemInfoWindow::ClearItem);
-    ItemSelectionWindow->GetOnPocketChanged().AddUniqueDynamic(PocketWindow, &UPocketWindow::SetCurrentPocket);
-    CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UBagScreen::UBagScreen::OnItemCommandSelected);
-    CommandWindow->GetOnCancel().AddUniqueDynamic(this, &UBagScreen::OnItemCommandCanceled);
-    
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
     ItemSelectionWindow->SetBag(Bag);
     PocketTabWidget->SetItemSelectionWindow(ItemSelectionWindow);
@@ -66,10 +58,16 @@ UItemSelectionWindow * UBagScreen::GetItemSelectionWindow() const {
     return ItemSelectionWindow;
 }
 
-void UBagScreen::CreateCommands(const FItem &Item, int32 Quantity) {
-    auto Commands =
-        UPokemonUIUtils::CreateCommandListFromHandlers(CommandHandlers->GetHandlers(), this, Item, Quantity);
-    CommandWindow->SetCommands(MoveTemp(Commands));
+UItemInfoWindow * UBagScreen::GetItemInfoWindow() const {
+    return ItemInfoWindow;
+}
+
+UPocketTabWidget * UBagScreen::GetPocketTabWidget() const {
+    return PocketTabWidget;
+}
+
+UPocketWindow * UBagScreen::GetPocketWindow() const {
+    return PocketWindow;
 }
 
 void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
@@ -80,25 +78,5 @@ void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
     }
 
     ToggleItemSelection(false);
-    CreateCommands(Item, Quantity);
-    CommandWindow->SetIndex(0);
-    CommandWindow->ActivateWidget();
-    CommandWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-}
-
-void UBagScreen::OnItemCommandSelected(int32, UCommand *Command) {
-    static FName CancelCommand = TEXT("Cancel");
-    if (Command->GetID() == CancelCommand) {
-        OnItemCommandCanceled();
-    } else {
-        auto Handler = Command->GetHandler<UBagMenuHandler>();
-        check(Handler != nullptr)
-        Handler->Handle(this, *ItemSelectionWindow->GetCurrentItem(), ItemSelectionWindow->GetItemQuantity());
-    }
-}
-
-void UBagScreen::OnItemCommandCanceled() {
-    CommandWindow->DeactivateWidget();
-    CommandWindow->SetVisibility(ESlateVisibility::Hidden);
-    ToggleItemSelection(true);
+    ShowItemCommands();
 }
