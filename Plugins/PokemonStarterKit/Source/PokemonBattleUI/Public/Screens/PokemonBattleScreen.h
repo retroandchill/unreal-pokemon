@@ -89,7 +89,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     void NextBattler(const TScriptInterface<IBattler> &Battler);
 
-protected:
+  protected:
     /**
      * Called when a move is selected on a battler
      * @param Battler The battler to use the move
@@ -104,7 +104,7 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void OnMoveCanceled();
 
-private:
+  private:
     /**
      * The widget that is used to select the options from the menu
      */

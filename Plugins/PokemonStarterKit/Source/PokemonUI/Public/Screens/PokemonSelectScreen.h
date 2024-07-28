@@ -41,9 +41,8 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
   protected:
     void RefreshSelf_Implementation() override;
 
-    
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UPokemonSelectionPane* GetSelectionPane() const;
+    UPokemonSelectionPane *GetSelectionPane() const;
 
   public:
     UFUNCTION(BlueprintCallable, Category = Navigation)
@@ -70,7 +69,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
     UFUNCTION(BlueprintImplementableEvent, Category = Selection)
     void DisplayPokemonCommands(const TScriptInterface<ITrainer> &Trainer, int32 Index);
 
-private:
+  private:
     /**
      * Delegate for when a Pokémon is selected
      */

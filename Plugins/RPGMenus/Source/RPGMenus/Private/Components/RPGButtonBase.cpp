@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/RPGButtonBase.h"
 
 void URPGButtonBase::NativePreConstruct() {
@@ -14,8 +13,9 @@ void URPGButtonBase::UpdateVisibility() {
         return;
     }
 #endif
-    
-    if ((!bIsVisible && !bIsVisibleDelegate.IsBound()) || (bIsVisibleDelegate.IsBound() && !bIsVisibleDelegate.Execute())) {
+
+    if ((!bIsVisible && !bIsVisibleDelegate.IsBound()) ||
+        (bIsVisibleDelegate.IsBound() && !bIsVisibleDelegate.Execute())) {
         SetVisibility(DisabledVisibility);
     } else {
         SetVisibility(EnabledVisibility);

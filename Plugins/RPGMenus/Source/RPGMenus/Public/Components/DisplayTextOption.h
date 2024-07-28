@@ -16,13 +16,13 @@ UCLASS(Abstract)
 class RPGMENUS_API UDisplayTextOption : public URPGButtonBase {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
-    
+
   public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
-    const FText& GetText() const;
-    
+    const FText &GetText() const;
+
     /**
      * Set the display text for this widget
      * @param NewText The new display text for the widget
@@ -36,7 +36,7 @@ protected:
   private:
     UPROPERTY(EditAnywhere, BlueprintGetter = GetText, BlueprintSetter = SetText, Category = Content)
     FText Text = FText::FromStringView(TEXT("Text Block"));
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> DisplayText;
 };

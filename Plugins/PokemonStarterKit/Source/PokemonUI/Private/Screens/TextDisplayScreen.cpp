@@ -1,8 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/TextDisplayScreen.h"
-#include "Data/Command.h"
 #include "Components/CommandWindow.h"
 #include "Components/MessageWindow.h"
+#include "Data/Command.h"
 
 void UTextDisplayScreen::NativeConstruct() {
     Super::NativeConstruct();

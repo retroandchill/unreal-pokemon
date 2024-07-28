@@ -50,16 +50,16 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     void RefreshSelf_Implementation() override;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UItemSelectionWindow* GetItemSelectionWindow() const;
+    UItemSelectionWindow *GetItemSelectionWindow() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UItemInfoWindow* GetItemInfoWindow() const;
-    
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UPocketTabWidget* GetPocketTabWidget() const;
+    UItemInfoWindow *GetItemInfoWindow() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UPocketWindow* GetPocketWindow() const;
+    UPocketTabWidget *GetPocketTabWidget() const;
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
+    UPocketWindow *GetPocketWindow() const;
 
     /**
      * Called when an item is selected by the player
@@ -72,7 +72,7 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void ShowItemCommands();
 
-private:
+  private:
     /**
      * The window that displays the pockets
      */

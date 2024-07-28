@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
+
 #include "PokemonSelectionPaneBase.generated.h"
 
 class IPokemon;
@@ -14,7 +15,7 @@ class UCanvasPanel;
 class UUniformGridPanel;
 class UPokemonPanel;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPokemonPanelSelected, const TScriptInterface<IPokemon>&, Pokemon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPokemonPanelSelected, const TScriptInterface<IPokemon> &, Pokemon);
 
 /**
  * Base widget for selecting a Pokémon from a list.
@@ -23,9 +24,9 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonSelectionPaneBase : public USelectableWidget {
     GENERATED_BODY()
 
-public:
+  public:
     void SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon);
-    
+
     void RefreshWindow();
 
     /**
@@ -65,7 +66,7 @@ public:
 
   protected:
     virtual TOptional<int32> GetNumPanelsToAdd() const;
-    
+
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 
     /**
@@ -104,5 +105,4 @@ public:
 
     UPROPERTY(BlueprintAssignable, Category = Selection)
     FOnPokemonPanelSelected OnPokemonSelected;
-
 };

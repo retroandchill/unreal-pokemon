@@ -2,9 +2,9 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Asserts.h"
 #include "CommonButtonBase.h"
-#include "Components/WidgetSwitcher.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Components/Summary/SummaryTabWidget.h"
+#include "Components/WidgetSwitcher.h"
 #include "Input/UIActionBinding.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
@@ -30,8 +30,6 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
 
-    
-
     FPokemonTestUtilities::CreateMockParty(World.Get());
     auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
     Screen->SetInitialPokemon(Trainer, 0);
@@ -43,10 +41,8 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UPokemonSelectionPaneBase, PokemonSelection);
     UE_ASSERT_NOT_NULL(PokemonSelection);
 
-    auto PreviousActionHandle =
-        SummaryTabs->GetActionBindings().FindByPredicate([](const FUIActionBindingHandle &BindingHandle) {
-            return BindingHandle.GetActionName() == "MenuPrevious";
-        });
+    auto PreviousActionHandle = SummaryTabs->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuPrevious"; });
     UE_ASSERT_NOT_NULL(PreviousActionHandle);
     auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
     UE_ASSERT_NOT_NULL(PreviousAction.Get());
@@ -57,16 +53,18 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(NextAction.Get());
     SummaryPages->SetPage(1);
     UE_CHECK_EQUAL(1, SummaryPages->GetCurrentPageIndex());
-    
+
     UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(2, SummaryPages->GetCurrentPageIndex());
     UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_CHECK_EQUAL(1, SummaryPages->GetCurrentPageIndex());
 
-    UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(), SummaryPages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+    UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
+                   SummaryPages->GetCurrentPokemon()->GetSpecies().ID.ToString());
     PokemonSelection->SetIndex(1);
     PokemonSelection->GetSelectedOption()->SetIsSelected(true);
-    UE_CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(), SummaryPages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+    UE_CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(),
+                   SummaryPages->GetCurrentPokemon()->GetSpecies().ID.ToString());
 
     return true;
 }

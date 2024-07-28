@@ -40,7 +40,7 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
 
     void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
 
-public:
+  public:
     /**
      * Set the text to display to the player
      * @param Text The text to display to the player

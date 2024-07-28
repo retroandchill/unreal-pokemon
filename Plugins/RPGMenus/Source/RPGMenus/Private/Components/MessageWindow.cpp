@@ -1,13 +1,13 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Components/MessageWindow.h"
 #include "CommonTextBlock.h"
+#include "Components/DialogueBox.h"
 #include "Components/DisplayText.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
 #include "Fonts/FontMeasure.h"
 #include "Input/CommonUIInputTypes.h"
 #include "MathUtilities.h"
-#include "Components/DialogueBox.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UMessageWindow::NativeConstruct() {
@@ -26,7 +26,7 @@ void UMessageWindow::NativeConstruct() {
         if (DialogueBox->GetCurrentLine().IsEmpty()) {
             return;
         }
-        
+
         SetPaused(true);
 
         if (bWaitForChoice) {
@@ -78,7 +78,7 @@ void UMessageWindow::SetPaused(bool bPausedIn) {
 
     if (PauseArrow == nullptr)
         return;
-    
+
     if (bPaused) {
         PauseArrow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     } else {

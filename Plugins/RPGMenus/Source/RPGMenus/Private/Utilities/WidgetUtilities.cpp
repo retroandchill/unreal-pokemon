@@ -2,9 +2,9 @@
 #include "Utilities/WidgetUtilities.h"
 #include "CommonTextBlock.h"
 #include "Components/Image.h"
+#include "Components/RichTextBlock.h"
 #include "Engine/UserInterfaceSettings.h"
 #include "PaperSprite.h"
-#include "Components/RichTextBlock.h"
 
 float UWidgetUtilities::GetWidgetDPIScale() {
     static constexpr float SlateDPI = 96.f;
@@ -62,9 +62,9 @@ void UWidgetUtilities::SetTextStyleOverride(URichTextBlock *TextBlock, TSubclass
         TextBlock->ClearAllDefaultStyleOverrides();
         return;
     }
-    
+
     auto DefaultObject = Style.GetDefaultObject();
     FTextBlockStyle DefaultStyle;
     DefaultObject->ToTextBlockStyle(DefaultStyle);
-    TextBlock->SetDefaultTextStyle(DefaultStyle);    
+    TextBlock->SetDefaultTextStyle(DefaultStyle);
 }

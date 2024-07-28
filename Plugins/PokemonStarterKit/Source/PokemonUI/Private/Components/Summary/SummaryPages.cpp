@@ -1,15 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/SummaryPages.h"
-#include "Components/WidgetSwitcher.h"
 #include "Components/Summary/SummaryScreenPage.h"
+#include "Components/WidgetSwitcher.h"
 
 void USummaryPages::NativeConstruct() {
     Super::NativeConstruct();
     CastChecked<USummaryScreenPage>(PageSwitcher->GetActiveWidget())->OnPageShown();
 }
 
-void USummaryPages::SetPokemon(const TScriptInterface<IPokemon>& NewPokemon) {
+void USummaryPages::SetPokemon(const TScriptInterface<IPokemon> &NewPokemon) {
     CurrentPokemon = NewPokemon;
     Refresh(CurrentPokemon);
     if (OnPokemonChange.IsBound()) {

@@ -2,13 +2,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/SelectableWidget.h"
-#include "Components/Common/PokemonSelectionPaneBase.h"
 
 #include "PokemonSelectionPane.generated.h"
-
-
 
 /**
  * Pane used to select Pokémon from in a grid based format

@@ -6,12 +6,11 @@
 void UPokemonMovesPage::NativeConstruct() {
     Super::NativeConstruct();
 
-
     FBindUIActionArgs BindArgs(SelectionAction, FSimpleDelegate::CreateWeakLambda(this, [this] {
-        if (bIsShown) {
-            OnSelected.Broadcast();
-        }
-    }));
+                                   if (bIsShown) {
+                                       OnSelected.Broadcast();
+                                   }
+                               }));
     BindArgs.bDisplayInActionBar = false;
     BindArgs.OverrideDisplayName = ActionText;
     InspectActionHandler = RegisterUIActionBinding(BindArgs);

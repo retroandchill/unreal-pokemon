@@ -5,11 +5,6 @@
 #include "CoreMinimal.h"
 #include "CommonRichTextBlock.h"
 #include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
 
 #include "DialogueTextBlock.generated.h"
 
@@ -22,7 +17,7 @@ UCLASS()
 class RPGMENUS_API UDialogueTextBlock : public UCommonRichTextBlock {
     GENERATED_BODY()
 
-public:
+  public:
     FORCEINLINE TSharedPtr<FSlateTextLayout> GetTextLayout() const {
         return TextLayout;
     }
@@ -31,14 +26,14 @@ public:
         return TextMarshaller;
     }
 
-protected:
+  protected:
     TSharedRef<SWidget> RebuildWidget() override;
 
-    virtual TSharedRef<FRichTextLayoutMarshaller> CreateMarshaller(const TArray<TSharedRef<ITextDecorator>>& CreatedDecorators);
-    virtual TSharedRef<FSlateTextLayout> CreateLayout(SWidget* InOwner, const FTextBlockStyle& InDefaultTextStyle);
+    virtual TSharedRef<FRichTextLayoutMarshaller>
+    CreateMarshaller(const TArray<TSharedRef<ITextDecorator>> &CreatedDecorators);
+    virtual TSharedRef<FSlateTextLayout> CreateLayout(SWidget *InOwner, const FTextBlockStyle &InDefaultTextStyle);
 
-private:
+  private:
     TSharedPtr<FSlateTextLayout> TextLayout;
     TSharedPtr<FRichTextLayoutMarshaller> TextMarshaller;
-
 };

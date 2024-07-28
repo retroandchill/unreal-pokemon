@@ -1,13 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/BagScreen.h"
+#include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketTabWidget.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Components/Bag/ItemSelectionWindow.h"
 
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
-    
+
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
     ItemSelectionWindow->SetBag(Bag);
     PocketTabWidget->SetItemSelectionWindow(ItemSelectionWindow);
@@ -48,19 +48,19 @@ void UBagScreen::RefreshSelf_Implementation() {
     RefreshScene();
 }
 
-UItemSelectionWindow * UBagScreen::GetItemSelectionWindow() const {
+UItemSelectionWindow *UBagScreen::GetItemSelectionWindow() const {
     return ItemSelectionWindow;
 }
 
-UItemInfoWindow * UBagScreen::GetItemInfoWindow() const {
+UItemInfoWindow *UBagScreen::GetItemInfoWindow() const {
     return ItemInfoWindow;
 }
 
-UPocketTabWidget * UBagScreen::GetPocketTabWidget() const {
+UPocketTabWidget *UBagScreen::GetPocketTabWidget() const {
     return PocketTabWidget;
 }
 
-UPocketWindow * UBagScreen::GetPocketWindow() const {
+UPocketWindow *UBagScreen::GetPocketWindow() const {
     return PocketWindow;
 }
 

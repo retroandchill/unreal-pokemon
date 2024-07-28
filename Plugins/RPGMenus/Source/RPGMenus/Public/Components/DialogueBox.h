@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
+
 #include "DialogueBox.generated.h"
 
 class UDialogueTextBlock;
@@ -16,29 +17,33 @@ struct FDialogueTextSegment {
 };
 
 /**
- * 
+ *
  */
 UCLASS()
 class RPGMENUS_API UDialogueBox : public UCommonUserWidget {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box", meta = (AutoCreateRefTerm = InLine))
-    void PlayLine(const FText& InLine);
+    void PlayLine(const FText &InLine);
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
-    const FText& GetCurrentLine() const { return CurrentLine; }
+    const FText &GetCurrentLine() const {
+        return CurrentLine;
+    }
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
-    bool HasFinishedPlayingLine() const { return bHasFinishedPlaying; }
+    bool HasFinishedPlayingLine() const {
+        return bHasFinishedPlaying;
+    }
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
     void SkipToLineEnd();
 
-    FDelegateHandle BindToOnLineFinishedPlaying(FOnLineFinishedPlaying::FDelegate&& Callback);
+    FDelegateHandle BindToOnLineFinishedPlaying(FOnLineFinishedPlaying::FDelegate &&Callback);
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
-    UDialogueTextBlock* GetLineText() const;
+    UDialogueTextBlock *GetLineText() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "DialogueBox")
     float GetLetterPlayTime() const;
@@ -51,15 +56,15 @@ public:
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "DialogueBox")
     void SetEndHoldTime(float NewHoldTime);
-    
-protected:
+
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue Box")
     void OnPlayLetter();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue Box")
     void OnLineFinishedPlaying();
 
-private:
+  private:
     void PlayNextLetter();
 
     void CalculateWrappedString();
@@ -72,13 +77,16 @@ private:
     /**
      * The amount of time between printing individual letters (for the "typewriter" effect).
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetLetterPlayTime, BlueprintSetter = SetLetterPlayTime, Category = "Dialogue Box")
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetLetterPlayTime, BlueprintSetter = SetLetterPlayTime,
+              Category = "Dialogue Box")
     float LetterPlayTime = 0.025f;
 
     /**
-     * The amount of time to wait after finishing the line before actually marking it completed. This helps prevent accidentally progressing dialogue on short lines.
+     * The amount of time to wait after finishing the line before actually marking it completed. This helps prevent
+     * accidentally progressing dialogue on short lines.
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetEndHoldTime, BlueprintSetter = SetEndHoldTime, Category = "Dialogue Box")
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetEndHoldTime, BlueprintSetter = SetEndHoldTime,
+              Category = "Dialogue Box")
     float EndHoldTime = 0.15f;
 
     UPROPERTY()
@@ -102,5 +110,4 @@ private:
     FTimerHandle LetterTimer;
 
     FOnLineFinishedPlaying LineFinishedPlayingDelegate;
-
 };

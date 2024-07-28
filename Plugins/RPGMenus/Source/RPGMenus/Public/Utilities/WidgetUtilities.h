@@ -53,5 +53,5 @@ class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
     static void SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bool MatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = "Text|Styles")
-    static void SetTextStyleOverride(URichTextBlock* TextBlock, TSubclassOf<UCommonTextStyle> Style);
+    static void SetTextStyleOverride(URichTextBlock *TextBlock, TSubclassOf<UCommonTextStyle> Style);
 };

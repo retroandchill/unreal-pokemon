@@ -70,5 +70,4 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, Category = Content)
     static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget);
-    
 };

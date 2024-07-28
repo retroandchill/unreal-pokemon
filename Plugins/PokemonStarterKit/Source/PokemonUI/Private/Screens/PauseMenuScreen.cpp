@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/PauseMenuScreen.h"
-#include "Data/Command.h"
 #include "Components/CommandWindow.h"
+#include "Data/Command.h"
 
 void UPauseMenuScreen::NativeConstruct() {
     Super::NativeConstruct();

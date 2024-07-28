@@ -1,12 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
-#include "CommonUITypes.h"
-#include "EnhancedInputSubsystems.h"
+#include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
+#include "CommonUITypes.h"
+#include "Components/SelectableWidget.h"
+#include "EnhancedInputSubsystems.h"
 #include "PrimaryGameLayout.h"
 #include "RPGUIManagerSubsystem.h"
-#include "Algo/ForEach.h"
-#include "Components/SelectableWidget.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/unique.hpp>
 
@@ -31,14 +31,14 @@ void UScreen::NativeConstruct() {
     });
 }
 
-UWidget * UScreen::NativeGetDesiredFocusTarget() const {
+UWidget *UScreen::NativeGetDesiredFocusTarget() const {
     auto Widget = SelectableWidgets.FindByPredicate(&UCommonActivatableWidget::IsActivated);
     return Widget != nullptr ? *Widget : nullptr;
 }
 
 TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const {
     using enum ERPGWidgetInputMode;
-    
+
     switch (InputConfig) {
     case GameAndMenu:
         return FUIInputConfig(ECommonInputMode::All, GameMouseCaptureMode);
@@ -76,6 +76,6 @@ void UScreen::NativeOnDeactivated() {
     if (IsVisible()) {
         SetVisibility(ESlateVisibility::HitTestInvisible);
     }
-    
+
     GetGameInstance()->GetSubsystem<URPGUIManagerSubsystem>()->OnScreenDeactivated(this);
 }

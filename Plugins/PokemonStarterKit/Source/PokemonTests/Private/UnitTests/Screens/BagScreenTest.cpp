@@ -1,7 +1,12 @@
 ﻿#include "Screens/BagScreen.h"
 #include "Asserts.h"
 #include "CommonButtonBase.h"
+#include "Components/Bag/ItemSelectionWindow.h"
+#include "Components/Bag/PocketTabWidget.h"
+#include "Components/Bag/PocketWindow.h"
+#include "Components/CommandWindow.h"
 #include "EnhancedInputSubsystems.h"
+#include "Input/UIActionBinding.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
@@ -9,11 +14,6 @@
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Components/CommandWindow.h"
-#include "Components/Bag/ItemSelectionWindow.h"
-#include "Components/Bag/PocketTabWidget.h"
-#include "Components/Bag/PocketWindow.h"
-#include "Input/UIActionBinding.h"
 #include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
 #include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
 
@@ -57,7 +57,7 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(NextActionHandle);
     auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
     UE_ASSERT_NOT_NULL(NextAction.Get());
-    
+
     UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
     UE_ASSERT_EQUAL(TEXT("Medicine"), PocketWindow->GetCurrentPocket().ToString());
 
@@ -82,7 +82,7 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
 
     auto Dispatcher2 = NewObject<UNoItemSelectedDispatcher>(World.Get());
     ItemSelectionWindow->GetOnNoItemSelected().AddUniqueDynamic(Dispatcher2, &UNoItemSelectedDispatcher::OnReceive);
-    
+
     UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
     UE_ASSERT_EQUAL(TEXT("Items"), PocketWindow->GetCurrentPocket().ToString());
     UE_ASSERT_TRUE(Dispatcher2->bCalled);

@@ -1,16 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Bag/PocketTabWidget.h"
-#include "CommonActionWidget.h"
-#include "PokemonDataSettings.h"
-#include "RangeHelpers.h"
 #include "Algo/ForEach.h"
+#include "CommonActionWidget.h"
+#include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketButton.h"
 #include "Groups/CommonButtonGroupBase.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
-#include "Components/Bag/ItemSelectionWindow.h"
+#include "PokemonDataSettings.h"
+#include "RangeHelpers.h"
 #include <range/v3/view/transform.hpp>
 
 UPocketTabWidget::UPocketTabWidget() {
@@ -27,12 +26,12 @@ void UPocketTabWidget::NativePreConstruct() {
         return;
     }
 #endif
-    
+
     auto PocketNames = UItemHelper::GetPocketNames();
     Algo::ForEach(PocketButtons, &UWidget::RemoveFromParent);
-    PocketButtons = RangeHelpers::CreateRange(PocketNames)
-        | ranges::views::transform(std::bind_front(&UPocketTabWidget::CreatePocketButton, this))
-        | RangeHelpers::TToArray<TObjectPtr<UPocketButton>>();
+    PocketButtons = RangeHelpers::CreateRange(PocketNames) |
+                    ranges::views::transform(std::bind_front(&UPocketTabWidget::CreatePocketButton, this)) |
+                    RangeHelpers::TToArray<TObjectPtr<UPocketButton>>();
 
     PocketLeftActionWidget->SetEnhancedInputAction(PocketLeftAction);
     PocketRightActionWidget->SetEnhancedInputAction(PocketRightAction);
@@ -68,7 +67,7 @@ void UPocketTabWidget::SetItemSelectionWindow(UItemSelectionWindow *Window) {
     ItemSelectionWindow->SetPocket(*CurrentPocket);
 }
 
-UPocketButton * UPocketTabWidget::CreatePocketButton(FName Pocket) {
+UPocketButton *UPocketTabWidget::CreatePocketButton(FName Pocket) {
     auto Button = WidgetTree->ConstructWidget(ButtonClass);
     Button->SetPocket(Pocket);
     if (auto Style = PocketButtonStyles.FindChecked(Pocket); Style != nullptr) {
@@ -82,7 +81,7 @@ void UPocketTabWidget::PocketLeft() {
     if (!ItemSelectionWindow->IsActivated()) {
         return;
     }
-    
+
     --CurrentPocket;
     PocketButtons[CurrentPocket.GetIndex()]->SetIsSelected(true);
     ItemSelectionWindow->SetPocket(*CurrentPocket);

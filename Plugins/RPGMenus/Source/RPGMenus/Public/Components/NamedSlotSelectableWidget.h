@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "SelectableWidget.h"
+
 #include "NamedSlotSelectableWidget.generated.h"
 
 /**
@@ -14,19 +15,17 @@ UCLASS(Abstract)
 class RPGMENUS_API UNamedSlotSelectableWidget : public USelectableWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Selection)
     void UpdateOptions();
-    
-private:
-    
+
+  private:
     /**
      * The slot that will contain the window's content
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UNamedSlot> ContentSlot;
-
 };

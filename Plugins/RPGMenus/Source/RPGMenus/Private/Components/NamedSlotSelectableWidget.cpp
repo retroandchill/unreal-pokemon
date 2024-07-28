@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/NamedSlotSelectableWidget.h"
 #include "CommonButtonBase.h"
 #include "Components/NamedSlot.h"
@@ -16,7 +15,7 @@ void UNamedSlotSelectableWidget::UpdateOptions() {
     if (ContentSlot == nullptr) {
         return;
     }
-    
+
     auto ContentWidget = Cast<UPanelWidget>(ContentSlot->GetContent());
     if (ContentWidget == nullptr) {
         return;
@@ -29,7 +28,7 @@ void UNamedSlotSelectableWidget::UpdateOptions() {
         if (Child == nullptr) {
             continue;
         }
-        
+
         Child->UpdateVisibility();
         if (!Child->IsVisible()) {
             continue;

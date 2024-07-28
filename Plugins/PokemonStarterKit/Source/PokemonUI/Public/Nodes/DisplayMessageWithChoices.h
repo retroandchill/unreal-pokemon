@@ -36,7 +36,8 @@ class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintAsyncActionBas
      */
     UFUNCTION(BlueprintCallable, DisplayName = "Display Message w/ Choices",
               meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "Messages")
-    static UDisplayMessageWithChoices *DisplayMessageWithChoices(const UObject *WorldContextObject, FText Message, const TArray<FText> &Choices);
+    static UDisplayMessageWithChoices *DisplayMessageWithChoices(const UObject *WorldContextObject, FText Message,
+                                                                 const TArray<FText> &Choices);
 
     void Activate() override;
 

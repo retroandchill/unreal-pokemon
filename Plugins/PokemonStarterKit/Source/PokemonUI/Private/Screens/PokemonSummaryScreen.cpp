@@ -2,14 +2,14 @@
 
 #include "Screens/PokemonSummaryScreen.h"
 #include "CommonButtonBase.h"
-#include "Components/Image.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
+#include "Components/Image.h"
 #include "Components/Summary/SummaryNameInfo.h"
+#include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
+#include "Components/Summary/SummaryTabWidget.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
-#include "Components/Summary/SummaryPages.h"
-#include "Components/Summary/SummaryTabWidget.h"
 
 void UPokemonSummaryScreen::NativePreConstruct() {
     Super::NativePreConstruct();
@@ -39,7 +39,7 @@ USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const {
     return SummaryPages;
 }
 
-UPokemonSelectionPaneBase * UPokemonSummaryScreen::GetPokemonSelection() const {
+UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
     return PokemonSelection;
 }
 

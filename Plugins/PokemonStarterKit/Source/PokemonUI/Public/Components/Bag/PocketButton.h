@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
+
 #include "PocketButton.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract)
 class POKEMONUI_API UPocketButton : public UCommonButtonBase {
     GENERATED_BODY()
 
-public:
+  public:
     void SetPocket(FName PocketIn);
 
-private:
+  private:
     FName Pocket;
-
 };

@@ -2,6 +2,7 @@
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Components/BattleMovePanel.h"
+#include "Components/BattleMoveSelect.h"
 #include "Components/DisplayText.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
@@ -14,7 +15,6 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
-#include "Components/BattleMoveSelect.h"
 
 using namespace testing;
 

@@ -6,9 +6,9 @@
 
 class UPokemonUISettings;
 
-UDisplayMessageWithChoices *
-UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject *WorldContextObject, FText Message,
-                                                      const TArray<FText> &Choices) {
+UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject *WorldContextObject,
+                                                                                  FText Message,
+                                                                                  const TArray<FText> &Choices) {
     auto Node = NewObject<UDisplayMessageWithChoices>();
     Node->WorldContextObject = WorldContextObject;
     Node->Message = MoveTemp(Message);

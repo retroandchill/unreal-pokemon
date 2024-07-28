@@ -9,8 +9,8 @@ UScreen *URPGMenuUtilities::PushScreenToStack(const UObject *WorldContextObject,
     return Layout->PushWidgetToLayerStack<UScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenType);
 }
 
-UScreen * URPGMenuUtilities::LoadAndPushScreenToStack(const UObject *WorldContextObject,
-    const TSoftClassPtr<UScreen> &ScreenType) {
+UScreen *URPGMenuUtilities::LoadAndPushScreenToStack(const UObject *WorldContextObject,
+                                                     const TSoftClassPtr<UScreen> &ScreenType) {
     return PushScreenToStack(WorldContextObject, ScreenType.LoadSynchronous());
 }
 

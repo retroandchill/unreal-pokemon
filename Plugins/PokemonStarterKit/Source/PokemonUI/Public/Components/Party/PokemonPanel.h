@@ -92,7 +92,6 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
     void RefreshVisuals();
 
   private:
-
     /**
      * The panel class that owns this one
      */
@@ -106,5 +105,4 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
     TScriptInterface<IPokemon> Pokemon;
 
     int32 PokemonIndex;
-
 };

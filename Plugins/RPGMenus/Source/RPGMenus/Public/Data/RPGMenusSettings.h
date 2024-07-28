@@ -15,7 +15,7 @@ class RPGMENUS_API URPGMenusSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:
-    UPROPERTY(EditDefaultsOnly, Config, Category = Input, meta = (AllowedClasses="InputMappingContext"))
+    UPROPERTY(EditDefaultsOnly, Config, Category = Input, meta = (AllowedClasses = "InputMappingContext"))
     FSoftObjectPath MenuMappingContext;
 
     UPROPERTY(EditDefaultsOnly, Config, Category = Input)

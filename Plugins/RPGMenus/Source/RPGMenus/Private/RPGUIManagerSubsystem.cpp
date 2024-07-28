@@ -1,16 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RPGUIManagerSubsystem.h"
+#include "Data/RPGMenusSettings.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "PrimaryGameLayout.h"
 #include "RPGMenus.h"
-#include "Data/RPGMenusSettings.h"
 #include "Screens/Screen.h"
 
 void URPGUIManagerSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    MenuMappingContext = CastChecked<UInputMappingContext>(GetDefault<URPGMenusSettings>()->MenuMappingContext.TryLoad());
+    MenuMappingContext =
+        CastChecked<UInputMappingContext>(GetDefault<URPGMenusSettings>()->MenuMappingContext.TryLoad());
 }
 
 UScreen *URPGUIManagerSubsystem::GetTopScreenOfStack() const {
@@ -29,7 +30,7 @@ void URPGUIManagerSubsystem::OnScreenActivated(UScreen *Screen) {
     if (ActiveScreenCount == 0) {
         UE_LOG(LogRPGMenus, Display, TEXT("Adding menu input mapping context!"))
         auto Subsystem = Screen->GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
-        
+
 #if WITH_EDITOR
         if (Subsystem != nullptr) {
 #endif
@@ -54,7 +55,7 @@ void URPGUIManagerSubsystem::OnScreenDeactivated(UScreen *Screen) {
             return;
         }
 #endif
-        
+
         Subsystem->RemoveMappingContext(MenuMappingContext);
     }
 }

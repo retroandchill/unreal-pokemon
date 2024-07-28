@@ -28,9 +28,8 @@ class POKEMONBATTLEUI_API UPokemonActionOptions : public UNamedSlotSelectableWid
      * @param Battler The current battler
      */
     void SetBattler(const TScriptInterface<IBattler> &Battler);
-    
-  private:
 
+  private:
     /**
      * The current battler who is selecting
      */

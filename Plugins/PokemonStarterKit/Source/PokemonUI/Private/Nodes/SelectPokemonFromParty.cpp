@@ -5,7 +5,8 @@
 #include "PrimaryGameLayout.h"
 #include "Screens/PokemonSelectScreen.h"
 
-USelectPokemonFromParty *USelectPokemonFromParty::SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText) {
+USelectPokemonFromParty *USelectPokemonFromParty::SelectPokemonFromParty(const UObject *WorldContextObject,
+                                                                         FText HelpText) {
     auto Node = NewObject<USelectPokemonFromParty>();
     Node->WorldContextObject = WorldContextObject;
     Node->HelpText = HelpText;

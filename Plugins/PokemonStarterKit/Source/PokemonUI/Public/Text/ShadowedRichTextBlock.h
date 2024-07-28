@@ -52,6 +52,7 @@ class POKEMONUI_API UShadowedRichTextBlock : public UDialogueTextBlock {
     GENERATED_BODY()
 
   protected:
-    TSharedRef<FRichTextLayoutMarshaller> CreateMarshaller(const TArray<TSharedRef<ITextDecorator>> &CreatedDecorators) override;
+    TSharedRef<FRichTextLayoutMarshaller>
+    CreateMarshaller(const TArray<TSharedRef<ITextDecorator>> &CreatedDecorators) override;
     TSharedRef<FSlateTextLayout> CreateLayout(SWidget *InOwner, const FTextBlockStyle &InDefaultTextStyle) override;
 };

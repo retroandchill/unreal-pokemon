@@ -96,7 +96,6 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UImage> ItemIcon;
-    
 
     /**
      * The widget used to display the item's description

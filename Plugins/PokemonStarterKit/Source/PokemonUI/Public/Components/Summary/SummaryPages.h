@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pokemon/Pokemon.h"
 #include "Components/SelectableWidget.h"
+#include "Pokemon/Pokemon.h"
 #include <range/v3/view/any_view.hpp>
 
 #include "SummaryPages.generated.h"
@@ -26,9 +26,9 @@ UCLASS(Abstract)
 class POKEMONUI_API USummaryPages : public UCommonUserWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
-    
+
   public:
     /**
      * Refresh any of the child pages added to this widget.
@@ -42,7 +42,7 @@ protected:
      * @param NewPokemon The index of said Pokémon.
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Content)
-    void SetPokemon(const TScriptInterface<IPokemon>& NewPokemon);
+    void SetPokemon(const TScriptInterface<IPokemon> &NewPokemon);
 
     /**
      * Get the delegate that is called when a Pokémon is changed.
@@ -89,7 +89,7 @@ protected:
      */
     UPROPERTY(BlueprintGetter = GetCurrentPokemon, BlueprintSetter = SetPokemon, Category = Content)
     TScriptInterface<IPokemon> CurrentPokemon;
-    
+
     /**
      * Called when a Pokémon is changed
      */
@@ -100,5 +100,4 @@ protected:
      */
     UPROPERTY(BlueprintGetter = GetPageSwitcher, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UWidgetSwitcher> PageSwitcher;
-    
 };

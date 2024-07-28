@@ -3,8 +3,8 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
-#include "KismetCompiler.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "KismetCompiler.h"
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/RPGMenuUtilities.h"
 
@@ -36,7 +36,8 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
     OutputPin->MakeLinkTo(InputPin);
 }
 
-void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar, UFunction *FactoryFunc) const {
+void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+                                                   UFunction *FactoryFunc) const {
     auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode, UFunction *Factory) {
         auto TypedNode = CastChecked<UK2Node_DisplayMessageBase>(Node);
         auto ReturnProp = CastFieldChecked<FObjectProperty>(Factory->GetReturnProperty());
@@ -49,6 +50,7 @@ void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegis
     auto Spawner = UBlueprintNodeSpawner::Create(GetClass());
     check(Spawner != nullptr)
 
-    Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateLambda(CustomizeCallback, FactoryFunc);
+    Spawner->CustomizeNodeDelegate =
+        UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateLambda(CustomizeCallback, FactoryFunc);
     ActionRegistrar.AddBlueprintAction(GetClass(), Spawner);
 }

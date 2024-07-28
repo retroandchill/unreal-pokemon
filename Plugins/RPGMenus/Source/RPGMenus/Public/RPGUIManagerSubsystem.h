@@ -18,18 +18,18 @@ class RPGMENUS_API URPGUIManagerSubsystem : public UGameUIManagerSubsystem {
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-    
+
     UFUNCTION(BlueprintPure, Category = Screens)
     UScreen *GetTopScreenOfStack() const;
 
     UFUNCTION(BlueprintPure, Category = Screens)
     UScreen *GetTopScreenOfOverlay() const;
 
-    void OnScreenActivated(UScreen* Screen);
-    
-    void OnScreenDeactivated(UScreen* Screen);
+    void OnScreenActivated(UScreen *Screen);
 
-private:
+    void OnScreenDeactivated(UScreen *Screen);
+
+  private:
     UPROPERTY()
     TObjectPtr<UInputMappingContext> MenuMappingContext;
 

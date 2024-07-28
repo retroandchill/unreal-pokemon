@@ -222,8 +222,7 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
     auto &StatValues = UReflectionUtils::GetPropertyValue<TArray<TObjectPtr<UPokemonStatRow>>>(Page, TEXT("StatRows"));
     UE_ASSERT_EQUAL(6, StatValues.Num());
 
-    TArray<FString> Values = {
-        TEXT("HP"), TEXT("Atk"), TEXT("Def"), TEXT("SpAtk"), TEXT("SpDef"), TEXT("Spd")};
+    TArray<FString> Values = {TEXT("HP"), TEXT("Atk"), TEXT("Def"), TEXT("SpAtk"), TEXT("SpDef"), TEXT("Spd")};
     for (int i = 0; i < Values.Num(); i++) {
         FIND_CHILD_WIDGET(StatValues[i], UDisplayText, StatLabel);
         UE_ASSERT_NOT_NULL(StatLabel);

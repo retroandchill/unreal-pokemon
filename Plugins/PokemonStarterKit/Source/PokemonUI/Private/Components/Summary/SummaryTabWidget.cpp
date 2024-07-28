@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Summary/SummaryTabWidget.h"
-#include "CommonActionWidget.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
+#include "CommonActionWidget.h"
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Groups/CommonButtonGroupBase.h"
@@ -43,15 +42,14 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
     Algo::ForEach(PageButtons, &UWidget::RemoveFromParent);
 
     auto Pages = SummaryPages->GetPages();
-    PageButtons = RangeHelpers::CreateRange(Pages)
-        | ranges::views::transform(std::bind_front(&USummaryTabWidget::CreatePageButton, this))
-        | RangeHelpers::TToArray<TObjectPtr<UCommonButtonBase>>();
+    PageButtons = RangeHelpers::CreateRange(Pages) |
+                  ranges::views::transform(std::bind_front(&USummaryTabWidget::CreatePageButton, this)) |
+                  RangeHelpers::TToArray<TObjectPtr<UCommonButtonBase>>();
 
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
-    
 }
 
-UCommonButtonBase * USummaryTabWidget::CreatePageButton(USummaryScreenPage *Page) {
+UCommonButtonBase *USummaryTabWidget::CreatePageButton(USummaryScreenPage *Page) {
     auto Button = WidgetTree->ConstructWidget(PageButtonClass);
     Button->SetStyle(Page->GetTabButtonStyle());
     PageButtonGroup->AddWidget(Button);

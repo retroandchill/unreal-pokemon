@@ -15,9 +15,9 @@ UCLASS(Abstract)
 class POKEMONBLUEPRINTNODES_API UK2Node_DisplayMessageBase : public UK2Node_BaseAsyncTask, public IMessageNode {
     GENERATED_BODY()
 
-public:
+  public:
     explicit UK2Node_DisplayMessageBase(const FObjectInitializer &Initializer);
-    
+
   protected:
     /**
      * Check if the supplied pin is connected to another message related node, and if not, add a node to close the

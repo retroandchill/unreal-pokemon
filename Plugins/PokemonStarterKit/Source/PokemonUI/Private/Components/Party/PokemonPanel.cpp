@@ -1,9 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Party/PokemonPanel.h"
-#include "Pokemon/Pokemon.h"
 #include "Components/Party/PokemonSelectionPane.h"
 #include "Components/SelectableWidget.h"
+#include "Pokemon/Pokemon.h"
 
 void UPokemonPanel::SetOwner(USelectableWidget *NewOwner) {
     Owner = NewOwner;

@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonUserWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonUserWidget.h"
 
 #include "SummaryScreenPage.generated.h"
 
@@ -33,7 +33,7 @@ class POKEMONUI_API USummaryScreenPage : public UCommonUserWidget {
 
     TSubclassOf<UCommonButtonStyle> GetTabButtonStyle() const;
 
-private:
+  private:
     /**
      * The delegate for when a page is selected
      */

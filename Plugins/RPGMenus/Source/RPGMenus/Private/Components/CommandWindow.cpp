@@ -50,7 +50,7 @@ void UCommandWindow::AddCommands() {
 
         auto TextWidget = WidgetTree->ConstructWidget<UDisplayTextOption>(DisplayTextWidgetClass);
         TextWidget->SetText(Command->GetText());
-        
+
         SlotOption(TextWidget);
         ActiveCommands.Add(Command);
     }

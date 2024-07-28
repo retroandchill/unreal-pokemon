@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/DialogueBox.h"
 #include "Components/DialogueTextBlock.h"
 #include "Framework/Text/ILayoutBlock.h"
@@ -10,7 +9,7 @@
 void UDialogueBox::PlayLine(const FText &InLine) {
     check(GetWorld() != nullptr)
 
-    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+    FTimerManager &TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLine = InLine;
@@ -48,7 +47,7 @@ void UDialogueBox::PlayLine(const FText &InLine) {
 }
 
 void UDialogueBox::SkipToLineEnd() {
-    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+    FTimerManager &TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLetterIndex = MaxLetterIndex - 1;
@@ -65,7 +64,7 @@ FDelegateHandle UDialogueBox::BindToOnLineFinishedPlaying(FOnLineFinishedPlaying
     return LineFinishedPlayingDelegate.Add(MoveTemp(Callback));
 }
 
-UDialogueTextBlock * UDialogueBox::GetLineText() const {
+UDialogueTextBlock *UDialogueBox::GetLineText() const {
     return LineText;
 }
 
@@ -105,7 +104,7 @@ void UDialogueBox::PlayNextLetter() {
             LineText->SetText(FText::FromString(CalculateSegments()));
         }
 
-        FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+        FTimerManager &TimerManager = GetWorld()->GetTimerManager();
         TimerManager.ClearTimer(LetterTimer);
 
         FTimerDelegate Delegate;
@@ -121,11 +120,11 @@ void UDialogueBox::CalculateWrappedString() {
         MaxLetterIndex = Segments[0].Text.Len();
         return;
     }
-    
+
     TSharedPtr<FSlateTextLayout> Layout = LineText->GetTextLayout();
     TSharedPtr<FRichTextLayoutMarshaller> Marshaller = LineText->GetTextMarshaller();
 
-    const FGeometry& TextBoxGeometry = LineText->GetCachedGeometry();
+    const FGeometry &TextBoxGeometry = LineText->GetCachedGeometry();
     const FVector2D TextBoxSize = TextBoxGeometry.GetLocalSize();
 
     Layout->SetWrappingWidth(static_cast<float>(TextBoxSize.X));
@@ -133,7 +132,7 @@ void UDialogueBox::CalculateWrappedString() {
     Layout->UpdateIfNeeded();
 
     bool bHasWrittenText = false;
-    for (const FTextLayout::FLineView& View : Layout->GetLineViews()) {
+    for (const FTextLayout::FLineView &View : Layout->GetLineViews()) {
         for (TSharedRef<ILayoutBlock> Block : View.Blocks) {
             TSharedRef<IRun> Run = Block->GetRun();
 
@@ -174,7 +173,7 @@ FString UDialogueBox::CalculateSegments() {
 
     int32 Idx = CachedLetterIndex;
     while (Idx <= CurrentLetterIndex && CurrentSegmentIndex < Segments.Num()) {
-        const FDialogueTextSegment& Segment = Segments[CurrentSegmentIndex];
+        const FDialogueTextSegment &Segment = Segments[CurrentSegmentIndex];
         ProcessSegmentTags(Result, Idx, Segment);
 
         bool bIsSegmentComplete = true;
@@ -194,7 +193,7 @@ FString UDialogueBox::CalculateSegments() {
         if (!bIsSegmentComplete) {
             break;
         }
-        
+
         CachedLetterIndex = Idx;
         CachedSegmentText = Result;
         ++CurrentSegmentIndex;
@@ -208,7 +207,7 @@ void UDialogueBox::ProcessSegmentTags(FString &Result, int32 &Idx, const FDialog
         Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
 
         if (!Segment.RunInfo.MetaData.IsEmpty()) {
-            for (const TTuple<FString, FString>& MetaData : Segment.RunInfo.MetaData) {
+            for (const TTuple<FString, FString> &MetaData : Segment.RunInfo.MetaData) {
                 Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
             }
         }

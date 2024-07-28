@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
@@ -79,6 +78,6 @@ void UPokemonSelectionPaneBase::SwitchPokemon(UPokemonPanel *Panel1, UPokemonPan
     Panel1->SwapPokemon(*Panel2);
     Panel1->Refresh();
     Panel2->Refresh();
-    
+
     OnPokemonSelected.Broadcast(GetSelectableOption<UPokemonPanel>(GetIndex())->GetPokemon());
 }

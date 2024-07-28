@@ -99,7 +99,7 @@ void USelectableWidget::ClearSelectableOptions(bool bRemoveWidgets) {
     if (bRemoveWidgets) {
         Algo::ForEach(SelectableButtons, &UWidget::RemoveFromParent);
     }
-    
+
     SelectableButtons.Reset();
     SelectableButtonGroup->RemoveAll();
 }

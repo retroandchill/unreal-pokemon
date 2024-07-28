@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
+#include "Components/SelectableWidget.h"
 #include "Manipulation/CircularIterator.h"
 #include "Screens/InventoryScreen.h"
-#include "Components/SelectableWidget.h"
 
 #include "ItemSelectionWindow.generated.h"
 
@@ -37,7 +37,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
   public:
     explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
-    
+
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.
@@ -147,5 +147,4 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
      */
     UPROPERTY(EditAnywhere, Category = "Display")
     TSubclassOf<UItemOption> ItemEntryClass;
-    
 };

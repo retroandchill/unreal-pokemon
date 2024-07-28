@@ -39,10 +39,10 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
   public:
     explicit USelectableWidget(const FObjectInitializer &Initializer);
 
-protected:
+  protected:
     void NativePreConstruct() override;
 
-public:
+  public:
     /**
      * Get the number of items in the menu that can be selected
      * @return The total number of items

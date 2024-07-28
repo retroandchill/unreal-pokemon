@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
+
 #include "RPGButtonBase.generated.h"
 
 /**
@@ -13,19 +14,19 @@ UCLASS(Abstract, DisplayName = "RPG Button Base")
 class RPGMENUS_API URPGButtonBase : public UCommonButtonBase {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
 
-public:
+  public:
     void UpdateVisibility();
-    
-private:
+
+  private:
     /**
      * Is this option visible to the player?
      */
     UPROPERTY(EditAnywhere, Category = Visibility)
     bool bIsVisible = true;
-    
+
     UPROPERTY()
     FGetBool bIsVisibleDelegate;
 
@@ -40,5 +41,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = Visibility, meta = (ValidEnumValues = "Collapsed, Hidden"))
     ESlateVisibility DisabledVisibility = ESlateVisibility::Collapsed;
-
 };

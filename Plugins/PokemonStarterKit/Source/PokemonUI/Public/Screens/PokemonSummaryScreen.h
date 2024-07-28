@@ -33,8 +33,8 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
      * @param InitialIndex The index to start at
      */
     UFUNCTION(BlueprintCallable, Category = Pokemon)
-    void SetInitialPokemon(const TScriptInterface<ITrainer>& Trainer, int32 InitialIndex);
-    
+    void SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex);
+
     /**
      * Set the initial position in the party for cycling
      * @param Party The party to display the summaries of
@@ -76,7 +76,7 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
      */
     UPROPERTY(BlueprintGetter = GetSummaryPages, Category = Widgets, meta = (BindWidget))
     TObjectPtr<USummaryPages> SummaryPages;
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USummaryTabWidget> SummaryTabs;
 

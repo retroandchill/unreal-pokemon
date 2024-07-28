@@ -28,13 +28,7 @@ RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag);
 } // namespace RPG::Menus
 
 UENUM(BlueprintType)
-enum class ERPGWidgetInputMode : uint8
-{
-    Default,
-    GameAndMenu,
-    Game,
-    Menu
-};
+enum class ERPGWidgetInputMode : uint8 { Default, GameAndMenu, Game, Menu };
 
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
@@ -47,7 +41,7 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
   protected:
     void NativeConstruct() override;
 
-    UWidget* NativeGetDesiredFocusTarget() const override;
+    UWidget *NativeGetDesiredFocusTarget() const override;
 
   public:
     /**

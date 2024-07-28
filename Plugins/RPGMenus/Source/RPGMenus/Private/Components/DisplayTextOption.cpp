@@ -8,7 +8,7 @@ void UDisplayTextOption::NativePreConstruct() {
     DisplayText->SetText(Text);
 }
 
-const FText & UDisplayTextOption::GetText() const {
+const FText &UDisplayTextOption::GetText() const {
     return Text;
 }
 
