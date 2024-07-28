@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
+#include "Components/RPGButtonBase.h"
 
 #include "BattleMenuOption.generated.h"
 
@@ -14,17 +15,11 @@ class UDisplayText;
  * The actual option widget for the move selection.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleMenuOption : public UCommonButtonBase {
+class POKEMONBATTLEUI_API UBattleMenuOption : public URPGButtonBase {
     GENERATED_BODY()
 
-  public:
-    /**
-     * Init the properties of this option with the given handler
-     * @param Handler The handler to use for initialization
-     */
-    void InitFromHandler(const UBattleMenuHandler *Handler);
-
   protected:
+    void NativePreConstruct() override;
     void NativeOnCurrentTextStyleChanged() override;
 
   private:
@@ -39,4 +34,16 @@ class POKEMONBATTLEUI_API UBattleMenuOption : public UCommonButtonBase {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UImage> BackgroundImage;
+
+    /**
+     * The text used for the option
+     */
+    UPROPERTY(EditAnywhere, Category = Option)
+    FText Text;
+
+    /**
+     * The image to use for the option's background
+     */
+    UPROPERTY(EditAnywhere, Category = Option)
+    FSlateBrush Image;
 };

@@ -26,6 +26,10 @@ void UNamedSlotSelectableWidget::UpdateOptions() {
     ClearSelectableOptions(false);
     for (int32 i = 0; i < ContentWidget->GetChildrenCount(); i++) {
         auto Child = Cast<URPGButtonBase>(ContentWidget->GetChildAt(i));
+        if (Child == nullptr) {
+            continue;
+        }
+        
         Child->UpdateVisibility();
         if (!Child->IsVisible()) {
             continue;

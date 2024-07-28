@@ -46,6 +46,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Selection")
     UPokemonActionOptions *GetActionSelect() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void SelectMove(const TScriptInterface<IBattler> &Battler);
 
     /**
@@ -91,27 +92,22 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     void NextBattler(const TScriptInterface<IBattler> &Battler);
 
-    /**
-     * Called when the fight command is selected
-     * @param Index The selected index
-     */
-    UFUNCTION()
-    void OnActionSelected(int32 Index);
-
+protected:
     /**
      * Called when a move is selected on a battler
      * @param Battler The battler to use the move
      * @param Move The selected move
      */
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void OnMoveSelected(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IBattleMove> &Move);
 
     /**
      * Called when the player cancels move selection
      */
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void OnMoveCanceled();
 
+private:
     /**
      * The widget that is used to select the options from the menu
      */

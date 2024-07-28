@@ -13,9 +13,9 @@
 
 void UPokemonBattleScreen::NativeConstruct() {
     Super::NativeConstruct();
-    ActionSelect->GetOnConfirm().AddUniqueDynamic(this, &UPokemonBattleScreen::OnActionSelected);
-    MoveSelect->GetOnMoveSelected().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
-    MoveSelect->GetOnCancel().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
+    //ActionSelect->GetOnConfirm().AddUniqueDynamic(this, &UPokemonBattleScreen::OnActionSelected);
+    //MoveSelect->GetOnMoveSelected().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
+    //MoveSelect->GetOnCancel().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
 }
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
@@ -83,10 +83,6 @@ void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
     ActionSelect->SetIndex(0);
     ActionSelect->ActivateWidget();
-}
-
-void UPokemonBattleScreen::OnActionSelected(int32) {
-    ActionSelect->ExecuteCurrentHandler(this);
 }
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
