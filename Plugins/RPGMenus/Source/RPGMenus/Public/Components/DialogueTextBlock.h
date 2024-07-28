@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CommonRichTextBlock.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
 
 #include "DialogueTextBlock.generated.h"
 
