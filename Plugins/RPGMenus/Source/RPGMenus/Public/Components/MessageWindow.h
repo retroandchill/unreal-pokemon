@@ -38,6 +38,8 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
     void NativeConstruct() override;
     void NativeDestruct() override;
 
+    void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
+
 public:
     /**
      * Set the text to display to the player

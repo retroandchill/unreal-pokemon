@@ -42,6 +42,24 @@ void UMessageWindow::NativeDestruct() {
     Super::NativeDestruct();
 }
 
+void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
+    Super::NativeTick(MyGeometry, InDeltaTime);
+
+    if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
+        ScrollTimer.GetValue() += InDeltaTime;
+        ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolation(OriginalScroll.GetValue(), BottomScroll,
+                                                                       ScrollSpeed, ScrollTimer.GetValue()));
+
+        if (FMath::IsNearlyEqual(ScrollBox->GetScrollOffset(), BottomScroll)) {
+            ScrollTimer.Reset();
+            OriginalScroll.Reset();
+        }
+    } else if (float CurrentScroll = ScrollBox->GetScrollOffset(); !FMath::IsNearlyEqual(CurrentScroll, BottomScroll)) {
+        ScrollTimer.Emplace(0.f);
+        OriginalScroll.Emplace(CurrentScroll);
+    }
+}
+
 void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
     check(DialogueBox != nullptr)
 

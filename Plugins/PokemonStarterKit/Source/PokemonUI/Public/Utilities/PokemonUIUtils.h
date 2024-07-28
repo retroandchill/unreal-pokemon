@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/Widget.h"
 #include "Data/Command.h"
-#include "Handlers/MenuHandler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "RangeHelpers.h"
@@ -72,22 +70,5 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, Category = Content)
     static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget);
-
-    /**
-     * Create the command list from the given list of provided handlers
-     * @tparam T The type of the handler class
-     * @tparam A The types of the arguments to the ShouldShow() method in the handlers
-     * @param Handlers The array of handler to process
-     * @param Args The arguments to the ShouldShow() method in the handlers
-     * @return The list of commands that was created
-     */
-    template <typename T, typename... A>
-    static TArray<TObjectPtr<UCommand>> CreateCommandListFromHandlers(const TArray<T> &Handlers, A &&...Args) {
-        auto Commands =
-            RangeHelpers::CreateRange(Handlers) |
-            ranges::views::filter([&Args...](T Handler) { return Handler->ShouldShow(Forward<A>(Args)...); }) |
-            ranges::views::transform(&UMenuHandler::CreateCommand) | RangeHelpers::TToArray<TObjectPtr<UCommand>>();
-
-        return Commands;
-    }
+    
 };

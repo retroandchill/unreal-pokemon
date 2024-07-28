@@ -1,7 +1,6 @@
 ﻿#include "Screens/BagScreen.h"
 #include "Asserts.h"
 #include "CommonButtonBase.h"
-#include "Handlers/BagMenu/BagMenuHandlerSet.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
@@ -9,7 +8,6 @@
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "UtilityClasses/Dispatchers/SampleHandler.h"
 #include "Components/CommandWindow.h"
 #include "Components/Bag/ItemSelectionWindow.h"
 
@@ -37,23 +35,11 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
     UE_ASSERT_NOT_NULL(CommandWindow);
 
-    auto &HandlerSet =
-        UReflectionUtils::GetMutablePropertyValue<TObjectPtr<UBagMenuHandlerSet>>(Screen.Get(), "CommandHandlers");
-    HandlerSet = NewObject<UBagMenuHandlerSet>(Screen.Get());
-    auto &Handlers =
-        UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBagMenuHandler>>>(HandlerSet, "Handlers");
-    Handlers.Empty();
-    auto SampleHandler = NewObject<USampleHandler>(Screen.Get());
-    Handlers.Emplace(SampleHandler);
-
     using enum ESlateVisibility;
     ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
     UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
     UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
     UE_ASSERT_TRUE(CommandWindow->IsActivated());
-    CommandWindow->GetSelectedOption()->OnClicked().Broadcast();
-    UE_CHECK_EQUAL(TEXT("REPEL"), SampleHandler->ItemID.ToString());
-    UE_CHECK_EQUAL(1, SampleHandler->ItemQuantity);
 
     CommandWindow->GetOnCancel().Broadcast();
     UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
