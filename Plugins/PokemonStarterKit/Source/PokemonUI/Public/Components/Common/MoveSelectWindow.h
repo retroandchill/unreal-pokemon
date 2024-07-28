@@ -46,22 +46,7 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
     void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback);
 
   protected:
-    /**
-     * Refresh the layout of this scene for if the Pokémon is trying to learn a move
-     * @param bLearningMove Is the player trying to learn a move
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void RefreshLayout(bool bLearningMove);
-
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
-
-    /**
-     * Set the position of the cursor based on the (valid) index
-     * @param Widget The widget that acts as the cursor for the window
-     * @param NewIndex The index of the cursor
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SetCursorPosition(UWidget *Widget, int32 NewIndex);
 
   private:
     /**
@@ -77,12 +62,6 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
      */
     UPROPERTY(EditAnywhere, Category = Display)
     TSubclassOf<UMovePanel> PanelClass;
-
-    /**
-     * The widget that acts as the cursor for the window
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UWidget> CursorWidget;
 
     /**
      * The current Pokémon whose moves are being displayed

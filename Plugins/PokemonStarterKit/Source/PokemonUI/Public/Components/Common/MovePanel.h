@@ -79,9 +79,6 @@ class POKEMONUI_API UMovePanel : public UCommonButtonBase {
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> MovePPText;
 
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PPLabel;
-
     /**
      * The format used to print a move's PP.
      */

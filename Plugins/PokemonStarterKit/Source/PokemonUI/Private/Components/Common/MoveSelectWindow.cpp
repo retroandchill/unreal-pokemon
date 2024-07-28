@@ -10,7 +10,6 @@
 
 void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) {
     CurrentPokemon = Pokemon;
-    RefreshLayout(MoveToLearn.IsSet());
 
     ClearSelectableOptions();
     int32 MoveCount = GetDefault<UPokemonDataSettings>()->MaxMoves;
@@ -38,11 +37,7 @@ void UMoveSelectWindow::BindToOnMoveSelectionChanged(const FOnMoveSelectionChang
 
 void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
-    if (NewIndex == -1) {
-        CursorWidget->SetVisibility(ESlateVisibility::Hidden);
-    } else {
-        CursorWidget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-        SetCursorPosition(CursorWidget, NewIndex);
+    if (NewIndex != INDEX_NONE) {
         OnMoveSelectionChanged.Broadcast(GetSelectableOption<UMovePanel>(NewIndex)->GetMove());
     }
 }

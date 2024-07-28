@@ -10,6 +10,7 @@
 
 #include "SelectableWidget.generated.h"
 
+class UCommonButtonGroupBase;
 class UCommonButtonBase;
 class USelectionInputs;
 struct FInputActionInstance;
@@ -38,6 +39,10 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
   public:
     explicit USelectableWidget(const FObjectInitializer &Initializer);
 
+protected:
+    void NativePreConstruct() override;
+
+public:
     /**
      * Get the number of items in the menu that can be selected
      * @return The total number of items
@@ -205,4 +210,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      */
     UPROPERTY()
     TArray<TObjectPtr<UCommonButtonBase>> SelectableButtons;
+
+    UPROPERTY()
+    TObjectPtr<UCommonButtonGroupBase> SelectableButtonGroup;
 };

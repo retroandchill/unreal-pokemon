@@ -10,13 +10,13 @@
 #include "SummaryPages.generated.h"
 
 class USummaryScreenPage;
+
 /**
  * Delegate called when the Pokémon is changed by the iterator.
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &);
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelected, int32);
-DECLARE_MULTICAST_DELEGATE(FOnScreenBackOut);
 
 class UPokemonInfoPage;
 class UWidgetSwitcher;
@@ -25,11 +25,8 @@ class UWidgetSwitcher;
  * The widget that controls allowing the player to scroll between pages on the summary screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
+class POKEMONUI_API USummaryPages : public UCommonUserWidget {
     GENERATED_BODY()
-
-  public:
-    explicit USummaryPages(const FObjectInitializer &Initializer);
 
   protected:
     void NativeConstruct() override;
@@ -44,10 +41,10 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
 
     /**
      * Set the initial Pokémon to use with this iterator.
-     * @param Pokemon The Pokémon in question to look at.
-     * @param PartyIndex The index of said Pokémon.
+     * @param NewPokemon The index of said Pokémon.
      */
-    void SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Pokemon, int32 PartyIndex);
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Content)
+    void SetPokemon(const TScriptInterface<IPokemon>& NewPokemon);
 
     /**
      * Get the delegate that is called when a Pokémon is changed.
@@ -59,6 +56,7 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
      * Get the Pokémon that is currently being displayed.
      * @return The currently displayed Pokémon
      */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
     const TScriptInterface<IPokemon> &GetCurrentPokemon() const;
 
     /**
@@ -79,11 +77,7 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     void Select() const;
     void NextPage();
     void PreviousPage();
-    void NextPokemon();
-    void PreviousPokemon();
-
     FOnSelected &GetOnSelected();
-    FOnScreenBackOut &GetOnScreenBackOut();
 
   protected:
     /**
@@ -93,14 +87,13 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     UWidgetSwitcher *GetPageSwitcher() const;
 
-    bool NativeOnHandleBackAction() override;
-
   private:
     /**
-     * Iterator used to cycle through the part
+     * The Pokémon that is currently the subject for this widget
      */
-    FPokemonIterator CurrentPokemon;
-
+    UPROPERTY(BlueprintGetter = GetCurrentPokemon, BlueprintSetter = SetPokemon, Category = Content)
+    TScriptInterface<IPokemon> CurrentPokemon;
+    
     /**
      * Called when a Pokémon is changed
      */
@@ -113,18 +106,9 @@ class POKEMONUI_API USummaryPages : public UCommonActivatableWidget {
     TObjectPtr<UWidgetSwitcher> PageSwitcher;
 
     FOnSelected OnSelected;
-    FOnScreenBackOut OnScreenBackOut;
 
     UPROPERTY(EditAnywhere, Category = Input)
     TObjectPtr<UInputAction> SelectionAction;
 
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> NextPokemonAction;
-
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> PreviousPokemonAction;
-
     FUIActionBindingHandle InspectActionHandler;
-    FUIActionBindingHandle NextPokemonActionHandle;
-    FUIActionBindingHandle PreviousPokemonActionHandle;
 };

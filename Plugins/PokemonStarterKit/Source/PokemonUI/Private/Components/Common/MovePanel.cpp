@@ -38,13 +38,11 @@ void UMovePanel::OnMoveSet() {
     if (Move != nullptr) {
         auto &MoveData = Move->GetMoveData();
         MoveNameText->SetText(MoveData.RealName);
-        PPLabel->SetVisibility(SelfHitTestInvisible);
         MovePPText->SetText(FText::Format(MovePPFormat, {Move->GetCurrentPP(), MoveData.TotalPP}));
         TypeIcon->SetVisibility(SelfHitTestInvisible);
         UWidgetUtilities::SetBrushFromAsset(TypeIcon, GetTypeIcon(), true);
     } else {
         MoveNameText->SetText(UnknownMoveLabel);
-        PPLabel->SetVisibility(Hidden);
         MovePPText->SetText(UnknownMovePP);
         TypeIcon->SetVisibility(Hidden);
     }

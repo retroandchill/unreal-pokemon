@@ -2,7 +2,7 @@
 
 #include "Screens/PokemonSummaryScreen.h"
 #include "Components/Image.h"
-#include "Components/Summary/HoldItemInfo.h"
+#include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
@@ -23,8 +23,6 @@ void UPokemonSummaryScreen::NativeConstruct() {
 
     SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
     SummaryPages->GetOnSelected().AddUObject(this, &UPokemonSummaryScreen::SummaryPageConfirm);
-    SummaryPages->GetOnScreenBackOut().AddUObject(this, &UPokemonSummaryScreen::CloseScreen);
-    SummaryPages->ActivateWidget();
 }
 
 void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex) {
@@ -32,11 +30,17 @@ void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &
 }
 
 void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex) {
-    SummaryPages->SetInitialPokemon(Party, InitialIndex);
+    PokemonSelection->SetPokemonToDisplay(Party);
+    PokemonSelection->SetIndex(InitialIndex);
+    PokemonSelection->ActivateWidget();
 }
 
 USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const {
     return SummaryPages;
+}
+
+UPokemonSelectionPaneBase * UPokemonSummaryScreen::GetPokemonSelection() const {
+    return PokemonSelection;
 }
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {

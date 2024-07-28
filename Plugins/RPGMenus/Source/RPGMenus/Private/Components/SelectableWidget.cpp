@@ -2,10 +2,16 @@
 #include "Components/SelectableWidget.h"
 #include "Algo/ForEach.h"
 #include "CommonButtonBase.h"
+#include "Groups/CommonButtonGroupBase.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
     bIsBackHandler = true;
     bIsBackActionDisplayedInActionBar = true;
+}
+
+void USelectableWidget::NativePreConstruct() {
+    Super::NativePreConstruct();
+    SelectableButtonGroup = NewObject<UCommonButtonGroupBase>(this);
 }
 
 int32 USelectableWidget::GetItemCount() const {
@@ -95,6 +101,7 @@ void USelectableWidget::ClearSelectableOptions(bool bRemoveWidgets) {
     }
     
     SelectableButtons.Reset();
+    SelectableButtonGroup->RemoveAll();
 }
 
 void USelectableWidget::SlotOption(UCommonButtonBase *Option) {
@@ -110,6 +117,7 @@ int32 USelectableWidget::AddOptionToWidget(UCommonButtonBase *Option) {
             SetIndex(OptionIndex);
         }
     });
+    SelectableButtonGroup->AddWidget(Option);
     return OptionIndex;
 }
 

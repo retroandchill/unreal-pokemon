@@ -7,6 +7,7 @@
 
 #include "PokemonSummaryScreen.generated.h"
 
+class UPokemonSelectionPaneBase;
 class USummaryTabWidget;
 class ITrainer;
 class UHoldItemInfo;
@@ -48,6 +49,9 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     USummaryPages *GetSummaryPages() const;
 
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
+    UPokemonSelectionPaneBase *GetPokemonSelection() const;
+
   private:
     /**
      * Set the Pokémon for the widgets
@@ -82,4 +86,7 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USummaryTabWidget> SummaryTabs;
+
+    UPROPERTY(BlueprintGetter = GetPokemonSelection, Category = Widgets, meta = (BindWidget))
+    TObjectPtr<UPokemonSelectionPaneBase> PokemonSelection;
 };
