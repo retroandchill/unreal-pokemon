@@ -1,12 +1,12 @@
 ﻿#include "Asserts.h"
 #include "Battle/Battlers/Battler.h"
 #include "Components/BattleMenuOption.h"
+#include "Components/PokemonActionOptions.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattler.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Windows/PokemonActionOptions.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonActionOptions, "Unit Tests.Battle.UI.TestPokemonActionOptions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

@@ -2,6 +2,7 @@
 #include "Asserts.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
+#include "Components/Party/PokemonSelectionPane.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Species/SpeciesData.h"
@@ -9,7 +10,6 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/PokemonTestUtilities.h"
-#include "Windows/PokemonSelectionPane.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Unit Tests.UI.PokemonPanelInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

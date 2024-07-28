@@ -30,14 +30,12 @@ class POKEMONUI_API UDisplayMessage : public UBlueprintAsyncActionBase {
     /**
      * Display a message to the player and call the following after the message is done
      * @param WorldContextObject The object used to obtain the state of the world to display the message with
-     * @param ScreenClass The class used to display the message to the screen
      * @param Message The message to display to the player
      * @return The node to execute the task with
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Messages")
-    static UDisplayMessage *DisplayMessage(const UObject *WorldContextObject,
-                                           TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message);
+    static UDisplayMessage *DisplayMessage(const UObject *WorldContextObject, FText Message);
 
     void Activate() override;
 
@@ -53,12 +51,6 @@ class POKEMONUI_API UDisplayMessage : public UBlueprintAsyncActionBase {
      */
     UPROPERTY()
     TObjectPtr<const UObject> WorldContextObject;
-
-    /**
-     * The class used to display the message to the screen
-     */
-    UPROPERTY()
-    TSubclassOf<UTextDisplayScreen> ScreenClass;
 
     /**
      * The message to display to the player

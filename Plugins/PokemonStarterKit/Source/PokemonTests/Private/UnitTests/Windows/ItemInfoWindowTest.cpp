@@ -1,4 +1,4 @@
-﻿#include "Windows/ItemInfoWindow.h"
+﻿#include "Components/Bag/ItemInfoWindow.h"
 #include "Asserts.h"
 #include "Bag/Item.h"
 #include "Components/DisplayText.h"

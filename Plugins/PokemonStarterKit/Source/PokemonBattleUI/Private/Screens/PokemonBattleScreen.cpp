@@ -7,16 +7,9 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
-#include "Windows/BattleMoveSelect.h"
-#include "Windows/PokemonActionOptions.h"
+#include "Components/BattleMoveSelect.h"
+#include "Components/PokemonActionOptions.h"
 #include <functional>
-
-void UPokemonBattleScreen::NativeConstruct() {
-    Super::NativeConstruct();
-    ActionSelect->GetOnConfirm().AddUniqueDynamic(this, &UPokemonBattleScreen::OnActionSelected);
-    MoveSelect->GetOnMoveSelected().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
-    MoveSelect->GetOnCancel().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
-}
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     CurrentBattle = Battle;
@@ -46,7 +39,7 @@ UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
 }
 
 void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler) {
-    ActionSelect->ActivateWidget();
+    ActionSelect->DeactivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Hidden);
     MoveSelect->SetBattler(Battler);
     MoveSelect->SetVisibility(ESlateVisibility::Visible);
@@ -83,10 +76,6 @@ void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
     ActionSelect->SetIndex(0);
     ActionSelect->ActivateWidget();
-}
-
-void UPokemonBattleScreen::OnActionSelected(int32) {
-    ActionSelect->ExecuteCurrentHandler(this);
 }
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,

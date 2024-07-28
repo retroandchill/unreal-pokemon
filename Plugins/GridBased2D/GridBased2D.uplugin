@@ -20,11 +20,6 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "GridBased2DEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "GridBased2DTests",
 			"Type": "Editor",
 			"LoadingPhase": "Default"

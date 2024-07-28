@@ -1,14 +1,13 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessage.h"
+#include "PokemonUISettings.h"
 #include "PrimaryGameLayout.h"
 #include "Screens/TextDisplayScreen.h"
 
-UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject,
-                                                 TSubclassOf<UTextDisplayScreen> ScreenClass, FText Message) {
+UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message) {
     auto Node = NewObject<UDisplayMessage>();
     Node->WorldContextObject = WorldContextObject;
-    Node->ScreenClass = ScreenClass;
-    Node->Message = Message;
+    Node->Message = MoveTemp(Message);
     return Node;
 }
 
@@ -22,6 +21,7 @@ void UDisplayMessage::Activate() {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr) {
+        auto ScreenClass = GetDefault<UPokemonUISettings>()->TextScreenClass.TryLoadClass<UTextDisplayScreen>();
         Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
     }
     Screen->SetText(Message);

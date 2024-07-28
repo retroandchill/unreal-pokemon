@@ -1,5 +1,6 @@
 ﻿
 #include "Asserts.h"
+#include "Components/Party/PokemonSelectionPane.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
@@ -10,9 +11,6 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/PokemonTestUtilities.h"
-#include "Windows/CommandWindow.h"
-#include "Windows/HelpWindow.h"
-#include "Windows/PokemonSelectionPane.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Unit Tests.Screens.PartyScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -33,26 +31,6 @@ bool PartyScreenTest::RunTest(const FString &Parameters) {
 
     FIND_CHILD_WIDGET(Screen.Get(), UPokemonSelectionPane, SelectionPane);
     UE_ASSERT_NOT_NULL(SelectionPane);
-    FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
-    UE_ASSERT_NOT_NULL(CommandWindow);
-    FIND_CHILD_WIDGET(Screen.Get(), UHelpWindow, CommandHelpWindow);
-    UE_ASSERT_NOT_NULL(CommandHelpWindow);
-
-    UE_ASSERT_TRUE(SelectionPane->IsActivated());
-    UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
-    UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
-
-    SelectionPane->GetSelectedOption()->OnClicked().Broadcast();
-    UE_ASSERT_FALSE(SelectionPane->IsActivated());
-    UE_ASSERT_TRUE(CommandWindow->IsActivated());
-    UE_CHECK_EQUAL(Visible, CommandWindow->GetVisibility());
-    UE_CHECK_EQUAL(SelfHitTestInvisible, CommandHelpWindow->GetVisibility());
-
-    CommandWindow->GetOnCancel().Broadcast();
-    UE_ASSERT_TRUE(SelectionPane->IsActivated());
-    UE_ASSERT_FALSE(CommandWindow->IsActivated());
-    UE_CHECK_EQUAL(Collapsed, CommandWindow->GetVisibility());
-    UE_CHECK_EQUAL(Collapsed, CommandHelpWindow->GetVisibility());
 
     SelectionPane->BeginSwitch(SelectionPane->GetIndex());
     SelectionPane->SetIndex(1);

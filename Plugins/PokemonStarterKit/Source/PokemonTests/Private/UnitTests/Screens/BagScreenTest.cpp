@@ -1,7 +1,12 @@
 ﻿#include "Screens/BagScreen.h"
 #include "Asserts.h"
 #include "CommonButtonBase.h"
-#include "Handlers/BagMenu/BagMenuHandlerSet.h"
+#include "Components/Bag/ItemSelectionWindow.h"
+#include "Components/Bag/PocketTabWidget.h"
+#include "Components/Bag/PocketWindow.h"
+#include "Components/CommandWindow.h"
+#include "EnhancedInputSubsystems.h"
+#include "Input/UIActionBinding.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
@@ -9,9 +14,8 @@
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "UtilityClasses/Dispatchers/SampleHandler.h"
-#include "Windows/CommandWindow.h"
-#include "Windows/ItemSelectionWindow.h"
+#include "UtilityClasses/Dispatchers/ItemSlotDispatcher.h"
+#include "UtilityClasses/Dispatchers/NoItemSelectedDispatcher.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -23,7 +27,9 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
     auto WidgetClass = Subclasses[0];
 
     auto Bag = UnrealInjector::NewInjectedDependency<IBag>(World.Get());
-    Bag->ObtainItem(TEXT("REPEL"));
+    Bag->ObtainItem(TEXT("POTION"), 5);
+    Bag->ObtainItem(TEXT("FULLHEAL"), 10);
+    Bag->ObtainItem(TEXT("BURNHEAL"), 20);
     auto &Subsystem = UPokemonSubsystem::GetInstance(World.Get());
     UReflectionUtils::SetPropertyValue<TScriptInterface<IBag>>(&Subsystem, "Bag", Bag);
 
@@ -34,47 +40,52 @@ bool BagScreenTest::RunTest(const FString &Parameters) {
 
     FIND_CHILD_WIDGET(Screen.Get(), UItemSelectionWindow, ItemSelectionWindow);
     UE_ASSERT_NOT_NULL(ItemSelectionWindow);
-    FIND_CHILD_WIDGET(Screen.Get(), UCommandWindow, CommandWindow);
-    UE_ASSERT_NOT_NULL(CommandWindow);
+    FIND_CHILD_WIDGET(Screen.Get(), UPocketTabWidget, PocketTabWidget);
+    UE_ASSERT_NOT_NULL(PocketTabWidget);
+    FIND_CHILD_WIDGET(Screen.Get(), UPocketWindow, PocketWindow);
+    UE_ASSERT_NOT_NULL(PocketWindow);
 
-    auto &HandlerSet =
-        UReflectionUtils::GetMutablePropertyValue<TObjectPtr<UBagMenuHandlerSet>>(Screen.Get(), "CommandHandlers");
-    HandlerSet = NewObject<UBagMenuHandlerSet>(Screen.Get());
-    auto &Handlers =
-        UReflectionUtils::GetMutablePropertyValue<TArray<TObjectPtr<UBagMenuHandler>>>(HandlerSet, "Handlers");
-    Handlers.Empty();
-    auto SampleHandler = NewObject<USampleHandler>(Screen.Get());
-    Handlers.Emplace(SampleHandler);
+    UE_ASSERT_EQUAL(TEXT("Items"), PocketWindow->GetCurrentPocket().ToString());
 
-    using enum ESlateVisibility;
-    ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
-    UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
-    UE_ASSERT_TRUE(CommandWindow->IsActivated());
-    CommandWindow->GetSelectedOption()->OnClicked().Broadcast();
-    UE_CHECK_EQUAL(TEXT("REPEL"), SampleHandler->ItemID.ToString());
-    UE_CHECK_EQUAL(1, SampleHandler->ItemQuantity);
+    auto PreviousActionHandle = PocketTabWidget->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuPrevious"; });
+    UE_ASSERT_NOT_NULL(PreviousActionHandle);
+    auto PreviousAction = FUIActionBinding::FindBinding(*PreviousActionHandle);
+    UE_ASSERT_NOT_NULL(PreviousAction.Get());
+    auto NextActionHandle = PocketTabWidget->GetActionBindings().FindByPredicate(
+        [](const FUIActionBindingHandle &BindingHandle) { return BindingHandle.GetActionName() == "MenuNext"; });
+    UE_ASSERT_NOT_NULL(NextActionHandle);
+    auto NextAction = FUIActionBinding::FindBinding(*NextActionHandle);
+    UE_ASSERT_NOT_NULL(NextAction.Get());
 
-    CommandWindow->GetOnCancel().Broadcast();
-    UE_CHECK_EQUAL(Hidden, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(CommandWindow->IsActivated());
-    UE_ASSERT_TRUE(ItemSelectionWindow->IsActivated());
-    ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
-    UE_CHECK_EQUAL(SelfHitTestInvisible, CommandWindow->GetVisibility());
-    UE_CHECK_FALSE(ItemSelectionWindow->IsActivated());
-    UE_ASSERT_TRUE(CommandWindow->IsActivated());
-    CommandWindow->GetOnCancel().Broadcast();
+    UE_CHECK_TRUE(NextAction->OnExecuteAction.ExecuteIfBound());
+    UE_ASSERT_EQUAL(TEXT("Medicine"), PocketWindow->GetCurrentPocket().ToString());
 
-    FName ItemID;
-    int32 ItemQuantity;
-    Screen->GetOnItemSelected().BindLambda(
-        [&ItemID, &ItemQuantity](const TScriptInterface<IInventoryScreen> &, const FItem &Item, int32 Quantity) {
-            ItemID = Item.ID;
-            ItemQuantity = Quantity;
-        });
-    ItemSelectionWindow->GetSelectedOption()->OnClicked().Broadcast();
-    UE_CHECK_EQUAL(TEXT("REPEL"), ItemID.ToString());
-    UE_CHECK_EQUAL(1, ItemQuantity);
+    auto Dispatcher = NewObject<UItemSlotDispatcher>(World.Get());
+    ItemSelectionWindow->GetOnItemChanged().AddUniqueDynamic(Dispatcher, &UItemSlotDispatcher::ReceiveItem);
+
+    ItemSelectionWindow->SetIndex(0);
+    UE_CHECK_EQUAL(TEXT("POTION"), Dispatcher->ItemID.ToString());
+    UE_CHECK_EQUAL(5, Dispatcher->Quantity);
+    UE_ASSERT_NOT_NULL(ItemSelectionWindow->GetCurrentItem());
+    UE_CHECK_EQUAL(TEXT("POTION"), ItemSelectionWindow->GetCurrentItem()->ID.ToString());
+    ItemSelectionWindow->SetIndex(1);
+    UE_CHECK_EQUAL(TEXT("FULLHEAL"), Dispatcher->ItemID.ToString());
+    UE_CHECK_EQUAL(10, Dispatcher->Quantity);
+    UE_ASSERT_NOT_NULL(ItemSelectionWindow->GetCurrentItem());
+    UE_CHECK_EQUAL(TEXT("FULLHEAL"), ItemSelectionWindow->GetCurrentItem()->ID.ToString());
+    ItemSelectionWindow->SetIndex(2);
+    UE_CHECK_EQUAL(TEXT("BURNHEAL"), Dispatcher->ItemID.ToString());
+    UE_CHECK_EQUAL(20, Dispatcher->Quantity);
+    UE_ASSERT_NOT_NULL(ItemSelectionWindow->GetCurrentItem());
+    UE_CHECK_EQUAL(TEXT("BURNHEAL"), ItemSelectionWindow->GetCurrentItem()->ID.ToString());
+
+    auto Dispatcher2 = NewObject<UNoItemSelectedDispatcher>(World.Get());
+    ItemSelectionWindow->GetOnNoItemSelected().AddUniqueDynamic(Dispatcher2, &UNoItemSelectedDispatcher::OnReceive);
+
+    UE_CHECK_TRUE(PreviousAction->OnExecuteAction.ExecuteIfBound());
+    UE_ASSERT_EQUAL(TEXT("Items"), PocketWindow->GetCurrentPocket().ToString());
+    UE_ASSERT_TRUE(Dispatcher2->bCalled);
 
     return true;
 }

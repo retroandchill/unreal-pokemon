@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/MoveForgetScreen.h"
-#include "Windows/MoveInfoWindow.h"
-#include "Windows/MoveSelectWindow.h"
+#include "Components/Common/MoveInfoWindow.h"
+#include "Components/Common/MoveSelectWindow.h"
 
 void UMoveForgetScreen::NativeConstruct() {
     Super::NativeConstruct();

@@ -114,6 +114,15 @@ class TCircularIterator {
         return Temp;
     }
 
+    int32 GetIndex() const {
+        return CurrentIndex;
+    }
+
+    void SetIndex(int32 Index) {
+        check(Data.IsValidIndex(Index))
+        CurrentIndex = Index;
+    }
+
     /**
      * Return if the iterator in question is valid or not.
      * @return Is the container referenced non-empty.
