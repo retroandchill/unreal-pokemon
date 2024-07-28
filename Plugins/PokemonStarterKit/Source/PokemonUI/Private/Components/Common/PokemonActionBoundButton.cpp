@@ -47,7 +47,14 @@ void UPokemonActionBoundButton::UpdateInputActionWidget() {
     if (InputActionWidget != nullptr) { // optional bound widget
         InputActionWidget->SetInputActionBinding(BindingHandle);
 
-        auto ActionDisplayName = BindingHandle.GetDisplayName();
+        FText ActionDisplayName;
+        if (auto Binding = FUIActionBinding::FindBinding(BindingHandle); Binding != nullptr) {
+            ActionDisplayName = Binding->ActionDisplayName;
+        }
+
+        if (ActionDisplayName.IsEmpty()) {
+            ActionDisplayName = BindingHandle.GetDisplayName();
+        }
         if (BindingHandle.IsValid()) {
             const auto BoundWidget = BindingHandle.GetBoundWidget();
             if (auto BindingOwner = BoundWidget ? BoundWidget->GetOwningLocalPlayer() : nullptr;

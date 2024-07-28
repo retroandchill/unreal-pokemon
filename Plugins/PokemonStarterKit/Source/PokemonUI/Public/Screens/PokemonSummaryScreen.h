@@ -60,13 +60,6 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     void SetPokemon(const TScriptInterface<IPokemon> &Pokemon);
 
     /**
-     * Called when confirming on the summary page.
-     * @param Index The index that the window is on
-     */
-    UFUNCTION()
-    void SummaryPageConfirm(int32 Index);
-
-    /**
      * The widget containing the name information
      */
     UPROPERTY(meta = (BindWidget))

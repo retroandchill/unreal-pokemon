@@ -16,8 +16,6 @@ class USummaryScreenPage;
  */
 DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &);
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelected, int32);
-
 class UPokemonInfoPage;
 class UWidgetSwitcher;
 
@@ -28,9 +26,9 @@ UCLASS(Abstract)
 class POKEMONUI_API USummaryPages : public UCommonUserWidget {
     GENERATED_BODY()
 
-  protected:
+protected:
     void NativeConstruct() override;
-
+    
   public:
     /**
      * Refresh any of the child pages added to this widget.
@@ -74,10 +72,8 @@ class POKEMONUI_API USummaryPages : public UCommonUserWidget {
 
     int32 GetCurrentPageIndex() const;
 
-    void Select() const;
     void NextPage();
     void PreviousPage();
-    FOnSelected &GetOnSelected();
 
   protected:
     /**
@@ -104,11 +100,5 @@ class POKEMONUI_API USummaryPages : public UCommonUserWidget {
      */
     UPROPERTY(BlueprintGetter = GetPageSwitcher, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UWidgetSwitcher> PageSwitcher;
-
-    FOnSelected OnSelected;
-
-    UPROPERTY(EditAnywhere, Category = Input)
-    TObjectPtr<UInputAction> SelectionAction;
-
-    FUIActionBindingHandle InspectActionHandler;
+    
 };

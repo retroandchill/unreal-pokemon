@@ -108,8 +108,6 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(PokemonIDText);
     UE_CHECK_EQUAL(ForeignTrainer->GetIdNumber(), FCString::Atoi(*PokemonIDText->GetText().ToString()));
 
-    UE_CHECK_FALSE(Page->CanSelectOnPage());
-
     return true;
 }
 
@@ -182,8 +180,6 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(TEXT("Egg hatched."), Lines[6]);           // Egg Hatched
     UE_CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[7]); // Characteristic
 
-    UE_CHECK_FALSE(Page->CanSelectOnPage());
-
     return true;
 }
 
@@ -235,8 +231,6 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
         UE_CHECK_EQUAL(Values[i], StatLabel->GetText().ToString());
     }
 
-    UE_CHECK_FALSE(Page->CanSelectOnPage());
-
     return true;
 }
 
@@ -257,8 +251,6 @@ bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Level = 40}, ForeignTrainer);
     Page->RefreshInfo(Pokemon1);
-
-    UE_CHECK_TRUE(Page->CanSelectOnPage());
 
     return true;
 }

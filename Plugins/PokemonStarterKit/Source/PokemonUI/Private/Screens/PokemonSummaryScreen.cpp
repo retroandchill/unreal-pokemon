@@ -21,9 +21,7 @@ void UPokemonSummaryScreen::NativePreConstruct() {
 
 void UPokemonSummaryScreen::NativeConstruct() {
     Super::NativeConstruct();
-
     SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
-    SummaryPages->GetOnSelected().AddUObject(this, &UPokemonSummaryScreen::SummaryPageConfirm);
 }
 
 void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex) {
@@ -53,13 +51,4 @@ void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon
     auto [SpriteMaterial, Size] = GraphicsLoadingSubsystem->GetPokemonUISprite(Pokemon, this);
     UWidgetUtilities::SetBrushFromAsset(PokemonSprite, SpriteMaterial);
     PokemonSprite->SetDesiredSizeOverride(Size);
-}
-
-void UPokemonSummaryScreen::SummaryPageConfirm(int32 Index) {
-    auto Page = SummaryPages->GetPage(Index);
-    if (Page == nullptr || !Page->CanSelectOnPage()) {
-        return;
-    }
-
-    Page->GetPageSelected().Broadcast();
 }

@@ -3,18 +3,10 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/Summary/SummaryScreenPage.h"
-#include "Input/CommonUIInputTypes.h"
 
 void USummaryPages::NativeConstruct() {
     Super::NativeConstruct();
-
-    auto CreateBindArgs = [this](UInputAction *Action, auto Function, bool bDisplayInActionBar = false) {
-        FBindUIActionArgs BindArgs(Action, FSimpleDelegate::CreateUObject(this, Function));
-        BindArgs.bDisplayInActionBar = bDisplayInActionBar;
-        return BindArgs;
-    };
-
-    InspectActionHandler = RegisterUIActionBinding(CreateBindArgs(SelectionAction, &USummaryPages::Select));
+    CastChecked<USummaryScreenPage>(PageSwitcher->GetActiveWidget())->OnPageShown();
 }
 
 void USummaryPages::SetPokemon(const TScriptInterface<IPokemon>& NewPokemon) {
@@ -34,7 +26,9 @@ const TScriptInterface<IPokemon> &USummaryPages::GetCurrentPokemon() const {
 }
 
 void USummaryPages::SetPage(int32 PageIndex) {
+    CastChecked<USummaryScreenPage>(PageSwitcher->GetActiveWidget())->OnPageHidden();
     PageSwitcher->SetActiveWidgetIndex(PageIndex);
+    CastChecked<USummaryScreenPage>(PageSwitcher->GetActiveWidget())->OnPageShown();
 }
 
 TArray<USummaryScreenPage *> USummaryPages::GetPages() const {
@@ -49,21 +43,12 @@ int32 USummaryPages::GetCurrentPageIndex() const {
     return PageSwitcher->GetActiveWidgetIndex();
 }
 
-void USummaryPages::Select() const {
-    OnSelected.Broadcast(PageSwitcher->GetActiveWidgetIndex());
-}
-
 void USummaryPages::NextPage() {
-    PageSwitcher->SetActiveWidgetIndex(
-        FMath::Min(PageSwitcher->GetActiveWidgetIndex() + 1, PageSwitcher->GetNumWidgets() - 1));
+    SetPage(FMath::Min(PageSwitcher->GetActiveWidgetIndex() + 1, PageSwitcher->GetNumWidgets() - 1));
 }
 
 void USummaryPages::PreviousPage() {
-    PageSwitcher->SetActiveWidgetIndex(FMath::Max(PageSwitcher->GetActiveWidgetIndex() - 1, 0));
-}
-
-FOnSelected &USummaryPages::GetOnSelected() {
-    return OnSelected;
+    SetPage(FMath::Max(PageSwitcher->GetActiveWidgetIndex() - 1, 0));
 }
 
 UWidgetSwitcher *USummaryPages::GetPageSwitcher() const {

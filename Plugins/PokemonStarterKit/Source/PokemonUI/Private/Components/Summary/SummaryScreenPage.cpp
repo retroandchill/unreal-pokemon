@@ -6,12 +6,12 @@ void USummaryScreenPage::RefreshInfo_Implementation(const TScriptInterface<IPoke
     // No implementation by default
 }
 
-bool USummaryScreenPage::CanSelectOnPage_Implementation() const {
-    return false;
+void USummaryScreenPage::OnPageShown() {
+    // No implementation by default
 }
 
-FPageSelected &USummaryScreenPage::GetPageSelected() {
-    return PageSelected;
+void USummaryScreenPage::OnPageHidden() {
+    // No implementation by default
 }
 
 TSubclassOf<UCommonButtonStyle> USummaryScreenPage::GetTabButtonStyle() const {
