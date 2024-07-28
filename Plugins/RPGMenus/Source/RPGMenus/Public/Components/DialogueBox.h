@@ -69,7 +69,7 @@ class RPGMENUS_API UDialogueBox : public UCommonUserWidget {
 
     void CalculateWrappedString();
     FString CalculateSegments();
-    void ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment);
+    static void ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment);
 
     UPROPERTY(BlueprintGetter = GetLineText, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UDialogueTextBlock> LineText;
