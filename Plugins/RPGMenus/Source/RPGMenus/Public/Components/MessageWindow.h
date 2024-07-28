@@ -8,6 +8,7 @@
 
 #include "MessageWindow.generated.h"
 
+class UDialogueBox;
 class UInputAction;
 class UDisplayText;
 class UCommandWindow;
@@ -33,15 +34,11 @@ UCLASS()
 class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
     GENERATED_BODY()
 
-  public:
-    void NativePreConstruct() override;
+  protected:
     void NativeConstruct() override;
     void NativeDestruct() override;
 
-  protected:
-    void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
-
-  public:
+public:
     /**
      * Set the text to display to the player
      * @param Text The text to display to the player
@@ -80,41 +77,6 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
 
   private:
     /**
-     * Automatically resize the window to match the desired number of lines
-     */
-    void ResizeWindow();
-
-    /**
-     * Queue up the new text if the geometry information is available
-     */
-    void QueueUpNewText();
-
-    /**
-     * Queue up a new line of text to display to the player
-     * @param Line The current line of text to queue
-     * @param TotalTextAreaWidth The total width of the rendering area
-     */
-    void QueueLine(const FString &Line, double TotalTextAreaWidth);
-
-    /**
-     * Queue the given text to the display queue
-     * @param Text The text to add to the queue
-     */
-    void QueueText(FStringView Text);
-
-    /**
-     * Split up the line by word and add each word individually wrapping when necessary
-     * @param Line The current line of text to queue
-     * @param TotalTextAreaWidth The total width of the rendering area
-     */
-    void QueueIndividualWords(const FString &Line, double TotalTextAreaWidth);
-
-    /**
-     * Queue a new line to be added
-     */
-    void AddNewLine();
-
-    /**
      * The callback for when the text has finished displaying
      */
     UPROPERTY(BlueprintAssignable, Category = Events)
@@ -127,16 +89,10 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
     FDisplayChoices OnDisplayChoices;
 
     /**
-     * The actual area where the window is drawn
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UWindow> Window;
-
-    /**
      * The widget that contains the text displayed to the player
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> DisplayTextWidget;
+    TObjectPtr<UDialogueBox> DialogueBox;
 
     /**
      * The scroll box used to keep the text visible on screen
@@ -161,27 +117,6 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
      */
     UPROPERTY(EditAnywhere, Category = Display)
     float ExtraPadding;
-
-    /**
-     * The full text to queue up for display
-     */
-    TOptional<FText> FullText;
-
-    /**
-     * The current word to be displayed to the player
-     */
-    TQueue<TCHAR> WordToDisplay;
-
-    /**
-     * The speed at which the text scrolls by (0 = Instant)
-     */
-    UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 0, UIMax = 0))
-    float TextSpeed = 0.025f;
-
-    /**
-     * The current timer for the text letter display
-     */
-    float TextTimer = 0.0f;
 
     /**
      * The original scroll position

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonRichTextBlock.h"
+#include "Components/DialogueTextBlock.h"
 
 #include "ShadowedRichTextBlock.generated.h"
 
@@ -47,7 +48,7 @@ struct FModifiedTextStyle {
  * Clone of RichTextBlock that draws three shadows instead of just one.
  */
 UCLASS()
-class POKEMONUI_API UShadowedRichTextBlock : public UCommonRichTextBlock {
+class POKEMONUI_API UShadowedRichTextBlock : public UDialogueTextBlock {
     GENERATED_BODY()
 
   protected:
