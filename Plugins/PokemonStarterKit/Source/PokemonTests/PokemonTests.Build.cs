@@ -41,7 +41,8 @@ public class PokemonTests : ModuleRules
                 "GameplayTasks",
                 "CommonUI",
                 "CommonGame",
-                "DeveloperSettings"
+                "DeveloperSettings",
+                "EnhancedInput"
             }
         );
     }

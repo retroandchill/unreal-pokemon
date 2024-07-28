@@ -37,6 +37,7 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
 
   public:
     explicit UItemSelectionWindow(const FObjectInitializer &ObjectInitializer);
+    
     /**
      * Set the bag and starting pocket to view.
      * @param Bag The bag in question to open.

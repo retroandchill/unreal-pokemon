@@ -29,7 +29,14 @@ void URPGUIManagerSubsystem::OnScreenActivated(UScreen *Screen) {
     if (ActiveScreenCount == 0) {
         UE_LOG(LogRPGMenus, Display, TEXT("Adding menu input mapping context!"))
         auto Subsystem = Screen->GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
-        Subsystem->AddMappingContext(MenuMappingContext, GetDefault<URPGMenusSettings>()->MenuMappingPriority);
+        
+#if WITH_EDITOR
+        if (Subsystem != nullptr) {
+#endif
+            Subsystem->AddMappingContext(MenuMappingContext, GetDefault<URPGMenusSettings>()->MenuMappingPriority);
+#if WITH_EDITOR
+        }
+#endif
     }
 
     ActiveScreenCount++;
@@ -42,6 +49,12 @@ void URPGUIManagerSubsystem::OnScreenDeactivated(UScreen *Screen) {
     if (ActiveScreenCount == 0) {
         UE_LOG(LogRPGMenus, Display, TEXT("Removing menu input mapping context!"))
         auto Subsystem = Screen->GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+#if WITH_EDITOR
+        if (Subsystem == nullptr) {
+            return;
+        }
+#endif
+        
         Subsystem->RemoveMappingContext(MenuMappingContext);
     }
 }

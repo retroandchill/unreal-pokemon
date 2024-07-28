@@ -227,7 +227,7 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
     UE_ASSERT_EQUAL(6, StatValues.Num());
 
     TArray<FString> Values = {
-        TEXT("HP"), TEXT("<Boosted>Atk</>"), TEXT("Def"), TEXT("<Decreased>SpAtk</>"), TEXT("SpDef"), TEXT("Spd")};
+        TEXT("HP"), TEXT("Atk"), TEXT("Def"), TEXT("SpAtk"), TEXT("SpDef"), TEXT("Spd")};
     for (int i = 0; i < Values.Num(); i++) {
         FIND_CHILD_WIDGET(StatValues[i], UDisplayText, StatLabel);
         UE_ASSERT_NOT_NULL(StatLabel);

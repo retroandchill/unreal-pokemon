@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/PokemonSummaryScreen.h"
+#include "CommonButtonBase.h"
 #include "Components/Image.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Components/Summary/SummaryNameInfo.h"
@@ -32,6 +33,7 @@ void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &
 void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex) {
     PokemonSelection->SetPokemonToDisplay(Party);
     PokemonSelection->SetIndex(InitialIndex);
+    PokemonSelection->GetSelectedOption()->SetIsSelected(true);
     PokemonSelection->ActivateWidget();
 }
 
