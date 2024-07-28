@@ -4,6 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "CommonRichTextBlock.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+
 #include "DialogueTextBlock.generated.h"
 
 class FRichTextLayoutMarshaller;
@@ -25,7 +32,10 @@ public:
     }
 
 protected:
-    virtual TSharedRef<SWidget> RebuildWidget() override;
+    TSharedRef<SWidget> RebuildWidget() override;
+
+    virtual TSharedRef<FRichTextLayoutMarshaller> CreateMarshaller(const TArray<TSharedRef<ITextDecorator>>& CreatedDecorators);
+    virtual TSharedRef<FSlateTextLayout> CreateLayout(SWidget* InOwner, const FTextBlockStyle& InDefaultTextStyle);
 
 private:
     TSharedPtr<FSlateTextLayout> TextLayout;

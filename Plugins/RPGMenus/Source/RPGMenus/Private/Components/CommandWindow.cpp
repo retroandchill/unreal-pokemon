@@ -19,11 +19,6 @@ void UCommandWindow::NativePreConstruct() {
     AddCommands();
 }
 
-void UCommandWindow::SetCommands(const TArray<TObjectPtr<UCommand>> &NewCommands) {
-    Commands = NewCommands;
-    AddCommands();
-}
-
 void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands) {
     Commands = MoveTemp(NewCommands);
     AddCommands();
@@ -55,8 +50,7 @@ void UCommandWindow::AddCommands() {
 
         auto TextWidget = WidgetTree->ConstructWidget<UDisplayTextOption>(DisplayTextWidgetClass);
         TextWidget->SetText(Command->GetText());
-
-        int32 CurrentIndex = ActiveCommands.Num();
+        
         SlotOption(TextWidget);
         ActiveCommands.Add(Command);
     }

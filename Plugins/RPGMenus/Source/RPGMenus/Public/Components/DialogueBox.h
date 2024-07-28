@@ -64,6 +64,7 @@ private:
 
     void CalculateWrappedString();
     FString CalculateSegments();
+    void ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment);
 
     UPROPERTY(BlueprintGetter = GetLineText, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UDialogueTextBlock> LineText;

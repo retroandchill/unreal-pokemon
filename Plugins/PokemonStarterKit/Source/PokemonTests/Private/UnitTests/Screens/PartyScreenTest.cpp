@@ -10,9 +10,6 @@
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/PokemonTestUtilities.h"
-#include "Components/CommandWindow.h"
-#include "Components/HelpWindow.h"
-#include "Components/NamedSlotSelectableWidget.h"
 #include "Components/Party/PokemonSelectionPane.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Unit Tests.Screens.PartyScreenTest",

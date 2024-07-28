@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/PokemonSelectScreen.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Components/HelpWindow.h"
 #include "Components/Party/PokemonSelectionPane.h"
 
 void UPokemonSelectScreen::NativeConstruct() {

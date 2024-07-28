@@ -21,9 +21,6 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
-  protected:
-    void NativeConstruct() override;
-
   public:
     /**
      * Set the battle that this screen holds

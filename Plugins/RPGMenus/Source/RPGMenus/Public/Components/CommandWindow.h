@@ -41,12 +41,6 @@ class RPGMENUS_API UCommandWindow : public USelectableWidget {
   public:
     /**
      * Set the commands to the given values
-     * @param NewCommands The commands to copy into the list of commands
-     */
-    void SetCommands(const TArray<TObjectPtr<UCommand>> &NewCommands);
-
-    /**
-     * Set the commands to the given values
      * @param NewCommands The commands to move into the list of commands
      */
     void SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands);

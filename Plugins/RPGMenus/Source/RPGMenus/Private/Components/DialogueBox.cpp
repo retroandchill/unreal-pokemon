@@ -8,7 +8,7 @@
 #include "Framework/Text/SlateTextLayout.h"
 
 void UDialogueBox::PlayLine(const FText &InLine) {
-    check(GetWorld() != nullptr);
+    check(GetWorld() != nullptr)
 
     FTimerManager& TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
@@ -128,14 +128,12 @@ void UDialogueBox::CalculateWrappedString() {
     const FGeometry& TextBoxGeometry = LineText->GetCachedGeometry();
     const FVector2D TextBoxSize = TextBoxGeometry.GetLocalSize();
 
-    Layout->SetWrappingWidth(TextBoxSize.X);
+    Layout->SetWrappingWidth(static_cast<float>(TextBoxSize.X));
     Marshaller->SetText(CurrentLine.ToString(), *Layout.Get());
     Layout->UpdateIfNeeded();
 
     bool bHasWrittenText = false;
     for (const FTextLayout::FLineView& View : Layout->GetLineViews()) {
-        const FTextLayout::FLineModel& Model = Layout->GetLineModels()[View.ModelIndex];
-
         for (TSharedRef<ILayoutBlock> Block : View.Blocks) {
             TSharedRef<IRun> Run = Block->GetRun();
 
@@ -177,22 +175,7 @@ FString UDialogueBox::CalculateSegments() {
     int32 Idx = CachedLetterIndex;
     while (Idx <= CurrentLetterIndex && CurrentSegmentIndex < Segments.Num()) {
         const FDialogueTextSegment& Segment = Segments[CurrentSegmentIndex];
-        if (!Segment.RunInfo.Name.IsEmpty()) {
-            Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
-
-            if (!Segment.RunInfo.MetaData.IsEmpty()) {
-                for (const TTuple<FString, FString>& MetaData : Segment.RunInfo.MetaData) {
-                    Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
-                }
-            }
-
-            if (Segment.Text.IsEmpty()) {
-                Result += TEXT("/>");
-                ++Idx; // This still takes up an index for the typewriter effect.
-            } else {
-                Result += TEXT(">");
-            }
-        }
+        ProcessSegmentTags(Result, Idx, Segment);
 
         bool bIsSegmentComplete = true;
         if (!Segment.Text.IsEmpty()) {
@@ -218,4 +201,23 @@ FString UDialogueBox::CalculateSegments() {
     }
 
     return Result;
+}
+
+void UDialogueBox::ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment) {
+    if (!Segment.RunInfo.Name.IsEmpty()) {
+        Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
+
+        if (!Segment.RunInfo.MetaData.IsEmpty()) {
+            for (const TTuple<FString, FString>& MetaData : Segment.RunInfo.MetaData) {
+                Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
+            }
+        }
+
+        if (Segment.Text.IsEmpty()) {
+            Result += TEXT("/>");
+            ++Idx; // This still takes up an index for the typewriter effect.
+        } else {
+            Result += TEXT(">");
+        }
+    }
 }

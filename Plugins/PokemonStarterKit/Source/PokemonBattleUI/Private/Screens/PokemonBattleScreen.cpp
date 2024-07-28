@@ -11,13 +11,6 @@
 #include "Components/PokemonActionOptions.h"
 #include <functional>
 
-void UPokemonBattleScreen::NativeConstruct() {
-    Super::NativeConstruct();
-    //ActionSelect->GetOnConfirm().AddUniqueDynamic(this, &UPokemonBattleScreen::OnActionSelected);
-    //MoveSelect->GetOnMoveSelected().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveSelected);
-    //MoveSelect->GetOnCancel().AddUniqueDynamic(this, &UPokemonBattleScreen::OnMoveCanceled);
-}
-
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     CurrentBattle = Battle;
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);

@@ -11,8 +11,7 @@ TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget() {
 
     TArray<TSharedRef<ITextDecorator>> CreatedDecorators;
     CreateDecorators(CreatedDecorators);
-
-    TextMarshaller = FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), CreatedDecorators, StyleInstance.Get());
+    TextMarshaller = CreateMarshaller(CreatedDecorators);
 
     MyRichTextBlock =
         SNew(SRichTextBlock)
@@ -20,9 +19,17 @@ TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget() {
         .Marshaller(TextMarshaller)
         .CreateSlateTextLayout(
             FCreateSlateTextLayout::CreateWeakLambda(this, [this] (SWidget* InOwner, const FTextBlockStyle& InDefaultTextStyle) mutable {
-                TextLayout = FSlateTextLayout::Create(InOwner, InDefaultTextStyle);
+                TextLayout = CreateLayout(InOwner, InDefaultTextStyle);
                 return StaticCastSharedPtr<FSlateTextLayout>(TextLayout).ToSharedRef();
             }));
 
     return MyRichTextBlock.ToSharedRef();
+}
+
+TSharedRef<FRichTextLayoutMarshaller> UDialogueTextBlock::CreateMarshaller(const TArray<TSharedRef<ITextDecorator>>& CreatedDecorators) {
+    return FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), CreatedDecorators, StyleInstance.Get());
+}
+
+TSharedRef<FSlateTextLayout> UDialogueTextBlock::CreateLayout(SWidget* InOwner, const FTextBlockStyle& InDefaultTextStyle) {
+    return FSlateTextLayout::Create(InOwner, InDefaultTextStyle);
 }
