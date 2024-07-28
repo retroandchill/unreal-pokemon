@@ -46,7 +46,7 @@ UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
 }
 
 void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler) {
-    ActionSelect->ActivateWidget();
+    ActionSelect->DeactivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Hidden);
     MoveSelect->SetBattler(Battler);
     MoveSelect->SetVisibility(ESlateVisibility::Visible);

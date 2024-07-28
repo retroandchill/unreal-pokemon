@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "RPGMenus.h"
 
-constexpr auto GLoctextNamespace = "FRPGMenusModule";
+DEFINE_LOG_CATEGORY(LogRPGMenus)
 
 void FRPGMenusModule::StartupModule() {
     // No special startup code needed

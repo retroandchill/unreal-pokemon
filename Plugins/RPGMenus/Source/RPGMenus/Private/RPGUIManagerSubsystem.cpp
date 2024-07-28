@@ -4,6 +4,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "PrimaryGameLayout.h"
+#include "RPGMenus.h"
 #include "Data/RPGMenusSettings.h"
 #include "Screens/Screen.h"
 
@@ -26,6 +27,7 @@ UScreen *URPGUIManagerSubsystem::GetTopScreenOfOverlay() const {
 
 void URPGUIManagerSubsystem::OnScreenActivated(UScreen *Screen) {
     if (ActiveScreenCount == 0) {
+        UE_LOG(LogRPGMenus, Display, TEXT("Adding menu input mapping context!"))
         auto Subsystem = Screen->GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
         Subsystem->AddMappingContext(MenuMappingContext, GetDefault<URPGMenusSettings>()->MenuMappingPriority);
     }
@@ -38,6 +40,7 @@ void URPGUIManagerSubsystem::OnScreenDeactivated(UScreen *Screen) {
     ActiveScreenCount--;
 
     if (ActiveScreenCount == 0) {
+        UE_LOG(LogRPGMenus, Display, TEXT("Removing menu input mapping context!"))
         auto Subsystem = Screen->GetOwningLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
         Subsystem->RemoveMappingContext(MenuMappingContext);
     }
