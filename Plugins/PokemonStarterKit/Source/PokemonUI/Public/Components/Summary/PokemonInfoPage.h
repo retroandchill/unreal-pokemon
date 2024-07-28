@@ -86,6 +86,31 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
     TObjectPtr<UProgressBar> ExpBar;
 
     /**
+     * The widget used to display the item's name
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UDisplayText> ItemNameText;
+
+    /**
+     * The image used to display the item's icon
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UImage> ItemIcon;
+    
+
+    /**
+     * The widget used to display the item's description
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UDisplayText> ItemDescriptionText;
+
+    /**
+     * The image used to if a Pokémon is shiny or not
+     */
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UImage> ShinyIcon;
+
+    /**
      * The length of the Pokémon's Pokédex number
      */
     UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
@@ -96,4 +121,10 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
      */
     UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
     int32 IdNumberLength = 6;
+
+    /**
+     * The text displayed if the Pokémon is holding no item
+     */
+    UPROPERTY(EditAnywhere, Category = Display)
+    FText NoItemText = NSLOCTEXT("UPokemonInfoPage", "NoItemText", "None");
 };

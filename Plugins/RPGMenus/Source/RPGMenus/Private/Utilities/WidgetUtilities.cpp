@@ -1,8 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Utilities/WidgetUtilities.h"
+#include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Engine/UserInterfaceSettings.h"
 #include "PaperSprite.h"
+#include "Components/RichTextBlock.h"
 
 float UWidgetUtilities::GetWidgetDPIScale() {
     static constexpr float SlateDPI = 96.f;
@@ -53,4 +55,16 @@ void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bo
     } else if (Asset->Implements<USlateTextureAtlasInterface>()) {
         ImageWidget->SetBrushFromAtlasInterface(Asset, MatchSize);
     }
+}
+
+void UWidgetUtilities::SetTextStyleOverride(URichTextBlock *TextBlock, TSubclassOf<UCommonTextStyle> Style) {
+    if (Style == nullptr) {
+        TextBlock->ClearAllDefaultStyleOverrides();
+        return;
+    }
+    
+    auto DefaultObject = Style.GetDefaultObject();
+    FTextBlockStyle DefaultStyle;
+    DefaultObject->ToTextBlockStyle(DefaultStyle);
+    TextBlock->SetDefaultTextStyle(DefaultStyle);    
 }

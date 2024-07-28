@@ -25,7 +25,6 @@ void UPokemonSummaryScreen::NativeConstruct() {
     SummaryPages->GetOnSelected().AddUObject(this, &UPokemonSummaryScreen::SummaryPageConfirm);
     SummaryPages->GetOnScreenBackOut().AddUObject(this, &UPokemonSummaryScreen::CloseScreen);
     SummaryPages->ActivateWidget();
-    SummaryPages->SetPage(0);
 }
 
 void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex) {
@@ -42,7 +41,6 @@ USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const {
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
     NameInfo->Refresh(Pokemon);
-    ItemInfo->Refresh(Pokemon);
     SummaryPages->Refresh(Pokemon);
 
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
