@@ -43,4 +43,19 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     ExpTotalText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExp())));
     NextLevelUpCountText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExpForNextLevel())));
     ExpBar->SetPercent(StatBlock->GetExpPercent());
+
+    using enum ESlateVisibility;
+    if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem != nullptr) {
+        ItemNameText->SetText(HoldItem->RealName);
+        ItemDescriptionText->SetText(HoldItem->Description);
+        auto Item = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>()->GetItemIcon(HoldItem->ID);
+        UWidgetUtilities::SetBrushFromAsset(ItemIcon, Item, true);
+        ItemIcon->SetVisibility(SelfHitTestInvisible);
+    } else {
+        ItemNameText->SetText(NoItemText);
+        ItemIcon->SetVisibility(Hidden);
+        ItemDescriptionText->SetText(FText::GetEmpty());
+    }
+
+    ShinyIcon->SetVisibility(Pokemon->IsShiny() ? SelfHitTestInvisible : Hidden);
 }

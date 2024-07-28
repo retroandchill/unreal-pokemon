@@ -44,6 +44,9 @@ class POKEMONUI_API UItemOption : public UCommonButtonBase {
   protected:
     void NativeOnCurrentTextStyleChanged() override;
 
+    UFUNCTION(BlueprintImplementableEvent, Category = Display)
+    void OnItemSet(FName Item, int32 Quantity);
+
   private:
     /**
      * Represents the current item held by this option

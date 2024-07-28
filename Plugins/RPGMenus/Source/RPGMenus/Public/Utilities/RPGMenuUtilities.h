@@ -23,8 +23,20 @@ class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
      * @param ScreenType The screen class to spawn
      * @return The created screen.
      */
-    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
+    UFUNCTION(BlueprintCallable, Category = Screens,
+              meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = ScreenType))
     static UScreen *PushScreenToStack(const UObject *WorldContextObject, TSubclassOf<UScreen> ScreenType);
+
+    /**
+     * Helper function used to create a screen on the stack from Blueprints
+     * @param WorldContextObject The world context object needed to get the subsystem
+     * @param ScreenType The screen class to spawn
+     * @return The created screen.
+     */
+    UFUNCTION(BlueprintCallable, Category = Screens,
+              meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = ScreenType))
+    static UScreen *LoadAndPushScreenToStack(const UObject *WorldContextObject,
+                                             const TSoftClassPtr<UScreen> &ScreenType);
 
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
     static UScreen *RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag);

@@ -2,8 +2,8 @@
 
 #include "RPGMenusTestUtilities.h"
 #include "CommonButtonBase.h"
+#include "Components/MessageWindow.h"
 #include "Input/UIActionBinding.h"
-#include "Windows/MessageWindow.h"
 
 void URPGMenusTestUtilities::SelectCurrentOption(USelectableWidget *SelectableWidget) {
     SelectableWidget->GetSelectedOption()->OnClicked().Broadcast();

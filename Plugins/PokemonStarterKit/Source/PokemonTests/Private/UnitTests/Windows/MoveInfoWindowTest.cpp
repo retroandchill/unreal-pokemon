@@ -1,12 +1,12 @@
 ﻿
 #include "Asserts.h"
+#include "Components/Common/MoveInfoWindow.h"
 #include "Components/DisplayText.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Moves/DefaultMove.h"
 #include "Utilities/RAII.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
-#include "Windows/MoveInfoWindow.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(MoveInfoWindowTest, "Unit Tests.Windows.MoveInfoWindowTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Battlers/Battler.h"
+#include "Species/SpeciesData.h"
 #include <gmock/gmock.h>
 
 class FMockBattler : public IBattler {

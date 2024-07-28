@@ -2,7 +2,6 @@
 #include "Asserts.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
-#include "Components/Summary/HoldItemInfo.h"
 #include "Components/Summary/PokemonInfoPage.h"
 #include "Components/Summary/PokemonMovesPage.h"
 #include "Components/Summary/PokemonSkillsPage.h"
@@ -78,48 +77,6 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_HoldItemInfo,
-                                 "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.HoldItemInfo",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-bool PokemonSummaryPagesTest_HoldItemInfo::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UHoldItemInfo>();
-    UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
-    auto WidgetClass = Subclasses[0];
-
-    auto Page = CreateWidget<UHoldItemInfo>(World.Get(), WidgetClass);
-    Page->AddToViewport();
-
-    auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Shiny = true, .Item = FName("MYSTICWATER")}, ForeignTrainer);
-
-    Page->Refresh(Pokemon1);
-
-    FIND_CHILD_WIDGET(Page, UDisplayText, ItemNameText);
-    UE_ASSERT_NOT_NULL(ItemNameText);
-    UE_CHECK_EQUAL(TEXT("Mystic Water"), ItemNameText->GetText().ToString());
-
-    FIND_CHILD_WIDGET(Page, UImage, ItemIcon);
-    UE_ASSERT_NOT_NULL(ItemIcon);
-    UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ItemIcon->GetVisibility());
-
-    FIND_CHILD_WIDGET(Page, UImage, ShinyIcon);
-    UE_ASSERT_NOT_NULL(ShinyIcon);
-    UE_CHECK_EQUAL(ESlateVisibility::SelfHitTestInvisible, ShinyIcon->GetVisibility());
-
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = "OMASTAR", .Shiny = false}, ForeignTrainer);
-    Page->Refresh(Pokemon2);
-
-    UE_CHECK_EQUAL(TEXT("None"), ItemNameText->GetText().ToString());
-    UE_CHECK_EQUAL(ESlateVisibility::Hidden, ItemIcon->GetVisibility());
-    UE_CHECK_EQUAL(ESlateVisibility::Hidden, ShinyIcon->GetVisibility());
-
-    return true;
-}
-
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_PokemonInfo,
                                  "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.PokemonInfo",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
@@ -150,8 +107,6 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(Page, UDisplayText, PokemonIDText);
     UE_ASSERT_NOT_NULL(PokemonIDText);
     UE_CHECK_EQUAL(ForeignTrainer->GetIdNumber(), FCString::Atoi(*PokemonIDText->GetText().ToString()));
-
-    UE_CHECK_FALSE(Page->CanSelectOnPage());
 
     return true;
 }
@@ -225,8 +180,6 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(TEXT("Egg hatched."), Lines[6]);           // Egg Hatched
     UE_CHECK_EQUAL(TEXT("Likes to thrash about."), Lines[7]); // Characteristic
 
-    UE_CHECK_FALSE(Page->CanSelectOnPage());
-
     return true;
 }
 
@@ -269,16 +222,13 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
     auto &StatValues = UReflectionUtils::GetPropertyValue<TArray<TObjectPtr<UPokemonStatRow>>>(Page, TEXT("StatRows"));
     UE_ASSERT_EQUAL(6, StatValues.Num());
 
-    TArray<FString> Values = {
-        TEXT("HP"), TEXT("<Boosted>Atk</>"), TEXT("Def"), TEXT("<Decreased>SpAtk</>"), TEXT("SpDef"), TEXT("Spd")};
+    TArray<FString> Values = {TEXT("HP"), TEXT("Atk"), TEXT("Def"), TEXT("SpAtk"), TEXT("SpDef"), TEXT("Spd")};
     for (int i = 0; i < Values.Num(); i++) {
         FIND_CHILD_WIDGET(StatValues[i], UDisplayText, StatLabel);
         UE_ASSERT_NOT_NULL(StatLabel);
 
         UE_CHECK_EQUAL(Values[i], StatLabel->GetText().ToString());
     }
-
-    UE_CHECK_FALSE(Page->CanSelectOnPage());
 
     return true;
 }
@@ -300,8 +250,6 @@ bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Level = 40}, ForeignTrainer);
     Page->RefreshInfo(Pokemon1);
-
-    UE_CHECK_TRUE(Page->CanSelectOnPage());
 
     return true;
 }

@@ -30,6 +30,7 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
      * Get the Pokémon that this panel displays the information for
      * @return The Pokémon that this panel displays the information for
      */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
     const TScriptInterface<IPokemon> &GetPokemon() const;
 
     /**
@@ -37,7 +38,7 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
      * @param NewPokemon The Pokémon to set this panel to
      * @param Index The index of this particular panel
      */
-    void SetPokemon(TScriptInterface<IPokemon> NewPokemon, int32 Index);
+    void SetPokemon(const TScriptInterface<IPokemon> &NewPokemon, int32 Index);
 
     /**
      * Swap held Pokémon with another panel
@@ -90,73 +91,18 @@ class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectable
     UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Visuals")
     void RefreshVisuals();
 
-    UFUNCTION(BlueprintImplementableEvent, Category = "User Interface|Visuals")
-    UObject *GetHeldItemGraphic(const FItem &Item);
-
   private:
-    /**
-     * Refresh all the information related to the Pokémon
-     */
-    void RefreshPokemonInfo();
-
     /**
      * The panel class that owns this one
      */
+    UPROPERTY()
     TObjectPtr<USelectableWidget> Owner;
 
     /**
      * The Pokémon reference that is currently being held onto
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintGetter = GetPokemon, Category = Content)
     TScriptInterface<IPokemon> Pokemon;
 
     int32 PokemonIndex;
-
-    /**
-     * The image that displays the icon of the Pokémon to the player
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> PokemonIcon;
-
-    /**
-     * The image asset that forms the held item icon
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> HeldItemIcon;
-
-    /**
-     * The text that displays the name for the Pokémon
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> NameText;
-
-    /**
-     * The text block that displays the level for the Pokémon
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> LevelText;
-
-    /**
-     * The text block that displays the gender symbol for the Pokémon
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> GenderText;
-
-    /**
-     * The color settings for the gender text widget
-     */
-    UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
-
-    /**
-     * The text block that displays the current and total HP of the Pokémon
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> HPText;
-
-    /**
-     * The image that displays the HP bar when necessary
-     */
-    UPROPERTY(DisplayName = "HP Bar", meta = (BindWidget))
-    TObjectPtr<UProgressBar> HPBar;
 };

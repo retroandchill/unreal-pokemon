@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "CommonUserWidget.h"
 
 #include "SummaryScreenPage.generated.h"
 
+class UCommonButtonStyle;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPageSelected);
 
 class IPokemon;
@@ -15,7 +17,7 @@ class IPokemon;
  * Abstract declaration of a page on the summary screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryScreenPage : public UUserWidget {
+class POKEMONUI_API USummaryScreenPage : public UCommonUserWidget {
     GENERATED_BODY()
 
   public:
@@ -26,18 +28,10 @@ class POKEMONUI_API USummaryScreenPage : public UUserWidget {
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Summary)
     void RefreshInfo(const TScriptInterface<IPokemon> &Pokemon);
 
-    /**
-     * Can the player select this page to view something else?
-     * @return Can this page be selected.
-     */
-    UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = Selection)
-    bool CanSelectOnPage() const;
+    virtual void OnPageShown();
+    virtual void OnPageHidden();
 
-    /**
-     * Get the page selected delegate.
-     * @return The delegate for when a page is selected
-     */
-    FPageSelected &GetPageSelected();
+    TSubclassOf<UCommonButtonStyle> GetTabButtonStyle() const;
 
   private:
     /**
@@ -45,4 +39,10 @@ class POKEMONUI_API USummaryScreenPage : public UUserWidget {
      */
     UPROPERTY(BlueprintAssignable)
     FPageSelected PageSelected;
+
+    /**
+     * The style applied to the button in the tab widget in the screen
+     */
+    UPROPERTY(EditAnywhere, Category = Selection)
+    TSubclassOf<UCommonButtonStyle> TabButtonStyle;
 };

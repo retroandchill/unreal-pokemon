@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SelectableWidget.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Windows/SelectableWidget.h"
 
 #include "RPGMenusTestUtilities.generated.h"
 

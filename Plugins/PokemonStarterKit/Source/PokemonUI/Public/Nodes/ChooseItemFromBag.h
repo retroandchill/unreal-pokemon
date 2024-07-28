@@ -18,7 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnItemCancel);
 /**
  * Choose and item from the bag and process the item accordingly
  */
-UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
+UCLASS(meta = (HideThen))
 class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
@@ -32,8 +32,7 @@ class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, TSubclassOf<UBagScreen> ScreenClass,
-                                                 const FItemFilter &ItemFilter);
+    static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, const FItemFilter &ItemFilter);
 
     void Activate() override;
 
@@ -70,12 +69,6 @@ class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
      */
     UPROPERTY()
     TObjectPtr<const UObject> WorldContextObject;
-
-    /**
-     * The class used to display the message to the screen
-     */
-    UPROPERTY()
-    TSubclassOf<UBagScreen> ScreenClass;
 
     /**
      * The filter used for the item list
