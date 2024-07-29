@@ -106,7 +106,27 @@ void APokemonBattle::Tick(float DeltaSeconds) {
 
 void APokemonBattle::StartBattle() {
     CreateBattleHUD();
+    
     StartTurn();
+}
+
+void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
+    auto Sorted = Battlers
+        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return !Battler->IsFainted(); })  
+        | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+    Sorted.Sort([](const TScriptInterface<IBattler>& A, const TScriptInterface<IBattler>& B) {
+        int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
+        int32 SpeedB = FMath::FloorToInt32(B->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
+        if (SpeedA == SpeedB) {
+            return FMath::RandBool();
+        }
+
+        return SpeedA > SpeedB;
+    });
+
+    for (auto &Battler : Sorted) {
+        Battler->RecordParticipation();
+    }
 }
 
 void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {

@@ -85,6 +85,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
 
     void ShowSprite() const override;
+    void RecordParticipation() override;
 
     const TOptional<FStatusEffectInfo> &GetStatusEffect() const override;
     void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
@@ -103,6 +104,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     void SpawnSpriteActor(bool ShouldShow = false);
 
+private:
     /**
      * The ability component for the battler
      */
@@ -119,6 +121,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IBattleSide> OwningSide;
+
+    UPROPERTY()
+    TArray<TScriptInterface<IBattler>> Participants;
 
     /**
      * The actual class used for the battler's sprite.

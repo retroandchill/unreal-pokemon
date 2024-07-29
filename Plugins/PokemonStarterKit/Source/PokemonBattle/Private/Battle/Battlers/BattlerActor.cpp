@@ -29,6 +29,8 @@
 #include "Species/PokemonStatType.h"
 #include "Species/Stat.h"
 #include <functional>
+#include <range/v3/algorithm/for_each.hpp>
+#include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
@@ -214,6 +216,15 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);
+}
+
+void ABattlerActor::RecordParticipation() {
+    auto NewParticipants = OwningSide->GetOwningBattle()->GetSides()
+        | ranges::views::filter([this](const TScriptInterface<IBattleSide>& Side) { return Side != OwningSide; } )
+        | ranges::views::transform([](const TScriptInterface<IBattleSide>& Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); })
+        | ranges::views::join
+        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return !Battler->IsFainted(); });
+    ranges::for_each(NewParticipants, [this](const TScriptInterface<IBattler>& Battler) { Participants.AddUnique(Battler); });
 }
 
 const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {

@@ -32,6 +32,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
     MOCK_METHOD(void, ShowSprite, (), (const, override));
+    MOCK_METHOD(void, RecordParticipation, (), (override));
     MOCK_METHOD(const TOptional<FStatusEffectInfo> &, GetStatusEffect, (), (const, override));
     MOCK_METHOD2(InflictStatusEffect, void(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
     MOCK_METHOD(void, CureStatusEffect, (), (override));

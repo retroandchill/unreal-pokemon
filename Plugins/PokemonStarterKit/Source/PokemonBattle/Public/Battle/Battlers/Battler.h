@@ -190,6 +190,8 @@ class POKEMONBATTLE_API IBattler {
      */
     virtual void ShowSprite() const = 0;
 
+    virtual void RecordParticipation() = 0;
+
     /**
      * Get the status effect held by this battler
      * @return The status effect held by the battler
