@@ -9,17 +9,17 @@ namespace Pokemon::UI {
 /**
  * Callback delegate for updating the progress bar
  */
-DECLARE_MULTICAST_DELEGATE_OneParam(FSetNewPercent, float)
+DECLARE_MULTICAST_DELEGATE_OneParam(FSetNewPercent, float);
 
-    /**
-     * Called when an animation is complete
-     */
-    DECLARE_MULTICAST_DELEGATE(FOnAnimationComplete)
+/**
+ * Called when an animation is complete
+ */
+DECLARE_MULTICAST_DELEGATE(FOnAnimationComplete);
 
-    /**
-     * Struct that contains all the information needed to update a progress bar
-     */
-    struct POKEMONUI_API FBarAnimationData {
+/**
+ * Struct that contains all the information needed to update a progress bar
+ */
+struct POKEMONUI_API FBarAnimationData {
 
     /**
      * The starting percentage for the animation
@@ -53,14 +53,15 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FSetNewPercent, float)
      * @param AnimationDuration The duration of the animation
      * @param bWrapAround Should the animation wrap around when the percentage gets to 1?
      */
-    FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration, bool bWrapAround = false);
+    FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration,
+                      bool bWrapAround = false);
 };
 
 /**
  * Animation component for draining a progress bar
  */
 class POKEMONUI_API FProgressBarAnimation : public FTickableGameObject {
-  public:
+public:
     /**
      * Play an animation from start to finish with the following parameters
      * @param StartPercent The starting percentage of the progress bar
@@ -76,6 +77,13 @@ class POKEMONUI_API FProgressBarAnimation : public FTickableGameObject {
      */
     void BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding);
 
+
+    /**
+     * Bind an action to the wrap around callback for this component
+     * @param Binding The binding for the wrap around action
+     */
+    void BindActionToWrapAroundAnimation(FOnAnimationComplete::FDelegate &&Binding);
+
     /**
      * Bind an action to the complete callback for this component
      * @param Binding The binding for the complete action
@@ -85,11 +93,16 @@ class POKEMONUI_API FProgressBarAnimation : public FTickableGameObject {
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;
 
-  private:
+private:
     /**
      * Delegate for updating the percent of the progress bar
      */
     FSetNewPercent SetNewPercent;
+
+    /**
+     * Delegate for signalling that the progress bar has wrapped around
+     */
+    FOnAnimationComplete OnBarWrapAround;
 
     /**
      * Delegate for signalling that the animation is complete
