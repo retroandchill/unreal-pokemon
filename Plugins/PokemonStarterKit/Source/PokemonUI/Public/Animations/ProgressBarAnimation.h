@@ -42,12 +42,18 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FSetNewPercent, float)
     float CurrentTime = 0.f;
 
     /**
+     * Should the animation wrap around when the percentage gets to 1?
+     */
+    bool bWrapAround = false;
+
+    /**
      * Construct a new animation
      * @param StartingPercentage The starting percentage for the animation
      * @param EndingPercentage The ending percentage of the animation
      * @param AnimationDuration The duration of the animation
+     * @param bWrapAround Should the animation wrap around when the percentage gets to 1?
      */
-    FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration);
+    FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration, bool bWrapAround = false);
 };
 
 /**
@@ -60,8 +66,9 @@ class POKEMONUI_API FProgressBarAnimation : public FTickableGameObject {
      * @param StartPercent The starting percentage of the progress bar
      * @param EndPercent The ending percentage of the progress bar
      * @param Duration How long it should take to get there
+     * @param bShouldWrap
      */
-    void PlayAnimation(float StartPercent, float EndPercent, float Duration);
+    void PlayAnimation(float StartPercent, float EndPercent, float Duration, bool bShouldWrap = false);
 
     /**
      * Bind an action to the update callback for this component
