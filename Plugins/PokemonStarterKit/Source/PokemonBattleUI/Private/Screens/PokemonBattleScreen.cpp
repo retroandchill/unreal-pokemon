@@ -8,8 +8,14 @@
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMoveSelect.h"
+#include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
 #include <functional>
+
+void UPokemonBattleScreen::NativeConstruct() {
+    Super::NativeConstruct();
+    SwapToPanelDisplay();
+}
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     CurrentBattle = Battle;
@@ -21,6 +27,8 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
         AddPanelsForSide(Index, Side);
         Index++;
     });
+
+    ExpGainPane->SetBattle(CurrentBattle);
 }
 
 void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler) {

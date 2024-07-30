@@ -46,6 +46,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattleSide> &GetOwningSide() const override;
 
+    UFUNCTION(BlueprintPure, Category = Context)
+    const TScriptInterface<IPokemon>& GetWrappedPokemon() const override;
+    
     const FSpeciesData &GetSpecies() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
@@ -69,7 +72,15 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void Faint() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
+    bool CanGainExp() const override;
+
+    UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    TArray<FExpGainInfo> GiveExpToParticipants() override;
+
+    void GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs, const FLevelUpEnd& OnEnd) override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;

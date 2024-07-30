@@ -46,6 +46,7 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
     void SendOutBattlers() const override;
 
     const TArray<TScriptInterface<IBattler>> &GetBattlers() const override;
+    const TArray<TScriptInterface<ITrainer>> &GetTrainers() const override;
 
     bool CanBattle() const override;
 

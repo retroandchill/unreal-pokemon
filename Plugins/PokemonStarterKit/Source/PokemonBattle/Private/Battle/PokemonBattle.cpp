@@ -70,6 +70,11 @@ void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
 }
 
+bool APokemonBattle::IsTrainerBattle_Implementation() const {
+    check(Sides.IsValidIndex(OpponentSideIndex))
+    return !Sides[OpponentSideIndex]->GetTrainers().IsEmpty();
+}
+
 void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
     Phase = EBattlePhase::Setup;
     check(BattlePawn != nullptr && PlayerController != nullptr)
@@ -112,7 +117,7 @@ void APokemonBattle::StartBattle() {
 
 void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
     auto Sorted = Battlers
-        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return !Battler->IsFainted(); })  
+        | ranges::views::filter(&IsNotFainted)  
         | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
     Sorted.Sort([](const TScriptInterface<IBattler>& A, const TScriptInterface<IBattler>& B) {
         int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
@@ -160,6 +165,16 @@ const TQueue<TUniquePtr<IBattleAction>> &APokemonBattle::GetActionQueue() const 
 
 #endif
 
+const TScriptInterface<IBattleSide> & APokemonBattle::GetPlayerSide() const {
+    check(Sides.IsValidIndex(PlayerSideIndex))
+    return Sides[PlayerSideIndex];
+}
+
+const TScriptInterface<IBattleSide> & APokemonBattle::GetOpposingSide() const {
+    check(Sides.IsValidIndex(OpponentSideIndex))
+    return Sides[OpponentSideIndex];
+}
+
 ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
     return RangeHelpers::CreateRange(Sides);
 }
@@ -182,13 +197,13 @@ APawn *APokemonBattle::GetBattlePawn() const {
 }
 
 void APokemonBattle::DisplayBattleIntroMessage() {
-    check(Sides.IsValidIndex(1))
-    ProcessBattleIntroMessage(Sides[1]->GetIntroText());
+    check(Sides.IsValidIndex(OpponentSideIndex))
+    ProcessBattleIntroMessage(Sides[OpponentSideIndex]->GetIntroText());
 }
 
 void APokemonBattle::OpponentSendOut() {
-    check(Sides.IsValidIndex(1))
-    const auto &Side = Sides[1];
+    check(Sides.IsValidIndex(OpponentSideIndex))
+    const auto &Side = Sides[OpponentSideIndex];
     if (auto &SendOutText = Side->GetSendOutText(); SendOutText.IsSet()) {
         ProcessOpponentSendOutMessage(SendOutText.GetValue());
     } else {
@@ -197,14 +212,14 @@ void APokemonBattle::OpponentSendOut() {
 }
 
 void APokemonBattle::OpponentSendOutAnimation() {
-    check(Sides.IsValidIndex(1))
-    const auto &Side = Sides[1];
+    check(Sides.IsValidIndex(OpponentSideIndex))
+    const auto &Side = Sides[OpponentSideIndex];
     ProcessOpponentSendOutAnimation(Side);
 }
 
 void APokemonBattle::PlayerSendOut() {
-    check(Sides.IsValidIndex(0))
-    const auto &Side = Sides[0];
+    check(Sides.IsValidIndex(PlayerSideIndex))
+    const auto &Side = Sides[PlayerSideIndex];
     if (auto &SendOutText = Side->GetSendOutText(); SendOutText.IsSet()) {
         ProcessPlayerSendOutMessage(SendOutText.GetValue());
     } else {
@@ -213,8 +228,8 @@ void APokemonBattle::PlayerSendOut() {
 }
 
 void APokemonBattle::PlayerSendOutAnimation() {
-    check(Sides.IsValidIndex(0))
-    const auto &Side = Sides[0];
+    check(Sides.IsValidIndex(PlayerSideIndex))
+    const auto &Side = Sides[PlayerSideIndex];
     ProcessPlayerSendOutAnimation(Side);
 }
 

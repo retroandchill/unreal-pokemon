@@ -97,6 +97,8 @@ class POKEMONBATTLE_API IBattleSide {
      */
     virtual const TArray<TScriptInterface<IBattler>> &GetBattlers() const = 0;
 
+    virtual const TArray<TScriptInterface<ITrainer>> &GetTrainers() const = 0;
+
     /**
      * Determine if the side can still fight or not
      * @return Can this side fight

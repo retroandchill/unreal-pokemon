@@ -68,6 +68,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void BeginPlay() override;
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+    bool IsTrainerBattle_Implementation() const override;
     void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
 
     void Tick(float DeltaSeconds) override;
@@ -98,6 +99,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn *GetBattlePawn() const final;
 
+    const TScriptInterface<IBattleSide>& GetPlayerSide() const override;
+    const TScriptInterface<IBattleSide>& GetOpposingSide() const override;
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;

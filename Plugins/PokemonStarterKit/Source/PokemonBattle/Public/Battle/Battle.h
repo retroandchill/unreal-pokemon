@@ -62,6 +62,9 @@ class POKEMONBATTLE_API IBattle {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
+    static constexpr int32 PlayerSideIndex = 0;
+    static constexpr int32 OpponentSideIndex = 1;
+    
     virtual TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) = 0;
 
     /**
@@ -70,6 +73,9 @@ class POKEMONBATTLE_API IBattle {
      * @return A reference to this object
      */
     virtual TScriptInterface<IBattle> Initialize(const FBattleInfo &BattleInfo) = 0;
+
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|State")
+    bool IsTrainerBattle() const;
 
     /**
      * Have the player take possession of the battle pawn and begin the battle intro.
@@ -101,6 +107,9 @@ class POKEMONBATTLE_API IBattle {
      * @return The pawn used in battle
      */
     virtual APawn *GetBattlePawn() const = 0;
+
+    virtual const TScriptInterface<IBattleSide>& GetPlayerSide() const = 0;
+    virtual const TScriptInterface<IBattleSide>& GetOpposingSide() const = 0;
 
     /**
      * Get all sides in the current battle

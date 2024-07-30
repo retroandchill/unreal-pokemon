@@ -10,7 +10,7 @@
  *
  */
 class FMockBattleSide : public IBattleSide {
-  public:
+public:
     ~FMockBattleSide() override = default;
 
     MOCK_METHOD3(Initialize, TScriptInterface<IBattleSide>(const TScriptInterface<IBattle> &Battle,
@@ -27,5 +27,6 @@ class FMockBattleSide : public IBattleSide {
     MOCK_METHOD(bool, ShowBackSprites, (), (const, override));
     MOCK_METHOD(void, SendOutBattlers, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattler>> &, GetBattlers, (), (const, override));
+    MOCK_METHOD(const TArray<TScriptInterface<ITrainer>> &, GetTrainers, (), (const, override));
     MOCK_METHOD(bool, CanBattle, (), (const, override));
 };

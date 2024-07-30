@@ -125,6 +125,10 @@ const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
     return Battlers;
 }
 
+const TArray<TScriptInterface<ITrainer>> & AActiveSide::GetTrainers() const {
+    return Trainers;
+}
+
 bool AActiveSide::CanBattle() const {
     return Algo::AnyOf(Battlers, [](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
 }

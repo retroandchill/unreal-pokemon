@@ -8,6 +8,7 @@
 
 #include "PokemonBattleScreen.generated.h"
 
+class UExpGainPane;
 class IBattleMove;
 class UBattleMoveSelect;
 class UPokemonActionOptions;
@@ -21,7 +22,10 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
-  public:
+  protected:
+    void NativeConstruct() override;
+
+public:
     /**
      * Set the battle that this screen holds
      * @param Battle The battle in question
@@ -67,6 +71,12 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals", meta = (ForceAsFunctions))
     void SlotPanel(UPokemonBattlePanel *Panel, int32 Side);
+
+    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Battle|Visuals", meta = (ForceAsFunctions))
+    void SwapToPanelDisplay();
+
+    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Battle|Visuals", meta = (ForceAsFunctions))
+    void SwapToExpGainDisplay();
 
   private:
     /**
@@ -116,6 +126,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UBattleMoveSelect> MoveSelect;
+
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UExpGainPane> ExpGainPane;
 
     /**
      * The battle that this screen is showing the information for
