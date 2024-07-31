@@ -94,6 +94,8 @@ public:
     TStatId GetStatId() const override;
 
 private:
+    float PercentLastTick = 0.f;
+    
     /**
      * Delegate for updating the percent of the progress bar
      */

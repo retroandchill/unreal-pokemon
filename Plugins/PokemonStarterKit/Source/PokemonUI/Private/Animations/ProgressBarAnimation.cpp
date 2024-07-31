@@ -17,6 +17,7 @@ void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, 
     }
 
     AnimationData.Emplace(StartPercent, EndPercent, Duration, bShouldWrap);
+    PercentLastTick = StartPercent;
 }
 
 void FProgressBarAnimation::BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding) {
@@ -39,15 +40,15 @@ void FProgressBarAnimation::Tick(float DeltaTime) {
     auto &[StartingPercentage, EndPercentage, AnimationDuration, CurrentTime, bWrapAround] = AnimationData.GetValue();
     CurrentTime += DeltaTime;
     float NewPercent = FMath::Lerp(StartingPercentage, EndPercentage, CurrentTime / AnimationDuration);
-    if (bWrapAround) {
-        float OldValue = NewPercent;
+    if (bWrapAround && StartingPercentage < EndPercentage) {
         NewPercent = FMath::Fmod(NewPercent, 1.f);
-        if (!FMath::IsNearlyEqual(OldValue, NewPercent)) {
+        if (PercentLastTick > NewPercent) {
             OnBarWrapAround.Broadcast();
         }
     }
     
     SetNewPercent.Broadcast(NewPercent);
+    PercentLastTick = NewPercent;
     if (CurrentTime >= AnimationDuration) {
         AnimationData.Reset();
         OnAnimationComplete.Broadcast();

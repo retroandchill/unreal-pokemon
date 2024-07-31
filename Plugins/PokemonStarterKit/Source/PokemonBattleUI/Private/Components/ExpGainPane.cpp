@@ -32,7 +32,7 @@ void UExpGainPane::GainExp(TArray<FExpGainInfo>&& GainInfosIn) {
     for (int32 i = 0; i < Panels.Num(); i++) {
         auto &Panel = Panels[i];
         auto &GainInfo = GainInfos[i];
-        Panel->SetBattler(GainInfo.GainingBattler, GainInfo.StatChanges.ExpPercentChange.Before);
+        Panel->SetBattler(GainInfo.GainingBattler, GainInfo.StatChanges.LevelChange.Before, GainInfo.StatChanges.ExpPercentChange.Before);
         Panel->ChangeExpGainDisplay(GainInfo.Amount);
     }
 }

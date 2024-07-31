@@ -19,6 +19,6 @@ public:
     
 private:
     UPROPERTY()
-    FGameplayAttributeData ExpGainRate = 1.f;
+    FGameplayAttributeData ExpGainRate = 10.f;
 
 };

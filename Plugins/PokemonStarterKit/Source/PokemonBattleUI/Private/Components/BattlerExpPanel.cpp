@@ -24,9 +24,9 @@ void UBattlerExpPanel::NativeConstruct() {
         FUpdateComplete::CreateUObject(this, &UBattlerExpPanel::OnExpGainComplete));
 }
 
-void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler, const TOptional<float> &ExpGainPercent) {
+void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler, const TOptional<int32>& Level, const TOptional<float> &ExpGainPercent) {
     CurrentBattler = Battler;
-    DisplayedLevel = Battler->GetPokemonLevel();
+    DisplayedLevel = Level.Get(Battler->GetPokemonLevel());
     LevelText->SetText(FText::FromString(FString::FromInt(DisplayedLevel)));
     ExpBar->SetPercent(ExpGainPercent.Get(Battler->GetExpPercent()));
     ChangeExpGainDisplay(0);
