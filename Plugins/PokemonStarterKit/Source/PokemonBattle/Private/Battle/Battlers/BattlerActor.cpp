@@ -232,6 +232,12 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
     for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
+        if (Battler->IsFainted()) {
+            auto &GainInfo = GainInfos.Emplace_GetRef(Battler, 0);
+            GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, {});
+            continue;
+        }
+        
         int32 BattlerLevel = Battler->GetPokemonLevel();
         auto &ExpAttributes = *Battler->GetAbilityComponent()->GetExpAttributeSet();
         float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;

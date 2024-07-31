@@ -29,7 +29,7 @@ void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
     GainInfos = MoveTemp(GainInfosIn);
     check(Panels.Num() == GainInfos.Num())
     for (int32 i = 0; i < Panels.Num(); i++) {
-        auto &Panel = Panels[i];
+        const auto &Panel = Panels[i];
         auto &GainInfo = GainInfos[i];
         Panel->SetBattler(GainInfo.GainingBattler, GainInfo.StatChanges.LevelChange.Before,
                           GainInfo.StatChanges.ExpPercentChange.Before);
