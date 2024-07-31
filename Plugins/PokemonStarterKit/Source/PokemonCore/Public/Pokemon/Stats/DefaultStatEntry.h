@@ -33,7 +33,7 @@ class POKEMONCORE_API UDefaultStatEntry : public UObject, public IStatEntry {
     int32 GetEV() const override;
 
     UFUNCTION(BlueprintCallable, Category = Stats)
-    void SetEV(int32 Value) override;
+    void SetEV(int32 NewValue) override;
 
     UFUNCTION(BlueprintCallable, Category = Stats)
     void RefreshValue(int32 Level, int32 Base, const FNature &Nature) override;
