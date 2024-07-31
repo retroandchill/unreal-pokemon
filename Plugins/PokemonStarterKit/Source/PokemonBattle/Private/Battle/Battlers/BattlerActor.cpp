@@ -249,8 +249,12 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
 }
 
 FLevelUpStatChanges ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
-    // TODO: Actually gain EVs
-    return WrappedPokemon->GetStatBlock()->GainExp(Exp, false);
+    auto StatBlock = WrappedPokemon->GetStatBlock();
+    for (auto &[ID, Amount] : EVs) {
+        auto Stat = StatBlock->GetStat(ID);
+        Stat->SetEV(Stat->GetEV() + Amount);
+    }
+    return StatBlock->GainExp(Exp, false);
 }
 
 TArray<FName> ABattlerActor::GetTypes() const {

@@ -35,6 +35,10 @@ int32 UDefaultStatEntry::GetEV() const {
     return EV;
 }
 
+void UDefaultStatEntry::SetEV(int32 Value) {
+    EV = Value;
+}
+
 void UDefaultStatEntry::RefreshValue(int32 Level, int32 Base, const FNature &Nature) {
     // No implementation but abstracts are not allowed so we have to put this here
 }
