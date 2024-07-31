@@ -231,6 +231,12 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
     int32 Level = GetPokemonLevel();
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
+#if WITH_EDITOR
+    if (!Battle->GetPlayerSide()->GetTrainers().ContainsByPredicate([PlayerTrainer](const TScriptInterface<ITrainer>& Trainer) { return Trainer != PlayerTrainer; })) {
+        return GainInfos;
+    }
+#endif
+    
     for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
         int32 BattlerLevel = Battler->GetPokemonLevel();
         auto &ExpAttributes = *Battler->GetAbilityComponent()->GetExpAttributeSet();
