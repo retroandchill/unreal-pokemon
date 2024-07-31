@@ -149,6 +149,9 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetPokemonLevel() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual void RefreshStats() = 0;
+
     /**
      * Get the value of the Pokémon's Max HP.
      * @return The Pokémon's Max HP

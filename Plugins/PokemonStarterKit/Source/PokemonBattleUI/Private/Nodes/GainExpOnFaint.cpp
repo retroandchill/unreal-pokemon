@@ -35,6 +35,12 @@ void UGainExpOnFaint::Activate() {
         }
     }
 
+    for (auto &Info : GainInfos) {
+        if (Info.StatChanges.LevelChange.Diff() > 0) {
+            Info.GainingBattler->RefreshStats();
+        }
+    }
+
     auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
     CompleteHandle = Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
     Screen->DisplayExpForGain(MoveTemp(GainInfos));

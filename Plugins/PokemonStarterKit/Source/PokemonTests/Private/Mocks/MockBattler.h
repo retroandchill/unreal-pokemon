@@ -22,6 +22,7 @@ public:
     MOCK_METHOD(FText, GetNickname, (), (const, override));
     MOCK_METHOD(EPokemonGender, GetGender, (), (const, override));
     MOCK_METHOD(int32, GetPokemonLevel, (), (const, override));
+    MOCK_METHOD(void, RefreshStats, (), (override));
     MOCK_METHOD(float, GetHPPercent, (), (const, override));
     MOCK_METHOD(void, TakeBattleDamage, (int32 Damage), (override));
     MOCK_METHOD(bool, IsFainted, (), (const, override));

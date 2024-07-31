@@ -174,6 +174,22 @@ int32 ABattlerActor::GetPokemonLevel() const {
     return WrappedPokemon->GetStatBlock()->GetLevel();
 }
 
+void ABattlerActor::RefreshStats() {
+    auto &DataSubsystem = FDataManager::GetInstance();
+    auto &StatTable = DataSubsystem.GetDataTable<FStat>();
+    auto StatBlock = WrappedPokemon->GetStatBlock();
+    StatTable.ForEach([this, &StatBlock](const FStat &Stat) {
+        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
+            auto StatValue = StatBlock->GetStat(Stat.ID);
+            BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
+                                                             static_cast<float>(StatValue->GetStatValue()));
+        }
+    });
+
+    BattlerAbilityComponent->SetNumericAttributeBase(UPokemonCoreAttributeSet::GetHPAttribute(),
+        static_cast<float>(WrappedPokemon->GetCurrentHP()));
+}
+
 float ABattlerActor::GetHPPercent() const {
     auto CoreAttributes = BattlerAbilityComponent->GetCoreAttributes();
     return CoreAttributes->GetHP() / CoreAttributes->GetMaxHP();
