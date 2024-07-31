@@ -72,21 +72,12 @@ struct POKEMONBATTLE_API FExpGainInfo {
     UPROPERTY(BlueprintReadOnly, Category = Exp)
     int32 Amount = 0;
 
-    /**
-     * Should the amount be displayed as boosted?
-     */
     UPROPERTY(BlueprintReadOnly, Category = Exp)
-    bool bBoosted = false;
-
-    /**
-     * The number of EVs gained in each stat
-     */
-    UPROPERTY(BlueprintReadOnly, Category = Exp)
-    TMap<FName, uint8> EVs;
+    FLevelUpStatChanges StatChanges;
 
     FExpGainInfo() = default;
 
-    FExpGainInfo(const TScriptInterface<IBattler>& Battler, int32 Amount, bool bBoosted = false);
+    FExpGainInfo(const TScriptInterface<IBattler>& Battler, int32 Amount);
     
 };
 
@@ -198,7 +189,7 @@ class POKEMONBATTLE_API IBattler {
     virtual TArray<FExpGainInfo> GiveExpToParticipants() = 0;
 
     UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual void GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs, const FLevelUpEnd& OnEnd) = 0;
+    virtual FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) = 0;
 
     /**
      * Get the Pokémon's current type

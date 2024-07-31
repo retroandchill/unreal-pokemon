@@ -25,10 +25,12 @@ protected:
     void NativeConstruct() override;
     
 public:
-    void SetBattler(const TScriptInterface<IBattler>& Battler);
+    void SetBattler(const TScriptInterface<IBattler>& Battler, const TOptional<float> &ExpGainPercent = TOptional<float>());
 
     void ChangeExpGainDisplay(int32 Gain);
     void AnimateGain(float MaxDuration = 3.f);
+
+    void BindOnAnimationComplete(FSimpleDelegate&& Callback);
     
 protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Content)
@@ -40,7 +42,7 @@ protected:
 private:
     void UpdateExpBarPercent(float NewPercent);
     void OnLevelUp();
-    void OnExpGainComplete();
+    void OnExpGainComplete() const;
     
     UPROPERTY()
     TScriptInterface<IBattler> CurrentBattler;
@@ -59,5 +61,7 @@ private:
     TObjectPtr<UDisplayText> ExpGainText;
 
     Pokemon::UI::FProgressBarAnimation ExpBarAnimation;
+
+    FSimpleMulticastDelegate OnGainAnimationComplete;
 
 };

@@ -111,7 +111,7 @@ void APokemonBattle::Tick(float DeltaSeconds) {
 
 void APokemonBattle::StartBattle() {
     CreateBattleHUD();
-    
+    OnBattlersEnteringBattle(GetActiveBattlers());
     StartTurn();
 }
 
@@ -128,7 +128,7 @@ void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<
 
         return SpeedA > SpeedB;
     });
-
+    
     for (auto &Battler : Sorted) {
         Battler->RecordParticipation();
     }

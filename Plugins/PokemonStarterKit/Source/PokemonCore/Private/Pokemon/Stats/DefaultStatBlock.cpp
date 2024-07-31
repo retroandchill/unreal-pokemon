@@ -74,8 +74,9 @@ int32 UDefaultStatBlock::GetExpForNextLevel() const {
 }
 
 float UDefaultStatBlock::GetExpPercent() const {
-    if (Level == GetMaxLevel())
+    if (Level == GetMaxLevel()) {
         return 0.f;
+    }
 
     auto &GrowthRate = UPokemonSubsystem::GetInstance(this).GetGrowthRate(Owner->GetSpecies().GrowthRate);
     auto ExpNeededForLevel = static_cast<float>(GrowthRate.ExpForLevel(Level));
@@ -83,13 +84,18 @@ float UDefaultStatBlock::GetExpPercent() const {
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
 }
 
-void UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) {
+FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) {
+    FLevelUpStatChanges Changes;
+    float ExpPercent = GetExpPercent();
+    Changes.ExpPercentChange.Before = ExpPercent;
+    Changes.ExpPercentChange.After = ExpPercent;
     Exp += Change;
 
-    FLevelUpStatChanges Changes;
     Changes.LevelChange.Before = Level;
+    Changes.LevelChange.After = Level;
     for (auto &[ID, Stat] : Stats) {
-        Changes.StatChanges.Emplace(ID, {.Before = Stat->GetStatValue()});
+        int32 StatValue = Stat->GetStatValue();
+        Changes.StatChanges.Emplace(ID, {.Before = StatValue, .After = StatValue});
     }
     while (Exp >= GetExpForNextLevel()) {
         Level++;
@@ -97,6 +103,7 @@ void UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUp
 
     if (Level > Changes.LevelChange.Before) {
         Changes.LevelChange.After = Level;
+        Changes.ExpPercentChange.After = GetExpPercent();
         CalculateStats(Owner->GetSpecies().BaseStats);
         for (auto &[ID, Stat] : Stats) {
             Changes.StatChanges[ID].After = Stat->GetStatValue();
@@ -105,6 +112,8 @@ void UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUp
         auto Utilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
         IPokemonUtilities::Execute_ProcessLevelUp(Utilities, this, Owner, Changes, bShowMessages, OnEnd);
     }
+
+    return Changes;
 }
 
 const FNature &UDefaultStatBlock::GetNature() const {

@@ -18,6 +18,9 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
   public:
     TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) override;
 
+    UFUNCTION(BlueprintPure, Category = Metadata)
+    const FGuid& GetInternalId() const override;
+
     UFUNCTION(BlueprintPure, Category = Bio)
     const FTrainerType &GetTrainerType() const override;
 
@@ -52,6 +55,9 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
     int32 GetSecretId() const override;
 
   private:
+    UPROPERTY(SaveGame)
+    FGuid InternalId;
+    
     /**
      * The ID of the species of Pokémon this is
      */

@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Utilities/PokemonUtilities.h"
 
 #include "BattlerHelpers.generated.h"
 
+struct FExpGainInfo;
 class IBattler;
 struct FGameplayAbilityActorInfo;
 /**

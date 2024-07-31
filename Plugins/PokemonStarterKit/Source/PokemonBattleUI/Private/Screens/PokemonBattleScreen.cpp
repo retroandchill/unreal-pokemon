@@ -46,6 +46,10 @@ UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
     return ActionSelect;
 }
 
+UExpGainPane * UPokemonBattleScreen::GetExpGainPane() const {
+    return ExpGainPane;
+}
+
 void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler) {
     ActionSelect->DeactivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Hidden);
@@ -65,6 +69,20 @@ UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInte
     auto Find = Panels.FindByPredicate(
         [&Battler](const UPokemonBattlePanel *Panel) { return Panel->GetCurrentBattler() == Battler; });
     return Find != nullptr ? *Find : nullptr;
+}
+
+void UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInfo> &&GainInfos) {
+    ExpGainPane->GainExp(MoveTemp(GainInfos));
+    SwapToExpGainDisplay();
+    PlayExpGainAnimation();
+}
+
+FDelegateHandle UPokemonBattleScreen::BindToExpGainComplete(FSimpleDelegate &&Callback) {
+    return OnExpGainComplete.Add(MoveTemp(Callback));
+}
+
+void UPokemonBattleScreen::RemoveFromExpGainComplete(FDelegateHandle Handle) {
+    OnExpGainComplete.Remove(Handle);
 }
 
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
@@ -105,4 +123,8 @@ void UPokemonBattleScreen::OnMoveCanceled() {
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     ActionSelect->ActivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UPokemonBattleScreen::CompleteExpGain() {
+    OnExpGainComplete.Broadcast();
 }

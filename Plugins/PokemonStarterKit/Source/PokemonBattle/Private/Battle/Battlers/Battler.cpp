@@ -7,6 +7,6 @@ FStatusEffectInfo::FStatusEffectInfo(FName StatusEffectID, FActiveGameplayEffect
     : StatusEffectID(StatusEffectID), EffectHandle(EffectHandle) {
 }
 
-FExpGainInfo::FExpGainInfo(const TScriptInterface<IBattler> &Battler, int32 Amount, bool bBoosted)
-    : GainingBattler(Battler), Amount(Amount), bBoosted(bBoosted) {
+FExpGainInfo::FExpGainInfo(const TScriptInterface<IBattler> &Battler, int32 Amount)
+    : GainingBattler(Battler), Amount(Amount) {
 }

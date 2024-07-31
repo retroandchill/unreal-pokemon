@@ -9,6 +9,7 @@
 
 class FMockBattler : public IBattler {
 public:
+
     ~FMockBattler() override = default;
 
     MOCK_METHOD3(Initialize,
@@ -28,7 +29,7 @@ public:
     MOCK_METHOD(bool, CanGainExp, (), (const, override));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
     MOCK_METHOD(TArray<FExpGainInfo>, GiveExpToParticipants, (), (override));
-    MOCK_METHOD3(GainExpAndEVs, void(int32 Exp, const TMap<FName, uint8> &EVs, const FLevelUpEnd &OnEnd));
+    MOCK_METHOD2(GainExpAndEVs, FLevelUpStatChanges(int32 Exp, const TMap<FName, uint8> &EVs));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent *, GetAbilityComponent, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));

@@ -31,6 +31,7 @@
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
+#include "Utilities/TrainerHelpers.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/join.hpp>
@@ -201,31 +202,37 @@ float ABattlerActor::GetExpPercent() const {
 TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
     TArray<FExpGainInfo> GainInfos;
     auto &Battle = OwningSide->GetOwningBattle();
+    if (OwningSide != Battle->GetOpposingSide()) {
+        return GainInfos;
+    }
+    
     auto &BattleSettings = *GetDefault<UPokemonBattleSettings>();
     auto &Species = WrappedPokemon->GetSpecies();
     
     float TrainerBoost = IBattle::Execute_IsTrainerBattle(Battle.GetObject()) ? BattleSettings.TrainerExpGainMultiplier : 1.f;
     int32 BaseExp = Species.BaseExp;
     int32 Level = GetPokemonLevel();
-    
-    for (auto &Battler : Participants) {
+
+    auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
+    for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
         int32 BattlerLevel = Battler->GetPokemonLevel();
         auto &ExpAttributes = *Battler->GetAbilityComponent()->GetExpAttributeSet();
-
-        int32 ExpGain = FMath::FloorToInt32((BaseExp * Level / 5 * TrainerBoost
-            * FMath::Pow((2 * Level + 10) / (Level + BattlerLevel + 10), 2.5f) + 1)
+        float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;
+        
+        int32 ExpGain = FMath::FloorToInt32((BaseExp * Level / 5.f * TrainerBoost * (1.f / SplitFactor)
+            * FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) + 1)
             * ExpAttributes.GetExpGainRate());
         
         auto &GainInfo = GainInfos.Emplace_GetRef(Battler, ExpGain);
-        GainInfo.EVs = Species.EVs;
+        GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, Species.EVs);
     }
     
     return GainInfos;
 }
 
-void ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs, const FLevelUpEnd& OnEnd) {
+FLevelUpStatChanges ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
     // TODO: Actually gain EVs
-    WrappedPokemon->GetStatBlock()->GainExp(Exp, true, OnEnd);
+    return WrappedPokemon->GetStatBlock()->GainExp(Exp, false);
 }
 
 TArray<FName> ABattlerActor::GetTypes() const {
@@ -265,8 +272,9 @@ void ABattlerActor::RecordParticipation() {
         | ranges::views::transform([](const TScriptInterface<IBattleSide>& Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); })
         | ranges::views::join
         | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return !Battler->IsFainted(); })
-        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return Battler->CanGainExp(); });
-    ranges::for_each(NewParticipants, [this](const TScriptInterface<IBattler>& Battler) { Participants.AddUnique(Battler); });
+        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return Battler->CanGainExp(); })
+        | ranges::views::transform([](const TScriptInterface<IBattler>& Battler) { return Battler->GetInternalId(); });
+    ranges::for_each(NewParticipants, [this](const FGuid& ID) { Participants.Add(ID); });
 }
 
 const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {

@@ -6,9 +6,13 @@
 #include "CommonUserWidget.h"
 #include "ExpGainPane.generated.h"
 
+struct FExpGainInfo;
 class IBattler;
 class IBattle;
 class UBattlerExpPanel;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExpGainComplete);
+
 /**
  * 
  */
@@ -21,6 +25,14 @@ public:
 
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
     void SlotBattlerPanel(UBattlerExpPanel* Panel);
+
+    void GainExp(TArray<FExpGainInfo>&& GainInfosIn);
+
+    UFUNCTION(BlueprintCallable, Category = Exp)
+    void PlayExpGain(float MaxDuration = 3.f);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Exp)
+    const TArray<FExpGainInfo> &GetGainInfos() const;
     
 private:
     UBattlerExpPanel* CreateBattlerPanel(const TScriptInterface<IBattler>& Battler);
@@ -34,4 +46,11 @@ private:
     UPROPERTY(EditAnywhere, Category = Content)
     TSubclassOf<UBattlerExpPanel> PanelClass;
 
+    int32 AnimationsComplete = 0;
+
+    UPROPERTY(BlueprintAssignable, Category = Events)
+    FOnExpGainComplete OnExpGainComplete;
+
+    UPROPERTY(BlueprintGetter = GetGainInfos, Category = Exp)
+    TArray<FExpGainInfo> GainInfos;
 };

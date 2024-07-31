@@ -24,10 +24,11 @@ void UBattlerExpPanel::NativeConstruct() {
         FUpdateComplete::CreateUObject(this, &UBattlerExpPanel::OnExpGainComplete));
 }
 
-void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler) {
+void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler, const TOptional<float> &ExpGainPercent) {
     CurrentBattler = Battler;
     DisplayedLevel = Battler->GetPokemonLevel();
     LevelText->SetText(FText::FromString(FString::FromInt(DisplayedLevel)));
+    ExpBar->SetPercent(ExpGainPercent.Get(Battler->GetExpPercent()));
     ChangeExpGainDisplay(0);
     OnBattlerSet(CurrentBattler);
 }
@@ -48,6 +49,10 @@ void UBattlerExpPanel::AnimateGain(float MaxDuration) {
     ExpBarAnimation.PlayAnimation(StartPercent, EndPercent,GainRate, true);
 }
 
+void UBattlerExpPanel::BindOnAnimationComplete(FSimpleDelegate &&Callback) {
+    OnGainAnimationComplete.Add(MoveTemp(Callback));
+}
+
 void UBattlerExpPanel::UpdateExpBarPercent(float NewPercent) {
     ExpBar->SetPercent(NewPercent);
 }
@@ -58,5 +63,6 @@ void UBattlerExpPanel::OnLevelUp() {
     DisplayLevelUp();
 }
 
-void UBattlerExpPanel::OnExpGainComplete() {
+void UBattlerExpPanel::OnExpGainComplete() const {
+    OnGainAnimationComplete.Broadcast();
 }

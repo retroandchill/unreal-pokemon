@@ -28,5 +28,6 @@ public:
     MOCK_METHOD(void, SendOutBattlers, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattler>> &, GetBattlers, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<ITrainer>> &, GetTrainers, (), (const, override));
+    MOCK_METHOD(const TArray<TScriptInterface<IBattler>> &, GetTrainerParty, (const TScriptInterface<ITrainer>& Trainer),  (const, override));
     MOCK_METHOD(bool, CanBattle, (), (const, override));
 };

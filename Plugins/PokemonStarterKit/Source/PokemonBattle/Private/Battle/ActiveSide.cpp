@@ -63,9 +63,15 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Trainers.Emplace(Trainer);
     TScriptInterface<IBattleSide> Side = this;
     auto &Party = Trainer->GetParty();
-    for (uint8 i = 0; i < PokemonCount; i++) {
-        auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), GetBattlerSpawnPosition(i));
-        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+    auto &BattleParty = TrainerParties.Add(Trainer->GetInternalId()).Battlers;
+    for (uint8 i = 0; i < Party.Num(); i++) {
+        auto SpawnPosition = i < PokemonCount ? GetBattlerSpawnPosition(i) : GetTransform();
+        auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), SpawnPosition);
+        BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+        if (i < PokemonCount) {
+            Battlers.Emplace_GetRef(Battler);
+        }
+        
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 
@@ -127,6 +133,10 @@ const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
 
 const TArray<TScriptInterface<ITrainer>> & AActiveSide::GetTrainers() const {
     return Trainers;
+}
+
+const TArray<TScriptInterface<IBattler>> & AActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
+    return TrainerParties.FindChecked(Trainer->GetInternalId()).Battlers;
 }
 
 bool AActiveSide::CanBattle() const {

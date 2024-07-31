@@ -80,7 +80,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintCallable, Category = Stats)
     TArray<FExpGainInfo> GiveExpToParticipants() override;
 
-    void GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs, const FLevelUpEnd& OnEnd) override;
+    FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;
@@ -134,7 +134,7 @@ private:
     TScriptInterface<IBattleSide> OwningSide;
 
     UPROPERTY()
-    TArray<TScriptInterface<IBattler>> Participants;
+    TSet<FGuid> Participants;
 
     /**
      * The actual class used for the battler's sprite.
