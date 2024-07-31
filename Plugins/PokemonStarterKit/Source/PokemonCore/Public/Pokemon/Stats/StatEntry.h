@@ -75,4 +75,7 @@ class POKEMONCORE_API IStatEntry {
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetEV() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual void SetEV(int32 Value) = 0;
 };

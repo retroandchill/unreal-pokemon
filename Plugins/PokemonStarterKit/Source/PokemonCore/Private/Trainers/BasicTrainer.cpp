@@ -6,11 +6,16 @@
 #include "Pokemon/Stats/StatBlock.h"
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
+    InternalId = FGuid::NewGuid();
     TrainerType = NewTrainerType;
     Name = NewTrainerName;
     ID = FMath::RandRange(0, 999999);
     SecretID = FMath::RandRange(0, 999999);
     return this;
+}
+
+const FGuid &UBasicTrainer::GetInternalId() const {
+    return InternalId;
 }
 
 const FTrainerType &UBasicTrainer::GetTrainerType() const {

@@ -117,4 +117,10 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle, meta = (UIMin = 1, ClampMin = 1))
     TArray<int32> CriticalHitRatios = {24, 8, 2, 1};
+
+    /**
+     * The multiplier for gaining exp in battle from a trainer Pokémon
+     */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle)
+    float TrainerExpGainMultiplier = 1.f;
 };

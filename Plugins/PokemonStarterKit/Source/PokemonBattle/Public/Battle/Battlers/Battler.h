@@ -7,15 +7,19 @@
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "range/v3/view/any_view.hpp"
 #include "UObject/Interface.h"
+#include "Utilities/PokemonUtilities.h"
 
 #include "Battler.generated.h"
 
+class IBattler;
 struct FSpeciesData;
 class UBattlerAbilityComponent;
 class IPokemon;
 class IBattleSide;
 class IBattleMove;
 class IBattlerController;
+
+DECLARE_DYNAMIC_DELEGATE(FBattleLevelUpEnd);
 
 /**
  * Information about a status effect inflicted upon the battler
@@ -47,6 +51,33 @@ struct POKEMONBATTLE_API FStatusEffectInfo {
      * @param EffectHandle The gameplay effect that represents the status effect
      */
     FStatusEffectInfo(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle);
+};
+
+/**
+ * Information about Exp. that the battler gained
+ */
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FExpGainInfo {
+    GENERATED_BODY()
+
+    /**
+     * The battler who is gaining Exp.
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Exp)
+    TScriptInterface<IBattler> GainingBattler;
+
+    /**
+     * The amount of Exp. that is gained for display.
+     */
+    UPROPERTY(BlueprintReadOnly, Category = Exp)
+    int32 Amount = 0;
+
+    UPROPERTY(BlueprintReadOnly, Category = Exp)
+    FLevelUpStatChanges StatChanges;
+
+    FExpGainInfo() = default;
+
+    FExpGainInfo(const TScriptInterface<IBattler> &Battler, int32 Amount);
 };
 
 // This class does not need to be modified.
@@ -84,7 +115,11 @@ class POKEMONBATTLE_API IBattler {
      * Get the side that this battler is a part of
      * @return The battler's side
      */
+    UFUNCTION(BlueprintCallable, Category = Context)
     virtual const TScriptInterface<IBattleSide> &GetOwningSide() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Context)
+    virtual const TScriptInterface<IPokemon> &GetWrappedPokemon() const = 0;
 
     /**
      * Get the species that this battler represents
@@ -113,6 +148,9 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetPokemonLevel() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual void RefreshStats() = 0;
+
     /**
      * Get the value of the Pokémon's Max HP.
      * @return The Pokémon's Max HP
@@ -139,12 +177,21 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void Faint() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual bool CanGainExp() const = 0;
+
     /**
      * Get the percent value of Exp to a level up
      * @return The Pokémon's exp to level up percentage
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual float GetExpPercent() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual TArray<FExpGainInfo> GiveExpToParticipants() = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) = 0;
 
     /**
      * Get the Pokémon's current type
@@ -189,6 +236,8 @@ class POKEMONBATTLE_API IBattler {
      * Show the battler's sprite in battle
      */
     virtual void ShowSprite() const = 0;
+
+    virtual void RecordParticipation() = 0;
 
     /**
      * Get the status effect held by this battler

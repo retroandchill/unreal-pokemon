@@ -46,6 +46,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattleSide> &GetOwningSide() const override;
 
+    UFUNCTION(BlueprintPure, Category = Context)
+    const TScriptInterface<IPokemon> &GetWrappedPokemon() const override;
+
     const FSpeciesData &GetSpecies() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
@@ -56,6 +59,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetPokemonLevel() const override;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    void RefreshStats() override;
 
     UFUNCTION(BlueprintPure, DisplayName = "Get HP Percent", Category = Stats)
     float GetHPPercent() const override;
@@ -69,7 +75,15 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void Faint() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
+    bool CanGainExp() const override;
+
+    UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    TArray<FExpGainInfo> GiveExpToParticipants() override;
+
+    FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;
@@ -85,6 +99,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
 
     void ShowSprite() const override;
+    void RecordParticipation() override;
 
     const TOptional<FStatusEffectInfo> &GetStatusEffect() const override;
     void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
@@ -103,6 +118,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     void SpawnSpriteActor(bool ShouldShow = false);
 
+  private:
     /**
      * The ability component for the battler
      */
@@ -119,6 +135,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IBattleSide> OwningSide;
+
+    UPROPERTY()
+    TSet<FGuid> Participants;
 
     /**
      * The actual class used for the battler's sprite.

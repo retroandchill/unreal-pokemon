@@ -12,6 +12,7 @@ class UMoveUsageAttributeSet;
 class UTargetDamageStateAttributeSet;
 class UStatStagesAttributeSet;
 class UPokemonCoreAttributeSet;
+class UExpAttributeSet;
 
 struct FModifierCount {
     uint8 MultiplierCount = 0;
@@ -33,6 +34,7 @@ class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponen
     UPokemonCoreAttributeSet *GetCoreAttributes() const;
     UStatStagesAttributeSet *GetStatStages() const;
     UTargetDamageStateAttributeSet *GetTargetDamageStateAttributeSet() const;
+    UExpAttributeSet *GetExpAttributeSet() const;
 
     FGameplayEffectSpecHandle MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level,
                                                FGameplayEffectContextHandle Context) const override;
@@ -49,6 +51,9 @@ class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponen
 
     UPROPERTY()
     TObjectPtr<UTargetDamageStateAttributeSet> TargetDamageStateAttributeSet;
+
+    UPROPERTY()
+    TObjectPtr<UExpAttributeSet> ExpAttributeSet;
 
     TUniquePtr<FModifierInformation> ModifierInfo = MakeUnique<FModifierInformation>();
 };

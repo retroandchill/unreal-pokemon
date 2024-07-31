@@ -13,4 +13,6 @@ class POKEMONTESTS_API ATestActiveSide : public AActiveSide {
 
   public:
     ATestActiveSide();
+
+    const TArray<TScriptInterface<IBattler>> &GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const override;
 };

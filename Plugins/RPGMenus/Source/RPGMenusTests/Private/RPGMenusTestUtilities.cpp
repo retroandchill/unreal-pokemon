@@ -6,7 +6,15 @@
 #include "Input/UIActionBinding.h"
 
 void URPGMenusTestUtilities::SelectCurrentOption(USelectableWidget *SelectableWidget) {
-    SelectableWidget->GetSelectedOption()->OnClicked().Broadcast();
+    auto SelectedOption = SelectableWidget->GetSelectedOption();
+    if (auto Function = SelectedOption->FindFunction("HandleButtonClicked"); Function == nullptr) {
+        UE_LOG(LogBlueprint, Error, TEXT("Could not find function 'HandleButtonClicked'"))
+        return;
+    }
+    
+    FSimpleDelegate Delegate;
+    Delegate.BindUFunction(SelectedOption, "HandleButtonClicked");
+    Delegate.Execute();
 }
 
 void URPGMenusTestUtilities::CancelOnWidget(USelectableWidget *SelectableWidget) {

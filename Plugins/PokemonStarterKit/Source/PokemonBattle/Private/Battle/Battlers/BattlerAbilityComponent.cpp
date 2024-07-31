@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Attributes/ExpAttributeSet.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
@@ -16,6 +17,9 @@ void UBattlerAbilityComponent::BeginPlay() {
 
     TargetDamageStateAttributeSet = NewObject<UTargetDamageStateAttributeSet>(GetOwner());
     AddSpawnedAttribute(TargetDamageStateAttributeSet);
+
+    ExpAttributeSet = NewObject<UExpAttributeSet>(GetOwner());
+    AddSpawnedAttribute(ExpAttributeSet);
 }
 
 UPokemonCoreAttributeSet *UBattlerAbilityComponent::GetCoreAttributes() const {
@@ -28,6 +32,10 @@ UStatStagesAttributeSet *UBattlerAbilityComponent::GetStatStages() const {
 
 UTargetDamageStateAttributeSet *UBattlerAbilityComponent::GetTargetDamageStateAttributeSet() const {
     return TargetDamageStateAttributeSet;
+}
+
+UExpAttributeSet *UBattlerAbilityComponent::GetExpAttributeSet() const {
+    return ExpAttributeSet;
 }
 
 FGameplayEffectSpecHandle UBattlerAbilityComponent::MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass,

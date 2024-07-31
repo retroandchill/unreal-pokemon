@@ -65,9 +65,10 @@ class POKEMONCORE_API IStatBlock {
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
 #if CPP
-    virtual void GainExp(int32 Change, bool bShowMessages = false, const FLevelUpEnd &OnEnd = FLevelUpEnd()) = 0;
+    virtual FLevelUpStatChanges GainExp(int32 Change, bool bShowMessages = false,
+                                        const FLevelUpEnd &OnEnd = FLevelUpEnd()) = 0;
 #else
-    virtual void GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) = 0;
+    virtual FLevelUpStatChanges GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) = 0;
 #endif
 
     /**
