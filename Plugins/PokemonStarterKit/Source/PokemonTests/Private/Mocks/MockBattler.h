@@ -8,8 +8,7 @@
 #include <gmock/gmock.h>
 
 class FMockBattler : public IBattler {
-public:
-
+  public:
     ~FMockBattler() override = default;
 
     MOCK_METHOD3(Initialize,

@@ -2,6 +2,7 @@
 
 #include "Battle/Battlers/BattlerActor.h"
 #include "Battle/Abilities/AbilityLookup.h"
+#include "Battle/Attributes/ExpAttributeSet.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
@@ -17,7 +18,6 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
 #include "DataManager.h"
-#include "PokemonBattleSettings.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
@@ -25,9 +25,9 @@
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
-#include "Battle/Attributes/ExpAttributeSet.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -154,7 +154,7 @@ const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
     return OwningSide;
 }
 
-const TScriptInterface<IPokemon> & ABattlerActor::GetWrappedPokemon() const {
+const TScriptInterface<IPokemon> &ABattlerActor::GetWrappedPokemon() const {
     return WrappedPokemon;
 }
 
@@ -187,7 +187,7 @@ void ABattlerActor::RefreshStats() {
     });
 
     BattlerAbilityComponent->SetNumericAttributeBase(UPokemonCoreAttributeSet::GetHPAttribute(),
-        static_cast<float>(WrappedPokemon->GetCurrentHP()));
+                                                     static_cast<float>(WrappedPokemon->GetCurrentHP()));
 }
 
 float ABattlerActor::GetHPPercent() const {
@@ -221,11 +221,12 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
     if (OwningSide != Battle->GetOpposingSide()) {
         return GainInfos;
     }
-    
+
     auto &BattleSettings = *GetDefault<UPokemonBattleSettings>();
     auto &Species = WrappedPokemon->GetSpecies();
-    
-    float TrainerBoost = IBattle::Execute_IsTrainerBattle(Battle.GetObject()) ? BattleSettings.TrainerExpGainMultiplier : 1.f;
+
+    float TrainerBoost =
+        IBattle::Execute_IsTrainerBattle(Battle.GetObject()) ? BattleSettings.TrainerExpGainMultiplier : 1.f;
     int32 BaseExp = Species.BaseExp;
     int32 Level = GetPokemonLevel();
 
@@ -234,15 +235,16 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
         int32 BattlerLevel = Battler->GetPokemonLevel();
         auto &ExpAttributes = *Battler->GetAbilityComponent()->GetExpAttributeSet();
         float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;
-        
-        int32 ExpGain = FMath::FloorToInt32((BaseExp * Level / 5.f * TrainerBoost * (1.f / SplitFactor)
-            * FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) + 1)
-            * ExpAttributes.GetExpGainRate());
-        
+
+        int32 ExpGain = FMath::FloorToInt32((BaseExp * Level / 5.f * TrainerBoost * (1.f / SplitFactor) *
+                                                 FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) +
+                                             1) *
+                                            ExpAttributes.GetExpGainRate());
+
         auto &GainInfo = GainInfos.Emplace_GetRef(Battler, ExpGain);
         GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, Species.EVs);
     }
-    
+
     return GainInfos;
 }
 
@@ -283,14 +285,16 @@ void ABattlerActor::ShowSprite() const {
 }
 
 void ABattlerActor::RecordParticipation() {
-    auto NewParticipants = OwningSide->GetOwningBattle()->GetSides()
-        | ranges::views::filter([this](const TScriptInterface<IBattleSide>& Side) { return Side != OwningSide; } )
-        | ranges::views::transform([](const TScriptInterface<IBattleSide>& Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); })
-        | ranges::views::join
-        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return !Battler->IsFainted(); })
-        | ranges::views::filter([](const TScriptInterface<IBattler>& Battler) { return Battler->CanGainExp(); })
-        | ranges::views::transform([](const TScriptInterface<IBattler>& Battler) { return Battler->GetInternalId(); });
-    ranges::for_each(NewParticipants, [this](const FGuid& ID) { Participants.Add(ID); });
+    auto NewParticipants =
+        OwningSide->GetOwningBattle()->GetSides() |
+        ranges::views::filter([this](const TScriptInterface<IBattleSide> &Side) { return Side != OwningSide; }) |
+        ranges::views::transform(
+            [](const TScriptInterface<IBattleSide> &Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); }) |
+        ranges::views::join |
+        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); }) |
+        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return Battler->CanGainExp(); }) |
+        ranges::views::transform([](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId(); });
+    ranges::for_each(NewParticipants, [this](const FGuid &ID) { Participants.Add(ID); });
 }
 
 const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {

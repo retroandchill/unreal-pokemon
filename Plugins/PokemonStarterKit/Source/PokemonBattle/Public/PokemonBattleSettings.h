@@ -123,5 +123,4 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle)
     float TrainerExpGainMultiplier = 1.f;
-    
 };

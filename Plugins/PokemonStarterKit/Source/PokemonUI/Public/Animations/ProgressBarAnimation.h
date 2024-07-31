@@ -61,7 +61,7 @@ struct POKEMONUI_API FBarAnimationData {
  * Animation component for draining a progress bar
  */
 class POKEMONUI_API FProgressBarAnimation : public FTickableGameObject {
-public:
+  public:
     /**
      * Play an animation from start to finish with the following parameters
      * @param StartPercent The starting percentage of the progress bar
@@ -76,7 +76,6 @@ public:
      * @param Binding The binding for the update action
      */
     void BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding);
-
 
     /**
      * Bind an action to the wrap around callback for this component
@@ -93,9 +92,9 @@ public:
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;
 
-private:
+  private:
     float PercentLastTick = 0.f;
-    
+
     /**
      * Delegate for updating the percent of the progress bar
      */

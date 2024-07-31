@@ -14,7 +14,7 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText
     return this;
 }
 
-const FGuid & UBasicTrainer::GetInternalId() const {
+const FGuid &UBasicTrainer::GetInternalId() const {
     return InternalId;
 }
 

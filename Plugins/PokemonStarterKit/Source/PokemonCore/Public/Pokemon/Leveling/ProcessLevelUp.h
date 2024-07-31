@@ -13,22 +13,23 @@ class IPokemon;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterLevelUp);
 
 /**
- * 
+ *
  */
 UCLASS(meta = (HideThen))
 class POKEMONCORE_API UProcessLevelUp : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Pokémon|Stats")
-    static UProcessLevelUp *ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges, bool bShowMessages);
+    static UProcessLevelUp *ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon,
+                                           const FLevelUpStatChanges &StatChanges, bool bShowMessages);
 
     void Activate() override;
 
-private:
+  private:
     /**
-    * Execute the callback after exp gain is completed
-    */
+     * Execute the callback after exp gain is completed
+     */
     UFUNCTION()
     void ExecuteAfterLevelUp();
 

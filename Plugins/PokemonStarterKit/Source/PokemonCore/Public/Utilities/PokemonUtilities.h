@@ -82,7 +82,7 @@ struct POKEMONCORE_API FLevelUpStatChanges {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
     TMap<FName, FStatChange> StatChanges;
 
-    FLevelUpStatChanges& operator+=(const FLevelUpStatChanges& Other);
+    FLevelUpStatChanges &operator+=(const FLevelUpStatChanges &Other);
 };
 
 // This class does not need to be modified.

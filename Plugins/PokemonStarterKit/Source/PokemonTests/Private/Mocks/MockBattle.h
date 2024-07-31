@@ -20,8 +20,8 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(void, QueueAction, (TUniquePtr<IBattleAction> && Action), (override));
     MOCK_METHOD(bool, ActionSelectionFinished, (), (const, override));
     MOCK_METHOD(APawn *, GetBattlePawn, (), (const, override));
-    MOCK_METHOD(const TScriptInterface<IBattleSide>&, GetPlayerSide, (), (const, override));
-    MOCK_METHOD(const TScriptInterface<IBattleSide>&, GetOpposingSide, (), (const, override));
+    MOCK_METHOD(const TScriptInterface<IBattleSide> &, GetPlayerSide, (), (const, override));
+    MOCK_METHOD(const TScriptInterface<IBattleSide> &, GetOpposingSide, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattleSide>>, GetSides, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
     MOCK_METHOD(void, ExecuteAction, (IBattleAction & Action), (override));

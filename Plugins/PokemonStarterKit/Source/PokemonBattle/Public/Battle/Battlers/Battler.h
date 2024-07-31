@@ -77,8 +77,7 @@ struct POKEMONBATTLE_API FExpGainInfo {
 
     FExpGainInfo() = default;
 
-    FExpGainInfo(const TScriptInterface<IBattler>& Battler, int32 Amount);
-    
+    FExpGainInfo(const TScriptInterface<IBattler> &Battler, int32 Amount);
 };
 
 // This class does not need to be modified.
@@ -120,7 +119,7 @@ class POKEMONBATTLE_API IBattler {
     virtual const TScriptInterface<IBattleSide> &GetOwningSide() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = Context)
-    virtual const TScriptInterface<IPokemon>& GetWrappedPokemon() const = 0;
+    virtual const TScriptInterface<IPokemon> &GetWrappedPokemon() const = 0;
 
     /**
      * Get the species that this battler represents
@@ -177,7 +176,7 @@ class POKEMONBATTLE_API IBattler {
      */
     UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void Faint() const = 0;
-    
+
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual bool CanGainExp() const = 0;
 

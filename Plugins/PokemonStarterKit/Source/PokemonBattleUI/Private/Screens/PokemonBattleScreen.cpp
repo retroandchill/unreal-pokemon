@@ -46,7 +46,7 @@ UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
     return ActionSelect;
 }
 
-UExpGainPane * UPokemonBattleScreen::GetExpGainPane() const {
+UExpGainPane *UPokemonBattleScreen::GetExpGainPane() const {
     return ExpGainPane;
 }
 

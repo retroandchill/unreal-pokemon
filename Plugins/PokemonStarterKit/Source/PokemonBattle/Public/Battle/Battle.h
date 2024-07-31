@@ -64,7 +64,7 @@ class POKEMONBATTLE_API IBattle {
   public:
     static constexpr int32 PlayerSideIndex = 0;
     static constexpr int32 OpponentSideIndex = 1;
-    
+
     virtual TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) = 0;
 
     /**
@@ -108,8 +108,8 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual APawn *GetBattlePawn() const = 0;
 
-    virtual const TScriptInterface<IBattleSide>& GetPlayerSide() const = 0;
-    virtual const TScriptInterface<IBattleSide>& GetOpposingSide() const = 0;
+    virtual const TScriptInterface<IBattleSide> &GetPlayerSide() const = 0;
+    virtual const TScriptInterface<IBattleSide> &GetOpposingSide() const = 0;
 
     /**
      * Get all sides in the current battle

@@ -5,8 +5,10 @@
 
 using namespace Pokemon::UI;
 
-FBarAnimationData::FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration, bool bWrapAround)
-    : StartingPercentage(StartingPercentage), EndPercentage(EndingPercentage), AnimationDuration(AnimationDuration), bWrapAround(bWrapAround) {
+FBarAnimationData::FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration,
+                                     bool bWrapAround)
+    : StartingPercentage(StartingPercentage), EndPercentage(EndingPercentage), AnimationDuration(AnimationDuration),
+      bWrapAround(bWrapAround) {
 }
 
 void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, float Duration, bool bShouldWrap) {
@@ -46,7 +48,7 @@ void FProgressBarAnimation::Tick(float DeltaTime) {
             OnBarWrapAround.Broadcast();
         }
     }
-    
+
     SetNewPercent.Broadcast(NewPercent);
     PercentLastTick = NewPercent;
     if (CurrentTime >= AnimationDuration) {

@@ -116,10 +116,9 @@ void APokemonBattle::StartBattle() {
 }
 
 void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
-    auto Sorted = Battlers
-        | ranges::views::filter(&IsNotFainted)  
-        | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
-    Sorted.Sort([](const TScriptInterface<IBattler>& A, const TScriptInterface<IBattler>& B) {
+    auto Sorted =
+        Battlers | ranges::views::filter(&IsNotFainted) | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+    Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
         int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         int32 SpeedB = FMath::FloorToInt32(B->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         if (SpeedA == SpeedB) {
@@ -128,7 +127,7 @@ void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<
 
         return SpeedA > SpeedB;
     });
-    
+
     for (auto &Battler : Sorted) {
         Battler->RecordParticipation();
     }
@@ -165,12 +164,12 @@ const TQueue<TUniquePtr<IBattleAction>> &APokemonBattle::GetActionQueue() const 
 
 #endif
 
-const TScriptInterface<IBattleSide> & APokemonBattle::GetPlayerSide() const {
+const TScriptInterface<IBattleSide> &APokemonBattle::GetPlayerSide() const {
     check(Sides.IsValidIndex(PlayerSideIndex))
     return Sides[PlayerSideIndex];
 }
 
-const TScriptInterface<IBattleSide> & APokemonBattle::GetOpposingSide() const {
+const TScriptInterface<IBattleSide> &APokemonBattle::GetOpposingSide() const {
     check(Sides.IsValidIndex(OpponentSideIndex))
     return Sides[OpponentSideIndex];
 }

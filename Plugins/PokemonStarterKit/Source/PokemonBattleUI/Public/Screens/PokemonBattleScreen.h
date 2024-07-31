@@ -26,7 +26,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
   protected:
     void NativeConstruct() override;
 
-public:
+  public:
     /**
      * Set the battle that this screen holds
      * @param Battle The battle in question
@@ -67,15 +67,15 @@ public:
      */
     UPokemonBattlePanel *FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const;
 
-    void DisplayExpForGain(TArray<FExpGainInfo>&& GainInfos);
+    void DisplayExpForGain(TArray<FExpGainInfo> &&GainInfos);
 
-    FDelegateHandle BindToExpGainComplete(FSimpleDelegate&& Callback);
+    FDelegateHandle BindToExpGainComplete(FSimpleDelegate &&Callback);
 
     void RemoveFromExpGainComplete(FDelegateHandle Handle);
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     void FinishExpGainDisplay();
-    
+
   protected:
     /**
      * Slot a panel into the widget

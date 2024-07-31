@@ -1,7 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "DataManager.h"
-#include "PokemonDataSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -9,6 +8,7 @@
 #include "Pokemon/Stats/DefaultMainBattleStatEntry.h"
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
+#include "PokemonDataSettings.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -91,7 +91,7 @@ FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages,
     Changes.ExpPercentChange.Before = ExpPercent;
     Changes.ExpPercentChange.After = ExpPercent;
     Exp += Change;
-    
+
     Changes.LevelChange.Before = Level;
     Changes.LevelChange.After = Level;
     for (auto &[ID, Stat] : Stats) {

@@ -47,8 +47,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     const TScriptInterface<IBattleSide> &GetOwningSide() const override;
 
     UFUNCTION(BlueprintPure, Category = Context)
-    const TScriptInterface<IPokemon>& GetWrappedPokemon() const override;
-    
+    const TScriptInterface<IPokemon> &GetWrappedPokemon() const override;
+
     const FSpeciesData &GetSpecies() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
@@ -118,7 +118,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     void SpawnSpriteActor(bool ShouldShow = false);
 
-private:
+  private:
     /**
      * The ability component for the battler
      */

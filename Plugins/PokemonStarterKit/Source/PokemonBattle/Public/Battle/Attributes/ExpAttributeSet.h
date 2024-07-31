@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeMacros.h"
 #include "AttributeSet.h"
+
 #include "ExpAttributeSet.generated.h"
 
 /**
@@ -14,11 +15,10 @@ UCLASS()
 class POKEMONBATTLE_API UExpAttributeSet : public UAttributeSet {
     GENERATED_BODY()
 
-public:
+  public:
     ATTRIBUTE_ACCESSORS(UExpAttributeSet, ExpGainRate)
-    
-private:
+
+  private:
     UPROPERTY()
     FGameplayAttributeData ExpGainRate = 1.f;
-
 };

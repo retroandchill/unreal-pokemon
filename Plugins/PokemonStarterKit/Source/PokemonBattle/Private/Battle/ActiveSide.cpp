@@ -71,7 +71,7 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
         if (i < PokemonCount) {
             Battlers.Emplace_GetRef(Battler);
         }
-        
+
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 
@@ -131,11 +131,12 @@ const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
     return Battlers;
 }
 
-const TArray<TScriptInterface<ITrainer>> & AActiveSide::GetTrainers() const {
+const TArray<TScriptInterface<ITrainer>> &AActiveSide::GetTrainers() const {
     return Trainers;
 }
 
-const TArray<TScriptInterface<IBattler>> & AActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
+const TArray<TScriptInterface<IBattler>> &
+AActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
     return TrainerParties.FindChecked(Trainer->GetInternalId()).Battlers;
 }
 

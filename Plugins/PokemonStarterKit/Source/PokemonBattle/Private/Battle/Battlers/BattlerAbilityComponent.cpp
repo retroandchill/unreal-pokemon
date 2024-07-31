@@ -34,7 +34,7 @@ UTargetDamageStateAttributeSet *UBattlerAbilityComponent::GetTargetDamageStateAt
     return TargetDamageStateAttributeSet;
 }
 
-UExpAttributeSet * UBattlerAbilityComponent::GetExpAttributeSet() const {
+UExpAttributeSet *UBattlerAbilityComponent::GetExpAttributeSet() const {
     return ExpAttributeSet;
 }
 

@@ -30,7 +30,7 @@ class POKEMONCORE_API ITrainer {
     virtual TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) = 0;
 
     UFUNCTION(BlueprintCallable, Category = Metadata)
-    virtual const FGuid& GetInternalId() const = 0;
+    virtual const FGuid &GetInternalId() const = 0;
 
     /**
      * Get the type of the trainer this is

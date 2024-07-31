@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/GainExpOnFaint.h"
 #include "Battle/Battlers/Battler.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Utilities/BattleScreenHelpers.h"
 
-UGainExpOnFaint * UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObject, const TArray<TScriptInterface<IBattler>> &Battlers) {
+UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObject,
+                                                 const TArray<TScriptInterface<IBattler>> &Battlers) {
     auto Node = NewObject<UGainExpOnFaint>();
     Node->WorldContextObject = WorldContextObject;
     Node->Battlers = Battlers;
@@ -42,7 +42,8 @@ void UGainExpOnFaint::Activate() {
     }
 
     auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
-    CompleteHandle = Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
+    CompleteHandle =
+        Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
     Screen->DisplayExpForGain(MoveTemp(GainInfos));
 }
 
