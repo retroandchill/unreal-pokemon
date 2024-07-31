@@ -42,6 +42,12 @@ void UGainExpOnFaint::Activate() {
     }
 
     auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
+    if (Screen == nullptr) {
+        OnComplete.Broadcast();
+        SetReadyToDestroy();
+        return;
+    }
+    
     CompleteHandle =
         Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
     Screen->DisplayExpForGain(MoveTemp(GainInfos));

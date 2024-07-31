@@ -11,6 +11,7 @@
 #include "Nodes/PlayBattlerHPAnimation.h"
 #include "PrimaryGameLayout.h"
 #include "RangeHelpers.h"
+#include "Battle/ActiveSide.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PlayerUtilities.h"
@@ -56,6 +57,8 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler1, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
     TArray Side1Battlers = {Battler1};
     ON_CALL(MockSide1, GetBattlers).WillByDefault(ReturnRef(Side1Battlers));
+    ON_CALL(MockBattle, GetPlayerSide).WillByDefault(ReturnRef(Side1));
+    ON_CALL(MockSide1, GetTrainerParty).WillByDefault(ReturnRef(Side1Battlers));
 
     CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler2, FMockBattler, MockBattler2);
     auto Battler2Actor = Cast<AActor>(Battler1.GetObject());
@@ -71,7 +74,8 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler2, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
     TArray Side2Battlers = {Battler2};
     ON_CALL(MockSide2, GetBattlers).WillByDefault(ReturnRef(Side2Battlers));
-
+    ON_CALL(MockBattle, GetOpposingSide).WillByDefault(ReturnRef(Side2));
+    
     Battler1Actor->DispatchBeginPlay();
     Battler2Actor->DispatchBeginPlay();
     Battler1AbilityComponent->GetCoreAttributes()->InitHP(100);
