@@ -4,18 +4,18 @@
 #include "Components/NumberImageWidget.h"
 #include "Components/ProgressBar.h"
 #include "Misc/AutomationTest.h"
-#include "Mocking/UnrealMock.h"
-#include "Mocks/MockBattle.h"
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockBattleSide.h"
 #include "Nodes/PlayBattlerHPAnimation.h"
 #include "PrimaryGameLayout.h"
-#include "RangeHelpers.h"
+#include "Battle/ActiveSide.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Screens/PokemonBattleScreen.h"
-#include "Species/SpeciesData.h"
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
+#include "UtilityClasses/BattleActors/TestActiveSide.h"
+#include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
 using namespace testing;
 
@@ -33,47 +33,40 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(Layout);
     auto Screen = Layout->PushWidgetToLayerStack<UPokemonBattleScreen>(RPG::Menus::PrimaryMenuLayerTag, WidgetClass);
 
-    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
+                                                                                 .Level = 75,
+                                                                                 .IVs = {{"ATTACK", 31}},
+                                                                                 .EVs = {{"ATTACK", 104}},
+                                                                                 .Nature = FName("TIMID"),
+                                                                                 .Moves = {TEXT("ICEFANG")}});
+    auto Pokemon2 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
+                                                                                 .Level = 65,
+                                                                                 .IVs = {{"DEFENSE", 31}},
+                                                                                 .EVs = {{"DEFENSE", 92}},
+                                                                                 .Nature = FName("JOLLY")});
 
-    CREATE_MOCK(IBattleSide, Side1, FMockBattleSide, MockSide1);
-    CREATE_MOCK(IBattleSide, Side2, FMockBattleSide, MockSide2);
-    TArray<TScriptInterface<IBattleSide>, TInlineAllocator<2>> Sides = {Side1, Side2};
-    ON_CALL(MockBattle, GetSides).WillByDefault(Return(RangeHelpers::CreateRange(Sides)));
+    auto Battle = World->SpawnActor<ATestPokemonBattle>();
+    auto Side1 = World->SpawnActor<ATestActiveSide>();
+    Side1->Initialize(Battle, {Pokemon1}, false);
+    auto Side2 = World->SpawnActor<ATestActiveSide>();
+    Side2->Initialize(Battle, {Pokemon2}, false);
+    Battle->Initialize({Side1, Side2});
 
-    TOptional<FStatusEffectInfo> StatusEffectInfo;
-
-    CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler1, FMockBattler, MockBattler1);
+    auto Battler1 = Side1->GetBattlers()[0];
+    auto Battler2 = Side2->GetBattlers()[0];
     auto Battler1Actor = Cast<AActor>(Battler1.GetObject());
-    auto Battler1AbilityComponent = static_cast<UBattlerAbilityComponent *>(
-        Battler1Actor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
-    ON_CALL(MockBattler1, GetAbilityComponent).WillByDefault(Return(Battler1AbilityComponent));
-    EXPECT_CALL(MockBattler1, IsFainted).WillOnce(Return(false)).WillOnce(Return(false)).WillRepeatedly(Return(true));
-    ON_CALL(MockBattler1, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Lucario"))));
-    ON_CALL(MockBattler1, GetPokemonLevel).WillByDefault(Return(50));
-    EXPECT_CALL(MockBattler1, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f));
-    ON_CALL(MockBattler1, GetGender).WillByDefault(Return(EPokemonGender::Male));
-    ON_CALL(MockBattler1, GetExpPercent).WillByDefault(Return(0.25f));
-    ON_CALL(MockBattler1, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
-    TArray Side1Battlers = {Battler1};
-    ON_CALL(MockSide1, GetBattlers).WillByDefault(ReturnRef(Side1Battlers));
-
-    CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler2, FMockBattler, MockBattler2);
-    auto Battler2Actor = Cast<AActor>(Battler1.GetObject());
-    auto Battler2AbilityComponent = static_cast<UBattlerAbilityComponent *>(
-        Battler2Actor->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
-    ON_CALL(MockBattler2, GetAbilityComponent).WillByDefault(Return(Battler2AbilityComponent));
-    EXPECT_CALL(MockBattler2, IsFainted).WillOnce(Return(false)).WillOnce(Return(false)).WillRepeatedly(Return(true));
-    ON_CALL(MockBattler2, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Lucario"))));
-    ON_CALL(MockBattler2, GetPokemonLevel).WillByDefault(Return(50));
-    EXPECT_CALL(MockBattler2, GetHPPercent).WillOnce(Return(1.f)).WillOnce(Return(0.5f));
-    ON_CALL(MockBattler2, GetGender).WillByDefault(Return(EPokemonGender::Male));
-    ON_CALL(MockBattler2, GetExpPercent).WillByDefault(Return(0.25f));
-    ON_CALL(MockBattler2, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
-    TArray Side2Battlers = {Battler2};
-    ON_CALL(MockSide2, GetBattlers).WillByDefault(ReturnRef(Side2Battlers));
-
+    auto Battler2Actor = Cast<AActor>(Battler2.GetObject());
+    UE_ASSERT_NOT_NULL(Battler1Actor);
+    UE_ASSERT_NOT_NULL(Battler2Actor);
+    
     Battler1Actor->DispatchBeginPlay();
     Battler2Actor->DispatchBeginPlay();
+
+    auto Battler1AbilityComponent = Battler1->GetAbilityComponent();
+    auto Battler2AbilityComponent = Battler1->GetAbilityComponent();
+    
     Battler1AbilityComponent->GetCoreAttributes()->InitHP(100);
     Battler1AbilityComponent->GetCoreAttributes()->InitMaxHP(100);
     Battler2AbilityComponent->GetCoreAttributes()->InitHP(100);

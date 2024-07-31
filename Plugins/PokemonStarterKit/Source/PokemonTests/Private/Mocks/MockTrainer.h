@@ -15,6 +15,7 @@ class FMockTrainer : public ITrainer {
     ~FMockTrainer() override = default;
 
     MOCK_METHOD2(Initialize, TScriptInterface<ITrainer>(FName NewTrainerType, FText NewTrainerName));
+    MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));
     MOCK_METHOD(const FTrainerType &, GetTrainerType, (), (const, override));
     MOCK_METHOD(FText, GetTrainerName, (), (const, override));
     MOCK_METHOD(int32, GetPayout, (), (const, override));

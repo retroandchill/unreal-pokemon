@@ -8,6 +8,8 @@
 
 #include "PokemonBattleScreen.generated.h"
 
+struct FExpGainInfo;
+class UExpGainPane;
 class IBattleMove;
 class UBattleMoveSelect;
 class UPokemonActionOptions;
@@ -20,6 +22,9 @@ class IBattle;
 UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
+
+  protected:
+    void NativeConstruct() override;
 
   public:
     /**
@@ -40,8 +45,11 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      * Get the action select widget
      * @return Get the action select widget
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Selection")
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Widgets")
     UPokemonActionOptions *GetActionSelect() const;
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Widgets")
+    UExpGainPane *GetExpGainPane() const;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void SelectMove(const TScriptInterface<IBattler> &Battler);
@@ -59,14 +67,32 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPokemonBattlePanel *FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const;
 
+    void DisplayExpForGain(TArray<FExpGainInfo> &&GainInfos);
+
+    FDelegateHandle BindToExpGainComplete(FSimpleDelegate &&Callback);
+
+    void RemoveFromExpGainComplete(FDelegateHandle Handle);
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void FinishExpGainDisplay();
+
   protected:
     /**
      * Slot a panel into the widget
      * @param Panel The panel being slotted
      * @param Side The side of battle that the panel is for (0 generally means the player, while 1 is the opponent)
      */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals", meta = (ForceAsFunctions))
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void SlotPanel(UPokemonBattlePanel *Panel, int32 Side);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void SwapToPanelDisplay();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void SwapToExpGainDisplay();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void PlayExpGainAnimation();
 
   private:
     /**
@@ -104,6 +130,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void OnMoveCanceled();
 
+    UFUNCTION(BlueprintCallable, Category = "Battle|Exp")
+    void CompleteExpGain();
+
   private:
     /**
      * The widget that is used to select the options from the menu
@@ -116,6 +145,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UBattleMoveSelect> MoveSelect;
+
+    UPROPERTY(BlueprintGetter = GetExpGainPane, Category = "Widgets", meta = (BindWidget))
+    TObjectPtr<UExpGainPane> ExpGainPane;
 
     /**
      * The battle that this screen is showing the information for
@@ -147,4 +179,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPROPERTY()
     TOptional<int32> SelectionIndex;
+
+    /**
+     * Called when the Exp. Gain Animation and move learning is complete
+     */
+    FSimpleMulticastDelegate OnExpGainComplete;
 };

@@ -36,6 +36,28 @@ struct POKEMONCORE_API FStatChange {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
     int32 After;
+
+    int32 Diff() const;
+};
+
+/**
+ * The change to the Exp. bar fill for a Pokémon
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FExpPercentChange {
+    GENERATED_BODY()
+
+    /**
+     * The stat value before the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    float Before;
+
+    /**
+     * The stat value after the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    float After;
 };
 
 /**
@@ -51,11 +73,16 @@ struct POKEMONCORE_API FLevelUpStatChanges {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
     FStatChange LevelChange;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    FExpPercentChange ExpPercentChange;
+
     /**
      * The changes to the individual stats in battle
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
     TMap<FName, FStatChange> StatChanges;
+
+    FLevelUpStatChanges &operator+=(const FLevelUpStatChanges &Other);
 };
 
 // This class does not need to be modified.
