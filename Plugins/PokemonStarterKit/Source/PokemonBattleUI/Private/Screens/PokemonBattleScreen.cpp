@@ -85,6 +85,11 @@ void UPokemonBattleScreen::RemoveFromExpGainComplete(FDelegateHandle Handle) {
     OnExpGainComplete.Remove(Handle);
 }
 
+void UPokemonBattleScreen::FinishExpGainDisplay() {
+    Algo::ForEach(Panels, &UPokemonBattlePanel::Refresh);
+    SwapToPanelDisplay();
+}
+
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
     Algo::ForEach(Side->GetBattlers(), std::bind_front(&UPokemonBattleScreen::CreateBattlePanel, this, Index));
 }

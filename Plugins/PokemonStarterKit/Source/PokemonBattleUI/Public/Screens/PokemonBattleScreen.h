@@ -73,11 +73,8 @@ public:
 
     void RemoveFromExpGainComplete(FDelegateHandle Handle);
 
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void SwapToPanelDisplay();
-
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void SwapToExpGainDisplay();
+    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
+    void FinishExpGainDisplay();
     
   protected:
     /**
@@ -87,6 +84,12 @@ public:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void SlotPanel(UPokemonBattlePanel *Panel, int32 Side);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void SwapToPanelDisplay();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void SwapToExpGainDisplay();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void PlayExpGainAnimation();

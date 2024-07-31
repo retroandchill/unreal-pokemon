@@ -36,6 +36,8 @@ struct POKEMONCORE_API FStatChange {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
     int32 After;
+
+    int32 Diff() const;
 };
 
 /**

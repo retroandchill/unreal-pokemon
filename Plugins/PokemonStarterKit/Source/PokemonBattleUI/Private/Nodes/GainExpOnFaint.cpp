@@ -42,7 +42,7 @@ void UGainExpOnFaint::Activate() {
 
 void UGainExpOnFaint::OnExpGainComplete() {
     auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
-    Screen->SwapToPanelDisplay();
+    Screen->FinishExpGainDisplay();
     OnComplete.Broadcast();
     Screen->RemoveFromExpGainComplete(CompleteHandle);
     SetReadyToDestroy();
