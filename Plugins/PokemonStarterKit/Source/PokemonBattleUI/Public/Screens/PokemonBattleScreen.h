@@ -123,7 +123,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     void NextBattler(const TScriptInterface<IBattler> &Battler);
 
-  protected:
+    void AdvanceToNextSelection();
+
+protected:
     /**
      * Called when a move is selected on a battler
      * @param Battler The battler to use the move
@@ -137,6 +139,13 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void OnMoveCanceled();
+
+    
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
+    void OnSwitchSelected(const TScriptInterface<IBattler>& Battler, const TScriptInterface<IBattler>& Target);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
+    void HideSwitchWindow();
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Exp")
     void CompleteExpGain();

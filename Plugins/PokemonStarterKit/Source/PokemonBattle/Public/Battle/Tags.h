@@ -19,6 +19,11 @@ POKEMONBATTLE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(HoldForComplete);
 POKEMONBATTLE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(StartAction);
 
 /**
+ * The tag used for events fired for a switch out event
+ */
+POKEMONBATTLE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(SwitchOut);
+
+/**
  * The tag used for events fired at the end of the turn
  */
 POKEMONBATTLE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(EndTurn);

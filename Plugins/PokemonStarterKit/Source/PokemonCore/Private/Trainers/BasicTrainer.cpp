@@ -31,6 +31,10 @@ FText UBasicTrainer::GetTrainerName() const {
     return Name;
 }
 
+FText UBasicTrainer::GetFullTrainerName() const {
+    return FText::Format(FText::FromStringView(TEXT("{0} {1}")), { GetTrainerType().RealName, Name });
+}
+
 int32 UBasicTrainer::GetPayout() const {
     check(!Party.IsEmpty())
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();

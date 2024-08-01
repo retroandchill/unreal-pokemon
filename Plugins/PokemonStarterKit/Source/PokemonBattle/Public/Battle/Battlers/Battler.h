@@ -11,6 +11,7 @@
 
 #include "Battler.generated.h"
 
+struct FGameplayAbilitySpecHandle;
 class IBattler;
 struct FSpeciesData;
 class UBattlerAbilityComponent;
@@ -120,6 +121,9 @@ class POKEMONBATTLE_API IBattler {
 
     UFUNCTION(BlueprintCallable, Category = Context)
     virtual const TScriptInterface<IPokemon> &GetWrappedPokemon() const = 0;
+    
+    UFUNCTION(BlueprintCallable, Category = Context)
+    virtual bool IsActive() const = 0;
 
     /**
      * Get the species that this battler represents
@@ -214,6 +218,14 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Moves)
     virtual const TArray<TScriptInterface<IBattleMove>> &GetMoves() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Switching)
+    virtual FText GetRecallMessage() const = 0;
+
+    virtual FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler>& SwitchTarget) = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Ownership)
+    virtual bool IsOwnedByPlayer() const = 0;
+
     /**
      * Select the actions for this battler
      */
@@ -225,6 +237,9 @@ class POKEMONBATTLE_API IBattler {
      * @return The number of actions that can be taken
      */
     virtual uint8 GetActionCount() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
+    virtual int32 GetTurnCount() const = 0;
 
     /**
      * Get all allies in battle

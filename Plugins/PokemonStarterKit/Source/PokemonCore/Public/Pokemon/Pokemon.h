@@ -171,6 +171,13 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Trainer)
     virtual TScriptInterface<IObtainedBlock> GetObtainedInformation() const = 0;
+
+    /**
+     * Get the information about the Pokémon's current handler
+     * @return Is information about the current handler
+     */
+    UFUNCTION(BlueprintCallable, Category = Trainer)
+    virtual const TScriptInterface<ITrainer> &GetCurrentHandler() const = 0;
 };
 
 /**

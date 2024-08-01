@@ -28,6 +28,7 @@
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
+#include "Battle/Actions/SwitchActionBase.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -114,6 +115,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         HoldItem = FGameplayAbilitySpecHandle();
     }
 
+    auto SwitchActionAbility = GetDefault<UPokemonBattleSettings>()->SwitchAbilityClass.TryLoadClass<USwitchActionBase>();
+    SwitchActionHandle = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(SwitchActionAbility, 1, INDEX_NONE, this));
+
     return this;
 }
 
@@ -156,6 +160,10 @@ const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
 
 const TScriptInterface<IPokemon> &ABattlerActor::GetWrappedPokemon() const {
     return WrappedPokemon;
+}
+
+bool ABattlerActor::IsActive() const {
+    return OwningSide->GetBattlers().Contains(this);
 }
 
 const FSpeciesData &ABattlerActor::GetSpecies() const {
@@ -275,6 +283,19 @@ const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {
     return Moves;
 }
 
+FText ABattlerActor::GetRecallMessage() const {
+    return GetMessageOnRecall();
+}
+
+FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) const {
+    // TODO: Active the ability
+    return SwitchActionHandle;
+}
+
+bool ABattlerActor::IsOwnedByPlayer() const {
+    return WrappedPokemon->GetCurrentHandler() == UTrainerHelpers::GetPlayerCharacter(this);
+}
+
 void ABattlerActor::SelectActions() {
     Controller->InitiateActionSelection(this);
 }
@@ -305,6 +326,10 @@ void ABattlerActor::RecordParticipation() {
         ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return Battler->CanGainExp(); }) |
         ranges::views::transform([](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId(); });
     ranges::for_each(NewParticipants, [this](const FGuid &ID) { Participants.Add(ID); });
+}
+
+int32 ABattlerActor::GetTurnCount() const {
+    return TurnCount;
 }
 
 const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {

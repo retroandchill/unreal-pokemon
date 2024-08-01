@@ -27,6 +27,9 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
     UFUNCTION(BlueprintPure, Category = Bio)
     FText GetTrainerName() const override;
 
+    UFUNCTION(BlueprintCallable, Category = Bio)
+    FText GetFullTrainerName() const override;
+
     UFUNCTION(BlueprintPure, Category = Drops)
     int32 GetPayout() const override;
 
