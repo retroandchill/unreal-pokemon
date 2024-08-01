@@ -8,6 +8,7 @@
 
 #include "PokemonBattleScreen.generated.h"
 
+class UBattleSwitchPane;
 struct FExpGainInfo;
 class UExpGainPane;
 class IBattleMove;
@@ -47,6 +48,13 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Widgets")
     UPokemonActionOptions *GetActionSelect() const;
+
+    /**
+     * Get the switch selection pane widget 
+     * @return The pane used to select Pokémon to switch in
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Widgets")
+    UBattleSwitchPane *GetBattleSwitchPane() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Widgets")
     UExpGainPane *GetExpGainPane() const;
@@ -145,6 +153,12 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UBattleMoveSelect> MoveSelect;
+
+    /**
+     * The pane used to select Pokémon to switch in
+     */
+    UPROPERTY(BlueprintGetter = GetBattleSwitchPane, Category = "Widgets", meta = (BindWidget))
+    TObjectPtr<UBattleSwitchPane> BattleSwitchPane;
 
     UPROPERTY(BlueprintGetter = GetExpGainPane, Category = "Widgets", meta = (BindWidget))
     TObjectPtr<UExpGainPane> ExpGainPane;
