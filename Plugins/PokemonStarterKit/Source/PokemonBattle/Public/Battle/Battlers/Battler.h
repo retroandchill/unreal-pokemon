@@ -250,11 +250,13 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Show the battler's sprite in battle
      */
+    UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void ShowSprite() const = 0;
 
     /**
      * Hide the battler's sprite
      */
+    UFUNCTION(BlueprintCallable, Category = Visuals)
     virtual void HideSprite() const = 0;
 
     virtual void RecordParticipation() = 0;

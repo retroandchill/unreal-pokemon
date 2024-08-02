@@ -54,6 +54,7 @@ TScriptInterface<IPokemon> UBasicTrainer::GetPokemon(int32 Index) const {
 
 void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) {
     Party.Add(Pokemon);
+    Pokemon->SetCurrentHandler(this);
 }
 
 void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {

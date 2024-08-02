@@ -24,8 +24,10 @@ void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     UserIndex = Payload->UserIndex;
     SwitchTargetIndex = Payload->SwapIndex;
     
-    auto Battler = CastChecked<IBattler>(GetCurrentActorInfo()->AvatarActor);
+    TScriptInterface<IBattler> Battler = GetCurrentActorInfo()->AvatarActor.Get();
+    check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
+    PlayRecallAnimation(Battler);
 }
 
 void USwitchActionBase::SwapWithTarget() {

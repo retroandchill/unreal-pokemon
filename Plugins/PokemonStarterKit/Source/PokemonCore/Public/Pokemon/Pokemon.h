@@ -178,6 +178,9 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Trainer)
     virtual const TScriptInterface<ITrainer> &GetCurrentHandler() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = Trainer)
+    virtual void SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler) = 0;
 };
 
 /**

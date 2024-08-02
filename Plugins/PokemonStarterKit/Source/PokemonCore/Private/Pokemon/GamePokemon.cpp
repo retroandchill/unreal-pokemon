@@ -152,6 +152,10 @@ const TScriptInterface<ITrainer> & UGamePokemon::GetCurrentHandler() const {
     return CurrentHandler;
 }
 
+void UGamePokemon::SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler) {
+    CurrentHandler = NewHandler;
+}
+
 UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data) {
     return Create(WorldContext, Data, nullptr);
 }
