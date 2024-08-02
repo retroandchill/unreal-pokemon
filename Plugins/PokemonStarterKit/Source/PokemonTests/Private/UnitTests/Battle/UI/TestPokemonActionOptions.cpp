@@ -1,7 +1,7 @@
 ﻿#include "Asserts.h"
 #include "Battle/Battlers/Battler.h"
-#include "Components/BattleMenuOption.h"
 #include "Components/PokemonActionOptions.h"
+#include "Components/RPGButtonBase.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattler.h"
@@ -23,7 +23,7 @@ bool TestPokemonActionOptions::RunTest(const FString &Parameters) {
     Window->AddToViewport();
     Window->SetBattler(Battler);
 
-    auto Children = UWidgetTestUtilities::FindAllChildWidgetsOfType<UBattleMenuOption>(Window.Get());
+    auto Children = UWidgetTestUtilities::FindAllChildWidgetsOfType<URPGButtonBase>(Window.Get());
     UE_CHECK_EQUAL(Window->GetItemCount(), Children.Num());
 
     return true;

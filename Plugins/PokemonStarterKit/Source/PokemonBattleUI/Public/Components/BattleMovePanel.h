@@ -22,6 +22,7 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * Get the move for this panel
      * @return The move that this panel represents
      */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
     const TScriptInterface<IBattleMove> &GetMove() const;
 
     /**
@@ -32,11 +33,10 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
 
   protected:
     /**
-     * Get the icon for the move's type.
-     * @return The move's type icon
+     * Set the visual appearance of the move for this widget
      */
-    UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "Moves|Graphics")
-    UObject *GetTypeIcon();
+    UFUNCTION(BlueprintImplementableEvent, Category = "Style")
+    void SetPanelAppearance();
 
   private:
     /**
@@ -47,14 +47,8 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
     /**
      * The move this panel holds
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintGetter = GetMove, Category = Content)
     TScriptInterface<IBattleMove> Move;
-
-    /**
-     * Image icon for a move's type
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> TypeIcon;
 
     /**
      * Text for a move's name
@@ -71,6 +65,6 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
     /**
      * The format used to print a move's PP.
      */
-    UPROPERTY(EditAnywhere, DisplayName = "Move PP Format", Category = Display)
+    UPROPERTY(EditAnywhere, DisplayName = "Move PP Format", Category = Content)
     FText MovePPFormat = FText::FromStringView(TEXT("{0}/{1}"));
 };

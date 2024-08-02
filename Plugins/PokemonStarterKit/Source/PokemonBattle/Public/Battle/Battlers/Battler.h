@@ -8,10 +8,10 @@
 #include "range/v3/view/any_view.hpp"
 #include "UObject/Interface.h"
 #include "Utilities/PokemonUtilities.h"
+#include "GameplayAbilitySpecHandle.h"
 
 #include "Battler.generated.h"
 
-struct FGameplayAbilitySpecHandle;
 class IBattler;
 struct FSpeciesData;
 class UBattlerAbilityComponent;
