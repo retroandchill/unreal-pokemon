@@ -287,7 +287,7 @@ FText ABattlerActor::GetRecallMessage() const {
     return GetMessageOnRecall();
 }
 
-FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) const {
+FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
     // TODO: Active the ability
     return SwitchActionHandle;
 }
