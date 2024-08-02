@@ -252,6 +252,11 @@ class POKEMONBATTLE_API IBattler {
      */
     virtual void ShowSprite() const = 0;
 
+    /**
+     * Hide the battler's sprite
+     */
+    virtual void HideSprite() const = 0;
+
     virtual void RecordParticipation() = 0;
 
     /**

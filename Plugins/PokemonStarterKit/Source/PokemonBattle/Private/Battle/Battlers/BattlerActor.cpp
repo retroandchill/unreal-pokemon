@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerActor.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Battle/Abilities/AbilityLookup.h"
 #include "Battle/Attributes/ExpAttributeSet.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
@@ -28,7 +29,9 @@
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
-#include "Battle/Actions/SwitchActionBase.h"
+#include "Battle/Tags.h"
+#include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Events/SwitchPokemonPayload.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -288,7 +291,24 @@ FText ABattlerActor::GetRecallMessage() const {
 }
 
 FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
-    // TODO: Active the ability
+    
+    FGameplayEventData EventData;
+    EventData.Instigator = this;
+
+    check(OwningTrainer != nullptr)
+    auto &TrainerParty = OwningSide->GetTrainerParty(OwningTrainer);
+    auto Payload = NewObject<USwitchPokemonPayload>();
+    Payload->OwningTrainer = OwningTrainer;
+    Payload->UserIndex = TrainerParty.Find(this);
+    Payload->SwapIndex = TrainerParty.Find(SwitchTarget);
+    check(Payload->UserIndex != INDEX_NONE && Payload->SwapIndex != INDEX_NONE)
+    
+    EventData.OptionalObject = Payload;
+    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
+    TargetData->SetActors({CastChecked<AActor>(SwitchTarget.GetObject())});
+    EventData.TargetData.Data.Emplace(TargetData);
+
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, Pokemon::Battle::SwitchOut, EventData);
     return SwitchActionHandle;
 }
 
@@ -313,6 +333,11 @@ ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 void ABattlerActor::ShowSprite() const {
     check(Sprite != nullptr)
     Sprite->SetActorHiddenInGame(false);
+}
+
+void ABattlerActor::HideSprite() const {
+    check(Sprite != nullptr)
+    Sprite->SetActorHiddenInGame(true);
 }
 
 void ABattlerActor::RecordParticipation() {

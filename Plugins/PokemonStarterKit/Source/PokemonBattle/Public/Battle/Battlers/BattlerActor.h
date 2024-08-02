@@ -110,6 +110,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
 
     void ShowSprite() const override;
+    void HideSprite() const override;
     void RecordParticipation() override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
