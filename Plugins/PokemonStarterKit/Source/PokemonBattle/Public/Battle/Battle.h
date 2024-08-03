@@ -131,7 +131,7 @@ class POKEMONBATTLE_API IBattle {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
     void BeginActionSelection(const TScriptInterface<IBattler> &Battler);
-    
+
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
     void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
 

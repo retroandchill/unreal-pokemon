@@ -280,15 +280,16 @@ void APokemonBattle::EndTurn() {
             return;
         }
 
-        // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out faints
-        ranges::for_each( RangeHelpers::CreateRange(Sides[i]->GetBattlers())
-            | ranges::views::filter(&IsFainted), [this, &bRequiresSwaps](const TScriptInterface<IBattler>& Battler) {
-                auto BattlerId = Battler->GetInternalId();
-                CurrentActionCount.Add(BattlerId, 0);
-                ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
-                Battler->RequireSwitch();
-                bRequiresSwaps = true;
-            });
+        // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out
+        // faints
+        ranges::for_each(RangeHelpers::CreateRange(Sides[i]->GetBattlers()) | ranges::views::filter(&IsFainted),
+                         [this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
+                             auto BattlerId = Battler->GetInternalId();
+                             CurrentActionCount.Add(BattlerId, 0);
+                             ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
+                             Battler->RequireSwitch();
+                             bRequiresSwaps = true;
+                         });
     }
 
     // If we need swaps, we're going to enter a second selecting and action phase to process the swaps

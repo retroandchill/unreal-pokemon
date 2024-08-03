@@ -20,7 +20,7 @@
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
 
-static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>>& BattleParty) {
+static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>> &BattleParty) {
     for (uint8 j = Start + 1; j < BattleParty.Num(); j++) {
         if (auto &Substitute = BattleParty[j]; !Substitute->IsFainted()) {
             BattleParty.Swap(Start, j);

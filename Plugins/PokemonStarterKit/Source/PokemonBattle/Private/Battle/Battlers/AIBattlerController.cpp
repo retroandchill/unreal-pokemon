@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/AIBattlerController.h"
+#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "RangeHelpers.h"
-#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -50,7 +50,7 @@ void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Ba
     check(CurrentHandler != nullptr)
 
     auto &HandlerParty = Battler->GetOwningSide()->GetTrainerParty(CurrentHandler);
-    auto ViableSwap = HandlerParty.FindByPredicate([](const TScriptInterface<IBattler>& Possibility) {
+    auto ViableSwap = HandlerParty.FindByPredicate([](const TScriptInterface<IBattler> &Possibility) {
         return !Possibility->IsActive() && !Possibility->IsFainted();
     });
     check(ViableSwap != nullptr)

@@ -2,8 +2,8 @@
 
 #include "Nodes/GainExpOnFaint.h"
 #include "Battle/Battle.h"
-#include "Battle/BattleSide.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Utilities/BattleScreenHelpers.h"
 
@@ -16,7 +16,7 @@ UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObje
 }
 
 void UGainExpOnFaint::Activate() {
-    auto ValidBattlers = Battlers.FilterByPredicate([](const TScriptInterface<IBattler>& Battler) {
+    auto ValidBattlers = Battlers.FilterByPredicate([](const TScriptInterface<IBattler> &Battler) {
         auto &OwningSide = Battler->GetOwningSide();
         return OwningSide == OwningSide->GetOwningBattle()->GetOpposingSide();
     });

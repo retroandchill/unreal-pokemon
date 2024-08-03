@@ -2,8 +2,8 @@
 
 #include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Battlers/Battler.h"
-#include "PokemonBattleSettings.h"
 #include "Battle/BattleSide.h"
+#include "PokemonBattleSettings.h"
 
 FBattleActionSwitchPokemon::FBattleActionSwitchPokemon(const TScriptInterface<IBattler> &BattlerIn,
                                                        const TScriptInterface<IBattler> &SwitchTargetIn)

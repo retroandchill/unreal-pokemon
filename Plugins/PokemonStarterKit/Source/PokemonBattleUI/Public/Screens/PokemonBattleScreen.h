@@ -46,7 +46,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     void SelectAction(const TScriptInterface<IBattler> &Battler);
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void PromptMandatorySwitch(const TScriptInterface<IBattler>& Battler);
+    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
 
     /**
      * Get the action select widget
