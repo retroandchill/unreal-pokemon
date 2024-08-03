@@ -13,18 +13,29 @@ class ABattleTransitionActor;
 class ULevelStreamingDynamic;
 class IBattle;
 
+USTRUCT()
+struct POKEMONBATTLE_API FLevelStreamingVolumeState {
+    GENERATED_BODY()
+
+    UPROPERTY()
+    TObjectPtr<ALevelStreamingVolume> Volume;
+
+    bool bDisabled = false;
+};
+
 /**
  * Delegate called when the battle is finished and the player is allowed to continue on
  */
-DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
+DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult);
 
-    /**
-     * Subsystem used to control transitions to and from the battle scene
-     */
-    UCLASS() class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
+/**
+ * Subsystem used to control transitions to and from the battle scene
+ */
+UCLASS()
+class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     GENERATED_BODY()
 
-  public:
+public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
     /**
@@ -61,7 +72,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
      */
     void RemoveFromBattleFinished(const FDelegateHandle &Handle);
 
-  private:
+private:
     /**
      * Set up the jump into battle
      */
@@ -105,4 +116,6 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult)
      * player loses and loss is not allowed).
      */
     FBattleFinished BattleFinished;
+
+    TArray<FLevelStreamingVolumeState> StreamingStates;
 };

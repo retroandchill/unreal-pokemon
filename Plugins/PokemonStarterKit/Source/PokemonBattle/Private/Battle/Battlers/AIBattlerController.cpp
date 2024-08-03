@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/AIBattlerController.h"
+#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
@@ -22,6 +23,10 @@ void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattl
     AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChooseAction, this, Battler));
 }
 
+void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const {
+    AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChoosePokemonToSwitchTo, this, Battler));
+}
+
 void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
     ActionReady = MoveTemp(QueueAction);
 }
@@ -38,4 +43,17 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
     auto Targets = Move->GetAllPossibleTargets() | RangeHelpers::TToArray<FTargetWithIndex>();
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
+}
+
+void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const {
+    auto &CurrentHandler = Battler->GetWrappedPokemon()->GetCurrentHandler();
+    check(CurrentHandler != nullptr)
+
+    auto &HandlerParty = Battler->GetOwningSide()->GetTrainerParty(CurrentHandler);
+    auto ViableSwap = HandlerParty.FindByPredicate([](const TScriptInterface<IBattler> &Possibility) {
+        return !Possibility->IsActive() && !Possibility->IsFainted();
+    });
+    check(ViableSwap != nullptr)
+
+    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionSwitchPokemon>(Battler, *ViableSwap));
 }

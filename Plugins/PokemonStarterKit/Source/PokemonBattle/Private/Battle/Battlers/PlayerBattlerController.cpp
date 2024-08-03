@@ -12,6 +12,10 @@ void UPlayerBattlerController::InitiateActionSelection(const TScriptInterface<IB
     IBattle::Execute_BeginActionSelection(BattleContext.GetObject(), Battler);
 }
 
+void UPlayerBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const {
+    IBattle::Execute_PromptMandatorySwitch(BattleContext.GetObject(), Battler);
+}
+
 void UPlayerBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
     ActionReady = MoveTemp(QueueAction);
 }

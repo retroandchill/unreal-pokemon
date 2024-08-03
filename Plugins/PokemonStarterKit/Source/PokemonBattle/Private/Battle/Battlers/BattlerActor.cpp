@@ -294,7 +294,6 @@ FText ABattlerActor::GetRecallMessage() const {
 }
 
 FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
-
     FGameplayEventData EventData;
     EventData.Instigator = this;
 
@@ -321,6 +320,10 @@ bool ABattlerActor::IsOwnedByPlayer() const {
 
 void ABattlerActor::SelectActions() {
     Controller->InitiateActionSelection(this);
+}
+
+void ABattlerActor::RequireSwitch() {
+    Controller->InitiateForcedSwitch(this);
 }
 
 uint8 ABattlerActor::GetActionCount() const {

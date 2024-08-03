@@ -2,6 +2,7 @@
 
 #include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "PokemonBattleSettings.h"
 
 FBattleActionSwitchPokemon::FBattleActionSwitchPokemon(const TScriptInterface<IBattler> &BattlerIn,
@@ -13,12 +14,16 @@ FString FBattleActionSwitchPokemon::GetReferencerName() const {
     return TEXT("FBattleActionSwitchPokemon");
 }
 
+bool FBattleActionSwitchPokemon::CanExecute() const {
+    return GetBattler()->GetOwningSide()->GetBattlers().Contains(GetBattler());
+}
+
 int32 FBattleActionSwitchPokemon::GetPriority() const {
     return GetDefault<UPokemonBattleSettings>()->SwitchPriority;
 }
 
 FText FBattleActionSwitchPokemon::GetActionMessage() const {
-    return GetBattler()->GetRecallMessage();
+    return FText::GetEmpty();
 }
 
 FGameplayAbilitySpecHandle FBattleActionSwitchPokemon::ActivateAbility() {

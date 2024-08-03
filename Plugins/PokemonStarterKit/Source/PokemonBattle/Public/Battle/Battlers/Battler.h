@@ -232,6 +232,11 @@ class POKEMONBATTLE_API IBattler {
     virtual void SelectActions() = 0;
 
     /**
+     * Force the battler to choose a party member to switch to
+     */
+    virtual void RequireSwitch() = 0;
+
+    /**
      * How many actions a Pokémon may take in a turn.
      * <p>Note: Messages like "Pikachu cannot move" or "Snorlax must recharge" count as actions</p>
      * @return The number of actions that can be taken

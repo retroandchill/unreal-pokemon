@@ -20,6 +20,14 @@
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
 
+static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>> &BattleParty) {
+    for (uint8 j = Start + 1; j < BattleParty.Num(); j++) {
+        if (auto &Substitute = BattleParty[j]; !Substitute->IsFainted()) {
+            BattleParty.Swap(Start, j);
+        }
+    }
+}
+
 AActiveSide::AActiveSide() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));
 }
@@ -68,16 +76,24 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
         auto SpawnPosition = i < PokemonCount ? GetBattlerSpawnPosition(i) : GetTransform();
         auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), SpawnPosition);
         BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+        Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+    }
+
+    for (uint8 i = 0; i < BattleParty.Num(); i++) {
+        if (BattleParty[i]->IsFainted()) {
+            SwapForNonFaintedBattler(i, BattleParty);
+        }
+
+        auto &Battler = BattleParty[i];
+        check(!Battler->IsFainted())
         if (i < PokemonCount) {
             Battlers.Emplace_GetRef(Battler);
         }
-
-        Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 
     auto TrainerName = FText::FormatOrdered(FText::FromStringView(TEXT("{0} {1}")), Trainer->GetTrainerType().RealName,
                                             Trainer->GetTrainerName());
-    IntroMessageText = FText::FormatNamed(WildBattleTextFormat, TEXT("Names"), TrainerName);
+    IntroMessageText = FText::FormatNamed(TrainerBattleTextFormat, TEXT("Names"), TrainerName);
 
     // TODO: Add support for multiple battlers
     SendOutText = FText::FormatNamed(ShowBackSprites ? PlayerSendOutTextFormat : OpponentSendOutTextFormat,
@@ -150,5 +166,16 @@ void AActiveSide::SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer
 }
 
 bool AActiveSide::CanBattle() const {
-    return Algo::AnyOf(Battlers, [](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
+    auto IsNotFainted = [](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); };
+    if (Algo::AnyOf(Battlers, IsNotFainted)) {
+        return true;
+    }
+
+    for (auto &[ID, Party] : TrainerParties) {
+        if (Algo::AnyOf(Party.Battlers, IsNotFainted)) {
+            return true;
+        }
+    }
+
+    return false;
 }
