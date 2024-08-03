@@ -19,6 +19,7 @@ class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerCo
 
   public:
     void InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const override;
+    void InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const override;
     void BindOnActionReady(FActionReady &&QueueAction) override;
 
   private:
@@ -26,6 +27,8 @@ class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerCo
      * Perform an asynchronous action selection process
      */
     void ChooseAction(TScriptInterface<IBattler> Battler) const;
+
+    void ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const;
 
     /**
      * Called when an action is ready to be executed

@@ -1,7 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/GainExpOnFaint.h"
+#include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Utilities/BattleScreenHelpers.h"
 
@@ -14,15 +16,19 @@ UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObje
 }
 
 void UGainExpOnFaint::Activate() {
-    if (Battlers.IsEmpty()) {
+    auto ValidBattlers = Battlers.FilterByPredicate([](const TScriptInterface<IBattler> &Battler) {
+        auto &OwningSide = Battler->GetOwningSide();
+        return OwningSide == OwningSide->GetOwningBattle()->GetOpposingSide();
+    });
+    if (ValidBattlers.IsEmpty()) {
         OnComplete.Broadcast();
         SetReadyToDestroy();
         return;
     }
 
-    auto GainInfos = Battlers[0]->GiveExpToParticipants();
-    for (int32 i = 1; i < Battlers.Num(); i++) {
-        auto AdditionalInfos = Battlers[i]->GiveExpToParticipants();
+    auto GainInfos = ValidBattlers[0]->GiveExpToParticipants();
+    for (int32 i = 1; i < ValidBattlers.Num(); i++) {
+        auto AdditionalInfos = ValidBattlers[i]->GiveExpToParticipants();
         check(GainInfos.Num() == AdditionalInfos.Num())
 
         for (int32 j = 0; j < GainInfos.Num(); j++) {

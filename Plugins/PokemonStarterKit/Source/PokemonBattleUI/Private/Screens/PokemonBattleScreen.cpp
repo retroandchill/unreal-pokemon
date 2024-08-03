@@ -34,7 +34,13 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     ExpGainPane->SetBattle(CurrentBattle);
 }
 
+void UPokemonBattleScreen::ClearSelectingBattlers() {
+    SelectingBattlers.Reset();
+    SelectionIndex.Reset();
+}
+
 void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler) {
+    bMandatorySwitch = false;
     SelectingBattlers.Emplace(Battler);
     if (!SelectionIndex.IsSet()) {
         SelectionIndex.Emplace(0);
@@ -43,6 +49,16 @@ void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battle
     if (!ActionSelect->IsVisible()) {
         NextBattler(Battler);
     }
+}
+
+void UPokemonBattleScreen::PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) {
+    bMandatorySwitch = true;
+    SelectingBattlers.Emplace(Battler);
+    if (!SelectionIndex.IsSet()) {
+        SelectionIndex.Emplace(0);
+    }
+
+    OnMandatorySwitch();
 }
 
 UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
@@ -120,7 +136,7 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
     check(SelectionIndex.IsSet())
     auto &SelIndex = SelectionIndex.GetValue();
     SelIndex++;
-    if (SelectingBattlers.IsValidIndex(SelIndex)) {
+    if (!bMandatorySwitch && SelectingBattlers.IsValidIndex(SelIndex)) {
         NextBattler(SelectingBattlers[SelIndex]);
     }
 }
@@ -144,7 +160,9 @@ void UPokemonBattleScreen::OnMoveCanceled() {
 void UPokemonBattleScreen::OnSwitchSelected(const TScriptInterface<IBattler> &Battler,
                                             const TScriptInterface<IBattler> &Target) {
     CurrentBattle->QueueAction(MakeUnique<FBattleActionSwitchPokemon>(Battler, Target));
-    HideSwitchWindow();
+    if (!bMandatorySwitch || *SelectionIndex == SelectingBattlers.Num() - 1) {
+        HideSwitchWindow();
+    }
     AdvanceToNextSelection();
 }
 

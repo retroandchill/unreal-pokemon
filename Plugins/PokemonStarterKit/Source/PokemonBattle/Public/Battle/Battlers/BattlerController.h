@@ -32,6 +32,8 @@ class POKEMONBATTLE_API IBattlerController {
      */
     virtual void InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const = 0;
 
+    virtual void InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const = 0;
+
     /**
      * Bind a callback to when an action is ready
      * @param QueueAction The action to take when ready to act
