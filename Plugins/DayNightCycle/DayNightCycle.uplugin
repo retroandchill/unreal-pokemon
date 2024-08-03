@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.1.0",
 	"FriendlyName": "DayNightCycle",
 	"Description": "Adds the capability to handle a day night cycle inside a map",
 	"Category": "Gameplay",
