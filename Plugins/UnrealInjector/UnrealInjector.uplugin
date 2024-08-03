@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0.0",
+	"VersionName": "0.1.0",
 	"FriendlyName": "UnrealInjector",
 	"Description": "Dependency injection plugin for UInterfaces and UObjects.",
 	"Category": "Utility",

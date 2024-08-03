@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "0.0.1",
+	"VersionName": "0.1.0",
 	"FriendlyName": "TileReplacer",
 	"Description": "Basic tile replacement plugin for replacing Paper2D tiles with other actor types.",
 	"Category": "2D",

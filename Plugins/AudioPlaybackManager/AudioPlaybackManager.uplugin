@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.1.0",
 	"FriendlyName": "AudioPlaybackManager",
 	"Description": "Simple plugin for handling the playback of audio in the game",
 	"Category": "Audio",
