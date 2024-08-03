@@ -35,7 +35,8 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(UBattlerAbilityComponent *, GetAbilityComponent, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));
     MOCK_METHOD(FText, GetRecallMessage, (), (const, override));
-    MOCK_METHOD(FGameplayAbilitySpecHandle, PerformSwitch, (const TScriptInterface<IBattler>& SwitchTarget), (override));
+    MOCK_METHOD(FGameplayAbilitySpecHandle, PerformSwitch, (const TScriptInterface<IBattler> &SwitchTarget),
+                (override));
     MOCK_METHOD(bool, IsOwnedByPlayer, (), (const, override));
     MOCK_METHOD(void, SelectActions, (), (override));
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
@@ -44,7 +45,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(void, ShowSprite, (), (const, override));
     MOCK_METHOD(void, HideSprite, (), (const, override));
     MOCK_METHOD(void, RecordParticipation, (), (override));
-    MOCK_METHOD(void, AddParticipant, (const TScriptInterface<IBattler>& Participant), (override));
+    MOCK_METHOD(void, AddParticipant, (const TScriptInterface<IBattler> &Participant), (override));
     MOCK_METHOD(const TOptional<FStatusEffectInfo> &, GetStatusEffect, (), (const, override));
     MOCK_METHOD2(InflictStatusEffect, void(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
     MOCK_METHOD(void, CureStatusEffect, (), (override));

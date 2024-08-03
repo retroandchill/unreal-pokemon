@@ -148,7 +148,7 @@ TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
     return ObtainedBlock;
 }
 
-const TScriptInterface<ITrainer> & UGamePokemon::GetCurrentHandler() const {
+const TScriptInterface<ITrainer> &UGamePokemon::GetCurrentHandler() const {
     return CurrentHandler;
 }
 

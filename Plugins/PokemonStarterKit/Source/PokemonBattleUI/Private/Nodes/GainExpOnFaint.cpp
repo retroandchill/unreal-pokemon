@@ -47,7 +47,7 @@ void UGainExpOnFaint::Activate() {
         SetReadyToDestroy();
         return;
     }
-    
+
     CompleteHandle =
         Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
     Screen->DisplayExpForGain(MoveTemp(GainInfos));

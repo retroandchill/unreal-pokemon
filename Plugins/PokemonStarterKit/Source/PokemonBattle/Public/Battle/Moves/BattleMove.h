@@ -20,7 +20,7 @@ struct POKEMONBATTLE_API FTargetWithIndex {
     TWeakInterfacePtr<IBattler> Target;
     int32 BattlerIndex;
 
-    explicit FTargetWithIndex(const TScriptInterface<IBattler>& Battler);
+    explicit FTargetWithIndex(const TScriptInterface<IBattler> &Battler);
 };
 
 // This class does not need to be modified.
@@ -133,5 +133,5 @@ class POKEMONBATTLE_API IBattleMove {
     /*
      * Try to activate the move returning the spec handle for the move execution
      */
-    virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex>& Targets) = 0;
+    virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex> &Targets) = 0;
 };

@@ -40,7 +40,6 @@ struct POKEMONBATTLE_API FStatStageInfo {
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, DisplayName = "Negative Accuracy/Evasion Multiplier",
               Category = "Stats", meta = (UIMin = 0, ClampMin = 0))
     float NegativeAccEvaMultiplier;
-    
 };
 
 /**
@@ -134,6 +133,7 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     /**
      * The priority of a switch action in battle
      */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = Switching, meta = (MetaClass = "SwitchActionBase"))
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = Switching,
+              meta = (MetaClass = "SwitchActionBase"))
     FSoftClassPath SwitchAbilityClass;
 };

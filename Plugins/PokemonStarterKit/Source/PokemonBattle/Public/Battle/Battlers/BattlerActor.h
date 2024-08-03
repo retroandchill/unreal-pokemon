@@ -48,7 +48,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IPokemon> &GetWrappedPokemon() const override;
-    
+
     UFUNCTION(BlueprintPure, Category = Context)
     bool IsActive() const override;
 
@@ -100,7 +100,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Switching)
     FText GetRecallMessage() const;
 
-    FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler>& SwitchTarget) override;
+    FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) override;
 
     UFUNCTION(BlueprintPure, Category = Ownership)
     bool IsOwnedByPlayer() const;
@@ -111,12 +111,12 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
     UFUNCTION(BlueprintCallable, Category = Visuals)
     void ShowSprite() const override;
-    
+
     UFUNCTION(BlueprintCallable, Category = Visuals)
     void HideSprite() const override;
-    
+
     void RecordParticipation() override;
-    void AddParticipant(const TScriptInterface<IBattler>& Participant) override;
+    void AddParticipant(const TScriptInterface<IBattler> &Participant) override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
     int32 GetTurnCount() const override;
@@ -125,7 +125,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
     void CureStatusEffect() override;
 
-protected:
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
     FText GetMessageOnRecall() const;
 

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/BattleSwitchPane.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
@@ -17,7 +16,8 @@ void UBattleSwitchPane::RefreshContent() {
     ClearSelectableOptions();
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
     check(CurrentBattle != nullptr)
-    for (auto &PlayerParty = CurrentBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
+    for (auto &PlayerParty = CurrentBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer);
+         auto &Battler : PlayerParty) {
         auto Panel = WidgetTree->ConstructWidget(PanelClass);
         Panel->SetBattler(Battler);
         SlotOption(Panel);

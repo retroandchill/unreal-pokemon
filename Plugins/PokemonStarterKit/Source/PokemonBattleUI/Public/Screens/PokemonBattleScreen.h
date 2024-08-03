@@ -50,7 +50,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     UPokemonActionOptions *GetActionSelect() const;
 
     /**
-     * Get the switch selection pane widget 
+     * Get the switch selection pane widget
      * @return The pane used to select Pokémon to switch in
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Widgets")
@@ -125,7 +125,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
 
     void AdvanceToNextSelection();
 
-protected:
+  protected:
     /**
      * Called when a move is selected on a battler
      * @param Battler The battler to use the move
@@ -140,9 +140,8 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void OnMoveCanceled();
 
-    
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void OnSwitchSelected(const TScriptInterface<IBattler>& Battler, const TScriptInterface<IBattler>& Target);
+    void OnSwitchSelected(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IBattler> &Target);
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
     void HideSwitchWindow();

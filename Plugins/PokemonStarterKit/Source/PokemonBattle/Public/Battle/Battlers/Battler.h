@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "GameplayEffectTypes.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "range/v3/view/any_view.hpp"
 #include "UObject/Interface.h"
 #include "Utilities/PokemonUtilities.h"
-#include "GameplayAbilitySpecHandle.h"
 
 #include "Battler.generated.h"
 
@@ -121,7 +121,7 @@ class POKEMONBATTLE_API IBattler {
 
     UFUNCTION(BlueprintCallable, Category = Context)
     virtual const TScriptInterface<IPokemon> &GetWrappedPokemon() const = 0;
-    
+
     UFUNCTION(BlueprintCallable, Category = Context)
     virtual bool IsActive() const = 0;
 
@@ -221,7 +221,7 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Switching)
     virtual FText GetRecallMessage() const = 0;
 
-    virtual FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler>& SwitchTarget) = 0;
+    virtual FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) = 0;
 
     UFUNCTION(BlueprintCallable, Category = Ownership)
     virtual bool IsOwnedByPlayer() const = 0;
@@ -261,7 +261,7 @@ class POKEMONBATTLE_API IBattler {
 
     virtual void RecordParticipation() = 0;
 
-    virtual void AddParticipant(const TScriptInterface<IBattler>& Participant) = 0;
+    virtual void AddParticipant(const TScriptInterface<IBattler> &Participant) = 0;
 
     /**
      * Get the status effect held by this battler

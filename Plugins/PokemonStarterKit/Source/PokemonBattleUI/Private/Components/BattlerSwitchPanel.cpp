@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/BattlerSwitchPanel.h"
 
-const TScriptInterface<IBattler> & UBattlerSwitchPanel::GetBattler() const {
+const TScriptInterface<IBattler> &UBattlerSwitchPanel::GetBattler() const {
     return CurrentBattler;
 }
 

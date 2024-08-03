@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleActionBase.h"
 #include "Battle/Moves/BattleMove.h"
-
+#include "BattleActionBase.h"
 
 /**
  * The battle action for using a move

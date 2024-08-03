@@ -15,9 +15,12 @@
 #include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
+#include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Tags.h"
 #include "DataManager.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Moves/MoveData.h"
@@ -29,9 +32,6 @@
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
-#include "Battle/Tags.h"
-#include "Battle/Switching/SwitchActionBase.h"
-#include "Battle/Events/SwitchPokemonPayload.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -119,8 +119,10 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         HoldItem = FGameplayAbilitySpecHandle();
     }
 
-    auto SwitchActionAbility = GetDefault<UPokemonBattleSettings>()->SwitchAbilityClass.TryLoadClass<USwitchActionBase>();
-    SwitchActionHandle = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(SwitchActionAbility, 1, INDEX_NONE, this));
+    auto SwitchActionAbility =
+        GetDefault<UPokemonBattleSettings>()->SwitchAbilityClass.TryLoadClass<USwitchActionBase>();
+    SwitchActionHandle =
+        BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(SwitchActionAbility, 1, INDEX_NONE, this));
 
     return this;
 }
@@ -249,7 +251,7 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
             GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, {});
             continue;
         }
-        
+
         int32 BattlerLevel = Battler->GetPokemonLevel();
         auto &ExpAttributes = *Battler->GetAbilityComponent()->GetExpAttributeSet();
         float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;
@@ -292,7 +294,7 @@ FText ABattlerActor::GetRecallMessage() const {
 }
 
 FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
-    
+
     FGameplayEventData EventData;
     EventData.Instigator = this;
 
@@ -303,7 +305,7 @@ FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<I
     Payload->UserIndex = TrainerParty.Find(this);
     Payload->SwapIndex = TrainerParty.Find(SwitchTarget);
     check(Payload->UserIndex != INDEX_NONE && Payload->SwapIndex != INDEX_NONE)
-    
+
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->SetActors({CastChecked<AActor>(SwitchTarget.GetObject())});
@@ -346,14 +348,14 @@ void ABattlerActor::RecordParticipation() {
         return;
     }
 
-    auto AllOpponents = RangeHelpers::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers())
-        | ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
-    ranges::for_each(AllOpponents, [this](const TScriptInterface<IBattler>& Battler) {
-        Battler->AddParticipant(this);
-    });
+    auto AllOpponents =
+        RangeHelpers::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
+        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
+    ranges::for_each(AllOpponents,
+                     [this](const TScriptInterface<IBattler> &Battler) { Battler->AddParticipant(this); });
 }
 
-void ABattlerActor::AddParticipant(const TScriptInterface<IBattler>& Participant) {
+void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {
     Participants.Add(Participant->GetInternalId());
 }
 

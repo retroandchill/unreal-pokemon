@@ -32,7 +32,7 @@ FText UBasicTrainer::GetTrainerName() const {
 }
 
 FText UBasicTrainer::GetFullTrainerName() const {
-    return FText::Format(FText::FromStringView(TEXT("{0} {1}")), { GetTrainerType().RealName, Name });
+    return FText::Format(FText::FromStringView(TEXT("{0} {1}")), {GetTrainerType().RealName, Name});
 }
 
 int32 UBasicTrainer::GetPayout() const {

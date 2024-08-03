@@ -69,7 +69,7 @@ class POKEMONBATTLE_API UPokemonBattleMove : public UObject, public IBattleMove 
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattler> &GetOwningBattler() const override;
 
-    FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex>& Targets) override;
+    FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex> &Targets) override;
 
   private:
     /**

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
+
 #include "BattleSwitchPane.generated.h"
 
 class IBattler;
@@ -13,7 +14,7 @@ class UBattlerSwitchPanel;
 /**
  * Delegate called when the selected battler is changed in the widget.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectedBattlerChanged, const TScriptInterface<IBattler>&, Battler);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectedBattlerChanged, const TScriptInterface<IBattler> &, Battler);
 
 /**
  * The pane that holds the battler options for switching in combat
@@ -22,22 +23,22 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UBattleSwitchPane : public USelectableWidget {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set the current battle for this pane
      * @param Battle The battle for this particular pane
      */
-    void SetBattle(const TScriptInterface<IBattle>& Battle);
-    
+    void SetBattle(const TScriptInterface<IBattle> &Battle);
+
     /**
      * Refresh the contents of the window
      */
     void RefreshContent();
 
-protected:
+  protected:
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 
-private:
+  private:
     /**
      * The widget class for the panels that will be created.
      */

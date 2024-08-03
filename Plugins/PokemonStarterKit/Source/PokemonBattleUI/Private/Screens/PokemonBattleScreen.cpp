@@ -2,10 +2,10 @@
 
 #include "Screens/PokemonBattleScreen.h"
 #include "Algo/ForEach.h"
+#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMoveSelect.h"
@@ -49,7 +49,7 @@ UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
     return ActionSelect;
 }
 
-UBattleSwitchPane * UPokemonBattleScreen::GetBattleSwitchPane() const {
+UBattleSwitchPane *UPokemonBattleScreen::GetBattleSwitchPane() const {
     return BattleSwitchPane;
 }
 
@@ -116,8 +116,7 @@ void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler
     ActionSelect->ActivateWidget();
 }
 
-void UPokemonBattleScreen::AdvanceToNextSelection()
-{
+void UPokemonBattleScreen::AdvanceToNextSelection() {
     check(SelectionIndex.IsSet())
     auto &SelIndex = SelectionIndex.GetValue();
     SelIndex++;
@@ -128,8 +127,7 @@ void UPokemonBattleScreen::AdvanceToNextSelection()
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = Move->GetAllPossibleTargets()
-        | RangeHelpers::TToArray<FTargetWithIndex>();
+    auto Targets = Move->GetAllPossibleTargets() | RangeHelpers::TToArray<FTargetWithIndex>();
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
@@ -143,7 +141,8 @@ void UPokemonBattleScreen::OnMoveCanceled() {
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
 }
 
-void UPokemonBattleScreen::OnSwitchSelected(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IBattler> &Target) {
+void UPokemonBattleScreen::OnSwitchSelected(const TScriptInterface<IBattler> &Battler,
+                                            const TScriptInterface<IBattler> &Target) {
     CurrentBattle->QueueAction(MakeUnique<FBattleActionSwitchPokemon>(Battler, Target));
     HideSwitchWindow();
     AdvanceToNextSelection();

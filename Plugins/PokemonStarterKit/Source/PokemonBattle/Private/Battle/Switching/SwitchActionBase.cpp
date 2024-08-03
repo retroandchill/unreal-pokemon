@@ -1,13 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Switching/SwitchActionBase.h"
 #include "Battle/Battle.h"
-#include "Battle/BattleSide.h"
-#include "Battle/Tags.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
+#include "Battle/Tags.h"
 #include <range/v3/view/single.hpp>
 
 USwitchActionBase::USwitchActionBase() {
@@ -16,8 +15,9 @@ USwitchActionBase::USwitchActionBase() {
 }
 
 void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-    const FGameplayAbilityActorInfo *ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-    const FGameplayEventData *TriggerEventData) {
+                                        const FGameplayAbilityActorInfo *ActorInfo,
+                                        const FGameplayAbilityActivationInfo ActivationInfo,
+                                        const FGameplayEventData *TriggerEventData) {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
     // If this is not triggered by an event throw an exception
@@ -26,7 +26,7 @@ void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     OwningTrainer = Payload->OwningTrainer;
     UserIndex = Payload->UserIndex;
     SwitchTargetIndex = Payload->SwapIndex;
-    
+
     TScriptInterface<IBattler> Battler = GetCurrentActorInfo()->AvatarActor.Get();
     check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];

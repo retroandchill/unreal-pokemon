@@ -1,8 +1,8 @@
 ﻿#include "Asserts.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
 #include "Battle/PokemonBattle.h"
-#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
 #include "Mocks/MockBattleAction.h"
@@ -42,9 +42,10 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler1, IsFainted).WillByDefault(Return(false));
     ON_CALL(MockBattler1, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Battler 1"))));
     auto Battler1AbilityComponent = static_cast<UBattlerAbilityComponent *>(
-        Cast<AActor>(Battler1.GetObject())->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+        Cast<AActor>(Battler1.GetObject())
+            ->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
     ON_CALL(MockBattler1, GetAbilityComponent).WillByDefault(Return(Battler1AbilityComponent));
-    
+
     Side1Battlers.Add(Battler1);
     CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler2, FMockBattler, MockBattler2);
     auto Battler2ID = FGuid::NewGuid();
@@ -54,7 +55,8 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler2, IsFainted).WillByDefault(Return(false));
     ON_CALL(MockBattler2, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Battler 2"))));
     auto Battler2AbilityComponent = static_cast<UBattlerAbilityComponent *>(
-        Cast<AActor>(Battler2.GetObject())->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+        Cast<AActor>(Battler2.GetObject())
+            ->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
     ON_CALL(MockBattler2, GetAbilityComponent).WillByDefault(Return(Battler2AbilityComponent));
     Side1Battlers.Add(Battler2);
     ON_CALL(MockSide1, GetBattlers).WillByDefault(ReturnRef(Side1Battlers));
@@ -68,7 +70,8 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler3, IsFainted).WillByDefault(Return(false));
     ON_CALL(MockBattler3, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Battler 3"))));
     auto Battler3AbilityComponent = static_cast<UBattlerAbilityComponent *>(
-        Cast<AActor>(Battler3.GetObject())->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
+        Cast<AActor>(Battler3.GetObject())
+            ->AddComponentByClass(UBattlerAbilityComponent::StaticClass(), false, FTransform(), false));
     ON_CALL(MockBattler3, GetAbilityComponent).WillByDefault(Return(Battler3AbilityComponent));
     Side2Battlers.Add(Battler3);
     ON_CALL(MockSide2, GetBattlers).WillByDefault(ReturnRef(Side2Battlers));

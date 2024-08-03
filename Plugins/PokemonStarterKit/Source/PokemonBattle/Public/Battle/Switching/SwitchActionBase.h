@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+
 #include "SwitchActionBase.generated.h"
 
 struct FRunningMessageSet;
@@ -16,7 +17,7 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Default constructor.
      */
@@ -26,13 +27,13 @@ public:
                          const FGameplayAbilityActivationInfo ActivationInfo,
                          const FGameplayEventData *TriggerEventData) override;
 
-protected:
+  protected:
     /**
      * Play the animation to recall the Pokémon. It ends when {@link USwitchActionBase::SwapWithTarget} is called.
      * @param SwappingFrom The battler that is being recalled
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    void PlayRecallAnimation(const TScriptInterface<IBattler>& SwappingFrom);
+    void PlayRecallAnimation(const TScriptInterface<IBattler> &SwappingFrom);
 
     /**
      * Perform the internal swap of the Pokémon.
@@ -45,15 +46,15 @@ protected:
      * @param SwappingTo The battler that is being sent out
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    void PlaySendOutAnimation(const TScriptInterface<IBattler>& SwappingTo);
+    void PlaySendOutAnimation(const TScriptInterface<IBattler> &SwappingTo);
 
     UFUNCTION(BlueprintCallable, Category = Switching)
     void TriggerOnSendOut();
 
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    void DisplaySwitchInEffects(const TScriptInterface<IBattler>& Battler, const FRunningMessageSet& Messages);
+    void DisplaySwitchInEffects(const TScriptInterface<IBattler> &Battler, const FRunningMessageSet &Messages);
 
-private:
+  private:
     UPROPERTY()
     TScriptInterface<ITrainer> OwningTrainer;
     int32 UserIndex = 0;
