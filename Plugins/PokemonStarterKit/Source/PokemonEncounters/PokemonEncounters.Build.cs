@@ -19,7 +19,7 @@ public class PokemonEncounters : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore", "PokemonData"
             }
         );
     }

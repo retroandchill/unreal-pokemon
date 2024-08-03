@@ -64,7 +64,10 @@ class POKEMONENCOUNTERS_API AMapEncounterData : public AActor {
     GENERATED_BODY()
 
 public:
-
+#if WITH_EDITOR
+    EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
+#endif
+    
 private:
     /**
      * The full list of encounters in an area.
