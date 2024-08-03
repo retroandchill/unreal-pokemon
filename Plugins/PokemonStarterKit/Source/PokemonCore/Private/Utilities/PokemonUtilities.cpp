@@ -14,7 +14,7 @@ FLevelUpStatChanges &FLevelUpStatChanges::operator+=(const FLevelUpStatChanges &
         if (!StatChanges.Contains(ID)) {
             continue;
         }
-        
+
         auto &[Before, After] = StatChanges.FindChecked(ID);
         Before = FMath::Min(Before, StatChange.Before);
         After = FMath::Max(After, StatChange.After);

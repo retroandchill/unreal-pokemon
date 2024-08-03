@@ -140,6 +140,15 @@ AActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
     return TrainerParties.FindChecked(Trainer->GetInternalId()).Battlers;
 }
 
+void AActiveSide::SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer, int32 IndexA, int32 IndexB) {
+    auto &BattlerArray = TrainerParties.FindChecked(Trainer->GetInternalId()).Battlers;
+    BattlerArray.Swap(IndexA, IndexB);
+
+    if (auto BattlePartyIndex = Battlers.Find(BattlerArray[IndexB]); BattlePartyIndex != INDEX_NONE) {
+        Battlers[BattlePartyIndex] = BattlerArray[IndexA];
+    }
+}
+
 bool AActiveSide::CanBattle() const {
     return Algo::AnyOf(Battlers, [](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
 }

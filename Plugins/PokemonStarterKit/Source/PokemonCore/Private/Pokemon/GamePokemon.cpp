@@ -35,8 +35,10 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
 
     if (Trainer != nullptr) {
         OwnerInfo = FOwnerInfo(*Trainer);
+        CurrentHandler = Trainer;
     } else {
         OwnerInfo = FOwnerInfo(this);
+        CurrentHandler = nullptr;
     }
 
     ObtainedBlock = UnrealInjector::NewInjectedDependency<IObtainedBlock>(this, DTO);
@@ -144,6 +146,14 @@ const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
 
 TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
     return ObtainedBlock;
+}
+
+const TScriptInterface<ITrainer> &UGamePokemon::GetCurrentHandler() const {
+    return CurrentHandler;
+}
+
+void UGamePokemon::SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler) {
+    CurrentHandler = NewHandler;
 }
 
 UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data) {

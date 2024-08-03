@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Battlers/BattlerActor.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Battle/Abilities/AbilityLookup.h"
 #include "Battle/Attributes/ExpAttributeSet.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
@@ -14,9 +15,12 @@
 #include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
+#include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Tags.h"
 #include "DataManager.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Moves/MoveData.h"
@@ -57,6 +61,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
+    OwningTrainer = WrappedPokemon->GetCurrentHandler();
 
     auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
@@ -114,6 +119,11 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         HoldItem = FGameplayAbilitySpecHandle();
     }
 
+    auto SwitchActionAbility =
+        GetDefault<UPokemonBattleSettings>()->SwitchAbilityClass.TryLoadClass<USwitchActionBase>();
+    SwitchActionHandle =
+        BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(SwitchActionAbility, 1, INDEX_NONE, this));
+
     return this;
 }
 
@@ -156,6 +166,10 @@ const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
 
 const TScriptInterface<IPokemon> &ABattlerActor::GetWrappedPokemon() const {
     return WrappedPokemon;
+}
+
+bool ABattlerActor::IsActive() const {
+    return OwningSide->GetBattlers().Contains(this);
 }
 
 const FSpeciesData &ABattlerActor::GetSpecies() const {
@@ -237,7 +251,7 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
             GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, {});
             continue;
         }
-        
+
         int32 BattlerLevel = Battler->GetPokemonLevel();
         auto &ExpAttributes = *Battler->GetAbilityComponent()->GetExpAttributeSet();
         float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;
@@ -275,6 +289,36 @@ const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {
     return Moves;
 }
 
+FText ABattlerActor::GetRecallMessage() const {
+    return GetMessageOnRecall();
+}
+
+FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
+
+    FGameplayEventData EventData;
+    EventData.Instigator = this;
+
+    check(OwningTrainer != nullptr)
+    auto &TrainerParty = OwningSide->GetTrainerParty(OwningTrainer);
+    auto Payload = NewObject<USwitchPokemonPayload>();
+    Payload->OwningTrainer = OwningTrainer;
+    Payload->UserIndex = TrainerParty.Find(this);
+    Payload->SwapIndex = TrainerParty.Find(SwitchTarget);
+    check(Payload->UserIndex != INDEX_NONE && Payload->SwapIndex != INDEX_NONE)
+
+    EventData.OptionalObject = Payload;
+    auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
+    TargetData->SetActors({CastChecked<AActor>(SwitchTarget.GetObject())});
+    EventData.TargetData.Data.Emplace(TargetData);
+
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, Pokemon::Battle::SwitchOut, EventData);
+    return SwitchActionHandle;
+}
+
+bool ABattlerActor::IsOwnedByPlayer() const {
+    return WrappedPokemon->GetCurrentHandler() == UTrainerHelpers::GetPlayerCharacter(this);
+}
+
 void ABattlerActor::SelectActions() {
     Controller->InitiateActionSelection(this);
 }
@@ -294,17 +338,29 @@ void ABattlerActor::ShowSprite() const {
     Sprite->SetActorHiddenInGame(false);
 }
 
+void ABattlerActor::HideSprite() const {
+    check(Sprite != nullptr)
+    Sprite->SetActorHiddenInGame(true);
+}
+
 void ABattlerActor::RecordParticipation() {
-    auto NewParticipants =
-        OwningSide->GetOwningBattle()->GetSides() |
-        ranges::views::filter([this](const TScriptInterface<IBattleSide> &Side) { return Side != OwningSide; }) |
-        ranges::views::transform(
-            [](const TScriptInterface<IBattleSide> &Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); }) |
-        ranges::views::join |
-        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); }) |
-        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return Battler->CanGainExp(); }) |
-        ranges::views::transform([](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId(); });
-    ranges::for_each(NewParticipants, [this](const FGuid &ID) { Participants.Add(ID); });
+    if (!IsOwnedByPlayer()) {
+        return;
+    }
+
+    auto AllOpponents =
+        RangeHelpers::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
+        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
+    ranges::for_each(AllOpponents,
+                     [this](const TScriptInterface<IBattler> &Battler) { Battler->AddParticipant(this); });
+}
+
+void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {
+    Participants.Add(Participant->GetInternalId());
+}
+
+int32 ABattlerActor::GetTurnCount() const {
+    return TurnCount;
 }
 
 const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {

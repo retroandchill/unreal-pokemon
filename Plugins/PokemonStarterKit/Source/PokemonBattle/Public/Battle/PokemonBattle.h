@@ -77,7 +77,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void StartBattle() override;
 
-    void OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers);
+    FRunningMessageSet OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers);
 
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;

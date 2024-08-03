@@ -16,6 +16,17 @@
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
+static TScriptInterface<IBattler> SwapIfNecessary(const FTargetWithIndex &TargetWithIndex) {
+    auto Target = TargetWithIndex.Target.ToScriptInterface();
+    if (Target == nullptr) {
+        return nullptr;
+    }
+
+    auto &OwningSide = Target->GetOwningSide();
+    auto &Battlers = OwningSide->GetBattlers();
+    return Battlers[TargetWithIndex.BattlerIndex];
+}
+
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
                                                              const TScriptInterface<IMove> &Move) {
     Owner = Battler;
@@ -37,15 +48,14 @@ bool UPokemonBattleMove::IsUsable() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-TArray<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
+ranges::any_view<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    return Battle->GetActiveBattlers() | ranges::views::filter([&UserId](const TScriptInterface<IBattler> &Battler) {
+    return Battle->GetActiveBattlers() | ranges::views::filter([UserId](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() != UserId;
-           }) |
-           RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+           });
 }
 
 FText UPokemonBattleMove::GetDisplayName() const {
@@ -100,7 +110,7 @@ const TScriptInterface<IBattler> &UPokemonBattleMove::GetOwningBattler() const {
     return Owner;
 }
 
-FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<TScriptInterface<IBattler>> &Targets) {
+FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTargetWithIndex> &Targets) {
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;
@@ -113,11 +123,12 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<TScr
         UAbilitySystemBlueprintLibrary::GetGameplayAbilityFromSpecHandle(AbilityComponent, FunctionCode, bIsInstanced);
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
-    TargetData->SetActors(RangeHelpers::CreateRange(Targets) |
-                          ranges::views::transform([](const TScriptInterface<IBattler> &Battler) {
-                              return CastChecked<AActor>(Battler.GetObject());
-                          }) |
-                          RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
+    TargetData->SetActors(
+        RangeHelpers::CreateRange(Targets) | ranges::views::transform(&SwapIfNecessary) |
+        ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
+        ranges::views::transform(
+            [](const TScriptInterface<IBattler> &Battler) { return CastChecked<AActor>(Battler.GetObject()); }) |
+        RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);

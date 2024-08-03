@@ -17,6 +17,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(FGuid, GetInternalId, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IBattleSide> &, GetOwningSide, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IPokemon> &, GetWrappedPokemon, (), (const, override));
+    MOCK_METHOD(bool, IsActive, (), (const, override));
     MOCK_METHOD(const FSpeciesData &, GetSpecies, (), (const, override));
     MOCK_METHOD(FText, GetNickname, (), (const, override));
     MOCK_METHOD(EPokemonGender, GetGender, (), (const, override));
@@ -33,11 +34,18 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent *, GetAbilityComponent, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));
+    MOCK_METHOD(FText, GetRecallMessage, (), (const, override));
+    MOCK_METHOD(FGameplayAbilitySpecHandle, PerformSwitch, (const TScriptInterface<IBattler> &SwitchTarget),
+                (override));
+    MOCK_METHOD(bool, IsOwnedByPlayer, (), (const, override));
     MOCK_METHOD(void, SelectActions, (), (override));
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
+    MOCK_METHOD(int32, GetTurnCount, (), (const, override));
     MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
     MOCK_METHOD(void, ShowSprite, (), (const, override));
+    MOCK_METHOD(void, HideSprite, (), (const, override));
     MOCK_METHOD(void, RecordParticipation, (), (override));
+    MOCK_METHOD(void, AddParticipant, (const TScriptInterface<IBattler> &Participant), (override));
     MOCK_METHOD(const TOptional<FStatusEffectInfo> &, GetStatusEffect, (), (const, override));
     MOCK_METHOD2(InflictStatusEffect, void(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
     MOCK_METHOD(void, CureStatusEffect, (), (override));

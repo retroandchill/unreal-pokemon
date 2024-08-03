@@ -1,15 +1,15 @@
 ﻿#include "Asserts.h"
+#include "Battle/ActiveSide.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Components/NumberImageWidget.h"
 #include "Components/ProgressBar.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockBattleSide.h"
 #include "Nodes/PlayBattlerHPAnimation.h"
 #include "PrimaryGameLayout.h"
-#include "Battle/ActiveSide.h"
-#include "Lookup/InjectionUtilities.h"
 #include "Screens/PokemonBattleScreen.h"
 #include "Utilities/PlayerUtilities.h"
 #include "Utilities/ReflectionUtils.h"
@@ -60,13 +60,13 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
     auto Battler2Actor = Cast<AActor>(Battler2.GetObject());
     UE_ASSERT_NOT_NULL(Battler1Actor);
     UE_ASSERT_NOT_NULL(Battler2Actor);
-    
+
     Battler1Actor->DispatchBeginPlay();
     Battler2Actor->DispatchBeginPlay();
 
     auto Battler1AbilityComponent = Battler1->GetAbilityComponent();
     auto Battler2AbilityComponent = Battler1->GetAbilityComponent();
-    
+
     Battler1AbilityComponent->GetCoreAttributes()->InitHP(100);
     Battler1AbilityComponent->GetCoreAttributes()->InitMaxHP(100);
     Battler2AbilityComponent->GetCoreAttributes()->InitHP(100);

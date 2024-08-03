@@ -2,12 +2,14 @@
 
 #include "Screens/PokemonBattleScreen.h"
 #include "Algo/ForEach.h"
+#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMoveSelect.h"
+#include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
 #include <functional>
@@ -28,6 +30,7 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
         Index++;
     });
 
+    BattleSwitchPane->SetBattle(CurrentBattle);
     ExpGainPane->SetBattle(CurrentBattle);
 }
 
@@ -44,6 +47,10 @@ void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battle
 
 UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
     return ActionSelect;
+}
+
+UBattleSwitchPane *UPokemonBattleScreen::GetBattleSwitchPane() const {
+    return BattleSwitchPane;
 }
 
 UExpGainPane *UPokemonBattleScreen::GetExpGainPane() const {
@@ -109,12 +116,7 @@ void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler
     ActionSelect->ActivateWidget();
 }
 
-void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
-                                          const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = Move->GetAllPossibleTargets();
-    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
-    MoveSelect->DeactivateWidget();
-    MoveSelect->SetVisibility(ESlateVisibility::Hidden);
+void UPokemonBattleScreen::AdvanceToNextSelection() {
     check(SelectionIndex.IsSet())
     auto &SelIndex = SelectionIndex.GetValue();
     SelIndex++;
@@ -123,11 +125,27 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
     }
 }
 
+void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
+                                          const TScriptInterface<IBattleMove> &Move) {
+    auto Targets = Move->GetAllPossibleTargets() | RangeHelpers::TToArray<FTargetWithIndex>();
+    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
+    MoveSelect->DeactivateWidget();
+    MoveSelect->SetVisibility(ESlateVisibility::Hidden);
+    AdvanceToNextSelection();
+}
+
 void UPokemonBattleScreen::OnMoveCanceled() {
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     ActionSelect->ActivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UPokemonBattleScreen::OnSwitchSelected(const TScriptInterface<IBattler> &Battler,
+                                            const TScriptInterface<IBattler> &Target) {
+    CurrentBattle->QueueAction(MakeUnique<FBattleActionSwitchPokemon>(Battler, Target));
+    HideSwitchWindow();
+    AdvanceToNextSelection();
 }
 
 void UPokemonBattleScreen::CompleteExpGain() {

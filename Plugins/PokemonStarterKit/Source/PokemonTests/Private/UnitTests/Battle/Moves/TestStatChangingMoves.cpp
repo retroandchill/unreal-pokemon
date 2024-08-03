@@ -124,7 +124,7 @@ bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());
     UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetDefenseStages());
@@ -165,7 +165,7 @@ bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());
     UE_CHECK_EQUAL(-2.f, Battler2->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
@@ -207,7 +207,7 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
     Battler2->GetAbilityComponent()->SetNumericAttributeBase(
         UStatStagesAttributeSet::GetSpecialDefenseStagesAttribute(), -6.f);
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Metal Sound failed against all targets!"), ELogVerbosity::Display);
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());

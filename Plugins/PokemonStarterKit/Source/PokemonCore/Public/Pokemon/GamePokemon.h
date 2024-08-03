@@ -78,6 +78,12 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintPure, Category = Trainer)
     TScriptInterface<IObtainedBlock> GetObtainedInformation() const override;
 
+    UFUNCTION(BlueprintPure, Category = Trainer)
+    const TScriptInterface<ITrainer> &GetCurrentHandler() const override;
+
+    UFUNCTION(BlueprintCallable, Category = Trainer)
+    void SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler) override;
+
     /**
      * Create a new Pokémon from the given input data
      * @param Data The data to input to create the Pokémon
@@ -170,4 +176,10 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     TScriptInterface<IObtainedBlock> ObtainedBlock;
+
+    /**
+     * The block that contains the information about the current handler trainer
+     */
+    UPROPERTY(SaveGame)
+    TScriptInterface<ITrainer> CurrentHandler;
 };

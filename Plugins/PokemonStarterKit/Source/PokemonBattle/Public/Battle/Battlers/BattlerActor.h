@@ -49,6 +49,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IPokemon> &GetWrappedPokemon() const override;
 
+    UFUNCTION(BlueprintPure, Category = Context)
+    bool IsActive() const override;
+
     const FSpeciesData &GetSpecies() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
@@ -94,16 +97,37 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Moves)
     const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;
 
+    UFUNCTION(BlueprintPure, Category = Switching)
+    FText GetRecallMessage() const;
+
+    FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) override;
+
+    UFUNCTION(BlueprintPure, Category = Ownership)
+    bool IsOwnedByPlayer() const;
+
     void SelectActions() override;
     uint8 GetActionCount() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
 
+    UFUNCTION(BlueprintCallable, Category = Visuals)
     void ShowSprite() const override;
+
+    UFUNCTION(BlueprintCallable, Category = Visuals)
+    void HideSprite() const override;
+
     void RecordParticipation() override;
+    void AddParticipant(const TScriptInterface<IBattler> &Participant) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
+    int32 GetTurnCount() const override;
 
     const TOptional<FStatusEffectInfo> &GetStatusEffect() const override;
     void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
     void CureStatusEffect() override;
+
+  protected:
+    UFUNCTION(BlueprintImplementableEvent, Category = Switching)
+    FText GetMessageOnRecall() const;
 
   private:
     /**
@@ -118,7 +142,6 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     void SpawnSpriteActor(bool ShouldShow = false);
 
-  private:
     /**
      * The ability component for the battler
      */
@@ -150,6 +173,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IPokemon> WrappedPokemon;
+
+    UPROPERTY()
+    TScriptInterface<ITrainer> OwningTrainer;
 
     /**
      * The list of gameplay abilities that should be activated immediately upon the actor being spawned.
@@ -188,6 +214,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     TOptional<FStatusEffectInfo> StatusEffect;
 
+    FGameplayAbilitySpecHandle SwitchActionHandle;
+
     /**
      * The moves this battler knows
      */
@@ -205,4 +233,6 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TScriptInterface<IBattlerController> Controller;
+
+    int32 TurnCount = 0;
 };

@@ -11,12 +11,13 @@ ATestActiveSide::ATestActiveSide() {
                                                               ATestBattlerActor::StaticClass());
 }
 
-const TArray<TScriptInterface<IBattler>> & ATestActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
+const TArray<TScriptInterface<IBattler>> &
+ATestActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
     auto &Parties = UReflectionUtils::GetPropertyValue<TMap<FGuid, FTrainerParty>>(this, "TrainerParties");
     if (Trainer == nullptr || !Parties.Contains(Trainer->GetInternalId())) {
         static TArray<TScriptInterface<IBattler>> Ret;
         return Ret;
     }
-    
+
     return Super::GetTrainerParty(Trainer);
 }

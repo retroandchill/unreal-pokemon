@@ -18,6 +18,7 @@ class FMockTrainer : public ITrainer {
     MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));
     MOCK_METHOD(const FTrainerType &, GetTrainerType, (), (const, override));
     MOCK_METHOD(FText, GetTrainerName, (), (const, override));
+    MOCK_METHOD(FText, GetFullTrainerName, (), (const, override));
     MOCK_METHOD(int32, GetPayout, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IPokemon>> &, GetParty, (), (const, override));
     MOCK_METHOD(TScriptInterface<IPokemon>, GetPokemon, (int32 Index), (const, override));

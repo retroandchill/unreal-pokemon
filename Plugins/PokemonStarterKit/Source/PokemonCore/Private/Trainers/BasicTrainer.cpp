@@ -31,6 +31,10 @@ FText UBasicTrainer::GetTrainerName() const {
     return Name;
 }
 
+FText UBasicTrainer::GetFullTrainerName() const {
+    return FText::Format(FText::FromStringView(TEXT("{0} {1}")), {GetTrainerType().RealName, Name});
+}
+
 int32 UBasicTrainer::GetPayout() const {
     check(!Party.IsEmpty())
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
@@ -50,6 +54,7 @@ TScriptInterface<IPokemon> UBasicTrainer::GetPokemon(int32 Index) const {
 
 void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) {
     Party.Add(Pokemon);
+    Pokemon->SetCurrentHandler(this);
 }
 
 void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {

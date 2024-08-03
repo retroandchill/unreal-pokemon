@@ -70,8 +70,8 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
     float HPPercent = HPBar->GetPercent();
     float OldHP = FMath::RoundToFloat(CoreAttributes->GetMaxHP() * HPPercent);
     float DrainRate = FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * AnimationDrainSpeed, MaxDuration);
-
-    HPBarUpdateAnimation.PlayAnimation(HPPercent, CurrentBattler->GetHPPercent(), DrainRate);
+    float CurrentPercent = CurrentBattler->GetHPPercent();
+    HPBarUpdateAnimation.PlayAnimation(HPPercent, CurrentPercent, DrainRate);
 }
 
 void UPokemonBattlePanel::RefreshStatusEffect() {
