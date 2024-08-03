@@ -32,6 +32,10 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
 }
 
+static bool IsFainted(const TScriptInterface<IBattler> &Battler) {
+    return Battler->IsFainted();
+}
+
 static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
     return !Battler->IsFainted();
 }
@@ -260,13 +264,31 @@ void APokemonBattle::StartTurn() {
 }
 
 void APokemonBattle::EndTurn() {
+    bool bRequiresSwaps = false;
+    ExpectedActionCount.Reset();
+    CurrentActionCount.Reset();
     for (int32 i = 0; i < Sides.Num(); i++) {
         if (!Sides[i]->CanBattle()) {
             DecideBattle(i);
             return;
         }
+
+        ranges::for_each( RangeHelpers::CreateRange(Sides[i]->GetBattlers())
+            | ranges::views::filter(&IsFainted), [this, &bRequiresSwaps](const TScriptInterface<IBattler>& Battler) {
+                auto BattlerId = Battler->GetInternalId();
+                CurrentActionCount.Add(BattlerId, 0);
+                ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
+                Battler->RequireSwitch();
+                bRequiresSwaps = true;
+            });
     }
-    StartTurn();
+
+    // If we need swaps, we're going to enter a second selecting and action phase to process the swaps
+    if (bRequiresSwaps) {
+        Phase = EBattlePhase::Selecting;
+    } else {
+        StartTurn();
+    }
 }
 
 void APokemonBattle::BeginActionProcessing() {

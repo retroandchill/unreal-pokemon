@@ -323,6 +323,10 @@ void ABattlerActor::SelectActions() {
     Controller->InitiateActionSelection(this);
 }
 
+void ABattlerActor::RequireSwitch() {
+    Controller->InitiateForcedSwitch(this);
+}
+
 uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }

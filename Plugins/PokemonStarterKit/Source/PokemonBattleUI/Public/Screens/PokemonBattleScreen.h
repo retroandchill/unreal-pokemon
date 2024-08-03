@@ -42,6 +42,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void SelectAction(const TScriptInterface<IBattler> &Battler);
 
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
+    void PromptMandatorySwitch(const TScriptInterface<IBattler>& Battler);
+
     /**
      * Get the action select widget
      * @return Get the action select widget
@@ -95,6 +98,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void SwapToPanelDisplay();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    void OnMandatorySwitch();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void SwapToExpGainDisplay();
@@ -206,4 +212,6 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      * Called when the Exp. Gain Animation and move learning is complete
      */
     FSimpleMulticastDelegate OnExpGainComplete;
+
+    bool bMandatorySwitch = false;
 };

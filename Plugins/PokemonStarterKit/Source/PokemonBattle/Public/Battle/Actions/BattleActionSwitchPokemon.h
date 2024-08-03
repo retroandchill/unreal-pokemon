@@ -18,6 +18,7 @@ class POKEMONBATTLE_API FBattleActionSwitchPokemon : public FBattleActionBase {
     explicit FBattleActionSwitchPokemon(const TScriptInterface<IBattler> &BattlerIn,
                                         const TScriptInterface<IBattler> &SwitchTargetIn);
     FString GetReferencerName() const override;
+    bool CanExecute() const override;
     int32 GetPriority() const override;
     FText GetActionMessage() const override;
 

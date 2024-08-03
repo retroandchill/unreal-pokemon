@@ -106,6 +106,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     bool IsOwnedByPlayer() const;
 
     void SelectActions() override;
+    void RequireSwitch() override;
     uint8 GetActionCount() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetAllies() const override;
 

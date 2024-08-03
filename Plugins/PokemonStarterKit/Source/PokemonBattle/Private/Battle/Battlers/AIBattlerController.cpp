@@ -6,6 +6,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "RangeHelpers.h"
+#include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -20,6 +21,10 @@ void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattl
     // is choosing a move. Ideally we want these threads to resolve quickly (or at least faster than the player can
     // input their commands.
     AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChooseAction, this, Battler));
+}
+
+void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const {
+    AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChoosePokemonToSwitchTo, this, Battler));
 }
 
 void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
@@ -38,4 +43,17 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
     auto Targets = Move->GetAllPossibleTargets() | RangeHelpers::TToArray<FTargetWithIndex>();
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
+}
+
+void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const {
+    auto &CurrentHandler = Battler->GetWrappedPokemon()->GetCurrentHandler();
+    check(CurrentHandler != nullptr)
+
+    auto &HandlerParty = Battler->GetOwningSide()->GetTrainerParty(CurrentHandler);
+    auto ViableSwap = HandlerParty.FindByPredicate([](const TScriptInterface<IBattler>& Possibility) {
+        return !Possibility->IsActive() && !Possibility->IsFainted();
+    });
+    check(ViableSwap != nullptr)
+
+    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionSwitchPokemon>(Battler, *ViableSwap));
 }
