@@ -7,6 +7,10 @@
 #include "Misc/DataValidation.h"
 #include "Species/SpeciesData.h"
 
+const TMap<FName, FEncounterData> & AMapEncounterData::GetEncounters() const {
+    return Encounters;
+}
+
 #if WITH_EDITOR
 EDataValidationResult AMapEncounterData::IsDataValid(FDataValidationContext &Context) const {
     auto OriginalResult = Super::IsDataValid(Context);

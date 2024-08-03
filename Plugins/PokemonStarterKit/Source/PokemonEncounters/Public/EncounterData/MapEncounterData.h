@@ -64,6 +64,13 @@ class POKEMONENCOUNTERS_API AMapEncounterData : public AActor {
     GENERATED_BODY()
 
 public:
+    /**
+     * Get the full list of encounters in an area.
+     * @return The full list of encounters in an area.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = RandomEncounters)
+    const TMap<FName, FEncounterData>& GetEncounters() const;
+    
 #if WITH_EDITOR
     EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
 #endif
@@ -72,7 +79,7 @@ private:
     /**
      * The full list of encounters in an area.
      */
-    UPROPERTY(EditInstanceOnly, Category = RandomEncounters,
+    UPROPERTY(EditInstanceOnly, BlueprintGetter = GetEncounters, Category = RandomEncounters,
         meta = (GetKeyOptions = "PokemonData.EncounterTypeUtils.GetEncounterTypes"))
     TMap<FName, FEncounterData> Encounters;
 
