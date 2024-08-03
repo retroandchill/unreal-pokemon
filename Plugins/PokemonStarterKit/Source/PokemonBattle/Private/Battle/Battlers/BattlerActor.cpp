@@ -294,7 +294,6 @@ FText ABattlerActor::GetRecallMessage() const {
 }
 
 FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
-
     FGameplayEventData EventData;
     EventData.Instigator = this;
 

@@ -34,6 +34,11 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     ExpGainPane->SetBattle(CurrentBattle);
 }
 
+void UPokemonBattleScreen::ClearSelectingBattlers() {
+    SelectingBattlers.Reset();
+    SelectionIndex.Reset();
+}
+
 void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler) {
     bMandatorySwitch = false;
     SelectingBattlers.Emplace(Battler);

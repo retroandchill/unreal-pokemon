@@ -35,6 +35,9 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
     void SetBattle(const TScriptInterface<IBattle> &Battle);
 
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
+    void ClearSelectingBattlers();
+
     /**
      * Have a battler select an action from the HUD.
      * @param Battler The battler who is selecting an action.

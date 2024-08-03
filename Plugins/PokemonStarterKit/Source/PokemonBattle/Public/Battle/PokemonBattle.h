@@ -252,6 +252,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void EndTurn();
 
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
+    void ClearActionSelection();
+
   private:
     /**
      * Process all of the actions about to be performed
@@ -279,6 +282,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * The current turn number that we're on in battle.
      */
     uint32 TurnCount = 0;
+
+    bool bSwitchPrompting = false;
 
     /**
      * The list of sides in battle

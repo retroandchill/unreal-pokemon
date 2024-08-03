@@ -95,10 +95,15 @@ void APokemonBattle::Tick(float DeltaSeconds) {
         BeginActionProcessing();
     } else if (Phase == Actions) {
         if (ActionQueue.IsEmpty()) {
-            auto Payload = NewObject<UBattleMessagePayload>();
-            Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
             Phase = Judging;
-            ProcessTurnEndMessages(Payload->Messages);
+            if (bSwitchPrompting) {
+                EndTurn();
+            } else {
+                // We don't want to send out this event twice
+                auto Payload = NewObject<UBattleMessagePayload>();
+                Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
+                ProcessTurnEndMessages(Payload->Messages);
+            }
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
                 DisplayAction(Action->GetActionMessage());
@@ -251,6 +256,7 @@ void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
 }
 
 void APokemonBattle::StartTurn() {
+    bSwitchPrompting = false;
     TurnCount++;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
@@ -264,6 +270,7 @@ void APokemonBattle::StartTurn() {
 }
 
 void APokemonBattle::EndTurn() {
+    ClearActionSelection();
     bool bRequiresSwaps = false;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
@@ -273,6 +280,7 @@ void APokemonBattle::EndTurn() {
             return;
         }
 
+        // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out faints
         ranges::for_each( RangeHelpers::CreateRange(Sides[i]->GetBattlers())
             | ranges::views::filter(&IsFainted), [this, &bRequiresSwaps](const TScriptInterface<IBattler>& Battler) {
                 auto BattlerId = Battler->GetInternalId();
@@ -285,6 +293,7 @@ void APokemonBattle::EndTurn() {
 
     // If we need swaps, we're going to enter a second selecting and action phase to process the swaps
     if (bRequiresSwaps) {
+        bSwitchPrompting = true;
         Phase = EBattlePhase::Selecting;
     } else {
         StartTurn();
