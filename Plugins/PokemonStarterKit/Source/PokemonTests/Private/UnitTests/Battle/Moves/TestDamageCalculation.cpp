@@ -44,7 +44,7 @@ bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Garchomp calculated to take 170 damage"), ELogVerbosity::Display);
     Action.Execute();
     UE_CHECK_TRUE(Action.IsComplete());
@@ -91,7 +91,7 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
     auto Battler2 = Side2->GetBattlers()[0];
     Battler2->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetDefenseStagesAttribute(), 2.f);
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Critical hit against Garchomp!"), ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Garchomp calculated to take 279 damage"), ELogVerbosity::Display);
     Action.Execute();
@@ -132,7 +132,7 @@ bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Critical hit against Milotic!"), ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Milotic calculated to take 28 damage"), ELogVerbosity::Display);
     Action.Execute();
@@ -175,7 +175,7 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Drapion calculated to take 79 damage"), ELogVerbosity::Display);
     Action.Execute();
 
@@ -216,7 +216,7 @@ bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Sylveon is unaffected by Draco Meteor!"), ELogVerbosity::Display);
     Action.Execute();
 
@@ -259,7 +259,7 @@ bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Paramete
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Druddigon calculated to take 631"), ELogVerbosity::Display);
     Action.Execute();
 
@@ -302,7 +302,7 @@ bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameter
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Critical hit against Alakazam!"), ELogVerbosity::Display);
     Action.Execute();
 

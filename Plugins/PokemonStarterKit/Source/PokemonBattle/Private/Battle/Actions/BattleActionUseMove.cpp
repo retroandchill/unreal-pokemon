@@ -6,11 +6,10 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Moves/BattleMove.h"
-#include "Battle/Moves/MoveTags.h"
 
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
                                            const TScriptInterface<IBattleMove> &MoveIn,
-                                           TArray<TScriptInterface<IBattler>> &&TargetsIn)
+                                           TArray<FTargetWithIndex> &&TargetsIn)
     : FBattleActionBase(BattlerIn), Move(MoveIn), Targets(MoveTemp(TargetsIn)) {
 }
 

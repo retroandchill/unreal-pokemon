@@ -342,16 +342,19 @@ void ABattlerActor::HideSprite() const {
 }
 
 void ABattlerActor::RecordParticipation() {
-    auto NewParticipants =
-        OwningSide->GetOwningBattle()->GetSides() |
-        ranges::views::filter([this](const TScriptInterface<IBattleSide> &Side) { return Side != OwningSide; }) |
-        ranges::views::transform(
-            [](const TScriptInterface<IBattleSide> &Side) { return RangeHelpers::CreateRange(Side->GetBattlers()); }) |
-        ranges::views::join |
-        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); }) |
-        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return Battler->CanGainExp(); }) |
-        ranges::views::transform([](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId(); });
-    ranges::for_each(NewParticipants, [this](const FGuid &ID) { Participants.Add(ID); });
+    if (!IsOwnedByPlayer()) {
+        return;
+    }
+
+    auto AllOpponents = RangeHelpers::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers())
+        | ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
+    ranges::for_each(AllOpponents, [this](const TScriptInterface<IBattler>& Battler) {
+        Battler->AddParticipant(this);
+    });
+}
+
+void ABattlerActor::AddParticipant(const TScriptInterface<IBattler>& Participant) {
+    Participants.Add(Participant->GetInternalId());
 }
 
 int32 ABattlerActor::GetTurnCount() const {

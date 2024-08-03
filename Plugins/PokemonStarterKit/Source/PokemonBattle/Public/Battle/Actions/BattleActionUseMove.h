@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BattleActionBase.h"
+#include "Battle/Moves/BattleMove.h"
 
-class IBattleMove;
 
 /**
  * The battle action for using a move
@@ -19,7 +19,7 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
      * @param TargetsIn The targets for the move in question
      */
     FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn, const TScriptInterface<IBattleMove> &MoveIn,
-                         TArray<TScriptInterface<IBattler>> &&TargetsIn);
+                         TArray<FTargetWithIndex> &&TargetsIn);
 
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     FString GetReferencerName() const override;
@@ -39,5 +39,5 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
     /**
      * The targets for the move
      */
-    TArray<TScriptInterface<IBattler>> Targets;
+    TArray<FTargetWithIndex> Targets;
 };

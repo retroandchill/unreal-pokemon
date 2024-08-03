@@ -261,6 +261,8 @@ class POKEMONBATTLE_API IBattler {
 
     virtual void RecordParticipation() = 0;
 
+    virtual void AddParticipant(const TScriptInterface<IBattler>& Participant) = 0;
+
     /**
      * Get the status effect held by this battler
      * @return The status effect held by the battler

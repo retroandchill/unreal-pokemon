@@ -44,6 +44,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(void, ShowSprite, (), (const, override));
     MOCK_METHOD(void, HideSprite, (), (const, override));
     MOCK_METHOD(void, RecordParticipation, (), (override));
+    MOCK_METHOD(void, AddParticipant, (const TScriptInterface<IBattler>& Participant), (override));
     MOCK_METHOD(const TOptional<FStatusEffectInfo> &, GetStatusEffect, (), (const, override));
     MOCK_METHOD2(InflictStatusEffect, void(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
     MOCK_METHOD(void, CureStatusEffect, (), (override));

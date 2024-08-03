@@ -20,7 +20,7 @@ class FMockBattleMove : public IBattleMove {
     MOCK_METHOD(int32, GetAccuracy, (), (const, override));
     MOCK_METHOD(const FMoveTarget &, GetTargetType, (), (const, override));
     MOCK_METHOD(const TArray<FName> &, GetTags, (), (const, override));
-    MOCK_METHOD(TArray<TScriptInterface<IBattler>>, GetAllPossibleTargets, (), (const, override));
+    MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetAllPossibleTargets, (), (const, override));
     MOCK_METHOD(bool, IsUsable, (), (const, override));
     MOCK_METHOD(FText, GetDisplayName, (), (const override));
     MOCK_METHOD(int32, GetCurrentPP, (), (const override));
@@ -31,6 +31,5 @@ class FMockBattleMove : public IBattleMove {
     MOCK_METHOD(int32, GetAdditionalEffectChance, (), (const override));
     MOCK_METHOD(void, PayCost, (int32 Amount), (override));
     MOCK_METHOD(const TScriptInterface<IBattler> &, GetOwningBattler, (), (const, override));
-    MOCK_METHOD(FGameplayAbilitySpecHandle, TryActivateMove, (const TArray<TScriptInterface<IBattler>> &Targets),
-                (override));
+    MOCK_METHOD(FGameplayAbilitySpecHandle, TryActivateMove, (const TArray<FTargetWithIndex> &Targets), (override));
 };

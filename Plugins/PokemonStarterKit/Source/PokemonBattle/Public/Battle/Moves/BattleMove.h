@@ -6,6 +6,7 @@
 #include "GameplayAbilitySpecHandle.h"
 #include "Moves/MoveDamageCategory.h"
 #include "UObject/Interface.h"
+#include <range/v3/view/any_view.hpp>
 
 #include "BattleMove.generated.h"
 
@@ -14,6 +15,13 @@ struct FType;
 class IMove;
 class IBattler;
 class IBattle;
+
+struct POKEMONBATTLE_API FTargetWithIndex {
+    TWeakInterfacePtr<IBattler> Target;
+    int32 BattlerIndex;
+
+    explicit FTargetWithIndex(const TScriptInterface<IBattler>& Battler);
+};
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable)
@@ -42,7 +50,7 @@ class POKEMONBATTLE_API IBattleMove {
      * Compute all possible targets for the move based on the given user information
      * @return The found list of targets
      */
-    virtual TArray<TScriptInterface<IBattler>> GetAllPossibleTargets() const = 0;
+    virtual ranges::any_view<TScriptInterface<IBattler>> GetAllPossibleTargets() const = 0;
 
     /**
      * Is the move usable
@@ -125,5 +133,5 @@ class POKEMONBATTLE_API IBattleMove {
     /*
      * Try to activate the move returning the spec handle for the move execution
      */
-    virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<TScriptInterface<IBattler>> &Targets) = 0;
+    virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex>& Targets) = 0;
 };

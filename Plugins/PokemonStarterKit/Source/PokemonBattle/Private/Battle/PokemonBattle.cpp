@@ -115,7 +115,8 @@ void APokemonBattle::StartBattle() {
     StartTurn();
 }
 
-void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
+FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
+    FRunningMessageSet Messages;
     auto Sorted =
         Battlers | ranges::views::filter(&IsNotFainted) | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
@@ -131,6 +132,8 @@ void APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<
     for (auto &Battler : Sorted) {
         Battler->RecordParticipation();
     }
+
+    return Messages;
 }
 
 void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {

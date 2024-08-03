@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Actions/BattleActionBase.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include <functional>
@@ -17,7 +18,7 @@ const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const {
 }
 
 bool FBattleActionBase::CanExecute() const {
-    return !Battler->IsFainted();
+    return !Battler->IsFainted() && Battler->GetOwningSide()->GetBattlers().Contains(Battler);
 }
 
 void FBattleActionBase::Execute() {

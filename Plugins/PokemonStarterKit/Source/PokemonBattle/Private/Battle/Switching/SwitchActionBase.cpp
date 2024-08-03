@@ -2,10 +2,13 @@
 
 
 #include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Tags.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
+#include <range/v3/view/single.hpp>
 
 USwitchActionBase::USwitchActionBase() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -34,9 +37,16 @@ void USwitchActionBase::SwapWithTarget() {
     auto &ActorInfo = *GetCurrentActorInfo();
     auto Battler = CastChecked<IBattler>(ActorInfo.AvatarActor);
     Battler->HideSprite();
-    Battler->GetOwningSide()->SwapBattlerPositions(OwningTrainer, UserIndex, SwitchTargetIndex);
+    auto &OwningSide = Battler->GetOwningSide();
+    OwningSide->SwapBattlerPositions(OwningTrainer, UserIndex, SwitchTargetIndex);
 
     auto TargetActor = CastChecked<AActor>(SwapTarget.GetObject());
     TargetActor->SetActorTransform(ActorInfo.AvatarActor->GetActorTransform());
     PlaySendOutAnimation(SwapTarget);
+}
+
+void USwitchActionBase::TriggerOnSendOut() {
+    auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
+    auto Messages = Battle->OnBattlersEnteringBattle(ranges::views::single(SwapTarget));
+    DisplaySwitchInEffects(SwapTarget, Messages);
 }

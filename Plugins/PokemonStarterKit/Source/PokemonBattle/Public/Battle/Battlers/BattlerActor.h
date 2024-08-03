@@ -116,6 +116,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void HideSprite() const override;
     
     void RecordParticipation() override;
+    void AddParticipant(const TScriptInterface<IBattler>& Participant) override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
     int32 GetTurnCount() const override;

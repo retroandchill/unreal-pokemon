@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "SwitchActionBase.generated.h"
 
+struct FRunningMessageSet;
 class ITrainer;
 class IBattler;
 /**
@@ -45,6 +46,12 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
     void PlaySendOutAnimation(const TScriptInterface<IBattler>& SwappingTo);
+
+    UFUNCTION(BlueprintCallable, Category = Switching)
+    void TriggerOnSendOut();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = Switching)
+    void DisplaySwitchInEffects(const TScriptInterface<IBattler>& Battler, const FRunningMessageSet& Messages);
 
 private:
     UPROPERTY()
