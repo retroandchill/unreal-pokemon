@@ -31,6 +31,22 @@ struct POKEMONDATA_API FEncounterType : public FIndexedTableRow {
      * The weight applied for when an encounter will occur when taking a step
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Encounter Info",
-              meta = (UIMin = 0, ClampMin = 10, UIMax = 100, ClampMax = 100))
+              meta = (UIMin = 1, ClampMin = 1, UIMax = 100, ClampMax = 100))
     int32 TriggerChance;
+};
+
+/**
+ * Utility class for getting the full list of all encounter types
+ */
+UCLASS()
+class POKEMONDATA_API UEncounterTypeUtils : public UBlueprintFunctionLibrary {
+    GENERATED_BODY()
+
+public:
+    /**
+     * Get a list of all possible encounter types.
+     * @return The full list of all encounter types
+     */
+    UFUNCTION(BlueprintCallable, Category = RandomEncounters)
+    static TArray<FName> GetEncounterTypes();
 };
