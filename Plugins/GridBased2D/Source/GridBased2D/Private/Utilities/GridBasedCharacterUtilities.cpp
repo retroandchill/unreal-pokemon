@@ -46,8 +46,8 @@ TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACh
     TSet<FName> Tags;
     
     TArray<UPrimitiveComponent*> Components;
-    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation(),
-        GridSize / 2 + 2, ObjectTypes, nullptr, { Character }, Components);
+    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation() + FVector(0, 0, 2),
+        GridSize / 2, ObjectTypes, nullptr, { Character }, Components);
     for (auto Comp : Components) {
         Tags.Append(Comp->ComponentTags);
     }
