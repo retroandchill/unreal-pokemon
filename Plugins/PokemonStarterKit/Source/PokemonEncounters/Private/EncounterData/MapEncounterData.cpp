@@ -7,7 +7,7 @@
 #include "Misc/DataValidation.h"
 #include "Species/SpeciesData.h"
 
-const TMap<FName, FEncounterData> & AMapEncounterData::GetEncounters() const {
+const TMap<FGameplayTag, FEncounterData> & AMapEncounterData::GetEncounters() const {
     return Encounters;
 }
 
@@ -17,17 +17,9 @@ EDataValidationResult AMapEncounterData::IsDataValid(FDataValidationContext &Con
     
     auto &DataManager = FDataManager::GetInstance();
     auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
-    auto &EncounterTypeTable = DataManager.GetDataTable<FEncounterType>();
 
     bool bErrorsFound = false;
     for (auto &[Type, Data] : Encounters) {
-        if (!EncounterTypeTable.IsRowNameValid(Type)) {
-            auto InvalidEncounterTypeText = NSLOCTEXT("PokemonEncounters", "InvalidEncounterType",
-                "Invalid Encounter Type: {0}");
-            Context.AddError(FText::FormatOrdered(InvalidEncounterTypeText, FText::FromString(Type.ToString())));
-            bErrorsFound = true;
-        }
-
         int32 EncounterChance = 0;
         for (const auto &[Chance, Species, LevelRange] : Data.Encounters) {
             if (!SpeciesTable.IsRowNameValid(Species)) {

@@ -2,9 +2,57 @@
 
 #include "Utilities/GridBasedCharacterUtilities.h"
 #include "CharacterMovementComponentAsync.h"
+#include "GridBased2DSettings.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MathUtilities.h"
+#include "RangeHelpers.h"
+#include "Engine/OverlapResult.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include <range/v3/functional/bind_back.hpp>
+
+bool UGridBasedCharacterUtilities::CheckCurrentTileForTag(ACharacter *Character, FName Tag) {
+    static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());
+    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {
+        UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
+        UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)
+    };
+    
+    TArray<UPrimitiveComponent*> Components;
+    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation(),
+        GridSize, ObjectTypes, nullptr, { Character }, Components);
+
+    if (Components.ContainsByPredicate(ranges::bind_back(&UPrimitiveComponent::ComponentHasTag, Tag))) {
+        return true;
+    }
+
+    FHitResult Result;
+    auto Start = Character->GetActorLocation();
+    auto End = Start + FVector(0, 0, GridSize + 2);
+
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(Character);
+    Character->GetWorld()->LineTraceSingleByChannel(Result, Start, End, ECC_Pawn, Params);
+    return IsValid(Result.Component.Get()) && Result.Component->ComponentHasTag(Tag);
+}
+
+TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACharacter *Character) {
+    static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());
+    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {
+        UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
+        UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)
+    };
+
+    TSet<FName> Tags;
+    
+    TArray<UPrimitiveComponent*> Components;
+    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation(),
+        GridSize / 2 + 2, ObjectTypes, nullptr, { Character }, Components);
+    for (auto Comp : Components) {
+        Tags.Append(Comp->ComponentTags);
+    }
+    return Tags;
+}
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {

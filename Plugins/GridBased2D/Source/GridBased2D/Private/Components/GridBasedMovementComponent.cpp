@@ -296,6 +296,9 @@ void UGridBasedMovementComponent::MoveComplete() {
         auto Callback = MoveTemp(MoveCallback.GetValue());
         MoveCallback.Reset();
         Callback();
+    } else {
+        // If we're not forcing movement via a script we want to up the steps to check for events
+        OnTakeStep.Broadcast();
     }
 
     auto Owner = GetOwner();

@@ -17,6 +17,7 @@ class IMapGrid;
 class IInteractable;
 class ATileMapGridBasedMap;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterCompleteStep);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDirectionChange, EFacingDirection, Direction);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterMovementStateChange, bool, bIsMoving);
 
@@ -125,7 +126,7 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     TArray<TScriptInterface<IInteractable>> InteractTestOnFacingTile(EFacingDirection MovementDirection) const;
 
     /**
-     * Perform a hit interaction on all of the interactable objects in front of the player
+     * Perform a hit interaction on all the interactable objects in front of the player
      * @param Interactables The interactable objects in question
      */
     void HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const;
@@ -174,6 +175,9 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
 
     UPROPERTY(BlueprintAssignable)
     FOnCharacterMovementStateChange OnMovementStateChange;
+
+    UPROPERTY(BlueprintAssignable)
+    FOnCharacterCompleteStep OnTakeStep;
 
     /**
      * The timer for movement used to linearly interpolate the position to the new one

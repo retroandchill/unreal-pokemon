@@ -2,14 +2,39 @@
 
 
 #include "Management/RandomEncounterSubsystem.h"
+#include "AbilitySystemComponent.h"
 #include "Algo/ForEach.h"
 #include "EncounterData/MapEncounterData.h"
+#include "GameFramework/Character.h"
+#include "Management/RandomEncounterAttributeSet.h"
+#include "Pokemon/Pokemon.h"
+#include "Pokemon/Stats/StatBlock.h"
+#include "Trainers/Trainer.h"
+#include "Utilities/TrainerHelpers.h"
 
 void URandomEncounterSubsystem::SetEncounterData(AMapEncounterData *Data) {
     EncounterData = Data;
 }
 
-bool URandomEncounterSubsystem::RequestEncounterForType(FName EncounterType, FRetrievedEncounter &Encounter, int32 ChanceRolls) const {
+bool URandomEncounterSubsystem::HasEncountersForType(const FGameplayTag &EncounterType) const {
+    if (!IsValid(EncounterData)) {
+        return false;
+    }
+
+    for (auto &[Tag, Data] : EncounterData->GetEncounters()) {
+        if (Tag.MatchesTag(EncounterType)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool URandomEncounterSubsystem::HasEncountersForTypeExact(const FGameplayTag &EncounterType) const {
+    return IsValid(EncounterData) && EncounterData->GetEncounters().Contains(EncounterType);
+}
+
+bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag & EncounterType, FRetrievedEncounter &Encounter, int32 ChanceRolls) const {
     if (!IsValid(EncounterData)) {
         return false;
     }
@@ -46,5 +71,75 @@ bool URandomEncounterSubsystem::RequestEncounterForType(FName EncounterType, FRe
     check(EncounterEntry != nullptr)
     Encounter.Species = EncounterEntry->Species;
     Encounter.Level = FMath::RandRange(EncounterEntry->LevelRange.GetLowerBoundValue(), EncounterEntry->LevelRange.GetUpperBoundValue());
+    return true;
+}
+
+bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter* PlayerCharacter, const FGameplayTag &EncounterType,
+                                                        bool bRepelActive, bool bTriggeredByStep) {
+    if (bEncountersDisabled || !IsValid(EncounterData)) {
+        return false;
+    }
+
+    auto &Encounters = EncounterData->GetEncounters();
+    auto Data = Encounters.Find(EncounterType);
+    if (Data == nullptr || Data->TriggerChance == 0) {
+        return false;
+    }
+
+    auto EncounterChance = static_cast<float>(Data->TriggerChance);
+    auto MinStepsNeeded = FMath::Clamp(8 - (EncounterChance / 10), 0, 8);
+    if (bTriggeredByStep) {
+        EncounterChance += ChanceAccumulator / 200;
+        if (auto PlayerAbilities = PlayerCharacter->GetComponentByClass<UAbilitySystemComponent>(); PlayerAbilities != nullptr) {
+            bool bFound;
+            auto Multiplier = PlayerAbilities->GetGameplayAttributeValue(URandomEncounterAttributeSet::GetEncounterStepModifierAttribute(), bFound);
+            if (bFound) {
+                EncounterChance *= Multiplier;
+            }
+        }
+    }
+
+    if (bLowerEncounterRate) {
+        EncounterChance /= 2;
+        MinStepsNeeded *= 2;
+    } else if (bHigherEncounterRate) {
+        EncounterChance *= 1.5f;
+        MinStepsNeeded /= 2;
+    }
+
+    // TODO: Trigger out of battle ability effects
+
+    // Wild encounters are much less likely to happen for the first few steps after a previous wild encounter
+    if (bTriggeredByStep && StepCount < MinStepsNeeded) {
+        StepCount++;
+        if (FMath::Rand() % 100 >= EncounterChance * 5 / (Data->TriggerChance + ChanceAccumulator / 200)) {
+            return false;
+        }
+    }
+
+    if (FMath::Rand() % 100 < EncounterChance) {
+        return true;
+    }
+
+    if (bTriggeredByStep) {
+        if (bRepelActive) {
+            ChanceAccumulator = 0;
+        } else {
+            ChanceAccumulator += Data->TriggerChance;
+        }
+    }
+
+    return false;
+}
+
+bool URandomEncounterSubsystem::AllowEncounter(const FRetrievedEncounter &Encounter, bool bRepelActive) {
+    if (bRepelActive) {
+        if (auto FirstPokemon = UTrainerHelpers::GetPlayerCharacter(this)->GetPokemon(0); FirstPokemon != nullptr && Encounter.Level < FirstPokemon->GetStatBlock()->GetLevel()) {
+            ChanceAccumulator = 0;
+            return false;
+        }
+    }
+
+    // TODO: Add field ability checks
     return true;
 }

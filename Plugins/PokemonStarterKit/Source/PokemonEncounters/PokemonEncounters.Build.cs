@@ -9,7 +9,7 @@ public class PokemonEncounters : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "GameplayTags", "GameplayAbilities"
             }
         );
 
@@ -19,7 +19,7 @@ public class PokemonEncounters : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore", "PokemonData"
+                "SlateCore", "PokemonData", "PokemonCore"
             }
         );
     }

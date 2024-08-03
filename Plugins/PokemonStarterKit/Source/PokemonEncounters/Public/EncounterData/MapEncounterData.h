@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
 #include "MapEncounterData.generated.h"
 
@@ -47,7 +48,7 @@ struct POKEMONENCOUNTERS_API FEncounterData {
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = RandomEncounters,
               meta = (UIMin = 1, ClampMin = 1, UIMax = 100, ClampMax = 100))
-    TOptional<int32> TriggerChanceOverride;
+    int32 TriggerChance = 21;
 
     /**
      * The individual encounters in an area
@@ -69,7 +70,7 @@ public:
      * @return The full list of encounters in an area.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = RandomEncounters)
-    const TMap<FName, FEncounterData>& GetEncounters() const;
+    const TMap<FGameplayTag, FEncounterData>& GetEncounters() const;
     
 #if WITH_EDITOR
     EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
@@ -81,7 +82,7 @@ private:
      */
     UPROPERTY(EditInstanceOnly, BlueprintGetter = GetEncounters, Category = RandomEncounters,
         meta = (GetKeyOptions = "PokemonData.EncounterTypeUtils.GetEncounterTypes"))
-    TMap<FName, FEncounterData> Encounters;
+    TMap<FGameplayTag, FEncounterData> Encounters;
 
 
 };

@@ -22,6 +22,7 @@ class FMockTrainer : public ITrainer {
     MOCK_METHOD(int32, GetPayout, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IPokemon>> &, GetParty, (), (const, override));
     MOCK_METHOD(TScriptInterface<IPokemon>, GetPokemon, (int32 Index), (const, override));
+    MOCK_METHOD(int32,  GetAblePokemonCount, (), (const, override));
     MOCK_METHOD(void, AddPokemonToParty, (const TScriptInterface<IPokemon> &Pokemon), (override));
     MOCK_METHOD2(SwapPositionsInParty, void(int32 Index1, int32 Index2));
     MOCK_METHOD(void, ClearParty, (), (override));
