@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Events/BattleMessage.h"
 #include "Functional/FunctionalShorthands.h"
 #include "UObject/Interface.h"
 #include <range/v3/view/any_view.hpp>
@@ -89,6 +90,8 @@ class POKEMONBATTLE_API IBattle {
      * etc.)
      */
     virtual void StartBattle() = 0;
+
+    virtual FRunningMessageSet OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) = 0;
 
     /**
      * Add an action to the pending queue

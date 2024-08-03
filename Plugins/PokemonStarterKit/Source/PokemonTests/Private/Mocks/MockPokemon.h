@@ -36,4 +36,6 @@ class FMockPokemon : public IPokemon {
     MOCK_METHOD(void, RemoveHoldItem, (), (override));
     MOCK_METHOD(const FOwnerInfo &, GetOwnerInfo, (), (const, override));
     MOCK_METHOD(TScriptInterface<IObtainedBlock>, GetObtainedInformation, (), (const, override));
+    MOCK_METHOD(const TScriptInterface<ITrainer> &, GetCurrentHandler, (), (const, override));
+    MOCK_METHOD(void, SetCurrentHandler, (const TScriptInterface<ITrainer> &NewHandler), ());
 };

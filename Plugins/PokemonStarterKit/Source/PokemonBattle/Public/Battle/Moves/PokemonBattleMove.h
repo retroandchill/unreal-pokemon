@@ -28,7 +28,7 @@ class POKEMONBATTLE_API UPokemonBattleMove : public UObject, public IBattleMove 
     UFUNCTION(BlueprintPure, Category = Usability)
     bool IsUsable() const override;
 
-    TArray<TScriptInterface<IBattler>> GetAllPossibleTargets() const override;
+    ranges::any_view<TScriptInterface<IBattler>> GetAllPossibleTargets() const override;
 
     UFUNCTION(BlueprintPure, Category = Display)
     FText GetDisplayName() const override;
@@ -69,7 +69,7 @@ class POKEMONBATTLE_API UPokemonBattleMove : public UObject, public IBattleMove 
     UFUNCTION(BlueprintPure, Category = Context)
     const TScriptInterface<IBattler> &GetOwningBattler() const override;
 
-    FGameplayAbilitySpecHandle TryActivateMove(const TArray<TScriptInterface<IBattler>> &Targets) override;
+    FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex> &Targets) override;
 
   private:
     /**

@@ -3,6 +3,7 @@
 #include "Battle/Actions/BattleActionBase.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/BattleSide.h"
 #include <functional>
 
 FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {
@@ -17,7 +18,7 @@ const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const {
 }
 
 bool FBattleActionBase::CanExecute() const {
-    return !Battler->IsFainted();
+    return !Battler->IsFainted() && Battler->GetOwningSide()->GetBattlers().Contains(Battler);
 }
 
 void FBattleActionBase::Execute() {

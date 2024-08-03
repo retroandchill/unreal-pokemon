@@ -47,7 +47,7 @@ bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Aura Sphere always hits, bypassing accuracy check against Snorlax"),
                        ELogVerbosity::Display);
     Action.Execute();
@@ -88,7 +88,7 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Hydro Pump missed Snorlax!"), ELogVerbosity::Display);
     Action.Execute();
 
@@ -134,7 +134,7 @@ bool TestMoveHits_AccuracyEvasionRegular::RunTest(const FString &Parameters) {
     Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetEvasionStagesAttribute(),
                                                              -4.f);
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Accuracy threshold for Snorlax is 107"), ELogVerbosity::Display);
     Action.Execute();
 
@@ -179,7 +179,7 @@ bool TestMoveHits_AccuracyEvasionOutsideBounds::RunTest(const FString &Parameter
     Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetEvasionStagesAttribute(),
                                                              -6.f);
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Accuracy threshold for Snorlax is 27"), ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Hydro Pump missed Snorlax!"), ELogVerbosity::Display);
     Action.Execute();

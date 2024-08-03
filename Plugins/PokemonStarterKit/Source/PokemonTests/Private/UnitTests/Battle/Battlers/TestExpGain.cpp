@@ -25,7 +25,7 @@ bool TestExpGain::RunTest(const FString &Parameters) {
                                                                                  .Moves = {TEXT("ICEFANG")}});
     auto &PlayerCharacter = UTrainerHelpers::GetPlayerCharacter(World.Get());
     PlayerCharacter->AddPokemonToParty(Pokemon1);
-    
+
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
                                                                                  .Level = 65,
@@ -60,6 +60,6 @@ bool TestExpGain::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(1, Result.Num());
     UE_CHECK_TRUE(Result[0].GainingBattler == Battler1);
     UE_CHECK_EQUAL(0, Result[0].Amount);
-    
+
     return true;
 }

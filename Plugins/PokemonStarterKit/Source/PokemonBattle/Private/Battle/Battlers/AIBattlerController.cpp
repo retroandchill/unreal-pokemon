@@ -3,10 +3,12 @@
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "RangeHelpers.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/view/transform.hpp>
 
 static bool IsMoveUsable(const TScriptInterface<IBattleMove> &Move) {
     return Move->IsUsable();
@@ -34,6 +36,6 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
-    auto Targets = Move->GetAllPossibleTargets();
+    auto Targets = Move->GetAllPossibleTargets() | RangeHelpers::TToArray<FTargetWithIndex>();
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
 }

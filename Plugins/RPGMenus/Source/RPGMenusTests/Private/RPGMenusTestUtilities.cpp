@@ -11,7 +11,7 @@ void URPGMenusTestUtilities::SelectCurrentOption(USelectableWidget *SelectableWi
         UE_LOG(LogBlueprint, Error, TEXT("Could not find function 'HandleButtonClicked'"))
         return;
     }
-    
+
     FSimpleDelegate Delegate;
     Delegate.BindUFunction(SelectedOption, "HandleButtonClicked");
     Delegate.Execute();

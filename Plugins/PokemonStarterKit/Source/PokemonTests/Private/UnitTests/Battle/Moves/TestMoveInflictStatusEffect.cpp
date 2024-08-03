@@ -44,7 +44,7 @@ bool TestMoveInflictStatusEffect_MainEffect::RunTest(const FString &Parameters) 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Applying effects of Will-o-Wisp to Snorlax!"), ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Snorlax didn't take any damage, skipping the additional effect chance!"),
                        ELogVerbosity::Display);
@@ -90,7 +90,7 @@ bool TestMoveInflictStatusEffect_AlreadyHas::RunTest(const FString &Parameters) 
     auto Battler2 = Side2->GetBattlers()[0];
     Battler2->InflictStatusEffect("BURN", FActiveGameplayEffectHandle());
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Will-o-Wisp failed against all targets!"), ELogVerbosity::Display);
     Action.Execute();
 
@@ -137,7 +137,7 @@ bool TestMoveInflictStatusEffect_AdditionalEffect::RunTest(const FString &Parame
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Fire Blast's additional effect chance against Snorlax calculated to be 20"),
                        ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Applying additional effect of Fire Blast to Snorlax"), ELogVerbosity::Display);
@@ -189,7 +189,7 @@ bool TestMoveInflictStatusEffect_AdditionalEffectBlocked::RunTest(const FString 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {Battler2});
+    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Fire Blast's additional effect chance against Ribombee calculated to be 0"),
                        ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Fire Blast's additional effect chance is 0, skipping!"), ELogVerbosity::Display);

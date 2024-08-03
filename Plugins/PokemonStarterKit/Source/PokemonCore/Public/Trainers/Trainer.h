@@ -46,6 +46,9 @@ class POKEMONCORE_API ITrainer {
     UFUNCTION(BlueprintCallable, Category = Bio)
     virtual FText GetTrainerName() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Bio)
+    virtual FText GetFullTrainerName() const = 0;
+
     /**
      * Get the amount of money this trainer will pay out
      * @return The amount of money this trainer pays out

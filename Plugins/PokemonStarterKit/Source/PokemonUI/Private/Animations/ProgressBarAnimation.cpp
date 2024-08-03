@@ -18,6 +18,12 @@ void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, 
         return;
     }
 
+    if (Duration == 0.f) {
+        SetNewPercent.Broadcast(EndPercent);
+        OnAnimationComplete.Broadcast();
+        return;
+    }
+
     AnimationData.Emplace(StartPercent, EndPercent, Duration, bShouldWrap);
     PercentLastTick = StartPercent;
 }

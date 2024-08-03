@@ -30,5 +30,6 @@ class FMockBattleSide : public IBattleSide {
     MOCK_METHOD(const TArray<TScriptInterface<ITrainer>> &, GetTrainers, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattler>> &, GetTrainerParty,
                 (const TScriptInterface<ITrainer> &Trainer), (const, override));
+    MOCK_METHOD3(SwapBattlerPositions, void(const TScriptInterface<ITrainer> &Trainer, int32 IndexA, int32 IndexB));
     MOCK_METHOD(bool, CanBattle, (), (const, override));
 };
