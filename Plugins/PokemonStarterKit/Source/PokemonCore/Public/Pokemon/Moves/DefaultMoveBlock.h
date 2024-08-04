@@ -37,14 +37,15 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     TScriptInterface<IMove> CreateNewMove(FName MoveID) override;
 
   private:
-    UPROPERTY()
+    UPROPERTY(SaveGame)
     TScriptInterface<IPokemon> Owner;
 
-    UPROPERTY()
+    UPROPERTY(SaveGame)
     TArray<TScriptInterface<IMove>> Moves;
 
     /**
      * The full move learning memory of the Pokémon presented in the order the moves were learned.
      */
+    UPROPERTY(SaveGame)
     TSet<FName> MoveMemory;
 };
