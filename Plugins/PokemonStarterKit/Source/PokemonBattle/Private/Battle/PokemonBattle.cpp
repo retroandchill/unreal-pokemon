@@ -53,7 +53,7 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleIn
     TScriptInterface<IBattle> Self = this;
     Sides.Emplace(BattleInfo.CreatePlayerSide(Self, BattleSideClass.LoadSynchronous(), GetPlayerSidePosition()));
     Sides.Emplace(BattleInfo.CreateOpposingSide(Self, BattleSideClass.LoadSynchronous(), GetOpponentSidePosition()));
-    Execute_JumpToBattleScene(this, UGameplayStatics::GetPlayerController(this, 0));
+    Execute_JumpToBattleScene(this, GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false));
     return Self;
 }
 
@@ -84,6 +84,7 @@ void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerC
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
+    PlayerController->EnableInput(PlayerController);
     PlayBattleIntro();
 }
 

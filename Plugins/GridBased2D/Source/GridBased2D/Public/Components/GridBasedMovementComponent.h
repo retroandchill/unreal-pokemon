@@ -45,6 +45,13 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
     void SetPositionInGrid(FVector Position);
 
     /**
+     * Set the character's movement time.
+     * @param Time The time (in seconds) it takes to traverse a single tile.
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Character)
+    void SetMoveTime(double Time);
+
+    /**
      * Move the character in the specified direction
      * @param MovementDirection The direction to move the character in
      */
@@ -178,6 +185,12 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
 
     UPROPERTY(BlueprintAssignable)
     FOnCharacterCompleteStep OnTakeStep;
+
+    /**
+     * The time (in seconds) it takes to traverse a single tile.
+     */
+    UPROPERTY(EditAnywhere, BlueprintSetter = SetMoveTime, Category = Character)
+    double MoveTime = 0.25;
 
     /**
      * The timer for movement used to linearly interpolate the position to the new one
