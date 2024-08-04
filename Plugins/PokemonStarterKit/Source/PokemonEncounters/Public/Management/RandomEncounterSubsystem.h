@@ -85,9 +85,4 @@ private:
     int32 ChanceAccumulator = 0;
     int32 StepCount = 0;
 
-    bool bLowerEncounterRate = false;
-    bool bHigherEncounterRate = false;
-    bool bLowerLevelWildPokemon = false;
-    bool bHigherLevelWildPokemon = false;
-
 };

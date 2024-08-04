@@ -17,6 +17,8 @@ class POKEMONENCOUNTERS_API URandomEncounterAttributeSet : public UAttributeSet 
 
 public:
     ATTRIBUTE_ACCESSORS(URandomEncounterAttributeSet, EncounterStepModifier)
+    ATTRIBUTE_ACCESSORS(URandomEncounterAttributeSet, EncounterChanceModifier)
+    ATTRIBUTE_ACCESSORS(URandomEncounterAttributeSet, MinStepsNeededModifier)
 
 private:
     /**
@@ -25,5 +27,17 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData EncounterStepModifier = 1.f;
+
+    /**
+     * The direct modifier to the encounter chance
+     */
+    UPROPERTY()
+    FGameplayAttributeData EncounterChanceModifier = 1.f;
+
+    /**
+     * The direct modifier to the minimum number of steps before regular encounter rolls resume
+     */
+    UPROPERTY()
+    FGameplayAttributeData MinStepsNeededModifier = 1.f;
     
 };

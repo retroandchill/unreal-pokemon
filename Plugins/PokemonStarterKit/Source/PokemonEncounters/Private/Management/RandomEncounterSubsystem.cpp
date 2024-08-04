@@ -12,6 +12,12 @@
 #include "Trainers/Trainer.h"
 #include "Utilities/TrainerHelpers.h"
 
+static float GetMultiplier(const UAbilitySystemComponent* AbilitySystemComponent, const FGameplayAttribute& GameplayAttribute) {
+    bool bFound;
+    auto Multiplier = AbilitySystemComponent->GetGameplayAttributeValue(GameplayAttribute, bFound);
+    return bFound ? Multiplier : 1.f;
+}
+
 void URandomEncounterSubsystem::SetEncounterData(AMapEncounterData *Data) {
     EncounterData = Data;
 }
@@ -88,24 +94,16 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter* PlayerCharac
 
     auto EncounterChance = static_cast<float>(Data->TriggerChance);
     auto MinStepsNeeded = FMath::Clamp(8 - (EncounterChance / 10), 0, 8);
+    
+    auto PlayerAbilities = PlayerCharacter->GetComponentByClass<UAbilitySystemComponent>();
+    check(PlayerAbilities != nullptr)
     if (bTriggeredByStep) {
         EncounterChance += ChanceAccumulator / 200;
-        if (auto PlayerAbilities = PlayerCharacter->GetComponentByClass<UAbilitySystemComponent>(); PlayerAbilities != nullptr) {
-            bool bFound;
-            auto Multiplier = PlayerAbilities->GetGameplayAttributeValue(URandomEncounterAttributeSet::GetEncounterStepModifierAttribute(), bFound);
-            if (bFound) {
-                EncounterChance *= Multiplier;
-            }
-        }
+        EncounterChance *= GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterStepModifierAttribute());
     }
 
-    if (bLowerEncounterRate) {
-        EncounterChance /= 2;
-        MinStepsNeeded *= 2;
-    } else if (bHigherEncounterRate) {
-        EncounterChance *= 1.5f;
-        MinStepsNeeded /= 2;
-    }
+    EncounterChance *= GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterChanceModifierAttribute());
+    MinStepsNeeded *= GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetMinStepsNeededModifierAttribute());
 
     // TODO: Trigger out of battle ability effects
 
