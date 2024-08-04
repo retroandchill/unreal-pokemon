@@ -32,4 +32,7 @@ public:
     UPROPERTY(VisibleAnywhere, Category = Location)
     FTransform PlayerLocation;
 
+    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    FDateTime SaveDate;
+
 };

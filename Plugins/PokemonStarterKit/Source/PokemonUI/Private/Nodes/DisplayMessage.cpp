@@ -38,4 +38,5 @@ void UDisplayMessage::ExecuteOnConfirm() {
         return;
 
     Screen->NextMessage.RemoveDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
+    SetReadyToDestroy();
 }

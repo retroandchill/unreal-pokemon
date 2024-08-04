@@ -98,6 +98,7 @@ UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGam
     check(PlayerCharacter != nullptr)
     SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
 
+    SaveGame->SaveDate = FDateTime::Now();
     return SaveGame;
 }
 

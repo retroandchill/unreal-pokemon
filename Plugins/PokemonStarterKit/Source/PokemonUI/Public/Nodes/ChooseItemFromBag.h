@@ -44,7 +44,7 @@ class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
      * @param Quantity The quantity of items held
      */
     UFUNCTION()
-    void ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item, int32 Quantity) const;
+    void ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item, int32 Quantity);
 
     /**
      * Function called to execute the on cancelled pin
