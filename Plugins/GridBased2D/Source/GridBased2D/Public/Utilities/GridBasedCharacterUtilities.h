@@ -17,9 +17,6 @@ class GRIDBASED2D_API UGridBasedCharacterUtilities : public UBlueprintFunctionLi
 
   public:
     UFUNCTION(BlueprintCallable, Category = "Map|Grid", meta = (DefaultToSelf = "Character"))
-    static bool CheckCurrentTileForTag(ACharacter *Character, FName Tag);
-
-    UFUNCTION(BlueprintCallable, Category = "Map|Grid", meta = (DefaultToSelf = "Character"))
     static TSet<FName> CollectComponentTagsForCurrentTile(ACharacter *Character);
 
     /**
