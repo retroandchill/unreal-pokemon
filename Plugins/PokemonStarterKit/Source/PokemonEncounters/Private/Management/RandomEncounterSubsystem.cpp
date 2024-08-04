@@ -28,9 +28,10 @@ bool URandomEncounterSubsystem::HasEncountersForType(const FGameplayTag &Encount
         return false;
     }
 
-    return Algo::AnyOf(EncounterData->GetEncounters(), [&EncounterType](const TPair<FGameplayTag, FEncounterData>& Pair) {
-        return Pair.Key.MatchesTag(EncounterType);
-    });
+    return Algo::AnyOf(EncounterData->GetEncounters(),
+                       [&EncounterType](const TPair<FGameplayTag, FEncounterData> &Pair) {
+                           return Pair.Key.MatchesTag(EncounterType);
+                       });
 }
 
 bool URandomEncounterSubsystem::HasEncountersForTypeExact(const FGameplayTag &EncounterType) const {
@@ -111,7 +112,8 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharac
     // Wild encounters are much less likely to happen for the first few steps after a previous wild encounter
     if (bTriggeredByStep && static_cast<float>(StepCount) < MinStepsNeeded) {
         StepCount++;
-        if (FMath::Rand() % 100 >= EncounterChance * 5 / static_cast<float>((Data->TriggerChance + ChanceAccumulator / 200))) {
+        if (FMath::Rand() % 100 >=
+            EncounterChance * 5 / static_cast<float>((Data->TriggerChance + ChanceAccumulator / 200))) {
             return false;
         }
     }
