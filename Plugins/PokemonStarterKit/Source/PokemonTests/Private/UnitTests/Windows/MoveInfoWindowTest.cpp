@@ -28,7 +28,7 @@ bool MoveInfoWindowTest::RunTest(const FString &Parameters) {
     FIND_CHILD_WIDGET(MoveInfo.Get(), UDisplayText, DescriptionText);
     UE_ASSERT_NOT_NULL(DescriptionText);
 
-    auto Move1 = NewObject<UDefaultMove>(World.Get())->Initialize(TEXT("AURASPHERE"));
+    auto Move1 = NewObject<UDefaultMove>(World.Get())->Initialize({.Move = TEXT("AURASPHERE")});
     MoveInfo->RefreshMove(Move1);
     UE_ASSERT_EQUAL(TEXT("80"), PowerText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("---"), AccuracyText->GetText().ToString());
@@ -36,14 +36,14 @@ bool MoveInfoWindowTest::RunTest(const FString &Parameters) {
         TEXT("The user looses a blast of aura power from deep within its body. This move is certain to hit."),
         DescriptionText->GetText().ToString());
 
-    auto Move2 = NewObject<UDefaultMove>(World.Get())->Initialize(TEXT("PSYWAVE"));
+    auto Move2 = NewObject<UDefaultMove>(World.Get())->Initialize({.Move = TEXT("PSYWAVE")});
     MoveInfo->RefreshMove(Move2);
     UE_ASSERT_EQUAL(TEXT("???"), PowerText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("100%"), AccuracyText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("The target is attacked with an odd psychic wave. The attack varies in intensity."),
                     DescriptionText->GetText().ToString());
 
-    auto Move3 = NewObject<UDefaultMove>(World.Get())->Initialize(TEXT("GROWL"));
+    auto Move3 = NewObject<UDefaultMove>(World.Get())->Initialize({.Move = TEXT("GROWL")});
     MoveInfo->RefreshMove(Move3);
     UE_ASSERT_EQUAL(TEXT("---"), PowerText->GetText().ToString());
     UE_ASSERT_EQUAL(TEXT("100%"), AccuracyText->GetText().ToString());

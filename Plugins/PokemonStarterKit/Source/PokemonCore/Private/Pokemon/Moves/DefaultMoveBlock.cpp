@@ -23,6 +23,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
     auto KnowableMoves =
         Species->Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
 
+    MoveMemory.Append(DTO.MoveMemory);
     Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove &Move) { return Move.Move; });
 
     // We want to get the last possible level a move can be learned at for our purposes
@@ -40,12 +41,12 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
 
             // A manual move override list could cause moves not known by default to be displayed,
             // so we need to add them manually here.
-            MoveMemory.Add(Move);
+            MoveMemory.Add(Move.Move);
         }
     } else {
         int32 MoveMax = FMath::Min(MaxMoves, KnowableMoves.Num());
         for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++) {
-            Moves.Emplace(CreateNewMove(KnowableMoves[i].Move));
+            Moves.Emplace(CreateNewMove({.Move = KnowableMoves[i].Move }));
         }
     }
 
@@ -62,12 +63,12 @@ bool UDefaultMoveBlock::HasOpenMoveSlot() const {
 
 void UDefaultMoveBlock::PlaceMoveInOpenSlot(FName Move) {
     check(HasOpenMoveSlot())
-    Moves.Emplace(CreateNewMove(Move));
+    Moves.Emplace(CreateNewMove({.Move = Move}));
 }
 
 void UDefaultMoveBlock::OverwriteMoveSlot(FName Move, int32 SlotIndex) {
     check(Moves.IsValidIndex(SlotIndex))
-    Moves[SlotIndex] = CreateNewMove(Move);
+    Moves[SlotIndex] = CreateNewMove({.Move = Move});
 }
 
 TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
@@ -92,6 +93,10 @@ void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLear
     IPokemonUtilities::Execute_LearnMove(PokemonUtilities, this, Owner, Move, AfterMoveLearned);
 }
 
-TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(FName MoveID) {
+TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO& MoveID) {
     return NewObject<UDefaultMove>(this)->Initialize(MoveID);
+}
+
+const TSet<FName> & UDefaultMoveBlock::GetMoveMemory() const {
+    return MoveMemory;
 }

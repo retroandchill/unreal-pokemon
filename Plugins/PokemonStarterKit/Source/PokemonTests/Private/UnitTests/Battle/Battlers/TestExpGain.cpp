@@ -22,7 +22,7 @@ bool TestExpGain::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"ATTACK", 31}},
                                                                                  .EVs = {{"ATTACK", 104}},
                                                                                  .Nature = FName("TIMID"),
-                                                                                 .Moves = {TEXT("ICEFANG")}});
+                                                                                 .Moves = {{.Move = TEXT("ICEFANG")}}});
     auto &PlayerCharacter = UTrainerHelpers::GetPlayerCharacter(World.Get());
     PlayerCharacter->AddPokemonToParty(Pokemon1);
 

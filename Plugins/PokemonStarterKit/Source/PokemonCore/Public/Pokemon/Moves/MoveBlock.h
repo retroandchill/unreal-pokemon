@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pokemon/PokemonDTO.h"
 #include "UObject/Interface.h"
 
 #include "MoveBlock.generated.h"
@@ -64,6 +65,9 @@ class POKEMONCORE_API IMoveBlock {
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     virtual void OverwriteMoveSlot(FName Move, int32 SlotIndex) = 0;
 
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    virtual const TSet<FName> &GetMoveMemory() const = 0;
+
     /**
      * Get the level up moves that are learned between level ups
      * @param InitialLevel The level that leveling started at
@@ -85,5 +89,5 @@ class POKEMONCORE_API IMoveBlock {
      * @param MoveID The ID of the move to learn
      * @return The created move object
      */
-    virtual TScriptInterface<IMove> CreateNewMove(FName MoveID) = 0;
+    virtual TScriptInterface<IMove> CreateNewMove(const FMoveDTO& MoveID) = 0;
 };

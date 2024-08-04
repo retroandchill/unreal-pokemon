@@ -12,7 +12,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveTest, "Unit Tests.Core.Moves.Default
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool DefaultMoveTest::RunTest(const FString &Parameters) {
-    auto Move = NewObject<UDefaultMove>()->Initialize(TEXT("FLAMETHROWER"));
+    auto Move = NewObject<UDefaultMove>()->Initialize({.Move = TEXT("FLAMETHROWER")});
     UE_CHECK_EQUAL(90, Move->GetBasePower());
     UE_CHECK_EQUAL(100, Move->GetAccuracy());
     UE_CHECK_EQUAL(EMoveDamageCategory::Special, Move->GetDamageCategory());
@@ -46,7 +46,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves, "Unit Tests.Co
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize(
-        nullptr, {.Species = "RIOLU", .Level = 40, .Moves = {"WORKUP", "AURASPHERE", "FEINT"}});
+        nullptr, {.Species = "RIOLU", .Level = 40, .Moves = {{.Move = "WORKUP"}, {.Move = "AURASPHERE"}, {.Move = "FEINT"}}});
     auto Moves = Move->GetMoves();
     UE_ASSERT_EQUAL(3, Moves.Num());
     UE_CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());

@@ -24,7 +24,7 @@ bool TestMoveInflictStatusEffect_MainEffect::RunTest(const FString &Parameters) 
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("WILLOWISP")}});
+                                                                                 .Moves = {{.Move = TEXT("WILLOWISP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -69,7 +69,7 @@ bool TestMoveInflictStatusEffect_AlreadyHas::RunTest(const FString &Parameters) 
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("WILLOWISP")}});
+                                                                                 .Moves = {{.Move = TEXT("WILLOWISP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -112,7 +112,7 @@ bool TestMoveInflictStatusEffect_AdditionalEffect::RunTest(const FString &Parame
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
                                                                                  .Ability = FName("SERENEGRACE"),
-                                                                                 .Moves = {TEXT("FIREBLAST")}});
+                                                                                 .Moves = {{.Move = TEXT("FIREBLAST")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -163,7 +163,7 @@ bool TestMoveInflictStatusEffect_AdditionalEffectBlocked::RunTest(const FString 
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
                                                                                  .Ability = FName("SERENEGRACE"),
-                                                                                 .Moves = {TEXT("FIREBLAST")}});
+                                                                                 .Moves = {{.Move = TEXT("FIREBLAST")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("RIBOMBEE"),
                                                                                  .Level = 100,

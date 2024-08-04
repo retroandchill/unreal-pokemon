@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TrainerDTO.h"
 
 #include "Trainer.generated.h"
 
@@ -9,7 +10,7 @@ struct FTrainerType;
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType)
+UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
 class POKEMONCORE_API UTrainer : public UInterface {
     GENERATED_BODY()
 };
@@ -28,6 +29,10 @@ class POKEMONCORE_API ITrainer {
      * @return A pointer to this trainer
      */
     virtual TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) = 0;
+
+    virtual TScriptInterface<ITrainer> Initialize(const FTrainerDTO& DTO) = 0;
+
+    virtual FTrainerDTO Serialize() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = Metadata)
     virtual const FGuid &GetInternalId() const = 0;

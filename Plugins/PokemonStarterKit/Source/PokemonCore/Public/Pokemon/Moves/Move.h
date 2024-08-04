@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Moves/MoveDamageCategory.h"
+#include "Pokemon/PokemonDTO.h"
 
 #include "Move.generated.h"
 
@@ -23,6 +24,8 @@ class POKEMONCORE_API IMove {
     GENERATED_BODY()
 
   public:
+    virtual FMoveDTO Serialize() const = 0;
+    
     /**
      * Get the data for the underlying move that this move represents
      * @return The data for this move

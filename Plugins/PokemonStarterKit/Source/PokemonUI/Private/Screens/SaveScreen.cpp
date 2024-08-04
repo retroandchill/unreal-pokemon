@@ -19,6 +19,27 @@ void USaveScreen::NativeOnActivated() {
         }));
 }
 
+void USaveScreen::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
+    Super::NativeTick(MyGeometry, InDeltaTime);
+    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
+    if (!SaveGameCreationFuture.IsSet() || !SaveGameCreationFuture->IsReady()) {
+        return;
+    }
+
+    auto SaveGame = SaveGameCreationFuture->Consume();
+    UGameplayStatics::AsyncSaveGameToSlot(
+        SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
+        FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
+            this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
+                if (bSuccess) {
+                    SetSaveGame(SaveGame);
+                }
+                OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
+                OnSaveCompleteDelegate.Unbind();
+            }));
+    SaveGameCreationFuture.Reset();
+}
+
 void USaveScreen::SetSaveGame(UPokemonSaveGame *SaveGame) {
     CurrentSaveGame = SaveGame;
     if (SaveGame != nullptr) {
@@ -31,19 +52,15 @@ void USaveScreen::SetSaveGame(UPokemonSaveGame *SaveGame) {
 }
 
 void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
-    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    auto SaveGame =
-        UPokemonSubsystem::GetInstance(this).CreateSaveGame(Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
-    AddCustomSaveProperties(SaveGame);
-    UGameplayStatics::AsyncSaveGameToSlot(
-        SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-        FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
-            this, [this, SaveGame, Callback = MoveTemp(OnComplete)](const FString &, const int32, bool bSuccess) {
-                if (bSuccess) {
-                    SetSaveGame(SaveGame);
-                }
-                Callback.Execute(bSuccess);
-            }));
+    check(!SaveGameCreationFuture.IsSet())
+    OnSaveCompleteDelegate = MoveTemp(OnComplete);
+    SaveGameCreationFuture.Emplace(AsyncThread([this] {
+        auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
+        auto SaveGame =
+            UPokemonSubsystem::GetInstance(this).CreateSaveGame(Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
+        AddCustomSaveProperties(SaveGame);
+        return SaveGame;
+    }));
 }
 
 FDelegateHandle USaveScreen::BindToExitSaveScreen(FExitSaveScreen::FDelegate &&Callback) {

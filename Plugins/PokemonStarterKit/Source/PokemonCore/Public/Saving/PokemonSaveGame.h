@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameDataSavingLibrary.h"
 #include "GameFramework/SaveGame.h"
+#include "Trainers/TrainerDTO.h"
 
 #include "PokemonSaveGame.generated.h"
 
@@ -19,13 +21,13 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
 
   public:
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
-    TScriptInterface<ITrainer> PlayerCharacter;
+    FTrainerDTO PlayerCharacter;
 
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
-    TScriptInterface<IBag> Bag;
+    FObjectData Bag;
 
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
-    TObjectPtr<UPlayerMetadata> PlayerMetadata;
+    FObjectData PlayerMetadata;
 
     UPROPERTY(VisibleAnywhere, Category = Location)
     FString CurrentMap;

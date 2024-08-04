@@ -24,6 +24,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
   protected:
     void NativeOnActivated() override;
+    void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
 
     /**
      * Set the save game being used by this window
@@ -80,4 +81,8 @@ class POKEMONUI_API USaveScreen : public UScreen {
     FString DateFormat = TEXT("%m/%d/%Y");
 
     FExitSaveScreen OnExitSaveScreen;
+
+    FOnSaveComplete OnSaveCompleteDelegate;
+
+    TOptional<TFuture<UPokemonSaveGame*>> SaveGameCreationFuture;
 };

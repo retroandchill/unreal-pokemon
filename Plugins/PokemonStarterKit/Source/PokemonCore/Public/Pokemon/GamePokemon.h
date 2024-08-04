@@ -23,6 +23,8 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
   public:
     void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) override;
 
+    FPokemonDTO Serialize() const override;
+
     UFUNCTION(BlueprintPure, Category = Bio)
     FText GetNickname() const override;
 

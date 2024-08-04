@@ -10,9 +10,14 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
+#include "RangeHelpers.h"
+#include "DataTypes/OptionalUtilities.h"
+#include "Pokemon/Moves/Move.h"
 #include "Species/GenderRatio.h"
+#include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
+#include <range/v3/view/transform.hpp>
 
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
@@ -34,15 +39,59 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     }
 
     if (Trainer != nullptr) {
-        OwnerInfo = FOwnerInfo(*Trainer);
+        if (DTO.OwnerInfo.IsSet()) {
+            OwnerInfo = *DTO.OwnerInfo;
+        } else {
+            OwnerInfo = FOwnerInfo(*Trainer);
+        }
         CurrentHandler = Trainer;
         Rename(nullptr, CurrentHandler.GetObject());
     } else {
-        OwnerInfo = FOwnerInfo(this);
+        if (DTO.OwnerInfo.IsSet()) {
+            OwnerInfo = *DTO.OwnerInfo;
+        } else {
+            OwnerInfo = FOwnerInfo(this);
+        }
         CurrentHandler = nullptr;
     }
 
     ObtainedBlock = UnrealInjector::NewInjectedDependency<IObtainedBlock>(this, DTO);
+}
+
+FPokemonDTO UGamePokemon::Serialize() const {
+    TMap<FName, int32> IVs;
+    TMap<FName, int32> EVs;
+    StatBlock->ForEachStat([&IVs, &EVs](FName ID, const IStatEntry& Stat) {
+       IVs.Emplace(ID, Stat.GetIV());
+       EVs.Emplace(ID, Stat.GetEV());
+    });
+    return {
+        .Species = Species,
+        .Level = StatBlock->GetLevel(),
+        .PersonalityValue = PersonalityValue,
+        .Nickname = Nickname,
+        .Gender = Gender,
+        .Shiny = Shiny,
+        .PokeBall = PokeBall,
+        .CurrentHP = CurrentHP,
+        .Exp = StatBlock->GetExp(),
+        .IVs = MoveTemp(IVs),
+        .EVs = MoveTemp(EVs),
+        .Nature = StatBlock->GetNature().ID,
+        .Ability = AbilityBlock->GetAbilityID(),
+        .Item = HoldItem,
+        .Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves())
+            | ranges::views::transform([](const TScriptInterface<IMove>& Move) { return Move->Serialize(); })
+            | RangeHelpers::TToArray<FMoveDTO>(),
+        .MoveMemory = MoveBlock->GetMoveMemory(),
+        .ObtainMethod = ObtainedBlock->GetObtainMethod(),
+        .LevelMet = ObtainedBlock->GetLevelMet(),
+        .TimeReceived = OptionalUtilities::OfNullable(ObtainedBlock->GetTimeReceived()),
+        .MetLocation = ObtainedBlock->GetObtainText(),
+        .TimeHatched = OptionalUtilities::OfNullable(ObtainedBlock->GetTimeHatched()),
+        .HatchedMap = ObtainedBlock->GetHatchedMap(),
+        .OwnerInfo = OwnerInfo
+    };
 }
 
 FText UGamePokemon::GetNickname() const {

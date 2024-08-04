@@ -25,7 +25,7 @@ bool TestAddingAndRemovingStatusEffects::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"ATTACK", 31}},
                                                                                  .EVs = {{"ATTACK", 104}},
                                                                                  .Nature = FName("TIMID"),
-                                                                                 .Moves = {TEXT("ICEFANG")}});
+                                                                                 .Moves = {{.Move = TEXT("ICEFANG")}}});
 
     CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
     CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);

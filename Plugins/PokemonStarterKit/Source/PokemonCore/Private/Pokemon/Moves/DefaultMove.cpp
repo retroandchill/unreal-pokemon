@@ -5,10 +5,18 @@
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
 
-TScriptInterface<IMove> UDefaultMove::Initialize(FName MoveID) {
-    ID = MoveID;
-    CurrentPP = GetMoveData().TotalPP;
+TScriptInterface<IMove> UDefaultMove::Initialize(const FMoveDTO& MoveID) {
+    ID = MoveID.Move;
+    auto TotalPP = GetMoveData().TotalPP;
+    CurrentPP = FMath::Clamp(MoveID.CurrentPP.Get(TotalPP), 0, TotalPP);
     return this;
+}
+
+FMoveDTO UDefaultMove::Serialize() const {
+    return {
+        .Move = ID,
+        .CurrentPP = CurrentPP
+    };
 }
 
 const FMoveData &UDefaultMove::GetMoveData() const {

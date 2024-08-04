@@ -8,7 +8,6 @@
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Pokemon/Pokemon.h"
 #include "Saving/PokemonSaveGame.h"
-#include "Trainers/TrainerStub.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
@@ -42,8 +41,7 @@ bool UPokemonSubsystem::Exists(const UObject *WorldContext) {
 
 void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
-    Player =
-        NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
 
     // TODO: Remove this temp inventory stuff
@@ -89,9 +87,9 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
     }
 
     auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
-    SaveGame->PlayerCharacter = StaticDuplicateObject(Player.GetObject(), this);
-    SaveGame->Bag = StaticDuplicateObject(Bag.GetObject(), this);
-    SaveGame->PlayerMetadata = CastChecked<UPlayerMetadata>(StaticDuplicateObject(PlayerMetadata, this));
+    SaveGame->PlayerCharacter = Player->Serialize();
+    SaveGame->Bag = FObjectData(Bag.GetObject());
+    SaveGame->PlayerMetadata = FObjectData(PlayerMetadata);
 
     SaveGame->CurrentMap = GetWorld()->GetMapName();
     auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
@@ -103,9 +101,9 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
 }
 
 void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
-    Player = StaticDuplicateObject(SaveGame->PlayerCharacter.GetObject(), this);
-    Bag = StaticDuplicateObject(SaveGame->Bag.GetObject(), this);
-    PlayerMetadata = CastChecked<UPlayerMetadata>(StaticDuplicateObject(SaveGame->PlayerMetadata, this));
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveGame->PlayerCharacter);
+    //Bag = SaveGame->Bag.Deserialize(this);
+    //PlayerMetadata = SaveGame->PlayerMetadata.Deserialize<UPlayerMetadata>(this);
 
     if (!bChangeMap) {
         return;
