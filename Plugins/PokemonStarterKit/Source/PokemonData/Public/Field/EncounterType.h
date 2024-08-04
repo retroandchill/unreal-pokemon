@@ -13,7 +13,7 @@
  * @deprecated The encounter system uses a gameplay tag based system now and no longer needs this
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FEncounterType : public FIndexedTableRow {
+struct [[deprecated("Not used for encounter system")]] POKEMONDATA_API FEncounterType : public FIndexedTableRow {
     GENERATED_BODY()
 
     /**
