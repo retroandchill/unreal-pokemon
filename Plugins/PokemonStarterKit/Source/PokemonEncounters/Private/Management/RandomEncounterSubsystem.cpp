@@ -2,6 +2,7 @@
 
 #include "Management/RandomEncounterSubsystem.h"
 #include "AbilitySystemComponent.h"
+#include "Algo/AnyOf.h"
 #include "Algo/ForEach.h"
 #include "EncounterData/MapEncounterData.h"
 #include "GameFramework/Character.h"
@@ -27,13 +28,9 @@ bool URandomEncounterSubsystem::HasEncountersForType(const FGameplayTag &Encount
         return false;
     }
 
-    for (auto &[Tag, Data] : EncounterData->GetEncounters()) {
-        if (Tag.MatchesTag(EncounterType)) {
-            return true;
-        }
-    }
-
-    return false;
+    return Algo::AnyOf(EncounterData->GetEncounters(), [&EncounterType](const TPair<FGameplayTag, FEncounterData>& Pair) {
+        return Pair.Key.MatchesTag(EncounterType);
+    });
 }
 
 bool URandomEncounterSubsystem::HasEncountersForTypeExact(const FGameplayTag &EncounterType) const {
@@ -64,7 +61,7 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &Enco
         }
     }
 
-    FEncounterEntry *EncounterEntry = nullptr;
+    const FEncounterEntry *EncounterEntry = nullptr;
     for (auto &Entry : EncounterList) {
         RandomNumber -= Entry.Chance;
         if (RandomNumber >= 0) {
@@ -72,7 +69,6 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &Enco
         }
 
         EncounterEntry = &Entry;
-        break;
     }
 
     check(EncounterEntry != nullptr)
@@ -100,7 +96,7 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharac
     auto PlayerAbilities = PlayerCharacter->GetComponentByClass<UAbilitySystemComponent>();
     check(PlayerAbilities != nullptr)
     if (bTriggeredByStep) {
-        EncounterChance += ChanceAccumulator / 200;
+        EncounterChance += static_cast<float>(ChanceAccumulator / 200);
         EncounterChance *=
             GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterStepModifierAttribute());
     }
@@ -113,9 +109,9 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharac
     // TODO: Trigger out of battle ability effects
 
     // Wild encounters are much less likely to happen for the first few steps after a previous wild encounter
-    if (bTriggeredByStep && StepCount < MinStepsNeeded) {
+    if (bTriggeredByStep && static_cast<float>(StepCount) < MinStepsNeeded) {
         StepCount++;
-        if (FMath::Rand() % 100 >= EncounterChance * 5 / (Data->TriggerChance + ChanceAccumulator / 200)) {
+        if (FMath::Rand() % 100 >= EncounterChance * 5 / static_cast<float>((Data->TriggerChance + ChanceAccumulator / 200))) {
             return false;
         }
     }

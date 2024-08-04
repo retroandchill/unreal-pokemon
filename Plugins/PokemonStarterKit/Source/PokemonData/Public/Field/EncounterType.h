@@ -10,6 +10,7 @@
 
 /**
  * Represents any of the various encounter types that may occur within the world
+ * @deprecated The encounter system uses a gameplay tag based system now and no longer needs this
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
 struct POKEMONDATA_API FEncounterType : public FIndexedTableRow {
@@ -33,20 +34,4 @@ struct POKEMONDATA_API FEncounterType : public FIndexedTableRow {
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Encounter Info",
               meta = (UIMin = 1, ClampMin = 1, UIMax = 100, ClampMax = 100))
     int32 TriggerChance;
-};
-
-/**
- * Utility class for getting the full list of all encounter types
- */
-UCLASS()
-class POKEMONDATA_API UEncounterTypeUtils : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
-
-  public:
-    /**
-     * Get a list of all possible encounter types.
-     * @return The full list of all encounter types
-     */
-    UFUNCTION(BlueprintCallable, Category = RandomEncounters)
-    static TArray<FName> GetEncounterTypes();
 };

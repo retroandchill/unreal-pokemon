@@ -14,7 +14,7 @@ const TMap<FGameplayTag, FEncounterData> &AMapEncounterData::GetEncounters() con
 EDataValidationResult AMapEncounterData::IsDataValid(FDataValidationContext &Context) const {
     auto OriginalResult = Super::IsDataValid(Context);
 
-    auto &DataManager = FDataManager::GetInstance();
+    const auto &DataManager = FDataManager::GetInstance();
     auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
     bool bErrorsFound = false;
