@@ -62,7 +62,7 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &Enco
     }
 
     const FEncounterEntry *EncounterEntry = nullptr;
-    for (auto &Entry : EncounterList) {
+    for (const auto &Entry : EncounterList) {
         RandomNumber -= Entry.Chance;
         if (RandomNumber >= 0) {
             continue;
