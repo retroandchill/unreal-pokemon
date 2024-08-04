@@ -98,4 +98,5 @@ void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
         Volume->bDisabled = bDisabled;
     }
     StreamingStates.Reset();
+    bBattleInitialized = false;
 }
