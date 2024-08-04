@@ -2,9 +2,30 @@
 
 #include "Utilities/GridBasedCharacterUtilities.h"
 #include "CharacterMovementComponentAsync.h"
+#include "Engine/OverlapResult.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GridBased2DSettings.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "MathUtilities.h"
+#include "RangeHelpers.h"
+#include <range/v3/functional/bind_back.hpp>
+
+TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACharacter *Character) {
+    static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());
+    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
+                                                                UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)};
+
+    TSet<FName> Tags;
+
+    TArray<UPrimitiveComponent *> Components;
+    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation() + FVector(0, 0, 2),
+                                                  GridSize / 2, ObjectTypes, nullptr, {Character}, Components);
+    for (auto Comp : Components) {
+        Tags.Append(Comp->ComponentTags);
+    }
+    return Tags;
+}
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {

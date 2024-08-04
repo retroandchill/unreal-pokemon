@@ -4,6 +4,8 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "RangeHelpers.h"
+#include <range/v3/view/filter.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
     InternalId = FGuid::NewGuid();
@@ -50,6 +52,17 @@ TScriptInterface<IPokemon> UBasicTrainer::GetPokemon(int32 Index) const {
     }
 
     return Party[Index];
+}
+
+int32 UBasicTrainer::GetAblePokemonCount() const {
+    int32 Count = 0;
+    for (auto &Pokemon : Party) {
+        if (!Pokemon->IsFainted()) {
+            Count++;
+        }
+    }
+
+    return Count;
 }
 
 void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) {
