@@ -27,7 +27,7 @@ public:
     TObjectPtr<UPlayerMetadata> PlayerMetadata;
     
     UPROPERTY(VisibleAnywhere, Category = Location)
-    TSoftObjectPtr<UWorld> CurrentMap;
+    FString CurrentMap;
 
     UPROPERTY(VisibleAnywhere, Category = Location)
     FTransform PlayerLocation;

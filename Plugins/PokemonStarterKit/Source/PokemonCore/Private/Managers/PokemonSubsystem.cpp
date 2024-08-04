@@ -1,10 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
+#include "GameFramework/Character.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
+#include "Pokemon/Pokemon.h"
 #include "Pokemon/Exp/GrowthRate.h"
+#include "Saving/PokemonSaveGame.h"
 #include "Trainers/TrainerStub.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
@@ -78,4 +81,38 @@ FText UPokemonSubsystem::GetCurrentLocation() const {
 
 void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
+}
+
+UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame() const {
+    auto SaveGame = NewObject<UPokemonSaveGame>();
+    SaveGame->PlayerCharacter = Player;
+    SaveGame->Bag = Bag;
+    SaveGame->PlayerMetadata = PlayerMetadata;
+
+    SaveGame->CurrentMap = GetWorld()->GetMapName();
+    auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
+    check(PlayerCharacter != nullptr)
+    SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
+
+    return SaveGame;
+}
+
+void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
+    Player = SaveGame->PlayerCharacter;
+    Bag = SaveGame->Bag;
+    PlayerMetadata = SaveGame->PlayerMetadata;
+
+    if (!bChangeMap) {
+        return;
+    }
+
+    LoadTransform.Emplace(SaveGame->PlayerLocation);
+    UGameplayStatics::OpenLevel(this, FName(*SaveGame->CurrentMap));
+}
+
+void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter* PlayerCharacter) {
+    if (LoadTransform.IsSet()) {
+        PlayerCharacter->SetActorTransform(*LoadTransform);
+        LoadTransform.Reset();
+    }
 }
