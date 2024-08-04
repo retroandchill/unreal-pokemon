@@ -27,6 +27,7 @@
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/empty.hpp>
 #include <range/v3/view/filter.hpp>
+#include <range/v3/numeric/accumulate.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -200,6 +201,38 @@ void APokemonBattle::ExecuteAction(IBattleAction &Action) {
     DisplayAction(Action.GetActionMessage());
 }
 
+bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) {
+    if (!bDuringBattle) {
+        RunAttempts++;
+    }
+
+    auto PlayerSpeed = Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
+    float EnemySpeed = 1.f;
+    ranges::for_each(RangeHelpers::CreateRange(GetOpposingSide()->GetBattlers())
+        | ranges::views::filter(&IsNotFainted)
+        | ranges::views::transform([](const TScriptInterface<IBattler>& Foe) { return Foe->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute()); }),
+        [&EnemySpeed](float Speed) {
+           if (Speed > EnemySpeed) {
+               EnemySpeed = Speed;
+           } 
+        });
+
+    float Rate;
+    if (PlayerSpeed > EnemySpeed) {
+        Rate = 256.f;
+    } else {
+        Rate = PlayerSpeed * 128.f / EnemySpeed;
+        Rate += static_cast<float>(RunAttempts * 30);
+    }
+
+    return Rate >= 256.f || FMath::Rand() % 256 < Rate;
+}
+
+void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
+    Phase = EBattlePhase::Decided;
+    ProcessBattleResult(Result);
+}
+
 void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
     OnBattleEnd.Add(MoveTemp(Callback));
 }
@@ -331,10 +364,6 @@ void APokemonBattle::NextAction() {
 }
 
 void APokemonBattle::DecideBattle(int32 SideIndex) {
-    Phase = EBattlePhase::Decided;
-    if (SideIndex == 0) {
-        ProcessPlayerLoss(false);
-    } else {
-        ProcessPlayerVictory(false);
-    }
+    using enum EBattleResult;
+    Execute_EndBattle(this, SideIndex == PlayerSideIndex ? Victory : Defeat);
 }

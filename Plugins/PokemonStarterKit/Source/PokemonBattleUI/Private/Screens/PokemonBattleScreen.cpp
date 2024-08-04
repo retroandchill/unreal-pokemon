@@ -6,6 +6,7 @@
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Actions/BattleActionDoNothing.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMoveSelect.h"
@@ -17,6 +18,10 @@
 void UPokemonBattleScreen::NativeConstruct() {
     Super::NativeConstruct();
     SwapToPanelDisplay();
+}
+
+const TScriptInterface<IBattle> &UPokemonBattleScreen::GetBattle() const {
+    return CurrentBattle;
 }
 
 void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
@@ -148,6 +153,18 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     AdvanceToNextSelection();
+}
+
+void UPokemonBattleScreen::SkipRemainingActions() {
+    ActionSelect->DeactivateWidget();
+    ActionSelect->SetVisibility(ESlateVisibility::Hidden);
+    MoveSelect->DeactivateWidget();
+    MoveSelect->SetVisibility(ESlateVisibility::Hidden);
+    auto &SelIndex = SelectionIndex.GetValue();
+    while (SelectingBattlers.IsValidIndex(SelIndex)) {
+        CurrentBattle->QueueAction(MakeUnique<FBattleActionDoNothing>(SelectingBattlers[SelIndex]));
+        SelIndex++;
+    }
 }
 
 void UPokemonBattleScreen::OnMoveCanceled() {

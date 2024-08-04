@@ -40,6 +40,16 @@ enum class EBattleResult : uint8 {
     Draw,
 
     /**
+     * The player's side fled from battle
+     */
+    PlayerEscaped,
+
+    /**
+     * The opponent's side fled from battle
+     */
+    FoeEscaped,
+
+    /**
      * The battle ended early (typically for event purposes)
      */
     Inconclusive
@@ -140,6 +150,22 @@ class POKEMONBATTLE_API IBattle {
      * @param Action The action to execute
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
+    
+    /**
+     * Take the current battler and check if the player is able to run from battle
+     * @param Battler The battler that will be used to perform the run calculation
+     * @param bDuringBattle Is this being called during the send out prompt?
+     * @return Can the player run?
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|Flow")
+    bool RunCheck(const TScriptInterface<IBattler>& Battler, bool bDuringBattle);
+
+    /**
+     * Terminate the battle with the specified result
+     * @param Result The result for the battle state
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|Flow")
+    void EndBattle(EBattleResult Result);
 
     /**
      * Bind a delegate for when the battle ends

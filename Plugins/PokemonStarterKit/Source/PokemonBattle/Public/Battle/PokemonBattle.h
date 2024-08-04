@@ -104,6 +104,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const override;
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
+
+protected:
+    bool RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) override;
+    void EndBattle_Implementation(EBattleResult Result) override;
+    
+public:
     void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
 
   protected:
@@ -212,18 +218,11 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void ExecuteAction();
 
     /**
-     * Process the player's victory in battle
-     * @param IsTrainerBattle Is the battle a trainer battle
+     * Process the result of the battle and exit
+     * @param Result The outcome of the battle in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
-    void ProcessPlayerVictory(bool IsTrainerBattle);
-
-    /**
-     * Process the player's loss in battle
-     * @param IsTrainerBattle Is the battle a trainer battle
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
-    void ProcessPlayerLoss(bool IsTrainerBattle);
+    void ProcessBattleResult(EBattleResult Result);
 
     /**
      * Exit the battle scene and return to the map
@@ -346,4 +345,6 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * Delegate that is invoked when the battle ends
      */
     FOnBattleEnd OnBattleEnd;
+
+    int32 RunAttempts = 0;
 };
