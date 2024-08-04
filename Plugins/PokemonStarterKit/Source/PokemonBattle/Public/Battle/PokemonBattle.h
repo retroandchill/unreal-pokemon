@@ -105,11 +105,11 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
 
-protected:
+  protected:
     bool RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) override;
     void EndBattle_Implementation(EBattleResult Result) override;
-    
-public:
+
+  public:
     void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
 
   protected:

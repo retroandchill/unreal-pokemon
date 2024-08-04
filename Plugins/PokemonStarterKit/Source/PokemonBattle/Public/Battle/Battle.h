@@ -150,7 +150,7 @@ class POKEMONBATTLE_API IBattle {
      * @param Action The action to execute
      */
     virtual void ExecuteAction(IBattleAction &Action) = 0;
-    
+
     /**
      * Take the current battler and check if the player is able to run from battle
      * @param Battler The battler that will be used to perform the run calculation
@@ -158,7 +158,7 @@ class POKEMONBATTLE_API IBattle {
      * @return Can the player run?
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|Flow")
-    bool RunCheck(const TScriptInterface<IBattler>& Battler, bool bDuringBattle);
+    bool RunCheck(const TScriptInterface<IBattler> &Battler, bool bDuringBattle);
 
     /**
      * Terminate the battle with the specified result

@@ -2,11 +2,11 @@
 
 #include "Screens/PokemonBattleScreen.h"
 #include "Algo/ForEach.h"
+#include "Battle/Actions/BattleActionDoNothing.h"
 #include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Actions/BattleActionDoNothing.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMoveSelect.h"

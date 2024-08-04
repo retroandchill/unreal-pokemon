@@ -24,10 +24,10 @@
 #include "RangeHelpers.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
+#include <range/v3/numeric/accumulate.hpp>
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/empty.hpp>
 #include <range/v3/view/filter.hpp>
-#include <range/v3/numeric/accumulate.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return RangeHelpers::CreateRange(Side->GetBattlers());
@@ -206,16 +206,20 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
         RunAttempts++;
     }
 
-    auto PlayerSpeed = Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
+    auto PlayerSpeed =
+        Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    ranges::for_each(RangeHelpers::CreateRange(GetOpposingSide()->GetBattlers())
-        | ranges::views::filter(&IsNotFainted)
-        | ranges::views::transform([](const TScriptInterface<IBattler>& Foe) { return Foe->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute()); }),
-        [&EnemySpeed](float Speed) {
-           if (Speed > EnemySpeed) {
-               EnemySpeed = Speed;
-           } 
-        });
+    ranges::for_each(RangeHelpers::CreateRange(GetOpposingSide()->GetBattlers()) |
+                         ranges::views::filter(&IsNotFainted) |
+                         ranges::views::transform([](const TScriptInterface<IBattler> &Foe) {
+                             return Foe->GetAbilityComponent()->GetNumericAttributeBase(
+                                 UPokemonCoreAttributeSet::GetSpeedAttribute());
+                         }),
+                     [&EnemySpeed](float Speed) {
+                         if (Speed > EnemySpeed) {
+                             EnemySpeed = Speed;
+                         }
+                     });
 
     float Rate;
     if (PlayerSpeed > EnemySpeed) {

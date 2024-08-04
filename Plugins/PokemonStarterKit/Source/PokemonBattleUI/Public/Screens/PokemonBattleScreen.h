@@ -34,7 +34,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     const TScriptInterface<IBattle> &GetBattle() const;
-    
+
     /**
      * Set the battle that this screen holds
      * @param Battle The battle in question

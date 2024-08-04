@@ -1,10 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Actions/BattleActionDoNothing.h"
 
 FBattleActionDoNothing::FBattleActionDoNothing(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {
-    
 }
 
 void FBattleActionDoNothing::AddReferencedObjects(FReferenceCollector &Collector) {
@@ -15,7 +13,7 @@ FString FBattleActionDoNothing::GetReferencerName() const {
     return TEXT("FBattleActionDoNothing");
 }
 
-const TScriptInterface<IBattler> & FBattleActionDoNothing::GetBattler() const {
+const TScriptInterface<IBattler> &FBattleActionDoNothing::GetBattler() const {
     return Battler;
 }
 
