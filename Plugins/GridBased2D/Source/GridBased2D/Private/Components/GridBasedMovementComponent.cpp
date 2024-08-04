@@ -27,6 +27,10 @@ void UGridBasedMovementComponent::SetPositionInGrid(FVector Position) {
     GetOwner()->SetActorLocation(Position, bPerformSweep);
 }
 
+void UGridBasedMovementComponent::SetMoveTime(double Time) {
+    MoveTime = Time;
+}
+
 void UGridBasedMovementComponent::BeginPlay() {
     Super::BeginPlay();
 
@@ -240,17 +244,15 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     float &Timer = MoveTimer.GetValue();
     Timer += DeltaTime;
 
-    double MoveSpeed = 0.25;
-
     auto Owner = GetOwner();
     auto Position = Owner->GetActorLocation();
     auto GridSize = UGridUtils::GetGridSize(this);
     if (CurrentPosition.X != DesiredPosition.X) {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
         Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
-                                                         MoveSpeed * Distance, Timer);
+                                                         MoveTime * Distance, Timer);
 
-        if (Timer >= MoveSpeed * Distance) {
+        if (Timer >= MoveTime * Distance) {
             CurrentPosition.X = DesiredPosition.X;
         }
     }
@@ -258,9 +260,9 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     if (CurrentPosition.Y != DesiredPosition.Y) {
         int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
         Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
-                                                         MoveSpeed * Distance, Timer);
+                                                         MoveTime * Distance, Timer);
 
-        if (Timer >= MoveSpeed * Distance) {
+        if (Timer >= MoveTime * Distance) {
             CurrentPosition.Y = DesiredPosition.Y;
         }
     }
