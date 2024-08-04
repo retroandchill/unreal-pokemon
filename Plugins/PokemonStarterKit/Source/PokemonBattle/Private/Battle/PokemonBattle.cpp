@@ -343,8 +343,13 @@ void APokemonBattle::BeginActionProcessing() {
     Phase = EBattlePhase::Actions;
     bActionTextDisplayed = false;
     SelectedActions.Sort([](const TUniquePtr<IBattleAction> &A, const TUniquePtr<IBattleAction> &B) {
-        if (A->GetPriority() > B->GetPriority()) {
+        int32 PriorityA = A->GetPriority();
+        int32 PriorityB = B->GetPriority();
+        if (PriorityA > PriorityB) {
             return true;
+        }
+        if (PriorityA < PriorityB) {
+            return false;
         }
 
         int32 SpeedA = FMath::FloorToInt32(A->GetBattler()->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
