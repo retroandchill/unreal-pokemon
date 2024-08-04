@@ -29,6 +29,13 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
 
   public:
     /**
+     * Get the current battle for this screen
+     * @return The current battle for this screen
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
+    const TScriptInterface<IBattle> &GetBattle() const;
+
+    /**
      * Set the battle that this screen holds
      * @param Battle The battle in question
      */
@@ -144,6 +151,12 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     void OnMoveSelected(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IBattleMove> &Move);
 
     /**
+     * Skip the actions of all remaining battlers in line.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
+    void SkipRemainingActions();
+
+    /**
      * Called when the player cancels move selection
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
@@ -183,7 +196,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     /**
      * The battle that this screen is showing the information for
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintGetter = GetBattle, Category = "Battle|Visuals")
     TScriptInterface<IBattle> CurrentBattle;
 
     /**
