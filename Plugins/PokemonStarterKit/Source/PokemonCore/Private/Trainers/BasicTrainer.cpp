@@ -2,9 +2,9 @@
 
 #include "Trainers/BasicTrainer.h"
 #include "DataManager.h"
-#include "RangeHelpers.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "RangeHelpers.h"
 #include <range/v3/view/filter.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {

@@ -42,7 +42,7 @@ UCLASS()
 class POKEMONDATA_API UEncounterTypeUtils : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get a list of all possible encounter types.
      * @return The full list of all encounter types

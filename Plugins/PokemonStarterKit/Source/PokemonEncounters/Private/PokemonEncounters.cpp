@@ -7,5 +7,5 @@ void FPokemonEncountersModule::StartupModule() {
 void FPokemonEncountersModule::ShutdownModule() {
     // No implementation needed
 }
-    
+
 IMPLEMENT_MODULE(FPokemonEncountersModule, PokemonEncounters)

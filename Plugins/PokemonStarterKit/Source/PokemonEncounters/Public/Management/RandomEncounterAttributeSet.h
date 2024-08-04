@@ -9,18 +9,18 @@
 #include "RandomEncounterAttributeSet.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONENCOUNTERS_API URandomEncounterAttributeSet : public UAttributeSet {
     GENERATED_BODY()
 
-public:
+  public:
     ATTRIBUTE_ACCESSORS(URandomEncounterAttributeSet, EncounterStepModifier)
     ATTRIBUTE_ACCESSORS(URandomEncounterAttributeSet, EncounterChanceModifier)
     ATTRIBUTE_ACCESSORS(URandomEncounterAttributeSet, MinStepsNeededModifier)
 
-private:
+  private:
     /**
      * The modifier applied to random encounter calculations when walking. Mainly used to reduce the encounter rate
      * by 20% when on the bicyle.
@@ -39,5 +39,4 @@ private:
      */
     UPROPERTY()
     FGameplayAttributeData MinStepsNeededModifier = 1.f;
-    
 };

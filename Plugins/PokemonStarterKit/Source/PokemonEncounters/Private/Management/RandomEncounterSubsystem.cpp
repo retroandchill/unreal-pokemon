@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Management/RandomEncounterSubsystem.h"
 #include "AbilitySystemComponent.h"
 #include "Algo/ForEach.h"
@@ -12,7 +11,8 @@
 #include "Trainers/Trainer.h"
 #include "Utilities/TrainerHelpers.h"
 
-static float GetMultiplier(const UAbilitySystemComponent* AbilitySystemComponent, const FGameplayAttribute& GameplayAttribute) {
+static float GetMultiplier(const UAbilitySystemComponent *AbilitySystemComponent,
+                           const FGameplayAttribute &GameplayAttribute) {
     bool bFound;
     auto Multiplier = AbilitySystemComponent->GetGameplayAttributeValue(GameplayAttribute, bFound);
     return bFound ? Multiplier : 1.f;
@@ -40,7 +40,8 @@ bool URandomEncounterSubsystem::HasEncountersForTypeExact(const FGameplayTag &En
     return IsValid(EncounterData) && EncounterData->GetEncounters().Contains(EncounterType);
 }
 
-bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag & EncounterType, FRetrievedEncounter &Encounter, int32 ChanceRolls) const {
+bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &EncounterType,
+                                                        FRetrievedEncounter &Encounter, int32 ChanceRolls) const {
     if (!IsValid(EncounterData)) {
         return false;
     }
@@ -52,9 +53,9 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag & Enc
     }
 
     auto EncounterList = Data->Encounters;
-    EncounterList.Sort([](const FEncounterEntry& A, const FEncounterEntry& B) { return A.Chance > B.Chance; });
+    EncounterList.Sort([](const FEncounterEntry &A, const FEncounterEntry &B) { return A.Chance > B.Chance; });
     int32 ChanceTotal = 0;
-    Algo::ForEach(EncounterList, [&ChanceTotal](const FEncounterEntry& Entry) { ChanceTotal += Entry.Chance;});
+    Algo::ForEach(EncounterList, [&ChanceTotal](const FEncounterEntry &Entry) { ChanceTotal += Entry.Chance; });
 
     int32 RandomNumber = 0;
     for (int32 i = 0; i < ChanceRolls; i++) {
@@ -63,7 +64,7 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag & Enc
         }
     }
 
-    FEncounterEntry* EncounterEntry = nullptr;
+    FEncounterEntry *EncounterEntry = nullptr;
     for (auto &Entry : EncounterList) {
         RandomNumber -= Entry.Chance;
         if (RandomNumber >= 0) {
@@ -76,11 +77,12 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag & Enc
 
     check(EncounterEntry != nullptr)
     Encounter.Species = EncounterEntry->Species;
-    Encounter.Level = FMath::RandRange(EncounterEntry->LevelRange.GetLowerBoundValue(), EncounterEntry->LevelRange.GetUpperBoundValue());
+    Encounter.Level = FMath::RandRange(EncounterEntry->LevelRange.GetLowerBoundValue(),
+                                       EncounterEntry->LevelRange.GetUpperBoundValue());
     return true;
 }
 
-bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter* PlayerCharacter, const FGameplayTag &EncounterType,
+bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharacter, const FGameplayTag &EncounterType,
                                                         bool bRepelActive, bool bTriggeredByStep) {
     if (bEncountersDisabled || !IsValid(EncounterData)) {
         return false;
@@ -94,16 +96,19 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter* PlayerCharac
 
     auto EncounterChance = static_cast<float>(Data->TriggerChance);
     auto MinStepsNeeded = FMath::Clamp(8 - (EncounterChance / 10), 0, 8);
-    
+
     auto PlayerAbilities = PlayerCharacter->GetComponentByClass<UAbilitySystemComponent>();
     check(PlayerAbilities != nullptr)
     if (bTriggeredByStep) {
         EncounterChance += ChanceAccumulator / 200;
-        EncounterChance *= GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterStepModifierAttribute());
+        EncounterChance *=
+            GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterStepModifierAttribute());
     }
 
-    EncounterChance *= GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterChanceModifierAttribute());
-    MinStepsNeeded *= GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetMinStepsNeededModifierAttribute());
+    EncounterChance *=
+        GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterChanceModifierAttribute());
+    MinStepsNeeded *=
+        GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetMinStepsNeededModifierAttribute());
 
     // TODO: Trigger out of battle ability effects
 
@@ -132,7 +137,8 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter* PlayerCharac
 
 bool URandomEncounterSubsystem::AllowEncounter(const FRetrievedEncounter &Encounter, bool bRepelActive) {
     if (bRepelActive) {
-        if (auto FirstPokemon = UTrainerHelpers::GetPlayerCharacter(this)->GetPokemon(0); FirstPokemon != nullptr && Encounter.Level < FirstPokemon->GetStatBlock()->GetLevel()) {
+        if (auto FirstPokemon = UTrainerHelpers::GetPlayerCharacter(this)->GetPokemon(0);
+            FirstPokemon != nullptr && Encounter.Level < FirstPokemon->GetStatBlock()->GetLevel()) {
             ChanceAccumulator = 0;
             return false;
         }

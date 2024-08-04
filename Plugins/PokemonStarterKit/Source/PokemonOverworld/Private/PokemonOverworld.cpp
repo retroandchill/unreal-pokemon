@@ -1,13 +1,11 @@
 ﻿#include "PokemonOverworld.h"
 
-void FPokemonOverworldModule::StartupModule()
-{
+void FPokemonOverworldModule::StartupModule() {
     // No implementation
 }
 
-void FPokemonOverworldModule::ShutdownModule()
-{
+void FPokemonOverworldModule::ShutdownModule() {
     // No implementation
 }
-    
+
 IMPLEMENT_MODULE(FPokemonOverworldModule, PokemonOverworld)

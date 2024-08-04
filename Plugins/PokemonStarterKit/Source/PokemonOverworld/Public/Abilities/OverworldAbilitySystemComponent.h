@@ -7,19 +7,16 @@
 
 #include "OverworldAbilitySystemComponent.generated.h"
 
-
 class URandomEncounterAttributeSet;
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class POKEMONOVERWORLD_API UOverworldAbilitySystemComponent : public UAbilitySystemComponent {
     GENERATED_BODY()
 
-public:
+  public:
     void BeginPlay() override;
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<URandomEncounterAttributeSet> EncounterAttributes;
-
-
 };

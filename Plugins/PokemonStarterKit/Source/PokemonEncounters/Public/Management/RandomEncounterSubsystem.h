@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Subsystems/WorldSubsystem.h"
+
 #include "RandomEncounterSubsystem.generated.h"
 
 struct FGameplayTag;
@@ -38,13 +39,13 @@ UCLASS()
 class POKEMONENCOUNTERS_API URandomEncounterSubsystem : public UWorldSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set the actor that will convey the encounter data to the world.
      * @param Data The encounter data that is sent to the game
      */
     UFUNCTION(BlueprintCallable, Category = RandomEncounters)
-    void SetEncounterData(AMapEncounterData* Data);
+    void SetEncounterData(AMapEncounterData *Data);
 
     /**
      * Check if there are valid encounters for the given encounter type
@@ -55,7 +56,8 @@ public:
     bool HasEncountersForType(UPARAM(meta = (Categories = "EncounterTypes")) const FGameplayTag &EncounterType) const;
 
     UFUNCTION(BlueprintPure, Category = RandomEncounters, meta = (AutoCreateRefTerm = EncounterType))
-    bool HasEncountersForTypeExact(UPARAM(meta = (Categories = "EncounterTypes")) const FGameplayTag &EncounterType) const;
+    bool HasEncountersForTypeExact(UPARAM(meta = (Categories = "EncounterTypes"))
+                                       const FGameplayTag &EncounterType) const;
 
     /**
      * Request a random encounter of the given type.
@@ -65,24 +67,24 @@ public:
      * @return Was an encounter found?
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = RandomEncounters,
-        meta = (ExpandBoolAsExecs = "ReturnValue", AutoCreateRefTerm = EncounterType))
+              meta = (ExpandBoolAsExecs = "ReturnValue", AutoCreateRefTerm = EncounterType))
     bool RequestEncounterForType(UPARAM(meta = (Categories = "EncounterTypes")) const FGameplayTag &EncounterType,
-        FRetrievedEncounter& Encounter, int32 ChanceRolls = 1) const;
+                                 FRetrievedEncounter &Encounter, int32 ChanceRolls = 1) const;
 
     UFUNCTION(BlueprintCallable, Category = RandomEncounters, meta = (AutoCreateRefTerm = EncounterType))
-    bool CheckEncounterTriggered(ACharacter* PlayerCharacter, const FGameplayTag& EncounterType, bool bRepelActive = false, bool bTriggeredByStep = true);
+    bool CheckEncounterTriggered(ACharacter *PlayerCharacter, const FGameplayTag &EncounterType,
+                                 bool bRepelActive = false, bool bTriggeredByStep = true);
 
     UFUNCTION(BlueprintCallable, Category = RandomEncounters, meta = (AutoCreateRefTerm = EncounterType))
-    bool AllowEncounter(const FRetrievedEncounter& Encounter, bool bRepelActive = false);
-    
-private:
+    bool AllowEncounter(const FRetrievedEncounter &Encounter, bool bRepelActive = false);
+
+  private:
     UPROPERTY()
     bool bEncountersDisabled = false;
-    
+
     UPROPERTY()
     TObjectPtr<AMapEncounterData> EncounterData;
 
     int32 ChanceAccumulator = 0;
     int32 StepCount = 0;
-
 };

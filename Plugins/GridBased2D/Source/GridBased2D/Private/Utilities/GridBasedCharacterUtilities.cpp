@@ -2,25 +2,23 @@
 
 #include "Utilities/GridBasedCharacterUtilities.h"
 #include "CharacterMovementComponentAsync.h"
-#include "GridBased2DSettings.h"
+#include "Engine/OverlapResult.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GridBased2DSettings.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "MathUtilities.h"
 #include "RangeHelpers.h"
-#include "Engine/OverlapResult.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include <range/v3/functional/bind_back.hpp>
 
 bool UGridBasedCharacterUtilities::CheckCurrentTileForTag(ACharacter *Character, FName Tag) {
     static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());
-    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {
-        UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
-        UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)
-    };
-    
-    TArray<UPrimitiveComponent*> Components;
-    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation(),
-        GridSize, ObjectTypes, nullptr, { Character }, Components);
+    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
+                                                                UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)};
+
+    TArray<UPrimitiveComponent *> Components;
+    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation(), GridSize, ObjectTypes,
+                                                  nullptr, {Character}, Components);
 
     if (Components.ContainsByPredicate(ranges::bind_back(&UPrimitiveComponent::ComponentHasTag, Tag))) {
         return true;
@@ -38,16 +36,14 @@ bool UGridBasedCharacterUtilities::CheckCurrentTileForTag(ACharacter *Character,
 
 TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACharacter *Character) {
     static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());
-    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {
-        UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
-        UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)
-    };
+    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
+                                                                UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)};
 
     TSet<FName> Tags;
-    
-    TArray<UPrimitiveComponent*> Components;
+
+    TArray<UPrimitiveComponent *> Components;
     UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation() + FVector(0, 0, 2),
-        GridSize / 2, ObjectTypes, nullptr, { Character }, Components);
+                                                  GridSize / 2, ObjectTypes, nullptr, {Character}, Components);
     for (auto Comp : Components) {
         Tags.Append(Comp->ComponentTags);
     }

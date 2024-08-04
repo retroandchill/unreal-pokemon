@@ -12,7 +12,8 @@ bool TestValidateEncounter::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto EncounterData = World->SpawnActor<AMapEncounterData>();
 
-    auto &Encounters = UReflectionUtils::GetMutablePropertyValue<TMap<FName, FEncounterData>>(EncounterData, "Encounters");
+    auto &Encounters =
+        UReflectionUtils::GetMutablePropertyValue<TMap<FName, FEncounterData>>(EncounterData, "Encounters");
     auto Context = MakeUnique<FDataValidationContext>();
     UE_CHECK_EQUAL(EDataValidationResult::Valid, EncounterData->IsDataValid(*Context));
 
@@ -44,12 +45,12 @@ bool TestValidateEncounter::RunTest(const FString &Parameters) {
     EncounterRow2.LevelRange.SetLowerBound(FInt32Range::BoundsType::Open());
     EncounterRow2.LevelRange.SetUpperBound(FInt32Range::BoundsType::Inclusive(15));
     UE_CHECK_EQUAL(EDataValidationResult::Invalid, EncounterData->IsDataValid(*Context));
-    
+
     Context = MakeUnique<FDataValidationContext>();
     EncounterRow2.Species = "PIDOVE";
     EncounterRow2.Chance = 50;
     EncounterRow2.LevelRange.SetLowerBound(FInt32Range::BoundsType::Inclusive(13));
     UE_CHECK_EQUAL(EDataValidationResult::Valid, EncounterData->IsDataValid(*Context));
-    
+
     return true;
 }
