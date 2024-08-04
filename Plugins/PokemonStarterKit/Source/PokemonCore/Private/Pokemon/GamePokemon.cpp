@@ -36,6 +36,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     if (Trainer != nullptr) {
         OwnerInfo = FOwnerInfo(*Trainer);
         CurrentHandler = Trainer;
+        Rename(nullptr, CurrentHandler.GetObject());
     } else {
         OwnerInfo = FOwnerInfo(this);
         CurrentHandler = nullptr;
@@ -154,6 +155,7 @@ const TScriptInterface<ITrainer> &UGamePokemon::GetCurrentHandler() const {
 
 void UGamePokemon::SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler) {
     CurrentHandler = NewHandler;
+    Rename(nullptr, CurrentHandler.GetObject());
 }
 
 UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data) {
