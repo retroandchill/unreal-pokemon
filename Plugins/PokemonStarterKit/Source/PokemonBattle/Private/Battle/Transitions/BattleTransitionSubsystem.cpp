@@ -84,7 +84,7 @@ void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
     check(BattleInfo.IsSet())
-    if (Result == EBattleResult::Victory || Result == EBattleResult::Inconclusive || BattleInfo->bLossAllowed) {
+    if (Result != EBattleResult::Defeat || BattleInfo->bLossAllowed) {
         BattleFinished.Broadcast(Result);
     } else {
         // If the player loses we want all script callbacks to be removed

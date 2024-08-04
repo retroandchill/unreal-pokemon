@@ -365,5 +365,5 @@ void APokemonBattle::NextAction() {
 
 void APokemonBattle::DecideBattle(int32 SideIndex) {
     using enum EBattleResult;
-    Execute_EndBattle(this, SideIndex == PlayerSideIndex ? Victory : Defeat);
+    Execute_EndBattle(this, SideIndex == PlayerSideIndex ? Defeat : Victory);
 }
