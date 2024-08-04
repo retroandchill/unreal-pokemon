@@ -83,8 +83,12 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame() const {
-    auto SaveGame = NewObject<UPokemonSaveGame>();
+UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) const {
+    if (SaveGameClass == nullptr) {
+        SaveGameClass = UPokemonSaveGame::StaticClass();
+    }
+    
+    auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
     SaveGame->PlayerCharacter = Player;
     SaveGame->Bag = Bag;
     SaveGame->PlayerMetadata = PlayerMetadata;

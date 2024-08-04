@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Pokemon/Exp/GrowthRate.h"
+#include "Saving/PokemonSaveGame.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
 
@@ -84,8 +85,9 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Maps|Display")
     void SetCurrentLocation(const FText &LocationName);
 
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving)
-    UPokemonSaveGame* CreateSaveGame() const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving,
+        meta = (DeterminesOutputType = "SaveGameClass", DynamicOutputParam = "ReturnValue"))
+    UPokemonSaveGame* CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass = nullptr) const;
 
     UFUNCTION(BlueprintCallable, Category = Saving)
     void LoadSave(UPokemonSaveGame* SaveGame, bool bChangeMap = false);
