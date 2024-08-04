@@ -8,7 +8,7 @@
 
 class USaveScreen;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScreenSaveComplete, bool, bSuccess);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenSaveComplete);
 
 /**
  * Attempt to save the game.
@@ -33,7 +33,10 @@ private:
      * Called when the save is completed
      */
     UPROPERTY(BlueprintAssignable)
-    FOnScreenSaveComplete SaveComplete;
+    FOnScreenSaveComplete SaveSuccess;
+
+    UPROPERTY(BlueprintAssignable)
+    FOnScreenSaveComplete SaveFailed;
 
     /**
      * The screen to save the game with.

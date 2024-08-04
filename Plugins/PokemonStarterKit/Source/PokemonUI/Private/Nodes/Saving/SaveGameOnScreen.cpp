@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Nodes/SaveGameOnScreen.h"
+#include "Nodes/Saving/SaveGameOnScreen.h"
 #include "Screens/SaveScreen.h"
 
 USaveGameOnScreen * USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
@@ -12,7 +12,7 @@ USaveGameOnScreen * USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
 
 void USaveGameOnScreen::Activate() {
     Screen->SaveGame(FOnSaveComplete::CreateWeakLambda(this, [this](bool bSuccess) {
-        SaveComplete.Broadcast(bSuccess);
+        bSuccess ? SaveSuccess.Broadcast() : SaveFailed.Broadcast();
         SetReadyToDestroy();
     }));
 }

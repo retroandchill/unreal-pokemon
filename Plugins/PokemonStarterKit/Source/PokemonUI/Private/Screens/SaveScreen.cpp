@@ -8,7 +8,8 @@
 #include "Saving/PokemonSaveGame.h"
 #include "Settings/PokemonSaveGameSettings.h"
 
-void USaveScreen::NativeConstruct() {
+void USaveScreen::NativeOnActivated() {
+    Super::NativeOnActivated();
     auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
     UGameplayStatics::AsyncLoadGameFromSlot(Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
         FAsyncLoadGameFromSlotDelegate::CreateWeakLambda(this, [this](const FString&, int32, USaveGame* SaveGameIn) {
@@ -41,4 +42,14 @@ void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
             }
             Callback.Execute(bSuccess);
         }));
+}
+
+FDelegateHandle USaveScreen::BindToExitSaveScreen(FExitSaveScreen::FDelegate &&Callback) {
+    return OnExitSaveScreen.Add(MoveTemp(Callback));
+}
+
+void USaveScreen::ExitSaveScreen(bool bSuccess) {
+    CloseScreen();
+    OnExitSaveScreen.Broadcast(bSuccess);
+    OnExitSaveScreen.Clear();
 }

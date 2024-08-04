@@ -12,6 +12,7 @@ class UPokemonSaveGame;
 class USaveGameCard;
 
 DECLARE_DELEGATE_OneParam(FOnSaveComplete, bool);
+DECLARE_MULTICAST_DELEGATE_OneParam(FExitSaveScreen, bool);
 
 /**
  * The screen used to save the game.
@@ -21,7 +22,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
     GENERATED_BODY()
 
 protected:
-    void NativeConstruct() override;
+    void NativeOnActivated() override;
 
     /**
      * Set the save game being used by this window
@@ -42,6 +43,8 @@ public:
      */
     void SaveGame(FOnSaveComplete&& OnComplete);
 
+    FDelegateHandle BindToExitSaveScreen(FExitSaveScreen::FDelegate&& Callback);
+
 protected:
     /**
      * Add any additional custom properties to the save file that might be needed.
@@ -49,6 +52,9 @@ protected:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Saving)
     void AddCustomSaveProperties(UPokemonSaveGame* SaveGame);
+
+    UFUNCTION(BlueprintCallable, Category = Saving)
+    void ExitSaveScreen(bool bSuccess);
     
 private:
     UPROPERTY(meta = (BindWidget))
@@ -71,5 +77,7 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = "Memo|Formatting")
     FString DateFormat = TEXT("%m/%d/%Y");
+
+    FExitSaveScreen OnExitSaveScreen;
     
 };
