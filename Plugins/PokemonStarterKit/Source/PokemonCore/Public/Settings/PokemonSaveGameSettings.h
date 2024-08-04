@@ -16,7 +16,7 @@ UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Save Files")
 class POKEMONCORE_API UPokemonSaveGameSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * The name of the primary save slot
      */
@@ -33,7 +33,6 @@ public:
      * The type of the save game class
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Saving & Loading",
-        meta = (MetaClass = "PokemonSaveGame"))
+              meta = (MetaClass = "PokemonSaveGame"))
     FSoftClassPath SaveGameClass = UPokemonSaveGame::StaticClass();
-
 };

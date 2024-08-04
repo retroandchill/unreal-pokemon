@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
+
 #include "SaveGameCard.generated.h"
 
 class IPokemon;
@@ -16,23 +17,23 @@ UCLASS(Abstract)
 class POKEMONUI_API USaveGameCard : public UCommonUserWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeConstruct() override;
 
     UFUNCTION(BlueprintImplementableEvent, Category = Layout)
     void SlotPokemonIcon(UImage *Icon);
 
-private:
+  private:
     void UpdateTimeLabels();
 
-    UImage* CreatePokemonIcon(const TScriptInterface<IPokemon>& Pokemon);
-    
+    UImage *CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
+
     UFUNCTION()
     void UpdatePlaytimeText(float Playtime);
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> DateText;
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> TimeText;
 

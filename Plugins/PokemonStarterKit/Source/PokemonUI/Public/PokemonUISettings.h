@@ -38,7 +38,7 @@ class POKEMONUI_API UPokemonUISettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "MoveForgetScreen"))
     FSoftClassPath MoveForgetScreenClass;
-    
+
     /**
      * The screen displayed when prompting to save
      */

@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/Saving/SaveGameCard.h"
-#include "RangeHelpers.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/DisplayText.h"
@@ -10,6 +8,7 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
+#include "RangeHelpers.h"
 #include <range/v3/view/transform.hpp>
 
 void USaveGameCard::NativeConstruct() {
@@ -25,9 +24,9 @@ void USaveGameCard::NativeConstruct() {
     LocationText->SetText(Subsystem.GetCurrentLocation());
 
     Algo::ForEach(Icons, &UWidget::RemoveFromParent);
-    Icons = RangeHelpers::CreateRange(Subsystem.GetPlayer()->GetParty())
-        | ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this))
-        | RangeHelpers::TToArray<TObjectPtr<UImage>>();
+    Icons = RangeHelpers::CreateRange(Subsystem.GetPlayer()->GetParty()) |
+            ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this)) |
+            RangeHelpers::TToArray<TObjectPtr<UImage>>();
 
     // TODO: Badges and Pokédex info when it's ready
 
@@ -42,10 +41,11 @@ void USaveGameCard::UpdateTimeLabels() {
 
     auto Seconds = static_cast<float>(60 - Now.GetSecond());
     auto &TimerManager = GetGameInstance()->GetTimerManager();
-    TimerManager.SetTimer(TimeUpdateTimer, FTimerDelegate::CreateUObject(this, &USaveGameCard::UpdateTimeLabels), Seconds, false);
+    TimerManager.SetTimer(TimeUpdateTimer, FTimerDelegate::CreateUObject(this, &USaveGameCard::UpdateTimeLabels),
+                          Seconds, false);
 }
 
-UImage * USaveGameCard::CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon) {
+UImage *USaveGameCard::CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon) {
     auto Image = WidgetTree->ConstructWidget<UImage>();
     auto Subsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
     auto [Material, Size] = Subsystem->GetPokemonIcon(Pokemon, this);
@@ -55,7 +55,6 @@ UImage * USaveGameCard::CreatePokemonIcon(const TScriptInterface<IPokemon> &Poke
     SlotPokemonIcon(Image);
     return Image;
 }
-
 
 void USaveGameCard::UpdatePlaytimeText(float Playtime) {
     PlaytimeText->SetText(FText::FromString(FTimespan::FromSeconds(Playtime).ToString(TEXT("%h:%m")).RightChop(1)));

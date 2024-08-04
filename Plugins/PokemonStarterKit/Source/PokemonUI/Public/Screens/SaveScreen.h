@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
+
 #include "SaveScreen.generated.h"
 
 class UDisplayText;
@@ -21,7 +22,7 @@ UCLASS(Abstract)
 class POKEMONUI_API USaveScreen : public UScreen {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativeOnActivated() override;
 
     /**
@@ -29,7 +30,7 @@ protected:
      * @param SaveGame The save game being used by the window
      */
     UFUNCTION(BlueprintCallable, Category = Saving)
-    void SetSaveGame(UPokemonSaveGame* SaveGame);
+    void SetSaveGame(UPokemonSaveGame *SaveGame);
 
     /**
      * Prompt the player to save the game.
@@ -37,26 +38,26 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Saving)
     void PromptToSaveGame();
 
-public:
+  public:
     /**
      * Attempt to save the game
      */
-    void SaveGame(FOnSaveComplete&& OnComplete);
+    void SaveGame(FOnSaveComplete &&OnComplete);
 
-    FDelegateHandle BindToExitSaveScreen(FExitSaveScreen::FDelegate&& Callback);
+    FDelegateHandle BindToExitSaveScreen(FExitSaveScreen::FDelegate &&Callback);
 
-protected:
+  protected:
     /**
      * Add any additional custom properties to the save file that might be needed.
      * @param SaveGame Additional properties to add to the save file
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Saving)
-    void AddCustomSaveProperties(UPokemonSaveGame* SaveGame);
+    void AddCustomSaveProperties(UPokemonSaveGame *SaveGame);
 
     UFUNCTION(BlueprintCallable, Category = Saving)
     void ExitSaveScreen(bool bSuccess);
-    
-private:
+
+  private:
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USaveGameCard> SaveGameCard;
 
@@ -79,5 +80,4 @@ private:
     FString DateFormat = TEXT("%m/%d/%Y");
 
     FExitSaveScreen OnExitSaveScreen;
-    
 };

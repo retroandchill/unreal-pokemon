@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "PromptSaveGame.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSaveWindowExit);
@@ -15,18 +16,18 @@ UCLASS(meta = (HideThen))
 class POKEMONUI_API UPromptSaveGame : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Prompt the player to save the game and then continue based on the result.
      * @param WorldContext The screen to save the game with.
      * @return The node to process on
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving, meta = (WorldContext = WorldContext))
-    static UPromptSaveGame* PromptToSave(const UObject* WorldContext);
+    static UPromptSaveGame *PromptToSave(const UObject *WorldContext);
 
     void Activate() override;
 
-private:
+  private:
     /**
      * Called when the player saves the game
      */
@@ -38,8 +39,7 @@ private:
      */
     UPROPERTY(BlueprintAssignable)
     FOnSaveWindowExit DidNotSave;
-    
+
     UPROPERTY()
     TObjectPtr<const UObject> WorldContext;
-
 };

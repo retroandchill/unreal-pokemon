@@ -5,8 +5,8 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
-#include "Pokemon/Pokemon.h"
 #include "Pokemon/Exp/GrowthRate.h"
+#include "Pokemon/Pokemon.h"
 #include "Saving/PokemonSaveGame.h"
 #include "Trainers/TrainerStub.h"
 
@@ -83,11 +83,11 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) {
+UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) {
     if (SaveGameClass == nullptr) {
         SaveGameClass = UPokemonSaveGame::StaticClass();
     }
-    
+
     auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
     SaveGame->PlayerCharacter = StaticDuplicateObject(Player.GetObject(), this);
     SaveGame->Bag = StaticDuplicateObject(Bag.GetObject(), this);
@@ -115,7 +115,7 @@ void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
     UGameplayStatics::OpenLevel(this, FName(*SaveGame->CurrentMap));
 }
 
-void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter* PlayerCharacter) {
+void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter) {
     if (LoadTransform.IsSet()) {
         PlayerCharacter->SetActorTransform(*LoadTransform);
         LoadTransform.Reset();

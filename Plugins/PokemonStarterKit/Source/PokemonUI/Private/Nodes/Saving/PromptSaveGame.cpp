@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/Saving/PromptSaveGame.h"
 #include "PokemonUISettings.h"
 #include "PrimaryGameLayout.h"
 #include "Screens/SaveScreen.h"
 
-UPromptSaveGame * UPromptSaveGame::PromptToSave(const UObject *WorldContext) {
+UPromptSaveGame *UPromptSaveGame::PromptToSave(const UObject *WorldContext) {
     auto Node = NewObject<UPromptSaveGame>();
     Node->WorldContext = WorldContext;
     return Node;

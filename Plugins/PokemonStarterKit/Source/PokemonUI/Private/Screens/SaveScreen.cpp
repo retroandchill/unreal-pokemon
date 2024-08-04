@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Screens/SaveScreen.h"
 #include "Components/DisplayText.h"
 #include "Kismet/GameplayStatics.h"
@@ -11,19 +10,20 @@
 void USaveScreen::NativeOnActivated() {
     Super::NativeOnActivated();
     auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    UGameplayStatics::AsyncLoadGameFromSlot(Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-        FAsyncLoadGameFromSlotDelegate::CreateWeakLambda(this, [this](const FString&, int32, USaveGame* SaveGameIn) {
+    UGameplayStatics::AsyncLoadGameFromSlot(
+        Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
+        FAsyncLoadGameFromSlotDelegate::CreateWeakLambda(this, [this](const FString &, int32, USaveGame *SaveGameIn) {
             auto PokemonSaveGame = Cast<UPokemonSaveGame>(SaveGameIn);
             SetSaveGame(PokemonSaveGame);
             PromptToSaveGame();
         }));
 }
 
-void USaveScreen::SetSaveGame(UPokemonSaveGame* SaveGame) {
+void USaveScreen::SetSaveGame(UPokemonSaveGame *SaveGame) {
     CurrentSaveGame = SaveGame;
     if (SaveGame != nullptr) {
-        LastSavedText->SetText(FText::FormatNamed(LastSavedFormat,
-            TEXT("Date"), FText::FromString(SaveGame->SaveDate.ToFormattedString(*DateFormat)),
+        LastSavedText->SetText(FText::FormatNamed(
+            LastSavedFormat, TEXT("Date"), FText::FromString(SaveGame->SaveDate.ToFormattedString(*DateFormat)),
             TEXT("Time"), FText::FromString(SaveGame->SaveDate.ToFormattedString(TEXT("%H:%M")))));
     } else {
         LastSavedText->SetText(FText::GetEmpty());
@@ -32,16 +32,18 @@ void USaveScreen::SetSaveGame(UPokemonSaveGame* SaveGame) {
 
 void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
     auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    auto SaveGame = UPokemonSubsystem::GetInstance(this).CreateSaveGame(Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
+    auto SaveGame =
+        UPokemonSubsystem::GetInstance(this).CreateSaveGame(Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
     AddCustomSaveProperties(SaveGame);
-    UGameplayStatics::AsyncSaveGameToSlot(SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-        FAsyncSaveGameToSlotDelegate::CreateWeakLambda(this, [this, SaveGame, Callback = MoveTemp(OnComplete)](const FString&, const int32, bool bSuccess) {
-
-            if (bSuccess) {
-                SetSaveGame(SaveGame);
-            }
-            Callback.Execute(bSuccess);
-        }));
+    UGameplayStatics::AsyncSaveGameToSlot(
+        SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
+        FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
+            this, [this, SaveGame, Callback = MoveTemp(OnComplete)](const FString &, const int32, bool bSuccess) {
+                if (bSuccess) {
+                    SetSaveGame(SaveGame);
+                }
+                Callback.Execute(bSuccess);
+            }));
 }
 
 FDelegateHandle USaveScreen::BindToExitSaveScreen(FExitSaveScreen::FDelegate &&Callback) {

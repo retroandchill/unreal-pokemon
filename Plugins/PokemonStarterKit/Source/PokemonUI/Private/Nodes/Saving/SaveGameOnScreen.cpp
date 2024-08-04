@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/Saving/SaveGameOnScreen.h"
 #include "Screens/SaveScreen.h"
 
-USaveGameOnScreen * USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
+USaveGameOnScreen *USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
     auto Node = NewObject<USaveGameOnScreen>();
     Node->Screen = Screen;
     return Node;

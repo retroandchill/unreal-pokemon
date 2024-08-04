@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+
 #include "PokemonSaveGame.generated.h"
 
 class UPlayerMetadata;
@@ -16,7 +17,7 @@ UCLASS()
 class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
     GENERATED_BODY()
 
-public:
+  public:
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
     TScriptInterface<ITrainer> PlayerCharacter;
 
@@ -25,7 +26,7 @@ public:
 
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
     TObjectPtr<UPlayerMetadata> PlayerMetadata;
-    
+
     UPROPERTY(VisibleAnywhere, Category = Location)
     FString CurrentMap;
 
@@ -34,5 +35,4 @@ public:
 
     UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
     FDateTime SaveDate;
-
 };

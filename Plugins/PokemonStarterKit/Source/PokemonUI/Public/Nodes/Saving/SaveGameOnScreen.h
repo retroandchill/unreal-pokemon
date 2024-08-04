@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "SaveGameOnScreen.generated.h"
 
 class USaveScreen;
@@ -17,18 +18,18 @@ UCLASS(meta = (HideThen))
 class POKEMONUI_API USaveGameOnScreen : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Attempt to save the game.
      * @param Screen The screen to save the game with.
      * @return The node to process on
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving, meta = (DefaultToSelf = Screen))
-    static USaveGameOnScreen* SaveGame(USaveScreen* Screen);
+    static USaveGameOnScreen *SaveGame(USaveScreen *Screen);
 
     void Activate() override;
 
-private:
+  private:
     /**
      * Called when the save is completed
      */
@@ -43,5 +44,4 @@ private:
      */
     UPROPERTY()
     TObjectPtr<USaveScreen> Screen;
-
 };
