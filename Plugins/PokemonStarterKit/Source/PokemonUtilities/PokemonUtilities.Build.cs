@@ -13,7 +13,7 @@ public class PokemonUtilities : ModuleRules
 			new string[]
 			{
 				"Core",
-				"UnrealRanges"
+				"UnrealRanges", "GameplayTags", "GameplayAbilities"
 			}
 		);
 

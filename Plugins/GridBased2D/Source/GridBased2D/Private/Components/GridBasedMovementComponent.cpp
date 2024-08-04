@@ -297,6 +297,7 @@ void UGridBasedMovementComponent::MoveComplete() {
         MoveCallback.Reset();
         Callback();
     }
+    OnTakeStep.Broadcast();
 
     auto Owner = GetOwner();
     auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>();

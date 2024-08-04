@@ -35,7 +35,7 @@ UCLASS()
 class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
     /**
@@ -72,7 +72,7 @@ public:
      */
     void RemoveFromBattleFinished(const FDelegateHandle &Handle);
 
-private:
+  private:
     /**
      * Set up the jump into battle
      */

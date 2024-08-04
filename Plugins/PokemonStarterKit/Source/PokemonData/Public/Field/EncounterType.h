@@ -10,6 +10,7 @@
 
 /**
  * Represents any of the various encounter types that may occur within the world
+ * @deprecated The encounter system uses a gameplay tag based system now and no longer needs this
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
 struct POKEMONDATA_API FEncounterType : public FIndexedTableRow {
@@ -31,6 +32,6 @@ struct POKEMONDATA_API FEncounterType : public FIndexedTableRow {
      * The weight applied for when an encounter will occur when taking a step
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Encounter Info",
-              meta = (UIMin = 0, ClampMin = 10, UIMax = 100, ClampMax = 100))
+              meta = (UIMin = 1, ClampMin = 1, UIMax = 100, ClampMax = 100))
     int32 TriggerChance;
 };

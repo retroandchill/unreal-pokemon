@@ -42,7 +42,8 @@ public class PokemonTests : ModuleRules
                 "CommonUI",
                 "CommonGame",
                 "DeveloperSettings",
-                "EnhancedInput"
+                "EnhancedInput", 
+                "PokemonEncounters"
             }
         );
     }

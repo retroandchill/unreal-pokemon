@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AttributeMacros.h"
 #include "AttributeSet.h"
+#include "GameplayTags/AttributeMacros.h"
 
 #include "PokemonCoreAttributeSet.generated.h"
 

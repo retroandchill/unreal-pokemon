@@ -71,6 +71,9 @@ class POKEMONCORE_API ITrainer {
     UFUNCTION(BlueprintCallable, Category = "Pokémon")
     virtual TScriptInterface<IPokemon> GetPokemon(int32 Index) const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual int32 GetAblePokemonCount() const = 0;
+
     /**
      * Add a Pokémon to the trainer's party
      * @param Pokemon The Pokémon to add to the party

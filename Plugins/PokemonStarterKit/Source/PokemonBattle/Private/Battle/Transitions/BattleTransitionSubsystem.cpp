@@ -4,9 +4,9 @@
 #include "Battle/Battle.h"
 #include "Battle/Transitions/BattleTransitionActor.h"
 #include "Engine/LevelStreamingDynamic.h"
+#include "Engine/LevelStreamingVolume.h"
 #include "Kismet/GameplayStatics.h"
 #include "PokemonBattleSettings.h"
-#include "Engine/LevelStreamingVolume.h"
 
 void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
@@ -42,7 +42,7 @@ void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
     }
 
     StreamingStates.Reset();
-    TArray<AActor*> LevelStreamingVolumes;
+    TArray<AActor *> LevelStreamingVolumes;
     UGameplayStatics::GetAllActorsOfClass(this, ALevelStreamingVolume::StaticClass(), LevelStreamingVolumes);
     for (auto Actor : LevelStreamingVolumes) {
         auto &[Volume, bDisabled] = StreamingStates.Emplace_GetRef();
