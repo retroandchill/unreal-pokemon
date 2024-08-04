@@ -83,15 +83,15 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) const {
+UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) {
     if (SaveGameClass == nullptr) {
         SaveGameClass = UPokemonSaveGame::StaticClass();
     }
     
     auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
-    SaveGame->PlayerCharacter = Player;
-    SaveGame->Bag = Bag;
-    SaveGame->PlayerMetadata = PlayerMetadata;
+    SaveGame->PlayerCharacter = StaticDuplicateObject(Player.GetObject(), this);
+    SaveGame->Bag = StaticDuplicateObject(Bag.GetObject(), this);
+    SaveGame->PlayerMetadata = CastChecked<UPlayerMetadata>(StaticDuplicateObject(PlayerMetadata, this));
 
     SaveGame->CurrentMap = GetWorld()->GetMapName();
     auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
@@ -103,9 +103,9 @@ UPokemonSaveGame * UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGam
 }
 
 void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
-    Player = SaveGame->PlayerCharacter;
-    Bag = SaveGame->Bag;
-    PlayerMetadata = SaveGame->PlayerMetadata;
+    Player = StaticDuplicateObject(SaveGame->PlayerCharacter.GetObject(), this);
+    Bag = StaticDuplicateObject(SaveGame->Bag.GetObject(), this);
+    PlayerMetadata = CastChecked<UPlayerMetadata>(StaticDuplicateObject(SaveGame->PlayerMetadata, this));
 
     if (!bChangeMap) {
         return;
