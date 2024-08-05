@@ -48,7 +48,7 @@ bool TestExpGain::RunTest(const FString &Parameters) {
     UE_CHECK_TRUE(Result[0].GainingBattler == Battler1);
     UE_CHECK_EQUAL(1642, Result[0].Amount);
 
-    Battler2->RecordParticipation();
+    Battler1->RecordParticipation();
     Result = Battler2->GiveExpToParticipants();
     UE_CHECK_EQUAL(1, Result.Num());
     UE_CHECK_TRUE(Result[0].GainingBattler == Battler1);
