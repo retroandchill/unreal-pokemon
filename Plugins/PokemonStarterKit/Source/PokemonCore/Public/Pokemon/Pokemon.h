@@ -92,6 +92,9 @@ class POKEMONCORE_API IPokemon {
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual bool IsShiny() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual bool IsAble() const = 0;
+
     /**
      * Get the current HP of the Pokémon in question
      * @return The current HP of this particular Pokémon
@@ -112,6 +115,14 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual int32 GetMaxHP() const = 0;
+
+    /**
+     * Restore HP by the specified amount.
+     * @param Amount The amount of HP to restore.
+     * @return The actual amount of HP recovered.
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual int32 RestoreHP(int32 Amount) = 0;
 
     /**
      * Returns if the Pokémon is currently fainted

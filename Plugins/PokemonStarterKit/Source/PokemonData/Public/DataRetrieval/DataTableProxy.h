@@ -21,8 +21,14 @@ class TDataTableProxy final : public IGameData {
         return T::StaticStruct();
     }
 
-    T *GetData(FName ID) const override {
+    const T *GetData(FName ID) const override {
         return DataTable->FindRow<T>(ID, TEXT("Find row!"));
+    }
+
+    const T &GetDataChecked(FName ID) const override {
+        auto Data = DataTable->FindRow<T>(ID, TEXT("Find row!"));
+        check(Data != nullptr)
+        return *Data;
     }
 
     TArray<FName> GetTableRowNames() const override {

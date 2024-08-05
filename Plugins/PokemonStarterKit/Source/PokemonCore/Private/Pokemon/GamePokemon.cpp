@@ -131,6 +131,10 @@ bool UGamePokemon::IsShiny() const {
     return D < static_cast<uint32>(GetDefault<UPokemonDataSettings>()->ShinyPokemonChance);
 }
 
+bool UGamePokemon::IsAble() const {
+    return CurrentHP > 0;
+}
+
 int32 UGamePokemon::GetCurrentHP() const {
     return CurrentHP;
 }
@@ -141,6 +145,12 @@ void UGamePokemon::SetCurrentHP(int32 Value) {
 
 int32 UGamePokemon::GetMaxHP() const {
     return GetStatBlock()->GetStat(GetDefault<UPokemonDataSettings>()->HPStat)->GetStatValue();
+}
+
+int32 UGamePokemon::RestoreHP(int32 Amount) {
+    int32 Before = CurrentHP;
+    SetCurrentHP(CurrentHP + Amount);
+    return CurrentHP - Before;
 }
 
 bool UGamePokemon::IsFainted() const {

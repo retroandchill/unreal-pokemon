@@ -24,6 +24,7 @@ class FMockPokemon : public IPokemon {
     MOCK_METHOD(const TArray<FName> &, GetTypes, (), (const, override));
     MOCK_METHOD(FName, GetPokeBall, (), (const, override));
     MOCK_METHOD(bool, IsShiny, (), (const, override));
+    MOCK_METHOD(bool, IsAble, (), (const, override));
     MOCK_METHOD(int32, GetCurrentHP, (), (const, override));
     MOCK_METHOD(void, SetCurrentHP, (int32 Value), (override));
     MOCK_METHOD(int32, GetMaxHP, (), (const, override));

@@ -8,6 +8,7 @@
 
 #include "BagScreen.generated.h"
 
+class UFieldItemEffect;
 class UPokemonSelectionPane;
 class UPocketTabWidget;
 class UBagMenuHandlerSet;
@@ -72,7 +73,12 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void ShowItemCommands();
 
+    UFUNCTION(BlueprintCallable, Category = Items)
+    void TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon>& Pokemon);
+
   private:
+    void OnItemEffectConclude(bool bSuccess, FName ItemID);
+    
     /**
      * The window that displays the pockets
      */
@@ -98,4 +104,7 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
      * Callback for when an item is selected
      */
     FOnItemSelected OnItemSelected;
+
+    UPROPERTY()
+    TObjectPtr<UFieldItemEffect> CurrentItemEffect;
 };

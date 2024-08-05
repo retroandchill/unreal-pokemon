@@ -1,9 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/BagScreen.h"
+#include "DataManager.h"
+#include "ItemEffectLookup.h"
 #include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketTabWidget.h"
+#include "Field/FieldItemEffectUseOnPokemon.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Player/Bag.h"
+#include "Utilities/TrainerHelpers.h"
 
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();
@@ -40,12 +45,12 @@ void UBagScreen::CloseScreen() {
 }
 
 void UBagScreen::RefreshScene() {
-    ItemSelectionWindow->RefreshWindow();
+    RefreshSelf();
 }
 
 void UBagScreen::RefreshSelf_Implementation() {
     Super::RefreshSelf_Implementation();
-    RefreshScene();
+    ItemSelectionWindow->RefreshWindow();
 }
 
 UItemSelectionWindow *UBagScreen::GetItemSelectionWindow() const {
@@ -73,4 +78,27 @@ void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
 
     ToggleItemSelection(false);
     ShowItemCommands();
+}
+
+void UBagScreen::TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon) {
+    auto EffectClass = Pokemon::Items::LookupFieldItemEffect<UFieldItemEffectUseOnPokemon>(Item.ID);
+    if (EffectClass == nullptr) {
+        OnItemEffectConclude(false, Item.ID);
+        return;
+    }
+
+    auto Effect = NewObject<UFieldItemEffectUseOnPokemon>(this, EffectClass);
+    Effect->BindToEffectComplete(FOnItemEffectComplete::FDelegate::CreateUObject(this, &UBagScreen::OnItemEffectConclude, Item.ID));
+    Effect->Use(Item, Quantity, Pokemon);
+    CurrentItemEffect = Effect;
+}
+
+void UBagScreen::OnItemEffectConclude(bool bSuccess, FName ItemID) {
+    auto &Item = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemID);
+    if (bSuccess && Item.Consumable) {
+        UTrainerHelpers::GetBag(this)->RemoveItem(ItemID, 1);
+    }
+
+    RefreshScene();
+    CurrentItemEffect = nullptr;
 }
