@@ -60,8 +60,8 @@ template <typename T, typename RangeType>
     requires(!std::is_copy_constructible_v<RangeType>)
 TArray<T> ToArray(RangeType &Range) {
     TArray<T> Ret;
-    for (const auto &Value : Range) {
-        Ret.Emplace(Value);
+    for (auto &&Value : Range) {
+        Ret.Emplace(Forward(Value));
     }
     return Ret;
 }

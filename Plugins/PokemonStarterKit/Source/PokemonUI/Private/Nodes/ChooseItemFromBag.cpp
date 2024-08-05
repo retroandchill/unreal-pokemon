@@ -23,10 +23,12 @@ void UChooseItemFromBag::Activate() {
 }
 
 void UChooseItemFromBag::ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item,
-                                           int32 Quantity) const {
+                                           int32 Quantity) {
     OnSelected.Broadcast(Screen, Item, Quantity);
+    SetReadyToDestroy();
 }
 
 void UChooseItemFromBag::ExecuteOnCanceled() {
     OnCanceled.Broadcast();
+    SetReadyToDestroy();
 }

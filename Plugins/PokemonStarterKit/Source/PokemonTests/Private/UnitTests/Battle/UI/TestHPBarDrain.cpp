@@ -39,7 +39,7 @@ bool TestHPBarDrain::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"ATTACK", 31}},
                                                                                  .EVs = {{"ATTACK", 104}},
                                                                                  .Nature = FName("TIMID"),
-                                                                                 .Moves = {TEXT("ICEFANG")}});
+                                                                                 .Moves = {{.Move = TEXT("ICEFANG")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
                                                                                  .Level = 65,

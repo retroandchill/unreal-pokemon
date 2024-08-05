@@ -4,24 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Bag.h"
+#include "BagDTO.h"
 #include "ItemSlot.h"
 #include "UObject/Object.h"
 
 #include "DefaultBag.generated.h"
-
-/**
- * Wrapper around the items in a pocket in the game.
- */
-USTRUCT(BlueprintType)
-struct POKEMONCORE_API FPocket {
-    GENERATED_BODY()
-
-    /**
-     * The items that have been placed inside that pocket.
-     */
-    UPROPERTY(SaveGame)
-    TArray<FItemSlot> Items;
-};
 
 /**
  * The default implementation of the player's bag.
@@ -31,7 +18,8 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     GENERATED_BODY()
 
   public:
-    void Initialize() override;
+    void Initialize(const FBagDTO& DTO = FBagDTO()) override;
+    FBagDTO ToDTO() const override;
 
     UFUNCTION(BlueprintPure, Category = "Player|Inventory")
     int32 GetItemQuantity(FName ItemID) const override;

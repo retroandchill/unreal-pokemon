@@ -15,16 +15,16 @@ USTRUCT(BlueprintType)
 struct POKEMONCORE_API FOwnerInfo {
     GENERATED_BODY()
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pokémon|Original Trainer")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Pokémon|Original Trainer")
     FText OriginalTrainerName;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pokémon|Original Trainer")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Pokémon|Original Trainer")
     ETrainerGender OriginalTrainerGender = ETrainerGender::Unknown;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pokémon|Original Trainer")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Pokémon|Original Trainer")
     int32 ID = 0;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pokémon|Original Trainer")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Pokémon|Original Trainer")
     int32 SecretID = 0;
 
     FOwnerInfo();

@@ -26,7 +26,7 @@ bool TrainerInfoTest::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(Player->GetIdNumber(), Pokemon1->GetOwnerInfo().ID);
     UE_CHECK_EQUAL(Player->GetSecretId(), Pokemon1->GetOwnerInfo().SecretID);
 
-    auto ForeignTrainer = NewObject<UBasicTrainer>()->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto ForeignTrainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PORYGON"}, ForeignTrainer);
     UE_CHECK_EQUAL(TEXT("Amy"), Pokemon2->GetOwnerInfo().OriginalTrainerName.ToString());

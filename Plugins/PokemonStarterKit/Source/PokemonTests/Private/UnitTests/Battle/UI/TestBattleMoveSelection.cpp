@@ -36,7 +36,7 @@ bool TestBattleMoveSelection::RunTest(const FString &Parameters) {
         World.Get(),
         FPokemonDTO{.Species = TEXT("MIMIKYU"),
                     .Level = 50,
-                    .Moves = {TEXT("SHADOWSNEAK"), TEXT("PLAYROUGH"), TEXT("SWORDSDANCE"), TEXT("SHADOWCLAW")}});
+                    .Moves = {{.Move = TEXT("SHADOWSNEAK")}, {.Move = TEXT("PLAYROUGH")}, {.Move = TEXT("SWORDSDANCE")}, {.Move = TEXT("SHADOWCLAW")}}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     Battler->DispatchBeginPlay();
     Battler->Initialize(Side, Pokemon);

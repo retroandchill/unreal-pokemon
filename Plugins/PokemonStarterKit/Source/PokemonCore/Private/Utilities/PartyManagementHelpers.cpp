@@ -10,7 +10,7 @@ TScriptInterface<IPokemon> UPartyManagementHelpers::AddPokemonToParty(const UObj
                                                                       const FPokemonDTO &Pokemon) {
     auto Player = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>()->GetPlayer();
     check(Player != nullptr)
-    auto CreatedPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(WorldContext, Pokemon);
+    auto CreatedPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(Player.GetObject(), Pokemon);
     Player->AddPokemonToParty(CreatedPokemon);
     return CreatedPokemon;
 }

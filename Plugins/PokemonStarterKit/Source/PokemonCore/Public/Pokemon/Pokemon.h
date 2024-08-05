@@ -41,6 +41,8 @@ class POKEMONCORE_API IPokemon {
      */
     virtual void Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer = nullptr) = 0;
 
+    virtual FPokemonDTO ToDTO() const = 0;
+    
     /**
      * Get the name of the Pokémon in question
      * @return The Pokémon's Nickname

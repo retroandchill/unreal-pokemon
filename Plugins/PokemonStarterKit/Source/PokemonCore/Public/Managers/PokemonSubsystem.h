@@ -3,11 +3,13 @@
 
 #include "CoreMinimal.h"
 #include "Pokemon/Exp/GrowthRate.h"
+#include "Saving/PokemonSaveGame.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
 
 #include "PokemonSubsystem.generated.h"
 
+class UPokemonSaveGame;
 class IBag;
 class UPlayerMetadata;
 
@@ -83,6 +85,16 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Maps|Display")
     void SetCurrentLocation(const FText &LocationName);
 
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving,
+              meta = (DeterminesOutputType = "SaveGameClass", DynamicOutputParam = "ReturnValue"))
+    UPokemonSaveGame *CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass = nullptr) const;
+
+    UFUNCTION(BlueprintCallable, Category = Saving)
+    void LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap = false);
+
+    UFUNCTION(BlueprintCallable, Category = Saving)
+    void AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter);
+
   private:
     /**
      * The trainer that represents the player character
@@ -112,4 +124,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     UPROPERTY(BlueprintGetter = GetCurrentLocation, BlueprintSetter = SetCurrentLocation)
     FText CurrentLocation;
+
+    TOptional<FTransform> LoadTransform;
 };
