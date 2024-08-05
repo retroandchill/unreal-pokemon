@@ -12,7 +12,7 @@ TScriptInterface<IMove> UDefaultMove::Initialize(const FMoveDTO& MoveID) {
     return this;
 }
 
-FMoveDTO UDefaultMove::Serialize() const {
+FMoveDTO UDefaultMove::ToDTO() const {
     return {
         .Move = ID,
         .CurrentPP = CurrentPP

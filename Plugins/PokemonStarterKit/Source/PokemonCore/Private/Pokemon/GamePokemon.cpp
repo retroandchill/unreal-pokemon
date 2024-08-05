@@ -58,7 +58,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     ObtainedBlock = UnrealInjector::NewInjectedDependency<IObtainedBlock>(this, DTO);
 }
 
-FPokemonDTO UGamePokemon::Serialize() const {
+FPokemonDTO UGamePokemon::ToDTO() const {
     TMap<FName, int32> IVs;
     TMap<FName, int32> EVs;
     StatBlock->ForEachStat([&IVs, &EVs](FName ID, const IStatEntry& Stat) {
@@ -81,7 +81,7 @@ FPokemonDTO UGamePokemon::Serialize() const {
         .Ability = AbilityBlock->GetAbilityID(),
         .Item = HoldItem,
         .Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves())
-            | ranges::views::transform([](const TScriptInterface<IMove>& Move) { return Move->Serialize(); })
+            | ranges::views::transform([](const TScriptInterface<IMove>& Move) { return Move->ToDTO(); })
             | RangeHelpers::TToArray<FMoveDTO>(),
         .MoveMemory = MoveBlock->GetMoveMemory(),
         .ObtainMethod = ObtainedBlock->GetObtainMethod(),

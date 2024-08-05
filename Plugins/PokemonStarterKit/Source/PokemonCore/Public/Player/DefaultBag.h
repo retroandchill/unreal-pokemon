@@ -19,7 +19,7 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
 
   public:
     void Initialize(const FBagDTO& DTO = FBagDTO()) override;
-    FBagDTO Serialize() const override;
+    FBagDTO ToDTO() const override;
 
     UFUNCTION(BlueprintPure, Category = "Player|Inventory")
     int32 GetItemQuantity(FName ItemID) const override;

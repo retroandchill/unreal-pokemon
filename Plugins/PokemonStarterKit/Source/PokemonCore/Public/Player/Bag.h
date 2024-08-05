@@ -26,7 +26,7 @@ class POKEMONCORE_API IBag {
   public:
     virtual void Initialize(const FBagDTO& DTO = FBagDTO()) = 0;
 
-    virtual FBagDTO Serialize() const = 0;
+    virtual FBagDTO ToDTO() const = 0;
 
     /**
      * Get the count of a specific item.

@@ -30,13 +30,13 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
     return this;
 }
 
-FTrainerDTO UBasicTrainer::Serialize() const {
+FTrainerDTO UBasicTrainer::ToDTO() const {
     return {
         .InternalID = InternalId,
         .TrainerType = TrainerType,
         .Name = Name,
         .Party = RangeHelpers::CreateRange(Party)
-            | ranges::views::transform([](const TScriptInterface<IPokemon>& Pokemon) { return Pokemon->Serialize(); })
+            | ranges::views::transform([](const TScriptInterface<IPokemon>& Pokemon) { return Pokemon->ToDTO(); })
             | RangeHelpers::TToArray<FPokemonDTO>(),
         .ID = ID,
         .SecretID = SecretID

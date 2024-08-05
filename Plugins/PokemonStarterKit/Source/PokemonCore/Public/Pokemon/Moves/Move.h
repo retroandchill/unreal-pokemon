@@ -24,7 +24,7 @@ class POKEMONCORE_API IMove {
     GENERATED_BODY()
 
   public:
-    virtual FMoveDTO Serialize() const = 0;
+    virtual FMoveDTO ToDTO() const = 0;
     
     /**
      * Get the data for the underlying move that this move represents

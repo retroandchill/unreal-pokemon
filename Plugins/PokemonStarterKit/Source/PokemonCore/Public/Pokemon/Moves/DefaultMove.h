@@ -18,7 +18,7 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
   public:
     TScriptInterface<IMove> Initialize(const FMoveDTO& MoveID);
 
-    FMoveDTO Serialize() const override;
+    FMoveDTO ToDTO() const override;
 
     const FMoveData &GetMoveData() const override;
 

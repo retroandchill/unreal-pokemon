@@ -87,8 +87,8 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
     }
 
     auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
-    SaveGame->PlayerCharacter = Player->Serialize();
-    SaveGame->Bag = Bag->Serialize();
+    SaveGame->PlayerCharacter = Player->ToDTO();
+    SaveGame->Bag = Bag->ToDTO();
 
     SaveGame->CurrentMap = GetWorld()->GetMapName();
     auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();

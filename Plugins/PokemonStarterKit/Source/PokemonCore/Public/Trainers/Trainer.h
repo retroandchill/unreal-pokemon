@@ -32,7 +32,7 @@ class POKEMONCORE_API ITrainer {
 
     virtual TScriptInterface<ITrainer> Initialize(const FTrainerDTO& DTO) = 0;
 
-    virtual FTrainerDTO Serialize() const = 0;
+    virtual FTrainerDTO ToDTO() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = Metadata)
     virtual const FGuid &GetInternalId() const = 0;

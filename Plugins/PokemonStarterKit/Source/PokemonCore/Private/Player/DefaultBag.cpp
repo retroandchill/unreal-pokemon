@@ -23,7 +23,7 @@ void UDefaultBag::Initialize(const FBagDTO& DTO) {
     ItemSlots = DTO.ItemSlots;
 }
 
-FBagDTO UDefaultBag::Serialize() const {
+FBagDTO UDefaultBag::ToDTO() const {
     return {
         .ItemSlots = ItemSlots
     };
