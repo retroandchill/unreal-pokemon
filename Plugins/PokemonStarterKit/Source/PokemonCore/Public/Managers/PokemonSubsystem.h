@@ -87,7 +87,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving,
               meta = (DeterminesOutputType = "SaveGameClass", DynamicOutputParam = "ReturnValue"))
-    UPokemonSaveGame *CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass = nullptr);
+    UPokemonSaveGame *CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass = nullptr) const;
 
     UFUNCTION(BlueprintCallable, Category = Saving)
     void LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap = false);

@@ -81,20 +81,22 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) {
+UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) const {
     if (SaveGameClass == nullptr) {
         SaveGameClass = UPokemonSaveGame::StaticClass();
     }
 
     auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
     SaveGame->PlayerCharacter = Player->Serialize();
-    SaveGame->Bag = FObjectData(Bag.GetObject());
-    SaveGame->PlayerMetadata = FObjectData(PlayerMetadata);
+    SaveGame->Bag = Bag->Serialize();
 
     SaveGame->CurrentMap = GetWorld()->GetMapName();
     auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
     check(PlayerCharacter != nullptr)
     SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
+
+    SaveGame->StartDate = PlayerMetadata->StartDate;
+    SaveGame->TotalPlaytime = PlayerMetadata->TotalPlaytime;
 
     SaveGame->SaveDate = FDateTime::Now();
     return SaveGame;
@@ -102,8 +104,9 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
 
 void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
     Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveGame->PlayerCharacter);
-    //Bag = SaveGame->Bag.Deserialize(this);
-    //PlayerMetadata = SaveGame->PlayerMetadata.Deserialize<UPlayerMetadata>(this);
+    Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
+    PlayerMetadata->StartDate = SaveGame->StartDate;
+    PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
 
     if (!bChangeMap) {
         return;

@@ -3,15 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameDataSavingLibrary.h"
 #include "GameFramework/SaveGame.h"
+#include "Player/BagDTO.h"
 #include "Trainers/TrainerDTO.h"
 
 #include "PokemonSaveGame.generated.h"
 
-class UPlayerMetadata;
-class IBag;
-class ITrainer;
 /**
  * The structure of a save file for the game.
  */
@@ -24,10 +21,7 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
     FTrainerDTO PlayerCharacter;
 
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
-    FObjectData Bag;
-
-    UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
-    FObjectData PlayerMetadata;
+    FBagDTO Bag;
 
     UPROPERTY(VisibleAnywhere, Category = Location)
     FString CurrentMap;
@@ -37,4 +31,10 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
 
     UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
     FDateTime SaveDate;
+
+    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    FDateTime StartDate;
+    
+    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    float TotalPlaytime;
 };
