@@ -7,13 +7,15 @@
 
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;
-    LevelMet = DTO.Level;
+    LevelMet = DTO.LevelMet.Get(DTO.Level);
 
     ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [this] {
         return UPokemonSubsystem::Exists(this) ? UPokemonSubsystem::GetInstance(this).GetCurrentLocation() : FText();
     });
 
-    TimeReceived = FDateTime::Now();
+    TimeReceived = DTO.TimeReceived.Get(FDateTime::Now());
+    TimeHatched = DTO.TimeHatched;
+    HatchedMap = DTO.HatchedMap;
     return this;
 }
 

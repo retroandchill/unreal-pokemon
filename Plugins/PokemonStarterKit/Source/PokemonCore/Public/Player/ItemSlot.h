@@ -17,13 +17,13 @@ struct POKEMONCORE_API FItemSlot {
     /**
      * The ID of the item that is in this slot.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Inventory")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Player|Inventory")
     FName Item;
 
     /**
      * The number of items that are possessed
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Inventory")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Player|Inventory")
     int32 Quantity = 1;
 
     const FItem &GetItem() const;

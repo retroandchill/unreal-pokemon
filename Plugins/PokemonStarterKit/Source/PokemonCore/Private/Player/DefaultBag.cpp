@@ -19,8 +19,14 @@ bool ItemSlotMatches(FName ItemID, const FItemSlot &Slot) {
     return Slot.Item == ItemID;
 }
 
-void UDefaultBag::Initialize() {
-    // No initialization needed
+void UDefaultBag::Initialize(const FBagDTO& DTO) {
+    ItemSlots = DTO.ItemSlots;
+}
+
+FBagDTO UDefaultBag::ToDTO() const {
+    return {
+        .ItemSlots = ItemSlots
+    };
 }
 
 int32 UDefaultBag::GetItemQuantity(FName ItemID) const {

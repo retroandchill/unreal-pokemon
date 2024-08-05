@@ -5,8 +5,21 @@
 #include "CoreMinimal.h"
 #include "Breeding/PokemonGender.h"
 #include "TrainerMemo/ObtainMethod.h"
+#include "Trainers/OwnerInfo.h"
 
 #include "PokemonDTO.generated.h"
+
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FMoveDTO {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data",
+              meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
+    FName Move;
+
+    UPROPERTY(EditAnywhere, Category = Data)
+    TOptional<int32> CurrentPP;
+};
 
 /**
  * Data transfer object for a Pokémon. This is what gets serialized for both the builder and for any communication
@@ -115,7 +128,14 @@ struct POKEMONCORE_API FPokemonDTO {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
               meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
-    TArray<FName> Moves;
+    TArray<FMoveDTO> Moves;
+
+    /**
+     * The moves known by the Pokémon
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
+              meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
+    TSet<FName> MoveMemory;
 
     /**
      * The method the Pokémon was obtained with
@@ -123,9 +143,24 @@ struct POKEMONCORE_API FPokemonDTO {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     EObtainMethod ObtainMethod = EObtainMethod::Default;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    TOptional<int32> LevelMet;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    TOptional<FDateTime> TimeReceived;
+
     /**
      * Manual override of the met location (otherwise use the map they were obtained on)
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FText> MetLocation;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    TOptional<FDateTime> TimeHatched;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    TOptional<FText> HatchedMap;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
+    TOptional<FOwnerInfo> OwnerInfo;
 };

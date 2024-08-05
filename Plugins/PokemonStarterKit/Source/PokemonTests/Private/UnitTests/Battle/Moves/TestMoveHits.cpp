@@ -27,7 +27,7 @@ bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("AURASPHERE")}});
+                                                                                 .Moves = {{.Move = TEXT("AURASPHERE")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -68,7 +68,7 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("HYDROPUMP")}});
+                                                                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -110,7 +110,7 @@ bool TestMoveHits_AccuracyEvasionRegular::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("HYDROPUMP")}});
+                                                                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -155,7 +155,7 @@ bool TestMoveHits_AccuracyEvasionOutsideBounds::RunTest(const FString &Parameter
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("HYDROPUMP")}});
+                                                                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,

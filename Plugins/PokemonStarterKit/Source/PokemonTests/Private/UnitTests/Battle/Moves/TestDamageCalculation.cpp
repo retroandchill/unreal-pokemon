@@ -24,7 +24,7 @@ bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"ATTACK", 31}},
                                                                                  .EVs = {{"ATTACK", 104}},
                                                                                  .Nature = FName("TIMID"),
-                                                                                 .Moves = {TEXT("ICEFANG")}});
+                                                                                 .Moves = {{.Move = TEXT("ICEFANG")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
                                                                                  .Level = 65,
@@ -65,7 +65,7 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
                                                                                  .EVs = {{"ATTACK", 104}},
                                                                                  .Nature = FName("TIMID"),
                                                                                  .Item = FName("MUSCLEBAND"),
-                                                                                 .Moves = {TEXT("ICEFANG")}});
+                                                                                 .Moves = {{.Move = TEXT("ICEFANG")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
                                                                                  .Level = 65,
@@ -112,7 +112,7 @@ bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("TIMID"),
-                                                                                 .Moves = {TEXT("FROSTBREATH")}});
+                                                                                 .Moves = {{.Move = TEXT("FROSTBREATH")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("MILOTIC"),
                                                                                  .Level = 100,
@@ -154,7 +154,7 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("TIMID"),
                                                                                  .Item = FName("TWISTEDSPOON"),
-                                                                                 .Moves = {TEXT("FROSTBREATH")}});
+                                                                                 .Moves = {{.Move = TEXT("FROSTBREATH")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("DRAPION"),
                                                                                  .Level = 100,
@@ -196,7 +196,7 @@ bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("TIMID"),
-                                                                                 .Moves = {TEXT("DRACOMETEOR")}});
+                                                                                 .Moves = {{.Move = TEXT("DRACOMETEOR")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SYLVEON"),
                                                                                  .Level = 100,
@@ -239,7 +239,7 @@ bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Paramete
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("TIMID"),
                                                                                  .Item = FName("SOULDEW"),
-                                                                                 .Moves = {TEXT("DRACOMETEOR")}});
+                                                                                 .Moves = {{.Move = TEXT("DRACOMETEOR")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("DRUDDIGON"),
                                                                                  .Level = 100,
@@ -282,7 +282,7 @@ bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameter
                                                                                  .Nature = FName("TIMID"),
                                                                                  .Ability = FName("SUPERLUCK"),
                                                                                  .Item = FName("SCOPELENS"),
-                                                                                 .Moves = {TEXT("NIGHTSLASH")}});
+                                                                                 .Moves = {{.Move = TEXT("NIGHTSLASH")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("ALAKAZAM"),
                                                                                  .Level = 100,

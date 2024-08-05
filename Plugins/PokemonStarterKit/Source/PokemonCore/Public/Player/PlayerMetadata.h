@@ -53,13 +53,13 @@ class POKEMONCORE_API UPlayerMetadata : public UObject, public FTickableGameObje
     /**
      * The datetime the player started the game on.
      */
-    UPROPERTY(BlueprintGetter = GetStartDate, Category = "Player|Metadata")
+    UPROPERTY(BlueprintGetter = GetStartDate, SaveGame, Category = "Player|Metadata")
     FDateTime StartDate;
 
     /**
      * The total amount of time (in seconds) that the game has been played
      */
-    UPROPERTY(BlueprintGetter = GetTotalPlaytime, Category = "Player|Metadata")
+    UPROPERTY(BlueprintGetter = GetTotalPlaytime, SaveGame, Category = "Player|Metadata")
     float TotalPlaytime;
 
     /**

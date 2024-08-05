@@ -24,7 +24,7 @@ bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("NASTYPLOT")}});
+                                                                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -63,7 +63,7 @@ bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Paramet
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("NASTYPLOT")}});
+                                                                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -104,7 +104,7 @@ bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("CLOSECOMBAT")}});
+                                                                                 .Moves = {{.Move = TEXT("CLOSECOMBAT")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -145,7 +145,7 @@ bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) 
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("METALSOUND")}});
+                                                                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -185,7 +185,7 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .Moves = {TEXT("METALSOUND")}});
+                                                                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,

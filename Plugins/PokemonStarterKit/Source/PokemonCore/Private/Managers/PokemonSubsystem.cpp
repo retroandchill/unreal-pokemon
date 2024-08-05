@@ -1,11 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
+#include "GameFramework/Character.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
 #include "Pokemon/Exp/GrowthRate.h"
-#include "Trainers/TrainerStub.h"
+#include "Pokemon/Pokemon.h"
+#include "Saving/PokemonSaveGame.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
@@ -39,8 +41,7 @@ bool UPokemonSubsystem::Exists(const UObject *WorldContext) {
 
 void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
-    Player =
-        NewObject<UTrainerStub>(this)->Initialize(TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
 
     // TODO: Remove this temp inventory stuff
@@ -78,4 +79,46 @@ FText UPokemonSubsystem::GetCurrentLocation() const {
 
 void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
+}
+
+UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) const {
+    if (SaveGameClass == nullptr) {
+        SaveGameClass = UPokemonSaveGame::StaticClass();
+    }
+
+    auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
+    SaveGame->PlayerCharacter = Player->ToDTO();
+    SaveGame->Bag = Bag->ToDTO();
+
+    SaveGame->CurrentMap = GetWorld()->GetMapName();
+    auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
+    check(PlayerCharacter != nullptr)
+    SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
+
+    SaveGame->StartDate = PlayerMetadata->StartDate;
+    SaveGame->TotalPlaytime = PlayerMetadata->TotalPlaytime;
+
+    SaveGame->SaveDate = FDateTime::Now();
+    return SaveGame;
+}
+
+void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveGame->PlayerCharacter);
+    Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
+    PlayerMetadata->StartDate = SaveGame->StartDate;
+    PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
+
+    if (!bChangeMap) {
+        return;
+    }
+
+    LoadTransform.Emplace(SaveGame->PlayerLocation);
+    UGameplayStatics::OpenLevel(this, FName(*SaveGame->CurrentMap));
+}
+
+void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter) {
+    if (LoadTransform.IsSet()) {
+        PlayerCharacter->SetActorTransform(*LoadTransform);
+        LoadTransform.Reset();
+    }
 }

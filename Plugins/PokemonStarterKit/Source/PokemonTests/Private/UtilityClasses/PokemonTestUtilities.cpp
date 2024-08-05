@@ -28,7 +28,7 @@ void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                 .Nature = FName("Naive"),
                                                 .Ability = FName("TORRENT"),
                                                 .Item = FName("LIFEORB"),
-                                                .Moves = {"HYDROPUMP", "KNOCKOFF", "MEGAHORN", "SACREDSWORD"}});
+                                                .Moves = {{.Move = "HYDROPUMP"}, {.Move = "KNOCKOFF"}, {.Move = "MEGAHORN"}, {.Move = "SACREDSWORD"}}});
     UPartyManagementHelpers::AddPokemonToParty(WorldContext,
                                                {.Species = FName("EMBOAR"),
                                                 .Level = 100,
@@ -44,7 +44,7 @@ void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                 .Nature = FName("Jolly"),
                                                 .Ability = FName("RECKLESS"),
                                                 .Item = FName("CHOICEBAND"),
-                                                .Moves = {"FLAREBLITZ", "SUPERPOWER", "WILDCHARGE", "EARTHQUAKE"}});
+                                                .Moves = {{.Move = "FLAREBLITZ"}, {.Move = "SUPERPOWER"}, {.Move = "WILDCHARGE"}, {.Move = "EARTHQUAKE"}}});
     UPartyManagementHelpers::AddPokemonToParty(WorldContext, {.Species = FName("SERPERIOR"),
                                                               .Level = 100,
                                                               .Gender = Female,
@@ -59,5 +59,5 @@ void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
                                                               .Nature = FName("Timid"),
                                                               .Ability = FName("CONTRARY"),
                                                               .Item = FName("ROCKYHELMET"),
-                                                              .Moves = {"LEAFSTORM", "TAUNT", "GLARE", "DEFOG"}});
+                                                              .Moves = {{.Move = "LEAFSTORM"}, {.Move = "TAUNT"}, {.Move = "GLARE"}, {.Move = "DEFOG"}}});
 }
