@@ -37,6 +37,8 @@ void URPGUIManagerSubsystem::OnScreenActivated(UScreen *Screen) {
             Subsystem->AddMappingContext(MenuMappingContext, GetDefault<URPGMenusSettings>()->MenuMappingPriority);
 #if WITH_EDITOR
         }
+        
+        Screen->GetOwningPlayer()->SetInputMode(FInputModeUIOnly());
 #endif
     }
 
@@ -57,5 +59,6 @@ void URPGUIManagerSubsystem::OnScreenDeactivated(UScreen *Screen) {
 #endif
 
         Subsystem->RemoveMappingContext(MenuMappingContext);
+        Screen->GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
     }
 }
