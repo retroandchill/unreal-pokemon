@@ -29,6 +29,11 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
 
   public:
     /**
+     * The default animation drain speed in generation 4. This is 1 HP every 2 frames of a 60 FPS drain.
+     */
+    static constexpr float AnimationDrainSpeed = 2.f / 60.f;
+    
+    /**
      * Take a number and pad it with the required number of leading 0s
      * @param Value The number to pad with 0s
      * @param DesiredLength The desired length of the string

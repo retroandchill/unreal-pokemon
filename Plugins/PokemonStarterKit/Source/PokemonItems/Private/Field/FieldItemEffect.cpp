@@ -3,8 +3,8 @@
 
 #include "Field/FieldItemEffect.h"
 
-UWorld * UFieldItemEffect::GetWorld() const {
-    return GetOuter()->GetWorld();
+bool UFieldItemEffect::ImplementsGetWorld() const {
+    return true;
 }
 
 FDelegateHandle UFieldItemEffect::BindToEffectComplete(FOnItemEffectComplete::FDelegate &&Delegate) {

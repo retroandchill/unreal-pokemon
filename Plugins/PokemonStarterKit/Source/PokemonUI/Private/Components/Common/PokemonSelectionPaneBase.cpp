@@ -5,6 +5,13 @@
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
 #include <range/v3/algorithm/for_each.hpp>
+#include <range/v3/algorithm/find_if.hpp>
+
+UPokemonPanel * UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
+    auto Panels = GetSelectableOptions<UPokemonPanel>();
+    auto Result = ranges::find_if(Panels, [&Pokemon](UPokemonPanel* Panel) { return Panel->GetPokemon() == Pokemon; });
+    return Result != Panels.end() ? *Result : nullptr;
+}
 
 void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon) {
     ClearSelectableOptions();

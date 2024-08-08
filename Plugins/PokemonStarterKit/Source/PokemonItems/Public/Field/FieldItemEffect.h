@@ -19,7 +19,7 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
     GENERATED_BODY()
 
 public:
-    UWorld* GetWorld() const override;
+    bool ImplementsGetWorld() const override;
     
     /**
      * Bind a delegate to the callback when an item is done.

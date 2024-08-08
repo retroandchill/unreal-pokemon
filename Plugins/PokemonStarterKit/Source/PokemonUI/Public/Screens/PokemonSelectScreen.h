@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PartyDisplayScreen.h"
 #include "PartyScreen.h"
 #include "Screens/Screen.h"
 #include "Trainers/Trainer.h"
@@ -9,6 +10,7 @@
 
 #include "PokemonSelectScreen.generated.h"
 
+class UPokemonSelectionPaneBase;
 class UPartyMenuHandlerSet;
 class UPartyMenuHandler;
 class UCommand;
@@ -20,7 +22,7 @@ class UPokemonSelectionPane;
  * Screen for when the player needs to select a Pokémon from the menu
  */
 UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
+class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen, public IPartyDisplayScreen {
     GENERATED_BODY()
 
   protected:
@@ -43,6 +45,8 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen {
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     UPokemonSelectionPane *GetSelectionPane() const;
+
+    UPokemonSelectionPaneBase *GetPokemonSelectionPane_Implementation() const override;
 
   public:
     UFUNCTION(BlueprintCallable, Category = Navigation)

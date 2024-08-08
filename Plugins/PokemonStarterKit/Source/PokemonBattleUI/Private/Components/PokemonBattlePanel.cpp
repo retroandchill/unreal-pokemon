@@ -14,11 +14,6 @@
 using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
 using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
 
-/**
- * The default animation drain speed in generation 4. This is 1 HP every 2 frames of a 60 FPS drain.
- */
-constexpr float AnimationDrainSpeed = 2.f / 60.f;
-
 void UPokemonBattlePanel::NativeConstruct() {
     Super::NativeConstruct();
     HPBarUpdateAnimation.BindActionToPercentDelegate(
@@ -69,7 +64,7 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
     auto CoreAttributes = CurrentBattler->GetAbilityComponent()->GetCoreAttributes();
     float HPPercent = HPBar->GetPercent();
     float OldHP = FMath::RoundToFloat(CoreAttributes->GetMaxHP() * HPPercent);
-    float DrainRate = FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * AnimationDrainSpeed, MaxDuration);
+    float DrainRate = FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * UPokemonUIUtils::AnimationDrainSpeed, MaxDuration);
     float CurrentPercent = CurrentBattler->GetHPPercent();
     HPBarUpdateAnimation.PlayAnimation(HPPercent, CurrentPercent, DrainRate);
 }
