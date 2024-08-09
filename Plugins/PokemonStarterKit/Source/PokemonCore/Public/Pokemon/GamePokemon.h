@@ -45,6 +45,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintPure, Category = Bio)
     bool IsShiny() const override;
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    bool IsAble() const override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetCurrentHP() const override;
 
@@ -53,6 +56,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     UFUNCTION(BlueprintPure, Category = Stats)
     int32 GetMaxHP() const override;
+
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    int32 RestoreHP(int32 Amount);
 
     UFUNCTION(BlueprintPure, Category = Stats)
     bool IsFainted() const override;

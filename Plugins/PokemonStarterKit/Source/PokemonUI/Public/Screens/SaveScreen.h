@@ -84,5 +84,5 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
     FOnSaveComplete OnSaveCompleteDelegate;
 
-    TOptional<TFuture<UPokemonSaveGame*>> SaveGameCreationFuture;
+    TOptional<TFuture<UPokemonSaveGame *>> SaveGameCreationFuture;
 };

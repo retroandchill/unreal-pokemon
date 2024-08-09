@@ -121,6 +121,12 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
     FDirectoryPath ItemIconPackageName;
 
     /**
+     * The name of the package that contains the field item effects
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath FieldItemEffectPackageName;
+
+    /**
      * The name of the package that contains the move effect Blueprints
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
@@ -161,6 +167,12 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString SummaryBallPrefix;
+
+    /**
+     * The prefix that is placed before a move effect when looking it up
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString FieldItemEffectPrefix;
 
     /**
      * The prefix that is placed before a move effect when looking it up

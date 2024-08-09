@@ -2,10 +2,10 @@
 
 #include "Trainers/BasicTrainer.h"
 #include "DataManager.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "RangeHelpers.h"
-#include "Lookup/InjectionUtilities.h"
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
@@ -24,23 +24,23 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
     ID = DTO.ID;
     SecretID = DTO.SecretID;
 
-    Party = RangeHelpers::CreateRange(DTO.Party)
-        | ranges::views::transform([this](const FPokemonDTO& Pokemon) { return UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon); })
-        | RangeHelpers::TToArray<TScriptInterface<IPokemon>>();
+    Party = RangeHelpers::CreateRange(DTO.Party) | ranges::views::transform([this](const FPokemonDTO &Pokemon) {
+                return UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon);
+            }) |
+            RangeHelpers::TToArray<TScriptInterface<IPokemon>>();
     return this;
 }
 
 FTrainerDTO UBasicTrainer::ToDTO() const {
-    return {
-        .InternalID = InternalId,
-        .TrainerType = TrainerType,
-        .Name = Name,
-        .Party = RangeHelpers::CreateRange(Party)
-            | ranges::views::transform([](const TScriptInterface<IPokemon>& Pokemon) { return Pokemon->ToDTO(); })
-            | RangeHelpers::TToArray<FPokemonDTO>(),
-        .ID = ID,
-        .SecretID = SecretID
-    };
+    return {.InternalID = InternalId,
+            .TrainerType = TrainerType,
+            .Name = Name,
+            .Party =
+                RangeHelpers::CreateRange(Party) |
+                ranges::views::transform([](const TScriptInterface<IPokemon> &Pokemon) { return Pokemon->ToDTO(); }) |
+                RangeHelpers::TToArray<FPokemonDTO>(),
+            .ID = ID,
+            .SecretID = SecretID};
 }
 
 const FGuid &UBasicTrainer::GetInternalId() const {

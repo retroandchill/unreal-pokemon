@@ -85,10 +85,12 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
     });
 
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(),
-        FPokemonDTO{.Species = TEXT("MIMIKYU"),
-                    .Level = 50,
-                    .Moves = {{.Move = TEXT("SHADOWSNEAK")}, {.Move = TEXT("PLAYROUGH")}, {.Move = TEXT("SWORDSDANCE")}, {.Move = TEXT("SHADOWCLAW")}}});
+        World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
+                                 .Level = 50,
+                                 .Moves = {{.Move = TEXT("SHADOWSNEAK")},
+                                           {.Move = TEXT("PLAYROUGH")},
+                                           {.Move = TEXT("SWORDSDANCE")},
+                                           {.Move = TEXT("SHADOWCLAW")}}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     Battler->DispatchBeginPlay(false);
     Battler->Initialize(Side, Pokemon);

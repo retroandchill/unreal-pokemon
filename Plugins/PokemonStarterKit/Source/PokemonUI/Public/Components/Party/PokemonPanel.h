@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Animations/ProgressBarAnimation.h"
 #include "Bag/Item.h"
 #include "CommonButtonBase.h"
 #include "Pokemon/Breeding/PokemonGender.h"

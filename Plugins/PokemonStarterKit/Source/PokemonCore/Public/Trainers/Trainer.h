@@ -30,7 +30,7 @@ class POKEMONCORE_API ITrainer {
      */
     virtual TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) = 0;
 
-    virtual TScriptInterface<ITrainer> Initialize(const FTrainerDTO& DTO) = 0;
+    virtual TScriptInterface<ITrainer> Initialize(const FTrainerDTO &DTO) = 0;
 
     virtual FTrainerDTO ToDTO() const = 0;
 

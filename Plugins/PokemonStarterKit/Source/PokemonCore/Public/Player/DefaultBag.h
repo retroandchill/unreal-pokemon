@@ -18,7 +18,7 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     GENERATED_BODY()
 
   public:
-    void Initialize(const FBagDTO& DTO = FBagDTO()) override;
+    void Initialize(const FBagDTO &DTO = FBagDTO()) override;
     FBagDTO ToDTO() const override;
 
     UFUNCTION(BlueprintPure, Category = "Player|Inventory")

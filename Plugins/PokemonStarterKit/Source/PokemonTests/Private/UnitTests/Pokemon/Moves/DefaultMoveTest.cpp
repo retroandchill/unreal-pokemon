@@ -46,7 +46,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultMoveBlockTestManualMoves, "Unit Tests.Co
 
 bool DefaultMoveBlockTestManualMoves::RunTest(const FString &Parameters) {
     auto Move = NewObject<UDefaultMoveBlock>()->Initialize(
-        nullptr, {.Species = "RIOLU", .Level = 40, .Moves = {{.Move = "WORKUP"}, {.Move = "AURASPHERE"}, {.Move = "FEINT"}}});
+        nullptr,
+        {.Species = "RIOLU", .Level = 40, .Moves = {{.Move = "WORKUP"}, {.Move = "AURASPHERE"}, {.Move = "FEINT"}}});
     auto Moves = Move->GetMoves();
     UE_ASSERT_EQUAL(3, Moves.Num());
     UE_CHECK_EQUAL("WORKUP", Moves[0]->GetMoveData().ID.ToString());

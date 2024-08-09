@@ -56,6 +56,7 @@ void UScreen::CloseScreen() {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer());
     Layout->FindAndRemoveWidgetFromLayer(this);
     OnScreenClosed.Broadcast();
+    RemoveFromParent();
 }
 
 FOnScreenClosed &UScreen::GetOnScreenClosed() {
