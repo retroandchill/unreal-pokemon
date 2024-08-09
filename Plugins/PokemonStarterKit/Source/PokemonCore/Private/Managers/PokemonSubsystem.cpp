@@ -41,7 +41,8 @@ bool UPokemonSubsystem::Exists(const UObject *WorldContext) {
 
 void UPokemonSubsystem::StartNewGame() {
     // TODO: Swap this instantiation with the actual trainer instantiation
-    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, TEXT("POKEMONTRAINER_Nate"), FText::FromStringView(TEXT("Nate")));
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, TEXT("POKEMONTRAINER_Nate"),
+                                                             FText::FromStringView(TEXT("Nate")));
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
 
     // TODO: Remove this temp inventory stuff

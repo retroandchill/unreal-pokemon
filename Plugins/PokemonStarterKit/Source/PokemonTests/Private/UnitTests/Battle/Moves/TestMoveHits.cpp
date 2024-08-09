@@ -21,13 +21,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveHits_Certain, "Unit Tests.Battle.TestMo
 
 bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("AURASPHERE")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("AURASPHERE")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -62,13 +62,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveHits_Regular, "Unit Tests.Battle.TestMo
 
 bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUGIA"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUGIA"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -104,13 +104,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveHits_AccuracyEvasionRegular,
 
 bool TestMoveHits_AccuracyEvasionRegular::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUGIA"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUGIA"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -149,13 +149,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveHits_AccuracyEvasionOutsideBounds,
 
 bool TestMoveHits_AccuracyEvasionOutsideBounds::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUGIA"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUGIA"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("HYDROPUMP")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,

@@ -22,7 +22,14 @@ class POKEMONDATA_API IGameData {
      * @param ID he ID to get the data from
      * @return The retrieved row from the database
      */
-    virtual FTableRowBase *GetData(FName ID) const = 0;
+    virtual const FTableRowBase *GetData(FName ID) const = 0;
+
+    /**
+     * Get the specified row from the data table
+     * @param ID he ID to get the data from
+     * @return The retrieved row from the database
+     */
+    virtual const FTableRowBase &GetDataChecked(FName ID) const = 0;
 
     /**
      * Get the list of IDs in the table

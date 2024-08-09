@@ -17,8 +17,8 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
 
   public:
     TScriptInterface<ITrainer> Initialize(FName NewTrainerType, FText NewTrainerName) override;
-    TScriptInterface<ITrainer> Initialize(const FTrainerDTO& DTO) override;
-    
+    TScriptInterface<ITrainer> Initialize(const FTrainerDTO &DTO) override;
+
     FTrainerDTO ToDTO() const override;
 
     UFUNCTION(BlueprintPure, Category = Metadata)

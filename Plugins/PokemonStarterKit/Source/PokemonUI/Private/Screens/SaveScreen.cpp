@@ -27,16 +27,15 @@ void USaveScreen::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
     }
 
     auto SaveGame = SaveGameCreationFuture->Consume();
-    UGameplayStatics::AsyncSaveGameToSlot(
-        SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-        FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
-            this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
-                if (bSuccess) {
-                    SetSaveGame(SaveGame);
-                }
-                OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
-                OnSaveCompleteDelegate.Unbind();
-            }));
+    UGameplayStatics::AsyncSaveGameToSlot(SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
+                                          FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
+                                              this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
+                                                  if (bSuccess) {
+                                                      SetSaveGame(SaveGame);
+                                                  }
+                                                  OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
+                                                  OnSaveCompleteDelegate.Unbind();
+                                              }));
     SaveGameCreationFuture.Reset();
 }
 
@@ -56,8 +55,8 @@ void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
     OnSaveCompleteDelegate = MoveTemp(OnComplete);
     SaveGameCreationFuture.Emplace(AsyncThread([this] {
         auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-        auto SaveGame =
-            UPokemonSubsystem::GetInstance(this).CreateSaveGame(Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
+        auto SaveGame = UPokemonSubsystem::GetInstance(this).CreateSaveGame(
+            Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
         AddCustomSaveProperties(SaveGame);
         return SaveGame;
     }));

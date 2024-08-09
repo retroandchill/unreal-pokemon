@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "BagDTO.h"
+#include "UObject/Interface.h"
 
 #include "Bag.generated.h"
 
@@ -24,7 +24,7 @@ class POKEMONCORE_API IBag {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
-    virtual void Initialize(const FBagDTO& DTO = FBagDTO()) = 0;
+    virtual void Initialize(const FBagDTO &DTO = FBagDTO()) = 0;
 
     virtual FBagDTO ToDTO() const = 0;
 

@@ -38,6 +38,8 @@ void URPGUIManagerSubsystem::OnScreenActivated(UScreen *Screen) {
 #if WITH_EDITOR
         }
 #endif
+
+        Screen->GetOwningPlayer()->SetInputMode(FInputModeUIOnly());
     }
 
     ActiveScreenCount++;
@@ -57,5 +59,6 @@ void URPGUIManagerSubsystem::OnScreenDeactivated(UScreen *Screen) {
 #endif
 
         Subsystem->RemoveMappingContext(MenuMappingContext);
+        Screen->GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
     }
 }

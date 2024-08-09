@@ -18,13 +18,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_RaiseUserStats,
 
 bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -57,13 +57,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_RaiseUserStats_Failed,
 
 bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -98,13 +98,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_LowerUserStats,
 
 bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("CLOSECOMBAT")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("CLOSECOMBAT")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -139,13 +139,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_LowerTargetStats,
 
 bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
@@ -179,13 +179,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_LowerTargetStats_Failed,
 
 bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                                                                 .Nature = FName("MODEST"),
-                                                                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                 .Level = 100,
+                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                 .Nature = FName("MODEST"),
+                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,

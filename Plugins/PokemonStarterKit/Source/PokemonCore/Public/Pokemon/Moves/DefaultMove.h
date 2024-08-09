@@ -16,7 +16,7 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     GENERATED_BODY()
 
   public:
-    TScriptInterface<IMove> Initialize(const FMoveDTO& MoveID);
+    TScriptInterface<IMove> Initialize(const FMoveDTO &MoveID);
 
     FMoveDTO ToDTO() const override;
 

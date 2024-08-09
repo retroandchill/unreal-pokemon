@@ -46,7 +46,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
     } else {
         int32 MoveMax = FMath::Min(MaxMoves, KnowableMoves.Num());
         for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++) {
-            Moves.Emplace(CreateNewMove({.Move = KnowableMoves[i].Move }));
+            Moves.Emplace(CreateNewMove({.Move = KnowableMoves[i].Move}));
         }
     }
 
@@ -93,10 +93,10 @@ void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLear
     IPokemonUtilities::Execute_LearnMove(PokemonUtilities, this, Owner, Move, AfterMoveLearned);
 }
 
-TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO& MoveID) {
+TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {
     return NewObject<UDefaultMove>(this)->Initialize(MoveID);
 }
 
-const TSet<FName> & UDefaultMoveBlock::GetMoveMemory() const {
+const TSet<FName> &UDefaultMoveBlock::GetMoveMemory() const {
     return MoveMemory;
 }

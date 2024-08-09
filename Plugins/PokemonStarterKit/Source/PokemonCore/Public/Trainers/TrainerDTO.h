@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
+
 #include "TrainerDTO.generated.h"
 
 /**
- * 
+ *
  */
 USTRUCT(BlueprintType)
 struct POKEMONCORE_API FTrainerDTO {
@@ -28,8 +29,7 @@ struct POKEMONCORE_API FTrainerDTO {
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
     int32 ID;
-    
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
     int32 SecretID;
-
 };
