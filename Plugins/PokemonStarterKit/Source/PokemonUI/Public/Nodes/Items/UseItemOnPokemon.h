@@ -12,7 +12,7 @@ class IPokemon;
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (HideThen))
 class POKEMONUI_API UUseItemOnPokemon : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 

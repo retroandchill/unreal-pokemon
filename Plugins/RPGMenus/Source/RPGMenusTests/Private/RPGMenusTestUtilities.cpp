@@ -35,3 +35,7 @@ void URPGMenusTestUtilities::ForceAdvanceText(UMessageWindow *MessageWindow, FNa
 
     MenuAction->OnExecuteAction.ExecuteIfBound();
 }
+
+void URPGMenusTestUtilities::ForceClickButton(UCommonButtonBase *Button) {
+    Button->OnClicked().Broadcast();
+}
