@@ -34,7 +34,7 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
 
     UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
     FDateTime StartDate;
-    
+
     UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
     float TotalPlaytime;
 };

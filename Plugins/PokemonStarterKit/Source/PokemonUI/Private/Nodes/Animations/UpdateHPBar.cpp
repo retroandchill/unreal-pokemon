@@ -1,17 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Nodes/Animations/UpdateHPBar.h"
-#include "Components/ProgressBar.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Components/Party/HPBarPanel.h"
 #include "Components/Party/PokemonPanel.h"
+#include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
 #include "Screens/PartyDisplayScreen.h"
 #include "Screens/Screen.h"
 #include "Utilities/PokemonUIUtils.h"
 
-UUpdateHPBar * UUpdateHPBar::UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon, float MaxDuration) {
+UUpdateHPBar *UUpdateHPBar::UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon, float MaxDuration) {
     auto Node = NewObject<UUpdateHPBar>();
     Node->Screen = Screen;
     Node->Pokemon = Pokemon;
@@ -19,7 +18,8 @@ UUpdateHPBar * UUpdateHPBar::UpdateHPBar(UScreen *Screen, const TScriptInterface
     return Node;
 }
 
-void UUpdateHPBar::Activate() {using FSetPercent = Pokemon::UI::FSetNewPercent::FDelegate;
+void UUpdateHPBar::Activate() {
+    using FSetPercent = Pokemon::UI::FSetNewPercent::FDelegate;
     if (!Screen->Implements<UPartyDisplayScreen>()) {
         OnAnimationComplete.Broadcast();
         SetReadyToDestroy();
@@ -27,7 +27,8 @@ void UUpdateHPBar::Activate() {using FSetPercent = Pokemon::UI::FSetNewPercent::
     }
 
     auto SelectionPane = IPartyDisplayScreen::Execute_GetPokemonSelectionPane(Screen);
-    check(IsValid(SelectionPane));
+    check(IsValid(SelectionPane))
+    ;
     auto Panel = SelectionPane->FindPanelForPokemon(Pokemon);
     if (!IsValid(Panel) || !Panel->Implements<UHPBarPanel>()) {
         OnAnimationComplete.Broadcast();
@@ -37,7 +38,7 @@ void UUpdateHPBar::Activate() {using FSetPercent = Pokemon::UI::FSetNewPercent::
 
     auto ProgressBar = IHPBarPanel::Execute_GetHPBar(Panel);
     check(IsValid(ProgressBar))
-    
+
     Animation.BindActionToPercentDelegate(FSetPercent::CreateWeakLambda(Panel, [this, Panel](float Percent) {
         float HPValue = FMath::RoundToFloat(Pokemon->GetMaxHP() * Percent);
         IHPBarPanel::Execute_UpdateHPBarPercent(Panel, Percent, HPValue);
@@ -50,7 +51,8 @@ void UUpdateHPBar::Activate() {using FSetPercent = Pokemon::UI::FSetNewPercent::
 
     float HPPercent = ProgressBar->GetPercent();
     float OldHP = FMath::RoundToFloat(Pokemon->GetMaxHP() * HPPercent);
-    float DrainRate = FMath::Min(FMath::Abs(OldHP - Pokemon->GetCurrentHP()) * UPokemonUIUtils::AnimationDrainSpeed, MaxDuration);
+    float DrainRate =
+        FMath::Min(FMath::Abs(OldHP - Pokemon->GetCurrentHP()) * UPokemonUIUtils::AnimationDrainSpeed, MaxDuration);
     float CurrentPercent = static_cast<float>(Pokemon->GetCurrentHP()) / static_cast<float>(Pokemon->GetMaxHP());
     Animation.PlayAnimation(HPPercent, CurrentPercent, DrainRate);
 }

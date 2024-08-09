@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "FieldItemEffect.h"
 #include "UObject/Object.h"
+
 #include "FieldItemEffectUseOnPokemon.generated.h"
 
 class IPokemon;
@@ -17,8 +18,7 @@ UCLASS(Abstract)
 class POKEMONITEMS_API UFieldItemEffectUseOnPokemon : public UFieldItemEffect {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
-    void Use(const FItem& Item, int32 Quantity, const TScriptInterface<IPokemon>& Pokemon);
-
+    void Use(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon);
 };

@@ -37,7 +37,7 @@ void URPGUIManagerSubsystem::OnScreenActivated(UScreen *Screen) {
             Subsystem->AddMappingContext(MenuMappingContext, GetDefault<URPGMenusSettings>()->MenuMappingPriority);
 #if WITH_EDITOR
         }
-        
+
         Screen->GetOwningPlayer()->SetInputMode(FInputModeUIOnly());
 #endif
     }

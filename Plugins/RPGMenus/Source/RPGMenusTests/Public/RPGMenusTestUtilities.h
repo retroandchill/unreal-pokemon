@@ -27,5 +27,5 @@ class RPGMENUSTESTS_API URPGMenusTestUtilities : public UBlueprintFunctionLibrar
     static void ForceAdvanceText(UMessageWindow *MessageWindow, FName InputName = "MenuConfirm");
 
     UFUNCTION(BlueprintCallable, Category = Message)
-    static void ForceClickButton(UCommonButtonBase* Button);
+    static void ForceClickButton(UCommonButtonBase *Button);
 };

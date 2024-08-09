@@ -25,8 +25,8 @@ class POKEMONUI_API UPokemonSelectionPaneBase : public USelectableWidget {
     GENERATED_BODY()
 
   public:
-    UPokemonPanel* FindPanelForPokemon(const TScriptInterface<IPokemon>& Pokemon) const;
-    
+    UPokemonPanel *FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const;
+
     void SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon);
 
     void RefreshWindow();

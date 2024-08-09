@@ -21,7 +21,7 @@ void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) 
     }
 
     if (MoveToLearn.IsSet()) {
-        auto TempMove = CurrentPokemon->GetMoveBlock()->CreateNewMove({.Move = *MoveToLearn });
+        auto TempMove = CurrentPokemon->GetMoveBlock()->CreateNewMove({.Move = *MoveToLearn});
         CreateMovePanel(TempMove, true);
     }
 }

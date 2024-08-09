@@ -89,5 +89,5 @@ class POKEMONCORE_API IMoveBlock {
      * @param MoveID The ID of the move to learn
      * @return The created move object
      */
-    virtual TScriptInterface<IMove> CreateNewMove(const FMoveDTO& MoveID) = 0;
+    virtual TScriptInterface<IMove> CreateNewMove(const FMoveDTO &MoveID) = 0;
 };

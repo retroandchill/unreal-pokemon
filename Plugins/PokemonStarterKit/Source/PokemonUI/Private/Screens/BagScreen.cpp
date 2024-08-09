@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/BagScreen.h"
-#include "DataManager.h"
-#include "ItemEffectLookup.h"
 #include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketTabWidget.h"
+#include "DataManager.h"
 #include "Field/FieldItemEffectUseOnPokemon.h"
+#include "ItemEffectLookup.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "Utilities/TrainerHelpers.h"
@@ -81,7 +81,7 @@ void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
 }
 
 void UBagScreen::TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon,
-    FOnItemEffectComplete::FDelegate&& CompletionDelegate) {
+                                     FOnItemEffectComplete::FDelegate &&CompletionDelegate) {
     auto EffectClass = Pokemon::Items::LookupFieldItemEffect<UFieldItemEffectUseOnPokemon>(Item.ID);
     if (EffectClass == nullptr) {
         OnItemEffectConclude(false, Item.ID);
@@ -90,10 +90,11 @@ void UBagScreen::TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TS
     }
 
     auto Effect = NewObject<UFieldItemEffectUseOnPokemon>(this, EffectClass);
-    Effect->BindToEffectComplete(FOnItemEffectComplete::FDelegate::CreateWeakLambda(this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
-        OnItemEffectConclude(bSuccess, ItemID);
-        Callback.Execute(bSuccess);
-    }));
+    Effect->BindToEffectComplete(FOnItemEffectComplete::FDelegate::CreateWeakLambda(
+        this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
+            OnItemEffectConclude(bSuccess, ItemID);
+            Callback.Execute(bSuccess);
+        }));
     Effect->Use(Item, Quantity, Pokemon);
     CurrentItemEffect = Effect;
 }

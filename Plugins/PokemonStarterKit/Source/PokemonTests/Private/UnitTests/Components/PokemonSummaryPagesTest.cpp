@@ -30,7 +30,8 @@ bool PokemonSummaryPagesTest_NameInfo::RunTest(const FString &Parameters) {
     auto Page = CreateWidget<USummaryNameInfo>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
-    auto ForeignTrainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto ForeignTrainer =
+        NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(),
         FPokemonDTO{
@@ -90,7 +91,8 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     auto Page = CreateWidget<UPokemonInfoPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
-    auto ForeignTrainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto ForeignTrainer =
+        NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "KABUTOPS"},
                                                                    ForeignTrainer);
 
@@ -124,7 +126,8 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     auto Page = CreateWidget<UTrainerMemoPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
-    auto ForeignTrainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto ForeignTrainer =
+        NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
                                                                     FPokemonDTO{.Species = "KABUTOPS",
                                                                                 .Level = 40,
@@ -196,7 +199,8 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
     auto Page = CreateWidget<UPokemonSkillsPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
-    auto ForeignTrainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto ForeignTrainer =
+        NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
                                                                     FPokemonDTO{.Species = "KABUTOPS",
                                                                                 .Level = 40,
@@ -246,7 +250,8 @@ bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
     auto Page = CreateWidget<UPokemonMovesPage>(World.Get(), WidgetClass);
     Page->AddToViewport();
 
-    auto ForeignTrainer = NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
+    auto ForeignTrainer =
+        NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Level = 40}, ForeignTrainer);
     Page->RefreshInfo(Pokemon1);

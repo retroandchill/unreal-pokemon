@@ -9,7 +9,7 @@ concept overloads_equals = requires(T A, T B) { A == B; };
 
 namespace OptionalUtilities {
 template <typename T>
-TOptional<T> OfNullable(const T* Value) {
+TOptional<T> OfNullable(const T *Value) {
     return Value != nullptr ? TOptional<T>(*Value) : TOptional<T>();
 }
 

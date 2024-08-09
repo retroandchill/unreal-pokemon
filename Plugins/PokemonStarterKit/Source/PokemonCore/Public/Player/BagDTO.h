@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ItemSlot.h"
 #include "UObject/Object.h"
+
 #include "BagDTO.generated.h"
 
 /**
@@ -22,7 +23,7 @@ struct POKEMONCORE_API FPocket {
 };
 
 /**
- * 
+ *
  */
 USTRUCT(BlueprintType)
 struct POKEMONCORE_API FBagDTO {
@@ -30,5 +31,4 @@ struct POKEMONCORE_API FBagDTO {
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
     TMap<FName, FPocket> ItemSlots;
-
 };

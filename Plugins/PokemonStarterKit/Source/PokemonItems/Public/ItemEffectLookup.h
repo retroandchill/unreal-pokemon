@@ -10,7 +10,7 @@ class UFieldItemEffect;
 namespace Pokemon::Items {
 
 template <typename T>
-requires std::is_base_of_v<UFieldItemEffect, T>
+    requires std::is_base_of_v<UFieldItemEffect, T>
 TSubclassOf<T> LookupFieldItemEffect(FName ID) {
     if (ID.IsNone()) {
         return nullptr;
@@ -21,12 +21,11 @@ TSubclassOf<T> LookupFieldItemEffect(FName ID) {
     const auto &[ClassPath] = AssetPaths.FieldItemEffectPackageName;
     auto &ClassPrefix = AssetPaths.FieldItemEffectPrefix;
     auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, ID.ToString()});
-    if (auto ItemClass = LoadObject<UClass>(nullptr, *FullPackage);
-        ItemClass != nullptr && ItemClass->IsChildOf<T>()) {
+    if (auto ItemClass = LoadObject<UClass>(nullptr, *FullPackage); ItemClass != nullptr && ItemClass->IsChildOf<T>()) {
         return ItemClass;
     }
 
     return nullptr;
 }
-    
-}
+
+} // namespace Pokemon::Items

@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InventoryScreen.h"
 #include "Field/FieldItemEffect.h"
+#include "InventoryScreen.h"
 #include "Screens/Screen.h"
 
 #include "BagScreen.generated.h"
@@ -74,13 +74,13 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void ShowItemCommands();
 
-public:
-    void TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon>& Pokemon,
-        FOnItemEffectComplete::FDelegate&& CompletionDelegate);
+  public:
+    void TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon,
+                             FOnItemEffectComplete::FDelegate &&CompletionDelegate);
 
   private:
     void OnItemEffectConclude(bool bSuccess, FName ItemID);
-    
+
     /**
      * The window that displays the pockets
      */

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Field/FieldItemEffect.h"
 
 bool UFieldItemEffect::ImplementsGetWorld() const {

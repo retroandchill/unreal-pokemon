@@ -39,7 +39,7 @@ UPokemonSelectionPane *UPokemonSelectScreen::GetSelectionPane() const {
     return SelectionPane;
 }
 
-UPokemonSelectionPaneBase * UPokemonSelectScreen::GetPokemonSelectionPane_Implementation() const {
+UPokemonSelectionPaneBase *UPokemonSelectScreen::GetPokemonSelectionPane_Implementation() const {
     return SelectionPane;
 }
 

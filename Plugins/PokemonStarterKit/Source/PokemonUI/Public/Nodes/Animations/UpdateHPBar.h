@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animations/ProgressBarAnimation.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+
 #include "UpdateHPBar.generated.h"
 
 class UScreen;
@@ -18,9 +19,9 @@ UCLASS(DisplayName = "Update HP Bar", meta = (HideThen))
 class POKEMONUI_API UUpdateHPBar : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAnimationComplete);
-    
+
     /**
      * Update a Pokémon's HP bar to its new desired value.
      * @param Screen The screen that is currently being shown
@@ -29,17 +30,18 @@ public:
      * @return The node to execute the task with
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Animations")
-    static UUpdateHPBar *UpdateHPBar(UScreen* Screen, const TScriptInterface<IPokemon>& Pokemon, float MaxDuration = 1.f);
+    static UUpdateHPBar *UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon,
+                                     float MaxDuration = 1.f);
 
     void Activate() override;
 
-private:
+  private:
     /**
      * Called when the HP bar is done animating
      */
     UPROPERTY(BlueprintAssignable)
     FOnAnimationComplete OnAnimationComplete;
-    
+
     UPROPERTY()
     TObjectPtr<UScreen> Screen;
 
@@ -47,7 +49,6 @@ private:
     TScriptInterface<IPokemon> Pokemon;
 
     float MaxDuration;
-    
-    Pokemon::UI::FProgressBarAnimation Animation;
 
+    Pokemon::UI::FProgressBarAnimation Animation;
 };

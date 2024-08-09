@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "PartyDisplayScreen.generated.h"
 
 class UPokemonSelectionPaneBase;
@@ -21,8 +22,7 @@ class POKEMONUI_API IPartyDisplayScreen {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     UFUNCTION(BlueprintNativeEvent, Category = Widgets)
-    UPokemonSelectionPaneBase* GetPokemonSelectionPane() const;
-
+    UPokemonSelectionPaneBase *GetPokemonSelectionPane() const;
 };

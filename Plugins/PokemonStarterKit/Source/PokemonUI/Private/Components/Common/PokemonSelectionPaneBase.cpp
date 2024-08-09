@@ -4,12 +4,12 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
-#include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/algorithm/find_if.hpp>
+#include <range/v3/algorithm/for_each.hpp>
 
-UPokemonPanel * UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
+UPokemonPanel *UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
     auto Panels = GetSelectableOptions<UPokemonPanel>();
-    auto Result = ranges::find_if(Panels, [&Pokemon](UPokemonPanel* Panel) { return Panel->GetPokemon() == Pokemon; });
+    auto Result = ranges::find_if(Panels, [&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; });
     return Result != Panels.end() ? *Result : nullptr;
 }
 
