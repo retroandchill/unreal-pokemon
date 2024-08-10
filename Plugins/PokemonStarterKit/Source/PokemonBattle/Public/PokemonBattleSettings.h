@@ -88,6 +88,12 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     FSoftClassPath DefaultMoveAbility;
 
     /**
+     * The default ability used for using items in battle
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass = "BattleItemEffect"))
+    FSoftClassPath DefaultBattleItemAbility;
+
+    /**
      * The default level that is streamed in when starting a battle
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle,

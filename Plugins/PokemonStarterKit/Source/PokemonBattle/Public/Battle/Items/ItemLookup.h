@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
 
+class UBattleItemEffect;
 struct FItem;
 class UGameplayAbility;
 
@@ -22,5 +23,19 @@ POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindHoldItemEffect(FName ID);
  * @return The gameplay ability class for that item (if an effect exists)
  */
 POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindHoldItemEffect(const FItem *Item);
+
+/**
+ * Lookup a hold item effect by its ID
+ * @param ID The ID that's associated with the hold item effect
+ * @return The gameplay ability class for that item (if an effect exists)
+ */
+POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindBattleItemEffect(FName ID);
+
+/**
+ * Lookup a hold item effect by its ID
+ * @param Item The hold item's data struct
+ * @return The gameplay ability class for that item (if an effect exists)
+ */
+POKEMONBATTLE_API TSubclassOf<UGameplayAbility> FindBattleItemEffect(const FItem *Item);
 
 } // namespace Pokemon::Battle::Items
