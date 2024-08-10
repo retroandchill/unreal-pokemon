@@ -131,6 +131,12 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     int32 SwitchPriority = 6;
 
     /**
+     * The priority of an item action in battle
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = Switching)
+    int32 ItemPriority = 6;
+
+    /**
      * The priority of a switch action in battle
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = Switching,
