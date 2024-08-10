@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NativeGameplayTags.h"
 #include "UObject/Object.h"
 
 #include "BattleUse.generated.h"
@@ -41,3 +42,27 @@ enum class EBattleUse : uint8 {
      */
     Direct = 5
 };
+
+namespace Pokemon::Data::Bag {
+
+/**
+ * Tag for items that restore HP.
+ */
+POKEMONDATA_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(HPPPRestore);
+
+/**
+ * Tag for items that cure status effects.
+ */
+POKEMONDATA_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(StatusRestore);
+
+/**
+ * Tag for items that are Poké Balls
+ */
+POKEMONDATA_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(PokeBall);
+
+/**
+ * Tag for items that are considered Battle Usage.
+ */
+POKEMONDATA_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(BattleUse);
+
+}
