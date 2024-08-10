@@ -5,6 +5,8 @@
 #include "DataManager.h"
 #include "Bag/Item.h"
 #include "Components/DisplayText.h"
+#include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Utilities/WidgetUtilities.h"
 
 void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
     ItemID = Item;
@@ -13,6 +15,14 @@ void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
     static auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     auto &ItemData = ItemTable.GetDataChecked(ItemID);
 
-    ItemQuantityText->SetText(ItemData.RealName);
-    ItemQuantityText->SetText(FText::FromString(FString::FromInt(ItemQuantity)));
+    auto Subsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+    auto IconAsset = Subsystem->GetItemIcon(ItemID);
+    UWidgetUtilities::SetBrushFromAsset(ItemIcon, IconAsset, true);
+    
+    ItemNameText->SetText(ItemData.RealName);
+    if (ItemData.ShouldShowQuantity()) {
+        ItemQuantityText->SetText(FText::Format(FText::FromStringView(TEXT("×{0}")), {Quantity}));
+    } else {
+        ItemQuantityText->SetText(FText::FromStringView(TEXT("")));
+    }
 }

@@ -6,6 +6,7 @@
 #include "CommonButtonBase.h"
 #include "BattleItemSelectionOption.generated.h"
 
+class UImage;
 class UDisplayText;
 /**
  * The individual item option to select in battle.
@@ -23,6 +24,9 @@ public:
     void SetItem(FName Item, int32 Quantity);
 
 private:
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UImage> ItemIcon;
+    
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> ItemNameText;
     
