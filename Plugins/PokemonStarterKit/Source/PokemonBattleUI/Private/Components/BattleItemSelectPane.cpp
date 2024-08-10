@@ -21,5 +21,10 @@ void UBattleItemSelectPane::SetBattleItemUse(const FGameplayTag &Usage) {
         auto Option = WidgetTree->ConstructWidget(ItemOptionClass);
         Option->SetItem(Item, Quantity);
         SlotOption(Option);
+        Option->OnClicked().AddUObject(this, &UBattleItemSelectPane::ItemSelected, Item, Quantity);
     });
+}
+
+void UBattleItemSelectPane::ItemSelected(FName Item, int32 Quantity) const {
+    OnItemSelected.Broadcast(Item, Quantity);
 }
