@@ -32,6 +32,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     MoveBlock = UnrealInjector::NewInjectedDependency<IMoveBlock>(this, this, DTO);
     AbilityBlock = UnrealInjector::NewInjectedDependency<IAbilityBlock>(this, this, DTO);
     HoldItem = DTO.Item;
+    StatusEffect = DTO.StatusEffect;
 
     if (DTO.PokeBall.IsSet()) {
         PokeBall = *DTO.PokeBall;
@@ -84,6 +85,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
                      ranges::views::transform([](const TScriptInterface<IMove> &Move) { return Move->ToDTO(); }) |
                      RangeHelpers::TToArray<FMoveDTO>(),
             .MoveMemory = MoveBlock->GetMoveMemory(),
+            .StatusEffect = StatusEffect,
             .ObtainMethod = ObtainedBlock->GetObtainMethod(),
             .LevelMet = ObtainedBlock->GetLevelMet(),
             .TimeReceived = OptionalUtilities::OfNullable(ObtainedBlock->GetTimeReceived()),
