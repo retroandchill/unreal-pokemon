@@ -24,11 +24,5 @@ public class UnrealInjectorEditor : ModuleRules
                 "PropertyEditor"
             }
         );
-        
-        if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers")))
-        {
-            PrivateDependencyModuleNames.Add("AutomationTestHelpers");
-            PrivateDefinitions.Add("HAS_AUTOMATION_HELPERS");
-        }
     }
 }
