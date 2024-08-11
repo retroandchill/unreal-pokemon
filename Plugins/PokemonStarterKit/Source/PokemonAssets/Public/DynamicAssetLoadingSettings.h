@@ -133,7 +133,7 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
     FDirectoryPath MoveFunctionCodePackageName;
 
     /**
-     * The name of the package that contains the move effect Blueprints
+     * The name of the package that contains the battle item effect Blueprints
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
     FDirectoryPath BattleItemEffectPackageName;
@@ -175,7 +175,7 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
     FString SummaryBallPrefix;
 
     /**
-     * The prefix that is placed before a move effect when looking it up
+     * The prefix that is placed before a field item effect when looking it up
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString FieldItemEffectPrefix;
@@ -187,7 +187,7 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
     FString MoveFunctionCodePrefix;
 
     /**
-     * The prefix that is placed before a move effect when looking it up
+     * The prefix that is placed before a battle item when looking it up
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString BattleItemEffectPrefix;

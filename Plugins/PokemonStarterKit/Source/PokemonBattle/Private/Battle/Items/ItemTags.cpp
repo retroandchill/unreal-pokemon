@@ -7,5 +7,9 @@
 
 namespace Pokemon::Battle::Items {
 
+/**
+ * Tag applied to a battler when they're actively using an item.
+ */
 const UE_DEFINE_GAMEPLAY_TAG(UsingItem, "Battle.UsingItem");
+
 }
