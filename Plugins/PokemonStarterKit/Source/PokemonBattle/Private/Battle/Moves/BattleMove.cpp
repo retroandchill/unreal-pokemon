@@ -14,3 +14,13 @@ static int32 GetTargetIndex(const TScriptInterface<IBattler> &Battler) {
 FTargetWithIndex::FTargetWithIndex(const TScriptInterface<IBattler> &Battler)
     : Target(Battler.GetObject()), BattlerIndex(GetTargetIndex(Battler)) {
 }
+
+TScriptInterface<IBattler> FTargetWithIndex::SwapIfNecessary() const {
+    if (!Target.IsValid()) {
+        return nullptr;
+    }
+
+    auto &OwningSide = Target->GetOwningSide();
+    auto &Battlers = OwningSide->GetBattlers();
+    return Battlers[BattlerIndex];
+}

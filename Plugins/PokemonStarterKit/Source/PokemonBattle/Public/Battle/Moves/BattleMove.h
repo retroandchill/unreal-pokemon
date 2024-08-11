@@ -21,6 +21,8 @@ struct POKEMONBATTLE_API FTargetWithIndex {
     int32 BattlerIndex;
 
     explicit FTargetWithIndex(const TScriptInterface<IBattler> &Battler);
+
+    TScriptInterface<IBattler> SwapIfNecessary() const;
 };
 
 // This class does not need to be modified.

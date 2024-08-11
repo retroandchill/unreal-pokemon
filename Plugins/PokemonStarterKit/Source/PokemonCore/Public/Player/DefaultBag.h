@@ -35,6 +35,7 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
 
     void SortPocket(FName Pocket, const IBagSorter &Sorter) override;
     void ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const override;
+    void ForEachItem(const TFunctionRef<void(FName, int32)> &Callback) const override;
 
   private:
     /**

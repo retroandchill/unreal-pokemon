@@ -19,6 +19,8 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
+#include "Battle/Status.h"
+#include "Battle/StatusEffects/StatusEffectTags.h"
 #include "Battle/Switching/SwitchActionBase.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
@@ -373,11 +375,13 @@ const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {
 void ABattlerActor::InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
     check(!StatusEffect.IsSet())
     StatusEffect.Emplace(StatusEffectID, EffectHandle);
+    WrappedPokemon->SetStatusEffect(StatusEffectID);
 }
 
 void ABattlerActor::CureStatusEffect() {
     check(StatusEffect.IsSet())
     StatusEffect.Reset();
+    WrappedPokemon->RemoveStatusEffect();
 }
 
 void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {

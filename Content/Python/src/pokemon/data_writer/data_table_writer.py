@@ -1,6 +1,7 @@
 # "Unreal Pokémon" created by Retro & Chill.
 import unreal
-from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary, ScriptStruct
+import os
+from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary, ScriptStruct, Paths
 
 from pokemon.data_loader.pbs_data import PbsIniData, ItemData, MoveData, TypeData, AbilityData, SpeciesData, \
     TrainerTypeData
@@ -13,6 +14,11 @@ def import_data(item_data: PbsIniData, table_name: str, struct_type: ScriptStruc
     :param table_name: The name of the data table as seen in the Data folder of the Content browser
     :param struct_type: The struct used for the row import
     """
+    export_dir = os.path.join(Paths.project_dir(), 'Intermediate', 'PBSExports')
+    os.makedirs(export_dir, exist_ok=True)
+    with open(os.path.join(export_dir, f'{table_name}.json'), 'w') as f:
+        print(item_data.to_json(), file=f)
+
     data_table = EditorAssetLibrary.load_asset('/Game/Data/{0}.{0}'.format(table_name))
     if isinstance(data_table, DataTable):
         DataTableFunctionLibrary.fill_data_table_from_json_string(data_table, item_data.to_json(), struct_type)

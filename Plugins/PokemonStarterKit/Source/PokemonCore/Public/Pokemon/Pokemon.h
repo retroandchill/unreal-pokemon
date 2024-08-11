@@ -11,6 +11,7 @@
 
 #include "Pokemon.generated.h"
 
+struct FStatus;
 class IObtainedBlock;
 struct FOwnerInfo;
 class IAbilityBlock;
@@ -170,6 +171,27 @@ class POKEMONCORE_API IPokemon {
      */
     UFUNCTION(BlueprintCallable, Category = Items)
     virtual void RemoveHoldItem() = 0;
+
+    /**
+     * Get the status effect of the Pokémon.
+     * @return The status effect of the Pokémon
+     */
+    virtual const FStatus *GetStatusEffect() const = 0;
+
+    /**
+     * Set the Pokémon's status effect
+     * @param StatusID The ID of the status effect in question.
+     * @param bOverwriteExisting Should this overwrite the existing status effect?
+     * @return Was the status effect changed?
+     */
+    UFUNCTION(BlueprintCallable, Category = StatusEffects)
+    virtual bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) = 0;
+
+    /**
+     * Remove a Pokémon's status condition
+     */
+    UFUNCTION(BlueprintCallable, Category = StatusEffects)
+    virtual void RemoveStatusEffect() = 0;
 
     /**
      * Get the information about the Pokémon's original trainer

@@ -2946,6 +2946,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A spray-type medicine for treating wounds. It can be used to restore 20 HP to a single Pokémon.
 #-------------------------------
@@ -2956,6 +2957,7 @@ Pocket = 2
 Price = 700
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A spray-type medicine for treating wounds. It can be used to restore 60 HP to a single Pokémon.
 #-------------------------------
@@ -2966,6 +2968,7 @@ Pocket = 2
 Price = 1500
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A spray-type medicine for treating wounds. It can be used to restore 120 HP to a single Pokémon.
 #-------------------------------
@@ -2977,6 +2980,7 @@ Price = 2500
 BPPrice = 2
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A spray-type medicine for treating wounds. It can completely restore the max HP of a single Pokémon.
 #-------------------------------
@@ -2987,6 +2991,7 @@ Pocket = 2
 Price = 3000
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore,StatusRestore
 Flags = Fling_30
 Description = A medicine that fully restores the HP and heals any status problems of a single Pokémon.
 #-------------------------------
@@ -3008,6 +3013,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A spray-type medicine. It awakens a Pokémon from the clutches of sleep.
 #-------------------------------
@@ -3018,6 +3024,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A spray-type medicine. It lifts the effect of poison from one Pokémon.
 #-------------------------------
@@ -3028,6 +3035,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A spray-type medicine. It heals a single Pokémon that is suffering from a burn.
 #-------------------------------
@@ -3038,6 +3046,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A spray-type medicine. It eliminates paralysis from a single Pokémon.
 #-------------------------------
@@ -3048,6 +3057,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A spray-type medicine. It defrosts a Pokémon that has been frozen solid.
 #-------------------------------
@@ -3058,6 +3068,7 @@ Pocket = 2
 Price = 400
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A spray-type medicine. It heals all the status problems of a single Pokémon.
 #-------------------------------
@@ -3070,6 +3081,7 @@ Pocket = 2
 Price = 250
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Pewter City's famous crunchy snack. They can be used to heal all status conditions of a single Pokémon.
 #-------------------------------
@@ -3080,6 +3092,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Mahogany Town's famous candy. It can be used once to heal all the status conditions of a Pokémon.
 #-------------------------------
@@ -3090,6 +3103,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Lavaridge Town's local specialty. It heals all the status problems of one Pokémon.
 #-------------------------------
@@ -3100,6 +3114,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Old Chateau's hidden specialty. It heals all the status problems of a single Pokémon.
 #-------------------------------
@@ -3110,6 +3125,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Castelia City's specialty, soft-serve ice cream. It heals all the status problems of a single Pokémon.
 #-------------------------------
@@ -3120,6 +3136,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A popular treat in Lumiose City. It can be used once to heal all the status conditions of a Pokémon.
 #-------------------------------
@@ -3130,6 +3147,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Shalour City's famous shortbread. It can be used once to heal all the status conditions of a Pokémon.
 #-------------------------------
@@ -3140,6 +3158,7 @@ Pocket = 2
 Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = The Alola region's specialty--fried bread. It can be used once to heal all the status conditions of a Pokémon.
 #-------------------------------
@@ -3150,6 +3169,7 @@ Pocket = 2
 Price = 2000
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A medicine that revives a fainted Pokémon. It restores half the Pokémon's maximum HP.
 #-------------------------------
@@ -3161,6 +3181,7 @@ Price = 4000
 BPPrice = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A medicine that revives a fainted Pokémon. It fully restores the Pokémon's HP.
 #-------------------------------
@@ -3173,6 +3194,7 @@ Pocket = 2
 Price = 100
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A 100% pure juice made of Berries. It restores the HP of one Pokémon by just 20 points.
 #-------------------------------
@@ -3183,6 +3205,7 @@ Pocket = 2
 Price = 3000
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = Very sweet chocolate. It restores the HP of one Pokémon by only 20 points.
 #-------------------------------
@@ -3195,6 +3218,7 @@ Pocket = 2
 Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = Water with high mineral content. It can be used to restore 30 HP to a single Pokémon.
 #-------------------------------
@@ -3207,6 +3231,7 @@ Pocket = 2
 Price = 300
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A highly carbonated soda drink. It can be used to restore 50 HP to a single Pokémon.
 #-------------------------------
@@ -3220,6 +3245,7 @@ Price = 350
 SellPrice = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A very sweet and refreshing drink. It can be used to restore 70 HP to a single Pokémon.
 #-------------------------------
@@ -3232,6 +3258,7 @@ Pocket = 2
 Price = 600
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = Milk with a very high nutrition content. It restores the HP of one Pokémon by 100 points.
 #-------------------------------
@@ -3244,6 +3271,7 @@ Pocket = 2
 Price = 500
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = A very bitter medicinal powder. It can be used to restore 60 HP to a single Pokémon.
 #-------------------------------
@@ -3254,6 +3282,7 @@ Pocket = 2
 Price = 1200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = An extremely bitter medicinal root. It can be used to restore 120 HP to a single Pokémon.
 #-------------------------------
@@ -3266,6 +3295,7 @@ Pocket = 2
 Price = 300
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A very bitter medicine powder. It heals all the status problems of a single Pokémon.
 #-------------------------------
@@ -3276,6 +3306,7 @@ Pocket = 2
 Price = 2800
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = A very bitter medicinal herb. It revives a fainted Pokémon, fully restoring its HP.
 #-------------------------------
@@ -3288,6 +3319,7 @@ Pocket = 2
 Price = 8000
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Description = Honey that Dynamax Vespiquen produces. It has the same effect as a Max Revive.
 #-------------------------------
@@ -3299,6 +3331,7 @@ Price = 1200
 BPPrice = 4
 FieldUse = OnPokemon
 BattleUse = OnMove
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = It restores the PP of a Pokémon's selected move by a maximum of 10 points.
 #-------------------------------
@@ -3309,6 +3342,7 @@ Pocket = 2
 Price = 2000
 FieldUse = OnPokemon
 BattleUse = OnMove
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = It fully restores the PP of a single selected move that has been learned by the target Pokémon.
 #-------------------------------
@@ -3319,6 +3353,7 @@ Pocket = 2
 Price = 3000
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = It restores the PP of all the moves learned by the targeted Pokémon by 10 points each.
 #-------------------------------
@@ -3329,6 +3364,7 @@ Pocket = 2
 Price = 4500
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Fling_30
 Description = It fully restores the PP of all the moves learned by the targeted Pokémon.
 #-------------------------------
@@ -3824,6 +3860,7 @@ NamePlural = Great Balls
 Pocket = 3
 Price = 600
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A good, high-performance Ball that provides a higher Pokémon catch rate than a standard Poké Ball.
 #-------------------------------
@@ -3833,6 +3870,7 @@ NamePlural = Poké Balls
 Pocket = 3
 Price = 200
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A device for catching wild Pokémon. It is thrown like a ball at the target. It is designed as a capsule system.
 #-------------------------------
@@ -3842,6 +3880,7 @@ NamePlural = Safari Balls
 Pocket = 3
 Price = 0
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A special Poké Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.
 #-------------------------------
@@ -3851,6 +3890,7 @@ NamePlural = Sport Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A special Poké Ball for the Bug-Catching Contest.
 #-------------------------------
@@ -3860,6 +3900,7 @@ NamePlural = Net Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on Water- and Bug-type Pokémon.
 #-------------------------------
@@ -3869,6 +3910,7 @@ NamePlural = Dive Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on Pokémon that live underwater.
 #-------------------------------
@@ -3878,6 +3920,7 @@ NamePlural = Nest Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on weaker Pokémon in the wild.
 #-------------------------------
@@ -3887,6 +3930,7 @@ NamePlural = Repeat Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on Pokémon species that were previously caught.
 #-------------------------------
@@ -3896,6 +3940,7 @@ NamePlural = Timer Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Ball that becomes progressively better the more turns there are in a battle.
 #-------------------------------
@@ -3905,6 +3950,7 @@ NamePlural = Luxury Balls
 Pocket = 3
 Price = 3000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A comfortable Poké Ball that makes a caught wild Pokémon quickly grow friendly.
 #-------------------------------
@@ -3915,6 +3961,7 @@ Pocket = 3
 Price = 200
 SellPrice = 10
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat rare Poké Ball that has been specially made to commemorate an event of some sort.
 #-------------------------------
@@ -3924,6 +3971,7 @@ NamePlural = Dusk Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves.
 #-------------------------------
@@ -3933,6 +3981,7 @@ NamePlural = Heal Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A remedial Poké Ball that restores the caught Pokémon's HP and eliminates any status problem.
 #-------------------------------
@@ -3942,6 +3991,7 @@ NamePlural = Quick Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that provides a better catch rate if used at the start of a wild encounter.
 #-------------------------------
@@ -3951,6 +4001,7 @@ NamePlural = Cherish Balls
 Pocket = 3
 Price = 0
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A quite rare Poké Ball that has been specially crafted to commemorate an occasion of some sort.
 #-------------------------------
@@ -3960,6 +4011,7 @@ NamePlural = Fast Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball that makes it easier to catch fast Pokémon.
 #-------------------------------
@@ -3969,6 +4021,7 @@ NamePlural = Level Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball for catching Pokémon that are a lower level than your own.
 #-------------------------------
@@ -3978,6 +4031,7 @@ NamePlural = Lure Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball for catching Pokémon hooked by a Rod when fishing.
 #-------------------------------
@@ -3987,6 +4041,7 @@ NamePlural = Heavy Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball for catching very heavy Pokémon.
 #-------------------------------
@@ -3996,6 +4051,7 @@ NamePlural = Love Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball for catching Pokémon that are the opposite gender of your Pokémon.
 #-------------------------------
@@ -4005,6 +4061,7 @@ NamePlural = Friend Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball that makes caught Pokémon more friendly.
 #-------------------------------
@@ -4014,6 +4071,7 @@ NamePlural = Moon Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A Poké Ball for catching Pokémon that evolve using the Moon Stone.
 #-------------------------------
@@ -4023,6 +4081,7 @@ NamePlural = Dream Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon while they're asleep.
 #-------------------------------
@@ -4032,6 +4091,7 @@ NamePlural = Beast Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
+BattleUsageCategories = PokeBall
 Flags = PokeBall
 Description = A special Poké Ball designed to catch Ultra Beasts. It has a low success rate for catching others.
 #-------------------------------
@@ -5196,6 +5256,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_FIRE_80
 Description = It may be used or held by a Pokémon to recover from paralysis.
 #-------------------------------
@@ -5206,6 +5267,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_WATER_80
 Description = It may be used or held by a Pokémon to recover from sleep.
 #-------------------------------
@@ -5216,6 +5278,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_ELECTRIC_80
 Description = It may be used or held by a Pokémon to recover from poison.
 #-------------------------------
@@ -5226,6 +5289,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_GRASS_80
 Description = It may be used or held by a Pokémon to recover from a burn.
 #-------------------------------
@@ -5236,6 +5300,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_ICE_80
 Description = It may be used or held by a Pokémon to defrost it.
 #-------------------------------
@@ -5246,6 +5311,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnMove
+BattleUsageCategories = HPPPRestore
 Flags = Berry,Fling_10,NaturalGift_FIGHTING_80
 Description = It may be used or held by a Pokémon to restore a move's PP by 10.
 #-------------------------------
@@ -5256,6 +5322,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Berry,Fling_10,NaturalGift_POISON_80
 Description = It may be used or held by a Pokémon to heal the user by just 10 HP.
 #-------------------------------
@@ -5265,6 +5332,7 @@ NamePlural = Persim Berries
 Pocket = 5
 Price = 20
 BattleUse = OnBattler
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_GROUND_80
 Description = It may be used or held by a Pokémon to recover from confusion.
 #-------------------------------
@@ -5275,6 +5343,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Berry,Fling_10,NaturalGift_FLYING_80
 Description = It may be used or held by a Pokémon to recover from any status problem.
 #-------------------------------
@@ -5285,6 +5354,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = HPPPRestore
 Flags = Berry,Fling_10,NaturalGift_PSYCHIC_80
 Description = It may be used or held by a Pokémon to heal the user's HP a little.
 #-------------------------------
@@ -5885,6 +5955,7 @@ NamePlural = X Attack 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the Attack stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5894,6 +5965,7 @@ NamePlural = X Attack 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It drastically raises the Attack stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5903,6 +5975,7 @@ NamePlural = X Attack 6s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It raises the Attack stat of a Pokémon in battle immensely. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5912,6 +5985,7 @@ NamePlural = X Defenses
 Pocket = 7
 Price = 2000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that sharply boosts the Defense of a Pokémon while it remains in battle.
 #-------------------------------
@@ -5921,6 +5995,7 @@ NamePlural = X Defense 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the Defense stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5930,6 +6005,7 @@ NamePlural = X Defense 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It drastically raises the Defense stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5939,6 +6015,7 @@ NamePlural = X Defense 6s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It raises the Defense stat of a Pokémon in battle immensely. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5948,6 +6025,7 @@ NamePlural = X Sp. Atks
 Pocket = 7
 Price = 1000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that sharply boosts the Sp. Atk stat of a Pokémon while it remains in battle.
 #-------------------------------
@@ -5957,6 +6035,7 @@ NamePlural = X Sp. Atk 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the Sp. Atk stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5966,6 +6045,7 @@ NamePlural = X Sp. Atk 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It drastically raises the Sp. Atk stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5975,6 +6055,7 @@ NamePlural = X Sp. Atk 6s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It raises the Sp. Atk stat of a Pokémon in battle immensely. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -5984,6 +6065,7 @@ NamePlural = X Sp. Defs
 Pocket = 7
 Price = 2000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that sharply boosts the Sp. Def stat of a Pokémon while it remains in battle.
 #-------------------------------
@@ -5993,6 +6075,7 @@ NamePlural = X Sp. Def 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the Sp. Def stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6002,6 +6085,7 @@ NamePlural = X Sp. Def 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It drastically raises the Sp. Def stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6011,6 +6095,7 @@ NamePlural = X Sp. Def 6s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It raises the Sp. Def stat of a Pokémon in battle immensely. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6020,6 +6105,7 @@ NamePlural = X Speeds
 Pocket = 7
 Price = 1000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that sharply boosts the Speed stat of a Pokémon while it remains in battle.
 #-------------------------------
@@ -6029,6 +6115,7 @@ NamePlural = X Speed 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the Speed stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6038,6 +6125,7 @@ NamePlural = X Speed 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It drastically raises the Speed stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6047,6 +6135,7 @@ NamePlural = X Speed 6s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It raises the Speed stat of a Pokémon in battle immensely. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6056,6 +6145,7 @@ NamePlural = X Accuracies
 Pocket = 7
 Price = 1000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that sharply boosts the accuracy of a Pokémon while it remains in battle.
 #-------------------------------
@@ -6065,6 +6155,7 @@ NamePlural = X Accuracy 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the accuracy of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6074,6 +6165,7 @@ NamePlural = X Accuracy 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It drastically raises the accuracy of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6083,6 +6175,7 @@ NamePlural = X Accuracy 6s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It raises the accuracy of a Pokémon in battle immensely. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6094,6 +6187,7 @@ PortionNamePlural = clusters of Max Mushrooms
 Pocket = 7
 Price = 8000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = Mushrooms that boost all stats of a Pokémon during battle.
 #-------------------------------
@@ -6103,6 +6197,7 @@ NamePlural = Dire Hits
 Pocket = 7
 Price = 1000
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that raises the critical-hit ratio greatly. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6112,6 +6207,7 @@ NamePlural = Dire Hit 2s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It sharply raises the critical-hit ratio. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6121,6 +6217,7 @@ NamePlural = Dire Hit 3s
 Pocket = 7
 Price = 0
 BattleUse = OnBattler
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = It greatly raises the critical-hit ratio. It wears off if the Pokémon is withdrawn.
 #-------------------------------
@@ -6130,6 +6227,7 @@ NamePlural = Guard Specs.
 Pocket = 7
 Price = 1500
 BattleUse = Direct
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that prevents stat reduction among the Trainer's party Pokémon for five turns after use.
 #-------------------------------
@@ -6172,6 +6270,7 @@ Pocket = 7
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Consumable = false
 Description = A blue flute made from blown glass. Its melody awakens a single Pokémon from sleep.
@@ -6182,6 +6281,7 @@ NamePlural = Yellow Flutes
 Pocket = 7
 Price = 20
 BattleUse = OnBattler
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Consumable = false
 Description = A yellow flute made from blown glass. Its melody snaps a single Pokémon out of confusion.
@@ -6192,6 +6292,7 @@ NamePlural = Red Flutes
 Pocket = 7
 Price = 20
 BattleUse = OnBattler
+BattleUsageCategories = StatusRestore
 Flags = Fling_30
 Consumable = false
 Description = A red flute made from blown glass. Its melody snaps a single Pokémon out of infatuation.
@@ -6202,6 +6303,7 @@ NamePlural = Poké Dolls
 Pocket = 7
 Price = 300
 BattleUse = Direct
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = A doll that attracts Pokémon. Use it to flee from any battle with a wild Pokémon.
 #-------------------------------
@@ -6211,6 +6313,7 @@ NamePlural = Fluffy Tails
 Pocket = 7
 Price = 300
 BattleUse = Direct
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that attracts Pokémon. Use it to flee from any battle with a wild Pokémon.
 #-------------------------------
@@ -6220,6 +6323,7 @@ NamePlural = Poké Toys
 Pocket = 7
 Price = 300
 BattleUse = Direct
+BattleUsageCategories = BattleUse
 Flags = Fling_30
 Description = An item that attracts Pokémon. Use it to flee from any battle with a wild Pokémon.
 #-------------------------------
@@ -6320,6 +6424,7 @@ Pocket = 8
 Price = 0
 FieldUse = OnPokemon
 BattleUse = Direct
+BattleUsageCategories = StatusRestore
 Flags = KeyItem
 Description = A flute that is said to instantly awaken any Pokémon. It has a lovely tone.
 #-------------------------------
