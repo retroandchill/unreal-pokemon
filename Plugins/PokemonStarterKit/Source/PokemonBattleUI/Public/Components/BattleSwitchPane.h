@@ -33,6 +33,7 @@ class POKEMONBATTLEUI_API UBattleSwitchPane : public USelectableWidget {
     /**
      * Refresh the contents of the window
      */
+    UFUNCTION(BlueprintCallable, Category = Content)
     void RefreshContent();
 
   protected:

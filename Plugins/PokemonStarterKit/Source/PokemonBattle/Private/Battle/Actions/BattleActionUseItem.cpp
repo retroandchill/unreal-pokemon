@@ -3,6 +3,7 @@
 
 #include "Battle/Actions/BattleActionUseItem.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Battle/Battlers/Battler.h"
 #include "DataManager.h"
 #include "PokemonBattleSettings.h"
 #include "RangeHelpers.h"
@@ -86,7 +87,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         RangeHelpers::CreateRange(Targets) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
         ranges::views::transform(
-            [](const TScriptInterface<IBattler> &Battler) { return CastChecked<AActor>(Battler.GetObject()); }) |
+            [](const TScriptInterface<IBattler> &B) { return CastChecked<AActor>(B.GetObject()); }) |
         RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
     EventData.TargetData.Data.Emplace(TargetData);
 

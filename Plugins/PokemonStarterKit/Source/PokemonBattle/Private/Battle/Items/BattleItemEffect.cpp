@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "DataManager.h"
 #include "RangeHelpers.h"
+#include "Algo/ForEach.h"
 #include "Battle/Items/ItemTags.h"
 #include "Bag/Item.h"
 #include "Battle/Battlers/Battler.h"
@@ -45,7 +46,8 @@ void UBattleItemEffect::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
     FRunningMessageSet Messages;
     bShouldConsumeItem = ApplyGlobalEffect(User, Messages);
-    ranges::for_each(FilterInvalidTargets(TriggerEventData), [&User, &Messages, this](const TScriptInterface<IBattler>& Target) {
+    auto Targets = FilterInvalidTargets(TriggerEventData);
+    Algo::ForEach(Targets, [&User, &Messages, this](const TScriptInterface<IBattler>& Target) {
        bShouldConsumeItem |= ApplyEffectToTarget(User, Target, Messages); 
     });
     DisplayResults(Messages);
@@ -75,18 +77,27 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
     return true;
 }
 
-ranges::any_view<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(
-    const FGameplayEventData* TriggerEventData) {
-    return RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
+TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(
+    const FGameplayEventData *TriggerEventData) {
+    auto ActorLists =
+        RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
+        RangeHelpers::TToArray<TArray<TWeakObjectPtr<AActor>>>();
+
+    return RangeHelpers::CreateRange(ActorLists) |
         ranges::views::transform(
-               [](const TArray<TWeakObjectPtr<AActor>> &List) { return RangeHelpers::CreateRange(List); }) |
+               [](const TArray<TWeakObjectPtr<AActor>> &List) {
+                   return RangeHelpers::CreateRange(List);
+               }) |
            ranges::views::join |
-           ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
+           ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) {
+               return Actor.Get();
+           }) |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
            ranges::views::filter(&AActor::Implements<UBattler>) |
-               ranges::views::transform([](AActor *Actor) {
+           ranges::views::transform([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;
                return Battler;
-           }) | ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this));
+    }) | ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this))
+    | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 }

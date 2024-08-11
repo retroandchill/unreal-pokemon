@@ -82,8 +82,8 @@ private:
      * @param TriggerEventData
      * @return The array of filtered target actors
      */
-    ranges::any_view<TScriptInterface<IBattler>> FilterInvalidTargets(
-        const FGameplayEventData* TriggerEventData);
+    TArray<TScriptInterface<IBattler>> FilterInvalidTargets(
+        const FGameplayEventData *TriggerEventData);
     
     FName ItemID;
 
