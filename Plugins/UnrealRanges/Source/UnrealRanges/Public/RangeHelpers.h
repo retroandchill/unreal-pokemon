@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "range/v3/view/all.hpp"
 #include "range/v3/view/span.hpp"
+#include <range/v3/view/filter.hpp>
+#include <range/v3/view/single.hpp>
+#include <range/v3/view/transform.hpp>
 
 namespace RangeHelpers {
 

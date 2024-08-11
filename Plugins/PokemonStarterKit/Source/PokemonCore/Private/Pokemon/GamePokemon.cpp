@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
 #include "Bag/Item.h"
+#include "Battle/Status.h"
 #include "DataManager.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Lookup/InjectionUtilities.h"
@@ -31,6 +32,7 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     MoveBlock = UnrealInjector::NewInjectedDependency<IMoveBlock>(this, this, DTO);
     AbilityBlock = UnrealInjector::NewInjectedDependency<IAbilityBlock>(this, this, DTO);
     HoldItem = DTO.Item;
+    StatusEffect = DTO.StatusEffect;
 
     if (DTO.PokeBall.IsSet()) {
         PokeBall = *DTO.PokeBall;
@@ -83,6 +85,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
                      ranges::views::transform([](const TScriptInterface<IMove> &Move) { return Move->ToDTO(); }) |
                      RangeHelpers::TToArray<FMoveDTO>(),
             .MoveMemory = MoveBlock->GetMoveMemory(),
+            .StatusEffect = StatusEffect,
             .ObtainMethod = ObtainedBlock->GetObtainMethod(),
             .LevelMet = ObtainedBlock->GetLevelMet(),
             .TimeReceived = OptionalUtilities::OfNullable(ObtainedBlock->GetTimeReceived()),
@@ -196,6 +199,28 @@ void UGamePokemon::SetHoldItem(FName Item) {
 
 void UGamePokemon::RemoveHoldItem() {
     HoldItem.Reset();
+}
+
+const FStatus *UGamePokemon::GetStatusEffect() const {
+    static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
+    TFunctionRef<const FStatus *(const FName &)> GetStatus = [](const FName &ID) { return StatusTable.GetData(ID); };
+
+    auto Mapped = OptionalUtilities::Map(StatusEffect, GetStatus);
+    return Mapped.Get(nullptr);
+}
+
+bool UGamePokemon::SetStatusEffect(FName StatusID, bool bOverwriteExisting) {
+    if (StatusEffect.IsSet() && !bOverwriteExisting) {
+        return false;
+    }
+
+    check(FDataManager::GetInstance().GetDataTable<FStatus>().IsRowNameValid(StatusID))
+    StatusEffect.Emplace(StatusID);
+    return true;
+}
+
+void UGamePokemon::RemoveStatusEffect() {
+    StatusEffect.Reset();
 }
 
 const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {

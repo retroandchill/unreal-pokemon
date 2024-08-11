@@ -16,7 +16,7 @@
 	"Modules": [
 		{
 			"Name": "AutomationTestHelpers",
-			"Type": "Runtime",
+			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
 	],

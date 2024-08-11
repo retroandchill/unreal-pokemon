@@ -3,6 +3,7 @@ from typing import Optional
 
 from .pbs_ini_data import PbsIniData, DataContainer
 from ..ini_data import IniData
+from ...unreal_interface.gameplay_tags import create_gameplay_tag_structure
 
 ItemArgs = tuple[DataContainer, DataContainer, DataContainer]
 
@@ -35,6 +36,7 @@ class ItemData(PbsIniData[ItemArgs]):
             "BPPrice": ("BPPrice", "u", None),
             "FieldUse": ("FieldUse", "e", field_use_enum),
             "BattleUse": ("BattleUse", "e", battle_use_enum),
+            "BattleUsageCategories": ("BattleUsageCategories", "*s", None),
             "Flags": ("Tags", "*s", None),
             "Consumable": ("Consumable", "b", None),
             "ShowQuantity": ("ShowQuantity", "b", None),
@@ -53,6 +55,8 @@ class ItemData(PbsIniData[ItemArgs]):
         item["BPPrice"] = item.get("BPPrice", 1)
         item["FieldUse"] = item.get("FieldUse", "NoFieldUse")
         item["BattleUse"] = item.get("BattleUse", "NoBattleUse")
+        item["BattleUsageCategories"] = create_gameplay_tag_structure('Battle.Items.BattleUse',
+                                                                      item.get("BattleUsageCategories", []))
         item["Tags"] = item.get("Tags", [])
         item["Consumable"] = item.get("Consumable", not ItemData.__is_important(item))
         item["ShowQuantity"] = item.get("ShowQuantity", True)

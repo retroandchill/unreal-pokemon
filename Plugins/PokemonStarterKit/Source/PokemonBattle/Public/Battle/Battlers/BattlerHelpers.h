@@ -4,14 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
+#include "Battler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Utilities/PokemonUtilities.h"
+#include "Utilities/StatusEffectUtilities.h"
 
 #include "BattlerHelpers.generated.h"
 
 struct FExpGainInfo;
 class IBattler;
 struct FGameplayAbilityActorInfo;
+
 /**
  * Library of helper functions used for battlers
  */
@@ -29,4 +32,15 @@ class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = "Battler|Stats")
     static float GetBattlerStat(const FGameplayAbilityActorInfo &ActorInfo, FGameplayAttribute Attribute, bool &bFound);
+
+    /**
+     * Get the Pokémon's status effect
+     * @param Battler The Pokémon to get the status effect for
+     * @param StatusEffect The status effect information to write that data into
+     * @return If the Pokémon has a status effect
+     */
+    UFUNCTION(BlueprintCallable, Category = "Battler|StatusEffects",
+              meta = (ExpandEnumAsExecs = "ReturnValue", DefaultToSelf = "Battler"))
+    static EStatusEffectStatus GetStatusEffect(const TScriptInterface<IBattler> &Battler,
+                                               FStatusEffectInfo &StatusEffect);
 };

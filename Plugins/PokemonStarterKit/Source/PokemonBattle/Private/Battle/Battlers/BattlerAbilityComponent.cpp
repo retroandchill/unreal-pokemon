@@ -54,6 +54,19 @@ FGameplayEffectSpecHandle UBattlerAbilityComponent::MakeOutgoingSpec(TSubclassOf
     return FGameplayEffectSpecHandle(nullptr);
 }
 
+TOptional<FGameplayAbilitySpecHandle>
+UBattlerAbilityComponent::FindAbilityOfClass(TSubclassOf<UGameplayAbility> AbilityClass) const {
+    auto AbilitySpec =
+        Algo::FindByPredicate(ActivatableAbilities.Items, [AbilityClass](const FGameplayAbilitySpec &Spec) {
+            return Spec.Ability->IsA(AbilityClass);
+        });
+    if (AbilitySpec == nullptr) {
+        return TOptional<FGameplayAbilitySpecHandle>();
+    }
+
+    return AbilitySpec->Handle;
+}
+
 UGameplayEffect *UBattlerAbilityComponent::CreateGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass,
                                                                 float Level,
                                                                 const FGameplayEffectContextHandle &Context) const {

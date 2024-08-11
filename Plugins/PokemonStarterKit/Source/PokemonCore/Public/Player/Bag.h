@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BagDTO.h"
 #include "UObject/Interface.h"
+#include <range/v3/view/any_view.hpp>
 
 #include "Bag.generated.h"
 
@@ -75,4 +76,10 @@ class POKEMONCORE_API IBag {
      * @param Callback The callback for each iteration of the loop
      */
     virtual void ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const = 0;
+
+    /**
+     * Get a view of all the items in the player's inventory.
+     * @return The view of all items in the inventory
+     */
+    virtual void ForEachItem(const TFunctionRef<void(FName, int32)> &Callback) const = 0;
 };

@@ -1,4 +1,4 @@
-﻿
+﻿#ifdef HAS_AUTOMATION_HELPERS
 #include "Asserts.h"
 #include "DependencyInjectionSettings.h"
 #include "Misc/AutomationTest.h"
@@ -25,3 +25,4 @@ bool TestDependencyInjectionSettingsCustomization::RunTest(const FString &Parame
 
     return true;
 }
+#endif

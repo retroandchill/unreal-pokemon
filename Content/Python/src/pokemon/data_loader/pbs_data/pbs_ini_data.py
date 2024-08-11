@@ -69,7 +69,7 @@ class PbsIniData(Generic[T], abc.ABC):
         Convert the list of data to a JSON string
         :return: A JSON representation of the data
         """
-        return json.dumps(self.__data)
+        return json.dumps(self.__data, indent=4)
 
     def __iter__(self):
         return self.__data.__iter__()
