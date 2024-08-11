@@ -138,14 +138,27 @@ struct POKEMONCORE_API FPokemonDTO {
     TSet<FName> MoveMemory;
 
     /**
+     * The status effect that the Pokémon is afflicted with.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
+        meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
+    TOptional<FName> StatusEffect;
+
+    /**
      * The method the Pokémon was obtained with
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     EObtainMethod ObtainMethod = EObtainMethod::Default;
 
+    /**
+     * The level the Pokémon was met at. Uses its current level if unset.
+     */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<int32> LevelMet;
 
+    /**
+     * The time the Pokémon was received. Uses the current time if unset.
+     */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FDateTime> TimeReceived;
 
@@ -155,12 +168,21 @@ struct POKEMONCORE_API FPokemonDTO {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FText> MetLocation;
 
+    /**
+     * The time the Pokémon hatched at.
+     */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FDateTime> TimeHatched;
 
+    /**
+     * The name of the map the Pokémon hatched on.
+     */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FText> HatchedMap;
 
+    /**
+     * The information about the owning trainer. Constructs a fresh object based on the provided trainer if unset.
+     */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FOwnerInfo> OwnerInfo;
 };

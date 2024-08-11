@@ -32,6 +32,8 @@
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
+#include "Battle/Status.h"
+#include "Battle/StatusEffects/StatusEffectTags.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -373,11 +375,13 @@ const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {
 void ABattlerActor::InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
     check(!StatusEffect.IsSet())
     StatusEffect.Emplace(StatusEffectID, EffectHandle);
+    WrappedPokemon->SetStatusEffect(StatusEffectID);
 }
 
 void ABattlerActor::CureStatusEffect() {
     check(StatusEffect.IsSet())
     StatusEffect.Reset();
+    WrappedPokemon->RemoveStatusEffect();
 }
 
 void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {

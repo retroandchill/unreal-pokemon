@@ -13,6 +13,7 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "RangeHelpers.h"
+#include "Battle/Status.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -196,6 +197,30 @@ void UGamePokemon::SetHoldItem(FName Item) {
 
 void UGamePokemon::RemoveHoldItem() {
     HoldItem.Reset();
+}
+
+const FStatus *UGamePokemon::GetStatusEffect() const {
+    static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
+    TFunctionRef<const FStatus*(const FName &)> GetStatus = [](const FName &ID) {
+        return StatusTable.GetData(ID);
+    };
+    
+    auto Mapped = OptionalUtilities::Map(StatusEffect, GetStatus);
+    return Mapped.Get(nullptr);
+}
+
+bool UGamePokemon::SetStatusEffect(FName StatusID, bool bOverwriteExisting) {
+    if (StatusEffect.IsSet() && !bOverwriteExisting) {
+        return false;
+    }
+
+    check(FDataManager::GetInstance().GetDataTable<FStatus>().IsRowNameValid(StatusID))
+    StatusEffect.Emplace(StatusID);
+    return true;
+}
+
+void UGamePokemon::RemoveStatusEffect() {
+    StatusEffect.Reset();
 }
 
 const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {

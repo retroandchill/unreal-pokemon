@@ -80,6 +80,14 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintCallable, Category = Items)
     void RemoveHoldItem() override;
 
+    const FStatus *GetStatusEffect() const override;
+    
+    UFUNCTION(BlueprintCallable, Category = StatusEffects)
+    bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) override;
+    
+    UFUNCTION(BlueprintCallable, Category = StatusEffects)
+    void RemoveStatusEffect() override;
+
     UFUNCTION(BlueprintPure, Category = Trainer)
     const FOwnerInfo &GetOwnerInfo() const override;
 
@@ -172,6 +180,12 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     TOptional<FName> HoldItem;
+    
+    /**
+     * The status effect the Pokémon is inflicted with
+     */
+    UPROPERTY(SaveGame)
+    TOptional<FName> StatusEffect;
 
     /**
      * The information about the original trainer
