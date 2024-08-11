@@ -22,12 +22,12 @@ struct POKEMONBATTLE_API FItemTarget {
 class POKEMONBATTLE_API FBattleActionUseItem : public FBattleActionBase {
   public:
     FBattleActionUseItem(const TScriptInterface<IBattler> &Battler, FName ItemID, FItemTarget &&ItemTarget);
-    virtual FString GetReferencerName() const override;
-    virtual int32 GetPriority() const override;
-    virtual FText GetActionMessage() const override;
+    FString GetReferencerName() const override;
+    int32 GetPriority() const override;
+    FText GetActionMessage() const override;
 
   protected:
-    virtual FGameplayAbilitySpecHandle ActivateAbility() override;
+    FGameplayAbilitySpecHandle ActivateAbility() override;
 
   private:
     FName ItemID;
