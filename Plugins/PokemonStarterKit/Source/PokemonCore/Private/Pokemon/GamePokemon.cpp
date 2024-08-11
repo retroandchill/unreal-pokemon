@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
 #include "Bag/Item.h"
+#include "Battle/Status.h"
 #include "DataManager.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Lookup/InjectionUtilities.h"
@@ -13,7 +14,6 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "RangeHelpers.h"
-#include "Battle/Status.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -203,10 +203,8 @@ void UGamePokemon::RemoveHoldItem() {
 
 const FStatus *UGamePokemon::GetStatusEffect() const {
     static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
-    TFunctionRef<const FStatus*(const FName &)> GetStatus = [](const FName &ID) {
-        return StatusTable.GetData(ID);
-    };
-    
+    TFunctionRef<const FStatus *(const FName &)> GetStatus = [](const FName &ID) { return StatusTable.GetData(ID); };
+
     auto Mapped = OptionalUtilities::Map(StatusEffect, GetStatus);
     return Mapped.Get(nullptr);
 }

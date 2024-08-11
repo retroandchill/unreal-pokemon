@@ -39,6 +39,8 @@ class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary {
      * @param StatusEffect The status effect information to write that data into
      * @return If the Pokémon has a status effect
      */
-    UFUNCTION(BlueprintCallable, Category = "Battler|StatusEffects", meta = (ExpandEnumAsExecs = "ReturnValue", DefaultToSelf = "Battler"))
-    static EStatusEffectStatus GetStatusEffect(const TScriptInterface<IBattler>& Battler, FStatusEffectInfo& StatusEffect);
+    UFUNCTION(BlueprintCallable, Category = "Battler|StatusEffects",
+              meta = (ExpandEnumAsExecs = "ReturnValue", DefaultToSelf = "Battler"))
+    static EStatusEffectStatus GetStatusEffect(const TScriptInterface<IBattler> &Battler,
+                                               FStatusEffectInfo &StatusEffect);
 };

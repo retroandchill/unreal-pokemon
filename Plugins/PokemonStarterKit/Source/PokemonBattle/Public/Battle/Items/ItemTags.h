@@ -12,4 +12,4 @@ namespace Pokemon::Battle::Items {
  */
 POKEMONBATTLE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(UsingItem);
 
-}
+} // namespace Pokemon::Battle::Items

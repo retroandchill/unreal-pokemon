@@ -141,7 +141,7 @@ struct POKEMONCORE_API FPokemonDTO {
      * The status effect that the Pokémon is afflicted with.
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data,
-        meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
+              meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
     TOptional<FName> StatusEffect;
 
     /**

@@ -65,4 +65,4 @@ POKEMONDATA_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(PokeBall);
  */
 POKEMONDATA_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(BattleUse);
 
-}
+} // namespace Pokemon::Data::Bag

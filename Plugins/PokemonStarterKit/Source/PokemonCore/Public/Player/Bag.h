@@ -81,5 +81,5 @@ class POKEMONCORE_API IBag {
      * Get a view of all the items in the player's inventory.
      * @return The view of all items in the inventory
      */
-    virtual void ForEachItem(const TFunctionRef<void(FName, int32)>& Callback) const = 0;
+    virtual void ForEachItem(const TFunctionRef<void(FName, int32)> &Callback) const = 0;
 };

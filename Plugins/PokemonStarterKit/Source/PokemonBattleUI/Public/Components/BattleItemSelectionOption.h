@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
+
 #include "BattleItemSelectionOption.generated.h"
 
 class UImage;
@@ -15,7 +16,7 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UBattleItemSelectionOption : public UCommonButtonBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set the currently displayed item.
      * @param Item The ID of the item.
@@ -23,16 +24,16 @@ public:
      */
     void SetItem(FName Item, int32 Quantity);
 
-private:
+  private:
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UImage> ItemIcon;
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> ItemNameText;
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> ItemQuantityText;
-    
+
     FName ItemID;
     int32 ItemQuantity;
 };

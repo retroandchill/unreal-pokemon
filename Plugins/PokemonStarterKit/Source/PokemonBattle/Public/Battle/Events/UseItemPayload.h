@@ -5,17 +5,18 @@
 #include "CoreMinimal.h"
 #include "Battle/Actions/BattleActionUseItem.h"
 #include "UObject/Object.h"
+
 #include "UseItemPayload.generated.h"
 
 class UGameplayAbility;
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONBATTLE_API UUseItemPayload : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     UPROPERTY()
     FName Item;
 

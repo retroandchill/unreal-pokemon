@@ -1,19 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Actions/BattleActionUseItem.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "Battle/Battlers/Battler.h"
-#include "DataManager.h"
-#include "PokemonBattleSettings.h"
-#include "RangeHelpers.h"
 #include "Bag/Item.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/UseItemPayload.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Items/ItemTags.h"
+#include "DataManager.h"
 #include "DataTypes/OptionalUtilities.h"
+#include "PokemonBattleSettings.h"
+#include "RangeHelpers.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -30,8 +28,8 @@ FItemTarget::FItemTarget(FTargetWithIndex &&Target) {
 }
 
 FBattleActionUseItem::FBattleActionUseItem(const TScriptInterface<IBattler> &Battler, FName ItemID,
-                                           FItemTarget &&ItemTarget) : FBattleActionBase(Battler), ItemID(ItemID),
-                                                                       ItemTarget(MoveTemp(ItemTarget)) {
+                                           FItemTarget &&ItemTarget)
+    : FBattleActionBase(Battler), ItemID(ItemID), ItemTarget(MoveTemp(ItemTarget)) {
 }
 
 FString FBattleActionUseItem::GetReferencerName() const {
@@ -44,10 +42,8 @@ int32 FBattleActionUseItem::GetPriority() const {
 
 FText FBattleActionUseItem::GetActionMessage() const {
     auto &ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemID);
-    return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")), {
-        GetBattler()->GetWrappedPokemon()->GetCurrentHandler()->GetTrainerName(),
-        ItemData.RealName
-    });
+    return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
+                         {GetBattler()->GetWrappedPokemon()->GetCurrentHandler()->GetTrainerName(), ItemData.RealName});
 }
 
 FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
@@ -60,7 +56,6 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         return AbilityComponent->GiveAbility(Spec);
     });
 
-    
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;
     EventData.Instigator = OwnerActor;
@@ -82,7 +77,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     } else if (auto AsTargetWithIndex = ItemTarget.Data.TryGet<FTargetWithIndex>(); AsTargetWithIndex != nullptr) {
         Targets.Emplace(AsTargetWithIndex->SwapIfNecessary());
     }
-    
+
     TargetData->SetActors(
         RangeHelpers::CreateRange(Targets) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |

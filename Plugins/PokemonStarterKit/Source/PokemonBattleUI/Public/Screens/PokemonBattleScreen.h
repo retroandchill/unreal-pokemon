@@ -166,7 +166,8 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     void OnSwitchSelected(const TScriptInterface<IBattler> &Battler, const TScriptInterface<IBattler> &Target);
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void OnUseItemOnPokemonSelected(FName ItemID, const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+    void OnUseItemOnPokemonSelected(FName ItemID, const TScriptInterface<IBattler> &User,
+                                    const TScriptInterface<IBattler> &Target);
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
     void HideSwitchWindow();

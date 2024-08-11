@@ -10,12 +10,12 @@ float UBattlerHelpers::GetBattlerStat(const FGameplayAbilityActorInfo &ActorInfo
 }
 
 EStatusEffectStatus UBattlerHelpers::GetStatusEffect(const TScriptInterface<IBattler> &Battler,
-    FStatusEffectInfo &StatusEffect) {
+                                                     FStatusEffectInfo &StatusEffect) {
     auto StatusEffectInfo = Battler->GetStatusEffect();
     if (!StatusEffectInfo.IsSet()) {
         return EStatusEffectStatus::NoStatusEffect;
     }
-    
+
     StatusEffect = *StatusEffectInfo;
     return EStatusEffectStatus::HasStatusEffect;
 }

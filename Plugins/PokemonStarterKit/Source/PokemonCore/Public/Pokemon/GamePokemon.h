@@ -81,10 +81,10 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     void RemoveHoldItem() override;
 
     const FStatus *GetStatusEffect() const override;
-    
+
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) override;
-    
+
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     void RemoveStatusEffect() override;
 
@@ -180,7 +180,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
      */
     UPROPERTY(SaveGame)
     TOptional<FName> HoldItem;
-    
+
     /**
      * The status effect the Pokémon is inflicted with
      */

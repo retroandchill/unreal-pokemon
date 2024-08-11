@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/StatusEffectUtilities.h"
 #include "Pokemon/Pokemon.h"
 
@@ -10,7 +9,7 @@ EStatusEffectStatus UStatusEffectUtilities::GetStatusEffect(const TScriptInterfa
     if (Status == nullptr) {
         return EStatusEffectStatus::NoStatusEffect;
     }
-    
+
     StatusEffect = *Status;
     return EStatusEffectStatus::HasStatusEffect;
 }

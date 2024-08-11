@@ -44,28 +44,26 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
      * Pocket in the Bag where this item is stored.
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BagInfo",
-        meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+              meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
     FName Pocket;
 
     /**
      * Purchase price of this item.
      */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Marts",
-        meta = (ClampMin = 0, UIMin = 0))
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Marts", meta = (ClampMin = 0, UIMin = 0))
     int32 Price;
 
     /**
      * Sell price of this item. If blank, is half the purchase price.
      */
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Marts",
-        meta = (ClampMin = 0, UIMin = 0))
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Marts", meta = (ClampMin = 0, UIMin = 0))
     int32 SellPrice;
 
     /**
      * Purchase price of this item in Battle Points (BP).
      */
-    UPROPERTY(DisplayName = "BP Price", BlueprintReadOnly, Category = "Marts",
-        EditAnywhere, meta = (ClampMin = 1, UIMin = 1))
+    UPROPERTY(DisplayName = "BP Price", BlueprintReadOnly, Category = "Marts", EditAnywhere,
+              meta = (ClampMin = 1, UIMin = 1))
     int32 BPPrice;
 
     /**
@@ -108,7 +106,7 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
      * Move taught by this HM, TM or TR.
      */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Usage,
-        meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
+              meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
     FName Move;
 
     /**

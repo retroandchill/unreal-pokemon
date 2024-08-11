@@ -4,11 +4,11 @@
 #include "Algo/ForEach.h"
 #include "Battle/Actions/BattleActionDoNothing.h"
 #include "Battle/Actions/BattleActionSwitchPokemon.h"
+#include "Battle/Actions/BattleActionUseItem.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Actions/BattleActionUseItem.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattleMoveSelect.h"
@@ -186,9 +186,9 @@ void UPokemonBattleScreen::OnSwitchSelected(const TScriptInterface<IBattler> &Ba
 }
 
 void UPokemonBattleScreen::OnUseItemOnPokemonSelected(FName ItemID, const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
-    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseItem>(User, ItemID,
-        FItemTarget(TWeakInterfacePtr<IBattler>(Target.GetObject()))));
+                                                      const TScriptInterface<IBattler> &Target) {
+    CurrentBattle->QueueAction(
+        MakeUnique<FBattleActionUseItem>(User, ItemID, FItemTarget(TWeakInterfacePtr<IBattler>(Target.GetObject()))));
     HideSwitchWindow();
     AdvanceToNextSelection();
 }

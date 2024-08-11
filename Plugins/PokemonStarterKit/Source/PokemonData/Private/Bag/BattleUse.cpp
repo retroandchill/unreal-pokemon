@@ -7,4 +7,4 @@ const UE_DEFINE_GAMEPLAY_TAG(StatusRestore, "Battle.Items.BattleUse.StatusRestor
 const UE_DEFINE_GAMEPLAY_TAG(PokeBall, "Battle.Items.BattleUse.PokeBall");
 const UE_DEFINE_GAMEPLAY_TAG(BattleUse, "Battle.Items.BattleUse.BattleUse");
 
-}
+} // namespace Pokemon::Data::Bag

@@ -108,7 +108,7 @@ void UDefaultBag::ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, i
     }
 }
 
-void UDefaultBag::ForEachItem(const TFunctionRef<void(FName, int32)>& Callback) const {
+void UDefaultBag::ForEachItem(const TFunctionRef<void(FName, int32)> &Callback) const {
     for (auto &[Pocket, Items] : ItemSlots) {
         for (auto &[Item, Quantity] : Items.Items) {
             Callback(Item, Quantity);

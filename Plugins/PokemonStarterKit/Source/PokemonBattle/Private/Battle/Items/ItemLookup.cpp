@@ -33,7 +33,8 @@ TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindHoldItemEffect(const F
 
 TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindBattleItemEffect(FName ID) {
     if (ID.IsNone()) {
-        auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
+        auto MoveClass =
+            GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
         check(MoveClass != nullptr)
         return MoveClass;
     }
@@ -45,7 +46,7 @@ TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindBattleItemEffect(FName
     if (auto MoveClass = LoadObject<UClass>(nullptr, *FullPackage);
         MoveClass != nullptr && MoveClass->IsChildOf(UGameplayAbility::StaticClass())) {
         return MoveClass;
-        }
+    }
 
     auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
     check(MoveClass != nullptr)

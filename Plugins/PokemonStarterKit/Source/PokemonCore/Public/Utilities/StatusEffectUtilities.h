@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Status.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "StatusEffectUtilities.generated.h"
 
 class IPokemon;
@@ -32,14 +33,14 @@ UCLASS()
 class POKEMONCORE_API UStatusEffectUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Get the Pokémon's status effect
      * @param Pokemon The Pokémon to get the status effect for
      * @param StatusEffect The status effect information to write that data into
      * @return If the Pokémon has a status effect
      */
-    UFUNCTION(BlueprintCallable, Category = "StatusEffects", meta = (ExpandEnumAsExecs = "ReturnValue", DefaultToSelf = "Pokemon"))
+    UFUNCTION(BlueprintCallable, Category = "StatusEffects",
+              meta = (ExpandEnumAsExecs = "ReturnValue", DefaultToSelf = "Pokemon"))
     static EStatusEffectStatus GetStatusEffect(const TScriptInterface<IPokemon> &Pokemon, FStatus &StatusEffect);
-
 };

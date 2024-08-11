@@ -19,7 +19,7 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API UBattleItemEffect : public UGameplayAbility {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Create the CDO for this class
      */
@@ -30,7 +30,7 @@ public:
      * @return The item that is being used
      */
     UFUNCTION(BlueprintPure, Category = Context)
-    const FItem& GetItem() const;
+    const FItem &GetItem() const;
 
     bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
                                      const FGameplayEventData *Payload) const override;
@@ -41,7 +41,7 @@ public:
                     const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
                     bool bWasCancelled) override;
 
-protected:
+  protected:
     /**
      * Apply the global (no targets) effect of the item.
      * @param User The user of the item.
@@ -49,7 +49,7 @@ protected:
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
     UFUNCTION(BlueprintNativeEvent, Category = Effect)
-    bool ApplyGlobalEffect(const TScriptInterface<IBattler>& User, const FRunningMessageSet &Messages);
+    bool ApplyGlobalEffect(const TScriptInterface<IBattler> &User, const FRunningMessageSet &Messages);
 
     /**
      * Apply the effect of the item to an individual target.
@@ -59,7 +59,8 @@ protected:
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
     UFUNCTION(BlueprintNativeEvent, Category = Effect)
-    bool ApplyEffectToTarget(const TScriptInterface<IBattler>& User, const TScriptInterface<IBattler>& Target, const FRunningMessageSet &Messages);
+    bool ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
+                             const FRunningMessageSet &Messages);
 
     /**
      * Display the results of the items usage.
@@ -74,19 +75,17 @@ protected:
      * @return Is this a valid target for the move.
      */
     UFUNCTION(BlueprintNativeEvent, Category = Validation)
-    bool IsTargetValid(const TScriptInterface<IBattler>& Battler);
+    bool IsTargetValid(const TScriptInterface<IBattler> &Battler);
 
-private:
+  private:
     /**
      * Filter out any invalid targets from this move
      * @param TriggerEventData
      * @return The array of filtered target actors
      */
-    TArray<TScriptInterface<IBattler>> FilterInvalidTargets(
-        const FGameplayEventData *TriggerEventData);
-    
+    TArray<TScriptInterface<IBattler>> FilterInvalidTargets(const FGameplayEventData *TriggerEventData);
+
     FName ItemID;
 
     bool bShouldConsumeItem = false;
-
 };

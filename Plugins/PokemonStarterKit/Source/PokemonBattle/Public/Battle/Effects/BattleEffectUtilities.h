@@ -5,18 +5,19 @@
 #include "CoreMinimal.h"
 #include "GameplayEffect.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "BattleEffectUtilities.generated.h"
 
 struct FGameplayTag;
 class IBattler;
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONBATTLE_API UBattleEffectUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Apply the specified item effect to the target with the specified magnitude.
      * @param Target The target of the move in question.
@@ -25,6 +26,7 @@ public:
      * @param Magnitude The value of the magnitude
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Effects", meta = (AutoCreateRefTerm = "EffectClass,DataTag"))
-    static void ApplyEffectToTargetWithMagnitude(const TScriptInterface<IBattler>& Target, const TSoftClassPtr<UGameplayEffect>& EffectClass, const FGameplayTag& DataTag, float Magnitude);
-    
+    static void ApplyEffectToTargetWithMagnitude(const TScriptInterface<IBattler> &Target,
+                                                 const TSoftClassPtr<UGameplayEffect> &EffectClass,
+                                                 const FGameplayTag &DataTag, float Magnitude);
 };
