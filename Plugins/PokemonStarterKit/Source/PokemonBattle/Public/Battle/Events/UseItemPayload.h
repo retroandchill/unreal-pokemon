@@ -22,4 +22,6 @@ public:
     UPROPERTY()
     TObjectPtr<const UGameplayAbility> Ability;
 
+    UPROPERTY()
+    TMap<FGuid, TScriptInterface<IBattleMove>> TargetedMoves;
 };

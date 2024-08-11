@@ -39,6 +39,13 @@ class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponen
     FGameplayEffectSpecHandle MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level,
                                                FGameplayEffectContextHandle Context) const override;
 
+    /**
+     * Find the gameplay ability with the specified class.
+     * @param AbilityClass The class of ability to look for.
+     * @return The handle for said ability (if found)
+     */
+    TOptional<FGameplayAbilitySpecHandle> FindAbilityOfClass(TSubclassOf<UGameplayAbility> AbilityClass) const;
+
   private:
     UGameplayEffect *CreateGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level,
                                           const FGameplayEffectContextHandle &Context) const;
