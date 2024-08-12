@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
+#include "Algo/ForEach.h"
 #include "Bag/Item.h"
 #include "Battle/Status.h"
 #include "DataManager.h"
@@ -14,7 +15,6 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "RangeHelpers.h"
-#include "Algo/ForEach.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -157,9 +157,8 @@ int32 UGamePokemon::RestoreHP(int32 Amount) {
 
 void UGamePokemon::FullyHeal() {
     SetCurrentHP(GetMaxHP());
-    Algo::ForEach(MoveBlock->GetMoves(), [](const TScriptInterface<IMove>& Move) {
-       Move->RecoverPP(Move->GetTotalPP()); 
-    });
+    Algo::ForEach(MoveBlock->GetMoves(),
+                  [](const TScriptInterface<IMove> &Move) { Move->RecoverPP(Move->GetTotalPP()); });
     StatusEffect.Reset();
 }
 

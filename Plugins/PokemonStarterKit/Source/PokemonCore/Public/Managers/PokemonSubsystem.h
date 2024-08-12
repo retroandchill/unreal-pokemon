@@ -115,7 +115,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      * @param Transform The transform that the player should reset to.
      */
     UFUNCTION(BlueprintCallable, Category = Reset, meta = (AutoCreateRefTerm = "MapName,Transform"))
-    void SetPlayerResetLocation(const FString &MapName, const FTransform& Transform);
+    void SetPlayerResetLocation(const FString &MapName, const FTransform &Transform);
 
     /**
      * Set the player's reset location to their current location

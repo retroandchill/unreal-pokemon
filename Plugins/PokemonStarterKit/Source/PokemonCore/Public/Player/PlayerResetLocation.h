@@ -8,13 +8,13 @@
  * Structure that contains information about the player's location when they reset after a defeat.
  */
 class POKEMONCORE_API FPlayerResetLocation {
-public:
+  public:
     /**
      * Create a new reset location from the given player character actor.
      * @param MapName The name of the map the player should travel to on a reset.
      * @param Transform The transform that the player should reset to.
      */
-    explicit FPlayerResetLocation(FStringView MapName, const FTransform& Transform);
+    explicit FPlayerResetLocation(FStringView MapName, const FTransform &Transform);
 
     /**
      * Get the name of the map the player should travel to on a reset.
@@ -28,7 +28,7 @@ public:
      */
     const FTransform &GetPlayerTransform() const;
 
-private:
+  private:
     FString MapName;
     FTransform PlayerTransform;
 };

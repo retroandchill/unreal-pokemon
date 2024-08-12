@@ -6,8 +6,8 @@
 #include "Engine/LevelStreamingDynamic.h"
 #include "Engine/LevelStreamingVolume.h"
 #include "Kismet/GameplayStatics.h"
-#include "PokemonBattleSettings.h"
 #include "Managers/PokemonSubsystem.h"
+#include "PokemonBattleSettings.h"
 
 void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);

@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Trainers/BasicTrainer.h"
+#include "Algo/ForEach.h"
 #include "DataManager.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "RangeHelpers.h"
-#include "Algo/ForEach.h"
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
@@ -71,7 +71,7 @@ int32 UBasicTrainer::GetPayout() const {
 }
 
 void UBasicTrainer::HealParty() {
-    Algo::ForEach(Party, [](const TScriptInterface<IPokemon>& Pokemon) { Pokemon->FullyHeal(); });
+    Algo::ForEach(Party, [](const TScriptInterface<IPokemon> &Pokemon) { Pokemon->FullyHeal(); });
 }
 
 const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {
