@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/GamePokemon.h"
+#include "Algo/ForEach.h"
 #include "Bag/Item.h"
 #include "Battle/Status.h"
 #include "DataManager.h"
@@ -152,6 +153,13 @@ int32 UGamePokemon::RestoreHP(int32 Amount) {
     int32 Before = CurrentHP;
     SetCurrentHP(CurrentHP + Amount);
     return CurrentHP - Before;
+}
+
+void UGamePokemon::FullyHeal() {
+    SetCurrentHP(GetMaxHP());
+    Algo::ForEach(MoveBlock->GetMoves(),
+                  [](const TScriptInterface<IMove> &Move) { Move->RecoverPP(Move->GetTotalPP()); });
+    StatusEffect.Reset();
 }
 
 bool UGamePokemon::IsFainted() const {

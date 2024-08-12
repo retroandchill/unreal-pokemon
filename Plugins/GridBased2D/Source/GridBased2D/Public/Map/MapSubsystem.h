@@ -59,6 +59,10 @@ class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
      */
     void UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const;
 
+    /**
+     * Get the destination that the player is set to warp to.
+     * @return The destination that the player is set to warp to.
+     */
     const TOptional<TPair<FName, EFacingDirection>> &GetWarpDestination() const;
 
   private:

@@ -62,6 +62,12 @@ class POKEMONCORE_API ITrainer {
     virtual int32 GetPayout() const = 0;
 
     /**
+     * Fully heal the trainer's party of Pokémon, fully restoring their HP, PP, and removing any status conditions.
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual void HealParty() = 0;
+
+    /**
      * Get the trainer's list of party Pokémon
      * @return The list of Pokémon in the order the trainer has them in
      */

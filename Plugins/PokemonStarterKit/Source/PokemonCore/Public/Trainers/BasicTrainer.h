@@ -36,6 +36,9 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
     UFUNCTION(BlueprintPure, Category = Drops)
     int32 GetPayout() const override;
 
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    void HealParty() override;
+
     UFUNCTION(BlueprintPure, Category = "Pokémon")
     const TArray<TScriptInterface<IPokemon>> &GetParty() const override;
 

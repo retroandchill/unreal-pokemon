@@ -70,6 +70,10 @@ const TArray<FName> &UDefaultMove::GetTags() const {
     return GetMoveData().Tags;
 }
 
+void UDefaultMove::RecoverPP(int32 Amount) {
+    CurrentPP = FMath::Clamp(CurrentPP + Amount, 0, GetTotalPP());
+}
+
 void UDefaultMove::DecrementPP(int32 Amount) {
     CurrentPP = FMath::Clamp(CurrentPP - Amount, 0, GetTotalPP());
 }

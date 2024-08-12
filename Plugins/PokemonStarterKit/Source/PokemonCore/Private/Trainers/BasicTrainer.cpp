@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Trainers/BasicTrainer.h"
+#include "Algo/ForEach.h"
 #include "DataManager.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
@@ -67,6 +68,10 @@ FText UBasicTrainer::GetFullTrainerName() const {
 int32 UBasicTrainer::GetPayout() const {
     check(!Party.IsEmpty())
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
+}
+
+void UBasicTrainer::HealParty() {
+    Algo::ForEach(Party, [](const TScriptInterface<IPokemon> &Pokemon) { Pokemon->FullyHeal(); });
 }
 
 const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {

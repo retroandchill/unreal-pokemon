@@ -47,7 +47,8 @@ public class AutomationTestHelpers : ModuleRules
 				"GoogleTest", 
 				"CommonGame",
 				"CommonUI",
-				"EngineSettings"
+				"EngineSettings",
+				"FunctionalTesting"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
