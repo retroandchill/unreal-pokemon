@@ -100,6 +100,9 @@ class POKEMONUI_API UPokemonSelectionPaneBase : public USelectableWidget {
     UPROPERTY(EditAnywhere, Category = Display)
     TSubclassOf<UWidget> BlankPanelClass;
 
+    UPROPERTY()
+    TArray<TObjectPtr<UWidget>> BlankPanels;
+
     /**
      * The index the player is switching from
      */

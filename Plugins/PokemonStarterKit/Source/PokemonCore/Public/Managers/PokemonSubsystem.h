@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Player/PlayerResetLocation.h"
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Saving/PokemonSaveGame.h"
 #include "Subsystems/GameInstanceSubsystem.h"
@@ -95,6 +96,34 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     UFUNCTION(BlueprintCallable, Category = Saving)
     void AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter);
 
+    /**
+     * Is there a valid reset location for the player?
+     * @return Is there a valid reset location for the player?
+     */
+    UFUNCTION(BlueprintPure, Category = Reset)
+    bool IsResetLocationSet() const;
+
+    /**
+     * Perform a reset on the player, fully healing the party.
+     */
+    UFUNCTION(BlueprintCallable, Category = Reset)
+    void PerformPlayerReset();
+
+    /**
+     * Set the player's reset location to their current location
+     * @param MapName The name of the map the player should travel to on a reset.
+     * @param Transform The transform that the player should reset to.
+     */
+    UFUNCTION(BlueprintCallable, Category = Reset, meta = (AutoCreateRefTerm = "MapName,Transform"))
+    void SetPlayerResetLocation(const FString &MapName, const FTransform& Transform);
+
+    /**
+     * Set the player's reset location to their current location
+     * @param PlayerCharacter The player character to draw the information from
+     */
+    UFUNCTION(BlueprintCallable, Category = Reset)
+    void SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter);
+
   private:
     /**
      * The trainer that represents the player character
@@ -126,4 +155,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
     FText CurrentLocation;
 
     TOptional<FTransform> LoadTransform;
+
+    TOptional<FPlayerResetLocation> PlayerResetLocation;
 };

@@ -6,6 +6,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "RangeHelpers.h"
+#include "Algo/ForEach.h"
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
@@ -67,6 +68,10 @@ FText UBasicTrainer::GetFullTrainerName() const {
 int32 UBasicTrainer::GetPayout() const {
     check(!Party.IsEmpty())
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
+}
+
+void UBasicTrainer::HealParty() {
+    Algo::ForEach(Party, [](const TScriptInterface<IPokemon>& Pokemon) { Pokemon->FullyHeal(); });
 }
 
 const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {

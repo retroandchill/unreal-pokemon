@@ -14,6 +14,7 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "RangeHelpers.h"
+#include "Algo/ForEach.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -152,6 +153,14 @@ int32 UGamePokemon::RestoreHP(int32 Amount) {
     int32 Before = CurrentHP;
     SetCurrentHP(CurrentHP + Amount);
     return CurrentHP - Before;
+}
+
+void UGamePokemon::FullyHeal() {
+    SetCurrentHP(GetMaxHP());
+    Algo::ForEach(MoveBlock->GetMoves(), [](const TScriptInterface<IMove>& Move) {
+       Move->RecoverPP(Move->GetTotalPP()); 
+    });
+    StatusEffect.Reset();
 }
 
 bool UGamePokemon::IsFainted() const {

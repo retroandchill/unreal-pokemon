@@ -60,6 +60,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintCallable, Category = Stats)
     int32 RestoreHP(int32 Amount);
 
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    void FullyHeal() override;
+
     UFUNCTION(BlueprintPure, Category = Stats)
     bool IsFainted() const override;
 

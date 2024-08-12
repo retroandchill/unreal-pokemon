@@ -126,6 +126,12 @@ class POKEMONCORE_API IPokemon {
     virtual int32 RestoreHP(int32 Amount) = 0;
 
     /**
+     * Fully restore the Pokémon's HP, PP, and remove any status effects.
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual void FullyHeal() = 0;
+
+    /**
      * Returns if the Pokémon is currently fainted
      * @return Is the Pokémon currently fainted
      */
