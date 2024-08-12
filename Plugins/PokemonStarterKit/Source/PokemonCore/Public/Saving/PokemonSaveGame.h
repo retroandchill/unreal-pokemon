@@ -29,6 +29,12 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
     UPROPERTY(VisibleAnywhere, Category = Location)
     FTransform PlayerLocation;
 
+    UPROPERTY(VisibleAnywhere, Category = Reset)
+    FString ResetMap;
+
+    UPROPERTY(VisibleAnywhere, Category = Reset)
+    FTransform ResetLocation;
+
     UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
     FDateTime SaveDate;
 

@@ -110,6 +110,13 @@ class POKEMONCORE_API IMove {
     virtual const TArray<FName> &GetTags() const = 0;
 
     /**
+     * Increase the amount of PP by the set provided amount.
+     * @param Amount The amount of PP to recover
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    virtual void RecoverPP(int32 Amount = 1) = 0;
+
+    /**
      * Reduce the amount of PP a move has by the given amount
      * @param Amount The amount of PP to reduce by
      */

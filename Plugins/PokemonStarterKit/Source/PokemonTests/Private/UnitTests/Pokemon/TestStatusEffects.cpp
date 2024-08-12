@@ -22,18 +22,17 @@ bool TestStatusEffects::RunTest(const FString &Parameters) {
     Pokemon->SetStatusEffect("BURN");
     UE_CHECK_EQUAL(EStatusEffectStatus::HasStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
     UE_CHECK_EQUAL(TEXT("BURN"), Status.ID.ToString());
-    
+
     Pokemon->SetStatusEffect("SLEEP");
     UE_CHECK_EQUAL(EStatusEffectStatus::HasStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
     UE_CHECK_EQUAL(TEXT("BURN"), Status.ID.ToString());
 
-    
     Pokemon->SetStatusEffect("SLEEP", true);
     UE_CHECK_EQUAL(EStatusEffectStatus::HasStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
     UE_CHECK_EQUAL(TEXT("SLEEP"), Status.ID.ToString());
 
     Pokemon->RemoveStatusEffect();
     UE_CHECK_EQUAL(EStatusEffectStatus::NoStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
-    
+
     return true;
 }

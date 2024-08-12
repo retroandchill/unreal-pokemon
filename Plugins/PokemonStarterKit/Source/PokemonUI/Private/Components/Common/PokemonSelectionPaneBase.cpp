@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Common/PokemonSelectionPaneBase.h"
+#include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
@@ -15,6 +16,8 @@ UPokemonPanel *UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInter
 
 void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon) {
     ClearSelectableOptions();
+    Algo::ForEach(BlankPanels, &UWidget::RemoveFromParent);
+    BlankPanels.Reset();
     int32 MaxPartySize = GetNumPanelsToAdd().Get(Pokemon.Num());
     for (int32 i = 0; i < MaxPartySize; i++) {
         if (i < Pokemon.Num()) {
@@ -27,6 +30,7 @@ void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInter
             check(BlankPanelClass != nullptr)
             auto NewWidget = WidgetTree->ConstructWidget<UWidget>(BlankPanelClass);
             PlaceOptionIntoWidget(NewWidget, i);
+            BlankPanels.Emplace(NewWidget);
         }
     }
 }

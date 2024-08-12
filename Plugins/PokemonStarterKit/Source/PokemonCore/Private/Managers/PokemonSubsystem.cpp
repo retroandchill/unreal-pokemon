@@ -5,6 +5,7 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
+#include "Player/PlayerResetLocation.h"
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Pokemon/Pokemon.h"
 #include "Saving/PokemonSaveGame.h"
@@ -96,6 +97,10 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
     check(PlayerCharacter != nullptr)
     SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
 
+    check(PlayerResetLocation.IsSet())
+    SaveGame->ResetMap = PlayerResetLocation->GetMapName();
+    SaveGame->ResetLocation = PlayerResetLocation->GetPlayerTransform();
+
     SaveGame->StartDate = PlayerMetadata->StartDate;
     SaveGame->TotalPlaytime = PlayerMetadata->TotalPlaytime;
 
@@ -108,6 +113,7 @@ void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
     PlayerMetadata->StartDate = SaveGame->StartDate;
     PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
+    PlayerResetLocation.Emplace(SaveGame->ResetMap, SaveGame->ResetLocation);
 
     if (!bChangeMap) {
         return;
@@ -122,4 +128,23 @@ void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter)
         PlayerCharacter->SetActorTransform(*LoadTransform);
         LoadTransform.Reset();
     }
+}
+
+bool UPokemonSubsystem::IsResetLocationSet() const {
+    return PlayerResetLocation.IsSet();
+}
+
+void UPokemonSubsystem::PerformPlayerReset() {
+    Player->HealParty();
+    check(PlayerResetLocation.IsSet())
+    LoadTransform.Emplace(PlayerResetLocation->GetPlayerTransform());
+    UGameplayStatics::OpenLevel(this, FName(*PlayerResetLocation->GetMapName()));
+}
+
+void UPokemonSubsystem::SetPlayerResetLocation(const FString &MapName, const FTransform &Transform) {
+    PlayerResetLocation.Emplace(MapName, Transform);
+}
+
+void UPokemonSubsystem::SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter) {
+    SetPlayerResetLocation(GetWorld()->GetMapName(), PlayerCharacter->GetActorTransform());
 }

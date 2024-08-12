@@ -6,6 +6,7 @@
 #include "Engine/LevelStreamingDynamic.h"
 #include "Engine/LevelStreamingVolume.h"
 #include "Kismet/GameplayStatics.h"
+#include "Managers/PokemonSubsystem.h"
 #include "PokemonBattleSettings.h"
 
 void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
@@ -89,6 +90,7 @@ void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
     } else {
         // If the player loses we want all script callbacks to be removed
         BattleFinished.Clear();
+        UPokemonSubsystem::GetInstance(this).PerformPlayerReset();
     }
 
     Battlefield = nullptr;

@@ -56,6 +56,9 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     const TArray<FName> &GetTags() const override;
 
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    void RecoverPP(int32 Amount = 1) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     void DecrementPP(int32 Amount) override;
 
   private:
