@@ -26,7 +26,7 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/ToArray.h"
 #include "Species/Stat.h"
 #include <range/v3/view/filter.hpp>

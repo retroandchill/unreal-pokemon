@@ -7,7 +7,7 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>

@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Battle/Status.h"
 #include "DataManager.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/ToArray.h"
 #include <range/v3/view/transform.hpp>
 

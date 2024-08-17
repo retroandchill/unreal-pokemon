@@ -9,7 +9,7 @@
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Pokemon/Pokemon.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"

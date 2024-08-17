@@ -4,7 +4,7 @@
 #include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/ToArray.h"
 
 FItem::FItem() = default;

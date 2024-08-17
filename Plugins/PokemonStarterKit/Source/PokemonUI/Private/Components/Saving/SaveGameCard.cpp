@@ -5,10 +5,11 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
+#include "Components/Party/PokemonSelectionPane.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 void USaveGameCard::NativeConstruct() {
@@ -26,7 +27,7 @@ void USaveGameCard::NativeConstruct() {
     Algo::ForEach(Icons, &UWidget::RemoveFromParent);
     Icons = UE::Ranges::CreateRange(Subsystem.GetPlayer()->GetParty()) |
             ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this)) |
-            RangeHelpers::TToArray<TObjectPtr<UImage>>();
+            UE::Ranges::ToArray;
 
     // TODO: Badges and Pokédex info when it's ready
 

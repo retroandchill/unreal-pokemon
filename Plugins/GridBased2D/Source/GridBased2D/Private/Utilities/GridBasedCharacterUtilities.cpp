@@ -8,7 +8,6 @@
 #include "GridBased2DSettings.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MathUtilities.h"
-#include "RangeHelpers.h"
 #include <range/v3/functional/bind_back.hpp>
 
 TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACharacter *Character) {

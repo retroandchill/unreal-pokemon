@@ -9,7 +9,7 @@
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/ToArray.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>

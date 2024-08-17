@@ -6,7 +6,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/ToArray.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>

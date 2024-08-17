@@ -33,7 +33,7 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/ToArray.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
