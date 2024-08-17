@@ -12,7 +12,9 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/Helpers.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -113,13 +115,13 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->SetActors(
-        RangeHelpers::CreateRange(Targets) | ranges::views::transform([](const FTargetWithIndex &TargetWithIndex) {
+        UE::Ranges::CreateRange(Targets) | ranges::views::transform([](const FTargetWithIndex &TargetWithIndex) {
             return TargetWithIndex.SwapIfNecessary();
         }) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(
-            [](const TScriptInterface<IBattler> &Battler) { return CastChecked<AActor>(Battler.GetObject()); }) |
-        RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
+        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+            ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
+        UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);

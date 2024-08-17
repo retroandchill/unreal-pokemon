@@ -2,7 +2,8 @@
 #include "Species/Stat.h"
 #include "Algo/RemoveIf.h"
 #include "DataManager.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -13,23 +14,23 @@ TArray<FName> UStatHelper::GetStatNames() {
 TArray<FName> UStatHelper::GetMainStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
-    return RangeHelpers::CreateRange(Stats) |
+    return UE::Ranges::CreateRange(Stats) |
            ranges::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Battle; }) |
-           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
+           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | UE::Ranges::ToArray;
 }
 
 TArray<FName> UStatHelper::GetBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
-    return RangeHelpers::CreateRange(Stats) |
+    return UE::Ranges::CreateRange(Stats) |
            ranges::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Main; }) |
-           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
+           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | UE::Ranges::ToArray;
 }
 
 TArray<FName> UStatHelper::GetMainBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
-    return RangeHelpers::CreateRange(Stats) |
+    return UE::Ranges::CreateRange(Stats) |
            ranges::views::filter([](const FStat *Stat) { return Stat->Type == EPokemonStatType::MainBattle; }) |
-           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
+           ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | UE::Ranges::ToArray;
 }

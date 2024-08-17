@@ -2,13 +2,13 @@
 #include "DataManager.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/transform.hpp>
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();
-    auto DataTableView = RangeHelpers::CreateRange(Settings->DataTables) |
+    auto DataTableView = UE::Ranges::CreateRange(Settings->DataTables) |
                          ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
                          ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); });
     ranges::for_each(DataTableView, [this](UDataTable *Table) {

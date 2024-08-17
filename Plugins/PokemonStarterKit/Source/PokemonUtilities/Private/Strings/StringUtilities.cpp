@@ -1,8 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Strings/StringUtilities.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/transform.hpp>
+#include <range/v3/view/span.hpp>
 
 bool UStringUtilities::StartsWithVowelText(FText Text) {
     return StartsWithVowel(Text.ToString());
@@ -29,7 +30,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, FText Contracti
     auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
-        auto StringItems = RangeHelpers::CreateRange(Items) | ranges::views::transform(ExtractString);
+        auto StringItems = UE::Ranges::CreateRange(Items) | ranges::views::transform(ExtractString);
         return FText::FromString(FString::Join(StringItems, *Contraction.ToString()));
     }
 

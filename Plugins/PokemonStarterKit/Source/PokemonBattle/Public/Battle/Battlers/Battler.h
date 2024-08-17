@@ -176,6 +176,13 @@ class POKEMONBATTLE_API IBattler {
     virtual bool IsFainted() const = 0;
 
     /**
+     * Check to see if the battler in question has fainted
+     * @return Has the Pokémon fainted
+     */
+    UFUNCTION(BlueprintCallable, Category = Stats)
+    virtual bool IsNotFainted() const = 0;
+
+    /**
      * Visually faint the battler
      */
     UFUNCTION(BlueprintCallable, Category = Visuals)

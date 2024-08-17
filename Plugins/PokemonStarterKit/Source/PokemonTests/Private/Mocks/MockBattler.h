@@ -26,6 +26,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(float, GetHPPercent, (), (const, override));
     MOCK_METHOD(void, TakeBattleDamage, (int32 Damage), (override));
     MOCK_METHOD(bool, IsFainted, (), (const, override));
+    MOCK_METHOD(bool, IsNotFainted, (), (const, override));
     MOCK_METHOD(void, Faint, (), (const, override));
     MOCK_METHOD(bool, CanGainExp, (), (const, override));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));

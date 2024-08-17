@@ -33,7 +33,8 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -93,9 +94,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
 
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
+    Moves = UE::Ranges::CreateRange(MoveBlock->GetMoves()) |
             ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
-            RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
+            UE::Ranges::ToArray;
     SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
@@ -133,18 +134,18 @@ void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     InnateAbilityHandles =
-        RangeHelpers::CreateRange(InnateAbilities) |
+        UE::Ranges::CreateRange(InnateAbilities) |
         ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
             return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
         }) |
-        RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
-    InnateEffectHandles = RangeHelpers::CreateRange(InnateEffects) |
+        UE::Ranges::ToArray;
+    InnateEffectHandles = UE::Ranges::CreateRange(InnateEffects) |
                           ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
                               return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
                           }) |
-                          RangeHelpers::TToArray<FActiveGameplayEffectHandle>();
+                          UE::Ranges::ToArray;
 }
 
 void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
@@ -218,6 +219,11 @@ void ABattlerActor::TakeBattleDamage(int32 Damage) {
 bool ABattlerActor::IsFainted() const {
     return WrappedPokemon->IsFainted();
 }
+
+bool ABattlerActor::IsNotFainted() const {
+    return !WrappedPokemon->IsFainted();
+}
+
 
 void ABattlerActor::Faint() const {
     IBattlerSprite::Execute_Faint(Sprite);
@@ -333,7 +339,7 @@ uint8 ABattlerActor::GetActionCount() const {
 }
 
 ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
-    return RangeHelpers::CreateRange(OwningSide->GetBattlers()) |
+    return UE::Ranges::CreateRange(OwningSide->GetBattlers()) |
            ranges::views::filter(
                [this](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == InternalId; });
 }
@@ -354,10 +360,9 @@ void ABattlerActor::RecordParticipation() {
     }
 
     auto AllOpponents =
-        RangeHelpers::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
-        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
-    ranges::for_each(AllOpponents,
-                     [this](const TScriptInterface<IBattler> &Battler) { Battler->AddParticipant(this); });
+        UE::Ranges::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
+        ranges::views::filter(&IBattler::IsNotFainted);
+    ranges::for_each(AllOpponents, ranges::bind_back(&IBattler::AddParticipant, this));
 }
 
 void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {
