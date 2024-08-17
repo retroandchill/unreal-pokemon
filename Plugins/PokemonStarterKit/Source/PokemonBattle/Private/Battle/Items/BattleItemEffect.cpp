@@ -17,6 +17,7 @@
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
+#include <range/v3/view/cache1.hpp>
 
 UBattleItemEffect::UBattleItemEffect() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -80,12 +81,9 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 }
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
-    auto ActorLists =
-        RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
+    return RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
-        RangeHelpers::TToArray<TArray<TWeakObjectPtr<AActor>>>();
-
-    return RangeHelpers::CreateRange(ActorLists) |
+        ranges::views::cache1 |
            ranges::views::transform(
                [](const TArray<TWeakObjectPtr<AActor>> &List) { return RangeHelpers::CreateRange(List); }) |
            ranges::views::join |

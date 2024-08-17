@@ -31,6 +31,7 @@
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
+#include <range/v3/view/cache1.hpp>
 
 int32 FCapturedBattleStat::GetStatValue() const {
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
@@ -134,13 +135,10 @@ FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
                                                                const FGameplayAbilityActorInfo &ActorInfo,
                                                                const FGameplayEventData *TriggerEventData) {
-    auto ActorLists =
-        RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
+    return RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
-        RangeHelpers::TToArray<TArray<TWeakObjectPtr<AActor>>>();
-
-    return RangeHelpers::CreateRange(ActorLists) |
-           ranges::views::transform(
+        ranges::views::cache1 |
+        ranges::views::transform(
                [](const TArray<TWeakObjectPtr<AActor>> &List) { return RangeHelpers::CreateRange(List); }) |
            ranges::views::join |
            ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
