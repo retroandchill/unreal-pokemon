@@ -95,7 +95,7 @@ private:
 static_assert(ranges::forward_iterator<TViewIterator<TArray<int32>::RangedForConstIteratorType>>);
 
 /**
- * Generic view declaration used to hold a copy of a container.
+ * Generic view declaration used to contain a non-owing view of an unreal engine container.
  * @tparam T The container that is held.
  */
 template <typename T>
@@ -121,14 +121,7 @@ public:
      * Construct a new view with a reference to a container.
      * @param Container The container to reference.
      */
-    explicit TUEContainerView(T &Container) requires std::is_reference_v<T> : Container(Container) {
-    }
-
-    /**
-     * Construct a new view moving in a container.
-     * @param Container The container to move in.
-     */
-    explicit TUEContainerView(T &&Container) requires (!std::is_reference_v<T>) : Container(MoveTemp(Container)) {
+    explicit TUEContainerView(T &Container) : Container(&Container) {
     }
 
     /**
@@ -136,7 +129,7 @@ public:
      * @return The iterator for the first element.
      */
     FORCEINLINE FIterator begin() {
-        return FIterator(Container.begin());
+        return FIterator(Container->begin());
     }
 
     /**
@@ -144,7 +137,7 @@ public:
      * @return The iterator for the termination of iteration.
      */
     FORCEINLINE FIterator end() {
-        return FIterator(Container.end());
+        return FIterator(Container->end());
     }
 
     /**
@@ -152,7 +145,7 @@ public:
      * @return The iterator for the first element.
      */
     FORCEINLINE FConstIterator begin() const {
-        return FConstIterator(Container.begin());
+        return FConstIterator(const_cast<const T*>(Container)->begin());
     }
 
     /**
@@ -160,7 +153,7 @@ public:
      * @return The iterator for the termination of iteration.
      */
     FORCEINLINE FConstIterator end() const {
-        return FConstIterator(Container.end());
+        return FConstIterator(const_cast<const T*>(Container)->end());
     }
 
     /**
@@ -168,18 +161,19 @@ public:
      * @return The size of the view.
      */
     FORCEINLINE FSizeType size() const {
-        return Container.Num();
+        return Container->Num();
     }
 
 private:
-    T Container;
+    T *Container = nullptr;
 };
 
-static_assert(ranges::forward_range<TUEContainerView<TArray<int32>>>);
-static_assert(ranges::sized_range<TUEContainerView<TArray<int32>>>);
-static_assert(ranges::forward_range<TUEContainerView<TArray<int32>&>>);
-static_assert(ranges::sized_range<TUEContainerView<TArray<int32>&>>);
-static_assert(ranges::forward_range<TUEContainerView<const TArray<int32>&>>);
-static_assert(ranges::sized_range<TUEContainerView<const TArray<int32>&>>);
-
 }
+
+template <typename T>
+    requires UE::Ranges::IsUEContainer<T>
+constexpr inline bool ranges::enable_view<UE::Ranges::TUEContainerView<T>> = true;
+
+static_assert(ranges::forward_range<UE::Ranges::TUEContainerView<TArray<int32>>>);
+static_assert(ranges::sized_range<UE::Ranges::TUEContainerView<TArray<int32>>>);
+static_assert(ranges::viewable_range<UE::Ranges::TUEContainerView<TArray<int32>>>);

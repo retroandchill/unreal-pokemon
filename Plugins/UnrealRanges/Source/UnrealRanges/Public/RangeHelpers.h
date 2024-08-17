@@ -21,9 +21,8 @@ namespace RangeHelpers {
  */
 template <typename T>
     requires UE::Ranges::IsUEContainer<T>
-auto CreateRange(T&& Range) {
-    auto View = UE::Ranges::TUEContainerView<T>(Forward<T>(Range));
-    return View | ranges::views::cache1;
+auto CreateRange(T& Range) {
+    return UE::Ranges::TUEContainerView<T>(Range);
 }
 
 /**
@@ -39,8 +38,6 @@ TArray<T> ToArray(RangeType &&Range) {
     
     if constexpr (ranges::sized_range<T>) {
         Ret.Reserve(ranges::size(Range));
-    } else if constexpr (ranges::is_finite<T>::value) {
-        Ret.Reserve(ranges::distance(Range.begin(), Range.end()));
     }
 
     if constexpr (std::movable<T>) {
