@@ -9,7 +9,7 @@
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 UPocketTabWidget::UPocketTabWidget() {

@@ -7,7 +7,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {

@@ -13,7 +13,7 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>

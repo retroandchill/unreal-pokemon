@@ -8,7 +8,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattlerExpPanel.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Utilities/TrainerHelpers.h"
 #include <range/v3/functional/bind_back.hpp>
 #include <range/v3/view/transform.hpp>

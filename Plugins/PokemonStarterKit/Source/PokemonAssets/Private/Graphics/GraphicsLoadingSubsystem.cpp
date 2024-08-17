@@ -9,7 +9,7 @@
 #include "Species/SpeciesData.h"
 #include "TextureCompiler.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>

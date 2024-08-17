@@ -9,7 +9,7 @@
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"

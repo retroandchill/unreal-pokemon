@@ -6,7 +6,7 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo)

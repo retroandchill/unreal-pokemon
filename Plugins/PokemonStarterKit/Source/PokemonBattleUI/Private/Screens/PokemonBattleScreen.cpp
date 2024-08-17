@@ -15,7 +15,7 @@
 #include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <functional>
 
 void UPokemonBattleScreen::NativeConstruct() {

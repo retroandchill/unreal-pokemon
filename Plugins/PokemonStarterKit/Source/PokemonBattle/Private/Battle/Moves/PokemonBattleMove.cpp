@@ -13,7 +13,7 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 

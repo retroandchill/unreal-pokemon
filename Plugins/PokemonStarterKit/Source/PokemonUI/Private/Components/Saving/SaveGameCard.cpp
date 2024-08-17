@@ -9,7 +9,7 @@
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 void USaveGameCard::NativeConstruct() {

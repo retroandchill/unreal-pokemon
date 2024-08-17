@@ -27,7 +27,7 @@
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Species/Stat.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>

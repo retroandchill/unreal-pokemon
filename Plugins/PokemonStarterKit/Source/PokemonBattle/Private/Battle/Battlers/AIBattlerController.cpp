@@ -7,7 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>

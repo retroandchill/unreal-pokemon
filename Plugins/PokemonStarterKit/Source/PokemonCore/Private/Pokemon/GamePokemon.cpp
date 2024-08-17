@@ -15,7 +15,7 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"

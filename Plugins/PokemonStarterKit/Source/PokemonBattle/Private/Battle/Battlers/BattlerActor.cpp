@@ -34,7 +34,7 @@
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/ToArray.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
