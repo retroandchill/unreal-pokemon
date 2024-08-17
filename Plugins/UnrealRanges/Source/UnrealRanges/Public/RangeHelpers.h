@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "range/v3/view/all.hpp"
 #include "range/v3/view/span.hpp"
+#include "Ranges/RangeConcepts.h"
+#include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
@@ -14,25 +16,13 @@ namespace RangeHelpers {
 /**
  * Create a new range from the provided array.
  * @tparam T The type of data the array holds
- * @param View The array view to create the view from.
- * @return The created view
- */
-template <typename T, typename Alloc>
-auto CreateRange(const TArray<T, Alloc> &View) {
-    ranges::span Span(View.GetData(), View.Num());
-    return ranges::views::all(Span);
-}
-
-/**
- * Create a new range from the provided array.
- * @tparam T The type of data the array holds
- * @param View The array view to create the view from.
+ * @param Range The array view to create the view from.
  * @return The created view
  */
 template <typename T>
-auto CreateRange(TConstArrayView<T> &View) {
-    ranges::span Span(View.GetData(), View.Num());
-    return ranges::views::all(Span);
+    requires UE::Ranges::IsUEContainer<T>
+auto CreateRange(T&& Range) {
+    return UE::Ranges::TUEContainerView<T>(Forward<T>(Range));
 }
 
 /**
