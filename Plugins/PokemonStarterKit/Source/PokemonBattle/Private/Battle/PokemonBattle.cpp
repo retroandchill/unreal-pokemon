@@ -23,6 +23,7 @@
 #include "range/v3/view/transform.hpp"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/Helpers.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/numeric/accumulate.hpp>
@@ -36,10 +37,6 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
 
 static bool IsFainted(const TScriptInterface<IBattler> &Battler) {
     return Battler->IsFainted();
-}
-
-static bool IsNotFainted(const TScriptInterface<IBattler> &Battler) {
-    return !Battler->IsFainted();
 }
 
 APokemonBattle::APokemonBattle() {
@@ -70,9 +67,7 @@ void APokemonBattle::BeginPlay() {
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     auto AllSides =
-        UE::Ranges::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
-            return CastChecked<AActor>(Side.GetObject());
-        });
+        UE::Ranges::CreateRange(Sides) | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
     ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
 }
 
@@ -129,7 +124,7 @@ void APokemonBattle::StartBattle() {
 
 FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
     FRunningMessageSet Messages;
-    auto Sorted = Battlers | ranges::views::filter(&IsNotFainted) | UE::Ranges::ToArray;
+    auto Sorted = Battlers | ranges::views::filter(&IBattler::IsNotFainted) | UE::Ranges::ToArray;
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
         int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         int32 SpeedB = FMath::FloorToInt32(B->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
@@ -194,7 +189,7 @@ ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const
 
 ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     return UE::Ranges::CreateRange(Sides) | ranges::views::transform(&GetBattlers) | ranges::views::join |
-           ranges::views::filter(&IsNotFainted);
+           ranges::views::filter(&IBattler::IsNotFainted);
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
@@ -210,7 +205,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
     ranges::for_each(UE::Ranges::CreateRange(GetOpposingSide()->GetBattlers()) |
-                         ranges::views::filter(&IsNotFainted) |
+                         ranges::views::filter(&IBattler::IsNotFainted) |
                          ranges::views::transform([](const TScriptInterface<IBattler> &Foe) {
                              return Foe->GetAbilityComponent()->GetNumericAttributeBase(
                                  UPokemonCoreAttributeSet::GetSpeedAttribute());

@@ -13,6 +13,7 @@
 #include "PokemonBattleSettings.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/Helpers.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -82,8 +83,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     TargetData->SetActors(
         UE::Ranges::CreateRange(Targets) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(
-            [](const TScriptInterface<IBattler> &B) { return CastChecked<AActor>(B.GetObject()); }) |
+        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
             ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
         UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);

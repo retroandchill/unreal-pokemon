@@ -14,6 +14,7 @@
 #include "Pokemon/Moves/Move.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/Helpers.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -118,8 +119,7 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
             return TargetWithIndex.SwapIfNecessary();
         }) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(
-            [](const TScriptInterface<IBattler> &Battler) { return CastChecked<AActor>(Battler.GetObject()); }) |
+        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
             ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
         UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);

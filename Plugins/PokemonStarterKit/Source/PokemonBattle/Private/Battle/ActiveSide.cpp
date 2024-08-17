@@ -9,6 +9,7 @@
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Pokemon/Pokemon.h"
+#include "Ranges/Utilities/Helpers.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
@@ -109,9 +110,7 @@ void AActiveSide::BeginPlay() {
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     auto AllBattlers =
-        UE::Ranges::CreateRange(Battlers) | ranges::views::transform([](const TScriptInterface<IBattler> &Side) {
-            return CastChecked<AActor>(Side.GetObject());
-        });
+        UE::Ranges::CreateRange(Battlers) | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
     ranges::for_each(AllBattlers, [](AActor *Actor) { Actor->Destroy(); });
 }
 
@@ -140,7 +139,7 @@ bool AActiveSide::ShowBackSprites() const {
 }
 
 void AActiveSide::SendOutBattlers() const {
-    Algo::ForEach(Battlers, [](const TScriptInterface<IBattler> &Battler) { Battler->ShowSprite(); });
+    Algo::ForEach(Battlers, &IBattler::ShowSprite);
 }
 
 const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
@@ -166,13 +165,12 @@ void AActiveSide::SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer
 }
 
 bool AActiveSide::CanBattle() const {
-    auto IsNotFainted = [](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); };
-    if (Algo::AnyOf(Battlers, IsNotFainted)) {
+    if (Algo::NoneOf(Battlers, &IBattler::IsFainted)) {
         return true;
     }
 
     for (auto &[ID, Party] : TrainerParties) {
-        if (Algo::AnyOf(Party.Battlers, IsNotFainted)) {
+        if (Algo::NoneOf(Party.Battlers, &IBattler::IsFainted)) {
             return true;
         }
     }

@@ -220,6 +220,11 @@ bool ABattlerActor::IsFainted() const {
     return WrappedPokemon->IsFainted();
 }
 
+bool ABattlerActor::IsNotFainted() const {
+    return !WrappedPokemon->IsFainted();
+}
+
+
 void ABattlerActor::Faint() const {
     IBattlerSprite::Execute_Faint(Sprite);
 }
@@ -356,9 +361,8 @@ void ABattlerActor::RecordParticipation() {
 
     auto AllOpponents =
         UE::Ranges::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
-        ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
-    ranges::for_each(AllOpponents,
-                     [this](const TScriptInterface<IBattler> &Battler) { Battler->AddParticipant(this); });
+        ranges::views::filter(&IBattler::IsNotFainted);
+    ranges::for_each(AllOpponents, ranges::bind_back(&IBattler::AddParticipant, this));
 }
 
 void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {

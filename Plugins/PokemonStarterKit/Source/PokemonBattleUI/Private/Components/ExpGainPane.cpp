@@ -6,8 +6,8 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
+#include "Components/BattleItemSelectPane.h"
 #include "Components/BattlerExpPanel.h"
-#include "Managers/PokemonSubsystem.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Utilities/TrainerHelpers.h"
 #include <range/v3/functional/bind_back.hpp>
