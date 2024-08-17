@@ -9,6 +9,7 @@
 #include "RangeHelpers.h"
 #include "Species/SpeciesData.h"
 #include "TextureCompiler.h"
+#include "Ranges/Views/ToArray.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>
@@ -190,7 +191,7 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FN
            }) |
            ranges::views::transform(
                [&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); }) |
-           RangeHelpers::TToArray<UObject *>();
+           UE::Ranges::ToArray;
 }
 
 UObject *UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {

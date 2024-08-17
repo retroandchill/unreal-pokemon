@@ -34,6 +34,7 @@
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -95,7 +96,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     auto MoveBlock = Pokemon->GetMoveBlock();
     Moves = UE::Ranges::CreateRange(MoveBlock->GetMoves()) |
             ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
-            RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
+            UE::Ranges::ToArray;
     SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
@@ -137,14 +138,14 @@ void ABattlerActor::BeginPlay() {
         ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
             return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
         }) |
-        RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
+        UE::Ranges::ToArray;
     InnateEffectHandles = UE::Ranges::CreateRange(InnateEffects) |
                           ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
                               return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
                           }) |
-                          RangeHelpers::TToArray<FActiveGameplayEffectHandle>();
+                          UE::Ranges::ToArray;
 }
 
 void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {

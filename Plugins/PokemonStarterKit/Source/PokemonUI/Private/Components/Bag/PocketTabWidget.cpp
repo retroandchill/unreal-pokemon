@@ -10,6 +10,7 @@
 #include "Memory/CursorMemorySubsystem.h"
 #include "PokemonDataSettings.h"
 #include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 UPocketTabWidget::UPocketTabWidget() {
@@ -31,7 +32,7 @@ void UPocketTabWidget::NativePreConstruct() {
     Algo::ForEach(PocketButtons, &UWidget::RemoveFromParent);
     PocketButtons = UE::Ranges::CreateRange(PocketNames) |
                     ranges::views::transform(std::bind_front(&UPocketTabWidget::CreatePocketButton, this)) |
-                    RangeHelpers::TToArray<TObjectPtr<UPocketButton>>();
+                    UE::Ranges::ToArray;
 
     PocketLeftActionWidget->SetEnhancedInputAction(PocketLeftAction);
     PocketRightActionWidget->SetEnhancedInputAction(PocketRightAction);

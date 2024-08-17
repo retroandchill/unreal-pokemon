@@ -62,7 +62,7 @@ TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
     return UE::Ranges::CreateRange(Rows) |
            ranges::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
-           ranges::views::transform([](const FItem *Item) { return Item->ID; }) | RangeHelpers::TToArray<FName>();
+           ranges::views::transform([](const FItem *Item) { return Item->ID; }) | UE::Ranges::ToArray;
 }
 
 TArray<FName> UItemHelper::GetPocketNames() {

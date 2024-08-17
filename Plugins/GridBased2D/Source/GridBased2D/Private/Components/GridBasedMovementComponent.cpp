@@ -222,7 +222,8 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
     return UE::Ranges::CreateRange(Results) |
            ranges::views::transform([](const FOverlapResult &Result) { return Result.GetActor(); }) |
            ranges::views::filter(&AActor::Implements<UInteractable>) |
-           RangeHelpers::TToArray<TScriptInterface<IInteractable>>();
+           ranges::views::transform([](AActor* Actor) { return TScriptInterface<IInteractable>(Actor); }) |
+           UE::Ranges::ToArray;
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {

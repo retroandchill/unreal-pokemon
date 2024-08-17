@@ -7,6 +7,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
@@ -28,7 +29,7 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
     Party = UE::Ranges::CreateRange(DTO.Party) | ranges::views::transform([this](const FPokemonDTO &Pokemon) {
                 return UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon);
             }) |
-            RangeHelpers::TToArray<TScriptInterface<IPokemon>>();
+            UE::Ranges::ToArray;
     return this;
 }
 
@@ -39,7 +40,7 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
             .Party =
                 UE::Ranges::CreateRange(Party) |
                 ranges::views::transform([](const TScriptInterface<IPokemon> &Pokemon) { return Pokemon->ToDTO(); }) |
-                RangeHelpers::TToArray<FPokemonDTO>(),
+                UE::Ranges::ToArray,
             .ID = ID,
             .SecretID = SecretID};
 }

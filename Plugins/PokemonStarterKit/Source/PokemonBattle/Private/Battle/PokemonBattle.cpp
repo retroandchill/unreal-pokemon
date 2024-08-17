@@ -22,6 +22,7 @@
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
 #include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/numeric/accumulate.hpp>
@@ -128,8 +129,7 @@ void APokemonBattle::StartBattle() {
 
 FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
     FRunningMessageSet Messages;
-    auto Sorted =
-        Battlers | ranges::views::filter(&IsNotFainted) | RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+    auto Sorted = Battlers | ranges::views::filter(&IsNotFainted) | UE::Ranges::ToArray;
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
         int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         int32 SpeedB = FMath::FloorToInt32(B->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());

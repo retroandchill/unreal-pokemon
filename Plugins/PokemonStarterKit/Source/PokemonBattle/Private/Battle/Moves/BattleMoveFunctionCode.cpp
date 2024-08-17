@@ -70,7 +70,7 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
     auto TagsList = UE::Ranges::CreateRange(BattleMove->GetTags()) |
                     ranges::views::transform([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) |
-                    RangeHelpers::TToArray<FGameplayTag>();
+                    UE::Ranges::ToArray;
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
     TagsList.Emplace(Pokemon::Battle::Moves::GetUserCategoryTag(BattleMove->GetCategory()));
 
@@ -148,7 +148,7 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                TScriptInterface<IBattler> Battler = Actor;
                return !Battler->IsFainted();
            }) |
-           RangeHelpers::TToArray<AActor *>();
+           UE::Ranges::ToArray;
 }
 
 void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
@@ -181,7 +181,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         return bSuccess;
     };
     auto FilteredTargets = UE::Ranges::CreateRange(Targets) | ranges::views::filter(TargetFailureCheckCallback) |
-                           RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+                           UE::Ranges::ToArray;
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
@@ -201,7 +201,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         return bHitResult;
     };
     auto SuccessfulHits = UE::Ranges::CreateRange(FilteredTargets) | ranges::views::filter(HitCheckCallback) |
-                          RangeHelpers::TToArray<TScriptInterface<IBattler>>();
+                          UE::Ranges::ToArray;
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
