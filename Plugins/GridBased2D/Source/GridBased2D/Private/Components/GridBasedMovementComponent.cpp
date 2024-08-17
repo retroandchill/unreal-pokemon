@@ -9,7 +9,8 @@
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -217,10 +218,12 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 
 TArray<TScriptInterface<IInteractable>>
 UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
-    return RangeHelpers::CreateRange(HitTestOnFacingTile(MovementDirection)) |
+    auto Results = HitTestOnFacingTile(MovementDirection);
+    return UE::Ranges::CreateRange(Results) |
            ranges::views::transform([](const FOverlapResult &Result) { return Result.GetActor(); }) |
            ranges::views::filter(&AActor::Implements<UInteractable>) |
-           RangeHelpers::TToArray<TScriptInterface<IInteractable>>();
+           ranges::views::transform([](AActor* Actor) { return TScriptInterface<IInteractable>(Actor); }) |
+           UE::Ranges::ToArray;
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {

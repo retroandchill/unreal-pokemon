@@ -6,9 +6,9 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
+#include "Components/BattleItemSelectPane.h"
 #include "Components/BattlerExpPanel.h"
-#include "Managers/PokemonSubsystem.h"
-#include "RangeHelpers.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Utilities/TrainerHelpers.h"
 #include <range/v3/functional/bind_back.hpp>
 #include <range/v3/view/transform.hpp>
@@ -20,9 +20,9 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
-    Panels = RangeHelpers::CreateRange(OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer)) |
+    Panels = UE::Ranges::CreateRange(OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer)) |
              ranges::views::transform(std::bind_front(&UExpGainPane::CreateBattlerPanel, this)) |
-             RangeHelpers::TToArray<TObjectPtr<UBattlerExpPanel>>();
+             UE::Ranges::ToArray;
 }
 
 void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {

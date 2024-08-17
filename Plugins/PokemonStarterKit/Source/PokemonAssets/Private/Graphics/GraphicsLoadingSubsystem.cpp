@@ -6,9 +6,10 @@
 #include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
-#include "RangeHelpers.h"
 #include "Species/SpeciesData.h"
 #include "TextureCompiler.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>
@@ -185,12 +186,12 @@ UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FName> &Types) const {
     auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
-    return RangeHelpers::CreateRange(Types) | ranges::views::transform([&PathSettings](FName Type) {
+    return UE::Ranges::CreateRange(Types) | ranges::views::transform([&PathSettings](FName Type) {
                return GetFullAssetName(PathSettings.TypeIconPrefix, Type);
            }) |
            ranges::views::transform(
                [&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); }) |
-           RangeHelpers::TToArray<UObject *>();
+           UE::Ranges::ToArray;
 }
 
 UObject *UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {

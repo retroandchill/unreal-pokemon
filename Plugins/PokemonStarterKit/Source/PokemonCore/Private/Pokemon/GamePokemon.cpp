@@ -14,7 +14,8 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -82,9 +83,9 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Nature = StatBlock->GetNature().ID,
             .Ability = AbilityBlock->GetAbilityID(),
             .Item = HoldItem,
-            .Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
+            .Moves = UE::Ranges::CreateRange(MoveBlock->GetMoves()) |
                      ranges::views::transform([](const TScriptInterface<IMove> &Move) { return Move->ToDTO(); }) |
-                     RangeHelpers::TToArray<FMoveDTO>(),
+                     UE::Ranges::ToArray,
             .MoveMemory = MoveBlock->GetMoveMemory(),
             .StatusEffect = StatusEffect,
             .ObtainMethod = ObtainedBlock->GetObtainMethod(),

@@ -11,7 +11,9 @@
 #include "DataManager.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "PokemonBattleSettings.h"
-#include "RangeHelpers.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/Helpers.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -79,11 +81,11 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     }
 
     TargetData->SetActors(
-        RangeHelpers::CreateRange(Targets) |
+        UE::Ranges::CreateRange(Targets) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(
-            [](const TScriptInterface<IBattler> &B) { return CastChecked<AActor>(B.GetObject()); }) |
-        RangeHelpers::TToArray<TWeakObjectPtr<AActor>>());
+        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+            ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
+        UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Items::UsingItem, EventData);

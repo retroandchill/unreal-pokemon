@@ -15,6 +15,7 @@
 #include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include <functional>
 
 void UPokemonBattleScreen::NativeConstruct() {
@@ -150,7 +151,9 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = Move->GetAllPossibleTargets() | RangeHelpers::TToArray<FTargetWithIndex>();
+    auto Targets = Move->GetAllPossibleTargets() |
+        ranges::views::transform([](const TScriptInterface<IBattler>& B) { return FTargetWithIndex(B); }) |
+        UE::Ranges::ToArray;
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);

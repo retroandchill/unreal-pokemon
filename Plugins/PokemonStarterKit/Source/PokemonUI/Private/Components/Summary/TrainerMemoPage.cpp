@@ -3,11 +3,11 @@
 #include "Components/Summary/TrainerMemoPage.h"
 #include "CommonRichTextBlock.h"
 #include "Components/DisplayText.h"
+#include "Components/Party/PokemonSelectionPane.h"
 #include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
-#include "RangeHelpers.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 #include <range/v3/view/transform.hpp>
@@ -75,7 +75,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     auto JoinedString = FString::Join(
-        RangeHelpers::CreateRange(Lines) |
+        UE::Ranges::CreateRange(Lines) |
             ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
         TEXT("\n"));
     MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
