@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "range/v3/view/all.hpp"
 #include "range/v3/view/span.hpp"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/single.hpp>
 #include <range/v3/view/transform.hpp>
+#include <range/v3/view/cache1.hpp>
 
 namespace RangeHelpers {
 
@@ -22,7 +22,8 @@ namespace RangeHelpers {
 template <typename T>
     requires UE::Ranges::IsUEContainer<T>
 auto CreateRange(T&& Range) {
-    return UE::Ranges::TUEContainerView<T>(Forward<T>(Range));
+    auto View = UE::Ranges::TUEContainerView<T>(Forward<T>(Range));
+    return View | ranges::views::cache1;
 }
 
 /**
@@ -33,29 +34,25 @@ auto CreateRange(T&& Range) {
  * @return The range values as an array
  */
 template <typename T, typename RangeType>
-    requires std::is_copy_constructible_v<RangeType>
-TArray<T> ToArray(RangeType Range) {
+TArray<T> ToArray(RangeType &&Range) {
     TArray<T> Ret;
-    for (const auto &Value : Range) {
-        Ret.Emplace(Value);
+    
+    if constexpr (ranges::sized_range<T>) {
+        Ret.Reserve(ranges::size(Range));
+    } else if constexpr (ranges::is_finite<T>::value) {
+        Ret.Reserve(ranges::distance(Range.begin(), Range.end()));
     }
-    return Ret;
-}
 
-/**
- * Convert the elements in the range into an array
- * @tparam T The type of data the array will hold
- * @tparam RangeType The input range type
- * @param Range The range to process
- * @return The range values as an array
- */
-template <typename T, typename RangeType>
-    requires(!std::is_copy_constructible_v<RangeType>)
-TArray<T> ToArray(RangeType &Range) {
-    TArray<T> Ret;
-    for (auto &&Value : Range) {
-        Ret.Emplace(Forward(Value));
+    if constexpr (std::movable<T>) {
+        for (auto &&Value : Range) {
+            Ret.Emplace(MoveTempIfPossible(Value));
+        }
+    } else {
+        for (const auto &Value : Range) {
+            Ret.Emplace(Value);
+        }
     }
+    
     return Ret;
 }
 
@@ -74,8 +71,8 @@ struct TToArray {
      * @return The range values as an array
      */
     template <typename RangeType>
-    friend TArray<T> operator|(RangeType Range, TToArray) {
-        return ToArray<T, RangeType>(Range);
+    friend TArray<T> operator|(RangeType &&Range, TToArray) {
+        return ToArray<T, RangeType>(Forward<RangeType>(Range));
     }
 };
 
