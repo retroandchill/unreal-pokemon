@@ -93,7 +93,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
 
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = RangeHelpers::CreateRange(MoveBlock->GetMoves()) |
+    Moves = UE::Ranges::CreateRange(MoveBlock->GetMoves()) |
             ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
             RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
     SpawnSpriteActor(ShowImmediately);
@@ -133,12 +133,12 @@ void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     InnateAbilityHandles =
-        RangeHelpers::CreateRange(InnateAbilities) |
+        UE::Ranges::CreateRange(InnateAbilities) |
         ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
             return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
         }) |
         RangeHelpers::TToArray<FGameplayAbilitySpecHandle>();
-    InnateEffectHandles = RangeHelpers::CreateRange(InnateEffects) |
+    InnateEffectHandles = UE::Ranges::CreateRange(InnateEffects) |
                           ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
@@ -333,7 +333,7 @@ uint8 ABattlerActor::GetActionCount() const {
 }
 
 ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
-    return RangeHelpers::CreateRange(OwningSide->GetBattlers()) |
+    return UE::Ranges::CreateRange(OwningSide->GetBattlers()) |
            ranges::views::filter(
                [this](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == InternalId; });
 }
@@ -354,7 +354,7 @@ void ABattlerActor::RecordParticipation() {
     }
 
     auto AllOpponents =
-        RangeHelpers::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
+        UE::Ranges::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
         ranges::views::filter([](const TScriptInterface<IBattler> &Battler) { return !Battler->IsFainted(); });
     ranges::for_each(AllOpponents,
                      [this](const TScriptInterface<IBattler> &Battler) { Battler->AddParticipant(this); });

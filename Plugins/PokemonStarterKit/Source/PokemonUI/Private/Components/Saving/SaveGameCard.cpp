@@ -24,7 +24,7 @@ void USaveGameCard::NativeConstruct() {
     LocationText->SetText(Subsystem.GetCurrentLocation());
 
     Algo::ForEach(Icons, &UWidget::RemoveFromParent);
-    Icons = RangeHelpers::CreateRange(Subsystem.GetPlayer()->GetParty()) |
+    Icons = UE::Ranges::CreateRange(Subsystem.GetPlayer()->GetParty()) |
             ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this)) |
             RangeHelpers::TToArray<TObjectPtr<UImage>>();
 

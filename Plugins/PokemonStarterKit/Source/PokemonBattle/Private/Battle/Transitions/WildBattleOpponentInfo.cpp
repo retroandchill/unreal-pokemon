@@ -30,7 +30,7 @@ TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const 
         return UnrealInjector::NewInjectedDependency<IPokemon>(World, *PokemonInfo);
     };
 
-    auto Pokemon = RangeHelpers::CreateRange(OpposingPokemonInfo) | ranges::views::transform(CreatePokemon) |
+    auto Pokemon = UE::Ranges::CreateRange(OpposingPokemonInfo) | ranges::views::transform(CreatePokemon) |
                    RangeHelpers::TToArray<TScriptInterface<IPokemon>>();
 
     // For a wild battle the number of Pokémon and the active side count must match

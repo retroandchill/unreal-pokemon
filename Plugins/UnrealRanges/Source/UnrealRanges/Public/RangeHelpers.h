@@ -14,18 +14,6 @@
 namespace RangeHelpers {
 
 /**
- * Create a new range from the provided array.
- * @tparam T The type of data the array holds
- * @param Range The array view to create the view from.
- * @return The created view
- */
-template <typename T>
-    requires UE::Ranges::IsUEContainer<T>
-auto CreateRange(T& Range) {
-    return UE::Ranges::TUEContainerView<T>(Range);
-}
-
-/**
  * Convert the elements in the range into an array
  * @tparam T The type of data the array will hold
  * @tparam RangeType The input range type

@@ -32,7 +32,7 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    auto PossibleMoves = RangeHelpers::CreateRange(Battler->GetMoves()) | ranges::views::filter(&IsMoveUsable) |
+    auto PossibleMoves = UE::Ranges::CreateRange(Battler->GetMoves()) | ranges::views::filter(&IsMoveUsable) |
                          RangeHelpers::TToArray<TScriptInterface<IBattleMove>>();
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want

@@ -81,11 +81,11 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 }
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
-    return RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
+    return UE::Ranges::CreateRange(TriggerEventData->TargetData.Data) |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
         ranges::views::cache1 |
            ranges::views::transform(
-               [](const TArray<TWeakObjectPtr<AActor>> &List) { return RangeHelpers::CreateRange(List); }) |
+               [](const TArray<TWeakObjectPtr<AActor>> &List) { return UE::Ranges::CreateRange(List); }) |
            ranges::views::join |
            ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |

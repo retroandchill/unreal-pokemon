@@ -29,7 +29,7 @@ void UPocketTabWidget::NativePreConstruct() {
 
     auto PocketNames = UItemHelper::GetPocketNames();
     Algo::ForEach(PocketButtons, &UWidget::RemoveFromParent);
-    PocketButtons = RangeHelpers::CreateRange(PocketNames) |
+    PocketButtons = UE::Ranges::CreateRange(PocketNames) |
                     ranges::views::transform(std::bind_front(&UPocketTabWidget::CreatePocketButton, this)) |
                     RangeHelpers::TToArray<TObjectPtr<UPocketButton>>();
 

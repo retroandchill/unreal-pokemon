@@ -10,6 +10,7 @@
  */
 namespace UE::Ranges {
 
+namespace Detail {
 template <typename>
 struct TIsUEContainer : std::false_type {};
 
@@ -21,9 +22,6 @@ struct TIsUEContainer<TSet<T, K, A>> : std::true_type {};
 
 template <typename K, typename V, typename A, typename F>
 struct TIsUEContainer<TMap<K, V, A, F>> : std::true_type {};
-
-template <typename T>
-concept IsUEContainer = TIsUEContainer<std::remove_cvref_t<T>>::value;
 
 /**
  * Filler struct to indicate no existing operator.
@@ -46,9 +44,15 @@ FNo operator==(const T&, const U&);
  */
 template <typename T, typename U = T>
 struct TEqualExists {
-    enum {
-        Value = !std::is_same_v<decltype(std::declval<T>() == std::declval<U>()), FNo>
-    };
+    static constexpr bool Value = !std::is_same_v<decltype(std::declval<T>() == std::declval<U>()), FNo>;
 };
+
+}
+
+template <typename T>
+concept IsUEContainer = Detail::TIsUEContainer<std::remove_cvref_t<T>>::value;
+
+template <typename T, typename U = T>
+concept EqualExists = Detail::TEqualExists<T, U>::Value;
 
 }

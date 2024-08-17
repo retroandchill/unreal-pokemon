@@ -49,7 +49,7 @@ public:
      * @return Are the iterators equal.
      */
     FORCEINLINE bool operator==(const TViewIterator &Other) const {
-        if constexpr (TEqualExists<I>::Value) {
+        if constexpr (EqualExists<I>) {
             return Iterator == Other.Iterator;
         } else {
             if (Iterator.IsSet() && Other.Iterator.IsSet()) {
@@ -167,6 +167,18 @@ public:
 private:
     T *Container = nullptr;
 };
+
+/**
+ * Create a new range from the provided array.
+ * @tparam T The type of data the array holds
+ * @param Range The array view to create the view from.
+ * @return The created view
+ */
+template <typename T>
+    requires IsUEContainer<T>
+auto CreateRange(T& Range) {
+    return TUEContainerView<T>(Range);
+}
 
 }
 

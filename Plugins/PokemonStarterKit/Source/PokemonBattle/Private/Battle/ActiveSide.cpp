@@ -109,7 +109,7 @@ void AActiveSide::BeginPlay() {
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     auto AllBattlers =
-        RangeHelpers::CreateRange(Battlers) | ranges::views::transform([](const TScriptInterface<IBattler> &Side) {
+        UE::Ranges::CreateRange(Battlers) | ranges::views::transform([](const TScriptInterface<IBattler> &Side) {
             return CastChecked<AActor>(Side.GetObject());
         });
     ranges::for_each(AllBattlers, [](AActor *Actor) { Actor->Destroy(); });

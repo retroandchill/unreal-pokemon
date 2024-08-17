@@ -10,6 +10,7 @@
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
 #include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -218,7 +219,7 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 TArray<TScriptInterface<IInteractable>>
 UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
     auto Results = HitTestOnFacingTile(MovementDirection);
-    return RangeHelpers::CreateRange(Results) |
+    return UE::Ranges::CreateRange(Results) |
            ranges::views::transform([](const FOverlapResult &Result) { return Result.GetActor(); }) |
            ranges::views::filter(&AActor::Implements<UInteractable>) |
            RangeHelpers::TToArray<TScriptInterface<IInteractable>>();

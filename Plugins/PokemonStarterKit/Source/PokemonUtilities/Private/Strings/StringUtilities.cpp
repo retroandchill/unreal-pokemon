@@ -29,7 +29,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, FText Contracti
     auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
-        auto StringItems = RangeHelpers::CreateRange(Items) | ranges::views::transform(ExtractString);
+        auto StringItems = UE::Ranges::CreateRange(Items) | ranges::views::transform(ExtractString);
         return FText::FromString(FString::Join(StringItems, *Contraction.ToString()));
     }
 

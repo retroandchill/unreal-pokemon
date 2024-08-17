@@ -13,7 +13,7 @@ TArray<FName> UStatHelper::GetStatNames() {
 TArray<FName> UStatHelper::GetMainStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
-    return RangeHelpers::CreateRange(Stats) |
+    return UE::Ranges::CreateRange(Stats) |
            ranges::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Battle; }) |
            ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
 }
@@ -21,7 +21,7 @@ TArray<FName> UStatHelper::GetMainStatNames() {
 TArray<FName> UStatHelper::GetBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
-    return RangeHelpers::CreateRange(Stats) |
+    return UE::Ranges::CreateRange(Stats) |
            ranges::views::filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Main; }) |
            ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
 }
@@ -29,7 +29,7 @@ TArray<FName> UStatHelper::GetBattleStatNames() {
 TArray<FName> UStatHelper::GetMainBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stats = StatTable.GetAllRows();
-    return RangeHelpers::CreateRange(Stats) |
+    return UE::Ranges::CreateRange(Stats) |
            ranges::views::filter([](const FStat *Stat) { return Stat->Type == EPokemonStatType::MainBattle; }) |
            ranges::views::transform([](const FStat *Stat) { return Stat->ID; }) | RangeHelpers::TToArray<FName>();
 }

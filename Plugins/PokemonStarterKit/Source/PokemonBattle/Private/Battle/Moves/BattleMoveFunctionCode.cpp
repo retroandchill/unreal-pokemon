@@ -27,6 +27,7 @@
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
 #include "RangeHelpers.h"
+#include "Ranges/Views/ToArray.h"
 #include "Species/Stat.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
@@ -67,7 +68,7 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     BattleMove = CastChecked<UUseMovePayload>(TriggerEventData->OptionalObject)->Move;
 
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
-    auto TagsList = RangeHelpers::CreateRange(BattleMove->GetTags()) |
+    auto TagsList = UE::Ranges::CreateRange(BattleMove->GetTags()) |
                     ranges::views::transform([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) |
                     RangeHelpers::TToArray<FGameplayTag>();
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
@@ -135,11 +136,11 @@ FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
                                                                const FGameplayAbilityActorInfo &ActorInfo,
                                                                const FGameplayEventData *TriggerEventData) {
-    return RangeHelpers::CreateRange(TriggerEventData->TargetData.Data) |
+    return UE::Ranges::CreateRange(TriggerEventData->TargetData.Data) |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
         ranges::views::cache1 |
         ranges::views::transform(
-               [](const TArray<TWeakObjectPtr<AActor>> &List) { return RangeHelpers::CreateRange(List); }) |
+               [](const TArray<TWeakObjectPtr<AActor>> &List) { return UE::Ranges::CreateRange(List); }) |
            ranges::views::join |
            ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
@@ -179,7 +180,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bSuccess;
     };
-    auto FilteredTargets = RangeHelpers::CreateRange(Targets) | ranges::views::filter(TargetFailureCheckCallback) |
+    auto FilteredTargets = UE::Ranges::CreateRange(Targets) | ranges::views::filter(TargetFailureCheckCallback) |
                            RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
@@ -199,7 +200,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bHitResult;
     };
-    auto SuccessfulHits = RangeHelpers::CreateRange(FilteredTargets) | ranges::views::filter(HitCheckCallback) |
+    auto SuccessfulHits = UE::Ranges::CreateRange(FilteredTargets) | ranges::views::filter(HitCheckCallback) |
                           RangeHelpers::TToArray<TScriptInterface<IBattler>>();
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {

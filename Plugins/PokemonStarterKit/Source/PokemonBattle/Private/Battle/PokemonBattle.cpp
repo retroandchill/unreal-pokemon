@@ -30,7 +30,7 @@
 #include <range/v3/view/filter.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
-    return RangeHelpers::CreateRange(Side->GetBattlers());
+    return UE::Ranges::CreateRange(Side->GetBattlers());
 }
 
 static bool IsFainted(const TScriptInterface<IBattler> &Battler) {
@@ -69,7 +69,7 @@ void APokemonBattle::BeginPlay() {
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     auto AllSides =
-        RangeHelpers::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
+        UE::Ranges::CreateRange(Sides) | ranges::views::transform([](const TScriptInterface<IBattleSide> &Side) {
             return CastChecked<AActor>(Side.GetObject());
         });
     ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
@@ -189,11 +189,11 @@ const TScriptInterface<IBattleSide> &APokemonBattle::GetOpposingSide() const {
 }
 
 ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
-    return RangeHelpers::CreateRange(Sides);
+    return UE::Ranges::CreateRange(Sides);
 }
 
 ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
-    return RangeHelpers::CreateRange(Sides) | ranges::views::transform(&GetBattlers) | ranges::views::join |
+    return UE::Ranges::CreateRange(Sides) | ranges::views::transform(&GetBattlers) | ranges::views::join |
            ranges::views::filter(&IsNotFainted);
 }
 
@@ -209,7 +209,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     auto PlayerSpeed =
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    ranges::for_each(RangeHelpers::CreateRange(GetOpposingSide()->GetBattlers()) |
+    ranges::for_each(UE::Ranges::CreateRange(GetOpposingSide()->GetBattlers()) |
                          ranges::views::filter(&IsNotFainted) |
                          ranges::views::transform([](const TScriptInterface<IBattler> &Foe) {
                              return Foe->GetAbilityComponent()->GetNumericAttributeBase(
@@ -320,7 +320,7 @@ void APokemonBattle::EndTurn() {
 
         // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out
         // faints
-        ranges::for_each(RangeHelpers::CreateRange(Sides[i]->GetBattlers()) | ranges::views::filter(&IsFainted),
+        ranges::for_each(UE::Ranges::CreateRange(Sides[i]->GetBattlers()) | ranges::views::filter(&IsFainted),
                          [this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
                              auto BattlerId = Battler->GetInternalId();
                              CurrentActionCount.Add(BattlerId, 0);

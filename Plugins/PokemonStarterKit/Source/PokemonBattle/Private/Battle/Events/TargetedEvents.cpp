@@ -46,7 +46,7 @@ static bool AllyNotFainted(const TScriptInterface<IBattler> &Battler) {
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     auto SideView = ranges::views::single(Side) | ranges::views::transform(&ConvertToActor);
-    auto ActiveBattlers = RangeHelpers::CreateRange(Side->GetBattlers()) | ranges::views::filter(&AllyNotFainted) |
+    auto ActiveBattlers = UE::Ranges::CreateRange(Side->GetBattlers()) | ranges::views::filter(&AllyNotFainted) |
                           ranges::views::transform(&ConvertToActor);
     return ranges::views::concat(SideView, ActiveBattlers);
 }

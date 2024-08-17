@@ -82,7 +82,7 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
             [&Move](const TScriptInterface<IMove> &MoveData) { return MoveData->GetMoveData().ID == Move.Move; });
     };
 
-    return RangeHelpers::CreateRange(Species.Moves) | ranges::views::filter(MoveLevelInRange) |
+    return UE::Ranges::CreateRange(Species.Moves) | ranges::views::filter(MoveLevelInRange) |
            ranges::views::filter(DoesNotKnowMove) |
            ranges::views::transform([](const FLevelUpMove &Move) { return Move.Move; }) |
            RangeHelpers::TToArray<FName>();

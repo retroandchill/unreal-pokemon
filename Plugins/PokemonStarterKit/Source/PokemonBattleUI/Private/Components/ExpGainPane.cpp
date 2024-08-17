@@ -20,7 +20,7 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
-    Panels = RangeHelpers::CreateRange(OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer)) |
+    Panels = UE::Ranges::CreateRange(OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer)) |
              ranges::views::transform(std::bind_front(&UExpGainPane::CreateBattlerPanel, this)) |
              RangeHelpers::TToArray<TObjectPtr<UBattlerExpPanel>>();
 }

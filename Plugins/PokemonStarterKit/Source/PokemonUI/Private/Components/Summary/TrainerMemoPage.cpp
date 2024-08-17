@@ -75,7 +75,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     auto JoinedString = FString::Join(
-        RangeHelpers::CreateRange(Lines) |
+        UE::Ranges::CreateRange(Lines) |
             ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
         TEXT("\n"));
     MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
