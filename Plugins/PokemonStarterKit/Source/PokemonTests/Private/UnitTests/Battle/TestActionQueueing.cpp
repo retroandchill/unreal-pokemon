@@ -40,6 +40,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler1, SelectActions).WillByDefault(std::bind_front(QueueBattleAction, Battler1));
     ON_CALL(MockBattler1, GetActionCount).WillByDefault(Return(1));
     ON_CALL(MockBattler1, IsFainted).WillByDefault(Return(false));
+    ON_CALL(MockBattler1, IsNotFainted).WillByDefault(Return(true));
     ON_CALL(MockBattler1, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Battler 1"))));
     auto Battler1AbilityComponent = static_cast<UBattlerAbilityComponent *>(
         Cast<AActor>(Battler1.GetObject())
@@ -53,6 +54,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler2, SelectActions).WillByDefault(std::bind_front(QueueBattleAction, Battler2));
     ON_CALL(MockBattler2, GetActionCount).WillByDefault(Return(1));
     ON_CALL(MockBattler2, IsFainted).WillByDefault(Return(false));
+    ON_CALL(MockBattler2, IsNotFainted).WillByDefault(Return(true));
     ON_CALL(MockBattler2, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Battler 2"))));
     auto Battler2AbilityComponent = static_cast<UBattlerAbilityComponent *>(
         Cast<AActor>(Battler2.GetObject())
@@ -68,6 +70,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     ON_CALL(MockBattler3, SelectActions).WillByDefault(std::bind_front(QueueBattleAction, Battler3));
     ON_CALL(MockBattler3, GetActionCount).WillByDefault(Return(2));
     ON_CALL(MockBattler3, IsFainted).WillByDefault(Return(false));
+    ON_CALL(MockBattler3, IsNotFainted).WillByDefault(Return(true));
     ON_CALL(MockBattler3, GetNickname).WillByDefault(Return(FText::FromStringView(TEXT("Battler 3"))));
     auto Battler3AbilityComponent = static_cast<UBattlerAbilityComponent *>(
         Cast<AActor>(Battler3.GetObject())

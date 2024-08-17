@@ -165,12 +165,12 @@ void AActiveSide::SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer
 }
 
 bool AActiveSide::CanBattle() const {
-    if (Algo::NoneOf(Battlers, &IBattler::IsFainted)) {
+    if (Algo::AnyOf(Battlers, &IBattler::IsNotFainted)) {
         return true;
     }
 
     for (auto &[ID, Party] : TrainerParties) {
-        if (Algo::NoneOf(Party.Battlers, &IBattler::IsFainted)) {
+        if (Algo::AnyOf(Party.Battlers, &IBattler::IsNotFainted)) {
             return true;
         }
     }
