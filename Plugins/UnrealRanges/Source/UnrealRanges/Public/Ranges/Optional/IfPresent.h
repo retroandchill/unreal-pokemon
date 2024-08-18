@@ -35,12 +35,11 @@ namespace UE::Optionals {
 
     struct FIfPresent {
 
-        template <typename F, typename... A>
-            requires Ranges::FunctionalType<F>
-        constexpr auto operator()(F&& Functor, A&&... Args) const {
-            using BindingType = decltype(Ranges::BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
+        template <typename... A>
+        constexpr auto operator()(A&&... Args) const {
+            using BindingType = decltype(Ranges::BindFunctor<A...>(Forward<A>(Args)...));
             return TOptionalClosure<TIfPresentInvoker<BindingType>>(TIfPresentInvoker<BindingType>(
-                Ranges::BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
+                Ranges::BindFunctor<A...>(Forward<A>(Args)...)));
         }
         
     };

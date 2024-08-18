@@ -27,5 +27,11 @@ namespace UE::Ranges {
             return MoveTempIfPossible(Functor);
         }
     }
+
+    template <typename C, typename F, typename... A>
+        requires StdExt::IsMemberFunction_v<F>
+    FORCEINLINE constexpr auto BindFunctor(C&& Object, F&& Functor, A&&... Args) {
+        return std::bind_front(BindFunctor(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
+    }
     
 }

@@ -10,6 +10,7 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Map.h"
 #include <range/v3/view/transform.hpp>
 
 void USaveGameCard::NativeConstruct() {
@@ -26,7 +27,7 @@ void USaveGameCard::NativeConstruct() {
 
     Algo::ForEach(Icons, &UWidget::RemoveFromParent);
     Icons = Subsystem.GetPlayer()->GetParty() |
-            ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this)) | UE::Ranges::ToArray;
+            UE::Ranges::Map(this, &USaveGameCard::CreatePokemonIcon) | UE::Ranges::ToArray;
 
     // TODO: Badges and Pokédex info when it's ready
 

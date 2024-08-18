@@ -43,18 +43,15 @@ namespace UE::Optionals {
 
         /**
          * Create the optional closure to operate with.
-         * @tparam F The functor to bind
          * @tparam A The arguments to supply to the functor.
-         * @param Functor The functor to bind
          * @param Args The arguments to supply to the functor.
          * @return The bound functional closure.
          */
-        template <typename F, typename... A>
-            requires Ranges::FunctionalType<F>
-        constexpr auto operator()(F&& Functor, A&&... Args) const {
-            using BindingType = decltype(Ranges::BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
+        template <typename... A>
+        constexpr auto operator()(A&&... Args) const {
+            using BindingType = decltype(Ranges::BindFunctor<A...>(Forward<A>(Args)...));
             return TOptionalClosure<TOrElseGetInvoker<BindingType>>(TOrElseGetInvoker<BindingType>(
-                Ranges::BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
+                Ranges::BindFunctor<A...>(Forward<A>(Args)...)));
         }
         
     };

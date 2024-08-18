@@ -36,6 +36,7 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -45,7 +46,7 @@
 #include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
 
-TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
+TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Move, ABattlerActor *Battler) {
     check(Battler != nullptr)
     check(Move != nullptr)
     TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
@@ -95,7 +96,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
 
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = MoveBlock->GetMoves() | ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
+    Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&CreateBattleMove, this) |
             UE::Ranges::ToArray;
     SpawnSpriteActor(ShowImmediately);
 

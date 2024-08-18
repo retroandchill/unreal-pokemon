@@ -9,6 +9,7 @@
 #include "Groups/CommonButtonGroupBase.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Map.h"
 
 void USummaryTabWidget::NativePreConstruct() {
     Super::NativePreConstruct();
@@ -43,7 +44,7 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
     Algo::ForEach(PageButtons, &UWidget::RemoveFromParent);
 
     auto Pages = SummaryPages->GetPages();
-    PageButtons = Pages | ranges::views::transform(std::bind_front(&USummaryTabWidget::CreatePageButton, this)) |
+    PageButtons = Pages | UE::Ranges::Map(this, &USummaryTabWidget::CreatePageButton) |
                   UE::Ranges::ToArray;
 
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
