@@ -84,7 +84,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Ability = AbilityBlock->GetAbilityID(),
             .Item = HoldItem,
             .Moves = MoveBlock->GetMoves() |
-                     ranges::views::transform([](const TScriptInterface<IMove> &Move) { return Move->ToDTO(); }) |
+                     ranges::views::transform(&IMove::ToDTO) |
                      UE::Ranges::ToArray,
             .MoveMemory = MoveBlock->GetMoveMemory(),
             .StatusEffect = StatusEffect,
