@@ -23,7 +23,7 @@
 #include "range/v3/view/transform.hpp"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Helpers.h"
+#include "Ranges/Utilities/Casts.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/numeric/accumulate.hpp>

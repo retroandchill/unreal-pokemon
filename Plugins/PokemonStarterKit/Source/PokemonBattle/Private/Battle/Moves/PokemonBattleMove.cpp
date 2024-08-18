@@ -14,7 +14,7 @@
 #include "Pokemon/Moves/Move.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Helpers.h"
+#include "Ranges/Utilities/Casts.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 

@@ -198,6 +198,10 @@ FORCEINLINE constexpr auto operator|(T& Container, ranges::views::view_closure<V
     return UE::Ranges::CreateRange(Container) | ViewClosure;
 }
 
+/**
+ * Template specialization to ensure that TUEContainerView is considered a view by the range system.
+ * @tparam T The type of the container that is being viewed
+ */
 template <typename T>
     requires UE::Ranges::IsUEContainer<T>
 constexpr inline bool ranges::enable_view<UE::Ranges::TUEContainerView<T>> = true;
