@@ -2,27 +2,27 @@
 #include "DataManager.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Views/ContainerView.h"
-#include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/transform.hpp>
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();
-    auto DataTableView = Settings->DataTables |
-                         ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
-                         ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); });
-    ranges::for_each(DataTableView, [this](UDataTable *Table) {
-        auto RowStruct = Table->GetRowStruct();
-        if (RowStruct == nullptr) {
-            return;
-        }
+    Settings->DataTables |
+        ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
+        ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); }) |
+        UE::Ranges::ForEach([this](UDataTable *Table) {
+            auto RowStruct = Table->GetRowStruct();
+            if (RowStruct == nullptr) {
+                return;
+            }
 
-        const auto &DataRegistry = FDataRegistry::GetInstance();
-        if (!DataRegistry.IsTypeRegistered(RowStruct))
-            return;
+            const auto &DataRegistry = FDataRegistry::GetInstance();
+            if (!DataRegistry.IsTypeRegistered(RowStruct))
+                return;
 
-        DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table));
-    });
+            DataTables.Add(RowStruct->GetFName(), DataRegistry.CreateDataTableProxy(RowStruct, Table));
+        });
 }
 
 FDataManager::~FDataManager() = default;

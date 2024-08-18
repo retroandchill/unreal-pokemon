@@ -9,6 +9,7 @@
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Pokemon/Pokemon.h"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Strings/StringUtilities.h"
@@ -109,8 +110,9 @@ void AActiveSide::BeginPlay() {
 
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    auto AllBattlers = Battlers | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
-    ranges::for_each(AllBattlers, [](AActor *Actor) { Actor->Destroy(); });
+    Battlers |
+        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+        UE::Ranges::ForEach([](AActor* A) { return A->Destroy(); });
 }
 
 const FGuid &AActiveSide::GetInternalId() const {

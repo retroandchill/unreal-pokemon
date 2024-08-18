@@ -5,6 +5,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
+#include "Ranges/Algorithm/ForEach.h"
 #include <range/v3/algorithm/find_if.hpp>
 #include <range/v3/algorithm/for_each.hpp>
 
@@ -36,7 +37,8 @@ void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInter
 }
 
 void UPokemonSelectionPaneBase::RefreshWindow() {
-    ranges::for_each(GetSelectableOptions<ISelectablePanel>(), &ISelectablePanel::Refresh);
+    GetSelectableOptions<ISelectablePanel>() |
+     UE::Ranges::ForEach(&ISelectablePanel::Refresh);
 }
 
 bool UPokemonSelectionPaneBase::IsSwitching() const {

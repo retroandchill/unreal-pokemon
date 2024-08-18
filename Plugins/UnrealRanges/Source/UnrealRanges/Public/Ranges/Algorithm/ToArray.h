@@ -12,6 +12,13 @@ namespace UE::Ranges {
      */
     struct FToArray {
 
+        /**
+         * Invocation operation for the closure. Converts the range into an array of the target type.
+         * @tparam R The range to pass in.
+         * @tparam T The value type of the range
+         * @param Range The range to convert into an array.
+         * @return The result of the array
+         */
         template <typename R, typename T = ranges::range_value_t<R>>
             requires ranges::input_range<R>
         constexpr auto operator()(R &&Range) {

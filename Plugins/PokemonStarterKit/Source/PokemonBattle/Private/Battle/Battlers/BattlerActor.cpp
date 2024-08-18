@@ -33,6 +33,7 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Species/PokemonStatType.h"
@@ -354,10 +355,10 @@ void ABattlerActor::RecordParticipation() {
     if (!IsOwnedByPlayer()) {
         return;
     }
-
-    auto AllOpponents = OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
-                        ranges::views::filter(&IBattler::IsNotFainted);
-    ranges::for_each(AllOpponents, ranges::bind_back(&IBattler::AddParticipant, this));
+    
+    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
+        ranges::views::filter(&IBattler::IsNotFainted) |
+        UE::Ranges::ForEach(&IBattler::AddParticipant, this);
 }
 
 void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {

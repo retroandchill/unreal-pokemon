@@ -21,6 +21,7 @@
 #include "Pokemon/Pokemon.h"
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/ContainerView.h"
@@ -62,8 +63,8 @@ void APokemonBattle::BeginPlay() {
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    auto AllSides = Sides | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
-    ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
+    Sides | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+        UE::Ranges::ForEach([](AActor *Actor) { Actor->Destroy(); });
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {
@@ -288,7 +289,7 @@ void APokemonBattle::StartTurn() {
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
     Phase = EBattlePhase::Selecting;
-    std::ranges::for_each(GetActiveBattlers(), [this](const TScriptInterface<IBattler> &Battler) {
+    GetActiveBattlers() | UE::Ranges::ForEach([this](const TScriptInterface<IBattler> &Battler) {
         auto BattlerId = Battler->GetInternalId();
         CurrentActionCount.Add(BattlerId, 0);
         ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
