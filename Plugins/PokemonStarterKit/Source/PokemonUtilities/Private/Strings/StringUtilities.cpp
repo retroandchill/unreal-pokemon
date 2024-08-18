@@ -3,6 +3,7 @@
 #include "Strings/StringUtilities.h"
 #include "Ranges/Algorithm/ToString.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include <range/v3/view/span.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -31,14 +32,13 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText& Co
     auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
-        auto StringItems = Items | ranges::views::transform(ExtractString);
         return FText::FromString(Items |
-            ranges::views::transform(ExtractString) |
+            UE::Ranges::Map(ExtractString) |
             UE::Ranges::ToString(Conjunction.ToString()));
     }
 
     auto JoinedItems = ranges::span(Items.GetData(), Items.Num() - 1) |
-        ranges::views::transform(ExtractString) |
+        UE::Ranges::Map(ExtractString) |
         UE::Ranges::ToString(TEXT(", "));
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));

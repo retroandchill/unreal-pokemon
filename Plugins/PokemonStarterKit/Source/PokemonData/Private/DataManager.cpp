@@ -3,14 +3,16 @@
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include <range/v3/view/transform.hpp>
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();
     Settings->DataTables |
-        ranges::views::transform([](const FSoftObjectPath &Path) { return Path.TryLoad(); }) |
-        ranges::views::transform([](UObject *Object) { return CastChecked<UDataTable>(Object); }) |
+        UE::Ranges::Map(&FSoftObjectPath::TryLoad, nullptr) |
+        UE::Ranges::CastType<UDataTable> |
         UE::Ranges::ForEach([this](UDataTable *Table) {
             auto RowStruct = Table->GetRowStruct();
             if (RowStruct == nullptr) {

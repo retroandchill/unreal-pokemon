@@ -60,7 +60,7 @@ void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle>
     EventData.EventTag = Tag;
     SendOutEventForActor(BattleActor, Tag, EventData);
     Battle->GetSides() |
-        ranges::views::transform(&UnrollBattleSide) |
+        UE::Ranges::Map(&UnrollBattleSide) |
         ranges::views::join |
         UE::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
 }

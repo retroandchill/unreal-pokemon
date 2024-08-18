@@ -28,6 +28,7 @@
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include "Species/Stat.h"
 #include <range/v3/view/cache1.hpp>
 #include <range/v3/view/filter.hpp>
@@ -137,15 +138,15 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                                                                const FGameplayAbilityActorInfo &ActorInfo,
                                                                const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
-           ranges::views::transform(
-               [](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
+           UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
            ranges::views::cache1 | ranges::views::transform([](const TArray<TWeakObjectPtr<AActor>> &List) {
                return UE::Ranges::CreateRange(List);
            }) |
            ranges::views::join |
            ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
-           ranges::views::filter(&AActor::Implements<UBattler>) | ranges::views::filter([](AActor *Actor) {
+           ranges::views::filter(&AActor::Implements<UBattler>) |
+           ranges::views::filter([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;
                return !Battler->IsFainted();
            }) |

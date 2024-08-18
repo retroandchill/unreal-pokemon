@@ -15,6 +15,7 @@
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/MakeWeak.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -85,7 +86,8 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         Targets |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
         UE::Ranges::CastType<AActor> |
-        ranges::views::transform([](AActor *A) { return TWeakObjectPtr<AActor>(A); }) | UE::Ranges::ToArray);
+        UE::Ranges::MakeWeak |
+        UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Items::UsingItem, EventData);

@@ -7,6 +7,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include <range/v3/view/transform.hpp>
 
 FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo)
@@ -31,7 +32,7 @@ TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const 
         return UnrealInjector::NewInjectedDependency<IPokemon>(World, *PokemonInfo);
     };
 
-    auto Pokemon = OpposingPokemonInfo | ranges::views::transform(CreatePokemon) | UE::Ranges::ToArray;
+    auto Pokemon = OpposingPokemonInfo | UE::Ranges::Map(CreatePokemon) | UE::Ranges::ToArray;
 
     // For a wild battle the number of Pokémon and the active side count must match
     check(Pokemon.Num() == ActivePokemonCount)

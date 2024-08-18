@@ -13,7 +13,9 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/cache1.hpp>
 #include <range/v3/view/filter.hpp>
@@ -83,17 +85,14 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
-           ranges::views::transform(
-               [](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
+           UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
            ranges::views::cache1 | ranges::views::transform([](const TArray<TWeakObjectPtr<AActor>> &List) {
                return UE::Ranges::CreateRange(List);
            }) |
            ranges::views::join |
            ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
-           ranges::views::filter(&AActor::Implements<UBattler>) | ranges::views::transform([](AActor *Actor) {
-               TScriptInterface<IBattler> Battler = Actor;
-               return Battler;
-           }) |
+           ranges::views::filter(&AActor::Implements<UBattler>) |
+           UE::Ranges::CastType<IBattler> |
            ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this)) | UE::Ranges::ToArray;
 }

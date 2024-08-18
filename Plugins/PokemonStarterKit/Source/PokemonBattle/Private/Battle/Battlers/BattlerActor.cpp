@@ -139,7 +139,7 @@ void ABattlerActor::BeginPlay() {
             return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
         }) |
         UE::Ranges::ToArray;
-    InnateEffectHandles = InnateEffects | ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
+    InnateEffectHandles = InnateEffects | UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
                               return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);

@@ -185,8 +185,10 @@ ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const
 }
 
 ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
-    return Sides | ranges::views::transform(&GetBattlers) | ranges::views::join |
-           ranges::views::filter(&IBattler::IsNotFainted);
+    return Sides |
+        UE::Ranges::Map(&GetBattlers) |
+        ranges::views::join |
+        ranges::views::filter(&IBattler::IsNotFainted);
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
@@ -201,16 +203,15 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     auto PlayerSpeed =
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    ranges::for_each(GetOpposingSide()->GetBattlers() | ranges::views::filter(&IBattler::IsNotFainted) |
-                         ranges::views::transform([](const TScriptInterface<IBattler> &Foe) {
-                             return Foe->GetAbilityComponent()->GetNumericAttributeBase(
-                                 UPokemonCoreAttributeSet::GetSpeedAttribute());
-                         }),
-                     [&EnemySpeed](float Speed) {
-                         if (Speed > EnemySpeed) {
-                             EnemySpeed = Speed;
-                         }
-                     });
+    GetOpposingSide()->GetBattlers() |
+        ranges::views::filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Map(&IBattler::GetAbilityComponent) |
+        UE::Ranges::Map(&UAbilitySystemComponent::GetNumericAttributeBase, UPokemonCoreAttributeSet::GetSpeedAttribute()) |
+        UE::Ranges::ForEach([&EnemySpeed](float Speed) {
+            if (Speed > EnemySpeed) {
+                EnemySpeed = Speed;
+            }
+        });
 
     float Rate;
     if (PlayerSpeed > EnemySpeed) {
