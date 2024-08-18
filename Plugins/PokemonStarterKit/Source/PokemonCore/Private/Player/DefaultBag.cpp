@@ -3,10 +3,12 @@
 #include "Player/DefaultBag.h"
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "PokemonDataSettings.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OptionalClosure.h"
+#include "Ranges/Optional/OrElse.h"
 #include <functional>
 
 /**
@@ -51,9 +53,8 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
     }
 
     const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings->PocketInfo.FindChecked(Item->Pocket);
-    auto HasRoom =
-        OptionalUtilities::Map<bool, int32>(MaxPocketSize, [&Pocket](int32 Max) { return Pocket->Items.Num() < Max; });
-    return HasRoom.Get(true);
+    return MaxPocketSize | UE::Optionals::Map([&Pocket](int32 Max) { return Pocket->Items.Num() < Max; })
+        | UE::Optionals::OrElse(true);
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {

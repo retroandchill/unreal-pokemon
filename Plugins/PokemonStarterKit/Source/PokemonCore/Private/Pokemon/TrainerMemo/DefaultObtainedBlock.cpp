@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Pokemon/TrainerMemo/DefaultObtainedBlock.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Ranges/Optional/OrElseGet.h"

@@ -6,7 +6,7 @@
 EStatusEffectStatus UStatusEffectUtilities::GetStatusEffect(const TScriptInterface<IPokemon> &Pokemon,
                                                             FStatus &StatusEffect) {
     auto Status = Pokemon->GetStatusEffect();
-    if (Status == nullptr) {
+    if (Status.IsSet()) {
         return EStatusEffectStatus::NoStatusEffect;
     }
 

@@ -75,7 +75,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintPure, Category = Abilities)
     TScriptInterface<IAbilityBlock> GetAbility() const override;
 
-    const FItem *GetHoldItem() const override;
+    TOptional<const FItem &> GetHoldItem() const override;
 
     UFUNCTION(BlueprintCallable, Category = Items)
     void SetHoldItem(FName Item) override;
@@ -83,7 +83,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     UFUNCTION(BlueprintCallable, Category = Items)
     void RemoveHoldItem() override;
 
-    const FStatus *GetStatusEffect() const override;
+    TOptional<const FStatus &> GetStatusEffect() const override;
 
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) override;

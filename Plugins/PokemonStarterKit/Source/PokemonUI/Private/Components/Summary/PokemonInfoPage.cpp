@@ -45,7 +45,7 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     ExpBar->SetPercent(StatBlock->GetExpPercent());
 
     using enum ESlateVisibility;
-    if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem != nullptr) {
+    if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem.IsSet()) {
         ItemNameText->SetText(HoldItem->RealName);
         ItemDescriptionText->SetText(HoldItem->Description);
         auto Item = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>()->GetItemIcon(HoldItem->ID);

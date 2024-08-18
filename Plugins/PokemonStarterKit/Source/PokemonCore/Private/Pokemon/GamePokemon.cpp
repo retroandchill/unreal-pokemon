@@ -4,7 +4,6 @@
 #include "Bag/Item.h"
 #include "Battle/Status.h"
 #include "DataManager.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
@@ -15,6 +14,9 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OrElse.h"
+#include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
@@ -192,7 +194,7 @@ TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
     return AbilityBlock;
 }
 
-const FItem *UGamePokemon::GetHoldItem() const {
+TOptional<const FItem &> UGamePokemon::GetHoldItem() const {
     if (!HoldItem.IsSet()) {
         return nullptr;
     }
@@ -210,12 +212,9 @@ void UGamePokemon::RemoveHoldItem() {
     HoldItem.Reset();
 }
 
-const FStatus *UGamePokemon::GetStatusEffect() const {
+TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const {
     static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
-    TFunctionRef<const FStatus *(const FName &)> GetStatus = [](const FName &ID) { return StatusTable.GetData(ID); };
-
-    auto Mapped = OptionalUtilities::Map(StatusEffect, GetStatus);
-    return Mapped.Get(nullptr);
+    return StatusEffect | UE::Optionals::Map([](const FName &ID) { return StatusTable.GetData(ID); });
 }
 
 bool UGamePokemon::SetStatusEffect(FName StatusID, bool bOverwriteExisting) {

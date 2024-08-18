@@ -20,9 +20,9 @@ namespace UE::Optionals {
 
         /**
          * Obtain the underlying element of an optional, invoking the functor if nothing is present.
-         * @tparam O 
-         * @param Optional 
-         * @return 
+         * @tparam O The type of the passed optional
+         * @param Optional The passed optional
+         * @return The obtained value
          */
         template <typename O>
             requires UEOptional<O>
@@ -52,7 +52,8 @@ namespace UE::Optionals {
         template <typename F, typename... A>
             requires Ranges::FunctionalType<F>
         constexpr auto operator()(F&& Functor, A&&... Args) const {
-            return TOptionalClosure<TOrElseGetInvoker<F>>(TOrElseGetInvoker<F>(
+            using BindingType = decltype(Ranges::BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
+            return TOptionalClosure<TOrElseGetInvoker<BindingType>>(TOrElseGetInvoker<BindingType>(
                 Ranges::BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
         }
         
