@@ -31,7 +31,7 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R>
-        void operator()(R&& Range) {
+        void operator()(R&& Range) const {
             ranges::for_each(Forward<R>(Range), Functor);
         }
 

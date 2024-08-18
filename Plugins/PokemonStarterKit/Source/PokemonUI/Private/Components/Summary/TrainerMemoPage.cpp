@@ -8,6 +8,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
+#include "Ranges/Algorithm/ToString.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 #include <range/v3/view/transform.hpp>
@@ -74,10 +75,9 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(CharacteristicList[BestIV % CharacteristicList.Num()]);
     }
 
-    auto JoinedString = FString::Join(
-        Lines | ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
-        TEXT("\n"));
-    MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
+    MemoBlock->SetText(FText::FromString(Lines |
+        ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }) |
+        UE::Ranges::ToString(TEXT("\n"))));
 }
 
 FText UTrainerMemoPage::FormatDate(const FDateTime &DateTime) const {
