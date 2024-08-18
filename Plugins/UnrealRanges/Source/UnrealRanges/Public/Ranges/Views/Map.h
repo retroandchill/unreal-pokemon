@@ -12,7 +12,7 @@ namespace UE::Ranges {
 
         template <typename... A>
         FORCEINLINE constexpr auto operator()(A&&... Args) const {
-            return ranges::views::transform(BindFunctor<A...>(Forward<A>(Args)...));
+            return ranges::views::transform(CreateBinding<A...>(Forward<A>(Args)...));
         }
         
     };

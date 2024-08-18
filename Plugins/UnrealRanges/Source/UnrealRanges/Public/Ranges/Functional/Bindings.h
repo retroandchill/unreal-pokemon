@@ -20,7 +20,7 @@ namespace UE::Ranges {
      */
     template <typename F, typename... A>
         requires FunctionalType<F>
-    FORCEINLINE constexpr auto BindFunctor(F&& Functor, A&&... Args) {
+    FORCEINLINE constexpr auto CreateBinding(F&& Functor, A&&... Args) {
         if constexpr (sizeof...(A) > 0) {
             return ranges::bind_back(Forward<F>(Functor), Forward<A>(Args)...);
         } else {
@@ -30,8 +30,8 @@ namespace UE::Ranges {
 
     template <typename C, typename F, typename... A>
         requires StdExt::IsMemberFunction_v<F>
-    FORCEINLINE constexpr auto BindFunctor(C&& Object, F&& Functor, A&&... Args) {
-        return std::bind_front(BindFunctor(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
+    FORCEINLINE constexpr auto CreateBinding(C&& Object, F&& Functor, A&&... Args) {
+        return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
     }
     
 }

@@ -54,9 +54,9 @@ namespace UE::Ranges {
         template <typename F, typename... A>
             requires FunctionalType<F>
         constexpr auto operator()(F &&Functor, A&&... Args) const {
-            using BindingType = decltype(BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
             return TTerminalClosure<TForEachInvoker<BindingType>>(TForEachInvoker<BindingType>(
-                BindFunctor<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
+                CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
         } 
         
     };
