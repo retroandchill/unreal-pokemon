@@ -4,3 +4,6 @@
 [submodule "Plugins/PokemonStarterKit/Source/PokemonUtilities/External/bimap"]
 	path = Plugins/PokemonStarterKit/Source/PokemonUtilities/Public/External/bimap
 	url = https://github.com/LarsHagemann/bimap.git
+[submodule "Plugins/UnrealRanges/Deps/FunctionTraits"]
+	path = Plugins/UnrealRanges/Deps/FunctionTraits
+	url = https://github.com/HexadigmSystems/FunctionTraits.git

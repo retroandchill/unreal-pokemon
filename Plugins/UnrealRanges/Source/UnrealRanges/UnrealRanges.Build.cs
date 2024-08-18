@@ -54,7 +54,8 @@ public class UnrealRanges : ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[]
 			{
-				Path.Combine(ModuleDirectory, "../../Deps/range-v3/include")
+				Path.Combine(ModuleDirectory, "../../Deps/range-v3/include"),
+				Path.Combine(ModuleDirectory, "../../Deps/FunctionTraits")
 			}
 			);
 		
