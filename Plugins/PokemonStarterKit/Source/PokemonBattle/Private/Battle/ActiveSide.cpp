@@ -11,6 +11,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
@@ -111,7 +112,7 @@ void AActiveSide::BeginPlay() {
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     Battlers |
-        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+        UE::Ranges::CastType<AActor> |
         UE::Ranges::ForEach([](AActor* A) { return A->Destroy(); });
 }
 

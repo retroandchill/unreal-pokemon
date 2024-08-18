@@ -18,6 +18,7 @@
 #include "Ranges/Optional/OrElse.h"
 #include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
@@ -86,7 +87,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Ability = AbilityBlock->GetAbilityID(),
             .Item = HoldItem,
             .Moves = MoveBlock->GetMoves() |
-                     ranges::views::transform(&IMove::ToDTO) |
+                     UE::Ranges::Map(&IMove::ToDTO) |
                      UE::Ranges::ToArray,
             .MoveMemory = MoveBlock->GetMoveMemory(),
             .StatusEffect = StatusEffect,

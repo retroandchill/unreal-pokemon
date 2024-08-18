@@ -35,6 +35,8 @@ struct TOptional<T&> {
     constexpr explicit(false) TOptional(T* Value) : Data(Value) {
     }
 
+    constexpr explicit(false) TOptional(nullptr_t) {}
+
     /**
      * Assignment operator from the underlying value.
      * @param Value The value to assign in.
@@ -157,3 +159,12 @@ struct TOptional<T&> {
 private:
     T* Data = nullptr;
 };
+
+namespace UE::Optionals {
+
+    template <typename T>
+    FORCEINLINE TOptional<T&> OfNullable(T* Ptr) {
+        return TOptional<T&>(Ptr);
+    }
+    
+}

@@ -9,6 +9,7 @@
 #include "Battle/BattleSide.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/concat.hpp>
@@ -39,9 +40,9 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
 }
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
-    auto SideView = ranges::views::single(Side) | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
+    auto SideView = ranges::views::single(Side) | UE::Ranges::CastType<AActor>;
     auto ActiveBattlers = Side->GetBattlers() | ranges::views::filter(&IBattler::IsNotFainted) |
-                          ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
+                          UE::Ranges::CastType<AActor>;
     return ranges::views::concat(SideView, ActiveBattlers);
 }
 
@@ -89,7 +90,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
     User->GetAllies() |
         ranges::views::filter(&IBattler::IsNotFainted) |
-        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+        UE::Ranges::CastType<AActor> |
         UE::Ranges::ForEach([&EventTags, &EventData](AActor* Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.UserAllyTag, EventData);
@@ -100,7 +101,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
     Target->GetAllies() |
         ranges::views::filter(&IBattler::IsNotFainted) |
-        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+        UE::Ranges::CastType<AActor> |
             UE::Ranges::ForEach([&EventTags, &EventData](AActor* Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);

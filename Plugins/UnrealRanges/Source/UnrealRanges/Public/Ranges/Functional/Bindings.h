@@ -31,7 +31,11 @@ namespace UE::Ranges {
     template <typename C, typename F, typename... A>
         requires StdExt::IsMemberFunction_v<F>
     FORCEINLINE constexpr auto CreateBinding(C&& Object, F&& Functor, A&&... Args) {
-        return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
+        if constexpr (std::is_base_of_v<StdExt::MemberFunctionClass_t<F>, std::remove_cvref_t<C>>) {
+            return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), &Object);
+        } else {
+            return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
+        }
     }
     
 }

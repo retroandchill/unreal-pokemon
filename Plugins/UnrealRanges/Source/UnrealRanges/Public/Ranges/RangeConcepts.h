@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Concepts/EqualExists.h"
 #include "Concepts/UEContainer.h"
+#include "Concepts/UObjectPointer.h"
 #include <TypeTraits.h>
 
 /**
@@ -16,6 +17,11 @@ namespace UE::Ranges {
      */
     namespace Detail {}
 
+    template <typename T>
+    concept UnrealInterface = !std::is_base_of_v<UObject, T> && requires {
+        typename T::UClassType;
+    };
+
     /**
      * Concept to check if the passed in functor is a valid functional type.
      * @tparam T The type to check against
@@ -23,5 +29,10 @@ namespace UE::Ranges {
     template <typename T>
     concept FunctionalType = requires {
         typename StdExt::FunctionType_t<T>;
+    };
+
+    template <typename P, typename T>
+    concept PointerTo = requires(P&& Ptr, T&& Value) {
+        { *Ptr } -> std::convertible_to<std::add_lvalue_reference_t<T>>;
     };
 }

@@ -43,7 +43,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     };
     auto ObtainedLocation = ObtainedInformation->GetObtainText() |
         UE::Optionals::Map(TextCheck) |
-            UE::Optionals::OrElse(UnknownObtainLocation);
+        UE::Optionals::OrElse(UnknownObtainLocation);
     Lines.Emplace(FormatLocation(ObtainedLocation));
 
     auto ObtainMethod = ObtainedInformation->GetObtainMethod();
@@ -79,7 +79,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     MemoBlock->SetText(FText::FromString(Lines |
-        ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }) |
+        UE::Ranges::Map(&FText::ToString) |
         UE::Ranges::ToString(TEXT("\n"))));
 }
 

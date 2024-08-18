@@ -24,6 +24,7 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
@@ -63,7 +64,7 @@ void APokemonBattle::BeginPlay() {
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    Sides | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+    Sides | UE::Ranges::CastType<AActor> |
         UE::Ranges::ForEach([](AActor *Actor) { Actor->Destroy(); });
 }
 

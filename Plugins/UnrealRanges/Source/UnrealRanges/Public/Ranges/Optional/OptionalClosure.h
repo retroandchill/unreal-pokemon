@@ -26,7 +26,7 @@ namespace UE::Optionals {
         }
     
     private:
-        F Functor;
+        F Functor = F();
     };    
     
 }

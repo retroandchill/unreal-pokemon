@@ -13,6 +13,7 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -83,7 +84,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     TargetData->SetActors(
         Targets |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
+        UE::Ranges::CastType<AActor> |
         ranges::views::transform([](AActor *A) { return TWeakObjectPtr<AActor>(A); }) | UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
