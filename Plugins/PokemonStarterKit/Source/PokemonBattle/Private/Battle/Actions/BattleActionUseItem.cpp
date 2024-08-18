@@ -12,6 +12,7 @@
 #include "DataTypes/OptionalUtilities.h"
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/filter.hpp>
@@ -53,7 +54,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     auto &Owner = GetBattler();
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto ExistingHandle = AbilityComponent->FindAbilityOfClass(EffectClass);
-    auto Handle = OptionalUtilities::OrElseGet(ExistingHandle, [&EffectClass, &Owner, &AbilityComponent] {
+    auto Handle = ExistingHandle | UE::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
         FGameplayAbilitySpec Spec(EffectClass, 1, INDEX_NONE, Owner.GetObject());
         return AbilityComponent->GiveAbility(Spec);
     });

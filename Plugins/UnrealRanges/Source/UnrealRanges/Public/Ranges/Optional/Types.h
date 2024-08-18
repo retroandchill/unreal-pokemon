@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "OptionalRef.h"
 
-namespace UE::Ranges {
+/**
+ * The optional specific part of the UE Ranges library.
+ */
+namespace UE::Optionals {
 
     namespace Detail {
 
@@ -43,6 +46,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     using TOptionalType = typename Detail::TOptionalValueTraits<T>::Type;
+
     
     
 }

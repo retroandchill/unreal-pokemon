@@ -4,12 +4,13 @@
 #include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
+#include "Ranges/Optional/OrElseGet.h"
 
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.LevelMet.Get(DTO.Level);
 
-    ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [this] {
+    ObtainText = DTO.MetLocation | UE::Optionals::OrElseGet([this] {
         return UPokemonSubsystem::Exists(this) ? UPokemonSubsystem::GetInstance(this).GetCurrentLocation() : FText();
     });
 
