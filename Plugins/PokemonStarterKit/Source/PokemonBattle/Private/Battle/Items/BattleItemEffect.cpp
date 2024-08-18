@@ -15,6 +15,7 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/cache1.hpp>
@@ -90,7 +91,7 @@ TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const
                return UE::Ranges::CreateRange(List);
            }) |
            ranges::views::join |
-           ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
+           UE::Ranges::MakeStrong |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
            ranges::views::filter(&AActor::Implements<UBattler>) |
            UE::Ranges::CastType<IBattler> |

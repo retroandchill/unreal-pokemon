@@ -10,6 +10,7 @@
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"
@@ -84,7 +85,7 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
     };
 
     return Species.Moves | ranges::views::filter(MoveLevelInRange) | ranges::views::filter(DoesNotKnowMove) |
-           ranges::views::transform([](const FLevelUpMove &Move) { return Move.Move; }) | UE::Ranges::ToArray;
+           UE::Ranges::Map(&FLevelUpMove::Move) | UE::Ranges::ToArray;
 }
 
 void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {

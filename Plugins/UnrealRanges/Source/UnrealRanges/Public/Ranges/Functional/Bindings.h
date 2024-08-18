@@ -37,5 +37,11 @@ namespace UE::Ranges {
             return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
         }
     }
+
+    template <typename M>
+        requires std::is_member_pointer_v<M> && (!std::is_member_function_pointer_v<M>)
+    FORCEINLINE constexpr auto CreateBinding(M&& Member) {
+        return Forward<M>(Member);
+    }
     
 }

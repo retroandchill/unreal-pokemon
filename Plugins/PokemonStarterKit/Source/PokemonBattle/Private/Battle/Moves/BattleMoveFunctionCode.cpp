@@ -28,6 +28,7 @@
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include "Species/Stat.h"
 #include <range/v3/view/cache1.hpp>
@@ -70,7 +71,7 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
 
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
     auto TagsList = BattleMove->GetTags() |
-                    ranges::views::transform([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) |
+                    UE::Ranges::Map([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) |
                     UE::Ranges::ToArray;
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
     TagsList.Emplace(Pokemon::Battle::Moves::GetUserCategoryTag(BattleMove->GetCategory()));
@@ -143,7 +144,7 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                return UE::Ranges::CreateRange(List);
            }) |
            ranges::views::join |
-           ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
+           UE::Ranges::MakeStrong |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
            ranges::views::filter(&AActor::Implements<UBattler>) |
            ranges::views::filter([](AActor *Actor) {
