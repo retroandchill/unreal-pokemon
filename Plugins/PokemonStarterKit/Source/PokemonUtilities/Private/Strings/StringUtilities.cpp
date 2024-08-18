@@ -2,8 +2,8 @@
 
 #include "Strings/StringUtilities.h"
 #include "Ranges/Views/ContainerView.h"
-#include <range/v3/view/transform.hpp>
 #include <range/v3/view/span.hpp>
+#include <range/v3/view/transform.hpp>
 
 bool UStringUtilities::StartsWithVowelText(FText Text) {
     return StartsWithVowel(Text.ToString());

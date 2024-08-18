@@ -26,8 +26,7 @@ void USaveGameCard::NativeConstruct() {
 
     Algo::ForEach(Icons, &UWidget::RemoveFromParent);
     Icons = Subsystem.GetPlayer()->GetParty() |
-            ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this)) |
-            UE::Ranges::ToArray;
+            ranges::views::transform(std::bind_front(&USaveGameCard::CreatePokemonIcon, this)) | UE::Ranges::ToArray;
 
     // TODO: Badges and Pokédex info when it's ready
 

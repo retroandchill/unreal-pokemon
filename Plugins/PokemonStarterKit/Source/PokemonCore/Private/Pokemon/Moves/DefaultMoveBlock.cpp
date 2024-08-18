@@ -8,8 +8,8 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"
@@ -83,10 +83,8 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
             [&Move](const TScriptInterface<IMove> &MoveData) { return MoveData->GetMoveData().ID == Move.Move; });
     };
 
-    return Species.Moves | ranges::views::filter(MoveLevelInRange) |
-           ranges::views::filter(DoesNotKnowMove) |
-           ranges::views::transform([](const FLevelUpMove &Move) { return Move.Move; }) |
-           UE::Ranges::ToArray;
+    return Species.Moves | ranges::views::filter(MoveLevelInRange) | ranges::views::filter(DoesNotKnowMove) |
+           ranges::views::transform([](const FLevelUpMove &Move) { return Move.Move; }) | UE::Ranges::ToArray;
 }
 
 void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {

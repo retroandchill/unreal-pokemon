@@ -7,7 +7,7 @@
 #include "ModularPlayerState.generated.h"
 
 namespace EEndPlayReason {
-enum Type : int;
+    enum Type : int;
 }
 
 class UObject;

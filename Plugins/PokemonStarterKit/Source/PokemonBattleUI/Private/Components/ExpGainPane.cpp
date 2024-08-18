@@ -21,8 +21,7 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
     Panels = OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer) |
-             ranges::views::transform(std::bind_front(&UExpGainPane::CreateBattlerPanel, this)) |
-             UE::Ranges::ToArray;
+             ranges::views::transform(std::bind_front(&UExpGainPane::CreateBattlerPanel, this)) | UE::Ranges::ToArray;
 }
 
 void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {

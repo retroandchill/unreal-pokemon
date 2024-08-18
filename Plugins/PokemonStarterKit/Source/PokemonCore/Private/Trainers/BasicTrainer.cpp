@@ -6,8 +6,8 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/transform.hpp>
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
@@ -37,10 +37,10 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
     return {.InternalID = InternalId,
             .TrainerType = TrainerType,
             .Name = Name,
-            .Party =
-                Party |
-                ranges::views::transform([](const TScriptInterface<IPokemon> &Pokemon) { return Pokemon->ToDTO(); }) |
-                UE::Ranges::ToArray,
+            .Party = Party | ranges::views::transform([](const TScriptInterface<IPokemon> &Pokemon) {
+                         return Pokemon->ToDTO();
+                     }) |
+                     UE::Ranges::ToArray,
             .ID = ID,
             .SecretID = SecretID};
 }

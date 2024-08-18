@@ -41,112 +41,112 @@ enum class EDamageEffectiveness : uint8 {
 
 namespace Pokemon::TypeEffectiveness {
 
-/**
- * The amount to multiply a move's damage by for an immunity
- */
-constexpr float IneffectiveMultiplier = 0.0f;
+    /**
+     * The amount to multiply a move's damage by for an immunity
+     */
+    constexpr float IneffectiveMultiplier = 0.0f;
 
-/**
- * The amount to multiply a move's damage by for a resistance
- */
-constexpr float NotVeryEffectiveMultiplier = 0.5f;
+    /**
+     * The amount to multiply a move's damage by for a resistance
+     */
+    constexpr float NotVeryEffectiveMultiplier = 0.5f;
 
-/**
- * The amount of multiply a move's damage by when it does normal damage.
- */
-constexpr float NormalEffectiveMultiplier = 1.0f;
+    /**
+     * The amount of multiply a move's damage by when it does normal damage.
+     */
+    constexpr float NormalEffectiveMultiplier = 1.0f;
 
-/**
- * The amount to multiply a move's damage by for a weakness
- */
-constexpr float SuperEffectiveMultiplier = 2.0f;
+    /**
+     * The amount to multiply a move's damage by for a weakness
+     */
+    constexpr float SuperEffectiveMultiplier = 2.0f;
 
-/**
- * Is the match-up against the move ineffective?
- * @param Multiplier The multiplier for the determined match-up
- * @return Is the match-up against the move ineffective?
- */
-constexpr bool IsIneffective(float Multiplier) {
-    return Multiplier <= IneffectiveMultiplier;
-}
-
-/**
- * Is the match-up against the move not-very-effective?
- * @param Multiplier The multiplier for the determined match-up
- * @return Is the match-up against the move not-very-effective?
- */
-constexpr bool IsNotVeryEffective(float Multiplier) {
-    return Multiplier > IneffectiveMultiplier && Multiplier < NormalEffectiveMultiplier;
-}
-
-/**
- * Is the match-up against the move not-very-effective or ineffective?
- * @param Multiplier The multiplier for the determined match-up
- * @return Is the match-up against the move not-very-effective or ineffective?
- */
-constexpr bool IsResistant(float Multiplier) {
-    return Multiplier < NormalEffectiveMultiplier;
-}
-
-/**
- * Is the match-up against the move normally effectiveness?
- * @param Multiplier The multiplier for the determined match-up
- * @return Is the match-up against the move normally effectiveness?
- */
-constexpr bool IsNormal(float Multiplier) {
-    return Multiplier == NormalEffectiveMultiplier;
-}
-
-/**
- * Is the match-up against the move super effective?
- * @param Multiplier The multiplier for the determined match-up
- * @return Is the match-up against the move super effective?
- */
-constexpr bool IsSuperEffective(float Multiplier) {
-    return Multiplier > NormalEffectiveMultiplier;
-}
-
-/**
- * Get the effectiveness multiplier for the given effectiveness value
- * @param Effectiveness The effectiveness to evaluate
- * @return The multiplier to apply
- */
-constexpr float GetMultiplierForEffectiveness(EDamageEffectiveness Effectiveness) {
-    using enum EDamageEffectiveness;
-    switch (Effectiveness) {
-    case NoEffect:
-        return IneffectiveMultiplier;
-    case NotVeryEffective:
-        return NotVeryEffectiveMultiplier;
-    case SuperEffective:
-        return SuperEffectiveMultiplier;
-    default:
-        return NormalEffectiveMultiplier;
-    }
-}
-
-/**
- * Get the effectiveness amount from the provided multiplier
- * @param Multiplier The multiplier for the determined match-up
- * @return The state of effectiveness
- */
-constexpr EDamageEffectiveness GetEffectivenessFromMultiplier(float Multiplier) {
-    using enum EDamageEffectiveness;
-
-    if (IsIneffective(Multiplier)) {
-        return NoEffect;
+    /**
+     * Is the match-up against the move ineffective?
+     * @param Multiplier The multiplier for the determined match-up
+     * @return Is the match-up against the move ineffective?
+     */
+    constexpr bool IsIneffective(float Multiplier) {
+        return Multiplier <= IneffectiveMultiplier;
     }
 
-    if (IsNotVeryEffective(Multiplier)) {
-        return NotVeryEffective;
+    /**
+     * Is the match-up against the move not-very-effective?
+     * @param Multiplier The multiplier for the determined match-up
+     * @return Is the match-up against the move not-very-effective?
+     */
+    constexpr bool IsNotVeryEffective(float Multiplier) {
+        return Multiplier > IneffectiveMultiplier && Multiplier < NormalEffectiveMultiplier;
     }
 
-    if (IsSuperEffective(Multiplier)) {
-        return SuperEffective;
+    /**
+     * Is the match-up against the move not-very-effective or ineffective?
+     * @param Multiplier The multiplier for the determined match-up
+     * @return Is the match-up against the move not-very-effective or ineffective?
+     */
+    constexpr bool IsResistant(float Multiplier) {
+        return Multiplier < NormalEffectiveMultiplier;
     }
 
-    return Normal;
-}
+    /**
+     * Is the match-up against the move normally effectiveness?
+     * @param Multiplier The multiplier for the determined match-up
+     * @return Is the match-up against the move normally effectiveness?
+     */
+    constexpr bool IsNormal(float Multiplier) {
+        return Multiplier == NormalEffectiveMultiplier;
+    }
+
+    /**
+     * Is the match-up against the move super effective?
+     * @param Multiplier The multiplier for the determined match-up
+     * @return Is the match-up against the move super effective?
+     */
+    constexpr bool IsSuperEffective(float Multiplier) {
+        return Multiplier > NormalEffectiveMultiplier;
+    }
+
+    /**
+     * Get the effectiveness multiplier for the given effectiveness value
+     * @param Effectiveness The effectiveness to evaluate
+     * @return The multiplier to apply
+     */
+    constexpr float GetMultiplierForEffectiveness(EDamageEffectiveness Effectiveness) {
+        using enum EDamageEffectiveness;
+        switch (Effectiveness) {
+        case NoEffect:
+            return IneffectiveMultiplier;
+        case NotVeryEffective:
+            return NotVeryEffectiveMultiplier;
+        case SuperEffective:
+            return SuperEffectiveMultiplier;
+        default:
+            return NormalEffectiveMultiplier;
+        }
+    }
+
+    /**
+     * Get the effectiveness amount from the provided multiplier
+     * @param Multiplier The multiplier for the determined match-up
+     * @return The state of effectiveness
+     */
+    constexpr EDamageEffectiveness GetEffectivenessFromMultiplier(float Multiplier) {
+        using enum EDamageEffectiveness;
+
+        if (IsIneffective(Multiplier)) {
+            return NoEffect;
+        }
+
+        if (IsNotVeryEffective(Multiplier)) {
+            return NotVeryEffective;
+        }
+
+        if (IsSuperEffective(Multiplier)) {
+            return SuperEffective;
+        }
+
+        return Normal;
+    }
 
 } // namespace Pokemon::TypeEffectiveness
 

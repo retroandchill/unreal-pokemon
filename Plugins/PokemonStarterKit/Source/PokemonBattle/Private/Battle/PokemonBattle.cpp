@@ -21,9 +21,9 @@
 #include "Pokemon/Pokemon.h"
 #include "range/v3/view/join.hpp"
 #include "range/v3/view/transform.hpp"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/ContainerView.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/numeric/accumulate.hpp>
@@ -62,8 +62,7 @@ void APokemonBattle::BeginPlay() {
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    auto AllSides =
-        Sides | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
+    auto AllSides = Sides | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
     ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
 }
 
@@ -200,8 +199,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     auto PlayerSpeed =
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    ranges::for_each(GetOpposingSide()->GetBattlers() |
-                         ranges::views::filter(&IBattler::IsNotFainted) |
+    ranges::for_each(GetOpposingSide()->GetBattlers() | ranges::views::filter(&IBattler::IsNotFainted) |
                          ranges::views::transform([](const TScriptInterface<IBattler> &Foe) {
                              return Foe->GetAbilityComponent()->GetNumericAttributeBase(
                                  UPokemonCoreAttributeSet::GetSpeedAttribute());

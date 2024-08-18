@@ -6,10 +6,10 @@
 #include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
+#include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Species/SpeciesData.h"
 #include "TextureCompiler.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Algorithm/ToArray.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>

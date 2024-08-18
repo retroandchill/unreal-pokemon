@@ -6,8 +6,8 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -33,8 +33,7 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    auto PossibleMoves = Battler->GetMoves() | ranges::views::filter(&IsMoveUsable) |
-                         UE::Ranges::ToArray;
+    auto PossibleMoves = Battler->GetMoves() | ranges::views::filter(&IsMoveUsable) | UE::Ranges::ToArray;
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
     // this class to call to a series of additional child objects that represent the checks that can be used. It may
@@ -43,8 +42,8 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
     auto Targets = Move->GetAllPossibleTargets() |
-        ranges::views::transform([](const TScriptInterface<IBattler>& M) { return FTargetWithIndex(M); } ) |
-        UE::Ranges::ToArray;
+                   ranges::views::transform([](const TScriptInterface<IBattler> &M) { return FTargetWithIndex(M); }) |
+                   UE::Ranges::ToArray;
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
 }
 

@@ -12,9 +12,9 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/ContainerView.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
 
@@ -120,8 +120,7 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
         }) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
         ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
-            ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
-        UE::Ranges::ToArray);
+        ranges::views::transform([](AActor *A) { return TWeakObjectPtr<AActor>(A); }) | UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);

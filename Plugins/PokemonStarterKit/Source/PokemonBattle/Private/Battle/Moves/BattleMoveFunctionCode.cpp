@@ -26,13 +26,13 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Species/Stat.h"
+#include <range/v3/view/cache1.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/join.hpp>
 #include <range/v3/view/transform.hpp>
-#include <range/v3/view/cache1.hpp>
 
 int32 FCapturedBattleStat::GetStatValue() const {
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
@@ -137,10 +137,11 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                                                                const FGameplayAbilityActorInfo &ActorInfo,
                                                                const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
-        ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
-        ranges::views::cache1 |
-        ranges::views::transform(
-               [](const TArray<TWeakObjectPtr<AActor>> &List) { return UE::Ranges::CreateRange(List); }) |
+           ranges::views::transform(
+               [](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
+           ranges::views::cache1 | ranges::views::transform([](const TArray<TWeakObjectPtr<AActor>> &List) {
+               return UE::Ranges::CreateRange(List);
+           }) |
            ranges::views::join |
            ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
@@ -180,8 +181,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bSuccess;
     };
-    auto FilteredTargets = Targets | ranges::views::filter(TargetFailureCheckCallback) |
-                           UE::Ranges::ToArray;
+    auto FilteredTargets = Targets | ranges::views::filter(TargetFailureCheckCallback) | UE::Ranges::ToArray;
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
@@ -200,8 +200,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bHitResult;
     };
-    auto SuccessfulHits = FilteredTargets | ranges::views::filter(HitCheckCallback) |
-                          UE::Ranges::ToArray;
+    auto SuccessfulHits = FilteredTargets | ranges::views::filter(HitCheckCallback) | UE::Ranges::ToArray;
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())

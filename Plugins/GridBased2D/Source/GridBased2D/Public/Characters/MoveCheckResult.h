@@ -44,21 +44,21 @@ struct GRIDBASED2D_API FMoveCheckResult {
 
 // Structured binding metadata declaration
 namespace std {
-template <>
-struct tuple_size<FMoveCheckResult> : integral_constant<size_t, 2> {};
+    template <>
+    struct tuple_size<FMoveCheckResult> : integral_constant<size_t, 2> {};
 
-template <>
-struct tuple_element<0, FMoveCheckResult> {
-    using type = bool;
-};
+    template <>
+    struct tuple_element<0, FMoveCheckResult> {
+        using type = bool;
+    };
 
-template <>
-struct tuple_element<1, FMoveCheckResult> {
-    using type = TArray<TScriptInterface<IInteractable>>;
-};
+    template <>
+    struct tuple_element<1, FMoveCheckResult> {
+        using type = TArray<TScriptInterface<IInteractable>>;
+    };
 
-template <size_t Index>
-struct tuple_element<Index, FMoveCheckResult> : conditional<Index == 0, std::string, int> {
-    static_assert(Index < 2, "Index out of bounds for MoveCheckResult");
-};
+    template <size_t Index>
+    struct tuple_element<Index, FMoveCheckResult> : conditional<Index == 0, std::string, int> {
+        static_assert(Index < 2, "Index out of bounds for MoveCheckResult");
+    };
 } // namespace std

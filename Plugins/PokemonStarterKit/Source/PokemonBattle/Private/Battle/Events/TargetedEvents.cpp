@@ -85,7 +85,8 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
 
     SendOutEventForActor(EventTags.GlobalTag, EventData, UserActor);
     SendOutEventForActor(EventTags.UserTag, EventData, UserActor);
-    for (AActor *Ally : User->GetAllies() | filter(&IBattler::IsNotFainted) | transform(&UE::Ranges::CastInterfaceChecked<AActor>)) {
+    for (AActor *Ally :
+         User->GetAllies() | filter(&IBattler::IsNotFainted) | transform(&UE::Ranges::CastInterfaceChecked<AActor>)) {
         SendOutEventForActor(EventTags.GlobalTag, EventData, Ally);
         SendOutEventForActor(EventTags.UserAllyTag, EventData, Ally);
     }
@@ -93,7 +94,8 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     auto TargetActor = CastChecked<AActor>(Target.GetObject());
     SendOutEventForActor(EventTags.GlobalTag, EventData, TargetActor);
     SendOutEventForActor(EventTags.TargetTag, EventData, TargetActor);
-    for (AActor *Ally : Target->GetAllies() | filter(&IBattler::IsNotFainted) | transform(&UE::Ranges::CastInterfaceChecked<AActor>)) {
+    for (AActor *Ally :
+         Target->GetAllies() | filter(&IBattler::IsNotFainted) | transform(&UE::Ranges::CastInterfaceChecked<AActor>)) {
         SendOutEventForActor(EventTags.GlobalTag, EventData, Ally);
         SendOutEventForActor(EventTags.TargetAllyTag, EventData, Ally);
     }

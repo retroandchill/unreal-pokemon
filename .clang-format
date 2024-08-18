@@ -7,6 +7,7 @@ TabWidth: 4
 IndentWidth: 4
 SortIncludes: CaseInsensitive
 AllowShortFunctionsOnASingleLine: None
+NamespaceIndentation: All
 IncludeBlocks: Regroup
 IncludeCategories:
     - Regex: 'CoreMinimal.h'

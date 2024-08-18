@@ -109,8 +109,7 @@ void AActiveSide::BeginPlay() {
 
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    auto AllBattlers =
-        Battlers | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
+    auto AllBattlers = Battlers | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
     ranges::for_each(AllBattlers, [](AActor *Actor) { Actor->Destroy(); });
 }
 

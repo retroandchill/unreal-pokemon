@@ -12,7 +12,7 @@
 class APlayerController;
 class ULocalPlayer;
 namespace ETravelFailure {
-enum Type : int;
+    enum Type : int;
 }
 struct FOnlineResultInformation;
 

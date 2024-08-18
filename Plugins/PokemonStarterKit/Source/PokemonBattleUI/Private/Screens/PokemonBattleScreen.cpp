@@ -152,8 +152,8 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
     auto Targets = Move->GetAllPossibleTargets() |
-        ranges::views::transform([](const TScriptInterface<IBattler>& B) { return FTargetWithIndex(B); }) |
-        UE::Ranges::ToArray;
+                   ranges::views::transform([](const TScriptInterface<IBattler> &B) { return FTargetWithIndex(B); }) |
+                   UE::Ranges::ToArray;
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
