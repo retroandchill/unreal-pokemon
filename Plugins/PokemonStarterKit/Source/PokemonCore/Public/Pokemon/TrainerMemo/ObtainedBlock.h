@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ObtainMethod.h"
 #include "UObject/Interface.h"
+#include "Ranges/Optional/OptionalRef.h"
 
 #include "ObtainedBlock.generated.h"
 
@@ -43,7 +44,7 @@ class POKEMONCORE_API IObtainedBlock {
      * Get the time this Pokémon was received
      * @return When was this Pokémon received
      */
-    virtual const FDateTime *GetTimeReceived() const = 0;
+    virtual TOptional<const FDateTime &> GetTimeReceived() const = 0;
 
     /**
      * Get the location or other means of obtaining that this Pokémon has.
@@ -55,7 +56,7 @@ class POKEMONCORE_API IObtainedBlock {
      * Get the time this Pokémon hatched
      * @return The date and time the egg hatched.
      */
-    virtual const FDateTime *GetTimeHatched() const = 0;
+    virtual TOptional<const FDateTime &> GetTimeHatched() const = 0;
 
     /**
      * Set the this Pokémon hatched

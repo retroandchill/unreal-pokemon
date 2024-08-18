@@ -27,7 +27,7 @@ int32 UDefaultObtainedBlock::GetLevelMet() const {
     return LevelMet;
 }
 
-const FDateTime *UDefaultObtainedBlock::GetTimeReceived() const {
+TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeReceived() const {
     return &TimeReceived;
 }
 
@@ -35,7 +35,7 @@ TOptional<FText> UDefaultObtainedBlock::GetObtainText() {
     return ObtainText;
 }
 
-const FDateTime *UDefaultObtainedBlock::GetTimeHatched() const {
+TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeHatched() const {
     return TimeHatched.GetPtrOrNull();
 }
 

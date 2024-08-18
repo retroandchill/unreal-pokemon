@@ -90,9 +90,9 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .StatusEffect = StatusEffect,
             .ObtainMethod = ObtainedBlock->GetObtainMethod(),
             .LevelMet = ObtainedBlock->GetLevelMet(),
-            .TimeReceived = OptionalUtilities::OfNullable(ObtainedBlock->GetTimeReceived()),
+            .TimeReceived = ObtainedBlock->GetTimeReceived().GetValueOptional(),
             .MetLocation = ObtainedBlock->GetObtainText(),
-            .TimeHatched = OptionalUtilities::OfNullable(ObtainedBlock->GetTimeHatched()),
+            .TimeHatched = ObtainedBlock->GetTimeHatched().GetValueOptional(),
             .HatchedMap = ObtainedBlock->GetHatchedMap(),
             .OwnerInfo = OwnerInfo};
 }

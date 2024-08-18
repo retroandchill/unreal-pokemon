@@ -11,8 +11,7 @@ namespace UE::Ranges {
      * Object used to handle a closure for a terminal pipe operation with ranges
      */
     template <typename F>
-    class TTerminalClosure {
-      public:
+    struct TTerminalClosure {
         /**
          * Default constructor, used for constant closure declarations.
          */

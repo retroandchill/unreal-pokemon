@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "range/v3/functional/bind_back.hpp"
-#include <TypeTraits.h>
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
 

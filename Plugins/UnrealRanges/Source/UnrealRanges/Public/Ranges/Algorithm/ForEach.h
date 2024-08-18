@@ -15,8 +15,7 @@ namespace UE::Ranges {
      * @tparam F The type of the functor to call as part of the for each loop.
      */
     template <typename F>
-    class TForEachInvoker {
-    public:
+    struct TForEachInvoker {
         /**
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.

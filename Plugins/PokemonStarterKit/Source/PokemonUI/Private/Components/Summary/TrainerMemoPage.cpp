@@ -30,7 +30,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     auto ObtainedInformation = Pokemon->GetObtainedInformation();
-    if (auto TimeReceived = ObtainedInformation->GetTimeReceived(); TimeReceived != nullptr) {
+    if (auto TimeReceived = ObtainedInformation->GetTimeReceived(); TimeReceived.IsSet()) {
         Lines.Emplace(FormatDate(*TimeReceived));
     }
 
@@ -47,7 +47,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     if (ObtainMethod == EObtainMethod::Egg) {
-        if (auto TimeHatched = ObtainedInformation->GetTimeHatched(); TimeHatched != nullptr) {
+        if (auto TimeHatched = ObtainedInformation->GetTimeHatched(); TimeHatched.IsSet()) {
             Lines.Emplace(FormatDate(*TimeHatched));
         }
 
