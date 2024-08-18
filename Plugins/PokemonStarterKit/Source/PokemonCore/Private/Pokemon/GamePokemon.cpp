@@ -83,7 +83,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Nature = StatBlock->GetNature().ID,
             .Ability = AbilityBlock->GetAbilityID(),
             .Item = HoldItem,
-            .Moves = UE::Ranges::CreateRange(MoveBlock->GetMoves()) |
+            .Moves = MoveBlock->GetMoves() |
                      ranges::views::transform([](const TScriptInterface<IMove> &Move) { return Move->ToDTO(); }) |
                      UE::Ranges::ToArray,
             .MoveMemory = MoveBlock->GetMoveMemory(),

@@ -68,7 +68,7 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     BattleMove = CastChecked<UUseMovePayload>(TriggerEventData->OptionalObject)->Move;
 
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
-    auto TagsList = UE::Ranges::CreateRange(BattleMove->GetTags()) |
+    auto TagsList = BattleMove->GetTags() |
                     ranges::views::transform([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) |
                     UE::Ranges::ToArray;
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
@@ -136,7 +136,7 @@ FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
                                                                const FGameplayAbilityActorInfo &ActorInfo,
                                                                const FGameplayEventData *TriggerEventData) {
-    return UE::Ranges::CreateRange(TriggerEventData->TargetData.Data) |
+    return TriggerEventData->TargetData.Data |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
         ranges::views::cache1 |
         ranges::views::transform(
@@ -180,7 +180,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bSuccess;
     };
-    auto FilteredTargets = UE::Ranges::CreateRange(Targets) | ranges::views::filter(TargetFailureCheckCallback) |
+    auto FilteredTargets = Targets | ranges::views::filter(TargetFailureCheckCallback) |
                            UE::Ranges::ToArray;
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
@@ -200,7 +200,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bHitResult;
     };
-    auto SuccessfulHits = UE::Ranges::CreateRange(FilteredTargets) | ranges::views::filter(HitCheckCallback) |
+    auto SuccessfulHits = FilteredTargets | ranges::views::filter(HitCheckCallback) |
                           UE::Ranges::ToArray;
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {

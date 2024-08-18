@@ -186,7 +186,7 @@ UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FName> &Types) const {
     auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
-    return UE::Ranges::CreateRange(Types) | ranges::views::transform([&PathSettings](FName Type) {
+    return Types | ranges::views::transform([&PathSettings](FName Type) {
                return GetFullAssetName(PathSettings.TypeIconPrefix, Type);
            }) |
            ranges::views::transform(

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/RangeConcepts.h"
 #include <range/v3/range/concepts.hpp>
+#include <range/v3/view/view.hpp>
 
 namespace UE::Ranges {
 
@@ -121,7 +122,7 @@ public:
      * Construct a new view with a reference to a container.
      * @param Container The container to reference.
      */
-    explicit TUEContainerView(T &Container) : Container(&Container) {
+    explicit constexpr TUEContainerView(T &Container) : Container(&Container) {
     }
 
     /**
@@ -171,15 +172,30 @@ private:
 /**
  * Create a new range from the provided array.
  * @tparam T The type of data the array holds
- * @param Range The array view to create the view from.
+ * @param Container The array view to create the view from.
  * @return The created view
  */
 template <typename T>
     requires IsUEContainer<T>
-auto CreateRange(T& Range) {
-    return TUEContainerView<T>(Range);
+FORCEINLINE constexpr auto CreateRange(T& Container) {
+    return TUEContainerView<T>(Container);
 }
 
+}
+
+/**
+ * Overload of the pipe operator so that UE containers can be piped directly into a range without calling
+ * CreateRange on it first.
+ * @tparam T The type of the container
+ * @tparam V The type of the view closure being passed in
+ * @param Container The container being passed in
+ * @param ViewClosure The closure to pipe into
+ * @return The result of the view operation
+ */
+template <typename T, typename V>
+    requires UE::Ranges::IsUEContainer<T>
+FORCEINLINE constexpr auto operator|(T& Container, ranges::views::view_closure<V> ViewClosure) {
+    return UE::Ranges::CreateRange(Container) | ViewClosure;
 }
 
 template <typename T>

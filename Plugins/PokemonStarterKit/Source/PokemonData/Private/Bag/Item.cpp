@@ -60,7 +60,7 @@ TArray<FName> UItemHelper::GetItemNames() {
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
-    return UE::Ranges::CreateRange(Rows) |
+    return Rows |
            ranges::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
            ranges::views::transform([](const FItem *Item) { return Item->ID; }) | UE::Ranges::ToArray;
 }

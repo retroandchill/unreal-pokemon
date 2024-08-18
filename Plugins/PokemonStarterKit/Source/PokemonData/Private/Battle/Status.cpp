@@ -8,6 +8,6 @@
 TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     static auto &Table = FDataManager::GetInstance().GetDataTable<FStatus>();
     auto Rows = Table.GetAllRows();
-    return UE::Ranges::CreateRange(Rows) |
+    return Rows |
            ranges::views::transform([](const FStatus *Status) { return Status->ID; }) | UE::Ranges::ToArray;
 }

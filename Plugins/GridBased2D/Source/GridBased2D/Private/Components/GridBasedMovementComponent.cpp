@@ -219,7 +219,7 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 TArray<TScriptInterface<IInteractable>>
 UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
     auto Results = HitTestOnFacingTile(MovementDirection);
-    return UE::Ranges::CreateRange(Results) |
+    return Results |
            ranges::views::transform([](const FOverlapResult &Result) { return Result.GetActor(); }) |
            ranges::views::filter(&AActor::Implements<UInteractable>) |
            ranges::views::transform([](AActor* Actor) { return TScriptInterface<IInteractable>(Actor); }) |

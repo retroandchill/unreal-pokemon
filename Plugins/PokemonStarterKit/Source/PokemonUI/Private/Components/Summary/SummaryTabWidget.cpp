@@ -43,7 +43,7 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
     Algo::ForEach(PageButtons, &UWidget::RemoveFromParent);
 
     auto Pages = SummaryPages->GetPages();
-    PageButtons = UE::Ranges::CreateRange(Pages) |
+    PageButtons = Pages |
                   ranges::views::transform(std::bind_front(&USummaryTabWidget::CreatePageButton, this)) |
                   UE::Ranges::ToArray;
 

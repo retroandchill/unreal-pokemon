@@ -82,7 +82,7 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 }
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
-    return UE::Ranges::CreateRange(TriggerEventData->TargetData.Data) |
+    return TriggerEventData->TargetData.Data |
         ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
         ranges::views::cache1 |
            ranges::views::transform(

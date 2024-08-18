@@ -115,7 +115,7 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->SetActors(
-        UE::Ranges::CreateRange(Targets) | ranges::views::transform([](const FTargetWithIndex &TargetWithIndex) {
+        Targets | ranges::views::transform([](const FTargetWithIndex &TargetWithIndex) {
             return TargetWithIndex.SwapIfNecessary();
         }) |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |

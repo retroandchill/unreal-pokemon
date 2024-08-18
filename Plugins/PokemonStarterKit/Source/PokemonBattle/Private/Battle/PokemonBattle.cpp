@@ -35,10 +35,6 @@ static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return UE::Ranges::CreateRange(Side->GetBattlers());
 }
 
-static bool IsFainted(const TScriptInterface<IBattler> &Battler) {
-    return Battler->IsFainted();
-}
-
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
 }
@@ -67,7 +63,7 @@ void APokemonBattle::BeginPlay() {
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     auto AllSides =
-        UE::Ranges::CreateRange(Sides) | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
+        Sides | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
     ranges::for_each(AllSides, [](AActor *Actor) { Actor->Destroy(); });
 }
 
@@ -188,7 +184,7 @@ ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const
 }
 
 ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
-    return UE::Ranges::CreateRange(Sides) | ranges::views::transform(&GetBattlers) | ranges::views::join |
+    return Sides | ranges::views::transform(&GetBattlers) | ranges::views::join |
            ranges::views::filter(&IBattler::IsNotFainted);
 }
 
@@ -204,7 +200,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     auto PlayerSpeed =
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    ranges::for_each(UE::Ranges::CreateRange(GetOpposingSide()->GetBattlers()) |
+    ranges::for_each(GetOpposingSide()->GetBattlers() |
                          ranges::views::filter(&IBattler::IsNotFainted) |
                          ranges::views::transform([](const TScriptInterface<IBattler> &Foe) {
                              return Foe->GetAbilityComponent()->GetNumericAttributeBase(
@@ -315,7 +311,7 @@ void APokemonBattle::EndTurn() {
 
         // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out
         // faints
-        ranges::for_each(UE::Ranges::CreateRange(Sides[i]->GetBattlers()) | ranges::views::filter(&IsFainted),
+        ranges::for_each(Sides[i]->GetBattlers() | ranges::views::filter(&IBattler::IsFainted),
                          [this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
                              auto BattlerId = Battler->GetInternalId();
                              CurrentActionCount.Add(BattlerId, 0);

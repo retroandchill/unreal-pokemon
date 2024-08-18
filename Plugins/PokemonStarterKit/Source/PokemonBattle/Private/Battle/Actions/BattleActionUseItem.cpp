@@ -81,7 +81,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     }
 
     TargetData->SetActors(
-        UE::Ranges::CreateRange(Targets) |
+        Targets |
         ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
         ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
             ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |

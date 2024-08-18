@@ -26,7 +26,7 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
     ID = DTO.ID;
     SecretID = DTO.SecretID;
 
-    Party = UE::Ranges::CreateRange(DTO.Party) | ranges::views::transform([this](const FPokemonDTO &Pokemon) {
+    Party = DTO.Party | ranges::views::transform([this](const FPokemonDTO &Pokemon) {
                 return UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon);
             }) |
             UE::Ranges::ToArray;
@@ -38,7 +38,7 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
             .TrainerType = TrainerType,
             .Name = Name,
             .Party =
-                UE::Ranges::CreateRange(Party) |
+                Party |
                 ranges::views::transform([](const TScriptInterface<IPokemon> &Pokemon) { return Pokemon->ToDTO(); }) |
                 UE::Ranges::ToArray,
             .ID = ID,

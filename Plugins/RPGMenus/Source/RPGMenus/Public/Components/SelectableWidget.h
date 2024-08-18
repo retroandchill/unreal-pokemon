@@ -139,7 +139,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      */
     template <typename T>
     auto GetSelectableOptions() const {
-        return UE::Ranges::CreateRange(SelectableButtons) |
+        return SelectableButtons |
                ranges::views::transform([](UCommonButtonBase *Button) { return CastChecked<T>(Button); });
     }
 
