@@ -33,7 +33,7 @@ public:
      * @return The result of the closure operation (can be void depending on the closure)
      */
     template <typename R>
-        requires ranges::input_range<R>
+        requires ranges::input_range<R> && std::is_invocable_v<F, R>
     FORCEINLINE friend constexpr auto operator|(R&& Range, TTerminalClosure Closure) {
         return Closure.Functor(Forward<R>(Range));
     }

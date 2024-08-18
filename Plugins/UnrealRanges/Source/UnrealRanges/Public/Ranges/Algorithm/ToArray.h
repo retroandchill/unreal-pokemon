@@ -7,7 +7,6 @@
 #include <range/v3/range/concepts.hpp>
 
 namespace UE::Ranges {
-
 /**
  * Terminal operator for converting a range into a TArray object.
  */
