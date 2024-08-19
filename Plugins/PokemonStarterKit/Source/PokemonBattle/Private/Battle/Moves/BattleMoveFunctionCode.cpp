@@ -32,10 +32,8 @@
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include "Species/Stat.h"
-#include <range/v3/view/cache1.hpp>
+#include "Ranges/Views/CacheLast.h"
 #include <range/v3/view/filter.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/transform.hpp>
 
 int32 FCapturedBattleStat::GetStatValue() const {
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
@@ -141,7 +139,7 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                                                                const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
            UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           ranges::views::cache1 |
+           UE::Ranges::CacheLast |
            UE::Ranges::Join |
            UE::Ranges::MakeStrong |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |

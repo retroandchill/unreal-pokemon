@@ -15,14 +15,12 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/cache1.hpp>
 #include <range/v3/view/filter.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/transform.hpp>
 
 UBattleItemEffect::UBattleItemEffect() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -88,7 +86,7 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
            UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           ranges::views::cache1 |
+           UE::Ranges::CacheLast |
            UE::Ranges::Join |
            UE::Ranges::MakeStrong |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
