@@ -30,6 +30,11 @@ namespace UE::Ranges {
         
     };
 
+    /**
+     * Cast the type to another type. This will automatically handle the conversion between script interfaces and
+     * UObjects without the need to explicitly specify that.
+     * @tparam T The type to cast to.
+     */
     template <typename T>
     constexpr ranges::views::view_closure<TCastType<T>> CastType;
     

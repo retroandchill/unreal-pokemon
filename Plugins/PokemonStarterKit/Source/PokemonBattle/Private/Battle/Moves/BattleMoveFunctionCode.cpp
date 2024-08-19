@@ -28,6 +28,7 @@
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include "Species/Stat.h"
@@ -140,10 +141,8 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                                                                const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
            UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           ranges::views::cache1 | ranges::views::transform([](const TArray<TWeakObjectPtr<AActor>> &List) {
-               return UE::Ranges::CreateRange(List);
-           }) |
-           ranges::views::join |
+           ranges::views::cache1 |
+           UE::Ranges::Join |
            UE::Ranges::MakeStrong |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
            ranges::views::filter(&AActor::Implements<UBattler>) |

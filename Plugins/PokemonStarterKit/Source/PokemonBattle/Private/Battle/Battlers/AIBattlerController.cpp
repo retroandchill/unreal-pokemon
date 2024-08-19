@@ -7,6 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include <functional>
 #include <range/v3/view/filter.hpp>
@@ -42,7 +43,7 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
     auto Targets = Move->GetAllPossibleTargets() |
-                   ranges::views::transform([](const TScriptInterface<IBattler> &M) { return FTargetWithIndex(M); }) |
+                   UE::Ranges::Construct<FTargetWithIndex>() |
                    UE::Ranges::ToArray;
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
 }

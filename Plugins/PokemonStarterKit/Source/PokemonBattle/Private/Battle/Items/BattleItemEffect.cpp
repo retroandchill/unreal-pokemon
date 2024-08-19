@@ -15,6 +15,7 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include <range/v3/algorithm/for_each.hpp>
@@ -87,13 +88,12 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
     return TriggerEventData->TargetData.Data |
            UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           ranges::views::cache1 | ranges::views::transform([](const TArray<TWeakObjectPtr<AActor>> &List) {
-               return UE::Ranges::CreateRange(List);
-           }) |
-           ranges::views::join |
+           ranges::views::cache1 |
+           UE::Ranges::Join |
            UE::Ranges::MakeStrong |
            ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
            ranges::views::filter(&AActor::Implements<UBattler>) |
            UE::Ranges::CastType<IBattler> |
-           ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this)) | UE::Ranges::ToArray;
+           ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this)) |
+           UE::Ranges::ToArray;
 }

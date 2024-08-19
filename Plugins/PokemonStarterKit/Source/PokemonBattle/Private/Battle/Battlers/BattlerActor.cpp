@@ -35,6 +35,7 @@
 #include "range/v3/view/filter.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 #include "Species/PokemonStatType.h"
@@ -134,10 +135,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
-    InnateAbilityHandles =
-        InnateAbilities | ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
-            return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
-        }) |
+    InnateAbilityHandles = InnateAbilities |
+        UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
+        UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
         UE::Ranges::ToArray;
     InnateEffectHandles = InnateEffects | UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();

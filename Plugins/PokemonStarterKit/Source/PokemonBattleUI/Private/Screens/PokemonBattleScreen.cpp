@@ -17,6 +17,7 @@
 #include "Components/PokemonActionOptions.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Construct.h"
 #include <functional>
 
 void UPokemonBattleScreen::NativeConstruct() {
@@ -154,7 +155,7 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
     auto Targets = Move->GetAllPossibleTargets() |
-                   ranges::views::transform([](const TScriptInterface<IBattler> &B) { return FTargetWithIndex(B); }) |
+                   UE::Ranges::Construct<FTargetWithIndex>() | 
                    UE::Ranges::ToArray;
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->DeactivateWidget();
