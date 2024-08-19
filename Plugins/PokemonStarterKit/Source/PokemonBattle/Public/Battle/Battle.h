@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Events/BattleMessage.h"
 #include "Functional/FunctionalShorthands.h"
+#include "Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
-#include <range/v3/view/any_view.hpp>
 
 #include "Battle.generated.h"
 
@@ -101,7 +101,7 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual void StartBattle() = 0;
 
-    virtual FRunningMessageSet OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) = 0;
+    virtual FRunningMessageSet OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
 
     /**
      * Add an action to the pending queue
@@ -128,13 +128,13 @@ class POKEMONBATTLE_API IBattle {
      * Get all sides in the current battle
      * @return A view of all sides in the battle
      */
-    virtual ranges::any_view<TScriptInterface<IBattleSide>> GetSides() const = 0;
+    virtual UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const = 0;
 
     /**
      * Get all active battlers in the battle
      * @return A view of all active battlers
      */
-    virtual ranges::any_view<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
+    virtual UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
 
     /**
      * Initiate the process of selecting actions for the given battler.

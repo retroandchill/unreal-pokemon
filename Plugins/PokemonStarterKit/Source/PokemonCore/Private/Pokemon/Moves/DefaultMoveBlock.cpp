@@ -15,8 +15,6 @@
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon> &Pokemon,
                                                            const FPokemonDTO &DTO) {

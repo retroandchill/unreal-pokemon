@@ -6,8 +6,6 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 TArray<FName> UStatHelper::GetStatNames() {
     return FDataManager::GetInstance().GetDataTable<FStat>().GetTableRowNames();

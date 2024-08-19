@@ -44,9 +44,6 @@
 #include "Species/Stat.h"
 #include "Utilities/TrainerHelpers.h"
 #include <functional>
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Move, ABattlerActor *Battler) {
     check(Battler != nullptr)
@@ -337,7 +334,7 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+UE::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
     return OwningSide->GetBattlers() | UE::Ranges::Filter([this](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() == InternalId;
            });

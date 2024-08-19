@@ -11,7 +11,6 @@
 #include "Player/PlayerMetadata.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/transform.hpp>
 
 void USaveGameCard::NativeConstruct() {
     Super::NativeConstruct();

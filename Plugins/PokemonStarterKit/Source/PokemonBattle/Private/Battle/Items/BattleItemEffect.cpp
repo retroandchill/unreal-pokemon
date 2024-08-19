@@ -21,8 +21,6 @@
 #include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/filter.hpp>
 
 UBattleItemEffect::UBattleItemEffect() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();

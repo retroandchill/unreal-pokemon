@@ -11,7 +11,7 @@
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Views/ContainerView.h"
 
 UPocketTabWidget::UPocketTabWidget() {
     for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets) {

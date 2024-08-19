@@ -12,13 +12,10 @@
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(MoveTemp(Battler));

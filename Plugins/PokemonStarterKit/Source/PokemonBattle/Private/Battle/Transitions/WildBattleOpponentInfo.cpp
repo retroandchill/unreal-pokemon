@@ -8,7 +8,6 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/transform.hpp>
 
 FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo)
     : OpposingPokemonInfo({PokemonInfo}) {

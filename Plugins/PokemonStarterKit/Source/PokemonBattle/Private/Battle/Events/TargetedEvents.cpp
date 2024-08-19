@@ -10,14 +10,11 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
+#include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/concat.hpp>
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/single.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Views/Join.h"
+#include "Ranges/Views/Single.h"
 
 const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Scope) {
     switch (Scope) {
@@ -41,10 +38,10 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
 }
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
-    auto SideView = ranges::views::single(Side) | UE::Ranges::CastType<AActor>;
+    auto SideView = UE::Ranges::Single(Side) | UE::Ranges::CastType<AActor>;
     auto ActiveBattlers = Side->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
                           UE::Ranges::CastType<AActor>;
-    return ranges::views::concat(SideView, ActiveBattlers);
+    return UE::Ranges::Concat(SideView, ActiveBattlers);
 }
 
 static void SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag, FGameplayEventData &EventData) {
@@ -62,7 +59,7 @@ void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle>
     SendOutEventForActor(BattleActor, Tag, EventData);
     Battle->GetSides() |
         UE::Ranges::Map(&UnrollBattleSide) |
-        ranges::views::join |
+        UE::Ranges::Join |
         UE::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
 }
 

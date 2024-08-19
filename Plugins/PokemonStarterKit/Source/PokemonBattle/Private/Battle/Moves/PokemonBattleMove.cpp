@@ -19,8 +19,6 @@
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
                                                              const TScriptInterface<IMove> &Move) {
@@ -43,7 +41,7 @@ bool UPokemonBattleMove::IsUsable() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-ranges::any_view<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
+UE::Ranges::TAnyView<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();

@@ -4,10 +4,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
-#include "Data/CursorDirection.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
-#include <range/v3/view/transform.hpp>
 
 #include "SelectableWidget.generated.h"
 

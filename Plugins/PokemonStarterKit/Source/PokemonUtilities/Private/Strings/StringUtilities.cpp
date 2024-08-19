@@ -4,8 +4,7 @@
 #include "Ranges/Algorithm/ToString.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/span.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Views/Span.h"
 
 bool UStringUtilities::StartsWithVowelText(const FText& Text) {
     return StartsWithVowel(Text.ToString());
@@ -37,7 +36,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText& Co
             UE::Ranges::ToString(Conjunction.ToString()));
     }
 
-    auto JoinedItems = ranges::span(Items.GetData(), Items.Num() - 1) |
+    auto JoinedItems = UE::Ranges::TSpan(Items.GetData(), Items.Num() - 1) |
         UE::Ranges::Map(ExtractString) |
         UE::Ranges::ToString(TEXT(", "));
     if (bOxfordComma) {

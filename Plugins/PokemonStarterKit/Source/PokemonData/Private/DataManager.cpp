@@ -6,7 +6,6 @@
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/transform.hpp>
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();

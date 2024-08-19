@@ -10,13 +10,10 @@
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Functional/Bindings.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
     PrimaryComponentTick.bCanEverTick = true;

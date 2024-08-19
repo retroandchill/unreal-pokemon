@@ -6,13 +6,11 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
-#include "Components/BattleItemSelectPane.h"
 #include "Components/BattlerExpPanel.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Map.h"
 #include "Utilities/TrainerHelpers.h"
-#include <range/v3/functional/bind_back.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Views/ContainerView.h"
 
 void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     OwningBattle = Battle;

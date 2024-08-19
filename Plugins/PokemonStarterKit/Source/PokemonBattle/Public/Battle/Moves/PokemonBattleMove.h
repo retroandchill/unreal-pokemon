@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BattleMove.h"
 #include "GameplayAbilitySpecHandle.h"
+#include "Ranges/Views/AnyView.h"
 
 #include "PokemonBattleMove.generated.h"
 
@@ -28,7 +29,7 @@ class POKEMONBATTLE_API UPokemonBattleMove : public UObject, public IBattleMove 
     UFUNCTION(BlueprintPure, Category = Usability)
     bool IsUsable() const override;
 
-    ranges::any_view<TScriptInterface<IBattler>> GetAllPossibleTargets() const override;
+    UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetAllPossibleTargets() const override;
 
     UFUNCTION(BlueprintPure, Category = Display)
     FText GetDisplayName() const override;

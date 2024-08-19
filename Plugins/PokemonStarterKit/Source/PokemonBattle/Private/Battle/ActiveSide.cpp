@@ -16,12 +16,6 @@
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/concat.hpp>
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/single.hpp>
-#include <range/v3/view/transform.hpp>
 
 static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>> &BattleParty) {
     for (uint8 j = Start + 1; j < BattleParty.Num(); j++) {

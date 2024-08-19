@@ -28,12 +28,6 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
-#include <functional>
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/numeric/accumulate.hpp>
-#include <range/v3/view/concat.hpp>
-#include <range/v3/view/empty.hpp>
-#include <range/v3/view/filter.hpp>
 
 static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
     return UE::Ranges::CreateRange(Side->GetBattlers());
@@ -121,7 +115,7 @@ void APokemonBattle::StartBattle() {
     StartTurn();
 }
 
-FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
+FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     FRunningMessageSet Messages;
     auto Sorted = Battlers | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::ToArray;
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
@@ -182,11 +176,11 @@ const TScriptInterface<IBattleSide> &APokemonBattle::GetOpposingSide() const {
     return Sides[OpponentSideIndex];
 }
 
-ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
+UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
     return UE::Ranges::CreateRange(Sides);
 }
 
-ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
+UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     return Sides |
         UE::Ranges::Map(&GetBattlers) |
         UE::Ranges::Join |

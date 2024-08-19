@@ -12,8 +12,6 @@
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OrElse.h"
 #include "Species/Nature.h"
-#include "Species/Stat.h"
-#include <range/v3/view/transform.hpp>
 
 FCharacteristicList::FCharacteristicList() = default;
 

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
 #include "Pokemon/Pokemon.h"
-#include <range/v3/view/any_view.hpp>
 
 #include "SummaryPages.generated.h"
 

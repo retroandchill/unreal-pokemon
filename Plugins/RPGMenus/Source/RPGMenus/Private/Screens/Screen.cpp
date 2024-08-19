@@ -1,14 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/Screen.h"
-#include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
-#include "CommonUITypes.h"
 #include "Components/SelectableWidget.h"
-#include "EnhancedInputSubsystems.h"
 #include "PrimaryGameLayout.h"
 #include "RPGUIManagerSubsystem.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/unique.hpp>
 
 class UEnhancedInputLocalPlayerSubsystem;
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");

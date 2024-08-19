@@ -35,7 +35,6 @@
 #include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/FilterValid.h"
-#include <range/v3/view/filter.hpp>
 
 int32 FCapturedBattleStat::GetStatValue() const {
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();

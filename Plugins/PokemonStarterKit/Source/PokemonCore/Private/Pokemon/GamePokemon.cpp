@@ -23,7 +23,6 @@
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
-#include <range/v3/view/transform.hpp>
 
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
