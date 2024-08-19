@@ -9,13 +9,8 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include <functional>
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
-
-static bool IsMoveUsable(const TScriptInterface<IBattleMove> &Move) {
-    return Move->IsUsable();
-}
 
 void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const {
     // Doing this async is probably overkill, but as the AI gets more complicated and adds more conditions that it
@@ -34,7 +29,9 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    auto PossibleMoves = Battler->GetMoves() | ranges::views::filter(&IsMoveUsable) | UE::Ranges::ToArray;
+    auto PossibleMoves = Battler->GetMoves() |
+        UE::Ranges::Filter(&IBattleMove::IsUsable) |
+            UE::Ranges::ToArray;
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
     // this class to call to a series of additional child objects that represent the checks that can be used. It may

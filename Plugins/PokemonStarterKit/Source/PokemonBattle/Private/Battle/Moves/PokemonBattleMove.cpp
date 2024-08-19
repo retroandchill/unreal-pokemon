@@ -16,6 +16,8 @@
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -46,7 +48,7 @@ ranges::any_view<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleT
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    return Battle->GetActiveBattlers() | ranges::views::filter([UserId](const TScriptInterface<IBattler> &Battler) {
+    return Battle->GetActiveBattlers() | UE::Ranges::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() != UserId;
            });
 }
@@ -118,7 +120,7 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->SetActors(
         Targets | UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) |
-        ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
+        UE::Ranges::FilterValid |
         UE::Ranges::CastType<AActor> |
         UE::Ranges::MakeWeak |
         UE::Ranges::ToArray);

@@ -11,6 +11,7 @@
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/concat.hpp>
 #include <range/v3/view/filter.hpp>
@@ -41,7 +42,7 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     auto SideView = ranges::views::single(Side) | UE::Ranges::CastType<AActor>;
-    auto ActiveBattlers = Side->GetBattlers() | ranges::views::filter(&IBattler::IsNotFainted) |
+    auto ActiveBattlers = Side->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
                           UE::Ranges::CastType<AActor>;
     return ranges::views::concat(SideView, ActiveBattlers);
 }
@@ -89,7 +90,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
     User->GetAllies() |
-        ranges::views::filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::CastType<AActor> |
         UE::Ranges::ForEach([&EventTags, &EventData](AActor* Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
@@ -100,7 +101,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
     Target->GetAllies() |
-        ranges::views::filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::CastType<AActor> |
             UE::Ranges::ForEach([&EventTags, &EventData](AActor* Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);

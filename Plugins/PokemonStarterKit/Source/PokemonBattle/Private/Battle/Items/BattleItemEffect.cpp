@@ -16,6 +16,8 @@
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/CacheLast.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
@@ -89,9 +91,9 @@ TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const
            UE::Ranges::CacheLast |
            UE::Ranges::Join |
            UE::Ranges::MakeStrong |
-           ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
-           ranges::views::filter(&AActor::Implements<UBattler>) |
+           UE::Ranges::FilterValid |
+           UE::Ranges::Filter(&AActor::Implements<UBattler>) |
            UE::Ranges::CastType<IBattler> |
-           ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this)) |
+           UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) |
            UE::Ranges::ToArray;
 }

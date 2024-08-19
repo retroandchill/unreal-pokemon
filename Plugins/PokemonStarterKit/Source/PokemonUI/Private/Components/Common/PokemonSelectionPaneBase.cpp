@@ -7,6 +7,7 @@
 #include "Components/Party/SelectablePanel.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Views/Filter.h"
 #include <range/v3/algorithm/find_if.hpp>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/filter.hpp>
@@ -14,7 +15,7 @@
 TOptional<UPokemonPanel &> UPokemonSelectionPaneBase::FindPanelForPokemon(
     const TScriptInterface<IPokemon> &Pokemon) const {
     return GetSelectableOptions<UPokemonPanel>() |
-        ranges::views::filter([&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
+        UE::Ranges::Filter([&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
         UE::Ranges::FindFirst;    
 }
 

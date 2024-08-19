@@ -26,6 +26,8 @@
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Join.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/numeric/accumulate.hpp>
@@ -121,7 +123,7 @@ void APokemonBattle::StartBattle() {
 
 FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(ranges::any_view<TScriptInterface<IBattler>> Battlers) {
     FRunningMessageSet Messages;
-    auto Sorted = Battlers | ranges::views::filter(&IBattler::IsNotFainted) | UE::Ranges::ToArray;
+    auto Sorted = Battlers | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::ToArray;
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
         int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         int32 SpeedB = FMath::FloorToInt32(B->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
@@ -187,8 +189,8 @@ ranges::any_view<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const
 ranges::any_view<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     return Sides |
         UE::Ranges::Map(&GetBattlers) |
-        ranges::views::join |
-        ranges::views::filter(&IBattler::IsNotFainted);
+        UE::Ranges::Join |
+        UE::Ranges::Filter(&IBattler::IsNotFainted);
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
@@ -204,7 +206,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
     GetOpposingSide()->GetBattlers() |
-        ranges::views::filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::Map(&IBattler::GetAbilityComponent) |
         UE::Ranges::Map(&UAbilitySystemComponent::GetNumericAttributeBase, UPokemonCoreAttributeSet::GetSpeedAttribute()) |
         UE::Ranges::ForEach([&EnemySpeed](float Speed) {
@@ -312,8 +314,8 @@ void APokemonBattle::EndTurn() {
 
         // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out
         // faints
-        ranges::for_each(Sides[i]->GetBattlers() | ranges::views::filter(&IBattler::IsFainted),
-                         [this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
+        Sides[i]->GetBattlers() | UE::Ranges::Filter(&IBattler::IsFainted) |
+            UE::Ranges::ForEach([this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
                              auto BattlerId = Battler->GetInternalId();
                              CurrentActionCount.Add(BattlerId, 0);
                              ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());

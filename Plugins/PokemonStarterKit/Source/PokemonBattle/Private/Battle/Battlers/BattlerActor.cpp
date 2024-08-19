@@ -37,6 +37,7 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
@@ -337,7 +338,7 @@ uint8 ABattlerActor::GetActionCount() const {
 }
 
 ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
-    return OwningSide->GetBattlers() | ranges::views::filter([this](const TScriptInterface<IBattler> &Battler) {
+    return OwningSide->GetBattlers() | UE::Ranges::Filter([this](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() == InternalId;
            });
 }
@@ -358,7 +359,7 @@ void ABattlerActor::RecordParticipation() {
     }
     
     OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
-        ranges::views::filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::ForEach(&IBattler::AddParticipant, this);
 }
 

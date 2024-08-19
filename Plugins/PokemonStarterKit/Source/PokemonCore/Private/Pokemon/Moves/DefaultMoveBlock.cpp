@@ -10,6 +10,7 @@
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
@@ -84,7 +85,7 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
             [&Move](const TScriptInterface<IMove> &MoveData) { return MoveData->GetMoveData().ID == Move.Move; });
     };
 
-    return Species.Moves | ranges::views::filter(MoveLevelInRange) | ranges::views::filter(DoesNotKnowMove) |
+    return Species.Moves | UE::Ranges::Filter(MoveLevelInRange) | UE::Ranges::Filter(DoesNotKnowMove) |
            UE::Ranges::Map(&FLevelUpMove::Move) | UE::Ranges::ToArray;
 }
 

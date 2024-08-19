@@ -13,7 +13,7 @@ namespace UE::Ranges {
 
         template <typename R, typename T = ranges::range_value_t<R>>
             requires ranges::input_range<R> && Optionals::UEOptional<std::remove_cvref_t<T>>
-        auto operator()(R &&Range) const {
+        constexpr auto operator()(R &&Range) const {
             return Range | Map([](T&& Optional) {
                 check(Optional.IsSet())
                 return Optional.GetPtrOrNull();

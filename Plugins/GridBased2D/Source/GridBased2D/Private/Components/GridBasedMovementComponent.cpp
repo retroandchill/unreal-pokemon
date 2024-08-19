@@ -13,6 +13,7 @@
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -223,7 +224,7 @@ TArray<TScriptInterface<IInteractable>>
 UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
     auto Results = HitTestOnFacingTile(MovementDirection);
     return Results | UE::Ranges::Map(&FOverlapResult::GetActor) |
-           ranges::views::filter(&AActor::Implements<UInteractable>) |
+           UE::Ranges::Filter(&AActor::Implements<UInteractable>) |
            UE::Ranges::CastType<IInteractable> |
            UE::Ranges::ToArray;
 }

@@ -15,6 +15,7 @@
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/transform.hpp>
@@ -84,7 +85,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
 
     TargetData->SetActors(
         Targets |
-        ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
+        UE::Ranges::FilterValid |
         UE::Ranges::CastType<AActor> |
         UE::Ranges::MakeWeak |
         UE::Ranges::ToArray);

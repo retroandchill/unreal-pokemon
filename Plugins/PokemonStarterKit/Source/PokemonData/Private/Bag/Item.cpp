@@ -6,6 +6,7 @@
 #include "range/v3/view/transform.hpp"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 
 FItem::FItem() = default;
@@ -61,7 +62,7 @@ TArray<FName> UItemHelper::GetItemNames() {
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
-    return Rows | ranges::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
+    return Rows | UE::Ranges::Filter(&FItem::IsPokeBall) |
            UE::Ranges::Map(&FItem::ID) | UE::Ranges::ToArray;
 }
 
