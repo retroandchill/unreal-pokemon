@@ -1,4 +1,4 @@
-﻿// "Unreal Pokémon" created by Retro & Chill.
+// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Strings/StringUtilities.h"
 #include "Ranges/Algorithm/ToString.h"
@@ -36,7 +36,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText& Co
             UE::Ranges::ToString(Conjunction.ToString()));
     }
 
-    auto JoinedItems = UE::Ranges::TSpan(Items.GetData(), Items.Num() - 1) |
+    auto JoinedItems = UE::Ranges::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
         UE::Ranges::Map(ExtractString) |
         UE::Ranges::ToString(TEXT(", "));
     if (bOxfordComma) {
