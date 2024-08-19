@@ -22,7 +22,7 @@
 
 template <typename T>
     requires std::is_base_of_v<UObject, T>
-static TOptional<T&> LookupAssetByName(FStringView AssetName, FStringView BasePackageName) {
+static TOptional<T&> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
     FStringView Prefix;
     if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
         int32 PrefixLength = CharIndex + 1;
@@ -36,7 +36,7 @@ static TOptional<T&> LookupAssetByName(FStringView AssetName, FStringView BasePa
 
 template <typename T>
     requires std::is_base_of_v<UObject, T>
-static TOptional<T&> LookupAssetByName(FName AssetName, FStringView BasePackageName) {
+static TOptional<T&> LookupAssetByName(FStringView BasePackageName, FName AssetName) {
     return LookupAssetByName<T>(BasePackageName, AssetName.ToString());
 }
 
@@ -146,7 +146,7 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScr
 
 FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerTypeSprite(FName TrainerType, UObject *Outer) const {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->TrainerSpritesPackageName;
-    return LookupAssetByName<UTexture2D>(TrainerType.ToString(), AssetPath) |
+    return LookupAssetByName<UTexture2D>(AssetPath, TrainerType.ToString()) |
         UE::Optionals::Map(&ConvertTextureToMaterial, TrainerSpriteMaterials.FrontSpriteBaseMaterialUI, Outer) |
         UE::Optionals::OrElse(FMaterialInstanceWithSize{nullptr, FVector2D()});
 }
@@ -155,7 +155,7 @@ UObject *UGraphicsLoadingSubsystem::GetTypeIconGraphic(FName Type) const {
     auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
     auto FullName = GetFullAssetName(Type, PathSettings.TypeIconPrefix);
-    return LookupAssetByName<UObject>(FullName, AssetPath).GetPtrOrNull();
+    return LookupAssetByName<UObject>(AssetPath, FullName).GetPtrOrNull();
 }
 
 TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FName> &Types) const {
@@ -163,9 +163,9 @@ TArray<UObject *> UGraphicsLoadingSubsystem::GetTypeIconGraphics(const TArray<FN
     auto &[AssetPath] = PathSettings.TypeIconsPackageName;
     static_assert(UE::Ranges::FunctionalType<decltype(&GetFullAssetName)>);
     auto Binding = Types | UE::Ranges::Map(&GetFullAssetName, PathSettings.TypeIconPrefix);
-    auto Mapping = UE::Ranges::Map([&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(Name, AssetPath); });
+    auto Mapping = UE::Ranges::Map([&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); });
     return Types | UE::Ranges::Map(&GetFullAssetName, PathSettings.TypeIconPrefix) |
-           UE::Ranges::Map([&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(Name, AssetPath); }) |
+           UE::Ranges::Map([&AssetPath](FStringView Name) { return LookupAssetByName<UObject>(AssetPath, Name); }) |
            UE::Ranges::Extract |
            UE::Ranges::ToArray;
 }
@@ -174,31 +174,31 @@ UObject *UGraphicsLoadingSubsystem::GetStatusIconGraphic(FName Status) const {
     auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.StatusIconsPackageName;
     auto FullName = GetFullAssetName(Status, PathSettings.StatusIconPrefix);
-    return LookupAssetByName<UObject>(FullName, AssetPath).GetPtrOrNull();
+    return LookupAssetByName<UObject>(AssetPath, FullName).GetPtrOrNull();
 }
 
 UObject *UGraphicsLoadingSubsystem::GetTypePanelGraphic(FName Type) const {
     auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.TypePanelsPackageName;
     auto FullName = GetFullAssetName(Type, PathSettings.TypePanelPrefix);
-    return LookupAssetByName<UObject>(FullName, AssetPath).GetPtrOrNull();
+    return LookupAssetByName<UObject>(AssetPath, FullName).GetPtrOrNull();
 }
 
 UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     auto &PathSettings = *GetDefault<UDynamicAssetLoadingSettings>();
     auto &[AssetPath] = PathSettings.SummaryBallPackageName;
     auto FullName = GetFullAssetName(PokeBall, PathSettings.SummaryBallPrefix);
-    return LookupAssetByName<UObject>(FullName, AssetPath) |
+    return LookupAssetByName<UObject>(AssetPath, FullName) |
         UE::Optionals::Or([this, &AssetPath] {
-            return LookupAssetByName<UObject>(GetDefault<UPokemonDataSettings>()->DefaultPokeBall.ToString(), AssetPath);
+            return LookupAssetByName<UObject>(AssetPath, GetDefault<UPokemonDataSettings>()->DefaultPokeBall.ToString());
         }) | UE::Optionals::GetPtrOrNull;
 }
 
 UObject *UGraphicsLoadingSubsystem::GetItemIcon(FName ItemID) const {
     static const FName DefaultItem = "000";
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->ItemIconPackageName;
-    return LookupAssetByName<UObject>(ItemID, AssetPath) |
-        UE::Optionals::Or([&AssetPath] { return LookupAssetByName<UObject>(DefaultItem, AssetPath); }) |
+    return LookupAssetByName<UObject>(AssetPath, ItemID) |
+        UE::Optionals::Or([&AssetPath] { return LookupAssetByName<UObject>(AssetPath, DefaultItem); }) |
         UE::Optionals::GetPtrOrNull;
 }
 
