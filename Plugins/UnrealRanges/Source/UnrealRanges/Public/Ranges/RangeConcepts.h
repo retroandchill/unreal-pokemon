@@ -12,10 +12,6 @@
  * Functionality pertaining to UE support for C++ 20 Ranges/range-v3.
  */
 namespace UE::Ranges {
-    /**
-     * Internal namespace for handling details for the concepts of the UE ranges library.
-     */
-    namespace Detail {}
     
     template <typename T>
     concept UnrealInterface = !std::is_base_of_v<UObject, T> && requires {

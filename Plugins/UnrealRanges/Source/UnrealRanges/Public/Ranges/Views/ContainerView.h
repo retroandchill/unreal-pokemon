@@ -176,7 +176,7 @@ namespace UE::Ranges {
      */
     template <typename T>
         requires UEContainer<T>
-    FORCEINLINE constexpr auto CreateRange(T &Container) {
+    constexpr auto CreateRange(T &Container) {
         return TUEContainerView<T>(Container);
     }
 
@@ -193,7 +193,7 @@ namespace UE::Ranges {
  */
 template <typename T, typename V>
     requires UE::Ranges::UEContainer<T>
-FORCEINLINE constexpr auto operator|(T &Container, ranges::views::view_closure<V> ViewClosure) {
+constexpr auto operator|(T &Container, ranges::views::view_closure<V> ViewClosure) {
     return UE::Ranges::CreateRange(Container) | ViewClosure;
 }
 

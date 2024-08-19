@@ -31,7 +31,7 @@ namespace UE::Ranges {
     struct TConstruct {
 
         template <typename... A>
-        FORCEINLINE constexpr auto operator()(A&&... Args) const {
+        constexpr auto operator()(A&&... Args) const {
             if constexpr (sizeof...(A) > 0) {
                 return ranges::make_view_closure(ranges::bind_back(TConstructInvoker<T>(), Forward<A>(Args)...));
             } else {

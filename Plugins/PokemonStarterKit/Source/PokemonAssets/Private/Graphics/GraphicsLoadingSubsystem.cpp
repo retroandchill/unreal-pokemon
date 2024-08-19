@@ -133,7 +133,6 @@ FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Specie
                                                                     const FPokemonAssetParams &AdditionalParams) {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
-    auto Texture = ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList);
     return ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList) |
         UE::Optionals::Map(&ConvertTextureToMaterial, PokemonSpriteMaterials.IconMaterial, Outer) |
         UE::Optionals::OrElse(FMaterialInstanceWithSize{nullptr, FVector2D()});
@@ -189,7 +188,7 @@ UObject *UGraphicsLoadingSubsystem::GetPokeBallIcon(FName PokeBall) const {
     auto &[AssetPath] = PathSettings.SummaryBallPackageName;
     auto FullName = GetFullAssetName(PokeBall, PathSettings.SummaryBallPrefix);
     return LookupAssetByName<UObject>(AssetPath, FullName) |
-        UE::Optionals::Or([this, &AssetPath] {
+        UE::Optionals::Or([&AssetPath] {
             return LookupAssetByName<UObject>(AssetPath, GetDefault<UPokemonDataSettings>()->DefaultPokeBall.ToString());
         }) | UE::Optionals::GetPtrOrNull;
 }
