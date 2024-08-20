@@ -4,8 +4,10 @@
 #include "PokemonDataSettings.h"
 #include "range/v3/view/filter.hpp"
 #include "range/v3/view/transform.hpp"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Map.h"
 
 FItem::FItem() = default;
 
@@ -60,9 +62,8 @@ TArray<FName> UItemHelper::GetItemNames() {
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Rows = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
-    return UE::Ranges::CreateRange(Rows) |
-           ranges::views::filter([](const FItem *Item) { return Item->IsPokeBall(); }) |
-           ranges::views::transform([](const FItem *Item) { return Item->ID; }) | UE::Ranges::ToArray;
+    return Rows | UE::Ranges::Filter(&FItem::IsPokeBall) |
+           UE::Ranges::Map(&FItem::ID) | UE::Ranges::ToArray;
 }
 
 TArray<FName> UItemHelper::GetPocketNames() {

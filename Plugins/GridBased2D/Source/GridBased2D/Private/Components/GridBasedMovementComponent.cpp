@@ -9,10 +9,11 @@
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Views/CastType.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Map.h"
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
     PrimaryComponentTick.bCanEverTick = true;
@@ -219,10 +220,9 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 TArray<TScriptInterface<IInteractable>>
 UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
     auto Results = HitTestOnFacingTile(MovementDirection);
-    return UE::Ranges::CreateRange(Results) |
-           ranges::views::transform([](const FOverlapResult &Result) { return Result.GetActor(); }) |
-           ranges::views::filter(&AActor::Implements<UInteractable>) |
-           ranges::views::transform([](AActor* Actor) { return TScriptInterface<IInteractable>(Actor); }) |
+    return Results | UE::Ranges::Map(&FOverlapResult::GetActor) |
+           UE::Ranges::Filter(&AActor::Implements<UInteractable>) |
+           UE::Ranges::CastType<IInteractable> |
            UE::Ranges::ToArray;
 }
 

@@ -33,18 +33,19 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
 #include "range/v3/view/filter.hpp"
-#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Construct.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Map.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include "Utilities/TrainerHelpers.h"
 #include <functional>
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/transform.hpp>
 
-TScriptInterface<IBattleMove> CreateBattleMove(ABattlerActor *Battler, const TScriptInterface<IMove> &Move) {
+TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Move, ABattlerActor *Battler) {
     check(Battler != nullptr)
     check(Move != nullptr)
     TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
@@ -94,8 +95,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
 
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = UE::Ranges::CreateRange(MoveBlock->GetMoves()) |
-            ranges::views::transform(std::bind_front(&CreateBattleMove, this)) |
+    Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&CreateBattleMove, this) |
             UE::Ranges::ToArray;
     SpawnSpriteActor(ShowImmediately);
 
@@ -115,7 +115,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         Ability = FGameplayAbilitySpecHandle();
     }
 
-    if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem());
+    if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem().GetPtrOrNull());
         HoldItemClass != nullptr) {
         HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
     } else {
@@ -133,14 +133,11 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
-    InnateAbilityHandles =
-        UE::Ranges::CreateRange(InnateAbilities) |
-        ranges::views::transform([this](const TSubclassOf<UGameplayAbility> &Type) {
-            return BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(Type, 1, INDEX_NONE, this));
-        }) |
+    InnateAbilityHandles = InnateAbilities |
+        UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
+        UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
         UE::Ranges::ToArray;
-    InnateEffectHandles = UE::Ranges::CreateRange(InnateEffects) |
-                          ranges::views::transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
+    InnateEffectHandles = InnateEffects | UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
                               return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
@@ -223,7 +220,6 @@ bool ABattlerActor::IsFainted() const {
 bool ABattlerActor::IsNotFainted() const {
     return !WrappedPokemon->IsFainted();
 }
-
 
 void ABattlerActor::Faint() const {
     IBattlerSprite::Execute_Faint(Sprite);
@@ -338,10 +334,10 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-ranges::any_view<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
-    return UE::Ranges::CreateRange(OwningSide->GetBattlers()) |
-           ranges::views::filter(
-               [this](const TScriptInterface<IBattler> &Battler) { return Battler->GetInternalId() == InternalId; });
+UE::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+    return OwningSide->GetBattlers() | UE::Ranges::Filter([this](const TScriptInterface<IBattler> &Battler) {
+               return Battler->GetInternalId() == InternalId;
+           });
 }
 
 void ABattlerActor::ShowSprite() const {
@@ -358,11 +354,10 @@ void ABattlerActor::RecordParticipation() {
     if (!IsOwnedByPlayer()) {
         return;
     }
-
-    auto AllOpponents =
-        UE::Ranges::CreateRange(OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers()) |
-        ranges::views::filter(&IBattler::IsNotFainted);
-    ranges::for_each(AllOpponents, ranges::bind_back(&IBattler::AddParticipant, this));
+    
+    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
+        UE::Ranges::Filter(&IBattler::IsNotFainted) |
+        UE::Ranges::ForEach(&IBattler::AddParticipant, this);
 }
 
 void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {

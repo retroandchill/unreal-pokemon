@@ -25,9 +25,9 @@ bool DefaultObtainedBlockTest::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(EObtainMethod::FatefulEncounter, ObtainedBlock->GetObtainMethod());
     UE_ASSERT_TRUE(ObtainedBlock->GetObtainText().IsSet());
     UE_CHECK_EQUAL(TEXT("TestLocation"), ObtainedBlock->GetObtainText().GetValue().ToString());
-    UE_CHECK_NOT_NULL(ObtainedBlock->GetTimeReceived());
+    UE_CHECK_TRUE(ObtainedBlock->GetTimeReceived().IsSet());
     UE_CHECK_FALSE(ObtainedBlock->GetHatchedMap().IsSet());
-    UE_CHECK_NULL(ObtainedBlock->GetTimeHatched());
+    UE_CHECK_FALSE(ObtainedBlock->GetTimeHatched().IsSet());
 
     return true;
 }

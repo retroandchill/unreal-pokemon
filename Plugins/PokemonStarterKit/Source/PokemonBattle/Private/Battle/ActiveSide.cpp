@@ -9,17 +9,13 @@
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Pokemon/Pokemon.h"
-#include "Ranges/Utilities/Helpers.h"
+#include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/concat.hpp>
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/single.hpp>
-#include <range/v3/view/transform.hpp>
 
 static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>> &BattleParty) {
     for (uint8 j = Start + 1; j < BattleParty.Num(); j++) {
@@ -109,9 +105,9 @@ void AActiveSide::BeginPlay() {
 
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    auto AllBattlers =
-        UE::Ranges::CreateRange(Battlers) | ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>);
-    ranges::for_each(AllBattlers, [](AActor *Actor) { Actor->Destroy(); });
+    Battlers |
+        UE::Ranges::CastType<AActor> |
+        UE::Ranges::ForEach([](AActor* A) { return A->Destroy(); });
 }
 
 const FGuid &AActiveSide::GetInternalId() const {

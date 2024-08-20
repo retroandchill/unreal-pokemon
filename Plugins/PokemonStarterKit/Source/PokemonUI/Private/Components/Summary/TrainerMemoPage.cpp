@@ -1,16 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/TrainerMemoPage.h"
-#include "CommonRichTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/Party/PokemonSelectionPane.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
+#include "Ranges/Algorithm/ToString.h"
+#include "Ranges/Optional/IfPresent.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OptionalClosure.h"
+#include "Ranges/Optional/OrElse.h"
 #include "Species/Nature.h"
-#include "Species/Stat.h"
-#include <range/v3/view/transform.hpp>
 
 FCharacteristicList::FCharacteristicList() = default;
 
@@ -28,16 +29,19 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(FText::Format(NatureLineFormat, {{TEXT("Nature"), NatureName}}));
     }
 
-    auto ObtainedInformation = Pokemon->GetObtainedInformation();
-    if (auto TimeReceived = ObtainedInformation->GetTimeReceived(); TimeReceived != nullptr) {
-        Lines.Emplace(FormatDate(*TimeReceived));
-    }
+    auto EmplaceDate = [this, &Lines](const FDateTime& D) {
+        Lines.Emplace(FormatDate(D));
+    };
 
-    TFunctionRef<FText(const FText &Text)> TextCheck = [this](const FText &Text) {
+    auto ObtainedInformation = Pokemon->GetObtainedInformation();
+    ObtainedInformation->GetTimeReceived() | UE::Optionals::IfPresent(EmplaceDate);
+
+    auto TextCheck = [this](const FText &Text) {
         return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text;
     };
-    auto ObtainedLocation =
-        OptionalUtilities::Map(ObtainedInformation->GetObtainText(), TextCheck).Get(UnknownObtainLocation);
+    auto ObtainedLocation = ObtainedInformation->GetObtainText() |
+        UE::Optionals::Map(TextCheck) |
+        UE::Optionals::OrElse(UnknownObtainLocation);
     Lines.Emplace(FormatLocation(ObtainedLocation));
 
     auto ObtainMethod = ObtainedInformation->GetObtainMethod();
@@ -46,12 +50,10 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     }
 
     if (ObtainMethod == EObtainMethod::Egg) {
-        if (auto TimeHatched = ObtainedInformation->GetTimeHatched(); TimeHatched != nullptr) {
-            Lines.Emplace(FormatDate(*TimeHatched));
-        }
-
-        auto HatchedLocation =
-            OptionalUtilities::Map(ObtainedInformation->GetHatchedMap(), TextCheck).Get(UnknownObtainLocation);
+        ObtainedInformation->GetTimeHatched() | UE::Optionals::IfPresent(EmplaceDate);
+        auto HatchedLocation = ObtainedInformation->GetHatchedMap() |
+            UE::Optionals::Map(TextCheck) |
+            UE::Optionals::OrElse(UnknownObtainLocation);
         Lines.Emplace(FormatLocation(HatchedLocation));
         Lines.Emplace(EggHatchedText);
     } else {
@@ -74,18 +76,16 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(CharacteristicList[BestIV % CharacteristicList.Num()]);
     }
 
-    auto JoinedString = FString::Join(
-        UE::Ranges::CreateRange(Lines) |
-            ranges::views::transform([](const FText &Text) -> const FString & { return Text.ToString(); }),
-        TEXT("\n"));
-    MemoBlock->SetText(FText::FromString(MoveTemp(JoinedString)));
+    MemoBlock->SetText(FText::FromString(Lines |
+        UE::Ranges::Map(&FText::ToString) |
+        UE::Ranges::ToString(TEXT("\n"))));
 }
 
 FText UTrainerMemoPage::FormatDate(const FDateTime &DateTime) const {
     return FText::FromString(DateTime.ToFormattedString(*DateLineFormat));
 }
 
-FText UTrainerMemoPage::FormatLocation(FText Location) const {
+FText UTrainerMemoPage::FormatLocation(const FText& Location) const {
     return FText::Format(LocationFormatting, {{TEXT("Location"), Location}});
 }
 

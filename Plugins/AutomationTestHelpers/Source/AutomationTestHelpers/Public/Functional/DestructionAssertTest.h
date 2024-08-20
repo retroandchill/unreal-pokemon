@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "FunctionalTest.h"
+
 #include "DestructionAssertTest.generated.h"
 
 /**
@@ -14,15 +15,14 @@ UCLASS(Abstract)
 class AUTOMATIONTESTHELPERS_API ADestructionAssertTest : public AFunctionalTest {
     GENERATED_BODY()
 
-public:
+  public:
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-protected:
+  protected:
     /**
      * Perform the final assert(s) before play ends.
      * @param EndPlayReason The reason play ended
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Assertions, meta = (ForceAsFunction))
     void FinalAssert(EEndPlayReason::Type EndPlayReason);
-
 };

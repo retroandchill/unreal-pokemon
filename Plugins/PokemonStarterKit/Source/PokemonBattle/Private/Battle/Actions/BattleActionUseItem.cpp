@@ -9,13 +9,13 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "PokemonBattleSettings.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Helpers.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Optional/OrElseGet.h"
+#include "Ranges/Views/CastType.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/FilterValid.h"
+#include "Ranges/Views/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(MoveTemp(Battler));
@@ -53,7 +53,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     auto &Owner = GetBattler();
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto ExistingHandle = AbilityComponent->FindAbilityOfClass(EffectClass);
-    auto Handle = OptionalUtilities::OrElseGet(ExistingHandle, [&EffectClass, &Owner, &AbilityComponent] {
+    auto Handle = ExistingHandle | UE::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
         FGameplayAbilitySpec Spec(EffectClass, 1, INDEX_NONE, Owner.GetObject());
         return AbilityComponent->GiveAbility(Spec);
     });
@@ -81,10 +81,10 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     }
 
     TargetData->SetActors(
-        UE::Ranges::CreateRange(Targets) |
-        ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
-            ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
+        Targets |
+        UE::Ranges::FilterValid |
+        UE::Ranges::CastType<AActor> |
+        UE::Ranges::MakeWeak |
         UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 

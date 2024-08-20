@@ -13,7 +13,7 @@ void UHoldItemUtilities::GetHeldItem(const TScriptInterface<IPokemon> &Pokemon, 
         return;
     }
 
-    if (auto FoundHeldItem = Pokemon->GetHoldItem(); FoundHeldItem != nullptr) {
+    if (auto FoundHeldItem = Pokemon->GetHoldItem(); FoundHeldItem.IsSet()) {
         Branches = HasItem;
         HeldItem = *FoundHeldItem;
     } else {

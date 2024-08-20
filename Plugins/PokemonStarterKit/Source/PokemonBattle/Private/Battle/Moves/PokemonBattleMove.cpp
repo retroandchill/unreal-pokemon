@@ -12,11 +12,13 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Helpers.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
+#include "Ranges/Utilities/Casts.h"
+#include "Ranges/Views/CastType.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/FilterValid.h"
+#include "Ranges/Views/MakeWeak.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
                                                              const TScriptInterface<IMove> &Move) {
@@ -39,12 +41,12 @@ bool UPokemonBattleMove::IsUsable() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-ranges::any_view<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
+UE::Ranges::TAnyView<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    return Battle->GetActiveBattlers() | ranges::views::filter([UserId](const TScriptInterface<IBattler> &Battler) {
+    return Battle->GetActiveBattlers() | UE::Ranges::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() != UserId;
            });
 }
@@ -115,12 +117,10 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->SetActors(
-        UE::Ranges::CreateRange(Targets) | ranges::views::transform([](const FTargetWithIndex &TargetWithIndex) {
-            return TargetWithIndex.SwapIfNecessary();
-        }) |
-        ranges::views::filter([](const FScriptInterface &Interface) { return Interface.GetObject() != nullptr; }) |
-        ranges::views::transform(&UE::Ranges::CastInterfaceChecked<AActor>) |
-            ranges::views::transform([](AActor* A) { return TWeakObjectPtr<AActor>(A); }) |
+        Targets | UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) |
+        UE::Ranges::FilterValid |
+        UE::Ranges::CastType<AActor> |
+        UE::Ranges::MakeWeak |
         UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 

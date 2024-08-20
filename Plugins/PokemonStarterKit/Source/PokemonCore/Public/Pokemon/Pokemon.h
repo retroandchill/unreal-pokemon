@@ -8,6 +8,7 @@
 #include "Manipulation/CircularIterator.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
+#include "Ranges/Optional/OptionalRef.h"
 
 #include "Pokemon.generated.h"
 
@@ -163,7 +164,7 @@ class POKEMONCORE_API IPokemon {
      * Get the hold item used by the Pokémon.
      * @return The held item used by the given Pokémon if it has one
      */
-    virtual const FItem *GetHoldItem() const = 0;
+    virtual TOptional<const FItem &> GetHoldItem() const = 0;
 
     /**
      * Set the item that the Pokémon is currently holding
@@ -182,7 +183,7 @@ class POKEMONCORE_API IPokemon {
      * Get the status effect of the Pokémon.
      * @return The status effect of the Pokémon
      */
-    virtual const FStatus *GetStatusEffect() const = 0;
+    virtual TOptional<const FStatus &> GetStatusEffect() const = 0;
 
     /**
      * Set the Pokémon's status effect
