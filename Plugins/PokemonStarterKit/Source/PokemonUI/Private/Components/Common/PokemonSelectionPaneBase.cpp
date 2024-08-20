@@ -5,13 +5,15 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
-#include <range/v3/algorithm/find_if.hpp>
-#include <range/v3/algorithm/for_each.hpp>
+#include "Ranges/Algorithm/FindFirst.h"
+#include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Views/Filter.h"
 
-UPokemonPanel *UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
-    auto Panels = GetSelectableOptions<UPokemonPanel>();
-    auto Result = ranges::find_if(Panels, [&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; });
-    return Result != Panels.end() ? *Result : nullptr;
+TOptional<UPokemonPanel &> UPokemonSelectionPaneBase::FindPanelForPokemon(
+    const TScriptInterface<IPokemon> &Pokemon) const {
+    return GetSelectableOptions<UPokemonPanel>() |
+        UE::Ranges::Filter([&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
+        UE::Ranges::FindFirst;    
 }
 
 void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon) {
@@ -36,7 +38,8 @@ void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInter
 }
 
 void UPokemonSelectionPaneBase::RefreshWindow() {
-    ranges::for_each(GetSelectableOptions<ISelectablePanel>(), &ISelectablePanel::Refresh);
+    GetSelectableOptions<ISelectablePanel>() |
+     UE::Ranges::ForEach(&ISelectablePanel::Refresh);
 }
 
 bool UPokemonSelectionPaneBase::IsSwitching() const {

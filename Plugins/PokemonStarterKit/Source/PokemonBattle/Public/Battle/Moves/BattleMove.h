@@ -6,7 +6,7 @@
 #include "GameplayAbilitySpecHandle.h"
 #include "Moves/MoveDamageCategory.h"
 #include "UObject/Interface.h"
-#include <range/v3/view/any_view.hpp>
+#include "Ranges/Views/AnyView.h"
 
 #include "BattleMove.generated.h"
 
@@ -52,7 +52,7 @@ class POKEMONBATTLE_API IBattleMove {
      * Compute all possible targets for the move based on the given user information
      * @return The found list of targets
      */
-    virtual ranges::any_view<TScriptInterface<IBattler>> GetAllPossibleTargets() const = 0;
+    virtual UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetAllPossibleTargets() const = 0;
 
     /**
      * Is the move usable

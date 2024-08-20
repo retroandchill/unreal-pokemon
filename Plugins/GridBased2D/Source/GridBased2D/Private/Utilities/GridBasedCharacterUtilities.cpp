@@ -8,7 +8,6 @@
 #include "GridBased2DSettings.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MathUtilities.h"
-#include <range/v3/functional/bind_back.hpp>
 
 TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACharacter *Character) {
     static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());

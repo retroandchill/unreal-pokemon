@@ -24,9 +24,9 @@ class POKEMONCORE_API UDefaultObtainedBlock : public UObject, public IObtainedBl
     UFUNCTION(BlueprintPure, Category = "Trainer Memo")
     int32 GetLevelMet() const override;
 
-    const FDateTime *GetTimeReceived() const override;
+    TOptional<const FDateTime &> GetTimeReceived() const override;
     TOptional<FText> GetObtainText() override;
-    const FDateTime *GetTimeHatched() const override;
+    TOptional<const FDateTime &> GetTimeHatched() const override;
 
     UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
     void SetTimeHatched(const FDateTime &DateTime) override;

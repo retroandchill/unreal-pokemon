@@ -4,9 +4,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
-#include "Data/CursorDirection.h"
+#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
-#include <range/v3/view/transform.hpp>
 
 #include "SelectableWidget.generated.h"
 
@@ -139,8 +138,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      */
     template <typename T>
     auto GetSelectableOptions() const {
-        return UE::Ranges::CreateRange(SelectableButtons) |
-               ranges::views::transform([](UCommonButtonBase *Button) { return CastChecked<T>(Button); });
+        return SelectableButtons | UE::Ranges::CastType<T>;
     }
 
     /**

@@ -1,15 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Pokemon/TrainerMemo/DefaultObtainedBlock.h"
-#include "DataTypes/OptionalUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
+#include "Ranges/Optional/OrElseGet.h"
 
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.LevelMet.Get(DTO.Level);
 
-    ObtainText = OptionalUtilities::OrElseGet(DTO.MetLocation, [this] {
+    ObtainText = DTO.MetLocation | UE::Optionals::OrElseGet([this] {
         return UPokemonSubsystem::Exists(this) ? UPokemonSubsystem::GetInstance(this).GetCurrentLocation() : FText();
     });
 
@@ -27,7 +27,7 @@ int32 UDefaultObtainedBlock::GetLevelMet() const {
     return LevelMet;
 }
 
-const FDateTime *UDefaultObtainedBlock::GetTimeReceived() const {
+TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeReceived() const {
     return &TimeReceived;
 }
 
@@ -35,7 +35,7 @@ TOptional<FText> UDefaultObtainedBlock::GetObtainText() {
     return ObtainText;
 }
 
-const FDateTime *UDefaultObtainedBlock::GetTimeHatched() const {
+TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeHatched() const {
     return TimeHatched.GetPtrOrNull();
 }
 

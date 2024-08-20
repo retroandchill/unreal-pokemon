@@ -20,8 +20,9 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
      * @param Text The supplied text
      * @return does it start with a vowel
      */
-    UFUNCTION(BlueprintPure, Category = "Utilities|Strings", DisplayName = "Starts With a Vowel (Text)")
-    static bool StartsWithVowelText(FText Text);
+    UFUNCTION(BlueprintPure, Category = "Utilities|Strings", DisplayName = "Starts With a Vowel (Text)",
+        meta = (AutoCreateRefTerm = Text))
+    static bool StartsWithVowelText(const FText& Text);
 
     /**
      * Check if the supplied text starts with a vowel
@@ -41,10 +42,10 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
     /**
      * Take a list of strings and generate a single text string list
      * @param Items The items in question to concatenate
-     * @param Contraction The contraction to use on the last two items
+     * @param Conjunction The contraction to use on the last two items
      * @param bOxfordComma Should an oxford comma be applied to a list of 3 or more?
      * @return The generated list string
      */
-    UFUNCTION(BlueprintPure, Category = "Utilities|Strings")
-    static FText GenerateList(const TArray<FText> &Items, FText Contraction, bool bOxfordComma = true);
+    UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Conjunction))
+    static FText GenerateList(const TArray<FText> &Items, const FText& Conjunction, bool bOxfordComma = true);
 };

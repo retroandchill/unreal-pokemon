@@ -3,11 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/Command.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Pokemon/Breeding/PokemonGender.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 #include "PokemonUIUtils.generated.h"
 

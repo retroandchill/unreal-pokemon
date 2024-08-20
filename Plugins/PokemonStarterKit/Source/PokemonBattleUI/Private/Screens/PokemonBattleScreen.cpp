@@ -15,7 +15,9 @@
 #include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Construct.h"
 #include <functional>
 
 void UPokemonBattleScreen::NativeConstruct() {
@@ -33,10 +35,11 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Panels.Reset();
 
     int32 Index = 0;
-    std::ranges::for_each(Battle->GetSides(), [this, &Index](const TScriptInterface<IBattleSide> &Side) {
-        AddPanelsForSide(Index, Side);
-        Index++;
-    });
+    Battle->GetSides() |
+        UE::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
+            AddPanelsForSide(Index, Side);
+            Index++;
+        });
 
     BattleSwitchPane->SetBattle(CurrentBattle);
     ExpGainPane->SetBattle(CurrentBattle);
@@ -152,8 +155,8 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
     auto Targets = Move->GetAllPossibleTargets() |
-        ranges::views::transform([](const TScriptInterface<IBattler>& B) { return FTargetWithIndex(B); }) |
-        UE::Ranges::ToArray;
+                   UE::Ranges::Construct<FTargetWithIndex>() | 
+                   UE::Ranges::ToArray;
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);

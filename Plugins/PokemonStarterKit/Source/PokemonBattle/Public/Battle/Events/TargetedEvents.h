@@ -142,33 +142,33 @@ struct POKEMONBATTLE_API FTargetedEvent {
 
 namespace Pokemon::Battle::Events {
 
-/**
- * Send out an event to the entire battle
- * @param Battle The battle in question
- * @param Payload The payload data for the event
- * @param Tag the tag to apply to the event
- */
-POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject *Payload,
-                                          const FGameplayTag &Tag);
+    /**
+     * Send out an event to the entire battle
+     * @param Battle The battle in question
+     * @param Payload The payload data for the event
+     * @param Tag the tag to apply to the event
+     */
+    POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject *Payload,
+                                              const FGameplayTag &Tag);
 
-/**
- * Send out a single event to the user of a move
- * @param User The user of the move in question
- * @param Payload The payload data for the event
- * @param EventTag The event tag to send out for this event
- */
-POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
-                                        const FNativeGameplayTag &EventTag);
+    /**
+     * Send out a single event to the user of a move
+     * @param User The user of the move in question
+     * @param Payload The payload data for the event
+     * @param EventTag The event tag to send out for this event
+     */
+    POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
+                                            const FNativeGameplayTag &EventTag);
 
-/**
- * Send out a set of events to the battlefield.
- * @param User The user of the move in question
- * @param Target The target of the move in question
- * @param Payload The payload data for the event
- * @param EventTags The event tags to send out for this event
- */
-POKEMONBATTLE_API void SendOutMoveEvents(const TScriptInterface<IBattler> &User,
-                                         const TScriptInterface<IBattler> &Target, const UObject *Payload,
-                                         const FTargetedEvent &EventTags);
+    /**
+     * Send out a set of events to the battlefield.
+     * @param User The user of the move in question
+     * @param Target The target of the move in question
+     * @param Payload The payload data for the event
+     * @param EventTags The event tags to send out for this event
+     */
+    POKEMONBATTLE_API void SendOutMoveEvents(const TScriptInterface<IBattler> &User,
+                                             const TScriptInterface<IBattler> &Target, const UObject *Payload,
+                                             const FTargetedEvent &EventTags);
 
 } // namespace Pokemon::Battle::Events

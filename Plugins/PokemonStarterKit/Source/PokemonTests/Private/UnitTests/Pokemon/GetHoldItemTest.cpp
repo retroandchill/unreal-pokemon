@@ -43,7 +43,7 @@ bool GetHoldItemTest_WithNoItem::RunTest(const FString &Parameters) {
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     bool HasItem = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("HasItem"));
     UE_CHECK_FALSE(HasItem);
-    UE_CHECK_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_FALSE(Pokemon->GetHoldItem().IsSet());
     return true;
 }
 
@@ -63,11 +63,11 @@ bool GetHoldItemTest_WithItem::RunTest(const FString &Parameters) {
     ITestDispatcher::Execute_ExecuteTest(Dispatcher);
     bool HasItem = UReflectionUtils::GetPropertyValue<bool>(Dispatcher, TEXT("HasItem"));
     UE_CHECK_TRUE(HasItem);
-    UE_CHECK_NOT_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_TRUE(Pokemon->GetHoldItem().IsSet());
 
     auto &HoldItem = UReflectionUtils::GetPropertyValue<FItem>(Dispatcher, TEXT("HoldItem"));
     UE_CHECK_EQUAL(TEXT("LIGHTBALL"), HoldItem.ID.ToString());
-    UE_ASSERT_NOT_NULL(Pokemon->GetHoldItem());
+    UE_CHECK_TRUE(Pokemon->GetHoldItem().IsSet());
     UE_CHECK_EQUAL(TEXT("LIGHTBALL"), Pokemon->GetHoldItem()->ID.ToString());
 
     return true;

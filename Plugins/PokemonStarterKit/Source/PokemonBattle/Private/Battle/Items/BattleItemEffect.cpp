@@ -12,13 +12,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include <range/v3/algorithm/for_each.hpp>
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/join.hpp>
-#include <range/v3/view/transform.hpp>
-#include <range/v3/view/cache1.hpp>
+#include "Ranges/Views/CastType.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/CacheLast.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/FilterValid.h"
+#include "Ranges/Views/Join.h"
+#include "Ranges/Views/MakeStrong.h"
+#include "Ranges/Views/Map.h"
 
 UBattleItemEffect::UBattleItemEffect() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -82,18 +84,14 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 }
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
-    return UE::Ranges::CreateRange(TriggerEventData->TargetData.Data) |
-        ranges::views::transform([](const TSharedPtr<FGameplayAbilityTargetData> &Ptr) { return Ptr->GetActors(); }) |
-        ranges::views::cache1 |
-           ranges::views::transform(
-               [](const TArray<TWeakObjectPtr<AActor>> &List) { return UE::Ranges::CreateRange(List); }) |
-           ranges::views::join |
-           ranges::views::transform([](const TWeakObjectPtr<AActor> &Actor) { return Actor.Get(); }) |
-           ranges::views::filter([](const AActor *Actor) { return Actor != nullptr; }) |
-           ranges::views::filter(&AActor::Implements<UBattler>) | ranges::views::transform([](AActor *Actor) {
-               TScriptInterface<IBattler> Battler = Actor;
-               return Battler;
-           }) |
-           ranges::views::filter(std::bind_front(&UBattleItemEffect::IsTargetValid, this)) |
+    return TriggerEventData->TargetData.Data |
+           UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
+           UE::Ranges::CacheLast |
+           UE::Ranges::Join |
+           UE::Ranges::MakeStrong |
+           UE::Ranges::FilterValid |
+           UE::Ranges::Filter(&AActor::Implements<UBattler>) |
+           UE::Ranges::CastType<IBattler> |
+           UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) |
            UE::Ranges::ToArray;
 }

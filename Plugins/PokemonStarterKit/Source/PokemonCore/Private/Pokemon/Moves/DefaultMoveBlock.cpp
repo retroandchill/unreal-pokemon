@@ -8,13 +8,13 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Map.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/transform.hpp>
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon> &Pokemon,
                                                            const FPokemonDTO &DTO) {
@@ -83,10 +83,8 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
             [&Move](const TScriptInterface<IMove> &MoveData) { return MoveData->GetMoveData().ID == Move.Move; });
     };
 
-    return UE::Ranges::CreateRange(Species.Moves) | ranges::views::filter(MoveLevelInRange) |
-           ranges::views::filter(DoesNotKnowMove) |
-           ranges::views::transform([](const FLevelUpMove &Move) { return Move.Move; }) |
-           UE::Ranges::ToArray;
+    return Species.Moves | UE::Ranges::Filter(MoveLevelInRange) | UE::Ranges::Filter(DoesNotKnowMove) |
+           UE::Ranges::Map(&FLevelUpMove::Move) | UE::Ranges::ToArray;
 }
 
 void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {

@@ -43,7 +43,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(void, RequireSwitch, (), (override));
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
     MOCK_METHOD(int32, GetTurnCount, (), (const, override));
-    MOCK_METHOD(ranges::any_view<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
+    MOCK_METHOD(UE::Ranges::TAnyView<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
     MOCK_METHOD(void, ShowSprite, (), (const, override));
     MOCK_METHOD(void, HideSprite, (), (const, override));
     MOCK_METHOD(void, RecordParticipation, (), (override));

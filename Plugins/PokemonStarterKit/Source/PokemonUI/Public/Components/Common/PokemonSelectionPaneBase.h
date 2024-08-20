@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
+#include "Ranges/Optional/OptionalRef.h"
 
 #include "PokemonSelectionPaneBase.generated.h"
 
@@ -25,7 +26,7 @@ class POKEMONUI_API UPokemonSelectionPaneBase : public USelectableWidget {
     GENERATED_BODY()
 
   public:
-    UPokemonPanel *FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const;
+    TOptional<UPokemonPanel &> FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const;
 
     void SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon);
 

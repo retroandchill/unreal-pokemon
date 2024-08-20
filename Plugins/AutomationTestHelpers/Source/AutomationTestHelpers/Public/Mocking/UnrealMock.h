@@ -7,20 +7,20 @@
 
 namespace UnrealMock {
 
-template <typename T>
-TScriptInterface<T> CreateMockedWrapper(T &Mock, UObject *Outer = GetTransientPackage()) {
-    TScriptInterface<T> Ret = NewObject<UMockedObject>(Outer);
-    Ret.SetInterface(&Mock);
-    return Ret;
-}
+    template <typename T>
+    TScriptInterface<T> CreateMockedWrapper(T &Mock, UObject *Outer = GetTransientPackage()) {
+        TScriptInterface<T> Ret = NewObject<UMockedObject>(Outer);
+        Ret.SetInterface(&Mock);
+        return Ret;
+    }
 
-template <typename T>
-TScriptInterface<T> CreateMockedActor(T &Mock, UWorld *World) {
-    auto Actor = World->SpawnActor<AActor>();
-    TScriptInterface<T> Ret = Actor;
-    Ret.SetInterface(&Mock);
-    return Ret;
-}
+    template <typename T>
+    TScriptInterface<T> CreateMockedActor(T &Mock, UWorld *World) {
+        auto Actor = World->SpawnActor<AActor>();
+        TScriptInterface<T> Ret = Actor;
+        Ret.SetInterface(&Mock);
+        return Ret;
+    }
 
 } // namespace UnrealMock
 

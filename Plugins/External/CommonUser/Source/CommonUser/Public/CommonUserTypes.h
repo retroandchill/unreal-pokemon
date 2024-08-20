@@ -17,19 +17,19 @@ using ELoginStatusType = ELoginStatus::Type;
 #include "Online/Connectivity.h"
 #include "Online/OnlineError.h"
 namespace UE::Online {
-enum class ELoginStatus : uint8;
-enum class EPrivilegeResults : uint32;
-enum class EUserPrivileges : uint8;
-using IAuthPtr = TSharedPtr<class IAuth>;
-using IOnlineServicesPtr = TSharedPtr<class IOnlineServices>;
-template <typename OpType>
-class TOnlineResult;
-struct FAuthLogin;
-struct FConnectionStatusChanged;
-struct FExternalUIShowLoginUI;
-struct FAuthLoginStatusChanged;
-struct FQueryUserPrivilege;
-struct FAccountInfo;
+    enum class ELoginStatus : uint8;
+    enum class EPrivilegeResults : uint32;
+    enum class EUserPrivileges : uint8;
+    using IAuthPtr = TSharedPtr<class IAuth>;
+    using IOnlineServicesPtr = TSharedPtr<class IOnlineServices>;
+    template <typename OpType>
+    class TOnlineResult;
+    struct FAuthLogin;
+    struct FConnectionStatusChanged;
+    struct FExternalUIShowLoginUI;
+    struct FAuthLoginStatusChanged;
+    struct FQueryUserPrivilege;
+    struct FAccountInfo;
 } // namespace UE::Online
 using FOnlineErrorType = UE::Online::FOnlineError;
 using ELoginStatusType = UE::Online::ELoginStatus;
