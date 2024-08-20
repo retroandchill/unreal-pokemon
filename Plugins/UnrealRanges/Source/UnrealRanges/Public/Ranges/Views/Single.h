@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <range/v3/view/single.hpp>
+THIRD_PARTY_INCLUDES_END
 
 namespace UE::Ranges {
 

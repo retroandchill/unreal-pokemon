@@ -2,7 +2,7 @@
 
 #include "DependencyInjectionSettings.h"
 
-#ifdef WITH_METADATA
+#if WITH_METADATA
 void UDependencyInjectionSettings::RefreshDependencies() {
     if (CheckForNewInjectableInterfaces()) {
         TryUpdateDefaultConfigFile();
@@ -14,7 +14,7 @@ const TMap<UClass *, FInjectionTarget> &UDependencyInjectionSettings::GetTargetI
     return TargetInjections;
 }
 
-#ifdef WITH_METADATA
+#if WITH_METADATA
 bool UDependencyInjectionSettings::CheckForNewInjectableInterfaces() {
     bool bChangeOccurred = false;
     for (TObjectIterator<UClass> It; It; ++It) {

@@ -35,6 +35,7 @@ void UNumberImageWidget::ReleaseSlateResources(bool bReleaseChildren) {
     ImageBox.Reset();
 }
 
+#if WITH_EDITOR
 void UNumberImageWidget::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
     Super::PostEditChangeProperty(PropertyChangedEvent);
     RebuildWidget();
@@ -44,6 +45,7 @@ void UNumberImageWidget::PostEditChangeChainProperty(FPropertyChangedChainEvent 
     Super::PostEditChangeChainProperty(PropertyChangedEvent);
     RebuildWidget();
 }
+#endif
 
 void UNumberImageWidget::RefreshNumber() {
     if (ImageBox == nullptr) {
