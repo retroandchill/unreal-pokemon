@@ -2,7 +2,6 @@
 
 #include "EncounterData/MapEncounterData.h"
 #include "DataManager.h"
-#include "Field/EncounterType.h"
 #include "Misc/DataValidation.h"
 #include "Species/SpeciesData.h"
 

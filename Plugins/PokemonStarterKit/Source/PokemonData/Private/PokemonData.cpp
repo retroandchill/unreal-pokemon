@@ -8,7 +8,6 @@
 #include "Battle/Type.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "Exp/GrowthRateData.h"
-#include "Field/EncounterType.h"
 #include "Field/Weather.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
@@ -39,7 +38,6 @@ void FPokemonDataModule::StartupModule() {
     DataRegistry.RegisterStruct<FNature>();
     DataRegistry.RegisterStruct<FStatus>();
     DataRegistry.RegisterStruct<FWeather>();
-    DataRegistry.RegisterStruct<FEncounterType>();
     DataRegistry.RegisterStruct<FEnvironment>();
     DataRegistry.RegisterStruct<FBattleWeather>();
     DataRegistry.RegisterStruct<FBattleTerrain>();

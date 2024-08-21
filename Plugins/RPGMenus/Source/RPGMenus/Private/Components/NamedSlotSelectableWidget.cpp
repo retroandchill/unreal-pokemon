@@ -15,8 +15,10 @@ void UNamedSlotSelectableWidget::UpdateOptions() {
     if (ContentSlot == nullptr) {
         return;
     }
+#endif
 
     auto ContentWidget = Cast<UPanelWidget>(ContentSlot->GetContent());
+#if WITH_EDITOR
     if (ContentWidget == nullptr) {
         return;
     }
