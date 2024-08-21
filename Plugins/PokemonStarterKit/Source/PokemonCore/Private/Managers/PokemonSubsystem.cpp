@@ -20,7 +20,8 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
         GrowthRates.Add(Type, Exp::FGrowthRateRegistry::GetInstance().Construct(Type));
     }
 
-#if WITH_EDITOR
+    // TODO: Remove this and create a proper title screen
+#if !UE_BUILD_SHIPPING
     StartNewGame();
 #endif
 }
