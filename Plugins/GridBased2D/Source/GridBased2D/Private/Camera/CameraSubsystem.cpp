@@ -16,7 +16,8 @@ void UCameraSubsystem::Tick(float DeltaTime) {
     auto CameraRotation = PlayerCameraManager->GetCameraRotation();
     if (FVector2D NewRotation(CameraRotation.Yaw + ZRotationAdjustment, CameraRotation.Pitch);
             !CurrentCameraAngle.Equals(NewRotation)) {
-        SetCurrentCameraAngle(NewRotation);
+        CurrentCameraAngle = NewRotation;
+        OnCameraAngleChanged.Broadcast(CurrentCameraAngle);
     }
 }
 
@@ -30,9 +31,4 @@ FOnCameraAngleChanged &UCameraSubsystem::GetOnCameraAngleChanged() {
 
 FVector2D UCameraSubsystem::GetCurrentCameraAngle() const {
     return CurrentCameraAngle;
-}
-
-void UCameraSubsystem::SetCurrentCameraAngle(FVector2D NewAngle) {
-    CurrentCameraAngle = NewAngle;
-    OnCameraAngleChanged.Broadcast(NewAngle);
 }

@@ -39,13 +39,6 @@ class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Camera)
     FVector2D GetCurrentCameraAngle() const;
 
-    /**
-     * Notify the game that the camera angle has changed
-     * @param NewAngle The new angle that the camera was rotated to.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Events)
-    void SetCurrentCameraAngle(FVector2D NewAngle);
-
   private:
     /**
      * The dispatcher called when the camera angle is changed.
@@ -56,7 +49,7 @@ class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem {
     /**
      * The currently cached camera angle.
      */
-    UPROPERTY(BlueprintGetter = GetCurrentCameraAngle, BlueprintSetter = SetCurrentCameraAngle, Category = Camera)
+    UPROPERTY(BlueprintGetter = GetCurrentCameraAngle, Category = Camera)
     FVector2D CurrentCameraAngle;
 
     UPROPERTY()
