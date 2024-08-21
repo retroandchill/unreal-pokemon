@@ -13,10 +13,19 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCameraAngleChanged, FVector2D, An
  * Subystem for handling the camera angle among other aspects of the system.
  */
 UCLASS()
-class GRIDBASED2D_API UCameraSubsystem : public UWorldSubsystem {
+class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem {
     GENERATED_BODY()
 
   public:
+    /**
+     * The adjustment that needs to be made to the Z-Rotation to get the correct rotation in-game.
+     */
+    static constexpr double ZRotationAdjustment = 90.0;
+    
+    void OnWorldBeginPlay(UWorld &InWorld) override;
+    void Tick(float DeltaTime) override;
+    TStatId GetStatId() const override;
+    
     /**
      * Get the dispatcher called when the camera angle is changed.
      * @return The dispatcher called when the camera angle changes.
@@ -49,4 +58,7 @@ class GRIDBASED2D_API UCameraSubsystem : public UWorldSubsystem {
      */
     UPROPERTY(BlueprintGetter = GetCurrentCameraAngle, BlueprintSetter = SetCurrentCameraAngle, Category = Camera)
     FVector2D CurrentCameraAngle;
+
+    UPROPERTY()
+    TObjectPtr<APlayerCameraManager> PlayerCameraManager;
 };
