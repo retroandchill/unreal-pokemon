@@ -25,7 +25,7 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O&& Optional) const {
             if (Optional.IsSet()) {
-                Functor(*Optional);
+                ranges::invoke(Functor, *Optional);
             }
         }
 
