@@ -9,6 +9,7 @@
 #include "Ranges/Functional/Bindings.h"
 
 namespace UE::Optionals {
+        
 
     template <typename F>
     struct TMapInvoker {
@@ -24,8 +25,8 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O&& Optional) const {
-            using ResultType = TOptionalType<decltype(Functor(*Optional))>;
-            return Optional.IsSet() ? Functor(*Optional) : TOptional<ResultType>();
+            using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
+            return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : TOptional<ResultType>();
         }
 
     private:
