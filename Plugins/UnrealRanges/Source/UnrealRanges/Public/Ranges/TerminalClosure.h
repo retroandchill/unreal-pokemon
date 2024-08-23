@@ -36,7 +36,7 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R> && std::is_invocable_v<F, R>
-        FORCEINLINE friend constexpr auto operator|(R &&Range, TTerminalClosure Closure) {
+        friend constexpr auto operator|(R &&Range, TTerminalClosure Closure) {
             return Closure.Functor(Forward<R>(Range));
         }
 

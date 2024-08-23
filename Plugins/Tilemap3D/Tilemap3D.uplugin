@@ -18,6 +18,11 @@
 			"Name": "Tilemap3D",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "Tilemap3DEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }
