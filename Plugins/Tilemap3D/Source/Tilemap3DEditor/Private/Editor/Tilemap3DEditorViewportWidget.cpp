@@ -25,3 +25,10 @@ void UTilemap3DEditorViewportWidget::SetTilemap(ATilemap3D *Tilemap3D) {
         TilemapWidget->SetTilemap(TilemapActor);
     }
 }
+
+void UTilemap3DEditorViewportWidget::SetTile(UStaticMesh *Mesh) {
+    TileMesh = Mesh;
+    if (TilemapWidget != nullptr) {
+        TilemapWidget->SetMesh(TileMesh);
+    }
+}

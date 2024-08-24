@@ -25,6 +25,10 @@ void STilemap3DEditorViewport::SetTilemap(ATilemap3D *Tilemap3D) {
     Tilemap = Tilemap3D;
 }
 
+void STilemap3DEditorViewport::SetMesh(UStaticMesh *InMesh) {
+    Mesh = InMesh;
+}
+
 int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry,
                                         const FSlateRect &MyCullingRect, FSlateWindowElementList &OutDrawElements,
                                         int32 LayerId,
@@ -81,6 +85,12 @@ FVector2D STilemap3DEditorViewport::ComputeDesiredSize(float LayoutScaleMultipli
     }
 
     return FVector2D(Tilemap->GetSizeX() * GridSize, Tilemap->GetSizeY() * GridSize);
+}
+
+void STilemap3DEditorViewport::OnMouseLeave(const FPointerEvent &MouseEvent) {
+    SCompoundWidget::OnMouseLeave(MouseEvent);
+    CurrentMousePosition.Reset();
+    bIsHoldingMouse = false;
 }
 
 FReply STilemap3DEditorViewport::OnMouseMove(const FGeometry &SenderGeometry, const FPointerEvent &MouseEvent) {

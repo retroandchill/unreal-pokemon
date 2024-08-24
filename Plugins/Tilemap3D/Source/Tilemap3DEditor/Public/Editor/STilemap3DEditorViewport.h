@@ -24,11 +24,13 @@ public:
     void Construct(const FArguments &InArgs);
 
     void SetTilemap(ATilemap3D* Tilemap3D);
+    void SetMesh(UStaticMesh* InMesh);
 
     int32 OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry, const FSlateRect &MyCullingRect, FSlateWindowElementList &OutDrawElements, int32 LayerId, const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const override;
 
     FVector2D ComputeDesiredSize(float LayoutScaleMultiplier) const override;
 
+    void OnMouseLeave(const FPointerEvent &MouseEvent) override;
     FReply OnMouseMove(const FGeometry& SenderGeometry, const FPointerEvent& MouseEvent) override;
     FReply OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
     FReply OnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;

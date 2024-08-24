@@ -22,10 +22,13 @@ public:
     void ReleaseSlateResources(bool bReleaseChildren) override;
 
     void SetTilemap(ATilemap3D* Tilemap3D);
-
+    void SetTile(UStaticMesh* Mesh);
 private:
     UPROPERTY()
     TObjectPtr<ATilemap3D> TilemapActor;
+
+    UPROPERTY()
+    TObjectPtr<UStaticMesh> TileMesh;
     
     TSharedPtr<STilemap3DEditorViewport> TilemapWidget;
 

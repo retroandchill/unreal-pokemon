@@ -36,9 +36,11 @@ private:
     void UpdateTileButtons();
     void UpdateTileAppearance(int32 X, int32 Y, int32 Layer);
     
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetTilemapActor, Category = Configuration,
-        meta = (UIMin = 1, ClampMin = 1))
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetTilemapActor, Category = Configuration)
     TObjectPtr<ATilemap3D> TilemapActor;
+    
+    UPROPERTY(EditAnywhere, Category = Configuration)
+    TObjectPtr<UStaticMesh> SelectedTile;
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UTilemap3DEditorViewportWidget> Editor;

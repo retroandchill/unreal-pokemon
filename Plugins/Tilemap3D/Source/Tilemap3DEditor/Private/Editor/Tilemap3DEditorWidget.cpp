@@ -33,6 +33,7 @@ void UTilemap3DEditorWidget::PostEditChangeProperty(FPropertyChangedEvent &Prope
     Super::PostEditChangeProperty(PropertyChangedEvent);
     if (IsValid(Editor)) {
         Editor->SetTilemap(TilemapActor);
+        Editor->SetTile(SelectedTile);
     }
 }
 
