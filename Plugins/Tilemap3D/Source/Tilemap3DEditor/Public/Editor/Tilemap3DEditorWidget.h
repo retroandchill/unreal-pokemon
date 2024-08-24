@@ -6,7 +6,8 @@
 #include "Editor/Blutility/Classes/EditorUtilityWidget.h"
 #include "Tilemap3DEditorWidget.generated.h"
 
-class UCommonButtonBase;
+class ATilemap3D;
+class UTileButtonBase;
 
 /**
  * 
@@ -19,23 +20,29 @@ protected:
     void NativePreConstruct() override;
 
     UFUNCTION(BlueprintImplementableEvent, Category = Placement)
-    void SlotTileButton(UCommonButtonBase* Button, int32 X, int32 Y);
+    void SlotTileButton(UTileButtonBase* Button, int32 X, int32 Y);
 
     UFUNCTION(BlueprintImplementableEvent, Category = Tiles)
     void OnTileButtonClicked(int32 X, int32 Y);
 
-private:
-    UPROPERTY(EditAnywhere, Category = Configuration, meta = (UIMin = 1, ClampMin = 1))
-    int32 SizeX;
+public:
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Configuration)
+    ATilemap3D* GetTilemapActor() const;
 
-    UPROPERTY(EditAnywhere, Category = Configuration, meta = (UIMin = 1, ClampMin = 1))
-    int32 SizeY;
+private:
+    void UpdateTileButtons();
+    void UpdateTileAppearance(int32 X, int32 Y, int32 Layer);
+    
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetTilemapActor, Category = Configuration,
+        meta = (UIMin = 1, ClampMin = 1))
+    TObjectPtr<ATilemap3D> TilemapActor;
 
     UPROPERTY()
-    TArray<TObjectPtr<UCommonButtonBase>> TileButtons;
+    TArray<TObjectPtr<UTileButtonBase>> TileButtons;
 
 	UPROPERTY(EditAnywhere, Category = Style)
-	TSubclassOf<UCommonButtonBase> TileButtonClass;
+	TSubclassOf<UTileButtonBase> TileButtonClass;
 
-
+    FDelegateHandle MapSizeChangedHandle;
+    FDelegateHandle TileChangedHandle;
 };

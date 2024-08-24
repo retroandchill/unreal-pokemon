@@ -22,7 +22,10 @@ public class Tilemap3DEditor : ModuleRules
                 "SlateCore",
                 "Blutility",
                 "UMG",
-                "CommonUI"
+                "CommonUI",
+                "Tilemap3D", 
+                "UnrealRanges",
+                "InputCore"
             }
         );
     }

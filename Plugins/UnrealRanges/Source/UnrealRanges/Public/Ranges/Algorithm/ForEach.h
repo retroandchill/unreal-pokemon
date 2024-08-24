@@ -7,6 +7,7 @@
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/TerminalClosure.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Algo/ForEach.h"
 
 namespace UE::Ranges {
 
@@ -32,6 +33,12 @@ namespace UE::Ranges {
             requires ranges::input_range<R>
         void operator()(R&& Range) const {
             ranges::for_each(Forward<R>(Range), Functor);
+        }
+
+        template <typename R>
+            requires UEContainer<R>
+        void operator()(R &Range) const {
+            Algo::ForEach(Range, Functor);
         }
 
     private:

@@ -40,6 +40,12 @@ namespace UE::Ranges {
             return Closure.Functor(Forward<R>(Range));
         }
 
+        template <typename R>
+            requires UEContainer<R>
+        friend constexpr auto operator|(R &Range, TTerminalClosure Closure) {
+            return Closure.Functor(Range);
+        }
+
       private:
         F Functor = F();
     };

@@ -37,7 +37,7 @@ public class Tilemap3D : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore",
+				"SlateCore", "UnrealRanges",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
