@@ -6,6 +6,7 @@
 #include "Editor/Blutility/Classes/EditorUtilityWidget.h"
 #include "Tilemap3DEditorWidget.generated.h"
 
+class UTilemap3DEditorViewportWidget;
 class ATilemap3D;
 class UTileButtonBase;
 
@@ -29,6 +30,8 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Configuration)
     ATilemap3D* GetTilemapActor() const;
 
+    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+
 private:
     void UpdateTileButtons();
     void UpdateTileAppearance(int32 X, int32 Y, int32 Layer);
@@ -36,6 +39,9 @@ private:
     UPROPERTY(EditAnywhere, BlueprintGetter = GetTilemapActor, Category = Configuration,
         meta = (UIMin = 1, ClampMin = 1))
     TObjectPtr<ATilemap3D> TilemapActor;
+
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTilemap3DEditorViewportWidget> Editor;
 
     UPROPERTY()
     TArray<TObjectPtr<UTileButtonBase>> TileButtons;

@@ -5,6 +5,7 @@
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Editor/TileButtonBase.h"
+#include "Editor/Tilemap3DEditorViewportWidget.h"
 #include "Tilemap/Tilemap3D.h"
 
 using FTileCallback = FOnTileChanged::FDelegate;
@@ -26,6 +27,13 @@ void UTilemap3DEditorWidget::NativePreConstruct() {
 
 ATilemap3D * UTilemap3DEditorWidget::GetTilemapActor() const {
     return TilemapActor;
+}
+
+void UTilemap3DEditorWidget::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
+    Super::PostEditChangeProperty(PropertyChangedEvent);
+    if (IsValid(Editor)) {
+        Editor->SetTilemap(TilemapActor);
+    }
 }
 
 void UTilemap3DEditorWidget::UpdateTileButtons() {
