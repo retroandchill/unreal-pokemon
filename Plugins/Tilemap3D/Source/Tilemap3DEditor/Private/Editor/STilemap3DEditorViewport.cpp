@@ -6,7 +6,7 @@
 #include "SlateOptMacros.h"
 #include "Tilemap/Tilemap3D.h"
 
-constexpr double GridSize = 16.f; 
+constexpr double GridSize = 24.f; 
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
