@@ -22,7 +22,7 @@ void ATilemap3D::AddTile(UStaticMesh *Mesh, int32 X, int32 Y, int32 Layer) {
     }
     auto NewComponent = CastChecked<UStaticMeshComponent>(AddComponentByClass(UStaticMeshComponent::StaticClass(),
         false, FTransform(FVector(TileSize.X * X, TileSize.Y * Y, 0)), false));
-    NewComponent->CreationMethod = EComponentCreationMethod::Native;
+    NewComponent->CreationMethod = EComponentCreationMethod::Instance;
     AddOwnedComponent(NewComponent);
     NewComponent->SetStaticMesh(Mesh);
     Tile = NewComponent;

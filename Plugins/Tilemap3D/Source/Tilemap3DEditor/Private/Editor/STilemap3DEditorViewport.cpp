@@ -6,6 +6,8 @@
 #include "SlateOptMacros.h"
 #include "Tilemap/Tilemap3D.h"
 
+constexpr double GridSize = 16.f; 
+
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void STilemap3DEditorViewport::Construct(const FArguments &InArgs) {
@@ -16,6 +18,8 @@ void STilemap3DEditorViewport::Construct(const FArguments &InArgs) {
 	];
 	*/
 }
+
+END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void STilemap3DEditorViewport::SetTilemap(ATilemap3D *Tilemap3D) {
     Tilemap = Tilemap3D;
@@ -34,7 +38,7 @@ int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry 
     }
 
     FSlateBrush Brush;
-    Brush.SetImageSize(FVector2D(16, 16));
+    Brush.SetImageSize(FVector2D(GridSize, GridSize));
 
     const FVector2D CursorSize = Brush.ImageSize / AllottedGeometry.Scale;
     int32 SizeX = Tilemap->GetSizeX();
@@ -47,11 +51,24 @@ int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry 
                 OutDrawElements,
                 DrawLayerId,
                 AllottedGeometry.ToPaintGeometry(CursorSize, FSlateLayoutTransform(
-                                                     FVector2D(16 * i, 16 * j)
+                                                     FVector2D(GridSize * i, GridSize * j)
                                                         / AllottedGeometry.Scale)),
                 &Brush,
                 ESlateDrawEffect::None,
                 LayerContents != nullptr ? FLinearColor::Green : FLinearColor::White);
+
+            if (CurrentMousePosition == FIntVector2(i, j)) {
+                DrawLayerId++;
+                FSlateDrawElement::MakeBox(
+                OutDrawElements,
+                DrawLayerId,
+                AllottedGeometry.ToPaintGeometry(CursorSize, FSlateLayoutTransform(
+                                                     FVector2D(GridSize * i, GridSize * j)
+                                                        / AllottedGeometry.Scale)),
+                &Brush,
+                ESlateDrawEffect::None,
+                FLinearColor::Red);
+            }
         }
     }
 
@@ -63,7 +80,66 @@ FVector2D STilemap3DEditorViewport::ComputeDesiredSize(float LayoutScaleMultipli
         return SCompoundWidget::ComputeDesiredSize(LayoutScaleMultiplier);
     }
 
-    return FVector2D(Tilemap->GetSizeX() * 16, Tilemap->GetSizeY() * 16);
+    return FVector2D(Tilemap->GetSizeX() * GridSize, Tilemap->GetSizeY() * GridSize);
 }
 
-END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+FReply STilemap3DEditorViewport::OnMouseMove(const FGeometry &SenderGeometry, const FPointerEvent &MouseEvent) {
+    auto MousePosition = SenderGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
+    if (auto NewGridPos = GetGridPosition(MousePosition, SenderGeometry.Scale); CurrentMousePosition != NewGridPos) {
+        CurrentMousePosition = NewGridPos;
+
+        if (bIsHoldingMouse && Tilemap.IsValid() && CurrentMousePosition.IsSet()) {
+            SetTile(*CurrentMousePosition);
+            return FReply::Handled();
+        }
+    }
+    
+    return FReply::Unhandled();
+}
+
+FReply STilemap3DEditorViewport::OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) {
+    FReply Reply = FReply::Unhandled();
+    if (MouseEvent.GetEffectingButton() != EKeys::LeftMouseButton || !Tilemap.IsValid() || !CurrentMousePosition.IsSet()) {
+        return FReply::Unhandled();
+    }
+
+    bIsHoldingMouse = true;
+    SetTile(*CurrentMousePosition);
+    return FReply::Handled();
+}
+
+FReply STilemap3DEditorViewport::OnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) {
+    if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton) {
+        bIsHoldingMouse = false;
+    }
+    
+    return FReply::Unhandled();
+}
+
+TOptional<FIntVector2> STilemap3DEditorViewport::GetGridPosition(const FVector2D &Geometry, double Scale) const {
+    if (!Tilemap.IsValid()) {
+        return TOptional<FIntVector2>();
+    }
+
+    int32 SizeX = Tilemap->GetSizeX();
+    int32 SizeY = Tilemap->GetSizeY();
+
+    double Divisor = GridSize / Scale;
+
+    int32 CoordX = FMath::FloorToInt32(Geometry.X / Divisor);
+    int32 CoordY = FMath::FloorToInt32(Geometry.Y / Divisor);
+
+    if (CoordX < 0 || CoordX >= SizeX || CoordY < 0 || CoordY >= SizeY) {
+        return TOptional<FIntVector2>();
+    }
+
+    return FIntVector2(CoordX, CoordY);
+}
+
+void STilemap3DEditorViewport::SetTile(const FIntVector2& Position, int32 Layer) const {
+    if (Mesh.IsValid()) {
+        Tilemap->AddTile(Mesh.Get(), Position.X, Position.Y, Layer);
+    } else {
+        Tilemap->RemoveTile(Position.X, Position.Y, Layer);
+    }
+}
