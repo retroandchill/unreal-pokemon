@@ -9,7 +9,7 @@ public class Tilemap3DEditor : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "AssetTools",
             }
         );
 
@@ -25,7 +25,8 @@ public class Tilemap3DEditor : ModuleRules
                 "CommonUI",
                 "Tilemap3D", 
                 "UnrealRanges",
-                "InputCore"
+                "InputCore",
+                "UnrealEd"
             }
         );
     }
