@@ -26,9 +26,9 @@ void UTilemap3DEditorViewportWidget::SetTilemap(ATilemap3D *Tilemap3D) {
     }
 }
 
-void UTilemap3DEditorViewportWidget::SetTile(UStaticMesh *Mesh) {
-    TileMesh = Mesh;
+void UTilemap3DEditorViewportWidget::SetTile(const FTileHandle& Handle) {
+    PaintTile = Handle;
     if (TilemapWidget != nullptr) {
-        TilemapWidget->SetMesh(TileMesh);
+        TilemapWidget->SetTileHandle(PaintTile);
     }
 }

@@ -25,8 +25,8 @@ void STilemap3DEditorViewport::SetTilemap(ATilemap3D *Tilemap3D) {
     Tilemap = Tilemap3D;
 }
 
-void STilemap3DEditorViewport::SetMesh(UStaticMesh *InMesh) {
-    Mesh = InMesh;
+void STilemap3DEditorViewport::SetTileHandle(const FTileHandle& InTileHandle) {
+    PaintTile = InTileHandle;
 }
 
 int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry,
@@ -147,8 +147,8 @@ TOptional<FIntVector2> STilemap3DEditorViewport::GetGridPosition(const FVector2D
 }
 
 void STilemap3DEditorViewport::SetTile(const FIntVector2& Position, int32 Layer) const {
-    if (Mesh.IsValid()) {
-        Tilemap->AddTile(Mesh.Get(), Position.X, Position.Y, Layer);
+    if (PaintTile.IsValidTile()) {
+        Tilemap->AddTile(PaintTile, Position.X, Position.Y, Layer);
     } else {
         Tilemap->RemoveTile(Position.X, Position.Y, Layer);
     }

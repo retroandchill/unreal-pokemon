@@ -4,16 +4,63 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include "Tilemap3D.generated.h"
 
+struct FTile3D;
+class UTileset3D;
+
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnTileChanged, int32, int32, int32);
+
+USTRUCT()
+struct TILEMAP3D_API FTileHandle {
+    GENERATED_BODY()
+
+    FTileHandle() = default;
+
+    FTileHandle(UTileset3D& InTileset, int32 InTileID);
+
+    TOptional<const FTile3D&> GetTile() const;
+
+    bool IsValidTile() const;
+    
+private:
+    UPROPERTY()
+    TObjectPtr<UTileset3D> Tileset;
+
+    UPROPERTY()
+    int32 TileID = INDEX_NONE;
+};
+
+USTRUCT()
+struct TILEMAP3D_API FTileInfo {
+    GENERATED_BODY()
+
+    FTileInfo() = default;
+
+    FTileInfo(UStaticMeshComponent& InTileMesh, const FTileHandle& InTile, const FIntVector2 &InTileOrigin);
+
+    bool IsValidTile() const;
+
+    UStaticMeshComponent* GetMeshComponent() const;
+
+private:
+    UPROPERTY()
+    TObjectPtr<UStaticMeshComponent> TileMesh;
+
+    UPROPERTY()
+    FTileHandle Tile;
+
+    UPROPERTY()
+    FIntVector2 TileOrigin;
+};
 
 USTRUCT()
 struct TILEMAP3D_API FTileRow {
     GENERATED_BODY()
 
     UPROPERTY()
-    TArray<TObjectPtr<USceneComponent>> Tiles;
+    TArray<FTileInfo> Tiles;
 
     FTileRow() = default;
 
@@ -27,10 +74,7 @@ class TILEMAP3D_API ATilemap3D : public AActor {
 public:
     ATilemap3D();
     
-    UFUNCTION(BlueprintCallable, Category = Tilemap)
-    void AddTile(UStaticMesh* Mesh, int32 X, int32 Y, int32 Layer);
-
-    UFUNCTION(BlueprintCallable, Category = Tilemap)
+    void AddTile(const FTileHandle& Tile, int32 X, int32 Y, int32 Layer);
     void RemoveTile(int32 X, int32 Y, int32 Layer);
 
     void OnConstruction(const FTransform &Transform) override;
@@ -51,7 +95,7 @@ public:
     void RemoveTileChangedBinding(FDelegateHandle Handle);
 
 private:
-    TObjectPtr<USceneComponent>& GetAdjustedTilePosition(int32 X, int32 Y);
+    FTileInfo& GetAdjustedTilePosition(int32 X, int32 Y);
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSizeX, Category = Grid, meta = (UIMin = 1, ClampMin = 1))
     int32 SizeX = 10;

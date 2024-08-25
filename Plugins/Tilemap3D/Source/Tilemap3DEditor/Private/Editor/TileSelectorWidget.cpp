@@ -37,6 +37,6 @@ void UTileSelectorWidget::RemoveFromTileSelectionChanged(FDelegateHandle Handle)
     OnTileSelectionChanged.Remove(Handle);
 }
 
-void UTileSelectorWidget::TileSelectionChanged(TOptional<const FTile3D&> Tile) const {
+void UTileSelectorWidget::TileSelectionChanged(const FTileHandle& Tile) const {
     OnTileSelectionChanged.Broadcast(Tile);
 }

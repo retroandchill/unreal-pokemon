@@ -9,11 +9,12 @@
 
 #include "TileSelectorWidget.generated.h"
 
+struct FTileHandle;
 struct FTile3D;
 class UTileset3D;
 class STileSelector;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnTileSelectionChanged, TOptional<const FTile3D&>);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTileSelectionChanged, const FTileHandle& Tile);
 
 /**
  * 
@@ -33,7 +34,7 @@ public:
     void RemoveFromTileSelectionChanged(FDelegateHandle Handle);
 
 private:
-    void TileSelectionChanged(TOptional<const FTile3D&> Tile) const;
+    void TileSelectionChanged(const FTileHandle& Tile) const;
     
     UPROPERTY()
     TObjectPtr<UTileset3D> Tileset;

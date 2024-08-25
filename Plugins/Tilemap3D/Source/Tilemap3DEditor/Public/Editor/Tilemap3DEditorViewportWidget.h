@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/Widget.h"
+#include "Tilemap/Tilemap3D.h"
+
 #include "Tilemap3DEditorViewportWidget.generated.h"
 
 class ATilemap3D;
@@ -22,13 +24,13 @@ public:
     void ReleaseSlateResources(bool bReleaseChildren) override;
 
     void SetTilemap(ATilemap3D* Tilemap3D);
-    void SetTile(UStaticMesh* Mesh);
+    void SetTile(const FTileHandle& Handle);
 private:
     UPROPERTY()
     TObjectPtr<ATilemap3D> TilemapActor;
 
     UPROPERTY()
-    TObjectPtr<UStaticMesh> TileMesh;
+    FTileHandle PaintTile;
     
     TSharedPtr<STilemap3DEditorViewport> TilemapWidget;
 

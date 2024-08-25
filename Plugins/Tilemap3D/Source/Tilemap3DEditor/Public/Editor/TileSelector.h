@@ -6,10 +6,11 @@
 #include "Tileset/Tile3D.h"
 #include "Widgets/SCompoundWidget.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Tilemap/Tilemap3D.h"
 
 class UTileset3D;
 
-DECLARE_DELEGATE_OneParam(FOnSelectedTileChanged, TOptional<const FTile3D&>);
+DECLARE_DELEGATE_OneParam(FOnSelectedTileChanged, const FTileHandle& Tile);
 
 /**
  * 

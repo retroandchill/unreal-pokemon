@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Tilemap/Tilemap3D.h"
 #include "Widgets/SCompoundWidget.h"
 
 class ATilemap3D;
@@ -24,7 +25,7 @@ public:
     void Construct(const FArguments &InArgs);
 
     void SetTilemap(ATilemap3D* Tilemap3D);
-    void SetMesh(UStaticMesh* InMesh);
+    void SetTileHandle(const FTileHandle& InTileHandle);
 
     int32 OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry, const FSlateRect &MyCullingRect, FSlateWindowElementList &OutDrawElements, int32 LayerId, const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const override;
 
@@ -41,6 +42,6 @@ private:
 
     bool bIsHoldingMouse = false;
     TWeakObjectPtr<ATilemap3D> Tilemap;
-    TWeakObjectPtr<UStaticMesh> Mesh;
+    FTileHandle PaintTile;
     TOptional<FIntVector2> CurrentMousePosition;
 };

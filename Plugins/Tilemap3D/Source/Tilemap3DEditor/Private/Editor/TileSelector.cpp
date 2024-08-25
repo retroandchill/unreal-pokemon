@@ -67,14 +67,14 @@ void STileSelector::SetTileset(UTileset3D *Tileset3D) {
 void STileSelector::OnTileSelectionChanged(FName Item, ESelectInfo::Type) const {
     DetailsOverlay->ClearChildren();
     if (!Tileset.IsValid()) {
-        OnSelectedTileChanged_Handler.ExecuteIfBound(nullptr);
+        OnSelectedTileChanged_Handler.ExecuteIfBound(FTileHandle());
         return;
     }
     
     int32 Index = TileOptions.Find(Item);
     check(TileOptions.IsValidIndex(Index))
     auto &Tile = Tileset->GetTiles()[Index];
-    OnSelectedTileChanged_Handler.ExecuteIfBound(Tile);
+    OnSelectedTileChanged_Handler.ExecuteIfBound(FTileHandle(*Tileset, Index));
     
     auto& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     FDetailsViewArgs Args;

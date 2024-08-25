@@ -7,6 +7,7 @@
 #include "Editor/TileSelectorWidget.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OrElse.h"
 
 using FOnSelectionChanged = FOnTileSelectionChanged::FDelegate;
 
@@ -18,13 +19,9 @@ void UTilemap3DEditorWidget::NativeConstruct() {
     }
     
     TileSelector->BindToTileSelectionChanged(FOnSelectionChanged::CreateWeakLambda(this,
-        [this](TOptional<const FTile3D&> Tile) {
-            if (IsValid(Editor)) {
-                auto TileMesh = Tile |
-                    UE::Optionals::Map(&FTile3D::TargetMesh) |
-                    UE::Optionals::Map(&TSoftObjectPtr<UStaticMesh>::LoadSynchronous) |
-                    UE::Optionals::GetPtrOrNull;    
-                Editor->SetTile(TileMesh);
+        [this](const FTileHandle& Tile) {
+            if (IsValid(Editor)) { 
+                Editor->SetTile(Tile);
             }
         }));
 }
