@@ -24,6 +24,8 @@ struct TILEMAP3D_API FTileHandle {
 
     bool IsValidTile() const;
     
+    bool operator==(const FTileHandle& Other) const;
+    
 private:
     UPROPERTY()
     TObjectPtr<UTileset3D> Tileset;
@@ -39,12 +41,12 @@ struct TILEMAP3D_API FTileInfo {
     FTileInfo() = default;
 
     FTileInfo(UStaticMeshComponent& InTileMesh, const FTileHandle& InTile, const FIntVector2 &InTileOrigin);
-
-    FTileInfo(const FTileInfo& Other, const FIntVector2& Offset);
-
+    
     bool IsValidTile() const;
 
     TOptional<const FTile3D&> GetTile() const;
+
+    const FTileHandle& GetTileHandle() const;
 
     UStaticMeshComponent* GetMeshComponent() const;
 

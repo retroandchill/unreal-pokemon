@@ -20,6 +20,10 @@ bool FTileHandle::IsValidTile() const {
     return Tiles.IsValidIndex(TileID);
 }
 
+bool FTileHandle::operator==(const FTileHandle &Other) const {
+    return Tileset == Other.Tileset && TileID == Other.TileID;
+}
+
 FTileInfo::FTileInfo(UStaticMeshComponent &InTileMesh, const FTileHandle& InTile, const FIntVector2 &InTileOrigin)
     : TileMesh(InTileMesh), Tile(InTile), TileOrigin(InTileOrigin) {
     auto TileInfo = Tile.GetTile();
@@ -28,16 +32,16 @@ FTileInfo::FTileInfo(UStaticMeshComponent &InTileMesh, const FTileHandle& InTile
     }
 }
 
-FTileInfo::FTileInfo(const FTileInfo &Other, const FIntVector2 &Offset) : TileMesh(Other.TileMesh),
-    Tile(Other.Tile), TileOrigin(Other.TileOrigin + Offset) {
-}
-
 bool FTileInfo::IsValidTile() const {
     return IsValid(TileMesh) && Tile.IsValidTile();
 }
 
 TOptional<const FTile3D &> FTileInfo::GetTile() const {
     return Tile.GetTile();
+}
+
+const FTileHandle & FTileInfo::GetTileHandle() const {
+    return Tile;
 }
 
 UStaticMeshComponent * FTileInfo::GetMeshComponent() const {
@@ -168,7 +172,7 @@ void ATilemap3D::FillInTile(const FTile3D &Tile, const FTileInfo& OriginTile, in
 
             RemoveTile(X + j, Y + i, Layer);
             check(Row.IsValidIndex(X + j))
-            Row[X + j] = FTileInfo(OriginTile, FIntVector2(j, i));
+            Row[X + j] = OriginTile;
         }
     }
 }

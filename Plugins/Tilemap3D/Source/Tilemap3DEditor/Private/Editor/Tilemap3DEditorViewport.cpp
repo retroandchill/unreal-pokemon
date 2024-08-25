@@ -4,8 +4,11 @@
 #include "Editor/Tilemap3DEditorViewport.h"
 
 #include "SlateOptMacros.h"
+#include "Ranges/Optional/Filter.h"
+#include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OrElse.h"
+#include "Ranges/Views/Map.h"
 #include "Tilemap/Tilemap3D.h"
 #include "Tileset/Tile3D.h"
 
@@ -104,11 +107,22 @@ void STilemap3DEditorViewport::OnMouseLeave(const FPointerEvent &MouseEvent) {
 FReply STilemap3DEditorViewport::OnMouseMove(const FGeometry &SenderGeometry, const FPointerEvent &MouseEvent) {
     auto MousePosition = SenderGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
     if (auto NewGridPos = GetGridPosition(MousePosition, SenderGeometry.Scale); CurrentMousePosition != NewGridPos) {
-        CurrentMousePosition = NewGridPos;
+        CurrentMousePosition = NewGridPos |
+            UE::Optionals::Filter([this](const FIntVector2&) { return Tilemap.IsValid(); }) |
+            UE::Optionals::Map([this](const FIntVector2&) -> auto& { return PaintTile; }) |
+                UE::Optionals::FlatMap(&FTileHandle::GetTile) |
+                UE::Optionals::Map([this, &NewGridPos](const FTile3D& I) {
+                    return FIntVector2(
+                        FMath::Min(NewGridPos->X, Tilemap->GetSizeX() - I.SizeX),
+                        FMath::Min(NewGridPos->Y, Tilemap->GetSizeY() - I.SizeY));
+        });
 
         if (bIsHoldingMouse && Tilemap.IsValid() && CurrentMousePosition.IsSet()) {
-            SetTile(*CurrentMousePosition);
-            return FReply::Handled();
+            if (auto TileData = Tilemap->GetTile(CurrentMousePosition->X, CurrentMousePosition->Y);
+                    TileData.GetTileOrigin() == *CurrentMousePosition || TileData.GetTileHandle() != PaintTile) {
+                SetTile(*CurrentMousePosition);
+                return FReply::Handled();
+            }
         }
     }
     
