@@ -2,7 +2,7 @@
 
 
 #include "Editor/Tilemap3DEditorViewportWidget.h"
-#include "Editor/STilemap3DEditorViewport.h"
+#include "Editor/Tilemap3DEditorViewport.h"
 
 TSharedRef<SWidget> UTilemap3DEditorViewportWidget::RebuildWidget() {
     SAssignNew(TilemapWidget, STilemap3DEditorViewport);

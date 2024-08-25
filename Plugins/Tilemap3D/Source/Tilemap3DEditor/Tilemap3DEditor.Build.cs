@@ -9,7 +9,7 @@ public class Tilemap3DEditor : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core", "AssetTools",
+                "Core", "AssetTools", "Tilemap3D",
             }
         );
 
