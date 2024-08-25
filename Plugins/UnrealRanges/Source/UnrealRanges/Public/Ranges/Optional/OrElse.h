@@ -23,7 +23,7 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O&& Optional) {
             using ResultType = TOptionalElementType<O>;
-            return Optional.IsSet() ? *Optional : ResultType(MoveTemp(Value));
+            return Optional.IsSet() ? *Optional : ResultType(Forward<T>(Value));
         }
     private:
         T Value;

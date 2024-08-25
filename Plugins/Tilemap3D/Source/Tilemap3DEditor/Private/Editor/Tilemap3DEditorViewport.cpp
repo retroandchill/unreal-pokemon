@@ -4,7 +4,10 @@
 #include "Editor/Tilemap3DEditorViewport.h"
 
 #include "SlateOptMacros.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OrElse.h"
 #include "Tilemap/Tilemap3D.h"
+#include "Tileset/Tile3D.h"
 
 constexpr double GridSize = 24.f; 
 
@@ -44,36 +47,41 @@ int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry 
     FSlateBrush Brush;
     Brush.SetImageSize(FVector2D(GridSize, GridSize));
 
-    const FVector2D CursorSize = Brush.ImageSize / AllottedGeometry.Scale;
+    const FVector2D TileSize = Brush.ImageSize / AllottedGeometry.Scale;
     int32 SizeX = Tilemap->GetSizeX();
     int32 SizeY = Tilemap->GetSizeY();
     for (int32 i = 0; i < SizeX; i++) {
         for (int32 j = 0; j < SizeY; j++) {
-            auto LayerContents = Tilemap->GetTile(i, j);
+            auto LayerContents = Tilemap->GetTile(i, j).GetTile();
             DrawLayerId++;
             FSlateDrawElement::MakeBox(
                 OutDrawElements,
                 DrawLayerId,
-                AllottedGeometry.ToPaintGeometry(CursorSize, FSlateLayoutTransform(
+                AllottedGeometry.ToPaintGeometry(TileSize, FSlateLayoutTransform(
                                                      FVector2D(GridSize * i, GridSize * j)
                                                         / AllottedGeometry.Scale)),
                 &Brush,
                 ESlateDrawEffect::None,
-                LayerContents != nullptr ? FLinearColor::Green : FLinearColor::White);
-
-            if (CurrentMousePosition == FIntVector2(i, j)) {
-                DrawLayerId++;
-                FSlateDrawElement::MakeBox(
-                OutDrawElements,
-                DrawLayerId,
-                AllottedGeometry.ToPaintGeometry(CursorSize, FSlateLayoutTransform(
-                                                     FVector2D(GridSize * i, GridSize * j)
-                                                        / AllottedGeometry.Scale)),
-                &Brush,
-                ESlateDrawEffect::None,
-                FLinearColor::Red);
-            }
+                LayerContents.IsSet() ? FLinearColor::Green : FLinearColor::White);
         }
+    }
+
+    if (CurrentMousePosition.IsSet()) {
+        auto &Pos = *CurrentMousePosition;
+        auto CursorSize = PaintTile.GetTile() |
+            UE::Optionals::Map([&TileSize](const FTile3D& Tile)
+                { return FVector2D(TileSize.X * Tile.SizeX, TileSize.Y * Tile.SizeY); }) |
+            UE::Optionals::OrElse(TileSize);
+        DrawLayerId++;
+        FSlateDrawElement::MakeBox(
+        OutDrawElements,
+        DrawLayerId,
+        AllottedGeometry.ToPaintGeometry(CursorSize, FSlateLayoutTransform(
+                                             FVector2D(GridSize * Pos.X, GridSize * Pos.Y)
+                                                / AllottedGeometry.Scale)),
+        &Brush,
+        ESlateDrawEffect::None,
+        FLinearColor::Red);
     }
 
     return DrawLayerId;

@@ -40,9 +40,15 @@ struct TILEMAP3D_API FTileInfo {
 
     FTileInfo(UStaticMeshComponent& InTileMesh, const FTileHandle& InTile, const FIntVector2 &InTileOrigin);
 
+    FTileInfo(const FTileInfo& Other, const FIntVector2& Offset);
+
     bool IsValidTile() const;
 
+    TOptional<const FTile3D&> GetTile() const;
+
     UStaticMeshComponent* GetMeshComponent() const;
+
+    const FIntVector2& GetTileOrigin() const;
 
 private:
     UPROPERTY()
@@ -85,8 +91,7 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Grid)
     int32 GetSizeY() const;
 
-    UFUNCTION(BlueprintPure, Category = Grid)
-    USceneComponent* GetTile(int32 X, int32 Y) const;
+    const FTileInfo &GetTile(int32 X, int32 Y) const;
 
     FDelegateHandle BindToOnMapSizeChange(FSimpleMulticastDelegate::FDelegate&& Delegate);
     void RemoveMapSizeChangedBinding(FDelegateHandle Handle);
@@ -96,6 +101,9 @@ public:
 
 private:
     FTileInfo& GetAdjustedTilePosition(int32 X, int32 Y);
+
+    void FillInTile(const FTile3D& Tile, const FTileInfo& OriginTile, int32 X, int32 Y, int32 Layer);
+    void ClearOutTile(const FTile3D& Tile, int32 X, int32 Y, int32 Layer);
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSizeX, Category = Grid, meta = (UIMin = 1, ClampMin = 1))
     int32 SizeX = 10;

@@ -3,6 +3,7 @@
 
 #include "Tilemap/Tilemap3D.h"
 #include "Algo/ForEach.h"
+#include "Ranges/Optional/IfPresent.h"
 #include "Tileset/Tileset3D.h"
 
 
@@ -27,12 +28,24 @@ FTileInfo::FTileInfo(UStaticMeshComponent &InTileMesh, const FTileHandle& InTile
     }
 }
 
+FTileInfo::FTileInfo(const FTileInfo &Other, const FIntVector2 &Offset) : TileMesh(Other.TileMesh),
+    Tile(Other.Tile), TileOrigin(Other.TileOrigin + Offset) {
+}
+
 bool FTileInfo::IsValidTile() const {
     return IsValid(TileMesh) && Tile.IsValidTile();
 }
 
+TOptional<const FTile3D &> FTileInfo::GetTile() const {
+    return Tile.GetTile();
+}
+
 UStaticMeshComponent * FTileInfo::GetMeshComponent() const {
     return TileMesh;
+}
+
+const FIntVector2 & FTileInfo::GetTileOrigin() const {
+    return TileOrigin;
 }
 
 FTileRow::FTileRow(int32 Size) {
@@ -48,15 +61,15 @@ ATilemap3D::ATilemap3D() {
 void ATilemap3D::AddTile(const FTileHandle& Tile, int32 X, int32 Y, int32 Layer) {
     auto &CurrentTile = GetAdjustedTilePosition(X, Y);
     if (CurrentTile.IsValidTile()) {
-        auto Mesh = CurrentTile.GetMeshComponent();
-        Mesh->DestroyComponent();
-        RemoveOwnedComponent(Mesh);
+        RemoveTile(X, Y, Layer);
     }
     auto NewComponent = CastChecked<UStaticMeshComponent>(AddComponentByClass(UStaticMeshComponent::StaticClass(),
         false, FTransform(FVector(TileSize.X * X, TileSize.Y * Y, 0)), false));
     NewComponent->CreationMethod = EComponentCreationMethod::Instance;
     AddOwnedComponent(NewComponent);
+    auto TileData = Tile.GetTile();
     CurrentTile = FTileInfo(*NewComponent, Tile, FIntVector2(X, Y));
+    TileData | UE::Optionals::IfPresent(this, &ATilemap3D::FillInTile, CurrentTile, X, Y, Layer);
     OnTileChanged.Broadcast(X, Y, Layer);
 }
 
@@ -67,7 +80,10 @@ void ATilemap3D::RemoveTile(int32 X, int32 Y, int32 Layer) {
         Mesh->DestroyComponent(false);
         RemoveOwnedComponent(Mesh);
     }
+    auto TileData = Tile.GetTile();
+    TileData | UE::Optionals::IfPresent(this, &ATilemap3D::ClearOutTile, X, Y, Layer);
     Tile = FTileInfo();
+    
     OnTileChanged.Broadcast(X, Y, Layer);
 }
 
@@ -112,10 +128,10 @@ int32 ATilemap3D::GetSizeY() const {
     return SizeY;
 }
 
-USceneComponent * ATilemap3D::GetTile(int32 X, int32 Y) const {
+const FTileInfo &ATilemap3D::GetTile(int32 X, int32 Y) const {
     check(TileRows.IsValidIndex(Y))
     check(TileRows[Y].Tiles.IsValidIndex(X))
-    return TileRows[Y].Tiles[X].GetMeshComponent();
+    return TileRows[Y].Tiles[X];
 }
 
 FDelegateHandle ATilemap3D::BindToOnMapSizeChange(FSimpleMulticastDelegate::FDelegate &&Delegate) {
@@ -138,4 +154,43 @@ FTileInfo & ATilemap3D::GetAdjustedTilePosition(int32 X, int32 Y) {
     check(TileRows.IsValidIndex(Y))
     check(TileRows[Y].Tiles.IsValidIndex(X))
     return TileRows[Y].Tiles[X];
+}
+
+void ATilemap3D::FillInTile(const FTile3D &Tile, const FTileInfo& OriginTile, int32 X, int32 Y, int32 Layer) {
+    for (int32 i = 0; i < Tile.SizeY; i++) {
+        check(TileRows.IsValidIndex(X + i))
+            
+        auto &Row = TileRows[Y + i].Tiles;
+        for (int32 j = 0; j < Tile.SizeX; j++) {
+            if (i == 0 && j == 0) {
+                continue;
+            }
+
+            RemoveTile(X + j, Y + i, Layer);
+            check(Row.IsValidIndex(X + j))
+            Row[X + j] = FTileInfo(OriginTile, FIntVector2(j, i));
+        }
+    }
+}
+
+void ATilemap3D::ClearOutTile(const FTile3D &Tile, int32 X, int32 Y, int32 Layer) {
+    for (int32 i = 0; i < Tile.SizeY; i++) {
+        check(TileRows.IsValidIndex(Y + i))
+            
+        auto &Row = TileRows[Y + i].Tiles;
+        for (int32 j = 0; j < Tile.SizeX; j++) {
+            if (i == 0 && j == 0) {
+                continue;
+            }
+
+            check(Row.IsValidIndex(X + j))
+            auto &ExistingTile = Row[X + j];
+            if (ExistingTile.IsValidTile()) {
+                auto Mesh = ExistingTile.GetMeshComponent();
+                Mesh->DestroyComponent(false);
+                RemoveOwnedComponent(Mesh);
+            }
+            ExistingTile = FTileInfo();
+        }
+    }
 }
