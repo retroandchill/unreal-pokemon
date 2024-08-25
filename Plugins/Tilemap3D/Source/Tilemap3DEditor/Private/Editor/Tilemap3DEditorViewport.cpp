@@ -7,6 +7,7 @@
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/Or.h"
 #include "Ranges/Optional/OrElse.h"
 #include "Ranges/Views/Map.h"
 #include "Tilemap/Tilemap3D.h"
@@ -115,7 +116,7 @@ FReply STilemap3DEditorViewport::OnMouseMove(const FGeometry &SenderGeometry, co
                     return FIntVector2(
                         FMath::Min(NewGridPos->X, Tilemap->GetSizeX() - I.SizeX),
                         FMath::Min(NewGridPos->Y, Tilemap->GetSizeY() - I.SizeY));
-        });
+                }) | UE::Optionals::Or([&NewGridPos] { return NewGridPos; });
 
         if (bIsHoldingMouse && Tilemap.IsValid() && CurrentMousePosition.IsSet()) {
             if (auto TileData = Tilemap->GetTile(CurrentMousePosition->X, CurrentMousePosition->Y);
