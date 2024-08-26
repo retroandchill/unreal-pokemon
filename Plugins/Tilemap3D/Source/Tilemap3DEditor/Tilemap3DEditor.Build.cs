@@ -26,7 +26,8 @@ public class Tilemap3DEditor : ModuleRules
                 "Tilemap3D", 
                 "UnrealRanges",
                 "InputCore",
-                "UnrealEd"
+                "UnrealEd",
+                "RenderCore"
             }
         );
     }
