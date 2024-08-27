@@ -4,10 +4,10 @@
 #include "Editor/TileSelectorViewportClient.h"
 #include "AssetEditorModeManager.h"
 #include "UnrealWidget.h"
-#include "Algo/ForEach.h"
 #include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Views/AnyView.h"
 #include "Tileset/Tileset3D.h"
+
+constexpr int32 TilesPerRow = 8;
 
 FTileSelectorViewportClient::FTileSelectorViewportClient(UTileset3D *InTileSet) : Tileset(InTileSet) {
     ELevelViewportType NewViewportType = LVT_OrthoXY;
@@ -42,8 +42,7 @@ void FTileSelectorViewportClient::SetTileSet(UTileset3D *Tileset3D) {
     if (Tileset3D == nullptr) {
         return;
     }
-
-    constexpr int32 TilesPerRow = 8;
+    
     int32 CurrentIndex = 0;
     auto TileSize = Tileset3D->GetTileSize();
     for (auto &Tile : Tileset3D->GetTiles()) {
