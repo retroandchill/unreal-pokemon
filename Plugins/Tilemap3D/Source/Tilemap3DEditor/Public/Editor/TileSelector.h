@@ -8,6 +8,8 @@
 #include "Ranges/Optional/OptionalRef.h"
 #include "Tilemap/Tilemap3D.h"
 
+class FTileSelectorViewportClient;
+class STileSelectorViewport;
 class FTile3DEditorViewportClient;
 class STile3DEditorViewport;
 class UTileset3D;
@@ -37,10 +39,12 @@ private:
     void OnTileSelectionChanged(FName Item, ESelectInfo::Type) const;
     
     TSharedPtr<SComboBox<FName>> TileComboBox;
-    TSharedPtr<SOverlay> DetailsOverlay;
-    TSharedPtr<IStructureDetailsView> DetailsView;
     TSharedPtr<STile3DEditorViewport> PreviewWidget;
     TSharedPtr<FTile3DEditorViewportClient> PreviewClient;
+
+    TSharedPtr<STileSelectorViewport> SelectorViewport;
+    TSharedPtr<FTileSelectorViewportClient> SelectorClient;
+    
     TWeakObjectPtr<UTileset3D> Tileset;
     TArray<FName> TileOptions;
     FOnSelectedTileChanged OnSelectedTileChanged_Handler;

@@ -6,6 +6,10 @@
 #include "Ranges/Views/Map.h"
 #include "Ranges/Views/ContainerView.h"
 
+const FVector & UTileset3D::GetTileSize() const {
+    return TileSize;
+}
+
 const TArray<FTile3D> & UTileset3D::GetTiles() const {
     return Tiles;
 }

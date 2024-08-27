@@ -16,13 +16,20 @@ class TILEMAP3D_API UTileset3D : public UObject {
 
 public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Tileset)
+    const FVector &GetTileSize() const;
+    
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Tileset)
     const TArray<FTile3D> &GetTiles() const;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Tileset)
     TArray<FName> GetTileNames() const;
 
 private:
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetTileSize, Category = Size)
+    FVector TileSize = FVector(16, 16, 16);
+    
     UPROPERTY(EditAnywhere, BlueprintGetter = GetTiles, Category = Tileset)
     TArray<FTile3D> Tiles;
+
     
 };

@@ -42,12 +42,6 @@ private:
 	// The current tile being edited or INDEX_NONE
 	int32 TileBeingEditedIndex = INDEX_NONE;
 
-	// Are we currently manipulating something?
-	bool bManipulating = false;
-
-	// Did we dirty something during manipulation?
-	bool bManipulationDirtiedSomething = false;
-
 	// Should we show stats for the tile?
 	bool bShowStats = false;
 
@@ -65,7 +59,4 @@ private:
 
 	// Called when TileBeingEditedIndex changes
 	FOnPreviewTileChanged OnSingleTileIndexChanged;
-	
-	bool HandleBeginTransform();
-	bool HandleEndTransform();
 };

@@ -76,10 +76,6 @@ TSharedRef<FEditorViewportClient> STile3DEditorViewport::MakeEditorViewportClien
 	return TypedViewportClient.ToSharedRef();
 }
 
-void STile3DEditorViewport::BindCommands() {
-    SEditorViewport::BindCommands();
-}
-
 void STile3DEditorViewport::OnFocusViewportToSelection() {
 	TypedViewportClient->RequestFocusOnSelection(/*bInstant=*/ false);
 }

@@ -25,6 +25,11 @@ FTile3DEditorViewportClient::FTile3DEditorViewportClient(UTileset3D *InTileSet) 
     // Create a render component for the tile preview
     PreviewTileSpriteComponent = NewObject<UStaticMeshComponent>();
     PreviewScene->AddComponent(PreviewTileSpriteComponent, FTransform::Identity);
+
+    // Get the correct general direction of the perspective mode; the distance doesn't matter much as we've queued up a deferred zoom that will calculate a much better distance
+    auto InitialLocation = FVector(0, 1, 1);
+    auto InitialRotation = FRotator(-45, -90, 0);
+    SetInitialViewTransform(LVT_Perspective, 100.0f * InitialLocation, InitialRotation, DEFAULT_ORTHOZOOM);
 }
 
 void FTile3DEditorViewportClient::Tick(float DeltaSeconds) {
@@ -72,6 +77,7 @@ void FTile3DEditorViewportClient::SetTileIndex(int32 InTileIndex) {
 	OnSingleTileIndexChanged.Broadcast(TileBeingEditedIndex, OldTileIndex);
 
 	// Redraw the viewport
+	Invalidate();
 	Invalidate();
 }
 

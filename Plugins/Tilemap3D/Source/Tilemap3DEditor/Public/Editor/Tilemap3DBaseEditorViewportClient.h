@@ -48,13 +48,6 @@ protected:
         return FBox(ForceInitToZero);
     }
 
-    UTexture2D *GetCheckerboardTexture() const;
-    void SetCheckerboardTexture(UTexture2D* InCheckerboardTexture);
-    FVector2D GetZoomPos() const;
-    void SetZoomPos1(FVector2D InZoomPos);
-    float GetZoomAmount() const;
-    void SetZoomAmount(float InZoomAmount);
-
 private:
     /** Checkerboard texture */
     TObjectPtr<UTexture2D> CheckerboardTexture;

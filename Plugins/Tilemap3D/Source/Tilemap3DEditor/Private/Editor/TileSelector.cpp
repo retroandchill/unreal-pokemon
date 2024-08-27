@@ -7,6 +7,8 @@
 #include "SlateOptMacros.h"
 #include "Editor/Tile3DEditorViewport.h"
 #include "Editor/Tile3DEditorViewportClient.h"
+#include "Editor/TileSelectorViewport.h"
+#include "Editor/TileSelectorViewportClient.h"
 #include "Tileset/Tileset3D.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -26,6 +28,7 @@ void STileSelector::Construct(const FArguments & InArgs) {
                    : NSLOCTEXT("Tilemap3D", "SelectATile", "Select a Tile");
     };
 
+    SelectorClient = MakeShared<FTileSelectorViewportClient>(Tileset.Get());
     PreviewClient = MakeShared<FTile3DEditorViewportClient>(Tileset.Get());
 
     ChildSlot
@@ -58,7 +61,7 @@ void STileSelector::Construct(const FArguments & InArgs) {
         .HAlign(HAlign_Fill)
         .FillHeight(1.f)
         [
-            SAssignNew(DetailsOverlay, SOverlay)
+            SAssignNew(SelectorViewport, STileSelectorViewport, SelectorClient)
         ]
     ];
 }
@@ -72,6 +75,7 @@ void STileSelector::SetTileset(UTileset3D *Tileset3D) {
     if (!TileOptions.Contains(TileComboBox->GetSelectedItem())) {
         TileComboBox->SetSelectedItem(NAME_None);
     }
+    SelectorClient->SetTileSet(Tileset3D);
     PreviewClient->SetTileSet(Tileset3D);
 
     if (Tileset3D != nullptr) {
@@ -82,7 +86,6 @@ void STileSelector::SetTileset(UTileset3D *Tileset3D) {
 }
 
 void STileSelector::OnTileSelectionChanged(FName Item, ESelectInfo::Type) const {
-    DetailsOverlay->ClearChildren();
     if (!Tileset.IsValid()) {
         OnSelectedTileChanged_Handler.ExecuteIfBound(FTileHandle());
         return;
@@ -90,18 +93,6 @@ void STileSelector::OnTileSelectionChanged(FName Item, ESelectInfo::Type) const 
     
     int32 Index = TileOptions.Find(Item);
     check(TileOptions.IsValidIndex(Index))
-    auto &Tile = Tileset->GetTiles()[Index];
     PreviewClient->SetTileIndex(Index);
     OnSelectedTileChanged_Handler.ExecuteIfBound(FTileHandle(*Tileset, Index));
-    
-    auto& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-    FDetailsViewArgs Args;
-    FStructureDetailsViewArgs StructureDetailsViewArgs;
-    auto StructOnScope = MakeShared<FStructOnScope>(FTile3D::StaticStruct(),
-        reinterpret_cast<uint8*>(const_cast<FTile3D*>(&Tile)));
-    DetailsOverlay->AddSlot()
-    [
-        PropertyModule.CreateStructureDetailView(Args, StructureDetailsViewArgs, StructOnScope)
-            ->GetWidget().ToSharedRef()
-    ];
 }

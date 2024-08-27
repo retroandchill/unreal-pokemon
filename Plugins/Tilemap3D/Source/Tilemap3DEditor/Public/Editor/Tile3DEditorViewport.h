@@ -17,7 +17,6 @@ public:
 
     TSharedPtr<SWidget> MakeViewportToolbar() override;
     TSharedRef<FEditorViewportClient> MakeEditorViewportClient() override;
-    void BindCommands() override;
     void OnFocusViewportToSelection() override;
 
     TSharedRef<SEditorViewport> GetViewportWidget() override;

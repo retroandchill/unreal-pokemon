@@ -13,11 +13,6 @@ FTilemap3DBaseEditorViewportClient::FTilemap3DBaseEditorViewportClient(const TWe
 
     bDeferZoomToSprite = true;
     bDeferZoomToSpriteIsInstant = true;
-
-    // Get the correct general direction of the perspective mode; the distance doesn't matter much as we've queued up a deferred zoom that will calculate a much better distance
-    auto InitialLocation = FVector(0, -1, -1);
-    auto InitialRotation = FRotator(-45, -90, 0);
-    SetInitialViewTransform(LVT_Perspective, -100.0f * InitialLocation, InitialRotation, DEFAULT_ORTHOZOOM);
 }
 
 void FTilemap3DBaseEditorViewportClient::Tick(float DeltaSeconds) {
@@ -74,28 +69,4 @@ void FTilemap3DBaseEditorViewportClient::DestroyCheckerboardTexture() {
         CheckerboardTexture->MarkAsGarbage();
         CheckerboardTexture = nullptr;
     }
-}
-
-UTexture2D *FTilemap3DBaseEditorViewportClient::GetCheckerboardTexture() const {
-    return CheckerboardTexture;
-}
-
-void FTilemap3DBaseEditorViewportClient::SetCheckerboardTexture(UTexture2D* InCheckerboardTexture) {
-    CheckerboardTexture = InCheckerboardTexture;
-}
-
-FVector2D FTilemap3DBaseEditorViewportClient::GetZoomPos() const {
-    return ZoomPos;
-}
-
-void FTilemap3DBaseEditorViewportClient::SetZoomPos1(FVector2D InZoomPos) {
-    ZoomPos = InZoomPos;
-}
-
-float FTilemap3DBaseEditorViewportClient::GetZoomAmount() const {
-    return ZoomAmount;
-}
-
-void FTilemap3DBaseEditorViewportClient::SetZoomAmount(float InZoomAmount) {
-    ZoomAmount = InZoomAmount;
 }
