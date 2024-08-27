@@ -16,7 +16,7 @@ FTileSelectorViewportClient::FTileSelectorViewportClient(UTileset3D *InTileSet) 
 
     Widget->SetUsesEditorModeTools(ModeTools.Get());
 
-    DrawHelper.bDrawGrid = true;
+    DrawHelper.bDrawGrid = false;
     DrawHelper.bDrawPivot = false;
 
     PreviewScene = &OwnedPreviewScene;

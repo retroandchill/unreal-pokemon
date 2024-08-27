@@ -39,9 +39,6 @@ private:
     void OnTileSelectionChanged(FName Item, ESelectInfo::Type) const;
     
     TSharedPtr<SComboBox<FName>> TileComboBox;
-    TSharedPtr<STile3DEditorViewport> PreviewWidget;
-    TSharedPtr<FTile3DEditorViewportClient> PreviewClient;
-
     TSharedPtr<STileSelectorViewport> SelectorViewport;
     TSharedPtr<FTileSelectorViewportClient> SelectorClient;
     

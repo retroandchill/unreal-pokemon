@@ -29,8 +29,6 @@ void STileSelector::Construct(const FArguments & InArgs) {
     };
 
     SelectorClient = MakeShared<FTileSelectorViewportClient>(Tileset.Get());
-    PreviewClient = MakeShared<FTile3DEditorViewportClient>(Tileset.Get());
-
     ChildSlot
     [
         SNew(SVerticalBox)
@@ -50,14 +48,7 @@ void STileSelector::Construct(const FArguments & InArgs) {
             ]
         ]
         + SVerticalBox::Slot()
-        .VAlign(VAlign_Top)
-        .HAlign(HAlign_Fill)
-        .FillHeight(1.f)
-        [
-            SAssignNew(PreviewWidget, STile3DEditorViewport, PreviewClient)
-        ]
-        + SVerticalBox::Slot()
-        .VAlign(VAlign_Top)
+        .VAlign(VAlign_Fill)
         .HAlign(HAlign_Fill)
         .FillHeight(1.f)
         [
@@ -76,12 +67,10 @@ void STileSelector::SetTileset(UTileset3D *Tileset3D) {
         TileComboBox->SetSelectedItem(NAME_None);
     }
     SelectorClient->SetTileSet(Tileset3D);
-    PreviewClient->SetTileSet(Tileset3D);
 
     if (Tileset3D != nullptr) {
         auto Tiles = Tileset3D->GetTileNames();
         auto TileIndex = Tiles.Find(TileComboBox->GetSelectedItem());
-        PreviewClient->SetTileIndex(TileIndex);
     }
 }
 
@@ -93,6 +82,5 @@ void STileSelector::OnTileSelectionChanged(FName Item, ESelectInfo::Type) const 
     
     int32 Index = TileOptions.Find(Item);
     check(TileOptions.IsValidIndex(Index))
-    PreviewClient->SetTileIndex(Index);
     OnSelectedTileChanged_Handler.ExecuteIfBound(FTileHandle(*Tileset, Index));
 }
