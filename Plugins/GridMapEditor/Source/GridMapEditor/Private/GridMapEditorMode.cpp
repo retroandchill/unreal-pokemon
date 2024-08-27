@@ -16,6 +16,9 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "TileSet.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/Optional/OrElse.h"
 #include "Toolkits/ToolkitManager.h"
 
 static FName GridMapBrushHighlightColorParamName("HighlightColor");
@@ -137,7 +140,14 @@ void FGridMapEditorMode::Tick(FEditorViewportClient* ViewportClient, float Delta
 
 	if (bBrushTraceValid)
 	{
-		FTransform BrushTransform = FTransform(FQuat::Identity, BrushLocation, FVector::OneVector);
+	    auto BrushScaleCalc = [this](const UGridMapTileSet& TileSet) {
+	        auto BaseSize = TileBrushComponent->GetStaticMesh()->GetBounds().GetBox().GetSize();
+	        return FVector(TileSet.TileSize / BaseSize.X, TileSet.TileSize / BaseSize.Y, TileSet.TileHeight / BaseSize.X);
+	    };
+	    auto BrushScale = UE::Optionals::OfNullable(UISettings.GetCurrentTileSet().Get()) |
+	        UE::Optionals::Map(BrushScaleCalc) |
+	        UE::Optionals::OrElse(FVector::OneVector);
+		FTransform BrushTransform = FTransform(FQuat::Identity, BrushLocation, BrushScale);
 		TileBrushComponent->SetRelativeTransform(BrushTransform);
 
 		// warning color if we're erasing tiles
@@ -687,6 +697,7 @@ void FGridMapEditorMode::SetActiveTileSet(UGridMapTileSet* TileSet)
 	}
 
 	UISettings.SetCurrentTileSet(ActiveTileSet);
+    
 }
 
 FString FGridMapEditorMode::CreateActorLabel(const class UGridMapTileSet* TileSet) const
