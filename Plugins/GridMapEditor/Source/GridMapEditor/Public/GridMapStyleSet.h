@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Styling/SlateStyle.h"
 
-class FGridMapStyleSet : public FSlateStyleSet {
+class GRIDMAPEDITOR_API FGridMapStyleSet : public FSlateStyleSet {
     typedef FSlateStyleSet Super;
 
     static const FVector2D Icon14x14;

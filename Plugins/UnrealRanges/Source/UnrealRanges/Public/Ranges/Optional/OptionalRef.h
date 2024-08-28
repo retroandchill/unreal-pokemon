@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Concepts/Pointers.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -166,6 +167,12 @@ namespace UE::Optionals {
     template <typename T>
     FORCEINLINE TOptional<T &> OfNullable(T *Ptr) {
         return TOptional<T &>(Ptr);
+    }
+
+    template <typename T>
+        requires Ranges::Pointer<T>
+    FORCEINLINE auto OfNullable(const T& Ptr) {
+        return TOptional<Ranges::TRawPointerType<T>>(Ranges::GetRawPointer<T>(Ptr));
     }
 
 } // namespace UE::Optionals

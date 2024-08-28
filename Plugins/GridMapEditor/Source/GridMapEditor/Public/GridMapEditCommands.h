@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Framework/Commands/Commands.h"
 
-class FGridMapEditCommands : public TCommands<FGridMapEditCommands> {
+class GRIDMAPEDITOR_API FGridMapEditCommands : public TCommands<FGridMapEditCommands> {
   public:
     FGridMapEditCommands();
 

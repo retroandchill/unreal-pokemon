@@ -14,9 +14,18 @@ TSoftObjectPtr<class UStaticMesh> FGridMapTileList::GetRandomTile() const {
     return Tiles[RandomElementIndex];
 }
 
+#if WITH_EDITOR
+void UGridMapTileSet::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
+    UObject::PostEditChangeProperty(PropertyChangedEvent);
+    for (int32 i = 0; i < Tiles.Num(); i++) {
+        Tiles[i].Index = i;
+    }
+}
+#endif
+
 TOptional<const FGridMapTileList &> UGridMapTileSet::FindTilesForAdjacency(uint32 Bitmask) const {
     // If we're using a tileset with a single tile, then assume it can be placed anywhere
-    if (Tiles.Num() == 1 && bIgnoreAdjacency) {
+    if (Tiles.Num() == 1) {
         return Tiles[0];
     }
 

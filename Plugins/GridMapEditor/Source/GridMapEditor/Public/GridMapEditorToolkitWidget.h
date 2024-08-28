@@ -9,7 +9,7 @@
 
 class FGridMapEditorMode;
 
-class SGridMapEditorToolkitWidget : public SCompoundWidget {
+class GRIDMAPEDITOR_API SGridMapEditorToolkitWidget : public SCompoundWidget {
   public:
     SLATE_BEGIN_ARGS(SGridMapEditorToolkitWidget) {
     }

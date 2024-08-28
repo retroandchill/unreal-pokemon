@@ -11,7 +11,7 @@
  *
  */
 UCLASS()
-class UGridMapTileSetFactory : public UFactory {
+class GRIDMAPEDITOR_API UGridMapTileSetFactory : public UFactory {
     GENERATED_UCLASS_BODY()
 
     // UFactory interface

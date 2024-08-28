@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "AssetTypeActions_Base.h"
 
-class FGridMapTileSetAssetTypeActions : public FAssetTypeActions_Base {
+class GRIDMAPEDITOR_API FGridMapTileSetAssetTypeActions : public FAssetTypeActions_Base {
   public:
     FGridMapTileSetAssetTypeActions(EAssetTypeCategories::Type InAssetCategory);
 

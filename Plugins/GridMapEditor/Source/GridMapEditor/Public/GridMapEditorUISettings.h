@@ -4,7 +4,7 @@
 #include "GridMapEditorTypes.h"
 #include "TileSet.h"
 
-struct FGridMapEditorUISettings {
+struct GRIDMAPEDITOR_API FGridMapEditorUISettings {
     FGridMapEditorUISettings() = default;
 
     // tool

@@ -6,7 +6,7 @@
 #include "Layout/Visibility.h"
 #include "Toolkits/BaseToolkit.h"
 
-class FGridMapEditorModeToolkit : public FModeToolkit {
+class GRIDMAPEDITOR_API FGridMapEditorModeToolkit : public FModeToolkit {
   public:
     FGridMapEditorModeToolkit();
 

@@ -4,7 +4,7 @@
 #include "IPropertyTypeCustomization.h"
 #include "PropertyHandle.h"
 
-class FTileBitsetCustomization : public IPropertyTypeCustomization {
+class GRIDMAPEDITOR_API FTileBitsetCustomization : public IPropertyTypeCustomization {
   public:
     // IPropertyTypeCustomization interface
 

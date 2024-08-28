@@ -23,7 +23,15 @@ USTRUCT()
 struct GRIDMAP_API FGridMapTileList {
     GENERATED_BODY()
 
-  public:
+    UPROPERTY(VisibleAnywhere)
+    int32 Index = 0;
+
+    UPROPERTY(EditAnywhere)
+    FGameplayTagContainer TileTags;
+
+    UPROPERTY(EditAnywhere)
+    FTileSetTagRequirements AdjacencyTagRequirements;
+    
     UPROPERTY(EditAnywhere)
     FGridMapTileBitset TileAdjacency;
 
@@ -31,9 +39,9 @@ struct GRIDMAP_API FGridMapTileList {
     FRotator Rotation = FRotator::ZeroRotator;
 
     UPROPERTY(EditAnywhere, meta = (AllowAbstract))
-    TArray<TSoftObjectPtr<class UStaticMesh>> Tiles;
+    TArray<TSoftObjectPtr<UStaticMesh>> Tiles;
 
-    TSoftObjectPtr<class UStaticMesh> GetRandomTile() const;
+    TSoftObjectPtr<UStaticMesh> GetRandomTile() const;
 };
 
 /**
@@ -45,7 +53,6 @@ class GRIDMAP_API UGridMapTileSet : public UObject {
   public:
     UGridMapTileSet();
 
-  public:
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
     FGameplayTagContainer TileTags;
 
@@ -54,9 +61,6 @@ class GRIDMAP_API UGridMapTileSet : public UObject {
 
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
     bool bMatchesEmpty;
-
-    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
-    bool bIgnoreAdjacency;
 
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
     uint32 TileSize;
@@ -79,6 +83,10 @@ class GRIDMAP_API UGridMapTileSet : public UObject {
     UPROPERTY(EditDefaultsOnly, Category = "Tiles")
     TArray<FGridMapTileList> Tiles;
 
+#if WITH_EDITOR
+    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+#endif
+    
     TOptional<const FGridMapTileList &> FindTilesForAdjacency(uint32 Bitmask) const;
 
   protected:

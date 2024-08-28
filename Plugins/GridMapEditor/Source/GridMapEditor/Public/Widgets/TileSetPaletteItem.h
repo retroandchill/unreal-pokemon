@@ -10,7 +10,7 @@ class STileSetPalette;
 class FGridMapEditorMode;
 class FAssetThumbnailPool;
 
-class FTileSetPaletteItemModel : public TSharedFromThis<FTileSetPaletteItemModel> {
+class GRIDMAPEDITOR_API FTileSetPaletteItemModel : public TSharedFromThis<FTileSetPaletteItemModel> {
   public:
     FTileSetPaletteItemModel(UGridMapTileSet *InTileSet, TSharedRef<STileSetPalette> InTileSetPalette,
                              FGridMapEditorMode *InEditorMode);
@@ -21,7 +21,7 @@ class FTileSetPaletteItemModel : public TSharedFromThis<FTileSetPaletteItemModel
     FGridMapEditorMode *EditorMode;
 };
 
-class STileSetItemTile : public STableRow<UGridMapTileSet *> {
+class GRIDMAPEDITOR_API STileSetItemTile : public STableRow<UGridMapTileSet *> {
   public:
     SLATE_BEGIN_ARGS(STileSetItemTile) {
     }

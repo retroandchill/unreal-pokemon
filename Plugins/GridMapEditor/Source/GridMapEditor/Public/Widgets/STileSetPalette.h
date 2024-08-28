@@ -14,7 +14,7 @@ class UGridMapTileSet;
 
 typedef STileView<UGridMapTileSet *> SGridMapTileSetTileView;
 
-class STileSetPalette : public SCompoundWidget {
+class GRIDMAPEDITOR_API STileSetPalette : public SCompoundWidget {
   public:
     SLATE_BEGIN_ARGS(STileSetPalette) {
     }

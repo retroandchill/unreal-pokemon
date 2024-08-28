@@ -9,7 +9,7 @@
 struct FGridMapEditorUISettings;
 class FGridMapEditorMode;
 
-class SGridMapEditorSettingsWidget : public SCompoundWidget {
+class GRIDMAPEDITOR_API SGridMapEditorSettingsWidget : public SCompoundWidget {
   public:
     SLATE_BEGIN_ARGS(SGridMapEditorSettingsWidget) {
     }

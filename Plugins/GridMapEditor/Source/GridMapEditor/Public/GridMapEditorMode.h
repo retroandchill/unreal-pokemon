@@ -7,7 +7,7 @@
 #include "GridMapEditorTypes.h"
 #include "GridMapEditorUISettings.h"
 
-class FGridMapEditorMode : public FEdMode {
+class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode {
   protected:
     typedef TPair<class AGridMapStaticMeshActor *, uint32> FAdjacentTile;
 
