@@ -197,6 +197,40 @@ TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildPaintOptions()
 			]								
 		]
 
+	    // Tilemap Layers
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        [
+            SNew(SHorizontalBox)
+            .ToolTipText(LOCTEXT("GridMapPaintLayer_ToolTip", "Paint layer of the gridmap. Allows you to place multiple tiles direclty on top of each other."))
+            + SHorizontalBox::Slot()
+            .Padding(FGridMapStyleSet::StandardLeftPadding)
+            .FillWidth(1.0f)
+            .VAlign(VAlign_Center)
+            [
+                SNew(STextBlock)
+                .Text(LOCTEXT("GridMapPaintLayer", "Layer"))
+                .Font(FGridMapStyleSet::StandardFont)
+            ]
+            + SHorizontalBox::Slot()
+            .Padding(FGridMapStyleSet::StandardRightPadding)
+            .FillWidth(2.0f)
+            .MaxWidth(100.f)
+            .VAlign(VAlign_Center)
+            [
+                SNew(SNumericEntryBox<int32>)
+                .Font(FGridMapStyleSet::StandardFont)
+                .AllowSpin(true)
+                .MinValue(0)
+                .MaxValue(65530)
+                .MaxSliderValue(1000)
+                .MinDesiredValueWidth(50.0f)
+                .SliderExponent(3.0f)
+                .Value(this, &SGridMapEditorToolkitWidget::GetPaintLayer)
+                .OnValueChanged(this, &SGridMapEditorToolkitWidget::SetPaintLayer)
+            ]
+        ]
+
 		// Tilemap Target Height
 		+ SVerticalBox::Slot()
 		.AutoHeight()
@@ -213,7 +247,6 @@ TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildPaintOptions()
 				.Text(LOCTEXT("GridMapPaintHeight", "Height"))
 				.Font(FGridMapStyleSet::StandardFont)
 			]
-#if false // temp
 			+ SHorizontalBox::Slot()
 			.Padding(FGridMapStyleSet::StandardRightPadding)
 			.FillWidth(2.0f)
@@ -231,7 +264,6 @@ TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildPaintOptions()
 				.Value(this, &SGridMapEditorToolkitWidget::GetPaintHeight)
 				.OnValueChanged(this, &SGridMapEditorToolkitWidget::SetPaintHeight)
 			]
-#endif
 		]
 
 		// Hide Actors
@@ -300,11 +332,28 @@ TOptional<FVector> SGridMapEditorToolkitWidget::GetPaintOrigin() const
 	return GridMapEditorMode->UISettings.GetPaintOrigin();
 }
 
+TOptional<float> SGridMapEditorToolkitWidget::GetPaintHeight() const {
+    return GridMapEditorMode->UISettings.GetPaintHeight();
+}
+
+void SGridMapEditorToolkitWidget::SetPaintHeight(float InPaintHeight) {
+    return GridMapEditorMode->UISettings.SetPaintHeight(InPaintHeight);
+}
+
+TOptional<int32> SGridMapEditorToolkitWidget::GetPaintLayer() const {
+    return GridMapEditorMode->UISettings.GetPaintLayer();
+}
+
+void SGridMapEditorToolkitWidget::SetPaintLayer(int32 InPaintLayer) {
+    return GridMapEditorMode->UISettings.SetPaintLayer(InPaintLayer);
+}
+
 void SGridMapEditorToolkitWidget::OnChangeTileSet(UObject* NewAsset)
 {
 	if (UGridMapTileSet* NewTileSet = Cast<UGridMapTileSet>(NewAsset))
 	{
 		GridMapEditorMode->UISettings.SetCurrentTileSet(NewTileSet);
+	    GridMapEditorMode->SetActiveTileSet(NewTileSet);
 	}
 }
 

@@ -4,47 +4,103 @@
 #include "GridMapEditorTypes.h"
 #include "TileSet.h"
 
-struct FGridMapEditorUISettings
-{
-public:
-	FGridMapEditorUISettings();
+struct FGridMapEditorUISettings {
+    FGridMapEditorUISettings() = default;
 
-	// tool
-	bool GetPaintToolSelected() const { return bPaintToolSelected ? true : false; }
-	void SetPaintToolSelected(bool InbPaintToolSelected) { bPaintToolSelected = InbPaintToolSelected; }
+    // tool
+    bool GetPaintToolSelected() const {
+        return bPaintToolSelected;
+    }
 
-	bool GetSelectToolSelected() const { return bSelectToolSelected ? true : false; }
-	void SetSelectToolSelected(bool bInSelectToolSelected) { bSelectToolSelected = bInSelectToolSelected; }
+    void SetPaintToolSelected(bool InbPaintToolSelected) {
+        bPaintToolSelected = InbPaintToolSelected;
+    }
 
-	bool GetSettingsToolSelected() const { return bSettingsToolSelected; }
-	void SetSettingsToolSelected(bool bInSettingsToolSelected) { bSettingsToolSelected = bInSettingsToolSelected; }
+    bool GetSelectToolSelected() const {
+        return bSelectToolSelected;
+    }
 
-	FVector GetPaintOrigin() const { return PaintOrigin; }
-	void SetPaintOrigin(const FVector& NewPaintOrigin) { PaintOrigin = NewPaintOrigin; }
+    void SetSelectToolSelected(bool bInSelectToolSelected) {
+        bSelectToolSelected = bInSelectToolSelected;
+    }
 
-	EGridMapPaintMode GetPaintMode() const { return PaintMode; }
-	void SetPaintMode(EGridMapPaintMode InPaintMode) { PaintMode = InPaintMode; }	
+    bool GetSettingsToolSelected() const {
+        return bSettingsToolSelected;
+    }
 
-	bool GetHideOwnedActors() const { return bHideOwnedActors; }
-	void SetHideOwnedActors(bool bInHideActors) { bHideOwnedActors = bInHideActors; }
+    void SetSettingsToolSelected(bool bInSettingsToolSelected) {
+        bSettingsToolSelected = bInSettingsToolSelected;
+    }
 
-	TWeakObjectPtr<class UGridMapTileSet> GetCurrentTileSet() const { return CurrentTileSetPtr; }
-	void SetCurrentTileSet(class UGridMapTileSet* NewTileSet) { CurrentTileSetPtr = NewTileSet; }
+    FVector GetPaintOrigin() const {
+        return PaintOrigin;
+    }
 
-	bool GetDebugDrawTiles() const { return bDebugDrawUpdatedTiles; }
-	void SetDebugDrawTiles(bool bInDebugDrawUpdatedTiles) { bDebugDrawUpdatedTiles = bInDebugDrawUpdatedTiles; }
+    void SetPaintOrigin(const FVector &NewPaintOrigin) {
+        PaintOrigin = NewPaintOrigin;
+    }
+
+    float GetPaintHeight() const {
+        return PaintHeight;
+    }
+
+    void SetPaintHeight(float InPaintHeight) {
+        PaintHeight = InPaintHeight;
+    }
+
+    int32 GetPaintLayer() const {
+        return PaintLayer;
+    }
+
+    void SetPaintLayer(int32 InPaintLayer) {
+        PaintLayer = InPaintLayer;
+    }
+
+    EGridMapPaintMode GetPaintMode() const {
+        return PaintMode;
+    }
+
+    void SetPaintMode(EGridMapPaintMode InPaintMode) {
+        PaintMode = InPaintMode;
+    }
+
+    bool GetHideOwnedActors() const {
+        return bHideOwnedActors;
+    }
+
+    void SetHideOwnedActors(bool bInHideActors) {
+        bHideOwnedActors = bInHideActors;
+    }
+
+    TWeakObjectPtr<class UGridMapTileSet> GetCurrentTileSet() const {
+        return CurrentTileSetPtr;
+    }
+
+    void SetCurrentTileSet(class UGridMapTileSet *NewTileSet) {
+        CurrentTileSetPtr = NewTileSet;
+    }
+
+    bool GetDebugDrawTiles() const {
+        return bDebugDrawUpdatedTiles;
+    }
+
+    void SetDebugDrawTiles(bool bInDebugDrawUpdatedTiles) {
+        bDebugDrawUpdatedTiles = bInDebugDrawUpdatedTiles;
+    }
 
 private:
-	bool bPaintToolSelected;
-	bool bSelectToolSelected;
-	bool bSettingsToolSelected;
+    bool bPaintToolSelected = true;
+    bool bSelectToolSelected = false;
+    bool bSettingsToolSelected = false;
+    float PaintHeight = 0.f;
+    int32 PaintLayer = 0;
 
-	FVector PaintOrigin;
-	EGridMapPaintMode PaintMode;
-	bool bHideOwnedActors;
+    FVector PaintOrigin = FVector::ZeroVector;
+    EGridMapPaintMode PaintMode = EGridMapPaintMode::Paint;
+    bool bHideOwnedActors = false;
 
-	bool bDebugDrawUpdatedTiles;
+    bool bDebugDrawUpdatedTiles = false;
 
-	TWeakObjectPtr<class UGridMapTileSet> CurrentTileSetPtr;
-	
+    TWeakObjectPtr<UGridMapTileSet> CurrentTileSetPtr;
+
 };

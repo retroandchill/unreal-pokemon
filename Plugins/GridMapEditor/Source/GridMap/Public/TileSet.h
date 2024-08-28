@@ -6,6 +6,7 @@
 #include "UObject/Object.h"
 #include "GameplayTagContainer.h"
 #include "TileSetTagRequirements.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include "TileSet.generated.h"
 
 USTRUCT()
@@ -56,19 +57,36 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Tile Set Config")
 	bool bMatchesEmpty;
 
+    UPROPERTY(EditDefaultsOnly, Category="Tile Set Config")
+    bool bIgnoreAdjacency;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
 	uint32 TileSize;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
 	uint32 TileHeight;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config", meta = (UIMin = 1, ClampMin = 1))
+    uint32 SizeX = 1;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config", meta = (UIMin = 1, ClampMin = 1))
+    uint32 SizeY = 1;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config", meta = (UIMin = 1, ClampMin = 1))
+    uint32 SizeZ = 1;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
+    FVector2D BrushOffset;
+    
+
 	UPROPERTY(EditDefaultsOnly, Category="Tiles")
 	TArray<FGridMapTileList> Tiles;
 
-	const FGridMapTileList* FindTilesForAdjacency(uint32 bitmask) const;
+
+    TOptional<const FGridMapTileList &> FindTilesForAdjacency(uint32 Bitmask) const;
 
 protected:
-	const FGridMapTileList* SearchForTilesWithCompatibleAdjacency(uint32 bitmask) const;
+	TOptional<const FGridMapTileList &> SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const;
 
 public:
 	//this can't be here, it breaks non-editor builds :/

@@ -10,13 +10,15 @@
  * 
  */
 UCLASS()
-class GRIDMAP_API AGridMapStaticMeshActor : public AStaticMeshActor
-{
-	GENERATED_BODY()
+class GRIDMAP_API AGridMapStaticMeshActor : public AStaticMeshActor {
+    GENERATED_BODY()
 
 public:
-	AGridMapStaticMeshActor(const FObjectInitializer& ObjectInitializer = FObjectInitializer());
+    explicit AGridMapStaticMeshActor(const FObjectInitializer &ObjectInitializer = FObjectInitializer());
 
-	UPROPERTY()
-	TObjectPtr<class UGridMapTileSet> TileSet;	
+    UPROPERTY()
+    TObjectPtr<class UGridMapTileSet> TileSet;
+
+    UPROPERTY(VisibleAnywhere, Category = Layers)
+    int32 CurrentLayer = 0;
 };

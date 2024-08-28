@@ -37,6 +37,12 @@ private:
 	void SetPaintOrigin(FVector InHeight);
 	TOptional<FVector> GetPaintOrigin() const;
 
+    TOptional<float> GetPaintHeight() const;
+    void SetPaintHeight(float InPaintHeight);
+    
+    TOptional<int32> GetPaintLayer() const;
+    void SetPaintLayer(int32 InPaintLayer);
+
 	void OnChangeTileSet(UObject* NewAsset);
 	UObject* GetCurrentTileSet() const;
 

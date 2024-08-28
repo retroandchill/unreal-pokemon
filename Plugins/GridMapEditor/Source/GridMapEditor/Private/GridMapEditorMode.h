@@ -71,9 +71,10 @@ private:
 	void PaintTile();
 	void EraseTile(class AGridMapStaticMeshActor* TileToErase);
 
-	uint32 GetTileAdjacencyBitmask(class UWorld* World, const FVector& Origin, UGridMapTileSet* TileSet) const;
-	bool TilesAt(class UWorld* World, const FVector& Origin, TArray<class AGridMapStaticMeshActor*>& OutTiles) const;
-	bool GetAdjacentTiles(class UWorld* World, const FVector& Origin, TArray<TPair<class AGridMapStaticMeshActor*, uint32>>& OutAdjacentTiles, bool bIncludeEmptyTiles = false) const;
+	uint32 GetTileAdjacencyBitmask(class UWorld* World, const FVector& Origin, UGridMapTileSet* TileSet, int32 Layer) const;
+	bool TilesAt(class UWorld* World, const FVector& Origin, int32 Layer, TArray<class AGridMapStaticMeshActor*>& OutTiles) const;
+	bool GetAdjacentTiles(class UWorld* World, const FVector& Origin, TArray<TPair<class AGridMapStaticMeshActor*, uint32>>& OutAdjacentTiles, int32
+                          Layer, bool bIncludeEmptyTiles = false) const;
 	void UpdateAdjacentTiles(class UWorld* World, const TArray<FAdjacentTile>& RootActors);
 
 	FString CreateActorLabel(const class UGridMapTileSet* TileSet) const;

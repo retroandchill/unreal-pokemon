@@ -39,7 +39,7 @@ public class GridMap : ModuleRules
 				"Slate",
 				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
-                "GameplayTags",
+                "GameplayTags", "UnrealRanges",
 			}
 			);
 		

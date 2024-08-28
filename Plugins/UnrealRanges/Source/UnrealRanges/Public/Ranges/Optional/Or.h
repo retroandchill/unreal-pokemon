@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Traits.h"
 #include "Ranges/Functional/Bindings.h"
+#include "OptionalClosure.h"
 
 namespace UE::Optionals {
 
