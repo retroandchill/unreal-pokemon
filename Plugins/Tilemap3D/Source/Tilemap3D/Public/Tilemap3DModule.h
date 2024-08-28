@@ -5,9 +5,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FTilemap3DModule : public IModuleInterface
-{
-public:
-	void StartupModule() override;
-	void ShutdownModule() override;
+class FTilemap3DModule : public IModuleInterface {
+  public:
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

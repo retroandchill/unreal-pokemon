@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Tileset/Tile3D.h"
-#include "Widgets/SCompoundWidget.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "Tilemap/Tilemap3D.h"
+#include "Tileset/Tile3D.h"
+#include "Widgets/SCompoundWidget.h"
 
 class FTileSelectorViewportClient;
 class STileSelectorViewport;
@@ -14,18 +14,17 @@ class FTile3DEditorViewportClient;
 class STile3DEditorViewport;
 class UTileset3D;
 
-DECLARE_DELEGATE_OneParam(FOnSelectedTileChanged, const FTileHandle& Tile);
+DECLARE_DELEGATE_OneParam(FOnSelectedTileChanged, const FTileHandle &Tile);
 
 /**
- * 
+ *
  */
 class TILEMAP3DEDITOR_API STileSelector : public SCompoundWidget {
-public:
+  public:
     SLATE_BEGIN_ARGS(STileSelector) {
     }
-        SLATE_EVENT(FOnSelectedTileChanged, OnSelectedTileChanged)
+    SLATE_EVENT(FOnSelectedTileChanged, OnSelectedTileChanged)
     SLATE_END_ARGS()
-        
 
     /**
      * Constructs this widget with the provided arguments
@@ -33,15 +32,15 @@ public:
      */
     void Construct(const FArguments &InArgs);
 
-    void SetTileset(UTileset3D* Tileset3D);
-    
-private:
+    void SetTileset(UTileset3D *Tileset3D);
+
+  private:
     void OnTileSelectionChanged(FName Item, ESelectInfo::Type) const;
-    
+
     TSharedPtr<SComboBox<FName>> TileComboBox;
     TSharedPtr<STileSelectorViewport> SelectorViewport;
     TSharedPtr<FTileSelectorViewportClient> SelectorClient;
-    
+
     TWeakObjectPtr<UTileset3D> Tileset;
     TArray<FName> TileOptions;
     FOnSelectedTileChanged OnSelectedTileChanged_Handler;

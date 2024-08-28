@@ -13,7 +13,7 @@ struct TILEMAP3D_API FTile3D {
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Basic)
     FName TileName;
-    
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Appearance)
     TSoftObjectPtr<UStaticMesh> TargetMesh;
 
@@ -28,5 +28,4 @@ struct TILEMAP3D_API FTile3D {
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Metadata)
     FGameplayTagContainer TerrainTags;
-
 };

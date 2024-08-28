@@ -22,12 +22,13 @@ namespace UE::Ranges {
             } else if constexpr (UObjectPointer<S> && UnrealInterface<T>) {
                 return Range | Map([](S Object) { return TScriptInterface<T>(Object); });
             } else if constexpr (std::is_base_of_v<FScriptInterface, S> && UnrealInterface<T>) {
-                return Range | Map([](const FScriptInterface& Interface) { return TScriptInterface<T>(Interface.GetObject()); });
+                return Range | Map([](const FScriptInterface &Interface) {
+                           return TScriptInterface<T>(Interface.GetObject());
+                       });
             } else {
                 return Range | Map([](S Object) { return static_cast<T>(Object); });
             }
         }
-        
     };
 
     /**
@@ -37,5 +38,5 @@ namespace UE::Ranges {
      */
     template <typename T>
     constexpr ranges::views::view_closure<TCastType<T>> CastType;
-    
-}
+
+} // namespace UE::Ranges

@@ -85,9 +85,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Nature = StatBlock->GetNature().ID,
             .Ability = AbilityBlock->GetAbilityID(),
             .Item = HoldItem,
-            .Moves = MoveBlock->GetMoves() |
-                     UE::Ranges::Map(&IMove::ToDTO) |
-                     UE::Ranges::ToArray,
+            .Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&IMove::ToDTO) | UE::Ranges::ToArray,
             .MoveMemory = MoveBlock->GetMoveMemory(),
             .StatusEffect = StatusEffect,
             .ObtainMethod = ObtainedBlock->GetObtainMethod(),

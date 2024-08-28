@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Editor/Tilemap3DEditorWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Editor/Tilemap3DEditorViewportWidget.h"
@@ -17,16 +16,16 @@ void UTilemap3DEditorWidget::NativeConstruct() {
     if (!IsValid(TileSelector)) {
         return;
     }
-    
-    TileSelector->BindToTileSelectionChanged(FOnSelectionChanged::CreateWeakLambda(this,
-        [this](const FTileHandle& Tile) {
-            if (IsValid(Editor)) { 
+
+    TileSelector->BindToTileSelectionChanged(
+        FOnSelectionChanged::CreateWeakLambda(this, [this](const FTileHandle &Tile) {
+            if (IsValid(Editor)) {
                 Editor->SetTile(Tile);
             }
         }));
 }
 
-ATilemap3D * UTilemap3DEditorWidget::GetTilemapActor() const {
+ATilemap3D *UTilemap3DEditorWidget::GetTilemapActor() const {
     return TilemapActor;
 }
 

@@ -11,10 +11,9 @@ THIRD_PARTY_INCLUDES_END
 
 namespace UE::Ranges {
 
-
     struct FFilter {
         template <typename... A>
-        constexpr auto operator()(A&&... Args) const {
+        constexpr auto operator()(A &&...Args) const {
             return ranges::views::filter(CreateBinding<A...>(Forward<A>(Args)...));
         }
     };
@@ -24,5 +23,5 @@ namespace UE::Ranges {
      * you can supply to it in order to create a valid binding.
      */
     constexpr FFilter Filter;
-    
-}
+
+} // namespace UE::Ranges

@@ -25,12 +25,11 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R>
-        auto operator()(R&& Range) {
+        auto operator()(R &&Range) {
             using ResultType = Optionals::TOptionalType<ranges::range_common_reference_t<R>>;
             auto Result = Range.begin();
             return Result != Range.end() ? TOptional<ResultType>(*Result) : TOptional<ResultType>();
         }
-        
     };
 
     /**
@@ -38,5 +37,5 @@ namespace UE::Ranges {
      * range contains pointers.
      */
     constexpr TTerminalClosure<FFindFirst> FindFirst;
-    
-}
+
+} // namespace UE::Ranges

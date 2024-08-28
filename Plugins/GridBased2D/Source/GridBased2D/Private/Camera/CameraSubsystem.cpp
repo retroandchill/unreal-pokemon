@@ -17,7 +17,6 @@ void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
         UE::Optionals::IfPresent([this, &InWorld](int32 PlayerIndex) {
             PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(&InWorld, PlayerIndex);
         });
-
 }
 
 void UCameraSubsystem::Tick(float DeltaTime) {

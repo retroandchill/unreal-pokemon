@@ -16,17 +16,18 @@ const FMargin FGridMapStyleSet::StandardRightPadding(3.f, 3.f, 6.f, 3.f);
 
 const FSlateFontInfo FGridMapStyleSet::StandardFont = FEditorStyle::GetFontStyle(TEXT("PropertyWindow.NormalFont"));
 
-FGridMapStyleSet::FGridMapStyleSet(const FString& PluginContentDir)
-	: Super(Name)
-	, ContentGridMapDir(PluginContentDir)
-{
-	SetContentRoot(FPaths::EngineContentDir() / TEXT("Editor/Slate"));
-	SetCoreContentRoot(FPaths::EngineContentDir() / TEXT("Slate"));
+FGridMapStyleSet::FGridMapStyleSet(const FString &PluginContentDir) : Super(Name), ContentGridMapDir(PluginContentDir) {
+    SetContentRoot(FPaths::EngineContentDir() / TEXT("Editor/Slate"));
+    SetCoreContentRoot(FPaths::EngineContentDir() / TEXT("Slate"));
 
-	Set("GridMapEditor.Tab", new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/mode_40.png"), Icon40x40));
-	Set("GridMapEditor.Tab.Small", new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/mode_40.png"), Icon16x16));
+    Set("GridMapEditor.Tab", new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/mode_40.png"), Icon40x40));
+    Set("GridMapEditor.Tab.Small",
+        new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/mode_40.png"), Icon16x16));
 
-	Set("GridMapEditCommands.PaintTiles", new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/paint_40.png"), Icon20x20));
-	Set("GridMapEditCommands.SelectTiles", new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/icon_GridMap_Select_40x.png"), Icon20x20));
-	Set("GridMapEditCommands.TileSettings", new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/icon_GridMap_Settings_40x.png"), Icon20x20));
+    Set("GridMapEditCommands.PaintTiles",
+        new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/paint_40.png"), Icon20x20));
+    Set("GridMapEditCommands.SelectTiles",
+        new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/icon_GridMap_Select_40x.png"), Icon20x20));
+    Set("GridMapEditCommands.TileSettings",
+        new FSlateImageBrush(ContentGridMapDir + TEXT("Icons/UIIcons/icon_GridMap_Settings_40x.png"), Icon20x20));
 }

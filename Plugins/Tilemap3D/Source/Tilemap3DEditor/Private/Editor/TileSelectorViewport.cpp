@@ -1,12 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Editor/TileSelectorViewport.h"
 #include "Editor/TileSelectorViewportClient.h"
 
-
 void STileSelectorViewport::Construct(const FArguments &InArgs,
-    TSharedPtr<FTileSelectorViewportClient> InViewportClient) {
+                                      TSharedPtr<FTileSelectorViewportClient> InViewportClient) {
     TypedViewportClient = InViewportClient;
 
     SEditorViewport::Construct(SEditorViewport::FArguments());

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Editor/TileSelectorWidget.h"
 #include "Editor/TileSelector.h"
 
@@ -37,6 +36,6 @@ void UTileSelectorWidget::RemoveFromTileSelectionChanged(FDelegateHandle Handle)
     OnTileSelectionChanged.Remove(Handle);
 }
 
-void UTileSelectorWidget::TileSelectionChanged(const FTileHandle& Tile) const {
+void UTileSelectorWidget::TileSelectionChanged(const FTileHandle &Tile) const {
     OnTileSelectionChanged.Broadcast(Tile);
 }

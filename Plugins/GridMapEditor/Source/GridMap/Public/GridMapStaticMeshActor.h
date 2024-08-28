@@ -4,16 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Engine/StaticMeshActor.h"
+
 #include "GridMapStaticMeshActor.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class GRIDMAP_API AGridMapStaticMeshActor : public AStaticMeshActor {
     GENERATED_BODY()
 
-public:
+  public:
     explicit AGridMapStaticMeshActor(const FObjectInitializer &ObjectInitializer = FObjectInitializer());
 
     UPROPERTY()

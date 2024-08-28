@@ -9,7 +9,7 @@
  * @tparam T The type of the optional that was consumed.
  */
 template <typename T>
-struct TOptional<T&> {
+struct TOptional<T &> {
 
     /**
      * Typedef for the element type used by this container.
@@ -25,24 +25,25 @@ struct TOptional<T&> {
      * Construct a new optional from a reference.
      * @param Value The value to reference in this optional.
      */
-    constexpr explicit(false) TOptional(T& Value) : Data(&Value) {
+    constexpr explicit(false) TOptional(T &Value) : Data(&Value) {
     }
 
     /**
      * Construct a new optional from a nullable pointer.
-     * @param Value 
+     * @param Value
      */
-    constexpr explicit(false) TOptional(T* Value) : Data(Value) {
+    constexpr explicit(false) TOptional(T *Value) : Data(Value) {
     }
 
-    constexpr explicit(false) TOptional(nullptr_t) {}
+    constexpr explicit(false) TOptional(nullptr_t) {
+    }
 
     /**
      * Assignment operator from the underlying value.
      * @param Value The value to assign in.
      * @return A reference to this object
      */
-    TOptional& operator=(T& Value) {
+    TOptional &operator=(T &Value) {
         Data = &Value;
         return *this;
     }
@@ -52,7 +53,7 @@ struct TOptional<T&> {
      * @param Value The value to emplace
      * @return A reference to the emplaced value
      */
-    T& Emplace(T& Value) {
+    T &Emplace(T &Value) {
         Data = Value;
         return *Data;
     }
@@ -62,7 +63,7 @@ struct TOptional<T&> {
      * @param DefaultValue The default to substitute for an empty optional.
      * @return The retrieved value
      */
-    const T& Get(const T& DefaultValue) const {
+    const T &Get(const T &DefaultValue) const {
         return Data != nullptr ? *Data : DefaultValue;
     }
 
@@ -70,7 +71,7 @@ struct TOptional<T&> {
      * Get a nullable pointer for the optional.
      * @return The retrieved value
      */
-    T* GetPtrOrNull() {
+    T *GetPtrOrNull() {
         return Data;
     }
 
@@ -78,7 +79,7 @@ struct TOptional<T&> {
      * Get a nullable pointer for the optional.
      * @return The retrieved value
      */
-    const T* GetPtrOrNull() const {
+    const T *GetPtrOrNull() const {
         return Data;
     }
 
@@ -86,7 +87,7 @@ struct TOptional<T&> {
      * Get a reference to the underlying data.
      * @return The retrieved value
      */
-    T& GetValue() {
+    T &GetValue() {
         check(Data != nullptr)
         return *Data;
     }
@@ -95,7 +96,7 @@ struct TOptional<T&> {
      * Get a reference to the underlying data.
      * @return The retrieved value
      */
-    const T& GetValue() const {
+    const T &GetValue() const {
         check(Data != nullptr)
         return *Data;
     }
@@ -124,7 +125,7 @@ struct TOptional<T&> {
      * Dereference operator.
      * @return A reference to the underlying data.
      */
-    T& operator*() {
+    T &operator*() {
         check(Data != nullptr)
         return *Data;
     }
@@ -133,7 +134,7 @@ struct TOptional<T&> {
      * Dereference operator.
      * @return A reference to the underlying data.
      */
-    T& operator*() const {
+    T &operator*() const {
         check(Data != nullptr)
         return *Data;
     }
@@ -142,7 +143,7 @@ struct TOptional<T&> {
      * Pointer member access operator.
      * @return A pointer to the underlying data.
      */
-    T* operator->() {
+    T *operator->() {
         check(Data != nullptr)
         return Data;
     }
@@ -151,20 +152,20 @@ struct TOptional<T&> {
      * Pointer member access operator.
      * @return A pointer to the underlying data.
      */
-    T* operator->() const {
+    T *operator->() const {
         check(Data != nullptr)
         return Data;
     }
 
-private:
-    T* Data = nullptr;
+  private:
+    T *Data = nullptr;
 };
 
 namespace UE::Optionals {
 
     template <typename T>
-    FORCEINLINE TOptional<T&> OfNullable(T* Ptr) {
-        return TOptional<T&>(Ptr);
+    FORCEINLINE TOptional<T &> OfNullable(T *Ptr) {
+        return TOptional<T &>(Ptr);
     }
-    
-}
+
+} // namespace UE::Optionals

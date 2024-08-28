@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Editor/Tilemap3DBaseEditorViewportClient.h"
 #include "CanvasTypes.h"
 #include "ImageUtils.h"
 
-FTilemap3DBaseEditorViewportClient::FTilemap3DBaseEditorViewportClient(const TWeakPtr<SEditorViewport> &InEditorViewportWidget)
+FTilemap3DBaseEditorViewportClient::FTilemap3DBaseEditorViewportClient(
+    const TWeakPtr<SEditorViewport> &InEditorViewportWidget)
     : FEditorViewportClient(nullptr, nullptr, InEditorViewportWidget) {
     ELevelViewportType NewViewportType = LVT_Perspective;
     SetViewModes(VMI_Unlit, VMI_Unlit);
@@ -54,7 +54,7 @@ void FTilemap3DBaseEditorViewportClient::ModifyCheckerboardTextureColors() {
 }
 
 void FTilemap3DBaseEditorViewportClient::SetupCheckerboardTexture(const FColor &ColorOne, const FColor &ColorTwo,
-    int32 CheckerSize) {
+                                                                  int32 CheckerSize) {
     if (CheckerboardTexture == nullptr) {
         CheckerboardTexture = FImageUtils::CreateCheckerboardTexture(ColorOne, ColorTwo, CheckerSize);
     }
@@ -65,7 +65,7 @@ void FTilemap3DBaseEditorViewportClient::DestroyCheckerboardTexture() {
         if (CheckerboardTexture->GetResource()) {
             CheckerboardTexture->ReleaseResource();
         }
-        
+
         CheckerboardTexture->MarkAsGarbage();
         CheckerboardTexture = nullptr;
     }

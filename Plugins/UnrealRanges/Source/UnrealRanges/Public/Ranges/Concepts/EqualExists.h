@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-
 namespace UE::Ranges {
     namespace Detail {
         /**

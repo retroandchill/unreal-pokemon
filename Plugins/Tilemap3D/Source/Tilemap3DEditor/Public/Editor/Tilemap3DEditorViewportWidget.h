@@ -18,20 +18,20 @@ UCLASS(BlueprintType)
 class TILEMAP3DEDITOR_API UTilemap3DEditorViewportWidget : public UWidget {
     GENERATED_BODY()
 
-public:
+  public:
     TSharedRef<SWidget> RebuildWidget() override;
     void SynchronizeProperties() override;
     void ReleaseSlateResources(bool bReleaseChildren) override;
 
-    void SetTilemap(ATilemap3D* Tilemap3D);
-    void SetTile(const FTileHandle& Handle);
-private:
+    void SetTilemap(ATilemap3D *Tilemap3D);
+    void SetTile(const FTileHandle &Handle);
+
+  private:
     UPROPERTY()
     TObjectPtr<ATilemap3D> TilemapActor;
 
     UPROPERTY()
     FTileHandle PaintTile;
-    
-    TSharedPtr<STilemap3DEditorViewport> TilemapWidget;
 
+    TSharedPtr<STilemap3DEditorViewport> TilemapWidget;
 };

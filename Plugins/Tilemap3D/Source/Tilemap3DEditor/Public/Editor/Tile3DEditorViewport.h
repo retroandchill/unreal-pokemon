@@ -8,12 +8,14 @@
 
 class FTile3DEditorViewportClient;
 
-class TILEMAP3DEDITOR_API STile3DEditorViewport : public SEditorViewport, public ICommonEditorViewportToolbarInfoProvider {
-public:
-    SLATE_BEGIN_ARGS(STile3DEditorViewport) {}
+class TILEMAP3DEDITOR_API STile3DEditorViewport : public SEditorViewport,
+                                                  public ICommonEditorViewportToolbarInfoProvider {
+  public:
+    SLATE_BEGIN_ARGS(STile3DEditorViewport) {
+    }
     SLATE_END_ARGS()
 
-    void Construct(const FArguments& InArgs, TSharedPtr<FTile3DEditorViewportClient> InViewportClient);
+    void Construct(const FArguments &InArgs, TSharedPtr<FTile3DEditorViewportClient> InViewportClient);
 
     TSharedPtr<SWidget> MakeViewportToolbar() override;
     TSharedRef<FEditorViewportClient> MakeEditorViewportClient() override;
@@ -23,9 +25,9 @@ public:
     TSharedPtr<FExtender> GetExtenders() const override;
     void OnFloatingButtonClicked() override;
 
-protected:
+  protected:
     FText GetTitleText() const;
 
-private:
+  private:
     TSharedPtr<FTile3DEditorViewportClient> TypedViewportClient;
 };

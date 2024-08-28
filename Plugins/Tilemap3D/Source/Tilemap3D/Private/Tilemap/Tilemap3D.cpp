@@ -1,18 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Tilemap/Tilemap3D.h"
 #include "Algo/ForEach.h"
 #include "Ranges/Optional/IfPresent.h"
 #include "Tileset/Tileset3D.h"
-
 
 FTileHandle::FTileHandle(UTileset3D &InTileset, int32 InTileID) : Tileset(InTileset), TileID(InTileID) {
 }
 
 TOptional<const FTile3D &> FTileHandle::GetTile() const {
     auto &Tiles = Tileset->GetTiles();
-    return Tiles.IsValidIndex(TileID) ? Tiles[TileID] : TOptional<const FTile3D&>();
+    return Tiles.IsValidIndex(TileID) ? Tiles[TileID] : TOptional<const FTile3D &>();
 }
 
 bool FTileHandle::IsValidTile() const {
@@ -24,7 +22,7 @@ bool FTileHandle::operator==(const FTileHandle &Other) const {
     return Tileset == Other.Tileset && TileID == Other.TileID;
 }
 
-FTileInfo::FTileInfo(UStaticMeshComponent &InTileMesh, const FTileHandle& InTile, const FIntVector2 &InTileOrigin)
+FTileInfo::FTileInfo(UStaticMeshComponent &InTileMesh, const FTileHandle &InTile, const FIntVector2 &InTileOrigin)
     : TileMesh(InTileMesh), Tile(InTile), TileOrigin(InTileOrigin) {
     auto TileInfo = Tile.GetTile();
     if (TileInfo.IsSet()) {
@@ -40,15 +38,15 @@ TOptional<const FTile3D &> FTileInfo::GetTile() const {
     return Tile.GetTile();
 }
 
-const FTileHandle & FTileInfo::GetTileHandle() const {
+const FTileHandle &FTileInfo::GetTileHandle() const {
     return Tile;
 }
 
-UStaticMeshComponent * FTileInfo::GetMeshComponent() const {
+UStaticMeshComponent *FTileInfo::GetMeshComponent() const {
     return TileMesh;
 }
 
-const FIntVector2 & FTileInfo::GetTileOrigin() const {
+const FIntVector2 &FTileInfo::GetTileOrigin() const {
     return TileOrigin;
 }
 
@@ -62,13 +60,13 @@ ATilemap3D::ATilemap3D() {
     SetRootComponent(TilemapRoot);
 }
 
-void ATilemap3D::AddTile(const FTileHandle& Tile, int32 X, int32 Y, int32 Layer) {
+void ATilemap3D::AddTile(const FTileHandle &Tile, int32 X, int32 Y, int32 Layer) {
     auto &CurrentTile = GetAdjustedTilePosition(X, Y);
     if (CurrentTile.IsValidTile()) {
         RemoveTile(X, Y, Layer);
     }
-    auto NewComponent = CastChecked<UStaticMeshComponent>(AddComponentByClass(UStaticMeshComponent::StaticClass(),
-        false, FTransform(FVector(TileSize.X * X, TileSize.Y * Y, 0)), false));
+    auto NewComponent = CastChecked<UStaticMeshComponent>(AddComponentByClass(
+        UStaticMeshComponent::StaticClass(), false, FTransform(FVector(TileSize.X * X, TileSize.Y * Y, 0)), false));
     NewComponent->CreationMethod = EComponentCreationMethod::Instance;
     AddOwnedComponent(NewComponent);
     auto TileData = Tile.GetTile();
@@ -87,7 +85,7 @@ void ATilemap3D::RemoveTile(int32 X, int32 Y, int32 Layer) {
     auto TileData = Tile.GetTile();
     TileData | UE::Optionals::IfPresent(this, &ATilemap3D::ClearOutTile, X, Y, Layer);
     Tile = FTileInfo();
-    
+
     OnTileChanged.Broadcast(X, Y, Layer);
 }
 
@@ -95,12 +93,12 @@ void ATilemap3D::OnConstruction(const FTransform &Transform) {
     Super::OnConstruction(Transform);
     for (int32 i = 0; i < TileRows.Num(); i++) {
         if (i >= SizeY) {
-            Algo::ForEach(TileRows[i].Tiles, [this](const FTileInfo& Tile) {
+            Algo::ForEach(TileRows[i].Tiles, [this](const FTileInfo &Tile) {
                 auto Component = Tile.GetMeshComponent();
                 if (Component == nullptr) {
                     return;
                 }
-                
+
                 Component->DestroyComponent(false);
                 RemoveOwnedComponent(Component);
             });
@@ -118,9 +116,9 @@ void ATilemap3D::OnConstruction(const FTransform &Transform) {
             RemoveOwnedComponent(Mesh);
         }
     }
-    
+
     TileRows.SetNum(SizeY);
-    Algo::ForEach(TileRows, [this](FTileRow& Row) { Row.Tiles.SetNum(SizeX); });
+    Algo::ForEach(TileRows, [this](FTileRow &Row) { Row.Tiles.SetNum(SizeX); });
     OnMapSizeChanged.Broadcast();
 }
 
@@ -154,16 +152,16 @@ void ATilemap3D::RemoveTileChangedBinding(FDelegateHandle Handle) {
     OnTileChanged.Remove(Handle);
 }
 
-FTileInfo & ATilemap3D::GetAdjustedTilePosition(int32 X, int32 Y) {
+FTileInfo &ATilemap3D::GetAdjustedTilePosition(int32 X, int32 Y) {
     check(TileRows.IsValidIndex(Y))
     check(TileRows[Y].Tiles.IsValidIndex(X))
     return TileRows[Y].Tiles[X];
 }
 
-void ATilemap3D::FillInTile(const FTile3D &Tile, const FTileInfo& OriginTile, int32 X, int32 Y, int32 Layer) {
+void ATilemap3D::FillInTile(const FTile3D &Tile, const FTileInfo &OriginTile, int32 X, int32 Y, int32 Layer) {
     for (int32 i = 0; i < Tile.SizeY; i++) {
         check(TileRows.IsValidIndex(X + i))
-            
+
         auto &Row = TileRows[Y + i].Tiles;
         for (int32 j = 0; j < Tile.SizeX; j++) {
             if (i == 0 && j == 0) {
@@ -180,7 +178,7 @@ void ATilemap3D::FillInTile(const FTile3D &Tile, const FTileInfo& OriginTile, in
 void ATilemap3D::ClearOutTile(const FTile3D &Tile, int32 X, int32 Y, int32 Layer) {
     for (int32 i = 0; i < Tile.SizeY; i++) {
         check(TileRows.IsValidIndex(Y + i))
-            
+
         auto &Row = TileRows[Y + i].Tiles;
         for (int32 j = 0; j < Tile.SizeX; j++) {
             if (i == 0 && j == 0) {

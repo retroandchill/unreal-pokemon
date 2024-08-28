@@ -7,18 +7,18 @@
 
 class UTileset3D;
 /**
- * 
+ *
  */
 class TILEMAP3DEDITOR_API FTileSelectorViewportClient : public FTilemap3DBaseEditorViewportClient {
 
-public:
-    explicit FTileSelectorViewportClient(UTileset3D* InTileSet);
+  public:
+    explicit FTileSelectorViewportClient(UTileset3D *InTileSet);
 
     void AddReferencedObjects(FReferenceCollector &Collector) override;
 
-    void SetTileSet(UTileset3D* Tileset3D);
+    void SetTileSet(UTileset3D *Tileset3D);
 
-private:
+  private:
     TWeakObjectPtr<UTileset3D> Tileset;
     FPreviewScene OwnedPreviewScene;
     TArray<TObjectPtr<UStaticMeshComponent>> TileMeshes;

@@ -12,5 +12,5 @@ namespace UE::Ranges {
 
     template <typename T, ranges::category C = ranges::category::input>
     using TAnyView = ranges::any_view<T, C>;
-    
+
 }

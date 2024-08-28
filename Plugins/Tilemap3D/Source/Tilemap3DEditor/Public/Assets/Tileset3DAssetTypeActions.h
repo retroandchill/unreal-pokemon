@@ -6,16 +6,16 @@
 #include "AssetTypeActions_Base.h"
 
 /**
- * 
+ *
  */
 class TILEMAP3DEDITOR_API FTileset3DAssetTypeActions : public FAssetTypeActions_Base {
-public:
+  public:
     explicit FTileset3DAssetTypeActions(EAssetTypeCategories::Type AssetCategory);
-    UClass* GetSupportedClass() const override;
+    UClass *GetSupportedClass() const override;
     FText GetName() const override;
     FColor GetTypeColor() const override;
     uint32 GetCategories() override;
 
-private:
+  private:
     EAssetTypeCategories::Type AssetCategory;
 };

@@ -4,24 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "AssetTypeCategories.h"
-#include "PropertyEditorDelegates.h"
 #include "Modules/ModuleManager.h"
+#include "PropertyEditorDelegates.h"
 
-class FGridMapEditorModule : public IModuleInterface
-{
-public:
+class FGridMapEditorModule : public IModuleInterface {
+  public:
+    /** IModuleInterface implementation */
+    virtual void StartupModule() override;
+    virtual void ShutdownModule() override;
 
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+  private:
+    void RegisterAssetTypeAction(class IAssetTools &AssetTools, TSharedRef<class IAssetTypeActions> Action);
+    void RegisterCustomPropertyTypeLayout(FName PropertyTypeName,
+                                          FOnGetPropertyTypeCustomizationInstance PropertyTypeLayoutDelegate);
 
-private:
-	void RegisterAssetTypeAction(class IAssetTools& AssetTools, TSharedRef<class IAssetTypeActions> Action);
-	void RegisterCustomPropertyTypeLayout(FName PropertyTypeName, FOnGetPropertyTypeCustomizationInstance PropertyTypeLayoutDelegate);
+    TSharedPtr<class FSlateStyleSet> StyleSet;
+    TSet<FName> RegisteredPropertyTypes;
+    TArray<TSharedPtr<class IAssetTypeActions>> CreatedAssetTypeActions;
 
-	TSharedPtr<class FSlateStyleSet> StyleSet;
-	TSet<FName> RegisteredPropertyTypes;
-	TArray<TSharedPtr<class IAssetTypeActions>> CreatedAssetTypeActions;
-
-	EAssetTypeCategories::Type GridMapAssetCategory;
+    EAssetTypeCategories::Type GridMapAssetCategory;
 };

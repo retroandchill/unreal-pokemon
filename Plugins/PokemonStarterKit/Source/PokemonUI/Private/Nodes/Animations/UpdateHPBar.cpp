@@ -28,7 +28,7 @@ void UUpdateHPBar::Activate() {
 
     auto SelectionPane = IPartyDisplayScreen::Execute_GetPokemonSelectionPane(Screen);
     check(IsValid(SelectionPane))
-    
+
     auto Panel = SelectionPane->FindPanelForPokemon(Pokemon).GetPtrOrNull();
     if (!IsValid(Panel) || !Panel->Implements<UHPBarPanel>()) {
         OnAnimationComplete.Broadcast();

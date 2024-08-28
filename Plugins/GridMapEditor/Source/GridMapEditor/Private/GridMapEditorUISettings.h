@@ -88,7 +88,7 @@ struct FGridMapEditorUISettings {
         bDebugDrawUpdatedTiles = bInDebugDrawUpdatedTiles;
     }
 
-private:
+  private:
     bool bPaintToolSelected = true;
     bool bSelectToolSelected = false;
     bool bSettingsToolSelected = false;
@@ -102,5 +102,4 @@ private:
     bool bDebugDrawUpdatedTiles = false;
 
     TWeakObjectPtr<UGridMapTileSet> CurrentTileSetPtr;
-
 };

@@ -14,5 +14,5 @@ namespace UE::Ranges {
      * Create a view from a single element.
      */
     constexpr auto Single = ranges::views::single;
-    
-}
+
+} // namespace UE::Ranges

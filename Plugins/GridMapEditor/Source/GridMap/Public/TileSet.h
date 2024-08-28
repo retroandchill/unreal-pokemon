@@ -3,68 +3,66 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
 #include "GameplayTagContainer.h"
-#include "TileSetTagRequirements.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "TileSetTagRequirements.h"
+#include "UObject/Object.h"
+
 #include "TileSet.generated.h"
 
 USTRUCT()
-struct GRIDMAP_API FGridMapTileBitset
-{
-	GENERATED_BODY()
+struct GRIDMAP_API FGridMapTileBitset {
+    GENERATED_BODY()
 
-public:
-	UPROPERTY(EditAnywhere)
-	uint32 Bitset = 0;
+  public:
+    UPROPERTY(EditAnywhere)
+    uint32 Bitset = 0;
 };
 
 USTRUCT()
-struct GRIDMAP_API FGridMapTileList
-{
-	GENERATED_BODY()
+struct GRIDMAP_API FGridMapTileList {
+    GENERATED_BODY()
 
-public:
-	UPROPERTY(EditAnywhere)
-	FGridMapTileBitset TileAdjacency;
+  public:
+    UPROPERTY(EditAnywhere)
+    FGridMapTileBitset TileAdjacency;
 
-	UPROPERTY(EditAnywhere)
-	FRotator Rotation = FRotator::ZeroRotator;
+    UPROPERTY(EditAnywhere)
+    FRotator Rotation = FRotator::ZeroRotator;
 
-	UPROPERTY(EditAnywhere, meta = (AllowAbstract))
-	TArray<TSoftObjectPtr<class UStaticMesh>> Tiles;
+    UPROPERTY(EditAnywhere, meta = (AllowAbstract))
+    TArray<TSoftObjectPtr<class UStaticMesh>> Tiles;
 
-	TSoftObjectPtr<class UStaticMesh> GetRandomTile() const;
+    TSoftObjectPtr<class UStaticMesh> GetRandomTile() const;
 };
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType)
-class GRIDMAP_API UGridMapTileSet : public UObject
-{
-	GENERATED_BODY()
-public:
-	UGridMapTileSet();
-	
-public:
-	UPROPERTY(EditDefaultsOnly, Category="Tile Set Config")
-	FGameplayTagContainer TileTags;
+class GRIDMAP_API UGridMapTileSet : public UObject {
+    GENERATED_BODY()
+  public:
+    UGridMapTileSet();
 
-	UPROPERTY(EditDefaultsOnly, Category="Tile Set Config")
-	FTileSetTagRequirements AdjacencyTagRequirements;
+  public:
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
+    FGameplayTagContainer TileTags;
 
-	UPROPERTY(EditDefaultsOnly, Category="Tile Set Config")
-	bool bMatchesEmpty;
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
+    FTileSetTagRequirements AdjacencyTagRequirements;
 
-    UPROPERTY(EditDefaultsOnly, Category="Tile Set Config")
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
+    bool bMatchesEmpty;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
     bool bIgnoreAdjacency;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
-	uint32 TileSize;
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
+    uint32 TileSize;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
-	uint32 TileHeight;
+    UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
+    uint32 TileHeight;
 
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config", meta = (UIMin = 1, ClampMin = 1))
     uint32 SizeX = 1;
@@ -74,24 +72,22 @@ public:
 
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config", meta = (UIMin = 1, ClampMin = 1))
     uint32 SizeZ = 1;
-    
+
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
     FVector2D BrushOffset;
-    
 
-	UPROPERTY(EditDefaultsOnly, Category="Tiles")
-	TArray<FGridMapTileList> Tiles;
-
+    UPROPERTY(EditDefaultsOnly, Category = "Tiles")
+    TArray<FGridMapTileList> Tiles;
 
     TOptional<const FGridMapTileList &> FindTilesForAdjacency(uint32 Bitmask) const;
 
-protected:
-	TOptional<const FGridMapTileList &> SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const;
+  protected:
+    TOptional<const FGridMapTileList &> SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const;
 
-public:
-	//this can't be here, it breaks non-editor builds :/
-//#if WITH_EDITOR
-	UPROPERTY(Transient)
-	TObjectPtr<class UStaticMesh> MeshForIcon;
-//#endif
+  public:
+    // this can't be here, it breaks non-editor builds :/
+    // #if WITH_EDITOR
+    UPROPERTY(Transient)
+    TObjectPtr<class UStaticMesh> MeshForIcon;
+    // #endif
 };

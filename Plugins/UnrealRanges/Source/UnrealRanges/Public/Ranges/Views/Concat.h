@@ -14,5 +14,5 @@ namespace UE::Ranges {
      * Concatenate a set of multiple ranges into one larger range.
      */
     constexpr auto Concat = ranges::views::concat;
-    
-}
+
+} // namespace UE::Ranges

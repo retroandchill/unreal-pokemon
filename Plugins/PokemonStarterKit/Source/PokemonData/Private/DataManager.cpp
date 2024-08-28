@@ -9,9 +9,7 @@
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();
-    Settings->DataTables |
-        UE::Ranges::Map(&FSoftObjectPath::TryLoad, nullptr) |
-        UE::Ranges::CastType<UDataTable> |
+    Settings->DataTables | UE::Ranges::Map(&FSoftObjectPath::TryLoad, nullptr) | UE::Ranges::CastType<UDataTable> |
         UE::Ranges::ForEach([this](UDataTable *Table) {
             auto RowStruct = Table->GetRowStruct();
             if (RowStruct == nullptr) {

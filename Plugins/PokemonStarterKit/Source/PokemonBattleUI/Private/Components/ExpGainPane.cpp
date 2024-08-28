@@ -9,9 +9,9 @@
 #include "Components/BattlerExpPanel.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 #include "Utilities/TrainerHelpers.h"
-#include "Ranges/Views/ContainerView.h"
 
 void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     OwningBattle = Battle;

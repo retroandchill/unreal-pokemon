@@ -3,16 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Traits.h"
-#include "Ranges/RangeConcepts.h"
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/RangeConcepts.h"
+#include "Traits.h"
 
 namespace UE::Optionals {
 
     template <typename F>
     struct TIfPresentInvoker {
-        explicit constexpr TIfPresentInvoker(F&& Functor) : Functor(MoveTemp(Functor)) {
+        explicit constexpr TIfPresentInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
         }
 
         /**
@@ -23,28 +23,26 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O&& Optional) const {
+        constexpr auto operator()(O &&Optional) const {
             if (Optional.IsSet()) {
                 ranges::invoke(Functor, *Optional);
             }
         }
 
-    private:
+      private:
         F Functor;
     };
 
     struct FIfPresent {
 
         template <typename... A>
-        constexpr auto operator()(A&&... Args) const {
+        constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
-            return TOptionalClosure<TIfPresentInvoker<BindingType>>(TIfPresentInvoker<BindingType>(
-                Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+            return TOptionalClosure<TIfPresentInvoker<BindingType>>(
+                TIfPresentInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
         }
-        
     };
 
-    
     constexpr FIfPresent IfPresent;
-    
-}
+
+} // namespace UE::Optionals

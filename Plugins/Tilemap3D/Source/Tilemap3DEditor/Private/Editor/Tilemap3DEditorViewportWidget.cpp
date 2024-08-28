@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Editor/Tilemap3DEditorViewportWidget.h"
 #include "Editor/Tilemap3DEditorViewport.h"
 
@@ -26,7 +25,7 @@ void UTilemap3DEditorViewportWidget::SetTilemap(ATilemap3D *Tilemap3D) {
     }
 }
 
-void UTilemap3DEditorViewportWidget::SetTile(const FTileHandle& Handle) {
+void UTilemap3DEditorViewportWidget::SetTile(const FTileHandle &Handle) {
     PaintTile = Handle;
     if (TilemapWidget != nullptr) {
         TilemapWidget->SetTileHandle(PaintTile);

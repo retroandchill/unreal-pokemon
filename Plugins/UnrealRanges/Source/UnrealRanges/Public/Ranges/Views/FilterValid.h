@@ -20,16 +20,15 @@ namespace UE::Ranges {
             if constexpr (UObjectPointer<T>) {
                 return Range | Filter(&IsValid);
             } else if constexpr (std::is_base_of_v<FScriptInterface, std::remove_cvref_t<T>>) {
-                return Range | Filter([](const FScriptInterface& Interface) { return IsValid(Interface.GetObject()); });
+                return Range | Filter([](const FScriptInterface &Interface) { return IsValid(Interface.GetObject()); });
             } else if constexpr (Optionals::UEOptional<T>) {
-                return Range | Filter([](const T& Optional) { return Optional.IsSet(); });
+                return Range | Filter([](const T &Optional) { return Optional.IsSet(); });
             } else if constexpr (DereferencesToUObject<T>) {
-                return Range | Filter([](const T& Ptr) { return IsValid(Ptr.Get()); });
+                return Range | Filter([](const T &Ptr) { return IsValid(Ptr.Get()); });
             } else {
-                return Range | Filter([](const T& Ptr) { return Ptr != nullptr; });
+                return Range | Filter([](const T &Ptr) { return Ptr != nullptr; });
             }
         }
-        
     };
 
     /**
@@ -38,5 +37,5 @@ namespace UE::Ranges {
      * all other types will perform an equality check against nullptr.
      */
     constexpr ranges::views::view_closure<FFilterValid> FilterValid;
-    
-}
+
+} // namespace UE::Ranges

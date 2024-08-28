@@ -7,26 +7,21 @@
 #define LOCTEXT_NAMESPACE "GridMapEditor"
 
 FGridMapTileSetAssetTypeActions::FGridMapTileSetAssetTypeActions(EAssetTypeCategories::Type InAssetCategory)
-	: AssetCategory(InAssetCategory)
-{
+    : AssetCategory(InAssetCategory) {
 }
 
-FText FGridMapTileSetAssetTypeActions::GetName() const
-{
-	return LOCTEXT("FGridMapTileSetAssetTypeActionsName", "Grid Tiles");
+FText FGridMapTileSetAssetTypeActions::GetName() const {
+    return LOCTEXT("FGridMapTileSetAssetTypeActionsName", "Grid Tiles");
 }
 
-FColor FGridMapTileSetAssetTypeActions::GetTypeColor() const
-{
-	return FColorList::Orange;
+FColor FGridMapTileSetAssetTypeActions::GetTypeColor() const {
+    return FColorList::Orange;
 }
 
-UClass* FGridMapTileSetAssetTypeActions::GetSupportedClass() const
-{
-	return UGridMapTileSet::StaticClass();
+UClass *FGridMapTileSetAssetTypeActions::GetSupportedClass() const {
+    return UGridMapTileSet::StaticClass();
 }
 
-uint32 FGridMapTileSetAssetTypeActions::GetCategories()
-{
-	return AssetCategory;
+uint32 FGridMapTileSetAssetTypeActions::GetCategories() {
+    return AssetCategory;
 }

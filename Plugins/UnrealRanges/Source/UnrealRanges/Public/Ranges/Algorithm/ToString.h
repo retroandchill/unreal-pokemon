@@ -25,11 +25,11 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R> && std::is_convertible_v<ranges::range_value_t<R>, FString>
-        constexpr auto operator()(R&& Range) const {
+        constexpr auto operator()(R &&Range) const {
             return FString::Join(Forward<R>(Range), Conjunction.GetData());
         }
 
-    private:
+      private:
         FStringView Conjunction;
     };
 
@@ -45,7 +45,7 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires std::convertible_to<T, FStringView>
-        auto operator()(T&& Conjunction) const {
+        auto operator()(T &&Conjunction) const {
             return TTerminalClosure(FToStringInvoker(Forward<T>(Conjunction)));
         }
     };
@@ -55,5 +55,5 @@ namespace UE::Ranges {
      * converted into FStringView.
      */
     inline constexpr FToString ToString;
-    
-}
+
+} // namespace UE::Ranges

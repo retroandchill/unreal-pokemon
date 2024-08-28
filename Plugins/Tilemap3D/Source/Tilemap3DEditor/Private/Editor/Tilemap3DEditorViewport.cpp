@@ -1,29 +1,27 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Editor/Tilemap3DEditorViewport.h"
-
-#include "SlateOptMacros.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/Or.h"
 #include "Ranges/Optional/OrElse.h"
 #include "Ranges/Views/Map.h"
+#include "SlateOptMacros.h"
 #include "Tilemap/Tilemap3D.h"
 #include "Tileset/Tile3D.h"
 
-constexpr double GridSize = 24.f; 
+constexpr double GridSize = 24.f;
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void STilemap3DEditorViewport::Construct(const FArguments &InArgs) {
     /*
-	ChildSlot
-	[
-		// Populate the widget
-	];
-	*/
+    ChildSlot
+    [
+        // Populate the widget
+    ];
+    */
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -32,17 +30,15 @@ void STilemap3DEditorViewport::SetTilemap(ATilemap3D *Tilemap3D) {
     Tilemap = Tilemap3D;
 }
 
-void STilemap3DEditorViewport::SetTileHandle(const FTileHandle& InTileHandle) {
+void STilemap3DEditorViewport::SetTileHandle(const FTileHandle &InTileHandle) {
     PaintTile = InTileHandle;
 }
 
 int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry,
                                         const FSlateRect &MyCullingRect, FSlateWindowElementList &OutDrawElements,
-                                        int32 LayerId,
-                                        const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const {
+                                        int32 LayerId, const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const {
     int32 DrawLayerId = SCompoundWidget::OnPaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId,
-                                                 InWidgetStyle,
-                                                 bParentEnabled);
+                                                 InWidgetStyle, bParentEnabled);
 
     if (!Tilemap.IsValid()) {
         return DrawLayerId;
@@ -59,33 +55,25 @@ int32 STilemap3DEditorViewport::OnPaint(const FPaintArgs &Args, const FGeometry 
             auto LayerContents = Tilemap->GetTile(i, j).GetTile();
             DrawLayerId++;
             FSlateDrawElement::MakeBox(
-                OutDrawElements,
-                DrawLayerId,
-                AllottedGeometry.ToPaintGeometry(TileSize, FSlateLayoutTransform(
-                                                     FVector2D(GridSize * i, GridSize * j)
-                                                        / AllottedGeometry.Scale)),
-                &Brush,
-                ESlateDrawEffect::None,
-                LayerContents.IsSet() ? FLinearColor::Green : FLinearColor::White);
+                OutDrawElements, DrawLayerId,
+                AllottedGeometry.ToPaintGeometry(
+                    TileSize, FSlateLayoutTransform(FVector2D(GridSize * i, GridSize * j) / AllottedGeometry.Scale)),
+                &Brush, ESlateDrawEffect::None, LayerContents.IsSet() ? FLinearColor::Green : FLinearColor::White);
         }
     }
 
     if (CurrentMousePosition.IsSet()) {
         auto &Pos = *CurrentMousePosition;
-        auto CursorSize = PaintTile.GetTile() |
-            UE::Optionals::Map([&TileSize](const FTile3D& Tile)
-                { return FVector2D(TileSize.X * Tile.SizeX, TileSize.Y * Tile.SizeY); }) |
-            UE::Optionals::OrElse(TileSize);
+        auto CursorSize = PaintTile.GetTile() | UE::Optionals::Map([&TileSize](const FTile3D &Tile) {
+                              return FVector2D(TileSize.X * Tile.SizeX, TileSize.Y * Tile.SizeY);
+                          }) |
+                          UE::Optionals::OrElse(TileSize);
         DrawLayerId++;
-        FSlateDrawElement::MakeBox(
-        OutDrawElements,
-        DrawLayerId,
-        AllottedGeometry.ToPaintGeometry(CursorSize, FSlateLayoutTransform(
-                                             FVector2D(GridSize * Pos.X, GridSize * Pos.Y)
-                                                / AllottedGeometry.Scale)),
-        &Brush,
-        ESlateDrawEffect::None,
-        FLinearColor::Red);
+        FSlateDrawElement::MakeBox(OutDrawElements, DrawLayerId,
+                                   AllottedGeometry.ToPaintGeometry(
+                                       CursorSize, FSlateLayoutTransform(FVector2D(GridSize * Pos.X, GridSize * Pos.Y) /
+                                                                         AllottedGeometry.Scale)),
+                                   &Brush, ESlateDrawEffect::None, FLinearColor::Red);
     }
 
     return DrawLayerId;
@@ -108,31 +96,31 @@ void STilemap3DEditorViewport::OnMouseLeave(const FPointerEvent &MouseEvent) {
 FReply STilemap3DEditorViewport::OnMouseMove(const FGeometry &SenderGeometry, const FPointerEvent &MouseEvent) {
     auto MousePosition = SenderGeometry.AbsoluteToLocal(MouseEvent.GetScreenSpacePosition());
     if (auto NewGridPos = GetGridPosition(MousePosition, SenderGeometry.Scale); CurrentMousePosition != NewGridPos) {
-        CurrentMousePosition = NewGridPos |
-            UE::Optionals::Filter([this](const FIntVector2&) { return Tilemap.IsValid(); }) |
-            UE::Optionals::Map([this](const FIntVector2&) -> auto& { return PaintTile; }) |
-                UE::Optionals::FlatMap(&FTileHandle::GetTile) |
-                UE::Optionals::Map([this, &NewGridPos](const FTile3D& I) {
-                    return FIntVector2(
-                        FMath::Min(NewGridPos->X, Tilemap->GetSizeX() - I.SizeX),
-                        FMath::Min(NewGridPos->Y, Tilemap->GetSizeY() - I.SizeY));
-                }) | UE::Optionals::Or([&NewGridPos] { return NewGridPos; });
+        CurrentMousePosition =
+            NewGridPos | UE::Optionals::Filter([this](const FIntVector2 &) { return Tilemap.IsValid(); }) |
+            UE::Optionals::Map([this](const FIntVector2 &) -> auto & { return PaintTile; }) |
+            UE::Optionals::FlatMap(&FTileHandle::GetTile) | UE::Optionals::Map([this, &NewGridPos](const FTile3D &I) {
+                return FIntVector2(FMath::Min(NewGridPos->X, Tilemap->GetSizeX() - I.SizeX),
+                                   FMath::Min(NewGridPos->Y, Tilemap->GetSizeY() - I.SizeY));
+            }) |
+            UE::Optionals::Or([&NewGridPos] { return NewGridPos; });
 
         if (bIsHoldingMouse && Tilemap.IsValid() && CurrentMousePosition.IsSet()) {
             if (auto TileData = Tilemap->GetTile(CurrentMousePosition->X, CurrentMousePosition->Y);
-                    TileData.GetTileOrigin() == *CurrentMousePosition || TileData.GetTileHandle() != PaintTile) {
+                TileData.GetTileOrigin() == *CurrentMousePosition || TileData.GetTileHandle() != PaintTile) {
                 SetTile(*CurrentMousePosition);
                 return FReply::Handled();
             }
         }
     }
-    
+
     return FReply::Unhandled();
 }
 
 FReply STilemap3DEditorViewport::OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) {
     FReply Reply = FReply::Unhandled();
-    if (MouseEvent.GetEffectingButton() != EKeys::LeftMouseButton || !Tilemap.IsValid() || !CurrentMousePosition.IsSet()) {
+    if (MouseEvent.GetEffectingButton() != EKeys::LeftMouseButton || !Tilemap.IsValid() ||
+        !CurrentMousePosition.IsSet()) {
         return FReply::Unhandled();
     }
 
@@ -145,7 +133,7 @@ FReply STilemap3DEditorViewport::OnMouseButtonUp(const FGeometry &MyGeometry, co
     if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton) {
         bIsHoldingMouse = false;
     }
-    
+
     return FReply::Unhandled();
 }
 
@@ -169,7 +157,7 @@ TOptional<FIntVector2> STilemap3DEditorViewport::GetGridPosition(const FVector2D
     return FIntVector2(CoordX, CoordY);
 }
 
-void STilemap3DEditorViewport::SetTile(const FIntVector2& Position, int32 Layer) const {
+void STilemap3DEditorViewport::SetTile(const FIntVector2 &Position, int32 Layer) const {
     if (PaintTile.IsValidTile()) {
         Tilemap->AddTile(PaintTile, Position.X, Position.Y, Layer);
     } else {

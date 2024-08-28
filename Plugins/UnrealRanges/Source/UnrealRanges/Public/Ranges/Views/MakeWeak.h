@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Map.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Concepts/WeakReferencable.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
 
@@ -16,7 +16,6 @@ namespace UE::Ranges {
         auto operator()(R &&Range) const {
             return Range | Map([](T &&Ptr) { return TWeakRefType<T>(Forward<T>(Ptr)); });
         }
-        
     };
 
     /**
@@ -25,4 +24,4 @@ namespace UE::Ranges {
      */
     constexpr ranges::views::view_closure<FMakeWeak> MakeWeak;
 
-}
+} // namespace UE::Ranges

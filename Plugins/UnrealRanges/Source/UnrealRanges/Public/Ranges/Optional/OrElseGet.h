@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
-#include "Traits.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/RangeConcepts.h"
+#include "Traits.h"
 
 namespace UE::Optionals {
 
@@ -16,7 +16,8 @@ namespace UE::Optionals {
      */
     template <typename F>
     struct TOrElseGetInvoker {
-        explicit constexpr TOrElseGetInvoker(F&& Functor) : Functor(Functor) {}
+        explicit constexpr TOrElseGetInvoker(F &&Functor) : Functor(Functor) {
+        }
 
         /**
          * Obtain the underlying element of an optional, invoking the functor if nothing is present.
@@ -26,15 +27,14 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O&& Optional) const {
+        constexpr auto operator()(O &&Optional) const {
             using ResultType = TOptionalElementType<O>;
             return Optional.IsSet() ? *Optional : ResultType(Functor());
         }
-        
-    private:
+
+      private:
         F Functor;
     };
-
 
     /**
      * Optional closure creator to get an alternate value out of an optional if necessary.
@@ -48,16 +48,16 @@ namespace UE::Optionals {
          * @return The bound functional closure.
          */
         template <typename... A>
-        constexpr auto operator()(A&&... Args) const {
+        constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
-            return TOptionalClosure<TOrElseGetInvoker<BindingType>>(TOrElseGetInvoker<BindingType>(
-                Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+            return TOptionalClosure<TOrElseGetInvoker<BindingType>>(
+                TOrElseGetInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
         }
-        
     };
 
     /**
-     * Get the value of an optional, getting out the value as supplied by the contained functor if the value is not present.
+     * Get the value of an optional, getting out the value as supplied by the contained functor if the value is not
+     * present.
      */
     constexpr FOrElseGet OrElseGet;
-}
+} // namespace UE::Optionals

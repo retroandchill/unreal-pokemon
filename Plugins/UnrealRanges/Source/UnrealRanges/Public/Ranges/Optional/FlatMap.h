@@ -4,16 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
-#include "Types.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/RangeConcepts.h"
+#include "Types.h"
 
 namespace UE::Optionals {
-        
 
     template <typename F>
     struct TFlatMapInvoker {
-        explicit constexpr TFlatMapInvoker(F&& Functor) : Functor(MoveTemp(Functor)) {
+        explicit constexpr TFlatMapInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
         }
 
         /**
@@ -24,28 +23,27 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O&& Optional) const {
+        constexpr auto operator()(O &&Optional) const {
             using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
             return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : ResultType();
         }
 
-    private:
+      private:
         F Functor;
     };
 
     struct FFlatMap {
 
         template <typename... A>
-        constexpr auto operator()(A&&... Args) const {
+        constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
-            return TOptionalClosure<TFlatMapInvoker<BindingType>>(TFlatMapInvoker<BindingType>(
-                Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+            return TOptionalClosure<TFlatMapInvoker<BindingType>>(
+                TFlatMapInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
         }
-        
     };
 
     /**
      * Map the optional to a new value if present, otherwise return an empty optional.
      */
     constexpr FFlatMap FlatMap;
-}
+} // namespace UE::Optionals

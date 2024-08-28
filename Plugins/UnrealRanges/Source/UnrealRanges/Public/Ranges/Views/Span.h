@@ -12,5 +12,5 @@ namespace UE::Ranges {
 
     template <typename T, ranges::detail::span_index_t N = ranges::dynamic_extent>
     using TSpan = ranges::span<T, N>;
-    
+
 }

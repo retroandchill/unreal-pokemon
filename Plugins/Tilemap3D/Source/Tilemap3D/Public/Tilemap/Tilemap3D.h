@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Ranges/Optional/OptionalRef.h"
+
 #include "Tilemap3D.generated.h"
 
 struct FTile3D;
@@ -18,15 +19,15 @@ struct TILEMAP3D_API FTileHandle {
 
     FTileHandle() = default;
 
-    FTileHandle(UTileset3D& InTileset, int32 InTileID);
+    FTileHandle(UTileset3D &InTileset, int32 InTileID);
 
-    TOptional<const FTile3D&> GetTile() const;
+    TOptional<const FTile3D &> GetTile() const;
 
     bool IsValidTile() const;
-    
-    bool operator==(const FTileHandle& Other) const;
-    
-private:
+
+    bool operator==(const FTileHandle &Other) const;
+
+  private:
     UPROPERTY()
     TObjectPtr<UTileset3D> Tileset;
 
@@ -40,19 +41,19 @@ struct TILEMAP3D_API FTileInfo {
 
     FTileInfo() = default;
 
-    FTileInfo(UStaticMeshComponent& InTileMesh, const FTileHandle& InTile, const FIntVector2 &InTileOrigin);
-    
+    FTileInfo(UStaticMeshComponent &InTileMesh, const FTileHandle &InTile, const FIntVector2 &InTileOrigin);
+
     bool IsValidTile() const;
 
-    TOptional<const FTile3D&> GetTile() const;
+    TOptional<const FTile3D &> GetTile() const;
 
-    const FTileHandle& GetTileHandle() const;
+    const FTileHandle &GetTileHandle() const;
 
-    UStaticMeshComponent* GetMeshComponent() const;
+    UStaticMeshComponent *GetMeshComponent() const;
 
-    const FIntVector2& GetTileOrigin() const;
+    const FIntVector2 &GetTileOrigin() const;
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<UStaticMeshComponent> TileMesh;
 
@@ -79,10 +80,10 @@ UCLASS()
 class TILEMAP3D_API ATilemap3D : public AActor {
     GENERATED_BODY()
 
-public:
+  public:
     ATilemap3D();
-    
-    void AddTile(const FTileHandle& Tile, int32 X, int32 Y, int32 Layer);
+
+    void AddTile(const FTileHandle &Tile, int32 X, int32 Y, int32 Layer);
     void RemoveTile(int32 X, int32 Y, int32 Layer);
 
     void OnConstruction(const FTransform &Transform) override;
@@ -95,18 +96,18 @@ public:
 
     const FTileInfo &GetTile(int32 X, int32 Y) const;
 
-    FDelegateHandle BindToOnMapSizeChange(FSimpleMulticastDelegate::FDelegate&& Delegate);
+    FDelegateHandle BindToOnMapSizeChange(FSimpleMulticastDelegate::FDelegate &&Delegate);
     void RemoveMapSizeChangedBinding(FDelegateHandle Handle);
 
-    FDelegateHandle BindToOnTileChange(FOnTileChanged::FDelegate&& Delegate);
+    FDelegateHandle BindToOnTileChange(FOnTileChanged::FDelegate &&Delegate);
     void RemoveTileChangedBinding(FDelegateHandle Handle);
 
-private:
-    FTileInfo& GetAdjustedTilePosition(int32 X, int32 Y);
+  private:
+    FTileInfo &GetAdjustedTilePosition(int32 X, int32 Y);
 
-    void FillInTile(const FTile3D& Tile, const FTileInfo& OriginTile, int32 X, int32 Y, int32 Layer);
-    void ClearOutTile(const FTile3D& Tile, int32 X, int32 Y, int32 Layer);
-    
+    void FillInTile(const FTile3D &Tile, const FTileInfo &OriginTile, int32 X, int32 Y, int32 Layer);
+    void ClearOutTile(const FTile3D &Tile, int32 X, int32 Y, int32 Layer);
+
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSizeX, Category = Grid, meta = (UIMin = 1, ClampMin = 1))
     int32 SizeX = 10;
 
@@ -118,11 +119,10 @@ private:
 
     UPROPERTY()
     TObjectPtr<USceneComponent> TilemapRoot;
-    
+
     UPROPERTY()
     TArray<FTileRow> TileRows;
 
     FSimpleMulticastDelegate OnMapSizeChanged;
     FOnTileChanged OnTileChanged;
-
 };

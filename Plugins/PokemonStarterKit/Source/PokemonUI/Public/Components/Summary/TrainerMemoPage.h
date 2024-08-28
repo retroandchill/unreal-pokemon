@@ -48,7 +48,7 @@ class POKEMONUI_API UTrainerMemoPage : public USummaryScreenPage {
   private:
     FText FormatDate(const FDateTime &DateTime) const;
 
-    FText FormatLocation(const FText& Location) const;
+    FText FormatLocation(const FText &Location) const;
 
     /**
      * The text box used to display the information memo.

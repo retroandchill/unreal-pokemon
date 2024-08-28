@@ -10,19 +10,19 @@ namespace Tilemap3D {
         FVector2D Dimensions;
         FLinearColor Color;
     };
-}
+} // namespace Tilemap3D
 
 /**
- * 
+ *
  */
 class TILEMAP3DEDITOR_API FTilemap3DBaseEditorViewportClient : public FEditorViewportClient {
-public:
+  public:
     /** Constructor */
-    explicit FTilemap3DBaseEditorViewportClient(const TWeakPtr<SEditorViewport>& InEditorViewportWidget = nullptr);
+    explicit FTilemap3DBaseEditorViewportClient(const TWeakPtr<SEditorViewport> &InEditorViewportWidget = nullptr);
 
     void Tick(float DeltaSeconds) override;
     FLinearColor GetBackgroundColor() const override;
-    void AddReferencedObjects(FReferenceCollector& Collector) override;
+    void AddReferencedObjects(FReferenceCollector &Collector) override;
 
     void RequestFocusOnSelection(bool bInstant);
 
@@ -36,19 +36,20 @@ public:
 
     // List of selection rectangles to draw
     TArray<Tilemap3D::FViewportSelectionRectangle> SelectionRectangles;
-private:
+
+  private:
     /** Initialize the checkerboard texture for the texture preview, if necessary */
-    void SetupCheckerboardTexture(const FColor& ColorOne, const FColor& ColorTwo, int32 CheckerSize);
+    void SetupCheckerboardTexture(const FColor &ColorOne, const FColor &ColorTwo, int32 CheckerSize);
 
     /** Destroy the checkerboard texture if one exists */
     void DestroyCheckerboardTexture();
 
-protected:
+  protected:
     virtual FBox GetDesiredFocusBounds() const {
         return FBox(ForceInitToZero);
     }
 
-private:
+  private:
     /** Checkerboard texture */
     TObjectPtr<UTexture2D> CheckerboardTexture;
     FVector2D ZoomPos = FVector2D::ZeroVector;

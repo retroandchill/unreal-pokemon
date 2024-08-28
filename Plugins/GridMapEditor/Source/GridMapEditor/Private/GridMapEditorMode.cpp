@@ -4,30 +4,28 @@
 #include "DrawDebugHelpers.h"
 #include "EditorModeManager.h"
 #include "EditorViewportClient.h"
-#include "EngineUtils.h"
 #include "Engine/CollisionProfile.h"
 #include "Engine/Engine.h"
 #include "Engine/EngineTypes.h"
 #include "Engine/World.h"
+#include "EngineUtils.h"
 #include "Framework/Commands/UICommandList.h"
 #include "GridMapEditCommands.h"
 #include "GridMapEditorModeToolkit.h"
 #include "GridMapStaticMeshActor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Materials/MaterialInstanceDynamic.h"
-#include "TileSet.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "Ranges/Optional/OrElse.h"
+#include "TileSet.h"
 #include "Toolkits/ToolkitManager.h"
 
 static FName GridMapBrushHighlightColorParamName("HighlightColor");
 
 const FEditorModeID FGridMapEditorMode::EM_GridMapEditorModeId = TEXT("EM_GridMapEditorMode");
 
-FGridMapEditorMode::FGridMapEditorMode()
-    : FEdMode()
-      , ActiveTileSet(nullptr) {
+FGridMapEditorMode::FGridMapEditorMode() : FEdMode(), ActiveTileSet(nullptr) {
     BrushDefaultHighlightColor = FColor(127, 127, 255, 255);
     BrushWarningHighlightColor = FColor::Red;
 
@@ -37,7 +35,8 @@ FGridMapEditorMode::FGridMapEditorMode()
         UMaterial *BrushMaterial = LoadObject<UMaterial>(
             nullptr, TEXT("/GridMapEditor/M_TileBrushCube.M_TileBrushCube"), nullptr, LOAD_None, nullptr);
         BrushMID = UMaterialInstanceDynamic::Create(BrushMaterial, GetTransientPackage());
-        check(BrushMID != nullptr);
+        check(BrushMID != nullptr)
+        ;
         FLinearColor DefaultColor;
         BrushMID->GetVectorParameterDefaultValue(GridMapBrushHighlightColorParamName, DefaultColor);
         BrushDefaultHighlightColor = DefaultColor.ToFColor(false);
@@ -63,35 +62,22 @@ FGridMapEditorMode::FGridMapEditorMode()
 }
 
 FGridMapEditorMode::~FGridMapEditorMode() {
-
 }
 
 void FGridMapEditorMode::BindCommandList() {
     const FGridMapEditCommands &Commands = FGridMapEditCommands::Get();
 
-    UICommandList->MapAction(
-        Commands.SetPaintTiles,
-        FExecuteAction::CreateRaw(this, &FGridMapEditorMode::OnSetPaintTiles),
-        FCanExecuteAction(),
-        FIsActionChecked::CreateLambda([this] {
-            return UISettings.GetPaintToolSelected();
-        }));
+    UICommandList->MapAction(Commands.SetPaintTiles,
+                             FExecuteAction::CreateRaw(this, &FGridMapEditorMode::OnSetPaintTiles), FCanExecuteAction(),
+                             FIsActionChecked::CreateLambda([this] { return UISettings.GetPaintToolSelected(); }));
 
     UICommandList->MapAction(
-        Commands.SetSelectTiles,
-        FExecuteAction::CreateRaw(this, &FGridMapEditorMode::OnSetSelectTiles),
-        FCanExecuteAction(),
-        FIsActionChecked::CreateLambda([this] {
-            return UISettings.GetSelectToolSelected();
-        }));
+        Commands.SetSelectTiles, FExecuteAction::CreateRaw(this, &FGridMapEditorMode::OnSetSelectTiles),
+        FCanExecuteAction(), FIsActionChecked::CreateLambda([this] { return UISettings.GetSelectToolSelected(); }));
 
     UICommandList->MapAction(
-        Commands.SetTileSettings,
-        FExecuteAction::CreateRaw(this, &FGridMapEditorMode::OnSetTileSettings),
-        FCanExecuteAction(),
-        FIsActionChecked::CreateLambda([this] {
-            return UISettings.GetSettingsToolSelected();
-        }));
+        Commands.SetTileSettings, FExecuteAction::CreateRaw(this, &FGridMapEditorMode::OnSetTileSettings),
+        FCanExecuteAction(), FIsActionChecked::CreateLambda([this] { return UISettings.GetSettingsToolSelected(); }));
 }
 
 void FGridMapEditorMode::Enter() {
@@ -131,22 +117,18 @@ void FGridMapEditorMode::Tick(FEditorViewportClient *ViewportClient, float Delta
     if (bBrushTraceValid) {
         auto BrushScaleCalc = [this](const UGridMapTileSet &TileSet) {
             auto BaseSize = TileBrushComponent->GetStaticMesh()->GetBounds().GetBox().GetSize();
-            return FVector(TileSet.TileSize * TileSet.SizeX / BaseSize.X,
-                           TileSet.TileSize * TileSet.SizeY / BaseSize.Y,
+            return FVector(TileSet.TileSize * TileSet.SizeX / BaseSize.X, TileSet.TileSize * TileSet.SizeY / BaseSize.Y,
                            TileSet.TileHeight * TileSet.SizeZ / BaseSize.Z);
         };
         auto BrushScaleOffset = [](const UGridMapTileSet &TileSet) {
-            return FVector(TileSet.TileSize * (TileSet.SizeX - 1) / 2,
-                TileSet.TileSize * (TileSet.SizeY - 1) / 2,
-                TileSet.TileHeight * (TileSet.SizeZ - 1) / 2);
+            return FVector(TileSet.TileSize * (TileSet.SizeX - 1) / 2, TileSet.TileSize * (TileSet.SizeY - 1) / 2,
+                           TileSet.TileHeight * (TileSet.SizeZ - 1) / 2);
         };
-        
-        auto BrushScale = UE::Optionals::OfNullable(ActiveTileSet) |
-                          UE::Optionals::Map(BrushScaleCalc) |
+
+        auto BrushScale = UE::Optionals::OfNullable(ActiveTileSet) | UE::Optionals::Map(BrushScaleCalc) |
                           UE::Optionals::OrElse(FVector::OneVector);
-        auto BrushOffset = UE::Optionals::OfNullable(ActiveTileSet) |
-                          UE::Optionals::Map(BrushScaleOffset) |
-                          UE::Optionals::OrElse(FVector::ZeroVector);
+        auto BrushOffset = UE::Optionals::OfNullable(ActiveTileSet) | UE::Optionals::Map(BrushScaleOffset) |
+                           UE::Optionals::OrElse(FVector::ZeroVector);
         FTransform BrushTransform = FTransform(FQuat::Identity, BrushLocation + BrushOffset, BrushScale);
         TileBrushComponent->SetRelativeTransform(BrushTransform);
 
@@ -170,7 +152,6 @@ void FGridMapEditorMode::Tick(FEditorViewportClient *ViewportClient, float Delta
             TileBrushComponent->UnregisterComponent();
         }
     }
-
 }
 
 bool FGridMapEditorMode::UsesToolkits() const {
@@ -194,11 +175,10 @@ bool FGridMapEditorMode::MouseMove(FEditorViewportClient *ViewportClient, FViewp
                                    int32 MouseY) {
     if (IsEditingEnabled()) {
         // Compute a world space ray from the screen space mouse coordinates
-        FSceneViewFamilyContext ViewFamily(FSceneViewFamily::ConstructionValues(
-                ViewportClient->Viewport,
-                ViewportClient->GetScene(),
-                ViewportClient->EngineShowFlags)
-            .SetRealtimeUpdate(ViewportClient->IsRealtime()));
+        FSceneViewFamilyContext ViewFamily(FSceneViewFamily::ConstructionValues(ViewportClient->Viewport,
+                                                                                ViewportClient->GetScene(),
+                                                                                ViewportClient->EngineShowFlags)
+                                               .SetRealtimeUpdate(ViewportClient->IsRealtime()));
 
         FSceneView *View = ViewportClient->CalcSceneView(&ViewFamily);
         FViewportCursorLocation MouseViewportRay(View, ViewportClient, MouseX, MouseY);
@@ -216,12 +196,11 @@ bool FGridMapEditorMode::MouseMove(FEditorViewportClient *ViewportClient, FViewp
 
 bool FGridMapEditorMode::CapturedMouseMove(FEditorViewportClient *InViewportClient, FViewport *InViewport,
                                            int32 InMouseX, int32 InMouseY) {
-    //Compute a world space ray from the screen space mouse coordinates
-    FSceneViewFamilyContext ViewFamily(FSceneViewFamily::ConstructionValues(
-            InViewportClient->Viewport,
-            InViewportClient->GetScene(),
-            InViewportClient->EngineShowFlags)
-        .SetRealtimeUpdate(InViewportClient->IsRealtime()));
+    // Compute a world space ray from the screen space mouse coordinates
+    FSceneViewFamilyContext ViewFamily(FSceneViewFamily::ConstructionValues(InViewportClient->Viewport,
+                                                                            InViewportClient->GetScene(),
+                                                                            InViewportClient->EngineShowFlags)
+                                           .SetRealtimeUpdate(InViewportClient->IsRealtime()));
 
     FSceneView *View = InViewportClient->CalcSceneView(&ViewFamily);
     FViewportCursorLocation MouseViewportRay(View, InViewportClient, InMouseX, InMouseY);
@@ -240,8 +219,8 @@ bool FGridMapEditorMode::CapturedMouseMove(FEditorViewportClient *InViewportClie
 
 void FGridMapEditorMode::PaintTile() {
     // are we erasing?
-    if (bIsPainting && bBrushTraceValid && UISettings.GetPaintMode() == EGridMapPaintMode::Erase && UISettings.
-        GetCurrentTileSet().IsValid()) {
+    if (bIsPainting && bBrushTraceValid && UISettings.GetPaintMode() == EGridMapPaintMode::Erase &&
+        UISettings.GetCurrentTileSet().IsValid()) {
         // and we're on top of something?
         if (BrushTraceHitActor.IsValid() && Cast<AGridMapStaticMeshActor>(BrushTraceHitActor.Get())) {
             EraseTile(Cast<AGridMapStaticMeshActor>(BrushTraceHitActor.Get()));
@@ -250,15 +229,15 @@ void FGridMapEditorMode::PaintTile() {
         return;
     }
 
-    // if we're painting, 
+    // if we're painting,
     if (bIsPainting && bBrushTraceValid && UISettings.GetCurrentTileSet().IsValid()) {
         UGridMapTileSet *TileSet = UISettings.GetCurrentTileSet().Get();
 
         // if it's the same tile set, don't do anything
         if (BrushTraceHitActor.IsValid()) {
             AGridMapStaticMeshActor *BrushTraceHitTile = Cast<AGridMapStaticMeshActor>(BrushTraceHitActor.Get());
-            if (BrushTraceHitTile && BrushTraceHitTile->TileSet && TileSet->TileTags.HasAllExact(
-                    BrushTraceHitTile->TileSet->TileTags))
+            if (BrushTraceHitTile && BrushTraceHitTile->TileSet &&
+                TileSet->TileTags.HasAllExact(BrushTraceHitTile->TileSet->TileTags))
                 return;
         }
 
@@ -289,14 +268,11 @@ void FGridMapEditorMode::PaintTile() {
             MeshActor->GetStaticMeshComponent()->SetStaticMesh(StaticMesh);
             MeshActor->ReregisterAllComponents();
 
-            auto Offset = UE::Optionals::OfNullable(ActiveTileSet) |
-                          UE::Optionals::Map(&UGridMapTileSet::BrushOffset) |
-                          UE::Optionals::Map([](const FVector2D &V) {
-                              return FVector(V, 0);
-                          }) |
+            auto Offset = UE::Optionals::OfNullable(ActiveTileSet) | UE::Optionals::Map(&UGridMapTileSet::BrushOffset) |
+                          UE::Optionals::Map([](const FVector2D &V) { return FVector(V, 0); }) |
                           UE::Optionals::OrElse(FVector::ZeroVector);
-            FTransform BrushTransform = FTransform(TileList->Rotation.Quaternion(), BrushLocation + Offset,
-                                                   FVector::OneVector);
+            FTransform BrushTransform =
+                FTransform(TileList->Rotation.Quaternion(), BrushLocation + Offset, FVector::OneVector);
             MeshActor->SetActorTransform(BrushTransform);
 
             // update adjacent tiles
@@ -310,8 +286,8 @@ void FGridMapEditorMode::PaintTile() {
 
 void FGridMapEditorMode::EraseTile(AGridMapStaticMeshActor *TileToErase) {
     TArray<FAdjacentTile> AdjacentTiles;
-    bool hasAdjacentTiles = GetAdjacentTiles(GetWorld(), TileToErase->GetActorLocation(), AdjacentTiles,
-                                             UISettings.GetPaintLayer());
+    bool hasAdjacentTiles =
+        GetAdjacentTiles(GetWorld(), TileToErase->GetActorLocation(), AdjacentTiles, UISettings.GetPaintLayer());
 
     GetWorld()->DestroyActor(TileToErase);
 
@@ -418,7 +394,7 @@ void FGridMapEditorMode::ClearAllToolSelection() {
 void FGridMapEditorMode::OnSetPaintTiles() {
     ClearAllToolSelection();
     UISettings.SetPaintToolSelected(true);
-    //HandleToolChanged();
+    // HandleToolChanged();
 }
 
 void FGridMapEditorMode::OnSetSelectTiles() {
@@ -445,15 +421,15 @@ EGridMapEditingState FGridMapEditorMode::GetEditingState() const {
     return EGridMapEditingState::Enabled;
 }
 
-uint32 FGridMapEditorMode::GetTileAdjacencyBitmask(UWorld *World, const FVector &Origin,
-                                                   UGridMapTileSet *TileSet, int32 Layer) const {
+uint32 FGridMapEditorMode::GetTileAdjacencyBitmask(UWorld *World, const FVector &Origin, UGridMapTileSet *TileSet,
+                                                   int32 Layer) const {
     uint32 bitmask = 0;
 
     TArray<FAdjacentTile> AdjacentTiles;
     if (GetAdjacentTiles(World, Origin, AdjacentTiles, Layer, TileSet->bMatchesEmpty)) {
         for (const FAdjacentTile &AdjacentTile : AdjacentTiles) {
-            if (AdjacentTile.Key && TileSet->AdjacencyTagRequirements.RequirementsMet(
-                    AdjacentTile.Key->TileSet->TileTags))
+            if (AdjacentTile.Key &&
+                TileSet->AdjacencyTagRequirements.RequirementsMet(AdjacentTile.Key->TileSet->TileTags))
                 bitmask |= AdjacentTile.Value;
             else if (AdjacentTile.Key == nullptr) {
                 bitmask |= AdjacentTile.Value;
@@ -464,8 +440,8 @@ uint32 FGridMapEditorMode::GetTileAdjacencyBitmask(UWorld *World, const FVector 
     return bitmask;
 }
 
-bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin,
-                                 int32 Layer, TArray<AGridMapStaticMeshActor *> &OutTiles) const {
+bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin, int32 Layer,
+                                 TArray<AGridMapStaticMeshActor *> &OutTiles) const {
     TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
     TArray<AActor *> ActorsToIgnore;
     TArray<AActor *> OutActors;
@@ -473,16 +449,16 @@ bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin,
     auto TileSize = GetTileSize();
     auto TileHeight = GetTileHeight();
     auto Scaled = UE::Optionals::OfNullable(ActiveTileSet) |
-            UE::Optionals::Map([](const UGridMapTileSet& M) { return FUintVector(M.SizeX, M.SizeY, M.SizeZ); }) |
-                UE::Optionals::OrElse(FUintVector(1));
+                  UE::Optionals::Map([](const UGridMapTileSet &M) { return FUintVector(M.SizeX, M.SizeY, M.SizeZ); }) |
+                  UE::Optionals::OrElse(FUintVector(1));
     auto ScaledGridWidth = static_cast<int32>(TileSize * Scaled.X * .95f / 2.f);
     auto ScaledGridLength = static_cast<int32>(TileSize * Scaled.Y * .95f / 2.f);
     auto ScaledGridHeight = static_cast<int32>(TileHeight * Scaled.Z / 2.f);
 
     FVector OriginOffset((Scaled.X - 1) * TileSize / 2, (Scaled.Y - 1) * TileSize / 2, (Scaled.Z - 1) * TileHeight / 2);
-    if (UKismetSystemLibrary::BoxOverlapActors(World, Origin + OriginOffset, FVector(ScaledGridWidth, ScaledGridLength, ScaledGridHeight),
-                                               ObjectTypes, AGridMapStaticMeshActor::StaticClass(), ActorsToIgnore,
-                                               OutActors)) {
+    if (UKismetSystemLibrary::BoxOverlapActors(
+            World, Origin + OriginOffset, FVector(ScaledGridWidth, ScaledGridLength, ScaledGridHeight), ObjectTypes,
+            AGridMapStaticMeshActor::StaticClass(), ActorsToIgnore, OutActors)) {
         OutTiles.Reserve(OutActors.Num());
         for (AActor *OutActor : OutActors) {
             if (auto TileMesh = Cast<AGridMapStaticMeshActor>(OutActor);
@@ -525,8 +501,8 @@ void FGridMapEditorMode::UpdateAdjacentTiles(UWorld *World, const TArray<FAdjace
             continue;
 
         UGridMapTileSet *TileSet = CurrentActor->TileSet;
-        uint32 Adjacency = GetTileAdjacencyBitmask(GetWorld(), CurrentActor->GetActorLocation(), TileSet,
-                                                   UISettings.GetPaintLayer());
+        uint32 Adjacency =
+            GetTileAdjacencyBitmask(GetWorld(), CurrentActor->GetActorLocation(), TileSet, UISettings.GetPaintLayer());
         auto TileList = TileSet->FindTilesForAdjacency(Adjacency);
         if (!TileList.IsSet()) {
             GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Red, TEXT("Failed to find tile!"), true,
@@ -569,13 +545,13 @@ bool FGridMapEditorMode::GetAdjacentTiles(UWorld *World, const FVector &Origin,
     static FVector Offsets[TileCount]{
         FVector(0, -GetTileSize(), 0), // top-center
         FVector(-GetTileSize(), 0, 0), // center-left
-        FVector(GetTileSize(), 0, 0), // center-right
-        FVector(0, GetTileSize(), 0), // botton-center
+        FVector(GetTileSize(), 0, 0),  // center-right
+        FVector(0, GetTileSize(), 0),  // botton-center
 
         FVector(-GetTileSize(), -GetTileSize(), 0), // top left
-        FVector(GetTileSize(), -GetTileSize(), 0), // top right
-        FVector(-GetTileSize(), GetTileSize(), 0), // bottom left
-        FVector(GetTileSize(), GetTileSize(), 0), // bottom right
+        FVector(GetTileSize(), -GetTileSize(), 0),  // top right
+        FVector(-GetTileSize(), GetTileSize(), 0),  // bottom left
+        FVector(GetTileSize(), GetTileSize(), 0),   // bottom right
     };
 
     static uint32 Bits[TileCount]{
@@ -600,7 +576,6 @@ bool FGridMapEditorMode::GetAdjacentTiles(UWorld *World, const FVector &Origin,
         } else if (bIncludeEmptyTiles) {
             OutAdjacentTiles.Add(TPair<AGridMapStaticMeshActor *, uint32>(nullptr, Bits[i]));
         }
-
     }
 
     return OutAdjacentTiles.Num() > 0;
@@ -644,7 +619,6 @@ void FGridMapEditorMode::SetActiveTileSet(UGridMapTileSet *TileSet) {
     }
 
     UISettings.SetCurrentTileSet(ActiveTileSet);
-
 }
 
 FString FGridMapEditorMode::CreateActorLabel(const class UGridMapTileSet *TileSet) const {
