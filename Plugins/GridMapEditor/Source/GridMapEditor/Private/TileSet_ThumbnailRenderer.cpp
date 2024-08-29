@@ -61,5 +61,6 @@ void UTileSet_ThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, uint32 
 }
 
 void UTileSet_ThumbnailRenderer::BeginDestroy() {
+    Super::BeginDestroy();
     ThumbnailScene.Reset();
 }

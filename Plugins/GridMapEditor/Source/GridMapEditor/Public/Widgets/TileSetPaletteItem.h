@@ -27,6 +27,6 @@ class GRIDMAPEDITOR_API STileSetItemTile : public STableRow<UGridMapTileSet *> {
     }
     SLATE_END_ARGS()
 
-    void Construct(const FArguments &InArgs, TSharedRef<STableViewBase> InOwnerTableView,
+    void Construct(const FArguments &InArgs, const FGridMapEditorMode& EditorMode, TSharedRef<STableViewBase> InOwnerTableView,
                    TSharedPtr<FAssetThumbnailPool> InThumbnailPool, UGridMapTileSet *TileSet);
 };

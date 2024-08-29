@@ -25,7 +25,7 @@ class SGridTilePreviewWidget : public SCompoundWidget {
                    FAnchors Anchors) {
         ChildSlot
             [SNew(SButton)
-                 .ButtonStyle(FEditorStyle::Get(), "SimpleSharpButton")
+                 .ButtonStyle(FAppStyle::Get(), "SimpleSharpButton")
                  .ButtonColorAndOpacity(FLinearColor(FColor(40, 40, 40)))
                  .OnClicked(this, &SGridTilePreviewWidget::OnTileClicked, StructPropertyHandle, bit)
                  .ContentPadding(FMargin(2.0f, 2.0f))
@@ -33,7 +33,7 @@ class SGridTilePreviewWidget : public SCompoundWidget {
 
                       + SVerticalBox::Slot().AutoHeight()
                             [SNew(SBorder)
-                                 .BorderImage(FEditorStyle::GetBrush("UMGEditor.AnchorGrid"))
+                                 .BorderImage(FAppStyle::GetBrush("UMGEditor.AnchorGrid"))
                                  .Padding(
                                      0)[SNew(SBox)
                                             .WidthOverride(32)
@@ -54,7 +54,7 @@ class SGridTilePreviewWidget : public SCompoundWidget {
                                                                   .Visibility(
                                                                       this, &SGridTilePreviewWidget::GetVisibility_Tile,
                                                                       StructPropertyHandle, bit)
-                                                                  .Image(FEditorStyle::Get().GetBrush(
+                                                                  .Image(FAppStyle::Get().GetBrush(
                                                                       "UMGEditor.AnchoredWidget"))]]]]]]]];
     }
 
@@ -120,7 +120,7 @@ void FTileBitsetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Struc
         .NameContent()[StructPropertyHandle->CreatePropertyNameWidget()]
         // value
         .ValueContent()[SNew(SBorder)
-                            .BorderImage(FEditorStyle::GetBrush("WhiteBrush"))
+                            .BorderImage(FAppStyle::GetBrush("WhiteBrush"))
                             .BorderBackgroundColor(FLinearColor(FColor(66, 139, 202)))
                             .Padding(0)[SNew(SVerticalBox) +
                                         SVerticalBox::Slot()

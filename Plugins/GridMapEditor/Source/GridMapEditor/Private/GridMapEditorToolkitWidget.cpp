@@ -41,7 +41,7 @@ void SGridMapEditorToolkitWidget::Construct(const FArguments &InArgs) {
                        // right side content
                        + SHorizontalBox::Slot().Padding(0.f, 2.f, 2.f, 0.f)
                              [SNew(SBorder)
-                                  .BorderImage(FEditorStyle::GetBrush("ToolPanel.DarkGroupBorder"))
+                                  .BorderImage(FAppStyle::GetBrush("ToolPanel.DarkGroupBorder"))
                                   .Padding(FGridMapStyleSet::StandardPadding)
                                       [SNew(SVerticalBox)
 
@@ -53,7 +53,7 @@ void SGridMapEditorToolkitWidget::Construct(const FArguments &InArgs) {
                                                   .HAlign(HAlign_Left)
                                                       [SNew(STextBlock)
                                                            .Text(this, &SGridMapEditorToolkitWidget::GetActiveToolName)
-                                                           .TextStyle(FEditorStyle::Get(), "FoliageEditMode."
+                                                           .TextStyle(FAppStyle::Get(), "FoliageEditMode."
                                                                                            "ActiveToolName.Text")]]
 
                                        // Paint Options
@@ -78,7 +78,7 @@ END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildToolBar() {
     FVerticalToolBarBuilder Toolbar(GridMapEditorMode->UICommandList, FMultiBoxCustomization::None);
     Toolbar.SetLabelVisibility(EVisibility::Collapsed);
-    Toolbar.SetStyle(&FEditorStyle::Get(), "FoliageEditToolbar");
+    Toolbar.SetStyle(&FAppStyle::Get(), "FoliageEditToolbar");
     {
         Toolbar.AddToolBarButton(FGridMapEditCommands::Get().SetPaintTiles);
         Toolbar.AddToolBarButton(FGridMapEditCommands::Get().SetSelectTiles);
@@ -96,7 +96,7 @@ TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildToolBar() {
                                   SOverlay::Slot()[SNew(SBorder)
                                                        .HAlign(HAlign_Center)
                                                        .Padding(0)
-                                                       .BorderImage(FEditorStyle::GetBrush("NoBorder"))
+                                                       .BorderImage(FAppStyle::GetBrush("NoBorder"))
                                                        .IsEnabled(
                                                            FSlateApplication::Get()
                                                                .GetNormalExecutionAttribute())[Toolbar.MakeWidget()]]];

@@ -16,7 +16,7 @@
 void STileSetPalette::Construct(const FArguments &InArgs) {
     EditorMode = InArgs._GridMapEditorMode;
 
-    ThumbnailPool = MakeShareable(new FAssetThumbnailPool(64, false));
+    ThumbnailPool = MakeShared<FAssetThumbnailPool>(64);
 
     ChildSlot
         [SNew(SVerticalBox)
@@ -24,7 +24,7 @@ void STileSetPalette::Construct(const FArguments &InArgs) {
          +
          SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Fill)
              [SNew(SBorder)
-                  .BorderImage(FEditorStyle::GetBrush("DetailsView.CategoryTop"))
+                  .BorderImage(FAppStyle::GetBrush("DetailsView.CategoryTop"))
                   .Padding(FMargin(6.f, 2.f))
                   .BorderBackgroundColor(FLinearColor(.6f, .6f, .6f, 1.0f))
                       [SNew(SHorizontalBox) +
@@ -34,7 +34,7 @@ void STileSetPalette::Construct(const FArguments &InArgs) {
                                // +Add Foliage Type button
                                SAssignNew(AddTileSetCombo, SComboButton)
                                    .ForegroundColor(FLinearColor::White)
-                                   .ButtonStyle(FEditorStyle::Get(), "FlatButton.Success")
+                                   .ButtonStyle(FAppStyle::Get(), "FlatButton.Success")
                                    .OnGetMenuContent(this, &STileSetPalette::GetAddTileSetPicker)
                                    .ContentPadding(FMargin(1.f))
                                    .ButtonContent()
@@ -43,16 +43,16 @@ void STileSetPalette::Construct(const FArguments &InArgs) {
                                             .VAlign(VAlign_Center)
                                             .AutoWidth()
                                             .Padding(1.f)[SNew(STextBlock)
-                                                              .TextStyle(FEditorStyle::Get(), "FoliageEditMode."
+                                                              .TextStyle(FAppStyle::Get(), "FoliageEditMode."
                                                                                               "AddFoliageType.Text")
-                                                              .Font(FEditorStyle::Get().GetFontStyle("FontAwesome.9"))
+                                                              .Font(FAppStyle::Get().GetFontStyle("FontAwesome.9"))
                                                               .Text(FText::FromString(
                                                                   FString(TEXT("\xf067"))) /*fa-plus*/)] +
                                         SHorizontalBox::Slot()
                                             .VAlign(VAlign_Center)
                                             .Padding(1.f)[SNew(STextBlock)
                                                               .Text(LOCTEXT("AddTileSetButtonLabel", "Add Tile Set"))
-                                                              .TextStyle(FEditorStyle::Get(), "FoliageEditMode."
+                                                              .TextStyle(FAppStyle::Get(), "FoliageEditMode."
                                                                                               "AddFoliageType.Text")]]]
 
                        + SHorizontalBox::Slot()
@@ -70,12 +70,12 @@ void STileSetPalette::Construct(const FArguments &InArgs) {
                            SNew( SComboButton )
                            .ContentPadding(0)
                            .ForegroundColor( FSlateColor::UseForeground() )
-                           .ButtonStyle( FEditorStyle::Get(), "ToggleButton" )
+                           .ButtonStyle( FAppStyle::Get(), "ToggleButton" )
                            .OnGetMenuContent(this, &SFoliagePalette::GetViewOptionsMenuContent)
                            .ButtonContent()
                            [
                                SNew(SImage)
-                               .Image( FEditorStyle::GetBrush("GenericViewButton") )
+                               .Image( FAppStyle::GetBrush("GenericViewButton") )
                            ]
                        ]
                        */
@@ -155,15 +155,10 @@ TSharedRef<SWidget> STileSetPalette::BuildPaletteView() {
 
 TSharedRef<ITableRow> STileSetPalette::GenerateTile(UGridMapTileSet *Item,
                                                     const TSharedRef<STableViewBase> &OwnerTable) {
-    return SNew(STileSetItemTile, OwnerTable, ThumbnailPool, Item);
-
-    // Refresh the palette to ensure that thumbnails are correct
-    RefreshPalette();
+    return SNew(STileSetItemTile, *EditorMode, OwnerTable, ThumbnailPool, Item);
 }
 
 void STileSetPalette::OnSelectionChanged(UGridMapTileSet *Item, ESelectInfo::Type SelectInfo) {
-    // RefreshDetailsWidget();
-
     EditorMode->SetActiveTileSet(Item);
 }
 
