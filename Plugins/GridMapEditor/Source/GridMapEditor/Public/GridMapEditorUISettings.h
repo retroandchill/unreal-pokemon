@@ -64,14 +64,6 @@ struct GRIDMAPEDITOR_API FGridMapEditorUISettings {
         PaintMode = InPaintMode;
     }
 
-    bool GetHideOwnedActors() const {
-        return bHideOwnedActors;
-    }
-
-    void SetHideOwnedActors(bool bInHideActors) {
-        bHideOwnedActors = bInHideActors;
-    }
-
     TWeakObjectPtr<class UGridMapTileSet> GetCurrentTileSet() const {
         return CurrentTileSetPtr;
     }
@@ -97,7 +89,6 @@ struct GRIDMAPEDITOR_API FGridMapEditorUISettings {
 
     FVector PaintOrigin = FVector::ZeroVector;
     EGridMapPaintMode PaintMode = EGridMapPaintMode::Paint;
-    bool bHideOwnedActors = false;
 
     bool bDebugDrawUpdatedTiles = false;
 

@@ -184,32 +184,7 @@ TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildPaintOptions() {
                                                  .MinDesiredValueWidth(50.0f)
                                                  .SliderExponent(3.0f)
                                                  .Value(this, &SGridMapEditorToolkitWidget::GetPaintHeight)
-                                                 .OnValueChanged(this, &SGridMapEditorToolkitWidget::SetPaintHeight)]]
-
-           // Hide Actors
-           +
-           SVerticalBox::Slot()
-               .Padding(FGridMapStyleSet::StandardPadding)
-               .AutoHeight()
-                   [SNew(SHorizontalBox)
-
-                    +
-                    SHorizontalBox::Slot()
-                        .VAlign(VAlign_Center)
-                        .Padding(FGridMapStyleSet::StandardPadding)
-                            [SNew(SWrapBox).UseAllottedWidth(true).InnerSlotPadding({6, 5})
-
-                             +
-                             SWrapBox::Slot()[SNew(SBox).MinDesiredWidth(
-                                 150)[SNew(SCheckBox)
-                                          .OnCheckStateChanged(this, &SGridMapEditorToolkitWidget::
-                                                                         OnCheckStateChanged_HideOwnedActors)
-                                          .IsChecked(this, &SGridMapEditorToolkitWidget::GetCheckState_HideOwnedActors)
-                                          .ToolTipText(LOCTEXT("GridMapHideActors_ToolTip",
-                                                               "Whether to hide the actors in the outliner"))
-                                              [SNew(STextBlock)
-                                                   .Text(LOCTEXT("GridMapHideActors", "Hide in outliner"))
-                                                   .Font(FGridMapStyleSet::StandardFont)]]]]];
+                                                 .OnValueChanged(this, &SGridMapEditorToolkitWidget::SetPaintHeight)]];
 }
 
 bool SGridMapEditorToolkitWidget::IsGridMapEditorEnabled() const {
@@ -262,14 +237,6 @@ void SGridMapEditorToolkitWidget::OnChangeTileSet(UObject *NewAsset) {
 
 UObject *SGridMapEditorToolkitWidget::GetCurrentTileSet() const {
     return GridMapEditorMode->UISettings.GetCurrentTileSet().Get();
-}
-
-void SGridMapEditorToolkitWidget::OnCheckStateChanged_HideOwnedActors(ECheckBoxState InState) {
-    GridMapEditorMode->UISettings.SetHideOwnedActors(InState == ECheckBoxState::Checked ? true : false);
-}
-
-ECheckBoxState SGridMapEditorToolkitWidget::GetCheckState_HideOwnedActors() const {
-    return GridMapEditorMode->UISettings.GetHideOwnedActors() ? ECheckBoxState::Checked : ECheckBoxState::Unchecked;
 }
 
 FText SGridMapEditorToolkitWidget::GetActiveToolName() const {

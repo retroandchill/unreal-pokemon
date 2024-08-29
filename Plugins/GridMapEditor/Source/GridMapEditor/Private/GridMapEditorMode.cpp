@@ -236,8 +236,8 @@ void FGridMapEditorMode::PaintTile() {
         // if it's the same tile set, don't do anything
         if (BrushTraceHitActor.IsValid()) {
             AGridMapStaticMeshActor *BrushTraceHitTile = Cast<AGridMapStaticMeshActor>(BrushTraceHitActor.Get());
-            if (BrushTraceHitTile && BrushTraceHitTile->GetGridTile().IsValidTile() &&
-                TileSet->TileTags.HasAllExact(BrushTraceHitTile->GetGridTile().GetTileTags()))
+            if (BrushTraceHitTile && BrushTraceHitTile->TileSet &&
+                TileSet->TileTags.HasAllExact(BrushTraceHitTile->TileSet->TileTags))
                 return;
         }
 
@@ -254,12 +254,11 @@ void FGridMapEditorMode::PaintTile() {
             TSoftObjectPtr<UStaticMesh> StaticMeshAsset = TileList->GetRandomTile();
 
             FActorSpawnParameters SpawnParameters;
-            if (UISettings.GetHideOwnedActors()) {
-                SpawnParameters.bHideFromSceneOutliner = true;
-            }
             AGridMapStaticMeshActor *MeshActor = GetWorld()->SpawnActor<AGridMapStaticMeshActor>(SpawnParameters);
-            MeshActor->SetGridTile(FGridTileHandle(TileSet, TileList->Index));
-            MeshActor->SetLayer(UISettings.GetPaintLayer());
+            auto FolderPath = FString::Format(TEXT("Tiles/Layer{0}"), {UISettings.GetPaintLayer()});
+            MeshActor->SetFolderPath(*FolderPath);
+            MeshActor->TileSet = TileSet;
+            MeshActor->CurrentLayer = UISettings.GetPaintLayer();
 
             // Rename the display name of the new actor in the editor to reflect the mesh that is being created from.
             FActorLabelUtilities::SetActorLabelUnique(MeshActor, CreateActorLabel(TileSet));
@@ -429,7 +428,7 @@ uint32 FGridMapEditorMode::GetTileAdjacencyBitmask(UWorld *World, const FVector 
     if (GetAdjacentTiles(World, Origin, AdjacentTiles, Layer, TileSet->bMatchesEmpty)) {
         for (const FAdjacentTile &AdjacentTile : AdjacentTiles) {
             if (AdjacentTile.Key &&
-                TileSet->AdjacencyTagRequirements.RequirementsMet(AdjacentTile.Key->GetGridTile().GetTileTags()))
+                TileSet->AdjacencyTagRequirements.RequirementsMet(AdjacentTile.Key->TileSet->TileTags))
                 bitmask |= AdjacentTile.Value;
             else if (AdjacentTile.Key == nullptr) {
                 bitmask |= AdjacentTile.Value;
@@ -462,7 +461,7 @@ bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin, int32 Lay
         OutTiles.Reserve(OutActors.Num());
         for (AActor *OutActor : OutActors) {
             if (auto TileMesh = Cast<AGridMapStaticMeshActor>(OutActor);
-                TileMesh != nullptr && TileMesh->GetLayer() == Layer)
+                TileMesh != nullptr && TileMesh->CurrentLayer == Layer)
                 OutTiles.Add(TileMesh);
         }
     }
@@ -500,10 +499,10 @@ void FGridMapEditorMode::UpdateAdjacentTiles(UWorld *World, const TArray<FAdjace
         if (ProcessedActors.Contains(CurrentActor))
             continue;
 
-        auto &GridTile = CurrentActor->GetGridTile();
+        UGridMapTileSet *TileSet = CurrentActor->TileSet;
         uint32 Adjacency =
-            GetTileAdjacencyBitmask(GetWorld(), CurrentActor->GetActorLocation(), GridTile.TileSet, UISettings.GetPaintLayer());
-        auto TileList = GridTile.TileSet->FindTilesForAdjacency(Adjacency);
+            GetTileAdjacencyBitmask(GetWorld(), CurrentActor->GetActorLocation(), TileSet, UISettings.GetPaintLayer());
+        auto TileList = TileSet->FindTilesForAdjacency(Adjacency);
         if (!TileList.IsSet()) {
             GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Red, TEXT("Failed to find tile!"), true,
                                              FVector2D::UnitVector);

@@ -46,9 +46,6 @@ class GRIDMAPEDITOR_API SGridMapEditorToolkitWidget : public SCompoundWidget {
     void OnChangeTileSet(UObject *NewAsset);
     UObject *GetCurrentTileSet() const;
 
-    void OnCheckStateChanged_HideOwnedActors(ECheckBoxState InState);
-    ECheckBoxState GetCheckState_HideOwnedActors() const;
-
     // helper for visibilities
     EVisibility GetVisibility_PaintOptions() const;
     EVisibility GetVisibility_SelectOptions() const;
