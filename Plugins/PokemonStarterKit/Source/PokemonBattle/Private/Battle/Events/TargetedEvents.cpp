@@ -39,8 +39,8 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     auto SideView = UE::Ranges::Single(Side) | UE::Ranges::CastType<AActor>;
-    auto ActiveBattlers = Side->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
-                          UE::Ranges::CastType<AActor>;
+    auto ActiveBattlers =
+        Side->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::CastType<AActor>;
     return UE::Ranges::Concat(SideView, ActiveBattlers);
 }
 
@@ -57,9 +57,7 @@ void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle>
     EventData.OptionalObject = Payload;
     EventData.EventTag = Tag;
     SendOutEventForActor(BattleActor, Tag, EventData);
-    Battle->GetSides() |
-        UE::Ranges::Map(&UnrollBattleSide) |
-        UE::Ranges::Join |
+    Battle->GetSides() | UE::Ranges::Map(&UnrollBattleSide) | UE::Ranges::Join |
         UE::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
 }
 
@@ -86,10 +84,8 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
 
     SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
-    User->GetAllies() |
-        UE::Ranges::Filter(&IBattler::IsNotFainted) |
-        UE::Ranges::CastType<AActor> |
-        UE::Ranges::ForEach([&EventTags, &EventData](AActor* Ally) {
+    User->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::CastType<AActor> |
+        UE::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.UserAllyTag, EventData);
         });
@@ -97,10 +93,8 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     auto TargetActor = CastChecked<AActor>(Target.GetObject());
     SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
-    Target->GetAllies() |
-        UE::Ranges::Filter(&IBattler::IsNotFainted) |
-        UE::Ranges::CastType<AActor> |
-            UE::Ranges::ForEach([&EventTags, &EventData](AActor* Ally) {
+    Target->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::CastType<AActor> |
+        UE::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
         });

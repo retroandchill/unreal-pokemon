@@ -27,14 +27,14 @@
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include "Species/Stat.h"
-#include "Ranges/Views/CacheLast.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/FilterValid.h"
 
 int32 FCapturedBattleStat::GetStatValue() const {
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
@@ -71,8 +71,7 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
 
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
     auto TagsList = BattleMove->GetTags() |
-                    UE::Ranges::Map([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) |
-                    UE::Ranges::ToArray;
+                    UE::Ranges::Map([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) | UE::Ranges::ToArray;
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
     TagsList.Emplace(Pokemon::Battle::Moves::GetUserCategoryTag(BattleMove->GetCategory()));
 
@@ -138,14 +137,9 @@ FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
                                                                const FGameplayAbilityActorInfo &ActorInfo,
                                                                const FGameplayEventData *TriggerEventData) {
-    return TriggerEventData->TargetData.Data |
-           UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           UE::Ranges::CacheLast |
-           UE::Ranges::Join |
-           UE::Ranges::MakeStrong |
-           UE::Ranges::FilterValid |
-           UE::Ranges::Filter(&AActor::Implements<UBattler>) |
-           UE::Ranges::Filter([](AActor *Actor) {
+    return TriggerEventData->TargetData.Data | UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
+           UE::Ranges::CacheLast | UE::Ranges::Join | UE::Ranges::MakeStrong | UE::Ranges::FilterValid |
+           UE::Ranges::Filter(&AActor::Implements<UBattler>) | UE::Ranges::Filter([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;
                return !Battler->IsFainted();
            }) |

@@ -28,7 +28,7 @@ namespace UE::Ranges {
 
         template <typename T>
             requires std::is_base_of_v<UObject, T>
-        struct TIsWeakReferencable<T*> {
+        struct TIsWeakReferencable<T *> {
             using WeakRefType = TWeakObjectPtr<T>;
         };
 
@@ -38,7 +38,7 @@ namespace UE::Ranges {
         template <typename T>
         struct TIsWeakReference<TWeakPtr<T>> : std::true_type {
 
-            static TSharedPtr<T> ToStrong(const TWeakPtr<T>& Ptr) {
+            static TSharedPtr<T> ToStrong(const TWeakPtr<T> &Ptr) {
                 return Ptr.Pin();
             }
         };
@@ -47,19 +47,15 @@ namespace UE::Ranges {
             requires std::is_base_of_v<UObject, T>
         struct TIsWeakReference<TWeakObjectPtr<T>> : std::true_type {
 
-            static T* ToStrong(const TWeakObjectPtr<T>& Ptr) {
+            static T *ToStrong(const TWeakObjectPtr<T> &Ptr) {
                 return Ptr.Get();
             }
-            
         };
-        
-    }
-    
+
+    } // namespace Detail
+
     template <typename T>
-    concept WeakReferenceable = requires {
-        typename Detail::TIsWeakReferencable<std::remove_cvref_t<T>>::WeakRefType;
-    };
-    
+    concept WeakReferenceable = requires { typename Detail::TIsWeakReferencable<std::remove_cvref_t<T>>::WeakRefType; };
 
     template <typename T>
         requires WeakReferenceable<T>
@@ -76,8 +72,8 @@ namespace UE::Ranges {
      */
     template <typename T>
         requires WeakReference<T>
-    FORCEINLINE auto ToStrongRef(T&& Ptr) {
+    FORCEINLINE auto ToStrongRef(T &&Ptr) {
         return Detail::TIsWeakReference<std::remove_cvref_t<T>>::ToStrong(Forward<T>(Ptr));
     }
-    
-}
+
+} // namespace UE::Ranges

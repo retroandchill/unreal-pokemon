@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Algo/ForEach.h"
 #include "range/v3/algorithm/for_each.hpp"
+#include "Ranges/Functional/Bindings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/TerminalClosure.h"
-#include "Ranges/Functional/Bindings.h"
 
 namespace UE::Ranges {
 
@@ -20,7 +21,7 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TForEachInvoker(F&& Functor) : Functor(MoveTemp(Functor)) {
+        constexpr explicit TForEachInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
         }
 
         /**
@@ -30,11 +31,17 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R>
-        void operator()(R&& Range) const {
+        void operator()(R &&Range) const {
             ranges::for_each(Forward<R>(Range), Functor);
         }
 
-    private:
+        template <typename R>
+            requires UEContainer<R>
+        void operator()(R &Range) const {
+            Algo::ForEach(Range, Functor);
+        }
+
+      private:
         F Functor;
     };
 
@@ -44,7 +51,7 @@ namespace UE::Ranges {
     struct FForEach {
 
         /**
-         * Functional invocation that is used to perform the 
+         * Functional invocation that is used to perform the
          * @tparam F The type of the functor.
          * @tparam A The type(s) of any additional arguments to bind to the callback.
          * @param Functor The functor to bind to the for each loop.
@@ -53,17 +60,16 @@ namespace UE::Ranges {
          */
         template <typename F, typename... A>
             requires FunctionalType<F>
-        constexpr auto operator()(F &&Functor, A&&... Args) const {
+        constexpr auto operator()(F &&Functor, A &&...Args) const {
             using BindingType = decltype(CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
-            return TTerminalClosure<TForEachInvoker<BindingType>>(TForEachInvoker<BindingType>(
-                CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
-        } 
-        
+            return TTerminalClosure<TForEachInvoker<BindingType>>(
+                TForEachInvoker<BindingType>(CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...)));
+        }
     };
 
     /**
      * Terminal invoker for ending a range pipe by performing a for each loop on the closure.
      */
     inline constexpr FForEach ForEach;
-    
-}
+
+} // namespace UE::Ranges

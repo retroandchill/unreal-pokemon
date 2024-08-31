@@ -6,9 +6,9 @@
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
 #include "Manipulation/CircularIterator.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
-#include "Ranges/Optional/OptionalRef.h"
 
 #include "Pokemon.generated.h"
 

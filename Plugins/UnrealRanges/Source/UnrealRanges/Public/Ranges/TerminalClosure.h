@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Views/ContainerView.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/range/concepts.hpp>
@@ -36,8 +37,14 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R> && std::is_invocable_v<F, R>
-        FORCEINLINE friend constexpr auto operator|(R &&Range, TTerminalClosure Closure) {
+        friend constexpr auto operator|(R &&Range, TTerminalClosure Closure) {
             return Closure.Functor(Forward<R>(Range));
+        }
+
+        template <typename R>
+            requires UEContainer<R>
+        friend constexpr auto operator|(R &Range, TTerminalClosure Closure) {
+            return Closure.Functor(Range);
         }
 
       private:

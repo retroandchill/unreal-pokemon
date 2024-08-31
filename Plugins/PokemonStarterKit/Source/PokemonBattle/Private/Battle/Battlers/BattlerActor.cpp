@@ -95,8 +95,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
 
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&CreateBattleMove, this) |
-            UE::Ranges::ToArray;
+    Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&CreateBattleMove, this) | UE::Ranges::ToArray;
     SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
@@ -133,10 +132,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
-    InnateAbilityHandles = InnateAbilities |
-        UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
-        UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
-        UE::Ranges::ToArray;
+    InnateAbilityHandles = InnateAbilities | UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
+                           UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
+                           UE::Ranges::ToArray;
     InnateEffectHandles = InnateEffects | UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
@@ -354,9 +352,8 @@ void ABattlerActor::RecordParticipation() {
     if (!IsOwnedByPlayer()) {
         return;
     }
-    
-    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
-        UE::Ranges::Filter(&IBattler::IsNotFainted) |
+
+    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::ForEach(&IBattler::AddParticipant, this);
 }
 

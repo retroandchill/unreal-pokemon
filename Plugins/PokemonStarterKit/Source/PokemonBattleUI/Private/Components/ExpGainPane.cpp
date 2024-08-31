@@ -7,10 +7,11 @@
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattlerExpPanel.h"
+#include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 #include "Utilities/TrainerHelpers.h"
-#include "Ranges/Views/ContainerView.h"
 
 void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     OwningBattle = Battle;
@@ -37,7 +38,7 @@ void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
 
 void UExpGainPane::PlayExpGain(float MaxDuration) {
     AnimationsComplete = 0;
-    Algo::ForEach(Panels, ranges::bind_back(&UBattlerExpPanel::AnimateGain, MaxDuration));
+    Panels | UE::Ranges::ForEach(&UBattlerExpPanel::AnimateGain, MaxDuration);
 }
 
 const TArray<FExpGainInfo> &UExpGainPane::GetGainInfos() const {

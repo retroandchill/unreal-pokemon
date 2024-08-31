@@ -6,7 +6,7 @@
 #include "Ranges/Views/Map.h"
 #include "Ranges/Views/Span.h"
 
-bool UStringUtilities::StartsWithVowelText(const FText& Text) {
+bool UStringUtilities::StartsWithVowelText(const FText &Text) {
     return StartsWithVowel(Text.ToString());
 }
 
@@ -23,7 +23,7 @@ bool UStringUtilities::StartsWithVowel(FStringView String) {
     return Vowels.Contains(FChar::ToLower(String[0]));
 }
 
-FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText& Conjunction, bool bOxfordComma) {
+FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Conjunction, bool bOxfordComma) {
     if (Items.IsEmpty()) {
         return FText::GetEmpty();
     }
@@ -31,14 +31,11 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText& Co
     auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
-        return FText::FromString(Items |
-            UE::Ranges::Map(ExtractString) |
-            UE::Ranges::ToString(Conjunction.ToString()));
+        return FText::FromString(Items | UE::Ranges::Map(ExtractString) | UE::Ranges::ToString(Conjunction.ToString()));
     }
 
     auto JoinedItems = UE::Ranges::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
-        UE::Ranges::Map(ExtractString) |
-        UE::Ranges::ToString(TEXT(", "));
+                       UE::Ranges::Map(ExtractString) | UE::Ranges::ToString(TEXT(", "));
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));
     }

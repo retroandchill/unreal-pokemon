@@ -9,11 +9,11 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Views/Filter.h"
 
-TOptional<UPokemonPanel &> UPokemonSelectionPaneBase::FindPanelForPokemon(
-    const TScriptInterface<IPokemon> &Pokemon) const {
+TOptional<UPokemonPanel &>
+UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
     return GetSelectableOptions<UPokemonPanel>() |
-        UE::Ranges::Filter([&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
-        UE::Ranges::FindFirst;    
+           UE::Ranges::Filter([&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
+           UE::Ranges::FindFirst;
 }
 
 void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon) {
@@ -38,8 +38,7 @@ void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInter
 }
 
 void UPokemonSelectionPaneBase::RefreshWindow() {
-    GetSelectableOptions<ISelectablePanel>() |
-     UE::Ranges::ForEach(&ISelectablePanel::Refresh);
+    GetSelectableOptions<ISelectablePanel>() | UE::Ranges::ForEach(&ISelectablePanel::Refresh);
 }
 
 bool UPokemonSelectionPaneBase::IsSwitching() const {
