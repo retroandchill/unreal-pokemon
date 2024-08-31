@@ -17,7 +17,7 @@ constexpr std::array TileBasicInfos = {
     FTileBasicInfo{12, -90, 0},
     FTileBasicInfo{10, 0, 0},
     FTileBasicInfo{5, 180, 0},
-    FTileBasicInfo {3, 90, 0},
+    FTileBasicInfo{3, 90, 0},
     FTileBasicInfo{6, 90, 1},
     FTileBasicInfo{9, 0, 1},
     FTileBasicInfo{14, -90, 2},
@@ -52,9 +52,9 @@ constexpr std::array TileBasicInfos = {
     FTileBasicInfo{47, -90, 11},
     FTileBasicInfo{31, 90, 11},
     FTileBasicInfo{141, 180, 12},
-    FTileBasicInfo{75, 0, 12},
+    FTileBasicInfo{75, 0, 13},
     FTileBasicInfo{45, 180, 13},
-    FTileBasicInfo{27, 0, 13},
+    FTileBasicInfo{27, 0, 12},
     FTileBasicInfo{142, -90, 13},
     FTileBasicInfo{78, -90, 12},
     FTileBasicInfo{39, 90, 12},
@@ -71,10 +71,10 @@ static FGridMapTileList MakeTileList(const FTileBasicInfo &Info, const TArray<US
     };
 }
 
-static void SetTileInfos(UGridMapTileSet& TileSet, const TArray<UStaticMesh *> &Tiles) {
+static void SetTileInfos(UGridMapTileSet &TileSet, const TArray<UStaticMesh *> &Tiles) {
     TileSet.Tiles = TileBasicInfos |
-           UE::Ranges::Map(&MakeTileList, Tiles) |
-           UE::Ranges::ToArray;
+                    UE::Ranges::Map(&MakeTileList, Tiles) |
+                    UE::Ranges::ToArray;
 }
 
 void UGridMapEditorUtilities::CreateAutoTileLayout(UGridMapTileSet *TileSet, const TArray<UStaticMesh *> &Tiles) {
