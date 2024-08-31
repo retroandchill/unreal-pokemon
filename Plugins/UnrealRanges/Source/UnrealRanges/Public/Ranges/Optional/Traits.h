@@ -30,19 +30,16 @@ namespace UE::Optionals {
              * The effective contained type of the optional.
              */
             using ElementType = typename TOptional<T>::ElementType;
-            
         };
-        
-    }
+
+    } // namespace Detail
 
     /**
      * Concept that checks if a type is a TOptional type.
      * @tparam T The type to check
      */
     template <typename T>
-    concept UEOptional = requires {
-        typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ContainedType;
-    };
+    concept UEOptional = requires { typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ContainedType; };
 
     /**
      * Type definition to get the underlying type out of the optional
@@ -51,7 +48,7 @@ namespace UE::Optionals {
     template <typename T>
         requires UEOptional<T>
     using TContainedOptionalType = typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ContainedType;
-    
+
     /**
      * Type definition to get the underlying element type out of the optional
      * @tparam T The optional type to get the element type from
@@ -59,5 +56,5 @@ namespace UE::Optionals {
     template <typename T>
         requires UEOptional<T>
     using TOptionalElementType = typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ElementType;
-    
-}
+
+} // namespace UE::Optionals

@@ -37,8 +37,7 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
     return {.InternalID = InternalId,
             .TrainerType = TrainerType,
             .Name = Name,
-            .Party = Party | UE::Ranges::Map(&IPokemon::ToDTO) |
-                     UE::Ranges::ToArray,
+            .Party = Party | UE::Ranges::Map(&IPokemon::ToDTO) | UE::Ranges::ToArray,
             .ID = ID,
             .SecretID = SecretID};
 }

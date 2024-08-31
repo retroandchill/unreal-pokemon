@@ -35,11 +35,10 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Panels.Reset();
 
     int32 Index = 0;
-    Battle->GetSides() |
-        UE::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
-            AddPanelsForSide(Index, Side);
-            Index++;
-        });
+    Battle->GetSides() | UE::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
+        AddPanelsForSide(Index, Side);
+        Index++;
+    });
 
     BattleSwitchPane->SetBattle(CurrentBattle);
     ExpGainPane->SetBattle(CurrentBattle);
@@ -154,9 +153,7 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = Move->GetAllPossibleTargets() |
-                   UE::Ranges::Construct<FTargetWithIndex>() | 
-                   UE::Ranges::ToArray;
+    auto Targets = Move->GetAllPossibleTargets() | UE::Ranges::Construct<FTargetWithIndex>() | UE::Ranges::ToArray;
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);

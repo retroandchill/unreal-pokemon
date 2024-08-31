@@ -21,11 +21,11 @@ class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem {
      * The adjustment that needs to be made to the Z-Rotation to get the correct rotation in-game.
      */
     static constexpr double ZRotationAdjustment = 90.0;
-    
+
     void OnWorldBeginPlay(UWorld &InWorld) override;
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;
-    
+
     /**
      * Get the dispatcher called when the camera angle is changed.
      * @return The dispatcher called when the camera angle changes.

@@ -54,9 +54,9 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto ExistingHandle = AbilityComponent->FindAbilityOfClass(EffectClass);
     auto Handle = ExistingHandle | UE::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
-        FGameplayAbilitySpec Spec(EffectClass, 1, INDEX_NONE, Owner.GetObject());
-        return AbilityComponent->GiveAbility(Spec);
-    });
+                      FGameplayAbilitySpec Spec(EffectClass, 1, INDEX_NONE, Owner.GetObject());
+                      return AbilityComponent->GiveAbility(Spec);
+                  });
 
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;
@@ -80,12 +80,8 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         Targets.Emplace(AsTargetWithIndex->SwapIfNecessary());
     }
 
-    TargetData->SetActors(
-        Targets |
-        UE::Ranges::FilterValid |
-        UE::Ranges::CastType<AActor> |
-        UE::Ranges::MakeWeak |
-        UE::Ranges::ToArray);
+    TargetData->SetActors(Targets | UE::Ranges::FilterValid | UE::Ranges::CastType<AActor> | UE::Ranges::MakeWeak |
+                          UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Items::UsingItem, EventData);

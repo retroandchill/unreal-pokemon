@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "Moves/MoveDamageCategory.h"
-#include "UObject/Interface.h"
 #include "Ranges/Views/AnyView.h"
+#include "UObject/Interface.h"
 
 #include "BattleMove.generated.h"
 

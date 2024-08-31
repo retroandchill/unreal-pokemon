@@ -53,8 +53,8 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
     }
 
     const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings->PocketInfo.FindChecked(Item->Pocket);
-    return MaxPocketSize | UE::Optionals::Map([&Pocket](int32 Max) { return Pocket->Items.Num() < Max; })
-        | UE::Optionals::OrElse(true);
+    return MaxPocketSize | UE::Optionals::Map([&Pocket](int32 Max) { return Pocket->Items.Num() < Max; }) |
+           UE::Optionals::OrElse(true);
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {

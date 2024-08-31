@@ -13,7 +13,7 @@ namespace UE::Ranges {
 
     struct FMap {
         template <typename... A>
-        constexpr auto operator()(A&&... Args) const {
+        constexpr auto operator()(A &&...Args) const {
             return ranges::views::transform(CreateBinding<A...>(Forward<A>(Args)...));
         }
     };
@@ -23,5 +23,5 @@ namespace UE::Ranges {
      * you can supply to it in order to create a valid binding.
      */
     constexpr FMap Map;
-    
-}
+
+} // namespace UE::Ranges

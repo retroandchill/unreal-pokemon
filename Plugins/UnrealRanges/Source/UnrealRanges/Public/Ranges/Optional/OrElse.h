@@ -10,8 +10,12 @@ namespace UE::Optionals {
     template <typename T>
     struct TOrElseInvoker {
 
-        explicit constexpr TOrElseInvoker(const T& Value) : Value(Value) {}
-        explicit constexpr TOrElseInvoker(T&& Value) requires (!std::is_lvalue_reference_v<T>) : Value(MoveTemp(Value)) {}
+        explicit constexpr TOrElseInvoker(const T &Value) : Value(Value) {
+        }
+        explicit constexpr TOrElseInvoker(T &&Value)
+            requires(!std::is_lvalue_reference_v<T>)
+            : Value(MoveTemp(Value)) {
+        }
 
         /**
          * Obtain the underlying element of an optional, invoking the functor if nothing is present.
@@ -21,11 +25,12 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O&& Optional) {
+        constexpr auto operator()(O &&Optional) {
             using ResultType = TOptionalElementType<O>;
-            return Optional.IsSet() ? *Optional : ResultType(MoveTemp(Value));
+            return Optional.IsSet() ? *Optional : ResultType(Forward<T>(Value));
         }
-    private:
+
+      private:
         T Value;
     };
 
@@ -38,15 +43,14 @@ namespace UE::Optionals {
          * @return The bound functional closure.
          */
         template <typename T>
-        constexpr auto operator()(T&& Value) const {
+        constexpr auto operator()(T &&Value) const {
             return TOptionalClosure<TOrElseInvoker<T>>(TOrElseInvoker<T>(Forward<T>(Value)));
         }
-        
     };
 
     /**
      * Get the value contained within the optional, or alternatively the supplied value.
      */
     constexpr FOrElse OrElse;
-    
-}
+
+} // namespace UE::Optionals

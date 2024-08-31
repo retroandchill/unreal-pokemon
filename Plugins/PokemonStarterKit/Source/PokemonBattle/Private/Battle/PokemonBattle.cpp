@@ -60,8 +60,7 @@ void APokemonBattle::BeginPlay() {
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    Sides | UE::Ranges::CastType<AActor> |
-        UE::Ranges::ForEach([](AActor *Actor) { Actor->Destroy(); });
+    Sides | UE::Ranges::CastType<AActor> | UE::Ranges::ForEach([](AActor *Actor) { Actor->Destroy(); });
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {
@@ -181,10 +180,7 @@ UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() c
 }
 
 UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
-    return Sides |
-        UE::Ranges::Map(&GetBattlers) |
-        UE::Ranges::Join |
-        UE::Ranges::Filter(&IBattler::IsNotFainted);
+    return Sides | UE::Ranges::Map(&GetBattlers) | UE::Ranges::Join | UE::Ranges::Filter(&IBattler::IsNotFainted);
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
@@ -199,10 +195,10 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     auto PlayerSpeed =
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    GetOpposingSide()->GetBattlers() |
-        UE::Ranges::Filter(&IBattler::IsNotFainted) |
+    GetOpposingSide()->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::Map(&IBattler::GetAbilityComponent) |
-        UE::Ranges::Map(&UAbilitySystemComponent::GetNumericAttributeBase, UPokemonCoreAttributeSet::GetSpeedAttribute()) |
+        UE::Ranges::Map(&UAbilitySystemComponent::GetNumericAttributeBase,
+                        UPokemonCoreAttributeSet::GetSpeedAttribute()) |
         UE::Ranges::ForEach([&EnemySpeed](float Speed) {
             if (Speed > EnemySpeed) {
                 EnemySpeed = Speed;
@@ -310,12 +306,12 @@ void APokemonBattle::EndTurn() {
         // faints
         Sides[i]->GetBattlers() | UE::Ranges::Filter(&IBattler::IsFainted) |
             UE::Ranges::ForEach([this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
-                             auto BattlerId = Battler->GetInternalId();
-                             CurrentActionCount.Add(BattlerId, 0);
-                             ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
-                             Battler->RequireSwitch();
-                             bRequiresSwaps = true;
-                         });
+                auto BattlerId = Battler->GetInternalId();
+                CurrentActionCount.Add(BattlerId, 0);
+                ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
+                Battler->RequireSwitch();
+                bRequiresSwaps = true;
+            });
     }
 
     // If we need swaps, we're going to enter a second selecting and action phase to process the swaps

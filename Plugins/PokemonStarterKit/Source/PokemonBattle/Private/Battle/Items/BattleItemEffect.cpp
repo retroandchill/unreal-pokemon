@@ -13,9 +13,9 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Join.h"
@@ -84,14 +84,8 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 }
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
-    return TriggerEventData->TargetData.Data |
-           UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           UE::Ranges::CacheLast |
-           UE::Ranges::Join |
-           UE::Ranges::MakeStrong |
-           UE::Ranges::FilterValid |
-           UE::Ranges::Filter(&AActor::Implements<UBattler>) |
-           UE::Ranges::CastType<IBattler> |
-           UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) |
-           UE::Ranges::ToArray;
+    return TriggerEventData->TargetData.Data | UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
+           UE::Ranges::CacheLast | UE::Ranges::Join | UE::Ranges::MakeStrong | UE::Ranges::FilterValid |
+           UE::Ranges::Filter(&AActor::Implements<UBattler>) | UE::Ranges::CastType<IBattler> |
+           UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) | UE::Ranges::ToArray;
 }

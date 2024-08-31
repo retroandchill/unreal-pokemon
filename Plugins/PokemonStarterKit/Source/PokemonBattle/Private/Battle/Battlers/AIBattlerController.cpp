@@ -29,9 +29,7 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    auto PossibleMoves = Battler->GetMoves() |
-        UE::Ranges::Filter(&IBattleMove::IsUsable) |
-            UE::Ranges::ToArray;
+    auto PossibleMoves = Battler->GetMoves() | UE::Ranges::Filter(&IBattleMove::IsUsable) | UE::Ranges::ToArray;
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
     // this class to call to a series of additional child objects that represent the checks that can be used. It may
@@ -39,9 +37,7 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
-    auto Targets = Move->GetAllPossibleTargets() |
-                   UE::Ranges::Construct<FTargetWithIndex>() |
-                   UE::Ranges::ToArray;
+    auto Targets = Move->GetAllPossibleTargets() | UE::Ranges::Construct<FTargetWithIndex>() | UE::Ranges::ToArray;
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
 }
 

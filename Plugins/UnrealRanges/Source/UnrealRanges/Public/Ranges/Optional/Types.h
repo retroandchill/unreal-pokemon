@@ -35,10 +35,10 @@ namespace UE::Optionals {
             /**
              * The basic definition for how a return value should be stored in an optional.
              */
-            using Type = std::remove_pointer_t<T>&;
+            using Type = std::remove_pointer_t<T> &;
         };
-        
-    }
+
+    } // namespace Detail
 
     /**
      * The basic definition for how a return value should be stored in an optional.
@@ -47,6 +47,4 @@ namespace UE::Optionals {
     template <typename T>
     using TOptionalType = typename Detail::TOptionalValueTraits<T>::Type;
 
-    
-    
-}
+} // namespace UE::Optionals

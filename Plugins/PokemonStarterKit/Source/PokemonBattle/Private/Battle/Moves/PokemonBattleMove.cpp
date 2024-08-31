@@ -116,12 +116,8 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
         UAbilitySystemBlueprintLibrary::GetGameplayAbilityFromSpecHandle(AbilityComponent, FunctionCode, bIsInstanced);
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
-    TargetData->SetActors(
-        Targets | UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) |
-        UE::Ranges::FilterValid |
-        UE::Ranges::CastType<AActor> |
-        UE::Ranges::MakeWeak |
-        UE::Ranges::ToArray);
+    TargetData->SetActors(Targets | UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) | UE::Ranges::FilterValid |
+                          UE::Ranges::CastType<AActor> | UE::Ranges::MakeWeak | UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);

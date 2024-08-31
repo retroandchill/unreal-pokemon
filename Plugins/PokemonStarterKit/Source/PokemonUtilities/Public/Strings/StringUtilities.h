@@ -21,8 +21,8 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
      * @return does it start with a vowel
      */
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", DisplayName = "Starts With a Vowel (Text)",
-        meta = (AutoCreateRefTerm = Text))
-    static bool StartsWithVowelText(const FText& Text);
+              meta = (AutoCreateRefTerm = Text))
+    static bool StartsWithVowelText(const FText &Text);
 
     /**
      * Check if the supplied text starts with a vowel
@@ -47,5 +47,5 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
      * @return The generated list string
      */
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Conjunction))
-    static FText GenerateList(const TArray<FText> &Items, const FText& Conjunction, bool bOxfordComma = true);
+    static FText GenerateList(const TArray<FText> &Items, const FText &Conjunction, bool bOxfordComma = true);
 };

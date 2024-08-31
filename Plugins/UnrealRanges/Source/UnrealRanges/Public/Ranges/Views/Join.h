@@ -16,12 +16,12 @@ namespace UE::Ranges {
             requires ranges::input_range<R> && (ranges::input_range<T> || UEContainer<T>)
         auto operator()(R &&Range) const {
             if constexpr (UEContainer<T>) {
-                return Range | Map([](T&& Container) { return CreateRange<std::remove_reference_t<T>>(Container); }) | ranges::views::join;
+                return Range | Map([](T &&Container) { return CreateRange<std::remove_reference_t<T>>(Container); }) |
+                       ranges::views::join;
             } else {
                 return Range | ranges::views::join;
             }
         }
-        
     };
 
     /**
@@ -29,4 +29,4 @@ namespace UE::Ranges {
      * and join those without needing to be explicitly done.
      */
     constexpr ranges::views::view_closure<FJoin> Join;
-}
+} // namespace UE::Ranges
