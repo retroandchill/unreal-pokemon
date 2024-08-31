@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Views/ContainerView.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/range/concepts.hpp>
