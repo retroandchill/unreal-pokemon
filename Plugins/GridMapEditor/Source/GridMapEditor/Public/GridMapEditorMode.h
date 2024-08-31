@@ -16,14 +16,11 @@ class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode {
 
   public:
     FGridMapEditorMode();
-    virtual ~FGridMapEditorMode();
 
     // FEdMode interface
     virtual void Enter() override;
     virtual void Exit() override;
     virtual void Tick(FEditorViewportClient *ViewportClient, float DeltaTime) override;
-    // virtual void Render(const FSceneView* View, FViewport* Viewport, FPrimitiveDrawInterface* PDI) override;
-    // virtual void ActorSelectionChangeNotify() override;
     bool UsesToolkits() const override;
     virtual void AddReferencedObjects(FReferenceCollector &Collector) override;
 
@@ -98,16 +95,13 @@ class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode {
     FVector BrushLocation;
     FVector BrushTraceDirection;
     TWeakObjectPtr<class AActor> BrushTraceHitActor;
-    UStaticMeshComponent *TileBrushComponent;
+    TObjectPtr<UStaticMeshComponent> TileBrushComponent;
     /** The dynamic material of the tile brush. */
-    class UMaterialInstanceDynamic *BrushMID;
+    UMaterialInstanceDynamic *BrushMID;
     FColor BrushDefaultHighlightColor;
     FColor BrushWarningHighlightColor;
     FColor BrushCurrentHighlightColor;
 
-    UPROPERTY()
-    TArray<class UGridMapTileSet *> ActiveTileSets;
-
-    UPROPERTY()
-    class UGridMapTileSet *ActiveTileSet;
+    TArray<UGridMapTileSet *> ActiveTileSets;
+    UGridMapTileSet *ActiveTileSet;
 };

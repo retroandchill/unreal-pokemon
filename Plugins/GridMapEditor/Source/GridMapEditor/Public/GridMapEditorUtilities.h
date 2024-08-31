@@ -18,7 +18,4 @@ public:
     UFUNCTION(BlueprintCallable, Category = GridMap)
     static void CreateAutoTileLayout(UGridMapTileSet* TileSet, const TArray<UStaticMesh*>& Tiles);
 
-    UFUNCTION(BlueprintCallable, Category = GridMap)
-    static void PrintAutoTileData(UGridMapTileSet* TileSet);
-
 };

@@ -61,9 +61,6 @@ FGridMapEditorMode::FGridMapEditorMode() : FEdMode(), ActiveTileSet(nullptr) {
     BindCommandList();
 }
 
-FGridMapEditorMode::~FGridMapEditorMode() {
-}
-
 void FGridMapEditorMode::BindCommandList() {
     const FGridMapEditCommands &Commands = FGridMapEditCommands::Get();
 

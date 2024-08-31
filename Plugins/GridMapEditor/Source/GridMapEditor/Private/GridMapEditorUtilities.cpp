@@ -5,7 +5,6 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/IfPresent.h"
 #include "Ranges/Views/Map.h"
-#include "Ranges/Views/ContainerView.h"
 
 struct FTileBasicInfo {
     const uint32 TileBitset;
@@ -80,18 +79,4 @@ static void SetTileInfos(UGridMapTileSet &TileSet, const TArray<UStaticMesh *> &
 void UGridMapEditorUtilities::CreateAutoTileLayout(UGridMapTileSet *TileSet, const TArray<UStaticMesh *> &Tiles) {
     UE::Optionals::OfNullable(TileSet) |
         UE::Optionals::IfPresent(&SetTileInfos, Tiles);
-}
-
-void UGridMapEditorUtilities::PrintAutoTileData(UGridMapTileSet *TileSet) {
-    FString FullList;
-    for (auto &[TileAdjacency, Rotation, Tiles] : TileSet->Tiles) {
-        auto Bits = TileAdjacency.Bitset;
-        auto Yaw = FMath::RoundToInt32(Rotation.Yaw);
-        auto AssetName = Tiles[0].GetAssetName();
-        AssetName.RemoveFromStart(TEXT("Sand_path"));
-        auto Index = FCString::Atoi(*AssetName) - 1;
-        FullList.Appendf(TEXT("FTileBasicInfo{%d, %d, %d},\n"), Bits, Yaw, Index);
-    }
-
-    UE_LOG(LogBlueprint, Warning, TEXT("%s"), *FullList)
 }
