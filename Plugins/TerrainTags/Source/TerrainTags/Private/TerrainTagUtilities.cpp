@@ -27,7 +27,7 @@ static auto GetTerrainActors(const UObject* WorldContext, const FVector &Positio
 bool UTerrainTagUtilities::HasTerrainTag(const UObject* WorldContext, const FGameplayTag &Tag,
                                          const FVector &Position, float Radius) {
     auto Match = GetTerrainActors(WorldContext, Position, Radius) |
-        UE::Ranges::Filter(&ITerrain::Execute_HasTerrainTag, Tag) |
+        UE::Ranges::Filter([&Tag](const AActor* A) { return ITerrain::Execute_HasTerrainTag(A, Tag); }) |
         UE::Ranges::FindFirst;
     return Match.IsSet();
 }
@@ -35,7 +35,7 @@ bool UTerrainTagUtilities::HasTerrainTag(const UObject* WorldContext, const FGam
 bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const FGameplayTagContainer &Tags,
     const FVector &Position, float Radius) {
     auto Match = GetTerrainActors(WorldContext, Position, Radius) |
-        UE::Ranges::Filter(&ITerrain::Execute_HasAnyTerrainTag, Tags) |
+        UE::Ranges::Filter([&Tags](const AActor* A) { return ITerrain::Execute_HasAnyTerrainTag(A, Tags); }) |
         UE::Ranges::FindFirst;
     return Match.IsSet();
 }
@@ -43,7 +43,7 @@ bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const F
 bool UTerrainTagUtilities::HasAllTerrainTags(const UObject *WorldContext, const FGameplayTagContainer &Tags,
     const FVector &Position, float Radius) {
     auto Match = GetTerrainActors(WorldContext, Position, Radius) |
-        UE::Ranges::Filter(&ITerrain::Execute_HasAllTerrainTags, Tags) |
+        UE::Ranges::Filter([&Tags](const AActor* A) { return ITerrain::Execute_HasAllTerrainTags(A, Tags); }) |
         UE::Ranges::FindFirst;
     return Match.IsSet();
 }
