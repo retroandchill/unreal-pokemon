@@ -10,7 +10,7 @@
 /**
  *
  */
-UCLASS()
+UCLASS(BlueprintType)
 class GRIDMAPEDITOR_API UGridMapTileSetFactory : public UFactory {
     GENERATED_UCLASS_BODY()
 
