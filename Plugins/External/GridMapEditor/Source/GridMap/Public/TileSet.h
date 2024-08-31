@@ -44,7 +44,6 @@ class GRIDMAP_API UGridMapTileSet : public UObject {
   public:
     UGridMapTileSet();
 
-  public:
     UPROPERTY(EditDefaultsOnly, Category = "Tile Set Config")
     FGameplayTagContainer TileTags;
 
@@ -81,9 +80,6 @@ class GRIDMAP_API UGridMapTileSet : public UObject {
     TOptional<const FGridMapTileList &> SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const;
 
   public:
-    // this can't be here, it breaks non-editor builds :/
-    // #if WITH_EDITOR
     UPROPERTY(Transient)
-    TObjectPtr<class UStaticMesh> MeshForIcon;
-    // #endif
+    TObjectPtr<UStaticMesh> MeshForIcon;
 };
