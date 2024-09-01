@@ -46,9 +46,12 @@ UE::Ranges::TAnyView<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossi
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
-    return Battle->GetActiveBattlers() | UE::Ranges::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
+    // clang-format off
+    return Battle->GetActiveBattlers() |
+           UE::Ranges::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() != UserId;
            });
+    // clang-format on
 }
 
 FText UPokemonBattleMove::GetDisplayName() const {
@@ -116,8 +119,14 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
         UAbilitySystemBlueprintLibrary::GetGameplayAbilityFromSpecHandle(AbilityComponent, FunctionCode, bIsInstanced);
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
-    TargetData->SetActors(Targets | UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) | UE::Ranges::FilterValid |
-                          UE::Ranges::CastType<AActor> | UE::Ranges::MakeWeak | UE::Ranges::ToArray);
+    // clang-format off
+    TargetData->SetActors(Targets |
+                          UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) |
+                          UE::Ranges::FilterValid |
+                          UE::Ranges::CastType<AActor> |
+                          UE::Ranges::MakeWeak |
+                          UE::Ranges::ToArray);
+    // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);

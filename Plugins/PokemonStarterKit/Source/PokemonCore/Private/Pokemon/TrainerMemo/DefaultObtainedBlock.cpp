@@ -9,10 +9,14 @@ TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemo
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.LevelMet.Get(DTO.Level);
 
-    ObtainText = DTO.MetLocation | UE::Optionals::OrElseGet([this] {
-                     return UPokemonSubsystem::Exists(this) ? UPokemonSubsystem::GetInstance(this).GetCurrentLocation()
-                                                            : FText();
+    // clang-format off
+    ObtainText = DTO.MetLocation |
+                 UE::Optionals::OrElseGet([this] {
+                     return UPokemonSubsystem::Exists(this)
+                                ? UPokemonSubsystem::GetInstance(this).GetCurrentLocation()
+                                : FText();
                  });
+    // clang-format on
 
     TimeReceived = DTO.TimeReceived.Get(FDateTime::Now());
     TimeHatched = DTO.TimeHatched;

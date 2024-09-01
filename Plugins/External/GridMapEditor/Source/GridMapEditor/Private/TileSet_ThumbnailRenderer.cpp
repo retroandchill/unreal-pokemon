@@ -34,11 +34,9 @@ void UTileSet_ThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, uint32 
     if (!TileSet->MeshForIcon) {
         return;
     }
-    
-    if (ThumbnailScene == nullptr || !ensure(ThumbnailScene->GetWorld() != nullptr))
-    {
-        if (ThumbnailScene)
-        {
+
+    if (ThumbnailScene == nullptr || !ensure(ThumbnailScene->GetWorld() != nullptr)) {
+        if (ThumbnailScene) {
             FlushRenderingCommands();
         }
         ThumbnailScene = MakeUnique<FTileMeshThumbnailScene>();
@@ -48,9 +46,10 @@ void UTileSet_ThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, uint32 
     ThumbnailScene->SetActorRotation(TileList->Rotation);
     ThumbnailScene->GetScene()->UpdateSpeedTreeWind(0.0);
 
-    FSceneViewFamilyContext ViewFamily( FSceneViewFamily::ConstructionValues( RenderTarget, ThumbnailScene->GetScene(), FEngineShowFlags(ESFIM_Game) )
-                                        .SetTime(UThumbnailRenderer::GetTime())
-                                        .SetAdditionalViewFamily(bAdditionalViewFamily));
+    FSceneViewFamilyContext ViewFamily(
+        FSceneViewFamily::ConstructionValues(RenderTarget, ThumbnailScene->GetScene(), FEngineShowFlags(ESFIM_Game))
+            .SetTime(UThumbnailRenderer::GetTime())
+            .SetAdditionalViewFamily(bAdditionalViewFamily));
 
     ViewFamily.EngineShowFlags.DisableAdvancedFeatures();
     ViewFamily.EngineShowFlags.MotionBlur = 0;

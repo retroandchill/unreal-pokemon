@@ -13,21 +13,36 @@ TArray<FName> UStatHelper::GetStatNames() {
 
 TArray<FName> UStatHelper::GetMainStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
-    auto Stats = StatTable.GetAllRows();
-    return Stats | UE::Ranges::Filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Battle; }) |
-           UE::Ranges::Map(&FStat::ID) | UE::Ranges::ToArray;
+    // clang-format off
+    return StatTable.GetAllRows() |
+           UE::Ranges::Filter([](const FStat &Stat) {
+               return Stat.Type != EPokemonStatType::Battle;
+           }) |
+           UE::Ranges::Map(&FStat::ID) |
+           UE::Ranges::ToArray;
+    // clang-format on
 }
 
 TArray<FName> UStatHelper::GetBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
-    auto Stats = StatTable.GetAllRows();
-    return Stats | UE::Ranges::Filter([](const FStat *Stat) { return Stat->Type != EPokemonStatType::Main; }) |
-           UE::Ranges::Map(&FStat::ID) | UE::Ranges::ToArray;
+    // clang-format off
+    return StatTable.GetAllRows() |
+           UE::Ranges::Filter([](const FStat &Stat) {
+               return Stat.Type != EPokemonStatType::Main;
+           }) |
+           UE::Ranges::Map(&FStat::ID) |
+           UE::Ranges::ToArray;
+    // clang-format on
 }
 
 TArray<FName> UStatHelper::GetMainBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
-    auto Stats = StatTable.GetAllRows();
-    return Stats | UE::Ranges::Filter([](const FStat *Stat) { return Stat->Type == EPokemonStatType::MainBattle; }) |
-           UE::Ranges::Map(&FStat::ID) | UE::Ranges::ToArray;
+    // clang-format off
+    return StatTable.GetAllRows() |
+           UE::Ranges::Filter([](const FStat &Stat) {
+               return Stat.Type == EPokemonStatType::MainBattle;
+           }) |
+           UE::Ranges::Map(&FStat::ID) |
+           UE::Ranges::ToArray;
+    // clang-format on
 }

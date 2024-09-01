@@ -8,5 +8,9 @@
 TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     static auto &Table = FDataManager::GetInstance().GetDataTable<FStatus>();
     auto Rows = Table.GetAllRows();
-    return Rows | UE::Ranges::Map(&FStatus::ID) | UE::Ranges::ToArray;
+    // clang-format off
+    return Rows |
+           UE::Ranges::Map(&FStatus::ID) |
+           UE::Ranges::ToArray;
+    // clang-format on
 }

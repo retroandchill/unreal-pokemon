@@ -38,9 +38,13 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
 }
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
-    auto SideView = UE::Ranges::Single(Side) | UE::Ranges::CastType<AActor>;
-    auto ActiveBattlers =
-        Side->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::CastType<AActor>;
+    // clang-format off
+    auto SideView = UE::Ranges::Single(Side) |
+                    UE::Ranges::CastType<AActor>;
+    auto ActiveBattlers = Side->GetBattlers() |
+                          UE::Ranges::Filter(&IBattler::IsNotFainted) |
+                          UE::Ranges::CastType<AActor>;
+    // clang-format on
     return UE::Ranges::Concat(SideView, ActiveBattlers);
 }
 

@@ -3,25 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DataManager.h"
-#include "GiveItemToPokemon.h"
 #include "Bag/Item.h"
+#include "DataManager.h"
 #include "Field/FieldItemEffect.h"
+#include "GiveItemToPokemon.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Screens/BagScreen.h"
 
 #include "UseItem.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract)
 class POKEMONUI_API UUseItem : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
-public:
+  public:
     template <typename T>
         requires std::is_base_of_v<UUseItem, T>
-    static T* ConstructUseItemNode(UBagScreen *Screen, FName Item, int32 Quantity) {
+    static T *ConstructUseItemNode(UBagScreen *Screen, FName Item, int32 Quantity) {
         auto Node = NewObject<T>();
         Node->BagScreen = Screen;
         Node->ItemName = Item;
@@ -29,17 +29,18 @@ public:
         return Node;
     }
 
-protected:
+  protected:
     template <typename T, typename... A>
         requires Pokemon::Items::FieldItem<T, A...>
-    void UseItem(A&&... Args) {
+    void UseItem(A &&...Args) {
         auto &ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemName);
-        BagScreen->TryUseItem<T, A...>(ItemData, ItemQuantity,
+        BagScreen->TryUseItem<T, A...>(
+            ItemData, ItemQuantity,
             FOnItemEffectComplete::FDelegate::CreateUObject(this, &UUseItem::OnItemEffectComplete),
             Forward<A>(Args)...);
     }
-    
-private:
+
+  private:
     void OnItemEffectComplete(bool bSuccess);
 
     /**

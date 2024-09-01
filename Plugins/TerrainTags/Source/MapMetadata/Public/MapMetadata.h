@@ -5,11 +5,9 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FMapMetadataModule : public IModuleInterface
-{
-public:
-
-	/** IModuleInterface implementation */
-	void StartupModule() override;
-	void ShutdownModule() override;
+class FMapMetadataModule : public IModuleInterface {
+  public:
+    /** IModuleInterface implementation */
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

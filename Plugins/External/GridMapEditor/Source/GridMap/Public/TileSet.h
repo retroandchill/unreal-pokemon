@@ -22,7 +22,7 @@ struct GRIDMAP_API FGridMapTileBitset {
 USTRUCT()
 struct GRIDMAP_API FGridMapTileList {
     GENERATED_BODY()
-    
+
     UPROPERTY(EditAnywhere)
     FGridMapTileBitset TileAdjacency;
 

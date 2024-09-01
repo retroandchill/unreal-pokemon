@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Concepts/UObjectPointer.h"
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Views/Filter.h"
 

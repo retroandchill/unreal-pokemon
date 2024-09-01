@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "FieldItemEffect.h"
+
 #include "FieldItemEffectDirect.generated.h"
 
 struct FItem;
@@ -15,8 +16,7 @@ UCLASS()
 class POKEMONITEMS_API UFieldItemEffectDirect : public UFieldItemEffect {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void Use(const FItem &Item, int32 Quantity);
-
 };

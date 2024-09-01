@@ -18,7 +18,19 @@
 			"Name": "UnrealRanges",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UnrealRangesTests",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
-	"SupportURL": ""
+	"SupportURL": "",
+	"Plugins": [
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true
+		}
+	]
 }

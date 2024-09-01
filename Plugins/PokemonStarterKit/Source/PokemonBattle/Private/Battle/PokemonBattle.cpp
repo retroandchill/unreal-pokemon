@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/PokemonBattle.h"
-#include "Algo/AnyOf.h"
-#include "Algo/ForEach.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
@@ -15,23 +13,14 @@
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
-#include "Chaos/ChaosPerfTest.h"
-#include "Lookup/InjectionUtilities.h"
-#include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "range/v3/view/join.hpp"
-#include "range/v3/view/transform.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
-
-static auto GetBattlers(const TScriptInterface<IBattleSide> &Side) {
-    return UE::Ranges::CreateRange(Side->GetBattlers());
-}
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
@@ -60,7 +49,13 @@ void APokemonBattle::BeginPlay() {
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    Sides | UE::Ranges::CastType<AActor> | UE::Ranges::ForEach([](AActor *Actor) { Actor->Destroy(); });
+    // clang-format off
+    Sides |
+        UE::Ranges::CastType<AActor> |
+        UE::Ranges::ForEach([](AActor *Actor) {
+            Actor->Destroy();
+        });
+    // clang-format on
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {
@@ -116,7 +111,11 @@ void APokemonBattle::StartBattle() {
 
 FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     FRunningMessageSet Messages;
-    auto Sorted = Battlers | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::ToArray;
+    // clang-format off
+    auto Sorted = Battlers |
+                  UE::Ranges::Filter(&IBattler::IsNotFainted) |
+                  UE::Ranges::ToArray;
+    // clang-format on
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
         int32 SpeedA = FMath::FloorToInt32(A->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
         int32 SpeedB = FMath::FloorToInt32(B->GetAbilityComponent()->GetCoreAttributes()->GetSpeed());
@@ -180,7 +179,12 @@ UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() c
 }
 
 UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
-    return Sides | UE::Ranges::Map(&GetBattlers) | UE::Ranges::Join | UE::Ranges::Filter(&IBattler::IsNotFainted);
+    // clang-format off
+    return Sides |
+           UE::Ranges::Map(&IBattleSide::GetBattlers) |
+           UE::Ranges::Join |
+           UE::Ranges::Filter(&IBattler::IsNotFainted);
+    // clang-format on
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
@@ -195,7 +199,9 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     auto PlayerSpeed =
         Battler->GetAbilityComponent()->GetNumericAttributeBase(UPokemonCoreAttributeSet::GetSpeedAttribute());
     float EnemySpeed = 1.f;
-    GetOpposingSide()->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
+    // clang-format off
+    GetOpposingSide()->GetBattlers() |
+        UE::Ranges::Filter(&IBattler::IsNotFainted) |
         UE::Ranges::Map(&IBattler::GetAbilityComponent) |
         UE::Ranges::Map(&UAbilitySystemComponent::GetNumericAttributeBase,
                         UPokemonCoreAttributeSet::GetSpeedAttribute()) |
@@ -204,6 +210,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
                 EnemySpeed = Speed;
             }
         });
+    // clang-format on
 
     float Rate;
     if (PlayerSpeed > EnemySpeed) {

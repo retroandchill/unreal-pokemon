@@ -105,7 +105,13 @@ void AActiveSide::BeginPlay() {
 
 void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
-    Battlers | UE::Ranges::CastType<AActor> | UE::Ranges::ForEach([](AActor *A) { return A->Destroy(); });
+    // clang-format off
+    Battlers |
+        UE::Ranges::CastType<AActor> |
+        UE::Ranges::ForEach([](AActor *A) {
+            return A->Destroy();
+        });
+    // clang-format on
 }
 
 const FGuid &AActiveSide::GetInternalId() const {

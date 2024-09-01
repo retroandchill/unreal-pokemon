@@ -29,7 +29,11 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    auto PossibleMoves = Battler->GetMoves() | UE::Ranges::Filter(&IBattleMove::IsUsable) | UE::Ranges::ToArray;
+    // clang-format off
+    auto PossibleMoves = Battler->GetMoves() |
+                         UE::Ranges::Filter(&IBattleMove::IsUsable) |
+                         UE::Ranges::ToArray;
+    // clang-format on
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
     // this class to call to a series of additional child objects that represent the checks that can be used. It may

@@ -26,10 +26,13 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
     ID = DTO.ID;
     SecretID = DTO.SecretID;
 
-    Party = DTO.Party | UE::Ranges::Map([this](const FPokemonDTO &Pokemon) {
+    // clang-format off
+    Party = DTO.Party |
+            UE::Ranges::Map([this](const FPokemonDTO &Pokemon) {
                 return UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon);
             }) |
             UE::Ranges::ToArray;
+    // clang-format on
     return this;
 }
 
@@ -37,7 +40,11 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
     return {.InternalID = InternalId,
             .TrainerType = TrainerType,
             .Name = Name,
-            .Party = Party | UE::Ranges::Map(&IPokemon::ToDTO) | UE::Ranges::ToArray,
+            // clang-format off
+            .Party = Party |
+                     UE::Ranges::Map(&IPokemon::ToDTO) |
+                     UE::Ranges::ToArray,
+            // clang-format on
             .ID = ID,
             .SecretID = SecretID};
 }
