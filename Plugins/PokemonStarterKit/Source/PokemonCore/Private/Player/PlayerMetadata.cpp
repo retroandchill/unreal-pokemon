@@ -27,6 +27,14 @@ float UPlayerMetadata::GetTotalPlaytime() const {
     return TotalPlaytime;
 }
 
+int32 UPlayerMetadata::GetRepelSteps() const {
+    return RepelSteps;
+}
+
+void UPlayerMetadata::SetRepelSteps(int32 NewRepelSteps) {
+    RepelSteps = FMath::Max(0, NewRepelSteps);
+}
+
 FOnTimeUpdate &UPlayerMetadata::GetOnTimeUpdated() {
     return OnTimeUpdated;
 }

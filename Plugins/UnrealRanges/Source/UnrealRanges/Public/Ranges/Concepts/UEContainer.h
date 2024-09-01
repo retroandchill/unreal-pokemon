@@ -52,6 +52,12 @@ namespace UE::Ranges {
         template <typename K, typename V, typename A, typename F>
         struct TIsUEContainer<TMap<K, V, A, F>> : std::true_type {};
 
+        template <typename>
+        struct TIsUEMap : std::false_type {};
+
+        template <typename K, typename V, typename A, typename F>
+        struct TIsUEMap<TMap<K, V, A, F>> : std::true_type {};
+
     } // namespace Detail
 
     /**
@@ -60,5 +66,8 @@ namespace UE::Ranges {
      */
     template <typename T>
     concept UEContainer = Detail::TIsUEContainer<std::remove_cvref_t<T>>::value;
+
+    template <typename T>
+    concept UEMap = Detail::TIsUEMap<T>::value;
 
 } // namespace UE::Ranges

@@ -26,6 +26,7 @@ public class GridMap : ModuleRules
 			new string[]
 			{
 				"Core",
+				"MapMetadata"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

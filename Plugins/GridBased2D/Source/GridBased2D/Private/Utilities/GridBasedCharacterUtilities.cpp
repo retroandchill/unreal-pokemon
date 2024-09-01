@@ -9,22 +9,6 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "MathUtilities.h"
 
-TSet<FName> UGridBasedCharacterUtilities::CollectComponentTagsForCurrentTile(ACharacter *Character) {
-    static const auto GridSize = static_cast<float>(GetDefault<UGridBased2DSettings>()->GetGridSize());
-    static TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
-                                                                UEngineTypes::ConvertToObjectType(ECC_WorldDynamic)};
-
-    TSet<FName> Tags;
-
-    TArray<UPrimitiveComponent *> Components;
-    UKismetSystemLibrary::SphereOverlapComponents(Character, Character->GetActorLocation() + FVector(0, 0, 2),
-                                                  GridSize / 2, ObjectTypes, nullptr, {Character}, Components);
-    for (auto Comp : Components) {
-        Tags.Append(Comp->ComponentTags);
-    }
-    return Tags;
-}
-
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {
     if (HitComponent != nullptr && !CanStepUpOnComponent(Character, *HitComponent)) {

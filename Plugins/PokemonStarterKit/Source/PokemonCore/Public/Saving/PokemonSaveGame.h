@@ -43,4 +43,7 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
 
     UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
     float TotalPlaytime;
+
+    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    int32 RepelSteps;
 };
