@@ -21,34 +21,31 @@ public:
      * Does this actor have the given terrain tag?
      * @param WorldContext The object used to obtain information about the world
      * @param Tag The tag to search for
-     * @param Position The origin for the search
-     * @param Radius The radius to perform the sweep for actors on
+     * @param Character The origin for the search
      * @return Is the given tag present?
      */
     UFUNCTION(BlueprintPure, Category = TerrainTags,
-        meta = (AutoCreateRefTerm = "Tag,Position", WorldContext = WorldContext))
-    static bool HasTerrainTag(const UObject* WorldContext, const FGameplayTag& Tag, const FVector& Position, float Radius = 5.0f);
+        meta = (AutoCreateRefTerm = Tag, WorldContext = WorldContext))
+    static bool HasTerrainTag(const UObject* WorldContext, const FGameplayTag& Tag, const ACharacter* Character);
 
     /**
      * Does this actor have any of the given terrain tags?
      * @param WorldContext The object used to obtain information about the world
     * @param Tags The tags to search for
-     * @param Position The origin for the search
-     * @param Radius The radius to perform the sweep for actors on
+     * @param Character The origin for the search
      * @return Is at least a single terrain tag present?
      */
     UFUNCTION(BlueprintPure, Category = TerrainTags, meta = (AutoCreateRefTerm = Tags))
-    static bool HasAnyTerrainTag(const UObject* WorldContext, const FGameplayTagContainer& Tags, const FVector& Position, float Radius = 5.0f);
+    static bool HasAnyTerrainTag(const UObject* WorldContext, const FGameplayTagContainer& Tags, const ACharacter* Character);
 
     /**
      * Does this actor have all of the given terrain tags?
      * @param WorldContext The object used to obtain information about the world
     * @param Tags The tags to search for
-     * @param Position The origin for the search
-     * @param Radius The radius to perform the sweep for actors on
+     * @param Character The origin for the search
      * @return Are all the terrain tags present?
      */
     UFUNCTION(BlueprintPure, Category = TerrainTags, meta = (AutoCreateRefTerm = Tags))
-    static bool HasAllTerrainTags(const UObject* WorldContext, const FGameplayTagContainer& Tags, const FVector& Position, float Radius = 5.0f);
+    static bool HasAllTerrainTags(const UObject* WorldContext, const FGameplayTagContainer& Tags, ACharacter* Character);
 
 };

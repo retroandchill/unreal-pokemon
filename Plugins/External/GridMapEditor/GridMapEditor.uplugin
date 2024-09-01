@@ -35,6 +35,10 @@
 		{
 			"Name": "UnrealRanges",
 			"Enabled": true
+		},
+		{
+			"Name": "TerrainTags",
+			"Enabled": true
 		}
 	]
 }
