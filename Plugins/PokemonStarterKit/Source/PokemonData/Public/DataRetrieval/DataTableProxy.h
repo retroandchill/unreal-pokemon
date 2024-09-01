@@ -53,29 +53,13 @@ class TDataTableProxy final : public IGameData {
      * Iterate through the data table's rows and execute the callback on each entry
      * @param Callback The callback method
      */
-    void ForEach(TFunctionRef<void(const T &)> Callback) const {
+    template <typename F>
+        requires std::invocable<F, const T&>
+    void ForEach(F&& Callback) const {
         for (auto Rows = GetAllRows(); auto Row : Rows) {
             const T &Ref = *Row;
             Callback(Ref);
         }
-    }
-
-    TArray<const T *> Filter(TFunctionRef<bool(const T &)> Predicate) const {
-        TArray<const T *> Rows;
-        ForEach([&Rows, &Predicate](const T &Row) {
-            if (Predicate(Row)) {
-                Rows.Add(&Row);
-            }
-        });
-
-        return Rows;
-    }
-
-    template <typename R>
-    TArray<R> Map(TFunctionRef<R(const T &)> Mapping) const {
-        TArray<R> Ret;
-        ForEach([&Ret, &Mapping](const T &Row) { Ret.Add(Mapping(Row)); });
-        return Ret;
     }
 
   private:
