@@ -95,6 +95,10 @@
 		{
 			"Name": "GridMapEditor",
 			"Enabled": true
+		},
+		{
+			"Name": "MapMetadata",
+			"Enabled": true
 		}
 	]
 }

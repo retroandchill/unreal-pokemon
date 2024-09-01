@@ -7,6 +7,7 @@
 
 #include "FieldItemEffect.generated.h"
 
+struct FItem;
 /**
  * Called when the item is done evaluating.
  */
@@ -42,3 +43,11 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
   private:
     FOnItemEffectComplete OnEffectComplete;
 };
+
+namespace Pokemon::Items {
+    template <typename T, typename... A>
+    concept FieldItem = std::is_base_of_v<UFieldItemEffect, T>
+        && requires(T& Effect, const FItem& Item, int32 Quantity, A&&... Args) {
+              Effect.Use(Item, Quantity, Forward<A>(Args)...);
+        };
+}

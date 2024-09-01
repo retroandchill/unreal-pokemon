@@ -6,6 +6,7 @@
 #include "DataManager.h"
 #include "Field/FieldItemEffectUseOnPokemon.h"
 #include "ItemEffectLookup.h"
+#include "Field/FieldItemEffectDirect.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "Utilities/TrainerHelpers.h"
@@ -78,25 +79,6 @@ void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
 
     ToggleItemSelection(false);
     ShowItemCommands();
-}
-
-void UBagScreen::TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon,
-                                     FOnItemEffectComplete::FDelegate &&CompletionDelegate) {
-    auto EffectClass = Pokemon::Items::LookupFieldItemEffect<UFieldItemEffectUseOnPokemon>(Item.ID);
-    if (EffectClass == nullptr) {
-        OnItemEffectConclude(false, Item.ID);
-        CompletionDelegate.Execute(false);
-        return;
-    }
-
-    auto Effect = NewObject<UFieldItemEffectUseOnPokemon>(this, EffectClass);
-    Effect->BindToEffectComplete(FOnItemEffectComplete::FDelegate::CreateWeakLambda(
-        this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
-            OnItemEffectConclude(bSuccess, ItemID);
-            Callback.Execute(bSuccess);
-        }));
-    Effect->Use(Item, Quantity, Pokemon);
-    CurrentItemEffect = Effect;
 }
 
 void UBagScreen::OnItemEffectConclude(bool bSuccess, FName ItemID) {

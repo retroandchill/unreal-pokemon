@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GiveItemToPokemon.h"
+#include "UseItem.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 
 #include "UseItemOnPokemon.generated.h"
@@ -14,7 +15,7 @@ class IPokemon;
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UUseItemOnPokemon : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UUseItemOnPokemon : public UUseItem {
     GENERATED_BODY()
 
   public:
@@ -32,36 +33,6 @@ class POKEMONUI_API UUseItemOnPokemon : public UBlueprintAsyncActionBase {
     void Activate() override;
 
   private:
-    /**
-     * Called when the item is given to the Pokémon
-     */
-    UPROPERTY(BlueprintAssignable)
-    FItemResult ItemUsed;
-
-    /**
-     * Called when the player backs out (or the item cannot be given)
-     */
-    UPROPERTY(BlueprintAssignable)
-    FItemResult ItemNotUsed;
-
-    /**
-     * The object used to obtain the state of the world to open the menu with
-     */
-    UPROPERTY()
-    TObjectPtr<UBagScreen> BagScreen;
-
-    /**
-     * The new item to give
-     */
-    UPROPERTY()
-    FName Item;
-
-    /**
-     * The new item to give
-     */
-    UPROPERTY()
-    int32 Quantity;
-
     /**
      * The Pokémon receiving the item
      */

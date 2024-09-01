@@ -25,6 +25,9 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     int32 GetItemQuantity(FName ItemID) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
+    bool HasItemWithTag(FName Tag) const override;
+
+    UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     bool CanObtainItem(FName ItemID) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")

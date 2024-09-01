@@ -104,6 +104,7 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
 
     SaveGame->StartDate = PlayerMetadata->StartDate;
     SaveGame->TotalPlaytime = PlayerMetadata->TotalPlaytime;
+    SaveGame->RepelSteps = PlayerMetadata->RepelSteps;
 
     SaveGame->SaveDate = FDateTime::Now();
     return SaveGame;
@@ -114,6 +115,7 @@ void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
     PlayerMetadata->StartDate = SaveGame->StartDate;
     PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
+    PlayerMetadata->RepelSteps = SaveGame->RepelSteps;
     PlayerResetLocation.Emplace(SaveGame->ResetMap, SaveGame->ResetLocation);
 
     if (!bChangeMap) {

@@ -27,4 +27,12 @@ namespace UE::Ranges {
     concept PointerTo = requires(P &&Ptr, T &&Value) {
         { *Ptr } -> std::convertible_to<std::add_lvalue_reference_t<T>>;
     };
+
+    template <typename T>
+    concept MapPair = requires(T&& Pair) {
+        Pair.Key;
+        Pair.Value;
+    };
+
+    
 } // namespace UE::Ranges

@@ -28,4 +28,13 @@ class POKEMONCORE_API UTrainerHelpers : public UBlueprintFunctionLibrary {
 
     UFUNCTION(BlueprintPure, Category = "Player", meta = (WorldContext = "WorldContextObject"))
     static const TScriptInterface<IBag> &GetBag(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintPure, Category = "Player", meta = (WorldContext = "WorldContextObject"))
+    static bool IsRepelActive(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, Category = "Player", meta = (WorldContext = "WorldContextObject"))
+    static bool ApplyRepel(const UObject *WorldContextObject, int32 Steps);
+
+    UFUNCTION(BlueprintCallable, Category = "Player", meta = (WorldContext = "WorldContextObject"))
+    static void DecrementRepelSteps(const UObject *WorldContextObject);
 };

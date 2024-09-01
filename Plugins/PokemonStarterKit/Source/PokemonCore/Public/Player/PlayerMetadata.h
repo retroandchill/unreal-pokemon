@@ -38,6 +38,12 @@ class POKEMONCORE_API UPlayerMetadata : public UObject, public FTickableGameObje
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
     float GetTotalPlaytime() const;
 
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Player|Metadata")
+    int32 GetRepelSteps() const;
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Player|Metadata")
+    void SetRepelSteps(int32 NewRepelSteps);
+
     /**
      * Retrieves the delegate for when the time is updated
      * @return Called when the player's playtime is updated. Should be emitted about every minute.
@@ -61,6 +67,9 @@ class POKEMONCORE_API UPlayerMetadata : public UObject, public FTickableGameObje
      */
     UPROPERTY(BlueprintGetter = GetTotalPlaytime, SaveGame, Category = "Player|Metadata")
     float TotalPlaytime;
+
+    UPROPERTY(BlueprintGetter = GetRepelSteps, BlueprintSetter = SetRepelSteps, SaveGame, Category = "Player|Metadata")
+    int32 RepelSteps = 0;
 
     /**
      * The time since the last update was called

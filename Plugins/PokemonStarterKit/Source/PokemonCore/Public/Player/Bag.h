@@ -36,6 +36,9 @@ class POKEMONCORE_API IBag {
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     virtual int32 GetItemQuantity(FName ItemID) const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
+    virtual bool HasItemWithTag(FName Tag) const = 0;
+
     /**
      * Is the player able to obtain an item of this type.
      * @param ItemID The ID of the item to check against

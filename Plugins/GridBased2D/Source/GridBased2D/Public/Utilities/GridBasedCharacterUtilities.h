@@ -16,9 +16,6 @@ class GRIDBASED2D_API UGridBasedCharacterUtilities : public UBlueprintFunctionLi
     GENERATED_BODY()
 
   public:
-    UFUNCTION(BlueprintCallable, Category = "Map|Grid", meta = (DefaultToSelf = "Character"))
-    static TSet<FName> CollectComponentTagsForCurrentTile(ACharacter *Character);
-
     /**
      * Check if a tile is a valid floor tile
      * @param TargetSquare The world space location of the tile in question
