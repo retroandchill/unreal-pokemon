@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Field/FieldItemEffect.h"
 #include "InventoryScreen.h"
+#include "ItemEffectLookup.h"
+#include "Bag/Item.h"
 #include "Screens/Screen.h"
 
 #include "BagScreen.generated.h"
@@ -75,8 +77,25 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     void ShowItemCommands();
 
   public:
-    void TryUseItemOnPokemon(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon,
-                             FOnItemEffectComplete::FDelegate &&CompletionDelegate);
+    template <typename T, typename... A>
+        requires std::is_base_of_v<UFieldItemEffect, T>
+    void TryUseItem(const FItem&Item, int32 Quantity, FOnItemEffectComplete::FDelegate &&CompletionDelegate, A&&... Args) {
+        auto EffectClass = Pokemon::Items::LookupFieldItemEffect<T>(Item.ID);
+        if (EffectClass == nullptr) {
+            OnItemEffectConclude(false, Item.ID);
+            CompletionDelegate.Execute(false);
+            return;
+        }
+
+        auto Effect = NewObject<T>(this, EffectClass);
+        Effect->BindToEffectComplete(FOnItemEffectComplete::FDelegate::CreateWeakLambda(
+            this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
+                OnItemEffectConclude(bSuccess, ItemID);
+                Callback.Execute(bSuccess);
+            }));
+        Effect->Use(Item, Quantity, Forward<A>(Args)...);
+        CurrentItemEffect = Effect;
+    }
 
   private:
     void OnItemEffectConclude(bool bSuccess, FName ItemID);
