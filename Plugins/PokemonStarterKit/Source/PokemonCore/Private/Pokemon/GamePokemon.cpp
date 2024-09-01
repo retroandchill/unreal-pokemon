@@ -224,6 +224,10 @@ TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const {
     // clang-format on
 }
 
+bool UGamePokemon::HasStatusEffect(const FStatusHandle &Handle) const {
+    return StatusEffect == FName(Handle);
+}
+
 bool UGamePokemon::SetStatusEffect(FName StatusID, bool bOverwriteExisting) {
     if (StatusEffect.IsSet() && !bOverwriteExisting) {
         return false;

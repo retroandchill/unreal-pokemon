@@ -27,7 +27,10 @@ public class PokemonEditorTools : ModuleRules
                 "EditorSubsystem",
                 "UnrealInjector", 
                 "PokemonBattle",
-                "InputCore"
+                "InputCore",
+                "UnrealEd",
+                "GraphEditor",
+                "BlueprintGraph"
             }
         );
     }

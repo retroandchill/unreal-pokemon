@@ -85,6 +85,9 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     TOptional<const FStatus &> GetStatusEffect() const override;
 
+    UFUNCTION(BlueprintCallable, Category = StatusEffects, meta = (AutoCreateRefTerm = Handle))
+    bool HasStatusEffect(const FStatusHandle& Handle) const override;
+
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) override;
 

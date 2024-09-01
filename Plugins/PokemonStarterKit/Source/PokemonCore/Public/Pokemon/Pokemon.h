@@ -12,6 +12,7 @@
 
 #include "Pokemon.generated.h"
 
+struct FStatusHandle;
 struct FStatus;
 class IObtainedBlock;
 struct FOwnerInfo;
@@ -184,6 +185,9 @@ class POKEMONCORE_API IPokemon {
      * @return The status effect of the Pokémon
      */
     virtual TOptional<const FStatus &> GetStatusEffect() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = StatusEffects, meta = (AutoCreateRefTerm = Handle))
+    virtual bool HasStatusEffect(const FStatusHandle& Handle) const = 0;
 
     /**
      * Set the Pokémon's status effect
