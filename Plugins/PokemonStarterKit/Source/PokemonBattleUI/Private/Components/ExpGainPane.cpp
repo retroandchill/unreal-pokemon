@@ -20,8 +20,11 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
+    // clang-format off
     Panels = OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer) |
-             UE::Ranges::Map(this, &UExpGainPane::CreateBattlerPanel) | UE::Ranges::ToArray;
+             UE::Ranges::Map(this, &UExpGainPane::CreateBattlerPanel) |
+             UE::Ranges::ToArray;
+    // clang-format on
 }
 
 void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {

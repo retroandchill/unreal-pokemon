@@ -220,9 +220,13 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
 TArray<TScriptInterface<IInteractable>>
 UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
     auto Results = HitTestOnFacingTile(MovementDirection);
-    return Results | UE::Ranges::Map(&FOverlapResult::GetActor) |
-           UE::Ranges::Filter(&AActor::Implements<UInteractable>) | UE::Ranges::CastType<IInteractable> |
+    // clang-format off
+    return Results |
+           UE::Ranges::Map(&FOverlapResult::GetActor) |
+           UE::Ranges::Filter(&AActor::Implements<UInteractable>) |
+           UE::Ranges::CastType<IInteractable> |
            UE::Ranges::ToArray;
+    // clang-format on
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {

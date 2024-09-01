@@ -44,7 +44,11 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
     Algo::ForEach(PageButtons, &UWidget::RemoveFromParent);
 
     auto Pages = SummaryPages->GetPages();
-    PageButtons = Pages | UE::Ranges::Map(this, &USummaryTabWidget::CreatePageButton) | UE::Ranges::ToArray;
+    // clang-format off
+    PageButtons = Pages |
+                  UE::Ranges::Map(this, &USummaryTabWidget::CreatePageButton) |
+                  UE::Ranges::ToArray;
+    // clang-format on
 
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
 }

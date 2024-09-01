@@ -95,7 +95,11 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     HPChangedDelegate.AddUObject(this, &ABattlerActor::UpdateHPValue);
 
     auto MoveBlock = Pokemon->GetMoveBlock();
-    Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&CreateBattleMove, this) | UE::Ranges::ToArray;
+    // clang-format off
+    Moves = MoveBlock->GetMoves() |
+            UE::Ranges::Map(&CreateBattleMove, this) |
+            UE::Ranges::ToArray;
+    // clang-format on
     SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
@@ -132,15 +136,19 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 void ABattlerActor::BeginPlay() {
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
-    InnateAbilityHandles = InnateAbilities | UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
+    // clang-format off
+    InnateAbilityHandles = InnateAbilities |
+                           UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
                            UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
                            UE::Ranges::ToArray;
-    InnateEffectHandles = InnateEffects | UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
+    InnateEffectHandles = InnateEffects |
+                          UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
                               return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
                           }) |
                           UE::Ranges::ToArray;
+    // clang-format on
 }
 
 void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
@@ -259,7 +267,7 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
         float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;
 
         int32 ExpGain = FMath::FloorToInt32((BaseExp * Level / 5.f * TrainerBoost * (1.f / SplitFactor) *
-                                                 FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) +
+                                             FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) +
                                              1) *
                                             ExpAttributes.GetExpGainRate());
 
@@ -333,9 +341,12 @@ uint8 ABattlerActor::GetActionCount() const {
 }
 
 UE::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
-    return OwningSide->GetBattlers() | UE::Ranges::Filter([this](const TScriptInterface<IBattler> &Battler) {
+    // clang-format off
+    return OwningSide->GetBattlers() |
+           UE::Ranges::Filter([this](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() == InternalId;
            });
+    // clang-format on
 }
 
 void ABattlerActor::ShowSprite() const {

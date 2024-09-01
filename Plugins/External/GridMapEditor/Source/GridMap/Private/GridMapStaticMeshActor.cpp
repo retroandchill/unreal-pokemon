@@ -12,22 +12,28 @@ AGridMapStaticMeshActor::AGridMapStaticMeshActor(const FObjectInitializer &Objec
 }
 
 bool AGridMapStaticMeshActor::HasTerrainTag_Implementation(const FGameplayTag &Tag) const {
+    // clang-format off
     return UE::Optionals::OfNullable(TileSet) |
         UE::Optionals::Map(&UGridMapTileSet::TileTags) |
         UE::Optionals::Map(&FGameplayTagContainer::HasTag, Tag) |
         UE::Optionals::OrElse(false);
+    // clang-format on
 }
 
 bool AGridMapStaticMeshActor::HasAnyTerrainTag_Implementation(const FGameplayTagContainer &TagsToCheck) const {
+    // clang-format off
     return UE::Optionals::OfNullable(TileSet) |
         UE::Optionals::Map(&UGridMapTileSet::TileTags) |
         UE::Optionals::Map(&FGameplayTagContainer::HasAny, TagsToCheck) |
         UE::Optionals::OrElse(false);
+    // clang-format on
 }
 
 bool AGridMapStaticMeshActor::HasAllTerrainTags_Implementation(const FGameplayTagContainer &TagsToCheck) const {
+    // clang-format off
     return UE::Optionals::OfNullable(TileSet) |
         UE::Optionals::Map(&UGridMapTileSet::TileTags) |
         UE::Optionals::Map(&FGameplayTagContainer::HasAll, TagsToCheck) |
         UE::Optionals::OrElse(false);
+    // clang-format on
 }

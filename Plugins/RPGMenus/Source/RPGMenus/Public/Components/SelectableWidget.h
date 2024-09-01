@@ -138,7 +138,10 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      */
     template <typename T>
     auto GetSelectableOptions() const {
-        return SelectableButtons | UE::Ranges::CastType<T>;
+        // clang-format off
+        return SelectableButtons |
+               UE::Ranges::CastType<T>;
+        // clang-format on
     }
 
     /**

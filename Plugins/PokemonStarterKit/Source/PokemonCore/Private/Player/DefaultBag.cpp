@@ -47,15 +47,17 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
 
 bool UDefaultBag::HasItemWithTag(FName Tag) const {
     auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
+    // clang-format off
     auto Match = ItemSlots |
-        UE::Ranges::MapValue |
-        UE::Ranges::Map(&FPocket::Items) |
-        UE::Ranges::Join |
-        UE::Ranges::Map(&FItemSlot::Item) |
-        UE::Ranges::Map(ItemTable, &TDataTableProxy<FItem>::GetDataChecked) |
-        UE::Ranges::Map(&FItem::Tags) |
-        UE::Ranges::Filter(&TArray<FName>::Contains<FName>, Tag) |
-        UE::Ranges::FindFirst;
+                 UE::Ranges::MapValue |
+                 UE::Ranges::Map(&FPocket::Items) |
+                 UE::Ranges::Join |
+                 UE::Ranges::Map(&FItemSlot::Item) |
+                 UE::Ranges::Map(ItemTable, &TDataTableProxy<FItem>::GetDataChecked) |
+                 UE::Ranges::Map(&FItem::Tags) |
+                 UE::Ranges::Filter(&TArray<FName>::Contains<FName>, Tag) |
+                 UE::Ranges::FindFirst;
+    // clang-format on
     return Match.IsSet();
 }
 
@@ -73,9 +75,13 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
     }
 
     const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings->PocketInfo.FindChecked(Item->Pocket);
+    // clang-format off
     return MaxPocketSize |
-        UE::Optionals::Map([&Pocket](int32 Max) { return Pocket->Items.Num() < Max; }) |
-        UE::Optionals::OrElse(true);
+           UE::Optionals::Map([&Pocket](int32 Max) {
+               return Pocket->Items.Num() < Max;
+           }) |
+           UE::Optionals::OrElse(true);
+    // clang-format on
 }
 
 int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {

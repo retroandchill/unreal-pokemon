@@ -10,6 +10,7 @@
 void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
     Super::OnWorldBeginPlay(InWorld);
 
+    // clang-format off
     UE::Optionals::OfNullable(InWorld.GetGameInstance()) |
         UE::Optionals::Map(&UGameInstance::GetPrimaryPlayerController, false) |
         UE::Optionals::Map(&APlayerController::GetLocalPlayer) |
@@ -17,6 +18,7 @@ void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
         UE::Optionals::IfPresent([this, &InWorld](int32 PlayerIndex) {
             PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(&InWorld, PlayerIndex);
         });
+    // clang-format on
 }
 
 void UCameraSubsystem::Tick(float DeltaTime) {

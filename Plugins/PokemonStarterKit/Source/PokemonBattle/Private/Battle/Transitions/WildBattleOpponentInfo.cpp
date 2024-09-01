@@ -18,8 +18,7 @@ TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const 
                                                                           const FTransform &Transform,
                                                                           int32 ActivePokemonCount) {
     auto World = Battle.GetObject()->GetWorld();
-    check(World != nullptr)
-    ;
+    check(World != nullptr);
 
     auto SideActor = World->SpawnActor(SideClass, &Transform);
     SideActor->AttachToActor(CastChecked<AActor>(Battle.GetObject()),
@@ -31,7 +30,11 @@ TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const 
         return UnrealInjector::NewInjectedDependency<IPokemon>(World, *PokemonInfo);
     };
 
-    auto Pokemon = OpposingPokemonInfo | UE::Ranges::Map(CreatePokemon) | UE::Ranges::ToArray;
+    // clang-format off
+    auto Pokemon = OpposingPokemonInfo |
+                   UE::Ranges::Map(CreatePokemon) |
+                   UE::Ranges::ToArray;
+    // clang-format on
 
     // For a wild battle the number of Pokémon and the active side count must match
     check(Pokemon.Num() == ActivePokemonCount)

@@ -29,14 +29,21 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(FText::Format(NatureLineFormat, {{TEXT("Nature"), NatureName}}));
     }
 
-    auto EmplaceDate = [this, &Lines](const FDateTime &D) { Lines.Emplace(FormatDate(D)); };
+    auto EmplaceDate = [this, &Lines](const FDateTime &D) {
+        Lines.Emplace(FormatDate(D));
+    };
 
     auto ObtainedInformation = Pokemon->GetObtainedInformation();
     ObtainedInformation->GetTimeReceived() | UE::Optionals::IfPresent(EmplaceDate);
 
-    auto TextCheck = [this](const FText &Text) { return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text; };
-    auto ObtainedLocation = ObtainedInformation->GetObtainText() | UE::Optionals::Map(TextCheck) |
+    auto TextCheck = [this](const FText &Text) {
+        return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text;
+    };
+    // clang-format off
+    auto ObtainedLocation = ObtainedInformation->GetObtainText() |
+                            UE::Optionals::Map(TextCheck) |
                             UE::Optionals::OrElse(UnknownObtainLocation);
+    // clang-format on
     Lines.Emplace(FormatLocation(ObtainedLocation));
 
     auto ObtainMethod = ObtainedInformation->GetObtainMethod();
@@ -46,8 +53,11 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
     if (ObtainMethod == EObtainMethod::Egg) {
         ObtainedInformation->GetTimeHatched() | UE::Optionals::IfPresent(EmplaceDate);
-        auto HatchedLocation = ObtainedInformation->GetHatchedMap() | UE::Optionals::Map(TextCheck) |
+        // clang-format off
+        auto HatchedLocation = ObtainedInformation->GetHatchedMap() |
+                               UE::Optionals::Map(TextCheck) |
                                UE::Optionals::OrElse(UnknownObtainLocation);
+        // clang-format on
         Lines.Emplace(FormatLocation(HatchedLocation));
         Lines.Emplace(EggHatchedText);
     } else {
@@ -70,7 +80,11 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(CharacteristicList[BestIV % CharacteristicList.Num()]);
     }
 
-    MemoBlock->SetText(FText::FromString(Lines | UE::Ranges::Map(&FText::ToString) | UE::Ranges::ToString(TEXT("\n"))));
+    // clang-format off
+    MemoBlock->SetText(FText::FromString(Lines |
+                                         UE::Ranges::Map(&FText::ToString) |
+                                         UE::Ranges::ToString(TEXT("\n"))));
+    // clang-format on
 }
 
 FText UTrainerMemoPage::FormatDate(const FDateTime &DateTime) const {

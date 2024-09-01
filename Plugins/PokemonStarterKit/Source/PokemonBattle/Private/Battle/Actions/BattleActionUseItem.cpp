@@ -53,10 +53,13 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     auto &Owner = GetBattler();
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto ExistingHandle = AbilityComponent->FindAbilityOfClass(EffectClass);
-    auto Handle = ExistingHandle | UE::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
+    // clang-format off
+    auto Handle = ExistingHandle |
+                  UE::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
                       FGameplayAbilitySpec Spec(EffectClass, 1, INDEX_NONE, Owner.GetObject());
                       return AbilityComponent->GiveAbility(Spec);
                   });
+    // clang-format on
 
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;

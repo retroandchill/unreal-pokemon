@@ -85,7 +85,11 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Nature = StatBlock->GetNature().ID,
             .Ability = AbilityBlock->GetAbilityID(),
             .Item = HoldItem,
-            .Moves = MoveBlock->GetMoves() | UE::Ranges::Map(&IMove::ToDTO) | UE::Ranges::ToArray,
+            // clang-format off
+            .Moves = MoveBlock->GetMoves() |
+                     UE::Ranges::Map(&IMove::ToDTO) |
+                     UE::Ranges::ToArray,
+            // clang-format on
             .MoveMemory = MoveBlock->GetMoveMemory(),
             .StatusEffect = StatusEffect,
             .ObtainMethod = ObtainedBlock->GetObtainMethod(),
@@ -159,7 +163,9 @@ int32 UGamePokemon::RestoreHP(int32 Amount) {
 void UGamePokemon::FullyHeal() {
     SetCurrentHP(GetMaxHP());
     Algo::ForEach(MoveBlock->GetMoves(),
-                  [](const TScriptInterface<IMove> &Move) { Move->RecoverPP(Move->GetTotalPP()); });
+                  [](const TScriptInterface<IMove> &Move) {
+                      Move->RecoverPP(Move->GetTotalPP());
+                  });
     StatusEffect.Reset();
 }
 
@@ -212,7 +218,12 @@ void UGamePokemon::RemoveHoldItem() {
 
 TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const {
     static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
-    return StatusEffect | UE::Optionals::Map([](const FName &ID) { return StatusTable.GetData(ID); });
+    // clang-format off
+    return StatusEffect |
+           UE::Optionals::Map([](const FName &ID) {
+               return StatusTable.GetData(ID);
+           });
+    // clang-format on
 }
 
 bool UGamePokemon::SetStatusEffect(FName StatusID, bool bOverwriteExisting) {
