@@ -25,8 +25,11 @@ void USaveGameCard::NativeConstruct() {
     LocationText->SetText(Subsystem.GetCurrentLocation());
 
     Algo::ForEach(Icons, &UWidget::RemoveFromParent);
-    Icons = Subsystem.GetPlayer()->GetParty() | UE::Ranges::Map(this, &USaveGameCard::CreatePokemonIcon) |
+    // clang-format off
+    Icons = Subsystem.GetPlayer()->GetParty() |
+            UE::Ranges::Map(this, &USaveGameCard::CreatePokemonIcon) |
             UE::Ranges::ToArray;
+    // clang-format on
 
     // TODO: Badges and Pokédex info when it's ready
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "UObject/Interface.h"
+
 #include "Terrain.generated.h"
 
 struct FGameplayTag;
@@ -23,14 +24,14 @@ class MAPMETADATA_API ITerrain {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Does this actor have the given terrain tag?
      * @param Tag The tag to search for
      * @return Is the given tag present?
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = TerrainTags, meta = (AutoCreateRefTerm = Tag))
-    bool HasTerrainTag(const FGameplayTag& Tag) const;
+    bool HasTerrainTag(const FGameplayTag &Tag) const;
 
     /**
      * Does this actor have any of the given terrain tags?
@@ -38,7 +39,7 @@ public:
      * @return Is at least a single terrain tag present?
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = TerrainTags, meta = (AutoCreateRefTerm = Tags))
-    bool HasAnyTerrainTag(const FGameplayTagContainer& Tags) const;
+    bool HasAnyTerrainTag(const FGameplayTagContainer &Tags) const;
 
     /**
      * Does this actor have all of the given terrain tags?
@@ -46,6 +47,5 @@ public:
      * @return Are all the terrain tags present?
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = TerrainTags, meta = (AutoCreateRefTerm = Tags))
-    bool HasAllTerrainTags(const FGameplayTagContainer& Tags) const;
-
+    bool HasAllTerrainTags(const FGameplayTagContainer &Tags) const;
 };

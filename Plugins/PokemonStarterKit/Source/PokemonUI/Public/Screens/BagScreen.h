@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Bag/Item.h"
 #include "Field/FieldItemEffect.h"
 #include "InventoryScreen.h"
 #include "ItemEffectLookup.h"
-#include "Bag/Item.h"
 #include "Screens/Screen.h"
 
 #include "BagScreen.generated.h"
@@ -79,7 +79,8 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
   public:
     template <typename T, typename... A>
         requires std::is_base_of_v<UFieldItemEffect, T>
-    void TryUseItem(const FItem&Item, int32 Quantity, FOnItemEffectComplete::FDelegate &&CompletionDelegate, A&&... Args) {
+    void TryUseItem(const FItem &Item, int32 Quantity, FOnItemEffectComplete::FDelegate &&CompletionDelegate,
+                    A &&...Args) {
         auto EffectClass = Pokemon::Items::LookupFieldItemEffect<T>(Item.ID);
         if (EffectClass == nullptr) {
             OnItemEffectConclude(false, Item.ID);

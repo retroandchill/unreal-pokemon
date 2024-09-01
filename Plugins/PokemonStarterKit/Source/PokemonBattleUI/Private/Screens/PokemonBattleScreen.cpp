@@ -35,10 +35,13 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     Panels.Reset();
 
     int32 Index = 0;
-    Battle->GetSides() | UE::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
-        AddPanelsForSide(Index, Side);
-        Index++;
-    });
+    // clang-format off
+    Battle->GetSides() |
+        UE::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
+            AddPanelsForSide(Index, Side);
+            Index++;
+        });
+    // clang-format on
 
     BattleSwitchPane->SetBattle(CurrentBattle);
     ExpGainPane->SetBattle(CurrentBattle);

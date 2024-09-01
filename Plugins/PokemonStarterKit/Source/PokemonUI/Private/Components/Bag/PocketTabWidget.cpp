@@ -30,7 +30,11 @@ void UPocketTabWidget::NativePreConstruct() {
 
     auto PocketNames = UItemHelper::GetPocketNames();
     Algo::ForEach(PocketButtons, &UWidget::RemoveFromParent);
-    PocketButtons = PocketNames | UE::Ranges::Map(this, &UPocketTabWidget::CreatePocketButton) | UE::Ranges::ToArray;
+    // clang-format off
+    PocketButtons = PocketNames |
+                    UE::Ranges::Map(this, &UPocketTabWidget::CreatePocketButton) |
+                    UE::Ranges::ToArray;
+    // clang-format on
 
     PocketLeftActionWidget->SetEnhancedInputAction(PocketLeftAction);
     PocketRightActionWidget->SetEnhancedInputAction(PocketRightAction);

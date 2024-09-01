@@ -171,7 +171,7 @@ namespace UE::Optionals {
 
     template <typename T>
         requires Ranges::Pointer<T>
-    FORCEINLINE auto OfNullable(const T& Ptr) {
+    FORCEINLINE auto OfNullable(const T &Ptr) {
         return TOptional<Ranges::TRawPointerType<T>>(Ranges::GetRawPointer<T>(Ptr));
     }
 

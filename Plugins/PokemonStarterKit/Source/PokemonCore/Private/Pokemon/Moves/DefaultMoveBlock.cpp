@@ -83,8 +83,13 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
             [&Move](const TScriptInterface<IMove> &MoveData) { return MoveData->GetMoveData().ID == Move.Move; });
     };
 
-    return Species.Moves | UE::Ranges::Filter(MoveLevelInRange) | UE::Ranges::Filter(DoesNotKnowMove) |
-           UE::Ranges::Map(&FLevelUpMove::Move) | UE::Ranges::ToArray;
+    // clang-format off
+    return Species.Moves |
+           UE::Ranges::Filter(MoveLevelInRange) |
+           UE::Ranges::Filter(DoesNotKnowMove) |
+           UE::Ranges::Map(&FLevelUpMove::Move) |
+           UE::Ranges::ToArray;
+    // clang-format on
 }
 
 void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {

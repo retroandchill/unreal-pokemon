@@ -11,9 +11,11 @@
 
 TOptional<UPokemonPanel &>
 UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
+    // clang-format off
     return GetSelectableOptions<UPokemonPanel>() |
-           UE::Ranges::Filter([&Pokemon](UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
+           UE::Ranges::Filter([&Pokemon](const UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
            UE::Ranges::FindFirst;
+    // clang-format on
 }
 
 void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInterface<IPokemon>> Pokemon) {

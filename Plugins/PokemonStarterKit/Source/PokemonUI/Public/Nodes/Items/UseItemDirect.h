@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GiveItemToPokemon.h"
-#include "UseItem.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "UseItem.h"
+
 #include "UseItemDirect.generated.h"
 
 class UBagScreen;
 /**
- * 
+ *
  */
 UCLASS(meta = (HideThen))
 class POKEMONUI_API UUseItemDirect : public UUseItem {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Use the given item directly on the field.
      * @param Screen The screen calling the item effect

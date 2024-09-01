@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Concepts/EqualExists.h"
 #include "Concepts/UEContainer.h"
-#include "Concepts/UObjectPointer.h"
 #include <TypeTraits.h>
 
 /**
@@ -29,10 +27,9 @@ namespace UE::Ranges {
     };
 
     template <typename T>
-    concept MapPair = requires(T&& Pair) {
+    concept MapPair = requires(T &&Pair) {
         Pair.Key;
         Pair.Value;
     };
 
-    
 } // namespace UE::Ranges

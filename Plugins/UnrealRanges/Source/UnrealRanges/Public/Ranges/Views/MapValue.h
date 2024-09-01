@@ -13,14 +13,12 @@ namespace UE::Ranges {
             requires ranges::input_range<R> && MapPair<T>
         auto operator()(R &&Range) const {
             if constexpr (std::is_lvalue_reference_v<T>) {
-                return Range | Map([](T Pair) -> auto& { return Pair.Value; });
+                return Range | Map([](T Pair) -> auto & { return Pair.Value; });
             } else {
                 return Range | Map([](T Pair) { return Pair.Value; });
             }
-            
         }
     };
-
 
     constexpr ranges::views::view_closure<FMapValue> MapValue;
 } // namespace UE::Ranges

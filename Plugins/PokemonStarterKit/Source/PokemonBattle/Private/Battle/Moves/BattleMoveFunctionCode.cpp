@@ -70,8 +70,13 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     BattleMove = CastChecked<UUseMovePayload>(TriggerEventData->OptionalObject)->Move;
 
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
+    // clang-format off
     auto TagsList = BattleMove->GetTags() |
-                    UE::Ranges::Map([](FName Tag) -> FGameplayTag { return Lookup.GetTag(Tag); }) | UE::Ranges::ToArray;
+                    UE::Ranges::Map([](FName Tag) -> FGameplayTag {
+                        return Lookup.GetTag(Tag);
+                    }) |
+                    UE::Ranges::ToArray;
+    // clang-format on
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
     TagsList.Emplace(Pokemon::Battle::Moves::GetUserCategoryTag(BattleMove->GetCategory()));
 

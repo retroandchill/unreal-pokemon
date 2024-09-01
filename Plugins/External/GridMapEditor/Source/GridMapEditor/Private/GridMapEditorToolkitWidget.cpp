@@ -54,7 +54,7 @@ void SGridMapEditorToolkitWidget::Construct(const FArguments &InArgs) {
                                                       [SNew(STextBlock)
                                                            .Text(this, &SGridMapEditorToolkitWidget::GetActiveToolName)
                                                            .TextStyle(FAppStyle::Get(), "FoliageEditMode."
-                                                                                           "ActiveToolName.Text")]]
+                                                                                        "ActiveToolName.Text")]]
 
                                        // Paint Options
                                        + SVerticalBox::Slot().AutoHeight()[BuildPaintOptions()]
@@ -137,9 +137,9 @@ TSharedRef<SWidget> SGridMapEditorToolkitWidget::BuildPaintOptions() {
            // Tilemap Layers
            + SVerticalBox::Slot().AutoHeight()
                  [SNew(SHorizontalBox)
-                      .ToolTipText(
-                          LOCTEXT("GridMapPaintLayer_ToolTip", "Paint layer of the gridmap. Allows you to place "
-                                                               "multiple tiles direclty on top of each other.")) +
+                      .ToolTipText(LOCTEXT("GridMapPaintLayer_ToolTip",
+                                           "Paint layer of the gridmap. Allows you to place "
+                                           "multiple tiles direclty on top of each other.")) +
                   SHorizontalBox::Slot()
                       .Padding(FGridMapStyleSet::StandardLeftPadding)
                       .FillWidth(1.0f)

@@ -4,7 +4,9 @@
 #include "CoreMinimal.h"
 #include "GameData.h"
 #include "IndexedTableRow.h"
-#include "Memory/RootMemoryPointers.h"
+#include "Ranges/Views/CastType.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/MapValue.h"
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it
@@ -13,8 +15,8 @@
 template <typename T>
     requires std::is_base_of_v<FIndexedTableRow, T>
 class TDataTableProxy final : public IGameData {
-  public:
-    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(MakeUniqueRoot(DataTable)) {
+public:
+    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable) {
     }
 
     UScriptStruct *GetStructType() const override {
@@ -43,44 +45,17 @@ class TDataTableProxy final : public IGameData {
         return DataTable.Get();
     }
 
-    TArray<T *> GetAllRows() const {
-        TArray<T *> Rows;
-        DataTable->GetAllRows(TEXT("ForEach"), Rows);
-        return Rows;
+    auto GetAllRows() const {
+        // clang-format off
+        return DataTable->GetRowMap() |
+               UE::Ranges::MapValue |
+               UE::Ranges::CastType<T>;
+        // clang-format on
     }
 
-    /**
-     * Iterate through the data table's rows and execute the callback on each entry
-     * @param Callback The callback method
-     */
-    void ForEach(TFunctionRef<void(const T &)> Callback) const {
-        for (auto Rows = GetAllRows(); auto Row : Rows) {
-            const T &Ref = *Row;
-            Callback(Ref);
-        }
-    }
-
-    TArray<const T *> Filter(TFunctionRef<bool(const T &)> Predicate) const {
-        TArray<const T *> Rows;
-        ForEach([&Rows, &Predicate](const T &Row) {
-            if (Predicate(Row)) {
-                Rows.Add(&Row);
-            }
-        });
-
-        return Rows;
-    }
-
-    template <typename R>
-    TArray<R> Map(TFunctionRef<R(const T &)> Mapping) const {
-        TArray<R> Ret;
-        ForEach([&Ret, &Mapping](const T &Row) { Ret.Add(Mapping(Row)); });
-        return Ret;
-    }
-
-  private:
+private:
     /**
      * A pointer to the data table asset that this proxy object contains
      */
-    TUniqueRootPtr<UDataTable> DataTable;
+    TStrongObjectPtr<UDataTable> DataTable;
 };

@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GiveItemToPokemon.h"
-#include "UseItem.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "UseItem.h"
 
 #include "UseItemOnPokemon.generated.h"
 

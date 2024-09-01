@@ -31,11 +31,18 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
     auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
-        return FText::FromString(Items | UE::Ranges::Map(ExtractString) | UE::Ranges::ToString(Conjunction.ToString()));
+        // clang-format off
+        return FText::FromString(Items |
+            UE::Ranges::Map(ExtractString) |
+            UE::Ranges::ToString(Conjunction.ToString()));
+        // clang-format on
     }
 
+    // clang-format off
     auto JoinedItems = UE::Ranges::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
-                       UE::Ranges::Map(ExtractString) | UE::Ranges::ToString(TEXT(", "));
+                       UE::Ranges::Map(ExtractString) |
+                           UE::Ranges::ToString(TEXT(", "));
+    // clang-format on
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));
     }
