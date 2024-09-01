@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Terrain.h"
+#include "TerrainTags/Terrain.h"
 #include "Engine/StaticMeshActor.h"
 
 #include "GridMapStaticMeshActor.generated.h"

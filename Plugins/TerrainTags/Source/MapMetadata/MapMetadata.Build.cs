@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class TerrainTags : ModuleRules
+public class MapMetadata : ModuleRules
 {
-	public TerrainTags(ReadOnlyTargetRules Target) : base(Target)
+	public MapMetadata(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		

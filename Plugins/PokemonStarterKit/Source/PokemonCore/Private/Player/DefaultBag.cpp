@@ -11,7 +11,7 @@
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OrElse.h"
 #include "Ranges/Views/Map.h"
-#include "Ranges/Views/Value.h"
+#include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
@@ -48,7 +48,7 @@ int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
 bool UDefaultBag::HasItemWithTag(FName Tag) const {
     auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     auto Match = ItemSlots |
-        UE::Ranges::Value |
+        UE::Ranges::MapValue |
         UE::Ranges::Map(&FPocket::Items) |
         UE::Ranges::Join |
         UE::Ranges::Map(&FItemSlot::Item) |

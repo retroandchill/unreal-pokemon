@@ -26,7 +26,7 @@ public class GridMap : ModuleRules
 			new string[]
 			{
 				"Core",
-				"TerrainTags"
+				"MapMetadata"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

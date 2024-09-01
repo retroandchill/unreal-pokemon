@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FTerrainTagsModule : public IModuleInterface
+class FMapMetadataModule : public IModuleInterface
 {
 public:
 

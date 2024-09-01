@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "TerrainTagUtilities.h"
-#include "Terrain.h"
+#include "TerrainTags/TerrainTagUtilities.h"
+#include "TerrainTags/Terrain.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/OverlapResult.h"
 #include "GameFramework/Character.h"
