@@ -19,7 +19,10 @@ namespace UE::Ranges {
         /**
          * Default constructor, used for constant closure declarations.
          */
-        explicit constexpr TTerminalClosure() requires std::is_default_constructible_v<F> : Functor() {}
+        explicit constexpr TTerminalClosure()
+            requires std::is_default_constructible_v<F>
+            : Functor() {
+        }
 
         /**
          * Construct a new instance by moving the target functor into the closure.

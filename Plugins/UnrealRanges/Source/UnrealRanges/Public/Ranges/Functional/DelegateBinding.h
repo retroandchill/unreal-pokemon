@@ -9,7 +9,7 @@ namespace UE::Ranges {
 
     template <typename D, typename... A>
         requires UEDelegate<D>
-    constexpr auto InvokeDelegate(D&& Delegate, A&&... Args) {
+    constexpr auto InvokeDelegate(D &&Delegate, A &&...Args) {
         if constexpr (SingleBindDelegate<D>) {
             check(Delegate.IsBound())
             return Delegate.Execute(Forward<A>(Args)...);
@@ -17,5 +17,5 @@ namespace UE::Ranges {
             Delegate.Broadcast(Forward<A>(Args)...);
         }
     }
-    
-}
+
+} // namespace UE::Ranges

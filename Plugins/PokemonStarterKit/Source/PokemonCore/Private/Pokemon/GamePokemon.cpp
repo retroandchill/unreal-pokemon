@@ -163,9 +163,7 @@ int32 UGamePokemon::RestoreHP(int32 Amount) {
 void UGamePokemon::FullyHeal() {
     SetCurrentHP(GetMaxHP());
     Algo::ForEach(MoveBlock->GetMoves(),
-                  [](const TScriptInterface<IMove> &Move) {
-                      Move->RecoverPP(Move->GetTotalPP());
-                  });
+                  [](const TScriptInterface<IMove> &Move) { Move->RecoverPP(Move->GetTotalPP()); });
     StatusEffect.Reset();
 }
 

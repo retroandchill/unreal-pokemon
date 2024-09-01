@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "range/v3/functional/bind_back.hpp"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Concepts/Delegates.h"
 #include "Ranges/Functional/DelegateBinding.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
 
@@ -48,12 +48,10 @@ namespace UE::Ranges {
 
     template <typename D, typename... A>
         requires UEDelegate<D>
-    constexpr auto CreateBinding(D&& Delegate, A&&... Args) {
-        return ranges::bind_back([Callback = Forward<D>(Delegate)]<typename... B>(B&&... Vals) {
-            return InvokeDelegate(Callback, Forward<B>(Vals)...);
-        }, Forward<A>(Args)...);
+    constexpr auto CreateBinding(D &&Delegate, A &&...Args) {
+        return ranges::bind_back([Callback = Forward<D>(Delegate)]<typename... B>(
+                                     B &&...Vals) { return InvokeDelegate(Callback, Forward<B>(Vals)...); },
+                                 Forward<A>(Args)...);
     }
-
-    
 
 } // namespace UE::Ranges

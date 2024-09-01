@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "TileMeshThumbnailScene.h"
 #include "Engine/StaticMeshActor.h"
 #include "ThumbnailRendering/SceneThumbnailInfo.h"
@@ -26,7 +25,7 @@ void FTileMeshThumbnailScene::SetStaticMesh(UStaticMesh *StaticMesh) {
     if (StaticMesh != nullptr) {
         PreviewActor->SetActorLocation(FVector(0, 0, 0), false);
 
-        //Force LOD 0
+        // Force LOD 0
         PreviewActor->GetStaticMeshComponent()->ForcedLodModel = 1;
 
         PreviewActor->GetStaticMeshComponent()->UpdateBounds();
@@ -52,9 +51,12 @@ void FTileMeshThumbnailScene::SetActorRotation(const FRotator &Rotation) {
 void FTileMeshThumbnailScene::GetViewMatrixParameters(const float InFOVDegrees, FVector &OutOrigin,
                                                       float &OutOrbitPitch, float &OutOrbitYaw,
                                                       float &OutOrbitZoom) const {
-    check(PreviewActor);
-    check(PreviewActor->GetStaticMeshComponent());
-    check(PreviewActor->GetStaticMeshComponent()->GetStaticMesh());
+    check(PreviewActor)
+    ;
+    check(PreviewActor->GetStaticMeshComponent())
+    ;
+    check(PreviewActor->GetStaticMeshComponent()->GetStaticMesh())
+    ;
 
     const float HalfFOVRadians = FMath::DegreesToRadians<float>(InFOVDegrees) * 0.5f;
     // Add extra size to view slightly outside of the sphere to compensate for perspective
@@ -62,8 +64,8 @@ void FTileMeshThumbnailScene::GetViewMatrixParameters(const float InFOVDegrees, 
     const float BoundsZOffset = GetBoundsZOffset(PreviewActor->GetStaticMeshComponent()->Bounds);
     const float TargetDistance = HalfMeshSize / FMath::Tan(HalfFOVRadians);
 
-    auto ThumbnailInfo = Cast<USceneThumbnailInfo>(
-        PreviewActor->GetStaticMeshComponent()->GetStaticMesh()->ThumbnailInfo);
+    auto ThumbnailInfo =
+        Cast<USceneThumbnailInfo>(PreviewActor->GetStaticMeshComponent()->GetStaticMesh()->ThumbnailInfo);
     if (ThumbnailInfo != nullptr) {
         if (TargetDistance + ThumbnailInfo->OrbitZoom < 0) {
             ThumbnailInfo->OrbitZoom = -TargetDistance;

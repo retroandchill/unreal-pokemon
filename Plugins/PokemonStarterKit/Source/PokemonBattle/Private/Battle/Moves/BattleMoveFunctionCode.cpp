@@ -176,7 +176,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
+                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
         }
         return bSuccess;
     };
@@ -195,7 +195,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                    *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
+                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
         }
         return bHitResult;
     };
@@ -237,7 +237,7 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TSc
     if (BattleMove->GetCategory() != EMoveDamageCategory::Status && FMath::IsNearlyZero(TypeMod)) {
         TargetAbilities.AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
         AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                       .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
+            .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
         UE_LOG(LogBattle, Display, TEXT("%s is unaffected by %s!"), *Target->GetNickname().ToString(),
                *BattleMove->GetDisplayName().ToString())
         return false;

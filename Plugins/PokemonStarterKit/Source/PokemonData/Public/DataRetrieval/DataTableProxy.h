@@ -5,8 +5,8 @@
 #include "GameData.h"
 #include "IndexedTableRow.h"
 #include "Ranges/Views/CastType.h"
-#include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/MapValue.h"
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it
@@ -15,7 +15,7 @@
 template <typename T>
     requires std::is_base_of_v<FIndexedTableRow, T>
 class TDataTableProxy final : public IGameData {
-  public:
+public:
     explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable) {
     }
 
@@ -46,12 +46,14 @@ class TDataTableProxy final : public IGameData {
     }
 
     auto GetAllRows() const {
+        // clang-format off
         return DataTable->GetRowMap() |
-            UE::Ranges::MapValue |
-            UE::Ranges::CastType<T>;
+               UE::Ranges::MapValue |
+               UE::Ranges::CastType<T>;
+        // clang-format on
     }
 
-  private:
+private:
     /**
      * A pointer to the data table asset that this proxy object contains
      */

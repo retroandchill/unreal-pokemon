@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Ranges/Views/ContainerView.h"
 
-
 namespace UE::Ranges {
 
     namespace Detail {
@@ -24,10 +23,11 @@ namespace UE::Ranges {
             requires UEContainer<T>
         struct TRangeTraits<T> {
             using Value = typename TRangeTraits<TUEContainerView<std::remove_reference_t<T>>>::Value;
-            using CommonReference = typename TRangeTraits<TUEContainerView<std::remove_reference_t<T>>>::CommonReference;
+            using CommonReference =
+                typename TRangeTraits<TUEContainerView<std::remove_reference_t<T>>>::CommonReference;
             using Reference = typename TRangeTraits<TUEContainerView<std::remove_reference_t<T>>>::Reference;
         };
-    }
+    } // namespace Detail
 
     template <typename T>
         requires ranges::range<T> || UEContainer<T>
@@ -36,9 +36,9 @@ namespace UE::Ranges {
     template <typename T>
         requires ranges::range<T> || UEContainer<T>
     using TRangeReference = typename Detail::TRangeTraits<T>::Reference;
-    
+
     template <typename T>
         requires ranges::range<T> || UEContainer<T>
-    using TRangeCommonReference = typename Detail::TRangeTraits<T>::CommonReference ;
-    
-}
+    using TRangeCommonReference = typename Detail::TRangeTraits<T>::CommonReference;
+
+} // namespace UE::Ranges

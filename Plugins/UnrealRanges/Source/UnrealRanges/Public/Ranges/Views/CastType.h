@@ -25,10 +25,10 @@ namespace UE::Ranges {
                 return Range | Map([](const FScriptInterface &Interface) {
                            return TScriptInterface<T>(Interface.GetObject());
                        });
-            } else if constexpr (std::is_same_v<S, uint8*>) {
-                return Range | Map([](S Object) -> T& { return *static_cast<T*>(static_cast<void*>(Object)); });
+            } else if constexpr (std::is_same_v<S, uint8 *>) {
+                return Range | Map([](S Object) -> T & { return *static_cast<T *>(static_cast<void *>(Object)); });
             } else {
-                return Range | Map([](S Object) -> T& { return static_cast<T&>(*Object); });
+                return Range | Map([](S Object) -> T & { return static_cast<T &>(*Object); });
             }
         }
     };

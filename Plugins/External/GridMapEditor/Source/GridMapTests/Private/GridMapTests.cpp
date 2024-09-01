@@ -2,16 +2,12 @@
 
 #define LOCTEXT_NAMESPACE "FGridMapTestsModule"
 
-void FGridMapTestsModule::StartupModule()
-{
-    
+void FGridMapTestsModule::StartupModule() {
 }
 
-void FGridMapTestsModule::ShutdownModule()
-{
-    
+void FGridMapTestsModule::ShutdownModule() {
 }
 
 #undef LOCTEXT_NAMESPACE
-    
+
 IMPLEMENT_MODULE(FGridMapTestsModule, GridMapTests)

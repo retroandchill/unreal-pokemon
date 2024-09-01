@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/TerminalClosure.h"
 #include "Ranges/Concepts/Types.h"
+#include "Ranges/TerminalClosure.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/range/concepts.hpp>
@@ -18,8 +18,8 @@ namespace UE::Ranges {
          * @param KeyFunctor The functor to call to get the keys
          * @param ValueFunctor The functor to call to get the values
          */
-        constexpr TToMapInvoker(K &&KeyFunctor, V&& ValueFunctor) : KeyFunctor(MoveTemp(KeyFunctor)),
-            ValueFunctor(MoveTemp(ValueFunctor)) {
+        constexpr TToMapInvoker(K &&KeyFunctor, V &&ValueFunctor)
+            : KeyFunctor(MoveTemp(KeyFunctor)), ValueFunctor(MoveTemp(ValueFunctor)) {
         }
 
         /**
@@ -48,7 +48,7 @@ namespace UE::Ranges {
         K KeyFunctor;
         V ValueFunctor;
     };
-    
+
     template <typename K>
     struct TToMapValueBinding {
 
@@ -66,16 +66,16 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
-        constexpr auto operator()(A&&...Args) {
+        constexpr auto operator()(A &&...Args) {
             using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
             return TTerminalClosure<TToMapInvoker<K, BindingType>>(
                 TToMapInvoker<K, BindingType>(MoveTemp(Functor), CreateBinding<A...>(Forward<A>(Args)...)));
         }
 
-    private:
+      private:
         K Functor;
     };
-    
+
     struct FToMapKeyBinding {
 
         /**
@@ -90,8 +90,6 @@ namespace UE::Ranges {
             return TToMapValueBinding<BindingType>(CreateBinding<A...>(Forward<A>(Args)...));
         }
     };
-
-    
 
     /**
      * Terminal invoker for ending a range pipe by performing a for each loop on the closure.

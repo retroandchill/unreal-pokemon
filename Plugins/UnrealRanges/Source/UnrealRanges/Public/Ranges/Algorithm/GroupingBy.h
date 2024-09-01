@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/RangeConcepts.h"
-#include "Ranges/TerminalClosure.h"
 #include "Ranges/Concepts/Types.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/RangeConcepts.h"
+#include "Ranges/TerminalClosure.h"
 
 namespace UE::Ranges {
 

@@ -22,20 +22,14 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
     auto Species = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetData(DTO.Species);
     check(Species != nullptr)
     auto KnowableMoves =
-        Species->Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) {
-            return Move.Level <= DTO.Level;
-        });
+        Species->Moves.FilterByPredicate([&DTO](const FLevelUpMove &Move) { return Move.Level <= DTO.Level; });
 
     MoveMemory.Append(DTO.MoveMemory);
-    Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove &Move) {
-        return Move.Move;
-    });
+    Algo::Transform(KnowableMoves, MoveMemory, [](const FLevelUpMove &Move) { return Move.Move; });
 
     // We want to get the last possible level a move can be learned at for our purposes
     Algo::Reverse(KnowableMoves);
-    Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) {
-        return Move.Move;
-    });
+    Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
     const auto &Settings = *GetDefault<UPokemonDataSettings>();
@@ -86,9 +80,7 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
     };
     auto DoesNotKnowMove = [this](const FLevelUpMove &Move) {
         return !Moves.ContainsByPredicate(
-            [&Move](const TScriptInterface<IMove> &MoveData) {
-                return MoveData->GetMoveData().ID == Move.Move;
-            });
+            [&Move](const TScriptInterface<IMove> &MoveData) { return MoveData->GetMoveData().ID == Move.Move; });
     };
 
     // clang-format off

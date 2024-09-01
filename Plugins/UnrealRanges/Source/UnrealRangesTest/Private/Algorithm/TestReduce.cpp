@@ -5,17 +5,15 @@
 
 BEGIN_DEFINE_SPEC(FTestReduce, "Unit Tests.Ranges.Algorithm",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
- 
+
 TArray<int32> DemoArray;
- 
+
 END_DEFINE_SPEC(FTestReduce);
 
 void FTestReduce::Define() {
     Describe("Test Reduce Operation", [this] {
-        BeforeEach([this] {
-            DemoArray = {1, 2, 3, 4, 5};
-        });
-        
+        BeforeEach([this] { DemoArray = {1, 2, 3, 4, 5}; });
+
         It("Should be able to reduce a range", [this] {
             // clang-format off
             auto Value = DemoArray |

@@ -27,10 +27,9 @@ namespace UE::Ranges {
     };
 
     template <typename T>
-    concept MapPair = requires(T&& Pair) {
+    concept MapPair = requires(T &&Pair) {
         Pair.Key;
         Pair.Value;
     };
 
-    
 } // namespace UE::Ranges

@@ -42,7 +42,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
     auto JoinedItems = UE::Ranges::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
                        UE::Ranges::Map(ExtractString) |
                            UE::Ranges::ToString(TEXT(", "));
-        // clang-format on
+    // clang-format on
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));
     }

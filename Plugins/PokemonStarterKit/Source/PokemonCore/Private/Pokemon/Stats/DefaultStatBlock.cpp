@@ -44,6 +44,7 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
     using enum EPokemonStatType;
+    // clang-format off
     Stats = StatTable.GetAllRows() |
             UE::Ranges::Filter([](const FStat &Stat) {
                 return Stat.Type != Battle;
@@ -57,6 +58,7 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
 
                 return NewObject<UDefaultMainBattleStatEntry>(this)->Initialize(Stat.ID, IV, EV);
             });
+    // clang-format on
 }
 
 int32 UDefaultStatBlock::GetLevel() const {

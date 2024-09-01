@@ -150,9 +150,7 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
 
 bool APokemonBattle::ActionSelectionFinished() const {
     return Algo::NoneOf(ExpectedActionCount,
-                        [this](const TPair<FGuid, uint8> &Pair) {
-                            return CurrentActionCount[Pair.Key] < Pair.Value;
-                        });
+                        [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
 #if WITH_EDITOR

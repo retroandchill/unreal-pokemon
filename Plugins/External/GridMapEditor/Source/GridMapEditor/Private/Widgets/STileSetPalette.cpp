@@ -21,64 +21,64 @@ void STileSetPalette::Construct(const FArguments &InArgs) {
     ChildSlot
         [SNew(SVerticalBox)
 
-         +
-         SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Fill)
-             [SNew(SBorder)
-                  .BorderImage(FAppStyle::GetBrush("DetailsView.CategoryTop"))
-                  .Padding(FMargin(6.f, 2.f))
-                  .BorderBackgroundColor(FLinearColor(.6f, .6f, .6f, 1.0f))
-                      [SNew(SHorizontalBox) +
-                       SHorizontalBox::Slot()
-                           .HAlign(HAlign_Left)
-                           .AutoWidth()[
-                               // +Add Foliage Type button
-                               SAssignNew(AddTileSetCombo, SComboButton)
-                                   .ForegroundColor(FLinearColor::White)
-                                   .ButtonStyle(FAppStyle::Get(), "FlatButton.Success")
-                                   .OnGetMenuContent(this, &STileSetPalette::GetAddTileSetPicker)
-                                   .ContentPadding(FMargin(1.f))
-                                   .ButtonContent()
-                                       [SNew(SHorizontalBox) +
-                                        SHorizontalBox::Slot()
-                                            .VAlign(VAlign_Center)
-                                            .AutoWidth()
-                                            .Padding(1.f)[SNew(STextBlock)
-                                                              .TextStyle(FAppStyle::Get(), "FoliageEditMode."
-                                                                                              "AddFoliageType.Text")
-                                                              .Font(FAppStyle::Get().GetFontStyle("FontAwesome.9"))
-                                                              .Text(FText::FromString(
-                                                                  FString(TEXT("\xf067"))) /*fa-plus*/)] +
-                                        SHorizontalBox::Slot()
-                                            .VAlign(VAlign_Center)
-                                            .Padding(1.f)[SNew(STextBlock)
-                                                              .Text(LOCTEXT("AddTileSetButtonLabel", "Add Tile Set"))
-                                                              .TextStyle(FAppStyle::Get(), "FoliageEditMode."
-                                                                                              "AddFoliageType.Text")]]]
+         + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Fill)
+               [SNew(SBorder)
+                    .BorderImage(FAppStyle::GetBrush("DetailsView.CategoryTop"))
+                    .Padding(FMargin(6.f, 2.f))
+                    .BorderBackgroundColor(FLinearColor(.6f, .6f, .6f, 1.0f))
+                        [SNew(SHorizontalBox) +
+                         SHorizontalBox::Slot()
+                             .HAlign(HAlign_Left)
+                             .AutoWidth()[
+                                 // +Add Foliage Type button
+                                 SAssignNew(AddTileSetCombo, SComboButton)
+                                     .ForegroundColor(FLinearColor::White)
+                                     .ButtonStyle(FAppStyle::Get(), "FlatButton.Success")
+                                     .OnGetMenuContent(this, &STileSetPalette::GetAddTileSetPicker)
+                                     .ContentPadding(FMargin(1.f))
+                                     .ButtonContent()
+                                         [SNew(SHorizontalBox) +
+                                          SHorizontalBox::Slot()
+                                              .VAlign(VAlign_Center)
+                                              .AutoWidth()
+                                              .Padding(1.f)[SNew(STextBlock)
+                                                                .TextStyle(FAppStyle::Get(),
+                                                                           "FoliageEditMode."
+                                                                           "AddFoliageType.Text")
+                                                                .Font(FAppStyle::Get().GetFontStyle("FontAwesome.9"))
+                                                                .Text(FText::FromString(
+                                                                    FString(TEXT("\xf067"))) /*fa-plus*/)] +
+                                          SHorizontalBox::Slot()
+                                              .VAlign(VAlign_Center)
+                                              .Padding(1.f)[SNew(STextBlock)
+                                                                .Text(LOCTEXT("AddTileSetButtonLabel", "Add Tile Set"))
+                                                                .TextStyle(FAppStyle::Get(), "FoliageEditMode."
+                                                                                             "AddFoliageType.Text")]]]
 
-                       + SHorizontalBox::Slot()
-                             .HAlign(HAlign_Fill)
-                             .VAlign(VAlign_Center)
-                             .Padding(6.f, 0.f)[SAssignNew(SearchBoxPtr, SSearchBox)
-                                                    .HintText(LOCTEXT("SearchTileSetPaletteHint", "Search Tile Sets"))
-                                                    .OnTextChanged(this, &STileSetPalette::OnSearchTextChanged)]
-                       /*
-                       // View Options
-                       + SHorizontalBox::Slot()
-                       .HAlign(HAlign_Right)
-                       .AutoWidth()
-                       [
-                           SNew( SComboButton )
-                           .ContentPadding(0)
-                           .ForegroundColor( FSlateColor::UseForeground() )
-                           .ButtonStyle( FAppStyle::Get(), "ToggleButton" )
-                           .OnGetMenuContent(this, &SFoliagePalette::GetViewOptionsMenuContent)
-                           .ButtonContent()
-                           [
-                               SNew(SImage)
-                               .Image( FAppStyle::GetBrush("GenericViewButton") )
-                           ]
-                       ]
-                       */
+                         + SHorizontalBox::Slot()
+                               .HAlign(HAlign_Fill)
+                               .VAlign(VAlign_Center)
+                               .Padding(6.f, 0.f)[SAssignNew(SearchBoxPtr, SSearchBox)
+                                                      .HintText(LOCTEXT("SearchTileSetPaletteHint", "Search Tile Sets"))
+                                                      .OnTextChanged(this, &STileSetPalette::OnSearchTextChanged)]
+                         /*
+                         // View Options
+                         + SHorizontalBox::Slot()
+                         .HAlign(HAlign_Right)
+                         .AutoWidth()
+                         [
+                             SNew( SComboButton )
+                             .ContentPadding(0)
+                             .ForegroundColor( FSlateColor::UseForeground() )
+                             .ButtonStyle( FAppStyle::Get(), "ToggleButton" )
+                             .OnGetMenuContent(this, &SFoliagePalette::GetViewOptionsMenuContent)
+                             .ButtonContent()
+                             [
+                                 SNew(SImage)
+                                 .Image( FAppStyle::GetBrush("GenericViewButton") )
+                             ]
+                         ]
+                         */
     ]]
 
          + SVerticalBox::Slot().AutoHeight().HAlign(HAlign_Fill)[BuildPaletteView()]

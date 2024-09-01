@@ -29,16 +29,12 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         Lines.Emplace(FText::Format(NatureLineFormat, {{TEXT("Nature"), NatureName}}));
     }
 
-    auto EmplaceDate = [this, &Lines](const FDateTime &D) {
-        Lines.Emplace(FormatDate(D));
-    };
+    auto EmplaceDate = [this, &Lines](const FDateTime &D) { Lines.Emplace(FormatDate(D)); };
 
     auto ObtainedInformation = Pokemon->GetObtainedInformation();
     ObtainedInformation->GetTimeReceived() | UE::Optionals::IfPresent(EmplaceDate);
 
-    auto TextCheck = [this](const FText &Text) {
-        return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text;
-    };
+    auto TextCheck = [this](const FText &Text) { return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text; };
     // clang-format off
     auto ObtainedLocation = ObtainedInformation->GetObtainText() |
                             UE::Optionals::Map(TextCheck) |

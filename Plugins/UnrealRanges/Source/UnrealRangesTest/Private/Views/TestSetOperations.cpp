@@ -5,17 +5,15 @@
 
 BEGIN_DEFINE_SPEC(FTestSetOperations, "Unit Tests.Ranges.View",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
- 
+
 TArray<int32> DemoArray;
- 
+
 END_DEFINE_SPEC(FTestSetOperations);
 
 void FTestSetOperations::Define() {
     Describe("Test Set Operations", [this] {
-        BeforeEach([this] {
-            DemoArray = {1, 2, 3, 4, 5};
-        });
-        
+        BeforeEach([this] { DemoArray = {1, 2, 3, 4, 5}; });
+
         It("Should be able to convert a view into a set", [this] {
             // clang-format off
             auto Values = DemoArray |

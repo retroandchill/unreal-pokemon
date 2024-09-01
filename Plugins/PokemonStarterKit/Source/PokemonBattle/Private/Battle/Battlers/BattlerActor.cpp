@@ -267,7 +267,7 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
         float SplitFactor = Participants.Contains(Battler->GetInternalId()) ? 1.f : 2.f;
 
         int32 ExpGain = FMath::FloorToInt32((BaseExp * Level / 5.f * TrainerBoost * (1.f / SplitFactor) *
-                                             FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) +
+                                                 FMath::Pow((2.f * Level + 10) / (Level + BattlerLevel + 10), 2.5f) +
                                              1) *
                                             ExpAttributes.GetExpGainRate());
 

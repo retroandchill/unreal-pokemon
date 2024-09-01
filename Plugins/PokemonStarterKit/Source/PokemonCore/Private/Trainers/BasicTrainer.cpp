@@ -76,9 +76,7 @@ int32 UBasicTrainer::GetPayout() const {
 }
 
 void UBasicTrainer::HealParty() {
-    Algo::ForEach(Party, [](const TScriptInterface<IPokemon> &Pokemon) {
-        Pokemon->FullyHeal();
-    });
+    Algo::ForEach(Party, [](const TScriptInterface<IPokemon> &Pokemon) { Pokemon->FullyHeal(); });
 }
 
 const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {

@@ -18,7 +18,7 @@ TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const 
                                                                           const FTransform &Transform,
                                                                           int32 ActivePokemonCount) {
     auto World = Battle.GetObject()->GetWorld();
-    check(World != nullptr);
+    check(World != nullptr)
 
     auto SideActor = World->SpawnActor(SideClass, &Transform);
     SideActor->AttachToActor(CastChecked<AActor>(Battle.GetObject()),

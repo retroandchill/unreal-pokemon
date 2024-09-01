@@ -3,21 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/RangeConcepts.h"
-#include "Ranges/TerminalClosure.h"
 #include "Ranges/Concepts/Types.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/RangeConcepts.h"
+#include "Ranges/TerminalClosure.h"
 
 namespace UE::Ranges {
 
     template <typename F, typename I>
     struct TReduceInvoker {
-        constexpr explicit TReduceInvoker(F &&Functor, I&& Identity) : Functor(MoveTemp(Functor)), Identity(Identity) {
+        constexpr explicit TReduceInvoker(F &&Functor, I &&Identity) : Functor(MoveTemp(Functor)), Identity(Identity) {
         }
 
         template <typename R>
             requires ranges::input_range<R> || UEContainer<R>
-        constexpr auto operator()(R&& Range) {
+        constexpr auto operator()(R &&Range) {
             using RangeElementType = TRangeCommonReference<R>;
             auto RunningTotal = Identity;
             for (RangeElementType Elem : Range) {
@@ -26,21 +26,19 @@ namespace UE::Ranges {
             return RunningTotal;
         }
 
-
-    private:
+      private:
         F Functor;
         I Identity;
     };
-    
+
     struct FReduce {
-        
+
         template <typename I, typename F, typename... A>
             requires FunctionalType<F>
-        constexpr auto operator()(I&& Identity, F &&Functor, A &&...Args) const {
+        constexpr auto operator()(I &&Identity, F &&Functor, A &&...Args) const {
             using BindingType = decltype(CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
-            return TTerminalClosure<TReduceInvoker<BindingType, I>>(
-                TReduceInvoker<BindingType, I>(CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...),
-                Forward<I>(Identity)));
+            return TTerminalClosure<TReduceInvoker<BindingType, I>>(TReduceInvoker<BindingType, I>(
+                CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...), Forward<I>(Identity)));
         }
     };
 
@@ -49,5 +47,5 @@ namespace UE::Ranges {
      * accumulation function, and returns the reduced value.
      */
     constexpr FReduce Reduce;
-    
-}
+
+} // namespace UE::Ranges

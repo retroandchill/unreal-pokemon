@@ -4,14 +4,13 @@
 #include "InteractiveToolManager.h"
 #include "Misc/AutomationTest.h"
 
-BEGIN_DEFINE_SPEC(
-    TestGridEditorMode, "Unit Tests.Editor.Tools.GridMap.EditorMode",
-    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+BEGIN_DEFINE_SPEC(TestGridEditorMode, "Unit Tests.Editor.Tools.GridMap.EditorMode",
+                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-UEdMode* EditorMode;
-UInteractiveToolManager* InteractiveToolManager;
-UWorld* World;
-AStaticMeshActor* PolygonMesh;
+UEdMode *EditorMode;
+UInteractiveToolManager *InteractiveToolManager;
+UWorld *World;
+AStaticMeshActor *PolygonMesh;
 
 END_DEFINE_SPEC(TestGridEditorMode)
 
@@ -34,7 +33,6 @@ void TestGridEditorMode::Define() {
         });
 
         AfterEach([this] {
-        
             // Resetting the interface out of Modeling Tools
             InteractiveToolManager->DeactivateTool(EToolSide::Left, EToolShutdownType::Completed);
             GLevelEditorModeTools().ActivateMode(FBuiltinEditorModes::EM_Default);

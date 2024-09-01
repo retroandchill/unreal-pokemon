@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Concepts/UObjectPointer.h"
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Views/Filter.h"
-#include "Ranges/Concepts/UObjectPointer.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/view/view.hpp>
