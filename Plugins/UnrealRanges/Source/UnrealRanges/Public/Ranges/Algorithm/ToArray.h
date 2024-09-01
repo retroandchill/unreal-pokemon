@@ -23,12 +23,14 @@ namespace UE::Ranges {
          * @return The result of the array
          */
         template <typename R, typename T = ranges::range_value_t<R>>
-            requires ranges::input_range<R>
+            requires ranges::input_range<R> || UEContainer<T>
         constexpr auto operator()(R &&Range) {
             TArray<T> Ret;
 
             if constexpr (ranges::sized_range<T>) {
                 Ret.Reserve(ranges::size(Range));
+            } else if constexpr (UEContainer<T>) {
+                Ret.Reserve(Range.Num());
             }
 
             if constexpr (std::movable<T>) {

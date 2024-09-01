@@ -4,7 +4,9 @@
 #include "CoreMinimal.h"
 #include "GameData.h"
 #include "IndexedTableRow.h"
-#include "Memory/RootMemoryPointers.h"
+#include "Ranges/Views/CastType.h"
+#include "Ranges/Views/MapValue.h"
+#include "Ranges/Views/ContainerView.h"
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it
@@ -14,7 +16,7 @@ template <typename T>
     requires std::is_base_of_v<FIndexedTableRow, T>
 class TDataTableProxy final : public IGameData {
   public:
-    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(MakeUniqueRoot(DataTable)) {
+    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable) {
     }
 
     UScriptStruct *GetStructType() const override {
@@ -43,28 +45,15 @@ class TDataTableProxy final : public IGameData {
         return DataTable.Get();
     }
 
-    TArray<T *> GetAllRows() const {
-        TArray<T *> Rows;
-        DataTable->GetAllRows(TEXT("ForEach"), Rows);
-        return Rows;
-    }
-
-    /**
-     * Iterate through the data table's rows and execute the callback on each entry
-     * @param Callback The callback method
-     */
-    template <typename F>
-        requires std::invocable<F, const T&>
-    void ForEach(F&& Callback) const {
-        for (auto Rows = GetAllRows(); auto Row : Rows) {
-            const T &Ref = *Row;
-            Callback(Ref);
-        }
+    auto GetAllRows() const {
+        return DataTable->GetRowMap() |
+            UE::Ranges::MapValue |
+            UE::Ranges::CastType<T>;
     }
 
   private:
     /**
      * A pointer to the data table asset that this proxy object contains
      */
-    TUniqueRootPtr<UDataTable> DataTable;
+    TStrongObjectPtr<UDataTable> DataTable;
 };

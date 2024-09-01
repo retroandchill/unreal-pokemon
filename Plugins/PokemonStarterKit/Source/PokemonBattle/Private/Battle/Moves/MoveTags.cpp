@@ -4,6 +4,7 @@
 #include "Battle/Tags.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
+#include "Ranges/Algorithm/ForEach.h"
 
 namespace Pokemon::Battle::Moves {
 
@@ -58,7 +59,7 @@ namespace Pokemon::Battle::Moves {
     FLookup::FLookup() {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FMoveData>();
-        TypeTable.ForEach([this](const FMoveData &Move) {
+        TypeTable.GetAllRows() | UE::Ranges::ForEach([this](const FMoveData &Move) {
             for (auto Tag : Move.Tags) {
                 if (Tags.Contains(Tag)) {
                     continue;

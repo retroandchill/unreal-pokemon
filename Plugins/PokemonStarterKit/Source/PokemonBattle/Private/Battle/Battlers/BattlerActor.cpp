@@ -76,7 +76,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     }
 
     auto StatBlock = WrappedPokemon->GetStatBlock();
-    StatTable.ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
+    StatTable.GetAllRows() | UE::Ranges::ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
         if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
             auto StatValue = StatBlock->GetStat(Stat.ID);
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
@@ -198,7 +198,7 @@ void ABattlerActor::RefreshStats() {
     auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
     auto StatBlock = WrappedPokemon->GetStatBlock();
-    StatTable.ForEach([this, &StatBlock](const FStat &Stat) {
+    StatTable.GetAllRows() | UE::Ranges::ForEach([this, &StatBlock](const FStat &Stat) {
         if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
             auto StatValue = StatBlock->GetStat(Stat.ID);
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
