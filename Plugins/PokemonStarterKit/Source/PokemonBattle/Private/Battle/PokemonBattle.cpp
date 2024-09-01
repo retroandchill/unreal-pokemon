@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/PokemonBattle.h"
-#include "Algo/AnyOf.h"
-#include "Algo/ForEach.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
@@ -15,15 +13,10 @@
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
-#include "Chaos/ChaosPerfTest.h"
-#include "Lookup/InjectionUtilities.h"
-#include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "range/v3/view/join.hpp"
-#include "range/v3/view/transform.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -190,6 +183,7 @@ UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() c
 UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     // clang-format off
     return Sides |
+           UE::Ranges::Map(&IBattleSide::GetBattlers) |
            UE::Ranges::Join |
            UE::Ranges::Filter(&IBattler::IsNotFainted);
     // clang-format on
