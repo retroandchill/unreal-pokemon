@@ -1,5 +1,6 @@
 ﻿#include "Asserts.h"
 #include "Misc/AutomationTest.h"
+#include "Ranges/Algorithm/GroupingBy.h"
 #include "Ranges/Views/MapKey.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/MapValue.h"
@@ -35,7 +36,7 @@ void FTestMapOperations::Define() {
             return true;
         });
 
-        It("SHould be able to extract values from a map", [this] {
+        It("Should be able to extract values from a map", [this] {
             // clang-format off
             auto Keys = DemoMap |
                 UE::Ranges::MapValue |
@@ -46,6 +47,19 @@ void FTestMapOperations::Define() {
             UE_CHECK_EQUAL(4, Keys[1]);
             UE_CHECK_EQUAL(6, Keys[2]);
 
+            return true;
+        });
+
+        It("Should be able to group a range into a map", [this] {
+            std::array Values = {std::make_pair(1, "Number"), std::make_pair(1, "Value"), std::make_pair(2, "Other")};
+            auto Maps = Values |
+                UE::Ranges::GroupingBy([](const std::pair<int32, const char*>& Pair){ return Pair.first; });
+            UE_ASSERT_EQUAL(2, Maps.Num());
+            UE_ASSERT_TRUE(Maps.Contains(1));
+            UE_ASSERT_EQUAL(2, Maps[1].Num());
+            UE_ASSERT_TRUE(Maps.Contains(2));
+            UE_ASSERT_EQUAL(1, Maps[1].Num());
+            
             return true;
         });
     });

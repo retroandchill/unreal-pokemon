@@ -24,7 +24,7 @@ namespace UE::Ranges {
          * @return The value of the first element, or empty if the range is empty.
          */
         template <typename R>
-            requires ranges::input_range<R>
+            requires ranges::input_range<R> || UEContainer<R>
         auto operator()(R &&Range) {
             using ResultType = Optionals::TOptionalType<ranges::range_common_reference_t<R>>;
             auto Result = Range.begin();

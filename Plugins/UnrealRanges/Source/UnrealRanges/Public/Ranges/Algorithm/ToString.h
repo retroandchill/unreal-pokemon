@@ -24,7 +24,7 @@ namespace UE::Ranges {
          * @return The combined string.
          */
         template <typename R>
-            requires ranges::input_range<R> && std::is_convertible_v<ranges::range_value_t<R>, FString>
+            requires (ranges::input_range<R> || UEContainer<R>) && std::is_convertible_v<ranges::range_value_t<R>, FString>
         constexpr auto operator()(R &&Range) const {
             return FString::Join(Forward<R>(Range), Conjunction.GetData());
         }

@@ -38,7 +38,9 @@ namespace UE::Ranges {
         template <typename R>
             requires UEContainer<R>
         void operator()(R &Range) const {
-            Algo::ForEach(Range, Functor);
+            for (auto& Elem : Range) {
+                std::invoke(Functor, Elem);
+            }
         }
 
       private:
