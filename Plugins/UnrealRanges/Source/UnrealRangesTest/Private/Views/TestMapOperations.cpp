@@ -5,7 +5,7 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/MapValue.h"
 
-BEGIN_DEFINE_SPEC(FTestMapOperations, "Unit Tests.Ranges.Map",
+BEGIN_DEFINE_SPEC(FTestMapOperations, "Unit Tests.Ranges.View",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
  
 TMap<int32, int32> DemoMap;

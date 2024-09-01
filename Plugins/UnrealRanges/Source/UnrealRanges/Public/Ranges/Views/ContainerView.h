@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/RangeConcepts.h"
+#include "Ranges/Concepts/UEContainer.h"
+#include "Ranges/Concepts/EqualExists.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/range/concepts.hpp>

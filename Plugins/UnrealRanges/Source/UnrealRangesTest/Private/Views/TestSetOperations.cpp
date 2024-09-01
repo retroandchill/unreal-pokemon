@@ -3,7 +3,7 @@
 #include "Ranges/Algorithm/ToSet.h"
 #include "Ranges/Views/Map.h"
 
-BEGIN_DEFINE_SPEC(FTestSetOperations, "Unit Tests.Ranges.Set",
+BEGIN_DEFINE_SPEC(FTestSetOperations, "Unit Tests.Ranges.View",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
  
 TArray<int32> DemoArray;

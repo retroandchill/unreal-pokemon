@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ForEach.h"
+#include "Ranges/Concepts/Types.h"
 #include "Ranges/Optional/Types.h"
 
 THIRD_PARTY_INCLUDES_START
@@ -26,7 +27,7 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R> || UEContainer<R>
         auto operator()(R &&Range) {
-            using ResultType = Optionals::TOptionalType<ranges::range_common_reference_t<R>>;
+            using ResultType = Optionals::TOptionalType<TRangeCommonReference<R>>;
             auto Result = Range.begin();
             return Result != Range.end() ? TOptional<ResultType>(*Result) : TOptional<ResultType>();
         }

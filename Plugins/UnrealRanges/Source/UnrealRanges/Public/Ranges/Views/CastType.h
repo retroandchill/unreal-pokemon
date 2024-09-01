@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Map.h"
-#include "Ranges/RangeConcepts.h"
+#include "Ranges/Concepts/UObjectPointer.h"
 #include "Ranges/Utilities/Casts.h"
 
 namespace UE::Ranges {

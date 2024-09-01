@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/TerminalClosure.h"
+#include "Ranges/Concepts/Types.h"
 #include "Ranges/Functional/Bindings.h"
 
 namespace UE::Ranges {
@@ -30,9 +31,9 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R> || UEContainer<R>
         auto operator()(R &&Range) const {
-            using RangeType = ranges::range_common_reference_t<R>;
+            using RangeType = TRangeCommonReference<R>;
             using KeyType = std::remove_cvref_t<decltype(std::invoke(Functor, std::declval<RangeType>()))>;
-            using ValueType = ranges::range_value_t<R>;
+            using ValueType = TRangeValue<R>;
 
             TMap<KeyType, TArray<ValueType>> Result;
             for (RangeType &&Elem : Range) {

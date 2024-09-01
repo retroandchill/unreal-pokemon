@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/TerminalClosure.h"
+#include "Ranges/Concepts/Types.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/range/concepts.hpp>
@@ -29,7 +30,7 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R> || UEContainer<R>
         auto operator()(R &&Range) const {
-            using RangeType = ranges::range_common_reference_t<R>;
+            using RangeType = TRangeCommonReference<R>;
             using KeyType = std::remove_cvref_t<decltype(std::invoke(KeyFunctor, std::declval<RangeType>()))>;
             using ValueType = std::remove_cvref_t<decltype(std::invoke(ValueFunctor, std::declval<RangeType>()))>;
 
