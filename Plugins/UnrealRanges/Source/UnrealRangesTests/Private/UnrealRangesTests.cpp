@@ -1,4 +1,4 @@
-﻿#include "UnrealRangesTest.h"
+﻿#include "UnrealRangesTests.h"
 
 #define LOCTEXT_NAMESPACE "FUnrealRangesTestModule"
 

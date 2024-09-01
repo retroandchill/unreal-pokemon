@@ -20,7 +20,7 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "UnrealRangesTest",
+			"Name": "UnrealRangesTests",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}

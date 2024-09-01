@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class UnrealRangesTest : ModuleRules
+public class UnrealRangesTests : ModuleRules
 {
-    public UnrealRangesTest(ReadOnlyTargetRules Target) : base(Target)
+    public UnrealRangesTests(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
