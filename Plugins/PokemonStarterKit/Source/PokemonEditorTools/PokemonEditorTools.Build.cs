@@ -30,7 +30,8 @@ public class PokemonEditorTools : ModuleRules
                 "InputCore",
                 "UnrealEd",
                 "GraphEditor",
-                "BlueprintGraph"
+                "BlueprintGraph",
+                "ToolWidgets"
             }
         );
     }

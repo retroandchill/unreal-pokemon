@@ -4,6 +4,7 @@
 #include "Pins/DataHandlePinFactory.h"
 #include "DataManager.h"
 #include "SGraphPinNameList.h"
+#include "Pins/DataHandlePinStructPin.h"
 #include "Ranges/Algorithm/ToArray.h"
 
 
@@ -12,24 +13,11 @@ TSharedPtr<SGraphPin> FDataHandlePinFactory::CreatePin(UEdGraphPin *Pin) const {
         return FGraphPanelPinFactory::CreatePin(Pin);
     }
 
-    auto &DataManager = FDataManager::GetInstance();
     auto PinStructType = Cast<UScriptStruct>(Pin->PinType.PinSubCategoryObject.Get());
-    auto StructName = PinStructType->GetMetaData("StructType");
-    UScriptStruct* ReferencedType = nullptr;
-    for (TObjectIterator<UScriptStruct> It; It; ++It) {
-        if (It->GetName() == StructName && DataManager.HasDataTable(*It)) {
-            ReferencedType = *It;
-            break;
-        }
-    }
-    if (ReferencedType == nullptr) {
+    check(PinStructType != nullptr)
+    if (!Pokemon::Data::IsValidDataTableStruct(PinStructType)) {
         return FGraphPanelPinFactory::CreatePin(Pin);
     }
 
-    auto StructRows = DataManager.GetDataTable(ReferencedType).GetTableRowNames();
-    auto NamesList = StructRows |
-        UE::Ranges::Map([](FName Name) { return MakeShared<FName>(Name).ToSharedPtr(); }) |
-        UE::Ranges::ToArray;
-
-    return SNew(SGraphPinNameList, Pin, NamesList);
+    return SNew(SDataHandlePinStructPin, Pin);
 }

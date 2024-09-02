@@ -2,28 +2,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataStructHandle.h"
 #include "GameData.h"
-#include "IndexedTableRow.h"
-#include "Ranges/Concepts/Structs.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/MapValue.h"
-
-namespace Pokemon::Data {
-    /**
-     * Concept for a struct that is used for a data proxy.
-     * @tparam T The type to verify the struct status against
-     */
-    template <typename T>
-    concept DataStruct = UE::Ranges::UEStruct<T> && std::is_base_of_v<FIndexedTableRow, T>;
-
-    /**
-     * The struct for
-     */
-    template <typename T>
-    concept DataStructHandle = DataStruct<typename std::remove_cvref_t<T>::FValueType> &&
-        std::convertible_to<FName, std::remove_reference_t<T>> && std::convertible_to<T, FName>;
-}
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it

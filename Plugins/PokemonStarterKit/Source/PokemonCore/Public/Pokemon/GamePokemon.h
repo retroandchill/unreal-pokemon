@@ -9,6 +9,7 @@
 
 #include "GamePokemon.generated.h"
 
+struct FStatusHandle;
 class IMoveBlock;
 struct FPokemonDTO;
 class IMove;
@@ -85,7 +86,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
 
     TOptional<const FStatus &> GetStatusEffect() const override;
 
-    UFUNCTION(BlueprintCallable, Category = StatusEffects, meta = (AutoCreateRefTerm = Handle))
+    UFUNCTION(BlueprintPure, Category = StatusEffects, meta = (AutoCreateRefTerm = Handle))
     bool HasStatusEffect(const FStatusHandle& Handle) const override;
 
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
