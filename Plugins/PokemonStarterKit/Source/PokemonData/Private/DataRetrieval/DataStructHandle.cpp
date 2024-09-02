@@ -2,6 +2,7 @@
 
 
 #include "DataRetrieval/DataStructHandle.h"
+#include "Misc/OutputDeviceNull.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Map.h"
 
@@ -85,4 +86,36 @@ FString Pokemon::Data::FStructWrapper::ExportText() const {
     FString Ret;
     GetStruct()->ExportText(Ret, Struct.get(), Struct.get(), nullptr, PPF_None, nullptr);
     return Ret;
+}
+
+void Pokemon::Data::FStructWrapper::FromExportString(FStringView ExportString, int32 PortFlags) {
+    if (ExportString.IsEmpty()) {
+        return;
+    }
+    
+    auto StructClass = GetStruct();
+    Struct = std::unique_ptr<void, FStructDestructor>(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass));
+    StructClass->InitializeStruct(Struct.get());
+
+    FOutputDeviceNull NullOut;
+    StructClass->ImportText(ExportString.GetData(), Struct.get(), nullptr, PortFlags, &NullOut,
+        StructClass->GetFName().ToString(), true);
+}
+
+bool UDataStructHandleUtilities::NotEqual_HandleHandle(const FDataStructHandle &, FName) {
+    check(false)
+    return false;
+}
+
+DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle) {
+    P_GET_STRUCT_REF(FDataStructHandle, DataHandle)
+    P_GET_PROPERTY(FNameProperty, Other)
+    P_FINISH;
+
+    bool bResult;
+    P_NATIVE_BEGIN;
+    bResult = DataHandle.RowID  != Other;
+    P_NATIVE_END;
+
+    *static_cast<bool *>(RESULT_PARAM) = bResult;
 }

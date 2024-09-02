@@ -13,8 +13,13 @@ void SDataHandlePinStructPin::Construct(const FArguments &, UEdGraphPin *InGraph
     SGraphPin::Construct(SGraphPin::FArguments(), InGraphPin);
 }
 
-TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
+void SDataHandlePinStructPin::ParseDefaultValueData() {
     Handle = CastChecked<UScriptStruct>(GraphPinObj->PinType.PinSubCategoryObject.Get());
+    Handle.FromExportString(GraphPinObj->GetDefaultAsString(), PPF_SerializedAsImportText);
+}
+
+TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
+    ParseDefaultValueData();
     Options = Handle.GetStructOptions();
 
     // clang-format off

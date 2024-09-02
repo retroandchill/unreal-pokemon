@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
 #include "Ranges/Concepts/Structs.h"
+#include "UObject/UnrealTypePrivate.h"
 #include <memory>
+
+#include "DataStructHandle.generated.h"
 
 namespace Pokemon::Data {
     /**
@@ -125,11 +128,30 @@ namespace Pokemon::Data {
     void SetRowID(FName RowID);
 
     FString ExportText() const;
+    void FromExportString(FStringView ExportString, int32 PortFlags = PPF_None);
 
     private:
         std::unique_ptr<void, FStructDestructor> Struct;
     };
 }
+
+USTRUCT(BlueprintType, BlueprintInternalUseOnly)
+struct POKEMONDATA_API FDataStructHandle {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere)
+    FName RowID;
+};
+
+UCLASS()
+class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibrary {
+    GENERATED_BODY()
+
+public:
+    UFUNCTION(BlueprintCallable, Category = DataHandles, CustomThunk, meta = (CustomStructureParam = DataHandle))
+    static bool NotEqual_HandleHandle(const FDataStructHandle& DataHandle, FName Other);
+    DECLARE_FUNCTION(execNotEqual_HandleHandle);
+};
 
 #define DECLARE_DATA_HANDLE(ClassName, StructType) \
     public: \

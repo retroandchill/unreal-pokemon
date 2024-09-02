@@ -12,8 +12,16 @@ TSharedRef<IPropertyTypeCustomization> FWrappedKeyCustomization::MakeInstance(FN
 
 void FWrappedKeyCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow &HeaderRow,
                                                IPropertyTypeCustomizationUtils &CustomizationUtils) {
-    HeaderRow.NameContent()[PropertyHandle->CreatePropertyNameWidget()]
-        .ValueContent()[PropertyHandle->GetChildHandle(PropertyName)->CreatePropertyValueWidget()];
+    // clang-format off
+    HeaderRow.NameContent()
+        [
+            PropertyHandle->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        [
+            PropertyHandle->GetChildHandle(PropertyName)->CreatePropertyValueWidget()
+        ];
+    // clang-format on
 }
 
 void FWrappedKeyCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> PropertyHandle,

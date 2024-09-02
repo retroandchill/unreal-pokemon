@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataStructHandleNode.h"
 #include "K2Node_Switch.h"
 #include "K2Node_SwitchName.h"
 #include "DataRetrieval/DataStructHandle.h"
@@ -14,11 +15,14 @@ struct FStatusHandle;
  * 
  */
 UCLASS()
-class POKEMONBLUEPRINTNODES_API UK2Node_SwitchOnDataHandle : public UK2Node_Switch {
+class POKEMONBLUEPRINTNODES_API UK2Node_SwitchOnDataHandle : public UK2Node_Switch, public IDataStructHandleNode {
     GENERATED_BODY()
 
 public:
     explicit UK2Node_SwitchOnDataHandle(const FObjectInitializer& ObjectInitializer);
+    void Initialize(UScriptStruct* Struct);
+
+    UScriptStruct* GetStructType() const final;
     void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
     void PostLoad() override;
 
@@ -40,8 +44,11 @@ protected:
     void RemovePin(UEdGraphPin* TargetPin) override;
     
 private:
+    UPROPERTY()
+    TObjectPtr<UScriptStruct> StructType;
+    
     UPROPERTY(EditAnywhere, Category = PinOptions)
-    TArray<FStatusHandle> PinHandles;
+    TArray<FDataStructHandle> PinHandles;
 
     UPROPERTY()
     TArray<FName> PinNames;

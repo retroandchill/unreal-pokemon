@@ -24,6 +24,7 @@ public:
     void Construct(const FArguments &InArgs, UEdGraphPin* InGraphPin);
 
 protected:
+    void ParseDefaultValueData() override;
     TSharedRef<SWidget> GetDefaultValueWidget() override;
 
 private:

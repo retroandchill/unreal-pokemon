@@ -1,6 +1,7 @@
 ﻿#include "PokemonEditorTools.h"
 #include "Bag/Item.h"
 #include "Battle/Status.h"
+#include "Details/DataHandleCustomization.h"
 #include "Details/WrappedKeyCustomization.h"
 #include "Pins/DataHandlePinFactory.h"
 #include "Species/Stat.h"
@@ -16,6 +17,9 @@ void FPokemonEditorToolsModule::StartupModule() {
     FEdGraphUtilities::RegisterVisualPinFactory(MakeShared<FDataHandlePinFactory>());
     
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+    PropertyModule.RegisterCustomPropertyTypeLayout(TEXT("DataStructHandle"),
+        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FDataHandleCustomization::MakeInstance));
+    
     REGISTER_WRAPPED_PROPERTY(PropertyModule, PocketKey, PocketName);
     REGISTER_WRAPPED_PROPERTY(PropertyModule, BattleStat, Stat);
     

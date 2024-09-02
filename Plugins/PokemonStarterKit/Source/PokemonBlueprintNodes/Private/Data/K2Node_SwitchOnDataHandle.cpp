@@ -11,8 +11,16 @@ UK2Node_SwitchOnDataHandle::UK2Node_SwitchOnDataHandle(const FObjectInitializer&
     : Super(ObjectInitializer)
 {
     FunctionName = TEXT("NotEqual_HandleHandle");
-    FunctionClass = UStatusEffectHelper::StaticClass();
+    FunctionClass = UDataStructHandleUtilities::StaticClass();
     OrphanedPinSaveMode = ESaveOrphanPinMode::SaveNone;
+}
+
+void UK2Node_SwitchOnDataHandle::Initialize(UScriptStruct *Struct) {
+    StructType = Struct;
+}
+
+UScriptStruct * UK2Node_SwitchOnDataHandle::GetStructType() const {
+    return StructType;
 }
 
 void UK2Node_SwitchOnDataHandle::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
@@ -38,7 +46,8 @@ FText UK2Node_SwitchOnDataHandle::GetTooltipText() const {
 }
 
 FText UK2Node_SwitchOnDataHandle::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    return NSLOCTEXT("K2Node", "Switch_Tag", "Switch on Status Handle");
+    auto StructName = StructType != nullptr ? StructType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
+    return FText::FormatNamed(NSLOCTEXT("K2Node", "Switch_Tag", "Switch on {Handle}"), TEXT("Handle"), StructName);
 }
 
 bool UK2Node_SwitchOnDataHandle::ShouldShowNodeProperties() const {
@@ -46,18 +55,29 @@ bool UK2Node_SwitchOnDataHandle::ShouldShowNodeProperties() const {
 }
 
 void UK2Node_SwitchOnDataHandle::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
-    // actions get registered under specific object-keys; the idea is that 
-    // actions might have to be updated (or deleted) if their object-key is  
-    // mutated (or removed)... here we use the node's class (so if the node 
-    // type disappears, then the action should go with it)
-    // to keep from needlessly instantiating a UBlueprintNodeSpawner, first   
-    // check to make sure that the registrar is looking for actions of this type
-    // (could be regenerating actions for a specific asset, and therefore the 
-    // registrar would only accept actions corresponding to that asset)
+    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
+                                    UScriptStruct *Subclass) {
+        auto TypedNode = CastChecked<UK2Node_SwitchOnDataHandle>(Node);
+        TypedNode->Initialize(Subclass);
+    };
+    
     if (auto ActionKey = GetClass(); ActionRegistrar.IsOpenForRegistration(ActionKey)) {
+        for (TObjectIterator<UScriptStruct> It; It; ++It) {
+            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(*It, true) || !Pokemon::Data::IsValidDataTableStruct(*It)) {
+                continue;
+            }
+
+            UBlueprintNodeSpawner *Spawner = UBlueprintNodeSpawner::Create(ActionKey);
+            check(Spawner)
+
+            using FCustomizeCallback = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
+            Spawner->CustomizeNodeDelegate = FCustomizeCallback::CreateLambda(CustomizeCallback, *It);
+            ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+        }
+        auto StructTypes = FDataManager::GetInstance().GetStructTypes();
+        
         auto NodeSpawner = UBlueprintNodeSpawner::Create(GetClass());
         check(NodeSpawner != nullptr);
-
         ActionRegistrar.AddBlueprintAction(ActionKey, NodeSpawner);
     }
 }
@@ -68,7 +88,7 @@ void UK2Node_SwitchOnDataHandle::AddPinToSwitchNode() {
 
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, PinName);
     if (PinHandles.Num() < PinNames.Num()) {
-        PinHandles.Add(FStatusHandle());
+        PinHandles.Add(FDataStructHandle(PinNames.Last()));
     }
 }
 
@@ -118,7 +138,7 @@ void UK2Node_SwitchOnDataHandle::CreateFunctionPin() {
 }
 
 void UK2Node_SwitchOnDataHandle::CreateSelectionPin() {
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, FStatusHandle::StaticStruct(),
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, StructType,
                                  TEXT("Selection"));
 }
 
