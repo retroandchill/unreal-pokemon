@@ -66,9 +66,6 @@ class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = Name,
         meta = (DisplayName = "Convert To StatusHandle", CompactNodeTitle = "->", BlueprintAutocast))
     static FStatusHandle ConvertNameToStatusHandle(FName Name);
-
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = StatusHandle)
-    static bool NotEqual_HandleHandle(FStatusHandle Handle, FName Name);
 };
 
 static_assert(UE::Ranges::UEStruct<FStatus>);

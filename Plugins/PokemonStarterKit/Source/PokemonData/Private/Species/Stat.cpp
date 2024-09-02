@@ -35,6 +35,10 @@ TArray<FName> UStatHelper::GetBattleStatNames() {
     // clang-format on
 }
 
+FName UStatHelper::ConvertStatHandleToName(const FStatHandle &Struct) {
+    return Struct;
+}
+
 TArray<FName> UStatHelper::GetMainBattleStatNames() {
     auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     // clang-format off
@@ -45,4 +49,32 @@ TArray<FName> UStatHelper::GetMainBattleStatNames() {
            UE::Ranges::Map(&FStat::ID) |
            UE::Ranges::ToArray;
     // clang-format on
+}
+
+FStatHandle UStatHelper::ConvertNameToItemHandle(FName Name) {
+    return Name;
+}
+
+FName UStatHelper::ConvertMainStatHandleToName(const FMainStatHandle &Struct) {
+    return Struct;
+}
+
+FMainStatHandle UStatHelper::ConvertNameToMainStatHandle(FName Name) {
+    return Name;
+}
+
+FName UStatHelper::ConvertBattleStatHandleToName(const FBattleStatHandle &Struct) {
+    return Struct;
+}
+
+FBattleStatHandle UStatHelper::ConvertNameToBattleStatHandle(FName Name) {
+    return Name;
+}
+
+FName UStatHelper::ConvertItemMainBattleStatHandleToName(const FMainBattleStatHandle &Struct) {
+    return Struct;
+}
+
+FMainBattleStatHandle UStatHelper::ConverMainBattleStatHandle(FName Name) {
+    return Name;
 }

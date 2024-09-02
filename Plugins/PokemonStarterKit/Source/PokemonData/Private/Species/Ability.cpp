@@ -5,3 +5,11 @@
 TArray<FName> UAbilityHelper::GetAbilityNames() {
     return FDataManager::GetInstance().GetDataTable<FAbility>().GetTableRowNames();
 }
+
+FName UAbilityHelper::ConvertAbilityHandleHandleToName(const FAbilityHandle &Struct) {
+    return Struct;
+}
+
+FAbilityHandle UAbilityHelper::ConvertNameToAbilityHandle(FName Name) {
+    return Name;
+}

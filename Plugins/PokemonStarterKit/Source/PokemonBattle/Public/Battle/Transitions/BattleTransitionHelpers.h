@@ -6,6 +6,7 @@
 #include "BattleInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Pokemon/PokemonDTO.h"
+#include "Species/SpeciesData.h"
 
 #include "BattleTransitionHelpers.generated.h"
 
@@ -25,5 +26,5 @@ class POKEMONBATTLE_API UBattleTransitionHelpers : public UBlueprintFunctionLibr
      * @return The created battle information
      */
     UFUNCTION(BlueprintPure, Category = Battle)
-    static FBattleInfo MakeSingleWildBattle(FName Species, int32 Level = 5, bool bLossAllowed = false);
+    static FBattleInfo MakeSingleWildBattle(FSpeciesHandle Species, int32 Level = 5, bool bLossAllowed = false);
 };

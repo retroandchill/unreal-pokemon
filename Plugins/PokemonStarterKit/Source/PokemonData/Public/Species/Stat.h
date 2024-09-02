@@ -5,6 +5,7 @@
 #include "AttributeSet.h"
 #include "IndexedTableRow.h"
 #include "PokemonStatType.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "UObject/Object.h"
 
 #include "Stat.generated.h"
@@ -58,6 +59,61 @@ struct POKEMONDATA_API FStat : public FIndexedTableRow {
     FGameplayAttribute StagesAttribute;
 };
 
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FStatHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FStatHandle, FStat)
+
+    /**
+     * The name of the battle stat.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.StatHelper.GetStatNames"))
+    FName RowID;
+};
+
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FMainStatHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FMainStatHandle, FStat)
+
+    /**
+     * The name of the battle stat.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainStatNames"))
+    FName RowID;
+};
+
+/**
+ * Thin wrapper around a battle stat name, that forces the user to select a battle stat.
+ */
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FBattleStatHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FBattleStatHandle, FStat)
+
+    /**
+     * The name of the battle stat.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.StatHelper.GetBattleStatNames"))
+    FName RowID;
+};
+
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FMainBattleStatHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FMainBattleStatHandle, FStat)
+
+    /**
+     * The name of the battle stat.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.StatHelper.GetMainBattleStatNames"))
+    FName RowID;
+};
+
 /**
  * Blueprint function library for getting stat data out.
  */
@@ -93,28 +149,40 @@ class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetBattleStatNames();
+
+    UFUNCTION(BlueprintPure, Category = StatHandle,
+        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+            AutoCreateRefTerm = Struct))
+    static FName ConvertStatHandleToName(const FStatHandle& Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+        meta = (DisplayName = "Convert To Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FStatHandle ConvertNameToItemHandle(FName Name);
+
+    UFUNCTION(BlueprintPure, Category = StatHandle,
+        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+            AutoCreateRefTerm = Struct))
+    static FName ConvertMainStatHandleToName(const FMainStatHandle& Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+        meta = (DisplayName = "Convert To Main Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FMainStatHandle ConvertNameToMainStatHandle(FName Name);
+
+    UFUNCTION(BlueprintPure, Category = StatHandle,
+        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+            AutoCreateRefTerm = Struct))
+    static FName ConvertBattleStatHandleToName(const FBattleStatHandle& Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+        meta = (DisplayName = "Convert To Battle STat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FBattleStatHandle ConvertNameToBattleStatHandle(FName Name);
+
+    UFUNCTION(BlueprintPure, Category = StatHandle,
+        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+            AutoCreateRefTerm = Struct))
+    static FName ConvertItemMainBattleStatHandleToName(const FMainBattleStatHandle& Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+        meta = (DisplayName = "Convert To Main/Battle Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FMainBattleStatHandle ConverMainBattleStatHandle(FName Name);
 };
-
-/**
- * Thin wrapper around a battle stat name, that forces the user to select a battle stat.
- */
-USTRUCT(BlueprintType)
-struct POKEMONDATA_API FBattleStat {
-    GENERATED_BODY()
-
-    /**
-     * The name of the battle stat.
-     */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
-              meta = (GetOptions = "PokemonData.StatHelper.GetBattleStatNames"))
-    FName Stat;
-};
-
-/**
- * Function used to get the type hash of the battle, making it identical to the wrapped property.
- * @param Key The key structure
- * @return The return type in question
- */
-inline uint32 GetTypeHash(const FBattleStat &Key) {
-    return GetTypeHash(Key.Stat);
-}

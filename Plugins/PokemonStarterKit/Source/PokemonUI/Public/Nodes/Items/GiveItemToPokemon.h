@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Bag/Item.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 
 #include "GiveItemToPokemon.generated.h"
@@ -32,7 +33,7 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
      */
     UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
               Category = "Selection")
-    static UGiveItemToPokemon *GiveItemToPokemon(const UObject *WorldContextObject, FName Item,
+    static UGiveItemToPokemon *GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
                                                  const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex = 0);
 
     void Activate() override;

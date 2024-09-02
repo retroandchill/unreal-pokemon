@@ -5,7 +5,7 @@
 #include "Utilities/ItemUtilities.h"
 #include "Utilities/UtilitiesSubsystem.h"
 
-UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FName Item,
+UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
                                                           const TScriptInterface<IPokemon> &Pokemon,
                                                           int32 PokemonIndex) {
     auto Node = NewObject<UGiveItemToPokemon>();

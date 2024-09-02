@@ -23,6 +23,7 @@ void FPokemonEditorToolsModule::StartupModule() {
     REGISTER_WRAPPED_PROPERTY(PropertyModule, PocketKey, PocketName);
     REGISTER_WRAPPED_PROPERTY(PropertyModule, BattleStat, Stat);
     
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, ItemHandle, RowID);
     REGISTER_WRAPPED_PROPERTY(PropertyModule, StatusHandle, RowID);
 }
 

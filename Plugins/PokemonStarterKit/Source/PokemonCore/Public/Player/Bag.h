@@ -34,7 +34,7 @@ class POKEMONCORE_API IBag {
      * @return The number the player has (0 means the player doesn't have any)
      */
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    virtual int32 GetItemQuantity(FName ItemID) const = 0;
+    virtual int32 GetItemQuantity(FItemHandle ItemID) const = 0;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     virtual bool HasItemWithTag(FName Tag) const = 0;
@@ -45,7 +45,7 @@ class POKEMONCORE_API IBag {
      * @return Can the item be added.
      */
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    virtual bool CanObtainItem(FName ItemID) const = 0;
+    virtual bool CanObtainItem(FItemHandle ItemID) const = 0;
 
     /**
      * Add an item to the player's inventory.
@@ -54,7 +54,7 @@ class POKEMONCORE_API IBag {
      * @return The number of items that were actually obtained.
      */
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    virtual int32 ObtainItem(FName ItemID, int32 Amount = 1) = 0;
+    virtual int32 ObtainItem(FItemHandle ItemID, int32 Amount = 1) = 0;
 
     /**
      * Add an item to the player's inventory.
@@ -63,7 +63,7 @@ class POKEMONCORE_API IBag {
      * @return The number of items that were actually removed.
      */
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    virtual int32 RemoveItem(FName ItemID, int32 Amount = 1) = 0;
+    virtual int32 RemoveItem(FItemHandle ItemID, int32 Amount = 1) = 0;
 
     /**
      * Sort the specified pocket with the provided sorter

@@ -16,13 +16,9 @@ TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
 }
 
 FName UStatusEffectHelper::ConvertStatusHandleToName(const FStatusHandle& Struct) {
-    return Struct.RowID;
+    return Struct;
 }
 
 FStatusHandle UStatusEffectHelper::ConvertNameToStatusHandle(FName Name) {
-    return FStatusHandle(Name);
-}
-
-bool UStatusEffectHelper::NotEqual_HandleHandle(FStatusHandle Handle, FName Name) {
-    return Handle.RowID != Name;
+    return Name;
 }

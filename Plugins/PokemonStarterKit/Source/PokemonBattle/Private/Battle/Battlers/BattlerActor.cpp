@@ -383,7 +383,7 @@ const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {
 void ABattlerActor::InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
     check(!StatusEffect.IsSet())
     StatusEffect.Emplace(StatusEffectID, EffectHandle);
-    WrappedPokemon->SetStatusEffect(StatusEffectID);
+    WrappedPokemon->SetStatusEffect(FStatusHandle(StatusEffectID));
 }
 
 void ABattlerActor::CureStatusEffect() {

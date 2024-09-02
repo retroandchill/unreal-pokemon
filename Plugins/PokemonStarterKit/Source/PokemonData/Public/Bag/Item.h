@@ -6,6 +6,7 @@
 #include "FieldUse.h"
 #include "GameplayTagContainer.h"
 #include "IndexedTableRow.h"
+#include "DataRetrieval/DataStructHandle.h"
 
 #include "Item.generated.h"
 
@@ -178,6 +179,45 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
     bool CanHold() const;
 };
 
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FItemHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FItemHandle, FItem)
+
+    /**
+     * The ID of the row in question.
+     */
+    UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.ItemHelper.GetItemNames"))
+    FName RowID;
+};
+
+/**
+ * Thin wrapper around a Pocket name, that forces the user to select a pocket name.
+ */
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FPocketKey {
+    GENERATED_BODY()
+
+    /**
+     * The name of the pocket.
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
+              meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
+    FName PocketName;
+
+    FString ExportText() const;
+    void FromExportString(FStringView ExportString, int32 PortFlags = PPF_None);
+};
+
+/**
+ * Function used to get the type hash of the pocket key, making it identical to the wrapped property.
+ * @param Key The key structure
+ * @return The return type in question
+ */
+inline uint32 GetTypeHash(const FPocketKey &Key) {
+    return GetTypeHash(Key.PocketName);
+}
+
 /**
  * Blueprint function library for getting item data out.
  */
@@ -230,28 +270,13 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = Items)
     static bool CanHold(const FItem &Item);
+
+    UFUNCTION(BlueprintPure, Category = ItemHandle,
+        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+            AutoCreateRefTerm = Struct))
+    static FName ConvertItemHandleToName(const FItemHandle& Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+        meta = (DisplayName = "Convert To Item Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FItemHandle ConvertNameToItemHandle(FName Name);
 };
-
-/**
- * Thin wrapper around a Pocket name, that forces the user to select a pocket name.
- */
-USTRUCT(BlueprintType)
-struct POKEMONDATA_API FPocketKey {
-    GENERATED_BODY()
-
-    /**
-     * The name of the pocket.
-     */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data,
-              meta = (GetOptions = "PokemonData.ItemHelper.GetPocketNames"))
-    FName PocketName;
-};
-
-/**
- * Function used to get the type hash of the pocket key, making it identical to the wrapped property.
- * @param Key The key structure
- * @return The return type in question
- */
-inline uint32 GetTypeHash(const FPocketKey &Key) {
-    return GetTypeHash(Key.PocketName);
-}

@@ -62,12 +62,12 @@ bool UDefaultMoveBlock::HasOpenMoveSlot() const {
     return Moves.Num() < GetDefault<UPokemonDataSettings>()->MaxMoves;
 }
 
-void UDefaultMoveBlock::PlaceMoveInOpenSlot(FName Move) {
+void UDefaultMoveBlock::PlaceMoveInOpenSlot(FMoveHandle Move) {
     check(HasOpenMoveSlot())
     Moves.Emplace(CreateNewMove({.Move = Move}));
 }
 
-void UDefaultMoveBlock::OverwriteMoveSlot(FName Move, int32 SlotIndex) {
+void UDefaultMoveBlock::OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) {
     check(Moves.IsValidIndex(SlotIndex))
     Moves[SlotIndex] = CreateNewMove({.Move = Move});
 }
@@ -92,7 +92,7 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
     // clang-format on
 }
 
-void UDefaultMoveBlock::LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) {
+void UDefaultMoveBlock::LearnMove(FMoveHandle Move, const FMoveLearnEnd &AfterMoveLearned) {
     auto PokemonUtilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
     IPokemonUtilities::Execute_LearnMove(PokemonUtilities, this, Owner, Move, AfterMoveLearned);
 }

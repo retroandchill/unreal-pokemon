@@ -228,7 +228,7 @@ bool UGamePokemon::HasStatusEffect(const FStatusHandle &Handle) const {
     return StatusEffect == Handle.RowID;
 }
 
-bool UGamePokemon::SetStatusEffect(FName StatusID, bool bOverwriteExisting) {
+bool UGamePokemon::SetStatusEffect(const FStatusHandle &StatusID, bool bOverwriteExisting) {
     if (StatusEffect.IsSet() && !bOverwriteExisting) {
         return false;
     }

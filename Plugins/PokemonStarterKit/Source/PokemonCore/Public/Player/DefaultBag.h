@@ -22,19 +22,19 @@ class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
     FBagDTO ToDTO() const override;
 
     UFUNCTION(BlueprintPure, Category = "Player|Inventory")
-    int32 GetItemQuantity(FName ItemID) const override;
+    int32 GetItemQuantity(FItemHandle ItemID) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     bool HasItemWithTag(FName Tag) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    bool CanObtainItem(FName ItemID) const override;
+    bool CanObtainItem(FItemHandle ItemID) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    int32 ObtainItem(FName ItemID, int32 Amount = 1) override;
+    int32 ObtainItem(FItemHandle ItemID, int32 Amount = 1) override;
 
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
-    int32 RemoveItem(FName ItemID, int32 Amount = 1) override;
+    int32 RemoveItem(FItemHandle ItemID, int32 Amount = 1) override;
 
     void SortPocket(FName Pocket, const IBagSorter &Sorter) override;
     void ForEachInPocket(FName Pocket, const TFunctionRef<void(FName, int32)> &Callback) const override;

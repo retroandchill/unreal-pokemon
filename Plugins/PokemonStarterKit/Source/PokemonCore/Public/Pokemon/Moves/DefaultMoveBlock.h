@@ -25,15 +25,15 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     bool HasOpenMoveSlot() const;
 
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
-    void PlaceMoveInOpenSlot(FName Move) override;
+    void PlaceMoveInOpenSlot(FMoveHandle Move) override;
 
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
-    void OverwriteMoveSlot(FName Move, int32 SlotIndex) override;
+    void OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
     virtual TArray<FName> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
 
-    void LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) override;
+    void LearnMove(FMoveHandle Move, const FMoveLearnEnd &AfterMoveLearned) override;
     TScriptInterface<IMove> CreateNewMove(const FMoveDTO &MoveID) override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")

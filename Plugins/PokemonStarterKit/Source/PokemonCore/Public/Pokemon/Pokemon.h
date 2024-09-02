@@ -195,8 +195,8 @@ class POKEMONCORE_API IPokemon {
      * @param bOverwriteExisting Should this overwrite the existing status effect?
      * @return Was the status effect changed?
      */
-    UFUNCTION(BlueprintCallable, Category = StatusEffects)
-    virtual bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) = 0;
+    UFUNCTION(BlueprintCallable, Category = StatusEffectss, meta = (AutoCreateRefTerm = StatusID))
+    virtual bool SetStatusEffect(const FStatusHandle& StatusID, bool bOverwriteExisting = false) = 0;
 
     /**
      * Remove a Pokémon's status condition

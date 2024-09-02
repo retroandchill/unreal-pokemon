@@ -157,7 +157,9 @@ public:
     public: \
         using FValueType = StructType; \
         ClassName() = default; \
-        explicit ClassName(FName RowID) : RowID(RowID) {} \
+        explicit(false) ClassName(FName RowID) : RowID(RowID) {} \
+        explicit(false) ClassName(const TCHAR* RowID) : RowID(RowID) {} \
+        operator FName() const { return RowID; } \
         friend uint32 GetTypeHash(const ClassName &Key) { \
             return GetTypeHash(Key.RowID); \
         }
