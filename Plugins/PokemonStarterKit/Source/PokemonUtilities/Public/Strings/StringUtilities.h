@@ -49,7 +49,5 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Conjunction))
     static FText GenerateList(const TArray<FText> &Items, const FText &Conjunction, bool bOxfordComma = true);
 
-    static TSharedPtr<FString> NameToStringPtr(FName Name) {
-        return MakeShared<FString>(Name.ToString());
-    }
+    static TSharedPtr<FString> NameToStringPtr(FName Name);
 };

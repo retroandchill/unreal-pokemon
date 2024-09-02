@@ -3,7 +3,10 @@
 #include "Battle/Status.h"
 #include "Details/DataHandleCustomization.h"
 #include "Details/WrappedKeyCustomization.h"
+#include "Moves/MoveData.h"
 #include "Pins/DataHandlePinFactory.h"
+#include "Species/Ability.h"
+#include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include <functional>
 
@@ -21,10 +24,16 @@ void FPokemonEditorToolsModule::StartupModule() {
         FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FDataHandleCustomization::MakeInstance));
     
     REGISTER_WRAPPED_PROPERTY(PropertyModule, PocketKey, PocketName);
-    REGISTER_WRAPPED_PROPERTY(PropertyModule, BattleStat, Stat);
     
     REGISTER_WRAPPED_PROPERTY(PropertyModule, ItemHandle, RowID);
     REGISTER_WRAPPED_PROPERTY(PropertyModule, StatusHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, StatHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, MainStatHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, MainBattleStatHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, BattleStatHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, SpeciesHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, MoveHandle, RowID);
+    REGISTER_WRAPPED_PROPERTY(PropertyModule, AbilityHandle, RowID);
 }
 
 void FPokemonEditorToolsModule::ShutdownModule() {

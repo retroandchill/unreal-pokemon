@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/RangeConcepts.h"
+#include "Map.h"
 #include <range/v3/view/view.hpp>
 
 namespace UE::Ranges {

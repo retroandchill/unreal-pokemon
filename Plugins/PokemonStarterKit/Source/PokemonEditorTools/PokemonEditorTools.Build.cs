@@ -31,7 +31,9 @@ public class PokemonEditorTools : ModuleRules
                 "UnrealEd",
                 "GraphEditor",
                 "BlueprintGraph",
-                "ToolWidgets", "PokemonBlueprintNodes"
+                "ToolWidgets", 
+                "PokemonBlueprintNodes",
+                "PokemonUtilities"
             }
         );
     }

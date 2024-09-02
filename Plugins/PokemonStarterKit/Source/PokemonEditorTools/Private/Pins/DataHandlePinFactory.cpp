@@ -3,6 +3,7 @@
 
 #include "Pins/DataHandlePinFactory.h"
 #include "Pins/DataHandlePinStructPin.h"
+#include "Pins/PocketKeyPin.h"
 
 
 TSharedPtr<SGraphPin> FDataHandlePinFactory::CreatePin(UEdGraphPin *Pin) const {
@@ -12,6 +13,10 @@ TSharedPtr<SGraphPin> FDataHandlePinFactory::CreatePin(UEdGraphPin *Pin) const {
 
     auto PinStructType = Cast<UScriptStruct>(Pin->PinType.PinSubCategoryObject.Get());
     check(PinStructType != nullptr)
+    if (PinStructType == FPocketKey::StaticStruct()) {
+        return SNew(SPocketKeyPin, Pin);    
+    }
+    
     if (!Pokemon::Data::IsValidDataTableStruct(PinStructType)) {
         return FGraphPanelPinFactory::CreatePin(Pin);
     }

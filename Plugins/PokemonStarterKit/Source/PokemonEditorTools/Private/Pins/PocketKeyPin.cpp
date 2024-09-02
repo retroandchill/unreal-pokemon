@@ -5,6 +5,7 @@
 #include "PokemonDataSettings.h"
 #include "SSearchableComboBox.h"
 #include "Ranges/Algorithm/FindFirst.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -26,7 +27,8 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
     // clang-format off
     Options = GetDefault<UPokemonDataSettings>()->PocketNames |
               UE::Ranges::MapValue |
-              UE::Ranges::Map(&UStringUtilities::NameToStringPtr);
+              UE::Ranges::Map(&UStringUtilities::NameToStringPtr) |
+              UE::Ranges::ToArray;
     // clang-format on
 
     // clang-format off
@@ -71,7 +73,13 @@ bool SPocketKeyPin::RowMatches(const TSharedPtr<FString> &Str) const {
 }
 
 const TSharedPtr<FString> & SPocketKeyPin::GetItemString() const {
-    return MakeShared<FString>(Handle.PocketName.ToString());
+    // clang-format off
+    auto Item = Options |
+                UE::Ranges::Filter(this, &SPocketKeyPin::RowMatches) |
+                UE::Ranges::FindFirst;
+    // clang-format on
+    check(Item.IsSet())
+    return *Item;
 }
 
 FText SPocketKeyPin::GetItemText() const {
