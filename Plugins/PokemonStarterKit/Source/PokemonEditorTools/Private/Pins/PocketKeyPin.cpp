@@ -1,15 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Pins/PocketKeyPin.h"
 #include "PokemonDataSettings.h"
-#include "SSearchableComboBox.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
+#include "Ranges/Views/MapValue.h"
+#include "SSearchableComboBox.h"
 #include "Strings/StringUtilities.h"
 
 class UPokemonDataSettings;
@@ -72,7 +71,7 @@ bool SPocketKeyPin::RowMatches(const TSharedPtr<FString> &Str) const {
     return FName(*Str) == Handle.PocketName;
 }
 
-const TSharedPtr<FString> & SPocketKeyPin::GetItemString() const {
+const TSharedPtr<FString> &SPocketKeyPin::GetItemString() const {
     // clang-format off
     auto Item = Options |
                 UE::Ranges::Filter(this, &SPocketKeyPin::RowMatches) |

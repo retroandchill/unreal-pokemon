@@ -246,7 +246,6 @@ struct POKEMONDATA_API FSpeciesHandle {
     FName RowID;
 };
 
-
 /**
  * Blueprint function library for getting species data out.
  */
@@ -263,11 +262,11 @@ class POKEMONDATA_API USpeciesHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetSpeciesNames();
 
     UFUNCTION(BlueprintPure, Category = ItemHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertSpeciesHandleToName(const FSpeciesHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertSpeciesHandleToName(const FSpeciesHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Species Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Species Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FSpeciesHandle ConvertNameToSpeciesHandle(FName Name);
 };

@@ -1,15 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Data/K2Node_SwitchOnDataHandle.h"
+#include "Battle/Status.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "DataManager.h"
-#include "Battle/Status.h"
 
-UK2Node_SwitchOnDataHandle::UK2Node_SwitchOnDataHandle(const FObjectInitializer& ObjectInitializer)
-    : Super(ObjectInitializer)
-{
+UK2Node_SwitchOnDataHandle::UK2Node_SwitchOnDataHandle(const FObjectInitializer &ObjectInitializer)
+    : Super(ObjectInitializer) {
     FunctionName = TEXT("NotEqual_HandleHandle");
     FunctionClass = UDataStructHandleUtilities::StaticClass();
     OrphanedPinSaveMode = ESaveOrphanPinMode::SaveNone;
@@ -19,7 +17,7 @@ void UK2Node_SwitchOnDataHandle::Initialize(UScriptStruct *Struct) {
     StructType = Struct;
 }
 
-UScriptStruct * UK2Node_SwitchOnDataHandle::GetStructType() const {
+UScriptStruct *UK2Node_SwitchOnDataHandle::GetStructType() const {
     return StructType;
 }
 
@@ -46,7 +44,8 @@ FText UK2Node_SwitchOnDataHandle::GetTooltipText() const {
 }
 
 FText UK2Node_SwitchOnDataHandle::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto StructName = StructType != nullptr ? StructType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto StructName =
+        StructType != nullptr ? StructType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "Switch_Tag", "Switch on {Handle}"), TEXT("Handle"), StructName);
 }
 
@@ -55,15 +54,15 @@ bool UK2Node_SwitchOnDataHandle::ShouldShowNodeProperties() const {
 }
 
 void UK2Node_SwitchOnDataHandle::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
-    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
-                                    UScriptStruct *Subclass) {
+    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode, UScriptStruct *Subclass) {
         auto TypedNode = CastChecked<UK2Node_SwitchOnDataHandle>(Node);
         TypedNode->Initialize(Subclass);
     };
-    
+
     if (auto ActionKey = GetClass(); ActionRegistrar.IsOpenForRegistration(ActionKey)) {
         for (TObjectIterator<UScriptStruct> It; It; ++It) {
-            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(*It, true) || !Pokemon::Data::IsValidDataTableStruct(*It)) {
+            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(*It, true) ||
+                !Pokemon::Data::IsValidDataTableStruct(*It)) {
                 continue;
             }
 
@@ -75,9 +74,10 @@ void UK2Node_SwitchOnDataHandle::GetMenuActions(FBlueprintActionDatabaseRegistra
             ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
         }
         auto StructTypes = FDataManager::GetInstance().GetStructTypes();
-        
+
         auto NodeSpawner = UBlueprintNodeSpawner::Create(GetClass());
-        check(NodeSpawner != nullptr);
+        check(NodeSpawner != nullptr)
+        ;
         ActionRegistrar.AddBlueprintAction(ActionKey, NodeSpawner);
     }
 }
@@ -138,8 +138,7 @@ void UK2Node_SwitchOnDataHandle::CreateFunctionPin() {
 }
 
 void UK2Node_SwitchOnDataHandle::CreateSelectionPin() {
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, StructType,
-                                 TEXT("Selection"));
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, StructType, TEXT("Selection"));
 }
 
 void UK2Node_SwitchOnDataHandle::CreateCasePins() {

@@ -20,6 +20,7 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
 #include "Battle/Status.h"
+#include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
 #include "Battle/Switching/SwitchActionBase.h"
 #include "Battle/Tags.h"
@@ -32,7 +33,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-#include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "range/v3/view/filter.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
@@ -128,8 +128,10 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 
     if (auto StatusEffectClass = Pokemon::Battle::StatusEffects::FindStatusEffect(Pokemon->GetStatusEffect());
         StatusEffectClass != nullptr) {
-        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass, 0, BattlerAbilityComponent->MakeEffectContext());
-        StatusEffect.Emplace(Pokemon->GetStatusEffect()->ID, BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data));
+        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass, 0,
+                                                              BattlerAbilityComponent->MakeEffectContext());
+        StatusEffect.Emplace(Pokemon->GetStatusEffect()->ID,
+                             BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data));
     } else {
         StatusEffect.Reset();
     }

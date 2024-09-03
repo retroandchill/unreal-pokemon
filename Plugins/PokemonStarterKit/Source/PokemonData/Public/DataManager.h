@@ -26,13 +26,13 @@ class POKEMONDATA_API FDataManager {
 
     template <typename T>
         requires Pokemon::Data::DataStructHandle<T>
-    auto GetData(T&& Handle) const {
+    auto GetData(T &&Handle) const {
         return GetDataTable<typename std::remove_cvref_t<T>::FStructType>().GetData(Handle);
     }
 
     template <typename T>
         requires Pokemon::Data::DataStructHandle<T>
-    auto GetDataChecked(T&& Handle) const {
+    auto GetDataChecked(T &&Handle) const {
         return GetDataTable<typename std::remove_cvref_t<T>::FStructType>().GetDataChecked(Handle);
     }
 
@@ -62,7 +62,7 @@ class POKEMONDATA_API FDataManager {
      */
     const IGameData &GetDataTable(TObjectPtr<const UScriptStruct> StructType) const;
 
-    bool HasDataTable(const UScriptStruct* StructType) const;
+    bool HasDataTable(const UScriptStruct *StructType) const;
 
     /**
      * Get the set of valid struct types held in this class

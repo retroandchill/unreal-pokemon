@@ -15,7 +15,7 @@ TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     // clang-format on
 }
 
-FName UStatusEffectHelper::ConvertStatusHandleToName(const FStatusHandle& Struct) {
+FName UStatusEffectHelper::ConvertStatusHandleToName(const FStatusHandle &Struct) {
     return Struct;
 }
 

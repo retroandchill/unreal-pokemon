@@ -23,14 +23,14 @@ namespace Pokemon::Data {
      * @tparam T The type that we want to check
      */
     template <typename T>
-    concept DataStructHandle = DataStruct<typename std::remove_cvref_t<T>::FValueType> && requires(T&& Struct) {
+    concept DataStructHandle = DataStruct<typename std::remove_cvref_t<T>::FValueType> && requires(T &&Struct) {
         { Struct.RowID } -> std::convertible_to<FName>;
     };
 
     constexpr auto DataStructRowID = TEXT("RowID");
 
 #if WITH_METADATA
-    POKEMONDATA_API bool IsValidDataTableStruct(const UScriptStruct* Struct);
+    POKEMONDATA_API bool IsValidDataTableStruct(const UScriptStruct *Struct);
 #endif
 
     /**
@@ -47,14 +47,14 @@ namespace Pokemon::Data {
          * Initialize a destructor for the given struct type.
          * @param StructClass The struct type in question
          */
-        explicit FStructDestructor(UScriptStruct* StructClass) : StructClass(StructClass) {
+        explicit FStructDestructor(UScriptStruct *StructClass) : StructClass(StructClass) {
         }
 
         /**
          * Operator used to free the underlying struct type
          * @param Struct The struct to free
          */
-        void operator()(void* Struct) const {
+        void operator()(void *Struct) const {
             if (Struct != nullptr && StructClass != nullptr) {
                 StructClass->DestroyStruct(StructClass);
                 FMemory::Free(Struct);
@@ -65,13 +65,12 @@ namespace Pokemon::Data {
          * Get the struct class that needs to be destroyed
          * @return The struct class that needs to be destroyed
          */
-        UScriptStruct* GetStruct() const {
+        UScriptStruct *GetStruct() const {
             return StructClass;
         }
 
-    private:
+      private:
         TObjectPtr<UScriptStruct> StructClass;
-        
     };
 
     /**
@@ -88,17 +87,20 @@ namespace Pokemon::Data {
          * Create a new wrapper from the underlying struct type.
          * @param StructClass The type of struct to initialize
          */
-        explicit FStructWrapper(UScriptStruct* StructClass) : Struct(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass)) {
+        explicit FStructWrapper(UScriptStruct *StructClass)
+            : Struct(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass)) {
             StructClass->InitializeStruct(Struct.get());
         }
 
         /**
-         * Assignment operator from the underlying struct class, destruction will happen automatically due to the unique ptr.
+         * Assignment operator from the underlying struct class, destruction will happen automatically due to the unique
+         * ptr.
          * @param StructClass The type of struct to initialize
          * @return A reference to this object
          */
-        FStructWrapper& operator=(UScriptStruct* StructClass) {
-            Struct = std::unique_ptr<void, FStructDestructor>(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass));
+        FStructWrapper &operator=(UScriptStruct *StructClass) {
+            Struct = std::unique_ptr<void, FStructDestructor>(FMemory::Malloc(StructClass->GetStructureSize()),
+                                                              FStructDestructor(StructClass));
             StructClass->InitializeStruct(Struct.get());
             return *this;
         }
@@ -107,7 +109,7 @@ namespace Pokemon::Data {
          * Get the underlying struct data.
          * @return The underlying struct data
          */
-        void* Get() const {
+        void *Get() const {
             return Struct.get();
         }
 
@@ -115,25 +117,25 @@ namespace Pokemon::Data {
          * Get the struct class that is being wrapped
          * @return The struct class that is being wrapped
          */
-        UScriptStruct* GetStruct() const {
+        UScriptStruct *GetStruct() const {
             return Struct.get_deleter().GetStruct();
         }
 
 #if WITH_METADATA
-    TArray<TSharedPtr<FString>> GetStructOptions() const;
+        TArray<TSharedPtr<FString>> GetStructOptions() const;
 #endif
 
-    FName GetRowID()  const;
-        
-    void SetRowID(FName RowID);
+        FName GetRowID() const;
 
-    FString ExportText() const;
-    void FromExportString(FStringView ExportString, int32 PortFlags = PPF_None);
+        void SetRowID(FName RowID);
 
-    private:
+        FString ExportText() const;
+        void FromExportString(FStringView ExportString, int32 PortFlags = PPF_None);
+
+      private:
         std::unique_ptr<void, FStructDestructor> Struct;
     };
-}
+} // namespace Pokemon::Data
 
 USTRUCT(BlueprintType, BlueprintInternalUseOnly)
 struct POKEMONDATA_API FDataStructHandle {
@@ -147,21 +149,27 @@ UCLASS()
 class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = DataHandles, CustomThunk, meta = (CustomStructureParam = DataHandle))
-    static bool NotEqual_HandleHandle(const FDataStructHandle& DataHandle, FName Other);
+    static bool NotEqual_HandleHandle(const FDataStructHandle &DataHandle, FName Other);
     DECLARE_FUNCTION(execNotEqual_HandleHandle);
 };
 
-#define DECLARE_DATA_HANDLE(ClassName, StructType) \
-    public: \
-        using FValueType = StructType; \
-        ClassName() = default; \
-        explicit(false) ClassName(FName RowID) : RowID(RowID) {} \
-        explicit(false) ClassName(const ANSICHAR* RowID) : RowID(RowID) {} \
-        explicit(false) ClassName(const WIDECHAR* RowID) : RowID(RowID) {} \
-        explicit(false) ClassName(const UTF8CHAR* RowID) : RowID(RowID) {} \
-        operator FName() const { return RowID; } \
-        friend uint32 GetTypeHash(const ClassName &Key) { \
-            return GetTypeHash(Key.RowID); \
-        }
+#define DECLARE_DATA_HANDLE(ClassName, StructType)                                                                     \
+  public:                                                                                                              \
+    using FValueType = StructType;                                                                                     \
+    ClassName() = default;                                                                                             \
+    explicit(false) ClassName(FName RowID) : RowID(RowID) {                                                            \
+    }                                                                                                                  \
+    explicit(false) ClassName(const ANSICHAR *RowID) : RowID(RowID) {                                                  \
+    }                                                                                                                  \
+    explicit(false) ClassName(const WIDECHAR *RowID) : RowID(RowID) {                                                  \
+    }                                                                                                                  \
+    explicit(false) ClassName(const UTF8CHAR *RowID) : RowID(RowID) {                                                  \
+    }                                                                                                                  \
+    operator FName() const {                                                                                           \
+        return RowID;                                                                                                  \
+    }                                                                                                                  \
+    friend uint32 GetTypeHash(const ClassName &Key) {                                                                  \
+        return GetTypeHash(Key.RowID);                                                                                 \
+    }

@@ -15,13 +15,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatusRemoveItem, "Unit Tests.Battle.Items.
 
 bool TestStatusRemoveItem::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                 .Level = 100,
-                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                 .Nature = FName("MODEST"),
-                                 .StatusEffect = "BURN"});
+    auto Pokemon1 =
+        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                                                                 .Level = 100,
+                                                                                 .IVs = {{"SPECIAL_ATTACK", 31}},
+                                                                                 .EVs = {{"SPECIAL_ATTACK", 252}},
+                                                                                 .Nature = FName("MODEST"),
+                                                                                 .StatusEffect = "BURN"});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,

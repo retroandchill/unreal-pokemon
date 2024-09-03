@@ -11,9 +11,9 @@
  * Widget that represents a data handle struct pin, giving the user a dropdown instead of a regular struct pin.
  */
 class POKEMONEDITORTOOLS_API SDataHandlePinStructPin : public SGraphPinStructInstance {
-public:
+  public:
     SLATE_BEGIN_ARGS(SDataHandlePinStructPin) {
-        }
+    }
 
     SLATE_END_ARGS()
 
@@ -21,17 +21,17 @@ public:
      * @param InArgs The slate arguments
      * @param InGraphPin The pin that we are associated with
      */
-    void Construct(const FArguments &InArgs, UEdGraphPin* InGraphPin);
+    void Construct(const FArguments &InArgs, UEdGraphPin *InGraphPin);
 
-protected:
+  protected:
     void ParseDefaultValueData() override;
     TSharedRef<SWidget> GetDefaultValueWidget() override;
 
-private:
-    bool RowMatches(const TSharedPtr<FString>& Str) const;
+  private:
+    bool RowMatches(const TSharedPtr<FString> &Str) const;
     const TSharedPtr<FString> &GetItemString() const;
     FText GetItemText() const;
-    
+
     TArray<TSharedPtr<FString>> Options;
     Pokemon::Data::FStructWrapper Handle;
 };

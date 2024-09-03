@@ -3,9 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "IndexedTableRow.h"
 #include "PokemonStatType.h"
-#include "DataRetrieval/DataStructHandle.h"
 #include "UObject/Object.h"
 
 #include "Stat.generated.h"
@@ -151,38 +151,38 @@ class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetBattleStatNames();
 
     UFUNCTION(BlueprintPure, Category = StatHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertStatHandleToName(const FStatHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertStatHandleToName(const FStatHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FStatHandle ConvertNameToItemHandle(FName Name);
 
     UFUNCTION(BlueprintPure, Category = StatHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertMainStatHandleToName(const FMainStatHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertMainStatHandleToName(const FMainStatHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Main Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Main Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FMainStatHandle ConvertNameToMainStatHandle(FName Name);
 
     UFUNCTION(BlueprintPure, Category = StatHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertBattleStatHandleToName(const FBattleStatHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertBattleStatHandleToName(const FBattleStatHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Battle STat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Battle STat Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FBattleStatHandle ConvertNameToBattleStatHandle(FName Name);
 
     UFUNCTION(BlueprintPure, Category = StatHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertItemMainBattleStatHandleToName(const FMainBattleStatHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertItemMainBattleStatHandleToName(const FMainBattleStatHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Main/Battle Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Main/Battle Stat Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FMainBattleStatHandle ConverMainBattleStatHandle(FName Name);
 };

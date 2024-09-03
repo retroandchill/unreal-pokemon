@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "StatEntry.h"
 #include "Species/Stat.h"
+#include "StatEntry.h"
 #include "Utilities/PokemonUtilities.h"
 
 #include "StatBlock.generated.h"

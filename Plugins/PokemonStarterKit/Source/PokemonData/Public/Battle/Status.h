@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IndexedTableRow.h"
 #include "DataRetrieval/DataTableProxy.h"
+#include "IndexedTableRow.h"
 #include "Ranges/Views/AnyView.h"
 #include "UObject/Object.h"
 
@@ -40,7 +40,6 @@ struct POKEMONDATA_API FStatusHandle {
      */
     UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
     FName RowID;
-    
 };
 
 /**
@@ -59,12 +58,12 @@ class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetStatusEffectNames();
 
     UFUNCTION(BlueprintPure, Category = StatusHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertStatusHandleToName(const FStatusHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertStatusHandleToName(const FStatusHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To StatusHandle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To StatusHandle", CompactNodeTitle = "->", BlueprintAutocast))
     static FStatusHandle ConvertNameToStatusHandle(FName Name);
 };
 

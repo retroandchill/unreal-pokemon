@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "DataRetrieval/DataStructHandle.h"
 #include "Misc/OutputDeviceNull.h"
 #include "Ranges/Algorithm/ToArray.h"
@@ -36,15 +35,15 @@ TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() co
     check(StructClass != nullptr)
 
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
-    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"),
-           TEXT("Missing FName property: %s"), RowProperty)
+    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"), TEXT("Missing FName property: %s"),
+           RowProperty)
 
-    auto Options = RowProperty->GetMetaData("GetOptions");
+        auto Options = RowProperty->GetMetaData("GetOptions");
     auto GetOptionsFunction = FindObject<UFunction>(nullptr, *Options, true);
     checkf(GetOptionsFunction != nullptr && GetOptionsFunction->HasAnyFunctionFlags(EFunctionFlags::FUNC_Static),
            TEXT("Invalid GetOptions: %s"), *Options)
 
-    FGetOptionsParams Params;
+        FGetOptionsParams Params;
     auto GetOptionsCDO = GetOptionsFunction->GetOuterUClass()->GetDefaultObject();
     GetOptionsCDO->ProcessEvent(GetOptionsFunction, &Params);
 
@@ -62,10 +61,10 @@ FName Pokemon::Data::FStructWrapper::GetRowID() const {
     check(StructClass != nullptr)
 
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
-    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"),
-           TEXT("Missing FName property: %s"), RowProperty)
-    
-    auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
+    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"), TEXT("Missing FName property: %s"),
+           RowProperty)
+
+        auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
     return TPropertyTypeFundamentals<FName>::GetPropertyValue(PropertyContainer);
 }
 
@@ -75,10 +74,10 @@ void Pokemon::Data::FStructWrapper::SetRowID(FName RowID) {
     check(StructClass != nullptr)
 
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
-    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"),
-           TEXT("Missing FName property: %s"), RowProperty)
+    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"), TEXT("Missing FName property: %s"),
+           RowProperty)
 
-    auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
+        auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
     TPropertyTypeFundamentals<FName>::SetPropertyValue(PropertyContainer, RowID);
 }
 
@@ -92,14 +91,15 @@ void Pokemon::Data::FStructWrapper::FromExportString(FStringView ExportString, i
     if (ExportString.IsEmpty()) {
         return;
     }
-    
+
     auto StructClass = GetStruct();
-    Struct = std::unique_ptr<void, FStructDestructor>(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass));
+    Struct = std::unique_ptr<void, FStructDestructor>(FMemory::Malloc(StructClass->GetStructureSize()),
+                                                      FStructDestructor(StructClass));
     StructClass->InitializeStruct(Struct.get());
 
     FOutputDeviceNull NullOut;
     StructClass->ImportText(ExportString.GetData(), Struct.get(), nullptr, PortFlags, &NullOut,
-        StructClass->GetFName().ToString(), true);
+                            StructClass->GetFName().ToString(), true);
 }
 
 bool UDataStructHandleUtilities::NotEqual_HandleHandle(const FDataStructHandle &, FName) {
@@ -114,7 +114,7 @@ DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle) {
 
     bool bResult;
     P_NATIVE_BEGIN;
-    bResult = DataHandle.RowID  != Other;
+    bResult = DataHandle.RowID != Other;
     P_NATIVE_END;
 
     *static_cast<bool *>(RESULT_PARAM) = bResult;

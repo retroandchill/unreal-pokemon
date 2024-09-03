@@ -8,12 +8,12 @@
 #include "Widgets/SCompoundWidget.h"
 
 /**
- * 
+ *
  */
 class POKEMONEDITORTOOLS_API SPocketKeyPin : public SGraphPinStructInstance {
-public:
+  public:
     SLATE_BEGIN_ARGS(SPocketKeyPin) {
-        }
+    }
 
     SLATE_END_ARGS()
 
@@ -21,17 +21,17 @@ public:
      * @param InArgs The slate arguments
      * @param InGraphPin The pin that we are associated with
      */
-    void Construct(const FArguments &InArgs, UEdGraphPin* InGraphPin);
+    void Construct(const FArguments &InArgs, UEdGraphPin *InGraphPin);
 
-protected:
+  protected:
     void ParseDefaultValueData() override;
     TSharedRef<SWidget> GetDefaultValueWidget() override;
 
-private:
-    bool RowMatches(const TSharedPtr<FString>& Str) const;
+  private:
+    bool RowMatches(const TSharedPtr<FString> &Str) const;
     const TSharedPtr<FString> &GetItemString() const;
     FText GetItemText() const;
-    
+
     TArray<TSharedPtr<FString>> Options;
     FPocketKey Handle;
 };

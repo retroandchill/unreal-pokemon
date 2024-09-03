@@ -15,7 +15,7 @@
 template <typename T>
     requires Pokemon::Data::DataStruct<T>
 class TDataTableProxy final : public IGameData {
-public:
+  public:
     explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable) {
     }
 
@@ -53,7 +53,7 @@ public:
         // clang-format on
     }
 
-private:
+  private:
     /**
      * A pointer to the data table asset that this proxy object contains
      */

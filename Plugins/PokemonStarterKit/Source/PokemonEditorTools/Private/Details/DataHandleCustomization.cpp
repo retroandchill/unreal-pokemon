@@ -1,23 +1,21 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Details/DataHandleCustomization.h"
-#include "DetailWidgetRow.h"
 #include "Data/DataStructHandleNode.h"
 #include "DataRetrieval/DataStructHandle.h"
+#include "DetailWidgetRow.h"
 #include "Ranges/Algorithm/ToSet.h"
 #include "Ranges/Views/CastType.h"
-#include "Ranges/Views/Filter.h"
 #include "Ranges/Views/ContainerView.h"
-
+#include "Ranges/Views/Filter.h"
 
 TSharedRef<IPropertyTypeCustomization> FDataHandleCustomization::MakeInstance() {
     return MakeShared<FDataHandleCustomization>();
 }
 
 void FDataHandleCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow &HeaderRow,
-    IPropertyTypeCustomizationUtils &CustomizationUtils) {
-    TArray<UObject*> OuterObjects;
+                                               IPropertyTypeCustomizationUtils &CustomizationUtils) {
+    TArray<UObject *> OuterObjects;
     PropertyHandle->GetOuterObjects(OuterObjects);
     // clang-format off
     auto StructTypes = OuterObjects |
@@ -36,7 +34,7 @@ void FDataHandleCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Prope
     } else {
         WrappedProperty->GetProperty()->RemoveMetaData(TEXT("GetOptions"));
     }
-    
+
     // clang-format off
     HeaderRow.NameContent()
         [
@@ -50,6 +48,7 @@ void FDataHandleCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Prope
 }
 
 void FDataHandleCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> PropertyHandle,
-    IDetailChildrenBuilder &ChildBuilder, IPropertyTypeCustomizationUtils &CustomizationUtils) {
+                                                 IDetailChildrenBuilder &ChildBuilder,
+                                                 IPropertyTypeCustomizationUtils &CustomizationUtils) {
     // No child customization
 }

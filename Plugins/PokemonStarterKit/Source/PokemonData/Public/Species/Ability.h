@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IndexedTableRow.h"
 #include "DataRetrieval/DataStructHandle.h"
+#include "IndexedTableRow.h"
 
 #include "Ability.generated.h"
 
@@ -61,11 +61,11 @@ class POKEMONDATA_API UAbilityHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetAbilityNames();
 
     UFUNCTION(BlueprintPure, Category = AbilityHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertAbilityHandleHandleToName(const FAbilityHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertAbilityHandleHandleToName(const FAbilityHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Ability Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Ability Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FAbilityHandle ConvertNameToAbilityHandle(FName Name);
 };

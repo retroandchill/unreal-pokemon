@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Status.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Status.h"
 #include "Species/SpeciesData.h"
 #include <gmock/gmock.h>
 

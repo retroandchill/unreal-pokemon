@@ -126,10 +126,10 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     int32 GetTurnCount() const override;
 
     const TOptional<FStatusEffectInfo> &GetStatusEffect() const override;
-    
+
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     void InflictStatusEffect(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle) override;
-    
+
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     void CureStatusEffect() override;
 

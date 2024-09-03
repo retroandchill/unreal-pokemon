@@ -187,7 +187,7 @@ class POKEMONCORE_API IPokemon {
     virtual TOptional<const FStatus &> GetStatusEffect() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = StatusEffects, meta = (AutoCreateRefTerm = Handle))
-    virtual bool HasStatusEffect(const FStatusHandle& Handle) const = 0;
+    virtual bool HasStatusEffect(const FStatusHandle &Handle) const = 0;
 
     /**
      * Set the Pokémon's status effect
@@ -196,7 +196,7 @@ class POKEMONCORE_API IPokemon {
      * @return Was the status effect changed?
      */
     UFUNCTION(BlueprintCallable, Category = StatusEffectss, meta = (AutoCreateRefTerm = StatusID))
-    virtual bool SetStatusEffect(const FStatusHandle& StatusID, bool bOverwriteExisting = false) = 0;
+    virtual bool SetStatusEffect(const FStatusHandle &StatusID, bool bOverwriteExisting = false) = 0;
 
     /**
      * Remove a Pokémon's status condition

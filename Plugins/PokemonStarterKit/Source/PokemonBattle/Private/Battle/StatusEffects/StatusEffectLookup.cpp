@@ -1,11 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/StatusEffects/StatusEffectLookup.h"
+#include "Battle/Status.h"
 #include "DynamicAssetLoadingSettings.h"
 #include "GameplayEffect.h"
-#include "Battle/Status.h"
-
 
 TSubclassOf<UGameplayEffect> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID) {
     if (ID.IsNone()) {

@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "IndexedTableRow.h"
 #include "MoveDamageCategory.h"
-#include "DataRetrieval/DataStructHandle.h"
 #include "UObject/Object.h"
 
 #include "MoveData.generated.h"
@@ -130,11 +130,11 @@ class POKEMONDATA_API UMoveHelper : public UBlueprintFunctionLibrary {
     static TArray<FName> GetMoveNames();
 
     UFUNCTION(BlueprintPure, Category = MoveHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertMoveHandleHandleToName(const FMoveHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertMoveHandleHandleToName(const FMoveHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Move Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Move Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FMoveHandle ConvertNameToMoveHandle(FName Name);
 };

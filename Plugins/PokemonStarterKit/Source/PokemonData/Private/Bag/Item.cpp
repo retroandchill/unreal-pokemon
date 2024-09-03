@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
-#include "PokemonDataSettings.h"
 #include "Misc/OutputDeviceNull.h"
+#include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -65,12 +65,11 @@ void FPocketKey::FromExportString(FStringView ExportString, int32 PortFlags) {
     if (ExportString.IsEmpty()) {
         return;
     }
-    
+
     PocketName = NAME_None;
 
     FOutputDeviceNull NullOut;
-    StaticStruct()->ImportText(ExportString.GetData(), this, nullptr, PortFlags, &NullOut,
-        TEXT("FPocketKey"), true);
+    StaticStruct()->ImportText(ExportString.GetData(), this, nullptr, PortFlags, &NullOut, TEXT("FPocketKey"), true);
 }
 
 TArray<FName> UItemHelper::GetItemNames() {

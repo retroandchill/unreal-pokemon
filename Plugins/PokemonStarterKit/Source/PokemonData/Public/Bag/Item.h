@@ -3,10 +3,10 @@
 
 #include "CoreMinimal.h"
 #include "BattleUse.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "FieldUse.h"
 #include "GameplayTagContainer.h"
 #include "IndexedTableRow.h"
-#include "DataRetrieval/DataStructHandle.h"
 
 #include "Item.generated.h"
 
@@ -272,11 +272,11 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
     static bool CanHold(const FItem &Item);
 
     UFUNCTION(BlueprintPure, Category = ItemHandle,
-        meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
-            AutoCreateRefTerm = Struct))
-    static FName ConvertItemHandleToName(const FItemHandle& Struct);
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertItemHandleToName(const FItemHandle &Struct);
 
     UFUNCTION(BlueprintPure, Category = Name,
-        meta = (DisplayName = "Convert To Item Handle", CompactNodeTitle = "->", BlueprintAutocast))
+              meta = (DisplayName = "Convert To Item Handle", CompactNodeTitle = "->", BlueprintAutocast))
     static FItemHandle ConvertNameToItemHandle(FName Name);
 };
