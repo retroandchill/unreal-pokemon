@@ -20,6 +20,7 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
 #include "Battle/Status.h"
+#include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
 #include "Battle/Switching/SwitchActionBase.h"
 #include "Battle/Tags.h"
@@ -123,6 +124,16 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
     } else {
         HoldItem = FGameplayAbilitySpecHandle();
+    }
+
+    if (auto StatusEffectClass = Pokemon::Battle::StatusEffects::FindStatusEffect(Pokemon->GetStatusEffect());
+        StatusEffectClass != nullptr) {
+        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass, 0,
+                                                              BattlerAbilityComponent->MakeEffectContext());
+        StatusEffect.Emplace(Pokemon->GetStatusEffect()->ID,
+                             BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data));
+    } else {
+        StatusEffect.Reset();
     }
 
     auto SwitchActionAbility =
@@ -380,7 +391,7 @@ const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {
     return StatusEffect;
 }
 
-void ABattlerActor::InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
+void ABattlerActor::InflictStatusEffect(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
     check(!StatusEffect.IsSet())
     StatusEffect.Emplace(StatusEffectID, EffectHandle);
     WrappedPokemon->SetStatusEffect(StatusEffectID);

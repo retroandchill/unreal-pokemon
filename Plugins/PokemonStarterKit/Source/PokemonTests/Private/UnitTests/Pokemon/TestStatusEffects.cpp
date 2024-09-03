@@ -19,15 +19,15 @@ bool TestStatusEffects::RunTest(const FString &Parameters) {
     FStatus Status;
     UE_CHECK_EQUAL(EStatusEffectStatus::NoStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
 
-    Pokemon->SetStatusEffect("BURN");
+    Pokemon->SetStatusEffect(FStatusHandle("BURN"));
     UE_CHECK_EQUAL(EStatusEffectStatus::HasStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
     UE_CHECK_EQUAL(TEXT("BURN"), Status.ID.ToString());
 
-    Pokemon->SetStatusEffect("SLEEP");
+    Pokemon->SetStatusEffect(FStatusHandle("SLEEP"));
     UE_CHECK_EQUAL(EStatusEffectStatus::HasStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
     UE_CHECK_EQUAL(TEXT("BURN"), Status.ID.ToString());
 
-    Pokemon->SetStatusEffect("SLEEP", true);
+    Pokemon->SetStatusEffect(FStatusHandle("SLEEP"), true);
     UE_CHECK_EQUAL(EStatusEffectStatus::HasStatusEffect, UStatusEffectUtilities::GetStatusEffect(Pokemon, Status));
     UE_CHECK_EQUAL(TEXT("SLEEP"), Status.ID.ToString());
 

@@ -35,7 +35,7 @@ FBagDTO UDefaultBag::ToDTO() const {
     return {.ItemSlots = ItemSlots};
 }
 
-int32 UDefaultBag::GetItemQuantity(FName ItemID) const {
+int32 UDefaultBag::GetItemQuantity(FItemHandle ItemID) const {
     auto Pocket = GetPocket(ItemID);
     if (Pocket == nullptr) {
         return 0;
@@ -61,7 +61,7 @@ bool UDefaultBag::HasItemWithTag(FName Tag) const {
     return Match.IsSet();
 }
 
-bool UDefaultBag::CanObtainItem(FName ItemID) const {
+bool UDefaultBag::CanObtainItem(FItemHandle ItemID) const {
     auto Settings = GetDefault<UPokemonDataSettings>();
     if (auto ItemQuantity = GetItemQuantity(ItemID); ItemQuantity > 0) {
         return ItemQuantity < Settings->MaxItemsPerSlot;
@@ -84,7 +84,7 @@ bool UDefaultBag::CanObtainItem(FName ItemID) const {
     // clang-format on
 }
 
-int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
+int32 UDefaultBag::ObtainItem(FItemHandle ItemID, int32 Amount) {
     auto Settings = GetDefault<UPokemonDataSettings>();
     auto &Pocket = GetPocket(ItemID);
     int32 SlotMax = Settings->MaxItemsPerSlot;
@@ -101,7 +101,7 @@ int32 UDefaultBag::ObtainItem(FName ItemID, int32 Amount) {
     return ItemSlot->Quantity - QuantityBefore;
 }
 
-int32 UDefaultBag::RemoveItem(FName ItemID, int32 Amount) {
+int32 UDefaultBag::RemoveItem(FItemHandle ItemID, int32 Amount) {
     auto Settings = GetDefault<UPokemonDataSettings>();
     auto &Pocket = GetPocket(ItemID);
     auto SlotIndex = Pocket.IndexOfByPredicate(std::bind_front(&ItemSlotMatches, ItemID));

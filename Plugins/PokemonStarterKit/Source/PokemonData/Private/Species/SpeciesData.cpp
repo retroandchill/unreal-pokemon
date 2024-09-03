@@ -12,3 +12,11 @@ const FGenderRatio &FSpeciesData::GetGenderRatio() const {
 TArray<FName> USpeciesHelper::GetSpeciesNames() {
     return FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetTableRowNames();
 }
+
+FName USpeciesHelper::ConvertSpeciesHandleToName(const FSpeciesHandle &Struct) {
+    return Struct;
+}
+
+FSpeciesHandle USpeciesHelper::ConvertNameToSpeciesHandle(FName Name) {
+    return Name;
+}

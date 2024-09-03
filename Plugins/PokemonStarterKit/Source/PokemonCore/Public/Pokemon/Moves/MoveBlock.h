@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Moves/MoveData.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Interface.h"
 
@@ -55,7 +56,7 @@ class POKEMONCORE_API IMoveBlock {
      * @param Move The move to be learned
      */
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
-    virtual void PlaceMoveInOpenSlot(FName Move) = 0;
+    virtual void PlaceMoveInOpenSlot(FMoveHandle Move) = 0;
 
     /**
      * Overwrite an existing move
@@ -63,7 +64,7 @@ class POKEMONCORE_API IMoveBlock {
      * @param SlotIndex The index of the move to replace
      */
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
-    virtual void OverwriteMoveSlot(FName Move, int32 SlotIndex) = 0;
+    virtual void OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) = 0;
 
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     virtual const TSet<FName> &GetMoveMemory() const = 0;
@@ -82,7 +83,7 @@ class POKEMONCORE_API IMoveBlock {
      * @param Move The move to learn
      * @param AfterMoveLearned This is called after the move learning prompt is done
      */
-    virtual void LearnMove(FName Move, const FMoveLearnEnd &AfterMoveLearned) = 0;
+    virtual void LearnMove(FMoveHandle Move, const FMoveLearnEnd &AfterMoveLearned) = 0;
 
     /**
      * Create a new move interface object. This is typically a temporary used for the move learn screen)

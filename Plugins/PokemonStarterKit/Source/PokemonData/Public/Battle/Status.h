@@ -2,7 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataRetrieval/DataTableProxy.h"
 #include "IndexedTableRow.h"
+#include "Ranges/Views/AnyView.h"
 #include "UObject/Object.h"
 
 #include "Status.generated.h"
@@ -27,6 +29,18 @@ struct POKEMONDATA_API FStatus : public FIndexedTableRow {
     TSubclassOf<AActor> Animation;
 };
 
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FStatusHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FStatusHandle, FStatus)
+
+    /**
+     * The ID of the row in question.
+     */
+    UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
+    FName RowID;
+};
+
 /**
  * Helper functions for status effects
  */
@@ -41,4 +55,17 @@ class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetStatusEffectNames();
+
+    UFUNCTION(BlueprintPure, Category = StatusHandle,
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertStatusHandleToName(const FStatusHandle &Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+              meta = (DisplayName = "Convert To StatusHandle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FStatusHandle ConvertNameToStatusHandle(FName Name);
 };
+
+static_assert(UE::Ranges::UEStruct<FStatus>);
+static_assert(Pokemon::Data::DataStruct<FStatus>);
+static_assert(Pokemon::Data::DataStructHandle<FStatusHandle>);

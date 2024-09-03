@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 #include "Bag/Item.h"
 #include "DataManager.h"
+#include "Misc/OutputDeviceNull.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
@@ -54,6 +55,23 @@ bool FItem::CanHold() const {
     return !IsImportant();
 }
 
+FString FPocketKey::ExportText() const {
+    FString Ret;
+    StaticStruct()->ExportText(Ret, this, this, nullptr, PPF_None, nullptr);
+    return Ret;
+}
+
+void FPocketKey::FromExportString(FStringView ExportString, int32 PortFlags) {
+    if (ExportString.IsEmpty()) {
+        return;
+    }
+
+    PocketName = NAME_None;
+
+    FOutputDeviceNull NullOut;
+    StaticStruct()->ImportText(ExportString.GetData(), this, nullptr, PortFlags, &NullOut, TEXT("FPocketKey"), true);
+}
+
 TArray<FName> UItemHelper::GetItemNames() {
     return FDataManager::GetInstance().GetDataTable<FItem>().GetTableRowNames();
 }
@@ -87,4 +105,12 @@ bool UItemHelper::IsMail(const FItem &Item) {
 
 bool UItemHelper::CanHold(const FItem &Item) {
     return Item.CanHold();
+}
+
+FName UItemHelper::ConvertItemHandleToName(const FItemHandle &Struct) {
+    return Struct;
+}
+
+FItemHandle UItemHelper::ConvertNameToItemHandle(FName Name) {
+    return Name;
 }

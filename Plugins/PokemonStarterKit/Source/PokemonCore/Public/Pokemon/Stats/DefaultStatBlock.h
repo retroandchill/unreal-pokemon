@@ -37,7 +37,7 @@ class POKEMONCORE_API UDefaultStatBlock : public UObject, public IStatBlock {
     const FNature &GetNature() const override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
-    TScriptInterface<IStatEntry> GetStat(FName Stat) const override;
+    TScriptInterface<IStatEntry> GetStat(FMainStatHandle Stat) const override;
 
     void ForEachStat(const TFunctionRef<void(FName, const IStatEntry &)> &Predicate) const override;
 

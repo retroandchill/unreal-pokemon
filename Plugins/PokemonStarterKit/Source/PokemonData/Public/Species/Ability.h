@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "IndexedTableRow.h"
 
 #include "Ability.generated.h"
@@ -32,6 +33,18 @@ struct POKEMONDATA_API FAbility : public FIndexedTableRow {
     TArray<FName> Tags;
 };
 
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FAbilityHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FAbilityHandle, FAbility)
+
+    /**
+     * The ID of the row in question.
+     */
+    UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.AbilityHelper.GetAbilityNames"))
+    FName RowID;
+};
+
 /**
  * Blueprint function library for getting ability data out.
  */
@@ -46,4 +59,13 @@ class POKEMONDATA_API UAbilityHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetAbilityNames();
+
+    UFUNCTION(BlueprintPure, Category = AbilityHandle,
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertAbilityHandleHandleToName(const FAbilityHandle &Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+              meta = (DisplayName = "Convert To Ability Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FAbilityHandle ConvertNameToAbilityHandle(FName Name);
 };

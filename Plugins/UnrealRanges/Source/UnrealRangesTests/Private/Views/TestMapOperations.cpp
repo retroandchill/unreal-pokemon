@@ -52,7 +52,7 @@ void FTestMapOperations::Define() {
             UE_ASSERT_TRUE(Maps.Contains(1));
             UE_ASSERT_EQUAL(2, Maps[1].Num());
             UE_ASSERT_TRUE(Maps.Contains(2));
-            UE_ASSERT_EQUAL(1, Maps[1].Num());
+            UE_ASSERT_EQUAL(1, Maps[2].Num());
 
             return true;
         });

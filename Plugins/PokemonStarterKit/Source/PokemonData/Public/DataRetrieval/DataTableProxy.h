@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataStructHandle.h"
 #include "GameData.h"
-#include "IndexedTableRow.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/MapValue.h"
@@ -13,9 +13,9 @@
  * @tparam T The row type this proxy references
  */
 template <typename T>
-    requires std::is_base_of_v<FIndexedTableRow, T>
+    requires Pokemon::Data::DataStruct<T>
 class TDataTableProxy final : public IGameData {
-public:
+  public:
     explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable) {
     }
 
@@ -53,7 +53,7 @@ public:
         // clang-format on
     }
 
-private:
+  private:
     /**
      * A pointer to the data table asset that this proxy object contains
      */

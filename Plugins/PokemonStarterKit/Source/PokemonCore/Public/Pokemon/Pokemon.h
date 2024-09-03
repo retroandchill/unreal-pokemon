@@ -12,6 +12,7 @@
 
 #include "Pokemon.generated.h"
 
+struct FStatusHandle;
 struct FStatus;
 class IObtainedBlock;
 struct FOwnerInfo;
@@ -185,14 +186,17 @@ class POKEMONCORE_API IPokemon {
      */
     virtual TOptional<const FStatus &> GetStatusEffect() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = StatusEffects, meta = (AutoCreateRefTerm = Handle))
+    virtual bool HasStatusEffect(const FStatusHandle &Handle) const = 0;
+
     /**
      * Set the Pokémon's status effect
      * @param StatusID The ID of the status effect in question.
      * @param bOverwriteExisting Should this overwrite the existing status effect?
      * @return Was the status effect changed?
      */
-    UFUNCTION(BlueprintCallable, Category = StatusEffects)
-    virtual bool SetStatusEffect(FName StatusID, bool bOverwriteExisting = false) = 0;
+    UFUNCTION(BlueprintCallable, Category = StatusEffectss, meta = (AutoCreateRefTerm = StatusID))
+    virtual bool SetStatusEffect(const FStatusHandle &StatusID, bool bOverwriteExisting = false) = 0;
 
     /**
      * Remove a Pokémon's status condition

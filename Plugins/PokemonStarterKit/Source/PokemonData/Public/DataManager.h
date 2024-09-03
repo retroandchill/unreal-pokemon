@@ -24,6 +24,18 @@ class POKEMONDATA_API FDataManager {
      */
     static FDataManager &GetInstance();
 
+    template <typename T>
+        requires Pokemon::Data::DataStructHandle<T>
+    auto GetData(T &&Handle) const {
+        return GetDataTable<typename std::remove_cvref_t<T>::FStructType>().GetData(Handle);
+    }
+
+    template <typename T>
+        requires Pokemon::Data::DataStructHandle<T>
+    auto GetDataChecked(T &&Handle) const {
+        return GetDataTable<typename std::remove_cvref_t<T>::FStructType>().GetDataChecked(Handle);
+    }
+
     /**
      * Get the data table that contains data of the specified type
      * @tparam T The type to look up the table for
@@ -49,6 +61,8 @@ class POKEMONDATA_API FDataManager {
      * @return A reference to the table proxy object
      */
     const IGameData &GetDataTable(TObjectPtr<const UScriptStruct> StructType) const;
+
+    bool HasDataTable(const UScriptStruct *StructType) const;
 
     /**
      * Get the set of valid struct types held in this class
