@@ -5,6 +5,7 @@
 #include "EvolutionMethod.h"
 #include "IndexedTableRow.h"
 #include "LevelUpMove.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "UObject/Object.h"
 
 #include "SpeciesData.generated.h"
@@ -234,6 +235,18 @@ struct POKEMONDATA_API FSpeciesData : public FIndexedTableRow {
     const FGenderRatio &GetGenderRatio() const;
 };
 
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FSpeciesHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FSpeciesHandle, FSpeciesData);
+
+    /**
+     * The ID of the row in question.
+     */
+    UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.SpeciesHelper.GetSpeciesNames"))
+    FName RowID;
+};
+
 /**
  * Blueprint function library for getting species data out.
  */
@@ -248,4 +261,13 @@ class POKEMONDATA_API USpeciesHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetSpeciesNames();
+
+    UFUNCTION(BlueprintPure, Category = ItemHandle,
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertSpeciesHandleToName(const FSpeciesHandle &Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+              meta = (DisplayName = "Convert To Species Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FSpeciesHandle ConvertNameToSpeciesHandle(FName Name);
 };

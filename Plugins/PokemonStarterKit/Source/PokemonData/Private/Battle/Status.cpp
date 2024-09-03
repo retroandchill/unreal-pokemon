@@ -14,3 +14,11 @@ TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
            UE::Ranges::ToArray;
     // clang-format on
 }
+
+FName UStatusEffectHelper::ConvertStatusHandleToName(const FStatusHandle &Struct) {
+    return Struct;
+}
+
+FStatusHandle UStatusEffectHelper::ConvertNameToStatusHandle(FName Name) {
+    return Name;
+}

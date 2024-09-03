@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Battlers/Battler.h"
+#include "Battle/Status.h"
 #include "Species/SpeciesData.h"
 #include <gmock/gmock.h>
 
@@ -49,6 +50,6 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(void, RecordParticipation, (), (override));
     MOCK_METHOD(void, AddParticipant, (const TScriptInterface<IBattler> &Participant), (override));
     MOCK_METHOD(const TOptional<FStatusEffectInfo> &, GetStatusEffect, (), (const, override));
-    MOCK_METHOD2(InflictStatusEffect, void(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
+    MOCK_METHOD2(InflictStatusEffect, void(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
     MOCK_METHOD(void, CureStatusEffect, (), (override));
 };

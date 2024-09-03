@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Species/Stat.h"
 #include "StatEntry.h"
 #include "Utilities/PokemonUtilities.h"
 
@@ -84,7 +85,7 @@ class POKEMONCORE_API IStatBlock {
      * @return The entry of the stat
      */
     UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual TScriptInterface<IStatEntry> GetStat(FName Stat) const = 0;
+    virtual TScriptInterface<IStatEntry> GetStat(FMainStatHandle Stat) const = 0;
 
     /**
      * Iterate over the stats performing the given predicate

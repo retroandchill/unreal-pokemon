@@ -50,3 +50,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
     JoinedItems.Appendf(TEXT(" %s %s"), *Conjunction.ToString(), *Items.Last().ToString());
     return FText::FromString(MoveTemp(JoinedItems));
 }
+
+TSharedPtr<FString> UStringUtilities::NameToStringPtr(FName Name) {
+    return MakeShared<FString>(Name.ToString());
+}

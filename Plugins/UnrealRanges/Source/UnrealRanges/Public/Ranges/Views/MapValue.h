@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Map.h"
 #include "Ranges/RangeConcepts.h"
 #include <range/v3/view/view.hpp>
 

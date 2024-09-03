@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "IndexedTableRow.h"
 #include "MoveDamageCategory.h"
 #include "UObject/Object.h"
@@ -101,6 +102,18 @@ struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
     static constexpr int32 VARIABLE_POWER = 1;
 };
 
+USTRUCT(BlueprintType, meta = (DisableSplitPin))
+struct POKEMONDATA_API FMoveHandle {
+    GENERATED_BODY()
+    DECLARE_DATA_HANDLE(FMoveHandle, FMoveData)
+
+    /**
+     * The ID of the row in question.
+     */
+    UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.MoveHelper.GetMoveNames"))
+    FName RowID;
+};
+
 /**
  * Blueprint function library for getting move data out.
  */
@@ -115,4 +128,13 @@ class POKEMONDATA_API UMoveHelper : public UBlueprintFunctionLibrary {
      */
     UFUNCTION()
     static TArray<FName> GetMoveNames();
+
+    UFUNCTION(BlueprintPure, Category = MoveHandle,
+              meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
+                      AutoCreateRefTerm = Struct))
+    static FName ConvertMoveHandleHandleToName(const FMoveHandle &Struct);
+
+    UFUNCTION(BlueprintPure, Category = Name,
+              meta = (DisplayName = "Convert To Move Handle", CompactNodeTitle = "->", BlueprintAutocast))
+    static FMoveHandle ConvertNameToMoveHandle(FName Name);
 };

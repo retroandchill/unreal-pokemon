@@ -30,7 +30,7 @@ FText UK2Node_GetAllGameDataIDs::GetNodeTitle(ENodeTitleType::Type TitleType) co
 }
 
 FText UK2Node_GetAllGameDataIDs::GetTooltipText() const {
-    if (StructType) {
+    if (StructType != nullptr) {
         return FText::FormatNamed(
             NSLOCTEXT("K2Node", "GetAllGameDataIDs_TooltipFormat", "Get All {StructName} IDs \n\n{StructTooltip}"),
             TEXT("StructName"), StructType->GetDisplayNameText(), TEXT("StructTooltip"),

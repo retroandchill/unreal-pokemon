@@ -6,8 +6,6 @@
 #include "Battle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Events/BattleMessage.h"
-#include "GameplayAbilitySpecHandle.h"
-#include "Pokemon/PokemonDTO.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"

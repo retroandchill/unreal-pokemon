@@ -134,7 +134,7 @@ const FNature &UDefaultStatBlock::GetNature() const {
     return *DataTable.GetData(NatureRows[Index]);
 }
 
-TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FName Stat) const {
+TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FMainStatHandle Stat) const {
     check(Stats.Contains(Stat))
     return Stats[Stat];
 }

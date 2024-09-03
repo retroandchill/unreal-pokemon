@@ -1,8 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "TestShutdownSubsystem.h"
+#include "IAutomationControllerModule.h"
 #include "TestShutdownOutputDevice.h"
+#include "Algo/AnyOf.h"
 
+class IAutomationControllerModule;
 UTestShutdownSubsystem *UTestShutdownSubsystem::Instance = nullptr;
 TUniquePtr<FTestShutdownOutputDevice> UTestShutdownSubsystem::ShutdownOutputDevice =
     MakeUnique<FTestShutdownOutputDevice>();
@@ -33,7 +36,10 @@ bool UTestShutdownSubsystem::IsTickable() const {
 
 void UTestShutdownSubsystem::Tick(float DeltaTime) {
     if (ShutdownOutputDevice->ShutdownMessageReceived() && bExitRequested) {
-        FGenericPlatformMisc::RequestExit(false);
+        auto AutomationControllerModule = FModuleManager::GetModulePtr<IAutomationControllerModule>("AutomationController");
+        auto AutomationController = AutomationControllerModule->GetAutomationController();
+        uint8 ExitCode = Algo::AnyOf(AutomationController->GetFilteredReports(), &IAutomationReport::HasErrors) ? 1 : 0;
+        FGenericPlatformMisc::RequestExitWithStatus(false, ExitCode);
     }
 }
 
