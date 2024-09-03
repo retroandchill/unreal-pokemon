@@ -151,6 +151,12 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
     FDirectoryPath HoldItemBattleEffectPackageName;
 
     /**
+     * The name of the package that contains the status effect Blueprints
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Search Paths", meta = (ContentDir))
+    FDirectoryPath StatusEffectPackageName;
+
+    /**
      * The prefix that is placed before a type icon when searching
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
@@ -203,4 +209,10 @@ class POKEMONASSETS_API UDynamicAssetLoadingSettings : public UDeveloperSettings
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
     FString HoldItemEffectPrefix;
+
+    /**
+     * The prefix that is placed before a status item effect when looking it up
+     */
+    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = "Prefixes")
+    FString StatusEffectPrefix;
 };

@@ -286,10 +286,12 @@ class POKEMONBATTLE_API IBattler {
      * @param StatusEffectID The ID of the status effect to inflict
      * @param EffectHandle The handle for the corresponding gameplay effect
      */
-    virtual void InflictStatusEffect(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle) = 0;
+    UFUNCTION(BlueprintCallable, Category = StatusEffects)
+    virtual void InflictStatusEffect(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle) = 0;
 
     /**
      * Remove the battler's status effect
      */
+    UFUNCTION(BlueprintCallable, Category = StatusEffects)
     virtual void CureStatusEffect() = 0;
 };
