@@ -24,6 +24,15 @@ bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(TEXT("Switch on Ability Handle"), TestNode->GetNodeTitle(MenuTitle).ToString());
     UE_CHECK_EQUAL(TEXT("Selects an output that matches the input value"), TestNode->GetTooltipText().ToString());
     UE_CHECK_TRUE(TestNode->ShouldShowNodeProperties());
+
+    UE_CHECK_TRUE(TestNode->GetStructType() == FAbilityHandle::StaticStruct());
+
+    auto PinType = TestNode->GetPinType();
+    UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Struct, PinType.PinCategory);
+    UE_CHECK_TRUE(PinType.PinSubCategoryObject == FAbilityHandle::StaticStruct());
+
+    UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Name, TestNode->GetInnerCaseType().PinCategory);
+    
     
     return true;
 }
