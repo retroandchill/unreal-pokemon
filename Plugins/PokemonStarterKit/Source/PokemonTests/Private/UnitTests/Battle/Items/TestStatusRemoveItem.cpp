@@ -21,7 +21,7 @@ bool TestStatusRemoveItem::RunTest(const FString &Parameters) {
                                                                                  .IVs = {{"SPECIAL_ATTACK", 31}},
                                                                                  .EVs = {{"SPECIAL_ATTACK", 252}},
                                                                                  .Nature = FName("MODEST"),
-                                                                                 .StatusEffect = "BURN"});
+                                                                                 .StatusEffect = FName("BURN")});
     auto Pokemon2 =
         UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
                                                                                  .Level = 100,
