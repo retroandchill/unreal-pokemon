@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
 #include "Ranges/Concepts/Structs.h"
-#include "UObject/UnrealTypePrivate.h"
 #include <memory>
 
 #include "DataStructHandle.generated.h"
@@ -54,7 +53,8 @@ namespace Pokemon::Data {
          * Operator used to free the underlying struct type
          * @param Struct The struct to free
          */
-        void operator()(void *Struct) const {
+        template <typename T>
+        void operator()(T *Struct) const {
             if (Struct != nullptr && StructClass != nullptr) {
                 StructClass->DestroyStruct(StructClass);
                 FMemory::Free(Struct);
@@ -109,8 +109,10 @@ namespace Pokemon::Data {
          * Get the underlying struct data.
          * @return The underlying struct data
          */
-        void *Get() const {
-            return Struct.get();
+        template <typename T>
+            requires DataStructHandle<T>
+        T *Get() const {
+            return static_cast<T*>(Struct.get());
         }
 
         /**
@@ -159,13 +161,13 @@ class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibr
   public:                                                                                                              \
     using FValueType = StructType;                                                                                     \
     ClassName() = default;                                                                                             \
-    explicit(false) ClassName(FName RowID) : RowID(RowID) {                                                            \
+    ClassName(FName RowID) : RowID(RowID) {                                                            \
     }                                                                                                                  \
-    explicit(false) ClassName(const ANSICHAR *RowID) : RowID(RowID) {                                                  \
+    ClassName(const ANSICHAR *RowID) : RowID(RowID) {                                                  \
     }                                                                                                                  \
-    explicit(false) ClassName(const WIDECHAR *RowID) : RowID(RowID) {                                                  \
+    ClassName(const WIDECHAR *RowID) : RowID(RowID) {                                                  \
     }                                                                                                                  \
-    explicit(false) ClassName(const UTF8CHAR *RowID) : RowID(RowID) {                                                  \
+    ClassName(const UTF8CHAR *RowID) : RowID(RowID) {                                                  \
     }                                                                                                                  \
     operator FName() const {                                                                                           \
         return RowID;                                                                                                  \

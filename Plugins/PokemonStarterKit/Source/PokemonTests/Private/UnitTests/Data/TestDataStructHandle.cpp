@@ -14,7 +14,7 @@ bool TestDataStructHandle::RunTest(const FString &Parameters) {
     UE_ASSERT_TRUE(WrappedStruct.GetStruct() == FSpeciesHandle::StaticStruct());
     WrappedStruct.SetRowID(TEXT("BULBASAUR"));
     UE_CHECK_EQUAL(TEXT("BULBASAUR"), WrappedStruct.GetRowID().ToString());
-    auto AsHandle = static_cast<FSpeciesHandle *>(WrappedStruct.Get());
+    auto AsHandle = WrappedStruct.Get<FSpeciesHandle>();
     UE_CHECK_EQUAL(TEXT("BULBASAUR"), AsHandle->RowID.ToString());
 
     WrappedStruct = FItemHandle::StaticStruct();

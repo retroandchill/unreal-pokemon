@@ -22,10 +22,8 @@ UScriptStruct *UK2Node_SwitchOnDataHandle::GetStructType() const {
 }
 
 void UK2Node_SwitchOnDataHandle::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
-    auto PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-    bool bIsDirty = PropertyName == GET_MEMBER_NAME_CHECKED(UK2Node_SwitchOnDataHandle, PinHandles);
-
-    if (bIsDirty) {
+    if (auto PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
+        PropertyName == GET_MEMBER_NAME_CHECKED(UK2Node_SwitchOnDataHandle, PinHandles)) {
         ReconstructNode();
     }
     Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -88,7 +86,7 @@ void UK2Node_SwitchOnDataHandle::AddPinToSwitchNode() {
 
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, PinName);
     if (PinHandles.Num() < PinNames.Num()) {
-        PinHandles.Add(FDataStructHandle(PinNames.Last()));
+        PinHandles.Add(FDataStructHandle{PinNames.Last()});
     }
 }
 
@@ -119,18 +117,17 @@ FEdGraphPinType UK2Node_SwitchOnDataHandle::GetInnerCaseType() const {
 
 void UK2Node_SwitchOnDataHandle::CreateFunctionPin() {
     // Set properties on the function pin
-    UEdGraphPin *FunctionPin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, FunctionClass, FunctionName);
+    auto FunctionPin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, FunctionClass, FunctionName);
     FunctionPin->bDefaultValueIsReadOnly = true;
     FunctionPin->bNotConnectable = true;
     FunctionPin->bHidden = true;
 
-    UFunction *Function = FindUField<UFunction>(FunctionClass, FunctionName);
+    const auto Function = FindUField<UFunction>(FunctionClass, FunctionName);
     const bool bIsStaticFunc = Function->HasAllFunctionFlags(FUNC_Static);
     if (bIsStaticFunc) {
         // Wire up the self to the CDO of the class if it's not us
-        if (UBlueprint *BP = GetBlueprint()) {
-            UClass *FunctionOwnerClass = Function->GetOuterUClass();
-            if (!BP->SkeletonGeneratedClass->IsChildOf(FunctionOwnerClass)) {
+        if (auto BP = GetBlueprint()) {
+            if (const auto FunctionOwnerClass = Function->GetOuterUClass(); !BP->SkeletonGeneratedClass->IsChildOf(FunctionOwnerClass)) {
                 FunctionPin->DefaultObject = FunctionOwnerClass->GetDefaultObject();
             }
         }

@@ -43,7 +43,8 @@ public class PokemonTests : ModuleRules
                 "CommonGame",
                 "DeveloperSettings",
                 "EnhancedInput", 
-                "PokemonEncounters"
+                "PokemonEncounters",
+                "ToolWidgets"
             }
         );
     }

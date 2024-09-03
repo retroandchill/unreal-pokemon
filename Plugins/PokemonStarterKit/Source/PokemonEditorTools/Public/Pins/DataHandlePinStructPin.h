@@ -11,7 +11,6 @@
  * Widget that represents a data handle struct pin, giving the user a dropdown instead of a regular struct pin.
  */
 class POKEMONEDITORTOOLS_API SDataHandlePinStructPin : public SGraphPinStructInstance {
-  public:
     SLATE_BEGIN_ARGS(SDataHandlePinStructPin) {
     }
 

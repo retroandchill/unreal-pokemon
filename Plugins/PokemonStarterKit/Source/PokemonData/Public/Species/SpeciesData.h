@@ -5,6 +5,7 @@
 #include "EvolutionMethod.h"
 #include "IndexedTableRow.h"
 #include "LevelUpMove.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "UObject/Object.h"
 
 #include "SpeciesData.generated.h"
@@ -237,7 +238,7 @@ struct POKEMONDATA_API FSpeciesData : public FIndexedTableRow {
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
 struct POKEMONDATA_API FSpeciesHandle {
     GENERATED_BODY()
-    DECLARE_DATA_HANDLE(FSpeciesHandle, FSpeciesData)
+    DECLARE_DATA_HANDLE(FSpeciesHandle, FSpeciesData);
 
     /**
      * The ID of the row in question.

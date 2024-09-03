@@ -11,7 +11,6 @@
  *
  */
 class POKEMONEDITORTOOLS_API SPocketKeyPin : public SGraphPinStructInstance {
-  public:
     SLATE_BEGIN_ARGS(SPocketKeyPin) {
     }
 

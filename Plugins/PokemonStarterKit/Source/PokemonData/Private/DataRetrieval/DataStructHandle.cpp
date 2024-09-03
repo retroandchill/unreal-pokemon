@@ -106,12 +106,12 @@ bool UDataStructHandleUtilities::NotEqual_HandleHandle(const FDataStructHandle &
 DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle) {
     P_GET_STRUCT_REF(FDataStructHandle, DataHandle)
     P_GET_PROPERTY(FNameProperty, Other)
-    P_FINISH;
+    P_FINISH
 
     bool bResult;
-    P_NATIVE_BEGIN;
+    P_NATIVE_BEGIN
     bResult = DataHandle.RowID != Other;
-    P_NATIVE_END;
+    P_NATIVE_END
 
     *static_cast<bool *>(RESULT_PARAM) = bResult;
 }

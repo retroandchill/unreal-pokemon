@@ -13,7 +13,7 @@
 
 class UPokemonDataSettings;
 
-void SPocketKeyPin::Construct(const FArguments &InArgs, UEdGraphPin *InGraphPin) {
+void SPocketKeyPin::Construct(const FArguments &, UEdGraphPin *InGraphPin) {
     SGraphPin::Construct(SGraphPin::FArguments(), InGraphPin);
 }
 
@@ -45,7 +45,7 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
     return SNew(SSearchableComboBox)
         .Visibility(this, &SGraphPin::GetDefaultValueVisibility)
         .OptionsSource(&Options)
-        .OnGenerateWidget_Lambda([this](const TSharedPtr<FString> &Name) {
+        .OnGenerateWidget_Lambda([](const TSharedPtr<FString> &Name) {
             return SNew(STextBlock)
                 .Text(FText::FromString(*Name))
                 .Font(IPropertyTypeCustomizationUtils::GetRegularFont());

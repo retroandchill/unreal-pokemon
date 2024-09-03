@@ -32,7 +32,6 @@ struct POKEMONDATA_API FStatus : public FIndexedTableRow {
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
 struct POKEMONDATA_API FStatusHandle {
     GENERATED_BODY()
-
     DECLARE_DATA_HANDLE(FStatusHandle, FStatus)
 
     /**
