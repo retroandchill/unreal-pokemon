@@ -35,13 +35,11 @@ TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() co
     check(StructClass != nullptr)
 
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
-    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"), TEXT("Missing FName property: %s"),
-           RowProperty)
+    check(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"))
 
         auto Options = RowProperty->GetMetaData("GetOptions");
     auto GetOptionsFunction = FindObject<UFunction>(nullptr, *Options, true);
-    checkf(GetOptionsFunction != nullptr && GetOptionsFunction->HasAnyFunctionFlags(EFunctionFlags::FUNC_Static),
-           TEXT("Invalid GetOptions: %s"), *Options)
+    check(GetOptionsFunction != nullptr && GetOptionsFunction->HasAnyFunctionFlags(EFunctionFlags::FUNC_Static))
 
         FGetOptionsParams Params;
     auto GetOptionsCDO = GetOptionsFunction->GetOuterUClass()->GetDefaultObject();
@@ -61,8 +59,7 @@ FName Pokemon::Data::FStructWrapper::GetRowID() const {
     check(StructClass != nullptr)
 
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
-    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"), TEXT("Missing FName property: %s"),
-           RowProperty)
+    check(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"))
 
         auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
     return TPropertyTypeFundamentals<FName>::GetPropertyValue(PropertyContainer);
@@ -74,8 +71,7 @@ void Pokemon::Data::FStructWrapper::SetRowID(FName RowID) {
     check(StructClass != nullptr)
 
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
-    checkf(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"), TEXT("Missing FName property: %s"),
-           RowProperty)
+    check(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"))
 
         auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
     TPropertyTypeFundamentals<FName>::SetPropertyValue(PropertyContainer, RowID);
