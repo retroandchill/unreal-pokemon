@@ -25,6 +25,14 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Storage|Information",
         meta = (AutoCreateRefTerm = NewName))
     void SetDisplayName(const FText &NewName) override;
+    
+    TOptional<int32> DepositToBox(const TScriptInterface<IPokemon> &Pokemon) override;
+
+    UFUNCTION(BlueprintPure, Category = "Storage|Pokémon")
+    bool IsBoxFull() const override;
+    
+    TOptional<IPokemon &> WithdrawFromBox(int32 BoxIndex) override;
+    TOptional<IPokemon &> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon) override;
 
 private:
     /**

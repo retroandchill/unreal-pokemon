@@ -6,6 +6,7 @@
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "PokemonDataSettings.h"
+#include "Ranges/Algorithm/AnyOf.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalClosure.h"
@@ -48,17 +49,15 @@ int32 UDefaultBag::GetItemQuantity(FItemHandle ItemID) const {
 bool UDefaultBag::HasItemWithTag(FName Tag) const {
     auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     // clang-format off
-    auto Match = ItemSlots |
+    return ItemSlots |
                  UE::Ranges::MapValue |
                  UE::Ranges::Map(&FPocket::Items) |
                  UE::Ranges::Join |
                  UE::Ranges::Map(&FItemSlot::Item) |
                  UE::Ranges::Map(ItemTable, &TDataTableProxy<FItem>::GetDataChecked) |
                  UE::Ranges::Map(&FItem::Tags) |
-                 UE::Ranges::Filter(&TArray<FName>::Contains<FName>, Tag) |
-                 UE::Ranges::FindFirst;
+                 UE::Ranges::AnyOf(&TArray<FName>::Contains<FName>, Tag);
     // clang-format on
-    return Match.IsSet();
 }
 
 bool UDefaultBag::CanObtainItem(FItemHandle ItemID) const {

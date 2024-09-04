@@ -4,6 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Pokemon/PokemonDTO.h"
+#include "StorageBoxDTO.generated.h"
+
+
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FStorageSlot {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, Category = Contents)
+    TOptional<FPokemonDTO> Pokemon;
+};
 
 /**
  * The underlying storage type used to save and load a storage box
@@ -16,5 +26,5 @@ struct POKEMONCORE_API FStorageBoxDTO {
     FText DisplayName;
 
     UPROPERTY(EditAnywhere, Category = Contents)
-    TArray<TOptional<FPokemonDTO>> StoredPokemon;
+    TArray<FStorageSlot> StoredPokemon;
 };

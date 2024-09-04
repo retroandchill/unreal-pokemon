@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include "StorageBox.generated.h"
 
+class IPokemon;
 struct FStorageBoxDTO;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType)
+UINTERFACE(BlueprintType, NotBlueprintable)
 class UStorageBox : public UInterface {
     GENERATED_BODY()
 };
@@ -44,5 +46,34 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Storage|Information",
         meta = (AutoCreateRefTerm = NewName))
     virtual void SetDisplayName(const FText& NewName) = 0;
+
+    /**
+     * Deposit of a Pokémon into the box.
+     * @param Pokemon The Pokémon to deposit
+     * @return The index of the Pokémon if it was deposited
+     */
+    virtual TOptional<int32> DepositToBox(const TScriptInterface<IPokemon>& Pokemon) = 0;
+
+    /**
+     * Check if the given box is full or not.
+     * @return Is the given box full
+     */
+    UFUNCTION(BlueprintCallable, Category = "Storage|Pokémon")
+    virtual bool IsBoxFull() const = 0;
+
+    /**
+     * Withdraw a Pokémon from a box at the given index
+     * @param BoxIndex The index to withdraw from
+     * @return The withdrawn Pokémon
+     */
+    virtual TOptional<IPokemon&> WithdrawFromBox(int32 BoxIndex) = 0;
+
+    /**
+     * Swap the out the Pokémon stored at the given index with a new Pokémon
+     * @param BoxIndex The index to store into
+     * @param Pokemon The Pokémon to replace into the slot
+     * @return The Pokémon that used to be in slot
+     */
+    virtual TOptional<IPokemon&> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon>& Pokemon) = 0;
 
 };

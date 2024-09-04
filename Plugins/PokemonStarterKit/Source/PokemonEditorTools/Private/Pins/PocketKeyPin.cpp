@@ -9,6 +9,7 @@
 #include "Ranges/Views/Map.h"
 #include "Ranges/Views/MapValue.h"
 #include "SSearchableComboBox.h"
+#include "Ranges/Algorithm/AnyOf.h"
 #include "Strings/StringUtilities.h"
 
 class UPokemonDataSettings;
@@ -32,10 +33,9 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
 
     // clang-format off
     auto Match = Options |
-                 UE::Ranges::Filter(this, &SPocketKeyPin::RowMatches) |
-                 UE::Ranges::FindFirst;
+                 UE::Ranges::AnyOf(this, &SPocketKeyPin::RowMatches);
     // clang-format on
-    if (!Match.IsSet() && !Options.IsEmpty()) {
+    if (!Match && !Options.IsEmpty()) {
         Handle.PocketName = **Options[0];
     }
 

@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Engine/OverlapResult.h"
 #include "GameFramework/Character.h"
+#include "Ranges/Algorithm/AnyOf.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -33,29 +34,23 @@ static TArray<FOverlapResult> GetTerrainActors(const UObject *WorldContext, cons
 bool UTerrainTagUtilities::HasTerrainTag(const UObject *WorldContext, const FGameplayTag &Tag,
                                          const ACharacter *Character) {
     auto Overlaps = GetTerrainActors(WorldContext, Character);
-    auto Match = Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
+    return Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
                  UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
-                 UE::Ranges::Filter([&Tag](const AActor *A) { return ITerrain::Execute_HasTerrainTag(A, Tag); }) |
-                 UE::Ranges::FindFirst;
-    return Match.IsSet();
+                 UE::Ranges::AnyOf([&Tag](const AActor *A) { return ITerrain::Execute_HasTerrainTag(A, Tag); });
 }
 
 bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const FGameplayTagContainer &Tags,
                                             const ACharacter *Character) {
     auto Overlaps = GetTerrainActors(WorldContext, Character);
-    auto Match = Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
+    return Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
                  UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
-                 UE::Ranges::Filter([&Tags](const AActor *A) { return ITerrain::Execute_HasAnyTerrainTag(A, Tags); }) |
-                 UE::Ranges::FindFirst;
-    return Match.IsSet();
+                 UE::Ranges::AnyOf([&Tags](const AActor *A) { return ITerrain::Execute_HasAnyTerrainTag(A, Tags); });;
 }
 
 bool UTerrainTagUtilities::HasAllTerrainTags(const UObject *WorldContext, const FGameplayTagContainer &Tags,
                                              ACharacter *Character) {
     auto Overlaps = GetTerrainActors(WorldContext, Character);
-    auto Match = Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
+    return Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
                  UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
-                 UE::Ranges::Filter([&Tags](const AActor *A) { return ITerrain::Execute_HasAllTerrainTags(A, Tags); }) |
-                 UE::Ranges::FindFirst;
-    return Match.IsSet();
+                 UE::Ranges::AnyOf([&Tags](const AActor *A) { return ITerrain::Execute_HasAllTerrainTags(A, Tags); });
 }

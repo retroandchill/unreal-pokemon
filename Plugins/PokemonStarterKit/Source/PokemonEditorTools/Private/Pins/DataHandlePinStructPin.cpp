@@ -6,6 +6,7 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "SSearchableComboBox.h"
+#include "Ranges/Algorithm/AnyOf.h"
 
 void SDataHandlePinStructPin::Construct(const FArguments &, UEdGraphPin *InGraphPin) {
     SGraphPin::Construct(SGraphPin::FArguments(), InGraphPin);
@@ -22,10 +23,9 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
 
     // clang-format off
     auto Match = Options |
-                 UE::Ranges::Filter(this, &SDataHandlePinStructPin::RowMatches) |
-                 UE::Ranges::FindFirst;
+                 UE::Ranges::AnyOf(this, &SDataHandlePinStructPin::RowMatches);
     // clang-format on
-    if (!Match.IsSet() && !Options.IsEmpty()) {
+    if (!Match && !Options.IsEmpty()) {
         Handle.SetRowID(FName(**Options[0]));
     }
 
