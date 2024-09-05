@@ -3,25 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Algo/ForEach.h"
-#include "range/v3/algorithm/for_each.hpp"
+#include "Algo/NoneOf.h"
+#include "range/v3/algorithm/none_of.hpp"
 #include "Ranges/Functional/Bindings.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/TerminalClosure.h"
 
 namespace UE::Ranges {
 
     /**
-     * Terminal invoker for performing the for each termination.
+     * Terminal invoker for performing a none of operation
      * @tparam F The type of the functor to call as part of the for each loop.
      */
     template <typename F>
-    struct TForEachInvoker {
+    struct TNoneOfInvoker {
         /**
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TForEachInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+        constexpr explicit TNoneOfInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
         }
 
         /**
@@ -31,16 +30,14 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R>
-        void operator()(R &&Range) const {
-            ranges::for_each(Forward<R>(Range), Functor);
+        bool operator()(R &&Range) const {
+            return ranges::none_of(Forward<R>(Range), Functor);
         }
 
         template <typename R>
             requires UEContainer<R>
-        void operator()(R &Range) const {
-            for (auto &Elem : Range) {
-                std::invoke(Functor, Elem);
-            }
+        bool operator()(R &Range) const {
+            return Algo::NoneOf(Range, Functor);
         }
 
       private:
@@ -48,9 +45,9 @@ namespace UE::Ranges {
     };
 
     /**
-     * Closure creation struct for handling for each operations.
+     * Closure creation struct for handling none of operations.
      */
-    struct FForEach {
+    struct FNoneOf {
 
         /**
          * Functional invocation that is used to perform the
@@ -59,16 +56,16 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
-        constexpr auto operator()(A &&...Args) const {
+        constexpr auto operator()( A &&...Args) const {
             using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
-            return TTerminalClosure<TForEachInvoker<BindingType>>(
-                TForEachInvoker<BindingType>(CreateBinding<A...>(Forward<A>(Args)...)));
+            return TTerminalClosure<TNoneOfInvoker<BindingType>>(
+                TNoneOfInvoker<BindingType>(CreateBinding<A...>(Forward<A>(Args)...)));
         }
     };
 
     /**
-     * Terminal invoker for ending a range pipe by performing a for each loop on the closure.
+     * Terminal invoker for ending a range pipe by check if none of the elements match the condition
      */
-    inline constexpr FForEach ForEach;
+    inline constexpr FNoneOf NoneOf;
 
 } // namespace UE::Ranges

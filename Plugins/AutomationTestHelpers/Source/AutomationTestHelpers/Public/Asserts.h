@@ -30,6 +30,11 @@
     if (!UE_CHECK_NOT_EQUAL(Expected, Actual))                                                                         \
     return ConcludeTest(*this, false)
 
+template <typename A, typename B>
+concept CanAssertEqual = requires(FAutomationTestBase &TestObject, const TCHAR* What, A LHS, B RHS) {
+    TestObject.TestEqual(What, LHS, RHS);
+};
+
 /**
  * Assert that the given statement is true.
  * @param TestObject The test object.
@@ -92,6 +97,7 @@ FORCEINLINE bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What
  * @return Did the assert succeed?
  */
 template <typename A, typename B>
+    requires CanAssertEqual<A, B>
 FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Expected, const B &Actual) {
     return TestObject.TestEqual(What.GetData(), Actual, Expected);
 }

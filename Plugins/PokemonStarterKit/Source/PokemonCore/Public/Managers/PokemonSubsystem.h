@@ -10,6 +10,7 @@
 
 #include "PokemonSubsystem.generated.h"
 
+class IStorageSystem;
 class UPokemonSaveGame;
 class IBag;
 class UPlayerMetadata;
@@ -57,6 +58,13 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Player)
     const TScriptInterface<IBag> &GetBag() const;
+
+    /**
+     * Get the Pokémon Storage System
+     * @return A reference to the Pokémon storage system
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Player)
+    const TScriptInterface<IStorageSystem> &GetStorageSystem() const;
 
     /**
      * Get the metadata about the current player
@@ -136,6 +144,12 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
      */
     UPROPERTY(BlueprintGetter = GetBag, Category = Player)
     TScriptInterface<IBag> Bag;
+
+    /**
+     * The Pokémon storage system
+     */
+    UPROPERTY(BlueprintGetter = GetStorageSystem, Category = Player)
+    TScriptInterface<IStorageSystem> StorageSystem;
 
     /**
      * The metadata about the player
