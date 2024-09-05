@@ -9,6 +9,8 @@
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Pokemon/Pokemon.h"
 #include "Saving/PokemonSaveGame.h"
+#include "Settings/PokemonStorageSystemSettings.h"
+#include "Storage/StorageSystem.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
@@ -47,6 +49,10 @@ void UPokemonSubsystem::StartNewGame() {
                                                              FText::FromStringView(TEXT("Nate")));
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this);
 
+    auto StorageSettings = GetDefault<UPokemonStorageSystemSettings>();
+    StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, StorageSettings->TotalBoxes,
+        StorageSettings->BoxCapacity);
+    
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }
@@ -57,6 +63,10 @@ const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
 
 const TScriptInterface<IBag> &UPokemonSubsystem::GetBag() const {
     return Bag;
+}
+
+const TScriptInterface<IStorageSystem> & UPokemonSubsystem::GetStorageSystem() const {
+    return StorageSystem;
 }
 
 UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const {
@@ -84,6 +94,7 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
     auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
     SaveGame->PlayerCharacter = Player->ToDTO();
     SaveGame->Bag = Bag->ToDTO();
+    SaveGame->StorageSystem = StorageSystem->ToDTO();
 
     SaveGame->CurrentMap = GetWorld()->GetMapName();
     auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
@@ -105,6 +116,7 @@ UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame
 void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
     Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveGame->PlayerCharacter);
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
+    StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, SaveGame->StorageSystem);
     PlayerMetadata->StartDate = SaveGame->StartDate;
     PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
     PlayerMetadata->RepelSteps = SaveGame->RepelSteps;

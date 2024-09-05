@@ -3,8 +3,10 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/GamePokemon.h"
+#include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/DefaultStorageBox.h"
 #include "Storage/StorageBox.h"
+#include "Storage/StorageSystem.h"
 #include "Storage/StorageUtilities.h"
 #include "Utilities/WidgetTestUtilities.h"
 
@@ -16,11 +18,28 @@ bool TestStorageBox::RunTest(const FString &Parameters) {
 
     UPokemonSubsystem::GetInstance(World.Get()).StartNewGame();
     auto Player = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
+
+    auto &StorageSystem = UPokemonSubsystem::GetInstance(World.Get()).GetStorageSystem();
+    UE_CHECK_NOT_NULL(StorageSystem.GetObject());
+
+    auto Settings = GetDefault<UPokemonStorageSystemSettings>();
+    UE_ASSERT_EQUAL(Settings->TotalBoxes, StorageSystem->GetBoxCount());
+    UE_CHECK_EQUAL(0, StorageSystem->GetCurrentBoxIndex());
+    StorageSystem->SetCurrentBoxIndex(1);
+    UE_CHECK_EQUAL(1, StorageSystem->GetCurrentBoxIndex());
+    for (int32 i = 0; i < StorageSystem->GetBoxCount(); i++) {
+        UE_CHECK_EQUAL(Settings->BoxCapacity, StorageSystem->GetBox(i)->GetCapacity());
+
+        auto BoxName = FText::FormatNamed(Settings->BoxNameFormat, TEXT("Index"), i + 1);
+        UE_CHECK_EQUAL(BoxName.ToString(), StorageSystem->GetBox(i)->GetDisplayName().ToString());
+    }
+    
+    auto Box = StorageSystem->GetBox(0);
+    Box->SetDisplayName(FText::FromStringView(TEXT("Test Box")));
+    UE_CHECK_EQUAL(TEXT("Test Box"), Box->GetDisplayName().ToString());
+
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
         FPokemonDTO{.Species = TEXT("PIKACHU"), .Level = 20}, Player);
-
-    auto Box = NewObject<UDefaultStorageBox>(World.Get())->Initialize(FText::FromStringView(TEXT("Box 1")), 30);
-
     int32 DepositIndex = INDEX_NONE;
     UE_ASSERT_EQUAL(EDepositResult::Deposited, UStorageUtilities::DepositToBox(Box, Pokemon1, DepositIndex));
     UE_CHECK_EQUAL(0, DepositIndex);

@@ -19,12 +19,17 @@ public:
     TScriptInterface<IStorageBox> Initialize(FText &&InitialName, int32 Capacity) override;
     TScriptInterface<IStorageBox> Initialize(const FStorageBoxDTO &DTO) override;
 
+    FStorageBoxDTO ToDTO() const override;
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Storage|Information")
     const FText & GetDisplayName() const override;
     
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Storage|Information",
         meta = (AutoCreateRefTerm = NewName))
     void SetDisplayName(const FText &NewName) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Storage|Information")
+    int32 GetCapacity() const override;
     
     TOptional<int32> DepositToBox(const TScriptInterface<IPokemon> &Pokemon) override;
 

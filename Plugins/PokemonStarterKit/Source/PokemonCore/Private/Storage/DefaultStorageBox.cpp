@@ -2,12 +2,14 @@
 
 
 #include "Storage/DefaultStorageBox.h"
+#include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/AllOf.h"
 #include "Ranges/Algorithm/AnyOf.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OrElseGet.h"
+#include "Ranges/Views/Construct.h"
 #include "Ranges/Views/Map.h"
 #include "Storage/StorageBoxDTO.h"
 #include "Ranges/Views/ContainerView.h"
@@ -40,12 +42,32 @@ TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(const FStorageBoxDT
     return this;
 }
 
+FStorageBoxDTO UDefaultStorageBox::ToDTO() const {
+    return {
+        .DisplayName = DisplayName,
+        // clang-format off
+        .StoredPokemon = StoredPokemon |
+                         UE::Ranges::Map(&TScriptInterface<IPokemon>::GetInterface) |
+                         UE::Ranges::Map([](IPokemon *Pokemon) {
+                             return UE::Optionals::OfNullable(Pokemon) |
+                                    UE::Optionals::Map(&IPokemon::ToDTO);
+                         }) |
+                         UE::Ranges::Construct<FStorageSlot>() |
+                         UE::Ranges::ToArray
+        // clang-format on
+    };
+}
+
 const FText &UDefaultStorageBox::GetDisplayName() const {
     return DisplayName;
 }
 
 void UDefaultStorageBox::SetDisplayName(const FText &NewName) {
     DisplayName = NewName;
+}
+
+int32 UDefaultStorageBox::GetCapacity() const {
+    return StoredPokemon.Num();
 }
 
 TOptional<int32> UDefaultStorageBox::DepositToBox(const TScriptInterface<IPokemon> &Pokemon) {

@@ -7,6 +7,8 @@
 #include "StorageBoxDTO.generated.h"
 
 
+class IStorageBox;
+
 USTRUCT(BlueprintType)
 struct POKEMONCORE_API FStorageSlot {
     GENERATED_BODY()
@@ -27,4 +29,6 @@ struct POKEMONCORE_API FStorageBoxDTO {
 
     UPROPERTY(EditAnywhere, Category = Contents)
     TArray<FStorageSlot> StoredPokemon;
+
+    TScriptInterface<IStorageBox> CreateBox(UObject* Outer) const;
 };

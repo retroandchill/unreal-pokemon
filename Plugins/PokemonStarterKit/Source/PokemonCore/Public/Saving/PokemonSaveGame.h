@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
 #include "Player/BagDTO.h"
+#include "Storage/StorageSystemDTO.h"
 #include "Trainers/TrainerDTO.h"
 
 #include "PokemonSaveGame.generated.h"
@@ -22,6 +23,9 @@ class POKEMONCORE_API UPokemonSaveGame : public USaveGame {
 
     UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
     FBagDTO Bag;
+
+    UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
+    FStorageSystemDTO StorageSystem;
 
     UPROPERTY(VisibleAnywhere, Category = Location)
     FString CurrentMap;

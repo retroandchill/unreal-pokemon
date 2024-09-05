@@ -10,7 +10,7 @@
 class IPokemon;
 struct FStorageBoxDTO;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable)
+UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
 class UStorageBox : public UInterface {
     GENERATED_BODY()
 };
@@ -31,6 +31,8 @@ public:
      */
     virtual TScriptInterface<IStorageBox> Initialize(FText &&InitialName, int32 Capacity) = 0;
     virtual TScriptInterface<IStorageBox> Initialize(const FStorageBoxDTO& DTO) = 0;
+
+    virtual FStorageBoxDTO ToDTO() const = 0;
     
     /**
      * Get the display name of the box.
@@ -46,6 +48,13 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Storage|Information",
         meta = (AutoCreateRefTerm = NewName))
     virtual void SetDisplayName(const FText& NewName) = 0;
+
+    /**
+     * Get the capacity of the box.
+     * @return The capacity of the box in question
+     */
+    UFUNCTION(BlueprintCallable, Category = "Storage|Information")
+    virtual int32 GetCapacity() const = 0;
 
     /**
      * Deposit of a Pokémon into the box.
