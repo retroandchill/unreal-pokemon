@@ -26,7 +26,7 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
 void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
                                                 TSubclassOf<ABattleTransitionActor> Transition) {
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
-    PlayerController->DisableInput(PlayerController);
+    PlayerController->GetPawn()->DisableInput(PlayerController);
     static auto &BattleLevelOffset = GetDefault<UPokemonBattleSettings>()->BattleSceneOffset;
     if (Transition != nullptr) {
         using FTransitionBinding = FOnBattleTransitionComplete::FDelegate;
@@ -101,4 +101,7 @@ void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
     }
     StreamingStates.Reset();
     bBattleInitialized = false;
+
+    auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
+    PlayerController->GetPawn()->EnableInput(PlayerController);
 }
