@@ -68,7 +68,6 @@ void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerC
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
-    PlayerController->EnableInput(PlayerController);
     PlayBattleIntro();
 }
 
