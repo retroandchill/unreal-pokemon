@@ -9,6 +9,8 @@
 
 #include "PokemonDTO.generated.h"
 
+class IPokemon;
+
 USTRUCT(BlueprintType)
 struct POKEMONCORE_API FMoveDTO {
     GENERATED_BODY()
@@ -185,4 +187,6 @@ struct POKEMONCORE_API FPokemonDTO {
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FOwnerInfo> OwnerInfo;
+
+    TScriptInterface<IPokemon> CreatePokemon(UObject* Outer) const;
 };
