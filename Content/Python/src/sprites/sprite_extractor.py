@@ -1,6 +1,8 @@
+from typing import Optional
+
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
-    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
+    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name, EditorAssetLibrary
 
 INVALID_ASSET_ERROR = 'Invalid asset type created'
 
@@ -11,7 +13,7 @@ def get_package_name(texture: Object) -> str:
     return texture.get_path_name().removesuffix(f'{texture.get_name()}.{texture.get_name()}')
 
 
-def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: int) -> list[PaperSprite]:
+def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperSpriteFactory()
     texture_package = get_package_name(source_texture)
@@ -31,16 +33,44 @@ def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_si
             new_sprite.set_editor_property('source_texture', source_texture)
             new_sprite.set_editor_property('source_uv', offset)
             new_sprite.set_editor_property('source_dimension', cell_size)
-            new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CUSTOM)
-            new_sprite.set_editor_property('custom_pivot_point', Vector2D(offset.x + cell_size.x / 2,
-                                                                          offset.y + cell_size.y - grid_size / 2))
+            if grid_size is not None:
+                new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CUSTOM)
+                new_sprite.set_editor_property('custom_pivot_point', Vector2D(offset.x + cell_size.x / 2,
+                                                                              offset.y + cell_size.y - grid_size / 2))
+            else:
+                new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CENTER_CENTER)
             sprites.append(new_sprite)
 
     return sprites
 
 
-def compile_sprites_into_flipbooks(source_texture: Texture2D, sprites: list[PaperSprite], columns: int,
-                                   frame_rate: float) -> list[PaperFlipbook]:
+def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[PaperSprite],
+                                  frame_rate: float) -> PaperFlipbook:
+    asset_tools = AssetToolsHelpers.get_asset_tools()
+    factory = PaperFlipbookFactory()
+    texture_package = get_package_name(source_texture)
+
+    base_name = source_texture.get_name()
+    EditorAssetLibrary.rename_loaded_asset(source_texture, f'{base_name}_Texture')
+    new_flipbook = asset_tools.create_asset(f'{base_name}', texture_package,
+                                            PaperFlipbook.static_class(), factory)
+    if not isinstance(new_flipbook, PaperFlipbook):
+        raise RuntimeError(INVALID_ASSET_ERROR)
+
+    key_frames: Array[PaperFlipbookKeyFrame] = Array(PaperFlipbookKeyFrame)
+    for sprite in sprites:
+        frame = PaperFlipbookKeyFrame()
+        frame.set_editor_property('sprite', sprite)
+        key_frames.append(frame)
+
+    new_flipbook.set_editor_property('key_frames', key_frames)
+    new_flipbook.set_editor_property('frames_per_second', frame_rate)
+    return new_flipbook
+
+
+
+def compile_sprites_into_directional_flipbooks(source_texture: Texture2D, sprites: list[PaperSprite], columns: int,
+                                               frame_rate: float) -> list[PaperFlipbook]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperFlipbookFactory()
     texture_package = get_package_name(source_texture)
