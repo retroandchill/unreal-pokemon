@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from typing import Optional
 
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
@@ -13,7 +15,46 @@ def get_package_name(texture: Object) -> str:
     return texture.get_path_name().removesuffix(f'{texture.get_name()}.{texture.get_name()}')
 
 
+def get_parent_package(package_name: str) -> str:
+    return f'{"/".join(package_name.split("/")[:-2])}/'
+
+
 def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
+    asset_tools = AssetToolsHelpers.get_asset_tools()
+    factory = PaperSpriteFactory()
+    texture_package = get_package_name(source_texture)
+
+    cell_size = Vector2D(source_texture.blueprint_get_size_x() / columns,
+                         source_texture.blueprint_get_size_y())
+    sprites = []
+    for i in range(columns):
+        new_sprite = asset_tools.create_asset(f'{source_texture.get_name()}_Sprite_{len(sprites)}',
+                                              texture_package, PaperSprite.static_class(), factory)
+        if not isinstance(new_sprite, PaperSprite):
+            raise RuntimeError(INVALID_ASSET_ERROR)
+
+        offset = Vector2D(i * cell_size.x, 0)
+
+        compile_sprite(new_sprite, source_texture, cell_size, grid_size, offset)
+        sprites.append(new_sprite)
+
+    return sprites
+
+
+def compile_sprite(new_sprite: PaperSprite, source_texture: Texture2D, cell_size: Vector2D,
+                   grid_size: Optional[int], offset: Vector2D) -> None:
+    new_sprite.set_editor_property('source_texture', source_texture)
+    new_sprite.set_editor_property('source_uv', offset)
+    new_sprite.set_editor_property('source_dimension', cell_size)
+    if grid_size is not None:
+        new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CUSTOM)
+        new_sprite.set_editor_property('custom_pivot_point', Vector2D(offset.x + cell_size.x / 2,
+                                                                      offset.y + cell_size.y - grid_size / 2))
+    else:
+        new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CENTER_CENTER)
+
+
+def create_directional_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperSpriteFactory()
     texture_package = get_package_name(source_texture)
@@ -30,15 +71,7 @@ def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_si
 
             offset = Vector2D(j * cell_size.x, i * cell_size.y)
 
-            new_sprite.set_editor_property('source_texture', source_texture)
-            new_sprite.set_editor_property('source_uv', offset)
-            new_sprite.set_editor_property('source_dimension', cell_size)
-            if grid_size is not None:
-                new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CUSTOM)
-                new_sprite.set_editor_property('custom_pivot_point', Vector2D(offset.x + cell_size.x / 2,
-                                                                              offset.y + cell_size.y - grid_size / 2))
-            else:
-                new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CENTER_CENTER)
+            compile_sprite(new_sprite, source_texture, cell_size, grid_size, offset)
             sprites.append(new_sprite)
 
     return sprites
@@ -48,11 +81,9 @@ def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[Paper
                                   frame_rate: float) -> PaperFlipbook:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperFlipbookFactory()
-    texture_package = get_package_name(source_texture)
+    texture_package = get_parent_package(get_package_name(source_texture))
 
-    base_name = source_texture.get_name()
-    EditorAssetLibrary.rename_loaded_asset(source_texture, f'{base_name}_Texture')
-    new_flipbook = asset_tools.create_asset(f'{base_name}', texture_package,
+    new_flipbook = asset_tools.create_asset(source_texture.get_name(), texture_package,
                                             PaperFlipbook.static_class(), factory)
     if not isinstance(new_flipbook, PaperFlipbook):
         raise RuntimeError(INVALID_ASSET_ERROR)

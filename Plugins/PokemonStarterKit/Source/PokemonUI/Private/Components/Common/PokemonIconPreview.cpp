@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Common/PokemonIconPreview.h"
+#include "PaperFlipbookUserWidget.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Image.h"
@@ -12,9 +13,7 @@
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::Refresh_Implementation(Pokemon);
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    auto [Icon, Size] = GraphicsLoadingSubsystem->GetPokemonIcon(Pokemon, this);
-    UWidgetUtilities::SetBrushFromAsset(PokemonIcon, Icon);
-    PokemonIcon->SetDesiredSizeOverride(Size);
+    PokemonIcon->SetFlipbook(GraphicsLoadingSubsystem->GetPokemonIcon(Pokemon));
     auto IconGraphics = GraphicsLoadingSubsystem->GetTypeIconGraphics(Pokemon->GetTypes());
     Algo::ForEach(TypeIcons, &UWidget::RemoveFromParent);
     TypeIcons.Empty();

@@ -21,7 +21,8 @@ public class PokemonUI : ModuleRules
 				"GameplayTags",
 				"EnhancedInput",
 				"DeveloperSettings", 
-				"PokemonItems"
+				"PokemonItems",
+				"PaperFlipbookWidget"
 			}
 		);
 

@@ -1,6 +1,6 @@
 from unreal import Texture2D, Array, ScopedSlowTask
 
-from sprites.sprite_extractor import create_sprites_from_texture, compile_sprites_into_flipbook
+from sprites.sprite_extractor import compile_sprites_into_flipbook, create_sprites_from_texture
 
 
 def execute(textures: Array[Texture2D], columns: int, frame_rate: float):
@@ -16,4 +16,3 @@ def execute(textures: Array[Texture2D], columns: int, frame_rate: float):
             slow_task.enter_progress_frame(1, f'Processing: {texture.get_name()}')
             sprites = create_sprites_from_texture(texture, columns)
             compile_sprites_into_flipbook(texture, sprites, frame_rate)
-            

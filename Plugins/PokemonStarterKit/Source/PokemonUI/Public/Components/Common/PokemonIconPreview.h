@@ -7,6 +7,7 @@
 
 #include "PokemonIconPreview.generated.h"
 
+class UPaperFlipbookUserWidget;
 class UImage;
 
 /**
@@ -33,7 +34,7 @@ class POKEMONUI_API UPokemonIconPreview : public UPokemonInfoWidget {
      * The icon for the Pokémon
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> PokemonIcon;
+    TObjectPtr<UPaperFlipbookUserWidget> PokemonIcon;
 
     UPROPERTY()
     TArray<TObjectPtr<UImage>> TypeIcons;

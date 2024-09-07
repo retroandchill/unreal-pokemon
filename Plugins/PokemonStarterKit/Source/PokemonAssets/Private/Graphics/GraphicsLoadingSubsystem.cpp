@@ -18,6 +18,7 @@
 #include "TextureCompiler.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
+#include "PaperFlipbook.h"
 #include <cmath>
 
 template <typename T>
@@ -129,20 +130,15 @@ UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, boo
     // clang-format on
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon,
-                                                                    UObject *Outer) {
-    return GetSpeciesIcon(Pokemon->GetSpecies().ID, Outer, {.Gender = Pokemon->GetGender()});
+UPaperFlipbook* UGraphicsLoadingSubsystem::GetPokemonIcon(const TScriptInterface<IPokemon>& Pokemon) {
+    return GetSpeciesIcon(Pokemon->GetSpecies().ID, {.Gender = Pokemon->GetGender()});
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species, UObject *Outer,
-                                                                    const FPokemonAssetParams &AdditionalParams) {
+UPaperFlipbook* UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species,
+                                                          const FPokemonAssetParams& AdditionalParams) {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
-    // clang-format off
-    return ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList) |
-           UE::Optionals::Map(&ConvertTextureToMaterial, PokemonSpriteMaterials.IconMaterial, Outer) |
-           UE::Optionals::OrElse(FMaterialInstanceWithSize{nullptr, FVector2D()});
-    // clang-format on
+    return ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
 }
 
 FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer,

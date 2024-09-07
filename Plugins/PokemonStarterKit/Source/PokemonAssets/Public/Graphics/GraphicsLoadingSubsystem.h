@@ -9,6 +9,7 @@
 
 #include "GraphicsLoadingSubsystem.generated.h"
 
+class UPaperFlipbook;
 struct FTrainerSpriteSettings;
 struct FPokemonSpriteSettings;
 class UStaticImageRepository;
@@ -75,21 +76,19 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     /**
      * Get the icon based upon the Pokémon that was passed in.
      * @param Pokemon The Pokémon to get the icon for
-     * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer);
+    UPaperFlipbook* GetPokemonIcon(const TScriptInterface<IPokemon>& Pokemon);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
      * @param Species The species of Pokémon to get the icon for
-     * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetSpeciesIcon(FName Species, UObject *Outer,
-                                             const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    UPaperFlipbook* GetSpeciesIcon(FName Species,
+                                   const FPokemonAssetParams& AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
