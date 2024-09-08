@@ -1,10 +1,8 @@
-import os
-from pathlib import Path
 from typing import Optional
 
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
-    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name, EditorAssetLibrary
+    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
 
 INVALID_ASSET_ERROR = 'Invalid asset type created'
 
@@ -17,7 +15,6 @@ def get_package_name(texture: Object) -> str:
 
 def get_parent_package(package_name: str) -> str:
     return f'{"/".join(package_name.split("/")[:-2])}/'
-
 
 def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
