@@ -1,12 +1,20 @@
-from typing import Optional
+from typing import Optional, re
 
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
-    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
+    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name, EditorAssetLibrary
 
 INVALID_ASSET_ERROR = 'Invalid asset type created'
 
 DIRECTIONS = [2, 4, 6, 8]
+
+
+def convert_filename_to_package_name(filename: str) -> str:
+    match = re.match(r'(\w+)\.png', filename)
+    if match is None:
+        raise ValueError(f'Invalid filename: {filename}')
+
+    return filename.replace('png', match.group(1))
 
 
 def get_package_name(texture: Object) -> str:
@@ -15,6 +23,7 @@ def get_package_name(texture: Object) -> str:
 
 def get_parent_package(package_name: str) -> str:
     return f'{"/".join(package_name.split("/")[:-2])}/'
+
 
 def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
@@ -32,14 +41,37 @@ def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_si
 
         offset = Vector2D(i * cell_size.x, 0)
 
-        compile_sprite(new_sprite, source_texture, cell_size, grid_size, offset)
+        compile_sprite(new_sprite, source_texture, cell_size, offset, grid_size)
         sprites.append(new_sprite)
 
     return sprites
 
 
-def compile_sprite(new_sprite: PaperSprite, source_texture: Texture2D, cell_size: Vector2D,
-                   grid_size: Optional[int], offset: Vector2D) -> None:
+def create_sprites_from_sprite_sheet(source_texture: Texture2D, frames: int, rows: int, columns: int) -> list[PaperSprite]:
+    asset_tools = AssetToolsHelpers.get_asset_tools()
+    factory = PaperSpriteFactory()
+    texture_package = get_package_name(source_texture)
+
+    cell_size = Vector2D(source_texture.blueprint_get_size_x() / columns,
+                         source_texture.blueprint_get_size_y() / rows)
+
+    sprites = []
+    for i in range(frames):
+        new_sprite = asset_tools.create_asset(f'{source_texture.get_name()}_Sprite_{len(sprites)}',
+                                              texture_package, PaperSprite.static_class(), factory)
+        if not isinstance(new_sprite, PaperSprite):
+            raise RuntimeError(INVALID_ASSET_ERROR)
+
+        offset = Vector2D((i % columns) * cell_size.x, (i / columns) * cell_size.y)
+
+        compile_sprite(new_sprite, source_texture, cell_size, offset)
+        sprites.append(new_sprite)
+
+    return sprites
+
+
+def compile_sprite(new_sprite: PaperSprite, source_texture: Texture2D, cell_size: Vector2D, offset: Vector2D,
+                   grid_size: Optional[int] = None) -> None:
     new_sprite.set_editor_property('source_texture', source_texture)
     new_sprite.set_editor_property('source_uv', offset)
     new_sprite.set_editor_property('source_dimension', cell_size)
@@ -68,7 +100,7 @@ def create_directional_sprites_from_texture(source_texture: Texture2D, columns: 
 
             offset = Vector2D(j * cell_size.x, i * cell_size.y)
 
-            compile_sprite(new_sprite, source_texture, cell_size, grid_size, offset)
+            compile_sprite(new_sprite, source_texture, cell_size, offset, grid_size)
             sprites.append(new_sprite)
 
     return sprites
