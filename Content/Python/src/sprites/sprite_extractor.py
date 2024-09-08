@@ -10,11 +10,16 @@ DIRECTIONS = [2, 4, 6, 8]
 
 
 def convert_filename_to_package_name(filename: str) -> str:
+    # Replace windows path separators
+    filename = filename.replace('\\', '/')
+
     match = re.match(r'(\w+)\.png', filename)
     if match is None:
         raise ValueError(f'Invalid filename: {filename}')
 
-    return filename.replace('png', match.group(1))
+    filename = filename.replace('png', match.group(1))
+    paths = filename.split('/')
+    return f'{"/".join(paths[:-1])}/_Source/{paths[-1]}'
 
 
 def get_package_name(texture: Object) -> str:

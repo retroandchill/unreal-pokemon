@@ -1,6 +1,6 @@
 import csv
 
-from unreal import Texture2D, Array, ScopedSlowTask, EditorAssetLibrary
+from unreal import Texture2D, Array, ScopedSlowTask, EditorAssetLibrary, Object
 
 from sprites.sprite_extractor import compile_sprites_into_flipbook, create_sprites_from_texture, sprite_exists, \
     convert_filename_to_package_name, create_sprites_from_sprite_sheet
@@ -19,7 +19,7 @@ def execute(base_package: str, manifest_file: str, frame_rate: float):
 
     with ScopedSlowTask(len(data), "Importing Icons") as slow_task:
         slow_task.make_dialog(True)
-        for texture, frames, rows, columns  in data:
+        for texture, frames, rows, columns in data:
             if slow_task.should_cancel():
                 break
 
@@ -30,4 +30,12 @@ def execute(base_package: str, manifest_file: str, frame_rate: float):
                 continue
 
             sprites = create_sprites_from_sprite_sheet(source_texture, frames, rows, columns)
-            compile_sprites_into_flipbook(source_texture, sprites, frame_rate)
+            flipbook = compile_sprites_into_flipbook(source_texture, sprites, frame_rate)
+
+            all_assets = Array(Object)
+            for sprite in sprites:
+                all_assets.append(sprite)
+
+            all_assets.append(flipbook)
+
+            EditorAssetLibrary.save_loaded_assets(all_assets, False)
