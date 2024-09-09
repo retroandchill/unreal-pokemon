@@ -70,19 +70,6 @@ static TOptional<T &> ResolveAsset(FStringView BasePackageName, const TArray<FSt
 static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
                                                          FStringView Subfolder);
 
-static FMaterialInstanceWithSize
-ConvertTextureToMaterial(UTexture2D &Texture, const TSoftObjectPtr<UMaterialInterface> &BaseMaterial, UObject *Outer) {
-#if WITH_EDITOR
-    FTextureCompilingManager::Get().FinishCompilation({&Texture});
-#endif
-
-    static FName SourceTexture = "SourceTexture";
-    auto Material = UMaterialInstanceDynamic::Create(BaseMaterial.LoadSynchronous(), Outer);
-    Material->SetTextureParameterValue(SourceTexture, &Texture);
-    int32 Height = Texture.GetSizeY();
-    return {Material, FVector2D(Height, Height)};
-}
-
 void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
@@ -91,42 +78,19 @@ void UGraphicsLoadingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
     TrainerSpriteMaterials = Settings->TrainerSprites;
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
-                                                                            UObject *Outer, bool bBack) const {
-    return GetSpeciesBattleSprite(Pokemon->GetSpecies().ID, Outer, bBack,
-                                  {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
+UPaperFlipbook* UGraphicsLoadingSubsystem::GetPokemonBattleSprite(const TScriptInterface<IPokemon>& Pokemon,
+                                                                  bool bBack) const {
+    return GetSpeciesBattleSprite(Pokemon->GetSpecies().ID, bBack, {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
 }
 
-FMaterialInstanceWithSize
-UGraphicsLoadingSubsystem::GetSpeciesBattleSprite(FName Species, UObject *Outer, bool bBack,
-                                                  const FPokemonAssetParams &AdditionalParams) const {
+UPaperFlipbook* UGraphicsLoadingSubsystem::GetSpeciesBattleSprite(FName Species, bool bBack,
+                                                                  const FPokemonAssetParams& AdditionalParams) const {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
 
     // clang-format off
-    return ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList) |
-           UE::Optionals::Map(&ConvertTextureToMaterial, PokemonSpriteMaterials.BattleSpritesMaterial, Outer) |
-           UE::Optionals::OrElse(FMaterialInstanceWithSize{nullptr, FVector2D()});
-    // clang-format on
-}
-
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetPokemonUISprite(const TScriptInterface<IPokemon> &Pokemon,
-                                                                        UObject *Outer, bool bBack) const {
-    return GetSpeciesUISprite(Pokemon->GetSpecies().ID, Outer, bBack,
-                              {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
-}
-
-FMaterialInstanceWithSize
-UGraphicsLoadingSubsystem::GetSpeciesUISprite(FName Species, UObject *Outer, bool bBack,
-                                              const FPokemonAssetParams &AdditionalParams) const {
-    auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
-    auto SpriteResolutionList =
-        CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
-    // clang-format off
-    return ResolveAsset<UTexture2D>(AssetPath, SpriteResolutionList) |
-           UE::Optionals::Map(&ConvertTextureToMaterial, PokemonSpriteMaterials.UISpritesMaterial, Outer) |
-           UE::Optionals::OrElse(FMaterialInstanceWithSize{nullptr, FVector2D()});
+    return ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
     // clang-format on
 }
 
@@ -141,17 +105,14 @@ UPaperFlipbook* UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species,
     return ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer,
-                                                                      UObject *Outer) const {
-    return GetTrainerTypeSprite(Trainer->GetTrainerType().ID, Outer);
+UPaperFlipbook *UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer) const {
+    return GetTrainerTypeSprite(Trainer->GetTrainerType().ID);
 }
 
-FMaterialInstanceWithSize UGraphicsLoadingSubsystem::GetTrainerTypeSprite(FName TrainerType, UObject *Outer) const {
+UPaperFlipbook *UGraphicsLoadingSubsystem::GetTrainerTypeSprite(FName TrainerType) const {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->TrainerSpritesPackageName;
     // clang-format off
-    return LookupAssetByName<UTexture2D>(AssetPath, TrainerType.ToString()) |
-           UE::Optionals::Map(&ConvertTextureToMaterial, TrainerSpriteMaterials.FrontSpriteBaseMaterialUI, Outer) |
-           UE::Optionals::OrElse(FMaterialInstanceWithSize{nullptr, FVector2D()});
+    return LookupAssetByName<UPaperFlipbook>(AssetPath, TrainerType.ToString()).GetPtrOrNull();
     // clang-format on
 }
 
