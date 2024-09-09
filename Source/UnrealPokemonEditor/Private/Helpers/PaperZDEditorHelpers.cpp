@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Helpers/PaperZDEditorHelpers.h"
+#include "TextureCompiler.h"
 #include "UnrealPokemonEditor.h"
 
 bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource) {
@@ -15,4 +16,8 @@ bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnima
     TPropertyTypeFundamentals<TObjectPtr<UPaperZDAnimationSource>>::SetPropertyValue(PropertyContainer,
                                                                                      AnimationSource);
     return true;
+}
+
+void UPaperZDEditorHelpers::FinishLoadingTexture(UTexture2D *Texture) {
+    FTextureCompilingManager::Get().FinishCompilation({Texture});
 }

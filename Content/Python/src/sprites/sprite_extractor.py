@@ -1,3 +1,4 @@
+import math
 from typing import Optional
 import re
 
@@ -13,13 +14,12 @@ DIRECTIONS = [2, 4, 6, 8]
 def convert_filename_to_package_name(filename: str) -> str:
     # Replace windows path separators
     filename = filename.replace('\\', '/')
-
-    match = re.match(r'(\w+)\.png', filename)
-    if match is None:
-        raise ValueError(f'Invalid filename: {filename}')
-
-    filename = filename.replace('png', match.group(1))
     paths = filename.split('/')
+
+    match = re.match(r'(\w+)\.png', paths[-1])
+    if match is None:
+        raise ValueError(f'Invalid filename: {paths[-1]}')
+    paths[-1] = paths[-1].replace('png', match.group(1))
     return f'{"/".join(paths[:-1])}/_Source/{paths[-1]}'
 
 
@@ -68,7 +68,7 @@ def create_sprites_from_sprite_sheet(source_texture: Texture2D, frames: int, row
         if not isinstance(new_sprite, PaperSprite):
             raise RuntimeError(INVALID_ASSET_ERROR)
 
-        offset = Vector2D((i % columns) * cell_size.x, (i / columns) * cell_size.y)
+        offset = Vector2D((i % columns) * cell_size.x, (i // columns) * cell_size.y)
 
         compile_sprite(new_sprite, source_texture, cell_size, offset)
         sprites.append(new_sprite)
