@@ -25,7 +25,7 @@ public class Enhanced2D : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", "Paper2D"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
