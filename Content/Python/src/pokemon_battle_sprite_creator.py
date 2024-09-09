@@ -3,7 +3,7 @@ import csv
 from unreal import Texture2D, Array, ScopedSlowTask, EditorAssetLibrary, Object, PaperZDEditorHelpers
 
 from sprites.sprite_extractor import compile_sprites_into_flipbook, \
-    convert_filename_to_package_name, create_sprites_from_sprite_sheet
+    convert_filename_to_package_name, create_sprites_from_sprite_sheet, sprite_exists
 
 
 def execute(base_package: str, manifest_file: str, frame_rate: float):
@@ -28,6 +28,10 @@ def execute(base_package: str, manifest_file: str, frame_rate: float):
             source_texture = EditorAssetLibrary.load_asset(texture)
             if not isinstance(source_texture, Texture2D):
                 continue
+
+            if sprite_exists(source_texture):
+                continue
+
             PaperZDEditorHelpers.finish_loading_texture(source_texture)
 
             sprites = create_sprites_from_sprite_sheet(source_texture, frames, rows, columns)
