@@ -16,11 +16,6 @@ def convert_filename_to_package_name(filename: str) -> str:
     # Replace windows path separators
     filename = filename.replace('\\', '/')
     paths = filename.split('/')
-
-    match = re.match(r'(\w+)\.png', paths[-1])
-    if match is None:
-        raise ValueError(f'Invalid filename: {paths[-1]}')
-    paths[-1] = paths[-1].replace('png', match.group(1))
     return f'{"/".join(paths[:-1])}/_Source/{paths[-1]}'
 
 
@@ -122,7 +117,7 @@ def create_directional_sprites_from_texture(source_texture: Texture2D, columns: 
 
 
 def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[PaperSprite],
-                                  frame_rate: float) -> PaperFlipbook:
+                                  frame_rate: float, frame_order: list[int]) -> PaperFlipbook:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperFlipbookFactory()
     texture_package = get_parent_package(get_package_name(source_texture))
@@ -133,7 +128,8 @@ def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[Paper
         raise RuntimeError(INVALID_ASSET_ERROR)
 
     key_frames: Array[PaperFlipbookKeyFrame] = Array(PaperFlipbookKeyFrame)
-    for sprite in sprites:
+    for i in frame_order:
+        sprite = sprites[i]
         frame = PaperFlipbookKeyFrame()
         frame.set_editor_property('sprite', sprite)
         key_frames.append(frame)

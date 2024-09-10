@@ -12,19 +12,19 @@ def execute(base_package: str, manifest_file: str, frame_rate: float):
     """
     with open(manifest_file, "r") as manifest_file:
         csv_reader = csv.reader(manifest_file)
-        data = []
+        data: list[tuple[str, int, int, int, list[int]]] = []
         next(csv_reader, None)
         for row in csv_reader:
-            data.append((row[0], int(row[1]), int(row[2]), int(row[3])))
+            data.append((row[0], int(row[1]), int(row[2]), int(row[3]), eval(row[4])))
 
     with ScopedSlowTask(len(data), "Importing Icons") as slow_task:
         slow_task.make_dialog(True)
-        for texture, frames, rows, columns in data:
+        for texture, frames, rows, columns, frame_data in data:
             if slow_task.should_cancel():
                 break
 
             slow_task.enter_progress_frame(1, f'Processing: {texture}')
-            texture = convert_filename_to_package_name(f'{base_package}{texture}')
+            texture = convert_filename_to_package_name(f'{base_package}/{texture}')
             source_texture = EditorAssetLibrary.load_asset(texture)
             if not isinstance(source_texture, Texture2D):
                 continue
@@ -35,7 +35,7 @@ def execute(base_package: str, manifest_file: str, frame_rate: float):
             PaperZDEditorHelpers.finish_loading_texture(source_texture)
 
             sprites = create_sprites_from_sprite_sheet(source_texture, frames, rows, columns)
-            flipbook = compile_sprites_into_flipbook(source_texture, sprites, frame_rate)
+            flipbook = compile_sprites_into_flipbook(source_texture, sprites, frame_rate, frame_data)
 
             all_assets = Array(Object)
             for sprite in sprites:
