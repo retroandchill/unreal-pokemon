@@ -30,7 +30,7 @@ void UTrainerCardScreen::SetTrainerSprite() {
     check(GraphicsLoadingSubsystem != nullptr)
     auto Flipbook = GraphicsLoadingSubsystem->GetTrainerSprite(Trainer);
     TrainerImage->SetFlipbook(Flipbook);
-    TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames() - 1);
+    TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());
 }
 
 void UTrainerCardScreen::SetTrainerInfo() {

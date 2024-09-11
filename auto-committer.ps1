@@ -10,5 +10,5 @@ foreach ($folder in $folders) {
 }
 
 foreach ($rev in $(git rev-list --reverse origin/feature/140-battle-animations..feature/140-battle-animations)) {
-    git push origin ${rev}:/feature/140-battle-animations
+    git push origin ${rev}:feature/140-battle-animations
 }
