@@ -4,7 +4,6 @@
 #include "Camera/CameraFacingRotatorComponent.h"
 #include "Camera/CameraSubsystem.h"
 #include "Camera/CameraUtilities.h"
-#include "Kismet/GameplayStatics.h"
 
 using FRotateEvent = FOnCameraAngleChanged::FDelegate;
 

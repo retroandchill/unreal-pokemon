@@ -27,14 +27,6 @@ def get_parent_package(package_name: str) -> str:
     return f'{"/".join(package_name.split("/")[:-2])}/'
 
 
-def sprite_exists(source_texture: Texture2D) -> bool:
-    texture_package = get_package_name(source_texture)
-
-    asset_registry = AssetRegistryHelpers.get_asset_registry()
-    sprite_asset = asset_registry.get_asset_by_object_path(Name(f'{texture_package}{source_texture.get_name()}_Sprite_0.{source_texture.get_name()}_Sprite_0'))
-    return sprite_asset.is_valid()
-
-
 def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperSpriteFactory()
