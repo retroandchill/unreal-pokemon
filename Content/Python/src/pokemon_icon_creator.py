@@ -1,9 +1,11 @@
+from typing import Union
+
 from unreal import Texture2D, Array, ScopedSlowTask
 
 from sprites.sprite_extractor import compile_sprites_into_flipbook, create_sprites_from_texture
 
 
-def execute(textures: Array[Texture2D] | list[Texture2D], columns: int, frame_rate: float):
+def execute(textures: Union[Array[Texture2D], list[Texture2D]], columns: int, frame_rate: float):
     """
     Perform the creation of the sprites for the given icon sets.
     """

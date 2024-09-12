@@ -109,7 +109,7 @@ def create_directional_sprites_from_texture(source_texture: Texture2D, columns: 
 
 
 def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[PaperSprite],
-                                  frame_rate: float, frame_order: list[int]) -> PaperFlipbook:
+                                  frame_rate: float, frame_order: Optional[list[int]] = None) -> PaperFlipbook:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperFlipbookFactory()
     texture_package = get_parent_package(get_package_name(source_texture))
@@ -120,6 +120,8 @@ def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[Paper
         raise RuntimeError(INVALID_ASSET_ERROR)
 
     key_frames: Array[PaperFlipbookKeyFrame] = Array(PaperFlipbookKeyFrame)
+    if frame_order is None:
+        frame_order = range(len(sprites))
     for i in frame_order:
         sprite = sprites[i]
         frame = PaperFlipbookKeyFrame()

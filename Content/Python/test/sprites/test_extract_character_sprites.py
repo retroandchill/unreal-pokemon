@@ -1,12 +1,12 @@
 import unittest
 
+from coverage_helpers import run_test_with_coverage
 from unreal import Texture2D, Array, EditorAssetLibrary, PaperZDAnimationSource
 
 import character_sprite_creator
-from coverage_helpers import run_test_with_coverage
 
 
-class TestExtractSprites(unittest.TestCase):
+class TestExtractCharacterSprites(unittest.TestCase):
     def test_extract_character_sprites(self):
         anim_source = EditorAssetLibrary.load_asset('/Game/Python/test/resources/ExpansionTest.ExpansionTest')
         self.assertIsInstance(anim_source, PaperZDAnimationSource)
@@ -27,4 +27,4 @@ class TestExtractSprites(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    result = run_test_with_coverage(TestExtractSprites, __file__)
+    result = run_test_with_coverage(TestExtractCharacterSprites, __file__)
