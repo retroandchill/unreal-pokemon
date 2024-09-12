@@ -35,8 +35,8 @@ TStatId UCameraSubsystem::GetStatId() const {
     RETURN_QUICK_DECLARE_CYCLE_STAT(UCameraSubsystem, STATGROUP_Tickables);
 }
 
-FOnCameraAngleChanged &UCameraSubsystem::GetOnCameraAngleChanged() {
-    return OnCameraAngleChanged;
+FDelegateHandle UCameraSubsystem::BindToGetOnCameraAngleChanged(FOnCameraAngleChanged::FDelegate &&Binding) {
+    return OnCameraAngleChanged.Add(MoveTemp(Binding));
 }
 
 FVector2D UCameraSubsystem::GetCurrentCameraAngle() const {
