@@ -9,6 +9,7 @@
 
 #include "GraphicsLoadingSubsystem.generated.h"
 
+class UPaperFlipbook;
 struct FTrainerSpriteSettings;
 struct FPokemonSpriteSettings;
 class UStaticImageRepository;
@@ -55,59 +56,45 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer,
-                                                     bool bBack = false) const;
+    UPaperFlipbook* GetPokemonBattleSprite(const TScriptInterface<IPokemon>& Pokemon,
+                                           bool bBack = false) const;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize
-    GetSpeciesBattleSprite(FName Species, UObject *Outer, bool bBack = false,
-                           const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams()) const;
-
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetPokemonUISprite(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer,
-                                                 bool bBack = false) const;
-
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize
-    GetSpeciesUISprite(FName Species, UObject *Outer, bool bBack = false,
-                       const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams()) const;
+    UPaperFlipbook* GetSpeciesBattleSprite(FName Species, bool bBack = false,
+                                           const FPokemonAssetParams& AdditionalParams = FPokemonAssetParams()) const;
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
      * @param Pokemon The Pokémon to get the icon for
-     * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon, UObject *Outer);
+    UPaperFlipbook* GetPokemonIcon(const TScriptInterface<IPokemon>& Pokemon);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
      * @param Species The species of Pokémon to get the icon for
-     * @param Outer The owner of the created material instance
      * @return The graphical asset that this icon refers to.
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetSpeciesIcon(FName Species, UObject *Outer,
-                                             const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    UPaperFlipbook* GetSpeciesIcon(FName Species,
+                                   const FPokemonAssetParams& AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
      * @param Trainer The trainer in question
-     * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, UObject *Outer) const;
+    UPaperFlipbook* GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer) const;
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
      * @param TrainerType The trainer in question
-     * @param Outer The owner of the created material instance
      * @return The graphical asset that displays the trainer sprite
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    FMaterialInstanceWithSize GetTrainerTypeSprite(FName TrainerType, UObject *Outer) const;
+    UPaperFlipbook* GetTrainerTypeSprite(FName TrainerType) const;
 
     /**
      * Get the icon graphic for a singular type.

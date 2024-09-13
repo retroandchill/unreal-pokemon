@@ -1,7 +1,7 @@
 from unreal import Texture2D, Array, PaperZDAnimationSource, ScopedSlowTask
 
-from sprites.sprite_extractor import create_sprites_from_texture, compile_sprites_into_flipbooks, \
-    place_flipbooks_in_animation_source
+from sprites.sprite_extractor import create_directional_sprites_from_texture, \
+    compile_sprites_into_directional_flipbooks, place_flipbooks_in_animation_source
 
 
 def execute(textures: Array[Texture2D], columns: int, grid_size: int, frame_rate: float,
@@ -21,6 +21,6 @@ def execute(textures: Array[Texture2D], columns: int, grid_size: int, frame_rate
                 break
 
             slow_task.enter_progress_frame(1, f'Processing: {texture.get_name()}')
-            sprites = create_sprites_from_texture(texture, columns, grid_size)
-            flipbooks = compile_sprites_into_flipbooks(texture, sprites, columns, frame_rate)
+            sprites = create_directional_sprites_from_texture(texture, columns, grid_size)
+            flipbooks = compile_sprites_into_directional_flipbooks(texture, sprites, columns, frame_rate)
             place_flipbooks_in_animation_source(texture, flipbooks, anim_source)

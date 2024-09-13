@@ -99,6 +99,11 @@
 		{
 			"Name": "MapMetadata",
 			"Enabled": true
+		},
+		{
+			"Name": "PaperFlipbookWidget",
+			"Enabled": true,
+			"MarketplaceURL": "https://unrealengineresources.com/plugins"
 		}
 	]
 }

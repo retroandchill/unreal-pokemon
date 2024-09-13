@@ -7,6 +7,7 @@
 
 #include "TrainerCardScreen.generated.h"
 
+class UPaperFlipbookUserWidget;
 class UPlayerMetadata;
 class ITrainer;
 class UImage;
@@ -56,7 +57,7 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
      * The image used for the player's sprite
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> TrainerImage;
+    TObjectPtr<UPaperFlipbookUserWidget> TrainerImage;
 
     /**
      * The text used to display the player's name
