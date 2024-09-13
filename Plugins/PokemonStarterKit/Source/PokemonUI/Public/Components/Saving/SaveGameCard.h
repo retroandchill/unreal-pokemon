@@ -7,6 +7,7 @@
 
 #include "SaveGameCard.generated.h"
 
+class UPaperFlipbookUserWidget;
 class IPokemon;
 class UImage;
 class UDisplayText;
@@ -21,12 +22,12 @@ class POKEMONUI_API USaveGameCard : public UCommonUserWidget {
     void NativeConstruct() override;
 
     UFUNCTION(BlueprintImplementableEvent, Category = Layout)
-    void SlotPokemonIcon(UImage *Icon);
+    void SlotPokemonIcon(UPaperFlipbookUserWidget *Icon);
 
   private:
     void UpdateTimeLabels();
 
-    UImage *CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
+    UPaperFlipbookUserWidget *CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
 
     UFUNCTION()
     void UpdatePlaytimeText(float Playtime);
@@ -41,7 +42,7 @@ class POKEMONUI_API USaveGameCard : public UCommonUserWidget {
     TObjectPtr<UDisplayText> LocationText;
 
     UPROPERTY()
-    TArray<TObjectPtr<UImage>> Icons;
+    TArray<TObjectPtr<UPaperFlipbookUserWidget>> Icons;
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UDisplayText> GymBadgeText;

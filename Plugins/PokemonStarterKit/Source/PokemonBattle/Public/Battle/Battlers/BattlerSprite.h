@@ -7,6 +7,7 @@
 
 #include "BattlerSprite.generated.h"
 
+class UPaperFlipbook;
 struct FMaterialInstanceWithSize;
 // This class does not need to be modified.
 UINTERFACE()
@@ -24,10 +25,10 @@ class POKEMONBATTLE_API IBattlerSprite {
   public:
     /**
      * Set the battle sprite to the given material
-     * @param Material The material to use for the battle sprite
+     * @param Flipbook The material to use for the battle sprite
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void SetBattleSprite(const FMaterialInstanceWithSize &Material);
+    void SetBattleSprite(UPaperFlipbook *Flipbook);
 
     /**
      * Faint the battler

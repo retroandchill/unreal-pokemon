@@ -26,7 +26,8 @@ public class PokemonAssets : ModuleRules
 			new string[]
 			{
 				"Core",
-				"DeveloperSettings"
+				"DeveloperSettings",
+				"Paper2D"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -41,7 +42,7 @@ public class PokemonAssets : ModuleRules
 				"SlateCore",
 				"PokemonCore",
 				"PokemonData",
-				"UnrealInjector"
+				"UnrealInjector",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

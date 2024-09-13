@@ -2,6 +2,7 @@
 
 #include "Screens/PokemonSummaryScreen.h"
 #include "CommonButtonBase.h"
+#include "PaperFlipbookUserWidget.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
 #include "Components/Image.h"
 #include "Components/Summary/SummaryNameInfo.h"
@@ -48,7 +49,6 @@ void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon
     SummaryPages->Refresh(Pokemon);
 
     auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    auto [SpriteMaterial, Size] = GraphicsLoadingSubsystem->GetPokemonUISprite(Pokemon, this);
-    UWidgetUtilities::SetBrushFromAsset(PokemonSprite, SpriteMaterial);
-    PokemonSprite->SetDesiredSizeOverride(Size);
+    auto Flipbook = GraphicsLoadingSubsystem->GetPokemonBattleSprite(Pokemon);
+    PokemonSprite->SetFlipbook(Flipbook);
 }

@@ -30,7 +30,8 @@ public class PokemonBattleUI : ModuleRules
                 "UMG",
                 "PokemonAssets",
                 "GameplayAbilities",
-                "GameplayTags"
+                "GameplayTags",
+                "Paper2D"
             }
         );
     }

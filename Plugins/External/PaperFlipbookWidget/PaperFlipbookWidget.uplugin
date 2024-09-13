@@ -1,0 +1,36 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Paper Flipbook Widget",
+	"Description": "Paper flipbook widget allows you to display a flipbook asset in the UI.",
+	"Category": "User Interface",
+	"CreatedBy": "Elhoussine Mehnik",
+	"CreatedByURL": "https://twitter.com/HoussineMehnik",
+	"DocsURL": "https://unrealengineresources.com/documentation",
+	"MarketplaceURL": "https://unrealengineresources.com/plugins",
+	"SupportURL": "mailto:ue4resources@gmail.com",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"EnabledByDefault": false,
+	"Modules": [
+		{
+			"Name": "PaperFlipbookWidget",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault"
+		},
+		{
+			"Name": "PaperFlipbookWidgetEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Paper2D",
+			"Enabled": true
+		}
+	]
+}

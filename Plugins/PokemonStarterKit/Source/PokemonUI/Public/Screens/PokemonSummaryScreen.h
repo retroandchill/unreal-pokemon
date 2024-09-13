@@ -7,6 +7,7 @@
 
 #include "PokemonSummaryScreen.generated.h"
 
+class UPaperFlipbookUserWidget;
 class UPokemonSelectionPaneBase;
 class USummaryTabWidget;
 class ITrainer;
@@ -69,7 +70,7 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
      * The widget that displays the Pokémon sprite
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> PokemonSprite;
+    TObjectPtr<UPaperFlipbookUserWidget> PokemonSprite;
 
     /**
      * The widget containing the name information

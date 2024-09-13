@@ -21,7 +21,8 @@ public class PokemonUI : ModuleRules
 				"GameplayTags",
 				"EnhancedInput",
 				"DeveloperSettings", 
-				"PokemonItems"
+				"PokemonItems",
+				"PaperFlipbookWidget"
 			}
 		);
 
@@ -35,7 +36,9 @@ public class PokemonUI : ModuleRules
 				"UMG",
 				"RenderCore",
 				"UnrealInjector", 
-				"CommonInput", "PokemonItems"
+				"CommonInput", 
+				"PokemonItems",
+				"Paper2D"
 			}
 		);
 	}
