@@ -20,5 +20,6 @@ class TestExtractIcons(unittest.TestCase):
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/Icons/CHARMANDER.CHARMANDER'))
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/Icons/SQUIRTLE.SQUIRTLE'))
 
+
 if __name__ == '__main__':
     result = run_test_with_coverage(TestExtractIcons, __file__)

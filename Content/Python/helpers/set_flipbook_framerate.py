@@ -27,6 +27,7 @@ def change_pivot_point(package_name: str):
                 EditorAssetLibrary.save_loaded_assets(to_save)
                 to_save = Array(PaperFlipbook)
 
+
 if __name__ == '__main__':
     change_pivot_point('/Game/Graphics/Pokemon/Front/')
     change_pivot_point('/Game/Graphics/Pokemon/FrontShiny/')

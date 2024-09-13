@@ -28,7 +28,6 @@ def change_pivot_point(package_name: str):
                 to_save = Array(PaperSprite)
 
 
-
 if __name__ == '__main__':
     change_pivot_point('/Game/Graphics/Pokemon/Back/_Source/')
     change_pivot_point('/Game/Graphics/Pokemon/BackShiny/_Source/')
