@@ -1,11 +1,8 @@
-import math
 from typing import Optional
-import re
 
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
-    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name, EditorAssetLibrary, \
-    AssetRegistryHelpers
+    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
 
 INVALID_ASSET_ERROR = 'Invalid asset type created'
 
@@ -27,7 +24,8 @@ def get_parent_package(package_name: str) -> str:
     return f'{"/".join(package_name.split("/")[:-2])}/'
 
 
-def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
+def create_sprites_from_texture(source_texture: Texture2D, columns: int,
+                                grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperSpriteFactory()
     texture_package = get_package_name(source_texture)
@@ -49,7 +47,8 @@ def create_sprites_from_texture(source_texture: Texture2D, columns: int, grid_si
     return sprites
 
 
-def create_sprites_from_sprite_sheet(source_texture: Texture2D, frames: int, rows: int, columns: int) -> list[PaperSprite]:
+def create_sprites_from_sprite_sheet(source_texture: Texture2D, frames: int,
+                                     rows: int, columns: int) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperSpriteFactory()
     texture_package = get_package_name(source_texture)
@@ -85,7 +84,8 @@ def compile_sprite(new_sprite: PaperSprite, source_texture: Texture2D, cell_size
         new_sprite.set_editor_property('pivot_mode', SpritePivotMode.CENTER_CENTER)
 
 
-def create_directional_sprites_from_texture(source_texture: Texture2D, columns: int, grid_size: Optional[int] = None) -> list[PaperSprite]:
+def create_directional_sprites_from_texture(source_texture: Texture2D, columns: int,
+                                            grid_size: Optional[int] = None) -> list[PaperSprite]:
     asset_tools = AssetToolsHelpers.get_asset_tools()
     factory = PaperSpriteFactory()
     texture_package = get_package_name(source_texture)
@@ -131,7 +131,6 @@ def compile_sprites_into_flipbook(source_texture: Texture2D, sprites: list[Paper
     new_flipbook.set_editor_property('key_frames', key_frames)
     new_flipbook.set_editor_property('frames_per_second', frame_rate)
     return new_flipbook
-
 
 
 def compile_sprites_into_directional_flipbooks(source_texture: Texture2D, sprites: list[PaperSprite], columns: int,
