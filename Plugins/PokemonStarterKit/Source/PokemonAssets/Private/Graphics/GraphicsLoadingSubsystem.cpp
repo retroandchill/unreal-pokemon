@@ -10,40 +10,16 @@
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/Or.h"
-#include "Ranges/Optional/OrElse.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Extract.h"
 #include "Ranges/Views/Map.h"
 #include "Species/SpeciesData.h"
-#include "TextureCompiler.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include "PaperFlipbook.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetUtilities.h"
 #include <cmath>
-
-/**
- * Fetch the first matching asset for the provided keys
- * @tparam T The type of asset we're looking for
- * @param BasePackageName The base package to search for when resolving
- * @param Keys The keys to use when resolving
- * @return The found asset, if it exists
- */
-template <typename T>
-    requires std::is_base_of_v<UObject, T>
-static TOptional<T &> ResolveAsset(FStringView BasePackageName, const TArray<FString> &Keys) {
-    for (const auto &Key : Keys) {
-        auto Lookup = UAssetLoader::LookupAssetByName<T>(BasePackageName, Key);
-        if (!Lookup.IsSet()) {
-            continue;
-        }
-
-        return Lookup;
-    }
-
-    return nullptr;
-}
 
 static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
                                                          FStringView Subfolder);
@@ -68,7 +44,7 @@ UPaperFlipbook* UGraphicsLoadingSubsystem::GetSpeciesBattleSprite(FName Species,
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
 
     // clang-format off
-    return ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
+    return UAssetLoader::ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
     // clang-format on
 }
 
@@ -80,7 +56,7 @@ UPaperFlipbook* UGraphicsLoadingSubsystem::GetSpeciesIcon(FName Species,
                                                           const FPokemonAssetParams& AdditionalParams) {
     auto &[AssetPath] = GetDefault<UDynamicAssetLoadingSettings>()->PokemonSpritePackageName;
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
-    return ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
+    return UAssetLoader::ResolveAsset<UPaperFlipbook>(AssetPath, SpriteResolutionList).GetPtrOrNull();
 }
 
 UPaperFlipbook *UGraphicsLoadingSubsystem::GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer) const {
