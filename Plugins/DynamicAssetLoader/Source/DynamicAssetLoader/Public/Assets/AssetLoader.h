@@ -120,5 +120,4 @@ public:
     UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
         DeterminesOutputType = "BaseClass", DynamicOutputParam = "ReturnValue", AutoCreateRefTerm = "BasePackageName"))
     static UClass* LookupBlueprintClassByName(UClass* BaseClass, const FDirectoryPath &BasePackageName, const FString &AssetName);
-
 };
