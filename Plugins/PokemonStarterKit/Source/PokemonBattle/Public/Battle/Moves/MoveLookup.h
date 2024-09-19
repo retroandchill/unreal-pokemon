@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbility.h"
+
+class UBattleMoveFunctionCode;
 
 namespace Pokemon::Battle::Moves {
 
@@ -12,6 +13,6 @@ namespace Pokemon::Battle::Moves {
      * @param FunctionCode The function code of the move in question
      * @return The class that corresponds with the move
      */
-    POKEMONBATTLE_API TSubclassOf<UGameplayAbility> LookupMoveEffectClass(FName FunctionCode);
+    POKEMONBATTLE_API TSubclassOf<UBattleMoveFunctionCode> LookupMoveEffectClass(FName FunctionCode);
 
 } // namespace Pokemon::Battle::Moves

@@ -4,12 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Ranges/RangeConcepts.h"
 #include "AssetLoadingSettings.generated.h"
 
 namespace UE::Assets {
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     class TAssetClass;
+    
+    template <typename T>
+        requires std::is_base_of_v<UObject, T>
+    class TBlueprintClass;
 }
 
 USTRUCT(BlueprintType)
@@ -28,6 +33,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     UPROPERTY()
     bool bIsNative = false;
 
+
     FAssetLoadingEntry() = default;
 
 private:
@@ -36,6 +42,10 @@ private:
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     friend class UE::Assets::TAssetClass;
+
+    template <typename T>
+        requires std::is_base_of_v<UObject, T>
+    friend class UE::Assets::TBlueprintClass;
 };
 
 /**
@@ -51,5 +61,8 @@ public:
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
     TMap<FName, FAssetLoadingEntry> AssetClasses;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
+    TMap<FName, FAssetLoadingEntry> BlueprintClasses;
 
 };

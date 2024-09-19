@@ -128,7 +128,7 @@ public:
         } else {
             // clang-format off
             return UE::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
-                   UE::Optionals::Filter(&UClass::IsChildOf, T::StaticClass()) |
+                   UE::Optionals::Filter([](UClass& Class) { return Class.IsChildOf(T::StaticClass()); }) |
                    UE::Optionals::Map([](UClass &Class) {
                        return TNonNullSubclassOf<T>(&Class);
                    });
@@ -216,4 +216,57 @@ public:
         ExpandEnumAsExecs="ReturnValue"))
     static EAssetLoadResult ResolveAsset(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                          const TArray<FString> &Keys, UObject *&FoundAsset);
+
+    /**
+     * Fetch the first matching asset for the provided keys
+     * @tparam T The type of asset we're looking for
+     * @param BasePackageName The base package to search for when resolving
+     * @param Keys The keys to use when resolving
+     * @return The found asset, if it exists
+     */
+    template <typename T = UObject, typename R>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
+                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+    static TOptional<TNonNullSubclassOf<T>> ResolveClass(FStringView BasePackageName, R &&Keys) {
+        using ElementType = UE::Ranges::TRangeCommonReference<R>;
+        // clang-format off
+        return Keys |
+               UE::Ranges::Map([&BasePackageName](ElementType Key) {
+                   return LookupBlueprintClassByName<T>(BasePackageName, Key);
+               }) |
+               UE::Ranges::Filter([](TOptional<TNonNullSubclassOf<T>> Optional) { return Optional.IsSet(); }) |
+               UE::Ranges::FindFirst |
+               UE::Optionals::FlatMap([](const TOptional<TNonNullSubclassOf<T>> Optional) {
+                   return Optional;
+               });
+        // clang-format on
+    }
+
+    /**
+     * Fetch the first matching asset for the provided keys
+     * @tparam T The type of asset we're looking for
+     * @param BasePackageName The base package to search for when resolving
+     * @param Keys The keys to use when resolving
+     * @return The found asset, if it exists
+     */
+    template <typename T = UObject, typename R>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
+                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+    static TOptional<TNonNullSubclassOf<T>> ResolveClass(const FDirectoryPath &BasePackageName, R &&Keys) {
+        return ResolveClass<T, R>(BasePackageName.Path, Forward<R>(Keys));
+    }
+
+    /**
+     * Fetch the first matching asset for the provided keys
+     * @param AssetClass The type of asset we're looking for
+     * @param BasePackageName The base package to search for when resolving
+     * @param Keys The keys to use when resolving
+     * @param FoundClass The found asset, if it exists
+     * @return The result of the lookup
+     */
+    UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
+        DeterminesOutputType = "BaseClass", DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
+        ExpandEnumAsExecs="ReturnValue"))
+    static EAssetLoadResult ResolveClass(UClass *AssetClass, const FDirectoryPath &BasePackageName,
+                                         const TArray<FString> &Keys, UClass *&FoundClass);
 };

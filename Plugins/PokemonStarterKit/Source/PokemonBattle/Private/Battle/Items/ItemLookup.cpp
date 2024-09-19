@@ -5,58 +5,44 @@
 #include "Bag/Item.h"
 #include "DynamicAssetLoadingSettings.h"
 #include "PokemonBattleSettings.h"
+#include "Battle/BlueprintClasses.h"
+#include "Ranges/Optional/OrElse.h"
+#include "Ranges/Optional/OrElseGet.h"
 
-TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindHoldItemEffect(FName ID) {
-    if (ID.IsNone()) {
-        return nullptr;
-    }
-
-    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
-    const auto &[ClassPath] = AssetPaths.HoldItemBattleEffectPackageName;
-    auto &ClassPrefix = AssetPaths.HoldItemEffectPrefix;
-    auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, ID.ToString()});
-    if (auto HoldItemClass = LoadObject<UClass>(nullptr, *FullPackage);
-        HoldItemClass != nullptr && HoldItemClass->IsChildOf<UGameplayAbility>()) {
-        return HoldItemClass;
-    }
-
-    return nullptr;
+TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(FName ID) {
+    return Classes::HoldItemEffects.LoadClass(ID);
 }
 
-TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindHoldItemEffect(const FItem *Item) {
-    if (Item == nullptr) {
-        return nullptr;
-    }
-
-    return FindHoldItemEffect(Item->ID);
+TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(const FItem *Item) {
+    // clang-format off
+    return UE::Optionals::OfNullable(Item) |
+           UE::Optionals::Map(&FItem::ID) |
+           UE::Optionals::FlatMap([](FName ID) {
+               return FindHoldItemEffect(ID);
+           });
+    // clang-format on
 }
 
-TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindBattleItemEffect(FName ID) {
-    if (ID.IsNone()) {
-        auto MoveClass =
-            GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
-        check(MoveClass != nullptr)
-        return MoveClass;
-    }
-
-    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
-    const auto &[ClassPath] = AssetPaths.BattleItemEffectPackageName;
-    auto &ClassPrefix = AssetPaths.BattleItemEffectPrefix;
-    auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, ID.ToString()});
-    if (auto MoveClass = LoadObject<UClass>(nullptr, *FullPackage);
-        MoveClass != nullptr && MoveClass->IsChildOf(UGameplayAbility::StaticClass())) {
-        return MoveClass;
-    }
-
-    auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
-    check(MoveClass != nullptr)
-    return MoveClass;
+static TSubclassOf<UBattleItemEffect> FindDefaultItemEffect() {
+    auto ItemClass =
+        GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
+    check(ItemClass != nullptr)
+    return ItemClass;
 }
 
-TSubclassOf<UGameplayAbility> Pokemon::Battle::Items::FindBattleItemEffect(const FItem *Item) {
-    if (Item == nullptr) {
-        return FindBattleItemEffect(NAME_None);
-    }
+TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(FName ID) {
+    // clang-format off
+    return Classes::ItemEffects.LoadClass(ID) |
+           UE::Optionals::OrElseGet(&FindDefaultItemEffect);
+    // clang-format on
+}
 
-    return FindBattleItemEffect(Item->ID);
+TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(const FItem *Item) {
+    // clang-format off
+    auto ID = UE::Optionals::OfNullable(Item) |
+              UE::Optionals::Map(&FItem::ID) |
+              UE::Optionals::OrElse(NAME_None);
+    // clang-format on
+
+    return FindBattleItemEffect(ID);
 }

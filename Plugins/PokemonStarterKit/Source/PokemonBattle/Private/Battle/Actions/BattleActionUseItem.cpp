@@ -16,6 +16,7 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
+#include "Battle/Items/BattleItemEffect.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(MoveTemp(Battler));

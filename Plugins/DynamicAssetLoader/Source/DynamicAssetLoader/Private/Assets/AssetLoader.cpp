@@ -36,3 +36,11 @@ EAssetLoadResult UAssetLoader::ResolveAsset(UClass *AssetClass, const FDirectory
         UE::Optionals::GetPtrOrNull;
     return FoundAsset != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
 }
+
+EAssetLoadResult UAssetLoader::ResolveClass(UClass *AssetClass, const FDirectoryPath &BasePackageName,
+    const TArray<FString> &Keys, UClass *&FoundClass) {
+    FoundClass = ResolveClass(BasePackageName, Keys) |
+        UE::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
+        UE::Optionals::GetPtrOrNull;
+    return FoundClass != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+}

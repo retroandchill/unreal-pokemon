@@ -112,23 +112,23 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
-    if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
-        AbilityClass != nullptr) {
-        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
+    if (auto AbilityClass = Pokemon::Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
+        AbilityClass.IsSet()) {
+        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass.GetValue(), 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
 
     if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem().GetPtrOrNull());
-        HoldItemClass != nullptr) {
-        HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
+        HoldItemClass.IsSet()) {
+        HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass.GetValue(), 1, INDEX_NONE, this));
     } else {
         HoldItem = FGameplayAbilitySpecHandle();
     }
 
     if (auto StatusEffectClass = Pokemon::Battle::StatusEffects::FindStatusEffect(Pokemon->GetStatusEffect());
-        StatusEffectClass != nullptr) {
-        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass, 0,
+        StatusEffectClass.IsSet()) {
+        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass.GetValue(), 0,
                                                               BattlerAbilityComponent->MakeEffectContext());
         StatusEffect.Emplace(Pokemon->GetStatusEffect()->ID,
                              BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data));

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AssetLoader.h"
 #include "AssetLoadingSettings.h"
+#include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Map.h"
@@ -97,6 +98,89 @@ namespace UE::Assets {
         FDirectoryPath DefaultAssetPath;
         FStringView DefaultPrefix;
     };
+
+    template <typename T>
+        requires std::is_base_of_v<UObject, T>
+    class TBlueprintClass {
+    public:
+        /**
+         * Construct a new asset object using this loader
+         * @param Key The key for the asset in question
+         * @param DefaultPath The default path to the asset, should be a valid game directory
+         * @param DefaultPrefix The default prefix for the asset type
+         */
+        explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT(""))
+            : Key(Key), DefaultAssetPath(FString(DefaultPath)), DefaultPrefix(DefaultPrefix) {
+            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit);
+        }
+
+        /**
+         * Load the asset with the specified name
+         * @param ClassName The name of the asset in question
+         * @return The loaded asset
+         */
+        TOptional<TNonNullSubclassOf<T>> LoadClass(FStringView ClassName) const {
+            auto Settings = GetDefault<UAssetLoadingSettings>();
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
+            auto FullName = UAssetUtilities::GetFullAssetName(ClassName,
+                                                              AssetClassData.AssetPrefix.Get(TEXT("")));
+            return UAssetLoader::LookupBlueprintClassByName<T>(AssetClassData.RootDirectory, FullName);
+        }
+
+        /**
+         * Load the asset with the specified name
+         * @param ClassName The name of the asset in question
+         * @return The loaded asset
+         */
+        TOptional<TNonNullSubclassOf<T>> LoadClass(FName ClassName) const {
+            if (ClassName.IsNone()) {
+                return TOptional<TNonNullSubclassOf<T>>();
+            }
+            return LoadClass(ClassName.ToString());
+        }
+
+        template <typename R>
+            requires Ranges::Range<R> && std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+        TOptional<TNonNullSubclassOf<T>> ResolveClass(R &&Assets) const {
+            using ElementType = Ranges::TRangeCommonReference<R>;
+            auto Settings = GetDefault<UAssetLoadingSettings>();
+            auto AssetClassData = Settings->BlueprintClasses.FindChecked(Key);
+            auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
+            // clang-format off
+            auto FullNames = Assets |
+                             Ranges::Map([&Prefix](ElementType AssetName) {
+                                 return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
+                             });
+            // clang-format on
+            return UAssetLoader::ResolveClass<T>(AssetClassData.RootDirectory, FullNames);
+        }
+
+        template <typename R>
+            requires Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+        TArray<TOptional<TNonNullSubclassOf<T>>> LoadClasses(R &&Classes) const {
+            using ElementType = Ranges::TRangeCommonReference<R>;
+            // clang-format off
+            return Classes |
+                   Ranges::Map([this](ElementType Value) { return LoadClass(Value); }) |
+                   Ranges::ToArray;
+            // clang-format on
+        }
+
+    private:
+        void OnPostEngineInit() {
+            auto Settings = GetMutableDefault<UAssetLoadingSettings>();
+            if (Settings->BlueprintClasses.Contains(Key)) {
+                return;
+            }
+
+            Settings->BlueprintClasses.Emplace(
+                Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+        }
+
+        FName Key;
+        FDirectoryPath DefaultAssetPath;
+        FStringView DefaultPrefix;
+    };
 }
 
 /**
@@ -113,7 +197,7 @@ namespace UE::Assets {
  * @param AssetType The type of the asset
  */
 #define UE_DECLARE_ASSET_CLASS_EXTERN(Name, AssetType) \
-    extern const UE::Assets::TAssetClass<AssetType> Name
+    extern UE_DECLARE_ASSET_CLASS(Name, AssetType)
 
 /**
  * Declare an asset class with the following variable name and asset type
@@ -121,7 +205,7 @@ namespace UE::Assets {
  * @param AssetType The type of the asset
  */
 #define UE_DECLARE_ASSET_CLASS_EXPORTED(ExportSymbol, Name, AssetType) \
-    ExportSymbol extern const UE::Assets::TAssetClass<AssetType> Name
+    ExportSymbol UE_DECLARE_ASSET_CLASS_EXTERN(Name, AssetType)
 
 /**
  * Define an asset class to use for loading assets.
@@ -141,4 +225,49 @@ namespace UE::Assets {
  * @param Prefix The default prefix for the asset
  */
 #define UE_DEFINE_ASSET_CLASS_STATIC(Name, AssetType, Directory, Prefix) \
-    static const UE::Assets::TAssetClass<AssetType> Name(#Name, TEXT(Directory), TEXT(Prefix))
+    static UE_DEFINE_ASSET_CLASS(Name, AssetType, Directory, Prefix)
+
+
+/**
+ * Declare an asset class with the following variable name and asset type
+ * @param Name The name of the asset class
+ * @param AssetType The type of the asset
+ */
+#define UE_DECLARE_BLUEPRINT_CLASS(Name, AssetType) \
+const UE::Assets::TBlueprintClass<AssetType> Name
+
+/**
+ * Declare an asset class with the following variable name and asset type
+ * @param Name The name of the asset class
+ * @param AssetType The type of the asset
+ */
+#define UE_DECLARE_BLUEPRINT_CLASS_EXTERN(Name, AssetType) \
+extern UE_DECLARE_BLUEPRINT_CLASS(Name, AssetType)
+
+/**
+ * Declare an asset class with the following variable name and asset type
+ * @param Name The name of the asset class
+ * @param AssetType The type of the asset
+ */
+#define UE_DECLARE_BLUEPRINT_CLASS_EXPORTED(ExportSymbol, Name, AssetType) \
+ExportSymbol UE_DECLARE_BLUEPRINT_CLASS_EXTERN(Name, AssetType)
+
+/**
+ * Define an asset class to use for loading assets.
+ * @param Name The name of the asset class
+ * @param AssetType The type of the asset
+ * @param Directory The default directory for the asset class
+ * @param Prefix The default prefix for the asset
+ */
+#define UE_DEFINE_BLUEPRINT_CLASS(Name, AssetType, Directory, Prefix) \
+const UE::Assets::TBlueprintClass<AssetType> Name(#Name, TEXT(Directory), TEXT(Prefix))
+
+/**
+ * Define an asset class to use for loading assets.
+ * @param Name The name of the asset class
+ * @param AssetType The type of the asset
+ * @param Directory The default directory for the asset class
+ * @param Prefix The default prefix for the asset
+ */
+#define UE_DEFINE_BLUEPRINT_CLASS_STATIC(Name, AssetType, Directory, Prefix) \
+static UE_DEFINE_BLUEPRINT_CLASS(Name, AssetType, Directory, Prefix)
