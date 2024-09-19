@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pokemon/Breeding/PokemonGender.h"
-#include "SpriteMaterials.h"
+#include "SpriteLoader.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "GraphicsLoadingSubsystem.generated.h"
@@ -17,34 +16,6 @@ class UTextureRepository;
 class ITrainer;
 class IPokemon;
 
-USTRUCT(BlueprintType)
-struct POKEMONASSETS_API FPokemonAssetParams {
-    GENERATED_BODY()
-
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites, meta = (UIMin = 0, ClampMin = 0))
-    int32 Form = 0;
-
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites)
-    EPokemonGender Gender = EPokemonGender::Male;
-
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites)
-    bool bShiny = false;
-
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Sprites)
-    bool bShadow = false;
-};
-
-USTRUCT(BlueprintType)
-struct POKEMONASSETS_API FMaterialInstanceWithSize {
-    GENERATED_BODY()
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Graphics")
-    TObjectPtr<UMaterialInstanceDynamic> Material;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Graphics")
-    FVector2D Size;
-};
-
 /**
  * Subsystem designed to handle the loading of graphical assets into memory
  */
@@ -53,8 +24,6 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
     GENERATED_BODY()
 
   public:
-    void Initialize(FSubsystemCollectionBase &Collection) override;
-
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UPaperFlipbook* GetPokemonBattleSprite(const TScriptInterface<IPokemon>& Pokemon,
                                            bool bBack = false) const;
@@ -143,17 +112,4 @@ class POKEMONASSETS_API UGraphicsLoadingSubsystem : public UGameInstanceSubsyste
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
     UObject *GetItemIcon(FName ItemID) const;
-
-  private:
-    /**
-     * The materials for a Pokémon sprites
-     */
-    UPROPERTY()
-    FPokemonSpriteMaterials PokemonSpriteMaterials;
-
-    /**
-     * The materials for trainer sprites.
-     */
-    UPROPERTY()
-    FTrainerSpriteMaterials TrainerSpriteMaterials;
 };

@@ -4,9 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Ranges/Algorithm/FindFirst.h"
+#include "Ranges/Concepts/Types.h"
 #include "Ranges/Optional/Filter.h"
+#include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Map.h"
 #include "Templates/NonNullSubclassOf.h"
 
 #include "AssetLoader.generated.h"
@@ -51,16 +56,16 @@ public:
             Prefix = AssetName.SubStr(0, PrefixLength);
             AssetName = AssetName.RightChop(PrefixLength);
         }
-        
+
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
         if constexpr (std::is_same_v<T, UObject>) {
             return UE::Optionals::OfNullable<T>(
-                    StaticLoadObject(T::StaticClass(), nullptr, *SearchKey,
-                        nullptr, LOAD_NoWarn));
+                StaticLoadObject(T::StaticClass(), nullptr, *SearchKey,
+                                 nullptr, LOAD_NoWarn));
         } else {
             return UE::Optionals::OfNullable<T>(
-                    Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey,
-                        nullptr, LOAD_NoWarn)));   
+                Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey,
+                                         nullptr, LOAD_NoWarn)));
         }
     }
 
@@ -88,8 +93,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
         DeterminesOutputType = "AssetClass", DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
         ExpandEnumAsExecs = "ReturnValue"))
-    static EAssetLoadResult LookupAssetByName(UClass* AssetClass, const FDirectoryPath &BasePackageName,
-        const FString &AssetName, UObject*& FoundAsset);
+    static EAssetLoadResult LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName,
+                                              const FString &AssetName, UObject *&FoundAsset);
 
     /**
      * Look up a Blueprint class by its name
@@ -100,7 +105,8 @@ public:
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<TNonNullSubclassOf<T>> LookupBlueprintClassByName(FStringView BasePackageName, FStringView AssetName) {
+    static TOptional<TNonNullSubclassOf<T>> LookupBlueprintClassByName(FStringView BasePackageName,
+                                                                       FStringView AssetName) {
         FStringView Prefix;
         if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
             int32 PrefixLength = CharIndex + 1;
@@ -109,12 +115,20 @@ public:
         }
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}_C"), {BasePackageName, Prefix, AssetName});
         if constexpr (std::is_same_v<T, UObject>) {
+            // clang-format off
             return UE::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
-                UE::Optionals::Map([](UClass& Class) { return TNonNullSubclassOf<T>(&Class); });
+                   UE::Optionals::Map([](UClass &Class) {
+                       return TNonNullSubclassOf<T>(&Class);
+                   });
+            // clang-format on
         } else {
+            // clang-format off
             return UE::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
-                UE::Optionals::Filter(&UClass::IsChildOf, T::StaticClass()) |
-                UE::Optionals::Map([](UClass& Class) { return TNonNullSubclassOf<T>(&Class); });
+                   UE::Optionals::Filter(&UClass::IsChildOf, T::StaticClass()) |
+                   UE::Optionals::Map([](UClass &Class) {
+                       return TNonNullSubclassOf<T>(&Class);
+                   });
+            // clang-format on
         }
     }
 
@@ -127,7 +141,8 @@ public:
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<TNonNullSubclassOf<T>> LookupBlueprintClassByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
+    static TOptional<TNonNullSubclassOf<T>> LookupBlueprintClassByName(const FDirectoryPath &BasePackageName,
+                                                                       FStringView AssetName) {
         return LookupBlueprintClassByName<T>(BasePackageName.Path, AssetName);
     }
 
@@ -142,8 +157,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
         DeterminesOutputType = "BaseClass", DynamicOutputParam = "FoundClass", AutoCreateRefTerm = "BasePackageName",
         ExpandEnumAsExecs="ReturnValue"))
-    static EAssetLoadResult LookupBlueprintClassByName(UClass* BaseClass, const FDirectoryPath &BasePackageName,
-        const FString &AssetName, UClass*& FoundClass);
+    static EAssetLoadResult LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,
+                                                       const FString &AssetName, UClass *&FoundClass);
 
     /**
      * Fetch the first matching asset for the provided keys
@@ -152,19 +167,22 @@ public:
      * @param Keys The keys to use when resolving
      * @return The found asset, if it exists
      */
-    template <typename T = UObject, typename S>
-        requires std::is_base_of_v<UObject, T> && std::is_convertible_v<S, FStringView>
-    static TOptional<T &> ResolveAsset(FStringView BasePackageName, const TArray<S> &Keys) {
-        for (const auto &Key : Keys) {
-            auto Lookup = LookupAssetByName<T>(BasePackageName, Key);
-            if (!Lookup.IsSet()) {
-                continue;
-            }
-
-            return Lookup;
-        }
-
-        return nullptr;
+    template <typename T = UObject, typename R>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
+                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+    static TOptional<T &> ResolveAsset(FStringView BasePackageName, R &&Keys) {
+        using ElementType = UE::Ranges::TRangeCommonReference<R>;
+        // clang-format off
+        return Keys |
+               UE::Ranges::Map([&BasePackageName](ElementType Key) {
+                   return LookupAssetByName<T>(BasePackageName, Key);
+               }) |
+               UE::Ranges::Filter([](TOptional<T&> Optional) { return Optional.IsSet(); }) |
+               UE::Ranges::FindFirst |
+               UE::Optionals::FlatMap([](const TOptional<T &> Optional) {
+                   return Optional;
+               });
+        // clang-format on
     }
 
     /**
@@ -174,10 +192,11 @@ public:
      * @param Keys The keys to use when resolving
      * @return The found asset, if it exists
      */
-    template <typename T = UObject, typename S>
-        requires std::is_base_of_v<UObject, T> && std::is_convertible_v<S, FStringView>
-    static TOptional<T&> ResolveAsset(const FDirectoryPath &BasePackageName, const TArray<S> &Keys) {
-        return ResolveAsset<T, S>(BasePackageName.Path, Keys);
+    template <typename T = UObject, typename R>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
+                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+    static TOptional<T &> ResolveAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
+        return ResolveAsset<T, R>(BasePackageName.Path, Forward<R>(Keys));
     }
 
     /**
@@ -191,6 +210,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
         DeterminesOutputType = "BaseClass", DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
         ExpandEnumAsExecs="ReturnValue"))
-    static EAssetLoadResult ResolveAsset(UClass* AssetClass, const FDirectoryPath &BasePackageName,
-                                         const TArray<FString>& Keys, UObject*& FoundAsset);
+    static EAssetLoadResult ResolveAsset(UClass *AssetClass, const FDirectoryPath &BasePackageName,
+                                         const TArray<FString> &Keys, UObject *&FoundAsset);
 };

@@ -7,6 +7,7 @@
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "Graphics/AssetClasses.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
@@ -72,8 +73,7 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
 
 void UPokemonBattlePanel::RefreshStatusEffect() {
     if (auto &Status = CurrentBattler->GetStatusEffect(); Status.IsSet()) {
-        auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-        auto Icon = GraphicsSubsystem->GetStatusIconGraphic(Status.GetValue().StatusEffectID);
+        auto Icon = Pokemon::Assets::Graphics::StatusIcons.LoadAsset(Status.GetValue().StatusEffectID).GetPtrOrNull();
         StatusIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
         UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
     } else {

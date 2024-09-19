@@ -30,15 +30,18 @@ namespace UE::Ranges {
     } // namespace Detail
 
     template <typename T>
-        requires ranges::range<T> || UEContainer<T>
+    concept Range = UEContainer<T> || ranges::range<T>;
+
+    template <typename T>
+        requires Range<T>
     using TRangeValue = typename Detail::TRangeTraits<T>::Value;
 
     template <typename T>
-        requires ranges::range<T> || UEContainer<T>
+        requires Range<T>
     using TRangeReference = typename Detail::TRangeTraits<T>::Reference;
 
     template <typename T>
-        requires ranges::range<T> || UEContainer<T>
+        requires Range<T>
     using TRangeCommonReference = typename Detail::TRangeTraits<T>::CommonReference;
 
 } // namespace UE::Ranges

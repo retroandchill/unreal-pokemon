@@ -25,10 +25,7 @@ void UTrainerCardScreen::NativeConstruct() {
 
 void UTrainerCardScreen::SetTrainerSprite() {
     check(TrainerImage != nullptr)
-
-    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    check(GraphicsLoadingSubsystem != nullptr)
-    auto Flipbook = GraphicsLoadingSubsystem->GetTrainerSprite(Trainer);
+    auto Flipbook = USpriteLoader::GetTrainerSprite(Trainer);
     TrainerImage->SetFlipbook(Flipbook);
     TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());
 }

@@ -3,6 +3,6 @@
 
 #include "Assets/AssetUtilities.h"
 
-FString UAssetUtilities::GetFullAssetName(FName Identifier, FStringView Prefix)  {
-    return FString::Format(TEXT("{0}{1}"), {Prefix, Identifier.ToString()});
+FString UAssetUtilities::GetFullAssetName(FStringView Identifier, FStringView Prefix)  {
+    return FString::Format(TEXT("{0}{1}"), {Prefix, Identifier});
 }

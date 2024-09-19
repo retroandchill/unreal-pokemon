@@ -5,6 +5,7 @@
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Image.h"
+#include "Graphics/AssetClasses.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Utilities/WidgetUtilities.h"
@@ -12,12 +13,15 @@
 
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::Refresh_Implementation(Pokemon);
-    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    PokemonIcon->SetFlipbook(GraphicsLoadingSubsystem->GetPokemonIcon(Pokemon));
-    auto IconGraphics = GraphicsLoadingSubsystem->GetTypeIconGraphics(Pokemon->GetTypes());
+    PokemonIcon->SetFlipbook(USpriteLoader::GetPokemonIcon(Pokemon));
+    auto IconGraphics = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(Pokemon->GetTypes());
     Algo::ForEach(TypeIcons, &UWidget::RemoveFromParent);
     TypeIcons.Empty();
-    Algo::ForEach(IconGraphics, std::bind_front(&UPokemonIconPreview::CreateTypeIcon, this));
+    // clang-format off
+    IconGraphics |
+        UE::Ranges::Map([](TOptional<UObject&> Optional) { return Optional.GetPtrOrNull(); }) |
+        UE::Ranges::ForEach(this, &UPokemonIconPreview::CreateTypeIcon);
+    // clang-format on
 }
 
 void UPokemonIconPreview::CreateTypeIcon(UObject *Resource) {

@@ -14,6 +14,5 @@ class DYNAMICASSETLOADER_API UAssetUtilities : public UBlueprintFunctionLibrary 
     GENERATED_BODY()
 
 public:
-    static FString GetFullAssetName(FName Identifier, FStringView Prefix);
-
+    static FString GetFullAssetName(FStringView Identifier, FStringView Prefix);
 };

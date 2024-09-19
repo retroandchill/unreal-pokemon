@@ -4,6 +4,7 @@
 #include "Bag/Item.h"
 #include "Components/DisplayText.h"
 #include "DataManager.h"
+#include "Graphics/AssetClasses.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
 
@@ -14,8 +15,7 @@ void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
     static auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     auto &ItemData = ItemTable.GetDataChecked(ItemID);
 
-    auto Subsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    auto IconAsset = Subsystem->GetItemIcon(ItemID);
+    auto IconAsset =  Pokemon::Assets::Graphics::ItemIcons.LoadAsset(ItemID).GetPtrOrNull();
     UWidgetUtilities::SetBrushFromAsset(ItemIcon, IconAsset, true);
 
     ItemNameText->SetText(ItemData.RealName);

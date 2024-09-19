@@ -410,9 +410,8 @@ void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
 void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
     Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-    auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
+    
     IBattlerSprite::Execute_SetBattleSprite(
-        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
+        Sprite, USpriteLoader::GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

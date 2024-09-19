@@ -8,6 +8,7 @@
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "DataManager.h"
+#include "Graphics/AssetClasses.h"
 #include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
@@ -25,10 +26,9 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();
-    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    for (auto Types = GraphicsLoadingSubsystem->GetTypeIconGraphics(Pokemon->GetTypes()); auto Asset : Types) {
+    for (auto Types = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(Pokemon->GetTypes()); auto Asset : Types) {
         auto Icon = WidgetTree->ConstructWidget<UImage>();
-        UWidgetUtilities::SetBrushFromAsset(Icon, Asset, true);
+        UWidgetUtilities::SetBrushFromAsset(Icon, Asset.GetPtrOrNull(), true);
         SlotTypeIcon(Icon);
     }
 
@@ -48,7 +48,7 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem.IsSet()) {
         ItemNameText->SetText(HoldItem->RealName);
         ItemDescriptionText->SetText(HoldItem->Description);
-        auto Item = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>()->GetItemIcon(HoldItem->ID);
+        auto Item = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(HoldItem->ID).GetPtrOrNull();
         UWidgetUtilities::SetBrushFromAsset(ItemIcon, Item, true);
         ItemIcon->SetVisibility(SelfHitTestInvisible);
     } else {

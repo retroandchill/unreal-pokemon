@@ -16,7 +16,8 @@ public class PokemonBattleUI : ModuleRules
                 "PokemonData",
                 "PokemonCore",
                 "CommonUI",
-                "CommonGame"
+                "CommonGame",
+                "DynamicAssetLoader"
             }
         );
 

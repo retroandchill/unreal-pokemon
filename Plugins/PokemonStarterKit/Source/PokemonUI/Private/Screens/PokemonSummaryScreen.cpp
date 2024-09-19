@@ -47,8 +47,6 @@ UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
     NameInfo->Refresh(Pokemon);
     SummaryPages->Refresh(Pokemon);
-
-    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    auto Flipbook = GraphicsLoadingSubsystem->GetPokemonBattleSprite(Pokemon);
+    auto Flipbook = USpriteLoader::GetPokemonBattleSprite(Pokemon);
     PokemonSprite->SetFlipbook(Flipbook);
 }
