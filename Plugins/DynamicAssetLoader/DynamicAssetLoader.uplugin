@@ -18,6 +18,11 @@
 			"Name": "DynamicAssetLoader",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "DynamicAssetLoaderNodes",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

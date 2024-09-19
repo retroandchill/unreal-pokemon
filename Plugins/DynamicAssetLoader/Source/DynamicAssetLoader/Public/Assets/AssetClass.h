@@ -40,7 +40,7 @@ namespace UE::Assets {
          */
         TOptional<T &> LoadAsset(FStringView AssetName) const {
             auto Settings = GetDefault<UAssetLoadingSettings>();
-            auto AssetClassData = Settings->NativeAssetClasses.FindChecked(Key);
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName,
                                                               AssetClassData.AssetPrefix.Get(TEXT("")));
             return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
@@ -60,7 +60,7 @@ namespace UE::Assets {
         TOptional<T &> ResolveAsset(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
-            auto AssetClassData = Settings->NativeAssetClasses.FindChecked(Key);
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
             // clang-format off
             auto FullNames = Assets |
@@ -85,11 +85,11 @@ namespace UE::Assets {
     private:
         void OnPostEngineInit() {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
-            if (Settings->NativeAssetClasses.Contains(Key)) {
+            if (Settings->AssetClasses.Contains(Key)) {
                 return;
             }
 
-            Settings->NativeAssetClasses.Emplace(
+            Settings->AssetClasses.Emplace(
                 Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
         }
 

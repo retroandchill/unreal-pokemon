@@ -2,6 +2,8 @@
 
 
 #include "Assets/AssetLoader.h"
+#include "Assets/AssetLoadingSettings.h"
+#include "Assets/AssetUtilities.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 
 EAssetLoadResult UAssetLoader::LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName, const FString &AssetName, UObject*& FoundAsset) {
@@ -9,6 +11,14 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(UClass *AssetClass, const FDire
         UE::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
         UE::Optionals::GetPtrOrNull;
     return FoundAsset != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+}
+
+EAssetLoadResult UAssetLoader::LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject*& FoundAsset) {
+    auto Settings = GetDefault<UAssetLoadingSettings>();
+    auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
+    auto FullName = UAssetUtilities::GetFullAssetName(AssetName,
+        AssetInfo.AssetPrefix.Get(TEXT("")));
+    return LookupAssetByName(AssetInfo.AssetClass, AssetInfo.RootDirectory, FullName, FoundAsset);
 }
 
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,

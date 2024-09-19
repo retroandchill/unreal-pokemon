@@ -96,6 +96,10 @@ public:
     static EAssetLoadResult LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                               const FString &AssetName, UObject *&FoundAsset);
 
+    UFUNCTION(BlueprintInternalUseOnly, meta = (CallableWithoutWorldContext,
+        DeterminesOutputType = "AssetClass", DynamicOutputParam = "FoundAsset"))
+    static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString& AssetName, UObject*& FoundAsset);
+
     /**
      * Look up a Blueprint class by its name
      * @tparam T The base class of the blueprint to look for

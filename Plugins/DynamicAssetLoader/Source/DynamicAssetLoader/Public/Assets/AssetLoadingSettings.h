@@ -50,12 +50,6 @@ public:
      * Edit the defaults for asset classes that are natively defined in code
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
-    TMap<FName, FAssetLoadingEntry> NativeAssetClasses;
-
-    /**
-     * Asset classes that are defined outside the codebase
-     */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
-    TMap<FName, FAssetLoadingEntry> UserCreatedAssetClasses;
+    TMap<FName, FAssetLoadingEntry> AssetClasses;
 
 };
