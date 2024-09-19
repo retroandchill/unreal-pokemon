@@ -96,8 +96,8 @@ public:
     static EAssetLoadResult LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                               const FString &AssetName, UObject *&FoundAsset);
 
-    UFUNCTION(BlueprintInternalUseOnly, meta = (CallableWithoutWorldContext,
-        DeterminesOutputType = "AssetClass", DynamicOutputParam = "FoundAsset"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (CallableWithoutWorldContext,
+        DeterminesOutputType = "AssetClass", DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString& AssetName, UObject*& FoundAsset);
 
     /**

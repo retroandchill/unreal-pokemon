@@ -88,6 +88,11 @@ TArray<FString> USpriteLoader::CreatePokemonSpriteResolutionList(FName Species, 
     return FormattedStrings;
 }
 
-UPaperFlipbook *USpriteLoader::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer) {
-    return Pokemon::Assets::Graphics::TrainerSprites.LoadAsset(Trainer->GetTrainerType().ID).GetPtrOrNull();
+UPaperFlipbook *USpriteLoader::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, bool bBack) {
+    TArray<FString, TInlineAllocator<2>> StringParts = {
+        bBack ? TEXT("Back") : TEXT("Front"),
+        Trainer->GetTrainerType().ID.ToString()
+    };
+    auto JoinedString = FString::Join(StringParts, TEXT("/"));
+    return Pokemon::Assets::Graphics::TrainerSprites.LoadAsset(JoinedString).GetPtrOrNull();
 }

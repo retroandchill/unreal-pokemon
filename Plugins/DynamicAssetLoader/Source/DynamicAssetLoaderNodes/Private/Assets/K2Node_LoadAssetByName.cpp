@@ -49,14 +49,14 @@ FText UK2Node_LoadAssetByName::GetNodeTitle(ENodeTitleType::Type TitleType) cons
     auto AssetClass = GetDefault<UAssetLoadingSettings>()->AssetClasses.Find(AssetKey);
     if (AssetClass == nullptr)
     {
-        return NSLOCTEXT("K2Node", "DataTable_Title_None", "Load Asset by Name");
+        return NSLOCTEXT("K2Node", "LoadAssetByName_Title_None", "Load Asset by Name");
     }
     
     if (CachedNodeTitle.IsOutOfDate(this)) {
         FFormatNamedArguments Args;
-        Args.Add(TEXT("AssetClass"), FText::FromString(AssetClass->AssetClass->GetName()));
+        Args.Add(TEXT("AssetClass"), FText::FromString(AssetKey.ToString()));
 
-        FText LocFormat = NSLOCTEXT("K2Node", "DataTable", "Load {DataTableName} by Name");
+        FText LocFormat = NSLOCTEXT("K2Node", "LoadAssetByNameTitle", "Load {AssetClass} by Name");
         CachedNodeTitle.SetCachedText(FText::Format(LocFormat, Args), this);
     }
 
@@ -82,17 +82,20 @@ void UK2Node_LoadAssetByName::ExpandNode(FKismetCompilerContext &CompilerContext
     static const FName Found_ParamName(TEXT("Found"));
     static const FName NotFound_ParamName(TEXT("NotFound"));
 
+    auto ExecPin = GetExecPin();
     auto AssetNamePin = GetAssetNamePin();
     auto ReturnValuePin = GetResultPin();
     auto FoundPin = GetAssetNotFoundPin();
     auto NotFoundPin = GetAssetNotFoundPin();
 
+    auto CallCreateExecutePin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
     auto CallCreateIdentifierPin = CallGetNode->FindPinChecked(IdentifierKey_ParamName);
     auto CallCreateAssetNamePin = CallGetNode->FindPinChecked(AssetName_ParamName);
     auto CallCreateFoundAssetPin = CallGetNode->FindPinChecked(FoundAsset_ParamName);
     auto CallCreateFoundPin = CallGetNode->FindPinChecked(Found_ParamName);
     auto CallCreateNotFoundPin = CallGetNode->FindPinChecked(NotFound_ParamName);
 
+    CompilerContext.MovePinLinksToIntermediate(*ExecPin, *CallCreateExecutePin);
     CallCreateIdentifierPin->DefaultValue = AssetKey.ToString();
     CompilerContext.MovePinLinksToIntermediate(*AssetNamePin, *CallCreateAssetNamePin);
 

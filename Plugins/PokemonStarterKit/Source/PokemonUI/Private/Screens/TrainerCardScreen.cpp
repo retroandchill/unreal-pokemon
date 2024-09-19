@@ -27,7 +27,9 @@ void UTrainerCardScreen::SetTrainerSprite() {
     check(TrainerImage != nullptr)
     auto Flipbook = USpriteLoader::GetTrainerSprite(Trainer);
     TrainerImage->SetFlipbook(Flipbook);
-    TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());
+    if (Flipbook != nullptr) {
+        TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());
+    }
 }
 
 void UTrainerCardScreen::SetTrainerInfo() {

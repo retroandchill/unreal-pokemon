@@ -67,9 +67,10 @@ public:
     /**
      * Get the sprite used for a trainer based on the given sprite information
      * @param Trainer The trainer in question
+     * @param bBack
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    static UPaperFlipbook* GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer);
+    static UPaperFlipbook* GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer, bool bBack = false);
 
 };
