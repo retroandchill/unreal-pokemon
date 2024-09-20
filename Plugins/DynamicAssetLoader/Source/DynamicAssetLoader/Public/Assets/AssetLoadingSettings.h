@@ -5,39 +5,39 @@
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
 #include "Ranges/RangeConcepts.h"
+
 #include "AssetLoadingSettings.generated.h"
 
 namespace UE::Assets {
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     class TAssetClass;
-    
+
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     class TBlueprintClass;
-}
+} // namespace UE::Assets
 
 USTRUCT(BlueprintType)
 struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ContentDir))
-	FDirectoryPath RootDirectory;
+    FDirectoryPath RootDirectory;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TOptional<FString> AssetPrefix;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    TOptional<FString> AssetPrefix;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "!bIsNative"))
-    UClass* AssetClass = nullptr;
+    UClass *AssetClass = nullptr;
 
     UPROPERTY()
     bool bIsNative = false;
 
-
     FAssetLoadingEntry() = default;
 
-private:
-    FAssetLoadingEntry(const FDirectoryPath& RootDirectory, FStringView AssetPrefix, UClass* AssetClass);
+  private:
+    FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass);
 
     template <typename T>
         requires std::is_base_of_v<UObject, T>
@@ -55,7 +55,7 @@ UCLASS(Config = Game, DefaultConfig, DisplayName = "Asset Loading")
 class DYNAMICASSETLOADER_API UAssetLoadingSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Edit the defaults for asset classes that are natively defined in code
      */
@@ -64,5 +64,4 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
     TMap<FName, FAssetLoadingEntry> BlueprintClasses;
-
 };

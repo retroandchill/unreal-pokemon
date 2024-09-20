@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
+
 #include "K2Node_LoadAssetByName.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class DYNAMICASSETLOADERNODES_API UK2Node_LoadAssetByName : public UK2Node {
     GENERATED_BODY()
 
-public:
+  public:
     UK2Node_LoadAssetByName();
     void Initialize(FName InAssetKey);
-    
+
     void AllocateDefaultPins() override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
@@ -42,7 +43,7 @@ public:
     /** Get the type of the TableRow to return */
     UClass *GetAssetClassType() const;
 
-private:
+  private:
     void SetPinToolTip(UEdGraphPin &MutatablePin, const FText &PinDescription) const;
 
     UPROPERTY()

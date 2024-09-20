@@ -39,7 +39,7 @@ UCLASS()
 class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Look up an asset of the given type by its name
      * @tparam T The type of the asset to look up
@@ -60,12 +60,10 @@ public:
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
         if constexpr (std::is_same_v<T, UObject>) {
             return UE::Optionals::OfNullable<T>(
-                StaticLoadObject(T::StaticClass(), nullptr, *SearchKey,
-                                 nullptr, LOAD_NoWarn));
+                StaticLoadObject(T::StaticClass(), nullptr, *SearchKey, nullptr, LOAD_NoWarn));
         } else {
             return UE::Optionals::OfNullable<T>(
-                Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey,
-                                         nullptr, LOAD_NoWarn)));
+                Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey, nullptr, LOAD_NoWarn)));
         }
     }
 
@@ -90,15 +88,17 @@ public:
      * @param FoundAsset The found asset
      * @return The result of the lookup
      */
-    UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
-        DeterminesOutputType = "AssetClass", DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
-        ExpandEnumAsExecs = "ReturnValue"))
+    UFUNCTION(BlueprintCallable, Category = Assets,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
+                      DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
+                      ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                               const FString &AssetName, UObject *&FoundAsset);
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (CallableWithoutWorldContext,
-        DeterminesOutputType = "AssetClass", DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
-    static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString& AssetName, UObject*& FoundAsset);
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
+                      DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
+    static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject *&FoundAsset);
 
     /**
      * Look up a Blueprint class by its name
@@ -158,9 +158,10 @@ public:
      * @param FoundClass The found class
      * @return The result of the lookup
      */
-    UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
-        DeterminesOutputType = "BaseClass", DynamicOutputParam = "FoundClass", AutoCreateRefTerm = "BasePackageName",
-        ExpandEnumAsExecs="ReturnValue"))
+    UFUNCTION(BlueprintCallable, Category = Assets,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "BaseClass",
+                      DynamicOutputParam = "FoundClass", AutoCreateRefTerm = "BasePackageName",
+                      ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,
                                                        const FString &AssetName, UClass *&FoundClass);
 
@@ -172,8 +173,8 @@ public:
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
-                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
+                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<T &> ResolveAsset(FStringView BasePackageName, R &&Keys) {
         using ElementType = UE::Ranges::TRangeCommonReference<R>;
         // clang-format off
@@ -197,8 +198,8 @@ public:
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
-                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
+                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<T &> ResolveAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
         return ResolveAsset<T, R>(BasePackageName.Path, Forward<R>(Keys));
     }
@@ -211,9 +212,10 @@ public:
      * @param FoundAsset The found asset, if it exists
      * @return The result of the lookup
      */
-    UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
-        DeterminesOutputType = "BaseClass", DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
-        ExpandEnumAsExecs="ReturnValue"))
+    UFUNCTION(BlueprintCallable, Category = Assets,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "BaseClass",
+                      DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
+                      ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult ResolveAsset(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                          const TArray<FString> &Keys, UObject *&FoundAsset);
 
@@ -225,8 +227,8 @@ public:
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
-                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
+                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<TNonNullSubclassOf<T>> ResolveClass(FStringView BasePackageName, R &&Keys) {
         using ElementType = UE::Ranges::TRangeCommonReference<R>;
         // clang-format off
@@ -250,8 +252,8 @@ public:
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R>
-                 && std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
+                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<TNonNullSubclassOf<T>> ResolveClass(const FDirectoryPath &BasePackageName, R &&Keys) {
         return ResolveClass<T, R>(BasePackageName.Path, Forward<R>(Keys));
     }
@@ -264,9 +266,10 @@ public:
      * @param FoundClass The found asset, if it exists
      * @return The result of the lookup
      */
-    UFUNCTION(BlueprintCallable, Category = Assets, meta = (CallableWithoutWorldContext,
-        DeterminesOutputType = "BaseClass", DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
-        ExpandEnumAsExecs="ReturnValue"))
+    UFUNCTION(BlueprintCallable, Category = Assets,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "BaseClass",
+                      DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
+                      ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult ResolveClass(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                          const TArray<FString> &Keys, UClass *&FoundClass);
 };

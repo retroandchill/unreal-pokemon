@@ -1,13 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Assets/K2Node_LoadAssetByName.h"
+#include "Assets/AssetLoader.h"
+#include "Assets/AssetLoadingSettings.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
-#include "Assets/AssetLoader.h"
-#include "Assets/AssetLoadingSettings.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OptionalRef.h"
@@ -33,25 +32,24 @@ void UK2Node_LoadAssetByName::AllocateDefaultPins() {
 
     // AssetNamePin
     auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, AssetNamePinName);
-    SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "AssetNamePinDescription",
-        "The name of the asset to load"));
+    SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "AssetNamePinDescription", "The name of the asset to load"));
 
     // Result pin
-    auto ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, GetAssetClassType(), UEdGraphSchema_K2::PN_ReturnValue);
+    auto ResultPin =
+        CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, GetAssetClassType(), UEdGraphSchema_K2::PN_ReturnValue);
     ResultPin->PinFriendlyName = NSLOCTEXT("K2Node", "LoadAssetByName Output Asset", "Found Asset");
-    SetPinToolTip(*ResultPin, NSLOCTEXT("K2Node", "LoadAssetByName ResultPinDescription",
-        "The returned asset, if found"));
+    SetPinToolTip(*ResultPin,
+                  NSLOCTEXT("K2Node", "LoadAssetByName ResultPinDescription", "The returned asset, if found"));
 
     Super::AllocateDefaultPins();
 }
 
 FText UK2Node_LoadAssetByName::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     auto AssetClass = GetDefault<UAssetLoadingSettings>()->AssetClasses.Find(AssetKey);
-    if (AssetClass == nullptr)
-    {
+    if (AssetClass == nullptr) {
         return NSLOCTEXT("K2Node", "LoadAssetByName_Title_None", "Load Asset by Name");
     }
-    
+
     if (CachedNodeTitle.IsOutOfDate(this)) {
         FFormatNamedArguments Args;
         Args.Add(TEXT("AssetClass"), FText::FromString(AssetKey.ToString()));
@@ -115,8 +113,7 @@ FSlateIcon UK2Node_LoadAssetByName::GetIconAndTint(FLinearColor &OutColor) const
 }
 
 void UK2Node_LoadAssetByName::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
-    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
-                                    FName InAssetKey) {
+    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode, FName InAssetKey) {
         auto TypedNode = CastChecked<UK2Node_LoadAssetByName>(Node);
         TypedNode->Initialize(InAssetKey);
     };
@@ -142,31 +139,35 @@ FText UK2Node_LoadAssetByName::GetMenuCategory() const {
     return NSLOCTEXT("UK2Node_LoadAssetByName", "MenuCategory", "Assets");
 }
 
-UEdGraphPin * UK2Node_LoadAssetByName::GetAssetFoundPin() const {
-    UEdGraphPin* Pin = FindPinChecked(UEdGraphSchema_K2::PN_Then);
-    check(Pin->Direction == EGPD_Output);
+UEdGraphPin *UK2Node_LoadAssetByName::GetAssetFoundPin() const {
+    UEdGraphPin *Pin = FindPinChecked(UEdGraphSchema_K2::PN_Then);
+    check(Pin->Direction == EGPD_Output)
+    ;
     return Pin;
 }
 
-UEdGraphPin * UK2Node_LoadAssetByName::GetAssetNamePin() const {
-    UEdGraphPin* Pin = FindPinChecked(AssetNamePinName);
-    check(Pin->Direction == EGPD_Input);
+UEdGraphPin *UK2Node_LoadAssetByName::GetAssetNamePin() const {
+    UEdGraphPin *Pin = FindPinChecked(AssetNamePinName);
+    check(Pin->Direction == EGPD_Input)
+    ;
     return Pin;
 }
 
-UEdGraphPin * UK2Node_LoadAssetByName::GetAssetNotFoundPin() const {
-    UEdGraphPin* Pin = FindPinChecked(AssetNotFoundPinName);
-    check(Pin->Direction == EGPD_Output);
+UEdGraphPin *UK2Node_LoadAssetByName::GetAssetNotFoundPin() const {
+    UEdGraphPin *Pin = FindPinChecked(AssetNotFoundPinName);
+    check(Pin->Direction == EGPD_Output)
+    ;
     return Pin;
 }
 
-UEdGraphPin * UK2Node_LoadAssetByName::GetResultPin() const {
-    UEdGraphPin* Pin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-    check(Pin->Direction == EGPD_Output);
+UEdGraphPin *UK2Node_LoadAssetByName::GetResultPin() const {
+    UEdGraphPin *Pin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
+    check(Pin->Direction == EGPD_Output)
+    ;
     return Pin;
 }
 
-UClass * UK2Node_LoadAssetByName::GetAssetClassType() const {
+UClass *UK2Node_LoadAssetByName::GetAssetClassType() const {
     auto Setting = GetDefault<UAssetLoadingSettings>();
     // clang-format off
     return UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
