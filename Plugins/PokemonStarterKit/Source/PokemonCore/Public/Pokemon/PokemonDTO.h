@@ -188,5 +188,5 @@ struct POKEMONCORE_API FPokemonDTO {
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = Data)
     TOptional<FOwnerInfo> OwnerInfo;
 
-    TScriptInterface<IPokemon> CreatePokemon(UObject* Outer) const;
+    TScriptInterface<IPokemon> CreatePokemon(UObject *Outer) const;
 };

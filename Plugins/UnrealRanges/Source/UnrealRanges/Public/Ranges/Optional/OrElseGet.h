@@ -29,7 +29,7 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
             using ResultType = TOptionalElementType<O>;
-            return Optional.IsSet() ? *Optional : ResultType(Functor());
+            return Optional.IsSet() ? ResultType(Optional.GetValue()) : ResultType(Functor());
         }
 
       private:

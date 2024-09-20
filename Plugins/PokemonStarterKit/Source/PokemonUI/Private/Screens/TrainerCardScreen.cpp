@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/TrainerCardScreen.h"
+#include "Components/DisplayText.h"
+#include "Graphics/SpriteLoader.h"
+#include "Managers/PokemonSubsystem.h"
 #include "PaperFlipbook.h"
 #include "PaperFlipbookUserWidget.h"
-#include "Components/DisplayText.h"
-#include "Components/Image.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
 #include "Utilities/PokemonUIUtils.h"
 
@@ -25,12 +24,11 @@ void UTrainerCardScreen::NativeConstruct() {
 
 void UTrainerCardScreen::SetTrainerSprite() {
     check(TrainerImage != nullptr)
-
-    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    check(GraphicsLoadingSubsystem != nullptr)
-    auto Flipbook = GraphicsLoadingSubsystem->GetTrainerSprite(Trainer);
+    auto Flipbook = USpriteLoader::GetTrainerSprite(Trainer);
     TrainerImage->SetFlipbook(Flipbook);
-    TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());
+    if (Flipbook != nullptr) {
+        TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());
+    }
 }
 
 void UTrainerCardScreen::SetTrainerInfo() {

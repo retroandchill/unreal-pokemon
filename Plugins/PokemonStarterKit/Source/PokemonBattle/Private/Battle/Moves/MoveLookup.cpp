@@ -1,27 +1,20 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Moves/MoveLookup.h"
-#include "Abilities/GameplayAbility.h"
-#include "DynamicAssetLoadingSettings.h"
+#include "Battle/BlueprintClasses.h"
+#include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "PokemonBattleSettings.h"
+#include "Ranges/Optional/OrElseGet.h"
 
-TSubclassOf<UGameplayAbility> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
-    if (FunctionCode.IsNone()) {
-        auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultMoveAbility.TryLoadClass<UGameplayAbility>();
-        check(MoveClass != nullptr)
-        return MoveClass;
-    }
-
-    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
-    const auto &[ClassPath] = AssetPaths.MoveFunctionCodePackageName;
-    auto &ClassPrefix = AssetPaths.MoveFunctionCodePrefix;
-    auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, FunctionCode.ToString()});
-    if (auto MoveClass = LoadObject<UClass>(nullptr, *FullPackage);
-        MoveClass != nullptr && MoveClass->IsChildOf(UGameplayAbility::StaticClass())) {
-        return MoveClass;
-    }
-
-    auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultMoveAbility.TryLoadClass<UGameplayAbility>();
+static TSubclassOf<UBattleMoveFunctionCode> GetDefaultMoveClass() {
+    auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultMoveAbility.TryLoadClass<UBattleMoveFunctionCode>();
     check(MoveClass != nullptr)
     return MoveClass;
+}
+
+TSubclassOf<UBattleMoveFunctionCode> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
+    // clang-format off
+    return Classes::MoveEffects.LoadClass(FunctionCode) |
+           UE::Optionals::OrElseGet(&GetDefaultMoveClass);
+    // clang-format on
 }

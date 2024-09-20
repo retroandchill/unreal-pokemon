@@ -25,8 +25,7 @@
 #include "Battle/Switching/SwitchActionBase.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Moves/MoveData.h"
+#include "Graphics/SpriteLoader.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Moves/Move.h"
 #include "Pokemon/Moves/MoveBlock.h"
@@ -112,23 +111,25 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
-    if (auto AbilityClass = Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
-        AbilityClass != nullptr) {
-        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, INDEX_NONE, this));
+    if (auto AbilityClass = Pokemon::Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
+        AbilityClass.IsSet()) {
+        Ability =
+            BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass.GetValue(), 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
 
     if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem().GetPtrOrNull());
-        HoldItemClass != nullptr) {
-        HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass, 1, INDEX_NONE, this));
+        HoldItemClass.IsSet()) {
+        HoldItem =
+            BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass.GetValue(), 1, INDEX_NONE, this));
     } else {
         HoldItem = FGameplayAbilitySpecHandle();
     }
 
     if (auto StatusEffectClass = Pokemon::Battle::StatusEffects::FindStatusEffect(Pokemon->GetStatusEffect());
-        StatusEffectClass != nullptr) {
-        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass, 0,
+        StatusEffectClass.IsSet()) {
+        auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass.GetValue(), 0,
                                                               BattlerAbilityComponent->MakeEffectContext());
         StatusEffect.Emplace(Pokemon->GetStatusEffect()->ID,
                              BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data));
@@ -411,8 +412,7 @@ void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
     Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
-    auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
     IBattlerSprite::Execute_SetBattleSprite(
-        Sprite, GraphicsSubsystem->GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
+        Sprite, USpriteLoader::GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

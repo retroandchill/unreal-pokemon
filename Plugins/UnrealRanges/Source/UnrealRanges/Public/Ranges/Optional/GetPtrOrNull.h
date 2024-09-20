@@ -13,7 +13,11 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
-            return Optional.GetPtrOrNull();
+            if constexpr (SubclassOptional<O>) {
+                return Optional.Get(nullptr);
+            } else {
+                return Optional.GetPtrOrNull();
+            }
         }
     };
 

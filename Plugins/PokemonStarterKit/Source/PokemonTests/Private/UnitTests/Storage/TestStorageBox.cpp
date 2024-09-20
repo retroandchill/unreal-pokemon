@@ -33,20 +33,20 @@ bool TestStorageBox::RunTest(const FString &Parameters) {
         auto BoxName = FText::FormatNamed(Settings->BoxNameFormat, TEXT("Index"), i + 1);
         UE_CHECK_EQUAL(BoxName.ToString(), StorageSystem->GetBox(i)->GetDisplayName().ToString());
     }
-    
+
     auto Box = StorageSystem->GetBox(0);
     Box->SetDisplayName(FText::FromStringView(TEXT("Test Box")));
     UE_CHECK_EQUAL(TEXT("Test Box"), Box->GetDisplayName().ToString());
 
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
-        FPokemonDTO{.Species = TEXT("PIKACHU"), .Level = 20}, Player);
+    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("PIKACHU"), .Level = 20}, Player);
     int32 DepositIndex = INDEX_NONE;
     UE_ASSERT_EQUAL(EDepositResult::Deposited, UStorageUtilities::DepositToBox(Box, Pokemon1, DepositIndex));
     UE_CHECK_EQUAL(0, DepositIndex);
 
     for (int32 i = 1; i < 30; i++) {
-        auto FillerPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
-            FPokemonDTO{.Species = TEXT("MAGIKARP"), .Level = 5}, Player);
+        auto FillerPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("MAGIKARP"), .Level = 5}, Player);
         DepositIndex = INDEX_NONE;
         UE_ASSERT_EQUAL(EDepositResult::Deposited, UStorageUtilities::DepositToBox(Box, FillerPokemon, DepositIndex));
         UE_CHECK_EQUAL(i, DepositIndex);
@@ -54,9 +54,8 @@ bool TestStorageBox::RunTest(const FString &Parameters) {
 
     UE_CHECK_TRUE(Box->IsBoxFull());
 
-    
-    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(),
-        FPokemonDTO{.Species = TEXT("RIOLU"), .Level = 20}, Player);
+    auto Pokemon2 = UnrealInjector::NewInjectedDependency<IPokemon>(
+        World.Get(), FPokemonDTO{.Species = TEXT("RIOLU"), .Level = 20}, Player);
     DepositIndex = INDEX_NONE;
     UE_ASSERT_EQUAL(EDepositResult::BoxFull, UStorageUtilities::DepositToBox(Box, Pokemon2, DepositIndex));
     UE_CHECK_EQUAL(INDEX_NONE, DepositIndex);
@@ -76,6 +75,6 @@ bool TestStorageBox::RunTest(const FString &Parameters) {
     Withdrawn = nullptr;
     UE_ASSERT_EQUAL(EWithdrawResult::PokemonPresent, UStorageUtilities::SwapWithPokemon(Box, 0, Pokemon2, Withdrawn));
     UE_CHECK_TRUE(Withdrawn == Pokemon1);
-    
+
     return true;
 }

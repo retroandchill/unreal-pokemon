@@ -35,22 +35,23 @@ bool UTerrainTagUtilities::HasTerrainTag(const UObject *WorldContext, const FGam
                                          const ACharacter *Character) {
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     return Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
-                 UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
-                 UE::Ranges::AnyOf([&Tag](const AActor *A) { return ITerrain::Execute_HasTerrainTag(A, Tag); });
+           UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
+           UE::Ranges::AnyOf([&Tag](const AActor *A) { return ITerrain::Execute_HasTerrainTag(A, Tag); });
 }
 
 bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const FGameplayTagContainer &Tags,
                                             const ACharacter *Character) {
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     return Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
-                 UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
-                 UE::Ranges::AnyOf([&Tags](const AActor *A) { return ITerrain::Execute_HasAnyTerrainTag(A, Tags); });;
+           UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
+           UE::Ranges::AnyOf([&Tags](const AActor *A) { return ITerrain::Execute_HasAnyTerrainTag(A, Tags); });
+    ;
 }
 
 bool UTerrainTagUtilities::HasAllTerrainTags(const UObject *WorldContext, const FGameplayTagContainer &Tags,
                                              ACharacter *Character) {
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     return Overlaps | UE::Ranges::Map(&FOverlapResult::GetActor) | UE::Ranges::FilterValid |
-                 UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
-                 UE::Ranges::AnyOf([&Tags](const AActor *A) { return ITerrain::Execute_HasAllTerrainTags(A, Tags); });
+           UE::Ranges::Filter(&AActor::Implements<UTerrain>) |
+           UE::Ranges::AnyOf([&Tags](const AActor *A) { return ITerrain::Execute_HasAllTerrainTags(A, Tags); });
 }

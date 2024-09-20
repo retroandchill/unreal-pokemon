@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Storage/DefaultStorageSystem.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
@@ -39,14 +38,12 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
 }
 
 FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
-    return {
-        // clang-format off
+    return {// clang-format off
         .Boxes = Boxes |
                  UE::Ranges::Map(&IStorageBox::ToDTO) |
                  UE::Ranges::ToArray,
-        // clang-format on
-        .CurrentBoxIndex = CurrentBoxIndex
-    };
+            // clang-format on
+            .CurrentBoxIndex = CurrentBoxIndex};
 }
 
 int32 UDefaultStorageSystem::GetBoxCount() const {
@@ -65,7 +62,6 @@ int32 UDefaultStorageSystem::GetCurrentBoxIndex() const {
 void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
     check(Boxes.IsValidIndex(NewIndex))
     CurrentBoxIndex = NewIndex;
-    
 }
 
 TScriptInterface<IStorageBox> UDefaultStorageSystem::CreateStorageBox(FText &&BoxName, int32 BoxCapacity) {
