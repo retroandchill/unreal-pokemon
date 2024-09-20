@@ -29,7 +29,7 @@ namespace UE::Assets {
          * @param DefaultPrefix The default prefix for the asset type
          */
         explicit TAssetClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT(""))
-            : Key(Key), DefaultAssetPath(FString(DefaultPath)), DefaultPrefix(DefaultPrefix) {
+            : Key(Key), DefaultAssetPath({FString(DefaultPath)}), DefaultPrefix(DefaultPrefix) {
             FCoreDelegates::OnPostEngineInit.AddRaw(this, &TAssetClass::OnPostEngineInit);
         }
 
@@ -112,7 +112,7 @@ namespace UE::Assets {
          * @param DefaultPrefix The default prefix for the asset type
          */
         explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT(""))
-            : Key(Key), DefaultAssetPath(FString(DefaultPath)), DefaultPrefix(DefaultPrefix) {
+            : Key(Key), DefaultAssetPath({FString(DefaultPath)}), DefaultPrefix(DefaultPrefix) {
             FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit);
         }
 

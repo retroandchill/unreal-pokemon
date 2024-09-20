@@ -28,7 +28,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     TOptional<FString> AssetPrefix;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "!bIsNative"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
     UClass *AssetClass = nullptr;
 
     UPROPERTY()
@@ -59,9 +59,9 @@ class DYNAMICASSETLOADER_API UAssetLoadingSettings : public UDeveloperSettings {
     /**
      * Edit the defaults for asset classes that are natively defined in code
      */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
+    UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys))
     TMap<FName, FAssetLoadingEntry> AssetClasses;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys, EditFixedSize))
+    UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys))
     TMap<FName, FAssetLoadingEntry> BlueprintClasses;
 };

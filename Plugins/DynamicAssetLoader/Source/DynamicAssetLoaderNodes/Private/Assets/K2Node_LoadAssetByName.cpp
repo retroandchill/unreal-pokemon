@@ -45,8 +45,7 @@ void UK2Node_LoadAssetByName::AllocateDefaultPins() {
 }
 
 FText UK2Node_LoadAssetByName::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto AssetClass = GetDefault<UAssetLoadingSettings>()->AssetClasses.Find(AssetKey);
-    if (AssetClass == nullptr) {
+    if (auto AssetClass = GetDefault<UAssetLoadingSettings>()->AssetClasses.Find(AssetKey); AssetClass == nullptr) {
         return NSLOCTEXT("K2Node", "LoadAssetByName_Title_None", "Load Asset by Name");
     }
 
