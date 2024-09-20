@@ -112,7 +112,7 @@ namespace Pokemon::Data {
         template <typename T>
             requires DataStructHandle<T>
         T *Get() const {
-            return static_cast<T*>(Struct.get());
+            return static_cast<T *>(Struct.get());
         }
 
         /**
@@ -161,13 +161,13 @@ class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibr
   public:                                                                                                              \
     using FValueType = StructType;                                                                                     \
     ClassName() = default;                                                                                             \
-    ClassName(FName RowID) : RowID(RowID) {                                                            \
+    ClassName(FName RowID) : RowID(RowID) {                                                                            \
     }                                                                                                                  \
-    ClassName(const ANSICHAR *RowID) : RowID(RowID) {                                                  \
+    ClassName(const ANSICHAR *RowID) : RowID(RowID) {                                                                  \
     }                                                                                                                  \
-    ClassName(const WIDECHAR *RowID) : RowID(RowID) {                                                  \
+    ClassName(const WIDECHAR *RowID) : RowID(RowID) {                                                                  \
     }                                                                                                                  \
-    ClassName(const UTF8CHAR *RowID) : RowID(RowID) {                                                  \
+    ClassName(const UTF8CHAR *RowID) : RowID(RowID) {                                                                  \
     }                                                                                                                  \
     operator FName() const {                                                                                           \
         return RowID;                                                                                                  \

@@ -11,7 +11,8 @@ public class PokemonItems : ModuleRules
             {
                 "Core",
                 "PokemonCore",
-                "PokemonAssets"
+                "PokemonAssets",
+                "DynamicAssetLoader",
             }
         );
 

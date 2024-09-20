@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Common/MovePanel.h"
-#include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Graphics/AssetClasses.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "Utilities/WidgetUtilities.h"
@@ -28,8 +27,7 @@ void UMovePanel::SetIsMoveToLearn(bool bIsBeingLearned) {
 
 UObject *UMovePanel::GetTypeIcon_Implementation() {
     check(Move != nullptr)
-    auto GraphicsSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    return GraphicsSubsystem->GetTypeIconGraphic(Move->GetType());
+    return Pokemon::Assets::Graphics::TypeIcons.LoadAsset(Move->GetType()).GetPtrOrNull();
 }
 
 void UMovePanel::OnMoveSet() {

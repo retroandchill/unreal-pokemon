@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "EditorUtilityWidget.h"
+
 #include "PokemonSpriteImporterBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class UNREALPOKEMONEDITOR_API UPokemonSpriteImporterBase : public UEditorUtilityWidget {
@@ -15,5 +16,4 @@ class UNREALPOKEMONEDITOR_API UPokemonSpriteImporterBase : public UEditorUtility
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = InputData, meta = (AllowPrivateAccess, ContentDir))
     FDirectoryPath BasePackage;
-
 };

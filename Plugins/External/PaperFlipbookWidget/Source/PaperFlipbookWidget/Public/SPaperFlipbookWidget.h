@@ -5,11 +5,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Misc/Attribute.h"
 #include "Input/Reply.h"
-#include "Widgets/DeclarativeSyntaxSupport.h"
-#include "Styling/SlateColor.h"
+#include "Misc/Attribute.h"
 #include "Styling/CoreStyle.h"
+#include "Styling/SlateColor.h"
+#include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/SLeafWidget.h"
 
 class FPaintArgs;
@@ -20,181 +20,175 @@ class UPaperSprite;
 /**
  * Implements a widget that displays a paper flipbook.
  */
-class PAPERFLIPBOOKWIDGET_API SPaperFlipbookWidget
-	: public SLeafWidget
-{
-public:
-	SLATE_BEGIN_ARGS(SPaperFlipbookWidget)
-		: _ColorAndOpacity(FLinearColor::White)
-		, _OnMouseButtonDown()
-	{
-	}
+class PAPERFLIPBOOKWIDGET_API SPaperFlipbookWidget : public SLeafWidget {
+  public:
+    SLATE_BEGIN_ARGS(SPaperFlipbookWidget) : _ColorAndOpacity(FLinearColor::White), _OnMouseButtonDown() {
+    }
 
+    /** Color and opacity */
+    SLATE_ATTRIBUTE(FSlateColor, ColorAndOpacity)
 
-	/** Color and opacity */
-	SLATE_ATTRIBUTE(FSlateColor, ColorAndOpacity)
+    /** Invoked when the mouse is pressed in the widget. */
+    SLATE_EVENT(FPointerEventHandler, OnMouseButtonDown)
 
-		/** Invoked when the mouse is pressed in the widget. */
-		SLATE_EVENT(FPointerEventHandler, OnMouseButtonDown)
+    /** Called when the button is pressed */
+    SLATE_EVENT(FSimpleDelegate, OnFinishedPlaying)
 
-		/** Called when the button is pressed */
-		SLATE_EVENT(FSimpleDelegate, OnFinishedPlaying)
+    SLATE_END_ARGS()
 
-		SLATE_END_ARGS()
+    /** Constructor */
+    SPaperFlipbookWidget();
 
-		/** Constructor */
-		SPaperFlipbookWidget();
+    /**
+     * Construct this widget
+     *
+     * @param	InArgs	The declaration data for this widget
+     */
+    void Construct(const FArguments &InArgs);
 
-	/**
-	 * Construct this widget
-	 *
-	 * @param	InArgs	The declaration data for this widget
-	 */
-	void Construct(const FArguments& InArgs);
+  public:
+    /** See the ColorAndOpacity attribute */
+    void SetColorAndOpacity(const TAttribute<FSlateColor> &InColorAndOpacity);
 
-public:
+    /** See the ColorAndOpacity attribute */
+    void SetColorAndOpacity(FLinearColor InColorAndOpacity);
 
-	/** See the ColorAndOpacity attribute */
-	void SetColorAndOpacity(const TAttribute<FSlateColor>& InColorAndOpacity);
+    /** See OnMouseButtonDown event */
+    void SetOnMouseButtonDown(FPointerEventHandler EventHandler);
 
-	/** See the ColorAndOpacity attribute */
-	void SetColorAndOpacity(FLinearColor InColorAndOpacity);
+    /** Set OnFinishedPlaying event */
+    void SetOnFinishedPlaying(FSimpleDelegate InOnFinishedPlaying);
 
-	/** See OnMouseButtonDown event */
-	void SetOnMouseButtonDown(FPointerEventHandler EventHandler);
+    void OverrideBrushSize(FVector2D InDesiredSize, bool bOverride);
 
-	/** Set OnFinishedPlaying event */
-	void SetOnFinishedPlaying(FSimpleDelegate InOnFinishedPlaying);
+    /**  */
+    void SetBrushTintColor(FSlateColor TintColor);
 
-	void OverrideBrushSize(FVector2D InDesiredSize, bool bOverride);
+    /**  */
+    void SetBrushTiling(TEnumAsByte<enum ESlateBrushTileType::Type> InTiling);
 
-	/**  */
-	void SetBrushTintColor(FSlateColor TintColor);
+    /**  */
+    void SetBrushMirroring(TEnumAsByte<enum ESlateBrushMirrorType::Type> InMirroring);
 
-	/**  */
-	void SetBrushTiling(TEnumAsByte<enum ESlateBrushTileType::Type> InTiling);
+    FSlateBrush *GetBrush();
 
-	/**  */
-	void SetBrushMirroring(TEnumAsByte<enum ESlateBrushMirrorType::Type> InMirroring);
+  public:
+    // SWidget overrides
+    virtual int32 OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry, const FSlateRect &MyCullingRect,
+                          FSlateWindowElementList &OutDrawElements, int32 LayerId, const FWidgetStyle &InWidgetStyle,
+                          bool bParentEnabled) const override;
+    virtual FReply OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
+    virtual void Tick(const FGeometry &AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
 
-	FSlateBrush* GetBrush();
+  protected:
+    // Begin SWidget overrides.
+    virtual FVector2D ComputeDesiredSize(float) const override;
+    // End SWidget overrides.
 
-public:
+  protected:
+    FSlateBrush DefaultBrush;
 
-	// SWidget overrides
-	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override;
-	virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
-	virtual void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
+    uint8 bUseSpriteSize : 1;
 
-protected:
-	// Begin SWidget overrides.
-	virtual FVector2D ComputeDesiredSize(float) const override;
-	// End SWidget overrides.
+    /** Color and opacity scale for this image */
+    TAttribute<FSlateColor> ColorAndOpacity;
 
-protected:
+    /** Invoked when the mouse is pressed in the image */
+    FPointerEventHandler OnMouseButtonDownHandler;
 
-	FSlateBrush DefaultBrush;
+    /** The delegate to execute when a non-looping flipbook finishes playing */
+    FSimpleDelegate OnFinishedPlaying;
 
-	uint8 bUseSpriteSize : 1;
+    /** Flipbook currently being played */
+    UPaperFlipbook *SourceFlipbook;
 
-	/** Color and opacity scale for this image */
-	TAttribute<FSlateColor> ColorAndOpacity;
+    /** Current play rate of the flipbook */
+    float PlayRate;
 
-	/** Invoked when the mouse is pressed in the image */
-	FPointerEventHandler OnMouseButtonDownHandler;
+    /** Whether the flipbook should loop when it reaches the end, or stop */
+    uint8 bLooping : 1;
 
-	/** The delegate to execute when a non-looping flipbook finishes playing */
-	FSimpleDelegate OnFinishedPlaying;
+    /** If playback should move the current position backwards instead of forwards */
+    uint8 bReversePlayback : 1;
 
-	/** Flipbook currently being played */
-	UPaperFlipbook* SourceFlipbook;
+    /** Are we currently playing (moving Position) */
+    uint8 bPlaying : 1;
 
-	/** Current play rate of the flipbook */
-	float PlayRate;
+    /** Current position in the timeline */
+    float AccumulatedTime;
 
-	/** Whether the flipbook should loop when it reaches the end, or stop */
-	uint8 bLooping : 1;
+    /** Last frame index calculated */
+    int32 CachedFrameIndex;
 
-	/** If playback should move the current position backwards instead of forwards */
-	uint8 bReversePlayback : 1;
+  public:
+    /** Change the flipbook used by this instance (will reset the play time to 0 if it is a new flipbook). */
+    virtual bool SetFlipbook(class UPaperFlipbook *NewFlipbook);
 
-	/** Are we currently playing (moving Position) */
-	uint8 bPlaying : 1;
+    /** Gets the flipbook used by this instance. */
+    virtual UPaperFlipbook *GetFlipbook();
 
-	/** Current position in the timeline */
-	float AccumulatedTime;
+    /** Start playback of flipbook */
+    void Play();
 
-	/** Last frame index calculated */
-	int32 CachedFrameIndex;
+    /** Start playback of flipbook from the start */
+    void PlayFromStart();
 
-public:
-	/** Change the flipbook used by this instance (will reset the play time to 0 if it is a new flipbook). */
-	virtual bool SetFlipbook(class UPaperFlipbook* NewFlipbook);
+    /** Start playback of flipbook in reverse */
+    void Reverse();
 
-	/** Gets the flipbook used by this instance. */
-	virtual UPaperFlipbook* GetFlipbook();
+    /** Start playback of flipbook in reverse from the end */
+    void ReverseFromEnd();
 
-	/** Start playback of flipbook */
-	void Play();
+    /** Stop playback of flipbook */
+    void Stop();
 
-	/** Start playback of flipbook from the start */
-	void PlayFromStart();
+    /** Get whether this flipbook is playing or not. */
+    bool IsPlaying() const;
 
-	/** Start playback of flipbook in reverse */
-	void Reverse();
+    /** Get whether we are reversing or not */
+    bool IsReversing() const;
 
-	/** Start playback of flipbook in reverse from the end */
-	void ReverseFromEnd();
+    /** Jump to a position in the flipbook (expressed in frames). If bFireEvents is true, event functions will fire,
+     * otherwise they will not. */
+    void SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents);
 
-	/** Stop playback of flipbook */
-	void Stop();
+    /** Get the current playback position (in frames) of the flipbook */
+    int32 GetPlaybackPositionInFrames() const;
 
-	/** Get whether this flipbook is playing or not. */
-	bool IsPlaying() const;
+    /** Jump to a position in the flipbook (expressed in seconds). If bFireEvents is true, event functions will fire,
+     * otherwise they will not. */
+    void SetPlaybackPosition(float NewPosition, bool bFireEvents);
 
-	/** Get whether we are reversing or not */
-	bool IsReversing() const;
+    /** Get the current playback position (in seconds) of the flipbook */
+    float GetPlaybackPosition() const;
 
-	/** Jump to a position in the flipbook (expressed in frames). If bFireEvents is true, event functions will fire, otherwise they will not. */
-	void SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents);
+    /** true means we should loop, false means we should not. */
+    void SetLooping(bool bNewLooping);
 
-	/** Get the current playback position (in frames) of the flipbook */
-	int32 GetPlaybackPositionInFrames() const;
+    /** Get whether we are looping or not */
+    bool IsLooping() const;
 
-	/** Jump to a position in the flipbook (expressed in seconds). If bFireEvents is true, event functions will fire, otherwise they will not. */
-	void SetPlaybackPosition(float NewPosition, bool bFireEvents);
+    /** Sets the new play rate for this flipbook */
+    void SetPlayRate(float NewRate);
 
-	/** Get the current playback position (in seconds) of the flipbook */
-	float GetPlaybackPosition() const;
+    /** Get the current play rate for this flipbook */
+    float GetPlayRate() const;
 
-	/** true means we should loop, false means we should not. */
-	void SetLooping(bool bNewLooping);
+    /** Set the new playback position time to use */
+    void SetNewTime(float NewTime);
 
-	/** Get whether we are looping or not */
-	bool IsLooping() const;
+    /** Get length of the flipbook (in seconds) */
+    float GetFlipbookLength() const;
 
-	/** Sets the new play rate for this flipbook */
-	void SetPlayRate(float NewRate);
+    /** Get length of the flipbook (in frames) */
+    int32 GetFlipbookLengthInFrames() const;
 
-	/** Get the current play rate for this flipbook */
-	float GetPlayRate() const;
+    /** Get the nominal framerate that the flipbook will be played back at (ignoring PlayRate), in frames per second */
+    float GetFlipbookFramerate() const;
 
-	/** Set the new playback position time to use */
-	void SetNewTime(float NewTime);
+  protected:
+    void CalculateCurrentFrame();
+    UPaperSprite *GetSpriteAtCachedIndex() const;
 
-	/** Get length of the flipbook (in seconds) */
-	float GetFlipbookLength() const;
-
-	/** Get length of the flipbook (in frames) */
-	int32 GetFlipbookLengthInFrames() const;
-
-	/** Get the nominal framerate that the flipbook will be played back at (ignoring PlayRate), in frames per second */
-	float GetFlipbookFramerate() const;
-
-protected:
-
-	void CalculateCurrentFrame();
-	UPaperSprite* GetSpriteAtCachedIndex() const;
-
-	void TickFlipbook(float DeltaTime);
+    void TickFlipbook(float DeltaTime);
 };

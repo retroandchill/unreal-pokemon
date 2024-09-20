@@ -7,11 +7,9 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FPaperFlipbookWidgetEditorModule : public IModuleInterface
-{
-public:
-
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+class FPaperFlipbookWidgetEditorModule : public IModuleInterface {
+  public:
+    /** IModuleInterface implementation */
+    virtual void StartupModule() override;
+    virtual void ShutdownModule() override;
 };

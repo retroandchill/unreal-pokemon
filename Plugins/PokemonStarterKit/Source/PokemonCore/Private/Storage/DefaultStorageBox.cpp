@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Storage/DefaultStorageBox.h"
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/AllOf.h"
@@ -10,9 +9,9 @@
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Views/Construct.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 #include "Storage/StorageBoxDTO.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Utilities/TrainerHelpers.h"
 
 TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(FText &&InitialName, int32 Capacity) {

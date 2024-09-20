@@ -6,6 +6,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/UseItemPayload.h"
+#include "Battle/Items/BattleItemEffect.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"

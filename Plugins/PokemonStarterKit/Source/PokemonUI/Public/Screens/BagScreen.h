@@ -81,14 +81,14 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
         requires std::is_base_of_v<UFieldItemEffect, T>
     void TryUseItem(const FItem &Item, int32 Quantity, FOnItemEffectComplete::FDelegate &&CompletionDelegate,
                     A &&...Args) {
-        auto EffectClass = Pokemon::Items::LookupFieldItemEffect<T>(Item.ID);
-        if (EffectClass == nullptr) {
+        auto EffectClass = Pokemon::Items::FieldItemEffects.LoadClass<T>(Item.ID);
+        if (!EffectClass.IsSet()) {
             OnItemEffectConclude(false, Item.ID);
             CompletionDelegate.Execute(false);
             return;
         }
 
-        auto Effect = NewObject<T>(this, EffectClass);
+        auto Effect = NewObject<T>(this, EffectClass.GetValue());
         Effect->BindToEffectComplete(FOnItemEffectComplete::FDelegate::CreateWeakLambda(
             this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
                 OnItemEffectConclude(bSuccess, ItemID);

@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Algo/AnyOf.h"
-#include "range/v3/algorithm/for_each.hpp"
 #include "range/v3/algorithm/any_of.hpp"
+#include "range/v3/algorithm/for_each.hpp"
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/TerminalClosure.h"
 
@@ -57,7 +57,7 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
-        constexpr auto operator()( A &&...Args) const {
+        constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
             return TTerminalClosure<TAllOfInvoker<BindingType>>(
                 TAllOfInvoker<BindingType>(CreateBinding<A...>(Forward<A>(Args)...)));

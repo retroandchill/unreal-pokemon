@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Pointers.h"
+#include "Templates/NonNullSubclassOf.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -165,14 +166,19 @@ struct TOptional<T &> {
 namespace UE::Optionals {
 
     template <typename T>
-    FORCEINLINE TOptional<T &> OfNullable(T *Ptr) {
+    constexpr TOptional<T &> OfNullable(T *Ptr) {
         return TOptional<T &>(Ptr);
     }
 
     template <typename T>
         requires Ranges::Pointer<T>
-    FORCEINLINE auto OfNullable(const T &Ptr) {
+    constexpr auto OfNullable(const T &Ptr) {
         return TOptional<Ranges::TRawPointerType<T>>(Ranges::GetRawPointer<T>(Ptr));
+    }
+
+    template <typename T>
+    constexpr TOptional<TNonNullSubclassOf<T>> OfNullable(TSubclassOf<T> Ptr) {
+        return TOptional<TNonNullSubclassOf<T>>(Ptr);
     }
 
 } // namespace UE::Optionals

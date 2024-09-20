@@ -37,11 +37,11 @@ TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() co
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
     check(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"))
 
-        auto Options = RowProperty->GetMetaData("GetOptions");
+    auto Options = RowProperty->GetMetaData("GetOptions");
     auto GetOptionsFunction = FindObject<UFunction>(nullptr, *Options, true);
     check(GetOptionsFunction != nullptr && GetOptionsFunction->HasAnyFunctionFlags(EFunctionFlags::FUNC_Static))
 
-        FGetOptionsParams Params;
+    FGetOptionsParams Params;
     auto GetOptionsCDO = GetOptionsFunction->GetOuterUClass()->GetDefaultObject();
     GetOptionsCDO->ProcessEvent(GetOptionsFunction, &Params);
 
@@ -61,7 +61,7 @@ FName Pokemon::Data::FStructWrapper::GetRowID() const {
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
     check(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"))
 
-        auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
+    auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
     return TPropertyTypeFundamentals<FName>::GetPropertyValue(PropertyContainer);
 }
 
@@ -73,7 +73,7 @@ void Pokemon::Data::FStructWrapper::SetRowID(FName RowID) {
     auto RowProperty = StructClass->FindPropertyByName(DataStructRowID);
     check(RowProperty != nullptr && RowProperty->GetCPPType() == TEXT("FName"))
 
-        auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
+    auto PropertyContainer = RowProperty->ContainerPtrToValuePtr<void>(Struct.get());
     TPropertyTypeFundamentals<FName>::SetPropertyValue(PropertyContainer, RowID);
 }
 

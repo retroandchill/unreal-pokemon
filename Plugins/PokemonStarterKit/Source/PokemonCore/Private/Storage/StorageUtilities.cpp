@@ -1,9 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Storage/StorageUtilities.h"
-#include "Storage/StorageBox.h"
 #include "Pokemon/Pokemon.h"
+#include "Storage/StorageBox.h"
 
 EDepositResult UStorageUtilities::DepositToBox(const TScriptInterface<IStorageBox> &Box,
                                                const TScriptInterface<IPokemon> &Pokemon, int32 &DepositIndex) {

@@ -94,9 +94,8 @@ void UK2Node_SwitchOnDataHandle::AddPinToSwitchNode() {
 FName UK2Node_SwitchOnDataHandle::GetUniquePinName() {
     Pokemon::Data::FStructWrapper DataHandle(StructType);
     auto Options = DataHandle.GetStructOptions();
-    auto Rows = Options |
-        UE::Ranges::Map([](const TSharedPtr<FString>& String) { return FName(**String); }) |
-        UE::Ranges::ToArray;    
+    auto Rows = Options | UE::Ranges::Map([](const TSharedPtr<FString> &String) { return FName(**String); }) |
+                UE::Ranges::ToArray;
     FName NewPinName;
     for (auto Row : Rows) {
         if (!FindPin(Row)) {
@@ -133,7 +132,8 @@ void UK2Node_SwitchOnDataHandle::CreateFunctionPin() {
     if (bIsStaticFunc) {
         // Wire up the self to the CDO of the class if it's not us
         if (auto BP = GetBlueprint()) {
-            if (const auto FunctionOwnerClass = Function->GetOuterUClass(); !BP->SkeletonGeneratedClass->IsChildOf(FunctionOwnerClass)) {
+            if (const auto FunctionOwnerClass = Function->GetOuterUClass();
+                !BP->SkeletonGeneratedClass->IsChildOf(FunctionOwnerClass)) {
                 FunctionPin->DefaultObject = FunctionOwnerClass->GetDefaultObject();
             }
         }

@@ -1,14 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Saving/SaveGameCard.h"
-#include "PaperFlipbookUserWidget.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/DisplayText.h"
-#include "Components/Image.h"
-#include "Components/Party/PokemonSelectionPane.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Graphics/SpriteLoader.h"
 #include "Managers/PokemonSubsystem.h"
+#include "PaperFlipbookUserWidget.h"
 #include "Player/PlayerMetadata.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Map.h"
@@ -51,8 +49,7 @@ void USaveGameCard::UpdateTimeLabels() {
 
 UPaperFlipbookUserWidget *USaveGameCard::CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon) {
     auto Image = WidgetTree->ConstructWidget<UPaperFlipbookUserWidget>();
-    auto Subsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    auto Flipbook = Subsystem->GetPokemonIcon(Pokemon);
+    auto Flipbook = USpriteLoader::GetPokemonIcon(Pokemon);
     Image->SetFlipbook(Flipbook);
     Image->SetPlayRate(0.f);
     SlotPokemonIcon(Image);

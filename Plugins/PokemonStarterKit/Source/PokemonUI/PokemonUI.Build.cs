@@ -38,7 +38,8 @@ public class PokemonUI : ModuleRules
 				"UnrealInjector", 
 				"CommonInput", 
 				"PokemonItems",
-				"Paper2D"
+				"Paper2D",
+				"DynamicAssetLoader"
 			}
 		);
 	}
