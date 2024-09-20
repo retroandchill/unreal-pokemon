@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/TrainerCardScreen.h"
-#include "PaperFlipbook.h"
-#include "PaperFlipbookUserWidget.h"
 #include "Components/DisplayText.h"
 #include "Graphics/SpriteLoader.h"
 #include "Managers/PokemonSubsystem.h"
+#include "PaperFlipbook.h"
+#include "PaperFlipbookUserWidget.h"
 #include "Player/PlayerMetadata.h"
 #include "Utilities/PokemonUIUtils.h"
 

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "UObject/Interface.h"
+
 #include "StorageBox.generated.h"
 
 class IPokemon;
@@ -22,7 +23,7 @@ class POKEMONCORE_API IStorageBox {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Initialize a storage box with the given name and capacity
      * @param InitialName The name of the box upon creation
@@ -30,10 +31,10 @@ public:
      * @return A pointer to the created box
      */
     virtual TScriptInterface<IStorageBox> Initialize(FText &&InitialName, int32 Capacity) = 0;
-    virtual TScriptInterface<IStorageBox> Initialize(const FStorageBoxDTO& DTO) = 0;
+    virtual TScriptInterface<IStorageBox> Initialize(const FStorageBoxDTO &DTO) = 0;
 
     virtual FStorageBoxDTO ToDTO() const = 0;
-    
+
     /**
      * Get the display name of the box.
      * @return The box's display name
@@ -45,9 +46,8 @@ public:
      * Set the display name for the box.
      * @param NewName The new name for the box
      */
-    UFUNCTION(BlueprintCallable, Category = "Storage|Information",
-        meta = (AutoCreateRefTerm = NewName))
-    virtual void SetDisplayName(const FText& NewName) = 0;
+    UFUNCTION(BlueprintCallable, Category = "Storage|Information", meta = (AutoCreateRefTerm = NewName))
+    virtual void SetDisplayName(const FText &NewName) = 0;
 
     /**
      * Get the capacity of the box.
@@ -61,7 +61,7 @@ public:
      * @param Pokemon The Pokémon to deposit
      * @return The index of the Pokémon if it was deposited
      */
-    virtual TOptional<int32> DepositToBox(const TScriptInterface<IPokemon>& Pokemon) = 0;
+    virtual TOptional<int32> DepositToBox(const TScriptInterface<IPokemon> &Pokemon) = 0;
 
     /**
      * Check if the given box is full or not.
@@ -75,7 +75,7 @@ public:
      * @param BoxIndex The index to withdraw from
      * @return The withdrawn Pokémon
      */
-    virtual TOptional<IPokemon&> WithdrawFromBox(int32 BoxIndex) = 0;
+    virtual TOptional<IPokemon &> WithdrawFromBox(int32 BoxIndex) = 0;
 
     /**
      * Swap the out the Pokémon stored at the given index with a new Pokémon
@@ -83,6 +83,5 @@ public:
      * @param Pokemon The Pokémon to replace into the slot
      * @return The Pokémon that used to be in slot
      */
-    virtual TOptional<IPokemon&> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon>& Pokemon) = 0;
-
+    virtual TOptional<IPokemon &> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon) = 0;
 };

@@ -14,4 +14,4 @@ namespace Pokemon::Battle::Abilities {
      * @return The instantiated gameplay ability for that ability (if an effect exists)
      */
     POKEMONBATTLE_API TOptional<TNonNullSubclassOf<UGameplayAbility>> CreateAbilityEffect(FName ID);
-} // namespace Battle::Abilities
+} // namespace Pokemon::Battle::Abilities

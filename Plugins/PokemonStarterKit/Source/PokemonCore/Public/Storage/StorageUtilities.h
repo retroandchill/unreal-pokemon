@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "StorageUtilities.generated.h"
 
 class IPokemon;
@@ -44,14 +45,17 @@ UCLASS()
 class POKEMONCORE_API UStorageUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = "Storage|Pokémon")
-    static EDepositResult DepositToBox(const TScriptInterface<IStorageBox>& Box, const TScriptInterface<IPokemon>& Pokemon, int32& DepositIndex);
+    static EDepositResult DepositToBox(const TScriptInterface<IStorageBox> &Box,
+                                       const TScriptInterface<IPokemon> &Pokemon, int32 &DepositIndex);
 
     UFUNCTION(BlueprintCallable, Category = "Storage|Pokémon")
-    static EWithdrawResult WithdrawFromBox(const TScriptInterface<IStorageBox>& Box, int32 BoxIndex, TScriptInterface<IPokemon>& WithdrawnPokemon);
+    static EWithdrawResult WithdrawFromBox(const TScriptInterface<IStorageBox> &Box, int32 BoxIndex,
+                                           TScriptInterface<IPokemon> &WithdrawnPokemon);
 
     UFUNCTION(BlueprintCallable, Category = "Storage|Pokémon")
-    static EWithdrawResult SwapWithPokemon(const TScriptInterface<IStorageBox>& Box, int32 BoxIndex, const TScriptInterface<IPokemon>& Pokemon, TScriptInterface<IPokemon>& WithdrawnPokemon);
-
+    static EWithdrawResult SwapWithPokemon(const TScriptInterface<IStorageBox> &Box, int32 BoxIndex,
+                                           const TScriptInterface<IPokemon> &Pokemon,
+                                           TScriptInterface<IPokemon> &WithdrawnPokemon);
 };

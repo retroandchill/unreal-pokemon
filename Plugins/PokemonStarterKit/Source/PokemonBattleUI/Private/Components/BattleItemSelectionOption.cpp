@@ -14,7 +14,7 @@ void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
     static auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     auto &ItemData = ItemTable.GetDataChecked(ItemID);
 
-    auto IconAsset =  Pokemon::Assets::Graphics::ItemIcons.LoadAsset(ItemID).GetPtrOrNull();
+    auto IconAsset = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(ItemID).GetPtrOrNull();
     UWidgetUtilities::SetBrushFromAsset(ItemIcon, IconAsset, true);
 
     ItemNameText->SetText(ItemData.RealName);

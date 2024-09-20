@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Graphics/SpriteLoader.h"
 #include "Graphics/AssetClasses.h"
 #include "Pokemon/Pokemon.h"
@@ -15,9 +14,8 @@ UPaperFlipbook *USpriteLoader::GetPokemonBattleSprite(const TScriptInterface<IPo
 
 UPaperFlipbook *USpriteLoader::GetSpeciesBattleSprite(FName Species, bool bBack,
                                                       const FPokemonAssetParams &AdditionalParams) {
-    auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species,
-                                                                  AdditionalParams,
-                                                                  bBack ? TEXT("Back") : TEXT("Front"));
+    auto SpriteResolutionList =
+        CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
     return Pokemon::Assets::Graphics::PokemonSprites.ResolveAsset(SpriteResolutionList).GetPtrOrNull();
 }
 
@@ -89,10 +87,8 @@ TArray<FString> USpriteLoader::CreatePokemonSpriteResolutionList(FName Species, 
 }
 
 UPaperFlipbook *USpriteLoader::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, bool bBack) {
-    TArray<FString, TInlineAllocator<2>> StringParts = {
-        bBack ? TEXT("Back") : TEXT("Front"),
-        Trainer->GetTrainerType().ID.ToString()
-    };
+    TArray<FString, TInlineAllocator<2>> StringParts = {bBack ? TEXT("Back") : TEXT("Front"),
+                                                        Trainer->GetTrainerType().ID.ToString()};
     auto JoinedString = FString::Join(StringParts, TEXT("/"));
     return Pokemon::Assets::Graphics::TrainerSprites.LoadAsset(JoinedString).GetPtrOrNull();
 }

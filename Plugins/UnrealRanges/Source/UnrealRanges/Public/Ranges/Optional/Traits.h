@@ -56,8 +56,8 @@ namespace UE::Optionals {
     concept UEOptional = requires { typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ContainedType; };
 
     template <typename T>
-    concept SubclassOptional = UEOptional<T> && requires(T&& Optional) {
-        { Optional.Get(nullptr) } -> std::same_as<UClass*>;
+    concept SubclassOptional = UEOptional<T> && requires(T &&Optional) {
+        { Optional.Get(nullptr) } -> std::same_as<UClass *>;
     };
 
     /**

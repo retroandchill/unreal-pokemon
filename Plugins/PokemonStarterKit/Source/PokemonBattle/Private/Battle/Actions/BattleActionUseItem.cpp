@@ -6,6 +6,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/UseItemPayload.h"
+#include "Battle/Items/BattleItemEffect.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
@@ -16,7 +17,6 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
-#include "Battle/Items/BattleItemEffect.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(MoveTemp(Battler));

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+
 #include "SpriteLoader.generated.h"
 
 class ITrainer;
@@ -35,34 +36,36 @@ UCLASS()
 class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook* GetPokemonBattleSprite(const TScriptInterface<IPokemon>& Pokemon,
-                                           bool bBack = false);
+    static UPaperFlipbook *GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
 
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon", meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook* GetSpeciesBattleSprite(FName Species, bool bBack = false,
-                                           const FPokemonAssetParams& AdditionalParams = FPokemonAssetParams());
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
+              meta = (CallableWithoutWorldContext))
+    static UPaperFlipbook *GetSpeciesBattleSprite(FName Species, bool bBack = false,
+                                                  const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
      * @param Pokemon The Pokémon to get the icon for
      * @return The graphical asset that this icon refers to.
      */
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon", meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook* GetPokemonIcon(const TScriptInterface<IPokemon>& Pokemon);
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
+              meta = (CallableWithoutWorldContext))
+    static UPaperFlipbook *GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
      * @param Species The species of Pokémon to get the icon for
      * @return The graphical asset that this icon refers to.
      */
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon", meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook* GetSpeciesIcon(FName Species,
-                                   const FPokemonAssetParams& AdditionalParams = FPokemonAssetParams());
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
+              meta = (CallableWithoutWorldContext))
+    static UPaperFlipbook *GetSpeciesIcon(FName Species,
+                                          const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
-                                                         FStringView Subfolder);
+                                                             FStringView Subfolder);
 
     /**
      * Get the sprite used for a trainer based on the given sprite information
@@ -71,6 +74,5 @@ public:
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    static UPaperFlipbook* GetTrainerSprite(const TScriptInterface<ITrainer>& Trainer, bool bBack = false);
-
+    static UPaperFlipbook *GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, bool bBack = false);
 };

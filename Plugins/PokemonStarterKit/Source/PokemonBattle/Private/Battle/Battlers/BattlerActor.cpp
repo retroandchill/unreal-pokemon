@@ -25,13 +25,13 @@
 #include "Battle/Switching/SwitchActionBase.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
+#include "Graphics/SpriteLoader.h"
 #include "Pokemon/Abilities/AbilityBlock.h"
 #include "Pokemon/Moves/Move.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-#include "Graphics/SpriteLoader.h"
 #include "range/v3/view/filter.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
@@ -113,14 +113,16 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
 
     if (auto AbilityClass = Pokemon::Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
         AbilityClass.IsSet()) {
-        Ability = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass.GetValue(), 1, INDEX_NONE, this));
+        Ability =
+            BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass.GetValue(), 1, INDEX_NONE, this));
     } else {
         Ability = FGameplayAbilitySpecHandle();
     }
 
     if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem().GetPtrOrNull());
         HoldItemClass.IsSet()) {
-        HoldItem = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass.GetValue(), 1, INDEX_NONE, this));
+        HoldItem =
+            BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass.GetValue(), 1, INDEX_NONE, this));
     } else {
         HoldItem = FGameplayAbilitySpecHandle();
     }
@@ -409,7 +411,7 @@ void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
 void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
     Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-    
+
     IBattlerSprite::Execute_SetBattleSprite(
         Sprite, USpriteLoader::GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);

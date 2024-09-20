@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Common/PokemonIconPreview.h"
-#include "PaperFlipbookUserWidget.h"
 #include "Algo/ForEach.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Image.h"
 #include "Graphics/AssetClasses.h"
 #include "Graphics/SpriteLoader.h"
+#include "PaperFlipbookUserWidget.h"
 #include "Pokemon/Pokemon.h"
 #include "Utilities/WidgetUtilities.h"
 

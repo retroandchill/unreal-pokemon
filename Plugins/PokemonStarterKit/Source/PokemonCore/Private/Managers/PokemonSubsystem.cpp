@@ -51,8 +51,8 @@ void UPokemonSubsystem::StartNewGame() {
 
     auto StorageSettings = GetDefault<UPokemonStorageSystemSettings>();
     StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, StorageSettings->TotalBoxes,
-        StorageSettings->BoxCapacity);
-    
+                                                                          StorageSettings->BoxCapacity);
+
     PlayerMetadata = NewObject<UPlayerMetadata>();
     PlayerMetadata->StartNewGame();
 }
@@ -65,7 +65,7 @@ const TScriptInterface<IBag> &UPokemonSubsystem::GetBag() const {
     return Bag;
 }
 
-const TScriptInterface<IStorageSystem> & UPokemonSubsystem::GetStorageSystem() const {
+const TScriptInterface<IStorageSystem> &UPokemonSubsystem::GetStorageSystem() const {
     return StorageSystem;
 }
 

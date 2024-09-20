@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Moves/MoveLookup.h"
-#include "PokemonBattleSettings.h"
 #include "Battle/BlueprintClasses.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
+#include "PokemonBattleSettings.h"
 #include "Ranges/Optional/OrElseGet.h"
 
 static TSubclassOf<UBattleMoveFunctionCode> GetDefaultMoveClass() {

@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PaperFlipbook.h"
 #include "Assets/AssetClass.h"
+#include "PaperFlipbook.h"
 
 /**
  * Settings for all Pokémon graphical assets
@@ -45,5 +45,5 @@ namespace Pokemon::Assets::Graphics {
      * Asset class for item icons.
      */
     UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, ItemIcons, UObject);
-    
-}
+
+} // namespace Pokemon::Assets::Graphics
