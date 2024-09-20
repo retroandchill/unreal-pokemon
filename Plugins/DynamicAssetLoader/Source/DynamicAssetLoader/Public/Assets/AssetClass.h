@@ -125,7 +125,7 @@ namespace UE::Assets {
             requires std::is_base_of_v<T, U>
         TOptional<TNonNullSubclassOf<U>> LoadClass(FStringView ClassName) const {
             auto Settings = GetDefault<UAssetLoadingSettings>();
-            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
+            auto AssetClassData = Settings->BlueprintClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(ClassName, AssetClassData.AssetPrefix.Get(TEXT("")));
             return UAssetLoader::LookupBlueprintClassByName<U>(AssetClassData.RootDirectory, FullName);
         }
