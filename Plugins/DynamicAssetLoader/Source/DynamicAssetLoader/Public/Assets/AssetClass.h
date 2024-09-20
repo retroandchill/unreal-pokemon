@@ -39,12 +39,14 @@ namespace UE::Assets {
          * @param AssetName The name of the asset in question
          * @return The loaded asset
          */
-        TOptional<T &> LoadAsset(FStringView AssetName) const {
+        template <typename U = T>
+            requires std::is_base_of_v<T, U>
+        TOptional<U &> LoadAsset(FStringView AssetName) const {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName,
                                                               AssetClassData.AssetPrefix.Get(TEXT("")));
-            return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
+            return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName);
         }
 
         /**
@@ -52,13 +54,16 @@ namespace UE::Assets {
          * @param AssetName The name of the asset in question
          * @return The loaded asset
          */
-        TOptional<T &> LoadAsset(FName AssetName) const {
-            return LoadAsset(AssetName.ToString());
+        template <typename U = T>
+            requires std::is_base_of_v<T, U>
+        TOptional<U &> LoadAsset(FName AssetName) const {
+            return LoadAsset<U>(AssetName.ToString());
         }
 
-        template <typename R>
-            requires Ranges::Range<R> && std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
-        TOptional<T &> ResolveAsset(R &&Assets) const {
+        template <typename U = T, typename R>
+            requires std::is_base_of_v<T, U> && Ranges::Range<R> &&
+                std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+        TOptional<U &> ResolveAsset(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
@@ -69,16 +74,16 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            return UAssetLoader::ResolveAsset<T>(AssetClassData.RootDirectory, FullNames);
+            return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
         }
 
-        template <typename R>
-            requires Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
-        TArray<TOptional<T &>> LoadAssets(R &&Assets) const {
+        template <typename U = T, typename R>
+            requires std::is_base_of_v<T, U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+        TArray<TOptional<U &>> LoadAssets(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
-                   Ranges::Map([this](ElementType Value) { return LoadAsset(Value); }) |
+                   Ranges::Map([this](ElementType Value) { return LoadAsset<U>(Value); }) |
                    Ranges::ToArray;
             // clang-format on
         }
@@ -119,29 +124,34 @@ namespace UE::Assets {
          * @param ClassName The name of the asset in question
          * @return The loaded asset
          */
-        TOptional<TNonNullSubclassOf<T>> LoadClass(FStringView ClassName) const {
+        template <typename U = T>
+            requires std::is_base_of_v<T, U>
+        TOptional<TNonNullSubclassOf<U>> LoadClass(FStringView ClassName) const {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(ClassName,
                                                               AssetClassData.AssetPrefix.Get(TEXT("")));
-            return UAssetLoader::LookupBlueprintClassByName<T>(AssetClassData.RootDirectory, FullName);
+            return UAssetLoader::LookupBlueprintClassByName<U>(AssetClassData.RootDirectory, FullName);
         }
 
         /**
          * Load the asset with the specified name
          * @param ClassName The name of the asset in question
          * @return The loaded asset
-         */
-        TOptional<TNonNullSubclassOf<T>> LoadClass(FName ClassName) const {
+        */
+        template <typename U = T>
+            requires std::is_base_of_v<T, U>
+        TOptional<TNonNullSubclassOf<U>> LoadClass(FName ClassName) const {
             if (ClassName.IsNone()) {
-                return TOptional<TNonNullSubclassOf<T>>();
+                return TOptional<TNonNullSubclassOf<U>>();
             }
-            return LoadClass(ClassName.ToString());
+            return LoadClass<U>(ClassName.ToString());
         }
 
-        template <typename R>
-            requires Ranges::Range<R> && std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
-        TOptional<TNonNullSubclassOf<T>> ResolveClass(R &&Assets) const {
+        template <typename U = T, typename R>
+            requires std::is_base_of_v<T, U> && Ranges::Range<R> &&
+                    std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+        TOptional<TNonNullSubclassOf<U>> ResolveClass(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->BlueprintClasses.FindChecked(Key);
@@ -152,16 +162,16 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            return UAssetLoader::ResolveClass<T>(AssetClassData.RootDirectory, FullNames);
+            return UAssetLoader::ResolveClass<U>(AssetClassData.RootDirectory, FullNames);
         }
 
-        template <typename R>
-            requires Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
-        TArray<TOptional<TNonNullSubclassOf<T>>> LoadClasses(R &&Classes) const {
+        template <typename U = T, typename R>
+            requires std::is_base_of_v<U, T> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+        TArray<TOptional<TNonNullSubclassOf<U>>> LoadClasses(R &&Classes) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Classes |
-                   Ranges::Map([this](ElementType Value) { return LoadClass(Value); }) |
+                   Ranges::Map([this](ElementType Value) { return LoadClass<U>(Value); }) |
                    Ranges::ToArray;
             // clang-format on
         }
