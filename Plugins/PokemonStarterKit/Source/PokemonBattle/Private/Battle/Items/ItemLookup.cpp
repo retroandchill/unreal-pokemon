@@ -3,7 +3,6 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Abilities/GameplayAbility.h"
 #include "Bag/Item.h"
-#include "DynamicAssetLoadingSettings.h"
 #include "PokemonBattleSettings.h"
 #include "Battle/BlueprintClasses.h"
 #include "Ranges/Optional/OrElse.h"

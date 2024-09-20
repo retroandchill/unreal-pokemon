@@ -2,7 +2,6 @@
 
 #include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "Battle/Status.h"
-#include "DynamicAssetLoadingSettings.h"
 #include "GameplayEffect.h"
 #include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"

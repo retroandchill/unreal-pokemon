@@ -6,10 +6,9 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Image.h"
 #include "Graphics/AssetClasses.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Graphics/SpriteLoader.h"
 #include "Pokemon/Pokemon.h"
 #include "Utilities/WidgetUtilities.h"
-#include <functional>
 
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::Refresh_Implementation(Pokemon);

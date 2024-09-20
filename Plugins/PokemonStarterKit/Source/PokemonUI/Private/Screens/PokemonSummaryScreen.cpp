@@ -4,13 +4,11 @@
 #include "CommonButtonBase.h"
 #include "PaperFlipbookUserWidget.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
-#include "Components/Image.h"
 #include "Components/Summary/SummaryNameInfo.h"
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/Summary/SummaryTabWidget.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Utilities/WidgetUtilities.h"
+#include "Graphics/SpriteLoader.h"
 
 void UPokemonSummaryScreen::NativePreConstruct() {
     Super::NativePreConstruct();

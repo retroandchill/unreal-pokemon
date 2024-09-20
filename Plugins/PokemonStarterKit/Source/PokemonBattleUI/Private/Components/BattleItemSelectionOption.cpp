@@ -5,7 +5,6 @@
 #include "Components/DisplayText.h"
 #include "DataManager.h"
 #include "Graphics/AssetClasses.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {

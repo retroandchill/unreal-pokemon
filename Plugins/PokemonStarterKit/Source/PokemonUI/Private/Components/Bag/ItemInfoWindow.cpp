@@ -5,7 +5,6 @@
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
 #include "Graphics/AssetClasses.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UItemInfoWindow::Refresh_Implementation(const FItem &Item, int32 Quantity) {
