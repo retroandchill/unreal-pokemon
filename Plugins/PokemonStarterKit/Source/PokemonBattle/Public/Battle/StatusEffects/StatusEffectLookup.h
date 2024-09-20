@@ -15,12 +15,13 @@ namespace Pokemon::Battle::StatusEffects {
      * @param ID The ID that's associated with the hold item effect
      * @return The gameplay ability class for that item (if an effect exists)
      */
-    POKEMONBATTLE_API TSubclassOf<UGameplayEffect> FindStatusEffect(FName ID);
+    POKEMONBATTLE_API TOptional<TNonNullSubclassOf<UGameplayEffect>> FindStatusEffect(FName ID);
 
     /**
      * Lookup a status effect by its ID
      * @param Status The status effect to look up
      * @return The gameplay effect class for that status effect (if an effect exists)
      */
-    POKEMONBATTLE_API TSubclassOf<UGameplayEffect> FindStatusEffect(TOptional<const FStatus &> Status);
+    POKEMONBATTLE_API TOptional<TNonNullSubclassOf<UGameplayEffect>>
+    FindStatusEffect(TOptional<const FStatus &> Status);
 } // namespace Pokemon::Battle::StatusEffects

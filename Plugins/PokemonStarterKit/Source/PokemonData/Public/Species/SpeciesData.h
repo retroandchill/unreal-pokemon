@@ -2,10 +2,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataRetrieval/DataStructHandle.h"
 #include "EvolutionMethod.h"
 #include "IndexedTableRow.h"
 #include "LevelUpMove.h"
-#include "DataRetrieval/DataStructHandle.h"
 #include "UObject/Object.h"
 
 #include "SpeciesData.generated.h"

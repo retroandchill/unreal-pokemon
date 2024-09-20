@@ -4,8 +4,6 @@
 #include "Battle/Moves/BattleMove.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
-#include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IBattleMove> &UBattleMovePanel::GetMove() const {
     return Move;

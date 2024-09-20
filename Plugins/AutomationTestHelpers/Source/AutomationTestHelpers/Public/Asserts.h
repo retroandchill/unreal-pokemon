@@ -31,7 +31,7 @@
     return ConcludeTest(*this, false)
 
 template <typename A, typename B>
-concept CanAssertEqual = requires(FAutomationTestBase &TestObject, const TCHAR* What, A LHS, B RHS) {
+concept CanAssertEqual = requires(FAutomationTestBase &TestObject, const TCHAR *What, A LHS, B RHS) {
     TestObject.TestEqual(What, LHS, RHS);
 };
 

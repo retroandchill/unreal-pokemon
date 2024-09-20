@@ -7,7 +7,7 @@
 
 #include "CameraSubsystem.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraAngleChanged, const FVector2D&);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraAngleChanged, const FVector2D &);
 
 /**
  * Subsystem for handling the camera angle among other aspects of the system.
@@ -31,7 +31,7 @@ class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem {
      * @param Binding The delegate to bind to the event
      * @return The handle for the bound event.
      */
-    FDelegateHandle BindToGetOnCameraAngleChanged(FOnCameraAngleChanged::FDelegate&& Binding);
+    FDelegateHandle BindToGetOnCameraAngleChanged(FOnCameraAngleChanged::FDelegate &&Binding);
 
     /**
      * Get the currently cached camera angle.

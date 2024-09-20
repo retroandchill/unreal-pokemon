@@ -2,6 +2,7 @@
 
 #include "Pins/PocketKeyPin.h"
 #include "PokemonDataSettings.h"
+#include "Ranges/Algorithm/AnyOf.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
@@ -9,7 +10,6 @@
 #include "Ranges/Views/Map.h"
 #include "Ranges/Views/MapValue.h"
 #include "SSearchableComboBox.h"
-#include "Ranges/Algorithm/AnyOf.h"
 #include "Strings/StringUtilities.h"
 
 class UPokemonDataSettings;

@@ -4,11 +4,11 @@
 #include "Bag/Item.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Graphics/AssetClasses.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UItemInfoWindow::Refresh_Implementation(const FItem &Item, int32 Quantity) {
-    auto ItemGraphic = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>()->GetItemIcon(Item.ID);
+    auto ItemGraphic = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(Item.ID).GetPtrOrNull();
     ItemIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     UWidgetUtilities::SetBrushFromAsset(ItemIcon, ItemGraphic, true);
     ItemDescription->SetText(Item.Description);

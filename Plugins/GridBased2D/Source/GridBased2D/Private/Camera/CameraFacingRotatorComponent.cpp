@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Camera/CameraFacingRotatorComponent.h"
 #include "Camera/CameraSubsystem.h"
 #include "Camera/CameraUtilities.h"
@@ -15,8 +14,10 @@ void UCameraFacingRotatorComponent::BeginPlay() {
     Super::BeginPlay();
 
     auto CameraSubsystem = GetWorld()->GetSubsystem<UCameraSubsystem>();
-    check(IsValid(CameraSubsystem));
-    CameraSubsystem->BindToGetOnCameraAngleChanged(FRotateEvent::CreateUObject(this, &UCameraFacingRotatorComponent::AdjustCameraRotation));
+    check(IsValid(CameraSubsystem))
+    ;
+    CameraSubsystem->BindToGetOnCameraAngleChanged(
+        FRotateEvent::CreateUObject(this, &UCameraFacingRotatorComponent::AdjustCameraRotation));
     AdjustCameraRotation(CameraSubsystem->GetCurrentCameraAngle());
 }
 
@@ -25,4 +26,3 @@ void UCameraFacingRotatorComponent::AdjustCameraRotation(const FVector2D &Angle)
     RotatedComponent->SetWorldRotation(UCameraUtilities::TranslateCameraRotation(Angle));
     OnComponentRotated.Broadcast(Angle);
 }
-

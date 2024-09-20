@@ -5,41 +5,42 @@
 #include "CoreMinimal.h"
 #include "StorageBox.h"
 #include "UObject/Object.h"
+
 #include "DefaultStorageBox.generated.h"
 
 class IPokemon;
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONCORE_API UDefaultStorageBox : public UObject, public IStorageBox {
     GENERATED_BODY()
 
-public:
+  public:
     TScriptInterface<IStorageBox> Initialize(FText &&InitialName, int32 Capacity) override;
     TScriptInterface<IStorageBox> Initialize(const FStorageBoxDTO &DTO) override;
 
     FStorageBoxDTO ToDTO() const override;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Storage|Information")
-    const FText & GetDisplayName() const override;
-    
+    const FText &GetDisplayName() const override;
+
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Storage|Information",
-        meta = (AutoCreateRefTerm = NewName))
+              meta = (AutoCreateRefTerm = NewName))
     void SetDisplayName(const FText &NewName) override;
 
     UFUNCTION(BlueprintCallable, Category = "Storage|Information")
     int32 GetCapacity() const override;
-    
+
     TOptional<int32> DepositToBox(const TScriptInterface<IPokemon> &Pokemon) override;
 
     UFUNCTION(BlueprintPure, Category = "Storage|Pokémon")
     bool IsBoxFull() const override;
-    
+
     TOptional<IPokemon &> WithdrawFromBox(int32 BoxIndex) override;
     TOptional<IPokemon &> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon) override;
 
-private:
+  private:
     /**
      * The name of the box as displayed to the player.
      */
@@ -53,5 +54,4 @@ private:
      */
     UPROPERTY()
     TArray<TScriptInterface<IPokemon>> StoredPokemon;
-
 };

@@ -29,5 +29,5 @@ class UNREALPOKEMONEDITOR_API UPaperZDEditorHelpers : public UBlueprintFunctionL
     static bool SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource);
 
     UFUNCTION(BlueprintCallable, Category = "Textures|Utilities")
-    static void FinishLoadingTexture(UTexture2D* Texture);
+    static void FinishLoadingTexture(UTexture2D *Texture);
 };

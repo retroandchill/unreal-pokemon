@@ -1,27 +1,21 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/StatusEffects/StatusEffectLookup.h"
+#include "Battle/BlueprintClasses.h"
 #include "Battle/Status.h"
-#include "DynamicAssetLoadingSettings.h"
 #include "GameplayEffect.h"
+#include "Ranges/Optional/FlatMap.h"
+#include "Ranges/Optional/Map.h"
 
-TSubclassOf<UGameplayEffect> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID) {
-    if (ID.IsNone()) {
-        return nullptr;
-    }
-
-    auto &AssetPaths = *GetDefault<UDynamicAssetLoadingSettings>();
-    const auto &[ClassPath] = AssetPaths.StatusEffectPackageName;
-    auto &ClassPrefix = AssetPaths.StatusEffectPrefix;
-    auto FullPackage = FString::Format(TEXT("{0}/{1}{2}.{1}{2}_C"), {ClassPath, ClassPrefix, ID.ToString()});
-    if (auto StatusEffectClass = LoadObject<UClass>(nullptr, *FullPackage);
-        StatusEffectClass != nullptr && StatusEffectClass->IsChildOf<UGameplayEffect>()) {
-        return StatusEffectClass;
-    }
-
-    return nullptr;
+TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID) {
+    return Classes::StatusEffects.LoadClass(ID);
 }
 
-TSubclassOf<UGameplayEffect> Pokemon::Battle::StatusEffects::FindStatusEffect(TOptional<const FStatus &> Status) {
-    return Status.IsSet() ? FindStatusEffect(Status->ID) : nullptr;
+TOptional<TNonNullSubclassOf<UGameplayEffect>>
+Pokemon::Battle::StatusEffects::FindStatusEffect(TOptional<const FStatus &> Status) {
+    // clang-format off
+    return Status |
+           UE::Optionals::Map(&FStatus::ID) |
+           UE::Optionals::FlatMap([](FName ID) { return FindStatusEffect(ID); });
+    // clang-format on
 }

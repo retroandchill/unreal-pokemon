@@ -1,11 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Summary/SummaryNameInfo.h"
-#include "CommonNumericTextBlock.h"
-#include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/Image.h"
-#include "Graphics/GraphicsLoadingSubsystem.h"
+#include "Graphics/AssetClasses.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "Utilities/PokemonUIUtils.h"
@@ -26,8 +24,7 @@ void USummaryNameInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &
     PokemonLevelText->SetText(FText::FromString(FString::FromInt(Pokemon->GetStatBlock()->GetLevel())));
 
     // TODO: Configure the status and Poké Ball
-    auto GraphicsLoadingSubsystem = GetGameInstance()->GetSubsystem<UGraphicsLoadingSubsystem>();
-    UWidgetUtilities::SetBrushFromAsset(PokemonBallIcon,
-                                        GraphicsLoadingSubsystem->GetPokeBallIcon(Pokemon->GetPokeBall()), true);
+    auto BallIcon = Pokemon::Assets::Graphics::SummaryBalls.LoadAsset(Pokemon->GetPokeBall()).GetPtrOrNull();
+    UWidgetUtilities::SetBrushFromAsset(PokemonBallIcon, BallIcon, true);
     PokemonStatusIcon->SetVisibility(Hidden);
 }
