@@ -361,8 +361,9 @@ UE::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() cons
     // clang-format on
 }
 
-void ABattlerActor::ShowSprite() const {
+void ABattlerActor::ShowSprite(const FVector &Offset) const {
     check(Sprite != nullptr)
+    Sprite->SetActorLocation(Sprite->GetActorLocation() + Offset);
     Sprite->SetActorHiddenInGame(false);
 }
 
@@ -404,12 +405,16 @@ void ABattlerActor::CureStatusEffect() {
     WrappedPokemon->RemoveStatusEffect();
 }
 
+FTransform ABattlerActor::GetSpriteTransform_Implementation() const {
+    return GetTransform();
+}
+
 void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
     WrappedPokemon->SetCurrentHP(FMath::FloorToInt32(Data.NewValue));
 }
 
 void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
-    Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetTransform());
+    Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetSpriteTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
     IBattlerSprite::Execute_SetBattleSprite(

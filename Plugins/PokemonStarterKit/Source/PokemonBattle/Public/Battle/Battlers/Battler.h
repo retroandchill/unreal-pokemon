@@ -262,8 +262,12 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Show the battler's sprite in battle
      */
-    UFUNCTION(BlueprintCallable, Category = Visuals)
-    virtual void ShowSprite() const = 0;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Visuals, meta = (AutoCreateRefTerm = Offset))
+#if CPP
+    virtual void ShowSprite(const FVector& Offset = FVector()) const = 0;
+#else
+    virtual void ShowSprite(const FVector& Offset) const = 0;
+#endif
 
     /**
      * Hide the battler's sprite
