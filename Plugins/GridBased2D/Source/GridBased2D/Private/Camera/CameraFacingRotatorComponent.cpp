@@ -15,14 +15,17 @@ void UCameraFacingRotatorComponent::BeginPlay() {
 
     auto CameraSubsystem = GetWorld()->GetSubsystem<UCameraSubsystem>();
     check(IsValid(CameraSubsystem))
-    ;
     CameraSubsystem->BindToGetOnCameraAngleChanged(
         FRotateEvent::CreateUObject(this, &UCameraFacingRotatorComponent::AdjustCameraRotation));
     AdjustCameraRotation(CameraSubsystem->GetCurrentCameraAngle());
 }
 
 void UCameraFacingRotatorComponent::AdjustCameraRotation(const FVector2D &Angle) const {
-    check(IsValid(RotatedComponent))
+#if WITH_EDITOR
+    if (!IsValid(RotatedComponent)) {
+        return;
+    }
+#endif
     RotatedComponent->SetWorldRotation(UCameraUtilities::TranslateCameraRotation(Angle));
     OnComponentRotated.Broadcast(Angle);
 }

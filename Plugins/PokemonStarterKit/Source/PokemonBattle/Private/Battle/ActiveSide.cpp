@@ -139,7 +139,8 @@ bool AActiveSide::ShowBackSprites() const {
 }
 
 void AActiveSide::SendOutBattlers() const {
-    Algo::ForEach(Battlers, &IBattler::ShowSprite);
+    Battlers |
+        UE::Ranges::ForEach(&IBattler::ShowSprite, FVector());
 }
 
 const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {

@@ -95,8 +95,10 @@ class POKEMONBATTLE_API IBattleSide {
      * Get the list of battlers for this side
      * @return The battlers for this side.
      */
+    UFUNCTION(BlueprintCallable, Category = "Battle|Battlers")
     virtual const TArray<TScriptInterface<IBattler>> &GetBattlers() const = 0;
 
+    UFUNCTION(BlueprintCallable, Category = "Battle|Battlers")
     virtual const TArray<TScriptInterface<ITrainer>> &GetTrainers() const = 0;
 
     virtual const TArray<TScriptInterface<IBattler>> &
