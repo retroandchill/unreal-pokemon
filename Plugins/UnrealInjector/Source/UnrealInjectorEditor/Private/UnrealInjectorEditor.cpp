@@ -1,4 +1,5 @@
 ﻿#include "UnrealInjectorEditor.h"
+#include "Details/BlueprintNodeTargetCustomization.h"
 #include "Details/InjectionTargetCustomization.h"
 
 void FUnrealInjectorEditorModule::StartupModule() {
@@ -6,6 +7,9 @@ void FUnrealInjectorEditorModule::StartupModule() {
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("InjectionTarget"),
         FOnGetPropertyTypeCustomizationInstance::CreateLambda(&FInjectionTargetCustomization::MakeInstance));
+    PropertyModule.RegisterCustomPropertyTypeLayout(
+        TEXT("BlueprintNodeTarget"),
+        FOnGetPropertyTypeCustomizationInstance::CreateLambda(&FBlueprintNodeTargetCustomization::MakeInstance));
 }
 
 void FUnrealInjectorEditorModule::ShutdownModule() {

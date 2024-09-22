@@ -14,17 +14,21 @@ const TMap<UClass *, FInjectionTarget> &UDependencyInjectionSettings::GetTargetI
     return TargetInjections;
 }
 
+const TMap<UClass *, FBlueprintNodeTarget> & UDependencyInjectionSettings::GetBlueprintNodeClasses() const {
+    return BlueprintNodeClasses;
+}
+
 #if WITH_METADATA
 bool UDependencyInjectionSettings::CheckForNewInjectableInterfaces() {
     bool bChangeOccurred = false;
     for (TObjectIterator<UClass> It; It; ++It) {
-        if (!It->IsChildOf(UInterface::StaticClass()) || !It->HasMetaData(TEXT("Injectable")) ||
-            TargetInjections.Contains(*It)) {
-            continue;
+        if (It->IsChildOf(UInterface::StaticClass()) && It->HasMetaData(TEXT("Injectable")) && !TargetInjections.Contains(*It)) {
+            TargetInjections.Emplace(*It, *It);
+            bChangeOccurred = true;
+        } else if (It->HasMetaData(TEXT("UtilityNode")) && !BlueprintNodeClasses.Contains(*It)) {
+            BlueprintNodeClasses.Emplace(*It, *It);
+            bChangeOccurred = true;
         }
-
-        TargetInjections.Emplace(*It, *It);
-        bChangeOccurred = true;
     }
 
     return bChangeOccurred;

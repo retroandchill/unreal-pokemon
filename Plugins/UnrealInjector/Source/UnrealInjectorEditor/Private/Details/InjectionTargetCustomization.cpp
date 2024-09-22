@@ -2,6 +2,7 @@
 
 #include "Details/InjectionTargetCustomization.h"
 #include "DetailWidgetRow.h"
+#include "Lookup/InjectionTarget.h"
 
 TSharedRef<IPropertyTypeCustomization> FInjectionTargetCustomization::MakeInstance() {
     return MakeShared<FInjectionTargetCustomization>();
@@ -11,8 +12,8 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
                                                     FDetailWidgetRow &HeaderRow,
                                                     IPropertyTypeCustomizationUtils &CustomizationUtils) {
     UObject *InterfaceObject;
-    PropertyHandle->GetChildHandle(TEXT("TargetInterface"))->GetValue(InterfaceObject);
-    auto WrappedProperty = PropertyHandle->GetChildHandle(TEXT("InjectedClass"));
+    PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FInjectionTarget, TargetInterface))->GetValue(InterfaceObject);
+    auto WrappedProperty = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FInjectionTarget, InjectedClass));
     if (InterfaceObject != nullptr) {
         WrappedProperty->GetProperty()->SetMetaData(TEXT("MustImplement"), InterfaceObject->GetName());
     }
