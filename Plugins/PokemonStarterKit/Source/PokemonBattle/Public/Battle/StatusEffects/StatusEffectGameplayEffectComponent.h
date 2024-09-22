@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Status.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectComponent.h"
-#include "Battle/Status.h"
 
 #include "StatusEffectGameplayEffectComponent.generated.h"
 

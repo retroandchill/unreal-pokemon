@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprints/BlueprintUtilityNode.h"
+
 #include "Utility_ProcessLevelUp.generated.h"
 
 class IPokemon;
@@ -75,24 +76,23 @@ struct POKEMONCORE_API FLevelUpStatChanges {
 };
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable, BlueprintType, Abstract, meta = (UtilityNode))
 class POKEMONCORE_API UUtility_ProcessLevelUp : public UBlueprintUtilityNode {
     GENERATED_BODY()
 
-public:
+  public:
     void Execute(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges, bool bShowMessage,
-        FSimpleDelegate &&OnEnd);
+                 FSimpleDelegate &&OnEnd);
 
-protected:
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void Execute(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges, bool bShowMessage);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Events)
     void ExecuteOnEnd();
 
-private:
+  private:
     FSimpleMulticastDelegate EndProcess;
-
 };

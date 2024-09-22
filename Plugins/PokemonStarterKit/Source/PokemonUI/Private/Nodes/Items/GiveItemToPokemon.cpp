@@ -18,8 +18,8 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
 
 void UGiveItemToPokemon::Activate() {
     auto Subsystem = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_GiveItemToPokemon>(Item, Pokemon, PokemonIndex,
-        FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemGiven),
+    Subsystem->ExecuteUtilityFunction<UUtility_GiveItemToPokemon>(
+        Item, Pokemon, PokemonIndex, FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemGiven),
         FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemRejected));
 }
 

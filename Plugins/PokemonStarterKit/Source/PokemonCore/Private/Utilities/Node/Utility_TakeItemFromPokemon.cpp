@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/Node/Utility_TakeItemFromPokemon.h"
 
 void UUtility_TakeItemFromPokemon::Execute(const TScriptInterface<IPokemon> &Pokemon, FSimpleDelegate &&ItemTaken,
-    FSimpleDelegate &&ItemNotTaken) {
+                                           FSimpleDelegate &&ItemNotTaken) {
     OnItemTaken.Add(MoveTemp(ItemTaken));
     OnItemNotTaken.Add(MoveTemp(ItemNotTaken));
     Execute(Pokemon);

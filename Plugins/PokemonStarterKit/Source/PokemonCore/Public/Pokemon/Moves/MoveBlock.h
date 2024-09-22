@@ -88,7 +88,7 @@ class POKEMONCORE_API IMoveBlock {
      * @param Move The move to learn
      * @param AfterMoveLearned This is called after the move learning prompt is done
      */
-    virtual void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate&& AfterMoveLearned) = 0;
+    virtual void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) = 0;
 
     /**
      * Create a new move interface object. This is typically a temporary used for the move learn screen)

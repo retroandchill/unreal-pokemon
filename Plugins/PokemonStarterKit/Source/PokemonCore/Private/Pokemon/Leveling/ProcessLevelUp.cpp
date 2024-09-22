@@ -16,7 +16,8 @@ UProcessLevelUp *UProcessLevelUp::ProcessLevelUp(const TScriptInterface<IPokemon
 
 void UProcessLevelUp::Activate() {
     auto Subsystem = UGameplayStatics::GetGameInstance(Pokemon.GetObject())->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(Pokemon, StatChanges, bShowMessages,
+    Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(
+        Pokemon, StatChanges, bShowMessages,
         FSimpleDelegate::CreateUObject(this, &UProcessLevelUp::ExecuteAfterLevelUp));
 }
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BlueprintUtilityNode.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "UtilityNodeSubsystem.generated.h"
 
 namespace UnrealInjector {
@@ -14,10 +15,8 @@ namespace UnrealInjector {
      * @param A The arguments passed to the execute function
      */
     template <typename T, typename... A>
-    concept ExecutableUtility = requires(T* Object, A&&... Args) {
-        Object->Execute(Forward<A>(Args)...);
-    };
-    
+    concept ExecutableUtility = requires(T *Object, A &&...Args) { Object->Execute(Forward<A>(Args)...); };
+
     /**
      * Concept used to define a Blueprint Utility Node that can be called with the given arguments
      * @param T The type of the object to pass through
@@ -25,18 +24,18 @@ namespace UnrealInjector {
      */
     template <typename T, typename... A>
     concept BlueprintUtilityNode = std::is_base_of_v<UBlueprintUtilityNode, T> && ExecutableUtility<T, A...>;
-}
+} // namespace UnrealInjector
 
 /**
- * Subsystem used for handling the calling of async utilities 
+ * Subsystem used for handling the calling of async utilities
  */
 UCLASS()
 class UNREALINJECTOR_API UUtilityNodeSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
-    void Initialize(FSubsystemCollectionBase& Collection);
-    
+  public:
+    void Initialize(FSubsystemCollectionBase &Collection) override;
+
     /**
      * Execute a blueprint utility node.
      * @tparam T The type of the utility object
@@ -45,7 +44,7 @@ public:
      */
     template <typename T, typename... A>
         requires UnrealInjector::BlueprintUtilityNode<T, A...>
-    void ExecuteUtilityFunction(A&&... Args) {
+    void ExecuteUtilityFunction(A &&...Args) {
         auto Object = NewObject<T>(this, NodeTypes.FindChecked(T::StaticClass()));
         CreatedNodes.Add(Object);
         Object->Execute(Forward<A>(Args)...);
@@ -55,9 +54,9 @@ public:
      * Destroy a node in that has been completed.
      * @param Object The object to be removed to allowed garbage collection on
      */
-    void DestroyNode(UBlueprintUtilityNode* Object);
+    void DestroyNode(UBlueprintUtilityNode *Object);
 
-private:
+  private:
     UPROPERTY()
     TMap<TSubclassOf<UBlueprintUtilityNode>, TSubclassOf<UBlueprintUtilityNode>> NodeTypes;
 

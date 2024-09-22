@@ -5,23 +5,24 @@
 #include "CoreMinimal.h"
 #include "Blueprints/BlueprintUtilityNode.h"
 #include "UObject/Object.h"
+
 #include "Utility_GiveItemToPokemon.generated.h"
 
 struct FItemHandle;
 class IPokemon;
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable, BlueprintType, Abstract, meta = (UtilityNode))
 class POKEMONCORE_API UUtility_GiveItemToPokemon : public UBlueprintUtilityNode {
     GENERATED_BODY()
 
-public:
+  public:
     void Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex,
-        FSimpleDelegate &&ItemGiven, FSimpleDelegate &&ItemNotGiven);
+                 FSimpleDelegate &&ItemGiven, FSimpleDelegate &&ItemNotGiven);
 
-protected:
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex);
 
@@ -31,8 +32,7 @@ protected:
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Events)
     void ExecuteItemNotGiven();
 
-private:
+  private:
     FSimpleMulticastDelegate OnItemGiven;
     FSimpleMulticastDelegate OnItemNotGiven;
-
 };

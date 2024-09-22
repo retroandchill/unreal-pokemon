@@ -1,5 +1,6 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatBlock.h"
+#include "Blueprints/UtilityNodeSubsystem.h"
 #include "DataManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
@@ -9,7 +10,6 @@
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "PokemonDataSettings.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
 #include "Ranges/Algorithm/ToMap.h"
 #include "Ranges/Views/Filter.h"
 #include "Species/Nature.h"
@@ -118,8 +118,8 @@ FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages,
         }
 
         auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
-        Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(Owner, Changes, bShowMessages,
-            FSimpleDelegate::CreateLambda([OnEnd] { OnEnd.ExecuteIfBound(); }));
+        Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(
+            Owner, Changes, bShowMessages, FSimpleDelegate::CreateLambda([OnEnd] { OnEnd.ExecuteIfBound(); }));
     }
 
     return Changes;

@@ -4,21 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "Blueprints/BlueprintUtilityNode.h"
+
 #include "Utility_TakeItemFromPokemon.generated.h"
 
 class IPokemon;
 /**
- * 
+ *
  */
 UCLASS(Blueprintable, BlueprintType, Abstract, meta = (UtilityNode))
 class POKEMONCORE_API UUtility_TakeItemFromPokemon : public UBlueprintUtilityNode {
     GENERATED_BODY()
 
-public:
-    void Execute(const TScriptInterface<IPokemon> &Pokemon,
-        FSimpleDelegate &&ItemTaken, FSimpleDelegate &&ItemNotTaken);
+  public:
+    void Execute(const TScriptInterface<IPokemon> &Pokemon, FSimpleDelegate &&ItemTaken,
+                 FSimpleDelegate &&ItemNotTaken);
 
-protected:
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void Execute(const TScriptInterface<IPokemon> &Pokemon);
 
@@ -28,8 +29,7 @@ protected:
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Events)
     void ExecuteItemNotTaken();
 
-private:
+  private:
     FSimpleMulticastDelegate OnItemTaken;
     FSimpleMulticastDelegate OnItemNotTaken;
-
 };

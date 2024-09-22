@@ -33,7 +33,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
     virtual TArray<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
 
-    void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate&& AfterMoveLearned) override;
+    void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) override;
     TScriptInterface<IMove> CreateNewMove(const FMoveDTO &MoveID) override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")

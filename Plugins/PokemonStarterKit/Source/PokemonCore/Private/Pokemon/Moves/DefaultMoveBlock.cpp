@@ -2,13 +2,13 @@
 
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Algo/Unique.h"
+#include "Blueprints/UtilityNodeSubsystem.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/DefaultMove.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"
@@ -94,7 +94,7 @@ TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32
     // clang-format on
 }
 
-void UDefaultMoveBlock::LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate&& AfterMoveLearned) {
+void UDefaultMoveBlock::LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) {
     auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
     Subsystem->ExecuteUtilityFunction<UUtility_LearnMove>(Owner, Move, MoveTemp(AfterMoveLearned));
 }

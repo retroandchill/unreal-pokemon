@@ -34,5 +34,5 @@ struct UNREALINJECTOR_API FInjectionTarget {
      * Construct a new instance with the specified interface
      * @param InterfaceType The interface type to use
      */
-    explicit FInjectionTarget(UClass* InterfaceType);
+    explicit FInjectionTarget(UClass *InterfaceType);
 };

@@ -16,12 +16,12 @@ class UNREALINJECTOREDITOR_API FInjectionTargetCustomization : public IPropertyT
     void CustomizeChildren(TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder &ChildBuilder,
                            IPropertyTypeCustomizationUtils &CustomizationUtils) override;
 
-private:
-    const UClass* OnGetClass() const;
-    void OnSetClass(const UClass* NewClass) const;
+  private:
+    const UClass *OnGetClass() const;
+    void OnSetClass(const UClass *NewClass) const;
 
     /** Handle to the property being customized */
     TSharedPtr<IPropertyHandle> PropertyHandle;
     /** A cache of the currently resolved value for the class name */
-    mutable TWeakObjectPtr<UClass> CachedClassPtr;
+    mutable TWeakObjectPtr<const UClass> CachedClassPtr;
 };

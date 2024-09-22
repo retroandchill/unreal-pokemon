@@ -15,8 +15,8 @@ UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *W
 
 void UTakeItemFromPokemon::Activate() {
     auto Subsystem = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_TakeItemFromPokemon>(Pokemon,
-        FSimpleDelegate::CreateUObject(this, &UTakeItemFromPokemon::ExecuteItemTaken),
+    Subsystem->ExecuteUtilityFunction<UUtility_TakeItemFromPokemon>(
+        Pokemon, FSimpleDelegate::CreateUObject(this, &UTakeItemFromPokemon::ExecuteItemTaken),
         FSimpleDelegate::CreateUObject(this, &UTakeItemFromPokemon::ExecuteItemNotTaken));
 }
 

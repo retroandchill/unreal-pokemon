@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Status.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GameplayEffectTypes.h"
-#include "Battle/Status.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
@@ -265,9 +265,9 @@ class POKEMONBATTLE_API IBattler {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Visuals, meta = (AutoCreateRefTerm = Offset))
 #if CPP
-    virtual void ShowSprite(const FVector& Offset = FVector()) const = 0;
+    virtual void ShowSprite(const FVector &Offset = FVector()) const = 0;
 #else
-    virtual void ShowSprite(const FVector& Offset) const = 0;
+    virtual void ShowSprite(const FVector &Offset) const = 0;
 #endif
 
     /**
