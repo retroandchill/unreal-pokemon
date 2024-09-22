@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-#include "Utilities/PokemonUtilities.h"
+#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
 #include "ProcessLevelUp.generated.h"
 

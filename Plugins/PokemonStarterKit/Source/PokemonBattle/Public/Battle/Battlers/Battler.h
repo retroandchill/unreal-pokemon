@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GameplayEffectTypes.h"
+#include "Battle/Status.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
-#include "Utilities/PokemonUtilities.h"
+#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
 #include "Battler.generated.h"
 

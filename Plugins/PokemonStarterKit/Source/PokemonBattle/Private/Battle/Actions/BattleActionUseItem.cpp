@@ -11,6 +11,7 @@
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
 #include "PokemonBattleSettings.h"
+#include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Views/CastType.h"

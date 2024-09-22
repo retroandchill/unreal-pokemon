@@ -9,12 +9,12 @@
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "PokemonDataSettings.h"
+#include "Blueprints/UtilityNodeSubsystem.h"
 #include "Ranges/Algorithm/ToMap.h"
 #include "Ranges/Views/Filter.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
-#include "Utilities/UtilitiesSubsystem.h"
 
 using namespace StatUtils;
 
@@ -117,8 +117,9 @@ FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages,
             }
         }
 
-        auto Utilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
-        IPokemonUtilities::Execute_ProcessLevelUp(Utilities, this, Owner, Changes, bShowMessages, OnEnd);
+        auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
+        Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(Owner, Changes, bShowMessages,
+            FSimpleDelegate::CreateLambda([OnEnd] { OnEnd.ExecuteIfBound(); }));
     }
 
     return Changes;

@@ -8,13 +8,14 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
+#include "Blueprints/UtilityNodeSubsystem.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/PokemonUtilities.h"
-#include "Utilities/UtilitiesSubsystem.h"
+#include "Utilities/Node/Utility_LearnMove.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon> &Pokemon,
                                                            const FPokemonDTO &DTO) {
@@ -72,7 +73,7 @@ void UDefaultMoveBlock::OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) {
     Moves[SlotIndex] = CreateNewMove({.Move = Move});
 }
 
-TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
+TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
     auto &Species = Owner->GetSpecies();
 
     auto MoveLevelInRange = [InitialLevel, CurrentLevel](const FLevelUpMove &Move) {
@@ -88,13 +89,14 @@ TArray<FName> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 Curre
            UE::Ranges::Filter(MoveLevelInRange) |
            UE::Ranges::Filter(DoesNotKnowMove) |
            UE::Ranges::Map(&FLevelUpMove::Move) |
+           UE::Ranges::Construct<FMoveHandle>() |    
            UE::Ranges::ToArray;
     // clang-format on
 }
 
-void UDefaultMoveBlock::LearnMove(FMoveHandle Move, const FMoveLearnEnd &AfterMoveLearned) {
-    auto PokemonUtilities = GetWorld()->GetGameInstance()->GetSubsystem<UUtilitiesSubsystem>()->GetPokemonUtilities();
-    IPokemonUtilities::Execute_LearnMove(PokemonUtilities, this, Owner, Move, AfterMoveLearned);
+void UDefaultMoveBlock::LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate&& AfterMoveLearned) {
+    auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
+    Subsystem->ExecuteUtilityFunction<UUtility_LearnMove>(Owner, Move, MoveTemp(AfterMoveLearned));
 }
 
 TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {

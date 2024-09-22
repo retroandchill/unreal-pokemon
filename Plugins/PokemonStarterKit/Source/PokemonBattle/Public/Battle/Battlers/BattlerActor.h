@@ -9,6 +9,7 @@
 
 #include "BattlerActor.generated.h"
 
+class ITrainer;
 class UGameplayEffect;
 struct FOnAttributeChangeData;
 class UGameplayAbility;

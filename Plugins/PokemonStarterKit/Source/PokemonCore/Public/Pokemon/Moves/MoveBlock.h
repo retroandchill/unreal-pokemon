@@ -14,6 +14,11 @@ class IPokemon;
 struct FPokemonDTO;
 class IMove;
 
+/**
+ * The delegate called when the move learn procedure ends
+ */
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveLearnEnd, bool);
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
 class UMoveBlock : public UInterface {
@@ -76,14 +81,14 @@ class POKEMONCORE_API IMoveBlock {
      * @return The moves that will be learned
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
-    virtual TArray<FName> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const = 0;
+    virtual TArray<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const = 0;
 
     /**
      * Teach a move to this Pokémon
      * @param Move The move to learn
      * @param AfterMoveLearned This is called after the move learning prompt is done
      */
-    virtual void LearnMove(FMoveHandle Move, const FMoveLearnEnd &AfterMoveLearned) = 0;
+    virtual void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate&& AfterMoveLearned) = 0;
 
     /**
      * Create a new move interface object. This is typically a temporary used for the move learn screen)

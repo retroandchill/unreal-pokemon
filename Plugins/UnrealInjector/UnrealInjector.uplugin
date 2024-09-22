@@ -30,6 +30,10 @@
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
 			"Optional": true
+		},
+		{
+			"Name": "UnrealRanges",
+			"Enabled": true
 		}
 	],
 	"SupportURL": ""

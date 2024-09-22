@@ -6,7 +6,6 @@
 #include "AttributeSet.h"
 #include "Battler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Utilities/PokemonUtilities.h"
 #include "Utilities/StatusEffectUtilities.h"
 
 #include "BattlerHelpers.generated.h"
