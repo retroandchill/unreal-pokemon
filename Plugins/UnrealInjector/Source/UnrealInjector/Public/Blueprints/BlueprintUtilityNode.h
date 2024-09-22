@@ -14,6 +14,7 @@ class UNREALINJECTOR_API UBlueprintUtilityNode : public UObject {
     GENERATED_BODY()
 
 public:
+    bool ImplementsGetWorld() const override;
     void Destruct();
 
 };

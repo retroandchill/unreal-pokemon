@@ -18,8 +18,6 @@ class POKEMONCORE_API UUtility_GiveItemToPokemon : public UBlueprintUtilityNode 
     GENERATED_BODY()
 
 public:
-    bool ImplementsGetWorld() const override;
-
     void Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex,
         FSimpleDelegate &&ItemGiven, FSimpleDelegate &&ItemNotGiven);
 

@@ -3,10 +3,6 @@
 
 #include "Utilities/Node/Utility_GiveItemToPokemon.h"
 
-bool UUtility_GiveItemToPokemon::ImplementsGetWorld() const {
-    return true;
-}
-
 void UUtility_GiveItemToPokemon::Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex,
                                          FSimpleDelegate &&ItemGiven, FSimpleDelegate &&ItemNotGiven) {
     OnItemGiven.Add(MoveTemp(ItemGiven));
