@@ -16,14 +16,14 @@ struct UNREALINJECTOR_API FInjectionTarget {
     /**
      * The target interface, used to constrain the type of the injected class
      */
-    UPROPERTY(EditAnywhere, Category = "Dependency Injection")
-    TSubclassOf<UInterface> TargetInterface;
+    UPROPERTY(VisibleAnywhere, Category = "Dependency Injection")
+    FSoftClassPath TargetInterface;
 
     /**
      * The actual class to be injected.
      */
     UPROPERTY(EditAnywhere, Category = "Dependency Injection")
-    TSubclassOf<UObject> InjectedClass;
+    FSoftClassPath InjectedClass;
 
     /**
      * Default constructor.
@@ -34,5 +34,5 @@ struct UNREALINJECTOR_API FInjectionTarget {
      * Construct a new instance with the specified interface
      * @param InterfaceType The interface type to use
      */
-    explicit FInjectionTarget(const TSubclassOf<UInterface> &InterfaceType);
+    explicit FInjectionTarget(UClass* InterfaceType);
 };

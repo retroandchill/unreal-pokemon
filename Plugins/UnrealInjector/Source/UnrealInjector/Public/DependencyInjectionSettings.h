@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "Lookup/BlueprintNodeTarget.h"
 #include "Lookup/InjectionTarget.h"
 
 #include "DependencyInjectionSettings.generated.h"
@@ -25,16 +24,13 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
 #endif
 
     /**
-     * Get the target injections for each interface.
-     * @return The map of interface types to implementation classes
+     * The map of interface types to implementation classes
      */
-    const TMap<UClass *, FInjectionTarget> &GetTargetInjections() const;
-    
-    /**
-     * Get the target injections for blueprint nodes
-     * @return The map of object types to created
-     */
-    const TMap<UClass *, FBlueprintNodeTarget> &GetBlueprintNodeClasses() const;
+    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (EditFixedOrder))
+    TArray<FInjectionTarget> TargetInjections;
+
+    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (EditFixedOrder))
+    TArray<FInjectionTarget> BlueprintNodeClasses;
 
   private:
 #ifdef WITH_METADATA
@@ -44,13 +40,4 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
      */
     bool CheckForNewInjectableInterfaces();
 #endif
-
-    /**
-     * The map of interface types to implementation classes
-     */
-    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (ReadOnlyKeys))
-    TMap<UClass *, FInjectionTarget> TargetInjections;
-
-    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (ReadOnlyKeys))
-    TMap<UClass *, FBlueprintNodeTarget> BlueprintNodeClasses;
 };

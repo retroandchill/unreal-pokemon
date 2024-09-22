@@ -10,23 +10,21 @@ void UDependencyInjectionSettings::RefreshDependencies() {
 }
 #endif
 
-const TMap<UClass *, FInjectionTarget> &UDependencyInjectionSettings::GetTargetInjections() const {
-    return TargetInjections;
-}
-
-const TMap<UClass *, FBlueprintNodeTarget> & UDependencyInjectionSettings::GetBlueprintNodeClasses() const {
-    return BlueprintNodeClasses;
-}
-
 #if WITH_METADATA
 bool UDependencyInjectionSettings::CheckForNewInjectableInterfaces() {
+    auto ContainsType = [](const TArray<FInjectionTarget>& Collection, UClass* SourceClass) {
+      return Collection.ContainsByPredicate([&SourceClass](const FInjectionTarget& Target) {
+          return Target.TargetInterface == SourceClass;
+      });
+    };
+    
     bool bChangeOccurred = false;
     for (TObjectIterator<UClass> It; It; ++It) {
-        if (It->IsChildOf(UInterface::StaticClass()) && It->HasMetaData(TEXT("Injectable")) && !TargetInjections.Contains(*It)) {
-            TargetInjections.Emplace(*It, *It);
+        if (It->IsChildOf(UInterface::StaticClass()) && It->HasMetaData(TEXT("Injectable")) && !ContainsType(TargetInjections, *It)) {
+            TargetInjections.Emplace(*It);
             bChangeOccurred = true;
-        } else if (It->HasMetaData(TEXT("UtilityNode")) && !BlueprintNodeClasses.Contains(*It)) {
-            BlueprintNodeClasses.Emplace(*It, *It);
+        } else if (It->HasMetaData(TEXT("UtilityNode")) && !ContainsType(BlueprintNodeClasses, *It)) {
+            BlueprintNodeClasses.Emplace(*It);
             bChangeOccurred = true;
         }
     }

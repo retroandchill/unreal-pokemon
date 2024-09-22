@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BlueprintUtilityNode.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UtilityNodeSubsystem.generated.h"
 
@@ -16,15 +17,6 @@ namespace UnrealInjector {
     concept ExecutableUtility = requires(T* Object, A&&... Args) {
         Object->Execute(Forward<A>(Args)...);
     };
-
-    /**
-     * Concept used to define a Blueprint Utility Node that can be invalidated
-     * @param T The type of the object to pass through
-     */
-    template <typename T>
-    concept DestructibleUtility = requires(T* Object) {
-        Object->Destruct();
-    };
     
     /**
      * Concept used to define a Blueprint Utility Node that can be called with the given arguments
@@ -32,7 +24,7 @@ namespace UnrealInjector {
      * @param A The arguments passed to the execute function
      */
     template <typename T, typename... A>
-    concept BlueprintUtilityNode = std::is_base_of_v<UObject, T> && ExecutableUtility<T, A...> && DestructibleUtility<T>;
+    concept BlueprintUtilityNode = std::is_base_of_v<UBlueprintUtilityNode, T> && ExecutableUtility<T, A...>;
 }
 
 /**
@@ -63,12 +55,12 @@ public:
      * Destroy a node in that has been completed.
      * @param Object The object to be removed to allowed garbage collection on
      */
-    void DestroyNode(UObject* Object);
+    void DestroyNode(UBlueprintUtilityNode* Object);
 
 private:
     UPROPERTY()
-    TMap<TSubclassOf<UObject>, TSubclassOf<UObject>> NodeTypes;
+    TMap<TSubclassOf<UBlueprintUtilityNode>, TSubclassOf<UBlueprintUtilityNode>> NodeTypes;
 
     UPROPERTY()
-    TSet<TObjectPtr<UObject>> CreatedNodes;
+    TSet<TObjectPtr<UBlueprintUtilityNode>> CreatedNodes;
 };

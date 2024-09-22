@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Items/GiveItemToPokemon.h"
+#include "Blueprints/UtilityNodeSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "Utilities/ItemUtilities.h"
-#include "Utilities/UtilitiesSubsystem.h"
+#include "Utilities/Node/Utility_GiveItemToPokemon.h"
 
 UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
                                                           const TScriptInterface<IPokemon> &Pokemon,
@@ -17,15 +17,10 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
 }
 
 void UGiveItemToPokemon::Activate() {
-    auto ItemUtilities =
-        UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilitiesSubsystem>()->GetItemUtilities();
-    check(ItemUtilities != nullptr)
-    FItemResultNoRetValue OnSuccess;
-    OnSuccess.BindDynamic(this, &UGiveItemToPokemon::ExecuteItemGiven);
-    FItemResultNoRetValue OnFailure;
-    OnFailure.BindDynamic(this, &UGiveItemToPokemon::ExecuteItemRejected);
-    IItemUtilities::Execute_GiveItemToPokemon(ItemUtilities, WorldContextObject, Item, Pokemon, PokemonIndex, OnSuccess,
-                                              OnFailure);
+    auto Subsystem = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilityNodeSubsystem>();
+    Subsystem->ExecuteUtilityFunction<UUtility_GiveItemToPokemon>(Item, Pokemon, PokemonIndex,
+        FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemGiven),
+        FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemRejected));
 }
 
 void UGiveItemToPokemon::ExecuteItemGiven() {

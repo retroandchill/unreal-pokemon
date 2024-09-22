@@ -79,7 +79,7 @@ class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
     TOptional<const FItem &> GetHoldItem() const override;
 
     UFUNCTION(BlueprintCallable, Category = Items)
-    void SetHoldItem(FName Item) override;
+    void SetHoldItem(FItemHandle Item) override;
 
     UFUNCTION(BlueprintCallable, Category = Items)
     void RemoveHoldItem() override;

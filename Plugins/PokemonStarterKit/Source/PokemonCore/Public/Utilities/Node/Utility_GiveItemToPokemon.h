@@ -3,38 +3,38 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprints/BlueprintUtilityNode.h"
 #include "UObject/Object.h"
 #include "Utility_GiveItemToPokemon.generated.h"
 
+struct FItemHandle;
 class IPokemon;
-
-DECLARE_MULTICAST_DELEGATE(FItemResult);
 
 /**
  * 
  */
-UCLASS(meta = (UtilityNode))
-class POKEMONCORE_API UUtility_GiveItemToPokemon : public UObject {
+UCLASS(Blueprintable, BlueprintType, Abstract, meta = (UtilityNode))
+class POKEMONCORE_API UUtility_GiveItemToPokemon : public UBlueprintUtilityNode {
     GENERATED_BODY()
 
 public:
     bool ImplementsGetWorld() const override;
 
-    void Execute(FName Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex,
-        FItemResult::FDelegate &&ItemGiven, FItemResult::FDelegate &&ItemNotGiven);
+    void Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex,
+        FSimpleDelegate &&ItemGiven, FSimpleDelegate &&ItemNotGiven);
 
 protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
-    void Execute(FName Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex);
+    void Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Events)
-    void ExecuteItemGiven() const;
+    void ExecuteItemGiven();
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Events)
-    void ExecuteItemNotGiven() const;
+    void ExecuteItemNotGiven();
 
 private:
-    FItemResult OnItemGiven;
-    FItemResult OnItemNotGiven;
+    FSimpleMulticastDelegate OnItemGiven;
+    FSimpleMulticastDelegate OnItemNotGiven;
 
 };

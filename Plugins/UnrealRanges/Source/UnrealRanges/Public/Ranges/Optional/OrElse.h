@@ -23,11 +23,10 @@ namespace UE::Optionals {
          * @param Optional The passed optional
          * @return The obtained value
          */
-        template <typename O>
+        template <typename O, typename S = TOptionalElementType<O>>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) {
-            using ResultType = TOptionalElementType<O>;
-            return Optional.IsSet() ? *Optional : ResultType(Forward<T>(Value));
+            return Optional.IsSet() ? S(Optional.GetValue()) : S(Forward<T>(Value));
         }
 
       private:

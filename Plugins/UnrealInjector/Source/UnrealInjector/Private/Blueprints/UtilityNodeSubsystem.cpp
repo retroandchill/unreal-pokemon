@@ -6,11 +6,11 @@
 
 void UUtilityNodeSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    for (auto &[Key, Value] : GetDefault<UDependencyInjectionSettings>()->GetBlueprintNodeClasses()) {
-        NodeTypes.Emplace(Key, Value.InjectedClass.TryLoadClass<UObject>());
+    for (auto &[Key, Value] : GetDefault<UDependencyInjectionSettings>()->BlueprintNodeClasses) {
+        NodeTypes.Emplace(Key.TryLoadClass<UBlueprintUtilityNode>(), Value.TryLoadClass<UBlueprintUtilityNode>());
     }
 }
 
-void UUtilityNodeSubsystem::DestroyNode(UObject *Object) {
+void UUtilityNodeSubsystem::DestroyNode(UBlueprintUtilityNode *Object) {
     CreatedNodes.Remove(Object);
 }
