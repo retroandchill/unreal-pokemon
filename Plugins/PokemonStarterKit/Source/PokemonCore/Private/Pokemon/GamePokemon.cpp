@@ -206,7 +206,7 @@ TOptional<const FItem &> UGamePokemon::GetHoldItem() const {
     return ItemData;
 }
 
-void UGamePokemon::SetHoldItem(FName Item) {
+void UGamePokemon::SetHoldItem(FItemHandle Item) {
     HoldItem.Emplace(Item);
 }
 

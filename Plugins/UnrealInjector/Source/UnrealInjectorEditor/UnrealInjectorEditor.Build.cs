@@ -21,7 +21,9 @@ public class UnrealInjectorEditor : ModuleRules
                 "Slate",
                 "SlateCore",
                 "UnrealInjector",
-                "PropertyEditor"
+                "PropertyEditor", 
+                "UnrealRanges",
+                "UnrealEd"
             }
         );
         

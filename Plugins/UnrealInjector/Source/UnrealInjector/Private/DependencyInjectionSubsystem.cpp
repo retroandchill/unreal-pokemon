@@ -6,5 +6,7 @@
 void UDependencyInjectionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
 
-    InjectionSettings = GetDefault<UDependencyInjectionSettings>();
+    for (auto &[Interface, Implementation] : GetDefault<UDependencyInjectionSettings>()->TargetInjections) {
+        TargetInjections.Emplace(Interface.TryLoadClass<UInterface>(), Implementation.TryLoadClass<UObject>());
+    }
 }

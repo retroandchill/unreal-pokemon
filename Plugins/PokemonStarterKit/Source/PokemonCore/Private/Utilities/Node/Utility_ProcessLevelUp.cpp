@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Utilities/PokemonUtilities.h"
+#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
 int32 FStatChange::Diff() const {
     return After - Before;
 }
 
-// Add default functionality here for any IPokemonUtilities functions that are not pure virtual.
 FLevelUpStatChanges &FLevelUpStatChanges::operator+=(const FLevelUpStatChanges &Other) {
     LevelChange.Before = FMath::Min(LevelChange.Before, Other.LevelChange.Before);
     LevelChange.After = FMath::Max(LevelChange.After, Other.LevelChange.After);
@@ -21,4 +20,15 @@ FLevelUpStatChanges &FLevelUpStatChanges::operator+=(const FLevelUpStatChanges &
     }
 
     return *this;
+}
+
+void UUtility_ProcessLevelUp::Execute(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges,
+                                      bool bShowMessage, FSimpleDelegate &&OnEnd) {
+    EndProcess.Add(MoveTemp(OnEnd));
+    Execute(Pokemon, StatChanges, bShowMessage);
+}
+
+void UUtility_ProcessLevelUp::ExecuteOnEnd() {
+    EndProcess.Broadcast();
+    Destruct();
 }
