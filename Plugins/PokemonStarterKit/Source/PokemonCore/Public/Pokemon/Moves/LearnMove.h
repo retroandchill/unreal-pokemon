@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "Moves/MoveData.h"
 
 #include "LearnMove.generated.h"
 
@@ -29,7 +30,7 @@ class POKEMONCORE_API ULearnMove : public UBlueprintAsyncActionBase {
      * @return The created async action
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Pokémon|Moves")
-    static ULearnMove *LearnMove(const TScriptInterface<IPokemon> &Pokemon, FName Move);
+    static ULearnMove *LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move);
 
     void Activate() override;
 
@@ -63,5 +64,5 @@ class POKEMONCORE_API ULearnMove : public UBlueprintAsyncActionBase {
      * The move to learn
      */
     UPROPERTY()
-    FName Move;
+    FMoveHandle Move;
 };

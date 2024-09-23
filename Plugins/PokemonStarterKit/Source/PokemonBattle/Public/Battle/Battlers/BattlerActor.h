@@ -9,6 +9,7 @@
 
 #include "BattlerActor.generated.h"
 
+class ITrainer;
 class UGameplayEffect;
 struct FOnAttributeChangeData;
 class UGameplayAbility;
@@ -114,7 +115,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetAllies() const override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Visuals, meta = (AutoCreateRefTerm = Offset))
-    void ShowSprite(const FVector& Offset) const override;
+    void ShowSprite(const FVector &Offset) const override;
 
     UFUNCTION(BlueprintCallable, Category = Visuals)
     void HideSprite() const override;

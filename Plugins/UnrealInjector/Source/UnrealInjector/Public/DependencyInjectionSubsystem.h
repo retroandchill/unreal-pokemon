@@ -29,15 +29,13 @@ class UNREALINJECTOR_API UDependencyInjectionSubsystem : public UGameInstanceSub
      */
     template <typename T, typename... A>
     TScriptInterface<T> InjectDependency(UObject *Outer, A &&...Args) {
-        const FInjectionTarget *InterfaceClass =
-            InjectionSettings->GetTargetInjections().Find(T::UClassType::StaticClass());
-        check(InterfaceClass != nullptr)
-        TScriptInterface<T> CreatedInterface = NewObject<UObject>(Outer, InterfaceClass->InjectedClass);
+        auto &InterfaceClass = TargetInjections.FindChecked(T::UClassType::StaticClass());
+        TScriptInterface<T> CreatedInterface = NewObject<UObject>(Outer, InterfaceClass);
         CreatedInterface->Initialize(Forward<A>(Args)...);
         return CreatedInterface;
     }
 
   private:
     UPROPERTY()
-    TObjectPtr<const UDependencyInjectionSettings> InjectionSettings;
+    TMap<TSubclassOf<UInterface>, TSubclassOf<UObject>> TargetInjections;
 };

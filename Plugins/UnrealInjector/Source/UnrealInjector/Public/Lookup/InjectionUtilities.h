@@ -23,7 +23,7 @@ namespace UnrealInjector {
      * @param InterfaceType The UInterface type.
      * @return The first class that can be used
      */
-    UNREALINJECTOR_API UClass *GetFirstInjectableObject(TSubclassOf<UInterface> InterfaceType);
+    UNREALINJECTOR_API UClass *GetFirstInjectableObject(const TSubclassOf<UInterface> &InterfaceType);
 
     /**
      * Call to the Dependency Injection subsystem to create a new injected dependency.

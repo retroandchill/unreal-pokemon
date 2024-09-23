@@ -24,10 +24,13 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
 #endif
 
     /**
-     * Get the target injections for each interface.
-     * @return The map of interface types to implementation classes
+     * The map of interface types to implementation classes
      */
-    const TMap<UClass *, FInjectionTarget> &GetTargetInjections() const;
+    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (EditFixedOrder))
+    TArray<FInjectionTarget> TargetInjections;
+
+    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (EditFixedOrder))
+    TArray<FInjectionTarget> BlueprintNodeClasses;
 
   private:
 #ifdef WITH_METADATA
@@ -37,10 +40,4 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
      */
     bool CheckForNewInjectableInterfaces();
 #endif
-
-    /**
-     * The map of interface types to implementation classes
-     */
-    UPROPERTY(EditAnywhere, Config, EditFixedSize, Category = "Dependency Injection", meta = (ReadOnlyKeys))
-    TMap<UClass *, FInjectionTarget> TargetInjections;
 };

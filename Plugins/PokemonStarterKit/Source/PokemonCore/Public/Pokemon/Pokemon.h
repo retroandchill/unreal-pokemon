@@ -172,7 +172,7 @@ class POKEMONCORE_API IPokemon {
      * @param Item The currently held item
      */
     UFUNCTION(BlueprintCallable, Category = Items)
-    virtual void SetHoldItem(FName Item) = 0;
+    virtual void SetHoldItem(FItemHandle Item) = 0;
 
     /**
      * Remove the Pokémon's held item if it has one

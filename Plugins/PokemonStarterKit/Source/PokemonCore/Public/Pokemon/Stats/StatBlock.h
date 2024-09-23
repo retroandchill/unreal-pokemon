@@ -4,9 +4,11 @@
 #include "CoreMinimal.h"
 #include "Species/Stat.h"
 #include "StatEntry.h"
-#include "Utilities/PokemonUtilities.h"
+#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
 #include "StatBlock.generated.h"
+
+DECLARE_DYNAMIC_DELEGATE(FLevelUpEnd);
 
 class IPokemon;
 

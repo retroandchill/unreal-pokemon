@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Items/TakeItemFromPokemon.h"
+#include "Blueprints/UtilityNodeSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "Utilities/ItemUtilities.h"
-#include "Utilities/UtilitiesSubsystem.h"
+#include "Utilities/Node/Utility_TakeItemFromPokemon.h"
 
 UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *WorldContextObject,
                                                                 const TScriptInterface<IPokemon> &Pokemon) {
@@ -14,14 +14,10 @@ UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const UObject *W
 }
 
 void UTakeItemFromPokemon::Activate() {
-    auto ItemUtilities =
-        UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilitiesSubsystem>()->GetItemUtilities();
-    check(ItemUtilities != nullptr)
-    FItemResultNoRetValue OnSuccess;
-    OnSuccess.BindDynamic(this, &UTakeItemFromPokemon::ExecuteItemTaken);
-    FItemResultNoRetValue OnFailure;
-    OnFailure.BindDynamic(this, &UTakeItemFromPokemon::ExecuteItemNotTaken);
-    IItemUtilities::Execute_TakeItemFromPokemon(ItemUtilities, WorldContextObject, Pokemon, OnSuccess, OnFailure);
+    auto Subsystem = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilityNodeSubsystem>();
+    Subsystem->ExecuteUtilityFunction<UUtility_TakeItemFromPokemon>(
+        Pokemon, FSimpleDelegate::CreateUObject(this, &UTakeItemFromPokemon::ExecuteItemTaken),
+        FSimpleDelegate::CreateUObject(this, &UTakeItemFromPokemon::ExecuteItemNotTaken));
 }
 
 void UTakeItemFromPokemon::ExecuteItemTaken() {

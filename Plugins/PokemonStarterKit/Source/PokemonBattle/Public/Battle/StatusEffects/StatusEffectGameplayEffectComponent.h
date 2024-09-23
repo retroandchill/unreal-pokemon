@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Status.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectComponent.h"
 
@@ -36,5 +37,5 @@ class POKEMONBATTLE_API UStatusEffectGameplayEffectComponent : public UGameplayE
      * The ID of the status effect that this effect represents
      */
     UPROPERTY(EditAnywhere, meta = (GetOptions = "PokemonData.StatusEffectHelper.GetStatusEffectNames"))
-    FName StatusEffectID;
+    FStatusHandle StatusEffectID;
 };

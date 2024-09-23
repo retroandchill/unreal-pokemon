@@ -10,6 +10,7 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
+#include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/OrElseGet.h"
