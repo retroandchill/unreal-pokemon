@@ -101,3 +101,7 @@ TOptional<IPokemon &> UDefaultStorageBox::SwapWithPokemon(int32 BoxIndex, const 
     StoredPokemon[BoxIndex] = Pokemon;
     return ExistingPokemon;
 }
+
+const TArray<TScriptInterface<IPokemon>> & UDefaultStorageBox::GetStoredPokemon() const {
+    return StoredPokemon;
+}

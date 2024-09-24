@@ -7,6 +7,7 @@
 #include "Ranges/Concepts/Delegates.h"
 #include "Ranges/Functional/DelegateBinding.h"
 #include "Ranges/RangeConcepts.h"
+#include "Ranges/Functional/FunctionalBinding.h"
 
 namespace UE::Ranges {
 
@@ -26,7 +27,7 @@ namespace UE::Ranges {
         if constexpr (sizeof...(A) > 0) {
             return ranges::bind_back(Forward<F>(Functor), Forward<A>(Args)...);
         } else {
-            return MoveTempIfPossible(Functor);
+            return Forward<F>(Functor);
         }
     }
 
