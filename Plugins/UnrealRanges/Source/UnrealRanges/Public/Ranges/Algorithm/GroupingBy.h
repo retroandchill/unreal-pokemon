@@ -7,7 +7,6 @@
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/TerminalClosure.h"
-#include "Ranges/Functional/TryInvoke.h"
 
 namespace UE::Ranges {
 
@@ -33,12 +32,12 @@ namespace UE::Ranges {
             requires ranges::input_range<R> || UEContainer<R>
         auto operator()(R &&Range) const {
             using RangeType = TRangeCommonReference<R>;
-            using KeyType = std::remove_cvref_t<decltype(TryInvoke(Functor, std::declval<RangeType>()))>;
+            using KeyType = std::remove_cvref_t<decltype(std::invoke(Functor, std::declval<RangeType>()))>;
             using ValueType = TRangeValue<R>;
 
             TMap<KeyType, TArray<ValueType>> Result;
             for (RangeType &&Elem : Range) {
-                auto &Value = Result.FindOrAdd(TryInvoke(Functor, Forward<RangeType>(Elem)));
+                auto &Value = Result.FindOrAdd(std::invoke(Functor, Forward<RangeType>(Elem)));
                 Value.Emplace(Forward<RangeType>(Elem));
             }
 

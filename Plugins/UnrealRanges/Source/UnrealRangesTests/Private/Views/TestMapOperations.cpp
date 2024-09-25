@@ -47,7 +47,7 @@ void FTestMapOperations::Define() {
         It("Should be able to group a range into a map", [this] {
             std::array Values = {std::make_pair(1, "Number"), std::make_pair(1, "Value"), std::make_pair(2, "Other")};
             auto Maps =
-                Values | UE::Ranges::GroupingBy([](int32 First, const char *) { return First; });
+                Values | UE::Ranges::GroupingBy([](const std::pair<int32, const char *> &Pair) { return Pair.first; });
             UE_ASSERT_EQUAL(2, Maps.Num());
             UE_ASSERT_TRUE(Maps.Contains(1));
             UE_ASSERT_EQUAL(2, Maps[1].Num());
