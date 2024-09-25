@@ -3,7 +3,11 @@
 #include "Storage/DefaultStorageSystem.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/Arrays.h"
+#include "Ranges/Views/Concat.h"
+#include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/Ints.h"
+#include "Ranges/Views/Join.h"
 #include "Ranges/Views/Map.h"
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageBox.h"
@@ -62,6 +66,14 @@ int32 UDefaultStorageSystem::GetCurrentBoxIndex() const {
 void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
     check(Boxes.IsValidIndex(NewIndex))
     CurrentBoxIndex = NewIndex;
+}
+
+TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon) {
+    check(Boxes.IsValidIndex(CurrentBoxIndex))
+    std::array Indexes = { UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex) };
+    auto PivotRange = Indexes |
+        UE::Ranges::Join |
+        UE::Ranges::ReverseEnumerate<int32>(Boxes);
 }
 
 TScriptInterface<IStorageBox> UDefaultStorageSystem::CreateStorageBox(FText &&BoxName, int32 BoxCapacity) {

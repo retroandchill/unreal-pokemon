@@ -75,6 +75,13 @@ class POKEMONCORE_API ITrainer {
     virtual const TArray<TScriptInterface<IPokemon>> &GetParty() const = 0;
 
     /**
+     * Is the player's party full?
+     * @return Is the player's party full?
+     */
+    UFUNCTION(BlueprintCallable, Category = "Pokémon")
+    virtual bool IsPartyFull() const = 0;
+
+    /**
      * Get the Pokémon at the given index
      * @param Index The index to search for
      * @return The Pokémon at that index (nullptr if invalid)
