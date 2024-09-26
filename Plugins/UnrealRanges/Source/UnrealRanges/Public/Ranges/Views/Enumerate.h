@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Arrays.h"
-#include <range/v3/view/enumerate.hpp>
+#include "Ranges/Utilities/Arrays.h"
 #include "Ranges/Views/Map.h"
+
+#include <range/v3/view/enumerate.hpp>
 
 namespace UE::Ranges {
 
@@ -20,15 +22,9 @@ namespace UE::Ranges {
         template <typename T>
             requires Indexable<T, size_t>
         constexpr auto operator()(T&& Container) const {
-            if constexpr (std::is_lvalue_reference_v<T>) {
-                return Map([&Container](N Index) {
-                    return GetWithIndex<T, N>(Forward<T>(Container), Index);
-                });
-            } else {
-                return Map([Array = Forward<T>(Container)](N Index) {
-                    return GetWithIndex<T, N>(Array, Index);
-                });
-            }
+            return Map([&Container](N Index) {
+                return GetWithIndex<T, N>(Forward<T>(Container), Index);
+            });
         }
     };
 

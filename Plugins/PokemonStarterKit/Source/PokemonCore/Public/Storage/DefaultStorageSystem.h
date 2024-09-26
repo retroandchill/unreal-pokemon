@@ -36,8 +36,7 @@ class POKEMONCORE_API UDefaultStorageSystem : public UObject, public IStorageSys
 
   private:
     TScriptInterface<IStorageBox> CreateStorageBox(FText &&BoxName, int32 BoxCapacity);
-
-private:
+    
     UPROPERTY()
     TArray<TScriptInterface<IStorageBox>> Boxes;
 

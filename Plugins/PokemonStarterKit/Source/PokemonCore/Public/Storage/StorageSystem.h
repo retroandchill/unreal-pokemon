@@ -17,6 +17,10 @@ struct FDepositResult {
 
     UPROPERTY(BlueprintReadWrite)
     int32 DepositedPokemonIndex;
+
+    FDepositResult() = default;
+
+    FDepositResult(int32 DepositedPokemonIndex, int32 BoxIndex);
 };
 
 class IStorageBox;

@@ -7,13 +7,12 @@
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Types.h"
-#include "Ranges/Concepts/Tuples.h"
 
 namespace UE::Optionals {
 
     template <typename F>
-    struct TMapInvoker {
-        explicit constexpr TMapInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+    struct TFlatMapTupleInvoker {
+        explicit constexpr TFlatMapTupleInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
         }
 
         /**
@@ -25,26 +24,26 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
-            using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
-            return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : TOptional<ResultType>();
+            using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, *Optional))>;
+            return Optional.IsSet() ? ranges::tuple_apply(Functor, *Optional) : ResultType();
         }
 
       private:
         F Functor;
     };
 
-    struct FMap {
+    struct FFlatMapTuple {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
-            return TOptionalClosure<TMapInvoker<BindingType>>(
-                TMapInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+            return TOptionalClosure<TFlatMapTupleInvoker<BindingType>>(
+                TFlatMapTupleInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
         }
     };
 
     /**
      * Map the optional to a new value if present, otherwise return an empty optional.
      */
-    constexpr FMap Map;
+    constexpr FFlatMapTuple FlatMapTuple;
 } // namespace UE::Optionals

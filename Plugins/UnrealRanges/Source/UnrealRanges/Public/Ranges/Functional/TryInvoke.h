@@ -11,13 +11,13 @@ namespace UE::Ranges {
     public:
         template <typename F, typename... A>
         auto operator()(F&& Functor, A&&... Args) const {
-            return std::invoke(Forward<F>(Functor), Forward<A>(Args)...);
+            return ranges::invoke(Forward<F>(Functor), Forward<A>(Args)...);
         }
 
         template <typename F, typename T>
             requires CanApply<F, T>
         auto operator()(F&& Functor, T&& Tuple) const {
-            return std::apply(Forward<F>(Functor), Forward<T>(Tuple));
+            return ranges::tuple_apply(Forward<F>(Functor), Forward<T>(Tuple));
         }
     };
 

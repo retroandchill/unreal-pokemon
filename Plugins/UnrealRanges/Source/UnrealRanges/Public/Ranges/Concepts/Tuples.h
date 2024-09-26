@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <range/v3/utility/tuple_algorithm.hpp>
 
 namespace UE::Ranges {
 
@@ -41,14 +42,14 @@ namespace UE::Ranges {
     static_assert(TupleLike<TTuple<int32, bool, char>>);
 
     template <typename F, typename T>
-    concept CanApply = TupleLike<std::remove_cvref_t<T>> && requires(T&& Tuple, F&& Functor) {
-        { std::apply(Forward<F>(Functor), Forward<T>(Tuple)) } -> std::convertible_to<decltype([
+    concept CanApply = TupleLike<std::remove_reference_t<T>> && requires(std::remove_cvref_t<T> Tuple, F&& Functor) {
+        { ranges::tuple_apply(Forward<F>(Functor), Tuple) } -> std::convertible_to<decltype([
             Functor, Tuple]<size_t... N>(std::index_sequence<N...>) {
-                return Functor(std::get<N>(Tuple)...);
+                return Functor(get<N>(Tuple)...);
             }(std::make_index_sequence<std::tuple_size_v<std::remove_cvref_t<T>>>()))>;
     };
 
     static_assert(CanApply<void(*)(int32, int32), std::pair<int32, int32>>);
-    static_assert(CanApply<void(*)(int32, int32), std::pair<int32, int32>&>);
+    static_assert(CanApply<void(*)(int32, int32), TPair<int32, int32>>);
     
 }
