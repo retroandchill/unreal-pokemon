@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Delegates.h"
+#include "Ranges/RangeConcepts.h"
+#include <TypeTraits.h>
 
 namespace UE::Ranges {
 
@@ -32,6 +34,15 @@ namespace UE::Ranges {
     public: \
         FDelegateHandle BindTo##MemberName(DelegateType::FDelegate&& Binding) { \
             return MemberName.Add(MoveTemp(Binding)); \
+        } \
+        template <typename T, typename F, typename... A> \
+            requires std::is_base_of_v<UObject, T> && UE::Ranges::FunctionalType<F> \
+        FDelegateHandle BindTo##MemberName(T* Object, F&& Functor, A&&... Args) { \
+            if constexpr (StdExt::IsMemberFunction_v<F>) { \
+                return MemberName.AddUObject(Object, Forward<F>(Functor), Forward<A>(Args)...);    \
+            } else { \
+                return MemberName.AddWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...); \
+            } \
         } \
         void RemoveFrom##MemberName(FDelegateHandle Handle) { \
             MemberName.Remove(Handle); \

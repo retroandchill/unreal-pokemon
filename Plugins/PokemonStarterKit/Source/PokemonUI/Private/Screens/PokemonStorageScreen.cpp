@@ -12,6 +12,7 @@ void UPokemonStorageScreen::NativeConstruct() {
     Super::NativeConstruct();
     auto &StorageSystem = UPokemonSubsystem::GetInstance(this).GetStorageSystem();
     StorageBoxWindow->SetStorageBox(StorageSystem->GetCurrentBox());
+    StorageBoxWindow->BindToOnSelectedPokemonChanged(this, &UPokemonStorageScreen::OnSelectedPokemonChanged);
 }
 
 void UPokemonStorageScreen::OnSelectedPokemonChanged(TOptional<IPokemon &> SelectedPokemon) {
