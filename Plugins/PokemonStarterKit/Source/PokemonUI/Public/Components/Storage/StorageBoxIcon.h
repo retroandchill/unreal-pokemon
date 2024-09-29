@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
 #include "CommonUserWidget.h"
+#include "StorageInfoPage.h"
+
 #include "StorageBoxIcon.generated.h"
 
 class IPokemon;
@@ -16,10 +18,16 @@ class POKEMONUI_API UStorageBoxIcon : public UCommonButtonBase {
     GENERATED_BODY()
 
 public:
+    /**
+     * Set the Pokémon for this icon.
+     * @param Pokemon The Pokémon in question
+     */
     UFUNCTION(BlueprintImplementableEvent, Category = UI)
     void SetPokemon(const TScriptInterface<IPokemon>& Pokemon);
 
+    /**
+     * Set this icon to be an empty slot.
+     */
     UFUNCTION(BlueprintImplementableEvent, Category = UI)
     void ResetPokemon();
-
 };

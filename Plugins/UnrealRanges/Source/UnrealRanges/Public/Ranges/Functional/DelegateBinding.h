@@ -19,3 +19,20 @@ namespace UE::Ranges {
     }
 
 } // namespace UE::Ranges
+
+/**
+ * Declares a multicast delegate member for a class adding some basic boilerplate methods that are used to bind the
+ * delegate and release the binding, but allowing the invocation to remain private.
+ * @param DelegateType The type of delegate
+ * @param MemberName The name of the member variable
+ */
+#define UE_MULTICAST_DELEGATE_MEMBER(DelegateType, MemberName) \
+    private: \
+        DelegateType MemberName; \
+    public: \
+        FDelegateHandle BindTo##MemberName(DelegateType::FDelegate&& Binding) { \
+            return MemberName.Add(MoveTemp(Binding)); \
+        } \
+        void RemoveFrom##MemberName(FDelegateHandle Handle) { \
+            MemberName.Remove(Handle); \
+        }

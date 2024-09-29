@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonUserWidget.h"
+#include "StorageInfoPage.h"
 #include "Components/SelectableWidget.h"
 
 #include "StorageBoxWindow.generated.h"
@@ -25,6 +25,11 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
     void SetStorageBox(const TScriptInterface<IStorageBox>& InStorageBox);
 
+    /**
+     * Binding for the selected Pokémon being changed.
+     */
+    UE_MULTICAST_DELEGATE_MEMBER(FOnSelectedPokemonChanged, OnSelectedPokemonChanged)
+
 private:
     void CreateStorageBoxIcon(const TScriptInterface<IPokemon>& Pokemon);
     
@@ -33,5 +38,4 @@ private:
 
     UPROPERTY(EditAnywhere, Category = Display)
     TSubclassOf<UStorageBoxIcon> StorageBoxIconClass;
-
 };

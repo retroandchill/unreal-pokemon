@@ -80,7 +80,12 @@ namespace UE::Ranges {
     }
 
     template <typename T>
+        requires Pointer<std::remove_cvref_t<T>>
     using TRawPointerType = typename Detail::TPointerTraits<std::remove_cvref_t<T>>::RawPointer;
+
+    template <typename T>
+        requires Pointer<std::remove_cvref_t<T>>
+    using TReferenceType = decltype(*std::declval<T>());
 
     static_assert(Pointer<UObject *>);
     static_assert(Pointer<TObjectPtr<UObject>>);

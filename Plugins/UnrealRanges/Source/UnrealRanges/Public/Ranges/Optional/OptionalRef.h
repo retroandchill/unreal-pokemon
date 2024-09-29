@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Pointers.h"
 #include "Templates/NonNullSubclassOf.h"
+#include "Ranges/RangeConcepts.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -109,6 +110,14 @@ struct TOptional<T &> {
     }
 
     /**
+     * Convert this value to an Unreal Interface type
+     * @return The created script interface
+     */
+    TScriptInterface<T> GetInterface() const requires UE::Ranges::UnrealInterface<T> {
+        return TScriptInterface<T>(Data != nullptr ? Data->_getUObject() : nullptr);
+    }
+
+    /**
      * Returns if the value is set
      * @return Is there a valid optional?
      */
@@ -173,7 +182,7 @@ namespace UE::Optionals {
     template <typename T>
         requires Ranges::Pointer<T>
     constexpr auto OfNullable(const T &Ptr) {
-        return TOptional<Ranges::TRawPointerType<T>>(Ranges::GetRawPointer<T>(Ptr));
+        return TOptional<Ranges::TReferenceType<T>>(Ranges::GetRawPointer<T>(Ptr));
     }
 
     template <typename T>
