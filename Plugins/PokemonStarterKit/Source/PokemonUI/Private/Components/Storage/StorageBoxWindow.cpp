@@ -6,6 +6,7 @@
 #include "Components/Storage/StorageBoxIcon.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/Ints.h"
 #include "Storage/StorageBox.h"
 
 const TScriptInterface<IStorageBox> & UStorageBoxWindow::GetStorageBox() const {
@@ -14,7 +15,6 @@ const TScriptInterface<IStorageBox> & UStorageBoxWindow::GetStorageBox() const {
 
 void UStorageBoxWindow::SetStorageBox(const TScriptInterface<IStorageBox> &InStorageBox) {
     StorageBox = InStorageBox;
-    ClearSelectableOptions();
     StorageBox->GetStoredPokemon() |
         UE::Ranges::ForEach(this, &UStorageBoxWindow::CreateStorageBoxIcon);
 }

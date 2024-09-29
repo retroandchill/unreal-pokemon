@@ -62,6 +62,10 @@ const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetBox(int32 Index) 
     return Boxes[Index];
 }
 
+const TScriptInterface<IStorageBox> & UDefaultStorageSystem::GetCurrentBox() const {
+    return GetBox(CurrentBoxIndex);
+}
+
 int32 UDefaultStorageSystem::GetCurrentBoxIndex() const {
     return CurrentBoxIndex;
 }

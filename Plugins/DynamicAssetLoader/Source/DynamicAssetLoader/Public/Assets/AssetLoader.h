@@ -3,11 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AssetUtilities.h"
+#include "TextureCompiler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Concepts/Types.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/FlatMap.h"
+#include "Ranges/Optional/IfPresent.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "Ranges/Views/Filter.h"
@@ -41,6 +44,35 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
 
   public:
     /**
+     * Attempt to load an asset, completing all texture compilation in an editor build.
+     * @tparam T The type of asset to load
+     * @param SearchKey The search key for the asset
+     * @return The loaded asset
+     */
+    template <typename T>
+        requires std::is_base_of_v<UObject, T>
+    static TOptional<T&> AttemptLoad(FStringView SearchKey) {
+        if constexpr (std::is_same_v<T, UObject>) {
+            auto Asset = UE::Optionals::OfNullable<T>(StaticLoadObject(T::StaticClass(), nullptr,
+                SearchKey.GetData(),nullptr, LOAD_NoWarn));
+            
+#if WITH_EDITOR
+            FTextureCompilingManager::Get().FinishAllCompilation();
+#endif
+            return Asset;
+        } else {
+            auto Asset = UE::Optionals::OfNullable<T>(Cast<T>(StaticLoadObject(T::StaticClass(), nullptr,
+                SearchKey.GetData(), nullptr, LOAD_NoWarn)));
+            
+#if WITH_EDITOR
+            FTextureCompilingManager::Get().FinishAllCompilation();
+#endif
+            return Asset;
+        }
+    }
+        
+    
+    /**
      * Look up an asset of the given type by its name
      * @tparam T The type of the asset to look up
      * @param BasePackageName The base package name for the asset
@@ -58,13 +90,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         }
 
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
-        if constexpr (std::is_same_v<T, UObject>) {
-            return UE::Optionals::OfNullable<T>(
-                StaticLoadObject(T::StaticClass(), nullptr, *SearchKey, nullptr, LOAD_NoWarn));
-        } else {
-            return UE::Optionals::OfNullable<T>(
-                Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *SearchKey, nullptr, LOAD_NoWarn)));
-        }
+        return AttemptLoad<T>(SearchKey);
     }
 
     /**

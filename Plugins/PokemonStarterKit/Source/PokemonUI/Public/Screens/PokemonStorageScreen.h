@@ -14,6 +14,9 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonStorageScreen : public UScreen {
     GENERATED_BODY()
 
+protected:
+    void NativeConstruct() override;
+    
 public:
     /**
      * Get the box storage widget

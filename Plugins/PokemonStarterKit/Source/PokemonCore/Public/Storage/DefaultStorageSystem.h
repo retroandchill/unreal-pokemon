@@ -26,6 +26,9 @@ class POKEMONCORE_API UDefaultStorageSystem : public UObject, public IStorageSys
     UFUNCTION(BlueprintCallable, Category = StorageSystem)
     const TScriptInterface<IStorageBox> &GetBox(int32 Index) const override;
 
+    UFUNCTION(BlueprintCallable, Category = StorageSystem)
+    const TScriptInterface<IStorageBox> &GetCurrentBox() const override;
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = StorageSystem)
     int32 GetCurrentBoxIndex() const override;
 

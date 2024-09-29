@@ -50,6 +50,9 @@ class POKEMONCORE_API IStorageSystem {
     virtual const TScriptInterface<IStorageBox> &GetBox(int32 Index) const = 0;
 
     UFUNCTION(BlueprintCallable, Category = StorageSystem)
+    virtual const TScriptInterface<IStorageBox> &GetCurrentBox() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = StorageSystem)
     virtual int32 GetCurrentBoxIndex() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = StorageSystem)
