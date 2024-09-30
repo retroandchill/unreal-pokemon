@@ -3,14 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AssetUtilities.h"
 #include "TextureCompiler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Concepts/Types.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/FlatMap.h"
-#include "Ranges/Optional/IfPresent.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "Ranges/Views/Filter.h"

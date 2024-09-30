@@ -44,6 +44,7 @@ public class PokemonAssets : ModuleRules
 				"PokemonData",
 				"UnrealInjector", 
 				"DynamicAssetLoader",
+				"RPGMenus"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

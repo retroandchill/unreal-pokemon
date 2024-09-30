@@ -91,4 +91,30 @@ namespace UE::Ranges {
     static_assert(Pointer<TObjectPtr<UObject>>);
     static_assert(Pointer<const TObjectPtr<UObject>>);
     static_assert(Pointer<const TObjectPtr<UObject> &>);
+
+    namespace Detail {
+        template <typename>
+        struct TIsReferenceType : std::false_type {};
+
+        template <typename T>
+            requires std::is_base_of_v<UObject, T>
+        struct TIsReferenceType<T> : std::true_type {
+            using VariableType = TObjectPtr<T>;
+            using ArgumentType = T*;
+        };
+
+        template <typename T>
+            requires UnrealInterface<T>
+        struct TIsReferenceType<T> : std::true_type {
+            using VariableType = TScriptInterface<T>;
+            using ArgumentType = const TScriptInterface<T>&;
+        };
+    }
+
+    template <typename T>
+    concept UnrealReferenceType = Detail::TIsReferenceType<T>::value;
+
+    template <typename T>
+        requires UnrealReferenceType<T>
+    using TVariableType = typename TIsReferenceType<T>::VariableType;
 } // namespace UE::Ranges

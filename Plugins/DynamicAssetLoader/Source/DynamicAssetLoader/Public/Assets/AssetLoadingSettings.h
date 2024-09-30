@@ -5,12 +5,16 @@
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
 #include "Ranges/RangeConcepts.h"
+#include "Ranges/Utilities/VariantObject.h"
 
 #include "AssetLoadingSettings.generated.h"
 
 namespace UE::Assets {
     template <typename T>
-        requires std::is_base_of_v<UObject, T>
+    concept AssetClassType = std::is_base_of_v<UObject, T> || Ranges::VariantObjectStruct<T>;
+    
+    template <typename T>
+        requires AssetClassType<T>
     class TAssetClass;
 
     template <typename T>
@@ -40,7 +44,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass);
 
     template <typename T>
-        requires std::is_base_of_v<UObject, T>
+        requires UE::Assets::AssetClassType<T>
     friend class UE::Assets::TAssetClass;
 
     template <typename T>

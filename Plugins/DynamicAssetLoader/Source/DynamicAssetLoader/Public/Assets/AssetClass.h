@@ -7,6 +7,8 @@
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Utilities/VariantObject.h"
+#include "Ranges/Views/Construct.h"
 #include "Ranges/Views/Map.h"
 
 namespace UE::Assets {
@@ -19,9 +21,13 @@ namespace UE::Assets {
      * @tparam T The class of the asset in question
      */
     template <typename T>
-        requires std::is_base_of_v<UObject, T>
+        requires AssetClassType<T>
     class TAssetClass {
       public:
+        template <typename U>
+        static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) ||
+            (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
+        
         /**
          * Construct a new asset object using this loader
          * @param Key The key for the asset in question
@@ -39,12 +45,19 @@ namespace UE::Assets {
          * @return The loaded asset
          */
         template <typename U = T>
-            requires std::is_base_of_v<T, U>
-        TOptional<U &> LoadAsset(FStringView AssetName) const {
+            requires ValidTemplateParam<U>
+        auto LoadAsset(FStringView AssetName) const  {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
-            return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName);
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName);
+            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName) |
+                    Ranges::Construct<T>;
+            } else {
+                static_assert(false, "Invalid state");
+            }
         }
 
         /**
@@ -53,15 +66,15 @@ namespace UE::Assets {
          * @return The loaded asset
          */
         template <typename U = T>
-            requires std::is_base_of_v<T, U>
-        TOptional<U &> LoadAsset(FName AssetName) const {
+            requires ValidTemplateParam<U>
+        auto LoadAsset(FName AssetName) const {
             return LoadAsset<U>(AssetName.ToString());
         }
 
         template <typename U = T, typename R>
-            requires std::is_base_of_v<T, U> && Ranges::Range<R> &&
+            requires ValidTemplateParam<U> && Ranges::Range<R> &&
                      std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
-        TOptional<U &> ResolveAsset(R &&Assets) const {
+        auto ResolveAsset(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
@@ -72,12 +85,19 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
+            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames) |
+                    Ranges::Construct<T>;
+            } else {
+                static_assert(false, "Invalid state");
+            }
         }
 
         template <typename U = T, typename R>
             requires std::is_base_of_v<T, U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
-        TArray<TOptional<U &>> LoadAssets(R &&Assets) const {
+        auto LoadAssets(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
@@ -100,6 +120,8 @@ namespace UE::Assets {
         FDirectoryPath DefaultAssetPath;
         FStringView DefaultPrefix;
     };
+
+    
 
     template <typename T>
         requires std::is_base_of_v<UObject, T>

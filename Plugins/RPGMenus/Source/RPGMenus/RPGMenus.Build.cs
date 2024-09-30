@@ -18,7 +18,8 @@ public class RPGMenus : ModuleRules
 				"UnrealRanges",
 				"CommonGame",
 				"GameplayTags",
-				"EnhancedInput"
+				"EnhancedInput", 
+				"Paper2D"
 			}
 		);
 
