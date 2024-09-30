@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Algo/AllOf.h"
 #include "Algo/AnyOf.h"
-#include "range/v3/algorithm/any_of.hpp"
+#include "range/v3/algorithm/all_of.hpp"
 #include "range/v3/algorithm/for_each.hpp"
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/TerminalClosure.h"
@@ -32,13 +33,13 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R>
         bool operator()(R &&Range) const {
-            return ranges::any_of(Forward<R>(Range), Functor);
+            return ranges::all_of(Forward<R>(Range), Functor);
         }
 
         template <typename R>
             requires UEContainer<R>
         bool operator()(R &Range) const {
-            return Algo::AnyOf(Range, Functor);
+            return Algo::AllOf(Range, Functor);
         }
 
       private:

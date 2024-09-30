@@ -4,6 +4,7 @@
 #include "Screens/PokemonStorageScreen.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/Storage/StorageBoxWindow.h"
+#include "Components/Storage/StorageInfoPanel.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Storage/StorageSystem.h"
 #include "Pokemon/Pokemon.h"
@@ -16,13 +17,12 @@ void UPokemonStorageScreen::NativeConstruct() {
 }
 
 void UPokemonStorageScreen::OnSelectedPokemonChanged(TOptional<IPokemon &> SelectedPokemon) {
+    auto Pokemon = SelectedPokemon.GetInterface();
     if (!SelectedPokemon.IsSet()) {
-        StorageInfoSwitcher->SetVisibility(ESlateVisibility::Hidden);
+        StorageInfoPanel->SetVisibility(ESlateVisibility::Hidden);
         return;
     }
 
-    StorageInfoSwitcher->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-    auto CurrentWidget = StorageInfoSwitcher->GetActiveWidget();
-    check(CurrentWidget->Implements<UStorageInfoPage>());
-    IStorageInfoPage::Execute_DisplayInfo(CurrentWidget, SelectedPokemon.GetInterface());
+    StorageInfoPanel->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    StorageInfoPanel->SetSelectedPokemon(SelectedPokemon.GetInterface());
 }

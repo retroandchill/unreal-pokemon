@@ -6,6 +6,7 @@
 #include "Screens/Screen.h"
 #include "PokemonStorageScreen.generated.h"
 
+class UStorageInfoPanel;
 class IPokemon;
 class UWidgetSwitcher;
 class UStorageBoxWindow;
@@ -30,15 +31,11 @@ public:
         return StorageBoxWindow;
     }
 
-    /**
-     * Get the storage info switcher.
-     * @return The widget switcher that displays the information about the Pokémon being displayed.
-     */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UWidgetSwitcher* GetStorageInfoSwitcher() const {
-        return StorageInfoSwitcher;
+    UStorageInfoPanel* GetStorageInfoPanel() const {
+        return StorageInfoPanel;
     }
-
+    
 private:
     void OnSelectedPokemonChanged(TOptional<IPokemon&> SelectedPokemon);
     
@@ -48,10 +45,7 @@ private:
     UPROPERTY(BlueprintGetter = GetStorageBoxWindow, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UStorageBoxWindow> StorageBoxWindow;
 
-    /**
-     * The widget switcher that displays the information about the Pokémon being displayed.
-     */
-    UPROPERTY(BlueprintGetter = GetStorageInfoSwitcher, Category = Widgets, meta = (BindWidget))
-    TObjectPtr<UWidgetSwitcher> StorageInfoSwitcher;
+    UPROPERTY(BlueprintGetter = GetStorageInfoPanel, Category = Widgets, meta = (BindWidget))
+    TObjectPtr<UStorageInfoPanel> StorageInfoPanel;
 
 };
