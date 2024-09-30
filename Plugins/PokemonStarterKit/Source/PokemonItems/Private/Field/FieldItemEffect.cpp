@@ -8,10 +8,6 @@ bool UFieldItemEffect::ImplementsGetWorld() const {
 }
 #endif
 
-FDelegateHandle UFieldItemEffect::BindToEffectComplete(FOnItemEffectComplete::FDelegate &&Delegate) {
-    return OnEffectComplete.Add(MoveTemp(Delegate));
-}
-
 void UFieldItemEffect::EffectComplete(bool bSuccess) const {
     OnEffectComplete.Broadcast(bSuccess);
 }

@@ -30,10 +30,6 @@ void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemo
     MoveSelectWindow->SetIndex(0);
 }
 
-void UMoveForgetScreen::BindToOnMoveForgetComplete(FOnMoveForgetComplete::FDelegate &&Callback) {
-    OnMoveForgetComplete.Add(MoveTemp(Callback));
-}
-
 void UMoveForgetScreen::MoveForgetComplete(bool bMoveForgotten) {
     CloseScreen();
     OnMoveForgetComplete.Broadcast(bMoveForgotten);

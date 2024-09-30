@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Functional/Delegates.h"
 #include "Screens/Screen.h"
 
 #include "MoveForgetScreen.generated.h"
@@ -42,10 +43,9 @@ class POKEMONUI_API UMoveForgetScreen : public UScreen {
     void InitializeScene(const TScriptInterface<IPokemon> &Pokemon, FName Move);
 
     /**
-     * Bind a callback to the completion of a move
-     * @param Callback The callback to bind to the move's completion
+     * Called when the move deletion is completed
      */
-    void BindToOnMoveForgetComplete(FOnMoveForgetComplete::FDelegate &&Callback);
+    UE_MULTICAST_DELEGATE_MEMBER(FOnMoveForgetComplete, OnMoveForgetComplete)
 
   protected:
     /**
@@ -145,9 +145,4 @@ class POKEMONUI_API UMoveForgetScreen : public UScreen {
      */
     UPROPERTY(BlueprintGetter = GetMoveInfoWindow, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UMoveInfoWindow> MoveInfoWindow;
-
-    /**
-     * Called when the move deletion is completed
-     */
-    FOnMoveForgetComplete OnMoveForgetComplete;
 };
