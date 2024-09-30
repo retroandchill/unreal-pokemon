@@ -5,8 +5,10 @@
 DECLARE_DELEGATE_RetVal_TwoParams(bool, FDemoDelegate, FStringView, int32);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FDemoMulticastDelegate, FStringView, int32);
 
-static_assert(UE::Ranges::SingleBindDelegate<FDemoDelegate>);
+static_assert(UE::Ranges::NativeDelegate<FDemoDelegate>);
+static_assert(UE::Ranges::UnicastDelegate<FDemoDelegate>);
 static_assert(UE::Ranges::UEDelegate<FDemoDelegate>);
+static_assert(UE::Ranges::NativeDelegate<FDemoMulticastDelegate>);
 static_assert(UE::Ranges::MulticastDelegate<FDemoMulticastDelegate>);
 static_assert(UE::Ranges::UEDelegate<FDemoMulticastDelegate>);
 

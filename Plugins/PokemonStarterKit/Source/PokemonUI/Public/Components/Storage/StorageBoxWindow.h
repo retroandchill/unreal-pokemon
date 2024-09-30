@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "StorageInfoPage.h"
 #include "Components/SelectableWidget.h"
+#include "Ranges/Functional/Delegates.h"
 
 #include "StorageBoxWindow.generated.h"
 
