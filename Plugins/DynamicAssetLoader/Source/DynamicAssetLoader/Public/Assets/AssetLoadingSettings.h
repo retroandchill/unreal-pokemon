@@ -22,6 +22,12 @@ namespace UE::Assets {
     class TBlueprintClass;
 } // namespace UE::Assets
 
+UENUM(BLueprintType)
+enum class EAssetClassType : uint8 {
+    Object,
+    VariantObject
+};
+
 USTRUCT(BlueprintType)
 struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     GENERATED_BODY()
@@ -32,7 +38,8 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     TOptional<FString> AssetPrefix;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly,
+        meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
     UClass *AssetClass = nullptr;
 
     UPROPERTY()
@@ -41,7 +48,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     FAssetLoadingEntry() = default;
 
   private:
-    FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass);
+    FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass = UObject::StaticClass());
 
     template <typename T>
         requires UE::Assets::AssetClassType<T>

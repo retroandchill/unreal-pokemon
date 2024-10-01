@@ -53,8 +53,8 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName);
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
-                return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName) |
-                    Ranges::Construct<T>;
+                return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
+                    Optionals::Map([](UObject& Object) { return T(&Object); });
             } else {
                 static_assert(false, "Invalid state");
             }
@@ -88,15 +88,15 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
-                return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames) |
-                    Ranges::Construct<T>;
+                return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
+                    Optionals::Map([](UObject& Object) { return T(&Object); });
             } else {
                 static_assert(false, "Invalid state");
             }
         }
 
         template <typename U = T, typename R>
-            requires std::is_base_of_v<T, U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+            requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
         auto LoadAssets(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
@@ -113,7 +113,12 @@ namespace UE::Assets {
                 return;
             }
 
-            Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix));
+            }
+            
         }
 
         FName Key;
