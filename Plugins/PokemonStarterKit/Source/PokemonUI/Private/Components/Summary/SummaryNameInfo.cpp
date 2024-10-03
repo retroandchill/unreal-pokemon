@@ -6,6 +6,7 @@
 #include "Graphics/AssetClasses.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
 
@@ -24,7 +25,11 @@ void USummaryNameInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &
     PokemonLevelText->SetText(FText::FromString(FString::FromInt(Pokemon->GetStatBlock()->GetLevel())));
 
     // TODO: Configure the status and Poké Ball
-    auto BallIcon = Pokemon::Assets::Graphics::SummaryBalls.LoadAsset(Pokemon->GetPokeBall()).GetPtrOrNull();
+    // clang-format off
+    auto BallIcon = Pokemon::Assets::Graphics::SummaryBalls.LoadAsset(Pokemon->GetPokeBall()) |
+                    UE::Optionals::FlatMap([](const FImageAsset &ImageAsset) { return ImageAsset.TryGet(); }) |
+                    UE::Optionals::GetPtrOrNull;
+    // clang-format on
     UWidgetUtilities::SetBrushFromAsset(PokemonBallIcon, BallIcon, true);
     PokemonStatusIcon->SetVisibility(Hidden);
 }

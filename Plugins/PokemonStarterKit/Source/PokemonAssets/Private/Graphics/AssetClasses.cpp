@@ -11,7 +11,7 @@ namespace Pokemon::Assets::Graphics {
     UE_DEFINE_ASSET_CLASS(TypeIcons, FImageAsset, "/Game/Graphics/UI/Types", "types_");
     UE_DEFINE_ASSET_CLASS(TypePanels, UObject, "/Game/Graphics/UI/Battle/Moves", "move_");
     UE_DEFINE_ASSET_CLASS(StatusIcons, UObject, "/Game/Graphics/UI/Statuses", "status_");
-    UE_DEFINE_ASSET_CLASS(SummaryBalls, UObject, "/Game/Graphics/UI/Summary/BallIcons", "icon_ball_");
+    UE_DEFINE_ASSET_CLASS(SummaryBalls, FImageAsset, "/Game/Graphics/UI/Summary/BallIcons", "icon_ball_");
     UE_DEFINE_ASSET_CLASS(ItemIcons, UObject, "/Game/Graphics/Items", "");
 
 } // namespace Pokemon::Assets::Graphics

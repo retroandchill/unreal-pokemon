@@ -10,12 +10,13 @@
 #include "ImageAsset.generated.h"
 
 /**
- * Struct that contains a wrapper around an image asset.
+ * Struct that contains a wrapper around an image asset that can be used inside an image widget.
+ * TODO: Add support for UPaperFlipbook
  */
 USTRUCT(BlueprintType)
 struct RPGMENUS_API FImageAsset
 #if CPP
-    : UE::Ranges::TVariantObject<UTexture2D, UMaterialInterface, ISlateTextureAtlasInterface, UPaperFlipbook>, FGCObject {
+    : UE::Ranges::TVariantObject<UTexture, UMaterialInterface, ISlateTextureAtlasInterface>, FGCObject {
 #else
     {
 #endif

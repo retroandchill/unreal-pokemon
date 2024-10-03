@@ -40,7 +40,7 @@ namespace Pokemon::Assets::Graphics {
     /**
      * Asset class for Poké Ball icons on the summary screen.
      */
-    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, SummaryBalls, UObject);
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, SummaryBalls, FImageAsset);
 
     /**
      * Asset class for item icons.

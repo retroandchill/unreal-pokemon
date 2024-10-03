@@ -32,7 +32,8 @@ public class RPGMenus : ModuleRules
 				"SlateCore",
 				"CommonMath",
 				"Paper2D",
-				"DeveloperSettings"
+				"DeveloperSettings", 
+				"PaperFlipbookWidget"
 			}
 		);
 	}
