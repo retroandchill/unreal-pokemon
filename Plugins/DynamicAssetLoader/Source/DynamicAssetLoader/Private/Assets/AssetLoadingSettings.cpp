@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Assets/AssetLoadingSettings.h"
-
 static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
     static UPackage* CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/DynamicAssetLoader"));
     UScriptStruct* Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
@@ -16,6 +15,11 @@ UScriptStruct * TBaseStructure<FAssetClassType>::Get() {
 }
 
 FAssetLoadingEntry::FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass)
+    : RootDirectory(RootDirectory), AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
+      AssetClass(AssetClass), bIsNative(true) {
+}
+
+FAssetLoadingEntry::FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UScriptStruct *AssetClass)
     : RootDirectory(RootDirectory), AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
       AssetClass(AssetClass), bIsNative(true) {
 }

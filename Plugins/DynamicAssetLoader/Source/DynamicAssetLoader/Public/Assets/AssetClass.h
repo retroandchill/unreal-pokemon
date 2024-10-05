@@ -7,8 +7,7 @@
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/VariantObject.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Views/Map.h"
 
 namespace UE::Assets {
@@ -116,7 +115,11 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, T>) {
                 Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
-                Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix));
+                if constexpr (Ranges::CoreStructType<T>) {
+                    Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, TBaseStructure<T>::Get()));
+                } else {
+                    Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticStruct()));
+                }
             }
             
         }

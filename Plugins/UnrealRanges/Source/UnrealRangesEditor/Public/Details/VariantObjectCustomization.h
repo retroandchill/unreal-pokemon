@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DetailWidgetRow.h"
-#include "Ranges/Utilities/VariantObject.h"
+#include "Ranges/Variants/VariantObject.h"
 
 namespace UE::Ranges {
     /**

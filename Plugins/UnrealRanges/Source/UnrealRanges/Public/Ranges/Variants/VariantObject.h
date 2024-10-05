@@ -10,21 +10,35 @@
 #include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/FilterTuple.h"
 
+#include "VariantObject.generated.h"
+
+UENUM()
+enum class EVariantFindResult : uint8 {
+    CastSucceeded UMETA(DisplayName = "execute"),
+    CastFailed
+};
+
 namespace UE::Ranges {
 
     template <typename... T>
         requires ((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
     struct TVariantObject;
+    
+    namespace Detail {
+        template <typename>
+        struct TIsVariantObject : std::false_type {};
+
+        template <typename... T>
+        struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
+    }
 
     template <typename T>
-    concept VariantObjectStruct = UEStruct<T> && requires(T &&Object) {
-        []<typename... A>(TVariantObject<A...>&&){}(Forward<T>(Object));
-    };
+    concept VariantObjectStruct = UEStruct<T> && Detail::TIsVariantObject<T>::value;
     
     template <typename T>
         requires VariantObjectStruct<T>
     class TVariantObjectCustomization;
-
+    
     /**
      * Specialized variant type that handles a subset of UObject subclasses and interfaces.
      * @tparam T The types that are valid
@@ -35,8 +49,9 @@ namespace UE::Ranges {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
 
         /**
-         * Default construct, creates a variant object that exists within an invalid state. Only to be used as a
-         * default constructor. If passed into a TOptional it will be considered unset.
+         * Default construct, creates a variant object that exists within an invalid state,
+         * where the contained value is nullptr. If a TOptional<> is constructed from this state, it will construct
+         * into the unset state.
          */
         TVariantObject() = default;
         
@@ -92,6 +107,10 @@ namespace UE::Ranges {
             return *ContainedObject;
         }
 
+        constexpr bool operator==(std::nullptr_t) const {
+            return IsValid();
+        }
+
         /**
          * Check if the variant is of the given type
          * @tparam U The underlying type to check against
@@ -99,8 +118,16 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires (std::same_as<T, U> || ...)
-        bool IsType() const {
+        constexpr bool IsType() const {
             return TypeIndex == GetTypeIndex<U>();
+        }
+
+        /**
+         * Runs a check to ensure that the contained state is valid.
+         * @return The state is valid
+         */
+        constexpr bool IsValid() const {
+            return !IsType<std::nullptr_t>() && ContainedObject != nullptr;
         }
 
     protected:
@@ -171,6 +198,11 @@ namespace UE::Ranges {
             return TypeIndex;
         }
 
+        static const auto &GetTypeClasses() {
+            static std::array Values = { nullptr, GetUnrealClassType<T>()... };
+            return Values;
+        }
+
         template <typename U>
             requires UObjectPointer<U> && (std::same_as<T, U> || ...)
         void Set(U* Object) {
@@ -203,6 +235,10 @@ namespace UE::Ranges {
             TypeIndex = GetTypeIndex<std::nullptr_t>();
             return *this;
         }
+
+        bool operator==(FIntrusiveUnsetOptionalState) const {
+            return !IsValid();
+        }
         
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
@@ -216,6 +252,18 @@ namespace UE::Ranges {
             }
         }
 
+        template <typename U>
+            requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
+        static constexpr UClass* GetUnrealClassType() {
+            if constexpr (std::is_same_v<std::nullptr_t, U>) {
+                return nullptr;
+            } else if constexpr (UnrealInterface<U>) {
+                return U::UClassType::StaticClass();
+            } else {
+                return U::StaticClass();
+            }
+        }
+
         friend struct TOptional<TVariantObject>;
         friend class TVariantObjectCustomization<T>;
         
@@ -223,6 +271,13 @@ namespace UE::Ranges {
         uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();
     };
 }
-    
-    
-    
+
+#define UE_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...) \
+    struct StructName : UE::Ranges::TVariantObject<__VA_ARGS__> { \
+        StructName() = default; \
+        template <typename... T> \
+            requires std::constructible_from<TVariantObject, T...> \
+        explicit(std::same_as<TVariantObject, std::remove_reference_t<T>...>) StructName(T&&... Args) : TVariantObject(Forward<T>(Args)...) {} \
+    }; \
+    template <> \
+    struct UE::Ranges::Detail::TIsVariantObject<StructName> : std::true_type {}

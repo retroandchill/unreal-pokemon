@@ -8,6 +8,7 @@ static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
     UScriptStruct* Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
         CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
     check(Result != nullptr);
+    Result->SetMetaData(TEXT("VariantObject"), TEXT("true"));
     return Result;
 }
 

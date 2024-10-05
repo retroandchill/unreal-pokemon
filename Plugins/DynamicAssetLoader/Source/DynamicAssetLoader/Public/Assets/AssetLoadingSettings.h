@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
 #include "Ranges/RangeConcepts.h"
-#include "Ranges/Utilities/VariantObject.h"
+#include "Ranges/Variants/VariantObject.h"
 
 #include "AssetLoadingSettings.generated.h"
 
@@ -23,9 +23,9 @@ namespace UE::Assets {
 } // namespace UE::Assets
 
 #if CPP
-using FAssetClassType = UE::Ranges::TVariantObject<UClass, UScriptStruct>;
+UE_DECLARE_VARIANT_OBJECT_STRUCT(FAssetClassType, UClass, UScriptStruct);
 #else
-USTRUCT(BlueprintType, NoExport)
+USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FAssetClassType {
     UPROPERTY(EditAnywhere,
         meta = (AllowedClasses="/Script/Engine.UClass,/Script/Engine.ScriptStruct"))
@@ -53,7 +53,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly,
         meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
-    FAssetClassType AssetClass;
+    FAssetClassType AssetClass = FAssetClassType(UObject::StaticClass());
 
     UPROPERTY()
     bool bIsNative = false;
@@ -62,6 +62,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
 
   private:
     FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass = UObject::StaticClass());
+    FAssetLoadingEntry(const FDirectoryPath& RootDirectory, FStringView AssetPrefix, UScriptStruct *AssetClass);
 
     template <typename T>
         requires UE::Assets::AssetClassType<T>
