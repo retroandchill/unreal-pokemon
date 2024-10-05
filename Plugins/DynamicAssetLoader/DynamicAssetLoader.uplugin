@@ -23,6 +23,11 @@
 			"Name": "DynamicAssetLoaderNodes",
 			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "DynamicAssetLoaderEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

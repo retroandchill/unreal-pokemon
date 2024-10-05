@@ -1,17 +1,11 @@
 ﻿#include "UnrealRangesEditor.h"
 
-#define LOCTEXT_NAMESPACE "FUnrealRangesEditorModule"
-
-void FUnrealRangesEditorModule::StartupModule()
-{
-    
+void FUnrealRangesEditorModule::StartupModule() {
+    // No special start up
 }
 
-void FUnrealRangesEditorModule::ShutdownModule()
-{
-    
+void FUnrealRangesEditorModule::ShutdownModule() {
+    // No special shutdown
 }
-
-#undef LOCTEXT_NAMESPACE
     
 IMPLEMENT_MODULE(FUnrealRangesEditorModule, UnrealRangesEditor)

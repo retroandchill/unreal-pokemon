@@ -23,6 +23,7 @@ void FRPGMenusEditorModule::OnPostEngineInit() const {
     // Register thumbnails
     UThumbnailManager::Get().RegisterCustomRenderer(UWindowskin::StaticClass(),
                                                     UWindowskinThumbnailRenderer::StaticClass());
+    
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("ImageAsset"),

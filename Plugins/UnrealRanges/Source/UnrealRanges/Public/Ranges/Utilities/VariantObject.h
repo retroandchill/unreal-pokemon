@@ -76,8 +76,6 @@ namespace UE::Ranges {
         explicit TVariantObject(const FScriptInterface& Object) : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject())) {
         }
 
-        virtual ~TVariantObject() = default;
-
         /**
          * Access any of the members on UObject, regardless of the underlying type.
          * @return The underlying object
@@ -195,15 +193,6 @@ namespace UE::Ranges {
         void Set(const FScriptInterface& Object) {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex(Object.GetObject());
-        }
-
-        bool operator==(const TVariantObject& Other) const {
-            return TypeIndex == Other.TypeIndex && ContainedObject == Other.ContainedObject;
-        }
-
-        virtual bool Serialize(FArchive& Ar) {
-            Ar << ContainedObject << TypeIndex;
-            return true;
         }
 
     private:
