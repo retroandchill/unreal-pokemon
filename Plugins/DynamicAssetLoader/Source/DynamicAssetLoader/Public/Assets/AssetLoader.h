@@ -116,7 +116,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
                       DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
                       ExpandEnumAsExecs = "ReturnValue"))
-    static EAssetLoadResult LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName,
+    static EAssetLoadResult LookupAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
                                               const FString &AssetName, UObject *&FoundAsset);
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,

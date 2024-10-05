@@ -66,6 +66,15 @@ struct TOptional<T &> {
      * @param DefaultValue The default to substitute for an empty optional.
      * @return The retrieved value
      */
+    T& Get(T& DefaultValue) {
+        return Data != nullptr ? *Data : DefaultValue;
+    }
+
+    /**
+     * Get the value of the optional.
+     * @param DefaultValue The default to substitute for an empty optional.
+     * @return The retrieved value
+     */
     const T &Get(const T &DefaultValue) const {
         return Data != nullptr ? *Data : DefaultValue;
     }

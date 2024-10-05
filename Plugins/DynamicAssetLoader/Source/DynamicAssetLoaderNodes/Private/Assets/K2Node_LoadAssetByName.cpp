@@ -120,7 +120,7 @@ void UK2Node_LoadAssetByName::GetMenuActions(FBlueprintActionDatabaseRegistrar &
     if (auto ActionKey = GetClass(); ActionRegistrar.IsOpenForRegistration(ActionKey)) {
 
         for (auto Settings = GetDefault<UAssetLoadingSettings>(); auto &[Key, AssetClass] : Settings->AssetClasses) {
-            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(AssetClass.AssetClass, true)) {
+            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(&AssetClass.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), true)) {
                 continue;
             }
 
@@ -169,9 +169,10 @@ UEdGraphPin *UK2Node_LoadAssetByName::GetResultPin() const {
 UClass *UK2Node_LoadAssetByName::GetAssetClassType() const {
     auto Setting = GetDefault<UAssetLoadingSettings>();
     // clang-format off
-    return UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
+    return &(UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
         UE::Optionals::Map(&FAssetLoadingEntry::AssetClass) |
-        UE::Optionals::OrElse(UObject::StaticClass());
+        UE::Optionals::FlatMap(&FAssetClassType::TryGet<UClass>) |
+        UE::Optionals::OrElse(*UObject::StaticClass()));
     // clang-format on
 }
 

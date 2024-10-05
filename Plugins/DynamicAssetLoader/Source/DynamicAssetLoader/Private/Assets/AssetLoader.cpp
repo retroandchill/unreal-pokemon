@@ -5,7 +5,7 @@
 #include "Assets/AssetUtilities.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 
-EAssetLoadResult UAssetLoader::LookupAssetByName(UClass *AssetClass, const FDirectoryPath &BasePackageName,
+EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
                                                  const FString &AssetName, UObject *&FoundAsset) {
     FoundAsset = LookupAssetByName(BasePackageName, AssetName) |
                  UE::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
@@ -17,7 +17,7 @@ EAssetLoadResult UAssetLoader::LoadDynamicAsset(FName Identifier, const FString 
     auto Settings = GetDefault<UAssetLoadingSettings>();
     auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
     auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
-    return LookupAssetByName(AssetInfo.AssetClass, AssetInfo.RootDirectory, FullName, FoundAsset);
+    return LookupAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory, FullName, FoundAsset);
 }
 
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,

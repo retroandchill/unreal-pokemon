@@ -23,6 +23,8 @@ public class RPGMenusEditor : ModuleRules
 				"Slate",
 				"SlateCore",
 				"UnrealEd",
+				"UnrealRangesEditor",
+				"RPGMenus"
 			}
 		);
 	}

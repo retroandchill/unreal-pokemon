@@ -22,10 +22,23 @@ namespace UE::Assets {
     class TBlueprintClass;
 } // namespace UE::Assets
 
-UENUM(BLueprintType)
-enum class EAssetClassType : uint8 {
-    Object,
-    VariantObject
+#if CPP
+using FAssetClassType = UE::Ranges::TVariantObject<UClass, UScriptStruct>;
+#else
+USTRUCT(BlueprintType, NoExport)
+struct FAssetClassType {
+    UPROPERTY(EditAnywhere,
+        meta = (AllowedClasses="/Script/Engine.UClass,/Script/Engine.ScriptStruct"))
+    TObjectPtr<UObject> ContainedObject;
+
+    UPROPERTY()
+    uint64 TypeIndex;
+};
+#endif
+
+template<>
+struct DYNAMICASSETLOADER_API TBaseStructure<FAssetClassType>  {
+    static UScriptStruct* Get(); 
 };
 
 USTRUCT(BlueprintType)
@@ -40,7 +53,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly,
         meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
-    UClass *AssetClass = nullptr;
+    FAssetClassType AssetClass;
 
     UPROPERTY()
     bool bIsNative = false;

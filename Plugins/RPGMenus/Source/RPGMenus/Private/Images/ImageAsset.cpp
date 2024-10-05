@@ -3,18 +3,15 @@
 
 #include "Images/ImageAsset.h"
 
-void FImageAsset::AddReferencedObjects(FReferenceCollector &Collector) {
-    Collector.AddReferencedObject(GetObjectPtr());
+static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
+    static UPackage* CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));
+    UScriptStruct* Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
+        CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
+    check(Result != nullptr);
+    return Result;
 }
 
-FString FImageAsset::GetReferencerName() const {
-    return TEXT("FImageAsset");
-}
-
-FImageAsset::FImageAsset(FIntrusiveUnsetOptionalState State) : TVariantObject(State) {
-}
-
-FImageAsset & FImageAsset::operator=(FIntrusiveUnsetOptionalState State) {
-    TVariantObject::operator=(State);
-    return *this;
+UScriptStruct * TBaseStructure<FImageAsset>::Get() {
+    static UScriptStruct* ScriptStruct = StaticGetBaseStructureInternal(TEXT("ImageAsset"));
+    return ScriptStruct;
 }

@@ -12,15 +12,33 @@
 
 namespace UE::Ranges {
 
+    template <typename... T>
+        requires ((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+    struct TVariantObject;
+
+    template <typename T>
+    concept VariantObjectStruct = UEStruct<T> && requires(T &&Object) {
+        []<typename... A>(TVariantObject<A...>&&){}(Forward<T>(Object));
+    };
+    
+    template <typename T>
+        requires VariantObjectStruct<T>
+    class TVariantObjectCustomization;
+
     /**
      * Specialized variant type that handles a subset of UObject subclasses and interfaces.
      * @tparam T The types that are valid
      */
     template <typename... T>
         requires ((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
-    class TVariantObject {
-    public:
+    struct TVariantObject {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
+
+        /**
+         * Default construct, creates a variant object that exists within an invalid state. Only to be used as a
+         * default constructor. If passed into a TOptional it will be considered unset.
+         */
+        TVariantObject() = default;
         
         /**
          * Construct a new object from the given object
@@ -96,6 +114,14 @@ namespace UE::Ranges {
             return ContainedObject;
         }
 
+        /**
+         * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
+         * @return The raw object pointer
+         */
+        const TObjectPtr<UObject>& GetObjectPtr() const {
+            return ContainedObject;
+        }
+
     public:
         /**
          * Get a reference to the held value, will raise a fatal error if the wrong type.
@@ -125,14 +151,14 @@ namespace UE::Ranges {
         
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        static constexpr size_t GetTypeIndex() {
+        static constexpr uint64 GetTypeIndex() {
             constexpr std::array<bool, sizeof...(T) + 1> TypesMatch = { std::same_as<U, std::nullptr_t>, std::same_as<U, T>... };
             auto Find = ranges::find_if(TypesMatch, [](bool Matches) { return Matches; });
             check(Find != TypesMatch.end())
             return std::distance(TypesMatch.begin(), Find);
         }
 
-        static size_t GetTypeIndex(const UObject* Object) {
+        static uint64 GetTypeIndex(const UObject* Object) {
             auto TypeCheck = []<typename U>(const UObject* O) { return IsValidType<U>(O); };
             constexpr std::array TypeChecks = {
                 &TVariantObject::IsValidType<std::nullptr_t>,
@@ -143,7 +169,7 @@ namespace UE::Ranges {
             return std::distance(TypeChecks.begin(), Find);
         }
 
-        size_t GetTypeIndex() const {
+        uint64 GetTypeIndex() const {
             return TypeIndex;
         }
 
@@ -171,17 +197,24 @@ namespace UE::Ranges {
             TypeIndex = GetTypeIndex(Object.GetObject());
         }
 
-    protected:
-        TVariantObject() = default;
+        bool operator==(const TVariantObject& Other) const {
+            return TypeIndex == Other.TypeIndex && ContainedObject == Other.ContainedObject;
+        }
+
+        virtual bool Serialize(FArchive& Ar) {
+            Ar << ContainedObject << TypeIndex;
+            return true;
+        }
+
+    private:
         explicit TVariantObject(FIntrusiveUnsetOptionalState) : ContainedObject(nullptr) {}
 
-        virtual TVariantObject& operator=(FIntrusiveUnsetOptionalState) {
+        TVariantObject& operator=(FIntrusiveUnsetOptionalState) {
             ContainedObject = nullptr;
             TypeIndex = GetTypeIndex<std::nullptr_t>();
             return *this;
         }
-
-    private:
+        
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         static constexpr bool IsValidType(const UObject* Object) {
@@ -195,15 +228,10 @@ namespace UE::Ranges {
         }
 
         friend struct TOptional<TVariantObject>;
-            
+        friend class TVariantObjectCustomization<T>;
         
         TObjectPtr<UObject> ContainedObject;
-        size_t TypeIndex = GetTypeIndex<std::nullptr_t>();
-    };
-
-    template <typename T>
-    concept VariantObjectStruct = UEStruct<T> && requires(T &&Object) {
-        []<typename... A>(TVariantObject<A...>&&){}(Forward<T>(Object));
+        uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();
     };
 }
     
