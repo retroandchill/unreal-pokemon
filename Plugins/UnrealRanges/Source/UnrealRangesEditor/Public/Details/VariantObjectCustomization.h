@@ -41,7 +41,7 @@ namespace UE::Ranges {
 
                 check(StructData != nullptr)
                 auto AsVariant = static_cast<T*>(StructData);
-                AsVariant->TypeIndex = AsVariant->GetTypeIndex(AsVariant->ContainedObject);
+                AsVariant->TypeIndex = AsVariant->GetTypeIndex(AsVariant->ContainedObject).GetValue();
             }));
         }
         

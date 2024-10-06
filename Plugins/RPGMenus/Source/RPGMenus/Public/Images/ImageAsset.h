@@ -37,6 +37,9 @@ class RPGMENUS_API UImageAssetHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
 public:
+    UFUNCTION(BlueprintCallable, Category = Variants, meta = (ExpandEnumAsExecs = "ReturnValue"))
+    static EVariantFindResult MakeImageAsset(UObject* Object, FImageAsset& AsImageAsset);
+    
     UFUNCTION(BlueprintPure, DisplayName = "Make Image Asset (Texture)", Category = Variants, meta = (BlueprintAutocast))
     static FImageAsset MakeImageAsset_Texture(UTexture* Texture);
     

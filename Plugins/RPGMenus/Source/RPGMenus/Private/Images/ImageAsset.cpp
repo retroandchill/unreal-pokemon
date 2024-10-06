@@ -17,6 +17,15 @@ UScriptStruct * TBaseStructure<FImageAsset>::Get() {
     return ScriptStruct;
 }
 
+EVariantFindResult UImageAssetHelpers::MakeImageAsset(UObject *Object, FImageAsset &AsImageAsset) {
+    if (!FImageAsset::GetTypeIndex(Object).IsSet()) {
+        return EVariantFindResult::CastFailed;
+    }
+
+    AsImageAsset.Set(Object);
+    return EVariantFindResult::CastSucceeded;
+}
+
 FImageAsset UImageAssetHelpers::MakeImageAsset_Texture(UTexture *Texture) {
     return FImageAsset(Texture);
 }

@@ -14,7 +14,7 @@
 
 UENUM()
 enum class EVariantFindResult : uint8 {
-    CastSucceeded UMETA(DisplayName = "execute"),
+    CastSucceeded UMETA(DisplayName = "then"),
     CastFailed
 };
 
@@ -81,14 +81,14 @@ namespace UE::Ranges {
          * Attempt to construct a new object from the given object. will raise a fatal error if the wrong type.
          * @param Object The object to construct from
          */
-        explicit TVariantObject(UObject* Object) : ContainedObject(Object), TypeIndex(GetTypeIndex(Object)) {
+        explicit TVariantObject(UObject* Object) : ContainedObject(Object), TypeIndex(GetTypeIndex(Object).GetValue()) {
         }
 
         /**
          * Attempt to construct a new object from the given interface, will raise a fatal error if the wrong type.
          * @param Object The inteface to construct from
          */
-        explicit TVariantObject(const FScriptInterface& Object) : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject())) {
+        explicit TVariantObject(const FScriptInterface& Object) : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue()) {
         }
 
         /**
@@ -183,24 +183,18 @@ namespace UE::Ranges {
             return std::distance(TypesMatch.begin(), Find);
         }
 
-        static uint64 GetTypeIndex(const UObject* Object) {
+        static TOptional<uint64> GetTypeIndex(const UObject* Object) {
             auto TypeCheck = []<typename U>(const UObject* O) { return IsValidType<U>(O); };
             constexpr std::array TypeChecks = {
                 &TVariantObject::IsValidType<std::nullptr_t>,
                 &TVariantObject::IsValidType<T>...
             };
             auto Find = ranges::find_if(TypeChecks, [Object](auto&& Callback) { return Callback(Object); });
-            check(Find != TypeChecks.end())
-            return std::distance(TypeChecks.begin(), Find);
+            return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
         uint64 GetTypeIndex() const {
             return TypeIndex;
-        }
-
-        static const auto &GetTypeClasses() {
-            static std::array Values = { nullptr, GetUnrealClassType<T>()... };
-            return Values;
         }
 
         template <typename U>
@@ -219,12 +213,12 @@ namespace UE::Ranges {
 
         void Set(UObject* Object) {
             ContainedObject = Object;
-            TypeIndex = GetTypeIndex(Object);
+            TypeIndex = GetTypeIndex(Object).GetValue();
         }
 
         void Set(const FScriptInterface& Object) {
             ContainedObject = Object.GetObject();
-            TypeIndex = GetTypeIndex(Object.GetObject());
+            TypeIndex = GetTypeIndex(Object.GetObject()).GetValue();
         }
 
     private:
