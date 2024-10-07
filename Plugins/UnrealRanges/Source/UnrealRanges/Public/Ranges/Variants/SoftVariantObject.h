@@ -59,7 +59,7 @@ namespace UE::Ranges {
          * @return the asset object represented by this asset ptr
          */
         template <typename U>
-            requires (T::template IsValidType<T>())
+            requires (T::template StaticIsValidType<T>())
         TOptional<U &> LoadSynchronous() {
             return Optionals::OfNullable(Cast<U>(Ptr.LoadSynchronous()));
         }
@@ -94,7 +94,7 @@ namespace UE::Ranges {
         }
 
     private:
-        friend class TOptional<TSoftVariantObject>;
+        friend struct TOptional<TSoftVariantObject>;
 
         explicit TSoftVariantObject(FIntrusiveUnsetOptionalState) {}
 

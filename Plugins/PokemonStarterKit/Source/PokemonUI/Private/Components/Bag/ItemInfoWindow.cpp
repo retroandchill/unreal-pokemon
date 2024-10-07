@@ -8,7 +8,7 @@
 #include "Utilities/WidgetUtilities.h"
 
 void UItemInfoWindow::Refresh_Implementation(const FItem &Item, int32 Quantity) {
-    auto ItemGraphic = Pokemon::Assets::Graphics::ItemIcons.LoadAssetAsync(Item.ID).GetValue().LoadSynchronous();
+    auto ItemGraphic = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(Item.ID).GetPtrOrNull();
     ItemIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     UWidgetUtilities::SetBrushFromAsset(ItemIcon, ItemGraphic, true);
     ItemDescription->SetText(Item.Description);

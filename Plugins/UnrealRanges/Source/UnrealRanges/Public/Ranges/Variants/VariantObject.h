@@ -36,7 +36,7 @@ namespace UE::Ranges {
     concept VariantObject = Detail::TIsVariantObject<T>::value;
 
     template <typename T>
-    concept VariantObjectStruct = UEStruct<T> && VariantObject;
+    concept VariantObjectStruct = UEStruct<T> && VariantObject<T>;
     
     template <typename T>
         requires VariantObjectStruct<T>
@@ -201,8 +201,8 @@ namespace UE::Ranges {
         }
 
         template <typename U>
-        static constexpr bool IsValidType() {
-            return(std::same_as<T, U> || ...);
+        static constexpr bool StaticIsValidType() {
+            return (std::same_as<T, U> || ...);
         }
 
         static bool IsValidType(const UObject* Object) {
@@ -294,4 +294,4 @@ namespace UE::Ranges {
         template <typename... T> \
             requires std::constructible_from<TSoftVariantObject, T...> \
         explicit(std::same_as<TSoftVariantObject, std::remove_reference_t<T>...>) FSoft##StructName(T&&... Args) : TSoftVariantObject(Forward<T>(Args)...) {} \
-    }
+    };

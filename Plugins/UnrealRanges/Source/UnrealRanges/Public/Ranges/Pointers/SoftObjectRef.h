@@ -85,7 +85,7 @@ struct TSoftObjectRef {
     }
 
 private:
-    friend class TOptional<TSoftObjectRef>;
+    friend struct TOptional<TSoftObjectRef>;
 
     explicit TSoftObjectRef(FIntrusiveUnsetOptionalState) {}
 
@@ -98,13 +98,21 @@ private:
 };
 
 namespace UE::Optionals {
-    template <typename T, typename P>
-        requires std::is_same_v<std::remove_cvref_t<P>, TSoftObjectPtr<T>>
-    constexpr TOptional<TSoftObjectRef<T>> OfNullable(P&& Ptr) {
+    template <typename T>
+    constexpr TOptional<TSoftObjectRef<T>> OfNullable(const TSoftObjectPtr<T>& Ptr) {
         if (Ptr.IsNull()) {
             return TOptional<TSoftObjectRef<T>>();
         }
         
-        return TOptional<TSoftObjectRef<T>>(Forward<P>(Ptr));
+        return TOptional<TSoftObjectRef<T>>(TSoftObjectRef<T>(Ptr));
+    }
+    
+    template <typename T>
+    constexpr TOptional<TSoftObjectRef<T>> OfNullable(TSoftObjectPtr<T>&& Ptr) {
+        if (Ptr.IsNull()) {
+            return TOptional<TSoftObjectRef<T>>();
+        }
+        
+        return TOptional<TSoftObjectRef<T>>(TSoftObjectRef<T>(MoveTemp(Ptr)));
     }
 }
