@@ -12,6 +12,7 @@
 #include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/Pointers/SoftObjectRef.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 #include "Templates/NonNullSubclassOf.h"
@@ -69,6 +70,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
             return Asset;
         }
     }
+
+    static FString CreateSearchKey(FStringView BasePackageName, FStringView AssetName);
         
     
     /**
@@ -80,16 +83,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<T &> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
-        FStringView Prefix;
-        if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
-            int32 PrefixLength = CharIndex + 1;
-            Prefix = AssetName.SubStr(0, PrefixLength);
-            AssetName = AssetName.RightChop(PrefixLength);
-        }
-
-        auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
-        return AttemptLoad<T>(SearchKey);
+    static TOptional<T &> FindAssetByName(FStringView BasePackageName, FStringView AssetName) {
+        return AttemptLoad<T>(CreateSearchKey(BasePackageName, AssetName));
     }
 
     /**
@@ -101,28 +96,20 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<T &> LookupAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
+    static TOptional<T &> FindAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
+        return FindAssetByName<T>(BasePackageName.Path, AssetName);
+    }
+
+    template <typename T = UObject>
+        requires std::is_base_of_v<UObject, T>
+    static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
+        return UE::Optionals::OfNullable<T>(TSoftObjectPtr<T>(CreateSearchKey(BasePackageName, AssetName)));
+    }
+
+    template <typename T = UObject>
+        requires std::is_base_of_v<UObject, T>
+    static TOptional<TSoftObjectRef<T>> LookupAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
         return LookupAssetByName<T>(BasePackageName.Path, AssetName);
-    }
-
-    template <typename T = UObject>
-        requires std::is_base_of_v<UObject, T>
-    static TSharedRef<UE::Assets::TAsyncLoadHandle<T>> LookupAssetByNameAsync(FStringView BasePackageName, FStringView AssetName) {
-        FStringView Prefix;
-        if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
-            int32 PrefixLength = CharIndex + 1;
-            Prefix = AssetName.SubStr(0, PrefixLength);
-            AssetName = AssetName.RightChop(PrefixLength);
-        }
-
-        auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
-        return UE::Assets::TAsyncLoadHandle<T>::Create(SearchKey);
-    }
-
-    template <typename T = UObject>
-        requires std::is_base_of_v<UObject, T>
-    static TSharedRef<UE::Assets::TAsyncLoadHandle<T>> LookupAssetByNameAsync(const FDirectoryPath &BasePackageName, FStringView AssetName) {
-        return LookupAssetByNameAsync<T>(BasePackageName.Path, AssetName);
     }
 
     /**
@@ -137,7 +124,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
                       DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
                       ExpandEnumAsExecs = "ReturnValue"))
-    static EAssetLoadResult LookupAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
+    static EAssetLoadResult FindAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
                                               const FString &AssetName, UObject *&FoundAsset);
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
@@ -225,7 +212,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         // clang-format off
         return Keys |
                UE::Ranges::Map([&BasePackageName](ElementType Key) {
-                   return LookupAssetByName<T>(BasePackageName, Key);
+                   return FindAssetByName<T>(BasePackageName, Key);
                }) |
                UE::Ranges::Filter([](TOptional<T&> Optional) { return Optional.IsSet(); }) |
                UE::Ranges::FindFirst |
@@ -234,6 +221,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
                });
         // clang-format on
     }
+    
 
     /**
      * Fetch the first matching asset for the provided keys
@@ -263,6 +251,24 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
                       ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult ResolveAsset(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                          const TArray<FString> &Keys, UObject *&FoundAsset);
+
+    template <typename T = UObject, typename R>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
+                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+    static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(FStringView BasePackageName, R &&Keys) {
+        using ElementType = UE::Ranges::TRangeCommonReference<R>;
+        // clang-format off
+        return Keys |
+               UE::Ranges::Map([&BasePackageName](ElementType Key) {
+                   return LookupAssetByName<T>(BasePackageName, Key);
+               }) |
+               UE::Ranges::Filter([](TOptional<TSoftObjectRef<T>> Optional) { return !Optional.IsSet(); }) |
+               UE::Ranges::FindFirst |
+               UE::Optionals::FlatMap([](const TOptional<TSoftObjectRef<T>> Optional) {
+                   return Optional;
+               });
+        // clang-format on
+    }
 
     /**
      * Fetch the first matching asset for the provided keys

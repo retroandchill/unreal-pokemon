@@ -5,9 +5,20 @@
 #include "Assets/AssetUtilities.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 
-EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
-                                                 const FString &AssetName, UObject *&FoundAsset) {
-    FoundAsset = LookupAssetByName(BasePackageName, AssetName) |
+FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView AssetName) {
+    FStringView Prefix;
+    if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
+        int32 PrefixLength = CharIndex + 1;
+        Prefix = AssetName.SubStr(0, PrefixLength);
+        AssetName = AssetName.RightChop(PrefixLength);
+    }
+
+    return FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
+}
+
+EAssetLoadResult UAssetLoader::FindAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
+                                               const FString &AssetName, UObject *&FoundAsset) {
+    FoundAsset = FindAssetByName(BasePackageName, AssetName) |
                  UE::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
                  UE::Optionals::GetPtrOrNull;
     return FoundAsset != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
@@ -17,7 +28,7 @@ EAssetLoadResult UAssetLoader::LoadDynamicAsset(FName Identifier, const FString 
     auto Settings = GetDefault<UAssetLoadingSettings>();
     auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
     auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
-    return LookupAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory, FullName, FoundAsset);
+    return FindAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory, FullName, FoundAsset);
 }
 
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,

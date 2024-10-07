@@ -17,6 +17,11 @@ UScriptStruct * TBaseStructure<FImageAsset>::Get() {
     return ScriptStruct;
 }
 
+UScriptStruct * TBaseStructure<FSoftImageAsset>::Get() {
+    static UScriptStruct* ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftImageAsset"));
+    return ScriptStruct;
+}
+
 EVariantFindResult UImageAssetHelpers::MakeImageAsset(UObject *Object, FImageAsset &AsImageAsset) {
     if (!FImageAsset::GetTypeIndex(Object).IsSet()) {
         return EVariantFindResult::CastFailed;

@@ -128,6 +128,10 @@ namespace UE::Ranges {
             { D::CreateWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...) } -> std::same_as<std::remove_cvref_t<D>>;
         };
 
+    template <typename D, typename... A>
+    concept CanBindDelegate = CanBindStatic<D, A...> || CanBindLambda<D, A...> || CanBindRaw<D, A...> ||
+        CanBindUObject<D, A...> || CanBindWeakLambda<D, A...> || CanBindSP<D, A...> || CanBindSPLambda<D, A...>;
+
     template <typename D, typename F, typename... A>
     concept CanAddStatic = NativeMulitcastDelegate<D> && requires(D&& Delegate, F&& Functor, A&&... Args) {
         { Delegate.AddStatic(Forward<F>(Functor), Forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;

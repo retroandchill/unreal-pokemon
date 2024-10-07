@@ -6,6 +6,7 @@
 #include "Engine/DeveloperSettings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Variants/VariantObject.h"
+#include "Ranges/Variants/SoftVariantObject.h"
 
 #include "AssetLoadingSettings.generated.h"
 
@@ -23,7 +24,7 @@ namespace UE::Assets {
 } // namespace UE::Assets
 
 #if CPP
-UE_DECLARE_VARIANT_OBJECT_STRUCT(FAssetClassType, UClass, UScriptStruct);
+UE_DECLARE_VARIANT_OBJECT_STRUCT(AssetClassType, UClass, UScriptStruct);
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FAssetClassType {
@@ -34,10 +35,22 @@ struct FAssetClassType {
     UPROPERTY()
     uint64 TypeIndex;
 };
+
+USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
+struct FSoftAssetClassType {
+    UPROPERTY(EditAnywhere,
+        meta = (AllowedClasses="/Script/Engine.UClass,/Script/Engine.ScriptStruct"))
+    TSoftObjectPtr<UObject> Ptr;
+};
 #endif
 
 template<>
 struct DYNAMICASSETLOADER_API TBaseStructure<FAssetClassType>  {
+    static UScriptStruct* Get(); 
+};
+
+template<>
+struct DYNAMICASSETLOADER_API TBaseStructure<FSoftAssetClassType>  {
     static UScriptStruct* Get(); 
 };
 

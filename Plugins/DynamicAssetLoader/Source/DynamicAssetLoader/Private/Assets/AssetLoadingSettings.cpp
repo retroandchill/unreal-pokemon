@@ -14,6 +14,11 @@ UScriptStruct * TBaseStructure<FAssetClassType>::Get() {
     return ScriptStruct;
 }
 
+UScriptStruct * TBaseStructure<FSoftAssetClassType>::Get() {
+    static UScriptStruct* ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftAssetClassType"));
+    return ScriptStruct;
+}
+
 FAssetLoadingEntry::FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass)
     : RootDirectory(RootDirectory), AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
       AssetClass(AssetClass), bIsNative(true) {

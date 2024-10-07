@@ -6,8 +6,6 @@
 #include "AssetLoader.h"
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
-#include "AsyncLoadHandle.h"
-#include "Engine/AssetManager.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Views/Map.h"
@@ -52,9 +50,9 @@ namespace UE::Assets {
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
             if constexpr (std::is_base_of_v<UObject, T>) {
-                return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName);
+                return UAssetLoader::FindAssetByName<U>(AssetClassData.RootDirectory, FullName);
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
-                return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
+                return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
                     Optionals::Map([](UObject& Object) { return T(&Object); });
             } else {
                 static_assert(false, "Invalid state");
@@ -74,17 +72,25 @@ namespace UE::Assets {
 
         template <typename U = T>
             requires ValidTemplateParam<U>
-        auto LoadAssetAsync(FStringView AssetName) const  {
+        auto LookupAsset(FStringView AssetName) const  {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
-            return UAssetLoader::LookupAssetByNameAsync(AssetClassData.RootDirectory, FullName);
+
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
+            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
+                    Optionals::Map([](const TSoftObjectRef<> &Object) { return T::SoftPtrType(&Object); });
+            } else {
+                static_assert(false, "Invalid state");
+            }
         }
 
         template <typename U = T>
             requires ValidTemplateParam<U>
-        auto LoadAssetAsync(FName AssetName) const {
-            return LoadAssetAsync<U>(AssetName.ToString());
+        auto LookupAsset(FName AssetName) const {
+            return LookupAsset<U>(AssetName.ToString());
         }
 
 
@@ -113,12 +119,47 @@ namespace UE::Assets {
         }
 
         template <typename U = T, typename R>
+            requires ValidTemplateParam<U> && Ranges::Range<R> &&
+                     std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+        auto ResolveSoftAsset(R &&Assets) const {
+            using ElementType = Ranges::TRangeCommonReference<R>;
+            auto Settings = GetDefault<UAssetLoadingSettings>();
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
+            auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
+            // clang-format off
+            auto FullNames = Assets |
+                             Ranges::Map([&Prefix](ElementType AssetName) {
+                                 return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
+                             });
+            // clang-format on
+            if constexpr (std::is_base_of_v<UObject, T>) {
+            return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
+            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
+                    Optionals::Map([](const TSoftObjectRef<>& Object) { return T(&Object); });
+            } else {
+                static_assert(false, "Invalid state");
+            }
+        }
+
+        template <typename U = T, typename R>
             requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
         auto LoadAssets(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
                    Ranges::Map([this](ElementType Value) { return LoadAsset<U>(Value); }) |
+                   Ranges::ToArray;
+            // clang-format on
+        }
+
+        template <typename U = T, typename R>
+            requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+        auto LookupAssets(R &&Assets) const {
+            using ElementType = Ranges::TRangeCommonReference<R>;
+            // clang-format off
+            return Assets |
+                   Ranges::Map([this](ElementType Value) { return LookupAsset<U>(Value); }) |
                    Ranges::ToArray;
             // clang-format on
         }

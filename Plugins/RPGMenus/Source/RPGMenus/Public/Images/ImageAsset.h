@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Variants/VariantObject.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 #include "UObject/Object.h"
@@ -10,7 +11,7 @@
 #include "ImageAsset.generated.h"
 
 #if CPP
-UE_DECLARE_VARIANT_OBJECT_STRUCT(FImageAsset, UTexture, UMaterialInterface, ISlateTextureAtlasInterface);
+UE_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture, UMaterialInterface, ISlateTextureAtlasInterface);
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FImageAsset {
@@ -22,10 +23,23 @@ struct FImageAsset {
     UPROPERTY()
     uint64 TypeIndex;
 };
+
+USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
+struct FSoftImageAsset {
+    UPROPERTY(EditAnywhere,
+        meta = (AllowedClasses="/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface",
+            DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
+    TSoftObjectPtr<UObject> Ptr;
+};
 #endif
 
 template<>
 struct RPGMENUS_API TBaseStructure<FImageAsset>  {
+    static UScriptStruct* Get(); 
+};
+
+template<>
+struct RPGMENUS_API TBaseStructure<FSoftImageAsset>  {
     static UScriptStruct* Get(); 
 };
 

@@ -33,7 +33,10 @@ namespace UE::Ranges {
     }
 
     template <typename T>
-    concept VariantObjectStruct = UEStruct<T> && Detail::TIsVariantObject<T>::value;
+    concept VariantObject = Detail::TIsVariantObject<T>::value;
+
+    template <typename T>
+    concept VariantObjectStruct = UEStruct<T> && VariantObject;
     
     template <typename T>
         requires VariantObjectStruct<T>
@@ -197,6 +200,11 @@ namespace UE::Ranges {
             return TypeIndex;
         }
 
+        template <typename U>
+        static constexpr bool IsValidType() {
+            return(std::same_as<T, U> || ...);
+        }
+
         static bool IsValidType(const UObject* Object) {
             return GetTypeIndex(Object).IsSet();
         }
@@ -271,11 +279,19 @@ namespace UE::Ranges {
 }
 
 #define UE_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...) \
-    struct StructName : UE::Ranges::TVariantObject<__VA_ARGS__> { \
-        StructName() = default; \
+    struct FSoft##StructName; \
+    struct F##StructName : UE::Ranges::TVariantObject<__VA_ARGS__> { \
+        using SoftPtrType = FSoft##StructName; \
+        F##StructName() = default; \
         template <typename... T> \
             requires std::constructible_from<TVariantObject, T...> \
-        explicit(std::same_as<TVariantObject, std::remove_reference_t<T>...>) StructName(T&&... Args) : TVariantObject(Forward<T>(Args)...) {} \
+        explicit(std::same_as<TVariantObject, std::remove_reference_t<T>...>) F##StructName(T&&... Args) : TVariantObject(Forward<T>(Args)...) {} \
     }; \
     template <> \
-    struct UE::Ranges::Detail::TIsVariantObject<StructName> : std::true_type {}
+    struct UE::Ranges::Detail::TIsVariantObject<F##StructName> : std::true_type {}; \
+    struct FSoft##StructName : UE::Ranges::TSoftVariantObject<F##StructName> { \
+        FSoft##StructName() = default; \
+        template <typename... T> \
+            requires std::constructible_from<TSoftVariantObject, T...> \
+        explicit(std::same_as<TSoftVariantObject, std::remove_reference_t<T>...>) FSoft##StructName(T&&... Args) : TSoftVariantObject(Forward<T>(Args)...) {} \
+    }
