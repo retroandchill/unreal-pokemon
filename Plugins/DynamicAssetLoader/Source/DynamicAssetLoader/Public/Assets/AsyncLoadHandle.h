@@ -59,7 +59,8 @@ namespace UE::Assets {
             requires std::constructible_from<FSoftObjectPath, A...>
         TSharedPtr<FStreamableHandle> CreateHandle(A&&... Args) {
             auto &StreamableManager = UAssetManager::GetStreamableManager();
-            return StreamableManager.RequestAsyncLoad(FSoftObjectPath(Forward(Args)...));
+            return StreamableManager.RequestAsyncLoad(FSoftObjectPath(Forward(Args)...),
+                Ranges::CreateDelegate<FStreamableDelegate>(this->AsShared(), &TAsyncLoadHandle::OnAssetLoaded));
         }
 
         void OnAssetLoaded() {
