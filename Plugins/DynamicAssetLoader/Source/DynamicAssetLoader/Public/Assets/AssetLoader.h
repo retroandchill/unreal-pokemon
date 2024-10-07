@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AsyncLoadHandle.h"
 #include "TextureCompiler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Ranges/Algorithm/FindFirst.h"
@@ -102,6 +103,26 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T>
     static TOptional<T &> LookupAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
         return LookupAssetByName<T>(BasePackageName.Path, AssetName);
+    }
+
+    template <typename T = UObject>
+        requires std::is_base_of_v<UObject, T>
+    static TSharedRef<UE::Assets::TAsyncLoadHandle<T>> LookupAssetByNameAsync(FStringView BasePackageName, FStringView AssetName) {
+        FStringView Prefix;
+        if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
+            int32 PrefixLength = CharIndex + 1;
+            Prefix = AssetName.SubStr(0, PrefixLength);
+            AssetName = AssetName.RightChop(PrefixLength);
+        }
+
+        auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
+        return MakeShared<UE::Assets::TAsyncLoadHandle<T>>(SearchKey);
+    }
+
+    template <typename T = UObject>
+        requires std::is_base_of_v<UObject, T>
+    static TSharedRef<UE::Assets::TAsyncLoadHandle<T>> LookupAssetByNameAsync(const FDirectoryPath &BasePackageName, FStringView AssetName) {
+        return LookupAssetByNameAsync<T>(BasePackageName.Path, AssetName);
     }
 
     /**

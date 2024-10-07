@@ -197,6 +197,10 @@ namespace UE::Ranges {
             return TypeIndex;
         }
 
+        static bool IsValidType(const UObject* Object) {
+            return GetTypeIndex(Object).IsSet();
+        }
+
         template <typename U>
             requires UObjectPointer<U> && (std::same_as<T, U> || ...)
         void Set(U* Object) {

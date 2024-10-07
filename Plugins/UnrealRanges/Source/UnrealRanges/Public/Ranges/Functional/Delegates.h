@@ -4,8 +4,49 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Delegates.h"
+#include "Ranges/Concepts/UObjectPointer.h"
 
 namespace UE::Ranges {
+    template <typename D, typename F, typename... A>
+        requires CanBindStatic<D, F, A...> || CanBindLambda<D, F, A...>
+    D CreateDelegate(F&& Functor, A&&... Args) {
+        if constexpr (CanBindStatic<D, F, A...>) {
+            return D::CreateStatic(Forward<F>(Functor), Forward<A>(Args)...);
+        } else {
+            return D::CreateLambda(Forward<A>(Functor), Forward<A>(Args)...);
+        }
+    }
+
+    template <typename D, typename T, typename F, typename... A>
+        requires CanBindUObject<D, T, F, A...> || CanBindWeakLambda<D, T, F, A...> ||
+            CanBindRaw<D, T, F, A...>
+    D CreateDelegate(T* Object, F&& Functor, A&&... Args) {
+        if constexpr (CanBindUObject<D, T, F, A...>) {
+            return D::CreateUObject(Object, Forward<F>(Functor), Forward<A>(Args)...);
+        } else if constexpr (CanBindWeakLambda<D, T, F, A...>) {
+            return D::CreateWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+        } else {
+            return D::CreateRaw(Object, Forward<F>(Functor), Forward<A>(Args)...);
+        }
+    }
+
+    template <typename D, typename T, ESPMode M, typename F, typename... A>
+        requires CanBindSP<D, T, M, F, A...> || CanBindSPLambda<D, T, M, F, A...>
+    D CreateDelegate(const TSharedRef<T, M>& Object, F&& Functor, A&&... Args) {
+        if constexpr (CanBindSP<D, T, M, F, A...>) {
+            return D::CreateSP(Object, Forward<F>(Functor), Forward<A>(Args)...);
+        } else {
+            return D::CreateSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+        }
+    }
+
+    template <typename D, typename T, typename... A>
+        requires NativeUnicastDelegate<D> && UObjectPointer<T>
+    D CreateDelegate(T&& Object, FName FunctionName, A&&... Args) {
+        return D::CreateUFunction(Forward<T>(Object), FunctionName, Forward<A>(Args)...);
+    }
+
+    
     template <typename D>
         requires UnicastDelegate<D>
     void BindToDelegate(D& Delegate, D&& Binding) {

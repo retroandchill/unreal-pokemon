@@ -1,4 +1,4 @@
-﻿// "Unreal Pokémon" created by Retro & Chill.
+// "Unreal Pokémon" created by Retro & Chill.
 
 #pragma once
 
@@ -6,6 +6,8 @@
 #include "AssetLoader.h"
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
+#include "AsyncLoadHandle.h"
+#include "Engine/AssetManager.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Views/Map.h"
@@ -69,6 +71,22 @@ namespace UE::Assets {
         auto LoadAsset(FName AssetName) const {
             return LoadAsset<U>(AssetName.ToString());
         }
+
+        template <typename U = T>
+            requires ValidTemplateParam<U>
+        auto LoadAssetAsync(FStringView AssetName) const  {
+            auto Settings = GetDefault<UAssetLoadingSettings>();
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
+            auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
+            return UAssetLoader::LookupAssetByNameAsync(AssetClassData.RootDirectory, FullName);
+        }
+
+        template <typename U = T>
+            requires ValidTemplateParam<U>
+        auto LoadAssetAsync(FName AssetName) const {
+            return LoadAssetAsync<U>(AssetName.ToString());
+        }
+
 
         template <typename U = T, typename R>
             requires ValidTemplateParam<U> && Ranges::Range<R> &&
