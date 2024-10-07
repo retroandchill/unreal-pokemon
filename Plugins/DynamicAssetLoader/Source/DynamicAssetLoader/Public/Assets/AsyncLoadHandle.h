@@ -15,15 +15,27 @@ namespace UE::Assets {
      */
     template <typename T>
         requires AssetClassType<T>
-    class TAsyncLoadHandle : public TSharedFromThis<TAsyncLoadHandle<T>> {
+    class TAsyncLoadHandle {
     public:
         using AssetType = std::conditional_t<Ranges::VariantObjectStruct<T>, T, T&>;
         DECLARE_MULTICAST_DELEGATE_OneParam(FOnAssetLoaded, TOptional<AssetType>)
+
+    private:
+        struct FPrivateToken { explicit FPrivateToken() = default; };
+
+    public:
+        explicit TAsyncLoadHandle(FPrivateToken) {}
         
         template <typename... A>
             requires std::constructible_from<FSoftObjectPath, A...>
-        explicit TAsyncLoadHandle(A&&... Args) : Handle(CreateHandle(Forward<A>(Args)...).ToSharedRef()) {}
-
+        static TSharedRef<TAsyncLoadHandle> Create(A&&... Args) {
+            auto Ret = MakeShared<TAsyncLoadHandle>(FPrivateToken{});
+            auto &StreamableManager = UAssetManager::GetStreamableManager();
+            Ret->Handle = StreamableManager.RequestAsyncLoad(FSoftObjectPath(Forward<A>(Args)...),
+                FStreamableDelegate::CreateSP(Ret, &TAsyncLoadHandle::OnAssetLoaded));
+            return Ret;
+        }
+        
         bool IsLoaded() const {
             return Handle->HasLoadCompleted();
         }
@@ -55,14 +67,6 @@ namespace UE::Assets {
         
         
     private:
-        template <typename... A>
-            requires std::constructible_from<FSoftObjectPath, A...>
-        TSharedPtr<FStreamableHandle> CreateHandle(A&&... Args) {
-            auto &StreamableManager = UAssetManager::GetStreamableManager();
-            return StreamableManager.RequestAsyncLoad(FSoftObjectPath(Forward(Args)...),
-                Ranges::CreateDelegate<FStreamableDelegate>(this->AsShared(), &TAsyncLoadHandle::OnAssetLoaded));
-        }
-
         void OnAssetLoaded() {
             if constexpr (Ranges::VariantObjectStruct<T>) {
                 // clang-format off
@@ -78,7 +82,7 @@ namespace UE::Assets {
             OnLoadCompleteDelegate.Broadcast(Asset);
         }
         
-        TSharedRef<FStreamableHandle> Handle;
+        TSharedPtr<FStreamableHandle> Handle;
         TOptional<AssetType> Asset;
         FOnAssetLoaded OnLoadCompleteDelegate;
     };

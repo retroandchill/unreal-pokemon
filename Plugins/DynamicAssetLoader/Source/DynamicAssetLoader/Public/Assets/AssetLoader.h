@@ -116,7 +116,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         }
 
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
-        return MakeShared<UE::Assets::TAsyncLoadHandle<T>>(SearchKey);
+        return UE::Assets::TAsyncLoadHandle<T>::Create(SearchKey);
     }
 
     template <typename T = UObject>

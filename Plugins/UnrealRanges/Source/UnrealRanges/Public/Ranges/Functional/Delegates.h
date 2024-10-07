@@ -13,7 +13,7 @@ namespace UE::Ranges {
         if constexpr (CanBindStatic<D, F, A...>) {
             return D::CreateStatic(Forward<F>(Functor), Forward<A>(Args)...);
         } else {
-            return D::CreateLambda(Forward<A>(Functor), Forward<A>(Args)...);
+            return D::CreateLambda(Forward<F>(Functor), Forward<A>(Args)...);
         }
     }
 
@@ -104,7 +104,7 @@ namespace UE::Ranges {
         if constexpr (CanAddStatic<D, F, A...>) {
             return Delegate.AddStatic(Forward<F>(Functor), Forward<A>(Args)...);
         } else {
-            return Delegate.AddLambda(Forward<A>(Functor), Forward<A>(Args)...);
+            return Delegate.AddLambda(Forward<F>(Functor), Forward<A>(Args)...);
         }
     }
 
