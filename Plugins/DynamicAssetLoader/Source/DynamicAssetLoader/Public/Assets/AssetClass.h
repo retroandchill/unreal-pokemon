@@ -132,9 +132,9 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            if constexpr (std::is_base_of_v<UObject, T>) {
-            return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
-            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+            if constexpr (std::is_base_of_v<UObject, U>) {
+                return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
+            } else if constexpr (Ranges::VariantObjectStruct<U>) {
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
                     Optionals::Map([](const TSoftObjectRef<>& Object) { return T(&Object); });
             } else {

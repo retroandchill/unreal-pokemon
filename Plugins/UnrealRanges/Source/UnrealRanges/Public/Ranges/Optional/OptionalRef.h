@@ -66,7 +66,7 @@ struct TOptional<T &> {
      * @param DefaultValue The default to substitute for an empty optional.
      * @return The retrieved value
      */
-    T& Get(T& DefaultValue) {
+    T& Get(T& DefaultValue) const requires (!std::is_const_v<T>) {
         return Data != nullptr ? *Data : DefaultValue;
     }
 
@@ -83,15 +83,7 @@ struct TOptional<T &> {
      * Get a nullable pointer for the optional.
      * @return The retrieved value
      */
-    T *GetPtrOrNull() {
-        return Data;
-    }
-
-    /**
-     * Get a nullable pointer for the optional.
-     * @return The retrieved value
-     */
-    const T *GetPtrOrNull() const {
+    T *GetPtrOrNull() const {
         return Data;
     }
 
@@ -99,16 +91,7 @@ struct TOptional<T &> {
      * Get a reference to the underlying data.
      * @return The retrieved value
      */
-    T &GetValue() {
-        check(Data != nullptr)
-        return *Data;
-    }
-
-    /**
-     * Get a reference to the underlying data.
-     * @return The retrieved value
-     */
-    const T &GetValue() const {
+    T &GetValue() const {
         check(Data != nullptr)
         return *Data;
     }

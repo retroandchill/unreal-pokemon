@@ -14,6 +14,7 @@ template <typename T = UObject>
     requires std::is_base_of_v<UObject, T>
 struct TSoftObjectRef {
     static constexpr bool bHasIntrusiveUnsetOptionalState = true;
+	using IntrusiveUnsetOptionalStateType = TSoftObjectRef;
     
     template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...>
@@ -61,7 +62,7 @@ struct TSoftObjectRef {
         return UE::Optionals::OfNullable(Ptr.LoadSynchronous());
     }
 
-    UE::Ranges::TAsyncLoadHandle<T> LoadAsync() const {
+    TSharedRef<UE::Ranges::TAsyncLoadHandle<T>> LoadAsync() const {
         return UE::Ranges::TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
     }
 
@@ -87,6 +88,10 @@ struct TSoftObjectRef {
      */
     FString ToString() const {
         return Ptr.ToString();
+    }
+
+    bool operator==(FIntrusiveUnsetOptionalState) const {
+        return Ptr.IsNull();
     }
 
 private:

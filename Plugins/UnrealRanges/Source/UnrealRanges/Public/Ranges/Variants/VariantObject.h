@@ -52,6 +52,7 @@ namespace UE::Ranges {
         requires ((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
     struct TVariantObject {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
+	    using IntrusiveUnsetOptionalStateType = TVariantObject;
 
         /**
          * Default construct, creates a variant object that exists within an invalid state,

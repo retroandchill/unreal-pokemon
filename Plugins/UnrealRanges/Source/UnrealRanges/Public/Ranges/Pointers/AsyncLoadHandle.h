@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
-#include "Ranges/Variants/VariantObjectStruct.h"
+#include "Ranges/Variants/VariantObject.h"
+#include "Ranges/Functional/Delegates.h"
 #include <mutex>
 
 namespace UE::Ranges {
@@ -29,7 +30,7 @@ namespace UE::Ranges {
         static TSharedRef<TAsyncLoadHandle> Create(const FSoftObjectPath &ObjectPath) {
             auto Handle = MakeShared<TAsyncLoadHandle>(FPrivateToken(), ObjectPath);
             Handle->Handle->BindCompleteDelegate(FStreamableDelegate::CreateSP(Handle, &TAsyncLoadHandle::SetResult));
-            Handle->Handle->StartStreaming();
+            Handle->Handle->StartStalledHandle();
             return Handle;
         }
 
@@ -47,25 +48,25 @@ namespace UE::Ranges {
 
         template <typename F, typename... A>
             requires std::invocable<F, const TOptional<ResultType>&, A...> &&
-                CanBindDelegate<FAsyncLoadCompleteDelegate, F, A...>
+                CanBindDelegate<typename FAsyncLoadCompleteDelegate::FDelegate, F, A...>
         void OnLoadComplete(F&& Functor, A&&... Args) {
             std::scoped_lock Lock(UpdateMutex);
             if (IsLoaded()) {
                 std::invoke(Forward<F>(Functor), Result, Forward<A>(Args)...);
             } else {
-                Handle->BindCompleteDelegate(CreateDelegate<FAsyncLoadCompleteDelegate, F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
+                AddToDelegate(OnCompleteDelegate, Forward<F>(Functor), Forward<A>(Args)...);
             }
         }
 
         template <typename O, typename F, typename... A>
             requires std::invocable<F, O, const TOptional<ResultType>&, A...> &&
-                CanBindDelegate<FAsyncLoadCompleteDelegate, O, F, A...>
+                CanBindDelegate<typename FAsyncLoadCompleteDelegate::FDelegate, O, F, A...>
         void OnLoadComplete(O&& Object, F&& Functor, A&&... Args) {
             std::scoped_lock Lock(UpdateMutex);
             if (IsLoaded()) {
                 std::invoke(Forward<F>(Functor), Forward<O>(Object), Result, Forward<A>(Args)...);
             } else {
-                Handle->BindCompleteDelegate(CreateDelegate<FAsyncLoadCompleteDelegate, O, F, A...>(Forward<O>(Object), Forward<F>(Functor), Forward<A>(Args)...));
+                AddToDelegate(OnCompleteDelegate, Forward<O>(Object), Forward<F>(Functor), Forward<A>(Args)...);
             }
         }
 

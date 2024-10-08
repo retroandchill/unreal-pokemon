@@ -38,6 +38,7 @@ namespace UE::Ranges {
         requires VariantObject<T>
     struct TSoftVariantObject {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
+	    using IntrusiveUnsetOptionalStateType = TSoftVariantObject;
 
         template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...>
@@ -104,7 +105,7 @@ namespace UE::Ranges {
             return TOptional<T>(Result);
         }
 
-        TAsyncLoadHandle<T> LoadAsync() const {
+        TSharedRef<TAsyncLoadHandle<T>> LoadAsync() const {
             return TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
         }
 
@@ -122,6 +123,10 @@ namespace UE::Ranges {
          */
         FString ToString() const {
             return Ptr.ToString();
+        }
+
+        bool operator==(FIntrusiveUnsetOptionalState) const {
+            return Ptr.IsNull();
         }
 
     private:

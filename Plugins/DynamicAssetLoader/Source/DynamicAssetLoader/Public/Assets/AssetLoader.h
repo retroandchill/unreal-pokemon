@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AsyncLoadHandle.h"
 #include "TextureCompiler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Ranges/Algorithm/FindFirst.h"
@@ -103,7 +102,13 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
-        return UE::Optionals::OfNullable<T>(TSoftObjectPtr<T>(CreateSearchKey(BasePackageName, AssetName)));
+        auto& AssetManager = UAssetManager::Get();
+        FSoftObjectPath Path(CreateSearchKey(BasePackageName, AssetName));
+        if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>()) {
+            return UE::Optionals::OfNullable<T>(TSoftObjectPtr<T>(Path));
+        }
+        
+        return TOptional<TSoftObjectRef<T>>();
     }
 
     template <typename T = UObject>
@@ -262,12 +267,19 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
                UE::Ranges::Map([&BasePackageName](ElementType Key) {
                    return LookupAssetByName<T>(BasePackageName, Key);
                }) |
-               UE::Ranges::Filter([](TOptional<TSoftObjectRef<T>> Optional) { return !Optional.IsSet(); }) |
+               UE::Ranges::Filter([](TOptional<TSoftObjectRef<T>> Optional) { return Optional.IsSet(); }) |
                UE::Ranges::FindFirst |
                UE::Optionals::FlatMap([](const TOptional<TSoftObjectRef<T>> Optional) {
                    return Optional;
                });
         // clang-format on
+    }
+
+    template <typename T = UObject, typename R>
+        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
+                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+    static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
+        return ResolveSoftAsset<T, R>(BasePackageName.Path, Forward<R>(Keys));
     }
 
     /**
