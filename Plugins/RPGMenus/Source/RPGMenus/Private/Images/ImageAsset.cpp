@@ -74,3 +74,17 @@ EVariantFindResult UImageAssetHelpers::CastToSlateTextureAtlas(const FImageAsset
     AsTextureAtlas = ImageAsset.Get<ISlateTextureAtlasInterface>()._getUObject();
     return EVariantFindResult::CastSucceeded;
 }
+
+FSoftImageAsset UImageAssetHelpers::MakeSoftImageAsset(const FImageAsset &ImageAsset) {
+    return FSoftImageAsset(ImageAsset);
+}
+
+EVariantFindResult UImageAssetHelpers::LoadSynchronous(const FSoftImageAsset &Path, FImageAsset &LoadedAsset) {
+    auto Result = Path.LoadSynchronous();
+    if (!Result.IsSet()) {
+        return EVariantFindResult::CastFailed;
+    }
+
+    LoadedAsset = FImageAsset(*Result);
+    return EVariantFindResult::CastSucceeded;
+}

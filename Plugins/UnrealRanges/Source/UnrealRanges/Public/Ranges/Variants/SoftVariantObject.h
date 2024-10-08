@@ -6,6 +6,30 @@
 #include "VariantObject.h"
 
 namespace UE::Ranges {
+
+    template <typename T>
+        requires VariantObject<T>
+    struct TSoftVariantObject;
+    
+    namespace Detail {
+        template <typename>
+        struct TIsSoftVariantObject : std::false_type {};
+
+        template <typename... T>
+        struct TIsSoftVariantObject<TSoftVariantObject<T...>> : std::true_type {};
+    }
+
+    template <typename T>
+    concept SoftVariantObject = Detail::TIsSoftVariantObject<T>::value;
+
+    template <typename T>
+    concept SoftVariantObjectStruct = UEStruct<T> && SoftVariantObject<T>;
+    
+    template <typename T>
+        requires SoftVariantObjectStruct<T>
+    class TSoftVariantObjectCustomization;
+
+    
     /**
      * 
      */
@@ -19,6 +43,8 @@ namespace UE::Ranges {
         explicit TSoftVariantObject(A&&... Args) : Ptr(Forward<A>(Args)...) {
             check(!Ptr.IsNull())
         }
+
+        explicit TSoftVariantObject(const T& Object) : Ptr(&Object.Get()) {}
         
         /**
          * Returns asset name string, leaving off the /package/path part
@@ -60,7 +86,7 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires (T::template StaticIsValidType<T>())
-        TOptional<U &> LoadSynchronous() {
+        TOptional<U &> LoadSynchronous() const {
             return Optionals::OfNullable(Cast<U>(Ptr.LoadSynchronous()));
         }
 
@@ -68,7 +94,7 @@ namespace UE::Ranges {
          * Synchronously load (if necessary) and return the asset object represented by this asset ptr
          * @return the asset object represented by this asset ptr
          */
-        TOptional<T> LoadSynchronous() {
+        TOptional<T> LoadSynchronous() const {
             auto Result = Ptr.LoadSynchronous();
             if (!T::IsValidType(Result)) {
                 return TOptional<T>();
@@ -95,6 +121,10 @@ namespace UE::Ranges {
 
     private:
         friend struct TOptional<TSoftVariantObject>;
+
+        template <typename U>
+            requires SoftVariantObjectStruct<U>
+        friend class TSoftVariantObjectCustomization;
 
         explicit TSoftVariantObject(FIntrusiveUnsetOptionalState) {}
 

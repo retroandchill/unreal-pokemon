@@ -7,6 +7,7 @@
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Variants/SoftVariantObject.h"
+#include "Ranges/Variants/VariantObjectStruct.h"
 
 #include "AssetLoadingSettings.generated.h"
 

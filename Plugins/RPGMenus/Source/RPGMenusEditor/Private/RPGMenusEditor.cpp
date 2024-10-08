@@ -3,6 +3,7 @@
 #include "AssetToolsModule.h"
 #include "Data/Windowskin.h"
 #include "IAssetTools.h"
+#include "Details/SoftVariantObjectCustomization.h"
 #include "Details/VariantObjectCustomization.h"
 #include "Windowskin/WindowskinAssetActions.h"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
@@ -28,6 +29,10 @@ void FRPGMenusEditorModule::OnPostEngineInit() const {
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("ImageAsset"),
         FOnGetPropertyTypeCustomizationInstance::CreateStatic(&UE::Ranges::TVariantObjectCustomization<FImageAsset>::MakeInstance));
+    
+    PropertyModule.RegisterCustomPropertyTypeLayout(
+        TEXT("SoftImageAsset"),
+        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&UE::Ranges::TSoftVariantObjectCustomization<FSoftImageAsset>::MakeInstance));
 }
 
 void FRPGMenusEditorModule::ShutdownModule() {

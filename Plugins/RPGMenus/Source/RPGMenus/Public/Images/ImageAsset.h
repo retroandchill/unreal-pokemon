@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Variants/VariantObject.h"
+#include "Ranges/Variants/VariantObjectStruct.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 #include "UObject/Object.h"
 
@@ -78,4 +79,12 @@ public:
     UFUNCTION(BlueprintCallable, Category = Variants,
         meta = (AutoCreateRefTerm = "ImageAsset", ExpandEnumAsExecs = "ReturnValue"))
     static EVariantFindResult CastToSlateTextureAtlas(const FImageAsset& ImageAsset, TScriptInterface<ISlateTextureAtlasInterface>& AsTextureAtlas);
+
+    UFUNCTION(BlueprintPure, Category = Variants,
+        meta = (CompactNodeTile = "->", BlueprintAutocast, AutoCreateRefTerm = ImageAsset))
+    static FSoftImageAsset MakeSoftImageAsset(const FImageAsset& ImageAsset);
+
+    UFUNCTION(BlueprintCallable, Category = Variants,
+        meta = (AutoCreateRefTerm = Path, ExpandEnumAsExecs = "ReturnValue"))
+    static EVariantFindResult LoadSynchronous(const FSoftImageAsset& Path, FImageAsset& LoadedAsset);
 };

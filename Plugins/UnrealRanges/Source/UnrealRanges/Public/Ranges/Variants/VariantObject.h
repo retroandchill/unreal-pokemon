@@ -36,7 +36,9 @@ namespace UE::Ranges {
     concept VariantObject = Detail::TIsVariantObject<T>::value;
 
     template <typename T>
-    concept VariantObjectStruct = UEStruct<T> && VariantObject<T>;
+    concept VariantObjectStruct = UEStruct<T> && VariantObject<T> && requires {
+        std::declval<typename T::SoftPtrType>();
+    };
     
     template <typename T>
         requires VariantObjectStruct<T>
@@ -163,7 +165,7 @@ namespace UE::Ranges {
         }
 
         UObject& Get() const {
-            check(IsValid(ContainedObject));
+            check(::IsValid(ContainedObject));
             return *ContainedObject;
         }
 
@@ -271,27 +273,12 @@ namespace UE::Ranges {
         }
 
         friend struct TOptional<TVariantObject>;
-        friend class TVariantObjectCustomization<T>;
+
+        template <typename U>
+            requires VariantObjectStruct<U>
+        friend class TVariantObjectCustomization;
         
         TObjectPtr<UObject> ContainedObject;
         uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();
     };
 }
-
-#define UE_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...) \
-    struct FSoft##StructName; \
-    struct F##StructName : UE::Ranges::TVariantObject<__VA_ARGS__> { \
-        using SoftPtrType = FSoft##StructName; \
-        F##StructName() = default; \
-        template <typename... T> \
-            requires std::constructible_from<TVariantObject, T...> \
-        explicit(std::same_as<TVariantObject, std::remove_reference_t<T>...>) F##StructName(T&&... Args) : TVariantObject(Forward<T>(Args)...) {} \
-    }; \
-    template <> \
-    struct UE::Ranges::Detail::TIsVariantObject<F##StructName> : std::true_type {}; \
-    struct FSoft##StructName : UE::Ranges::TSoftVariantObject<F##StructName> { \
-        FSoft##StructName() = default; \
-        template <typename... T> \
-            requires std::constructible_from<TSoftVariantObject, T...> \
-        explicit(std::same_as<TSoftVariantObject, std::remove_reference_t<T>...>) FSoft##StructName(T&&... Args) : TSoftVariantObject(Forward<T>(Args)...) {} \
-    };
