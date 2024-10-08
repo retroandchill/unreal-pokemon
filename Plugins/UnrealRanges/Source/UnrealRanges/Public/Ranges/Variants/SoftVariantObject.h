@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "VariantObject.h"
+#include "Ranges/Pointers/AsyncLoadHandle.h"
 
 namespace UE::Ranges {
 
@@ -101,6 +102,10 @@ namespace UE::Ranges {
             }
 
             return TOptional<T>(Result);
+        }
+
+        TAsyncLoadHandle<T> LoadAsync() const {
+            return TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
         }
 
         /**

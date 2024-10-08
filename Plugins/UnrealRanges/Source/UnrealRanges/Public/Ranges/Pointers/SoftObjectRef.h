@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AsyncLoadHandle.h"
 #include "Ranges/Optional/OptionalRef.h"
 
 /**
@@ -56,8 +57,12 @@ struct TSoftObjectRef {
      * Synchronously load (if necessary) and return the asset object represented by this asset ptr
      * @return the asset object represented by this asset ptr
      */
-    TOptional<T&> LoadSynchronous() {
+    TOptional<T&> LoadSynchronous() const {
         return UE::Optionals::OfNullable(Ptr.LoadSynchronous());
+    }
+
+    UE::Ranges::TAsyncLoadHandle<T> LoadAsync() const {
+        return UE::Ranges::TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
     }
 
     /**
