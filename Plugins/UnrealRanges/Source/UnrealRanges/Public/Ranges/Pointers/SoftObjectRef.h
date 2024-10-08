@@ -19,7 +19,7 @@ struct TSoftObjectRef {
     template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...>
     explicit TSoftObjectRef(A&&... Args) : Ptr(Forward<A>(Args)...) {
-        check(!Ptr.IsNull())
+        check(IsAssetValid())
     }
 
     /**
@@ -58,8 +58,10 @@ struct TSoftObjectRef {
      * Synchronously load (if necessary) and return the asset object represented by this asset ptr
      * @return the asset object represented by this asset ptr
      */
-    TOptional<T&> LoadSynchronous() const {
-        return UE::Optionals::OfNullable(Ptr.LoadSynchronous());
+    T& LoadSynchronous() const {
+        auto Result = Ptr.LoadSynchronous();
+        check(::IsValid(Result));
+        return *Result;
     }
 
     TSharedRef<UE::Ranges::TAsyncLoadHandle<T>> LoadAsync() const {
@@ -102,6 +104,12 @@ private:
     TSoftObjectRef& operator=(FIntrusiveUnsetOptionalState) {
         Ptr.Reset();
         return *this;
+    }
+
+    bool IsAssetValid() const {
+        auto &AssetManager = UAssetManager::Get();
+        FAssetData Data;
+        return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf<T>();
     }
     
     TSoftObjectPtr<T> Ptr;

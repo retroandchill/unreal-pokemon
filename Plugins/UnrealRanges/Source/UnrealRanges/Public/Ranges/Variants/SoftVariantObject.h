@@ -42,8 +42,7 @@ namespace UE::Ranges {
 
         template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...>
-        explicit TSoftVariantObject(A&&... Args) : Ptr(Forward<A>(Args)...) {
-            check(!Ptr.IsNull())
+        explicit TSoftVariantObject(A&&... Args) : Ptr(Forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
         explicit TSoftVariantObject(const T& Object) : Ptr(&Object.Get()) {}
@@ -89,7 +88,11 @@ namespace UE::Ranges {
         template <typename U>
             requires (T::template StaticIsValidType<T>())
         TOptional<U &> LoadSynchronous() const {
-            return Optionals::OfNullable(Cast<U>(Ptr.LoadSynchronous()));
+            if (TypeIndex != T::template GetTypeIndex<U>()) {
+                return TOptional<U &>();
+            }
+            
+            return Optionals::OfNullable(static_cast<U*>(Ptr.LoadSynchronous()));
         }
 
         /**
@@ -142,7 +145,15 @@ namespace UE::Ranges {
             Ptr.Reset();
             return *this;
         }
+
+        FAssetData GetAssetData() const {
+            auto &AssetManager = UAssetManager::Get();
+            FAssetData Data;
+            verify(AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data))
+            return Data;
+        }
         
         TSoftObjectPtr<> Ptr;
+        uint64 TypeIndex = T::template GetTypeIndex<std::nullptr_t>();
     };
 }

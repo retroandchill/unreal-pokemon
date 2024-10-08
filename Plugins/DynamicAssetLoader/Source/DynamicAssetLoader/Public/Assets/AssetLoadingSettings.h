@@ -42,6 +42,9 @@ struct FSoftAssetClassType {
     UPROPERTY(EditAnywhere,
         meta = (AllowedClasses="/Script/Engine.UClass,/Script/Engine.ScriptStruct"))
     TSoftObjectPtr<UObject> Ptr;
+
+    UPROPERTY()
+    uint64 TypeIndex;
 };
 #endif
 

@@ -31,6 +31,9 @@ struct FSoftImageAsset {
         meta = (AllowedClasses="/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface",
             DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
     TSoftObjectPtr<UObject> Ptr;
+
+    UPROPERTY()
+    uint64 TypeIndex;
 };
 #endif
 

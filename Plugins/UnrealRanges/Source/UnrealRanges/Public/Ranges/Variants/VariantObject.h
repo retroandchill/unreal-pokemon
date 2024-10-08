@@ -199,6 +199,15 @@ namespace UE::Ranges {
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
+        static TOptional<uint64> GetTypeIndex(const FAssetData& Data) {
+            constexpr std::array TypeChecks = {
+                &TVariantObject::IsAssetTypeValid<std::nullptr_t>,
+                &TVariantObject::IsAssetTypeValid<T>...
+            };
+            auto Find = ranges::find_if(TypeChecks, [&Data](auto&& Callback) { return std::invoke(Callback, Data); });
+            return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
+        }
+
         uint64 GetTypeIndex() const {
             return TypeIndex;
         }
@@ -206,6 +215,18 @@ namespace UE::Ranges {
         template <typename U>
         static constexpr bool StaticIsValidType() {
             return (std::same_as<T, U> || ...);
+        }
+
+        template <typename U>
+            requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
+        static constexpr bool IsAssetTypeValid(const FAssetData& Data) {
+            if constexpr (std::same_as<U, std::nullptr_t>) {
+                return !Data.IsValid();
+            } else if constexpr (UnrealInterface<U>) {
+                return Data.GetClass()->ImplementsInterface(U::UClassType::StaticClass());
+            } else {
+                return Data.IsInstanceOf<U>();
+            }
         }
 
         static bool IsValidType(const UObject* Object) {
