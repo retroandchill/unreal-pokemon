@@ -21,6 +21,12 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
     GENERATED_BODY()
 
 public:
+    void SetBrush(const FSlateBrush& InBrush) override;
+    
+private:
+    void SetBrush(const FSlateBrush& InBrush, bool bUpdateAssetImage);
+
+public:
     void SetBrushFromAsset(USlateBrushAsset* Asset) override;
     void SetBrushFromTexture(UTexture2D* Texture, bool bMatchSize = false) override;
     void SetBrushFromTextureDynamic(UTexture2DDynamic* Texture, bool bMatchSize = false) override;

@@ -10,6 +10,18 @@
 constexpr int32 ImageWidgetIndex = 0;
 constexpr int32 PaperFlipbookWidgetIndex = 1;
 
+void UEnhancedImage::SetBrush(const FSlateBrush &InBrush) {
+    SetBrush(InBrush, true);
+}
+
+void UEnhancedImage::SetBrush(const FSlateBrush &InBrush, bool bUpdateAssetImage) {
+    Super::SetBrush(InBrush);
+    if (bUpdateAssetImage) {
+        SetSourceImageInternal(InBrush.GetResourceObject());
+        bManualSize = true;
+    }
+}
+
 void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset) {
     Super::SetBrushFromAsset(Asset);
     SetSourceImageInternal(Asset->Brush.GetResourceObject());
@@ -149,7 +161,7 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
                 break;
             }
         }
-        SetBrush(UpdateBrush);
+        SetBrush(UpdateBrush, false);
     }
 }
 #endif
