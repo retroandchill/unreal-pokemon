@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Variants/VariantObjectStruct.h"
 #include "Engine/Texture2DDynamic.h"
-#include "PaperFlipbook.h"
 #include "Slate/SlateTextureAtlasInterface.h"
+#include "Ranges/Variants/VariantObjectStruct.h"
+#include "PaperFlipbook.h"
 
 #include "ImageAsset.generated.h"
 

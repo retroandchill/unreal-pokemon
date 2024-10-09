@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Assets/AssetClass.h"
-#include "PaperFlipbook.h"
 #include "Images/ImageAsset.h"
 
 /**

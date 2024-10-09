@@ -18,8 +18,9 @@ public class RPGMenus : ModuleRules
 				"UnrealRanges",
 				"CommonGame",
 				"GameplayTags",
-				"EnhancedInput", 
-				"Paper2D"
+				"EnhancedInput",
+				"Paper2D",
+				"PaperFlipbookWidget"
 			}
 		);
 
@@ -32,7 +33,6 @@ public class RPGMenus : ModuleRules
 				"SlateCore",
 				"CommonMath",
 				"DeveloperSettings", 
-				"PaperFlipbookWidget"
 			}
 		);
 	}

@@ -4,6 +4,7 @@
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
 #include "SPaperFlipbookWidget.h"
+#include "Slate/SlateBrushAsset.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"
 
 constexpr int32 ImageWidgetIndex = 0;
