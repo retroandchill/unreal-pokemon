@@ -123,7 +123,7 @@ namespace UE::Ranges {
          * @return Is this the given type
          */
         template <typename U>
-            requires (std::same_as<T, U> || ...)
+            requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         constexpr bool IsType() const {
             return TypeIndex == GetTypeIndex<U>();
         }

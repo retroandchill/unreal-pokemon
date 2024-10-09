@@ -10,57 +10,64 @@
 constexpr int32 ImageWidgetIndex = 0;
 constexpr int32 PaperFlipbookWidgetIndex = 1;
 
-void UEnhancedImage::SetBrush(const FSlateBrush &InBrush) {
-    Super::SetBrush(InBrush);
-    SetSourceImageInternal(InBrush.GetResourceObject());
-}
-
 void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset) {
     Super::SetBrushFromAsset(Asset);
     SetSourceImageInternal(Asset->Brush.GetResourceObject());
+    bManualSize = true;
 }
 
 void UEnhancedImage::SetBrushFromTexture(UTexture2D *Texture, bool bMatchSize) {
     Super::SetBrushFromTexture(Texture, bMatchSize);
     SourceImage.Set(Texture);
+    bManualSize = !bMatchSize;
 }
 
 void UEnhancedImage::SetBrushFromTextureDynamic(UTexture2DDynamic *Texture, bool bMatchSize) {
     Super::SetBrushFromTextureDynamic(Texture, bMatchSize);
     SourceImage.Set(Texture);
+    bManualSize = !bMatchSize;
 }
 
 void UEnhancedImage::SetBrushFromMaterial(UMaterialInterface *Material) {
     Super::SetBrushFromMaterial(Material);
     SourceImage.Set(Material);
+    bManualSize = true;
 }
 
 void UEnhancedImage::SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion,
     bool bMatchSize) {
     Super::SetBrushFromAtlasInterface(AtlasRegion, bMatchSize);
     SourceImage.Set(AtlasRegion);
+    bManualSize = !bMatchSize;
+}
+
+void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize) {
+    Super::SetBrushFromAtlasInterface(Flipbook->GetSpriteAtFrame(0), bMatchSize);
+    SourceImage.Set(Flipbook);
+    bManualSize = !bMatchSize;
 }
 
 void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize) {
     SourceImage = ImageAsset;
     switch (ImageAsset.GetTypeIndex()) {
     case FImageAsset::GetTypeIndex<UTexture2D>():
-        SetBrushFromTexture(&ImageAsset.Get<UTexture2D>());
+        SetBrushFromTexture(&ImageAsset.Get<UTexture2D>(), bMatchSize);
         break;
     case FImageAsset::GetTypeIndex<UTexture2DDynamic>():
-        SetBrushFromTextureDynamic(&ImageAsset.Get<UTexture2DDynamic>());
+        SetBrushFromTextureDynamic(&ImageAsset.Get<UTexture2DDynamic>(), bMatchSize);
         break;
     case FImageAsset::GetTypeIndex<UMaterialInterface>():
         SetBrushFromMaterial(&ImageAsset.Get<UMaterialInterface>());
         break;
     case FImageAsset::GetTypeIndex<ISlateTextureAtlasInterface>():
-        SetBrushFromAtlasInterface(ImageAsset.Get<ISlateTextureAtlasInterface>()._getUObject());
+        SetBrushFromAtlasInterface(ImageAsset.Get<ISlateTextureAtlasInterface>()._getUObject(), bMatchSize);
         break;
     case FImageAsset::GetTypeIndex<UPaperFlipbook>():
-        SetBrushFromAtlasInterface(ImageAsset.Get<UPaperFlipbook>().GetSpriteAtFrame(0));
+        SetBrushFromPaperFlipbook(&ImageAsset.Get<UPaperFlipbook>(), bMatchSize);
         break;
     default:
         SetBrushFromAsset(nullptr);
+        break;
     }
 }
 
@@ -84,7 +91,7 @@ void UEnhancedImage::SynchronizeProperties() {
     auto ColorAndOpacityBinding = PROPERTY_BINDING(FSlateColor, ColorAndOpacity);
     if (FlipbookWidget.IsValid()) {
         auto &CurrentBrush = GetBrush();
-        FlipbookWidget->OverrideBrushSize(CurrentBrush.GetImageSize(), true);
+        FlipbookWidget->OverrideBrushSize(CurrentBrush.GetImageSize(), bManualSize);
         FlipbookWidget->SetBrushMirroring(CurrentBrush.GetMirroring());
         FlipbookWidget->SetBrushTiling(CurrentBrush.GetTiling());
         FlipbookWidget->SetColorAndOpacity(ColorAndOpacityBinding);
@@ -104,6 +111,7 @@ void UEnhancedImage::SynchronizeProperties() {
 
 void UEnhancedImage::ReleaseSlateResources(bool bReleaseChildren) {
     Super::ReleaseSlateResources(bReleaseChildren);
+    Switcher.Reset();
     FlipbookWidget.Reset();
 }
 
@@ -118,12 +126,30 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
         } else {
             UpdateBrush.SetResourceObject(SourceImage.TryGet().GetPtrOrNull());
         }
-    } else if (PropertyChangedEvent.GetPropertyName() == "Brush") {
-        if (auto &BrushData = GetBrush(); BrushData.GetResourceObject() == nullptr) {
-            SourceImage.Reset();
-        } else {
-            SourceImage.Set(BrushData.GetResourceObject());
+
+        if (!bManualSize && SourceImage.IsValid() && !SourceImage.IsType<UMaterialInterface>()) {
+            switch (SourceImage.GetTypeIndex()) {
+            case FImageAsset::GetTypeIndex<UTexture2D>(): {
+                auto &Texture = SourceImage.Get<UTexture2D>();
+                UpdateBrush.SetImageSize(FVector2D(Texture.GetSizeX(), Texture.GetSizeY()));
+                break;
+            }
+            case FImageAsset::GetTypeIndex<UTexture2DDynamic>(): {
+                auto &Texture = SourceImage.Get<UTexture2DDynamic>();
+                UpdateBrush.SetImageSize(FVector2D(Texture.SizeX, Texture.SizeY));
+                break;
+            }
+            case FImageAsset::GetTypeIndex<ISlateTextureAtlasInterface>():
+                UpdateBrush.SetImageSize(SourceImage.Get<ISlateTextureAtlasInterface>().GetSlateAtlasData().GetSourceDimensions());
+                break;
+            case FImageAsset::GetTypeIndex<UPaperFlipbook>():
+                UpdateBrush.SetImageSize(SourceImage.Get<UPaperFlipbook>().GetSpriteAtFrame(0)->GetSourceSize());
+                break;
+            default:
+                break;
+            }
         }
+        SetBrush(UpdateBrush);
     }
 }
 #endif

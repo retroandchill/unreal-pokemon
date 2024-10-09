@@ -21,12 +21,12 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
     GENERATED_BODY()
 
 public:
-    void SetBrush(const FSlateBrush& InBrush) override;
     void SetBrushFromAsset(USlateBrushAsset* Asset) override;
     void SetBrushFromTexture(UTexture2D* Texture, bool bMatchSize = false) override;
     void SetBrushFromTextureDynamic(UTexture2DDynamic* Texture, bool bMatchSize = false) override;
     void SetBrushFromMaterial(UMaterialInterface* Material) override;
     void SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion, bool bMatchSize = false) override;
+    virtual void SetBrushFromPaperFlipbook(UPaperFlipbook* Flipbook, bool bMatchSize = false);
     virtual void SetBrushFromImageAsset(const FImageAsset& ImageAsset, bool bMatchSize = false);
 
 protected:
@@ -66,8 +66,9 @@ private:
     /** Whether the flipbook should loop when it reaches the end, or stop */
     UPROPERTY(Category = Appearance, EditAnywhere)
     bool bLooping = true;
-
-    float CurrentTime = 0.f;
+    
+    UPROPERTY(Category = Appearance, EditAnywhere)
+    bool bManualSize = false;
 
     TSharedPtr<SWidgetSwitcher> Switcher;
     TSharedPtr<SPaperFlipbookWidget> FlipbookWidget;
