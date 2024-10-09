@@ -234,7 +234,7 @@ namespace UE::Ranges {
         }
 
         template <typename U>
-            requires UObjectPointer<U> && (std::same_as<T, U> || ...)
+            requires std::is_base_of_v<UObject, U> && (std::same_as<T, U> || ...)
         void Set(U* Object) {
             ContainedObject = Object;
             TypeIndex = GetTypeIndex<U>();
@@ -255,6 +255,12 @@ namespace UE::Ranges {
         void Set(const FScriptInterface& Object) {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex(Object.GetObject()).GetValue();
+        }
+
+    protected:
+        void SetUnchecked(std::nullptr_t) {
+            ContainedObject = nullptr;
+            TypeIndex = GetTypeIndex<std::nullptr_t>();
         }
 
     private:

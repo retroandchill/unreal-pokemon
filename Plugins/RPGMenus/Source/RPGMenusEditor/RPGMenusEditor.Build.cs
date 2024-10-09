@@ -24,7 +24,8 @@ public class RPGMenusEditor : ModuleRules
 				"SlateCore",
 				"UnrealEd",
 				"UnrealRangesEditor",
-				"RPGMenus"
+				"RPGMenus",
+				"Paper2D"
 			}
 		);
 	}

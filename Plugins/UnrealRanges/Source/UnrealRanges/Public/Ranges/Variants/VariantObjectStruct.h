@@ -14,6 +14,9 @@
         template <typename... T> \
             requires std::constructible_from<TVariantObject, T...> \
         explicit(std::same_as<TVariantObject, std::remove_reference_t<T>...>) F##StructName(T&&... Args) : TVariantObject(Forward<T>(Args)...) {} \
+        void Reset() { \
+            SetUnchecked(nullptr); \
+        }\
     }; \
     template <> \
     struct UE::Ranges::Detail::TIsVariantObject<F##StructName> : std::true_type {}; \
