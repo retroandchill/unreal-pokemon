@@ -17,7 +17,6 @@ void UPokemonStorageScreen::NativeConstruct() {
 }
 
 void UPokemonStorageScreen::OnSelectedPokemonChanged(TOptional<IPokemon &> SelectedPokemon) {
-    auto Pokemon = SelectedPokemon.GetInterface();
     if (!SelectedPokemon.IsSet()) {
         StorageInfoPanel->SetVisibility(ESlateVisibility::Hidden);
         return;

@@ -120,6 +120,10 @@ namespace UE::Ranges {
             return Ptr.ToSoftObjectPath();
         }
 
+        const TSoftObjectPtr<>& ToSoftObjectPtr() const {
+            return Ptr;
+        }
+
         /**
          * Returns string representation of reference, in form /package/path.assetname
          * @return The string representation of reference, in form /package/path.assetname

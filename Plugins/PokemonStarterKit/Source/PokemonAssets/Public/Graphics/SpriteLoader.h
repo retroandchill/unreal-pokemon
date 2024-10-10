@@ -45,6 +45,14 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
     static UPaperFlipbook *GetSpeciesBattleSprite(FName Species, bool bBack = false,
                                                   const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
+    UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
+    static TSoftObjectPtr<UPaperFlipbook> GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
+
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
+              meta = (CallableWithoutWorldContext))
+    static TSoftObjectPtr<UPaperFlipbook> GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
+                                                  const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+
     /**
      * Get the icon based upon the Pokémon that was passed in.
      * @param Pokemon The Pokémon to get the icon for
@@ -62,6 +70,25 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
     static UPaperFlipbook *GetSpeciesIcon(FName Species,
+                                          const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+
+    /**
+     * Get the icon based upon the Pokémon that was passed in.
+     * @param Pokemon The Pokémon to get the icon for
+     * @return The graphical asset that this icon refers to.
+     */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
+              meta = (CallableWithoutWorldContext))
+    static TSoftObjectPtr<UPaperFlipbook> GetLazyPokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
+
+    /**
+     * Get the icon based upon the Pokémon information that was passed in.
+     * @param Species The species of Pokémon to get the icon for
+     * @return The graphical asset that this icon refers to.
+     */
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
+              meta = (CallableWithoutWorldContext))
+    static TSoftObjectPtr<UPaperFlipbook> GetLazySpeciesIcon(FName Species,
                                           const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,

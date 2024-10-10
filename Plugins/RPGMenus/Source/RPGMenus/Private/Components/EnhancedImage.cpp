@@ -4,6 +4,7 @@
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
 #include "SPaperFlipbookWidget.h"
+#include "Ranges/Functional/PropertyBindings.h"
 #include "Slate/SlateBrushAsset.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"
 
@@ -57,6 +58,9 @@ void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bM
     Super::SetBrushFromAtlasInterface(Flipbook->GetSpriteAtFrame(0), bMatchSize);
     SourceImage.Set(Flipbook);
     bManualSize = !bMatchSize;
+    if (FlipbookWidget != nullptr) {
+        FlipbookWidget->SetFlipbook(Flipbook);
+    }
 }
 
 void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize) {
@@ -83,6 +87,30 @@ void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool 
     }
 }
 
+void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize) {
+    if (!LazyFlipbook.IsNull()) {
+        RequestAsyncLoad(LazyFlipbook, FStreamableDelegate::CreateWeakLambda(this, [this, LazyFlipbook, bMatchSize] {
+            ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+            SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
+        }));
+    } else {
+        // Hack to get into the private method that is inaccessible
+        SetBrushFromLazyDisplayAsset(LazyFlipbook, bMatchSize);
+    }
+}
+
+void UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize) {
+    if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
+        RequestAsyncLoad(SoftPointer, FStreamableDelegate::CreateWeakLambda(this, [this, LazyImage, bMatchSize] {
+            ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"), *LazyImage.ToSoftObjectPath().ToString());
+            SetBrushFromImageAsset(LazyImage.LoadSynchronous().GetValue(), bMatchSize);
+        }));
+    } else {
+        // Hack to get into the private method that is inaccessible
+        SetBrushFromLazyDisplayAsset(SoftPointer, bMatchSize);
+    }
+}
+
 TSharedRef<SWidget> UEnhancedImage::RebuildImageWidget() {
     FlipbookWidget = SNew(SPaperFlipbookWidget);
     // clang-format off
@@ -100,7 +128,7 @@ TSharedRef<SWidget> UEnhancedImage::RebuildImageWidget() {
 void UEnhancedImage::SynchronizeProperties() {
     Super::SynchronizeProperties();
 
-    auto ColorAndOpacityBinding = PROPERTY_BINDING(FSlateColor, ColorAndOpacity);
+    auto ColorAndOpacityBinding = PROPERTY_BINDING_WRAPPED(FSlateColor, ColorAndOpacity);
     if (FlipbookWidget.IsValid()) {
         auto &CurrentBrush = GetBrush();
         FlipbookWidget->OverrideBrushSize(CurrentBrush.GetImageSize(), bManualSize);

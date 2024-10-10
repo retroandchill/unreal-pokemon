@@ -32,8 +32,18 @@ public:
     void SetBrushFromTextureDynamic(UTexture2DDynamic* Texture, bool bMatchSize = false) override;
     void SetBrushFromMaterial(UMaterialInterface* Material) override;
     void SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion, bool bMatchSize = false) override;
+
+    UFUNCTION(BlueprintCallable, Category = Image)
     virtual void SetBrushFromPaperFlipbook(UPaperFlipbook* Flipbook, bool bMatchSize = false);
+
+    UFUNCTION(BlueprintCallable, Category = Image)
     virtual void SetBrushFromImageAsset(const FImageAsset& ImageAsset, bool bMatchSize = false);
+
+    UFUNCTION(BlueprintCallable, Category = LazyImage)
+    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook>& LazyFlipbook, bool bMatchSize = false);
+
+    UFUNCTION(BlueprintCallable, Category = LazyImage)
+    void SetBrushFromLazyImageAsset(const FSoftImageAsset& LazyImage, bool bMatchSize = false);
 
 protected:
     TSharedRef<SWidget> RebuildImageWidget() override;
