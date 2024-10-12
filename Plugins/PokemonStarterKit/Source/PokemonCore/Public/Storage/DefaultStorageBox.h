@@ -41,7 +41,8 @@ class POKEMONCORE_API UDefaultStorageBox : public UObject, public IStorageBox {
     TOptional<IPokemon &> WithdrawFromBox(int32 BoxIndex) override;
     TOptional<IPokemon &> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon) override;
 
-    const TArray<TScriptInterface<IPokemon>>& GetStoredPokemon() const override;;
+    TOptional<IPokemon&> GetStoredPokemon(int32 Index) const override;
+    const TArray<TScriptInterface<IPokemon>>& GetStoredPokemon() const override;
 
   private:
     /**

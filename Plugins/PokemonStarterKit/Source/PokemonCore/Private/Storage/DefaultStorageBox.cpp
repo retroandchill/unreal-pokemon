@@ -102,6 +102,11 @@ TOptional<IPokemon &> UDefaultStorageBox::SwapWithPokemon(int32 BoxIndex, const 
     return ExistingPokemon;
 }
 
+TOptional<IPokemon &> UDefaultStorageBox::GetStoredPokemon(int32 Index) const {
+    check(StoredPokemon.IsValidIndex(Index))
+    return UE::Optionals::OfNullable(StoredPokemon[Index]);
+}
+
 const TArray<TScriptInterface<IPokemon>> & UDefaultStorageBox::GetStoredPokemon() const {
     return StoredPokemon;
 }

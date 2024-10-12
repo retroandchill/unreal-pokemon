@@ -31,6 +31,9 @@ public:
      */
     UE_MULTICAST_DELEGATE_MEMBER(FOnSelectedPokemonChanged, OnSelectedPokemonChanged)
 
+    protected:
+    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+
 private:
     void CreateStorageBoxIcon(const TScriptInterface<IPokemon>& Pokemon);
     

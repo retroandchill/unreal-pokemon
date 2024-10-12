@@ -18,15 +18,21 @@ void UStorageBoxWindow::SetStorageBox(const TScriptInterface<IStorageBox> &InSto
         UE::Ranges::ForEach(this, &UStorageBoxWindow::CreateStorageBoxIcon);
 }
 
+void UStorageBoxWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
+    if (OldIndex == NewIndex) {
+        return;
+    }
+    
+    auto StoredPokemon = NewIndex != INDEX_NONE ? StorageBox->GetStoredPokemon(NewIndex) : TOptional<IPokemon&>();
+    OnSelectedPokemonChanged.Broadcast(StoredPokemon);
+}
+
 void UStorageBoxWindow::CreateStorageBoxIcon(const TScriptInterface<IPokemon> &Pokemon) {
     check(IsValid(StorageBoxIconClass))
     auto Widget = WidgetTree->ConstructWidget(StorageBoxIconClass);
     static_assert(UE::Ranges::Pointer<TScriptInterface<IPokemon>>);
     static_assert(UE::Ranges::Pointer<const TScriptInterface<IPokemon>>);
     static_assert(UE::Ranges::Pointer<const TScriptInterface<IPokemon>&>);
-    Widget->OnHovered().AddWeakLambda(this, [this, Contained = UE::Optionals::OfNullable(Pokemon)] {
-        OnSelectedPokemonChanged.Broadcast(Contained);
-    });
     if (IsValid(Pokemon.GetObject())) {
         Widget->SetPokemon(Pokemon);
     } else {
