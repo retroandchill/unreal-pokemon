@@ -56,6 +56,6 @@ namespace UE::Ranges {
 
 
     template <typename T, typename... A>
-    concept CanInvokeBinding = std::invocable<decltype(CreateBinding<A...>(Forward<A>(std::declval<A>()...))), T>;
+    concept CanInvokeBinding = std::invocable<decltype(CreateBinding<A...>(Forward<A>(std::declval<A>())...)), T>;
 
 } // namespace UE::Ranges
