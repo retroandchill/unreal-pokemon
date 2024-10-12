@@ -61,6 +61,10 @@
 		{
 			"Name": "UnrealRanges",
 			"Enabled": true
+		},
+		{
+			"Name": "PaperFlipbookWidget",
+			"Enabled": true
 		}
 	]
 }
