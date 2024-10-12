@@ -4,8 +4,8 @@
 #include "Images/ImageAsset.h"
 
 static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
-    static UPackage* CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));
-    UScriptStruct* Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
+    static const auto* const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));
+    auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
         CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
     check(Result != nullptr);
     Result->SetMetaData(TEXT("VariantObject"), TEXT("true"));
@@ -13,7 +13,7 @@ static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
 }
 
 UScriptStruct * TBaseStructure<FImageAsset>::Get() {
-    static UScriptStruct* ScriptStruct = StaticGetBaseStructureInternal(TEXT("ImageAsset"));
+    static auto* ScriptStruct = StaticGetBaseStructureInternal(TEXT("ImageAsset"));
     return ScriptStruct;
 }
 

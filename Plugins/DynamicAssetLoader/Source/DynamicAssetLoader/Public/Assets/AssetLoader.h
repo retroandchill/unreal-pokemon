@@ -102,7 +102,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
-        auto& AssetManager = UAssetManager::Get();
+        const auto& AssetManager = UAssetManager::Get();
         FSoftObjectPath Path(CreateSearchKey(BasePackageName, AssetName));
         if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>()) {
             return UE::Optionals::OfNullable<T>(TSoftObjectPtr<T>(Path));

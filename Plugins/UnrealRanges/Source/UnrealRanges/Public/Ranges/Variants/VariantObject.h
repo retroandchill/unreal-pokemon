@@ -37,7 +37,7 @@ namespace UE::Ranges {
 
     template <typename T>
     concept VariantObjectStruct = UEStruct<T> && VariantObject<T> && requires {
-        std::declval<typename T::SoftPtrType>();
+        typename T::SoftPtrType;
     };
     
     template <typename T>
@@ -190,7 +190,6 @@ namespace UE::Ranges {
         }
 
         static TOptional<uint64> GetTypeIndex(const UObject* Object) {
-            auto TypeCheck = []<typename U>(const UObject* O) { return IsValidType<U>(O); };
             constexpr std::array TypeChecks = {
                 &TVariantObject::IsValidType<std::nullptr_t>,
                 &TVariantObject::IsValidType<T>...

@@ -41,7 +41,7 @@ namespace UE::Ranges {
 	    using IntrusiveUnsetOptionalStateType = TSoftVariantObject;
 
         template <typename... A>
-        requires std::constructible_from<TSoftObjectPtr<T>, A...>
+        requires std::constructible_from<TSoftObjectPtr<T>, A...> && !std::same_as<TSoftVariantObject, std::remove_cvref_t<A>...> 
         explicit TSoftVariantObject(A&&... Args) : Ptr(Forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 

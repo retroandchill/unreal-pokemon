@@ -2,15 +2,15 @@
 
 #include "Assets/AssetLoadingSettings.h"
 static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
-    static UPackage* CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/DynamicAssetLoader"));
-    UScriptStruct* Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
+    static const auto* const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/DynamicAssetLoader"));
+    auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
         CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
     check(Result != nullptr);
     return Result;
 }
 
 UScriptStruct * TBaseStructure<FAssetClassType>::Get() {
-    static UScriptStruct* ScriptStruct = StaticGetBaseStructureInternal(TEXT("AssetClassType"));
+    static auto ScriptStruct = StaticGetBaseStructureInternal(TEXT("AssetClassType"));
     return ScriptStruct;
 }
 
