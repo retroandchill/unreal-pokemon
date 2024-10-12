@@ -15,8 +15,8 @@ void UPromptSaveGame::Activate() {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContext);
     auto ScreenClass = GetDefault<UPokemonUISettings>()->SaveScreenClass.TryLoadClass<USaveScreen>();
     auto Screen = Layout->PushWidgetToLayerStack<USaveScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
-    Screen->BindToExitSaveScreen(FExitSaveScreen::FDelegate::CreateWeakLambda(this, [this](bool bSuccess) {
+    Screen->BindToOnExitSaveScreen(this, [this](bool bSuccess) {
         bSuccess ? Saved.Broadcast() : DidNotSave.Broadcast();
         SetReadyToDestroy();
-    }));
+    });
 }

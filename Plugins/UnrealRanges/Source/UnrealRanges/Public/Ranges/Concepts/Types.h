@@ -44,4 +44,7 @@ namespace UE::Ranges {
         requires Range<T>
     using TRangeCommonReference = typename Detail::TRangeTraits<T>::CommonReference;
 
+    template <typename R, typename T>
+    concept RangeOf = Range<T> && std::convertible_to<TRangeCommonReference<R>, T>;
+
 } // namespace UE::Ranges

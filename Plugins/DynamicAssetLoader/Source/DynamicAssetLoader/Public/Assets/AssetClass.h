@@ -1,4 +1,4 @@
-﻿// "Unreal Pokémon" created by Retro & Chill.
+// "Unreal Pokémon" created by Retro & Chill.
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Views/Map.h"
 
 namespace UE::Assets {
@@ -19,9 +20,13 @@ namespace UE::Assets {
      * @tparam T The class of the asset in question
      */
     template <typename T>
-        requires std::is_base_of_v<UObject, T>
+        requires AssetClassType<T>
     class TAssetClass {
       public:
+        template <typename U>
+        static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) ||
+            (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
+        
         /**
          * Construct a new asset object using this loader
          * @param Key The key for the asset in question
@@ -39,12 +44,18 @@ namespace UE::Assets {
          * @return The loaded asset
          */
         template <typename U = T>
-            requires std::is_base_of_v<T, U>
-        TOptional<U &> LoadAsset(FStringView AssetName) const {
+            requires ValidTemplateParam<U>
+        auto LoadAsset(FStringView AssetName) const  {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
-            return UAssetLoader::LookupAssetByName<U>(AssetClassData.RootDirectory, FullName);
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                return UAssetLoader::FindAssetByName<U>(AssetClassData.RootDirectory, FullName);
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
+                return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
+                    Optionals::Map([](UObject& Object) { return T(&Object); });
+            }
         }
 
         /**
@@ -53,15 +64,38 @@ namespace UE::Assets {
          * @return The loaded asset
          */
         template <typename U = T>
-            requires std::is_base_of_v<T, U>
-        TOptional<U &> LoadAsset(FName AssetName) const {
+            requires ValidTemplateParam<U>
+        auto LoadAsset(FName AssetName) const {
             return LoadAsset<U>(AssetName.ToString());
         }
 
+        template <typename U = T>
+            requires ValidTemplateParam<U>
+        auto LookupAsset(FStringView AssetName) const  {
+            auto Settings = GetDefault<UAssetLoadingSettings>();
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
+            auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
+
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
+                return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
+                    Optionals::Map([](const TSoftObjectRef<> &Object) { return T::SoftPtrType(&Object); });
+            }
+        }
+
+        template <typename U = T>
+            requires ValidTemplateParam<U>
+        auto LookupAsset(FName AssetName) const {
+            return LookupAsset<U>(AssetName.ToString());
+        }
+
+
         template <typename U = T, typename R>
-            requires std::is_base_of_v<T, U> && Ranges::Range<R> &&
+            requires ValidTemplateParam<U> && Ranges::Range<R> &&
                      std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
-        TOptional<U &> ResolveAsset(R &&Assets) const {
+        auto ResolveAsset(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
@@ -72,16 +106,56 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
+                return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
+                    Optionals::Map([](UObject& Object) { return T(&Object); });
+            }
         }
 
         template <typename U = T, typename R>
-            requires std::is_base_of_v<T, U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
-        TArray<TOptional<U &>> LoadAssets(R &&Assets) const {
+            requires ValidTemplateParam<U> && Ranges::Range<R> &&
+                     std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+        auto ResolveSoftAsset(R &&Assets) const {
+            using ElementType = Ranges::TRangeCommonReference<R>;
+            auto Settings = GetDefault<UAssetLoadingSettings>();
+            auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
+            auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
+            // clang-format off
+            auto FullNames = Assets |
+                             Ranges::Map([&Prefix](ElementType AssetName) {
+                                 return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
+                             });
+            // clang-format on
+            if constexpr (std::is_base_of_v<UObject, U>) {
+                return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
+                return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
+                    Optionals::Map([](const TSoftObjectRef<>& Object) { return T(&Object); });
+            }
+        }
+
+        template <typename U = T, typename R>
+            requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+        auto LoadAssets(R &&Assets) const {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
                    Ranges::Map([this](ElementType Value) { return LoadAsset<U>(Value); }) |
+                   Ranges::ToArray;
+            // clang-format on
+        }
+
+        template <typename U = T, typename R>
+            requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+        auto LookupAssets(R &&Assets) const {
+            using ElementType = Ranges::TRangeCommonReference<R>;
+            // clang-format off
+            return Assets |
+                   Ranges::Map([this](ElementType Value) { return LookupAsset<U>(Value); }) |
                    Ranges::ToArray;
             // clang-format on
         }
@@ -93,13 +167,24 @@ namespace UE::Assets {
                 return;
             }
 
-            Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+            if constexpr (std::is_base_of_v<UObject, T>) {
+                Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                if constexpr (Ranges::CoreStructType<T>) {
+                    Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, TBaseStructure<T>::Get()));
+                } else {
+                    Settings->AssetClasses.Emplace(Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticStruct()));
+                }
+            }
+            
         }
 
         FName Key;
         FDirectoryPath DefaultAssetPath;
         FStringView DefaultPrefix;
     };
+
+    
 
     template <typename T>
         requires std::is_base_of_v<UObject, T>

@@ -62,10 +62,6 @@ void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
     }));
 }
 
-FDelegateHandle USaveScreen::BindToExitSaveScreen(FExitSaveScreen::FDelegate &&Callback) {
-    return OnExitSaveScreen.Add(MoveTemp(Callback));
-}
-
 void USaveScreen::ExitSaveScreen(bool bSuccess) {
     CloseScreen();
     OnExitSaveScreen.Broadcast(bSuccess);

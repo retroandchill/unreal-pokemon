@@ -26,7 +26,7 @@ namespace UE::Ranges {
         if constexpr (sizeof...(A) > 0) {
             return ranges::bind_back(Forward<F>(Functor), Forward<A>(Args)...);
         } else {
-            return MoveTempIfPossible(Functor);
+            return Forward<F>(Functor);
         }
     }
 
@@ -53,5 +53,9 @@ namespace UE::Ranges {
                                      B &&...Vals) { return InvokeDelegate(Callback, Forward<B>(Vals)...); },
                                  Forward<A>(Args)...);
     }
+
+
+    template <typename T, typename... A>
+    concept CanInvokeBinding = std::invocable<decltype(CreateBinding<A...>(Forward<A>(std::declval<A>())...)), T>;
 
 } // namespace UE::Ranges

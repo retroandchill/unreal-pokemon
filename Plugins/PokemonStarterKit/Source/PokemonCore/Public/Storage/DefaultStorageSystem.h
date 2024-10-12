@@ -26,15 +26,20 @@ class POKEMONCORE_API UDefaultStorageSystem : public UObject, public IStorageSys
     UFUNCTION(BlueprintCallable, Category = StorageSystem)
     const TScriptInterface<IStorageBox> &GetBox(int32 Index) const override;
 
+    UFUNCTION(BlueprintCallable, Category = StorageSystem)
+    const TScriptInterface<IStorageBox> &GetCurrentBox() const override;
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = StorageSystem)
     int32 GetCurrentBoxIndex() const override;
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = StorageSystem)
     void SetCurrentBoxIndex(int32 NewIndex) override;
+    
+    TOptional<FDepositResult> TryDeposit(const TScriptInterface<IPokemon> &Pokemon) override;
 
   private:
     TScriptInterface<IStorageBox> CreateStorageBox(FText &&BoxName, int32 BoxCapacity);
-
+    
     UPROPERTY()
     TArray<TScriptInterface<IStorageBox>> Boxes;
 

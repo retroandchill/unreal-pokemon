@@ -43,6 +43,9 @@ class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
     const TArray<TScriptInterface<IPokemon>> &GetParty() const override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon")
+    bool IsPartyFull() const override;
+
+    UFUNCTION(BlueprintPure, Category = "Pokémon")
     TScriptInterface<IPokemon> GetPokemon(int32 Index) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Pokémon")

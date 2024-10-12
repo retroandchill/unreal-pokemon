@@ -20,8 +20,7 @@ void UPromptReplaceMove::Activate() {
     auto Screen = Layout->PushWidgetToLayerStack<UMoveForgetScreen>(
         RPG::Menus::PrimaryMenuLayerTag, ScreenPaths.MoveForgetScreenClass.TryLoadClass<UMoveForgetScreen>());
     Screen->InitializeScene(Pokemon, Move);
-    Screen->BindToOnMoveForgetComplete(
-        FOnMoveForgetComplete::FDelegate::CreateUObject(this, &UPromptReplaceMove::OnMoveSelectionComplete));
+    Screen->BindToOnMoveForgetComplete(this, &UPromptReplaceMove::OnMoveSelectionComplete);
 }
 
 void UPromptReplaceMove::OnMoveSelectionComplete(bool bMoveReplaced) {

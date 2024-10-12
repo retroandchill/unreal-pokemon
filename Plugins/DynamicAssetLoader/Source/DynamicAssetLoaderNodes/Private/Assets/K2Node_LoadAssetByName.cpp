@@ -35,8 +35,18 @@ void UK2Node_LoadAssetByName::AllocateDefaultPins() {
     SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "AssetNamePinDescription", "The name of the asset to load"));
 
     // Result pin
-    auto ResultPin =
-        CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, GetAssetClassType(), UEdGraphSchema_K2::PN_ReturnValue);
+    auto Setting = GetDefault<UAssetLoadingSettings>();
+    auto &ClassType = Setting->AssetClasses.FindChecked(AssetKey);
+    UEdGraphPin* ResultPin;
+    if (ClassType.AssetClass.IsType<UClass>()) {
+        ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object,
+            &ClassType.AssetClass.Get<UClass>(), UEdGraphSchema_K2::PN_ReturnValue);
+    } else {
+        check(ClassType.AssetClass.IsType<UScriptStruct>())
+        ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
+            &ClassType.AssetClass.Get<UScriptStruct>(), UEdGraphSchema_K2::PN_ReturnValue);
+    }
+    
     ResultPin->PinFriendlyName = NSLOCTEXT("K2Node", "LoadAssetByName Output Asset", "Found Asset");
     SetPinToolTip(*ResultPin,
                   NSLOCTEXT("K2Node", "LoadAssetByName ResultPinDescription", "The returned asset, if found"));
@@ -82,7 +92,7 @@ void UK2Node_LoadAssetByName::ExpandNode(FKismetCompilerContext &CompilerContext
     auto ExecPin = GetExecPin();
     auto AssetNamePin = GetAssetNamePin();
     auto ReturnValuePin = GetResultPin();
-    auto FoundPin = GetAssetNotFoundPin();
+    auto FoundPin = GetAssetFoundPin();
     auto NotFoundPin = GetAssetNotFoundPin();
 
     auto CallCreateExecutePin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
@@ -95,11 +105,38 @@ void UK2Node_LoadAssetByName::ExpandNode(FKismetCompilerContext &CompilerContext
     CompilerContext.MovePinLinksToIntermediate(*ExecPin, *CallCreateExecutePin);
     CallCreateIdentifierPin->DefaultValue = AssetKey.ToString();
     CompilerContext.MovePinLinksToIntermediate(*AssetNamePin, *CallCreateAssetNamePin);
+    
+    if (auto &ClassType = GetDefault<UAssetLoadingSettings>()->AssetClasses.FindChecked(AssetKey); ClassType.AssetClass.IsType<UClass>()) {
+        CallCreateFoundAssetPin->PinType = ReturnValuePin->PinType;
+        CallCreateFoundAssetPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
+        CompilerContext.MovePinLinksToIntermediate(*FoundPin, *CallCreateFoundPin);
+        CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateFoundAssetPin);
+    } else {
+        check(ClassType.AssetClass.IsType<UScriptStruct>())
+        auto &Struct = ClassType.AssetClass.Get<UScriptStruct>();
+        auto HelperClassName = FString::Format(TEXT("{0}Helpers"), { Struct.GetName() });
+        auto HelperClass = FindObject<UClass>(Struct.GetPackage(), *HelperClassName);
+        check(HelperClass != nullptr);
+        auto CastFunctionName = FString::Format(TEXT("Make{0}"), { Struct.GetName() });
+        auto CallCastNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
+        CallCastNode->FunctionReference.SetExternalMember(*CastFunctionName, HelperClass);
+        CallCastNode->AllocateDefaultPins();
 
-    CallCreateFoundAssetPin->PinType = ReturnValuePin->PinType;
-    CallCreateFoundAssetPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
-    CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateFoundAssetPin);
-    CompilerContext.MovePinLinksToIntermediate(*FoundPin, *CallCreateFoundPin);
+        auto CastObjectName = FString::Format(TEXT("As{0}"), { Struct.GetName() });
+        auto CallCastExecutePin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
+        auto CallCastObjectPin = CallCastNode->FindPinChecked(FName("Object"));
+        auto CallCastFoundAssetPin = CallCastNode->FindPinChecked(*CastObjectName);
+        auto CallCastFoundPin = CallCastNode->FindPinChecked(FName("CastSucceeded"));
+        auto CallCastNotFoundPin = CallCastNode->FindPinChecked(FName("CastFailed"));
+
+        CallCreateFoundPin->MakeLinkTo(CallCastExecutePin);
+        CallCreateFoundAssetPin->MakeLinkTo(CallCastObjectPin);
+        
+        CompilerContext.MovePinLinksToIntermediate(*FoundPin, *CallCastFoundPin);
+        CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCastFoundAssetPin);
+        CompilerContext.CopyPinLinksToIntermediate(*NotFoundPin, *CallCastNotFoundPin);
+    }
+    
     CompilerContext.MovePinLinksToIntermediate(*NotFoundPin, *CallCreateNotFoundPin);
 
     BreakAllNodeLinks();
@@ -120,7 +157,7 @@ void UK2Node_LoadAssetByName::GetMenuActions(FBlueprintActionDatabaseRegistrar &
     if (auto ActionKey = GetClass(); ActionRegistrar.IsOpenForRegistration(ActionKey)) {
 
         for (auto Settings = GetDefault<UAssetLoadingSettings>(); auto &[Key, AssetClass] : Settings->AssetClasses) {
-            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(AssetClass.AssetClass, true)) {
+            if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(&AssetClass.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), true)) {
                 continue;
             }
 
@@ -169,9 +206,10 @@ UEdGraphPin *UK2Node_LoadAssetByName::GetResultPin() const {
 UClass *UK2Node_LoadAssetByName::GetAssetClassType() const {
     auto Setting = GetDefault<UAssetLoadingSettings>();
     // clang-format off
-    return UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
+    return &(UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
         UE::Optionals::Map(&FAssetLoadingEntry::AssetClass) |
-        UE::Optionals::OrElse(UObject::StaticClass());
+        UE::Optionals::FlatMap(&FAssetClassType::TryGet<UClass>) |
+        UE::Optionals::OrElse(*UObject::StaticClass()));
     // clang-format on
 }
 

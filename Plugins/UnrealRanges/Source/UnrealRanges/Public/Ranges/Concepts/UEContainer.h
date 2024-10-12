@@ -77,7 +77,7 @@ namespace UE::Ranges {
 
     template <typename T>
         requires UEContainer<T>
-    using TContainerType = typename Detail::TIsUEContainer<std::remove_cvref_t<T>>::ValueType;
+    using TValueType = typename Detail::TIsUEContainer<std::remove_cvref_t<T>>::ValueType;
 
     template <typename T>
     concept UEMap = Detail::TIsUEMap<T>::value;

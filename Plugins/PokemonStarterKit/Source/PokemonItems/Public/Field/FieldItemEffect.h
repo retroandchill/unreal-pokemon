@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Functional/Delegates.h"
 #include "UObject/Object.h"
 
 #include "FieldItemEffect.generated.h"
@@ -24,13 +25,8 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
 #if WITH_EDITOR
     bool ImplementsGetWorld() const override;
 #endif
-
-    /**
-     * Bind a delegate to the callback when an item is done.
-     * @param Delegate The callback for when the item has resolved.
-     * @return The handle to the delegate in question.
-     */
-    FDelegateHandle BindToEffectComplete(FOnItemEffectComplete::FDelegate &&Delegate);
+    
+    UE_MULTICAST_DELEGATE_MEMBER(FOnItemEffectComplete, OnEffectComplete);
 
   protected:
     /**
@@ -39,9 +35,6 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Items)
     void EffectComplete(bool bSuccess) const;
-
-  private:
-    FOnItemEffectComplete OnEffectComplete;
 };
 
 namespace Pokemon::Items {

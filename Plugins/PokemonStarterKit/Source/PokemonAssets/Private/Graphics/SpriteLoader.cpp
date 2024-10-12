@@ -3,6 +3,7 @@
 #include "Graphics/SpriteLoader.h"
 #include "Graphics/AssetClasses.h"
 #include "Pokemon/Pokemon.h"
+#include "Ranges/Optional/OrElse.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/TrainerType.h"
 #include <cmath>
@@ -19,6 +20,23 @@ UPaperFlipbook *USpriteLoader::GetSpeciesBattleSprite(FName Species, bool bBack,
     return Pokemon::Assets::Graphics::PokemonSprites.ResolveAsset(SpriteResolutionList).GetPtrOrNull();
 }
 
+TSoftObjectPtr<UPaperFlipbook> USpriteLoader::GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
+                                                                         bool bBack) {
+    return GetLazySpeciesBattleSprite(Pokemon->GetSpecies().ID, bBack,
+                                      {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
+}
+
+TSoftObjectPtr<UPaperFlipbook> USpriteLoader::GetLazySpeciesBattleSprite(FName Species, bool bBack,
+                                                                         const FPokemonAssetParams &AdditionalParams) {
+    auto SpriteResolutionList =
+        CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
+    // clang-format off
+    return Pokemon::Assets::Graphics::PokemonSprites.ResolveSoftAsset(SpriteResolutionList) |
+           UE::Optionals::Map(&TSoftObjectRef<UPaperFlipbook>::ToSoftObjectPtr) |
+           UE::Optionals::OrElse(TSoftObjectPtr<UPaperFlipbook>());
+    // clang-format on
+}
+
 UPaperFlipbook *USpriteLoader::GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon) {
     return GetSpeciesIcon(Pokemon->GetSpecies().ID, {.Gender = Pokemon->GetGender()});
 }
@@ -26,6 +44,20 @@ UPaperFlipbook *USpriteLoader::GetPokemonIcon(const TScriptInterface<IPokemon> &
 UPaperFlipbook *USpriteLoader::GetSpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams) {
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
     return Pokemon::Assets::Graphics::PokemonSprites.ResolveAsset(SpriteResolutionList).GetPtrOrNull();
+}
+
+TSoftObjectPtr<UPaperFlipbook> USpriteLoader::GetLazyPokemonIcon(const TScriptInterface<IPokemon> &Pokemon) {
+    return GetLazySpeciesIcon(Pokemon->GetSpecies().ID, {.Gender = Pokemon->GetGender()});
+}
+
+TSoftObjectPtr<UPaperFlipbook> USpriteLoader::GetLazySpeciesIcon(FName Species,
+    const FPokemonAssetParams &AdditionalParams) {
+    auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
+    // clang-format off
+    return Pokemon::Assets::Graphics::PokemonSprites.ResolveSoftAsset(SpriteResolutionList) |
+           UE::Optionals::Map(&TSoftObjectRef<UPaperFlipbook>::ToSoftObjectPtr) |
+           UE::Optionals::OrElse(TSoftObjectPtr<UPaperFlipbook>());
+    // clang-format on
 }
 
 TArray<FString> USpriteLoader::CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,

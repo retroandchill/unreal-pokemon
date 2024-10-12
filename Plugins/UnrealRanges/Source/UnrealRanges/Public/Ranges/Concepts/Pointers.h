@@ -80,10 +80,41 @@ namespace UE::Ranges {
     }
 
     template <typename T>
+        requires Pointer<std::remove_cvref_t<T>>
     using TRawPointerType = typename Detail::TPointerTraits<std::remove_cvref_t<T>>::RawPointer;
+
+    template <typename T>
+        requires Pointer<std::remove_cvref_t<T>>
+    using TReferenceType = decltype(*std::declval<T>());
 
     static_assert(Pointer<UObject *>);
     static_assert(Pointer<TObjectPtr<UObject>>);
     static_assert(Pointer<const TObjectPtr<UObject>>);
     static_assert(Pointer<const TObjectPtr<UObject> &>);
+
+    namespace Detail {
+        template <typename>
+        struct TIsReferenceType : std::false_type {};
+
+        template <typename T>
+            requires std::is_base_of_v<UObject, T>
+        struct TIsReferenceType<T> : std::true_type {
+            using VariableType = TObjectPtr<T>;
+            using ArgumentType = T*;
+        };
+
+        template <typename T>
+            requires UnrealInterface<T>
+        struct TIsReferenceType<T> : std::true_type {
+            using VariableType = TScriptInterface<T>;
+            using ArgumentType = const TScriptInterface<T>&;
+        };
+    }
+
+    template <typename T>
+    concept UnrealReferenceType = Detail::TIsReferenceType<T>::value;
+
+    template <typename T>
+        requires UnrealReferenceType<T>
+    using TVariableType = typename TIsReferenceType<T>::VariableType;
 } // namespace UE::Ranges

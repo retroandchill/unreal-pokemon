@@ -23,10 +23,10 @@ namespace UE::Optionals {
          * @param Optional The passed optional
          * @return The obtained value
          */
-        template <typename O, typename S = TOptionalElementType<O>>
+        template <typename O, typename S = decltype(std::declval<O>().Get(std::declval<T>()))>
             requires UEOptional<O>
-        constexpr auto operator()(O &&Optional) {
-            return Optional.IsSet() ? S(Optional.GetValue()) : S(Forward<T>(Value));
+        constexpr S operator()(O &&Optional) {
+            return Optional.Get(Forward<T>(Value));
         }
 
       private:

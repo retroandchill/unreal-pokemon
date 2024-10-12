@@ -5,12 +5,20 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/Pokemon.h"
+#include "Storage/StorageSystem.h"
 
 TScriptInterface<IPokemon> UPartyManagementHelpers::AddPokemonToParty(const UObject *WorldContext,
                                                                       const FPokemonDTO &Pokemon) {
-    auto Player = UGameplayStatics::GetGameInstance(WorldContext)->GetSubsystem<UPokemonSubsystem>()->GetPlayer();
+    auto &Subsystem = UPokemonSubsystem::GetInstance(WorldContext);
+    auto Player = Subsystem.GetPlayer();
     check(Player != nullptr)
     auto CreatedPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(Player.GetObject(), Pokemon);
-    Player->AddPokemonToParty(CreatedPokemon);
+    if (Player->IsPartyFull()) {
+        auto StorageSystem = Subsystem.GetStorageSystem();
+        check(StorageSystem != nullptr)
+        StorageSystem->TryDeposit(CreatedPokemon);
+    } else {
+        Player->AddPokemonToParty(CreatedPokemon);
+    }
     return CreatedPokemon;
 }

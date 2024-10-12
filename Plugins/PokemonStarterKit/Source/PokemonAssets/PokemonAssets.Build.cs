@@ -27,7 +27,7 @@ public class PokemonAssets : ModuleRules
 			{
 				"Core",
 				"DeveloperSettings",
-				"Paper2D"
+				"Paper2D", "UnrealRanges"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -44,6 +44,7 @@ public class PokemonAssets : ModuleRules
 				"PokemonData",
 				"UnrealInjector", 
 				"DynamicAssetLoader",
+				"RPGMenus"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
