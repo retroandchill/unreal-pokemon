@@ -2,4 +2,4 @@
 
 #include "Pokemon/Abilities/AbilityBlock.h"
 
-// Add default functionality here for any IAbilityBlock functions that are not pure virtual.
+DEFINE_INJECTABLE_DEPENDENCY(IAbilityBlock)

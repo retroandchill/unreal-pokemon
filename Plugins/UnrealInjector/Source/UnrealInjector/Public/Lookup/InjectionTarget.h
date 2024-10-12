@@ -6,6 +6,8 @@
 
 #include "InjectionTarget.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnInjectedClassEdited, const FSoftClassPath& Path);
+
 /**
  * Wrapper struct for an injection target. Used for details panel customization.
  */
@@ -25,6 +27,10 @@ struct UNREALINJECTOR_API FInjectionTarget {
     UPROPERTY(EditAnywhere, Category = "Dependency Injection")
     FSoftClassPath InjectedClass;
 
+#if WITH_EDITOR
+    FOnInjectedClassEdited OnInjectedClassEdited;
+#endif
+
     /**
      * Default constructor.
      */
@@ -34,5 +40,6 @@ struct UNREALINJECTOR_API FInjectionTarget {
      * Construct a new instance with the specified interface
      * @param InterfaceType The interface type to use
      */
-    explicit FInjectionTarget(UClass *InterfaceType);
+    explicit FInjectionTarget(const UClass *InterfaceType);
+    
 };

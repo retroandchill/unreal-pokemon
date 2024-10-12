@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprints/BlueprintUtilityNode.h"
+#include "Lookup/InjectableDependency.h"
 
 #include "Utility_ProcessLevelUp.generated.h"
 
@@ -78,7 +79,7 @@ struct POKEMONCORE_API FLevelUpStatChanges {
 /**
  *
  */
-UCLASS(Blueprintable, BlueprintType, Abstract, meta = (UtilityNode))
+UCLASS(Blueprintable, BlueprintType, Abstract)
 class POKEMONCORE_API UUtility_ProcessLevelUp : public UBlueprintUtilityNode {
     GENERATED_BODY()
 
@@ -96,3 +97,5 @@ class POKEMONCORE_API UUtility_ProcessLevelUp : public UBlueprintUtilityNode {
   private:
     FSimpleMulticastDelegate EndProcess;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, UUtility_ProcessLevelUp);

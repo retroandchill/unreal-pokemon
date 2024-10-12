@@ -89,5 +89,9 @@ void FInjectionTargetCustomization::OnSetClass(const UClass *NewClass) const {
     if (auto WrappedProperty = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FInjectionTarget, InjectedClass));
         WrappedProperty->SetValueFromFormattedString(NewClass ? NewClass->GetPathName() : "None") == Success) {
         CachedClassPtr = MakeWeakObjectPtr(NewClass);
+        void* Struct;
+        PropertyHandle->GetValueData(Struct);
+        auto AsInjectionTarget = static_cast<FInjectionTarget *>(Struct);
+        AsInjectionTarget->OnInjectedClassEdited.Broadcast(AsInjectionTarget->InjectedClass);
     }
 }

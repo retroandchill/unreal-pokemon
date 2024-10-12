@@ -5,8 +5,7 @@
 
 FInjectionTarget::FInjectionTarget() = default;
 
-FInjectionTarget::FInjectionTarget(UClass *InterfaceType)
+FInjectionTarget::FInjectionTarget(const UClass *InterfaceType)
     : TargetInterface(InterfaceType),
-      InjectedClass(InterfaceType->IsChildOf<UInterface>() ? UnrealInjector::GetFirstInjectableObject(InterfaceType)
-                                                           : nullptr) {
+      InjectedClass(UnrealInjector::GetFirstInjectableObject(InterfaceType).GetPtrOrNull()) {
 }

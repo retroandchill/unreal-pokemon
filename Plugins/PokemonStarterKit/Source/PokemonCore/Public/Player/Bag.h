@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BagDTO.h"
+#include "Lookup/InjectableDependency.h"
 #include "UObject/Interface.h"
 
 #include "Bag.generated.h"
@@ -11,7 +12,7 @@
 class IBagSorter;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+UINTERFACE(NotBlueprintable, BlueprintType)
 class POKEMONCORE_API UBag : public UInterface {
     GENERATED_BODY()
 };
@@ -85,3 +86,5 @@ class POKEMONCORE_API IBag {
      */
     virtual void ForEachItem(const TFunctionRef<void(FName, int32)> &Callback) const = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IBag);

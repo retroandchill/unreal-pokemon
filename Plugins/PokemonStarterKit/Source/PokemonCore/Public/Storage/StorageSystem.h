@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "StorageSystemDTO.h"
+#include "Lookup/InjectableDependency.h"
 #include "UObject/Interface.h"
 
 #include "StorageSystem.generated.h"
@@ -25,7 +26,7 @@ struct FDepositResult {
 
 class IStorageBox;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
+UINTERFACE(BlueprintType, NotBlueprintable)
 class UStorageSystem : public UInterface {
     GENERATED_BODY()
 };
@@ -65,3 +66,5 @@ class POKEMONCORE_API IStorageSystem {
      */
     virtual TOptional<FDepositResult> TryDeposit(const TScriptInterface<IPokemon>& Pokemon) = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IStorageSystem)

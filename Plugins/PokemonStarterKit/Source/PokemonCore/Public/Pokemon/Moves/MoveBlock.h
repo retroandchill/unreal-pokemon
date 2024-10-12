@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Lookup/InjectableDependency.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/PokemonDTO.h"
 #include "UObject/Interface.h"
@@ -20,7 +21,7 @@ class IMove;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveLearnEnd, bool);
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UMoveBlock : public UInterface {
     GENERATED_BODY()
 };
@@ -97,3 +98,5 @@ class POKEMONCORE_API IMoveBlock {
      */
     virtual TScriptInterface<IMove> CreateNewMove(const FMoveDTO &MoveID) = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IMoveBlock);

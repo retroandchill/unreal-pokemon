@@ -13,7 +13,7 @@ struct FMoveHandle;
 /**
  *
  */
-UCLASS(Blueprintable, BlueprintType, Abstract, meta = (UtilityNode))
+UCLASS(Blueprintable, BlueprintType, Abstract)
 class POKEMONCORE_API UUtility_LearnMove : public UBlueprintUtilityNode {
     GENERATED_BODY()
 
@@ -31,3 +31,6 @@ class POKEMONCORE_API UUtility_LearnMove : public UBlueprintUtilityNode {
   private:
     FOnMoveLearnEnd EndProcess;
 };
+
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, UUtility_LearnMove);

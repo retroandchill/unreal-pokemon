@@ -2,9 +2,10 @@
 
 #include "Lookup/InjectionUtilities.h"
 
-UClass *UnrealInjector::GetFirstInjectableObject(const TSubclassOf<UInterface> &InterfaceType) {
+TOptional<UClass&> UnrealInjector::GetFirstInjectableObject(const UClass *Class) {
+    
     for (TObjectIterator<UClass> It; It; ++It) {
-        if (It->ImplementsInterface(InterfaceType) && !It->HasAnyClassFlags(CLASS_Abstract)) {
+        if ((It->ImplementsInterface(Class) || It->IsChildOf(Class)) && !It->HasAnyClassFlags(CLASS_Abstract)) {
             return *It;
         }
     }

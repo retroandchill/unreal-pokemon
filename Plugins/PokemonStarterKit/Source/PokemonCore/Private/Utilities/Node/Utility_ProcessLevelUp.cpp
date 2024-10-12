@@ -2,6 +2,8 @@
 
 #include "Utilities/Node/Utility_ProcessLevelUp.h"
 
+DEFINE_INJECTABLE_DEPENDENCY(UUtility_ProcessLevelUp)
+
 int32 FStatChange::Diff() const {
     return After - Before;
 }

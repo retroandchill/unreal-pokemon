@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "TrainerDTO.h"
+#include "Lookup/InjectableDependency.h"
 
 #include "Trainer.generated.h"
 
@@ -10,7 +11,7 @@ struct FTrainerType;
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+UINTERFACE(NotBlueprintable, BlueprintType)
 class POKEMONCORE_API UTrainer : public UInterface {
     GENERATED_BODY()
 };
@@ -127,3 +128,5 @@ class POKEMONCORE_API ITrainer {
     UFUNCTION(BlueprintCallable, Category = Bio)
     virtual int32 GetSecretId() const = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, ITrainer);
