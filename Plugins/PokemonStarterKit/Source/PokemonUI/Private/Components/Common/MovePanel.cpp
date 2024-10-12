@@ -6,6 +6,7 @@
 #include "Graphics/AssetClasses.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
 #include "Utilities/WidgetUtilities.h"
 
 const TScriptInterface<IMove> &UMovePanel::GetMove() {
@@ -27,7 +28,11 @@ void UMovePanel::SetIsMoveToLearn(bool bIsBeingLearned) {
 
 UObject *UMovePanel::GetTypeIcon_Implementation() {
     check(Move != nullptr)
-    return Pokemon::Assets::Graphics::TypeIcons.LoadAsset(Move->GetType()).GetPtrOrNull();
+    // clang-format off
+    return Pokemon::Assets::Graphics::TypeIcons.LoadAsset(Move->GetType()) |
+        UE::Optionals::FlatMap([](const FImageAsset& Asset) { return Asset.TryGet(); }) |
+        UE::Optionals::GetPtrOrNull;
+    // clang-format on
 }
 
 void UMovePanel::OnMoveSet() {

@@ -8,6 +8,21 @@
 
 #include "StorageSystem.generated.h"
 
+USTRUCT(BlueprintType)
+struct FDepositResult {
+    GENERATED_BODY()
+
+    UPROPERTY(BlueprintReadWrite)
+    int32 BoxIndex;
+
+    UPROPERTY(BlueprintReadWrite)
+    int32 DepositedPokemonIndex;
+
+    FDepositResult() = default;
+
+    FDepositResult(int32 DepositedPokemonIndex, int32 BoxIndex);
+};
+
 class IStorageBox;
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
@@ -35,8 +50,18 @@ class POKEMONCORE_API IStorageSystem {
     virtual const TScriptInterface<IStorageBox> &GetBox(int32 Index) const = 0;
 
     UFUNCTION(BlueprintCallable, Category = StorageSystem)
+    virtual const TScriptInterface<IStorageBox> &GetCurrentBox() const = 0;
+
+    UFUNCTION(BlueprintCallable, Category = StorageSystem)
     virtual int32 GetCurrentBoxIndex() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = StorageSystem)
     virtual void SetCurrentBoxIndex(int32 NewIndex) = 0;
+
+    /**
+     * Attempt to deposit a Pokémon into the box system
+     * @param Pokemon The Pokémon to try to deposit
+     * @return The index of the box and the slot the Pokémon was deposited to
+     */
+    virtual TOptional<FDepositResult> TryDeposit(const TScriptInterface<IPokemon>& Pokemon) = 0;
 };

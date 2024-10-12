@@ -12,4 +12,7 @@ namespace UE::Ranges {
      */
     constexpr auto Ints = ranges::views::ints;
 
+    template <typename S, typename T>
+    using TIotaView = ranges::iota_view<S, T>;
+
 } // namespace UE::Ranges

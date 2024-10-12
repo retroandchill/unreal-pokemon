@@ -8,6 +8,8 @@
 #include "Graphics/AssetClasses.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
+#include "Ranges/Optional/IfPresent.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/OwnerInfo.h"
 #include "Utilities/PokemonUIUtils.h"
@@ -22,9 +24,15 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();
+
     for (auto Types = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(Pokemon->GetTypes()); auto Asset : Types) {
+        // clang-format off
+        auto AssetObject = Asset |
+                           UE::Optionals::FlatMap([](const FImageAsset &ImageAsset) { return ImageAsset.TryGet();}) |
+                           UE::Optionals::GetPtrOrNull;
+        // clang-format on
         auto Icon = WidgetTree->ConstructWidget<UImage>();
-        UWidgetUtilities::SetBrushFromAsset(Icon, Asset.GetPtrOrNull(), true);
+        UWidgetUtilities::SetBrushFromAsset(Icon, AssetObject, true);
         SlotTypeIcon(Icon);
     }
 

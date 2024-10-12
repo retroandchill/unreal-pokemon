@@ -8,6 +8,7 @@
 #include "Graphics/SpriteLoader.h"
 #include "PaperFlipbookUserWidget.h"
 #include "Pokemon/Pokemon.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
@@ -18,7 +19,11 @@ void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon
     TypeIcons.Empty();
     // clang-format off
     IconGraphics |
-        UE::Ranges::Map([](TOptional<UObject&> Optional) { return Optional.GetPtrOrNull(); }) |
+        UE::Ranges::Map([](const TOptional<FImageAsset> &Optional) {
+            return Optional |
+                UE::Optionals::FlatMap([](const FImageAsset& Opt) { return Opt.TryGet(); }) |
+                UE::Optionals::GetPtrOrNull;
+        }) |
         UE::Ranges::ForEach(this, &UPokemonIconPreview::CreateTypeIcon);
     // clang-format on
 }

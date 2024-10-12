@@ -23,6 +23,11 @@
 			"Name": "UnrealRangesTests",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UnrealRangesEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"SupportURL": "",

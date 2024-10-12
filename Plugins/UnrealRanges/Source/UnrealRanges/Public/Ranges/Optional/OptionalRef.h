@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Pointers.h"
 #include "Templates/NonNullSubclassOf.h"
+#include "Ranges/RangeConcepts.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -65,6 +66,15 @@ struct TOptional<T &> {
      * @param DefaultValue The default to substitute for an empty optional.
      * @return The retrieved value
      */
+    T& Get(T& DefaultValue) const requires (!std::is_const_v<T>) {
+        return Data != nullptr ? *Data : DefaultValue;
+    }
+
+    /**
+     * Get the value of the optional.
+     * @param DefaultValue The default to substitute for an empty optional.
+     * @return The retrieved value
+     */
     const T &Get(const T &DefaultValue) const {
         return Data != nullptr ? *Data : DefaultValue;
     }
@@ -73,15 +83,7 @@ struct TOptional<T &> {
      * Get a nullable pointer for the optional.
      * @return The retrieved value
      */
-    T *GetPtrOrNull() {
-        return Data;
-    }
-
-    /**
-     * Get a nullable pointer for the optional.
-     * @return The retrieved value
-     */
-    const T *GetPtrOrNull() const {
+    T *GetPtrOrNull() const {
         return Data;
     }
 
@@ -89,16 +91,7 @@ struct TOptional<T &> {
      * Get a reference to the underlying data.
      * @return The retrieved value
      */
-    T &GetValue() {
-        check(Data != nullptr)
-        return *Data;
-    }
-
-    /**
-     * Get a reference to the underlying data.
-     * @return The retrieved value
-     */
-    const T &GetValue() const {
+    T &GetValue() const {
         check(Data != nullptr)
         return *Data;
     }
@@ -106,6 +99,14 @@ struct TOptional<T &> {
     auto GetValueOptional() const {
         using ResultType = std::remove_const_t<T>;
         return Data != nullptr ? TOptional<ResultType>(*Data) : TOptional<ResultType>();
+    }
+
+    /**
+     * Convert this value to an Unreal Interface type
+     * @return The created script interface
+     */
+    TScriptInterface<T> GetInterface() const requires UE::Ranges::UnrealInterface<T> {
+        return TScriptInterface<T>(Data != nullptr ? Data->_getUObject() : nullptr);
     }
 
     /**
@@ -173,7 +174,7 @@ namespace UE::Optionals {
     template <typename T>
         requires Ranges::Pointer<T>
     constexpr auto OfNullable(const T &Ptr) {
-        return TOptional<Ranges::TRawPointerType<T>>(Ranges::GetRawPointer<T>(Ptr));
+        return TOptional<Ranges::TReferenceType<T>>(Ranges::GetRawPointer<T>(Ptr));
     }
 
     template <typename T>

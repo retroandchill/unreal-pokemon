@@ -7,6 +7,7 @@
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Types.h"
+#include "Ranges/Concepts/Tuples.h"
 
 namespace UE::Optionals {
 

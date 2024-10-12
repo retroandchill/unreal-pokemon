@@ -84,4 +84,16 @@ class POKEMONCORE_API IStorageBox {
      * @return The Pokémon that used to be in slot
      */
     virtual TOptional<IPokemon &> SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon) = 0;
+
+    /**
+     * Get the list of the stored Pokémon in the box.
+     * @return The stored Pokémon
+     */
+    virtual TOptional<IPokemon&> GetStoredPokemon(int32 Index) const = 0;
+
+    /**
+     * Get the list of the stored Pokémon in the box.
+     * @return The stored Pokémon
+     */
+    virtual const TArray<TScriptInterface<IPokemon>>& GetStoredPokemon() const = 0;
 };

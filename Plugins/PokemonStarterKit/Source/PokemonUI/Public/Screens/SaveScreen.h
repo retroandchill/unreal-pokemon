@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Functional/Delegates.h"
 #include "Screens/Screen.h"
 
 #include "SaveScreen.generated.h"
@@ -45,7 +46,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
      */
     void SaveGame(FOnSaveComplete &&OnComplete);
 
-    FDelegateHandle BindToExitSaveScreen(FExitSaveScreen::FDelegate &&Callback);
+    UE_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
 
   protected:
     /**
@@ -79,8 +80,6 @@ class POKEMONUI_API USaveScreen : public UScreen {
      */
     UPROPERTY(EditAnywhere, Category = "Memo|Formatting")
     FString DateFormat = TEXT("%m/%d/%Y");
-
-    FExitSaveScreen OnExitSaveScreen;
 
     FOnSaveComplete OnSaveCompleteDelegate;
 

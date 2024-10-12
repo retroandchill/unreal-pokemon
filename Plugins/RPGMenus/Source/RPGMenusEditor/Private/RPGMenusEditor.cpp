@@ -3,8 +3,11 @@
 #include "AssetToolsModule.h"
 #include "Data/Windowskin.h"
 #include "IAssetTools.h"
+#include "Details/SoftVariantObjectCustomization.h"
+#include "Details/VariantObjectCustomization.h"
 #include "Windowskin/WindowskinAssetActions.h"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
+#include "Images/ImageAsset.h"
 
 constexpr auto GLoctextNamespace = "FRPGMenusEditorModule";
 
@@ -21,6 +24,15 @@ void FRPGMenusEditorModule::OnPostEngineInit() const {
     // Register thumbnails
     UThumbnailManager::Get().RegisterCustomRenderer(UWindowskin::StaticClass(),
                                                     UWindowskinThumbnailRenderer::StaticClass());
+    
+    auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+    PropertyModule.RegisterCustomPropertyTypeLayout(
+        TEXT("ImageAsset"),
+        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&UE::Ranges::TVariantObjectCustomization<FImageAsset>::MakeInstance));
+    
+    PropertyModule.RegisterCustomPropertyTypeLayout(
+        TEXT("SoftImageAsset"),
+        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&UE::Ranges::TSoftVariantObjectCustomization<FSoftImageAsset>::MakeInstance));
 }
 
 void FRPGMenusEditorModule::ShutdownModule() {

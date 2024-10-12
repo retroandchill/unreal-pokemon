@@ -22,7 +22,7 @@ namespace UE::Optionals {
 
         template <typename O>
             requires UEOptional<O>
-        friend constexpr auto operator|(O &&Optional, TOptionalClosure Closure) {
+        friend constexpr decltype(auto) operator|(O &&Optional, TOptionalClosure Closure) {
             return Closure.Functor(Forward<O>(Optional));
         }
 
