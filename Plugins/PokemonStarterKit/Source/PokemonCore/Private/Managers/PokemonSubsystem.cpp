@@ -2,6 +2,7 @@
 
 #include "Managers/PokemonSubsystem.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Player/Bag.h"
 #include "Player/PlayerMetadata.h"
@@ -14,7 +15,6 @@
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    Collection.InitializeDependency(UDependencyInjectionSubsystem::StaticClass());
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();

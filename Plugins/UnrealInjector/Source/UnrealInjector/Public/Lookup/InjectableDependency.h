@@ -6,7 +6,6 @@
 #include "DependencyInjectionSettings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Concepts/UObjectPointer.h"
 #include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/Filter.h"
@@ -19,8 +18,7 @@ namespace UnrealInjector {
 
     template <typename T>
         requires CanInject<T>
-    class TInjectionSettings {
-    };
+    class TInjectionSettings {};
 
     template <typename T>
         requires CanInject<T>
@@ -32,8 +30,8 @@ namespace UnrealInjector {
     };
 
     template <typename T>
-    concept HasInitializerFunction = requires {
-        &T::Initialize;
+    concept HasInitializerFunction = requires(T Injection) {
+        [&Injection] <typename... A>(A&... Args) { Injection.Initialize(Forward<A>(Args)...); };
     };
 
     template <typename T, typename... A>
@@ -54,7 +52,7 @@ namespace UnrealInjector {
 
         template <typename... A>
             requires CanInitialize<T, A...>
-        auto Inject(UObject* Outer, A&&... Args) {
+        auto Inject(UObject* Outer, A&&... Args) const {
             auto InterfaceClass = UE::Ranges::GetClass<T>();
             auto CreatedObject = CreateInjection(Outer, InterfaceClass);
             if constexpr (InitializableFrom<T, A...>) {
@@ -71,7 +69,7 @@ namespace UnrealInjector {
             auto &Result = Setting->TargetInjections |
                 UE::Ranges::Filter([](const FInjectionTarget& Target) { return UE::Ranges::TypesMatch<T>(Target.InjectedClass); }) |
                 UE::Ranges::FindFirst |
-                UE::Optionals::OrElseGet([Setting] -> auto& { return Setting->TargetInjections.Emplace_GetRef(UE::Ranges::GetClass<T>()); });
+                UE::Optionals::OrElseGet([Setting]() -> auto& { return Setting->TargetInjections.Emplace_GetRef(UE::Ranges::GetClass<T>()); });
             // clang-format on
 
             ClassPtr = Result.InjectedClass;
@@ -98,16 +96,20 @@ namespace UnrealInjector {
 }
 
 #define DECLARE_INJECTABLE_DEPENDENCY(Export, Type) \
+    namespace UnrealInjector { \
     template <> \
-    Export class UnrealInjector::TInjectionSettings<Type> { \
+    class Export TInjectionSettings<Type> { \
         public: \
             static const TInjectableDependency<Type>& Get(); \
         private: \
             static TInjectableDependency<Type> InjectedDependency; \
+    }; \
     }
 
 #define DEFINE_INJECTABLE_DEPENDENCY(Type) \
-    UnrealInjector::TInjectableDependency<Type> UnrealInjector::TInjectionSettings<Type>::InjectedDependency; \
-    const UnrealInjector::TInjectableDependency<Type>& UnrealInjector::TInjectionSettings<Type>::Get() { \
+    namespace UnrealInjector { \
+    TInjectableDependency<Type> TInjectionSettings<Type>::InjectedDependency; \
+    const TInjectableDependency<Type>& TInjectionSettings<Type>::Get() { \
         return InjectedDependency; \
+    } \
     }

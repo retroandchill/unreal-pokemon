@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Lookup/InjectableDependency.h"
 #include "UObject/Interface.h"
+#include "Lookup/InjectableDependency.h"
 
 #include "AbilityBlock.generated.h"
 

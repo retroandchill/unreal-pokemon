@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DependencyInjectionSubsystem.h"
 #include "InjectableDependency.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Optional/OptionalRef.h"
@@ -39,7 +38,7 @@ namespace UnrealInjector {
     template <typename T, typename... A>
         requires Injectable<T> && CanInitialize<T, A...>
     auto NewInjectedDependency(UObject *Outer, A &&...Args) {
-        return TInjectionSettings<T>::Get().Inject(Outer, Args...);
+        return TInjectionSettings<T>::Get().template Inject<A...>(Outer, Forward<A>(Args)...);
     }
 
 } // namespace UnrealInjector

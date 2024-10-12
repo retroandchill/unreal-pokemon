@@ -6,10 +6,7 @@
 #define LOCTEXT_NAMESPACE "FUnrealInjectorModule"
 
 void FUnrealInjectorModule::StartupModule() {
-#if WITH_METADATA
-    FCoreDelegates::OnPostEngineInit.AddLambda(
-        [] { GetMutableDefault<UDependencyInjectionSettings>()->RefreshDependencies(); });
-#endif
+    // No startup code
 }
 
 void FUnrealInjectorModule::ShutdownModule() {

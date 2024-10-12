@@ -46,7 +46,7 @@ class UNREALINJECTOR_API UUtilityNodeSubsystem : public UGameInstanceSubsystem {
     template <typename T, typename... A>
         requires UnrealInjector::BlueprintUtilityNode<T, A...>
     void ExecuteUtilityFunction(A &&...Args) {
-        auto Object = UnrealInjector::NewInjectedDependency<T>();
+        auto Object = UnrealInjector::NewInjectedDependency<T>(this);
         CreatedNodes.Emplace(Object);
         Object->Execute(Forward<A>(Args)...);
     }
