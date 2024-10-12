@@ -51,11 +51,10 @@ namespace UE::Assets {
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::FindAssetByName<U>(AssetClassData.RootDirectory, FullName);
-            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
                     Optionals::Map([](UObject& Object) { return T(&Object); });
-            } else {
-                static_assert(false, "Invalid state");
             }
         }
 
@@ -79,11 +78,10 @@ namespace UE::Assets {
 
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
-            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
                     Optionals::Map([](const TSoftObjectRef<> &Object) { return T::SoftPtrType(&Object); });
-            } else {
-                static_assert(false, "Invalid state");
             }
         }
 
@@ -110,11 +108,10 @@ namespace UE::Assets {
             // clang-format on
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
-            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
                     Optionals::Map([](UObject& Object) { return T(&Object); });
-            } else {
-                static_assert(false, "Invalid state");
             }
         }
 
@@ -134,11 +131,10 @@ namespace UE::Assets {
             // clang-format on
             if constexpr (std::is_base_of_v<UObject, U>) {
                 return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
-            } else if constexpr (Ranges::VariantObjectStruct<U>) {
+            } else {
+                static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
                     Optionals::Map([](const TSoftObjectRef<>& Object) { return T(&Object); });
-            } else {
-                static_assert(false, "Invalid state");
             }
         }
 
