@@ -20,11 +20,6 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "RPGMenusDeveloper",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "RPGMenusEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
