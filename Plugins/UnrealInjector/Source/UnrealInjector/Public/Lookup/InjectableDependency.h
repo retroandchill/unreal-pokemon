@@ -53,8 +53,7 @@ namespace UnrealInjector {
         template <typename... A>
             requires CanInitialize<T, A...>
         auto Inject(UObject* Outer, A&&... Args) const {
-            auto InterfaceClass = UE::Ranges::GetClass<T>();
-            auto CreatedObject = CreateInjection(Outer, InterfaceClass);
+            auto CreatedObject = CreateInjection(Outer, ClassPtr.LoadSynchronous());
             if constexpr (InitializableFrom<T, A...>) {
                 CreatedObject->Initialize(Forward<A>(Args)...);
             }
