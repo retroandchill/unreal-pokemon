@@ -18,6 +18,10 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonStorageScreen : public UScreen {
     GENERATED_BODY()
 
+public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UPokemonStorageScreen* AddPokemonStorageScreenToStack(const UObject* WorldContextObject);
+
 protected:
     void NativeConstruct() override;
     
@@ -49,3 +53,5 @@ private:
     TObjectPtr<UStorageInfoPanel> StorageInfoPanel;
 
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UPokemonStorageScreen)

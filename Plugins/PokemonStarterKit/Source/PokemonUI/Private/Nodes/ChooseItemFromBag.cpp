@@ -14,9 +14,7 @@ UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldCo
 }
 
 void UChooseItemFromBag::Activate() {
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto ScreenClass = GetDefault<UPokemonUISettings>()->BagScreenClass.TryLoadClass<UBagScreen>();
-    auto Screen = Layout->PushWidgetToLayerStack<UBagScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
+    auto Screen = UBagScreen::AddBagScreenToStack(WorldContextObject);
     Screen->ApplyItemFilter(ItemFilter);
     Screen->GetOnItemSelected().BindUObject(this, &UChooseItemFromBag::ExecuteOnSelected);
     Screen->GetOnScreenClosed().AddUniqueDynamic(this, &UChooseItemFromBag::ExecuteOnCanceled);

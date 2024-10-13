@@ -6,6 +6,7 @@
 #include "DependencyInjectionSettings.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Algorithm/FindFirst.h"
+#include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/Filter.h"
@@ -29,18 +30,13 @@ namespace UnrealInjector {
         { TInjectionSettings<T>::Get() } -> std::same_as<const TInjectableDependency<T>&>;
     };
 
-    template <typename T>
-    concept HasInitializerFunction = requires(T Injection) {
-        [&Injection] <typename... A>(A&... Args) { Injection.Initialize(Forward<A>(Args)...); };
-    };
-
     template <typename T, typename... A>
-    concept InitializableFrom = HasInitializerFunction<T> && requires(T Injection, A&&... Args) {
+    concept InitializableFrom = requires(T Injection, A&&... Args) {
         Injection.Initialize(Forward<A>(Args)...);
     };
 
     template <typename T, typename... A>
-    concept CanInitialize = (!HasInitializerFunction<T> && sizeof...(A) == 0) || InitializableFrom<T, A...>;
+    concept CanInitialize = (!InitializableFrom<T> && sizeof...(A) == 0) || InitializableFrom<T, A...>;
     
     template <typename T>
         requires CanInject<T>
@@ -49,6 +45,12 @@ namespace UnrealInjector {
         TInjectableDependency() {
             FCoreDelegates::OnPostEngineInit.Add(FSimpleDelegate::CreateRaw(this, &TInjectableDependency::SetUpInjection));
         }
+
+        ~TInjectableDependency() = default;
+        TInjectableDependency(const TInjectableDependency&) = delete;
+        TInjectableDependency& operator=(const TInjectableDependency&) = delete;
+        TInjectableDependency(TInjectableDependency&&) = delete;
+        TInjectableDependency& operator=(TInjectableDependency&&) = delete;
 
         template <typename... A>
             requires CanInitialize<T, A...>
@@ -65,8 +67,8 @@ namespace UnrealInjector {
         void SetUpInjection() {
             auto Setting = GetMutableDefault<UDependencyInjectionSettings>();
             // clang-format off
-            auto &Result = Setting->TargetInjections |
-                UE::Ranges::Filter([](const FInjectionTarget& Target) { return UE::Ranges::TypesMatch<T>(Target.InjectedClass); }) |
+            auto& Result = Setting->TargetInjections |
+                UE::Ranges::Filter([](const FInjectionTarget& Target) { return UE::Ranges::TypesMatch<T>(Target.TargetInterface); }) |
                 UE::Ranges::FindFirst |
                 UE::Optionals::OrElseGet([Setting]() -> auto& { return Setting->TargetInjections.Emplace_GetRef(UE::Ranges::GetClass<T>()); });
             // clang-format on

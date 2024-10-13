@@ -20,8 +20,7 @@ void UDisplayMessageWithChoices::Activate() {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr) {
-        auto ScreenClass = GetDefault<UPokemonUISettings>()->TextScreenClass.TryLoadClass<UTextDisplayScreen>();
-        Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
+        Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContextObject);
     }
     Screen->DisplayChoices(Message, Choices);
     Screen->ProcessChoice.AddUniqueDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);

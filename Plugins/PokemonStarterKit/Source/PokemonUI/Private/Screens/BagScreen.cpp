@@ -9,7 +9,14 @@
 #include "ItemEffectLookup.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
+#include "Utilities/RPGMenuUtilities.h"
 #include "Utilities/TrainerHelpers.h"
+
+DEFINE_INJECTABLE_DEPENDENCY(UBagScreen)
+
+UBagScreen * UBagScreen::AddBagScreenToStack(const UObject *WorldContextObject) {
+    return URPGMenuUtilities::InjectScreenToStack<UBagScreen>(WorldContextObject).GetPtrOrNull();
+}
 
 void UBagScreen::NativeConstruct() {
     Super::NativeConstruct();

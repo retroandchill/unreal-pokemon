@@ -36,10 +36,10 @@ namespace UE::Ranges {
         requires std::derived_from<T, UObject> || UnrealInterface<T>
     constexpr bool TypesMatch(const UClass &Class) {
         if constexpr (std::derived_from<T, UObject>) {
-            return Class.IsChildOf<UObject>();
+            return Class.IsChildOf<T>();
         } else {
             static_assert(UnrealInterface<T>);
-            return Class.ImplementsInterface(T::UClassType::StaticClass());
+            return Class.IsChildOf<typename T::UClassType>();
         }
     }
 

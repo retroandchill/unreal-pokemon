@@ -9,6 +9,13 @@
 #include "Components/Summary/SummaryTabWidget.h"
 #include "Graphics/SpriteLoader.h"
 #include "PaperFlipbookUserWidget.h"
+#include "Utilities/RPGMenuUtilities.h"
+
+DEFINE_INJECTABLE_DEPENDENCY(UPokemonSummaryScreen)
+
+UPokemonSummaryScreen * UPokemonSummaryScreen::AddPokemonSummaryScreenToStack(const UObject *WorldContextObject) {
+    return URPGMenuUtilities::InjectScreenToStack<UPokemonSummaryScreen>(WorldContextObject).GetPtrOrNull();
+}
 
 void UPokemonSummaryScreen::NativePreConstruct() {
     Super::NativePreConstruct();

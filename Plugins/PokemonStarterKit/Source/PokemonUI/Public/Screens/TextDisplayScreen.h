@@ -27,6 +27,10 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UTextDisplayScreen : public UScreen {
     GENERATED_BODY()
 
+public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UTextDisplayScreen* AddTextDisplayScreenToOverlay(const UObject* WorldContextObject);
+
   protected:
     void NativeConstruct() override;
 
@@ -97,3 +101,5 @@ class POKEMONUI_API UTextDisplayScreen : public UScreen {
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UCommandWindow> CommandWindow;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UTextDisplayScreen)

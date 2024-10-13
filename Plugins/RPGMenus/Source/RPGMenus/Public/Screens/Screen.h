@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 #include "NativeGameplayTags.h"
+#include "Lookup/InjectableDependency.h"
 
 #include "Screen.generated.h"
 
@@ -24,7 +25,7 @@ namespace RPG::Menus {
      * The native tag assigned to any overlay layers layer for display
      */
     RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag);
-
+    
 } // namespace RPG::Menus
 
 UENUM(BlueprintType)
@@ -95,3 +96,11 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     UPROPERTY(EditDefaultsOnly, Category = Input)
     EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::CapturePermanently;
 };
+
+namespace RPG::Menus {
+    template <typename T>
+    concept InjectableScreen = std::derived_from<T, UScreen> && UnrealInjector::Injectable<T>;
+
+    template <typename T, typename... A>
+    concept CanInjectScreen = InjectableScreen<T> && UnrealInjector::CanInitialize<T, A...>;
+}

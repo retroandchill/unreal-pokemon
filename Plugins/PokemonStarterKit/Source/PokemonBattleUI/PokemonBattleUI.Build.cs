@@ -17,7 +17,8 @@ public class PokemonBattleUI : ModuleRules
                 "PokemonCore",
                 "CommonUI",
                 "CommonGame",
-                "DynamicAssetLoader"
+                "DynamicAssetLoader",
+                "UnrealInjector"
             }
         );
 

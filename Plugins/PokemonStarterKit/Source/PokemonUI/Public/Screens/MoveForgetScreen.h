@@ -8,6 +8,7 @@
 
 #include "MoveForgetScreen.generated.h"
 
+struct FMoveHandle;
 class IMove;
 class UMoveSelectWindow;
 class UMoveInfoWindow;
@@ -24,6 +25,10 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveForgetComplete, bool);
 UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UMoveForgetScreen : public UScreen {
     GENERATED_BODY()
+
+public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject, AutoCreateRefTerm = Move))
+    static UMoveForgetScreen* AddMoveForgetScreenToStack(const UObject* WorldContextObject);
 
   protected:
     void NativeConstruct() override;
@@ -146,3 +151,5 @@ class POKEMONUI_API UMoveForgetScreen : public UScreen {
     UPROPERTY(BlueprintGetter = GetMoveInfoWindow, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UMoveInfoWindow> MoveInfoWindow;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UMoveForgetScreen)

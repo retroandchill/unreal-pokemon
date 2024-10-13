@@ -3,6 +3,13 @@
 #include "Screens/MoveForgetScreen.h"
 #include "Components/Common/MoveInfoWindow.h"
 #include "Components/Common/MoveSelectWindow.h"
+#include "Utilities/RPGMenuUtilities.h"
+
+DEFINE_INJECTABLE_DEPENDENCY(UMoveForgetScreen)
+
+UMoveForgetScreen * UMoveForgetScreen::AddMoveForgetScreenToStack(const UObject *WorldContextObject) {
+    return URPGMenuUtilities::InjectScreenToStack<UMoveForgetScreen>(WorldContextObject).GetPtrOrNull();
+}
 
 void UMoveForgetScreen::NativeConstruct() {
     Super::NativeConstruct();

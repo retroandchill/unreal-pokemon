@@ -16,6 +16,10 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UPauseMenuScreen : public UScreen {
     GENERATED_BODY()
 
+public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UPauseMenuScreen* AddPauseMenuScreenToStack(const UObject* WorldContextObject);
+    
   protected:
     void NativeConstruct() override;
 
@@ -26,3 +30,5 @@ class POKEMONUI_API UPauseMenuScreen : public UScreen {
     UPROPERTY(EditAnywhere, Category = Sound)
     TObjectPtr<USoundBase> OpenSound;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UPauseMenuScreen)

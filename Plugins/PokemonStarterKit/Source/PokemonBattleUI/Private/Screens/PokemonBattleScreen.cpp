@@ -18,7 +18,14 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Construct.h"
+#include "Utilities/RPGMenuUtilities.h"
 #include <functional>
+
+DEFINE_INJECTABLE_DEPENDENCY(UPokemonBattleScreen)
+
+UPokemonBattleScreen * UPokemonBattleScreen::AddPokemonBattleScreenToStack(const UObject *WorldContextObject) {
+    return URPGMenuUtilities::InjectScreenToStack<UPokemonBattleScreen>(WorldContextObject).GetPtrOrNull();
+}
 
 void UPokemonBattleScreen::NativeConstruct() {
     Super::NativeConstruct();

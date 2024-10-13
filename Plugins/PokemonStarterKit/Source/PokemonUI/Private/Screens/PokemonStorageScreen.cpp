@@ -8,6 +8,13 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Storage/StorageSystem.h"
 #include "Pokemon/Pokemon.h"
+#include "Utilities/RPGMenuUtilities.h"
+
+DEFINE_INJECTABLE_DEPENDENCY(UPokemonStorageScreen)
+
+UPokemonStorageScreen * UPokemonStorageScreen::AddPokemonStorageScreenToStack(const UObject *WorldContextObject) {
+    return URPGMenuUtilities::InjectScreenToStack<UPokemonStorageScreen>(WorldContextObject).GetPtrOrNull();
+}
 
 void UPokemonStorageScreen::NativeConstruct() {
     Super::NativeConstruct();
