@@ -16,11 +16,12 @@ UE_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture2D, UTexture2DDynamic, UMat
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FImageAsset {
+    // clang-format off
     UPROPERTY(EditAnywhere,
               meta = (AllowedClasses =
-                          "/Script/Engine.Texture2D,/Script/Engine.Texture2DDynamic,/Script/Engine.MaterialInterface,/"
-                          "Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook",
+                          "/Script/Engine.Texture2D,/Script/Engine.Texture2DDynamic,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook",
                       DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
+    // clang-format on
     TObjectPtr<UObject> ContainedObject;
 
     UPROPERTY()
@@ -29,11 +30,12 @@ struct FImageAsset {
 
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FSoftImageAsset {
+    // clang-format off
     UPROPERTY(EditAnywhere,
               meta = (AllowedClasses =
-                          "/Script/Engine.Texture2D,/Script/Engine.Texture2DDynamic,/Script/Engine.MaterialInterface,/"
-                          "Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook",
+                          "/Script/Engine.Texture2D,/Script/Engine.Texture2DDynamic,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook",
                       DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
+    // clang-format on
     TSoftObjectPtr<UObject> Ptr;
 
     UPROPERTY()
