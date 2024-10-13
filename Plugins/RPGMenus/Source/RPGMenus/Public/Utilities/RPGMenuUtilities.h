@@ -27,7 +27,6 @@ class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
         auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
 
         if (auto Layer = Layout->GetLayerWidget(LayerTag); Layer != nullptr) {
-            auto &Injection = UnrealInjector::TInjectionSettings<T>::Get();
             auto Widget = UnrealInjector::NewInjectedDependency<T, A...>(Layer, Forward<A>(Args)...);
             Layer->AddWidgetInstance(*Widget);
             return Widget;
