@@ -25,7 +25,7 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
 #if WITH_EDITOR
     bool ImplementsGetWorld() const override;
 #endif
-    
+
     UE_MULTICAST_DELEGATE_MEMBER(FOnItemEffectComplete, OnEffectComplete);
 
   protected:

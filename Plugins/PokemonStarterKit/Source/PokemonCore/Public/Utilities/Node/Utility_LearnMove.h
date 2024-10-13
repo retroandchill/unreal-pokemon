@@ -32,5 +32,4 @@ class POKEMONCORE_API UUtility_LearnMove : public UBlueprintUtilityNode {
     FOnMoveLearnEnd EndProcess;
 };
 
-
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, UUtility_LearnMove);

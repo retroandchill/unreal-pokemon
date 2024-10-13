@@ -6,7 +6,7 @@
 
 #include "InjectionTarget.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnInjectedClassEdited, const FSoftClassPath& Path);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnInjectedClassEdited, const FSoftClassPath &Path);
 
 /**
  * Wrapper struct for an injection target. Used for details panel customization.
@@ -41,5 +41,4 @@ struct UNREALINJECTOR_API FInjectionTarget {
      * @param InterfaceType The interface type to use
      */
     explicit FInjectionTarget(const UClass *InterfaceType);
-    
 };

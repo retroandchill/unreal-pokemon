@@ -4,7 +4,7 @@
 #include "Modules/ModuleManager.h"
 
 class FDynamicAssetLoaderEditorModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 };

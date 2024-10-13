@@ -19,12 +19,12 @@ namespace UE::Ranges {
 
         template <typename... T>
         struct TIsTuple<TTuple<T...>> : std::true_type {};
-    }
+    } // namespace Detail
 
     template <typename T, size_t N>
     concept HasTupleElement = requires(T Tuple) {
-      typename std::tuple_element_t<N, std::remove_const_t<T>>;
-      { get<N>(Tuple) } -> std::convertible_to<const std::tuple_element_t<N, T>&>;
+        typename std::tuple_element_t<N, std::remove_const_t<T>>;
+        { get<N>(Tuple) } -> std::convertible_to<const std::tuple_element_t<N, T> &>;
     };
 
     template <typename T>
@@ -42,14 +42,15 @@ namespace UE::Ranges {
     static_assert(TupleLike<TTuple<int32, bool, char>>);
 
     template <typename F, typename T>
-    concept CanApply = TupleLike<std::remove_reference_t<T>> && requires(std::remove_cvref_t<T> Tuple, F&& Functor) {
-        { ranges::tuple_apply(Forward<F>(Functor), Tuple) } -> std::convertible_to<decltype([
-            Functor, Tuple]<size_t... N>(std::index_sequence<N...>) {
-                return Functor(get<N>(Tuple)...);
-            }(std::make_index_sequence<std::tuple_size_v<std::remove_cvref_t<T>>>()))>;
+    concept CanApply = TupleLike<std::remove_reference_t<T>> && requires(std::remove_cvref_t<T> Tuple, F &&Functor) {
+        {
+            ranges::tuple_apply(Forward<F>(Functor), Tuple)
+        } -> std::convertible_to<decltype([Functor, Tuple]<size_t... N>(std::index_sequence<N...>) {
+            return Functor(get<N>(Tuple)...);
+        }(std::make_index_sequence<std::tuple_size_v<std::remove_cvref_t<T>>>()))>;
     };
 
-    static_assert(CanApply<void(*)(int32, int32), std::pair<int32, int32>>);
-    static_assert(CanApply<void(*)(int32, int32), TPair<int32, int32>>);
-    
-}
+    static_assert(CanApply<void (*)(int32, int32), std::pair<int32, int32>>);
+    static_assert(CanApply<void (*)(int32, int32), TPair<int32, int32>>);
+
+} // namespace UE::Ranges

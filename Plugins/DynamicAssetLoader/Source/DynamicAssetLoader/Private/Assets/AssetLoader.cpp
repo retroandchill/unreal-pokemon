@@ -16,7 +16,7 @@ FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView A
     return FString::Format(TEXT("{0}/{1}{2}.{2}"), {BasePackageName, Prefix, AssetName});
 }
 
-EAssetLoadResult UAssetLoader::FindAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
+EAssetLoadResult UAssetLoader::FindAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                                const FString &AssetName, UObject *&FoundAsset) {
     FoundAsset = FindAssetByName(BasePackageName, AssetName) |
                  UE::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
@@ -28,7 +28,8 @@ EAssetLoadResult UAssetLoader::LoadDynamicAsset(FName Identifier, const FString 
     auto Settings = GetDefault<UAssetLoadingSettings>();
     auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
     auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
-    return FindAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory, FullName, FoundAsset);
+    return FindAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory,
+                           FullName, FoundAsset);
 }
 
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,

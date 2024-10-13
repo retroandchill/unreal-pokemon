@@ -13,7 +13,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSummaryScreen)
 
-UPokemonSummaryScreen * UPokemonSummaryScreen::AddPokemonSummaryScreenToStack(const UObject *WorldContextObject) {
+UPokemonSummaryScreen *UPokemonSummaryScreen::AddPokemonSummaryScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<UPokemonSummaryScreen>(WorldContextObject).GetPtrOrNull();
 }
 

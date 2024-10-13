@@ -7,9 +7,9 @@
 namespace UE::Ranges {
     template <typename T>
     concept CoreStructType = requires {
-        { TBaseStructure<std::remove_cvref_t<T>>::Get() } -> std::same_as<UScriptStruct*>;
+        { TBaseStructure<std::remove_cvref_t<T>>::Get() } -> std::same_as<UScriptStruct *>;
     };
-    
+
     /**
      * Concept for any USTRUCT in the editor.
      */

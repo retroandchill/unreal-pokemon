@@ -14,13 +14,13 @@ namespace UE::Ranges {
     template <typename T>
         requires VariantObjectStruct<T>
     class TVariantObjectCustomization : public IPropertyTypeCustomization {
-    public:
+      public:
         static TSharedRef<IPropertyTypeCustomization> MakeInstance() {
             return MakeShared<TVariantObjectCustomization>();
         }
 
-        void CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle, FDetailWidgetRow& HeaderRow,
-            IPropertyTypeCustomizationUtils& StructCustomizationUtils) override {
+        void CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle, FDetailWidgetRow &HeaderRow,
+                             IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
             auto WrappedProperty = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(T, ContainedObject));
             // clang-format off
             HeaderRow.NameContent()
@@ -32,22 +32,23 @@ namespace UE::Ranges {
                     WrappedProperty->CreatePropertyValueWidget()
                 ];
             // clang-format on
-            
+
             WrappedProperty->SetOnPropertyValueChanged(FSimpleDelegate::CreateLambda([StructPropertyHandle] {
-                void* StructData;
-                if (const auto Result = StructPropertyHandle->GetValueData(StructData); Result != FPropertyAccess::Success) {
+                void *StructData;
+                if (const auto Result = StructPropertyHandle->GetValueData(StructData);
+                    Result != FPropertyAccess::Success) {
                     return;
                 }
 
                 check(StructData != nullptr)
-                auto AsVariant = static_cast<T*>(StructData);
+                auto AsVariant = static_cast<T *>(StructData);
                 AsVariant->TypeIndex = AsVariant->GetTypeIndex(AsVariant->ContainedObject).GetValue();
             }));
         }
-        
-        void CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle, IDetailChildrenBuilder& ChildBuilder,
-            IPropertyTypeCustomizationUtils& StructCustomizationUtils) override {
+
+        void CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle, IDetailChildrenBuilder &ChildBuilder,
+                               IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
             // No child customization
         }
     };
-}
+} // namespace UE::Ranges

@@ -7,7 +7,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UTextDisplayScreen)
 
-UTextDisplayScreen * UTextDisplayScreen::AddTextDisplayScreenToOverlay(const UObject *WorldContextObject) {
+UTextDisplayScreen *UTextDisplayScreen::AddTextDisplayScreenToOverlay(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToOverlay<UTextDisplayScreen>(WorldContextObject).GetPtrOrNull();
 }
 

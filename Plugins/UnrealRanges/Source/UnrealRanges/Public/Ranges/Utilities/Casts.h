@@ -49,19 +49,19 @@ namespace UE::Ranges {
         if (Class == nullptr) {
             return false;
         }
-        
+
         return TypesMatch<T>(*Class);
     }
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr bool TypesMatch(const FSoftClassPath& Path) {
+    constexpr bool TypesMatch(const FSoftClassPath &Path) {
         return TypesMatch<T>(Path.TryLoadClass<UObject>());
     }
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr UClass* GetClass() {
+    constexpr UClass *GetClass() {
         if constexpr (std::derived_from<T, UObject>) {
             return T::StaticClass();
         } else {
@@ -69,6 +69,5 @@ namespace UE::Ranges {
             return T::UClassType::StaticClass();
         }
     }
-    
 
 } // namespace UE::Ranges

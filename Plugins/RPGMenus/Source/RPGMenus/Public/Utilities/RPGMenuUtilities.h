@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PrimaryGameLayout.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Lookup/InjectionUtilities.h"
+#include "PrimaryGameLayout.h"
 #include "Screens/Screen.h"
 
 #include "RPGMenuUtilities.generated.h"
@@ -19,12 +19,13 @@ UCLASS()
 class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
-    static TOptional<T&> InjectScreenToLayer(const UObject* WorldContextObject, const FGameplayTag& LayerTag, A&&... Args) {
+    static TOptional<T &> InjectScreenToLayer(const UObject *WorldContextObject, const FGameplayTag &LayerTag,
+                                              A &&...Args) {
         auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-        
+
         if (auto Layer = Layout->GetLayerWidget(LayerTag); Layer != nullptr) {
             auto &Injection = UnrealInjector::TInjectionSettings<T>::Get();
             auto Widget = UnrealInjector::NewInjectedDependency<T, A...>(Layer, Forward<A>(Args)...);
@@ -34,16 +35,16 @@ public:
 
         return nullptr;
     }
-    
+
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
-    static TOptional<T&> InjectScreenToStack(const UObject* WorldContextObject, A&&... Args) {
+    static TOptional<T &> InjectScreenToStack(const UObject *WorldContextObject, A &&...Args) {
         return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::PrimaryMenuLayerTag, Forward<A>(Args)...);
     }
 
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
-    static TOptional<T&> InjectScreenToOverlay(const UObject* WorldContextObject, A&&... Args) {
+    static TOptional<T &> InjectScreenToOverlay(const UObject *WorldContextObject, A &&...Args) {
         return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::OverlayMenuLayerTag, Forward<A>(Args)...);
     }
 

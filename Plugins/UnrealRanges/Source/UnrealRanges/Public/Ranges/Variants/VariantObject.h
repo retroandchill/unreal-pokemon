@@ -3,56 +3,51 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Concepts/Structs.h"
 #include "Ranges/Concepts/UObjectPointer.h"
+#include "Ranges/RangeConcepts.h"
 #include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/FilterTuple.h"
 
 #include "VariantObject.generated.h"
 
 UENUM()
-enum class EVariantFindResult : uint8 {
-    CastSucceeded UMETA(DisplayName = "then"),
-    CastFailed
-};
+enum class EVariantFindResult : uint8 { CastSucceeded UMETA(DisplayName = "then"), CastFailed };
 
 namespace UE::Ranges {
 
     template <typename... T>
-        requires ((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+        requires((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
     struct TVariantObject;
-    
+
     namespace Detail {
         template <typename>
         struct TIsVariantObject : std::false_type {};
 
         template <typename... T>
         struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
-    }
+    } // namespace Detail
 
     template <typename T>
     concept VariantObject = Detail::TIsVariantObject<T>::value;
 
     template <typename T>
-    concept VariantObjectStruct = UEStruct<T> && VariantObject<T> && requires {
-        typename T::SoftPtrType;
-    };
-    
+    concept VariantObjectStruct = UEStruct<T> && VariantObject<T> && requires { typename T::SoftPtrType; };
+
     template <typename T>
         requires VariantObjectStruct<T>
     class TVariantObjectCustomization;
-    
+
     /**
      * Specialized variant type that handles a subset of UObject subclasses and interfaces.
      * @tparam T The types that are valid
      */
     template <typename... T>
-        requires ((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+        requires((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
     struct TVariantObject {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
-	    using IntrusiveUnsetOptionalStateType = TVariantObject;
+        using IntrusiveUnsetOptionalStateType = TVariantObject;
 
         /**
          * Default construct, creates a variant object that exists within an invalid state,
@@ -60,7 +55,7 @@ namespace UE::Ranges {
          * into the unset state.
          */
         TVariantObject() = default;
-        
+
         /**
          * Construct a new object from the given object
          * @tparam U The type of object to construct from
@@ -68,7 +63,7 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires UObjectPointer<U> && (std::same_as<T, U> || ...)
-        explicit TVariantObject(U* Object) : ContainedObject(Object), TypeIndex(GetTypeIndex<U>()) {
+        explicit TVariantObject(U *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex<U>()) {
             check(Object != nullptr)
         }
 
@@ -79,7 +74,8 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires UnrealInterface<U> && (std::same_as<T, U> || ...)
-        explicit TVariantObject(const TScriptInterface<U>& Object) : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex<U>()) {
+        explicit TVariantObject(const TScriptInterface<U> &Object)
+            : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex<U>()) {
             check(Object != nullptr)
         }
 
@@ -87,21 +83,22 @@ namespace UE::Ranges {
          * Attempt to construct a new object from the given object. will raise a fatal error if the wrong type.
          * @param Object The object to construct from
          */
-        explicit TVariantObject(UObject* Object) : ContainedObject(Object), TypeIndex(GetTypeIndex(Object).GetValue()) {
+        explicit TVariantObject(UObject *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex(Object).GetValue()) {
         }
 
         /**
          * Attempt to construct a new object from the given interface, will raise a fatal error if the wrong type.
          * @param Object The inteface to construct from
          */
-        explicit TVariantObject(const FScriptInterface& Object) : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue()) {
+        explicit TVariantObject(const FScriptInterface &Object)
+            : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue()) {
         }
 
         /**
          * Access any of the members on UObject, regardless of the underlying type.
          * @return The underlying object
          */
-        UObject* operator->() const {
+        UObject *operator->() const {
             return ContainedObject;
         }
 
@@ -109,7 +106,7 @@ namespace UE::Ranges {
          * Dereference the underlying UObject, regardless of the underlying type.
          * @return The underlying object
          */
-        UObject& operator*() const {
+        UObject &operator*() const {
             return *ContainedObject;
         }
 
@@ -136,12 +133,12 @@ namespace UE::Ranges {
             return !IsType<std::nullptr_t>() && ContainedObject != nullptr;
         }
 
-    protected:
+      protected:
         /**
          * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
          * @return The raw object pointer
          */
-        TObjectPtr<UObject>& GetObjectPtr() {
+        TObjectPtr<UObject> &GetObjectPtr() {
             return ContainedObject;
         }
 
@@ -149,61 +146,59 @@ namespace UE::Ranges {
          * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
          * @return The raw object pointer
          */
-        const TObjectPtr<UObject>& GetObjectPtr() const {
+        const TObjectPtr<UObject> &GetObjectPtr() const {
             return ContainedObject;
         }
 
-    public:
+      public:
         /**
          * Get a reference to the held value, will raise a fatal error if the wrong type.
          * @tparam U The type of the value
-         * @return 
+         * @return
          */
         template <typename U>
-            requires (std::same_as<T, U> || ...)
-        U& Get() const {
+            requires(std::same_as<T, U> || ...)
+        U &Get() const {
             return *CastChecked<U>(ContainedObject);
         }
 
-        UObject& Get() const {
-            check(::IsValid(ContainedObject));
+        UObject &Get() const {
+            check(::IsValid(ContainedObject))
+            ;
             return *ContainedObject;
         }
 
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        TOptional<U&> TryGet() const {
+        TOptional<U &> TryGet() const {
             return Optionals::OfNullable(Cast<U>(ContainedObject));
         }
 
-        TOptional<UObject&> TryGet() const {
+        TOptional<UObject &> TryGet() const {
             return Optionals::OfNullable(ContainedObject);
         }
-        
+
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         static constexpr uint64 GetTypeIndex() {
-            constexpr std::array<bool, sizeof...(T) + 1> TypesMatch = { std::same_as<U, std::nullptr_t>, std::same_as<U, T>... };
+            constexpr std::array<bool, sizeof...(T) + 1> TypesMatch = {std::same_as<U, std::nullptr_t>,
+                                                                       std::same_as<U, T>...};
             auto Find = ranges::find_if(TypesMatch, [](bool Matches) { return Matches; });
             check(Find != TypesMatch.end())
             return std::distance(TypesMatch.begin(), Find);
         }
 
-        static TOptional<uint64> GetTypeIndex(const UObject* Object) {
-            constexpr std::array TypeChecks = {
-                &TVariantObject::IsValidType<std::nullptr_t>,
-                &TVariantObject::IsValidType<T>...
-            };
-            auto Find = ranges::find_if(TypeChecks, [Object](auto&& Callback) { return Callback(Object); });
+        static TOptional<uint64> GetTypeIndex(const UObject *Object) {
+            constexpr std::array TypeChecks = {&TVariantObject::IsValidType<std::nullptr_t>,
+                                               &TVariantObject::IsValidType<T>...};
+            auto Find = ranges::find_if(TypeChecks, [Object](auto &&Callback) { return Callback(Object); });
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
-        static TOptional<uint64> GetTypeIndex(const FAssetData& Data) {
-            constexpr std::array TypeChecks = {
-                &TVariantObject::IsAssetTypeValid<std::nullptr_t>,
-                &TVariantObject::IsAssetTypeValid<T>...
-            };
-            auto Find = ranges::find_if(TypeChecks, [&Data](auto&& Callback) { return std::invoke(Callback, Data); });
+        static TOptional<uint64> GetTypeIndex(const FAssetData &Data) {
+            constexpr std::array TypeChecks = {&TVariantObject::IsAssetTypeValid<std::nullptr_t>,
+                                               &TVariantObject::IsAssetTypeValid<T>...};
+            auto Find = ranges::find_if(TypeChecks, [&Data](auto &&Callback) { return std::invoke(Callback, Data); });
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
@@ -218,7 +213,7 @@ namespace UE::Ranges {
 
         template <typename U>
             requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
-        static constexpr bool IsAssetTypeValid(const FAssetData& Data) {
+        static constexpr bool IsAssetTypeValid(const FAssetData &Data) {
             if constexpr (std::same_as<U, std::nullptr_t>) {
                 return !Data.IsValid();
             } else if constexpr (UnrealInterface<U>) {
@@ -228,44 +223,45 @@ namespace UE::Ranges {
             }
         }
 
-        static bool IsValidType(const UObject* Object) {
+        static bool IsValidType(const UObject *Object) {
             return GetTypeIndex(Object).IsSet();
         }
 
         template <typename U>
             requires std::is_base_of_v<UObject, U> && (std::same_as<T, U> || ...)
-        void Set(U* Object) {
+        void Set(U *Object) {
             ContainedObject = Object;
             TypeIndex = GetTypeIndex<U>();
         }
 
         template <typename U>
             requires UnrealInterface<U> && (std::same_as<T, U> || ...)
-        void Set(const TScriptInterface<U>& Object) {
+        void Set(const TScriptInterface<U> &Object) {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex<U>();
         }
 
-        void Set(UObject* Object) {
+        void Set(UObject *Object) {
             ContainedObject = Object;
             TypeIndex = GetTypeIndex(Object).GetValue();
         }
 
-        void Set(const FScriptInterface& Object) {
+        void Set(const FScriptInterface &Object) {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex(Object.GetObject()).GetValue();
         }
 
-    protected:
+      protected:
         void SetUnchecked(std::nullptr_t) {
             ContainedObject = nullptr;
             TypeIndex = GetTypeIndex<std::nullptr_t>();
         }
 
-    private:
-        explicit TVariantObject(FIntrusiveUnsetOptionalState) : ContainedObject(nullptr) {}
+      private:
+        explicit TVariantObject(FIntrusiveUnsetOptionalState) : ContainedObject(nullptr) {
+        }
 
-        TVariantObject& operator=(FIntrusiveUnsetOptionalState) {
+        TVariantObject &operator=(FIntrusiveUnsetOptionalState) {
             ContainedObject = nullptr;
             TypeIndex = GetTypeIndex<std::nullptr_t>();
             return *this;
@@ -274,10 +270,10 @@ namespace UE::Ranges {
         bool operator==(FIntrusiveUnsetOptionalState) const {
             return !IsValid();
         }
-        
+
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        static constexpr bool IsValidType(const UObject* Object) {
+        static constexpr bool IsValidType(const UObject *Object) {
             if constexpr (std::is_same_v<std::nullptr_t, U>) {
                 return Object == nullptr;
             } else if constexpr (UnrealInterface<U>) {
@@ -289,7 +285,7 @@ namespace UE::Ranges {
 
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        static constexpr UClass* GetUnrealClassType() {
+        static constexpr UClass *GetUnrealClassType() {
             if constexpr (std::is_same_v<std::nullptr_t, U>) {
                 return nullptr;
             } else if constexpr (UnrealInterface<U>) {
@@ -304,8 +300,8 @@ namespace UE::Ranges {
         template <typename U>
             requires VariantObjectStruct<U>
         friend class TVariantObjectCustomization;
-        
+
         TObjectPtr<UObject> ContainedObject;
         uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();
     };
-}
+} // namespace UE::Ranges

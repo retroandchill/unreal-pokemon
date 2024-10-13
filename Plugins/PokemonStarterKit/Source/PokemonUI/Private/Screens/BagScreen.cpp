@@ -14,7 +14,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UBagScreen)
 
-UBagScreen * UBagScreen::AddBagScreenToStack(const UObject *WorldContextObject) {
+UBagScreen *UBagScreen::AddBagScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<UBagScreen>(WorldContextObject).GetPtrOrNull();
 }
 

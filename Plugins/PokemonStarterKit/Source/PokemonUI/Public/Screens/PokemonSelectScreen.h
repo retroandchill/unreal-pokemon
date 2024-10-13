@@ -25,9 +25,9 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen, public IPartyDisplayScreen {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UPokemonSelectScreen* AddPokemonSelectScreenToStack(const UObject* WorldContextObject);
+    static UPokemonSelectScreen *AddPokemonSelectScreenToStack(const UObject *WorldContextObject);
 
   protected:
     void NativeConstruct() override;

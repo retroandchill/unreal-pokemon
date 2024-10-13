@@ -27,9 +27,9 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UTextDisplayScreen : public UScreen {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UTextDisplayScreen* AddTextDisplayScreenToOverlay(const UObject* WorldContextObject);
+    static UTextDisplayScreen *AddTextDisplayScreenToOverlay(const UObject *WorldContextObject);
 
   protected:
     void NativeConstruct() override;

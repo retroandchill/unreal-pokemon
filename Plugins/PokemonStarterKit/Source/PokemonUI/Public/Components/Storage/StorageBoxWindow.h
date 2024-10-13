@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "StorageInfoPage.h"
 #include "Components/SelectableWidget.h"
 #include "Ranges/Functional/Delegates.h"
+#include "StorageInfoPage.h"
 
 #include "StorageBoxWindow.generated.h"
 
@@ -19,24 +19,24 @@ UCLASS(Abstract)
 class POKEMONUI_API UStorageBoxWindow : public USelectableWidget {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IStorageBox>& GetStorageBox() const;
+    const TScriptInterface<IStorageBox> &GetStorageBox() const;
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
-    void SetStorageBox(const TScriptInterface<IStorageBox>& InStorageBox);
+    void SetStorageBox(const TScriptInterface<IStorageBox> &InStorageBox);
 
     /**
      * Binding for the selected Pokémon being changed.
      */
     UE_MULTICAST_DELEGATE_MEMBER(FOnSelectedPokemonChanged, OnSelectedPokemonChanged)
 
-    protected:
+  protected:
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
 
-private:
-    void CreateStorageBoxIcon(const TScriptInterface<IPokemon>& Pokemon);
-    
+  private:
+    void CreateStorageBoxIcon(const TScriptInterface<IPokemon> &Pokemon);
+
     UPROPERTY(BlueprintGetter = GetStorageBox, BlueprintSetter = SetStorageBox, Category = Storage)
     TScriptInterface<IStorageBox> StorageBox;
 

@@ -26,9 +26,10 @@ UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UMoveForgetScreen : public UScreen {
     GENERATED_BODY()
 
-public:
-    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject, AutoCreateRefTerm = Move))
-    static UMoveForgetScreen* AddMoveForgetScreenToStack(const UObject* WorldContextObject);
+  public:
+    UFUNCTION(BlueprintCallable, Category = Screens,
+              meta = (WorldContext = WorldContextObject, AutoCreateRefTerm = Move))
+    static UMoveForgetScreen *AddMoveForgetScreenToStack(const UObject *WorldContextObject);
 
   protected:
     void NativeConstruct() override;

@@ -7,7 +7,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UMoveForgetScreen)
 
-UMoveForgetScreen * UMoveForgetScreen::AddMoveForgetScreenToStack(const UObject *WorldContextObject) {
+UMoveForgetScreen *UMoveForgetScreen::AddMoveForgetScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<UMoveForgetScreen>(WorldContextObject).GetPtrOrNull();
 }
 

@@ -6,7 +6,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSelectScreen)
 
-UPokemonSelectScreen * UPokemonSelectScreen::AddPokemonSelectScreenToStack(const UObject *WorldContextObject) {
+UPokemonSelectScreen *UPokemonSelectScreen::AddPokemonSelectScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<UPokemonSelectScreen>(WorldContextObject).GetPtrOrNull();
 }
 

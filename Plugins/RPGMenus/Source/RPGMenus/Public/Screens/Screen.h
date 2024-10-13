@@ -4,8 +4,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
-#include "NativeGameplayTags.h"
 #include "Lookup/InjectableDependency.h"
+#include "NativeGameplayTags.h"
 
 #include "Screen.generated.h"
 
@@ -25,7 +25,7 @@ namespace RPG::Menus {
      * The native tag assigned to any overlay layers layer for display
      */
     RPGMENUS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(OverlayMenuLayerTag);
-    
+
 } // namespace RPG::Menus
 
 UENUM(BlueprintType)
@@ -103,4 +103,4 @@ namespace RPG::Menus {
 
     template <typename T, typename... A>
     concept CanInjectScreen = InjectableScreen<T> && UnrealInjector::CanInitialize<T, A...>;
-}
+} // namespace RPG::Menus

@@ -22,10 +22,10 @@ class UImage;
 UCLASS(Abstract)
 class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     GENERATED_BODY()
-    
-public:
+
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UPokemonSummaryScreen* AddPokemonSummaryScreenToStack(const UObject* WorldContextObject);
+    static UPokemonSummaryScreen *AddPokemonSummaryScreenToStack(const UObject *WorldContextObject);
 
   protected:
     void NativePreConstruct() override;

@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ObtainMethod.h"
 #include "Lookup/InjectableDependency.h"
+#include "ObtainMethod.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "UObject/Interface.h"
 

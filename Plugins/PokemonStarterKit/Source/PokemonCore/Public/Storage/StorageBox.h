@@ -90,13 +90,13 @@ class POKEMONCORE_API IStorageBox {
      * Get the list of the stored Pokémon in the box.
      * @return The stored Pokémon
      */
-    virtual TOptional<IPokemon&> GetStoredPokemon(int32 Index) const = 0;
+    virtual TOptional<IPokemon &> GetStoredPokemon(int32 Index) const = 0;
 
     /**
      * Get the list of the stored Pokémon in the box.
      * @return The stored Pokémon
      */
-    virtual const TArray<TScriptInterface<IPokemon>>& GetStoredPokemon() const = 0;
+    virtual const TArray<TScriptInterface<IPokemon>> &GetStoredPokemon() const = 0;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IStorageBox);

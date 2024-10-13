@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Pointers.h"
-#include "Templates/NonNullSubclassOf.h"
 #include "Ranges/RangeConcepts.h"
+#include "Templates/NonNullSubclassOf.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -66,7 +66,9 @@ struct TOptional<T &> {
      * @param DefaultValue The default to substitute for an empty optional.
      * @return The retrieved value
      */
-    T& Get(T& DefaultValue) const requires (!std::is_const_v<T>) {
+    T &Get(T &DefaultValue) const
+        requires(!std::is_const_v<T>)
+    {
         return Data != nullptr ? *Data : DefaultValue;
     }
 
@@ -105,7 +107,9 @@ struct TOptional<T &> {
      * Convert this value to an Unreal Interface type
      * @return The created script interface
      */
-    TScriptInterface<T> GetInterface() const requires UE::Ranges::UnrealInterface<T> {
+    TScriptInterface<T> GetInterface() const
+        requires UE::Ranges::UnrealInterface<T>
+    {
         return TScriptInterface<T>(Data != nullptr ? Data->_getUObject() : nullptr);
     }
 

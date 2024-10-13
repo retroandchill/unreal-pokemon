@@ -24,9 +24,9 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UPokemonBattleScreen* AddPokemonBattleScreenToStack(const UObject* WorldContextObject);
+    static UPokemonBattleScreen *AddPokemonBattleScreenToStack(const UObject *WorldContextObject);
 
   protected:
     void NativeConstruct() override;

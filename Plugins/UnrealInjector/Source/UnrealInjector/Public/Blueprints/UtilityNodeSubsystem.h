@@ -25,8 +25,8 @@ namespace UnrealInjector {
      * @param A The arguments passed to the execute function
      */
     template <typename T, typename... A>
-    concept BlueprintUtilityNode = Injectable<T> && CanInitialize<T> &&
-        std::derived_from<T, UBlueprintUtilityNode> && ExecutableUtility<T, A...>;
+    concept BlueprintUtilityNode =
+        Injectable<T> && CanInitialize<T> && std::derived_from<T, UBlueprintUtilityNode> && ExecutableUtility<T, A...>;
 } // namespace UnrealInjector
 
 /**

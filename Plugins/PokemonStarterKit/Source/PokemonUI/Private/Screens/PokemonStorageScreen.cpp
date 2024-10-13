@@ -1,18 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Screens/PokemonStorageScreen.h"
-#include "Components/WidgetSwitcher.h"
 #include "Components/Storage/StorageBoxWindow.h"
 #include "Components/Storage/StorageInfoPanel.h"
+#include "Components/WidgetSwitcher.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Storage/StorageSystem.h"
 #include "Pokemon/Pokemon.h"
+#include "Storage/StorageSystem.h"
 #include "Utilities/RPGMenuUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonStorageScreen)
 
-UPokemonStorageScreen * UPokemonStorageScreen::AddPokemonStorageScreenToStack(const UObject *WorldContextObject) {
+UPokemonStorageScreen *UPokemonStorageScreen::AddPokemonStorageScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<UPokemonStorageScreen>(WorldContextObject).GetPtrOrNull();
 }
 

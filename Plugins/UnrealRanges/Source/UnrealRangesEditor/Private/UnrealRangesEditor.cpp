@@ -7,5 +7,5 @@ void FUnrealRangesEditorModule::StartupModule() {
 void FUnrealRangesEditorModule::ShutdownModule() {
     // No special shutdown
 }
-    
+
 IMPLEMENT_MODULE(FUnrealRangesEditorModule, UnrealRangesEditor)

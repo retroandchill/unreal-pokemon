@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
+
 #include "PokemonStorageScreen.generated.h"
 
 class UStorageInfoPanel;
@@ -18,31 +19,31 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonStorageScreen : public UScreen {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UPokemonStorageScreen* AddPokemonStorageScreenToStack(const UObject* WorldContextObject);
+    static UPokemonStorageScreen *AddPokemonStorageScreenToStack(const UObject *WorldContextObject);
 
-protected:
+  protected:
     void NativeConstruct() override;
-    
-public:
+
+  public:
     /**
      * Get the box storage widget.
      * @return The window that displays the contents of the current box
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UStorageBoxWindow* GetStorageBoxWindow() const {
+    UStorageBoxWindow *GetStorageBoxWindow() const {
         return StorageBoxWindow;
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UStorageInfoPanel* GetStorageInfoPanel() const {
+    UStorageInfoPanel *GetStorageInfoPanel() const {
         return StorageInfoPanel;
     }
-    
-private:
-    void OnSelectedPokemonChanged(TOptional<IPokemon&> SelectedPokemon);
-    
+
+  private:
+    void OnSelectedPokemonChanged(TOptional<IPokemon &> SelectedPokemon);
+
     /**
      * The window that displays the contents of the current box
      */
@@ -51,7 +52,6 @@ private:
 
     UPROPERTY(BlueprintGetter = GetStorageInfoPanel, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UStorageInfoPanel> StorageInfoPanel;
-
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UPokemonStorageScreen)

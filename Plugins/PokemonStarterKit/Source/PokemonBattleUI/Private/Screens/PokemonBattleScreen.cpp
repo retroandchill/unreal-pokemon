@@ -23,7 +23,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonBattleScreen)
 
-UPokemonBattleScreen * UPokemonBattleScreen::AddPokemonBattleScreenToStack(const UObject *WorldContextObject) {
+UPokemonBattleScreen *UPokemonBattleScreen::AddPokemonBattleScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<UPokemonBattleScreen>(WorldContextObject).GetPtrOrNull();
 }
 

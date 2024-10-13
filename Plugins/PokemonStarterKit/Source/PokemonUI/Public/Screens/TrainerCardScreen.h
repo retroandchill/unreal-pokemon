@@ -20,10 +20,10 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UTrainerCardScreen : public UScreen {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UTrainerCardScreen* AddTrainerCardScreenToStack(const UObject* WorldContextObject);
-    
+    static UTrainerCardScreen *AddTrainerCardScreenToStack(const UObject *WorldContextObject);
+
   protected:
     void NativeConstruct() override;
 

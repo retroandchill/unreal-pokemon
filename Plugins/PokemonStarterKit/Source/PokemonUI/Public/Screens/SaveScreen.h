@@ -23,9 +23,9 @@ UCLASS(Abstract)
 class POKEMONUI_API USaveScreen : public UScreen {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static USaveScreen* AddSaveScreenToStack(const UObject* WorldContextObject);
+    static USaveScreen *AddSaveScreenToStack(const UObject *WorldContextObject);
 
   protected:
     void NativeOnActivated() override;

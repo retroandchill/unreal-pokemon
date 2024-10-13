@@ -10,7 +10,7 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(USaveScreen)
 
-USaveScreen * USaveScreen::AddSaveScreenToStack(const UObject *WorldContextObject) {
+USaveScreen *USaveScreen::AddSaveScreenToStack(const UObject *WorldContextObject) {
     return URPGMenuUtilities::InjectScreenToStack<USaveScreen>(WorldContextObject).GetPtrOrNull();
 }
 

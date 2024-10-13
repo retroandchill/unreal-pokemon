@@ -34,7 +34,7 @@ class POKEMONUI_API UPromptReplaceMove : public UBlueprintAsyncActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Selection",
               meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = Move))
     static UPromptReplaceMove *PromptReplaceMove(const UObject *WorldContextObject,
-                                                 const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle& Move);
+                                                 const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle &Move);
 
     void Activate() override;
 

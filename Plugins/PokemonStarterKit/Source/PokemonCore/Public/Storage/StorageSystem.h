@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "StorageSystemDTO.h"
 #include "Lookup/InjectableDependency.h"
+#include "StorageSystemDTO.h"
 #include "UObject/Interface.h"
 
 #include "StorageSystem.generated.h"
@@ -64,7 +64,7 @@ class POKEMONCORE_API IStorageSystem {
      * @param Pokemon The Pokémon to try to deposit
      * @return The index of the box and the slot the Pokémon was deposited to
      */
-    virtual TOptional<FDepositResult> TryDeposit(const TScriptInterface<IPokemon>& Pokemon) = 0;
+    virtual TOptional<FDepositResult> TryDeposit(const TScriptInterface<IPokemon> &Pokemon) = 0;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IStorageSystem)

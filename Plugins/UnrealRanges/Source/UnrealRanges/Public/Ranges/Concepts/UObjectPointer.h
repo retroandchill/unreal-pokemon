@@ -31,6 +31,6 @@ namespace UE::Ranges {
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    using TVariablePtr = std::conditional_t<UnrealInterface<T>, TScriptInterface<T>, T*>;
+    using TVariablePtr = std::conditional_t<UnrealInterface<T>, TScriptInterface<T>, T *>;
 
 } // namespace UE::Ranges

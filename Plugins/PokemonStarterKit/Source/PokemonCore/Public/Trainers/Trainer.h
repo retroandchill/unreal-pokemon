@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TrainerDTO.h"
 #include "Lookup/InjectableDependency.h"
+#include "TrainerDTO.h"
 
 #include "Trainer.generated.h"
 

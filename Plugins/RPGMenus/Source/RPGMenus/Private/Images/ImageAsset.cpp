@@ -1,24 +1,24 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Images/ImageAsset.h"
 
-static UScriptStruct* StaticGetBaseStructureInternal(FName Name) {
-    static const auto* const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));
-    auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(UScriptStruct::StaticClass(),
-        CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
-    check(Result != nullptr);
+static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
+    static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));
+    auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(
+        UScriptStruct::StaticClass(), CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
+    check(Result != nullptr)
+    ;
     Result->SetMetaData(TEXT("VariantObject"), TEXT("true"));
     return Result;
 }
 
-UScriptStruct * TBaseStructure<FImageAsset>::Get() {
-    static auto* ScriptStruct = StaticGetBaseStructureInternal(TEXT("ImageAsset"));
+UScriptStruct *TBaseStructure<FImageAsset>::Get() {
+    static auto *ScriptStruct = StaticGetBaseStructureInternal(TEXT("ImageAsset"));
     return ScriptStruct;
 }
 
-UScriptStruct * TBaseStructure<FSoftImageAsset>::Get() {
-    static UScriptStruct* ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftImageAsset"));
+UScriptStruct *TBaseStructure<FSoftImageAsset>::Get() {
+    static UScriptStruct *ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftImageAsset"));
     return ScriptStruct;
 }
 
@@ -43,7 +43,8 @@ FImageAsset UImageAssetHelpers::MakeImageAsset_Material(UMaterialInterface *Mate
     return FImageAsset(Material);
 }
 
-FImageAsset UImageAssetHelpers::MakeImageAsset_SlateTextureAsset(const TScriptInterface<ISlateTextureAtlasInterface> &TextureAtlas) {
+FImageAsset UImageAssetHelpers::MakeImageAsset_SlateTextureAsset(
+    const TScriptInterface<ISlateTextureAtlasInterface> &TextureAtlas) {
     return FImageAsset(TextureAtlas);
 }
 
@@ -51,7 +52,7 @@ FImageAsset UImageAssetHelpers::MakeImageAsset_PaperFlipbook(UPaperFlipbook *Fli
     return FImageAsset(Flipbook);
 }
 
-UObject * UImageAssetHelpers::ConvertToObject(const FImageAsset &ImageAsset) {
+UObject *UImageAssetHelpers::ConvertToObject(const FImageAsset &ImageAsset) {
     return ImageAsset.TryGet().GetPtrOrNull();
 }
 
@@ -59,17 +60,17 @@ EVariantFindResult UImageAssetHelpers::CastToTexture2D(const FImageAsset &ImageA
     if (!ImageAsset.IsType<UTexture2D>()) {
         return EVariantFindResult::CastFailed;
     }
-    
+
     AsTexture = &ImageAsset.Get<UTexture2D>();
     return EVariantFindResult::CastSucceeded;
 }
 
 EVariantFindResult UImageAssetHelpers::CastToTextureDynamic(const FImageAsset &ImageAsset,
-    UTexture2DDynamic *&AsTexture) {
+                                                            UTexture2DDynamic *&AsTexture) {
     if (!ImageAsset.IsType<UTexture2DDynamic>()) {
         return EVariantFindResult::CastFailed;
     }
-    
+
     AsTexture = &ImageAsset.Get<UTexture2DDynamic>();
     return EVariantFindResult::CastSucceeded;
 }
@@ -78,17 +79,18 @@ EVariantFindResult UImageAssetHelpers::CastToMaterial(const FImageAsset &ImageAs
     if (!ImageAsset.IsType<UMaterialInterface>()) {
         return EVariantFindResult::CastFailed;
     }
-    
+
     AsMaterial = &ImageAsset.Get<UMaterialInterface>();
     return EVariantFindResult::CastSucceeded;
 }
 
-EVariantFindResult UImageAssetHelpers::CastToSlateTextureAtlas(const FImageAsset &ImageAsset,
-    TScriptInterface<ISlateTextureAtlasInterface> &AsTextureAtlas) {
+EVariantFindResult
+UImageAssetHelpers::CastToSlateTextureAtlas(const FImageAsset &ImageAsset,
+                                            TScriptInterface<ISlateTextureAtlasInterface> &AsTextureAtlas) {
     if (!ImageAsset.IsType<ISlateTextureAtlasInterface>()) {
         return EVariantFindResult::CastFailed;
     }
-    
+
     AsTextureAtlas = ImageAsset.Get<ISlateTextureAtlasInterface>()._getUObject();
     return EVariantFindResult::CastSucceeded;
 }
@@ -97,7 +99,7 @@ EVariantFindResult UImageAssetHelpers::CastToPaperFlipbook(const FImageAsset &Im
     if (!ImageAsset.IsType<UPaperFlipbook>()) {
         return EVariantFindResult::CastFailed;
     }
-    
+
     AsFlipbook = &ImageAsset.Get<UPaperFlipbook>();
     return EVariantFindResult::CastSucceeded;
 }

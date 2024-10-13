@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "InjectableDependency.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UnrealInjector {
-    
+
     /**
      * Lookup the first injectable object type for the given type
      * @tparam T The raw interface type.
@@ -16,7 +16,7 @@ namespace UnrealInjector {
      */
     template <typename T>
         requires UE::Ranges::UnrealInterface<T>
-    TOptional<UClass&> GetFirstInjectableObject() {
+    TOptional<UClass &> GetFirstInjectableObject() {
         return GetFirstInjectableObject(T::UClassType::StaticClass());
     }
 
@@ -25,7 +25,7 @@ namespace UnrealInjector {
      * @param Class The class to check injection for
      * @return The first class that can be used
      */
-    UNREALINJECTOR_API TOptional<UClass&> GetFirstInjectableObject(const UClass *Class);
+    UNREALINJECTOR_API TOptional<UClass &> GetFirstInjectableObject(const UClass *Class);
 
     /**
      * Call to the Dependency Injection subsystem to create a new injected dependency.
