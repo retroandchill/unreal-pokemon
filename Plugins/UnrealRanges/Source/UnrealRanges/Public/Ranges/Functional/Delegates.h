@@ -57,7 +57,7 @@ namespace UE::Ranges {
         if constexpr (CanBindStatic<D, F, A...>) {
             Delegate.BindStatic(Forward<F>(Functor), Forward<A>(Args)...);
         } else {
-            Delegate.BindLambda(Forward<A>(Functor), Forward<A>(Args)...);
+            Delegate.BindLambda(Forward<F>(Functor), Forward<A>(Args)...);
         }
     }
 
@@ -88,6 +88,11 @@ namespace UE::Ranges {
     void BindToDelegate(D &Delegate, T &&Object, FName FunctionName, A &&...Args) {
         Delegate.BindUFunction(Forward<T>(Object), FunctionName, Forward<A>(Args)...);
     }
+
+    template <typename D, typename... A>
+    concept CanBindDelegate = requires(D&& Delegate, A &&...Args) {
+        BindToDelegate<D, A...>(Forward<D>(), Forward<A>(Args)...);
+    };
 
     template <typename M, typename U>
         requires MulticastDelegate<M> && BindableTo<M, U>

@@ -106,7 +106,7 @@ namespace UE::Ranges {
                 return TOptional<T>();
             }
 
-            return TOptional<T>(Result);
+            return TOptional<T>(T(Result));
         }
 
         TSharedRef<TAsyncLoadHandle<T>> LoadAsync() const {

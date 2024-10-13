@@ -13,7 +13,7 @@
         F##StructName() = default;                                                                                     \
         template <typename... T>                                                                                       \
             requires std::constructible_from<TVariantObject, T...>                                                     \
-        explicit(std::same_as<TVariantObject, std::remove_reference_t<T>...>) F##StructName(T &&...Args)               \
+        explicit F##StructName(T &&...Args)               \
             : TVariantObject(Forward<T>(Args)...) {                                                                    \
         }                                                                                                              \
         void Reset() {                                                                                                 \
@@ -26,7 +26,7 @@
         FSoft##StructName() = default;                                                                                 \
         template <typename... T>                                                                                       \
             requires std::constructible_from<TSoftVariantObject, T...>                                                 \
-        explicit(std::same_as<TSoftVariantObject, std::remove_reference_t<T>...>) FSoft##StructName(T &&...Args)       \
+        explicit FSoft##StructName(T &&...Args)       \
             : TSoftVariantObject(Forward<T>(Args)...) {                                                                \
         }                                                                                                              \
     };                                                                                                                 \

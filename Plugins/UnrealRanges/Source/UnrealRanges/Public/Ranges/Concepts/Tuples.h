@@ -31,9 +31,9 @@ namespace UE::Ranges {
     concept TupleLike = requires(T Tuple) {
         typename std::tuple_size<T>;
         requires std::derived_from<std::tuple_size<T>, std::integral_constant<size_t, std::tuple_size_v<T>>>;
-    } && []<size_t... N>(std::index_sequence<N...>) {
-        return (HasTupleElement<T, N> && ...);
-    }(std::make_index_sequence<std::tuple_size_v<T>>());
+    };
+
+    static_assert(std::tuple_size_v<TTuple<int32, bool, char>> == 3);
 
     static_assert(TupleLike<std::pair<int32, int32>>);
     static_assert(TupleLike<std::pair<int32, int32>>);
@@ -43,11 +43,7 @@ namespace UE::Ranges {
 
     template <typename F, typename T>
     concept CanApply = TupleLike<std::remove_reference_t<T>> && requires(std::remove_cvref_t<T> Tuple, F &&Functor) {
-        {
-            ranges::tuple_apply(Forward<F>(Functor), Tuple)
-        } -> std::convertible_to<decltype([Functor, Tuple]<size_t... N>(std::index_sequence<N...>) {
-            return Functor(get<N>(Tuple)...);
-        }(std::make_index_sequence<std::tuple_size_v<std::remove_cvref_t<T>>>()))>;
+        ranges::tuple_apply(Forward<F>(Functor), Tuple);
     };
 
     static_assert(CanApply<void (*)(int32, int32), std::pair<int32, int32>>);

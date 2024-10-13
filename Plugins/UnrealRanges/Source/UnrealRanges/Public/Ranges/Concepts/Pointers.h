@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <Ranges/RangeConcepts.h>
 
 namespace UE::Ranges {
     namespace Detail {
