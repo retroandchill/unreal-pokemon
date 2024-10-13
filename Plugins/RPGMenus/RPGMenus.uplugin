@@ -60,6 +60,10 @@
 		{
 			"Name": "PaperFlipbookWidget",
 			"Enabled": true
+		},
+		{
+			"Name": "UnrealInjector",
+			"Enabled": true
 		}
 	]
 }
