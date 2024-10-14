@@ -32,7 +32,7 @@ void UCameraSubsystem::Tick(float DeltaTime) {
 }
 
 TStatId UCameraSubsystem::GetStatId() const {
-    RETURN_QUICK_DECLARE_CYCLE_STAT(UCameraSubsystem, STATGROUP_Tickables);
+    RETURN_QUICK_DECLARE_CYCLE_STAT(UCameraSubsystem, STATGROUP_Tickables)
 }
 
 FDelegateHandle UCameraSubsystem::BindToGetOnCameraAngleChanged(FOnCameraAngleChanged::FDelegate &&Binding) {

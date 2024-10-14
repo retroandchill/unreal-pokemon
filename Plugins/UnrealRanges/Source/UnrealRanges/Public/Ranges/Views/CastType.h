@@ -39,6 +39,6 @@ namespace UE::Ranges {
      * @tparam T The type to cast to.
      */
     template <typename T>
-    constexpr ranges::views::view_closure<TCastType<T>> CastType;
+    inline constexpr ranges::views::view_closure<TCastType<T>> CastType;
 
 } // namespace UE::Ranges

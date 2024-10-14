@@ -114,7 +114,7 @@ void UK2Node_LoadAssetByName::ExpandNode(FKismetCompilerContext &CompilerContext
         CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateFoundAssetPin);
     } else {
         check(ClassType.AssetClass.IsType<UScriptStruct>())
-        auto &Struct = ClassType.AssetClass.Get<UScriptStruct>();
+        const auto &Struct = ClassType.AssetClass.Get<UScriptStruct>();
         auto HelperClassName = FString::Format(TEXT("{0}Helpers"), {Struct.GetName()});
         auto HelperClass = FindObject<UClass>(Struct.GetPackage(), *HelperClassName);
         check(HelperClass != nullptr)
