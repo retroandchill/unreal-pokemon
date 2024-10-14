@@ -32,4 +32,42 @@ namespace UE::Ranges {
         return CastChecked<T>(Interface.GetObject());
     }
 
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    constexpr bool TypesMatch(const UClass &Class) {
+        if constexpr (std::derived_from<T, UObject>) {
+            return Class.IsChildOf<T>();
+        } else {
+            static_assert(UnrealInterface<T>);
+            return Class.IsChildOf<typename T::UClassType>();
+        }
+    }
+
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    constexpr bool TypesMatch(const UClass *Class) {
+        if (Class == nullptr) {
+            return false;
+        }
+
+        return TypesMatch<T>(*Class);
+    }
+
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    constexpr bool TypesMatch(const FSoftClassPath &Path) {
+        return TypesMatch<T>(Path.TryLoadClass<UObject>());
+    }
+
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    constexpr UClass *GetClass() {
+        if constexpr (std::derived_from<T, UObject>) {
+            return T::StaticClass();
+        } else {
+            static_assert(UnrealInterface<T>);
+            return T::UClassType::StaticClass();
+        }
+    }
+
 } // namespace UE::Ranges

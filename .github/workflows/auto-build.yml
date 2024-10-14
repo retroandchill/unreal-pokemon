@@ -53,3 +53,4 @@ jobs:
             coverage.txt
             coverage-reports/*.xml
             TestResults/*
+            Saved/Logs/*

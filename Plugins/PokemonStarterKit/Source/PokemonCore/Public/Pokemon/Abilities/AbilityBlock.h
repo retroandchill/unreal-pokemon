@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Lookup/InjectableDependency.h"
 #include "UObject/Interface.h"
 
 #include "AbilityBlock.generated.h"
@@ -11,7 +12,7 @@ struct FPokemonDTO;
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UAbilityBlock : public UInterface {
     GENERATED_BODY()
 };
@@ -52,3 +53,5 @@ class POKEMONCORE_API IAbilityBlock {
     UFUNCTION(BlueprintCallable, Category = Abilities)
     virtual const FText &GetAbilityDescription() const = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IAbilityBlock);

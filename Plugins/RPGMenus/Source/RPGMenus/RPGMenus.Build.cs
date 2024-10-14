@@ -20,7 +20,8 @@ public class RPGMenus : ModuleRules
 				"GameplayTags",
 				"EnhancedInput",
 				"Paper2D",
-				"PaperFlipbookWidget"
+				"PaperFlipbookWidget",
+				"UnrealInjector"
 			}
 		);
 

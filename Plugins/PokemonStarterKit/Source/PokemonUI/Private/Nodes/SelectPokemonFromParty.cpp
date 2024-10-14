@@ -14,9 +14,7 @@ USelectPokemonFromParty *USelectPokemonFromParty::SelectPokemonFromParty(const U
 }
 
 void USelectPokemonFromParty::Activate() {
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto ScreenClass = GetDefault<UPokemonUISettings>()->PartyScreenClass.TryLoadClass<UPokemonSelectScreen>();
-    auto Screen = Layout->PushWidgetToLayerStack<UPokemonSelectScreen>(RPG::Menus::PrimaryMenuLayerTag, ScreenClass);
+    auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(WorldContextObject);
     Screen->GetOnPokemonSelect().BindUObject(this, &USelectPokemonFromParty::ExecuteOnSelected);
     Screen->GetOnScreenClosed().AddUniqueDynamic(this, &USelectPokemonFromParty::ExecuteOnCanceled);
 }

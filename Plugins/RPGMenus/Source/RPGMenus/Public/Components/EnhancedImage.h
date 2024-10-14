@@ -14,48 +14,49 @@ class SPaperFlipbookWidget;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFlipbookFinishedPlaying);
 
 /**
- * 
+ *
  */
 UCLASS()
 class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
     GENERATED_BODY()
 
-public:
-    void SetBrush(const FSlateBrush& InBrush) override;
-    
-private:
-    void SetBrush(const FSlateBrush& InBrush, bool bUpdateAssetImage);
+  public:
+    void SetBrush(const FSlateBrush &InBrush) override;
 
-public:
-    void SetBrushFromAsset(USlateBrushAsset* Asset) override;
-    void SetBrushFromTexture(UTexture2D* Texture, bool bMatchSize = false) override;
-    void SetBrushFromTextureDynamic(UTexture2DDynamic* Texture, bool bMatchSize = false) override;
-    void SetBrushFromMaterial(UMaterialInterface* Material) override;
-    void SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion, bool bMatchSize = false) override;
+  private:
+    void SetBrush(const FSlateBrush &InBrush, bool bUpdateAssetImage);
 
-    UFUNCTION(BlueprintCallable, Category = Image)
-    virtual void SetBrushFromPaperFlipbook(UPaperFlipbook* Flipbook, bool bMatchSize = false);
+  public:
+    void SetBrushFromAsset(USlateBrushAsset *Asset) override;
+    void SetBrushFromTexture(UTexture2D *Texture, bool bMatchSize = false) override;
+    void SetBrushFromTextureDynamic(UTexture2DDynamic *Texture, bool bMatchSize = false) override;
+    void SetBrushFromMaterial(UMaterialInterface *Material) override;
+    void SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion,
+                                    bool bMatchSize = false) override;
 
     UFUNCTION(BlueprintCallable, Category = Image)
-    virtual void SetBrushFromImageAsset(const FImageAsset& ImageAsset, bool bMatchSize = false);
+    virtual void SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize = false);
+
+    UFUNCTION(BlueprintCallable, Category = Image)
+    virtual void SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook>& LazyFlipbook, bool bMatchSize = false);
+    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyImageAsset(const FSoftImageAsset& LazyImage, bool bMatchSize = false);
+    void SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false);
 
-protected:
+  protected:
     TSharedRef<SWidget> RebuildImageWidget() override;
     void SynchronizeProperties() override;
     void ReleaseSlateResources(bool bReleaseChildren) override;
-    
+
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
-private:
-    void SetSourceImageInternal(UObject* Object);
+  private:
+    void SetSourceImageInternal(UObject *Object);
 
     int32 GetWidgetIndex() const;
 
@@ -67,7 +68,7 @@ private:
      */
     UPROPERTY(BlueprintAssignable, Category = "PaperFlipbook|Widget|Event")
     FOnFlipbookFinishedPlaying OnFinishedPlaying;
-    
+
     UPROPERTY(EditAnywhere, Category = Appearance)
     FImageAsset SourceImage;
 
@@ -82,7 +83,7 @@ private:
     /** Whether the flipbook should loop when it reaches the end, or stop */
     UPROPERTY(Category = Appearance, EditAnywhere)
     bool bLooping = true;
-    
+
     UPROPERTY(Category = Appearance, EditAnywhere)
     bool bManualSize = false;
 

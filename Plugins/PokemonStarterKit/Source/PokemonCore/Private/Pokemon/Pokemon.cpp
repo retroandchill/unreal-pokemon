@@ -2,4 +2,4 @@
 
 #include "Pokemon/Pokemon.h"
 
-// Add default functionality here for any IPokemon functions that are not pure virtual.
+DEFINE_INJECTABLE_DEPENDENCY(IPokemon)

@@ -2,6 +2,8 @@
 
 #include "Utilities/Node/Utility_LearnMove.h"
 
+DEFINE_INJECTABLE_DEPENDENCY(UUtility_LearnMove)
+
 void UUtility_LearnMove::Execute(const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle &Move,
                                  FOnMoveLearnEnd::FDelegate &&OnEnd) {
     EndProcess.Add(MoveTemp(OnEnd));

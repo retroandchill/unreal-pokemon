@@ -46,12 +46,14 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
                                                   const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook> GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
+    static TSoftObjectPtr<UPaperFlipbook> GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
+                                                                     bool bBack = false);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook> GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
-                                                  const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    static TSoftObjectPtr<UPaperFlipbook>
+    GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
+                               const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -88,8 +90,8 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook> GetLazySpeciesIcon(FName Species,
-                                          const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    static TSoftObjectPtr<UPaperFlipbook>
+    GetLazySpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
                                                              FStringView Subfolder);

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
     namespace Detail {
@@ -27,5 +28,9 @@ namespace UE::Ranges {
     concept DereferencesToUObject = requires(T Ptr) {
         { Ptr.Get() } -> std::convertible_to<const UObject *>;
     };
+
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    using TVariablePtr = std::conditional_t<UnrealInterface<T>, TScriptInterface<T>, T *>;
 
 } // namespace UE::Ranges

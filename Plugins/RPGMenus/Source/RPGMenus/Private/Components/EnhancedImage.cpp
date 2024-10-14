@@ -1,11 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
-#include "SPaperFlipbookWidget.h"
 #include "Ranges/Functional/PropertyBindings.h"
 #include "Slate/SlateBrushAsset.h"
+#include "SPaperFlipbookWidget.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"
 
 constexpr int32 ImageWidgetIndex = 0;
@@ -48,7 +47,7 @@ void UEnhancedImage::SetBrushFromMaterial(UMaterialInterface *Material) {
 }
 
 void UEnhancedImage::SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion,
-    bool bMatchSize) {
+                                                bool bMatchSize) {
     Super::SetBrushFromAtlasInterface(AtlasRegion, bMatchSize);
     SourceImage.Set(AtlasRegion);
     bManualSize = !bMatchSize;
@@ -87,12 +86,14 @@ void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool 
     }
 }
 
-void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize) {
+void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
+                                                   bool bMatchSize) {
     if (!LazyFlipbook.IsNull()) {
         RequestAsyncLoad(LazyFlipbook, FStreamableDelegate::CreateWeakLambda(this, [this, LazyFlipbook, bMatchSize] {
-            ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
-            SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
-        }));
+                             ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
+                                        *LazyFlipbook.ToSoftObjectPath().ToString());
+                             SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
+                         }));
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(LazyFlipbook, bMatchSize);
@@ -102,9 +103,10 @@ void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFl
 void UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize) {
     if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
         RequestAsyncLoad(SoftPointer, FStreamableDelegate::CreateWeakLambda(this, [this, LazyImage, bMatchSize] {
-            ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"), *LazyImage.ToSoftObjectPath().ToString());
-            SetBrushFromImageAsset(LazyImage.LoadSynchronous().GetValue(), bMatchSize);
-        }));
+                             ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
+                                        *LazyImage.ToSoftObjectPath().ToString());
+                             SetBrushFromImageAsset(LazyImage.LoadSynchronous().GetValue(), bMatchSize);
+                         }));
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(SoftPointer, bMatchSize);
@@ -180,7 +182,8 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
                 break;
             }
             case FImageAsset::GetTypeIndex<ISlateTextureAtlasInterface>():
-                UpdateBrush.SetImageSize(SourceImage.Get<ISlateTextureAtlasInterface>().GetSlateAtlasData().GetSourceDimensions());
+                UpdateBrush.SetImageSize(
+                    SourceImage.Get<ISlateTextureAtlasInterface>().GetSlateAtlasData().GetSourceDimensions());
                 break;
             case FImageAsset::GetTypeIndex<UPaperFlipbook>():
                 UpdateBrush.SetImageSize(SourceImage.Get<UPaperFlipbook>().GetSpriteAtFrame(0)->GetSourceSize());

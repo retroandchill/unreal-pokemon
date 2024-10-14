@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BlueprintUtilityNode.h"
+#include "Lookup/InjectableDependency.h"
+#include "Lookup/InjectionUtilities.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "UtilityNodeSubsystem.generated.h"
@@ -23,7 +25,8 @@ namespace UnrealInjector {
      * @param A The arguments passed to the execute function
      */
     template <typename T, typename... A>
-    concept BlueprintUtilityNode = std::is_base_of_v<UBlueprintUtilityNode, T> && ExecutableUtility<T, A...>;
+    concept BlueprintUtilityNode =
+        Injectable<T> && CanInitialize<T> && std::derived_from<T, UBlueprintUtilityNode> && ExecutableUtility<T, A...>;
 } // namespace UnrealInjector
 
 /**
@@ -34,8 +37,6 @@ class UNREALINJECTOR_API UUtilityNodeSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
   public:
-    void Initialize(FSubsystemCollectionBase &Collection) override;
-
     /**
      * Execute a blueprint utility node.
      * @tparam T The type of the utility object
@@ -45,8 +46,8 @@ class UNREALINJECTOR_API UUtilityNodeSubsystem : public UGameInstanceSubsystem {
     template <typename T, typename... A>
         requires UnrealInjector::BlueprintUtilityNode<T, A...>
     void ExecuteUtilityFunction(A &&...Args) {
-        auto Object = NewObject<T>(this, NodeTypes.FindChecked(T::StaticClass()));
-        CreatedNodes.Add(Object);
+        auto Object = UnrealInjector::NewInjectedDependency<T>(this);
+        CreatedNodes.Emplace(Object);
         Object->Execute(Forward<A>(Args)...);
     }
 
@@ -57,9 +58,6 @@ class UNREALINJECTOR_API UUtilityNodeSubsystem : public UGameInstanceSubsystem {
     void DestroyNode(UBlueprintUtilityNode *Object);
 
   private:
-    UPROPERTY()
-    TMap<TSubclassOf<UBlueprintUtilityNode>, TSubclassOf<UBlueprintUtilityNode>> NodeTypes;
-
     UPROPERTY()
     TSet<TObjectPtr<UBlueprintUtilityNode>> CreatedNodes;
 };

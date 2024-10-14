@@ -1,12 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Moves/PromptReplaceMove.h"
-#include "PokemonUISettings.h"
-#include "PrimaryGameLayout.h"
+#include "Moves/MoveData.h"
 #include "Screens/MoveForgetScreen.h"
 
 UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldContextObject,
-                                                          const TScriptInterface<IPokemon> &Pokemon, FName Move) {
+                                                          const TScriptInterface<IPokemon> &Pokemon,
+                                                          const FMoveHandle &Move) {
     auto Node = NewObject<UPromptReplaceMove>();
     Node->WorldContextObject = WorldContextObject;
     Node->Pokemon = Pokemon;
@@ -15,10 +15,8 @@ UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldCo
 }
 
 void UPromptReplaceMove::Activate() {
-    auto &ScreenPaths = *GetDefault<UPokemonUISettings>();
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto Screen = Layout->PushWidgetToLayerStack<UMoveForgetScreen>(
-        RPG::Menus::PrimaryMenuLayerTag, ScreenPaths.MoveForgetScreenClass.TryLoadClass<UMoveForgetScreen>());
+
+    auto Screen = UMoveForgetScreen::AddMoveForgetScreenToStack(WorldContextObject);
     Screen->InitializeScene(Pokemon, Move);
     Screen->BindToOnMoveForgetComplete(this, &UPromptReplaceMove::OnMoveSelectionComplete);
 }

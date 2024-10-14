@@ -18,11 +18,11 @@ void UDisplayMessage::Activate() {
         OnConfirm.Broadcast();
         return;
     }
+
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
     auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr) {
-        auto ScreenClass = GetDefault<UPokemonUISettings>()->TextScreenClass.TryLoadClass<UTextDisplayScreen>();
-        Screen = Layout->PushWidgetToLayerStack<UTextDisplayScreen>(RPG::Menus::OverlayMenuLayerTag, ScreenClass);
+        Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContextObject);
     }
     Screen->SetText(Message);
     Screen->NextMessage.AddUniqueDynamic(this, &UDisplayMessage::ExecuteOnConfirm);

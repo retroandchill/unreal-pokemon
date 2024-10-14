@@ -51,7 +51,7 @@ TSoftObjectPtr<UPaperFlipbook> USpriteLoader::GetLazyPokemonIcon(const TScriptIn
 }
 
 TSoftObjectPtr<UPaperFlipbook> USpriteLoader::GetLazySpeciesIcon(FName Species,
-    const FPokemonAssetParams &AdditionalParams) {
+                                                                 const FPokemonAssetParams &AdditionalParams) {
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
     // clang-format off
     return Pokemon::Assets::Graphics::PokemonSprites.ResolveSoftAsset(SpriteResolutionList) |

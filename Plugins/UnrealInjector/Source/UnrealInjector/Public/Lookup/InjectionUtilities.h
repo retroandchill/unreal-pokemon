@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DependencyInjectionSubsystem.h"
-#include "Kismet/GameplayStatics.h"
+#include "InjectableDependency.h"
+#include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UnrealInjector {
 
@@ -14,16 +15,17 @@ namespace UnrealInjector {
      * @return The first class that can be used
      */
     template <typename T>
-    UClass *GetFirstInjectableObject() {
+        requires UE::Ranges::UnrealInterface<T>
+    TOptional<UClass &> GetFirstInjectableObject() {
         return GetFirstInjectableObject(T::UClassType::StaticClass());
     }
 
     /**
      * Lookup the first injectable object type for the given type
-     * @param InterfaceType The UInterface type.
+     * @param Class The class to check injection for
      * @return The first class that can be used
      */
-    UNREALINJECTOR_API UClass *GetFirstInjectableObject(const TSubclassOf<UInterface> &InterfaceType);
+    UNREALINJECTOR_API TOptional<UClass &> GetFirstInjectableObject(const UClass *Class);
 
     /**
      * Call to the Dependency Injection subsystem to create a new injected dependency.
@@ -34,10 +36,9 @@ namespace UnrealInjector {
      * @return The created interface
      */
     template <typename T, typename... A>
-    TScriptInterface<T> NewInjectedDependency(UObject *Outer, A &&...Args) {
-        auto Subsystem = UGameplayStatics::GetGameInstance(Outer)->GetSubsystem<UDependencyInjectionSubsystem>();
-        check(Subsystem != nullptr)
-        return Subsystem->InjectDependency<T>(Outer, Forward<A>(Args)...);
+        requires Injectable<T> && CanInitialize<T, A...>
+    auto NewInjectedDependency(UObject *Outer, A &&...Args) {
+        return TInjectionSettings<T>::Get().template Inject<A...>(Outer, Forward<A>(Args)...);
     }
 
 } // namespace UnrealInjector

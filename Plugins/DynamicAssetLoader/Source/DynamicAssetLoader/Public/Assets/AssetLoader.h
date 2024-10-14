@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TextureCompiler.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Concepts/Types.h"
@@ -15,6 +14,7 @@
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
 #include "Templates/NonNullSubclassOf.h"
+#include "TextureCompiler.h"
 
 #include "AssetLoader.generated.h"
 
@@ -50,19 +50,19 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<T&> AttemptLoad(FStringView SearchKey) {
+    static TOptional<T &> AttemptLoad(FStringView SearchKey) {
         if constexpr (std::is_same_v<T, UObject>) {
-            auto Asset = UE::Optionals::OfNullable<T>(StaticLoadObject(T::StaticClass(), nullptr,
-                SearchKey.GetData(),nullptr, LOAD_NoWarn));
-            
+            auto Asset = UE::Optionals::OfNullable<T>(
+                StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn));
+
 #if WITH_EDITOR
             FTextureCompilingManager::Get().FinishAllCompilation();
 #endif
             return Asset;
         } else {
-            auto Asset = UE::Optionals::OfNullable<T>(Cast<T>(StaticLoadObject(T::StaticClass(), nullptr,
-                SearchKey.GetData(), nullptr, LOAD_NoWarn)));
-            
+            auto Asset = UE::Optionals::OfNullable<T>(
+                Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn)));
+
 #if WITH_EDITOR
             FTextureCompilingManager::Get().FinishAllCompilation();
 #endif
@@ -71,8 +71,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     }
 
     static FString CreateSearchKey(FStringView BasePackageName, FStringView AssetName);
-        
-    
+
     /**
      * Look up an asset of the given type by its name
      * @tparam T The type of the asset to look up
@@ -102,18 +101,19 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
-        const auto& AssetManager = UAssetManager::Get();
+        const auto &AssetManager = UAssetManager::Get();
         FSoftObjectPath Path(CreateSearchKey(BasePackageName, AssetName));
         if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>()) {
             return UE::Optionals::OfNullable<T>(TSoftObjectPtr<T>(Path));
         }
-        
+
         return TOptional<TSoftObjectRef<T>>();
     }
 
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<TSoftObjectRef<T>> LookupAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
+    static TOptional<TSoftObjectRef<T>> LookupAssetByName(const FDirectoryPath &BasePackageName,
+                                                          FStringView AssetName) {
         return LookupAssetByName<T>(BasePackageName.Path, AssetName);
     }
 
@@ -129,8 +129,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
                       DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
                       ExpandEnumAsExecs = "ReturnValue"))
-    static EAssetLoadResult FindAssetByName(const UClass* AssetClass, const FDirectoryPath &BasePackageName,
-                                              const FString &AssetName, UObject *&FoundAsset);
+    static EAssetLoadResult FindAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
+                                            const FString &AssetName, UObject *&FoundAsset);
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
@@ -226,7 +226,6 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
                });
         // clang-format on
     }
-    
 
     /**
      * Fetch the first matching asset for the provided keys

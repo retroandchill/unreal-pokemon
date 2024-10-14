@@ -27,8 +27,8 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O &&Optional) const {
-            using ResultType = TOptionalElementType<O>;
+        constexpr decltype(auto) operator()(O &&Optional) const {
+            using ResultType = TContainedOptionalType<O>;
             return Optional.IsSet() ? ResultType(Optional.GetValue()) : ResultType(Functor());
         }
 

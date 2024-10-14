@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Lookup/InjectableDependency.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "UObject/Interface.h"
 
@@ -11,7 +12,7 @@
 class IPokemon;
 struct FStorageBoxDTO;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
+UINTERFACE(BlueprintType, NotBlueprintable)
 class UStorageBox : public UInterface {
     GENERATED_BODY()
 };
@@ -89,11 +90,13 @@ class POKEMONCORE_API IStorageBox {
      * Get the list of the stored Pokémon in the box.
      * @return The stored Pokémon
      */
-    virtual TOptional<IPokemon&> GetStoredPokemon(int32 Index) const = 0;
+    virtual TOptional<IPokemon &> GetStoredPokemon(int32 Index) const = 0;
 
     /**
      * Get the list of the stored Pokémon in the box.
      * @return The stored Pokémon
      */
-    virtual const TArray<TScriptInterface<IPokemon>>& GetStoredPokemon() const = 0;
+    virtual const TArray<TScriptInterface<IPokemon>> &GetStoredPokemon() const = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IStorageBox);

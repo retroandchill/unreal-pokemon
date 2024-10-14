@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Lookup/InjectableDependency.h"
 #include "ObtainMethod.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "UObject/Interface.h"
@@ -11,7 +12,7 @@
 
 struct FPokemonDTO;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable, meta = (Injectable))
+UINTERFACE(BlueprintType, NotBlueprintable)
 class UObtainedBlock : public UInterface {
     GENERATED_BODY()
 };
@@ -78,3 +79,5 @@ class POKEMONCORE_API IObtainedBlock {
     UFUNCTION(BlueprintCallable, Category = "Trainer Memo")
     virtual void SetHatchedMap(const FText &MapName) = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IObtainedBlock);

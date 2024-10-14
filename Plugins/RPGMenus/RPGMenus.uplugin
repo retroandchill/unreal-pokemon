@@ -20,11 +20,6 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "RPGMenusDeveloper",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "RPGMenusEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
@@ -64,6 +59,10 @@
 		},
 		{
 			"Name": "PaperFlipbookWidget",
+			"Enabled": true
+		},
+		{
+			"Name": "UnrealInjector",
 			"Enabled": true
 		}
 	]

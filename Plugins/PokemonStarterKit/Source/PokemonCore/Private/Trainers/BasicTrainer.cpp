@@ -3,10 +3,10 @@
 #include "Trainers/BasicTrainer.h"
 #include "Algo/ForEach.h"
 #include "DataManager.h"
-#include "PokemonDataSettings.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
@@ -86,7 +86,8 @@ const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {
 
 bool UBasicTrainer::IsPartyFull() const {
     int32 MaxPartySize = GetDefault<UPokemonDataSettings>()->MaxPartySize;
-    check(Party.Num() <= MaxPartySize);
+    check(Party.Num() <= MaxPartySize)
+    ;
     return Party.Num() == MaxPartySize;
 }
 

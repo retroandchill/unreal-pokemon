@@ -14,13 +14,13 @@ namespace UE::Ranges {
     template <typename T>
         requires SoftVariantObjectStruct<T>
     class TSoftVariantObjectCustomization : public IPropertyTypeCustomization {
-    public:
+      public:
         static TSharedRef<IPropertyTypeCustomization> MakeInstance() {
             return MakeShared<TSoftVariantObjectCustomization>();
         }
 
-        void CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle, FDetailWidgetRow& HeaderRow,
-            IPropertyTypeCustomizationUtils& StructCustomizationUtils) override {
+        void CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle, FDetailWidgetRow &HeaderRow,
+                             IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
             auto WrappedProperty = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(T, Ptr));
             // clang-format off
             HeaderRow.NameContent()
@@ -33,10 +33,10 @@ namespace UE::Ranges {
                 ];
             // clang-format on
         }
-        
-        void CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle, IDetailChildrenBuilder& ChildBuilder,
-            IPropertyTypeCustomizationUtils& StructCustomizationUtils) override {
+
+        void CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle, IDetailChildrenBuilder &ChildBuilder,
+                               IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
             // No child customization
         }
     };
-}
+} // namespace UE::Ranges

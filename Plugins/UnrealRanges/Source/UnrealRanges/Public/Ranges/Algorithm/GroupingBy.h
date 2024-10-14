@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Types.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/Functional/TryInvoke.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/TerminalClosure.h"
-#include "Ranges/Functional/TryInvoke.h"
 
 namespace UE::Ranges {
 

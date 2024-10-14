@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_DELEGATE(FLevelUpEnd);
 class IPokemon;
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType, meta = (Injectable))
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UStatBlock : public UInterface {
     GENERATED_BODY()
 };
@@ -102,3 +102,5 @@ class POKEMONCORE_API IStatBlock {
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual void CalculateStats(const TMap<FName, int32> &BaseStats) = 0;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IStatBlock);

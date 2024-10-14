@@ -2,4 +2,4 @@
 
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 
-// Add default functionality here for any IObtainedBlock functions that are not pure virtual.
+DEFINE_INJECTABLE_DEPENDENCY(IObtainedBlock)

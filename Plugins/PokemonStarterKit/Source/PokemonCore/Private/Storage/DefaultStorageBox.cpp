@@ -107,6 +107,6 @@ TOptional<IPokemon &> UDefaultStorageBox::GetStoredPokemon(int32 Index) const {
     return UE::Optionals::OfNullable(StoredPokemon[Index]);
 }
 
-const TArray<TScriptInterface<IPokemon>> & UDefaultStorageBox::GetStoredPokemon() const {
+const TArray<TScriptInterface<IPokemon>> &UDefaultStorageBox::GetStoredPokemon() const {
     return StoredPokemon;
 }

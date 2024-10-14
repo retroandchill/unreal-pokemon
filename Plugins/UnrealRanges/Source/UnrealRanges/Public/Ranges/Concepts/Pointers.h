@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <Ranges/RangeConcepts.h>
 
 namespace UE::Ranges {
     namespace Detail {
@@ -100,16 +101,16 @@ namespace UE::Ranges {
             requires std::is_base_of_v<UObject, T>
         struct TIsReferenceType<T> : std::true_type {
             using VariableType = TObjectPtr<T>;
-            using ArgumentType = T*;
+            using ArgumentType = T *;
         };
 
         template <typename T>
             requires UnrealInterface<T>
         struct TIsReferenceType<T> : std::true_type {
             using VariableType = TScriptInterface<T>;
-            using ArgumentType = const TScriptInterface<T>&;
+            using ArgumentType = const TScriptInterface<T> &;
         };
-    }
+    } // namespace Detail
 
     template <typename T>
     concept UnrealReferenceType = Detail::TIsReferenceType<T>::value;

@@ -6,15 +6,16 @@
 void FDynamicAssetLoaderEditorModule::StartupModule() {
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(
-        TEXT("AssetClassType"),
-        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&UE::Ranges::TVariantObjectCustomization<FAssetClassType>::MakeInstance));
+        TEXT("AssetClassType"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
+                                    &UE::Ranges::TVariantObjectCustomization<FAssetClassType>::MakeInstance));
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("SoftAssetClassType"),
-        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&UE::Ranges::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
+        FOnGetPropertyTypeCustomizationInstance::CreateStatic(
+            &UE::Ranges::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
 }
 
 void FDynamicAssetLoaderEditorModule::ShutdownModule() {
     // No shutdown needed
 }
-    
+
 IMPLEMENT_MODULE(FDynamicAssetLoaderEditorModule, DynamicAssetLoaderEditor)

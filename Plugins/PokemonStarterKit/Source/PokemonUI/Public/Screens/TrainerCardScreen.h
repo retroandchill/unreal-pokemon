@@ -20,6 +20,10 @@ UCLASS(Blueprintable, Abstract)
 class POKEMONUI_API UTrainerCardScreen : public UScreen {
     GENERATED_BODY()
 
+  public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UTrainerCardScreen *AddTrainerCardScreenToStack(const UObject *WorldContextObject);
+
   protected:
     void NativeConstruct() override;
 
@@ -107,3 +111,5 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
     UPROPERTY(EditAnywhere, Category = Display, meta = (UIMin = 1, ClampMin = 1))
     int32 IdNumberLength = 6;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UTrainerCardScreen)

@@ -17,7 +17,7 @@
 static FText GetDefaultBoxName(int32 Index);
 static bool CheckOpenBox(int32 Index, const TScriptInterface<IStorageBox> &Box);
 static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInterface<IStorageBox> &Box,
-    const TScriptInterface<IPokemon> &Pokemon);
+                                                 const TScriptInterface<IPokemon> &Pokemon);
 
 TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCount, int32 BoxCapacity,
                                                                    int32 StartingIndex) {
@@ -44,13 +44,12 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
 }
 
 FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
-    return {
-        // clang-format off
+    return {// clang-format off
         .Boxes = Boxes |
                  UE::Ranges::Map(&IStorageBox::ToDTO) |
                  UE::Ranges::ToArray,
-        // clang-format on
-        .CurrentBoxIndex = CurrentBoxIndex};
+            // clang-format on
+            .CurrentBoxIndex = CurrentBoxIndex};
 }
 
 int32 UDefaultStorageSystem::GetBoxCount() const {
@@ -62,7 +61,7 @@ const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetBox(int32 Index) 
     return Boxes[Index];
 }
 
-const TScriptInterface<IStorageBox> & UDefaultStorageSystem::GetCurrentBox() const {
+const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetCurrentBox() const {
     return GetBox(CurrentBoxIndex);
 }
 
@@ -102,7 +101,6 @@ static bool CheckOpenBox(int32, const TScriptInterface<IStorageBox> &Box) {
 }
 
 static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInterface<IStorageBox> &Box,
-    const TScriptInterface<IPokemon> &Pokemon) {
-    return Box->DepositToBox(Pokemon) |
-        UE::Optionals::Construct<FDepositResult>(Index);
+                                                 const TScriptInterface<IPokemon> &Pokemon) {
+    return Box->DepositToBox(Pokemon) | UE::Optionals::Construct<FDepositResult>(Index);
 }
