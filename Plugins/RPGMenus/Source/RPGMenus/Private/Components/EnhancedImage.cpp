@@ -5,6 +5,8 @@
 #include "Ranges/Functional/PropertyBindings.h"
 #include "Slate/SlateBrushAsset.h"
 #include "SPaperFlipbookWidget.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
+#include "Ranges/Optional/Map.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"
 
 constexpr int32 ImageWidgetIndex = 0;
@@ -24,7 +26,12 @@ void UEnhancedImage::SetBrush(const FSlateBrush &InBrush, bool bUpdateAssetImage
 
 void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset) {
     Super::SetBrushFromAsset(Asset);
-    SetSourceImageInternal(Asset->Brush.GetResourceObject());
+    // clang-format off
+    SetSourceImageInternal(UE::Optionals::OfNullable(Asset) |
+                           UE::Optionals::Map(&USlateBrushAsset::Brush) |
+                           UE::Optionals::Map(&FSlateBrush::GetResourceObject) |
+                           UE::Optionals::GetPtrOrNull);
+    // clang-format on
     bManualSize = true;
 }
 
@@ -90,10 +97,10 @@ void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFl
                                                    bool bMatchSize) {
     if (!LazyFlipbook.IsNull()) {
         RequestAsyncLoad(LazyFlipbook, FStreamableDelegate::CreateWeakLambda(this, [this, LazyFlipbook, bMatchSize] {
-                             ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
-                                        *LazyFlipbook.ToSoftObjectPath().ToString());
-                             SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
-                         }));
+            ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
+                       *LazyFlipbook.ToSoftObjectPath().ToString());
+            SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
+        }));
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(LazyFlipbook, bMatchSize);
@@ -103,10 +110,12 @@ void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFl
 void UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize) {
     if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
         RequestAsyncLoad(SoftPointer, FStreamableDelegate::CreateWeakLambda(this, [this, LazyImage, bMatchSize] {
-                             ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
-                                        *LazyImage.ToSoftObjectPath().ToString());
-                             SetBrushFromImageAsset(LazyImage.LoadSynchronous().GetValue(), bMatchSize);
-                         }));
+            ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
+                       *LazyImage.ToSoftObjectPath().ToString());
+            auto FoundAsset = LazyImage.LoadSynchronous();
+            check(FoundAsset.IsSet())
+            SetBrushFromImageAsset(FoundAsset.GetValue(), bMatchSize);
+        }));
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(SoftPointer, bMatchSize);
@@ -118,9 +127,12 @@ TSharedRef<SWidget> UEnhancedImage::RebuildImageWidget() {
     // clang-format off
     Switcher = SNew(SWidgetSwitcher)
         .WidgetIndex_UObject(this, &UEnhancedImage::GetWidgetIndex)
-        + SWidgetSwitcher::Slot() [
+        + SWidgetSwitcher::Slot()
+        [
             Super::RebuildImageWidget()
-        ] + SWidgetSwitcher::Slot() [
+        ]
+        + SWidgetSwitcher::Slot()
+        [
             FlipbookWidget.ToSharedRef()
         ];
     // clang-format on
@@ -163,7 +175,7 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
     if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UEnhancedImage, SourceImage)) {
         auto UpdateBrush = GetBrush();
         if (SourceImage.IsType<UPaperFlipbook>()) {
-            auto &Flipbook = SourceImage.Get<UPaperFlipbook>();
+            const auto &Flipbook = SourceImage.Get<UPaperFlipbook>();
             UpdateBrush.SetResourceObject(Flipbook.GetSpriteAtFrame(0));
         } else {
             UpdateBrush.SetResourceObject(SourceImage.TryGet().GetPtrOrNull());
@@ -172,12 +184,12 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
         if (!bManualSize && SourceImage.IsValid() && !SourceImage.IsType<UMaterialInterface>()) {
             switch (SourceImage.GetTypeIndex()) {
             case FImageAsset::GetTypeIndex<UTexture2D>(): {
-                auto &Texture = SourceImage.Get<UTexture2D>();
+                const auto &Texture = SourceImage.Get<UTexture2D>();
                 UpdateBrush.SetImageSize(FVector2D(Texture.GetSizeX(), Texture.GetSizeY()));
                 break;
             }
             case FImageAsset::GetTypeIndex<UTexture2DDynamic>(): {
-                auto &Texture = SourceImage.Get<UTexture2DDynamic>();
+                const auto &Texture = SourceImage.Get<UTexture2DDynamic>();
                 UpdateBrush.SetImageSize(FVector2D(Texture.SizeX, Texture.SizeY));
                 break;
             }
