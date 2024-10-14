@@ -26,5 +26,5 @@ namespace UE::Ranges {
     };
 
     template <typename N = size_t>
-    constexpr TReverseEnumerate<N> ReverseEnumerate;
+    inline constexpr TReverseEnumerate<N> ReverseEnumerate;
 } // namespace UE::Ranges
