@@ -94,3 +94,4 @@ cpp-coverage.xml
 *.profraw
 *.profdata
 coverage.txt
+TestResults
