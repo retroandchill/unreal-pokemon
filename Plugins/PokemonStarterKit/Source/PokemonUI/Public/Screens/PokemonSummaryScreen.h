@@ -23,6 +23,10 @@ UCLASS(Abstract)
 class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     GENERATED_BODY()
 
+  public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UPokemonSummaryScreen *AddPokemonSummaryScreenToStack(const UObject *WorldContextObject);
+
   protected:
     void NativePreConstruct() override;
     void NativeConstruct() override;
@@ -84,3 +88,5 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     UPROPERTY(BlueprintGetter = GetPokemonSelection, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UPokemonSelectionPaneBase> PokemonSelection;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UPokemonSummaryScreen)

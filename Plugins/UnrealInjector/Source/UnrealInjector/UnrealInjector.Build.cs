@@ -25,7 +25,7 @@ public class UnrealInjector : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", "UnrealRanges",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

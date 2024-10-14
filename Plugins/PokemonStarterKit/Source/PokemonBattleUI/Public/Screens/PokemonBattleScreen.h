@@ -24,6 +24,10 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
     GENERATED_BODY()
 
+  public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UPokemonBattleScreen *AddPokemonBattleScreenToStack(const UObject *WorldContextObject);
+
   protected:
     void NativeConstruct() override;
 
@@ -235,3 +239,5 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
 
     bool bMandatorySwitch = false;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONBATTLEUI_API, UPokemonBattleScreen)

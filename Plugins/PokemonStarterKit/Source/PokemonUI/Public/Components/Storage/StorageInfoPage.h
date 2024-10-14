@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "UObject/Interface.h"
+
 #include "StorageInfoPage.generated.h"
 
 class IPokemon;
@@ -12,7 +13,7 @@ class IPokemon;
 /**
  * Delegate invoked when the selected Pokémon in changed.
  */
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelectedPokemonChanged, TOptional<IPokemon&>);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelectedPokemonChanged, TOptional<IPokemon &>);
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, Blueprintable)
@@ -27,12 +28,11 @@ class POKEMONUI_API IStorageInfoPage {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * The Pokémon to display information for.
      * @param Pokemon The Pokémon in question.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Storage)
-    void DisplayInfo(const TScriptInterface<IPokemon>& Pokemon);
-
+    void DisplayInfo(const TScriptInterface<IPokemon> &Pokemon);
 };

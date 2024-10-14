@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
+#include "Lookup/InjectableDependency.h"
 #include "NativeGameplayTags.h"
 
 #include "Screen.generated.h"
@@ -95,3 +96,11 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     UPROPERTY(EditDefaultsOnly, Category = Input)
     EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::CapturePermanently;
 };
+
+namespace RPG::Menus {
+    template <typename T>
+    concept InjectableScreen = std::derived_from<T, UScreen> && UnrealInjector::Injectable<T>;
+
+    template <typename T, typename... A>
+    concept CanInjectScreen = InjectableScreen<T> && UnrealInjector::CanInitialize<T, A...>;
+} // namespace RPG::Menus

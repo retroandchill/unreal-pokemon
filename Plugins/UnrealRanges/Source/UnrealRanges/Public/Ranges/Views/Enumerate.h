@@ -6,7 +6,6 @@
 #include "Ranges/Concepts/Arrays.h"
 #include "Ranges/Utilities/Arrays.h"
 #include "Ranges/Views/Map.h"
-
 #include <range/v3/view/enumerate.hpp>
 
 namespace UE::Ranges {
@@ -21,13 +20,11 @@ namespace UE::Ranges {
 
         template <typename T>
             requires Indexable<T, size_t>
-        constexpr auto operator()(T&& Container) const {
-            return Map([&Container](N Index) {
-                return GetWithIndex<T, N>(Forward<T>(Container), Index);
-            });
+        constexpr auto operator()(T &&Container) const {
+            return Map([&Container](N Index) { return GetWithIndex<T, N>(Forward<T>(Container), Index); });
         }
     };
 
     template <typename N = size_t>
     constexpr TReverseEnumerate<N> ReverseEnumerate;
-}
+} // namespace UE::Ranges

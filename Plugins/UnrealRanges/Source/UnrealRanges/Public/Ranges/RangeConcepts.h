@@ -16,10 +16,10 @@ namespace UE::Ranges {
      * @param T The particular interface type
      */
     template <typename T>
-    concept UnrealInterface = !std::is_base_of_v<UObject, T> && std::same_as<typename T::ThisClass, T>
-        && std::is_base_of_v<UInterface, typename T::UClassType> && requires(T&& Interface)  {
-            { Interface._getUObject() } -> std::same_as<UObject*>;
-        };
+    concept UnrealInterface = !std::is_base_of_v<UObject, T> && std::same_as<typename T::ThisClass, T> &&
+                              std::is_base_of_v<UInterface, typename T::UClassType> && requires(T &&Interface) {
+                                  { Interface._getUObject() } -> std::same_as<UObject *>;
+                              };
 
     /**
      * Concept to check if the passed in functor is a valid functional type.

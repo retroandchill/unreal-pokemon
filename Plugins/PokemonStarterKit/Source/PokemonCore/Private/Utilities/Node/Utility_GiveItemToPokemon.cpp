@@ -2,6 +2,8 @@
 
 #include "Utilities/Node/Utility_GiveItemToPokemon.h"
 
+DEFINE_INJECTABLE_DEPENDENCY(UUtility_GiveItemToPokemon)
+
 void UUtility_GiveItemToPokemon::Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon,
                                          int32 PokemonIndex, FSimpleDelegate &&ItemGiven,
                                          FSimpleDelegate &&ItemNotGiven) {

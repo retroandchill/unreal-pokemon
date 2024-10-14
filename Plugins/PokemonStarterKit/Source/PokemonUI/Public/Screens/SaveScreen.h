@@ -23,6 +23,10 @@ UCLASS(Abstract)
 class POKEMONUI_API USaveScreen : public UScreen {
     GENERATED_BODY()
 
+  public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static USaveScreen *AddSaveScreenToStack(const UObject *WorldContextObject);
+
   protected:
     void NativeOnActivated() override;
     void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
@@ -85,3 +89,5 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
     TOptional<TFuture<UPokemonSaveGame *>> SaveGameCreationFuture;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, USaveScreen)

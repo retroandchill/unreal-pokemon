@@ -30,6 +30,10 @@ UCLASS(Abstract, Blueprintable)
 class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     GENERATED_BODY()
 
+  public:
+    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
+    static UBagScreen *AddBagScreenToStack(const UObject *WorldContextObject);
+
   protected:
     void NativeConstruct() override;
 
@@ -89,8 +93,8 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
         }
 
         auto Effect = NewObject<T>(this, EffectClass.GetValue());
-        Effect->BindToOnEffectComplete(this,
-            [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
+        Effect->BindToOnEffectComplete(
+            this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
                 OnItemEffectConclude(bSuccess, ItemID);
                 Callback.Execute(bSuccess);
             });
@@ -130,3 +134,5 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UPROPERTY()
     TObjectPtr<UFieldItemEffect> CurrentItemEffect;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UBagScreen)

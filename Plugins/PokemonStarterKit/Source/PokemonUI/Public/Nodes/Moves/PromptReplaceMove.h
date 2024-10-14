@@ -7,6 +7,7 @@
 
 #include "PromptReplaceMove.generated.h"
 
+struct FMoveHandle;
 class IPokemon;
 class UMoveForgetScreen;
 
@@ -31,9 +32,9 @@ class POKEMONUI_API UPromptReplaceMove : public UBlueprintAsyncActionBase {
      * @return The created node
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Selection",
-              meta = (WorldContext = "WorldContextObject"))
+              meta = (WorldContext = "WorldContextObject", AutoCreateRefTerm = Move))
     static UPromptReplaceMove *PromptReplaceMove(const UObject *WorldContextObject,
-                                                 const TScriptInterface<IPokemon> &Pokemon, FName Move);
+                                                 const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle &Move);
 
     void Activate() override;
 

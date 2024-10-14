@@ -16,28 +16,9 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
     GENERATED_BODY()
 
   public:
-#if WITH_METADATA
-    /**
-     * Refresh the default dependencies from the list of classes
-     */
-    void RefreshDependencies();
-#endif
-
     /**
      * The map of interface types to implementation classes
      */
     UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (EditFixedOrder))
     TArray<FInjectionTarget> TargetInjections;
-
-    UPROPERTY(EditDefaultsOnly, Config, EditFixedSize, Category = DependencyInjection, meta = (EditFixedOrder))
-    TArray<FInjectionTarget> BlueprintNodeClasses;
-
-  private:
-#ifdef WITH_METADATA
-    /**
-     * Run a sweep for any new interfaces that exist now and load them into the settings
-     * @return If there was a change to the data at all
-     */
-    bool CheckForNewInjectableInterfaces();
-#endif
 };

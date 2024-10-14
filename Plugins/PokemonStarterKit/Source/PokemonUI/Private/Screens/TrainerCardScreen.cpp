@@ -8,6 +8,13 @@
 #include "PaperFlipbookUserWidget.h"
 #include "Player/PlayerMetadata.h"
 #include "Utilities/PokemonUIUtils.h"
+#include "Utilities/RPGMenuUtilities.h"
+
+DEFINE_INJECTABLE_DEPENDENCY(UTrainerCardScreen)
+
+UTrainerCardScreen *UTrainerCardScreen::AddTrainerCardScreenToStack(const UObject *WorldContextObject) {
+    return URPGMenuUtilities::InjectScreenToStack<UTrainerCardScreen>(WorldContextObject).GetPtrOrNull();
+}
 
 void UTrainerCardScreen::NativeConstruct() {
     Super::NativeConstruct();

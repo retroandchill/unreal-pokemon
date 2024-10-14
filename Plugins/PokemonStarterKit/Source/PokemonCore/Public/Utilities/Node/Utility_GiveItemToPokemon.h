@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprints/BlueprintUtilityNode.h"
+#include "Lookup/InjectableDependency.h"
 #include "UObject/Object.h"
 
 #include "Utility_GiveItemToPokemon.generated.h"
@@ -36,3 +37,5 @@ class POKEMONCORE_API UUtility_GiveItemToPokemon : public UBlueprintUtilityNode 
     FSimpleMulticastDelegate OnItemGiven;
     FSimpleMulticastDelegate OnItemNotGiven;
 };
+
+DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, UUtility_GiveItemToPokemon);

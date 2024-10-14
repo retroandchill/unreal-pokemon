@@ -1,7 +1,6 @@
 import unittest
 
 from coverage_helpers import run_test_with_coverage
-from parsing.test_schema_parser import TestSchemaParser
 from pokemon.unreal_interface.gameplay_tags import create_gameplay_tag_structure
 
 
@@ -21,4 +20,4 @@ class TestGameplayTags(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    result = run_test_with_coverage(TestSchemaParser, __file__)
+    result = run_test_with_coverage(TestGameplayTags, __file__)

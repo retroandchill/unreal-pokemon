@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
-#include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Functional/Delegates.h"
+#include "Ranges/Variants/VariantObject.h"
 #include <mutex>
 
 namespace UE::Ranges {
     /**
-     * 
+     *
      */
     template <typename T>
         requires std::is_base_of_v<UObject, T> || VariantObject<T>
@@ -19,11 +19,11 @@ namespace UE::Ranges {
         struct FPrivateToken {
             explicit FPrivateToken() = default;
         };
-        
-    public:
-        using ResultType = std::conditional_t<VariantObject<T>, T, T&>;
-        DECLARE_MULTICAST_DELEGATE_OneParam(FAsyncLoadCompleteDelegate, const TOptional<ResultType>&);
-        
+
+      public:
+        using ResultType = std::conditional_t<VariantObject<T>, T, T &>;
+        DECLARE_MULTICAST_DELEGATE_OneParam(FAsyncLoadCompleteDelegate, const TOptional<ResultType> &);
+
         explicit TAsyncLoadHandle(FPrivateToken, const FSoftObjectPath &ObjectPath) : Handle(CreateHandle(ObjectPath)) {
         }
 
@@ -38,7 +38,7 @@ namespace UE::Ranges {
             return bLoadCompleted;
         }
 
-        const TOptional<ResultType>& GetObject(float Timeout = 0.f) const {
+        const TOptional<ResultType> &GetObject(float Timeout = 0.f) const {
             if (!IsLoaded()) {
                 Handle->WaitUntilComplete(Timeout);
             }
@@ -47,9 +47,9 @@ namespace UE::Ranges {
         }
 
         template <typename F, typename... A>
-            requires std::invocable<F, const TOptional<ResultType>&, A...> &&
-                CanBindDelegate<typename FAsyncLoadCompleteDelegate::FDelegate, F, A...>
-        void OnLoadComplete(F&& Functor, A&&... Args) {
+            requires std::invocable<F, const TOptional<ResultType> &, A...> &&
+                     CanBindDelegate<typename FAsyncLoadCompleteDelegate::FDelegate, F, A...>
+        void OnLoadComplete(F &&Functor, A &&...Args) {
             std::scoped_lock Lock(UpdateMutex);
             if (IsLoaded()) {
                 std::invoke(Forward<F>(Functor), Result, Forward<A>(Args)...);
@@ -59,9 +59,9 @@ namespace UE::Ranges {
         }
 
         template <typename O, typename F, typename... A>
-            requires std::invocable<F, O, const TOptional<ResultType>&, A...> &&
-                CanBindDelegate<typename FAsyncLoadCompleteDelegate::FDelegate, O, F, A...>
-        void OnLoadComplete(O&& Object, F&& Functor, A&&... Args) {
+            requires std::invocable<F, O, const TOptional<ResultType> &, A...> &&
+                     CanBindDelegate<typename FAsyncLoadCompleteDelegate::FDelegate, O, F, A...>
+        void OnLoadComplete(O &&Object, F &&Functor, A &&...Args) {
             std::scoped_lock Lock(UpdateMutex);
             if (IsLoaded()) {
                 std::invoke(Forward<F>(Functor), Forward<O>(Object), Result, Forward<A>(Args)...);
@@ -70,11 +70,11 @@ namespace UE::Ranges {
             }
         }
 
-    private:
+      private:
         static TSharedRef<FStreamableHandle> CreateHandle(const FSoftObjectPath &ObjectPath) {
             auto &StreamableManager = UAssetManager::GetStreamableManager();
             auto Handle = StreamableManager.RequestAsyncLoad(ObjectPath, FStreamableDelegate(),
-                FStreamableManager::DefaultAsyncLoadPriority, false, true);
+                                                             FStreamableManager::DefaultAsyncLoadPriority, false, true);
             return Handle.ToSharedRef();
         }
 
@@ -97,4 +97,4 @@ namespace UE::Ranges {
         bool bLoadCompleted = false;
         std::mutex UpdateMutex;
     };
-}
+} // namespace UE::Ranges

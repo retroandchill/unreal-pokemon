@@ -2,4 +2,4 @@
 
 #include "Pokemon/Moves/MoveBlock.h"
 
-// Add default functionality here for any IMoveBlock functions that are not pure virtual.
+DEFINE_INJECTABLE_DEPENDENCY(IMoveBlock)
