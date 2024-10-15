@@ -167,8 +167,8 @@ namespace UE::Ranges {
         FAssetData GetAssetData() const {
             auto &AssetManager = UAssetManager::Get();
             FAssetData Data;
-            verify(AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data))
-            return Data;
+            AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data);
+            return MoveTemp(Data);
         }
 
         TSoftObjectPtr<> Ptr;

@@ -43,8 +43,6 @@ class POKEMONUI_API UItemOption : public UCommonButtonBase {
     void SetItem(FName Item, int32 Quantity);
 
   protected:
-    void NativeOnCurrentTextStyleChanged() override;
-
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
     void OnItemSet(const FItem& Item, int32 Quantity);
 
