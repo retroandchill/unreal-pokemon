@@ -3,8 +3,36 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SoftVariantObject.h"
-#include "VariantObject.h"
+#include "Ranges/Variants/VariantObject.h"
+#include "Ranges/Variants/SoftVariantObject.h"
+#include "Ranges/Optional/OptionalRef.h"
+
+namespace UE::Ranges {
+    class UNREALRANGES_API FVariantObjectStructRegistry {
+        FVariantObjectStructRegistry() = default;
+        ~FVariantObjectStructRegistry() = default;
+
+    public:
+        static FVariantObjectStructRegistry& Get();
+
+        template <typename T>
+            requires VariantObjectStruct<T>
+        static bool RegisterVariantStruct() {
+            AddToDelegate(FCoreDelegates::OnPostEngineInit, [] {
+                auto &Instance = Get();
+                auto Struct = GetScriptStruct<T>();
+                Instance.RegisteredStructs.Emplace(Struct->GetFName(),
+                    GetScriptStruct<typename T::SoftPtrType>());
+            });
+            return true;
+        }
+
+        TOptional<UScriptStruct&> GetStruct(const UScriptStruct &StructName);
+
+    private:
+        TMap<FName, TWeakObjectPtr<UScriptStruct>> RegisteredStructs;
+    };
+}
 
 #define UE_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...)                                                              \
     struct FSoft##StructName;                                                                                          \
@@ -32,3 +60,6 @@
     };                                                                                                                 \
     template <>                                                                                                        \
     struct UE::Ranges::Detail::TIsSoftVariantObject<FSoft##StructName> : std::true_type {}
+
+#define UE_DEFINE_VARIANT_OBJECT_STRUCT(StructName) \
+    static const bool __##StructName__Registration = UE::Ranges::FVariantObjectStructRegistry::RegisterVariantStruct<StructName>()

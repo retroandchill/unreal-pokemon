@@ -132,10 +132,22 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     static EAssetLoadResult FindAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                             const FString &AssetName, UObject *&FoundAsset);
 
+    UFUNCTION(BlueprintCallable, Category = Assets,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
+                      DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
+                      ExpandEnumAsExecs = "ReturnValue"))
+    static EAssetLoadResult LookupAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
+                                            const FString &AssetName, TSoftObjectPtr<UObject> &FoundAsset);
+
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
                       DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
     static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject *&FoundAsset);
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+              meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
+                      DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
+    static EAssetLoadResult LookupDynamicAsset(FName Identifier, const FString &AssetName, TSoftObjectPtr<UObject> &FoundAsset);
 
     /**
      * Look up a Blueprint class by its name

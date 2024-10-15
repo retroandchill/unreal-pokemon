@@ -44,6 +44,6 @@ namespace Pokemon::Assets::Graphics {
     /**
      * Asset class for item icons.
      */
-    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, ItemIcons, UObject);
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, ItemIcons, FImageAsset);
 
 } // namespace Pokemon::Assets::Graphics

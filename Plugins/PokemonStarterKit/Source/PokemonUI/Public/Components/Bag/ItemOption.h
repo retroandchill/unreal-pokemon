@@ -7,6 +7,7 @@
 
 #include "ItemOption.generated.h"
 
+class UCommonTextBlock;
 struct FItem;
 struct FItemSlot;
 class UDisplayText;
@@ -38,14 +39,14 @@ class POKEMONUI_API UItemOption : public UCommonButtonBase {
      * @param Item The ID of the item in question
      * @param Quantity The quantity of the item
      */
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, Category = Display)
     void SetItem(FName Item, int32 Quantity);
 
   protected:
     void NativeOnCurrentTextStyleChanged() override;
 
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void OnItemSet(FName Item, int32 Quantity);
+    void OnItemSet(const FItem& Item, int32 Quantity);
 
   private:
     /**
@@ -57,16 +58,4 @@ class POKEMONUI_API UItemOption : public UCommonButtonBase {
      * Represents the quantity held
      */
     int32 QuantityHeld;
-
-    /**
-     * Text that displays an item's name
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemNameText;
-
-    /**
-     * Text that displays the item's quantity.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemQuantityText;
 };

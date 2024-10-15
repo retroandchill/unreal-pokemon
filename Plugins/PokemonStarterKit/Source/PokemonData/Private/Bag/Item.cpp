@@ -107,6 +107,10 @@ bool UItemHelper::CanHold(const FItem &Item) {
     return Item.CanHold();
 }
 
+bool UItemHelper::ShouldShowQuantity(const FItem &Item) {
+    return Item.ShouldShowQuantity();
+}
+
 FName UItemHelper::ConvertItemHandleToName(const FItemHandle &Struct) {
     return Struct;
 }

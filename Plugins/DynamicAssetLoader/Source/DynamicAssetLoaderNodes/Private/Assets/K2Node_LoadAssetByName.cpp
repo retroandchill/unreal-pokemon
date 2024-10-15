@@ -181,28 +181,24 @@ FText UK2Node_LoadAssetByName::GetMenuCategory() const {
 UEdGraphPin *UK2Node_LoadAssetByName::GetAssetFoundPin() const {
     UEdGraphPin *Pin = FindPinChecked(UEdGraphSchema_K2::PN_Then);
     check(Pin->Direction == EGPD_Output)
-    ;
     return Pin;
 }
 
 UEdGraphPin *UK2Node_LoadAssetByName::GetAssetNamePin() const {
     UEdGraphPin *Pin = FindPinChecked(AssetNamePinName);
     check(Pin->Direction == EGPD_Input)
-    ;
     return Pin;
 }
 
 UEdGraphPin *UK2Node_LoadAssetByName::GetAssetNotFoundPin() const {
     UEdGraphPin *Pin = FindPinChecked(AssetNotFoundPinName);
     check(Pin->Direction == EGPD_Output)
-    ;
     return Pin;
 }
 
 UEdGraphPin *UK2Node_LoadAssetByName::GetResultPin() const {
     UEdGraphPin *Pin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
     check(Pin->Direction == EGPD_Output)
-    ;
     return Pin;
 }
 

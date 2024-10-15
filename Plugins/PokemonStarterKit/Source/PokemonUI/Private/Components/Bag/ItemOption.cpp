@@ -3,7 +3,6 @@
 #include "Components/Bag/ItemOption.h"
 #include "Bag/Item.h"
 #include "CommonTextBlock.h"
-#include "Components/DisplayText.h"
 #include "DataManager.h"
 
 const FItem &UItemOption::GetItem() const {
@@ -18,6 +17,7 @@ int32 UItemOption::GetQuantity() const {
 
 void UItemOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
+    /*
     auto TextStyle = GetCurrentTextStyleClass();
     if (ItemNameText != nullptr) {
         // ItemNameText->SetTextStyle(TextStyle);
@@ -25,13 +25,14 @@ void UItemOption::NativeOnCurrentTextStyleChanged() {
     if (ItemQuantityText != nullptr) {
         // ItemQuantityText->SetTextStyle(TextStyle);
     }
+    */
 }
 
-void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {
+void UItemOption::SetItem(FName Item, int32 Quantity) {
     CurrentItem = Item;
     QuantityHeld = Quantity;
 
-    auto &ItemData = GetItem();
+    /*
     ItemNameText->SetText(ItemData.RealName);
 
     if (ItemData.ShouldShowQuantity()) {
@@ -39,6 +40,7 @@ void UItemOption::SetItem_Implementation(FName Item, int32 Quantity) {
     } else {
         ItemQuantityText->SetText(FText::FromStringView(TEXT("")));
     }
-
-    OnItemSet(Item, Quantity);
+    */
+    
+    OnItemSet(GetItem(), Quantity);
 }

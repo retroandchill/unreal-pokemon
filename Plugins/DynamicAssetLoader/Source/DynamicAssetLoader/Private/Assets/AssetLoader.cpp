@@ -4,6 +4,7 @@
 #include "Assets/AssetLoadingSettings.h"
 #include "Assets/AssetUtilities.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
+#include "Ranges/Optional/OrElseGet.h"
 
 FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView AssetName) {
     FStringView Prefix;
@@ -24,11 +25,33 @@ EAssetLoadResult UAssetLoader::FindAssetByName(const UClass *AssetClass, const F
     return FoundAsset != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
 }
 
+EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
+    const FString &AssetName, TSoftObjectPtr<> &FoundAsset) {
+    auto Value = LookupAssetByName(BasePackageName, AssetName) |
+                 UE::Optionals::Filter(&TSoftObjectRef<>::IsAssetOfType, AssetClass);
+    // clang-format off
+    FoundAsset = LookupAssetByName(BasePackageName, AssetName) |
+                 UE::Optionals::Filter(&TSoftObjectRef<>::IsAssetOfType, AssetClass) |
+                 UE::Optionals::Map(&TSoftObjectRef<>::ToSoftObjectPtr) |
+                 UE::Optionals::OrElseGet([] { return TSoftObjectPtr(); });
+    // clang-format on
+    return FoundAsset.IsNull() ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+}
+
 EAssetLoadResult UAssetLoader::LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject *&FoundAsset) {
     auto Settings = GetDefault<UAssetLoadingSettings>();
     auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
     auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
     return FindAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory,
+                           FullName, FoundAsset);
+}
+
+EAssetLoadResult UAssetLoader::LookupDynamicAsset(FName Identifier, const FString &AssetName,
+    TSoftObjectPtr<UObject> &FoundAsset) {
+    auto Settings = GetDefault<UAssetLoadingSettings>();
+    auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
+    auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
+    return LookupAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory,
                            FullName, FoundAsset);
 }
 

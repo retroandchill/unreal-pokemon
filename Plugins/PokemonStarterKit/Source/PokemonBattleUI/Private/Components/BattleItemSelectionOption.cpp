@@ -5,6 +5,7 @@
 #include "Components/DisplayText.h"
 #include "DataManager.h"
 #include "Graphics/AssetClasses.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
 #include "Utilities/WidgetUtilities.h"
 
 void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
@@ -14,7 +15,11 @@ void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
     static auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     auto &ItemData = ItemTable.GetDataChecked(ItemID);
 
-    auto IconAsset = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(ItemID).GetPtrOrNull();
+    // clang-format off
+    auto IconAsset = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(ItemID) |
+                       UE::Optionals::Map([](const FImageAsset &Asset) -> auto &{ return Asset.Get(); }) |
+                       UE::Optionals::GetPtrOrNull;
+    // clang-format on
     UWidgetUtilities::SetBrushFromAsset(ItemIcon, IconAsset, true);
 
     ItemNameText->SetText(ItemData.RealName);

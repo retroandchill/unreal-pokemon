@@ -8,6 +8,7 @@
 
 #include "PocketWindow.generated.h"
 
+class UCommonTextBlock;
 class UPocketGraphic;
 class UDisplayText;
 
@@ -34,22 +35,18 @@ class POKEMONUI_API UPocketWindow : public UUserWidget {
     void SetCurrentPocket(FName Pocket);
 
   protected:
+    UFUNCTION(BlueprintImplementableEvent, Category = Display)
+    void SetPocketName(const FText& PocketName);
+
+  private:
     /**
      * Update the information displayed to the player regarding the current pocket
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
     void UpdatePocketInfo();
-
-  private:
+    
     /**
      * The current pocket that is being viewed
      */
     UPROPERTY(BlueprintGetter = GetCurrentPocket, BlueprintSetter = SetCurrentPocket, Category = Inventory)
     FName CurrentPocket;
-
-    /**
-     * The widget that holds the pocket being shown.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PocketName;
 };

@@ -40,7 +40,7 @@ namespace UE::Ranges {
         using IntrusiveUnsetOptionalStateType = TSoftVariantObject;
 
         template <typename... A>
-            requires std::constructible_from<TSoftObjectPtr<T>, A...>
+            requires std::constructible_from<TSoftObjectPtr<>, A...>
         explicit TSoftVariantObject(A &&...Args)
             : Ptr(Forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
@@ -113,6 +113,11 @@ namespace UE::Ranges {
             return TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
         }
 
+        void Set(const TSoftObjectPtr<>& Object) {
+            Ptr = Object;
+            TypeIndex = T::GetTypeIndex(GetAssetData()).GetValue();
+        }
+
         /**
          * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
          * @return The StringObjectPath that is wrapped by this SoftObjectPtr
@@ -135,6 +140,13 @@ namespace UE::Ranges {
 
         bool operator==(FIntrusiveUnsetOptionalState) const {
             return Ptr.IsNull();
+        }
+
+        static TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &Object) {
+            auto &AssetManager = UAssetManager::Get();
+            FAssetData Data;
+            AssetManager.GetAssetDataForPath(Object.ToSoftObjectPath(), Data);
+            return T::GetTypeIndex(Data);
         }
 
       private:
