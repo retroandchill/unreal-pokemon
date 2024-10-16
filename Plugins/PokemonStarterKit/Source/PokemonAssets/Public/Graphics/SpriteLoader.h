@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+#include "Graphics/BattleRender.h"
+#include "Images/ImageAsset.h"
 
 #include "SpriteLoader.generated.h"
 
@@ -38,21 +40,20 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
 
   public:
     UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook *GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
+    static FBattleRender GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook *GetSpeciesBattleSprite(FName Species, bool bBack = false,
+    static FBattleRender GetSpeciesBattleSprite(FName Species, bool bBack = false,
                                                   const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook> GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
+    static FSoftBattleRender GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
                                                                      bool bBack = false);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook>
-    GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
+    static FSoftBattleRender GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
                                const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
@@ -62,7 +63,7 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook *GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
+    static FImageAsset GetPokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
@@ -71,7 +72,7 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static UPaperFlipbook *GetSpeciesIcon(FName Species,
+    static FImageAsset GetSpeciesIcon(FName Species,
                                           const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
@@ -81,7 +82,7 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook> GetLazyPokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
+    static FSoftImageAsset GetLazyPokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
 
     /**
      * Get the icon based upon the Pokémon information that was passed in.
@@ -90,8 +91,7 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static TSoftObjectPtr<UPaperFlipbook>
-    GetLazySpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    static FSoftImageAsset GetLazySpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
                                                              FStringView Subfolder);
@@ -103,5 +103,5 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      * @return The graphical asset that displays the trainer sprite, as well as the size of the sprite
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon")
-    static UPaperFlipbook *GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, bool bBack = false);
+    static FBattleRender GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, bool bBack = false);
 };

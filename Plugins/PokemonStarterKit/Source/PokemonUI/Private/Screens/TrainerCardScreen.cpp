@@ -31,7 +31,7 @@ void UTrainerCardScreen::NativeConstruct() {
 
 void UTrainerCardScreen::SetTrainerSprite() {
     check(TrainerImage != nullptr)
-    auto Flipbook = USpriteLoader::GetTrainerSprite(Trainer);
+    auto Flipbook = USpriteLoader::GetTrainerSprite(Trainer).TryGet<UPaperFlipbook>().GetPtrOrNull();
     TrainerImage->SetFlipbook(Flipbook);
     if (Flipbook != nullptr) {
         TrainerImage->SetPlaybackPositionInFrames(Flipbook->GetNumFrames());

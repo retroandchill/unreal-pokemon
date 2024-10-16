@@ -133,7 +133,7 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
-                       Optionals::Map([](const TSoftObjectRef<> &Object) { return T(&Object); });
+                       Optionals::Map([](const TSoftObjectRef<> &Object) { return T::SoftPtrType(Object.ToSoftObjectPtr()); });
             }
         }
 

@@ -4,9 +4,10 @@
 
 namespace Pokemon::Assets::Graphics {
 
-    UE_DEFINE_ASSET_CLASS(PokemonSprites, UPaperFlipbook, "/Game/Graphics/Pokemon", "");
+    UE_DEFINE_ASSET_CLASS(PokemonBattleSprites, FBattleRender, "/Game/Graphics/Pokemon", "");
+    UE_DEFINE_ASSET_CLASS(PokemonMenuSprites, FImageAsset, "/Game/Graphics/Pokemon", "");
 
-    UE_DEFINE_ASSET_CLASS(TrainerSprites, UPaperFlipbook, "/Game/Graphics/Trainers", "");
+    UE_DEFINE_ASSET_CLASS(TrainerSprites, FBattleRender, "/Game/Graphics/Trainers", "");
 
     UE_DEFINE_ASSET_CLASS(TypeIcons, FImageAsset, "/Game/Graphics/UI/Types", "types_");
     UE_DEFINE_ASSET_CLASS(TypePanels, UObject, "/Game/Graphics/UI/Battle/Moves", "move_");

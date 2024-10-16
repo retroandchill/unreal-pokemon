@@ -8,11 +8,12 @@
 #include "KismetCompiler.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetLoadingSettings.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Optional/OrElse.h"
 
 class UK2Node_CallFunction;
-static const FName AssetNamePinName = "AssetName";
-static const FName AssetNotFoundPinName = "AssetNotFound";
+static const FName Lookup_AssetNamePinName = "AssetName";
+static const FName Lookup_AssetNotFoundPinName = "AssetNotFound";
 
 UK2Node_LookupAssetByName::UK2Node_LookupAssetByName() {
     NodeTooltip = NSLOCTEXT("UK2Node_LookupAssetByName", "NodeTooltip", "Attempts to find the path of an asset by its name");
@@ -27,10 +28,10 @@ void UK2Node_LookupAssetByName::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Execute);
     auto AssetFoundPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Then);
     AssetFoundPin->PinFriendlyName = NSLOCTEXT("K2Node", "LoadAssetByName Asset Found Exec pin", "Asset Found");
-    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, AssetNotFoundPinName);
+    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, Lookup_AssetNotFoundPinName);
 
     // AssetNamePin
-    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, AssetNamePinName);
+    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, Lookup_AssetNamePinName);
     SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "AssetNamePinDescription", "The name of the asset to load"));
 
     // Result pin
@@ -42,9 +43,12 @@ void UK2Node_LookupAssetByName::AllocateDefaultPins() {
                               UEdGraphSchema_K2::PN_ReturnValue);
     } else {
         check(ClassType.AssetClass.IsType<UScriptStruct>())
-        auto SoftStruct = UE::Ranges::FVariantObjectStructRegistry::Get().GetStruct(ClassType.AssetClass.Get<UScriptStruct>());
-        ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, SoftStruct.GetPtrOrNull(),
-                              UEdGraphSchema_K2::PN_ReturnValue);
+        // clang-format off
+        auto SoftStruct = UE::Ranges::FVariantObjectStructRegistry::Get().GetVariantStructData(ClassType.AssetClass.Get<UScriptStruct>()) |
+            UE::Optionals::Map(&UE::Ranges::FRegisteredVariantStruct::GetSoftStructType) |
+            UE::Optionals::GetPtrOrNull;
+        // clang-format on
+        ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, SoftStruct, UEdGraphSchema_K2::PN_ReturnValue);
     }
 
     ResultPin->PinFriendlyName = NSLOCTEXT("K2Node", "LoadAssetByName Output Asset", "Found Asset");
@@ -185,13 +189,13 @@ UEdGraphPin * UK2Node_LookupAssetByName::GetAssetFoundPin() const {
 }
 
 UEdGraphPin * UK2Node_LookupAssetByName::GetAssetNamePin() const {
-    UEdGraphPin *Pin = FindPinChecked(AssetNamePinName);
+    UEdGraphPin *Pin = FindPinChecked(Lookup_AssetNamePinName);
     check(Pin->Direction == EGPD_Input)
     return Pin;
 }
 
 UEdGraphPin * UK2Node_LookupAssetByName::GetAssetNotFoundPin() const {
-    UEdGraphPin *Pin = FindPinChecked(AssetNotFoundPinName);
+    UEdGraphPin *Pin = FindPinChecked(Lookup_AssetNotFoundPinName);
     check(Pin->Direction == EGPD_Output)
     return Pin;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Graphics/BattleRender.h"
 #include "UObject/Interface.h"
 
 #include "BattlerSprite.generated.h"
@@ -25,10 +26,10 @@ class POKEMONBATTLE_API IBattlerSprite {
   public:
     /**
      * Set the battle sprite to the given material
-     * @param Flipbook The material to use for the battle sprite
+     * @param Render The material to use for the battle sprite
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void SetBattleSprite(UPaperFlipbook *Flipbook);
+    void SetBattleSprite(const FBattleRender &Render);
 
     /**
      * Faint the battler

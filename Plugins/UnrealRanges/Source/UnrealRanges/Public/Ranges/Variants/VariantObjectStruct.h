@@ -6,8 +6,56 @@
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/Views/MapValue.h"
+#include "Ranges/Views/ContainerView.h"
+
+#include "VariantObjectStruct.generated.h"
 
 namespace UE::Ranges {
+    class UNREALRANGES_API FRegisteredVariantStruct {
+        FRegisteredVariantStruct(UScriptStruct *StructType,
+            UScriptStruct* SoftStructType,
+            TOptional<uint64> (*IndexFunction) (const UObject*),
+            TArray<UClass*>&& AllowedClasses);
+
+    public:
+        template <typename T>
+            requires VariantObjectStruct<T>
+        static FRegisteredVariantStruct Create() {
+            return FRegisteredVariantStruct(GetScriptStruct<T>(),
+                GetScriptStruct<typename T::SoftPtrType>(),
+                &T::GetTypeIndex,
+                T::GetTypeClasses());
+        }
+        
+        UScriptStruct* GetStructType() const {
+            return StructType;
+        }
+
+        UScriptStruct* GetSoftStructType() const {
+            return SoftStructType;
+        }
+
+        TOptional<uint64> GetTypeIndex(const UObject* Object) const {
+            return TypeIndexFunction(Object);
+        }
+
+        const TArray<UClass*>& GetAllowedClasses() const {
+            return AllowedClasses;
+        }
+
+        auto GetClassesWithStructType() const {
+            return AllowedClasses |
+                Map([this](UClass* Class) { return TPair<UScriptStruct*, UClass*>(StructType, Class); });
+        }
+
+    private:
+        UScriptStruct* StructType;
+        UScriptStruct* SoftStructType;
+        TOptional<uint64> (*TypeIndexFunction) (const UObject*);
+        TArray<UClass*> AllowedClasses;
+    };
+    
     class UNREALRANGES_API FVariantObjectStructRegistry {
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
@@ -22,15 +70,19 @@ namespace UE::Ranges {
                 auto &Instance = Get();
                 auto Struct = GetScriptStruct<T>();
                 Instance.RegisteredStructs.Emplace(Struct->GetFName(),
-                    GetScriptStruct<typename T::SoftPtrType>());
+                    FRegisteredVariantStruct::Create<T>());
             });
             return true;
         }
+        
+        TOptional<FRegisteredVariantStruct&> GetVariantStructData(const UScriptStruct &Struct);
 
-        TOptional<UScriptStruct&> GetStruct(const UScriptStruct &StructName);
+        auto GetAllRegisteredStructs() const {
+            return RegisteredStructs | MapValue;
+        }
 
     private:
-        TMap<FName, TWeakObjectPtr<UScriptStruct>> RegisteredStructs;
+        TMap<FName, FRegisteredVariantStruct> RegisteredStructs;
     };
 }
 
@@ -63,3 +115,25 @@ namespace UE::Ranges {
 
 #define UE_DEFINE_VARIANT_OBJECT_STRUCT(StructName) \
     static const bool __##StructName__Registration = UE::Ranges::FVariantObjectStructRegistry::RegisterVariantStruct<StructName>()
+
+USTRUCT()
+struct UNREALRANGES_API FVariantObjectTemplate {
+    GENERATED_BODY()
+
+    UPROPERTY()
+    TObjectPtr<UObject> ContainedObject;
+
+    UPROPERTY()
+    uint64 TypeIndex;
+};
+
+USTRUCT()
+struct UNREALRANGES_API FSoftVariantObjectTemplate {
+    GENERATED_BODY()
+    
+    UPROPERTY()
+    TSoftObjectPtr<UObject> Ptr;
+
+    UPROPERTY()
+    uint64 TypeIndex;
+};

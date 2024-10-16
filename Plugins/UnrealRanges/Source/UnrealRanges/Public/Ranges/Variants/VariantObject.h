@@ -7,6 +7,7 @@
 #include "Ranges/Concepts/Structs.h"
 #include "Ranges/Concepts/UObjectPointer.h"
 #include "Ranges/RangeConcepts.h"
+#include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/FilterTuple.h"
 
@@ -171,7 +172,11 @@ namespace UE::Ranges {
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         TOptional<U &> TryGet() const {
-            return Optionals::OfNullable(Cast<U>(ContainedObject));
+            if (TypeIndex != GetTypeIndex<U>()) {
+                return TOptional<U&>();
+            }
+            
+            return Optionals::OfNullable(static_cast<U*>(ContainedObject));
         }
 
         TOptional<UObject &> TryGet() const {
@@ -225,6 +230,10 @@ namespace UE::Ranges {
 
         static bool IsValidType(const UObject *Object) {
             return GetTypeIndex(Object).IsSet();
+        }
+
+        static TArray<UClass*> GetTypeClasses() {
+            return { GetClass<T>()... };
         }
 
         template <typename U>

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BattleRender.h"
 #include "Assets/AssetClass.h"
 #include "Images/ImageAsset.h"
 
@@ -14,12 +15,17 @@ namespace Pokemon::Assets::Graphics {
     /**
      * Asset class for Pokémon battle sprites.
      */
-    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, PokemonSprites, UPaperFlipbook);
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, PokemonBattleSprites, FBattleRender);
+
+    /**
+     * Asset class for Pokémon battle sprites.
+     */
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, PokemonMenuSprites, FImageAsset);
 
     /**
      * Asset class for Trainer sprites.
      */
-    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, TrainerSprites, UPaperFlipbook);
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, TrainerSprites, FBattleRender);
 
     /**
      * Asset class for type icons.

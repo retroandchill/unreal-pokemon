@@ -49,7 +49,7 @@ void USaveGameCard::UpdateTimeLabels() {
 
 UPaperFlipbookUserWidget *USaveGameCard::CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon) {
     auto Image = WidgetTree->ConstructWidget<UPaperFlipbookUserWidget>();
-    auto Flipbook = USpriteLoader::GetPokemonIcon(Pokemon);
+    auto Flipbook = USpriteLoader::GetPokemonIcon(Pokemon).TryGet<UPaperFlipbook>().GetPtrOrNull();
     Image->SetFlipbook(Flipbook);
     Image->SetPlayRate(0.f);
     SlotPokemonIcon(Image);
