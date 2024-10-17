@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Exceptions/BlueprintException.h"
+#include "Ranges/Exceptions/TypeException.h"
+#include "Ranges/Exceptions/VariantException.h"
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Optional/OptionalRef.h"
@@ -11,23 +12,65 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Span.h"
 
-#include <bit>
-
-#include "VariantObjectStruct.generated.h"
-
 namespace UE::Ranges {
+    /**
+     * Abstract declaration of the definition of a registered variant struct type. This is meant to only really be used
+     * in blueprints as several of this methods throw exception that are intended to be handled by a CustomThunk function
+     * that will then trigger an actual blueprint exception.
+     */
     class UNREALRANGES_API IVariantRegistration {
     public:
         virtual ~IVariantRegistration() = default;
 
+        /**
+         * Get the base struct for the given registration.
+         * @return The base struct for the given registration.
+         */
         virtual UScriptStruct *GetStructType() const = 0;
+
+        /**
+         * The struct used to represent a soft reference to this struct.
+         * @return The struct used to represent a soft reference to this struct.
+         */
         virtual UScriptStruct *GetSoftStructType() const = 0;
+
+        /**
+         * Get the type index for the given object
+         * @param SourceObject The object to check against
+         * @return The type index of the object
+         */
         virtual TOptional<uint64> GetTypeIndex(const UObject* SourceObject) const = 0;
+        
+        /**
+         * Set the value of the given struct to the given source object.
+         * @param SourceObject The object in question
+         * @param Property The property information for the struct
+         * @param StructValue The pointer to the raw bytes of the struct
+         * @throws FTypeException If the supplied struct is not the same type as this registration
+         * @throws FVariantException If the supplied object is not valid for the given variant
+         */
         virtual void SetStructValue(UObject *SourceObject, const FStructProperty &Property,
                                     uint8 *StructValue) const = 0;
+
+        /**
+         * Get the underlying value of the variant
+        * @param Property The property information for the struct
+         * @param StructValue The pointer to the raw bytes of the struct
+         * @return The object for the variant (if found)
+         * @throws FTypeException If the supplied struct is not the same type as this registration
+         */
         virtual TOptional<UObject&> GetValue(const FStructProperty &Property, uint8 *StructValue) const = 0;
+
+        /**
+         * Get the span of valid classes for the object
+         * @return The span of classes
+         */
         virtual TSpan<UClass*> GetValidClasses() const = 0;
 
+        /**
+         * Get a range of pairs of the underlying struct and all the classes that were supplied.
+         * @return The found values
+         */
         auto GetClassesWithStructType() const {
             auto StructType = GetStructType();
             return GetValidClasses() |
@@ -35,6 +78,11 @@ namespace UE::Ranges {
         }
     };
 
+    /**
+     * The implementation for the registration of an individual struct. This is stored as a pointer to an interface so
+     * the type information ends up being erased.
+     * @tparam T The type of the struct in question
+     */
     template <typename T>
         requires VariantObjectStruct<T>
     class TVariantStructRegistration : public IVariantRegistration {
@@ -53,7 +101,7 @@ namespace UE::Ranges {
 
         void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
             if (Property.Struct != GetStructType()) {
-                throw FBlueprintException(EBlueprintExceptionType::AccessViolation,
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
                                           NSLOCTEXT(
                                               "SetStructValue", "IncompatibleProperty",
                                               "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
@@ -63,7 +111,7 @@ namespace UE::Ranges {
             auto Variant = static_cast<T *>(VariantPtr);
             auto TypeIndex = T::GetTypeIndex(SourceObject);
             if (!TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
-                throw FBlueprintException(EBlueprintExceptionType::AccessViolation,
+                throw FVariantException(EBlueprintExceptionType::AccessViolation,
                                           NSLOCTEXT("CreateVariantFromObject", "InvalidObjectType",
                                                     "Incompatible object parameter; the supplied object is not of a valid type for this variant object"));
             }
@@ -73,7 +121,7 @@ namespace UE::Ranges {
         
         TOptional<UObject&> GetValue(const FStructProperty &Property, uint8 *StructValue) const {
             if (Property.Struct != GetStructType()) {
-                throw FBlueprintException(EBlueprintExceptionType::AccessViolation,
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
                                           NSLOCTEXT(
                                               "SetStructValue", "IncompatibleProperty",
                                               "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
@@ -89,6 +137,9 @@ namespace UE::Ranges {
         }
     };
 
+    /**
+     * Static registry for a variant struct object.
+     */
     class UNREALRANGES_API FVariantObjectStructRegistry {
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
@@ -99,9 +150,19 @@ namespace UE::Ranges {
 
         FVariantObjectStructRegistry &operator=(const FVariantObjectStructRegistry &) = delete;
         FVariantObjectStructRegistry &operator=(FVariantObjectStructRegistry &&) = delete;
-        
+
+        /**
+         * Get the static instance of the registry.
+         * @return The static instance of the registry.
+         */
         static FVariantObjectStructRegistry &Get();
 
+        /**
+         * Register a new struct with this registry. Actual registration is deferred until OnPostEngineInit is fired.
+         * Once that event has been triggered this function does nothing.
+         * @tparam T The type of struct to register.
+         * @return If the registration was successful (always true, used to enable compile time registration)
+         */
         template <typename T>
             requires VariantObjectStruct<T>
         static bool RegisterVariantStruct() {
@@ -114,8 +175,17 @@ namespace UE::Ranges {
             return true;
         }
 
+        /**
+         * Get the variant struct data for the given struct type.
+         * @param Struct The non-null refrence to the struct type
+         * @return The registration of the struct (if found)
+         */
         TOptional<IVariantRegistration &> GetVariantStructData(const UScriptStruct &Struct);
 
+        /**
+         * Get the range of all registered structs.
+         * @return The iterable range of all the registered structs.
+         */
         auto GetAllRegisteredStructs() const {
             return RegisteredStructs |
                    MapValue |
@@ -127,6 +197,11 @@ namespace UE::Ranges {
     };
 }
 
+/**
+ * Declare a new variant object struct with the given name
+ * @param StructName The name of the struct in question
+ * @param ... The types that are registered to the struct type
+ */
 #define UE_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...)                                                              \
     struct FSoft##StructName;                                                                                          \
     struct F##StructName : UE::Ranges::TVariantObject<__VA_ARGS__> {                                                   \
@@ -154,27 +229,9 @@ namespace UE::Ranges {
     template <>                                                                                                        \
     struct UE::Ranges::Detail::TIsSoftVariantObject<FSoft##StructName> : std::true_type {}
 
+/**
+ * Perform the static registration of the struct type. This is required to allow a variant struct to be accessible to blueprints.
+ * @param StructName The name of the struct to implement.
+ */
 #define UE_DEFINE_VARIANT_OBJECT_STRUCT(StructName) \
     static const bool __##StructName__Registration = UE::Ranges::FVariantObjectStructRegistry::RegisterVariantStruct<StructName>()
-
-USTRUCT()
-struct UNREALRANGES_API FVariantObjectTemplate {
-    GENERATED_BODY()
-
-    UPROPERTY()
-    TObjectPtr<UObject> ContainedObject;
-
-    UPROPERTY()
-    uint64 TypeIndex;
-};
-
-USTRUCT()
-struct UNREALRANGES_API FSoftVariantObjectTemplate {
-    GENERATED_BODY()
-
-    UPROPERTY()
-    TSoftObjectPtr<UObject> Ptr;
-
-    UPROPERTY()
-    uint64 TypeIndex;
-};

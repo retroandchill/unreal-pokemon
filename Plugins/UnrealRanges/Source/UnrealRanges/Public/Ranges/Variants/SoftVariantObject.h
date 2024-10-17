@@ -20,9 +20,17 @@ namespace UE::Ranges {
         struct TIsSoftVariantObject<TSoftVariantObject<T...>> : std::true_type {};
     } // namespace Detail
 
+    /**
+     * Checks if the given type is a soft variant object.
+     * @tparam T The type to check
+     */
     template <typename T>
     concept SoftVariantObject = Detail::TIsSoftVariantObject<T>::value;
 
+    /**
+     * Checks if the given type is a soft variant object type that has a valid UStruct representation..
+     * @tparam T The type to check
+     */
     template <typename T>
     concept SoftVariantObjectStruct = UEStruct<T> && SoftVariantObject<T>;
 
@@ -31,7 +39,8 @@ namespace UE::Ranges {
     class TSoftVariantObjectCustomization;
 
     /**
-     *
+     * Represents a soft (path) reference to an object of one of serveral possible types.
+     * @tparam T The variant object that dictates the data for this variant
      */
     template <typename T>
         requires VariantObject<T>
@@ -39,13 +48,22 @@ namespace UE::Ranges {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TSoftVariantObject;
 
+        /**
+         * Construct this pointer from the given asset information.
+         * @tparam A The types of the forwarding arguments
+         * @param Args The arguments to pass
+         */
         template <typename... A>
             requires std::constructible_from<TSoftObjectPtr<>, A...>
         explicit TSoftVariantObject(A &&...Args)
             : Ptr(Forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
-        explicit TSoftVariantObject(const T &Object) : Ptr(&Object.Get()) {
+        /**
+         * Create an instance explicitly from the given object
+         * @param Object The object to set from
+         */
+        explicit TSoftVariantObject(const T &Object) : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
         /**
@@ -109,23 +127,35 @@ namespace UE::Ranges {
             return TOptional<T>(T(Result));
         }
 
+        /**
+         * Perform an asynchronous load of the given object.
+         * @return The handle for the async load
+         */
         TSharedRef<TAsyncLoadHandle<T>> LoadAsync() const {
             return TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
         }
 
+        /**
+         * Set the value from the given soft pointer
+         * @param Object The soft object to set from
+         */
         void Set(const TSoftObjectPtr<>& Object) {
             Ptr = Object;
             TypeIndex = T::GetTypeIndex(GetAssetData()).GetValue();
         }
 
         /**
-         * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
-         * @return The StringObjectPath that is wrapped by this SoftObjectPtr
+         * Returns the SoftObjectPath that is wrapped by this TSoftVariantObject
+         * @return The SoftObjectPath that is wrapped by this TSoftVariantObject
          */
         const FSoftObjectPath &ToSoftObjectPath() const {
             return Ptr.ToSoftObjectPath();
         }
 
+        /**
+         * Returns the SoftObjectPtr that is wrapped by this TSoftVariantObject
+         * @return The SoftObjectPtr that is wrapped by this TSoftVariantObject
+         */
         const TSoftObjectPtr<> &ToSoftObjectPtr() const {
             return Ptr;
         }
@@ -138,10 +168,19 @@ namespace UE::Ranges {
             return Ptr.ToString();
         }
 
+        /**
+         * Equality operator against the unset optional state
+         * @return Is this an unset value
+         */
         bool operator==(FIntrusiveUnsetOptionalState) const {
             return Ptr.IsNull();
         }
 
+        /**
+         * Get the type index of the given soft object pointer. This is obtained by getting the asset metadata.
+         * @param Object The object to check against
+         * @return The type index of the asset
+         */
         static TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &Object) {
             auto &AssetManager = UAssetManager::Get();
             FAssetData Data;

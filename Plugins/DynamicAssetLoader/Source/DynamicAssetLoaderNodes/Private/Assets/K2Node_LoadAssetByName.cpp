@@ -12,8 +12,8 @@
 #include "Ranges/Optional/OptionalRef.h"
 #include "Ranges/Optional/OrElse.h"
 
-static const FName Lookup_AssetNamePinName = "AssetName";
-static const FName Lookup_AssetNotFoundPinName = "AssetNotFound";
+static const FName Load_AssetNamePinName = "AssetName";
+static const FName Load_AssetNotFoundPinName = "AssetNotFound";
 
 UK2Node_LoadAssetByName::UK2Node_LoadAssetByName() {
     NodeTooltip = NSLOCTEXT("UK2Node_LoadAssetByName", "NodeTooltip", "Attempts to retrieve an asset by its name");
@@ -28,10 +28,10 @@ void UK2Node_LoadAssetByName::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Execute);
     auto AssetFoundPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Then);
     AssetFoundPin->PinFriendlyName = NSLOCTEXT("K2Node", "LoadAssetByName Asset Found Exec pin", "Asset Found");
-    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, Lookup_AssetNotFoundPinName);
+    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, Load_AssetNotFoundPinName);
 
     // AssetNamePin
-    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, Lookup_AssetNamePinName);
+    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, Load_AssetNamePinName);
     SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "AssetNamePinDescription", "The name of the asset to load"));
 
     // Result pin
@@ -185,13 +185,13 @@ UEdGraphPin *UK2Node_LoadAssetByName::GetAssetFoundPin() const {
 }
 
 UEdGraphPin *UK2Node_LoadAssetByName::GetAssetNamePin() const {
-    UEdGraphPin *Pin = FindPinChecked(Lookup_AssetNamePinName);
+    UEdGraphPin *Pin = FindPinChecked(Load_AssetNamePinName);
     check(Pin->Direction == EGPD_Input)
     return Pin;
 }
 
 UEdGraphPin *UK2Node_LoadAssetByName::GetAssetNotFoundPin() const {
-    UEdGraphPin *Pin = FindPinChecked(Lookup_AssetNotFoundPinName);
+    UEdGraphPin *Pin = FindPinChecked(Load_AssetNotFoundPinName);
     check(Pin->Direction == EGPD_Output)
     return Pin;
 }

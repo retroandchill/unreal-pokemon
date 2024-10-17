@@ -16,9 +16,15 @@ class UNREALRANGES_API UVariantObjectUtilities : public UBlueprintFunctionLibrar
     GENERATED_BODY()
 
 public:
+    /**
+     * Create a variant struct object from the given object.
+     * <p><b>NOTE:</b> This function should never be called from C++, and should only be called from Blueprints.</p>
+     * @param Object The object in question
+     * @param Variant The output struct.
+     */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
         meta = (CustomStructureParam = "Variant"))
-    static void CreateVariantFromObject(const UObject* Object, int32& Variant);
+    static void CreateVariantFromObject(const UObject* Object, uint8& Variant);
 	DECLARE_FUNCTION(execCreateVariantFromObject);
 
     

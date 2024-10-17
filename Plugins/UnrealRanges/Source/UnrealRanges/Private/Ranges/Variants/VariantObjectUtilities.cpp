@@ -5,7 +5,7 @@
 #include "Blueprint/BlueprintExceptionInfo.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
 
-void UVariantObjectUtilities::CreateVariantFromObject(const UObject *Object, int32 &Variant) {
+void UVariantObjectUtilities::CreateVariantFromObject(const UObject *Object, uint8 &Variant) {
     // We should never hit this! Stubbed to avoid NoExport on the class.
     check(false)
 }
