@@ -12,7 +12,7 @@
 #include "Ranges/Optional/OrElse.h"
 
 class UK2Node_CallFunction;
-static const FName Load_AssetNamePinName = "AssetName";
+static const FName Lookup_AssetNamePinName = "AssetName";
 static const FName Lookup_AssetNotFoundPinName = "AssetNotFound";
 
 UK2Node_LookupAssetByName::UK2Node_LookupAssetByName() {
@@ -31,7 +31,7 @@ void UK2Node_LookupAssetByName::AllocateDefaultPins() {
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, Lookup_AssetNotFoundPinName);
 
     // AssetNamePin
-    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, Load_AssetNamePinName);
+    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, Lookup_AssetNamePinName);
     SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "AssetNamePinDescription", "The name of the asset to load"));
 
     // Result pin
@@ -189,7 +189,7 @@ UEdGraphPin * UK2Node_LookupAssetByName::GetAssetFoundPin() const {
 }
 
 UEdGraphPin * UK2Node_LookupAssetByName::GetAssetNamePin() const {
-    UEdGraphPin *Pin = FindPinChecked(Load_AssetNamePinName);
+    UEdGraphPin *Pin = FindPinChecked(Lookup_AssetNamePinName);
     check(Pin->Direction == EGPD_Input)
     return Pin;
 }
