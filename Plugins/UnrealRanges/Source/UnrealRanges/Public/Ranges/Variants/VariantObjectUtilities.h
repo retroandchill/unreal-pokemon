@@ -43,5 +43,24 @@ public:
             DeterminesOutputType = Class, DynamicOutputParam = Object))
     static EVariantFindResult GetObjectFromVariantChecked(TSubclassOf<UObject> Class, const uint8& Variant, UObject* &Object);
     DECLARE_FUNCTION(execGetObjectFromVariantChecked);
-    
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "Variant,SoftVariant"))
+    static void MakeSoftVariantFromVariant(const uint8& Variant, uint8& SoftVariant);
+    DECLARE_FUNCTION(execMakeSoftVariantFromVariant);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "SoftVariant"))
+    static void MakeSoftVariantFromSoftObject(const TSoftObjectPtr<UObject>& Object, uint8& SoftVariant);
+    DECLARE_FUNCTION(execMakeSoftVariantFromSoftObject);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "SoftVariant"))
+    static EVariantFindResult MakeSoftVariantFromSoftObjectChecked(const TSoftObjectPtr<UObject>& Object, uint8& SoftVariant);
+    DECLARE_FUNCTION(execMakeSoftVariantFromSoftObjectChecked);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "SoftVariant,Variant"))
+    static EVariantFindResult LoadSynchronous(const uint8& SoftVariant, uint8& Variant);
+    DECLARE_FUNCTION(execLoadSynchronous);
 };

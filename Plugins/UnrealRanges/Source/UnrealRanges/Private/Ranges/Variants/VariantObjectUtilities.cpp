@@ -2,17 +2,12 @@
 
 
 #include "Ranges/Variants/VariantObjectUtilities.h"
-#include "Blueprint/BlueprintExceptionInfo.h"
 #include "Ranges/Blueprints/BlueprintRuntimeUtils.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
 
-void UVariantObjectUtilities::CreateVariantFromObject(const UObject *Object, uint8 &Variant) {
-    // We should never hit this! Stubbed to avoid NoExport on the class.
-    check(false)
-}
-
+CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::CreateVariantFromObject, const UObject*, uint8&)
 DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {
     P_GET_OBJECT(UObject, Object)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
@@ -30,12 +25,8 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {
     }
 }
 
-EVariantFindResult UVariantObjectUtilities::CreateVariantFromObjectChecked(TSubclassOf<UObject> Class, const UObject *Object, uint8 &Variant) {
-    // We should never hit this! Stubbed to avoid NoExport on the class.
-    check(false)
-    return EVariantFindResult::CastFailed;
-}
-
+CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::CreateVariantFromObjectChecked,
+    TSubclassOf<UObject>, const UObject *, uint8 &)
 DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked) {
     P_GET_OBJECT(UClass, Class)
     P_GET_OBJECT(UObject, Object)
@@ -60,12 +51,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked) {
     }
 }
 
-UObject * UVariantObjectUtilities::GetObjectFromVariant(const uint8 &Variant) {
-    // We should never hit this! Stubbed to avoid NoExport on the class.
-    check(false)
-    return nullptr;
-}
-
+CUSTOM_THUNK_STUB(UObject *, UVariantObjectUtilities::GetObjectFromVariant, const uint8 &)
 DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariant) {
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_FINISH
@@ -75,20 +61,15 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariant) {
         auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
             P_GET_RESULT(UObject*, Object);
-        Object = StructInfo.GetValue(*StructProp, VariantPtr).GetPtrOrNull();
+            Object = StructInfo.GetValue(*StructProp, VariantPtr).GetPtrOrNull();
         P_NATIVE_END
     } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }
 }
 
-EVariantFindResult UVariantObjectUtilities::GetObjectFromVariantChecked(TSubclassOf<UObject> Class,
-    const uint8 &Variant, UObject *&Object) {
-    // We should never hit this! Stubbed to avoid NoExport on the class.
-    check(false)
-    return EVariantFindResult::CastFailed;
-}
-
+CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::GetObjectFromVariantChecked,
+    TSubclassOf<UObject>, const uint8 &, UObject *&)
 DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
     P_GET_OBJECT(UClass, Class)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
@@ -99,13 +80,95 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
         auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
+        // clang-format off
             Object = StructInfo.GetValue(*StructProp, VariantPtr) |
                 UE::Optionals::Filter([&Class](const UObject& Obj) { return UE::Ranges::TypesMatch(Obj, *Class); }) |
                 UE::Optionals::GetPtrOrNull;
+        // clang-format on
         P_NATIVE_END
         
         P_GET_RESULT(EVariantFindResult, Result);
         Result = Object != nullptr ? EVariantFindResult::CastSucceeded : EVariantFindResult::CastFailed;
+    } catch (const UE::Ranges::FBlueprintException &Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
+    }
+}
+
+CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::MakeSoftVariantFromVariant, const uint8&, uint8 &)
+DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromVariant) {
+    P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
+    P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
+    P_FINISH
+    
+    try {
+        UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
+        UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
+        auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        P_NATIVE_BEGIN
+            StructInfo.MakeSoftValue(*StructProp, VariantPtr, *SoftStructProp, SoftVariantPtr);
+        P_NATIVE_END
+    } catch (const UE::Ranges::FBlueprintException &Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
+    }
+}
+
+CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::MakeSoftVariantFromSoftObject, const TSoftObjectPtr<>&, uint8&)
+DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObject) {
+    P_GET_SOFTOBJECT(TSoftObjectPtr<>, SoftObject)
+    P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
+    P_FINISH
+
+    try {
+        UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
+        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        P_NATIVE_BEGIN
+            StructInfo.MakeSoftValue(SoftObject, *SoftStructProp, SoftVariantPtr);
+        P_NATIVE_END
+    } catch (const UE::Ranges::FBlueprintException &Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
+    }
+}
+
+CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::MakeSoftVariantFromSoftObjectChecked,
+    const TSoftObjectPtr<> &, uint8&);
+DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecked) {
+    P_GET_SOFTOBJECT(TSoftObjectPtr<>, SoftObject)
+    P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
+    P_FINISH
+
+    try {
+        UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
+        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        P_NATIVE_BEGIN
+            P_GET_RESULT(EVariantFindResult, Result);
+            if (auto TypeIndex = StructInfo.GetTypeIndex(SoftObject); !SoftObject.IsNull() && TypeIndex.IsSet()) {
+                Result = EVariantFindResult::CastSucceeded;
+                StructInfo.MakeSoftValue(SoftObject, *SoftStructProp, SoftVariantPtr);
+            } else {
+                Result = EVariantFindResult::CastFailed;
+            }
+        P_NATIVE_END
+    } catch (const UE::Ranges::FBlueprintException &Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
+    }
+}
+
+CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::LoadSynchronous, const uint8 &, uint8&)
+DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
+    P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
+    P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
+
+    try {
+        UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
+        UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
+        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        bool bLoaded;
+        P_NATIVE_BEGIN
+            bLoaded = StructInfo.LoadSynchronous(*SoftStructProp, SoftVariantPtr, *StructProp, VariantPtr);
+        P_NATIVE_END
+        
+        P_GET_RESULT(EVariantFindResult, Result);
+        Result = bLoaded ? EVariantFindResult::CastSucceeded : EVariantFindResult::CastFailed;
     } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }

@@ -10,6 +10,6 @@ namespace UE::Ranges {
     TOptional<IVariantRegistration &> FVariantObjectStructRegistry::GetVariantStructData(
         const UScriptStruct &Struct) {
         return Optionals::OfNullable(RegisteredStructs.Find(Struct.GetFName())) |
-            Optionals::Map(&TUniquePtr<IVariantRegistration>::Get);
+            Optionals::Map(&TSharedRef<IVariantRegistration>::Get);
     }
 }

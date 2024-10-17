@@ -136,6 +136,15 @@ namespace UE::Ranges {
         }
 
         /**
+         * Set the value from the given hard reference
+         * @param Object Hard reference to set from
+         */
+        void Set(const T& Object) {
+            Ptr = Object.TryGet().GetPtrOrNull();
+            TypeIndex = Object.GetTypeIndex();
+        }
+
+        /**
          * Set the value from the given soft pointer
          * @param Object The soft object to set from
          */

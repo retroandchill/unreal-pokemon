@@ -39,8 +39,15 @@ namespace UE::Ranges {
          * @param SourceObject The object to check against
          * @return The type index of the object
          */
-        virtual TOptional<uint64> GetTypeIndex(const UObject* SourceObject) const = 0;
-        
+        virtual TOptional<uint64> GetTypeIndex(const UObject *SourceObject) const = 0;
+
+        /**
+         * Get the type index for the given object
+         * @param SourceObject The object to check against
+         * @return The type index of the object
+         */
+        virtual TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<>& SourceObject) const = 0;
+
         /**
          * Set the value of the given struct to the given source object.
          * @param SourceObject The object in question
@@ -59,13 +66,44 @@ namespace UE::Ranges {
          * @return The object for the variant (if found)
          * @throws FTypeException If the supplied struct is not the same type as this registration
          */
-        virtual TOptional<UObject&> GetValue(const FStructProperty &Property, uint8 *StructValue) const = 0;
+        virtual TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const = 0;
+
+        /**
+         * Make a soft pointer value from the given hard reference.
+         * @param Property The property for the hard reference.
+         * @param StructValue The pointer to the raw bytes of the hard reference
+         * @param SoftProperty The property for the soft reference.
+         * @param SoftStructValue The pointer to the raw bytes of the soft reference
+         * @throws FTypeException If the supplied structs are not the same type as this registration
+         */
+        virtual void MakeSoftValue(const FStructProperty &Property, const uint8 *StructValue,
+                                   const FStructProperty &SoftProperty, uint8 *SoftStructValue) const = 0;
+
+        /**
+         * Make a soft pointer value from the given hard reference.
+         * @param Path The soft path to set from
+         * @param SoftProperty The property for the soft reference.
+         * @param SoftStructValue The pointer to the raw bytes of the soft reference
+         * @throws FTypeException If the supplied structs are not the same type as this registration
+         */
+        virtual void MakeSoftValue(const TSoftObjectPtr<> &Path,
+                                   const FStructProperty &SoftProperty, uint8 *SoftStructValue) const = 0;
+
+        /**
+         * Synchronously load the object contained within the struct.
+         * @param SoftProperty The property for the soft reference.
+         * @param SoftStructValue The pointer to the raw bytes of the soft reference
+         * @param Property The property for the hard reference.
+         * @param StructValue The pointer to the raw bytes of the hard reference
+         */
+        virtual bool LoadSynchronous(const FStructProperty &SoftProperty, const uint8 *SoftStructValue,
+                                     const FStructProperty &Property, uint8 *StructValue) const = 0;
 
         /**
          * Get the span of valid classes for the object
          * @return The span of classes
          */
-        virtual TSpan<UClass*> GetValidClasses() const = 0;
+        virtual TSpan<UClass *> GetValidClasses() const = 0;
 
         /**
          * Get a range of pairs of the underlying struct and all the classes that were supplied.
@@ -74,7 +112,9 @@ namespace UE::Ranges {
         auto GetClassesWithStructType() const {
             auto StructType = GetStructType();
             return GetValidClasses() |
-                Map([StructType](UClass* Class) { return std::make_pair(StructType, Class); });
+                   Map([StructType](UClass *Class) {
+                       return std::make_pair(StructType, Class);
+                   });
         }
     };
 
@@ -95,16 +135,21 @@ namespace UE::Ranges {
             return GetScriptStruct<typename T::SoftPtrType>();
         }
 
-        TOptional<uint64> GetTypeIndex(const UObject* SourceObject) const {
+        TOptional<uint64> GetTypeIndex(const UObject *SourceObject) const final {
             return T::GetTypeIndex(SourceObject);
+        }
+
+        TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<>& SourceObject) const final {
+            return T::SoftPtrType::GetTypeIndex(SourceObject);
+            
         }
 
         void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
             if (Property.Struct != GetStructType()) {
                 throw FTypeException(EBlueprintExceptionType::AccessViolation,
-                                          NSLOCTEXT(
-                                              "SetStructValue", "IncompatibleProperty",
-                                              "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+                                     NSLOCTEXT(
+                                         "SetStructValue", "IncompatibleProperty",
+                                         "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
             }
 
             void *VariantPtr = StructValue;
@@ -112,19 +157,19 @@ namespace UE::Ranges {
             auto TypeIndex = T::GetTypeIndex(SourceObject);
             if (!TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
                 throw FVariantException(EBlueprintExceptionType::AccessViolation,
-                                          NSLOCTEXT("CreateVariantFromObject", "InvalidObjectType",
-                                                    "Incompatible object parameter; the supplied object is not of a valid type for this variant object"));
+                                        NSLOCTEXT("CreateVariantFromObject", "InvalidObjectType",
+                                                  "Incompatible object parameter; the supplied object is not of a valid type for this variant object"));
             }
 
             Variant->Set(SourceObject);
         }
-        
-        TOptional<UObject&> GetValue(const FStructProperty &Property, uint8 *StructValue) const {
+
+        TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const final {
             if (Property.Struct != GetStructType()) {
                 throw FTypeException(EBlueprintExceptionType::AccessViolation,
-                                          NSLOCTEXT(
-                                              "SetStructValue", "IncompatibleProperty",
-                                              "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+                                     NSLOCTEXT(
+                                         "SetStructValue", "IncompatibleProperty",
+                                         "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
             }
 
             void *VariantPtr = StructValue;
@@ -132,7 +177,63 @@ namespace UE::Ranges {
             return Variant->TryGet();
         }
 
-        TSpan<UClass*> GetValidClasses() const final {
+        void MakeSoftValue(const FStructProperty &Property, const uint8 *StructValue,
+                           const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
+            if (Property.Struct != GetStructType() || SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT(
+                                         "MakeSoftValue", "IncompatibleProperty",
+                                         "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+            }
+
+            const void *VariantPtr = StructValue;
+            auto Variant = static_cast<const T *>(VariantPtr);
+
+            void *SoftVariantPtr = SoftStructValue;
+            auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
+
+            SoftVariant->Set(*Variant);
+        }
+
+        void MakeSoftValue(const TSoftObjectPtr<> &Path,
+                           const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
+            if (SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT(
+                                         "MakeSoftValue", "IncompatibleProperty",
+                                         "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+            }
+
+            void *SoftVariantPtr = SoftStructValue;
+            auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
+            SoftVariant->Set(Path);
+        }
+
+        bool LoadSynchronous(const FStructProperty &SoftProperty, const uint8 *SoftStructValue,
+                                     const FStructProperty &Property, uint8 *StructValue) const {
+            if (Property.Struct != GetStructType() || SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT(
+                                         "MakeSoftValue", "IncompatibleProperty",
+                                         "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+            }
+
+            void *VariantPtr = StructValue;
+            auto Variant = static_cast<T *>(VariantPtr);
+
+            const void *SoftVariantPtr = SoftStructValue;
+            auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
+
+            auto Result = SoftVariant->LoadSynchronous();
+            if (!Result.IsSet()) {
+                return false;
+            }
+            
+            *Variant = Result.GetValue();
+            return true;
+        }
+
+        TSpan<UClass *> GetValidClasses() const final {
             return T::GetTypeClasses();
         }
     };
@@ -169,8 +270,11 @@ namespace UE::Ranges {
             AddToDelegate(FCoreDelegates::OnPostEngineInit, [] {
                 auto &Instance = Get();
                 auto Struct = GetScriptStruct<T>();
-                Instance.RegisteredStructs.Emplace(Struct->GetFName(),
-                                                   MakeUnique<TVariantStructRegistration<T>>());
+                auto &Registered = Instance.RegisteredStructs.Emplace(Struct->GetFName(),
+                                                   MakeShared<TVariantStructRegistration<T>>());
+                // We're using a shared pointer to avoid double allocating identical registration info for the same class
+                auto SoftStruct = GetScriptStruct<typename T::SoftPtrType>();
+                Instance.RegisteredStructs.Emplace(SoftStruct->GetFName(), Registered);
             });
             return true;
         }
@@ -189,11 +293,11 @@ namespace UE::Ranges {
         auto GetAllRegisteredStructs() const {
             return RegisteredStructs |
                    MapValue |
-                   Map(&TUniquePtr<IVariantRegistration>::operator*);
+                   Map(&TSharedRef<IVariantRegistration>::operator*);
         }
 
     private:
-        TMap<FName, TUniquePtr<IVariantRegistration>> RegisteredStructs;
+        TMap<FName, TSharedRef<IVariantRegistration>> RegisteredStructs;
     };
 }
 
