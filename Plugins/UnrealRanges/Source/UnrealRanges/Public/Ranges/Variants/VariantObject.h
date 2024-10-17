@@ -165,7 +165,6 @@ namespace UE::Ranges {
 
         UObject &Get() const {
             check(::IsValid(ContainedObject))
-            ;
             return *ContainedObject;
         }
 
@@ -232,8 +231,9 @@ namespace UE::Ranges {
             return GetTypeIndex(Object).IsSet();
         }
 
-        static TArray<UClass*> GetTypeClasses() {
-            return { GetClass<T>()... };
+        static decltype(auto) GetTypeClasses() {
+            static std::array TypeClasses = { GetClass<T>()... };
+            return TypeClasses;
         }
 
         template <typename U>

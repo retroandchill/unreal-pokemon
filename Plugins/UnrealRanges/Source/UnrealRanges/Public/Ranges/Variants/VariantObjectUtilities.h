@@ -18,7 +18,7 @@ class UNREALRANGES_API UVariantObjectUtilities : public UBlueprintFunctionLibrar
 public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
         meta = (CustomStructureParam = "Variant"))
-    static void CreateVariantFromObject(const UScriptStruct* DataStruct, const UObject* Object, int32& Variant);
+    static void CreateVariantFromObject(const UObject* Object, int32& Variant);
 	DECLARE_FUNCTION(execCreateVariantFromObject);
 
     

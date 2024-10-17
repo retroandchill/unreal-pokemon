@@ -61,11 +61,11 @@ void UK2Node_MakeVariantObjectStruct::GetMenuActions(FBlueprintActionDatabaseReg
     auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
     // clang-format off
     for (auto AllData = Registry.GetAllRegisteredStructs() |
-                        UE::Ranges::Filter([](const UE::Ranges::FRegisteredVariantStruct &StructType) {
+                        UE::Ranges::Filter([](const UE::Ranges::IVariantRegistration &StructType) {
                             return UEdGraphSchema_K2::IsAllowableBlueprintVariableType(
                                 StructType.GetStructType(), true);
                         }) |
-                        UE::Ranges::Map(&UE::Ranges::FRegisteredVariantStruct::GetClassesWithStructType) |
+                        UE::Ranges::Map(&UE::Ranges::IVariantRegistration::GetClassesWithStructType) |
                         UE::Ranges::Join;
          auto [Struct, Class] : AllData) {
         auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);

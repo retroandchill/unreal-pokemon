@@ -3,65 +3,104 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Exceptions/BlueprintException.h"
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Span.h"
+
+#include <bit>
 
 #include "VariantObjectStruct.generated.h"
 
 namespace UE::Ranges {
-    class UNREALRANGES_API FRegisteredVariantStruct {
-        FRegisteredVariantStruct(UScriptStruct *StructType,
-            UScriptStruct* SoftStructType,
-            TOptional<uint64> (*IndexFunction) (const UObject*),
-            TArray<UClass*>&& AllowedClasses);
-
+    class UNREALRANGES_API IVariantRegistration {
     public:
-        template <typename T>
-            requires VariantObjectStruct<T>
-        static FRegisteredVariantStruct Create() {
-            return FRegisteredVariantStruct(GetScriptStruct<T>(),
-                GetScriptStruct<typename T::SoftPtrType>(),
-                &T::GetTypeIndex,
-                T::GetTypeClasses());
-        }
-        
-        UScriptStruct* GetStructType() const {
-            return StructType;
-        }
+        virtual ~IVariantRegistration() = default;
 
-        UScriptStruct* GetSoftStructType() const {
-            return SoftStructType;
-        }
-
-        TOptional<uint64> GetTypeIndex(const UObject* Object) const {
-            return TypeIndexFunction(Object);
-        }
-
-        const TArray<UClass*>& GetAllowedClasses() const {
-            return AllowedClasses;
-        }
+        virtual UScriptStruct *GetStructType() const = 0;
+        virtual UScriptStruct *GetSoftStructType() const = 0;
+        virtual TOptional<uint64> GetTypeIndex(const UObject* SourceObject) const = 0;
+        virtual void SetStructValue(UObject *SourceObject, const FStructProperty &Property,
+                                    uint8 *StructValue) const = 0;
+        virtual TOptional<UObject&> GetValue(const FStructProperty &Property, uint8 *StructValue) const = 0;
+        virtual TSpan<UClass*> GetValidClasses() const = 0;
 
         auto GetClassesWithStructType() const {
-            return AllowedClasses |
-                Map([this](UClass* Class) { return TPair<UScriptStruct*, UClass*>(StructType, Class); });
+            auto StructType = GetStructType();
+            return GetValidClasses() |
+                Map([StructType](UClass* Class) { return std::make_pair(StructType, Class); });
+        }
+    };
+
+    template <typename T>
+        requires VariantObjectStruct<T>
+    class TVariantStructRegistration : public IVariantRegistration {
+    public:
+        UScriptStruct *GetStructType() const final {
+            return GetScriptStruct<T>();
         }
 
-    private:
-        UScriptStruct* StructType;
-        UScriptStruct* SoftStructType;
-        TOptional<uint64> (*TypeIndexFunction) (const UObject*);
-        TArray<UClass*> AllowedClasses;
+        UScriptStruct *GetSoftStructType() const final {
+            return GetScriptStruct<typename T::SoftPtrType>();
+        }
+
+        TOptional<uint64> GetTypeIndex(const UObject* SourceObject) const {
+            return T::GetTypeIndex(SourceObject);
+        }
+
+        void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
+            if (Property.Struct != GetStructType()) {
+                throw FBlueprintException(EBlueprintExceptionType::AccessViolation,
+                                          NSLOCTEXT(
+                                              "SetStructValue", "IncompatibleProperty",
+                                              "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+            }
+
+            void *VariantPtr = StructValue;
+            auto Variant = static_cast<T *>(VariantPtr);
+            auto TypeIndex = T::GetTypeIndex(SourceObject);
+            if (!TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
+                throw FBlueprintException(EBlueprintExceptionType::AccessViolation,
+                                          NSLOCTEXT("CreateVariantFromObject", "InvalidObjectType",
+                                                    "Incompatible object parameter; the supplied object is not of a valid type for this variant object"));
+            }
+
+            Variant->Set(SourceObject);
+        }
+        
+        TOptional<UObject&> GetValue(const FStructProperty &Property, uint8 *StructValue) const {
+            if (Property.Struct != GetStructType()) {
+                throw FBlueprintException(EBlueprintExceptionType::AccessViolation,
+                                          NSLOCTEXT(
+                                              "SetStructValue", "IncompatibleProperty",
+                                              "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+            }
+
+            void *VariantPtr = StructValue;
+            auto Variant = static_cast<T *>(VariantPtr);
+            return Variant->TryGet();
+        }
+
+        TSpan<UClass*> GetValidClasses() const final {
+            return T::GetTypeClasses();
+        }
     };
-    
+
     class UNREALRANGES_API FVariantObjectStructRegistry {
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
 
     public:
-        static FVariantObjectStructRegistry& Get();
+        FVariantObjectStructRegistry(const FVariantObjectStructRegistry &) = delete;
+        FVariantObjectStructRegistry(FVariantObjectStructRegistry &&) = delete;
+
+        FVariantObjectStructRegistry &operator=(const FVariantObjectStructRegistry &) = delete;
+        FVariantObjectStructRegistry &operator=(FVariantObjectStructRegistry &&) = delete;
+        
+        static FVariantObjectStructRegistry &Get();
 
         template <typename T>
             requires VariantObjectStruct<T>
@@ -70,19 +109,21 @@ namespace UE::Ranges {
                 auto &Instance = Get();
                 auto Struct = GetScriptStruct<T>();
                 Instance.RegisteredStructs.Emplace(Struct->GetFName(),
-                    FRegisteredVariantStruct::Create<T>());
+                                                   MakeUnique<TVariantStructRegistration<T>>());
             });
             return true;
         }
-        
-        TOptional<FRegisteredVariantStruct&> GetVariantStructData(const UScriptStruct &Struct);
+
+        TOptional<IVariantRegistration &> GetVariantStructData(const UScriptStruct &Struct);
 
         auto GetAllRegisteredStructs() const {
-            return RegisteredStructs | MapValue;
+            return RegisteredStructs |
+                   MapValue |
+                   Map(&TUniquePtr<IVariantRegistration>::operator*);
         }
 
     private:
-        TMap<FName, FRegisteredVariantStruct> RegisteredStructs;
+        TMap<FName, TUniquePtr<IVariantRegistration>> RegisteredStructs;
     };
 }
 
@@ -130,7 +171,7 @@ struct UNREALRANGES_API FVariantObjectTemplate {
 USTRUCT()
 struct UNREALRANGES_API FSoftVariantObjectTemplate {
     GENERATED_BODY()
-    
+
     UPROPERTY()
     TSoftObjectPtr<UObject> Ptr;
 

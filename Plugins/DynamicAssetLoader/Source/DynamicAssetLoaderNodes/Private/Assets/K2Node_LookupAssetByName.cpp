@@ -45,7 +45,7 @@ void UK2Node_LookupAssetByName::AllocateDefaultPins() {
         check(ClassType.AssetClass.IsType<UScriptStruct>())
         // clang-format off
         auto SoftStruct = UE::Ranges::FVariantObjectStructRegistry::Get().GetVariantStructData(ClassType.AssetClass.Get<UScriptStruct>()) |
-            UE::Optionals::Map(&UE::Ranges::FRegisteredVariantStruct::GetSoftStructType) |
+            UE::Optionals::Map(&UE::Ranges::IVariantRegistration::GetSoftStructType) |
             UE::Optionals::GetPtrOrNull;
         // clang-format on
         ResultPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, SoftStruct, UEdGraphSchema_K2::PN_ReturnValue);
