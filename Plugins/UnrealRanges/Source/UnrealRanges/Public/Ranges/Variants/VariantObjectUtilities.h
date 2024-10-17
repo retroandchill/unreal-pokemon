@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "VariantObject.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "VariantObjectUtilities.generated.h"
 
@@ -27,6 +28,20 @@ public:
     static void CreateVariantFromObject(const UObject* Object, uint8& Variant);
 	DECLARE_FUNCTION(execCreateVariantFromObject);
 
-    
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "Variant"))
+    static EVariantFindResult CreateVariantFromObjectChecked(TSubclassOf<UObject> Class, const UObject* Object, uint8& Variant);
+    DECLARE_FUNCTION(execCreateVariantFromObjectChecked);
 
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "Variant"))
+    static UObject* GetObjectFromVariant(const uint8& Variant);
+    DECLARE_FUNCTION(execGetObjectFromVariant);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+        meta = (CustomStructureParam = "Variant", ExpandEnumAsExecs = "ReturnValue",
+            DeterminesOutputType = Class, DynamicOutputParam = Object))
+    static EVariantFindResult GetObjectFromVariantChecked(TSubclassOf<UObject> Class, const uint8& Variant, UObject* &Object);
+    DECLARE_FUNCTION(execGetObjectFromVariantChecked);
+    
 };

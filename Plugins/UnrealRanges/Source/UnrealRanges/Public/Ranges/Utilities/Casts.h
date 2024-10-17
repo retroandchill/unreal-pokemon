@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
 
@@ -58,6 +59,8 @@ namespace UE::Ranges {
     constexpr bool TypesMatch(const FSoftClassPath &Path) {
         return TypesMatch<T>(Path.TryLoadClass<UObject>());
     }
+
+    bool TypesMatch(const UObject& Object, const UClass& Class);
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
