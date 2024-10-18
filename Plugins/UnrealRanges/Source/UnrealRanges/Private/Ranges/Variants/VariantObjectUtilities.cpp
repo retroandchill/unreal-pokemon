@@ -25,7 +25,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {
     }
 }
 
-CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::CreateVariantFromObjectChecked,
+CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::CreateVariantFromObjectChecked,
     TSubclassOf<UObject>, const UObject *, uint8 &)
 DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked) {
     P_GET_OBJECT(UClass, Class)
@@ -36,13 +36,13 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked) {
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
         auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
-        P_GET_RESULT(EVariantFindResult, Result);
+        P_GET_RESULT(bool, Result);
         P_NATIVE_BEGIN
             if (auto TypeIndex = StructInfo.GetTypeIndex(Object); Object != nullptr && TypeIndex.IsSet()) {
-                Result = EVariantFindResult::CastSucceeded;
+                Result = true;
                 StructInfo.SetStructValue(Object, *StructProp, VariantPtr);
             } else {
-                Result = EVariantFindResult::CastFailed;
+                Result = false;
             }
         P_NATIVE_END
 
@@ -68,7 +68,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariant) {
     }
 }
 
-CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::GetObjectFromVariantChecked,
+CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::GetObjectFromVariantChecked,
     TSubclassOf<UObject>, const uint8 &, UObject *&)
 DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
     P_GET_OBJECT(UClass, Class)
@@ -87,8 +87,8 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
         // clang-format on
         P_NATIVE_END
         
-        P_GET_RESULT(EVariantFindResult, Result);
-        Result = Object != nullptr ? EVariantFindResult::CastSucceeded : EVariantFindResult::CastFailed;
+        P_GET_RESULT(bool, Result);
+        Result = Object != nullptr;
     } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }
@@ -129,7 +129,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObject) {
     }
 }
 
-CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::MakeSoftVariantFromSoftObjectChecked,
+CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::MakeSoftVariantFromSoftObjectChecked,
     const TSoftObjectPtr<> &, uint8&);
 DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecked) {
     P_GET_SOFTOBJECT(TSoftObjectPtr<>, SoftObject)
@@ -140,12 +140,12 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecke
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
-            P_GET_RESULT(EVariantFindResult, Result);
+            P_GET_RESULT(bool, Result);
             if (auto TypeIndex = StructInfo.GetTypeIndex(SoftObject); !SoftObject.IsNull() && TypeIndex.IsSet()) {
-                Result = EVariantFindResult::CastSucceeded;
+                Result = true;
                 StructInfo.MakeSoftValue(SoftObject, *SoftStructProp, SoftVariantPtr);
             } else {
-                Result = EVariantFindResult::CastFailed;
+                Result = false;
             }
         P_NATIVE_END
     } catch (const UE::Ranges::FBlueprintException &Exception) {
@@ -153,7 +153,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecke
     }
 }
 
-CUSTOM_THUNK_STUB(EVariantFindResult, UVariantObjectUtilities::LoadSynchronous, const uint8 &, uint8&)
+CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::LoadSynchronous, const uint8 &, uint8&)
 DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
@@ -167,8 +167,8 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
             bLoaded = StructInfo.LoadSynchronous(*SoftStructProp, SoftVariantPtr, *StructProp, VariantPtr);
         P_NATIVE_END
         
-        P_GET_RESULT(EVariantFindResult, Result);
-        Result = bLoaded ? EVariantFindResult::CastSucceeded : EVariantFindResult::CastFailed;
+        P_GET_RESULT(bool, Result);
+        Result = bLoaded;
     } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }

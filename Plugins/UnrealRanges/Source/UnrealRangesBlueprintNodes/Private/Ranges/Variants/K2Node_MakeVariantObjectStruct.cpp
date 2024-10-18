@@ -8,7 +8,6 @@
 #include "KismetCompiler.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
-#include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
 
@@ -102,7 +101,6 @@ void UK2Node_MakeVariantObjectStruct::GetMenuActions(FBlueprintActionDatabaseReg
             ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
         }
     }
-    // clang-format on
 }
 
 void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
