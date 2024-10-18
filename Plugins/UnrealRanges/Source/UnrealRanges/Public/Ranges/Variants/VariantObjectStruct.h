@@ -8,6 +8,7 @@
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Span.h"
@@ -103,19 +104,7 @@ namespace UE::Ranges {
          * Get the span of valid classes for the object
          * @return The span of classes
          */
-        virtual TSpan<UClass *> GetValidClasses() const = 0;
-
-        /**
-         * Get a range of pairs of the underlying struct and all the classes that were supplied.
-         * @return The found values
-         */
-        auto GetClassesWithStructType() const {
-            auto StructType = GetStructType();
-            return GetValidClasses() |
-                   Map([StructType](UClass *Class) {
-                       return std::make_pair(StructType, Class);
-                   });
-        }
+        virtual TArray<UClass *> GetValidClasses() const = 0;
     };
 
     /**
@@ -233,7 +222,7 @@ namespace UE::Ranges {
             return true;
         }
 
-        TSpan<UClass *> GetValidClasses() const final {
+        TArray<UClass *> GetValidClasses() const final {
             return T::GetTypeClasses();
         }
     };

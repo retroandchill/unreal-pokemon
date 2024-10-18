@@ -295,9 +295,8 @@ namespace UE::Ranges {
          * Get the array of all classes that are usable by this variant type.
          * @return The array of all classes that are usable by this variant type.
          */
-        static decltype(auto) GetTypeClasses() {
-            static std::array TypeClasses = { GetClass<T>()... };
-            return TypeClasses;
+        static TArray<UClass*> GetTypeClasses() {
+            return { GetClass<T>()... };
         }
 
         /**
