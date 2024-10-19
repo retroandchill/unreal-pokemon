@@ -23,20 +23,6 @@ UScriptStruct *TBaseStructure<FSoftImageAsset>::Get() {
     return ScriptStruct;
 }
 
-FSoftImageAsset UImageAssetHelpers::MakeSoftImageAsset(const FImageAsset &ImageAsset) {
-    return FSoftImageAsset(ImageAsset);
-}
-
-EVariantFindResult UImageAssetHelpers::MakeSoftImageAssetFromSoftObjectPtr(const TSoftObjectPtr<> &Object,
-    FSoftImageAsset &AsSoftImageAsset) {
-    if (!FSoftImageAsset::GetTypeIndex(Object).IsSet()) {
-        return EVariantFindResult::CastFailed;
-    }
-
-    AsSoftImageAsset.Set(Object);
-    return EVariantFindResult::CastSucceeded;
-}
-
 EVariantFindResult UImageAssetHelpers::LoadSynchronous(const FSoftImageAsset &Path, FImageAsset &LoadedAsset) {
     auto Result = Path.LoadSynchronous();
     if (!Result.IsSet()) {

@@ -61,13 +61,6 @@ class RPGMENUS_API UImageAssetHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
-    UFUNCTION(BlueprintPure, Category = Variants,
-              meta = (CompactNodeTile = "->", BlueprintAutocast, AutoCreateRefTerm = ImageAsset))
-    static FSoftImageAsset MakeSoftImageAsset(const FImageAsset &ImageAsset);
-
-    UFUNCTION(BlueprintCallable, Category = Variants, meta = (ExpandEnumAsExecs = "ReturnValue", AutoCreateRefTerm = Object))
-    static EVariantFindResult MakeSoftImageAssetFromSoftObjectPtr(const TSoftObjectPtr<UObject> &Object, FSoftImageAsset &AsSoftImageAsset);
-
     UFUNCTION(BlueprintCallable, Category = Variants,
               meta = (AutoCreateRefTerm = Path, ExpandEnumAsExecs = "ReturnValue"))
     static EVariantFindResult LoadSynchronous(const FSoftImageAsset &Path, FImageAsset &LoadedAsset);

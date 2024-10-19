@@ -68,12 +68,6 @@ class POKEMONASSETS_API UBattleRenderHelpers : public UBlueprintFunctionLibrary 
     GENERATED_BODY()
 
   public:
-    UFUNCTION(BlueprintPure, Category = Variants,
-              meta = (CompactNodeTile = "->", BlueprintAutocast, AutoCreateRefTerm = BattleRender))
-    static FSoftBattleRender MakeSoftBattleRender(const FBattleRender &BattleRender);
-
-    UFUNCTION(BlueprintCallable, Category = Variants, meta = (ExpandEnumAsExecs = "ReturnValue", AutoCreateRefTerm = Object))
-    static EVariantFindResult MakeSoftBattleRenderFromSoftObjectPtr(const TSoftObjectPtr<UObject> &Object, FSoftBattleRender &AsSoftBattleRender);
 
     UFUNCTION(BlueprintCallable, Category = Variants,
               meta = (AutoCreateRefTerm = Path, ExpandEnumAsExecs = "ReturnValue"))

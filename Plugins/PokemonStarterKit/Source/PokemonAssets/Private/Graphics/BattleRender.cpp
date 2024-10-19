@@ -24,20 +24,6 @@ UScriptStruct * TBaseStructure<FSoftBattleRender>::Get() {
     return ScriptStruct;
 }
 
-FSoftBattleRender UBattleRenderHelpers::MakeSoftBattleRender(const FBattleRender &BattleRender) {
-    return FSoftBattleRender(BattleRender);
-}
-
-EVariantFindResult UBattleRenderHelpers::MakeSoftBattleRenderFromSoftObjectPtr(const TSoftObjectPtr<UObject> &Object,
-    FSoftBattleRender &AsSoftBattleRender) {
-    if (!FSoftBattleRender::GetTypeIndex(Object).IsSet()) {
-        return EVariantFindResult::CastFailed;
-    }
-
-    AsSoftBattleRender.Set(Object);
-    return EVariantFindResult::CastSucceeded;
-}
-
 EVariantFindResult UBattleRenderHelpers::LoadSynchronous(const FSoftBattleRender &Path, FBattleRender &LoadedAsset) {
     auto Result = Path.LoadSynchronous();
     if (!Result.IsSet()) {
