@@ -4,13 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
+#include "K2Node_VariantCastBase.h"
+
 #include "K2Node_GetVariantValue.generated.h"
 
 /**
  * Get the value of a variant object, with a check for an invalid value
  */
 UCLASS()
-class UNREALRANGESBLUEPRINTNODES_API UK2Node_GetVariantValue : public UK2Node {
+class UNREALRANGESBLUEPRINTNODES_API UK2Node_GetVariantValue : public UK2Node_VariantCastBase {
     GENERATED_BODY()
 
 public:
@@ -20,17 +22,17 @@ public:
      * @param Output The type of the output node
      */
     void Initialize(UScriptStruct *Input, UClass *Output);
-
-    void AllocateDefaultPins() override;
+    
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
-    bool IsNodePure() const override;
-    FLinearColor GetNodeTitleColor() const override;
-    FText GetMenuCategory() const override;
-    FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
 
-    void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
-    void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
+protected:
+    void CreateInputAndOutputPins() override;
+    void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar, UE::Ranges::IVariantRegistration &Registration) const override;
+    UEdGraphPin* GetInputPin() const override;
+    UEdGraphPin* GetOutputPin() const override;
+    FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
+    void MakeAdditionalPinLinks(UK2Node& CallPerformCast) const override;
 
 private:
     UPROPERTY()

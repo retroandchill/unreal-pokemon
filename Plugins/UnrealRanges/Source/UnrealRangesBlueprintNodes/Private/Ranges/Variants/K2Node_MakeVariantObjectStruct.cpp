@@ -56,10 +56,6 @@ bool UK2Node_MakeVariantObjectStruct::IsNodePure() const {
     return true;
 }
 
-FText UK2Node_MakeVariantObjectStruct::GetMenuCategory() const {
-    return NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetMenuCategory", "Variants");
-}
-
 FSlateIcon UK2Node_MakeVariantObjectStruct::GetIconAndTint(FLinearColor &OutColor) const {
     OutColor = GetNodeTitleColor();
     static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");

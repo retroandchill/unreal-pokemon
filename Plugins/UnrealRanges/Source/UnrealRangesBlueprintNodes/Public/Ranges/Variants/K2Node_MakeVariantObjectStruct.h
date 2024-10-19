@@ -4,13 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
+#include "K2Node_VariantOperationBase.h"
+
 #include "K2Node_MakeVariantObjectStruct.generated.h"
 
 /**
  * K2 Node to make a variant object struct from a valid object type.
  */
 UCLASS()
-class UNREALRANGESBLUEPRINTNODES_API UK2Node_MakeVariantObjectStruct : public UK2Node {
+class UNREALRANGESBLUEPRINTNODES_API UK2Node_MakeVariantObjectStruct : public UK2Node_VariantOperationBase {
     GENERATED_BODY()
 
 public:
@@ -25,7 +27,6 @@ public:
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
     bool IsNodePure() const override;
-    FText GetMenuCategory() const override;
     FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
 
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;

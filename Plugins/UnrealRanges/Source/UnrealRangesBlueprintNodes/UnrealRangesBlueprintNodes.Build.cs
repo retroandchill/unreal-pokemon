@@ -9,7 +9,7 @@ public class UnrealRangesBlueprintNodes : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "UnrealRanges",
             }
         );
 
@@ -24,6 +24,7 @@ public class UnrealRangesBlueprintNodes : ModuleRules
                 "BlueprintGraph",
                 "KismetCompiler",
                 "UnrealEd",
+                "ToolMenus",
             }
         );
     }
