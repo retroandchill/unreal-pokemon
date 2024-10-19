@@ -14,24 +14,22 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_GetVariantObject : public UK2Node_V
     GENERATED_BODY()
 
 public:
-    /**
-     * Set up the node assigning the struct that this should be retrieving
-     * @param Input The type of the input node
-     */
-    void Initialize(UScriptStruct *Input);
-
     void AllocateDefaultPins() override;
+    void PostReconstructNode() override;
+    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
+    void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetCompactNodeTitle() const override;
     bool ShouldDrawCompact() const override;
     FText GetTooltipText() const override;
+    void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
+    void EarlyValidation(FCompilerResultsLog& MessageLog) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
 protected:
-    void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-        UE::Ranges::IVariantRegistration& Registration) const override;
-
+    UEdGraphPin *GetVariantPin() const;
+    TOptional<UScriptStruct&> GetInputStruct() const;
+    
 private:
-    UPROPERTY()
-    TObjectPtr<UScriptStruct> InputType;
+    void RefreshInputPin() const;
 };

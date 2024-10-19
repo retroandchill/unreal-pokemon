@@ -7,4 +7,5 @@
 namespace UE::Ranges {
     static const FName PN_CastSucceeded = "bSucceeded";
     static const FName PN_Object = "Object";
+    static const FName PN_Variant = "Variant";
 }
