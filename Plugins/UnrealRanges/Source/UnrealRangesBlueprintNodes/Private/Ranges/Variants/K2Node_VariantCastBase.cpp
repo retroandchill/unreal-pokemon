@@ -30,7 +30,7 @@ FText UK2Node_VariantCastBase::GetTooltipText() const {
 }
 
 bool UK2Node_VariantCastBase::IsNodePure() const {
-    return false;
+    return bIsPure;
 }
 
 FLinearColor UK2Node_VariantCastBase::GetNodeTitleColor() const {
