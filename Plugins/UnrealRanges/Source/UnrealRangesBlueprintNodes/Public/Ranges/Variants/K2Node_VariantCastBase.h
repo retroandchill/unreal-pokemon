@@ -8,11 +8,6 @@
 
 #include "K2Node_VariantCastBase.generated.h"
 
-namespace UE::Ranges {
-    static const FName PN_CastSucceeded = "bSucceeded";
-    
-}
-
 /**
  * 
  */

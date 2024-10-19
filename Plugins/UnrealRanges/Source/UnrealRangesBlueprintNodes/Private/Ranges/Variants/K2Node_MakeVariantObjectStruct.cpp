@@ -6,20 +6,19 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
+#include "Ranges/Blueprints/BlueprintPins.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OrElseGet.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
 
-void UK2Node_MakeVariantObjectStruct::Initialize(UClass *Input, UScriptStruct *Output) {
-    InputType = Input;
+
+void UK2Node_MakeVariantObjectStruct::Initialize(UScriptStruct *Output) {
     OutputType = Output;
 }
 
 void UK2Node_MakeVariantObjectStruct::AllocateDefaultPins() {
-    auto InputPinType = InputType != nullptr && InputType->HasAnyClassFlags(CLASS_Interface)
-                            ? UEdGraphSchema_K2::PC_Interface
-                            : UEdGraphSchema_K2::PC_Object;
-    auto InputPinSubclass = InputType != nullptr ? InputType.Get() : UObject::StaticClass();
-    CreatePin(EGPD_Input, InputPinType, InputPinSubclass, InputType->GetFName());
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
               (OutputType != nullptr ? OutputType.Get() : FTableRowBase::StaticStruct()),
               UEdGraphSchema_K2::PN_ReturnValue);
@@ -27,27 +26,70 @@ void UK2Node_MakeVariantObjectStruct::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
+void UK2Node_MakeVariantObjectStruct::PostReconstructNode() {
+    Super::PostReconstructNode();
+    RefreshInputPinType();
+}
+
+bool UK2Node_MakeVariantObjectStruct::IsConnectionDisallowed(const UEdGraphPin *MyPin, const UEdGraphPin *OtherPin,
+                                                             FString &OutReason) const {
+    if (MyPin != GetObjectPin() || MyPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) {
+        return false;
+    }
+
+    auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
+    auto Registration = Registry.GetVariantStructData(*OutputType);
+    check(Registration.IsSet())
+
+    bool bDisallowed = true;
+    if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Object || OtherPin->PinType.PinCategory ==
+        UEdGraphSchema_K2::PC_Interface) {
+        auto Class = Cast<UClass>(OtherPin->PinType.PinSubCategoryObject.Get());
+        bDisallowed = Class == nullptr || !Registration->IsValidType(Class);
+    }
+
+    return bDisallowed;
+
+}
+
+void UK2Node_MakeVariantObjectStruct::NotifyPinConnectionListChanged(UEdGraphPin *Pin) {
+    Super::NotifyPinConnectionListChanged(Pin);
+    if (Pin != GetObjectPin()) {
+        return;
+    }
+
+    RefreshInputPinType();
+}
+
 FText UK2Node_MakeVariantObjectStruct::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto ClassName = InputType != nullptr
-                         ? InputType->GetDisplayNameText()
-                         : FText::FromStringView(TEXT("<<INVALID>>"));
     auto StructName = OutputType != nullptr
                           ? OutputType->GetDisplayNameText()
                           : FText::FromStringView(TEXT("<<INVALID>>"));
-    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetNodeTitle", "Make {Output} ({Input})"),
-                              TEXT("Input"), ClassName, TEXT("Output"), StructName);
+    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetNodeTitle", "Make {Output}"),
+                              TEXT("Output"), StructName);
 }
 
 FText UK2Node_MakeVariantObjectStruct::GetTooltipText() const {
-    auto ClassName = InputType != nullptr
-                         ? InputType->GetDisplayNameText()
-                         : FText::FromStringView(TEXT("<<INVALID>>"));
+    // clang-format off
+    auto ClassName = GetInputClass() |
+                     UE::Optionals::Map(&UClass::GetDisplayNameText) |
+                     UE::Optionals::OrElseGet(&FText::FromStringView, TEXT("<<INVALID>>"));
+    // clang-format on
     auto StructName = OutputType != nullptr
                           ? OutputType->GetDisplayNameText()
                           : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetTooltipText",
                                         "Create a new {Output} structure from the source {Input} object."),
                               TEXT("Input"), ClassName, TEXT("Output"), StructName);
+}
+
+void UK2Node_MakeVariantObjectStruct::EarlyValidation(FCompilerResultsLog &MessageLog) const {
+    Super::EarlyValidation(MessageLog);
+
+    if (auto InputClass = GetInputClass(); !InputClass.IsSet()) {
+        MessageLog.Error(TEXT("Must have a valid connection to the input pin"));
+        return;
+    }
 }
 
 void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
@@ -62,7 +104,7 @@ void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &Compile
     static const FName Object_ParamName(TEXT("Object"));
     static const FName Variant_ParamName(TEXT("Variant"));
 
-    auto InputPin = FindPinChecked(InputType->GetFName());
+    auto InputPin = FindPinChecked(UE::Ranges::PN_Object);
     auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
     auto CallCreateObjectPin = CallCreateVariant->FindPinChecked(Object_ParamName);
@@ -80,20 +122,43 @@ void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &Compile
 }
 
 void UK2Node_MakeVariantObjectStruct::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-    UE::Ranges::IVariantRegistration &Registration) const {
+                                                              UE::Ranges::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool,
-                                UClass *Input, UScriptStruct *Output) {
+                                UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeVariantObjectStruct>(Node);
-        TypedNode->Initialize(Input, Output);
+        TypedNode->Initialize(Output);
     };
 
     auto ActionKey = GetClass();
     auto Struct = Registration.GetStructType();
-    for (auto Classes = Registration.GetValidClasses(); auto Class : Classes) {
-        auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-        check(Spawner != nullptr);
-        Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Class, Struct);
-        ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
+    check(Spawner != nullptr);
+    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Struct);
+    ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+}
+
+UEdGraphPin *UK2Node_MakeVariantObjectStruct::GetObjectPin() const {
+    return FindPin(UE::Ranges::PN_Object);
+}
+
+TOptional<UClass &> UK2Node_MakeVariantObjectStruct::GetInputClass() const {
+    auto ObjectPin = GetObjectPin();
+    if (ObjectPin == nullptr || ObjectPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard) {
+        return nullptr;
+    }
+
+    return Cast<UClass>(ObjectPin->PinType.PinSubCategoryObject.Get());
+}
+
+void UK2Node_MakeVariantObjectStruct::RefreshInputPinType() const {
+    if (auto ObjectPin = GetObjectPin(); ObjectPin->LinkedTo.Num() > 0) {
+        check(ObjectPin->LinkedTo.Num() == 1)
+        auto Pin = ObjectPin->LinkedTo[0];
+        ObjectPin->PinType = Pin->PinType;
+        ObjectPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
+    } else {
+        ObjectPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
+        ObjectPin->PinType.PinSubCategoryObject = nullptr;
     }
 }

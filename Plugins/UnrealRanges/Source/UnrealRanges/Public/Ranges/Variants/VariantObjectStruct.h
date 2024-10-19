@@ -35,6 +35,8 @@ namespace UE::Ranges {
          */
         virtual UScriptStruct *GetSoftStructType() const = 0;
 
+        virtual bool IsValidType(const UClass* Class) const = 0;
+
         /**
          * Get the type index for the given object
          * @param SourceObject The object to check against
@@ -122,6 +124,10 @@ namespace UE::Ranges {
 
         UScriptStruct *GetSoftStructType() const final {
             return GetScriptStruct<typename T::SoftPtrType>();
+        }
+
+        bool IsValidType(const UClass* Class) const final {
+            return T::IsValidType(Class);
         }
 
         TOptional<uint64> GetTypeIndex(const UObject *SourceObject) const final {

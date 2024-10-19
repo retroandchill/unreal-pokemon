@@ -2,10 +2,9 @@
 
 
 #include "Ranges/Variants/K2Node_VariantCastBase.h"
-#include "BlueprintActionDatabaseRegistrar.h"
-#include "BlueprintNodeSpawner.h"
 #include "K2Node_IfThenElse.h"
 #include "KismetCompiler.h"
+#include "Ranges/Blueprints/BlueprintPins.h"
 
 void UK2Node_VariantCastBase::AllocateDefaultPins() {
     if (!bIsPure) {

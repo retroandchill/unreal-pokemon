@@ -73,4 +73,19 @@ namespace UE::Ranges {
         }
     }
 
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    constexpr bool IsValidSubclass(const UClass* Class) {
+        if constexpr (std::derived_from<T, UObject>) {
+            return Class->IsChildOf<T>();
+        } else {
+            static_assert(UnrealInterface<T>);
+            if (Class->HasAnyClassFlags(CLASS_Interface)) {
+                return Class->IsChildOf<typename T::UClassType>();
+            }
+            
+            return Class->ImplementsInterface(T::UClassType::StaticClass());
+        }
+    }
+
 } // namespace UE::Ranges

@@ -291,6 +291,18 @@ namespace UE::Ranges {
             return GetTypeIndex(Object).IsSet();
         }
 
+        static bool IsValidType(const UClass* Class) {
+            if (Class == nullptr) {
+                return true;
+            }
+
+            static constexpr std::array ValidTypeChecks = { &IsValidSubclass<T>... };
+            auto Find = ranges::find_if(ValidTypeChecks, [Class](auto &&Callback) { return Callback(Class); });
+            return Find != ValidTypeChecks.end();
+        }
+        
+        
+
         /**
          * Get the array of all classes that are usable by this variant type.
          * @return The array of all classes that are usable by this variant type.

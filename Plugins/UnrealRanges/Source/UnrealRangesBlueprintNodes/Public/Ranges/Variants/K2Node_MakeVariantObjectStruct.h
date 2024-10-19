@@ -18,23 +18,28 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_MakeVariantObjectStruct : public UK
 public:
     /**
      * Set up the node assigning the struct that this should be retrieving
-     * @param Input The type of the input node
      * @param Output The type of the output node
      */
-    void Initialize(UClass *Input, UScriptStruct *Output);
+    void Initialize(UScriptStruct *Output);
 
     void AllocateDefaultPins() override;
+    void PostReconstructNode() override;
+    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
+    void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
+    void EarlyValidation(FCompilerResultsLog& MessageLog) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
 protected:
     void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
         UE::Ranges::IVariantRegistration& Registration) const override;
 
+    UEdGraphPin *GetObjectPin() const;
+    TOptional<UClass&> GetInputClass() const;
+
 private:
-    UPROPERTY()
-    TObjectPtr<UClass> InputType;
+    void RefreshInputPinType() const;
     
     UPROPERTY()
     TObjectPtr<UScriptStruct> OutputType;
