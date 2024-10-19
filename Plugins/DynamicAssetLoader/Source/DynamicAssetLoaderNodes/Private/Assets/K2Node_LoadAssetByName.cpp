@@ -11,6 +11,7 @@
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include "Ranges/Optional/OrElse.h"
+#include "Ranges/Variants/K2Node_CastObjectToVariant.h"
 
 static const FName Load_AssetNamePinName = "AssetName";
 static const FName Load_AssetNotFoundPinName = "AssetNotFound";
@@ -114,22 +115,16 @@ void UK2Node_LoadAssetByName::ExpandNode(FKismetCompilerContext &CompilerContext
         CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateFoundAssetPin);
     } else {
         check(ClassType.AssetClass.IsType<UScriptStruct>())
-        const auto &Struct = ClassType.AssetClass.Get<UScriptStruct>();
-        auto HelperClassName = FString::Format(TEXT("{0}Helpers"), {Struct.GetName()});
-        auto HelperClass = FindObject<UClass>(Struct.GetPackage(), *HelperClassName);
-        check(HelperClass != nullptr)
-        ;
-        auto CastFunctionName = FString::Format(TEXT("Make{0}"), {Struct.GetName()});
-        auto CallCastNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-        CallCastNode->FunctionReference.SetExternalMember(*CastFunctionName, HelperClass);
+        auto &Struct = ClassType.AssetClass.Get<UScriptStruct>();
+        auto CallCastNode = CompilerContext.SpawnIntermediateNode<UK2Node_CastObjectToVariant>(this, SourceGraph);
+        CallCastNode->Initialize(&Struct);
         CallCastNode->AllocateDefaultPins();
-
-        auto CastObjectName = FString::Format(TEXT("As{0}"), {Struct.GetName()});
+        
         auto CallCastExecutePin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
         auto CallCastObjectPin = CallCastNode->FindPinChecked(FName("Object"));
-        auto CallCastFoundAssetPin = CallCastNode->FindPinChecked(*CastObjectName);
-        auto CallCastFoundPin = CallCastNode->FindPinChecked(FName("CastSucceeded"));
-        auto CallCastNotFoundPin = CallCastNode->FindPinChecked(FName("CastFailed"));
+        auto CallCastFoundAssetPin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
+        auto CallCastFoundPin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_Then);
+        auto CallCastNotFoundPin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_CastFailed);
 
         CallCreateFoundPin->MakeLinkTo(CallCastExecutePin);
         CallCreateFoundAssetPin->MakeLinkTo(CallCastObjectPin);

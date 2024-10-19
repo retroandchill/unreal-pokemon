@@ -10,6 +10,16 @@ FText UK2Node_VariantOperationBase::GetMenuCategory() const {
     return NSLOCTEXT("K2Node", "VariantOperationBase_GetMenuCategory", "Variants");
 }
 
+bool UK2Node_VariantOperationBase::IsNodePure() const {
+    return true;
+}
+
+FSlateIcon UK2Node_VariantOperationBase::GetIconAndTint(FLinearColor &OutColor) const {
+    OutColor = GetNodeTitleColor();
+    static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
+    return Icon;
+}
+
 void UK2Node_VariantOperationBase::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
     if (!ActionRegistrar.IsOpenForRegistration(GetClass())) {
         return;

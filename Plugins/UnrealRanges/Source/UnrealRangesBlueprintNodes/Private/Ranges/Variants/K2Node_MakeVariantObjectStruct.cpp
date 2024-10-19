@@ -8,8 +8,6 @@
 #include "KismetCompiler.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Join.h"
 
 void UK2Node_MakeVariantObjectStruct::Initialize(UClass *Input, UScriptStruct *Output) {
     InputType = Input;
@@ -52,53 +50,6 @@ FText UK2Node_MakeVariantObjectStruct::GetTooltipText() const {
                               TEXT("Input"), ClassName, TEXT("Output"), StructName);
 }
 
-bool UK2Node_MakeVariantObjectStruct::IsNodePure() const {
-    return true;
-}
-
-FSlateIcon UK2Node_MakeVariantObjectStruct::GetIconAndTint(FLinearColor &OutColor) const {
-    OutColor = GetNodeTitleColor();
-    static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
-    return Icon;
-}
-
-void UK2Node_MakeVariantObjectStruct::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
-    auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
-                                UClass *Input, UScriptStruct *Output) {
-        auto TypedNode = CastChecked<UK2Node_MakeVariantObjectStruct>(Node);
-        TypedNode->Initialize(Input, Output);
-    };
-
-    auto ActionKey = GetClass();
-    if (!ActionRegistrar.IsOpenForRegistration(ActionKey)) {
-        return;
-    }
-
-    auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
-    // clang-format off
-    auto AllData = Registry.GetAllRegisteredStructs() |
-                   UE::Ranges::Filter([](const UE::Ranges::IVariantRegistration &StructType) {
-                       return UEdGraphSchema_K2::IsAllowableBlueprintVariableType(
-                           StructType.GetStructType(), true);
-                   });
-    // clang-format on
-    for (TSet<UScriptStruct *> Seen; auto &Registration : AllData) {
-        auto Struct = Registration.GetStructType();
-        if (Seen.Contains(Struct)) {
-            continue;
-        }
-        Seen.Add(Struct);
-
-        for (auto Classes = Registration.GetValidClasses(); auto Class : Classes) {
-            auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-            check(Spawner != nullptr);
-            Spawner->CustomizeNodeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate::CreateStatic(
-                CustomizeCallback, Class, Struct);
-            ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
-        }
-    }
-}
-
 void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
@@ -126,4 +77,23 @@ void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &Compile
     CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateVariantPin);
 
     BreakAllNodeLinks();
+}
+
+void UK2Node_MakeVariantObjectStruct::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+    UE::Ranges::IVariantRegistration &Registration) const {
+    using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
+    auto CustomizeCallback = [](UEdGraphNode *Node, bool,
+                                UClass *Input, UScriptStruct *Output) {
+        auto TypedNode = CastChecked<UK2Node_MakeVariantObjectStruct>(Node);
+        TypedNode->Initialize(Input, Output);
+    };
+
+    auto ActionKey = GetClass();
+    auto Struct = Registration.GetStructType();
+    for (auto Classes = Registration.GetValidClasses(); auto Class : Classes) {
+        auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
+        check(Spawner != nullptr);
+        Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Class, Struct);
+        ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    }
 }

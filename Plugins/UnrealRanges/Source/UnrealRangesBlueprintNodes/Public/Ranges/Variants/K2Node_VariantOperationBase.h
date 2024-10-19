@@ -17,6 +17,8 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_VariantOperationBase : public UK2No
 
 public:
     FText GetMenuCategory() const override;
+    bool IsNodePure() const override;
+    FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
 
 protected:

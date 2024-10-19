@@ -68,45 +68,6 @@ class POKEMONASSETS_API UBattleRenderHelpers : public UBlueprintFunctionLibrary 
     GENERATED_BODY()
 
   public:
-    UFUNCTION(BlueprintCallable, Category = Variants, meta = (ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult MakeBattleRender(UObject *Object, FBattleRender &AsImageAsset);
-
-    UFUNCTION(BlueprintPure, DisplayName = "Make Battle Render (SkeletalMesh)", Category = Variants,
-              meta = (BlueprintAutocast))
-    static FBattleRender MakeBattleRender_SkeletalMesh(USkeletalMesh *Mesh);
-
-    UFUNCTION(BlueprintPure, DisplayName = "Make Battle Render (Static Mesh)", Category = Variants,
-              meta = (BlueprintAutocast))
-    static FBattleRender MakeBattleRender_StaticMesh(UStaticMesh *Mesh);
-
-    UFUNCTION(BlueprintPure, DisplayName = "Make Battle Render (Material)", Category = Variants,
-              meta = (BlueprintAutocast))
-    static FBattleRender MakeBattleRender_PaperSprite(UPaperSprite *Sprite);
-
-    UFUNCTION(BlueprintPure, DisplayName = "Make Battle Render (Paper Flipbook)", Category = Variants,
-              meta = (BlueprintAutocast))
-    static FBattleRender MakeBattleRender_PaperFlipbook(UPaperFlipbook *Flipbook);
-
-    UFUNCTION(BlueprintPure, Category = Variants,
-              meta = (CompactNodeTitle = "->", BlueprintAutocast, AutoCreateRefTerm = BattleRender))
-    static UObject *ConvertToObject(const FBattleRender &BattleRender);
-
-    UFUNCTION(BlueprintCallable, Category = Variants,
-              meta = (AutoCreateRefTerm = "BattleRender", ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult CastToSkeletalMesh(const FBattleRender &BattleRender, USkeletalMesh *&AsMesh);
-
-    UFUNCTION(BlueprintCallable, Category = Variants,
-              meta = (AutoCreateRefTerm = "BattleRender", ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult CastToStaticMesh(const FBattleRender &BattleRender, UStaticMesh *&AsMesh);
-
-    UFUNCTION(BlueprintCallable, Category = Variants,
-              meta = (AutoCreateRefTerm = "BattleRender", ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult CastToPaperSprite(const FBattleRender &BattleRender, UPaperSprite *&AsSprite);
-
-    UFUNCTION(BlueprintCallable, Category = Variants,
-              meta = (AutoCreateRefTerm = "BattleRender", ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult CastToPaperFlipbook(const FBattleRender &BattleRender, UPaperFlipbook *&AsFlipbook);
-
     UFUNCTION(BlueprintPure, Category = Variants,
               meta = (CompactNodeTile = "->", BlueprintAutocast, AutoCreateRefTerm = BattleRender))
     static FSoftBattleRender MakeSoftBattleRender(const FBattleRender &BattleRender);
