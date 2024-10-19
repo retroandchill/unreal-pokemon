@@ -60,7 +60,7 @@ namespace UE::Ranges {
         return TypesMatch<T>(Path.TryLoadClass<UObject>());
     }
 
-    bool TypesMatch(const UObject& Object, const UClass& Class);
+    UNREALRANGES_API bool TypesMatch(const UObject& Object, const UClass& Class);
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>

@@ -14,20 +14,26 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_MakeSoftVariantFromSoftObject : pub
     GENERATED_BODY()
 
 public:
-    void Initialize(UClass* Object, UScriptStruct *SoftReference);
+    void Initialize(UScriptStruct *SoftReference);
 
     void AllocateDefaultPins() override;
+    void PostReconstructNode() override;
+    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
+    void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
+    void EarlyValidation(FCompilerResultsLog& MessageLog) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
 protected:
     void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
         UE::Ranges::IVariantRegistration& Registration) const override;
+    
+    UEdGraphPin *GetObjectPin() const;
+    TOptional<UClass&> GetInputClass() const;
 
 private:
-    UPROPERTY()
-    TObjectPtr<UClass> ObjectType;
+    void RefreshInputPinType() const;
     
     UPROPERTY()
     TObjectPtr<UScriptStruct> SoftReferenceType;

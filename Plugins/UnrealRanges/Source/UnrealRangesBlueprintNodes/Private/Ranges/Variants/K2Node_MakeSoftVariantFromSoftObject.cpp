@@ -6,16 +6,21 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
+#include "Ranges/Blueprints/BlueprintPins.h"
+#include "Ranges/Optional/CastType.h"
+#include "Ranges/Optional/MakeStrong.h"
+#include "Ranges/Optional/Map.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
 
-void UK2Node_MakeSoftVariantFromSoftObject::Initialize(UClass* Object, UScriptStruct *SoftReference) {
-    ObjectType = Object;
+void UK2Node_MakeSoftVariantFromSoftObject::Initialize(UScriptStruct *SoftReference) {
     SoftReferenceType = SoftReference;
 }
 
 void UK2Node_MakeSoftVariantFromSoftObject::AllocateDefaultPins() {
-    auto InputPinSubclass = ObjectType != nullptr ? ObjectType.Get() : UObject::StaticClass();
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_SoftObject, InputPinSubclass, ObjectType->GetFName());
+    FCreatePinParams Params;
+    Params.bIsConst;
+    Params.bIsReference;
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object, Params);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
               (SoftReferenceType != nullptr ? SoftReferenceType.Get() : FTableRowBase::StaticStruct()),
               UEdGraphSchema_K2::PN_ReturnValue);
@@ -23,26 +28,66 @@ void UK2Node_MakeSoftVariantFromSoftObject::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
+void UK2Node_MakeSoftVariantFromSoftObject::PostReconstructNode() {
+    Super::PostReconstructNode();
+    RefreshInputPinType();
+}
+
+bool UK2Node_MakeSoftVariantFromSoftObject::IsConnectionDisallowed(const UEdGraphPin *MyPin,
+                                                                   const UEdGraphPin *OtherPin,
+                                                                   FString &OutReason) const {
+    if (MyPin != GetObjectPin() || MyPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) {
+        return false;
+    }
+
+    auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
+    auto Registration = Registry.GetVariantStructData(*SoftReferenceType);
+    check(Registration.IsSet())
+
+    bool bDisallowed = true;
+    if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_SoftObject) {
+        auto Class = Cast<UClass>(OtherPin->PinType.PinSubCategoryObject.Get());
+        bDisallowed = Class == nullptr || !Registration->IsValidType(Class);
+    }
+
+    if (bDisallowed) {
+        OutReason = TEXT("Not a valid object type for this variant!");
+    }
+    return bDisallowed;
+}
+
+
+void UK2Node_MakeSoftVariantFromSoftObject::NotifyPinConnectionListChanged(UEdGraphPin *Pin) {
+    Super::NotifyPinConnectionListChanged(Pin);
+    if (Pin != GetObjectPin()) {
+        return;
+    }
+
+    RefreshInputPinType();
+}
+
 FText UK2Node_MakeSoftVariantFromSoftObject::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto ClassName = ObjectType != nullptr
-                          ? ObjectType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
     auto StructName = SoftReferenceType != nullptr
                           ? SoftReferenceType->GetDisplayNameText()
                           : FText::FromStringView(TEXT("<<INVALID>>"));
-    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromSoftObject_GetNodeTitle", "Make {Output} ({Input})"),
-                              TEXT("Input"), ClassName, TEXT("Output"), StructName);
+    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromSoftObject_GetNodeTitle", "Make {Output}"),
+                              TEXT("Output"), StructName);
 }
 
 FText UK2Node_MakeSoftVariantFromSoftObject::GetTooltipText() const {
-    auto ClassName = ObjectType != nullptr
-                          ? ObjectType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
     auto StructName = SoftReferenceType != nullptr
                           ? SoftReferenceType->GetDisplayNameText()
                           : FText::FromStringView(TEXT("<<INVALID>>"));
-    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromSoftObject_GetNodeTitle", "Make a new {Output} from the specified {Input}"),
-                              TEXT("Input"), ClassName, TEXT("Output"), StructName);
+    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromSoftObject_GetNodeTitle",
+                                        "Make a new {Output} from the specified soft object"),
+                              TEXT("Output"), StructName);
+}
+
+void UK2Node_MakeSoftVariantFromSoftObject::EarlyValidation(FCompilerResultsLog &MessageLog) const {
+
+    if (auto InputClass = GetInputClass(); !InputClass.IsSet()) {
+        MessageLog.Error(TEXT("Must have a valid connection to the input pin"));
+    }
 }
 
 void UK2Node_MakeSoftVariantFromSoftObject::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
@@ -57,7 +102,7 @@ void UK2Node_MakeSoftVariantFromSoftObject::ExpandNode(FKismetCompilerContext &C
     static const FName Object_ParamName(TEXT("Object"));
     static const FName Variant_ParamName(TEXT("SoftVariant"));
 
-    auto InputPin = FindPinChecked(ObjectType->GetFName());
+    auto InputPin = FindPinChecked(UE::Ranges::PN_Object);
     auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
     auto CallCreateObjectPin = CallCreateVariant->FindPinChecked(Object_ParamName);
@@ -75,46 +120,44 @@ void UK2Node_MakeSoftVariantFromSoftObject::ExpandNode(FKismetCompilerContext &C
 }
 
 void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-    UE::Ranges::IVariantRegistration &Registration) const {
+                                                                    UE::Ranges::IVariantRegistration &Registration)
+const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
-    auto CustomizeCallback = [](UEdGraphNode *Node, bool,
-                                UClass *Input, UScriptStruct *Output) {
+    auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeSoftVariantFromSoftObject>(Node);
-        TypedNode->Initialize(Input, Output);
+        TypedNode->Initialize(Output);
     };
 
     auto ActionKey = GetClass();
-    auto Struct = Registration.GetSoftStructType();
-    TSet<UClass*> AddedClasses;
-    TArray<UClass*> Interfaces;
-    for (auto Classes = Registration.GetValidClasses(); auto Class : Classes) {
-        if (Class->HasAnyClassFlags(CLASS_Interface)) {
-            Interfaces.Add(Class);
-            continue;
-        }
-        
-        auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-        check(Spawner != nullptr);
-        Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Class, Struct);
-        ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
-        AddedClasses.Add(Class);
-    }
+    auto SoftStruct = Registration.GetSoftStructType();
+    auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
+    check(Spawner != nullptr);
+    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, SoftStruct);
+    ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+}
 
-    for (TObjectIterator<UClass> It; It; ++It) {
-        if (AddedClasses.Contains(*It)) {
-            continue;
-        }
+UEdGraphPin *UK2Node_MakeSoftVariantFromSoftObject::GetObjectPin() const {
+    return FindPin(UE::Ranges::PN_Object);
+}
 
-        for (auto Interface : Interfaces) {
-            if (!It->ImplementsInterface(Interface) || It->GetSuperClass()->ImplementsInterface(Interface)) {
-                continue;
-            }
+TOptional<UClass &> UK2Node_MakeSoftVariantFromSoftObject::GetInputClass() const {
+    // clang-format off
+    return UE::Optionals::OfNullable(GetObjectPin()) |
+           UE::Optionals::Map(&UEdGraphPin::PinType) |
+           UE::Optionals::Map(&FEdGraphPinType::PinSubCategoryObject) |
+           UE::Optionals::MakeStrong |
+           UE::Optionals::CastType<UClass>;
+    // clang-format on
+}
 
-            auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-            check(Spawner != nullptr);
-            Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, *It, Struct);
-            ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
-            AddedClasses.Add(*It);
-        }
+void UK2Node_MakeSoftVariantFromSoftObject::RefreshInputPinType() const {
+    if (auto ObjectPin = GetObjectPin(); ObjectPin->LinkedTo.Num() > 0) {
+        check(ObjectPin->LinkedTo.Num() == 1)
+        auto Pin = ObjectPin->LinkedTo[0];
+        ObjectPin->PinType = Pin->PinType;
+        ObjectPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
+    } else {
+        ObjectPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
+        ObjectPin->PinType.PinSubCategoryObject = nullptr;
     }
 }

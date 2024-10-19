@@ -48,6 +48,9 @@ bool UK2Node_MakeVariantObjectStruct::IsConnectionDisallowed(const UEdGraphPin *
         bDisallowed = Class == nullptr || !Registration->IsValidType(Class);
     }
 
+    if (bDisallowed) {
+        OutReason = TEXT("Not a valid object type for this variant!");
+    }
     return bDisallowed;
 
 }
@@ -70,17 +73,12 @@ FText UK2Node_MakeVariantObjectStruct::GetNodeTitle(ENodeTitleType::Type TitleTy
 }
 
 FText UK2Node_MakeVariantObjectStruct::GetTooltipText() const {
-    // clang-format off
-    auto ClassName = GetInputClass() |
-                     UE::Optionals::Map(&UClass::GetDisplayNameText) |
-                     UE::Optionals::OrElseGet(&FText::FromStringView, TEXT("<<INVALID>>"));
-    // clang-format on
     auto StructName = OutputType != nullptr
                           ? OutputType->GetDisplayNameText()
                           : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetTooltipText",
-                                        "Create a new {Output} structure from the source {Input} object."),
-                              TEXT("Input"), ClassName, TEXT("Output"), StructName);
+                                        "Create a new {Output} structure from the source object."),
+                              TEXT("Output"), StructName);
 }
 
 void UK2Node_MakeVariantObjectStruct::EarlyValidation(FCompilerResultsLog &MessageLog) const {
@@ -88,7 +86,6 @@ void UK2Node_MakeVariantObjectStruct::EarlyValidation(FCompilerResultsLog &Messa
 
     if (auto InputClass = GetInputClass(); !InputClass.IsSet()) {
         MessageLog.Error(TEXT("Must have a valid connection to the input pin"));
-        return;
     }
 }
 
