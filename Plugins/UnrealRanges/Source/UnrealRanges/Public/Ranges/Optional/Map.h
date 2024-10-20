@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
-#include "Ranges/Concepts/Tuples.h"
 #include "Ranges/Functional/Bindings.h"
-#include "Ranges/RangeConcepts.h"
 #include "Types.h"
 
 namespace UE::Optionals {
@@ -47,4 +45,5 @@ namespace UE::Optionals {
      * Map the optional to a new value if present, otherwise return an empty optional.
      */
     constexpr FMap Map;
+
 } // namespace UE::Optionals

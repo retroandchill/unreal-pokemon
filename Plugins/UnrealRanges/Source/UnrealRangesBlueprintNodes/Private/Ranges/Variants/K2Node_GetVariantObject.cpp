@@ -7,6 +7,10 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "Ranges/Blueprints/BlueprintPins.h"
+#include "Ranges/Optional/Filter.h"
+#include "Ranges/Optional/FlatMap.h"
+#include "Ranges/Optional/GetPtrOrNull.h"
+#include "Ranges/Optional/Map.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
 
 void UK2Node_GetVariantObject::AllocateDefaultPins() {
@@ -22,7 +26,7 @@ void UK2Node_GetVariantObject::PostReconstructNode() {
 }
 
 bool UK2Node_GetVariantObject::IsConnectionDisallowed(const UEdGraphPin *MyPin, const UEdGraphPin *OtherPin,
-    FString &OutReason) const {
+                                                      FString &OutReason) const {
     if (MyPin != GetVariantPin() || MyPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) {
         return false;
     }
@@ -31,8 +35,14 @@ bool UK2Node_GetVariantObject::IsConnectionDisallowed(const UEdGraphPin *MyPin, 
     if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Struct) {
         auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
         auto Struct = Cast<UScriptStruct>(OtherPin->PinType.PinSubCategoryObject.Get());
-        bDisallowed = Struct == nullptr || !Registry.GetVariantStructData(*Struct).IsSet();
-        }
+        // clang-format off
+        auto Result = UE::Optionals::OfNullable(Struct) |
+                      UE::Optionals::FlatMap(Registry, &UE::Ranges::FVariantObjectStructRegistry::GetVariantStructData) |
+                      UE::Optionals::Map(&UE::Ranges::IVariantRegistration::GetStructType) |
+                      UE::Optionals::GetPtrOrNull;
+        // clang-format on
+        bDisallowed = Struct == nullptr || Struct != Result;
+    }
 
     if (bDisallowed) {
         OutReason = TEXT("Not a valid variant structure!");
@@ -64,7 +74,7 @@ bool UK2Node_GetVariantObject::ShouldDrawCompact() const {
 
 FText UK2Node_GetVariantObject::GetTooltipText() const {
     return NSLOCTEXT("K2Node", "GetVariantObject_GetVariantObject",
-        "Take the input variant struct object and convert it into an object reference.");
+                     "Take the input variant struct object and convert it into an object reference.");
 }
 
 void UK2Node_GetVariantObject::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
@@ -72,7 +82,7 @@ void UK2Node_GetVariantObject::GetMenuActions(FBlueprintActionDatabaseRegistrar 
     if (!ActionRegistrar.IsOpenForRegistration(ActionKey)) {
         return;
     }
-    
+
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
     check(Spawner != nullptr);
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
@@ -80,10 +90,10 @@ void UK2Node_GetVariantObject::GetMenuActions(FBlueprintActionDatabaseRegistrar 
 
 void UK2Node_GetVariantObject::EarlyValidation(FCompilerResultsLog &MessageLog) const {
     Super::EarlyValidation(MessageLog);
-    
+
     if (auto InputStruct = GetInputStruct(); !InputStruct.IsSet()) {
-            MessageLog.Error(TEXT("Must have a valid connection to the input pin"));
-        }
+        MessageLog.Error(TEXT("Must have a valid connection to the input pin"));
+    }
 }
 
 void UK2Node_GetVariantObject::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
@@ -103,18 +113,18 @@ void UK2Node_GetVariantObject::ExpandNode(FKismetCompilerContext &CompilerContex
     auto CallCreateVariantPin = CallCreateVariant->FindPinChecked(Variant_ParamName);
     auto CallCreateObjectPin = CallCreateVariant->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
-    CallCreateObjectPin->PinType = InputPin->PinType;
-    CallCreateObjectPin->PinType.PinSubCategoryObject = InputPin->PinType.PinSubCategoryObject;
-    CompilerContext.MovePinLinksToIntermediate(*InputPin, *CallCreateObjectPin);
+    CallCreateVariantPin->PinType = InputPin->PinType;
+    CallCreateVariantPin->PinType.PinSubCategoryObject = InputPin->PinType.PinSubCategoryObject;
+    CompilerContext.MovePinLinksToIntermediate(*InputPin, *CallCreateVariantPin);
 
-    CallCreateVariantPin->PinType = ReturnValuePin->PinType;
-    CallCreateVariantPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
-    CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateVariantPin);
+    CallCreateObjectPin->PinType = ReturnValuePin->PinType;
+    CallCreateObjectPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
+    CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateObjectPin);
 
     BreakAllNodeLinks();
 }
 
-UEdGraphPin * UK2Node_GetVariantObject::GetVariantPin() const {
+UEdGraphPin *UK2Node_GetVariantObject::GetVariantPin() const {
     return FindPin(UE::Ranges::PN_Variant);
 }
 

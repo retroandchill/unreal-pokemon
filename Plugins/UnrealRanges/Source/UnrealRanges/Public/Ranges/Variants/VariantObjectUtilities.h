@@ -60,7 +60,7 @@ public:
     DECLARE_FUNCTION(execMakeSoftVariantFromSoftObjectChecked);
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
-        meta = (CustomStructureParam = "SoftVariant,Variant"))
+        meta = (CustomStructureParam = "SoftVariant,Variant", ExpandBoolAsExecs = "ReturnValue"))
     static bool LoadSynchronous(const uint8& SoftVariant, uint8& Variant);
     DECLARE_FUNCTION(execLoadSynchronous);
 };
