@@ -19,7 +19,7 @@ void UK2Node_MakeVariantObjectStruct::Initialize(UScriptStruct *Output) {
 void UK2Node_MakeVariantObjectStruct::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
-              (OutputType != nullptr ? OutputType.Get() : FTableRowBase::StaticStruct()),
+              (OutputType != nullptr ? OutputType.Get() : nullptr),
               UEdGraphSchema_K2::PN_ReturnValue);
 
     Super::AllocateDefaultPins();

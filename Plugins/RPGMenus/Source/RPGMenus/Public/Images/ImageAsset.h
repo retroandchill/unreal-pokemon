@@ -52,16 +52,3 @@ template <>
 struct RPGMENUS_API TBaseStructure<FSoftImageAsset> {
     static UScriptStruct *Get();
 };
-
-/**
- * Blueprint helper functions for a variant type.
- */
-UCLASS()
-class RPGMENUS_API UImageAssetHelpers : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
-
-  public:
-    UFUNCTION(BlueprintCallable, Category = Variants,
-              meta = (AutoCreateRefTerm = Path, ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult LoadSynchronous(const FSoftImageAsset &Path, FImageAsset &LoadedAsset);
-};

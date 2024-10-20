@@ -66,6 +66,10 @@ namespace UE::Ranges {
         explicit TSoftVariantObject(const T &Object) : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
+        constexpr uint64 GetTypeIndex() const {
+            return TypeIndex;
+        }
+
         /**
          * Returns asset name string, leaving off the /package/path part
          * @return the asset name string, leaving off the /package/path part

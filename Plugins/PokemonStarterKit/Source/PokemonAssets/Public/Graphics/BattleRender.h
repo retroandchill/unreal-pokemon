@@ -59,17 +59,3 @@ template <>
 struct POKEMONASSETS_API TBaseStructure<FSoftBattleRender> {
     static UScriptStruct *Get();
 };
-
-/**
- * Blueprint helper functions for a variant type.
- */
-UCLASS()
-class POKEMONASSETS_API UBattleRenderHelpers : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
-
-  public:
-
-    UFUNCTION(BlueprintCallable, Category = Variants,
-              meta = (AutoCreateRefTerm = Path, ExpandEnumAsExecs = "ReturnValue"))
-    static EVariantFindResult LoadSynchronous(const FSoftBattleRender &Path, FBattleRender &LoadedAsset);
-};

@@ -246,6 +246,13 @@ namespace UE::Ranges {
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
+        static TOptional<uint64> GetTypeIndexForClass(const UClass* Class) {
+            constexpr std::array TypeChecks = {&TVariantObject::IsClassValid<std::nullptr_t>,
+                                               &TVariantObject::IsClassValid<T>...};
+            auto Find = ranges::find_if(TypeChecks, [Class](auto &&Callback) { return Callback(Class); });
+            return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
+        }
+
         /**
          * Get the type index of this varaint
          * @return The type index of this varaint
@@ -279,6 +286,18 @@ namespace UE::Ranges {
                 return Data.GetClass()->ImplementsInterface(U::UClassType::StaticClass());
             } else {
                 return Data.IsInstanceOf<U>();
+            }
+        }
+
+        template <typename U> 
+            requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
+        static constexpr bool IsClassValid(const UClass *Class) {
+            if constexpr (std::same_as<U, std::nullptr_t>) {
+                return Class == nullptr;
+            } else if constexpr (UnrealInterface<U>) {
+                return Class->ImplementsInterface(U::UClassType::StaticClass());
+            } else {
+                return Class->IsChildOf<U>();
             }
         }
 

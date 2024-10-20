@@ -23,13 +23,3 @@ UScriptStruct * TBaseStructure<FSoftBattleRender>::Get() {
     static auto *ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftBattleRender"));
     return ScriptStruct;
 }
-
-EVariantFindResult UBattleRenderHelpers::LoadSynchronous(const FSoftBattleRender &Path, FBattleRender &LoadedAsset) {
-    auto Result = Path.LoadSynchronous();
-    if (!Result.IsSet()) {
-        return EVariantFindResult::CastFailed;
-    }
-
-    LoadedAsset = FBattleRender(*Result);
-    return EVariantFindResult::CastSucceeded;
-}

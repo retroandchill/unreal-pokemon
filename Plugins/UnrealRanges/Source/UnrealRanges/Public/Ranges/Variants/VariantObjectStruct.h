@@ -8,6 +8,7 @@
 #include "Ranges/Variants/VariantObject.h"
 #include "Ranges/Variants/SoftVariantObject.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "Ranges/Pointers/SoftObjectRef.h"
 #include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/ContainerView.h"
@@ -91,6 +92,15 @@ namespace UE::Ranges {
          */
         virtual void MakeSoftValue(const TSoftObjectPtr<> &Path,
                                    const FStructProperty &SoftProperty, uint8 *SoftStructValue) const = 0;
+
+        /**
+         * Attempt to get the soft object pointer from the given value.
+         * @param Class The class to check against
+         * @param SoftProperty The soft property to check against
+         * @param SoftStructValue The soft struct value in question
+         * @return 
+         */
+        virtual TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass* Class, const FStructProperty &SoftProperty, uint8 *SoftStructValue) const = 0;
 
         /**
          * Synchronously load the object contained within the struct.
@@ -204,12 +214,30 @@ namespace UE::Ranges {
             SoftVariant->Set(Path);
         }
 
+        TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass* Class, const FStructProperty &SoftProperty, uint8 *SoftStructValue) const {
+            if (SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT(
+                                         "LoadSynchronous", "IncompatibleProperty",
+                                         "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+            }
+
+            const void *SoftVariantPtr = SoftStructValue;
+            auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
+            auto ClassIndex = T::GetTypeIndexForClass(Class);
+            if (!ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex()) {
+                return TOptional<TSoftObjectRef<>>();
+            }
+
+            return TSoftObjectRef<>(SoftVariant->ToSoftObjectPtr());
+        }
+
         bool LoadSynchronous(const FStructProperty &SoftProperty, const uint8 *SoftStructValue,
                                      const FStructProperty &Property, uint8 *StructValue) const {
             if (Property.Struct != GetStructType() || SoftProperty.Struct != GetSoftStructType()) {
                 throw FTypeException(EBlueprintExceptionType::AccessViolation,
                                      NSLOCTEXT(
-                                         "MakeSoftValue", "IncompatibleProperty",
+                                         "LoadSynchronous", "IncompatibleProperty",
                                          "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
             }
 

@@ -22,13 +22,3 @@ UScriptStruct *TBaseStructure<FSoftImageAsset>::Get() {
     static UScriptStruct *ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftImageAsset"));
     return ScriptStruct;
 }
-
-EVariantFindResult UImageAssetHelpers::LoadSynchronous(const FSoftImageAsset &Path, FImageAsset &LoadedAsset) {
-    auto Result = Path.LoadSynchronous();
-    if (!Result.IsSet()) {
-        return EVariantFindResult::CastFailed;
-    }
-
-    LoadedAsset = FImageAsset(*Result);
-    return EVariantFindResult::CastSucceeded;
-}
