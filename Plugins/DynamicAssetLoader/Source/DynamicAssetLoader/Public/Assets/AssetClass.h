@@ -315,7 +315,9 @@ namespace UE::Assets {
                                                            "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
                 }
 
-                StructProperty->CallSetter(Data, Result.GetPtrOrNull());
+                void* StructPtr = Data;
+                auto &Struct = *static_cast<T*>(StructPtr);
+                Struct = *Result;
             } else {
                 static_assert(std::derived_from<T, UObject>);
                 auto ObjectProperty = CastField<FObjectProperty>(&Property);
@@ -345,7 +347,9 @@ namespace UE::Assets {
                                                            "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
                 }
 
-                StructProperty->SetValue_InContainer(Data, Result.GetPtrOrNull());
+                void* StructPtr = Data;
+                auto &Struct = *static_cast<typename T::SoftPtrType*>(StructPtr);
+                Struct = *Result;
             } else {
                 static_assert(std::derived_from<T, UObject>);
                 auto ObjectProperty = CastField<FSoftObjectProperty>(&Property);
