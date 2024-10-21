@@ -286,11 +286,31 @@ namespace UE::Assets {
         FName Key;
     };
 
+    /**
+     * Opaque registration information for an asset class.
+     */
     class IAssetClassRegistration {
     public:
         virtual ~IAssetClassRegistration() = default;
 
+        /**
+         * Load an asset by its name
+         * @param AssetName The name of the asset in question
+         * @param Property The property to write out to
+         * @param Data The raw bytes to write the data to
+         * @return If the asset was found
+         * @throws Ranges::FTypeException If there is an issue with the type of property that is expected
+         */
         virtual bool LoadAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const = 0;
+        
+        /**
+         * Lookup an asset by its name, returning only a soft reference to the asset
+         * @param AssetName The name of the asset in question
+         * @param Property The property to write out to
+         * @param Data The raw bytes to write the data to
+         * @return If the asset was found
+         * @throws Ranges::FTypeException If there is an issue with the type of property that is expected
+         */
         virtual bool LookupAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const = 0;
     };
 
