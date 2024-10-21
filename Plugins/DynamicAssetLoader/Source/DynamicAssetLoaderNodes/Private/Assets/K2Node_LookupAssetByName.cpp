@@ -112,32 +112,10 @@ void UK2Node_LookupAssetByName::ExpandNode(class FKismetCompilerContext &Compile
     CallCreateIdentifierPin->DefaultValue = AssetKey.ToString();
     CompilerContext.MovePinLinksToIntermediate(*AssetNamePin, *CallCreateAssetNamePin);
 
-    if (auto &ClassType = GetDefault<UAssetLoadingSettings>()->AssetClasses.FindChecked(AssetKey);
-        ClassType.AssetClass.IsType<UClass>()) {
-        CallCreateFoundAssetPin->PinType = ReturnValuePin->PinType;
-        CallCreateFoundAssetPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
-        CompilerContext.MovePinLinksToIntermediate(*FoundPin, *CallCreateFoundPin);
-        CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateFoundAssetPin);
-    } else {
-        check(ClassType.AssetClass.IsType<UScriptStruct>())
-        auto &Struct = ClassType.AssetClass.Get<UScriptStruct>();
-        auto CallCastNode = CompilerContext.SpawnIntermediateNode<UK2Node_CastSoftObjectToSoftVariant>(this, SourceGraph);
-        CallCastNode->Initialize(&Struct);
-        CallCastNode->AllocateDefaultPins();
-        
-        auto CallCastExecutePin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_Execute);
-        auto CallCastObjectPin = CallCastNode->FindPinChecked(UE::Ranges::PN_SoftReference);
-        auto CallCastFoundAssetPin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
-        auto CallCastFoundPin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_Then);
-        auto CallCastNotFoundPin = CallCastNode->FindPinChecked(UEdGraphSchema_K2::PN_CastFailed);
-
-        CallCreateFoundPin->MakeLinkTo(CallCastExecutePin);
-        CallCreateFoundAssetPin->MakeLinkTo(CallCastObjectPin);
-
-        CompilerContext.MovePinLinksToIntermediate(*FoundPin, *CallCastFoundPin);
-        CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCastFoundAssetPin);
-        CompilerContext.CopyPinLinksToIntermediate(*NotFoundPin, *CallCastNotFoundPin);
-    }
+    CallCreateFoundAssetPin->PinType = ReturnValuePin->PinType;
+    CallCreateFoundAssetPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
+    CompilerContext.MovePinLinksToIntermediate(*FoundPin, *CallCreateFoundPin);
+    CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateFoundAssetPin);
 
     CompilerContext.MovePinLinksToIntermediate(*NotFoundPin, *CallCreateNotFoundPin);
 

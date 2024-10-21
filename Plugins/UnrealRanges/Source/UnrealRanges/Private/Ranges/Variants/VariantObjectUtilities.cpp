@@ -88,7 +88,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
         P_NATIVE_END
         
         P_GET_RESULT(bool, Result);
-        Result = Object != nullptr;
+        Result = IsValid(Object);
     } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }

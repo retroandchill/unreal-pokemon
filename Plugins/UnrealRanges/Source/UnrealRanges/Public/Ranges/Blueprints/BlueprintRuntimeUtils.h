@@ -53,6 +53,11 @@ namespace UE::Ranges {
     
 }
 
+#define P_GET_WILDCARD_PARAM(PropVar, PointerVar) \
+    Stack.StepCompiledIn<FProperty>(nullptr); \
+    const auto PropVar = Stack.MostRecentProperty; \
+    auto PointerVar = Stack.MostRecentPropertyAddress;
+
 #define P_GET_OPAQUE_STRUCT(PropVar, PointerVar) \
     Stack.StepCompiledIn<FStructProperty>(nullptr); \
     const auto PropVar = CastField<FStructProperty>(Stack.MostRecentProperty); \

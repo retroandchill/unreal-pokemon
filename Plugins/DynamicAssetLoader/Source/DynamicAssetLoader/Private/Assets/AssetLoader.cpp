@@ -1,8 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Assets/AssetLoader.h"
+#include "Assets/AssetClass.h"
 #include "Assets/AssetLoadingSettings.h"
 #include "Assets/AssetUtilities.h"
+#include "Ranges/Blueprints/BlueprintRuntimeUtils.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Optional/OrElseGet.h"
 
@@ -36,20 +38,60 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const
     return !FoundAsset.IsNull() ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
 }
 
-EAssetLoadResult UAssetLoader::LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject *&FoundAsset) {
-    auto Settings = GetDefault<UAssetLoadingSettings>();
-    auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
-    auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
-    return FindAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory,
-                           FullName, FoundAsset);
+CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LoadDynamicAsset, FName, const FString&, UObject*&)
+DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
+    P_GET_PROPERTY(FNameProperty, Identifier);
+    P_GET_PROPERTY(FStrProperty, AssetName)
+    P_GET_WILDCARD_PARAM(OutputProp, Output)
+    P_FINISH
+
+    try {
+        if (OutputProp == nullptr || Output == nullptr) {
+            throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
+                NSLOCTEXT("UAssetLoader", "LoadDynamicAsset_MissingParam", "The out parameter was not provided!"));
+        }
+        
+        auto Registration = UE::Assets::FAssetClassRegistry::Get().GetAssetClassRegistration(Identifier);
+        if (!Registration.IsSet()) {
+            throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
+                NSLOCTEXT("UAssetLoader", "LoadDynamicAsset_NoAssetType", "The provided asset type is not a valid asset"));
+        }
+
+        P_NATIVE_BEGIN
+        P_GET_RESULT(EAssetLoadResult, Result);
+        Result = Registration->LoadAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+        P_NATIVE_END;
+    } catch (const UE::Ranges::FBlueprintException& Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
+    }
 }
 
-EAssetLoadResult UAssetLoader::LookupDynamicAsset(FName Identifier, const FString &AssetName, TSoftObjectPtr<> &FoundAsset) {
-    auto Settings = GetDefault<UAssetLoadingSettings>();
-    auto &AssetInfo = Settings->AssetClasses.FindChecked(Identifier);
-    auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetInfo.AssetPrefix.Get(TEXT("")));
-    return LookupAssetByName(&AssetInfo.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), AssetInfo.RootDirectory,
-                           FullName, FoundAsset);
+CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LookupDynamicAsset, FName, const FString &, TSoftObjectPtr<> &)
+DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
+    P_GET_PROPERTY(FNameProperty, Identifier);
+    P_GET_PROPERTY(FStrProperty, AssetName)
+    P_GET_WILDCARD_PARAM(OutputProp, Output)
+    P_FINISH
+
+    try {
+        if (OutputProp == nullptr || Output == nullptr) {
+            throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
+                NSLOCTEXT("UAssetLoader", "LookupDynamicAsset_MissingParam", "The out parameter was not provided!"));
+        }
+        
+        auto Registration = UE::Assets::FAssetClassRegistry::Get().GetAssetClassRegistration(Identifier);
+        if (!Registration.IsSet()) {
+            throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
+                NSLOCTEXT("UAssetLoader", "LookupDynamicAsset_NoAssetType", "The provided asset type is not a valid asset"));
+        }
+
+        P_NATIVE_BEGIN
+        P_GET_RESULT(EAssetLoadResult, Result);
+        Result = Registration->LookupAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+        P_NATIVE_END;
+    } catch (const UE::Ranges::FBlueprintException& Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
+    }
 }
 
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,

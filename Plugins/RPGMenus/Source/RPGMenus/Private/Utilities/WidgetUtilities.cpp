@@ -10,8 +10,10 @@ void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bo
         ImageWidget->SetBrushFromTexture(Texture, MatchSize);
     } else if (auto Material = Cast<UMaterialInterface>(Asset); Material != nullptr) {
         ImageWidget->SetBrushFromMaterial(Material);
-    } else if (Asset->Implements<USlateTextureAtlasInterface>()) {
+    } else if (Asset != nullptr && Asset->Implements<USlateTextureAtlasInterface>()) {
         ImageWidget->SetBrushFromAtlasInterface(Asset, MatchSize);
+    } else {
+        ImageWidget->SetBrushFromAsset(nullptr);
     }
 }
 

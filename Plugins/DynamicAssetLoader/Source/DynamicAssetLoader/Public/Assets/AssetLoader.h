@@ -139,16 +139,19 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     static EAssetLoadResult LookupAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                             const FString &AssetName, TSoftObjectPtr<UObject> &FoundAsset);
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-              meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
-                      DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, CustomThunk,
+              meta = (CallableWithoutWorldContext, ExpandEnumAsExecs = "ReturnValue",
+                  CustomStructureParam = "FoundAsset"))
     static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject *&FoundAsset);
+    DECLARE_FUNCTION(execLoadDynamicAsset);
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, CustomThunk,
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
-                      DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue"))
+                      DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue",
+                      CustomStructureParam = "FoundAsset"))
     static EAssetLoadResult LookupDynamicAsset(FName Identifier, const FString &AssetName, TSoftObjectPtr<UObject> &FoundAsset);
-
+    DECLARE_FUNCTION(execLookupDynamicAsset);
+    
     /**
      * Look up a Blueprint class by its name
      * @tparam T The base class of the blueprint to look for

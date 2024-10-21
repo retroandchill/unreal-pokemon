@@ -15,6 +15,8 @@ namespace UE::Assets {
     template <typename T>
     concept AssetKey = std::is_same_v<std::remove_cvref_t<T>, FName> || std::is_convertible_v<T, FStringView>;
 
+    class FAssetClassRegistry;
+
     /**
      * Class used for native declarations of asset classes
      * @tparam T The class of the asset in question
@@ -22,10 +24,13 @@ namespace UE::Assets {
     template <typename T>
         requires AssetClassType<T>
     class TAssetClass {
-      public:
+    public:
         template <typename U>
-        static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) ||
-                                                   (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
+        static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) || (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
+
+        const FName &GetKey() const {
+            return Key;
+        }
 
         /**
          * Construct a new asset object using this loader
@@ -33,9 +38,8 @@ namespace UE::Assets {
          * @param DefaultPath The default path to the asset, should be a valid game directory
          * @param DefaultPrefix The default prefix for the asset type
          */
-        explicit TAssetClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT(""))
-            : Key(Key), DefaultAssetPath({FString(DefaultPath)}), DefaultPrefix(DefaultPrefix) {
-            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TAssetClass::OnPostEngineInit);
+        explicit TAssetClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key) {
+            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TAssetClass::OnPostEngineInit, DefaultPath, DefaultPrefix);
         }
 
         /**
@@ -54,7 +58,9 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
-                       Optionals::Map([](UObject &Object) { return T(&Object); });
+                       Optionals::Map([](UObject &Object) {
+                           return T(&Object);
+                       });
             }
         }
 
@@ -81,7 +87,9 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
-                       Optionals::Map([](const TSoftObjectRef<> &Object) { return T::SoftPtrType(&Object); });
+                       Optionals::Map([](const TSoftObjectRef<> &Object) {
+                           return T::SoftPtrType(Object.ToSoftObjectPtr());
+                       });
             }
         }
 
@@ -110,7 +118,9 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
-                       Optionals::Map([](UObject &Object) { return T(&Object); });
+                       Optionals::Map([](UObject &Object) {
+                           return T(&Object);
+                       });
             }
         }
 
@@ -133,7 +143,9 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
-                       Optionals::Map([](const TSoftObjectRef<> &Object) { return T::SoftPtrType(Object.ToSoftObjectPtr()); });
+                       Optionals::Map([](const TSoftObjectRef<> &Object) {
+                           return T::SoftPtrType(Object.ToSoftObjectPtr());
+                       });
             }
         }
 
@@ -143,7 +155,9 @@ namespace UE::Assets {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
-                   Ranges::Map([this](ElementType Value) { return LoadAsset<U>(Value); }) |
+                   Ranges::Map([this](ElementType Value) {
+                       return LoadAsset<U>(Value);
+                   }) |
                    Ranges::ToArray;
             // clang-format on
         }
@@ -154,13 +168,15 @@ namespace UE::Assets {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
-                   Ranges::Map([this](ElementType Value) { return LookupAsset<U>(Value); }) |
+                   Ranges::Map([this](ElementType Value) {
+                       return LookupAsset<U>(Value);
+                   }) |
                    Ranges::ToArray;
             // clang-format on
         }
 
-      private:
-        void OnPostEngineInit() {
+    private:
+        void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
             if (Settings->AssetClasses.Contains(Key)) {
                 return;
@@ -181,23 +197,21 @@ namespace UE::Assets {
         }
 
         FName Key;
-        FDirectoryPath DefaultAssetPath;
-        FStringView DefaultPrefix;
     };
 
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     class TBlueprintClass {
-      public:
+    public:
         /**
          * Construct a new asset object using this loader
          * @param Key The key for the asset in question
          * @param DefaultPath The default path to the asset, should be a valid game directory
          * @param DefaultPrefix The default prefix for the asset type
          */
-        explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT(""))
-            : Key(Key), DefaultAssetPath({FString(DefaultPath)}), DefaultPrefix(DefaultPrefix) {
-            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit);
+        explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key) {
+            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit,
+                                                    DefaultPath, DefaultPrefix);
         }
 
         /**
@@ -251,13 +265,15 @@ namespace UE::Assets {
             using ElementType = Ranges::TRangeCommonReference<R>;
             // clang-format off
             return Classes |
-                   Ranges::Map([this](ElementType Value) { return LoadClass<U>(Value); }) |
+                   Ranges::Map([this](ElementType Value) {
+                       return LoadClass<U>(Value);
+                   }) |
                    Ranges::ToArray;
             // clang-format on
         }
 
-      private:
-        void OnPostEngineInit() {
+    private:
+        void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
             if (Settings->BlueprintClasses.Contains(Key)) {
                 return;
@@ -268,8 +284,118 @@ namespace UE::Assets {
         }
 
         FName Key;
-        FDirectoryPath DefaultAssetPath;
-        FStringView DefaultPrefix;
+    };
+
+    class IAssetClassRegistration {
+    public:
+        virtual ~IAssetClassRegistration() = default;
+
+        virtual bool LoadAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const = 0;
+        virtual bool LookupAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const = 0;
+    };
+
+    template <typename T>
+        requires AssetClassType<T>
+    class TAssetClassRegistrationImpl : public IAssetClassRegistration {
+    public:
+        explicit TAssetClassRegistrationImpl(const TAssetClass<T> &AssetClass) : AssetClass(AssetClass) {
+        }
+
+        bool LoadAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override {
+            auto Result = AssetClass.LoadAsset(AssetName);
+            if (!Result.IsSet()) {
+                return false;
+            }
+
+            if constexpr (Ranges::VariantObjectStruct<T>) {
+                auto StructProperty = CastField<FStructProperty>(&Property);
+                if (StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<T>()) {
+                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
+                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
+                                                           "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+                }
+
+                StructProperty->CallSetter(Data, Result.GetPtrOrNull());
+            } else {
+                static_assert(std::derived_from<T, UObject>);
+                auto ObjectProperty = CastField<FObjectProperty>(&Property);
+                if (ObjectProperty == nullptr || !ObjectProperty->PropertyClass->IsChildOf<T>()) {
+                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
+                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty_Object",
+                                                           "Incompatible output parameter; the supplied object does is not of the correct type for this object."));
+                }
+
+                ObjectProperty->SetObjectPropertyValue(Data, Result.GetPtrOrNull());
+            }
+
+            return true;
+        }
+        
+        bool LookupAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override {
+            auto Result = AssetClass.LookupAsset(AssetName);
+            if (!Result.IsSet()) {
+                return false;
+            }
+
+            if constexpr (Ranges::VariantObjectStruct<T>) {
+                auto StructProperty = CastField<FStructProperty>(&Property);
+                if (StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<typename T::SoftPtrType>()) {
+                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
+                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
+                                                           "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+                }
+
+                StructProperty->SetValue_InContainer(Data, Result.GetPtrOrNull());
+            } else {
+                static_assert(std::derived_from<T, UObject>);
+                auto ObjectProperty = CastField<FSoftObjectProperty>(&Property);
+                if (ObjectProperty == nullptr || ObjectProperty->PropertyClass->IsChildOf<T>()) {
+                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
+                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty_Object",
+                                                           "Incompatible output parameter; the supplied object does is not of the correct type for this object."));
+                }
+                
+                ObjectProperty->SetValue_InContainer(Data, FSoftObjectPtr(Result->ToSoftObjectPath()));
+            }
+
+            return true;
+        }
+
+    private:
+        const TAssetClass<T> AssetClass;
+    };
+
+    class DYNAMICASSETLOADER_API FAssetClassRegistry {
+        FAssetClassRegistry() = default;
+        ~FAssetClassRegistry() = default;
+
+    public:
+        FAssetClassRegistry(const FAssetClassRegistry &) = delete;
+        FAssetClassRegistry(FAssetClassRegistry &&) = delete;
+        FAssetClassRegistry &operator=(const FAssetClassRegistry &) = delete;
+        FAssetClassRegistry &operator=(FAssetClassRegistry &&) = delete;
+
+        static FAssetClassRegistry &Get();
+
+        template <typename T>
+            requires AssetClassType<T>
+        bool RegisterAssetClass(const TAssetClass<T> &Registration) {
+            Ranges::AddToDelegate(FCoreDelegates::OnPostEngineInit, [this, &Registration] {
+                auto Key = Registration.GetKey();
+                if (AssetClassRegistry.Contains(Key)) {
+                    return;
+                }
+
+                AssetClassRegistry.Emplace(Key, MakeUnique<TAssetClassRegistrationImpl<T>>(Registration));
+            });
+            
+            return true;
+        }
+
+        TOptional<IAssetClassRegistration&> GetAssetClassRegistration(FName Key) const;
+
+    private:
+        TMap<FName, TUniquePtr<IAssetClassRegistration>> AssetClassRegistry;
     };
 } // namespace UE::Assets
 
@@ -303,7 +429,8 @@ namespace UE::Assets {
  * @param Prefix The default prefix for the asset
  */
 #define UE_DEFINE_ASSET_CLASS(Name, AssetType, Directory, Prefix)                                                      \
-    const UE::Assets::TAssetClass<AssetType> Name(#Name, TEXT(Directory), TEXT(Prefix))
+    const UE::Assets::TAssetClass<AssetType> Name(#Name, TEXT(Directory), TEXT(Prefix)); \
+    static const bool __AssetClassType_##Name##_Registered = UE::Assets::FAssetClassRegistry::Get().RegisterAssetClass(Name)
 
 /**
  * Define an asset class to use for loading assets.

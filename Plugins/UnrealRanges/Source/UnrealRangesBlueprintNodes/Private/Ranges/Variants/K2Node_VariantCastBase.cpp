@@ -119,7 +119,7 @@ void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext
 
         auto BranchNode = CompilerContext.SpawnIntermediateNode<UK2Node_IfThenElse>(this, SourceGraph);
         BranchNode->AllocateDefaultPins();
-        CompilerContext.MovePinLinksToIntermediate(*GetCastSucceededPin(), *BranchNode->GetConditionPin());
+        CallCastResultPin->MakeLinkTo(BranchNode->GetConditionPin());
         CompilerContext.MovePinLinksToIntermediate(*ExecPin, *BranchNode->GetExecPin());
         CompilerContext.MovePinLinksToIntermediate(*ThenPin, *BranchNode->GetThenPin());
         CompilerContext.MovePinLinksToIntermediate(*CastFailedPin, *BranchNode->GetElsePin());

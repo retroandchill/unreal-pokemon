@@ -75,9 +75,9 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
     FAssetLoadingEntry() = default;
 
   private:
-    FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix,
+    FAssetLoadingEntry(FStringView RootDirectory, FStringView AssetPrefix,
                        UClass *AssetClass = UObject::StaticClass());
-    FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UScriptStruct *AssetClass);
+    FAssetLoadingEntry(FStringView RootDirectory, FStringView AssetPrefix, UScriptStruct *AssetClass);
 
     template <typename T>
         requires UE::Assets::AssetClassType<T>

@@ -88,7 +88,7 @@ UK2Node_VariantCastBase::FCastFunctionInfo UK2Node_SoftVariantCast::GetPerformCa
 }
 
 void UK2Node_SoftVariantCast::MakeAdditionalPinLinks(UK2Node &CallPerformCast) const {
-    static const FName Class_ParamName(TEXT("Class"));
+    static const FName Class_ParamName(TEXT("Type"));
     auto CallCreateClassPin = CallPerformCast.FindPinChecked(Class_ParamName);
     CallCreateClassPin->DefaultObject = OutputType;
 }
