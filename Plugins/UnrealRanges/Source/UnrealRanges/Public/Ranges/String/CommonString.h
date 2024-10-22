@@ -81,7 +81,7 @@ namespace UE::Ranges {
      * @return An FStringView representation of the string.
      */
     template <typename T>
-        requires std::constructible_from<FCommonString, T>
+        requires std::constructible_from<FCommonString, T> && !std::same_as<std::remove_cvref_t<T>, FCommonString>
     FStringView GetStringView(T&& String) {
         if constexpr (std::same_as<std::remove_cvref_t<T>, FText>) {
             return String.ToString();

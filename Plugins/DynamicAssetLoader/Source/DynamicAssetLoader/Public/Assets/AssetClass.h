@@ -184,14 +184,14 @@ namespace UE::Assets {
 
             if constexpr (std::is_base_of_v<UObject, T>) {
                 Settings->AssetClasses.Emplace(Key,
-                                               FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+                                               FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
                 if constexpr (Ranges::CoreStructType<T>) {
                     Settings->AssetClasses.Emplace(
-                        Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, TBaseStructure<T>::Get()));
+                        Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, TBaseStructure<T>::Get()));
                 } else {
                     Settings->AssetClasses.Emplace(
-                        Key, FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticStruct()));
+                        Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticStruct()));
                 }
             }
         }
@@ -280,7 +280,7 @@ namespace UE::Assets {
             }
 
             Settings->BlueprintClasses.Emplace(Key,
-                                               FAssetLoadingEntry(DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+                                               FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
         }
 
         FName Key;

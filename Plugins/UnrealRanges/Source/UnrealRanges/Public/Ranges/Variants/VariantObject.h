@@ -146,6 +146,29 @@ namespace UE::Ranges {
             return !IsType<std::nullptr_t>() && ContainedObject != nullptr;
         }
 
+        /**
+         * Applies a given functor to the currently contained value of the variant object,
+         * ensuring that the type index is valid and not representing a nullptr. The function
+         * dispatches to the appropriate function implementation based on the type index.
+         *
+         * @param Functor The callable object (functor) that will be applied to the variant's content.
+         * @return The result of invoking the functor on the contained object.
+         */
+        template <typename F>
+            requires (std::invocable<F, T*> && ...)
+        constexpr decltype(auto) Visit(F&& Functor) const {
+            check(TypeIndex != GetTypeIndex<std::nullptr_t>())
+            static constexpr std::array VisitFunctions = { &TVariantObject::VisitSingle<T, F>... };
+            return ranges::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, Forward<F>(Functor));
+        }
+
+    private:
+        template <typename U, typename F>
+            requires (std::same_as<T, U> || ...) && std::invocable<F, U*>
+        static constexpr decltype(auto) VisitSingle(UObject* Object, F&& Functor) {
+            return ranges::invoke(Forward<F>(Functor), static_cast<U*>(Object));
+        }
+
       protected:
         /**
          * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
