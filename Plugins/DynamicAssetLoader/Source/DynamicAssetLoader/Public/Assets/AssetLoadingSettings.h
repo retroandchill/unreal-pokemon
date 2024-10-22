@@ -135,9 +135,9 @@ class DYNAMICASSETLOADER_API UAssetLoadingSettings : public UDeveloperSettings {
     /**
      * Edit the defaults for asset classes that are natively defined in code
      */
-    UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys))
+    UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Config, Category = "Assets", meta = (ReadOnlyKeys))
     TMap<FName, FAssetLoadingEntry> AssetClasses;
 
-    UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Category = "Assets", meta = (ReadOnlyKeys))
+    UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Config, Category = "Assets", meta = (ReadOnlyKeys))
     TMap<FName, FAssetLoadingEntry> BlueprintClasses;
 };

@@ -32,8 +32,12 @@ public:
     void Initialize(FName InAssetKey);
 
     void AllocateDefaultPins() override;
+    void PostReconstructNode() override;
+    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
+    void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
+    void GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const override;
     void ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
     FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
@@ -48,8 +52,29 @@ public:
     /** Get the result output pin */
     UEdGraphPin *GetResultPin() const;
 
-    /** Get the type of the TableRow to return */
+
+    /**
+     * Retrieves the class type of the asset associated with this node.
+     *
+     * This method returns the `UClass` corresponding to the asset key that
+     * is currently set for this node. If no asset key is found, it returns
+     * the default `UObject` class type.
+     *
+     * @return A pointer to the `UClass` type of the asset or a default `UObject` class type.
+     */
     UClass *GetAssetClassType() const;
+
+    /**
+     * Sets the wildcard mode for this node.
+     *
+     * This method allows the node to switch between wildcard mode and
+     * a specific type mode. When in wildcard mode, the node can handle multiple
+     * asset types dynamically.
+     *
+     * @param bNewWildcardMode Flag indicating whether the node should enter wildcard mode (`true`)
+     * or exit wildcard mode (`false`).
+     */
+    void SetWildcardMode(bool bNewWildcardMode);
 
 protected:
     /**
@@ -94,8 +119,14 @@ protected:
     virtual FName GetLoadFunctionName() const ABSTRACT_METHOD;
 
 private:
+    void ToggleWildcard();
+    void RefreshAssetNamePin() const;
+    
     UPROPERTY()
     FName AssetKey;
+
+    UPROPERTY()
+    bool bWildcardMode = true;
 
     /** Tooltip text for this node. */
     FText NodeTooltip;

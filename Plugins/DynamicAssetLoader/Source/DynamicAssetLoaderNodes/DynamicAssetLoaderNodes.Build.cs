@@ -24,7 +24,9 @@ public class DynamicAssetLoaderNodes : ModuleRules
                 "UnrealEd",
                 "BlueprintGraph",
                 "KismetCompiler",
-                "UnrealRanges", "UnrealRangesBlueprintNodes"
+                "UnrealRanges", 
+                "UnrealRangesBlueprintNodes",
+                "ToolMenus"
             }
         );
     }

@@ -8,6 +8,8 @@
 #include "KismetCompiler.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetLoadingSettings.h"
+#include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OrElse.h"
@@ -31,8 +33,11 @@ void UK2Node_DynamicAssetLoadBase::AllocateDefaultPins() {
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, AssetNotFoundPinName);
 
     // AssetNamePin
-    auto AssetNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, AssetNamePinName);
-    SetPinToolTip(*AssetNamePin, NSLOCTEXT("K2Node", "DynamicAssetLoadBase AssetNamePinDescription", "The name of the asset to load"));
+    auto AssetNamePin = CreatePin(EGPD_Input,
+                                  bWildcardMode ? UEdGraphSchema_K2::PC_Wildcard : UEdGraphSchema_K2::PC_String,
+                                  AssetNamePinName);
+    SetPinToolTip(*AssetNamePin,
+                  NSLOCTEXT("K2Node", "DynamicAssetLoadBase AssetNamePinDescription", "The name of the asset to load"));
 
     // Result pin
     auto Setting = GetDefault<UAssetLoadingSettings>();
@@ -46,11 +51,45 @@ void UK2Node_DynamicAssetLoadBase::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
+void UK2Node_DynamicAssetLoadBase::PostReconstructNode() {
+    Super::PostReconstructNode();
+    RefreshAssetNamePin();
+}
+
+bool UK2Node_DynamicAssetLoadBase::IsConnectionDisallowed(const UEdGraphPin *MyPin, const UEdGraphPin *OtherPin,
+                                                          FString &OutReason) const {
+    if (MyPin != GetAssetNamePin() || MyPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) {
+        return false;
+    }
+
+    static std::array ValidPinTypes = {
+        UEdGraphSchema_K2::PC_Name,
+        UEdGraphSchema_K2::PC_String,
+        UEdGraphSchema_K2::PC_Text
+    };
+    if (!std::ranges::contains(ValidPinTypes, OtherPin->PinType.PinCategory)) {
+        OutReason = TEXT("Not a valid string type structure!");
+        return true;
+    }
+
+    return false;
+}
+
+void UK2Node_DynamicAssetLoadBase::NotifyPinConnectionListChanged(UEdGraphPin *Pin) {
+    Super::NotifyPinConnectionListChanged(Pin);
+
+    if (Pin != GetAssetNamePin()) {
+        return;
+    }
+
+    RefreshAssetNamePin();
+}
+
 FText UK2Node_DynamicAssetLoadBase::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     auto LocFormat = GetNodeTitleFormat();
     if (auto AssetClass = GetDefault<UAssetLoadingSettings>()->AssetClasses.Find(AssetKey); AssetClass == nullptr) {
         return FText::FormatNamed(LocFormat, "Asset",
-            NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "GetNodeTitle Asset", "Asset"));
+                                  NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "GetNodeTitle Asset", "Asset"));
     }
 
     if (CachedNodeTitle.IsOutOfDate(this)) {
@@ -58,7 +97,7 @@ FText UK2Node_DynamicAssetLoadBase::GetNodeTitle(ENodeTitleType::Type TitleType)
         auto &ClassType = Setting->AssetClasses.FindChecked(AssetKey);
 
         CachedNodeTitle.SetCachedText(FText::FormatNamed(LocFormat,
-            TEXT("AssetClass"), ClassType.DisplayName), this);
+                                                         TEXT("AssetClass"), ClassType.DisplayName), this);
     }
 
     return CachedNodeTitle;
@@ -66,6 +105,42 @@ FText UK2Node_DynamicAssetLoadBase::GetNodeTitle(ENodeTitleType::Type TitleType)
 
 FText UK2Node_DynamicAssetLoadBase::GetTooltipText() const {
     return NodeTooltip;
+}
+
+void UK2Node_DynamicAssetLoadBase::GetNodeContextMenuActions(UToolMenu *Menu,
+                                                             UGraphNodeContextMenuContext *Context) const {
+    Super::GetNodeContextMenuActions(Menu, Context);
+
+    if (Context->bIsDebugging) {
+        return;
+    }
+
+    FText MenuEntryTitle = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeStringLiteralTitle",
+                                     "Convert to String-literal parameter");
+    FText MenuEntryTooltip = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeStringLiteralTooltip",
+                                       "Converts the asset name pin to a string literal parameter, allowing a hard-coded value to be used");
+
+    if (!bWildcardMode) {
+        MenuEntryTitle = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeWildcardTitle",
+                                   "Convert to wildcard parameter");
+        MenuEntryTooltip = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeWildcardTooltip",
+                                     "Converts the asset name pin to a wildcard parameter, allowing a Name, String or Text pin to be connected without conversion");
+    }
+
+    FToolMenuSection &Section = Menu->AddSection("UK2Node_DynamicAssetLoadBase",
+                                                 NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "SearchHeader",
+                                                           "Parameters"));
+
+    Section.AddMenuEntry(
+        "ToggleWildcard",
+        MenuEntryTitle,
+        MenuEntryTooltip,
+        FSlateIcon(),
+        FUIAction(
+            FExecuteAction::CreateUObject(const_cast<UK2Node_DynamicAssetLoadBase *>(this),
+                                          &UK2Node_DynamicAssetLoadBase::ToggleWildcard)
+            )
+        );
 }
 
 void UK2Node_DynamicAssetLoadBase::ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
@@ -126,9 +201,9 @@ void UK2Node_DynamicAssetLoadBase::GetMenuActions(FBlueprintActionDatabaseRegist
 
         for (auto Settings = GetDefault<UAssetLoadingSettings>(); auto &[Key, AssetClass] : Settings->AssetClasses) {
             if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(
-                    &AssetClass.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), true)) {
+                &AssetClass.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), true)) {
                 continue;
-                    }
+            }
 
             UBlueprintNodeSpawner *Spawner = UBlueprintNodeSpawner::Create(ActionKey);
             check(Spawner)
@@ -144,38 +219,62 @@ FText UK2Node_DynamicAssetLoadBase::GetMenuCategory() const {
     return Super::GetMenuCategory();
 }
 
-UEdGraphPin * UK2Node_DynamicAssetLoadBase::GetAssetFoundPin() const {
+UEdGraphPin *UK2Node_DynamicAssetLoadBase::GetAssetFoundPin() const {
     UEdGraphPin *Pin = FindPinChecked(UEdGraphSchema_K2::PN_Then);
     check(Pin->Direction == EGPD_Output)
     return Pin;
 }
 
-UEdGraphPin * UK2Node_DynamicAssetLoadBase::GetAssetNamePin() const {
+UEdGraphPin *UK2Node_DynamicAssetLoadBase::GetAssetNamePin() const {
     UEdGraphPin *Pin = FindPinChecked(AssetNamePinName);
     check(Pin->Direction == EGPD_Input)
     return Pin;
 }
 
-UEdGraphPin * UK2Node_DynamicAssetLoadBase::GetAssetNotFoundPin() const {
+UEdGraphPin *UK2Node_DynamicAssetLoadBase::GetAssetNotFoundPin() const {
     UEdGraphPin *Pin = FindPinChecked(AssetNotFoundPinName);
     check(Pin->Direction == EGPD_Output)
     return Pin;
 }
 
-UEdGraphPin * UK2Node_DynamicAssetLoadBase::GetResultPin() const {
+UEdGraphPin *UK2Node_DynamicAssetLoadBase::GetResultPin() const {
     UEdGraphPin *Pin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
     check(Pin->Direction == EGPD_Output)
     return Pin;
 }
 
-UClass * UK2Node_DynamicAssetLoadBase::GetAssetClassType() const {
+UClass *UK2Node_DynamicAssetLoadBase::GetAssetClassType() const {
     auto Setting = GetDefault<UAssetLoadingSettings>();
     // clang-format off
     return &(UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
-        UE::Optionals::Map(&FAssetLoadingEntry::AssetClass) |
-        UE::Optionals::FlatMap(&FAssetClassType::TryGet<UClass>) |
-        UE::Optionals::OrElse(*UObject::StaticClass()));
+             UE::Optionals::Map(&FAssetLoadingEntry::AssetClass) |
+             UE::Optionals::FlatMap(&FAssetClassType::TryGet<UClass>) |
+             UE::Optionals::OrElse(*UObject::StaticClass()));
     // clang-format on
+}
+
+void UK2Node_DynamicAssetLoadBase::SetWildcardMode(bool bNewWildcardMode) {
+    if (bNewWildcardMode == bWildcardMode) {
+        return;
+    }
+
+    bWildcardMode = bNewWildcardMode;
+    if (Pins.Num() > 0) {
+        ReconstructNode();
+    }
+
+    if (bWildcardMode) {
+        return;
+    }
+
+    auto AssetNamePin = GetAssetNamePin();
+    // clang-format off
+    auto ToBreak = AssetNamePin->LinkedTo |
+                   UE::Ranges::Filter([](const UEdGraphPin *Pin) { return Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_String; }) |
+                   UE::Ranges::ToArray;
+    ToBreak | UE::Ranges::ForEach(AssetNamePin, &UEdGraphPin::BreakLinkTo);
+    // clang-format on
+    RefreshAssetNamePin();
 }
 
 void UK2Node_DynamicAssetLoadBase::SetPinToolTip(UEdGraphPin &MutatablePin, const FText &PinDescription) const {
@@ -187,4 +286,25 @@ void UK2Node_DynamicAssetLoadBase::SetPinToolTip(UEdGraphPin &MutatablePin, cons
     }
 
     MutatablePin.PinToolTip += FString(TEXT("\n")) + PinDescription.ToString();
+}
+
+void UK2Node_DynamicAssetLoadBase::ToggleWildcard() {
+    const FText TransactionTitle = bWildcardMode
+                                       ? NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "ToggleToString",
+                                                   "Convert to String param")
+                                       : NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "ToggleToWildcard",
+                                                   "Convert to Wildcard Param");
+    const FScopedTransaction Transaction(TransactionTitle);
+    Modify();
+    SetWildcardMode(!bWildcardMode);
+}
+
+void UK2Node_DynamicAssetLoadBase::RefreshAssetNamePin() const {
+    if (auto NamePin = GetAssetNamePin(); NamePin->LinkedTo.Num() > 0) {
+        check(NamePin->LinkedTo.Num() == 1)
+        auto Pin = NamePin->LinkedTo[0];
+        NamePin->PinType = Pin->PinType;
+    } else {
+        NamePin->PinType.PinCategory = bWildcardMode ? UEdGraphSchema_K2::PC_Wildcard : UEdGraphSchema_K2::PC_String;
+    }
 }
