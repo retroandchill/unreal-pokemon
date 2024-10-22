@@ -13,6 +13,7 @@ namespace UE::Ranges {
 
     /**
      * Concept used to check that a property get actually get a value out using a static method.
+     * 
      * @tparam T The type to validate the concept against.
      */
     template <typename T>
@@ -62,25 +63,27 @@ namespace UE::Ranges {
             return std::distance(Classes.begin(), ValidClass);
         }
 
+        /**
+         * Invokes the appropriate VisitSingle method based on the TypeIndex for the given data and functor.
+         *
+         * @param Data A pointer to the data to be passed to the VisitSingle method.
+         * @param Functor The functor to be invoked with the data.
+         * @return The result of invoking the VisitSingle method specified by the TypeIndex with the given data and functor.
+         * @tparam F The signature of the functional callback
+         */
         template <typename F>
         constexpr decltype(auto) Visit(const uint8* Data, F&& Functor) {
             std::array Invocations = { &TPropertyVisitor::VisitSingle<T, F>... };
             return ranges::invoke(Invocations[TypeIndex], Data, Forward<F>(Functor));
         }
 
+    private:
         template <typename U, typename F>
             requires (std::same_as<T, U> || ...)
         constexpr static decltype(auto) VisitSingle(const uint8* Data, F&& Functor) {
             return ranges::invoke(Forward<F>(Functor), U::GetPropertyValue(Data));
         }
-
-        template <typename U>
-            requires (std::same_as<T, U> || ...)
-        constexpr decltype(auto) GetPropertyValue(const uint8* Data) {
-            return U::GetPropertyValue(Data);
-        }
-
-    private:
+        
         size_t TypeIndex;
     };
     
