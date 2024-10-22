@@ -7,6 +7,7 @@
 #include "Ranges/Blueprints/BlueprintRuntimeUtils.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Optional/OrElseGet.h"
+#include "Ranges/String/CommonString.h"
 
 FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView AssetName) {
     FStringView Prefix;
@@ -41,7 +42,7 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const
 CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LoadDynamicAsset, FName, const FString&, UObject*&)
 DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
     P_GET_PROPERTY(FNameProperty, Identifier);
-    P_GET_PROPERTY(FStrProperty, AssetName)
+    P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
     P_GET_WILDCARD_PARAM(OutputProp, Output)
     P_FINISH
 
@@ -57,6 +58,9 @@ DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
                 NSLOCTEXT("UAssetLoader", "LoadDynamicAsset_NoAssetType", "The provided asset type is not a valid asset"));
         }
 
+        auto AssetNameString = UE::Ranges::ExtractCommonStringFromProperty(AssetNameProp, AssetNameData);
+        auto AssetName = UE::Ranges::GetStringView(AssetNameString);
+
         P_NATIVE_BEGIN
         P_GET_RESULT(EAssetLoadResult, Result);
         Result = Registration->LoadAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
@@ -69,7 +73,7 @@ DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
 CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LookupDynamicAsset, FName, const FString &, TSoftObjectPtr<> &)
 DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
     P_GET_PROPERTY(FNameProperty, Identifier);
-    P_GET_PROPERTY(FStrProperty, AssetName)
+    P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
     P_GET_WILDCARD_PARAM(OutputProp, Output)
     P_FINISH
 
@@ -84,6 +88,9 @@ DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
             throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
                 NSLOCTEXT("UAssetLoader", "LookupDynamicAsset_NoAssetType", "The provided asset type is not a valid asset"));
         }
+
+        auto AssetNameString = UE::Ranges::ExtractCommonStringFromProperty(AssetNameProp, AssetNameData);
+        auto AssetName = UE::Ranges::GetStringView(AssetNameString);
 
         P_NATIVE_BEGIN
         P_GET_RESULT(EAssetLoadResult, Result);
