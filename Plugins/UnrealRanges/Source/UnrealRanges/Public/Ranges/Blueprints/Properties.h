@@ -55,7 +55,7 @@ namespace UE::Ranges {
         constexpr static size_t GetTypeIndex(const FProperty* Property) {
             static std::array Classes = { T::StaticClass()... };
             auto ValidClass = ranges::find_if(Classes, [Property](const FFieldClass* Class) { return Property->IsA(Class); });
-            if (ValidClass != Classes.end()) {
+            if (ValidClass == Classes.end()) {
                 throw FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
                     NSLOCTEXT("TPropertyVisitor", "GetTypeIndex_Error", "Invalid property type!"));
             }

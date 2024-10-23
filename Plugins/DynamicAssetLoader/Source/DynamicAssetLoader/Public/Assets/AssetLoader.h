@@ -70,6 +70,14 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         }
     }
 
+    /**
+     * Creates a unique search key based on the provided base package name and asset name.
+     * The search key is constructed by formatting and combining these elements.
+     *
+     * @param BasePackageName The base package name to be used in the search key.
+     * @param AssetName The asset name to be used in the search key, which may contain a prefix.
+     * @return A combined string that represents the unique search key.
+     */
     static FString CreateSearchKey(FStringView BasePackageName, FStringView AssetName);
 
     /**
@@ -98,6 +106,13 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         return FindAssetByName<T>(BasePackageName.Path, AssetName);
     }
 
+    /**
+     * Looks up an asset by its base package name and asset name, returning an optional soft object reference if found.
+     *
+     * @param BasePackageName The base package name to search within.
+     * @param AssetName The name of the asset to search for.
+     * @return An optional soft object reference to the asset if found; otherwise, an empty optional.
+     */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
@@ -110,6 +125,13 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         return TOptional<TSoftObjectRef<T>>();
     }
 
+    /**
+     * Looks up an asset by its name within a specified base package.
+     *
+     * @param BasePackageName The directory path of the base package where the asset is located.
+     * @param AssetName The name of the asset to be looked up.
+     * @return An optional reference to the found asset, wrapped in TOptional.
+     */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TSoftObjectRef<T>> LookupAssetByName(const FDirectoryPath &BasePackageName,
@@ -132,6 +154,16 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     static EAssetLoadResult FindAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                             const FString &AssetName, UObject *&FoundAsset);
 
+    /**
+     * This method looks up an asset by name given a base package name and asset class.
+     *
+     * @param AssetClass The class type of the asset being searched for.
+     * @param BasePackageName The base directory path where the asset is located.
+     * @param AssetName The name of the asset to look up.
+     * @param FoundAsset A reference to a TSoftObjectPtr<> that will hold the located asset if found.
+     *
+     * @return Returns an EAssetLoadResult indicating whether the asset was found or not.
+     */
     UFUNCTION(BlueprintCallable, Category = Assets,
               meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
                       DynamicOutputParam = "FoundAsset", AutoCreateRefTerm = "BasePackageName",
@@ -141,14 +173,13 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, CustomThunk,
               meta = (CallableWithoutWorldContext, ExpandEnumAsExecs = "ReturnValue",
-                  CustomStructureParam = "FoundAsset"))
+                  CustomStructureParam = "AssetName,FoundAsset"))
     static EAssetLoadResult LoadDynamicAsset(FName Identifier, const FString &AssetName, UObject *&FoundAsset);
     DECLARE_FUNCTION(execLoadDynamicAsset);
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, CustomThunk,
-              meta = (CallableWithoutWorldContext, DeterminesOutputType = "AssetClass",
-                      DynamicOutputParam = "FoundAsset", ExpandEnumAsExecs = "ReturnValue",
-                      CustomStructureParam = "FoundAsset"))
+              meta = (CallableWithoutWorldContext, ExpandEnumAsExecs = "ReturnValue",
+                      CustomStructureParam = "AssetName,FoundAsset"))
     static EAssetLoadResult LookupDynamicAsset(FName Identifier, const FString &AssetName, TSoftObjectPtr<UObject> &FoundAsset);
     DECLARE_FUNCTION(execLookupDynamicAsset);
     
@@ -271,6 +302,19 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     static EAssetLoadResult ResolveAsset(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                          const TArray<FString> &Keys, UObject *&FoundAsset);
 
+    /**
+     * Resolves a soft asset reference by searching through a range of keys.
+     *
+     * This function uses a pipeline of operations including mapping, filtering,
+     * finding the first occurrence, and flattening optional values to locate
+     * and return the first resolved soft asset reference.
+     *
+     * @tparam T Type of the asset to resolve.
+     * @tparam R Type of the range of keys.
+     * @param BasePackageName The base package name used for asset lookup.
+     * @param Keys A range of keys to search through.
+     * @return An optional containing the first found soft asset reference or an unset optional if none are found.
+     */
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
                  std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
@@ -289,6 +333,14 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         // clang-format on
     }
 
+    
+    /**
+     * Resolves a soft asset reference given a base package name and a set of keys.
+     *
+     * @param BasePackageName The base package name to resolve the asset from.
+     * @param Keys A set of keys used for resolving the asset.
+     * @return An optional soft object reference to the resolved asset.
+     */
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
                  std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>

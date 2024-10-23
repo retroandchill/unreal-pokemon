@@ -173,6 +173,7 @@ void UK2Node_DynamicAssetLoadBase::ExpandNode(class FKismetCompilerContext &Comp
 
     CompilerContext.MovePinLinksToIntermediate(*ExecPin, *CallCreateExecutePin);
     CallCreateIdentifierPin->DefaultValue = AssetKey.ToString();
+    CallCreateAssetNamePin->PinType = AssetNamePin->PinType;
     CompilerContext.MovePinLinksToIntermediate(*AssetNamePin, *CallCreateAssetNamePin);
 
     CallCreateFoundAssetPin->PinType = ReturnValuePin->PinType;

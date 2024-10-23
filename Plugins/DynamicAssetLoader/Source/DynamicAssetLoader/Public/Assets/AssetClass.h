@@ -179,6 +179,12 @@ namespace UE::Assets {
         void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
             if (Settings->AssetClasses.Contains(Key)) {
+                auto &AssetClass = Settings->AssetClasses[Key];
+                if constexpr (std::is_base_of_v<UObject, T>) {
+                    AssetClass.AssetClass.Set(T::StaticClass());
+                } else if constexpr (Ranges::VariantObjectStruct<T>) {
+                    AssetClass.AssetClass.Set(Ranges::GetScriptStruct<T>());
+                }
                 return;
             }
 
@@ -186,13 +192,8 @@ namespace UE::Assets {
                 Settings->AssetClasses.Emplace(Key,
                                                FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
-                if constexpr (Ranges::CoreStructType<T>) {
-                    Settings->AssetClasses.Emplace(
-                        Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, TBaseStructure<T>::Get()));
-                } else {
-                    Settings->AssetClasses.Emplace(
-                        Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticStruct()));
-                }
+                Settings->AssetClasses.Emplace(
+                        Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, Ranges::GetScriptStruct<T>()));
             }
         }
 

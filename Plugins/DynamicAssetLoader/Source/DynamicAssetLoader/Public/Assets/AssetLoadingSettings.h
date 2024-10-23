@@ -133,11 +133,26 @@ class DYNAMICASSETLOADER_API UAssetLoadingSettings : public UDeveloperSettings {
 
   public:
     /**
-     * Edit the defaults for asset classes that are natively defined in code
+     * A mapping between asset identifiers and their corresponding asset loading
+     * entries. This TMap is used within the asset loading system to store configurations
+     * for different types of assets, encapsulating details such as the display name,
+     * directory path, and optional prefix for the assets. The map's keys are of type FName,
+     * while the values are FAssetLoadingEntry objects. This setting is read-only within
+     * Blueprints and has a fixed size, meaning entries cannot be added or removed at runtime.
+     * It is configured in the project settings under the "Assets" category.
      */
     UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Config, Category = "Assets", meta = (ReadOnlyKeys))
     TMap<FName, FAssetLoadingEntry> AssetClasses;
 
+    /**
+     * A mapping between asset identifiers and their corresponding asset loading
+     * entries. This TMap is specifically used for Blueprint classes and provides
+     * read-only access to the asset details. Each entry in the map includes
+     * information necessary for asset management, such as display name, directory
+     * path, and optional asset prefix. These entries are configured in the asset
+     * loading settings and are fixed in size, meaning new entries cannot be added or
+     * removed at runtime. It is configured in the project settings under the "Assets" category.
+     */
     UPROPERTY(EditDefaultsOnly, EditFixedSize, BlueprintReadOnly, Config, Category = "Assets", meta = (ReadOnlyKeys))
     TMap<FName, FAssetLoadingEntry> BlueprintClasses;
 };
