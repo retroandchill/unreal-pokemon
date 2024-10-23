@@ -96,7 +96,8 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
      * such as loading, casting, and asset management. The asset class type can be specified
      * conditionally and can be edited within the asset editor, unless the asset is marked as native.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Transient,
+        meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
     FAssetClassType AssetClass = FAssetClassType(UObject::StaticClass());
 
     /**

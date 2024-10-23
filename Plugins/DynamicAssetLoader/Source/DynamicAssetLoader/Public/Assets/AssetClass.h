@@ -277,6 +277,7 @@ namespace UE::Assets {
         void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
             if (Settings->BlueprintClasses.Contains(Key)) {
+                Settings->BlueprintClasses[Key].AssetClass.Set(T::StaticClass());
                 return;
             }
 
