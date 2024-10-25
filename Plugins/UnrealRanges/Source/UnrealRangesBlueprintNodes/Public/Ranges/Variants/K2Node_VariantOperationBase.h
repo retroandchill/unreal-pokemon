@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "K2Node.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
+#include "Ranges/Utilities/Methods.h"
 
 #include "K2Node_VariantOperationBase.generated.h"
 
@@ -23,6 +24,6 @@ public:
 
 protected:
     virtual void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                         UE::Ranges::IVariantRegistration& Registration) const PURE_VIRTUAL(AddMenuOptionsForStruct);
+                                         UE::Ranges::IVariantRegistration& Registration) ABSTRACT_METHOD
 
 };

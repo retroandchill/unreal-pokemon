@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "K2Node.h"
 #include "K2Node_VariantOperationBase.h"
+#include "Ranges/Utilities/Methods.h"
 
 #include "K2Node_VariantCastBase.generated.h"
 
@@ -35,15 +36,15 @@ public:
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
 protected:
-    virtual void CreateInputAndOutputPins() PURE_VIRTUAL(CreateInputAndOutputPins);
+    virtual void CreateInputAndOutputPins() ABSTRACT_METHOD
     UEdGraphPin* GetCastFailedPin() const;
 
     virtual void MakeAdditionalPinLinks(UK2Node& CallPerformCast) const;
-    virtual UEdGraphPin* GetInputPin() const PURE_VIRTUAL(GetInputPin, return nullptr;);
-    virtual UEdGraphPin* GetOutputPin() const PURE_VIRTUAL(GetOutputPin, return nullptr;);
+    virtual UEdGraphPin* GetInputPin() const ABSTRACT_METHOD
+    virtual UEdGraphPin* GetOutputPin() const ABSTRACT_METHOD
     UEdGraphPin* GetCastSucceededPin() const;
     
-    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) PURE_VIRTUAL(GetPerformCastNode, return FCastFunctionInfo(););
+    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) ABSTRACT_METHOD
 
 private:
     void TogglePurity();
