@@ -156,7 +156,7 @@ namespace UE::Ranges {
          */
         template <typename F>
             requires (std::invocable<F, T*> && ...)
-        constexpr decltype(auto) Visit(F&& Functor) const {
+        decltype(auto) Visit(F&& Functor) const {
             check(TypeIndex != GetTypeIndex<std::nullptr_t>())
             static constexpr std::array VisitFunctions = { &TVariantObject::VisitSingle<T, F>... };
             return ranges::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, Forward<F>(Functor));
