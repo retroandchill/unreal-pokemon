@@ -52,7 +52,7 @@ namespace UE::Ranges {
          * @return The index of the property type if found within the predefined set of classes.
          * @throws FInvalidArgumentException if the property type is not found within the predefined set of classes.
          */
-        constexpr static size_t GetTypeIndex(const FProperty* Property) {
+        static size_t GetTypeIndex(const FProperty* Property) {
             static std::array Classes = { T::StaticClass()... };
             auto ValidClass = ranges::find_if(Classes, [Property](const FFieldClass* Class) { return Property->IsA(Class); });
             if (ValidClass == Classes.end()) {
