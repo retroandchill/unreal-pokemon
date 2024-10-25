@@ -11,7 +11,6 @@ public class UnrealPokemonEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
-		CppStandard = CppStandardVersion.Latest;
 		RegisterModulesCreatedByRider();
 	}
 

@@ -14,6 +14,10 @@
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OrElse.h"
 
+THIRD_PARTY_INCLUDES_START
+#include <range/v3/algorithm/contains.hpp>
+THIRD_PARTY_INCLUDES_END
+
 
 static const FName AssetNamePinName = "AssetName";
 static const FName AssetNotFoundPinName = "AssetNotFound";
@@ -67,7 +71,7 @@ bool UK2Node_DynamicAssetLoadBase::IsConnectionDisallowed(const UEdGraphPin *MyP
         UEdGraphSchema_K2::PC_String,
         UEdGraphSchema_K2::PC_Text
     };
-    if (!std::ranges::contains(ValidPinTypes, OtherPin->PinType.PinCategory)) {
+    if (!ranges::contains(ValidPinTypes, OtherPin->PinType.PinCategory)) {
         OutReason = TEXT("Not a valid string type structure!");
         return true;
     }
