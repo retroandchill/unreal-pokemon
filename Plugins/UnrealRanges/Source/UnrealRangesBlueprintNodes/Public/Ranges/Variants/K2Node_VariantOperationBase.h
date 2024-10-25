@@ -24,6 +24,6 @@ public:
 
 protected:
     virtual void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                         UE::Ranges::IVariantRegistration& Registration) ABSTRACT_METHOD
+                                         UE::Ranges::IVariantRegistration& Registration) const ABSTRACT_METHOD;
 
 };
