@@ -82,13 +82,13 @@ namespace UE::Assets {
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
 
-            if constexpr (std::is_base_of_v<UObject, T>) {
+            if constexpr (std::is_base_of_v<UObject, U>) {
                 return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
             } else {
-                static_assert(Ranges::VariantObjectStruct<T>);
+                static_assert(Ranges::VariantObjectStruct<U>);
                 return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
                        Optionals::Map([](const TSoftObjectRef<> &Object) {
-                           return T::SoftPtrType(Object.ToSoftObjectPtr());
+                           return typename U::SoftPtrType(Object.ToSoftObjectPtr());
                        });
             }
         }
@@ -141,10 +141,10 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, U>) {
                 return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
             } else {
-                static_assert(Ranges::VariantObjectStruct<T>);
+                static_assert(Ranges::VariantObjectStruct<U>);
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
                        Optionals::Map([](const TSoftObjectRef<> &Object) {
-                           return T::SoftPtrType(Object.ToSoftObjectPtr());
+                           return typename U::SoftPtrType(Object.ToSoftObjectPtr());
                        });
             }
         }

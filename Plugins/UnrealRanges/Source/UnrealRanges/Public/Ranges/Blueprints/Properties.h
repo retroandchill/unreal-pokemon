@@ -73,7 +73,7 @@ namespace UE::Ranges {
          */
         template <typename F>
         constexpr decltype(auto) Visit(const uint8* Data, F&& Functor) {
-            std::array Invocations = { &TPropertyVisitor::VisitSingle<T, F>... };
+            constexpr std::array Invocations = { &TPropertyVisitor::VisitSingle<T, F>... };
             return ranges::invoke(Invocations[TypeIndex], Data, Forward<F>(Functor));
         }
 

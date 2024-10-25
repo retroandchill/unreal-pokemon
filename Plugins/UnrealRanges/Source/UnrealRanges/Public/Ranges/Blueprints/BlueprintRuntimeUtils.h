@@ -36,7 +36,7 @@ namespace UE::Ranges {
     IVariantRegistration& GetVariantRegistration(const FStructProperty &Property);
 
     template <typename T>
-        requires !std::is_reference_v<T>
+        requires (!std::is_reference_v<T>)
     constexpr auto DefaultReturnValue() {
         if constexpr (std::is_void_v<T>) {
             // No-op
