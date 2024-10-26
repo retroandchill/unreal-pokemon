@@ -49,7 +49,7 @@ void UBattlerExpPanel::AnimateGain(float MaxDuration) {
 }
 
 void UBattlerExpPanel::BindOnAnimationComplete(FSimpleDelegate &&Callback) {
-    OnGainAnimationComplete.Add(MoveTemp(Callback));
+    OnGainAnimationComplete.Add(std::move(Callback));
 }
 
 void UBattlerExpPanel::UpdateExpBarPercent(float NewPercent) {

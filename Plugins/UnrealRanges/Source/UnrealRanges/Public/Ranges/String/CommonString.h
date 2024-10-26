@@ -42,13 +42,13 @@ namespace UE::Ranges {
             if constexpr (std::is_lvalue_reference_v<T>) {
                 return FCommonString(FStringView(Value.ToString()));
             } else {
-                return FCommonString(Forward<T>(Value));
+                return FCommonString(std::forward<T>(Value));
             }
         } else if constexpr (std::same_as<std::remove_cvref_t<T>, FString>) {
             if constexpr (std::is_lvalue_reference_v<T>) {
-                return FCommonString(FStringView(Forward<T>(Value)));
+                return FCommonString(FStringView(std::forward<T>(Value)));
             } else {
-                return FCommonString(Forward<T>(Value));
+                return FCommonString(std::forward<T>(Value));
             }
         } else {
             return FCommonString(FStringView(Value));

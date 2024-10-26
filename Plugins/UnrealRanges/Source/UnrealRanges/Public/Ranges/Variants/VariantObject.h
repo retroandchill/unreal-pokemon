@@ -159,14 +159,14 @@ namespace UE::Ranges {
         decltype(auto) Visit(F &&Functor) const {
             check(TypeIndex != GetTypeIndex<std::nullptr_t>())
             static constexpr std::array VisitFunctions = {&TVariantObject::VisitSingle<T, F>...};
-            return ranges::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, Forward<F>(Functor));
+            return ranges::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, std::forward<F>(Functor));
         }
 
       private:
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...) && std::invocable<F, U *>
         static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor) {
-            return ranges::invoke(Forward<F>(Functor), static_cast<U *>(Object));
+            return ranges::invoke(std::forward<F>(Functor), static_cast<U *>(Object));
         }
 
       protected:

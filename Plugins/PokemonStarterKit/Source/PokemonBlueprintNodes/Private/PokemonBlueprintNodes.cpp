@@ -3,7 +3,7 @@
 
 void FPokemonBlueprintNodesModule::StartupModule() {
     auto PinFactory = MakeShared<FPokemonDataGraphPinFactory>();
-    FEdGraphUtilities::RegisterVisualPinFactory(MoveTemp(PinFactory));
+    FEdGraphUtilities::RegisterVisualPinFactory(std::move(PinFactory));
 }
 
 void FPokemonBlueprintNodesModule::ShutdownModule() {

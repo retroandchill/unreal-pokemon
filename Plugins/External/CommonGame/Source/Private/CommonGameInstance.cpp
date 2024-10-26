@@ -18,7 +18,7 @@ UCommonGameInstance::UCommonGameInstance(const FObjectInitializer &ObjectInitial
 
 void UCommonGameInstance::HandleSystemMessage(FGameplayTag MessageType, FText Title, FText Message) {
     ULocalPlayer *FirstPlayer = GetFirstGamePlayer();
-    // Forward severe ones to the error dialog for the first player
+    // std::forward severe ones to the error dialog for the first player
     if (FirstPlayer && MessageType.MatchesTag(FCommonUserTags::SystemMessage_Error)) {
         if (UCommonMessagingSubsystem *Messaging = FirstPlayer->GetSubsystem<UCommonMessagingSubsystem>()) {
             Messaging->ShowError(UCommonGameDialogDescriptor::CreateConfirmationOk(Title, Message));

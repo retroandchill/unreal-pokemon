@@ -6,7 +6,7 @@
 
 FShadowedRichTextLayoutMarshaller::FShadowedRichTextLayoutMarshaller(TArray<TSharedRef<ITextDecorator>> InDecorators,
                                                                      const ISlateStyle *const InDecoratorStyleSet)
-    : FRichTextLayoutMarshaller(MoveTemp(InDecorators), InDecoratorStyleSet) {
+    : FRichTextLayoutMarshaller(std::move(InDecorators), InDecoratorStyleSet) {
     // InlineDecorators.Add(MakeShared)
 }
 
@@ -14,7 +14,7 @@ FShadowedRichTextLayoutMarshaller::FShadowedRichTextLayoutMarshaller(TSharedPtr<
                                                                      TSharedPtr<IRichTextMarkupWriter> InWriter,
                                                                      TArray<TSharedRef<ITextDecorator>> InDecorators,
                                                                      const ISlateStyle *const InDecoratorStyleSet)
-    : FRichTextLayoutMarshaller(MoveTemp(InParser), MoveTemp(InWriter), MoveTemp(InDecorators), InDecoratorStyleSet) {
+    : FRichTextLayoutMarshaller(std::move(InParser), std::move(InWriter), std::move(InDecorators), InDecoratorStyleSet) {
 }
 
 void FShadowedRichTextLayoutMarshaller::AppendRunsForText(

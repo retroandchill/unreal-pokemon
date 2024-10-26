@@ -45,7 +45,7 @@ namespace UE::Optionals {
          */
         template <typename T>
             requires std::same_as<std::remove_cv_t<T>, void>
-        struct TOptionalValueTraits<T*> {
+        struct TOptionalValueTraits<T *> {
             /**
              * The basic definition for how a return value should be stored in an optional.
              */

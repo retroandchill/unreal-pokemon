@@ -35,7 +35,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     auto MockAction1 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction1, GetPriority).WillByDefault(Return(2));
     ActionPointers.Add(MockAction1.Get());
-    Actions.Emplace(MoveTemp(MockAction1));
+    Actions.Emplace(std::move(MockAction1));
 
     auto MockAction2 = MakeUnique<FMockBattleAction>();
     CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler2, FMockBattler, MockBattler2);
@@ -48,7 +48,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ON_CALL(*MockAction2, GetBattler).WillByDefault(ReturnRef(Battler2));
     Battler2Abilities->GetCoreAttributes()->InitSpeed(20);
     ActionPointers.Add(MockAction2.Get());
-    Actions.Emplace(MoveTemp(MockAction2));
+    Actions.Emplace(std::move(MockAction2));
 
     auto MockAction3 = MakeUnique<FMockBattleAction>();
     CREATE_MOCK_ACTOR(World.Get(), IBattler, Battler3, FMockBattler, MockBattler3);
@@ -61,7 +61,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ON_CALL(*MockAction3, GetBattler).WillByDefault(ReturnRef(Battler3));
     Battler3Abilities->GetCoreAttributes()->InitSpeed(60);
     ActionPointers.Add(MockAction3.Get());
-    Actions.Emplace(MoveTemp(MockAction3));
+    Actions.Emplace(std::move(MockAction3));
 
     auto &Phase = UReflectionUtils::GetMutablePropertyValue<EBattlePhase>(Battle, "Phase");
     Phase = EBattlePhase::Selecting;
@@ -117,7 +117,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     auto MockAction1 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction1, CanExecute).WillByDefault(Return(false));
     ON_CALL(*MockAction1, IsExecuting).WillByDefault(Return(false));
-    ActionQueue.Enqueue(MoveTemp(MockAction1));
+    ActionQueue.Enqueue(std::move(MockAction1));
 
     auto MockAction2 = MakeUnique<FMockBattleAction>();
     ON_CALL(*MockAction2, CanExecute).WillByDefault(Return(true));
@@ -127,7 +127,7 @@ bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) 
     CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
     ON_CALL(*MockAction2, IsComplete).WillByDefault(Return(true));
     auto Action2 = MockAction2.Get();
-    ActionQueue.Enqueue(MoveTemp(MockAction2));
+    ActionQueue.Enqueue(std::move(MockAction2));
 
     Battle->TickActor(1, LEVELTICK_All, TickFunction);
     UE_ASSERT_TRUE(ActionQueue.Peek()->Get() == Action2);

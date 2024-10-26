@@ -41,6 +41,6 @@ namespace Pokemon::Items {
     template <typename T, typename... A>
     concept FieldItem =
         std::is_base_of_v<UFieldItemEffect, T> && requires(T &Effect, const FItem &Item, int32 Quantity, A &&...Args) {
-            Effect.Use(Item, Quantity, Forward<A>(Args)...);
+            Effect.Use(Item, Quantity, std::forward<A>(Args)...);
         };
 } // namespace Pokemon::Items

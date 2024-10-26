@@ -18,7 +18,7 @@ struct TSoftObjectRef {
 
     template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...>
-    explicit TSoftObjectRef(A &&...Args) : Ptr(Forward<A>(Args)...){ check(IsAssetValid())
+    explicit TSoftObjectRef(A &&...Args) : Ptr(std::forward<A>(Args)...){ check(IsAssetValid())
 }
 
 /**
@@ -140,6 +140,6 @@ namespace UE::Optionals {
             return TOptional<TSoftObjectRef<T>>();
         }
 
-        return TOptional<TSoftObjectRef<T>>(TSoftObjectRef<T>(MoveTemp(Ptr)));
+        return TOptional<TSoftObjectRef<T>>(TSoftObjectRef<T>(std::move(Ptr)));
     }
 } // namespace UE::Optionals

@@ -6,8 +6,8 @@ DEFINE_INJECTABLE_DEPENDENCY(UUtility_TakeItemFromPokemon)
 
 void UUtility_TakeItemFromPokemon::Execute(const TScriptInterface<IPokemon> &Pokemon, FSimpleDelegate &&ItemTaken,
                                            FSimpleDelegate &&ItemNotTaken) {
-    OnItemTaken.Add(MoveTemp(ItemTaken));
-    OnItemNotTaken.Add(MoveTemp(ItemNotTaken));
+    OnItemTaken.Add(std::move(ItemTaken));
+    OnItemNotTaken.Add(std::move(ItemNotTaken));
     Execute(Pokemon);
 }
 

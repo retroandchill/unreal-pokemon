@@ -337,7 +337,7 @@ namespace UE::Ranges {
         F##StructName() = default;                                                                                     \
         template <typename... T>                                                                                       \
             requires std::constructible_from<TVariantObject, T...>                                                     \
-        explicit F##StructName(T &&...Args) : TVariantObject(Forward<T>(Args)...) {                                    \
+        explicit F##StructName(T &&...Args) : TVariantObject(std::forward<T>(Args)...) {                               \
         }                                                                                                              \
         void Reset() {                                                                                                 \
             SetUnchecked(nullptr);                                                                                     \
@@ -349,7 +349,7 @@ namespace UE::Ranges {
         FSoft##StructName() = default;                                                                                 \
         template <typename... T>                                                                                       \
             requires std::constructible_from<TSoftVariantObject, T...>                                                 \
-        explicit FSoft##StructName(T &&...Args) : TSoftVariantObject(Forward<T>(Args)...) {                            \
+        explicit FSoft##StructName(T &&...Args) : TSoftVariantObject(std::forward<T>(Args)...) {                       \
         }                                                                                                              \
     };                                                                                                                 \
     template <>                                                                                                        \

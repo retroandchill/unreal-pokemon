@@ -88,7 +88,7 @@ TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterfa
 }
 
 TScriptInterface<IStorageBox> UDefaultStorageSystem::CreateStorageBox(FText &&BoxName, int32 BoxCapacity) {
-    return UnrealInjector::NewInjectedDependency<IStorageBox>(this, MoveTemp(BoxName), BoxCapacity);
+    return UnrealInjector::NewInjectedDependency<IStorageBox>(this, std::move(BoxName), BoxCapacity);
 }
 
 static FText GetDefaultBoxName(int32 Index) {

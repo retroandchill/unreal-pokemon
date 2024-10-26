@@ -7,7 +7,7 @@
 UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message) {
     auto Node = NewObject<UDisplayMessage>();
     Node->WorldContextObject = WorldContextObject;
-    Node->Message = MoveTemp(Message);
+    Node->Message = std::move(Message);
     return Node;
 }
 

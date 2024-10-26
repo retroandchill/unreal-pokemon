@@ -28,9 +28,9 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
             return TOptionalClosure<TOrInvoker<BindingType>>(
-                TOrInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+                TOrInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }
     };
 

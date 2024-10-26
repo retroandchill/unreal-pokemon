@@ -3,7 +3,7 @@
 #include "Battle/Transitions/BattleTransitionActor.h"
 
 FDelegateHandle ABattleTransitionActor::BindToOnComplete(FOnBattleTransitionComplete::FDelegate &&Binding) {
-    return OnBattleTransitionComplete.Add(MoveTemp(Binding));
+    return OnBattleTransitionComplete.Add(std::move(Binding));
 }
 
 void ABattleTransitionActor::CompleteTransition() {

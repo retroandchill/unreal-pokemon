@@ -22,7 +22,7 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TAllOfInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+        constexpr explicit TAllOfInvoker(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -33,7 +33,7 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R>
         bool operator()(R &&Range) const {
-            return ranges::all_of(Forward<R>(Range), Functor);
+            return ranges::all_of(std::forward<R>(Range), Functor);
         }
 
         template <typename R>
@@ -59,9 +59,9 @@ namespace UE::Ranges {
          */
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TAllOfInvoker<BindingType>>(
-                TAllOfInvoker<BindingType>(CreateBinding<A...>(Forward<A>(Args)...)));
+                TAllOfInvoker<BindingType>(CreateBinding<A...>(std::forward<A>(Args)...)));
         }
     };
 

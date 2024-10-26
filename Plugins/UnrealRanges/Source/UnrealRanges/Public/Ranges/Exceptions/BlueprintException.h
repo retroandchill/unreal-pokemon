@@ -22,7 +22,7 @@ namespace UE::Ranges {
             requires std::constructible_from<FBlueprintExceptionInfo, T...> &&
                          (sizeof...(T) != 1 || !(std::same_as<std::remove_cvref_t<T>, FBlueprintException> || ...))
         explicit FBlueprintException(T &&...Args)
-            : ExceptionInfo(Forward<T>(Args)...),
+            : ExceptionInfo(std::forward<T>(Args)...),
               NativeMessage(TCHAR_TO_ANSI(*ExceptionInfo.GetDescription().ToString())) {
         }
 

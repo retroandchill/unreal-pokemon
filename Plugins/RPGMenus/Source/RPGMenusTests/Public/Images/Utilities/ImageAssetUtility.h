@@ -5,46 +5,50 @@
 #include "CoreMinimal.h"
 #include "Images/ImageAsset.h"
 #include "UObject/Interface.h"
+
 #include "ImageAssetUtility.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable)
 class RPGMENUSTESTS_API UImageAssetUtility : public UObject {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    TArray<FImageAsset> CreateImageAssets(UTexture2D* Texture2D, const TScriptInterface<ISlateTextureAtlasInterface>& Sprite) const;
+    TArray<FImageAsset> CreateImageAssets(UTexture2D *Texture2D,
+                                          const TScriptInterface<ISlateTextureAtlasInterface> &Sprite) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    bool TryCreateImageAsset(const UObject* Object, FImageAsset& CreatedAsset) const;
+    bool TryCreateImageAsset(const UObject *Object, FImageAsset &CreatedAsset) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    bool GetTextureFromImageAsset(const FImageAsset& Asset, UTexture2D*& OutTexture) const;
+    bool GetTextureFromImageAsset(const FImageAsset &Asset, UTexture2D *&OutTexture) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    bool GetSpriteFromImageAsset(const FImageAsset& Asset, TScriptInterface<ISlateTextureAtlasInterface>& OutSprite) const;
+    bool GetSpriteFromImageAsset(const FImageAsset &Asset,
+                                 TScriptInterface<ISlateTextureAtlasInterface> &OutSprite) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    UObject* GetObjectFromImageAsset(const FImageAsset& CreatedAsset) const;
+    UObject *GetObjectFromImageAsset(const FImageAsset &CreatedAsset) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    FSoftImageAsset MakeSoftImageAsset(const FImageAsset& CreatedAsset) const;
+    FSoftImageAsset MakeSoftImageAsset(const FImageAsset &CreatedAsset) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    FSoftImageAsset MakeSoftImageAssetFromMaterial(const TSoftObjectPtr<UMaterialInterface>& Material) const;
-    
-    UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    bool TryMakeSoftImageAsset(const TSoftObjectPtr<UObject>& Object, FSoftImageAsset& OutSoftAsset) const;
+    FSoftImageAsset MakeSoftImageAssetFromMaterial(const TSoftObjectPtr<UMaterialInterface> &Material) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    bool GetSoftMaterialFromImageAsset(const FSoftImageAsset& Asset, TSoftObjectPtr<UMaterialInterface>& OutTexture) const;
+    bool TryMakeSoftImageAsset(const TSoftObjectPtr<UObject> &Object, FSoftImageAsset &OutSoftAsset) const;
 
     UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
-    bool LoadSynchronous(const FSoftImageAsset& SoftImageAsset, FImageAsset& OutAsset) const;
+    bool GetSoftMaterialFromImageAsset(const FSoftImageAsset &Asset,
+                                       TSoftObjectPtr<UMaterialInterface> &OutTexture) const;
+
+    UFUNCTION(BlueprintImplementableEvent, Category = UnitTesting)
+    bool LoadSynchronous(const FSoftImageAsset &SoftImageAsset, FImageAsset &OutAsset) const;
 
     UPROPERTY(EditDefaultsOnly, Category = UnitTesting)
     TObjectPtr<UTexture2D> TextureAsset;

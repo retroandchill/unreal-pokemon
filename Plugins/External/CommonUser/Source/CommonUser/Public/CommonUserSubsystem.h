@@ -496,7 +496,7 @@ class COMMONUSER_API UCommonUserSubsystem : public UGameInstanceSubsystem {
         FUserLoginRequest(UCommonUserInfo *InUserInfo, ECommonUserPrivilege InPrivilege,
                           ECommonUserOnlineContext InContext, FOnLocalUserLoginCompleteDelegate &&InDelegate)
             : UserInfo(TWeakObjectPtr<UCommonUserInfo>(InUserInfo)), DesiredPrivilege(InPrivilege),
-              DesiredContext(InContext), Delegate(MoveTemp(InDelegate)) {
+              DesiredContext(InContext), Delegate(std::move(InDelegate)) {
         }
 
         /** Which local user is trying to log on */

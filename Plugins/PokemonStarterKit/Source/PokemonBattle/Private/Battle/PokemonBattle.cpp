@@ -27,7 +27,7 @@ APokemonBattle::APokemonBattle() {
 }
 
 TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) {
-    Sides = MoveTemp(SidesIn);
+    Sides = std::move(SidesIn);
     return this;
 }
 
@@ -143,7 +143,7 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
     }
 
     FScopeLock Lock(&ActionMutex);
-    SelectedActions.Add(MoveTemp(Action));
+    SelectedActions.Add(std::move(Action));
     ActionCount++;
 }
 
@@ -228,7 +228,7 @@ void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
 }
 
 void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
-    OnBattleEnd.Add(MoveTemp(Callback));
+    OnBattleEnd.Add(std::move(Callback));
 }
 
 APawn *APokemonBattle::GetBattlePawn() const {
@@ -352,7 +352,7 @@ void APokemonBattle::BeginActionProcessing() {
     });
 
     for (auto &Action : SelectedActions) {
-        ActionQueue.Enqueue(MoveTemp(Action));
+        ActionQueue.Enqueue(std::move(Action));
     }
     SelectedActions.Reset();
 }

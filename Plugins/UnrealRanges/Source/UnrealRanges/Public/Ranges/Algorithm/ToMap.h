@@ -19,7 +19,7 @@ namespace UE::Ranges {
          * @param ValueFunctor The functor to call to get the values
          */
         constexpr TToMapInvoker(K &&KeyFunctor, V &&ValueFunctor)
-            : KeyFunctor(MoveTemp(KeyFunctor)), ValueFunctor(MoveTemp(ValueFunctor)) {
+            : KeyFunctor(std::move(KeyFunctor)), ValueFunctor(std::move(ValueFunctor)) {
         }
 
         /**
@@ -38,7 +38,7 @@ namespace UE::Ranges {
             for (RangeType Data : Range) {
                 auto Key = std::invoke(KeyFunctor, Data);
                 check(!Result.Contains(Key))
-                Result.Emplace(MoveTemp(Key), std::invoke(ValueFunctor, Data));
+                Result.Emplace(std::move(Key), std::invoke(ValueFunctor, Data));
             }
 
             return Result;
@@ -56,7 +56,7 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TToMapValueBinding(K &&Functor) : Functor(MoveTemp(Functor)) {
+        constexpr explicit TToMapValueBinding(K &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -67,9 +67,9 @@ namespace UE::Ranges {
          */
         template <typename... A>
         constexpr auto operator()(A &&...Args) {
-            using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TToMapInvoker<K, BindingType>>(
-                TToMapInvoker<K, BindingType>(MoveTemp(Functor), CreateBinding<A...>(Forward<A>(Args)...)));
+                TToMapInvoker<K, BindingType>(std::move(Functor), CreateBinding<A...>(std::forward<A>(Args)...)));
         }
 
       private:
@@ -86,8 +86,8 @@ namespace UE::Ranges {
          */
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
-            return TToMapValueBinding<BindingType>(CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
+            return TToMapValueBinding<BindingType>(CreateBinding<A...>(std::forward<A>(Args)...));
         }
     };
 

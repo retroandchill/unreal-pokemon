@@ -84,7 +84,7 @@ class DYNAMICASSETLOADERNODES_API UK2Node_DynamicAssetLoadBase : public UK2Node 
     template <typename T>
         requires std::convertible_to<std::remove_cvref_t<T>, FText>
     void SetNodeTooltip(T &&Text) {
-        NodeTooltip = Forward<T>(Text);
+        NodeTooltip = std::forward<T>(Text);
     }
 
     /**

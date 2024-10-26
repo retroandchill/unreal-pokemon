@@ -104,7 +104,7 @@ TArray<FString> USpriteLoader::CreatePokemonSpriteResolutionList(FName Species, 
         }
         auto FormattedName =
             FString::Format(TEXT("{0}{1}{2}{3}{4}"), {TrySubfolder, TrySpecies, TryForm, TryGender, TryShadow});
-        FormattedStrings.Add(MoveTemp(FormattedName));
+        FormattedStrings.Add(std::move(FormattedName));
     }
 
     return FormattedStrings;

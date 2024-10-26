@@ -285,7 +285,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
                  std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<T &> ResolveAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
-        return ResolveAsset<T, R>(BasePackageName.Path, Forward<R>(Keys));
+        return ResolveAsset<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
 
     /**
@@ -345,7 +345,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
                  std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
-        return ResolveSoftAsset<T, R>(BasePackageName.Path, Forward<R>(Keys));
+        return ResolveSoftAsset<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
 
     /**
@@ -384,7 +384,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
                  std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
     static TOptional<TNonNullSubclassOf<T>> ResolveClass(const FDirectoryPath &BasePackageName, R &&Keys) {
-        return ResolveClass<T, R>(BasePackageName.Path, Forward<R>(Keys));
+        return ResolveClass<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
 
     /**

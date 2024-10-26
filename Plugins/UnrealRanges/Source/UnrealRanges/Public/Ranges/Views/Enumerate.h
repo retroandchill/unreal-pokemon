@@ -21,7 +21,7 @@ namespace UE::Ranges {
         template <typename T>
             requires Indexable<T, size_t>
         constexpr auto operator()(T &&Container) const {
-            return Map([&Container](N Index) { return GetWithIndex<T, N>(Forward<T>(Container), Index); });
+            return Map([&Container](N Index) { return GetWithIndex<T, N>(std::forward<T>(Container), Index); });
         }
     };
 

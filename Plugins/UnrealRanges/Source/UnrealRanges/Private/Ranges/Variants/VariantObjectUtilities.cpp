@@ -80,7 +80,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
-        UObject* Object;
+        UObject *Object;
         P_NATIVE_BEGIN
         // clang-format off
             Object = StructInfo.GetValue(*StructProp, VariantPtr) |

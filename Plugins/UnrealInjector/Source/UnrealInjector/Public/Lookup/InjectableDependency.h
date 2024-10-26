@@ -31,7 +31,7 @@ namespace UnrealInjector {
     };
 
     template <typename T, typename... A>
-    concept InitializableFrom = requires(T Injection, A &&...Args) { Injection.Initialize(Forward<A>(Args)...); };
+    concept InitializableFrom = requires(T Injection, A &&...Args) { Injection.Initialize(std::forward<A>(Args)...); };
 
     template <typename T, typename... A>
     concept CanInitialize = (!InitializableFrom<T> && sizeof...(A) == 0) || InitializableFrom<T, A...>;
@@ -56,7 +56,7 @@ namespace UnrealInjector {
         auto Inject(UObject *Outer, A &&...Args) const {
             auto CreatedObject = CreateInjection(Outer, ClassPtr.LoadSynchronous());
             if constexpr (InitializableFrom<T, A...>) {
-                CreatedObject->Initialize(Forward<A>(Args)...);
+                CreatedObject->Initialize(std::forward<A>(Args)...);
             }
             return CreatedObject;
         }

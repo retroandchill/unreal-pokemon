@@ -20,7 +20,7 @@ namespace UE::Ranges {
         template <typename... T>
             requires std::constructible_from<FBlueprintException, T...> &&
                      (sizeof...(T) != 1 || !(std::derived_from<std::remove_cvref_t<T>, FVariantException> || ...))
-        explicit FVariantException(T &&...Args) : FBlueprintException(Forward<T>(Args)...) {
+        explicit FVariantException(T &&...Args) : FBlueprintException(std::forward<T>(Args)...) {
         }
     };
 } // namespace UE::Ranges

@@ -56,7 +56,7 @@ namespace UE::Ranges {
         template <typename... A>
             requires std::constructible_from<TSoftObjectPtr<>, A...>
         explicit TSoftVariantObject(A &&...Args)
-            : Ptr(Forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
+            : Ptr(std::forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
         /**
@@ -221,7 +221,7 @@ namespace UE::Ranges {
             auto &AssetManager = UAssetManager::Get();
             FAssetData Data;
             AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data);
-            return MoveTemp(Data);
+            return std::move(Data);
         }
 
         TSoftObjectPtr<> Ptr;

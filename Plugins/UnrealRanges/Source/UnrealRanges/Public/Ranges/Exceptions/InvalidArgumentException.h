@@ -20,7 +20,7 @@ namespace UE::Ranges {
             requires std::constructible_from<FBlueprintException, T...> &&
                      (sizeof...(T) != 1 ||
                       !(std::derived_from<std::remove_cvref_t<T>, FInvalidArgumentException> || ...))
-        explicit FInvalidArgumentException(T &&...Args) : FBlueprintException(Forward<T>(Args)...) {
+        explicit FInvalidArgumentException(T &&...Args) : FBlueprintException(std::forward<T>(Args)...) {
         }
     };
 } // namespace UE::Ranges

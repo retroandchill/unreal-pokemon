@@ -65,7 +65,7 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
     FaceDirection(MovementDirection);
     if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
         if (MoveCallback.IsSet()) {
-            auto Callback = MoveTemp(MoveCallback.GetValue());
+            auto Callback = std::move(MoveCallback.GetValue());
             MoveCallback.Reset();
             Callback();
         }
@@ -89,7 +89,7 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
         return;
     }
 
-    MoveCallback.Emplace(MoveTemp(MovementCompleteCallback));
+    MoveCallback.Emplace(std::move(MovementCompleteCallback));
     MoveInDirection(MovementDirection);
 }
 
@@ -301,7 +301,7 @@ void UGridBasedMovementComponent::MoveComplete() {
 
     // TODO: Decide if you want to refactor this at all. It might still be helpful to have for one time callbacks.
     if (MoveCallback.IsSet()) {
-        auto Callback = MoveTemp(MoveCallback.GetValue());
+        auto Callback = std::move(MoveCallback.GetValue());
         MoveCallback.Reset();
         Callback();
     }

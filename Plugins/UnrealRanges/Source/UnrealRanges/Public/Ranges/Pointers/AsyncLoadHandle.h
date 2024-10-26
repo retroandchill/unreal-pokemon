@@ -52,9 +52,9 @@ namespace UE::Ranges {
         void OnLoadComplete(F &&Functor, A &&...Args) {
             std::scoped_lock Lock(UpdateMutex);
             if (IsLoaded()) {
-                std::invoke(Forward<F>(Functor), Result, Forward<A>(Args)...);
+                std::invoke(std::forward<F>(Functor), Result, std::forward<A>(Args)...);
             } else {
-                AddToDelegate(OnCompleteDelegate, Forward<F>(Functor), Forward<A>(Args)...);
+                AddToDelegate(OnCompleteDelegate, std::forward<F>(Functor), std::forward<A>(Args)...);
             }
         }
 
@@ -64,9 +64,10 @@ namespace UE::Ranges {
         void OnLoadComplete(O &&Object, F &&Functor, A &&...Args) {
             std::scoped_lock Lock(UpdateMutex);
             if (IsLoaded()) {
-                std::invoke(Forward<F>(Functor), Forward<O>(Object), Result, Forward<A>(Args)...);
+                std::invoke(std::forward<F>(Functor), std::forward<O>(Object), Result, std::forward<A>(Args)...);
             } else {
-                AddToDelegate(OnCompleteDelegate, Forward<O>(Object), Forward<F>(Functor), Forward<A>(Args)...);
+                AddToDelegate(OnCompleteDelegate, std::forward<O>(Object), std::forward<F>(Functor),
+                              std::forward<A>(Args)...);
             }
         }
 

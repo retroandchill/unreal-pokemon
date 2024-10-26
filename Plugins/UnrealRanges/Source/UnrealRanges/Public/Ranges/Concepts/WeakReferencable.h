@@ -73,7 +73,7 @@ namespace UE::Ranges {
     template <typename T>
         requires WeakReference<T>
     FORCEINLINE auto ToStrongRef(T &&Ptr) {
-        return Detail::TIsWeakReference<std::remove_cvref_t<T>>::ToStrong(Forward<T>(Ptr));
+        return Detail::TIsWeakReference<std::remove_cvref_t<T>>::ToStrong(std::forward<T>(Ptr));
     }
 
 } // namespace UE::Ranges

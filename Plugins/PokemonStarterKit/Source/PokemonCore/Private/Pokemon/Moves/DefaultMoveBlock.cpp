@@ -96,7 +96,7 @@ TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32
 
 void UDefaultMoveBlock::LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) {
     auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_LearnMove>(Owner, Move, MoveTemp(AfterMoveLearned));
+    Subsystem->ExecuteUtilityFunction<UUtility_LearnMove>(Owner, Move, std::move(AfterMoveLearned));
 }
 
 TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {

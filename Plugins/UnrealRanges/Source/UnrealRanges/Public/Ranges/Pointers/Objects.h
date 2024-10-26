@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Blueprints/Properties.h"
+#include "Ranges/RangeConcepts.h"
 #include "Ranges/Utilities/Unreachable.h"
 
 namespace UE::Ranges {
@@ -17,7 +17,7 @@ namespace UE::Ranges {
      * @param Data A pointer to the raw data from which the property value will be interpreted.
      * @return A UObject pointer extracted from the provided property and data.
      */
-    UNREALRANGES_API UObject* GetObjectFromProperty(const FProperty *Property, const uint8 *Data);
+    UNREALRANGES_API UObject *GetObjectFromProperty(const FProperty *Property, const uint8 *Data);
 
     /**
      * Assigns a UObject to a given property and data.
@@ -34,25 +34,27 @@ namespace UE::Ranges {
      * Concept for any pointer wrapper type that has a .Get() method that returns a pointer to a UObject.
      */
     template <typename T>
-    concept CanGetObject = requires(T&& Object) {
-        { Object.Get() } -> std::convertible_to<UObject*>;
+    concept CanGetObject = requires(T &&Object) {
+        { Object.Get() } -> std::convertible_to<UObject *>;
     };
 
     /**
      * Retrieves a UObject pointer from a given object, interface, or pointer wrapper.
      *
-     * This method attempts to extract or convert the provided object to a UObject pointer depending on the type of the object.
+     * This method attempts to extract or convert the provided object to a UObject pointer depending on the type of the
+     * object.
      *
      * @tparam T The type of object pointer that is being passed through
-     * @param Object The object from which the UObject pointer is to be retrieved. This can be an actual UObject pointer,
-     *        a pointer wrapper type that has a .Get() method, or an Unreal Interface type.
+     * @param Object The object from which the UObject pointer is to be retrieved. This can be an actual UObject
+     * pointer, a pointer wrapper type that has a .Get() method, or an Unreal Interface type.
      * @return A UObject pointer extracted or converted from the provided object.
      */
     template <typename T>
-        requires std::convertible_to<T, UObject*> || CanGetObject<T> || std::derived_from<std::remove_cvref_t<T>, FScriptInterface>
-    UObject* GetObject(T && Object) {
-        if constexpr (std::convertible_to<T, UObject*>) {
-            return Forward<T>(Object);
+        requires std::convertible_to<T, UObject *> || CanGetObject<T> ||
+                 std::derived_from<std::remove_cvref_t<T>, FScriptInterface>
+    UObject *GetObject(T &&Object) {
+        if constexpr (std::convertible_to<T, UObject *>) {
+            return std::forward<T>(Object);
         } else if constexpr (CanGetObject<T>) {
             return Object.Get();
         } else if constexpr (std::derived_from<std::remove_cvref_t<T>, FScriptInterface>) {
@@ -71,8 +73,7 @@ namespace UE::Ranges {
      * @param Storage A pointer to the storage where the UObject should be set.
      * @param Object A pointer to the UObject to be set in the storage.
      */
-    UNREALRANGES_API void SetObject(const FObjectProperty* ObjectProperty, uint8* Storage, UObject* Object);
-
+    UNREALRANGES_API void SetObject(const FObjectProperty *ObjectProperty, uint8 *Storage, UObject *Object);
 
     /**
      * Sets a UObject pointer in the provided storage for a given interface property.
@@ -84,10 +85,10 @@ namespace UE::Ranges {
      * @param Storage A pointer to the raw memory where the property value is stored.
      * @param Object The UObject to be set for the interface property.
      */
-    UNREALRANGES_API void SetObject(const FInterfaceProperty* ObjectProperty, uint8* Storage, UObject* Object);
+    UNREALRANGES_API void SetObject(const FInterfaceProperty *ObjectProperty, uint8 *Storage, UObject *Object);
 
     /**
      * Visitor for checking either an object or an interface property.
      */
     using FObjectPropertyVisitor = TPropertyVisitor<FObjectProperty, FInterfaceProperty>;
-}
+} // namespace UE::Ranges

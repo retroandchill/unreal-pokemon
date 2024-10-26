@@ -11,7 +11,7 @@ namespace UE::Optionals {
 
     template <typename F>
     struct TMapInvoker {
-        explicit constexpr TMapInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+        explicit constexpr TMapInvoker(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -35,9 +35,9 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
             return TOptionalClosure<TMapInvoker<BindingType>>(
-                TMapInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+                TMapInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }
     };
 

@@ -79,7 +79,7 @@ void UK2Node_MakeSoftVariantFromVariant::AddMenuOptionsForStruct(FBlueprintActio
     auto ActionKey = GetClass();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
     check(Spawner != nullptr)
-    Spawner->CustomizeNodeDelegate =
-        FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(), Registration.GetSoftStructType());
+    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(),
+                                                                      Registration.GetSoftStructType());
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

@@ -16,5 +16,5 @@ std::pair<FPlayerPtr, APawn *> UPlayerUtilities::CreateTestPlayer(UWorld &World,
     PlayerController->PlayerState->SetUniqueId(FUniqueNetIdRepl());
     World.AddController(PlayerController);
 
-    return {MoveTemp(Player), Pawn};
+    return {std::move(Player), Pawn};
 }

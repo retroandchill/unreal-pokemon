@@ -65,8 +65,8 @@ namespace UE::Ranges {
 
         template <typename F>
         constexpr static decltype(auto) Visit(const FProperty *Property, F &&Functor) {
-            constexpr std::array Invocations = { &TPropertyVisitor::VisitProperty<T, F>... };
-            return ranges::invoke(Invocations[GetTypeIndex(Property)], Property, Forward<F>(Functor));
+            constexpr std::array Invocations = {&TPropertyVisitor::VisitProperty<T, F>...};
+            return ranges::invoke(Invocations[GetTypeIndex(Property)], Property, std::forward<F>(Functor));
         }
 
         /**
@@ -81,20 +81,20 @@ namespace UE::Ranges {
         template <typename F>
         constexpr decltype(auto) Visit(const uint8 *Data, F &&Functor) {
             constexpr std::array Invocations = {&TPropertyVisitor::VisitSingle<T, F>...};
-            return ranges::invoke(Invocations[TypeIndex], Data, Forward<F>(Functor));
+            return ranges::invoke(Invocations[TypeIndex], Data, std::forward<F>(Functor));
         }
 
       private:
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...)
         constexpr static decltype(auto) VisitSingle(const uint8 *Data, F &&Functor) {
-            return ranges::invoke(Forward<F>(Functor), U::GetPropertyValue(Data));
+            return ranges::invoke(std::forward<F>(Functor), U::GetPropertyValue(Data));
         }
 
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...)
         constexpr static decltype(auto) VisitProperty(const FProperty *Property, F &&Functor) {
-            return ranges::invoke(Forward<F>(Functor), static_cast<const U*>(Property));
+            return ranges::invoke(std::forward<F>(Functor), static_cast<const U *>(Property));
         }
 
         size_t TypeIndex;

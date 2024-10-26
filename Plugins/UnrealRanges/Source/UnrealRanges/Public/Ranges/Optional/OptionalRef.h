@@ -181,8 +181,8 @@ template <typename V>
 struct TOptional<V> {
 
     /**
-      * Typedef for the element type used by this container.
-      */
+     * Typedef for the element type used by this container.
+     */
     using ElementType = V;
 
     /**
@@ -195,16 +195,18 @@ struct TOptional<V> {
      *
      * @param Value The value for the optional
      */
-    constexpr explicit(false) TOptional(V *Value) : Data(Value) {}
+    constexpr explicit(false) TOptional(V *Value) : Data(Value) {
+    }
 
     /**
      * Constructor from nullptr, creates an empty optional.
      */
-    constexpr explicit(false) TOptional(nullptr_t) {}
+    constexpr explicit(false) TOptional(nullptr_t) {
+    }
 
     /**
      * Assignment operator from a void* value.
-     * 
+     *
      * @param Value The value in question
      * @return A reference to this
      */
@@ -215,7 +217,7 @@ struct TOptional<V> {
 
     /**
      * Assignment operator from a nullptr value. Sets the optional to empty.
-     * 
+     *
      * @return A reference to this
      */
     TOptional &operator=(nullptr_t) {
@@ -225,17 +227,17 @@ struct TOptional<V> {
 
     /**
      * Get the value for this optional.
-     * 
+     *
      * @param Alternate The alternative if this optional is empty.
      * @return The value
      */
-    V* Get(V* Alternate) const {
+    V *Get(V *Alternate) const {
         return Data != nullptr ? Data : Alternate;
     }
 
     /**
      * Get the value of this optional or nullptr.
-     * 
+     *
      * @return The value of this optional or nullptr.
      */
     V *GetPtrOrNull() const {
@@ -244,17 +246,17 @@ struct TOptional<V> {
 
     /**
      * Get the value of this optional, asserting that its set.
-     * 
+     *
      * @return The value of this optional.
      */
-    V* GetValue() const {
+    V *GetValue() const {
         check(IsSet())
         return Data;
     }
 
     /**
      * Returns if the value is set
-     * 
+     *
      * @return Is there a valid optional?
      */
     bool IsSet() const {
@@ -263,11 +265,11 @@ struct TOptional<V> {
 
     /**
      * Emplace a new pointer value into the optional.
-     * 
+     *
      * @param Value The value to emplace
      * @return A reference to the emplaced value
      */
-    void Emplace(V* Value) {
+    void Emplace(V *Value) {
         Data = Value;
     }
 
@@ -278,9 +280,8 @@ struct TOptional<V> {
         Data = nullptr;
     }
 
-    
-private:
-    V* Data = nullptr;
+  private:
+    V *Data = nullptr;
 };
 
 namespace UE::Optionals {

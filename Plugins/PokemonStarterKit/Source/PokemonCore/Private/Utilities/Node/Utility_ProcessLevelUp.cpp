@@ -26,7 +26,7 @@ FLevelUpStatChanges &FLevelUpStatChanges::operator+=(const FLevelUpStatChanges &
 
 void UUtility_ProcessLevelUp::Execute(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges,
                                       bool bShowMessage, FSimpleDelegate &&OnEnd) {
-    EndProcess.Add(MoveTemp(OnEnd));
+    EndProcess.Add(std::move(OnEnd));
     Execute(Pokemon, StatChanges, bShowMessage);
 }
 

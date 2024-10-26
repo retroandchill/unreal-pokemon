@@ -9,7 +9,7 @@ END_DEFINE_SPEC(FTestCommonString);
 
 void FTestCommonString::Define() {
     Describe("Test Common String Operations", [this] {
-        BeforeEach([] { });
+        BeforeEach([] {});
 
         It("FName should store a string as a Common String", [this] {
             FName Sample = "Hello World";
@@ -43,7 +43,7 @@ void FTestCommonString::Define() {
             UE_ASSERT_TRUE(std::holds_alternative<FText>(AsCommonString));
             return true;
         });
-        
+
         It("An string literal should store a string view as a Common String", [this] {
             auto AsCommonString = UE::Ranges::GetString(TEXT("Hello World"));
             UE_ASSERT_TRUE(std::holds_alternative<FStringView>(AsCommonString));

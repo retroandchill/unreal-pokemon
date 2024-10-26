@@ -45,5 +45,5 @@ TTuple<FDudWidgets, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTes
         World->SetBegunPlay(true);
     }
 
-    return {DudWidgets, MoveTemp(World), MoveTemp(GameInstance)};
+    return {DudWidgets, std::move(World), std::move(GameInstance)};
 }

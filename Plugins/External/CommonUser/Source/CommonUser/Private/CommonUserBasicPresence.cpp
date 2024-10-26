@@ -95,7 +95,7 @@ void UCommonUserBasicPresence::OnNotifySessionInformationChanged(ECommonSessionI
                     UpdateParams.Mutations.UpdatedProperties.Emplace(PresenceKeyGameMode, GameMode);
                     UpdateParams.Mutations.UpdatedProperties.Emplace(PresenceKeyMapName, MapNameTruncated);
 
-                    Presence->PartialUpdatePresence(MoveTemp(UpdateParams));
+                    Presence->PartialUpdatePresence(std::move(UpdateParams));
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     concept NativeUnicastDelegate = requires(T &&Delegate) {
-        { TDelegate(Forward<T>(Delegate)) } -> std::same_as<std::remove_cvref_t<T>>;
+        { TDelegate(std::forward<T>(Delegate)) } -> std::same_as<std::remove_cvref_t<T>>;
     };
 
     /**
@@ -37,7 +37,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     concept NativeMulitcastDelegate = requires(T &&Delegate) {
-        { TMulticastDelegate(Forward<T>(Delegate)) } -> std::same_as<std::remove_cvref_t<T>>;
+        { TMulticastDelegate(std::forward<T>(Delegate)) } -> std::same_as<std::remove_cvref_t<T>>;
     };
 
     /**
@@ -73,7 +73,7 @@ namespace UE::Ranges {
      */
     template <typename M, typename S>
     concept BindableTo = MulticastDelegate<M> && UnicastDelegate<S> && requires(M &&Delegate, S &&Source) {
-        { Delegate.Add(Forward<S>(Source)) } -> std::same_as<FDelegateHandle>;
+        { Delegate.Add(std::forward<S>(Source)) } -> std::same_as<FDelegateHandle>;
     };
 
     template <typename F, typename T>
@@ -84,76 +84,76 @@ namespace UE::Ranges {
 
     template <typename D, typename F, typename... A>
     concept CanBindStatic = NativeUnicastDelegate<D> && requires(D &&Delegate, F &&Functor, A &&...Args) {
-        Delegate.BindStatic(Forward<F>(Functor), Forward<A>(Args)...);
-        { D::CreateStatic(Forward<F>(Functor), Forward<A>(Args)...) } -> std::same_as<std::remove_cvref_t<D>>;
+        Delegate.BindStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
+        { D::CreateStatic(std::forward<F>(Functor), std::forward<A>(Args)...) } -> std::same_as<std::remove_cvref_t<D>>;
     };
 
     template <typename D, typename F, typename... A>
     concept CanBindLambda = NativeUnicastDelegate<D> && requires(D &&Delegate, F &&Functor, A &&...Args) {
-        Delegate.BindLambda(Forward<F>(Functor), Forward<A>(Args)...);
-        { D::CreateLambda(Forward<F>(Functor), Forward<A>(Args)...) } -> std::same_as<std::remove_cvref_t<D>>;
+        Delegate.BindLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
+        { D::CreateLambda(std::forward<F>(Functor), std::forward<A>(Args)...) } -> std::same_as<std::remove_cvref_t<D>>;
     };
 
     template <typename D, typename O, typename F, typename... A>
     concept CanBindRaw = NativeUnicastDelegate<D> && MemberFunctionOf<F, O> &&
                          requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
-                             Delegate.BindRaw(Object, Forward<F>(Functor), Forward<A>(Args)...);
+                             Delegate.BindRaw(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
                              {
-                                 D::CreateRaw(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                 D::CreateRaw(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                              } -> std::same_as<std::remove_cvref_t<D>>;
                          };
 
     template <typename D, typename O, ESPMode M, typename F, typename... A>
     concept CanBindSP = NativeUnicastDelegate<D> && MemberFunctionOf<F, O> &&
                         requires(D &&Delegate, const TSharedRef<O, M> &Object, F &&Functor, A &&...Args) {
-                            Delegate.BindSP(Object, Forward<F>(Functor), Forward<A>(Args)...);
+                            Delegate.BindSP(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
                             {
-                                D::CreateSP(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                D::CreateSP(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                             } -> std::same_as<std::remove_cvref_t<D>>;
                         };
 
     template <typename D, typename O, ESPMode M, typename F, typename... A>
     concept CanBindSPLambda = NativeUnicastDelegate<D> && MemberFunctionOf<F, O> &&
                               requires(D &&Delegate, const TSharedRef<O, M> &Object, F &&Functor, A &&...Args) {
-                                  Delegate.BindSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+                                  Delegate.BindSPLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
                                   {
-                                      D::CreateSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                      D::CreateSPLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                                   } -> std::same_as<std::remove_cvref_t<D>>;
                               };
 
     template <typename D, typename O, typename F, typename... A>
     concept CanBindUObject =
         NativeUnicastDelegate<D> && UObjectMember<F, O> && requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
-            Delegate.BindUObject(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
             {
-                D::CreateUObject(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                D::CreateUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
             } -> std::same_as<std::remove_cvref_t<D>>;
         };
 
     template <typename D, typename O, typename F, typename... A>
     concept CanBindWeakLambda = NativeUnicastDelegate<D> && std::is_base_of_v<UObject, O> &&
                                 requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
-                                    Delegate.BindWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+                                    Delegate.BindWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
                                     {
-                                        D::CreateWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                        D::CreateWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                                     } -> std::same_as<std::remove_cvref_t<D>>;
                                 };
 
     template <typename D, typename F, typename... A>
     concept CanAddStatic = NativeMulitcastDelegate<D> && requires(D &&Delegate, F &&Functor, A &&...Args) {
-        { Delegate.AddStatic(Forward<F>(Functor), Forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        { Delegate.AddStatic(std::forward<F>(Functor), std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
     };
 
     template <typename D, typename F, typename... A>
     concept CanAddLambda = NativeMulitcastDelegate<D> && requires(D &&Delegate, F &&Functor, A &&...Args) {
-        { Delegate.AddLambda(Forward<F>(Functor), Forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        { Delegate.AddLambda(std::forward<F>(Functor), std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
     };
 
     template <typename D, typename O, typename F, typename... A>
     concept CanAddRaw = NativeMulitcastDelegate<D> && MemberFunctionOf<F, O> &&
                         requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
                             {
-                                Delegate.AddRaw(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                Delegate.AddRaw(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                             } -> std::same_as<FDelegateHandle>;
                         };
 
@@ -161,7 +161,7 @@ namespace UE::Ranges {
     concept CanAddSP = NativeMulitcastDelegate<D> && MemberFunctionOf<F, O> &&
                        requires(D &&Delegate, const TSharedRef<O, M> &Object, F &&Functor, A &&...Args) {
                            {
-                               Delegate.AddSP(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                               Delegate.AddSP(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                            } -> std::same_as<FDelegateHandle>;
                        };
 
@@ -169,7 +169,7 @@ namespace UE::Ranges {
     concept CanAddSPLambda = NativeMulitcastDelegate<D> && MemberFunctionOf<F, O> &&
                              requires(D &&Delegate, const TSharedRef<O, M> &Object, F &&Functor, A &&...Args) {
                                  {
-                                     Delegate.AddSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                     Delegate.AddSPLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                                  } -> std::same_as<FDelegateHandle>;
                              };
 
@@ -177,17 +177,18 @@ namespace UE::Ranges {
     concept CanAddUObject = NativeMulitcastDelegate<D> && UObjectMember<F, O> &&
                             requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
                                 {
-                                    Delegate.AddUObject(Object, Forward<F>(Functor), Forward<A>(Args)...)
+                                    Delegate.AddUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
                                 } -> std::same_as<FDelegateHandle>;
                             };
 
     template <typename D, typename O, typename F, typename... A>
-    concept CanAddWeakLambda = NativeMulitcastDelegate<D> && std::is_base_of_v<UObject, O> &&
-                               requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
-                                   {
-                                       Delegate.AddWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...)
-                                   } -> std::same_as<FDelegateHandle>;
-                               };
+    concept CanAddWeakLambda =
+        NativeMulitcastDelegate<D> && std::is_base_of_v<UObject, O> &&
+        requires(D &&Delegate, O *Object, F &&Functor, A &&...Args) {
+            {
+                Delegate.AddWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...)
+            } -> std::same_as<FDelegateHandle>;
+        };
 
     namespace Detail {
         template <typename T>

@@ -14,9 +14,9 @@ namespace UE::Ranges {
     constexpr auto InvokeDelegate(D &&Delegate, A &&...Args) {
         if constexpr (UnicastDelegate<D>) {
             check(Delegate.IsBound())
-            return Delegate.Execute(Forward<A>(Args)...);
+            return Delegate.Execute(std::forward<A>(Args)...);
         } else if constexpr (MulticastDelegate<D>) {
-            Delegate.Broadcast(Forward<A>(Args)...);
+            Delegate.Broadcast(std::forward<A>(Args)...);
         }
     }
 

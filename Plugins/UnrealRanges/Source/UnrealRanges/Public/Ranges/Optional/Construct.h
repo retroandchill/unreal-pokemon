@@ -14,7 +14,7 @@ namespace UE::Optionals {
         template <typename O, typename... A>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional, A &&...Args) const {
-            return Optional.IsSet() ? TOptional<T>(T(*Optional, Forward<A>(Args)...)) : TOptional<T>();
+            return Optional.IsSet() ? TOptional<T>(T(*Optional, std::forward<A>(Args)...)) : TOptional<T>();
         }
     };
 
@@ -24,8 +24,8 @@ namespace UE::Optionals {
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
             if constexpr (sizeof...(A) > 0) {
-                using BackBound = decltype(ranges::bind_back(TConstructInvoker<T>(), Forward<A>(Args)...));
-                return TOptionalClosure<BackBound>(ranges::bind_back(TConstructInvoker<T>(), Forward<A>(Args)...));
+                using BackBound = decltype(ranges::bind_back(TConstructInvoker<T>(), std::forward<A>(Args)...));
+                return TOptionalClosure<BackBound>(ranges::bind_back(TConstructInvoker<T>(), std::forward<A>(Args)...));
             } else {
                 return TOptionalClosure<TConstructInvoker<T>>(TConstructInvoker<T>());
             }
