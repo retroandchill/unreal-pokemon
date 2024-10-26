@@ -221,7 +221,7 @@ namespace UE::Ranges {
             auto &AssetManager = UAssetManager::Get();
             FAssetData Data;
             AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data);
-            return std::move(Data);
+            return Data;
         }
 
         TSoftObjectPtr<> Ptr;

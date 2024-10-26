@@ -45,8 +45,6 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_Va
 
   public:
     void AllocateDefaultPins() override;
-    FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
-    FText GetTooltipText() const override;
     bool IsNodePure() const override;
     FLinearColor GetNodeTitleColor() const override;
     FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;

@@ -19,14 +19,6 @@ void UK2Node_VariantCastBase::AllocateDefaultPins() {
     }
 }
 
-FText UK2Node_VariantCastBase::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    return Super::GetNodeTitle(TitleType);
-}
-
-FText UK2Node_VariantCastBase::GetTooltipText() const {
-    return Super::GetTooltipText();
-}
-
 bool UK2Node_VariantCastBase::IsNodePure() const {
     return bIsPure;
 }

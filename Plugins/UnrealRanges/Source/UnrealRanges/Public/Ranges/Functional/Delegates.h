@@ -96,7 +96,7 @@ namespace UE::Ranges {
     template <typename M, typename U>
         requires MulticastDelegate<M> && BindableTo<M, U>
     FDelegateHandle AddToDelegate(M &Delegate, U &&Binding) {
-        return Delegate.Add(std::forward<M>(Binding));
+        return Delegate.Add(std::forward<U>(Binding));
     }
 
     template <typename D, typename F, typename... A>
