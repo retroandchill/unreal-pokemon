@@ -10,7 +10,27 @@
 #include "K2Node_VariantCastBase.generated.h"
 
 /**
+ * @class UK2Node_VariantCastBase
+ * @brief A base node for casting between variant types and objects in the Unreal Engine 5 Kismet system.
  *
+ * The UK2Node_VariantCastBase class serves as a foundational node class in UE5's Kismet visual scripting language.
+ * It enables the casting of variant data types, providing a mechanism to handle different data conversions
+ * dynamically at runtime within Blueprint scripts.
+ *
+ * @details
+ * This class provides the essential infrastructure for creating custom nodes that can perform type conversions
+ * between various variant data types. It is intended to be derived from in order to implement specific casting
+ * functionality required by the user. Since this is a base class, it does not directly implement the casting
+ * logic but rather sets up the necessary context and framework for derived classes to define their conversion rules.
+ *
+ * Primary use cases include:
+ * - Implementing custom data type conversions within Blueprint nodes.
+ * - Extending Blueprint functionality with new custom cast nodes.
+ * - Managing dynamic type conversions in a visual script environment.
+ *
+ * Key responsibilities:
+ * - Define the basic interface and structure for a variant cast node.
+ * - Facilitate the integration of custom cast logic in derived classes.
  */
 UCLASS(Abstract)
 class UNREALRANGESBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_VariantOperationBase {
