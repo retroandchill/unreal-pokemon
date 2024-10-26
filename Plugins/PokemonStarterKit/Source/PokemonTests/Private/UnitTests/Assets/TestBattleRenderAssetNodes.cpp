@@ -169,7 +169,6 @@ void FTestBattleRenderAssetNodes::Define() {
                 UE_CHECK_FALSE(Node->IsConnectionDisallowed(InputPin, ValidPin, Message));
             }
             
-            
             MakeTestPin(DummyInput, Pins, InvalidPin, UEdGraphSchema_K2::PC_Object, EGPD_Output);
             InvalidPin->PinType.PinSubCategoryObject = UObject::StaticClass();
             UE_CHECK_TRUE(Node->IsConnectionDisallowed(InputPin, InvalidPin, Message));

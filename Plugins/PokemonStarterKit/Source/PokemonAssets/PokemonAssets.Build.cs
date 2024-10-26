@@ -29,7 +29,7 @@ public class PokemonAssets : ModuleRules
 				"DeveloperSettings",
 				"Paper2D", 
 				"UnrealRanges",
-				"RPGMenus"
+				"RPGMenus", "PokemonCore"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
