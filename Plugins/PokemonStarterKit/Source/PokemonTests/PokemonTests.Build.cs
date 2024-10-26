@@ -48,7 +48,8 @@ public class PokemonTests : ModuleRules
                 "UnrealRangesBlueprintNodes",
                 "PokemonAssets",
                 "UnrealRanges",
-                "ToolMenus"
+                "ToolMenus", 
+                "DynamicAssetLoaderNodes"
             }
         );
     }

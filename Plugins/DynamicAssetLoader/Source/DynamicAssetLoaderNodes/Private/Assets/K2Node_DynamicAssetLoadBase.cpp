@@ -248,11 +248,8 @@ void UK2Node_DynamicAssetLoadBase::SetWildcardMode(bool bNewWildcardMode) {
     }
 
     bWildcardMode = bNewWildcardMode;
-    if (Pins.Num() > 0) {
-        ReconstructNode();
-    }
-
     if (bWildcardMode) {
+        RefreshAssetNamePin();
         return;
     }
 
