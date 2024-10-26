@@ -6,6 +6,7 @@
 #include "Ranges/Variants/K2Node_GetVariantObject.h"
 #include "Ranges/Variants/K2Node_GetVariantValue.h"
 #include "Ranges/Variants/K2Node_LoadVariantSynchronous.h"
+#include "Ranges/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
 #include "Ranges/Variants/K2Node_MakeVariantObjectStruct.h"
 #include "Utilities/K2Nodes.h"
 
@@ -135,6 +136,53 @@ void FTestBattleRenderAssetNodes::Define() {
             Pins[0]->MakeLinkTo(InputPin);
             Node->NotifyPinConnectionListChanged(InputPin);
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Object, InputPin->PinType.PinCategory);
+            UE_CHECK_TRUE(InputPin->PinType.PinSubCategoryObject == Classes[0]);
+
+            Pins[0]->BreakLinkTo(InputPin);
+            Node->NotifyPinConnectionListChanged(InputPin);
+            UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Wildcard, InputPin->PinType.PinCategory);
+            UE_CHECK_NULL(InputPin->PinType.PinSubCategoryObject.Get());
+            
+            return true;
+        });
+        
+        It("Test make Soft Battle Render", [this] {
+            auto Node = NewObject<UK2Node_MakeSoftVariantFromSoftObject>(TestGraph.Get());
+            Node->Initialize(StructType);
+            TestGraph->AddNode(Node);
+            Node->AllocateDefaultPins();
+            AssertValidNode(Node);
+
+            auto InputPin = Node->FindPin(UE::Ranges::PN_Object);
+            UE_ASSERT_NOT_NULL(InputPin);
+            auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
+            UE_ASSERT_NOT_NULL(OutputPin);
+            
+            MakeTestableNode(DummyInput, TestGraph.Get());
+            TArray<UEdGraphPin*> Pins;
+
+            auto Classes = Registration->GetValidClasses();
+            FString Message;
+            for (auto Class : Classes) {
+                MakeTestPin(DummyInput, Pins, ValidPin, UEdGraphSchema_K2::PC_SoftObject, EGPD_Output);
+                ValidPin->PinType.PinSubCategoryObject = Class;
+                UE_CHECK_FALSE(Node->IsConnectionDisallowed(InputPin, ValidPin, Message));
+            }
+            
+            
+            MakeTestPin(DummyInput, Pins, InvalidPin, UEdGraphSchema_K2::PC_Object, EGPD_Output);
+            InvalidPin->PinType.PinSubCategoryObject = UObject::StaticClass();
+            UE_CHECK_TRUE(Node->IsConnectionDisallowed(InputPin, InvalidPin, Message));
+            UE_CHECK_FALSE(Node->IsConnectionDisallowed(OutputPin, InvalidPin, Message));
+
+            AddExpectedMessage(TEXT("Must have a valid connection to the input pin"));
+            FCompilerResultsLog MessageLog;
+            Node->EarlyValidation(MessageLog);
+            UE_CHECK_EQUAL(1, MessageLog.NumErrors);
+
+            Pins[0]->MakeLinkTo(InputPin);
+            Node->NotifyPinConnectionListChanged(InputPin);
+            UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_SoftObject, InputPin->PinType.PinCategory);
             UE_CHECK_TRUE(InputPin->PinType.PinSubCategoryObject == Classes[0]);
 
             Pins[0]->BreakLinkTo(InputPin);
