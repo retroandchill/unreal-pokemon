@@ -46,7 +46,9 @@ public class PokemonTests : ModuleRules
                 "PokemonEncounters",
                 "ToolWidgets", 
                 "UnrealRangesBlueprintNodes",
-                "PokemonAssets"
+                "PokemonAssets",
+                "UnrealRanges",
+                "ToolMenus"
             }
         );
     }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/Exceptions/InvalidArgumentException.h"
 #include "Ranges/Exceptions/VariantException.h"
+#include "Ranges/Utilities/Unreachable.h"
 
 namespace UE::Ranges {
     class IVariantRegistration;
@@ -35,22 +36,6 @@ namespace UE::Ranges {
      */
     IVariantRegistration &GetVariantRegistration(const FStructProperty &Property);
 
-    template <typename T>
-        requires(!std::is_reference_v<T>)
-    constexpr auto DefaultReturnValue() {
-        if constexpr (std::is_void_v<T>) {
-            // No-op
-        } else if constexpr (std::is_pointer_v<T>) {
-            return nullptr;
-        } else if constexpr (std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_enum_v<T>) {
-            return static_cast<T>(0);
-        } else if constexpr (std::same_as<bool, T>) {
-            return false;
-        } else if constexpr (std::is_default_constructible_v<T>) {
-            return T();
-        }
-    }
-
 } // namespace UE::Ranges
 
 #define P_GET_WILDCARD_PARAM(PropVar, PointerVar)                                                                      \
@@ -67,5 +52,6 @@ namespace UE::Ranges {
 
 #define CUSTOM_THUNK_STUB(RetType, Method, ...)                                                                        \
     RetType Method(__VA_ARGS__) {                                                                                      \
-        check(false) return UE::Ranges::DefaultReturnValue<RetType>();                                                 \
+        check(false); \
+        UE::Ranges::Unreachable(); \
     }

@@ -27,3 +27,4 @@ ForEachMacros:
 Macros:
     - check(x)=assert(x);
     - verify(x)=x;
+    - ABSTRACT_METHOD={}
