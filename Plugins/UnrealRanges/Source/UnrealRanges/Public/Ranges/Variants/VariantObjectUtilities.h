@@ -25,7 +25,7 @@ class UNREALRANGES_API UVariantObjectUtilities : public UBlueprintFunctionLibrar
      * @param Variant The output struct.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
-              meta = (CustomStructureParam = "Variant"))
+              meta = (CustomStructureParam = "Object,Variant"))
     static void CreateVariantFromObject(const UObject *Object, uint8 &Variant);
     DECLARE_FUNCTION(execCreateVariantFromObject);
 
@@ -40,7 +40,7 @@ class UNREALRANGES_API UVariantObjectUtilities : public UBlueprintFunctionLibrar
     DECLARE_FUNCTION(execGetObjectFromVariant);
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
-              meta = (CustomStructureParam = "Variant", DeterminesOutputType = Class, DynamicOutputParam = Object))
+              meta = (CustomStructureParam = "Variant,Object"))
     static bool GetObjectFromVariantChecked(TSubclassOf<UObject> Class, const uint8 &Variant, UObject *&Object);
     DECLARE_FUNCTION(execGetObjectFromVariantChecked);
 
@@ -50,7 +50,7 @@ class UNREALRANGES_API UVariantObjectUtilities : public UBlueprintFunctionLibrar
     DECLARE_FUNCTION(execMakeSoftVariantFromVariant);
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
-              meta = (CustomStructureParam = "SoftVariant"))
+              meta = (CustomStructureParam = "Object,SoftVariant"))
     static void MakeSoftVariantFromSoftObject(const TSoftObjectPtr<UObject> &Object, uint8 &SoftVariant);
     DECLARE_FUNCTION(execMakeSoftVariantFromSoftObject);
 

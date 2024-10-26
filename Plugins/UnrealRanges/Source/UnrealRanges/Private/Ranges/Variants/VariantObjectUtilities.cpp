@@ -4,17 +4,19 @@
 #include "Ranges/Blueprints/BlueprintRuntimeUtils.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
+#include "Ranges/Pointers/Objects.h"
 #include "Ranges/Variants/VariantObjectStruct.h"
 
 CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::CreateVariantFromObject, const UObject *, uint8 &)
 DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {
-    P_GET_OBJECT(UObject, Object)
+    P_GET_WILDCARD_PARAM(ObjectParam, ObjectData)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_FINISH
 
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        auto Object = UE::Ranges::GetObjectFromProperty(ObjectParam, ObjectData);
         P_NATIVE_BEGIN
         StructInfo.SetStructValue(Object, *StructProp, VariantPtr);
         P_NATIVE_END
@@ -72,18 +74,20 @@ CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::GetObjectFromVariantChecked, TS
 DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
     P_GET_OBJECT(UClass, Class)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
-    P_GET_OBJECT_REF(UObject, Object);
+    P_GET_WILDCARD_PARAM(ObjectProp, ObjectData)
     P_FINISH
 
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        UObject* Object;
         P_NATIVE_BEGIN
         // clang-format off
             Object = StructInfo.GetValue(*StructProp, VariantPtr) |
                 UE::Optionals::Filter([&Class](const UObject& Obj) { return UE::Ranges::TypesMatch(Obj, *Class); }) |
                 UE::Optionals::GetPtrOrNull;
         // clang-format on
+        UE::Ranges::AssignObjectToProperty(ObjectProp, ObjectData, Object);
         P_NATIVE_END
 
         P_GET_RESULT(bool, Result);
@@ -180,6 +184,7 @@ CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::LoadSynchronous, const uint8 &,
 DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
+    P_FINISH
 
     try {
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);

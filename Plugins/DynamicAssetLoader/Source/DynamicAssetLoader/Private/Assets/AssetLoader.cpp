@@ -41,7 +41,7 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const
 
 CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LoadDynamicAsset, FName, const FString &, UObject *&)
 DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
-    P_GET_PROPERTY(FNameProperty, Identifier);
+    P_GET_PROPERTY(FNameProperty, Identifier)
     P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
     P_GET_WILDCARD_PARAM(OutputProp, Output)
     P_FINISH
@@ -75,7 +75,7 @@ DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
 
 CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LookupDynamicAsset, FName, const FString &, TSoftObjectPtr<> &)
 DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
-    P_GET_PROPERTY(FNameProperty, Identifier);
+    P_GET_PROPERTY(FNameProperty, Identifier)
     P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
     P_GET_WILDCARD_PARAM(OutputProp, Output)
     P_FINISH

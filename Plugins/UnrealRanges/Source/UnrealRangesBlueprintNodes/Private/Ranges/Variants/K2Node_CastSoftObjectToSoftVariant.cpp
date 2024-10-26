@@ -28,7 +28,7 @@ FText UK2Node_CastSoftObjectToSoftVariant::GetTooltipText() const {
 }
 
 void UK2Node_CastSoftObjectToSoftVariant::CreateInputAndOutputPins() {
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_SoftObject, UE::Ranges::PN_SoftReference);
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_SoftObject, UObject::StaticClass(), UE::Ranges::PN_SoftReference);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, OutputType != nullptr ? OutputType.Get() : nullptr,
               UEdGraphSchema_K2::PN_ReturnValue);
 }

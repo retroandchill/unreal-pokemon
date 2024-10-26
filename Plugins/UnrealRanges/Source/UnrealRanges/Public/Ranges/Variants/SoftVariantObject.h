@@ -125,7 +125,7 @@ namespace UE::Ranges {
          */
         TOptional<T> LoadSynchronous() const {
             auto Result = Ptr.LoadSynchronous();
-            if (!T::IsValidType(Result)) {
+            if (Result == nullptr || !T::IsValidType(Result)) {
                 return TOptional<T>();
             }
 

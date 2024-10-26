@@ -30,7 +30,7 @@ FText UK2Node_CastObjectToVariant::GetTooltipText() const {
 }
 
 void UK2Node_CastObjectToVariant::CreateInputAndOutputPins() {
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UE::Ranges::PN_Object);
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), UE::Ranges::PN_Object);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, OutputType != nullptr ? OutputType.Get() : nullptr,
               UEdGraphSchema_K2::PN_ReturnValue);
 }

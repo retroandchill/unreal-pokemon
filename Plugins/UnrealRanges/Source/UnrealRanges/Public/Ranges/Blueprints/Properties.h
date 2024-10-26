@@ -63,6 +63,12 @@ namespace UE::Ranges {
             return std::distance(Classes.begin(), ValidClass);
         }
 
+        template <typename F>
+        constexpr static decltype(auto) Visit(const FProperty *Property, F &&Functor) {
+            constexpr std::array Invocations = { &TPropertyVisitor::VisitProperty<T, F>... };
+            return ranges::invoke(Invocations[GetTypeIndex(Property)], Property, Forward<F>(Functor));
+        }
+
         /**
          * Invokes the appropriate VisitSingle method based on the TypeIndex for the given data and functor.
          *
@@ -83,6 +89,12 @@ namespace UE::Ranges {
             requires(std::same_as<T, U> || ...)
         constexpr static decltype(auto) VisitSingle(const uint8 *Data, F &&Functor) {
             return ranges::invoke(Forward<F>(Functor), U::GetPropertyValue(Data));
+        }
+
+        template <typename U, typename F>
+            requires(std::same_as<T, U> || ...)
+        constexpr static decltype(auto) VisitProperty(const FProperty *Property, F &&Functor) {
+            return ranges::invoke(Forward<F>(Functor), static_cast<const U*>(Property));
         }
 
         size_t TypeIndex;

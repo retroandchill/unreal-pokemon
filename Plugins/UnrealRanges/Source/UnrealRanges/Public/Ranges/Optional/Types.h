@@ -30,12 +30,26 @@ namespace UE::Optionals {
          * @tparam T The type to determine the storage of.
          */
         template <typename T>
-            requires std::is_pointer_v<T>
+            requires std::is_pointer_v<T> && (!std::same_as<std::remove_cv_t<T>, void>)
         struct TOptionalValueTraits<T> {
             /**
              * The basic definition for how a return value should be stored in an optional.
              */
             using Type = std::remove_pointer_t<T> &;
+        };
+
+        /**
+         * Template specialization to indicate that when determining how to store a type into an optional, we need to
+         * store it as a void value instead.
+         * @tparam T The type to determine the storage of.
+         */
+        template <typename T>
+            requires std::same_as<std::remove_cv_t<T>, void>
+        struct TOptionalValueTraits<T*> {
+            /**
+             * The basic definition for how a return value should be stored in an optional.
+             */
+            using Type = T;
         };
 
     } // namespace Detail

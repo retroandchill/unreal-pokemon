@@ -55,15 +55,15 @@ void UK2Node_MakeSoftVariantFromVariant::ExpandNode(FKismetCompilerContext &Comp
     auto ReturnValuePin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 
     auto CallCreateVariantPin = CallCreateVariant->FindPinChecked(Variant_ParamName);
-    auto CallCreateObjectPin = CallCreateVariant->FindPinChecked(SoftVariant_ParamName);
+    auto CallCreateSoftAssetPin = CallCreateVariant->FindPinChecked(SoftVariant_ParamName);
 
-    CallCreateObjectPin->PinType = InputPin->PinType;
-    CallCreateObjectPin->PinType.PinSubCategoryObject = InputPin->PinType.PinSubCategoryObject;
-    CompilerContext.MovePinLinksToIntermediate(*InputPin, *CallCreateObjectPin);
+    CallCreateVariantPin->PinType = InputPin->PinType;
+    CallCreateVariantPin->PinType.PinSubCategoryObject = InputPin->PinType.PinSubCategoryObject;
+    CompilerContext.MovePinLinksToIntermediate(*InputPin, *CallCreateVariantPin);
 
-    CallCreateVariantPin->PinType = ReturnValuePin->PinType;
-    CallCreateVariantPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
-    CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateVariantPin);
+    CallCreateSoftAssetPin->PinType = ReturnValuePin->PinType;
+    CallCreateSoftAssetPin->PinType.PinSubCategoryObject = ReturnValuePin->PinType.PinSubCategoryObject;
+    CompilerContext.MovePinLinksToIntermediate(*ReturnValuePin, *CallCreateSoftAssetPin);
 
     BreakAllNodeLinks();
 }
@@ -79,8 +79,7 @@ void UK2Node_MakeSoftVariantFromVariant::AddMenuOptionsForStruct(FBlueprintActio
     auto ActionKey = GetClass();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
     check(Spawner != nullptr)
-    ;
     Spawner->CustomizeNodeDelegate =
-        FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(), Registration.GetStructType());
+        FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(), Registration.GetSoftStructType());
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

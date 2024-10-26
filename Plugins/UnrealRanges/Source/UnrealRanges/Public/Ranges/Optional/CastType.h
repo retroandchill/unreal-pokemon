@@ -27,8 +27,10 @@ namespace UE::Optionals {
                 return Optional | Map([](const S &Object) { return Cast<T>(Object.GetObject()); });
             } else if constexpr (std::is_same_v<S, uint8 *>) {
                 return Optional | Map([](S Object) -> T & { return *static_cast<T *>(static_cast<void *>(Object)); });
+            } else if constexpr (std::is_reference_v<O>) {
+                return Optional | Map([](S &&Object) { return static_cast<T>(MoveTemp(Object)); });
             } else {
-                return Optional | Map([](S Object) -> T & { return static_cast<T &>(*Object); });
+                return Optional | Map([](S Object) { return static_cast<T>(Object); });
             }
         }
     };

@@ -14,7 +14,7 @@
 
 void UK2Node_GetVariantObject::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Variant);
-    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, UEdGraphSchema_K2::PN_ReturnValue);
+    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
 
     Super::AllocateDefaultPins();
 }
