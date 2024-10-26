@@ -63,7 +63,7 @@ namespace UE::Ranges {
     const auto PropVar = CastField<FStructProperty>(Stack.MostRecentProperty); \
     auto PointerVar = Stack.MostRecentPropertyAddress;
 
-#define P_GET_RESULT(Type, Name) auto &Name = *static_cast<Type*>(RESULT_PARAM);
+#define P_GET_RESULT(Type, Name) auto &Name = *static_cast<Type*>(RESULT_PARAM)
 
 #define CUSTOM_THUNK_STUB(RetType, Method, ...) \
     RetType Method(__VA_ARGS__) { \

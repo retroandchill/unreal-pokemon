@@ -32,7 +32,6 @@ public:
     FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
 
     void GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const override;
-    void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
 protected:

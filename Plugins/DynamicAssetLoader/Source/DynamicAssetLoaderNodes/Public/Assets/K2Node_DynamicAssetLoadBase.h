@@ -22,8 +22,6 @@ class DYNAMICASSETLOADERNODES_API UK2Node_DynamicAssetLoadBase : public UK2Node 
     GENERATED_BODY()
 
 public:
-    UK2Node_DynamicAssetLoadBase();
-
     /**
      * Initializes the node with the specified asset key.
      *
@@ -33,7 +31,7 @@ public:
 
     void AllocateDefaultPins() override;
     void PostReconstructNode() override;
-    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
+    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const override;
     void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;

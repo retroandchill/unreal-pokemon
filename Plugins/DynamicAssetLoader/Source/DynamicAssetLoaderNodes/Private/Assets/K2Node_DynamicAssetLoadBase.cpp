@@ -22,9 +22,6 @@ THIRD_PARTY_INCLUDES_END
 static const FName AssetNamePinName = "AssetName";
 static const FName AssetNotFoundPinName = "AssetNotFound";
 
-UK2Node_DynamicAssetLoadBase::UK2Node_DynamicAssetLoadBase() {
-}
-
 void UK2Node_DynamicAssetLoadBase::Initialize(FName InAssetKey) {
     AssetKey = InAssetKey;
 }
@@ -66,7 +63,7 @@ bool UK2Node_DynamicAssetLoadBase::IsConnectionDisallowed(const UEdGraphPin *MyP
         return false;
     }
 
-    static std::array ValidPinTypes = {
+    const static std::array ValidPinTypes = {
         UEdGraphSchema_K2::PC_Name,
         UEdGraphSchema_K2::PC_String,
         UEdGraphSchema_K2::PC_Text

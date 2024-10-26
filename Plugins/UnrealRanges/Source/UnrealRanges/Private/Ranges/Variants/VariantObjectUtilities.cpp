@@ -15,7 +15,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {
 
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
             StructInfo.SetStructValue(Object, *StructProp, VariantPtr);
         P_NATIVE_END
@@ -35,7 +35,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked) {
 
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_GET_RESULT(bool, Result);
         P_NATIVE_BEGIN
             if (auto TypeIndex = StructInfo.GetTypeIndex(Object); Object != nullptr && TypeIndex.IsSet()) {
@@ -58,7 +58,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariant) {
 
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
             P_GET_RESULT(UObject*, Object);
             Object = StructInfo.GetValue(*StructProp, VariantPtr).GetPtrOrNull();
@@ -78,7 +78,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
 
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
         // clang-format off
             Object = StructInfo.GetValue(*StructProp, VariantPtr) |
@@ -103,7 +103,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromVariant) {
     try {
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
             StructInfo.MakeSoftValue(*StructProp, VariantPtr, *SoftStructProp, SoftVariantPtr);
         P_NATIVE_END
@@ -120,7 +120,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObject) {
 
     try {
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
             StructInfo.MakeSoftValue(SoftObject, *SoftStructProp, SoftVariantPtr);
         P_NATIVE_END
@@ -138,7 +138,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecke
 
     try {
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
             P_GET_RESULT(bool, Result);
             if (auto TypeIndex = StructInfo.GetTypeIndex(SoftObject); !SoftObject.IsNull() && TypeIndex.IsSet()) {
@@ -162,7 +162,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execSoftVariantCast) {
     
     try {
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
             P_GET_RESULT(bool, Result);
         if (auto SoftResult = StructInfo.TryGetSoftValue(Class, *SoftStructProp, SoftVariantPtr); SoftResult.IsSet()) {
@@ -185,7 +185,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
     try {
         UE::Ranges::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         UE::Ranges::ValidateStructProperty(StructProp, VariantPtr);
-        auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
+        const auto &StructInfo = UE::Ranges::GetVariantRegistration(*SoftStructProp);
         bool bLoaded;
         P_NATIVE_BEGIN
             bLoaded = StructInfo.LoadSynchronous(*SoftStructProp, SoftVariantPtr, *StructProp, VariantPtr);

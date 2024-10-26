@@ -16,7 +16,7 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_LoadVariantSynchronous : public UK2
 public:
     void AllocateDefaultPins() override;
     void PostReconstructNode() override;
-    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
+    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const override;
     void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;

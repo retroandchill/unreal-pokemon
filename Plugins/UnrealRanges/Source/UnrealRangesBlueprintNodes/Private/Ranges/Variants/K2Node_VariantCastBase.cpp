@@ -88,10 +88,6 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
         );
 }
 
-void UK2Node_VariantCastBase::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
-    Super::GetMenuActions(ActionRegistrar);
-}
-
 void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
     Super::ExpandNode(CompilerContext, SourceGraph);
 

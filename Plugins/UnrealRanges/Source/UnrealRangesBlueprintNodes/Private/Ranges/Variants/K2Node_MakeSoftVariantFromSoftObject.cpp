@@ -17,10 +17,7 @@ void UK2Node_MakeSoftVariantFromSoftObject::Initialize(UScriptStruct *SoftRefere
 }
 
 void UK2Node_MakeSoftVariantFromSoftObject::AllocateDefaultPins() {
-    FCreatePinParams Params;
-    Params.bIsConst;
-    Params.bIsReference;
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object, Params);
+    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
               (SoftReferenceType != nullptr ? SoftReferenceType.Get() : nullptr),
               UEdGraphSchema_K2::PN_ReturnValue);

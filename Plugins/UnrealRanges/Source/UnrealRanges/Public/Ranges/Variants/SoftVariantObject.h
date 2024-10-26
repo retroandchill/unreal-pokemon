@@ -195,7 +195,7 @@ namespace UE::Ranges {
          * @return The type index of the asset
          */
         static TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &Object) {
-            auto &AssetManager = UAssetManager::Get();
+            const auto &AssetManager = UAssetManager::Get();
             FAssetData Data;
             AssetManager.GetAssetDataForPath(Object.ToSoftObjectPath(), Data);
             return T::GetTypeIndex(Data);

@@ -330,8 +330,7 @@ namespace UE::Assets {
             }
 
             if constexpr (Ranges::VariantObjectStruct<T>) {
-                auto StructProperty = CastField<FStructProperty>(&Property);
-                if (StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<T>()) {
+                if (auto StructProperty = CastField<FStructProperty>(&Property); StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<T>()) {
                     throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
                                                  NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
                                                            "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
@@ -362,8 +361,7 @@ namespace UE::Assets {
             }
 
             if constexpr (Ranges::VariantObjectStruct<T>) {
-                auto StructProperty = CastField<FStructProperty>(&Property);
-                if (StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<typename T::SoftPtrType>()) {
+                if (auto StructProperty = CastField<FStructProperty>(&Property); StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<typename T::SoftPtrType>()) {
                     throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
                                                  NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
                                                            "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));

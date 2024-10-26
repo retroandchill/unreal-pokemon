@@ -13,7 +13,7 @@ namespace UE::Optionals {
         template <typename O, typename T = TContainedOptionalType<O>>
             requires UEOptional<O> && Ranges::WeakReference<T>
         auto operator()(O &&Optional) const {
-            return Optional | Map([](T &&Ptr) { return Ranges::ToStrongRef<T>(Forward<T>(Ptr)); });
+            return Optional | Map([](T Ptr) { return Ranges::ToStrongRef<T>(Ptr); });
         }
     };
 

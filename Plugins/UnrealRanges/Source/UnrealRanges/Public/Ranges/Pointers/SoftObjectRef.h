@@ -97,13 +97,13 @@ struct TSoftObjectRef {
     }
 
     bool IsAssetValid() const {
-        auto &AssetManager = UAssetManager::Get();
+        const auto &AssetManager = UAssetManager::Get();
         FAssetData Data;
         return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf<T>();
     }
 
     bool IsAssetOfType(const UClass *AssetType) const {
-        auto &AssetManager = UAssetManager::Get();
+        const auto &AssetManager = UAssetManager::Get();
         FAssetData Data;
         return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf(AssetType);
     }

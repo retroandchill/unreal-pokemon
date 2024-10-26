@@ -28,8 +28,17 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr decltype(auto) operator()(O &&Optional) const {
-            using ResultType = TContainedOptionalType<O>;
-            return Optional.IsSet() ? ResultType(Optional.GetValue()) : ResultType(Functor());
+            using FunctorResult = std::invoke_result_t<F>;
+            using ContainedType = TContainedOptionalType<O>;
+            constexpr bool bReturnReference = std::is_lvalue_reference_v<FunctorResult>
+                && std::is_lvalue_reference_v<ContainedType>
+                && std::convertible_to<FunctorResult, ContainedType>;
+            using ResultType = std::conditional_t<bReturnReference, ContainedType, TOptionalElementType<O>>;
+            if constexpr (std::is_rvalue_reference_v<O>) {
+                return Optional.IsSet() ? ResultType(MoveTempIfPossible(Optional.GetValue())) : ResultType(Functor());
+            } else {
+                return Optional.IsSet() ? ResultType(Optional.GetValue()) : ResultType(Functor());
+            }
         }
 
       private:

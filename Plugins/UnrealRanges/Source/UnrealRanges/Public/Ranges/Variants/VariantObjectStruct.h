@@ -159,8 +159,7 @@ namespace UE::Ranges {
 
             void *VariantPtr = StructValue;
             auto Variant = static_cast<T *>(VariantPtr);
-            auto TypeIndex = T::GetTypeIndex(SourceObject);
-            if (!TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
+            if (auto TypeIndex = T::GetTypeIndex(SourceObject); !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
                 throw FVariantException(EBlueprintExceptionType::AccessViolation,
                                         NSLOCTEXT("CreateVariantFromObject", "InvalidObjectType",
                                                   "Incompatible object parameter; the supplied object is not of a valid type for this variant object"));
@@ -214,7 +213,7 @@ namespace UE::Ranges {
             SoftVariant->Set(Path);
         }
 
-        TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass* Class, const FStructProperty &SoftProperty, uint8 *SoftStructValue) const {
+        TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass* Class, const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
             if (SoftProperty.Struct != GetSoftStructType()) {
                 throw FTypeException(EBlueprintExceptionType::AccessViolation,
                                      NSLOCTEXT(
@@ -224,8 +223,7 @@ namespace UE::Ranges {
 
             const void *SoftVariantPtr = SoftStructValue;
             auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
-            auto ClassIndex = T::GetTypeIndexForClass(Class);
-            if (!ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex()) {
+            if (auto ClassIndex = T::GetTypeIndexForClass(Class); !ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex()) {
                 return TOptional<TSoftObjectRef<>>();
             }
 
@@ -233,7 +231,7 @@ namespace UE::Ranges {
         }
 
         bool LoadSynchronous(const FStructProperty &SoftProperty, const uint8 *SoftStructValue,
-                                     const FStructProperty &Property, uint8 *StructValue) const {
+                                     const FStructProperty &Property, uint8 *StructValue) const final {
             if (Property.Struct != GetStructType() || SoftProperty.Struct != GetSoftStructType()) {
                 throw FTypeException(EBlueprintExceptionType::AccessViolation,
                                      NSLOCTEXT(

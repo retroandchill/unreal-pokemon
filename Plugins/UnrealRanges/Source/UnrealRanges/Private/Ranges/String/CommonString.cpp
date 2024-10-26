@@ -10,6 +10,6 @@ namespace UE::Ranges {
     }
 
     FStringView GetStringView(const FCommonString &String) {
-        return std::visit([](auto&& Str) { return GetStringView(Str); }, String);
+        return std::visit([]<typename T>(T&& Str) { return GetStringView(Forward<T>(Str)); }, String);
     }
 }

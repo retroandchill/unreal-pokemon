@@ -17,16 +17,16 @@ namespace UE::Optionals {
         auto operator()(O &&Optional) const {
             if constexpr (Ranges::UObjectPointer<Ranges::TDecayReferenceType<S>> && (std::derived_from<T, UObject> || Ranges::UnrealInterface<T>)) {
                 if constexpr (std::is_lvalue_reference_v<S>) {
-                    return Optional | Map([](S &&Object) { return Cast<T>(&Object); });
+                    return Optional | Map([](S Object) { return Cast<T>(&Object); });
                 } else {
-                    return Optional | Map([](S &&Object) { return Cast<T>(Object); });
+                    return Optional | Map([](S Object) { return Cast<T>(Object); });
                 }
             } else if constexpr (std::derived_from<S, FScriptInterface> && (std::derived_from<T, UObject>  || Ranges::UnrealInterface<T>)) {
-                return Optional | Map([](S &&Object) { return Cast<T>(Object.GetObject()); });
-            } else if constexpr (std::is_same_v<S, uint8&>) {
-                return Optional | Map([](S &&Object) -> T & { return *static_cast<T *>(static_cast<void *>(Object)); });
+                return Optional | Map([](const S &Object) { return Cast<T>(Object.GetObject()); });
+            } else if constexpr (std::is_same_v<S, uint8*>) {
+                return Optional | Map([](S Object) -> T & { return *static_cast<T *>(static_cast<void *>(Object)); });
             } else {
-                return Optional | Map([](S &&Object) -> T & { return static_cast<T &>(*Object); });
+                return Optional | Map([](S Object) -> T & { return static_cast<T &>(*Object); });
             }
         }
     };

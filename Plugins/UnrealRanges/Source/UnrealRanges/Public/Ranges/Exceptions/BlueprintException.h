@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/BlueprintExceptionInfo.h"
 
+#include <string>
+
 namespace UE::Ranges {
 
     /**
@@ -20,7 +22,8 @@ namespace UE::Ranges {
         template <typename... T>
         requires std::constructible_from<FBlueprintExceptionInfo, T...> && (sizeof...(T) != 1 ||
             !(std::same_as<std::remove_cvref_t<T>, FBlueprintException> || ...))
-        explicit FBlueprintException(T&&... Args) : ExceptionInfo(Forward<T>(Args)...) {}
+        explicit FBlueprintException(T&&... Args) : ExceptionInfo(Forward<T>(Args)...),
+            NativeMessage(TCHAR_TO_ANSI(*ExceptionInfo.GetDescription().ToString())) {}
         
         [[nodiscard]] const char* what() const override;
 
@@ -34,5 +37,6 @@ namespace UE::Ranges {
 
     private:
         FBlueprintExceptionInfo ExceptionInfo;
+        std::string NativeMessage;
     };
 }

@@ -5,5 +5,5 @@
 
 
 const char * UE::Ranges::FBlueprintException::what() const {
-    return TCHAR_TO_ANSI(*ExceptionInfo.GetDescription().ToString());
+    return NativeMessage.c_str();
 }
