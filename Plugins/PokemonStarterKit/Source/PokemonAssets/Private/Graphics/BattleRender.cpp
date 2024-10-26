@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Graphics/BattleRender.h"
 
 UE_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
@@ -14,12 +13,12 @@ static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     return Result;
 }
 
-UScriptStruct * TBaseStructure<FBattleRender>::Get() {
+UScriptStruct *TBaseStructure<FBattleRender>::Get() {
     static auto *ScriptStruct = StaticGetBaseStructureInternal(TEXT("BattleRender"));
     return ScriptStruct;
 }
 
-UScriptStruct * TBaseStructure<FSoftBattleRender>::Get() {
+UScriptStruct *TBaseStructure<FSoftBattleRender>::Get() {
     static auto *ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftBattleRender"));
     return ScriptStruct;
 }

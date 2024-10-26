@@ -23,4 +23,4 @@ namespace UE::Optionals {
      */
     constexpr TOptionalClosure<FMakeStrong> MakeStrong;
 
-} // namespace UE::Ranges
+} // namespace UE::Optionals

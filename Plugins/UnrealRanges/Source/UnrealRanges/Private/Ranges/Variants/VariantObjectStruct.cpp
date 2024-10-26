@@ -7,9 +7,8 @@ namespace UE::Ranges {
         return Instance;
     }
 
-    TOptional<IVariantRegistration &> FVariantObjectStructRegistry::GetVariantStructData(
-        const UScriptStruct &Struct) {
+    TOptional<IVariantRegistration &> FVariantObjectStructRegistry::GetVariantStructData(const UScriptStruct &Struct) {
         return Optionals::OfNullable(RegisteredStructs.Find(Struct.GetFName())) |
-            Optionals::Map(&TSharedRef<IVariantRegistration>::Get);
+               Optionals::Map(&TSharedRef<IVariantRegistration>::Get);
     }
-}
+} // namespace UE::Ranges

@@ -60,7 +60,7 @@ namespace UE::Ranges {
         return TypesMatch<T>(Path.TryLoadClass<UObject>());
     }
 
-    UNREALRANGES_API bool TypesMatch(const UObject& Object, const UClass& Class);
+    UNREALRANGES_API bool TypesMatch(const UObject &Object, const UClass &Class);
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
@@ -75,7 +75,7 @@ namespace UE::Ranges {
 
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr bool IsValidSubclass(const UClass* Class) {
+    constexpr bool IsValidSubclass(const UClass *Class) {
         if constexpr (std::derived_from<T, UObject>) {
             return Class->IsChildOf<T>();
         } else {
@@ -83,7 +83,7 @@ namespace UE::Ranges {
             if (Class->HasAnyClassFlags(CLASS_Interface)) {
                 return Class->IsChildOf<typename T::UClassType>();
             }
-            
+
             return Class->ImplementsInterface(T::UClassType::StaticClass());
         }
     }

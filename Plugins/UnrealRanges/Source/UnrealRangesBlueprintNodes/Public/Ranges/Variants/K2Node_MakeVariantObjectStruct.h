@@ -15,7 +15,7 @@ UCLASS()
 class UNREALRANGESBLUEPRINTNODES_API UK2Node_MakeVariantObjectStruct : public UK2Node_VariantOperationBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set up the node assigning the struct that this should be retrieving
      * @param Output The type of the output node
@@ -24,24 +24,24 @@ public:
 
     void AllocateDefaultPins() override;
     void PostReconstructNode() override;
-    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const override;
-    void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
+    bool IsConnectionDisallowed(const UEdGraphPin *MyPin, const UEdGraphPin *OtherPin,
+                                FString &OutReason) const override;
+    void NotifyPinConnectionListChanged(UEdGraphPin *Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
-    void EarlyValidation(FCompilerResultsLog& MessageLog) const override;
+    void EarlyValidation(FCompilerResultsLog &MessageLog) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
-protected:
+  protected:
     void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-        UE::Ranges::IVariantRegistration& Registration) const override;
+                                 UE::Ranges::IVariantRegistration &Registration) const override;
 
     UEdGraphPin *GetObjectPin() const;
-    TOptional<UClass&> GetInputClass() const;
+    TOptional<UClass &> GetInputClass() const;
 
-private:
+  private:
     void RefreshInputPinType() const;
-    
+
     UPROPERTY()
     TObjectPtr<UScriptStruct> OutputType;
-
 };

@@ -13,15 +13,13 @@ FText UK2Node_LoadAssetByName::GetNodeTitleFormat() const {
     return NSLOCTEXT("K2Node", "LoadAssetByNameTitle", "Load {AssetClass} by Name");
 }
 
-UEdGraphPin * UK2Node_LoadAssetByName::CreateResultsPin(const FAssetClassType &AssetClass) {
-    return AssetClass.Visit(UE::Ranges::TOverloaded {
-        [this](UClass* Class) {
-            return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, Class,
-                UEdGraphSchema_K2::PN_ReturnValue);
+UEdGraphPin *UK2Node_LoadAssetByName::CreateResultsPin(const FAssetClassType &AssetClass) {
+    return AssetClass.Visit(UE::Ranges::TOverloaded{
+        [this](UClass *Class) {
+            return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, Class, UEdGraphSchema_K2::PN_ReturnValue);
         },
-        [this](UScriptStruct* Class) {
-            return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, Class,
-                UEdGraphSchema_K2::PN_ReturnValue);
+        [this](UScriptStruct *Class) {
+            return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, Class, UEdGraphSchema_K2::PN_ReturnValue);
         },
     });
 }

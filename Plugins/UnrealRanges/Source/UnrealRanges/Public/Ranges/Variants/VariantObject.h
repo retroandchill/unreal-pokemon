@@ -155,18 +155,18 @@ namespace UE::Ranges {
          * @return The result of invoking the functor on the contained object.
          */
         template <typename F>
-            requires (std::invocable<F, T*> && ...)
-        decltype(auto) Visit(F&& Functor) const {
+            requires(std::invocable<F, T *> && ...)
+        decltype(auto) Visit(F &&Functor) const {
             check(TypeIndex != GetTypeIndex<std::nullptr_t>())
-            static constexpr std::array VisitFunctions = { &TVariantObject::VisitSingle<T, F>... };
+            static constexpr std::array VisitFunctions = {&TVariantObject::VisitSingle<T, F>...};
             return ranges::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, Forward<F>(Functor));
         }
 
-    private:
+      private:
         template <typename U, typename F>
-            requires (std::same_as<T, U> || ...) && std::invocable<F, U*>
-        static constexpr decltype(auto) VisitSingle(UObject* Object, F&& Functor) {
-            return ranges::invoke(Forward<F>(Functor), static_cast<U*>(Object));
+            requires(std::same_as<T, U> || ...) && std::invocable<F, U *>
+        static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor) {
+            return ranges::invoke(Forward<F>(Functor), static_cast<U *>(Object));
         }
 
       protected:
@@ -216,10 +216,10 @@ namespace UE::Ranges {
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         TOptional<U &> TryGet() const {
             if (TypeIndex != GetTypeIndex<U>()) {
-                return TOptional<U&>();
+                return TOptional<U &>();
             }
-            
-            return Optionals::OfNullable(static_cast<U*>(ContainedObject));
+
+            return Optionals::OfNullable(static_cast<U *>(ContainedObject));
         }
 
         /**
@@ -269,7 +269,7 @@ namespace UE::Ranges {
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
-        static TOptional<uint64> GetTypeIndexForClass(const UClass* Class) {
+        static TOptional<uint64> GetTypeIndexForClass(const UClass *Class) {
             constexpr std::array TypeChecks = {&TVariantObject::IsClassValid<std::nullptr_t>,
                                                &TVariantObject::IsClassValid<T>...};
             auto Find = ranges::find_if(TypeChecks, [Class](auto &&Callback) { return Callback(Class); });
@@ -312,7 +312,7 @@ namespace UE::Ranges {
             }
         }
 
-        template <typename U> 
+        template <typename U>
             requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
         static constexpr bool IsClassValid(const UClass *Class) {
             if constexpr (std::same_as<U, std::nullptr_t>) {
@@ -333,24 +333,22 @@ namespace UE::Ranges {
             return GetTypeIndex(Object).IsSet();
         }
 
-        static bool IsValidType(const UClass* Class) {
+        static bool IsValidType(const UClass *Class) {
             if (Class == nullptr) {
                 return true;
             }
 
-            static constexpr std::array ValidTypeChecks = { &IsValidSubclass<T>... };
+            static constexpr std::array ValidTypeChecks = {&IsValidSubclass<T>...};
             auto Find = ranges::find_if(ValidTypeChecks, [Class](auto &&Callback) { return Callback(Class); });
             return Find != ValidTypeChecks.end();
         }
-        
-        
 
         /**
          * Get the array of all classes that are usable by this variant type.
          * @return The array of all classes that are usable by this variant type.
          */
-        static TArray<UClass*> GetTypeClasses() {
-            return { GetClass<T>()... };
+        static TArray<UClass *> GetTypeClasses() {
+            return {GetClass<T>()...};
         }
 
         /**

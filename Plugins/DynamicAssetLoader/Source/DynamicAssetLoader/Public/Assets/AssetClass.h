@@ -24,9 +24,10 @@ namespace UE::Assets {
     template <typename T>
         requires AssetClassType<T>
     class TAssetClass {
-    public:
+      public:
         template <typename U>
-        static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) || (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
+        static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) ||
+                                                   (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
 
         const FName &GetKey() const {
             return Key;
@@ -58,9 +59,7 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
-                       Optionals::Map([](UObject &Object) {
-                           return T(&Object);
-                       });
+                       Optionals::Map([](UObject &Object) { return T(&Object); });
             }
         }
 
@@ -118,9 +117,7 @@ namespace UE::Assets {
             } else {
                 static_assert(Ranges::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
-                       Optionals::Map([](UObject &Object) {
-                           return T(&Object);
-                       });
+                       Optionals::Map([](UObject &Object) { return T(&Object); });
             }
         }
 
@@ -175,7 +172,7 @@ namespace UE::Assets {
             // clang-format on
         }
 
-    private:
+      private:
         void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
             if (Settings->AssetClasses.Contains(Key)) {
@@ -189,11 +186,11 @@ namespace UE::Assets {
             }
 
             if constexpr (std::is_base_of_v<UObject, T>) {
-                Settings->AssetClasses.Emplace(Key,
-                                               FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+                Settings->AssetClasses.Emplace(
+                    Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
             } else if constexpr (Ranges::VariantObjectStruct<T>) {
                 Settings->AssetClasses.Emplace(
-                        Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, Ranges::GetScriptStruct<T>()));
+                    Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, Ranges::GetScriptStruct<T>()));
             }
         }
 
@@ -203,7 +200,7 @@ namespace UE::Assets {
     template <typename T>
         requires std::is_base_of_v<UObject, T>
     class TBlueprintClass {
-    public:
+      public:
         /**
          * Construct a new asset object using this loader
          * @param Key The key for the asset in question
@@ -211,8 +208,8 @@ namespace UE::Assets {
          * @param DefaultPrefix The default prefix for the asset type
          */
         explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key) {
-            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit,
-                                                    DefaultPath, DefaultPrefix);
+            FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit, DefaultPath,
+                                                    DefaultPrefix);
         }
 
         /**
@@ -273,7 +270,7 @@ namespace UE::Assets {
             // clang-format on
         }
 
-    private:
+      private:
         void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
             if (Settings->BlueprintClasses.Contains(Key)) {
@@ -281,8 +278,8 @@ namespace UE::Assets {
                 return;
             }
 
-            Settings->BlueprintClasses.Emplace(Key,
-                                               FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
+            Settings->BlueprintClasses.Emplace(
+                Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
         }
 
         FName Key;
@@ -292,7 +289,7 @@ namespace UE::Assets {
      * Opaque registration information for an asset class.
      */
     class IAssetClassRegistration {
-    public:
+      public:
         virtual ~IAssetClassRegistration() = default;
 
         /**
@@ -304,7 +301,7 @@ namespace UE::Assets {
          * @throws Ranges::FTypeException If there is an issue with the type of property that is expected
          */
         virtual bool LoadAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const = 0;
-        
+
         /**
          * Lookup an asset by its name, returning only a soft reference to the asset
          * @param AssetName The name of the asset in question
@@ -319,7 +316,7 @@ namespace UE::Assets {
     template <typename T>
         requires AssetClassType<T>
     class TAssetClassRegistrationImpl : public IAssetClassRegistration {
-    public:
+      public:
         explicit TAssetClassRegistrationImpl(const TAssetClass<T> &AssetClass) : AssetClass(AssetClass) {
         }
 
@@ -330,14 +327,17 @@ namespace UE::Assets {
             }
 
             if constexpr (Ranges::VariantObjectStruct<T>) {
-                if (auto StructProperty = CastField<FStructProperty>(&Property); StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<T>()) {
-                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
-                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
-                                                           "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+                if (auto StructProperty = CastField<FStructProperty>(&Property);
+                    StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<T>()) {
+                    throw Ranges::FTypeException(
+                        EBlueprintExceptionType::AccessViolation,
+                        NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
+                                  "Incompatible output parameter; the supplied struct does not have the same layout as "
+                                  "what is expected for a variant object struct."));
                 }
 
-                void* StructPtr = Data;
-                auto &Struct = *static_cast<T*>(StructPtr);
+                void *StructPtr = Data;
+                auto &Struct = *static_cast<T *>(StructPtr);
                 Struct = *Result;
             } else {
                 static_assert(std::derived_from<T, UObject>);
@@ -345,7 +345,8 @@ namespace UE::Assets {
                 if (ObjectProperty == nullptr || !ObjectProperty->PropertyClass->IsChildOf<T>()) {
                     throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
                                                  NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty_Object",
-                                                           "Incompatible output parameter; the supplied object does is not of the correct type for this object."));
+                                                           "Incompatible output parameter; the supplied object does is "
+                                                           "not of the correct type for this object."));
                 }
 
                 ObjectProperty->SetObjectPropertyValue(Data, Result.GetPtrOrNull());
@@ -353,7 +354,7 @@ namespace UE::Assets {
 
             return true;
         }
-        
+
         bool LookupAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override {
             auto Result = AssetClass.LookupAsset(AssetName);
             if (!Result.IsSet()) {
@@ -361,14 +362,18 @@ namespace UE::Assets {
             }
 
             if constexpr (Ranges::VariantObjectStruct<T>) {
-                if (auto StructProperty = CastField<FStructProperty>(&Property); StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<typename T::SoftPtrType>()) {
-                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
-                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
-                                                           "Incompatible output parameter; the supplied struct does not have the same layout as what is expected for a variant object struct."));
+                if (auto StructProperty = CastField<FStructProperty>(&Property);
+                    StructProperty == nullptr ||
+                    StructProperty->Struct.Get() != Ranges::GetScriptStruct<typename T::SoftPtrType>()) {
+                    throw Ranges::FTypeException(
+                        EBlueprintExceptionType::AccessViolation,
+                        NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
+                                  "Incompatible output parameter; the supplied struct does not have the same layout as "
+                                  "what is expected for a variant object struct."));
                 }
 
-                void* StructPtr = Data;
-                auto &Struct = *static_cast<typename T::SoftPtrType*>(StructPtr);
+                void *StructPtr = Data;
+                auto &Struct = *static_cast<typename T::SoftPtrType *>(StructPtr);
                 Struct = *Result;
             } else {
                 static_assert(std::derived_from<T, UObject>);
@@ -376,16 +381,17 @@ namespace UE::Assets {
                 if (ObjectProperty == nullptr || ObjectProperty->PropertyClass->IsChildOf<T>()) {
                     throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
                                                  NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty_Object",
-                                                           "Incompatible output parameter; the supplied object does is not of the correct type for this object."));
+                                                           "Incompatible output parameter; the supplied object does is "
+                                                           "not of the correct type for this object."));
                 }
-                
+
                 ObjectProperty->SetValue_InContainer(Data, FSoftObjectPtr(Result->ToSoftObjectPath()));
             }
 
             return true;
         }
 
-    private:
+      private:
         const TAssetClass<T> AssetClass;
     };
 
@@ -393,7 +399,7 @@ namespace UE::Assets {
         FAssetClassRegistry() = default;
         ~FAssetClassRegistry() = default;
 
-    public:
+      public:
         FAssetClassRegistry(const FAssetClassRegistry &) = delete;
         FAssetClassRegistry(FAssetClassRegistry &&) = delete;
         FAssetClassRegistry &operator=(const FAssetClassRegistry &) = delete;
@@ -412,13 +418,13 @@ namespace UE::Assets {
 
                 AssetClassRegistry.Emplace(Key, MakeUnique<TAssetClassRegistrationImpl<T>>(Registration));
             });
-            
+
             return true;
         }
 
-        TOptional<IAssetClassRegistration&> GetAssetClassRegistration(FName Key) const;
+        TOptional<IAssetClassRegistration &> GetAssetClassRegistration(FName Key) const;
 
-    private:
+      private:
         TMap<FName, TUniquePtr<IAssetClassRegistration>> AssetClassRegistry;
     };
 } // namespace UE::Assets
@@ -453,8 +459,9 @@ namespace UE::Assets {
  * @param Prefix The default prefix for the asset
  */
 #define UE_DEFINE_ASSET_CLASS(Name, AssetType, Directory, Prefix)                                                      \
-    const UE::Assets::TAssetClass<AssetType> Name(#Name, TEXT(Directory), TEXT(Prefix)); \
-    static const bool __AssetClassType_##Name##_Registered = UE::Assets::FAssetClassRegistry::Get().RegisterAssetClass(Name)
+    const UE::Assets::TAssetClass<AssetType> Name(#Name, TEXT(Directory), TEXT(Prefix));                               \
+    static const bool __AssetClassType_##Name##_Registered =                                                           \
+        UE::Assets::FAssetClassRegistry::Get().RegisterAssetClass(Name)
 
 /**
  * Define an asset class to use for loading assets.

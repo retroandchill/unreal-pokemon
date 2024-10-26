@@ -14,20 +14,19 @@ FBattleRender USpriteLoader::GetPokemonBattleSprite(const TScriptInterface<IPoke
 }
 
 FBattleRender USpriteLoader::GetSpeciesBattleSprite(FName Species, bool bBack,
-                                                      const FPokemonAssetParams &AdditionalParams) {
+                                                    const FPokemonAssetParams &AdditionalParams) {
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
     return Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveAsset(SpriteResolutionList).Get(FBattleRender());
 }
 
-FSoftBattleRender USpriteLoader::GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
-                                                                         bool bBack) {
+FSoftBattleRender USpriteLoader::GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack) {
     return GetLazySpeciesBattleSprite(Pokemon->GetSpecies().ID, bBack,
                                       {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
 }
 
 FSoftBattleRender USpriteLoader::GetLazySpeciesBattleSprite(FName Species, bool bBack,
-                                                                         const FPokemonAssetParams &AdditionalParams) {
+                                                            const FPokemonAssetParams &AdditionalParams) {
     auto SpriteResolutionList =
         CreatePokemonSpriteResolutionList(Species, AdditionalParams, bBack ? TEXT("Back") : TEXT("Front"));
     // clang-format off
@@ -48,8 +47,7 @@ FSoftImageAsset USpriteLoader::GetLazyPokemonIcon(const TScriptInterface<IPokemo
     return GetLazySpeciesIcon(Pokemon->GetSpecies().ID, {.Gender = Pokemon->GetGender()});
 }
 
-FSoftImageAsset USpriteLoader::GetLazySpeciesIcon(FName Species,
-                                                                 const FPokemonAssetParams &AdditionalParams) {
+FSoftImageAsset USpriteLoader::GetLazySpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams) {
     auto SpriteResolutionList = CreatePokemonSpriteResolutionList(Species, AdditionalParams, TEXT("Icons"));
     return Pokemon::Assets::Graphics::PokemonMenuSprites.ResolveSoftAsset(SpriteResolutionList).Get(FSoftImageAsset());
 }

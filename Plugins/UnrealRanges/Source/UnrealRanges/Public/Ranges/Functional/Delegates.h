@@ -90,9 +90,8 @@ namespace UE::Ranges {
     }
 
     template <typename D, typename... A>
-    concept CanBindDelegate = requires(D&& Delegate, A &&...Args) {
-        BindToDelegate<D, A...>(Forward<D>(), Forward<A>(Args)...);
-    };
+    concept CanBindDelegate =
+        requires(D &&Delegate, A &&...Args) { BindToDelegate<D, A...>(Forward<D>(), Forward<A>(Args)...); };
 
     template <typename M, typename U>
         requires MulticastDelegate<M> && BindableTo<M, U>

@@ -29,7 +29,7 @@ EAssetLoadResult UAssetLoader::FindAssetByName(const UClass *AssetClass, const F
 }
 
 EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
-    const FString &AssetName, TSoftObjectPtr<> &FoundAsset) {
+                                                 const FString &AssetName, TSoftObjectPtr<> &FoundAsset) {
     // clang-format off
     FoundAsset = LookupAssetByName(BasePackageName, AssetName) |
                  UE::Optionals::Filter(&TSoftObjectRef<>::IsAssetOfType, AssetClass) |
@@ -39,7 +39,7 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const
     return !FoundAsset.IsNull() ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
 }
 
-CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LoadDynamicAsset, FName, const FString&, UObject*&)
+CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LoadDynamicAsset, FName, const FString &, UObject *&)
 DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
     P_GET_PROPERTY(FNameProperty, Identifier);
     P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
@@ -48,14 +48,16 @@ DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
 
     try {
         if (OutputProp == nullptr || Output == nullptr) {
-            throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
+            throw UE::Ranges::FInvalidArgumentException(
+                EBlueprintExceptionType::AccessViolation,
                 NSLOCTEXT("UAssetLoader", "LoadDynamicAsset_MissingParam", "The out parameter was not provided!"));
         }
-        
+
         auto Registration = UE::Assets::FAssetClassRegistry::Get().GetAssetClassRegistration(Identifier);
         if (!Registration.IsSet()) {
             throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
-                NSLOCTEXT("UAssetLoader", "LoadDynamicAsset_NoAssetType", "The provided asset type is not a valid asset"));
+                                                        NSLOCTEXT("UAssetLoader", "LoadDynamicAsset_NoAssetType",
+                                                                  "The provided asset type is not a valid asset"));
         }
 
         auto AssetNameString = UE::Ranges::ExtractCommonStringFromProperty(AssetNameProp, AssetNameData);
@@ -63,9 +65,10 @@ DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
 
         P_NATIVE_BEGIN
         P_GET_RESULT(EAssetLoadResult, Result);
-        Result = Registration->LoadAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+        Result = Registration->LoadAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found
+                                                                         : EAssetLoadResult::NotFound;
         P_NATIVE_END;
-    } catch (const UE::Ranges::FBlueprintException& Exception) {
+    } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }
 }
@@ -79,14 +82,16 @@ DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
 
     try {
         if (OutputProp == nullptr || Output == nullptr) {
-            throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
+            throw UE::Ranges::FInvalidArgumentException(
+                EBlueprintExceptionType::AccessViolation,
                 NSLOCTEXT("UAssetLoader", "LookupDynamicAsset_MissingParam", "The out parameter was not provided!"));
         }
-        
+
         auto Registration = UE::Assets::FAssetClassRegistry::Get().GetAssetClassRegistration(Identifier);
         if (!Registration.IsSet()) {
             throw UE::Ranges::FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
-                NSLOCTEXT("UAssetLoader", "LookupDynamicAsset_NoAssetType", "The provided asset type is not a valid asset"));
+                                                        NSLOCTEXT("UAssetLoader", "LookupDynamicAsset_NoAssetType",
+                                                                  "The provided asset type is not a valid asset"));
         }
 
         auto AssetNameString = UE::Ranges::ExtractCommonStringFromProperty(AssetNameProp, AssetNameData);
@@ -94,9 +99,10 @@ DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
 
         P_NATIVE_BEGIN
         P_GET_RESULT(EAssetLoadResult, Result);
-        Result = Registration->LookupAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
+        Result = Registration->LookupAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found
+                                                                           : EAssetLoadResult::NotFound;
         P_NATIVE_END;
-    } catch (const UE::Ranges::FBlueprintException& Exception) {
+    } catch (const UE::Ranges::FBlueprintException &Exception) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, Exception.GetExceptionInfo());
     }
 }

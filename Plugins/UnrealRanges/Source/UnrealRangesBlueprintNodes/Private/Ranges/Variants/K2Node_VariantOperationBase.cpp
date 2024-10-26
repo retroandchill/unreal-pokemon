@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/K2Node_VariantOperationBase.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "Ranges/Variants/VariantObjectStruct.h"

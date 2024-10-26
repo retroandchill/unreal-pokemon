@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/K2Node_MakeVariantObjectStruct.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
@@ -11,15 +10,13 @@
 #include "Ranges/Variants/VariantObjectStruct.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
 
-
 void UK2Node_MakeVariantObjectStruct::Initialize(UScriptStruct *Output) {
     OutputType = Output;
 }
 
 void UK2Node_MakeVariantObjectStruct::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object);
-    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
-              (OutputType != nullptr ? OutputType.Get() : nullptr),
+    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, (OutputType != nullptr ? OutputType.Get() : nullptr),
               UEdGraphSchema_K2::PN_ReturnValue);
 
     Super::AllocateDefaultPins();
@@ -41,8 +38,8 @@ bool UK2Node_MakeVariantObjectStruct::IsConnectionDisallowed(const UEdGraphPin *
     check(Registration.IsSet())
 
     bool bDisallowed = true;
-    if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Object || OtherPin->PinType.PinCategory ==
-        UEdGraphSchema_K2::PC_Interface) {
+    if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Object ||
+        OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Interface) {
         auto Class = Cast<UClass>(OtherPin->PinType.PinSubCategoryObject.Get());
         bDisallowed = Class == nullptr || !Registration->IsValidType(Class);
     }
@@ -51,7 +48,6 @@ bool UK2Node_MakeVariantObjectStruct::IsConnectionDisallowed(const UEdGraphPin *
         OutReason = TEXT("Not a valid object type for this variant!");
     }
     return bDisallowed;
-
 }
 
 void UK2Node_MakeVariantObjectStruct::NotifyPinConnectionListChanged(UEdGraphPin *Pin) {
@@ -64,17 +60,15 @@ void UK2Node_MakeVariantObjectStruct::NotifyPinConnectionListChanged(UEdGraphPin
 }
 
 FText UK2Node_MakeVariantObjectStruct::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto StructName = OutputType != nullptr
-                          ? OutputType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto StructName =
+        OutputType != nullptr ? OutputType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetNodeTitle", "Make {Output}"),
                               TEXT("Output"), StructName);
 }
 
 FText UK2Node_MakeVariantObjectStruct::GetTooltipText() const {
-    auto StructName = OutputType != nullptr
-                          ? OutputType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto StructName =
+        OutputType != nullptr ? OutputType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeVariantObjectStruct_GetTooltipText",
                                         "Create a new {Output} structure from the source object."),
                               TEXT("Output"), StructName);
@@ -120,8 +114,7 @@ void UK2Node_MakeVariantObjectStruct::ExpandNode(FKismetCompilerContext &Compile
 void UK2Node_MakeVariantObjectStruct::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
                                                               UE::Ranges::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
-    auto CustomizeCallback = [](UEdGraphNode *Node, bool,
-                                UScriptStruct *Output) {
+    auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeVariantObjectStruct>(Node);
         TypedNode->Initialize(Output);
     };
@@ -129,7 +122,8 @@ void UK2Node_MakeVariantObjectStruct::AddMenuOptionsForStruct(FBlueprintActionDa
     auto ActionKey = GetClass();
     auto Struct = Registration.GetStructType();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr);
+    check(Spawner != nullptr)
+    ;
     Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Struct);
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

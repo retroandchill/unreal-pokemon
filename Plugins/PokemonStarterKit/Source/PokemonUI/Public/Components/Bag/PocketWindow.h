@@ -36,14 +36,14 @@ class POKEMONUI_API UPocketWindow : public UUserWidget {
 
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void SetPocketName(const FText& PocketName);
+    void SetPocketName(const FText &PocketName);
 
   private:
     /**
      * Update the information displayed to the player regarding the current pocket
      */
     void UpdatePocketInfo();
-    
+
     /**
      * The current pocket that is being viewed
      */

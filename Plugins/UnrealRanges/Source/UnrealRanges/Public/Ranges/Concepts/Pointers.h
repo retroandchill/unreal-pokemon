@@ -128,9 +128,9 @@ namespace UE::Ranges {
         template <typename T>
             requires std::is_lvalue_reference_v<T>
         struct TDecayReference<T> {
-            using Type = std::remove_reference_t<T>*;
+            using Type = std::remove_reference_t<T> *;
         };
-    }
+    } // namespace Detail
 
     template <typename T>
     using TDecayReferenceType = typename Detail::TDecayReference<T>::Type;

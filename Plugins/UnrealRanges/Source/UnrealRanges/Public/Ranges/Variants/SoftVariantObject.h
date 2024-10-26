@@ -63,7 +63,8 @@ namespace UE::Ranges {
          * Create an instance explicitly from the given object
          * @param Object The object to set from
          */
-        explicit TSoftVariantObject(const T &Object) : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
+        explicit TSoftVariantObject(const T &Object)
+            : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
         constexpr uint64 GetTypeIndex() const {
@@ -143,7 +144,7 @@ namespace UE::Ranges {
          * Set the value from the given hard reference
          * @param Object Hard reference to set from
          */
-        void Set(const T& Object) {
+        void Set(const T &Object) {
             Ptr = Object.TryGet().GetPtrOrNull();
             TypeIndex = Object.GetTypeIndex();
         }
@@ -152,7 +153,7 @@ namespace UE::Ranges {
          * Set the value from the given soft pointer
          * @param Object The soft object to set from
          */
-        void Set(const TSoftObjectPtr<>& Object) {
+        void Set(const TSoftObjectPtr<> &Object) {
             Ptr = Object;
             TypeIndex = T::GetTypeIndex(GetAssetData()).GetValue();
         }

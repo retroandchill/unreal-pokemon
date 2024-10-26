@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/K2Node_VariantCastBase.h"
 #include "K2Node_IfThenElse.h"
 #include "KismetCompiler.h"
@@ -50,42 +49,37 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
 
     FText MenuEntryTitle = NSLOCTEXT("UK2Node_VariantCastBase", "MakePureTitle", "Convert to pure cast");
     FText MenuEntryTooltip = NSLOCTEXT("UK2Node_VariantCastBase", "MakePureTooltip",
-                                       "Removes the execution pins to make the node more versatile (NOTE: the cast could still fail, resulting in an invalid output).");
+                                       "Removes the execution pins to make the node more versatile (NOTE: the cast "
+                                       "could still fail, resulting in an invalid output).");
 
     bool bCanTogglePurity = true;
-    auto CanExecutePurityToggle = [](bool const bInCanTogglePurity) {
-        return bInCanTogglePurity;
-    };
+    auto CanExecutePurityToggle = [](bool const bInCanTogglePurity) { return bInCanTogglePurity; };
 
     if (IsNodePure()) {
         MenuEntryTitle = NSLOCTEXT("UK2Node_VariantCastBase", "MakeImpureTitle", "Convert to impure cast");
-        MenuEntryTooltip = NSLOCTEXT("UK2Node_VariantCastBase", "MakeImpureTooltip",
-                                     "Adds in branching execution pins so that you can separatly handle when the cast fails/succeeds.");
+        MenuEntryTooltip = NSLOCTEXT(
+            "UK2Node_VariantCastBase", "MakeImpureTooltip",
+            "Adds in branching execution pins so that you can separatly handle when the cast fails/succeeds.");
 
         const UEdGraphSchema_K2 *K2Schema = Cast<UEdGraphSchema_K2>(GetSchema());
-        check(K2Schema != nullptr);
+        check(K2Schema != nullptr)
+        ;
 
         bCanTogglePurity = K2Schema->DoesGraphSupportImpureFunctions(GetGraph());
         if (!bCanTogglePurity) {
             MenuEntryTooltip = NSLOCTEXT("UK2Node_VariantCastBase", "CannotMakeImpureTooltip",
-                                         "This graph does not support impure calls (and you should therefore test the cast's result for validity).");
+                                         "This graph does not support impure calls (and you should therefore test the "
+                                         "cast's result for validity).");
         }
     }
 
-    FToolMenuSection &Section = Menu->AddSection("UK2Node_VariantCastBase",
-                                                 NSLOCTEXT("UK2Node_VariantCastBase", "DynamicCastHeader", "Cast"));
-    Section.AddMenuEntry(
-        "TogglePurity",
-        MenuEntryTitle,
-        MenuEntryTooltip,
-        FSlateIcon(),
-        FUIAction(
-            FExecuteAction::CreateUObject(const_cast<UK2Node_VariantCastBase *>(this),
-                                          &UK2Node_VariantCastBase::TogglePurity),
-            FCanExecuteAction::CreateStatic(CanExecutePurityToggle, bCanTogglePurity),
-            FIsActionChecked()
-            )
-        );
+    FToolMenuSection &Section =
+        Menu->AddSection("UK2Node_VariantCastBase", NSLOCTEXT("UK2Node_VariantCastBase", "DynamicCastHeader", "Cast"));
+    Section.AddMenuEntry("TogglePurity", MenuEntryTitle, MenuEntryTooltip, FSlateIcon(),
+                         FUIAction(FExecuteAction::CreateUObject(const_cast<UK2Node_VariantCastBase *>(this),
+                                                                 &UK2Node_VariantCastBase::TogglePurity),
+                                   FCanExecuteAction::CreateStatic(CanExecutePurityToggle, bCanTogglePurity),
+                                   FIsActionChecked()));
 }
 
 void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
@@ -140,8 +134,10 @@ UEdGraphPin *UK2Node_VariantCastBase::GetCastSucceededPin() const {
 
 void UK2Node_VariantCastBase::TogglePurity() {
     const bool bIsNodePure = IsNodePure();
-    const FText TransactionTitle = bIsNodePure ? NSLOCTEXT("UK2Node_VariantCastBase", "TogglePurityToImpure", "Convert to Impure Cast") : NSLOCTEXT("UK2Node_VariantCastBase", "TogglePurityToPure", "Convert to Pure Cast");
-    const FScopedTransaction Transaction( TransactionTitle );
+    const FText TransactionTitle =
+        bIsNodePure ? NSLOCTEXT("UK2Node_VariantCastBase", "TogglePurityToImpure", "Convert to Impure Cast")
+                    : NSLOCTEXT("UK2Node_VariantCastBase", "TogglePurityToPure", "Convert to Pure Cast");
+    const FScopedTransaction Transaction(TransactionTitle);
     Modify();
     SetPurity(!bIsNodePure);
 }
@@ -150,7 +146,7 @@ void UK2Node_VariantCastBase::SetPurity(bool bPurity) {
     if (bPurity == bIsPure) {
         return;
     }
-    
+
     bIsPure = bPurity;
     if (Pins.Num() > 0) {
         ReconstructNode();

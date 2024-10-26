@@ -10,20 +10,20 @@
 #include "K2Node_VariantCastBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract)
 class UNREALRANGESBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_VariantOperationBase {
     GENERATED_BODY()
 
-protected:
+  protected:
     struct FCastFunctionInfo {
-        UK2Node* CastNode = nullptr;
-        UEdGraphPin* InputPin = nullptr;
-        UEdGraphPin* OutputPin = nullptr;
+        UK2Node *CastNode = nullptr;
+        UEdGraphPin *InputPin = nullptr;
+        UEdGraphPin *OutputPin = nullptr;
     };
 
-public:
+  public:
     void AllocateDefaultPins() override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
@@ -31,24 +31,22 @@ public:
     FLinearColor GetNodeTitleColor() const override;
     FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
 
-    void GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const override;
+    void GetNodeContextMenuActions(UToolMenu *Menu, UGraphNodeContextMenuContext *Context) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
-protected:
-    virtual void CreateInputAndOutputPins() ABSTRACT_METHOD
-    UEdGraphPin* GetCastFailedPin() const;
+  protected:
+    virtual void CreateInputAndOutputPins() ABSTRACT_METHOD UEdGraphPin *GetCastFailedPin() const;
 
-    virtual void MakeAdditionalPinLinks(UK2Node& CallPerformCast) const;
-    virtual UEdGraphPin* GetInputPin() const ABSTRACT_METHOD
-    virtual UEdGraphPin* GetOutputPin() const ABSTRACT_METHOD
-    UEdGraphPin* GetCastSucceededPin() const;
-    
-    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) ABSTRACT_METHOD
+    virtual void MakeAdditionalPinLinks(UK2Node &CallPerformCast) const;
+    virtual UEdGraphPin *GetInputPin() const ABSTRACT_METHOD
+        virtual UEdGraphPin *GetOutputPin() const ABSTRACT_METHOD UEdGraphPin *GetCastSucceededPin() const;
 
-private:
-    void TogglePurity();
+    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext,
+                                                 UEdGraph *SourceGraph) ABSTRACT_METHOD
+
+        private : void TogglePurity();
     void SetPurity(bool bPurity);
-    
+
     UPROPERTY()
     bool bIsPure = false;
 };

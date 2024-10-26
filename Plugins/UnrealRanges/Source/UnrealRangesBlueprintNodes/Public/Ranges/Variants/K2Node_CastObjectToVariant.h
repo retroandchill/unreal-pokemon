@@ -15,7 +15,7 @@ UCLASS()
 class UNREALRANGESBLUEPRINTNODES_API UK2Node_CastObjectToVariant : public UK2Node_VariantCastBase {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Set up the node assigning the struct that this should be retrieving
      * @param Output The type of the output node
@@ -25,15 +25,15 @@ public:
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
 
-protected:
+  protected:
     void CreateInputAndOutputPins() override;
-    void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar, UE::Ranges::IVariantRegistration &Registration) const override;
-    UEdGraphPin* GetInputPin() const override;
-    UEdGraphPin* GetOutputPin() const override;
-    FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
+    void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+                                 UE::Ranges::IVariantRegistration &Registration) const override;
+    UEdGraphPin *GetInputPin() const override;
+    UEdGraphPin *GetOutputPin() const override;
+    FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<UScriptStruct> OutputType;
-    
 };

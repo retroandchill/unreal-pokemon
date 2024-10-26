@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/K2Node_MakeSoftVariantFromVariant.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
@@ -24,21 +23,19 @@ void UK2Node_MakeSoftVariantFromVariant::AllocateDefaultPins() {
 }
 
 FText UK2Node_MakeSoftVariantFromVariant::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto StructName = SoftReferenceType != nullptr
-                          ? SoftReferenceType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto StructName = SoftReferenceType != nullptr ? SoftReferenceType->GetDisplayNameText()
+                                                   : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromVariant_GetNodeTitle", "Make {Output}"),
                               TEXT("Output"), StructName);
 }
 
 FText UK2Node_MakeSoftVariantFromVariant::GetTooltipText() const {
-    auto HardStructName = HardReferenceType != nullptr
-                          ? HardReferenceType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
-    auto SoftStructName = SoftReferenceType != nullptr
-                          ? SoftReferenceType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
-    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromVariant_GetTooltipText", "Make a new {Output} structure from the provided {Input} structure."),
+    auto HardStructName = HardReferenceType != nullptr ? HardReferenceType->GetDisplayNameText()
+                                                       : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto SoftStructName = SoftReferenceType != nullptr ? SoftReferenceType->GetDisplayNameText()
+                                                       : FText::FromStringView(TEXT("<<INVALID>>"));
+    return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromVariant_GetTooltipText",
+                                        "Make a new {Output} structure from the provided {Input} structure."),
                               TEXT("Input"), HardStructName, TEXT("Output"), SoftStructName);
 }
 
@@ -72,7 +69,7 @@ void UK2Node_MakeSoftVariantFromVariant::ExpandNode(FKismetCompilerContext &Comp
 }
 
 void UK2Node_MakeSoftVariantFromVariant::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-    UE::Ranges::IVariantRegistration &Registration) const {
+                                                                 UE::Ranges::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Input, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeSoftVariantFromVariant>(Node);
@@ -81,7 +78,9 @@ void UK2Node_MakeSoftVariantFromVariant::AddMenuOptionsForStruct(FBlueprintActio
 
     auto ActionKey = GetClass();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr);
-    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(), Registration.GetStructType());
+    check(Spawner != nullptr)
+    ;
+    Spawner->CustomizeNodeDelegate =
+        FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(), Registration.GetStructType());
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

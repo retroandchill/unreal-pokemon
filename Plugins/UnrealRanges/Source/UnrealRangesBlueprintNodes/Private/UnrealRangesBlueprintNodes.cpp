@@ -1,14 +1,9 @@
 ﻿#include "UnrealRangesBlueprintNodes.h"
 
-
-void FUnrealRangesBlueprintNodesModule::StartupModule()
-{
-    
+void FUnrealRangesBlueprintNodesModule::StartupModule() {
 }
 
-void FUnrealRangesBlueprintNodesModule::ShutdownModule()
-{
-    
+void FUnrealRangesBlueprintNodesModule::ShutdownModule() {
 }
-    
+
 IMPLEMENT_MODULE(FUnrealRangesBlueprintNodesModule, UnrealRangesBlueprintNodes)

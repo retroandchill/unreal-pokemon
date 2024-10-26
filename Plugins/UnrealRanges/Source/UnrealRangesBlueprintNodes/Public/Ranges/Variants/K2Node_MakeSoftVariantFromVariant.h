@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "K2Node_VariantOperationBase.h"
+
 #include "K2Node_MakeSoftVariantFromVariant.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS()
 class UNREALRANGESBLUEPRINTNODES_API UK2Node_MakeSoftVariantFromVariant : public UK2Node_VariantOperationBase {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(UScriptStruct *HardReference, UScriptStruct *SoftReference);
 
     void AllocateDefaultPins() override;
@@ -21,16 +22,14 @@ public:
     FText GetTooltipText() const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
-protected:
+  protected:
     void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-        UE::Ranges::IVariantRegistration& Registration) const override;
+                                 UE::Ranges::IVariantRegistration &Registration) const override;
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<UScriptStruct> HardReferenceType;
-    
+
     UPROPERTY()
     TObjectPtr<UScriptStruct> SoftReferenceType;
-    
-
 };

@@ -22,4 +22,4 @@ namespace UE::Ranges {
         __builtin_unreachable();
 #endif
     }
-}
+} // namespace UE::Ranges

@@ -1,23 +1,21 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Assets/K2Node_DynamicAssetLoadBase.h"
+#include "Assets/AssetLoader.h"
+#include "Assets/AssetLoadingSettings.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
-#include "Assets/AssetLoader.h"
-#include "Assets/AssetLoadingSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OrElse.h"
+#include "Ranges/Views/ContainerView.h"
 
 THIRD_PARTY_INCLUDES_START
 #include <range/v3/algorithm/contains.hpp>
 THIRD_PARTY_INCLUDES_END
-
 
 static const FName AssetNamePinName = "AssetName";
 static const FName AssetNotFoundPinName = "AssetNotFound";
@@ -34,9 +32,8 @@ void UK2Node_DynamicAssetLoadBase::AllocateDefaultPins() {
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, AssetNotFoundPinName);
 
     // AssetNamePin
-    auto AssetNamePin = CreatePin(EGPD_Input,
-                                  bWildcardMode ? UEdGraphSchema_K2::PC_Wildcard : UEdGraphSchema_K2::PC_String,
-                                  AssetNamePinName);
+    auto AssetNamePin = CreatePin(
+        EGPD_Input, bWildcardMode ? UEdGraphSchema_K2::PC_Wildcard : UEdGraphSchema_K2::PC_String, AssetNamePinName);
     SetPinToolTip(*AssetNamePin,
                   NSLOCTEXT("K2Node", "DynamicAssetLoadBase AssetNamePinDescription", "The name of the asset to load"));
 
@@ -63,11 +60,8 @@ bool UK2Node_DynamicAssetLoadBase::IsConnectionDisallowed(const UEdGraphPin *MyP
         return false;
     }
 
-    const static std::array ValidPinTypes = {
-        UEdGraphSchema_K2::PC_Name,
-        UEdGraphSchema_K2::PC_String,
-        UEdGraphSchema_K2::PC_Text
-    };
+    const static std::array ValidPinTypes = {UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PC_String,
+                                             UEdGraphSchema_K2::PC_Text};
     if (!ranges::contains(ValidPinTypes, OtherPin->PinType.PinCategory)) {
         OutReason = TEXT("Not a valid string type structure!");
         return true;
@@ -97,8 +91,7 @@ FText UK2Node_DynamicAssetLoadBase::GetNodeTitle(ENodeTitleType::Type TitleType)
         auto Setting = GetDefault<UAssetLoadingSettings>();
         auto &ClassType = Setting->AssetClasses.FindChecked(AssetKey);
 
-        CachedNodeTitle.SetCachedText(FText::FormatNamed(LocFormat,
-                                                         TEXT("AssetClass"), ClassType.DisplayName), this);
+        CachedNodeTitle.SetCachedText(FText::FormatNamed(LocFormat, TEXT("AssetClass"), ClassType.DisplayName), this);
     }
 
     return CachedNodeTitle;
@@ -116,32 +109,26 @@ void UK2Node_DynamicAssetLoadBase::GetNodeContextMenuActions(UToolMenu *Menu,
         return;
     }
 
-    FText MenuEntryTitle = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeStringLiteralTitle",
-                                     "Convert to String-literal parameter");
-    FText MenuEntryTooltip = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeStringLiteralTooltip",
-                                       "Converts the asset name pin to a string literal parameter, allowing a hard-coded value to be used");
+    FText MenuEntryTitle =
+        NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeStringLiteralTitle", "Convert to String-literal parameter");
+    FText MenuEntryTooltip =
+        NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeStringLiteralTooltip",
+                  "Converts the asset name pin to a string literal parameter, allowing a hard-coded value to be used");
 
     if (!bWildcardMode) {
-        MenuEntryTitle = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeWildcardTitle",
-                                   "Convert to wildcard parameter");
+        MenuEntryTitle =
+            NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeWildcardTitle", "Convert to wildcard parameter");
         MenuEntryTooltip = NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MakeWildcardTooltip",
-                                     "Converts the asset name pin to a wildcard parameter, allowing a Name, String or Text pin to be connected without conversion");
+                                     "Converts the asset name pin to a wildcard parameter, allowing a Name, String or "
+                                     "Text pin to be connected without conversion");
     }
 
-    FToolMenuSection &Section = Menu->AddSection("UK2Node_DynamicAssetLoadBase",
-                                                 NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "SearchHeader",
-                                                           "Parameters"));
+    FToolMenuSection &Section = Menu->AddSection(
+        "UK2Node_DynamicAssetLoadBase", NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "SearchHeader", "Parameters"));
 
-    Section.AddMenuEntry(
-        "ToggleWildcard",
-        MenuEntryTitle,
-        MenuEntryTooltip,
-        FSlateIcon(),
-        FUIAction(
-            FExecuteAction::CreateUObject(const_cast<UK2Node_DynamicAssetLoadBase *>(this),
-                                          &UK2Node_DynamicAssetLoadBase::ToggleWildcard)
-            )
-        );
+    Section.AddMenuEntry("ToggleWildcard", MenuEntryTitle, MenuEntryTooltip, FSlateIcon(),
+                         FUIAction(FExecuteAction::CreateUObject(const_cast<UK2Node_DynamicAssetLoadBase *>(this),
+                                                                 &UK2Node_DynamicAssetLoadBase::ToggleWildcard)));
 }
 
 void UK2Node_DynamicAssetLoadBase::ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
@@ -203,7 +190,7 @@ void UK2Node_DynamicAssetLoadBase::GetMenuActions(FBlueprintActionDatabaseRegist
 
         for (auto Settings = GetDefault<UAssetLoadingSettings>(); auto &[Key, AssetClass] : Settings->AssetClasses) {
             if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(
-                &AssetClass.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), true)) {
+                    &AssetClass.AssetClass.TryGet<UClass>().Get(*UObject::StaticClass()), true)) {
                 continue;
             }
 
@@ -291,11 +278,9 @@ void UK2Node_DynamicAssetLoadBase::SetPinToolTip(UEdGraphPin &MutatablePin, cons
 }
 
 void UK2Node_DynamicAssetLoadBase::ToggleWildcard() {
-    const FText TransactionTitle = bWildcardMode
-                                       ? NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "ToggleToString",
-                                                   "Convert to String param")
-                                       : NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "ToggleToWildcard",
-                                                   "Convert to Wildcard Param");
+    const FText TransactionTitle =
+        bWildcardMode ? NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "ToggleToString", "Convert to String param")
+                      : NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "ToggleToWildcard", "Convert to Wildcard Param");
     const FScopedTransaction Transaction(TransactionTitle);
     Modify();
     SetWildcardMode(!bWildcardMode);

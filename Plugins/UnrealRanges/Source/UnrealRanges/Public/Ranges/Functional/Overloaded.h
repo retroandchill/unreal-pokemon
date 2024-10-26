@@ -22,4 +22,4 @@ namespace UE::Ranges {
     struct TOverloaded : T... {
         using T::operator()...;
     };
-}
+} // namespace UE::Ranges

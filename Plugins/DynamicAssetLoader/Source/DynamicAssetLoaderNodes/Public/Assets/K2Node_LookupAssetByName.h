@@ -37,12 +37,11 @@ UCLASS()
 class DYNAMICASSETLOADERNODES_API UK2Node_LookupAssetByName : public UK2Node_DynamicAssetLoadBase {
     GENERATED_BODY()
 
-public:
+  public:
     UK2Node_LookupAssetByName();
 
-protected:
+  protected:
     FText GetNodeTitleFormat() const override;
-    UEdGraphPin* CreateResultsPin(const FAssetClassType& AssetClass) override;
+    UEdGraphPin *CreateResultsPin(const FAssetClassType &AssetClass) override;
     FName GetLoadFunctionName() const override;
-
 };

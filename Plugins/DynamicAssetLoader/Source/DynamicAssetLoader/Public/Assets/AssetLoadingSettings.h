@@ -97,7 +97,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
      * conditionally and can be edited within the asset editor, unless the asset is marked as native.
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Transient,
-        meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
+              meta = (EditCondition = "!bIsNative", HideEditConditionToggle))
     FAssetClassType AssetClass = FAssetClassType(UObject::StaticClass());
 
     /**
@@ -114,7 +114,7 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
   private:
     FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix,
                        UClass *AssetClass = UObject::StaticClass());
-    FAssetLoadingEntry(FName Key,FStringView RootDirectory, FStringView AssetPrefix, UScriptStruct *AssetClass);
+    FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix, UScriptStruct *AssetClass);
 
     template <typename T>
         requires UE::Assets::AssetClassType<T>

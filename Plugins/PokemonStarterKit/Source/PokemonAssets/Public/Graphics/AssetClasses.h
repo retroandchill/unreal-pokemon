@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleRender.h"
 #include "Assets/AssetClass.h"
+#include "BattleRender.h"
 #include "Images/ImageAsset.h"
 
 /**

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/K2Node_LoadVariantSynchronous.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
@@ -29,8 +28,8 @@ void UK2Node_LoadVariantSynchronous::PostReconstructNode() {
 
 bool UK2Node_LoadVariantSynchronous::IsConnectionDisallowed(const UEdGraphPin *MyPin, const UEdGraphPin *OtherPin,
                                                             FString &OutReason) const {
-    if ((MyPin != GetSoftReferencePin() && MyPin != GetResultPin()) || MyPin->PinType.PinCategory !=
-        UEdGraphSchema_K2::PC_Wildcard) {
+    if ((MyPin != GetSoftReferencePin() && MyPin != GetResultPin()) ||
+        MyPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) {
         return false;
     }
 
@@ -38,9 +37,8 @@ bool UK2Node_LoadVariantSynchronous::IsConnectionDisallowed(const UEdGraphPin *M
     if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Struct) {
         auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
         auto Struct = Cast<UScriptStruct>(OtherPin->PinType.PinSubCategoryObject.Get());
-        auto GetStructFunction = MyPin == GetSoftReferencePin()
-                                     ? &UE::Ranges::IVariantRegistration::GetSoftStructType
-                                     : &UE::Ranges::IVariantRegistration::GetStructType;
+        auto GetStructFunction = MyPin == GetSoftReferencePin() ? &UE::Ranges::IVariantRegistration::GetSoftStructType
+                                                                : &UE::Ranges::IVariantRegistration::GetStructType;
         // clang-format off
         auto Result = UE::Optionals::OfNullable(Struct) |
                       UE::Optionals::FlatMap(Registry, &UE::Ranges::FVariantObjectStructRegistry::GetVariantStructData) |
@@ -83,7 +81,8 @@ void UK2Node_LoadVariantSynchronous::GetMenuActions(FBlueprintActionDatabaseRegi
     }
 
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr);
+    check(Spawner != nullptr)
+    ;
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
@@ -123,7 +122,6 @@ void UK2Node_LoadVariantSynchronous::ExpandNode(FKismetCompilerContext &Compiler
     auto CallCreateSoftReferencePin = CallCreateVariant->FindPinChecked(SoftVariant_ParamName);
     auto CallCreateVariantPin = CallCreateVariant->FindPinChecked(Variant_ParamName);
 
-    
     CompilerContext.MovePinLinksToIntermediate(*ExecPin, *CallCreateExecPin);
     CompilerContext.MovePinLinksToIntermediate(*ThenPin, *CallCreateThenPin);
     CompilerContext.MovePinLinksToIntermediate(*FailedPin, *CallCreateFailedPin);
@@ -175,8 +173,8 @@ void UK2Node_LoadVariantSynchronous::RefreshInputPin() const {
         InputPin->PinType = Pin->PinType;
         InputPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
 
-        auto Registration = Registry.GetVariantStructData(
-            *CastChecked<UScriptStruct>(InputPin->PinType.PinSubCategoryObject.Get()));
+        auto Registration =
+            Registry.GetVariantStructData(*CastChecked<UScriptStruct>(InputPin->PinType.PinSubCategoryObject.Get()));
         check(Registration.IsSet())
 
         OutputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Struct;
@@ -186,8 +184,8 @@ void UK2Node_LoadVariantSynchronous::RefreshInputPin() const {
         OutputPin->PinType = Pin->PinType;
         OutputPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
 
-        auto Registration = Registry.GetVariantStructData(
-            *CastChecked<UScriptStruct>(OutputPin->PinType.PinSubCategoryObject.Get()));
+        auto Registration =
+            Registry.GetVariantStructData(*CastChecked<UScriptStruct>(OutputPin->PinType.PinSubCategoryObject.Get()));
         check(Registration.IsSet())
 
         InputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Struct;

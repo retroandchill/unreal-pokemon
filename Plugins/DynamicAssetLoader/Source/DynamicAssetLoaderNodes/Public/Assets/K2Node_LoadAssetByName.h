@@ -40,8 +40,8 @@ class DYNAMICASSETLOADERNODES_API UK2Node_LoadAssetByName : public UK2Node_Dynam
   public:
     UK2Node_LoadAssetByName();
 
-protected:
+  protected:
     FText GetNodeTitleFormat() const override;
-    UEdGraphPin* CreateResultsPin(const FAssetClassType& AssetClass) override;
+    UEdGraphPin *CreateResultsPin(const FAssetClassType &AssetClass) override;
     FName GetLoadFunctionName() const override;
 };

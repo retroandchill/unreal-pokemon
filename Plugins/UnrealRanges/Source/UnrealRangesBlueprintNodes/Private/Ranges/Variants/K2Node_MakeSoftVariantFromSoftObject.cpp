@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
@@ -19,8 +18,7 @@ void UK2Node_MakeSoftVariantFromSoftObject::Initialize(UScriptStruct *SoftRefere
 void UK2Node_MakeSoftVariantFromSoftObject::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UE::Ranges::PN_Object);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
-              (SoftReferenceType != nullptr ? SoftReferenceType.Get() : nullptr),
-              UEdGraphSchema_K2::PN_ReturnValue);
+              (SoftReferenceType != nullptr ? SoftReferenceType.Get() : nullptr), UEdGraphSchema_K2::PN_ReturnValue);
 
     Super::AllocateDefaultPins();
 }
@@ -53,7 +51,6 @@ bool UK2Node_MakeSoftVariantFromSoftObject::IsConnectionDisallowed(const UEdGrap
     return bDisallowed;
 }
 
-
 void UK2Node_MakeSoftVariantFromSoftObject::NotifyPinConnectionListChanged(UEdGraphPin *Pin) {
     Super::NotifyPinConnectionListChanged(Pin);
     if (Pin != GetObjectPin()) {
@@ -64,17 +61,15 @@ void UK2Node_MakeSoftVariantFromSoftObject::NotifyPinConnectionListChanged(UEdGr
 }
 
 FText UK2Node_MakeSoftVariantFromSoftObject::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    auto StructName = SoftReferenceType != nullptr
-                          ? SoftReferenceType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto StructName = SoftReferenceType != nullptr ? SoftReferenceType->GetDisplayNameText()
+                                                   : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromSoftObject_GetNodeTitle", "Make {Output}"),
                               TEXT("Output"), StructName);
 }
 
 FText UK2Node_MakeSoftVariantFromSoftObject::GetTooltipText() const {
-    auto StructName = SoftReferenceType != nullptr
-                          ? SoftReferenceType->GetDisplayNameText()
-                          : FText::FromStringView(TEXT("<<INVALID>>"));
+    auto StructName = SoftReferenceType != nullptr ? SoftReferenceType->GetDisplayNameText()
+                                                   : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromSoftObject_GetNodeTitle",
                                         "Make a new {Output} from the specified soft object"),
                               TEXT("Output"), StructName);
@@ -116,9 +111,8 @@ void UK2Node_MakeSoftVariantFromSoftObject::ExpandNode(FKismetCompilerContext &C
     BreakAllNodeLinks();
 }
 
-void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                                                    UE::Ranges::IVariantRegistration &Registration)
-const {
+void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(
+    FBlueprintActionDatabaseRegistrar &ActionRegistrar, UE::Ranges::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeSoftVariantFromSoftObject>(Node);
@@ -128,7 +122,8 @@ const {
     auto ActionKey = GetClass();
     auto SoftStruct = Registration.GetSoftStructType();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr);
+    check(Spawner != nullptr)
+    ;
     Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, SoftStruct);
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

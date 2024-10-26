@@ -76,7 +76,7 @@ void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
 
 TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon) {
     check(Boxes.IsValidIndex(CurrentBoxIndex))
-    std::array Indexes = { UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex) };
+    std::array Indexes = {UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex)};
     // clang-format off
     return Indexes |
                    UE::Ranges::Join |

@@ -21,9 +21,9 @@ namespace UE::Ranges {
     template <typename T>
     void ValidateStructProperty(const FStructProperty *StructProperty, const T *StructPointer) {
         if (StructProperty == nullptr || StructPointer == nullptr) {
-            throw FInvalidArgumentException(EBlueprintExceptionType::AccessViolation,
-                                                  NSLOCTEXT("ValidateStructProperty", "Bad property",
-                                                            "Failed to resolve the struct parameter."));
+            throw FInvalidArgumentException(
+                EBlueprintExceptionType::AccessViolation,
+                NSLOCTEXT("ValidateStructProperty", "Bad property", "Failed to resolve the struct parameter."));
         }
     }
 
@@ -33,10 +33,10 @@ namespace UE::Ranges {
      * @return The struct registration
      * @throws FVariantException If the struct type is not a valid variant
      */
-    IVariantRegistration& GetVariantRegistration(const FStructProperty &Property);
+    IVariantRegistration &GetVariantRegistration(const FStructProperty &Property);
 
     template <typename T>
-        requires (!std::is_reference_v<T>)
+        requires(!std::is_reference_v<T>)
     constexpr auto DefaultReturnValue() {
         if constexpr (std::is_void_v<T>) {
             // No-op
@@ -50,23 +50,22 @@ namespace UE::Ranges {
             return T();
         }
     }
-    
-}
 
-#define P_GET_WILDCARD_PARAM(PropVar, PointerVar) \
-    Stack.StepCompiledIn<FProperty>(nullptr); \
-    const auto PropVar = Stack.MostRecentProperty; \
+} // namespace UE::Ranges
+
+#define P_GET_WILDCARD_PARAM(PropVar, PointerVar)                                                                      \
+    Stack.StepCompiledIn<FProperty>(nullptr);                                                                          \
+    const auto PropVar = Stack.MostRecentProperty;                                                                     \
     auto PointerVar = Stack.MostRecentPropertyAddress;
 
-#define P_GET_OPAQUE_STRUCT(PropVar, PointerVar) \
-    Stack.StepCompiledIn<FStructProperty>(nullptr); \
-    const auto PropVar = CastField<FStructProperty>(Stack.MostRecentProperty); \
+#define P_GET_OPAQUE_STRUCT(PropVar, PointerVar)                                                                       \
+    Stack.StepCompiledIn<FStructProperty>(nullptr);                                                                    \
+    const auto PropVar = CastField<FStructProperty>(Stack.MostRecentProperty);                                         \
     auto PointerVar = Stack.MostRecentPropertyAddress;
 
-#define P_GET_RESULT(Type, Name) auto &Name = *static_cast<Type*>(RESULT_PARAM)
+#define P_GET_RESULT(Type, Name) auto &Name = *static_cast<Type *>(RESULT_PARAM)
 
-#define CUSTOM_THUNK_STUB(RetType, Method, ...) \
-    RetType Method(__VA_ARGS__) { \
-        check(false) \
-        return UE::Ranges::DefaultReturnValue<RetType>(); \
+#define CUSTOM_THUNK_STUB(RetType, Method, ...)                                                                        \
+    RetType Method(__VA_ARGS__) {                                                                                      \
+        check(false) return UE::Ranges::DefaultReturnValue<RetType>();                                                 \
     }

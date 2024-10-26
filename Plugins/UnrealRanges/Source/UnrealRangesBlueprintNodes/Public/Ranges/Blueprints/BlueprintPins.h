@@ -12,4 +12,4 @@ namespace UE::Ranges {
     static const FName PN_SoftReference = "SoftReference";
     static const FName PN_Variant = "Variant";
     static const FName PN_LoadFailed = "LoadFailed";
-}
+} // namespace UE::Ranges

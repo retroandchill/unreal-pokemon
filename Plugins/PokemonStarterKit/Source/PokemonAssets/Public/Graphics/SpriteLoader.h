@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
-#include "Pokemon/Breeding/PokemonGender.h"
 #include "Graphics/BattleRender.h"
 #include "Images/ImageAsset.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Pokemon/Breeding/PokemonGender.h"
 
 #include "SpriteLoader.generated.h"
 
@@ -45,15 +45,15 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
     static FBattleRender GetSpeciesBattleSprite(FName Species, bool bBack = false,
-                                                  const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+                                                const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
-    static FSoftBattleRender GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
-                                                                     bool bBack = false);
+    static FSoftBattleRender GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static FSoftBattleRender GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
+    static FSoftBattleRender
+    GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
                                const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
@@ -73,7 +73,7 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
     static FImageAsset GetSpeciesIcon(FName Species,
-                                          const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+                                      const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the icon based upon the Pokémon that was passed in.
@@ -91,7 +91,8 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static FSoftImageAsset GetLazySpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    static FSoftImageAsset GetLazySpeciesIcon(FName Species,
+                                              const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     static TArray<FString> CreatePokemonSpriteResolutionList(FName Species, const FPokemonAssetParams &Params,
                                                              FStringView Subfolder);

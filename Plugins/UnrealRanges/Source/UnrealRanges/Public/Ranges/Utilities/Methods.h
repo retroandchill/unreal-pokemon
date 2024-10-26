@@ -9,4 +9,8 @@
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
-#define ABSTRACT_METHOD { LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(__PRETTY_FUNCTION__)); UE::Ranges::Unreachable(); }
+#define ABSTRACT_METHOD                                                                                                \
+    {                                                                                                                  \
+        LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(__PRETTY_FUNCTION__));                      \
+        UE::Ranges::Unreachable();                                                                                     \
+    }

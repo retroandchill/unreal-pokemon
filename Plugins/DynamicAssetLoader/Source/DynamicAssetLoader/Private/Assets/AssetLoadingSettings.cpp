@@ -23,15 +23,16 @@ UScriptStruct *TBaseStructure<FSoftAssetClassType>::Get() {
     return ScriptStruct;
 }
 
-FAssetLoadingEntry::FAssetLoadingEntry(FName Key,FStringView RootDirectory, FStringView AssetPrefix, UClass *AssetClass)
+FAssetLoadingEntry::FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix,
+                                       UClass *AssetClass)
     : DisplayName(FText::FromString(Key.ToString())), RootDirectory({FString(RootDirectory)}),
-      AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
-      AssetClass(AssetClass), bIsNative(true) {
+      AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)), AssetClass(AssetClass),
+      bIsNative(true) {
 }
 
 FAssetLoadingEntry::FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix,
                                        UScriptStruct *AssetClass)
     : DisplayName(FText::FromString(Key.ToString())), RootDirectory({FString(RootDirectory)}),
-      AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
-      AssetClass(AssetClass), bIsNative(true) {
+      AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)), AssetClass(AssetClass),
+      bIsNative(true) {
 }

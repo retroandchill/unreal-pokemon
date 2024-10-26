@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "K2Node.h"
 #include "Ranges/Utilities/Methods.h"
+
 #include "K2Node_DynamicAssetLoadBase.generated.h"
 
 struct FAssetClassType;
@@ -21,7 +22,7 @@ UCLASS(Abstract)
 class DYNAMICASSETLOADERNODES_API UK2Node_DynamicAssetLoadBase : public UK2Node {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Initializes the node with the specified asset key.
      *
@@ -31,11 +32,12 @@ public:
 
     void AllocateDefaultPins() override;
     void PostReconstructNode() override;
-    bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const override;
-    void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
+    bool IsConnectionDisallowed(const UEdGraphPin *MyPin, const UEdGraphPin *OtherPin,
+                                FString &OutReason) const override;
+    void NotifyPinConnectionListChanged(UEdGraphPin *Pin) override;
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
-    void GetNodeContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const override;
+    void GetNodeContextMenuActions(UToolMenu *Menu, UGraphNodeContextMenuContext *Context) const override;
     void ExpandNode(class FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
     FSlateIcon GetIconAndTint(FLinearColor &OutColor) const override;
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
@@ -49,7 +51,6 @@ public:
     UEdGraphPin *GetAssetNotFoundPin() const;
     /** Get the result output pin */
     UEdGraphPin *GetResultPin() const;
-
 
     /**
      * Retrieves the class type of the asset associated with this node.
@@ -74,7 +75,7 @@ public:
      */
     void SetWildcardMode(bool bNewWildcardMode);
 
-protected:
+  protected:
     /**
      * Sets the tooltip text for the node.
      *
@@ -82,7 +83,7 @@ protected:
      */
     template <typename T>
         requires std::convertible_to<std::remove_cvref_t<T>, FText>
-    void SetNodeTooltip(T&& Text) {
+    void SetNodeTooltip(T &&Text) {
         NodeTooltip = Forward<T>(Text);
     }
 
@@ -107,7 +108,7 @@ protected:
      * @param AssetClass The class type of the asset for which the results pin is to be created.
      * @return A pointer to the created results pin.
      */
-    virtual UEdGraphPin* CreateResultsPin(const FAssetClassType& AssetClass) ABSTRACT_METHOD;
+    virtual UEdGraphPin *CreateResultsPin(const FAssetClassType &AssetClass) ABSTRACT_METHOD;
 
     /**
      * Gets the name of the function to load the asset.
@@ -116,10 +117,10 @@ protected:
      */
     virtual FName GetLoadFunctionName() const ABSTRACT_METHOD;
 
-private:
+  private:
     void ToggleWildcard();
     void RefreshAssetNamePin() const;
-    
+
     UPROPERTY()
     FName AssetKey;
 
@@ -131,5 +132,4 @@ private:
 
     /** Constructing FText strings can be costly, so we cache the node's title */
     FNodeTextCache CachedNodeTitle;
-
 };

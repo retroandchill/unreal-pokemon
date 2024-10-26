@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Blueprints/Properties.h"
-
 #include <variant>
 
 namespace UE::Ranges {
@@ -14,8 +13,8 @@ namespace UE::Ranges {
      * @tparam T The potential string type
      */
     template <typename T>
-    concept Stringable = std::convertible_to<T, FStringView> || std::same_as<std::remove_cvref_t<T>, FName>
-        || std::same_as<std::remove_cvref_t<T>, FText>;
+    concept Stringable = std::convertible_to<T, FStringView> || std::same_as<std::remove_cvref_t<T>, FName> ||
+                         std::same_as<std::remove_cvref_t<T>, FText>;
 
     /**
      * Type union for any possible types that can be rendered as a string. This allows for the handling of cases where
@@ -36,7 +35,7 @@ namespace UE::Ranges {
      */
     template <typename T>
         requires Stringable<T>
-    FCommonString GetString(T&& Value) {
+    FCommonString GetString(T &&Value) {
         if constexpr (std::same_as<std::remove_cvref_t<T>, FName>) {
             return FCommonString(Value.ToString());
         } else if constexpr (std::same_as<std::remove_cvref_t<T>, FText>) {
@@ -68,7 +67,7 @@ namespace UE::Ranges {
      * @return A variant containing the string representation of the property value.
      * @throws FInvalidArgumentException if the property type is not found within the predefined set of classes.
      */
-    UNREALRANGES_API FCommonString ExtractCommonStringFromProperty(const FProperty* Property, const uint8* Data);
+    UNREALRANGES_API FCommonString ExtractCommonStringFromProperty(const FProperty *Property, const uint8 *Data);
 
     /**
      * Retrieves a view of the given string.
@@ -82,7 +81,7 @@ namespace UE::Ranges {
      */
     template <typename T>
         requires std::constructible_from<FCommonString, T> && (!std::same_as<std::remove_cvref_t<T>, FCommonString>)
-    FStringView GetStringView(T&& String) {
+    FStringView GetStringView(T &&String) {
         if constexpr (std::same_as<std::remove_cvref_t<T>, FText>) {
             return String.ToString();
         } else {
@@ -99,11 +98,11 @@ namespace UE::Ranges {
      * @param String The FCommonString variant containing the string data.
      * @return A FStringView representing the view of the string.
      */
-    UNREALRANGES_API FStringView GetStringView(const FCommonString& String);
+    UNREALRANGES_API FStringView GetStringView(const FCommonString &String);
 
     /**
      * Visitor for any property can can contain a value that can easily be converted to a string.
      */
     using FStringPropertyVisitor = TPropertyVisitor<FNameProperty, FStrProperty, FTextProperty>;
-    
-}
+
+} // namespace UE::Ranges

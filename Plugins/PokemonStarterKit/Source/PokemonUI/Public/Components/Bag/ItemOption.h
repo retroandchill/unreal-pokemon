@@ -44,7 +44,7 @@ class POKEMONUI_API UItemOption : public UCommonButtonBase {
 
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void OnItemSet(const FItem& Item, int32 Quantity);
+    void OnItemSet(const FItem &Item, int32 Quantity);
 
   private:
     /**
