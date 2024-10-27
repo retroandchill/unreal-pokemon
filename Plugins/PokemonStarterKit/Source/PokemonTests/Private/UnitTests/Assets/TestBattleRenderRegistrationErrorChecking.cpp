@@ -3,6 +3,7 @@
 #include "Graphics/BattleRender.h"
 #include "Misc/AutomationTest.h"
 #include "Ranges/Variants/K2Node_LoadVariantSynchronous.h"
+#include "Utilities/ContextObject.h"
 #include "UtilityClasses/Helpers/ExceptionTestHelper.h"
 
 BEGIN_DEFINE_SPEC(FTestRegistrationErrorChecking, "Unit Tests.Assets.BattleRender",
@@ -33,7 +34,7 @@ void FTestRegistrationErrorChecking::Define() {
             auto StructProperty = CastField<FStructProperty>(Property);
             UE_ASSERT_NOT_NULL(StructProperty);
 
-            auto Sprite = NewObject<UObject>();
+            auto Sprite = NewObject<UContextObject>();
             UE_CHECK_THROWS(
                 UE::Ranges::FTypeException,
                 Registration->SetStructValue(Sprite, *StructProperty, reinterpret_cast<uint8 *>(&Helper->Brush)))
@@ -49,7 +50,7 @@ void FTestRegistrationErrorChecking::Define() {
             auto StructProperty = CastField<FStructProperty>(Property);
             UE_ASSERT_NOT_NULL(StructProperty);
 
-            auto Sprite = NewObject<UObject>();
+            auto Sprite = NewObject<UContextObject>();
             UE_CHECK_THROWS(
                 UE::Ranges::FVariantException,
                 Registration->SetStructValue(Sprite, *StructProperty, reinterpret_cast<uint8 *>(&Helper->Render)))
@@ -67,7 +68,6 @@ void FTestRegistrationErrorChecking::Define() {
             auto OutputStructProperty = CastField<FStructProperty>(OutputProperty);
             UE_ASSERT_NOT_NULL(OutputStructProperty);
 
-            auto Sprite = NewObject<UObject>();
             UE_CHECK_THROWS(UE::Ranges::FTypeException,
                             Registration->MakeSoftValue(*InputStructProperty, reinterpret_cast<uint8 *>(&Helper->Brush),
                                                         *OutputStructProperty,
@@ -98,7 +98,6 @@ void FTestRegistrationErrorChecking::Define() {
             auto OutputStructProperty = CastField<FStructProperty>(OutputProperty);
             UE_ASSERT_NOT_NULL(OutputStructProperty);
 
-            auto Sprite = NewObject<UObject>();
             UE_CHECK_THROWS(
                 UE::Ranges::FTypeException,
                 Registration->LoadSynchronous(*InputStructProperty, reinterpret_cast<uint8 *>(&Helper->Brush),

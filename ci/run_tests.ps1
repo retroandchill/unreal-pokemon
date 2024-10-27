@@ -6,6 +6,11 @@ if ($LASTEXITCODE -ne 0) {
     echo "Tests failed with exit code: ${LASTEXITCODE}"
     exit -1
 }
+python ./ci/verify_test_success.py --file TestResults/index.json
+if ($LASTEXITCODE -ne 0) {
+    exit -1
+}
+
 Copy-Item "${unreal_engine_location}/default.profraw" "${location}/default.profraw"
 
 $clang_cl_location = "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/"
