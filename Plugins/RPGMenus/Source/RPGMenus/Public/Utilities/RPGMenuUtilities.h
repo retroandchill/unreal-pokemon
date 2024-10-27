@@ -38,13 +38,15 @@ class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
     static TOptional<T &> InjectScreenToStack(const UObject *WorldContextObject, A &&...Args) {
-        return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::PrimaryMenuLayerTag, std::forward<A>(Args)...);
+        return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::PrimaryMenuLayerTag,
+                                            std::forward<A>(Args)...);
     }
 
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
     static TOptional<T &> InjectScreenToOverlay(const UObject *WorldContextObject, A &&...Args) {
-        return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::OverlayMenuLayerTag, std::forward<A>(Args)...);
+        return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::OverlayMenuLayerTag,
+                                            std::forward<A>(Args)...);
     }
 
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))

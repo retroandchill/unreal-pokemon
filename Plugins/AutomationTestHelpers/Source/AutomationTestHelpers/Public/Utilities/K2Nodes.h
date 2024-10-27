@@ -22,18 +22,19 @@ struct FGraphDeleter {
     }
 };
 
-#define DeclareTestableBP(BPName, GraphName) \
-    TUniquePtr<UBlueprint, FBlueprintDeleter> BPName; \
+#define DeclareTestableBP(BPName, GraphName)                                                                           \
+    TUniquePtr<UBlueprint, FBlueprintDeleter> BPName;                                                                  \
     TUniquePtr<UEdGraph, FGraphDeleter> GraphName
 
 #define DefineTestableBP(BPName, GraphName)                                                                            \
     BPName = TUniquePtr<UBlueprint, FBlueprintDeleter>(FKismetEditorUtilities::CreateBlueprint(                        \
         AActor::StaticClass(), GetTransientPackage(), TEXT(#BPName), BPTYPE_Normal, UBlueprint::StaticClass(),         \
         UBlueprintGeneratedClass::StaticClass(), NAME_None));                                                          \
-    GraphName = BPName ? TUniquePtr<UEdGraph, FGraphDeleter>(FBlueprintEditorUtils::FindEventGraph(BPName.Get())) : nullptr
+    GraphName =                                                                                                        \
+        BPName ? TUniquePtr<UEdGraph, FGraphDeleter>(FBlueprintEditorUtils::FindEventGraph(BPName.Get())) : nullptr
 
-#define CleanUpTestableBP(BPName, GraphName) \
-    BPName.Reset(); \
+#define CleanUpTestableBP(BPName, GraphName)                                                                           \
+    BPName.Reset();                                                                                                    \
     GraphName.Reset()
 
 #define MakeTestableBP(BPName, GraphName)                                                                              \
@@ -92,6 +93,4 @@ struct FGraphDeleter {
     MakeTestPin(OwningNode, OutArray, QuatOutPin, UEdGraphSchema_K2::PC_Struct, EGPD_Output);                          \
     QuatOutPin->PinType.PinSubCategoryObject = TBaseStructure<FQuat>::Get()
 
-namespace K2::Nodes {
-    
-}
+namespace K2::Nodes {}

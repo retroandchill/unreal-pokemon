@@ -15,7 +15,8 @@
 
 FCharacteristicList::FCharacteristicList() = default;
 
-FCharacteristicList::FCharacteristicList(TArray<FText> &&Characteristics) : Characteristics(std::move(Characteristics)) {
+FCharacteristicList::FCharacteristicList(TArray<FText> &&Characteristics)
+    : Characteristics(std::move(Characteristics)) {
 }
 
 void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {

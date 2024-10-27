@@ -6,9 +6,8 @@
 
 class FPopulateMenuBuilderWithToolMenuEntry {
 
-public:
-    static void ExecuteOption(const FToolMenuEntry& Entry) {
+  public:
+    static void ExecuteOption(const FToolMenuEntry &Entry) {
         Entry.Action.GetUIAction()->Execute();
     }
-    
 };

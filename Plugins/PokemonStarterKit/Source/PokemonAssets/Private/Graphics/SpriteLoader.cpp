@@ -13,8 +13,7 @@ FBattleRender USpriteLoader::GetPokemonBattleSprite(const TScriptInterface<IPoke
 
 FBattleRender USpriteLoader::GetSpeciesBattleSprite(FName Species, bool bBack,
                                                     const FPokemonAssetParams &AdditionalParams) {
-    auto SpriteResolutionList =
-        AdditionalParams.CreateResolutionList(Species, bBack ? TEXT("Back") : TEXT("Front"));
+    auto SpriteResolutionList = AdditionalParams.CreateResolutionList(Species, bBack ? TEXT("Back") : TEXT("Front"));
     return Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveAsset(SpriteResolutionList).Get(FBattleRender());
 }
 
@@ -25,8 +24,7 @@ FSoftBattleRender USpriteLoader::GetLazyPokemonBattleSprite(const TScriptInterfa
 
 FSoftBattleRender USpriteLoader::GetLazySpeciesBattleSprite(FName Species, bool bBack,
                                                             const FPokemonAssetParams &AdditionalParams) {
-    auto SpriteResolutionList =
-        AdditionalParams.CreateResolutionList(Species, bBack ? TEXT("Back") : TEXT("Front"));
+    auto SpriteResolutionList = AdditionalParams.CreateResolutionList(Species, bBack ? TEXT("Back") : TEXT("Front"));
     // clang-format off
     return Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveSoftAsset(SpriteResolutionList).Get(FSoftBattleRender());
     // clang-format on

@@ -19,7 +19,7 @@ UCLASS()
 class POKEMONASSETS_API UAudioLoader : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * FindPokemonCry retrieves the specific audio cry associated with a
      * given Pokémon object implementing the IPokemon interface.
@@ -31,19 +31,20 @@ public:
      *         Pokémon's cry.
      */
     UFUNCTION(BlueprintCallable, Category = "Audio|Pokémon")
-    static USoundBase* FindPokemonCry(const TScriptInterface<IPokemon>& Pokemon);
+    static USoundBase *FindPokemonCry(const TScriptInterface<IPokemon> &Pokemon);
 
     /**
      * Retrieves the specific audio cry associated with a Pokémon species, considering additional parameters.
      *
      * @param Species A handle to the species of the Pokémon for which the audio cry is to be retrieved.
-     * @param AdditionalParams Additional parameters, such as gender and shiny status, that influence the specific cry to retrieve.
+     * @param AdditionalParams Additional parameters, such as gender and shiny status, that influence the specific cry
+     * to retrieve.
      *
-     * @return A pointer to the USoundBase sound asset corresponding to the Pokémon species' cry, or nullptr if not found.
+     * @return A pointer to the USoundBase sound asset corresponding to the Pokémon species' cry, or nullptr if not
+     * found.
      */
     UFUNCTION(BlueprintCallable, Category = "Audio|Pokémon",
-        meta = (CallableWithoutWorldContext, AutoCreateRefTerm = AdditionalParams))
-    static USoundBase* FindSpeciesCry(const FSpeciesHandle& Species,
-                                      const FPokemonAssetParams& AdditionalParams = FPokemonAssetParams());
-
+              meta = (CallableWithoutWorldContext, AutoCreateRefTerm = AdditionalParams))
+    static USoundBase *FindSpeciesCry(const FSpeciesHandle &Species,
+                                      const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 };

@@ -61,8 +61,8 @@ class UNREALRANGESBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_Va
     virtual UEdGraphPin *GetOutputPin() const ABSTRACT_METHOD
     UEdGraphPin *GetCastSucceededPin() const;
 
-    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext,
-                                                 UEdGraph *SourceGraph) ABSTRACT_METHOD
+    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+        ABSTRACT_METHOD
 
   private:
     void TogglePurity();

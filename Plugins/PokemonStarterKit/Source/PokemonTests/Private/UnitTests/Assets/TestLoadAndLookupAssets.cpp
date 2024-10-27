@@ -1,9 +1,9 @@
 ﻿#include "Asserts.h"
-#include "K2Node_CallFunction.h"
 #include "Assets/K2Node_LoadAssetByName.h"
 #include "Assets/K2Node_LookupAssetByName.h"
 #include "Audio/AssetClasses.h"
 #include "Graphics/AssetClasses.h"
+#include "K2Node_CallFunction.h"
 #include "Misc/AutomationTest.h"
 #include "Utilities/K2Nodes.h"
 #include "UtilityClasses/Helpers/ToolMenuActionAccess.h"
@@ -11,25 +11,21 @@
 BEGIN_DEFINE_SPEC(FTestLoadAndLookupAssets, "Unit Tests.Assets.BattleRender",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
 
-    DeclareTestableBP(TestBP, TestGraph);
+DeclareTestableBP(TestBP, TestGraph);
 
-    FORCEINLINE void AssertValidNode(UK2Node *Node) {
-        UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
-        UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
-        UE_CHECK_FALSE(Node->IsNodePure());
-    }
+FORCEINLINE void AssertValidNode(UK2Node *Node) {
+    UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
+    UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
+    UE_CHECK_FALSE(Node->IsNodePure());
+}
 
 END_DEFINE_SPEC(FTestLoadAndLookupAssets);
 
 void FTestLoadAndLookupAssets::Define() {
     Describe("Test Asset Loading/Lookup Blueprint Nodes", [this] {
-        BeforeEach([this] {
-            DefineTestableBP(TestBP, TestGraph);
-        });
+        BeforeEach([this] { DefineTestableBP(TestBP, TestGraph); });
 
-        AfterEach([this] {
-            CleanUpTestableBP(TestBP, TestGraph);
-        });
+        AfterEach([this] { CleanUpTestableBP(TestBP, TestGraph); });
 
         It("Verify wildcard pin accepts FName, FString, and FText", [this] {
             auto &AssetClass = Pokemon::Assets::Audio::PokemonCries;
@@ -113,7 +109,7 @@ void FTestLoadAndLookupAssets::Define() {
             auto Option = Section->FindEntry("ToggleWildcard");
             UE_ASSERT_NOT_NULL(Option);
             FPopulateMenuBuilderWithToolMenuEntry::ExecuteOption(*Option);
-            
+
             InputPin = Node->FindPin(FName("AssetName"));
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_String, InputPin->PinType.PinCategory);
             UE_ASSERT_EQUAL(0, InputPin->LinkedTo.Num());
@@ -214,6 +210,5 @@ void FTestLoadAndLookupAssets::Define() {
 
             return true;
         });
-
     });
 }

@@ -1,6 +1,6 @@
 ﻿#include "Asserts.h"
-#include "K2Node_CallFunction.h"
 #include "Graphics/BattleRender.h"
+#include "K2Node_CallFunction.h"
 #include "Misc/AutomationTest.h"
 #include "Ranges/Blueprints/BlueprintPins.h"
 #include "Ranges/Variants/K2Node_GetVariantObject.h"
@@ -18,10 +18,10 @@ DeclareTestableBP(TestBP, TestGraph);
 
 TObjectPtr<UScriptStruct> StructType;
 TObjectPtr<UScriptStruct> SoftStructType;
-TOptional<UE::Ranges::IVariantRegistration&> Registration;
+TOptional<UE::Ranges::IVariantRegistration &> Registration;
 
 template <bool bIsCompact = false>
-FORCEINLINE void AssertValidNode(UK2Node* Node) {
+FORCEINLINE void AssertValidNode(UK2Node *Node) {
     UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
     UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
     if constexpr (bIsCompact) {
@@ -41,9 +41,9 @@ void FTestBattleRenderAssetNodes::Define() {
             StructType = UE::Ranges::GetScriptStruct<FBattleRender>();
             SoftStructType = UE::Ranges::GetScriptStruct<FSoftBattleRender>();
             Registration = Registry.GetVariantStructData(*StructType);
-            DefineTestableBP(TestBP, TestGraph); 
+            DefineTestableBP(TestBP, TestGraph);
         });
-        
+
         AfterEach([this] {
             CleanUpTestableBP(TestBP, TestGraph);
             Registration.Reset();
@@ -59,9 +59,9 @@ void FTestBattleRenderAssetNodes::Define() {
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
-            
+
             MakeTestableNode(DummyInput, TestGraph.Get());
-            TArray<UEdGraphPin*> Pins;
+            TArray<UEdGraphPin *> Pins;
             MakeTestPin(DummyInput, Pins, ValidPin, UEdGraphSchema_K2::PC_Struct, EGPD_Output);
             ValidPin->PinType.PinSubCategoryObject = StructType;
 
@@ -87,10 +87,10 @@ void FTestBattleRenderAssetNodes::Define() {
             Node->NotifyPinConnectionListChanged(InputPin);
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Wildcard, InputPin->PinType.PinCategory);
             UE_CHECK_NULL(InputPin->PinType.PinSubCategoryObject.Get());
-            
+
             return true;
         });
-        
+
         It("Test make Battle Render", [this] {
             auto Node = NewObject<UK2Node_MakeVariantObjectStruct>(TestGraph.Get());
             Node->Initialize(StructType);
@@ -102,9 +102,9 @@ void FTestBattleRenderAssetNodes::Define() {
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
-            
+
             MakeTestableNode(DummyInput, TestGraph.Get());
-            TArray<UEdGraphPin*> Pins;
+            TArray<UEdGraphPin *> Pins;
 
             auto Classes = Registration->GetValidClasses();
             FString Message;
@@ -113,8 +113,7 @@ void FTestBattleRenderAssetNodes::Define() {
                 ValidPin->PinType.PinSubCategoryObject = Class;
                 UE_CHECK_FALSE(Node->IsConnectionDisallowed(InputPin, ValidPin, Message));
             }
-            
-            
+
             MakeTestPin(DummyInput, Pins, InvalidPin, UEdGraphSchema_K2::PC_Object, EGPD_Output);
             InvalidPin->PinType.PinSubCategoryObject = UObject::StaticClass();
             UE_CHECK_TRUE(Node->IsConnectionDisallowed(InputPin, InvalidPin, Message));
@@ -134,10 +133,10 @@ void FTestBattleRenderAssetNodes::Define() {
             Node->NotifyPinConnectionListChanged(InputPin);
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Wildcard, InputPin->PinType.PinCategory);
             UE_CHECK_NULL(InputPin->PinType.PinSubCategoryObject.Get());
-            
+
             return true;
         });
-        
+
         It("Test make Soft Battle Render", [this] {
             auto Node = NewObject<UK2Node_MakeSoftVariantFromSoftObject>(TestGraph.Get());
             Node->Initialize(StructType);
@@ -149,9 +148,9 @@ void FTestBattleRenderAssetNodes::Define() {
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
-            
+
             MakeTestableNode(DummyInput, TestGraph.Get());
-            TArray<UEdGraphPin*> Pins;
+            TArray<UEdGraphPin *> Pins;
 
             auto Classes = Registration->GetValidClasses();
             FString Message;
@@ -160,7 +159,7 @@ void FTestBattleRenderAssetNodes::Define() {
                 ValidPin->PinType.PinSubCategoryObject = Class;
                 UE_CHECK_FALSE(Node->IsConnectionDisallowed(InputPin, ValidPin, Message));
             }
-            
+
             MakeTestPin(DummyInput, Pins, InvalidPin, UEdGraphSchema_K2::PC_Object, EGPD_Output);
             InvalidPin->PinType.PinSubCategoryObject = UObject::StaticClass();
             UE_CHECK_TRUE(Node->IsConnectionDisallowed(InputPin, InvalidPin, Message));
@@ -180,10 +179,10 @@ void FTestBattleRenderAssetNodes::Define() {
             Node->NotifyPinConnectionListChanged(InputPin);
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Wildcard, InputPin->PinType.PinCategory);
             UE_CHECK_NULL(InputPin->PinType.PinSubCategoryObject.Get());
-            
+
             return true;
         });
-        
+
         It("Test cast node can toggle visibility", [this] {
             for (auto Classes = Registration->GetValidClasses(); auto Class : Classes) {
                 auto Node = NewObject<UK2Node_GetVariantValue>(TestGraph.Get());
@@ -194,7 +193,7 @@ void FTestBattleRenderAssetNodes::Define() {
 
                 UE_ASSERT_FALSE(Node->IsNodePure());
 
-                UGraphNodeContextMenuContext* ContextObject = NewObject<UGraphNodeContextMenuContext>();
+                UGraphNodeContextMenuContext *ContextObject = NewObject<UGraphNodeContextMenuContext>();
                 ContextObject->Init(TestGraph.Get(), Node, nullptr, false);
                 FToolMenuContext Context(ContextObject);
                 auto GeneratedMenu = UToolMenus::Get()->GenerateMenu("TestMenu", Context);
@@ -205,7 +204,7 @@ void FTestBattleRenderAssetNodes::Define() {
                 auto Option = Section->FindEntry("TogglePurity");
                 UE_ASSERT_NOT_NULL(Option);
                 FPopulateMenuBuilderWithToolMenuEntry::ExecuteOption(*Option);
-                
+
                 UE_ASSERT_TRUE(Node->IsNodePure());
                 GeneratedMenu = UToolMenus::Get()->GenerateMenu("TestMenu", Context);
                 Node->GetNodeContextMenuActions(GeneratedMenu, ContextObject);
@@ -214,10 +213,10 @@ void FTestBattleRenderAssetNodes::Define() {
                 Option = Section->FindEntry("TogglePurity");
                 UE_ASSERT_NOT_NULL(Section);
                 FPopulateMenuBuilderWithToolMenuEntry::ExecuteOption(*Option);
-                
+
                 UE_ASSERT_FALSE(Node->IsNodePure());
             }
-            
+
             return true;
         });
 
@@ -232,9 +231,9 @@ void FTestBattleRenderAssetNodes::Define() {
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
-            
+
             MakeTestableNode(DummyInput, TestGraph.Get());
-            TArray<UEdGraphPin*> Pins;
+            TArray<UEdGraphPin *> Pins;
             MakeTestPin(DummyInput, Pins, ValidInputPin, UEdGraphSchema_K2::PC_Struct, EGPD_Output);
             ValidInputPin->PinType.PinSubCategoryObject = SoftStructType;
             MakeTestPin(DummyInput, Pins, ValidOutputPin, UEdGraphSchema_K2::PC_Struct, EGPD_Input);
@@ -277,14 +276,14 @@ void FTestBattleRenderAssetNodes::Define() {
             UE_CHECK_TRUE(InputPin->PinType.PinSubCategoryObject == SoftStructType);
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Struct, OutputPin->PinType.PinCategory);
             UE_CHECK_TRUE(OutputPin->PinType.PinSubCategoryObject == StructType);
-            
+
             ValidOutputPin->BreakLinkTo(OutputPin);
             Node->NotifyPinConnectionListChanged(OutputPin);
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Wildcard, InputPin->PinType.PinCategory);
             UE_CHECK_NULL(InputPin->PinType.PinSubCategoryObject.Get());
             UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Wildcard, OutputPin->PinType.PinCategory);
             UE_CHECK_NULL(OutputPin->PinType.PinSubCategoryObject.Get());
-            
+
             return true;
         });
     });
