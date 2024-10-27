@@ -9,6 +9,7 @@
 #include "Ranges/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
 #include "Ranges/Variants/K2Node_MakeVariantObjectStruct.h"
 #include "Utilities/K2Nodes.h"
+#include "UtilityClasses/Helpers/ToolMenuActionAccess.h"
 
 BEGIN_DEFINE_SPEC(FTestBattleRenderAssetNodes, "Unit Tests.Assets.BattleRender",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
@@ -32,15 +33,6 @@ FORCEINLINE void AssertValidNode(UK2Node* Node) {
 }
 
 END_DEFINE_SPEC(FTestBattleRenderAssetNodes);
-
-class FPopulateMenuBuilderWithToolMenuEntry {
-
-    public:
-    static void ExecuteOption(const FToolMenuEntry& Entry) {
-        Entry.Action.GetUIAction()->Execute();
-    }
-    
-};
 
 void FTestBattleRenderAssetNodes::Define() {
     Describe("Test Battle Render Blueprint Nodes", [this] {

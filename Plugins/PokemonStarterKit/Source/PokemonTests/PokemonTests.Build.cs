@@ -49,7 +49,9 @@ public class PokemonTests : ModuleRules
                 "PokemonAssets",
                 "UnrealRanges",
                 "ToolMenus", 
-                "DynamicAssetLoaderNodes"
+                "DynamicAssetLoaderNodes",
+                "AutomationTest",
+                "Paper2D"
             }
         );
     }

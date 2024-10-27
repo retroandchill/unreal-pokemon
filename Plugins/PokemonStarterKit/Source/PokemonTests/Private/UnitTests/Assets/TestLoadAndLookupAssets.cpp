@@ -5,8 +5,8 @@
 #include "Audio/AssetClasses.h"
 #include "Graphics/AssetClasses.h"
 #include "Misc/AutomationTest.h"
-#include "Ranges/Blueprints/BlueprintPins.h"
 #include "Utilities/K2Nodes.h"
+#include "UtilityClasses/Helpers/ToolMenuActionAccess.h"
 
 BEGIN_DEFINE_SPEC(FTestLoadAndLookupAssets, "Unit Tests.Assets.BattleRender",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
@@ -20,15 +20,6 @@ BEGIN_DEFINE_SPEC(FTestLoadAndLookupAssets, "Unit Tests.Assets.BattleRender",
     }
 
 END_DEFINE_SPEC(FTestLoadAndLookupAssets);
-
-class FPopulateMenuBuilderWithToolMenuEntry {
-
-public:
-    static void ExecuteOption(const FToolMenuEntry &Entry) {
-        Entry.Action.GetUIAction()->Execute();
-    }
-
-};
 
 void FTestLoadAndLookupAssets::Define() {
     Describe("Test Asset Loading/Lookup Blueprint Nodes", [this] {
