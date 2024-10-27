@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     try:
-        with open(args.file, 'r') as file:
+        with open(args.file, mode='r', encoding='utf-8-sig') as file:
             test_report = json.load(file)
     except IOError:
         print(f'Failed to open file: {args.file}')
