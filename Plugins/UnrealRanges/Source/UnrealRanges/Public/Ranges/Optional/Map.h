@@ -4,16 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
-#include "Ranges/Concepts/Tuples.h"
 #include "Ranges/Functional/Bindings.h"
-#include "Ranges/RangeConcepts.h"
 #include "Types.h"
 
 namespace UE::Optionals {
 
     template <typename F>
     struct TMapInvoker {
-        explicit constexpr TMapInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+        explicit constexpr TMapInvoker(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -37,9 +35,9 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
             return TOptionalClosure<TMapInvoker<BindingType>>(
-                TMapInvoker<BindingType>(Ranges::CreateBinding<A...>(Forward<A>(Args)...)));
+                TMapInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }
     };
 
@@ -47,4 +45,5 @@ namespace UE::Optionals {
      * Map the optional to a new value if present, otherwise return an empty optional.
      */
     constexpr FMap Map;
+
 } // namespace UE::Optionals

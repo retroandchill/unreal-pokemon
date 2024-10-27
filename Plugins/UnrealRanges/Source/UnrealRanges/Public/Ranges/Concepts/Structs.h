@@ -20,4 +20,14 @@ namespace UE::Ranges {
 
     template <typename T>
     concept UEStruct = CoreStructType<T> || DeclaredStruct<T>;
+
+    template <typename T>
+        requires UEStruct<T>
+    constexpr UScriptStruct *GetScriptStruct() {
+        if constexpr (UE::Ranges::DeclaredStruct<T>) {
+            return T::StaticStruct();
+        } else {
+            return TBaseStructure<T>::Get();
+        }
+    }
 } // namespace UE::Ranges

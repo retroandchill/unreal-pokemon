@@ -115,13 +115,13 @@ UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInte
 }
 
 void UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInfo> &&GainInfos) {
-    ExpGainPane->GainExp(MoveTemp(GainInfos));
+    ExpGainPane->GainExp(std::move(GainInfos));
     SwapToExpGainDisplay();
     PlayExpGainAnimation();
 }
 
 FDelegateHandle UPokemonBattleScreen::BindToExpGainComplete(FSimpleDelegate &&Callback) {
-    return OnExpGainComplete.Add(MoveTemp(Callback));
+    return OnExpGainComplete.Add(std::move(Callback));
 }
 
 void UPokemonBattleScreen::RemoveFromExpGainComplete(FDelegateHandle Handle) {
@@ -164,7 +164,7 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
     auto Targets = Move->GetAllPossibleTargets() | UE::Ranges::Construct<FTargetWithIndex>() | UE::Ranges::ToArray;
-    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
+    CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     AdvanceToNextSelection();

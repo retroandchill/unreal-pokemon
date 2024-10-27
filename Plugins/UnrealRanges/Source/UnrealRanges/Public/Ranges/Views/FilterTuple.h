@@ -13,10 +13,11 @@ namespace UE::Ranges {
 
     struct FFilterTuple {
         template <typename... A>
-        constexpr auto operator()(A &&... Args) const {
-            return ranges::views::filter([Binding = CreateBinding<A...>(Forward<A>(Args)...)]<typename T>(T &&Tuple) {
-                return ranges::tuple_apply(Binding, Forward<T>(Tuple));
-            });
+        constexpr auto operator()(A &&...Args) const {
+            return ranges::views::filter(
+                [Binding = CreateBinding<A...>(std::forward<A>(Args)...)]<typename T>(T &&Tuple) {
+                    return ranges::tuple_apply(Binding, std::forward<T>(Tuple));
+                });
         }
     };
 

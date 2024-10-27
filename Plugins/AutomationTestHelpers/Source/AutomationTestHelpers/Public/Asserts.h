@@ -10,6 +10,15 @@
 #define UE_CHECK_NOT_NULL(Pointer) AssertNotNull(*this, TEXT(#Pointer), Pointer)
 #define UE_CHECK_EQUAL(Expected, Actual) AssertEqual(*this, TEXT(#Actual), Expected, Actual)
 #define UE_CHECK_NOT_EQUAL(Expected, Actual) AssertNotEqual(*this, TEXT(#Actual), Expected, Actual)
+#define UE_CHECK_THROWS(ExceptionType, ...)                                                                            \
+    try {                                                                                                              \
+        __VA_ARGS__;                                                                                                   \
+    } catch (const ExceptionType &) {                                                                                  \
+        UE_LOG(LogAutomationTest, Display, TEXT("Caught expcted exception type: %s"), TEXT(#ExceptionType))            \
+    } catch (const std::exception &Exception) {                                                                        \
+        FString Message = ANSI_TO_TCHAR(Exception.what());                                                             \
+        AddError(FString::Printf(TEXT("Caught unexpected exception: %s"), *Message));                                  \
+    }
 
 #define UE_ASSERT_TRUE(Condition)                                                                                      \
     if (!UE_CHECK_TRUE(Condition))                                                                                     \

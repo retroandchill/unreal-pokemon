@@ -18,7 +18,7 @@ struct TSoftObjectRef {
 
     template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...>
-    explicit TSoftObjectRef(A &&...Args) : Ptr(Forward<A>(Args)...){ check(IsAssetValid())
+    explicit TSoftObjectRef(A &&...Args) : Ptr(std::forward<A>(Args)...){ check(IsAssetValid())
 }
 
 /**
@@ -97,6 +97,18 @@ bool operator==(FIntrusiveUnsetOptionalState) const {
     return Ptr.IsNull();
 }
 
+bool IsAssetValid() const {
+    const auto &AssetManager = UAssetManager::Get();
+    FAssetData Data;
+    return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf<T>();
+}
+
+bool IsAssetOfType(const UClass *AssetType) const {
+    const auto &AssetManager = UAssetManager::Get();
+    FAssetData Data;
+    return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf(AssetType);
+}
+
 private:
 friend struct TOptional<TSoftObjectRef>;
 
@@ -106,12 +118,6 @@ explicit TSoftObjectRef(FIntrusiveUnsetOptionalState) {
 TSoftObjectRef &operator=(FIntrusiveUnsetOptionalState) {
     Ptr.Reset();
     return *this;
-}
-
-bool IsAssetValid() const {
-    auto &AssetManager = UAssetManager::Get();
-    FAssetData Data;
-    return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf<T>();
 }
 
 TSoftObjectPtr<T> Ptr;
@@ -134,6 +140,6 @@ namespace UE::Optionals {
             return TOptional<TSoftObjectRef<T>>();
         }
 
-        return TOptional<TSoftObjectRef<T>>(TSoftObjectRef<T>(MoveTemp(Ptr)));
+        return TOptional<TSoftObjectRef<T>>(TSoftObjectRef<T>(std::move(Ptr)));
     }
 } // namespace UE::Optionals

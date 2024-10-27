@@ -25,7 +25,7 @@ void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler>
 }
 
 void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
-    ActionReady = MoveTemp(QueueAction);
+    ActionReady = std::move(QueueAction);
 }
 
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
@@ -42,7 +42,7 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
     auto Targets = Move->GetAllPossibleTargets() | UE::Ranges::Construct<FTargetWithIndex>() | UE::Ranges::ToArray;
-    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, MoveTemp(Targets)));
+    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
 }
 
 void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const {

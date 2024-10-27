@@ -94,11 +94,11 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
 
         auto Effect = NewObject<T>(this, EffectClass.GetValue());
         Effect->BindToOnEffectComplete(
-            this, [this, ItemID = Item.ID, Callback = MoveTemp(CompletionDelegate)](bool bSuccess) {
+            this, [this, ItemID = Item.ID, Callback = std::move(CompletionDelegate)](bool bSuccess) {
                 OnItemEffectConclude(bSuccess, ItemID);
                 Callback.Execute(bSuccess);
             });
-        Effect->Use(Item, Quantity, Forward<A>(Args)...);
+        Effect->Use(Item, Quantity, std::forward<A>(Args)...);
         CurrentItemEffect = Effect;
     }
 

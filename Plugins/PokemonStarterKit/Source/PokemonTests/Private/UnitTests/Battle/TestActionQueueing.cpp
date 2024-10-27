@@ -30,7 +30,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
     auto QueueBattleAction = [&Battle](const TScriptInterface<IBattler> &Battler) {
         auto MockAction = MakeUnique<FMockBattleAction>();
         ON_CALL(*MockAction, GetBattler).WillByDefault(ReturnRef(Battler));
-        Battle->QueueAction(MoveTemp(MockAction));
+        Battle->QueueAction(std::move(MockAction));
     };
 
     TArray<TScriptInterface<IBattler>> Side1Battlers;

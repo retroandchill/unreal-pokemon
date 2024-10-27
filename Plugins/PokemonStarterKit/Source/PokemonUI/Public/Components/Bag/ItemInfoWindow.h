@@ -25,25 +25,12 @@ class POKEMONUI_API UItemInfoWindow : public UUserWidget {
      * @param Item The item in question
      * @param Quantity The number of items held
      */
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Display)
     void Refresh(const FItem &Item, int32 Quantity);
 
     /**
      * Clear out any item information.
      */
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Display)
     void ClearItem();
-
-  private:
-    /**
-     * The graphic for the icon of the item.
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> ItemIcon;
-
-    /**
-     * The text used to show the item's description
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemDescription;
 };

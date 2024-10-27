@@ -1,6 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Assets/AssetLoadingSettings.h"
+
+UE_DEFINE_VARIANT_OBJECT_STRUCT(FAssetClassType);
+
 static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/DynamicAssetLoader"));
     auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(
@@ -20,13 +23,16 @@ UScriptStruct *TBaseStructure<FSoftAssetClassType>::Get() {
     return ScriptStruct;
 }
 
-FAssetLoadingEntry::FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix, UClass *AssetClass)
-    : RootDirectory(RootDirectory), AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
-      AssetClass(AssetClass), bIsNative(true) {
+FAssetLoadingEntry::FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix,
+                                       UClass *AssetClass)
+    : DisplayName(FText::FromString(Key.ToString())), RootDirectory({FString(RootDirectory)}),
+      AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)), AssetClass(AssetClass),
+      bIsNative(true) {
 }
 
-FAssetLoadingEntry::FAssetLoadingEntry(const FDirectoryPath &RootDirectory, FStringView AssetPrefix,
+FAssetLoadingEntry::FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix,
                                        UScriptStruct *AssetClass)
-    : RootDirectory(RootDirectory), AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)),
-      AssetClass(AssetClass), bIsNative(true) {
+    : DisplayName(FText::FromString(Key.ToString())), RootDirectory({FString(RootDirectory)}),
+      AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)), AssetClass(AssetClass),
+      bIsNative(true) {
 }

@@ -12,7 +12,7 @@ namespace UE::Ranges {
 
     template <typename F, typename I>
     struct TReduceInvoker {
-        constexpr explicit TReduceInvoker(F &&Functor, I &&Identity) : Functor(MoveTemp(Functor)), Identity(Identity) {
+        constexpr explicit TReduceInvoker(F &&Functor, I &&Identity) : Functor(std::move(Functor)), Identity(Identity) {
         }
 
         template <typename R>
@@ -36,9 +36,9 @@ namespace UE::Ranges {
         template <typename I, typename F, typename... A>
             requires FunctionalType<F>
         constexpr auto operator()(I &&Identity, F &&Functor, A &&...Args) const {
-            using BindingType = decltype(CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<F, A...>(std::forward<F>(Functor), std::forward<A>(Args)...));
             return TTerminalClosure<TReduceInvoker<BindingType, I>>(TReduceInvoker<BindingType, I>(
-                CreateBinding<F, A...>(Forward<F>(Functor), Forward<A>(Args)...), Forward<I>(Identity)));
+                CreateBinding<F, A...>(std::forward<F>(Functor), std::forward<A>(Args)...), std::forward<I>(Identity)));
         }
     };
 

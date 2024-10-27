@@ -29,15 +29,15 @@ void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, 
 }
 
 void FProgressBarAnimation::BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding) {
-    SetNewPercent.Add(MoveTemp(Binding));
+    SetNewPercent.Add(std::move(Binding));
 }
 
 void FProgressBarAnimation::BindActionToWrapAroundAnimation(FOnAnimationComplete::FDelegate &&Binding) {
-    OnBarWrapAround.Add(MoveTemp(Binding));
+    OnBarWrapAround.Add(std::move(Binding));
 }
 
 void FProgressBarAnimation::BindActionToCompleteDelegate(FOnAnimationComplete::FDelegate &&Binding) {
-    OnAnimationComplete.Add(MoveTemp(Binding));
+    OnAnimationComplete.Add(std::move(Binding));
 }
 
 void FProgressBarAnimation::Tick(float DeltaTime) {

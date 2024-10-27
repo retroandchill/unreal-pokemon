@@ -11,7 +11,7 @@ UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoice
                                                                                   const TArray<FText> &Choices) {
     auto Node = NewObject<UDisplayMessageWithChoices>();
     Node->WorldContextObject = WorldContextObject;
-    Node->Message = MoveTemp(Message);
+    Node->Message = std::move(Message);
     Node->Choices = Choices;
     return Node;
 }

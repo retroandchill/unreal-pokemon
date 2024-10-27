@@ -72,7 +72,7 @@ void Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> 
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->TargetActorArray.Add(UserActor);
-    EventData.TargetData.Data.Emplace(MoveTemp(TargetData));
+    EventData.TargetData.Data.Emplace(std::move(TargetData));
     SendOutEventForActor(UserActor, EventTag, EventData);
 }
 
@@ -84,7 +84,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TargetData->TargetActorArray.Add(UserActor);
-    EventData.TargetData.Data.Emplace(MoveTemp(TargetData));
+    EventData.TargetData.Data.Emplace(std::move(TargetData));
 
     SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);

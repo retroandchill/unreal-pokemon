@@ -21,7 +21,7 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TGroupingByInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+        constexpr explicit TGroupingByInvoker(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -38,8 +38,8 @@ namespace UE::Ranges {
 
             TMap<KeyType, TArray<ValueType>> Result;
             for (RangeType &&Elem : Range) {
-                auto &Value = Result.FindOrAdd(TryInvoke(Functor, Forward<RangeType>(Elem)));
-                Value.Emplace(Forward<RangeType>(Elem));
+                auto &Value = Result.FindOrAdd(TryInvoke(Functor, std::forward<RangeType>(Elem)));
+                Value.Emplace(std::forward<RangeType>(Elem));
             }
 
             return Result;
@@ -62,9 +62,9 @@ namespace UE::Ranges {
          */
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TGroupingByInvoker<BindingType>>(
-                TGroupingByInvoker<BindingType>(CreateBinding<A...>(Forward<A>(Args)...)));
+                TGroupingByInvoker<BindingType>(CreateBinding<A...>(std::forward<A>(Args)...)));
         }
     };
 

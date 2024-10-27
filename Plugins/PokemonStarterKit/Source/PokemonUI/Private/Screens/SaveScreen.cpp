@@ -59,7 +59,7 @@ void USaveScreen::SetSaveGame(UPokemonSaveGame *SaveGame) {
 
 void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
     check(!SaveGameCreationFuture.IsSet())
-    OnSaveCompleteDelegate = MoveTemp(OnComplete);
+    OnSaveCompleteDelegate = std::move(OnComplete);
     SaveGameCreationFuture.Emplace(AsyncThread([this] {
         auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
         auto SaveGame = UPokemonSubsystem::GetInstance(this).CreateSaveGame(

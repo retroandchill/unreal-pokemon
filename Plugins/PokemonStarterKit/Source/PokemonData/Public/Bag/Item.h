@@ -271,6 +271,14 @@ class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = Items)
     static bool CanHold(const FItem &Item);
 
+    /**
+     * Determine if the item quantity should be shown?
+     * @param Item The item in question
+     * @return Should the quantity be shown?
+     */
+    UFUNCTION(BlueprintPure, Category = Items)
+    static bool ShouldShowQuantity(const FItem &Item);
+
     UFUNCTION(BlueprintPure, Category = ItemHandle,
               meta = (DisplayName = "Convert To Name", CompactNodeTitle = "->", BlueprintAutocast,
                       AutoCreateRefTerm = Struct))

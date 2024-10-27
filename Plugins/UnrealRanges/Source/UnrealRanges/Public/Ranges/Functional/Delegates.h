@@ -11,9 +11,9 @@ namespace UE::Ranges {
         requires CanBindStatic<D, F, A...> || CanBindLambda<D, F, A...>
     D CreateDelegate(F &&Functor, A &&...Args) {
         if constexpr (CanBindStatic<D, F, A...>) {
-            return D::CreateStatic(Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return D::CreateLambda(Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -21,11 +21,11 @@ namespace UE::Ranges {
         requires CanBindUObject<D, T, F, A...> || CanBindWeakLambda<D, T, F, A...> || CanBindRaw<D, T, F, A...>
     D CreateDelegate(T *Object, F &&Functor, A &&...Args) {
         if constexpr (CanBindUObject<D, T, F, A...>) {
-            return D::CreateUObject(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else if constexpr (CanBindWeakLambda<D, T, F, A...>) {
-            return D::CreateWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return D::CreateRaw(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateRaw(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -33,31 +33,31 @@ namespace UE::Ranges {
         requires CanBindSP<D, T, M, F, A...> || CanBindSPLambda<D, T, M, F, A...>
     D CreateDelegate(const TSharedRef<T, M> &Object, F &&Functor, A &&...Args) {
         if constexpr (CanBindSP<D, T, M, F, A...>) {
-            return D::CreateSP(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateSP(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return D::CreateSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return D::CreateSPLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
     template <typename D, typename T, typename... A>
         requires NativeUnicastDelegate<D> && UObjectPointer<T>
     D CreateDelegate(T &&Object, FName FunctionName, A &&...Args) {
-        return D::CreateUFunction(Forward<T>(Object), FunctionName, Forward<A>(Args)...);
+        return D::CreateUFunction(std::forward<T>(Object), FunctionName, std::forward<A>(Args)...);
     }
 
     template <typename D>
         requires UnicastDelegate<D>
     void BindToDelegate(D &Delegate, D &&Binding) {
-        Delegate = Forward<D>(Binding);
+        Delegate = std::forward<D>(Binding);
     }
 
     template <typename D, typename F, typename... A>
         requires CanBindStatic<D, F, A...> || CanBindLambda<D, F, A...>
     void BindToDelegate(D &Delegate, F &&Functor, A &&...Args) {
         if constexpr (CanBindStatic<D, F, A...>) {
-            Delegate.BindStatic(Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            Delegate.BindLambda(Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -65,11 +65,11 @@ namespace UE::Ranges {
         requires CanBindUObject<D, T, F, A...> || CanBindWeakLambda<D, T, F, A...> || CanBindRaw<D, T, F, A...>
     void BindToDelegate(D &Delegate, T *Object, F &&Functor, A &&...Args) {
         if constexpr (CanBindUObject<D, T, F, A...>) {
-            Delegate.BindUObject(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else if constexpr (CanBindWeakLambda<D, T, F, A...>) {
-            Delegate.BindWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            Delegate.BindRaw(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindRaw(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -77,36 +77,35 @@ namespace UE::Ranges {
         requires CanBindSP<D, T, M, F, A...> || CanBindSPLambda<D, T, M, F, A...>
     void BindToDelegate(D &Delegate, const TSharedRef<T, M> &Object, F &&Functor, A &&...Args) {
         if constexpr (CanBindSP<D, T, M, F, A...>) {
-            Delegate.BindSP(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindSP(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            Delegate.BindSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            Delegate.BindSPLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
     template <typename D, typename T, typename... A>
         requires NativeUnicastDelegate<D> && UObjectPointer<T>
     void BindToDelegate(D &Delegate, T &&Object, FName FunctionName, A &&...Args) {
-        Delegate.BindUFunction(Forward<T>(Object), FunctionName, Forward<A>(Args)...);
+        Delegate.BindUFunction(std::forward<T>(Object), FunctionName, std::forward<A>(Args)...);
     }
 
     template <typename D, typename... A>
-    concept CanBindDelegate = requires(D&& Delegate, A &&...Args) {
-        BindToDelegate<D, A...>(Forward<D>(), Forward<A>(Args)...);
-    };
+    concept CanBindDelegate =
+        requires(D &&Delegate, A &&...Args) { BindToDelegate<D, A...>(std::forward<D>(), std::forward<A>(Args)...); };
 
     template <typename M, typename U>
         requires MulticastDelegate<M> && BindableTo<M, U>
     FDelegateHandle AddToDelegate(M &Delegate, U &&Binding) {
-        return Delegate.Add(Forward<M>(Binding));
+        return Delegate.Add(std::forward<U>(Binding));
     }
 
     template <typename D, typename F, typename... A>
         requires CanAddStatic<D, F, A...> || CanAddLambda<D, F, A...>
     FDelegateHandle AddToDelegate(D &Delegate, F &&Functor, A &&...Args) {
         if constexpr (CanAddStatic<D, F, A...>) {
-            return Delegate.AddStatic(Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return Delegate.AddLambda(Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -114,11 +113,11 @@ namespace UE::Ranges {
         requires CanAddUObject<D, T, F, A...> || CanAddWeakLambda<D, T, F, A...> || CanAddRaw<D, T, F, A...>
     FDelegateHandle AddToDelegate(D &Delegate, T *Object, F &&Functor, A &&...Args) {
         if constexpr (CanAddUObject<D, T, F, A...>) {
-            return Delegate.AddUObject(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else if constexpr (CanAddWeakLambda<D, T, F, A...>) {
-            return Delegate.AddWeakLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return Delegate.AddRaw(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddRaw(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -126,21 +125,21 @@ namespace UE::Ranges {
         requires CanAddSP<D, T, M, F, A...> || CanAddSPLambda<D, T, M, F, A...>
     FDelegateHandle AddToDelegate(D &Delegate, const TSharedRef<T, M> &Object, F &&Functor, A &&...Args) {
         if constexpr (CanBindSP<D, T, M, F, A...>) {
-            return Delegate.AddSP(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddSP(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return Delegate.AddSPLambda(Object, Forward<F>(Functor), Forward<A>(Args)...);
+            return Delegate.AddSPLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
     template <typename D, typename T, typename... A>
         requires NativeMulitcastDelegate<D> && UObjectPointer<T>
     FDelegateHandle AddToDelegate(D &Delegate, T &&Object, FName FunctionName, A &&...Args) {
-        return Delegate.AddUFunction(Forward<T>(Object), FunctionName, Forward<A>(Args)...);
+        return Delegate.AddUFunction(std::forward<T>(Object), FunctionName, std::forward<A>(Args)...);
     }
 
     template <typename D, typename... A>
     concept CanAddToDelegate = NativeMulitcastDelegate<D> && requires(D &Delegate, A &&...Args) {
-        { AddToDelegate(Delegate, Forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        { AddToDelegate(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
     };
 } // namespace UE::Ranges
 
@@ -158,7 +157,7 @@ namespace UE::Ranges {
     template <typename... A>                                                                                           \
         requires UE::Ranges::CanAddToDelegate<DelegateType, A...>                                                      \
     FDelegateHandle BindTo##MemberName(A &&...Args) {                                                                  \
-        return UE::Ranges::AddToDelegate(MemberName, Forward<A>(Args)...);                                             \
+        return UE::Ranges::AddToDelegate(MemberName, std::forward<A>(Args)...);                                        \
     }                                                                                                                  \
     void RemoveFrom##MemberName(FDelegateHandle Handle) {                                                              \
         MemberName.Remove(Handle);                                                                                     \

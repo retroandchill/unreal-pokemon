@@ -17,7 +17,7 @@ public class PokemonBattle : ModuleRules
                 "GameplayTasks", 
                 "PokemonUtilities",
                 "DeveloperSettings",
-                "DynamicAssetLoader"
+                "DynamicAssetLoader", "PokemonAssets"
             }
         );
 

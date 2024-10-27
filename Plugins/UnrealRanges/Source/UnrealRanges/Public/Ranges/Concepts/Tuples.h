@@ -43,7 +43,7 @@ namespace UE::Ranges {
 
     template <typename F, typename T>
     concept CanApply = TupleLike<std::remove_reference_t<T>> && requires(std::remove_cvref_t<T> Tuple, F &&Functor) {
-        ranges::tuple_apply(Forward<F>(Functor), Tuple);
+        ranges::tuple_apply(std::forward<F>(Functor), Tuple);
     };
 
     static_assert(CanApply<void (*)(int32, int32), std::pair<int32, int32>>);

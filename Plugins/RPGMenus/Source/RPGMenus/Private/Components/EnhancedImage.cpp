@@ -3,10 +3,10 @@
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
 #include "Ranges/Functional/PropertyBindings.h"
-#include "Slate/SlateBrushAsset.h"
-#include "SPaperFlipbookWidget.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Ranges/Optional/Map.h"
+#include "Slate/SlateBrushAsset.h"
+#include "SPaperFlipbookWidget.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"
 
 constexpr int32 ImageWidgetIndex = 0;
@@ -97,10 +97,10 @@ void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFl
                                                    bool bMatchSize) {
     if (!LazyFlipbook.IsNull()) {
         RequestAsyncLoad(LazyFlipbook, FStreamableDelegate::CreateWeakLambda(this, [this, LazyFlipbook, bMatchSize] {
-            ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
-                       *LazyFlipbook.ToSoftObjectPath().ToString());
-            SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
-        }));
+                             ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
+                                        *LazyFlipbook.ToSoftObjectPath().ToString());
+                             SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
+                         }));
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(LazyFlipbook, bMatchSize);
@@ -110,12 +110,12 @@ void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFl
 void UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize) {
     if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
         RequestAsyncLoad(SoftPointer, FStreamableDelegate::CreateWeakLambda(this, [this, LazyImage, bMatchSize] {
-            ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
-                       *LazyImage.ToSoftObjectPath().ToString());
-            auto FoundAsset = LazyImage.LoadSynchronous();
+                             ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
+                                        *LazyImage.ToSoftObjectPath().ToString());
+                             auto FoundAsset = LazyImage.LoadSynchronous();
             check(FoundAsset.IsSet())
-            SetBrushFromImageAsset(FoundAsset.GetValue(), bMatchSize);
-        }));
+                             SetBrushFromImageAsset(FoundAsset.GetValue(), bMatchSize);
+                         }));
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(SoftPointer, bMatchSize);

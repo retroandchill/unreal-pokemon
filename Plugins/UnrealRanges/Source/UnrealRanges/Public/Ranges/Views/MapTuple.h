@@ -13,10 +13,10 @@ namespace UE::Ranges {
 
     struct FMapTuple {
         template <typename... A>
-        constexpr auto operator()(A &&... Args) const {
+        constexpr auto operator()(A &&...Args) const {
             return ranges::views::transform(
-                [Binding = CreateBinding<A...>(Forward<A>(Args)...)]<typename T>(T &&Tuple) {
-                    return ranges::tuple_apply(Binding, Forward<T>(Tuple));
+                [Binding = CreateBinding<A...>(std::forward<A>(Args)...)]<typename T>(T &&Tuple) {
+                    return ranges::tuple_apply(Binding, std::forward<T>(Tuple));
                 });
         }
     };

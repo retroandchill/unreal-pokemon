@@ -7,8 +7,8 @@ DEFINE_INJECTABLE_DEPENDENCY(UUtility_GiveItemToPokemon)
 void UUtility_GiveItemToPokemon::Execute(const FItemHandle &Item, const TScriptInterface<IPokemon> &Pokemon,
                                          int32 PokemonIndex, FSimpleDelegate &&ItemGiven,
                                          FSimpleDelegate &&ItemNotGiven) {
-    OnItemGiven.Add(MoveTemp(ItemGiven));
-    OnItemNotGiven.Add(MoveTemp(ItemNotGiven));
+    OnItemGiven.Add(std::move(ItemGiven));
+    OnItemNotGiven.Add(std::move(ItemNotGiven));
     Execute(Item, Pokemon, PokemonIndex);
 }
 

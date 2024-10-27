@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Bag/PocketWindow.h"
+#include "CommonTextBlock.h"
 #include "Components/DisplayText.h"
 #include "PokemonDataSettings.h"
 
@@ -13,8 +14,8 @@ void UPocketWindow::SetCurrentPocket(FName Pocket) {
     UpdatePocketInfo();
 }
 
-void UPocketWindow::UpdatePocketInfo_Implementation() {
+void UPocketWindow::UpdatePocketInfo() {
     auto &Settings = *GetDefault<UPokemonDataSettings>();
     const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings.PocketInfo.FindChecked(CurrentPocket);
-    PocketName->SetText(DisplayName);
+    SetPocketName(DisplayName);
 }

@@ -17,13 +17,13 @@ namespace UE::Optionals {
 
         constexpr TOptionalClosure() = default;
 
-        explicit constexpr TOptionalClosure(F &&Functor) : Functor(MoveTemp(Functor)) {
+        explicit constexpr TOptionalClosure(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         template <typename O>
             requires UEOptional<O>
         friend constexpr decltype(auto) operator|(O &&Optional, TOptionalClosure Closure) {
-            return Closure.Functor(Forward<O>(Optional));
+            return Closure.Functor(std::forward<O>(Optional));
         }
 
       private:

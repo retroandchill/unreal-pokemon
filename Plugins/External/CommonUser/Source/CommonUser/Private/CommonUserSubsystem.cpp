@@ -653,7 +653,7 @@ bool UCommonUserSubsystem::TransferPlatformAuthOSSv2(FOnlineContextCache *System
         FAuthQueryExternalAuthToken::Params Params;
         Params.LocalAccountId = GetLocalUserNetId(PlatformUser, ECommonUserOnlineContext::Platform).GetV2();
 
-        PlatformAuthInterface->QueryExternalAuthToken(MoveTemp(Params))
+        PlatformAuthInterface->QueryExternalAuthToken(std::move(Params))
             .OnComplete(this, [this, Request](const TOnlineResult<FAuthQueryExternalAuthToken> &Result) {
                 UCommonUserInfo *UserInfo = Request->UserInfo.Get();
                 if (!UserInfo) {
@@ -670,7 +670,7 @@ bool UCommonUserSubsystem::TransferPlatformAuthOSSv2(FOnlineContextCache *System
                     Params.CredentialsToken.Emplace<FExternalAuthToken>(GenerateAuthTokenResult.ExternalAuthToken);
 
                     IAuthPtr PrimaryAuthInterface = GetOnlineAuth(Request->CurrentContext);
-                    PrimaryAuthInterface->Login(MoveTemp(Params))
+                    PrimaryAuthInterface->Login(std::move(Params))
                         .OnComplete(this, [this, Request](const TOnlineResult<FAuthLogin> &Result) {
                             UCommonUserInfo *UserInfo = Request->UserInfo.Get();
                             if (!UserInfo) {
@@ -706,7 +706,7 @@ bool UCommonUserSubsystem::AutoLoginOSSv2(FOnlineContextCache *System, TSharedRe
     LoginParameters.CredentialsType = LoginCredentialsType::Auto;
     // Leave other LoginParameters as default to allow the online service to determine how to try to automatically log
     // in the user
-    TOnlineAsyncOpHandle<FAuthLogin> LoginHandle = System->AuthService->Login(MoveTemp(LoginParameters));
+    TOnlineAsyncOpHandle<FAuthLogin> LoginHandle = System->AuthService->Login(std::move(LoginParameters));
     LoginHandle.OnComplete(this, &ThisClass::HandleUserLoginCompletedV2, PlatformUser, Request->CurrentContext);
     return true;
 }
@@ -718,7 +718,7 @@ bool UCommonUserSubsystem::ShowLoginUIOSSv2(FOnlineContextCache *System, TShared
         FExternalUIShowLoginUI::Params ShowLoginUIParameters;
         ShowLoginUIParameters.PlatformUserId = PlatformUser;
         TOnlineAsyncOpHandle<FExternalUIShowLoginUI> LoginHandle =
-            ExternalUI->ShowLoginUI(MoveTemp(ShowLoginUIParameters));
+            ExternalUI->ShowLoginUI(std::move(ShowLoginUIParameters));
         LoginHandle.OnComplete(this, &ThisClass::HandleOnLoginUIClosedV2, PlatformUser, Request->CurrentContext);
         return true;
     }
@@ -736,7 +736,7 @@ bool UCommonUserSubsystem::QueryUserPrivilegeOSSv2(FOnlineContextCache *System, 
         Params.LocalAccountId = GetLocalUserNetId(PlatformUser, Request->CurrentContext).GetV2();
         Params.Privilege = DesiredPrivilege;
         TOnlineAsyncOpHandle<FQueryUserPrivilege> QueryHandle =
-            PrivilegesInterface->QueryUserPrivilege(MoveTemp(Params));
+            PrivilegesInterface->QueryUserPrivilege(std::move(Params));
         QueryHandle.OnComplete(this, &ThisClass::HandleCheckPrivilegesComplete, Request->UserInfo, DesiredPrivilege,
                                Request->CurrentContext);
         return true;
@@ -752,7 +752,7 @@ TSharedPtr<FAccountInfo> UCommonUserSubsystem::GetOnlineServiceAccountInfo(IAuth
     TSharedPtr<FAccountInfo> AccountInfo;
     FAuthGetLocalOnlineUserByPlatformUserId::Params GetAccountParams = {InUserId};
     TOnlineResult<FAuthGetLocalOnlineUserByPlatformUserId> GetAccountResult =
-        AuthService->GetLocalOnlineUserByPlatformUserId(MoveTemp(GetAccountParams));
+        AuthService->GetLocalOnlineUserByPlatformUserId(std::move(GetAccountParams));
     if (GetAccountResult.IsOk()) {
         AccountInfo = GetAccountResult.GetOkValue().AccountInfo;
     }
@@ -1329,7 +1329,7 @@ bool UCommonUserSubsystem::LoginLocalUser(const UCommonUserInfo *UserInfo, EComm
     }
 
     TSharedRef<FUserLoginRequest> NewRequest =
-        MakeShared<FUserLoginRequest>(LocalUserInfo, RequestedPrivilege, Context, MoveTemp(OnComplete));
+        MakeShared<FUserLoginRequest>(LocalUserInfo, RequestedPrivilege, Context, std::move(OnComplete));
     ActiveLoginRequests.Add(NewRequest);
 
     // This will execute callback or start login process

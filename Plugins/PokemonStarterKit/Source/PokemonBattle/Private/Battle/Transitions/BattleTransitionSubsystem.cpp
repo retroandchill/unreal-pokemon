@@ -63,7 +63,7 @@ void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
 }
 
 FDelegateHandle UBattleTransitionSubsystem::BindToBattleFinished(FBattleFinished::FDelegate &&Callback) {
-    return BattleFinished.Add(MoveTemp(Callback));
+    return BattleFinished.Add(std::move(Callback));
 }
 
 void UBattleTransitionSubsystem::RemoveFromBattleFinished(const FDelegateHandle &Handle) {

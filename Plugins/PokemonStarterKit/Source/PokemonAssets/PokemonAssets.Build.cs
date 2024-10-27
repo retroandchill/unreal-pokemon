@@ -27,7 +27,9 @@ public class PokemonAssets : ModuleRules
 			{
 				"Core",
 				"DeveloperSettings",
-				"Paper2D", "UnrealRanges"
+				"Paper2D", 
+				"UnrealRanges",
+				"RPGMenus", "PokemonCore"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -43,12 +45,20 @@ public class PokemonAssets : ModuleRules
 				"PokemonCore",
 				"PokemonData",
 				"UnrealInjector", 
-				"DynamicAssetLoader",
-				"RPGMenus"
+				"DynamicAssetLoader"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
-		
+
+		if (!string.IsNullOrEmpty(GetModuleDirectory("PaperZD")))
+		{
+			PublicDependencyModuleNames.Add("PaperZD");
+			PublicDefinitions.Add("WITH_PAPERZD=1");
+		}
+		else
+		{
+			PublicDefinitions.Add("WITH_PAPERZD=0");
+		}
 		
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[]

@@ -17,7 +17,7 @@ namespace UnrealInjector {
      * @param A The arguments passed to the execute function
      */
     template <typename T, typename... A>
-    concept ExecutableUtility = requires(T *Object, A &&...Args) { Object->Execute(Forward<A>(Args)...); };
+    concept ExecutableUtility = requires(T *Object, A &&...Args) { Object->Execute(std::forward<A>(Args)...); };
 
     /**
      * Concept used to define a Blueprint Utility Node that can be called with the given arguments
@@ -48,7 +48,7 @@ class UNREALINJECTOR_API UUtilityNodeSubsystem : public UGameInstanceSubsystem {
     void ExecuteUtilityFunction(A &&...Args) {
         auto Object = UnrealInjector::NewInjectedDependency<T>(this);
         CreatedNodes.Emplace(Object);
-        Object->Execute(Forward<A>(Args)...);
+        Object->Execute(std::forward<A>(Args)...);
     }
 
     /**

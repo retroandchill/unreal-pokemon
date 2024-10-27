@@ -24,9 +24,9 @@ namespace UE::Ranges {
         requires FunctionalType<F>
     constexpr auto CreateBinding(F &&Functor, A &&...Args) {
         if constexpr (sizeof...(A) > 0) {
-            return ranges::bind_back(Forward<F>(Functor), Forward<A>(Args)...);
+            return ranges::bind_back(std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
-            return Forward<F>(Functor);
+            return std::forward<F>(Functor);
         }
     }
 
@@ -34,27 +34,28 @@ namespace UE::Ranges {
         requires StdExt::IsMemberFunction_v<F>
     constexpr auto CreateBinding(C &&Object, F &&Functor, A &&...Args) {
         if constexpr (std::is_base_of_v<StdExt::MemberFunctionClass_t<F>, std::remove_cvref_t<C>>) {
-            return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), &Object);
+            return std::bind_front(CreateBinding(std::forward<F>(Functor), std::forward<A>(Args)...), &Object);
         } else {
-            return std::bind_front(CreateBinding(Forward<F>(Functor), Forward<A>(Args)...), Forward<C>(Object));
+            return std::bind_front(CreateBinding(std::forward<F>(Functor), std::forward<A>(Args)...),
+                                   std::forward<C>(Object));
         }
     }
 
     template <typename M>
         requires std::is_member_pointer_v<M> && (!std::is_member_function_pointer_v<M>)
     constexpr auto CreateBinding(M &&Member) {
-        return Forward<M>(Member);
+        return std::forward<M>(Member);
     }
 
     template <typename D, typename... A>
         requires UEDelegate<D>
     constexpr auto CreateBinding(D &&Delegate, A &&...Args) {
-        return ranges::bind_back([Callback = Forward<D>(Delegate)]<typename... B>(
-                                     B &&...Vals) { return InvokeDelegate(Callback, Forward<B>(Vals)...); },
-                                 Forward<A>(Args)...);
+        return ranges::bind_back([Callback = std::forward<D>(Delegate)]<typename... B>(
+                                     B &&...Vals) { return InvokeDelegate(Callback, std::forward<B>(Vals)...); },
+                                 std::forward<A>(Args)...);
     }
 
     template <typename T, typename... A>
-    concept CanInvokeBinding = std::invocable<decltype(CreateBinding<A...>(Forward<A>(std::declval<A>())...)), T>;
+    concept CanInvokeBinding = std::invocable<decltype(CreateBinding<A...>(std::forward<A>(std::declval<A>())...)), T>;
 
 } // namespace UE::Ranges
