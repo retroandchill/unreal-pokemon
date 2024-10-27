@@ -28,7 +28,7 @@ namespace UE::Ranges {
          * Construct a new instance by moving the target functor into the closure.
          * @param Functor The functor to invoke.
          */
-        explicit constexpr TTerminalClosure(F &&Functor) : Functor(MoveTemp(Functor)) {
+        explicit constexpr TTerminalClosure(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -41,7 +41,7 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R> && std::is_invocable_v<F, R>
         friend constexpr auto operator|(R &&Range, TTerminalClosure Closure) {
-            return Closure.Functor(Forward<R>(Range));
+            return Closure.Functor(std::forward<R>(Range));
         }
 
         template <typename R>

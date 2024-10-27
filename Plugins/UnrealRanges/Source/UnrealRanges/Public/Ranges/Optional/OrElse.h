@@ -14,7 +14,7 @@ namespace UE::Optionals {
         }
         explicit constexpr TOrElseInvoker(T &&Value)
             requires(!std::is_lvalue_reference_v<T>)
-            : Value(MoveTemp(Value)) {
+            : Value(std::move(Value)) {
         }
 
         /**
@@ -26,7 +26,7 @@ namespace UE::Optionals {
         template <typename O, typename S = decltype(std::declval<O>().Get(std::declval<T>()))>
             requires UEOptional<O>
         constexpr S operator()(O &&Optional) {
-            return Optional.Get(Forward<T>(Value));
+            return Optional.Get(std::forward<T>(Value));
         }
 
       private:
@@ -43,7 +43,7 @@ namespace UE::Optionals {
          */
         template <typename T>
         constexpr auto operator()(T &&Value) const {
-            return TOptionalClosure<TOrElseInvoker<T>>(TOrElseInvoker<T>(Forward<T>(Value)));
+            return TOptionalClosure<TOrElseInvoker<T>>(TOrElseInvoker<T>(std::forward<T>(Value)));
         }
     };
 

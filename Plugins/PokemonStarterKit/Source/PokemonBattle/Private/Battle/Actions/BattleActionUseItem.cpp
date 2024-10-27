@@ -20,20 +20,20 @@
 #include "Ranges/Views/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
-    Data.Set<TWeakInterfacePtr<IBattler>>(MoveTemp(Battler));
+    Data.Set<TWeakInterfacePtr<IBattler>>(std::move(Battler));
 }
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattleMove> &&Move) {
-    Data.Set<TWeakInterfacePtr<IBattleMove>>(MoveTemp(Move));
+    Data.Set<TWeakInterfacePtr<IBattleMove>>(std::move(Move));
 }
 
 FItemTarget::FItemTarget(FTargetWithIndex &&Target) {
-    Data.Set<FTargetWithIndex>(MoveTemp(Target));
+    Data.Set<FTargetWithIndex>(std::move(Target));
 }
 
 FBattleActionUseItem::FBattleActionUseItem(const TScriptInterface<IBattler> &Battler, FName ItemID,
                                            FItemTarget &&ItemTarget)
-    : FBattleActionBase(Battler), ItemID(ItemID), ItemTarget(MoveTemp(ItemTarget)) {
+    : FBattleActionBase(Battler), ItemID(ItemID), ItemTarget(std::move(ItemTarget)) {
 }
 
 FString FBattleActionUseItem::GetReferencerName() const {

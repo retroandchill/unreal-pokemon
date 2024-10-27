@@ -42,7 +42,7 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
     for (const auto &Choice : Choices) {
         Commands.Add(UCommand::CreateBasicCommand(Choice));
     }
-    CommandWindow->SetCommands(MoveTemp(Commands));
+    CommandWindow->SetCommands(std::move(Commands));
     MessageWindow->ActivateWidget();
 }
 

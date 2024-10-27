@@ -10,7 +10,7 @@
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
                                            const TScriptInterface<IBattleMove> &MoveIn,
                                            TArray<FTargetWithIndex> &&TargetsIn)
-    : FBattleActionBase(BattlerIn), Move(MoveIn), Targets(MoveTemp(TargetsIn)) {
+    : FBattleActionBase(BattlerIn), Move(MoveIn), Targets(std::move(TargetsIn)) {
 }
 
 void FBattleActionUseMove::AddReferencedObjects(FReferenceCollector &Collector) {

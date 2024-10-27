@@ -56,7 +56,7 @@ void UGainExpOnFaint::Activate() {
 
     CompleteHandle =
         Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
-    Screen->DisplayExpForGain(MoveTemp(GainInfos));
+    Screen->DisplayExpForGain(std::move(GainInfos));
 }
 
 void UGainExpOnFaint::OnExpGainComplete() {

@@ -28,7 +28,7 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
 }
 
 void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
-    GainInfos = MoveTemp(GainInfosIn);
+    GainInfos = std::move(GainInfosIn);
     check(Panels.Num() == GainInfos.Num())
     for (int32 i = 0; i < Panels.Num(); i++) {
         const auto &Panel = Panels[i];

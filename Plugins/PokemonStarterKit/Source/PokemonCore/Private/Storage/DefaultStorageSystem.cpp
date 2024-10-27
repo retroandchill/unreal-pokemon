@@ -76,7 +76,7 @@ void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
 
 TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon) {
     check(Boxes.IsValidIndex(CurrentBoxIndex))
-    std::array Indexes = { UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex) };
+    std::array Indexes = {UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex)};
     // clang-format off
     return Indexes |
                    UE::Ranges::Join |
@@ -88,7 +88,7 @@ TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterfa
 }
 
 TScriptInterface<IStorageBox> UDefaultStorageSystem::CreateStorageBox(FText &&BoxName, int32 BoxCapacity) {
-    return UnrealInjector::NewInjectedDependency<IStorageBox>(this, MoveTemp(BoxName), BoxCapacity);
+    return UnrealInjector::NewInjectedDependency<IStorageBox>(this, std::move(BoxName), BoxCapacity);
 }
 
 static FText GetDefaultBoxName(int32 Index) {

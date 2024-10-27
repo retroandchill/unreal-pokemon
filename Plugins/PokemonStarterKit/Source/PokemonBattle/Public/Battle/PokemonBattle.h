@@ -97,8 +97,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn *GetBattlePawn() const final;
 
+    UFUNCTION(BlueprintPure, Category = "Battle|Content")
     const TScriptInterface<IBattleSide> &GetPlayerSide() const override;
+
+    UFUNCTION(BlueprintPure, Category = "Battle|Content")
     const TScriptInterface<IBattleSide> &GetOpposingSide() const override;
+
     UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const override;
     UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;

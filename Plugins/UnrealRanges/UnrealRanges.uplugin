@@ -28,6 +28,11 @@
 			"Name": "UnrealRangesEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UnrealRangesBlueprintNodes",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"SupportURL": "",

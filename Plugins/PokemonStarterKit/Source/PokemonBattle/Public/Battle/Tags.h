@@ -39,7 +39,7 @@ namespace Pokemon::Battle {
         auto FullTag = FString::Format(Format.GetData(), {TagName.ToString()});
         auto Tag = MakeShared<FNativeGameplayTag>(UE_PLUGIN_NAME, UE_MODULE_NAME, *FullTag, TEXT(""),
                                                   ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD);
-        Tags.Emplace(TagName, MoveTemp(Tag));
+        Tags.Emplace(TagName, std::move(Tag));
     }
 
 } // namespace Pokemon::Battle

@@ -29,7 +29,9 @@ public class RPGMenusTests : ModuleRules
                 "BlueprintGraph",
                 "KismetCompiler",
                 "CommonUI",
-                "GameplayTags"
+                "GameplayTags", 
+                "DynamicAssetLoader",
+                "Paper2D"
             }
         );
     }

@@ -13,7 +13,7 @@
 
 void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
     Super::Refresh_Implementation(Pokemon);
-    PokemonIcon->SetFlipbook(USpriteLoader::GetPokemonIcon(Pokemon));
+    PokemonIcon->SetFlipbook(USpriteLoader::GetPokemonIcon(Pokemon).TryGet<UPaperFlipbook>().GetPtrOrNull());
     auto IconGraphics = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(Pokemon->GetTypes());
     Algo::ForEach(TypeIcons, &UWidget::RemoveFromParent);
     TypeIcons.Empty();

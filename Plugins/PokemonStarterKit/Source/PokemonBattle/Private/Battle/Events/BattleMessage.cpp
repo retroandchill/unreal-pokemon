@@ -5,12 +5,12 @@
 #include "Battle/Events/RunningMessageSetPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 
-FBattleMessage::FBattleMessage(FText &&Message) : Message(MoveTemp(Message)) {
+FBattleMessage::FBattleMessage(FText &&Message) : Message(std::move(Message)) {
 }
 
 FBattleMessage::FBattleMessage(FText &&Message, const TScriptInterface<IBattleAnimation> &Animation,
                                EAnimationPlacement AnimationPlacement)
-    : Message(MoveTemp(Message)), Animation(Animation), AnimationPlacement(AnimationPlacement) {
+    : Message(std::move(Message)), Animation(Animation), AnimationPlacement(AnimationPlacement) {
 }
 
 void FBattleMessage::AddReferencedObjects(FReferenceCollector &Collector) {
@@ -26,13 +26,13 @@ const TArray<FBattleMessage> &UBattleMessageHelper::GetMessages(const FRunningMe
 }
 
 void UBattleMessageHelper::AppendMessage(const FRunningMessageSet &Messages, FText Message) {
-    Messages.Messages->Emplace(MoveTemp(Message));
+    Messages.Messages->Emplace(std::move(Message));
 }
 
 void UBattleMessageHelper::AppendMessageWithAnimation(const FRunningMessageSet &Messages, FText Message,
                                                       const TScriptInterface<IBattleAnimation> &Animation,
                                                       EAnimationPlacement AnimationPlacement) {
-    Messages.Messages->Emplace(MoveTemp(Message), Animation, AnimationPlacement);
+    Messages.Messages->Emplace(std::move(Message), Animation, AnimationPlacement);
 }
 
 const FRunningMessageSet *UBattleMessageHelper::FindRunningMessageSet(const UGameplayAbility *Ability) {

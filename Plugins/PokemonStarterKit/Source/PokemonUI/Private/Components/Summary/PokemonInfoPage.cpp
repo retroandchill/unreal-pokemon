@@ -52,7 +52,11 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem.IsSet()) {
         ItemNameText->SetText(HoldItem->RealName);
         ItemDescriptionText->SetText(HoldItem->Description);
-        auto Item = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(HoldItem->ID).GetPtrOrNull();
+        // clang-format off
+        auto Item = Pokemon::Assets::Graphics::ItemIcons.LoadAsset(HoldItem->ID) |
+                           UE::Optionals::Map([](const FImageAsset &Asset) -> auto &{ return Asset.Get(); }) |
+                           UE::Optionals::GetPtrOrNull;
+        // clang-format on
         UWidgetUtilities::SetBrushFromAsset(ItemIcon, Item, true);
         ItemIcon->SetVisibility(SelfHitTestInvisible);
     } else {

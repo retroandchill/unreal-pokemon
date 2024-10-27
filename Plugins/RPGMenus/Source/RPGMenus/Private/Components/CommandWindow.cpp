@@ -20,7 +20,7 @@ void UCommandWindow::NativePreConstruct() {
 }
 
 void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands) {
-    Commands = MoveTemp(NewCommands);
+    Commands = std::move(NewCommands);
     AddCommands();
 }
 

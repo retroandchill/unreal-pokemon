@@ -64,6 +64,10 @@
 		{
 			"Name": "UnrealInjector",
 			"Enabled": true
+		},
+		{
+			"Name": "DynamicAssetLoader",
+			"Enabled": true
 		}
 	]
 }

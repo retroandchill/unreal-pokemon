@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
 
@@ -59,6 +60,8 @@ namespace UE::Ranges {
         return TypesMatch<T>(Path.TryLoadClass<UObject>());
     }
 
+    UNREALRANGES_API bool TypesMatch(const UObject &Object, const UClass &Class);
+
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
     constexpr UClass *GetClass() {
@@ -67,6 +70,21 @@ namespace UE::Ranges {
         } else {
             static_assert(UnrealInterface<T>);
             return T::UClassType::StaticClass();
+        }
+    }
+
+    template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    constexpr bool IsValidSubclass(const UClass *Class) {
+        if constexpr (std::derived_from<T, UObject>) {
+            return Class->IsChildOf<T>();
+        } else {
+            static_assert(UnrealInterface<T>);
+            if (Class->HasAnyClassFlags(CLASS_Interface)) {
+                return Class->IsChildOf<typename T::UClassType>();
+            }
+
+            return Class->ImplementsInterface(T::UClassType::StaticClass());
         }
     }
 

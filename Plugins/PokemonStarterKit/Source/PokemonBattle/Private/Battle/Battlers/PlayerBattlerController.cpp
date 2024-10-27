@@ -17,5 +17,5 @@ void UPlayerBattlerController::InitiateForcedSwitch(const TScriptInterface<IBatt
 }
 
 void UPlayerBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
-    ActionReady = MoveTemp(QueueAction);
+    ActionReady = std::move(QueueAction);
 }

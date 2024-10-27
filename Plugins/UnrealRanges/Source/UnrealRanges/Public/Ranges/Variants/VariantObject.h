@@ -7,6 +7,7 @@
 #include "Ranges/Concepts/Structs.h"
 #include "Ranges/Concepts/UObjectPointer.h"
 #include "Ranges/RangeConcepts.h"
+#include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/FilterTuple.h"
 
@@ -29,9 +30,17 @@ namespace UE::Ranges {
         struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
     } // namespace Detail
 
+    /**
+     * Checks if the given type is a variant object.
+     * @tparam T The type to check
+     */
     template <typename T>
     concept VariantObject = Detail::TIsVariantObject<T>::value;
 
+    /**
+     * Checks if the given type is a variant object type that has a valid UStruct representation..
+     * @tparam T The type to check
+     */
     template <typename T>
     concept VariantObjectStruct = UEStruct<T> && VariantObject<T> && requires { typename T::SoftPtrType; };
 
@@ -110,6 +119,10 @@ namespace UE::Ranges {
             return *ContainedObject;
         }
 
+        /**
+         * Equality operator against a null value.
+         * @return Is the variant null?
+         */
         constexpr bool operator==(std::nullptr_t) const {
             return IsValid();
         }
@@ -133,6 +146,29 @@ namespace UE::Ranges {
             return !IsType<std::nullptr_t>() && ContainedObject != nullptr;
         }
 
+        /**
+         * Applies a given functor to the currently contained value of the variant object,
+         * ensuring that the type index is valid and not representing a nullptr. The function
+         * dispatches to the appropriate function implementation based on the type index.
+         *
+         * @param Functor The callable object (functor) that will be applied to the variant's content.
+         * @return The result of invoking the functor on the contained object.
+         */
+        template <typename F>
+            requires(std::invocable<F, T *> && ...)
+        decltype(auto) Visit(F &&Functor) const {
+            check(TypeIndex != GetTypeIndex<std::nullptr_t>())
+            static constexpr std::array VisitFunctions = {&TVariantObject::VisitSingle<T, F>...};
+            return ranges::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, std::forward<F>(Functor));
+        }
+
+      private:
+        template <typename U, typename F>
+            requires(std::same_as<T, U> || ...) && std::invocable<F, U *>
+        static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor) {
+            return ranges::invoke(std::forward<F>(Functor), static_cast<U *>(Object));
+        }
+
       protected:
         /**
          * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
@@ -154,7 +190,7 @@ namespace UE::Ranges {
         /**
          * Get a reference to the held value, will raise a fatal error if the wrong type.
          * @tparam U The type of the value
-         * @return
+         * @return A reference to the value
          */
         template <typename U>
             requires(std::same_as<T, U> || ...)
@@ -162,22 +198,43 @@ namespace UE::Ranges {
             return *CastChecked<U>(ContainedObject);
         }
 
+        /**
+         * Get a reference to the held value, will raise a fatal error if null.
+         * @return A reference to the value
+         */
         UObject &Get() const {
             check(::IsValid(ContainedObject))
-            ;
             return *ContainedObject;
         }
 
+        /**
+         * Attempt to get an object of the given type.
+         * @tparam U The type to check (must be one of the variant types)
+         * @return The object, if the cast was successful
+         */
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         TOptional<U &> TryGet() const {
-            return Optionals::OfNullable(Cast<U>(ContainedObject));
+            if (TypeIndex != GetTypeIndex<U>()) {
+                return TOptional<U &>();
+            }
+
+            return Optionals::OfNullable(static_cast<U *>(ContainedObject));
         }
 
+        /**
+         * Try to get the underlying object.
+         * @return The underlying object
+         */
         TOptional<UObject &> TryGet() const {
             return Optionals::OfNullable(ContainedObject);
         }
 
+        /**
+         * Get the type index of the given type.
+         * @tparam U The type to check (must be one of the variant types)
+         * @return The index of the given type.
+         */
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
         static constexpr uint64 GetTypeIndex() {
@@ -188,6 +245,11 @@ namespace UE::Ranges {
             return std::distance(TypesMatch.begin(), Find);
         }
 
+        /**
+         * Try to get the type index of the given object
+         * @param Object The object to check
+         * @return The type index (if found)
+         */
         static TOptional<uint64> GetTypeIndex(const UObject *Object) {
             constexpr std::array TypeChecks = {&TVariantObject::IsValidType<std::nullptr_t>,
                                                &TVariantObject::IsValidType<T>...};
@@ -195,6 +257,11 @@ namespace UE::Ranges {
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
+        /**
+         * Try to get the type index of the given asset
+         * @param Data The asset to check
+         * @return The type index (if found)
+         */
         static TOptional<uint64> GetTypeIndex(const FAssetData &Data) {
             constexpr std::array TypeChecks = {&TVariantObject::IsAssetTypeValid<std::nullptr_t>,
                                                &TVariantObject::IsAssetTypeValid<T>...};
@@ -202,15 +269,37 @@ namespace UE::Ranges {
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
+        static TOptional<uint64> GetTypeIndexForClass(const UClass *Class) {
+            constexpr std::array TypeChecks = {&TVariantObject::IsClassValid<std::nullptr_t>,
+                                               &TVariantObject::IsClassValid<T>...};
+            auto Find = ranges::find_if(TypeChecks, [Class](auto &&Callback) { return Callback(Class); });
+            return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
+        }
+
+        /**
+         * Get the type index of this varaint
+         * @return The type index of this varaint
+         */
         uint64 GetTypeIndex() const {
             return TypeIndex;
         }
 
+        /**
+         * Perform a static (compile-time) check if the given type is valid
+         * @tparam U The type to check (must be one of the variant types)
+         * @return Is this a valid type
+         */
         template <typename U>
         static constexpr bool StaticIsValidType() {
             return (std::same_as<T, U> || ...);
         }
 
+        /**
+         * Check if the asset is a valid type (and matches the given type)
+         * @tparam U The type to check (must be one of the variant types)
+         * @param Data The asset data to check against
+         * @return Is this asset of a valid type
+         */
         template <typename U>
             requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
         static constexpr bool IsAssetTypeValid(const FAssetData &Data) {
@@ -223,10 +312,50 @@ namespace UE::Ranges {
             }
         }
 
+        template <typename U>
+            requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
+        static constexpr bool IsClassValid(const UClass *Class) {
+            if constexpr (std::same_as<U, std::nullptr_t>) {
+                return Class == nullptr;
+            } else if constexpr (UnrealInterface<U>) {
+                return Class->ImplementsInterface(U::UClassType::StaticClass());
+            } else {
+                return Class->IsChildOf<U>();
+            }
+        }
+
+        /**
+         * Check if the object is a valid type (and matches the given type)
+         * @param Object The object data to check against
+         * @return Is this object of a valid type
+         */
         static bool IsValidType(const UObject *Object) {
             return GetTypeIndex(Object).IsSet();
         }
 
+        static bool IsValidType(const UClass *Class) {
+            if (Class == nullptr) {
+                return true;
+            }
+
+            static constexpr std::array ValidTypeChecks = {&IsValidSubclass<T>...};
+            auto Find = ranges::find_if(ValidTypeChecks, [Class](auto &&Callback) { return Callback(Class); });
+            return Find != ValidTypeChecks.end();
+        }
+
+        /**
+         * Get the array of all classes that are usable by this variant type.
+         * @return The array of all classes that are usable by this variant type.
+         */
+        static TArray<UClass *> GetTypeClasses() {
+            return {GetClass<T>()...};
+        }
+
+        /**
+         * Set the value of this variant
+         * @tparam U The of the object to set (must be one of the variant types)
+         * @param Object The object to set
+         */
         template <typename U>
             requires std::is_base_of_v<UObject, U> && (std::same_as<T, U> || ...)
         void Set(U *Object) {
@@ -234,6 +363,11 @@ namespace UE::Ranges {
             TypeIndex = GetTypeIndex<U>();
         }
 
+        /**
+         * Set the value of this variant
+         * @tparam U The of the object to set (must be one of the variant types)
+         * @param Object The object to set
+         */
         template <typename U>
             requires UnrealInterface<U> && (std::same_as<T, U> || ...)
         void Set(const TScriptInterface<U> &Object) {
@@ -241,17 +375,28 @@ namespace UE::Ranges {
             TypeIndex = GetTypeIndex<U>();
         }
 
+        /**
+         * Set the value of this variant
+         * @param Object The object to set
+         */
         void Set(UObject *Object) {
             ContainedObject = Object;
             TypeIndex = GetTypeIndex(Object).GetValue();
         }
 
+        /**
+         * Set the value of this variant
+         * @param Object The object to set
+         */
         void Set(const FScriptInterface &Object) {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex(Object.GetObject()).GetValue();
         }
 
       protected:
+        /**
+         * Perform an unchecked set of a null value (this is used internally for declared variant object structs)
+         */
         void SetUnchecked(std::nullptr_t) {
             ContainedObject = nullptr;
             TypeIndex = GetTypeIndex<std::nullptr_t>();

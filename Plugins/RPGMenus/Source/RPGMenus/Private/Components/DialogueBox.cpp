@@ -61,7 +61,7 @@ void UDialogueBox::SkipToLineEnd() {
 }
 
 FDelegateHandle UDialogueBox::BindToOnLineFinishedPlaying(FOnLineFinishedPlaying::FDelegate &&Callback) {
-    return LineFinishedPlayingDelegate.Add(MoveTemp(Callback));
+    return LineFinishedPlayingDelegate.Add(std::move(Callback));
 }
 
 UDialogueTextBlock *UDialogueBox::GetLineText() const {

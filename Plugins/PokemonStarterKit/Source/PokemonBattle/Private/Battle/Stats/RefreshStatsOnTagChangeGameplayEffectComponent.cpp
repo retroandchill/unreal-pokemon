@@ -45,8 +45,9 @@ bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdde
     }
 
     // Now when this Effect is removed, we should remove all of our registered callbacks.
-    EventSet->OnEffectRemoved.AddUObject(
-        this, &URefreshStatsOnTagChangeGameplayEffectComponent::OnGameplayEffectRemoved, ASC, MoveTemp(AllBoundEvents));
+    EventSet->OnEffectRemoved.AddUObject(this,
+                                         &URefreshStatsOnTagChangeGameplayEffectComponent::OnGameplayEffectRemoved, ASC,
+                                         std::move(AllBoundEvents));
 
     return true;
 }

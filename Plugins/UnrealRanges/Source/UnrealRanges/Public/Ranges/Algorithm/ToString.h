@@ -15,7 +15,7 @@ namespace UE::Ranges {
     struct FToStringInvoker {
         template <typename T>
             requires std::convertible_to<T, FStringView>
-        constexpr explicit FToStringInvoker(T &&Conjunction) : Conjunction(Forward<T>(Conjunction)) {
+        constexpr explicit FToStringInvoker(T &&Conjunction) : Conjunction(std::forward<T>(Conjunction)) {
         }
 
         /**
@@ -27,7 +27,7 @@ namespace UE::Ranges {
         template <typename R>
             requires(ranges::input_range<R> || UEContainer<R>) && std::is_convertible_v<TRangeValue<R>, FString>
         constexpr auto operator()(R &&Range) const {
-            return FString::Join(Forward<R>(Range), Conjunction.GetData());
+            return FString::Join(std::forward<R>(Range), Conjunction.GetData());
         }
 
       private:
@@ -47,7 +47,7 @@ namespace UE::Ranges {
         template <typename T>
             requires std::convertible_to<T, FStringView>
         auto operator()(T &&Conjunction) const {
-            return TTerminalClosure(FToStringInvoker(Forward<T>(Conjunction)));
+            return TTerminalClosure(FToStringInvoker(std::forward<T>(Conjunction)));
         }
     };
 

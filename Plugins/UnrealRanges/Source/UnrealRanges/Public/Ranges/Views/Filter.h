@@ -14,7 +14,7 @@ namespace UE::Ranges {
     struct FFilter {
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            return ranges::views::filter(CreateBinding<A...>(Forward<A>(Args)...));
+            return ranges::views::filter(CreateBinding<A...>(std::forward<A>(Args)...));
         }
     };
 

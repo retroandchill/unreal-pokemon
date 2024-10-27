@@ -14,7 +14,7 @@ namespace UE::Ranges {
         template <typename R, typename T = ranges::range_common_reference_t<R>>
             requires ranges::input_range<R> && WeakReferenceable<T>
         auto operator()(R &&Range) const {
-            return Range | Map([](T &&Ptr) { return TWeakRefType<T>(Forward<T>(Ptr)); });
+            return Range | Map([](T &&Ptr) { return TWeakRefType<T>(std::forward<T>(Ptr)); });
         }
     };
 

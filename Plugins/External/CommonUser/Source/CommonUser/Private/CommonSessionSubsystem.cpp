@@ -556,7 +556,7 @@ void UCommonSessionSubsystem::CreateOnlineSessionInternalOSSv2(ULocalPlayer *Loc
     FString ModeName = Request->ModeNameForAdvertisement;
     FString MapName = Request->GetMapName();
 
-    Lobbies->CreateLobby(MoveTemp(CreateParams))
+    Lobbies->CreateLobby(std::move(CreateParams))
         .OnComplete(this, [this, SessionName, ModeName, MapName](const TOnlineResult<FCreateLobby> &CreateResult) {
             OnCreateSessionComplete(SessionName, CreateResult.IsOk());
             NotifySessionInformationUpdated(ECommonSessionInformationState::InGame, ModeName, MapName);
@@ -724,7 +724,7 @@ void UCommonSessionSubsystem::FindSessionsInternalOSSv2(ULocalPlayer *LocalPlaye
         StaticCastSharedPtr<FCommonOnlineSearchSettingsOSSv2>(SearchSettings)->FindLobbyParams;
     FindLobbyParams.LocalAccountId = LocalPlayer->GetPreferredUniqueNetId().GetV2();
 
-    Lobbies->FindLobbies(MoveTemp(FindLobbyParams))
+    Lobbies->FindLobbies(std::move(FindLobbyParams))
         .OnComplete(this, [this, LocalSearchSettings = SearchSettings](const TOnlineResult<FFindLobbies> &FindResult) {
             if (LocalSearchSettings != SearchSettings) {
                 // This was an abandoned search, ignore
@@ -1124,7 +1124,7 @@ void UCommonSessionSubsystem::JoinSessionInternalOSSv2(ULocalPlayer *LocalPlayer
 
     // Add any splitscreen players if they exist //@TODO: See UCommonSessionSubsystem::OnJoinSessionComplete
 
-    Lobbies->JoinLobby(MoveTemp(JoinParams))
+    Lobbies->JoinLobby(std::move(JoinParams))
         .OnComplete(this, [this, SessionName](const TOnlineResult<FJoinLobby> &JoinResult) {
             if (JoinResult.IsOk()) {
                 InternalTravelToSession(SessionName);

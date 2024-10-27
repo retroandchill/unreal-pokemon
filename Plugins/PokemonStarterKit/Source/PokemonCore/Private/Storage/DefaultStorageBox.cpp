@@ -15,7 +15,7 @@
 #include "Utilities/TrainerHelpers.h"
 
 TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(FText &&InitialName, int32 Capacity) {
-    DisplayName = MoveTemp(InitialName);
+    DisplayName = std::move(InitialName);
     StoredPokemon.SetNum(Capacity);
     return this;
 }

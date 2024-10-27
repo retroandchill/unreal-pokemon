@@ -38,7 +38,7 @@ namespace UnrealInjector {
     template <typename T, typename... A>
         requires Injectable<T> && CanInitialize<T, A...>
     auto NewInjectedDependency(UObject *Outer, A &&...Args) {
-        return TInjectionSettings<T>::Get().template Inject<A...>(Outer, Forward<A>(Args)...);
+        return TInjectionSettings<T>::Get().template Inject<A...>(Outer, std::forward<A>(Args)...);
     }
 
 } // namespace UnrealInjector

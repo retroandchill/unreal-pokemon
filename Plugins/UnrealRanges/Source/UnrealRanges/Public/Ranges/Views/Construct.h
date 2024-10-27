@@ -15,11 +15,11 @@ namespace UE::Ranges {
         constexpr auto operator()(R &&Range, A &&...Args) const {
             if constexpr (sizeof...(A) > 0) {
                 return Range | ranges::views::transform(ranges::bind_back(
-                                   []<typename... B>(B &&...BoundArgs) { return T(Forward<B>(BoundArgs)...); },
-                                   Forward<A>(Args)...));
+                                   []<typename... B>(B &&...BoundArgs) { return T(std::forward<B>(BoundArgs)...); },
+                                   std::forward<A>(Args)...));
             } else {
                 return Range | ranges::views::transform(
-                                   []<typename... B>(B &&...BoundArgs) { return T(Forward<B>(BoundArgs)...); });
+                                   []<typename... B>(B &&...BoundArgs) { return T(std::forward<B>(BoundArgs)...); });
             }
         }
     };
@@ -30,7 +30,7 @@ namespace UE::Ranges {
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
             if constexpr (sizeof...(A) > 0) {
-                return ranges::make_view_closure(ranges::bind_back(TConstructInvoker<T>(), Forward<A>(Args)...));
+                return ranges::make_view_closure(ranges::bind_back(TConstructInvoker<T>(), std::forward<A>(Args)...));
             } else {
                 return ranges::make_view_closure(TConstructInvoker<T>());
             }

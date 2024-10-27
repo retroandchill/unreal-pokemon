@@ -21,7 +21,7 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TForEachInvoker(F &&Functor) : Functor(MoveTemp(Functor)) {
+        constexpr explicit TForEachInvoker(F &&Functor) : Functor(std::move(Functor)) {
         }
 
         /**
@@ -32,7 +32,7 @@ namespace UE::Ranges {
         template <typename R>
             requires ranges::input_range<R>
         void operator()(R &&Range) const {
-            ranges::for_each(Forward<R>(Range), Functor);
+            ranges::for_each(std::forward<R>(Range), Functor);
         }
 
         template <typename R>
@@ -60,9 +60,9 @@ namespace UE::Ranges {
          */
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(CreateBinding<A...>(Forward<A>(Args)...));
+            using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TForEachInvoker<BindingType>>(
-                TForEachInvoker<BindingType>(CreateBinding<A...>(Forward<A>(Args)...)));
+                TForEachInvoker<BindingType>(CreateBinding<A...>(std::forward<A>(Args)...)));
         }
     };
 
