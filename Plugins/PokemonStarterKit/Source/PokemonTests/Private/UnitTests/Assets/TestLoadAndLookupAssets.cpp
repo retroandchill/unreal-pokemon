@@ -17,6 +17,7 @@ FORCEINLINE void AssertValidNode(UK2Node *Node) {
     UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
     UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
     UE_CHECK_FALSE(Node->IsNodePure());
+    UE_CHECK_FALSE(Node->GetMenuCategory().IsEmpty());
 }
 
 END_DEFINE_SPEC(FTestLoadAndLookupAssets);

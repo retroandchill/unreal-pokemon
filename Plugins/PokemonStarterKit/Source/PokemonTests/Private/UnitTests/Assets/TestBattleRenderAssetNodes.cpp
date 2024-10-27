@@ -24,6 +24,7 @@ template <bool bIsCompact = false>
 FORCEINLINE void AssertValidNode(UK2Node *Node) {
     UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
     UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
+    UE_CHECK_FALSE(Node->GetMenuCategory().IsEmpty());
     if constexpr (bIsCompact) {
         UE_CHECK_TRUE(Node->ShouldDrawCompact());
         UE_CHECK_FALSE(Node->GetCompactNodeTitle().IsEmpty());

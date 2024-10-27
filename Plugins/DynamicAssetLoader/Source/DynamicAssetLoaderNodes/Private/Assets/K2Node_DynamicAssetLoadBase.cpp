@@ -205,7 +205,7 @@ void UK2Node_DynamicAssetLoadBase::GetMenuActions(FBlueprintActionDatabaseRegist
 }
 
 FText UK2Node_DynamicAssetLoadBase::GetMenuCategory() const {
-    return Super::GetMenuCategory();
+    return NSLOCTEXT("UK2Node_DynamicAssetLoadBase", "MenuCategory", "Assets");
 }
 
 UEdGraphPin *UK2Node_DynamicAssetLoadBase::GetAssetFoundPin() const {
