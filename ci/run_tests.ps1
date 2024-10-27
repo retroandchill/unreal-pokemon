@@ -6,7 +6,7 @@ if ($LASTEXITCODE -ne 0) {
     echo "Tests failed with exit code: ${LASTEXITCODE}"
     exit -1
 }
-python ./ci/verify_test_success.py -file TestResults/index.json
+python run ./ci/verify_test_success.py --file TestResults/index.json
 if ($LASTEXITCODE -ne 0) {
     exit -1
 }
