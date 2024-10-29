@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Exceptions/InvalidArgumentException.h"
-#include "Ranges/Exceptions/TypeException.h"
 #include "Ranges/Exceptions/VariantException.h"
 #include "Ranges/Utilities/Unreachable.h"
 
@@ -30,23 +29,12 @@ namespace UE::Ranges {
     }
 
     /**
-     * Validates that the structure of the specified property matches the target structure.
-     *
-     * @param Property The property whose structure is to be validated.
-     * @param TargetStruct The target structure to match against.
-     * @throws FTypeException If the structure of the property does not match the target structure.
-     */
-    UNREALRANGES_API void ValidateStructsMatch(const FStructProperty &Property, UScriptStruct *TargetStruct);
-
-    UNREALRANGES_API void ValidateEnumsMatch(const FEnumProperty &Property, UEnum *TargetEnum);
-
-    /**
      * Get the registration information for a given variant.
      * @param Property The property that has the struct info
      * @return The struct registration
      * @throws FVariantException If the struct type is not a valid variant
      */
-    UNREALRANGES_API IVariantRegistration &GetVariantRegistration(const FStructProperty &Property);
+    IVariantRegistration &GetVariantRegistration(const FStructProperty &Property);
 
 } // namespace UE::Ranges
 

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Blueprints/BlueprintRuntimeUtils.h"
 #include "Ranges/Exceptions/TypeException.h"
 #include "Ranges/Exceptions/VariantException.h"
 #include "Ranges/Optional/OptionalRef.h"
@@ -151,8 +150,13 @@ namespace UE::Ranges {
         }
 
         void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
-            auto TargetStruct = GetStructType();
-            ValidateStructsMatch(Property, TargetStruct);
+            if (Property.Struct != GetStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT("SetStructValue", "IncompatibleProperty",
+                                               "Incompatible output parameter; the supplied struct does not have the "
+                                               "same layout as what is expected for a variant object struct."));
+            }
+
             void *VariantPtr = StructValue;
             auto Variant = static_cast<T *>(VariantPtr);
             if (auto TypeIndex = T::GetTypeIndex(SourceObject);
@@ -167,7 +171,13 @@ namespace UE::Ranges {
         }
 
         TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const final {
-            ValidateStructsMatch(Property, GetStructType());
+            if (Property.Struct != GetStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT("SetStructValue", "IncompatibleProperty",
+                                               "Incompatible output parameter; the supplied struct does not have the "
+                                               "same layout as what is expected for a variant object struct."));
+            }
+
             void *VariantPtr = StructValue;
             auto Variant = static_cast<T *>(VariantPtr);
             return Variant->TryGet();
@@ -175,8 +185,13 @@ namespace UE::Ranges {
 
         void MakeSoftValue(const FStructProperty &Property, const uint8 *StructValue,
                            const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
-            ValidateStructsMatch(Property, GetStructType());
-            ValidateStructsMatch(SoftProperty, GetSoftStructType());
+            if (Property.Struct != GetStructType() || SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT("MakeSoftValue", "IncompatibleProperty",
+                                               "Incompatible output parameter; the supplied struct does not have the "
+                                               "same layout as what is expected for a variant object struct."));
+            }
+
             const void *VariantPtr = StructValue;
             auto Variant = static_cast<const T *>(VariantPtr);
 
@@ -188,7 +203,13 @@ namespace UE::Ranges {
 
         void MakeSoftValue(const TSoftObjectPtr<> &Path, const FStructProperty &SoftProperty,
                            uint8 *SoftStructValue) const final {
-            ValidateStructsMatch(SoftProperty, GetSoftStructType());
+            if (SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT("MakeSoftValue", "IncompatibleProperty",
+                                               "Incompatible output parameter; the supplied struct does not have the "
+                                               "same layout as what is expected for a variant object struct."));
+            }
+
             void *SoftVariantPtr = SoftStructValue;
             auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
             SoftVariant->Set(Path);
@@ -196,7 +217,13 @@ namespace UE::Ranges {
 
         TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass *Class, const FStructProperty &SoftProperty,
                                                     uint8 *SoftStructValue) const final {
-            ValidateStructsMatch(SoftProperty, GetSoftStructType());
+            if (SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT("LoadSynchronous", "IncompatibleProperty",
+                                               "Incompatible output parameter; the supplied struct does not have the "
+                                               "same layout as what is expected for a variant object struct."));
+            }
+
             const void *SoftVariantPtr = SoftStructValue;
             auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
             if (auto ClassIndex = T::GetTypeIndexForClass(Class);
@@ -209,8 +236,13 @@ namespace UE::Ranges {
 
         bool LoadSynchronous(const FStructProperty &SoftProperty, const uint8 *SoftStructValue,
                              const FStructProperty &Property, uint8 *StructValue) const final {
-            ValidateStructsMatch(Property, GetStructType());
-            ValidateStructsMatch(SoftProperty, GetSoftStructType());
+            if (Property.Struct != GetStructType() || SoftProperty.Struct != GetSoftStructType()) {
+                throw FTypeException(EBlueprintExceptionType::AccessViolation,
+                                     NSLOCTEXT("LoadSynchronous", "IncompatibleProperty",
+                                               "Incompatible output parameter; the supplied struct does not have the "
+                                               "same layout as what is expected for a variant object struct."));
+            }
+
             void *VariantPtr = StructValue;
             auto Variant = static_cast<T *>(VariantPtr);
 
