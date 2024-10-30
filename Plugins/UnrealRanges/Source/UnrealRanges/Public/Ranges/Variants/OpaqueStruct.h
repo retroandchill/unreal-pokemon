@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Structs.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include <array>
 #include <any>
 
@@ -25,7 +26,7 @@ namespace UE::Ranges {
          * std::any, subtracting out the size of two pointers worth of data to make room for std::any's reference to
          * the stored type and this classes reference to the struct.
          */
-        static constexpr size_t SmallBufferSize = sizeof(std::any) - 2 * sizeof(void*);
+        static constexpr size_t SmallBufferSize = sizeof(std::any) - 2 * sizeof(void *);
 
         /**
          * Check to determine if a given type fits inside the small buffer for the type.
@@ -51,7 +52,7 @@ namespace UE::Ranges {
          * @param Struct Pointer to the UScriptStruct used to initialize the FOpaqueStruct.
          * @return A new FOpaqueStruct instance encapsulating the provided UScriptStruct.
          */
-        explicit FOpaqueStruct(const UScriptStruct* Struct) noexcept;
+        explicit FOpaqueStruct(const UScriptStruct *Struct) noexcept;
 
         /**
          * @brief Destructor for FOpaqueStruct.
@@ -68,7 +69,7 @@ namespace UE::Ranges {
          * @param Other The FOpaqueStruct instance to be copied.
          * @return A new FOpaqueStruct instance that is a copy of the provided instance.
          */
-        FOpaqueStruct(const FOpaqueStruct& Other);
+        FOpaqueStruct(const FOpaqueStruct &Other);
 
         /**
          * @brief Move constructor for FOpaqueStruct.
@@ -78,7 +79,7 @@ namespace UE::Ranges {
          * @param Other The FOpaqueStruct instance to be moved.
          * @return A new FOpaqueStruct instance that has taken ownership of the provided instance's resources.
          */
-        FOpaqueStruct(FOpaqueStruct&& Other) noexcept;
+        FOpaqueStruct(FOpaqueStruct &&Other) noexcept;
 
         /**
          * @brief Overloaded copy assignment operator for FOpaqueStruct.
@@ -88,7 +89,7 @@ namespace UE::Ranges {
          * @param Other The other struct to pull from
          * @return A reference to the first struct
          */
-        FOpaqueStruct& operator=(const FOpaqueStruct& Other);
+        FOpaqueStruct &operator=(const FOpaqueStruct &Other);
 
         /**
          * @brief Overloaded move assignment operator for FOpaqueStruct.
@@ -98,7 +99,7 @@ namespace UE::Ranges {
          * @param Other The other struct to pull from
          * @return A reference to the first struct
          */
-        FOpaqueStruct& operator=(FOpaqueStruct&& Other) noexcept;
+        FOpaqueStruct &operator=(FOpaqueStruct &&Other) noexcept;
 
         /**
          * @brief Retrieves the value of the stored structure.
@@ -112,12 +113,12 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        T& GetValue() const {
+        T &GetValue() const {
             check(Struct == GetScriptStruct<T>())
             if constexpr (bFitsSmallBuffer<T>) {
                 return *reinterpret_cast<T *>(Storage.SmallStorage.data());
             } else {
-                return *static_cast<T*>(Storage.LargeStorage);
+                return *static_cast<T *>(Storage.LargeStorage);
             }
         }
 
@@ -129,9 +130,9 @@ namespace UE::Ranges {
          *
          * @return A pointer to the value stored in the FOpaqueStruct.
          */
-        void* GetValue() const;
+        void *GetValue() const;
 
-        
+
         /**
          * @brief Attempts to retrieve a reference to a stored value of type T.
          *
@@ -143,11 +144,11 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        TOptional<T&> TryGet() const {
+        TOptional<T &> TryGet() const {
             if (Struct == GetScriptStruct<T>()) {
                 return nullptr;
             }
-            
+
             return &GetValue<T>();
         }
 
@@ -181,7 +182,7 @@ namespace UE::Ranges {
          *
          * @return A constant pointer to the UStruct representing the script structure.
          */
-        const UStruct* GetScriptStruct() const {
+        const UStruct *GetStruct() const {
             return Struct;
         }
 
@@ -193,21 +194,21 @@ namespace UE::Ranges {
          *
          * @param Other A reference to another FOpaqueStruct instance whose contents will be swapped with this instance.
          */
-        void Swap(FOpaqueStruct& Other);
+        void Swap(FOpaqueStruct &Other);
 
     private:
         union FStorage {
             std::array<std::byte, SmallBufferSize> SmallStorage;
-            void* LargeStorage;
+            void *LargeStorage;
 
             FStorage() = default;
 
-            explicit FStorage(const UScriptStruct* Struct);
+            explicit FStorage(const UScriptStruct *Struct);
         };
-        
+
         void DeleteExisting();
         FStorage PerformCopy() const;
-        
+
         FStorage Storage;
         TObjectPtr<const UScriptStruct> Struct;
     };
