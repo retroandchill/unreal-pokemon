@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Structs.h"
 #include <array>
+#include <any>
 
 namespace UE::Ranges {
     /**
@@ -17,9 +18,14 @@ namespace UE::Ranges {
     class UNREALRANGES_API FOpaqueStruct {
     public:
         /**
-         * The size of the buffer used for small structs.
+         * @brief The size of the buffer used for small structs.
+         *
+         * This size is set based upon a specific use case where this type may be stored inside an instance of std::any
+         * and should be able to be stored without a second allocation from that type. Thus, the type is the size of
+         * std::any, subtracting out the size of two pointers worth of data to make room for std::any's reference to
+         * the stored type and this classes reference to the struct.
          */
-        static constexpr size_t SmallBufferSize = 32;
+        static constexpr size_t SmallBufferSize = sizeof(std::any) - 2 * sizeof(void*);
 
         /**
          * Check to determine if a given type fits inside the small buffer for the type.
