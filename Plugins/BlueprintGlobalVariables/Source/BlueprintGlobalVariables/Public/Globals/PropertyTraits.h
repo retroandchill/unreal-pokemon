@@ -10,33 +10,38 @@ namespace Blueprint::Globals {
      * Definition for a property type for a primitive property.
      */
     template <typename>
-    struct TPropertyType : std::false_type {};
+    struct TPropertyType : std::false_type {
+    };
 
     /**
      * Concept that defines whether a given type has a property value or not.
      */
     template <typename T>
     concept HasPropertyType = TPropertyType<T>::value;
+    
 }
 
-#define PRIMITIVE_PROPERTY(Property) \
+#define DECLARE_PRIMITIVE_PROPERTY(Property) \
     static_assert(std::derived_from<Property, FProperty>); \
     template <> \
     struct Blueprint::Globals::TPropertyType<Property::TCppType> : std::true_type { \
         using FType = Property; \
     }
 
-PRIMITIVE_PROPERTY(FBoolProperty);
-PRIMITIVE_PROPERTY(FInt8Property);
-PRIMITIVE_PROPERTY(FByteProperty);
-PRIMITIVE_PROPERTY(FInt16Property);
-PRIMITIVE_PROPERTY(FUInt16Property);
-PRIMITIVE_PROPERTY(FIntProperty);
-PRIMITIVE_PROPERTY(FUInt32Property);
-PRIMITIVE_PROPERTY(FInt64Property);
-PRIMITIVE_PROPERTY(FUInt64Property);
-PRIMITIVE_PROPERTY(FFloatProperty);
-PRIMITIVE_PROPERTY(FDoubleProperty);
-PRIMITIVE_PROPERTY(FNameProperty);
-PRIMITIVE_PROPERTY(FStrProperty);
-PRIMITIVE_PROPERTY(FTextProperty);
+#define DEFINE_PRIMITIVE_PROPERTY(Property) \
+    static const bool __##Property##__Registered = Blueprint::Globals::RegisterPrimitiveProperty<Property::TCppType>()
+
+DECLARE_PRIMITIVE_PROPERTY(FBoolProperty);
+DECLARE_PRIMITIVE_PROPERTY(FInt8Property);
+DECLARE_PRIMITIVE_PROPERTY(FByteProperty);
+DECLARE_PRIMITIVE_PROPERTY(FInt16Property);
+DECLARE_PRIMITIVE_PROPERTY(FUInt16Property);
+DECLARE_PRIMITIVE_PROPERTY(FIntProperty);
+DECLARE_PRIMITIVE_PROPERTY(FUInt32Property);
+DECLARE_PRIMITIVE_PROPERTY(FInt64Property);
+DECLARE_PRIMITIVE_PROPERTY(FUInt64Property);
+DECLARE_PRIMITIVE_PROPERTY(FFloatProperty);
+DECLARE_PRIMITIVE_PROPERTY(FDoubleProperty);
+DECLARE_PRIMITIVE_PROPERTY(FNameProperty);
+DECLARE_PRIMITIVE_PROPERTY(FStrProperty);
+DECLARE_PRIMITIVE_PROPERTY(FTextProperty);
