@@ -23,12 +23,23 @@ namespace UE::Ranges {
          */
         explicit FOpaqueEnum(UEnum* Enum, int64 Value = 0);
 
+        
+        /**
+         * Constructs an FOpaqueEnum object that stores an enumeration value and its corresponding UE enumeration type.
+         *
+         * @param Value The enumeration value to be stored.
+         * @return A new instance of the FOpaqueEnum class initialized with the provided enumeration value.
+         */
+        template <typename T>
+            requires UEEnum<T>
+        explicit FOpaqueEnum(T Value) : NumericValue(static_cast<int64>(Value)), Enum(StaticEnum<T>()) {}
+
         /**
          * Retrieves the stored enumeration's numeric value.
          *
          * @return The numeric value of the stored enumeration.
          */
-        int64 GetNumericValue() const {
+        FORCEINLINE int64 GetNumericValue() const {
             return NumericValue;
         }
 
@@ -37,7 +48,7 @@ namespace UE::Ranges {
          *
          * @return A pointer to the UEnum that represents the type of the stored enumeration.
          */
-        const UEnum* GetEnum() const {
+        FORCEINLINE const UEnum* GetEnum() const {
             return Enum;
         }
 
@@ -46,7 +57,7 @@ namespace UE::Ranges {
          *
          * @return True if the Enum pointer is not null, indicating a valid stored enumeration; false otherwise.
          */
-        bool IsValid() const {
+        FORCEINLINE bool IsValid() const {
             return Enum != nullptr;
         }
 
@@ -62,7 +73,7 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEEnum<T>
-        T GetValue() const {
+        FORCEINLINE T GetValue() const {
             check(Enum == StaticEnum<T>())
             return static_cast<T>(NumericValue);
         }

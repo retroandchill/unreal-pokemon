@@ -5,56 +5,25 @@
 
 using namespace UE::Ranges;
 
-FOpaqueStruct::FStorage::FStorage(const UScriptStruct *Struct) {
-    if (auto StructureSize = static_cast<size_t>(Struct->GetStructureSize()); StructureSize <= SmallBufferSize) {
-        Struct->InitializeStruct(SmallStorage.data());
-    } else {
-        LargeStorage = FMemory::Malloc(StructureSize);
-        Struct->InitializeStruct(LargeStorage);
-    }
+FOpaqueStruct::FOpaqueStruct(const UScriptStruct *Struct) noexcept : Storage(MakeStorage(Struct)) {
 }
 
-FOpaqueStruct::FOpaqueStruct(const UScriptStruct *Struct) noexcept : Storage(Struct), Struct(Struct) {
-}
-
-FOpaqueStruct::~FOpaqueStruct() {
-    DeleteExisting();
-}
-
-FOpaqueStruct::FOpaqueStruct(const FOpaqueStruct &Other) : Storage(Other.PerformCopy()), Struct(Other.Struct) {
-}
-
-FOpaqueStruct::FOpaqueStruct(FOpaqueStruct &&Other) noexcept : Storage(std::move(Other.Storage)),
-                                                      Struct(std::move(Other.Struct)) {
-    Other.Struct = nullptr;
+FOpaqueStruct::FOpaqueStruct(const FOpaqueStruct &Other) : Storage(Other.PerformCopy()) {
 }
 
 FOpaqueStruct &FOpaqueStruct::operator=(const FOpaqueStruct &Other) {
-    DeleteExisting();
     Storage = Other.PerformCopy();
-    Struct = Other.Struct;
-    return *this;
-}
-
-FOpaqueStruct &FOpaqueStruct::operator=(FOpaqueStruct &&Other) noexcept {
-    DeleteExisting();
-    Storage = std::move(Other.Storage);
-    Struct = std::move(Other.Struct);
-    Other.Struct = nullptr;
     return *this;
 }
 
 void * FOpaqueStruct::GetValue() const {
-    check(Struct != nullptr)
-    if (Struct->GetStructureSize() >= SmallBufferSize) {
-        return const_cast<std::byte*>(Storage.SmallStorage.data());
-    }
-    
-    return Storage.LargeStorage;
+    auto Struct = GetStruct();
+    check(IsValid(Struct))
+    return Storage.get();
 }
 
 TOptional<void> FOpaqueStruct::TryGet() const {
-    if (Struct == nullptr) {
+    if (!IsValid(GetStruct())) {
         return nullptr;
     }
 
@@ -62,29 +31,35 @@ TOptional<void> FOpaqueStruct::TryGet() const {
 }
 
 void FOpaqueStruct::Swap(FOpaqueStruct &Other) {
-    std::swap(Struct, Other.Struct);
+    std::swap(Storage, Other.Storage);
 }
 
-void FOpaqueStruct::DeleteExisting() {
-    if (Struct == nullptr) {
-        return;
+FOpaqueStruct::FStorage FOpaqueStruct::MakeStorage(const UScriptStruct *Struct) noexcept {
+    if (!IsValid(Struct)) {
+        return FStorage();
     }
+
+    auto AllocateStruct = [](const UScriptStruct *S) {
+        auto Memory = FMemory::Malloc(static_cast<size_t>(S->GetStructureSize()));
+        S->InitializeStruct(Memory);
+        return Memory;
+    };
     
-    if (Struct->GetStructureSize() <= SmallBufferSize) {
-        Struct->DestroyStruct(Storage.SmallStorage.data());
-    } else {
-        Struct->DestroyStruct(Storage.LargeStorage);
-        FMemory::Free(Storage.LargeStorage);
-    }
+    return FStorage(AllocateStruct(Struct), FStructDeleter(Struct));
 }
 
 FOpaqueStruct::FStorage FOpaqueStruct::PerformCopy() const {
-    FStorage NewStorage;
-    if (auto StructureSize = static_cast<size_t>(Struct->GetStructureSize()); StructureSize <= SmallBufferSize) {
-        Struct->CopyScriptStruct(NewStorage.SmallStorage.data(), Storage.SmallStorage.data());
-    } else {
-        NewStorage.LargeStorage = FMemory::Malloc(StructureSize);
-        Struct->CopyScriptStruct(NewStorage.LargeStorage, Storage.LargeStorage);
+    auto Struct = GetStruct();
+    if (!IsValid(Struct)) {
+        return FStorage();
     }
-    return NewStorage;
+
+    auto CopyStruct = [](const FStorage& Other) {
+        auto &OtherStruct = Other.get_deleter().Struct;
+        auto Memory = FMemory::Malloc(static_cast<size_t>(OtherStruct->GetStructureSize()));
+        OtherStruct->CopyScriptStruct(Memory, OtherStruct.Get());
+        return Memory;
+    };
+    
+    return FStorage(CopyStruct(Storage), FStructDeleter(Struct));
 }
