@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Ranges/Variants/OpaqueStruct.h"
 
 using namespace UE::Ranges;
@@ -16,7 +15,7 @@ FOpaqueStruct &FOpaqueStruct::operator=(const FOpaqueStruct &Other) {
     return *this;
 }
 
-void * FOpaqueStruct::GetValue() const {
+void *FOpaqueStruct::GetValue() const {
     auto Struct = GetStruct();
     check(IsValid(Struct))
     return Storage.get();
@@ -44,7 +43,7 @@ FOpaqueStruct::FStorage FOpaqueStruct::MakeStorage(const UScriptStruct *Struct) 
         S->InitializeStruct(Memory);
         return Memory;
     };
-    
+
     return FStorage(AllocateStruct(Struct), FStructDeleter(Struct));
 }
 
@@ -54,12 +53,12 @@ FOpaqueStruct::FStorage FOpaqueStruct::PerformCopy() const {
         return FStorage();
     }
 
-    auto CopyStruct = [](const FStorage& Other) {
+    auto CopyStruct = [](const FStorage &Other) {
         auto &OtherStruct = Other.get_deleter().Struct;
         auto Memory = FMemory::Malloc(static_cast<size_t>(OtherStruct->GetStructureSize()));
         OtherStruct->CopyScriptStruct(Memory, OtherStruct.Get());
         return Memory;
     };
-    
+
     return FStorage(CopyStruct(Storage), FStructDeleter(Struct));
 }

@@ -52,7 +52,7 @@ namespace UE::Ranges {
          */
         explicit FStructDeleter(const UScriptStruct *Struct) noexcept : Struct(Struct) {
         }
-        
+
         /**
          * @brief Functor for deleting structures managed by `UScriptStruct`.
          *
@@ -66,14 +66,13 @@ namespace UE::Ranges {
          * and its memory freed.
          */
         template <typename T>
-        FORCEINLINE void operator()(T* Data) const noexcept {
+        FORCEINLINE void operator()(T *Data) const noexcept {
             if (Data != nullptr && IsValid(Struct)) {
                 Struct->DestroyStruct(Data);
                 FMemory::Free(Data);
             }
         }
     };
-
 
     /**
      * @struct FOpaqueStruct
@@ -86,8 +85,8 @@ namespace UE::Ranges {
      */
     class UNREALRANGES_API FOpaqueStruct {
         using FStorage = std::unique_ptr<void, FStructDeleter>;
-    
-    public:
+
+      public:
         /**
          * Default constructor for FOpaqueStruct.
          *
@@ -112,7 +111,6 @@ namespace UE::Ranges {
          */
         explicit FOpaqueStruct(const UScriptStruct *Struct) noexcept;
 
-        
         /**
          * @brief Constructs an FOpaqueStruct with the given initialization.
          *
@@ -124,10 +122,9 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        explicit FOpaqueStruct(T&& Struct) noexcept : Storage(InitializeFromKnown<T>(std::forward<T>(Struct))) {
+        explicit FOpaqueStruct(T &&Struct) noexcept : Storage(InitializeFromKnown<T>(std::forward<T>(Struct))) {
         }
 
-        
         /**
          * @brief Constructs an FOpaqueStruct with the given data and script struct.
          *
@@ -139,7 +136,7 @@ namespace UE::Ranges {
          * @return FOpaqueStruct instance initialized with the provided data and struct information.
          */
         template <typename T>
-        FOpaqueStruct(const T* Data, const UScriptStruct *Struct) noexcept : Storage(CopyFromUnknown<T>(Data, Struct)) {
+        FOpaqueStruct(const T *Data, const UScriptStruct *Struct) noexcept : Storage(CopyFromUnknown<T>(Data, Struct)) {
         }
 
         /**
@@ -199,7 +196,6 @@ namespace UE::Ranges {
          */
         FOpaqueStruct &operator=(FOpaqueStruct &&Other) noexcept = default;
 
-        
         /**
          * Retrieves the value stored within the FOpaqueStruct instance, ensuring it is of the specified type.
          *
@@ -225,7 +221,6 @@ namespace UE::Ranges {
          */
         void *GetValue() const;
 
-        
         /**
          * @brief Attempts to retrieve a reference to a value of type T.
          *
@@ -287,14 +282,14 @@ namespace UE::Ranges {
          */
         void Swap(FOpaqueStruct &Other);
 
-    private:
-        static FStorage MakeStorage(const UScriptStruct* Struct) noexcept;
+      private:
+        static FStorage MakeStorage(const UScriptStruct *Struct) noexcept;
         FStorage PerformCopy() const;
 
         template <typename T, typename RawType = std::decay_t<T>>
             requires UEStruct<T>
-        static FStorage InitializeFromKnown(T&& Struct) noexcept {
-            auto ForwardStruct = []<typename U>(U&& S) {
+        static FStorage InitializeFromKnown(T &&Struct) noexcept {
+            auto ForwardStruct = []<typename U>(U &&S) {
                 static_assert(std::same_as<U, T>);
                 auto Memory = FMemory::Malloc(sizeof(RawType));
                 *static_cast<RawType *>(Memory) = std::forward<U>(S);
@@ -305,13 +300,14 @@ namespace UE::Ranges {
         }
 
         template <typename T>
-        static FStorage CopyFromUnknown(const T* Data, const UScriptStruct *Struct) noexcept {
-            check(IsValid(Struct));
+        static FStorage CopyFromUnknown(const T *Data, const UScriptStruct *Struct) noexcept {
+            check(IsValid(Struct))
+            ;
             if (Data == nullptr) {
-                return FStorage(static_cast<void*>(nullptr), FStructDeleter(Struct));   
+                return FStorage(static_cast<void *>(nullptr), FStructDeleter(Struct));
             }
 
-            auto CopyStruct = [](const T* D, const UScriptStruct *S) {
+            auto CopyStruct = [](const T *D, const UScriptStruct *S) {
                 auto Memory = FMemory::Malloc(static_cast<size_t>(S->GetStructureSize()));
                 S->CopyScriptStruct(Memory, D);
                 return Memory;
@@ -321,4 +317,4 @@ namespace UE::Ranges {
 
         FStorage Storage;
     };
-}
+} // namespace UE::Ranges

@@ -7,16 +7,16 @@
 #include "Ranges/Concepts/Structs.h"
 #include "Ranges/Views/AnyView.h"
 
-#define DECLARE_PRIMITIVE_PROPERTY(Property) \
-    static_assert(std::derived_from<Property, FProperty>); \
-    template <> \
-    struct TPropertyMeta<Property::TCppType> : std::true_type { \
-        using FType = Property; \
-    }; \
+#define DECLARE_PRIMITIVE_PROPERTY(Property)                                                                           \
+    static_assert(std::derived_from<Property, FProperty>);                                                             \
+    template <>                                                                                                        \
+    struct TPropertyMeta<Property::TCppType> : std::true_type {                                                        \
+        using FType = Property;                                                                                        \
+    };                                                                                                                 \
     static_assert(Blueprint::Globals::HasCppType<Property>)
 
 namespace Blueprint::Globals {
-    
+
     /**
      * Concept for verifying if a property has a C++ type defined on its class definition.
      * @tparam T The type to check
@@ -29,14 +29,14 @@ namespace Blueprint::Globals {
      * @tparam T The type to check
      */
     template <typename T>
-    concept HasStaticPropertyGetter = HasCppType<T> && std::derived_from<T, TPropertyTypeFundamentals<typename T::TCppType>>;
+    concept HasStaticPropertyGetter =
+        HasCppType<T> && std::derived_from<T, TPropertyTypeFundamentals<typename T::TCppType>>;
 
     /**
      * Definition for a property type for a primitive property.
      */
     template <typename>
-    struct TPropertyMeta : std::false_type {
-    };
+    struct TPropertyMeta : std::false_type {};
 
     DECLARE_PRIMITIVE_PROPERTY(FBoolProperty);
     DECLARE_PRIMITIVE_PROPERTY(FInt8Property);
@@ -53,7 +53,6 @@ namespace Blueprint::Globals {
     DECLARE_PRIMITIVE_PROPERTY(FStrProperty);
     DECLARE_PRIMITIVE_PROPERTY(FTextProperty);
 
-
     /**
      * Template specialization for TPropertyMeta to define metadata for struct properties.
      * This struct inherits from std::true_type, indicating that the type T has
@@ -67,7 +66,6 @@ namespace Blueprint::Globals {
         using FType = FStructProperty;
     };
 
-    
     /**
      * Template specialization for TPropertyMeta to define metadata for enum properties.
      * This struct inherits from std::true_type, indicating that the type T has
@@ -94,4 +92,4 @@ namespace Blueprint::Globals {
     template <typename T>
         requires HasPropertyType<T>
     using TPropertyType = typename TPropertyMeta<T>::FType;
-}
+} // namespace Blueprint::Globals

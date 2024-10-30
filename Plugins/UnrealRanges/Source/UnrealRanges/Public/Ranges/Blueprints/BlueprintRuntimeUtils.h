@@ -10,7 +10,7 @@
 namespace UE::Ranges {
     class IVariantRegistration;
     class FTypeException;
-    
+
     /**
      * Validate that the given struct property is valid.
      * @tparam T The type of pointer for the struct (most likely either void* or uint8*)
@@ -33,7 +33,7 @@ namespace UE::Ranges {
      * @param Struct The expected struct to validate against.
      * @throws FTypeException If the given property's struct does not match the expected struct type.
      */
-    UNREALRANGES_API void ValidateStructsMatch(const FStructProperty& Property, const UScriptStruct* Struct);
+    UNREALRANGES_API void ValidateStructsMatch(const FStructProperty &Property, const UScriptStruct *Struct);
 
     /**
      * Ensures that the provided enum property matches the expected enum type.
@@ -41,7 +41,7 @@ namespace UE::Ranges {
      * @param Enum The expected enum type to validate against.
      * @throws FTypeException If the provided enum property does not match the expected enum type.
      */
-    UNREALRANGES_API void ValidateEnumsMatch(const FEnumProperty& Property, const UEnum* Enum);
+    UNREALRANGES_API void ValidateEnumsMatch(const FEnumProperty &Property, const UEnum *Enum);
 
     /**
      * Get the registration information for a given variant.

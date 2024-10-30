@@ -11,7 +11,7 @@ namespace UE::Ranges {
      * with the capability to handle different UE enumeration types through unified access methods.
      */
     class UNREALRANGES_API FOpaqueEnum {
-    public:
+      public:
         FOpaqueEnum() = default;
 
         /**
@@ -21,9 +21,8 @@ namespace UE::Ranges {
          * @param Value The numeric value of the enumeration to be stored.
          * @return A new instance of the FOpaqueEnum class initialized with the provided enumeration type and value.
          */
-        explicit FOpaqueEnum(UEnum* Enum, int64 Value = 0);
+        explicit FOpaqueEnum(UEnum *Enum, int64 Value = 0);
 
-        
         /**
          * Constructs an FOpaqueEnum object that stores an enumeration value and its corresponding UE enumeration type.
          *
@@ -32,7 +31,8 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEEnum<T>
-        explicit FOpaqueEnum(T Value) : NumericValue(static_cast<int64>(Value)), Enum(StaticEnum<T>()) {}
+        explicit FOpaqueEnum(T Value) : NumericValue(static_cast<int64>(Value)), Enum(StaticEnum<T>()) {
+        }
 
         /**
          * Retrieves the stored enumeration's numeric value.
@@ -48,7 +48,7 @@ namespace UE::Ranges {
          *
          * @return A pointer to the UEnum that represents the type of the stored enumeration.
          */
-        FORCEINLINE const UEnum* GetEnum() const {
+        FORCEINLINE const UEnum *GetEnum() const {
             return Enum;
         }
 
@@ -61,7 +61,6 @@ namespace UE::Ranges {
             return Enum != nullptr;
         }
 
-        
         /**
          * Retrieves the stored enumeration value as its respective enumeration type.
          *
@@ -78,7 +77,6 @@ namespace UE::Ranges {
             return static_cast<T>(NumericValue);
         }
 
-        
         /**
          * Attempts to retrieve the stored enumeration value as the specified type T.
          *
@@ -87,7 +85,8 @@ namespace UE::Ranges {
          * and returns it wrapped in TOptional. If they do not match, it returns an empty TOptional.
          *
          * @tparam T The enumeration type that the stored value should be cast to.
-         * @return TOptional containing the stored enumeration's value cast to the specified type T, or an empty TOptional if the types do not match.
+         * @return TOptional containing the stored enumeration's value cast to the specified type T, or an empty
+         * TOptional if the types do not match.
          */
         template <typename T>
             requires UEEnum<T>
@@ -95,12 +94,12 @@ namespace UE::Ranges {
             if (Enum != StaticEnum<T>()) {
                 return TOptional<T>();
             }
-            
+
             return TOptional<T>(static_cast<T>(NumericValue));
         }
-        
-    private:
+
+      private:
         int64 NumericValue = 0;
         TObjectPtr<const UEnum> Enum;
     };
-}
+} // namespace UE::Ranges

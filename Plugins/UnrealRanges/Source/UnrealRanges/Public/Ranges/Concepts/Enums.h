@@ -12,7 +12,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     concept UEEnum = std::is_enum_v<T> && requires {
-        { StaticEnum<T> } -> std::same_as<UEnum*>;
+        { StaticEnum<T> } -> std::same_as<UEnum *>;
     };
-    
-}
+
+} // namespace UE::Ranges
