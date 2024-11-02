@@ -6,11 +6,14 @@
 #include "Ranges/Functional/FunctionPointers.h"
 #include "Ranges/Optional/OptionalRef.h"
 #include <array>
+#include <any>
 
 namespace UE::Ranges {
     class FWildcard final {
     public:
         constexpr FWildcard() = default;
+
+        TArray<uint8> Data;
 
         template <typename T>
             requires (!std::same_as<std::decay_t<T>, FWildcard>)
