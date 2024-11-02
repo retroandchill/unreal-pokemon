@@ -2,10 +2,3 @@
 
 
 #include "Ranges/Variants/Wildcard.h"
-
-
-Wildcard::Wildcard() {
-}
-
-Wildcard::~Wildcard() {
-}
