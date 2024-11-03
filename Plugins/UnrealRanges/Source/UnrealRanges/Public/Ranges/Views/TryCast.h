@@ -22,11 +22,12 @@ namespace UE::Ranges {
             } else if constexpr (std::is_base_of_v<FScriptInterface, S> && std::is_base_of_v<UObject, T>) {
                 return Range | Map(&CastInterface<T>) | FilterValid;
             } else if constexpr (UObjectPointer<S> && UnrealInterface<T>) {
-                return Range | Map([](S Object) { return TScriptInterface<T>(Object); }) | FilterValid;
+                return Range | Filter([](S Object) { return Object->template Implements<typename T::UClassType>(); }) |
+                    Map([](S Object) { return TScriptInterface<T>(Object); });
             } else if constexpr (std::is_base_of_v<FScriptInterface, S> && UnrealInterface<T>) {
-                return Range | Map([](const FScriptInterface &Interface) {
-                           return TScriptInterface<T>(Interface.GetObject());
-                       }) | FilterValid;
+                return Range | Filter([](const FScriptInterface &Interface) {
+                    return Interface.GetObject()->Implements<typename T::UClassType>();
+                }) | Map([](const FScriptInterface &Interface) { return TScriptInterface<T>(Interface.GetObject()); });
             }
 
             Unreachable();
