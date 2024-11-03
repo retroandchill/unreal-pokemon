@@ -28,7 +28,7 @@ namespace Pokemon::Saving {
  * The structure of a save file for the game.
  */
 UCLASS()
-class POKEMONCORE_API UPokemonSaveGame : public USaveGame, public ISerializable {
+class POKEMONCORE_API UPokemonSaveGame : public UObject, public ISerializable {
     GENERATED_BODY()
 
   public:

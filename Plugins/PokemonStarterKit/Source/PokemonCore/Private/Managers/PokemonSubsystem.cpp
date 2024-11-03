@@ -87,50 +87,6 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) const {
-    if (SaveGameClass == nullptr) {
-        SaveGameClass = UPokemonSaveGame::StaticClass();
-    }
-
-    auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
-    SaveGame->PlayerCharacter = Player->ToDTO();
-    SaveGame->Bag = Bag->ToDTO();
-    SaveGame->StorageSystem = StorageSystem->ToDTO();
-
-    SaveGame->CurrentMap = GetWorld()->GetMapName();
-    auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
-    check(PlayerCharacter != nullptr)
-    SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
-
-    check(PlayerResetLocation.IsSet())
-    SaveGame->ResetMap = PlayerResetLocation->GetMapName();
-    SaveGame->ResetLocation = PlayerResetLocation->GetPlayerTransform();
-
-    SaveGame->StartDate = PlayerMetadata->StartDate;
-    SaveGame->TotalPlaytime = PlayerMetadata->TotalPlaytime;
-    SaveGame->RepelSteps = PlayerMetadata->RepelSteps;
-
-    SaveGame->SaveDate = FDateTime::Now();
-    return SaveGame;
-}
-
-void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
-    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveGame->PlayerCharacter);
-    Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
-    StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, SaveGame->StorageSystem);
-    PlayerMetadata->StartDate = SaveGame->StartDate;
-    PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
-    PlayerMetadata->RepelSteps = SaveGame->RepelSteps;
-    PlayerResetLocation.Emplace(SaveGame->ResetMap, SaveGame->ResetLocation);
-
-    if (!bChangeMap) {
-        return;
-    }
-
-    LoadTransform.Emplace(SaveGame->PlayerLocation);
-    UGameplayStatics::OpenLevel(this, FName(*SaveGame->CurrentMap));
-}
-
 void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const {
     auto SaveData = NewObject<UPokemonSaveGame>();
     SaveData->PlayerCharacter = Player->ToDTO();

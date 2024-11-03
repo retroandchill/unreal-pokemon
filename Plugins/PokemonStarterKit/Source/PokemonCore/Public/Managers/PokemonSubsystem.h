@@ -94,16 +94,14 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Maps|Display")
     void SetCurrentLocation(const FText &LocationName);
 
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving,
-              meta = (DeterminesOutputType = "SaveGameClass", DynamicOutputParam = "ReturnValue"))
-    UPokemonSaveGame *CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass = nullptr) const;
-
-    UFUNCTION(BlueprintCallable, Category = Saving)
-    void LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap = false);
-
     void CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const override;
     void LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& LoadTags) override;
 
+    /**
+     * Adjusts the player character's transform when loading a game if a saved transform is available.
+     *
+     * @param PlayerCharacter The player character whose transform will be adjusted upon loading.
+     */
     UFUNCTION(BlueprintCallable, Category = Saving)
     void AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter);
 

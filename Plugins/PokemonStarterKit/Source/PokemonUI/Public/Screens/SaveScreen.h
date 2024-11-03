@@ -8,6 +8,7 @@
 
 #include "SaveScreen.generated.h"
 
+class UEnhancedSaveGame;
 class UDisplayText;
 class USaveGame;
 class UPokemonSaveGame;
@@ -36,7 +37,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
      * @param SaveGame The save game being used by the window
      */
     UFUNCTION(BlueprintCallable, Category = Saving)
-    void SetSaveGame(UPokemonSaveGame *SaveGame);
+    void SetSaveGame(UEnhancedSaveGame *SaveGame);
 
     /**
      * Prompt the player to save the game.
@@ -53,13 +54,6 @@ class POKEMONUI_API USaveScreen : public UScreen {
     UE_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
 
   protected:
-    /**
-     * Add any additional custom properties to the save file that might be needed.
-     * @param SaveGame Additional properties to add to the save file
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Saving)
-    void AddCustomSaveProperties(UPokemonSaveGame *SaveGame);
-
     UFUNCTION(BlueprintCallable, Category = Saving)
     void ExitSaveScreen(bool bSuccess);
 
@@ -71,7 +65,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
     TObjectPtr<UDisplayText> LastSavedText;
 
     UPROPERTY()
-    TObjectPtr<UPokemonSaveGame> CurrentSaveGame;
+    TObjectPtr<UEnhancedSaveGame> CurrentSaveGame;
 
     /**
      * The format used for the last saved blurb.
@@ -87,7 +81,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
     FOnSaveComplete OnSaveCompleteDelegate;
 
-    TOptional<TFuture<UPokemonSaveGame *>> SaveGameCreationFuture;
+    TOptional<TFuture<UEnhancedSaveGame *>> SaveGameCreationFuture;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, USaveScreen)
