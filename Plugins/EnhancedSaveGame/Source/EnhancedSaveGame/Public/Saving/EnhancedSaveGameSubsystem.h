@@ -6,6 +6,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "EnhancedSaveGameSubsystem.generated.h"
 
+class UEnhancedSaveGame;
 /**
  * 
  */
@@ -14,6 +15,9 @@ class ENHANCEDSAVEGAME_API UEnhancedSaveGameSubsystem : public UGameInstanceSubs
     GENERATED_BODY()
 
 public:
+
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving)
+    UEnhancedSaveGame* CreateSaveGame() const;
 
 private:
 

@@ -45,6 +45,7 @@ void UGameServiceSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
         }) |
         UE::Ranges::CastType<UBlueprint> |
         UE::Ranges::Map(&UBlueprint::GeneratedClass) |
+        UE::Ranges::Filter([this](UClass* Class) { return !Services.Contains(Class); }) |    
         UE::Ranges::ForEach([this](UClass *Class) {
             Services.Emplace(Class, NewObject<UService>(this, Class));
         });

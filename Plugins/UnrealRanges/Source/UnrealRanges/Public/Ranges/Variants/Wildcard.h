@@ -20,13 +20,13 @@ namespace UE::Ranges {
         explicit(false) constexpr FWildcard(T &&Value) : Storage(CreateStorage(std::forward<T>(Value))), VTable(VTableForType<std::decay_t<T>>()) {
         }
 
-        constexpr FWildcard(const FWildcard & Other) : VTable(Other.VTable) {
+        FWildcard(const FWildcard & Other) : VTable(Other.VTable) {
             if (Other.HasValue()) {
                 Other.VTable->Copy(Other.Storage, Storage);
             }
         }
 
-        constexpr FWildcard(FWildcard && Other) : VTable(Other.VTable) {
+        FWildcard(FWildcard && Other) : VTable(Other.VTable) {
             if (Other.HasValue()) {
                 Other.VTable->Move(Other.Storage, Storage);
             }

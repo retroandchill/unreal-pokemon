@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Service.h"
+#include "Ranges/RangeConcepts.h"
+#include "Ranges/Views/MapValue.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/TryCast.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "GameServiceSubsystem.generated.h"
-
-class UService;
 
 /**
  * Subsystem for creating and populating services in the game context.
@@ -41,6 +44,22 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly,
         meta = (AutoCreateRefTerm = "ServiceClass", DeterminesOutputType = "ServiceClass"))
     UService* GetService(UPARAM(meta = (AllowAbstract = "false")) const TSubclassOf<UService> &ServiceClass);
+
+    /**
+     * Retrieves a list of services of the specified type.
+     *
+     * @tparam T The type of services to retrieve.
+     * @return A list of services that match the specified type.
+     */
+    template <typename T>
+        requires std::derived_from<T, UService> || UE::Ranges::UnrealInterface<T>
+    auto GetServicesOfType() const {
+        // clang-format off
+        return Services |
+            UE::Ranges::MapValue |
+            UE::Ranges::TryCast<T>;
+        // clang-format on
+    }
 
 private:
     UPROPERTY()
