@@ -16,7 +16,9 @@ public class PokemonCore : ModuleRules
 				"CommonMath",
 				"PokemonUtilities",
 				"UnrealInjector",
-				"DeveloperSettings"
+				"DeveloperSettings",
+				"EnhancedSaveGame",
+				"GameplayTags"
 			}
 		);
 

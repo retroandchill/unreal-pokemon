@@ -13,12 +13,12 @@
 #include "Services/GameServiceSubsystem.h"
 #endif
 
-UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame() const {
+UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTagContainer& SaveTags) const {
     auto SaveGame = NewObject<UEnhancedSaveGame>(GetGameInstance());
     auto &Subsystems = GetGameInstance()->GetSubsystemArray<UGameInstanceSubsystem>();
     // clang-format off
     Subsystems | UE::Ranges::FilterImplements<ISaveableSubsystem> |
-        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame);
+        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
     // clang-format on
 
 #if WITH_UNREAL_INJECTOR
@@ -26,7 +26,8 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame() const {
     check(ServiceSubsystem != nullptr);
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame);
+        UE::Ranges::Map(&FScriptInterface::GetObject) |
+        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
     // clang-format on
 #endif
 

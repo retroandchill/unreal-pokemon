@@ -20,9 +20,9 @@ namespace UE::Ranges {
             if constexpr (UObjectPointer<S> && std::is_base_of_v<UObject, T>) {
                 return Range | Map([](S Object) { return Cast<T>(Object); }) | FilterValid;
             } else if constexpr (std::is_base_of_v<FScriptInterface, S> && std::is_base_of_v<UObject, T>) {
-                return Range | Map(&CastInterface<T>) | FilterValid;;
+                return Range | Map(&CastInterface<T>) | FilterValid;
             } else if constexpr (UObjectPointer<S> && UnrealInterface<T>) {
-                return Range | Map([](S Object) { return TScriptInterface<T>(Object); }) | FilterValid;;
+                return Range | Map([](S Object) { return TScriptInterface<T>(Object); }) | FilterValid;
             } else if constexpr (std::is_base_of_v<FScriptInterface, S> && UnrealInterface<T>) {
                 return Range | Map([](const FScriptInterface &Interface) {
                            return TScriptInterface<T>(Interface.GetObject());

@@ -23,17 +23,17 @@ public:
 
     template <typename T>
         requires std::derived_from<T, ISerializable> && std::derived_from<T, UObject>
-    TOptional<T&> LoadObjectFromSaveGame(const FGameplayTag& Tag) {
+    TOptional<T&> LoadObjectFromSaveGame(const FGameplayTag& Tag) const {
         return static_cast<T*>(LoadObjectFromSaveGame(T::StaticClass(), Tag));
     }
 
-    UFUNCTION(BlueprintCallable, Category = Saving,
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving,
         meta = (AutoCreateRefTerm = "Class,Tag", DeterminesOutputType = Class))
     UObject* LoadObjectFromSaveGame(UPARAM(meta = (MustImplement = Serializable)) const TSubclassOf<UObject> &Class,
-                                    const FGameplayTag& Tag);
+                                    const FGameplayTag& Tag) const;
 
-    UFUNCTION(BlueprintCallable, Category = Saving, meta = (AutoCreateRefTerm = Tag))
-    bool LoadDataIntoObject(const FGameplayTag& Tag, const TScriptInterface<ISerializable>& TargetObject);
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving, meta = (AutoCreateRefTerm = Tag))
+    bool LoadDataIntoObject(const FGameplayTag& Tag, const TScriptInterface<ISerializable>& TargetObject) const;
 
 private:
     UPROPERTY(SaveGame)

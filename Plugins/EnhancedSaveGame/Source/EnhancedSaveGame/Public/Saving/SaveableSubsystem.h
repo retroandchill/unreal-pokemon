@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Serialization/SaveSerializationUtils.h"
 #include "UObject/Interface.h"
 #include "SaveableSubsystem.generated.h"
 
+struct FGameplayTagContainer;
 class UEnhancedSaveGame;
 class ISerializable;
 
@@ -31,9 +33,10 @@ public:
      * for an object should be saved into the UEnhancedSaveGame object.
      *
      * @param SaveGame The UEnhancedSaveGame instance where the data will be saved.
+     * @param SaveTags Any tags that were passed when the save was initiated
      */
     UFUNCTION(BlueprintNativeEvent, Category = Saving)
-    void CreateSaveData(UEnhancedSaveGame* SaveGame) const;
+    void CreateSaveData(UEnhancedSaveGame* SaveGame, const FGameplayTagContainer& SaveTags) const;
 
     /**
      * Loads saved data into an object.
@@ -41,9 +44,10 @@ public:
      * This method is intended to be overridden to define how the data
      * for an object should be loaded from the provided FObjectData structure.
      *
-     * @param ObjectData The FObjectData structure containing the serialized data to be loaded into the object.
+     * @param SaveGame The save game that the saved data is to be loaded from
+     * @param LoadTags Any tags that were passed when the load was initiated
      */
     UFUNCTION(BlueprintNativeEvent, Category = Saving)
-    void LoadSaveData(const FObjectData &ObjectData);
+    void LoadSaveData(const UEnhancedSaveGame* SaveGame, const FGameplayTagContainer& LoadTags);
 
 };

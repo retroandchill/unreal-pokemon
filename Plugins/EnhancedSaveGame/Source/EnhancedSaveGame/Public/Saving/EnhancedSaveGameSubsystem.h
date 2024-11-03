@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "EnhancedSaveGameSubsystem.generated.h"
 
 class UEnhancedSaveGame;
+struct FGameplayTagContainer;
 /**
  * 
  */
@@ -16,8 +18,9 @@ class ENHANCEDSAVEGAME_API UEnhancedSaveGameSubsystem : public UGameInstanceSubs
 
 public:
 
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving)
-    UEnhancedSaveGame* CreateSaveGame() const;
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving,
+        meta = (AutoCreateRefTerm = SaveTags))
+    UEnhancedSaveGame* CreateSaveGame(const FGameplayTagContainer& SaveTags = FGameplayTagContainer()) const;
 
 private:
 

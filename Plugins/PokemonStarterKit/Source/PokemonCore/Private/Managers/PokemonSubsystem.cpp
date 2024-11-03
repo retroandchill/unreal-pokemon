@@ -10,6 +10,7 @@
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Pokemon/Pokemon.h"
 #include "Saving/PokemonSaveGame.h"
+#include "Saving/Serialization/EnhancedSaveGame.h"
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageSystem.h"
 
@@ -128,6 +129,47 @@ void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
 
     LoadTransform.Emplace(SaveGame->PlayerLocation);
     UGameplayStatics::OpenLevel(this, FName(*SaveGame->CurrentMap));
+}
+
+void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const {
+    auto SaveData = NewObject<UPokemonSaveGame>();
+    SaveData->PlayerCharacter = Player->ToDTO();
+    SaveData->Bag = Bag->ToDTO();
+    SaveData->StorageSystem = StorageSystem->ToDTO();
+
+    SaveData->CurrentMap = GetWorld()->GetMapName();
+    auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
+    check(PlayerCharacter != nullptr)
+    SaveData->PlayerLocation = PlayerCharacter->GetActorTransform();
+
+    check(PlayerResetLocation.IsSet())
+    SaveData->ResetMap = PlayerResetLocation->GetMapName();
+    SaveData->ResetLocation = PlayerResetLocation->GetPlayerTransform();
+
+    SaveData->StartDate = PlayerMetadata->StartDate;
+    SaveData->TotalPlaytime = PlayerMetadata->TotalPlaytime;
+    SaveData->RepelSteps = PlayerMetadata->RepelSteps;
+
+    SaveData->SaveDate = FDateTime::Now();
+    SaveGame->AddObjectToSaveGame(Pokemon::Saving::PokemonCoreSaveData, SaveData);
+}
+
+void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& LoadTags) {
+    auto SaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveData->PlayerCharacter);
+    Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveData->Bag);
+    StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, SaveData->StorageSystem);
+    PlayerMetadata->StartDate = SaveData->StartDate;
+    PlayerMetadata->TotalPlaytime = SaveData->TotalPlaytime;
+    PlayerMetadata->RepelSteps = SaveData->RepelSteps;
+    PlayerResetLocation.Emplace(SaveData->ResetMap, SaveData->ResetLocation);
+
+    if (!LoadTags.HasTag(Pokemon::Saving::ChangeMapOnLoad)) {
+        return;
+    }
+
+    LoadTransform.Emplace(SaveData->PlayerLocation);
+    UGameplayStatics::OpenLevel(this, FName(*SaveData->CurrentMap));
 }
 
 void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter) {

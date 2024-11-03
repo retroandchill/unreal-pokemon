@@ -4,7 +4,7 @@
 #include "CoreMinimal.h"
 #include "Player/PlayerResetLocation.h"
 #include "Pokemon/Exp/GrowthRate.h"
-#include "Saving/PokemonSaveGame.h"
+#include "Saving/SaveableSubsystem.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Trainers/Trainer.h"
 
@@ -19,7 +19,7 @@ class UPlayerMetadata;
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
  */
 UCLASS()
-class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
+class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public ISaveableSubsystem {
     GENERATED_BODY()
 
   public:
@@ -100,6 +100,9 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem {
 
     UFUNCTION(BlueprintCallable, Category = Saving)
     void LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap = false);
+
+    void CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const override;
+    void LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& LoadTags) override;
 
     UFUNCTION(BlueprintCallable, Category = Saving)
     void AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter);

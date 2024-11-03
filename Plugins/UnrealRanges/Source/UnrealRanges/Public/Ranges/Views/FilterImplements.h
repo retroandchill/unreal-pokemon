@@ -23,15 +23,15 @@ namespace UE::Ranges {
             requires ranges::input_range<R> && (UObjectPointer<S> || DereferencesToUObject<S> || std::derived_from<FScriptInterface, std::decay_t<S>>)
         constexpr decltype(auto) operator()(R &&Range) const {
             if constexpr (UObjectPointer<S>) {
-                return std::forward<R>(Range) | Filter([](const UObject* Object) { return Object->Implements<typename T::UClassType>(); });
+                return Range | Filter([](const UObject* Object) { return Object->Implements<typename T::UClassType>(); });
             } else if constexpr (std::is_base_of_v<FScriptInterface, std::decay_t<S>>) {
                 if constexpr (std::derived_from<TInterfaceType<S>, T>) {
                     return std::forward<R>(Range);
                 } else {
-                    return std::forward<R>(Range) | Filter([](const FScriptInterface &Interface) { return Interface.GetObject()->Implements<typename T::UClassType>(); });
+                    return Range | Filter([](const FScriptInterface &Interface) { return Interface.GetObject()->Implements<typename T::UClassType>(); });
                 }
             } else if constexpr (DereferencesToUObject<T>) {
-                return std::forward<R>(Range) | Filter([](const T &Ptr) { return Ptr.Get()->template Implements<typename T::UClassType>(); });
+                return Range | Filter([](const T &Ptr) { return Ptr.Get()->template Implements<typename T::UClassType>(); });
             }
 
             Unreachable();
