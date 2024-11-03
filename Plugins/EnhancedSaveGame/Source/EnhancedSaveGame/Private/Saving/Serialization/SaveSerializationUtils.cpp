@@ -21,14 +21,20 @@ UObject* FObjectData::DeserializeObject() const {
     if (!IsValid(ObjectClass) || Data.Num() <= 0) {
         return nullptr;
     }
-     
+    auto Object = NewObject<UObject>(GetTransientPackage(), ObjectClass);
+    DeserializeObject(Object);
+    return Object;
+}
+
+void FObjectData::DeserializeObject(UObject *Object) const {
+    if (!IsValid(ObjectClass) || Data.Num() <= 0) {
+        return;
+    }
     FMemoryReader Reader(Data, true);
     FObjectAndNameAsStringProxyArchive Archive(Reader, true);
     Reader.SetIsLoading(true);
 
-    auto Object = NewObject<UObject>(GetTransientPackage(), ObjectClass);
     Object->Serialize(Archive);
-    return Object;
 }
 
 FObjectData USaveSerializationUtils::SerializeObject(UObject *Object) {

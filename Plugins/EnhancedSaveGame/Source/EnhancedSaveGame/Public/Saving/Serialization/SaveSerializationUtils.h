@@ -60,6 +60,8 @@ struct ENHANCEDSAVEGAME_API FObjectData {
      * @return A pointer to the deserialized UObject instance, or nullptr if deserialization fails.
      */
     UObject* DeserializeObject() const;
+
+    void DeserializeObject(UObject* Object) const;
 };
 
 /**
