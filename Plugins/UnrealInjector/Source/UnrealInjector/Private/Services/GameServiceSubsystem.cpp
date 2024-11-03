@@ -19,7 +19,7 @@
 void UGameServiceSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
     for (TObjectIterator<UClass> It; It; ++It) {
-        if (!It->IsChildOf<UService>() || It->HasAnyClassFlags(CLASS_Abstract)) {
+        if (!It->IsChildOf<UService>() || It->HasAnyClassFlags(CLASS_Abstract) || !UE::Ranges::IsInstantiableClass(*It)) {
             continue;
         }
 
@@ -46,6 +46,7 @@ void UGameServiceSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
         UE::Ranges::CastType<UBlueprint> |
         UE::Ranges::Map(&UBlueprint::GeneratedClass) |
         UE::Ranges::Filter([](const UClass* Class) { return !Class->HasAnyClassFlags(CLASS_Abstract); }) |
+        UE::Ranges::Filter(&UE::Ranges::IsInstantiableClass) |
         UE::Ranges::Filter([this](UClass* Class) { return !Services.Contains(Class); }) |
         UE::Ranges::ForEach([this](UClass *Class) {
             Services.Emplace(Class, NewObject<UService>(this, Class));
