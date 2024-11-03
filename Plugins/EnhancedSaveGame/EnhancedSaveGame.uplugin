@@ -19,5 +19,16 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "UnrealRanges",
+			"Enabled": true
+		},
+		{
+			"Name": "UnrealInjector",
+			"Enabled": true,
+			"Optional": true
+		}
 	]
 }
