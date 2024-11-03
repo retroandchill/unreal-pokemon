@@ -4,7 +4,9 @@
 #include "Components/DisplayText.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Saving/EnhancedSaveGameSubsystem.h"
 #include "Saving/PokemonSaveGame.h"
+#include "Saving/Serialization/EnhancedSaveGame.h"
 #include "Settings/PokemonSaveGameSettings.h"
 #include "Utilities/RPGMenuUtilities.h"
 
@@ -20,8 +22,8 @@ void USaveScreen::NativeOnActivated() {
     UGameplayStatics::AsyncLoadGameFromSlot(
         Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
         FAsyncLoadGameFromSlotDelegate::CreateWeakLambda(this, [this](const FString &, int32, USaveGame *SaveGameIn) {
-            auto PokemonSaveGame = Cast<UPokemonSaveGame>(SaveGameIn);
-            SetSaveGame(PokemonSaveGame);
+            auto EnhancedSaveGame = Cast<UEnhancedSaveGame>(SaveGameIn);
+            SetSaveGame(EnhancedSaveGame);
             PromptToSaveGame();
         }));
 }
@@ -46,12 +48,15 @@ void USaveScreen::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
     SaveGameCreationFuture.Reset();
 }
 
-void USaveScreen::SetSaveGame(UPokemonSaveGame *SaveGame) {
+void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
     CurrentSaveGame = SaveGame;
     if (SaveGame != nullptr) {
+        auto PokemonSaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
+        check(PokemonSaveData.IsSet())
+        
         LastSavedText->SetText(FText::FormatNamed(
-            LastSavedFormat, TEXT("Date"), FText::FromString(SaveGame->SaveDate.ToFormattedString(*DateFormat)),
-            TEXT("Time"), FText::FromString(SaveGame->SaveDate.ToFormattedString(TEXT("%H:%M")))));
+            LastSavedFormat, TEXT("Date"), FText::FromString(PokemonSaveData->SaveDate.ToFormattedString(*DateFormat)),
+            TEXT("Time"), FText::FromString(PokemonSaveData->SaveDate.ToFormattedString(TEXT("%H:%M")))));
     } else {
         LastSavedText->SetText(FText::GetEmpty());
     }
@@ -61,10 +66,7 @@ void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
     check(!SaveGameCreationFuture.IsSet())
     OnSaveCompleteDelegate = std::move(OnComplete);
     SaveGameCreationFuture.Emplace(AsyncThread([this] {
-        auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-        auto SaveGame = UPokemonSubsystem::GetInstance(this).CreateSaveGame(
-            Settings.SaveGameClass.TryLoadClass<UPokemonSaveGame>());
-        AddCustomSaveProperties(SaveGame);
+        auto SaveGame = UEnhancedSaveGameSubsystem::Get(this).CreateSaveGame();
         return SaveGame;
     }));
 }

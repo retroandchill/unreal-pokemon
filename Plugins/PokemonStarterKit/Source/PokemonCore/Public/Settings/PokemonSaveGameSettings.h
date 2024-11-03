@@ -28,11 +28,5 @@ class POKEMONCORE_API UPokemonSaveGameSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Saving & Loading")
     int32 PrimarySaveIndex = 0;
-
-    /**
-     * The type of the save game class
-     */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Saving & Loading",
-              meta = (MetaClass = "PokemonSaveGame"))
-    FSoftClassPath SaveGameClass = UPokemonSaveGame::StaticClass();
+    
 };

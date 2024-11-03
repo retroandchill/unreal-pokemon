@@ -10,6 +10,7 @@
 #include "Pokemon/Exp/GrowthRate.h"
 #include "Pokemon/Pokemon.h"
 #include "Saving/PokemonSaveGame.h"
+#include "Saving/Serialization/EnhancedSaveGame.h"
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageSystem.h"
 
@@ -86,48 +87,45 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-UPokemonSaveGame *UPokemonSubsystem::CreateSaveGame(TSubclassOf<UPokemonSaveGame> SaveGameClass) const {
-    if (SaveGameClass == nullptr) {
-        SaveGameClass = UPokemonSaveGame::StaticClass();
-    }
+void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const {
+    auto SaveData = NewObject<UPokemonSaveGame>();
+    SaveData->PlayerCharacter = Player->ToDTO();
+    SaveData->Bag = Bag->ToDTO();
+    SaveData->StorageSystem = StorageSystem->ToDTO();
 
-    auto SaveGame = NewObject<UPokemonSaveGame>(SaveGameClass);
-    SaveGame->PlayerCharacter = Player->ToDTO();
-    SaveGame->Bag = Bag->ToDTO();
-    SaveGame->StorageSystem = StorageSystem->ToDTO();
-
-    SaveGame->CurrentMap = GetWorld()->GetMapName();
+    SaveData->CurrentMap = GetWorld()->GetMapName();
     auto PlayerCharacter = GetGameInstance()->GetPrimaryPlayerController(false)->GetCharacter();
     check(PlayerCharacter != nullptr)
-    SaveGame->PlayerLocation = PlayerCharacter->GetActorTransform();
+    SaveData->PlayerLocation = PlayerCharacter->GetActorTransform();
 
     check(PlayerResetLocation.IsSet())
-    SaveGame->ResetMap = PlayerResetLocation->GetMapName();
-    SaveGame->ResetLocation = PlayerResetLocation->GetPlayerTransform();
+    SaveData->ResetMap = PlayerResetLocation->GetMapName();
+    SaveData->ResetLocation = PlayerResetLocation->GetPlayerTransform();
 
-    SaveGame->StartDate = PlayerMetadata->StartDate;
-    SaveGame->TotalPlaytime = PlayerMetadata->TotalPlaytime;
-    SaveGame->RepelSteps = PlayerMetadata->RepelSteps;
+    SaveData->StartDate = PlayerMetadata->StartDate;
+    SaveData->TotalPlaytime = PlayerMetadata->TotalPlaytime;
+    SaveData->RepelSteps = PlayerMetadata->RepelSteps;
 
-    SaveGame->SaveDate = FDateTime::Now();
-    return SaveGame;
+    SaveData->SaveDate = FDateTime::Now();
+    SaveGame->AddObjectToSaveGame(Pokemon::Saving::PokemonCoreSaveData, SaveData);
 }
 
-void UPokemonSubsystem::LoadSave(UPokemonSaveGame *SaveGame, bool bChangeMap) {
-    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveGame->PlayerCharacter);
-    Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveGame->Bag);
-    StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, SaveGame->StorageSystem);
-    PlayerMetadata->StartDate = SaveGame->StartDate;
-    PlayerMetadata->TotalPlaytime = SaveGame->TotalPlaytime;
-    PlayerMetadata->RepelSteps = SaveGame->RepelSteps;
-    PlayerResetLocation.Emplace(SaveGame->ResetMap, SaveGame->ResetLocation);
+void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& LoadTags) {
+    auto SaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
+    Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveData->PlayerCharacter);
+    Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveData->Bag);
+    StorageSystem = UnrealInjector::NewInjectedDependency<IStorageSystem>(this, SaveData->StorageSystem);
+    PlayerMetadata->StartDate = SaveData->StartDate;
+    PlayerMetadata->TotalPlaytime = SaveData->TotalPlaytime;
+    PlayerMetadata->RepelSteps = SaveData->RepelSteps;
+    PlayerResetLocation.Emplace(SaveData->ResetMap, SaveData->ResetLocation);
 
-    if (!bChangeMap) {
+    if (!LoadTags.HasTag(Pokemon::Saving::ChangeMapOnLoad)) {
         return;
     }
 
-    LoadTransform.Emplace(SaveGame->PlayerLocation);
-    UGameplayStatics::OpenLevel(this, FName(*SaveGame->CurrentMap));
+    LoadTransform.Emplace(SaveData->PlayerLocation);
+    UGameplayStatics::OpenLevel(this, FName(*SaveData->CurrentMap));
 }
 
 void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter) {
