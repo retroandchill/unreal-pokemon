@@ -9,7 +9,7 @@ public class UnrealInjectorBlueprintNodes : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "UnrealInjector",
             }
         );
 
@@ -19,7 +19,10 @@ public class UnrealInjectorBlueprintNodes : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore",
+                "KismetCompiler",
+                "BlueprintGraph",
+                "UnrealEd"
             }
         );
     }
