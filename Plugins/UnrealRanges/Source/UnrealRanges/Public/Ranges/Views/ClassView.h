@@ -46,7 +46,7 @@ namespace UE::Ranges {
         SizeType Index = INDEX_NONE;
     };
 
-    template <typename T>
+    template <typename T = UObject>
         requires std::derived_from<T, UObject>
     class TClassView {
     public:

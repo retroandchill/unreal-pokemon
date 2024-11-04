@@ -12,7 +12,7 @@ namespace UE::Ranges {
     public:
         using SizeType = TArray<UObject*>::SizeType;
         using difference_type = std::ptrdiff_t;
-        using value_type = T;
+        using value_type = T*;
         
         TObjectViewIterator() = default;
 
@@ -23,9 +23,9 @@ namespace UE::Ranges {
             return Index == Other.Index;
         }
         
-        T& operator * () const {
+        T* operator * () const {
             check(Objects.IsValid() && Objects->IsValidIndex(Index))
-            return *static_cast<T*>((*Objects)[Index]);
+            return static_cast<T*>((*Objects)[Index]);
         }
         
         TObjectViewIterator& operator++() {
@@ -43,7 +43,7 @@ namespace UE::Ranges {
         SizeType Index = INDEX_NONE;
     };
 
-    template <typename T>
+    template <typename T = UObject>
         requires std::derived_from<T, UObject>
     /**
      * @class TObjectView
