@@ -23,6 +23,11 @@
 			"Name": "UnrealInjectorEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UnrealInjectorBlueprintNodes",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
