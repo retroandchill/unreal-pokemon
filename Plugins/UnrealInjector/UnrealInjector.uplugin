@@ -28,6 +28,11 @@
 			"Name": "UnrealInjectorBlueprintNodes",
 			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UnrealInjectorTests",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

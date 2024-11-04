@@ -24,18 +24,8 @@ void UGameServiceSubsystem::Deinitialize() {
     Services.Empty();
 }
 
-UService *UGameServiceSubsystem::GetService(const TSubclassOf<UService> &ServiceClass) {
-    // clang-format off
-    return UE::Optionals::OfNullable(Services.Find(ServiceClass)) |
-           UE::Optionals::Map(&TObjectPtr<UService>::Get) |
-           UE::Optionals::GetPtrOrNull;
-    // clang-format on
-}
-
 UService * UGameServiceSubsystem::StaticGetService(const UObject *WorldContext,
     const TSubclassOf<UService> &ServiceClass) {
-    return UGameplayStatics::GetGameInstance(WorldContext)
-        ->GetSubsystem<UGameServiceSubsystem>()
-        ->GetService(ServiceClass);
+    return &GetService(WorldContext, ServiceClass);
     
 }
