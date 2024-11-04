@@ -41,9 +41,21 @@ public:
      * @param ServiceClass The TSubclassOf<UService> representing the service class type to retrieve.
      * @return A pointer to the registered service if found; otherwise, returns nullptr.
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly,
+    UFUNCTION(BlueprintPure, Category = DependencyInjection,
         meta = (AutoCreateRefTerm = "ServiceClass", DeterminesOutputType = "ServiceClass"))
     UService* GetService(UPARAM(meta = (AllowAbstract = "false")) const TSubclassOf<UService> &ServiceClass);
+
+    /**
+     * Static method to retrieve a service instance. It allows you to get a service without getting a pointer to
+     * the Game Service Subsystem.
+     *
+     * @return A pointer to the service instance.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, 
+        meta = (AutoCreateRefTerm = "ServiceClass", DeterminesOutputType = "ServiceClass",
+            WorldContext = WorldContext))
+    static UService* StaticGetService(const UObject* WorldContext, const TSubclassOf<UService> &ServiceClass);
+    
 
     /**
      * Retrieves a list of services of the specified type.

@@ -2,6 +2,7 @@
 
 
 #include "Services/GameServiceSubsystem.h"
+#include "Kismet/GameplayStatics.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/GetPtrOrNull.h"
@@ -29,4 +30,12 @@ UService *UGameServiceSubsystem::GetService(const TSubclassOf<UService> &Service
            UE::Optionals::Map(&TObjectPtr<UService>::Get) |
            UE::Optionals::GetPtrOrNull;
     // clang-format on
+}
+
+UService * UGameServiceSubsystem::StaticGetService(const UObject *WorldContext,
+    const TSubclassOf<UService> &ServiceClass) {
+    return UGameplayStatics::GetGameInstance(WorldContext)
+        ->GetSubsystem<UGameServiceSubsystem>()
+        ->GetService(ServiceClass);
+    
 }
