@@ -61,7 +61,7 @@ namespace UE::Ranges {
          *
          * This default constructor initializes an empty shared array view.
          */
-        explicit TSharedArrayView() {}
+        explicit TSharedArrayView() = default;
 
         /**
          * @brief Constructs a TSharedArrayView from an rvalue reference to an array.

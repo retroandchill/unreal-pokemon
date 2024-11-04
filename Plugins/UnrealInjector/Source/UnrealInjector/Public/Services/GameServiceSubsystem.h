@@ -74,9 +74,8 @@ public:
      *
      * @return A pointer to the service instance.
      */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, 
-        meta = (AutoCreateRefTerm = "ServiceClass", DeterminesOutputType = "ServiceClass",
-            WorldContext = WorldContext))
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly,
+        meta = (AutoCreateRefTerm = "ServiceClass", WorldContext = WorldContext))
     static UService* StaticGetService(const UObject* WorldContext, const TSubclassOf<UService> &ServiceClass);
     
 

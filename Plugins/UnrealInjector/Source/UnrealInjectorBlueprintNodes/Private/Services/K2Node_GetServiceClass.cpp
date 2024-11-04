@@ -27,12 +27,12 @@ void UK2Node_GetServiceClass::AllocateDefaultPins() {
 
     // Add blueprint pin
     if (!IsValid(ServiceClass)) {
-        CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, USubsystem::StaticClass(), TEXT("Class"));
+        CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, USubsystem::StaticClass(), TEXT("ServiceClass"));
     }
 
     // Result pin
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object,
-        IsValid(ServiceClass) ? static_cast<UClass*>(ServiceClass) : USubsystem::StaticClass(),
+        IsValid(ServiceClass) ? static_cast<UClass*>(ServiceClass) : UService::StaticClass(),
         UEdGraphSchema_K2::PN_ReturnValue);
 
     Super::AllocateDefaultPins();
@@ -103,7 +103,7 @@ void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext
     CallGetNode->AllocateDefaultPins();
 
     static const FName WorldContext_ParamName(TEXT("WorldContext"));
-    static const FName Class_ParamName(TEXT("Class"));
+    static const FName Class_ParamName(TEXT("ServiceClass"));
 
     if (GetBlueprint()->ParentClass->HasMetaDataHierarchical(FBlueprintMetadata::MD_ShowWorldContextPin)) {
         CompilerContext.MovePinLinksToIntermediate(*FindPinChecked(WorldContext_ParamName),
@@ -118,8 +118,10 @@ void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext
             *CallGetNode->FindPinChecked(Class_ParamName));
     }
 
-    CompilerContext.MovePinLinksToIntermediate(*FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue),
-            *CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue));
+    auto SourceReturnPin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
+    auto TargetReturnPin = CallGetNode->FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
+    TargetReturnPin->PinType = SourceReturnPin->PinType;
+    CompilerContext.MovePinLinksToIntermediate(*SourceReturnPin, *TargetReturnPin);
 
     BreakAllNodeLinks();
 }
