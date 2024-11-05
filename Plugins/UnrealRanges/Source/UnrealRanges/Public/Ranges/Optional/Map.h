@@ -6,6 +6,7 @@
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
 #include "Types.h"
+#include "Utilities.h"
 
 namespace UE::Optionals {
 
@@ -23,8 +24,13 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
-            using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
-            return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : TOptional<ResultType>();
+            if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>> && std::invocable<F, TNullableValue<O>>) {
+                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))) : TOptional<ResultType>();
+            } else {
+                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : TOptional<ResultType>();
+            }
         }
 
       private:
