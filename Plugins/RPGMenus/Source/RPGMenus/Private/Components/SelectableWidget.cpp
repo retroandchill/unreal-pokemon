@@ -28,9 +28,8 @@ int32 USelectableWidget::GetIndex() const {
 void USelectableWidget::SetIndex(int32 NewIndex) {
     int32 OldIndex = Index;
     Index = FMath::Clamp(NewIndex, static_cast<int32>(INDEX_NONE), GetItemCount() - 1);
-    UE::Optionals::OfNullable(GetSelectedOption()) |
+    UE::Optionals::OfNullable(GetSelectableOption(Index)) |
         UE::Optionals::IfPresent(&UCommonButtonBase::SetIsSelected, true, false);
-    SelectableButtons[Index]->SetIsSelected(true);
     OnSelectionChange(OldIndex, Index);
 }
 
@@ -39,7 +38,6 @@ void USelectableWidget::Deselect() {
     Index = INDEX_NONE;
     UE::Optionals::OfNullable(GetSelectableOption(OldIndex)) |
         UE::Optionals::IfPresent(&UCommonButtonBase::SetIsSelected, false, false);
-    SelectableButtons[OldIndex]->SetIsSelected(true);
     OnSelectionChange(OldIndex, Index);
 }
 
