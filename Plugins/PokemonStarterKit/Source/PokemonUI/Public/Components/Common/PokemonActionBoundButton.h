@@ -7,7 +7,8 @@
 
 #include "PokemonActionBoundButton.generated.h"
 
-class UDisplayText;
+class UTextBlock;
+
 /**
  * Specialized native action button implementation used to handling the changing of styles when the input method does
  */
@@ -31,7 +32,7 @@ class POKEMONUI_API UPokemonActionBoundButton : public UCommonButtonBase, public
     void OnUpdateInputAction();
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Text Block")
-    UDisplayText *GetActionNameText() const;
+    UCommonTextBlock *GetActionNameText() const;
 
   private:
     /**
@@ -41,7 +42,7 @@ class POKEMONUI_API UPokemonActionBoundButton : public UCommonButtonBase, public
     void HandleInputMethodChanged(ECommonInputType NewInputMethod);
 
     UPROPERTY(BlueprintGetter = GetActionNameText, Category = "Text Block", meta = (BindWidget))
-    TObjectPtr<UDisplayText> Text_ActionName;
+    TObjectPtr<UCommonTextBlock> Text_ActionName;
 
     FUIActionBindingHandle BindingHandle;
 
