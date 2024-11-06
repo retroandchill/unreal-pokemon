@@ -3,6 +3,9 @@
 #include "Algo/ForEach.h"
 #include "CommonButtonBase.h"
 #include "Groups/CommonButtonGroupBase.h"
+#include "Ranges/Optional/IfPresent.h"
+#include "Ranges/Optional/OptionalClosure.h"
+#include "Ranges/Pointers/SoftObjectRef.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
     bIsBackHandler = true;
@@ -25,12 +28,18 @@ int32 USelectableWidget::GetIndex() const {
 void USelectableWidget::SetIndex(int32 NewIndex) {
     int32 OldIndex = Index;
     Index = FMath::Clamp(NewIndex, static_cast<int32>(INDEX_NONE), GetItemCount() - 1);
+    UE::Optionals::OfNullable(GetSelectedOption()) |
+        UE::Optionals::IfPresent(&UCommonButtonBase::SetIsSelected, true, false);
+    SelectableButtons[Index]->SetIsSelected(true);
     OnSelectionChange(OldIndex, Index);
 }
 
 void USelectableWidget::Deselect() {
     int32 OldIndex = Index;
     Index = INDEX_NONE;
+    UE::Optionals::OfNullable(GetSelectableOption(OldIndex)) |
+        UE::Optionals::IfPresent(&UCommonButtonBase::SetIsSelected, false, false);
+    SelectableButtons[OldIndex]->SetIsSelected(true);
     OnSelectionChange(OldIndex, Index);
 }
 

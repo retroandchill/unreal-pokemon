@@ -14,6 +14,9 @@ UCLASS(Abstract, DisplayName = "RPG Button Base")
 class RPGMENUS_API URPGButtonBase : public UCommonButtonBase {
     GENERATED_BODY()
 
+public:
+    URPGButtonBase();
+
   protected:
     void NativePreConstruct() override;
 
