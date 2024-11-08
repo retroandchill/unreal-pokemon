@@ -17,7 +17,7 @@ void USummaryNameInfo::Refresh_Implementation(const TScriptInterface<IPokemon> &
     PokemonNameText->SetText(Pokemon->GetNickname());
 
     auto Gender = Pokemon->GetGender();
-    UPokemonUIUtils::SetPokemonGenderText(Gender, PokemonGenderText);
+    PokemonGenderText->SetText(UPokemonUIUtils::GetPokemonGenderText(Gender));
     if (GenderTextColors.Contains(Gender)) {
         PokemonGenderText->SetTextStyle(GenderTextColors[Gender]);
     }

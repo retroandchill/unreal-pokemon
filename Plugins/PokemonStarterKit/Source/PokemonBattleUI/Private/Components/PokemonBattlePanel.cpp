@@ -44,7 +44,7 @@ void UPokemonBattlePanel::Refresh() {
     HPBar->SetPercent(CurrentBattler->GetHPPercent());
 
     auto Gender = CurrentBattler->GetGender();
-    UPokemonUIUtils::SetPokemonGenderText(Gender, PokemonGender);
+    PokemonGender->SetText(UPokemonUIUtils::GetPokemonGenderText(Gender));
     if (GenderTextColors.Contains(Gender)) {
         PokemonGender->SetTextStyle(GenderTextColors[Gender]);
     }

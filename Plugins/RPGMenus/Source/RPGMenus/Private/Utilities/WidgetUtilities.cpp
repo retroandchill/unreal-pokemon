@@ -1,9 +1,14 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Utilities/WidgetUtilities.h"
+#include "CommonButtonBase.h"
 #include "CommonTextBlock.h"
 #include "Components/Image.h"
 #include "Components/RichTextBlock.h"
 #include "PaperSprite.h"
+#include "Blueprint/WidgetTree.h"
+#include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Views/TryCast.h"
+#include "Ranges/Views/ContainerView.h"
 
 void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bool MatchSize) {
     if (auto Texture = Cast<UTexture2D>(Asset); Texture != nullptr) {

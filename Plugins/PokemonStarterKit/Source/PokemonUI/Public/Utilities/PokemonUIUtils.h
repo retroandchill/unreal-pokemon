@@ -8,6 +8,7 @@
 
 #include "PokemonUIUtils.generated.h"
 
+class UTextBlock;
 class UPokemonMenuBase;
 class UCommand;
 class UMenuHandler;
@@ -64,11 +65,6 @@ class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
      */
     static void SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float CurrentValue, float MaxValue);
 
-    /**
-     * Set the text for a Pokémon's gender in the screen
-     * @param Gender The Pokémon to process
-     * @param TextWidget The widget to set the text for
-     */
-    UFUNCTION(BlueprintCallable, Category = Content)
-    static void SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget);
+    UFUNCTION(BlueprintPure, Category = Content)
+    static FText GetPokemonGenderText(EPokemonGender Gender);
 };
