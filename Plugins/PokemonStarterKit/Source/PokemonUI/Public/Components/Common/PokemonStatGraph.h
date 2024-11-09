@@ -6,19 +6,19 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "Widgets/SCompoundWidget.h"
 
+class SCanvas;
 class IPokemon;
+
 /**
  * 
  */
 class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
 public:
-    SLATE_BEGIN_ARGS(SPokemonStatGraph) : _DefaultAngleOffset(0.f),
-                                          _DrawRadius(0.9f) {
+    SLATE_BEGIN_ARGS(SPokemonStatGraph) : _DefaultAngleOffset(0.f) {
         }
 
-        SLATE_ATTRIBUTE(TArray<FName>, StatNames)
+        SLATE_ARGUMENT(TArray<FMainStatHandle>, StatNames)
         SLATE_ATTRIBUTE(float, DefaultAngleOffset)
-        SLATE_ARGUMENT(float, DrawRadius)
         SLATE_ARGUMENT(FLinearColor, GridLinesColor)
         SLATE_ARGUMENT(FLinearColor, NodeLinesColor)
     SLATE_END_ARGS()
@@ -31,6 +31,7 @@ public:
                   bool bParentEnabled) const override;
 
     void Tick(const FGeometry &AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
+    FVector2D ComputeDesiredSize(float LayoutScaleMultiplier) const override;
 
 private:
     void CacheNodeData(const FGeometry &AllottedGeometry);
@@ -39,15 +40,17 @@ private:
     void PaintLines(const FGeometry &AllottedGeometry, FSlateWindowElementList &OutDrawElements,
                     int32 &DrawLayerId) const;
 
+    TSharedPtr<SCanvas> DrawingCanvas;
+    TMap<FName, TSharedRef<SBox>> StatEntryWidgets;
+    
     TWeakInterfacePtr<IPokemon> Pokemon;
-    TAttribute<TArray<FName>> StatNames;
-    TArray<FName> CachedStatNames;
+    TArray<FMainStatHandle> StatNames;
     TArray<FVector2D> CachedNodeLocations;
 
     TAttribute<float> AngleOffsetAttribute;
     float DefaultAngleOffset = 0.f;
-    float DrawRadius = 0.9f;
 
     FLinearColor GridLinesColor;
     FLinearColor NodeLinesColor;
+    FVector2D MinimumDesiredSize = FVector2D(250);
 };
