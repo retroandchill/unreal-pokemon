@@ -11,10 +11,10 @@
 #include "Ranges/Optional/GetPtrOrNull.h"
 #include "Utilities/WidgetUtilities.h"
 
-void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
-    Super::Refresh_Implementation(Pokemon);
-    PokemonIcon->SetFlipbook(USpriteLoader::GetPokemonIcon(Pokemon).TryGet<UPaperFlipbook>().GetPtrOrNull());
-    auto IconGraphics = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(Pokemon->GetTypes());
+void UPokemonIconPreview::Refresh_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
+    Super::Refresh_Implementation(NewPokemon);
+    PokemonIcon->SetFlipbook(USpriteLoader::GetPokemonIcon(NewPokemon).TryGet<UPaperFlipbook>().GetPtrOrNull());
+    auto IconGraphics = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(NewPokemon->GetTypes());
     Algo::ForEach(TypeIcons, &UWidget::RemoveFromParent);
     TypeIcons.Empty();
     // clang-format off

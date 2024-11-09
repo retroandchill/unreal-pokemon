@@ -13,10 +13,10 @@ void UPokemonStatRow::SetDisplayedStat(FName NewDisplayedStat) {
     DisplayedStat = NewDisplayedStat;
 }
 
-void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
-    Super::Refresh_Implementation(Pokemon);
+void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
+    Super::Refresh_Implementation(NewPokemon);
 
-    auto StatBlock = Pokemon->GetStatBlock();
+    auto StatBlock = NewPokemon->GetStatBlock();
     auto StatInfo = StatBlock->GetStat(DisplayedStat);
     auto Stat = StatInfo->GetStat();
     const auto &StatChanges = StatBlock->GetNature().StatChanges;
@@ -30,14 +30,14 @@ void UPokemonStatRow::Refresh_Implementation(const TScriptInterface<IPokemon> &P
     } else { // StatChange->Change < 0
         StatLabel->SetTextStyle(DecreasedStyle);
     }
-    SetStatValueText(Pokemon, StatInfo);
+    SetStatValueText(NewPokemon, StatInfo);
 }
 
 UDisplayText *UPokemonStatRow::GetStatValue() const {
     return StatValue;
 }
 
-void UPokemonStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,
+void UPokemonStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &NewPokemon,
                                                       const TScriptInterface<IStatEntry> &StatInfo) {
     StatValue->SetText(FText::FromString(FString::FromInt(StatInfo->GetStatValue())));
 }

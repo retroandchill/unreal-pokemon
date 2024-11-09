@@ -21,10 +21,10 @@ public:
     /**
      * Update the information about the Pokémon displayed by this widget.
      * 
-     * @param Pokemon The new Pokémon to display the info for
+     * @param NewPokemon The new Pokémon to display the info for
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
-    void Refresh(const TScriptInterface<IPokemon> &Pokemon);
+    void Refresh(const TScriptInterface<IPokemon> &NewPokemon);
 
     /**
      * Retrieves the current Pokémon information displayed by the widget.

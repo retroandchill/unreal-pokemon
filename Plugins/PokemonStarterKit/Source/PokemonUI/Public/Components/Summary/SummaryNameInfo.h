@@ -19,7 +19,7 @@ class POKEMONUI_API USummaryNameInfo : public UPokemonInfoWidget {
     GENERATED_BODY()
 
   protected:
-    void Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
+    void Refresh_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
   private:
     /**

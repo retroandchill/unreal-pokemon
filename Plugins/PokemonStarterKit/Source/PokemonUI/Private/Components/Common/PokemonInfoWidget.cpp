@@ -2,7 +2,7 @@
 
 #include "Components/Common/PokemonInfoWidget.h"
 
-void UPokemonInfoWidget::Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
+void UPokemonInfoWidget::Refresh_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // No native implementation in this class
 }
 

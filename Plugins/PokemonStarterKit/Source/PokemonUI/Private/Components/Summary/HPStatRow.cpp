@@ -6,11 +6,11 @@
 #include "Pokemon/Stats/StatEntry.h"
 #include "Utilities/PokemonUIUtils.h"
 
-void UHPStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,
+void UHPStatRow::SetStatValueText_Implementation(const TScriptInterface<IPokemon> &NewPokemon,
                                                  const TScriptInterface<IStatEntry> &StatInfo) {
     GetStatValue()->SetText(
-        FText::FromString(FString::Format(TEXT("{0}/{1}"), {Pokemon->GetCurrentHP(), StatInfo->GetStatValue()})));
+        FText::FromString(FString::Format(TEXT("{0}/{1}"), {NewPokemon->GetCurrentHP(), StatInfo->GetStatValue()})));
 
-    UPokemonUIUtils::SetBarValues(HPBar, static_cast<float>(Pokemon->GetCurrentHP()),
-                                  static_cast<float>(Pokemon->GetMaxHP()));
+    UPokemonUIUtils::SetBarValues(HPBar, static_cast<float>(NewPokemon->GetCurrentHP()),
+                                  static_cast<float>(NewPokemon->GetMaxHP()));
 }

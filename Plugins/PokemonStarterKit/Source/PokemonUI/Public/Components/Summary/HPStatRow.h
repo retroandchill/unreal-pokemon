@@ -15,7 +15,7 @@ class POKEMONUI_API UHPStatRow : public UPokemonStatRow {
     GENERATED_BODY()
 
   protected:
-    void SetStatValueText_Implementation(const TScriptInterface<IPokemon> &Pokemon,
+    void SetStatValueText_Implementation(const TScriptInterface<IPokemon> &NewPokemon,
                                          const TScriptInterface<IStatEntry> &StatInfo) override;
 
   private:

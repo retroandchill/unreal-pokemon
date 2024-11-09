@@ -27,7 +27,7 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
     void SetDisplayedStat(FName NewDisplayedStat);
 
   protected:
-    void Refresh_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
+    void Refresh_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
     /**
      * Get the text widget for the value of the stat.
@@ -38,11 +38,11 @@ class POKEMONUI_API UPokemonStatRow : public UPokemonInfoWidget {
 
     /**
      * Set the value text of the given stat information
-     * @param Pokemon The Pokémon that owns the stat
+     * @param NewPokemon The Pokémon that owns the stat
      * @param StatInfo The information about the stat
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Stats")
-    void SetStatValueText(const TScriptInterface<IPokemon> &Pokemon, const TScriptInterface<IStatEntry> &StatInfo);
+    void SetStatValueText(const TScriptInterface<IPokemon> &NewPokemon, const TScriptInterface<IStatEntry> &StatInfo);
 
   private:
     /**
