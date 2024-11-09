@@ -14,7 +14,7 @@ void USummaryPages::NativeConstruct() {
 
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off
-    UE::Ranges::Ints(PageSwitcher->GetNumWidgets()) |
+    UE::Ranges::Ints(0, PageSwitcher->GetNumWidgets() - 1) |
         UE::Ranges::Map(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
         UE::Ranges::CastType<USummaryScreenPage> |
         UE::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
