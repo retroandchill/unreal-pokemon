@@ -20,7 +20,14 @@ public:
   protected:
     void NativePreConstruct() override;
 
-  public:
+public:
+    /**
+     * Updates the visibility of the button based on its current state. This method checks
+     * whether the button should be visible or not, taking into account both the default
+     * visibility state and any delegates that determine visibility. If the button is
+     * not visible, it sets the button's visibility to the `DisabledVisibility` state. Otherwise,
+     * it sets the button's visibility to the `EnabledVisibility` state.
+     */
     void UpdateVisibility();
 
   private:
