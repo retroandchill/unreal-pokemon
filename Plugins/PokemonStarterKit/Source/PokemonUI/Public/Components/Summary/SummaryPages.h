@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
+#include "Components/Common/PokemonInfoWidget.h"
 #include "Pokemon/Pokemon.h"
 
 #include "SummaryPages.generated.h"
@@ -22,39 +23,20 @@ class UWidgetSwitcher;
  * The widget that controls allowing the player to scroll between pages on the summary screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryPages : public UCommonUserWidget {
+class POKEMONUI_API USummaryPages : public UPokemonInfoWidget {
     GENERATED_BODY()
 
   protected:
     void NativeConstruct() override;
 
+    void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
+
   public:
-    /**
-     * Refresh any of the child pages added to this widget.
-     * @param Pokemon The Pokémon in question to refresh the data for
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Events)
-    void Refresh(const TScriptInterface<IPokemon> &Pokemon);
-
-    /**
-     * Set the initial Pokémon to use with this iterator.
-     * @param NewPokemon The index of said Pokémon.
-     */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Content)
-    void SetPokemon(const TScriptInterface<IPokemon> &NewPokemon);
-
     /**
      * Get the delegate that is called when a Pokémon is changed.
      * @return Delegate that is called when a Pokémon is changed.
      */
     FOnPokemonChange &GetOnPokemonChange();
-
-    /**
-     * Get the Pokémon that is currently being displayed.
-     * @return The currently displayed Pokémon
-     */
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
-    const TScriptInterface<IPokemon> &GetCurrentPokemon() const;
 
     /**
      * Get the page at the given index.
@@ -83,12 +65,6 @@ class POKEMONUI_API USummaryPages : public UCommonUserWidget {
     UWidgetSwitcher *GetPageSwitcher() const;
 
   private:
-    /**
-     * The Pokémon that is currently the subject for this widget
-     */
-    UPROPERTY(BlueprintGetter = GetCurrentPokemon, BlueprintSetter = SetPokemon, Category = Content)
-    TScriptInterface<IPokemon> CurrentPokemon;
-
     /**
      * Called when a Pokémon is changed
      */

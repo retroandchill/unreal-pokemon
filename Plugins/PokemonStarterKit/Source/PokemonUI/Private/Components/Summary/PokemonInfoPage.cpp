@@ -15,17 +15,15 @@
 #include "Utilities/PokemonUIUtils.h"
 #include "Utilities/WidgetUtilities.h"
 
-void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
-    Super::RefreshInfo_Implementation(Pokemon);
-
+void UPokemonInfoPage::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // TODO: Handle the regional Pokédex number
-    auto &Species = Pokemon->GetSpecies();
+    auto &Species = NewPokemon->GetSpecies();
     PokemonNumberText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(Species.RowID, PokedexNumberLength)));
     SpeciesNameText->SetText(Species.RealName);
 
     ClearTypeIcons();
 
-    for (auto Types = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(Pokemon->GetTypes()); auto Asset : Types) {
+    for (auto Types = Pokemon::Assets::Graphics::TypeIcons.LoadAssets(NewPokemon->GetTypes()); auto Asset : Types) {
         // clang-format off
         auto AssetObject = Asset |
                            UE::Optionals::FlatMap([](const FImageAsset &ImageAsset) { return ImageAsset.TryGet();}) |
@@ -36,20 +34,20 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         SlotTypeIcon(Icon);
     }
 
-    auto &OwnerInfo = Pokemon->GetOwnerInfo();
+    auto &OwnerInfo = NewPokemon->GetOwnerInfo();
     OTNameText->SetText(OwnerInfo.OriginalTrainerName);
     if (auto Color = GenderTextColors.Find(OwnerInfo.OriginalTrainerGender); Color != nullptr) {
         OTNameText->SetTextStyle(*Color);
     }
     PokemonIDText->SetText(FText::FromString(UPokemonUIUtils::ZeroPad(OwnerInfo.ID, IdNumberLength)));
 
-    auto StatBlock = Pokemon->GetStatBlock();
+    auto StatBlock = NewPokemon->GetStatBlock();
     ExpTotalText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExp())));
     NextLevelUpCountText->SetText(FText::FromString(FString::FromInt(StatBlock->GetExpForNextLevel())));
     ExpBar->SetPercent(StatBlock->GetExpPercent());
 
     using enum ESlateVisibility;
-    if (auto HoldItem = Pokemon->GetHoldItem(); HoldItem.IsSet()) {
+    if (auto HoldItem = NewPokemon->GetHoldItem(); HoldItem.IsSet()) {
         ItemNameText->SetText(HoldItem->RealName);
         ItemDescriptionText->SetText(HoldItem->Description);
         // clang-format off
@@ -65,5 +63,5 @@ void UPokemonInfoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
         ItemDescriptionText->SetText(FText::GetEmpty());
     }
 
-    ShinyIcon->SetVisibility(Pokemon->IsShiny() ? SelfHitTestInvisible : Hidden);
+    ShinyIcon->SetVisibility(NewPokemon->IsShiny() ? SelfHitTestInvisible : Hidden);
 }

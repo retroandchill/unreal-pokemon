@@ -35,13 +35,12 @@ void UPokemonSkillsPage::NativePreConstruct() {
     }
 }
 
-void UPokemonSkillsPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
-    Super::RefreshInfo_Implementation(Pokemon);
+void UPokemonSkillsPage::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     for (const auto &Row : StatRows) {
-        Row->Refresh(Pokemon);
+        Row->Refresh(NewPokemon);
     }
 
-    auto Ability = Pokemon->GetAbility();
+    auto Ability = NewPokemon->GetAbility();
     AbilityName->SetText(Ability->GetDisplayName());
     AbilityDescription->SetText(Ability->GetAbilityDescription());
 }

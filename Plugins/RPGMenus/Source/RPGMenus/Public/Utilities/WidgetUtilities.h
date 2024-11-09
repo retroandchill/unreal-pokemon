@@ -6,10 +6,12 @@
 
 #include "WidgetUtilities.generated.h"
 
+class USizeBox;
 class UCommonButtonBase;
 class URichTextBlock;
 class UCommonTextStyle;
 class UImage;
+
 /**
  * Utility class for Widget related operations
  */
@@ -23,5 +25,4 @@ class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
 
     UFUNCTION(BlueprintCallable, Category = "Text|Styles")
     static void SetTextStyleOverride(URichTextBlock *TextBlock, TSubclassOf<UCommonTextStyle> Style);
-
 };

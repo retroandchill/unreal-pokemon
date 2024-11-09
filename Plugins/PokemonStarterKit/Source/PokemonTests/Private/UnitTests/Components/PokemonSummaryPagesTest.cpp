@@ -96,7 +96,7 @@ bool PokemonSummaryPagesTest_PokemonInfo::RunTest(const FString &Parameters) {
     auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "KABUTOPS"},
                                                                    ForeignTrainer);
 
-    Page->RefreshInfo(Pokemon);
+    Page->SetPokemon(Pokemon);
 
     FIND_CHILD_WIDGET(Page, UDisplayText, SpeciesNameText);
     UE_ASSERT_NOT_NULL(SpeciesNameText);
@@ -139,7 +139,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
                                                                                         {"SPEED", 30}},
                                                                                 .Nature = FName("Adamant")},
                                                                     ForeignTrainer);
-    Page->RefreshInfo(Pokemon1);
+    Page->SetPokemon(Pokemon1);
 
     FIND_CHILD_WIDGET(Page, UDisplayText, MemoBlock);
     UE_ASSERT_NOT_NULL(MemoBlock);
@@ -170,7 +170,7 @@ bool PokemonSummaryPagesTest_TrainerMemo::RunTest(const FString &Parameters) {
     auto ObtainedBlock = Pokemon2->GetObtainedInformation();
     ObtainedBlock->SetTimeHatched(FDateTime::Now());
     ObtainedBlock->SetHatchedMap(FText::FromStringView(TEXT("Unit Test")));
-    Page->RefreshInfo(Pokemon2);
+    Page->SetPokemon(Pokemon2);
 
     Lines.Empty();
     MemoBlock->GetText().ToString().ParseIntoArrayLines(Lines);
@@ -213,7 +213,7 @@ bool PokemonSummaryPagesTest_Skills::RunTest(const FString &Parameters) {
                                                                                 .Nature = FName("Adamant"),
                                                                                 .Ability = FName("BATTLEARMOR")},
                                                                     ForeignTrainer);
-    Page->RefreshInfo(Pokemon1);
+    Page->SetPokemon(Pokemon1);
 
     FIND_CHILD_WIDGET(Page, UDisplayText, AbilityName);
     UE_ASSERT_NOT_NULL(AbilityName);
@@ -254,7 +254,7 @@ bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
         NewObject<UBasicTrainer>(World.Get())->Initialize(TEXT("LASS"), FText::FromStringView(TEXT("Amy")));
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
         World.Get(), FPokemonDTO{.Species = "KABUTOPS", .Level = 40}, ForeignTrainer);
-    Page->RefreshInfo(Pokemon1);
+    Page->SetPokemon(Pokemon1);
 
     return true;
 }

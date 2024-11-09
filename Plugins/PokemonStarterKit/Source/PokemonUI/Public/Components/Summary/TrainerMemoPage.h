@@ -36,7 +36,7 @@ class POKEMONUI_API UTrainerMemoPage : public USummaryScreenPage {
     GENERATED_BODY()
 
   protected:
-    void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
+    void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
     /**
      * Should the game show the Pokémon's nature?

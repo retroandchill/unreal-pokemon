@@ -67,18 +67,6 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     /**
      * The widget containing the name information
      */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<USummaryNameInfo> NameInfo;
-
-    /**
-     * The widget that displays the Pokémon sprite
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UPaperFlipbookUserWidget> PokemonSprite;
-
-    /**
-     * The widget containing the name information
-     */
     UPROPERTY(BlueprintGetter = GetSummaryPages, Category = Widgets, meta = (BindWidget))
     TObjectPtr<USummaryPages> SummaryPages;
 

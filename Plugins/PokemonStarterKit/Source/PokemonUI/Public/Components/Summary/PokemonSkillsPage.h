@@ -19,7 +19,7 @@ class POKEMONUI_API UPokemonSkillsPage : public USummaryScreenPage {
 
   protected:
     void NativePreConstruct() override;
-    void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
+    void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
     /**
      * Slot the selected HP stat row in the list of available stat rows.

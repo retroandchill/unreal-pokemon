@@ -6,6 +6,7 @@
 #include "Components/RichTextBlock.h"
 #include "PaperSprite.h"
 #include "Blueprint/WidgetTree.h"
+#include "Components/SizeBox.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Views/TryCast.h"
 #include "Ranges/Views/ContainerView.h"

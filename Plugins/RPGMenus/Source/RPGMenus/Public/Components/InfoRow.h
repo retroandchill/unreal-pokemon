@@ -44,7 +44,7 @@ private:
      * @see UpdateVisibility
      */
     UPROPERTY(EditAnywhere, Category = Visibility)
-    ESlateVisibility InitialVisibility;
+    ESlateVisibility InitialVisibility = ESlateVisibility::SelfHitTestInvisible;
 
     UPROPERTY()
     FGetSlateVisibility InitialVisibilityDelegate;

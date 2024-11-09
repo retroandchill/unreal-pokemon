@@ -21,7 +21,7 @@ class POKEMONUI_API UPokemonInfoPage : public USummaryScreenPage {
     GENERATED_BODY()
 
   protected:
-    void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
+    void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
     /**
      * Slot the supplied type icon into the widget.

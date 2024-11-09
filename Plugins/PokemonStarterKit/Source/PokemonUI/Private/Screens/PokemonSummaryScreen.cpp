@@ -50,8 +50,5 @@ UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
 }
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
-    NameInfo->Refresh(Pokemon);
     SummaryPages->Refresh(Pokemon);
-    auto Flipbook = USpriteLoader::GetPokemonBattleSprite(Pokemon).TryGet<UPaperFlipbook>().GetPtrOrNull();
-    PokemonSprite->SetFlipbook(Flipbook);
 }

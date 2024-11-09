@@ -3,26 +3,29 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/WidgetSwitcher.h"
+#include "Ranges/Views/Enumerate.h"
+#include "Ranges/Views/Ints.h"
+#include "Ranges/Algorithm/ForEach.h"
 
 void USummaryPages::NativeConstruct() {
     Super::NativeConstruct();
     CastChecked<USummaryScreenPage>(PageSwitcher->GetActiveWidget())->OnPageShown();
 }
 
-void USummaryPages::SetPokemon(const TScriptInterface<IPokemon> &NewPokemon) {
-    CurrentPokemon = NewPokemon;
-    Refresh(CurrentPokemon);
+void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
+    // clang-format off
+    UE::Ranges::Ints(PageSwitcher->GetNumWidgets()) |
+        UE::Ranges::Map(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
+        UE::Ranges::CastType<USummaryScreenPage> |
+        UE::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
+    // clang-format on
     if (OnPokemonChange.IsBound()) {
-        OnPokemonChange.Execute(CurrentPokemon);
+        OnPokemonChange.Execute(GetPokemon());
     }
 }
 
 FOnPokemonChange &USummaryPages::GetOnPokemonChange() {
     return OnPokemonChange;
-}
-
-const TScriptInterface<IPokemon> &USummaryPages::GetCurrentPokemon() const {
-    return CurrentPokemon;
 }
 
 void USummaryPages::SetPage(int32 PageIndex) {

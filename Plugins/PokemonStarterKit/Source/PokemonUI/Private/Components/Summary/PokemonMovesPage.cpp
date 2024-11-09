@@ -16,9 +16,8 @@ void UPokemonMovesPage::NativeConstruct() {
     InspectActionHandler = RegisterUIActionBinding(BindArgs);
 }
 
-void UPokemonMovesPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
-    Super::RefreshInfo_Implementation(Pokemon);
-    DrawPokemonMoves.Broadcast(Pokemon);
+void UPokemonMovesPage::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
+    DrawPokemonMoves.Broadcast(NewPokemon);
 }
 
 void UPokemonMovesPage::OnPageShown() {

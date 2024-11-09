@@ -19,11 +19,9 @@ FCharacteristicList::FCharacteristicList(TArray<FText> &&Characteristics)
     : Characteristics(std::move(Characteristics)) {
 }
 
-void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) {
-    Super::RefreshInfo_Implementation(Pokemon);
-
+void UTrainerMemoPage::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     TArray<FText> Lines;
-    auto StatBlock = Pokemon->GetStatBlock();
+    auto StatBlock = NewPokemon->GetStatBlock();
     bool bShowNature = ShowNature();
     if (bShowNature) {
         auto NatureName = StatBlock->GetNature().RealName;
@@ -32,7 +30,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
 
     auto EmplaceDate = [this, &Lines](const FDateTime &D) { Lines.Emplace(FormatDate(D)); };
 
-    auto ObtainedInformation = Pokemon->GetObtainedInformation();
+    auto ObtainedInformation = NewPokemon->GetObtainedInformation();
     ObtainedInformation->GetTimeReceived() | UE::Optionals::IfPresent(EmplaceDate);
 
     auto TextCheck = [this](const FText &Text) { return Text.IsEmptyOrWhitespace() ? UnknownObtainLocation : Text; };
@@ -64,7 +62,7 @@ void UTrainerMemoPage::RefreshInfo_Implementation(const TScriptInterface<IPokemo
     if (bShowNature) {
         FName BestStat;
         int32 BestIV = 0;
-        auto StartPoint = static_cast<int32>(Pokemon->GetPersonalityValue() % StatsOrder.Num());
+        auto StartPoint = static_cast<int32>(NewPokemon->GetPersonalityValue() % StatsOrder.Num());
         for (int i = 0; i < StatsOrder.Num(); i++) {
             if (auto Stat = StatsOrder[(i + StartPoint) % StatsOrder.Num()];
                 BestStat.IsNone() || StatBlock->GetStat(Stat)->GetIV() > StatBlock->GetStat(BestStat)->GetIV()) {
