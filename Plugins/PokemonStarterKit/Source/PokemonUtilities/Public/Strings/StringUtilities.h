@@ -49,5 +49,30 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Conjunction))
     static FText GenerateList(const TArray<FText> &Items, const FText &Conjunction, bool bOxfordComma = true);
 
+    /**
+     * Converts an FName object to a shared pointer of FString.
+     *
+     * @param Name The FName object to be converted.
+     * @return A shared pointer to the resulting FString.
+     */
     static TSharedPtr<FString> NameToStringPtr(FName Name);
+
+    /**
+     * Formats a given DateTime object into a string based on the specified format.
+     *
+     * @param DateTime The FDateTime object to be formatted.
+     * @param Format The format string to use for formatting the DateTime. Default is "%b %e, %Y".
+     * @return The formatted date as a string.
+     */
+    UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = "DateTime,Format"))
+    static FString FormatDate(const FDateTime &DateTime, const FString & Format = TEXT("%b %e, %Y"));
+
+    /**
+     * Joins an array of FText lines into a single FText separated by newline characters.
+     *
+     * @param Lines The array of FText lines to join.
+     * @return A single FText containing all the lines joined with newline characters.
+     */
+    UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Delimiter))
+    static FText JoinText(const TArray<FText>& Lines);
 };
