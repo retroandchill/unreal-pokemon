@@ -6,6 +6,7 @@
 #include "GameplayTagContainer.h"
 #include "Serialization/SaveSerializationUtils.h"
 #include "UObject/Interface.h"
+
 #include "SaveableSubsystem.generated.h"
 
 struct FGameplayTagContainer;
@@ -25,7 +26,7 @@ class ENHANCEDSAVEGAME_API ISaveableSubsystem {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     /**
      * Creates the save data for a given UEnhancedSaveGame instance.
      *
@@ -36,7 +37,7 @@ public:
      * @param SaveTags Any tags that were passed when the save was initiated
      */
     UFUNCTION(BlueprintNativeEvent, Category = Saving)
-    void CreateSaveData(UEnhancedSaveGame* SaveGame, const FGameplayTagContainer& SaveTags) const;
+    void CreateSaveData(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer &SaveTags) const;
 
     /**
      * Loads saved data into an object.
@@ -48,6 +49,5 @@ public:
      * @param LoadTags Any tags that were passed when the load was initiated
      */
     UFUNCTION(BlueprintNativeEvent, Category = Saving)
-    void LoadSaveData(const UEnhancedSaveGame* SaveGame, const FGameplayTagContainer& LoadTags);
-
+    void LoadSaveData(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer &LoadTags);
 };

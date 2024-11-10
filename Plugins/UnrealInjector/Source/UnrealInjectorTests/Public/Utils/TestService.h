@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UnrealInjector/Public/Services/Service.h"
+
 #include "TestService.generated.h"
 
 /**
@@ -13,8 +14,7 @@ UCLASS()
 class UNREALINJECTORTESTS_API UTestService : public UService {
     GENERATED_BODY()
 
-public:
-    UPROPERTY(BlueprintReadWrite, Category="Test")
+  public:
+    UPROPERTY(BlueprintReadWrite, Category = "Test")
     int32 TestValue = 42;
-
 };

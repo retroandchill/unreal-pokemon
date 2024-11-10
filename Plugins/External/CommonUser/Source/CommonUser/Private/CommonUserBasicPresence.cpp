@@ -84,7 +84,6 @@ void UCommonUserBasicPresence::OnNotifySessionInformationChanged(ECommonSessionI
 
         UE::Online::IOnlineServicesPtr OnlineServices = UE::Online::GetServices(GetWorld());
         check(OnlineServices)
-        ;
         UE::Online::IPresencePtr Presence = OnlineServices->GetPresenceInterface();
         if (Presence) {
             for (const ULocalPlayer *LocalPlayer : GetGameInstance()->GetLocalPlayers()) {

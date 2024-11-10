@@ -8,6 +8,5 @@ void UStorageInfoPanel::SetSelectedPokemon_Implementation(const TScriptInterface
     CurrentPokemon = Pokemon;
     auto CurrentWidget = StorageInfoSwitcher->GetActiveWidget();
     check(CurrentWidget->Implements<UStorageInfoPage>())
-    ;
     IStorageInfoPage::Execute_DisplayInfo(CurrentWidget, Pokemon);
 }

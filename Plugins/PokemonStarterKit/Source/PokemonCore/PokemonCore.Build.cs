@@ -30,6 +30,7 @@ public class PokemonCore : ModuleRules
 				"Slate",
 				"SlateCore", 
 				"Boost",
+				"UnrealRanges"
 			}
 		);
 	}

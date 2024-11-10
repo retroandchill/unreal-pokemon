@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Serialization.h"
-#include <variant>
 #include <array>
+#include <variant>
 
 namespace UE::Ranges {
 
@@ -22,7 +22,7 @@ namespace UE::Ranges {
      */
     template <typename T>
         requires CanSerialize<T>
-    void SerializeData(FArchive& Archive, T& Data) {
+    void SerializeData(FArchive &Archive, T &Data) {
         Archive << Data;
     }
 
@@ -39,12 +39,12 @@ namespace UE::Ranges {
      */
     template <typename T, typename... A>
         requires CanSerialize<T> && (std::same_as<T, A> || ...)
-    void LoadVariantData(FArchive& Archive, std::variant<A...>& Variant) {
+    void LoadVariantData(FArchive &Archive, std::variant<A...> &Variant) {
         Variant.template emplace<T>();
         SerializeData(Archive, std::get<T>(Variant));
     }
-    
-}
+
+} // namespace UE::Ranges
 
 /**
  * Stream operator overload for saving and loading data from std::variant.
@@ -55,18 +55,18 @@ namespace UE::Ranges {
  * @return The archive that we are saving to/loading from
  */
 template <typename... T>
-        requires (UE::Ranges::CanSerialize<T> && ...)
-FArchive& operator<<(FArchive& Archive, std::variant<T...>& Variant) {
+    requires(UE::Ranges::CanSerialize<T> && ...)
+FArchive &operator<<(FArchive &Archive, std::variant<T...> &Variant) {
     auto TypeIndex = static_cast<size_t>(INDEX_NONE);
     if (Archive.IsLoading()) {
-        static constexpr std::array LoadFunctions = { &UE::Ranges::LoadVariantData<T, T...>... };
+        static constexpr std::array LoadFunctions = {&UE::Ranges::LoadVariantData<T, T...>...};
         Archive << TypeIndex;
         check(TypeIndex < LoadFunctions.size())
         LoadFunctions[TypeIndex](Archive, Variant);
     } else {
         TypeIndex = Variant.index();
         Archive << TypeIndex;
-        std::visit([&Archive] <typename U> (U& Data) { UE::Ranges::SerializeData<U>(Archive, Data); }, Variant);
+        std::visit([&Archive]<typename U>(U &Data) { UE::Ranges::SerializeData<U>(Archive, Data); }, Variant);
     }
 
     return Archive;

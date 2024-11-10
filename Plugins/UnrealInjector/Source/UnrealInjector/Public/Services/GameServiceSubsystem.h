@@ -3,17 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Service.h"
 #include "Kismet/GameplayStatics.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Optional/CastType.h"
 #include "Ranges/Optional/GetValue.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Pointers/SoftObjectRef.h"
-#include "Ranges/Views/MapValue.h"
+#include "Ranges/RangeConcepts.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/TryCast.h"
+#include "Service.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "GameServiceSubsystem.generated.h"
 
 /**
@@ -23,8 +24,8 @@ UCLASS()
 class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
-    void Initialize(FSubsystemCollectionBase& Collection) override;
+  public:
+    void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
 
     /**
@@ -36,7 +37,7 @@ public:
      */
     template <typename T>
         requires std::derived_from<T, UService>
-    T& GetService(const TSubclassOf<T>& ServiceClass = T::StaticClass()) const {
+    T &GetService(const TSubclassOf<T> &ServiceClass = T::StaticClass()) const {
         // clang-format off
         return UE::Optionals::OfNullable(Services.Find(ServiceClass)) |
                UE::Optionals::Map(&TObjectPtr<UService>::Get) |
@@ -60,7 +61,7 @@ public:
      */
     template <typename T>
         requires std::derived_from<T, UService>
-    static T& GetService(const UObject* WorldContext, const TSubclassOf<T> &ServiceClass = T::StaticClass()) {
+    static T &GetService(const UObject *WorldContext, const TSubclassOf<T> &ServiceClass = T::StaticClass()) {
         auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
         check(IsValid(GameInstance))
         auto Subsystem = GameInstance->GetSubsystem<UGameServiceSubsystem>();
@@ -75,9 +76,8 @@ public:
      * @return A pointer to the service instance.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly,
-        meta = (AutoCreateRefTerm = "ServiceClass", WorldContext = WorldContext))
-    static UService* StaticGetService(const UObject* WorldContext, const TSubclassOf<UService> &ServiceClass);
-    
+              meta = (AutoCreateRefTerm = "ServiceClass", WorldContext = WorldContext))
+    static UService *StaticGetService(const UObject *WorldContext, const TSubclassOf<UService> &ServiceClass);
 
     /**
      * Retrieves a list of services of the specified type.
@@ -95,8 +95,7 @@ public:
         // clang-format on
     }
 
-private:
+  private:
     UPROPERTY()
     TMap<TSubclassOf<UService>, TObjectPtr<UService>> Services;
-
 };

@@ -49,6 +49,9 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
                   UE::Ranges::Map(this, &USummaryTabWidget::CreatePageButton) |
                   UE::Ranges::ToArray;
     // clang-format on
+    if (SummaryPages->GetPages().IsEmpty()) {
+        return;
+    }
 
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
 }

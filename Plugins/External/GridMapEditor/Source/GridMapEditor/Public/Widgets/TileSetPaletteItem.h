@@ -24,10 +24,10 @@ class GRIDMAPEDITOR_API FTileSetPaletteItemModel : public TSharedFromThis<FTileS
 class GRIDMAPEDITOR_API STileSetItemTile : public STableRow<UGridMapTileSet *> {
   public:
     SLATE_BEGIN_ARGS(STileSetItemTile) {
-    }
-    SLATE_END_ARGS()
+        }
+        SLATE_END_ARGS()
 
-    void Construct(const FArguments &InArgs, const FGridMapEditorMode &EditorMode,
-                   TSharedRef<STableViewBase> InOwnerTableView, TSharedPtr<FAssetThumbnailPool> InThumbnailPool,
-                   UGridMapTileSet *TileSet);
-};
+        void Construct(const FArguments &InArgs, const FGridMapEditorMode &EditorMode,
+                       TSharedRef<STableViewBase> InOwnerTableView, TSharedPtr<FAssetThumbnailPool> InThumbnailPool,
+                       UGridMapTileSet *TileSet);
+    };

@@ -67,6 +67,5 @@ namespace UE::Ranges {
 
 #define CUSTOM_THUNK_STUB(RetType, Method, ...)                                                                        \
     RetType Method(__VA_ARGS__) {                                                                                      \
-        check(false);                                                                                                  \
-        UE::Ranges::Unreachable();                                                                                     \
+        check(false) UE::Ranges::Unreachable();                                                                        \
     }

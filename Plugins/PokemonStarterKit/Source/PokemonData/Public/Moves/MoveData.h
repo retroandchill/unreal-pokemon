@@ -99,7 +99,12 @@ struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
     /**
      * Constant for a move that has variable power.
      */
-    static constexpr int32 VARIABLE_POWER = 1;
+    static constexpr int32 VariablePower = 1;
+
+    /**
+     * Constant for a move that always hits.
+     */
+    static constexpr int32 AlwaysHitsAccuracy = 0;
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))

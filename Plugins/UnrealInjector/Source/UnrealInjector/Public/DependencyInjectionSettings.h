@@ -18,7 +18,7 @@ class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSetting
   public:
     UPROPERTY(EditDefaultsOnly, Config, Category = DependencyInjection, meta = (ContentDir))
     TArray<FDirectoryPath> BlueprintServiceScan;
-    
+
     /**
      * The map of interface types to implementation classes
      */

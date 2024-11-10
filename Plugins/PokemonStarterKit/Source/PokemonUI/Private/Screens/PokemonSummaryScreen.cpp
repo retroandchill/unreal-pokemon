@@ -3,12 +3,9 @@
 #include "Screens/PokemonSummaryScreen.h"
 #include "CommonButtonBase.h"
 #include "Components/Common/PokemonSelectionPaneBase.h"
-#include "Components/Summary/SummaryNameInfo.h"
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/Summary/SummaryTabWidget.h"
-#include "Graphics/SpriteLoader.h"
-#include "PaperFlipbookUserWidget.h"
 #include "Utilities/RPGMenuUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSummaryScreen)
@@ -50,8 +47,5 @@ UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
 }
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
-    NameInfo->Refresh(Pokemon);
-    SummaryPages->Refresh(Pokemon);
-    auto Flipbook = USpriteLoader::GetPokemonBattleSprite(Pokemon).TryGet<UPaperFlipbook>().GetPtrOrNull();
-    PokemonSprite->SetFlipbook(Flipbook);
+    SummaryPages->SetPokemon(Pokemon);
 }

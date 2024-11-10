@@ -2,6 +2,10 @@
 
 #include "Components/RPGButtonBase.h"
 
+URPGButtonBase::URPGButtonBase() {
+    SetIsSelectable(true);
+}
+
 void URPGButtonBase::NativePreConstruct() {
     Super::NativePreConstruct();
     UpdateVisibility();

@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Services/K2Node_GetServiceClass.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
-#include "KismetCompiler.h"
 #include "Kismet2/BlueprintEditorUtils.h"
+#include "KismetCompiler.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalClosure.h"
@@ -32,8 +31,8 @@ void UK2Node_GetServiceClass::AllocateDefaultPins() {
 
     // Result pin
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object,
-        IsValid(ServiceClass) ? static_cast<UClass*>(ServiceClass) : UService::StaticClass(),
-        UEdGraphSchema_K2::PN_ReturnValue);
+              IsValid(ServiceClass) ? static_cast<UClass *>(ServiceClass) : UService::StaticClass(),
+              UEdGraphSchema_K2::PN_ReturnValue);
 
     Super::AllocateDefaultPins();
 }
@@ -107,7 +106,7 @@ void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext
 
     if (GetBlueprint()->ParentClass->HasMetaDataHierarchical(FBlueprintMetadata::MD_ShowWorldContextPin)) {
         CompilerContext.MovePinLinksToIntermediate(*FindPinChecked(WorldContext_ParamName),
-            *CallGetNode->FindPinChecked(WorldContext_ParamName));
+                                                   *CallGetNode->FindPinChecked(WorldContext_ParamName));
     }
 
     if (IsValid(ServiceClass)) {
@@ -115,7 +114,7 @@ void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext
         ClassPin->DefaultObject = ServiceClass;
     } else {
         CompilerContext.MovePinLinksToIntermediate(*FindPinChecked(Class_ParamName),
-            *CallGetNode->FindPinChecked(Class_ParamName));
+                                                   *CallGetNode->FindPinChecked(Class_ParamName));
     }
 
     auto SourceReturnPin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);

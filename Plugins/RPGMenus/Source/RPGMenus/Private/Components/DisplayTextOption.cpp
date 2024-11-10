@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/DisplayTextOption.h"
-#include "Components/DisplayText.h"
+#include "CommonTextBlock.h"
 
 void UDisplayTextOption::NativePreConstruct() {
     Super::NativePreConstruct();
@@ -20,6 +20,6 @@ void UDisplayTextOption::SetText(const FText &NewText) {
 void UDisplayTextOption::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
     if (DisplayText != nullptr) {
-        DisplayText->SetTextStyle(GetCurrentTextStyleClass());
+        DisplayText->SetStyle(GetCurrentTextStyleClass());
     }
 }

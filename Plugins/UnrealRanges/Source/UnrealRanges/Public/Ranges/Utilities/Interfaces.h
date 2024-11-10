@@ -14,4 +14,4 @@ namespace UE::Ranges {
     template <typename T>
         requires std::derived_from<std::decay_t<T>, FScriptInterface> || UnrealInterface<std::remove_pointer_t<T>>
     using TInterfaceType = std::decay_t<decltype(*std::declval<T>())>;
-}
+} // namespace UE::Ranges

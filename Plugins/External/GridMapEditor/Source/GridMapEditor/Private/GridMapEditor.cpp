@@ -78,7 +78,6 @@ void FGridMapEditorModule::RegisterAssetTypeAction(IAssetTools &AssetTools, TSha
 void FGridMapEditorModule::RegisterCustomPropertyTypeLayout(
     FName PropertyTypeName, FOnGetPropertyTypeCustomizationInstance PropertyTypeLayoutDelegate) {
     check(PropertyTypeName != NAME_None)
-    ;
 
     RegisteredPropertyTypes.Add(PropertyTypeName);
 

@@ -61,7 +61,6 @@ bool IsValid() const {
 T &LoadSynchronous() const {
     auto Result = Ptr.LoadSynchronous();
     check(::IsValid(Result))
-    ;
     return *Result;
 }
 

@@ -123,7 +123,6 @@ void UK2Node_MakeVariantObjectStruct::AddMenuOptionsForStruct(FBlueprintActionDa
     auto Struct = Registration.GetStructType();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
     check(Spawner != nullptr)
-    ;
     Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Struct);
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

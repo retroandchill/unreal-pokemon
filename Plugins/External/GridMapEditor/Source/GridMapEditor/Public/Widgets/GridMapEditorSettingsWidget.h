@@ -12,22 +12,22 @@ class FGridMapEditorMode;
 class GRIDMAPEDITOR_API SGridMapEditorSettingsWidget : public SCompoundWidget {
   public:
     SLATE_BEGIN_ARGS(SGridMapEditorSettingsWidget) {
-    }
-    SLATE_END_ARGS()
+        }
+        SLATE_END_ARGS()
 
-  public:
-    void Construct(const FArguments &InArgs, FGridMapEditorUISettings *GridMapUISettings,
-                   FGridMapEditorMode *GridMapEditorMode);
+      public:
+        void Construct(const FArguments &InArgs, FGridMapEditorUISettings *GridMapUISettings,
+                       FGridMapEditorMode *GridMapEditorMode);
 
-  private:
-    EVisibility GetVisibility_SettingsTab() const;
+      private:
+        EVisibility GetVisibility_SettingsTab() const;
 
-    void OnCheckStateChanged_DrawUpdatedTiles(ECheckBoxState InState);
-    ECheckBoxState GetCheckState_DrawUpdatedTiles() const;
+        void OnCheckStateChanged_DrawUpdatedTiles(ECheckBoxState InState);
+        ECheckBoxState GetCheckState_DrawUpdatedTiles() const;
 
-    FReply OnRebuildAllTiles();
+        FReply OnRebuildAllTiles();
 
-  private:
-    FGridMapEditorMode *EditorMode;
-    FGridMapEditorUISettings *UISettings;
-};
+      private:
+        FGridMapEditorMode *EditorMode;
+        FGridMapEditorUISettings *UISettings;
+    };

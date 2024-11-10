@@ -3,7 +3,7 @@
 #include "Components/Common/PokemonActionBoundButton.h"
 #include "CommonActionWidget.h"
 #include "CommonInputSubsystem.h"
-#include "Components/DisplayText.h"
+#include "CommonTextBlock.h"
 #include "Input/UIActionBinding.h"
 
 void UPokemonActionBoundButton::NativeConstruct() {
@@ -39,7 +39,7 @@ void UPokemonActionBoundButton::NativeOnCurrentTextStyleChanged() {
     Super::NativeOnCurrentTextStyleChanged();
 
     if (Text_ActionName != nullptr) {
-        Text_ActionName->SetTextStyle(GetCurrentTextStyleClass());
+        Text_ActionName->SetStyle(GetCurrentTextStyleClass());
     }
 }
 
@@ -75,7 +75,7 @@ void UPokemonActionBoundButton::UpdateInputActionWidget() {
     }
 }
 
-UDisplayText *UPokemonActionBoundButton::GetActionNameText() const {
+UCommonTextBlock *UPokemonActionBoundButton::GetActionNameText() const {
     return Text_ActionName;
 }
 

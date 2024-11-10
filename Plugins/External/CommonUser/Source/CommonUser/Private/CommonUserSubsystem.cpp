@@ -297,10 +297,8 @@ void UCommonUserSubsystem::CreateOnlineContexts() {
 #if COMMONUSER_OSSV1
     DefaultContextInternal->OnlineSubsystem = Online::GetSubsystem(GetWorld());
     check(DefaultContextInternal->OnlineSubsystem)
-    ;
     DefaultContextInternal->IdentityInterface = DefaultContextInternal->OnlineSubsystem->GetIdentityInterface();
     check(DefaultContextInternal->IdentityInterface.IsValid())
-    ;
 
     IOnlineSubsystem *PlatformSub = IOnlineSubsystem::GetByPlatform();
 
@@ -310,15 +308,12 @@ void UCommonUserSubsystem::CreateOnlineContexts() {
         PlatformContextInternal->OnlineSubsystem = PlatformSub;
         PlatformContextInternal->IdentityInterface = PlatformSub->GetIdentityInterface();
         check(PlatformContextInternal->IdentityInterface.IsValid())
-        ;
     }
 #else
     DefaultContextInternal->OnlineServices = GetServices(GetWorld(), EOnlineServices::Default);
     check(DefaultContextInternal->OnlineServices)
-    ;
     DefaultContextInternal->AuthService = DefaultContextInternal->OnlineServices->GetAuthInterface();
     check(DefaultContextInternal->AuthService)
-    ;
 
     UE::Online::IOnlineServicesPtr PlatformServices = GetServices(GetWorld(), EOnlineServices::Platform);
     if (PlatformServices && DefaultContextInternal->OnlineServices != PlatformServices) {
@@ -326,7 +321,6 @@ void UCommonUserSubsystem::CreateOnlineContexts() {
         PlatformContextInternal->OnlineServices = PlatformServices;
         PlatformContextInternal->AuthService = PlatformContextInternal->OnlineServices->GetAuthInterface();
         check(PlatformContextInternal->AuthService)
-        ;
     }
 #endif
 
@@ -499,7 +493,6 @@ void UCommonUserSubsystem::BindOnlineDelegatesOSSv1() {
     FOnlineContextCache *ServiceContext = GetContextCache(ServiceType);
     FOnlineContextCache *PlatformContext = GetContextCache(PlatformType);
     check(ServiceContext && ServiceContext->OnlineSubsystem && PlatformContext && PlatformContext->OnlineSubsystem)
-    ;
     // Connection delegates need to listen for both systems
 
     ServiceContext->OnlineSubsystem->AddOnConnectionStatusChangedDelegate_Handle(
@@ -561,7 +554,6 @@ bool UCommonUserSubsystem::QueryUserPrivilegeOSSv1(FOnlineContextCache *System, 
 
     FUniqueNetIdRepl CurrentId = GetLocalUserNetId(PlatformUser, Request->CurrentContext);
     check(CurrentId.IsValid())
-    ;
     IOnlineIdentity::FOnGetUserPrivilegeCompleteDelegate Delegate =
         IOnlineIdentity::FOnGetUserPrivilegeCompleteDelegate::CreateUObject(
             this, &UCommonUserSubsystem::HandleCheckPrivilegesComplete, Request->DesiredPrivilege, Request->UserInfo,
@@ -602,7 +594,6 @@ void UCommonUserSubsystem::BindOnlineDelegatesOSSv2() {
     FOnlineContextCache *ServiceContext = GetContextCache(ServiceType);
     FOnlineContextCache *PlatformContext = GetContextCache(PlatformType);
     check(ServiceContext && ServiceContext->OnlineServices && PlatformContext && PlatformContext->OnlineServices)
-    ;
 
     ServiceContext->LoginStatusChangedHandle = ServiceContext->AuthService->OnLoginStatusChanged().Add(
         this, &ThisClass::HandleAuthLoginStatusChanged, ServiceType);
@@ -627,7 +618,6 @@ void UCommonUserSubsystem::BindOnlineDelegatesOSSv2() {
 void UCommonUserSubsystem::CacheConnectionStatus(ECommonUserOnlineContext Context) {
     FOnlineContextCache *ContextCache = GetContextCache(Context);
     check(ContextCache)
-    ;
 
     EOnlineServicesConnectionStatus ConnectionStatus = EOnlineServicesConnectionStatus::NotConnected;
     if (IConnectivityPtr ConnectivityInterface = ContextCache->OnlineServices->GetConnectivityInterface()) {
@@ -1184,7 +1174,6 @@ void UCommonUserSubsystem::HandleLoginForUserInitialize(const UCommonUserInfo *U
                                                         FCommonUserInitializeParams Params) {
     UGameInstance *GameInstance = GetGameInstance();
     check(GameInstance)
-    ;
     FTimerManager &TimerManager = GameInstance->GetTimerManager();
     TOptional<FOnlineErrorType> Error = InError; // Copy so we can reset on handled errors
 
@@ -1634,7 +1623,6 @@ void UCommonUserSubsystem::HandleCheckPrivilegesComplete(const FUniqueNetId &Use
 
     FOnlineContextCache *ContextCache = GetContextCache(Context);
     check(ContextCache)
-    ;
 
     // If this returns disconnected, update the connection status
     if (UserResult == ECommonUserPrivilegeResult::NetworkConnectionUnavailable) {
@@ -1816,7 +1804,6 @@ void UCommonUserSubsystem::UpdateUserPrivilegeResult(UCommonUserInfo *UserInfo, 
                                                      ECommonUserPrivilegeResult Result,
                                                      ECommonUserOnlineContext Context) {
     check(UserInfo)
-    ;
 
     ECommonUserAvailability OldAvailability = UserInfo->GetPrivilegeAvailability(Privilege);
 

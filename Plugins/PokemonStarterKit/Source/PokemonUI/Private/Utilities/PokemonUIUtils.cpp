@@ -3,7 +3,9 @@
 #include "Utilities/PokemonUIUtils.h"
 #include "Components/DisplayText.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "Pokemon/Pokemon.h"
+#include "Ranges/Utilities/Unreachable.h"
 
 enum class EPokemonGender : uint8;
 
@@ -37,17 +39,17 @@ void UPokemonUIUtils::SetBarValues(TObjectPtr<UProgressBar> &ProgressBar, float 
     ProgressBar->SetPercent(FMath::Clamp(CurrentValue / MaxValue, 0, 1));
 }
 
-void UPokemonUIUtils::SetPokemonGenderText(EPokemonGender Gender, UDisplayText *TextWidget) {
+FText UPokemonUIUtils::GetPokemonGenderText(EPokemonGender Gender) {
     using enum EPokemonGender;
     switch (Gender) {
     case Male:
-        TextWidget->SetText(FText::FromStringView(TEXT("♂")));
-        break;
+        return FText::FromStringView(TEXT("♂"));
     case Female:
-        TextWidget->SetText(FText::FromStringView(TEXT("♀")));
-        break;
+        return FText::FromStringView(TEXT("♀"));
     case Genderless:
-        TextWidget->SetText(FText::FromStringView(TEXT("")));
-        break;
+        return FText::FromStringView(TEXT(""));
     }
+
+    check(false)
+    UE::Ranges::Unreachable();
 }

@@ -6,9 +6,12 @@
 
 #include "WidgetUtilities.generated.h"
 
+class USizeBox;
+class UCommonButtonBase;
 class URichTextBlock;
 class UCommonTextStyle;
 class UImage;
+
 /**
  * Utility class for Widget related operations
  */

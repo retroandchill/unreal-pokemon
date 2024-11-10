@@ -15,7 +15,7 @@ const TScriptInterface<IMove> &UMovePanel::GetMove() {
 
 void UMovePanel::SetMove(const TScriptInterface<IMove> &MoveIn) {
     Move = MoveIn;
-    OnMoveSet();
+    OnMoveSet(MoveIn);
 }
 
 bool UMovePanel::IsMoveToLearn() const {
@@ -26,6 +26,7 @@ void UMovePanel::SetIsMoveToLearn(bool bIsBeingLearned) {
     bIsMoveToLearn = bIsBeingLearned;
 }
 
+/*
 UObject *UMovePanel::GetTypeIcon_Implementation() {
     check(Move != nullptr)
     // clang-format off
@@ -50,3 +51,4 @@ void UMovePanel::OnMoveSet() {
         TypeIcon->SetVisibility(Hidden);
     }
 }
+*/
