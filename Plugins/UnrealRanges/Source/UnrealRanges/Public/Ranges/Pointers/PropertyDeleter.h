@@ -60,7 +60,6 @@ namespace UE::Ranges {
         void operator()(T *Data) {
             if (Data != nullptr) {
                 check(Property != nullptr)
-                ;
                 Property->DestroyAndFreeValue(Data);
             }
         }

@@ -12,7 +12,7 @@
 
 struct FPokemonDTO;
 // This class does not need to be modified.
-UINTERFACE(BlueprintType, NotBlueprintable)
+UINTERFACE(NotBlueprintable, BlueprintType)
 class UObtainedBlock : public UInterface {
     GENERATED_BODY()
 };

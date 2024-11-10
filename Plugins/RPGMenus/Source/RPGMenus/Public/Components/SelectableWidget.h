@@ -207,6 +207,12 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     int32 Index = INDEX_NONE;
 
     /**
+     * Should options be selection when the mouse hovers over it?
+     */
+    UPROPERTY(EditAnywhere, Category = Selection)
+    bool bSelectOptionOnHover = true;
+
+    /**
      * The child buttons that are part of this object
      */
     UPROPERTY()

@@ -60,11 +60,11 @@ bool SummaryPagesTest::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(1, SummaryPages->GetCurrentPageIndex());
 
     UE_CHECK_EQUAL(Trainer->GetParty()[0]->GetSpecies().ID.ToString(),
-                   SummaryPages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+                   SummaryPages->GetPokemon()->GetSpecies().ID.ToString());
     PokemonSelection->SetIndex(1);
     PokemonSelection->GetSelectedOption()->SetIsSelected(true);
     UE_CHECK_EQUAL(Trainer->GetParty()[1]->GetSpecies().ID.ToString(),
-                   SummaryPages->GetCurrentPokemon()->GetSpecies().ID.ToString());
+                   SummaryPages->GetPokemon()->GetSpecies().ID.ToString());
 
     return true;
 }

@@ -9,7 +9,6 @@ TScriptInterface<IBattleSide> FBattleInfo::CreatePlayerSide(const TScriptInterfa
                                                             const FTransform &Transform) const {
     auto World = Battle.GetObject()->GetWorld();
     check(World != nullptr)
-    ;
 
     auto SideActor = World->SpawnActor(SideClass, &Transform);
     SideActor->AttachToActor(CastChecked<AActor>(Battle.GetObject()),

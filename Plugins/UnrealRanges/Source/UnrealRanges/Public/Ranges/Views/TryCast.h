@@ -23,11 +23,14 @@ namespace UE::Ranges {
                 return Range | Map(&CastInterface<T>) | FilterValid;
             } else if constexpr (UObjectPointer<S> && UnrealInterface<T>) {
                 return Range | Filter([](S Object) { return Object->template Implements<typename T::UClassType>(); }) |
-                    Map([](S Object) { return TScriptInterface<T>(Object); });
+                       Map([](S Object) { return TScriptInterface<T>(Object); });
             } else if constexpr (std::is_base_of_v<FScriptInterface, S> && UnrealInterface<T>) {
                 return Range | Filter([](const FScriptInterface &Interface) {
-                    return Interface.GetObject()->Implements<typename T::UClassType>();
-                }) | Map([](const FScriptInterface &Interface) { return TScriptInterface<T>(Interface.GetObject()); });
+                           return Interface.GetObject()->Implements<typename T::UClassType>();
+                       }) |
+                       Map([](const FScriptInterface &Interface) {
+                           return TScriptInterface<T>(Interface.GetObject());
+                       });
             }
 
             Unreachable();
@@ -38,10 +41,10 @@ namespace UE::Ranges {
      * Cast the type to another type. This will automatically handle the conversion between script interfaces and
      * UObjects without the need to explicitly specify that. Any casts that fail are automatically filtered out from
      * the resultant view.
-     * 
+     *
      * @tparam T The type to cast to.
      */
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
     inline constexpr ranges::views::view_closure<TTryCast<T>> TryCast;
-}
+} // namespace UE::Ranges

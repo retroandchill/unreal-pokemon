@@ -10,7 +10,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetServiceInBlueprint, "Unit Tests.Dependen
 
 bool TestGetServiceInBlueprint::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto UtilityClass = LoadClass<UObject>(nullptr, TEXT("/UnrealInjector/Tests/Resources/TestContextTestObject.TestContextTestObject_C"));
+    auto UtilityClass = LoadClass<UObject>(
+        nullptr, TEXT("/UnrealInjector/Tests/Resources/TestContextTestObject.TestContextTestObject_C"));
     UE_ASSERT_NOT_NULL(UtilityClass);
     UE_ASSERT_TRUE(UtilityClass->ImplementsInterface(UTestServiceBlueprintNodeExecutor::StaticClass()));
     auto Object = NewObject<UObject>(World.Get(), UtilityClass);

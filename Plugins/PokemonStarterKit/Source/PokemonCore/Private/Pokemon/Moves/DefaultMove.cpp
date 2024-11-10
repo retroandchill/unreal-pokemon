@@ -22,8 +22,12 @@ const FMoveData &UDefaultMove::GetMoveData() const {
     return *Move;
 }
 
-const FText &UDefaultMove::GetDisplayName() const {
+FText UDefaultMove::GetDisplayName() const {
     return GetMoveData().RealName;
+}
+
+FText UDefaultMove::GetMoveDescription() const {
+    return GetMoveData().Description;
 }
 
 FName UDefaultMove::GetType() const {
@@ -38,8 +42,16 @@ int32 UDefaultMove::GetBasePower() const {
     return GetMoveData().Power;
 }
 
+bool UDefaultMove::IsVariablePower() const {
+    return GetBasePower() == FMoveData::VariablePower;
+}
+
 int32 UDefaultMove::GetAccuracy() const {
     return GetMoveData().Accuracy;
+}
+
+bool UDefaultMove::AlwaysHits() const {
+    return GetAccuracy() == FMoveData::AlwaysHitsAccuracy;
 }
 
 int32 UDefaultMove::GetCurrentPP() const {

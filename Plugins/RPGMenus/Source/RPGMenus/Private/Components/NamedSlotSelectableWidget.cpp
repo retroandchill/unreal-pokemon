@@ -31,6 +31,9 @@ void UNamedSlotSelectableWidget::UpdateOptions() {
             continue;
         }
 
+        Child->OnClicked().Clear();
+        Child->OnHovered().Clear();
+
         Child->UpdateVisibility();
         if (!Child->IsVisible()) {
             continue;

@@ -12,8 +12,8 @@ namespace UE::Ranges {
      * @tparam T The targe type for serialization
      */
     template <typename T>
-    concept CanSerialize = requires(FArchive &Archive, T& Data) {
-        { Archive << Data } -> std::same_as<FArchive&>;
+    concept CanSerialize = requires(FArchive &Archive, T &Data) {
+        { Archive << Data } -> std::same_as<FArchive &>;
     };
-    
-}
+
+} // namespace UE::Ranges

@@ -16,12 +16,10 @@ UAdditionalEffectChanceModificationPayload *UAdditionalEffectChanceModificationP
 
 const FAdditionalEffectChanceModificationData &UAdditionalEffectChanceModificationPayload::GetData() const {
     check(Data != nullptr)
-    ;
     return *Data;
 }
 
 void UAdditionalEffectChanceModificationPayload::SetAdditionalEffectChance(float AdditionalEffectChance) const {
     check(Data != nullptr)
-    ;
     Data->AdditionalEffectChance = AdditionalEffectChance;
 }

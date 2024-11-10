@@ -87,7 +87,8 @@ void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
     CurrentLocation = LocationName;
 }
 
-void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const {
+void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame,
+                                                      const FGameplayTagContainer &SaveTags) const {
     auto SaveData = NewObject<UPokemonSaveGame>();
     SaveData->PlayerCharacter = Player->ToDTO();
     SaveData->Bag = Bag->ToDTO();
@@ -110,7 +111,8 @@ void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGam
     SaveGame->AddObjectToSaveGame(Pokemon::Saving::PokemonCoreSaveData, SaveData);
 }
 
-void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& LoadTags) {
+void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame,
+                                                    const FGameplayTagContainer &LoadTags) {
     auto SaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
     Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveData->PlayerCharacter);
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveData->Bag);

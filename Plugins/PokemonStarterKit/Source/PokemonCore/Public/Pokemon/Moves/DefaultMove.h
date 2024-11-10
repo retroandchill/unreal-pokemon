@@ -22,8 +22,11 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
 
     const FMoveData &GetMoveData() const override;
 
-    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
-    const FText &GetDisplayName() const override;
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
+    FText GetDisplayName() const override;
+
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
+    FText GetMoveDescription() const override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     FName GetType() const override;
@@ -35,7 +38,13 @@ class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
     int32 GetBasePower() const override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
+    bool IsVariablePower() const override;
+
+    UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetAccuracy() const override;
+
+    UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
+    bool AlwaysHits() const override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")
     int32 GetCurrentPP() const override;

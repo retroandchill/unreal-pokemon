@@ -28,7 +28,7 @@ UCLASS()
 class UNREALINJECTORBLUEPRINTNODES_API UK2Node_GetServiceClass : public UK2Node {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(const TSubclassOf<UService> &Service);
 
     void AllocateDefaultPins() override;
@@ -43,10 +43,10 @@ public:
     void GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const override;
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
-private:
-    static void AddMenuActionForType(const TSubclassOf<UService>& Type, FBlueprintActionDatabaseRegistrar& ActionRegistrar, UClass* ActionKey);
-    
+  private:
+    static void AddMenuActionForType(const TSubclassOf<UService> &Type,
+                                     FBlueprintActionDatabaseRegistrar &ActionRegistrar, UClass *ActionKey);
+
     UPROPERTY()
     TSubclassOf<UService> ServiceClass;
-
 };

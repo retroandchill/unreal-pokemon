@@ -33,14 +33,14 @@ namespace Pokemon::Assets::Graphics {
     UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, TypeIcons, FImageAsset);
 
     /**
-     * Asset class for typed move panels in battle.
+     * Asset class for type icons.
      */
-    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, TypePanels, UObject);
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, TypeIconsSmall, FImageAsset);
 
     /**
      * Asset class for status effect icons.
      */
-    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, StatusIcons, UObject);
+    UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, StatusIcons, FImageAsset);
 
     /**
      * Asset class for Poké Ball icons on the summary screen.

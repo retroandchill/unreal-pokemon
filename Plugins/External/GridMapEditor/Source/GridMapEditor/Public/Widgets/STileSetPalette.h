@@ -17,39 +17,39 @@ typedef STileView<UGridMapTileSet *> SGridMapTileSetTileView;
 class GRIDMAPEDITOR_API STileSetPalette : public SCompoundWidget {
   public:
     SLATE_BEGIN_ARGS(STileSetPalette) {
-    }
-    SLATE_ARGUMENT(FGridMapEditorMode *, GridMapEditorMode)
-    SLATE_END_ARGS()
+        }
+        SLATE_ARGUMENT(FGridMapEditorMode *, GridMapEditorMode)
+        SLATE_END_ARGS()
 
-    void Construct(const FArguments &InArgs);
-    ~STileSetPalette();
+        void Construct(const FArguments &InArgs);
+        ~STileSetPalette();
 
-  private:
-    TSharedRef<SWidget> GetAddTileSetPicker();
-    TSharedRef<SWidget> BuildPaletteView();
+      private:
+        TSharedRef<SWidget> GetAddTileSetPicker();
+        TSharedRef<SWidget> BuildPaletteView();
 
-    TSharedRef<ITableRow> GenerateTile(UGridMapTileSet *Item, const TSharedRef<STableViewBase> &OwnerTable);
-    void OnSelectionChanged(UGridMapTileSet *Item, ESelectInfo::Type SelectInfo);
+        TSharedRef<ITableRow> GenerateTile(UGridMapTileSet *Item, const TSharedRef<STableViewBase> &OwnerTable);
+        void OnSelectionChanged(UGridMapTileSet *Item, ESelectInfo::Type SelectInfo);
 
-    void UpdatePalette(bool bRebuildItems);
-    EActiveTimerReturnType UpdatePaletteItems(double InCurrentTime, float InDeltaTime);
-    void RefreshPalette();
-    EActiveTimerReturnType RefreshPaletteItems(double InCurrentTime, float InDeltaTime);
+        void UpdatePalette(bool bRebuildItems);
+        EActiveTimerReturnType UpdatePaletteItems(double InCurrentTime, float InDeltaTime);
+        void RefreshPalette();
+        EActiveTimerReturnType RefreshPaletteItems(double InCurrentTime, float InDeltaTime);
 
-    void AddTileSet(const struct FAssetData &AssetData);
-    void OnSearchTextChanged(const FText &InFilterText);
+        void AddTileSet(const struct FAssetData &AssetData);
+        void OnSearchTextChanged(const FText &InFilterText);
 
-  private:
-    TSharedPtr<class SComboButton> AddTileSetCombo;
-    TSharedPtr<class SSearchBox> SearchBoxPtr;
-    TSharedPtr<class FAssetThumbnailPool> ThumbnailPool;
-    TSharedPtr<SGridMapTileSetTileView> TileViewWidget;
+      private:
+        TSharedPtr<class SComboButton> AddTileSetCombo;
+        TSharedPtr<class SSearchBox> SearchBoxPtr;
+        TSharedPtr<class FAssetThumbnailPool> ThumbnailPool;
+        TSharedPtr<SGridMapTileSetTileView> TileViewWidget;
 
-    TArray<UGridMapTileSet *> FilteredItems;
+        TArray<UGridMapTileSet *> FilteredItems;
 
-    bool bItemsNeedRebuild;
-    bool bIsRebuildTimerRegistered;
-    bool bIsRefreshTimerRegistered;
+        bool bItemsNeedRebuild;
+        bool bIsRebuildTimerRegistered;
+        bool bIsRefreshTimerRegistered;
 
-    FGridMapEditorMode *EditorMode;
-};
+        FGridMapEditorMode *EditorMode;
+    };

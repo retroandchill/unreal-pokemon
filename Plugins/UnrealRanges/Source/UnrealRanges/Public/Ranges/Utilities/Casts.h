@@ -146,6 +146,6 @@ namespace UE::Ranges {
      * @return A boolean indicating whether the Class is instantiable.
      *         Returns false if the ClassName starts with "SKEL_" or "REINST_".
      */
-    UNREALRANGES_API bool IsInstantiableClass(const UClass* Class);
+    UNREALRANGES_API bool IsInstantiableClass(const UClass *Class);
 
 } // namespace UE::Ranges

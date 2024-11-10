@@ -3,7 +3,7 @@
 #include "Ranges/Serialization/DataSerialization.h"
 
 BEGIN_DEFINE_SPEC(FTestVariantSerialization, "Unit Tests.Serialization.TestVariantSerialization",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 END_DEFINE_SPEC(FTestVariantSerialization);
 
 void FTestVariantSerialization::Define() {
@@ -28,7 +28,7 @@ void FTestVariantSerialization::Define() {
             Writer << Variant1;
             Reader << Variant2;
             UE_ASSERT_TRUE(Variant1 == Variant2);
-            
+
             return true;
         });
     });

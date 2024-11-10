@@ -1,13 +1,11 @@
 ﻿#include "UnrealInjectorBlueprintNodes.h"
 
-void FUnrealInjectorBlueprintNodesModule::StartupModule()
-{
+void FUnrealInjectorBlueprintNodesModule::StartupModule() {
     // No startup
 }
 
-void FUnrealInjectorBlueprintNodesModule::ShutdownModule()
-{
+void FUnrealInjectorBlueprintNodesModule::ShutdownModule() {
     // No shutdown
 }
-    
+
 IMPLEMENT_MODULE(FUnrealInjectorBlueprintNodesModule, UnrealInjectorBlueprintNodes)

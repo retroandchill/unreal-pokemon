@@ -25,7 +25,7 @@ class POKEMONUI_API UPokemonMovesPage : public USummaryScreenPage {
 
   protected:
     void NativeConstruct() override;
-    void RefreshInfo_Implementation(const TScriptInterface<IPokemon> &Pokemon) override;
+    void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
     void OnPageShown() override;
     void OnPageHidden() override;
 

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Saving/Serialization/EnhancedSaveGame.h"
 
 bool UEnhancedSaveGame::AddObjectToSaveGame(const FGameplayTag &Tag, const TScriptInterface<ISerializable> &Object) {
@@ -12,7 +11,7 @@ bool UEnhancedSaveGame::AddObjectToSaveGame(const FGameplayTag &Tag, const TScri
     return true;
 }
 
-UObject * UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &Class, const FGameplayTag &Tag) const {
+UObject *UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &Class, const FGameplayTag &Tag) const {
     auto SerializedObject = Data.Find(Tag);
     if (SerializedObject == nullptr) {
         return nullptr;
@@ -21,11 +20,12 @@ UObject * UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &
     if (!Class->IsChildOf(SerializedObject->ObjectClass)) {
         return nullptr;
     }
-    
+
     return SerializedObject->DeserializeObject();
 }
 
-bool UEnhancedSaveGame::LoadDataIntoObject(const FGameplayTag &Tag, const TScriptInterface<ISerializable>& TargetObject) const {
+bool UEnhancedSaveGame::LoadDataIntoObject(const FGameplayTag &Tag,
+                                           const TScriptInterface<ISerializable> &TargetObject) const {
     auto SerializedObject = Data.Find(Tag);
     if (!IsValid(TargetObject.GetObject()) || SerializedObject == nullptr) {
         return false;

@@ -57,7 +57,6 @@ void UK2Node_GetVariantValue::AddMenuOptionsForStruct(FBlueprintActionDatabaseRe
     for (auto Classes = Registration.GetValidClasses(); auto Class : Classes) {
         auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
         check(Spawner != nullptr)
-        ;
         Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(Callback, Class, Struct);
         ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
     }

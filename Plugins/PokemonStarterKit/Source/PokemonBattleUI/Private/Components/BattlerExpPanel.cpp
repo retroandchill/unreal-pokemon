@@ -2,6 +2,7 @@
 
 #include "Components/BattlerExpPanel.h"
 #include "Battle/Battlers/Battler.h"
+#include "CommonNumericTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/ProgressBar.h"
 
@@ -58,7 +59,7 @@ void UBattlerExpPanel::UpdateExpBarPercent(float NewPercent) {
 
 void UBattlerExpPanel::OnLevelUp() {
     DisplayedLevel++;
-    LevelText->SetText(FText::FromString(FString::FromInt(DisplayedLevel)));
+    LevelText->SetCurrentValue(static_cast<float>(DisplayedLevel));
     DisplayLevelUp();
 }
 

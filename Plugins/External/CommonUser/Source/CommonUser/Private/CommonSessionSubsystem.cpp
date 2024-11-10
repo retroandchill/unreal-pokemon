@@ -291,11 +291,9 @@ void UCommonSessionSubsystem::BindOnlineDelegates() {
 void UCommonSessionSubsystem::BindOnlineDelegatesOSSv1() {
     IOnlineSubsystem *OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
 
     const IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
     check(SessionInterface.IsValid())
-    ;
 
     SessionInterface->AddOnCreateSessionCompleteDelegate_Handle(
         FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete));
@@ -347,10 +345,8 @@ void UCommonSessionSubsystem::BindOnlineDelegatesOSSv2() {
     // subscribed to
     TSharedPtr<IOnlineServices> OnlineServices = GetServices(GetWorld());
     check(OnlineServices)
-    ;
     ILobbiesPtr Lobbies = OnlineServices->GetLobbiesInterface();
     check(Lobbies)
-    ;
 
     LobbyJoinRequestedHandle =
         Lobbies->OnUILobbyJoinRequested().Add(this, &UCommonSessionSubsystem::OnSessionJoinRequested);
@@ -469,11 +465,9 @@ void UCommonSessionSubsystem::CreateOnlineSessionInternalOSSv1(ULocalPlayer *Loc
 
     IOnlineSubsystem *const OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
 
     IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
     check(Sessions)
-    ;
 
     FUniqueNetIdPtr UserId;
     if (LocalPlayer) {
@@ -520,10 +514,8 @@ void UCommonSessionSubsystem::CreateOnlineSessionInternalOSSv2(ULocalPlayer *Loc
 
     IOnlineServicesPtr OnlineServices = GetServices(GetWorld());
     check(OnlineServices)
-    ;
     ILobbiesPtr Lobbies = OnlineServices->GetLobbiesInterface();
     check(Lobbies)
-    ;
     FCreateLobby::Params CreateParams;
 
     if (LocalPlayer) {
@@ -698,10 +690,8 @@ void UCommonSessionSubsystem::FindSessionsInternal(APlayerController *SearchingP
 void UCommonSessionSubsystem::FindSessionsInternalOSSv1(ULocalPlayer *LocalPlayer) {
     IOnlineSubsystem *OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
     IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
     check(Sessions)
-    ;
 
     if (!Sessions->FindSessions(*LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId(),
                                 StaticCastSharedRef<FCommonOnlineSearchSettingsOSSv1>(SearchSettings.ToSharedRef()))) {
@@ -715,10 +705,8 @@ void UCommonSessionSubsystem::FindSessionsInternalOSSv1(ULocalPlayer *LocalPlaye
 void UCommonSessionSubsystem::FindSessionsInternalOSSv2(ULocalPlayer *LocalPlayer) {
     IOnlineServicesPtr OnlineServices = GetServices(GetWorld());
     check(OnlineServices)
-    ;
     ILobbiesPtr Lobbies = OnlineServices->GetLobbiesInterface();
     check(Lobbies)
-    ;
 
     FFindLobbies::Params FindLobbyParams =
         StaticCastSharedPtr<FCommonOnlineSearchSettingsOSSv2>(SearchSettings)->FindLobbyParams;
@@ -733,7 +721,6 @@ void UCommonSessionSubsystem::FindSessionsInternalOSSv2(ULocalPlayer *LocalPlaye
             const bool bWasSuccessful = FindResult.IsOk();
             UE_LOG(LogCommonSession, Log, TEXT("FindLobbies(bWasSuccessful: %s)"), *LexToString(bWasSuccessful));
 		check(SearchSettings.IsValid())
-            ;
             if (bWasSuccessful) {
                 const FFindLobbies::Result &FindResults = FindResult.GetOkValue();
                 SearchSettings->SearchRequest->Results.Reset(FindResults.Lobbies.Num());
@@ -894,10 +881,8 @@ void UCommonSessionSubsystem::CleanUpSessions() {
 void UCommonSessionSubsystem::CleanUpSessionsOSSv1() {
     IOnlineSubsystem *OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
     IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
     check(Sessions)
-    ;
 
     EOnlineSessionState::Type SessionState = Sessions->GetSessionState(NAME_GameSession);
     UE_LOG(LogCommonSession, Log, TEXT("Session state is %s"), EOnlineSessionState::ToString(SessionState));
@@ -920,10 +905,8 @@ void UCommonSessionSubsystem::CleanUpSessionsOSSv1() {
 void UCommonSessionSubsystem::CleanUpSessionsOSSv2() {
     IOnlineServicesPtr OnlineServices = GetServices(GetWorld());
     check(OnlineServices)
-    ;
     ILobbiesPtr Lobbies = OnlineServices->GetLobbiesInterface();
     check(Lobbies)
-    ;
 
     FAccountId LocalPlayerId = GetAccountId(GetGameInstance()->GetFirstLocalPlayerController());
     FLobbyId LobbyId = GetLobbyId(NAME_GameSession);
@@ -1038,10 +1021,8 @@ void UCommonSessionSubsystem::JoinSessionInternalOSSv1(ULocalPlayer *LocalPlayer
                                                        UCommonSession_SearchResult *Request) {
     IOnlineSubsystem *OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
     IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
     check(Sessions)
-    ;
 
     Sessions->JoinSession(*LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId(), NAME_GameSession, Request->Result);
 }
@@ -1111,10 +1092,8 @@ void UCommonSessionSubsystem::JoinSessionInternalOSSv2(ULocalPlayer *LocalPlayer
     const FName SessionName(NAME_GameSession);
     IOnlineServicesPtr OnlineServices = GetServices(GetWorld());
     check(OnlineServices)
-    ;
     ILobbiesPtr Lobbies = OnlineServices->GetLobbiesInterface();
     check(Lobbies)
-    ;
 
     FJoinLobby::Params JoinParams;
     JoinParams.LocalAccountId = LocalPlayer->GetPreferredUniqueNetId().GetV2();
@@ -1139,10 +1118,8 @@ void UCommonSessionSubsystem::JoinSessionInternalOSSv2(ULocalPlayer *LocalPlayer
 void UCommonSessionSubsystem::OnSessionJoinRequested(const UE::Online::FUILobbyJoinRequested &EventParams) {
     TSharedPtr<IOnlineServices> OnlineServices = GetServices(GetWorld());
     check(OnlineServices)
-    ;
     IAuthPtr Auth = OnlineServices->GetAuthInterface();
     check(Auth)
-    ;
     TOnlineResult<FAuthGetLocalOnlineUserByOnlineAccountId> Account =
         Auth->GetLocalOnlineUserByOnlineAccountId({EventParams.LocalAccountId});
     if (Account.IsOk()) {
@@ -1177,10 +1154,8 @@ UE::Online::FLobbyId UCommonSessionSubsystem::GetLobbyId(const FName SessionName
     if (LocalUserId.IsValid()) {
         IOnlineServicesPtr OnlineServices = GetServices(GetWorld());
         check(OnlineServices)
-        ;
         ILobbiesPtr Lobbies = OnlineServices->GetLobbiesInterface();
         check(Lobbies)
-        ;
         TOnlineResult<FGetJoinedLobbies> JoinedLobbies = Lobbies->GetJoinedLobbies({LocalUserId});
         if (JoinedLobbies.IsOk()) {
             for (const TSharedRef<const FLobby> &Lobby : JoinedLobbies.GetOkValue().Lobbies) {
@@ -1210,11 +1185,9 @@ void UCommonSessionSubsystem::InternalTravelToSession(const FName SessionName) {
     // travel to session
     IOnlineSubsystem *OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
 
     IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
     check(Sessions.IsValid())
-    ;
 
     if (!Sessions->GetResolvedConnectString(SessionName, URL)) {
         FText FailReason = NSLOCTEXT("NetworkErrors", "TravelSessionFailed", "Travel to Session failed.");
@@ -1224,7 +1197,6 @@ void UCommonSessionSubsystem::InternalTravelToSession(const FName SessionName) {
 #else
     TSharedPtr<IOnlineServices> OnlineServices = GetServices(GetWorld(), EOnlineServices::Default);
     check(OnlineServices)
-    ;
 
     FAccountId LocalUserId = GetAccountId(PlayerController);
     if (LocalUserId.IsValid()) {
@@ -1343,11 +1315,9 @@ void UCommonSessionSubsystem::HandlePostLoadMap(UWorld *World) {
 #if COMMONUSER_OSSV1
     IOnlineSubsystem *OnlineSub = Online::GetSubsystem(GetWorld());
     check(OnlineSub)
-    ;
 
     const IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
     check(SessionInterface.IsValid())
-    ;
 
     // If we're hosting a session, update the advertised map name.
     if (HostSettings.IsValid()) {

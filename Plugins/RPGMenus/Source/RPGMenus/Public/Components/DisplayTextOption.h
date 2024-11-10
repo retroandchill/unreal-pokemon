@@ -8,7 +8,8 @@
 
 #include "DisplayTextOption.generated.h"
 
-class UDisplayText;
+class UCommonTextBlock;
+
 /**
  * Selectable option that contains a display text that can be updated
  */
@@ -38,5 +39,5 @@ class RPGMENUS_API UDisplayTextOption : public URPGButtonBase {
     FText Text = FText::FromStringView(TEXT("Text Block"));
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> DisplayText;
+    TObjectPtr<UCommonTextBlock> DisplayText;
 };

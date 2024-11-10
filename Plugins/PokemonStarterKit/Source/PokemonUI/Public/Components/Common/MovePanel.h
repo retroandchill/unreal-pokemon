@@ -40,18 +40,12 @@ class POKEMONUI_API UMovePanel : public UCommonButtonBase {
 
   protected:
     /**
-     * Get the icon for the move's type.
-     * @return The move's type icon
-     */
-    UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "Moves|Graphics")
-    UObject *GetTypeIcon();
-
-  private:
-    /**
      * Called when the move is set.
      */
-    void OnMoveSet();
+    UFUNCTION(BlueprintImplementableEvent, Category = Moves)
+    void OnMoveSet(const TScriptInterface<IMove> &NewMove);
 
+  private:
     /**
      * The actual move that this panel is displaying.
      */
@@ -60,40 +54,4 @@ class POKEMONUI_API UMovePanel : public UCommonButtonBase {
 
     UPROPERTY(BlueprintGetter = IsMoveToLearn, BlueprintSetter = SetIsMoveToLearn, Category = Moves)
     bool bIsMoveToLearn;
-
-    /**
-     * Image icon for a move's type
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> TypeIcon;
-
-    /**
-     * Text for a move's name
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> MoveNameText;
-
-    /**
-     * Text for the move's PP
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> MovePPText;
-
-    /**
-     * The format used to print a move's PP.
-     */
-    UPROPERTY(EditAnywhere, DisplayName = "Move PP Format", Category = Display)
-    FText MovePPFormat = FText::FromStringView(TEXT("{0}/{1}"));
-
-    /**
-     * The PP displayed for a blank move.
-     */
-    UPROPERTY(EditAnywhere, Category = Display)
-    FText UnknownMoveLabel = FText::FromStringView(TEXT("-----"));
-
-    /**
-     * The PP displayed for a blank move
-     */
-    UPROPERTY(EditAnywhere, Category = Display)
-    FText UnknownMovePP = FText::FromStringView(TEXT("--"));
 };

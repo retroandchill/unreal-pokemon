@@ -55,7 +55,6 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
 
         const UEdGraphSchema_K2 *K2Schema = Cast<UEdGraphSchema_K2>(GetSchema());
         check(K2Schema != nullptr)
-        ;
 
         bCanTogglePurity = K2Schema->DoesGraphSupportImpureFunctions(GetGraph());
         if (!bCanTogglePurity) {

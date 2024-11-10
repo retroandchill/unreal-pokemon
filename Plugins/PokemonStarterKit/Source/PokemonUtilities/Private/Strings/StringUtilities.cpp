@@ -33,15 +33,15 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
     if (Items.Num() <= 2) {
         // clang-format off
         return FText::FromString(Items |
-            UE::Ranges::Map(ExtractString) |
-            UE::Ranges::ToString(Conjunction.ToString()));
+                                 UE::Ranges::Map(ExtractString) |
+                                 UE::Ranges::ToString(Conjunction.ToString()));
         // clang-format on
     }
 
     // clang-format off
     auto JoinedItems = UE::Ranges::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
                        UE::Ranges::Map(ExtractString) |
-                           UE::Ranges::ToString(TEXT(", "));
+                       UE::Ranges::ToString(TEXT(", "));
     // clang-format on
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));
@@ -53,4 +53,16 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
 
 TSharedPtr<FString> UStringUtilities::NameToStringPtr(FName Name) {
     return MakeShared<FString>(Name.ToString());
+}
+
+FString UStringUtilities::FormatDate(const FDateTime &DateTime, const FString &Format) {
+    return DateTime.ToFormattedString(*Format);
+}
+
+FText UStringUtilities::JoinText(const TArray<FText> &Lines) {
+    // clang-format off
+    return FText::FromString(Lines |
+                             UE::Ranges::Map(&FText::ToString) |
+                             UE::Ranges::ToString(TEXT("\n")));
+    // clang-format on
 }

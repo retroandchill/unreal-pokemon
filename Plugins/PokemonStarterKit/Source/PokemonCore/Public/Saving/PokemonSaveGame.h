@@ -6,8 +6,8 @@
 #include "GameFramework/SaveGame.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/BagDTO.h"
-#include "Storage/StorageSystemDTO.h"
 #include "Saving/Serialization/Serializable.h"
+#include "Storage/StorageSystemDTO.h"
 #include "Trainers/TrainerDTO.h"
 
 #include "PokemonSaveGame.generated.h"
@@ -17,12 +17,12 @@ namespace Pokemon::Saving {
      * The native gameplay tag for the save data slot for this plugin's information.
      */
     POKEMONCORE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(PokemonCoreSaveData);
-    
+
     /**
      * Native gameplay tag for signalling after loading the game to change maps
      */
     POKEMONCORE_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(ChangeMapOnLoad);
-}
+} // namespace Pokemon::Saving
 
 /**
  * The structure of a save file for the game.
