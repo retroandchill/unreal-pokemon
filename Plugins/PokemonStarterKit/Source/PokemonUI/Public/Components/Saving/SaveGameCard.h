@@ -7,6 +7,7 @@
 
 #include "SaveGameCard.generated.h"
 
+class UCommonTextBlock;
 class UPaperFlipbookUserWidget;
 class IPokemon;
 class UImage;
@@ -21,37 +22,23 @@ class POKEMONUI_API USaveGameCard : public UCommonUserWidget {
   protected:
     void NativeConstruct() override;
 
-    UFUNCTION(BlueprintImplementableEvent, Category = Layout)
-    void SlotPokemonIcon(UPaperFlipbookUserWidget *Icon);
+    UFUNCTION(BlueprintImplementableEvent, Category = Display)
+    void SetContents();
 
   private:
     void UpdateTimeLabels();
-
-    UPaperFlipbookUserWidget *CreatePokemonIcon(const TScriptInterface<IPokemon> &Pokemon);
 
     UFUNCTION()
     void UpdatePlaytimeText(float Playtime);
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> DateText;
+    TObjectPtr<UCommonTextBlock> DateText;
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> TimeText;
+    TObjectPtr<UCommonTextBlock> TimeText;
 
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> LocationText;
-
-    UPROPERTY()
-    TArray<TObjectPtr<UPaperFlipbookUserWidget>> Icons;
-
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> GymBadgeText;
-
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokedexText;
-
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PlaytimeText;
+    TObjectPtr<UCommonTextBlock> PlaytimeText;
 
     /**
      * The format used for formatting the date

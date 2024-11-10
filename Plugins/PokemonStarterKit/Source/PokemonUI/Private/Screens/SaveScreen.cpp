@@ -53,12 +53,9 @@ void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
     if (SaveGame != nullptr) {
         auto PokemonSaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
         check(PokemonSaveData.IsSet())
-
-        LastSavedText->SetText(FText::FormatNamed(
-            LastSavedFormat, TEXT("Date"), FText::FromString(PokemonSaveData->SaveDate.ToFormattedString(*DateFormat)),
-            TEXT("Time"), FText::FromString(PokemonSaveData->SaveDate.ToFormattedString(TEXT("%H:%M")))));
+        OnSaveGameSet(PokemonSaveData.GetPtrOrNull());
     } else {
-        LastSavedText->SetText(FText::GetEmpty());
+        OnFirstSaveAttempt();
     }
 }
 

@@ -32,36 +32,36 @@ class POKEMONCORE_API UPokemonSaveGame : public UObject, public ISerializable {
     GENERATED_BODY()
 
   public:
-    UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PlayerInfo)
     FTrainerDTO PlayerCharacter;
 
-    UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PlayerInfo)
     FBagDTO Bag;
 
-    UPROPERTY(VisibleAnywhere, Category = PlayerInfo)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PlayerInfo)
     FStorageSystemDTO StorageSystem;
 
-    UPROPERTY(VisibleAnywhere, Category = Location)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Location)
     FString CurrentMap;
 
-    UPROPERTY(VisibleAnywhere, Category = Location)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Location)
     FTransform PlayerLocation;
 
-    UPROPERTY(VisibleAnywhere, Category = Reset)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Reset)
     FString ResetMap;
 
-    UPROPERTY(VisibleAnywhere, Category = Reset)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Reset)
     FTransform ResetLocation;
 
-    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SaveMetadata)
     FDateTime SaveDate;
 
-    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SaveMetadata)
     FDateTime StartDate;
 
-    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SaveMetadata)
     float TotalPlaytime;
 
-    UPROPERTY(VisibleAnywhere, Category = SaveMetadata)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SaveMetadata)
     int32 RepelSteps;
 };
