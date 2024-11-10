@@ -4,7 +4,6 @@
 #include "Components/Common/PokemonStatGraph.h"
 
 #include "SlateOptMacros.h"
-#include "Widgets/SCanvas.h"
 #include "Widgets/Layout/SBox.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -14,12 +13,7 @@ void SPokemonStatGraph::Construct(const FArguments &InArgs) {
     AngleOffsetAttribute = InArgs._DefaultAngleOffset;
     GridLinesColor = InArgs._GridLinesColor;
     NodeLinesColor = InArgs._NodeLinesColor;
-
-    DrawingCanvas = SNew(SCanvas);
-    for (auto Stat : StatNames) {
-        auto &Box = StatEntryWidgets.Emplace(Stat, SNew(SBox));
-        DrawingCanvas->AddSlot()[Box];
-    }
+    MinimumDesiredSize = InArgs._MinimumDesiredSize;
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -38,7 +32,7 @@ void SPokemonStatGraph::Tick(const FGeometry &AllottedGeometry, const double InC
 }
 
 FVector2D SPokemonStatGraph::ComputeDesiredSize(float LayoutScaleMultiplier) const {
-    return MinimumDesiredSize;
+    return MinimumDesiredSize.Get();
 }
 
 void SPokemonStatGraph::CacheNodeData(const FGeometry &AllottedGeometry) {

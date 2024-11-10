@@ -2,18 +2,18 @@
 
 
 #include "Components/Common/PokemonStatDisplay.h"
-#include "Components/Common/PokemonStatEntry.h"
 #include "Components/Common/PokemonStatGraph.h"
-#include "Ranges/Optional/GetPtrOrNull.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Views/Map.h"
+
+UPokemonStatDisplay::UPokemonStatDisplay() : StatOrder(UStatHelper::GetMainStatNames()) {
+}
 
 TSharedRef<SWidget> UPokemonStatDisplay::RebuildWidget() {
     // clang-format off
     StatGraph = SNew(SPokemonStatGraph)
         .StatNames(StatOrder)
-        .GridLinesColor(FLinearColor::Gray)
-        .NodeLinesColor(FLinearColor::White);
+        .GridLinesColor(InnerLinesColor)
+        .NodeLinesColor(OutlineColor)
+        .MinimumDesiredSize(MinimumDesiredSize);
     // clang-format on
     return StatGraph.ToSharedRef();
 }
@@ -23,22 +23,34 @@ void UPokemonStatDisplay::ReleaseSlateResources(bool bReleaseChildren) {
     StatGraph.Reset();
 }
 
-void UPokemonStatDisplay::GetSlotNames(TArray<FName> &SlotNames) const {
-    // clang-format off
-    SlotNames = StatOrder |
-                UE::Ranges::Map(&FMainStatHandle::RowID) |
-                UE::Ranges::ToArray;
-    // clang-format on
+void UPokemonStatDisplay::SynchronizeProperties() {
+    Super::SynchronizeProperties();
+    if (StatGraph == nullptr) {
+        return;
+    }
+
+    StatGraph->SetPokemon(Pokemon);
+    StatGraph->SetGridLinesColor(InnerLinesColor);
+    StatGraph->SetNodeLinesColor(OutlineColor);
+    StatGraph->SetMinimumDesiredSize(MinimumDesiredSize);
 }
 
-UWidget *UPokemonStatDisplay::GetContentForSlot(FName SlotName) const {
-    // clang-format off
-    return UE::Optionals::OfNullable(StatEntries.Find(SlotName)) |
-           UE::Optionals::Map(&TObjectPtr<UWidget>::Get) |
-           UE::Optionals::GetPtrOrNull;
-    // clang-format on
+void UPokemonStatDisplay::SetInnerLinesColor(const FLinearColor &InInnerLinesColor) {
+    InnerLinesColor = InInnerLinesColor;
+    SynchronizeProperties();
 }
 
-void UPokemonStatDisplay::SetContentForSlot(FName SlotName, UWidget *Content) {
-    StatEntries.Emplace(SlotName, Content);
+void UPokemonStatDisplay::SetOutlineColor(const FLinearColor &InOutlineColor) {
+    OutlineColor = InOutlineColor;
+    SynchronizeProperties();
+}
+
+void UPokemonStatDisplay::SetMinimumDesiredSize(const FVector2D &InMinimumDesiredSize) {
+    MinimumDesiredSize = InMinimumDesiredSize;
+    SynchronizeProperties();
+}
+
+void UPokemonStatDisplay::SetPokemon(const TScriptInterface<IPokemon> &NewPokemon) {
+    Pokemon = NewPokemon;
+    SynchronizeProperties();
 }
