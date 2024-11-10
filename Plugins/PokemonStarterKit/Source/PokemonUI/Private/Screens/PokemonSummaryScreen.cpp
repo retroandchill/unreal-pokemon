@@ -47,5 +47,5 @@ UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
 }
 
 void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
-    SummaryPages->Refresh(Pokemon);
+    SummaryPages->SetPokemon(Pokemon);
 }
