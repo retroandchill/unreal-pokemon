@@ -158,14 +158,14 @@ class POKEMONBATTLE_API IBattle {
      * @return Can the player run?
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|Flow")
-    bool Runcheck(const TScriptInterface<IBattler> &Battler, bool bDuringBattle)
+    bool RunCheck(const TScriptInterface<IBattler> &Battler, bool bDuringBattle);
 
-        /**
-         * Terminate the battle with the specified result
-         * @param Result The result for the battle state
-         */
-        UFUNCTION(BlueprintCallable, BlueprintNativeEvent,
-                  Category = "Battle|Flow") void EndBattle(EBattleResult Result);
+    /**
+     * Terminate the battle with the specified result
+     * @param Result The result for the battle state
+     */
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|Flow")
+    void EndBattle(EBattleResult Result);
 
     /**
      * Bind a delegate for when the battle ends
