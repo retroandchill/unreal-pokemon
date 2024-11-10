@@ -6,7 +6,8 @@
 #include "Pokemon/Moves/Move.h"
 #include "Utilities/WidgetUtilities.h"
 
-void UMoveInfoWindow::RefreshMove_Implementation(const TScriptInterface<IMove> &Move) {
+/*
+void UMoveInfoWindow::OnMoveSet_Implementation(const TScriptInterface<IMove> &Move) {
     auto &MoveData = Move->GetMoveData();
     UWidgetUtilities::SetBrushFromAsset(CategoryGraphic, CategoryGraphics.FindChecked(MoveData.Category), true);
     PowerText->SetText(GetMoveDamageText(MoveData));
@@ -32,4 +33,14 @@ FText UMoveInfoWindow::GetMoveAccuracyText_Implementation(const FMoveData &MoveD
     }
 
     return FText::FromString(FString::Format(TEXT("{0}%"), {MoveData.Accuracy}));
+}
+*/
+
+void UMoveInfoWindow::SetMove(const TScriptInterface<IMove> &NewMove) {
+    Move = NewMove;
+    if (IsValid(Move.GetObject())) {
+        OnMoveSet(NewMove);
+    } else {
+        OnMoveCleared();
+    }
 }

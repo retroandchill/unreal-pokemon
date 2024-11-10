@@ -22,61 +22,44 @@ class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
 
   public:
     /**
+     * Retrieves the current move data for this widget.
+     * This is a pure function that is intended for internal blueprint use only.
+     * 
+     * @return A constant reference to the current move interface.
+     */
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    const TScriptInterface<IMove> & GetMove() const {
+        return Move;
+    }
+
+    /**
+     * Sets the new move for this widget and updates the display accordingly.
+     *
+     * @param NewMove The new move to set for this widget.
+     */
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
+    void SetMove(const TScriptInterface<IMove> &NewMove);
+
+protected:
+    /**
      * Refresh the information to the given move.
-     * @param Move The move to display
+     * 
+     * @param NewMove The move to display
      */
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
-    void RefreshMove(const TScriptInterface<IMove> &Move);
-
-  protected:
-    /**
-     * Get the damage text for the given move
-     * @param MoveData The data of the move to examine.
-     * @return The text to display
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
-    FText GetMoveDamageText(const FMoveData &MoveData) const;
+    UFUNCTION(BlueprintImplementableEvent, Category = Display)
+    void OnMoveSet(const TScriptInterface<IMove> &NewMove);
 
     /**
-     * Get the accuracy text for the given move
-     * @param MoveData The data of the move to examine.
-     * @return The text to display
+     * Event triggered when a move is cleared from the widget.
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Display)
-    FText GetMoveAccuracyText(const FMoveData &MoveData) const;
+    UFUNCTION(BlueprintImplementableEvent, Category = Display)
+    void OnMoveCleared();
 
-  private:
+private:
     /**
-     * The graphics used to display the move category
+     * Interface for accessing and modifying the move data in this widget.
+     * The getter function retrieves the current move, while the setter allows modification of the move.
      */
-    UPROPERTY(
-        EditAnywhere, Category = Display,
-        meta = (AllowedClasses =
-                    "/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface",
-                DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
-    TMap<EMoveDamageCategory, TObjectPtr<UObject>> CategoryGraphics;
-
-    /**
-     * The widget used for the category icon
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> CategoryGraphic;
-
-    /**
-     * The widget used for the move's power
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PowerText;
-
-    /**
-     * The widget used for the move's accuracy
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> AccuracyText;
-
-    /**
-     * The widget used for the move's description
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> DescriptionText;
+    UPROPERTY(BlueprintGetter = GetMove, BlueprintSetter=SetMove, Category = Move)
+    TScriptInterface<IMove> Move;
 };

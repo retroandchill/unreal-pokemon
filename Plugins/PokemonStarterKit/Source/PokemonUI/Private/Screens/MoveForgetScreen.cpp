@@ -14,7 +14,7 @@ UMoveForgetScreen *UMoveForgetScreen::AddMoveForgetScreenToStack(const UObject *
 void UMoveForgetScreen::NativeConstruct() {
     Super::NativeConstruct();
     FOnMoveSelectionChanged::FDelegate Binding;
-    Binding.BindDynamic(MoveInfoWindow, &UMoveInfoWindow::RefreshMove);
+    Binding.BindDynamic(MoveInfoWindow, &UMoveInfoWindow::SetMove);
     MoveSelectWindow->BindToOnMoveSelectionChanged(Binding);
     MoveSelectWindow->GetOnConfirm().AddUniqueDynamic(this, &UMoveForgetScreen::OnMoveSelected);
     MoveSelectWindow->GetOnCancel().AddUniqueDynamic(this, &UMoveForgetScreen::OnCanceled);
