@@ -19,14 +19,6 @@ class POKEMONUI_API UPokemonInfoWidget : public UCommonUserWidget {
 
   public:
     /**
-     * Update the information about the Pokémon displayed by this widget.
-     *
-     * @param NewPokemon The new Pokémon to display the info for
-     */
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Display)
-    void Refresh(const TScriptInterface<IPokemon> &NewPokemon);
-
-    /**
      * Retrieves the current Pokémon information displayed by the widget.
      *
      * @return A reference to the current Pokémon.

@@ -41,19 +41,6 @@ void UPokemonBattlePanel::Refresh() {
     OnRefresh();
 }
 
-/*
-void UPokemonBattlePanel::Refresh() {
-    PokemonName->SetText(CurrentBattler->GetNickname());
-    PokemonLevel->SetText(FText::FromString(FString::FromInt(CurrentBattler->GetPokemonLevel())));
-
-    auto Gender = CurrentBattler->GetGender();
-    PokemonGender->SetText(UPokemonUIUtils::GetPokemonGenderText(Gender));
-    if (GenderTextColors.Contains(Gender)) {
-        PokemonGender->SetTextStyle(GenderTextColors[Gender]);
-    }
-}
-*/
-
 void UPokemonBattlePanel::BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate &Binding) {
     OnHPBarUpdated.Add(Binding);
 }
