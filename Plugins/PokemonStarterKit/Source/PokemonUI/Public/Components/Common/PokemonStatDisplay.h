@@ -23,14 +23,6 @@ class POKEMONUI_API UPokemonStatDisplay : public UWidget {
     GENERATED_BODY()
 
 public:
-    /**
-     * @brief Default constructor for UPokemonStatDisplay.
-     *
-     * Initializes the UPokemonStatDisplay object and sets the default order of the stats
-     * to be displayed, by fetching main stat names from the UStatHelper class.
-     */
-    UPokemonStatDisplay();
-    
     TSharedRef<SWidget> RebuildWidget() override;
     void ReleaseSlateResources(bool bReleaseChildren) override;
     void SynchronizeProperties() override;

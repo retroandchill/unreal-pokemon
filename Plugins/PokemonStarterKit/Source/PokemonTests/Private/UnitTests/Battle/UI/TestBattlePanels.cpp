@@ -6,7 +6,6 @@
 #include "Components/Image.h"
 #include "Components/NumberImageWidget.h"
 #include "Components/PokemonBattlePanel.h"
-#include "Components/PokemonBattlePanelPlayer.h"
 #include "Components/ProgressBar.h"
 #include "Misc/AutomationTest.h"
 #include "Mocking/UnrealMock.h"
@@ -22,7 +21,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestBattlePanels, "Unit Tests.Battle.UI.TestBat
 
 bool TestBattlePanels::RunTest(const FString &Parameters) {
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonBattlePanelPlayer>();
+    auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonBattlePanel>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
     auto WidgetClass = Subclasses[0];
 
@@ -40,7 +39,7 @@ bool TestBattlePanels::RunTest(const FString &Parameters) {
     TOptional<FStatusEffectInfo> StatusEffectInfo;
     ON_CALL(MockBattler, GetStatusEffect).WillByDefault(ReturnRef(StatusEffectInfo));
 
-    TWidgetPtr<UPokemonBattlePanelPlayer> Panel(CreateWidget<UPokemonBattlePanelPlayer>(World.Get(), WidgetClass));
+    TWidgetPtr<UPokemonBattlePanel> Panel(CreateWidget<UPokemonBattlePanel>(World.Get(), WidgetClass));
     Panel->AddToViewport();
 
     auto CoreAttributes = NewObject<UPokemonCoreAttributeSet>(BattlerActor);

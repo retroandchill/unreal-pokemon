@@ -4,9 +4,6 @@
 #include "Components/Common/PokemonStatDisplay.h"
 #include "Components/Common/PokemonStatGraph.h"
 
-UPokemonStatDisplay::UPokemonStatDisplay() : StatOrder(UStatHelper::GetMainStatNames()) {
-}
-
 TSharedRef<SWidget> UPokemonStatDisplay::RebuildWidget() {
     // clang-format off
     StatGraph = SNew(SPokemonStatGraph)
