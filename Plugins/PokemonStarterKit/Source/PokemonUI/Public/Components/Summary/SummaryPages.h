@@ -3,13 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/SelectableWidget.h"
 #include "Components/Common/PokemonInfoWidget.h"
 #include "Pokemon/Pokemon.h"
 
 #include "SummaryPages.generated.h"
 
 class USummaryScreenPage;
+
+/**
+ * Struct that contains a list of characteristics.
+ */
+USTRUCT(BlueprintType)
+struct POKEMONUI_API FCharacteristicList {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Characteristics")
+    TArray<FText> Characteristics;
+    
+};
 
 /**
  * Delegate called when the Pokémon is changed by the iterator.

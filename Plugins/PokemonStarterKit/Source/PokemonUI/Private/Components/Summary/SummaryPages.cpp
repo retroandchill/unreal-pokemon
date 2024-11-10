@@ -3,9 +3,9 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/WidgetSwitcher.h"
-#include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/Ints.h"
 #include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Views/CastType.h"
 
 void USummaryPages::NativeConstruct() {
     Super::NativeConstruct();
