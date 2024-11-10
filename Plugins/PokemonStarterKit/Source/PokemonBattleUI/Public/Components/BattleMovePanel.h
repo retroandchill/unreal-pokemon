@@ -23,7 +23,9 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * @return The move that this panel represents
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
-    const TScriptInterface<IBattleMove> &GetMove() const;
+    const TScriptInterface<IBattleMove> &GetMove() const{
+        return Move;
+    }
 
     /**
      * Set the move this panel represents
@@ -36,35 +38,12 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * Set the visual appearance of the move for this widget
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Style")
-    void SetPanelAppearance();
+    void OnMoveSet(const TScriptInterface<IBattleMove>& NewMove);
 
   private:
-    /**
-     * Called when the move is set.
-     */
-    void OnMoveSet();
-
     /**
      * The move this panel holds
      */
     UPROPERTY(BlueprintGetter = GetMove, Category = Content)
     TScriptInterface<IBattleMove> Move;
-
-    /**
-     * Text for a move's name
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> MoveNameText;
-
-    /**
-     * Text for the move's PP
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> MovePPText;
-
-    /**
-     * The format used to print a move's PP.
-     */
-    UPROPERTY(EditAnywhere, DisplayName = "Move PP Format", Category = Content)
-    FText MovePPFormat = FText::FromStringView(TEXT("{0}/{1}"));
 };

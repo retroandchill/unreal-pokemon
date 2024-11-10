@@ -9,6 +9,7 @@
 
 #include "PokemonBattlePanel.generated.h"
 
+class UEnhancedImage;
 class UCommonTextStyle;
 class UImage;
 class IBattler;
@@ -35,20 +36,23 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
      * Get the currently displayed battler
      * @return The battler whose information is being displayed
      */
-    const TScriptInterface<IBattler> &GetCurrentBattler() const;
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    const TScriptInterface<IBattler> &GetCurrentBattler() const {
+        return CurrentBattler;
+    }
 
     /**
      * Set the displayed battler
      * @param Battler The currently displayed battler
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Display")
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Display")
     void SetBattler(const TScriptInterface<IBattler> &Battler);
 
     /**
      * Refresh the displayed information in the widget
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Display")
-    virtual void Refresh();
+    void Refresh();
 
     /**
      * Animate the change in HP to the new value
@@ -77,6 +81,9 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
     void UnbindAllHPUpdateDelegates(UObject *Object);
 
   protected:
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Display")
+    void OnRefresh();
+    
     /**
      * The function used to callback to the depleted HP.
      * @param NewPercent The new HP percentage
@@ -89,23 +96,6 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
     virtual void HPPercentUpdateComplete() const;
 
   private:
-    /**
-     * The widget to display the Pokémon's name
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonName;
-
-    /**
-     * The widget to display the Pokémon's gender
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonGender;
-
-    /**
-     * The widget to display the Pokémon's level
-     */
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> PokemonLevel;
 
     /**
      * The widget that display's the HP percentage
@@ -117,19 +107,13 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
      * The widget that display's the status condition if the battler has a status condition
      */
     UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> StatusIcon;
+    TObjectPtr<UEnhancedImage> StatusIcon;
 
     /**
      * The battler this widget displays the information for
      */
-    UPROPERTY()
+    UPROPERTY(BlueprintGetter = GetCurrentBattler, BlueprintSetter = SetBattler, Category = Battler)
     TScriptInterface<IBattler> CurrentBattler;
-
-    /**
-     * The color settings for the gender text widget
-     */
-    UPROPERTY(EditAnywhere, Category = "Visuals|Text")
-    TMap<EPokemonGender, TSubclassOf<UCommonTextStyle>> GenderTextColors;
 
     /**
      * The animation for updating the HP bar

@@ -7,6 +7,7 @@
 
 #include "BattleItemSelectionOption.generated.h"
 
+struct FItem;
 class UImage;
 class UDisplayText;
 /**
@@ -24,15 +25,9 @@ class POKEMONBATTLEUI_API UBattleItemSelectionOption : public UCommonButtonBase 
      */
     void SetItem(FName Item, int32 Quantity);
 
-  private:
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UImage> ItemIcon;
-
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemNameText;
-
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> ItemQuantityText;
+    protected:
+    UFUNCTION(BlueprintImplementableEvent, Category = Item)
+    void OnItemSet(const FItem& Item, int32 Quantity);
 
     FName ItemID;
     int32 ItemQuantity;

@@ -5,6 +5,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Components/DisplayText.h"
+#include "Components/EnhancedImage.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Graphics/AssetClasses.h"
@@ -22,10 +23,6 @@ void UPokemonBattlePanel::NativeConstruct() {
         FUpdateComplete::CreateUObject(this, &UPokemonBattlePanel::HPPercentUpdateComplete));
 }
 
-const TScriptInterface<IBattler> &UPokemonBattlePanel::GetCurrentBattler() const {
-    return CurrentBattler;
-}
-
 void UPokemonBattlePanel::SetBattler(const TScriptInterface<IBattler> &Battler) {
     CurrentBattler = Battler;
     Refresh();
@@ -38,19 +35,24 @@ void UPokemonBattlePanel::Refresh() {
     } else {
         SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     }
+    RefreshStatusEffect();
+    HPBar->SetPercent(CurrentBattler->GetHPPercent());
 
+    OnRefresh();
+}
+
+/*
+void UPokemonBattlePanel::Refresh() {
     PokemonName->SetText(CurrentBattler->GetNickname());
     PokemonLevel->SetText(FText::FromString(FString::FromInt(CurrentBattler->GetPokemonLevel())));
-    HPBar->SetPercent(CurrentBattler->GetHPPercent());
 
     auto Gender = CurrentBattler->GetGender();
     PokemonGender->SetText(UPokemonUIUtils::GetPokemonGenderText(Gender));
     if (GenderTextColors.Contains(Gender)) {
         PokemonGender->SetTextStyle(GenderTextColors[Gender]);
     }
-
-    RefreshStatusEffect();
 }
+*/
 
 void UPokemonBattlePanel::BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate &Binding) {
     OnHPBarUpdated.Add(Binding);
@@ -71,13 +73,18 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
 }
 
 void UPokemonBattlePanel::RefreshStatusEffect() {
-    if (auto &Status = CurrentBattler->GetStatusEffect(); Status.IsSet()) {
-        auto Icon = Pokemon::Assets::Graphics::StatusIcons.LoadAsset(Status.GetValue().StatusEffectID).GetPtrOrNull();
-        StatusIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-        UWidgetUtilities::SetBrushFromAsset(StatusIcon, Icon, true);
-    } else {
+    // clang-format off
+    auto Icon = CurrentBattler->GetStatusEffect() |
+                UE::Optionals::Map(&FStatusEffectInfo::StatusEffectID) |
+                UE::Optionals::FlatMap([](FName ID) { return Pokemon::Assets::Graphics::StatusIcons.LoadAsset(ID); });
+    // clang-format on
+    if (!Icon.IsSet()) {
         StatusIcon->SetVisibility(ESlateVisibility::Hidden);
+        return;
     }
+
+    StatusIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    StatusIcon->SetBrushFromImageAsset(Icon.GetValue(), true);
 }
 
 void UPokemonBattlePanel::UpdateHPPercent(float NewPercent) {
