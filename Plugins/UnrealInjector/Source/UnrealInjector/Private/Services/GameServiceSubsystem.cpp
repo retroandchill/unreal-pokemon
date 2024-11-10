@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Services/GameServiceSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Ranges/Algorithm/ForEach.h"
@@ -14,9 +13,8 @@
 void UGameServiceSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
     UnrealInjector::GetAllServices() | UE::Ranges::ForEach([this](const TSubclassOf<UService> &Class) {
-            Services.Emplace(Class, NewObject<UService>(this, Class));
-        });
-        
+        Services.Emplace(Class, NewObject<UService>(this, Class));
+    });
 }
 
 void UGameServiceSubsystem::Deinitialize() {
@@ -24,8 +22,7 @@ void UGameServiceSubsystem::Deinitialize() {
     Services.Empty();
 }
 
-UService * UGameServiceSubsystem::StaticGetService(const UObject *WorldContext,
-    const TSubclassOf<UService> &ServiceClass) {
+UService *UGameServiceSubsystem::StaticGetService(const UObject *WorldContext,
+                                                  const TSubclassOf<UService> &ServiceClass) {
     return &GetService(WorldContext, ServiceClass);
-    
 }

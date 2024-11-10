@@ -45,7 +45,7 @@ class POKEMONUI_API UMovePanel : public UCommonButtonBase {
     UFUNCTION(BlueprintImplementableEvent, Category = Moves)
     void OnMoveSet(const TScriptInterface<IMove> &NewMove);
 
-private:
+  private:
     /**
      * The actual move that this panel is displaying.
      */

@@ -16,7 +16,8 @@ uint32 UPersonalityValueUtils::GeneratePersonalityValue(const FPokemonDTO &DTO) 
 }
 
 void UPersonalityValueUtils::GetBestStat(const TScriptInterface<IPokemon> &Pokemon,
-    const TArray<FMainStatHandle> &StatOrder, FMainStatHandle &BestStat, int32 &BestIV) {
+                                         const TArray<FMainStatHandle> &StatOrder, FMainStatHandle &BestStat,
+                                         int32 &BestIV) {
     auto StatBlock = Pokemon->GetStatBlock();
     check(!StatOrder.IsEmpty())
     auto StartPoint = static_cast<int32>(Pokemon->GetPersonalityValue() % StatOrder.Num());

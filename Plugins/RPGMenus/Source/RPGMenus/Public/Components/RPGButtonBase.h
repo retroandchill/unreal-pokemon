@@ -14,13 +14,13 @@ UCLASS(Abstract, DisplayName = "RPG Button Base")
 class RPGMENUS_API URPGButtonBase : public UCommonButtonBase {
     GENERATED_BODY()
 
-public:
+  public:
     URPGButtonBase();
 
   protected:
     void NativePreConstruct() override;
 
-public:
+  public:
     /**
      * Updates the visibility of the button based on its current state. This method checks
      * whether the button should be visible or not, taking into account both the default

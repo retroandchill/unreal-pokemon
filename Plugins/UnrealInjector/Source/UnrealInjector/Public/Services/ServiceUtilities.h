@@ -18,5 +18,5 @@ namespace UnrealInjector {
      * @return A list of classes, where each string represents the name of a service.
      */
     UNREALINJECTOR_API UE::Ranges::TAnyView<TSubclassOf<UService>> GetAllServices();
-    
-}
+
+} // namespace UnrealInjector

@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/InfoRow.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/Map.h"

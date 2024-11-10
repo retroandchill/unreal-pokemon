@@ -10,13 +10,13 @@
 
 class IObtainedBlock;
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONCORE_API UTrainerInfoHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Retrieves the time when a Pokémon was received.
      *
@@ -25,8 +25,9 @@ public:
      * @return An ESetStatus indicating whether the time was successfully retrieved or not.
      */
     UFUNCTION(BlueprintCallable, Category = "TrainerInfoHelpers",
-        meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock, ExpandEnumAsExecs = ReturnValue))
-    static ESetStatus GetTimeReceived(const TScriptInterface<IObtainedBlock>& ObtainedBlock, FDateTime& TimeReceived);
+              meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock,
+                      ExpandEnumAsExecs = ReturnValue))
+    static ESetStatus GetTimeReceived(const TScriptInterface<IObtainedBlock> &ObtainedBlock, FDateTime &TimeReceived);
 
     /**
      * Retrieves the text describing how a Pokémon was obtained.
@@ -36,8 +37,9 @@ public:
      * @return An ESetStatus indicating whether the obtain text was successfully retrieved or not.
      */
     UFUNCTION(BlueprintCallable, Category = "TrainerInfoHelpers",
-        meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock, ExpandEnumAsExecs = ReturnValue))
-    static ESetStatus GetObtainText(const TScriptInterface<IObtainedBlock>& ObtainedBlock, FText& ObtainText);
+              meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock,
+                      ExpandEnumAsExecs = ReturnValue))
+    static ESetStatus GetObtainText(const TScriptInterface<IObtainedBlock> &ObtainedBlock, FText &ObtainText);
 
     /**
      * Retrieves the time when a Pokémon hatched.
@@ -47,8 +49,9 @@ public:
      * @return An ESetStatus indicating whether the time was successfully retrieved or not.
      */
     UFUNCTION(BlueprintCallable, Category = "TrainerInfoHelpers",
-        meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock, ExpandEnumAsExecs = ReturnValue))
-    static ESetStatus GetTimeHatched(const TScriptInterface<IObtainedBlock>& ObtainedBlock, FDateTime& TimeHatched);
+              meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock,
+                      ExpandEnumAsExecs = ReturnValue))
+    static ESetStatus GetTimeHatched(const TScriptInterface<IObtainedBlock> &ObtainedBlock, FDateTime &TimeHatched);
 
     /**
      * Retrieves the map where a Pokémon hatched.
@@ -58,7 +61,7 @@ public:
      * @return An ESetStatus indicating whether the map was successfully retrieved or not.
      */
     UFUNCTION(BlueprintCallable, Category = "TrainerInfoHelpers",
-        meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock, ExpandEnumAsExecs = ReturnValue))
-    static ESetStatus GetHatchedMap(const TScriptInterface<IObtainedBlock>& ObtainedBlock, FText& HatchedMap);
-
+              meta = (DefaultToSelf = ObtainedBlock, AutoCreateRefTerm = ObtainedBlock,
+                      ExpandEnumAsExecs = ReturnValue))
+    static ESetStatus GetHatchedMap(const TScriptInterface<IObtainedBlock> &ObtainedBlock, FText &HatchedMap);
 };

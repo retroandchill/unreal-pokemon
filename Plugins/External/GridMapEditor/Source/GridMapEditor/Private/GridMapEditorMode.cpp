@@ -36,7 +36,6 @@ FGridMapEditorMode::FGridMapEditorMode() : FEdMode(), ActiveTileSet(nullptr) {
             nullptr, TEXT("/GridMapEditor/M_TileBrushCube.M_TileBrushCube"), nullptr, LOAD_None, nullptr);
         BrushMID = UMaterialInstanceDynamic::Create(BrushMaterial, GetTransientPackage());
         check(BrushMID != nullptr)
-        ;
         FLinearColor DefaultColor;
         BrushMID->GetVectorParameterDefaultValue(GridMapBrushHighlightColorParamName, DefaultColor);
         BrushDefaultHighlightColor = DefaultColor.ToFColor(false);

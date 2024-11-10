@@ -76,7 +76,6 @@ void UK2Node_SwitchOnDataHandle::GetMenuActions(FBlueprintActionDatabaseRegistra
 
         auto NodeSpawner = UBlueprintNodeSpawner::Create(GetClass());
         check(NodeSpawner != nullptr)
-        ;
         ActionRegistrar.AddBlueprintAction(ActionKey, NodeSpawner);
     }
 }

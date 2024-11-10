@@ -28,5 +28,4 @@ class POKEMONCORE_API UPokemonSaveGameSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Saving & Loading")
     int32 PrimarySaveIndex = 0;
-    
 };

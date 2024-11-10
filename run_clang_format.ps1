@@ -1,4 +1,4 @@
-﻿Get-ChildItem -Recurse . -Include *.cpp, *.h -Exclude "**/Deps/**,**/External/**" "**/Intermediate/**" -ErrorAction SilentlyContinue -Force | ForEach-Object {
+﻿Get-ChildItem -Recurse . -Include *.cpp, *.h -Exclude "**/Deps/**,**/External/**,**/Intermediate/**" -ErrorAction SilentlyContinue -Force | ForEach-Object {
     clang-format -i $_
 }
 

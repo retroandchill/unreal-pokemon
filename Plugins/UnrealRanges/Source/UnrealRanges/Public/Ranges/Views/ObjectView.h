@@ -9,26 +9,28 @@ namespace UE::Ranges {
     template <typename T>
         requires std::derived_from<T, UObject>
     class TObjectViewIterator {
-    public:
-        using SizeType = TArray<UObject*>::SizeType;
+      public:
+        using SizeType = TArray<UObject *>::SizeType;
         using difference_type = std::ptrdiff_t;
-        using value_type = T*;
-        
+        using value_type = T *;
+
         TObjectViewIterator() = default;
 
-        explicit TObjectViewIterator(const TSharedRef<TArray<UObject*>>& Objects, SizeType Index = 0) : Objects(Objects), Index(Index) {}
-        
-        bool operator==(const TObjectViewIterator& Other) const {
+        explicit TObjectViewIterator(const TSharedRef<TArray<UObject *>> &Objects, SizeType Index = 0)
+            : Objects(Objects), Index(Index) {
+        }
+
+        bool operator==(const TObjectViewIterator &Other) const {
             check(Objects == Other.Objects)
             return Index == Other.Index;
         }
-        
-        T* operator * () const {
+
+        T *operator*() const {
             check(Objects.IsValid() && Objects->IsValidIndex(Index))
-            return static_cast<T*>((*Objects)[Index]);
+            return static_cast<T *>((*Objects)[Index]);
         }
-        
-        TObjectViewIterator& operator++() {
+
+        TObjectViewIterator &operator++() {
             ++Index;
             return *this;
         }
@@ -38,8 +40,8 @@ namespace UE::Ranges {
             return Temp;
         }
 
-    private:
-        TSharedPtr<TArray<UObject*>> Objects;
+      private:
+        TSharedPtr<TArray<UObject *>> Objects;
         SizeType Index = INDEX_NONE;
     };
 
@@ -66,13 +68,17 @@ namespace UE::Ranges {
      * across different components of the software.
      */
     class TObjectView {
-    public:
-        explicit TObjectView(EObjectFlags AdditionalExclusionFlags = RF_ClassDefaultObject, bool bIncludeDerivedClasses = true, EInternalObjectFlags InInternalExclusionFlags = EInternalObjectFlags::None) {
-            GetObjectsOfClass(T::StaticClass(), *Objects, bIncludeDerivedClasses, AdditionalExclusionFlags, GetObjectIteratorDefaultInternalExclusionFlags(InInternalExclusionFlags));
+      public:
+        explicit TObjectView(EObjectFlags AdditionalExclusionFlags = RF_ClassDefaultObject,
+                             bool bIncludeDerivedClasses = true,
+                             EInternalObjectFlags InInternalExclusionFlags = EInternalObjectFlags::None) {
+            GetObjectsOfClass(T::StaticClass(), *Objects, bIncludeDerivedClasses, AdditionalExclusionFlags,
+                              GetObjectIteratorDefaultInternalExclusionFlags(InInternalExclusionFlags));
         }
 
-        explicit TObjectView(TArray<T*>&& Array) : Objects(MakeShared<TArray<UObject*>>(std::move(Array))) {}
-        
+        explicit TObjectView(TArray<T *> &&Array) : Objects(MakeShared<TArray<UObject *>>(std::move(Array))) {
+        }
+
         TObjectViewIterator<T> begin() const {
             return TObjectViewIterator<T>(Objects);
         }
@@ -81,16 +87,15 @@ namespace UE::Ranges {
             return TObjectViewIterator<T>(Objects, Objects->Num());
         }
 
-    private:
-        TSharedRef<TArray<UObject*>> Objects = MakeShared<TArray<UObject*>>();
+      private:
+        TSharedRef<TArray<UObject *>> Objects = MakeShared<TArray<UObject *>>();
     };
 
     static_assert(ranges::forward_range<TObjectView<UObject>>);
-}
+} // namespace UE::Ranges
 
 template <typename T>
     requires std::derived_from<T, UObject>
 constexpr inline bool ranges::enable_view<UE::Ranges::TObjectView<T>> = true;
 
 static_assert(ranges::viewable_range<UE::Ranges::TObjectView<UObject>>);
-

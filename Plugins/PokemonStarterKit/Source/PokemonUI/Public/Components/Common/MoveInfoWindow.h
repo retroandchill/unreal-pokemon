@@ -24,11 +24,11 @@ class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
     /**
      * Retrieves the current move data for this widget.
      * This is a pure function that is intended for internal blueprint use only.
-     * 
+     *
      * @return A constant reference to the current move interface.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IMove> & GetMove() const {
+    const TScriptInterface<IMove> &GetMove() const {
         return Move;
     }
 
@@ -40,10 +40,10 @@ class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
     void SetMove(const TScriptInterface<IMove> &NewMove);
 
-protected:
+  protected:
     /**
      * Refresh the information to the given move.
-     * 
+     *
      * @param NewMove The move to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
@@ -55,11 +55,11 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Display)
     void OnMoveCleared();
 
-private:
+  private:
     /**
      * Interface for accessing and modifying the move data in this widget.
      * The getter function retrieves the current move, while the setter allows modification of the move.
      */
-    UPROPERTY(BlueprintGetter = GetMove, BlueprintSetter=SetMove, Category = Move)
+    UPROPERTY(BlueprintGetter = GetMove, BlueprintSetter = SetMove, Category = Move)
     TScriptInterface<IMove> Move;
 };

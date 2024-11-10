@@ -21,4 +21,4 @@ namespace UE::Ranges {
      * with various range-based operations.
      */
     inline constexpr auto Unique = ranges::views::unique;
-}
+} // namespace UE::Ranges

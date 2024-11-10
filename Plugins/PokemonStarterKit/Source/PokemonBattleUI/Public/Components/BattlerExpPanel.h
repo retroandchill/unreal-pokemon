@@ -23,13 +23,15 @@ class POKEMONBATTLEUI_API UBattlerExpPanel : public UCommonUserWidget {
   protected:
     void NativeConstruct() override;
 
-public:
+  public:
     /**
      * Sets the battler information to be displayed on the experience panel.
      *
      * @param Battler The battler interface to be displayed.
-     * @param Level Optional parameter to set the level of the battler. If not provided, the battler's current level is used.
-     * @param ExpGainPercent Optional parameter to set the experience gain percentage. If not provided, the battler's current experience percentage is used.
+     * @param Level Optional parameter to set the level of the battler. If not provided, the battler's current level is
+     * used.
+     * @param ExpGainPercent Optional parameter to set the experience gain percentage. If not provided, the battler's
+     * current experience percentage is used.
      */
     void SetBattler(const TScriptInterface<IBattler> &Battler, const TOptional<int32> &Level = TOptional<int32>(),
                     const TOptional<float> &ExpGainPercent = TOptional<float>());

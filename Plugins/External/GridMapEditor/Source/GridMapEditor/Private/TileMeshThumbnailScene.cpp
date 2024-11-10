@@ -52,11 +52,8 @@ void FTileMeshThumbnailScene::GetViewMatrixParameters(const float InFOVDegrees, 
                                                       float &OutOrbitPitch, float &OutOrbitYaw,
                                                       float &OutOrbitZoom) const {
     check(PreviewActor)
-    ;
     check(PreviewActor->GetStaticMeshComponent())
-    ;
     check(PreviewActor->GetStaticMeshComponent()->GetStaticMesh())
-    ;
 
     const float HalfFOVRadians = FMath::DegreesToRadians<float>(InFOVDegrees) * 0.5f;
     // Add extra size to view slightly outside of the sphere to compensate for perspective

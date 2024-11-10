@@ -14,7 +14,7 @@ namespace UE::Optionals {
      *         the TOptional will store an lvalue reference. Otherwise, it will store a decayed version of the value.
      */
     template <typename T>
-    auto Of(T&& Value) {
+    auto Of(T &&Value) {
         if constexpr (std::is_lvalue_reference_v<T>) {
             return TOptional<T>(std::forward<T>(Value));
         } else {
@@ -32,13 +32,12 @@ namespace UE::Optionals {
      */
     template <typename T, typename R = Ranges::TRawPointerType<T>>
         requires Ranges::Pointer<T>
-    auto Of(T&& Value) {
+    auto Of(T &&Value) {
         auto RawPointer = Ranges::GetRawPointer<T>(std::forward<T>(Value));
-        check(RawPointer != nullptr);
-        return TOptional<std::remove_pointer_t<R>&>(RawPointer);
+        check(RawPointer != nullptr)
+        return TOptional<std::remove_pointer_t<R> &>(RawPointer);
     }
 
-    
     /**
      * Creates a TOptional object containing a valid subclass of T.
      *
@@ -48,8 +47,8 @@ namespace UE::Optionals {
     template <typename T>
         requires std::derived_from<T, UObject>
     auto Of(const TSubclassOf<T> &Class) {
-        check(Class != nullptr);
+        check(Class != nullptr)
         return TOptional<TNonNullSubclassOf<T>>(Class);
     }
-    
-}
+
+} // namespace UE::Optionals

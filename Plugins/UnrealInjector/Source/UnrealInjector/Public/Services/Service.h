@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "Service.generated.h"
 
 /**
@@ -12,6 +13,4 @@
 UCLASS(Abstract, Blueprintable, BlueprintType)
 class UNREALINJECTOR_API UService : public UObject {
     GENERATED_BODY()
-
-
 };

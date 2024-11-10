@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Saving/Serialization/SaveSerializationUtils.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 
@@ -9,7 +8,7 @@ FObjectData FObjectData::SerializeObject(UObject *Object) {
         return FObjectData();
     }
 
-    FObjectData Data = { .ObjectClass = Object->GetClass() };
+    FObjectData Data = {.ObjectClass = Object->GetClass()};
     FMemoryWriter Writer(Data.Data, true);
     FObjectAndNameAsStringProxyArchive Archive(Writer, true);
     Writer.SetIsSaving(true);
@@ -17,7 +16,7 @@ FObjectData FObjectData::SerializeObject(UObject *Object) {
     return Data;
 }
 
-UObject* FObjectData::DeserializeObject() const {
+UObject *FObjectData::DeserializeObject() const {
     if (!IsValid(ObjectClass) || Data.Num() <= 0) {
         return nullptr;
     }
@@ -41,6 +40,6 @@ FObjectData USaveSerializationUtils::SerializeObject(UObject *Object) {
     return FObjectData::SerializeObject(Object);
 }
 
-UObject * USaveSerializationUtils::DeserializeObject(const FObjectData &SerializedData) {
+UObject *USaveSerializationUtils::DeserializeObject(const FObjectData &SerializedData) {
     return SerializedData.DeserializeObject();
 }

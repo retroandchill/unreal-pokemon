@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Services/ServiceUtilities.h"
 #include "DependencyInjectionSettings.h"
 #include "Engine/ObjectLibrary.h"
@@ -13,7 +12,6 @@
 #include "Ranges/Views/SharedArrayView.h"
 #include "Ranges/Views/Unique.h"
 #include "Services/Service.h"
-
 
 UE::Ranges::TAnyView<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     auto Settings = GetDefault<UDependencyInjectionSettings>();
@@ -29,7 +27,6 @@ UE::Ranges::TAnyView<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     TArray<FAssetData> AssetData;
     ObjectLibrary->GetAssetDataList(AssetData);
 
-    
     // clang-format off
     auto FilteredAssetData = UE::Ranges::TSharedArrayView(std::move(AssetData)) |
         UE::Ranges::Map(&FAssetData::GetAsset, TSet<FName>()) |
@@ -43,6 +40,5 @@ UE::Ranges::TAnyView<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
         UE::Ranges::Map([](UClass* Class) { return TSubclassOf<UService>(Class); });
     // clang-format on
 
-    return UE::Ranges::Concat(UE::Ranges::TClassView<UService>(), std::move(FilteredAssetData)) |
-        UE::Ranges::Unique;
+    return UE::Ranges::Concat(UE::Ranges::TClassView<UService>(), std::move(FilteredAssetData)) | UE::Ranges::Unique;
 }

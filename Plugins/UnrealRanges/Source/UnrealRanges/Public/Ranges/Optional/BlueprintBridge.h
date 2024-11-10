@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Traits.h"
 #include "Ranges/RangeConcepts.h"
+#include "Traits.h"
 #include "UObject/Object.h"
-#include "BlueprintBridge.generated.h"
 
+#include "BlueprintBridge.generated.h"
 
 /**
  * @enum ESetStatus
@@ -35,28 +35,28 @@ namespace UE::Optionals {
         struct TBlueprintOptionalGetter;
 
         template <typename T>
-            requires (!std::is_reference_v<T>)
+            requires(!std::is_reference_v<T>)
         struct TBlueprintOptionalGetter<TOptional<T>> {
             using ValueType = std::remove_const_t<T>;
         };
 
         template <typename T>
-        struct TBlueprintOptionalGetter<TOptional<T&>> {
+        struct TBlueprintOptionalGetter<TOptional<T &>> {
             using ValueType = std::remove_const_t<T>;
         };
 
         template <typename T>
             requires std::derived_from<T, UObject>
-        struct TBlueprintOptionalGetter<TOptional<T&>> {
-            using ValueType = std::remove_const_t<T>*;
+        struct TBlueprintOptionalGetter<TOptional<T &>> {
+            using ValueType = std::remove_const_t<T> *;
         };
 
         template <typename T>
             requires Ranges::UnrealInterface<T>
-        struct TBlueprintOptionalGetter<TOptional<T&>> {
+        struct TBlueprintOptionalGetter<TOptional<T &>> {
             using ValueType = TScriptInterface<std::remove_const_t<T>>;
         };
-    }
+    } // namespace Detail
 
     /**
      * Get the type of the out parameter for a Blueprint utility function for getting the value of an optional property.
@@ -72,11 +72,8 @@ namespace UE::Optionals {
      * @tparam T The type to check
      */
     template <typename T>
-    concept BlueprintCompatibleOptional = UEOptional<T> && requires {
-        typename TBlueprintOutParameter<T>;
-    };
+    concept BlueprintCompatibleOptional = UEOptional<T> && requires { typename TBlueprintOutParameter<T>; };
 
-    
     /**
      * Retrieves the value from an optional and sets it to the output parameter.
      *
@@ -87,7 +84,7 @@ namespace UE::Optionals {
      */
     template <typename T>
         requires BlueprintCompatibleOptional<T>
-    constexpr ESetStatus GetBlueprintOptionalValue(T&& Optional, TBlueprintOutParameter<T>& OutParam) {
+    constexpr ESetStatus GetBlueprintOptionalValue(T &&Optional, TBlueprintOutParameter<T> &OutParam) {
         if (!Optional.IsSet()) {
             return ESetStatus::NotSet;
         }
@@ -101,4 +98,4 @@ namespace UE::Optionals {
         }
         return ESetStatus::IsSet;
     }
-}
+} // namespace UE::Optionals

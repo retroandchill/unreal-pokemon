@@ -19,7 +19,6 @@ struct POKEMONUI_API FCharacteristicList {
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Characteristics")
     TArray<FText> Characteristics;
-    
 };
 
 /**

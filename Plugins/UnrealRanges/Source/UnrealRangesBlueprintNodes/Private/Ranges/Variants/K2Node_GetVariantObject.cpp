@@ -84,7 +84,6 @@ void UK2Node_GetVariantObject::GetMenuActions(FBlueprintActionDatabaseRegistrar 
 
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
     check(Spawner != nullptr)
-    ;
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 

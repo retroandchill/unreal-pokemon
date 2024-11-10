@@ -23,7 +23,7 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * @return The move that this panel represents
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
-    const TScriptInterface<IBattleMove> &GetMove() const{
+    const TScriptInterface<IBattleMove> &GetMove() const {
         return Move;
     }
 
@@ -38,7 +38,7 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * Set the visual appearance of the move for this widget
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Style")
-    void OnMoveSet(const TScriptInterface<IBattleMove>& NewMove);
+    void OnMoveSet(const TScriptInterface<IBattleMove> &NewMove);
 
   private:
     /**

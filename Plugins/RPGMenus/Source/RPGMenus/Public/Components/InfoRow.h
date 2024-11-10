@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
+
 #include "InfoRow.generated.h"
 
 /**
@@ -17,23 +18,24 @@ UCLASS(Abstract)
 class RPGMENUS_API UInfoRow : public UCommonUserWidget {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
 
-public:
+  public:
     /**
      * @brief Updates the visibility of the UInfoRow widget based on its initial visibility settings.
      *
-     * This function determines the appropriate visibility state for the widget. During design time in the editor, it directly
-     * sets the visibility to the initial value. At runtime, it uses the InitialVisibilityDelegate to determine the visibility
-     * if the delegate is bound and valid. If the delegate is not bound or uninitialized, it defaults to the InitialVisibility value.
+     * This function determines the appropriate visibility state for the widget. During design time in the editor, it
+     * directly sets the visibility to the initial value. At runtime, it uses the InitialVisibilityDelegate to determine
+     * the visibility if the delegate is bound and valid. If the delegate is not bound or uninitialized, it defaults to
+     * the InitialVisibility value.
      *
      * @note This function is automatically called during the Native Pre-Construct phase of widget initialization.
      */
     UFUNCTION(BlueprintCallable, Category = Visibility)
     void UpdateVisibility();
 
-private:
+  private:
     /**
      * @brief Specifies the initial visibility state of the UInfoRow widget.
      *
@@ -48,5 +50,4 @@ private:
 
     UPROPERTY()
     FGetSlateVisibility InitialVisibilityDelegate;
-
 };

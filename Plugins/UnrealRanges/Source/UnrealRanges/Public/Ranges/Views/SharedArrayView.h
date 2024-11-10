@@ -8,26 +8,28 @@
 namespace UE::Ranges {
     template <typename T>
     class TSharedArrayIterator {
-    public:
+      public:
         using SizeType = typename TArray<T>::SizeType;
         using difference_type = std::ptrdiff_t;
         using value_type = T;
-        
+
         TSharedArrayIterator() = default;
 
-        explicit TSharedArrayIterator(const TSharedRef<TArray<T>>& Data, SizeType Index = 0) : Data(Data), Index(Index) {}
-        
-        bool operator==(const TSharedArrayIterator& Other) const {
+        explicit TSharedArrayIterator(const TSharedRef<TArray<T>> &Data, SizeType Index = 0)
+            : Data(Data), Index(Index) {
+        }
+
+        bool operator==(const TSharedArrayIterator &Other) const {
             check(Data == Other.Data)
             return Index == Other.Index;
         }
-        
-        T& operator * () const {
+
+        T &operator*() const {
             check(Data.IsValid() && Data->IsValidIndex(Index))
             return (*Data)[Index];
         }
-        
-        TSharedArrayIterator& operator++() {
+
+        TSharedArrayIterator &operator++() {
             ++Index;
             return *this;
         }
@@ -37,7 +39,7 @@ namespace UE::Ranges {
             return Temp;
         }
 
-    private:
+      private:
         TSharedPtr<TArray<T>> Data;
         SizeType Index = INDEX_NONE;
     };
@@ -55,7 +57,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     class TSharedArrayView {
-    public:
+      public:
         /**
          * @brief Default constructor for the TSharedArrayView class.
          *
@@ -73,7 +75,8 @@ namespace UE::Ranges {
          *              The contents of the array will be moved and managed by the TSharedArrayView.
          * @return An instance of TSharedArrayView that holds a shared reference to the array.
          */
-        explicit TSharedArrayView(TArray<T>&& Array) : Data(MakeShared<TArray<T>>(std::move(Array))) {}
+        explicit TSharedArrayView(TArray<T> &&Array) : Data(MakeShared<TArray<T>>(std::move(Array))) {
+        }
 
         /**
          * @brief Returns an iterator to the beginning of the shared array view.
@@ -99,15 +102,14 @@ namespace UE::Ranges {
             return TSharedArrayIterator<T>(Data, Data->Num());
         }
 
-    private:
+      private:
         TSharedRef<TArray<T>> Data = MakeShared<TArray<T>>();
     };
 
     static_assert(ranges::forward_range<TSharedArrayView<UObject>>);
-}
+} // namespace UE::Ranges
 
 template <typename T>
 constexpr inline bool ranges::enable_view<UE::Ranges::TSharedArrayView<T>> = true;
 
 static_assert(ranges::viewable_range<UE::Ranges::TSharedArrayView<int32>>);
-

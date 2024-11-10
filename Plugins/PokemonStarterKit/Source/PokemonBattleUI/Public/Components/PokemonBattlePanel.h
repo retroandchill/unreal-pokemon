@@ -83,7 +83,7 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Display")
     void OnRefresh();
-    
+
     /**
      * The function used to callback to the depleted HP.
      * @param NewPercent The new HP percentage
@@ -96,7 +96,6 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
     virtual void HPPercentUpdateComplete() const;
 
   private:
-
     /**
      * The widget that display's the HP percentage
      */

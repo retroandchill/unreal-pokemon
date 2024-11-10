@@ -189,8 +189,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     }
 
     auto HitCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
-        bool bHitResult = HitCheck(User, Target);
-        if (!bHitResult) {
+        bool bHitResult = Hitcheck(User, Target) if (!bHitResult) {
             UE_LOG(LogBattle, Display, TEXT("%s missed %s!"), *BattleMove->GetDisplayName().ToString(),
                    *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
@@ -505,7 +504,7 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
     }
 
     ApplyGeneralEffect(User, RunningMessages);
-    FaintCheck(User, Targets, RunningMessages);
+    Faintcheck(User, Targets, RunningMessages)
 }
 
 void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,

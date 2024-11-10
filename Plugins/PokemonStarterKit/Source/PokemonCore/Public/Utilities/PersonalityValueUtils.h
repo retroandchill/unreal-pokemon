@@ -51,6 +51,6 @@ class POKEMONCORE_API UPersonalityValueUtils : public UBlueprintFunctionLibrary 
      * @param BestIV The IV (Individual Value) of the best stat.
      */
     UFUNCTION(BlueprintCallable, Category = Summary, meta = (AutoCreateRefTerm = Pokemon, DefaultToSelf = Pokemon))
-    static void GetBestStat(const TScriptInterface<IPokemon>& Pokemon, const TArray<FMainStatHandle> &StatOrder,
-        FMainStatHandle &BestStat, int32 &BestIV);
+    static void GetBestStat(const TScriptInterface<IPokemon> &Pokemon, const TArray<FMainStatHandle> &StatOrder,
+                            FMainStatHandle &BestStat, int32 &BestIV);
 };

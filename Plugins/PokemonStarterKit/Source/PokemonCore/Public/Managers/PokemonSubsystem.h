@@ -94,8 +94,9 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Maps|Display")
     void SetCurrentLocation(const FText &LocationName);
 
-    void CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& SaveTags) const override;
-    void LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer& LoadTags) override;
+    void CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame,
+                                       const FGameplayTagContainer &SaveTags) const override;
+    void LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame, const FGameplayTagContainer &LoadTags) override;
 
     /**
      * Adjusts the player character's transform when loading a game if a saved transform is available.

@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/BattlerExpPanel.h"
-#include "CommonNumericTextBlock.h"
 #include "Battle/Battlers/Battler.h"
+#include "CommonNumericTextBlock.h"
 #include "Components/DisplayText.h"
 #include "Components/ProgressBar.h"
 

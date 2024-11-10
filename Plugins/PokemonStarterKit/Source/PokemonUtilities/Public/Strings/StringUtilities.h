@@ -65,7 +65,7 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
      * @return The formatted date as a string.
      */
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = "DateTime,Format"))
-    static FString FormatDate(const FDateTime &DateTime, const FString & Format = TEXT("%b %e, %Y"));
+    static FString FormatDate(const FDateTime &DateTime, const FString &Format = TEXT("%b %e, %Y"));
 
     /**
      * Joins an array of FText lines into a single FText separated by newline characters.
@@ -74,5 +74,5 @@ class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
      * @return A single FText containing all the lines joined with newline characters.
      */
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Delimiter))
-    static FText JoinText(const TArray<FText>& Lines);
+    static FText JoinText(const TArray<FText> &Lines);
 };

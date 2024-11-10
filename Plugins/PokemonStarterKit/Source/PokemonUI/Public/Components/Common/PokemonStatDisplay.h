@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PokemonInfoWidget.h"
+
 #include "PokemonStatDisplay.generated.h"
 
 class UPokemonStatEntry;
@@ -22,7 +23,7 @@ UCLASS()
 class POKEMONUI_API UPokemonStatDisplay : public UWidget {
     GENERATED_BODY()
 
-public:
+  public:
     TSharedRef<SWidget> RebuildWidget() override;
     void ReleaseSlateResources(bool bReleaseChildren) override;
     void SynchronizeProperties() override;
@@ -37,7 +38,7 @@ public:
      * @return A reference to the FLinearColor object representing the color of the inner lines.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const FLinearColor & GetInnerLinesColor() const {
+    const FLinearColor &GetInnerLinesColor() const {
         return InnerLinesColor;
     }
 
@@ -63,7 +64,7 @@ public:
      * @return A reference to the FLinearColor object representing the color of the outline.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const FLinearColor & GetOutlineColor() const {
+    const FLinearColor &GetOutlineColor() const {
         return OutlineColor;
     }
 
@@ -89,7 +90,7 @@ public:
      * @return A constant reference to a FVector2D representing the minimum desired size.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const FVector2D & GetMinimumDesiredSize() const {
+    const FVector2D &GetMinimumDesiredSize() const {
         return MinimumDesiredSize;
     }
 
@@ -115,7 +116,7 @@ public:
      * @return A constant reference to the TScriptInterface representing the Pokémon.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IPokemon> & GetPokemon() const {
+    const TScriptInterface<IPokemon> &GetPokemon() const {
         return Pokemon;
     }
 
@@ -131,7 +132,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
     void SetPokemon(const TScriptInterface<IPokemon> &NewPokemon);
 
-private:
+  private:
     /**
      * The order of the stats that are being drawn starting from the top and going around clockwise.
      */
@@ -145,7 +146,8 @@ private:
      * Pokémon stats graphical display. It enhances visual differentiation and adds
      * styling to the stat grid.
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetInnerLinesColor, BlueprintSetter = SetInnerLinesColor, Category = Style)
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetInnerLinesColor, BlueprintSetter = SetInnerLinesColor,
+              Category = Style)
     FLinearColor InnerLinesColor = FLinearColor::Gray;
 
     /**
@@ -165,8 +167,9 @@ private:
      * should be rendered at. Ensuring the widget respects this size helps to maintain
      * a consistent and visually appealing layout regardless of the container's size.
      */
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetMinimumDesiredSize, BlueprintSetter = SetMinimumDesiredSize, Category = Layout)
-    FVector2D MinimumDesiredSize = { 250, 250 };
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetMinimumDesiredSize, BlueprintSetter = SetMinimumDesiredSize,
+              Category = Layout)
+    FVector2D MinimumDesiredSize = {250, 250};
 
     /**
      * @brief Interface reference to a Pokémon object used in the UI widget.
@@ -181,7 +184,6 @@ private:
      */
     UPROPERTY(BlueprintGetter = GetPokemon, BlueprintSetter = SetPokemon, Category = Content)
     TScriptInterface<IPokemon> Pokemon;
-    
-    TSharedPtr<SPokemonStatGraph> StatGraph;
 
+    TSharedPtr<SPokemonStatGraph> StatGraph;
 };

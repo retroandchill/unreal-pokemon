@@ -28,9 +28,7 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
         return FText::GetEmpty();
     }
 
-    auto ExtractString = [](const FText &Text) -> const FString &{
-        return Text.ToString();
-    };
+    auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
         // clang-format off

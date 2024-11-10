@@ -87,7 +87,6 @@ const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {
 bool UBasicTrainer::IsPartyFull() const {
     int32 MaxPartySize = GetDefault<UPokemonDataSettings>()->MaxPartySize;
     check(Party.Num() <= MaxPartySize)
-    ;
     return Party.Num() == MaxPartySize;
 }
 

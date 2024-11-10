@@ -201,18 +201,18 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @return Did the move hit?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool HitCheck(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+    bool Hitcheck(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target)
 
-    /**
-     * Calculate the base accuracy of the move
-     * @param Accuracy The stated accuracy of the move
-     * @param User The user of the move
-     * @param Target The target to evaluate against
-     * @return The base accuracy to use in the hit check
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    int32 CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler> &User,
-                                const TScriptInterface<IBattler> &Target);
+        /**
+         * Calculate the base accuracy of the move
+         * @param Accuracy The stated accuracy of the move
+         * @param User The user of the move
+         * @param Target The target to evaluate against
+         * @return The base accuracy to use in the hit check
+         */
+        UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking") int32
+        CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler> &User,
+                              const TScriptInterface<IBattler> &Target);
 
     /**
      * Display the given messages and play the animation of the move

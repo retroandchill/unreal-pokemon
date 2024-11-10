@@ -63,7 +63,7 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection) {
     FaceDirection(MovementDirection);
-    if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
+    if (auto [bCanMove, FoundActors] = Movementcheck(MovementDirection) !bCanMove) {
         if (MoveCallback.IsSet()) {
             auto Callback = std::move(MoveCallback.GetValue());
             MoveCallback.Reset();
