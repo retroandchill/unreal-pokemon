@@ -7,25 +7,14 @@
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/Ints.h"
 
-void USummaryPages::NativeConstruct() {
-    Super::NativeConstruct();
-    CastChecked<USummaryScreenPage>(PageSwitcher->GetActiveWidget())->OnPageShown();
-}
 
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off
-    UE::Ranges::Ints(0, PageSwitcher->GetNumWidgets() - 1) |
+    UE::Ranges::Ints(0, PageSwitcher->GetNumWidgets()) |
         UE::Ranges::Map(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
         UE::Ranges::CastType<USummaryScreenPage> |
         UE::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
     // clang-format on
-    if (OnPokemonChange.IsBound()) {
-        OnPokemonChange.Execute(GetPokemon());
-    }
-}
-
-FOnPokemonChange &USummaryPages::GetOnPokemonChange() {
-    return OnPokemonChange;
 }
 
 void USummaryPages::SetPage(int32 PageIndex) {
