@@ -22,11 +22,6 @@ void UPokemonSummaryScreen::NativePreConstruct() {
     }
 }
 
-void UPokemonSummaryScreen::NativeConstruct() {
-    Super::NativeConstruct();
-    SummaryPages->GetOnPokemonChange().BindUObject(this, &UPokemonSummaryScreen::SetPokemon);
-}
-
 void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex) {
     SetInitialPokemon(Trainer->GetParty(), InitialIndex);
 }
@@ -44,8 +39,4 @@ USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const {
 
 UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
     return PokemonSelection;
-}
-
-void UPokemonSummaryScreen::SetPokemon(const TScriptInterface<IPokemon> &Pokemon) {
-    SummaryPages->SetPokemon(Pokemon);
 }

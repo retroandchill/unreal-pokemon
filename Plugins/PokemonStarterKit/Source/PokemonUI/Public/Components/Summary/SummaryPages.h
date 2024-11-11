@@ -21,11 +21,6 @@ struct POKEMONUI_API FCharacteristicList {
     TArray<FText> Characteristics;
 };
 
-/**
- * Delegate called when the Pokémon is changed by the iterator.
- */
-DECLARE_DELEGATE_OneParam(FOnPokemonChange, const TScriptInterface<IPokemon> &);
-
 class UPokemonInfoPage;
 class UWidgetSwitcher;
 
@@ -37,17 +32,10 @@ class POKEMONUI_API USummaryPages : public UPokemonInfoWidget {
     GENERATED_BODY()
 
   protected:
-    void NativeConstruct() override;
 
     void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
   public:
-    /**
-     * Get the delegate that is called when a Pokémon is changed.
-     * @return Delegate that is called when a Pokémon is changed.
-     */
-    FOnPokemonChange &GetOnPokemonChange();
-
     /**
      * Get the page at the given index.
      * @param PageIndex The index to search at
@@ -75,11 +63,6 @@ class POKEMONUI_API USummaryPages : public UPokemonInfoWidget {
     UWidgetSwitcher *GetPageSwitcher() const;
 
   private:
-    /**
-     * Called when a Pokémon is changed
-     */
-    FOnPokemonChange OnPokemonChange;
-
     /**
      * The widget used to actually switch the pages
      */

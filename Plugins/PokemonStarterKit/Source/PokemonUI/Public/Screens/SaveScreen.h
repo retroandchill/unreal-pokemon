@@ -40,6 +40,23 @@ class POKEMONUI_API USaveScreen : public UScreen {
     void SetSaveGame(UEnhancedSaveGame *SaveGame);
 
     /**
+     * Event triggered when the save game has been set.
+     * This can be implemented in Blueprints to define custom behavior that occurs
+     * when a new save game is assigned.
+     * @param SaveGame The save game object that has been set.
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = Saving)
+    void OnSaveGameSet(UPokemonSaveGame* SaveGame);
+
+    /**
+     * Event triggered on the first attempt to save the game.
+     * This method can be implemented in Blueprints to define custom behavior that occurs
+     * when the player tries to save the game for the first time.
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = Saving)
+    void OnFirstSaveAttempt();
+
+    /**
      * Prompt the player to save the game.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Saving)
@@ -54,6 +71,13 @@ class POKEMONUI_API USaveScreen : public UScreen {
     UE_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
 
   protected:
+    /**
+     * Exits the save screen and broadcasts the result of the save operation.
+     * This function closes the screen and triggers the OnExitSaveScreen event,
+     * indicating whether the save operation was successful or not.
+     *
+     * @param bSuccess A boolean flag indicating the success (true) or failure (false) of the save operation.
+     */
     UFUNCTION(BlueprintCallable, Category = Saving)
     void ExitSaveScreen(bool bSuccess);
 
@@ -61,23 +85,8 @@ class POKEMONUI_API USaveScreen : public UScreen {
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USaveGameCard> SaveGameCard;
 
-    UPROPERTY(meta = (BindWidget))
-    TObjectPtr<UDisplayText> LastSavedText;
-
     UPROPERTY()
     TObjectPtr<UEnhancedSaveGame> CurrentSaveGame;
-
-    /**
-     * The format used for the last saved blurb.
-     */
-    UPROPERTY(EditAnywhere, Category = Content)
-    FText LastSavedFormat = NSLOCTEXT("PokemonUI", "SaveScreen_LastSavedFormat", "Last saved on {Date} at {Time}");
-
-    /**
-     * The format used for formatting the date
-     */
-    UPROPERTY(EditAnywhere, Category = "Memo|Formatting")
-    FString DateFormat = TEXT("%m/%d/%Y");
 
     FOnSaveComplete OnSaveCompleteDelegate;
 
