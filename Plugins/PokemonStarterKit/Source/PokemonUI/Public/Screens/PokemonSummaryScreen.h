@@ -29,7 +29,6 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
 
   protected:
     void NativePreConstruct() override;
-    void NativeConstruct() override;
 
   public:
     /**
@@ -58,12 +57,6 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
     UPokemonSelectionPaneBase *GetPokemonSelection() const;
 
   private:
-    /**
-     * Set the Pokémon for the widgets
-     * @param Pokemon The Pokémon to set to.
-     */
-    void SetPokemon(const TScriptInterface<IPokemon> &Pokemon);
-
     /**
      * The widget containing the name information
      */
