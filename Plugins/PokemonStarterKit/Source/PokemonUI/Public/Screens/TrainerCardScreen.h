@@ -60,7 +60,8 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
      * This event is designed to be implemented in Blueprints. It allows for custom actions
      * to be performed whenever the player's trainer and metadata are updated.
      *
-     * @param Trainer A constant reference to the TScriptInterface of the ITrainer interface representing the new trainer assigned to the player.
+     * @param Trainer A constant reference to the TScriptInterface of the ITrainer interface representing the new
+     * trainer assigned to the player.
      * @param Metadata A pointer to the UPlayerMetadata object representing the new metadata assigned to the player.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Content)
@@ -68,8 +69,8 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
 
   private:
     /**
-      * The player trainer we're displaying information for.
-      */
+     * The player trainer we're displaying information for.
+     */
     UPROPERTY(BlueprintGetter = GetPlayerTrainer, Category = Content)
     TScriptInterface<ITrainer> PlayerTrainer;
 

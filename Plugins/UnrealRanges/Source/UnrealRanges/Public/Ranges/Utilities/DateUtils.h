@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "DateUtils.generated.h"
 
 /**
@@ -13,7 +14,7 @@ UCLASS()
 class UNREALRANGES_API UDateUtils : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Creates an FTimespan from a specified number of seconds.
      *
@@ -22,5 +23,4 @@ public:
      */
     UFUNCTION(BlueprintPure, Category = Timespan)
     static FTimespan FromSeconds(double Seconds);
-
 };

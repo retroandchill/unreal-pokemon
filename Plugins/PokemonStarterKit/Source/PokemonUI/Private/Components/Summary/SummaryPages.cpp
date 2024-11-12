@@ -7,7 +7,6 @@
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/Ints.h"
 
-
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off
     UE::Ranges::Ints(0, PageSwitcher->GetNumWidgets()) |

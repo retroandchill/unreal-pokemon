@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
+
 #include "PlayerInfoWidget.generated.h"
 
 class UPlayerMetadata;
@@ -19,7 +20,7 @@ UCLASS(Abstract)
 class POKEMONUI_API UPlayerInfoWidget : public UCommonUserWidget {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * Retrieve the player's trainer information.
      *
@@ -52,39 +53,43 @@ public:
      * This function assigns a new trainer and accompanying metadata to the player,
      * and handles the subsequent player info updates.
      *
-     * @param NewTrainer A constant reference to the TScriptInterface of the ITrainer interface representing the new trainer to be assigned.
-     * @param NewPlayerMetadata A pointer to the UPlayerMetadata object representing the new player metadata to be assigned.
+     * @param NewTrainer A constant reference to the TScriptInterface of the ITrainer interface representing the new
+     * trainer to be assigned.
+     * @param NewPlayerMetadata A pointer to the UPlayerMetadata object representing the new player metadata to be
+     * assigned.
      */
     UFUNCTION(BlueprintCallable, Category = Content)
     void SetPlayerInfo(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata);
-    
-protected:
+
+  protected:
     /**
      * Event triggered when the player's trainer and metadata are set.
      *
      * This event is designed to be implemented in Blueprints. It allows for custom actions
      * to be performed whenever the player's trainer and metadata are updated.
      *
-     * @param NewTrainer A constant reference to the TScriptInterface of the ITrainer interface representing the new trainer assigned to the player.
-     * @param NewPlayerMetadata A pointer to the UPlayerMetadata object representing the new metadata assigned to the player.
+     * @param NewTrainer A constant reference to the TScriptInterface of the ITrainer interface representing the new
+     * trainer assigned to the player.
+     * @param NewPlayerMetadata A pointer to the UPlayerMetadata object representing the new metadata assigned to the
+     * player.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Content)
     void OnPlayerInfoSet(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata);
 
     /**
      * Set the display text for the time
-     * 
+     *
      * @param Playtime The new playtime
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Content)
     void SetPlayerTimeInfo(float Playtime);
 
-private:
+  private:
     void HandlePlayerInfoSet(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata);
-    
+
     /**
-      * The player trainer we're displaying information for.
-      */
+     * The player trainer we're displaying information for.
+     */
     UPROPERTY(BlueprintGetter = GetPlayerTrainer, Category = Content)
     TScriptInterface<ITrainer> PlayerTrainer;
 
@@ -93,5 +98,4 @@ private:
      */
     UPROPERTY(BlueprintGetter = GetPlayerMetadata, Category = Content)
     TObjectPtr<UPlayerMetadata> PlayerMetadata;
-
 };
