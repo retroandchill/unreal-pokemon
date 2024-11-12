@@ -29,7 +29,7 @@ class POKEMONBATTLEUI_API UBattleItemSelectionOption : public UCommonButtonBase 
     UFUNCTION(BlueprintImplementableEvent, Category = Item)
     void OnItemSet(const FItem &Item, int32 Quantity);
 
-private:
+  private:
     FName ItemID;
     int32 ItemQuantity;
 };

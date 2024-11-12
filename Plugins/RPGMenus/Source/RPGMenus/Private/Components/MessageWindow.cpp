@@ -1,14 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Components/MessageWindow.h"
-#include "CommonTextBlock.h"
 #include "Components/DialogueBox.h"
-#include "Components/DisplayText.h"
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
-#include "Fonts/FontMeasure.h"
 #include "Input/CommonUIInputTypes.h"
 #include "MathUtilities.h"
-#include "Utilities/WidgetUtilities.h"
 
 void UMessageWindow::NativeConstruct() {
     Super::NativeConstruct();

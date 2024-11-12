@@ -3,28 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Screens/Screen.h"
+#include "CommonUserWidget.h"
 
-#include "TrainerCardScreen.generated.h"
+#include "PlayerInfoWidget.generated.h"
 
-class UPlayerInfoWidget;
-class UPaperFlipbookUserWidget;
 class UPlayerMetadata;
 class ITrainer;
-class UImage;
-class UDisplayText;
 
 /**
- * The screen used to bring up the trainer card.
+ * UPlayerInfoWidget displays information related to the player's trainer and metadata.
+ *
+ * This class extends UCommonUserWidget and provides both retrieval and assignment functionalities
+ * for player trainer and metadata information. It also includes Blueprint events for handling updates.
  */
-UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UTrainerCardScreen : public UScreen {
+UCLASS(Abstract)
+class POKEMONUI_API UPlayerInfoWidget : public UCommonUserWidget {
     GENERATED_BODY()
 
   public:
-    UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = WorldContextObject))
-    static UTrainerCardScreen *AddTrainerCardScreenToStack(const UObject *WorldContextObject);
-
     /**
      * Retrieve the player's trainer information.
      *
@@ -51,23 +47,46 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
         return PlayerMetadata;
     }
 
-  protected:
-    void NativeConstruct() override;
+    /**
+     * Set the player's trainer information and metadata.
+     *
+     * This function assigns a new trainer and accompanying metadata to the player,
+     * and handles the subsequent player info updates.
+     *
+     * @param NewTrainer A constant reference to the TScriptInterface of the ITrainer interface representing the new
+     * trainer to be assigned.
+     * @param NewPlayerMetadata A pointer to the UPlayerMetadata object representing the new player metadata to be
+     * assigned.
+     */
+    UFUNCTION(BlueprintCallable, Category = Content)
+    void SetPlayerInfo(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata);
 
+  protected:
     /**
      * Event triggered when the player's trainer and metadata are set.
      *
      * This event is designed to be implemented in Blueprints. It allows for custom actions
      * to be performed whenever the player's trainer and metadata are updated.
      *
-     * @param Trainer A constant reference to the TScriptInterface of the ITrainer interface representing the new
+     * @param NewTrainer A constant reference to the TScriptInterface of the ITrainer interface representing the new
      * trainer assigned to the player.
-     * @param Metadata A pointer to the UPlayerMetadata object representing the new metadata assigned to the player.
+     * @param NewPlayerMetadata A pointer to the UPlayerMetadata object representing the new metadata assigned to the
+     * player.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Content)
-    void OnPlayerInfoSet(const TScriptInterface<ITrainer> &Trainer, UPlayerMetadata *Metadata);
+    void OnPlayerInfoSet(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata);
+
+    /**
+     * Set the display text for the time
+     *
+     * @param Playtime The new playtime
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = Content)
+    void SetPlayerTimeInfo(float Playtime);
 
   private:
+    void HandlePlayerInfoSet(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata);
+
     /**
      * The player trainer we're displaying information for.
      */
@@ -80,5 +99,3 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
     UPROPERTY(BlueprintGetter = GetPlayerMetadata, Category = Content)
     TObjectPtr<UPlayerMetadata> PlayerMetadata;
 };
-
-DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UTrainerCardScreen)
