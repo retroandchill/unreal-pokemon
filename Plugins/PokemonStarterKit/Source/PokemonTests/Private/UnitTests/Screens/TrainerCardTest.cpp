@@ -1,7 +1,6 @@
 ﻿
 #include "Asserts.h"
 #include "Blueprint/WidgetTree.h"
-#include "Components/DisplayText.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Misc/AutomationTest.h"
 #include "Screens/TrainerCardScreen.h"
