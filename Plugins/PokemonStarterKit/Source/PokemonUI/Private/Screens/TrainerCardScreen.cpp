@@ -1,13 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Screens/TrainerCardScreen.h"
-#include "Components/DisplayText.h"
-#include "Graphics/SpriteLoader.h"
 #include "Managers/PokemonSubsystem.h"
-#include "PaperFlipbook.h"
 #include "PaperFlipbookUserWidget.h"
-#include "Player/PlayerMetadata.h"
-#include "Utilities/PokemonUIUtils.h"
+#include "Components/Common/PlayerInfoWidget.h"
 #include "Utilities/RPGMenuUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UTrainerCardScreen)
@@ -21,14 +17,12 @@ void UTrainerCardScreen::NativeConstruct() {
 
     auto PokemonSubsystem = GetGameInstance()->GetSubsystem<UPokemonSubsystem>();
     check(PokemonSubsystem != nullptr)
-    Trainer = PokemonSubsystem->GetPlayer();
+    PlayerTrainer = PokemonSubsystem->GetPlayer();
     PlayerMetadata = PokemonSubsystem->GetPlayerMetadata();
-    PlayerMetadata->GetOnTimeUpdated().AddUniqueDynamic(this, &UTrainerCardScreen::SetPlayerTimeInfo);
-
-    SetTrainerSprite();
-    SetTrainerInfo();
+    OnPlayerInfoSet(PlayerTrainer, PlayerMetadata);
 }
 
+/*
 void UTrainerCardScreen::SetTrainerSprite() {
     check(TrainerImage != nullptr)
     auto Flipbook = USpriteLoader::GetTrainerSprite(Trainer).TryGet<UPaperFlipbook>().GetPtrOrNull();
@@ -50,3 +44,4 @@ void UTrainerCardScreen::SetTrainerInfo() {
 void UTrainerCardScreen::SetPlayerTimeInfo(float Playtime) {
     TimeText->SetText(FText::FromString(FTimespan::FromSeconds(Playtime).ToString(TEXT("%h:%m")).RightChop(1)));
 }
+*/
