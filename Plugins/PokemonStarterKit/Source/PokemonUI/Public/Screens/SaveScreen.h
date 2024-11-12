@@ -46,7 +46,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
      * @param SaveGame The save game object that has been set.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Saving)
-    void OnSaveGameSet(UPokemonSaveGame* SaveGame);
+    void OnSaveGameSet(UPokemonSaveGame *SaveGame);
 
     /**
      * Event triggered on the first attempt to save the game.

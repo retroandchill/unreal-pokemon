@@ -32,7 +32,6 @@ class POKEMONUI_API USummaryPages : public UPokemonInfoWidget {
     GENERATED_BODY()
 
   protected:
-
     void OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) override;
 
   public:

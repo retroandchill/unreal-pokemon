@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Bag/PocketWindow.h"
-#include "CommonTextBlock.h"
-#include "Components/DisplayText.h"
 #include "PokemonDataSettings.h"
 
 FName UPocketWindow::GetCurrentPocket() const {

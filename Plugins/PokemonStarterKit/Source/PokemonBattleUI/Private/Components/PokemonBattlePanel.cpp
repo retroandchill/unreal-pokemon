@@ -4,13 +4,10 @@
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
-#include "Components/DisplayText.h"
 #include "Components/EnhancedImage.h"
-#include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Graphics/AssetClasses.h"
 #include "Utilities/PokemonUIUtils.h"
-#include "Utilities/WidgetUtilities.h"
 
 using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
 using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
