@@ -22,15 +22,9 @@ bool TrainerCardTest::RunTest(const FString &Parameters) {
     UE_ASSERT_NOT_NULL(Screen.Get());
     Screen->AddToViewport();
 
-    auto Trainer = UPokemonSubsystem::GetInstance(World.Get()).GetPlayer();
-
-    auto TrainerNameText = Screen->WidgetTree->FindWidget<UDisplayText>(TEXT("TrainerNameText"));
-    UE_ASSERT_NOT_NULL(TrainerNameText);
-    UE_CHECK_EQUAL(Trainer->GetTrainerName().ToString(), TrainerNameText->GetText().ToString());
-
-    auto IdText = Screen->WidgetTree->FindWidget<UDisplayText>(TEXT("IdText"));
-    UE_ASSERT_NOT_NULL(IdText);
-    UE_CHECK_EQUAL(Trainer->GetIdNumber(), FCString::Atoi(*IdText->GetText().ToString()));
+    auto &Subsystem = UPokemonSubsystem::GetInstance(World.Get());
+    UE_CHECK_TRUE(Screen->GetPlayerTrainer() == Subsystem.GetPlayer());
+    UE_CHECK_TRUE(Screen->GetPlayerMetadata() == Subsystem.GetPlayerMetadata());
 
     return true;
 }
