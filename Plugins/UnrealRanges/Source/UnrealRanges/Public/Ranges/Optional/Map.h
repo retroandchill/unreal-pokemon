@@ -7,12 +7,15 @@
 #include "Ranges/Functional/Bindings.h"
 #include "Types.h"
 #include "Utilities.h"
+#include "Ranges/Utilities/ForwardLike.h"
 
 namespace UE::Optionals {
 
     template <typename F>
     struct TMapInvoker {
-        explicit constexpr TMapInvoker(F &&Functor) : Functor(std::move(Functor)) {
+        template <typename T>
+            requires std::constructible_from<F, T>
+        explicit constexpr TMapInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
@@ -24,15 +27,21 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
+            using ContainedType = decltype(*Optional);
             if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>> &&
                           std::invocable<F, TNullableValue<O>>) {
                 using ResultType =
                     TOptionalType<decltype(ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))))>;
                 return Optional.IsSet() ? ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional)))
                                         : TOptional<ResultType>();
+            } else if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>>) {
+                using ResultType =
+                    TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, *Optional)
+                                        : TOptional<ResultType>();
             } else {
-                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
-                return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : TOptional<ResultType>();
+                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) : TOptional<ResultType>();
             }
         }
 
@@ -44,7 +53,7 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
+            using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TMapInvoker<BindingType>>(
                 TMapInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }

@@ -12,7 +12,10 @@ namespace UE::Optionals {
 
     template <typename F>
     struct TFlatMapTupleInvoker {
-        explicit constexpr TFlatMapTupleInvoker(F &&Functor) : Functor(std::move(Functor)) {
+        
+        template <typename T>
+            requires std::constructible_from<F, T>
+        explicit constexpr TFlatMapTupleInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
@@ -24,8 +27,9 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
-            using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, *Optional))>;
-            return Optional.IsSet() ? ranges::tuple_apply(Functor, *Optional) : ResultType();
+            using ContainedType = decltype(*Optional);
+            using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)))>;
+            return Optional.IsSet() ? ranges::tuple_apply(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) : ResultType();
         }
 
       private:
@@ -36,7 +40,7 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
+            using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TFlatMapTupleInvoker<BindingType>>(
                 TFlatMapTupleInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }

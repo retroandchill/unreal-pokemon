@@ -22,7 +22,7 @@ namespace UE::Ranges {
      */
     template <typename F, typename... A>
         requires FunctionalType<F>
-    constexpr auto CreateBinding(F &&Functor, A &&...Args) {
+    constexpr decltype(auto) CreateBinding(F &&Functor, A &&...Args) {
         if constexpr (sizeof...(A) > 0) {
             return ranges::bind_back(std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
@@ -32,7 +32,7 @@ namespace UE::Ranges {
 
     template <typename C, typename F, typename... A>
         requires StdExt::IsMemberFunction_v<F>
-    constexpr auto CreateBinding(C &&Object, F &&Functor, A &&...Args) {
+    constexpr decltype(auto) CreateBinding(C &&Object, F &&Functor, A &&...Args) {
         if constexpr (std::is_base_of_v<StdExt::MemberFunctionClass_t<F>, std::remove_cvref_t<C>>) {
             return std::bind_front(CreateBinding(std::forward<F>(Functor), std::forward<A>(Args)...), &Object);
         } else {
@@ -43,13 +43,13 @@ namespace UE::Ranges {
 
     template <typename M>
         requires std::is_member_pointer_v<M> && (!std::is_member_function_pointer_v<M>)
-    constexpr auto CreateBinding(M &&Member) {
+    constexpr decltype(auto) CreateBinding(M &&Member) {
         return std::forward<M>(Member);
     }
 
     template <typename D, typename... A>
         requires UEDelegate<D>
-    constexpr auto CreateBinding(D &&Delegate, A &&...Args) {
+    constexpr decltype(auto) CreateBinding(D &&Delegate, A &&...Args) {
         return ranges::bind_back([Callback = std::forward<D>(Delegate)]<typename... B>(
                                      B &&...Vals) { return InvokeDelegate(Callback, std::forward<B>(Vals)...); },
                                  std::forward<A>(Args)...);

@@ -57,6 +57,7 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
 }
 
 void UPokemonBattlePanel::RefreshStatusEffect() {
+    auto Value = Pokemon::Assets::Graphics::StatusIcons.LoadAsset(FName("id"));
     // clang-format off
     auto Icon = CurrentBattler->GetStatusEffect() |
                 UE::Optionals::Map(&FStatusEffectInfo::StatusEffectID) |

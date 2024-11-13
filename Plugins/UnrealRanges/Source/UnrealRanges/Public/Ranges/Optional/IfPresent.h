@@ -12,7 +12,10 @@ namespace UE::Optionals {
 
     template <typename F>
     struct TIfPresentInvoker {
-        explicit constexpr TIfPresentInvoker(F &&Functor) : Functor(std::move(Functor)) {
+        
+        template <typename T>
+            requires std::constructible_from<F, T>
+        explicit constexpr TIfPresentInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
@@ -37,7 +40,7 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
+            using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TIfPresentInvoker<BindingType>>(
                 TIfPresentInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }
