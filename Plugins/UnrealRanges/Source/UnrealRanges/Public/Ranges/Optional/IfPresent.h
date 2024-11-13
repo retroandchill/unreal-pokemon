@@ -14,7 +14,7 @@ namespace UE::Optionals {
     struct TIfPresentInvoker {
         
         template <typename T>
-            requires std::constructible_from<F, T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TIfPresentInvoker>)
         explicit constexpr TIfPresentInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 

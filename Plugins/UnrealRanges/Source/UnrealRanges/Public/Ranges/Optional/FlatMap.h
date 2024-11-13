@@ -13,7 +13,10 @@ namespace UE::Optionals {
 
     template <typename F>
     struct TFlatMapInvoker {
-        explicit constexpr TFlatMapInvoker(F &&Functor) : Functor(std::move(Functor)) {
+
+        template <typename T>
+            requires std::convertible_to<F, T> && (!std::same_as<std::remove_cvref_t<T>, TFlatMapInvoker>)
+        explicit constexpr TFlatMapInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**

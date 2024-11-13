@@ -15,7 +15,7 @@ namespace UE::Optionals {
     struct TFilterInvoker {
         
         template <typename T>
-            requires std::constructible_from<F, T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TFilterInvoker>)
         explicit constexpr TFilterInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 

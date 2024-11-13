@@ -14,7 +14,7 @@ namespace UE::Optionals {
     template <typename F>
     struct TMapInvoker {
         template <typename T>
-            requires std::constructible_from<F, T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TMapInvoker>)
         explicit constexpr TMapInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
