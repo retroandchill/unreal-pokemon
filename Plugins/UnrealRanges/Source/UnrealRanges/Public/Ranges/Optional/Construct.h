@@ -14,7 +14,7 @@ namespace UE::Optionals {
         template <typename O, typename... A>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional, A &&...Args) const {
-            return Optional.IsSet() ? TOptional<T>(T(*Optional, std::forward<A>(Args)...)) : TOptional<T>();
+            return Optional.IsSet() ? TOptional<T>(T(Ranges::ForwardLike<O>(*Optional), std::forward<A>(Args)...)) : TOptional<T>();
         }
     };
 

@@ -7,12 +7,15 @@
 #include "Ranges/Concepts/Tuples.h"
 #include "Ranges/Functional/Bindings.h"
 #include "Types.h"
+#include "Ranges/Utilities/ForwardLike.h"
 
 namespace UE::Optionals {
 
     template <typename F>
     struct TMapTupleInvoker {
-        explicit constexpr TMapTupleInvoker(F &&Functor) : Functor(std::move(Functor)) {
+        template <typename T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TMapTupleInvoker>)
+        explicit constexpr TMapTupleInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
@@ -24,8 +27,8 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
-            using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, *Optional))>;
-            return Optional.IsSet() ? ranges::tuple_apply(Functor, *Optional) : TOptional<ResultType>();
+            using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, Ranges::ForwardLike<O>(*Optional)))>;
+            return Optional.IsSet() ? ranges::tuple_apply(Functor, Ranges::ForwardLike<O>(*Optional)) : TOptional<ResultType>();
         }
 
       private:
@@ -36,7 +39,7 @@ namespace UE::Optionals {
 
         template <typename... A>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...));
+            using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TMapTupleInvoker<BindingType>>(
                 TMapTupleInvoker<BindingType>(Ranges::CreateBinding<A...>(std::forward<A>(Args)...)));
         }

@@ -14,7 +14,7 @@ namespace UE::Optionals {
 
         template <typename O, typename S = TContainedOptionalType<O>>
             requires UEOptional<O>
-        auto operator()(O &&Optional) const {
+        decltype(auto) operator()(O &&Optional) const {
             if constexpr (Ranges::UObjectPointer<Ranges::TDecayReferenceType<S>> &&
                           (std::derived_from<T, UObject> || Ranges::UnrealInterface<T>)) {
                 if constexpr (std::is_lvalue_reference_v<S>) {
@@ -30,7 +30,7 @@ namespace UE::Optionals {
             } else if constexpr (std::is_reference_v<O>) {
                 return Optional | Map([](S &&Object) { return static_cast<T>(std::move(Object)); });
             } else {
-                return Optional | Map([](S Object) { return static_cast<T>(Object); });
+                return Optional | Map([]<typename U> (U &&Object) { return static_cast<T>(std::forward<U>(Object)); });
             }
         }
     };

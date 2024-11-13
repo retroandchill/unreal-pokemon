@@ -40,13 +40,13 @@ namespace UE::Ranges {
          */
         template <typename R>
             requires ranges::input_range<R> && std::is_invocable_v<F, R>
-        friend constexpr auto operator|(R &&Range, TTerminalClosure Closure) {
+        friend constexpr decltype(auto) operator|(R &&Range, TTerminalClosure Closure) {
             return Closure.Functor(std::forward<R>(Range));
         }
 
         template <typename R>
             requires UEContainer<R>
-        friend constexpr auto operator|(R &Range, TTerminalClosure Closure) {
+        friend constexpr decltype(auto) operator|(R &Range, TTerminalClosure Closure) {
             return Closure.Functor(Range);
         }
 
