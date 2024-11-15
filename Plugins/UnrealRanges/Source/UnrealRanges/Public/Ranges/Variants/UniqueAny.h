@@ -20,7 +20,7 @@ namespace UE::Ranges {
      * @tparam T The type to check against
      */
     template <typename T>
-    concept FitsInUniqueAnySmallBuffer = sizeof(T) <= UniqueAnySmallBufferSize && std::is_nothrow_move_constructible_v<T>;
+    concept FitsInUniqueAnySmallBuffer = sizeof(T) <= UniqueAnySmallBufferSize;
 
     namespace Details {
         template <typename T>
@@ -301,8 +301,7 @@ namespace UE::Ranges {
 
             static void Move(FStorage& Source, FStorage& Dest) noexcept {
                 if constexpr (FitsInUniqueAnySmallBuffer<T>) {
-                    new (reinterpret_cast<T*>(&Dest.SmallStorage)) T(std::move(reinterpret_cast<T&>(Source.SmallStorage)));
-                    Destroy(Source);
+                    std::memcpy(&Dest.SmallStorage, &Source.SmallStorage, sizeof(T));
                 } else {
                     Dest.LargeStorage = Source.LargeStorage;
                     Source.LargeStorage = nullptr;
