@@ -304,7 +304,8 @@ namespace UE::Ranges {
                     new (reinterpret_cast<T*>(&Dest.SmallStorage)) T(std::move(reinterpret_cast<T&>(Source.SmallStorage)));
                     Destroy(Source);
                 } else {
-                    
+                    Dest.LargeStorage = Source.LargeStorage;
+                    Source.LargeStorage = nullptr;
                 }
             }
         };
