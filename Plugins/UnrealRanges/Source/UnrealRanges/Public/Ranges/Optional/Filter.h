@@ -32,6 +32,9 @@ namespace UE::Optionals {
             if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>>) {
                 using ResultType = std::remove_cvref_t<O>;
                 return Optional.IsSet() && ranges::invoke(Functor, *Optional) ? ResultType(std::forward<O>(Optional)) : ResultType();
+            } else if constexpr (SubclassOptional<O>) {
+                using ResultType = TOptional<TOptionalElementType<O>>;
+                return Optional.IsSet() && ranges::invoke(Functor, *Optional->Get()) ? ResultType(std::forward<O>(Optional)) : ResultType();
             } else if constexpr (std::is_lvalue_reference_v<O>) {
                 using ResultType = TOptional<TOptionalElementType<O>&>;
                 return Optional.IsSet() && ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) ? ResultType(*Optional) : ResultType();

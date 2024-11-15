@@ -110,7 +110,7 @@ DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,
                                                           const FString &AssetName, UClass *&FoundClass) {
     FoundClass = LookupBlueprintClassByName(BasePackageName, AssetName) |
-                 UE::Optionals::Filter([&BaseClass](const UClass *Class) { return Class->IsChildOf(BaseClass); }) |
+                 UE::Optionals::Filter([&BaseClass](const UClass &Class) { return Class.IsChildOf(BaseClass); }) |
                  UE::Optionals::GetPtrOrNull;
     return FoundClass != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
 }
@@ -126,7 +126,7 @@ EAssetLoadResult UAssetLoader::ResolveAsset(UClass *AssetClass, const FDirectory
 EAssetLoadResult UAssetLoader::ResolveClass(UClass *AssetClass, const FDirectoryPath &BasePackageName,
                                             const TArray<FString> &Keys, UClass *&FoundClass) {
     FoundClass = ResolveClass(BasePackageName, Keys) |
-                 UE::Optionals::Filter([&AssetClass](const UObject *Object) { return Object->IsA(AssetClass); }) |
+                 UE::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
                  UE::Optionals::GetPtrOrNull;
     return FoundClass != nullptr ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;
 }

@@ -29,7 +29,7 @@ UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *World
 
 UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTagContainer &SaveTags) const {
     auto SaveGame = NewObject<UEnhancedSaveGame>(GetGameInstance());
-    auto &Subsystems = GetGameInstance()->GetSubsystemArray<UGameInstanceSubsystem>();
+    auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
     Subsystems | UE::Ranges::FilterImplements<ISaveableSubsystem> |
         UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
@@ -50,7 +50,7 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
 
 void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
                                               const FGameplayTagContainer &LoadTags) const {
-    auto &Subsystems = GetGameInstance()->GetSubsystemArray<UGameInstanceSubsystem>();
+    auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
     Subsystems | UE::Ranges::FilterImplements<ISaveableSubsystem> |
         UE::Ranges::ForEach(&ISaveableSubsystem::Execute_LoadSaveData, SaveGame, LoadTags);

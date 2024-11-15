@@ -23,7 +23,8 @@ public class PokemonOverworld : ModuleRules
                 "SlateCore",
                 "PokemonEncounters",
                 "PokemonUtilities",
-                "GameplayTasks"
+                "GameplayTasks",
+                "GameplayTags"
             }
         );
     }
