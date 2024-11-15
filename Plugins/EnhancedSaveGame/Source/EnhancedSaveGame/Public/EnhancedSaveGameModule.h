@@ -3,11 +3,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SaveGameSystem.h"
 #include "Modules/ModuleManager.h"
+#include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
 
-class FEnhancedSaveGameModule : public IModuleInterface {
+class ENHANCEDSAVEGAME_API FEnhancedSaveGameModule : public ISaveGameSystemModule {
   public:
     /** IModuleInterface implementation */
     void StartupModule() override;
     void ShutdownModule() override;
+    ISaveGameSystem * GetSaveGameSystem() override;
+
+    static FEnhancedSaveGameModule& Get();
+
+#if WITH_EDITOR
+    void EnableInMemorySaving();
+    void DisableInMemorySaving();
+#endif
+
+private:
+    FGenericSaveGameSystem MainSaveGameSystem;
+    
+#if WITH_EDITOR
+    EnhancedSaveGame::FInMemorySaveGameSystem InMemorySaveGameSystem;
+    bool bInMemorySavingEnabled = false;
+#endif
+
+    static FEnhancedSaveGameModule* Instance;
 };

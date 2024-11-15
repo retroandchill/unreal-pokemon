@@ -1,15 +1,42 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "EnhancedSaveGameModule.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Optional/OrElse.h"
+
+FEnhancedSaveGameModule* FEnhancedSaveGameModule::Instance = nullptr;
 
 void FEnhancedSaveGameModule::StartupModule() {
-    // This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin
-    // file per-module
+    check(Instance == nullptr)
+    Instance = this;
 }
 
 void FEnhancedSaveGameModule::ShutdownModule() {
-    // This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-    // we call this function before unloading the module.
+    check(Instance != nullptr)
+    Instance = nullptr;
 }
+
+ISaveGameSystem * FEnhancedSaveGameModule::GetSaveGameSystem() {
+#if WITH_EDITOR
+    return bInMemorySavingEnabled ? static_cast<ISaveGameSystem*>(&InMemorySaveGameSystem) : static_cast<ISaveGameSystem*>(&MainSaveGameSystem);
+#else
+    return &MainSaveGameSystem;
+#endif
+}
+
+FEnhancedSaveGameModule & FEnhancedSaveGameModule::Get() {
+    check(Instance != nullptr)
+    return *Instance;
+}
+
+#if WITH_EDITOR
+void FEnhancedSaveGameModule::EnableInMemorySaving() {
+    bInMemorySavingEnabled = true;
+}
+
+void FEnhancedSaveGameModule::DisableInMemorySaving() {
+    bInMemorySavingEnabled = false;
+}
+#endif
 
 IMPLEMENT_MODULE(FEnhancedSaveGameModule, EnhancedSaveGame)
