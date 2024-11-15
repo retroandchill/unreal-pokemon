@@ -22,15 +22,18 @@ if __name__ == '__main__':
             captures.append(capture)
             continue
 
-        with open(file_name) as file:
-            file_string = file.read()
-            matches = re.findall(r'#include "(.*)"', file_string)
-
-            for include in matches:
-                new_capture = copy.deepcopy(capture)
-                capture['cmd'][1] = os.path.normpath(include)
-                captures.append(new_capture)
-                print(capture['cmd'][1])
+        try:
+            with open(file_name) as file:
+                file_string = file.read()
+                matches = re.findall(r'#include "(.*)"', file_string)
+    
+                for include in matches:
+                    new_capture = copy.deepcopy(capture)
+                    capture['cmd'][1] = os.path.normpath(include)
+                    captures.append(new_capture)
+                    print(capture['cmd'][1])
+        except FileNotFoundError:
+            captures.append(capture)
 
     build_wrapper_json['captures'] = captures
     with open(args.file, 'w') as file:
