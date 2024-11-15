@@ -11,7 +11,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open(args.file) as file:
         json_string = file.read()
-        json_string = re.sub(r'#(.*)\n?', '', json_string, flags=re.MULTILINE)
+        json_string = re.sub(r'^#(.*)\n?', '', json_string, flags=re.MULTILINE)
         build_wrapper_json = json.loads(json_string)
 
     captures = []

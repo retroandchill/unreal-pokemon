@@ -10,4 +10,4 @@ void FUnrealRangesTestModule::ShutdownModule() {
 
 #undef LOCTEXT_NAMESPACE
 
-IMPLEMENT_MODULE(FUnrealRangesTestModule, UnrealRangesTest)
+IMPLEMENT_MODULE(FUnrealRangesTestModule, UnrealRangesTests)
