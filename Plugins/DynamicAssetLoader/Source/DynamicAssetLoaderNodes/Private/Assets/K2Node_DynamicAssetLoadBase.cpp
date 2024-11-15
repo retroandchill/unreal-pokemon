@@ -255,9 +255,10 @@ void UK2Node_DynamicAssetLoadBase::SetWildcardMode(bool bNewWildcardMode) {
 
     auto AssetNamePin = GetAssetNamePin();
     // clang-format off
-    AssetNamePin->LinkedTo |
+    auto LinkedPins = AssetNamePin->LinkedTo |
                    UE::Ranges::Filter([](const UEdGraphPin *Pin) { return Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_String; }) |
-                   UE::Ranges::ForEach(AssetNamePin, &UEdGraphPin::BreakLinkTo, true);
+                       UE::Ranges::ToArray;
+    LinkedPins | UE::Ranges::ForEach(AssetNamePin, &UEdGraphPin::BreakLinkTo, true);
     // clang-format on
     RefreshAssetNamePin();
 }
