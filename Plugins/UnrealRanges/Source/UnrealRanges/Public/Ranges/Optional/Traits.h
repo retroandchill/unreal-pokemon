@@ -58,12 +58,11 @@ namespace UE::Optionals {
         requires UEOptional<T>
     using TOptionalElementType = typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ElementType;
 
-    
-
     template <typename T>
-    concept SubclassOptional = UEOptional<T> &&
-        std::derived_from<typename TOptionalElementType<std::decay_t<T>>::ElementType, UObject> &&
-            std::same_as<TNonNullSubclassOf<typename TOptionalElementType<std::decay_t<T>>::ElementType>, TOptionalElementType<std::decay_t<T>>>;
+    concept SubclassOptional =
+        UEOptional<T> && std::derived_from<typename TOptionalElementType<std::decay_t<T>>::ElementType, UObject> &&
+        std::same_as<TNonNullSubclassOf<typename TOptionalElementType<std::decay_t<T>>::ElementType>,
+                     TOptionalElementType<std::decay_t<T>>>;
 
     static_assert(SubclassOptional<TOptional<TNonNullSubclassOf<UObject>>>);
 

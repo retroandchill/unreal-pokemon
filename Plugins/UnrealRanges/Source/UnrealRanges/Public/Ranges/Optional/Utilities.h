@@ -21,7 +21,7 @@ namespace UE::Optionals {
     constexpr decltype(auto) GetNullableValue(T &&Optional) {
         if constexpr (SubclassOptional<T>) {
             auto Result = Optional.GetPtrOrNull();
-            return Result != nullptr ? Result->Get() : static_cast<UClass*>(nullptr);
+            return Result != nullptr ? Result->Get() : static_cast<UClass *>(nullptr);
         } else {
             return Optional.GetPtrOrNull();
         }

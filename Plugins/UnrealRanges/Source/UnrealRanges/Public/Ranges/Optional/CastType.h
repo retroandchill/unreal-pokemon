@@ -30,7 +30,7 @@ namespace UE::Optionals {
             } else if constexpr (std::is_reference_v<O>) {
                 return Optional | Map([](S &&Object) { return static_cast<T>(std::move(Object)); });
             } else {
-                return Optional | Map([]<typename U> (U &&Object) { return static_cast<T>(std::forward<U>(Object)); });
+                return Optional | Map([]<typename U>(U &&Object) { return static_cast<T>(std::forward<U>(Object)); });
             }
         }
     };

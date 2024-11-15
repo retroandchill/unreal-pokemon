@@ -12,7 +12,7 @@ namespace UE::Optionals {
 
         explicit constexpr TOrElseInvoker(const T &Value) : Value(Value) {
         }
-        
+
         explicit constexpr TOrElseInvoker(T &&Value)
             requires(!std::is_lvalue_reference_v<T>)
             : Value(std::move(Value)) {
