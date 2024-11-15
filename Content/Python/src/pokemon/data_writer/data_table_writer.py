@@ -1,4 +1,6 @@
 # "Unreal Pokémon" created by Retro & Chill.
+from tempfile import NamedTemporaryFile
+
 import unreal
 import os
 from unreal import DataTable, DataTableFunctionLibrary, EditorAssetLibrary, ScriptStruct, Paths
@@ -21,7 +23,9 @@ def import_data(item_data: PbsIniData, table_name: str, struct_type: ScriptStruc
 
     data_table = EditorAssetLibrary.load_asset('/Game/Data/{0}.{0}'.format(table_name))
     if isinstance(data_table, DataTable):
-        DataTableFunctionLibrary.fill_data_table_from_json_string(data_table, item_data.to_json(), struct_type)
+        with NamedTemporaryFile(suffix='.json') as temp:
+            temp.write(item_data.to_json().encode('utf-8'))
+            DataTableFunctionLibrary.fill_data_table_from_json_file(data_table, temp.name, struct_type)
 
 
 def import_types(type_data: TypeData) -> None:
