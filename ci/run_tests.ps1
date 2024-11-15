@@ -1,6 +1,6 @@
 $location = $( Get-Location )
 echo "Location: $location"
-$unreal_engine_location = "C:/Program Files/Epic Games/UE_5.4/Engine/Binaries/Win64"
+$unreal_engine_location = "C:/Program Files/Epic Games/UE_5.5/Engine/Binaries/Win64"
 & "${unreal_engine_location}/UnrealEditor-Win64-DebugGame-Cmd.exe" "${location}/UnrealPokemon.uproject" -clientconfig=DebugGame -nosplash -unattended -nullrhi -execcmds="automation runtests Unit Tests+Functional Tests+Python.UnrealPokemon,ShutdownAfterTests" -log -ReportOutputPath="${location}/TestResults"
 if ($LASTEXITCODE -ne 0) {
     echo "Tests failed with exit code: ${LASTEXITCODE}"
