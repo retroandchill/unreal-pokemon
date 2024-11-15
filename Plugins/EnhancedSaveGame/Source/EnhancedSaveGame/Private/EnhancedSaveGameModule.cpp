@@ -4,6 +4,8 @@
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OrElse.h"
 
+DEFINE_LOG_CATEGORY(LogEnhancedSaveGame);
+
 FEnhancedSaveGameModule* FEnhancedSaveGameModule::Instance = nullptr;
 
 void FEnhancedSaveGameModule::StartupModule() {

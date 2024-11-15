@@ -7,6 +7,8 @@
 #include "Modules/ModuleManager.h"
 #include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogEnhancedSaveGame, Log, All)
+
 class ENHANCEDSAVEGAME_API FEnhancedSaveGameModule : public ISaveGameSystemModule {
   public:
     /** IModuleInterface implementation */

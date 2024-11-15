@@ -2,6 +2,7 @@
 
 
 #include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
+#include "EnhancedSaveGameModule.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/IfPresent.h"
 #include "Ranges/Optional/OptionalRef.h"
@@ -46,6 +47,7 @@ ISaveGameSystem::ESaveExistsResult FInMemorySaveGameSystem::DoesSaveGameExistWit
 
 bool FInMemorySaveGameSystem::SaveGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex,
                                        const TArray<uint8> &Data) {
+    UE_LOG(LogEnhancedSaveGame, Log, TEXT("Saving to save game '%s' slot %d"), Name, UserIndex)
     auto &Slots = SaveGames.FindOrAdd(Name);
     Slots.Emplace(UserIndex, Data);
     return true;
@@ -53,6 +55,7 @@ bool FInMemorySaveGameSystem::SaveGame(bool bAttemptToUseUI, const TCHAR *Name, 
 
 bool FInMemorySaveGameSystem::LoadGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex,
                                        TArray<uint8> &Data) {
+    UE_LOG(LogEnhancedSaveGame, Log, TEXT("Loading save game '%s' slot %d"), Name, UserIndex)
     // clang-format off
     auto DataSlot = UE::Optionals::OfNullable(SaveGames.Find(Name)) |
                     UE::Optionals::Map([UserIndex](const TMap<int32, TArray<uint8>> &Map) {
