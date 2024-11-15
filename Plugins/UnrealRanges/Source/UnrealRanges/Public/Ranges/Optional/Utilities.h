@@ -20,7 +20,8 @@ namespace UE::Optionals {
         requires UEOptional<T>
     constexpr decltype(auto) GetNullableValue(T &&Optional) {
         if constexpr (SubclassOptional<T>) {
-            return Optional.Get(nullptr);
+            auto Result = Optional.Get(nullptr);
+            return Result != nullptr ? Result->Get() : nullptr;
         } else {
             return Optional.GetPtrOrNull();
         }

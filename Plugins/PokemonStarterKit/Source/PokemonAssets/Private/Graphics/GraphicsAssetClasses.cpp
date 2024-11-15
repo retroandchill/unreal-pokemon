@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Graphics/AssetClasses.h"
+#include "Graphics/GraphicsAssetClasses.h"
 
 namespace Pokemon::Assets::Graphics {
 

@@ -51,8 +51,9 @@ void SGridMapEditorSettingsWidget::Construct(const FArguments &InArgs, FGridMapE
                   SHorizontalBox::Slot()
                       .VAlign(VAlign_Center)
                       .Padding(FGridMapStyleSet::StandardPadding)
-                          [SNew(SWrapBox).UseAllottedWidth(true).InnerSlotPadding({6, 5})
-
+                          [SNew(SWrapBox)
+                              .UseAllottedSize(true)
+                              .InnerSlotPadding({6, 5})
                            + SWrapBox::Slot()[SNew(SBox).MinDesiredWidth(
                                  150)[SNew(SCheckBox)
                                           .OnCheckStateChanged(

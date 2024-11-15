@@ -6,7 +6,7 @@
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Components/EnhancedImage.h"
 #include "Components/ProgressBar.h"
-#include "Graphics/AssetClasses.h"
+#include "Graphics/GraphicsAssetClasses.h"
 #include "Utilities/PokemonUIUtils.h"
 
 using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
