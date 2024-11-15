@@ -26,7 +26,7 @@ if __name__ == '__main__':
             with open(file_name) as file:
                 file_string = file.read()
                 matches = re.findall(r'#include "(.*)"', file_string)
-    
+
                 for include in matches:
                     new_capture = copy.deepcopy(capture)
                     capture['cmd'][1] = os.path.normpath(include)
