@@ -3,6 +3,7 @@
 #include "Screens/SaveScreen.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
+#include "PokemonUI.h"
 #include "Saving/EnhancedSaveGameSubsystem.h"
 #include "Saving/PokemonSaveGame.h"
 #include "Saving/Serialization/EnhancedSaveGame.h"
@@ -27,26 +28,6 @@ void USaveScreen::NativeOnActivated() {
         }));
 }
 
-void USaveScreen::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) {
-    Super::NativeTick(MyGeometry, InDeltaTime);
-    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    if (!SaveGameCreationFuture.IsSet() || !SaveGameCreationFuture->IsReady()) {
-        return;
-    }
-
-    auto SaveGame = SaveGameCreationFuture->Consume();
-    UGameplayStatics::AsyncSaveGameToSlot(SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-                                          FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
-                                              this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
-                                                  if (bSuccess) {
-                                                      SetSaveGame(SaveGame);
-                                                  }
-                                                  OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
-                                                  OnSaveCompleteDelegate.Unbind();
-                                              }));
-    SaveGameCreationFuture.Reset();
-}
-
 void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
     CurrentSaveGame = SaveGame;
     if (SaveGame != nullptr) {
@@ -59,16 +40,33 @@ void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
 }
 
 void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
+    UE_LOG(LogPokemonUI, Display, TEXT("Creating the save game!"));
     check(!SaveGameCreationFuture.IsSet())
     OnSaveCompleteDelegate = std::move(OnComplete);
     SaveGameCreationFuture.Emplace(AsyncThread([this] {
         auto SaveGame = UEnhancedSaveGameSubsystem::Get(this).CreateSaveGame();
         return SaveGame;
     }));
+    SaveGameCreationFuture->AddOnCompleteTask(this, &USaveScreen::CommitSaveGame);
 }
 
 void USaveScreen::ExitSaveScreen(bool bSuccess) {
     CloseScreen();
     OnExitSaveScreen.Broadcast(bSuccess);
     OnExitSaveScreen.Clear();
+}
+
+void USaveScreen::CommitSaveGame(UEnhancedSaveGame *SaveGame) {
+    UE_LOG(LogPokemonUI, Display, TEXT("Saving game!"));
+    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
+    UGameplayStatics::AsyncSaveGameToSlot(SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
+                                          FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
+                                              this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
+                                                  if (bSuccess) {
+                                                      SetSaveGame(SaveGame);
+                                                  }
+                                                  OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
+                                                  OnSaveCompleteDelegate.Unbind();
+                                              }));
+    SaveGameCreationFuture.Reset();
 }

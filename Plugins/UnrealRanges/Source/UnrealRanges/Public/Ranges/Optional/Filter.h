@@ -6,14 +6,14 @@
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/RangeConcepts.h"
-#include "Types.h"
 #include "Ranges/Utilities/ForwardLike.h"
+#include "Types.h"
 
 namespace UE::Optionals {
 
     template <typename F>
     struct TFilterInvoker {
-        
+
         template <typename T>
             requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TFilterInvoker>)
         explicit constexpr TFilterInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
@@ -31,13 +31,23 @@ namespace UE::Optionals {
             using ContainedType = decltype(*Optional);
             if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>>) {
                 using ResultType = std::remove_cvref_t<O>;
-                return Optional.IsSet() && ranges::invoke(Functor, *Optional) ? ResultType(std::forward<O>(Optional)) : ResultType();
+                return Optional.IsSet() && ranges::invoke(Functor, *Optional) ? ResultType(std::forward<O>(Optional))
+                                                                              : ResultType();
+            } else if constexpr (SubclassOptional<O>) {
+                using ResultType = TOptional<TOptionalElementType<O>>;
+                return Optional.IsSet() && ranges::invoke(Functor, *Optional->Get())
+                           ? ResultType(std::forward<O>(Optional))
+                           : ResultType();
             } else if constexpr (std::is_lvalue_reference_v<O>) {
-                using ResultType = TOptional<TOptionalElementType<O>&>;
-                return Optional.IsSet() && ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) ? ResultType(*Optional) : ResultType();
+                using ResultType = TOptional<TOptionalElementType<O> &>;
+                return Optional.IsSet() && ranges::invoke(Functor, Ranges::ForwardLike<O &&, ContainedType>(*Optional))
+                           ? ResultType(*Optional)
+                           : ResultType();
             } else {
                 using ResultType = std::remove_cvref_t<O>;
-                return Optional.IsSet() && ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) ? ResultType(std::forward<O>(Optional)) : ResultType();
+                return Optional.IsSet() && ranges::invoke(Functor, Ranges::ForwardLike<O &&, ContainedType>(*Optional))
+                           ? ResultType(std::forward<O>(Optional))
+                           : ResultType();
             }
         }
 

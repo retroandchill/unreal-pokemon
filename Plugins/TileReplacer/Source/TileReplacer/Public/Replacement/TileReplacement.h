@@ -34,5 +34,3 @@ struct TILEREPLACER_API FTileReplacement : public FTableRowBase {
     UPROPERTY(EditAnywhere, Category = "Tile Replacement")
     bool bCollisionEnabled = false;
 };
-
-TILEREPLACER_API uint32 GetTypeHash(const FPaperTileInfo &TileInfo);

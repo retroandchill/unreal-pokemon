@@ -33,19 +33,6 @@ namespace UE::Optionals {
             using ElementType = typename TOptional<T>::ElementType;
         };
 
-        template <typename T>
-        struct TOptionalTraits<TOptional<TNonNullSubclassOf<T>>> {
-            /**
-             * The actual type specified in the type parameter of the optional.
-             */
-            using ContainedType = TNonNullSubclassOf<T>;
-
-            /**
-             * The effective contained type of the optional.
-             */
-            using ElementType = TSubclassOf<T>;
-        };
-
     } // namespace Detail
 
     /**
@@ -54,11 +41,6 @@ namespace UE::Optionals {
      */
     template <typename T>
     concept UEOptional = requires { typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ContainedType; };
-
-    template <typename T>
-    concept SubclassOptional = UEOptional<T> && requires(T &&Optional) {
-        { Optional.Get(nullptr) } -> std::same_as<UClass *>;
-    };
 
     /**
      * Type definition to get the underlying type out of the optional
@@ -75,6 +57,12 @@ namespace UE::Optionals {
     template <typename T>
         requires UEOptional<T>
     using TOptionalElementType = typename Detail::TOptionalTraits<std::remove_cvref_t<T>>::ElementType;
+
+    template <typename T>
+    concept SubclassOptional =
+        UEOptional<T> && std::derived_from<typename TOptionalElementType<std::decay_t<T>>::ElementType, UObject> &&
+        std::same_as<TNonNullSubclassOf<typename TOptionalElementType<std::decay_t<T>>::ElementType>,
+                     TOptionalElementType<std::decay_t<T>>>;
 
     static_assert(SubclassOptional<TOptional<TNonNullSubclassOf<UObject>>>);
 

@@ -38,22 +38,6 @@ UExpAttributeSet *UBattlerAbilityComponent::GetExpAttributeSet() const {
     return ExpAttributeSet;
 }
 
-FGameplayEffectSpecHandle UBattlerAbilityComponent::MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass,
-                                                                     float Level,
-                                                                     FGameplayEffectContextHandle Context) const {
-    if (Context.IsValid() == false) {
-        Context = MakeEffectContext();
-    }
-
-    if (GameplayEffectClass) {
-        auto GameplayEffect = CreateGameplayEffect(GameplayEffectClass, Level, Context);
-        auto NewSpec = MakeUnique<FGameplayEffectSpec>(GameplayEffect, Context, Level);
-        return FGameplayEffectSpecHandle(NewSpec.Release());
-    }
-
-    return FGameplayEffectSpecHandle(nullptr);
-}
-
 TOptional<FGameplayAbilitySpecHandle>
 UBattlerAbilityComponent::FindAbilityOfClass(TSubclassOf<UGameplayAbility> AbilityClass) const {
     auto AbilitySpec =
@@ -65,47 +49,4 @@ UBattlerAbilityComponent::FindAbilityOfClass(TSubclassOf<UGameplayAbility> Abili
     }
 
     return AbilitySpec->Handle;
-}
-
-UGameplayEffect *UBattlerAbilityComponent::CreateGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass,
-                                                                float Level,
-                                                                const FGameplayEffectContextHandle &Context) const {
-    auto GameplayEffect = GameplayEffectClass->GetDefaultObject<UGameplayEffect>();
-    if (GameplayEffect->DurationPolicy == EGameplayEffectDurationType::Instant) {
-        return GameplayEffect;
-    }
-
-    if (GameplayEffect->StackingType != EGameplayEffectStackingType::None &&
-        ModifierInfo->Stackables.Contains(GameplayEffectClass)) {
-        GameplayEffect = ModifierInfo->Stackables[GameplayEffectClass].Get();
-        if (GameplayEffect != nullptr) {
-            return GameplayEffect;
-        }
-    }
-
-    GameplayEffect = NewObject<UGameplayEffect>(Context.GetInstigator(), GameplayEffectClass);
-    if (GameplayEffect->StackingType != EGameplayEffectStackingType::None) {
-        ModifierInfo->Stackables.Emplace(GameplayEffectClass, GameplayEffect);
-    }
-
-    for (auto &Modifier : GameplayEffect->Modifiers) {
-        if (!Modifier.Attribute.IsValid()) {
-            continue;
-        }
-
-        auto &[MultiplierCount, DivisorCount] = ModifierInfo->ModifierCount.FindOrAdd(Modifier.Attribute);
-        if (Modifier.ModifierOp == EGameplayModOp::Multiplicitive) {
-            check(MultiplierCount < TNumericLimits<uint8>::Max())
-            Modifier.EvaluationChannelSettings.SetEvaluationChannel(
-                static_cast<EGameplayModEvaluationChannel>(MultiplierCount));
-            MultiplierCount++;
-        } else if (Modifier.ModifierOp != EGameplayModOp::Division) {
-            check(DivisorCount < TNumericLimits<uint8>::Max())
-            Modifier.EvaluationChannelSettings.SetEvaluationChannel(
-                static_cast<EGameplayModEvaluationChannel>(DivisorCount));
-            DivisorCount++;
-        }
-    }
-
-    return GameplayEffect;
 }

@@ -9,7 +9,9 @@ public class UnrealRangesTests : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", 
+                "FunctionalTestingEditor",
+                "FunctionalTesting",
             }
         );
 

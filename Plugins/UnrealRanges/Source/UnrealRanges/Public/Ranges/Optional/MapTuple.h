@@ -6,8 +6,8 @@
 #include "OptionalClosure.h"
 #include "Ranges/Concepts/Tuples.h"
 #include "Ranges/Functional/Bindings.h"
-#include "Types.h"
 #include "Ranges/Utilities/ForwardLike.h"
+#include "Types.h"
 
 namespace UE::Optionals {
 
@@ -28,7 +28,8 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
             using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, Ranges::ForwardLike<O>(*Optional)))>;
-            return Optional.IsSet() ? ranges::tuple_apply(Functor, Ranges::ForwardLike<O>(*Optional)) : TOptional<ResultType>();
+            return Optional.IsSet() ? ranges::tuple_apply(Functor, Ranges::ForwardLike<O>(*Optional))
+                                    : TOptional<ResultType>();
         }
 
       private:

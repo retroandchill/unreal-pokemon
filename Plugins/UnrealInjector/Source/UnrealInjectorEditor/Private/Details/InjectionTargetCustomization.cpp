@@ -44,8 +44,8 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
                       .VAlign(VAlign_Center)
                       .HAlign(HAlign_Left)[SNew(STextBlock)
                                                .Text(UE::Optionals::OfNullable(FoundClass) |
-                                                     UE::Optionals::Map([](const UClass &Class) {
-                                                         return Class.GetDisplayNameText();
+                                                     UE::Optionals::Map([](const UClass *Class) {
+                                                         return Class->GetDisplayNameText();
                                                      }) |
                                                      UE::Optionals::OrElse(FText::FromStringView(TEXT("Invalid"))))] +
                   SHorizontalBox::Slot()

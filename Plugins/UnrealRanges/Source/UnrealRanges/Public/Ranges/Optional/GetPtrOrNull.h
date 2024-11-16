@@ -14,7 +14,8 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
             if constexpr (SubclassOptional<O>) {
-                return Optional.Get(nullptr);
+                auto Result = Optional.GetPtrOrNull();
+                return Result != nullptr ? Result->Get() : nullptr;
             } else {
                 return Optional.GetPtrOrNull();
             }

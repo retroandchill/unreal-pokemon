@@ -41,6 +41,10 @@
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
 			"Optional": true
+		},
+		{
+			"Name": "FunctionalTestingEditor",
+			"Enabled": true
 		}
 	]
 }

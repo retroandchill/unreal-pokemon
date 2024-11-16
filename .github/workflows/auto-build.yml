@@ -50,6 +50,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: |
+            bw_output/*
             coverage.txt
             coverage-reports/*.xml
             TestResults/*

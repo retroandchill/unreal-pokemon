@@ -36,9 +36,6 @@ class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponen
     UTargetDamageStateAttributeSet *GetTargetDamageStateAttributeSet() const;
     UExpAttributeSet *GetExpAttributeSet() const;
 
-    FGameplayEffectSpecHandle MakeOutgoingSpec(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level,
-                                               FGameplayEffectContextHandle Context) const override;
-
     /**
      * Find the gameplay ability with the specified class.
      * @param AbilityClass The class of ability to look for.
@@ -47,9 +44,6 @@ class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponen
     TOptional<FGameplayAbilitySpecHandle> FindAbilityOfClass(TSubclassOf<UGameplayAbility> AbilityClass) const;
 
   private:
-    UGameplayEffect *CreateGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level,
-                                          const FGameplayEffectContextHandle &Context) const;
-
     UPROPERTY()
     TObjectPtr<UPokemonCoreAttributeSet> CoreAttributes;
 
