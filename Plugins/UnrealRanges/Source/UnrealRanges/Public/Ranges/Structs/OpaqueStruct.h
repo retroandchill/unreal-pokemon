@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Concepts/Structs.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include <array>
 
 namespace UE::Ranges {
     constexpr size_t SmallStructSize = sizeof(void*) * 7;
+
+    template <typename T>
+    concept SmallStructType = UEStruct<T> && sizeof(T) <= SmallStructSize;
 
     /**
      * Class FOpaqueStruct manages an opaque script structure, providing various utilities
@@ -34,6 +38,48 @@ namespace UE::Ranges {
         explicit FOpaqueStruct(const UScriptStruct& Struct) noexcept : Storage(Struct), Struct(&Struct) {}
 
         /**
+         * Constructs an FOpaqueStruct with the given script structure and raw data pointer.
+         *
+         * @param Struct A reference to the script structure used for constructing the opaque structure.
+         * @param Raw A pointer to the raw data associated with the script structure.
+         * @return An instance of FOpaqueStruct initialized with the provided script structure and raw data.
+         */
+        template <typename T>
+        explicit FOpaqueStruct(const UScriptStruct& Struct, T* Raw) : Storage(Struct, Raw), Struct(&Struct) {
+        }
+
+        /**
+         * Constructor FOpaqueStruct initializes the opaque structure with the provided script.
+         * Utilizes perfect forwarding to ensure that the structure is handled efficiently.
+         *
+         * @tparam T Type of the script structure being managed.
+         * @param Struct Temporary object of type T, representing the script structure to be stored.
+         */
+        template <typename T>
+            requires UEStruct<T> && (!std::derived_from<std::decay_t<T>, FOpaqueStruct>)
+        explicit FOpaqueStruct(T&& Struct) noexcept : Storage(std::forward<T>(Struct)), Struct(GetScriptStruct<T>()) {
+        }
+
+        /**
+         * Constructs an FOpaqueStruct instance directly in place, utilizing the given arguments to
+         * construct either a small or large internal structure based on the type T. Ensures
+         * exception safety and forwards arguments optimally.
+         *
+         * @tparam T The type of the structure to instantiate within the FOpaqueStruct.
+         * @tparam A Variadic template parameter pack for the constructor arguments of T.
+         * @param Args Constructor arguments for creating an instance of type T.
+         */
+        template <typename T, typename... A>
+            requires UEStruct<T> && std::constructible_from<T, A...>
+        explicit FOpaqueStruct(std::in_place_type_t<T>, A &&...Args) noexcept : Struct(GetScriptStruct<T>()) {
+            if constexpr (SmallStructType<T>) {
+                new (reinterpret_cast<T *>(&Storage.Small)) T(std::forward<A>(Args)...);
+            } else {
+                Storage.Large = new T(std::forward<A>(Args)...);
+            }
+        }
+
+        /**
          * Copy constructor for the FOpaqueStruct class.
          * This constructor initializes a new FOpaqueStruct instance by copying another instance, ensuring that the
          * internal storage and associated script structure are duplicated accurately.
@@ -42,7 +88,7 @@ namespace UE::Ranges {
          * @return A new FOpaqueStruct instance initialized with the copied data.
          */
         FOpaqueStruct(const FOpaqueStruct& Other) noexcept : Struct(Other.Struct) {
-            Storage.CopyTo(*Struct, Storage);
+            Other.Storage.CopyTo(*Struct, Storage);
         }
 
         /**
@@ -295,17 +341,39 @@ namespace UE::Ranges {
                 }
             }
 
-            void CopyTo(const UScriptStruct& Struct, FStorage& Dest) const noexcept {
+            template <typename T>
+            explicit FStorage(const UScriptStruct& Struct, T* Data) noexcept {
                 if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= SmallStructSize) {
-                    Struct.CopyScriptStruct(&Dest.Small, &Small);
+                    Struct.CopyScriptStruct(&Small, Data);
                 } else {
-                    Dest.Large = FMemory::Malloc(Size);
-                    Struct.CopyScriptStruct(Dest.Large, Large);
+                    Large = FMemory::Malloc(Size);
+                    Struct.CopyScriptStruct(Large, Data);
                 }
             }
 
-            void MoveTo(const UScriptStruct& Struct, FStorage& Dest) noexcept {
-                if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= SmallStructSize) {
+            template <typename T>
+                requires UEStruct<T>
+            explicit FStorage(T&& Struct) noexcept {
+                if constexpr (SmallStructType<T>) {
+                    new (reinterpret_cast<std::decay_t<T>*>(&Small)) std::decay_t<T>(std::forward<T>(Struct));
+                } else {
+                    Large = new std::decay_t<T>(std::forward<T>(Struct));
+                }
+            }
+
+            void CopyTo(const UScriptStruct& StructType, FStorage& Dest) const noexcept {
+                if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
+                    StructType.InitializeStruct(&Dest.Small);
+                    StructType.CopyScriptStruct(&Dest.Small, &Small);
+                } else {
+                    Dest.Large = FMemory::Malloc(Size);
+                    StructType.InitializeStruct(Dest.Large);
+                    StructType.CopyScriptStruct(Dest.Large, Large);
+                }
+            }
+
+            void MoveTo(const UScriptStruct& StructType, FStorage& Dest) noexcept {
+                if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
                     std::memcpy(&Dest.Small, &Small, Size);
                 } else {
                     Dest.Large = Large;
