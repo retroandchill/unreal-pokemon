@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "EnhancedSaveGameModule.h"
 
-
 #if WITH_EDITOR
 namespace EnhancedSaveGame {
     /**
@@ -17,7 +16,7 @@ namespace EnhancedSaveGame {
      * file-based saving when this object is destructed.
      */
     class FScopedInMemorySaveHandle {
-    public:
+      public:
         /**
          * @brief Constructor that enables in-memory saving.
          *
@@ -25,10 +24,10 @@ namespace EnhancedSaveGame {
          * switch the save system to use in-memory saving for the duration of this object's lifecycle.
          */
         FScopedInMemorySaveHandle() {
-            FEnhancedSaveGameModule::Get().EnableInMemorySaving(); 
+            FEnhancedSaveGameModule::Get().EnableInMemorySaving();
         }
 
-        FScopedInMemorySaveHandle(const FScopedInMemorySaveHandle&) = delete;
+        FScopedInMemorySaveHandle(const FScopedInMemorySaveHandle &) = delete;
 
         /**
          * @brief Move constructor for FScopedInMemorySaveHandle.
@@ -39,7 +38,7 @@ namespace EnhancedSaveGame {
          *
          * @return A new instance of FScopedInMemorySaveHandle with moved state.
          */
-        FScopedInMemorySaveHandle(FScopedInMemorySaveHandle&& Other) noexcept {
+        FScopedInMemorySaveHandle(FScopedInMemorySaveHandle &&Other) noexcept {
             Other.bIsActive = false;
         }
 
@@ -56,7 +55,7 @@ namespace EnhancedSaveGame {
             }
         }
 
-        FScopedInMemorySaveHandle& operator=(const FScopedInMemorySaveHandle&) = delete;
+        FScopedInMemorySaveHandle &operator=(const FScopedInMemorySaveHandle &) = delete;
 
         /**
          * @brief Move assignment operator for FScopedInMemorySaveHandle.
@@ -67,14 +66,14 @@ namespace EnhancedSaveGame {
          *
          * @return A new instance of FScopedInMemorySaveHandle with moved state.
          */
-        FScopedInMemorySaveHandle& operator=(FScopedInMemorySaveHandle&& Other) noexcept {
+        FScopedInMemorySaveHandle &operator=(FScopedInMemorySaveHandle &&Other) noexcept {
             bIsActive = true;
             Other.bIsActive = false;
             return *this;
         }
 
-    private:
+      private:
         bool bIsActive = true;
     };
-}
+} // namespace EnhancedSaveGame
 #endif

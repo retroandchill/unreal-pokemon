@@ -6,7 +6,7 @@
 
 DEFINE_LOG_CATEGORY(LogEnhancedSaveGame);
 
-FEnhancedSaveGameModule* FEnhancedSaveGameModule::Instance = nullptr;
+FEnhancedSaveGameModule *FEnhancedSaveGameModule::Instance = nullptr;
 
 void FEnhancedSaveGameModule::StartupModule() {
     check(Instance == nullptr)
@@ -18,15 +18,16 @@ void FEnhancedSaveGameModule::ShutdownModule() {
     Instance = nullptr;
 }
 
-ISaveGameSystem * FEnhancedSaveGameModule::GetSaveGameSystem() {
+ISaveGameSystem *FEnhancedSaveGameModule::GetSaveGameSystem() {
 #if WITH_EDITOR
-    return bInMemorySavingEnabled ? static_cast<ISaveGameSystem*>(&InMemorySaveGameSystem) : static_cast<ISaveGameSystem*>(&MainSaveGameSystem);
+    return bInMemorySavingEnabled ? static_cast<ISaveGameSystem *>(&InMemorySaveGameSystem)
+                                  : static_cast<ISaveGameSystem *>(&MainSaveGameSystem);
 #else
     return &MainSaveGameSystem;
 #endif
 }
 
-FEnhancedSaveGameModule & FEnhancedSaveGameModule::Get() {
+FEnhancedSaveGameModule &FEnhancedSaveGameModule::Get() {
     check(Instance != nullptr)
     return *Instance;
 }

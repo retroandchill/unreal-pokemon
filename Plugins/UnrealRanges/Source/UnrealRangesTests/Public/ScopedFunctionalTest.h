@@ -20,11 +20,11 @@ UCLASS(Abstract)
 class UNREALRANGESTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest {
     GENERATED_BODY()
 
-public:
+  public:
     void PrepareTest() override;
     void FinishTest(EFunctionalTestResult TestResult, const FString &Message) override;
 
-protected:
+  protected:
     /**
      * @brief Adds test objects scoped for the functional test.
      *
@@ -36,7 +36,7 @@ protected:
      * that are necessary for their functional tests.
      */
     virtual void AddScopedTestObjects();
-    
+
     /**
      * @brief Adds data scoped for the functional test.
      *
@@ -44,14 +44,15 @@ protected:
      *
      * @tparam T The type of data to add
      * @tparam A The types of the constructor arguments
-     * @param Args Variadic template arguments that are forwarded to construct the data of type T placed within the functional test scope.
+     * @param Args Variadic template arguments that are forwarded to construct the data of type T placed within the
+     * functional test scope.
      */
     template <typename T, typename... A>
         requires std::constructible_from<UE::Ranges::FUniqueAny, std::in_place_type_t<T>, A...>
-    void AddScopedData(A&&... Args) {
+    void AddScopedData(A &&...Args) {
         ScopedData.Emplace(std::in_place_type<T>, std::forward<A>(Args)...);
     }
 
-private:
+  private:
     TArray<UE::Ranges::FUniqueAny> ScopedData;
 };

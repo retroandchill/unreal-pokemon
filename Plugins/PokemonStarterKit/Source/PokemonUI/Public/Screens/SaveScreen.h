@@ -83,7 +83,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
   private:
     void CommitSaveGame(UEnhancedSaveGame *SaveGame);
-    
+
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USaveGameCard> SaveGameCard;
 

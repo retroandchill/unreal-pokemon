@@ -25,23 +25,23 @@ void FTestUniqueAny::Define() {
         });
 
         It("Can hold any type and change type as needed", [this] {
-           UE::Ranges::FUniqueAny Any;
+            UE::Ranges::FUniqueAny Any;
             UE_CHECK_FALSE(Any.HasValue());
 
             Any = 4;
             UE_CHECK_TRUE(Any.HasValue());
             UE_ASSERT_TRUE(Any.GetType() == typeid(int32));
             UE_CHECK_EQUAL(4, Any.Get<int32>());
-            UE_CHECK_EQUAL(const_cast<const UE::Ranges::FUniqueAny&>(Any).Get<int32>(), Any.Get<int32>());
+            UE_CHECK_EQUAL(const_cast<const UE::Ranges::FUniqueAny &>(Any).Get<int32>(), Any.Get<int32>());
 
             Any.Emplace<FString>(TEXT("Hello World"));
             auto StringValue = Any.TryGet<FString>();
             UE_ASSERT_TRUE(StringValue.IsSet());
             UE_CHECK_EQUAL(TEXT("Hello World"), *StringValue);
 
-            auto StdStringValue = const_cast<const UE::Ranges::FUniqueAny&>(Any).TryGet<std::string>();
+            auto StdStringValue = const_cast<const UE::Ranges::FUniqueAny &>(Any).TryGet<std::string>();
             UE_CHECK_FALSE(StdStringValue.IsSet());
-            
+
             Any.Emplace<std::array<FString, 10>>();
             UE_CHECK_TRUE(Any.HasValue());
 

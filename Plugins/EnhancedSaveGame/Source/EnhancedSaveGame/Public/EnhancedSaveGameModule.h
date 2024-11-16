@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SaveGameSystem.h"
 #include "Modules/ModuleManager.h"
+#include "SaveGameSystem.h"
 #include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogEnhancedSaveGame, Log, All)
@@ -14,22 +14,22 @@ class ENHANCEDSAVEGAME_API FEnhancedSaveGameModule : public ISaveGameSystemModul
     /** IModuleInterface implementation */
     void StartupModule() override;
     void ShutdownModule() override;
-    ISaveGameSystem * GetSaveGameSystem() override;
+    ISaveGameSystem *GetSaveGameSystem() override;
 
-    static FEnhancedSaveGameModule& Get();
+    static FEnhancedSaveGameModule &Get();
 
 #if WITH_EDITOR
     void EnableInMemorySaving();
     void DisableInMemorySaving();
 #endif
 
-private:
+  private:
     FGenericSaveGameSystem MainSaveGameSystem;
-    
+
 #if WITH_EDITOR
     EnhancedSaveGame::FInMemorySaveGameSystem InMemorySaveGameSystem;
     bool bInMemorySavingEnabled = false;
 #endif
 
-    static FEnhancedSaveGameModule* Instance;
+    static FEnhancedSaveGameModule *Instance;
 };

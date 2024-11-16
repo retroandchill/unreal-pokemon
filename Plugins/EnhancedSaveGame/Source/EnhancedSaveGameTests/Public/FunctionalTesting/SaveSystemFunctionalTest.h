@@ -18,8 +18,6 @@ UCLASS()
 class ENHANCEDSAVEGAMETESTS_API ASaveSystemFunctionalTest : public AScopedFunctionalTest {
     GENERATED_BODY()
 
-protected:
+  protected:
     void AddScopedTestObjects() override;
-    
-
 };

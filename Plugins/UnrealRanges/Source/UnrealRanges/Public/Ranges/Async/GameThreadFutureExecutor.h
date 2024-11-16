@@ -22,7 +22,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     class TGameThreadFutureExecutor : public FTickableGameObject {
-    public:
+      public:
         using FCompleteDelegate = TMulticastDelegate<void(T)>;
 
         /**
@@ -33,7 +33,8 @@ namespace UE::Ranges {
          * @param Future The future task to be executed on the game thread.
          * @return A TGameThreadFutureExecutor instance configured with the provided future.
          */
-        explicit TGameThreadFutureExecutor(TFuture<T>&& Future) : Future(std::move(Future)) {}
+        explicit TGameThreadFutureExecutor(TFuture<T> &&Future) : Future(std::move(Future)) {
+        }
 
         /**
          * @brief Adds a task to the OnComplete delegate that will be executed when the task is complete.
@@ -46,14 +47,14 @@ namespace UE::Ranges {
          */
         template <typename... A>
             requires CanAddToDelegate<FCompleteDelegate, A...>
-        FDelegateHandle AddOnCompleteTask(A&&... Args) {
+        FDelegateHandle AddOnCompleteTask(A &&...Args) {
             if (Value.IsSet()) {
                 ranges::invoke(CreateBinding<A...>(std::forward<A>(Args)...), *Value);
             }
-            
+
             return AddToDelegate(OnComplete, std::forward<A>(Args)...);
         }
-        
+
         void Tick(float DeltaTime) override {
             if (!Future.IsReady()) {
                 return;
@@ -62,14 +63,14 @@ namespace UE::Ranges {
             Value.Emplace(Future.Consume());
             OnComplete.Broadcast(*Value);
         }
-        
+
         TStatId GetStatId() const override {
             RETURN_QUICK_DECLARE_CYCLE_STAT(UTickBasedClock, STATGROUP_Tickables);
         }
 
-    private:
+      private:
         TFuture<T> Future;
         TOptional<T> Value;
         FCompleteDelegate OnComplete;
     };
-}
+} // namespace UE::Ranges

@@ -28,6 +28,6 @@ bool TestInMemorySaveSystem::RunTest(const FString &Parameters) {
 
     Data.Reset();
     UE_CHECK_FALSE(SaveSystem.LoadGame(false, SaveGameName, 0, Data));
-    
+
     return true;
 }

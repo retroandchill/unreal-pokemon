@@ -10,7 +10,7 @@ void URPGMenusTestUtilities::SelectCurrentOption(USelectableWidget *SelectableWi
         UE_LOG(LogBlueprint, Error, TEXT("The window isn't activated"))
         return;
     }
-    
+
     auto SelectedOption = SelectableWidget->GetSelectedOption();
     if (auto Function = SelectedOption->FindFunction("HandleButtonClicked"); Function == nullptr) {
         UE_LOG(LogBlueprint, Error, TEXT("Could not find function 'HandleButtonClicked'"))
