@@ -8,13 +8,15 @@
 namespace UE::Ranges {
 
     /**
-     * Concept for working with a Polymorphic struct type. Requires it be a valid UnrealEngine struct and have a
-     * virtual destructor.
+     * Concept for working with a Polymorphic struct type. Requires it be a valid UnrealEngine struct, have a
+     * virtual destructor, and have a GetStruct() method that returns the type of the struct.
      *
      * @tparam T The struct type to test
      */
     template <typename T>
-    concept PolymorphicStruct = UEStruct<T> && std::has_virtual_destructor_v<T>;
+    concept PolymorphicStruct = UEStruct<T> && std::has_virtual_destructor_v<T> && requires(T&& Struct) {
+        { Struct.GetStruct() } -> std::same_as<UScriptStruct *>;
+    };
 
     
     /**
@@ -40,6 +42,18 @@ namespace UE::Ranges {
         auto Memory = FMemory::Malloc(Struct->GetStructureSize());
         Struct->InitializeStruct(Memory);
         return MakeShareable(static_cast<T*>(Memory)).ToSharedRef();
-    } 
+    }
+
+    template <typename T>
+        requires PolymorphicStruct<T>
+    void operator<<(FArchive& Archive, TSharedRef<T>& Ptr) noexcept {
+        UScriptStruct* Struct = Archive.IsSaving() ? Ptr->GetStruct() : nullptr;
+        Archive << Struct;
+        check(Struct != nullptr && Struct->IsChildOf<T>())
+        if (Archive.IsLoading()) {
+            Ptr = static_cast<T*>(FMemory::Malloc(Struct->GetStructureSize()));
+        }
+        Struct->SerializeItem(Ptr.Get(), Archive, nullptr);
+    }
 
 }
