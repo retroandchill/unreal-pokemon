@@ -27,7 +27,7 @@ public class AutomationTestHelpers : ModuleRules
 			new string[]
 			{
 				"Core", 
-				"UMG", "FunctionalTestingEditor", "UnrealRanges"
+				"UMG"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

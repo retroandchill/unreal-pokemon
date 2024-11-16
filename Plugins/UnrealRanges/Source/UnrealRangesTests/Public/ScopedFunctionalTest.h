@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "EditorFunctionalTest.h"
 #include "Ranges/Variants/UniqueAny.h"
-#include <any>
 
 #include "ScopedFunctionalTest.generated.h"
 
@@ -18,7 +17,7 @@
  * for preparing and finishing the test, as well as managing scoped test objects and data.
  */
 UCLASS(Abstract)
-class AUTOMATIONTESTHELPERS_API AScopedFunctionalTest : public AEditorFunctionalTest {
+class UNREALRANGESTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest {
     GENERATED_BODY()
 
 public:

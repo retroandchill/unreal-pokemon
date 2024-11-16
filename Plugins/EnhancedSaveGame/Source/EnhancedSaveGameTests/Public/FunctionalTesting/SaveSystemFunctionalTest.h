@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EditorFunctionalTest.h"
-#include "Utilities/ScopedFunctionalTest.h"
+#include "ScopedFunctionalTest.h"
 
 #include "SaveSystemFunctionalTest.generated.h"
 

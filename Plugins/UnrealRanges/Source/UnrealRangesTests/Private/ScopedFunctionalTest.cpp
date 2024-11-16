@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Utilities/ScopedFunctionalTest.h"
+#include "ScopedFunctionalTest.h"
 
 
 void AScopedFunctionalTest::PrepareTest() {

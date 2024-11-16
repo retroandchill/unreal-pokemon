@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Optional/OptionalRef.h"
 #include <array>
 
 namespace UE::Ranges {
@@ -59,7 +60,7 @@ namespace UE::Ranges {
          * @param Value The value to be stored inside the FUniqueAny instance.
          */
         template <typename T>
-        explicit FUniqueAny(T&& Value) : Storage(std::forward<T>(Value)),  VTable(&GetVTableForType<std::decay_t<T>>()) {
+        explicit FUniqueAny(T&& Value) noexcept : Storage(std::forward<T>(Value)),  VTable(&GetVTableForType<std::decay_t<T>>()) {
         }
 
         
@@ -76,7 +77,7 @@ namespace UE::Ranges {
          * @return An FUniqueAny instance containing the newly constructed object of type T.
          */
         template <typename T, typename... A>
-        explicit FUniqueAny(std::in_place_type_t<T>, A&&... Args) : VTable(&GetVTableForType<T>()) {
+        explicit FUniqueAny(std::in_place_type_t<T>, A&&... Args) noexcept : VTable(&GetVTableForType<T>()) {
             if constexpr (FitsInUniqueAnySmallBuffer<T>) {
                 new (reinterpret_cast<T*>(&Storage.SmallStorage)) T(std::forward<A>(Args)...);
             } else {
@@ -127,6 +128,21 @@ namespace UE::Ranges {
             VTable = Other.VTable;
             VTable->Move(Other.Storage, Storage);
             Other.VTable = nullptr;
+            return *this;
+        }
+
+        /**
+         * @brief Overloads the assignment operator for an object of the ExampleClass.
+         *
+         * This function defines the behavior of the assignment operator,
+         * enabling the assignment of one instance of ExampleClass to another.
+         *
+         * @param Other The instance of ExampleClass to be assigned to this instance.
+         * @return A reference to this instance after assignment.
+         */
+        template <typename T>
+        FUniqueAny& operator=(T&& Other) noexcept {
+            Emplace<std::decay_t<T>>(std::forward<T>(Other));
             return *this;
         }
 
@@ -194,10 +210,31 @@ namespace UE::Ranges {
         template <typename T>
         TOptional<const T&> TryGet() const {
             if (GetType() != typeid(T)) {
-                return TOptional<T&>();
+                return TOptional<const T&>();
             }
 
             return GetUnchecked<T>();
+        }
+
+        /**
+         * @brief Emplaces a new object of type T using the provided arguments, destroying the currently stored object if nedded.
+         *
+         * @tparam T The type of object to store
+         * @tparam A The types of the constructor arguments
+         * @param Args Arguments to construct the new object with.
+         */
+        template <typename T, typename... A>
+        void Emplace(A&&... Args) {
+            if (HasValue()) {
+                VTable->Destroy(Storage);
+            }
+
+            if constexpr (FitsInUniqueAnySmallBuffer<std::decay_t<T>>) {
+                new (reinterpret_cast<T*>(&Storage.SmallStorage)) std::decay_t<T>(std::forward<A>(Args)...);
+            } else {
+                Storage.LargeStorage = new std::decay_t<T>(std::forward<A>(Args)...);
+            }
+            VTable = &GetVTableForType<std::decay_t<T>>();
         }
 
         /**
@@ -265,17 +302,17 @@ namespace UE::Ranges {
 
             template <typename T>
                 requires FitsInUniqueAnySmallBuffer<std::decay_t<T>>
-            explicit FStorage(T&& Data) {
+            explicit FStorage(T&& Data) noexcept {
                 new (reinterpret_cast<std::decay_t<T>*>(&SmallStorage)) std::decay_t<T>(std::forward<T>(Data));
             }
 
             template <typename T>
                 requires (!FitsInUniqueAnySmallBuffer<std::decay_t<T>>)
-            explicit FStorage(T&& Data) : LargeStorage(new std::decay_t<T>(std::forward<T>(Data))) {}
+            explicit FStorage(T&& Data) noexcept : LargeStorage(new std::decay_t<T>(std::forward<T>(Data))) {}
 
             template <typename T>
                 requires (!FitsInUniqueAnySmallBuffer<std::decay_t<T>>)
-            explicit FStorage(T* Data) : LargeStorage(Data) {}
+            explicit FStorage(T* Data) noexcept : LargeStorage(Data) {}
             
         };
 

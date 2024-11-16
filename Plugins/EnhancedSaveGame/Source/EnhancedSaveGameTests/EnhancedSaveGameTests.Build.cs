@@ -13,6 +13,7 @@ public class EnhancedSaveGameTests : ModuleRules
                 "FunctionalTesting",
                 "FunctionalTestingEditor", 
                 "AutomationTestHelpers",
+                "UnrealRangesTests"
             }
         );
 
