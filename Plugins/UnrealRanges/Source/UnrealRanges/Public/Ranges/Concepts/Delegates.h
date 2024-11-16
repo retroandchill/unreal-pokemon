@@ -80,7 +80,7 @@ namespace UE::Ranges {
     concept MemberFunctionOf = StdExt::IsMemberFunction_v<F> && std::is_same_v<StdExt::MemberFunctionClass_t<F>, T>;
 
     template <typename F, typename T>
-    concept UObjectMember = std::is_base_of_v<UObject, T> && MemberFunctionOf<F, T>;
+    concept UObjectMember = std::derived_from<T, UObject> && MemberFunctionOf<F, T>;
 
     template <typename D, typename F, typename... A>
     concept CanBindStatic = NativeUnicastDelegate<D> && requires(D &&Delegate, F &&Functor, A &&...Args) {

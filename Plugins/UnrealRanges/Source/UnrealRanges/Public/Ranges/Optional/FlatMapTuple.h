@@ -12,7 +12,7 @@ namespace UE::Optionals {
 
     template <typename F>
     struct TFlatMapTupleInvoker {
-        
+
         template <typename T>
             requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TFlatMapTupleInvoker>)
         explicit constexpr TFlatMapTupleInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
@@ -28,8 +28,10 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
             using ContainedType = decltype(*Optional);
-            using ResultType = TOptionalType<decltype(ranges::tuple_apply(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)))>;
-            return Optional.IsSet() ? ranges::tuple_apply(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) : ResultType();
+            using ResultType = TOptionalType<decltype(ranges::tuple_apply(
+                Functor, Ranges::ForwardLike<O &&, ContainedType>(*Optional)))>;
+            return Optional.IsSet() ? ranges::tuple_apply(Functor, Ranges::ForwardLike<O &&, ContainedType>(*Optional))
+                                    : ResultType();
         }
 
       private:

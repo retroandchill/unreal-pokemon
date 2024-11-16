@@ -10,10 +10,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestImageAssetOperations, "Unit Tests.Images.Te
 bool TestImageAssetOperations::RunTest(const FString &Parameters) {
     auto UtilityClass = UAssetLoader::LookupBlueprintClassByName<UImageAssetUtility>(TEXT("/RPGMenus/Tests/Resources"),
                                                                                      TEXT("ImageAssetUtilityImpl"));
-    auto Class = UtilityClass.Get(nullptr);
+    auto Class = UtilityClass.GetPtrOrNull();
     UE_ASSERT_NOT_NULL(Class);
 
-    auto Utility = NewObject<UImageAssetUtility>(GetTransientPackage(), Class);
+    auto Utility = NewObject<UImageAssetUtility>(GetTransientPackage(), Class->Get());
     UE_ASSERT_NOT_NULL(Utility);
 
     auto Variants = Utility->CreateImageAssets(Utility->TextureAsset, Utility->SpriteAsset);

@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
+#include "Ranges/Utilities/ForwardLike.h"
 #include "Types.h"
 #include "Utilities.h"
-#include "Ranges/Utilities/ForwardLike.h"
 
 namespace UE::Optionals {
 
@@ -28,20 +28,29 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
             using ContainedType = decltype(*Optional);
-            if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>> &&
-                          std::invocable<F, TNullableValue<O>>) {
+            if constexpr ((std::is_lvalue_reference_v<TContainedOptionalType<O>> ||
+                           SubclassOptional<O>)&&std::invocable<F, TNullableValue<O>>) {
+                using ResultType =
+                    TOptionalType<decltype(ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional)))
+                                        : TOptional<ResultType>();
+            } else if constexpr (SubclassOptional<O> && std::invocable<F, UClass &>) {
+                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, **Optional))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, **Optional) : TOptional<ResultType>();
+            } else if constexpr ((std::is_lvalue_reference_v<TContainedOptionalType<O>> ||
+                                  SubclassOptional<O>)&&std::invocable<F, TNullableValue<O>>) {
                 using ResultType =
                     TOptionalType<decltype(ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))))>;
                 return Optional.IsSet() ? ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional)))
                                         : TOptional<ResultType>();
             } else if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>>) {
-                using ResultType =
-                    TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
-                return Optional.IsSet() ? ranges::invoke(Functor, *Optional)
-                                        : TOptional<ResultType>();
+                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, *Optional))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, *Optional) : TOptional<ResultType>();
             } else {
-                using ResultType = TOptionalType<decltype(ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)))>;
-                return Optional.IsSet() ? ranges::invoke(Functor, Ranges::ForwardLike<O&&, ContainedType>(*Optional)) : TOptional<ResultType>();
+                using ResultType = TOptionalType<decltype(ranges::invoke(
+                    Functor, Ranges::ForwardLike<O &&, ContainedType>(*Optional)))>;
+                return Optional.IsSet() ? ranges::invoke(Functor, Ranges::ForwardLike<O &&, ContainedType>(*Optional))
+                                        : TOptional<ResultType>();
             }
         }
 

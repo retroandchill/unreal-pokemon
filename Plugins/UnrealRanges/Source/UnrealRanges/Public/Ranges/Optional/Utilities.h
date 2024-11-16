@@ -20,7 +20,8 @@ namespace UE::Optionals {
         requires UEOptional<T>
     constexpr decltype(auto) GetNullableValue(T &&Optional) {
         if constexpr (SubclassOptional<T>) {
-            return Optional.Get(nullptr);
+            auto Result = Optional.GetPtrOrNull();
+            return Result != nullptr ? Result->Get() : static_cast<UClass *>(nullptr);
         } else {
             return Optional.GetPtrOrNull();
         }
@@ -33,6 +34,6 @@ namespace UE::Optionals {
      */
     template <typename T>
         requires UEOptional<T>
-    using TNullableValue = decltype(GetNullableValue(std::decay_t<T>()));
+    using TNullableValue = decltype(GetNullableValue(std::declval<T>()));
 
 } // namespace UE::Optionals

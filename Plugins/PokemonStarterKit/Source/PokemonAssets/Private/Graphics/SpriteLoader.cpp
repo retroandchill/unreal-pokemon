@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/SpriteLoader.h"
-#include "Graphics/AssetClasses.h"
+#include "Graphics/GraphicsAssetClasses.h"
 #include "Pokemon/Pokemon.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/TrainerType.h"
