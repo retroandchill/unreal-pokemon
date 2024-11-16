@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Saving/EnhancedSaveGameSubsystem.h"
+#include "EnhancedSaveGameModule.h"
 #include "Kismet/GameplayStatics.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToMap.h"
@@ -28,6 +29,7 @@ UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *World
 }
 
 UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTagContainer &SaveTags) const {
+    UE_LOG(LogEnhancedSaveGame, Log, TEXT("Generating the save game object"));
     auto SaveGame = NewObject<UEnhancedSaveGame>(GetGameInstance());
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
@@ -45,6 +47,7 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     // clang-format on
 #endif
 
+    UE_LOG(LogEnhancedSaveGame, Display, TEXT("Object creation complete"));
     return SaveGame;
 }
 

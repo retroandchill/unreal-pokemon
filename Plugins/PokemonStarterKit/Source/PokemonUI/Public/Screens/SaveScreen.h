@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Async/GameThreadFutureExecutor.h"
 #include "Ranges/Functional/Delegates.h"
 #include "Screens/Screen.h"
 
@@ -30,7 +31,6 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
   protected:
     void NativeOnActivated() override;
-    void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
 
     /**
      * Set the save game being used by this window
@@ -82,6 +82,8 @@ class POKEMONUI_API USaveScreen : public UScreen {
     void ExitSaveScreen(bool bSuccess);
 
   private:
+    void CommitSaveGame(UEnhancedSaveGame *SaveGame);
+    
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USaveGameCard> SaveGameCard;
 
@@ -90,7 +92,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
     FOnSaveComplete OnSaveCompleteDelegate;
 
-    TOptional<TFuture<UEnhancedSaveGame *>> SaveGameCreationFuture;
+    TOptional<UE::Ranges::TGameThreadFutureExecutor<UEnhancedSaveGame *>> SaveGameCreationFuture;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, USaveScreen)
