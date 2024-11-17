@@ -32,3 +32,13 @@ Macros:
     - SLATE_END_ARGS()=};
     - SLATE_ATTRIBUTE(AttrType, AttrName) AttrType AttrName;
     - SLATE_ARGUMENT(AttrType, AttrName) AttrType AttrName;
+---
+Language: CSharp
+ColumnLimit: 120
+MaxEmptyLinesToKeep: 1
+TabWidth: 4
+IndentWidth: 4
+SortIncludes: CaseInsensitive
+AllowShortFunctionsOnASingleLine: None
+NamespaceIndentation: All
+IncludeBlocks: Regroup
