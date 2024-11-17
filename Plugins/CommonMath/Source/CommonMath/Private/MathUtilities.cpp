@@ -11,5 +11,9 @@ FVector UMathUtilities::Midpoint(const FVector &Start, const FVector &End) {
 
 int32 UMathUtilities::RandomIntInRange(const FInt32Range &Range) {
     check(Range.HasLowerBound() && Range.HasUpperBound())
-    return FMath::RandRange(Range.GetLowerBoundValue(), Range.GetUpperBoundValue());
+    auto LowerBound = Range.GetLowerBound();
+    auto UpperBound = Range.GetUpperBound();
+    return FMath::RandRange(
+        LowerBound.IsInclusive() ? LowerBound.GetValue() : LowerBound.GetValue() + 1,
+        UpperBound.IsInclusive() ? UpperBound.GetValue() : UpperBound.GetValue() - 1);
 }
