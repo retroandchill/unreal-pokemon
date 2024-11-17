@@ -14,6 +14,7 @@ namespace UE::Ranges {
      * Bind the supplied functor with the rear-most arguments being bound to the specified values. This works similarly
      * to ranges::bind_back except that it can work with no arguments supplied, which will simply return the functor
      * back to the caller.
+     * 
      * @tparam F The functor to bind back to.
      * @tparam A The types of the arguments
      * @param Functor The functor to bind
@@ -21,7 +22,7 @@ namespace UE::Ranges {
      * @return The bound functor
      */
     template <typename F, typename... A>
-        requires FunctionalType<F>
+        requires FunctionalType<F> && (!UEDelegate<F>)
     constexpr decltype(auto) CreateBinding(F &&Functor, A &&...Args) {
         if constexpr (sizeof...(A) > 0) {
             return ranges::bind_back(std::forward<F>(Functor), std::forward<A>(Args)...);
@@ -54,6 +55,11 @@ namespace UE::Ranges {
                                      B &&...Vals) { return InvokeDelegate(Callback, std::forward<B>(Vals)...); },
                                  std::forward<A>(Args)...);
     }
+
+    template <typename... A>
+    concept CanCreateBinding = requires(A&&... Args) {
+        { CreateBinding(std::forward<A>(Args)...) } -> FunctionalType;
+    };
 
     template <typename T, typename... A>
     concept CanInvokeBinding = std::invocable<decltype(CreateBinding<A...>(std::forward<A>(std::declval<A>())...)), T>;

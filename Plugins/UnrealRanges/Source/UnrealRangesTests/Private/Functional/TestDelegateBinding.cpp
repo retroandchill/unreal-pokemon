@@ -22,6 +22,7 @@ END_DEFINE_SPEC(FTestDelegateBinding);
 void FTestDelegateBinding::Define() {
     Describe("Test Delegate Binding", [this] {
         It("Should be able to bind a regular delegate", [this] {
+            FDemoDelegate Delegate;
             auto Binding = UE::Ranges::CreateBinding(FDemoDelegate::CreateStatic(&FTestDelegateBinding::IsLength), 10);
             UE_CHECK_TRUE(Binding(TEXT("1234567890")));
             UE_CHECK_FALSE(Binding(TEXT("123456789")));

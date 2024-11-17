@@ -39,6 +39,7 @@ namespace UE::Optionals {
     struct FMapTuple {
 
         template <typename... A>
+            requires Ranges::CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TMapTupleInvoker<BindingType>>(

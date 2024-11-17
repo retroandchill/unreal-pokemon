@@ -60,6 +60,7 @@ namespace UE::Optionals {
          * @return The bound functional closure.
          */
         template <typename... A>
+            requires Ranges::CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TOrElseGetInvoker<BindingType>>(

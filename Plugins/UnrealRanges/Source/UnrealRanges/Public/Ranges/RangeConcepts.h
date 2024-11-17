@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Concepts/UEContainer.h"
-#include <TypeTraits.h>
+#include "Ranges/Concepts/HasFunctionCallOperator.h"
 
 /**
  * Functionality pertaining to UE support for C++ 20 Ranges/range-v3.
@@ -26,8 +25,7 @@ namespace UE::Ranges {
      * @tparam T The type to check against
      */
     template <typename T>
-    concept FunctionalType =
-        std::is_function_v<std::remove_pointer_t<T>> || requires { typename StdExt::FunctionType_t<T>; };
+    concept FunctionalType = std::is_function_v<std::remove_pointer_t<T>> || HasFunctionCallOperator<T>;
 
     template <typename P, typename T>
     concept PointerTo = requires(P &&Ptr, T &&Value) {
