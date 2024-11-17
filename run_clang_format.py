@@ -2,6 +2,7 @@
 import subprocess
 
 STAY_OUT = ['Deps', 'External', 'Intermediate']
+LINE_ENDINGS = ['.cs', '.h', '.cpp', '.hpp', '.c', '.hxx', '.cxx']
 
 if __name__ == '__main__':
 
@@ -10,5 +11,5 @@ if __name__ == '__main__':
             continue
 
         for filename in filenames:
-            if filename.endswith('.cpp') or filename.endswith('.h'):
+            if any(filename.endswith(e) for e in LINE_ENDINGS):
                 subprocess.run(['clang-format', '-i', os.path.join(dirpath, filename)])

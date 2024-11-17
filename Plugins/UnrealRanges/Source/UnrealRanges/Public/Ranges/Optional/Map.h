@@ -28,8 +28,8 @@ namespace UE::Optionals {
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
             using ContainedType = decltype(*Optional);
-            if constexpr ((std::is_lvalue_reference_v<TContainedOptionalType<O>> ||
-                           SubclassOptional<O>)&&std::invocable<F, TNullableValue<O>>) {
+            if constexpr ((std::is_lvalue_reference_v<TContainedOptionalType<O>> || SubclassOptional<O>) &&
+                          std::invocable<F, TNullableValue<O>>) {
                 using ResultType =
                     TOptionalType<decltype(ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))))>;
                 return Optional.IsSet() ? ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional)))
@@ -37,8 +37,8 @@ namespace UE::Optionals {
             } else if constexpr (SubclassOptional<O> && std::invocable<F, UClass &>) {
                 using ResultType = TOptionalType<decltype(ranges::invoke(Functor, **Optional))>;
                 return Optional.IsSet() ? ranges::invoke(Functor, **Optional) : TOptional<ResultType>();
-            } else if constexpr ((std::is_lvalue_reference_v<TContainedOptionalType<O>> ||
-                                  SubclassOptional<O>)&&std::invocable<F, TNullableValue<O>>) {
+            } else if constexpr ((std::is_lvalue_reference_v<TContainedOptionalType<O>> || SubclassOptional<O>) &&
+                                 std::invocable<F, TNullableValue<O>>) {
                 using ResultType =
                     TOptionalType<decltype(ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional))))>;
                 return Optional.IsSet() ? ranges::invoke(Functor, GetNullableValue<O>(std::forward<O>(Optional)))

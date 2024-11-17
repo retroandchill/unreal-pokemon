@@ -8,7 +8,7 @@
 #include <array>
 
 namespace UE::Ranges {
-    constexpr size_t SmallStructSize = sizeof(void*) * 7;
+    constexpr size_t SmallStructSize = sizeof(void *) * 7;
 
     template <typename T>
     concept SmallStructType = UEStruct<T> && sizeof(T) <= SmallStructSize;
@@ -18,7 +18,7 @@ namespace UE::Ranges {
      * for constructing, copying, moving, and accessing the internal structure.
      */
     class FOpaqueStruct {
-    public:
+      public:
         /**
          * Default constructor for the FOpaqueStruct class.
          * Initializes an instance with no associated script structure.
@@ -35,7 +35,8 @@ namespace UE::Ranges {
          * @param Struct The UScriptStruct instance defining the structure to be managed.
          * @return A new FOpaqueStruct instance initialized with the provided structure.
          */
-        explicit FOpaqueStruct(const UScriptStruct& Struct) noexcept : Storage(Struct), Struct(&Struct) {}
+        explicit FOpaqueStruct(const UScriptStruct &Struct) noexcept : Storage(Struct), Struct(&Struct) {
+        }
 
         /**
          * Constructs an FOpaqueStruct with the given script structure and raw data pointer.
@@ -45,7 +46,7 @@ namespace UE::Ranges {
          * @return An instance of FOpaqueStruct initialized with the provided script structure and raw data.
          */
         template <typename T>
-        explicit FOpaqueStruct(const UScriptStruct& Struct, T* Raw) : Storage(Struct, Raw), Struct(&Struct) {
+        explicit FOpaqueStruct(const UScriptStruct &Struct, T *Raw) : Storage(Struct, Raw), Struct(&Struct) {
         }
 
         /**
@@ -57,7 +58,7 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T> && (!std::derived_from<std::decay_t<T>, FOpaqueStruct>)
-        explicit FOpaqueStruct(T&& Struct) noexcept : Storage(std::forward<T>(Struct)), Struct(GetScriptStruct<T>()) {
+        explicit FOpaqueStruct(T &&Struct) noexcept : Storage(std::forward<T>(Struct)), Struct(GetScriptStruct<T>()) {
         }
 
         /**
@@ -87,7 +88,7 @@ namespace UE::Ranges {
          * @param Other The FOpaqueStruct instance to be copied from.
          * @return A new FOpaqueStruct instance initialized with the copied data.
          */
-        FOpaqueStruct(const FOpaqueStruct& Other) noexcept : Struct(Other.Struct) {
+        FOpaqueStruct(const FOpaqueStruct &Other) noexcept : Struct(Other.Struct) {
             Other.Storage.CopyTo(*Struct, Storage);
         }
 
@@ -100,7 +101,7 @@ namespace UE::Ranges {
          * @param Other The FOpaqueStruct instance to be moved from.
          * @return A new FOpaqueStruct instance initialized with the moved data.
          */
-        FOpaqueStruct(FOpaqueStruct&& Other) noexcept : Struct(Other.Struct)  {
+        FOpaqueStruct(FOpaqueStruct &&Other) noexcept : Struct(Other.Struct) {
             Other.Storage.MoveTo(*Struct, Storage);
             Other.Struct = nullptr;
         }
@@ -118,17 +119,17 @@ namespace UE::Ranges {
 
         /**
          * Copy assignment operator for the FOpaqueStruct class.
-         * This assignment operator initializes a new FOpaqueStruct instance by copying another instance, ensuring that the
-         * internal storage and associated script structure are duplicated accurately.
+         * This assignment operator initializes a new FOpaqueStruct instance by copying another instance, ensuring that
+         * the internal storage and associated script structure are duplicated accurately.
          *
          * @param Other The FOpaqueStruct instance to be copied from.
          * @return A new FOpaqueStruct instance initialized with the copied data.
          */
-        FOpaqueStruct& operator=(const FOpaqueStruct& Other) noexcept {
+        FOpaqueStruct &operator=(const FOpaqueStruct &Other) noexcept {
             if (Struct != nullptr) {
                 Storage.Destroy(*Struct);
             }
-            
+
             Struct = Other.Struct;
             Other.Storage.CopyTo(*Struct, Storage);
             return *this;
@@ -136,18 +137,18 @@ namespace UE::Ranges {
 
         /**
          * Move assignment operator for the FOpaqueStruct class.
-         * This assignment operator initializes a new FOpaqueStruct instance by moving the resources from another instance.
-         * It transfers ownership of the internal storage and its associated script structure to the new instance,
-         * and sets the original instance's structure pointer to null.
+         * This assignment operator initializes a new FOpaqueStruct instance by moving the resources from another
+         * instance. It transfers ownership of the internal storage and its associated script structure to the new
+         * instance, and sets the original instance's structure pointer to null.
          *
          * @param Other The FOpaqueStruct instance to be moved from.
          * @return A new FOpaqueStruct instance initialized with the moved data.
          */
-        FOpaqueStruct& operator=(FOpaqueStruct&& Other) noexcept {
+        FOpaqueStruct &operator=(FOpaqueStruct &&Other) noexcept {
             if (Struct != nullptr) {
                 Storage.Destroy(*Struct);
             }
-            
+
             Struct = Other.Struct;
             Other.Storage.MoveTo(*Struct, Storage);
             Other.Struct = nullptr;
@@ -169,11 +170,11 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        FOpaqueStruct& operator=(T&& Data) noexcept {
+        FOpaqueStruct &operator=(T &&Data) noexcept {
             if (Struct != nullptr) {
                 Storage.Destroy(*Struct);
             }
-            
+
             Struct = GetScriptStruct<T>();
             if constexpr (SmallStructType<T>) {
                 new (reinterpret_cast<std::decay_t<T> *>(&Storage.Small)) std::decay_t<T>(std::forward<T>(Data));
@@ -192,7 +193,7 @@ namespace UE::Ranges {
          *       The new structure is initialized in the storage, either using small or large allocation
          *       based on the size of the structure.
          */
-        void Emplace(const UScriptStruct& StructType) noexcept {
+        void Emplace(const UScriptStruct &StructType) noexcept {
             if (Struct != nullptr) {
                 Storage.Destroy(*Struct);
             }
@@ -215,7 +216,7 @@ namespace UE::Ranges {
          * @param Data The data for the script structure to be placed.
          */
         template <typename T>
-        void Emplace(const UScriptStruct& StructType, T* Data) noexcept {
+        void Emplace(const UScriptStruct &StructType, T *Data) noexcept {
             if (Struct != nullptr) {
                 Storage.Destroy(*Struct);
             }
@@ -238,11 +239,11 @@ namespace UE::Ranges {
          */
         template <typename T, typename... A>
             requires UEStruct<T>
-        void Emplace(A&&... Args) noexcept {
+        void Emplace(A &&...Args) noexcept {
             if (Struct != nullptr) {
                 Storage.Destroy(*Struct);
             }
-            
+
             Struct = GetScriptStruct<T>();
             if constexpr (SmallStructType<T>) {
                 new (reinterpret_cast<T *>(&Storage.Small)) T(std::forward<A>(Args)...);
@@ -263,7 +264,8 @@ namespace UE::Ranges {
         /**
          * Determines if the FOpaqueStruct instance contains a valid structure of a specified type.
          *
-         * @return true if the instance has a script structure and it is a child of the specified type T; false otherwise.
+         * @return true if the instance has a script structure and it is a child of the specified type T; false
+         * otherwise.
          */
         template <typename T>
             requires UEStruct<T>
@@ -274,7 +276,7 @@ namespace UE::Ranges {
                 return HasValue() && Struct == GetScriptStruct<T>();
             }
         }
-            
+
         /**
          * Retrieves the stored structure.
          * Ensures that the structure is an instance of the desired type.
@@ -285,7 +287,7 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        T& Get() {
+        T &Get() {
             check(IsStruct<T>())
             return GetUnchecked<T>();
         }
@@ -300,7 +302,7 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        const T& Get() const {
+        const T &Get() const {
             check(IsStruct<T>())
             return GetUnchecked<T>();
         }
@@ -312,7 +314,7 @@ namespace UE::Ranges {
          * @return void* A pointer to the structure either from the small or large storage depending
          * on the structure size.
          */
-        void* GetRaw() {
+        void *GetRaw() {
             check(HasValue())
             return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
         }
@@ -324,7 +326,7 @@ namespace UE::Ranges {
          * @return void* A pointer to the structure either from the small or large storage depending
          * on the structure size.
          */
-        const void* GetRaw() const {
+        const void *GetRaw() const {
             check(HasValue())
             return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
         }
@@ -340,11 +342,11 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        TOptional<T&> TryGet() {
+        TOptional<T &> TryGet() {
             if (!IsStruct<T>()) {
-                return TOptional<T&>();
+                return TOptional<T &>();
             }
-            
+
             return GetUnchecked<T>();
         }
 
@@ -359,11 +361,11 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UEStruct<T>
-        TOptional<const T&> TryGet() const {
+        TOptional<const T &> TryGet() const {
             if (!IsStruct<T>()) {
-                return TOptional<const T&>();
+                return TOptional<const T &>();
             }
-            
+
             return GetUnchecked<T>();
         }
 
@@ -377,10 +379,10 @@ namespace UE::Ranges {
             if (!HasValue()) {
                 return TOptional<void>();
             }
-            
+
             return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
         }
-        
+
         /**
          * Tries to get the raw structure data pointer.
          *
@@ -391,7 +393,7 @@ namespace UE::Ranges {
             if (!HasValue()) {
                 return TOptional<const void>();
             }
-            
+
             return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
         }
 
@@ -409,37 +411,38 @@ namespace UE::Ranges {
             if (Struct == nullptr) {
                 return;
             }
-            
+
             Storage.Destroy(*Struct);
             Struct = nullptr;
         }
 
-    private:
+      private:
         template <typename T>
-        T& GetUnchecked() {
+        T &GetUnchecked() {
             if (Struct->GetStructureSize() <= SmallStructSize) {
-                return *reinterpret_cast<T*>(&Storage.Small);
+                return *reinterpret_cast<T *>(&Storage.Small);
             }
-            
-            return *static_cast<T*>(Storage.Large);
+
+            return *static_cast<T *>(Storage.Large);
         }
 
         template <typename T>
-        const T& GetUnchecked() const {
+        const T &GetUnchecked() const {
             if (Struct->GetStructureSize() <= SmallStructSize) {
-                return *reinterpret_cast<const T*>(&Storage.Small);
+                return *reinterpret_cast<const T *>(&Storage.Small);
             }
-            
-            return *static_cast<const T*>(Storage.Large);
+
+            return *static_cast<const T *>(Storage.Large);
         }
-        
+
         union FStorage {
             std::array<std::byte, SmallStructSize> Small;
-            void* Large;
+            void *Large;
 
-            FStorage() : Large(nullptr) {}
+            FStorage() : Large(nullptr) {
+            }
 
-            explicit FStorage(const UScriptStruct& Struct) noexcept {
+            explicit FStorage(const UScriptStruct &Struct) noexcept {
                 if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= SmallStructSize) {
                     Struct.InitializeStruct(&Small);
                 } else {
@@ -449,7 +452,7 @@ namespace UE::Ranges {
             }
 
             template <typename T>
-            explicit FStorage(const UScriptStruct& Struct, T* Data) noexcept {
+            explicit FStorage(const UScriptStruct &Struct, T *Data) noexcept {
                 if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= SmallStructSize) {
                     Struct.CopyScriptStruct(&Small, Data);
                 } else {
@@ -460,15 +463,15 @@ namespace UE::Ranges {
 
             template <typename T>
                 requires UEStruct<T>
-            explicit FStorage(T&& Struct) noexcept {
+            explicit FStorage(T &&Struct) noexcept {
                 if constexpr (SmallStructType<T>) {
-                    new (reinterpret_cast<std::decay_t<T>*>(&Small)) std::decay_t<T>(std::forward<T>(Struct));
+                    new (reinterpret_cast<std::decay_t<T> *>(&Small)) std::decay_t<T>(std::forward<T>(Struct));
                 } else {
                     Large = new std::decay_t<T>(std::forward<T>(Struct));
                 }
             }
 
-            void Destroy(const UScriptStruct& StructType) noexcept {
+            void Destroy(const UScriptStruct &StructType) noexcept {
                 if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
                     StructType.DestroyStruct(&Small);
                 } else {
@@ -477,7 +480,7 @@ namespace UE::Ranges {
                 }
             }
 
-            void CopyTo(const UScriptStruct& StructType, FStorage& Dest) const noexcept {
+            void CopyTo(const UScriptStruct &StructType, FStorage &Dest) const noexcept {
                 if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
                     StructType.InitializeStruct(&Dest.Small);
                     StructType.CopyScriptStruct(&Dest.Small, &Small);
@@ -488,7 +491,7 @@ namespace UE::Ranges {
                 }
             }
 
-            void MoveTo(const UScriptStruct& StructType, FStorage& Dest) noexcept {
+            void MoveTo(const UScriptStruct &StructType, FStorage &Dest) noexcept {
                 if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
                     std::memcpy(&Dest.Small, &Small, Size);
                 } else {
@@ -498,10 +501,7 @@ namespace UE::Ranges {
             }
         };
 
-        
-        
-
         FStorage Storage;
         TObjectPtr<const UScriptStruct> Struct;
     };
-}
+} // namespace UE::Ranges

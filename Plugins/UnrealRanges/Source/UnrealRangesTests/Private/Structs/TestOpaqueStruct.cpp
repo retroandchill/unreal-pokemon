@@ -68,7 +68,7 @@ void FTestOpaqueStruct::Define() {
             Struct2.Emplace<FTransform>();
             Struct1 = Struct2;
             UE_ASSERT_TRUE(Struct1.IsStruct<FTransform>());
-            
+
             return true;
         });
 
@@ -78,31 +78,33 @@ void FTestOpaqueStruct::Define() {
             UE_CHECK_TRUE(Struct.IsStruct<FTransform>());
             UE_CHECK_TRUE(Struct.TryGet<FTransform>().IsSet());
             UE_CHECK_TRUE(Struct.TryGetRaw().IsSet());
-            UE_CHECK_TRUE(const_cast<const UE::Ranges::FOpaqueStruct&>(Struct).TryGetRaw().IsSet());
-            
+            UE_CHECK_TRUE(const_cast<const UE::Ranges::FOpaqueStruct &>(Struct).TryGetRaw().IsSet());
+
             Struct = FTestStruct();
             UE_CHECK_TRUE(Struct.IsStruct<FTestStruct>());
             UE_CHECK_FALSE(Struct.TryGet<FTransform>().IsSet());
 
             Struct.Emplace(*UE::Ranges::GetScriptStruct<FTransform>());
             UE_CHECK_TRUE(Struct.IsStruct<FTransform>());
-            UE_CHECK_TRUE(const_cast<const UE::Ranges::FOpaqueStruct&>(Struct).TryGet<FTransform>().IsSet());
+            UE_CHECK_TRUE(const_cast<const UE::Ranges::FOpaqueStruct &>(Struct).TryGet<FTransform>().IsSet());
 
             Struct.Emplace(*UE::Ranges::GetScriptStruct<FTestStruct>());
             UE_CHECK_TRUE(Struct.IsStruct<FTestStruct>());
-            UE_CHECK_FALSE(const_cast<const UE::Ranges::FOpaqueStruct&>(Struct).TryGet<FTransform>().IsSet());
+            UE_CHECK_FALSE(const_cast<const UE::Ranges::FOpaqueStruct &>(Struct).TryGet<FTransform>().IsSet());
 
             FTransform Transform;
             Struct.Emplace(*UE::Ranges::GetScriptStruct<FTransform>(), &Transform);
             UE_ASSERT_TRUE(Struct.IsStruct<FTransform>());
             bool bIdentical = false;
-            UE_ASSERT_TRUE(UE::Ranges::GetScriptStruct<FTransform>()->GetCppStructOps()->Identical(Struct.GetRaw(), &Transform, PPF_None, bIdentical));
+            UE_ASSERT_TRUE(UE::Ranges::GetScriptStruct<FTransform>()->GetCppStructOps()->Identical(
+                Struct.GetRaw(), &Transform, PPF_None, bIdentical));
             UE_CHECK_TRUE(bIdentical);
 
             FVector Vector;
             Struct.Emplace(*UE::Ranges::GetScriptStruct<FVector>(), &Vector);
             UE_CHECK_TRUE(Struct.IsStruct<FVector>());
-            UE_ASSERT_TRUE(UE::Ranges::GetScriptStruct<FVector>()->GetCppStructOps()->Identical(const_cast<const UE::Ranges::FOpaqueStruct&>(Struct).GetRaw(), &Vector, PPF_None, bIdentical));
+            UE_ASSERT_TRUE(UE::Ranges::GetScriptStruct<FVector>()->GetCppStructOps()->Identical(
+                const_cast<const UE::Ranges::FOpaqueStruct &>(Struct).GetRaw(), &Vector, PPF_None, bIdentical));
             UE_CHECK_TRUE(bIdentical);
 
             Struct.Emplace<FTransform>();
@@ -110,9 +112,8 @@ void FTestOpaqueStruct::Define() {
 
             Struct.Emplace<FRotator>();
             UE_CHECK_TRUE(Struct.IsStruct<FRotator>());
-            
+
             return true;
         });
-        
     });
 }
