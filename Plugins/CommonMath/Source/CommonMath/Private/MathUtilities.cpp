@@ -8,3 +8,8 @@ int32 UMathUtilities::Pow(int32 Base, int32 Exponent) {
 FVector UMathUtilities::Midpoint(const FVector &Start, const FVector &End) {
     return (Start + End) / 2;
 }
+
+int32 UMathUtilities::RandomIntInRange(const FInt32Range &Range) {
+    check(Range.HasLowerBound() && Range.HasUpperBound())
+    return FMath::RandRange(Range.GetLowerBoundValue(), Range.GetUpperBoundValue());
+}
