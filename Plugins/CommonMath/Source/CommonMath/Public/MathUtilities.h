@@ -30,11 +30,11 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
      */
     template <typename A, typename B, typename C, typename D>
         requires std::is_arithmetic_v<A> && std::is_arithmetic_v<B> && std::is_arithmetic_v<C> &&
-                 std::is_arithmetic_v<D> &&
-                 (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
-                  std::is_floating_point_v<D>)
-    static auto LinearInterpolation(A StartValue, B EndValue, C Duration, D Delta)
-        -> decltype(StartValue * EndValue * Duration * Delta) {
+                     std::is_arithmetic_v<D> &&
+                     (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
+                      std::is_floating_point_v<D>)
+    static auto LinearInterpolation(A StartValue, B EndValue, C Duration,
+                                    D Delta) -> decltype(StartValue * EndValue * Duration * Delta) {
         if (Duration <= 0)
             return EndValue;
 

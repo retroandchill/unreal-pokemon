@@ -78,6 +78,7 @@ namespace UE::Ranges {
          * @return An FUniqueAny instance containing the newly constructed object of type T.
          */
         template <typename T, typename... A>
+            requires std::constructible_from<T, A...>
         explicit FUniqueAny(std::in_place_type_t<T>, A &&...Args) noexcept : VTable(&GetVTableForType<T>()) {
             if constexpr (FitsInUniqueAnySmallBuffer<T>) {
                 new (reinterpret_cast<T *>(&Storage.SmallStorage)) T(std::forward<A>(Args)...);
@@ -355,7 +356,7 @@ namespace UE::Ranges {
 
         template <typename T>
         static FVTable &GetVTableForType() {
-            // clang-fromat off
+            // clang-format off
             static FVTable VTable = {
                 .GetType = TVTableImpl<T>::GetType,
                 .Destroy = TVTableImpl<T>::Destroy,
