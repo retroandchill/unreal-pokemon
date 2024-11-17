@@ -356,9 +356,12 @@ namespace UE::Ranges {
 
         template <typename T>
         static FVTable &GetVTableForType() {
-            // clang-fromat off
+            // clang-format off
             static FVTable VTable = {
-                .GetType = TVTableImpl<T>::GetType, .Destroy = TVTableImpl<T>::Destroy, .Move = TVTableImpl<T>::Move};
+                .GetType = TVTableImpl<T>::GetType,
+                .Destroy = TVTableImpl<T>::Destroy,
+                .Move = TVTableImpl<T>::Move
+            };
             // clang-format on
             return VTable;
         }
