@@ -111,7 +111,9 @@ namespace UE::Ranges {
          * This destructor calls the Reset() method to ensure proper deallocation of the internal storage.
          */
         ~FOpaqueStruct() {
-            Reset();
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
         }
 
         /**
@@ -123,6 +125,10 @@ namespace UE::Ranges {
          * @return A new FOpaqueStruct instance initialized with the copied data.
          */
         FOpaqueStruct& operator=(const FOpaqueStruct& Other) noexcept {
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
+            
             Struct = Other.Struct;
             Other.Storage.CopyTo(*Struct, Storage);
             return *this;
@@ -138,10 +144,111 @@ namespace UE::Ranges {
          * @return A new FOpaqueStruct instance initialized with the moved data.
          */
         FOpaqueStruct& operator=(FOpaqueStruct&& Other) noexcept {
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
+            
             Struct = Other.Struct;
             Other.Storage.MoveTo(*Struct, Storage);
             Other.Struct = nullptr;
             return *this;
+        }
+
+        /**
+         * Assigns a new value to the FOpaqueStruct from a given data object.
+         *
+         * @tparam T The type of the data object being assigned.
+         * @param Data The data object to be assigned to the structure. Could be of either small or large struct type.
+         * @return Reference to the updated FOpaqueStruct.
+         *
+         * This method performs a type check at compile-time to ensure the appropriate storage
+         * is selected. If the FOpaqueStruct already contains a structure, the current structure
+         * will be destroyed before assigning the new data.
+         *
+         * The method is marked noexcept to indicate it does not throw exceptions.
+         */
+        template <typename T>
+            requires UEStruct<T>
+        FOpaqueStruct& operator=(T&& Data) noexcept {
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
+            
+            Struct = GetScriptStruct<T>();
+            if constexpr (SmallStructType<T>) {
+                new (reinterpret_cast<std::decay_t<T> *>(&Storage.Small)) std::decay_t<T>(std::forward<T>(Data));
+            } else {
+                Storage.Large = new std::decay_t<T>(std::forward<T>(Data));
+            }
+            return *this;
+        }
+
+        /**
+         * Emplaces a new script structure into the storage, replacing any existing structure.
+         *
+         * @param StructType The script structure type to be emplaced.
+         *
+         * @note If a structure already exists, it will be destroyed before the new one is emplaced.
+         *       The new structure is initialized in the storage, either using small or large allocation
+         *       based on the size of the structure.
+         */
+        void Emplace(const UScriptStruct& StructType) noexcept {
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
+
+            Struct = &StructType;
+            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= SmallStructSize) {
+                Struct->InitializeStruct(&Storage.Small);
+            } else {
+                Storage.Large = FMemory::Malloc(Size);
+                Struct->InitializeStruct(Storage.Large);
+            }
+        }
+
+        /**
+         * Places a new structure of the given type into the storage. The method manages
+         * the existing structure by first destroying it if it exists, and then placing
+         * the new structure by allocating memory accordingly.
+         *
+         * @param StructType The type of the script structure to be placed.
+         * @param Data The data for the script structure to be placed.
+         */
+        template <typename T>
+        void Emplace(const UScriptStruct& StructType, T* Data) noexcept {
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
+
+            Struct = &StructType;
+            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= SmallStructSize) {
+                Struct->InitializeStruct(&Storage.Small);
+                Struct->CopyScriptStruct(&Storage.Small, Data);
+            } else {
+                Storage.Large = FMemory::Malloc(Size);
+                Struct->InitializeStruct(Storage.Large);
+                Struct->CopyScriptStruct(Storage.Large, Data);
+            }
+        }
+
+        /**
+         * Emplaces a new instance of T within the internal storage, destroying any existing instance.
+         *
+         * @param Args Variadic arguments used to construct the new instance of T.
+         */
+        template <typename T, typename... A>
+            requires UEStruct<T>
+        void Emplace(A&&... Args) noexcept {
+            if (Struct != nullptr) {
+                Storage.Destroy(*Struct);
+            }
+            
+            Struct = GetScriptStruct<T>();
+            if constexpr (SmallStructType<T>) {
+                new (reinterpret_cast<T *>(&Storage.Small)) T(std::forward<A>(Args)...);
+            } else {
+                Storage.Large = new T(std::forward<A>(Args)...);
+            }
         }
 
         /**
@@ -161,7 +268,11 @@ namespace UE::Ranges {
         template <typename T>
             requires UEStruct<T>
         bool IsStruct() const {
-            return HasValue() && Struct->IsChildOf<T>();
+            if constexpr (TModels_V<CStaticStructProvider, T>) {
+                return HasValue() && Struct->IsChildOf<T>();
+            } else {
+                return HasValue() && Struct == GetScriptStruct<T>();
+            }
         }
             
         /**
@@ -299,12 +410,8 @@ namespace UE::Ranges {
                 return;
             }
             
-            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= SmallStructSize) {
-                Struct->DestroyStruct(&Storage.Small);
-            } else {
-                Struct->DestroyStruct(Storage.Large);
-                FMemory::Free(Storage.Large);
-            }
+            Storage.Destroy(*Struct);
+            Struct = nullptr;
         }
 
     private:
@@ -358,6 +465,15 @@ namespace UE::Ranges {
                     new (reinterpret_cast<std::decay_t<T>*>(&Small)) std::decay_t<T>(std::forward<T>(Struct));
                 } else {
                     Large = new std::decay_t<T>(std::forward<T>(Struct));
+                }
+            }
+
+            void Destroy(const UScriptStruct& StructType) noexcept {
+                if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
+                    StructType.DestroyStruct(&Small);
+                } else {
+                    StructType.DestroyStruct(Large);
+                    FMemory::Free(Large);
                 }
             }
 
