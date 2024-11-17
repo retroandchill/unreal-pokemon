@@ -5,10 +5,43 @@
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
 #include "UObject/Object.h"
+#include "Ranges/Optional/OptionalRef.h"
 
 #include "TurnBasedGameplayEffect.generated.h"
 
+class UGameplayEffect;
 class UTurnBasedEffectComponent;
+
+/**
+ * @enum ETurnDurationTrigger
+ * @brief Enum representing different trigger points in a turn-based game.
+ *
+ * This enumeration defines specific points within a turn or an action that can be used to
+ * trigger gameplay events or effects, such as the start or end of a turn or action.
+ */
+UENUM(BlueprintType)
+enum class ETurnDurationTrigger : uint8 {
+
+    /**
+     * Triggered at the start of the turn, will remove the effect before any turn-start abilities are triggered.
+     */
+    TurnStart,
+
+    /**
+     * Triggered at the end of the turn, will remove the effect before any turn-end abilities are triggered.
+     */
+    TurnEnd,
+
+    /**
+     * Triggered before the battler's action.
+     */
+    ActionStart,
+
+    /**
+     * Triggered after the battler's action.
+     */
+    ActionEnd
+};
 
 /**
  * @struct FTurnBasedGameplayEffect
@@ -45,6 +78,78 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
     FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent, FActiveGameplayEffectHandle EffectHandle, int32 TurnDuration = INDEX_NONE);
 
     /**
+     * @brief Retrieves the owning component of the turn-based effect.
+     *
+     * This method returns an optional reference to the UTurnBasedEffectComponent that owns this
+     * gameplay effect. If the owning component is valid, it will be returned; otherwise, the optional
+     * will be empty.
+     *
+     * @return An optional reference to the owning UTurnBasedEffectComponent.
+     */
+    TOptional<UTurnBasedEffectComponent&> GetOwningComponent() const {
+        return OwningComponent.Get();
+    }
+
+    /**
+     * @brief Retrieves the handle of the active gameplay effect.
+     *
+     * This method returns a constant reference to the FActiveGameplayEffectHandle
+     * associated with the turn-based gameplay effect.
+     *
+     * @return A constant reference to the FActiveGameplayEffectHandle.
+     */
+    const FActiveGameplayEffectHandle & GetEffectHandle() const {
+        return EffectHandle;
+    }
+
+    /**
+     * @brief Retrieves the gameplay effect associated with the turn-based gameplay component.
+     *
+     * This method returns a constant pointer to the UGameplayEffect associated with the
+     * turn-based gameplay component. The gameplay effect defines various properties and behaviors
+     * of the gameplay effect that this component is handling.
+     *
+     * @return A constant pointer to the UGameplayEffect.
+     */
+    const UGameplayEffect* GetGameplayEffect() const {
+        return GameplayEffect;
+    }
+
+    /**
+     * @brief Retrieves the number of turns the gameplay effect has been active.
+     *
+     * This method returns the count of how many turns the gameplay effect has been active.
+     *
+     * @return The number of turns the gameplay effect has been active.
+     */
+    int32 GetTurnsActive() const {
+        return TurnsActive;
+    }
+
+    /**
+     * @brief Retrieves the number of turns remaining for the gameplay effect.
+     *
+     * This method returns a constant reference to an optional integer representing the number of turns
+     * remaining for this gameplay effect. If the effect has no remaining turns, the optional will be empty.
+     *
+     * @return A constant reference to an optional integer containing the number of turns remaining.
+     */
+    const TOptional<int32> & GetTurnsRemaining() const {
+        return TurnsRemaining;
+    }
+
+    /**
+     * @brief Checks if the turn-based gameplay effect has a specified trigger.
+     *
+     * This method determines if the gameplay effect contains a specific turn duration trigger,
+     * such as triggers that may occur at the start or end of a turn or action.
+     *
+     * @param Trigger The turn duration trigger to check for.
+     * @return True if the trigger exists within the gameplay effect; otherwise, false.
+     */
+    bool HasTrigger(ETurnDurationTrigger Trigger) const;
+
+    /**
      * @brief Increments the turn count for the gameplay effect.
      *
      * This method increments the counter for the number of turns the gameplay effect has been active.
@@ -64,11 +169,13 @@ private:
     
     UPROPERTY()
     FActiveGameplayEffectHandle EffectHandle;
+
+    UPROPERTY()
+    TObjectPtr<const UGameplayEffect> GameplayEffect;
     
     UPROPERTY()
     int32 TurnsActive = 0;
 
     UPROPERTY()
     TOptional<int32> TurnsRemaining;
-
 };

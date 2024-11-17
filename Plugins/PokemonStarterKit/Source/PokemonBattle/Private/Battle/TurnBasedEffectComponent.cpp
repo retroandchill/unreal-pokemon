@@ -11,7 +11,7 @@ void UTurnBasedEffectComponent::BeginPlay() {
 }
 
 void UTurnBasedEffectComponent::AddTurnBasedEffect(FActiveGameplayEffectHandle Handle, int32 TurnDuration) {
-    ActiveTurnBasedEffects.Emplace(Handle, FTurnBasedGameplayEffect(this, Handle));
+    ActiveTurnBasedEffects.Emplace(Handle, FTurnBasedGameplayEffect(this, Handle, TurnDuration));
 }
 
 bool UTurnBasedEffectComponent::RemoveTurnBasedEffect(FActiveGameplayEffectHandle Handle) {

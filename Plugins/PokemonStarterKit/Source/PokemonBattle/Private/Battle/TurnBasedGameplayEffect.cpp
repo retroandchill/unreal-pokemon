@@ -4,7 +4,9 @@
 #include "Battle/TurnBasedGameplayEffect.h"
 #include "AbilitySystemComponent.h"
 #include "Battle/TurnBasedEffectComponent.h"
+#include "Battle/Effects/TurnBasedGameplayEffectComponent.h"
 #include "Ranges/Optional/Filter.h"
+#include "Ranges/Optional/IsSet.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/Of.h"
 #include "Ranges/Optional/OptionalClosure.h"
@@ -12,7 +14,28 @@
 #include "Ranges/Utilities/Comparison.h"
 
 FTurnBasedGameplayEffect::FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent,
-    FActiveGameplayEffectHandle EffectHandle, int32 TurnDuration) : OwningComponent(OwningComponent), EffectHandle(EffectHandle), TurnsRemaining(TurnDuration > 0 ? TOptional(TurnDuration) : TOptional<int32>()) {
+                                                   FActiveGameplayEffectHandle EffectHandle,
+                                                   int32 TurnDuration) : OwningComponent(OwningComponent),
+                                                                         EffectHandle(EffectHandle),
+                                                                         GameplayEffect(
+                                                                             OwningComponent->
+                                                                                 GetAbilitySystemComponent()->
+                                                                                 GetGameplayEffectCDO(EffectHandle)),
+                                                                         TurnsRemaining(
+                                                                             TurnDuration > 0
+                                                                                 ? TOptional(TurnDuration)
+                                                                                 : TOptional<int32>()) {
+
+}
+
+bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
+    // clang-format off
+    return UE::Optionals::OfNullable(GameplayEffect) |
+           UE::Optionals::Map(&UGameplayEffect::FindComponent<UTurnBasedGameplayEffectComponent>) |
+           UE::Optionals::Map(&UTurnBasedGameplayEffectComponent::GetTurnDurationTrigger) |
+           UE::Optionals::Filter(UE::Ranges::Equals, Trigger) |
+           UE::Optionals::IsSet;
+    // clang-format on
 }
 
 bool FTurnBasedGameplayEffect::IncrementTurnCount() {

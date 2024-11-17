@@ -32,6 +32,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
+#include "Battle/TurnBasedEffectComponent.h"
 #include "range/v3/view/filter.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
@@ -55,6 +56,7 @@ TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Mo
 
 ABattlerActor::ABattlerActor() {
     BattlerAbilityComponent = CreateDefaultSubobject<UBattlerAbilityComponent>("BattlerAbilityComponent");
+    TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
     InnateAbilities.Add(UInnate_CriticalHitDamage::StaticClass());
     InnateAbilities.Add(UInnate_MultiTargetDamageSplit::StaticClass());
     InnateAbilities.Add(UInnate_DamageSwing::StaticClass());
@@ -305,6 +307,10 @@ TArray<FName> ABattlerActor::GetTypes() const {
 
 UBattlerAbilityComponent *ABattlerActor::GetAbilityComponent() const {
     return BattlerAbilityComponent;
+}
+
+UTurnBasedEffectComponent * ABattlerActor::GetTurnBasedEffectComponent() const {
+    return TurnBasedEffectComponent;
 }
 
 const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {

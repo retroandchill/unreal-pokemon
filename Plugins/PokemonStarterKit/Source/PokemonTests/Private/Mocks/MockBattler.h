@@ -35,6 +35,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD2(GainExpAndEVs, FLevelUpStatChanges(int32 Exp, const TMap<FName, uint8> &EVs));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent *, GetAbilityComponent, (), (const, override));
+    MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));
     MOCK_METHOD(FText, GetRecallMessage, (), (const, override));
     MOCK_METHOD(FGameplayAbilitySpecHandle, PerformSwitch, (const TScriptInterface<IBattler> &SwitchTarget),

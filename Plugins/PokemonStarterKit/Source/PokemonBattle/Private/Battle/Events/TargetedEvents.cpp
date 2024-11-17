@@ -45,7 +45,7 @@ static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
                           UE::Ranges::Filter(&IBattler::IsNotFainted) |
                           UE::Ranges::CastType<AActor>;
     // clang-format on
-    return UE::Ranges::Concat(SideView, ActiveBattlers);
+    return UE::Ranges::Concat(std::move(SideView), std::move(ActiveBattlers));
 }
 
 static void SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag, FGameplayEventData &EventData) {

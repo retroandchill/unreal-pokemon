@@ -11,6 +11,7 @@
 #include "Battle/Events/BattleMessagePayload.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
+#include "Battle/TurnBasedEffectComponent.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -18,12 +19,15 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/CastType.h"
+#include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
+#include "Ranges/Views/Single.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
+    TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
 }
 
 TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) {
@@ -84,6 +88,7 @@ void APokemonBattle::Tick(float DeltaSeconds) {
                 EndTurn();
             } else {
                 // We don't want to send out this event twice
+                ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
                 auto Payload = NewObject<UBattleMessagePayload>();
                 Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
                 ProcessTurnEndMessages(Payload->Messages);
@@ -149,7 +154,9 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
 
 bool APokemonBattle::ActionSelectionFinished() const {
     return Algo::NoneOf(ExpectedActionCount,
-                        [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
+                        [this](const TPair<FGuid, uint8> &Pair) {
+                            return CurrentActionCount[Pair.Key] < Pair.Value;
+                        });
 }
 
 #if WITH_EDITOR
@@ -283,9 +290,24 @@ void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     OnBattleEnd.Broadcast(Result);
 }
 
+void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
+    // clang-format off
+    auto MyComponent = UE::Ranges::Single(TurnBasedEffectComponent.Get());
+    auto ChildComponents = Sides |
+                           UE::Ranges::Map(&IBattleSide::GetChildEffectComponents) |
+                           UE::Ranges::Join;
+    UE::Ranges::Concat(std::move(MyComponent), std::move(ChildComponents)) |
+        UE::Ranges::Map(&UTurnBasedEffectComponent::GetAllTurnBasedEffectsForTrigger, Trigger) |
+        UE::Ranges::Join |
+        UE::Ranges::ForEach(&FTurnBasedGameplayEffect::IncrementTurnCount);
+    // clang-format on
+}
+
 void APokemonBattle::StartTurn() {
     bSwitchPrompting = false;
     TurnCount++;
+    ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnStart);
+
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
     Phase = EBattlePhase::Selecting;

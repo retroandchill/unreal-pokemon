@@ -8,6 +8,7 @@
 
 #include "ActiveSide.generated.h"
 
+class UTurnBasedEffectComponent;
 class UBattleSideAbilitySystemComponent;
 class IBattle;
 
@@ -43,6 +44,12 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
   public:
     const FGuid &GetInternalId() const override;
     const TScriptInterface<IBattle> &GetOwningBattle() const override;
+
+    UFUNCTION(BlueprintPure, Category = GameplayAbilities)
+    UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const override;
+
+    UE::Ranges::TAnyView<UTurnBasedEffectComponent*> GetChildEffectComponents() const override;
+    
     uint8 GetSideSize() const override;
     const FText &GetIntroText() const override;
     const TOptional<FText> &GetSendOutText() const override;
@@ -74,6 +81,9 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
      */
     UPROPERTY()
     TObjectPtr<UBattleSideAbilitySystemComponent> AbilitySystemComponent;
+
+    UPROPERTY()
+    TObjectPtr<UTurnBasedEffectComponent> TurnBasedEffectComponent;
 
     FGuid InternalId;
 

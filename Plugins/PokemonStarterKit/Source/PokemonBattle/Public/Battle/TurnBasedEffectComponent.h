@@ -6,6 +6,10 @@
 #include "ActiveGameplayEffectHandle.h"
 #include "Components/ActorComponent.h"
 #include "Battle/TurnBasedGameplayEffect.h"
+#include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
+#include "Ranges/Views/MapValue.h"
+
 #include "TurnBasedEffectComponent.generated.h"
 
 struct FActiveGameplayEffectHandle;
@@ -28,7 +32,7 @@ public:
      * @return A pointer to the AbilitySystemComponent.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UAbilitySystemComponent* GetAbilitySystemComponent() const {
+    UAbilitySystemComponent *GetAbilitySystemComponent() const {
         return AbilitySystemComponent;
     }
 
@@ -48,6 +52,20 @@ public:
      */
     bool RemoveTurnBasedEffect(FActiveGameplayEffectHandle Handle);
 
+    /**
+     * Retrieves all active turn-based gameplay effects that correspond to a specified trigger.
+     *
+     * @param Trigger The specific turn duration trigger to filter effects by.
+     * @return A collection of active gameplay effects filtered to include only those with the specified trigger.
+     */
+    auto GetAllTurnBasedEffectsForTrigger(ETurnDurationTrigger Trigger) {
+        // clang-format off
+        return ActiveTurnBasedEffects |
+               UE::Ranges::MapValue |
+               UE::Ranges::Filter(&FTurnBasedGameplayEffect::HasTrigger, Trigger);
+        // clang-format on
+    }
+
 private:
     /**
      * AbilitySystemComponent is a reference to the UAbilitySystemComponent associated with this component.
@@ -56,7 +74,7 @@ private:
      */
     UPROPERTY(BlueprintGetter = GetAbilitySystemComponent, Category = GameplayAbilities)
     TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-    
+
     UPROPERTY()
     TMap<FActiveGameplayEffectHandle, FTurnBasedGameplayEffect> ActiveTurnBasedEffects;
 

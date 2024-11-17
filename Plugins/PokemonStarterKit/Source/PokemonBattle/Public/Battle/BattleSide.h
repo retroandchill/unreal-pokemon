@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
 
 #include "BattleSide.generated.h"
 
+class UTurnBasedEffectComponent;
 class UAbilitySystemComponent;
 class IPokemon;
 class ITrainer;
@@ -58,6 +60,17 @@ class POKEMONBATTLE_API IBattleSide {
      * @return The battle context for this side of combat
      */
     virtual const TScriptInterface<IBattle> &GetOwningBattle() const = 0;
+
+    /**
+     * Retrieve the turn-based effect component associated with this battle side.
+     * This component handles effects that span over multiple turns such as status conditions,
+     * stat changes, and other ongoing effects in the battle.
+     * @return The turn-based effect component for this side.
+     */
+    UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
+    virtual UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const = 0;
+
+    virtual UE::Ranges::TAnyView<UTurnBasedEffectComponent*> GetChildEffectComponents() const = 0;
 
     /**
      * The capacity for battlers on a given side.

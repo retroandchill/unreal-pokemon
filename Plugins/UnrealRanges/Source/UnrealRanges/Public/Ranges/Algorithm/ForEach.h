@@ -29,7 +29,7 @@ namespace UE::Ranges {
          * @tparam R The type of range that was passed through
          * @param Range The range to iterate over.
          */
-        template <typename R>
+        template <typename R, typename T = ranges::range_common_reference_t<R>>
             requires ranges::input_range<R>
         void operator()(R &&Range) const {
             ranges::for_each(std::forward<R>(Range), Functor);

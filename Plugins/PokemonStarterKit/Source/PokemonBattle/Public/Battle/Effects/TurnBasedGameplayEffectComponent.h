@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameplayEffectComponent.h"
+#include "Battle/TurnBasedGameplayEffect.h"
+
 #include "TurnBasedGameplayEffectComponent.generated.h"
 
 class UTurnBasedEffectComponent;
@@ -27,7 +29,19 @@ public:
 #if WITH_EDITOR
     EDataValidationResult IsDataValid(FDataValidationContext &Context) const override;
 #endif
-    
+
+    /**
+     * @brief Retrieves the trigger condition for the duration of a turn-based gameplay effect.
+     *
+     * This function returns the `ETurnDurationTrigger` value that specifies when the duration of a turn-based
+     * gameplay effect should be evaluated or triggered within the Pokémon Battle system.
+     *
+     * @return The trigger condition for the duration of the gameplay effect.
+     */
+    ETurnDurationTrigger GetTurnDurationTrigger() const {
+        return TurnDurationTrigger;
+    }
+
 private:
     static void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &GERemovalInfo, UTurnBasedEffectComponent* Component);
 
@@ -40,4 +54,11 @@ private:
     UPROPERTY(EditAnywhere)
     TOptional<FInt32Range> TurnDuration;
 
+    /**
+     * @brief Enum denoting the trigger condition for the duration of a turn-based gameplay effect in the Pokémon Battle system.
+     *
+     * This variable defines the specific conditions under which the duration of the turn-based effect will be evaluated or triggered.
+     */
+    UPROPERTY(EditAnywhere)
+    ETurnDurationTrigger TurnDurationTrigger = ETurnDurationTrigger::TurnEnd;
 };
