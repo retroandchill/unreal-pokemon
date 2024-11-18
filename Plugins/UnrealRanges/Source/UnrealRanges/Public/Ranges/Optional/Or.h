@@ -11,7 +11,9 @@ namespace UE::Optionals {
 
     template <typename F>
     struct TOrInvoker {
-        explicit constexpr TOrInvoker(F &&Functor) : Functor(Functor) {
+        template <typename T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::remove_cvref_t<T>, TOrInvoker>)
+        explicit constexpr TOrInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         template <typename O>
@@ -29,7 +31,7 @@ namespace UE::Optionals {
         template <typename... A>
             requires Ranges::CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
-            using BindingType = decltype(Ranges::CreateBinding(std::forward<A>(Args)...));
+            using BindingType = std::decay_t<decltype(Ranges::CreateBinding(std::forward<A>(Args)...))>;
             return TOptionalClosure<TOrInvoker<BindingType>>(
                 TOrInvoker<BindingType>(Ranges::CreateBinding(std::forward<A>(Args)...)));
         }

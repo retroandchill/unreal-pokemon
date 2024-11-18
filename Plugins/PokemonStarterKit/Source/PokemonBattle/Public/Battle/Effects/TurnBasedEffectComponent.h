@@ -9,6 +9,7 @@
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/MapValue.h"
+#include "Battle/Events/BattleMessage.h"
 
 #include "TurnBasedEffectComponent.generated.h"
 
@@ -70,7 +71,10 @@ public:
         explicit FScopedRunningMessageHandle(UTurnBasedEffectComponent* Component) : Component(Component) {}
 
         FScopedRunningMessageHandle(const FScopedRunningMessageHandle&) = delete;
-        FScopedRunningMessageHandle(FScopedRunningMessageHandle&&) = delete;
+        
+        FScopedRunningMessageHandle(FScopedRunningMessageHandle&& Other) : Component(Other.Component) {
+            Other.Component = nullptr;
+        }
 
         ~FScopedRunningMessageHandle() {
             if (Component.IsValid()) {
@@ -79,7 +83,12 @@ public:
         }
         
         FScopedRunningMessageHandle& operator=(const FScopedRunningMessageHandle&) = delete;
-        FScopedRunningMessageHandle& operator=(FScopedRunningMessageHandle&&) = delete;
+        
+        FScopedRunningMessageHandle& operator=(FScopedRunningMessageHandle&& Other) {
+            Component = Other.Component;
+            Other.Component = nullptr;
+            return *this;
+        } 
 
     private:
         TWeakObjectPtr<UTurnBasedEffectComponent> Component;

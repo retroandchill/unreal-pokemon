@@ -10,7 +10,7 @@ bool UBattleStatusEffectUtils::CanStatusEffectBeInflicted(FName StatusEffectID, 
     auto Messages = UBattleMessageHelper::FindRunningMessageSet(SourceAbility);
     if (auto &StatusEffect = Target->GetStatusEffect(); StatusEffect.IsSet()) {
         auto &Status = StatusEffect.GetValue();
-        if (Messages != nullptr) {
+        if (Messages.IsSet()) {
             if (Status.StatusEffectID == StatusEffectID) {
                 auto AppliedAlreadyText = FText::Format(AlreadyAppliedFormat, {{"Pkmn", Target->GetNickname()}});
                 UBattleMessageHelper::AppendMessage(*Messages, AppliedAlreadyText);
