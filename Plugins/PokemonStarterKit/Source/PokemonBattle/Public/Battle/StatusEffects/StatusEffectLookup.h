@@ -22,6 +22,5 @@ namespace Pokemon::Battle::StatusEffects {
      * @param Status The status effect to look up
      * @return The gameplay effect class for that status effect (if an effect exists)
      */
-    POKEMONBATTLE_API TOptional<TNonNullSubclassOf<UGameplayEffect>>
-    FindStatusEffect(TOptional<const FStatus &> Status);
+    POKEMONBATTLE_API TOptional<TNonNullSubclassOf<UGameplayEffect>> FindStatusEffect(TOptional<const FStatus &> Status);
 } // namespace Pokemon::Battle::StatusEffects

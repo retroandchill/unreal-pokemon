@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle.h"
-#include "TurnBasedGameplayEffect.h"
+#include "Effects/TurnBasedGameplayEffect.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Events/BattleMessage.h"
 #include "UObject/Object.h"
@@ -236,7 +236,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void ExitBattleScene(EBattleResult Result) const;
 
 private:
-    void ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger);
+    void ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger, const FRunningMessageSet& Messages);
     
     /**
      * Run at the head of every turn. Increments the turn count and initiates action selection.

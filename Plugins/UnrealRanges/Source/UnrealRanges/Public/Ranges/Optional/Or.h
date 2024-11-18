@@ -17,7 +17,7 @@ namespace UE::Optionals {
         template <typename O>
             requires UEOptional<O>
         constexpr auto operator()(O &&Optional) const {
-            return Optional.IsSet() ? Optional : Functor();
+            return Optional.IsSet() ? std::forward<O>(Optional) : Functor();
         }
 
       private:

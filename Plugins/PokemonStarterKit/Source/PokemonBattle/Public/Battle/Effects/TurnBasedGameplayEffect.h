@@ -11,6 +11,7 @@
 
 class UGameplayEffect;
 class UTurnBasedEffectComponent;
+struct FRunningMessageSet;
 
 /**
  * @enum ETurnDurationTrigger
@@ -21,12 +22,6 @@ class UTurnBasedEffectComponent;
  */
 UENUM(BlueprintType)
 enum class ETurnDurationTrigger : uint8 {
-
-    /**
-     * Triggered at the start of the turn, will remove the effect before any turn-start abilities are triggered.
-     */
-    TurnStart,
-
     /**
      * Triggered at the end of the turn, will remove the effect before any turn-end abilities are triggered.
      */
@@ -158,11 +153,11 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return True if the effect is removed after the increment; otherwise, false.
      */
-    bool IncrementTurnCount();
+    bool IncrementTurnCount(const FRunningMessageSet& RunningMessages);
     
 
 private:
-    bool RemoveEffect(int32 StacksToRemove = -1);
+    bool RemoveEffect(const FRunningMessageSet& Messages, int32 StacksToRemove = -1);
     
     UPROPERTY()
     TWeakObjectPtr<UTurnBasedEffectComponent> OwningComponent;

@@ -7,6 +7,7 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Utilities/Casts.h"
 #include "Ranges/Views/CastType.h"

@@ -16,6 +16,9 @@ UCLASS(Abstract, Blueprintable)
 class POKEMONBATTLE_API UGameplayCue_ApplyMessage : public UGameplayCueNotify_Static {
     GENERATED_BODY()
 
+public:
+    bool HandlesEvent(EGameplayCueEvent::Type EventType) const override;
+
   protected:
     /**
      * Perform the message append for whatever trigger is desired
@@ -35,4 +38,8 @@ class POKEMONBATTLE_API UGameplayCue_ApplyMessage : public UGameplayCueNotify_St
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Display")
     void AppendMessage(AActor *TargetActor, const FGameplayCueParameters &Parameters,
                        const FRunningMessageSet &Messages) const;
+
+private:
+    UPROPERTY(EditAnywhere, Category = GameplayCue)
+    TSet<TEnumAsByte<EGameplayCueEvent::Type>> ValidEventTypes;
 };

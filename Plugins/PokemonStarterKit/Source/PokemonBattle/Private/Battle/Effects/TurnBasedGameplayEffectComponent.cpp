@@ -5,7 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "GameplayEffect.h"
 #include "MathUtilities.h"
-#include "Battle/TurnBasedEffectComponent.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Battlers/Battler.h"
 #include "Misc/DataValidation.h"
 #include "Ranges/Optional/Filter.h"

@@ -2,8 +2,12 @@
 
 #include "Battle/Events/BattleMessage.h"
 #include "Abilities/GameplayAbility.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
+#include "Battle/Effects/TurnBasedGameplayEffectComponent.h"
 #include "Battle/Events/RunningMessageSetPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
+#include "Ranges/Optional/FlatMap.h"
+#include "Ranges/Optional/Map.h"
 
 FBattleMessage::FBattleMessage(FText &&Message) : Message(std::move(Message)) {
 }
@@ -35,7 +39,7 @@ void UBattleMessageHelper::AppendMessageWithAnimation(const FRunningMessageSet &
     Messages.Messages->Emplace(std::move(Message), Animation, AnimationPlacement);
 }
 
-const FRunningMessageSet *UBattleMessageHelper::FindRunningMessageSet(const UGameplayAbility *Ability) {
+TOptional<const FRunningMessageSet &> UBattleMessageHelper::FindRunningMessageSet(const UGameplayAbility *Ability) {
     if (Ability == nullptr) {
         return nullptr;
     }
@@ -43,13 +47,19 @@ const FRunningMessageSet *UBattleMessageHelper::FindRunningMessageSet(const UGam
     if (auto EventData = Ability->GetCurrentAbilitySpec()->GameplayEventData; EventData != nullptr) {
         if (auto MessagePayload = Cast<IRunningMessageSetPayload>(EventData->OptionalObject);
             MessagePayload != nullptr) {
-            return &MessagePayload->GetRunningMessageSet();
+            return MessagePayload->GetRunningMessageSet();
         }
     }
 
     if (auto FunctionCode = Cast<UBattleMoveFunctionCode>(Ability); FunctionCode != nullptr) {
-        return &FunctionCode->GetRunningMessage();
+        return FunctionCode->GetRunningMessage();
     }
 
     return nullptr;
+}
+
+TOptional<const FRunningMessageSet &> UBattleMessageHelper::FindRunningMessageSet(const AActor *Actor) {
+    return UE::Optionals::OfNullable(Actor) |
+        UE::Optionals::Map(&AActor::FindComponentByClass<UTurnBasedEffectComponent>) |
+            UE::Optionals::FlatMap(&UTurnBasedEffectComponent::GetRunningMessages);
 }

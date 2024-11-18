@@ -8,7 +8,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
-#include "Battle/TurnBasedEffectComponent.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Utilities/Casts.h"

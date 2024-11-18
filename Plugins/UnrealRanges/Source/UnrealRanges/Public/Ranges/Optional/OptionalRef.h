@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Traits.h"
 #include "Ranges/Concepts/Pointers.h"
 #include "Ranges/RangeConcepts.h"
 #include "Templates/NonNullSubclassOf.h"

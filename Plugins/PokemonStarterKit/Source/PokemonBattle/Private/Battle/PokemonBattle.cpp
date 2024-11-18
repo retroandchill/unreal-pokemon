@@ -11,7 +11,7 @@
 #include "Battle/Events/BattleMessagePayload.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
-#include "Battle/TurnBasedEffectComponent.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -88,8 +88,8 @@ void APokemonBattle::Tick(float DeltaSeconds) {
                 EndTurn();
             } else {
                 // We don't want to send out this event twice
-                ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
                 auto Payload = NewObject<UBattleMessagePayload>();
+                ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd, Payload->Messages);
                 Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
                 ProcessTurnEndMessages(Payload->Messages);
             }
@@ -290,7 +290,7 @@ void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     OnBattleEnd.Broadcast(Result);
 }
 
-void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
+void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger, const FRunningMessageSet& Messages) {
     // clang-format off
     auto MyComponent = UE::Ranges::Single(TurnBasedEffectComponent.Get());
     auto ChildComponents = Sides |
@@ -299,14 +299,14 @@ void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
     UE::Ranges::Concat(std::move(MyComponent), std::move(ChildComponents)) |
         UE::Ranges::Map(&UTurnBasedEffectComponent::GetAllTurnBasedEffectsForTrigger, Trigger) |
         UE::Ranges::Join |
-        UE::Ranges::ForEach(&FTurnBasedGameplayEffect::IncrementTurnCount);
+        UE::Ranges::ForEach(&FTurnBasedGameplayEffect::IncrementTurnCount, Messages);
     // clang-format on
 }
 
 void APokemonBattle::StartTurn() {
     bSwitchPrompting = false;
     TurnCount++;
-    ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnStart);
+    FRunningMessageSet Messages;
 
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();

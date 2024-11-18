@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "Ranges/Optional/OptionalRef.h"
 
 #include "BattleMessage.generated.h"
 
@@ -134,5 +135,7 @@ class UBattleMessageHelper : public UBlueprintFunctionLibrary {
      * @param Ability The ability in question
      * @return The running message set (or nullptr if not found)
      */
-    static const FRunningMessageSet *FindRunningMessageSet(const UGameplayAbility *Ability);
+    static TOptional<const FRunningMessageSet &> FindRunningMessageSet(const UGameplayAbility *Ability);
+
+    static TOptional<const FRunningMessageSet &> FindRunningMessageSet(const AActor *Actor);
 };

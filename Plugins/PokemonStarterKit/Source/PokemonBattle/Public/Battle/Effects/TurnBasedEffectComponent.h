@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
 #include "Components/ActorComponent.h"
-#include "Battle/TurnBasedGameplayEffect.h"
+#include "Battle/Effects/TurnBasedGameplayEffect.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/MapValue.h"
@@ -66,6 +66,31 @@ public:
         // clang-format on
     }
 
+    struct FScopedRunningMessageHandle {
+        explicit FScopedRunningMessageHandle(UTurnBasedEffectComponent* Component) : Component(Component) {}
+
+        FScopedRunningMessageHandle(const FScopedRunningMessageHandle&) = delete;
+        FScopedRunningMessageHandle(FScopedRunningMessageHandle&&) = delete;
+
+        ~FScopedRunningMessageHandle() {
+            if (Component.IsValid()) {
+                Component->RunningMessages.Reset();
+            }
+        }
+        
+        FScopedRunningMessageHandle& operator=(const FScopedRunningMessageHandle&) = delete;
+        FScopedRunningMessageHandle& operator=(FScopedRunningMessageHandle&&) = delete;
+
+    private:
+        TWeakObjectPtr<UTurnBasedEffectComponent> Component;
+    };
+
+    TOptional<const FRunningMessageSet &> GetRunningMessages() const {
+        return RunningMessages.IsSet() ? RunningMessages.GetValue() : TOptional<const FRunningMessageSet &>();
+    }
+
+    FScopedRunningMessageHandle SetRunningMessages(const FRunningMessageSet& Messages);
+
 private:
     /**
      * AbilitySystemComponent is a reference to the UAbilitySystemComponent associated with this component.
@@ -77,5 +102,6 @@ private:
 
     UPROPERTY()
     TMap<FActiveGameplayEffectHandle, FTurnBasedGameplayEffect> ActiveTurnBasedEffects;
-
+    
+    TOptional<FRunningMessageSet> RunningMessages;
 };

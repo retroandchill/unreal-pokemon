@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameplayEffectComponent.h"
-#include "Battle/TurnBasedGameplayEffect.h"
+#include "Battle/Cues/GameplayCue_ApplyMessage.h"
+#include "Battle/Effects/TurnBasedGameplayEffect.h"
 
 #include "TurnBasedGameplayEffectComponent.generated.h"
 
+struct FGameplayTagContainer;
 class UTurnBasedEffectComponent;
 struct FGameplayEffectRemovalInfo;
 
