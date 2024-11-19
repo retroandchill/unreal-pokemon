@@ -9,6 +9,7 @@
 #include "Battle/Events/UseItemPayload.h"
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
@@ -53,7 +54,11 @@ void UBattleItemEffect::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     Algo::ForEach(Targets, [&User, this](const TScriptInterface<IBattler> &Target) {
         bShouldConsumeItem |= ApplyEffectToTarget(User, Target);
     });
-    DisplayResults();
+
+    ABattleSequencer::DisplayBattleMessages(this, [this] {
+        ensure(CurrentActorInfo != nullptr);
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+    });
 }
 
 void UBattleItemEffect::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,

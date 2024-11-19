@@ -7,6 +7,7 @@
 #include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Tags.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Ranges/Views/Single.h"
 
 USwitchActionBase::USwitchActionBase() {
@@ -30,7 +31,8 @@ void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     TScriptInterface<IBattler> Battler = GetCurrentActorInfo()->AvatarActor.Get();
     check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
-    PlayRecallAnimation(Battler);
+    QueueRecallAnimation(Battler);
+    ABattleSequencer::DisplayBattleMessages(this, &USwitchActionBase::SwapWithTarget);
 }
 
 void USwitchActionBase::SwapWithTarget() {
@@ -42,11 +44,15 @@ void USwitchActionBase::SwapWithTarget() {
 
     auto TargetActor = CastChecked<AActor>(SwapTarget.GetObject());
     TargetActor->SetActorTransform(ActorInfo.AvatarActor->GetActorTransform());
-    PlaySendOutAnimation(SwapTarget);
+    QueueSendOutAnimation(SwapTarget);
+    ABattleSequencer::DisplayBattleMessages(this, &USwitchActionBase::TriggerOnSendOut);
 }
 
 void USwitchActionBase::TriggerOnSendOut() {
     auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
     Battle->OnBattlersEnteringBattle(UE::Ranges::Single(SwapTarget));
-    DisplaySwitchInEffects(SwapTarget);
+    ABattleSequencer::DisplayBattleMessages(this, [this] {
+        ensure(CurrentActorInfo != nullptr);
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+    });
 }

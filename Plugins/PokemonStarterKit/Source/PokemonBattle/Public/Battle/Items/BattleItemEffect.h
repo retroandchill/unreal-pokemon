@@ -58,12 +58,6 @@ class POKEMONBATTLE_API UBattleItemEffect : public UGameplayAbility {
     bool ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
-     * Display the results of the items usage.
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void DisplayResults();
-
-    /**
      * Check if an individual target for the item is valid
      * @param Battler Was the item target valid
      * @return Is this a valid target for the move.

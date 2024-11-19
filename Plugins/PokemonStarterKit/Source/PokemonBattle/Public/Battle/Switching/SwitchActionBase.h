@@ -32,7 +32,7 @@ class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
      * @param SwappingFrom The battler that is being recalled
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    void PlayRecallAnimation(const TScriptInterface<IBattler> &SwappingFrom);
+    void QueueRecallAnimation(const TScriptInterface<IBattler> &SwappingFrom);
 
     /**
      * Perform the internal swap of the Pokémon.
@@ -45,7 +45,7 @@ class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
      * @param SwappingTo The battler that is being sent out
      */
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    void PlaySendOutAnimation(const TScriptInterface<IBattler> &SwappingTo);
+    void QueueSendOutAnimation(const TScriptInterface<IBattler> &SwappingTo);
 
     UFUNCTION(BlueprintCallable, Category = Switching)
     void TriggerOnSendOut();
