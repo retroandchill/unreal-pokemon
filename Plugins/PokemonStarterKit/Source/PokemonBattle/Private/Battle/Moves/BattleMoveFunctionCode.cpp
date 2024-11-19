@@ -148,7 +148,6 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
 
 void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                                       const TArray<TScriptInterface<IBattler>> &Targets) {
-    RunningMessages.Messages->Reset();
     UE_LOG(LogBattle, Display, TEXT("%s is using move %s!"), *User->GetNickname().ToString(),
            *BattleMove->GetDisplayName().ToString())
     if (MoveFailed(User, Targets)) {
@@ -160,7 +159,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
 
     if (Targets.IsEmpty() && BattleMove->GetTargetType().NumTargets != ETargetCount::NoneOrSelf &&
         !WorksWithNoTargets()) {
-        RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
+        ABattleSequencer::QueueBattleMessage(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
         UE_LOG(LogBattle, Display, TEXT("%s has no targets!"), *BattleMove->GetDisplayName().ToString())
         ProcessMoveFailure();
         EndMove(User, Targets);
@@ -201,7 +200,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
-        RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
+        ABattleSequencer::QueueBattleMessage(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
         ProcessMoveFailure();
         EndMove(User, Targets);
         return;
@@ -474,7 +473,6 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 
 void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
                                                const TArray<TScriptInterface<IBattler>> &Targets) {
-    RunningMessages.Messages->Reset();
     UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
@@ -518,7 +516,6 @@ void UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
 void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
                                                      const TArray<TScriptInterface<IBattler>> &Targets) {
     UE_LOG(LogBattle, Display, TEXT("Applying additional effects of %s!"), *BattleMove->GetDisplayName().ToString())
-    RunningMessages.Messages->Reset();
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->GetCalculatedDamage() == 0.f) {
             UE_LOG(LogBattle, Display, TEXT("%s didn't take any damage, skipping the additional effect chance!"),

@@ -47,6 +47,6 @@ void USwitchActionBase::SwapWithTarget() {
 
 void USwitchActionBase::TriggerOnSendOut() {
     auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
-    auto Messages = Battle->OnBattlersEnteringBattle(UE::Ranges::Single(SwapTarget));
-    DisplaySwitchInEffects(SwapTarget, Messages);
+    Battle->OnBattlersEnteringBattle(UE::Ranges::Single(SwapTarget));
+    DisplaySwitchInEffects(SwapTarget);
 }

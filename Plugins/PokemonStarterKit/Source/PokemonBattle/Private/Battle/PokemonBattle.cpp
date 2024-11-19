@@ -8,7 +8,6 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Events/BattleMessagePayload.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
 #include "Battle/Animations/BattleSequencer.h"
