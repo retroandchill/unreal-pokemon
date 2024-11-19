@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PokemonBattleModule.h"
 #include "Battle/Events/BattleMessage.h"
 #include "GameFramework/Actor.h"
 #include "Ranges/Functional/Bindings.h"
@@ -13,6 +14,8 @@
 UCLASS(Abstract, Blueprintable)
 class POKEMONBATTLE_API ABattleSequencer : public AActor {
     GENERATED_BODY()
+
+    static constexpr TCHAR UninitializedLog[] = TEXT("BattleSequencer is not initialized!");
 
 protected:
     void BeginPlay() override;
@@ -47,8 +50,14 @@ public:
     template <typename... A>
         requires UE::Ranges::CanAddToDelegate<FSimpleMulticastDelegate, A...>
     static void DisplayBattleMessages(A&&... Args) {
-        if (ensure(Instance.IsValid())) {
+        if (Instance.IsValid()) {
             Instance->ProcessBattleMessages(std::forward<A>(Args)...);
+        } else {
+            // If we don't have an initialized battle sequencer, then we need to short circuit this and create the
+            // delegate and immediately execute it to avoid a soft-lock. We can't use std::invoke here because the
+            // argument order isn't always correct to do that.
+            UE_LOG(LogBattle, Warning, UninitializedLog)
+            UE::Ranges::CreateDelegate<FSimpleDelegate>(std::forward<A>(Args)...).Execute();
         }
     }
     

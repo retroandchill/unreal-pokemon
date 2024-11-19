@@ -21,15 +21,19 @@ void ABattleSequencer::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 }
 
 void ABattleSequencer::QueueBattleMessage(FText Text) {
-    if (ensure(Instance.IsValid())) {
+    if (Instance.IsValid()) {
         Instance->AddBattleMessage(std::move(Text));
+    } else {
+        UE_LOG(LogBattle, Warning, UninitializedLog)
     }
 }
 
 void ABattleSequencer::QueueBattleMessageWithAnimation(FText Text, const TScriptInterface<IBattleAnimation> &Animation,
     EAnimationPlacement AnimationPlacement) {
-    if (ensure(Instance.IsValid())) {
+    if (Instance.IsValid()) {
         Instance->AddBattleMessage(std::move(Text), Animation, AnimationPlacement);
+    } else {
+        UE_LOG(LogBattle, Warning, UninitializedLog)
     }
 }
 
