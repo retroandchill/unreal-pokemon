@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Events/RunningMessageSetPayload.h"
 #include "Battle/Events/TargetedMoveEventPayload.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "UObject/Object.h"
@@ -35,12 +34,6 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
     TScriptInterface<IBattler> Target;
 
     /**
-     * Any messages to be down after processing.
-     */
-    UPROPERTY(BlueprintReadWrite, Category = GameplayEvents)
-    FRunningMessageSet Messages;
-
-    /**
      * Should messages be shown?
      */
     UPROPERTY(BlueprintReadOnly, Category = GameplayEvents)
@@ -62,12 +55,10 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
      * @param Move The invoking move
      * @param User The user of the move
      * @param Target The target of the move
-     * @param Messages Any messages to be down after processing.
      * @param bShowMessages Should messages be shown?
      */
     FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move, const TScriptInterface<IBattler> &User,
-                               const TScriptInterface<IBattler> &Target, const FRunningMessageSet &Messages,
-                               bool bShowMessages = true);
+                               const TScriptInterface<IBattler> &Target, bool bShowMessages = true);
 };
 
 /**
@@ -75,8 +66,7 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
  */
 UCLASS(BlueprintType)
 class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject,
-                                                            public ITargetedMoveEventPayload,
-                                                            public IRunningMessageSetPayload {
+                                                            public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
   public:
@@ -85,14 +75,13 @@ class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject,
      * @param Move The invoking move
      * @param User The user of the move
      * @param Target The target of the move
-     * @param Messages Any messages to be down after processing.
      * @param bShowMessages Should messages be shown?
      * @return The created payload
      */
     static USuccessCheckAgainstTargetPayload *Create(const TScriptInterface<IBattleMove> &Move,
                                                      const TScriptInterface<IBattler> &User,
                                                      const TScriptInterface<IBattler> &Target,
-                                                     const FRunningMessageSet &Messages, bool bShowMessages = true);
+                                                     bool bShowMessages = true);
 
     /**
      * Get the wrapped payload struct
@@ -103,7 +92,6 @@ class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject,
 
     const TScriptInterface<IBattler> &GetUser() const final;
     const TScriptInterface<IBattler> &GetTarget() const final;
-    const FRunningMessageSet &GetRunningMessageSet() const override;
 
     /**
      * Set the new success state of the move to the given value

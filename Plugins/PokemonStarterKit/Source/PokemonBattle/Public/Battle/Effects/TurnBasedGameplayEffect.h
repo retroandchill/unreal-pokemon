@@ -11,7 +11,6 @@
 
 class UGameplayEffect;
 class UTurnBasedEffectComponent;
-struct FRunningMessageSet;
 
 /**
  * @enum ETurnDurationTrigger
@@ -153,11 +152,11 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return True if the effect is removed after the increment; otherwise, false.
      */
-    bool IncrementTurnCount(const FRunningMessageSet& RunningMessages);
+    bool IncrementTurnCount();
     
 
 private:
-    bool RemoveEffect(const FRunningMessageSet& Messages, int32 StacksToRemove = -1);
+    bool RemoveEffect(int32 StacksToRemove = -1);
     
     UPROPERTY()
     TWeakObjectPtr<UTurnBasedEffectComponent> OwningComponent;

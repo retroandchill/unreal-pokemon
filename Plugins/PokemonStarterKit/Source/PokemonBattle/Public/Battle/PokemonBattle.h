@@ -78,7 +78,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void StartBattle() override;
 
-    FRunningMessageSet OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
+    void OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
 
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
@@ -137,68 +137,35 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * Blueprint Graph.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void PlayBattleIntro();
+    void QueueBattleIntro();
 
     /**
      * Display the intro message for the battle.
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void DisplayBattleIntroMessage();
-
-    /**
-     * The helper function used to display the intro message to the player
-     * @param Message The message to display
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessBattleIntroMessage(const FText &Message);
+    UFUNCTION(BlueprintPure, Category = "Battle|Flow")
+    FText GetBattleIntroMessage() const;
 
     /**
      * Send out the opposing side Pokémon
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void OpponentSendOut();
+    void QueueOpponentSendOut();
 
     /**
      * Display the message for a Pokémon send out prior to the animation
      * @param Message The message to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessOpponentSendOutMessage(const FText &Message);
-
-    /**
-     * Play the animation to send out an opponent's Pokémon
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void OpponentSendOutAnimation();
-
-    /**
-     * Actually play the animation in question with the given side information
-     * @param OpponentSide The actual side structure for the opponents
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessOpponentSendOutAnimation(const TScriptInterface<IBattleSide> &OpponentSide);
+    void QueueOpponentSendOutMessage(const FText &Message);
 
     /**
      * Play the animation to send out the player's Pokémon
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void PlayerSendOut();
+    void QueuePlayerSendOut();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessPlayerSendOutMessage(const FText &Message);
-
-    /**
-     * Play the actual animation to
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void PlayerSendOutAnimation();
-
-    /**
-     * Actually play the animation in question with the given side information
-     * @param PlayerSide The actual side structure for the player
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void ProcessPlayerSendOutAnimation(const TScriptInterface<IBattleSide> &PlayerSide);
+    void QueuePlayerSendOutMessage(const FText &Message);
 
     /**
      * Create the HUD used for the battle system
@@ -217,7 +184,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * @param MessageText The text of the message to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void DisplayAction(const FText &MessageText);
+    void QueueDisplayAction(const FText &MessageText);
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void ExecuteAction();
@@ -227,7 +194,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * @param Result The outcome of the battle in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
-    void ProcessBattleResult(EBattleResult Result);
+    void QueueBattleResultAnimation(EBattleResult Result);
 
     /**
      * Exit the battle scene and return to the map
@@ -237,7 +204,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void ExitBattleScene(EBattleResult Result) const;
 
 private:
-    void ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger, const FRunningMessageSet& Messages);
+    void ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger);
     
     /**
      * Run at the head of every turn. Increments the turn count and initiates action selection.
@@ -245,13 +212,6 @@ private:
     void StartTurn();
 
   protected:
-    /**
-     * Display any messages for the end of a battle
-     * @param Messages The messages to display
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
-    void ProcessTurnEndMessages(const FRunningMessageSet &Messages);
-
     /**
      * Run all checks that need to be handled at the end of the turn
      */

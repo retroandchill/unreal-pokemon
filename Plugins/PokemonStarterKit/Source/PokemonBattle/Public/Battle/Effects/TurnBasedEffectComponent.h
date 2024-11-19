@@ -67,39 +67,6 @@ public:
         // clang-format on
     }
 
-    struct FScopedRunningMessageHandle {
-        explicit FScopedRunningMessageHandle(UTurnBasedEffectComponent* Component) : Component(Component) {}
-
-        FScopedRunningMessageHandle(const FScopedRunningMessageHandle&) = delete;
-        
-        FScopedRunningMessageHandle(FScopedRunningMessageHandle&& Other) : Component(Other.Component) {
-            Other.Component = nullptr;
-        }
-
-        ~FScopedRunningMessageHandle() {
-            if (Component.IsValid()) {
-                Component->RunningMessages.Reset();
-            }
-        }
-        
-        FScopedRunningMessageHandle& operator=(const FScopedRunningMessageHandle&) = delete;
-        
-        FScopedRunningMessageHandle& operator=(FScopedRunningMessageHandle&& Other) {
-            Component = Other.Component;
-            Other.Component = nullptr;
-            return *this;
-        } 
-
-    private:
-        TWeakObjectPtr<UTurnBasedEffectComponent> Component;
-    };
-
-    TOptional<const FRunningMessageSet &> GetRunningMessages() const {
-        return RunningMessages.IsSet() ? RunningMessages.GetValue() : TOptional<const FRunningMessageSet &>();
-    }
-
-    FScopedRunningMessageHandle SetRunningMessages(const FRunningMessageSet& Messages);
-
 private:
     /**
      * AbilitySystemComponent is a reference to the UAbilitySystemComponent associated with this component.
@@ -111,6 +78,4 @@ private:
 
     UPROPERTY()
     TMap<FActiveGameplayEffectHandle, FTurnBasedGameplayEffect> ActiveTurnBasedEffects;
-    
-    TOptional<FRunningMessageSet> RunningMessages;
 };

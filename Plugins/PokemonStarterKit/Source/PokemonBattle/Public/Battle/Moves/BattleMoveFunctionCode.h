@@ -113,12 +113,6 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
                     const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
                     bool bWasCancelled) override;
 
-    /**
-     * Get the running messages for this ability
-     * @return The running messages of this ability
-     */
-    const FRunningMessageSet &GetRunningMessage() const;
-
   protected:
     /**
      * Determine the type of the move.
@@ -431,11 +425,4 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      */
     UPROPERTY()
     FGameplayAttribute CostAttribute = UPokemonCoreAttributeSet::GetMoveCostAttribute();
-
-    /**
-     * Get the running messages for the move's execution. This is periodically cleared between the Blueprint events used
-     * to print them.
-     */
-    UPROPERTY()
-    FRunningMessageSet RunningMessages;
 };

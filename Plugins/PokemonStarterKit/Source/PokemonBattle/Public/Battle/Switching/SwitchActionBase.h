@@ -7,7 +7,6 @@
 
 #include "SwitchActionBase.generated.h"
 
-struct FRunningMessageSet;
 class ITrainer;
 class IBattler;
 /**
@@ -52,7 +51,7 @@ class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
     void TriggerOnSendOut();
 
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    void DisplaySwitchInEffects(const TScriptInterface<IBattler> &Battler, const FRunningMessageSet &Messages);
+    void DisplaySwitchInEffects(const TScriptInterface<IBattler> &Battler);
 
   private:
     UPROPERTY()

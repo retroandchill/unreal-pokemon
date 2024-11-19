@@ -12,9 +12,6 @@
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OrElse.h"
 #include "Ranges/Utilities/Comparison.h"
-#include "Ranges/Views/FilterValid.h"
-#include "Ranges/Views/Join.h"
-#include "Ranges/Views/Single.h"
 
 FTurnBasedGameplayEffect::FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent,
                                                    FActiveGameplayEffectHandle EffectHandle,
@@ -41,22 +38,19 @@ bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
     // clang-format on
 }
 
-bool FTurnBasedGameplayEffect::IncrementTurnCount(const FRunningMessageSet &RunningMessages) {
+bool FTurnBasedGameplayEffect::IncrementTurnCount() {
     TurnsActive++;
     // clang-format
     return TurnsRemaining |
            UE::Optionals::Filter(UE::Ranges::GreaterThan, TurnsActive) |
-           UE::Optionals::Map([this, &RunningMessages](auto) { return RemoveEffect(RunningMessages); }) |
+           UE::Optionals::Map([this](auto) { return RemoveEffect(); }) |
            UE::Optionals::OrElse(false);
     // clang-format off
 }
 
-bool FTurnBasedGameplayEffect::RemoveEffect(const FRunningMessageSet& Messages, int32 StacksToRemove) {
+bool FTurnBasedGameplayEffect::RemoveEffect(int32 StacksToRemove) {
     // clang-format
-    auto OwnedComponent = UE::Optionals::OfNullable(OwningComponent.Get());
-    auto MessageHandle = OwnedComponent |
-        UE::Optionals::Map(&UTurnBasedEffectComponent::SetRunningMessages, Messages);
-    return OwnedComponent |
+    return UE::Optionals::OfNullable(OwningComponent.Get()) |
                     UE::Optionals::Map(&UTurnBasedEffectComponent::GetAbilitySystemComponent) |
                     UE::Optionals::Map(&UAbilitySystemComponent::RemoveActiveGameplayEffect, EffectHandle, StacksToRemove) |
                     UE::Optionals::OrElse(false);

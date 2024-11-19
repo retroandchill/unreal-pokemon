@@ -17,7 +17,7 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (TArray<TScriptInterface<IBattleSide>> && SidesIn), (override));
     MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (const FBattleInfo &BattleInfo), (override));
     MOCK_METHOD(void, StartBattle, (), (override));
-    MOCK_METHOD(FRunningMessageSet, OnBattlersEnteringBattle,
+    MOCK_METHOD(void, OnBattlersEnteringBattle,
                 (UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers), (override));
     MOCK_METHOD(void, QueueAction, (TUniquePtr<IBattleAction> && Action), (override));
     MOCK_METHOD(bool, ActionSelectionFinished, (), (const, override));

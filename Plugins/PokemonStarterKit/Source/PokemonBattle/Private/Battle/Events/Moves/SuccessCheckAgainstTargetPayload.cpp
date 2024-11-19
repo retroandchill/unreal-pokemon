@@ -4,18 +4,16 @@
 
 FTargetSuccessCheckPayload::FTargetSuccessCheckPayload(const TScriptInterface<IBattleMove> &Move,
                                                        const TScriptInterface<IBattler> &User,
-                                                       const TScriptInterface<IBattler> &Target,
-                                                       const FRunningMessageSet &Messages, bool bShowMessages)
-    : Move(Move), User(User), Target(Target), Messages(Messages), bShowMessages(bShowMessages) {
+                                                       const TScriptInterface<IBattler> &Target, bool bShowMessages)
+    : Move(Move), User(User), Target(Target), bShowMessages(bShowMessages) {
 }
 
 USuccessCheckAgainstTargetPayload *USuccessCheckAgainstTargetPayload::Create(const TScriptInterface<IBattleMove> &Move,
                                                                              const TScriptInterface<IBattler> &User,
                                                                              const TScriptInterface<IBattler> &Target,
-                                                                             const FRunningMessageSet &Messages,
                                                                              bool bShowMessages) {
     auto Ret = NewObject<USuccessCheckAgainstTargetPayload>();
-    Ret->Data = MakeShared<FTargetSuccessCheckPayload>(Move, User, Target, Messages, bShowMessages);
+    Ret->Data = MakeShared<FTargetSuccessCheckPayload>(Move, User, Target, bShowMessages);
     return Ret;
 }
 
@@ -32,11 +30,6 @@ const TScriptInterface<IBattler> &USuccessCheckAgainstTargetPayload::GetUser() c
 const TScriptInterface<IBattler> &USuccessCheckAgainstTargetPayload::GetTarget() const {
     check(Data != nullptr)
     return Data->Target;
-}
-
-const FRunningMessageSet &USuccessCheckAgainstTargetPayload::GetRunningMessageSet() const {
-    check(Data != nullptr)
-    return Data->Messages;
 }
 
 void USuccessCheckAgainstTargetPayload::SetSuccess(bool bSuccess) const {

@@ -36,12 +36,6 @@ struct POKEMONBATTLE_API FDamageCalculationData {
     int32 TargetCount;
 
     /**
-     * The set of messages to be displayed before damage is displayed
-     */
-    UPROPERTY(BlueprintReadOnly, Category = Damage)
-    FRunningMessageSet PreDamageMessages;
-
-    /**
      * The calculated type of the move
      */
     UPROPERTY(BlueprintReadOnly, Category = Damage)
@@ -87,12 +81,11 @@ struct POKEMONBATTLE_API FDamageCalculationData {
      * @param User The user of the move
      * @param Target The target of the move
      * @param TargetCount The total number of available targets
-     * @param PreDamageMessages The set of messages to be displayed before damage is displayed
      * @param Type The determined type of the move
      * @param BasePower The base power of the move
      */
     FDamageCalculationData(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                           int32 TargetCount, const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower);
+                           int32 TargetCount, FName Type, int32 BasePower);
 };
 
 /**
@@ -100,8 +93,7 @@ struct POKEMONBATTLE_API FDamageCalculationData {
  */
 UCLASS(BlueprintType)
 class POKEMONBATTLE_API UDamageModificationPayload : public UObject,
-                                                     public ITargetedMoveEventPayload,
-                                                     public IRunningMessageSetPayload {
+                                                     public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
   public:
@@ -110,13 +102,12 @@ class POKEMONBATTLE_API UDamageModificationPayload : public UObject,
      * @param User The user of the move
      * @param Target The target of the move
      * @param TargetCount The total number of available targets
-     * @param PreDamageMessages The set of messages to be displayed before damage is displayed
      * @param Type The determined type of the move
      * @param BasePower The base power of the move
      */
     static UDamageModificationPayload *Create(const TScriptInterface<IBattler> &User,
                                               const TScriptInterface<IBattler> &Target, int32 TargetCount,
-                                              const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower);
+                                              FName Type, int32 BasePower);
 
     /**
      * Get the wrapped payload struct
@@ -127,7 +118,6 @@ class POKEMONBATTLE_API UDamageModificationPayload : public UObject,
 
     const TScriptInterface<IBattler> &GetUser() const final;
     const TScriptInterface<IBattler> &GetTarget() const final;
-    const FRunningMessageSet &GetRunningMessageSet() const override;
 
     /**
      * Set the power multiplier

@@ -18,9 +18,3 @@ void UTurnBasedEffectComponent::AddTurnBasedEffect(FActiveGameplayEffectHandle H
 bool UTurnBasedEffectComponent::RemoveTurnBasedEffect(FActiveGameplayEffectHandle Handle) {
     return ActiveTurnBasedEffects.Remove(Handle) > 0;
 }
-
-UTurnBasedEffectComponent::FScopedRunningMessageHandle UTurnBasedEffectComponent::SetRunningMessages(
-    const FRunningMessageSet &Messages) {
-    RunningMessages.Emplace(Messages);
-    return FScopedRunningMessageHandle(this);
-}

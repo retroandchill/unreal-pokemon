@@ -48,13 +48,12 @@ void UBattleItemEffect::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     ItemID = CastChecked<UUseItemPayload>(TriggerEventData->OptionalObject)->Item;
 
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
-    FRunningMessageSet Messages;
-    bShouldConsumeItem = ApplyGlobalEffect(User, Messages);
+    bShouldConsumeItem = ApplyGlobalEffect(User);
     auto Targets = FilterInvalidTargets(TriggerEventData);
-    Algo::ForEach(Targets, [&User, &Messages, this](const TScriptInterface<IBattler> &Target) {
-        bShouldConsumeItem |= ApplyEffectToTarget(User, Target, Messages);
+    Algo::ForEach(Targets, [&User, this](const TScriptInterface<IBattler> &Target) {
+        bShouldConsumeItem |= ApplyEffectToTarget(User, Target);
     });
-    DisplayResults(Messages);
+    DisplayResults();
 }
 
 void UBattleItemEffect::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
@@ -69,13 +68,11 @@ void UBattleItemEffect::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 }
 
 bool UBattleItemEffect::ApplyEffectToTarget_Implementation(const TScriptInterface<IBattler> &User,
-                                                           const TScriptInterface<IBattler> &Target,
-                                                           const FRunningMessageSet &Messages) {
+                                                           const TScriptInterface<IBattler> &Target) {
     return false;
 }
 
-bool UBattleItemEffect::ApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User,
-                                                         const FRunningMessageSet &Messages) {
+bool UBattleItemEffect::ApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User) {
     return false;
 }
 

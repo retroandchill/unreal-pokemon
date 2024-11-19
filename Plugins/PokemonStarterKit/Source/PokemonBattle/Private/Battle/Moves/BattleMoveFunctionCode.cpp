@@ -128,14 +128,6 @@ void UBattleMoveFunctionCode::EndAbility(const FGameplayAbilitySpecHandle Handle
         AbilityComponent->RemoveLooseGameplayTags(Tags, TNumericLimits<int32>::Max());
         AbilityComponent->GetTargetDamageStateAttributeSet()->Reset();
     }
-
-    // This ability is done, so we'll deallocate the running message memory to free up some space before the GC comes
-    // and cleans up the rest of this object
-    RunningMessages.Messages->Empty();
-}
-
-const FRunningMessageSet &UBattleMoveFunctionCode::GetRunningMessage() const {
-    return RunningMessages;
 }
 
 FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
@@ -253,7 +245,7 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TSc
         return false;
     }
 
-    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target, FRunningMessageSet());
+    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
                                                Pokemon::Battle::Moves::SuccessCheckAgainstTarget);
     return true;
@@ -362,7 +354,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const 
 
     int32 BasePower = CalculateBasePower(BattleMove->GetBasePower(), User, Target);
     auto Payload =
-        UDamageModificationPayload::Create(User, Target, TargetCount, FRunningMessageSet(), DeterminedType, BasePower);
+        UDamageModificationPayload::Create(User, Target, TargetCount, DeterminedType, BasePower);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::DamageModificationEvents);
     auto &PayloadData = Payload->GetData();
     float NewFinal = PayloadData.FinalDamageMultiplier;
