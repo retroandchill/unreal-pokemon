@@ -9,7 +9,7 @@ THIRD_PARTY_INCLUDES_START
 THIRD_PARTY_INCLUDES_END
 
 namespace UE::Ranges {
-
+    
     /**
      * Concatenate a set of multiple ranges into one larger range.
      */

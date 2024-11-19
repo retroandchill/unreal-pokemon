@@ -73,7 +73,6 @@ public:
     void ProcessBattleMessages(A&&... Args) {
         UE::Ranges::AddToDelegate(OnMessagesComplete, std::forward<A>(Args)...);
         if (Messages.empty()) {
-            UE::Ranges::CreateBinding(std::forward<A>(Args)...)();
             ProcessMessagesComplete();
             return;
         }

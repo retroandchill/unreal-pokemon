@@ -26,14 +26,17 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/CacheLast.h"
+#include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
+#include "Ranges/Views/Single.h"
 #include "Species/Stat.h"
 
 int32 FCapturedBattleStat::GetStatValue() const {
@@ -156,9 +159,10 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     RunningMessages.Messages->Reset();
     UE_LOG(LogBattle, Display, TEXT("%s is using move %s!"), *User->GetNickname().ToString(),
            *BattleMove->GetDisplayName().ToString())
-    if (MoveFailed(User, Targets, RunningMessages)) {
+    if (MoveFailed(User, Targets)) {
         UE_LOG(LogBattle, Display, TEXT("%s failed!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure(RunningMessages);
+        ProcessMoveFailure();
+        EndMove(User, Targets);
         return;
     }
 
@@ -166,13 +170,14 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         !WorksWithNoTargets()) {
         RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
         UE_LOG(LogBattle, Display, TEXT("%s has no targets!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure(RunningMessages);
+        ProcessMoveFailure();
+        EndMove(User, Targets);
         return;
     }
 
     auto TargetFailureCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
         Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->Reset();
-        bool bSuccess = SuccessCheckAgainstTarget(User, Target, RunningMessages);
+        bool bSuccess = SuccessCheckAgainstTarget(User, Target);
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
@@ -184,7 +189,8 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure(RunningMessages);
+        ProcessMoveFailure();
+        EndMove(User, Targets);
         return;
     }
 
@@ -204,28 +210,28 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
         RunningMessages.Messages->Emplace(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
-        ProcessMoveFailure(RunningMessages);
+        ProcessMoveFailure();
+        EndMove(User, Targets);
         return;
     }
 
     if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
         for (auto &Target : SuccessfulHits) {
-            CalculateDamageAgainstTarget(User, Target, SuccessfulHits.Num(), RunningMessages);
+            CalculateDamageAgainstTarget(User, Target, SuccessfulHits.Num());
         }
     }
 
-    DisplayMessagesAndAnimation(User, SuccessfulHits, RunningMessages);
+    QueueMoveAnimation(User, SuccessfulHits);
+    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::DealDamage, User, std::move(SuccessfulHits));
 }
 
 bool UBattleMoveFunctionCode::MoveFailed_Implementation(const TScriptInterface<IBattler> &User,
-                                                        const TArray<TScriptInterface<IBattler>> &Targets,
-                                                        const FRunningMessageSet &FailureMessages) const {
+                                                        const TArray<TScriptInterface<IBattler>> &Targets) const {
     return false;
 }
 
 bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TScriptInterface<IBattler> &User,
-                                                                       const TScriptInterface<IBattler> &Target,
-                                                                       const FRunningMessageSet &FailureMessages) {
+                                                                       const TScriptInterface<IBattler> &Target) {
     float TypeMod = CalculateTypeMatchUp(DeterminedType, User, Target);
     auto &TargetAbilities = *Target->GetAbilityComponent();
     auto &DamageState = *TargetAbilities.GetTargetDamageStateAttributeSet();
@@ -243,19 +249,18 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TSc
         return false;
     }
 
-    if (FailsAgainstTarget(User, Target, FailureMessages)) {
+    if (FailsAgainstTarget(User, Target)) {
         return false;
     }
 
-    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target, FailureMessages);
+    auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target, FRunningMessageSet());
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
                                                Pokemon::Battle::Moves::SuccessCheckAgainstTarget);
     return true;
 }
 
 bool UBattleMoveFunctionCode::FailsAgainstTarget_Implementation(const TScriptInterface<IBattler> &User,
-                                                                const TScriptInterface<IBattler> &Target,
-                                                                const FRunningMessageSet &FailureMessages) const {
+                                                                const TScriptInterface<IBattler> &Target) const {
     return false;
 }
 
@@ -335,7 +340,8 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
             ApplyGameplayEffectSpecToTarget(Handle, &ActorInfo, ActivationInfo, EffectSpec, TargetDataHandle);
     }
 
-    DisplayDamage(User, Targets);
+    AddDamageDisplayAnimations(User, Targets);
+    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::AddDamageDisplayAnimations, User, Targets);
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,
@@ -345,8 +351,7 @@ int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, co
 
 void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const TScriptInterface<IBattler> &User,
                                                                           const TScriptInterface<IBattler> &Target,
-                                                                          int32 TargetCount,
-                                                                          const FRunningMessageSet &PreDamageMessages) {
+                                                                          int32 TargetCount) {
     check(BattleMove->GetCategory() != EMoveDamageCategory::Status)
     auto TargetAbilityComponent = Target->GetAbilityComponent();
     auto &DamageState = *TargetAbilityComponent->GetTargetDamageStateAttributeSet();
@@ -357,7 +362,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const 
 
     int32 BasePower = CalculateBasePower(BattleMove->GetBasePower(), User, Target);
     auto Payload =
-        UDamageModificationPayload::Create(User, Target, TargetCount, PreDamageMessages, DeterminedType, BasePower);
+        UDamageModificationPayload::Create(User, Target, TargetCount, FRunningMessageSet(), DeterminedType, BasePower);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::DamageModificationEvents);
     auto &PayloadData = Payload->GetData();
     float NewFinal = PayloadData.FinalDamageMultiplier;
@@ -488,7 +493,7 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
 
         UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s to %s!"),
                *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
-        ApplyEffectWhenDealingDamage(User, Target, RunningMessages);
+        ApplyEffectWhenDealingDamage(User, Target);
     }
 
     UE_LOG(LogBattle, Display, TEXT("Applying effects of %s!"), *BattleMove->GetDisplayName().ToString())
@@ -501,11 +506,21 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
 
         UE_LOG(LogBattle, Display, TEXT("Applying effects of %s to %s!"), *BattleMove->GetDisplayName().ToString(),
                *Target->GetNickname().ToString())
-        ApplyEffectAgainstTarget(User, Target, RunningMessages);
+        ApplyEffectAgainstTarget(User, Target);
     }
 
-    ApplyGeneralEffect(User, RunningMessages);
-    FaintCheck(User, Targets, RunningMessages);
+    ApplyGeneralEffect(User);
+    FaintCheck(User, Targets);
+    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::ApplyAdditionalEffects, User, Targets);
+}
+
+void UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
+    const TArray<TScriptInterface<IBattler>> &Targets) {
+    // clang-format off
+    UE::Ranges::Concat(UE::Ranges::Single(User), UE::Ranges::CreateRange(Targets)) |
+        UE::Ranges::Filter(&IBattler::IsFainted) |
+        UE::Ranges::ForEach(this, &UBattleMoveFunctionCode::AddFaintAnimation);
+    // clang-format on
 }
 
 void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
@@ -532,7 +547,7 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
         if (Roll < Chance) {
             UE_LOG(LogBattle, Display, TEXT("Applying additional effect of %s to %s!"),
                    *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
-            ApplyAdditionalEffect(User, Target, RunningMessages);
+            ApplyAdditionalEffect(User, Target);
         }
     }
 
@@ -540,7 +555,7 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
 
     UE_LOG(LogBattle, Display, TEXT("%s has finished, display messages and concluding!"),
            *BattleMove->GetDisplayName().ToString())
-    DisplayMoveEffectsAndEndMove(User, Targets, RunningMessages);
+    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::EndMove, User, Targets);
 }
 
 int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
@@ -550,6 +565,15 @@ int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
                                                Pokemon::Battle::Moves::AdditionalEffectChanceEvents);
     return FMath::RoundToInt32(Payload->GetData().AdditionalEffectChance);
+}
+
+void UBattleMoveFunctionCode::EndMove(const TScriptInterface<IBattler> &User,
+    const TArray<TScriptInterface<IBattler>> &Targets) {
+    AddExpGainSequence(User, Targets);
+    ABattleSequencer::DisplayBattleMessages(this, [this] {
+        ensure(CurrentActorInfo);
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+    });
 }
 
 TArray<FActiveGameplayEffectHandle>

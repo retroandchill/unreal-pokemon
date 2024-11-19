@@ -20,14 +20,13 @@ class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibr
     /**
      * Check if a status effect can be inflicted on the target
      * @param StatusEffectID
-     * @param SourceAbility The ability attempting to inflict the status effect
      * @param Target The target of the status effect
      * @param AlreadyAppliedFormat
      * @param HasOtherStatusFormat
      * @return Can the effect be inflicted
      */
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
-    static bool CanStatusEffectBeInflicted(FName StatusEffectID, const UGameplayAbility *SourceAbility,
-                                           const TScriptInterface<IBattler> &Target, FText AlreadyAppliedFormat,
+    static bool CanStatusEffectBeInflicted(FName StatusEffectID,
+                                           const TScriptInterface<IBattler>& Target, FText AlreadyAppliedFormat,
                                            FText HasOtherStatusFormat);
 };

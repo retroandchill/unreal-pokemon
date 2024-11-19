@@ -151,19 +151,16 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * Check if the move failed completely
      * @param User The user of the move
      * @param Targets The targets of the move
-     * @param FailureMessages The handle for any failure messages to display
      * @return Did the move fail?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool MoveFailed(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets,
-                    const FRunningMessageSet &FailureMessages) const;
+    bool MoveFailed(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets) const;
 
     /**
      * Process that happens when a move fails.
-     * @param FailureMessages The messages display to the player
      */
     UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void ProcessMoveFailure(const FRunningMessageSet &FailureMessages);
+    void ProcessMoveFailure();
 
     /**
      * Can this move be used without any targets?
@@ -176,23 +173,19 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * Perform a success check against a single target
      * @param User The user of the move
      * @param Target The target to evaluate against
-     * @param FailureMessages The messages display to the player
      * @return Did the move succeed against the target
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                                   const FRunningMessageSet &FailureMessages);
+    bool SuccessCheckAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Check if this move fails against a target
      * @param User The user of the move
      * @param Target The target to evaluate against
-     * @param FailureMessages The messages display to the player
      * @return Did the move fail?
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Success Checking")
-    bool FailsAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                            const FRunningMessageSet &FailureMessages) const;
+    bool FailsAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) const;
 
     /**
      * Perform a hit check against the target
@@ -218,12 +211,10 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * Display the given messages and play the animation of the move
      * @param User The user of the move
      * @param Targets The target of the move in question
-     * @param Messages The messages to be displayed
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
-    void DisplayMessagesAndAnimation(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets,
-                                     const FRunningMessageSet &Messages);
+    void QueueMoveAnimation(const TScriptInterface<IBattler> &User,
+                                     const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -238,11 +229,10 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param User The user of the move
      * @param Target The target of the move
      * @param TargetCount The total number of target's being hit
-     * @param PreDamageMessages The messages to display before damage is dealt
      */
     UFUNCTION(BlueprintNativeEvent, Category = "Moves|Damage")
     void CalculateDamageAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                                      int32 TargetCount, const FRunningMessageSet &PreDamageMessages);
+                                      int32 TargetCount);
 
     /**
      * Apply any move-specifc damage multipliers
@@ -320,7 +310,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param Targets The targets of the move in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
-    void DisplayDamage(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    void AddDamageDisplayAnimations(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Apply any move effects to the targets
@@ -334,39 +324,35 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * Effect applied to a target that took damage from a move
      * @param User The user of the move
      * @param Target the target of the move
-     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                                      const FRunningMessageSet &Messages);
+    void ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Apply any guaranteed effects against a target
      * @param User The user of the move
      * @param Target The target of the move
-     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                                  const FRunningMessageSet &Messages);
+    void ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Apply any generate effects that don't depend on any targets
      * @param User The user of the move
-     * @param Messages The running set of messages to be displayed after the effects are applied
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyGeneralEffect(const TScriptInterface<IBattler> &User, const FRunningMessageSet &Messages);
+    void ApplyGeneralEffect(const TScriptInterface<IBattler> &User);
 
     /**
      * Perform a faint check on the user and targets before applying the additional effects
+     * 
      * @param User The user of the move
      * @param Targets the targets of the move
-     * @param Messages The running set of messages to be displayed after the effects are applied
      */
+    void FaintCheck(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void FaintCheck(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets,
-                    const FRunningMessageSet &Messages);
+    void AddFaintAnimation(const TScriptInterface<IBattler> &Battler);
 
     /**
      * Apply additional effects against the user
@@ -381,11 +367,9 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * Apply any additional effect to a target
      * @param User The user of the move
      * @param Target The target of the move
-     * @param Messages
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void ApplyAdditionalEffect(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                               const FRunningMessageSet &Messages);
+    void ApplyAdditionalEffect(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Calculate the value of a move's additional effect chance
@@ -401,12 +385,12 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * Display the move effects to the player and end the move
      * @param User The user of the move
      * @param Targets The targets of the move
-     * @param Messages
      */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Conclusion")
-    void DisplayMoveEffectsAndEndMove(const TScriptInterface<IBattler> &User,
-                                      const TArray<TScriptInterface<IBattler>> &Targets,
-                                      const FRunningMessageSet &Messages);
+    void EndMove(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
+    void AddExpGainSequence(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Target);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = GameplayEffects)
     TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler,
