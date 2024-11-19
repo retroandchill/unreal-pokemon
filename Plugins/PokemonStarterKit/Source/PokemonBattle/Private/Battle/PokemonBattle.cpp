@@ -98,8 +98,7 @@ void APokemonBattle::Tick(float DeltaSeconds) {
             }
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
-                QueueDisplayAction(Action->GetActionMessage());
-                bActionTextDisplayed = true;
+                ExecuteAction(*Action);
             } else {
                 ActionQueue.Pop();
             }
@@ -194,6 +193,7 @@ UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattle
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
+    bActionTextDisplayed = true;
     QueueDisplayAction(Action.GetActionMessage());
     ABattleSequencer::DisplayBattleMessages(this, [this] {
         ExecuteAction();
