@@ -11,6 +11,7 @@
 #include "Battle/Events/BattleMessagePayload.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
@@ -45,6 +46,7 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleIn
 
 void APokemonBattle::BeginPlay() {
     Super::BeginPlay();
+    BattleSequencer = GetWorld()->SpawnActor<ABattleSequencer>(BattleSequencerClass.LoadSynchronous());
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
@@ -60,6 +62,7 @@ void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
             Actor->Destroy();
         });
     // clang-format on
+    BattleSequencer->Destroy();
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {
