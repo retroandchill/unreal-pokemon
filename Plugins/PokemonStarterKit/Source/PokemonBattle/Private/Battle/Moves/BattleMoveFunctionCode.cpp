@@ -332,7 +332,7 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
     }
 
     AddDamageDisplayAnimations(User, Targets);
-    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::ApplyAdditionalEffects, User, Targets);
+    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::ApplyMoveEffects, User, Targets);
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,

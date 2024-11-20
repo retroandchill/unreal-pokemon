@@ -10,7 +10,10 @@ TSharedPtr<SGraphPin> FDataHandlePinFactory::CreatePin(UEdGraphPin *Pin) const {
     }
 
     auto PinStructType = Cast<UScriptStruct>(Pin->PinType.PinSubCategoryObject.Get());
-    check(PinStructType != nullptr)
+    if (PinStructType == nullptr) {
+        return FGraphPanelPinFactory::CreatePin(Pin);
+    }
+    
     if (PinStructType == FPocketKey::StaticStruct()) {
         return SNew(SPocketKeyPin, Pin);
     }
