@@ -25,18 +25,6 @@ class UNREALRANGESTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest
     void FinishTest(EFunctionalTestResult TestResult, const FString &Message) override;
 
     /**
-     * @brief Adds test objects scoped for the functional test.
-     *
-     * This method is a virtual function intended to be overridden by derived classes.
-     * It is called during the preparation phase of the functional test setup.
-     * The default implementation does not perform any operations.
-     *
-     * Derived classes should implement this method to add specific test objects
-     * that are necessary for their functional tests.
-     */
-    virtual void AddScopedTestObjects();
-
-    /**
      * @brief Adds data scoped for the functional test.
      *
      * This method emplaces data into the ScopedData array using the provided arguments.

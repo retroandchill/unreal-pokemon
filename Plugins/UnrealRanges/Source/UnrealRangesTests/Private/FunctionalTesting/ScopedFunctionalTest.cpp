@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "ScopedFunctionalTest.h"
-#include "ScopedTestComponent.h"
+#include "FunctionalTesting/ScopedFunctionalTest.h"
+#include "FunctionalTesting/ScopedTestComponent.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Casting/InstanceOf.h"
 #include "Ranges/Casting/StaticCast.h"
@@ -17,14 +17,11 @@ void AScopedFunctionalTest::PrepareTest() {
         UE::Ranges::Map(UE::Ranges::StaticCast<UScopedTestComponent *>) |
         UE::Ranges::ForEach(&UScopedTestComponent::AddScopedComponent, this);
     // clang-format on
-    AddScopedTestObjects();
 }
 
 void AScopedFunctionalTest::FinishTest(EFunctionalTestResult TestResult, const FString &Message) {
     Super::FinishTest(TestResult, Message);
-    ScopedData.Empty();
-}
 
-void AScopedFunctionalTest::AddScopedTestObjects() {
-    // No base functionality
+    // This will force all the destructors of the scoped components to be called
+    ScopedData.Empty();
 }
