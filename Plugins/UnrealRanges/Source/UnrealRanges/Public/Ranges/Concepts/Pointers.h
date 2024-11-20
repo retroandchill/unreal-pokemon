@@ -3,86 +3,47 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ranges/Utilities/Unreachable.h"
 #include <Ranges/RangeConcepts.h>
 
 namespace UE::Ranges {
-    namespace Detail {
-        template <typename>
-        struct TPointerTraits;
-
-        template <typename T>
-        struct TPointerTraits<T *> {
-            using RawPointer = T *;
-
-            FORCEINLINE static T *GetRawPointer(T *Ptr) {
-                return Ptr;
-            }
-        };
-
-        template <typename T>
-        struct TPointerTraits<TObjectPtr<T>> {
-            using RawPointer = T *;
-
-            FORCEINLINE static T *GetRawPointer(const TObjectPtr<T> &Ptr) {
-                return Ptr;
-            }
-        };
-
-        template <typename T>
-        struct TPointerTraits<TScriptInterface<T>> {
-            using RawPointer = T *;
-
-            FORCEINLINE static T *GetRawPointer(const TScriptInterface<T> &Ptr) {
-                return Ptr.GetInterface();
-            }
-        };
-
-        template <typename T>
-        struct TPointerTraits<TUniquePtr<T>> {
-            using RawPointer = T *;
-
-            FORCEINLINE static T *GetRawPointer(const TUniquePtr<T> &Ptr) {
-                return Ptr.Get();
-            }
-        };
-
-        template <typename T>
-        struct TPointerTraits<TSharedRef<T>> {
-            using RawPointer = T *;
-
-            FORCEINLINE static T *GetRawPointer(const TSharedRef<T> &Ptr) {
-                return Ptr.Get();
-            }
-        };
-
-        template <typename T>
-        struct TPointerTraits<TSharedPtr<T>> {
-            using RawPointer = T *;
-
-            FORCEINLINE static T *GetRawPointer(const TSharedPtr<T> &Ptr) {
-                return Ptr.Get();
-            }
-        };
-    } // namespace Detail
-
     template <typename T>
     concept RawPointer = std::is_pointer_v<T>;
 
     template <typename T>
-    concept Pointer = std::is_pointer_v<typename Detail::TPointerTraits<std::remove_cvref_t<T>>::RawPointer> &&
-                      requires(const std::remove_cvref_t<T> &Ptr) {
-                          { Detail::TPointerTraits<std::remove_cvref_t<T>>::GetRawPointer(Ptr) } -> RawPointer;
-                      };
+    concept StdPointer = requires(T &&Ptr) {
+        { Ptr.get() } -> RawPointer;
+    };
 
     template <typename T>
-        requires Pointer<std::remove_cvref_t<T>>
-    FORCEINLINE auto GetRawPointer(const std::remove_cvref_t<T> &Ptr) {
-        return Detail::TPointerTraits<std::remove_cvref_t<T>>::GetRawPointer(Ptr);
+    concept UnrealPointer = requires(T &&Ptr) {
+        {  Ptr.Get() } -> RawPointer;
+    };
+
+    template <typename T>
+    concept Pointer = RawPointer<std::decay_t<T>> || StdPointer<T> || UnrealPointer<T> || std::derived_from<std::decay_t<T>, FScriptInterface>;
+
+    template <typename T>
+        requires Pointer<T>
+    constexpr auto GetRawPointer(const T &Ptr) {
+        if constexpr (RawPointer<T>) {
+            return Ptr;
+        } else if constexpr (StdPointer<T>) {
+            return Ptr.get();
+        } else if constexpr (UnrealPointer<T>) {
+            return Ptr.Get();
+        } else if constexpr (std::same_as<T, FScriptInterface>) {
+            return Ptr.GetObject();
+        } else if constexpr (std::derived_from<T, FScriptInterface>) {
+            return Ptr.GetInterface();
+        }
+
+        Unreachable();
     }
 
     template <typename T>
-        requires Pointer<std::remove_cvref_t<T>>
-    using TRawPointerType = typename Detail::TPointerTraits<std::remove_cvref_t<T>>::RawPointer;
+        requires Pointer<T>
+    using TRawPointerType = decltype(GetRawPointer(std::declval<T>()));
 
     template <typename T>
         requires Pointer<std::remove_cvref_t<T>>
@@ -134,4 +95,14 @@ namespace UE::Ranges {
 
     template <typename T>
     using TDecayReferenceType = typename Detail::TDecayReference<T>::Type;
+
+    template <typename T, typename U>
+    concept DereferencesTo = requires(T&& Ptr) {
+        { *Ptr } -> std::convertible_to<U&>;
+    };
+
+    template <typename T>
+    concept DereferencesToInterface  = requires(T &&Ptr) {
+        { *Ptr } -> UnrealInterface;
+    };
 } // namespace UE::Ranges

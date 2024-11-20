@@ -24,7 +24,6 @@ class UNREALRANGESTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest
     void PrepareTest() override;
     void FinishTest(EFunctionalTestResult TestResult, const FString &Message) override;
 
-  protected:
     /**
      * @brief Adds test objects scoped for the functional test.
      *
