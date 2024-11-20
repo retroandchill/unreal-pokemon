@@ -26,6 +26,7 @@ void UUpdateHPBar::Activate() {
         return;
     }
 
+    Animation.SetWorldContext(Screen);
     auto SelectionPane = IPartyDisplayScreen::Execute_GetPokemonSelectionPane(Screen);
     check(IsValid(SelectionPane))
 

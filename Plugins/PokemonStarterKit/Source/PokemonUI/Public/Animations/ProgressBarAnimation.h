@@ -92,6 +92,13 @@ namespace Pokemon::UI {
         void Tick(float DeltaTime) override;
         TStatId GetStatId() const override;
 
+        /**
+         * Set the context of the world for the animation.
+         *
+         * @param WorldContext Pointer to the world context UObject.
+         */
+        void SetWorldContext(const UObject* WorldContext);
+
       private:
         float PercentLastTick = 0.f;
 
@@ -114,6 +121,8 @@ namespace Pokemon::UI {
          * The animation data for this bar. Only animates when set.
          */
         TOptional<FBarAnimationData> AnimationData;
+
+        TWeakObjectPtr<const UObject> WorldContextObject;
     };
 
 } // namespace Pokemon::UI

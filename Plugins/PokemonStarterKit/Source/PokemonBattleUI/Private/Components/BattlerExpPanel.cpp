@@ -15,6 +15,7 @@ using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
 
 void UBattlerExpPanel::NativeConstruct() {
     Super::NativeConstruct();
+    ExpBarAnimation.SetWorldContext(this);
     ExpBarAnimation.BindActionToPercentDelegate(
         FUpdatePercent::CreateUObject(this, &UBattlerExpPanel::UpdateExpBarPercent));
     ExpBarAnimation.BindActionToWrapAroundAnimation(FUpdateComplete::CreateUObject(this, &UBattlerExpPanel::OnLevelUp));
