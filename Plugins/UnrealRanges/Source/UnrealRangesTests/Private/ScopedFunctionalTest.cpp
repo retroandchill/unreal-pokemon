@@ -15,7 +15,7 @@ void AScopedFunctionalTest::PrepareTest() {
     GetComponents() |
         UE::Ranges::Filter(UE::Ranges::InstanceOf<UScopedTestComponent>) |
         UE::Ranges::Map(UE::Ranges::StaticCast<UScopedTestComponent *>) |
-        UE::Ranges::ForEach(&UScopedTestComponent::AddScopedComponent, *this);
+        UE::Ranges::ForEach(&UScopedTestComponent::AddScopedComponent, this);
     // clang-format on
     AddScopedTestObjects();
 }

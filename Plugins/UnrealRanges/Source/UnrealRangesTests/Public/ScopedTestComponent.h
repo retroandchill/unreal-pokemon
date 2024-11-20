@@ -15,7 +15,7 @@ class UNREALRANGESTESTS_API UScopedTestComponent : public UActorComponent {
     GENERATED_BODY()
 
 public:
-    virtual void AddScopedComponent(AScopedFunctionalTest& TestObject) ABSTRACT_METHOD;
+    virtual void AddScopedComponent(AScopedFunctionalTest* TestObject) ABSTRACT_METHOD;
 
 
 };

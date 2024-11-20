@@ -12,7 +12,7 @@ class ENHANCEDSAVEGAMETESTS_API USaveSystemTestComponent : public UScopedTestCom
     GENERATED_BODY()
 
 public:
-    void AddScopedComponent(AScopedFunctionalTest &TestObject) override;
+    void AddScopedComponent(AScopedFunctionalTest* TestObject) override;
 
 
 };

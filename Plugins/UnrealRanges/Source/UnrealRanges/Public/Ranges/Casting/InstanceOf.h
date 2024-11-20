@@ -22,12 +22,12 @@ namespace UE::Ranges {
     struct TInstanceOf {
 
         template <typename U>
-            requires std::derived_from<T, UObject> || UnrealInterface<U>
+            requires std::derived_from<U, UObject> || UnrealInterface<U>
         constexpr bool operator()(const U& Value) const requires std::derived_from<T, UObject> {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, U is a subclass of T, thus we can always assume this is true
                 return true;
-            } else if constexpr (std::derived_from<U, UObject>()) {
+            } else if constexpr (std::derived_from<U, UObject>) {
                 return Value.template IsA<T>();
             } else if (UnrealInterface<U>) {
                 return Value.template Implements<typename U::UClassType>();
@@ -37,12 +37,12 @@ namespace UE::Ranges {
         }
 
         template <typename U>
-            requires std::derived_from<T, UObject> || UnrealInterface<U>
+            requires std::derived_from<U, UObject> || UnrealInterface<U>
         constexpr bool operator()(const U& Value) const requires UnrealInterface<T> {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, U is a subclass of T, thus we can always assume this is true
                 return true;
-            } else if constexpr (std::derived_from<U, UObject>()) {
+            } else if constexpr (std::derived_from<U, UObject>) {
                 return Value._getUObject()->template IsA<T>();
             } else if (UnrealInterface<U>) {
                 return Value._getUObject().template Implements<typename U::UClassType>();
@@ -57,7 +57,7 @@ namespace UE::Ranges {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, U is a subclass of T, thus we can always assume this is true
                 return true;
-            } else if constexpr (std::derived_from<U, UObject>()) {
+            } else if constexpr (std::derived_from<U, UObject>) {
                 return Value.template IsA<T>();
             }
 

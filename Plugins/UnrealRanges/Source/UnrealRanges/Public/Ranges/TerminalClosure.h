@@ -28,7 +28,9 @@ namespace UE::Ranges {
          * Construct a new instance by moving the target functor into the closure.
          * @param Functor The functor to invoke.
          */
-        explicit constexpr TTerminalClosure(F &&Functor) : Functor(std::move(Functor)) {
+        template <typename T>
+            requires std::constructible_from<F, T>
+        explicit constexpr TTerminalClosure(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**

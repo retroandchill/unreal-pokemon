@@ -21,7 +21,9 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TForEachInvoker(F &&Functor) : Functor(std::move(Functor)) {
+        template <typename T>
+            requires std::constructible_from<F, T>
+        constexpr explicit TForEachInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
