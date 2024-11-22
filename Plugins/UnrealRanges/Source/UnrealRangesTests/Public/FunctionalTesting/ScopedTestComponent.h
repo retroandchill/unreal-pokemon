@@ -32,7 +32,7 @@ public:
      *
      * @param TestObject The scoped functional test to which the component should be added.
      */
-    virtual void AddScopedComponent(AScopedFunctionalTest* TestObject) ABSTRACT_METHOD;
+    virtual void AddScopedComponent(AScopedFunctionalTest& TestObject) ABSTRACT_METHOD;
 
 
 };

@@ -22,7 +22,7 @@ class UNREALRANGESTESTS_API UScopedTimeDilationComponent : public UScopedTestCom
     GENERATED_BODY()
 
 public:
-    void AddScopedComponent(AScopedFunctionalTest *TestObject) override;
+    void AddScopedComponent(AScopedFunctionalTest& TestObject) override;
 
 private:
     /**

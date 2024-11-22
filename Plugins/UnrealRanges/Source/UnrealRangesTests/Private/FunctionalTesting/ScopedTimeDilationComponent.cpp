@@ -5,6 +5,6 @@
 #include "FunctionalTesting/ScopedFunctionalTest.h"
 #include "Ranges/Utilities/ScopedTimeDilationFactor.h"
 
-void UScopedTimeDilationComponent::AddScopedComponent(AScopedFunctionalTest *TestObject) {
-    TestObject->AddScopedData<UE::Ranges::FScopedTimeDilationFactor>(this, TimeDilationFactor);
+void UScopedTimeDilationComponent::AddScopedComponent(AScopedFunctionalTest& TestObject) {
+    TestObject.AddScopedData<UE::Ranges::FScopedTimeDilationFactor>(this, TimeDilationFactor);
 }

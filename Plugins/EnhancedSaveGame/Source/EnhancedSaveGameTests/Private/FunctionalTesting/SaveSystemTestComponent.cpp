@@ -5,6 +5,6 @@
 #include "FunctionalTesting/ScopedFunctionalTest.h"
 #include "Saving/SaveGameManager/ScopedInMemorySaveHandle.h"
 
-void USaveSystemTestComponent::AddScopedComponent(AScopedFunctionalTest* TestObject) {
-    TestObject->AddScopedData<EnhancedSaveGame::FScopedInMemorySaveHandle>();
+void USaveSystemTestComponent::AddScopedComponent(AScopedFunctionalTest& TestObject) {
+    TestObject.AddScopedData<EnhancedSaveGame::FScopedInMemorySaveHandle>();
 }
