@@ -33,7 +33,6 @@
 #include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
-#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Join.h"
 #include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"

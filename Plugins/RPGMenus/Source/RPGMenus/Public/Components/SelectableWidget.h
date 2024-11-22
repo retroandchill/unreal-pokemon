@@ -5,8 +5,8 @@
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 #include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Map.h"
 
 #include "SelectableWidget.generated.h"
 

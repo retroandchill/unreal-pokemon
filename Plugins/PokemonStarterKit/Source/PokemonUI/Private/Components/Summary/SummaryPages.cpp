@@ -5,8 +5,8 @@
 #include "Components/WidgetSwitcher.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/Ints.h"
+#include "Ranges/Views/Map.h"
 
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off

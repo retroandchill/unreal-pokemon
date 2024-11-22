@@ -12,7 +12,6 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Utilities/WrapPointer.h"
-#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"

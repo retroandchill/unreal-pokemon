@@ -18,7 +18,7 @@
 #include "range/v3/view/join.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"

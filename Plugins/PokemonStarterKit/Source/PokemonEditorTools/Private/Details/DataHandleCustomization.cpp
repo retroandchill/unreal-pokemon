@@ -6,9 +6,9 @@
 #include "DetailWidgetRow.h"
 #include "Ranges/Algorithm/ToSet.h"
 #include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
+#include "Ranges/Views/Map.h"
 
 TSharedRef<IPropertyTypeCustomization> FDataHandleCustomization::MakeInstance() {
     return MakeShared<FDataHandleCustomization>();

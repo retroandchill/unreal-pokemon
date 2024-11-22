@@ -3,7 +3,7 @@
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 

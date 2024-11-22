@@ -13,11 +13,10 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Casts.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
-#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,

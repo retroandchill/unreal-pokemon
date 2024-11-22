@@ -13,10 +13,10 @@
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {

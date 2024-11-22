@@ -7,10 +7,8 @@
 #include "Ranges/Algorithm/AnyOf.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Casting/InstanceOf.h"
-#include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
-#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Map.h"
 #include "TerrainTags/Terrain.h"
 

@@ -7,10 +7,9 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Utilities/Casts.h"
-#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -62,8 +61,12 @@ void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle>
     EventData.OptionalObject = Payload;
     EventData.EventTag = Tag;
     SendOutEventForActor(BattleActor, Tag, EventData);
-    Battle->GetSides() | UE::Ranges::Map(&UnrollBattleSide) | UE::Ranges::Join |
+    // clang-format off
+    Battle->GetSides() |
+        UE::Ranges::Map(&UnrollBattleSide) |
+        UE::Ranges::Join |
         UE::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
+    // clang-format on
 }
 
 void Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
