@@ -57,7 +57,7 @@ namespace UE::Ranges {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, U is a subclass of T, thus we can always assume this is true
                 return true;
-            } else if constexpr (std::derived_from<U, UObject>) {
+            } else if constexpr (std::derived_from<U, FField>) {
                 return Value.template IsA<T>();
             }
 

@@ -27,7 +27,7 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O &&Optional) const {
+        constexpr decltype(auto) operator()(O &&Optional) const {
             using ContainedType = decltype(*Optional);
             if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>> &&
                           std::invocable<F, TNullableValue<O>>) {

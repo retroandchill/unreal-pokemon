@@ -46,6 +46,15 @@ struct TOptional<T &> {
     }
 
     /**
+     * Construct a new optional from an optional of subclass.
+     * @tparam U The subclass type
+     * @param Other The other optional 
+     */
+    template <typename U>
+        requires std::derived_from<U, T> && (!std::is_same_v<T, U>)
+    constexpr explicit(false) TOptional(TOptional<U&> Other) : Data(Other.GetPtrOrNull()) {}
+
+    /**
      * Assignment operator from the underlying value.
      * @param Value The value to assign in.
      * @return A reference to this object

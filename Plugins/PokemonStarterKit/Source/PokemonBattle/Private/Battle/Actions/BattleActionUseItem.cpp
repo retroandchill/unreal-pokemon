@@ -85,7 +85,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         Targets.Emplace(AsTargetWithIndex->SwapIfNecessary());
     }
 
-    TargetData->SetActors(Targets | UE::Ranges::FilterValid | UE::Ranges::CastType<AActor> | UE::Ranges::MakeWeak |
+    TargetData->SetActors(Targets | UE::Ranges::FilterValid | UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) | UE::Ranges::MakeWeak |
                           UE::Ranges::ToArray);
     EventData.TargetData.Data.Emplace(TargetData);
 

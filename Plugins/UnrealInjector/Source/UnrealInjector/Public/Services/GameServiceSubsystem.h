@@ -13,6 +13,8 @@
 #include "Ranges/Views/MapValue.h"
 #include "Ranges/Views/TryCast.h"
 #include "Service.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Optional/FlatMap.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "GameServiceSubsystem.generated.h"
@@ -41,7 +43,7 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
         // clang-format off
         return UE::Optionals::OfNullable(Services.Find(ServiceClass)) |
                UE::Optionals::Map(&TObjectPtr<UService>::Get) |
-               UE::Optionals::CastType<T> |
+               UE::Optionals::FlatMap(UE::Ranges::DynamicCast<T>) |
                UE::Optionals::GetValue;
         // clang-format on
     }

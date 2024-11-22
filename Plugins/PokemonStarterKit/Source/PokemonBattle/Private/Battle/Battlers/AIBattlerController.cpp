@@ -6,6 +6,7 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
+#include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Views/Construct.h"
 #include "Ranges/Views/ContainerView.h"

@@ -4,6 +4,7 @@
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/WidgetSwitcher.h"
 #include "Ranges/Algorithm/ForEach.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/Ints.h"
 
@@ -11,7 +12,7 @@ void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon>
     // clang-format off
     UE::Ranges::Ints(0, PageSwitcher->GetNumWidgets()) |
         UE::Ranges::Map(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
-        UE::Ranges::CastType<USummaryScreenPage> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<USummaryScreenPage>) |
         UE::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
     // clang-format on
 }

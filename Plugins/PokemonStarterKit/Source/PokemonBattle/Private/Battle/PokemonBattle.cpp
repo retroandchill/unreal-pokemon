@@ -56,7 +56,7 @@ void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     // clang-format off
     Sides |
-        UE::Ranges::CastType<AActor> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
         UE::Ranges::ForEach([](AActor *Actor) {
             Actor->Destroy();
         });

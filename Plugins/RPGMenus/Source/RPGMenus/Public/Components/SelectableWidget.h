@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 
@@ -140,7 +141,7 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
     auto GetSelectableOptions() const {
         // clang-format off
         return SelectableButtons |
-               UE::Ranges::CastType<T>;
+               UE::Ranges::Map(UE::Ranges::DynamicCastChecked<T>);
         // clang-format on
     }
 

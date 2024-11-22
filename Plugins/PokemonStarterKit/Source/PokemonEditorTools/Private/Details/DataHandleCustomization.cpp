@@ -5,6 +5,7 @@
 #include "DataRetrieval/DataStructHandle.h"
 #include "DetailWidgetRow.h"
 #include "Ranges/Algorithm/ToSet.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -20,7 +21,7 @@ void FDataHandleCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Prope
     // clang-format off
     auto StructTypes = OuterObjects |
         UE::Ranges::Filter(&UObject::Implements<UDataStructHandleNode>) |
-        UE::Ranges::CastType<IDataStructHandleNode> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IDataStructHandleNode>) |
         UE::Ranges::Map(&IDataStructHandleNode::GetStructType) |
         UE::Ranges::Filter(&Pokemon::Data::IsValidDataTableStruct) |
         UE::Ranges::ToSet;

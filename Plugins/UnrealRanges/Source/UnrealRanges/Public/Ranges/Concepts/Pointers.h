@@ -170,13 +170,20 @@ namespace UE::Ranges {
     };
 
     /**
+     * Checks if the type in question is a reference to an interface.
+     *
+     * @tparam T The reference type
+     */
+    template <typename T>
+    concept InterfaceReference = std::is_reference_v<T> && UnrealInterface<std::remove_reference_t<T>>;
+
+    /**
      * Checks if the dereference operator returns a reference to an Unreal Engine interface.
      *
      * @tparam T The pointer type
      */
-    
     template <typename T>
     concept DereferencesToInterface  = requires(T &&Ptr) {
-        { *Ptr } -> UnrealInterface;
+        { *Ptr } -> InterfaceReference;
     };
 } // namespace UE::Ranges

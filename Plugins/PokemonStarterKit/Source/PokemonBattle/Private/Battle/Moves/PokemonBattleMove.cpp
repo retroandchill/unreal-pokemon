@@ -123,7 +123,7 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     TargetData->SetActors(Targets |
                           UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) |
                           UE::Ranges::FilterValid |
-                          UE::Ranges::CastType<AActor> |
+                          UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
                           UE::Ranges::MakeWeak |
                           UE::Ranges::ToArray);
     // clang-format on

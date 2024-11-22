@@ -4,6 +4,7 @@
 #include "DependencyInjectionSettings.h"
 #include "Engine/ObjectLibrary.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ClassView.h"
 #include "Ranges/Views/Concat.h"
@@ -33,7 +34,7 @@ UE::Ranges::TAnyView<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
         UE::Ranges::Filter([](const UObject *Object) {
             return Object->IsA<UBlueprint>();
         }) |
-        UE::Ranges::CastType<UBlueprint> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<UBlueprint>) |
         UE::Ranges::Map(&UBlueprint::GeneratedClass) |
         UE::Ranges::Filter([](const UClass* Class) { return !Class->HasAnyClassFlags(CLASS_Abstract); }) |
         UE::Ranges::Filter(&UE::Ranges::IsInstantiableClass) |
