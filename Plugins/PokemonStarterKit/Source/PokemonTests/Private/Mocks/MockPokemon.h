@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Mocking/UnrealMock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Species/SpeciesData.h"
@@ -13,9 +14,9 @@
  *
  */
 class FMockPokemon : public IPokemon {
+    DECLARE_MOCK_INTERFACE(FMockPokemon)
+    
   public:
-    ~FMockPokemon() override = default;
-
     MOCK_METHOD2(Initialize, void(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer));
     MOCK_METHOD(FText, GetNickname, (), (const, override));
     MOCK_METHOD(uint32, GetPersonalityValue, (), (const, override));

@@ -18,7 +18,11 @@ namespace UE::Ranges {
                 return IsValid(GetRawPointer(Ptr));
             } else if constexpr (DereferencesToInterface<T>) {
                 auto RawPtr = GetRawPointer(Ptr);
-                return RawPtr != nullptr && IsValid(RawPtr->_getUObject());
+                if constexpr (std::derived_from<std::decay_t<T>, FScriptInterface>) {
+                    return RawPtr != nullptr && IsValid(Ptr.GetObject());
+                } else {
+                    return RawPtr != nullptr && IsValid(RawPtr->_getUObject());
+                }
             } else {
                 return Ptr != nullptr;
             }

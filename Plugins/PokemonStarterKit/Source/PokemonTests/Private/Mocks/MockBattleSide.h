@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Mocking/UnrealMock.h"
 #include "Battle/BattleSide.h"
 #include <gmock/gmock.h>
 
@@ -10,9 +11,9 @@
  *
  */
 class FMockBattleSide : public IBattleSide {
+    DECLARE_MOCK_INTERFACE(FMockBattleSide)
+    
   public:
-    ~FMockBattleSide() override = default;
-
     MOCK_METHOD3(Initialize, TScriptInterface<IBattleSide>(const TScriptInterface<IBattle> &Battle,
                                                            const TArray<TScriptInterface<IPokemon>> &Pokemon,
                                                            bool ShowBackSprites));

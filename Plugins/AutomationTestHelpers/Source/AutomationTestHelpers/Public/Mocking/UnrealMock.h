@@ -24,10 +24,22 @@ namespace UnrealMock {
 
 } // namespace UnrealMock
 
+#define DECLARE_MOCK_INTERFACE(ClassName) \
+    private: \
+        TObjectPtr<UObject> Object; \
+    public: \
+        ClassName() = default; \
+        ~ClassName() override = default; \
+        UObject* _getUObject() const override { return Object; } \
+        void SetObject(UObject* NewObject) { Object = NewObject; } \
+    private:    
+
 #define CREATE_MOCK(InterfaceType, InterfaceName, MockType, MockName)                                                  \
     MockType MockName;                                                                                                 \
-    auto InterfaceName = UnrealMock::CreateMockedWrapper<InterfaceType>(MockName)
+    auto InterfaceName = UnrealMock::CreateMockedWrapper<InterfaceType>(MockName); \
+    MockName.SetObject(InterfaceName.GetObject())
 
 #define CREATE_MOCK_ACTOR(World, InterfaceType, InterfaceName, MockType, MockName)                                     \
     MockType MockName;                                                                                                 \
-    auto InterfaceName = UnrealMock::CreateMockedActor<InterfaceType>(MockName, World)
+    auto InterfaceName = UnrealMock::CreateMockedActor<InterfaceType>(MockName, World); \
+    MockName.SetObject(InterfaceName.GetObject())

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Mocking/UnrealMock.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 #include <gmock/gmock.h>
@@ -11,9 +12,9 @@
  *
  */
 class FMockTrainer : public ITrainer {
+    DECLARE_MOCK_INTERFACE(FMockTrainer)
+    
   public:
-    ~FMockTrainer() override = default;
-
     MOCK_METHOD2(Initialize, TScriptInterface<ITrainer>(FName NewTrainerType, FText NewTrainerName));
     MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));
     MOCK_METHOD(const FTrainerType &, GetTrainerType, (), (const, override));

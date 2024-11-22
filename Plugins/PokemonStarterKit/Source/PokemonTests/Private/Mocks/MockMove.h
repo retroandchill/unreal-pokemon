@@ -3,14 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Mocking/UnrealMock.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
+#include "Pokemon/Moves/Move.h"
 #include <gmock/gmock.h>
 
 class FMockMove : public IMove {
+    DECLARE_MOCK_INTERFACE(FMockMove)
+    
   public:
-    ~FMockMove() override = default;
-
     MOCK_METHOD(const FMoveData &, GetMoveData, (), (const, override));
     MOCK_METHOD(FName, GetType, (), (const, override));
     MOCK_METHOD(EMoveDamageCategory, GetDamageCategory, (), (const, override));
