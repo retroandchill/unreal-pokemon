@@ -93,7 +93,7 @@ TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const
            UE::Ranges::CacheLast |
            UE::Ranges::Join |
            UE::Ranges::MakeStrong |
-           UE::Ranges::FilterValid |
+           UE::Ranges::Filter(UE::Ranges::ValidPtr) |
            UE::Ranges::Filter(&AActor::Implements<UBattler>) |
            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IBattler>) |
            UE::Ranges::Map(UE::Ranges::WrapPointer) |

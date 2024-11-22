@@ -85,8 +85,13 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         Targets.Emplace(AsTargetWithIndex->SwapIfNecessary());
     }
 
-    TargetData->SetActors(Targets | UE::Ranges::FilterValid | UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) | UE::Ranges::MakeWeak |
-                          UE::Ranges::ToArray);
+    // clang-format off
+    TargetData->SetActors(Targets |
+        UE::Ranges::Filter(UE::Ranges::ValidPtr) |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
+        UE::Ranges::MakeWeak |
+        UE::Ranges::ToArray);
+    // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Items::UsingItem, EventData);

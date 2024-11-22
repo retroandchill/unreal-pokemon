@@ -8,6 +8,8 @@
 #include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Utilities/Unreachable.h"
 
+PRAGMA_DISABLE_UNREACHABLE_CODE_WARNINGS
+
 namespace UE::Ranges {
     /**
      * @brief Struct to check if a given value is an instance of a specific Unreal Engine type.
@@ -43,9 +45,9 @@ namespace UE::Ranges {
                 // Trivial case, U is a subclass of T, thus we can always assume this is true
                 return true;
             } else if constexpr (std::derived_from<U, UObject>) {
-                return Value._getUObject()->template IsA<T>();
+                return Value.template Implements<typename T::UClassType>();
             } else if (UnrealInterface<U>) {
-                return Value._getUObject().template Implements<typename U::UClassType>();
+                return Value._getUObject().template Implements<typename T::UClassType>();
             }
 
             Unreachable();
@@ -83,3 +85,5 @@ namespace UE::Ranges {
     template <typename T>
     constexpr TInstanceOf<T> InstanceOf;
 }
+
+PRAGMA_RESTORE_UNREACHABLE_CODE_WARNINGS
