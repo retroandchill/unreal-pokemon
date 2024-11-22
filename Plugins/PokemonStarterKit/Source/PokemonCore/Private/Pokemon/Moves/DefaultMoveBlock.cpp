@@ -10,7 +10,7 @@
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
@@ -89,7 +89,7 @@ TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32
            UE::Ranges::Filter(MoveLevelInRange) |
            UE::Ranges::Filter(DoesNotKnowMove) |
            UE::Ranges::Map(&FLevelUpMove::Move) |
-           UE::Ranges::Construct<FMoveHandle>() |    
+           UE::Ranges::Map(UE::Ranges::Construct<FMoveHandle>) |    
            UE::Ranges::ToArray;
     // clang-format on
 }

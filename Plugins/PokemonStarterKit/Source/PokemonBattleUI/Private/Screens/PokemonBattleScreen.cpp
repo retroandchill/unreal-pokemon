@@ -17,7 +17,7 @@
 #include "Components/PokemonActionOptions.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Utilities/RPGMenuUtilities.h"
 #include <functional>
 
@@ -110,7 +110,9 @@ void UPokemonBattleScreen::Refresh() const {
 
 UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const {
     auto Find = Panels.FindByPredicate(
-        [&Battler](const UPokemonBattlePanel *Panel) { return Panel->GetCurrentBattler() == Battler; });
+        [&Battler](const UPokemonBattlePanel *Panel) {
+            return Panel->GetCurrentBattler() == Battler;
+        });
     return Find != nullptr ? *Find : nullptr;
 }
 
@@ -163,7 +165,11 @@ void UPokemonBattleScreen::AdvanceToNextSelection() {
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
                                           const TScriptInterface<IBattleMove> &Move) {
-    auto Targets = Move->GetAllPossibleTargets() | UE::Ranges::Construct<FTargetWithIndex>() | UE::Ranges::ToArray;
+    // clang-format off
+    auto Targets = Move->GetAllPossibleTargets() |
+                   UE::Ranges::Map(UE::Ranges::Construct<FTargetWithIndex>) |
+                   UE::Ranges::ToArray;
+    // clang-format on
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);

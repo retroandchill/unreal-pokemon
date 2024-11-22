@@ -4,8 +4,9 @@
 #include "Lookup/InjectionUtilities.h"
 #include "Ranges/Algorithm/FindFirst.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/Construct.h"
 #include "Ranges/Optional/FlatMapTuple.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Ranges/Views/Enumerate.h"
 #include "Ranges/Views/FilterTuple.h"
 #include "Ranges/Views/Ints.h"
@@ -44,12 +45,13 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
 }
 
 FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
-    return {// clang-format off
+    return {
+        // clang-format off
         .Boxes = Boxes |
                  UE::Ranges::Map(&IStorageBox::ToDTO) |
                  UE::Ranges::ToArray,
-            // clang-format on
-            .CurrentBoxIndex = CurrentBoxIndex};
+        // clang-format on
+        .CurrentBoxIndex = CurrentBoxIndex};
 }
 
 int32 UDefaultStorageSystem::GetBoxCount() const {
@@ -79,11 +81,11 @@ TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterfa
     std::array Indexes = {UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex)};
     // clang-format off
     return Indexes |
-                   UE::Ranges::Join |
-                   UE::Ranges::ReverseEnumerate<int32>(Boxes) |
-                   UE::Ranges::FilterTuple(&CheckOpenBox) |
-                   UE::Ranges::FindFirst |
-                   UE::Optionals::FlatMapTuple(&TryDepositToBox, Pokemon);
+           UE::Ranges::Join |
+           UE::Ranges::ReverseEnumerate<int32>(Boxes) |
+           UE::Ranges::FilterTuple(&CheckOpenBox) |
+           UE::Ranges::FindFirst |
+           UE::Optionals::FlatMapTuple(&TryDepositToBox, Pokemon);
     // clang-format on
 }
 
@@ -102,5 +104,8 @@ static bool CheckOpenBox(int32, const TScriptInterface<IStorageBox> &Box) {
 
 static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInterface<IStorageBox> &Box,
                                                  const TScriptInterface<IPokemon> &Pokemon) {
-    return Box->DepositToBox(Pokemon) | UE::Optionals::Construct<FDepositResult>(Index);
+    // clang-format off
+    return Box->DepositToBox(Pokemon) |
+           UE::Optionals::Map(UE::Ranges::Construct<FDepositResult>, Index);
+    // clang-format on
 }

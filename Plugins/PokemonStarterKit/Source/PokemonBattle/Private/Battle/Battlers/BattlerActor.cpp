@@ -35,7 +35,7 @@
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
@@ -151,7 +151,7 @@ void ABattlerActor::BeginPlay() {
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     // clang-format off
     InnateAbilityHandles = InnateAbilities |
-                           UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
+                           UE::Ranges::Map(UE::Ranges::Construct<FGameplayAbilitySpec>, 1, INDEX_NONE, this) |
                            UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
                            UE::Ranges::ToArray;
     InnateEffectHandles = InnateEffects |

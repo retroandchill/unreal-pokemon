@@ -13,13 +13,14 @@
 #include "Player/Bag.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Casting/InstanceOf.h"
+#include "Ranges/Pointers/MakeStrong.h"
 #include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Utilities/WrapPointer.h"
 #include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
-#include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 
 UBattleItemEffect::UBattleItemEffect() {
@@ -90,9 +91,9 @@ TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const
            UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
            UE::Ranges::CacheLast |
            UE::Ranges::Join |
-           UE::Ranges::MakeStrong |
+           UE::Ranges::Map(UE::Ranges::MakeStrongChecked) |
            UE::Ranges::Filter(UE::Ranges::ValidPtr) |
-           UE::Ranges::Filter(&AActor::Implements<UBattler>) |
+           UE::Ranges::Filter(UE::Ranges::InstanceOf<IBattler>) |
            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IBattler>) |
            UE::Ranges::Map(UE::Ranges::WrapPointer) |
            UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) |

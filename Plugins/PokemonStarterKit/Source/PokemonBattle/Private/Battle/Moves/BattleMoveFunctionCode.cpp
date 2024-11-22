@@ -29,12 +29,12 @@
 #include "Battle/Animations/BattleSequencer.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Casting/InstanceOf.h"
+#include "Ranges/Pointers/MakeStrong.h"
 #include "Ranges/Views/CacheLast.h"
 #include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
-#include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 #include "Ranges/Views/Single.h"
 #include "Species/Stat.h"
@@ -142,7 +142,7 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
            UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
            UE::Ranges::CacheLast |
            UE::Ranges::Join |
-           UE::Ranges::MakeStrong |
+           UE::Ranges::Map(UE::Ranges::MakeStrongChecked) |
            UE::Ranges::Filter(UE::Ranges::InstanceOf<IBattler>) |
            UE::Ranges::Filter([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;

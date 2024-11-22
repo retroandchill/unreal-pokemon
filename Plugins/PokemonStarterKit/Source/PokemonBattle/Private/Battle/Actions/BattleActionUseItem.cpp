@@ -15,9 +15,9 @@
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Optional/OrElseGet.h"
+#include "Ranges/Pointers/MakeWeak.h"
 #include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(std::move(Battler));
@@ -89,7 +89,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     TargetData->SetActors(Targets |
         UE::Ranges::Filter(UE::Ranges::ValidPtr) |
         UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
-        UE::Ranges::MakeWeak |
+        UE::Ranges::Map(UE::Ranges::MakeWeak) |
         UE::Ranges::ToArray);
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);

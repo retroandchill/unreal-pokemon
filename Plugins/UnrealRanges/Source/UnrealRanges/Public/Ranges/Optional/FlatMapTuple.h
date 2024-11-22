@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
-#include "Ranges/RangeConcepts.h"
+#include "Ranges/Utilities/ForwardLike.h"
 #include "Types.h"
 
 namespace UE::Optionals {
