@@ -29,7 +29,7 @@ namespace UE::Ranges {
          * @param Functor The functor to invoke.
          */
         template <typename T>
-            requires std::constructible_from<F, T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::decay_t<T>, TTerminalClosure>)
         explicit constexpr TTerminalClosure(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 

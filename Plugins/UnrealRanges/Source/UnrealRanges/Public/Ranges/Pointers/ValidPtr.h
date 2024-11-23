@@ -19,7 +19,7 @@ namespace UE::Ranges {
          * @return True if the pointer is valid, false otherwise.
          */
         template <Pointer T>
-        constexpr bool operator()(T &&Ptr) const {
+        constexpr bool operator()(const T &Ptr) const {
             if constexpr (DereferencesTo<T, const UObject>) {
                 return IsValid(GetRawPointer(Ptr));
             } else if constexpr (DereferencesToInterface<T>) {

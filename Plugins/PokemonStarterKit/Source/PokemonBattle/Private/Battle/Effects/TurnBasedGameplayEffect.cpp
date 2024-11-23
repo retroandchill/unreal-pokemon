@@ -31,18 +31,20 @@ bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
 
 bool FTurnBasedGameplayEffect::IncrementTurnCount() {
     TurnsActive++;
-    // clang-format
-    return TurnsRemaining | UE::Optionals::Filter(UE::Ranges::GreaterThan, TurnsActive) |
-           UE::Optionals::Map([this](auto) { return RemoveEffect(); }) | UE::Optionals::OrElse(false);
     // clang-format off
+    return TurnsRemaining |
+           UE::Optionals::Filter(UE::Ranges::GreaterThan, TurnsActive) |
+           UE::Optionals::Map([this](auto) { return RemoveEffect(); }) | 
+           UE::Optionals::OrElse(false);
+    // clang-format on
 }
 
 bool FTurnBasedGameplayEffect::RemoveEffect(int32 StacksToRemove) {
-    // clang-format
+    // clang-format off
     return UE::Optionals::OfNullable(OwningComponent.Get()) |
                     UE::Optionals::Map(&UTurnBasedEffectComponent::GetAbilitySystemComponent) |
                     UE::Optionals::Map(&UAbilitySystemComponent::RemoveActiveGameplayEffect, EffectHandle, StacksToRemove) |
                     UE::Optionals::OrElse(false);
-    // clang-format off
+    // clang-format on
     
 }

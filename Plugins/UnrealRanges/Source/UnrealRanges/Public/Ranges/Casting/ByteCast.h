@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <bit>
 
 namespace UE::Ranges {
     /**
@@ -44,7 +45,7 @@ namespace UE::Ranges {
         template <typename U>
             requires ValidByteType<U>
         constexpr decltype(auto) operator()(U *Bytes) const {
-            return *reinterpret_cast<T *>(Bytes);
+            return *std::bit_cast<T *>(Bytes);
         }
     };
 
