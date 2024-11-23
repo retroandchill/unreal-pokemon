@@ -116,6 +116,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
   public:
     void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
+    void ClearOnBattleEnd() override;
 
   protected:
     /**

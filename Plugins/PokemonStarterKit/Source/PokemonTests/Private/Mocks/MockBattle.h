@@ -27,4 +27,5 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(UE::Ranges::TAnyView<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
     MOCK_METHOD(void, ExecuteAction, (IBattleAction & Action), (override));
     MOCK_METHOD(void, BindToOnBattleEnd, (FOnBattleEnd::FDelegate && Callback), (override));
+    MOCK_METHOD(void, ClearOnBattleEnd, (), (override));
 };

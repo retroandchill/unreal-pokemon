@@ -19,6 +19,8 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Optional/IfPresent.h"
+#include "Ranges/Optional/Map.h"
 #include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
@@ -242,6 +244,10 @@ void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
     OnBattleEnd.Add(std::move(Callback));
 }
 
+void APokemonBattle::ClearOnBattleEnd() {
+    OnBattleEnd.Clear();
+}
+
 APawn *APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
@@ -269,8 +275,11 @@ void APokemonBattle::ExecuteAction() {
 }
 
 void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
-    auto PlayerController = BattlePawn->GetController();
-    PlayerController->Possess(StoredPlayerPawn);
+    // clang-format off
+    UE::Optionals::OfNullable(BattlePawn) |
+        UE::Optionals::Map([](const APawn *Pawn) { return Pawn->GetController(); }) |
+        UE::Optionals::IfPresent(&APlayerController::Possess, StoredPlayerPawn);
+    // clang-format on
     OnBattleEnd.Broadcast(Result);
 }
 

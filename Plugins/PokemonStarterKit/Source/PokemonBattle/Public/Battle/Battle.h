@@ -172,4 +172,6 @@ class POKEMONBATTLE_API IBattle {
      * @param Callback The callback to invoke when the battle ends
      */
     virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) = 0;
+
+    virtual void ClearOnBattleEnd() = 0;
 };
