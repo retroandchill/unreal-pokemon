@@ -6,6 +6,7 @@
 #include "Ranges/Concepts/Pointers.h"
 #include "Ranges/RangeConcepts.h"
 #include "Templates/NonNullSubclassOf.h"
+#include "Traits.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -42,6 +43,16 @@ struct TOptional<T &> {
      * Constructor from nullptr
      */
     constexpr explicit(false) TOptional(nullptr_t) {
+    }
+
+    /**
+     * Construct a new optional from an optional of subclass.
+     * @tparam U The subclass type
+     * @param Other The other optional
+     */
+    template <typename U>
+        requires std::derived_from<U, T> && (!std::is_same_v<T, U>)
+    constexpr explicit(false) TOptional(TOptional<U &> Other) : Data(Other.GetPtrOrNull()) {
     }
 
     /**

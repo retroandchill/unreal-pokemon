@@ -13,11 +13,11 @@
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Pointers/MakeWeak.h"
+#include "Ranges/Pointers/ValidPtr.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/FilterValid.h"
-#include "Ranges/Views/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(std::move(Battler));
@@ -85,8 +85,13 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
         Targets.Emplace(AsTargetWithIndex->SwapIfNecessary());
     }
 
-    TargetData->SetActors(Targets | UE::Ranges::FilterValid | UE::Ranges::CastType<AActor> | UE::Ranges::MakeWeak |
-                          UE::Ranges::ToArray);
+    // clang-format off
+    TargetData->SetActors(Targets |
+        UE::Ranges::Filter(UE::Ranges::ValidPtr) |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
+        UE::Ranges::Map(UE::Ranges::MakeWeak) |
+        UE::Ranges::ToArray);
+    // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Items::UsingItem, EventData);

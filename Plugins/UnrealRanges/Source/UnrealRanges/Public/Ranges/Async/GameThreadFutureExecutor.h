@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Ranges/Functional/Delegates.h"
+#include <range/v3/functional/invoke.hpp>
 
 namespace UE::Ranges {
     /**

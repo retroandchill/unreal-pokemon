@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Animations/ProgressBarAnimation.h"
+#include "Kismet/GameplayStatics.h"
 #include "PokemonUI.h"
 
 using namespace Pokemon::UI;
@@ -45,6 +46,10 @@ void FProgressBarAnimation::Tick(float DeltaTime) {
         return;
     }
 
+    if (WorldContextObject.IsValid()) {
+        DeltaTime *= UGameplayStatics::GetGlobalTimeDilation(WorldContextObject.Get());
+    }
+
     auto &[StartingPercentage, EndPercentage, AnimationDuration, CurrentTime, bWrapAround] = AnimationData.GetValue();
     CurrentTime += DeltaTime;
     float NewPercent = FMath::Lerp(StartingPercentage, EndPercentage, CurrentTime / AnimationDuration);
@@ -65,4 +70,8 @@ void FProgressBarAnimation::Tick(float DeltaTime) {
 
 TStatId FProgressBarAnimation::GetStatId() const {
     RETURN_QUICK_DECLARE_CYCLE_STAT(UHPBar, STATGROUP_Tickables)
+}
+
+void FProgressBarAnimation::SetWorldContext(const UObject *WorldContext) {
+    WorldContextObject = WorldContext;
 }

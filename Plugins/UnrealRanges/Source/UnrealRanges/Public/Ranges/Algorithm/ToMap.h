@@ -66,6 +66,7 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
+            requires CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) {
             using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TToMapInvoker<K, BindingType>>(
@@ -85,6 +86,7 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
+            requires CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TToMapValueBinding<BindingType>(CreateBinding<A...>(std::forward<A>(Args)...));

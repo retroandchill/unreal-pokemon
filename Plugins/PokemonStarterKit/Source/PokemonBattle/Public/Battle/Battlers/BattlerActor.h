@@ -9,6 +9,7 @@
 
 #include "BattlerActor.generated.h"
 
+class UTurnBasedEffectComponent;
 class ITrainer;
 class UGameplayEffect;
 struct FOnAttributeChangeData;
@@ -98,6 +99,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = GameplayAbilities)
     UBattlerAbilityComponent *GetAbilityComponent() const override;
 
+    UFUNCTION(BlueprintPure, Category = GameplayAbilities)
+    UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const override;
+
     UFUNCTION(BlueprintPure, Category = Moves)
     const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;
 
@@ -159,6 +163,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     UPROPERTY()
     TObjectPtr<UBattlerAbilityComponent> BattlerAbilityComponent;
+
+    UPROPERTY()
+    TObjectPtr<UTurnBasedEffectComponent> TurnBasedEffectComponent;
 
     /**
      * The internal ID of the battler

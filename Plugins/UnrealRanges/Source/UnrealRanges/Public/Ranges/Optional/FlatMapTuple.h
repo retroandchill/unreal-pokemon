@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
-#include "Ranges/RangeConcepts.h"
+#include "Ranges/Utilities/ForwardLike.h"
 #include "Types.h"
 
 namespace UE::Optionals {
@@ -41,6 +41,7 @@ namespace UE::Optionals {
     struct FFlatMapTuple {
 
         template <typename... A>
+            requires Ranges::CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TFlatMapTupleInvoker<BindingType>>(

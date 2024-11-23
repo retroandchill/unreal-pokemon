@@ -3,19 +3,16 @@
 #include "Battle//Events/Moves/DamageModificationPayload.h"
 
 FDamageCalculationData::FDamageCalculationData(const TScriptInterface<IBattler> &User,
-                                               const TScriptInterface<IBattler> &Target, int32 TargetCount,
-                                               const FRunningMessageSet &PreDamageMessages, FName Type, int32 BasePower)
-    : User(User), Target(Target), TargetCount(TargetCount), PreDamageMessages(PreDamageMessages), Type(Type),
-      BasePower(BasePower) {
+                                               const TScriptInterface<IBattler> &Target, int32 TargetCount, FName Type,
+                                               int32 BasePower)
+    : User(User), Target(Target), TargetCount(TargetCount), Type(Type), BasePower(BasePower) {
 }
 
 UDamageModificationPayload *UDamageModificationPayload::Create(const TScriptInterface<IBattler> &User,
                                                                const TScriptInterface<IBattler> &Target,
-                                                               int32 TargetCount,
-                                                               const FRunningMessageSet &PreDamageMessages, FName Type,
-                                                               int32 BasePower) {
+                                                               int32 TargetCount, FName Type, int32 BasePower) {
     auto Ret = NewObject<UDamageModificationPayload>();
-    Ret->Data = MakeShared<FDamageCalculationData>(User, Target, TargetCount, PreDamageMessages, Type, BasePower);
+    Ret->Data = MakeShared<FDamageCalculationData>(User, Target, TargetCount, Type, BasePower);
     return Ret;
 }
 
@@ -32,11 +29,6 @@ const TScriptInterface<IBattler> &UDamageModificationPayload::GetUser() const {
 const TScriptInterface<IBattler> &UDamageModificationPayload::GetTarget() const {
     check(Data != nullptr)
     return Data->Target;
-}
-
-const FRunningMessageSet &UDamageModificationPayload::GetRunningMessageSet() const {
-    check(Data != nullptr)
-    return Data->PreDamageMessages;
 }
 
 void UDamageModificationPayload::SetPowerMultiplier(float Amount) const {

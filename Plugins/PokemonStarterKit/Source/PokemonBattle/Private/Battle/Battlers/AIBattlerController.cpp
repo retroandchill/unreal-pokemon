@@ -6,8 +6,9 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
+#include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include <functional>
@@ -41,7 +42,11 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
     // are no such moves.
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
-    auto Targets = Move->GetAllPossibleTargets() | UE::Ranges::Construct<FTargetWithIndex>() | UE::Ranges::ToArray;
+    // clang-format off
+    auto Targets = Move->GetAllPossibleTargets() |
+                   UE::Ranges::Map(UE::Ranges::Construct<FTargetWithIndex>) |
+                   UE::Ranges::ToArray;
+    // clang-format on
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
 }
 

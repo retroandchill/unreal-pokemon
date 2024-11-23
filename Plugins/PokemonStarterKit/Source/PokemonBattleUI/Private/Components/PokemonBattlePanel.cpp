@@ -14,6 +14,7 @@ using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
 
 void UPokemonBattlePanel::NativeConstruct() {
     Super::NativeConstruct();
+    HPBarUpdateAnimation.SetWorldContext(this);
     HPBarUpdateAnimation.BindActionToPercentDelegate(
         FUpdatePercent::CreateUObject(this, &UPokemonBattlePanel::UpdateHPPercent));
     HPBarUpdateAnimation.BindActionToCompleteDelegate(

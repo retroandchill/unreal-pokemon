@@ -4,7 +4,7 @@
 #include "CoreMinimal.h"
 #include "DataStructHandle.h"
 #include "GameData.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/ByteCast.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/MapValue.h"
 
@@ -49,7 +49,7 @@ class TDataTableProxy final : public IGameData {
         // clang-format off
         return DataTable->GetRowMap() |
                UE::Ranges::MapValue |
-               UE::Ranges::CastType<T>;
+               UE::Ranges::Map(UE::Ranges::ByteCast<T>);
         // clang-format on
     }
 

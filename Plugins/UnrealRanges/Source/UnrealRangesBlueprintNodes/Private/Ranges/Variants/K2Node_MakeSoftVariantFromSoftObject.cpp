@@ -6,8 +6,8 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "Ranges/Blueprints/BlueprintPins.h"
-#include "Ranges/Optional/CastType.h"
-#include "Ranges/Optional/MakeStrong.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Variants/VariantObjectUtilities.h"
 
@@ -136,8 +136,7 @@ TOptional<UClass &> UK2Node_MakeSoftVariantFromSoftObject::GetInputClass() const
     return UE::Optionals::OfNullable(GetObjectPin()) |
            UE::Optionals::Map(&UEdGraphPin::PinType) |
            UE::Optionals::Map(&FEdGraphPinType::PinSubCategoryObject) |
-           UE::Optionals::MakeStrong |
-           UE::Optionals::CastType<UClass>;
+           UE::Optionals::FlatMap(UE::Ranges::DynamicCast<UClass>);
     // clang-format on
 }
 

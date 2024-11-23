@@ -6,13 +6,14 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/AIBattlerController.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSideAbilitySystemComponent.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Utilities/Casts.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Single.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
@@ -27,6 +28,7 @@ static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattl
 
 AActiveSide::AActiveSide() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));
+    TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
 }
 
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
@@ -107,7 +109,7 @@ void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     // clang-format off
     Battlers |
-        UE::Ranges::CastType<AActor> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
         UE::Ranges::ForEach([](AActor *A) {
             return A->Destroy();
         });
@@ -120,6 +122,16 @@ const FGuid &AActiveSide::GetInternalId() const {
 
 const TScriptInterface<IBattle> &AActiveSide::GetOwningBattle() const {
     return OwningBattle;
+}
+
+UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
+    return TurnBasedEffectComponent;
+}
+
+UE::Ranges::TAnyView<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
+    auto MyComponent = UE::Ranges::Single(TurnBasedEffectComponent.Get());
+    auto BattlerComponents = Battlers | UE::Ranges::Map(&IBattler::GetTurnBasedEffectComponent);
+    return UE::Ranges::Concat(std::move(MyComponent), std::move(BattlerComponents));
 }
 
 uint8 AActiveSide::GetSideSize() const {

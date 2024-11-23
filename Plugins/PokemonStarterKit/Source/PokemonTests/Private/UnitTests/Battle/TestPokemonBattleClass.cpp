@@ -10,7 +10,6 @@
 #include "Mocks/MockBattleAction.h"
 #include "Mocks/MockBattler.h"
 #include "Mocks/MockBattleSide.h"
-#include "Species/SpeciesData.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
@@ -28,6 +27,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto &ActionQueue = const_cast<TQueue<TUniquePtr<IBattleAction>> &>(Battle->GetActionQueue());
     auto &Actions = const_cast<TArray<TUniquePtr<IBattleAction>> &>(Battle->GetActions());
@@ -82,59 +82,5 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
     ActionQueue.Pop();
 
     UE_CHECK_TRUE(ActionQueue.IsEmpty());
-    return true;
-}
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonBattleClass_ActionExecution,
-                                 "Unit Tests.Battle.TestPokemonBattleClass.ActionExecution",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-bool TestPokemonBattleClass_ActionExecution::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    CREATE_MOCK_ACTOR(World.Get(), IBattleSide, Side1, FMockBattleSide, MockSide1);
-    CREATE_MOCK_ACTOR(World.Get(), IBattleSide, Side2, FMockBattleSide, MockSide2);
-
-    auto Side1Actor = CastChecked<AActor>(Side1.GetObject());
-    Side1Actor->AddComponentByClass(UBattleSideAbilitySystemComponent::StaticClass(), false, FTransform(), false);
-    auto Side2Actor = CastChecked<AActor>(Side2.GetObject());
-    Side2Actor->AddComponentByClass(UBattleSideAbilitySystemComponent::StaticClass(), false, FTransform(), false);
-
-    TArray<TScriptInterface<IBattler>> EmptyBattlers;
-    ON_CALL(MockSide1, GetBattlers).WillByDefault(ReturnRef(EmptyBattlers));
-    ON_CALL(MockSide2, GetBattlers).WillByDefault(ReturnRef(EmptyBattlers));
-
-    auto Battle = World->SpawnActor<ATestPokemonBattle>();
-    Battle->Initialize({Side1, Side2});
-
-    auto &Phase = UReflectionUtils::GetMutablePropertyValue<EBattlePhase>(Battle, "Phase");
-    Phase = EBattlePhase::Actions;
-    FActorTickFunction TickFunction;
-    Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    UE_CHECK_EQUAL(EBattlePhase::Judging, Phase);
-
-    Phase = EBattlePhase::Actions;
-    auto &ActionQueue = const_cast<TQueue<TUniquePtr<IBattleAction>> &>(Battle->GetActionQueue());
-    auto MockAction1 = MakeUnique<FMockBattleAction>();
-    ON_CALL(*MockAction1, CanExecute).WillByDefault(Return(false));
-    ON_CALL(*MockAction1, IsExecuting).WillByDefault(Return(false));
-    ActionQueue.Enqueue(std::move(MockAction1));
-
-    auto MockAction2 = MakeUnique<FMockBattleAction>();
-    ON_CALL(*MockAction2, CanExecute).WillByDefault(Return(true));
-    EXPECT_CALL(*MockAction2, IsExecuting).WillOnce(Return(false)).WillRepeatedly(Return(true));
-    ON_CALL(*MockAction2, GetActionMessage).WillByDefault(Return(FText::GetEmpty()));
-
-    CREATE_MOCK(IBattler, Target, FMockBattler, MockTarget);
-    ON_CALL(*MockAction2, IsComplete).WillByDefault(Return(true));
-    auto Action2 = MockAction2.Get();
-    ActionQueue.Enqueue(std::move(MockAction2));
-
-    Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    UE_ASSERT_TRUE(ActionQueue.Peek()->Get() == Action2);
-    Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    Battle->TickActor(1, LEVELTICK_All, TickFunction);
-    UE_CHECK_TRUE(ActionQueue.IsEmpty());
-
-    ActionQueue.Empty();
     return true;
 }

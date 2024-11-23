@@ -3,12 +3,13 @@
 #include "Battle/PokemonBattle.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
-#include "Battle/Events/BattleMessagePayload.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
@@ -17,13 +18,18 @@
 #include "range/v3/view/join.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Optional/IfPresent.h"
+#include "Ranges/Optional/Map.h"
+#include "Ranges/Views/Concat.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Join.h"
+#include "Ranges/Views/Single.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
+    TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
 }
 
 TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) {
@@ -41,6 +47,7 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleIn
 
 void APokemonBattle::BeginPlay() {
     Super::BeginPlay();
+    BattleSequencer = GetWorld()->SpawnActor<ABattleSequencer>(BattleSequencerClass.LoadSynchronous());
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
@@ -51,11 +58,12 @@ void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     // clang-format off
     Sides |
-        UE::Ranges::CastType<AActor> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
         UE::Ranges::ForEach([](AActor *Actor) {
             Actor->Destroy();
         });
     // clang-format on
+    BattleSequencer->Destroy();
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {
@@ -68,7 +76,10 @@ void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerC
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
-    PlayBattleIntro();
+    QueueBattleIntro();
+    QueueOpponentSendOut();
+    QueuePlayerSendOut();
+    ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::StartBattle);
 }
 
 void APokemonBattle::Tick(float DeltaSeconds) {
@@ -83,15 +94,13 @@ void APokemonBattle::Tick(float DeltaSeconds) {
             if (bSwitchPrompting) {
                 EndTurn();
             } else {
-                // We don't want to send out this event twice
-                auto Payload = NewObject<UBattleMessagePayload>();
-                Pokemon::Battle::Events::SendOutBattleEvent(this, Payload, Pokemon::Battle::EndTurn);
-                ProcessTurnEndMessages(Payload->Messages);
+                ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
+                Pokemon::Battle::Events::SendOutBattleEvent(this, nullptr, Pokemon::Battle::EndTurn);
+                ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::EndTurn);
             }
         } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
             if (Action->CanExecute()) {
-                DisplayAction(Action->GetActionMessage());
-                bActionTextDisplayed = true;
+                ExecuteAction(*Action);
             } else {
                 ActionQueue.Pop();
             }
@@ -105,11 +114,10 @@ void APokemonBattle::Tick(float DeltaSeconds) {
 void APokemonBattle::StartBattle() {
     CreateBattleHUD();
     OnBattlersEnteringBattle(GetActiveBattlers());
-    StartTurn();
+    ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::StartTurn);
 }
 
-FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
-    FRunningMessageSet Messages;
+void APokemonBattle::OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     // clang-format off
     auto Sorted = Battlers |
                   UE::Ranges::Filter(&IBattler::IsNotFainted) |
@@ -128,8 +136,6 @@ FRunningMessageSet APokemonBattle::OnBattlersEnteringBattle(UE::Ranges::TAnyView
     for (auto &Battler : Sorted) {
         Battler->RecordParticipation();
     }
-
-    return Messages;
 }
 
 void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
@@ -187,7 +193,9 @@ UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattle
 }
 
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
-    DisplayAction(Action.GetActionMessage());
+    bActionTextDisplayed = true;
+    QueueDisplayAction(Action.GetActionMessage());
+    ABattleSequencer::DisplayBattleMessages(this, [this] { ExecuteAction(); });
 }
 
 bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) {
@@ -224,52 +232,37 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
     Phase = EBattlePhase::Decided;
-    ProcessBattleResult(Result);
+    QueueBattleResultAnimation(Result);
+    ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::ExitBattleScene, Result);
 }
 
 void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
     OnBattleEnd.Add(std::move(Callback));
 }
 
+void APokemonBattle::ClearOnBattleEnd() {
+    OnBattleEnd.Clear();
+}
+
 APawn *APokemonBattle::GetBattlePawn() const {
     return BattlePawn;
 }
 
-void APokemonBattle::DisplayBattleIntroMessage() {
+FText APokemonBattle::GetBattleIntroMessage() const {
     check(Sides.IsValidIndex(OpponentSideIndex))
-    ProcessBattleIntroMessage(Sides[OpponentSideIndex]->GetIntroText());
+    return Sides[OpponentSideIndex]->GetIntroText();
 }
 
-void APokemonBattle::OpponentSendOut() {
-    check(Sides.IsValidIndex(OpponentSideIndex))
-    const auto &Side = Sides[OpponentSideIndex];
-    if (auto &SendOutText = Side->GetSendOutText(); SendOutText.IsSet()) {
-        ProcessOpponentSendOutMessage(SendOutText.GetValue());
-    } else {
-        ProcessOpponentSendOutAnimation(Side);
-    }
-}
-
-void APokemonBattle::OpponentSendOutAnimation() {
+void APokemonBattle::QueueOpponentSendOut() {
     check(Sides.IsValidIndex(OpponentSideIndex))
     const auto &Side = Sides[OpponentSideIndex];
-    ProcessOpponentSendOutAnimation(Side);
+    QueueOpponentSendOutMessage(Side->GetSendOutText().Get(FText::GetEmpty()));
 }
 
-void APokemonBattle::PlayerSendOut() {
+void APokemonBattle::QueuePlayerSendOut() {
     check(Sides.IsValidIndex(PlayerSideIndex))
     const auto &Side = Sides[PlayerSideIndex];
-    if (auto &SendOutText = Side->GetSendOutText(); SendOutText.IsSet()) {
-        ProcessPlayerSendOutMessage(SendOutText.GetValue());
-    } else {
-        ProcessPlayerSendOutAnimation(Side);
-    }
-}
-
-void APokemonBattle::PlayerSendOutAnimation() {
-    check(Sides.IsValidIndex(PlayerSideIndex))
-    const auto &Side = Sides[PlayerSideIndex];
-    ProcessPlayerSendOutAnimation(Side);
+    QueuePlayerSendOutMessage(Side->GetSendOutText().Get(FText::GetEmpty()));
 }
 
 void APokemonBattle::ExecuteAction() {
@@ -278,14 +271,31 @@ void APokemonBattle::ExecuteAction() {
 }
 
 void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
-    auto PlayerController = BattlePawn->GetController();
-    PlayerController->Possess(StoredPlayerPawn);
+    // clang-format off
+    UE::Optionals::OfNullable(BattlePawn) |
+        UE::Optionals::Map([](const APawn *Pawn) { return Pawn->GetController(); }) |
+        UE::Optionals::IfPresent(&APlayerController::Possess, StoredPlayerPawn);
+    // clang-format on
     OnBattleEnd.Broadcast(Result);
+}
+
+void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
+    // clang-format off
+    auto MyComponent = UE::Ranges::Single(TurnBasedEffectComponent.Get());
+    auto ChildComponents = Sides |
+                           UE::Ranges::Map(&IBattleSide::GetChildEffectComponents) |
+                           UE::Ranges::Join;
+    UE::Ranges::Concat(std::move(MyComponent), std::move(ChildComponents)) |
+        UE::Ranges::Map(&UTurnBasedEffectComponent::GetAllTurnBasedEffectsForTrigger, Trigger) |
+        UE::Ranges::Join |
+        UE::Ranges::ForEach(&FTurnBasedGameplayEffect::IncrementTurnCount);
+    // clang-format on
 }
 
 void APokemonBattle::StartTurn() {
     bSwitchPrompting = false;
     TurnCount++;
+
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
     Phase = EBattlePhase::Selecting;

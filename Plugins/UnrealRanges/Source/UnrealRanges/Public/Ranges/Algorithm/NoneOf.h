@@ -56,6 +56,7 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
+            requires CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TNoneOfInvoker<BindingType>>(

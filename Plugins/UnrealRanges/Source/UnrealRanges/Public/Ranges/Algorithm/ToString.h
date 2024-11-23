@@ -47,7 +47,7 @@ namespace UE::Ranges {
         template <typename T>
             requires std::convertible_to<T, FStringView>
         auto operator()(T &&Conjunction) const {
-            return TTerminalClosure(FToStringInvoker(std::forward<T>(Conjunction)));
+            return TTerminalClosure<FToStringInvoker>(FToStringInvoker(std::forward<T>(Conjunction)));
         }
     };
 

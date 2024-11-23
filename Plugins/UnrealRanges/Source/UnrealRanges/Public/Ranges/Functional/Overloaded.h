@@ -14,7 +14,7 @@ namespace UE::Ranges {
      * each of which implements an operator() function.
      *
      * Template Parameters:
-     * - T: A variadic template parameter pack representing the types from which
+     * @tparam T A variadic template parameter pack representing the types from which
      *      TOverloaded will inherit. Each of these types must implement an
      *      operator() function.
      */
