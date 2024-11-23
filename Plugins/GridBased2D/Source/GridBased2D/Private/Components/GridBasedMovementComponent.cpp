@@ -226,7 +226,6 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
            UE::Ranges::Map(&FOverlapResult::GetActor) |
            UE::Ranges::Filter(&AActor::Implements<UInteractable>) |
            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IInteractable>) |
-           UE::Ranges::Map(UE::Ranges::WrapPointer) |
            UE::Ranges::ToArray;
     // clang-format on
 }

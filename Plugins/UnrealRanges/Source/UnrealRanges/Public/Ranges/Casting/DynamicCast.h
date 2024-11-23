@@ -26,9 +26,23 @@ namespace UE::Ranges {
                 // Trivial case, no need to actually cast
                 return static_cast<T&>(Object);
             } else if constexpr (bChecked) {
-                return *CastChecked<T>(&Object);
+                if constexpr (std::derived_from<U, UObject> && UnrealInterface<T>) {
+                    check(Object.template Implements<typename T::UClassType>())
+                    return TScriptInterface<T>(&Object);
+                } else {
+                    return *CastChecked<T>(&Object);
+                }
+                
             } else {
-                return TOptional<T&>(Cast<T>(&Object));
+                if constexpr (std::derived_from<U, UObject> && UnrealInterface<T>) {
+                    if (!Object.template Implements<typename T::UClassType>()) {
+                        return TScriptInterface<T>(nullptr);
+                    }
+                    
+                    return TScriptInterface<T>(&Object);
+                } else {
+                    return TOptional<T&>(Cast<T>(&Object));
+                }
             }
         }
 
@@ -48,14 +62,24 @@ namespace UE::Ranges {
         template <typename U>
             requires DereferencesTo<U, const UObject> || DereferencesToInterface<U> || DereferencesTo<U, const FField>
         constexpr decltype(auto) operator()(U &&Ptr) const {
+            using ResultType = decltype(operator()(*Ptr));
             if constexpr (bChecked) {
                 checkf(ValidPtr(std::forward<U>(Ptr)), TEXT("Null pointer detected!"))
-                return &operator()(*Ptr);
+                if constexpr (std::is_lvalue_reference_v<ResultType>) {
+                    return &operator()(*Ptr);
+                } else {
+                    return operator()(*Ptr);
+                }
             } else {
                 if (!ValidPtr(std::forward<U>(Ptr))) {
                     return TOptional<T&>(nullptr);
                 }
-                return static_cast<TOptional<T&>>(operator()(*Ptr));
+
+                if constexpr (std::is_lvalue_reference_v<ResultType>) {
+                    return static_cast<TOptional<T&>>(operator()(*Ptr));
+                } else {
+                    return operator()(*Ptr);
+                }
             }
         }
     };

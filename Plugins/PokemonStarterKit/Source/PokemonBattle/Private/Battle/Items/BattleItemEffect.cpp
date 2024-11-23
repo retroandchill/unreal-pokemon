@@ -95,7 +95,6 @@ TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const
            UE::Ranges::Filter(UE::Ranges::ValidPtr) |
            UE::Ranges::Filter(UE::Ranges::InstanceOf<IBattler>) |
            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IBattler>) |
-           UE::Ranges::Map(UE::Ranges::WrapPointer) |
            UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) |
            UE::Ranges::ToArray;
     // clang-format off
