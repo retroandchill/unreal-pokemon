@@ -44,7 +44,7 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        UE::Ranges::Map(&ISaveableSubsystem::_getUObject) |
+        UE::Ranges::Map(&FScriptInterface::GetObject) |
         UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
     // clang-format on
 #endif
@@ -67,7 +67,7 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        UE::Ranges::Map(&ISaveableSubsystem::_getUObject) |
+        UE::Ranges::Map(&FScriptInterface::GetObject) |
         UE::Ranges::ForEach(&ISaveableSubsystem::Execute_LoadSaveData, SaveGame, LoadTags);
     // clang-format on
 #endif

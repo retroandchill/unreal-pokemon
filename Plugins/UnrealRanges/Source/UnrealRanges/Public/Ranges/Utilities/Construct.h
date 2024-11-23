@@ -13,6 +13,12 @@ namespace UE::Ranges {
      */
     template <typename T>
     struct TConstruct {
+        /**
+         * Constructs an object of type T with the provided arguments.
+         *
+         * @param Args Variadic template parameters for the constructor of type T.
+         * @return An instance of type T constructed with the provided arguments.
+         */
         template <typename... A>
             requires std::constructible_from<T, A...>
         constexpr T operator()(A&&... Args) const {

@@ -22,7 +22,13 @@ namespace UE::Ranges {
     template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T> || std::derived_from<T, FField>
     struct TInstanceOf {
-
+        
+        /**
+         * Checks if the given value is an instance of the specified type T.
+         *
+         * @param Value The value to be checked. This can be a subclass of UObject, an interface, or a class that implements UnrealInterface.
+         * @return True if the value is an instance of type T, otherwise false.
+         */
         template <typename U>
             requires std::derived_from<U, UObject> || UnrealInterface<U>
         constexpr bool operator()(const U& Value) const requires std::derived_from<T, UObject> {
@@ -37,7 +43,14 @@ namespace UE::Ranges {
 
             Unreachable();
         }
-
+        
+        /**
+         * Checks if the given value is an instance of the specified Unreal Interface type T.
+         *
+         * @param Value The value to be checked. This value can be a subclass of UObject, implement Unreal Engine interfaces,
+         * or be a class derived from T.
+         * @return True if the value is an instance of type T, otherwise false.
+         */
         template <typename U>
             requires std::derived_from<U, UObject> || UnrealInterface<U>
         constexpr bool operator()(const U& Value) const requires UnrealInterface<T> {
@@ -52,7 +65,13 @@ namespace UE::Ranges {
 
             Unreachable();
         }
-
+        
+        /**
+         * Checks if the given value is an instance of the specified field type T.
+         *
+         * @param Value The value to be checked. The value must be a type derived from FField.
+         * @return True if the value is an instance of the specified type T, otherwise false.
+         */
         template <typename U>
             requires std::derived_from<U, FField>
         constexpr bool operator()(const U& Value) const requires std::derived_from<T, FField> {
@@ -66,6 +85,12 @@ namespace UE::Ranges {
             Unreachable();
         }
 
+        /**
+         * Checks if the given pointer is valid and if the dereferenced value is an instance of the expected type.
+         *
+         * @param Ptr The pointer to be checked, which should dereference to a valid type.
+         * @return True if the pointer is valid and the dereferenced value is an instance of the expected type, otherwise false.
+         */
         template <typename U>
             requires DereferencesTo<U, const UObject> || DereferencesToInterface<U> || DereferencesTo<U, const FField>
         constexpr bool operator()(U &&Ptr) const {

@@ -30,6 +30,17 @@ namespace UE::Ranges {
      * - Utility methods to handle casting of custom objects, if needed.
      */
     struct TByteCast {
+        /**
+         * @brief Casts a byte pointer to a specified data type.
+         *
+         * This operator takes a pointer to a byte array and reinterprets it as a pointer to
+         * the specified data type `T`, then returns the dereferenced value. This is useful
+         * for low-level data manipulation where you need to convert a byte array back to
+         * a structured data type.
+         *
+         * @param Bytes A pointer to a byte array that will be reinterpreted as a pointer to type `T`.
+         * @return The value of the byte array reinterpreted as a value of type `T`.
+         */
         template <typename U>
             requires ValidByteType<U>
         constexpr decltype(auto) operator()(U* Bytes) const {

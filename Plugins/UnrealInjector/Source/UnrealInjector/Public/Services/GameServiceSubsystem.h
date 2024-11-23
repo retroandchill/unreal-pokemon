@@ -95,7 +95,7 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
         return Services |
             UE::Ranges::MapValue |
             UE::Ranges::Filter(UE::Ranges::InstanceOf<T>) |
-            UE::Ranges::Map(UE::Ranges::StaticCast<T*>);
+            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<T>);
         // clang-format on
     }
 

@@ -13,6 +13,15 @@ namespace UE::Ranges {
      * This class provides functionality to perform an addition operation on two input values.
      */
     struct FAdd {
+        /**
+         * Perform the addition operation on the target values.
+         * 
+         * @tparam T The type of the left-hand side
+         * @tparam U The type of the right-hand side
+         * @param LHS The left-hand side value
+         * @param RHS The right-hand side value
+         * @return The result of the operation
+         */
         template <typename T, typename U = T>
             requires Addable<T, U>
         constexpr decltype(auto) operator()(const T& LHS, const U& RHS) const {
@@ -33,6 +42,15 @@ namespace UE::Ranges {
      * This class provides functionality to perform a subtraction operation on two input values.
      */
     struct FSubtract {
+        /**
+         * Perform the subtraction operation on the target values.
+         * 
+         * @tparam T The type of the left-hand side
+         * @tparam U The type of the right-hand side
+         * @param LHS The left-hand side value
+         * @param RHS The right-hand side value
+         * @return The result of the operation
+         */
         template <typename T, typename U = T>
             requires Subtractable<T, U>
         constexpr decltype(auto) operator()(const T& LHS, const U& RHS) const {
@@ -53,6 +71,15 @@ namespace UE::Ranges {
      * This class provides functionality to perform a multiplication operation on two input values.
      */
     struct FMultiply {
+        /**
+         * Perform the multiplication operation on the target values.
+         * 
+         * @tparam T The type of the left-hand side
+         * @tparam U The type of the right-hand side
+         * @param LHS The left-hand side value
+         * @param RHS The right-hand side value
+         * @return The result of the operation
+         */
         template <typename T, typename U = T>
             requires Multipliable<T, U>
         constexpr decltype(auto) operator()(const T& LHS, const U& RHS) const {
@@ -73,6 +100,15 @@ namespace UE::Ranges {
      * This class provides functionality to perform a division operation on two input values.
      */
     struct FDivide {
+        /**
+         * Perform the division operation on the target values.
+         * 
+         * @tparam T The type of the left-hand side
+         * @tparam U The type of the right-hand side
+         * @param LHS The left-hand side value
+         * @param RHS The right-hand side value
+         * @return The result of the operation
+         */
         template <typename T, typename U = T>
             requires Dividable<T, U>
         constexpr decltype(auto) operator()(const T& LHS, const U& RHS) const {
@@ -93,6 +129,15 @@ namespace UE::Ranges {
      * This class provides functionality to perform a modulo operation on two input values.
      */
     struct FModulo {
+        /**
+         * Perform the modulo operation on the target values.
+         * 
+         * @tparam T The type of the left-hand side
+         * @tparam U The type of the right-hand side
+         * @param LHS The left-hand side value
+         * @param RHS The right-hand side value
+         * @return The result of the operation
+         */
         template <typename T, typename U = T>
             requires Moduloable<T, U>
         constexpr decltype(auto) operator()(const T& LHS, const U& RHS) const {

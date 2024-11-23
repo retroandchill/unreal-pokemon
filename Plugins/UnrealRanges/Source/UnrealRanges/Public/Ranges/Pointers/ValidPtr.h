@@ -12,6 +12,12 @@ namespace UE::Ranges {
      */
     struct FValidPtr {
 
+        /**
+         * Determines the validity of a given pointer based on its type and what it dereferences to.
+         *
+         * @param Ptr The pointer to be checked for validity.
+         * @return True if the pointer is valid, false otherwise.
+         */
         template <Pointer T>
         constexpr bool operator()(T &&Ptr) const {
             if constexpr (DereferencesTo<T, const UObject>) {
@@ -19,7 +25,7 @@ namespace UE::Ranges {
             } else if constexpr (DereferencesToInterface<T>) {
                 auto RawPtr = GetRawPointer(Ptr);
                 if constexpr (std::derived_from<std::decay_t<T>, FScriptInterface>) {
-                    return RawPtr != nullptr && IsValid(Ptr.GetObject());
+                    return IsValid(Ptr.GetObject());
                 } else {
                     return RawPtr != nullptr && IsValid(RawPtr->_getUObject());
                 }
