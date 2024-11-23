@@ -22,6 +22,7 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
     /**
      * Linear interpolation between two values, given the duration of the change and the time passed since the start of
      * the change (delta)
+     *
      * @param StartValue The starting value for the change
      * @param EndValue Where the value should be at the end of the duration
      * @param Duration The duration of the change
@@ -49,6 +50,7 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
 
     /**
      * Take the power of two exponents and return the result as an integer.
+     *
      * @param Base The base of the operation
      * @param Exponent The exponent of the operation
      * @return The result of the exponentiation
@@ -57,10 +59,20 @@ class COMMONMATH_API UMathUtilities : public UBlueprintFunctionLibrary {
 
     /**
      * Find the midpoint between two vector objects
+     *
      * @param Start The first vector to check
      * @param End The second vector to check
      * @return The midpoint between the two vectors
      */
     UFUNCTION(BlueprintPure, Category = "Math|Vector")
     static FVector Midpoint(const FVector &Start, const FVector &End);
+
+    /**
+     * Returns a random integer within the specified range.
+     *
+     * @param Range An FInt32Range object that specifies the lower and upper bounds.
+     * @return A random integer within the given range.
+     */
+    UFUNCTION(BlueprintPure, Category = "Math|Vector", meta = (AutoCreateRefTerm = Range))
+    static int32 RandomIntInRange(const FInt32Range &Range);
 };

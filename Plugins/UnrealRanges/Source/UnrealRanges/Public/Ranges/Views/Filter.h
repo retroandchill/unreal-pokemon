@@ -13,8 +13,9 @@ namespace UE::Ranges {
 
     struct FFilter {
         template <typename... A>
+            requires CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
-            return ranges::views::filter(CreateBinding<A...>(std::forward<A>(Args)...));
+            return ranges::views::filter(CreateBinding(std::forward<A>(Args)...));
         }
     };
 

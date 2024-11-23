@@ -4,22 +4,23 @@
 #include "AbilitySystemComponent.h"
 #include "Algo/ForEach.h"
 #include "Bag/Item.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/UseItemPayload.h"
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
-#include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "Ranges/Algorithm/ToArray.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Casting/InstanceOf.h"
+#include "Ranges/Pointers/MakeStrong.h"
+#include "Ranges/Pointers/ValidPtr.h"
+#include "Ranges/Utilities/WrapPointer.h"
 #include "Ranges/Views/CacheLast.h"
-#include "Ranges/Views/CastType.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
-#include "Ranges/Views/FilterValid.h"
 #include "Ranges/Views/Join.h"
-#include "Ranges/Views/MakeStrong.h"
 #include "Ranges/Views/Map.h"
 
 UBattleItemEffect::UBattleItemEffect() {
@@ -48,13 +49,16 @@ void UBattleItemEffect::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     ItemID = CastChecked<UUseItemPayload>(TriggerEventData->OptionalObject)->Item;
 
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
-    FRunningMessageSet Messages;
-    bShouldConsumeItem = ApplyGlobalEffect(User, Messages);
+    bShouldConsumeItem = ApplyGlobalEffect(User);
     auto Targets = FilterInvalidTargets(TriggerEventData);
-    Algo::ForEach(Targets, [&User, &Messages, this](const TScriptInterface<IBattler> &Target) {
-        bShouldConsumeItem |= ApplyEffectToTarget(User, Target, Messages);
+    Algo::ForEach(Targets, [&User, this](const TScriptInterface<IBattler> &Target) {
+        bShouldConsumeItem |= ApplyEffectToTarget(User, Target);
     });
-    DisplayResults(Messages);
+
+    ABattleSequencer::DisplayBattleMessages(this, [this] {
+        ensure(CurrentActorInfo != nullptr);
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+    });
 }
 
 void UBattleItemEffect::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
@@ -69,13 +73,11 @@ void UBattleItemEffect::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 }
 
 bool UBattleItemEffect::ApplyEffectToTarget_Implementation(const TScriptInterface<IBattler> &User,
-                                                           const TScriptInterface<IBattler> &Target,
-                                                           const FRunningMessageSet &Messages) {
+                                                           const TScriptInterface<IBattler> &Target) {
     return false;
 }
 
-bool UBattleItemEffect::ApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User,
-                                                         const FRunningMessageSet &Messages) {
+bool UBattleItemEffect::ApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User) {
     return false;
 }
 
@@ -84,8 +86,11 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 }
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
+    // clang-format on
     return TriggerEventData->TargetData.Data | UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           UE::Ranges::CacheLast | UE::Ranges::Join | UE::Ranges::MakeStrong | UE::Ranges::FilterValid |
-           UE::Ranges::Filter(&AActor::Implements<UBattler>) | UE::Ranges::CastType<IBattler> |
+           UE::Ranges::CacheLast | UE::Ranges::Join | UE::Ranges::Map(UE::Ranges::MakeStrongChecked) |
+           UE::Ranges::Filter(UE::Ranges::ValidPtr) | UE::Ranges::Filter(UE::Ranges::InstanceOf<IBattler>) |
+           UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IBattler>) |
            UE::Ranges::Filter(this, &UBattleItemEffect::IsTargetValid) | UE::Ranges::ToArray;
+    // clang-format off
 }

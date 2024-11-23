@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Status.h"
+#include "Mocking/UnrealMock.h"
 #include "Species/SpeciesData.h"
 #include <gmock/gmock.h>
 
 class FMockBattler : public IBattler {
-  public:
-    ~FMockBattler() override = default;
+    DECLARE_MOCK_INTERFACE(FMockBattler)
 
+  public:
     MOCK_METHOD3(Initialize,
                  TScriptInterface<IBattler>(const TScriptInterface<IBattleSide> &Side,
                                             const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately));
@@ -35,6 +36,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD2(GainExpAndEVs, FLevelUpStatChanges(int32 Exp, const TMap<FName, uint8> &EVs));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent *, GetAbilityComponent, (), (const, override));
+    MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));
     MOCK_METHOD(FText, GetRecallMessage, (), (const, override));
     MOCK_METHOD(FGameplayAbilitySpecHandle, PerformSwitch, (const TScriptInterface<IBattler> &SwitchTarget),

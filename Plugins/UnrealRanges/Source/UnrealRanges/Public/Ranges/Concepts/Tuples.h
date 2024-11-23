@@ -22,15 +22,16 @@ namespace UE::Ranges {
     } // namespace Detail
 
     template <typename T, size_t N>
-    concept HasTupleElement = requires(T Tuple) {
-        typename std::tuple_element_t<N, std::remove_const_t<T>>;
-        { get<N>(Tuple) } -> std::convertible_to<const std::tuple_element_t<N, T> &>;
+    concept HasTupleElement = requires(T &&Tuple) {
+        typename std::tuple_element_t<N, std::decay_t<T>>;
+        { get<N>(Tuple) } -> std::convertible_to<std::tuple_element_t<N, std::decay_t<T>>>;
     };
 
     template <typename T>
-    concept TupleLike = requires(T Tuple) {
-        typename std::tuple_size<T>;
-        requires std::derived_from<std::tuple_size<T>, std::integral_constant<size_t, std::tuple_size_v<T>>>;
+    concept TupleLike = requires {
+        typename std::tuple_size<std::decay_t<T>>;
+        requires std::derived_from<std::tuple_size<std::decay_t<T>>,
+                                   std::integral_constant<size_t, std::tuple_size_v<std::decay_t<T>>>>;
     };
 
     static_assert(std::tuple_size_v<TTuple<int32, bool, char>> == 3);

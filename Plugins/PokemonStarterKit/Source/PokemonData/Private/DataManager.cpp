@@ -3,7 +3,7 @@
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
 #include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 
@@ -12,7 +12,7 @@ FDataManager::FDataManager() {
     // clang-format off
     Settings->DataTables |
         UE::Ranges::Map(&FSoftObjectPath::TryLoad, nullptr) |
-        UE::Ranges::CastType<UDataTable> |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<UDataTable>) |
         UE::Ranges::ForEach([this](UDataTable *Table) {
             auto RowStruct = Table->GetRowStruct();
             if (RowStruct == nullptr) {

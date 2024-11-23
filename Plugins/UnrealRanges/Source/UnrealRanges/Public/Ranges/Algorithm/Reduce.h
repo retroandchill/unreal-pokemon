@@ -34,7 +34,7 @@ namespace UE::Ranges {
     struct FReduce {
 
         template <typename I, typename F, typename... A>
-            requires FunctionalType<F>
+            requires CanCreateBinding<F, A...>
         constexpr auto operator()(I &&Identity, F &&Functor, A &&...Args) const {
             using BindingType = decltype(CreateBinding<F, A...>(std::forward<F>(Functor), std::forward<A>(Args)...));
             return TTerminalClosure<TReduceInvoker<BindingType, I>>(TReduceInvoker<BindingType, I>(

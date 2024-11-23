@@ -4,14 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/GameplayStatics.h"
-#include "Ranges/Optional/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Casting/InstanceOf.h"
+#include "Ranges/Casting/StaticCast.h"
+#include "Ranges/Optional/FlatMap.h"
 #include "Ranges/Optional/GetValue.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Pointers/SoftObjectRef.h"
 #include "Ranges/RangeConcepts.h"
 #include "Ranges/Views/ContainerView.h"
+#include "Ranges/Views/Filter.h"
 #include "Ranges/Views/MapValue.h"
-#include "Ranges/Views/TryCast.h"
 #include "Service.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
@@ -41,7 +44,7 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
         // clang-format off
         return UE::Optionals::OfNullable(Services.Find(ServiceClass)) |
                UE::Optionals::Map(&TObjectPtr<UService>::Get) |
-               UE::Optionals::CastType<T> |
+               UE::Optionals::FlatMap(UE::Ranges::DynamicCast<T>) |
                UE::Optionals::GetValue;
         // clang-format on
     }
@@ -91,7 +94,8 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
         // clang-format off
         return Services |
             UE::Ranges::MapValue |
-            UE::Ranges::TryCast<T>;
+            UE::Ranges::Filter(UE::Ranges::InstanceOf<T>) |
+            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<T>);
         // clang-format on
     }
 

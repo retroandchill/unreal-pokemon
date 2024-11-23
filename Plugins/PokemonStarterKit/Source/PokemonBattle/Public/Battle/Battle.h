@@ -101,7 +101,7 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual void StartBattle() = 0;
 
-    virtual FRunningMessageSet OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
+    virtual void OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
 
     /**
      * Add an action to the pending queue
@@ -172,4 +172,6 @@ class POKEMONBATTLE_API IBattle {
      * @param Callback The callback to invoke when the battle ends
      */
     virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) = 0;
+
+    virtual void ClearOnBattleEnd() = 0;
 };

@@ -40,6 +40,7 @@ bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto Battler1 = Side1->GetBattlers()[0];
 
@@ -79,6 +80,7 @@ bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Paramet
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto Battler1 = Side1->GetBattlers()[0];
     Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetSpecialAttackStagesAttribute(),
@@ -120,6 +122,7 @@ bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -161,6 +164,7 @@ bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) 
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -201,6 +205,7 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];

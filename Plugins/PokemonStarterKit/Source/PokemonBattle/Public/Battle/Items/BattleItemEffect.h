@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 
-struct FRunningMessageSet;
 class IBattler;
 struct FItem;
 
@@ -44,29 +43,19 @@ class POKEMONBATTLE_API UBattleItemEffect : public UGameplayAbility {
     /**
      * Apply the global (no targets) effect of the item.
      * @param User The user of the item.
-     * @param Messages The running message (and animations) to display to the player for this usage
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
     UFUNCTION(BlueprintNativeEvent, Category = Effect)
-    bool ApplyGlobalEffect(const TScriptInterface<IBattler> &User, const FRunningMessageSet &Messages);
+    bool ApplyGlobalEffect(const TScriptInterface<IBattler> &User);
 
     /**
      * Apply the effect of the item to an individual target.
      * @param User The user of the item.
      * @param Target The target of the item in question
-     * @param Messages The running message (and animations) to display to the player for this usage
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
     UFUNCTION(BlueprintNativeEvent, Category = Effect)
-    bool ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target,
-                             const FRunningMessageSet &Messages);
-
-    /**
-     * Display the results of the items usage.
-     * @param Messages The messages to display to the player.
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = Display)
-    void DisplayResults(const FRunningMessageSet &Messages);
+    bool ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
 
     /**
      * Check if an individual target for the item is valid

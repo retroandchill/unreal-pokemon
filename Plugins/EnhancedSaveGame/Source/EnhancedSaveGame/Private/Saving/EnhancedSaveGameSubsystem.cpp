@@ -5,11 +5,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToMap.h"
+#include "Ranges/Casting/InstanceOf.h"
 #include "Ranges/Optional/GetValue.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Pointers/SoftObjectRef.h"
 #include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/FilterImplements.h"
+#include "Ranges/Views/Filter.h"
 #include "Saving/SaveableSubsystem.h"
 #include "Saving/Serialization/EnhancedSaveGame.h"
 
@@ -33,7 +34,8 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     auto SaveGame = NewObject<UEnhancedSaveGame>(GetGameInstance());
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
-    Subsystems | UE::Ranges::FilterImplements<ISaveableSubsystem> |
+    Subsystems |
+        UE::Ranges::Filter(UE::Ranges::InstanceOf<ISaveableSubsystem>) |
         UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
     // clang-format on
 
@@ -55,7 +57,8 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
                                               const FGameplayTagContainer &LoadTags) const {
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
-    Subsystems | UE::Ranges::FilterImplements<ISaveableSubsystem> |
+    Subsystems |
+        UE::Ranges::Filter(UE::Ranges::InstanceOf<ISaveableSubsystem>) |
         UE::Ranges::ForEach(&ISaveableSubsystem::Execute_LoadSaveData, SaveGame, LoadTags);
     // clang-format on
 

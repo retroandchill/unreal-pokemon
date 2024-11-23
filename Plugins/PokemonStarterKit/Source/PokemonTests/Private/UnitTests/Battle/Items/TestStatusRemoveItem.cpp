@@ -37,6 +37,7 @@ bool TestStatusRemoveItem::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
+    Battle->ClearOnBattleEnd();
 
     auto Battler1 = Side1->GetBattlers()[0];
     UE_ASSERT_TRUE(Battler1->GetStatusEffect().IsSet());

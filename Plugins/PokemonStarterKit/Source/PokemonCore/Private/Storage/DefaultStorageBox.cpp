@@ -3,12 +3,11 @@
 #include "Storage/DefaultStorageBox.h"
 #include "Pokemon/Pokemon.h"
 #include "Ranges/Algorithm/AllOf.h"
-#include "Ranges/Algorithm/AnyOf.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Optional/Map.h"
 #include "Ranges/Optional/OptionalClosure.h"
 #include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Map.h"
 #include "Storage/StorageBoxDTO.h"
@@ -51,7 +50,7 @@ FStorageBoxDTO UDefaultStorageBox::ToDTO() const {
                              return UE::Optionals::OfNullable(Pokemon) |
                                     UE::Optionals::Map(&IPokemon::ToDTO);
                          }) |
-                         UE::Ranges::Construct<FStorageSlot>() |
+                         UE::Ranges::Map(UE::Ranges::Construct<FStorageSlot>) |
                          UE::Ranges::ToArray
         // clang-format on
     };

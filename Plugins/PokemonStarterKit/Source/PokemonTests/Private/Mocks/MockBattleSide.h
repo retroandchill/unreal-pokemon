@@ -4,15 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Battle/BattleSide.h"
+#include "Mocking/UnrealMock.h"
 #include <gmock/gmock.h>
 
 /**
  *
  */
 class FMockBattleSide : public IBattleSide {
-  public:
-    ~FMockBattleSide() override = default;
+    DECLARE_MOCK_INTERFACE(FMockBattleSide)
 
+  public:
     MOCK_METHOD3(Initialize, TScriptInterface<IBattleSide>(const TScriptInterface<IBattle> &Battle,
                                                            const TArray<TScriptInterface<IPokemon>> &Pokemon,
                                                            bool ShowBackSprites));
@@ -21,6 +22,8 @@ class FMockBattleSide : public IBattleSide {
                                                            uint8 PokemonCount, bool ShowBackSprites));
     MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IBattle> &, GetOwningBattle, (), (const, override));
+    MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));
+    MOCK_METHOD(UE::Ranges::TAnyView<UTurnBasedEffectComponent *>, GetChildEffectComponents, (), (const, override));
     MOCK_METHOD(uint8, GetSideSize, (), (const, override));
     MOCK_METHOD(const FText &, GetIntroText, (), (const, override));
     MOCK_METHOD(const TOptional<FText> &, GetSendOutText, (), (const, override));

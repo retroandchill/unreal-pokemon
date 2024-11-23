@@ -15,6 +15,7 @@
 #include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
@@ -32,10 +33,9 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-#include "range/v3/view/filter.hpp"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Construct.h"
+#include "Ranges/Utilities/Construct.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
@@ -55,6 +55,7 @@ TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Mo
 
 ABattlerActor::ABattlerActor() {
     BattlerAbilityComponent = CreateDefaultSubobject<UBattlerAbilityComponent>("BattlerAbilityComponent");
+    TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
     InnateAbilities.Add(UInnate_CriticalHitDamage::StaticClass());
     InnateAbilities.Add(UInnate_MultiTargetDamageSplit::StaticClass());
     InnateAbilities.Add(UInnate_DamageSwing::StaticClass());
@@ -150,7 +151,7 @@ void ABattlerActor::BeginPlay() {
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     // clang-format off
     InnateAbilityHandles = InnateAbilities |
-                           UE::Ranges::Construct<FGameplayAbilitySpec>(1, INDEX_NONE, this) |
+                           UE::Ranges::Map(UE::Ranges::Construct<FGameplayAbilitySpec>, 1, INDEX_NONE, this) |
                            UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
                            UE::Ranges::ToArray;
     InnateEffectHandles = InnateEffects |
@@ -305,6 +306,10 @@ TArray<FName> ABattlerActor::GetTypes() const {
 
 UBattlerAbilityComponent *ABattlerActor::GetAbilityComponent() const {
     return BattlerAbilityComponent;
+}
+
+UTurnBasedEffectComponent *ABattlerActor::GetTurnBasedEffectComponent() const {
+    return TurnBasedEffectComponent;
 }
 
 const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {

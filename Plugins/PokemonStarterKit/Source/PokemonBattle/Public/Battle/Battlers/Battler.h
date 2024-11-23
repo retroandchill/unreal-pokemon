@@ -13,6 +13,7 @@
 
 #include "Battler.generated.h"
 
+class UTurnBasedEffectComponent;
 class IBattler;
 struct FSpeciesData;
 class UBattlerAbilityComponent;
@@ -218,6 +219,13 @@ class POKEMONBATTLE_API IBattler {
      */
     UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
     virtual UBattlerAbilityComponent *GetAbilityComponent() const = 0;
+
+    /**
+     * Retrieve the component responsible for handling turn-based effects.
+     * @return A pointer to the UTurnBasedEffectComponent associated with this battler.
+     */
+    UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
+    virtual UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const = 0;
 
     /**
      * Get the Pokémon's currently usable moves.

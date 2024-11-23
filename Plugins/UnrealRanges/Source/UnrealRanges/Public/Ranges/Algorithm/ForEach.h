@@ -21,7 +21,9 @@ namespace UE::Ranges {
          * Construct a new invoker from the provided functor.
          * @param Functor The functor to call back on.
          */
-        constexpr explicit TForEachInvoker(F &&Functor) : Functor(std::move(Functor)) {
+        template <typename T>
+            requires std::constructible_from<F, T> && (!std::same_as<std::decay_t<T>, TForEachInvoker>)
+        constexpr explicit TForEachInvoker(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
@@ -29,7 +31,7 @@ namespace UE::Ranges {
          * @tparam R The type of range that was passed through
          * @param Range The range to iterate over.
          */
-        template <typename R>
+        template <typename R, typename T = ranges::range_common_reference_t<R>>
             requires ranges::input_range<R>
         void operator()(R &&Range) const {
             ranges::for_each(std::forward<R>(Range), Functor);
@@ -59,6 +61,7 @@ namespace UE::Ranges {
          * @return The bound closure.
          */
         template <typename... A>
+            requires CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = decltype(CreateBinding<A...>(std::forward<A>(Args)...));
             return TTerminalClosure<TForEachInvoker<BindingType>>(

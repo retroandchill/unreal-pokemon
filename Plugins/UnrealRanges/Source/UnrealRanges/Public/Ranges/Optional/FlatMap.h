@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "OptionalClosure.h"
 #include "Ranges/Functional/Bindings.h"
-#include "Ranges/RangeConcepts.h"
+#include "Ranges/Utilities/ForwardLike.h"
 #include "Types.h"
 #include "Utilities.h"
 
@@ -27,7 +27,7 @@ namespace UE::Optionals {
          */
         template <typename O>
             requires UEOptional<O>
-        constexpr auto operator()(O &&Optional) const {
+        constexpr decltype(auto) operator()(O &&Optional) const {
             using ContainedType = decltype(*Optional);
             if constexpr (std::is_lvalue_reference_v<TContainedOptionalType<O>> &&
                           std::invocable<F, TNullableValue<O>>) {
@@ -53,6 +53,7 @@ namespace UE::Optionals {
     struct FFlatMap {
 
         template <typename... A>
+            requires Ranges::CanCreateBinding<A...>
         constexpr auto operator()(A &&...Args) const {
             using BindingType = std::decay_t<decltype(Ranges::CreateBinding<A...>(std::forward<A>(Args)...))>;
             return TOptionalClosure<TFlatMapInvoker<BindingType>>(

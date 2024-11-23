@@ -10,7 +10,8 @@
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
 #include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/CastType.h"
+#include "Ranges/Casting/DynamicCast.h"
+#include "Ranges/Utilities/WrapPointer.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
@@ -224,7 +225,7 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
     return Results |
            UE::Ranges::Map(&FOverlapResult::GetActor) |
            UE::Ranges::Filter(&AActor::Implements<UInteractable>) |
-           UE::Ranges::CastType<IInteractable> |
+           UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IInteractable>) |
            UE::Ranges::ToArray;
     // clang-format on
 }

@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
@@ -30,7 +31,8 @@ void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     TScriptInterface<IBattler> Battler = GetCurrentActorInfo()->AvatarActor.Get();
     check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
-    PlayRecallAnimation(Battler);
+    QueueRecallAnimation(Battler);
+    ABattleSequencer::DisplayBattleMessages(this, &USwitchActionBase::SwapWithTarget);
 }
 
 void USwitchActionBase::SwapWithTarget() {
@@ -42,11 +44,15 @@ void USwitchActionBase::SwapWithTarget() {
 
     auto TargetActor = CastChecked<AActor>(SwapTarget.GetObject());
     TargetActor->SetActorTransform(ActorInfo.AvatarActor->GetActorTransform());
-    PlaySendOutAnimation(SwapTarget);
+    QueueSendOutAnimation(SwapTarget);
+    ABattleSequencer::DisplayBattleMessages(this, &USwitchActionBase::TriggerOnSendOut);
 }
 
 void USwitchActionBase::TriggerOnSendOut() {
     auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
-    auto Messages = Battle->OnBattlersEnteringBattle(UE::Ranges::Single(SwapTarget));
-    DisplaySwitchInEffects(SwapTarget, Messages);
+    Battle->OnBattlersEnteringBattle(UE::Ranges::Single(SwapTarget));
+    ABattleSequencer::DisplayBattleMessages(this, [this] {
+        ensure(CurrentActorInfo != nullptr);
+        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+    });
 }

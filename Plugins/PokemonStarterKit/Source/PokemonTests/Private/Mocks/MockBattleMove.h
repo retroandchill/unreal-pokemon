@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Moves/BattleMove.h"
+#include "Mocking/UnrealMock.h"
 #include "Moves/Target.h"
 #include <gmock/gmock.h>
 
@@ -11,9 +12,9 @@
  *
  */
 class FMockBattleMove : public IBattleMove {
-  public:
-    ~FMockBattleMove() override = default;
+    DECLARE_MOCK_INTERFACE(FMockBattleMove)
 
+  public:
     MOCK_METHOD2(Initialize, TScriptInterface<IBattleMove>(const TScriptInterface<IBattler> &Battler,
                                                            const TScriptInterface<IMove> &Move));
     MOCK_METHOD(int32, GetBasePower, (), (const, override));
