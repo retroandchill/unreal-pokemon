@@ -24,7 +24,7 @@ namespace UE::Optionals {
     struct FIsSet {
         template <typename O>
             requires UEOptional<O>
-        constexpr bool operator()(O&& Optional) const {
+        constexpr bool operator()(O &&Optional) const {
             return Optional.IsSet();
         }
     };
@@ -43,4 +43,4 @@ namespace UE::Optionals {
      * by abstracting the complexity of condition evaluations.
      */
     constexpr TOptionalClosure<FIsSet> IsSet;
-}
+} // namespace UE::Optionals

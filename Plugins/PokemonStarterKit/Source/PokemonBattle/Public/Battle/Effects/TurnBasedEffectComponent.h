@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
-#include "Components/ActorComponent.h"
 #include "Battle/Effects/TurnBasedGameplayEffect.h"
+#include "Battle/Events/BattleMessage.h"
+#include "Components/ActorComponent.h"
 #include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/MapValue.h"
-#include "Battle/Events/BattleMessage.h"
 
 #include "TurnBasedEffectComponent.generated.h"
 
@@ -18,13 +18,14 @@ class UAbilitySystemComponent;
 
 /**
  * UTurnBasedEffectComponent is a component class that manages turn-based gameplay effects in a turn-based game.
- * It inherits from UActorComponent and integrates with the AbilitySystemComponent to apply and manage effects based on game turns.
+ * It inherits from UActorComponent and integrates with the AbilitySystemComponent to apply and manage effects based on
+ * game turns.
  */
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent {
     GENERATED_BODY()
 
-public:
+  public:
     void BeginPlay() override;
 
     /**
@@ -67,7 +68,7 @@ public:
         // clang-format on
     }
 
-private:
+  private:
     /**
      * AbilitySystemComponent is a reference to the UAbilitySystemComponent associated with this component.
      * It is used to apply and manage gameplay abilities and effects.

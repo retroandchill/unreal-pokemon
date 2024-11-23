@@ -32,7 +32,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     concept UnrealPointer = requires(T &&Ptr) {
-        {  Ptr.Get() } -> RawPointer;
+        { Ptr.Get() } -> RawPointer;
     };
 
     /**
@@ -41,11 +41,12 @@ namespace UE::Ranges {
      * @tparam T The type to check
      */
     template <typename T>
-    concept Pointer = RawPointer<std::decay_t<T>> || StdPointer<T> || UnrealPointer<T> || std::derived_from<std::decay_t<T>, FScriptInterface>;
+    concept Pointer = RawPointer<std::decay_t<T>> || StdPointer<T> || UnrealPointer<T> ||
+                      std::derived_from<std::decay_t<T>, FScriptInterface>;
 
     // We want to disable unreachable warnings because this function can fail for some reason
     PRAGMA_DISABLE_UNREACHABLE_CODE_WARNINGS
-    
+
     /**
      * Returns the raw pointer from a given pointer type. The pointer type can be a raw pointer,
      * a standard library smart pointer, or an Unreal Engine pointer type.
@@ -57,7 +58,8 @@ namespace UE::Ranges {
      *            - Unreal Engine smart pointer (e.g., TSharedPtr, TWeakPtr)
      *            - FScriptInterface
      *
-     * @return The raw pointer of type T. If the input pointer type is not recognized, the function will call Unreachable().
+     * @return The raw pointer of type T. If the input pointer type is not recognized, the function will call
+     * Unreachable().
      */
     template <typename T>
         requires Pointer<T>
@@ -165,8 +167,8 @@ namespace UE::Ranges {
      * @tparam U The target type
      */
     template <typename T, typename U>
-    concept DereferencesTo = requires(T&& Ptr) {
-        { *Ptr } -> std::convertible_to<U&>;
+    concept DereferencesTo = requires(T &&Ptr) {
+        { *Ptr } -> std::convertible_to<U &>;
     };
 
     /**
@@ -183,7 +185,7 @@ namespace UE::Ranges {
      * @tparam T The pointer type
      */
     template <typename T>
-    concept DereferencesToInterface  = requires(T &&Ptr) {
+    concept DereferencesToInterface = requires(T &&Ptr) {
         { *Ptr } -> InterfaceReference;
     };
 } // namespace UE::Ranges

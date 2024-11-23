@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "ScopedTestComponent.h"
-#include "ScopedTimeDilationComponent.generated.h"
 
+#include "ScopedTimeDilationComponent.generated.h"
 
 /**
  * @brief A component that applies a scoped time dilation effect to a functional test.
@@ -17,14 +17,14 @@
  * @ingroup FunctionalTesting
  * @blueprintspawnable
  */
-UCLASS(ClassGroup=(FunctionalTesting), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (FunctionalTesting), meta = (BlueprintSpawnableComponent))
 class UNREALRANGESTESTS_API UScopedTimeDilationComponent : public UScopedTestComponent {
     GENERATED_BODY()
 
-public:
-    void AddScopedComponent(AScopedFunctionalTest& TestObject) override;
+  public:
+    void AddScopedComponent(AScopedFunctionalTest &TestObject) override;
 
-private:
+  private:
     /**
      * @brief Factor by which time is dilated.
      *
@@ -40,5 +40,4 @@ private:
      */
     UPROPERTY(EditAnywhere, Category = TimeDilation, meta = (UIMin = 0.0001f, ClampMin = 0.0001f))
     float TimeDilationFactor = 1.0f;
-
 };

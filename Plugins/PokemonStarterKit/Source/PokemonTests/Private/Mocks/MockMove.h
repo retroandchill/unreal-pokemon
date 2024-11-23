@@ -11,7 +11,7 @@
 
 class FMockMove : public IMove {
     DECLARE_MOCK_INTERFACE(FMockMove)
-    
+
   public:
     MOCK_METHOD(const FMoveData &, GetMoveData, (), (const, override));
     MOCK_METHOD(FName, GetType, (), (const, override));

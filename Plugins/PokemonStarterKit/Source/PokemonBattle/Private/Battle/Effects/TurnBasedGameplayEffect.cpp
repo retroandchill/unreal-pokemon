@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Effects/TurnBasedGameplayEffect.h"
 #include "AbilitySystemComponent.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
@@ -14,18 +13,10 @@
 #include "Ranges/Utilities/Comparison.h"
 
 FTurnBasedGameplayEffect::FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent,
-                                                   FActiveGameplayEffectHandle EffectHandle,
-                                                   int32 TurnDuration) : OwningComponent(OwningComponent),
-                                                                         EffectHandle(EffectHandle),
-                                                                         GameplayEffect(
-                                                                             OwningComponent->
-                                                                             GetAbilitySystemComponent()->
-                                                                             GetGameplayEffectCDO(EffectHandle)),
-                                                                         TurnsRemaining(
-                                                                             TurnDuration > 0
-                                                                                 ? TOptional(TurnDuration)
-                                                                                 : TOptional<int32>()) {
-
+                                                   FActiveGameplayEffectHandle EffectHandle, int32 TurnDuration)
+    : OwningComponent(OwningComponent), EffectHandle(EffectHandle),
+      GameplayEffect(OwningComponent->GetAbilitySystemComponent()->GetGameplayEffectCDO(EffectHandle)),
+      TurnsRemaining(TurnDuration > 0 ? TOptional(TurnDuration) : TOptional<int32>()) {
 }
 
 bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
@@ -41,10 +32,8 @@ bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
 bool FTurnBasedGameplayEffect::IncrementTurnCount() {
     TurnsActive++;
     // clang-format
-    return TurnsRemaining |
-           UE::Optionals::Filter(UE::Ranges::GreaterThan, TurnsActive) |
-           UE::Optionals::Map([this](auto) { return RemoveEffect(); }) |
-           UE::Optionals::OrElse(false);
+    return TurnsRemaining | UE::Optionals::Filter(UE::Ranges::GreaterThan, TurnsActive) |
+           UE::Optionals::Map([this](auto) { return RemoveEffect(); }) | UE::Optionals::OrElse(false);
     // clang-format off
 }
 

@@ -45,13 +45,12 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
 }
 
 FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
-    return {
-        // clang-format off
+    return {// clang-format off
         .Boxes = Boxes |
                  UE::Ranges::Map(&IStorageBox::ToDTO) |
                  UE::Ranges::ToArray,
-        // clang-format on
-        .CurrentBoxIndex = CurrentBoxIndex};
+            // clang-format on
+            .CurrentBoxIndex = CurrentBoxIndex};
 }
 
 int32 UDefaultStorageSystem::GetBoxCount() const {

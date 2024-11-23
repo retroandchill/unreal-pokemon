@@ -29,7 +29,6 @@ static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattl
 AActiveSide::AActiveSide() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));
     TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
-    
 }
 
 TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
@@ -125,14 +124,13 @@ const TScriptInterface<IBattle> &AActiveSide::GetOwningBattle() const {
     return OwningBattle;
 }
 
-UTurnBasedEffectComponent * AActiveSide::GetTurnBasedEffectComponent() const {
+UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
     return TurnBasedEffectComponent;
 }
 
 UE::Ranges::TAnyView<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
     auto MyComponent = UE::Ranges::Single(TurnBasedEffectComponent.Get());
-    auto BattlerComponents = Battlers |
-        UE::Ranges::Map(&IBattler::GetTurnBasedEffectComponent);
+    auto BattlerComponents = Battlers | UE::Ranges::Map(&IBattler::GetTurnBasedEffectComponent);
     return UE::Ranges::Concat(std::move(MyComponent), std::move(BattlerComponents));
 }
 

@@ -12,10 +12,10 @@ namespace UE::Ranges {
      * @tparam U The type of the right-hand side
      */
     template <typename T, typename U = T>
-    concept InequalityComparable = requires(const T& LHS, const U& RHS) {
+    concept InequalityComparable = requires(const T &LHS, const U &RHS) {
         { LHS != RHS } -> std::convertible_to<bool>;
     };
-    
+
     /**
      * Checks if the two types have the less than (<) operator.
      *
@@ -23,7 +23,7 @@ namespace UE::Ranges {
      * @tparam U The type of the right-hand side
      */
     template <typename T, typename U = T>
-    concept LessThanComparable = requires(const T& LHS, const U& RHS) {
+    concept LessThanComparable = requires(const T &LHS, const U &RHS) {
         { LHS < RHS } -> std::convertible_to<bool>;
     };
 
@@ -34,7 +34,7 @@ namespace UE::Ranges {
      * @tparam U The type of the right-hand side
      */
     template <typename T, typename U = T>
-    concept LessThanOrEqualComparable = requires(const T& LHS, const U& RHS) {
+    concept LessThanOrEqualComparable = requires(const T &LHS, const U &RHS) {
         { LHS <= RHS } -> std::convertible_to<bool>;
     };
 
@@ -45,7 +45,7 @@ namespace UE::Ranges {
      * @tparam U The type of the right-hand side
      */
     template <typename T, typename U = T>
-    concept GreaterThanComparable = requires(const T& LHS, const U& RHS) {
+    concept GreaterThanComparable = requires(const T &LHS, const U &RHS) {
         { LHS > RHS } -> std::convertible_to<bool>;
     };
 
@@ -56,7 +56,7 @@ namespace UE::Ranges {
      * @tparam U The type of the right-hand side
      */
     template <typename T, typename U = T>
-    concept GreaterThanOrEqualComparable = requires(const T& LHS, const U& RHS) {
+    concept GreaterThanOrEqualComparable = requires(const T &LHS, const U &RHS) {
         { LHS >= RHS } -> std::convertible_to<bool>;
     };
-}
+} // namespace UE::Ranges

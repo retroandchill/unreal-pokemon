@@ -15,7 +15,7 @@ namespace UE::Ranges {
      * Bind the supplied functor with the rear-most arguments being bound to the specified values. This works similarly
      * to ranges::bind_back except that it can work with no arguments supplied, which will simply return the functor
      * back to the caller.
-     * 
+     *
      * @tparam F The functor to bind back to.
      * @tparam A The types of the arguments
      * @param Functor The functor to bind
@@ -32,7 +32,6 @@ namespace UE::Ranges {
         }
     }
 
-    
     /**
      * Creates a binding of a functor with the specified arguments.
      *
@@ -95,7 +94,7 @@ namespace UE::Ranges {
      * @tparam A The parameters for the bindings
      */
     template <typename... A>
-    concept CanCreateBinding = requires(A&&... Args) {
+    concept CanCreateBinding = requires(A &&...Args) {
         { CreateBinding(std::forward<A>(Args)...) } -> FunctionalType;
     };
 
@@ -112,7 +111,7 @@ namespace UE::Ranges {
 
 /**
  * Shorthand for creating a wrapped reference value
- * 
+ *
  * @param Value The value to turn into a std::reference_wrapper instance.
  */
 #define REF(Value) std::reference_wrapper(Value)

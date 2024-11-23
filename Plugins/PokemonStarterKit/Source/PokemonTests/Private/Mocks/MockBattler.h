@@ -3,15 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Mocking/UnrealMock.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Status.h"
+#include "Mocking/UnrealMock.h"
 #include "Species/SpeciesData.h"
 #include <gmock/gmock.h>
 
 class FMockBattler : public IBattler {
     DECLARE_MOCK_INTERFACE(FMockBattler)
-    
+
   public:
     MOCK_METHOD3(Initialize,
                  TScriptInterface<IBattler>(const TScriptInterface<IBattleSide> &Side,

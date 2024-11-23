@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Animations/AnimationActor.h"
 
 void AAnimationActor::BindDelegateToAnimationComplete_Implementation(const FBattleAnimationCompleteCallback &Delegate) {

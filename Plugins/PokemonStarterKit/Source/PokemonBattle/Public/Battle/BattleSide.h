@@ -70,7 +70,7 @@ class POKEMONBATTLE_API IBattleSide {
     UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
     virtual UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const = 0;
 
-    virtual UE::Ranges::TAnyView<UTurnBasedEffectComponent*> GetChildEffectComponents() const = 0;
+    virtual UE::Ranges::TAnyView<UTurnBasedEffectComponent *> GetChildEffectComponents() const = 0;
 
     /**
      * The capacity for battlers on a given side.

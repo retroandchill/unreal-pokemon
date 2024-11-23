@@ -40,4 +40,4 @@ namespace UE::Ranges {
      * This object can be used to determine if a pointer is valid based on its type and dereferenced value.
      */
     constexpr FValidPtr ValidPtr;
-}
+} // namespace UE::Ranges

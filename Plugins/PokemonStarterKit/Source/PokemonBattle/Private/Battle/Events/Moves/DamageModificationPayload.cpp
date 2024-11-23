@@ -3,17 +3,14 @@
 #include "Battle//Events/Moves/DamageModificationPayload.h"
 
 FDamageCalculationData::FDamageCalculationData(const TScriptInterface<IBattler> &User,
-                                               const TScriptInterface<IBattler> &Target, int32 TargetCount,
-                                               FName Type, int32 BasePower)
-    : User(User), Target(Target), TargetCount(TargetCount), Type(Type),
-      BasePower(BasePower) {
+                                               const TScriptInterface<IBattler> &Target, int32 TargetCount, FName Type,
+                                               int32 BasePower)
+    : User(User), Target(Target), TargetCount(TargetCount), Type(Type), BasePower(BasePower) {
 }
 
 UDamageModificationPayload *UDamageModificationPayload::Create(const TScriptInterface<IBattler> &User,
                                                                const TScriptInterface<IBattler> &Target,
-                                                               int32 TargetCount,
-                                                               FName Type,
-                                                               int32 BasePower) {
+                                                               int32 TargetCount, FName Type, int32 BasePower) {
     auto Ret = NewObject<UDamageModificationPayload>();
     Ret->Data = MakeShared<FDamageCalculationData>(User, Target, TargetCount, Type, BasePower);
     return Ret;

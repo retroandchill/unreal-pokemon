@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
-#include "UObject/Object.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "UObject/Object.h"
 
 #include "TurnBasedGameplayEffect.generated.h"
 
@@ -69,7 +69,8 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      * @param TurnDuration Number of turns the effect should last. Defaults to INDEX_NONE.
      * @return A new instance of FTurnBasedGameplayEffect.
      */
-    FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent, FActiveGameplayEffectHandle EffectHandle, int32 TurnDuration = INDEX_NONE);
+    FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent, FActiveGameplayEffectHandle EffectHandle,
+                             int32 TurnDuration = INDEX_NONE);
 
     /**
      * @brief Retrieves the owning component of the turn-based effect.
@@ -80,7 +81,7 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return An optional reference to the owning UTurnBasedEffectComponent.
      */
-    TOptional<UTurnBasedEffectComponent&> GetOwningComponent() const {
+    TOptional<UTurnBasedEffectComponent &> GetOwningComponent() const {
         return OwningComponent.Get();
     }
 
@@ -92,7 +93,7 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return A constant reference to the FActiveGameplayEffectHandle.
      */
-    const FActiveGameplayEffectHandle & GetEffectHandle() const {
+    const FActiveGameplayEffectHandle &GetEffectHandle() const {
         return EffectHandle;
     }
 
@@ -105,7 +106,7 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return A constant pointer to the UGameplayEffect.
      */
-    const UGameplayEffect* GetGameplayEffect() const {
+    const UGameplayEffect *GetGameplayEffect() const {
         return GameplayEffect;
     }
 
@@ -128,7 +129,7 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return A constant reference to an optional integer containing the number of turns remaining.
      */
-    const TOptional<int32> & GetTurnsRemaining() const {
+    const TOptional<int32> &GetTurnsRemaining() const {
         return TurnsRemaining;
     }
 
@@ -153,20 +154,19 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      * @return True if the effect is removed after the increment; otherwise, false.
      */
     bool IncrementTurnCount();
-    
 
-private:
+  private:
     bool RemoveEffect(int32 StacksToRemove = -1);
-    
+
     UPROPERTY()
     TWeakObjectPtr<UTurnBasedEffectComponent> OwningComponent;
-    
+
     UPROPERTY()
     FActiveGameplayEffectHandle EffectHandle;
 
     UPROPERTY()
     TObjectPtr<const UGameplayEffect> GameplayEffect;
-    
+
     UPROPERTY()
     int32 TurnsActive = 0;
 

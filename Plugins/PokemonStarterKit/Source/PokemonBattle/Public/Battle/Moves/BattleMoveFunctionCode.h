@@ -207,8 +207,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param Targets The target of the move in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
-    void QueueMoveAnimation(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets);
+    void QueueMoveAnimation(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -304,7 +303,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param Targets The targets of the move in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Damage")
-    void AddDamageDisplayAnimations(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    void AddDamageDisplayAnimations(const TScriptInterface<IBattler> &User,
+                                    const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Apply any move effects to the targets
@@ -339,7 +339,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
 
     /**
      * Perform a faint check on the user and targets before applying the additional effects
-     * 
+     *
      * @param User The user of the move
      * @param Targets the targets of the move
      */
@@ -382,7 +382,6 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      */
     void EndMove(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
 
-    
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void AddExpGainSequence(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Target);
 

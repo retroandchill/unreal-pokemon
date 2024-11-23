@@ -91,8 +91,7 @@ struct POKEMONBATTLE_API FDamageCalculationData {
  * The payload used during damage modification.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UDamageModificationPayload : public UObject,
-                                                     public ITargetedMoveEventPayload {
+class POKEMONBATTLE_API UDamageModificationPayload : public UObject, public ITargetedMoveEventPayload {
     GENERATED_BODY()
 
   public:
@@ -105,8 +104,8 @@ class POKEMONBATTLE_API UDamageModificationPayload : public UObject,
      * @param BasePower The base power of the move
      */
     static UDamageModificationPayload *Create(const TScriptInterface<IBattler> &User,
-                                              const TScriptInterface<IBattler> &Target, int32 TargetCount,
-                                              FName Type, int32 BasePower);
+                                              const TScriptInterface<IBattler> &Target, int32 TargetCount, FName Type,
+                                              int32 BasePower);
 
     /**
      * Get the wrapped payload struct

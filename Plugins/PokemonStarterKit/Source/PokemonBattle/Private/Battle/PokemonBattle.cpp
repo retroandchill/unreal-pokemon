@@ -3,15 +3,15 @@
 #include "Battle/PokemonBattle.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
-#include "Battle/Animations/BattleSequencer.h"
-#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Pokemon/Pokemon.h"
@@ -155,9 +155,7 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
 
 bool APokemonBattle::ActionSelectionFinished() const {
     return Algo::NoneOf(ExpectedActionCount,
-                        [this](const TPair<FGuid, uint8> &Pair) {
-                            return CurrentActionCount[Pair.Key] < Pair.Value;
-                        });
+                        [this](const TPair<FGuid, uint8> &Pair) { return CurrentActionCount[Pair.Key] < Pair.Value; });
 }
 
 #if WITH_EDITOR
@@ -197,9 +195,7 @@ UE::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattle
 void APokemonBattle::ExecuteAction(IBattleAction &Action) {
     bActionTextDisplayed = true;
     QueueDisplayAction(Action.GetActionMessage());
-    ABattleSequencer::DisplayBattleMessages(this, [this] {
-        ExecuteAction();
-    });
+    ABattleSequencer::DisplayBattleMessages(this, [this] { ExecuteAction(); });
 }
 
 bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) {

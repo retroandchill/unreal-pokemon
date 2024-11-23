@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "FunctionalTesting/ScopedTestComponent.h"
-#include "SaveSystemTestComponent.generated.h"
 
+#include "SaveSystemTestComponent.generated.h"
 
 /**
  * @class USaveSystemTestComponent
@@ -14,12 +14,10 @@
  * Inherits from UScopedTestComponent to integrate enhanced save game functionality
  * within the Unreal Engine testing framework.
  */
-UCLASS(ClassGroup=(FunctionalTest), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (FunctionalTest), meta = (BlueprintSpawnableComponent))
 class ENHANCEDSAVEGAMETESTS_API USaveSystemTestComponent : public UScopedTestComponent {
     GENERATED_BODY()
 
-public:
-    void AddScopedComponent(AScopedFunctionalTest& TestObject) override;
-
-
+  public:
+    void AddScopedComponent(AScopedFunctionalTest &TestObject) override;
 };

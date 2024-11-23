@@ -100,7 +100,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UBattlerAbilityComponent *GetAbilityComponent() const override;
 
     UFUNCTION(BlueprintPure, Category = GameplayAbilities)
-    UTurnBasedEffectComponent* GetTurnBasedEffectComponent() const override;
+    UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const override;
 
     UFUNCTION(BlueprintPure, Category = Moves)
     const TArray<TScriptInterface<IBattleMove>> &GetMoves() const override;

@@ -10,9 +10,8 @@
 
 class FMockPartyScreen : public IPartyScreen {
     DECLARE_MOCK_INTERFACE(FMockPartyScreen)
-    
-  public:
 
+  public:
     MOCK_METHOD(void, BeginSwitch, (int32 Index), (override));
     MOCK_METHOD(APlayerController *, GetPlayerController, (), (const, override));
     MOCK_METHOD(FOnPokemonSelected &, GetOnPokemonSelect, (), (override));

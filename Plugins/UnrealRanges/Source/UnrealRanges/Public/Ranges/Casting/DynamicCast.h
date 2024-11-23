@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/RangeConcepts.h"
 #include "Ranges/Concepts/Pointers.h"
 #include "Ranges/Pointers/ValidPtr.h"
+#include "Ranges/RangeConcepts.h"
 
 namespace UE::Ranges {
     /**
@@ -13,13 +13,14 @@ namespace UE::Ranges {
      * Provides a series of operator() overloads to perform dynamic casts with validation.
      * Casting can be done in either checked or unchecked mode, based on the template parameter `bChecked`.
      *
-     * @tparam T The type to cast to. This must derive from either UObject, FField, or satisfy the UnrealInterface concept.
+     * @tparam T The type to cast to. This must derive from either UObject, FField, or satisfy the UnrealInterface
+     * concept.
      * @tparam bChecked A boolean indicating whether casts should perform runtime checks.
      */
     template <typename T, bool bChecked = false>
         requires std::derived_from<T, UObject> || UnrealInterface<T> || std::derived_from<T, FField>
     struct TDynamicCast {
-        
+
         /**
          * @brief Functor for casting objects within the Unreal Engine framework.
          *
@@ -39,28 +40,33 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires std::derived_from<U, UObject> || UnrealInterface<U>
-        constexpr decltype(auto) operator()(U& Object) const requires std::derived_from<T, UObject> {
+                                                  constexpr decltype(auto) operator()(U &Object) const
+                         requires std::derived_from<T, UObject>
+        {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, no need to actually cast
-                return static_cast<T&>(Object);
+                return static_cast<T &>(Object);
             } else if constexpr (bChecked) {
                 return *CastChecked<T>(&Object);
             } else {
-                return TOptional<T&>(Cast<T>(&Object));
+                return TOptional<T &>(Cast<T>(&Object));
             }
         }
 
         /**
          * @brief Functor for casting objects within the Unreal Engine framework.
          *
-         * @tparam U The type of the object being cast. It must be a derived type of UObject or satisfy UnrealInterface<T> concept.
+         * @tparam U The type of the object being cast. It must be a derived type of UObject or satisfy
+         * UnrealInterface<T> concept.
          * @param Object Reference to the object to be cast.
          * @return The casted object or an optional reference to the casted object depending on the template parameters.
          *
          */
         template <typename U>
             requires std::derived_from<U, UObject> || UnrealInterface<U>
-        constexpr decltype(auto) operator()(U& Object) const requires UnrealInterface<T> {
+                                                  constexpr decltype(auto) operator()(U &Object) const
+                         requires UnrealInterface<T>
+        {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, no need to actually cast
                 return TScriptInterface<T>(&Object);
@@ -71,26 +77,27 @@ namespace UE::Ranges {
                 } else {
                     return *CastChecked<T>(&Object);
                 }
-                
+
             } else {
                 if constexpr (std::derived_from<U, UObject>) {
                     if (!Object.template Implements<typename T::UClassType>()) {
                         return TScriptInterface<T>(nullptr);
                     }
-                    
+
                     return TScriptInterface<T>(&Object);
                 } else {
-                    return TOptional<T&>(Cast<T>(&Object));
+                    return TOptional<T &>(Cast<T>(&Object));
                 }
             }
         }
-        
+
         /**
          * @brief Functor for casting objects within the Unreal Engine framework.
          *
          * @tparam U The type of the object being cast. It must be derived from FField.
          * @param Object Reference to the object to be cast.
-         * @return The casted object, or an optional reference to the casted object depending on the template parameters.
+         * @return The casted object, or an optional reference to the casted object depending on the template
+         * parameters.
          *
          * This operator uses templated type casting to safely cast an object to a
          * specified type within Unreal Engine's field framework.
@@ -103,49 +110,53 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires std::derived_from<U, FField>
-        constexpr decltype(auto) operator()(U& Object) const requires std::derived_from<T, FField> {
+        constexpr decltype(auto) operator()(U &Object) const
+            requires std::derived_from<T, FField>
+        {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, no need to actually cast
-                return static_cast<T&>(Object);
+                return static_cast<T &>(Object);
             } else if constexpr (bChecked) {
                 return *CastFieldChecked<T>(Object);
             } else {
-                return TOptional<T&>(CastField<T>(&Object));
+                return TOptional<T &>(CastField<T>(&Object));
             }
         }
-        
+
         /**
          * @brief Functor for casting pointer objects within the Unreal Engine framework.
          *
          * @tparam U The type of the pointer being cast.
          *           This type must dereference to either a const UObject or a const FField.
          * @param Ptr The pointer to the object that needs to be cast.
-         * @return decltype(auto) Returns a reference to the casted object or an optional reference to the casted object depending on the validity of the pointer and the template parameters.
+         * @return decltype(auto) Returns a reference to the casted object or an optional reference to the casted object
+         * depending on the validity of the pointer and the template parameters.
          *
-         * This operator checks if the provided pointer is valid. If the checked flag (bChecked) is enabled, it performs a check that throws an error if the pointer is null.
-         * If the flag is not enabled and the pointer is invalid, it returns an optional containing null.
-         * Otherwise, it returns an optional reference to the casted object.
+         * This operator checks if the provided pointer is valid. If the checked flag (bChecked) is enabled, it performs
+         * a check that throws an error if the pointer is null. If the flag is not enabled and the pointer is invalid,
+         * it returns an optional containing null. Otherwise, it returns an optional reference to the casted object.
          */
         template <typename U>
             requires DereferencesTo<U, const UObject> || DereferencesTo<U, const FField>
         constexpr decltype(auto) operator()(U &&Ptr) const {
             using ResultType = decltype(operator()(*Ptr));
             if constexpr (bChecked) {
-                checkf(ValidPtr(std::forward<U>(Ptr)), TEXT("Null pointer detected!"))
-                if constexpr (std::is_lvalue_reference_v<ResultType>) {
+                checkf(ValidPtr(std::forward<U>(Ptr)),
+                       TEXT("Null pointer detected!")) if constexpr (std::is_lvalue_reference_v<ResultType>) {
                     return &operator()(*Ptr);
-                } else {
+                }
+                else {
                     return operator()(*Ptr);
                 }
             } else {
                 if (!ValidPtr(std::forward<U>(Ptr))) {
-                    return TOptional<T&>(nullptr);
+                    return TOptional<T &>(nullptr);
                 }
 
                 if constexpr (std::derived_from<std::decay_t<U>, FScriptInterface>) {
                     return operator()(Ptr.GetObject());
                 } else {
-                    return static_cast<TOptional<T&>>(operator()(*Ptr));
+                    return static_cast<TOptional<T &>>(operator()(*Ptr));
                 }
             }
         }
@@ -170,21 +181,24 @@ namespace UE::Ranges {
             requires DereferencesToInterface<U>
         constexpr decltype(auto) operator()(U &&Ptr) const {
             if constexpr (bChecked) {
-                checkf(ValidPtr(std::forward<U>(Ptr)), TEXT("Null pointer detected!"))
-                if constexpr (std::derived_from<std::decay_t<U>, FScriptInterface>) {
+                checkf(
+                    ValidPtr(std::forward<U>(Ptr)),
+                    TEXT(
+                        "Null pointer detected!")) if constexpr (std::derived_from<std::decay_t<U>, FScriptInterface>) {
                     return operator()(Ptr.GetObject());
-                } else {
+                }
+                else {
                     return &operator()(*Ptr);
                 }
             } else {
                 if (!ValidPtr(std::forward<U>(Ptr))) {
-                    return TOptional<T&>(nullptr);
+                    return TOptional<T &>(nullptr);
                 }
 
                 if constexpr (std::derived_from<std::decay_t<U>, FScriptInterface>) {
                     return operator()(Ptr.GetObject());
                 } else {
-                    return static_cast<TOptional<T&>>(operator()(*Ptr));
+                    return static_cast<TOptional<T &>>(operator()(*Ptr));
                 }
             }
         }
@@ -194,19 +208,21 @@ namespace UE::Ranges {
      * A constexpr instance of TDynamicCast designed for Unreal Engine objects and fields.
      * Provides utilities for performing dynamic casts with validation, based on template parameters.
      *
-     * @tparam T The type to cast to. This type must derive from either UObject, FField, or satisfy the UnrealInterface concept.
+     * @tparam T The type to cast to. This type must derive from either UObject, FField, or satisfy the UnrealInterface
+     * concept.
      */
     template <typename T>
     constexpr TDynamicCast<T> DynamicCast;
-    
+
     /**
      * A constexpr instance of TDynamicCast, specialized to enforce runtime checks during casting.
      *
      * Designed for Unreal Engine objects and fields, this variable offers a reliable way to perform dynamic casts
      * with runtime validation, ensuring that the cast is safe and conforms to the expected type.
      *
-     * @tparam T The type to cast to. This type must derive from either UObject, FField, or satisfy the UnrealInterface concept.
+     * @tparam T The type to cast to. This type must derive from either UObject, FField, or satisfy the UnrealInterface
+     * concept.
      */
     template <typename T>
     constexpr TDynamicCast<T, true> DynamicCastChecked;
-}
+} // namespace UE::Ranges

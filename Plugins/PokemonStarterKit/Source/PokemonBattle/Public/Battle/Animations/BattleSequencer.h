@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PokemonBattleModule.h"
 #include "Battle/Events/BattleMessage.h"
 #include "GameFramework/Actor.h"
+#include "PokemonBattleModule.h"
 #include "Ranges/Functional/Bindings.h"
 #include "Ranges/Functional/Delegates.h"
 #include <queue>
+
 #include "BattleSequencer.generated.h"
 
 UCLASS(Abstract, Blueprintable)
@@ -17,11 +18,11 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
 
     static constexpr TCHAR UninitializedLog[] = TEXT("BattleSequencer is not initialized!");
 
-protected:
+  protected:
     void BeginPlay() override;
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-    
-public:
+
+  public:
     /**
      * Queues a battle message to be displayed during the battle sequence.
      *
@@ -38,9 +39,8 @@ public:
      * @param AnimationPlacement The position where the animation should be played (before or after the message).
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Sequencer")
-    static void QueueBattleMessageWithAnimation(FText Text,
-        const TScriptInterface<IBattleAnimation> &Animation,
-        EAnimationPlacement AnimationPlacement = EAnimationPlacement::Before);
+    static void QueueBattleMessageWithAnimation(FText Text, const TScriptInterface<IBattleAnimation> &Animation,
+                                                EAnimationPlacement AnimationPlacement = EAnimationPlacement::Before);
 
     /**
      * Displays multiple battle messages during the battle sequence.
@@ -49,7 +49,7 @@ public:
      */
     template <typename... A>
         requires UE::Ranges::CanAddToDelegate<FSimpleMulticastDelegate, A...>
-    static void DisplayBattleMessages(A&&... Args) {
+    static void DisplayBattleMessages(A &&...Args) {
         if (Instance.IsValid()) {
             Instance->ProcessBattleMessages(std::forward<A>(Args)...);
         } else {
@@ -60,7 +60,7 @@ public:
             UE::Ranges::CreateDelegate<FSimpleDelegate>(std::forward<A>(Args)...).Execute();
         }
     }
-    
+
     /**
      * Adds a battle message to the message queue.
      *
@@ -68,7 +68,7 @@ public:
      */
     template <typename... A>
         requires std::constructible_from<FBattleMessage, A...>
-    void AddBattleMessage(A&&... Args) {
+    void AddBattleMessage(A &&...Args) {
         Messages.emplace(std::forward<A>(Args)...);
     }
 
@@ -79,18 +79,18 @@ public:
      */
     template <typename... A>
         requires UE::Ranges::CanAddToDelegate<FSimpleMulticastDelegate, A...>
-    void ProcessBattleMessages(A&&... Args) {
+    void ProcessBattleMessages(A &&...Args) {
         UE::Ranges::AddToDelegate(OnMessagesComplete, std::forward<A>(Args)...);
         if (Messages.empty()) {
             ProcessMessagesComplete();
             return;
         }
-        
+
         bIsProcessingMessages = true;
         DisplayBattleMessage(Messages.front());
     }
 
-protected:
+  protected:
     /**
      * Displays a battle message during the battle sequence.
      *
@@ -108,13 +108,12 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Battle|Sequencer")
     void ProcessNextBattleMessage();
 
-private:
+  private:
     void ProcessMessagesComplete();
-    
+
     static TWeakObjectPtr<ABattleSequencer> Instance;
     std::queue<FBattleMessage> Messages;
 
     FSimpleMulticastDelegate OnMessagesComplete;
     bool bIsProcessingMessages = false;
-
 };

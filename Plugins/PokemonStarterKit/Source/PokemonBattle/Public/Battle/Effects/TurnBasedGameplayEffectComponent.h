@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayEffectComponent.h"
 #include "Battle/Effects/TurnBasedGameplayEffect.h"
+#include "GameplayEffectComponent.h"
 
 #include "TurnBasedGameplayEffectComponent.generated.h"
 
@@ -16,14 +16,14 @@ struct FGameplayEffectRemovalInfo;
  * @class UTurnBasedGameplayEffectComponent
  * @brief A component designed for managing turn-based gameplay effects within the Pokémon Battle system.
  *
- * This component extends the gameplay effect functionality to accommodate effects that last for a specified number of turns.
- * It interacts with the UTurnBasedEffectComponent to track and manage the turn-based effects.
+ * This component extends the gameplay effect functionality to accommodate effects that last for a specified number of
+ * turns. It interacts with the UTurnBasedEffectComponent to track and manage the turn-based effects.
  */
 UCLASS(DisplayName = "Turn Based")
 class POKEMONBATTLE_API UTurnBasedGameplayEffectComponent : public UGameplayEffectComponent {
     GENERATED_BODY()
 
-public:
+  public:
     bool OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
                                      FActiveGameplayEffect &ActiveGE) const override;
 
@@ -43,8 +43,9 @@ public:
         return TurnDurationTrigger;
     }
 
-private:
-    static void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &GERemovalInfo, UTurnBasedEffectComponent* Component);
+  private:
+    static void OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &GERemovalInfo,
+                                        UTurnBasedEffectComponent *Component);
 
     /**
      * @brief Specifies the range of turns a gameplay effect should last in the Pokémon Battle system.
@@ -56,9 +57,11 @@ private:
     TOptional<FInt32Range> TurnDuration;
 
     /**
-     * @brief Enum denoting the trigger condition for the duration of a turn-based gameplay effect in the Pokémon Battle system.
+     * @brief Enum denoting the trigger condition for the duration of a turn-based gameplay effect in the Pokémon Battle
+     * system.
      *
-     * This variable defines the specific conditions under which the duration of the turn-based effect will be evaluated or triggered.
+     * This variable defines the specific conditions under which the duration of the turn-based effect will be evaluated
+     * or triggered.
      */
     UPROPERTY(EditAnywhere)
     ETurnDurationTrigger TurnDurationTrigger = ETurnDurationTrigger::TurnEnd;

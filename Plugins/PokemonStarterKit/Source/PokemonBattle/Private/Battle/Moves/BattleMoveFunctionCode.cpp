@@ -2,6 +2,7 @@
 
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
@@ -26,7 +27,6 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Casting/InstanceOf.h"
 #include "Ranges/Pointers/MakeStrong.h"
@@ -178,7 +178,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
+                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
         }
         return bSuccess;
     };
@@ -198,7 +198,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                    *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
+                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
         }
         return bHitResult;
     };
@@ -241,7 +241,7 @@ bool UBattleMoveFunctionCode::SuccessCheckAgainstTarget_Implementation(const TSc
     if (BattleMove->GetCategory() != EMoveDamageCategory::Status && FMath::IsNearlyZero(TypeMod)) {
         TargetAbilities.AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
         AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                       .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
+            .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
         UE_LOG(LogBattle, Display, TEXT("%s is unaffected by %s!"), *Target->GetNickname().ToString(),
                *BattleMove->GetDisplayName().ToString())
         return false;
@@ -359,8 +359,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const 
     }
 
     int32 BasePower = CalculateBasePower(BattleMove->GetBasePower(), User, Target);
-    auto Payload =
-        UDamageModificationPayload::Create(User, Target, TargetCount, DeterminedType, BasePower);
+    auto Payload = UDamageModificationPayload::Create(User, Target, TargetCount, DeterminedType, BasePower);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::DamageModificationEvents);
     auto &PayloadData = Payload->GetData();
     float NewFinal = PayloadData.FinalDamageMultiplier;

@@ -6,7 +6,7 @@
 
 /**
  * Macro for handling creating localized text, using the filename for the namespace.
- * 
+ *
  * @param Key The searchable text key
  * @param Text The text itself
  */

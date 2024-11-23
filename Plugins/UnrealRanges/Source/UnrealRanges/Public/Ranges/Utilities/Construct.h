@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 namespace UE::Ranges {
-    
+
     /**
      * @class TConstruct
      * @brief The TConstruct class is used as a functional object to allow for the construction of a class with the
@@ -21,7 +21,7 @@ namespace UE::Ranges {
          */
         template <typename... A>
             requires std::constructible_from<T, A...>
-        constexpr T operator()(A&&... Args) const {
+        constexpr T operator()(A &&...Args) const {
             return T(std::forward<A>(Args)...);
         }
     };
@@ -31,4 +31,4 @@ namespace UE::Ranges {
      */
     template <typename T>
     constexpr TConstruct<T> Construct;
-}
+} // namespace UE::Ranges

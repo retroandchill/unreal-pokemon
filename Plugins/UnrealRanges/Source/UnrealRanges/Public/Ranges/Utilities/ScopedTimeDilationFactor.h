@@ -20,8 +20,8 @@ namespace UE::Ranges {
      * consistency of the time dilation state.
      */
     class UNREALRANGES_API FScopedTimeDilationFactor : public FGCObject {
-    
-    public:
+
+      public:
         /**
          * @brief Constructs an FScopedTimeDilationFactor instance and sets the time dilation factor.
          *
@@ -30,10 +30,10 @@ namespace UE::Ranges {
          *
          * @return An instance of FScopedTimeDilationFactor that manages the time dilation within its scope.
          */
-        FScopedTimeDilationFactor(const UObject* WorldContextObject, float Factor) noexcept;
+        FScopedTimeDilationFactor(const UObject *WorldContextObject, float Factor) noexcept;
 
-        FScopedTimeDilationFactor(const FScopedTimeDilationFactor&) = delete;
-        FScopedTimeDilationFactor(FScopedTimeDilationFactor&&) noexcept = delete;
+        FScopedTimeDilationFactor(const FScopedTimeDilationFactor &) = delete;
+        FScopedTimeDilationFactor(FScopedTimeDilationFactor &&) noexcept = delete;
 
         /**
          * @brief Destructor for FScopedTimeDilationFactor.
@@ -47,14 +47,14 @@ namespace UE::Ranges {
          */
         ~FScopedTimeDilationFactor() override;
 
-        FScopedTimeDilationFactor& operator=(const FScopedTimeDilationFactor&) = delete;
-        FScopedTimeDilationFactor& operator=(FScopedTimeDilationFactor&&) noexcept = delete;
-        
+        FScopedTimeDilationFactor &operator=(const FScopedTimeDilationFactor &) = delete;
+        FScopedTimeDilationFactor &operator=(FScopedTimeDilationFactor &&) noexcept = delete;
+
         void AddReferencedObjects(FReferenceCollector &Collector) override;
         FString GetReferencerName() const override;
 
-    private:
+      private:
         TObjectPtr<const UObject> WorldContextObject;
         float Factor;
     };
-}
+} // namespace UE::Ranges

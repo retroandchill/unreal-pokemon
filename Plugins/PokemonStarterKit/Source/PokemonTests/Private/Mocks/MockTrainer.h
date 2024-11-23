@@ -13,7 +13,7 @@
  */
 class FMockTrainer : public ITrainer {
     DECLARE_MOCK_INTERFACE(FMockTrainer)
-    
+
   public:
     MOCK_METHOD2(Initialize, TScriptInterface<ITrainer>(FName NewTrainerType, FText NewTrainerName));
     MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));

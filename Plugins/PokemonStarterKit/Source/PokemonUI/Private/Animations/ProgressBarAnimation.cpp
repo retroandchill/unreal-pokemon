@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Animations/ProgressBarAnimation.h"
-#include "PokemonUI.h"
 #include "Kismet/GameplayStatics.h"
+#include "PokemonUI.h"
 
 using namespace Pokemon::UI;
 

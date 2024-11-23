@@ -97,7 +97,7 @@ namespace Pokemon::UI {
          *
          * @param WorldContext Pointer to the world context UObject.
          */
-        void SetWorldContext(const UObject* WorldContext);
+        void SetWorldContext(const UObject *WorldContext);
 
       private:
         float PercentLastTick = 0.f;

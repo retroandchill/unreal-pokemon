@@ -92,7 +92,8 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
 
     SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
-    User->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
+    User->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
         UE::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.UserAllyTag, EventData);
@@ -101,7 +102,8 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     auto TargetActor = CastChecked<AActor>(Target.GetObject());
     SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
-    Target->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) | UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
+    Target->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
+        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
         UE::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);

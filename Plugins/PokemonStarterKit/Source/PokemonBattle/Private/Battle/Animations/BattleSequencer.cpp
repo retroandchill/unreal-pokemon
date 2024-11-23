@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Animations/BattleSequencer.h"
 #include "PokemonBattleModule.h"
 
@@ -29,7 +28,7 @@ void ABattleSequencer::QueueBattleMessage(FText Text) {
 }
 
 void ABattleSequencer::QueueBattleMessageWithAnimation(FText Text, const TScriptInterface<IBattleAnimation> &Animation,
-    EAnimationPlacement AnimationPlacement) {
+                                                       EAnimationPlacement AnimationPlacement) {
     if (Instance.IsValid()) {
         Instance->AddBattleMessage(std::move(Text), Animation, AnimationPlacement);
     } else {

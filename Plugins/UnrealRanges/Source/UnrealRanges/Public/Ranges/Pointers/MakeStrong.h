@@ -31,11 +31,11 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires std::derived_from<std::decay_t<T>, UObject>
-        constexpr T* operator()(const TWeakObjectPtr<T>& Ptr) const {
+        constexpr T *operator()(const TWeakObjectPtr<T> &Ptr) const {
             if constexpr (bChecked) {
                 check(ValidPtr(Ptr))
             }
-            
+
             return Ptr.Get();
         }
 
@@ -43,7 +43,8 @@ namespace UE::Ranges {
          * @brief Converts a TWeakInterfacePtr to a TScriptInterface.
          *
          * This operator provides the functionality to convert a TWeakInterfacePtr to a TScriptInterface of type T.
-         * If the bChecked template parameter is true, a runtime check is performed to validate the weak pointer before conversion.
+         * If the bChecked template parameter is true, a runtime check is performed to validate the weak pointer before
+         * conversion.
          *
          * @tparam T The type of the interface that the weak pointer points to.
          * @param Ptr The TWeakInterfacePtr that is to be converted.
@@ -51,11 +52,11 @@ namespace UE::Ranges {
          */
         template <typename T>
             requires UnrealInterface<T>
-        constexpr TScriptInterface<T> operator()(const TWeakInterfacePtr<T>& Ptr) const {
+        constexpr TScriptInterface<T> operator()(const TWeakInterfacePtr<T> &Ptr) const {
             if constexpr (bChecked) {
                 check(ValidPtr(Ptr))
             }
-            
+
             return Ptr.ToScriptInterface();
         }
 
@@ -72,7 +73,7 @@ namespace UE::Ranges {
          */
         template <typename T, ESPMode M, typename P>
             requires std::same_as<std::decay_t<P>, TWeakPtr<T, M>>
-        constexpr auto operator()(P&& Ptr) const {
+        constexpr auto operator()(P &&Ptr) const {
             if constexpr (bChecked) {
                 return std::forward<P>(Ptr).Pin().ToSharedRef();
             } else {
@@ -98,7 +99,7 @@ namespace UE::Ranges {
             if constexpr (bChecked) {
                 check(!Ptr.expired())
             }
-            
+
             return std::forward<P>(Ptr).lock();
         }
     };
@@ -126,4 +127,4 @@ namespace UE::Ranges {
      * is valid, thereby enhancing the safety and reliability of pointer conversions.
      */
     constexpr TMakeStrong<true> MakeStrongChecked;
-}
+} // namespace UE::Ranges

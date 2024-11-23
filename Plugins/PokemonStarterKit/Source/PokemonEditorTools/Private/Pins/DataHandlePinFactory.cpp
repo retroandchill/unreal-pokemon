@@ -13,7 +13,7 @@ TSharedPtr<SGraphPin> FDataHandlePinFactory::CreatePin(UEdGraphPin *Pin) const {
     if (PinStructType == nullptr) {
         return FGraphPanelPinFactory::CreatePin(Pin);
     }
-    
+
     if (PinStructType == FPocketKey::StaticStruct()) {
         return SNew(SPocketKeyPin, Pin);
     }

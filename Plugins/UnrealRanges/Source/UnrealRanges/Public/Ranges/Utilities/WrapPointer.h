@@ -13,13 +13,17 @@ namespace UE::Ranges {
      */
     struct FWrapPointer {
         /**
-         * @brief Wraps raw pointers of UObject-derived types or Unreal Engine interface types into their respective smart pointer types.
+         * @brief Wraps raw pointers of UObject-derived types or Unreal Engine interface types into their respective
+         * smart pointer types.
          *
-         * This operator allows conversion of raw pointers to appropriate Unreal Engine smart pointers, ensuring proper memory management.
+         * This operator allows conversion of raw pointers to appropriate Unreal Engine smart pointers, ensuring proper
+         * memory management.
          *
-         * @tparam T The type of the object being pointed to, which must be either a UObject-derived type or an Unreal Engine interface.
+         * @tparam T The type of the object being pointed to, which must be either a UObject-derived type or an Unreal
+         * Engine interface.
          * @param Ptr The raw pointer to the object.
-         * @return TObjectPtr<T> if T is derived from UObject, or TScriptInterface<T> if T implements an Unreal Engine interface.
+         * @return TObjectPtr<T> if T is derived from UObject, or TScriptInterface<T> if T implements an Unreal Engine
+         * interface.
          */
         template <typename T>
             requires std::derived_from<std::remove_cv_t<T>, UObject> || UnrealInterface<T>
@@ -38,10 +42,10 @@ namespace UE::Ranges {
     /**
      * @brief An instance of FWrapPointer for wrapping raw pointers into Unreal Engine smart pointer types.
      *
-     * This constant leverages the functionality of FWrapPointer to provide an easy-to-use mechanism for converting raw pointers
-     * of UObject-derived types or Unreal Engine interface types into their respective smart pointer types.
+     * This constant leverages the functionality of FWrapPointer to provide an easy-to-use mechanism for converting raw
+     * pointers of UObject-derived types or Unreal Engine interface types into their respective smart pointer types.
      *
      * @see FWrapPointer
      */
     constexpr FWrapPointer WrapPointer;
-}
+} // namespace UE::Ranges

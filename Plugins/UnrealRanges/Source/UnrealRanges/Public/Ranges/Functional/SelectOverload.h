@@ -19,12 +19,12 @@ namespace UE::Ranges {
     template <typename... A>
     struct TSelectOverload {
         template <typename R>
-        constexpr auto operator()(R(*Functor)(A...)) const {
+        constexpr auto operator()(R (*Functor)(A...)) const {
             return Functor;
         }
 
         template <typename R, typename C>
-        constexpr auto operator()(R(C::*Functor)(A...)) const {
+        constexpr auto operator()(R (C::*Functor)(A...)) const {
             return Functor;
         }
     };
@@ -40,4 +40,4 @@ namespace UE::Ranges {
      */
     template <typename... A>
     constexpr TSelectOverload<A...> SelectOverload;
-}
+} // namespace UE::Ranges

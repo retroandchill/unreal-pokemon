@@ -30,7 +30,8 @@ namespace UE::Ranges {
     template <typename T>
     concept TupleLike = requires {
         typename std::tuple_size<std::decay_t<T>>;
-        requires std::derived_from<std::tuple_size<std::decay_t<T>>, std::integral_constant<size_t, std::tuple_size_v<std::decay_t<T>>>>;
+        requires std::derived_from<std::tuple_size<std::decay_t<T>>,
+                                   std::integral_constant<size_t, std::tuple_size_v<std::decay_t<T>>>>;
     };
 
     static_assert(std::tuple_size_v<TTuple<int32, bool, char>> == 3);

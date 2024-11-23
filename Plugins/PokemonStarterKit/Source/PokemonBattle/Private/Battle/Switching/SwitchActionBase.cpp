@@ -1,13 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 #include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Tags.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Ranges/Views/Single.h"
 
 USwitchActionBase::USwitchActionBase() {

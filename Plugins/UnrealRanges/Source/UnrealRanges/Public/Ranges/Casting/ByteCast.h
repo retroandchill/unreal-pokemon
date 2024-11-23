@@ -12,7 +12,7 @@ namespace UE::Ranges {
      */
     template <typename T>
     concept ValidByteType = std::same_as<T, std::byte> || std::same_as<T, uint8> || std::same_as<T, void>;
-    
+
     template <typename T>
     /**
      * @class TByteCast
@@ -43,8 +43,8 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires ValidByteType<U>
-        constexpr decltype(auto) operator()(U* Bytes) const {
-            return *reinterpret_cast<T*>(Bytes);
+        constexpr decltype(auto) operator()(U *Bytes) const {
+            return *reinterpret_cast<T *>(Bytes);
         }
     };
 
@@ -63,4 +63,4 @@ namespace UE::Ranges {
      */
     template <typename T>
     constexpr TByteCast<T> ByteCast;
-}
+} // namespace UE::Ranges

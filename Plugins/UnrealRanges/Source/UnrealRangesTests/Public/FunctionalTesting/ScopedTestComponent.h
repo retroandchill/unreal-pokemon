@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Ranges/Utilities/Methods.h"
-#include "ScopedTestComponent.generated.h"
 
+#include "ScopedTestComponent.generated.h"
 
 class AScopedFunctionalTest;
 
@@ -18,11 +18,11 @@ class AScopedFunctionalTest;
  *
  * This class is abstract and requires the implementation of the AddScopedComponent method in derived classes.
  */
-UCLASS(Abstract, ClassGroup=(FunctionalTesting), meta=(BlueprintSpawnableComponent))
+UCLASS(Abstract, ClassGroup = (FunctionalTesting), meta = (BlueprintSpawnableComponent))
 class UNREALRANGESTESTS_API UScopedTestComponent : public UActorComponent {
     GENERATED_BODY()
 
-public:
+  public:
     /**
      * @brief Adds a scoped component to a functional test.
      *
@@ -32,7 +32,5 @@ public:
      *
      * @param TestObject The scoped functional test to which the component should be added.
      */
-    virtual void AddScopedComponent(AScopedFunctionalTest& TestObject) ABSTRACT_METHOD;
-
-
+    virtual void AddScopedComponent(AScopedFunctionalTest &TestObject) ABSTRACT_METHOD;
 };

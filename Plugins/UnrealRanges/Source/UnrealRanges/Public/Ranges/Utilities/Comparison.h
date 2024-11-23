@@ -14,7 +14,7 @@ namespace UE::Ranges {
     struct FEquals {
         /**
          * Perform the equality comparison on the target values.
-         * 
+         *
          * @tparam T The type of the left-hand side
          * @tparam U The type of the right-hand side
          * @param LHS The left-hand side value
@@ -23,7 +23,7 @@ namespace UE::Ranges {
          */
         template <typename T, typename U = T>
             requires std::equality_comparable_with<T, U>
-        constexpr bool operator()(const T& LHS, const U& RHS) const {
+        constexpr bool operator()(const T &LHS, const U &RHS) const {
             return LHS == RHS;
         }
     };
@@ -40,7 +40,7 @@ namespace UE::Ranges {
     struct FNotEqual {
         /**
          * Perform the inequality comparison on the target values.
-         * 
+         *
          * @tparam T The type of the left-hand side
          * @tparam U The type of the right-hand side
          * @param LHS The left-hand side value
@@ -49,7 +49,7 @@ namespace UE::Ranges {
          */
         template <typename T, typename U = T>
             requires InequalityComparable<T, U>
-        constexpr bool operator()(const T& LHS, const U& RHS) const {
+        constexpr bool operator()(const T &LHS, const U &RHS) const {
             return LHS != RHS;
         }
     };
@@ -66,7 +66,7 @@ namespace UE::Ranges {
     struct FLessThan {
         /**
          * Perform the less than comparison on the target values.
-         * 
+         *
          * @tparam T The type of the left-hand side
          * @tparam U The type of the right-hand side
          * @param LHS The left-hand side value
@@ -75,7 +75,7 @@ namespace UE::Ranges {
          */
         template <typename T, typename U = T>
             requires LessThanComparable<T, U>
-        constexpr bool operator()(const T& LHS, const U& RHS) const {
+        constexpr bool operator()(const T &LHS, const U &RHS) const {
             return LHS < RHS;
         }
     };
@@ -92,7 +92,7 @@ namespace UE::Ranges {
     struct FLessThanOrEqual {
         /**
          * Perform the less than or equal comparison on the target values.
-         * 
+         *
          * @tparam T The type of the left-hand side
          * @tparam U The type of the right-hand side
          * @param LHS The left-hand side value
@@ -101,13 +101,14 @@ namespace UE::Ranges {
          */
         template <typename T, typename U = T>
             requires LessThanOrEqualComparable<T, U>
-        constexpr bool operator()(const T& LHS, const U& RHS) const {
+        constexpr bool operator()(const T &LHS, const U &RHS) const {
             return LHS <= RHS;
         }
     };
 
     /**
-     * @brief An instance of the `FLessThanOrEqual` struct used for comparing values to check if one is less than or equal to the other.
+     * @brief An instance of the `FLessThanOrEqual` struct used for comparing values to check if one is less than or
+     * equal to the other.
      */
     constexpr FLessThanOrEqual LessThanOrEqual;
 
@@ -118,7 +119,7 @@ namespace UE::Ranges {
     struct FGreaterThan {
         /**
          * Perform the greater than comparison on the target values.
-         * 
+         *
          * @tparam T The type of the left-hand side
          * @tparam U The type of the right-hand side
          * @param LHS The left-hand side value
@@ -127,7 +128,7 @@ namespace UE::Ranges {
          */
         template <typename T, typename U = T>
             requires GreaterThanComparable<T, U>
-        constexpr bool operator()(const T& LHS, const U& RHS) const {
+        constexpr bool operator()(const T &LHS, const U &RHS) const {
             return LHS > RHS;
         }
     };
@@ -144,7 +145,7 @@ namespace UE::Ranges {
     struct FGreaterThanOrEqual {
         /**
          * Perform the greater than or equal comparison on the target values.
-         * 
+         *
          * @tparam T The type of the left-hand side
          * @tparam U The type of the right-hand side
          * @param LHS The left-hand side value
@@ -153,14 +154,15 @@ namespace UE::Ranges {
          */
         template <typename T, typename U = T>
             requires GreaterThanOrEqualComparable<T, U>
-        constexpr bool operator()(const T& LHS, const U& RHS) const {
+        constexpr bool operator()(const T &LHS, const U &RHS) const {
             return LHS >= RHS;
         }
     };
 
     /**
-     * @brief An instance of the `FGreaterThanOrEqual` struct used for comparing if one value is greater than or equal to another.
+     * @brief An instance of the `FGreaterThanOrEqual` struct used for comparing if one value is greater than or equal
+     * to another.
      */
     constexpr FGreaterThanOrEqual GreaterThanOrEqual;
-    
-}
+
+} // namespace UE::Ranges

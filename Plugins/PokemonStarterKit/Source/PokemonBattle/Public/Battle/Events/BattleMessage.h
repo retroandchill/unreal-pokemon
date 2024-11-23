@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
 #include "Ranges/Optional/OptionalRef.h"
+#include "UObject/Object.h"
 
 #include "BattleMessage.generated.h"
 

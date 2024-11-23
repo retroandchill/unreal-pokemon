@@ -26,7 +26,6 @@ class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibr
      * @return Can the effect be inflicted
      */
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
-    static bool CanStatusEffectBeInflicted(FName StatusEffectID,
-                                           const TScriptInterface<IBattler>& Target, FText AlreadyAppliedFormat,
-                                           FText HasOtherStatusFormat);
+    static bool CanStatusEffectBeInflicted(FName StatusEffectID, const TScriptInterface<IBattler> &Target,
+                                           FText AlreadyAppliedFormat, FText HasOtherStatusFormat);
 };

@@ -13,9 +13,9 @@ namespace UE::Ranges {
      */
     template <typename T, typename U>
     concept CanStaticCast = requires(T &&Input) {
-       { static_cast<U>(std::forward<T>(Input)) } -> std::same_as<U>; 
+        { static_cast<U>(std::forward<T>(Input)) } -> std::same_as<U>;
     };
-    
+
     /**
      * @brief A functor struct to perform static_cast on a given value.
      *
@@ -35,7 +35,7 @@ namespace UE::Ranges {
          */
         template <typename U>
             requires CanStaticCast<U, T>
-        constexpr T operator()(U&& Value) const {
+        constexpr T operator()(U &&Value) const {
             return static_cast<T>(std::forward<U>(Value));
         }
     };
@@ -50,4 +50,4 @@ namespace UE::Ranges {
      */
     template <typename T>
     constexpr TStaticCast<T> StaticCast;
-}
+} // namespace UE::Ranges

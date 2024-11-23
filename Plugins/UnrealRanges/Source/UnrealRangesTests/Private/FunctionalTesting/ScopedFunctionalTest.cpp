@@ -5,9 +5,9 @@
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Casting/InstanceOf.h"
 #include "Ranges/Casting/StaticCast.h"
+#include "Ranges/Views/ContainerView.h"
 #include "Ranges/Views/Filter.h"
 #include "Ranges/Views/Map.h"
-#include "Ranges/Views/ContainerView.h"
 
 void AScopedFunctionalTest::PrepareTest() {
     Super::PrepareTest();

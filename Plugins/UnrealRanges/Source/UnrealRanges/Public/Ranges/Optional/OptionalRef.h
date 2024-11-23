@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Traits.h"
 #include "Ranges/Concepts/Pointers.h"
 #include "Ranges/RangeConcepts.h"
 #include "Templates/NonNullSubclassOf.h"
+#include "Traits.h"
 
 /**
  * Template specialization for an optional that takes in a reference.
@@ -48,11 +48,12 @@ struct TOptional<T &> {
     /**
      * Construct a new optional from an optional of subclass.
      * @tparam U The subclass type
-     * @param Other The other optional 
+     * @param Other The other optional
      */
     template <typename U>
         requires std::derived_from<U, T> && (!std::is_same_v<T, U>)
-    constexpr explicit(false) TOptional(TOptional<U&> Other) : Data(Other.GetPtrOrNull()) {}
+    constexpr explicit(false) TOptional(TOptional<U &> Other) : Data(Other.GetPtrOrNull()) {
+    }
 
     /**
      * Assignment operator from the underlying value.

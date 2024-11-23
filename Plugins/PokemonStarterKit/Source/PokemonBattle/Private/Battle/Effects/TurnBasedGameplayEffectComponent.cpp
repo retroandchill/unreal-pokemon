@@ -1,12 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Effects/TurnBasedGameplayEffectComponent.h"
 #include "AbilitySystemComponent.h"
+#include "Battle/Battlers/Battler.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "GameplayEffect.h"
 #include "MathUtilities.h"
-#include "Battle/Effects/TurnBasedEffectComponent.h"
-#include "Battle/Battlers/Battler.h"
 #include "Misc/DataValidation.h"
 #include "Ranges/Optional/Filter.h"
 #include "Ranges/Optional/Map.h"

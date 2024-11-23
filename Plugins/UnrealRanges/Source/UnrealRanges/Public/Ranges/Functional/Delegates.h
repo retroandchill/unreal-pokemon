@@ -23,7 +23,8 @@ namespace UE::Ranges {
         if constexpr (CanBindUObject<D, T, F, A...>) {
             return D::CreateUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else if constexpr (StdExt::IsMemberFunction_v<F> && std::derived_from<T, StdExt::MemberFunctionClass_t<F>>) {
-            return D::CreateWeakLambda(Object, CreateBinding(Object, std::forward<F>(Functor), std::forward<A>(Args)...));
+            return D::CreateWeakLambda(Object,
+                                       CreateBinding(Object, std::forward<F>(Functor), std::forward<A>(Args)...));
         } else if constexpr (CanBindWeakLambda<D, T, F, A...>) {
             return D::CreateWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {
@@ -119,7 +120,8 @@ namespace UE::Ranges {
         if constexpr (CanAddUObject<D, T, F, A...>) {
             return Delegate.AddUObject(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else if constexpr (StdExt::IsMemberFunction_v<F> && std::derived_from<T, StdExt::MemberFunctionClass_t<F>>) {
-            return Delegate.AddWeakLambda(Object, CreateBinding(Object, std::forward<F>(Functor), std::forward<A>(Args)...));
+            return Delegate.AddWeakLambda(Object,
+                                          CreateBinding(Object, std::forward<F>(Functor), std::forward<A>(Args)...));
         } else if constexpr (CanAddWeakLambda<D, T, F, A...>) {
             return Delegate.AddWeakLambda(Object, std::forward<F>(Functor), std::forward<A>(Args)...);
         } else {

@@ -15,7 +15,7 @@
  */
 class FMockPokemon : public IPokemon {
     DECLARE_MOCK_INTERFACE(FMockPokemon)
-    
+
   public:
     MOCK_METHOD2(Initialize, void(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer));
     MOCK_METHOD(FText, GetNickname, (), (const, override));

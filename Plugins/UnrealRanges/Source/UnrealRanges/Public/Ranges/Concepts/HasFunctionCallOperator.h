@@ -7,8 +7,8 @@
 
 namespace UE::Ranges {
     namespace Details {
-       template <typename>
-       struct THasOneFunctionCallOperator : std::false_type {};
+        template <typename>
+        struct THasOneFunctionCallOperator : std::false_type {};
 
         template <typename T>
             requires std::is_member_function_pointer_v<decltype(&T::operator())>
@@ -20,8 +20,8 @@ namespace UE::Ranges {
 
         template <typename T>
         struct TMixin : T, FWithOp {};
-    }
+    } // namespace Details
 
     template <typename T>
     concept HasFunctionCallOperator = !Details::THasOneFunctionCallOperator<Details::TMixin<T>>::value;
-}
+} // namespace UE::Ranges

@@ -15,6 +15,7 @@
 #include "Battle/Battlers/Innate/Innate_MultiTargetDamageSplit.h"
 #include "Battle/Battlers/PlayerBattlerController.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
@@ -32,7 +33,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-#include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Ranges/Algorithm/ForEach.h"
 #include "Ranges/Algorithm/ToArray.h"
 #include "Ranges/Utilities/Construct.h"
@@ -308,7 +308,7 @@ UBattlerAbilityComponent *ABattlerActor::GetAbilityComponent() const {
     return BattlerAbilityComponent;
 }
 
-UTurnBasedEffectComponent * ABattlerActor::GetTurnBasedEffectComponent() const {
+UTurnBasedEffectComponent *ABattlerActor::GetTurnBasedEffectComponent() const {
     return TurnBasedEffectComponent;
 }
 

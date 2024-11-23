@@ -21,7 +21,7 @@ namespace UE::Ranges {
     struct TGetFromTuple {
         template <typename T>
             requires TupleLike<T> && HasTupleElement<T, N>
-        constexpr decltype(auto) operator()(T&& Tuple) const {
+        constexpr decltype(auto) operator()(T &&Tuple) const {
             return get<N>(std::forward<T>(Tuple));
         }
     };
@@ -36,4 +36,4 @@ namespace UE::Ranges {
      */
     template <size_t N>
     constexpr TGetFromTuple<N> GetFromTuple;
-}
+} // namespace UE::Ranges
