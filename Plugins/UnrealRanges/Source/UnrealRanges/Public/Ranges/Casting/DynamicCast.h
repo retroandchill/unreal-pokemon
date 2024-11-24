@@ -39,10 +39,8 @@ namespace UE::Ranges {
          *   reference to T, which may be null if the cast fails.
          */
         template <typename U>
-            requires std::derived_from<U, UObject> || UnrealInterface<U>
-                                                  constexpr decltype(auto) operator()(U &Object) const
-                         requires std::derived_from<T, UObject>
-        {
+            requires std::derived_from<T, UObject> && (std::derived_from<U, UObject> || UnrealInterface<U>)
+        constexpr decltype(auto) operator()(U &Object) const {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, no need to actually cast
                 return static_cast<T &>(Object);
@@ -63,10 +61,8 @@ namespace UE::Ranges {
          *
          */
         template <typename U>
-            requires std::derived_from<U, UObject> || UnrealInterface<U>
-                                                  constexpr decltype(auto) operator()(U &Object) const
-                         requires UnrealInterface<T>
-        {
+            requires UnrealInterface<T> && (std::derived_from<U, UObject> || UnrealInterface<U>)
+        constexpr decltype(auto) operator()(U &Object) const {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, no need to actually cast
                 return TScriptInterface<T>(&Object);
@@ -109,10 +105,8 @@ namespace UE::Ranges {
          *   reference to T, which may be null if the cast fails.
          */
         template <typename U>
-            requires std::derived_from<U, FField>
-        constexpr decltype(auto) operator()(U &Object) const
-            requires std::derived_from<T, FField>
-        {
+            requires std::derived_from<T, FField> && std::derived_from<U, FField>
+        constexpr decltype(auto) operator()(U &Object) const {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, no need to actually cast
                 return static_cast<T &>(Object);
@@ -139,7 +133,7 @@ namespace UE::Ranges {
         template <typename U>
             requires DereferencesTo<U, const UObject> || DereferencesTo<U, const FField>
         constexpr decltype(auto) operator()(U &&Ptr) const {
-            using ResultType = decltype(operator()(*Ptr));
+            using ResultType = decltype((*this)(*Ptr));
             if constexpr (bChecked) {
                 checkf(ValidPtr(std::forward<U>(Ptr)),
                        TEXT("Null pointer detected!")) if constexpr (std::is_lvalue_reference_v<ResultType>) {
