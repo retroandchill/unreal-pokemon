@@ -3,6 +3,7 @@
 #include "TestActiveSide.h"
 #include "TestBattlerActor.h"
 #include "Utilities/ReflectionUtils.h"
+#include "Trainers/Trainer.h"
 
 // Sets default values
 
