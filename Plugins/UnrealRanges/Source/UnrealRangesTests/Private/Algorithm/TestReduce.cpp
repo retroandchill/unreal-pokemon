@@ -2,6 +2,7 @@
 #include "Misc/AutomationTest.h"
 #include "Ranges/Algorithm/Reduce.h"
 #include "Ranges/Views/Map.h"
+import Ranges;
 
 BEGIN_DEFINE_SPEC(FTestReduce, "Unit Tests.Ranges.Algorithm",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
