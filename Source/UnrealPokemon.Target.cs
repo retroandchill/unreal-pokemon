@@ -8,6 +8,7 @@ public class UnrealPokemonTarget : TargetRules {
         DefaultBuildSettings = BuildSettingsVersion.V4;
         IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
         bEnableCppModules = true;
+        bUseUnityBuild = true;
         RegisterModulesCreatedByRider();
     }
 
