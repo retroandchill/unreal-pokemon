@@ -1,0 +1,79 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+jobs:
+  build:
+    name: Build Project
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - { name: "ubuntu-clang", os: ubuntu-latest, cc: "clang-18", cxx: "clang++-18" }
+    env:
+      LLVM_PROFILE_FILE: test-data-%p.profraw
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4.2.1
+        with:
+          fetch-depth: 0
+
+      - name: Install sonar-scanner and build-wrapper
+        uses: SonarSource/sonarcloud-github-c-cpp@v3
+
+      - name: Install Conan
+        run: |
+          sudo apt-get install -y python3
+          pip install conan
+
+      - name: Set up Clang
+        run: |
+          wget -qO- https://apt.llvm.org/llvm.sh | sudo bash -s -- 18
+          sudo apt-get install -y clang-tools-18
+
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Restore cached conan dependencies
+        id: cache-conan-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            /home/runner/.conan2
+          key: ${{ matrix.config.name }}-conan-deps
+
+      - name: Build & Test
+        uses: ashutoshvarma/action-cmake-build@master
+        with:
+          build-dir: ${{ runner.workspace }}/build
+          cc: ${{ matrix.config.cc }}
+          cxx: ${{ matrix.config.cxx }}
+          configure-options: -G Ninja -DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=clang-scan-deps-18
+          build-type: Release
+          run-test: true
+
+      - name: Save Conan Data
+        id: cache-conan-save
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            /home/runner/.conan2
+          key: ${{ steps.cache-conan-restore.outputs.cache-primary-key }}
+
+      - name: Merge counters from different runs and convert the result into an llvm-cov-compatible form
+        run: |
+          llvm-profdata-18 merge -o merged.profdata ${{ runner.workspace }}/build/**/*.profraw
+
+      - name: Collect the coverage
+        run: |
+          llvm-cov-18 show --show-branches=count --instr-profile merged.profdata ${{ runner.workspace }}/build/Tests/RetroLibTests > coverage.txt
+
+      - name: Run sonar-scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner --define sonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json" --define sonar.cfamily.llvm-cov.reportPath=coverage.txt

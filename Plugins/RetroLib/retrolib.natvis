@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="Retro::Polymorphic&lt;*&gt;">
+        <Expand>
+            <Item Name="[value]" ExcludeView="simple">vtable->getSize() > sizeof(storage) ? *(($T1*)storage.largeStorage) : *(($T1*)storage.smallStorage.data())</Item>
+            <Item Name="[large]" ExcludeView="simple">vtable->getSize() > sizeof(storage)</Item>
+        </Expand>
+    </Type>
+</AutoVisualizer>
