@@ -39,10 +39,10 @@ module;
 #include <thread>
 #include <tuple>
 #include <type_traits>
+#include <typeinfo>
 #include <utility>
 #include <variant>
 #include <vector>
-#include <typeinfo>
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunknown-warning-option"
@@ -66,7 +66,7 @@ export namespace std {
         using std::pmr::vector;
     }
     using std::hash;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::advance;
@@ -123,7 +123,7 @@ export namespace std {
         using std::ranges::distance;
         using std::ranges::next;
         using std::ranges::prev;
-    }  // namespace ranges
+    } // namespace ranges
     using std::reverse_iterator;
     using std::operator==;
     using std::operator!=;
@@ -167,7 +167,7 @@ export namespace std {
     using std::ssize;
     using std::unreachable_sentinel;
     using std::unreachable_sentinel_t;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::memchr;
@@ -193,7 +193,7 @@ export namespace std {
     using std::strstr;
     using std::strtok;
     using std::strxfrm;
-}  // namespace std
+} // namespace std
 // Workaround to ease the use.
 export {
     using ::memchr;
@@ -270,7 +270,7 @@ export namespace std {
     using std::vsnprintf;
     using std::vsprintf;
     using std::vsscanf;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::get;
@@ -294,7 +294,7 @@ export namespace std {
     using std::monostate;
     using std::swap;
     using std::visit;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::bind;
@@ -340,7 +340,7 @@ export namespace std {
         using std::placeholders::_7;
         using std::placeholders::_8;
         using std::placeholders::_9;
-    }  // namespace placeholders
+    } // namespace placeholders
     using std::bad_function_call;
     using std::function;
     using std::mem_fn;
@@ -357,8 +357,8 @@ export namespace std {
         using std::ranges::less;
         using std::ranges::less_equal;
         using std::ranges::not_equal_to;
-    }  // namespace ranges
-}  // namespace std
+    } // namespace ranges
+} // namespace std
 
 export namespace std {
     using std::align;
@@ -381,13 +381,13 @@ export namespace std {
     namespace ranges {
         using std::ranges::uninitialized_default_construct;
         using std::ranges::uninitialized_default_construct_n;
-    }  // namespace ranges
+    } // namespace ranges
     using std::uninitialized_value_construct;
     using std::uninitialized_value_construct_n;
     namespace ranges {
         using std::ranges::uninitialized_value_construct;
         using std::ranges::uninitialized_value_construct_n;
-    }  // namespace ranges
+    } // namespace ranges
     using std::uninitialized_copy;
     using std::uninitialized_copy_n;
     namespace ranges {
@@ -395,7 +395,7 @@ export namespace std {
         using std::ranges::uninitialized_copy_n;
         using std::ranges::uninitialized_copy_n_result;
         using std::ranges::uninitialized_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::uninitialized_move;
     using std::uninitialized_move_n;
     namespace ranges {
@@ -403,13 +403,13 @@ export namespace std {
         using std::ranges::uninitialized_move_n;
         using std::ranges::uninitialized_move_n_result;
         using std::ranges::uninitialized_move_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::uninitialized_fill;
     using std::uninitialized_fill_n;
     namespace ranges {
         using std::ranges::uninitialized_fill;
         using std::ranges::uninitialized_fill_n;
-    }  // namespace ranges
+    } // namespace ranges
     using std::construct_at;
     namespace ranges {
         using std::ranges::construct_at;
@@ -421,7 +421,7 @@ export namespace std {
         using std::ranges::destroy;
         using std::ranges::destroy_at;
         using std::ranges::destroy_n;
-    }  // namespace ranges
+    } // namespace ranges
     using std::default_delete;
     using std::make_unique;
     using std::unique_ptr;
@@ -456,7 +456,7 @@ export namespace std {
     using std::static_pointer_cast;
     using std::swap;
     using std::weak_ptr;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::cerr;
@@ -467,7 +467,7 @@ export namespace std {
     using std::wcin;
     using std::wclog;
     using std::wcout;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::ifstream;
@@ -482,7 +482,13 @@ export namespace std {
         using std::ranges::in_out_out_result;
         using std::ranges::in_out_result;
         using std::ranges::min_max_result;
-    }  // namespace ranges
+
+#ifdef _MSC_VER
+        namespace _Pipe {
+            using std::ranges::_Pipe::operator|;
+        }
+#endif
+    } // namespace ranges
     using std::all_of;
     namespace ranges {
         using std::ranges::all_of;
@@ -499,12 +505,12 @@ export namespace std {
     namespace ranges {
         using std::ranges::for_each;
         using std::ranges::for_each_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::for_each_n;
     namespace ranges {
         using std::ranges::for_each_n;
         using std::ranges::for_each_n_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::find;
     using std::find_if;
     using std::find_if_not;
@@ -512,7 +518,7 @@ export namespace std {
         using std::ranges::find;
         using std::ranges::find_if;
         using std::ranges::find_if_not;
-    }  // namespace ranges
+    } // namespace ranges
     namespace ranges {}
     using std::find_end;
     namespace ranges {
@@ -531,12 +537,12 @@ export namespace std {
     namespace ranges {
         using std::ranges::count;
         using std::ranges::count_if;
-    }  // namespace ranges
+    } // namespace ranges
     using std::mismatch;
     namespace ranges {
         using std::ranges::mismatch;
         using std::ranges::mismatch_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::equal;
     namespace ranges {
         using std::ranges::equal;
@@ -558,50 +564,50 @@ export namespace std {
     namespace ranges {
         using std::ranges::copy;
         using std::ranges::copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::copy_n;
     namespace ranges {
         using std::ranges::copy_n;
         using std::ranges::copy_n_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::copy_if;
     namespace ranges {
         using std::ranges::copy_if;
         using std::ranges::copy_if_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::copy_backward;
     namespace ranges {
         using std::ranges::copy_backward;
         using std::ranges::copy_backward_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::move;
     namespace ranges {
         using std::ranges::move;
         using std::ranges::move_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::move_backward;
     namespace ranges {
         using std::ranges::move_backward;
         using std::ranges::move_backward_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::swap_ranges;
     namespace ranges {
         using std::ranges::swap_ranges;
         using std::ranges::swap_ranges_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::iter_swap;
     using std::transform;
     namespace ranges {
         using std::ranges::binary_transform_result;
         using std::ranges::transform;
         using std::ranges::unary_transform_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::replace;
     using std::replace_if;
     namespace ranges {
         using std::ranges::replace;
         using std::ranges::replace_if;
-    }  // namespace ranges
+    } // namespace ranges
     using std::replace_copy;
     using std::replace_copy_if;
     namespace ranges {
@@ -609,25 +615,25 @@ export namespace std {
         using std::ranges::replace_copy_if;
         using std::ranges::replace_copy_if_result;
         using std::ranges::replace_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::fill;
     using std::fill_n;
     namespace ranges {
         using std::ranges::fill;
         using std::ranges::fill_n;
-    }  // namespace ranges
+    } // namespace ranges
     using std::generate;
     using std::generate_n;
     namespace ranges {
         using std::ranges::generate;
         using std::ranges::generate_n;
-    }  // namespace ranges
+    } // namespace ranges
     using std::remove;
     using std::remove_if;
     namespace ranges {
         using std::ranges::remove;
         using std::ranges::remove_if;
-    }  // namespace ranges
+    } // namespace ranges
     using std::remove_copy;
     using std::remove_copy_if;
     namespace ranges {
@@ -635,7 +641,7 @@ export namespace std {
         using std::ranges::remove_copy_if;
         using std::ranges::remove_copy_if_result;
         using std::ranges::remove_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::unique;
     namespace ranges {
         using std::ranges::unique;
@@ -644,7 +650,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::unique_copy;
         using std::ranges::unique_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::reverse;
     namespace ranges {
         using std::ranges::reverse;
@@ -653,7 +659,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::reverse_copy;
         using std::ranges::reverse_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::rotate;
     namespace ranges {
         using std::ranges::rotate;
@@ -662,7 +668,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::rotate_copy;
         using std::ranges::rotate_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::sample;
     namespace ranges {
         using std::ranges::sample;
@@ -691,13 +697,13 @@ export namespace std {
     namespace ranges {
         using std::ranges::partial_sort_copy;
         using std::ranges::partial_sort_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::is_sorted;
     using std::is_sorted_until;
     namespace ranges {
         using std::ranges::is_sorted;
         using std::ranges::is_sorted_until;
-    }  // namespace ranges
+    } // namespace ranges
     using std::nth_element;
     namespace ranges {
         using std::ranges::nth_element;
@@ -734,7 +740,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::partition_copy;
         using std::ranges::partition_copy_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::partition_point;
     namespace ranges {
         using std::ranges::partition_point;
@@ -743,7 +749,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::merge;
         using std::ranges::merge_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::inplace_merge;
     namespace ranges {
         using std::ranges::inplace_merge;
@@ -756,22 +762,22 @@ export namespace std {
     namespace ranges {
         using std::ranges::set_union;
         using std::ranges::set_union_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::set_intersection;
     namespace ranges {
         using std::ranges::set_intersection;
         using std::ranges::set_intersection_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::set_difference;
     namespace ranges {
         using std::ranges::set_difference;
         using std::ranges::set_difference_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::set_symmetric_difference;
     namespace ranges {
         using std::ranges::set_symmetric_difference;
         using std::ranges::set_symmetric_difference_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::push_heap;
     namespace ranges {
         using std::ranges::push_heap;
@@ -808,7 +814,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::minmax;
         using std::ranges::minmax_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::min_element;
     namespace ranges {
         using std::ranges::min_element;
@@ -821,7 +827,7 @@ export namespace std {
     namespace ranges {
         using std::ranges::minmax_element;
         using std::ranges::minmax_element_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::clamp;
     namespace ranges {
         using std::ranges::clamp;
@@ -835,13 +841,13 @@ export namespace std {
     namespace ranges {
         using std::ranges::next_permutation;
         using std::ranges::next_permutation_result;
-    }  // namespace ranges
+    } // namespace ranges
     using std::prev_permutation;
     namespace ranges {
         using std::ranges::prev_permutation;
         using std::ranges::prev_permutation_result;
-    }  // namespace ranges
-}  // namespace std
+    } // namespace ranges
+} // namespace std
 
 export namespace std {
     using std::adopt_lock;
@@ -862,14 +868,14 @@ export namespace std {
     using std::try_to_lock;
     using std::try_to_lock_t;
     using std::unique_lock;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::condition_variable;
     using std::condition_variable_any;
     using std::cv_status;
     using std::notify_all_at_thread_exit;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::atomic;
@@ -961,7 +967,7 @@ export namespace std {
     using std::memory_order_relaxed;
     using std::memory_order_release;
     using std::memory_order_seq_cst;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::coroutine_handle;
@@ -974,7 +980,7 @@ export namespace std {
     using std::noop_coroutine_promise;
     using std::suspend_always;
     using std::suspend_never;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::byte;
@@ -994,7 +1000,7 @@ export namespace std {
     using std::operator^;
     using std::operator~;
     using std::to_integer;
-}  // namespace std
+} // namespace std
 // Ease the use
 export {
     using ::max_align_t;
@@ -1017,7 +1023,7 @@ export namespace std {
     using std::terminate_handler;
     using std::throw_with_nested;
     using std::uncaught_exceptions;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::as_const;
@@ -1059,8 +1065,8 @@ export namespace std {
         using rel_ops::operator>;
         using rel_ops::operator<=;
         using rel_ops::operator>=;
-    }  // namespace rel_ops
-}  // namespace std
+    } // namespace rel_ops
+} // namespace std
 
 export namespace std {
     namespace ranges {
@@ -1104,7 +1110,7 @@ export namespace std {
         using std::ranges::view_base;
         using std::ranges::view_interface;
         using std::ranges::viewable_range;
-    }  // namespace ranges
+    } // namespace ranges
     using std::ranges::get;
     namespace ranges {
         using std::ranges::borrowed_iterator_t;
@@ -1127,7 +1133,7 @@ export namespace std {
         namespace views {
             using std::ranges::views::all;
             using std::ranges::views::all_t;
-        }  // namespace views
+        } // namespace views
         using std::ranges::filter_view;
         using std::ranges::ref_view;
         namespace views {
@@ -1162,7 +1168,7 @@ export namespace std {
         namespace views {
             using std::ranges::views::lazy_split;
             using std::ranges::views::split;
-        }  // namespace views
+        } // namespace views
         namespace views {
             using std::ranges::views::counted;
         }
@@ -1181,12 +1187,12 @@ export namespace std {
             using std::ranges::views::elements;
             using std::ranges::views::keys;
             using std::ranges::views::values;
-        }  // namespace views
-    }  // namespace ranges
+        } // namespace views
+    } // namespace ranges
     namespace views = ranges::views;
     using std::tuple_element;
     using std::tuple_size;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::atto;
@@ -1222,18 +1228,18 @@ export namespace std {
     using std::ratio_not_equal_v;
     using std::ratio_subtract;
     using std::tera;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::float_denorm_style;
     using std::float_round_style;
     using std::numeric_limits;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::binary_semaphore;
     using std::counting_semaphore;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::domain_error;
@@ -1245,7 +1251,7 @@ export namespace std {
     using std::range_error;
     using std::runtime_error;
     using std::underflow_error;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::_Exit;
@@ -1290,13 +1296,13 @@ export namespace std {
     using std::system;
     using std::wcstombs;
     using std::wctomb;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     namespace chrono {
         using std::chrono::duration;
         using std::chrono::time_point;
-    }  // namespace chrono
+    } // namespace chrono
     using std::common_type;
     namespace chrono {
         using std::chrono::duration_values;
@@ -1313,15 +1319,14 @@ export namespace std {
         using std::chrono::operator<=;
         using std::chrono::operator>=;
         using std::chrono::operator<=>;
-        using std::chrono::ceil;
-        using std::chrono::duration_cast;
-        using std::chrono::floor;
-        using std::chrono::round;
         using std::chrono::abs;
+        using std::chrono::ceil;
         using std::chrono::day;
         using std::chrono::days;
+        using std::chrono::duration_cast;
         using std::chrono::file_clock;
         using std::chrono::file_time;
+        using std::chrono::floor;
         using std::chrono::hh_mm_ss;
         using std::chrono::high_resolution_clock;
         using std::chrono::hours;
@@ -1344,6 +1349,7 @@ export namespace std {
         using std::chrono::month_weekday_last;
         using std::chrono::months;
         using std::chrono::nanoseconds;
+        using std::chrono::round;
         using std::chrono::seconds;
         using std::chrono::steady_clock;
         using std::chrono::sys_days;
@@ -1362,7 +1368,7 @@ export namespace std {
         using std::chrono::year_month_weekday;
         using std::chrono::year_month_weekday_last;
         using std::chrono::years;
-    }  // namespace chrono
+    } // namespace chrono
     namespace chrono {
         using std::chrono::April;
         using std::chrono::August;
@@ -1384,18 +1390,18 @@ export namespace std {
         using std::chrono::Thursday;
         using std::chrono::Tuesday;
         using std::chrono::Wednesday;
-    }  // namespace chrono
-}  // namespace std
+    } // namespace chrono
+} // namespace std
 export namespace std::inline literals::inline chrono_literals {
-        using std::literals::chrono_literals::operator""h;
-        using std::literals::chrono_literals::operator""min;
-        using std::literals::chrono_literals::operator""s;
-        using std::literals::chrono_literals::operator""ms;
-        using std::literals::chrono_literals::operator""us;
-        using std::literals::chrono_literals::operator""ns;
-        using std::literals::chrono_literals::operator""d;
-        using std::literals::chrono_literals::operator""y;
-}  // namespace std::inline literals::inline chrono_literals
+    using std::literals::chrono_literals::operator""h;
+    using std::literals::chrono_literals::operator""min;
+    using std::literals::chrono_literals::operator""s;
+    using std::literals::chrono_literals::operator""ms;
+    using std::literals::chrono_literals::operator""us;
+    using std::literals::chrono_literals::operator""ns;
+    using std::literals::chrono_literals::operator""d;
+    using std::literals::chrono_literals::operator""y;
+} // namespace std::inline literals::inline chrono_literals
 
 export namespace std {
     using std::basic_string;
@@ -1431,14 +1437,14 @@ export namespace std {
         using std::pmr::u32string;
         using std::pmr::u8string;
         using std::pmr::wstring;
-    }  // namespace pmr
+    } // namespace pmr
     using std::hash;
     inline namespace literals {
         inline namespace string_literals {
             using std::literals::string_literals::operator""s;
         }
-    }  // namespace literals
-}  // namespace std
+    } // namespace literals
+} // namespace std
 
 export namespace std {
     using std::array;
@@ -1449,7 +1455,7 @@ export namespace std {
     using std::to_array;
     using std::tuple_element;
     using std::tuple_size;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::bad_optional_access;
@@ -1466,7 +1472,7 @@ export namespace std {
     using std::hash;
     using std::make_optional;
     using std::swap;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::assignable_from;
@@ -1500,7 +1506,7 @@ export namespace std {
     using std::totally_ordered;
     using std::totally_ordered_with;
     using std::unsigned_integral;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::int16_t;
@@ -1531,7 +1537,7 @@ export namespace std {
     using std::uint_least8_t;
     using std::uintmax_t;
     using std::uintptr_t;
-}  // namespace std
+} // namespace std
 // FIXME: Ease the use.
 export {
     using ::int16_t;
@@ -1576,7 +1582,7 @@ export namespace std {
     using std::priority_queue;
     using std::swap;
     using std::uses_allocator;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::align_val_t;
@@ -1590,7 +1596,7 @@ export namespace std {
     using std::nothrow;
     using std::nothrow_t;
     using std::set_new_handler;
-}  // namespace std
+} // namespace std
 export {
     using ::operator new;
     using ::operator delete;
@@ -1616,7 +1622,7 @@ export namespace std {
     using std::swap;
     using std::tuple_size_v;
     using std::uses_allocator;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::add_const;
@@ -1842,7 +1848,7 @@ export namespace std {
     using std::unwrap_reference;
     using std::unwrap_reference_t;
     using std::void_t;
-}  // namespace std
+} // namespace std
 
 export namespace std {
     using std::jthread;
@@ -1853,16 +1859,16 @@ export namespace std {
         using std::this_thread::sleep_for;
         using std::this_thread::sleep_until;
         using std::this_thread::yield;
-    }  // namespace this_thread
+    } // namespace this_thread
     using std::operator==;
     using std::operator<=>;
     using std::operator<<;
     using std::hash;
-}  // namespace std
+} // namespace std
 
 #if defined(__GLIBCXX__) || defined(__GLIBCPP__)
 export namespace __gnu_cxx {
-using __gnu_cxx::operator==;
-using __gnu_cxx::operator-;
-}  // namespace __gnu_cxx
+    using __gnu_cxx::operator==;
+    using __gnu_cxx::operator-;
+} // namespace __gnu_cxx
 #endif

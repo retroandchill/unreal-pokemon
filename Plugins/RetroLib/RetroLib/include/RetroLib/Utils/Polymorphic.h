@@ -7,28 +7,33 @@
  */
 #pragma once
 
-#ifndef RETROLIB_EXPORT
+#if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Inheritance.h"
 #include "RetroLib/Concepts/OpaqueStorage.h"
+
+#include <array>
 #include <typeinfo>
 #include <utility>
+#endif
 
+#ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
 
 namespace Retro {
     /**
-     * @brief A class template that provides polymorphic storage and access capabilities for types derived from a base class.
+     * @brief A class template that provides polymorphic storage and access capabilities for types derived from a base
+     * class.
      *
-     * The Polymorphic class allows storing objects of different derived types within an instance without losing the polymorphic
-     * behavior. It provides interfaces to manage the lifetime and access the stored object polymorphically.
+     * The Polymorphic class allows storing objects of different derived types within an instance without losing the
+     * polymorphic behavior. It provides interfaces to manage the lifetime and access the stored object polymorphically.
      *
      * @tparam T The base class type which all stored objects must derive from. Must satisfy the ClassType concept.
      */
     RETROLIB_EXPORT template <ClassType T, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
-        requires (SmallStorageSize >= sizeof(void*))
+        requires(SmallStorageSize >= sizeof(void *))
     class Polymorphic {
-         template<typename U>
+        template <typename U>
             requires std::derived_from<U, T>
         static constexpr bool fitsSmallStorage = sizeof(U) <= SmallStorageSize;
 
@@ -47,7 +52,9 @@ namespace Retro {
          *
          * @throws No exceptions are thrown. The constructor is marked noexcept.
          */
-        constexpr Polymorphic() noexcept requires std::is_default_constructible_v<T> {
+        constexpr Polymorphic() noexcept
+            requires std::is_default_constructible_v<T>
+        {
             storage.template emplace<T>();
         }
 
@@ -71,7 +78,7 @@ namespace Retro {
          */
         template <typename U>
             requires std::derived_from<std::decay_t<U>, T>
-        explicit(false) constexpr Polymorphic(U&& value) noexcept : vtable(getVTable<U>()) {
+        explicit(false) constexpr Polymorphic(U &&value) noexcept : vtable(getVTable<U>()) {
             storage.template emplace<std::decay_t<U>>(std::forward<U>(value));
         }
 
@@ -99,7 +106,7 @@ namespace Retro {
          */
         template <typename U, typename... A>
             requires std::derived_from<U, T> && std::constructible_from<U, A...>
-        explicit constexpr Polymorphic(std::in_place_type_t<U>, A&&... args) noexcept : vtable(getVTable<U>()) {
+        explicit constexpr Polymorphic(std::in_place_type_t<U>, A &&...args) noexcept : vtable(getVTable<U>()) {
             storage.template emplace<U>(std::forward<A>(args)...);
         }
 
@@ -118,7 +125,7 @@ namespace Retro {
          *
          * @throws No exceptions are thrown. The constructor is marked noexcept.
          */
-        constexpr Polymorphic(const Polymorphic& other) noexcept : vtable(other.vtable) {
+        constexpr Polymorphic(const Polymorphic &other) noexcept : vtable(other.vtable) {
             vtable->copy(other.storage, storage);
         }
 
@@ -139,7 +146,7 @@ namespace Retro {
          *
          * @throws No exceptions are thrown. The constructor is marked noexcept.
          */
-        constexpr Polymorphic(Polymorphic&& other) noexcept : vtable(other.vtable) {
+        constexpr Polymorphic(Polymorphic &&other) noexcept : vtable(other.vtable) {
             vtable->move(other.storage, storage);
         }
 
@@ -169,7 +176,7 @@ namespace Retro {
          * @return A reference to the current object after assignment.
          * @note The operation is noexcept, implying it does not throw exceptions.
          */
-        constexpr Polymorphic& operator=(const Polymorphic& other) noexcept {
+        constexpr Polymorphic &operator=(const Polymorphic &other) noexcept {
             if (vtable->getType() == other.vtable->getType()) {
                 vtable = other.vtable;
                 vtable->copyAssign(other.storage, storage);
@@ -198,7 +205,7 @@ namespace Retro {
          *
          * @note The operation is noexcept, ensuring that it does not throw exceptions.
          */
-        constexpr Polymorphic& operator=(Polymorphic&& other) noexcept {
+        constexpr Polymorphic &operator=(Polymorphic &&other) noexcept {
             if (vtable->getType() == other.vtable->getType()) {
                 vtable = other.vtable;
                 vtable->moveAssign(other.storage, storage);
@@ -225,7 +232,7 @@ namespace Retro {
          */
         template <typename U>
             requires std::derived_from<std::decay_t<U>, T>
-        constexpr Polymorphic& operator=(U&& value) noexcept {
+        constexpr Polymorphic &operator=(U &&value) noexcept {
             emplace<std::decay_t<U>>(std::forward<U>(value));
             return *this;
         }
@@ -238,7 +245,7 @@ namespace Retro {
          *
          * @return A pointer to the stored value of type T.
          */
-        constexpr T* get() {
+        constexpr T *get() {
             return vtable->getValue(storage);
         }
 
@@ -250,7 +257,7 @@ namespace Retro {
          *
          * @return A pointer to the stored value of type T.
          */
-        constexpr const T* get() const {
+        constexpr const T *get() const {
             return vtable->getConstValue(storage);
         }
 
@@ -263,7 +270,7 @@ namespace Retro {
          *
          * @return A pointer of type T* managed by this object.
          */
-        constexpr T* operator->() {
+        constexpr T *operator->() {
             return get();
         }
 
@@ -276,7 +283,7 @@ namespace Retro {
          *
          * @return A pointer of type T* managed by this object.
          */
-        constexpr const T* operator->() const {
+        constexpr const T *operator->() const {
             return get();
         }
 
@@ -289,7 +296,7 @@ namespace Retro {
          *
          * @return A reference to the object of type T that is managed by the current instance.
          */
-        constexpr T& operator*() {
+        constexpr T &operator*() {
             return *get();
         }
 
@@ -302,7 +309,7 @@ namespace Retro {
          *
          * @return A reference to the object of type T that is managed by the current instance.
          */
-        constexpr const T& operator*() const {
+        constexpr const T &operator*() const {
             return *get();
         }
 
@@ -324,11 +331,11 @@ namespace Retro {
          */
         template <typename U, typename... A>
             requires std::derived_from<U, T>
-        constexpr void emplace(A&&... args) noexcept {
+        constexpr void emplace(A &&...args) noexcept {
             vtable->destroy(storage);
             vtable = getVTable<U>();
             if constexpr (fitsSmallStorage<U>) {
-                new (reinterpret_cast<U*>(storage.smallStorage.data())) U(std::forward<A>(args)...);
+                new (reinterpret_cast<U *>(storage.smallStorage.data())) U(std::forward<A>(args)...);
             } else {
                 storage.largeStorage = new U(std::forward<A>(args)...);
             }
@@ -350,9 +357,9 @@ namespace Retro {
 
             template <typename U, typename... A>
                 requires std::derived_from<U, T> && std::constructible_from<U, A...>
-            constexpr void emplace(A&&... args) noexcept {
+            constexpr void emplace(A &&...args) noexcept {
                 if constexpr (fitsSmallStorage<U>) {
-                    new (reinterpret_cast<U*>(smallStorage.data())) U(std::forward<A>(args)...);
+                    new (reinterpret_cast<U *>(smallStorage.data())) U(std::forward<A>(args)...);
                 } else {
                     largeStorage = new U(std::forward<A>(args)...);
                 }
@@ -360,22 +367,21 @@ namespace Retro {
         };
 
         struct VTable {
-            const std::type_info& (*getType)();
+            const std::type_info &(*getType)();
             size_t (*getSize)();
-            T* (*getValue)(OpaqueStorage& storage);
-            const T* (*getConstValue)(const OpaqueStorage& storage);
-            void (*destroy)(OpaqueStorage& storage);
-            void (*copy)(const OpaqueStorage& src, OpaqueStorage& dest);
-            void (*copyAssign)(const OpaqueStorage& src, OpaqueStorage& dest);
-            void (*move)(OpaqueStorage& src, OpaqueStorage& dest);
-            void (*moveAssign)(OpaqueStorage& src, OpaqueStorage& dest);
-
+            T *(*getValue)(OpaqueStorage &storage);
+            const T *(*getConstValue)(const OpaqueStorage &storage);
+            void (*destroy)(OpaqueStorage &storage);
+            void (*copy)(const OpaqueStorage &src, OpaqueStorage &dest);
+            void (*copyAssign)(const OpaqueStorage &src, OpaqueStorage &dest);
+            void (*move)(OpaqueStorage &src, OpaqueStorage &dest);
+            void (*moveAssign)(OpaqueStorage &src, OpaqueStorage &dest);
         };
 
         template <typename U>
             requires std::derived_from<U, T>
         struct VTableImpl {
-            static constexpr const std::type_info & getType() {
+            static constexpr const std::type_info &getType() {
                 return typeid(U);
             }
 
@@ -385,81 +391,81 @@ namespace Retro {
 
             static constexpr T *getValue(OpaqueStorage &data) {
                 if constexpr (fitsSmallStorage<U>) {
-                    return reinterpret_cast<U*>(data.smallStorage.data());
+                    return reinterpret_cast<U *>(data.smallStorage.data());
                 } else {
-                    return static_cast<U*>(data.largeStorage);
+                    return static_cast<U *>(data.largeStorage);
                 }
             }
 
-            static constexpr const T* getConstValue(const OpaqueStorage &data) {
+            static constexpr const T *getConstValue(const OpaqueStorage &data) {
                 if constexpr (fitsSmallStorage<U>) {
-                    return reinterpret_cast<const U*>(data.smallStorage.data());
+                    return reinterpret_cast<const U *>(data.smallStorage.data());
                 } else {
-                    return static_cast<const U*>(data.largeStorage);
+                    return static_cast<const U *>(data.largeStorage);
                 }
             }
 
             static constexpr void destroy(OpaqueStorage &data) {
                 if constexpr (fitsSmallStorage<U>) {
-                    reinterpret_cast<const U*>(data.smallStorage.data())->~U();
+                    reinterpret_cast<const U *>(data.smallStorage.data())->~U();
                 } else {
-                    delete static_cast<const U*>(data.largeStorage);
+                    delete static_cast<const U *>(data.largeStorage);
                 }
             }
 
             static constexpr void copy(const OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fitsSmallStorage<U>) {
-                    dest.template emplace<U>(*reinterpret_cast<const U*>(src.smallStorage.data()));
+                    dest.template emplace<U>(*reinterpret_cast<const U *>(src.smallStorage.data()));
                 } else {
-                    dest.template emplace<U>(*static_cast<const U*>(src.largeStorage));
+                    dest.template emplace<U>(*static_cast<const U *>(src.largeStorage));
                 }
             }
 
             static constexpr void copyAssign(const OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fitsSmallStorage<U>) {
-                    *reinterpret_cast<U*>(dest.smallStorage.data()) = *reinterpret_cast<const U*>(src.smallStorage.data());
+                    *reinterpret_cast<U *>(dest.smallStorage.data()) =
+                        *reinterpret_cast<const U *>(src.smallStorage.data());
                 } else {
-                    *static_cast<U*>(dest.largeStorage) = *static_cast<const U*>(src.largeStorage);
+                    *static_cast<U *>(dest.largeStorage) = *static_cast<const U *>(src.largeStorage);
                 }
             }
 
             static constexpr void move(OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fitsSmallStorage<U>) {
-                    dest.template emplace<U>(std::move(*reinterpret_cast<U*>(src.smallStorage.data())));
+                    dest.template emplace<U>(std::move(*reinterpret_cast<U *>(src.smallStorage.data())));
                 } else {
-                    dest.template emplace<U>(std::move(*static_cast<U*>(src.largeStorage)));
+                    dest.template emplace<U>(std::move(*static_cast<U *>(src.largeStorage)));
                 }
             }
 
             static constexpr void moveAssign(OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fitsSmallStorage<U>) {
-                    *reinterpret_cast<U*>(dest.smallStorage.data()) = std::move(*reinterpret_cast<U*>(src.smallStorage.data()));
+                    *reinterpret_cast<U *>(dest.smallStorage.data()) =
+                        std::move(*reinterpret_cast<U *>(src.smallStorage.data()));
                 } else {
-                    *static_cast<U*>(dest.largeStorage) = std::move(*static_cast<U*>(src.largeStorage));
+                    *static_cast<U *>(dest.largeStorage) = std::move(*static_cast<U *>(src.largeStorage));
                 }
             }
         };
 
         template <typename U>
             requires std::derived_from<U, T>
-        static const VTable* getVTable() {
+        static const VTable *getVTable() {
             using ImplType = VTableImpl<U>;
-            static constexpr VTable vtable = {
-                    .getType = &ImplType::getType,
-                    .getSize = &ImplType::getSize,
-                    .getValue = &ImplType::getValue,
-                    .getConstValue = &ImplType::getConstValue,
-                    .destroy = &ImplType::destroy,
-                    .copy = &ImplType::copy,
-                    .copyAssign = &ImplType::copyAssign,
-                    .move = &ImplType::move,
-                    .moveAssign = &ImplType::moveAssign
-            };
+            static constexpr VTable vtable = {.getType = &ImplType::getType,
+                                              .getSize = &ImplType::getSize,
+                                              .getValue = &ImplType::getValue,
+                                              .getConstValue = &ImplType::getConstValue,
+                                              .destroy = &ImplType::destroy,
+                                              .copy = &ImplType::copy,
+                                              .copyAssign = &ImplType::copyAssign,
+                                              .move = &ImplType::move,
+                                              .moveAssign = &ImplType::moveAssign};
             return &vtable;
         }
 
         OpaqueStorage storage;
-        const VTable* vtable = getVTable<T>();
+        const VTable *vtable = getVTable<T>();
     };
 
-} // Retro
+} // namespace Retro

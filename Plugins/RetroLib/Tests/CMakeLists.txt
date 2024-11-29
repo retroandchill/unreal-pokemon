@@ -1,7 +1,8 @@
 project(RetroLibTests)
 find_package(Catch2 3 REQUIRED)
 
-add_executable(RetroLibTests Utils/PolymorphicTest.cpp)
+add_executable(RetroLibTests Utils/PolymorphicTest.cpp
+        Ranges/Views/AnyViewTest.cpp)
 
 target_link_libraries(RetroLibTests
     PRIVATE

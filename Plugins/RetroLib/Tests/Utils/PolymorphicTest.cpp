@@ -7,18 +7,18 @@
  */
 #include <catch2/catch_test_macros.hpp>
 
-
-#ifdef RETROLIB_WITH_MODULES
+#if RETROLIB_WITH_MODULES
 import std;
 import RetroLib;
 #else
+#include "RetroLib/Utils/Polymorphic.h"
+
 #include <array>
 #include <memory>
-#include "RetroLib/Utils/Polymorphic.h"
 #endif
 
 class Base {
-public:
+  public:
     virtual ~Base() = default;
 
     virtual int getValue() const {
@@ -27,42 +27,45 @@ public:
 };
 
 class Derived1 : public Base {
-public:
-    explicit Derived1(int value) : value(value) {}
+  public:
+    explicit Derived1(int value) : value(value) {
+    }
 
     int getValue() const override {
         return value;
     }
 
-private:
+  private:
     int value;
 };
 
 class Derived2 : public Base {
-public:
-    explicit Derived2(const std::array<int, 15>& values) : values(values) {}
+  public:
+    explicit Derived2(const std::array<int, 15> &values) : values(values) {
+    }
 
     int getValue() const override {
         int value = 0;
-        for (int val: values) {
+        for (int val : values) {
             value += val;
         }
         return value;
     }
 
-private:
+  private:
     std::array<int, 15> values;
 };
 
 class Derived3 : public Base {
-public:
-    explicit Derived3(std::shared_ptr<int> value) : value(std::move(value)) {}
+  public:
+    explicit Derived3(std::shared_ptr<int> value) : value(std::move(value)) {
+    }
 
     int getValue() const override {
         return *value;
     }
 
-private:
+  private:
     std::shared_ptr<int> value;
 };
 
@@ -122,15 +125,15 @@ TEST_CASE("Polymorphic types can be instantiated and copied", "[utils]") {
     CHECK(polymorphic1->getValue() == 120);
 
     // Check that dereferencing works correctly
-    auto& dereferenced1 = *polymorphic1;
+    auto &dereferenced1 = *polymorphic1;
     CHECK(dereferenced1.getValue() == 120);
 
     const Retro::Polymorphic<Base> polymorphic3 = Retro::Polymorphic<Base>(std::in_place_type<Derived1>, 150);
-    auto& dereferenced2 = *polymorphic3;
+    auto &dereferenced2 = *polymorphic3;
     CHECK(dereferenced2.getValue() == 150);
 
     polymorphic1 = Retro::Polymorphic<Base>(std::in_place_type<Derived2>, VALUE_ARRAY1);
     const Retro::Polymorphic<Base> polymorphic4 = polymorphic1;
-    auto& dereferenced3 = *polymorphic4;
+    auto &dereferenced3 = *polymorphic4;
     CHECK(dereferenced3.getValue() == 120);
 }
