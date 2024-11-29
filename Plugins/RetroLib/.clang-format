@@ -1,0 +1,13 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+ColumnLimit: 120
+MaxEmptyLinesToKeep: 1
+TabWidth: 4
+IndentWidth: 4
+SortIncludes: CaseInsensitive
+AllowShortFunctionsOnASingleLine: None
+NamespaceIndentation: All
+IncludeBlocks: Regroup
+BreakBeforeConceptDeclarations: true
+AlwaysBreakTemplateDeclarations : Yes
