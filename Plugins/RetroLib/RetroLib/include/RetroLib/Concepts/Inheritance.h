@@ -46,4 +46,4 @@ namespace Retro {
     RETROLIB_EXPORT template <typename T>
     concept PolymorphicType = std::is_class_v<T> && std::has_virtual_destructor_v<T>;
 
-}
+} // namespace Retro
