@@ -9,6 +9,7 @@ module;
 
 #include "RetroLib/RetroLibMacros.h"
 
+#include <bit>
 #include <cassert>
 #include <typeinfo>
 
@@ -19,6 +20,7 @@ import std;
 #define RETROLIB_EXPORT export
 
 // clang-format off
+#include "RetroLib/TypeTraits.h"
 #include "RetroLib/FunctionTraits.h"
 
 #include "RetroLib/Concepts/Inheritance.h"
@@ -26,6 +28,8 @@ import std;
 #include "RetroLib/Concepts/ParameterPacks.h"
 
 #include "RetroLib/Functional/BindBack.h"
+#include "RetroLib/Functional/BindFront.h"
+#include "RetroLib/Functional/BindMethod.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 
 #include "RetroLib/Utils/ForwardLike.h"

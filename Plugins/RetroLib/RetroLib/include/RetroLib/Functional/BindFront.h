@@ -1,7 +1,7 @@
 /**
- * @file BindBack.h
- * @brief Contains the definitions for the bind_back method, which exists in the STL in C++23, but is needed here as
- * well.
+ * @file BindFront.h
+ * @brief Contains the definitions for the constexpr bind_front method, which exists in the STL in C++26, but is needed
+ * here as
  *
  * @author Retro & Chill
  * https://github.com/retroandchill
@@ -21,50 +21,43 @@
 #endif
 
 namespace retro {
-
     /**
-     * @brief A structure that binds additional arguments to a functor and provides
-     * invocable operators to invoke the functor with pre-bound and new arguments.
+     * @brief A structure that binds a set of arguments (ArgsTuple) to the front of a functor, enabling calls with
+     * additional arguments.
      *
-     * This template struct allows binding of arguments to the back of the argument
-     * list of a given functor. It checks at compile-time that the provided functor
-     * is valid and constructs an invocable object that accepts additional call-time
-     * arguments.
+     * The BindFrontConstInvoker template structure allows for permanent binding of arguments to the front of a
+     * specified functor, enabling invocation with additional arguments at a later point. It leverages template
+     * metaprogramming to ensure safe and efficient forwarding and invocation of the combined arguments. This invoker is
+     * particularly useful in scenarios that require binding known arguments in advance while preserving the flexibility
+     * to specify additional call-time arguments dynamically.
      *
-     * @tparam Functor The functor to be invoked. This can be a function pointer,
-     * member function pointer, or a callable object.
-     * @tparam A Types of the arguments to be bound to the functor.
-     *
-     * @require `is_valid_functor_object(Functor)` ensures that the functor is a valid callable entity.
-     *
-     * The class provides several operator() overloads to allow invocation with
-     * different const correctness and value category of `args`, reflecting the
-     * logic based on left-value, const-left-value, and right-value contexts.
+     * @tparam Functor The functor to be invoked with both bound and additional arguments. Must satisfy
+     * is_valid_functor_object.
+     * @tparam A Types of the arguments that are to be bound to the front of the Functor.
      */
     template <auto Functor, typename... A>
         requires(is_valid_functor_object(Functor))
-    struct BindBackConstInvoker {
+    struct BindFrontConstInvoker {
         using F = decltype(Functor);
         using ArgsTuple = std::tuple<A...>;
 
         /**
-         * @brief Constructs a BindBackConstInvoker object with a set of arguments.
+         * @brief Constructs a BindFrontConstInvoker with bound arguments.
          *
-         * This constructor initializes a BindBackConstInvoker instance by forwarding the
-         * provided arguments into a tuple (ArgsTuple) that will be used to store them.
-         * The constructor employs several constraints to ensure that the arguments are
-         * compatible with the intended use of the BindBackConstInvoker.
+         * This constructor initializes a BindFrontConstInvoker by binding a set of arguments,
+         * provided as a parameter pack, to the front of the invoker. The constructor utilizes
+         * template metaprogramming to ensure that the types of arguments can construct an
+         * ArgsTuple and verifies that the argument pack does not match a specific constraint
+         * represented by the PackSameAs concept. It forwards these arguments to construct
+         * them efficiently without making unnecessary copies.
          *
-         * @tparam T The types of the arguments to be stored in the ArgsTuple.
-         * @param args The arguments to be forwarded and stored within the instance.
-         *
-         * @require The parameter pack T must be constructible into an ArgsTuple. The
-         *          types of T must not match the BindBackConstInvoker itself to avoid
-         *          recursive template instantiation issues.
+         * @tparam T Variadic template parameter pack representing the types of arguments to be bound.
+         * @param args A set of arguments to be bound at construction. They are forwarded to
+         *             an ArgsTuple for storage.
          */
         template <typename... T>
-            requires std::constructible_from<ArgsTuple, T...> && (!PackSameAs<BindBackConstInvoker, T...>)
-        constexpr explicit BindBackConstInvoker(T &&...args) : args(std::forward<T>(args)...) {
+            requires std::constructible_from<ArgsTuple, T...> && (!PackSameAs<BindFrontConstInvoker, T...>)
+        constexpr explicit BindFrontConstInvoker(T &&...args) : args(std::forward<T>(args)...) {
         }
 
         /**
@@ -84,11 +77,11 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., A &...>
-        constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, T..., A &...>) {
+            requires std::invocable<F, A &..., T...>
+        constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, A &..., T...>) {
             return std::apply(
                 [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(Functor, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                    return std::invoke(Functor, std::forward<U>(final_args)..., std::forward<T>(call_args)...);
                 },
                 args);
         }
@@ -110,12 +103,12 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., const A &...>
+            requires std::invocable<F, const A &..., T...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, T..., const A &...>) {
+        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const A &..., T...>) {
             return std::apply(
                 [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(Functor, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                    return std::invoke(Functor, std::forward<U>(final_args)..., std::forward<T>(call_args)...);
                 },
                 args);
         }
@@ -137,11 +130,11 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., A...>
-        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, T..., A...>) {
+            requires std::invocable<F, A..., T...>
+        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, A..., T...>) {
             return std::apply(
                 [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(Functor, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                    return std::invoke(Functor, std::forward<U>(final_args)..., std::forward<T>(call_args)...);
                 },
                 std::move(args));
         }
@@ -151,46 +144,46 @@ namespace retro {
     };
 
     /**
-     * @class BindBackConstInvoker
+     * @class BindFrontConstInvoker
+     * @brief A utility class to bind an argument to the front of a callable object or functor.
      *
-     * @brief A template structure that enables partial application of a functor by
-     *        binding one of its arguments, allowing subsequent invocations with
-     *        additional arguments.
+     * The BindFrontConstInvoker template class is used to create objects that bind a specified
+     * argument to be used as the first argument in the invocation of a functor. This binding
+     * is done at the time of construction, allowing the functor to be invoked later with
+     * additional arguments.
      *
-     * This class provides a mechanism to bind the last argument of a functor
-     * at construction time, enabling the resulting callable object to be
-     * invoked with the remaining leading arguments. It supports multiple
-     * invocation overloads to handle different const and value qualifiers.
+     * @tparam Functor The callable object or functor to which the argument is to be bound.
+     *          This functor must satisfy specific conditions to be considered valid
+     *          as checked by the `is_valid_functor_object`.
      *
-     * @tparam Functor The type of the functor to be wrapped and invoked.
-     * @tparam A The type of the argument to be bound to the functor.
-     *
-     * @requires The functor must satisfy the `is_valid_functor_object` requirement
-     *           to ensure it can be invoked safely and correctly.
+     * @tparam A The type of the argument to be bound to the functor. The bound argument
+     *          will be passed as the first parameter during invocation.
      */
     template <auto Functor, typename A>
         requires(is_valid_functor_object(Functor))
-    struct BindBackConstInvoker<Functor, A> {
+    struct BindFrontConstInvoker<Functor, A> {
         using F = decltype(Functor);
 
         /**
-         * @brief Constructs a BindBackConstInvoker by binding a specified argument to the functor.
+         * @brief Constructs a BindFrontConstInvoker object by binding a specified argument.
          *
-         * This constructor enables creating an instance of the BindBackConstInvoker by
-         * forwarding an argument that will be bound to the functor. The argument is stored
-         * within the invoker and applied during function invocation.
+         * The constructor template allows creating a BindFrontConstInvoker object with
+         * an argument that will be bound as the first argument during the invocation
+         * of a functor. The bound argument is stored within the object to enable
+         * call-time combination with additional arguments.
          *
-         * @tparam T The type of the argument to bind, which must be convertible to the type A.
+         * @tparam T The type of the argument being bound. This type must be convertible
+         *           to the type A, which is specified at the class level. Additionally,
+         *           the template enforces that T is not the same as BindFrontConstInvoker
+         *           after type decay, preventing recursive instantiation.
          *
-         * @param arg The argument that will be bound to the last position of the functor's
-         * invocation signature.
-         *
-         * @requires The template parameter T must be convertible to A, and T must not decay
-         * to the same type as A to prevent ambiguity in binding.
+         * @param arg The argument to bind to the functor. This argument is forwarded
+         *            and stored in the BindFrontConstInvoker object to be used during
+         *            subsequent invocations of the associated functor.
          */
         template <typename T>
-            requires std::convertible_to<T, A> && (!std::same_as<std::decay_t<T>, BindBackConstInvoker>)
-        constexpr explicit BindBackConstInvoker(T &&arg) : arg(std::forward<T>(arg)) {
+            requires std::convertible_to<T, A> && (!std::same_as<std::decay_t<T>, BindFrontConstInvoker>)
+        constexpr explicit BindFrontConstInvoker(T &&arg) : arg(std::forward<T>(arg)) {
         }
 
         /**
@@ -210,9 +203,9 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., A &>
-        constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, T..., A &>) {
-            return std::invoke(Functor, std::forward<T>(call_args)..., arg);
+            requires std::invocable<F, A &, T...>
+        constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, A &, T...>) {
+            return std::invoke(Functor, arg, std::forward<T>(call_args)...);
         }
 
         /**
@@ -232,10 +225,10 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., const A &>
+            requires std::invocable<F, const A &, T...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, T..., const A &>) {
-            return std::invoke(Functor, std::forward<T>(call_args)..., arg);
+        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const A &, T...>) {
+            return std::invoke(Functor, arg, std::forward<T>(call_args)...);
         }
 
         /**
@@ -255,9 +248,9 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., A>
-        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, T..., A>) {
-            return std::invoke(Functor, std::forward<T>(call_args)..., std::move(arg));
+            requires std::invocable<F, A, T...>
+        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, A, T...>) {
+            return std::invoke(Functor, std::move(arg), std::forward<T>(call_args)...);
         }
 
       private:
@@ -265,41 +258,51 @@ namespace retro {
     };
 
     /**
-     * @brief A struct that binds the specified arguments at the back of the functor's argument list and provides
-     * multiple invocable interfaces.
+     * @brief A utility structure that binds the first two arguments to a functor and provides multiple callable
+     * operators.
      *
-     * The BindBackConstInvoker is a utility designed to store a functor along
-     * with two arguments that are appended to any additional arguments upon
-     * invocation. This allows for versatile, pre-configured functor invocations
-     * by effectively binding trailing arguments and enabling various const and
-     * mutable invocation scenarios.
+     * The `BindFrontConstInvoker` template binds the first two arguments to a specified functor at the time of its
+     * creation. This allows the invoker object to be called later with additional arguments, combining them with the
+     * pre-bound ones for the final invocation.
      *
-     * @tparam Functor The functor object type to be invoked, which must fulfill
-     *         the is_valid_functor_object requirements.
-     * @tparam A The type of the first argument to bind.
-     * @tparam B The type of the second argument to bind.
+     * @tparam Functor The functor object or function that forms the basis of the invocation.
+     * @tparam A The type of the first argument to be bound to the functor.
+     * @tparam B The type of the second argument to be bound to the functor.
+     *
+     * @requires The `is_valid_functor_object(Functor)` constraint ensures that the provided Functor is a valid callable
+     * entity.
+     *
+     * This struct provides a means to partially apply a functor with a fixed set of initial arguments and ensure
+     * that the object is still callable with additional arguments that can complete the function call.
+     *
+     * The callable operators support different value categories (lvalue, const lvalue, rvalue) of the invoker object,
+     * ensuring flexibility in how the bound arguments are passed or moved during invocation.
+     *
      */
     template <auto Functor, typename A, typename B>
         requires(is_valid_functor_object(Functor))
-    struct BindBackConstInvoker<Functor, A, B> {
+    struct BindFrontConstInvoker<Functor, A, B> {
         using F = decltype(Functor);
 
         /**
-         * @brief Constructs a BindBackConstInvoker with arguments to be bound.
+         * @brief Constructs a BindFrontConstInvoker object with the first two arguments pre-bound.
          *
-         * This constructor initializes a BindBackConstInvoker by storing
-         * the provided arguments for later use during call-time invocation.
-         * The arguments are bound to the end of the argument list of the functor
-         * to be invoked.
+         * This constructor initializes the BindFrontConstInvoker with two arguments that are bound
+         * to the functor to be invoked later. The arguments must be convertible to the specified
+         * types A and B respectively.
          *
-         * @tparam T Type of the first argument to bind, which must be convertible to type A.
-         * @tparam U Type of the second argument to bind.
-         * @param arg1 The first argument to be bound.
-         * @param arg2 The second argument to be bound.
+         * @tparam T The type of the first argument to be bound, which must be convertible to type A.
+         * @tparam U The type of the second argument to be bound, which must be convertible to type B.
+         *
+         * @param arg1 The first argument to be bound to the functor.
+         * @param arg2 The second argument to be bound to the functor.
+         *
+         * @requires std::convertible_to<T, A> Ensures that arg1 is convertible to type A.
+         * @requires std::convertible_to<U, B> Ensures that arg2 is convertible to type B.
          */
         template <typename T, typename U>
             requires std::convertible_to<T, A> && std::convertible_to<U, B>
-        constexpr BindBackConstInvoker(T &&arg1, U &&arg2) : arg1(std::forward<T>(arg1)), arg2(std::forward<U>(arg2)) {
+        constexpr BindFrontConstInvoker(T &&arg1, U &&arg2) : arg1(std::forward<T>(arg1)), arg2(std::forward<U>(arg2)) {
         }
 
         /**
@@ -319,10 +322,10 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., A &, B &>
+            requires std::invocable<F, A &, B &, T...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, T..., A &, B &>) {
-            return std::invoke(Functor, std::forward<T>(call_args)..., arg1, arg2);
+        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, A &, B &, T...>) {
+            return std::invoke(Functor, arg1, arg2, std::forward<T>(call_args)...);
         }
 
         /**
@@ -342,10 +345,10 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., const A &, const B &>
+            requires std::invocable<F, const A &, const B &, T...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, T..., const A &, const B &>) {
-            return std::invoke(Functor, std::forward<T>(call_args)..., arg1, arg2);
+        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const A &, const B &, T...>) {
+            return std::invoke(Functor, arg1, arg2, std::forward<T>(call_args)...);
         }
 
         /**
@@ -365,9 +368,9 @@ namespace retro {
          *          invocability of the functor with the provided and bound arguments.
          */
         template <typename... T>
-            requires std::invocable<F, T..., A, B>
-        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, T..., A, B>) {
-            return std::invoke(Functor, std::forward<T>(call_args)..., std::move(arg1), std::move(arg2));
+            requires std::invocable<F, A, B, T...>
+        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, A, B, T...>) {
+            return std::invoke(Functor, std::move(arg1), std::move(arg2), std::forward<T>(call_args)...);
         }
 
       private:
@@ -376,27 +379,25 @@ namespace retro {
     };
 
     /**
-     * @brief Binds arguments to the back of a functor for future invocation.
+     * @brief Binds a set of arguments to the front of a specified functor.
      *
-     * This function template returns a callable object that, when invoked, calls
-     * the provided `Functor` object with the stored arguments appended after any
-     * new arguments provided at invocation time. It ensures that `Functor` is a
-     * valid callable object by using the `is_valid_functor_object` constraint.
+     * The `bind_front` function template creates a `BindFrontConstInvoker` by capturing
+     * a given set of arguments and associating them with the front of the specified functor.
+     * This function template ensures that the provided functor is valid using the
+     * `is_valid_functor_object` constraint. It leverages perfect forwarding to
+     * efficiently bind arguments without unnecessary copies.
      *
-     * @tparam Functor The callable type to which the arguments will be bound.
-     *                 It must fulfill the `is_valid_functor_object` constraint.
-     * @tparam A Parameter pack representing the types of arguments to be bound
-     *           to the functor.
-     *
-     * @param args Arguments to bind to the back of the functor invocation.
-     *
-     * @return A BindBackConstInvoker instance configured with the deferred
-     *         invocation logic.
+     * @tparam Functor The type of the functor to which the arguments will be bound.
+     *                 This template parameter must satisfy `is_valid_functor_object`.
+     * @tparam A Variadic template parameters representing the types of the arguments
+     *           to be bound to the front of the functor.
+     * @param args Arguments to be bound and forwarded to the invoker.
+     * @return An instance of `BindFrontConstInvoker` with the specified functor
+     *         and bound arguments.
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
         requires(is_valid_functor_object(Functor))
-    constexpr auto bind_back(A &&...args) {
-        return BindBackConstInvoker<Functor, std::decay_t<A>...>(std::forward<A>(args)...);
+    constexpr auto bind_front(A &&...args) {
+        return BindFrontConstInvoker<Functor, std::decay_t<A>...>(std::forward<A>(args)...);
     }
-
 } // namespace retro

@@ -32,7 +32,7 @@ namespace retro {
      * @tparam T The type to be checked.
      */
     RETROLIB_EXPORT template <typename T>
-    concept ClassType = std::is_class_v<T> && (!std::is_union_v<T>);
+    concept Class = std::is_class_v<T> && (!std::is_union_v<T>);
 
     /**
      * @brief Concept to check if a type is a polymorphic class type.

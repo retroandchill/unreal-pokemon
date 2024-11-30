@@ -16,11 +16,11 @@ import RetroLib;
 #include <vector>
 #endif
 
-int add(int a, int b) {
+static int add(int a, int b) {
     return a + b;
 }
 
-void add_to_shared_back(int a, std::shared_ptr<int> ptr) {
+static void add_to_shared_back(int a, std::shared_ptr<int> ptr) {
     *ptr += a;
 }
 
@@ -35,7 +35,7 @@ struct FunctionalObject {
 
 constexpr FunctionalObject functor;
 
-int add_many(int a, int b, int c, int d) {
+static int add_many(int a, int b, int c, int d) {
     return a + b + c + d;
 }
 
