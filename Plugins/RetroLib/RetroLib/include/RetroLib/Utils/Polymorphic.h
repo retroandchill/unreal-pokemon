@@ -12,6 +12,7 @@
 #include "RetroLib/Concepts/OpaqueStorage.h"
 
 #include <array>
+#include <bit>
 #include <typeinfo>
 #include <utility>
 #endif
@@ -30,7 +31,7 @@ namespace retro {
      *
      * @tparam T The base class type which all stored objects must derive from. Must satisfy the ClassType concept.
      */
-    RETROLIB_EXPORT template <ClassType T, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
+    RETROLIB_EXPORT template <Class T, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
         requires(SmallStorageSize >= sizeof(void *))
     class Polymorphic {
         template <typename U>
@@ -335,7 +336,7 @@ namespace retro {
             vtable->destroy(storage);
             vtable = get_vtable<U>();
             if constexpr (fits_small_storage<U>) {
-                new (reinterpret_cast<U *>(storage.small_storage.data())) U(std::forward<A>(args)...);
+                new (std::bit_cast<U *>(storage.small_storage.data())) U(std::forward<A>(args)...);
             } else {
                 storage.large_storage = new U(std::forward<A>(args)...);
             }
@@ -359,7 +360,7 @@ namespace retro {
                 requires std::derived_from<U, T> && std::constructible_from<U, A...>
             constexpr void emplace(A &&...args) noexcept {
                 if constexpr (fits_small_storage<U>) {
-                    new (reinterpret_cast<U *>(small_storage.data())) U(std::forward<A>(args)...);
+                    new (std::bit_cast<U *>(small_storage.data())) U(std::forward<A>(args)...);
                 } else {
                     large_storage = new U(std::forward<A>(args)...);
                 }
@@ -391,7 +392,7 @@ namespace retro {
 
             static constexpr T *get_value(OpaqueStorage &data) {
                 if constexpr (fits_small_storage<U>) {
-                    return reinterpret_cast<U *>(data.small_storage.data());
+                    return std::bit_cast<U *>(data.small_storage.data());
                 } else {
                     return static_cast<U *>(data.large_storage);
                 }
@@ -399,7 +400,7 @@ namespace retro {
 
             static constexpr const T *get_const_value(const OpaqueStorage &data) {
                 if constexpr (fits_small_storage<U>) {
-                    return reinterpret_cast<const U *>(data.small_storage.data());
+                    return std::bit_cast<const U *>(data.small_storage.data());
                 } else {
                     return static_cast<const U *>(data.large_storage);
                 }
@@ -407,7 +408,7 @@ namespace retro {
 
             static constexpr void destroy(OpaqueStorage &data) {
                 if constexpr (fits_small_storage<U>) {
-                    reinterpret_cast<const U *>(data.small_storage.data())->~U();
+                    std::bit_cast<const U *>(data.small_storage.data())->~U();
                 } else {
                     delete static_cast<const U *>(data.large_storage);
                 }
@@ -415,7 +416,7 @@ namespace retro {
 
             static constexpr void copy(const OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fits_small_storage<U>) {
-                    dest.template emplace<U>(*reinterpret_cast<const U *>(src.small_storage.data()));
+                    dest.template emplace<U>(*std::bit_cast<const U *>(src.small_storage.data()));
                 } else {
                     dest.template emplace<U>(*static_cast<const U *>(src.large_storage));
                 }
@@ -423,8 +424,8 @@ namespace retro {
 
             static constexpr void copy_assign(const OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fits_small_storage<U>) {
-                    *reinterpret_cast<U *>(dest.small_storage.data()) =
-                        *reinterpret_cast<const U *>(src.small_storage.data());
+                    *std::bit_cast<U *>(dest.small_storage.data()) =
+                        *std::bit_cast<const U *>(src.small_storage.data());
                 } else {
                     *static_cast<U *>(dest.large_storage) = *static_cast<const U *>(src.large_storage);
                 }
@@ -432,7 +433,7 @@ namespace retro {
 
             static constexpr void move(OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fits_small_storage<U>) {
-                    dest.template emplace<U>(std::move(*reinterpret_cast<U *>(src.small_storage.data())));
+                    dest.template emplace<U>(std::move(*std::bit_cast<U *>(src.small_storage.data())));
                 } else {
                     dest.template emplace<U>(std::move(*static_cast<U *>(src.large_storage)));
                 }
@@ -440,8 +441,8 @@ namespace retro {
 
             static constexpr void move_assign(OpaqueStorage &src, OpaqueStorage &dest) {
                 if constexpr (fits_small_storage<U>) {
-                    *reinterpret_cast<U *>(dest.small_storage.data()) =
-                        std::move(*reinterpret_cast<U *>(src.small_storage.data()));
+                    *std::bit_cast<U *>(dest.small_storage.data()) =
+                        std::move(*std::bit_cast<U *>(src.small_storage.data()));
                 } else {
                     *static_cast<U *>(dest.large_storage) = std::move(*static_cast<U *>(src.large_storage));
                 }
