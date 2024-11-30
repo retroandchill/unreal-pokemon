@@ -7,11 +7,13 @@
  */
 #pragma once
 
-#ifndef RETROLIB_EXPORT
+#if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Inheritance.h"
 
 #include <array>
+#endif
 
+#ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
 

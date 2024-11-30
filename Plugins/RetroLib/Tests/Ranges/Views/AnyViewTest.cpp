@@ -64,7 +64,7 @@ TEST_CASE("Any view can take in a view of any type and iterate over it", "[views
 
     SECTION("Can use any view with a range pipe") {
         auto view = retro::views::AnyView<int>(std::vector<int>({1, 2, 3, 4})) |
-            std::ranges::views::filter([](int value) { return value % 2 == 0; });
+                    std::ranges::views::filter([](int value) { return value % 2 == 0; });
         int count = 0;
         for (auto value : view) {
             count += value;
