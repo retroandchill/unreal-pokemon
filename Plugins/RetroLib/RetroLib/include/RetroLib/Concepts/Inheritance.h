@@ -7,9 +7,11 @@
  */
 #pragma once
 
-#ifndef RETROLIB_EXPORT
+#if !RETROLIB_WITH_MODULES
 #include <type_traits>
+#endif
 
+#ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
 
