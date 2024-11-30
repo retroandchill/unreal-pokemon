@@ -15,7 +15,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace retro {
     /**
      * Global constant used to determine the size of the small buffer for opaque storage types.
      *
@@ -24,4 +24,4 @@ namespace Retro {
      * classes that use templated type erasure where the size of the erased type is consistent.
      */
     RETROLIB_EXPORT constexpr size_t DEFAULT_SMALL_STORAGE_SIZE = sizeof(void *) * 7;
-} // namespace Retro
+} // namespace retro

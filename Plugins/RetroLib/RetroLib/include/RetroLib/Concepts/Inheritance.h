@@ -13,7 +13,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace retro {
     /**
      * A concept that checks if a given type `T` is a class type,
      * excluding union types.
@@ -46,4 +46,4 @@ namespace Retro {
     RETROLIB_EXPORT template <typename T>
     concept PolymorphicType = std::is_class_v<T> && std::has_virtual_destructor_v<T>;
 
-} // namespace Retro
+} // namespace retro

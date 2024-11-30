@@ -20,7 +20,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Views {
+namespace retro::views {
 
     /**
      * @brief A concept to check if a range is compatible with a given type.
@@ -186,7 +186,7 @@ namespace Retro::Views {
          * @param ref A type-erased reference to the object under iteration.
          * @return True if the referenced object is at its end of iteration, false otherwise.
          */
-        virtual bool atEnd(AnyRef ref) = 0;
+        virtual bool at_end(AnyRef ref) = 0;
     };
 
     /**
@@ -474,7 +474,7 @@ namespace Retro::Views {
          * @return true if the current iterator has reached the end of the view, false otherwise.
          */
         constexpr bool operator==(const AnyViewSentinel &other) const {
-            return other.view->atEnd(delegate->iterator());
+            return other.view->at_end(delegate->iterator());
         }
 
         /**
@@ -637,7 +637,7 @@ namespace Retro::Views {
          * @return `true` if the iterator has reached the end of the range;
          * `false` otherwise.
          */
-        bool atEnd(AnyRef ref) override {
+        bool at_end(AnyRef ref) override {
             auto &it = ref.get<const std::ranges::iterator_t<R>>();
             return it == std::ranges::end(range);
         }
@@ -758,4 +758,4 @@ namespace Retro::Views {
       private:
         Polymorphic<AnyViewInterface<T>> data = AnyViewImpl<std::ranges::empty_view<T>>(std::views::empty<T>);
     };
-} // namespace Retro::Views
+} // namespace retro::views
