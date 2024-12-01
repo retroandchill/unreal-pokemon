@@ -28,6 +28,7 @@ namespace retro::optionals {
     concept StlOptional = requires(T &&optional) {
         optional.value();
         *optional;
+        optional.operator->();
         { optional.has_value() } -> std::same_as<bool>;
     };
 
@@ -104,89 +105,84 @@ namespace retro::optionals {
     RETROLIB_EXPORT template <Optional T>
     using ValueType = std::decay_t<CommonReference<T>>;
 
-    /**
-     * @brief A traits structure to determine properties related to optional types.
-     *
-     * This structure is designed to provide information about specific characteristics
-     * of optional types, particularly in the context of template specialization. By default,
-     * the struct specifies that a type is not an optional reference.
-     */
-    template <Optional>
-    struct OptionalTraits {
-        static constexpr bool is_optional_reference = false;
-    };
 
     /**
-     * @struct OptionalTraits
+     * @struct IsOptionalReference
      *
-     * @brief Traits structure used to determine specific characteristics of an optional type.
+     * @brief A type trait to determine if a type is an optional reference.
      *
-     * The OptionalTraits structure is used to inspect the properties of a given optional type
-     * and provides compile-time constant expressions to facilitate conditional logic based on
-     * these properties. This particular instantiation is designed for types wrapped in an
-     * optional-like structure denoted as O<T>.
+     * This structure inherits from `std::false_type` as a default implementation
+     * indicating that, by default, a given type is not an optional reference.
+     * Specializations of this struct can be created for custom types that
+     * represent optional references, allowing compile-time checks or
+     * conditional compilation paths dependent on whether a type meets the
+     * criteria of being an optional reference.
+     */
+    template <Optional>
+    struct IsOptionalReference : std::false_type {};
+
+    /**
+     * @brief A type trait to check if a type is an optional reference.
      *
-     * @tparam O A template parameter where O is an optional-like template and T is the
-     *              type contained within the optional.
-     *              @tparam T The underlying type of the optional
+     * This struct is a specialization for types of the form `O<T&>`, where `O` is a template parameter intended
+     * to represent optional-like containers and `T` is any type. It inherits from `std::true_type`,
+     * indicating that a type is indeed an optional reference.
      *
-     * @remark This traits structure checks the nature of the type T contained within the
-     *         optional structure to determine if it is an lvalue reference.
+     * @tparam O A template representing an optional-like type that can be instantiated with a reference.
+     * @tparam T The type of the reference for which the optional trait is being checked.
+     *
+     * This type trait is used to determine if a given type is an optional reference type. It can be used
+     * in template metaprogramming to enable or disable functionality based on whether a type is an optional
+     * reference.
      */
     template <template <typename> typename O, typename T>
         requires Optional<O<T>>
-    struct OptionalTraits<O<T>> {
-        /**
-         * @brief A compile-time boolean constant that represents whether a type T is an lvalue reference.
-         *
-         * This variable utilizes the type trait `std::is_lvalue_reference_v` to determine
-         * if the given type T is an lvalue reference. It evaluates to true if T is an
-         * lvalue reference, otherwise, it evaluates to false. This can be used in template
-         * metaprogramming and static assertions to enforce conditions or optimize code
-         * paths based on the reference type characteristics of T.
-         */
-        static constexpr bool is_optional_reference = std::is_lvalue_reference_v<T>;
-    };
+    struct IsOptionalReference<O<T&>> : std::true_type {};
 
     /**
-     * @struct OptionalTraits
-     * @brief Traits class specialization for handling optional reference wrappers.
+     * @brief Trait to determine if a type is an optional reference.
      *
-     * This specialization of the OptionalTraits struct is designed to work with
-     * std::reference_wrapper wrapped within a custom optional-like type `O`.
-     * It provides compile-time information about the nature of the optional type
-     * being a reference.
+     * This struct is specialized for types that are an optional reference,
+     * specifically when the type is `O` holding a `std::reference_wrapper<T>`.
      *
-     * @tparam T The type of the object referenced by std::reference_wrapper.
-     *
-     * @tparam O The custom optional-like template that wraps the std::reference_wrapper.
-     *
-     * @note The primary purpose of this specialization is to flag the optional
-     * type as holding a reference using the `is_optional_reference` static
-     * constexpr member.
-     *
-     * @see std::reference_wrapper
+     * @tparam T Type of the object that is referenced.
      */
     template <template <typename> typename O, typename T>
         requires Optional<O<std::reference_wrapper<T>>>
-    struct OptionalTraits<O<std::reference_wrapper<T>>> {
-        /**
-         * @brief A compile-time boolean constant that represents a predetermined truth value.
-         *
-         * This constant, `is_optional_reference`, is set to true by default, indicating a specific
-         * condition or state within the context of its usage. It may be employed as a flag or
-         * configuration parameter to influence logic flow, decision making, or optimization in
-         * template metaprogramming or other compile-time operations. Its fixed value asserts
-         * a truth statement that does not change during execution.
-         */
-        static constexpr bool is_optional_reference = true;
-    };
+    struct IsOptionalReference<O<std::reference_wrapper<T>>> : std::true_type {};
 
     /**
      * Concept to check if a type can be converted into an optional reference type.
      */
     RETROLIB_EXPORT template <typename T>
-    concept OptionalReference = OptionalTraits<T>::is_optional_reference;
+    concept OptionalReference = Optional<T> && IsOptionalReference<T>::value;
+
+    /**
+     * @struct IsRawReferenceOptionalAllowed
+     *
+     * @brief A trait to determine if raw references can be considered as optional.
+     *
+     * This struct inherits from `std::false_type`, indicating that by default
+     * raw references are not allowed to be considered optional.
+     *
+     * Can be specialized for custom types where raw references are conditionally
+     * permissible as optional, but the default behavior is to disallow this.
+     *
+     * @note This is typically used in template metaprogramming to enforce
+     * constraints on types or to implement conditional logic based on type traits.
+     */
+    RETROLIB_EXPORT template <template <typename> typename>
+    struct IsRawReferenceOptionalAllowed : std::false_type {};
+
+
+    /**
+     * Concept to check if making a raw reference to an optional type is valid or not.
+     *
+     * @tparam O The template type for the optionals
+     * @tparam T The contained value type
+     */
+    RETROLIB_EXPORT template <template <typename> typename O, typename T>
+    concept RawReferenceOptionalValid = Optional<O<T>> && IsRawReferenceOptionalAllowed<O>::value;
 
     /**
      * @brief Creates an optional reference wrapper around a given value.
@@ -205,6 +201,12 @@ namespace retro::optionals {
     constexpr decltype(auto) make_optional_reference(O<T> &value) {
         if constexpr (OptionalReference<O<T>>) {
             return value;
+        } else if constexpr (RawReferenceOptionalValid<O, T>) {
+            if (has_value(value)) {
+                return O<T&>(*value);
+            }
+
+            return O<T&>();
         } else {
             if (has_value(value)) {
                 return O<std::reference_wrapper<T>>(*value);
@@ -234,6 +236,12 @@ namespace retro::optionals {
     constexpr decltype(auto) make_optional_reference(const O<T> &value) {
         if constexpr (OptionalReference<O<T>>) {
             return value;
+        } else if constexpr (RawReferenceOptionalValid<O, T>) {
+            if (has_value(value)) {
+                return O<const T&>(*value);
+            }
+
+            return O<const T&>();
         } else {
             if (has_value(value)) {
                 return O<std::reference_wrapper<const T>>(*value);
