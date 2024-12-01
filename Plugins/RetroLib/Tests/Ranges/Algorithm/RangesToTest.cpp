@@ -19,7 +19,7 @@ import RetroLib;
 #include <vector>
 #endif
 
-TEST_CASE("Ranges can be converted into a collection type") {
+TEST_CASE("Ranges can be converted into a collection type", "[ranges]") {
     static constexpr std::array values = {1, 2, 3, 4, 5};
     SECTION("Convert to a like range type") {
         auto vectored = values | retro::ranges::to<std::vector>();

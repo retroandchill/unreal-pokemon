@@ -24,6 +24,8 @@ import std;
 #include "RetroLib/TypeTraits.h"
 #include "RetroLib/FunctionTraits.h"
 
+#include "RetroLib/TypeTraits.h"
+
 #include "RetroLib/Concepts/Inheritance.h"
 #include "RetroLib/Concepts/OpaqueStorage.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
@@ -35,6 +37,8 @@ import std;
 
 #include "RetroLib/Utils/ForwardLike.h"
 #include "RetroLib/Utils/Polymorphic.h"
+
+#include "RetroLib/Optionals/OptionalOperations.h"
 
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
