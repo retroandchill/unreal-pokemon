@@ -236,7 +236,7 @@ namespace retro {
      * @note This struct operates on a constexpr basis, allowing its functionality
      *       to be invoked during compile time if all arguments are compile-time constants.
      */
-    RETROLIB_EXPORT template <auto Functor>
+    template <auto Functor>
         requires(is_valid_functor_object(Functor))
     struct ExtensionMethodBinder {
         /**
@@ -271,4 +271,8 @@ namespace retro {
             }
         }
     };
+
+    RETROLIB_EXPORT template <auto Functor>
+        requires(is_valid_functor_object(Functor))
+    constexpr ExtensionMethodBinder<Functor> extension_method;
 } // namespace retro

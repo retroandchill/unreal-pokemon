@@ -63,9 +63,7 @@ namespace retro {
      * @tparam T The type to check for the dereference capability.
      */
     template <typename T>
-    concept Dereferenceable = requires(T&& ptr) {
-        *ptr;
-    };
+    concept Dereferenceable = requires(T &&ptr) { *ptr; };
 
     /**
      * Get the underlying type that comes from the pointer dereference.
@@ -87,8 +85,8 @@ namespace retro {
      * @tparam C The target type to which the dereferenced value should be convertible.
      */
     template <typename T, typename C>
-    concept DereferenceableTo = requires(T&& ptr) {
-        { *ptr } -> std::convertible_to<C&>;
+    concept DereferenceableTo = requires(T &&ptr) {
+        { *ptr } -> std::convertible_to<C &>;
     };
 
 } // namespace retro

@@ -29,7 +29,7 @@ std::string_view enum_to_string(TestEnum test_enum) {
         return "<Invalid>";
     }
 }
-constexpr retro::ExtensionMethodBinder<&enum_to_string> to_string;
+constexpr auto to_string = retro::extension_method<&enum_to_string>;
 
 struct VectorAppender {
     template <typename T, typename... A>
@@ -49,7 +49,7 @@ struct DemoStruct {
 };
 
 constexpr VectorAppender vector_appender;
-constexpr retro::ExtensionMethodBinder<vector_appender> append;
+constexpr auto append = retro::extension_method<vector_appender>;
 
 TEST_CASE("Test that extension methods can be used") {
     SECTION("Extension method on enum with no arguments") {

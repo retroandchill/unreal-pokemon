@@ -23,8 +23,9 @@
 
 namespace retro {
     template <typename T, typename M>
-    concept CanBindMethod = Method<M> && (std::convertible_to<T, RefQualifiedClassType<M>> ||
-                                          (Dereferenceable<T> && std::convertible_to<DereferencedType<T>, RefQualifiedClassType<M>>));
+    concept CanBindMethod =
+        Method<M> && (std::convertible_to<T, RefQualifiedClassType<M>> ||
+                      (Dereferenceable<T> && std::convertible_to<DereferencedType<T>, RefQualifiedClassType<M>>));
 
     /**
      * @brief A class template for binding a method to an object with pre-specified arguments.

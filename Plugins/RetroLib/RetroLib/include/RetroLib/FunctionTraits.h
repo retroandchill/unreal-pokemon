@@ -605,13 +605,14 @@ namespace retro {
     using ConstQualifiedClassType = std::conditional_t<ConstQualified<T>, const ClassType<T>, ClassType<T>>;
 
     /**
-     * Get the reference type of the owning class of a method, adding const to the type, if the method is const-qualified.
+     * Get the reference type of the owning class of a method, adding const to the type, if the method is
+     * const-qualified.
      *
      * @tparam T The method type in question
      */
     RETROLIB_EXPORT template <Method T>
-    using RefQualifiedClassType = std::conditional_t<RValueQualified<T>, ConstQualifiedClassType<T>&&, ConstQualifiedClassType<T>&>;
-
+    using RefQualifiedClassType =
+        std::conditional_t<RValueQualified<T>, ConstQualifiedClassType<T> &&, ConstQualifiedClassType<T> &>;
 
     /**
      * A concept that checks if a given type T satisfies two conditions:
