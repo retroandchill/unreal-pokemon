@@ -195,6 +195,5 @@ namespace retro::ranges {
      * @tparam T the type of element to add
      */
     template <typename R, typename T>
-    concept ContainerCompatibleRange =
-        std::ranges::input_range<R> && std::convertible_to<RangeCommonReference<R>, T>;
+    concept ContainerCompatibleRange = std::ranges::input_range<R> && std::convertible_to<RangeCommonReference<R>, T>;
 } // namespace retro::ranges
