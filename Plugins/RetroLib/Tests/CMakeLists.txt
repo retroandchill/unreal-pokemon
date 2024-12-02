@@ -8,7 +8,9 @@ add_executable(RetroLibTests Utils/PolymorphicTest.cpp
         Functional/TestBindMethod.cpp
         Functional/TestBindFront.cpp
         Ranges/Algorithm/RangesToTest.cpp
-        Optionals/TestOptionalOperations.cpp)
+        Optionals/TestOptionalOperations.cpp
+        Optionals/TestFilterOptional.cpp
+        Functional/TestInvoke.cpp)
 
 target_link_libraries(RetroLibTests
     PRIVATE

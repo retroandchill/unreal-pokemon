@@ -8,7 +8,9 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "Ranges/Concepts/Containers.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
+#include "RetroLib/Ranges/FeatureBridge.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 
 #include <ranges>
 #endif
