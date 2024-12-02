@@ -473,7 +473,40 @@ namespace retro {
      */
     template <typename T>
         requires HasOneFunctionCallOperator<T>::value
-    struct FunctionTraits<T> : FunctionTraits<decltype(&T::operator())> {};
+    struct FunctionTraits<T> : FunctionTraits<decltype(&T::operator())> {
+        static constexpr bool is_free = true;
+    };
+
+    /**
+     * @class MemberTraits
+     *
+     * @brief A struct used to derive type traits indicating the presence or absence of specific member features.
+     *
+     * The MemberTraits struct serves as a utility to enhance type introspection by inheriting from InvalidType.
+     * It is typically used in template metaprogramming to determine and enforce type characteristics and constraints.
+     */
+    template <typename>
+    struct MemberTraits : InvalidType {};
+
+    /**
+     * @struct MemberTraits
+     *
+     * @brief Provides type information about member pointers.
+     *
+     * The MemberTraits struct template is used to extract type information from member pointers.
+     * It inherits from ValidType and defines two type aliases: ClassType and MemberType.
+     * ClassType corresponds to the class type C to which the member belongs, and MemberType corresponds to the type M of the member itself.
+     *
+     * This is useful in template metaprogramming where type traits and introspection of member pointers are required.
+     *
+     * @tparam M Type of the member.
+     * @tparam C Type of the class containing the member.
+     */
+    template <typename C, typename M>
+    struct MemberTraits<M C::*> : ValidType {
+        using ClassType = C;
+        using MemberType = M;
+    };
 
     /**
      * @brief Concept to determine if a type is a functional type.
@@ -548,12 +581,28 @@ namespace retro {
     using Argument = typename FunctionTraits<T>::template Arg<N>;
 
     /**
+     * Concept for checking if a type is a class member.
+     *
+     * @tparam T The type to check
+     */
+    RETROLIB_EXPORT template <typename T>
+    concept Member = MemberTraits<T>::is_valid || Method<T>;
+
+    /**
      * The owning class of the given method.
      *
      * @tparam T The method type
      */
     RETROLIB_EXPORT template <Method T>
-    using ClassType = typename FunctionTraits<T>::ClassType;
+    using FunctionClassType = typename FunctionTraits<T>::ClassType;
+
+    /**
+     * The owning class of the given data members.
+     *
+     * @tparam T The method type
+     */
+    RETROLIB_EXPORT template <Member T>
+    using MemberClassType = typename MemberTraits<T>::ClassType;
 
     /**
      * @brief Concept to check for const-qualified types.
@@ -602,7 +651,7 @@ namespace retro {
      * @tparam T The method type in question
      */
     RETROLIB_EXPORT template <Method T>
-    using ConstQualifiedClassType = std::conditional_t<ConstQualified<T>, const ClassType<T>, ClassType<T>>;
+    using ConstQualifiedClassType = std::conditional_t<ConstQualified<T>, const FunctionClassType<T>, FunctionClassType<T>>;
 
     /**
      * Get the reference type of the owning class of a method, adding const to the type, if the method is

@@ -10,6 +10,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Functional/BindBack.h"
+#include "RetroLib/Utilities/WrapArg.h"
 #include "RetroLib/FunctionTraits.h"
 #endif
 
@@ -58,7 +59,7 @@ namespace retro {
         template <typename... A>
             requires std::invocable<decltype(Functor), A...>
         constexpr decltype(auto) operator()(A &&...args) const {
-            return std::invoke(Functor, std::forward<A>(args)...);
+            return invoke<Functor>(std::forward<A>(args)...);
         }
     };
 
@@ -215,7 +216,7 @@ namespace retro {
         template <typename T>
             requires std::invocable<decltype(Functor), T>
         friend constexpr decltype(auto) operator|(T &&operand, const ExtensionMethodConstClosure &) {
-            return std::invoke(Functor, std::forward<T>(operand));
+            return invoke<Functor>(std::forward<T>(operand));
         }
     };
 
@@ -266,8 +267,8 @@ namespace retro {
             if constexpr (sizeof...(T) == 0) {
                 return ExtensionMethodConstClosure<Functor>();
             } else {
-                using BindingType = decltype(retro::bind_back<Functor>(std::forward<T>(args)...));
-                return ExtensionMethodClosure<BindingType>(retro::bind_back<Functor>(std::forward<T>(args)...));
+                using BindingType = decltype(retro::bind_back<Functor>(wrap_arg<T>(std::forward<T>(args))...));
+                return ExtensionMethodClosure<BindingType>(retro::bind_back<Functor>(wrap_arg<T>(std::forward<T>(args))...));
             }
         }
     };
