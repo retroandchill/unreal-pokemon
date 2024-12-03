@@ -9,6 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Functional/BindFunctor.h"
 #include "RetroLib/Functional/Invoke.h"
 #endif
 
@@ -58,12 +59,7 @@ namespace retro::optionals {
     RETROLIB_EXPORT template <auto Functor, Optional O>
         requires std::is_invocable_r_v<bool, decltype(Functor), CommonReference<O>>
     constexpr auto filter(O&& optional) {
-        if constexpr (std::is_lvalue_reference_v<O>) {
-            using FilteredType = decltype(make_optional_reference(std::forward<O>(optional)));
-            return has_value(std::forward<O>(optional)) && invoke<Functor>(get(std::forward<O>(optional))) ? make_optional_reference(std::forward<O>(optional)) : FilteredType();
-        } else {
-            return has_value(std::forward<O>(optional)) && invoke<Functor>(get(std::forward<O>(optional))) ? O(std::forward<O>(optional)) : O();
-        }
+        return filter(std::forward<O>(optional), bind_functor<Functor>());
     }
 
     /**

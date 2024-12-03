@@ -20,7 +20,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::views {
+namespace retro::ranges {
 
     /**
      * @brief A concept to check if a range is compatible with a given type.

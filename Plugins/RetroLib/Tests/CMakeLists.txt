@@ -10,7 +10,8 @@ add_executable(RetroLibTests Utils/PolymorphicTest.cpp
         Ranges/Algorithm/RangesToTest.cpp
         Optionals/TestOptionalOperations.cpp
         Optionals/TestFilterOptional.cpp
-        Functional/TestInvoke.cpp)
+        Ranges/Views/TestConstexprAdapters.cpp
+)
 
 target_link_libraries(RetroLibTests
     PRIVATE

@@ -11,7 +11,6 @@
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/ParameterPacks.h"
 #include "RetroLib/FunctionTraits.h"
-#include "RetroLib/Functional/Invoke.h"
 #include "RetroLib/Utils/ForwardLike.h"
 
 #include <tuple>
@@ -82,7 +81,7 @@ namespace retro {
         constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, A &..., T...>) {
             return std::apply(
                 [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return invoke<Functor>(std::forward<U>(final_args)..., std::forward<T>(call_args)...);
+                    return std::invoke(Functor, std::forward<U>(final_args)..., std::forward<T>(call_args)...);
                 },
                 args);
         }
@@ -109,7 +108,7 @@ namespace retro {
         operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const A &..., T...>) {
             return std::apply(
                 [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return invoke<Functor>(std::forward<U>(final_args)..., std::forward<T>(call_args)...);
+                    return std::invoke(Functor, std::forward<U>(final_args)..., std::forward<T>(call_args)...);
                 },
                 args);
         }
@@ -135,7 +134,7 @@ namespace retro {
         constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, A..., T...>) {
             return std::apply(
                 [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return invoke<Functor>(std::forward<U>(final_args)..., std::forward<T>(call_args)...);
+                    return std::invoke(Functor, std::forward<U>(final_args)..., std::forward<T>(call_args)...);
                 },
                 std::move(args));
         }
@@ -206,7 +205,7 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, A &, T...>
         constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, A &, T...>) {
-            return invoke<Functor>(arg, std::forward<T>(call_args)...);
+            return std::invoke(Functor, arg, std::forward<T>(call_args)...);
         }
 
         /**
@@ -229,7 +228,7 @@ namespace retro {
             requires std::invocable<F, const A &, T...>
         constexpr decltype(auto)
         operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const A &, T...>) {
-            return invoke<Functor>(arg, std::forward<T>(call_args)...);
+            return std::invoke(Functor, arg, std::forward<T>(call_args)...);
         }
 
         /**
@@ -251,7 +250,7 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, A, T...>
         constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, A, T...>) {
-            return invoke<Functor>(std::move(arg), std::forward<T>(call_args)...);
+            return std::invoke(Functor, std::move(arg), std::forward<T>(call_args)...);
         }
 
       private:
@@ -326,7 +325,7 @@ namespace retro {
             requires std::invocable<F, A &, B &, T...>
         constexpr decltype(auto)
         operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, A &, B &, T...>) {
-            return invoke<Functor>(arg1, arg2, std::forward<T>(call_args)...);
+            return std::invoke(Functor, arg1, arg2, std::forward<T>(call_args)...);
         }
 
         /**
@@ -349,7 +348,7 @@ namespace retro {
             requires std::invocable<F, const A &, const B &, T...>
         constexpr decltype(auto)
         operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const A &, const B &, T...>) {
-            return invoke<Functor>(arg1, arg2, std::forward<T>(call_args)...);
+            return std::invoke(Functor, arg1, arg2, std::forward<T>(call_args)...);
         }
 
         /**
@@ -371,7 +370,7 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, A, B, T...>
         constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, A, B, T...>) {
-            return invoke<Functor>(std::move(arg1), std::move(arg2), std::forward<T>(call_args)...);
+            return std::invoke(Functor, std::move(arg1), std::move(arg2), std::forward<T>(call_args)...);
         }
 
       private:

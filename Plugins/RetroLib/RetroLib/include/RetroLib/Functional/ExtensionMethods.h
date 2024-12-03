@@ -59,7 +59,7 @@ namespace retro {
         template <typename... A>
             requires std::invocable<decltype(Functor), A...>
         constexpr decltype(auto) operator()(A &&...args) const {
-            return invoke<Functor>(std::forward<A>(args)...);
+            return std::invoke(Functor, std::forward<A>(args)...);
         }
     };
 
@@ -216,7 +216,7 @@ namespace retro {
         template <typename T>
             requires std::invocable<decltype(Functor), T>
         friend constexpr decltype(auto) operator|(T &&operand, const ExtensionMethodConstClosure &) {
-            return invoke<Functor>(std::forward<T>(operand));
+            return std::invoke(Functor, std::forward<T>(operand));
         }
     };
 
