@@ -34,7 +34,7 @@ import std;
 #include "RetroLib/Utils/WrapArg.h"
 #include "RetroLib/Utils/Polymorphic.h"
 
-#include "RetroLib/Functional/Invoke.h"
+#include "RetroLib/Functional/BindFunctor.h"
 #include "RetroLib/Functional/BindBack.h"
 #include "RetroLib/Functional/BindFront.h"
 #include "RetroLib/Functional/BindMethod.h"
@@ -48,5 +48,7 @@ import std;
 
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/Filter.h"
+#include "RetroLib/Ranges/Views/Transform.h"
 
 // clang-format on
