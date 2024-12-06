@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-    <Type Name="Retro::Polymorphic&lt;*&gt;">
+    <Type Name="retro::Polymorphic&lt;*&gt;">
         <Expand>
-            <Item Name="[value]" ExcludeView="simple">vtable->getSize() > sizeof(storage) ? *(($T1*)storage.largeStorage) : *(($T1*)storage.smallStorage.data())</Item>
-            <Item Name="[large]" ExcludeView="simple">vtable->getSize() > sizeof(storage)</Item>
+            <Item Name="[value]" ExcludeView="simple">vtable->get_size() > sizeof(storage) ? *(($T1*)storage.large_storage) : *(($T1*)storage.small_storage.data())</Item>
+            <Item Name="[large]" ExcludeView="simple">vtable->get_size() > sizeof(storage)</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="retro::Optional&lt;*&gt;">
+        <DisplayString Condition="!is_set">nullopt</DisplayString>
+        <DisplayString Condition="is_set">{data}</DisplayString>
+        <Expand>
+            <Item Condition="is_set" Name="[value]">data</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="retro::Optional&lt;*&gt;" Priority="Low">
+        <DisplayString Condition="data == nullptr">nullopt</DisplayString>
+        <DisplayString Condition="data != nullptr">{*data}</DisplayString>
+        <Expand>
+            <Item Condition="data != nullptr" Name="[value]">*data</Item>
         </Expand>
     </Type>
 </AutoVisualizer>

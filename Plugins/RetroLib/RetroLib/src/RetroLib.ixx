@@ -13,6 +13,7 @@ module;
 #include <cassert>
 #include <ranges>
 #include <typeinfo>
+#include <initializer_list>
 
 export module RetroLib;
 
@@ -26,6 +27,7 @@ import std;
 
 #include "RetroLib/TypeTraits.h"
 
+#include "RetroLib/Concepts/Comparisons.h"
 #include "RetroLib/Concepts/Inheritance.h"
 #include "RetroLib/Concepts/OpaqueStorage.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
@@ -41,6 +43,7 @@ import std;
 #include "RetroLib/Functional/ExtensionMethods.h"
 
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Optionals/Optional.h"
 #include "RetroLib/Optionals/Filter.h"
 
 #include "RetroLib/Ranges/FeatureBridge.h"
