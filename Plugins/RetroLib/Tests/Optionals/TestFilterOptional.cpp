@@ -41,7 +41,7 @@ TEST_CASE("Can filter an optional value", "[optionals]") {
         std::optional odd = 3;
         std::optional even = 4;
         std::optional<int> empty;
-        static_assert(retro::optionals::Optional<decltype(odd)>);
+        static_assert(retro::optionals::OptionalType<decltype(odd)>);
         auto filtered_odd = odd | retro::optionals::filter(retro::bind_back<greater_than>(4));
         CHECK_FALSE(filtered_odd.has_value());
         auto filtered_even = even | retro::optionals::filter(retro::bind_back<greater_than>(3));

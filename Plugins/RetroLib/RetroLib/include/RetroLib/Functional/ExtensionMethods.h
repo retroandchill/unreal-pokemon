@@ -10,7 +10,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Functional/BindBack.h"
-#include "RetroLib/Utilities/WrapArg.h"
+#include "RetroLib/Utils/WrapArg.h"
 #include "RetroLib/FunctionTraits.h"
 #endif
 

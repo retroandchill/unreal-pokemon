@@ -23,7 +23,7 @@ namespace retro {
      * @tparam N The index of the parameter pack
      * @tparam T The types of the parameter pack
      */
-    template <size_t N, typename... T>
+    RETROLIB_EXPORT template <size_t N, typename... T>
         requires(N < sizeof...(T))
     using PackType = std::tuple_element_t<N, std::tuple<std::decay_t<T>...>>;
 
@@ -37,6 +37,6 @@ namespace retro {
      * @tparam T The specified type to compare against.
      * @tparam A The parameter pack to be checked.
      */
-    template <typename T, typename... A>
+    RETROLIB_EXPORT template <typename T, typename... A>
     concept PackSameAs = (sizeof...(A) == 1) && std::same_as<PackType<0, A...>, T>;
 } // namespace retro
