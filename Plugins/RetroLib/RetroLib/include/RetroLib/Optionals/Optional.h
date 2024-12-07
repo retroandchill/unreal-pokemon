@@ -11,7 +11,7 @@
 #include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-#include "RetroLib/Concepts/Comparisons.h"
+#include "RetroLib/Concepts/Operators.h"
 
 #include <utility>
 #endif
