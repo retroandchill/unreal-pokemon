@@ -9,7 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/FunctionTraits.h"
-#include "RetroLib/Functional/BindFunctor.h"
+#include "RetroLib/Functional/CreateBinding.h"
 #include <ranges>
 #endif
 
@@ -34,6 +34,7 @@ namespace retro::ranges::views {
      *                 in the resulting range.
      *
      * @param range An R-value or L-value that represents the range of elements to be transformed.
+     * @param args The binding arguments for the functor
      *
      * @return Returns a range that is the result of applying the transform operation using
      *         the specified functor on each element of the provided range.
@@ -42,10 +43,11 @@ namespace retro::ranges::views {
      *       its value category. The actual transformation is wrapped in a functor
      *       that is bound to the appropriate transformation mechanism.
      */
-    RETROLIB_EXPORT template <auto Functor, std::ranges::input_range R>
+    RETROLIB_EXPORT template <auto Functor, std::ranges::input_range R, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr decltype(auto) transform(R&& range) {
-        return std::ranges::views::transform(std::forward<R>(range), bind_functor<Functor>());
+    constexpr decltype(auto) transform(R&& range, A&&... args) {
+        return std::ranges::views::transform(std::forward<R>(range),
+            create_binding<Functor>(std::forward<A>(args)...));
     }
 
     /**
@@ -55,12 +57,13 @@ namespace retro::ranges::views {
      * of a range by applying a functor. The functor is bound using the
      * `bind_functor` function, encapsulating the transformation logic.
      *
+     * @param args The binding arguments for the functor
      * @return A view of the transformed range, where each element has been
      * modified according to the specified functor.
      */
-    RETROLIB_EXPORT template <auto Functor>
+    RETROLIB_EXPORT template <auto Functor, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr decltype(auto) transform() {
-        return std::ranges::views::transform(bind_functor<Functor>());
+    constexpr decltype(auto) transform(A&&... args) {
+        return std::ranges::views::transform(create_binding<Functor>(std::forward<A>(args)...));
     }
 }
