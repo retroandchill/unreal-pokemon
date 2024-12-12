@@ -9,7 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Optionals/OptionalOperations.h"
-#include "RetroLib/Functional/BindFunctor.h"
+#include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 #endif
 
@@ -54,12 +54,13 @@ namespace retro::optionals {
      *
      * @tparam O The type of the optional being filtered.
      * @param optional The optional value to filter. This can be an lvalue or rvalue reference.
+     * @param args The binding arguments for the functor
      * @return A filtered optional, which contains its original value if the condition is satisfied, or is empty otherwise.
      */
-    RETROLIB_EXPORT template <auto Functor, OptionalType O>
-        requires std::is_invocable_r_v<bool, decltype(Functor), CommonReference<O>>
-    constexpr auto filter(O&& optional) {
-        return filter(std::forward<O>(optional), bind_functor<Functor>());
+    RETROLIB_EXPORT template <auto Functor, OptionalType O, typename... A>
+        requires std::is_invocable_r_v<bool, decltype(Functor), CommonReference<O>, A...>
+    constexpr auto filter(O&& optional, A&&... args) {
+        return filter(std::forward<O>(optional), create_binding<Functor>(std::forward<A>(args)...));
     }
 
     /**
@@ -136,15 +137,16 @@ namespace retro::optionals {
          *
          * @param optional The optional-like object to be filtered. It is expected to be
          *                 an rvalue reference that will be perfectly forwarded.
+         * @param args The binding arguments for the functor
          *
          * @return The result of invoking the filter operation on the provided optional-like
          *         object, with the filter's functor determining whether any contained value
          *         meets the criteria.
          */
-        template <OptionalType O>
-            requires std::is_invocable_r_v<bool, decltype(Functor), CommonReference<O>>
-        constexpr auto operator()(O&& optional) const {
-            return filter<Functor>(std::forward<O>(optional));
+        template <OptionalType O, typename... A>
+            requires std::is_invocable_r_v<bool, decltype(Functor), CommonReference<O>, A...>
+        constexpr auto operator()(O&& optional, A&&... args) const {
+            return filter<Functor>(std::forward<O>(optional), std::forward<A>(args)...);
         }
     };
 
@@ -189,12 +191,13 @@ namespace retro::optionals {
      * utilizing the provided functor. The functor is expected to perform a filtering operation,
      * applying its criteria on input values to determine whether they should be retained.
      *
+     * @param args The binding arguments for the functor
      * @return An extension method configured with a const_filter_invoker that uses the given functor
      *         for filtering operations.
      */
-    RETROLIB_EXPORT template <auto Functor>
-    constexpr auto filter() {
-        return extension_method<const_filter_invoker<Functor>>();
+    RETROLIB_EXPORT template <auto Functor, typename... A>
+    constexpr auto filter(A&&... args) {
+        return extension_method<const_filter_invoker<Functor>>(std::forward<A>(args)...);
     }
 
 }

@@ -14,6 +14,7 @@ import RetroLib;
 #include "RetroLib/Functional/BindBack.h"
 #include "RetroLib/Functional/BindFront.h"
 #include "RetroLib/Functional/BindMethod.h"
+#include "RetroLib/Functional/CreateBinding.h"
 
 #include <vector>
 #endif
@@ -52,6 +53,8 @@ public:
     int method(int value1, int value2, int value3) const {
         return value1 + value2 + value3;
     }
+
+    int member = 9;
 };
 
 TEST_CASE("Can bind back to a constexpr defined functional type", "[functional]") {
@@ -137,5 +140,33 @@ TEST_CASE("Can bind a method with an object", "[functional]") {
         CHECK(binding() == 15);
         CHECK(std::as_const(binding)() == 15);
         CHECK(retro::bind_method<&TestClass::method>(std::reference_wrapper(object), 10, 12, 7)() == 29);
+    }
+}
+
+TEST_CASE("Can use the opaque binding wrapper", "[functional]") {
+    SECTION("Can bind a regular functor") {
+        auto binding = retro::create_binding<add>(4);
+        CHECK(binding(3) == 7);
+        CHECK(std::as_const(binding)(5) == 9);
+        auto number = std::make_shared<int>(5);
+        auto weakNumber = std::weak_ptr(number);
+        retro::bind_back<add_to_shared_back>(std::move(number))(4);
+        CHECK(weakNumber.expired());
+    }
+
+    SECTION("Can bind a method using the this tag, or bind back without it") {
+        auto object = std::make_shared<TestClass>();
+        auto binding = retro::create_binding<&TestClass::method>(retro::this_type, object, 5, 6);
+        CHECK(binding(4) == 15);
+        CHECK(std::as_const(binding)(5) == 16);
+        CHECK(retro::create_binding<&TestClass::method>(10, 12)(object, 5) == 27);
+    }
+
+    SECTION("Can bind to a member") {
+        TestClass object;
+        auto binding1 = retro::create_binding<&TestClass::member>(object);
+        CHECK(binding1() == 9);
+        auto binding2 = retro::create_binding<&TestClass::member>();
+        CHECK(binding2(object) == 9);
     }
 }

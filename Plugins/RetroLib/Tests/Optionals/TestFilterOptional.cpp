@@ -17,22 +17,22 @@ import RetroLib;
 
 TEST_CASE("Can filter an optional value", "[optionals]") {
     SECTION("Can filter on a constant functor") {
-        constexpr auto is_even = [](int x) { return x % 2 == 0; };
+        constexpr auto is_even = [](int x, int y) { return x % y == 0; };
         std::optional odd = 3;
         std::optional even = 4;
         std::optional<int> empty;
-        auto filtered_odd = odd | retro::optionals::filter<is_even>();
+        auto filtered_odd = odd | retro::optionals::filter<is_even>(2);
         CHECK_FALSE(filtered_odd.has_value());
-        auto filtered_even = even | retro::optionals::filter<is_even>();
+        auto filtered_even = even | retro::optionals::filter<is_even>(2);
         CHECK(filtered_even.has_value());
-        auto filtered_empty = empty | retro::optionals::filter<is_even>();
+        auto filtered_empty = empty | retro::optionals::filter<is_even>(2);
         CHECK_FALSE(filtered_empty.has_value());
 
-        auto filtered_rvalue_odd = std::optional(5) | retro::optionals::filter<is_even>();
+        auto filtered_rvalue_odd = std::optional(5) | retro::optionals::filter<is_even>(2);
         CHECK_FALSE(filtered_rvalue_odd.has_value());
-        auto filtered_rvalue_even = std::optional(6) | retro::optionals::filter<is_even>();
+        auto filtered_rvalue_even = std::optional(6) | retro::optionals::filter<is_even>(2);
         CHECK(filtered_rvalue_even.has_value());
-        auto filtered_empty_rvalue = std::optional<int>() | retro::optionals::filter<is_even>();
+        auto filtered_empty_rvalue = std::optional<int>() | retro::optionals::filter<is_even>(2);
         CHECK_FALSE(filtered_empty_rvalue.has_value());
     }
 

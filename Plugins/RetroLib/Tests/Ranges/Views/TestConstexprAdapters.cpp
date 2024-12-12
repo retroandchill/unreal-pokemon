@@ -21,11 +21,11 @@ import RetroLib;
 TEST_CASE("Can use the constexpr range adapters", "[ranges]") {
     constexpr std::array values = {1, 2, 3, 4, 5};
     constexpr auto is_even = [](int i) { return i % 2 == 0; };
-    constexpr auto double_value = [](int i) { return i * 2; };
+    constexpr auto double_value = [](int i, int j) { return i * j; };
 
     SECTION("Can use the regular functional operators") {
         auto filtered = retro::ranges::views::filter<is_even>(values);
-        auto transformed = retro::ranges::views::transform<double_value>(filtered);
+        auto transformed = retro::ranges::views::transform<double_value>(filtered, 2);
 
         auto it = transformed.begin();
         CHECK(*it == 4);
@@ -38,7 +38,7 @@ TEST_CASE("Can use the constexpr range adapters", "[ranges]") {
     SECTION("Can use the range pipe syntax") {
         auto transformed = values |
             retro::ranges::views::filter<is_even>() |
-            retro::ranges::views::transform<double_value>();
+            retro::ranges::views::transform<double_value>(2);
 
         auto it = transformed.begin();
         CHECK(*it == 4);
