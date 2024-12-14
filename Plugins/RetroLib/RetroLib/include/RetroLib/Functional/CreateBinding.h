@@ -239,4 +239,8 @@ namespace retro {
     RETROLIB_EXPORT template <typename... A>
     using BindingType = decltype(create_binding(std::declval<A>()...));
 
+    RETROLIB_EXPORT template <auto Functor, typename... A>
+        requires HasFunctionCallOperator<decltype(Functor)>
+    using ConstBindingType = decltype(create_binding<Functor>(std::declval<A>()...));
+
 } // namespace retro
