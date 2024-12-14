@@ -21,6 +21,36 @@
 namespace retro::ranges::views {
 
     /**
+     * Applies a transformation to the elements in the given range by binding the provided arguments
+     * to the transformation operation.
+     *
+     * @param range The input range to be transformed.
+     * @param args The additional arguments to be used in conjunction with the transformation operation.
+     * @return A new range where each element is a result of applying the transformation operation using
+     *         the provided arguments.
+     */
+    RETROLIB_EXPORT template <std::ranges::input_range R, typename... A>
+    constexpr decltype(auto) transform(R &&range, A &&...args) {
+        return std::ranges::views::transform(std::forward<R>(range), create_binding(std::forward<A>(args)...));
+    }
+
+    /**
+     * @brief Applies a transformation function to a range of elements.
+     *
+     * This method wraps the provided arguments to create a binding and applies
+     * the std::ranges::views::transform view, which lazily transforms each
+     * element in the range according to the specified transformation logic.
+     *
+     * @param args Variadic template arguments to be used for creating the transformation binding.
+     *             These arguments are forwarded to the `create_binding` function.
+     * @return A view that represents the transformed range of elements.
+     */
+    RETROLIB_EXPORT template <typename... A>
+    constexpr decltype(auto) transform(A &&...args) {
+        return std::ranges::views::transform(create_binding(std::forward<A>(args)...));
+    }
+
+    /**
      * @brief Transforms the given range using a specified functor.
      *
      * This function applies a transformation to each element of the provided range

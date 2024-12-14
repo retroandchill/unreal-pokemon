@@ -36,24 +36,24 @@ TEST_CASE("Can filter an optional value", "[optionals]") {
         CHECK_FALSE(filtered_empty_rvalue.has_value());
     }
 
-    SECTION("Can filter on a constant functor") {
-        constexpr auto greater_than = [](int x, int y) { return x > y; };
+    SECTION("Can filter on a runtime functor") {
+        auto greater_than = [](int x, int y) { return x > y; };
         std::optional odd = 3;
         std::optional even = 4;
         std::optional<int> empty;
         static_assert(retro::optionals::OptionalType<decltype(odd)>);
-        auto filtered_odd = odd | retro::optionals::filter(retro::bind_back<greater_than>(4));
+        auto filtered_odd = odd | retro::optionals::filter(greater_than, 4);
         CHECK_FALSE(filtered_odd.has_value());
-        auto filtered_even = even | retro::optionals::filter(retro::bind_back<greater_than>(3));
+        auto filtered_even = even | retro::optionals::filter(greater_than, 3);
         CHECK(filtered_even.has_value());
-        auto filtered_empty = empty | retro::optionals::filter(retro::bind_back<greater_than>(3));
+        auto filtered_empty = empty | retro::optionals::filter(greater_than, 3);
         CHECK_FALSE(filtered_empty.has_value());
 
-        auto filtered_rvalue_odd = std::optional(5) | retro::optionals::filter(retro::bind_back<greater_than>(7));
+        auto filtered_rvalue_odd = std::optional(5) | retro::optionals::filter(greater_than, 7);
         CHECK_FALSE(filtered_rvalue_odd.has_value());
-        auto filtered_rvalue_even = std::optional(6) | retro::optionals::filter(retro::bind_back<greater_than>(4));
+        auto filtered_rvalue_even = std::optional(6) | retro::optionals::filter(greater_than, 4);
         CHECK(filtered_rvalue_even.has_value());
-        auto filtered_rvalue_empty = std::optional<int>() | retro::optionals::filter(retro::bind_back<greater_than>(4));
+        auto filtered_rvalue_empty = std::optional<int>() | retro::optionals::filter(greater_than, 4);
         CHECK_FALSE(filtered_rvalue_empty.has_value());
     }
 }

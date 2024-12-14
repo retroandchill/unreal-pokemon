@@ -23,6 +23,326 @@
 namespace retro {
 
     /**
+     * @brief A utility class that facilitates binding additional arguments to the end of a callable's argument list.
+     *
+     * This class allows deferring the invocation of a callable while pre-binding a set of arguments that will
+     * always be appended to the argument list provided at the time of invocation. It supports perfect forwarding
+     * of both the callable and the arguments and ensures proper handling of const, lvalue, and rvalue semantics.
+     *
+     * @tparam F The callable type to be wrapped.
+     * @tparam A Types of the arguments to be pre-bound to the callable.
+     */
+    template <HasFunctionCallOperator F, typename... A>
+    struct BindBackInvoker {
+        using ArgsTuple = std::tuple<A...>;
+
+        /**
+         * Constructs a BindBackInvoker instance by forwarding the given functor
+         * and arguments to initialize the internal storage for later invocation.
+         *
+         * @param functor The callable object or functor to store internally.
+         * @param args The arguments to bind to the functor, forwarded as rvalue references.
+         */
+        template <typename G, typename... T>
+            requires std::constructible_from<F, G> && std::constructible_from<ArgsTuple, T...> &&
+                         (!std::same_as<BindBackInvoker, std::decay_t<G>>)
+        constexpr explicit BindBackInvoker(G &&functor, T &&...args)
+            : functor(std::forward<G>(functor)), args(std::forward<T>(args)...) {
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<F &, T..., A &...>
+        constexpr decltype(auto)
+        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F &, T..., A &...>) {
+            return std::apply(
+                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
+                    return std::invoke(functor, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                },
+                args);
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<const F &, T..., const A &...>
+        constexpr decltype(auto)
+        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<const F &, T..., const A &...>) {
+            return std::apply(
+                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
+                    return std::invoke(functor, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                },
+                args);
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<F, T..., A...>
+        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, T..., A...>) {
+            return std::apply(
+                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
+                    return std::invoke(std::move(functor), std::forward<T>(call_args)...,
+                                       std::forward<U>(final_args)...);
+                },
+                std::move(args));
+        }
+
+      private:
+        F functor;
+        ArgsTuple args;
+    };
+
+    /**
+     * @brief A struct that enables partial application of a function-like object,
+     *        binding an argument to its last parameter position.
+     *
+     * This utility creates a callable object that binds a specific argument to
+     * the last parameter of the provided functor, enabling future invocations with
+     * additional arguments. The BindBackInvoker ensures proper forwarding of arguments
+     * and handles exception specifications for safe, efficient invocation.
+     *
+     * @tparam F The type of the callable object or functor to be stored and invoked.
+     * @tparam A The type of the argument to be bound to the functor's last parameter.
+     */
+    template <HasFunctionCallOperator F, typename A>
+    struct BindBackInvoker<F, A> {
+
+        /**
+         * @brief Constructs a BindBackInvoker object with a specified functor and argument.
+         *
+         * This constructor initializes the BindBackInvoker object by forwarding the provided
+         * functor and argument to their respective member variables. The use of `constexpr`
+         * ensures that the construction process can occur at compile-time if possible.
+         *
+         * @tparam G The type of the functor to be stored.
+         * @tparam T The type of the argument to be bound to the functor.
+         * @param functor The callable object or function to be stored and invoked.
+         * @param arg The argument that will be bound to the functor for invocation.
+         */
+        template <typename G, typename T>
+            requires std::constructible_from<F, G> && std::convertible_to<T, A>
+        constexpr BindBackInvoker(G &&functor, T &&arg) : functor(std::forward<G>(functor)), arg(std::forward<T>(arg)) {
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<F &, T..., A &>
+        constexpr decltype(auto) operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F &, T..., A &>) {
+            return std::invoke(functor, std::forward<T>(call_args)..., arg);
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<const F &, T..., const A &>
+        constexpr decltype(auto)
+        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<const F &, T..., const A &>) {
+            return std::invoke(functor, std::forward<T>(call_args)..., arg);
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<F, T..., A>
+        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, T..., A>) {
+            return std::invoke(std::move(functor), std::forward<T>(call_args)..., std::move(arg));
+        }
+
+      private:
+        F functor;
+        A arg;
+    };
+
+    /**
+     * @brief A utility structure for binding the last two arguments of a callable to predefined values.
+     *
+     * This class facilitates delayed invocation of a callable object with some arguments pre-bound
+     * at the end of its argument list. It provides an invocable interface that allows additional
+     * arguments to be supplied at the time of invocation, while the pre-bound arguments are appended
+     * to the input argument list.
+     *
+     * @tparam F The type of the callable object to be invoked.
+     * @tparam A The type of the first pre-bound argument.
+     * @tparam B The type of the second pre-bound argument.
+     */
+    template <HasFunctionCallOperator F, typename A, typename B>
+    struct BindBackInvoker<F, A, B> {
+        /**
+         * @brief Constructs a BindBackInvoker instance with the provided functor and arguments.
+         *
+         * @param functor The callable object to be invoked later. It is perfect-forwarded to preserve its value
+         * category.
+         * @param arg1 The first argument to bind to the invoker. It is perfect-forwarded.
+         * @param arg2 The second argument to bind to the invoker. It is perfect-forwarded.
+         */
+        template <typename G, typename T, typename U>
+            requires std::constructible_from<F, G> && std::convertible_to<T, A> && std::convertible_to<U, B>
+        constexpr BindBackInvoker(G &&functor, T &&arg1, U &&arg2)
+            : functor(std::forward<G>(functor)), arg1(std::forward<T>(arg1)), arg2(std::forward<U>(arg2)) {
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<F &, T..., A &, B &>
+        constexpr decltype(auto)
+        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F &, T..., A &, B &>) {
+            return std::invoke(functor, std::forward<T>(call_args)..., arg1, arg2);
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<const F &, T..., const A &, const B &>
+        constexpr decltype(auto) operator()(T &&...call_args) const & noexcept(
+            std::is_nothrow_invocable_v<const F &, T..., const A &, const B &>) {
+            return std::invoke(functor, std::forward<T>(call_args)..., arg1, arg2);
+        }
+
+        /**
+         * @brief Invokes the stored functor with the specified call-time arguments
+         *        followed by the pre-bound arguments.
+         *
+         * This invocable operator enables the BindBackConstInvoker to be called with
+         * additional arguments that are further processed and combined with the
+         * pre-bound arguments. It performs the invocation ensuring the combination
+         * is safe, considering exception specifications and argument forwarding.
+         *
+         * @tparam T The types of the additional arguments to be passed at call-time.
+         * @param call_args The arguments provided during the invocation.
+         * @return The result of invoking the functor with both pre-bound and additional arguments.
+         *
+         * @noexcept Conditional noexcept specification based on the nothrow
+         *          invocability of the functor with the provided and bound arguments.
+         */
+        template <typename... T>
+            requires std::invocable<F, T..., A, B>
+        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, T..., A, B>) {
+            return std::invoke(std::move(functor), std::forward<T>(call_args)..., std::move(arg1), std::move(arg2));
+        }
+
+      private:
+        F functor;
+        A arg1;
+        B arg2;
+    };
+
+    /**
      * @brief A structure that binds additional arguments to a functor and provides
      * invocable operators to invoke the functor with pre-bound and new arguments.
      *
@@ -374,6 +694,22 @@ namespace retro {
         A arg1;
         B arg2;
     };
+
+    /**
+     * Binds a set of arguments to the back of the provided callable object, creating a new callable object with the
+     * bound arguments.
+     *
+     * @tparam F The type of the callable object.
+     * @tparam A The types of the arguments to bind.
+     * @param functor The callable object to bind the arguments to.
+     * @param args The arguments to bind to the callable object.
+     * @return A new callable object with the specified arguments bound to the back.
+     */
+    RETROLIB_EXPORT template <typename F, typename... A>
+        requires HasFunctionCallOperator<std::decay_t<F>>
+    constexpr auto bind_back(F &&functor, A &&...args) {
+        return BindBackInvoker<std::decay_t<F>, std::decay_t<A>...>(std::forward<F>(functor), std::forward<A>(args)...);
+    }
 
     /**
      * @brief Binds arguments to the back of a functor for future invocation.
