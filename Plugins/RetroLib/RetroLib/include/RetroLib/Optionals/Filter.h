@@ -20,32 +20,38 @@
 namespace retro::optionals {
 
     /**
-     * Filters the given optional value using the specified functor.
+     * @brief Performs a filter operation on an optional-like object using a provided set of arguments.
      *
-     * This function applies a functor to the value contained within an optional.
-     * If the optional has a value and the functor returns true, it returns the original
-     * optional. Otherwise, it returns an empty optional.
+     * This function evaluates whether the given optional-like object satisfies the filter criteria
+     * defined by the functor or callable object constructed from the provided arguments. If the
+     * criteria are met, the function returns an optional or optional-like containing the value.
+     * Otherwise, an empty optional or optional-like is returned.
      *
-     * If the optional is a reference, a reference is returned, otherwise a value is returned.
+     * @tparam O The type of the optional-like object to be filtered. Can be an lvalue or rvalue reference.
+     * @tparam A Variadic template parameter representing the types of arguments passed to construct the callable
+     * object.
+     * @param optional The optional-like object to evaluate and potentially filter.
+     * @param args Variadic arguments used to construct the functor or callable object for the filter operation.
+     * @return For lvalue references, a filtered optional-like object using `make_optional_reference`.
+     *         For rvalue references, a filtered optional-like object containing a copy or an empty instance.
      *
-     * @tparam O The optional object that was passed along
-     * @tparam F The functor to operate on
-     * @param optional The optional value to be filtered. Can be an lvalue or rvalue reference.
-     * @param functor A callable object that takes the value from the optional and returns a boolean.
-     * @return The original optional if it has a value and the functor returns true, otherwise an empty optional.
+     * @note The operation evaluates `has_value` on the optional-like object and applies the callable
+     *       to the value if present.
+     * @note The callable object must be invocable with the value type of the optional-like object
+     *       and return a boolean indicating whether the value satisfies the filter condition.
      */
-    RETROLIB_EXPORT template <OptionalType O, typename F>
-        requires std::is_invocable_r_v<bool, F, CommonReference<O>>
-    constexpr auto filter(O &&optional, F &&functor) {
+    RETROLIB_EXPORT template <OptionalType O, typename... A>
+        requires std::is_invocable_r_v<bool, BindingType<A...>, CommonReference<O>>
+    constexpr auto filter(O &&optional, A &&...args) {
         if constexpr (std::is_lvalue_reference_v<O>) {
             using FilteredType = decltype(make_optional_reference(std::forward<O>(optional)));
             return has_value(std::forward<O>(optional)) &&
-                           std::invoke(std::forward<F>(functor), get<O>(std::forward<O>(optional)))
+                           std::invoke(create_binding(std::forward<A>(args)...), get<O>(std::forward<O>(optional)))
                        ? make_optional_reference(std::forward<O>(optional))
                        : FilteredType();
         } else {
             return has_value(std::forward<O>(optional)) &&
-                           std::invoke(std::forward<F>(functor), get<O>(std::forward<O>(optional)))
+                           std::invoke(create_binding(std::forward<A>(args)...), get<O>(std::forward<O>(optional)))
                        ? O(std::forward<O>(optional))
                        : O();
         }
@@ -92,7 +98,7 @@ namespace retro::optionals {
          *
          * @param optional The optional-like object that may contain a value to be filtered.
          *                 It is forwarded to allow modification or observation.
-         * @param functor The callable object used as a predicate to evaluate the contained value.
+         * @param args The callable binding parameters used as a predicate to evaluate the contained value.
          *                This must be an invocable object that returns a boolean indicating whether
          *                the value meets the criteria for inclusion.
          *
@@ -100,10 +106,10 @@ namespace retro::optionals {
          *         object (if it passes the filter) or a modified state that reflects the absence
          *         of a valid value, depending on the outcome of the functor.
          */
-        template <OptionalType O, typename F>
-            requires std::is_invocable_r_v<bool, F, CommonReference<O>>
-        constexpr auto operator()(O &&optional, F &&functor) const {
-            return filter(std::forward<O>(optional), std::forward<F>(functor));
+        template <OptionalType O, typename... A>
+            requires std::is_invocable_r_v<bool, BindingType<A...>, CommonReference<O>>
+        constexpr auto operator()(O &&optional, A &&...args) const {
+            return filter(std::forward<O>(optional), std::forward<A>(args)...);
         }
     };
 
@@ -181,14 +187,14 @@ namespace retro::optionals {
      * which must be invocable and return a boolean value, indicating whether an element
      * should be included or not.
      *
-     * @param functor A callable object that takes an element and returns a boolean.
+     * @param args A callable binding parameters that takes an element and returns a boolean.
      *                This functor defines the criteria for filtering elements.
      *
      * @return An extension method that applies the filter operation defined by the functor.
      */
-    RETROLIB_EXPORT template <typename F>
-    constexpr auto filter(F &&functor) {
-        return extension_method<filter_invoker>(std::forward<F>(functor));
+    RETROLIB_EXPORT template <typename... A>
+    constexpr auto filter(A &&...args) {
+        return extension_method<filter_invoker>(std::forward<A>(args)...);
     }
 
     /**

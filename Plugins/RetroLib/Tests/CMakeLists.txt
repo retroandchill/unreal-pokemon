@@ -8,7 +8,7 @@ add_executable(RetroLibTests Utils/PolymorphicTest.cpp
         Ranges/Algorithm/RangesToTest.cpp
         Optionals/TestOptionalOperations.cpp
         Optionals/TestFilterOptional.cpp
-        Ranges/Views/TestConstexprAdapters.cpp
+        Ranges/Views/TestRangeAdapters.cpp
         Optionals/TestOptional.cpp
         Utils/TestValidPtr.cpp
         Casts/TestCasts.cpp

@@ -161,6 +161,45 @@ namespace retro {
     WrappedFunctor(F) -> WrappedFunctor<std::decay_t<F>>;
 
     /**
+     * @brief Creates a binding by wrapping a functor and optional arguments into a WrappedFunctor object.
+     *
+     * This function generates a WrappedFunctor either directly from the provided functor if no
+     * additional arguments are supplied or by binding the provided arguments to the functor using `bind_back`.
+     *
+     * @tparam F The type of the functor to be wrapped.
+     * @tparam A The types of the additional arguments to bind to the functor.
+     * @param functor The callable object to be wrapped.
+     * @param args The additional arguments to bind to the callable object (if any).
+     * @return A WrappedFunctor containing the provided functor and any bound arguments.
+     */
+    RETROLIB_EXPORT template <typename F, typename... A>
+        requires HasFunctionCallOperator<std::decay_t<F>>
+    constexpr auto create_binding(F &&functor, A &&...args) {
+        if constexpr (sizeof...(A) == 0) {
+            return WrappedFunctor(std::forward<F>(functor));
+        } else {
+            return WrappedFunctor(bind_back(std::forward<F>(functor), std::forward<A>(args)...));
+        }
+    }
+
+    /**
+     * @brief Creates a binding by wrapping a functor and its associated arguments.
+     *
+     * This function binds a callable object along with its arguments and wraps it into
+     * a WrappedFunctor for further use.
+     *
+     * @param obj The object to which the functor is bound.
+     * @param functor The callable to be executed.
+     * @param args Additional arguments to be passed to the functor.
+     * @return A WrappedFunctor object encapsulating the bound functor and its arguments.
+     */
+    RETROLIB_EXPORT template <typename C, typename F, typename... A>
+        requires Member<F>
+    constexpr auto create_binding(C &&obj, F &&functor, A &&...args) {
+        return WrappedFunctor(bind_method(std::forward<C>(obj), std::forward<F>(functor), std::forward<A>(args)...));
+    }
+
+    /**
      * @brief Creates a binding for the given functor with optional arguments.
      *
      * This method conditionally creates a binding based on the presence of arguments.
@@ -196,5 +235,8 @@ namespace retro {
     constexpr auto create_binding(ThisType, C &&obj, A &&...args) {
         return WrappedFunctor(bind_method<Functor>(std::forward<C>(obj), std::forward<A>(args)...));
     }
+
+    RETROLIB_EXPORT template <typename... A>
+    using BindingType = decltype(create_binding(std::declval<A>()...));
 
 } // namespace retro

@@ -22,6 +22,30 @@
 namespace retro::ranges::views {
 
     /**
+     * Filters a given range using a provided predicate or multiple arguments that bind to a predicate.
+     *
+     * @param range The input range to be filtered.
+     * @param args Variadic arguments used to create the predicate binding.
+     * @return A range view containing elements from the input range that satisfy the predicate.
+     */
+    RETROLIB_EXPORT template <std::ranges::input_range R, typename... A>
+    constexpr decltype(auto) filter(R &&range, A &&...args) {
+        return std::ranges::views::filter(std::forward<R>(range), create_binding(std::forward<A>(args)...));
+    }
+
+    /**
+     * Filters a range based on a callable predicate or filter condition provided.
+     *
+     * @param args The arguments used to create the filter binding, typically including the range and a callable
+     * predicate. These arguments will be forwarded to create the necessary filter binding.
+     * @return A range view that only includes elements satisfying the given filter condition.
+     */
+    RETROLIB_EXPORT template <typename... A>
+    constexpr decltype(auto) filter(A &&...args) {
+        return std::ranges::views::filter(create_binding(std::forward<A>(args)...));
+    }
+
+    /**
      * Filters a given range using a functor that determines which elements to include.
      *
      * This method applies a filtering operation on the provided range, producing a new
