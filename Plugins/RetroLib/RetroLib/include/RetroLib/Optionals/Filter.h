@@ -209,6 +209,7 @@ namespace retro::optionals {
      *         for filtering operations.
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
+        requires HasFunctionCallOperator<decltype(Functor)>
     constexpr auto filter(A &&...args) {
         return extension_method<const_filter_invoker<Functor>>(std::forward<A>(args)...);
     }

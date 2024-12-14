@@ -134,7 +134,7 @@ namespace retro::optionals {
      * in template metaprogramming to enable or disable functionality based on whether a type is an optional
      * reference.
      */
-    template <template <typename> typename O, typename T>
+    template <template <typename...> typename O, typename T>
         requires OptionalType<O<T>>
     struct IsOptionalReference<O<T &>> : std::true_type {};
 
@@ -146,7 +146,7 @@ namespace retro::optionals {
      *
      * @tparam T Type of the object that is referenced.
      */
-    template <template <typename> typename O, typename T>
+    template <template <typename...> typename O, typename T>
         requires OptionalType<O<std::reference_wrapper<T>>>
     struct IsOptionalReference<O<std::reference_wrapper<T>>> : std::true_type {};
 
@@ -170,7 +170,7 @@ namespace retro::optionals {
      * @note This is typically used in template metaprogramming to enforce
      * constraints on types or to implement conditional logic based on type traits.
      */
-    RETROLIB_EXPORT template <template <typename> typename>
+    RETROLIB_EXPORT template <template <typename...> typename>
     struct IsRawReferenceOptionalAllowed : std::false_type {};
 
     /**
@@ -179,7 +179,7 @@ namespace retro::optionals {
      * @tparam O The template type for the optionals
      * @tparam T The contained value type
      */
-    RETROLIB_EXPORT template <template <typename> typename O, typename T>
+    RETROLIB_EXPORT template <template <typename...> typename O, typename T>
     concept RawReferenceOptionalValid = OptionalType<O<T>> && IsRawReferenceOptionalAllowed<O>::value;
 
     /**
@@ -194,7 +194,7 @@ namespace retro::optionals {
      * @return An object of type `O<T>` if it is already an optional reference, or
      *         an object of type `O<std::reference_wrapper<T>>` if not.
      */
-    RETROLIB_EXPORT template <template <typename> typename O, typename T>
+    RETROLIB_EXPORT template <template <typename...> typename O, typename T>
         requires OptionalType<O<T>>
     constexpr decltype(auto) make_optional_reference(O<T> &value) {
         if constexpr (OptionalReference<O<T>>) {
@@ -229,7 +229,7 @@ namespace retro::optionals {
      * @return A new optional that either contains a reference wrapper to the original value or is
      *         unengaged.
      */
-    RETROLIB_EXPORT template <template <typename> typename O, typename T>
+    RETROLIB_EXPORT template <template <typename...> typename O, typename T>
         requires OptionalType<O<T>>
     constexpr decltype(auto) make_optional_reference(const O<T> &value) {
         if constexpr (OptionalReference<O<T>>) {
@@ -263,7 +263,7 @@ namespace retro::optionals {
      * @param value The r-value of type `O<T>` to be used in creating an optional reference.
      * @return The result of calling `std::move` on the input value.
      */
-    RETROLIB_EXPORT template <template <typename> typename O, typename T>
+    RETROLIB_EXPORT template <template <typename...> typename O, typename T>
         requires OptionalType<O<T>>
     constexpr auto make_optional_reference(O<T> &&value) {
         static_assert(OptionalReference<O<T>>, "Cannot an r-value to an optional reference type.");
