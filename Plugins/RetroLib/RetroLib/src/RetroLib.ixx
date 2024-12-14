@@ -11,9 +11,9 @@ module;
 
 #include <bit>
 #include <cassert>
+#include <initializer_list>
 #include <ranges>
 #include <typeinfo>
-#include <initializer_list>
 
 export module RetroLib;
 
@@ -27,6 +27,7 @@ import std;
 
 #include "RetroLib/TypeTraits.h"
 
+#include "RetroLib/Concepts/CompleteType.h"
 #include "RetroLib/Concepts/Operators.h"
 #include "RetroLib/Concepts/Inheritance.h"
 #include "RetroLib/Concepts/OpaqueStorage.h"
@@ -41,6 +42,7 @@ import std;
 #include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Utils/ValidPtr.h"
 
+#include "RetroLib/Concepts/Tuples.h"
 #include "RetroLib/Optionals/Optional.h"
 
 #include "RetroLib/Casting/Convert.h"

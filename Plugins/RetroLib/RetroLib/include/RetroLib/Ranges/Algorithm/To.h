@@ -9,8 +9,8 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Functional/ExtensionMethods.h"
-#include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
+#include "RetroLib/Ranges/FeatureBridge.h"
 
 #include <ranges>
 #endif

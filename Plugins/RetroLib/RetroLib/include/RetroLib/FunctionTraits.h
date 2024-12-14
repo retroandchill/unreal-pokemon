@@ -495,7 +495,8 @@ namespace retro {
      *
      * The MemberTraits struct template is used to extract type information from member pointers.
      * It inherits from ValidType and defines two type aliases: ClassType and MemberType.
-     * ClassType corresponds to the class type C to which the member belongs, and MemberType corresponds to the type M of the member itself.
+     * ClassType corresponds to the class type C to which the member belongs, and MemberType corresponds to the type M
+     * of the member itself.
      *
      * This is useful in template metaprogramming where type traits and introspection of member pointers are required.
      *
@@ -651,7 +652,8 @@ namespace retro {
      * @tparam T The method type in question
      */
     RETROLIB_EXPORT template <Method T>
-    using ConstQualifiedClassType = std::conditional_t<ConstQualified<T>, const FunctionClassType<T>, FunctionClassType<T>>;
+    using ConstQualifiedClassType =
+        std::conditional_t<ConstQualified<T>, const FunctionClassType<T>, FunctionClassType<T>>;
 
     /**
      * Get the reference type of the owning class of a method, adding const to the type, if the method is

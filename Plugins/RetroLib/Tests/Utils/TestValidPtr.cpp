@@ -12,14 +12,15 @@ import std;
 import RetroLib;
 #else
 #include "RetroLib/Utils/ValidPtr.h"
+
 #include <memory>
 #endif
 
 TEST_CASE("Can check if a pointer is valid or invalid", "[utils]") {
     SECTION("Can work with raw pointers") {
         int value = 3;
-        int* ptr = nullptr;
-        int* valid_ptr = &value;
+        int *ptr = nullptr;
+        int *valid_ptr = &value;
 
         CHECK_FALSE(retro::valid_ptr(ptr));
         CHECK(retro::valid_ptr(valid_ptr));

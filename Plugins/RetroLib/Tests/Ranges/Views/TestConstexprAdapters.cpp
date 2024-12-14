@@ -14,8 +14,8 @@ import RetroLib;
 #include "RetroLib/Ranges/Views/Filter.h"
 #include "RetroLib/Ranges/Views/Transform.h"
 
-#include <vector>
 #include <array>
+#include <vector>
 #endif
 
 TEST_CASE("Can use the constexpr range adapters", "[ranges]") {
@@ -36,9 +36,8 @@ TEST_CASE("Can use the constexpr range adapters", "[ranges]") {
     }
 
     SECTION("Can use the range pipe syntax") {
-        auto transformed = values |
-            retro::ranges::views::filter<is_even>() |
-            retro::ranges::views::transform<double_value>(2);
+        auto transformed =
+            values | retro::ranges::views::filter<is_even>() | retro::ranges::views::transform<double_value>(2);
 
         auto it = transformed.begin();
         CHECK(*it == 4);

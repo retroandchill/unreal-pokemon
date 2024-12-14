@@ -12,6 +12,7 @@ import std;
 import RetroLib;
 #else
 #include "RetroLib/Utils/ValidPtr.h"
+
 #include <memory>
 #endif
 
@@ -35,7 +36,7 @@ namespace instanceof_test {
 
         int value2 = 4;
     };
-}
+} // namespace instanceof_test
 
 using namespace instanceof_test;
 
@@ -52,12 +53,12 @@ TEST_CASE("Check to see if we can convert between types statically", "[utils]") 
 
     SECTION("Can convert to pointers") {
         Derived1 derived1;
-        auto base = retro::convert<Base*>(&derived1);
+        auto base = retro::convert<Base *>(&derived1);
         CHECK(base == &derived1);
-        CHECK(retro::convert<Derived1*>(base) == &derived1);
-        auto opaque = retro::convert<void*>(base);
+        CHECK(retro::convert<Derived1 *>(base) == &derived1);
+        auto opaque = retro::convert<void *>(base);
         CHECK(opaque == &derived1);
-        CHECK(retro::convert<Derived1*>(opaque) == &derived1);
+        CHECK(retro::convert<Derived1 *>(opaque) == &derived1);
         CHECK(std::addressof(retro::byte_cast<Derived1>(opaque)) == &derived1);
     }
 }
@@ -66,9 +67,9 @@ TEST_CASE("Can check if a polymorphic type is an instance of another type", "[ut
     SECTION("Can work with raw pointers") {
         Derived1 value1;
         Derived2 value2;
-        Base* ptr = nullptr;
-        Base* valid_ptr1 = &value1;
-        Base* valid_ptr2 = &value2;
+        Base *ptr = nullptr;
+        Base *valid_ptr1 = &value1;
+        Base *valid_ptr2 = &value2;
 
         CHECK_FALSE(retro::instance_of<Base>(ptr));
         CHECK_FALSE(retro::instance_of<Derived1>(ptr));
@@ -124,9 +125,9 @@ TEST_CASE("Can check if a we can cast between types", "[utils]") {
     SECTION("Can work with raw pointers") {
         Derived1 value1;
         Derived2 value2;
-        Base* ptr = nullptr;
-        Base* valid_ptr1 = &value1;
-        Base* valid_ptr2 = &value2;
+        Base *ptr = nullptr;
+        Base *valid_ptr1 = &value1;
+        Base *valid_ptr2 = &value2;
 
         CHECK_FALSE(retro::class_cast<Base>(ptr).has_value());
         CHECK_FALSE(retro::class_cast<Derived1>(ptr).has_value());

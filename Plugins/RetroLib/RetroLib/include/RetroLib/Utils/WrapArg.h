@@ -27,11 +27,12 @@ namespace retro {
      *         argument as is.
      */
     RETROLIB_EXPORT template <typename T>
-    constexpr decltype(auto) wrap_arg(T&& arg) {
-        if constexpr (std::is_lvalue_reference_v<T> && (sizeof(std::decay_t<T>) > sizeof(void*) || !std::is_trivially_copyable_v<std::decay_t<T>>)) {
+    constexpr decltype(auto) wrap_arg(T &&arg) {
+        if constexpr (std::is_lvalue_reference_v<T> &&
+                      (sizeof(std::decay_t<T>) > sizeof(void *) || !std::is_trivially_copyable_v<std::decay_t<T>>)) {
             return std::reference_wrapper(arg);
         } else {
             return std::forward<T>(arg);
         }
     }
-}
+} // namespace retro

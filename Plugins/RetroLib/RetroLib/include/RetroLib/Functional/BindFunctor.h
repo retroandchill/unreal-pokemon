@@ -54,10 +54,9 @@ namespace retro {
          */
         template <typename... A>
             requires std::invocable<F, A...>
-        constexpr decltype(auto) operator()(A&&... args) const noexcept(std::is_nothrow_invocable_v<F, A...>) {
+        constexpr decltype(auto) operator()(A &&...args) const noexcept(std::is_nothrow_invocable_v<F, A...>) {
             return std::invoke(Functor, std::forward<A>(args)...);
         }
-
     };
 
     /**
@@ -71,4 +70,4 @@ namespace retro {
         return SimpleFunctorBinding<Functor>();
     }
 
-}
+} // namespace retro
