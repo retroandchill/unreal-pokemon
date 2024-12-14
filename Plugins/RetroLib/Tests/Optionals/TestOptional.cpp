@@ -158,7 +158,7 @@ TEST_CASE("Can use the new optional type", "[optionals]") {
         CHECK(*optional2 == 8);
 
         int other_variable = 4;
-        retro::Optional<int&> optional3 = other_variable;
+        retro::Optional<int &> optional3 = other_variable;
         CHECK(optional3.has_value());
         swap(optional2, optional3);
         CHECK(*optional3 == 8);
@@ -172,7 +172,7 @@ TEST_CASE("Can use the new optional type", "[optionals]") {
         CHECK(free_variable == 4);
 
         std::string testString = "Hello world";
-        retro::Optional<std::string&> optional4 = testString;
+        retro::Optional<std::string &> optional4 = testString;
         CHECK(optional4.has_value());
         CHECK(optional4->length() == 11);
         CHECK(std::as_const(optional4)->length() == 11);

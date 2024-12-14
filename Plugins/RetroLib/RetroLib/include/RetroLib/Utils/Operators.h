@@ -17,7 +17,7 @@
 
 namespace retro {
 
-     /**
+    /**
      * @class Equals
      * @brief A class to compare two  values for equality.
      */
@@ -353,4 +353,4 @@ namespace retro {
      * This variable provides a convenient way to use the FModulo class for the modulo operation of two values.
      */
     RETROLIB_EXPORT constexpr Modulo modulo;
-}
+} // namespace retro

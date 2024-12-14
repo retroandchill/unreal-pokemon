@@ -9,6 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Inheritance.h"
+
 #include <type_traits>
 #endif
 
@@ -65,7 +66,7 @@ namespace retro {
          */
         template <typename U>
             requires CanStaticCast<U, T>
-        constexpr decltype(auto) operator()(U&& args) const {
+        constexpr decltype(auto) operator()(U &&args) const {
             return static_cast<T>(std::forward<U>(args));
         }
     };
@@ -82,4 +83,4 @@ namespace retro {
      */
     RETROLIB_EXPORT template <typename T>
     constexpr Convert<T> convert;
-}
+} // namespace retro

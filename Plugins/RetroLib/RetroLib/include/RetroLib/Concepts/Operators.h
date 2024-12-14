@@ -92,7 +92,7 @@ namespace retro {
     concept ThreeWayComparable = requires(const T &lhs, const U &rhs) {
         { lhs <=> rhs } -> std::convertible_to<std::partial_ordering>;
     };
-    
+
     /**
      * Checks if the two types have the addition (+) operator.
      *
@@ -137,4 +137,4 @@ namespace retro {
      */
     RETROLIB_EXPORT template <typename T, typename U = T>
     concept Moduloable = requires(const T &lhs, const U &rhs) { lhs % rhs; };
-}
+} // namespace retro

@@ -105,7 +105,6 @@ namespace retro::optionals {
     RETROLIB_EXPORT template <OptionalType T>
     using ValueType = std::decay_t<CommonReference<T>>;
 
-
     /**
      * @struct IsOptionalReference
      *
@@ -137,7 +136,7 @@ namespace retro::optionals {
      */
     template <template <typename> typename O, typename T>
         requires OptionalType<O<T>>
-    struct IsOptionalReference<O<T&>> : std::true_type {};
+    struct IsOptionalReference<O<T &>> : std::true_type {};
 
     /**
      * @brief Trait to determine if a type is an optional reference.
@@ -174,7 +173,6 @@ namespace retro::optionals {
     RETROLIB_EXPORT template <template <typename> typename>
     struct IsRawReferenceOptionalAllowed : std::false_type {};
 
-
     /**
      * Concept to check if making a raw reference to an optional type is valid or not.
      *
@@ -203,10 +201,10 @@ namespace retro::optionals {
             return value;
         } else if constexpr (RawReferenceOptionalValid<O, T>) {
             if (has_value(value)) {
-                return O<T&>(*value);
+                return O<T &>(*value);
             }
 
-            return O<T&>();
+            return O<T &>();
         } else {
             if (has_value(value)) {
                 return O<std::reference_wrapper<T>>(*value);
@@ -238,10 +236,10 @@ namespace retro::optionals {
             return value;
         } else if constexpr (RawReferenceOptionalValid<O, T>) {
             if (has_value(value)) {
-                return O<const T&>(*value);
+                return O<const T &>(*value);
             }
 
-            return O<const T&>();
+            return O<const T &>();
         } else {
             if (has_value(value)) {
                 return O<std::reference_wrapper<const T>>(*value);

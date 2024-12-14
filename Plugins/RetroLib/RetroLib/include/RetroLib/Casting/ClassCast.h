@@ -9,9 +9,10 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Inheritance.h"
-#include "RetroLib/Utils/ValidPtr.h"
-#include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Utils/Optional.h"
+#include "RetroLib/Utils/Polymorphic.h"
+#include "RetroLib/Utils/ValidPtr.h"
+
 #include <type_traits>
 #endif
 
@@ -33,19 +34,20 @@ namespace retro {
      * @tparam Checked A boolean flag indicating whether the operation should assert the validity of the cast.
      *
      * @param value The reference to the object of type U that is to be cast.
-     * @return A reference of type T if the cast is successful. If Checked is false and the cast is unsuccessful, an Optional reference to T is returned.
+     * @return A reference of type T if the cast is successful. If Checked is false and the cast is unsuccessful, an
+     * Optional reference to T is returned.
      */
     RETROLIB_EXPORT template <Class T, Class U, bool Checked = false>
-    constexpr decltype(auto) dyn_cast_ref(U& value) {
+    constexpr decltype(auto) dyn_cast_ref(U &value) {
         if constexpr (std::is_base_of_v<T, U>) {
-            return static_cast<T&>(value);
+            return static_cast<T &>(value);
         } else {
-            auto ptr = dynamic_cast<T*>(&value);
+            auto ptr = dynamic_cast<T *>(&value);
             if constexpr (Checked) {
                 RETROLIB_ASSERT(valid_ptr(ptr));
-                return dynamic_cast<T&>(value);
+                return dynamic_cast<T &>(value);
             } else {
-                return ptr != nullptr ? Optional<T&>(*ptr) : Optional<T&>();
+                return ptr != nullptr ? Optional<T &>(*ptr) : Optional<T &>();
             }
         }
     }
@@ -54,8 +56,8 @@ namespace retro {
      * @brief ClassCast is a utility structure for performing dynamic casting and validation of references and pointers.
      *
      * The ClassCast utility provides functionality for safely casting between class types and validating the integrity
-     * of pointers and references at runtime. Casting is performed with optional checking, ensuring safety and correctness
-     * when converting between types.
+     * of pointers and references at runtime. Casting is performed with optional checking, ensuring safety and
+     * correctness when converting between types.
      *
      * @tparam T The target type to which the value will be dynamically casted.
      * @tparam Checked A boolean template parameter to indicate whether to perform runtime checks during casting.
@@ -72,32 +74,32 @@ namespace retro {
          * which is determined by the use of `decltype(auto)`.
          */
         template <Class U>
-        constexpr decltype(auto) operator()(U& value) {
+        constexpr decltype(auto) operator()(U &value) {
             return dyn_cast_ref<T, U, Checked>(value);
         }
 
         /**
          * Operator that performs a conditional transformation or validity check on the provided pointer-like value.
          *
-         * This operator function checks if the provided value is a valid pointer, and depending on compile-time conditions,
-         * it performs a dynamic cast or derives reference conversion.
+         * This operator function checks if the provided value is a valid pointer, and depending on compile-time
+         * conditions, it performs a dynamic cast or derives reference conversion.
          *
-         * @param value A universal reference to a value that will be checked for validity and conditionally transformed.
-         *              This can be a pointer or a reference to an object.
+         * @param value A universal reference to a value that will be checked for validity and conditionally
+         * transformed. This can be a pointer or a reference to an object.
          *
-         * @return An Optional containing a reference to the object of type T if the pointer is valid and the cast/conversion
-         *         succeeds. If the pointer is invalid, an empty Optional is returned.
+         * @return An Optional containing a reference to the object of type T if the pointer is valid and the
+         * cast/conversion succeeds. If the pointer is invalid, an empty Optional is returned.
          */
         template <PointerType U>
-        constexpr decltype(auto) operator()(U&& value) const {
+        constexpr decltype(auto) operator()(U &&value) const {
             if constexpr (Checked) {
                 RETROLIB_ASSERT(valid_ptr(std::forward<U>(value)));
                 return dyn_cast_ref<T, std::remove_pointer_t<U>, Checked>(*std::forward<U>(value));
             } else if constexpr (std::derived_from<std::decay_t<DereferencedType<U>>, std::decay_t<T>>) {
-                return valid_ptr(std::forward<U>(value)) ? Optional<T&>(*std::forward<U>(value)) : Optional<T&>();
+                return valid_ptr(std::forward<U>(value)) ? Optional<T &>(*std::forward<U>(value)) : Optional<T &>();
             } else {
                 if (!valid_ptr(std::forward<U>(value))) {
-                    return Optional<T&>();
+                    return Optional<T &>();
                 }
 
                 return dyn_cast_ref<T, std::decay_t<DereferencedType<U>>, Checked>(*std::forward<U>(value));
@@ -116,7 +118,7 @@ namespace retro {
          *         of the final operation's result.
          */
         template <Class U>
-        constexpr decltype(auto) operator()(Polymorphic<U>& value) const {
+        constexpr decltype(auto) operator()(Polymorphic<U> &value) const {
             return (*this)(*value);
         }
 
@@ -130,12 +132,14 @@ namespace retro {
          * @return The result of applying the functor to the dereferenced value stored in the Polymorphic object.
          */
         template <Class U>
-        constexpr decltype(auto) operator()(const Polymorphic<U>& value) const {
+        constexpr decltype(auto) operator()(const Polymorphic<U> &value) const {
             return (*this)(*value);
         }
 
-        constexpr Optional<T&> operator()(std::nullptr_t) const requires (!Checked) {
-            return Optional<T&>();
+        constexpr Optional<T &> operator()(std::nullptr_t) const
+            requires(!Checked)
+        {
+            return Optional<T &>();
         }
     };
 
@@ -168,4 +172,4 @@ namespace retro {
     RETROLIB_EXPORT template <Class T>
     constexpr ClassCast<T, true> class_cast_checked;
 
-}
+} // namespace retro

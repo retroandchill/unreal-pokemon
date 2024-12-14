@@ -9,8 +9,9 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Inheritance.h"
-#include "RetroLib/Utils/ValidPtr.h"
 #include "RetroLib/Utils/Polymorphic.h"
+#include "RetroLib/Utils/ValidPtr.h"
+
 #include <type_traits>
 #endif
 
@@ -28,7 +29,7 @@ namespace retro {
      *         that can be dynamically cast to T. Otherwise, returns false.
      */
     RETROLIB_EXPORT template <Class T, Class U>
-    constexpr bool is_valid_instance(const U& value) {
+    constexpr bool is_valid_instance(const U &value) {
         if constexpr (std::derived_from<U, T>) {
             // Trivial case, U is derived from T, so we know with certainty that this is valid
             return true;
@@ -36,7 +37,7 @@ namespace retro {
 #ifndef RTTI_ENABLED
             static_assert(false, "RTTI is disabled, but the type is not derived from T")
 #endif
-            auto casted = dynamic_cast<const T*>(&value);
+                auto casted = dynamic_cast<const T *>(&value);
             return casted != nullptr;
         }
     }
@@ -59,7 +60,7 @@ namespace retro {
          * @return A boolean indicating whether the value is a valid instance of type U.
          */
         template <Class U>
-        constexpr bool operator()(const U& value) const {
+        constexpr bool operator()(const U &value) const {
             return is_valid_instance<T, U>(value);
         }
 
@@ -75,7 +76,7 @@ namespace retro {
          * dereferenced value, otherwise false.
          */
         template <PointerType U>
-        constexpr bool operator()(U&& ptr) const {
+        constexpr bool operator()(U &&ptr) const {
             return valid_ptr(std::forward<U>(ptr)) && (*this)(*std::forward<U>(ptr));
         }
 
@@ -92,7 +93,7 @@ namespace retro {
          *         to the dereferenced value of the polymorphic object.
          */
         template <Class U, size_t Size>
-        constexpr bool operator()(const Polymorphic<U, Size>& polymorphic) const {
+        constexpr bool operator()(const Polymorphic<U, Size> &polymorphic) const {
             return (*this)(*polymorphic);
         }
 
@@ -124,4 +125,4 @@ namespace retro {
      */
     RETROLIB_EXPORT template <Class T>
     constexpr InstanceOf<T> instance_of;
-}
+} // namespace retro

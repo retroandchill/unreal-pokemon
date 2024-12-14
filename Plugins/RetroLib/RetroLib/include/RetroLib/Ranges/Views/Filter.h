@@ -9,15 +9,15 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "RetroLib/FunctionTraits.h"
 #include "RetroLib/Functional/CreateBinding.h"
+#include "RetroLib/FunctionTraits.h"
+
 #include <ranges>
 #endif
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
-
 
 namespace retro::ranges::views {
 
@@ -35,9 +35,8 @@ namespace retro::ranges::views {
      */
     RETROLIB_EXPORT template <auto Functor, std::ranges::input_range R, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr decltype(auto) filter(R&& range, A&&... args) {
-        return std::ranges::views::filter(std::forward<R>(range),
-            create_binding<Functor>(std::forward<A>(args)...));
+    constexpr decltype(auto) filter(R &&range, A &&...args) {
+        return std::ranges::views::filter(std::forward<R>(range), create_binding<Functor>(std::forward<A>(args)...));
     }
 
     /**
@@ -52,8 +51,8 @@ namespace retro::ranges::views {
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr decltype(auto) filter(A&&... args) {
+    constexpr decltype(auto) filter(A &&...args) {
         return std::ranges::views::filter(create_binding<Functor>(std::forward<A>(args)...));
     }
 
-}
+} // namespace retro::ranges::views

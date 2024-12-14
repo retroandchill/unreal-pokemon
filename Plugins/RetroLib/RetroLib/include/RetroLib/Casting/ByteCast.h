@@ -23,7 +23,8 @@ namespace retro {
      * @tparam T The test type
      */
     template <typename T>
-    concept ValidByteType = std::same_as<T, std::byte> || std::same_as<T, uint8_t> || std::same_as<T, int8_t> || std::same_as<T, void>;
+    concept ValidByteType =
+        std::same_as<T, std::byte> || std::same_as<T, uint8_t> || std::same_as<T, int8_t> || std::same_as<T, void>;
 
     template <typename T>
     /**
@@ -75,4 +76,4 @@ namespace retro {
      */
     RETROLIB_EXPORT template <typename T>
     constexpr ByteCast<T> byte_cast;
-}
+} // namespace retro

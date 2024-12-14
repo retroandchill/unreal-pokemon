@@ -28,7 +28,7 @@ namespace retro {
      * @return True if the pointer is valid (not null), otherwise false.
      */
     RETROLIB_EXPORT template <PointerType T>
-    constexpr bool is_valid_ptr(T&& ptr) {
+    constexpr bool is_valid_ptr(T &&ptr) {
         return std::forward<T>(ptr) != nullptr;
     }
 
@@ -41,7 +41,7 @@ namespace retro {
      */
     struct ValidPtr {
         template <PointerType T>
-        constexpr bool operator()(T&& ptr) const {
+        constexpr bool operator()(T &&ptr) const {
             return is_valid_ptr(std::forward<T>(ptr));
         }
 
@@ -89,7 +89,7 @@ namespace retro {
          * reference to handle both lvalue and rvalue pointers.
          * @return Returns true if the pointer is invalid, false otherwise.
          */
-        constexpr bool operator()(T&& ptr) const {
+        constexpr bool operator()(T &&ptr) const {
             return !is_valid_ptr(std::forward<T>(ptr));
         }
 
@@ -118,6 +118,4 @@ namespace retro {
      */
     RETROLIB_EXPORT constexpr InvalidPtr invalid_ptr;
 
-
-
-}
+} // namespace retro

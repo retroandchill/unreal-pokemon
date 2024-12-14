@@ -8,10 +8,10 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
+#include "RetroLib/Concepts/Operators.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-#include "RetroLib/Concepts/Operators.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #include <utility>
 #endif
@@ -36,9 +36,8 @@ namespace retro {
      * @note Specialize this struct for any custom type that should be
      *       considered as a valid optional type in your implementation.
      */
-    template<typename>
-    struct IsValidOptionalType : std::true_type {
-    };
+    template <typename>
+    struct IsValidOptionalType : std::true_type {};
 
     /**
      * @struct IsValidOptionalType
@@ -53,9 +52,8 @@ namespace retro {
      * @tparam std::nullopt_t Specialized parameter representing the type indicating
      *         an uninitialized or empty state in optional objects.
      */
-    template<>
-    struct IsValidOptionalType<std::nullopt_t> : std::false_type {
-    };
+    template <>
+    struct IsValidOptionalType<std::nullopt_t> : std::false_type {};
 
     /**
      * @brief Struct template specialization to define the validity of an optional type.
@@ -67,20 +65,19 @@ namespace retro {
      *
      * @tparam T The type encapsulated by `std::in_place_type_t`.
      */
-    template<typename T>
-    struct IsValidOptionalType<std::in_place_type_t<T> > : std::false_type {
-    };
+    template <typename T>
+    struct IsValidOptionalType<std::in_place_type_t<T>> : std::false_type {};
 
     /**
      * Concept to check if a type is allowed to be used in an optional.
      *
      * @tparam T The target type
      */
-    RETROLIB_EXPORT template<typename T>
-    concept ValidOptionalType = IsValidOptionalType<std::decay_t<T> >::value && std::destructible<T> &&
+    RETROLIB_EXPORT template <typename T>
+    concept ValidOptionalType = IsValidOptionalType<std::decay_t<T>>::value && std::destructible<T> &&
                                 (std::is_object_v<T> || std::is_lvalue_reference_v<T>);
 
-    RETROLIB_EXPORT template<ValidOptionalType T>
+    RETROLIB_EXPORT template <ValidOptionalType T>
     class Optional;
 
     /**
@@ -93,7 +90,7 @@ namespace retro {
      *         will never return normally, allowing for certain optimizations and warnings
      *         regarding control flow to be suppressed.
      */
-    template<typename = void>
+    template <typename = void>
     [[noreturn]] bool throw_bad_optional_access() {
         throw std::bad_optional_access();
     }
@@ -106,7 +103,7 @@ namespace retro {
      * that the value is not set. It offers functionalities to construct, store, and reset
      * the optional value.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalStorage {
         union {
             std::nullopt_t empty;
@@ -128,17 +125,18 @@ namespace retro {
         /**
          * @brief Constructor for the Optional class that initializes the object in-place with the provided arguments.
          *
-         * This constructor allows for the in-place construction of the stored value of type T using the given arguments.
-         * It utilizes std::in_place_type_t to enable this direct initialization and forwards the arguments for construction.
-         * The noexcept specification depends on whether the constructor of T, given arguments A..., is noexcept.
+         * This constructor allows for the in-place construction of the stored value of type T using the given
+         * arguments. It utilizes std::in_place_type_t to enable this direct initialization and forwards the arguments
+         * for construction. The noexcept specification depends on whether the constructor of T, given arguments A...,
+         * is noexcept.
          *
          * @param args The arguments to be used for constructing the stored value of type T.
          */
-        template<typename... A>
+        template <typename... A>
             requires std::constructible_from<T, A...> && (!PackSameAs<OptionalStorage, A...>)
         constexpr explicit OptionalStorage(std::in_place_type_t<T>,
-                                           A &&... args) noexcept(std::is_nothrow_constructible_v<T, A...>
-        ) : data(std::forward<A>(args)...), is_set(true) {
+                                           A &&...args) noexcept(std::is_nothrow_constructible_v<T, A...>)
+            : data(std::forward<A>(args)...), is_set(true) {
         }
 
         /**
@@ -163,8 +161,8 @@ namespace retro {
      *
      * @tparam T The type of the object to store.
      */
-    template<ValidOptionalType T>
-        requires (!std::is_trivially_destructible_v<T>)
+    template <ValidOptionalType T>
+        requires(!std::is_trivially_destructible_v<T>)
     struct OptionalStorage<T> {
         union {
             std::nullopt_t empty;
@@ -198,11 +196,11 @@ namespace retro {
          *       depends on whether the construction of T with the provided arguments is
          *       noexcept.
          */
-        template<typename... A>
+        template <typename... A>
             requires std::constructible_from<T, A...> && (!PackSameAs<std::decay_t<OptionalStorage>, A...>)
         constexpr explicit OptionalStorage(std::in_place_type_t<T>,
-                                           A &&... args) noexcept(std::is_nothrow_constructible_v<T, A...>
-        ) : data(std::forward<A>(args)...), is_set(true) {
+                                           A &&...args) noexcept(std::is_nothrow_constructible_v<T, A...>)
+            : data(std::forward<A>(args)...), is_set(true) {
         }
 
         /**
@@ -289,7 +287,7 @@ namespace retro {
      *
      * @tparam T The type of the value that can be optionally held by this class.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalBase : private OptionalStorage<T> {
         using OptionalStorage<T>::OptionalStorage;
         using OptionalStorage<T>::reset;
@@ -401,13 +399,14 @@ namespace retro {
          *
          * @param other The OptionalBase object to swap states with.
          */
-        constexpr void swap(
-            OptionalBase &other) noexcept(std::is_nothrow_move_constructible_v<T> && std::is_nothrow_swappable_v<T>)
-            requires std::swappable<T> {
+        constexpr void swap(OptionalBase &other) noexcept(std::is_nothrow_move_constructible_v<T> &&
+                                                          std::is_nothrow_swappable_v<T>)
+            requires std::swappable<T>
+        {
             using std::swap;
 
-            constexpr bool can_swap_trivially = std::is_trivially_move_constructible_v<T> &&
-                                                std::is_trivially_move_assignable_v<T>;
+            constexpr bool can_swap_trivially =
+                std::is_trivially_move_constructible_v<T> && std::is_trivially_move_assignable_v<T>;
             if constexpr (can_swap_trivially) {
                 swap(static_cast<OptionalStorage<T> &>(*this), static_cast<OptionalStorage<T> &>(other));
             } else {
@@ -424,40 +423,40 @@ namespace retro {
             }
         }
 
-    protected:
-        template<typename... A>
+      protected:
+        template <typename... A>
             requires std::constructible_from<T, A...>
-        T &construct_from(A &&... args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
+        T &construct_from(A &&...args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
             RETROLIB_ASSERT(!is_set);
-            new(&data) T(std::forward<A>(args)...);
+            new (&data) T(std::forward<A>(args)...);
             is_set = true;
             return data;
         }
 
-        template<typename I>
+        template <typename I>
             requires std::constructible_from<T, I>
         T &construct_from_deref(const I &it) {
             RETROLIB_ASSERT(!is_set);
-            new(&data) T(*it);
+            new (&data) T(*it);
             is_set = true;
             return data;
         }
 
-        template<typename U>
-        constexpr void assign_from(
-            U &&other) noexcept(std::is_nothrow_constructible_v<T, decltype(*std::forward<U>(other))> &&
-                                std::is_nothrow_assignable_v<T &, decltype(*std::forward<U>(other))>) {
+        template <typename U>
+        constexpr void
+        assign_from(U &&other) noexcept(std::is_nothrow_constructible_v<T, decltype(*std::forward<U>(other))> &&
+                                        std::is_nothrow_assignable_v<T &, decltype(*std::forward<U>(other))>) {
             if (!other.has_value()) {
                 reset();
             } else if (is_set) {
                 data = std::forward<U>(other).data;
             } else {
-                new(&data) T(*std::forward<U>(other));
+                new (&data) T(*std::forward<U>(other));
                 is_set = true;
             }
         }
 
-    private:
+      private:
         using OptionalStorage<T>::data;
         using OptionalStorage<T>::is_set;
     };
@@ -470,7 +469,7 @@ namespace retro {
      *
      * @tparam T The type of the referenced object.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalBase<T &> {
         /**
          * @brief Default constructor for the OptionalBase class.
@@ -494,7 +493,7 @@ namespace retro {
          *            OptionalBase instance.
          * @return No return value as this is a constructor.
          */
-        template<typename A>
+        template <typename A>
             requires std::constructible_from<T &, A>
         constexpr explicit OptionalBase(std::in_place_type_t<T &>, A &&arg) noexcept : data(&arg) {
         }
@@ -596,7 +595,9 @@ namespace retro {
          *
          * @param other Another instance of OptionalBase with which to swap the data.
          */
-        constexpr void swap(OptionalBase &other) noexcept(std::is_nothrow_swappable_v<T>) requires std::swappable<T> {
+        constexpr void swap(OptionalBase &other) noexcept(std::is_nothrow_swappable_v<T>)
+            requires std::swappable<T>
+        {
             using std::swap;
 
             if (data != nullptr && other.data != nullptr) {
@@ -606,8 +607,8 @@ namespace retro {
             }
         }
 
-    protected:
-        template<typename U>
+      protected:
+        template <typename U>
             requires std::convertible_to<U &, T &>
         constexpr T &construct_from(U &&ref) noexcept {
             RETROLIB_ASSERT(data == nullptr);
@@ -615,7 +616,7 @@ namespace retro {
             return *data;
         }
 
-        template<typename U>
+        template <typename U>
         constexpr void assign_from(U &&other) {
             if (data != nullptr && other.data != nullptr) {
                 *data = *std::forward<U>(other).data;
@@ -624,14 +625,14 @@ namespace retro {
             }
         }
 
-    private:
+      private:
         T *data = nullptr;
     };
 
     /**
      * Inheritance layer for an Optional of a type that has a non-trivial copy constructor.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalCopy : OptionalBase<T> {
 
         /**
@@ -709,10 +710,10 @@ namespace retro {
     /**
      * Layer of the Optional type depending on if it is copy constructable or not.
      */
-    template<ValidOptionalType T>
-    using CopyConstructLayer = std::conditional_t<
-        std::is_copy_constructible_v<T> && !std::is_trivially_copy_constructible_v<T>,
-        OptionalCopy<T>, OptionalBase<T> >;
+    template <ValidOptionalType T>
+    using CopyConstructLayer =
+        std::conditional_t<std::is_copy_constructible_v<T> && !std::is_trivially_copy_constructible_v<T>,
+                           OptionalCopy<T>, OptionalBase<T>>;
 
     /**
      * @brief Represents an optional wrapper with move semantics.
@@ -724,7 +725,7 @@ namespace retro {
      *
      * @tparam T The type of object managed by this optional wrapper.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalMove : CopyConstructLayer<T> {
         /**
          * @brief Default constructor for the OptionalMove class.
@@ -802,10 +803,10 @@ namespace retro {
     /**
      * Layer of the Optional type depending on if we need custom move construction..
      */
-    template<ValidOptionalType T>
-    using MoveConstructLayer = std::conditional_t<std::is_move_constructible_v<T> &&
-                                                  !std::is_trivially_move_constructible_v<T>,
-        OptionalMove<T>, CopyConstructLayer<T> >;
+    template <ValidOptionalType T>
+    using MoveConstructLayer =
+        std::conditional_t<std::is_move_constructible_v<T> && !std::is_trivially_move_constructible_v<T>,
+                           OptionalMove<T>, CopyConstructLayer<T>>;
 
     /**
      * @brief Struct for OptionalCopyAssign which extends MoveConstructLayer.
@@ -818,7 +819,7 @@ namespace retro {
      *
      * @tparam T Type parameter for the MoveConstructLayer.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalCopyAssign : MoveConstructLayer<T> {
         /**
          * @brief Default copy assignment operator for the OptionalCopyAssign class.
@@ -877,9 +878,9 @@ namespace retro {
          * @param other The OptionalCopyAssign object to copy from.
          * @return A reference to this OptionalCopyAssign object after the assignment.
          */
-        OptionalCopyAssign &operator=(
-            const OptionalCopyAssign &other) noexcept(
-            std::is_nothrow_copy_assignable_v<T> && std::is_nothrow_constructible_v<T, decltype(*other)>) {
+        OptionalCopyAssign &
+        operator=(const OptionalCopyAssign &other) noexcept(std::is_nothrow_copy_assignable_v<T> &&
+                                                            std::is_nothrow_constructible_v<T, decltype(*other)>) {
             this->assign_from(other);
             return *this;
         }
@@ -903,7 +904,7 @@ namespace retro {
     /**
      * Optional layer for when the copy assign operation is deleted.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct DeletedCopyAssign : MoveConstructLayer<T> {
         /**
          * @brief Default constructor for the DeletedCopyAssign class.
@@ -979,11 +980,13 @@ namespace retro {
     /**
      * Optional layer for the copy assignment operation.
      */
-    template<ValidOptionalType T>
-    using CopyAssignLayer = std::conditional_t<std::is_copy_constructible_v<T> && std::is_copy_assignable_v<T>,
-        std::conditional_t<std::is_reference_v<T> ||
-                           !(std::is_trivially_copy_constructible_v<T> && std::is_trivially_copy_assignable_v<T>),
-            OptionalCopyAssign<T>, MoveConstructLayer<T> >, DeletedCopyAssign<T> >;
+    template <ValidOptionalType T>
+    using CopyAssignLayer =
+        std::conditional_t<std::is_copy_constructible_v<T> && std::is_copy_assignable_v<T>,
+                           std::conditional_t<std::is_reference_v<T> || !(std::is_trivially_copy_constructible_v<T> &&
+                                                                          std::is_trivially_copy_assignable_v<T>),
+                                              OptionalCopyAssign<T>, MoveConstructLayer<T>>,
+                           DeletedCopyAssign<T>>;
 
     /**
      * @brief Default constructor for the OptionalMoveAssign struct.
@@ -992,7 +995,7 @@ namespace retro {
      * with a default-constructed object maintaining an empty state.
      * This constructor is noexcept, ensuring it does not throw exceptions.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct OptionalMoveAssign : CopyAssignLayer<T> {
         /**
          * @brief Default move assignment operator for the OptionalMoveAssign class.
@@ -1060,9 +1063,8 @@ namespace retro {
          * @param other An rvalue reference to another OptionalMoveAssign object.
          * @return A reference to the current instance after assignment.
          */
-        OptionalMoveAssign &operator=(
-            OptionalMoveAssign &&other) noexcept(
-            std::is_nothrow_move_constructible_v<T> && std::is_nothrow_move_assignable_v<T>) {
+        OptionalMoveAssign &operator=(OptionalMoveAssign &&other) noexcept(std::is_nothrow_move_constructible_v<T> &&
+                                                                           std::is_nothrow_move_assignable_v<T>) {
             this->assign_from(std::move(other));
             return *this;
         }
@@ -1073,7 +1075,7 @@ namespace retro {
     /**
      * Layer for when the move assignment is deleted.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     struct DeletedMoveAssign : CopyAssignLayer<T> {
         /**
          * @brief Defaulted deleted move assignment operator.
@@ -1137,34 +1139,32 @@ namespace retro {
     /**
      * Layer for when the move assignment is deleted.
      */
-    template<ValidOptionalType T>
-    using MoveAssignLayer = std::conditional_t<std::is_move_constructible_v<T> && std::is_move_assignable_v<T>,
-        std::conditional_t<std::is_reference_v<T> ||
-                           !(std::is_trivially_move_constructible_v<T> && std::is_trivially_move_assignable_v<T>),
-            OptionalMoveAssign<T>, CopyAssignLayer<T> >, DeletedMoveAssign<T> >;
+    template <ValidOptionalType T>
+    using MoveAssignLayer =
+        std::conditional_t<std::is_move_constructible_v<T> && std::is_move_assignable_v<T>,
+                           std::conditional_t<std::is_reference_v<T> || !(std::is_trivially_move_constructible_v<T> &&
+                                                                          std::is_trivially_move_assignable_v<T>),
+                                              OptionalMoveAssign<T>, CopyAssignLayer<T>>,
+                           DeletedMoveAssign<T>>;
 
     /**
      * Concept to check if we can convert between various optional types.
      */
-    template<typename U, typename T>
-    concept OptionalShouldConvert = !(std::constructible_from<T, Optional<U> &> ||
-                                      std::constructible_from<T, Optional<U> &&> ||
-                                      std::constructible_from<T, const Optional<U> &> ||
-                                      std::constructible_from<T, const Optional<U> &&> ||
-                                      std::convertible_to<Optional<U> &, T> ||
-                                      std::convertible_to<Optional<U> &&, T> ||
-                                      std::convertible_to<const Optional<U> &, T> ||
-                                      std::convertible_to<const Optional<U> &&, T>);
+    template <typename U, typename T>
+    concept OptionalShouldConvert =
+        !(std::constructible_from<T, Optional<U> &> || std::constructible_from<T, Optional<U> &&> ||
+          std::constructible_from<T, const Optional<U> &> || std::constructible_from<T, const Optional<U> &&> ||
+          std::convertible_to<Optional<U> &, T> || std::convertible_to<Optional<U> &&, T> ||
+          std::convertible_to<const Optional<U> &, T> || std::convertible_to<const Optional<U> &&, T>);
 
     /**
      * Concept to check if we can assign between various optional types.
      */
-    template<typename U, typename T>
-    concept OptionalShouldConvertAssign = OptionalShouldConvert<U, T> ||
-                                          !(std::assignable_from<T &, Optional<U> &> ||
-                                            std::assignable_from<T &, Optional<U> &&> ||
-                                            std::assignable_from<T &, const Optional<U> &> ||
-                                            std::assignable_from<T &, const Optional<U> &&>);
+    template <typename U, typename T>
+    concept OptionalShouldConvertAssign =
+        OptionalShouldConvert<U, T> ||
+        !(std::assignable_from<T &, Optional<U> &> || std::assignable_from<T &, Optional<U> &&> ||
+          std::assignable_from<T &, const Optional<U> &> || std::assignable_from<T &, const Optional<U> &&>);
 
     /**
      * @brief Class template for managing optional values with enhanced assignment and construction capabilities.
@@ -1176,13 +1176,12 @@ namespace retro {
      *
      * @tparam T The type of the value managed by the `Optional` instance.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     class Optional : private MoveAssignLayer<T> {
         using Base = MoveAssignLayer<T>;
 
-    public:
-        using ValueType = std::conditional_t<std::is_lvalue_reference_v<T>, T, std::remove_cv_t<T> >;
-
+      public:
+        using ValueType = std::conditional_t<std::is_lvalue_reference_v<T>, T, std::remove_cv_t<T>>;
 
         /**
          * @brief Default constructor for the Optional class.
@@ -1215,10 +1214,10 @@ namespace retro {
          * @tparam U The type of the value being used to initialize the Optional object.
          * @param value The value used to initialize the Optional object.
          */
-        template<ValidOptionalType U = T>
+        template <ValidOptionalType U = T>
             requires std::constructible_from<T, U> && (!std::same_as<std::decay_t<U>, Optional>)
-        constexpr explicit(!std::convertible_to<U, T>) Optional(U &&value) : Base(
-            std::in_place_type<T>, std::forward<U>(value)) {
+        constexpr explicit(!std::convertible_to<U, T>) Optional(U &&value)
+            : Base(std::in_place_type<T>, std::forward<U>(value)) {
         }
 
         /**
@@ -1262,7 +1261,7 @@ namespace retro {
          * @param other The Optional<U> object from which to construct the new Optional.
          *              The constructed object will contain a value only if `other` has a value.
          */
-        template<OptionalShouldConvert<T> U>
+        template <OptionalShouldConvert<T> U>
             requires std::constructible_from<T, const U &> && (!std::same_as<std::decay_t<U>, T>)
         constexpr explicit(!std::convertible_to<const U &, T>) Optional(const Optional<U> &other) {
             if (other.has_value()) {
@@ -1284,7 +1283,7 @@ namespace retro {
          * @return An Optional<T> object initialized with the moved value from the other Optional
          *         object, if present. Otherwise, it remains in an empty state.
          */
-        template<OptionalShouldConvert<T> U>
+        template <OptionalShouldConvert<T> U>
             requires std::constructible_from<T, U &&> && (!std::same_as<std::decay_t<U>, T>)
         constexpr explicit(!std::convertible_to<const U &, T>) Optional(Optional<U> &&other) {
             if (other.has_value()) {
@@ -1352,11 +1351,11 @@ namespace retro {
          * assigning based on the current state of the Optional.
          * @return A reference to the current Optional instance after the assignment.
          */
-        template<ValidOptionalType U = T>
-            requires (!std::same_as<std::decay_t<U>, Optional> && std::constructible_from<T, U> && std::assignable_from<
-                          T &, U>)
-        constexpr Optional &operator=(
-            U &&other) noexcept(std::is_nothrow_constructible_v<T, U> && std::is_nothrow_assignable_v<T &, U>) {
+        template <ValidOptionalType U = T>
+            requires(!std::same_as<std::decay_t<U>, Optional> && std::constructible_from<T, U> &&
+                     std::assignable_from<T &, U>)
+        constexpr Optional &operator=(U &&other) noexcept(std::is_nothrow_constructible_v<T, U> &&
+                                                          std::is_nothrow_assignable_v<T &, U>) {
             if (has_value()) {
                 **this = std::forward<U>(other);
             } else {
@@ -1378,8 +1377,9 @@ namespace retro {
          * @param other The other Optional object of type U to assign from.
          * @return A reference to the updated Optional object.
          */
-        template<OptionalShouldConvertAssign<T> U>
-            requires std::constructible_from<T, const U &> && std::assignable_from<T &, const U &> && (!std::same_as<std::decay_t<U>, T>)
+        template <OptionalShouldConvertAssign<T> U>
+            requires std::constructible_from<T, const U &> && std::assignable_from<T &, const U &> &&
+                     (!std::same_as<std::decay_t<U>, T>)
         constexpr Optional &operator=(const Optional<U> &other) {
             Base::assign_from(other);
             return *this;
@@ -1401,8 +1401,9 @@ namespace retro {
          * @param other The Optional object to move-assign from.
          * @return A reference to the current Optional object with updated contents.
          */
-        template<OptionalShouldConvertAssign<T> U>
-            requires std::constructible_from<T, U &&> && std::assignable_from<T &, U &&> && (!std::same_as<std::decay_t<U>, T>)
+        template <OptionalShouldConvertAssign<T> U>
+            requires std::constructible_from<T, U &&> && std::assignable_from<T &, U &&> &&
+                     (!std::same_as<std::decay_t<U>, T>)
         constexpr Optional &operator=(Optional<U> &&other) {
             Base::assign_from(std::move(other));
             return *this;
@@ -1418,7 +1419,7 @@ namespace retro {
          * @param it The iterator whose dereferenced value will be used for object construction.
          * @return A reference to the newly constructed object.
          */
-        template<typename I>
+        template <typename I>
             requires std::constructible_from<T, decltype(*std::declval<const I &>())>
         T &emplace_deref(const I &it) {
             reset();
@@ -1436,9 +1437,9 @@ namespace retro {
          *
          * @return A reference to the newly constructed object of type T.
          */
-        template<typename... A>
+        template <typename... A>
             requires std::constructible_from<T, A...>
-        T &emplace(A &&... args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
+        T &emplace(A &&...args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
             reset();
             return Base::construct_from(std::forward<A>(args)...);
         }
@@ -1454,10 +1455,10 @@ namespace retro {
          * @param args Additional arguments used to further initialize the object of type T.
          * @return A reference to the newly constructed object of type T.
          */
-        template<typename U, typename... A>
+        template <typename U, typename... A>
             requires std::constructible_from<T, std::initializer_list<U>, A...>
         T &emplace(std::initializer_list<U> initializer_list,
-                   A &&... args) noexcept(std::is_nothrow_constructible_v<T, std::initializer_list<U>, A...>) {
+                   A &&...args) noexcept(std::is_nothrow_constructible_v<T, std::initializer_list<U>, A...>) {
             reset();
             return Base::construct_from(initializer_list, std::forward<A>(args)...);
         }
@@ -1474,7 +1475,7 @@ namespace retro {
          * @param lhs The first Optional object to swap.
          * @param rhs The second Optional object to swap.
          */
-        constexpr friend void swap(Optional& lhs, Optional& rhs) noexcept(noexcept(lhs.swap(rhs))) {
+        constexpr friend void swap(Optional &lhs, Optional &rhs) noexcept(noexcept(lhs.swap(rhs))) {
             lhs.swap(rhs);
         }
 
@@ -1553,7 +1554,7 @@ namespace retro {
             return has_value() || throw_bad_optional_access(), std::move(**this);
         }
 
-        template<ValidOptionalType U>
+        template <ValidOptionalType U>
             requires std::copy_constructible<T> && std::convertible_to<U, T>
         /**
          * @brief Returns the stored value or a provided default value.
@@ -1573,7 +1574,7 @@ namespace retro {
             return has_value() ? **this : std::forward<U>(default_value);
         }
 
-        template<ValidOptionalType U>
+        template <ValidOptionalType U>
             requires std::move_constructible<U> && std::convertible_to<U, T>
         /**
          * @brief Returns the contained value or a provided default.
@@ -1612,7 +1613,7 @@ namespace retro {
      * @note The function is noexcept and can be evaluated at compile time if the
      * comparison of the contained values is noexcept.
      */
-    RETROLIB_EXPORT template<ValidOptionalType T, ValidOptionalType U>
+    RETROLIB_EXPORT template <ValidOptionalType T, ValidOptionalType U>
     constexpr bool operator==(const Optional<T> &self, const Optional<U> &other) noexcept(noexcept(*self == *other)) {
         return self.has_value() == other.has_value() && (!self.has_value() || *self == *other);
     }
@@ -1635,7 +1636,7 @@ namespace retro {
      * @note This operator is constexpr and noexcept, provided that the comparison
      *       of the contained types is noexcept.
      */
-    RETROLIB_EXPORT template<ValidOptionalType T, ValidOptionalType U>
+    RETROLIB_EXPORT template <ValidOptionalType T, ValidOptionalType U>
     constexpr auto operator<=>(const Optional<T> &self, const Optional<U> &other) noexcept(noexcept(*self <=> *other)) {
         using ResultType = std::compare_three_way_result_t<T, U>;
         if (self.has_value() && !other.has_value()) {
@@ -1665,7 +1666,7 @@ namespace retro {
      * @param std::nullopt_t A tag indicating an empty optional state.
      * @return true if the Optional object is empty, false otherwise.
      */
-    RETROLIB_EXPORT template<ValidOptionalType T>
+    RETROLIB_EXPORT template <ValidOptionalType T>
     constexpr bool operator==(const Optional<T> &self, std::nullopt_t) noexcept {
         return !self.has_value();
     }
@@ -1681,9 +1682,10 @@ namespace retro {
      * @param self The Optional object being compared.
      * @return std::strong_ordering::greater if the Optional has a value, std::strong_ordering::equal otherwise.
      *
-     * @note This function is marked as constexpr, allowing it to be evaluated at compile time, and noexcept, indicating that it does not throw exceptions.
+     * @note This function is marked as constexpr, allowing it to be evaluated at compile time, and noexcept, indicating
+     * that it does not throw exceptions.
      */
-    RETROLIB_EXPORT template<ValidOptionalType T>
+    RETROLIB_EXPORT template <ValidOptionalType T>
     constexpr std::strong_ordering operator<=>(const Optional<T> &self, std::nullopt_t) noexcept {
         return self.has_value() ? std::strong_ordering::greater : std::strong_ordering::equal;
     }
@@ -1700,7 +1702,7 @@ namespace retro {
      * @param other The Optional object to compare against std::nullopt_t.
      * @return True if the Optional object does not have a value, false otherwise.
      */
-    RETROLIB_EXPORT template<ValidOptionalType T>
+    RETROLIB_EXPORT template <ValidOptionalType T>
     constexpr bool operator==(std::nullopt_t, const Optional<T> &other) noexcept {
         return !other.has_value();
     }
@@ -1716,7 +1718,7 @@ namespace retro {
      * @param other The Optional object being compared with std::nullopt_t.
      * @return std::strong_ordering::less if the Optional has a value, otherwise std::strong_ordering::equal.
      */
-    RETROLIB_EXPORT template<ValidOptionalType T>
+    RETROLIB_EXPORT template <ValidOptionalType T>
     constexpr std::strong_ordering operator<=>(std::nullopt_t, const Optional<T> &other) noexcept {
         return other.has_value() ? std::strong_ordering::less : std::strong_ordering::equal;
     }
@@ -1732,13 +1734,14 @@ namespace retro {
      * @tparam U The type of the other object to compare with.
      * @param self The Optional object to compare.
      * @param other The other object to compare.
-     * @return true if the Optional object contains a value and that value is equal to the other object, otherwise false.
+     * @return true if the Optional object contains a value and that value is equal to the other object, otherwise
+     * false.
      *
      * @note This operator is marked as constexpr, allowing it to be evaluated at compile time.
      * It is also noexcept, depending on whether the underlying comparison operation is noexcept.
      */
     RETROLIB_EXPORT template <ValidOptionalType T, typename U>
-    constexpr bool operator==(const Optional<T>& self, const U &other) noexcept(noexcept(*self == other)) {
+    constexpr bool operator==(const Optional<T> &self, const U &other) noexcept(noexcept(*self == other)) {
         return self.has_value() && *self == other;
     }
 
@@ -1761,7 +1764,7 @@ namespace retro {
      * operation between T and U does not throw.
      */
     RETROLIB_EXPORT template <ValidOptionalType T, typename U>
-    constexpr auto operator<=>(const Optional<T>& self, const U &other) noexcept(noexcept(*self <=> other)) {
+    constexpr auto operator<=>(const Optional<T> &self, const U &other) noexcept(noexcept(*self <=> other)) {
         using ResultType = std::compare_three_way_result_t<T, U>;
         return self.has_value() ? *self <=> other : ResultType::greater;
     }
@@ -1817,7 +1820,7 @@ namespace retro {
      *
      * @tparam T The type of the value that the Optional should store.
      */
-    template<ValidOptionalType T>
+    template <ValidOptionalType T>
     Optional(T) -> Optional<T>;
 
     /**
@@ -1829,4 +1832,4 @@ namespace retro {
      */
     template <>
     struct optionals::IsRawReferenceOptionalAllowed<Optional> : std::true_type {};
-}
+} // namespace retro

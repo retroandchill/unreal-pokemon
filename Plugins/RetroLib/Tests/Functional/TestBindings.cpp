@@ -1,5 +1,5 @@
 /**
- * @file TestBindBack.cpp
+ * @file TestBindings.cpp
  * @brief Test the `bind_back` method to ensure that it works.
  *
  * @author Retro & Chill
@@ -42,14 +42,13 @@ static int add_many(int a, int b, int c, int d) {
     return a + b + c + d;
 }
 
-
 static int add_numbers(int a, int b, int c) {
     return a + b + c;
 }
 
 class TestClass {
 
-public:
+  public:
     int method(int value1, int value2, int value3) const {
         return value1 + value2 + value3;
     }
@@ -150,7 +149,7 @@ TEST_CASE("Can use the opaque binding wrapper", "[functional]") {
         CHECK(std::as_const(binding)(5) == 9);
         auto number = std::make_shared<int>(5);
         auto weakNumber = std::weak_ptr(number);
-        retro::bind_back<add_to_shared_back>(std::move(number))(4);
+        retro::create_binding<add_to_shared_back>(std::move(number))(4);
         CHECK(weakNumber.expired());
     }
 
@@ -168,5 +167,15 @@ TEST_CASE("Can use the opaque binding wrapper", "[functional]") {
         CHECK(binding1() == 9);
         auto binding2 = retro::create_binding<&TestClass::member>();
         CHECK(binding2(object) == 9);
+    }
+
+    SECTION("Can bind a functor and use tuples with it") {
+        auto binding = retro::create_binding<add>();
+        CHECK(binding(std::make_pair(3, 4)) == 7);
+        CHECK(std::as_const(binding)(std::make_pair(5, 4)) == 9);
+        auto number = std::make_shared<int>(5);
+        auto weakNumber = std::weak_ptr(number);
+        retro::create_binding<add_to_shared_back>()(std::make_pair(4, std::move(number)));
+        CHECK(weakNumber.expired());
     }
 }
