@@ -36,7 +36,6 @@ import std;
 
 #include "RetroLib/Utils/ForwardLike.h"
 #include "RetroLib/Utils/Operators.h"
-#include "RetroLib/Utils/WrapArg.h"
 #include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Utils/ValidPtr.h"
@@ -79,6 +78,7 @@ import std;
 #include "RetroLib/Ranges/Views/CacheLast.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/Filter.h"
+#include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/Transform.h"
 
 // clang-format on

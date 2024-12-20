@@ -8,8 +8,8 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
+#include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/NonPropagatingCache.h"
 #endif
 
@@ -30,36 +30,42 @@ namespace retro::ranges {
      * iteration and other range utilities.
      */
     RETROLIB_EXPORT template <std::ranges::input_range R>
-        requires std::ranges::viewable_range<R> && std::constructible_from<std::ranges::range_value_t<R>, std::ranges::range_reference_t<R>>
+        requires std::ranges::view<R> &&
+                 std::constructible_from<std::ranges::range_value_t<R>, std::ranges::range_reference_t<R>>
     class CacheLastView : std::ranges::view_interface<CacheLastView<R>> {
 
         class Iterator;
 
         class Sentinel {
-        public:
+          public:
             constexpr Sentinel() = default;
-            constexpr explicit Sentinel(std::ranges::sentinel_t<R> last) : last(std::move(last)) {}
+            constexpr explicit Sentinel(std::ranges::sentinel_t<R> last) : last(std::move(last)) {
+            }
 
-            constexpr std::ranges::range_difference_t<R> operator-(const Iterator& other) const requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, std::ranges::sentinel_t<R>> {
+            constexpr std::ranges::range_difference_t<R> operator-(const Iterator &other) const
+                requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, std::ranges::sentinel_t<R>>
+            {
                 return last - other.it;
             }
 
-        private:
+          private:
             friend Iterator;
             std::ranges::sentinel_t<R> last;
         };
 
         class Iterator {
 
-        public:
+          public:
             using value_type = std::ranges::range_value_t<R>;
             using single_pass = std::true_type;
             using difference_type = std::ranges::range_difference_t<R>;
 
             constexpr Iterator() = default;
-            constexpr Iterator(CacheLastView* parent, std::ranges::iterator_t<R> it) : parent(parent), it(std::move(it)) {}
+            constexpr Iterator(CacheLastView *parent, std::ranges::iterator_t<R> it)
+                : parent(parent), it(std::move(it)) {
+            }
 
-            constexpr std::ranges::range_value_t<R>&& operator*() const {
+            constexpr std::ranges::range_value_t<R> &&operator*() const {
                 if (parent->dirty) {
                     parent->update(*it);
                     parent->dirty = false;
@@ -68,15 +74,17 @@ namespace retro::ranges {
                 return std::move(*parent->cache);
             }
 
-            constexpr bool operator==(const Iterator& other) const requires std::ranges::forward_range<R> {
+            constexpr bool operator==(const Iterator &other) const
+                requires std::ranges::forward_range<R>
+            {
                 return it == other.it;
             }
 
-            constexpr bool operator==(const Sentinel& other) const {
+            constexpr bool operator==(const Sentinel &other) const {
                 return it == other.last;
             }
 
-            constexpr Iterator& operator++() {
+            constexpr Iterator &operator++() {
                 ++it;
                 parent->dirty = true;
                 return *this;
@@ -92,20 +100,24 @@ namespace retro::ranges {
                 }
             }
 
-            constexpr difference_type operator-(const Iterator& other) const requires std::sized_sentinel_for<std::ranges::iterator_t<R>, std::ranges::iterator_t<R>> {
+            constexpr difference_type operator-(const Iterator &other) const
+                requires std::sized_sentinel_for<std::ranges::iterator_t<R>, std::ranges::iterator_t<R>>
+            {
                 return it - other.it;
             }
 
-            constexpr difference_type operator-(const Sentinel& other) const requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, std::ranges::iterator_t<R>> {
+            constexpr difference_type operator-(const Sentinel &other) const
+                requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, std::ranges::iterator_t<R>>
+            {
                 return it - other.last;
             }
 
-        private:
-            CacheLastView* parent;
+          private:
+            CacheLastView *parent;
             std::ranges::iterator_t<R> it;
         };
 
-    public:
+      public:
         /**
          * @brief Default constructor for the CacheLastView class.
          *
@@ -124,8 +136,8 @@ namespace retro::ranges {
          *
          * @param range The range to be cached, transferred using move semantics.
          */
-        constexpr explicit CacheLastView(R range) : range(std::move(range)) {}
-
+        constexpr explicit CacheLastView(R range) : range(std::move(range)) {
+        }
 
         /**
          * @brief Provides an iterator to the beginning of the range.
@@ -149,7 +161,7 @@ namespace retro::ranges {
          *
          * @return An Iterator or Sentinel representing the end of the range.
          */
-        Iterator end()  {
+        Iterator end() {
             if constexpr (std::ranges::common_range<R>) {
                 return Iterator(this, std::ranges::end(range));
             } else {
@@ -165,21 +177,27 @@ namespace retro::ranges {
          *
          * @return The size of the range.
          */
-        constexpr auto size() const requires std::ranges::sized_range<R> {
+        constexpr auto size() const
+            requires std::ranges::sized_range<R>
+        {
             return std::ranges::size(range);
         }
 
-    private:
-        constexpr void update(std::ranges::range_reference_t<R>&& value) requires std::assignable_from<std::ranges::range_value_t<R>&, std::ranges::range_value_t<R>> {
+      private:
+        constexpr void update(std::ranges::range_reference_t<R> &&value)
+            requires std::assignable_from<std::ranges::range_value_t<R> &, std::ranges::range_value_t<R>>
+        {
             if (!cache.has_value()) {
-                cache.emplace(static_cast<std::ranges::range_reference_t<R>&&>(value));
+                cache.emplace(static_cast<std::ranges::range_reference_t<R> &&>(value));
             } else {
-                *cache = static_cast<std::ranges::range_reference_t<R>&&>(value);
+                *cache = static_cast<std::ranges::range_reference_t<R> &&>(value);
             }
         }
 
-        constexpr auto update(std::ranges::range_reference_t<R>&& value) requires (!std::assignable_from<std::ranges::range_value_t<R>&, std::ranges::range_value_t<R>>) {
-            cache.emplace(static_cast<std::ranges::range_reference_t<R>&&>(value));
+        constexpr auto update(std::ranges::range_reference_t<R> &&value)
+            requires(!std::assignable_from<std::ranges::range_value_t<R> &, std::ranges::range_value_t<R>>)
+        {
+            cache.emplace(static_cast<std::ranges::range_reference_t<R> &&>(value));
         }
 
         R range;
@@ -196,7 +214,7 @@ namespace retro::ranges {
      *         with a cached last element.
      */
     template <std::ranges::input_range R>
-    CacheLastView(R&&) -> CacheLastView<std::ranges::views::all_t<R>>;
+    CacheLastView(R &&) -> CacheLastView<std::ranges::views::all_t<R>>;
 
     namespace views {
         /**
@@ -225,8 +243,9 @@ namespace retro::ranges {
              * @return A CacheLastView constructed from the provided range.
              */
             template <std::ranges::input_range R>
-                requires std::ranges::viewable_range<R> && std::constructible_from<std::ranges::range_value_t<R>, std::ranges::range_reference_t<R>>
-            constexpr auto operator()(R&& range) const {
+                requires std::ranges::viewable_range<R> &&
+                         std::constructible_from<std::ranges::range_value_t<R>, std::ranges::range_reference_t<R>>
+            constexpr auto operator()(R &&range) const {
                 return CacheLastView(std::ranges::views::all(std::forward<R>(range)));
             }
         };
@@ -243,5 +262,5 @@ namespace retro::ranges {
          * recalculating it at every access, even for non-bidirectional ranges.
          */
         RETROLIB_EXPORT constexpr auto cache_last = extension_method<CacheLastInvoker{}>();
-    }
-}
+    } // namespace views
+} // namespace retro::ranges

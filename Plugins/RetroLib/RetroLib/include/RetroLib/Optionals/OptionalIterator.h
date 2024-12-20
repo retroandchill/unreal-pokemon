@@ -62,7 +62,8 @@ namespace retro::optionals {
          *
          * @param value A reference to the object this iterator will manage.
          */
-        constexpr explicit OptionalIterator(O &value) : value(&value) {}
+        constexpr explicit OptionalIterator(O &value) : value(&value) {
+        }
 
         /**
          * @brief Dereference operator for accessing the stored value.
@@ -88,7 +89,7 @@ namespace retro::optionals {
          * @return `true` if both `OptionalIterator` instances have equal values,
          *         otherwise `false`.
          */
-        constexpr bool operator==(const OptionalIterator& other) const {
+        constexpr bool operator==(const OptionalIterator &other) const {
             return value == other.value;
         }
 
@@ -101,7 +102,7 @@ namespace retro::optionals {
          *
          * @return `true` if the instances are considered equal, `false` otherwise.
          */
-        constexpr bool operator==(const OptionalSentinel&) const {
+        constexpr bool operator==(const OptionalSentinel &) const {
             return value == nullptr || !has_value(*value);
         }
 
@@ -114,7 +115,7 @@ namespace retro::optionals {
          *
          * @return A reference to the updated `OptionalIterator` object.
          */
-        constexpr OptionalIterator& operator++() {
+        constexpr OptionalIterator &operator++() {
             RETROLIB_ASSERT(value != nullptr);
             value = nullptr;
             return *this;
@@ -135,8 +136,7 @@ namespace retro::optionals {
             return copy;
         }
 
-
-    private:
+      private:
         O *value = nullptr;
     };
 
@@ -148,6 +148,6 @@ namespace retro::optionals {
      * @return An OptionalIterator instance with the deduced template type.
      */
     RETROLIB_EXPORT template <OptionalType O>
-    OptionalIterator(O&&) -> OptionalIterator<std::remove_reference_t<O>>;
+    OptionalIterator(O &&) -> OptionalIterator<std::remove_reference_t<O>>;
 
-}
+} // namespace retro::optionals
