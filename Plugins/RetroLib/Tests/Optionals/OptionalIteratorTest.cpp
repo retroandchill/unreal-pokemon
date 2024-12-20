@@ -48,7 +48,8 @@ TEST_CASE("Verify that we can iterate over optionals", "[optionals]") {
     }
 
     SECTION("Can be used to determine size") {
-        auto view = retro::ranges::views::concat(retro::Optional(1), retro::Optional<int>(), retro::Optional(2), retro::Optional<int>(), retro::Optional<int>(), retro::Optional(3));
+        auto view = retro::ranges::views::concat(retro::Optional(1), retro::Optional<int>(), retro::Optional(2),
+                                                 retro::Optional<int>(), retro::Optional<int>(), retro::Optional(3));
         CHECK(view.size() == 3);
     }
 }
