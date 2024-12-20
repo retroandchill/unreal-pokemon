@@ -213,7 +213,7 @@ namespace retro::ranges {
 
           public:
             using Reference = std::common_reference_t<std::ranges::range_reference_t<ConstifyIf<R>>...>;
-            static constexpr bool single_pass = (SinglePassIterator<std::ranges::iterator_t<R>> || ...);
+            using single_pass = std::bool_constant<(SinglePassIterator<std::ranges::iterator_t<R>> || ...)>;
 
             constexpr Iterator() = default;
 
