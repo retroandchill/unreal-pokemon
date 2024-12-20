@@ -5,8 +5,7 @@ if (RETROLIB_WITH_MODULES)
         PUBLIC
             FILE_SET retrolib_modules TYPE CXX_MODULES
             FILES
-                src/RetroLib.ixx
-                src/StlMock.ixx)
+                src/RetroLib.ixx)
     target_compile_definitions(RetroLib
         PUBLIC
             RETROLIB_WITH_MODULES=1)
