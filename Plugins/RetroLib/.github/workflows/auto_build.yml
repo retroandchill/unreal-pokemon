@@ -32,7 +32,7 @@ jobs:
       - name: Set up Clang
         run: |
           wget -qO- https://apt.llvm.org/llvm.sh | sudo bash -s -- 18
-          sudo apt-get install -y clang-tools-18
+          sudo apt-get install -y clang-tools-18 libc++-dev libc++abi-dev
 
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
@@ -51,7 +51,7 @@ jobs:
           build-dir: ${{ runner.workspace }}/build
           cc: ${{ matrix.config.cc }}
           cxx: ${{ matrix.config.cxx }}
-          configure-options: -G Ninja -DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=clang-scan-deps-18
+          configure-options: -G Ninja -DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=clang-scan-deps-18 -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DLIBCXX_BUILD=/usr/lib/llvm-18
           build-type: Release
           run-test: true
 

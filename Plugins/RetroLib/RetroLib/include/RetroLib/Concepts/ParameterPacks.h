@@ -39,4 +39,7 @@ namespace retro {
      */
     RETROLIB_EXPORT template <typename T, typename... A>
     concept PackSameAs = (sizeof...(A) == 1) && std::same_as<PackType<0, A...>, T>;
+
+    RETROLIB_EXPORT template <typename... T>
+    using LastInPack = std::tuple_element_t<sizeof...(T) - 1, std::tuple<T...>>;
 } // namespace retro
