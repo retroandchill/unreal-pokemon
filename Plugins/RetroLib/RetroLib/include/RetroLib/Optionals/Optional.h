@@ -10,7 +10,7 @@
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Operators.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
-#include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Optionals/OptionalIterator.h"
 #include "RetroLib/RetroLibMacros.h"
 
 #include <utility>
@@ -1594,6 +1594,58 @@ namespace retro {
         }
 
         using Base::reset;
+
+        /**
+         * @brief Returns an iterator to the beginning of the data structure.
+         *
+         * This method initializes and returns an OptionalIterator that points to
+         * the beginning of the container. The returned iterator allows traversal
+         * of the elements contained within the OptionalStorage.
+         *
+         * @return An OptionalIterator pointing to the beginning of the container.
+         */
+        constexpr auto begin() {
+            return optionals::OptionalIterator(*this);
+        }
+
+        /**
+         * @brief Returns a constant iterator to the beginning of the optional storage.
+         *
+         * This method constructs and returns an `OptionalIterator` pointing to the
+         * beginning of the optional storage. The returned iterator is constant
+         * (read-only) and operates on the current instance.
+         *
+         * @return A constant `OptionalIterator` to the beginning of the optional storage.
+         */
+        constexpr auto begin() const {
+            return optionals::OptionalIterator(*this);
+        }
+
+        /**
+         * @brief Provides the end sentinel for an optional-based iteration.
+         *
+         * This function returns an OptionalSentinel object that represents the end of
+         * a sequence in optional-based iteration. It is a constexpr function, allowing
+         * compile-time evaluation, and is marked as const to indicate that it does not
+         * modify the state of the object.
+         *
+         * @return An OptionalSentinel object indicating the end of the sequence.
+         */
+        constexpr optionals::OptionalSentinel end() const {
+            return optionals::OptionalSentinel();
+        }
+
+        /**
+         * @brief Determines the size based on the presence of a value.
+         *
+         * Returns 1 if a value is present, otherwise returns 0. This method is
+         * constexpr, allowing it to be evaluated at compile time.
+         *
+         * @return The size as 1 if a value exists, or 0 if no value is present.
+         */
+        constexpr size_t size() const {
+            return has_value() ? 1 : 0;
+        }
     };
 
     /**

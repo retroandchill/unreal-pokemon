@@ -14,6 +14,7 @@ add_executable(RetroLibTests Utils/PolymorphicTest.cpp
         Casts/TestCasts.cpp
         Utils/OperatorsTest.cpp
         Ranges/Views/ConcatViewTest.cpp
+        Optionals/OptionalIteratorTest.cpp
 )
 
 target_link_libraries(RetroLibTests

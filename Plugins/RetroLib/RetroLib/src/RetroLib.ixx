@@ -43,6 +43,7 @@ import std;
 #include "RetroLib/Utils/Variant.h"
 
 #include "RetroLib/Concepts/Tuples.h"
+#include "RetroLib/Optionals/OptionalIterator.h"
 #include "RetroLib/Optionals/Optional.h"
 
 #include "RetroLib/Casting/Convert.h"
