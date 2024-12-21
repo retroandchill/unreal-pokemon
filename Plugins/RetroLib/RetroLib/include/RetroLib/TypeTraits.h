@@ -89,4 +89,27 @@ namespace retro {
         { *ptr } -> std::convertible_to<C &>;
     };
 
+    RETROLIB_EXPORT template <typename>
+    struct TemplateSpecializationType : InvalidType {};
+
+    RETROLIB_EXPORT template <template <typename...> typename T, typename... A>
+    struct TemplateSpecializationType<T<A...>> : ValidType {
+        using Type = T<A...>;
+
+        template <typename... B>
+        using TemplateType = T<B...>;
+    };
+
+    RETROLIB_EXPORT template <typename T>
+    concept TemplateSpecialization = TemplateSpecializationType<T>::is_valid;
+
+    RETROLIB_EXPORT template <typename, template <typename...> typename>
+    struct IsSpecializationOf : std::false_type {};
+
+    RETROLIB_EXPORT template <template <typename...> typename T, typename... A>
+    struct IsSpecializationOf<T<A...>, T> : std::true_type {};
+
+    RETROLIB_EXPORT template <typename T, template <typename...> typename C>
+    concept SpecializationOf = IsSpecializationOf<T, C>::value;
+
 } // namespace retro

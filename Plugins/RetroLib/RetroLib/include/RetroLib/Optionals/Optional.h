@@ -1532,8 +1532,12 @@ namespace retro {
          *
          * @throws std::bad_optional_access if the optional object does not contain a value.
          */
-        constexpr T &&value() && {
-            return has_value() || throw_bad_optional_access(), std::move(**this);
+        constexpr decltype(auto) value() && {
+            if constexpr (std::is_lvalue_reference_v<T>) {
+                return has_value() || throw_bad_optional_access(), **this;
+            } else {
+                return has_value() || throw_bad_optional_access(), std::move(**this);
+            }
         }
 
         /**
@@ -1550,8 +1554,12 @@ namespace retro {
          *
          * @throws bad_optional_access if there is no value present in the optional object.
          */
-        constexpr const T &&value() const && {
-            return has_value() || throw_bad_optional_access(), std::move(**this);
+        constexpr decltype(auto) value() const && {
+            if constexpr (std::is_lvalue_reference_v<T>) {
+                return has_value() || throw_bad_optional_access(), **this;
+            } else {
+                return has_value() || throw_bad_optional_access(), std::move(**this);
+            }
         }
 
         template <ValidOptionalType U>
@@ -1873,7 +1881,7 @@ namespace retro {
      * @tparam T The type of the value that the Optional should store.
      */
     template <ValidOptionalType T>
-    Optional(T) -> Optional<T>;
+    Optional(T &&) -> Optional<std::decay_t<T>>;
 
     /**
      * @brief Trait for determining if raw reference optionals are allowed.
@@ -1884,4 +1892,67 @@ namespace retro {
      */
     template <>
     struct optionals::IsRawReferenceOptionalAllowed<Optional> : std::true_type {};
+
+    namespace optionals {
+        /**
+         * @brief Creates an object of type O by encapsulating a given value.
+         *
+         * Constructs an instance of O using the provided value, which is forwarded
+         * to maintain its value category. The type of the encapsulated value is
+         * deduced and decayed to remove any reference or const/volatile qualifiers.
+         *
+         * @tparam T The type of the value to be encapsulated.
+         * @param value The value to be wrapped in an O object.
+         * @return A new instance of O containing the forwarded value.
+         */
+        RETROLIB_EXPORT template <template <typename...> typename O = Optional, typename T>
+            requires OptionalType<O<std::decay_t<T>>>
+        constexpr O<std::decay_t<T>> of(T &&value) {
+            return O<std::decay_t<T>>(std::forward<T>(value));
+        }
+
+        /**
+         * @brief Creates an instance of the optional type with a reference to the provided value.
+         *
+         * This function returns an instance of the optional type `O` containing a reference
+         * to the specified value. The behavior depends on whether the combination of `O` and
+         * `T` satisfies the `RawReferenceOptionalValid` constraint:
+         * - If valid, the result is `O<T&>` initialized with the provided reference.
+         * - Otherwise, the result is `O<std::reference_wrapper<T>>` wrapping the reference.
+         *
+         * The implementation uses `constexpr` to ensure this decision can occur at compile time.
+         *
+         * @tparam T The type of the value to be wrapped as a reference.
+         * @param value A reference to the value to be stored in the optional.
+         * @return An instance of the optional type `O` containing the reference to the value.
+         */
+        RETROLIB_EXPORT template <template <typename...> typename O = Optional, typename T>
+            requires OptionalType<O<std::decay_t<T>>>
+        constexpr auto of_reference(T &value) {
+            if constexpr (RawReferenceOptionalValid<O, T>) {
+                return O<T &>(value);
+            } else {
+                return O<std::reference_wrapper<T>>(value);
+            }
+        }
+
+        /**
+         * @brief Creates a nullable optional parameter from the given value.
+         *
+         * Constructs a NullableOptionalParam object by forwarding the provided value.
+         * It utilizes the `of_nullable` function template from `NullableOptionalParam`
+         * and ensures the correct type by using `std::remove_reference_t` on the input value.
+         * This function is marked as constexpr, allowing it to be evaluated at compile time.
+         *
+         * @tparam T The type of the input value, which may be a reference or rvalue.
+         * @param value The value to be used for creating the nullable optional parameter.
+         * @return A NullableOptionalParam object containing the nullable value.
+         */
+        RETROLIB_EXPORT template <template <typename...> typename O = Optional, typename T>
+            requires Nullable<T, O>
+        constexpr auto of_nullable(T &&value) {
+            return NullableOptionalParam<std::remove_reference_t<T>>::template of_nullable<O>(std::forward<T>(value));
+        }
+
+    } // namespace optionals
 } // namespace retro

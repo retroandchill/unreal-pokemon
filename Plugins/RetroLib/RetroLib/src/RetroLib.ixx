@@ -59,7 +59,13 @@ import std;
 #include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 
+#include "RetroLib/Optionals/AndThen.h"
 #include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IsSet.h"
+#include "RetroLib/Optionals/OrElseThrow.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/Value.h"
 
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Ranges/FeatureBridge.h"

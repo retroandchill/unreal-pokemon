@@ -269,4 +269,58 @@ namespace retro::optionals {
         static_assert(OptionalReference<O<T>>, "Cannot an r-value to an optional reference type.");
         return std::move(value);
     }
-}; // namespace retro::optionals
+
+    /**
+     * @brief Represents an invalid type for a nullable optional parameter.
+     *
+     * This struct is used as a placeholder to indicate a type
+     * that is considered invalid in the context of nullable optional parameters.
+     * It inherits from the InvalidType base class.
+     */
+    RETROLIB_EXPORT template <typename>
+    struct NullableOptionalParam : InvalidType {};
+
+    /**
+     * @struct NullableOptionalParam
+     * @brief A template structure to handle nullable pointers and transform them into optional types.
+     *
+     * @tparam T The base type to be wrapped and processed.
+     *
+     * This struct is designed to handle pointer-to-type conversions,
+     * allowing nullable pointers to be represented as an optional type.
+     *
+     * @note This struct requires the `ValidType` to be the base type.
+     * @note The struct uses `std::remove_pointer_t` and `std::add_lvalue_reference_t`
+     *       for processing type definitions.
+     */
+    RETROLIB_EXPORT template <typename T>
+        requires std::is_pointer_v<T>
+    struct NullableOptionalParam<T> : ValidType {
+        using RawType = std::remove_pointer_t<T>;
+        using ReferenceType = std::add_lvalue_reference_t<RawType>;
+
+        template <template <typename...> typename O, typename U>
+            requires std::assignable_from<ReferenceType, std::remove_pointer_t<U> &> && OptionalType<O<U>>
+        static constexpr auto of_nullable(U *ptr) {
+            if constexpr (RawReferenceOptionalValid<O, U>) {
+                return ptr != nullptr ? O<ReferenceType>(*ptr) : O<ReferenceType>();
+            } else {
+                return ptr != nullptr ? O<std::reference_wrapper<T>>(*ptr) : O<std::reference_wrapper<T>>();
+            }
+        }
+    };
+
+    /**
+     * Verifies that the given optional and type combo allows for a nullability check rather than just passing the
+     * value straight into an optional.
+     *
+     * @tparam T The type check
+     * @tparam O The optional to insert into
+     */
+    RETROLIB_EXPORT template <typename T, template <typename...> typename O>
+    concept Nullable = NullableOptionalParam<std::remove_reference_t<T>>::is_valid && requires(T &&value) {
+        {
+            NullableOptionalParam<std::remove_reference_t<T>>::template of_nullable<O>(std::forward<T>(value))
+        } -> OptionalType;
+    };
+} // namespace retro::optionals

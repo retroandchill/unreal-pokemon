@@ -7,7 +7,7 @@ add_executable(RetroLibTests Utils/PolymorphicTest.cpp
         Functional/TestBindings.cpp
         Ranges/Algorithm/RangesTerminalClosureTest.cpp
         Optionals/TestOptionalOperations.cpp
-        Optionals/TestFilterOptional.cpp
+        Optionals/TestOptionalPipes.cpp
         Ranges/Views/TestRangeAdapters.cpp
         Optionals/TestOptional.cpp
         Utils/TestValidPtr.cpp
