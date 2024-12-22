@@ -11,6 +11,7 @@
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #include <ranges>
 #endif
@@ -55,7 +56,7 @@ namespace retro::ranges {
         if constexpr (std::ranges::sized_range<R> && ReservableContainer<C>) {
             // We want to guarantee that we won't have any weird overflow issues when inserting into a container with
             // a mismatch between signed and unsigned sizes.
-            assert(std::ranges::size(range) <= container_max_size(result));
+            RETROLIB_ASSERT(std::ranges::size(range) <= container_max_size(result));
             container_reserve(result, std::ranges::size(range));
         }
 

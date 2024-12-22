@@ -8,7 +8,8 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "Retro/Utils/ForwardLike.h"
+#include "RetroLib/FunctionTraits.h"
+#include "RetroLib/Utils/ForwardLike.h"
 
 #include <tuple>
 #include <type_traits>
@@ -38,10 +39,10 @@ namespace retro {
      * @tparam I The index to try and get
      */
     RETROLIB_EXPORT template <typename T, size_t I>
-    concept HasTupleElement = requires(T t) {
-        { get<I>(t) } -> std::convertible_to<std::tuple_element_t<I, T> &>;
+    concept HasTupleElement = requires(T &&t) {
+        { get<I>(std::forward<T>(t)) } -> std::convertible_to<std::tuple_element_t<I, T>>;
     } || requires(T t) {
-        { std::get<I>(t) } -> std::convertible_to<std::tuple_element_t<I, T> &>;
+        { std::get<I>(std::forward<T>(t)) } -> std::convertible_to<std::tuple_element_t<I, T>>;
     };
 
     /**

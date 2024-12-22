@@ -8,6 +8,7 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
+#include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Ranges/Concepts/Concatable.h"
 #include "RetroLib/Ranges/RangeBasics.h"
 
@@ -19,7 +20,6 @@
 #endif
 
 namespace retro::ranges {
-
     template <typename I>
     struct StoreInner {
         NonPropagatingCache<std::remove_cv_t<I>> inner;
@@ -72,7 +72,6 @@ namespace retro::ranges {
         using SizeType = std::common_type_t<std::ranges::range_difference_t<Inner>, std::ranges::range_difference_t<P>>;
 
         class Iterator {
-
           public:
             using value_type = std::common_type_t<std::ranges::range_value_t<Inner>, std::ranges::range_value_t<P>>;
             using reference =
@@ -213,6 +212,25 @@ namespace retro::ranges {
             return std::default_sentinel;
         }
 
+        /**
+         * @brief Computes the size of the range by considering the sizes of outer, contraction, and inner ranges.
+         *
+         * This method calculates the total size of the composite range by iterating over the outer range, factoring in
+         * the contraction size, and summing up the sizes of each element within the outer range.
+         *
+         * @return The computed total size of the range as `SizeType`.
+         */
+        constexpr SizeType size() const
+            requires std::ranges::sized_range<Outer> && std::ranges::sized_range<Inner> &&
+                     std::ranges::sized_range<P> && std::ranges::forward_range<Outer>
+        {
+            SizeType size = (std::ranges::size(outer) - 1) * std::ranges::size(contraction);
+            for (auto &&it : outer) {
+                size += std::ranges::size(std::forward<decltype(it)>(it));
+            }
+            return size;
+        }
+
       private:
         Outer outer;
         std::ranges::views::all_t<P> contraction;
@@ -236,59 +254,53 @@ namespace retro::ranges {
     JoinWithView(R &&, P &&) -> JoinWithView<std::ranges::views::all_t<R>, std::ranges::views::all_t<P>>;
 
     namespace views {
-        /**
-         * @brief Creates a JoinWithView by joining a range with a contraction element.
-         *
-         * This function takes a range and a contraction element, forwarding them to create
-         * a JoinWithView. The function ensures that the range and contraction elements are
-         * correctly transformed into views before constructing the resultant view.
-         *
-         * @param range The input range to be joined.
-         * @param contraction The element used as the separator between elements of the range.
-         * @return A JoinWithView representing the joined range with the specified contraction.
-         */
-        RETROLIB_EXPORT template <std::ranges::input_range R, std::ranges::forward_range P>
-            requires std::ranges::viewable_range<R> && std::ranges::input_range<std::ranges::range_reference_t<R>> &&
-                     std::ranges::viewable_range<P> && Concatable<std::ranges::range_reference_t<R>, P>
-        constexpr auto join_with(R &&range, P &&contraction) {
-            return JoinWithView(std::ranges::views::all(std::forward<R>(range)),
-                                std::ranges::views::all(std::forward<P>(contraction)));
-        }
-
-        /**
-         * @brief Joins a range with a single contraction value.
-         *
-         * This function forwards a range and a contraction value to create a new
-         * range where each element in the input range is joined with the provided
-         * contraction using `std::ranges::views::single`.
-         *
-         * @param range The input range to be joined.
-         * @param contraction The value to be used for joining elements of the range.
-         * @return A new range resulting from joining the input range with the contraction value.
-         */
-        RETROLIB_EXPORT template <std::ranges::input_range R, typename P>
-            requires std::ranges::viewable_range<R> && std::ranges::input_range<std::ranges::range_reference_t<R>> &&
-                     std::convertible_to<P, std::ranges::range_value_t<std::ranges::range_reference_t<R>>>
-        constexpr auto join_with(R &&range, P &&contraction) {
-            return join_with(std::forward<R>(range), std::ranges::views::single(std::forward<P>(contraction)));
-        }
-
         struct JoinWithInvoker {
-
+            /**
+             * @brief Creates a JoinWithView by joining a range with a contraction element.
+             *
+             * This function takes a range and a contraction element, forwarding them to create
+             * a JoinWithView. The function ensures that the range and contraction elements are
+             * correctly transformed into views before constructing the resultant view.
+             *
+             * @param range The input range to be joined.
+             * @param contraction The element used as the separator between elements of the range.
+             * @return A JoinWithView representing the joined range with the specified contraction.
+             */
             template <std::ranges::input_range R, std::ranges::forward_range P>
                 requires std::ranges::viewable_range<R> &&
                          std::ranges::input_range<std::ranges::range_reference_t<R>> &&
                          std::ranges::viewable_range<P> && Concatable<std::ranges::range_reference_t<R>, P>
             constexpr auto operator()(R &&range, P &&contraction) const {
-                return join_with(std::forward<R>(range), std::forward<P>(contraction));
+                return JoinWithView(std::ranges::views::all(std::forward<R>(range)),
+                                    std::ranges::views::all(std::forward<P>(contraction)));
             }
 
+            /**
+             * @brief Joins a range with a single contraction value.
+             *
+             * This function forwards a range and a contraction value to create a new
+             * range where each element in the input range is joined with the provided
+             * contraction using `std::ranges::views::single`.
+             *
+             * @param range The input range to be joined.
+             * @param contraction The value to be used for joining elements of the range.
+             * @return A new range resulting from joining the input range with the contraction value.
+             */
             template <std::ranges::input_range R, typename P>
                 requires std::ranges::viewable_range<R> &&
                          std::ranges::input_range<std::ranges::range_reference_t<R>> &&
                          std::convertible_to<P, std::ranges::range_value_t<std::ranges::range_reference_t<R>>>
             constexpr auto operator()(R &&range, P &&contraction) const {
-                return join_with(std::forward<R>(range), std::forward<P>(contraction));
+                return (*this)(std::forward<R>(range), std::ranges::views::single(std::forward<P>(contraction)));
+            }
+
+            template <std::ranges::input_range R, typename P>
+                requires std::ranges::viewable_range<R> &&
+                         std::ranges::input_range<std::ranges::range_reference_t<R>> &&
+                         std::convertible_to<P, std::ranges::range_value_t<std::ranges::range_reference_t<R>>> &&
+                         std::constructible_from<std::basic_string_view<P>, const P *>
+            constexpr auto operator()(R &&range, const P *contraction) const {
+                return (*this)(std::forward<R>(range), std::basic_string_view<P>(contraction));
             }
         };
 
@@ -304,11 +316,6 @@ namespace retro::ranges {
          * @param contraction The separator or delimiter used to join elements of the range.
          * @return A range adapter that joins elements of the range with the provided separator.
          */
-        RETROLIB_EXPORT template <typename P>
-        constexpr auto join_with(P &&contraction) {
-            return extension_method<join_with_invoker>(std::forward<P>(contraction));
-        }
-
+        RETROLIB_EXPORT constexpr auto join_with = extension_method<join_with_invoker>;
     } // namespace views
-
 } // namespace retro::ranges

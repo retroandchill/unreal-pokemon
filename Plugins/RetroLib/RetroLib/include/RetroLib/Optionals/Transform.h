@@ -9,7 +9,7 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "RetroLib/Functional/CreateBinding.h"
+#include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/FunctionTraits.h"
 #include "RetroLib/Optionals/Optional.h"
 
