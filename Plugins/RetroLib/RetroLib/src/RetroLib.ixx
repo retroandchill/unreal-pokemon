@@ -58,6 +58,7 @@ import std;
 #include "RetroLib/Functional/BindMethod.h"
 #include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
+#include "RetroLib/Functional/FunctionalClosure.h"
 
 #include "RetroLib/Optionals/AndThen.h"
 #include "RetroLib/Optionals/Filter.h"

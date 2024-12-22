@@ -27,6 +27,9 @@ namespace retro::optionals {
         }
     };
 
+    /**
+     * Get the value of passed/piped optional.
+     */
     RETROLIB_EXPORT constexpr auto value = extension_method<ValueInvoker{}>();
 
 } // namespace retro::optionals
