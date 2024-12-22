@@ -33,6 +33,93 @@ namespace retro::optionals {
     };
 
     /**
+     * @class OptionalOperations
+     * @brief A structure representing operations that may be optionally provided.
+     *
+     * This class inherits from InvalidType. It is designed to represent optional
+     * operations or functionality that may not always be required or defined.
+     *
+     * @note The base class `InvalidType` must be defined for the functionality of
+     * this class to be used effectively.
+     *
+     */
+    RETROLIB_EXPORT template <typename>
+    struct OptionalOperations : InvalidType {};
+
+    /**
+     * @brief The OptionalOperations struct provides utility functions to interact with objects of optional-like types.
+     *
+     * This struct is designed to handle operations on objects that adhere to the STL optional concept. The template
+     * parameter T specifies the type that the optional is expected to contain.
+     *
+     * @tparam T The type of value expected to be managed by the optional-like object.
+     */
+    RETROLIB_EXPORT template <StlOptional T>
+    struct OptionalOperations<T> : ValidType {
+
+        /**
+         * @brief Retrieves the value from an optional object by forwarding the input object.
+         *
+         * This version uses the deference operator, which does perform any checks for the validity of the value leading
+         * to undefined behavior.
+         *
+         * @param optional An optional object from which the value is to be retrieved.
+         *                 The parameter is forwarded, maintaining its value category
+         *                 (lvalue or rvalue).
+         * @return The value contained in the optional object. The return type maintains
+         *         the same value category as the input parameter.
+         */
+        template <StlOptional O>
+            requires std::same_as<T, std::decay_t<O>>
+        static constexpr decltype(auto) get(O &&optional) {
+            return *std::forward<O>(optional);
+        }
+
+        /**
+         * @brief Retrieves the value from an optional object by forwarding the input object.
+         *
+         * This version is checked, and will throw if there is no value. If performance is critical do not use this
+         * method.
+         *
+         * @param optional An optional object from which the value is to be retrieved.
+         *                 The parameter is forwarded, maintaining its value category
+         *                 (lvalue or rvalue).
+         * @return The value contained in the optional object. The return type maintains
+         *         the same value category as the input parameter.
+         * @throws std::bad_optional_access If the optional does not contain a value
+         */
+        template <StlOptional O>
+            requires std::same_as<T, std::decay_t<O>>
+        static constexpr decltype(auto) get_value(O &&optional) {
+            return std::forward<O>(optional).value();
+        }
+
+        /**
+         * Checks if the given optional object contains a value.
+         *
+         * @param optional An object of type O which must have a has_value() member function.
+         * @return A boolean value that is true if the optional object contains a value, otherwise false.
+         */
+        template <StlOptional O>
+            requires std::same_as<T, std::decay_t<O>>
+        static constexpr bool has_value(const O &optional) {
+            return optional.has_value();
+        }
+    };
+
+    /**
+     * Concept used to check if a type is an optional type as defined by the get() and has_value() methods.
+     *
+     * @tparam T The type to check inside the optional
+     */
+    RETROLIB_EXPORT template <typename T>
+    concept OptionalType = OptionalOperations<std::decay_t<T>>::is_valid && requires(T &&value) {
+        OptionalOperations<std::decay_t<T>>::get(std::forward<T>(value));
+        OptionalOperations<std::decay_t<T>>::get_value(std::forward<T>(value));
+        { OptionalOperations<std::decay_t<T>>::has_value(std::forward<T>(value)) } -> std::same_as<bool>;
+    };
+
+    /**
      * @brief Retrieves the value from an optional object by forwarding the input object.
      *
      * This version uses the deference operator, which does perform any checks for the validity of the value leading to
@@ -44,9 +131,9 @@ namespace retro::optionals {
      * @return The value contained in the optional object. The return type maintains
      *         the same value category as the input parameter.
      */
-    RETROLIB_EXPORT template <StlOptional O>
+    RETROLIB_EXPORT template <OptionalType O>
     constexpr decltype(auto) get(O &&optional) {
-        return *std::forward<O>(optional);
+        return OptionalOperations<std::decay_t<O>>::get(std::forward<O>(optional));
     }
 
     /**
@@ -61,9 +148,9 @@ namespace retro::optionals {
      *         the same value category as the input parameter.
      * @throws std::bad_optional_access If the optional does not contain a value
      */
-    RETROLIB_EXPORT template <StlOptional O>
+    RETROLIB_EXPORT template <OptionalType O>
     constexpr decltype(auto) get_value(O &&optional) {
-        return std::forward<O>(optional).value();
+        return OptionalOperations<std::decay_t<O>>::get_value(std::forward<O>(optional));
     }
 
     /**
@@ -72,22 +159,10 @@ namespace retro::optionals {
      * @param optional An object of type O which must have a has_value() member function.
      * @return A boolean value that is true if the optional object contains a value, otherwise false.
      */
-    RETROLIB_EXPORT template <StlOptional O>
+    RETROLIB_EXPORT template <OptionalType O>
     constexpr bool has_value(const O &optional) {
-        return optional.has_value();
+        return OptionalOperations<std::decay_t<O>>::has_value(optional);
     }
-
-    /**
-     * Concept used to check if a type is an optional type as defined by the get() and has_value() methods.
-     *
-     * @tparam T The type to check inside the optional
-     */
-    RETROLIB_EXPORT template <typename T>
-    concept OptionalType = requires(T &&value) {
-        get<T>(std::forward<T>(value));
-        get_value<T>(std::forward<T>(value));
-        { has_value<T>(std::forward<T>(value)) } -> std::same_as<bool>;
-    };
 
     /**
      * Obtain the type of reference obtained from the optional in question.
@@ -95,7 +170,7 @@ namespace retro::optionals {
      * @tparam T The optional to dereference
      */
     RETROLIB_EXPORT template <OptionalType T>
-    using CommonReference = decltype(get(std::declval<T>()));
+    using CommonReference = decltype(OptionalOperations<std::decay_t<T>>::get(std::declval<T>()));
 
     /**
      * Obtain the raw value type from the optional in question.

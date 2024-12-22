@@ -9,7 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/ExtensionMethods.h"
+#include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/Optionals/Optional.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 #endif

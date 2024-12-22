@@ -17,6 +17,9 @@
 #endif
 
 namespace retro {
-    template <typename I>
+    /**
+     * Concept to check if an iterator can only be used for a single pass.
+     */
+    RETROLIB_EXPORT template <typename I>
     concept SinglePassIterator = std::input_or_output_iterator<I> && !std::forward_iterator<I>;
 }

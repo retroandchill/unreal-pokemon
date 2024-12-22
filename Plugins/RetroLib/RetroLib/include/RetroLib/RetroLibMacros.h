@@ -7,6 +7,10 @@
  */
 #pragma once
 
+#if !RETROLIB_WITH_MODULES
+#include <cassert>
+#endif
+
 #if defined(__clang__)
 #if __has_feature(cxx_rtti)
 #define RTTI_ENABLED

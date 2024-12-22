@@ -29,6 +29,7 @@ TEST_CASE("Can use the standard range adapters", "[ranges]") {
     constexpr std::array values = {1, 2, 3, 4, 5};
     constexpr auto is_even = [](int i) { return i % 2 == 0; };
     constexpr auto double_value = [](int i, int j) { return i * j; };
+    auto filterer = retro::ranges::views::filter(is_even);
 
     SECTION("Can use the regular functional operators") {
         auto filtered = retro::ranges::views::filter(values, is_even);
@@ -273,5 +274,52 @@ TEST_CASE("Can join a string together using a view", "[ranges]") {
         auto constraction = ", "sv;
         auto joined = strings | retro::ranges::views::join_with(constraction) | retro::ranges::to<std::string>();
         CHECK(joined == "1, 2, 3, 4");
+    }
+}
+
+TEST_CASE("Can get the elements of a tupled collection", "[ranges]") {
+    SECTION("Can get the value of any tuple based collection") {
+        std::array<std::tuple<int, int, int>, 3> tuples = {
+            {std::make_tuple(1, 2, 3), std::make_tuple(4, 5, 6), std::make_tuple(7, 8, 9)}};
+
+        auto value_view = tuples | retro::ranges::views::elements<2>;
+        int sum = 0;
+        for (auto value : value_view) {
+            sum += value;
+        }
+        CHECK(sum == 18);
+
+        static_assert(std::ranges::sized_range<decltype(value_view)>);
+        CHECK(std::ranges::size(tuples) == std::ranges::size(value_view));
+
+        static_assert(std::ranges::random_access_range<decltype(value_view)>);
+        auto reversed = value_view | std::ranges::views::reverse;
+        sum = 0;
+        for (auto value : reversed) {
+            sum += value;
+        }
+        CHECK(sum == 18);
+
+        CHECK(value_view[1] == 6);
+        CHECK((value_view.end() - value_view.begin()) == value_view.size());
+    }
+
+    SECTION("Can get the keys of a map") {
+        std::map<int, std::string> map = {{1, "One"}, {2, "Two"}, {3, "Three"}};
+
+        auto keys_view = map | retro::ranges::views::keys;
+        int sum = 0;
+        for (auto key : keys_view) {
+            sum += key;
+        }
+        CHECK(sum == 6);
+    }
+
+    SECTION("Can get the values of a map") {
+        std::map<int, std::string> map = {{1, "One"}, {2, "Two"}, {3, "Three"}};
+        auto values_view = map | retro::ranges::views::values | retro::ranges::views::join_with(", ") |
+                           retro::ranges::to<std::string>();
+
+        CHECK(values_view == "One, Two, Three");
     }
 }
