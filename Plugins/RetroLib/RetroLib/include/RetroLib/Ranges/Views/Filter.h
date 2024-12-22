@@ -21,62 +21,22 @@
 
 namespace retro::ranges::views {
 
-    /**
-     * Filters a given range using a provided predicate or multiple arguments that bind to a predicate.
-     *
-     * @param range The input range to be filtered.
-     * @param args Variadic arguments used to create the predicate binding.
-     * @return A range view containing elements from the input range that satisfy the predicate.
-     */
-    RETROLIB_EXPORT template <std::ranges::input_range R, typename... A>
-    constexpr decltype(auto) filter(R &&range, A &&...args) {
-        return std::ranges::views::filter(std::forward<R>(range), create_binding(std::forward<A>(args)...));
-    }
+    template <auto Functor = dynamic_functor>
+        requires ValidFunctorParameter<Functor>
+    constexpr FunctorBindingInvoker<Functor, std::ranges::views::filter> filter_invoker;
 
     /**
-     * Filters a range based on a callable predicate or filter condition provided.
+     * Applies a filter transformation on the given arguments using the specified functor.
      *
-     * @param args The arguments used to create the filter binding, typically including the range and a callable
-     * predicate. These arguments will be forwarded to create the necessary filter binding.
-     * @return A range view that only includes elements satisfying the given filter condition.
+     * @param args Variadic template arguments representing the elements or ranges to be filtered.
+     *             These will be forwarded to the filter operation.
+     * @return A transformed range or sequence obtained by applying the filter operation
+     *         defined by the Functor to the given arguments.
      */
-    RETROLIB_EXPORT template <typename... A>
-    constexpr decltype(auto) filter(A &&...args) {
-        return std::ranges::views::filter(create_binding(std::forward<A>(args)...));
-    }
-
-    /**
-     * Filters a given range using a functor that determines which elements to include.
-     *
-     * This method applies a filtering operation on the provided range, producing a new
-     * range containing only those elements for which the bound functor returns true.
-     *
-     * @param range A forwardable range of elements to filter. The range should support
-     *              copying or moving and must be compatible with std::ranges::views::filter.
-     * @param args The binding arguments for the functor
-     * @return An instance of a range, resulting from the application of the filter view
-     *         with the specified functor, containing only elements that satisfy the functor's criteria.
-     */
-    RETROLIB_EXPORT template <auto Functor, std::ranges::input_range R, typename... A>
-        requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr decltype(auto) filter(R &&range, A &&...args) {
-        return std::ranges::views::filter(std::forward<R>(range), create_binding<Functor>(std::forward<A>(args)...));
-    }
-
-    /**
-     * Applies a filter operation on a range by utilizing a functor to determine
-     * the criteria for selecting elements from the range. It uses the
-     * standard library's ranges view filter mechanism.
-     *
-     * @param args The binding arguments for the functor
-     * @return A range view that filters elements based on the provided functor.
-     *         Only elements that satisfy the condition specified by the functor
-     *         will be included in the view.
-     */
-    RETROLIB_EXPORT template <auto Functor, typename... A>
-        requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr decltype(auto) filter(A &&...args) {
-        return std::ranges::views::filter(create_binding<Functor>(std::forward<A>(args)...));
+    RETROLIB_EXPORT template <auto Functor = dynamic_functor, typename... A>
+        requires ValidFunctorParameter<Functor>
+    constexpr auto filter(A &&...args) {
+        return extension_method<filter_invoker<Functor>>(std::forward<A>(args)...);
     }
 
 } // namespace retro::ranges::views
