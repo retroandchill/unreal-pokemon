@@ -145,4 +145,35 @@ namespace retro {
     concept NoThrowApplicable =
         HasFunctionCallOperator<std::decay_t<F>> && TupleLike<std::decay_t<T>> &&
         is_nothrow_applicable<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
+
+    RETROLIB_EXPORT template <TupleLike T, TupleLike U, template <typename> typename A, template <typename> class B,
+                              typename I = std::make_index_sequence<std::tuple_size_v<T>>>
+    struct TupleLikeCommonReference;
+
+    template <typename T, typename U, template <typename> typename A, template <typename> typename B, size_t... I>
+    concept TupleLikeCommonReferenceHelper = requires {
+        typename std::tuple<std::common_reference_t<A<std::tuple_element_t<I, T>>, B<std::tuple_element_t<I, U>>>...>;
+    };
+
+    RETROLIB_EXPORT template <typename T, typename U, template <typename> typename A, template <typename> typename B,
+                              size_t... I>
+        requires TupleLikeCommonReferenceHelper<T, U, A, B, I...>
+    struct TupleLikeCommonReference<T, U, A, B, std::index_sequence<I...>> {
+        using Type =
+            std::tuple<std::common_reference_t<A<std::tuple_element_t<I, T>>, B<std::tuple_element_t<I, U>>>...>;
+    };
+
+    RETROLIB_EXPORT template <TupleLike T, TupleLike U, typename I = std::make_index_sequence<std::tuple_size_v<T>>>
+    struct TupleLikeCommonType;
+
+    template <class T, class U, size_t... I>
+    concept TupleLikeCommonTypeHelper = requires {
+        typename std::tuple<std::common_type_t<std::tuple_element_t<I, T>, std::tuple_element_t<I, U>>...>;
+    };
+
+    RETROLIB_EXPORT template <class T, class U, size_t... I>
+        requires TupleLikeCommonTypeHelper<T, U, I...>
+    struct TupleLikeCommonType<T, U, std::index_sequence<I...>> {
+        using Type = std::tuple<std::common_type_t<std::tuple_element_t<I, T>, std::tuple_element_t<I, U>>...>;
+    };
 } // namespace retro

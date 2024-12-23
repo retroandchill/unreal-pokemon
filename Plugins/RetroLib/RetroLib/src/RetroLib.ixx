@@ -45,6 +45,7 @@ import std;
 #include "RetroLib/Optionals/OptionalIterator.h"
 #include "RetroLib/Optionals/Optional.h"
 
+#include "RetroLib/Utils/Tuple.h"
 #include "RetroLib/Utils/NonPropagatingCache.h"
 
 #include "RetroLib/Casting/Convert.h"
@@ -94,8 +95,11 @@ import std;
 #include "RetroLib/Ranges/Views/CacheLast.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/Enumerate.h"
 #include "RetroLib/Ranges/Views/Filter.h"
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/Transform.h"
+
+#include "RetroLib/Compatibility.h"
 
 // clang-format on

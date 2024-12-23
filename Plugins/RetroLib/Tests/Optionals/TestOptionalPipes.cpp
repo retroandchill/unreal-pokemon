@@ -8,8 +8,8 @@
 #include <catch2/catch_test_macros.hpp>
 
 #if RETROLIB_WITH_MODULES
-import std;
 import RetroLib;
+import std;
 #else
 #include "RetroLib/Functional/BindBack.h"
 #include "RetroLib/Optionals/AndThen.h"

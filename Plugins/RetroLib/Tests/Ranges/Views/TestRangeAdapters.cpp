@@ -11,13 +11,12 @@
 import std;
 import RetroLib;
 #else
+#include "RetroLib/Ranges/Algorithm/To.h "
 #include "RetroLib/Ranges/Views/CacheLastView.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/Filter.h"
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/Transform.h"
-#include "RetroLib/Ranges/Algorithm/To
-.h "
 
 #include <array>
 #include <string>
@@ -321,5 +320,57 @@ TEST_CASE("Can get the elements of a tupled collection", "[ranges]") {
                            retro::ranges::to<std::string>();
 
         CHECK(values_view == "One, Two, Three");
+    }
+}
+
+TEST_CASE("Can enumerate over a collection with its index", "[ranges]") {
+    constexpr static auto input = {'A', 'B', 'C', 'D'};
+
+    SECTION("Can enumerate using a function call") {
+        std::vector<std::tuple<size_t, char>> values;
+        for (const auto [index, letter] : retro::ranges::views::enumerate(input)) {
+            values.emplace_back(index, letter);
+        }
+        CHECK(values == std::vector<std::tuple<size_t, char>>{{0, 'A'}, {1, 'B'}, {2, 'C'}, {3, 'D'}});
+    }
+
+    SECTION("Can enumerate into a map") {
+        auto as_map = input | retro::ranges::views::enumerate |
+                      retro::ranges::views::transform(retro::convert_tuple<std::pair>) | retro::ranges::to<std::map>();
+        CHECK(as_map == std::map<std::ranges::range_difference_t<decltype(input)>, char>{{0, 'A'}, {1, 'B'}, {2, 'C'}, {3, 'D'}});
+    }
+
+    SECTION("Can propagate a constant reference and increment the values accordingly") {
+        std::vector numbers = {1, 3, 5, 7};
+
+        std::vector<int> output;
+        for (auto [index, num] : retro::ranges::views::enumerate(numbers)) {
+            ++num;
+            output.emplace_back(numbers[index]);
+        }
+        CHECK(output == std::vector<int>{2, 4, 6, 8});
+    }
+}
+
+TEST_CASE("Can enumerate in reverse mapping inices to elements", "[ranges]") {
+    constexpr static std::array input = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
+
+    SECTION("Can reverse enumerate using some generated indices") {
+        auto pairs = std::ranges::views::iota(static_cast<size_t>(6), input.size()) |
+                     retro::ranges::views::reverse_enumerate(input);
+
+        int count = 0;
+        for (auto [index, letter] : pairs) {
+            CHECK(letter == input[index]);
+            count++;
+        }
+        CHECK(count == 6);
+    }
+
+    SECTION("Can reverse enumerate into a map") {
+        auto pairs = std::ranges::views::iota(2, 5) | retro::ranges::views::reverse_enumerate(input) |
+                     retro::ranges::views::transform(retro::convert_tuple<std::pair>) | retro::ranges::to<std::map>();
+
+        CHECK(pairs == std::map<int, char>{{2, 'C'}, {3, 'D'}, {4, 'E'}});
     }
 }

@@ -22,13 +22,16 @@ namespace retro::optionals {
         /**
          * Provides a callable operator to conditionally invoke functions based on the presence or absence of a value.
          *
-         * @param optional An object to check for a value using `has_value`. Typically, this could be an optional-like object.
-         * @param present A callable function that will be invoked if `optional` contains a value. It is called with the value extracted from `optional`.
-         * @param absent A callable function that will be invoked if `optional` does not contain a value. It takes no arguments.
+         * @param optional An object to check for a value using `has_value`. Typically, this could be an optional-like
+         * object.
+         * @param present A callable function that will be invoked if `optional` contains a value. It is called with the
+         * value extracted from `optional`.
+         * @param absent A callable function that will be invoked if `optional` does not contain a value. It takes no
+         * arguments.
          */
         template <OptionalType O, typename F, typename G>
             requires std::invocable<F, CommonReference<O>> && std::invocable<G>
-        constexpr void operator()(O&& optional, F&& present, G&& absent) const {
+        constexpr void operator()(O &&optional, F &&present, G &&absent) const {
             if (has_value(std::forward<O>(optional))) {
                 std::invoke(std::forward<F>(present), get(std::forward<O>(optional)));
             } else {
@@ -50,4 +53,4 @@ namespace retro::optionals {
      * functional code entities.
      */
     RETROLIB_EXPORT constexpr auto if_present_or_else = extension_method<IfPresentOrElseInvoker{}>;
-}
+} // namespace retro::optionals
