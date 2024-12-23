@@ -181,6 +181,66 @@ namespace retro::optionals {
     using ValueType = std::decay_t<CommonReference<T>>;
 
     /**
+     * @brief Represents a structure for optional parameters.
+     *
+     * The OptionalParameters structure is expected to hold a set of optional
+     * parameters that can be used in various contexts, though the exact use-case
+     * depends on specific implementation. It inherits from InvalidType.
+     *
+     * @note The base class InvalidType must be defined in the relevant context,
+     * and the behavior of this structure is dependent on the implementation
+     * details and use of the base class.
+     *
+     * @warning Ensure that the base class InvalidType is properly defined
+     * before using this structure to avoid compilation or runtime errors.
+     */
+    template <typename>
+    struct OptionalParameters : InvalidType {};
+
+    /**
+     * @struct OptionalParameters
+     *
+     * @tparam O<T>
+     * Template parameter representing a container or a wrapper type that holds a type T.
+     *
+     * @brief Provides metadata regarding optional parameters.
+     * This struct defines the contained type T for a given container O and validates its type.
+     */
+    template <template <typename...> typename O, typename T>
+        requires OptionalType<O<T>>
+    struct OptionalParameters<O<T>> : ValidType {
+        using ContainedType = T;
+    };
+
+    /**
+     * @struct OptionalParameters
+     * @brief A structure template specialized for std::reference_wrapper<T> that defines additional type traits.
+     *
+     * This specialization of OptionalParameters is used to manage optional parameters that are wrapped
+     * in std::reference_wrapper. It derives from ValidType to ensure the type conforms to certain requirements.
+     *
+     * @tparam T A type that is wrapped inside std::reference_wrapper for optional parameter handling.
+     *
+     * @type ContainedType Represents the unwrapped type as a reference (T&). It is the type held within
+     *                      the std::reference_wrapper object.
+     */
+    template <template <typename...> typename O, typename T>
+        requires OptionalType<O<std::reference_wrapper<T>>>
+    struct OptionalParameters<O<std::reference_wrapper<T>>> : ValidType {
+        using ContainedType = T &;
+    };
+
+    /**
+     * Type parameter definition for the effective type parameter of an optional type. Decaying std::reference_wrapper
+     * to a raw reference.
+     *
+     * @tparam T The optional type in question
+     */
+    RETROLIB_EXPORT template <OptionalType T>
+        requires OptionalParameters<std::decay_t<T>>::is_valid
+    using TypeParam = typename OptionalParameters<std::decay_t<T>>::ContainedType;
+
+    /**
      * @struct IsOptionalReference
      *
      * @brief A type trait to determine if a type is an optional reference.

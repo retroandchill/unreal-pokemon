@@ -495,7 +495,7 @@ namespace retro {
          */
         template <typename A>
             requires std::constructible_from<T &, A>
-        constexpr explicit OptionalBase(std::in_place_type_t<T &>, A &&arg) noexcept : data(&arg) {
+        constexpr explicit OptionalBase(std::in_place_type_t<T &>, A &&arg) noexcept : data(&static_cast<T &>(arg)) {
         }
 
         /**

@@ -126,7 +126,6 @@ namespace retro::ranges {
         constexpr IteratorAssignAdapter(const IteratorAssignAdapter &) noexcept(
             std::is_nothrow_copy_constructible_v<I>) = default;
 
-
         /**
          * @brief Move constructor for the IteratorAssignAdapter class.
          *
@@ -158,7 +157,8 @@ namespace retro::ranges {
          * @param other The IteratorAssignAdapter instance whose state is to be assigned.
          * @return A reference to the current instance with the updated state.
          */
-        constexpr IteratorAssignAdapter &operator=(const IteratorAssignAdapter &other) noexcept(std::is_nothrow_copy_constructible_v<I>) {
+        constexpr IteratorAssignAdapter &
+        operator=(const IteratorAssignAdapter &other) noexcept(std::is_nothrow_copy_constructible_v<I>) {
             new (&adapted) I(other.adapted);
             return *this;
         }
@@ -172,7 +172,8 @@ namespace retro::ranges {
          * @param other The IteratorAssignAdapter object to move from.
          * @return A reference to the current IteratorAssignAdapter object.
          */
-        constexpr IteratorAssignAdapter &operator=(IteratorAssignAdapter &&other) noexcept(std::is_nothrow_move_constructible_v<I>) {
+        constexpr IteratorAssignAdapter &
+        operator=(IteratorAssignAdapter &&other) noexcept(std::is_nothrow_move_constructible_v<I>) {
             new (&adapted) I(std::move(other.adapted));
             return *this;
         }
