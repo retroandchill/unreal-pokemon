@@ -194,3 +194,142 @@ TEST_CASE("Can check if an optional value is set", "[optionals]") {
     std::optional<int> value2 = std::nullopt;
     CHECK_FALSE(value2 | retro::optionals::is_set);
 }
+
+TEST_CASE("Can convert between various optional types", "[optionals]") {
+    SECTION("Can convert between two optionals holding the same parameter") {
+        std::optional value1 = 34;
+        auto value2 = value1 | retro::optionals::to<retro::Optional>();
+        CHECK(value2.has_value());
+        CHECK(value2.value() == 34);
+
+        std::optional<int> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::to<retro::Optional>();
+        CHECK_FALSE(value4.has_value());
+    }
+
+    SECTION("Can convert between two unlike optional types") {
+        std::optional value1 = 34;
+        auto value2 = value1 | retro::optionals::to<retro::Optional<double>>();
+        CHECK(value2.has_value());
+        CHECK(value2.value() == 34.0);
+
+        std::optional<int> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::to<retro::Optional<double>>();
+        CHECK_FALSE(value4.has_value());
+    }
+
+    SECTION("Can convert from a reference-wrapped optional to a raw reference optional") {
+        int ref_value = 34;
+        std::optional value1 = std::ref(ref_value);
+        auto value2 = value1 | retro::optionals::to<retro::Optional>();
+        CHECK(value2.has_value());
+        CHECK(value2.value() == 34);
+
+        std::optional<std::reference_wrapper<int>> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::to<retro::Optional>();
+        CHECK_FALSE(value4.has_value());
+    }
+
+    SECTION("Can convert from a raw reference optional to a reference-wrapped optional") {
+        int ref_value = 34;
+        retro::Optional<int &> value1 = ref_value;
+        auto value2 = value1 | retro::optionals::to<std::optional>();
+        CHECK(value2.has_value());
+        CHECK(value2.value() == 34);
+
+        std::optional<std::reference_wrapper<int>> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::to<std::optional>();
+        CHECK_FALSE(value4.has_value());
+    }
+}
+
+TEST_CASE("Can get the value inside of an optional or an alternative", "[optionals]") {
+    SECTION("Can get the value of a value type out") {
+        std::optional value1 = 34;
+        auto value2 = value1 | retro::optionals::or_else_get([] { return 5; });
+        CHECK(value2 == 34);
+
+        std::optional<int> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::or_else_get([] { return 5; });
+        CHECK(value4 == 5);
+    }
+
+    SECTION("Can get the value of a reference type out") {
+        int ref_value = 34;
+        int alt_value = 45;
+        retro::Optional<int &> value1 = ref_value;
+        decltype(auto) value2 = value1 | retro::optionals::or_else_get([&alt_value]() -> int & { return alt_value; });
+        CHECK(value2 == 34);
+
+        retro::Optional<int &> value3 = std::nullopt;
+        decltype(auto) value4 = value3 | retro::optionals::or_else_get([&alt_value]() -> int & { return alt_value; });
+        CHECK(value4 == 45);
+    }
+
+    SECTION("Can collapse two different types") {
+        int ref_value = 34;
+        retro::Optional<int &> value1 = ref_value;
+        decltype(auto) value2 = value1 | retro::optionals::or_else_get([] { return 50.0; });
+        CHECK(value2 == 34);
+
+        retro::Optional<int &> value3 = std::nullopt;
+        decltype(auto) value4 = value3 | retro::optionals::or_else_get([] { return 50.0; });
+        CHECK(value4 == 50.0);
+    }
+
+    SECTION("Can get an optional out of the call") {
+        std::optional value1 = 34;
+        auto value2 = value1 | retro::optionals::or_else([] { return std::optional(5); });
+        REQUIRE(value2.has_value());
+        CHECK(*value2 == 34);
+
+        std::optional<int> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::or_else([] { return std::optional(5); });
+        REQUIRE(value4.has_value());
+        CHECK(*value4 == 5);
+    }
+}
+
+TEST_CASE("Can get the value or an alternative", "[optionals]") {
+    SECTION("Can get basic values out") {
+        std::optional value1 = 34;
+        auto value2 = value1 | retro::optionals::or_else_value(5);
+        CHECK(value2 == 34);
+
+        std::optional<int> value3 = std::nullopt;
+        auto value4 = value3 | retro::optionals::or_else_value(5);
+        CHECK(value4 == 5);
+    }
+
+    SECTION("Can get references out") {
+        int ref_value = 34;
+        int alt_value = 45;
+        retro::Optional<int &> value1 = ref_value;
+        decltype(auto) value2 = value1 | retro::optionals::or_else_value(std::ref(alt_value));
+        CHECK(value2 == 34);
+
+        retro::Optional<int &> value3 = std::nullopt;
+        decltype(auto) value4 = value3 | retro::optionals::or_else_value(std::ref(alt_value));
+        CHECK(value4 == alt_value);
+    }
+}
+
+TEST_CASE("Can execute on a value if said value is present", "[optionals]") {
+    SECTION("Can execute if a value is present of do nothing") {
+        int sum = 0;
+        std::optional value1 = 34;
+        value1 | retro::optionals::if_present([&sum](int value) { sum += value; });
+        std::optional<int> value2 = std::nullopt;
+        value2 | retro::optionals::if_present([&sum](int value) { sum += value; });
+        CHECK(sum == 34);
+    }
+
+    SECTION("Can execute if a value is present, otherwise doing an alternate action") {
+        int sum = 0;
+        std::optional value1 = 34;
+        value1 | retro::optionals::if_present_or_else([&sum](int value) { sum += value; }, [&sum] { sum += 5; });
+        std::optional<int> value2 = std::nullopt;
+        value2 | retro::optionals::if_present_or_else([&sum](int value) { sum += value; }, [&sum] { sum += 5; });
+        CHECK(sum == 39);
+    }
+}
