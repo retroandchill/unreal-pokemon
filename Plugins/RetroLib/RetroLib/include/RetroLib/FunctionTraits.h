@@ -51,7 +51,7 @@ namespace retro {
      * can conditionally enable or disable certain code paths.
      */
     template <typename T>
-        requires std::is_member_function_pointer_v<decltype(&T::operator())>
+        requires std::is_object_v<T> && std::is_member_function_pointer_v<decltype(&T::operator())>
     struct HasOneFunctionCallOperator<T> : std::true_type {};
 
     /**
@@ -84,6 +84,7 @@ namespace retro {
      * @tparam T The type to be extended with additional callable operations.
      */
     template <typename T>
+        requires std::is_class_v<T>
     struct Mixin : T, WithOp {};
 
     /**

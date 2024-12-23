@@ -309,6 +309,35 @@ namespace retro::ranges {
         }
 
         /**
+         * @brief Retrieves the base range.
+         *
+         * This method returns the base range `range` when the type `R` satisfies the
+         * `std::copy_constructible` concept. It is a `constexpr` function, meaning it
+         * can be evaluated at compile-time if all used expressions are also constant
+         * expressions.
+         *
+         * @return The base range of type `R`.
+         */
+        constexpr R base() const &
+            requires std::copy_constructible<R>
+        {
+            return range;
+        }
+
+        /**
+         * @brief Returns the underlying range.
+         *
+         * This method moves the stored range and returns it. As it is marked
+         * with `constexpr`, this operation can be evaluated at compile-time.
+         * The method applies only to rvalue instances of the class.
+         *
+         * @return `R` The moved underlying range.
+         */
+        constexpr R base() && {
+            return std::move(range);
+        }
+
+        /**
          * @brief Returns an iterator to the beginning of the range.
          *
          * This function provides a `constexpr` iterator to the start of the range

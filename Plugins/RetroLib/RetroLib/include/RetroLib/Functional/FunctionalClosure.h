@@ -71,9 +71,10 @@ namespace retro {
          *         The return type depends on the functor's return type.
          */
         template <typename T, typename F>
-            requires std::invocable<BaseFunctorType, T, F> && DynamicFunctorBinding<BoundFunctor>
+            requires std::invocable<BaseFunctorType, T, WrappedFunctor<std::decay_t<F>>> &&
+                     DynamicFunctorBinding<BoundFunctor>
         constexpr decltype(auto) operator()(T &&operand, F &&functor) const {
-            return std::invoke(BaseFunctor, std::forward<T>(operand), std::forward<F>(functor));
+            return std::invoke(BaseFunctor, std::forward<T>(operand), WrappedFunctor(std::forward<F>(functor)));
         }
 
         /**

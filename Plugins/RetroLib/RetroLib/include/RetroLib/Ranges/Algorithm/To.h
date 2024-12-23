@@ -21,6 +21,15 @@
 #endif
 
 namespace retro::ranges {
+    RETROLIB_EXPORT template <template <typename...> typename C>
+    struct FromRange {
+        template <typename R>
+        static auto from_range(int) -> decltype(C(std::ranges::iterator_t<R>{}, std::ranges::iterator_t<R>{}));
+
+        template <typename R>
+        using Invoke = decltype(FromRange::from_range<R>(0));
+    };
+
     /**
      * Concept used for doing checks on a compatible container type.
      *
@@ -82,10 +91,10 @@ namespace retro::ranges {
      * @param args Additional arguments to be forwarded to the conversion operation.
      * @return An instance of the target container type containing the elements of the input range.
      */
-    RETROLIB_EXPORT template <template <typename...> typename C, std::ranges::input_range R, typename... A>
+    RETROLIB_EXPORT template <template <typename...> typename C, std::ranges::input_range R, typename... A,
+                              typename D = typename FromRange<C>::template Invoke<R>>
     constexpr auto to(R &&range, A &&...args) {
-        using RangeType = std::ranges::range_value_t<R>;
-        return to<C<RangeType>>(std::forward<R>(range), std::forward<A>(args)...);
+        return to<D>(std::forward<R>(range), std::forward<A>(args)...);
     }
 
     /**

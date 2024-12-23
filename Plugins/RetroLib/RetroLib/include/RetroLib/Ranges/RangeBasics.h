@@ -22,7 +22,7 @@ namespace retro::ranges {
     struct BeginTag {};
     struct EndTag {};
 
-    template <typename R>
+    RETROLIB_EXPORT template <typename R>
     concept SimpleView = std::same_as<std::ranges::iterator_t<R>, std::ranges::iterator_t<const R>> &&
                          std::same_as<std::ranges::sentinel_t<R>, std::ranges::sentinel_t<const R>>;
 
