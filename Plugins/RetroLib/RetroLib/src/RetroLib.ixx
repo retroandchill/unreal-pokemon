@@ -47,6 +47,7 @@ import std;
 
 #include "RetroLib/Utils/Tuple.h"
 #include "RetroLib/Utils/NonPropagatingCache.h"
+#include "RetroLib/Utils/UniqueAny.h"
 
 #include "RetroLib/Casting/Convert.h"
 #include "RetroLib/Casting/ByteCast.h"

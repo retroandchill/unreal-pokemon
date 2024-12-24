@@ -22,4 +22,31 @@
             <Item Condition="data != nullptr" Name="[value]">*data</Item>
         </Expand>
     </Type>
+
+    <Type Name="retro::UniqueAny">
+        <Intrinsic Name="has_value"   Expression="vtable != 0"/>
+        <Intrinsic Name="rep"        Expression="storage"/>
+        <Intrinsic Name="type"        Expression="has_value() &amp;&amp; vtable->type"/>
+        <Intrinsic Name="is_big"     Expression="has_value() &amp;&amp; vtable->is_large"/>
+        <Intrinsic Name="is_small"   Expression="has_value() &amp;&amp; !vtable->is_large"/>
+        <DisplayString Condition="!has_value()">[empty]</DisplayString>
+        <DisplayString Condition="is_small()">[not empty (small)]</DisplayString>
+        <DisplayString Condition="is_big()">[not empty (large)]</DisplayString>
+        <Expand>
+            <Item Name="[castable_ptr]" Condition="is_small()">(void*)(&amp;storage.small_storage)</Item>
+            <Item Name="[castable_ptr]" Condition="is_big()">storage.large_storage</Item>
+            <Synthetic Name="has_value">
+                <DisplayString>{has_value()}</DisplayString>
+            </Synthetic>
+            <Synthetic Name="type" Condition="has_value()">
+                <DisplayString>{type()}</DisplayString>
+            </Synthetic>
+            <Synthetic Name="[representation]" Condition="is_small()">
+                <DisplayString>(Small Object)</DisplayString>
+            </Synthetic>
+            <Synthetic Name="[representation]" Condition="is_big()">
+                <DisplayString>(Dynamic Allocation)</DisplayString>
+            </Synthetic>
+        </Expand>
+    </Type>
 </AutoVisualizer>
