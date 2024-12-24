@@ -9,6 +9,7 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
+#include <type_traits>
 #include "RetroLib/Concepts/Tuples.h"
 #endif
 

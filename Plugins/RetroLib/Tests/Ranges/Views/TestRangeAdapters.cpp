@@ -352,7 +352,7 @@ TEST_CASE("Can enumerate over a collection with its index", "[ranges]") {
     }
 }
 
-TEST_CASE("Can enumerate in reverse mapping inices to elements", "[ranges]") {
+TEST_CASE("Can enumerate in reverse mapping indices to elements", "[ranges]") {
     constexpr static std::array input = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
 
     SECTION("Can reverse enumerate using some generated indices") {

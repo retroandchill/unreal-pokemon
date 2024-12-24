@@ -14,6 +14,7 @@ add_executable(RetroLibTests Utils/PolymorphicTest.cpp
         Casts/TestCasts.cpp
         Utils/OperatorsTest.cpp
         Optionals/OptionalIteratorTest.cpp
+        Utils/UniqueAnyTest.cpp
 )
 
 target_link_libraries(RetroLibTests
