@@ -12,6 +12,9 @@ import std;
 import RetroLib;
 #else
 #include "RetroLib/Optionals/Optional.h"
+#include "RetroLib/Ranges/Views/Concat.h"
+
+#include <ranges>
 #endif
 
 TEST_CASE("Verify that we can iterate over optionals", "[optionals]") {

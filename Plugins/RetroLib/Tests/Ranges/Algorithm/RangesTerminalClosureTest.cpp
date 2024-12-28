@@ -13,7 +13,11 @@
 import std;
 import RetroLib;
 #else
+#include "RetroLib/Ranges/Algorithm/AllOf.h"
+#include "RetroLib/Ranges/Algorithm/AnyOf.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
 #include "RetroLib/Ranges/Algorithm/ForEach.h"
+#include "RetroLib/Ranges/Algorithm/NoneOf.h"
 #include "RetroLib/Ranges/Algorithm/Reduce.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Filter.h"

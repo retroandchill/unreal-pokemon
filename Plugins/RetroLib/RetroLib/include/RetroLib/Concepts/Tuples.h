@@ -177,3 +177,25 @@ namespace retro {
         using Type = std::tuple<std::common_type_t<std::tuple_element_t<I, T>, std::tuple_element_t<I, U>>...>;
     };
 } // namespace retro
+
+#if __cplusplus < 202302L
+namespace std {
+
+    RETROLIB_EXPORT template <retro::TupleLike T, retro::TupleLike U, template <typename> typename A,
+                              template <typename> typename B>
+        requires(retro::SpecializationOf<T, tuple> || retro::SpecializationOf<U, tuple>) && is_same_v<T, decay_t<T>> &&
+                is_same_v<U, decay_t<U>> && (tuple_size_v<T> == tuple_size_v<U>) &&
+                requires { typename retro::TupleLikeCommonReference<T, U, A, B>::Type; }
+    struct basic_common_reference<T, U, A, B> {
+        using type = typename retro::TupleLikeCommonReference<T, U, A, B>::Type;
+    };
+
+    RETROLIB_EXPORT template <retro::TupleLike T, retro::TupleLike U>
+        requires(retro::SpecializationOf<T, tuple> || retro::SpecializationOf<U, tuple>) && is_same_v<T, decay_t<T>> &&
+                is_same_v<U, decay_t<U>> && (tuple_size_v<T> == tuple_size_v<U>) &&
+                requires { typename retro::TupleLikeCommonType<T, U>::Type; }
+    struct common_type<T, U> {
+        using type = typename retro::TupleLikeCommonType<T, U>::Type;
+    };
+} // namespace std
+#endif

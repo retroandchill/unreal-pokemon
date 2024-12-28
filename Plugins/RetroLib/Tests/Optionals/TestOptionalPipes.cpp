@@ -11,11 +11,21 @@
 import RetroLib;
 import std;
 #else
-#include "RetroLib/Functional/BindBack.h"
 #include "RetroLib/Optionals/AndThen.h"
 #include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/IfPresentOrElse.h"
+#include "RetroLib/Optionals/IsSet.h"
+#include "RetroLib/Optionals/OrElse.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Optionals/OrElseThrow.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/To.h"
 #include "RetroLib/Optionals/Transform.h"
-#include "RetroLib/TypeTraits.h"
+#include "RetroLib/Optionals/Value.h"
+
+#include <array>
 #endif
 
 TEST_CASE("Can filter an optional value", "[optionals]") {

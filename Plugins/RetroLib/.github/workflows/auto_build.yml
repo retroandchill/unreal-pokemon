@@ -10,9 +10,11 @@ jobs:
     name: Build Project
     runs-on: ${{ matrix.config.os }}
     strategy:
+      fail-fast: false
       matrix:
         config:
-          - { name: "ubuntu-clang", os: ubuntu-latest, cc: "clang-18", cxx: "clang++-18" }
+          - { name: "ubuntu-clang", os: ubuntu-latest, cc: "clang-18", cxx: "clang++-18", with_modules: ON }
+          - { name: "ubuntu-clang", os: ubuntu-latest, cc: "clang-18", cxx: "clang++-18", with_modules: OFF }
     env:
       LLVM_PROFILE_FILE: test-data-%p.profraw
     steps:
@@ -51,7 +53,7 @@ jobs:
           build-dir: ${{ runner.workspace }}/build
           cc: ${{ matrix.config.cc }}
           cxx: ${{ matrix.config.cxx }}
-          configure-options: -G Ninja -DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=clang-scan-deps-18 -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DLIBCXX_BUILD=/usr/lib/llvm-18
+          configure-options: -G Ninja -DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=clang-scan-deps-18 -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DLIBCXX_BUILD=/usr/lib/llvm-18 -DRETROLIB_WITH_MODULES=${{ matrix.config.with_modules }}
           build-type: Release
           run-test: true
 
@@ -75,5 +77,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ matrix.config.with_modules == 'ON' }}
         run: |
           sonar-scanner --define sonar.cfamily.compile-commands="${{ runner.workspace }}/build/compile_commands.json" --define sonar.cfamily.llvm-cov.reportPath=coverage.txt
