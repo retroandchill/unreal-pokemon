@@ -436,6 +436,15 @@ namespace retro::ranges {
     RETROLIB_EXPORT template <std::ranges::view V, std::ranges::random_access_range R>
         requires RangeWithMovableReference<V> && RangeWithMovableReference<R> && std::ranges::view<R> &&
                  std::convertible_to<std::ranges::range_reference_t<V>, std::ranges::range_difference_t<R>>
+    /**
+     * @brief A view that provides reverse enumeration over a range.
+     *
+     * The ReverseEnumerateView class allows enumeration of a range of indices creating a tuple of those indices with
+     * the element obtained from an input range.
+     *
+     * @tparam V The type of the index view.
+     * @tparam R The type of the data range to be enumerated.
+     */
     class ReverseEnumerateView : public std::ranges::view_interface<ReverseEnumerateView<V, R>> {
 
         template <bool Const>
@@ -626,36 +635,96 @@ namespace retro::ranges {
             std::ranges::sentinel_t<Base> end;
         };
 
-      public:
+    public:
+        /**
+         * @brief Default constructor for the ReverseEnumerateView class.
+         *
+         * This constructor enables the creation of a default-initialized ReverseEnumerateView object,
+         * provided that the underlying type V satisfies the default_initializable requirement.
+         *
+         * @return A default-initialized ReverseEnumerateView object.
+         */
         constexpr ReverseEnumerateView()
             requires std::default_initializable<V>
         = default;
 
+        /**
+         * @brief Constructs a ReverseEnumerateView object with specified view and range.
+         *
+         * This constructor initializes a ReverseEnumerateView object with the given view and range,
+         * moving the provided values into the corresponding member variables.
+         *
+         * @param view The view to be used for enumeration.
+         * @param range The range associated with the enumeration.
+         */
         constexpr explicit ReverseEnumerateView(V view, R range) : indices(std::move(view)), range(std::move(range)) {
         }
 
+        /**
+         * @brief Retrieves the base value of the object.
+         *
+         * This method returns the base value, `indices`, while ensuring that the
+         * `V` type satisfies the `std::copy_constructible` requirement.
+         *
+         * @return The base value of type `V`.
+         */
         constexpr V base() const &
             requires std::copy_constructible<V>
         {
             return indices;
         }
 
+        /**
+         * @brief Returns the base object by moving the indices.
+         *
+         * This function provides access to the base object, transferring ownership
+         * of the underlying indices through a move operation.
+         *
+         * @return The moved base object of type V.
+         */
         constexpr V base() && {
             return std::move(indices);
         }
 
+        /**
+         * @brief Begins iteration over the range with a custom iterator.
+         *
+         * This method initializes and returns a custom iterator for the
+         * range, starting from the beginning of the indices and the range.
+         * The method is only enabled when the type `V` does not satisfy
+         * the `SimpleView` concept.
+         *
+         * @return An initialized custom iterator for iterating over the range.
+         */
         constexpr auto begin()
             requires(!SimpleView<V>)
         {
             return Iterator<false>(std::ranges::begin(indices), range);
         }
 
+        /**
+         * @brief Retrieves an iterator to the beginning of the range.
+         *
+         * This method returns an iterator to the first element of the range, assuming the conditions
+         * for the range and iterator requirements are met.
+         *
+         * @return An iterator to the beginning of the range.
+         */
         constexpr auto begin() const
             requires RangeWithMovableReference<const V> && std::ranges::random_access_range<const V>
         {
             return Iterator<true>(std::ranges::begin(indices), range);
         }
 
+        /**
+         * @brief Retrieves the end iterator or sentinel for the view, conditional on the view's properties.
+         *
+         * This function returns either an iterator or a sentinel for the view, depending on whether
+         * the underlying view satisfies the forward range concept. It uses the conditional behavior
+         * of ranges to determine the appropriate return type.
+         *
+         * @return The end iterator or sentinel for the view.
+         */
         constexpr auto end()
             requires(!SimpleView<V>)
         {
@@ -666,6 +735,15 @@ namespace retro::ranges {
             }
         }
 
+        /**
+         * @brief Provides access to the end of the range in a constant context.
+         *
+         * This function returns an iterator or sentinel representing the end of the range,
+         * depending on the underlying range type and its properties. It utilizes constraints
+         * to ensure compatibility with ranges that support movable references and are random-access ranges.
+         *
+         * @return An iterator or sentinel representing the end of the range.
+         */
         constexpr auto end() const
             requires RangeWithMovableReference<const V> && std::ranges::random_access_range<const V>
         {
@@ -676,12 +754,29 @@ namespace retro::ranges {
             }
         }
 
+        /**
+         * @brief Retrieves the size of the range if the range satisfies the sized_range concept.
+         *
+         * This function computes and returns the size of the range
+         * represented by the indices member.
+         *
+         * @return The size of the range as determined by std::ranges::size.
+         *         The return type is dependent on the range's size.
+         */
         constexpr auto size()
             requires std::ranges::sized_range<V>
         {
             return std::ranges::size(indices);
         }
 
+        /**
+         * @brief Computes the size of the range.
+         *
+         * This method computes and returns the size of the range if the underlying
+         * range satisfies the `std::ranges::sized_range` constraint.
+         *
+         * @return The size of the range as computed by `std::ranges::size`.
+         */
         constexpr auto size() const
             requires std::ranges::sized_range<const V>
         {
@@ -699,12 +794,35 @@ namespace retro::ranges {
                 requires std::ranges::view<std::ranges::views::all_t<V>> && RangeWithMovableReference<V> &&
                          RangeWithMovableReference<R> && std::ranges::view<std::ranges::views::all_t<R>> &&
                          std::convertible_to<std::ranges::range_reference_t<V>, std::ranges::range_difference_t<R>>
+            /**
+             * @brief Constructs a ReverseEnumerateView from the given indices and range.
+             *
+             * This function operator creates a ReverseEnumerateView by applying `std::ranges::views::all`
+             * to the provided indices and range parameters. The indices and range are forwarded to ensure
+             * proper handling of value categories.
+             *
+             * @tparam V The type of the indices container.
+             * @tparam R The type of the range container.
+             * @param indices The container representing the indices to be associated with the range.
+             * @param range The container representing the range of elements to be enumerated.
+             * @return A ReverseEnumerateView constructed from the given indices and range.
+             */
             constexpr auto operator()(V &&indices, R &&range) const {
                 return ReverseEnumerateView(std::ranges::views::all(std::forward<V>(indices)),
                                             std::ranges::views::all(std::forward<R>(range)));
             }
         };
 
+        /**
+         * @brief Provides a reverse enumerate view as an extension method.
+         *
+         * This constant enables the creation of a range view that pairs elements
+         * of a given range with their indices in reverse order. It is typically
+         * used with ranges algorithms to enumerate elements and their indices
+         * in reverse while processing a container or a range.
+         *
+         * @return A reverse enumerate view invokable for use in range operations.
+         */
         RETROLIB_EXPORT constexpr auto reverse_enumerate = extension_method<ReverseEnumerateInvoker{}>;
     } // namespace views
 } // namespace retro::ranges

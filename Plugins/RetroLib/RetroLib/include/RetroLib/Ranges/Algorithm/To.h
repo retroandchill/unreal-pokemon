@@ -8,12 +8,13 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
+#include "RetroLib/Concepts/Tuples.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/RetroLibMacros.h"
 
-#include <ranges>
+#include <map>
 #endif
 
 #ifndef RETROLIB_EXPORT
@@ -21,13 +22,80 @@
 #endif
 
 namespace retro::ranges {
+    /**
+     * @struct IsMap
+     * @brief A type trait structure that indicates whether a given type is a map.
+     *
+     * This struct is a specialization of `std::false_type` and represents a compile-time
+     * boolean constant. It will evaluate to `false` for any type unless explicitly
+     * specialized for map-like types.
+     *
+     * Use this structure to perform type-checking operations for map-like types
+     * in template metaprogramming scenarios.
+     */
+    RETROLIB_EXPORT template <template <typename...> typename>
+    struct IsMap : std::false_type {};
+
+    /**
+     * @brief Trait to identify the std::map type.
+     *
+     * This specialization of the IsMap struct evaluates to std::true_type
+     * for the std::map type, indicating that the given type is considered
+     * a map-like container. It provides a convenient way to detect maps
+     * in template metaprogramming.
+     *
+     * @tparam std::map The specialization is explicitly defined for std::map.
+     *
+     * The primary use of this struct is to help with type identification
+     * and enable conditional compilation based on whether a type is a
+     * map-like container.
+     */
+    RETROLIB_EXPORT template <>
+    struct IsMap<std::map> : std::true_type {};
+
+    /**
+     * @brief A utility struct that defines a template alias to create a type
+     *        based on the range value type of a given range.
+     *
+     * The `FromRange` struct provides a mechanism to derive a type `C` using
+     * the element type of a given range `R`. This is achieved through the
+     * `Invoke` template alias, where `C` is parameterized with the value type
+     * of the specified range `R`.
+     *
+     * @tparam R The input range type that satisfies the C++ `std::ranges`
+     *        concept. The type must provide a valid range value type,
+     *        accessible via `std::ranges::range_value_t`.
+     */
     RETROLIB_EXPORT template <template <typename...> typename C>
     struct FromRange {
         template <typename R>
-        static auto from_range(int) -> decltype(C(std::ranges::iterator_t<R>{}, std::ranges::iterator_t<R>{}));
+        using Invoke = C<std::ranges::range_value_t<R>>;
+    };
 
+    /**
+     * @brief A template meta-structure for deriving a container type based on a range with tuple-like elements.
+     *
+     * @tparam C The container to be modified or constructed.
+     *
+     * This structure operates on a given range type `R` and ensures that the range's value type is tuple-like,
+     * with a tuple size of exactly 2. It then extracts the types of the tuple's first and second elements
+     * and uses them as the template parameters for the container `C`.
+     *
+     * Template Constraints:
+     * - The range value type of `R` must satisfy the `TupleLike` concept.
+     * - The size of the tuple-like value type must be exactly 2.
+     *
+     * Type Alias:
+     * - `Invoke`: Alias for `C` instantiated with the first and second tuple element types, respectively.
+     */
+    RETROLIB_EXPORT template <template <typename...> typename C>
+        requires IsMap<C>::value
+    struct FromRange<C> {
         template <typename R>
-        using Invoke = decltype(FromRange::from_range<R>(0));
+            requires TupleLike<std::ranges::range_value_t<R>> && (std::tuple_size_v<std::ranges::range_value_t<R>> == 2)
+        using Invoke = C<std::tuple_element_t<0, std::ranges::range_value_t<R>>,
+                         std::tuple_element_t<1, std::ranges::range_value_t<R>>>;
+        ;
     };
 
     /**

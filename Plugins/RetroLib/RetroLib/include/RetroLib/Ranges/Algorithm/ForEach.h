@@ -8,10 +8,11 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "Retrolib/Functional/CreateBinding.h"
-#include "Retrolib/Functional/ExtensionMethods.h"
-#include "Retrolib/Ranges/FeatureBridge.h"
+#include "RetroLib/Functional/CreateBinding.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
+#include "RetroLib/Ranges/FeatureBridge.h"
 
+#include <algorithm>
 #include <ranges>
 #endif
 

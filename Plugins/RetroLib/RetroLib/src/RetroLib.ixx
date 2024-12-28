@@ -98,9 +98,7 @@ import std;
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/Enumerate.h"
 #include "RetroLib/Ranges/Views/Filter.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/Transform.h"
-
-#include "RetroLib/Compatibility.h"
-
 // clang-format on

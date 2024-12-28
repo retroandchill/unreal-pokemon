@@ -9,7 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Inheritance.h"
-#include "RetroLib/Utils/Optional.h"
+#include "RetroLib/Optionals/Optional.h"
 #include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Utils/ValidPtr.h"
 
