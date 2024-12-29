@@ -236,6 +236,20 @@ namespace retro {
         return WrappedFunctor(bind_method<Functor>(std::forward<C>(obj), std::forward<A>(args)...));
     }
 
+    RETROLIB_EXPORT template <typename>
+    struct AdditionalBindingTypes : InvalidType {};
+
+    RETROLIB_EXPORT template <typename F, typename... A>
+    concept HasExtenededBinding = AdditionalBindingTypes<std::decay_t<F>>::is_valid && requires(F&& functor, A&&... args) {
+        { AdditionalBindingTypes<std::decay_t<F>>::bind(std::forward<F>(functor), std::forward<A>(args)...) } -> HasFunctionCallOperator;
+    };
+
+    RETROLIB_EXPORT template <typename F, typename... A>
+        requires HasExtenededBinding<F, A...>
+    constexpr auto create_binding(F&& functor, A &&...args) {
+        return AdditionalBindingTypes<std::decay_t<F>>::bind(std::forward<F>(functor), std::forward<A>(args)...);
+    }
+
     RETROLIB_EXPORT template <typename... A>
     using BindingType = decltype(create_binding(std::declval<A>()...));
 

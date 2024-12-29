@@ -20,6 +20,7 @@
 #endif
 
 namespace retro {
+
     /**
      * The type of forwarded tuple element. Normally it's the same as using `forward_like`, except when the tuple
      * element is an l-value reference, where the reference is retained.
@@ -40,9 +41,8 @@ namespace retro {
      */
     RETROLIB_EXPORT template <typename T, size_t I>
     concept HasTupleElement = requires(T &&t) {
-        { get<I>(std::forward<T>(t)) } -> std::convertible_to<std::tuple_element_t<I, T>>;
-    } || requires(T t) {
-        { std::get<I>(std::forward<T>(t)) } -> std::convertible_to<std::tuple_element_t<I, T>>;
+        // TODO: This isn't ideal but for some reason ADL does not work when compiling modules
+        typename std::tuple_element_t<I, T>;
     };
 
     /**
@@ -145,57 +145,4 @@ namespace retro {
     concept NoThrowApplicable =
         HasFunctionCallOperator<std::decay_t<F>> && TupleLike<std::decay_t<T>> &&
         is_nothrow_applicable<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
-
-    RETROLIB_EXPORT template <TupleLike T, TupleLike U, template <typename> typename A, template <typename> class B,
-                              typename I = std::make_index_sequence<std::tuple_size_v<T>>>
-    struct TupleLikeCommonReference;
-
-    template <typename T, typename U, template <typename> typename A, template <typename> typename B, size_t... I>
-    concept TupleLikeCommonReferenceHelper = requires {
-        typename std::tuple<std::common_reference_t<A<std::tuple_element_t<I, T>>, B<std::tuple_element_t<I, U>>>...>;
-    };
-
-    RETROLIB_EXPORT template <typename T, typename U, template <typename> typename A, template <typename> typename B,
-                              size_t... I>
-        requires TupleLikeCommonReferenceHelper<T, U, A, B, I...>
-    struct TupleLikeCommonReference<T, U, A, B, std::index_sequence<I...>> {
-        using Type =
-            std::tuple<std::common_reference_t<A<std::tuple_element_t<I, T>>, B<std::tuple_element_t<I, U>>>...>;
-    };
-
-    RETROLIB_EXPORT template <TupleLike T, TupleLike U, typename I = std::make_index_sequence<std::tuple_size_v<T>>>
-    struct TupleLikeCommonType;
-
-    template <class T, class U, size_t... I>
-    concept TupleLikeCommonTypeHelper = requires {
-        typename std::tuple<std::common_type_t<std::tuple_element_t<I, T>, std::tuple_element_t<I, U>>...>;
-    };
-
-    RETROLIB_EXPORT template <class T, class U, size_t... I>
-        requires TupleLikeCommonTypeHelper<T, U, I...>
-    struct TupleLikeCommonType<T, U, std::index_sequence<I...>> {
-        using Type = std::tuple<std::common_type_t<std::tuple_element_t<I, T>, std::tuple_element_t<I, U>>...>;
-    };
 } // namespace retro
-
-#if __cplusplus < 202302L
-namespace std {
-
-    RETROLIB_EXPORT template <retro::TupleLike T, retro::TupleLike U, template <typename> typename A,
-                              template <typename> typename B>
-        requires(retro::SpecializationOf<T, tuple> || retro::SpecializationOf<U, tuple>) && is_same_v<T, decay_t<T>> &&
-                is_same_v<U, decay_t<U>> && (tuple_size_v<T> == tuple_size_v<U>) &&
-                requires { typename retro::TupleLikeCommonReference<T, U, A, B>::Type; }
-    struct basic_common_reference<T, U, A, B> {
-        using type = typename retro::TupleLikeCommonReference<T, U, A, B>::Type;
-    };
-
-    RETROLIB_EXPORT template <retro::TupleLike T, retro::TupleLike U>
-        requires(retro::SpecializationOf<T, tuple> || retro::SpecializationOf<U, tuple>) && is_same_v<T, decay_t<T>> &&
-                is_same_v<U, decay_t<U>> && (tuple_size_v<T> == tuple_size_v<U>) &&
-                requires { typename retro::TupleLikeCommonType<T, U>::Type; }
-    struct common_type<T, U> {
-        using type = typename retro::TupleLikeCommonType<T, U>::Type;
-    };
-} // namespace std
-#endif

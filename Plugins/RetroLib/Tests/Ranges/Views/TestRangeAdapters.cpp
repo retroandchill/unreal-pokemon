@@ -32,7 +32,6 @@ TEST_CASE("Can use the standard range adapters", "[ranges]") {
     constexpr std::array values = {1, 2, 3, 4, 5};
     constexpr auto is_even = [](int i) { return i % 2 == 0; };
     constexpr auto double_value = [](int i, int j) { return i * j; };
-    auto filterer = retro::ranges::views::filter(is_even);
 
     SECTION("Can use the regular functional operators") {
         auto filtered = retro::ranges::views::filter(values, is_even);
@@ -328,7 +327,7 @@ TEST_CASE("Can get the elements of a tupled collection", "[ranges]") {
 }
 
 TEST_CASE("Can enumerate over a collection with its index", "[ranges]") {
-    constexpr static auto input = {'A', 'B', 'C', 'D'};
+    std::array input = {'A', 'B', 'C', 'D'};
 
     SECTION("Can enumerate using a function call") {
         std::vector<std::tuple<size_t, char>> values;
@@ -339,8 +338,7 @@ TEST_CASE("Can enumerate over a collection with its index", "[ranges]") {
     }
 
     SECTION("Can enumerate into a map") {
-        auto as_map = input | retro::ranges::views::enumerate |
-                      retro::ranges::views::transform(retro::convert_tuple<std::pair>) | retro::ranges::to<std::map>();
+        auto as_map = retro::ranges::to<std::map>(input | retro::ranges::views::enumerate);
         CHECK(as_map ==
               std::map<std::ranges::range_difference_t<decltype(input)>, char>{{0, 'A'}, {1, 'B'}, {2, 'C'}, {3, 'D'}});
     }
