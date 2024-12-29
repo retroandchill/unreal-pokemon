@@ -159,10 +159,9 @@ namespace retro::ranges {
      * @param args Additional arguments to be forwarded to the conversion operation.
      * @return An instance of the target container type containing the elements of the input range.
      */
-    RETROLIB_EXPORT template <template <typename...> typename C, std::ranges::input_range R, typename... A,
-                              typename D = typename FromRange<C>::template Invoke<R>>
+    RETROLIB_EXPORT template <template <typename...> typename C, std::ranges::input_range R, typename... A>
     constexpr auto to(R &&range, A &&...args) {
-        return to<D>(std::forward<R>(range), std::forward<A>(args)...);
+        return to<typename FromRange<C>::template Invoke<R>>(std::forward<R>(range), std::forward<A>(args)...);
     }
 
     /**

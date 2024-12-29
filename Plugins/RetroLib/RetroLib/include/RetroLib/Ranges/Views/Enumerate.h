@@ -27,6 +27,72 @@ namespace retro::ranges {
         std::ranges::input_range<R> && std::move_constructible<std::ranges::range_reference_t<R>> &&
         std::move_constructible<std::ranges::range_reference_t<R>>;
 
+    RETROLIB_EXPORT template <typename T, typename U>
+    struct EnumerateViewResult {
+        T index;
+        U value;
+
+        constexpr EnumerateViewResult() requires std::default_initializable<T> && std::default_initializable<U> = default;
+
+        template <typename A, typename B>
+            requires std::convertible_to<A, T> && std::convertible_to<B, T>
+        constexpr EnumerateViewResult(A&& index, B&& value) noexcept : index(std::forward<A>(index)), value(std::forward<B>(value)) {}
+
+        template <typename A, typename B>
+            requires std::convertible_to<A&, T> && std::convertible_to<B&, T>
+        constexpr explicit(false) EnumerateViewResult(EnumerateViewResult<A, B>& tuple) : index(tuple.index), value(tuple.value) {}
+
+        template <typename A, typename B>
+            requires std::convertible_to<const A&, T> && std::convertible_to<const B&, T>
+        constexpr explicit(false) EnumerateViewResult(const EnumerateViewResult<A, B>& tuple) : index(tuple.index), value(tuple.value) {}
+
+        template <typename A, typename B>
+            requires std::convertible_to<A, T> && std::convertible_to<B, T>
+        constexpr explicit(false) EnumerateViewResult(EnumerateViewResult<A, B>&& tuple) : index(std::forward<A>(tuple.index)), value(std::forward<B>(tuple.value)) {}
+
+        template <typename A, typename B>
+            requires std::convertible_to<T&, A> && std::convertible_to<U&, B>
+        constexpr operator std::tuple<A, B> () & {
+            return std::tuple<A, B>(index, value);
+        }
+
+        template <typename A, typename B>
+            requires std::convertible_to<const T&, A> && std::convertible_to<const U&, B>
+        constexpr operator std::tuple<A, B> () const & {
+            return std::tuple<A, B>(index, value);
+        }
+
+        template <typename A, typename B>
+            requires std::convertible_to<T, A> && std::convertible_to<U, B>
+        constexpr operator std::tuple<A, B> () && {
+            return std::tuple<A, B>(std::move(index), std::move(value));
+        }
+
+        template <typename A, typename B>
+            requires std::convertible_to<T&, A> && std::convertible_to<U&, B>
+        constexpr operator std::pair<A, B> () & {
+            return std::pair<A, B>(index, value);
+        }
+
+        template <typename A, typename B>
+            requires std::convertible_to<const T&, A> && std::convertible_to<const U&, B>
+        constexpr operator std::pair<A, B> () const & {
+            return std::pair<A, B>(index, value);
+        }
+
+        template <typename A, typename B>
+            requires std::convertible_to<T, A> && std::convertible_to<U, B>
+        constexpr operator std::pair<A, B> () && {
+            return std::pair<A, B>(std::move(index), std::move(value));
+        }
+    };
+
+    template <typename>
+    struct IsEnumerateResult : std::false_type {};
+
+    template <typename T, typename U>
+    struct IsEnumerateResult<EnumerateViewResult<T, U>> : std::true_type {};
+
     /**
      * @class EnumerateView
      * A view adaptor that enumerates the elements of a given range, pairing each element with its zero-based index.
@@ -51,10 +117,10 @@ namespace retro::ranges {
                                    std::conditional_t<std::ranges::forward_range<Base>, std::forward_iterator_tag,
                                                       std::input_iterator_tag>>>;
             using difference_type = std::ranges::range_difference_t<Base>;
-            using value_type = std::tuple<difference_type, std::ranges::range_value_t<Base>>;
+            using value_type = EnumerateViewResult<difference_type, std::ranges::range_value_t<Base>>;
 
           private:
-            using ReferenceType = std::tuple<difference_type, std::ranges::range_reference_t<Base>>;
+            using ReferenceType = EnumerateViewResult<difference_type, std::ranges::range_reference_t<Base>>;
 
           public:
             constexpr Iterator()
@@ -186,7 +252,7 @@ namespace retro::ranges {
             friend constexpr auto iter_move(const Iterator &self) noexcept(
                 noexcept(std::ranges::iter_move(self.current)) &&
                 std::is_nothrow_move_constructible_v<std::ranges::range_rvalue_reference_t<Base>>) {
-                using Tuple = std::tuple<difference_type, std::ranges::range_rvalue_reference_t<Base>>;
+                using Tuple = EnumerateViewResult<difference_type, std::ranges::range_rvalue_reference_t<Base>>;
                 return Tuple(self.pos, std::ranges::iter_move(self.current));
             }
 
@@ -460,10 +526,10 @@ namespace retro::ranges {
                                    std::conditional_t<std::ranges::forward_range<Base>, std::forward_iterator_tag,
                                                       std::input_iterator_tag>>>;
             using difference_type = std::ranges::range_difference_t<Base>;
-            using value_type = std::tuple<std::ranges::range_value_t<Base>, std::ranges::range_value_t<Viewed>>;
+            using value_type = EnumerateViewResult<std::ranges::range_value_t<Base>, std::ranges::range_value_t<Viewed>>;
 
           private:
-            using ReferenceType = std::tuple<std::ranges::range_value_t<Base>, std::ranges::range_reference_t<Viewed>>;
+            using ReferenceType = EnumerateViewResult<std::ranges::range_value_t<Base>, std::ranges::range_reference_t<Viewed>>;
 
           public:
             constexpr Iterator()
@@ -826,3 +892,74 @@ namespace retro::ranges {
         RETROLIB_EXPORT constexpr auto reverse_enumerate = extension_method<ReverseEnumerateInvoker{}>;
     } // namespace views
 } // namespace retro::ranges
+
+namespace std {
+    RETROLIB_EXPORT template <typename T>
+        requires retro::ranges::IsEnumerateResult<std::decay_t<T>>::value
+    struct tuple_size<T> : integral_constant<size_t, 2> {};
+
+    RETROLIB_EXPORT template <typename T, typename U>
+    struct tuple_element<0, retro::ranges::EnumerateViewResult<T, U>> {
+        using type = T;
+    };
+
+    RETROLIB_EXPORT template <typename T, typename U>
+    struct tuple_element<1, retro::ranges::EnumerateViewResult<T, U>> {
+        using type = U;
+    };
+
+    RETROLIB_EXPORT template <typename A, typename B, typename C, typename D>
+        requires std::common_with<A, C> && std::common_with<B, D>
+    struct common_type<retro::ranges::EnumerateViewResult<A, B>, retro::ranges::EnumerateViewResult<C, D>> {
+        using type = retro::ranges::EnumerateViewResult<std::common_type_t<A, C>, std::common_type_t<B, D>>;
+    };
+
+    RETROLIB_EXPORT template <typename A, typename B, typename C, typename D>
+        requires std::common_reference_with<A, C> && std::common_reference_with<B, D>
+    struct common_reference<retro::ranges::EnumerateViewResult<A, B>, retro::ranges::EnumerateViewResult<C, D>> {
+        using type = retro::ranges::EnumerateViewResult<std::common_reference_t<A, C>, std::common_reference_t<B, D>>;
+    };
+
+}
+
+namespace retro::ranges {
+    RETROLIB_EXPORT template <size_t I, typename T, typename U>
+        requires (I < 2)
+    constexpr auto get(EnumerateViewResult<T, U>& t ) noexcept -> std::tuple_element_t<I, EnumerateViewResult<T, U>>& {
+        if constexpr (I == 0) {
+            return t.index;
+        } else {
+            static_assert(I == 1);
+            return t.value;
+        }
+    }
+
+    RETROLIB_EXPORT template <size_t I, typename T, typename U>
+        requires (I < 2)
+    constexpr auto get(const EnumerateViewResult<T, U>& t ) noexcept -> const std::tuple_element_t<I, EnumerateViewResult<T, U>>& {
+        if constexpr (I == 0) {
+            return t.index;
+        } else {
+            static_assert(I == 1);
+            return t.value;
+        }
+    }
+
+    RETROLIB_EXPORT template <size_t I, typename T, typename U>
+        requires (I < 2)
+    constexpr auto get(EnumerateViewResult<T, U>&& t ) noexcept -> std::tuple_element_t<I, EnumerateViewResult<T, U>>&& {
+        if constexpr (I == 0) {
+            return static_cast<std::tuple_element_t<I, EnumerateViewResult<T, U>>&&>(t.index);
+        } else {
+            static_assert(I == 1);
+            return static_cast<std::tuple_element_t<I, EnumerateViewResult<T, U>>&&>(t.value);
+        }
+    }
+}
+
+namespace std {
+    RETROLIB_EXPORT template <size_t I, typename T>
+        requires (I < 2) && retro::ranges::IsEnumerateResult<std::decay_t<T>>::value && (!std::same_as<std::decay_t<T>, T>)
+    struct tuple_element<I, T> : tuple_element<I, std::decay_t<T>> {
+    };
+}
