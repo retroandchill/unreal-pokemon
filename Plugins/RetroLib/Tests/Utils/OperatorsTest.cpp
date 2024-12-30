@@ -18,37 +18,37 @@ import RetroLib;
 #endif
 
 TEST_CASE("Can use the operators to perform comparisons", "[utils]") {
-    CHECK(retro::equals(1, 1));
-    CHECK_FALSE(retro::equals(1, 2));
+    CHECK(Retro::Equals(1, 1));
+    CHECK_FALSE(Retro::Equals(1, 2));
 
-    CHECK_FALSE(retro::not_equal(1, 1));
-    CHECK(retro::not_equal(1, 2));
+    CHECK_FALSE(Retro::NotEqual(1, 1));
+    CHECK(Retro::NotEqual(1, 2));
 
-    CHECK_FALSE(retro::less_than(1, 0));
-    CHECK_FALSE(retro::less_than(1, 1));
-    CHECK(retro::less_than(1, 2));
+    CHECK_FALSE(Retro::LessThan(1, 0));
+    CHECK_FALSE(Retro::LessThan(1, 1));
+    CHECK(Retro::LessThan(1, 2));
 
-    CHECK_FALSE(retro::less_than_or_equal(1, 0));
-    CHECK(retro::less_than_or_equal(1, 1));
-    CHECK(retro::less_than_or_equal(1, 2));
+    CHECK_FALSE(Retro::LessThanOrEqual(1, 0));
+    CHECK(Retro::LessThanOrEqual(1, 1));
+    CHECK(Retro::LessThanOrEqual(1, 2));
 
-    CHECK(retro::greater_than(1, 0));
-    CHECK_FALSE(retro::greater_than(1, 1));
-    CHECK_FALSE(retro::greater_than(1, 2));
+    CHECK(Retro::GreaterThan(1, 0));
+    CHECK_FALSE(Retro::GreaterThan(1, 1));
+    CHECK_FALSE(Retro::GreaterThan(1, 2));
 
-    CHECK(retro::greater_than_or_equal(1, 0));
-    CHECK(retro::greater_than_or_equal(1, 1));
-    CHECK_FALSE(retro::greater_than_or_equal(1, 2));
+    CHECK(Retro::GreaterThanOrEqual(1, 0));
+    CHECK(Retro::GreaterThanOrEqual(1, 1));
+    CHECK_FALSE(Retro::GreaterThanOrEqual(1, 2));
 
-    CHECK(retro::three_way_compare(1, 0) == std::strong_ordering::greater);
-    CHECK(retro::three_way_compare(1, 1) == std::strong_ordering::equal);
-    CHECK(retro::three_way_compare(1, 2) == std::strong_ordering::less);
+    CHECK(Retro::ThreeWayCompare(1, 0) == std::strong_ordering::greater);
+    CHECK(Retro::ThreeWayCompare(1, 1) == std::strong_ordering::equal);
+    CHECK(Retro::ThreeWayCompare(1, 2) == std::strong_ordering::less);
 }
 
 TEST_CASE("Can perform basic math operations", "[utils]") {
-    CHECK(retro::add(2, 2) == 4);
-    CHECK(retro::subtract(6, 2) == 4);
-    CHECK(retro::multiply(6, 2) == 12);
-    CHECK(retro::divide(6, 2) == 3);
-    CHECK(retro::modulo(11, 3) == 2);
+    CHECK(Retro::Add(2, 2) == 4);
+    CHECK(Retro::Subtract(6, 2) == 4);
+    CHECK(Retro::Multiply(6, 2) == 12);
+    CHECK(Retro::Divide(6, 2) == 3);
+    CHECK(Retro::Modulo(11, 3) == 2);
 }

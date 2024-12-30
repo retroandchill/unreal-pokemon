@@ -5,6 +5,7 @@
  * @author Retro & Chill
  * https://github.com/retroandchill
  */
+#if RETROLIB_WITH_COROUTINES
 #include <catch2/catch_test_macros.hpp>
 
 #if RETROLIB_WITH_MODULES
@@ -19,62 +20,64 @@ import RetroLib;
 #include <vector>
 #endif
 
-namespace retro::ranges::testing {
-    static Generator<int> generate_integers(int num) {
-        for (int i = 0; i < num; i++) {
+namespace Retro::Ranges::Testing {
+    static Generator<int> GenerateIntegers(int Num) {
+        for (int i = 0; i < Num; i++) {
             co_yield i;
         }
     }
 
     template <typename T>
     struct Tree {
-        T value;
-        Tree *left{}, *right{};
+        T Value;
+        Tree *Left{};
+        Tree* Right{};
 
-        Generator<const T &> traverse_inorder() const {
-            if (left) {
-                co_yield ranges::ElementsOf(left->traverse_inorder());
+        Generator<const T &> TraverseInorder() const {
+            if (Left) {
+                co_yield Ranges::ElementsOf(Left->TraverseInorder());
             }
 
-            co_yield value;
+            co_yield Value;
 
-            if (right) {
-                co_yield ranges::ElementsOf(right->traverse_inorder());
+            if (Right) {
+                co_yield Ranges::ElementsOf(Right->TraverseInorder());
             }
         }
     };
 } // namespace retro::ranges::testing
 
 TEST_CASE("Can create a lazily evaluated generator", "[ranges]") {
-    using namespace retro::ranges::testing;
+    using namespace Retro::Ranges::Testing;
     SECTION("Use a generator to loop through some numbers") {
-        std::vector<int> numbers;
-        for (int i : generate_integers(5)) {
-            numbers.push_back(i);
+        std::vector<int> Numbers;
+        for (int i : GenerateIntegers(5)) {
+            Numbers.push_back(i);
         }
-        CHECK(numbers == std::vector({0, 1, 2, 3, 4}));
+        CHECK(Numbers == std::vector({0, 1, 2, 3, 4}));
     }
 
     SECTION("Can use a generator with a range pipe") {
-        auto numbers = generate_integers(10) | retro::ranges::views::filter([](int value) { return value % 2 == 0; }) |
-                       retro::ranges::to<std::vector>();
-        CHECK(numbers == std::vector({0, 2, 4, 6, 8}));
+        auto Numbers = GenerateIntegers(10) | Retro::Ranges::Views::Filter([](int Value) { return Value % 2 == 0; }) |
+                       Retro::Ranges::To<std::vector>();
+        CHECK(Numbers == std::vector({0, 2, 4, 6, 8}));
     }
 
     SECTION("Can traverse a nested range using ElementsOf") {
-        std::array<Tree<char>, 7> tree;
-        tree[0] = {'D', &tree[1], &tree[2]};
-        tree[1] = {'B', &tree[3], &tree[4]};
-        tree[2] = {'F', &tree[5], &tree[6]};
-        tree[3] = {'A'};
-        tree[4] = {'C'};
-        tree[5] = {'E'};
-        tree[6] = {'G'};
+        std::array<Tree<char>, 7> Tree;
+        Tree[0] = {'D', &Tree[1], &Tree[2]};
+        Tree[1] = {'B', &Tree[3], &Tree[4]};
+        Tree[2] = {'F', &Tree[5], &Tree[6]};
+        Tree[3] = {'A'};
+        Tree[4] = {'C'};
+        Tree[5] = {'E'};
+        Tree[6] = {'G'};
 
-        std::vector<char> values;
-        for (auto value : tree[0].traverse_inorder()) {
-            values.push_back(value);
+        std::vector<char> Values;
+        for (auto Value : Tree[0].TraverseInorder()) {
+            Values.push_back(Value);
         }
-        CHECK(values == std::vector({'A', 'B', 'C', 'D', 'E', 'F', 'G'}));
+        CHECK(Values == std::vector({'A', 'B', 'C', 'D', 'E', 'F', 'G'}));
     }
 }
+#endif

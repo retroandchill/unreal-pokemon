@@ -15,7 +15,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * A concept that checks if a given type `T` is a class type,
      * excluding union types.

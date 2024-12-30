@@ -18,57 +18,57 @@ import RetroLib;
 
 TEST_CASE("Any view can take in a view of any type and iterate over it", "[views]") {
     SECTION("Iterating over a default initialized view is empty") {
-        retro::ranges::AnyView<int> view;
-        int count = 0;
-        for (auto _ : view) {
-            count++;
+        Retro::Ranges::AnyView<int> View;
+        int Count = 0;
+        for (auto _ : View) {
+            Count++;
         }
-        CHECK(count == 0);
+        CHECK(Count == 0);
     }
 
     SECTION("We can iterate over multiple different containers that has range semantics") {
-        retro::ranges::AnyView<int> view(std::vector<int>({1, 2, 3, 4}));
-        int count = 0;
-        for (auto value : view) {
-            count += value;
+        Retro::Ranges::AnyView<int> View(std::vector<int>({1, 2, 3, 4}));
+        int Count = 0;
+        for (auto Value : View) {
+            Count += Value;
         }
-        CHECK(count == 10);
+        CHECK(Count == 10);
 
-        std::array values = {1, 2, 3, 4, 5};
-        view = values;
-        count = 0;
-        for (auto value : view) {
-            count += value;
+        std::array Values = {1, 2, 3, 4, 5};
+        View = Values;
+        Count = 0;
+        for (auto Value : View) {
+            Count += Value;
         }
-        CHECK(count == 15);
+        CHECK(Count == 15);
     }
 
     SECTION("Can iterate over a range pipe") {
-        std::array values = {1, 2, 3, 4, 5};
-        retro::ranges::AnyView<int> view = values | std::ranges::views::transform([](int value) { return value * 2; });
-        int count = 0;
-        for (auto value : view) {
-            count += value;
+        std::array Values = {1, 2, 3, 4, 5};
+        Retro::Ranges::AnyView<int> view = Values | std::ranges::views::transform([](int Value) { return Value * 2; });
+        int Count = 0;
+        for (auto Value : view) {
+            Count += Value;
         }
-        CHECK(count == 30);
+        CHECK(Count == 30);
     }
 
     SECTION("Can compare iterators between view instances") {
-        retro::ranges::AnyView<int> view(std::vector<int>({1, 2, 3, 4}));
-        auto iterator1 = view.begin();
-        auto iterator2 = view.begin();
-        iterator1++;
-        iterator2++;
-        CHECK(iterator1 == iterator2);
+        Retro::Ranges::AnyView<int> view(std::vector<int>({1, 2, 3, 4}));
+        auto Iterator1 = view.begin();
+        auto Iterator2 = view.begin();
+        Iterator1++;
+        Iterator2++;
+        CHECK(Iterator1 == Iterator2);
     }
 
     SECTION("Can use any view with a range pipe") {
-        auto view = retro::ranges::AnyView<int>(std::vector<int>({1, 2, 3, 4})) |
-                    std::ranges::views::filter([](int value) { return value % 2 == 0; });
-        int count = 0;
-        for (auto value : view) {
-            count += value;
+        auto View = Retro::Ranges::AnyView<int>(std::vector<int>({1, 2, 3, 4})) |
+                    std::ranges::views::filter([](const int value) { return value % 2 == 0; });
+        int Count = 0;
+        for (auto Value : View) {
+            Count += Value;
         }
-        CHECK(count == 6);
+        CHECK(Count == 6);
     }
 }

@@ -18,34 +18,34 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
 
     struct OrElseGetInvoker {
         /**
          * Invokes the provided functor or returns the value from the optional object.
          *
-         * @param optional The optional object to inspect. If this object has a value, the value will be
+         * @param Optional The optional object to inspect. If this object has a value, the value will be
          *                 extracted using `get` and returned.
-         * @param functor The functor to invoke in case the optional object does not contain a value.
+         * @param Functor The functor to invoke in case the optional object does not contain a value.
          * @return The value contained in the optional object if it has a value, otherwise the result of
          *         invoking the functor.
          */
         template <OptionalType O, typename F>
             requires std::invocable<F> && std::convertible_to<CommonReference<O>, std::invoke_result_t<F>>
-        constexpr decltype(auto) operator()(O &&optional, F &&functor) const {
-            if (has_value(std::forward<O>(optional))) {
-                return static_cast<std::invoke_result_t<F>>(get(std::forward<O>(optional)));
+        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const {
+            if (HasValue(std::forward<O>(Optional))) {
+                return static_cast<std::invoke_result_t<F>>(Get(std::forward<O>(Optional)));
             }
 
-            return std::invoke(std::forward<F>(functor));
+            return std::invoke(std::forward<F>(Functor));
         }
     };
 
-    constexpr OrElseGetInvoker or_else_get_function;
+    constexpr OrElseGetInvoker OrElseGetFunction;
 
-    template <auto Functor = dynamic_functor>
+    template <auto Functor = DynamicFunctor>
         requires ValidFunctorParameter<Functor>
-    constexpr FunctorBindingInvoker<Functor, or_else_get_function> or_else_get_invoker;
+    constexpr FunctorBindingInvoker<Functor, OrElseGetFunction> OrElseGetCallback;
 
     /**
      * Applies a provided function or functor when a source optional contains no value.
@@ -57,10 +57,10 @@ namespace retro::optionals {
      * @return The value contained in the source optional if it's not empty,
      *         otherwise, the result of invoking the provided callable object with the given arguments.
      */
-    RETROLIB_EXPORT template <auto Functor = dynamic_functor, typename... A>
+    RETROLIB_EXPORT template <auto Functor = DynamicFunctor, typename... A>
         requires ValidFunctorParameter<Functor>
-    constexpr auto or_else_get(A &&...args) {
-        return extension_method<or_else_get_invoker<Functor>>(std::forward<A>(args)...);
+    constexpr auto OrElseGet(A &&...Args) {
+        return ExtensionMethod<OrElseGetCallback<Functor>>(std::forward<A>(Args)...);
     }
 
 } // namespace retro::optionals

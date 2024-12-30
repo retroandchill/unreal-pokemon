@@ -15,7 +15,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * @struct IsComplete
      * @brief A type trait structure that inherits from std::false_type.

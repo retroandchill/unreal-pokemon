@@ -16,12 +16,12 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
 
     struct IsSetInvoker {
         template <OptionalType O>
-        constexpr bool operator()(O &&optional) const {
-            return has_value(std::forward<O>(optional));
+        constexpr bool operator()(O &&Optional) const {
+            return HasValue(std::forward<O>(Optional));
         }
     };
 
@@ -29,7 +29,7 @@ namespace retro::optionals {
      * @brief Represents a constexpr that defines an extension method for invoking a set-check mechanism.
      *
      * @details This construct creates a compile-time constant named `is_set` using
-     * the `extension_method` function and associates it with the `IsSetInvoker` object.
+     * the `ExtensionMethod` function and associates it with the `IsSetInvoker` object.
      * It is intended to be used as an invocation mechanism to check if a particular
      * set condition is satisfied or not.
      *
@@ -38,6 +38,6 @@ namespace retro::optionals {
      * with extension methods in environments where enhanced or dynamic behaviors are needed
      * based on compile-time extensions.
      */
-    RETROLIB_EXPORT constexpr auto is_set = extension_method<IsSetInvoker{}>();
+    RETROLIB_EXPORT constexpr auto IsSet = ExtensionMethod<IsSetInvoker{}>();
 
 } // namespace retro::optionals

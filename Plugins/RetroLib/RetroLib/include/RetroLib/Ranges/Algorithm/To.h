@@ -21,7 +21,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
     /**
      * @struct IsMap
      * @brief A type trait structure that indicates whether a given type is a map.
@@ -121,28 +121,28 @@ namespace retro::ranges {
      * @tparam C The container type to create
      * @tparam R The type of the added range
      * @tparam A The additional arguments to use
-     * @param range The input range of elements to be transformed into the container.
-     * @param args Additional arguments for constructing the container of type C.
+     * @param Range The input range of elements to be transformed into the container.
+     * @param Args Additional arguments for constructing the container of type C.
      * @return A container of type C with elements from the input range appended to it.
      */
     RETROLIB_EXPORT template <typename C, std::ranges::input_range R, typename... A>
         requires(!std::ranges::view<C>) && CompatibleContainerTypeForArgs<C, R, A...>
-    constexpr C to(R &&range, A &&...args) {
-        C result(std::forward<A>(args)...);
+    constexpr C To(R &&Range, A &&...Args) {
+        C Result(std::forward<A>(Args)...);
 
         if constexpr (std::ranges::sized_range<R> && ReservableContainer<C>) {
             // We want to guarantee that we won't have any weird overflow issues when inserting into a container with
             // a mismatch between signed and unsigned sizes.
-            RETROLIB_ASSERT(std::ranges::size(range) <= container_max_size(result));
-            container_reserve(result, std::ranges::size(range));
+            RETROLIB_ASSERT(std::ranges::size(Range) <= ContainerMaxSize(Result));
+            ContainerReserve(Result, std::ranges::size(Range));
         }
 
         using RangeType = RangeCommonReference<R>;
-        for (auto &&x : range) {
-            append_container(result, std::forward<RangeType>(x));
+        for (auto &&x : Range) {
+            AppendContainer(Result, std::forward<RangeType>(x));
         }
 
-        return result;
+        return Result;
     }
 
     /**
@@ -155,13 +155,13 @@ namespace retro::ranges {
      * @tparam C Template parameter deducing the target container type.
      * @tparam R The type of the input range.
      * @tparam A Variadic arguments to be forwarded.
-     * @param range The range to be converted.
-     * @param args Additional arguments to be forwarded to the conversion operation.
+     * @param Range The range to be converted.
+     * @param Args Additional arguments to be forwarded to the conversion operation.
      * @return An instance of the target container type containing the elements of the input range.
      */
     RETROLIB_EXPORT template <template <typename...> typename C, std::ranges::input_range R, typename... A>
-    constexpr auto to(R &&range, A &&...args) {
-        return to<typename FromRange<C>::template Invoke<R>>(std::forward<R>(range), std::forward<A>(args)...);
+    constexpr auto To(R &&Range, A &&...Args) {
+        return To<typename FromRange<C>::template Invoke<R>>(std::forward<R>(Range), std::forward<A>(Args)...);
     }
 
     /**
@@ -186,14 +186,14 @@ namespace retro::ranges {
          *
          * @tparam R The type of the range.
          * @tparam A Additional argument types.
-         * @param range The range to be converted.
-         * @param args Additional arguments to be forwarded to the `to` function.
+         * @param Range The range to be converted.
+         * @param Args Additional arguments to be forwarded to the `to` function.
          * @return A container of type C containing elements from the provided range.
          */
         template <std::ranges::input_range R, typename... A>
             requires CompatibleContainerTypeForArgs<C, R, A...>
-        constexpr C operator()(R &&range, A &&...args) const {
-            return to<C>(std::forward<R>(range), std::forward<A>(args)...);
+        constexpr C operator()(R &&Range, A &&...Args) const {
+            return To<C>(std::forward<R>(Range), std::forward<A>(Args)...);
         }
     };
 
@@ -206,7 +206,7 @@ namespace retro::ranges {
      */
     template <typename C>
         requires(!std::ranges::view<C>)
-    constexpr ToInvoker<C> to_invoker;
+    constexpr ToInvoker<C> ToCallback;
 
     /**
      * A struct providing a function call operator that invokes the `to` function template.
@@ -228,18 +228,18 @@ namespace retro::ranges {
          *
          * @tparam R The type of the range.
          * @tparam A Additional argument types.
-         * @param range The range of elements to be transformed or converted. It is
+         * @param Range The range of elements to be transformed or converted. It is
          *        forwarded as an rvalue reference to support different kinds of range
          *        inputs.
-         * @param args Additional arguments that may be required by the transformation
+         * @param Args Additional arguments that may be required by the transformation
          *        function `to`. These are also forwarded as rvalue references.
          *
          * @return The result of the transformation, encapsulated within a container of
          *         type `C`.
          */
         template <std::ranges::input_range R, typename... A>
-        constexpr auto operator()(R &&range, A &&...args) const {
-            return to<C>(std::forward<R>(range), std::forward<A>(args)...);
+        constexpr auto operator()(R &&Range, A &&...Args) const {
+            return To<C>(std::forward<R>(Range), std::forward<A>(Args)...);
         }
     };
 
@@ -254,7 +254,7 @@ namespace retro::ranges {
      * @tparam C The type for which the invoker is specialized.
      */
     template <template <typename...> typename C>
-    constexpr TemplatedToInvoker<C> template_to_invoker;
+    constexpr TemplatedToInvoker<C> TemplateToCallback;
 
     /**
      * Transforms the input arguments by applying the 'to' extension method with a specified invoker.
@@ -262,14 +262,14 @@ namespace retro::ranges {
      * @tparam C Template parameter representing the invoker type for the 'to' method.
      * @tparam A Variadic template parameter pack representing the types of the input arguments.
      *
-     * @param args The input arguments to be transformed.
+     * @param Args The input arguments to be transformed.
      *
      * @return An instance of the extension method with the specified invoker and input arguments.
      */
     RETROLIB_EXPORT template <typename C, typename... A>
         requires(!std::ranges::view<C>) && std::constructible_from<C, A...>
-    constexpr auto to(A &&...args) {
-        return extension_method<to_invoker<C>>(std::forward<A>(args)...);
+    constexpr auto To(A &&...Args) {
+        return ExtensionMethod<ToCallback<C>>(std::forward<A>(Args)...);
     }
 
     /**
@@ -279,15 +279,15 @@ namespace retro::ranges {
      * @tparam C Template parameter representing the invoker type for the 'to' method.
      * @tparam A Variadic template parameter pack representing the types of the input arguments.
      *
-     * @param args Variadic template arguments to be converted using the
+     * @param Args Variadic template arguments to be converted using the
      *             extension method.
      * @return The result of invoking the extension method with the specified
      *         converter and forwarded arguments, enabling conversion to the
      *         desired format or type.
      */
     RETROLIB_EXPORT template <template <typename...> typename C, typename... A>
-    constexpr auto to(A &&...args) {
-        return extension_method<template_to_invoker<C>>(std::forward<A>(args)...);
+    constexpr auto To(A &&...Args) {
+        return ExtensionMethod<TemplateToCallback<C>>(std::forward<A>(Args)...);
     }
 
 } // namespace retro::ranges

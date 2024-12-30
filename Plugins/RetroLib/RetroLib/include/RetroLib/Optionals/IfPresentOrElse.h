@@ -17,25 +17,25 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
     struct IfPresentOrElseInvoker {
         /**
          * Provides a callable operator to conditionally invoke functions based on the presence or absence of a value.
          *
-         * @param optional An object to check for a value using `has_value`. Typically, this could be an optional-like
+         * @param Optional An object to check for a value using `has_value`. Typically, this could be an optional-like
          * object.
-         * @param present A callable function that will be invoked if `optional` contains a value. It is called with the
+         * @param Present A callable function that will be invoked if `optional` contains a value. It is called with the
          * value extracted from `optional`.
-         * @param absent A callable function that will be invoked if `optional` does not contain a value. It takes no
+         * @param Absent A callable function that will be invoked if `optional` does not contain a value. It takes no
          * arguments.
          */
         template <OptionalType O, typename F, typename G>
             requires std::invocable<F, CommonReference<O>> && std::invocable<G>
-        constexpr void operator()(O &&optional, F &&present, G &&absent) const {
-            if (has_value(std::forward<O>(optional))) {
-                std::invoke(std::forward<F>(present), get(std::forward<O>(optional)));
+        constexpr void operator()(O &&Optional, F &&Present, G &&Absent) const {
+            if (HasValue(std::forward<O>(Optional))) {
+                std::invoke(std::forward<F>(Present), Get(std::forward<O>(Optional)));
             } else {
-                std::invoke(std::forward<G>(absent));
+                std::invoke(std::forward<G>(Absent));
             }
         }
     };
@@ -52,5 +52,5 @@ namespace retro::optionals {
      * simplify and streamline decision-making logic for `std::optional` values within
      * functional code entities.
      */
-    RETROLIB_EXPORT constexpr auto if_present_or_else = extension_method<IfPresentOrElseInvoker{}>;
+    RETROLIB_EXPORT constexpr auto IfPresentOrElse = ExtensionMethod<IfPresentOrElseInvoker{}>;
 } // namespace retro::optionals

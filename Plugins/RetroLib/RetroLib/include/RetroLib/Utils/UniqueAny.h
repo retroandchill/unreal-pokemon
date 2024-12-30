@@ -23,10 +23,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
-
-    template <typename T>
-    concept FitsInUniqueAnySmallBuffer = sizeof(T) <= DEFAULT_SMALL_STORAGE_SIZE;
+namespace Retro {
 
     /**
      * @class UniqueAny
@@ -39,6 +36,9 @@ namespace retro {
      * dynamically allocates memory for larger objects.
      */
     RETROLIB_EXPORT class UniqueAny final {
+        template <typename T>
+        static constexpr bool FitsInSmallBuffer = sizeof(T) <= DEFAULT_SMALL_STORAGE_SIZE;
+
       public:
         /**
          * @brief Default constructor for UniqueAny.
@@ -60,7 +60,7 @@ namespace retro {
         template <typename T>
             requires(!std::same_as<std::decay_t<T>, UniqueAny>)
         explicit(false) UniqueAny(T &&Value) noexcept
-            : storage(std::forward<T>(Value)), vtable(&get_vtable_for_type<std::decay_t<T>>()) {
+            : Storage(std::forward<T>(Value)), Vtable(&GetVtableForType<std::decay_t<T>>()) {
         }
 
         /**
@@ -77,11 +77,11 @@ namespace retro {
          */
         template <typename T, typename... A>
             requires std::constructible_from<T, A...>
-        explicit UniqueAny(std::in_place_type_t<T>, A &&...Args) noexcept : vtable(&get_vtable_for_type<T>()) {
-            if constexpr (FitsInUniqueAnySmallBuffer<T>) {
-                new (std::bit_cast<T *>(storage.small_storage.data())) T(std::forward<A>(Args)...);
+        explicit UniqueAny(std::in_place_type_t<T>, A &&...Args) noexcept : Vtable(&GetVtableForType<T>()) {
+            if constexpr (FitsInSmallBuffer<T>) {
+                new (std::bit_cast<T *>(Storage.SmallStorage.data())) T(std::forward<A>(Args)...);
             } else {
-                storage.large_storage = new T(std::forward<A>(Args)...);
+                Storage.LargeStorage = new T(std::forward<A>(Args)...);
             }
         }
 
@@ -96,9 +96,9 @@ namespace retro {
          * @param Other The UniqueAny instance to move from. The state of Other will be invalidated.
          * @return An UniqueAny instance that takes ownership of the value from the Other instance.
          */
-        UniqueAny(UniqueAny &&Other) noexcept : vtable(Other.vtable) {
-            vtable->move(Other.storage, storage);
-            Other.vtable = nullptr;
+        UniqueAny(UniqueAny &&Other) noexcept : Vtable(Other.Vtable) {
+            Vtable->Move(Other.Storage, Storage);
+            Other.Vtable = nullptr;
         }
 
         /**
@@ -108,8 +108,8 @@ namespace retro {
          * Ensures that the dynamically allocated memory, if any, is properly deallocated.
          */
         ~UniqueAny() {
-            if (vtable != nullptr) {
-                vtable->destroy(storage);
+            if (Vtable != nullptr) {
+                Vtable->Destroy(Storage);
             }
         }
 
@@ -126,9 +126,9 @@ namespace retro {
          * @return A reference to the current UniqueAny instance after the assignment.
          */
         UniqueAny &operator=(UniqueAny &&Other) noexcept {
-            vtable = Other.vtable;
-            vtable->move(Other.storage, storage);
-            Other.vtable = nullptr;
+            Vtable = Other.Vtable;
+            Vtable->Move(Other.Storage, Storage);
+            Other.Vtable = nullptr;
             return *this;
         }
 
@@ -143,7 +143,7 @@ namespace retro {
          */
         template <typename T>
         UniqueAny &operator=(T &&Other) noexcept {
-            emplace<std::decay_t<T>>(std::forward<T>(Other));
+            Emplace<std::decay_t<T>>(std::forward<T>(Other));
             return *this;
         }
 
@@ -159,12 +159,12 @@ namespace retro {
          * @return A reference to the stored value of type T.
          */
         template <typename T>
-        T &get() {
-            if (get_type() != typeid(T)) {
+        T &Get() {
+            if (GetType() != typeid(T)) {
                 throw std::bad_any_cast();
             }
 
-            return get_unchecked<T>();
+            return GetUnchecked<T>();
         }
 
         /**
@@ -179,12 +179,12 @@ namespace retro {
          * @return A reference to the stored value of type T.
          */
         template <typename T>
-        const T &get() const {
-            if (get_type() != typeid(T)) {
+        const T &Get() const {
+            if (GetType() != typeid(T)) {
                 throw std::bad_any_cast();
             }
 
-            return get_unchecked<T>();
+            return GetUnchecked<T>();
         }
 
         /**
@@ -198,12 +198,12 @@ namespace retro {
          * TOptional.
          */
         template <typename T>
-        Optional<T &> try_get() {
-            if (get_type() != typeid(T)) {
+        Optional<T &> TryGet() {
+            if (GetType() != typeid(T)) {
                 return std::nullopt;
             }
 
-            return get_unchecked<T>();
+            return GetUnchecked<T>();
         }
 
         /**
@@ -217,12 +217,12 @@ namespace retro {
          * TOptional.
          */
         template <typename T>
-        Optional<const T &> try_get() const {
-            if (get_type() != typeid(T)) {
+        Optional<const T &> TryGet() const {
+            if (GetType() != typeid(T)) {
                 return Optional<const T &>();
             }
 
-            return get_unchecked<T>();
+            return GetUnchecked<T>();
         }
 
         /**
@@ -234,17 +234,17 @@ namespace retro {
          * @param Args Arguments to construct the new object with.
          */
         template <typename T, typename... A>
-        void emplace(A &&...Args) {
-            if (has_value()) {
-                vtable->destroy(storage);
+        void Emplace(A &&...Args) {
+            if (HasValue()) {
+                Vtable->Destroy(Storage);
             }
 
-            if constexpr (FitsInUniqueAnySmallBuffer<std::decay_t<T>>) {
-                new (std::bit_cast<T *>(storage.small_storage.data())) std::decay_t<T>(std::forward<A>(Args)...);
+            if constexpr (FitsInSmallBuffer<std::decay_t<T>>) {
+                new (std::bit_cast<T *>(Storage.SmallStorage.data())) std::decay_t<T>(std::forward<A>(Args)...);
             } else {
-                storage.large_storage = new std::decay_t<T>(std::forward<A>(Args)...);
+                Storage.LargeStorage = new std::decay_t<T>(std::forward<A>(Args)...);
             }
-            vtable = &get_vtable_for_type<std::decay_t<T>>();
+            Vtable = &GetVtableForType<std::decay_t<T>>();
         }
 
         /**
@@ -254,10 +254,10 @@ namespace retro {
          *  it invokes the `Destroy` method from the virtual table pointer (`VTable`) to clean up
          *  the stored object, and then sets the `VTable` pointer to `nullptr`, effectively resetting the state.
          */
-        void reset() noexcept {
-            if (has_value()) {
-                vtable->destroy(storage);
-                vtable = nullptr;
+        void Reset() noexcept {
+            if (HasValue()) {
+                Vtable->Destroy(Storage);
+                Vtable = nullptr;
             }
         }
 
@@ -269,8 +269,8 @@ namespace retro {
          *
          * @return True if the object holds a value, false otherwise.
          */
-        bool has_value() const {
-            return vtable != nullptr;
+        bool HasValue() const {
+            return Vtable != nullptr;
         }
 
         /**
@@ -281,95 +281,95 @@ namespace retro {
          *
          * @return The type information of the stored value or void if no value is present.
          */
-        const std::type_info &get_type() const noexcept {
-            return has_value() ? *vtable->type : typeid(void);
+        const std::type_info &GetType() const noexcept {
+            return HasValue() ? *Vtable->Type : typeid(void);
         }
 
       private:
         template <typename T>
-        constexpr T &get_unchecked() {
-            if constexpr (FitsInUniqueAnySmallBuffer<T>) {
-                return *std::bit_cast<T *>(storage.small_storage.data());
+        constexpr T &GetUnchecked() {
+            if constexpr (FitsInSmallBuffer<T>) {
+                return *std::bit_cast<T *>(Storage.SmallStorage.data());
             } else {
-                return *static_cast<T *>(storage.large_storage);
+                return *static_cast<T *>(Storage.LargeStorage);
             }
         }
 
         template <typename T>
-        constexpr const T &get_unchecked() const {
-            if constexpr (FitsInUniqueAnySmallBuffer<T>) {
-                return *std::bit_cast<const T *>(storage.small_storage.data());
+        constexpr const T &GetUnchecked() const {
+            if constexpr (FitsInSmallBuffer<T>) {
+                return *std::bit_cast<const T *>(Storage.SmallStorage.data());
             } else {
-                return *static_cast<const T *>(storage.large_storage);
+                return *static_cast<const T *>(Storage.LargeStorage);
             }
         }
 
-        union Storage {
-            std::array<std::byte, DEFAULT_SMALL_STORAGE_SIZE> small_storage;
-            void *large_storage;
+        union ValueStorage {
+            std::array<std::byte, DEFAULT_SMALL_STORAGE_SIZE> SmallStorage;
+            void *LargeStorage;
 
-            Storage() : large_storage(nullptr) {
+            ValueStorage() : LargeStorage(nullptr) {
             }
 
             template <typename T>
-                requires FitsInUniqueAnySmallBuffer<std::decay_t<T>> && (!std::same_as<std::decay_t<T>, Storage>)
-            explicit Storage(T &&Data) noexcept {
-                new (std::bit_cast<std::decay_t<T> *>(small_storage.data())) std::decay_t<T>(std::forward<T>(Data));
+                requires FitsInSmallBuffer<std::decay_t<T>> && (!std::same_as<std::decay_t<T>, ValueStorage>)
+            explicit ValueStorage(T &&Data) noexcept {
+                new (std::bit_cast<std::decay_t<T> *>(SmallStorage.data())) std::decay_t<T>(std::forward<T>(Data));
             }
 
             template <typename T>
-                requires(!FitsInUniqueAnySmallBuffer<std::decay_t<T>>) && (!std::same_as<std::decay_t<T>, Storage>)
-            explicit Storage(T &&Data) noexcept : large_storage(new std::decay_t<T>(std::forward<T>(Data))) {
+                requires(!FitsInSmallBuffer<std::decay_t<T>>) && (!std::same_as<std::decay_t<T>, ValueStorage>)
+            explicit ValueStorage(T &&Data) noexcept : LargeStorage(new std::decay_t<T>(std::forward<T>(Data))) {
             }
 
             template <typename T>
-                requires(!FitsInUniqueAnySmallBuffer<std::decay_t<T>>)
-            explicit Storage(T *Data) noexcept : large_storage(Data) {
+                requires(!FitsInSmallBuffer<std::decay_t<T>>)
+            explicit ValueStorage(T *Data) noexcept : LargeStorage(Data) {
             }
         };
 
         struct VTable {
-            const std::type_info *type;
-            bool is_large = false;
-            void (*destroy)(Storage &Storage);
-            void (*move)(Storage &Source, Storage &Dest) noexcept;
+            const std::type_info *Type;
+            bool IsLarge = false;
+            void (*Destroy)(ValueStorage &Storage);
+            void (*Move)(ValueStorage &Source, ValueStorage &Dest) noexcept;
         };
 
         template <typename T>
         struct VTableImpl {
-            static void destroy(Storage &Storage) noexcept {
-                if constexpr (FitsInUniqueAnySmallBuffer<T>) {
-                    std::bit_cast<T *>(Storage.small_storage.data())->~T();
+            static void Destroy(ValueStorage &Storage) noexcept {
+                if constexpr (FitsInSmallBuffer<T>) {
+                    std::bit_cast<T *>(Storage.SmallStorage.data())->~T();
                 } else {
-                    delete static_cast<T *>(Storage.large_storage);
+                    delete static_cast<T *>(Storage.LargeStorage);
                 }
             }
 
-            static void move(Storage &Source, Storage &Dest) noexcept {
-                if constexpr (FitsInUniqueAnySmallBuffer<T>) {
-                    std::memcpy(&Dest.small_storage, &Source.small_storage, sizeof(T));
+            static void Move(ValueStorage &Source, ValueStorage &Dest) noexcept {
+                if constexpr (FitsInSmallBuffer<T>) {
+                    std::memcpy(&Dest.SmallStorage, &Source.SmallStorage, sizeof(T));
                 } else {
-                    Dest.large_storage = Source.large_storage;
-                    Source.large_storage = nullptr;
+                    Dest.LargeStorage = Source.LargeStorage;
+                    Source.LargeStorage = nullptr;
                 }
             }
         };
 
         template <typename T>
-        static VTable &get_vtable_for_type() {
+        static VTable &GetVtableForType() {
             // clang-format off
-            static VTable vtable = {
-                .type = &typeid(T),
-                .is_large = !FitsInUniqueAnySmallBuffer<T>,
-                .destroy = VTableImpl<T>::destroy,
-                .move = VTableImpl<T>::move
+            static VTable Vtable = {
+                .Type = &typeid(T),
+                .IsLarge = !FitsInSmallBuffer<T>,
+                .Destroy = VTableImpl<T>::Destroy,
+                .Move = VTableImpl<T>::Move
             };
             // clang-format on
-            return vtable;
+            return Vtable;
         }
 
-        Storage storage;
-        VTable *vtable = nullptr;
+        ValueStorage Storage;
+        VTable *Vtable = nullptr;
     };
 
 } // namespace retro

@@ -13,46 +13,46 @@ import RetroLib;
 #else
 #include "RetroLib/Optionals/Optional.h"
 #include "RetroLib/Ranges/Views/Concat.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 #include <ranges>
 #endif
 
 TEST_CASE("Verify that we can iterate over optionals", "[optionals]") {
     SECTION("Can use a ranged for loop") {
-        retro::Optional value = 3;
+        Retro::Optional Value = 3;
 
-        int sum = 0;
-        for (auto i : value) {
-            sum += i;
+        int Sum = 0;
+        for (auto i : Value) {
+            Sum += i;
         }
-        CHECK(sum == 3);
+        CHECK(Sum == 3);
     }
 
     SECTION("Can use an iterator based for loop") {
-        const retro::Optional value = 3;
-        static_assert(std::ranges::sized_range<retro::Optional<int>>);
+        const Retro::Optional Value = 3;
 
-        int sum = 0;
-        for (auto it = value.begin(); it != value.end(); it++) {
-            sum += *it;
+        int Sum = 0;
+        for (auto It = Value.begin(); It != Value.end(); It++) {
+            Sum += *It;
         }
-        CHECK(sum == 3);
+        CHECK(Sum == 3);
     }
 
     SECTION("Can use as part of a range pipe") {
-        std::vector<retro::Optional<int>> values = {1, std::nullopt, 2, 3, std::nullopt, std::nullopt, std::nullopt};
-        auto view = values | std::ranges::views::join;
+        std::vector<Retro::Optional<int>> Values = {1, std::nullopt, 2, 3, std::nullopt, std::nullopt, std::nullopt};
+        auto View = Values | Retro::Ranges::Views::Join;
 
-        int sum = 0;
-        for (auto i : view) {
-            sum += i;
+        int Sum = 0;
+        for (auto i : View) {
+            Sum += i;
         }
-        CHECK(sum == 6);
+        CHECK(Sum == 6);
     }
 
     SECTION("Can be used to determine size") {
-        auto view = retro::ranges::views::concat(retro::Optional(1), retro::Optional<int>(), retro::Optional(2),
-                                                 retro::Optional<int>(), retro::Optional<int>(), retro::Optional(3));
-        CHECK(view.size() == 3);
+        auto View = Retro::Ranges::Views::Concat(Retro::Optional(1), Retro::Optional<int>(), Retro::Optional(2),
+                                                 Retro::Optional<int>(), Retro::Optional<int>(), Retro::Optional(3));
+        CHECK(View.size() == 3);
     }
 }

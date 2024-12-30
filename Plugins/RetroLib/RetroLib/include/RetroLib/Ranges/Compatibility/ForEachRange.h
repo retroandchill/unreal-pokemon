@@ -19,7 +19,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
 
     /**
      * Concept for checking if an iterator can be bridged into being used for C++ 20 ranges.
@@ -72,8 +72,8 @@ namespace retro::ranges {
         requires(!std::is_default_constructible_v<I>)
     struct IteratorStorage<I> {
         union {
-            std::monostate empty;
-            I adapted;
+            std::monostate Empty;
+            I Adapted;
         };
 
         /**
@@ -83,7 +83,7 @@ namespace retro::ranges {
          *
          * @return A constexpr IteratorStorage instance in an empty state.
          */
-        constexpr IteratorStorage() : empty() {
+        constexpr IteratorStorage() : Empty() {
         }
 
         /**
@@ -91,11 +91,11 @@ namespace retro::ranges {
          *
          * Initializes an IteratorStorage object with the provided adapted object, using perfect forwarding.
          *
-         * @param adapted The object to adapt, passed as an rvalue reference.
+         * @param Adapted The object to adapt, passed as an rvalue reference.
          */
         template <typename T>
             requires std::constructible_from<I, T> && (!std::same_as<std::decay_t<T>, IteratorStorage>)
-        constexpr explicit IteratorStorage(T &&adapted) : adapted(std::forward<T>(adapted)) {
+        constexpr explicit IteratorStorage(T &&Adapted) : Adapted(std::forward<T>(Adapted)) {
         }
     };
 
@@ -147,19 +147,19 @@ namespace retro::ranges {
 
         using IteratorStorage<I>::IteratorStorage;
 
-        using IteratorStorage<I>::adapted;
+        using IteratorStorage<I>::Adapted;
 
         /**
          * @brief Copy assignment operator for the IteratorAssignAdapter class.
          *
          * This operator assigns the state of another IteratorAssignAdapter object to the current instance.
          *
-         * @param other The IteratorAssignAdapter instance whose state is to be assigned.
+         * @param Other The IteratorAssignAdapter instance whose state is to be assigned.
          * @return A reference to the current instance with the updated state.
          */
         constexpr IteratorAssignAdapter &
-        operator=(const IteratorAssignAdapter &other) noexcept(std::is_nothrow_copy_constructible_v<I>) {
-            new (&adapted) I(other.adapted);
+        operator=(const IteratorAssignAdapter &Other) noexcept(std::is_nothrow_copy_constructible_v<I>) {
+            new (&Adapted) I(Other.Adapted);
             return *this;
         }
 
@@ -169,12 +169,12 @@ namespace retro::ranges {
          * This operator moves the state of another IteratorAssignAdapter object into the current object.
          * The move is performed without throwing exceptions.
          *
-         * @param other The IteratorAssignAdapter object to move from.
+         * @param Other The IteratorAssignAdapter object to move from.
          * @return A reference to the current IteratorAssignAdapter object.
          */
         constexpr IteratorAssignAdapter &
-        operator=(IteratorAssignAdapter &&other) noexcept(std::is_nothrow_move_constructible_v<I>) {
-            new (&adapted) I(std::move(other.adapted));
+        operator=(IteratorAssignAdapter &&Other) noexcept(std::is_nothrow_move_constructible_v<I>) {
+            new (&Adapted) I(std::move(Other.Adapted));
             return *this;
         }
     };
@@ -207,7 +207,7 @@ namespace retro::ranges {
         using Base::Base;
 
       private:
-        using Base::adapted;
+        using Base::Adapted;
 
         friend class AdapterIterator<I, S>;
     };
@@ -281,11 +281,11 @@ namespace retro::ranges {
          * This operator checks if the adapted member of the current SentinelAdapter
          * is equal to the adapted member of the provided SentinelAdapter.
          *
-         * @param sentinel The SentinelAdapter to compare with the current object.
+         * @param Sentinel The SentinelAdapter to compare with the current object.
          * @return True if the adapted members are equal, otherwise false.
          */
-        constexpr bool operator==(const SentinelAdapter<I, S> &sentinel) const {
-            return !(adapted != sentinel.adapted);
+        constexpr bool operator==(const SentinelAdapter<I, S> &Sentinel) const {
+            return !(Adapted != Sentinel.Adapted);
         }
 
         /**
@@ -296,7 +296,7 @@ namespace retro::ranges {
          * @return The dereferenced value or reference obtained from the adapted iterator.
          */
         constexpr decltype(auto) operator*() const {
-            return *adapted;
+            return *Adapted;
         }
 
         /**
@@ -307,7 +307,7 @@ namespace retro::ranges {
          * @return A reference to the incremented AdapterIterator object.
          */
         constexpr AdapterIterator &operator++() {
-            ++adapted;
+            ++Adapted;
             return *this;
         }
 
@@ -319,11 +319,11 @@ namespace retro::ranges {
          * @param int Unused parameter to distinguish post-increment from pre-increment.
          */
         void operator++(int) {
-            ++adapted;
+            ++Adapted;
         }
 
       private:
-        using Base::adapted;
+        using Base::Adapted;
     };
 
     /**

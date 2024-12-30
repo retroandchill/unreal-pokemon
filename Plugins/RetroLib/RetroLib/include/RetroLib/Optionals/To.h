@@ -19,14 +19,14 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
 
     /**
      * @brief Converts an optional-like object to an instance of type T.
      *
      * @tparam T The target type to convert to.
      * @tparam F The type of the optional-like object being passed.
-     * @param optional The optional-like object holding a potential value.
+     * @param Optional The optional-like object holding a potential value.
      * @return An instance of type T. If the optional-like object contains a value,
      *         it is converted to T using its value. If it does not contain a value,
      *         a default-constructed instance of T is returned.
@@ -37,9 +37,9 @@ namespace retro::optionals {
      */
     RETROLIB_EXPORT template <OptionalType T, OptionalType F>
         requires std::convertible_to<TypeParam<F>, TypeParam<T>>
-    constexpr T to(F &&optional) {
-        if (has_value(optional)) {
-            return T(get(std::forward<F>(optional)));
+    constexpr T To(F &&Optional) {
+        if (HasValue(Optional)) {
+            return T(Get(std::forward<F>(Optional)));
         }
 
         return T();
@@ -52,18 +52,18 @@ namespace retro::optionals {
      * Otherwise, the input is directly forwarded and transformed into an instance of `T` with the `TypeParam` deduced
      * type.
      *
-     * @param optional The input element or object being transformed, which can be an rvalue or lvalue. Forwarded
+     * @param Optional The input element or object being transformed, which can be an rvalue or lvalue. Forwarded
      * accordingly.
      * @return The transformed element of the target type `T`, which depends on the deduced type of the input `optional`
      *         and the internal conditions.
      */
     RETROLIB_EXPORT template <template <typename...> typename T, OptionalType F>
-    constexpr auto to(F &&optional) {
+    constexpr auto To(F &&Optional) {
         if constexpr (std::is_lvalue_reference_v<TypeParam<F>> &&
                       !RawReferenceOptionalValid<T, std::remove_reference_t<TypeParam<F>>>) {
-            return to<T<std::reference_wrapper<std::remove_reference_t<TypeParam<F>>>>>(std::forward<F>(optional));
+            return To<T<std::reference_wrapper<std::remove_reference_t<TypeParam<F>>>>>(std::forward<F>(Optional));
         } else {
-            return to<T<TypeParam<F>>>(std::forward<F>(optional));
+            return To<T<TypeParam<F>>>(std::forward<F>(Optional));
         }
     }
 
@@ -71,24 +71,24 @@ namespace retro::optionals {
     struct ToInvoker {
         template <OptionalType F>
             requires std::convertible_to<ValueType<T>, ValueType<F>>
-        constexpr auto operator()(F &&optional) const {
-            return to<T>(std::forward<F>(optional));
+        constexpr auto operator()(F &&Optional) const {
+            return To<T>(std::forward<F>(Optional));
         }
     };
 
     template <OptionalType T>
-    constexpr ToInvoker<T> to_invoker;
+    constexpr ToInvoker<T> ToFunction;
 
     template <template <typename...> typename T>
     struct TemplatedToInvoker {
         template <OptionalType F>
-        constexpr auto operator()(F &&optional) const {
-            return to<T>(std::forward<F>(optional));
+        constexpr auto operator()(F &&Optional) const {
+            return To<T>(std::forward<F>(Optional));
         }
     };
 
     template <template <typename...> typename T>
-    constexpr TemplatedToInvoker<T> templated_to_invoker;
+    constexpr TemplatedToInvoker<T> TemplatedToFunction;
 
     /**
      * @brief Provides an extension method for transforming an object into a specific target type.
@@ -100,8 +100,8 @@ namespace retro::optionals {
      * @return An extension method invoker for handling the conversion to the specified type.
      */
     RETROLIB_EXPORT template <OptionalType T>
-    constexpr auto to() {
-        return extension_method<to_invoker<T>>();
+    constexpr auto To() {
+        return ExtensionMethod<ToFunction<T>>();
     }
 
     /**
@@ -116,8 +116,8 @@ namespace retro::optionals {
      *         in an extension method for further operations.
      */
     RETROLIB_EXPORT template <template <typename...> typename T>
-    constexpr auto to() {
-        return extension_method<templated_to_invoker<T>>();
+    constexpr auto To() {
+        return ExtensionMethod<TemplatedToFunction<T>>();
     }
 
 } // namespace retro::optionals

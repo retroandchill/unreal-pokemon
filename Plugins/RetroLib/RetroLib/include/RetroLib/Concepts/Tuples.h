@@ -19,7 +19,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * The type of forwarded tuple element. Normally it's the same as using `forward_like`, except when the tuple
@@ -57,7 +57,7 @@ namespace retro {
      *         sequence correspond to valid tuple elements within the type `T`. Returns true
      *         if all indices*/
     RETROLIB_EXPORT template <typename T, size_t... I>
-    consteval bool all_has_tuple_element(std::index_sequence<I...>) {
+    consteval bool AllHasTupleElement(std::index_sequence<I...>) {
         return (HasTupleElement<T, I> && ...);
     }
 
@@ -71,7 +71,7 @@ namespace retro {
     concept TupleLike = requires {
         typename std::tuple_size<T>::type;
         { std::tuple_size_v<T> } -> std::convertible_to<size_t>;
-    } && all_has_tuple_element<T>(std::make_index_sequence<std::tuple_size_v<T>>{});
+    } && AllHasTupleElement<T>(std::make_index_sequence<std::tuple_size_v<T>>{});
 
     /**
      * Checks if the given args can be applied to the given functor type.
@@ -93,7 +93,7 @@ namespace retro {
      *              the given index sequence, otherwise false.
      */
     template <typename F, typename T, size_t... I>
-    consteval bool can_apply_index_sequence(std::index_sequence<I...>) {
+    consteval bool CanApplyIndexSequence(std::index_sequence<I...>) {
         return CanApplyArgs<F, T, I...>;
     }
 
@@ -105,7 +105,7 @@ namespace retro {
      */
     RETROLIB_EXPORT template <typename F, typename T>
     concept CanApply = HasFunctionCallOperator<std::decay_t<F>> && TupleLike<std::decay_t<T>> &&
-                       can_apply_index_sequence<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
+                       CanApplyIndexSequence<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
 
     /**
      * Checks if the given args when applied to the given functor type is noexcept.
@@ -132,7 +132,7 @@ namespace retro {
      *         exceptions.
      */
     template <typename F, typename T, size_t... I>
-    consteval bool is_nothrow_applicable(std::index_sequence<I...>) {
+    consteval bool IsNoThrowApplicable(std::index_sequence<I...>) {
         return NoThrowApplicableArgs<F, T, I...>;
     }
     /**
@@ -144,5 +144,5 @@ namespace retro {
     RETROLIB_EXPORT template <typename F, typename T>
     concept NoThrowApplicable =
         HasFunctionCallOperator<std::decay_t<F>> && TupleLike<std::decay_t<T>> &&
-        is_nothrow_applicable<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
+        IsNoThrowApplicable<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
 } // namespace retro

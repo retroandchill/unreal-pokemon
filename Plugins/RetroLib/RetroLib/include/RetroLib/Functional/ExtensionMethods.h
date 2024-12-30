@@ -17,7 +17,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * @brief A struct that allows extension of methods using a provided functor.
@@ -36,8 +36,8 @@ namespace retro {
      * through an instance of this struct, leveraging parameter forwarding.
      */
     template <auto Functor>
-        requires(is_valid_functor_object(Functor))
-    struct ExtensionMethod {
+        requires(IsValidFunctorObject(Functor))
+    struct ExtensionMethodInvoker {
 
         /**
          * @brief Invokes the stored functor with the provided arguments.
@@ -48,7 +48,7 @@ namespace retro {
          * their value category and returns the result.
          *
          * @tparam A The types of the arguments passed to the functor.
-         * @param args The arguments to forward to the functor. These arguments will be perfectly
+         * @param Args The arguments to forward to the functor. These arguments will be perfectly
          * forwarded to preserve their original types, whether they are lvalue or rvalue references.
          * @return The result of invoking the functor with the specified arguments.
          *
@@ -57,8 +57,8 @@ namespace retro {
          */
         template <typename... A>
             requires std::invocable<decltype(Functor), A...>
-        constexpr decltype(auto) operator()(A &&...args) const {
-            return std::invoke(Functor, std::forward<A>(args)...);
+        constexpr decltype(auto) operator()(A &&...Args) const {
+            return std::invoke(Functor, std::forward<A>(Args)...);
         }
     };
 
@@ -90,8 +90,8 @@ namespace retro {
      * the requirements specified by the HasFunctionCallOperator concept.
      */
     template <auto Functor>
-        requires(is_valid_functor_object(Functor))
-    struct IsExtensionMethod<ExtensionMethod<Functor>> : std::true_type {};
+        requires(IsValidFunctorObject(Functor))
+    struct IsExtensionMethod<ExtensionMethodInvoker<Functor>> : std::true_type {};
 
     /**
      * @brief Concept to determine if a type is an extension method.
@@ -137,13 +137,13 @@ namespace retro {
          * the same as the decayed type of ExtensionMethodClosure and must be convertible
          * to the functor type F.
          *
-         * @param functor A callable entity to be encapsulated by the closure. It is
+         * @param Functor A callable entity to be encapsulated by the closure. It is
          * forwarded perfectly, preserving its value category and const/volatile
          * qualifiers.
          */
         template <typename T>
             requires(!std::same_as<std::decay_t<T>, ExtensionMethodClosure>) && std::convertible_to<T, F>
-        explicit constexpr ExtensionMethodClosure(T &&functor) : functor(std::forward<T>(functor)) {
+        explicit constexpr ExtensionMethodClosure(T &&Functor) : Functor(std::forward<T>(Functor)) {
         }
 
         /**
@@ -154,7 +154,7 @@ namespace retro {
          * using std::invoke to ensure compatibility with callable objects and member functions.
          *
          * @tparam T The type of the operand being passed to the functor.
-         * @param operand The argument to pass to the functor. It is perfectly
+         * @param Operand The argument to pass to the functor. It is perfectly
          *                forwarded to ensure the correct value category is preserved.
          * @return The result of invoking the functor with the provided operand.
          *         The deduced return type is determined by the functor's invocation result.
@@ -163,8 +163,8 @@ namespace retro {
          */
         template <typename T>
             requires std::invocable<F &, T>
-        constexpr decltype(auto) operator()(T &&operand) & {
-            return std::invoke(functor, std::forward<T>(operand));
+        constexpr decltype(auto) operator()(T &&Operand) & {
+            return std::invoke(Functor, std::forward<T>(Operand));
         }
 
         /**
@@ -175,7 +175,7 @@ namespace retro {
          * using std::invoke to ensure compatibility with callable objects and member functions.
          *
          * @tparam T The type of the operand being passed to the functor.
-         * @param operand The argument to pass to the functor. It is perfectly
+         * @param Operand The argument to pass to the functor. It is perfectly
          *                forwarded to ensure the correct value category is preserved.
          * @return The result of invoking the functor with the provided operand.
          *         The deduced return type is determined by the functor's invocation result.
@@ -184,8 +184,8 @@ namespace retro {
          */
         template <typename T>
             requires std::invocable<const F &, T>
-        constexpr decltype(auto) operator()(T &&operand) const & {
-            return std::invoke(functor, std::forward<T>(operand));
+        constexpr decltype(auto) operator()(T &&Operand) const & {
+            return std::invoke(Functor, std::forward<T>(Operand));
         }
 
         /**
@@ -196,7 +196,7 @@ namespace retro {
          * using std::invoke to ensure compatibility with callable objects and member functions.
          *
          * @tparam T The type of the operand being passed to the functor.
-         * @param operand The argument to pass to the functor. It is perfectly
+         * @param Operand The argument to pass to the functor. It is perfectly
          *                forwarded to ensure the correct value category is preserved.
          * @return The result of invoking the functor with the provided operand.
          *         The deduced return type is determined by the functor's invocation result.
@@ -205,8 +205,8 @@ namespace retro {
          */
         template <typename T>
             requires std::invocable<F, T>
-        constexpr decltype(auto) operator()(T &&operand) && {
-            return std::invoke(std::move(functor), std::forward<T>(operand));
+        constexpr decltype(auto) operator()(T &&Operand) && {
+            return std::invoke(std::move(Functor), std::forward<T>(Operand));
         }
 
         /**
@@ -215,15 +215,15 @@ namespace retro {
          * This operator enables a syntax where an operand can be "piped" through an extension method closure to
          * generate a result.
          *
-         * @param operand The input operand to which the extension method closure is applied. It is a forwarding
+         * @param Operand The input operand to which the extension method closure is applied. It is a forwarding
          * reference.
-         * @param closure The extension method closure to be applied to the operand.
+         * @param Closure The extension method closure to be applied to the operand.
          * @return The result of applying the extension method closure to the given operand.
          */
         template <typename T>
             requires std::invocable<F &, T>
-        friend constexpr decltype(auto) operator|(T &&operand, ExtensionMethodClosure &closure) {
-            return closure(std::forward<T>(operand));
+        friend constexpr decltype(auto) operator|(T &&Operand, ExtensionMethodClosure &Closure) {
+            return Closure(std::forward<T>(Operand));
         }
 
         /**
@@ -232,15 +232,15 @@ namespace retro {
          * This operator enables a syntax where an operand can be "piped" through an extension method closure to
          * generate a result.
          *
-         * @param operand The input operand to which the extension method closure is applied. It is a forwarding
+         * @param Operand The input operand to which the extension method closure is applied. It is a forwarding
          * reference.
-         * @param closure The extension method closure to be applied to the operand.
+         * @param Closure The extension method closure to be applied to the operand.
          * @return The result of applying the extension method closure to the given operand.
          */
         template <typename T>
             requires std::invocable<const F &, T>
-        friend constexpr decltype(auto) operator|(T &&operand, const ExtensionMethodClosure &closure) {
-            return closure(std::forward<T>(operand));
+        friend constexpr decltype(auto) operator|(T &&Operand, const ExtensionMethodClosure &Closure) {
+            return Closure(std::forward<T>(Operand));
         }
 
         /**
@@ -249,19 +249,19 @@ namespace retro {
          * This operator enables a syntax where an operand can be "piped" through an extension method closure to
          * generate a result.
          *
-         * @param operand The input operand to which the extension method closure is applied. It is a forwarding
+         * @param Operand The input operand to which the extension method closure is applied. It is a forwarding
          * reference.
-         * @param closure The extension method closure to be applied to the operand.
+         * @param Closure The extension method closure to be applied to the operand.
          * @return The result of applying the extension method closure to the given operand.
          */
         template <typename T>
             requires std::invocable<F, T>
-        friend constexpr decltype(auto) operator|(T &&operand, ExtensionMethodClosure &&closure) {
-            return std::move(closure)(std::forward<T>(operand));
+        friend constexpr decltype(auto) operator|(T &&Operand, ExtensionMethodClosure &&Closure) {
+            return std::move(Closure)(std::forward<T>(Operand));
         }
 
       private:
-        F functor;
+        F Functor;
     };
 
     /**
@@ -270,7 +270,7 @@ namespace retro {
      * extension method through operator overloading.
      *
      * The structure requires a valid functor object, which is validated through a custom
-     * is_valid_functor_object constraint. This ensures the passed functor is callable.
+     * IsValidFunctorObject constraint. This ensures the passed functor is callable.
      *
      * This feature allows the use of a functor in a pipeline style operation using the
      * bitwise OR operator, making it look like an extension method on the operand.
@@ -282,7 +282,7 @@ namespace retro {
      *   - The operator|, which takes an operand and invokes the stored functor on it.
      */
     template <auto Functor>
-        requires(is_valid_functor_object(Functor))
+        requires(IsValidFunctorObject(Functor))
     struct ExtensionMethodConstClosure {
 
         /**
@@ -292,15 +292,15 @@ namespace retro {
          * with the provided operand. It ensures that the operand is perfectly
          * forwarded to the invoked functor.
          *
-         * @param operand The argument to be forwarded to the Functor. It can be
+         * @param Operand The argument to be forwarded to the Functor. It can be
          *        an lvalue or rvalue of any type that is compatible with Functor.
          * @return The result of invoking the Functor with the forwarded operand.
          *         The return type depends on the Functor and the operand type.
          */
         template <typename T>
             requires std::invocable<decltype(Functor), T>
-        constexpr decltype(auto) operator()(T &&operand) const {
-            return std::invoke(Functor, std::forward<T>(operand));
+        constexpr decltype(auto) operator()(T &&Operand) const {
+            return std::invoke(Functor, std::forward<T>(Operand));
         }
 
         /**
@@ -308,8 +308,8 @@ namespace retro {
          *        to a given operand.
          *
          * @tparam T The type of the operand being passed.
-         * @param operand An argument of type T, forwarded to the closure.
-         * @param closure A constant reference to an ExtensionMethodConstClosure that
+         * @param Operand An argument of type T, forwarded to the closure.
+         * @param Closure A constant reference to an ExtensionMethodConstClosure that
          *        represents the extension method to be applied to the operand.
          * @return The result of invoking the closure with the provided operand, returned
          *         as an automatically deduced type.
@@ -322,8 +322,8 @@ namespace retro {
          */
         template <typename T>
             requires std::invocable<decltype(Functor), T>
-        friend constexpr decltype(auto) operator|(T &&operand, const ExtensionMethodConstClosure &closure) {
-            return closure(std::forward<T>(operand));
+        friend constexpr decltype(auto) operator|(T &&Operand, const ExtensionMethodConstClosure &Closure) {
+            return Closure(std::forward<T>(Operand));
         }
     };
 
@@ -338,26 +338,26 @@ namespace retro {
      * @tparam Functor A compile-time constant representing the functor to bind.
      *                 Must fulfill the requirements of being a valid functor object.
      *
-     * @requires Functor type must pass the `is_valid_functor_object` check, ensuring
+     * @requires Functor type must pass the `IsValidFunctorObject` check, ensuring
      *           it has a function call operator and, if a pointer, it should not be null.
      *
      * @note This struct operates on a constexpr basis, allowing its functionality
      *       to be invoked during compile time if all arguments are compile-time constants.
      */
     template <auto Functor>
-        requires(is_valid_functor_object(Functor))
+        requires(IsValidFunctorObject(Functor))
     struct ExtensionMethodBinder {
 
         /**
          * Overloaded call operator that invokes the Functor with the provided arguments.
          *
-         * @param args The arguments to be forwarded to the Functor for invocation.
+         * @param Args The arguments to be forwarded to the Functor for invocation.
          * @return The result of invoking the Functor with the forwarded arguments.
          */
         template <typename... T>
             requires std::invocable<decltype(Functor), T...>
-        constexpr auto operator()(T &&...args) const {
-            return std::invoke(Functor, std::forward<T>(args)...);
+        constexpr auto operator()(T &&...Args) const {
+            return std::invoke(Functor, std::forward<T>(Args)...);
         }
 
         /**
@@ -376,7 +376,7 @@ namespace retro {
          * @tparam T Variadic template parameter pack representing the types of
          *           arguments to bind to the functor.
          *
-         * @param args Forwarding reference to the arguments to be bound with the functor.
+         * @param Args Forwarding reference to the arguments to be bound with the functor.
          *             These are perfect-forwarded, preserving their value category.
          *
          * @return A callable closure with the provided arguments bound to the functor.
@@ -384,17 +384,17 @@ namespace retro {
          */
         template <typename... T>
             requires(!std::invocable<decltype(Functor), T...>)
-        constexpr auto operator()(T &&...args) const {
+        constexpr auto operator()(T &&...Args) const {
             if constexpr (sizeof...(T) == 0) {
                 return ExtensionMethodConstClosure<Functor>();
             } else {
-                using BindingType = decltype(retro::bind_back<Functor>(std::forward<T>(args)...));
-                return ExtensionMethodClosure<BindingType>(retro::bind_back<Functor>(std::forward<T>(args)...));
+                using BindingType = decltype(Retro::BindBack<Functor>(std::forward<T>(Args)...));
+                return ExtensionMethodClosure<BindingType>(Retro::BindBack<Functor>(std::forward<T>(Args)...));
             }
         }
     };
 
     RETROLIB_EXPORT template <auto Functor>
-        requires(is_valid_functor_object(Functor))
-    constexpr ExtensionMethodBinder<Functor> extension_method;
+        requires(IsValidFunctorObject(Functor))
+    constexpr ExtensionMethodBinder<Functor> ExtensionMethod;
 } // namespace retro

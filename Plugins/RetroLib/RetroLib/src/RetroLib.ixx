@@ -49,9 +49,9 @@ import std;
 #include "RetroLib/Utils/NonPropagatingCache.h"
 #include "RetroLib/Utils/UniqueAny.h"
 
-#include "RetroLib/Casting/Convert.h"
+#include "RetroLib/Casting/StaticCast.h"
 #include "RetroLib/Casting/ByteCast.h"
-#include "RetroLib/Casting/ClassCast.h"
+#include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/InstanceOf.h"
 
 #include "RetroLib/Functional/BindFunctor.h"
@@ -92,6 +92,7 @@ import std;
 #include "RetroLib/Ranges/Algorithm/Reduce.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/CacheLast.h"
 #include "RetroLib/Ranges/Views/Concat.h"

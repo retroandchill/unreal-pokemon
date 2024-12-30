@@ -16,20 +16,20 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
 
     struct ValueInvoker {
 
         template <OptionalType O>
-        constexpr decltype(auto) operator()(O &&optional) const {
-            RETROLIB_ASSERT(has_value(std::forward<O>(optional)));
-            return get(std::forward<O>(optional));
+        constexpr decltype(auto) operator()(O &&Optional) const {
+            RETROLIB_ASSERT(HasValue(std::forward<O>(Optional)));
+            return Get(std::forward<O>(Optional));
         }
     };
 
     /**
      * Get the value of passed/piped optional.
      */
-    RETROLIB_EXPORT constexpr auto value = extension_method<ValueInvoker{}>();
+    RETROLIB_EXPORT constexpr auto Value = ExtensionMethod<ValueInvoker{}>();
 
 } // namespace retro::optionals

@@ -8,7 +8,8 @@ if (RETROLIB_WITH_MODULES)
                 src/RetroLib.ixx)
     target_compile_definitions(RetroLib
         PUBLIC
-            RETROLIB_WITH_MODULES=1)
+            RETROLIB_WITH_MODULES=1
+            RETROLIB_WITH_COROUTINES=1)
 
     target_include_directories(RetroLib
             PUBLIC
@@ -21,6 +22,7 @@ else()
             ${CMAKE_CURRENT_SOURCE_DIR}/include)
     target_compile_definitions(RetroLib
             INTERFACE
-            RETROLIB_WITH_MODULES=0)
+            RETROLIB_WITH_MODULES=0
+            RETROLIB_WITH_COROUTINES=1)
 endif()
 
