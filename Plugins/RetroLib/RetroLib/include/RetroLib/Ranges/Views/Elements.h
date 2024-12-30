@@ -20,7 +20,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
 
     template <typename T, size_t N>
     concept ReturnableElement = std::is_reference_v<T> || std::move_constructible<std::tuple_element<N, T>>;
@@ -63,176 +63,176 @@ namespace retro::ranges {
           public:
             constexpr Iterator() = default;
 
-            constexpr Iterator(ElementsViewType &view, BeginTag) : view(&view), it(std::ranges::begin(view.range)) {
+            constexpr Iterator(ElementsViewType &View, BeginTag) : View(&View), It(std::ranges::begin(View.Range)) {
             }
 
-            constexpr Iterator(ElementsViewType &view, EndTag) : view(&view), it(std::ranges::end(view.range)) {
+            constexpr Iterator(ElementsViewType &View, EndTag) : View(&View), It(std::ranges::end(View.Range)) {
             }
 
             template <bool Other>
                 requires IsConst && (!Other)
-            explicit constexpr Iterator(Iterator<Other> other) : view(other.view), it(std::move(other.it)) {
+            explicit constexpr Iterator(Iterator<Other> OtherIt) : View(OtherIt.View), It(std::move(OtherIt.It)) {
             }
 
-            [[nodiscard]] constexpr decltype(auto) operator*() const noexcept(noexcept(get<N>(*it)))
+            [[nodiscard]] constexpr decltype(auto) operator*() const noexcept(noexcept(get<N>(*It)))
                 requires std::is_reference_v<std::ranges::range_reference_t<R>>
             {
-                return get<N>(*it);
+                return get<N>(*It);
             }
 
             [[nodiscard]] constexpr decltype(auto) operator*() const noexcept(
                 std::is_nothrow_move_constructible_v<std::tuple_element_t<N, std::ranges::range_reference_t<R>>> //
-                && noexcept(get<N>(*it))) {
+                && noexcept(get<N>(*It))) {
                 using ElementType = std::remove_cv_t<std::tuple_element_t<N, std::ranges::range_reference_t<R>>>;
-                return static_cast<ElementType>(get<N>(*it));
+                return static_cast<ElementType>(get<N>(*It));
             }
 
-            constexpr Iterator &operator++() noexcept(noexcept(++it)) {
-                ++it;
+            constexpr Iterator &operator++() noexcept(noexcept(++It)) {
+                ++It;
                 return *this;
             }
 
-            constexpr void operator++(int) noexcept(noexcept(++it)) {
-                ++it;
+            constexpr void operator++(int) noexcept(noexcept(++It)) {
+                ++It;
             }
 
             constexpr Iterator
-            operator++(int) noexcept(noexcept(++it) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            operator++(int) noexcept(noexcept(++It) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::forward_range<R>
             {
-                auto temp = *this;
-                ++it;
-                return temp;
+                auto Temp = *this;
+                ++It;
+                return Temp;
             }
 
-            constexpr Iterator &operator--() noexcept(noexcept(--it))
+            constexpr Iterator &operator--() noexcept(noexcept(--It))
                 requires std::ranges::bidirectional_range<R>
             {
-                --it;
+                --It;
                 return *this;
             }
 
             constexpr Iterator
-            operator--(int) noexcept(noexcept(--it) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            operator--(int) noexcept(noexcept(--It) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::bidirectional_range<R>
             {
                 auto temp = *this;
-                --it;
+                --It;
                 return temp;
             }
 
-            constexpr Iterator &operator+=(const difference_type offset) noexcept(noexcept(it += offset))
+            constexpr Iterator &operator+=(const difference_type Offset) noexcept(noexcept(It += Offset))
                 requires std::ranges::random_access_range<R>
             {
-                it += offset;
+                It += Offset;
                 return *this;
             }
 
-            constexpr Iterator &operator-=(const difference_type offset) noexcept(noexcept(it -= offset))
+            constexpr Iterator &operator-=(const difference_type Offset) noexcept(noexcept(It -= Offset))
                 requires std::ranges::random_access_range<R>
             {
-                it -= offset;
+                It -= Offset;
                 return *this;
             }
 
-            [[nodiscard]] constexpr decltype(auto) operator[](const difference_type index) const
-                noexcept(noexcept(get<N>(*(it + index))))
+            [[nodiscard]] constexpr decltype(auto) operator[](const difference_type Index) const
+                noexcept(noexcept(get<N>(*(It + Index))))
                 requires std::ranges::random_access_range<R> && std::is_reference_v<std::ranges::range_reference_t<R>>
             {
-                return get<N>(*(it + index));
+                return get<N>(*(It + Index));
             }
 
-            [[nodiscard]] constexpr decltype(auto) operator[](const difference_type index) const noexcept(
+            [[nodiscard]] constexpr decltype(auto) operator[](const difference_type Index) const noexcept(
                 std::is_nothrow_move_constructible_v<std::tuple_element_t<N, std::ranges::range_reference_t<R>>> //
-                && noexcept(get<N>(*(it + index))))
+                && noexcept(get<N>(*(It + Index))))
                 requires std::ranges::random_access_range<R>
             {
                 using ElementType = std::remove_cv_t<std::tuple_element_t<N, std::ranges::range_reference_t<R>>>;
-                return static_cast<ElementType>(get<N>(*(it + index)));
+                return static_cast<ElementType>(get<N>(*(It + Index)));
             }
 
             [[nodiscard]] friend constexpr bool
-            operator==(const Iterator &left, const Iterator &right) noexcept(noexcept(left.it == right.it))
+            operator==(const Iterator &Left, const Iterator &Right) noexcept(noexcept(Left.It == Right.It))
                 requires std::equality_comparable<std::ranges::iterator_t<R>>
             {
-                return left.it == right.it;
+                return Left.It == Right.It;
             }
 
-            [[nodiscard]] friend constexpr bool operator<(const Iterator &left,
-                                                          const Iterator &right) noexcept(noexcept(left.it < right.it))
+            [[nodiscard]] friend constexpr bool operator<(const Iterator &Left,
+                                                          const Iterator &Right) noexcept(noexcept(Left.It < Right.It))
                 requires std::ranges::random_access_range<R>
             {
-                return left.it < right.it;
+                return Left.It < Right.It;
             }
-            [[nodiscard]] friend constexpr bool operator>(const Iterator &left,
-                                                          const Iterator &right) noexcept(noexcept(left.it < right.it))
+            [[nodiscard]] friend constexpr bool operator>(const Iterator &Left,
+                                                          const Iterator &Right) noexcept(noexcept(Left.It < Right.It))
                 requires std::ranges::random_access_range<R>
             {
-                return right < left;
+                return Right < Left;
             }
-            [[nodiscard]] friend constexpr bool operator<=(const Iterator &left,
-                                                           const Iterator &right) noexcept(noexcept(left.it < right.it))
+            [[nodiscard]] friend constexpr bool operator<=(const Iterator &Left,
+                                                           const Iterator &Right) noexcept(noexcept(Left.It < Right.It))
                 requires std::ranges::random_access_range<R>
             {
-                return !(right < left);
+                return !(Right < Left);
             }
-            [[nodiscard]] friend constexpr bool operator>=(const Iterator &left,
-                                                           const Iterator &right) noexcept(noexcept(left.it < right.it))
+            [[nodiscard]] friend constexpr bool operator>=(const Iterator &Left,
+                                                           const Iterator &Right) noexcept(noexcept(Left.It < Right.It))
                 requires std::ranges::random_access_range<R>
             {
-                return !(left < right);
+                return !(Left < Right);
             }
 
             [[nodiscard]] friend constexpr auto
-            operator<=>(const Iterator &left, const Iterator &right) noexcept(noexcept(left.it <=> right.it))
+            operator<=>(const Iterator &Left, const Iterator &Right) noexcept(noexcept(Left.It <=> Right.It))
                 requires std::ranges::random_access_range<R> && std::three_way_comparable<std::ranges::iterator_t<R>>
             {
-                return left.it <=> right.it;
+                return Left.It <=> Right.It;
             }
 
             [[nodiscard]] friend constexpr Iterator
-            operator+(const Iterator &it, const difference_type offset) noexcept(
-                noexcept(std::declval<std::ranges::iterator_t<R> &>() += offset) &&
+            operator+(const Iterator &It, const difference_type Offset) noexcept(
+                noexcept(std::declval<std::ranges::iterator_t<R> &>() += Offset) &&
                 std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
-                auto copy = it;
-                copy.it += offset;
-                return copy;
+                auto Copy = It;
+                Copy.it += Offset;
+                return Copy;
             }
 
             [[nodiscard]] friend constexpr Iterator
-            operator+(const difference_type offset,
-                      const Iterator &it) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() += offset) &&
+            operator+(const difference_type Offset,
+                      const Iterator &It) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() += Offset) &&
                                                    std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
-                auto copy = it;
-                copy.it += offset;
-                return copy;
+                auto Copy = It;
+                Copy.it += Offset;
+                return Copy;
             }
 
             [[nodiscard]] friend constexpr Iterator
-            operator-(const Iterator &it, const difference_type offset) noexcept(
-                noexcept(std::declval<std::ranges::iterator_t<R> &>() -= offset) &&
+            operator-(const Iterator &It, const difference_type Offset) noexcept(
+                noexcept(std::declval<std::ranges::iterator_t<R> &>() -= Offset) &&
                 std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
-                auto copy = it;
-                copy.it -= offset;
-                return copy;
+                auto Copy = It;
+                Copy.it -= Offset;
+                return Copy;
             }
 
             [[nodiscard]] friend constexpr difference_type
-            operator-(const Iterator &left, const Iterator &right) noexcept(noexcept(left.it - right.it))
+            operator-(const Iterator &Left, const Iterator &Right) noexcept(noexcept(Left.It - Right.It))
                 requires std::sized_sentinel_for<std::ranges::iterator_t<R>, std::ranges::iterator_t<R>>
             {
-                return left.it - right.it;
+                return Left.It - Right.It;
             }
 
           private:
-            ElementsViewType *view;
-            std::ranges::iterator_t<ConstifyIf<R>> it;
+            ElementsViewType *View;
+            std::ranges::iterator_t<ConstifyIf<R>> It;
         };
 
         template <bool IsConst>
@@ -246,45 +246,45 @@ namespace retro::ranges {
 
           public:
             constexpr Sentinel() = default;
-            explicit constexpr Sentinel(ElementsViewType &view) : end_element(std::ranges::end(view.range)) {
+            explicit constexpr Sentinel(ElementsViewType &View) : EndElement(std::ranges::end(View.Range)) {
             }
 
             template <bool Other>
                 requires IsConst && (!Other)
-            explicit constexpr Sentinel(Sentinel<Other> other) : end_element(std::move(other.end_element)) {
+            explicit constexpr Sentinel(Sentinel<Other> OtherSen) : EndElement(std::move(OtherSen.EndElement)) {
             }
 
             template <bool Other>
                 requires std::sentinel_for<std::ranges::sentinel_t<R>, typename Iterator<Other>::IteratorType>
             [[nodiscard]] friend constexpr bool
-            operator==(const Iterator<Other> &left,
-                       const Sentinel &right) noexcept(noexcept(get_iterator_value(left) == right.end_element)) {
-                return get_iterator_value(left) == right.end_element;
+            operator==(const Iterator<Other> &Left,
+                       const Sentinel &Right) noexcept(noexcept(GetIteratorValue(Left) == Right.EndElement)) {
+                return GetIteratorValue(Left) == Right.EndElement;
             }
 
             template <bool Other>
                 requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, typename Iterator<Other>::IteratorType>
             [[nodiscard]] friend constexpr std::ranges::range_difference_t<R>
-            operator-(const Iterator<Other> &left,
-                      const Sentinel &right) noexcept(noexcept(get_iterator_value(left) - right.end_element)) {
-                return get_iterator_value(left) - right.end_element;
+            operator-(const Iterator<Other> &Left,
+                      const Sentinel &Right) noexcept(noexcept(GetIteratorValue(Left) - Right.EndElement)) {
+                return GetIteratorValue(Left) - Right.EndElement;
             }
 
             template <bool Other>
                 requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, typename Iterator<Other>::IteratorType>
             [[nodiscard]] friend constexpr std::ranges::range_difference_t<R>
-            operator-(const Sentinel &left,
-                      const Iterator<Other> &right) noexcept(noexcept(left.end_element - get_iterator_value(right))) {
-                return left.end_element - get_iterator_value(right);
+            operator-(const Sentinel &Left,
+                      const Iterator<Other> &Right) noexcept(noexcept(Left.EndElement - GetIteratorValue(Right))) {
+                return Left.EndElement - GetIteratorValue(Right);
             }
 
           private:
             template <bool Other>
-            static constexpr decltype(auto) get_iterator_value(const Iterator<Other> &it) noexcept {
-                return it.it;
+            static constexpr decltype(auto) GetIteratorValue(const Iterator<Other> &It) noexcept {
+                return It.It;
             }
 
-            std::ranges::sentinel_t<ConstifyIf<R>> end_element;
+            std::ranges::sentinel_t<ConstifyIf<R>> EndElement;
         };
 
       public:
@@ -303,9 +303,9 @@ namespace retro::ranges {
          * This is a constexpr explicit constructor that initializes an instance of the
          * `ElementsView` class by taking ownership of the provided range.
          *
-         * @param range The range to be used for initializing the `ElementsView` instance.
+         * @param Range The range to be used for initializing the `ElementsView` instance.
          */
-        constexpr explicit ElementsView(R range) : range(std::move(range)) {
+        constexpr explicit ElementsView(R Range) : Range(std::move(Range)) {
         }
 
         /**
@@ -321,7 +321,7 @@ namespace retro::ranges {
         constexpr R base() const &
             requires std::copy_constructible<R>
         {
-            return range;
+            return Range;
         }
 
         /**
@@ -334,7 +334,7 @@ namespace retro::ranges {
          * @return `R` The moved underlying range.
          */
         constexpr R base() && {
-            return std::move(range);
+            return std::move(Range);
         }
 
         /**
@@ -349,7 +349,7 @@ namespace retro::ranges {
          *         of the range.
          */
         [[nodiscard]] constexpr Iterator<false>
-        begin() noexcept(noexcept(std::ranges::begin(range)) &&
+        begin() noexcept(noexcept(std::ranges::begin(Range)) &&
                          std::is_nothrow_move_constructible_v<std::ranges::iterator_t<R>>)
             requires(!SimpleView<R>)
         {
@@ -367,7 +367,7 @@ namespace retro::ranges {
          * @return A `constexpr` iterator positioned at the beginning of the range.
          */
         [[nodiscard]] constexpr Iterator<true> begin() const
-            noexcept(noexcept(std::ranges::begin(range)) &&
+            noexcept(noexcept(std::ranges::begin(Range)) &&
                      std::is_nothrow_move_constructible_v<std::ranges::iterator_t<const R>>)
             requires std::ranges::range<const R>
         {
@@ -383,7 +383,7 @@ namespace retro::ranges {
          *
          * @return The end iterator or sentinel for the range.
          */
-        [[nodiscard]] constexpr auto end() noexcept(noexcept(std::ranges::end(range)) &&
+        [[nodiscard]] constexpr auto end() noexcept(noexcept(std::ranges::end(Range)) &&
                                                     std::is_nothrow_move_constructible_v<std::ranges::sentinel_t<R>>)
             requires(!SimpleView<R>)
         {
@@ -404,7 +404,7 @@ namespace retro::ranges {
          * @return An `Iterator` or `Sentinel` representing the end of the range.
          */
         [[nodiscard]] constexpr auto end() const
-            noexcept(noexcept(std::ranges::end(range)) &&
+            noexcept(noexcept(std::ranges::end(Range)) &&
                      std::is_nothrow_move_constructible_v<std::ranges::sentinel_t<const R>>)
             requires std::ranges::range<const R>
         {
@@ -425,10 +425,10 @@ namespace retro::ranges {
          *
          * @return The size of the range as determined by `std::ranges::size`.
          */
-        [[nodiscard]] constexpr auto size() noexcept(noexcept(std::ranges::size(range)))
+        [[nodiscard]] constexpr auto size() noexcept(noexcept(std::ranges::size(Range)))
             requires std::ranges::sized_range<R>
         {
-            return std::ranges::size(range);
+            return std::ranges::size(Range);
         }
 
         /**
@@ -441,17 +441,17 @@ namespace retro::ranges {
          *
          * @return The size of the range as determined by `std::ranges::size(range)`.
          */
-        [[nodiscard]] constexpr auto size() const noexcept(noexcept(std::ranges::size(range)))
+        [[nodiscard]] constexpr auto size() const noexcept(noexcept(std::ranges::size(Range)))
             requires std::ranges::sized_range<const R>
         {
-            return std::ranges::size(range);
+            return std::ranges::size(Range);
         }
 
       private:
-        R range;
+        R Range;
     };
 
-    namespace views {
+    namespace Views {
         template <size_t N>
         struct ElementsFunction {
             /**
@@ -474,12 +474,12 @@ namespace retro::ranges {
         };
 
         template <size_t N>
-        constexpr ElementsFunction<N> elements_function;
+        constexpr ElementsFunction<N> ElementsInvoker;
 
         /**
          * @brief Creates an extension method for accessing specific tuple elements.
          *
-         * This constexpr variable template utilizes the `extension_method` with the
+         * This constexpr variable template utilizes the `ExtensionMethod` with the
          * `elements_function<N>` specialization to generate a view for accessing
          * specific elements of tuples (or similar range-based data structures).
          *
@@ -492,7 +492,7 @@ namespace retro::ranges {
          *           the range-based data structure.
          */
         RETROLIB_EXPORT template <size_t N>
-        constexpr auto elements = extension_method<elements_function<N>>();
+        constexpr auto Elements = ExtensionMethod<ElementsInvoker<N>>();
 
         /**
          * @brief Creates a view selecting the elements at index 0 from the collection.
@@ -502,7 +502,7 @@ namespace retro::ranges {
          * from each entry. This is most commonly used in ranges to retrieve keys
          * or index-subset elements from collections such as maps or tuples.
          */
-        RETROLIB_EXPORT constexpr auto keys = elements<0>;
+        RETROLIB_EXPORT constexpr auto Keys = Elements<0>;
 
         /**
          * @brief A `constexpr` initialization of the `values` variable using the `elements` utility.
@@ -510,6 +510,6 @@ namespace retro::ranges {
          * This variable applies the `elements<1>` function, presumably to extract or represent
          * a specific aspect of a data structure or range in a compile-time evaluable manner.
          */
-        RETROLIB_EXPORT constexpr auto values = elements<1>;
+        RETROLIB_EXPORT constexpr auto Values = Elements<1>;
     } // namespace views
 } // namespace retro::ranges

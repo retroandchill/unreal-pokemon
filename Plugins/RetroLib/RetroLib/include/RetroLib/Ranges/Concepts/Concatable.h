@@ -15,7 +15,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
     /**
      * The reference type for the reference type of multiple ranges.
      *

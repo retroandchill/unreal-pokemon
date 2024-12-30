@@ -18,7 +18,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
 
     /**
      * Concept that defines if a container has an STL style reserve method.
@@ -26,10 +26,10 @@ namespace retro::ranges {
      * @tparam T The type to check
      */
     template <typename T>
-    concept StlReservable = std::ranges::sized_range<T> && requires(T &container, std::ranges::range_size_t<T> size) {
-        container.reserve(size);
-        { container.capacity() } -> std::convertible_to<std::ranges::range_size_t<T>>;
-        { container.max_size() } -> std::convertible_to<std::ranges::range_size_t<T>>;
+    concept StlReservable = std::ranges::sized_range<T> && requires(T &Container, std::ranges::range_size_t<T> Size) {
+        Container.reserve(Size);
+        { Container.capacity() } -> std::convertible_to<std::ranges::range_size_t<T>>;
+        { Container.max_size() } -> std::convertible_to<std::ranges::range_size_t<T>>;
     };
 
     /**
@@ -59,11 +59,11 @@ namespace retro::ranges {
         /**
          * Reserves storage in the given range to accommodate at least the specified number of elements.
          *
-         * @param range The container or range object that needs its storage reserved.
-         * @param size The minimum number of elements for which storage should be reserved.
+         * @param Range The container or range object that needs its storage reserved.
+         * @param Size The minimum number of elements for which storage should be reserved.
          */
-        static constexpr void reserve(T &range, std::ranges::range_size_t<T> size) {
-            range.reserve(size);
+        static constexpr void Reserve(T &Range, std::ranges::range_size_t<T> Size) {
+            Range.reserve(Size);
         }
 
         /**
@@ -73,11 +73,11 @@ namespace retro::ranges {
          * by calling its `capacity` method. It is applicable to any type that
          * defines a `capacity` method.
          *
-         * @param range A container-like object that supports the `capacity` method.
+         * @param Range A container-like object that supports the `capacity` method.
          * @return The capacity of the given container.
          */
-        static constexpr std::ranges::range_size_t<T> capacity(const T &range) {
-            return range.capacity();
+        static constexpr std::ranges::range_size_t<T> Capacity(const T &Range) {
+            return Range.capacity();
         }
 
         /**
@@ -87,12 +87,12 @@ namespace retro::ranges {
          * that the specified container type `T` can theoretically contain.
          * It calls the `max_size` member function of the container.
          *
-         * @param range The container object for which the maximum size is to be determined.
+         * @param Range The container object for which the maximum size is to be determined.
          *
          * @return The maximum size of the container as returned by its `max_size` method.
          */
-        static constexpr std::ranges::range_size_t<T> max_size(const T &range) {
-            return range.max_size();
+        static constexpr std::ranges::range_size_t<T> MaxSize(const T &Range) {
+            return Range.max_size();
         }
     };
 
@@ -102,14 +102,14 @@ namespace retro::ranges {
      * @tparam T The type to check
      */
     RETROLIB_EXPORT template <typename T>
-    concept ReservableContainer = std::ranges::sized_range<T> && ReservableContainerType<std::decay_t<T>>::is_valid &&
-                                  requires(T &container, std::ranges::range_size_t<T> size) {
-                                      ReservableContainerType<std::decay_t<T>>::reserve(container, size);
+    concept ReservableContainer = std::ranges::sized_range<T> && ReservableContainerType<std::decay_t<T>>::IsValid &&
+                                  requires(T &Container, std::ranges::range_size_t<T> Size) {
+                                      ReservableContainerType<std::decay_t<T>>::Reserve(Container, Size);
                                       {
-                                          ReservableContainerType<std::decay_t<T>>::capacity(container)
+                                          ReservableContainerType<std::decay_t<T>>::Capacity(Container)
                                       } -> std::convertible_to<std::ranges::range_size_t<T>>;
                                       {
-                                          ReservableContainerType<std::decay_t<T>>::max_size(container)
+                                          ReservableContainerType<std::decay_t<T>>::MaxSize(Container)
                                       } -> std::convertible_to<std::ranges::range_size_t<T>>;
                                   };
 
@@ -117,12 +117,12 @@ namespace retro::ranges {
      * Reserves storage in the given range to accommodate at least the specified number of elements.
      *
      * @tparam T The type of container
-     * @param range The container or range object that needs its storage reserved.
-     * @param size The minimum number of elements for which storage should be reserved.
+     * @param Range The container or range object that needs its storage reserved.
+     * @param Size The minimum number of elements for which storage should be reserved.
      */
     RETROLIB_EXPORT template <ReservableContainer T>
-    constexpr void container_reserve(T &range, std::ranges::range_size_t<T> size) {
-        ReservableContainerType<std::decay_t<T>>::reserve(range, size);
+    constexpr void ContainerReserve(T &Range, std::ranges::range_size_t<T> Size) {
+        ReservableContainerType<std::decay_t<T>>::Reserve(Range, Size);
     }
 
     /**
@@ -133,12 +133,12 @@ namespace retro::ranges {
      * defines a `capacity` method.
      *
      * @tparam T The type of container
-     * @param range A container-like object that supports the `capacity` method.
+     * @param Range A container-like object that supports the `capacity` method.
      * @return The capacity of the given container.
      */
     RETROLIB_EXPORT template <ReservableContainer T>
-    constexpr std::ranges::range_size_t<T> container_capacity(const T &range) {
-        return ReservableContainerType<std::decay_t<T>>::capacity(range);
+    constexpr std::ranges::range_size_t<T> ContainerCapacity(const T &Range) {
+        return ReservableContainerType<std::decay_t<T>>::Capacity(Range);
     }
 
     /**
@@ -149,13 +149,13 @@ namespace retro::ranges {
      * It calls the `max_size` member function of the container.
      *
      * @tparam T The type of the container which should provide a `max_size` method.
-     * @param range The container object for which the maximum size is to be determined.
+     * @param Range The container object for which the maximum size is to be determined.
      *
      * @return The maximum size of the container as returned by its `max_size` method.
      */
     RETROLIB_EXPORT template <ReservableContainer T>
-    constexpr std::ranges::range_size_t<T> container_max_size(const T &range) {
-        return ReservableContainerType<std::decay_t<T>>::max_size(range);
+    constexpr std::ranges::range_size_t<T> ContainerMaxSize(const T &Range) {
+        return ReservableContainerType<std::decay_t<T>>::MaxSize(Range);
     }
 
     /**
@@ -165,7 +165,7 @@ namespace retro::ranges {
      * @tparam R the type of element to add
      */
     template <typename C, typename R>
-    concept StlEmplaceBack = requires(C &c, R &&ref) { c.emplace_back(std::forward<R>(ref)); };
+    concept StlEmplaceBack = requires(C &Container, R &&Ref) { Container.emplace_back(std::forward<R>(Ref)); };
 
     /**
      * Concept that defines if a container has an STL style push_back method.
@@ -174,7 +174,7 @@ namespace retro::ranges {
      * @tparam R the type of element to add
      */
     template <typename C, typename R>
-    concept StlPushBack = requires(C &c, R &&ref) { c.push_back(std::forward<R>(ref)); };
+    concept StlPushBack = requires(C &Container, R &&Ref) { Container.push_back(std::forward<R>(Ref)); };
 
     /**
      * Concept that defines if a container has an STL style emplace method.
@@ -183,7 +183,7 @@ namespace retro::ranges {
      * @tparam R the type of element to add
      */
     template <typename C, typename R>
-    concept StlEmplace = requires(C &c, R &&ref) { c.emplace(std::forward<R>(ref)); };
+    concept StlEmplace = requires(C &Container, R &&Ref) { Container.emplace(std::forward<R>(Ref)); };
 
     /**
      * Concept that defines if a container has an STL style insert method.
@@ -192,7 +192,7 @@ namespace retro::ranges {
      * @tparam R the type of element to add
      */
     template <typename C, typename R>
-    concept StlInsert = requires(C &c, R &&ref) { c.insert(std::forward<R>(ref)); };
+    concept StlInsert = requires(C &Container, R &&Ref) { Container.insert(std::forward<R>(Ref)); };
 
     /**
      * Concept that defines if a container has any compliant STL-style append methods
@@ -236,10 +236,10 @@ namespace retro::ranges {
          * method to add an element to the container, thus ensuring both efficiency
          * and compatibility with the container's capabilities.
          *
-         * @param container The container to which the value is to be appended. It
+         * @param Container The container to which the value is to be appended. It
          * should support one of the following operations: emplace_back, push_back,
          * emplace, or insert.
-         * @param value The value to be appended to the container. The type of this
+         * @param Value The value to be appended to the container. The type of this
          * value must be compatible with the container's value type and the supported
          * insertion methods.
          * @return This function returns the result of the container's append operation.
@@ -249,15 +249,15 @@ namespace retro::ranges {
          */
         template <typename T>
             requires StlAppendable<C, T>
-        static constexpr decltype(auto) append(C &container, T &&value) {
+        static constexpr decltype(auto) Append(C &Container, T &&Value) {
             if constexpr (StlEmplaceBack<C, T>) {
-                return container.emplace_back(std::forward<T>(value));
+                return Container.emplace_back(std::forward<T>(Value));
             } else if constexpr (StlPushBack<C, T>) {
-                return container.push_back(std::forward<T>(value));
+                return Container.push_back(std::forward<T>(Value));
             } else if constexpr (StlEmplace<C, T>) {
-                return container.emplace(std::forward<T>(value));
+                return Container.emplace(std::forward<T>(Value));
             } else if constexpr (StlInsert<C, T>) {
-                return container.insert(std::forward<T>(value));
+                return Container.insert(std::forward<T>(Value));
             }
         }
     };
@@ -269,8 +269,8 @@ namespace retro::ranges {
      * @tparam T the type of element to add
      */
     template <typename C, typename T>
-    concept AppendableContainer = AppendableContainerType<C>::is_valid && requires(C &container, T &&value) {
-        AppendableContainerType<C>::append(container, std::forward<T>(value));
+    concept AppendableContainer = AppendableContainerType<C>::IsValid && requires(C &Container, T &&Value) {
+        AppendableContainerType<C>::Append(Container, std::forward<T>(Value));
     };
 
     /**
@@ -281,10 +281,10 @@ namespace retro::ranges {
      * method to add an element to the container, thus ensuring both efficiency
      * and compatibility with the container's capabilities.
      *
-     * @param container The container to which the value is to be appended. It
+     * @param Container The container to which the value is to be appended. It
      * should support one of the following operations: emplace_back, push_back,
      * emplace, or insert.
-     * @param value The value to be appended to the container. The type of this
+     * @param Value The value to be appended to the container. The type of this
      * value must be compatible with the container's value type and the supported
      * insertion methods.
      * @return This function returns the result of the container's append operation.
@@ -294,8 +294,8 @@ namespace retro::ranges {
      */
     template <typename C, typename T>
         requires AppendableContainer<C, T>
-    constexpr decltype(auto) append_container(C &container, T &&value) {
-        return AppendableContainerType<C>::append(container, std::forward<T>(value));
+    constexpr decltype(auto) AppendContainer(C &Container, T &&Value) {
+        return AppendableContainerType<C>::Append(Container, std::forward<T>(Value));
     }
 
     /**

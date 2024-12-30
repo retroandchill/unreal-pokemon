@@ -20,7 +20,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
 
     /**
      * @struct OptionalSentinel
@@ -60,9 +60,9 @@ namespace retro::optionals {
          * to an object to manage. This ensures the iterator has a defined value it can
          * access and operate on.
          *
-         * @param value A reference to the object this iterator will manage.
+         * @param Value A reference to the object this iterator will manage.
          */
-        constexpr explicit OptionalIterator(O &value) : value(&value) {
+        constexpr explicit OptionalIterator(O &Value) : Value(&Value) {
         }
 
         /**
@@ -75,8 +75,8 @@ namespace retro::optionals {
          * @return A constant reference or value of the dereferenced stored object.
          */
         constexpr decltype(auto) operator*() const {
-            RETROLIB_ASSERT(value != nullptr && has_value(*value));
-            return **value;
+            RETROLIB_ASSERT(Value != nullptr && HasValue(*Value));
+            return **Value;
         }
 
         /**
@@ -85,12 +85,12 @@ namespace retro::optionals {
          * Compares this `OptionalIterator` instance with another to determine if they
          * are equal based on their internal values.
          *
-         * @param other The `OptionalIterator` instance to compare against.
+         * @param Other The `OptionalIterator` instance to compare against.
          * @return `true` if both `OptionalIterator` instances have equal values,
          *         otherwise `false`.
          */
-        constexpr bool operator==(const OptionalIterator &other) const {
-            return value == other.value;
+        constexpr bool operator==(const OptionalIterator &Other) const {
+            return Value == Other.Value;
         }
 
         /**
@@ -103,7 +103,7 @@ namespace retro::optionals {
          * @return `true` if the instances are considered equal, `false` otherwise.
          */
         constexpr bool operator==(const OptionalSentinel &) const {
-            return value == nullptr || !has_value(*value);
+            return Value == nullptr || !HasValue(*Value);
         }
 
         /**
@@ -116,8 +116,8 @@ namespace retro::optionals {
          * @return A reference to the updated `OptionalIterator` object.
          */
         constexpr OptionalIterator &operator++() {
-            RETROLIB_ASSERT(value != nullptr);
-            value = nullptr;
+            RETROLIB_ASSERT(Value != nullptr);
+            Value = nullptr;
             return *this;
         }
 
@@ -131,13 +131,13 @@ namespace retro::optionals {
          * @return A copy of the `OptionalIterator` instance before it was incremented.
          */
         constexpr OptionalIterator operator++(int) {
-            OptionalIterator copy = *this;
+            OptionalIterator Copy = *this;
             ++*this;
-            return copy;
+            return Copy;
         }
 
       private:
-        O *value = nullptr;
+        O *Value = nullptr;
     };
 
     /**

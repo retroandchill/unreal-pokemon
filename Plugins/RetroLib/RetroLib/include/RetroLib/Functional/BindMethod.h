@@ -21,7 +21,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * Checks if the given method can be bound to the given object type.
      *
@@ -55,15 +55,15 @@ namespace retro {
          * Initializes the MethodBinding with a provided object, functor or callable, and additional arguments that can
          * be forwarded.
          *
-         * @param object The instance of the object associated with the binding.
-         * @param functor The callable or functor to be executed with the binding.
-         * @param args Additional arguments to be forwarded to the functor.
+         * @param Object The instance of the object associated with the binding.
+         * @param Functor The callable or functor to be executed with the binding.
+         * @param Args Additional arguments to be forwarded to the functor.
          */
         template <typename T, typename G, typename... U>
             requires std::convertible_to<C, T> && std::constructible_from<F, G> &&
                          std::constructible_from<ArgsTuple, U...>
-        constexpr MethodBinding(T &&object, G &&functor, U &&...args)
-            : object(std::forward<T>(object)), functor(std::forward<G>(functor)), args(std::forward<U>(args)...) {
+        constexpr MethodBinding(T &&Object, G &&Functor, U &&...Args)
+            : Object(std::forward<T>(Object)), Functor(std::forward<G>(Functor)), Args(std::forward<U>(Args)...) {
         }
 
         /**
@@ -76,7 +76,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -85,12 +85,12 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F &, C &, T..., A &...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &...>) {
+        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &...>) {
             return std::apply(
-                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(functor, object, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
+                    return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., std::forward<U>(FinalArgs)...);
                 },
-                args);
+                Args);
         }
 
         /**
@@ -103,7 +103,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -112,12 +112,12 @@ namespace retro {
         template <typename... T>
             requires std::invocable<const F &, const C &, T..., const A &...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const C &, T..., const A &...>) {
+        operator()(T &&...CallArgs) const & noexcept(std::is_nothrow_invocable_v<F, const C &, T..., const A &...>) {
             return std::apply(
-                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(functor, object, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
+                    return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., std::forward<U>(FinalArgs)...);
                 },
-                args);
+                Args);
         }
 
         /**
@@ -130,7 +130,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -139,19 +139,19 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, C, T..., A...>
         constexpr decltype(auto)
-        operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A...>) {
+        operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A...>) {
             return std::apply(
-                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(std::move(functor), std::move(object), std::forward<T>(call_args)...,
-                                       std::forward<U>(final_args)...);
+                [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
+                    return std::invoke(std::move(Functor), std::move(Object), std::forward<T>(CallArgs)...,
+                                       std::forward<U>(FinalArgs)...);
                 },
-                std::move(args));
+                std::move(Args));
         }
 
       private:
-        C object;
-        F functor;
-        ArgsTuple args;
+        C Object;
+        F Functor;
+        ArgsTuple Args;
     };
 
     /**
@@ -180,14 +180,14 @@ namespace retro {
          * @tparam T The type of the callable object, typically the object containing the method to be bound.
          * @tparam G The type of the functor, representing the callable method or function.
          * @tparam U The type of the argument to be forwarded and associated with the method.
-         * @param object The callable object or instance whose method is to be bound.
-         * @param functor The callable functor, method, or function to bind.
-         * @param arg The argument to be forwarded and used during method invocation.
+         * @param Object The callable object or instance whose method is to be bound.
+         * @param Functor The callable functor, method, or function to bind.
+         * @param Arg The argument to be forwarded and used during method invocation.
          */
         template <typename T, typename G, typename U>
             requires std::convertible_to<T, C> && std::constructible_from<F, G> && std::convertible_to<U, A>
-        constexpr MethodBinding(T &&object, G &&functor, U &&arg)
-            : object(std::forward<T>(object)), functor(std::forward<G>(functor)), arg(std::forward<U>(arg)) {
+        constexpr MethodBinding(T &&Object, G &&Functor, U &&Arg)
+            : Object(std::forward<T>(Object)), Functor(std::forward<G>(Functor)), Arg(std::forward<U>(Arg)) {
         }
 
         /**
@@ -200,7 +200,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -209,8 +209,8 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F &, C &, T..., A &>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F &, C &, T..., A &>) {
-            return std::invoke(functor, object, std::forward<T>(call_args)..., arg);
+        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F &, C &, T..., A &>) {
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg);
         }
 
         /**
@@ -223,7 +223,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -231,9 +231,9 @@ namespace retro {
          */
         template <typename... T>
             requires std::invocable<const F &, const C &, T..., const A &>
-        constexpr decltype(auto) operator()(T &&...call_args) const & noexcept(
+        constexpr decltype(auto) operator()(T &&...CallArgs) const & noexcept(
             std::is_nothrow_invocable_v<const F &, const C &, T..., const A &>) {
-            return std::invoke(functor, object, std::forward<T>(call_args)..., arg);
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg);
         }
 
         /**
@@ -246,7 +246,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -254,14 +254,14 @@ namespace retro {
          */
         template <typename... T>
             requires std::invocable<F, C, T..., A>
-        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A>) {
-            return std::invoke(std::move(functor), std::move(object), std::forward<T>(call_args)..., std::move(arg));
+        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A>) {
+            return std::invoke(std::move(Functor), std::move(Object), std::forward<T>(CallArgs)..., std::move(Arg));
         }
 
       private:
-        C object;
-        F functor;
-        A arg;
+        C Object;
+        F Functor;
+        A Arg;
     };
 
     /**
@@ -294,17 +294,17 @@ namespace retro {
          * @tparam U Type of the first argument.
          * @tparam W Type of the second argument.
          *
-         * @param object The callable object that will own the operation.
-         * @param functor A callable entity (e.g., member function pointer) to be invoked.
-         * @param arg1 The first argument to be passed to the functor.
-         * @param arg2 The second argument to be passed to the functor.
+         * @param Object The callable object that will own the operation.
+         * @param Functor A callable entity (e.g., member function pointer) to be invoked.
+         * @param Arg1 The first argument to be passed to the functor.
+         * @param Arg2 The second argument to be passed to the functor.
          */
         template <typename T, typename G, typename U, typename W>
             requires std::convertible_to<T, C> && std::constructible_from<F, G> && std::convertible_to<U, A> &&
                          std::convertible_to<W, B>
-        constexpr explicit MethodBinding(T &&object, G &&functor, U &&arg1, W &&arg2)
-            : object(std::forward<T>(object)), functor(std::forward<G>(functor)), arg1(std::forward<U>(arg1)),
-              arg2(std::forward<W>(arg2)) {
+        constexpr explicit MethodBinding(T &&Object, G &&Functor, U &&Arg1, W &&Arg2)
+            : Object(std::forward<T>(Object)), Functor(std::forward<G>(Functor)), Arg1(std::forward<U>(Arg1)),
+              Arg2(std::forward<W>(Arg2)) {
         }
 
         /**
@@ -317,7 +317,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -326,8 +326,8 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F &, C &, T..., A &, B &>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F &, C &, T..., A &, B &>) {
-            return std::invoke(functor, object, std::forward<T>(call_args)..., arg1, arg2);
+        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F &, C &, T..., A &, B &>) {
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg1, Arg2);
         }
 
         /**
@@ -340,7 +340,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -348,9 +348,9 @@ namespace retro {
          */
         template <typename... T>
             requires std::invocable<const F &, C, T..., const A &, const B &>
-        constexpr decltype(auto) operator()(T &&...call_args) const & noexcept(
+        constexpr decltype(auto) operator()(T &&...CallArgs) const & noexcept(
             std::is_nothrow_invocable_v<const F &, const C &, T..., const A &, const B &>) {
-            return std::invoke(functor, object, std::forward<T>(call_args)..., arg1, arg2);
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg1, Arg2);
         }
 
         /**
@@ -363,7 +363,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -372,16 +372,16 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, C, T..., A, B>
         constexpr decltype(auto)
-        operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A, B>) {
-            return std::invoke(std::move(functor), std::move(object), std::forward<T>(call_args)..., std::move(arg1),
-                               std::move(arg2));
+        operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A, B>) {
+            return std::invoke(std::move(Functor), std::move(Object), std::forward<T>(CallArgs)..., std::move(Arg1),
+                               std::move(Arg2));
         }
 
       private:
-        C object;
-        F functor;
-        A arg1;
-        B arg2;
+        C Object;
+        F Functor;
+        A Arg1;
+        B Arg2;
     };
 
     /**
@@ -415,8 +415,8 @@ namespace retro {
          * @tparam T The type of the object being bound. Must be convertible to the type C in the MethodConstBinding.
          * @tparam U Variadic template arguments representing types for additional arguments passed during construction.
          *
-         * @param object The object to which the method is bound.
-         * @param args Additional arguments to be bound, used in conjunction with the member function.
+         * @param Object The object to which the method is bound.
+         * @param Args Additional arguments to be bound, used in conjunction with the member function.
          *
          * @requires The constructor requires that the type T is not the same as a decayed MethodConstBinding type,
          *           ensuring that the object type is convertible to C, and the additional arguments can be
@@ -425,8 +425,8 @@ namespace retro {
         template <typename T, typename... U>
             requires std::convertible_to<C, T> && std::constructible_from<ArgsTuple, U...> &&
                          (!std::same_as<std::decay_t<T>, MethodConstBinding>)
-        constexpr explicit MethodConstBinding(T &&object, U &&...args)
-            : object(std::forward<T>(object)), args(std::forward<U>(args)...) {
+        constexpr explicit MethodConstBinding(T &&Object, U &&...Args)
+            : Object(std::forward<T>(Object)), Args(std::forward<U>(Args)...) {
         }
 
         /**
@@ -439,7 +439,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -447,12 +447,12 @@ namespace retro {
          */
         template <typename... T>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &...>) {
+        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &...>) {
             return std::apply(
-                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(Functor, object, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
+                    return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., std::forward<U>(FinalArgs)...);
                 },
-                args);
+                Args);
         }
 
         /**
@@ -465,7 +465,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -473,12 +473,12 @@ namespace retro {
          */
         template <typename... T>
         constexpr decltype(auto)
-        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const C &, T..., const A &...>) {
+        operator()(T &&...CallArgs) const & noexcept(std::is_nothrow_invocable_v<F, const C &, T..., const A &...>) {
             return std::apply(
-                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(Functor, object, std::forward<T>(call_args)..., std::forward<U>(final_args)...);
+                [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
+                    return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., std::forward<U>(FinalArgs)...);
                 },
-                args);
+                Args);
         }
 
         /**
@@ -491,7 +491,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -499,18 +499,18 @@ namespace retro {
          */
         template <typename... T>
         constexpr decltype(auto)
-        operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A...>) {
+        operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A...>) {
             return std::apply(
-                [&]<typename... U>(U &&...final_args) -> decltype(auto) {
-                    return std::invoke(Functor, std::move(object), std::forward<T>(call_args)...,
-                                       std::forward<U>(final_args)...);
+                [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
+                    return std::invoke(Functor, std::move(Object), std::forward<T>(CallArgs)...,
+                                       std::forward<U>(FinalArgs)...);
                 },
-                std::move(args));
+                std::move(Args));
         }
 
       private:
-        C object;
-        ArgsTuple args;
+        C Object;
+        ArgsTuple Args;
     };
 
     /**
@@ -543,16 +543,16 @@ namespace retro {
          *
          * @tparam T The type of the object that the method will be invoked on.
          * @tparam U The type of the argument to be pre-bound to the method.
-         * @param object An instance of the class containing the method to be bound.
-         * @param arg The argument to be used when invoking the method.
+         * @param Object An instance of the class containing the method to be bound.
+         * @param Arg The argument to be used when invoking the method.
          *
          * @note The constructor uses concepts to ensure the provided object and argument
          * types are convertible to the expected types for the class and argument.
          */
         template <typename T, typename U>
             requires std::convertible_to<T, C> && std::convertible_to<U, A>
-        constexpr explicit MethodConstBinding(T &&object, U &&arg)
-            : object(std::forward<T>(object)), arg(std::forward<U>(arg)) {
+        constexpr explicit MethodConstBinding(T &&Object, U &&Arg)
+            : Object(std::forward<T>(Object)), Arg(std::forward<U>(Arg)) {
         }
 
         /**
@@ -565,7 +565,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -574,8 +574,8 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, C &, T..., A &>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &>) {
-            return std::invoke(Functor, object, std::forward<T>(call_args)..., arg);
+        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &>) {
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg);
         }
 
         /**
@@ -588,7 +588,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -597,8 +597,8 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, const C &, T..., const A &>
         constexpr decltype(auto)
-        operator()(T &&...call_args) const & noexcept(std::is_nothrow_invocable_v<F, const C &, T..., const A &>) {
-            return std::invoke(Functor, object, std::forward<T>(call_args)..., arg);
+        operator()(T &&...CallArgs) const & noexcept(std::is_nothrow_invocable_v<F, const C &, T..., const A &>) {
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg);
         }
 
         /**
@@ -611,7 +611,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -619,13 +619,13 @@ namespace retro {
          */
         template <typename... T>
             requires std::invocable<F, C, T..., A>
-        constexpr decltype(auto) operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A>) {
-            return std::invoke(Functor, std::move(object), std::forward<T>(call_args)..., std::move(arg));
+        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A>) {
+            return std::invoke(Functor, std::move(Object), std::forward<T>(CallArgs)..., std::move(Arg));
         }
 
       private:
-        C object;
-        A arg;
+        C Object;
+        A Arg;
     };
 
     /**
@@ -673,16 +673,17 @@ namespace retro {
          * @tparam U The type of the first argument to be bound. Must be convertible to the template parameter A.
          * @tparam W The type of the second argument to be bound. Must be convertible to the template parameter B.
          *
-         * @param object The object to which the method is bound.
-         * @param arg1 The first argument to be bound to the method.
+         * @param Object The object to which the method is bound.
+         * @param Arg1 The first argument to be bound to the method.
+         * @param Arg2
          *
          * @note The constructor is explicit and constexpr, ensuring that the binding operation is executed at
          * compile-time for qualified contexts and preventing unintended implicit conversions.
          */
         template <typename T, typename U, typename W>
             requires std::convertible_to<T, C> && std::convertible_to<U, A> && std::convertible_to<W, B>
-        constexpr explicit MethodConstBinding(T &&object, U &&arg1, W &&arg2)
-            : object(std::forward<T>(object)), arg1(std::forward<U>(arg1)), arg2(std::forward<W>(arg2)) {
+        constexpr explicit MethodConstBinding(T &&Object, U &&Arg1, W &&Arg2)
+            : Object(std::forward<T>(Object)), Arg1(std::forward<U>(Arg1)), Arg2(std::forward<W>(Arg2)) {
         }
 
         /**
@@ -695,7 +696,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -704,8 +705,8 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, C &, T..., A &, B &>
         constexpr decltype(auto)
-        operator()(T &&...call_args) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &, B &>) {
-            return std::invoke(Functor, object, std::forward<T>(call_args)..., arg1, arg2);
+        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, C &, T..., A &, B &>) {
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg1, Arg2);
         }
 
         /**
@@ -718,7 +719,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -726,9 +727,9 @@ namespace retro {
          */
         template <typename... T>
             requires std::invocable<F, C, T..., const A &, const B &>
-        constexpr decltype(auto) operator()(T &&...call_args) const & noexcept(
+        constexpr decltype(auto) operator()(T &&...CallArgs) const & noexcept(
             std::is_nothrow_invocable_v<F, const C &, T..., const A &, const B &>) {
-            return std::invoke(Functor, object, std::forward<T>(call_args)..., arg1, arg2);
+            return std::invoke(Functor, Object, std::forward<T>(CallArgs)..., Arg1, Arg2);
         }
 
         /**
@@ -741,7 +742,7 @@ namespace retro {
          * is safe, considering exception specifications and argument forwarding.
          *
          * @tparam T The types of the additional arguments to be passed at call-time.
-         * @param call_args The arguments provided during the invocation.
+         * @param CallArgs The arguments provided during the invocation.
          * @return The result of invoking the functor with both pre-bound and additional arguments.
          *
          * @noexcept Conditional noexcept specification based on the nothrow
@@ -750,15 +751,15 @@ namespace retro {
         template <typename... T>
             requires std::invocable<F, C, T..., A, B>
         constexpr decltype(auto)
-        operator()(T &&...call_args) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A, B>) {
-            return std::invoke(Functor, std::move(object), std::forward<T>(call_args)..., std::move(arg1),
-                               std::move(arg2));
+        operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, C, T..., A, B>) {
+            return std::invoke(Functor, std::move(Object), std::forward<T>(CallArgs)..., std::move(Arg1),
+                               std::move(Arg2));
         }
 
       private:
-        C object;
-        A arg1;
-        B arg2;
+        C Object;
+        A Arg1;
+        B Arg2;
     };
 
     /**
@@ -767,18 +768,18 @@ namespace retro {
      * If there are no additional arguments, it uses std::bind_front to bind the object and functor.
      * Otherwise, it creates a MethodBinding with the provided object, functor, and arguments.
      *
-     * @param object The object to which the method or functor will be bound.
-     * @param functor The method or callable to bind to the object.
-     * @param args Optional additional arguments to pass to the callable.
+     * @param Object The object to which the method or functor will be bound.
+     * @param Functor The method or callable to bind to the object.
+     * @param Args Optional additional arguments to pass to the callable.
      * @return A callable object that can be invoked later with the given object, functor, and arguments bound.
      */
     RETROLIB_EXPORT template <typename C, Member F, typename... A>
-    constexpr auto bind_method(C &&object, F &&functor, A &&...args) {
+    constexpr auto BindMethod(C &&Object, F &&Functor, A &&...Args) {
         if constexpr (sizeof...(A) == 0) {
-            return std::bind_front(std::forward<F>(functor), std::forward<C>(object));
+            return std::bind_front(std::forward<F>(Functor), std::forward<C>(Object));
         } else {
             return MethodBinding<std::decay_t<C>, std::decay_t<F>, std::decay_t<A>...>(
-                std::forward<C>(object), std::forward<F>(functor), std::forward<A>(args)...);
+                std::forward<C>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
         }
     }
 
@@ -808,19 +809,19 @@ namespace retro {
      * @tparam A A variadic template parameter pack representing the types of
      *           additional arguments to bind to the method.
      *
-     * @param object The object instance to bind the method to.
-     * @param args Optional additional arguments to the method.
+     * @param Object The object instance to bind the method to.
+     * @param Args Optional additional arguments to the method.
      * @return A callable object that binds the specified method to
      *         the provided object and arguments.
      */
     RETROLIB_EXPORT template <auto Functor, typename C, typename... A>
         requires Method<decltype(Functor)>
-    constexpr auto bind_method(C &&object, A &&...args) {
+    constexpr auto BindMethod(C &&Object, A &&...Args) {
         if constexpr (sizeof...(A) == 0) {
-            return bind_front<Functor>(std::forward<C>(object));
+            return BindFront<Functor>(std::forward<C>(Object));
         } else {
-            return MethodConstBinding<std::decay_t<C>, Functor, std::decay_t<A>...>(std::forward<C>(object),
-                                                                                    std::forward<A>(args)...);
+            return MethodConstBinding<std::decay_t<C>, Functor, std::decay_t<A>...>(std::forward<C>(Object),
+                                                                                    std::forward<A>(Args)...);
         }
     }
 } // namespace retro

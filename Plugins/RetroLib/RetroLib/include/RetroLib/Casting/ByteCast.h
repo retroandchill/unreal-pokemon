@@ -16,7 +16,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * Represents a type we see as a valid opaque byte pointer.
      *
@@ -26,9 +26,8 @@ namespace retro {
     concept ValidByteType =
         std::same_as<T, std::byte> || std::same_as<T, uint8_t> || std::same_as<T, int8_t> || std::same_as<T, void>;
 
-    template <typename T>
     /**
-     * @class ByteCast
+     * @class ByteCastFunction
      * @brief A utility class for casting various data types to byte representations.
      *
      * TByteCast provides functionality to cast different data types such as integers,
@@ -42,7 +41,8 @@ namespace retro {
      * - Ensure proper endianess during the casting process.
      * - Utility methods to handle casting of custom objects, if needed.
      */
-    struct ByteCast {
+    template <typename T>
+    struct ByteCastFunction {
         /**
          * @brief Casts a byte pointer to a specified data type.
          *
@@ -75,5 +75,5 @@ namespace retro {
      * - Provides additional functionality for custom object conversions if necessary.
      */
     RETROLIB_EXPORT template <typename T>
-    constexpr ByteCast<T> byte_cast;
+    constexpr ByteCastFunction<T> ByteCast;
 } // namespace retro

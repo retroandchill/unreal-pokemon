@@ -16,7 +16,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * @class NonPropagatingCache
      * @brief A specialized cache class based on the Optional template.
@@ -104,12 +104,12 @@ namespace retro {
          * through move semantics. Resets the source NonPropagatingCache and ensures
          * the current object is also reset.
          *
-         * @param other The NonPropagatingCache object to move from.
+         * @param Other The NonPropagatingCache object to move from.
          * @return A reference to the current NonPropagatingCache object after the move.
          */
-        constexpr NonPropagatingCache &operator=(NonPropagatingCache &&other) noexcept {
-            other.Optional<T>::reset();
-            Optional<T>::reset();
+        constexpr NonPropagatingCache &operator=(NonPropagatingCache &&Other) noexcept {
+            Other.Optional<T>::Reset();
+            Optional<T>::Reset();
             return *this;
         }
 
@@ -125,7 +125,7 @@ namespace retro {
          * @return A reference to the newly emplaced value of type T.
          */
         template <typename I>
-        constexpr T &emplace_deref(const I &i) {
+        constexpr T &EmplaceDeref(const I &i) {
             return Optional<T>::emplace(*i);
         }
     };

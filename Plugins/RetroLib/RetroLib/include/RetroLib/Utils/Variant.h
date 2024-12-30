@@ -16,7 +16,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * @struct IndexedElement
@@ -31,7 +31,7 @@ namespace retro {
     RETROLIB_EXPORT template <typename T, size_t I>
     struct IndexedElement {
       private:
-        std::add_pointer_t<T> ptr;
+        std::add_pointer_t<T> Ptr;
 
       public:
         /**
@@ -40,9 +40,9 @@ namespace retro {
          * This constructor initializes the IndexedElement with a reference
          * to the given object. The address of the object is stored internally.
          *
-         * @param ptr A reference to the object to be indexed.
+         * @param Ptr A reference to the object to be indexed.
          */
-        constexpr explicit IndexedElement(T &ptr) : ptr(std::addressof(ptr)) {
+        constexpr explicit IndexedElement(T &Ptr) : Ptr(std::addressof(Ptr)) {
         }
 
         /**
@@ -53,8 +53,8 @@ namespace retro {
          *
          * @return A reference to the object of type T.
          */
-        constexpr T &get() const noexcept {
-            return *ptr;
+        constexpr T &Get() const noexcept {
+            return *Ptr;
         }
     };
 
@@ -70,7 +70,7 @@ namespace retro {
     RETROLIB_EXPORT template <typename T, size_t I>
     struct IndexedElement<T &&, I> {
       private:
-        T *ptr;
+        T *Ptr;
 
       public:
         /**
@@ -80,9 +80,9 @@ namespace retro {
          * to the provided object, utilizing perfect forwarding to ensure efficient
          * initialization. The address of the object is internally stored.
          *
-         * @param ptr An rvalue reference to the object to be indexed.
+         * @param Ptr An rvalue reference to the object to be indexed.
          */
-        constexpr explicit IndexedElement(T &&ptr) : ptr(std::addressof(ptr)) {
+        constexpr explicit IndexedElement(T &&Ptr) : Ptr(std::addressof(Ptr)) {
         }
 
         /**
@@ -93,8 +93,8 @@ namespace retro {
          *
          * @return A rvalue reference to the object of type T.
          */
-        constexpr T &&get() const noexcept {
-            return std::move(*ptr);
+        constexpr T &&Get() const noexcept {
+            return std::move(*Ptr);
         }
     };
 
@@ -116,7 +116,7 @@ namespace retro {
          * any operation. It is designed to be called in constant expressions and
          * guarantees no exceptions will be thrown.
          */
-        constexpr void get() const noexcept {
+        constexpr void Get() const noexcept {
             // No operation needed for this one
         }
     };
@@ -127,15 +127,15 @@ namespace retro {
      * This helper function forwards the specified visitor and variant, then invokes the visitor
      * with an IndexedElement containing an element from the variant and its index.
      *
-     * @param visitor A callable entity (function, lambda, etc.) to be applied to the IndexedElement.
-     * @param variant An instance of a variant type that is used to extract an indexed element.
+     * @param Visitor A callable entity (function, lambda, etc.) to be applied to the IndexedElement.
+     * @param Variant An instance of a variant type that is used to extract an indexed element.
      * @return The result of invoking the visitor with the IndexedElement.
      */
     template <size_t I, typename F, typename V>
-    constexpr decltype(auto) visit_index_helper(F &&visitor, V &&variant) {
-        return std::invoke(std::forward<F>(visitor),
+    constexpr decltype(auto) VisitIndexHelper(F &&Visitor, V &&Variant) {
+        return std::invoke(std::forward<F>(Visitor),
                            IndexedElement<std::variant_alternative_t<I, std::remove_reference_t<V>>, I>(
-                               std::get<I>(std::forward<V>(variant))));
+                               std::get<I>(std::forward<V>(Variant))));
     }
 
     /**
@@ -147,17 +147,17 @@ namespace retro {
      *
      * @tparam F The type of the visitor function or callable object.
      * @tparam V The type of the variant object to be visited.
-     * @param visitor The visitor object or function to apply to the active alternative of the variant.
-     * @param variant The variant object whose active alternative is being visited.
+     * @param Visitor The visitor object or function to apply to the active alternative of the variant.
+     * @param Variant The variant object whose active alternative is being visited.
      * @return The result of invoking the visitor on the active alternative of the variant.
      */
     RETROLIB_EXPORT template <typename F, typename V>
-    constexpr decltype(auto) visit_index(F &&visitor, V &&variant) {
+    constexpr decltype(auto) VisitIndex(F &&Visitor, V &&Variant) {
         constexpr auto N = std::variant_size_v<std::remove_cvref_t<V>>;
-        constexpr auto func_ptrs = []<size_t... I>(std::index_sequence<I...>) {
-            return std::array{&visit_index_helper<I, F, V>...};
+        constexpr auto FuncPtrs = []<size_t... I>(std::index_sequence<I...>) {
+            return std::array{&VisitIndexHelper<I, F, V>...};
         }(std::make_index_sequence<N>{});
-        return func_ptrs[variant.index()](std::forward<F>(visitor), std::forward<V>(variant));
+        return FuncPtrs[Variant.index()](std::forward<F>(Visitor), std::forward<V>(Variant));
     }
 
     /**
@@ -169,17 +169,17 @@ namespace retro {
      *
      * @tparam F The type of the visitor function or callable object.
      * @tparam V The type of the variant object to be visited.
-     * @param visitor The visitor object or function to apply to the active alternative of the variant.
-     * @param variant The variant object whose active alternative is being visited.
+     * @param Visitor The visitor object or function to apply to the active alternative of the variant.
+     * @param Variant The variant object whose active alternative is being visited.
      * @return The result of invoking the visitor on the active alternative of the variant.
      */
     RETROLIB_EXPORT template <typename R, typename F, typename V>
-    constexpr R visit_index(F &&visitor, V &&variant) {
+    constexpr R VisitIndex(F &&Visitor, V &&Variant) {
         constexpr auto N = std::variant_size_v<std::remove_cvref_t<V>>;
-        constexpr auto func_ptrs = []<size_t... I>(std::index_sequence<I...>) {
-            return std::array{&visit_index_helper<I, F, V>...};
+        constexpr auto FuncPtrs = []<size_t... I>(std::index_sequence<I...>) {
+            return std::array{&VisitIndexHelper<I, F, V>...};
         }(std::make_index_sequence<N>{});
-        return func_ptrs[variant.index()](std::forward<F>(visitor), std::forward<V>(variant));
+        return FuncPtrs[Variant.index()](std::forward<F>(Visitor), std::forward<V>(Variant));
     }
 
 } // namespace retro

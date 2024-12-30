@@ -17,11 +17,11 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges::views {
+namespace Retro::Ranges::Views {
 
-    template <auto Functor = dynamic_functor>
+    template <auto Functor = DynamicFunctor>
         requires ValidFunctorParameter<Functor>
-    constexpr FunctorBindingInvoker<Functor, std::ranges::views::transform> transform_invoker;
+    constexpr FunctorBindingInvoker<Functor, std::ranges::views::transform> TransformInvoker;
 
     /**
      * Applies a transformation operation on the given arguments, using the specified Functor.
@@ -30,15 +30,15 @@ namespace retro::ranges::views {
      * @tparam A Variadic template for the argument types to be passed to the transformation.
      * @tparam Functor The callable object or function used for the transformation operation.
      *
-     * @param args The arguments to be passed to the transformation operation. The parameters
+     * @param Args The arguments to be passed to the transformation operation. The parameters
      *        will be perfectly forwarded to the underlying implementation.
      *
      * @return A transformed result wrapped in an extension method that applies the given Functor
      *         with the specified arguments.
      */
-    RETROLIB_EXPORT template <auto Functor = dynamic_functor, typename... A>
+    RETROLIB_EXPORT template <auto Functor = DynamicFunctor, typename... A>
         requires ValidFunctorParameter<Functor>
-    constexpr auto transform(A &&...args) {
-        return extension_method<transform_invoker<Functor>>(std::forward<A>(args)...);
+    constexpr auto Transform(A &&...Args) {
+        return ExtensionMethod<TransformInvoker<Functor>>(std::forward<A>(Args)...);
     }
 } // namespace retro::ranges::views

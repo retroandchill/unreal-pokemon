@@ -16,7 +16,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * @struct InvalidType
@@ -36,11 +36,11 @@ namespace retro {
      * @see IsValid
      */
     RETROLIB_EXPORT struct InvalidType {
-        static constexpr bool is_valid = false;
+        static constexpr bool IsValid = false;
     };
 
     /**
-     * @struct ValidType
+     * @struct ValidType::
      *
      * @brief Represents a type that is confirmed to be valid.
      *
@@ -50,7 +50,7 @@ namespace retro {
      * of the type.
      */
     RETROLIB_EXPORT struct ValidType {
-        static constexpr bool is_valid = true;
+        static constexpr bool IsValid = true;
     };
 
     /**
@@ -63,7 +63,7 @@ namespace retro {
      * @tparam T The type to check for the dereference capability.
      */
     template <typename T>
-    concept Dereferenceable = requires(T &&ptr) { *ptr; };
+    concept Dereferenceable = requires(T &&Ptr) { *Ptr; };
 
     /**
      * Get the underlying type that comes from the pointer dereference.
@@ -85,8 +85,8 @@ namespace retro {
      * @tparam C The target type to which the dereferenced value should be convertible.
      */
     template <typename T, typename C>
-    concept DereferenceableTo = requires(T &&ptr) {
-        { *ptr } -> std::convertible_to<C &>;
+    concept DereferenceableTo = requires(T &&Ptr) {
+        { *Ptr } -> std::convertible_to<C &>;
     };
 
     RETROLIB_EXPORT template <typename>
@@ -101,7 +101,7 @@ namespace retro {
     };
 
     RETROLIB_EXPORT template <typename T>
-    concept TemplateSpecialization = TemplateSpecializationType<T>::is_valid;
+    concept TemplateSpecialization = TemplateSpecializationType<T>::IsValid;
 
     RETROLIB_EXPORT template <typename, template <typename...> typename>
     struct IsSpecializationOf : std::false_type {};

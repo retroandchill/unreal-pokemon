@@ -20,7 +20,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
 
     /**
      * @brief A concept to check if a range is compatible with a given type.
@@ -107,7 +107,7 @@ namespace retro::ranges {
          * referenced object are made during the construction.
          *
          * @tparam T The type of the object being referenced.
-         * @param obj The object to store a reference to.
+         * @param Obj The object to store a reference to.
          *
          * @note The constructor is marked explicit(false), allowing implicit conversions from
          *       object references to AnyRef instances.
@@ -117,7 +117,7 @@ namespace retro::ranges {
          *       during its execution.
          */
         template <typename T>
-        explicit(false) constexpr AnyRef(T &obj) noexcept : ptr(std::addressof(obj)), info(&typeid(RttiTag<T>)) {
+        explicit(false) constexpr AnyRef(T &Obj) noexcept : Ptr(std::addressof(Obj)), Info(&typeid(RttiTag<T>)) {
         }
 
         /**
@@ -143,13 +143,13 @@ namespace retro::ranges {
          */
         template <typename T>
         T &get() const noexcept {
-            RETROLIB_ASSERT(ptr != nullptr && info != nullptr && *info == typeid(RttiTag<T>));
-            return *const_cast<T *>(static_cast<const volatile T *>(ptr));
+            RETROLIB_ASSERT(Ptr != nullptr && Info != nullptr && *Info == typeid(RttiTag<T>));
+            return *const_cast<T *>(static_cast<const volatile T *>(Ptr));
         }
 
       private:
-        const volatile void *ptr = nullptr;
-        const std::type_info *info = nullptr;
+        const volatile void *Ptr = nullptr;
+        const std::type_info *Info = nullptr;
     };
 
     /**
@@ -183,10 +183,10 @@ namespace retro::ranges {
          * of its iteration sequence. This function effectively allows polymorphic
          * end-of-iteration checks on type-erased objects.
          *
-         * @param ref A type-erased reference to the object under iteration.
+         * @param Ref A type-erased reference to the object under iteration.
          * @return True if the referenced object is at its end of iteration, false otherwise.
          */
-        virtual bool at_end(AnyRef ref) = 0;
+        virtual bool AtEnd(AnyRef Ref) = 0;
     };
 
     /**
@@ -221,7 +221,7 @@ namespace retro::ranges {
          *
          * Initializes an AnyViewSentinel object by associating it with the specified ErasedView.
          *
-         * @param view A reference to an ErasedView object which will be used to determine the end
+         * @param View A reference to an ErasedView object which will be used to determine the end
          *        of iteration for a sequence. The view provides an interface for checking the iteration
          *        end condition through type-erased references.
          *
@@ -229,14 +229,14 @@ namespace retro::ranges {
          *       in constant expressions and preventing implicit conversions, respectively. The `noexcept`
          *       specifier indicates that this constructor is guaranteed not to throw exceptions.
          */
-        constexpr explicit AnyViewSentinel(ErasedView &view) noexcept : view(&view) {
+        constexpr explicit AnyViewSentinel(ErasedView &View) noexcept : View(&View) {
         }
 
       private:
         template <typename>
         friend class AnyViewIterator;
 
-        ErasedView *view = nullptr;
+        ErasedView *View = nullptr;
     };
 
     /**
@@ -271,7 +271,7 @@ namespace retro::ranges {
          *
          * @return An AnyRef reference to the iterator object.
          */
-        virtual AnyRef iterator() const = 0;
+        virtual AnyRef Iterator() const = 0;
 
         /**
          * @brief Provides access to the current element in the iteration sequence.
@@ -283,7 +283,7 @@ namespace retro::ranges {
          *
          * @return The element of type `T` at the current position in the iteration.
          */
-        virtual T read() const = 0;
+        virtual T Read() const = 0;
 
         /**
          * @brief Compares this iterator with another to determine equality.
@@ -296,7 +296,7 @@ namespace retro::ranges {
          * @param other An instance of AnyViewIteratorInterface to compare against.
          * @return True if the iterators are considered equal, false otherwise.
          */
-        virtual bool equal(const AnyViewIteratorInterface &other) const = 0;
+        virtual bool Equal(const AnyViewIteratorInterface &other) const = 0;
 
         /**
          * @brief Advances the iterator to the next element in the sequence.
@@ -306,7 +306,7 @@ namespace retro::ranges {
          * including what constitutes advancing, is defined by the implementation
          * in each subclass.
          */
-        virtual void next() = 0;
+        virtual void Next() = 0;
     };
 
     /**
@@ -356,11 +356,11 @@ namespace retro::ranges {
          * @tparam A The type of the iterator being adapted, which must be the same as `I` after decay
          *           and not be an AnyViewIteratorImpl.
          *
-         * @param iter The iterator instance to be wrapped by AnyViewIteratorImpl.
+         * @param Iter The iterator instance to be wrapped by AnyViewIteratorImpl.
          */
         template <typename A>
             requires std::same_as<std::decay_t<A>, I> && (!std::same_as<std::decay_t<A>, AnyViewIteratorImpl>)
-        constexpr explicit AnyViewIteratorImpl(A &&iter) : iter(std::forward<A>(iter)) {
+        constexpr explicit AnyViewIteratorImpl(A &&Iter) : Iter(std::forward<A>(Iter)) {
         }
 
         /**
@@ -375,30 +375,30 @@ namespace retro::ranges {
          */
         constexpr explicit AnyViewIteratorImpl(std::nullptr_t)
             requires std::is_pointer_v<I>
-            : iter(nullptr) {
+            : Iter(nullptr) {
         }
 
-        AnyRef iterator() const override {
-            return AnyRef(iter);
+        AnyRef Iterator() const override {
+            return AnyRef(Iter);
         }
 
-        T read() const override {
-            return *iter;
+        T Read() const override {
+            return *Iter;
         }
 
-        bool equal(const AnyViewIteratorInterface<T> &other) const override {
+        bool Equal(const AnyViewIteratorInterface<T> &other) const override {
 #ifdef RTTI_ENABLED
             RETROLIB_ASSERT(typeid(*this) == typeid(other));
 #endif
-            return iter == static_cast<const AnyViewIteratorImpl<I, T> &>(other).iter;
+            return Iter == static_cast<const AnyViewIteratorImpl<I, T> &>(other).Iter;
         }
 
-        void next() override {
-            ++iter;
+        void Next() override {
+            ++Iter;
         }
 
       private:
-        I iter;
+        I Iter;
     };
 
     /**
@@ -440,12 +440,12 @@ namespace retro::ranges {
          *
          * @tparam I The type of the input iterator.
          *
-         * @param iterator An iterator instance to initialize and adapt within this AnyViewIterator.
+         * @param Iterator An iterator instance to initialize and adapt within this AnyViewIterator.
          */
         template <typename I>
             requires(!std::same_as<std::decay_t<I>, AnyViewIterator>) && std::same_as<std::iter_value_t<I>, T>
-        constexpr explicit AnyViewIterator(I &&iterator)
-            : delegate(std::in_place_type<AnyViewIteratorImpl<std::decay_t<I>>>, std::forward<I>(iterator)) {
+        constexpr explicit AnyViewIterator(I &&Iterator)
+            : Delegate(std::in_place_type<AnyViewIteratorImpl<std::decay_t<I>>>, std::forward<I>(Iterator)) {
         }
 
         /**
@@ -456,11 +456,11 @@ namespace retro::ranges {
          * `equal` function, which typically compares the internal state of the iterators
          * being pointed to by the AnyViewIterator instances.
          *
-         * @param other The other AnyViewIterator object to compare against.
+         * @param Other The other AnyViewIterator object to compare against.
          * @return true if both AnyViewIterator objects are equal, false otherwise.
          */
-        constexpr bool operator==(const AnyViewIterator &other) const {
-            return delegate->equal(*other.delegate);
+        constexpr bool operator==(const AnyViewIterator &Other) const {
+            return Delegate->Equal(*Other.Delegate);
         }
 
         /**
@@ -470,11 +470,11 @@ namespace retro::ranges {
          * AnyViewSentinel object. Equality is determined by checking if the iteration
          * represented by delegate's iterator has reached the end of its associated view.
          *
-         * @param other The other AnyViewSentinel object to compare against.
+         * @param Other The other AnyViewSentinel object to compare against.
          * @return true if the current iterator has reached the end of the view, false otherwise.
          */
-        constexpr bool operator==(const AnyViewSentinel &other) const {
-            return other.view->at_end(delegate->iterator());
+        constexpr bool operator==(const AnyViewSentinel &Other) const {
+            return Other.View->AtEnd(Delegate->Iterator());
         }
 
         /**
@@ -487,7 +487,7 @@ namespace retro::ranges {
          * @return The element of type T currently pointed to by the iterator.
          */
         constexpr T operator*() const {
-            return delegate->read();
+            return Delegate->Read();
         }
 
         /**
@@ -502,7 +502,7 @@ namespace retro::ranges {
          * @return A reference to the incremented AnyViewIterator instance.
          */
         constexpr AnyViewIterator &operator++() {
-            delegate->next();
+            Delegate->Next();
             return *this;
         }
 
@@ -517,13 +517,13 @@ namespace retro::ranges {
          * @return A copy of the iterator's state prior to the increment.
          */
         constexpr AnyViewIterator operator++(int) {
-            auto temp = *this;
-            ++(*this);
-            return temp;
+            auto Temp = *this;
+            ++*this;
+            return Temp;
         }
 
       private:
-        Polymorphic<AnyViewIteratorInterface<T>> delegate = AnyViewIteratorImpl<T *>(nullptr);
+        Polymorphic<AnyViewIteratorInterface<T>> Delegate = AnyViewIteratorImpl<T *>(nullptr);
     };
 
     /**
@@ -598,7 +598,7 @@ namespace retro::ranges {
          * maintaining its value category (lvalue or rvalue) as originally passed.
          *
          * @tparam E The type of the range being forwarded.
-         * @param range The range to be encapsulated by the AnyViewImpl instance.
+         * @param Range The range to be encapsulated by the AnyViewImpl instance.
          *
          * @note This constructor is constrained to ensure that the type E is neither the
          * value type T nor any other non-decayable form, while also matching the decay type
@@ -606,7 +606,7 @@ namespace retro::ranges {
          */
         template <typename E>
             requires(!std::same_as<std::decay_t<E>, T>) && std::same_as<std::decay_t<E>, R>
-        constexpr explicit AnyViewImpl(E &&range) : range(std::forward<E>(range)) {
+        constexpr explicit AnyViewImpl(E &&Range) : Range(std::forward<E>(Range)) {
         }
 
         /**
@@ -620,7 +620,7 @@ namespace retro::ranges {
          * @return An `AnyViewIterator` object that points to the first element of the range.
          */
         AnyViewIterator<T> begin() override {
-            return AnyViewIterator<T>(std::ranges::begin(range));
+            return AnyViewIterator<T>(std::ranges::begin(Range));
         }
 
         /**
@@ -632,18 +632,18 @@ namespace retro::ranges {
          * the iterator against the range's end iterator, as provided by
          * `std::ranges::end`.
          *
-         * @param ref An `AnyRef` object containing the iterator to check.
+         * @param Ref An `AnyRef` object containing the iterator to check.
          *
          * @return `true` if the iterator has reached the end of the range;
          * `false` otherwise.
          */
-        bool at_end(AnyRef ref) override {
-            auto &it = ref.get<const std::ranges::iterator_t<R>>();
-            return it == std::ranges::end(range);
+        bool AtEnd(AnyRef Ref) override {
+            auto &It = Ref.get<const std::ranges::iterator_t<R>>();
+            return It == std::ranges::end(Range);
         }
 
       private:
-        R range;
+        R Range;
     };
 
     /**
@@ -692,7 +692,7 @@ namespace retro::ranges {
          * @tparam R The type of the range being passed; it must satisfy the input range
          *         requirements and must not be of type `AnyView` itself.
          *
-         * @param range The range object to encapsulate within the AnyView. The argument
+         * @param Range The range object to encapsulate within the AnyView. The argument
          *              is forwarded to handle various value categories (lvalue or rvalue).
          *
          * @note This constructor is explicit with a boolean condition (usually `false`)
@@ -700,8 +700,8 @@ namespace retro::ranges {
          */
         template <typename R>
             requires(!std::same_as<std::decay_t<R>, AnyView>) && std::ranges::input_range<R> && CompatibleRange<R, T>
-        explicit(false) AnyView(R &&range)
-            : data(std::in_place_type<AnyViewImpl<std::decay_t<R>>>, std::forward<R>(range)) {
+        explicit(false) AnyView(R &&Range)
+            : Data(std::in_place_type<AnyViewImpl<std::decay_t<R>>>, std::forward<R>(Range)) {
         }
 
         /**
@@ -716,7 +716,7 @@ namespace retro::ranges {
          * @tparam R The type of the range being passed. It must satisfy the input range
          *           requirements and must not be of type `AnyView` itself.
          *
-         * @param range The range object to assign to the `AnyView`.
+         * @param Range The range object to assign to the `AnyView`.
          *              The range is forwarded to accommodate different categories of value.
          *
          * @return A reference to the modified `AnyView` object, allowing for chaining
@@ -724,8 +724,8 @@ namespace retro::ranges {
          */
         template <typename R>
             requires(!std::same_as<std::decay_t<R>, AnyView>) && std::ranges::input_range<R>
-        AnyView &operator=(R &&range) {
-            data = AnyViewImpl<std::decay_t<R>>(std::forward<R>(range));
+        AnyView &operator=(R &&Range) {
+            Data = AnyViewImpl<std::decay_t<R>>(std::forward<R>(Range));
             return *this;
         }
 
@@ -739,7 +739,7 @@ namespace retro::ranges {
          * @return An `AnyViewIterator` instance pointing to the initial element of the range.
          */
         AnyViewIterator<T> begin() {
-            return data->begin();
+            return Data->begin();
         }
 
         /**
@@ -752,10 +752,10 @@ namespace retro::ranges {
          * @return An `AnyViewSentinel` that signals the end boundary of the range managed by `AnyView`.
          */
         AnyViewSentinel end() {
-            return AnyViewSentinel(*data);
+            return AnyViewSentinel(*Data);
         }
 
       private:
-        Polymorphic<AnyViewInterface<T>> data = AnyViewImpl<std::ranges::empty_view<T>>(std::views::empty<T>);
+        Polymorphic<AnyViewInterface<T>> Data = AnyViewImpl<std::ranges::empty_view<T>>(std::views::empty<T>);
     };
 } // namespace retro::ranges

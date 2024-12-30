@@ -7,9 +7,12 @@
  */
 #pragma once
 
+#if RETROLIB_WITH_COROUTINES
+
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
 
+#include <bit>
 #include <cassert>
 #include <coroutine>
 #include <exception>
@@ -22,7 +25,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     template <typename T>
     class ManualLifetime {
       public:
@@ -35,76 +38,76 @@ namespace retro {
         }
 
         template <typename... A>
-        T &construct(A &&...args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
-            return *::new (static_cast<void *>(std::addressof(value))) T(static_cast<A &&>(args)...);
+        T &Construct(A &&...Args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
+            return *::new (static_cast<void *>(std::addressof(Value))) T(static_cast<A &&>(Args)...);
         }
 
-        void destruct() noexcept(std::is_nothrow_destructible_v<T>) {
-            value.~T();
+        void Destruct() noexcept(std::is_nothrow_destructible_v<T>) {
+            Value.~T();
         }
 
-        T &get() & noexcept {
-            return value;
+        T &Get() & noexcept {
+            return Value;
         }
-        T &&get() && noexcept {
-            return static_cast<T &&>(value);
+        T &&Get() && noexcept {
+            return static_cast<T &&>(Value);
         }
-        const T &get() const & noexcept {
-            return value;
+        const T &Get() const & noexcept {
+            return Value;
         }
-        const T &&get() const && noexcept {
-            return static_cast<const T &&>(value);
+        const T &&Get() const && noexcept {
+            return static_cast<const T &&>(Value);
         }
 
       private:
         union {
-            std::remove_const_t<T> value;
+            std::remove_const_t<T> Value;
         };
     };
 
     template <typename T>
     class ManualLifetime<T &> {
       public:
-        T &construct(T &value_in) noexcept {
-            value = std::addressof(value_in);
-            return value_in;
+        T &Construct(T &ValueIn) noexcept {
+            Value = std::addressof(ValueIn);
+            return ValueIn;
         }
 
-        void destruct() noexcept {
+        void Destruct() noexcept {
             // No special destruction needed here
         }
 
-        T &get() const noexcept {
-            return *value;
+        T &Get() const noexcept {
+            return *Value;
         }
 
       private:
-        T *value = nullptr;
+        T *Value = nullptr;
     };
 
     template <typename T>
     class ManualLifetime<T &&> {
       public:
-        T &&construct(T &&value_in) noexcept {
-            value = std::addressof(value_in);
-            return static_cast<T &&>(value_in);
+        T &&Construct(T &&ValueIn) noexcept {
+            Value = std::addressof(ValueIn);
+            return static_cast<T &&>(ValueIn);
         }
 
-        void destruct() noexcept {
+        void Destruct() noexcept {
             // No special destruction needed here
         }
 
-        T &&get() const noexcept {
-            return static_cast<T &&>(*value);
+        T &&Get() const noexcept {
+            return static_cast<T &&>(*Value);
         }
 
       private:
-        T *value = nullptr;
+        T *Value = nullptr;
     };
 
     struct UseAllocatorArg {};
 
-    namespace ranges {
+    namespace Ranges {
 
         /**
          * @brief Represents a collection or group of elements.
@@ -123,11 +126,11 @@ namespace retro {
              * also requires that the type A is default constructible.
              *
              * @tparam R The type of the range being passed to the constructor.
-             * @param range The range to be used for initialization.
+             * @param Range The range to be used for initialization.
              */
-            explicit constexpr ElementsOf(R &&range) noexcept
+            explicit constexpr ElementsOf(R &&Range) noexcept
                 requires std::is_default_constructible_v<A>
-                : range(static_cast<R &&>(range)) {
+                : Range(static_cast<R &&>(Range)) {
             }
 
             /**
@@ -140,11 +143,11 @@ namespace retro {
              *
              * @tparam R The type of the range being passed to the constructor.
              * @tparam A The type of the allocator being used.
-             * @param range The range to initialize the ElementsOf object with.
-             * @param alloc The allocator to use for initializing the object.
+             * @param Range The range to initialize the ElementsOf object with.
+             * @param Alloc The allocator to use for initializing the object.
              */
-            constexpr ElementsOf(R &&range, A &&alloc) noexcept
-                : range(static_cast<R &&>(range)), alloc(static_cast<A &&>(alloc)) {
+            constexpr ElementsOf(R &&Range, A &&Alloc) noexcept
+                : Alloc(static_cast<A &&>(Alloc)), Range(static_cast<R &&>(Range)) {
             }
 
             /**
@@ -199,8 +202,8 @@ namespace retro {
              *
              * @return R&& An rvalue reference to the stored range.
              */
-            constexpr R &&get() noexcept {
-                return static_cast<R &&>(range);
+            constexpr R &&Get() noexcept {
+                return static_cast<R &&>(Range);
             }
 
             /**
@@ -211,13 +214,13 @@ namespace retro {
              *
              * @return The allocator object associated with the instance.
              */
-            constexpr A get_allocator() const noexcept {
-                return alloc;
+            constexpr A GetAllocator() const noexcept {
+                return Alloc;
             }
 
           private:
-            [[no_unique_address]] A alloc; // \expos
-            R &&range;                     // \expos
+            [[no_unique_address]] A Alloc; // \expos
+            R &&Range;                     // \expos
         };
 
         template <typename R>
@@ -229,11 +232,11 @@ namespace retro {
     } // namespace ranges
 
     template <typename A>
-    static constexpr bool allocator_needs_to_be_stored =
+    static constexpr bool AllocatorNeedsToBeStored =
         !std::allocator_traits<A>::is_always_equal::value || !std::is_default_constructible_v<A>;
 
     // Round s up to next multiple of a.
-    constexpr size_t aligned_allocation_size(size_t s, size_t a) {
+    constexpr size_t AlignedAllocationSize(size_t s, size_t a) {
         return (s + a - 1) & ~(a - 1);
     }
 
@@ -242,55 +245,55 @@ namespace retro {
 
     template <typename A>
     class PromiseBaseAlloc {
-        static constexpr std::size_t offset_of_allocator(std::size_t frame_size) noexcept {
-            return aligned_allocation_size(frame_size, alignof(A));
+        static constexpr std::size_t OffsetOfAllocator(std::size_t FrameSize) noexcept {
+            return AlignedAllocationSize(FrameSize, alignof(A));
         }
 
-        static constexpr std::size_t padded_frame_size(std::size_t frame_size) noexcept {
-            return offset_of_allocator(frame_size) + sizeof(A);
+        static constexpr std::size_t PaddedFrameSize(std::size_t FrameSize) noexcept {
+            return OffsetOfAllocator(FrameSize) + sizeof(A);
         }
 
-        static A &get_allocator(void *frame, std::size_t frame_size) noexcept {
-            return *std::bit_cast<A *>(static_cast<char *>(frame) + offset_of_allocator(frame_size));
+        static A &GetAllocator(void *Frame, std::size_t FrameSize) noexcept {
+            return *std::bit_cast<A *>(static_cast<char *>(Frame) + OffsetOfAllocator(FrameSize));
         }
 
       public:
         template <typename... T>
-        static void *operator new(std::size_t frame_size, std::allocator_arg_t, A alloc, T &...) {
-            void *frame = alloc.allocate(padded_frame_size(frame_size));
+        void *operator new(std::size_t FrameSize, std::allocator_arg_t, A Alloc, T &...) {
+            void *Frame = Alloc.allocate(PaddedFrameSize(FrameSize));
 
             // Store allocator at end of the coroutine frame.
             // Assuming the allocator's move constructor is non-throwing (a requirement for allocators)
-            ::new (static_cast<void *>(std::addressof(get_allocator(frame, frame_size)))) A(std::move(alloc));
+            ::new (static_cast<void *>(std::addressof(GetAllocator(Frame, FrameSize)))) A(std::move(Alloc));
 
-            return frame;
+            return Frame;
         }
 
         template <typename T, typename... U>
-        static void *operator new(std::size_t frame_size, T &, std::allocator_arg_t, A alloc, U &...) {
-            return PromiseBaseAlloc::operator new(frame_size, std::allocator_arg, std::move(alloc));
+        void *operator new(std::size_t FrameSize, T &, std::allocator_arg_t, A Alloc, U &...) {
+            return PromiseBaseAlloc::operator new(FrameSize, std::allocator_arg, std::move(Alloc));
         }
 
-        static void operator delete(void *ptr, std::size_t frame_size) noexcept {
-            A &alloc = get_allocator(ptr, frame_size);
+        void operator delete(void *Ptr, std::size_t FrameSize) noexcept {
+            A &alloc = GetAllocator(Ptr, FrameSize);
             A local_alloc(std::move(alloc));
             alloc.~A();
-            local_alloc.deallocate(static_cast<std::byte *>(ptr), padded_frame_size(frame_size));
+            local_alloc.deallocate(static_cast<std::byte *>(Ptr), PaddedFrameSize(FrameSize));
         }
     };
 
     template <typename A>
-        requires(!allocator_needs_to_be_stored<A>)
+        requires(!AllocatorNeedsToBeStored<A>)
     class PromiseBaseAlloc<A> {
       public:
-        static void *operator new(std::size_t size) {
-            A alloc;
-            return alloc.allocate(size);
+        void *operator new(std::size_t Size) {
+            A Alloc;
+            return Alloc.allocate(Size);
         }
 
-        static void operator delete(void *ptr, std::size_t size) noexcept {
-            A alloc;
-            alloc.deallocate(static_cast<std::byte *>(ptr), size);
+        void operator delete(void *Ptr, std::size_t Size) noexcept {
+            A Alloc;
+            Alloc.deallocate(static_cast<std::byte *>(Ptr), Size);
         }
     };
 
@@ -299,26 +302,26 @@ namespace retro {
         template <typename R, typename V, typename A>
         friend class Generator;
 
-        GeneratorPromiseBase *root;
-        std::coroutine_handle<> parent_or_leaf;
+        GeneratorPromiseBase *Root;
+        std::coroutine_handle<> ParentOrLeaf;
         // Note: Using manual_lifetime here to avoid extra calls to exception_ptr
         // constructor/destructor in cases where it is not needed (i.e. where this
         // generator coroutine is not used as a nested coroutine).
         // This member is lazily constructed by the __yield_sequence_awaiter::await_suspend()
         // method if this generator is used as a nested generator.
-        ManualLifetime<std::exception_ptr> exception;
-        ManualLifetime<T> value;
+        ManualLifetime<std::exception_ptr> Exception;
+        ManualLifetime<T> Value;
 
-        explicit GeneratorPromiseBase(std::coroutine_handle<> this_coro) noexcept
-            : root(this), parent_or_leaf(this_coro) {
+        explicit GeneratorPromiseBase(std::coroutine_handle<> ThisCoro) noexcept
+            : Root(this), ParentOrLeaf(ThisCoro) {
         }
 
         ~GeneratorPromiseBase() {
-            if (root != this) {
+            if (Root != this) {
                 // This coroutine was used as a nested generator and so will
                 // have constructed its __exception_ member which needs to be
                 // destroyed here.
-                exception.destruct();
+                Exception.Destruct();
             }
         }
 
@@ -330,8 +333,8 @@ namespace retro {
         }
 
         void unhandled_exception() {
-            if (root != this) {
-                exception.get() = std::current_exception();
+            if (Root != this) {
+                Exception.Get() = std::current_exception();
             } else {
                 throw;
             }
@@ -344,13 +347,13 @@ namespace retro {
             }
 
             template <typename P>
-            std::coroutine_handle<> await_suspend(std::coroutine_handle<P> handle) noexcept {
-                auto &promise = handle.promise();
-                auto &current_root = *promise.root;
-                if (&current_root != &promise) {
-                    auto parent = promise.parent_or_leaf;
-                    current_root.parent_or_leaf = parent;
-                    return parent;
+            std::coroutine_handle<> await_suspend(std::coroutine_handle<P> Handle) noexcept {
+                auto &Promise = Handle.promise();
+                auto &CurrentRoot = *Promise.Root;
+                if (&CurrentRoot != &Promise) {
+                    auto Parent = Promise.ParentOrLeaf;
+                    CurrentRoot.ParentOrLeaf = Parent;
+                    return Parent;
                 }
                 return std::noop_coroutine();
             }
@@ -365,25 +368,25 @@ namespace retro {
         }
 
         std::suspend_always yield_value(T &&x) noexcept(std::is_nothrow_move_constructible_v<T>) {
-            root->value.construct(std::move(x));
+            Root->Value.Construct(std::move(x));
             return {};
         }
 
         template <typename V>
             requires(!std::is_reference_v<T>) && std::is_convertible_v<V, T>
         std::suspend_always yield_value(V &&x) noexcept(std::is_nothrow_constructible_v<T, V>) {
-            root->value.construct(std::forward<V>(x));
+            Root->Value.Construct(std::forward<V>(x));
             return {};
         }
 
         template <typename G>
         struct YieldSequenceAwaiter {
-            G gen;
+            G Gen;
 
-            explicit(false) YieldSequenceAwaiter(G &&gen) noexcept
+            explicit(false) YieldSequenceAwaiter(G &&Gen) noexcept
                 // Taking ownership of the generator ensures frame are destroyed
                 // in the reverse order of their execution.
-                : gen(static_cast<G &&>(gen)) {
+                : Gen(static_cast<G &&>(Gen)) {
             }
 
             bool await_ready() noexcept {
@@ -393,47 +396,47 @@ namespace retro {
             // set the parent, root and exceptions pointer and
             // resume the nested
             template <typename Promise>
-            std::coroutine_handle<> await_suspend(std::coroutine_handle<Promise> handle) noexcept {
-                auto &current = handle.promise();
-                auto &nested = *gen.get_promise();
-                auto &current_root = *current.root;
+            std::coroutine_handle<> await_suspend(std::coroutine_handle<Promise> Handle) noexcept {
+                auto &Current = Handle.promise();
+                auto &Nested = *Gen.GetPromise();
+                auto &CurrentRoot = *Current.Root;
 
-                nested.root = current.root;
-                nested.parent_or_leaf = handle;
+                Nested.Root = Current.Root;
+                Nested.ParentOrLeaf = Handle;
 
                 // Lazily construct the __exception_ member here now that we
                 // know it will be used as a nested generator. This will be
                 // destroyed by the promise destructor.
-                nested.exception.construct();
-                current_root.parent_or_leaf = gen.get_coro();
+                Nested.Exception.Construct();
+                CurrentRoot.ParentOrLeaf = Gen.GetCoro();
 
                 // Immediately resume the nested coroutine (nested generator)
-                return gen.get_coro();
+                return Gen.GetCoro();
             }
 
             void await_resume() {
-                if (auto &nested_promise = *gen.get_promise(); nested_promise.exception.get()) {
-                    std::rethrow_exception(std::move(nested_promise.exception.get()));
+                if (auto &NestedPromise = *Gen.GetPromise(); NestedPromise.Exception.Get()) {
+                    std::rethrow_exception(std::move(NestedPromise.Exception.Get()));
                 }
             }
         };
 
         template <typename O, typename A>
         YieldSequenceAwaiter<Generator<T, O, A>>
-        yield_value(ranges::ElementsOf<Generator<T, O, A>> generator) noexcept {
-            return std::move(generator).get();
+        yield_value(Ranges::ElementsOf<Generator<T, O, A>> Generator) noexcept {
+            return std::move(Generator).Get();
         }
 
         template <std::ranges::range R, typename A>
-        YieldSequenceAwaiter<Generator<T, std::remove_cvref_t<T>, A>> yield_value(ranges::ElementsOf<R, A> &&x) {
-            return [](std::allocator_arg_t, A alloc, auto &&range) -> Generator<T, std::remove_cvref_t<T>, A> {
-                for (auto &&e : range)
-                    co_yield static_cast<decltype(e)>(e);
-            }(std::allocator_arg, x.get_allocator(), std::forward<R>(x.get()));
+        YieldSequenceAwaiter<Generator<T, std::remove_cvref_t<T>, A>> yield_value(Ranges::ElementsOf<R, A> &&X) {
+            return [](std::allocator_arg_t, A, auto &&Range) -> Generator<T, std::remove_cvref_t<T>, A> {
+                for (auto &&E : Range)
+                    co_yield static_cast<decltype(E)>(E);
+            }(std::allocator_arg, X.get_allocator(), std::forward<R>(X.get()));
         }
 
         void resume() {
-            parent_or_leaf.resume();
+            ParentOrLeaf.resume();
         }
 
         // Disable use of co_await within this coroutine.
@@ -458,14 +461,14 @@ namespace retro {
 
         template <std::ranges::range R>
         typename GeneratorPromiseBase<T>::template YieldSequenceAwaiter<Generator<T, V, A>>
-        yield_value(ranges::ElementsOf<R> &&x) {
+        yield_value(Ranges::ElementsOf<R> &&X) {
             static_assert(!ExplicitAllocator, "This coroutine has an explicit allocator specified with "
                                               "std::allocator_arg so an allocator needs to be passed "
                                               "explicitly to std::elements_of");
-            return []<typename U> (U &&range) -> Generator<T, V, A> {
-                for (auto &&e : std::forward<U>(range))
-                    co_yield std::forward<decltype(e)>(e);
-            }(std::forward<R>(x.get()));
+            return []<typename U> (U &&Range) -> Generator<T, V, A> {
+                for (auto &&E : std::forward<U>(Range))
+                    co_yield std::forward<decltype(E)>(E);
+            }(std::forward<R>(X.get()));
         }
     };
 
@@ -476,43 +479,43 @@ namespace retro {
 namespace std {
     // Type-erased allocator with default allocator behaviour.
     RETROLIB_EXPORT template <typename R, typename V, typename... A>
-    struct coroutine_traits<retro::Generator<R, V>, A...> {
-        using promise_type = retro::GeneratorPromise<retro::Generator<R, V>, std::allocator<std::byte>>;
+    struct coroutine_traits<Retro::Generator<R, V>, A...> {
+        using promise_type = Retro::GeneratorPromise<Retro::Generator<R, V>, std::allocator<std::byte>>;
     };
 
     // Type-erased allocator with std::allocator_arg parameter
     RETROLIB_EXPORT template <typename R, typename V, typename A, typename... T>
-    struct coroutine_traits<retro::Generator<R, V>, allocator_arg_t, A, T...> {
+    struct coroutine_traits<Retro::Generator<R, V>, allocator_arg_t, A, T...> {
       private:
-        using ByteAllocator = retro::ByteAllocatorType<A>;
+        using ByteAllocator = Retro::ByteAllocatorType<A>;
 
       public:
         using promise_type =
-            retro::GeneratorPromise<retro::Generator<R, V>, ByteAllocator, true /*explicit Allocator*/>;
+            Retro::GeneratorPromise<Retro::Generator<R, V>, ByteAllocator, true /*explicit Allocator*/>;
     };
 
     // Type-erased allocator with std::allocator_arg parameter (non-static member functions)
     RETROLIB_EXPORT template <typename R, typename V, typename S, typename A, typename... T>
-    struct coroutine_traits<retro::Generator<R, V>, S, allocator_arg_t, A, T...> {
+    struct coroutine_traits<Retro::Generator<R, V>, S, allocator_arg_t, A, T...> {
       private:
-        using ByteAllocator = retro::ByteAllocatorType<A>;
+        using ByteAllocator = Retro::ByteAllocatorType<A>;
 
       public:
         using promise_type =
-            retro::GeneratorPromise<retro::Generator<R, V>, ByteAllocator, true /*explicit Allocator*/>;
+            Retro::GeneratorPromise<Retro::Generator<R, V>, ByteAllocator, true /*explicit Allocator*/>;
     };
 
     // Generator with specified allocator type
     RETROLIB_EXPORT template <typename R, typename V, typename A, typename... T>
-    struct coroutine_traits<retro::Generator<R, V, A>, T...> {
-        using ByteAllocator = retro::ByteAllocatorType<A>;
+    struct coroutine_traits<Retro::Generator<R, V, A>, T...> {
+        using ByteAllocator = Retro::ByteAllocatorType<A>;
 
       public:
-        using promise_type = retro::GeneratorPromise<retro::Generator<R, V, A>, ByteAllocator>;
+        using promise_type = Retro::GeneratorPromise<Retro::Generator<R, V, A>, ByteAllocator>;
     };
 } // namespace std
 
-namespace retro {
+namespace Retro {
     /**
      * @class Generator
      * @brief The Generator class is a type of coroutine powered view. Allowing the user to define a method that
@@ -550,12 +553,12 @@ namespace retro {
          * but unspecified state. This constructor is marked noexcept, ensuring it
          * does not throw exceptions.
          *
-         * @param other Another Generator instance to move from.
+         * @param Other Another Generator instance to move from.
          *              The ownership of its resources will be transferred.
          * @return A newly constructed Generator object with the transferred resources.
          */
-        Generator(Generator &&other) noexcept
-            : coroutine(std::exchange(other.coroutine, {})), started(std::exchange(other.started, false)) {
+        Generator(Generator &&Other) noexcept
+            : Coroutine(std::exchange(Other.coroutine, {})), Started(std::exchange(Other.started, false)) {
         }
 
         /**
@@ -568,11 +571,11 @@ namespace retro {
          * during resource cleanup.
          */
         ~Generator() noexcept {
-            if (coroutine) {
-                if (started && !coroutine.done()) {
-                    coroutine.promise().value.destruct();
+            if (Coroutine) {
+                if (Started && !Coroutine.done()) {
+                    Coroutine.promise().value.destruct();
                 }
-                coroutine.destroy();
+                Coroutine.destroy();
             }
         }
 
@@ -601,8 +604,8 @@ namespace retro {
          * @param other The Generator object to swap with.
          */
         void swap(Generator &other) noexcept {
-            std::swap(coroutine, other.coroutine);
-            std::swap(started, other.started);
+            std::swap(Coroutine, other.coroutine);
+            std::swap(Started, other.started);
         }
 
     private:
@@ -619,25 +622,25 @@ namespace retro {
             Iterator() noexcept = default;
             Iterator(const Iterator &) = delete;
 
-            Iterator(Iterator &&other) noexcept : coroutine(std::exchange(other.coroutine, {})) {
+            Iterator(Iterator &&Other) noexcept : Coroutine(std::exchange(Other.Coroutine, {})) {
             }
 
-            Iterator &operator=(const Iterator &other) = delete;
+            Iterator &operator=(const Iterator &Other) = delete;
 
-            Iterator &operator=(Iterator &&other) noexcept {
-                std::swap(coroutine, other.coroutine);
+            Iterator &operator=(Iterator &&Other) noexcept {
+                std::swap(Coroutine, Other.Coroutine);
                 return *this;
             }
 
             ~Iterator() = default;
 
-            friend bool operator==(const Iterator &it, Sentinel) noexcept {
-                return it.coroutine.done();
+            friend bool operator==(const Iterator &It, Sentinel) noexcept {
+                return It.Coroutine.done();
             }
 
             Iterator &operator++() {
-                coroutine.promise().value.destruct();
-                coroutine.promise().resume();
+                Coroutine.promise().value.destruct();
+                Coroutine.promise().resume();
                 return *this;
             }
             void operator++(int) {
@@ -645,16 +648,16 @@ namespace retro {
             }
 
             reference operator*() const noexcept {
-                return static_cast<reference>(coroutine.promise().value.get());
+                return static_cast<reference>(Coroutine.promise().Value.Get());
             }
 
           private:
             friend Generator;
 
-            explicit Iterator(CoroutineHandle coroutine) noexcept : coroutine(coroutine) {
+            explicit Iterator(CoroutineHandle Coroutine) noexcept : Coroutine(Coroutine) {
             }
 
-            CoroutineHandle coroutine;
+            CoroutineHandle Coroutine;
         };
 
     public:
@@ -667,11 +670,11 @@ namespace retro {
          * @return An iterator pointing to the beginning of the sequence.
          */
         Iterator begin() {
-            RETROLIB_ASSERT(coroutine);
-            RETROLIB_ASSERT(!started);
-            started = true;
-            coroutine.resume();
-            return Iterator{coroutine};
+            RETROLIB_ASSERT(Coroutine);
+            RETROLIB_ASSERT(!Started);
+            Started = true;
+            Coroutine.resume();
+            return Iterator{Coroutine};
         }
 
         /**
@@ -685,7 +688,7 @@ namespace retro {
         }
 
       private:
-        explicit Generator(CoroutineHandle coroutine) noexcept : coroutine(coroutine) {
+        explicit Generator(CoroutineHandle coroutine) noexcept : Coroutine(coroutine) {
         }
 
     public:
@@ -697,8 +700,8 @@ namespace retro {
          *
          * @return A coroutine handle representing the current coroutine.
          */
-        std::coroutine_handle<> get_coro() noexcept {
-            return coroutine;
+        std::coroutine_handle<> GetCoro() noexcept {
+            return Coroutine;
         }
 
         /**
@@ -709,13 +712,13 @@ namespace retro {
          *
          * @return A pointer to the promise_type object.
          */
-        promise_type *get_promise() noexcept {
-            return std::addressof(coroutine.promise());
+        promise_type *GetPromise() noexcept {
+            return std::addressof(Coroutine.promise());
         }
 
       private:
-        CoroutineHandle coroutine;
-        bool started = false;
+        CoroutineHandle Coroutine;
+        bool Started = false;
     };
 
     /**
@@ -747,11 +750,11 @@ namespace retro {
          * It exchanges the internal state with the provided Generator object, leaving the
          * other object in a valid but unspecified state.
          *
-         * @param other The Generator instance to move resources from.
+         * @param Other The Generator instance to move resources from.
          */
-        Generator(Generator &&other) noexcept
-            : promise(std::exchange(other.promise, nullptr)), coroutine(std::exchange(other.coroutine, {})),
-              started(std::exchange(other.started, false)) {
+        Generator(Generator &&Other) noexcept
+            : Promise(std::exchange(Other.Promise, nullptr)), Coroutine(std::exchange(Other.Coroutine, {})),
+              Started(std::exchange(Other.Started, false)) {
         }
 
         /**
@@ -765,11 +768,11 @@ namespace retro {
          * throw any exceptions during its execution.
          */
         ~Generator() noexcept {
-            if (coroutine) {
-                if (started && !coroutine.done()) {
-                    promise->value.destruct();
+            if (Coroutine) {
+                if (Started && !Coroutine.done()) {
+                    Promise->Value.Destruct();
                 }
-                coroutine.destroy();
+                Coroutine.destroy();
             }
         }
 
@@ -795,12 +798,12 @@ namespace retro {
          * ensuring that their resources, such as promises and coroutines, are exchanged.
          * It is marked noexcept, guaranteeing no exceptions will be thrown during the swap.
          *
-         * @param other The Generator instance to swap with.
+         * @param Other The Generator instance to swap with.
          */
-        void swap(Generator &other) noexcept {
-            std::swap(promise, other.promise);
-            std::swap(coroutine, other.coroutine);
-            std::swap(started, other.started);
+        void swap(Generator &Other) noexcept {
+            std::swap(Promise, Other.promise);
+            std::swap(Coroutine, Other.coroutine);
+            std::swap(Started, Other.started);
         }
 
     private:
@@ -817,27 +820,27 @@ namespace retro {
             Iterator() noexcept = default;
             Iterator(const Iterator &) = delete;
 
-            Iterator(Iterator &&other) noexcept
-                : promise(std::exchange(other.promise, nullptr)), coroutine(std::exchange(other.coroutine, {})) {
+            Iterator(Iterator &&Other) noexcept
+                : Promise(std::exchange(Other.Promise, nullptr)), Coroutine(std::exchange(Other.Coroutine, {})) {
             }
 
             Iterator &operator=(const Iterator &) = default;
 
-            Iterator &operator=(Iterator &&other) noexcept {
-                promise = std::exchange(other.promise, nullptr);
-                coroutine = std::exchange(other.coroutine, {});
+            Iterator &operator=(Iterator &&Other) noexcept {
+                Promise = std::exchange(Other.Promise, nullptr);
+                Coroutine = std::exchange(Other.Coroutine, {});
                 return *this;
             }
 
             ~Iterator() = default;
 
-            friend bool operator==(const Iterator &it, Sentinel) noexcept {
-                return it.coroutine.done();
+            friend bool operator==(const Iterator &It, Sentinel) noexcept {
+                return It.Coroutine.done();
             }
 
             Iterator &operator++() {
-                promise->value.destruct();
-                promise->resume();
+                Promise->Value.Destruct();
+                Promise->resume();
                 return *this;
             }
 
@@ -846,18 +849,18 @@ namespace retro {
             }
 
             reference operator*() const noexcept {
-                return static_cast<reference>(promise->value.get());
+                return static_cast<reference>(Promise->Value.Get());
             }
 
           private:
             friend Generator;
 
-            explicit Iterator(PromiseBase *promise, std::coroutine_handle<> coroutine) noexcept
-                : promise(promise), coroutine(coroutine) {
+            explicit Iterator(PromiseBase *Promise, std::coroutine_handle<> Coroutine) noexcept
+                : Promise(Promise), Coroutine(Coroutine) {
             }
 
-            PromiseBase *promise;
-            std::coroutine_handle<> coroutine;
+            PromiseBase *Promise;
+            std::coroutine_handle<> Coroutine;
         };
 
     public:
@@ -873,11 +876,11 @@ namespace retro {
          * @note The coroutine must be valid and not have started prior to this call.
          */
         Iterator begin() {
-            RETROLIB_ASSERT(coroutine);
-            RETROLIB_ASSERT(!started);
-            started = true;
-            coroutine.resume();
-            return Iterator{promise, coroutine};
+            RETROLIB_ASSERT(Coroutine);
+            RETROLIB_ASSERT(!Started);
+            Started = true;
+            Coroutine.resume();
+            return Iterator{Promise, Coroutine};
         }
 
         /**
@@ -897,8 +900,8 @@ namespace retro {
         friend struct GeneratorPromise;
 
         template <typename P>
-        explicit Generator(std::coroutine_handle<P> coroutine) noexcept
-            : promise(std::addressof(coroutine.promise())), coroutine(coroutine) {
+        explicit Generator(std::coroutine_handle<P> Coroutine) noexcept
+            : Promise(std::addressof(Coroutine.promise())), Coroutine(Coroutine) {
         }
 
     public:
@@ -910,8 +913,8 @@ namespace retro {
         *
         * @return The coroutine handle associated with this object.
         */
-        std::coroutine_handle<> get_coro() noexcept {
-            return coroutine;
+        std::coroutine_handle<> GetCoro() noexcept {
+            return Coroutine;
         }
 
         /**
@@ -923,13 +926,15 @@ namespace retro {
          *
          * @return Pointer to the associated promise object.
          */
-        PromiseBase *get_promise() noexcept {
-            return promise;
+        PromiseBase *GetPromise() noexcept {
+            return Promise;
         }
 
       private:
-        PromiseBase *promise = nullptr;
-        std::coroutine_handle<> coroutine;
-        bool started = false;
+        PromiseBase *Promise = nullptr;
+        std::coroutine_handle<> Coroutine;
+        bool Started = false;
     };
 } // namespace retro
+
+#endif

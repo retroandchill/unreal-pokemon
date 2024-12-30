@@ -22,26 +22,26 @@ TEST_CASE("Can check if a pointer is valid or invalid", "[utils]") {
         int *ptr = nullptr;
         int *valid_ptr = &value;
 
-        CHECK_FALSE(retro::valid_ptr(ptr));
-        CHECK(retro::valid_ptr(valid_ptr));
+        CHECK_FALSE(Retro::ValidPtr(ptr));
+        CHECK(Retro::ValidPtr(valid_ptr));
 
-        CHECK(retro::invalid_ptr(ptr));
-        CHECK_FALSE(retro::invalid_ptr(valid_ptr));
+        CHECK(Retro::InvalidPtr(ptr));
+        CHECK_FALSE(Retro::InvalidPtr(valid_ptr));
     }
 
     SECTION("Handles nullptr literals") {
-        CHECK_FALSE(retro::valid_ptr(nullptr));
-        CHECK(retro::invalid_ptr(nullptr));
+        CHECK_FALSE(Retro::ValidPtr(nullptr));
+        CHECK(Retro::InvalidPtr(nullptr));
     }
 
     SECTION("Can work with wrapped pointer types (smart pointers)") {
         std::unique_ptr<int> ptr = nullptr;
         auto valid_ptr = std::make_unique<int>(3);
 
-        CHECK_FALSE(retro::valid_ptr(ptr));
-        CHECK(retro::valid_ptr(valid_ptr));
+        CHECK_FALSE(Retro::ValidPtr(ptr));
+        CHECK(Retro::ValidPtr(valid_ptr));
 
-        CHECK(retro::invalid_ptr(ptr));
-        CHECK_FALSE(retro::invalid_ptr(valid_ptr));
+        CHECK(Retro::InvalidPtr(ptr));
+        CHECK_FALSE(Retro::InvalidPtr(valid_ptr));
     }
 }

@@ -12,172 +12,172 @@ import std;
 import RetroLib;
 #else
 #include "RetroLib/Casting/ByteCast.h"
-#include "RetroLib/Casting/ClassCast.h"
-#include "RetroLib/Casting/Convert.h"
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Casting/StaticCast.h"
 #include "RetroLib/Casting/InstanceOf.h"
 
 #include <memory>
 #endif
 
-namespace instanceof_test {
+namespace InstanceofTest {
     struct Base {
         virtual ~Base() = default;
-        virtual int foo() = 0;
+        virtual int Foo() = 0;
     };
 
     struct Derived1 : Base {
-        int foo() override {
-            return value1;
+        int Foo() override {
+            return Value1;
         }
 
-        int value1 = 3;
+        int Value1 = 3;
     };
     struct Derived2 : Base {
-        int foo() override {
-            return value2;
+        int Foo() override {
+            return Value2;
         }
 
-        int value2 = 4;
+        int Value2 = 4;
     };
 } // namespace instanceof_test
 
-using namespace instanceof_test;
+using namespace InstanceofTest;
 
 TEST_CASE("Check to see if we can convert between types statically", "[utils]") {
     SECTION("Can convert between numberic types") {
-        CHECK(retro::convert<double>(4) == 4.0);
-        CHECK(retro::convert<int>(4.0) == 4);
+        CHECK(Retro::StaticCast<double>(4) == 4.0);
+        CHECK(Retro::StaticCast<int>(4.0) == 4);
     }
 
     SECTION("Can perform implicit conversions that call constructors") {
-        CHECK(retro::convert<std::string>("Hello world") == "Hello world");
-        CHECK(retro::convert<retro::Optional<int>>(4) == 4);
+        CHECK(Retro::StaticCast<std::string>("Hello world") == "Hello world");
+        CHECK(Retro::StaticCast<Retro::Optional<int>>(4) == 4);
     }
 
     SECTION("Can convert to pointers") {
-        Derived1 derived1;
-        auto base = retro::convert<Base *>(&derived1);
-        CHECK(base == &derived1);
-        CHECK(retro::convert<Derived1 *>(base) == &derived1);
-        auto opaque = retro::convert<void *>(base);
-        CHECK(opaque == &derived1);
-        CHECK(retro::convert<Derived1 *>(opaque) == &derived1);
-        CHECK(std::addressof(retro::byte_cast<Derived1>(opaque)) == &derived1);
+        Derived1 Value1;
+        auto BaseValue = Retro::StaticCast<Base *>(&Value1);
+        CHECK(BaseValue == &Value1);
+        CHECK(Retro::StaticCast<Derived1 *>(BaseValue) == &Value1);
+        auto Opaque = Retro::StaticCast<void *>(BaseValue);
+        CHECK(Opaque == &Value1);
+        CHECK(Retro::StaticCast<Derived1 *>(Opaque) == &Value1);
+        CHECK(std::addressof(Retro::ByteCast<Derived1>(Opaque)) == &Value1);
     }
 }
 
 TEST_CASE("Can check if a polymorphic type is an instance of another type", "[utils]") {
     SECTION("Can work with raw pointers") {
-        Derived1 value1;
-        Derived2 value2;
-        Base *ptr = nullptr;
-        Base *valid_ptr1 = &value1;
-        Base *valid_ptr2 = &value2;
+        Derived1 Value1;
+        Derived2 Value2;
+        Base *Ptr = nullptr;
+        Base *ValidPtr1 = &Value1;
+        Base *ValidPtr2 = &Value2;
 
-        CHECK_FALSE(retro::instance_of<Base>(ptr));
-        CHECK_FALSE(retro::instance_of<Derived1>(ptr));
-        CHECK_FALSE(retro::instance_of<Derived2>(ptr));
+        CHECK_FALSE(Retro::InstanceOf<Base>(Ptr));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(Ptr));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(Ptr));
 
-        CHECK(retro::instance_of<Base>(valid_ptr1));
-        CHECK(retro::instance_of<Derived1>(valid_ptr1));
-        CHECK_FALSE(retro::instance_of<Derived2>(valid_ptr1));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr1));
+        CHECK(Retro::InstanceOf<Derived1>(ValidPtr1));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(ValidPtr1));
 
-        CHECK(retro::instance_of<Base>(valid_ptr2));
-        CHECK_FALSE(retro::instance_of<Derived1>(valid_ptr2));
-        CHECK(retro::instance_of<Derived2>(valid_ptr2));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr2));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(ValidPtr2));
+        CHECK(Retro::InstanceOf<Derived2>(ValidPtr2));
     }
 
     SECTION("Handles nullptr literals") {
-        CHECK_FALSE(retro::instance_of<Derived1>(nullptr));
-        CHECK_FALSE(retro::instance_of<Derived2>(nullptr));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(nullptr));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(nullptr));
     }
 
     SECTION("Can work with wrapped pointer types (smart pointers)") {
-        std::unique_ptr<Base> ptr = nullptr;
-        std::unique_ptr<Base> valid_ptr1 = std::make_unique<Derived1>();
-        std::unique_ptr<Base> valid_ptr2 = std::make_unique<Derived2>();
+        std::unique_ptr<Base> Ptr = nullptr;
+        std::unique_ptr<Base> ValidPtr1 = std::make_unique<Derived1>();
+        std::unique_ptr<Base> ValidPtr2 = std::make_unique<Derived2>();
 
-        CHECK_FALSE(retro::instance_of<Base>(ptr));
-        CHECK_FALSE(retro::instance_of<Derived1>(ptr));
-        CHECK_FALSE(retro::instance_of<Derived2>(ptr));
+        CHECK_FALSE(Retro::InstanceOf<Base>(Ptr));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(Ptr));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(Ptr));
 
-        CHECK(retro::instance_of<Base>(valid_ptr1));
-        CHECK(retro::instance_of<Derived1>(valid_ptr1));
-        CHECK_FALSE(retro::instance_of<Derived2>(valid_ptr1));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr1));
+        CHECK(Retro::InstanceOf<Derived1>(ValidPtr1));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(ValidPtr1));
 
-        CHECK(retro::instance_of<Base>(valid_ptr2));
-        CHECK_FALSE(retro::instance_of<Derived1>(valid_ptr2));
-        CHECK(retro::instance_of<Derived2>(valid_ptr2));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr2));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(ValidPtr2));
+        CHECK(Retro::InstanceOf<Derived2>(ValidPtr2));
     }
 
     SECTION("Can work with a polymorphic value instance") {
-        retro::Polymorphic<Base> valid_ptr1(std::in_place_type<Derived1>);
-        retro::Polymorphic<Base> valid_ptr2(std::in_place_type<Derived2>);
+        Retro::Polymorphic<Base> ValidPtr1(std::in_place_type<Derived1>);
+        Retro::Polymorphic<Base> ValidPtr2(std::in_place_type<Derived2>);
 
-        CHECK(retro::instance_of<Base>(valid_ptr1));
-        CHECK(retro::instance_of<Derived1>(valid_ptr1));
-        CHECK_FALSE(retro::instance_of<Derived2>(valid_ptr1));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr1));
+        CHECK(Retro::InstanceOf<Derived1>(ValidPtr1));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(ValidPtr1));
 
-        CHECK(retro::instance_of<Base>(valid_ptr2));
-        CHECK_FALSE(retro::instance_of<Derived1>(valid_ptr2));
-        CHECK(retro::instance_of<Derived2>(valid_ptr2));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr2));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(ValidPtr2));
+        CHECK(Retro::InstanceOf<Derived2>(ValidPtr2));
     }
 }
 
 TEST_CASE("Can check if a we can cast between types", "[utils]") {
     SECTION("Can work with raw pointers") {
-        Derived1 value1;
-        Derived2 value2;
-        Base *ptr = nullptr;
-        Base *valid_ptr1 = &value1;
-        Base *valid_ptr2 = &value2;
+        Derived1 Value1;
+        Derived2 Value2;
+        Base *Ptr = nullptr;
+        Base *ValidPtr1 = &Value1;
+        Base *ValidPtr2 = &Value2;
 
-        CHECK_FALSE(retro::class_cast<Base>(ptr).has_value());
-        CHECK_FALSE(retro::class_cast<Derived1>(ptr).has_value());
-        CHECK_FALSE(retro::class_cast<Derived2>(ptr).has_value());
+        CHECK_FALSE(Retro::DynamicCast<Base>(Ptr).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived1>(Ptr).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived2>(Ptr).HasValue());
 
-        CHECK(retro::class_cast<Base>(valid_ptr1).has_value());
-        CHECK(retro::class_cast<Derived1>(valid_ptr1).has_value());
-        CHECK_FALSE(retro::class_cast<Derived2>(valid_ptr1).has_value());
+        CHECK(Retro::DynamicCast<Base>(ValidPtr1).HasValue());
+        CHECK(Retro::DynamicCast<Derived1>(ValidPtr1).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived2>(ValidPtr1).HasValue());
 
-        CHECK(retro::class_cast<Base>(valid_ptr2).has_value());
-        CHECK_FALSE(retro::class_cast<Derived1>(valid_ptr2).has_value());
-        CHECK(retro::class_cast<Derived2>(valid_ptr2).has_value());
+        CHECK(Retro::DynamicCast<Base>(ValidPtr2).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived1>(ValidPtr2).HasValue());
+        CHECK(Retro::DynamicCast<Derived2>(ValidPtr2).HasValue());
     }
 
     SECTION("Handles nullptr literals") {
-        CHECK_FALSE(retro::class_cast<Derived1>(nullptr).has_value());
-        CHECK_FALSE(retro::class_cast<Derived2>(nullptr).has_value());
+        CHECK_FALSE(Retro::DynamicCast<Derived1>(nullptr).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived2>(nullptr).HasValue());
     }
 
     SECTION("Can work with wrapped pointer types (smart pointers)") {
-        std::unique_ptr<Base> ptr = nullptr;
-        std::unique_ptr<Base> valid_ptr1 = std::make_unique<Derived1>();
-        std::unique_ptr<Base> valid_ptr2 = std::make_unique<Derived2>();
+        std::unique_ptr<Base> Ptr = nullptr;
+        std::unique_ptr<Base> ValidPtr1 = std::make_unique<Derived1>();
+        std::unique_ptr<Base> ValidPtr2 = std::make_unique<Derived2>();
 
-        CHECK_FALSE(retro::class_cast<Base>(ptr).has_value());
-        CHECK_FALSE(retro::class_cast<Derived1>(ptr).has_value());
-        CHECK_FALSE(retro::class_cast<Derived2>(ptr).has_value());
+        CHECK_FALSE(Retro::DynamicCast<Base>(Ptr).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived1>(Ptr).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived2>(Ptr).HasValue());
 
-        CHECK(retro::class_cast<Base>(valid_ptr1).has_value());
-        CHECK(retro::class_cast<Derived1>(valid_ptr1).has_value());
-        CHECK_FALSE(retro::class_cast<Derived2>(valid_ptr1).has_value());
+        CHECK(Retro::DynamicCast<Base>(ValidPtr1).HasValue());
+        CHECK(Retro::DynamicCast<Derived1>(ValidPtr1).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived2>(ValidPtr1).HasValue());
 
-        CHECK(retro::class_cast<Base>(valid_ptr2).has_value());
-        CHECK_FALSE(retro::class_cast<Derived1>(valid_ptr2).has_value());
-        CHECK(retro::class_cast<Derived2>(valid_ptr2).has_value());
+        CHECK(Retro::DynamicCast<Base>(ValidPtr2).HasValue());
+        CHECK_FALSE(Retro::DynamicCast<Derived1>(ValidPtr2).HasValue());
+        CHECK(Retro::DynamicCast<Derived2>(ValidPtr2).HasValue());
     }
 
     SECTION("Can work with a polymorphic value instance") {
-        retro::Polymorphic<Base> valid_ptr1(std::in_place_type<Derived1>);
-        retro::Polymorphic<Base> valid_ptr2(std::in_place_type<Derived2>);
+        Retro::Polymorphic<Base> ValidPtr1(std::in_place_type<Derived1>);
+        Retro::Polymorphic<Base> ValidPtr2(std::in_place_type<Derived2>);
 
-        CHECK(retro::instance_of<Base>(valid_ptr1));
-        CHECK(retro::instance_of<Derived1>(valid_ptr1));
-        CHECK_FALSE(retro::instance_of<Derived2>(valid_ptr1));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr1));
+        CHECK(Retro::InstanceOf<Derived1>(ValidPtr1));
+        CHECK_FALSE(Retro::InstanceOf<Derived2>(ValidPtr1));
 
-        CHECK(retro::instance_of<Base>(valid_ptr2));
-        CHECK_FALSE(retro::instance_of<Derived1>(valid_ptr2));
-        CHECK(retro::instance_of<Derived2>(valid_ptr2));
+        CHECK(Retro::InstanceOf<Base>(ValidPtr2));
+        CHECK_FALSE(Retro::InstanceOf<Derived1>(ValidPtr2));
+        CHECK(Retro::InstanceOf<Derived2>(ValidPtr2));
     }
 }

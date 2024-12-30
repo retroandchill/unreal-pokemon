@@ -19,7 +19,7 @@ import RetroLib;
 
 enum class TestEnum { Ordinal1, Ordinal2 };
 
-std::string_view enum_to_string(TestEnum test_enum) {
+std::string_view EnumToString(TestEnum test_enum) {
     switch (test_enum) {
     case TestEnum::Ordinal1:
         return "Ordinal1";
@@ -29,39 +29,39 @@ std::string_view enum_to_string(TestEnum test_enum) {
         return "<Invalid>";
     }
 }
-constexpr auto to_string = retro::extension_method<&enum_to_string>;
+constexpr auto ToString = Retro::ExtensionMethod<&EnumToString>;
 
 struct VectorAppender {
     template <typename T, typename... A>
         requires std::constructible_from<T, A...>
-    constexpr void operator()(std::vector<T> &vec, A &&...args) const {
-        vec.emplace_back(std::forward<A>(args)...);
+    constexpr void operator()(std::vector<T> &Vec, A &&...Args) const {
+        Vec.emplace_back(std::forward<A>(Args)...);
     }
 };
 
 struct DemoStruct {
 
-    DemoStruct(int value1, float value2) : value1(value1), value2(value2) {
+    DemoStruct(int Value1, float Value2) : Value1(Value1), Value2(Value2) {
     }
 
-    int value1;
-    float value2;
+    int Value1;
+    float Value2;
 };
 
-constexpr VectorAppender vector_appender;
-constexpr auto append = retro::extension_method<vector_appender>;
+constexpr VectorAppender VectorAppenderCaller;
+constexpr auto Append = Retro::ExtensionMethod<VectorAppenderCaller>;
 
 TEST_CASE("Test that extension methods can be used") {
     SECTION("Extension method on enum with no arguments") {
-        CHECK((TestEnum::Ordinal1 | to_string()) == "Ordinal1");
-        CHECK((TestEnum::Ordinal2 | to_string()) == "Ordinal2");
+        CHECK((TestEnum::Ordinal1 | ToString()) == "Ordinal1");
+        CHECK((TestEnum::Ordinal2 | ToString()) == "Ordinal2");
     }
 
     SECTION("Extension method can be invoked with arguments") {
-        std::vector<DemoStruct> structs;
-        structs | append(3, 6.5);
-        REQUIRE(structs.size() == 1);
-        CHECK(structs[0].value1 == 3);
-        CHECK(structs[0].value2 == 6.5);
+        std::vector<DemoStruct> Structs;
+        Structs | Append(3, 6.5);
+        REQUIRE(Structs.size() == 1);
+        CHECK(Structs[0].Value1 == 3);
+        CHECK(Structs[0].Value2 == 6.5);
     }
 }

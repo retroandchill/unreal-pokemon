@@ -19,31 +19,38 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
-    /**
-     * Checks if the given instance of type U is a valid instance of the desired base type T.
-     *
-     * @param value The instance of type U to be checked for validity.
-     * @return True if the instance is valid, meaning that U is derived from T or is an instance
-     *         that can be dynamically cast to T. Otherwise, returns false.
-     */
-    RETROLIB_EXPORT template <Class T, Class U>
-    constexpr bool is_valid_instance(const U &value) {
-        if constexpr (std::derived_from<U, T>) {
-            // Trivial case, U is derived from T, so we know with certainty that this is valid
-            return true;
-        } else {
+    RETROLIB_EXPORT template <Class T>
+    struct InstanceChecker {
+        /**
+         * Checks if the given instance of type U is a valid instance of the desired base type T.
+         *
+         * @param Value The instance of type U to be checked for validity.
+         * @return True if the instance is valid, meaning that U is derived from T or is an instance
+         *         that can be dynamically cast to T. Otherwise, returns false.
+         */
+        template <Class U>
+        constexpr bool operator()(const U& Value) const {
+            if constexpr (std::derived_from<U, T>) {
+                // Trivial case, U is derived from T, so we know with certainty that this is valid
+                return true;
+            } else {
 #ifndef RTTI_ENABLED
-            static_assert(false, "RTTI is disabled, but the type is not derived from T")
-#endif
-                auto casted = dynamic_cast<const T *>(&value);
-            return casted != nullptr;
+                static_assert(false, "RTTI is disabled, but the type is not derived from T");
+    #endif
+                    auto casted = dynamic_cast<const T *>(&Value);
+                return casted != nullptr;
+            }
         }
-    }
+    };
+
+
+    template <Class T>
+    static constexpr InstanceChecker<T> IsValidInstance;
 
     /**
-     * @struct InstanceOf
+     * @struct InstanceOfFunction
      * @brief A utility to check if an object or a pointer is a valid instance of a specified type.
      *
      * The InstanceOf struct provides overloaded function call operators to determine if a given
@@ -52,16 +59,16 @@ namespace retro {
      * @tparam T The type against which the object's type is being checked.
      */
     template <Class T>
-    struct InstanceOf {
+    struct InstanceOfFunction {
         /**
          * Checks if the given value is a valid instance of type U.
          *
-         * @param value The value to be checked against the type U.
+         * @param Value The value to be checked against the type U.
          * @return A boolean indicating whether the value is a valid instance of type U.
          */
         template <Class U>
-        constexpr bool operator()(const U &value) const {
-            return is_valid_instance<T, U>(value);
+        constexpr bool operator()(const U &Value) const {
+            return IsValidInstance<T>(Value);
         }
 
         /**
@@ -71,13 +78,13 @@ namespace retro {
          * to the `valid_ptr` function and whether the functor applied to the value pointed to by
          * the pointer is true.
          *
-         * @param ptr Pointer to the object that needs to be checked.
+         * @param Ptr Pointer to the object that needs to be checked.
          * @return true if the pointer is valid and the functor evaluates to true for the
          * dereferenced value, otherwise false.
          */
         template <PointerType U>
-        constexpr bool operator()(U &&ptr) const {
-            return valid_ptr(std::forward<U>(ptr)) && (*this)(*std::forward<U>(ptr));
+        constexpr bool operator()(U &&Ptr) const {
+            return ValidPtr(std::forward<U>(Ptr)) && (*this)(*std::forward<U>(Ptr));
         }
 
         /**
@@ -86,21 +93,21 @@ namespace retro {
          * This function is a callable operator that takes a polymorphic object
          * and applies this operator to its dereferenced value.
          *
-         * @param polymorphic A Polymorphic object which contains a type U of
+         * @param Polymorphic A Polymorphic object which contains a type U of
          *        a certain size. The object will be dereferenced and the
          *        result will be passed to the operator function.
          * @return A boolean value indicating the result of applying the operator
          *         to the dereferenced value of the polymorphic object.
          */
         template <Class U, size_t Size>
-        constexpr bool operator()(const Polymorphic<U, Size> &polymorphic) const {
-            return (*this)(*polymorphic);
+        constexpr bool operator()(const Polymorphic<U, Size> &Polymorphic) const {
+            return (*this)(*Polymorphic);
         }
 
         /**
          * Determines the boolean value for a nullptr.
          *
-         * @param A parameter of type std::nullptr_t representing a null pointer.
+         * @param std::nullptr_t A parameter of type std::nullptr_t representing a null pointer.
          * @return Always returns false as null pointers are considered false.
          */
         constexpr bool operator()(std::nullptr_t) const {
@@ -124,5 +131,5 @@ namespace retro {
      * are performed at compile-time.
      */
     RETROLIB_EXPORT template <Class T>
-    constexpr InstanceOf<T> instance_of;
+    constexpr InstanceOfFunction<T> InstanceOf;
 } // namespace retro

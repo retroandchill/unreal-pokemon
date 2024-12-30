@@ -15,7 +15,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
 
     RETROLIB_EXPORT enum class Cardinality : std::ptrdiff_t { Infinite = -3, Unknown = -2, Finite = -1 };
 

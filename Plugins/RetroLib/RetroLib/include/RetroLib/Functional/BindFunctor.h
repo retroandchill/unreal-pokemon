@@ -19,7 +19,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * @struct SimpleFunctorBinding
@@ -49,13 +49,13 @@ namespace retro {
          * forwarding the provided arguments to a specified functor using `std::invoke`.
          *
          * @tparam A Template parameter pack representing the types of arguments being forwarded.
-         * @param args An arbitrary number of arguments to be forwarded to the functor.
+         * @param Args An arbitrary number of arguments to be forwarded to the functor.
          * @return The result of invoking the functor with the given arguments.
          */
         template <typename... A>
             requires std::invocable<F, A...>
-        constexpr decltype(auto) operator()(A &&...args) const noexcept(std::is_nothrow_invocable_v<F, A...>) {
-            return std::invoke(Functor, std::forward<A>(args)...);
+        constexpr decltype(auto) operator()(A &&...Args) const noexcept(std::is_nothrow_invocable_v<F, A...>) {
+            return std::invoke(Functor, std::forward<A>(Args)...);
         }
     };
 
@@ -66,7 +66,7 @@ namespace retro {
      */
     template <auto Functor>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr auto bind_functor() {
+    constexpr auto BindFunctor() {
         return SimpleFunctorBinding<Functor>();
     }
 

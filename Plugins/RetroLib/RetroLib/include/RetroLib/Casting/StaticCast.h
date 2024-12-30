@@ -1,5 +1,5 @@
 /**
- * @file Convert.h
+ * @file StaticCast.h
  * @brief Static conversion functor between types.
  *
  * @author Retro & Chill
@@ -17,7 +17,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * Checks if you can cast from T to U.
@@ -26,12 +26,12 @@ namespace retro {
      * @tparam U The target type
      */
     RETROLIB_EXPORT template <typename T, typename U>
-    concept CanStaticCast = requires(T &&input) {
-        { static_cast<U>(std::forward<T>(input)) } -> std::same_as<U>;
+    concept CanStaticCast = requires(T &&Input) {
+        { static_cast<U>(std::forward<T>(Input)) } -> std::same_as<U>;
     };
 
     /**
-     * @class Convert
+     * @class StaticCastFunction
      *
      * @brief A generic conversion functor for types convertible to a specified type T.
      *
@@ -45,7 +45,7 @@ namespace retro {
      *       to be implicitly convertible.
      */
     template <typename T>
-    struct Convert {
+    struct StaticCastFunction {
         /**
          * @brief Invokes the conversion of the provided argument to the specified type T.
          *
@@ -55,7 +55,7 @@ namespace retro {
          *
          * @tparam U The type of the argument to be converted.
          *
-         * @param args The argument to be converted to type T.
+         * @param Args The argument to be converted to type T.
          *
          * @return The result of converting the argument to type T.
          *
@@ -66,8 +66,8 @@ namespace retro {
          */
         template <typename U>
             requires CanStaticCast<U, T>
-        constexpr decltype(auto) operator()(U &&args) const {
-            return static_cast<T>(std::forward<U>(args));
+        constexpr decltype(auto) operator()(U &&Args) const {
+            return static_cast<T>(std::forward<U>(Args));
         }
     };
 
@@ -82,5 +82,5 @@ namespace retro {
      * @tparam T The type to which the functor converts arguments.
      */
     RETROLIB_EXPORT template <typename T>
-    constexpr Convert<T> convert;
+    constexpr StaticCastFunction<T> StaticCast;
 } // namespace retro

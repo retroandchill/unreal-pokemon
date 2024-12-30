@@ -18,7 +18,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
 
     /**
      * A traits structure to determine if a given type has exactly one function call operator.
@@ -108,15 +108,15 @@ namespace retro {
      * If the object is a pointer or a member pointer, it also verifies that the pointer is not null.
      *
      * @tparam F The type of the functor object to be checked.
-     * @param functor The instance of the functor object to be validated.
+     * @param Functor The instance of the functor object to be validated.
      * @return True if the object is a valid functor, otherwise false.
      */
     RETROLIB_EXPORT template <typename F>
-    consteval bool is_valid_functor_object(const F &functor) {
+    consteval bool IsValidFunctorObject(const F &Functor) {
         if constexpr (!HasFunctionCallOperator<F>) {
             return false;
         } else if constexpr (std::is_pointer_v<F> || std::is_member_pointer_v<F>) {
-            return functor != nullptr;
+            return Functor != nullptr;
         } else {
             return true;
         }
@@ -138,7 +138,7 @@ namespace retro {
         /**
          * Indicates if this is a free function.
          */
-        static constexpr bool is_free = Free;
+        static constexpr bool IsFree = Free;
 
         /**
          * Identifies the return type of the function.
@@ -148,7 +148,7 @@ namespace retro {
         /**
          * The number of arguments the function takes.
          */
-        static constexpr size_t arg_count = sizeof...(A);
+        static constexpr size_t ArgCount = sizeof...(A);
 
         /**
          * Identifies the type of the N-th argument of the function.
@@ -157,13 +157,13 @@ namespace retro {
          * @requires `N` must be less than `arg_count`.
          */
         template <size_t N>
-            requires(N < arg_count)
+            requires(N < ArgCount)
         using Arg = std::tuple_element_t<N, std::tuple<A...>>;
 
         /**
          * A boolean value representing whether the member function is noexcept.
          */
-        static constexpr bool is_noexcept = NoExcept;
+        static constexpr bool IsNoexcept = NoExcept;
     };
 
     /**
@@ -218,12 +218,12 @@ namespace retro {
         /**
          * A boolean value representing whether the member function is const-qualified.
          */
-        static constexpr bool is_const = Const;
+        static constexpr bool IsConst = Const;
 
         /**
          * The reference qualifier (lvalue, rvalue, or none) of the member function.
          */
-        static constexpr RefQualifier ref_qualifier = Ref;
+        static constexpr RefQualifier Qualifier = Ref;
     };
 
     /**
@@ -526,7 +526,7 @@ namespace retro {
      * @tparam T The type to be checked against the functional-type criteria.
      */
     RETROLIB_EXPORT template <typename T>
-    concept FunctionalType = FunctionTraits<T>::is_valid;
+    concept FunctionalType = FunctionTraits<T>::IsValid;
 
     /**
      * @brief Concept to determine if a type T is a free function.
@@ -541,7 +541,7 @@ namespace retro {
      * @tparam T The type to be evaluated as a free function.
      */
     RETROLIB_EXPORT template <typename T>
-    concept FreeFunction = FunctionalType<T> && FunctionTraits<T>::is_free;
+    concept FreeFunction = FunctionalType<T> && FunctionTraits<T>::IsFree;
 
     /**
      * @brief Concept to determine if a type is a method.
@@ -554,7 +554,7 @@ namespace retro {
      * @tparam T The type to check against the concept.
      */
     RETROLIB_EXPORT template <typename T>
-    concept Method = FunctionalType<T> && (!FunctionTraits<T>::is_free);
+    concept Method = FunctionalType<T> && (!FunctionTraits<T>::IsFree);
 
     /**
      * The return type of the given functional type.
@@ -570,7 +570,7 @@ namespace retro {
      * @tparam T The functional type
      */
     RETROLIB_EXPORT template <FunctionalType T>
-    constexpr size_t argument_count = FunctionTraits<T>::arg_count;
+    constexpr size_t ArgumentCount = FunctionTraits<T>::ArgCount;
 
     /**
      * The N-th argument count of the given functional type.
@@ -579,7 +579,7 @@ namespace retro {
      * @tparam N The index of the argument
      */
     RETROLIB_EXPORT template <FunctionalType T, size_t N>
-        requires(N < argument_count<T>)
+        requires(N < ArgumentCount<T>)
     using Argument = typename FunctionTraits<T>::template Arg<N>;
 
     /**
@@ -588,7 +588,7 @@ namespace retro {
      * @tparam T The type to check
      */
     RETROLIB_EXPORT template <typename T>
-    concept Member = MemberTraits<T>::is_valid || Method<T>;
+    concept Member = MemberTraits<T>::IsValid || Method<T>;
 
     /**
      * The owning class of the given method.
@@ -619,7 +619,7 @@ namespace retro {
      * @tparam T The type to be checked for const qualification and conformity to Method<T>.
      */
     RETROLIB_EXPORT template <typename T>
-    concept ConstQualified = Method<T> && FunctionTraits<T>::is_const;
+    concept ConstQualified = Method<T> && FunctionTraits<T>::IsConst;
 
     /**
      * @brief Concept to check if a type T has a method and is lvalue-qualified.
@@ -632,7 +632,7 @@ namespace retro {
      * @tparam T The type to be checked against the concept requirements.
      */
     RETROLIB_EXPORT template <typename T>
-    concept LValueQualified = Method<T> && (FunctionTraits<T>::ref_qualifier == RefQualifier::LValue);
+    concept LValueQualified = Method<T> && (FunctionTraits<T>::Qualifier == RefQualifier::LValue);
 
     /**
      * Concept to determine if a given type `T` is qualified with an rvalue reference.
@@ -645,7 +645,7 @@ namespace retro {
      * @tparam T The type to be checked against the concept.
      */
     RETROLIB_EXPORT template <typename T>
-    concept RValueQualified = Method<T> && (FunctionTraits<T>::ref_qualifier == RefQualifier::RValue);
+    concept RValueQualified = Method<T> && (FunctionTraits<T>::Qualifier == RefQualifier::RValue);
 
     /**
      * Get the type of the owning class of a method, adding const to the type, if the method is const-qualified.
@@ -680,6 +680,6 @@ namespace retro {
      * - T: The type to check against the NoExcept concept.
      */
     RETROLIB_EXPORT template <typename T>
-    concept NoExcept = Method<T> && FunctionTraits<T>::is_noexcept;
+    concept NoExcept = Method<T> && FunctionTraits<T>::IsNoexcept;
 
 } // namespace retro

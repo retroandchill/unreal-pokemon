@@ -15,7 +15,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * @brief Forwards the given argument with type preservation analogous to std::forward,
      *        emulating the cv-qualifiers of a specified type.
@@ -33,16 +33,16 @@ namespace retro {
      *       it by adding the ability to replicate cv-qualifiers from a template type `T`.
      */
     RETROLIB_EXPORT template <class T, class U>
-    constexpr auto &&forward_like(U &&x) noexcept {
-        constexpr bool is_adding_const = std::is_const_v<std::remove_reference_t<T>>;
+    constexpr auto &&ForwardLike(U &&x) noexcept {
+        constexpr bool IsAddingConst = std::is_const_v<std::remove_reference_t<T>>;
         if constexpr (std::is_lvalue_reference_v<T &&>) {
-            if constexpr (is_adding_const) {
+            if constexpr (IsAddingConst) {
                 return std::as_const(x);
             } else {
                 return static_cast<U &>(x);
             }
         } else {
-            if constexpr (is_adding_const) {
+            if constexpr (IsAddingConst) {
                 return std::move(std::as_const(x));
             } else {
                 return std::move(x);
@@ -51,5 +51,5 @@ namespace retro {
     }
 
     RETROLIB_EXPORT template <typename T, typename U>
-    using ForwardLikeType = decltype(forward_like<T>(std::declval<U>()));
+    using ForwardLikeType = decltype(ForwardLike<T>(std::declval<U>()));
 } // namespace retro

@@ -18,7 +18,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::optionals {
+namespace Retro::Optionals {
 
     struct OrElseThrowInvoker {
         /**
@@ -33,19 +33,19 @@ namespace retro::optionals {
         template <OptionalType O, typename F>
             requires std::invocable<F> && std::derived_from<std::invoke_result_t<F>, std::exception>
         constexpr decltype(auto) operator()(O &&optional, F &&functor) const {
-            if (has_value(std::forward<O>(optional))) {
-                return get<O>(std::forward<O>(optional));
+            if (HasValue(std::forward<O>(optional))) {
+                return Get<O>(std::forward<O>(optional));
             }
 
             throw std::invoke(std::forward<F>(functor));
         }
     };
 
-    constexpr OrElseThrowInvoker or_else_throw_function;
+    constexpr OrElseThrowInvoker OrElseThrowFunction;
 
-    template <auto Functor = dynamic_functor>
+    template <auto Functor = DynamicFunctor>
         requires ValidFunctorParameter<Functor>
-    constexpr FunctorBindingInvoker<Functor, or_else_throw_function> or_else_throw_invoker;
+    constexpr FunctorBindingInvoker<Functor, OrElseThrowFunction> OrElseThrowCallback;
 
     /**
      * Creates an extension method that acts as an operator for std::optional types,
@@ -58,8 +58,8 @@ namespace retro::optionals {
      * @return An invoker object that can be used to throw an exception when
      *         applying to an empty optional value.
      */
-    RETROLIB_EXPORT constexpr auto or_else_throw() {
-        return extension_method<or_else_throw_invoker<dynamic_functor>>([] { return std::bad_optional_access{}; });
+    RETROLIB_EXPORT constexpr auto OrElseThrow() {
+        return ExtensionMethod<OrElseThrowCallback<DynamicFunctor>>([] { return std::bad_optional_access{}; });
     }
 
     /**
@@ -67,12 +67,12 @@ namespace retro::optionals {
      *
      * @tparam A The variadic template arguments to be forwarded to the functor.
      * @return A processed result of the input or an exception if the operation fails, leveraging the
-     * `extension_method`.
+     * `ExtensionMethod`.
      */
-    RETROLIB_EXPORT template <auto Functor = dynamic_functor, typename... A>
+    RETROLIB_EXPORT template <auto Functor = DynamicFunctor, typename... A>
         requires ValidFunctorParameter<Functor>
-    constexpr auto or_else_throw(A &&...args) {
-        return extension_method<or_else_throw_invoker<Functor>>(std::forward<A>(args)...);
+    constexpr auto OrElseThrow(A &&...Args) {
+        return ExtensionMethod<OrElseThrowCallback<Functor>>(std::forward<A>(Args)...);
     }
 
 } // namespace retro::optionals

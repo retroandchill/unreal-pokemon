@@ -17,7 +17,7 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro::ranges {
+namespace Retro::Ranges {
     /**
      * @brief Reduces a range of elements into a single value by applying a functor
      * iteratively.
@@ -29,18 +29,18 @@ namespace retro::ranges {
      * @tparam R The type of the range.
      * @tparam I The type of the identity value.
      * @tparam F The type of the functor.
-     * @param range The range of elements to be reduced.
-     * @param identity The initial identity value used in the reduction process.
-     * @param functor A callable object that specifies how to combine two elements.
+     * @param Range The range of elements to be reduced.
+     * @param Identity The initial identity value used in the reduction process.
+     * @param Functor A callable object that specifies how to combine two elements.
      * @return The final aggregated result of the reduction operation.
      */
     RETROLIB_EXPORT template <std::ranges::input_range R, typename I, HasFunctionCallOperator F>
         requires std::invocable<F, I, RangeCommonReference<R>> &&
                  std::convertible_to<std::invoke_result_t<F, I, RangeCommonReference<R>>, I>
-    constexpr auto reduce(R &&range, I &&identity, F functor) {
-        auto Result = std::forward<I>(identity);
-        for (auto &&value : std::forward<R>(range)) {
-            Result = std::invoke(functor, std::move(Result), std::forward<decltype(value)>(value));
+    constexpr auto Reduce(R &&Range, I &&Identity, F Functor) {
+        auto Result = std::forward<I>(Identity);
+        for (auto &&Value : std::forward<R>(Range)) {
+            Result = std::invoke(Functor, std::move(Result), std::forward<decltype(Value)>(Value));
         }
         return Result;
     }
@@ -49,19 +49,19 @@ namespace retro::ranges {
      * Reduces a given range by performing a folding operation using the specified identity value
      * and a binding created from the provided arguments.
      *
-     * @param range The range of elements to be reduced.
-     * @param identity The identity value used for the reduction operation.
-     * @param prime_arg The primary argument to create a binding for the reduction operation.
-     * @param args Additional arguments to create a binding for the reduction.
+     * @param Range The range of elements to be reduced.
+     * @param Identity The identity value used for the reduction operation.
+     * @param PrimeArg The primary argument to create a binding for the reduction operation.
+     * @param Args Additional arguments to create a binding for the reduction.
      * @return The result of folding the elements in the range using the specified identity value
      * and the created binding.
      */
     RETROLIB_EXPORT template <std::ranges::input_range R, typename I, typename T, typename... A>
         requires std::invocable<BindingType<T, A...>, I, RangeCommonReference<R>> &&
                  std::convertible_to<std::invoke_result_t<BindingType<T, A...>, I, RangeCommonReference<R>>, I>
-    constexpr auto reduce(R &&range, I &&identity, T &&prime_arg, A &&...args) {
-        return reduce(std::forward<R>(range), std::forward<I>(identity),
-                      create_binding(std::forward<T>(prime_arg), std::forward<A>(args)...));
+    constexpr auto Reduce(R &&Range, I &&Identity, T &&PrimeArg, A &&...Args) {
+        return Reduce(std::forward<R>(Range), std::forward<I>(Identity),
+                      CreateBinding(std::forward<T>(PrimeArg), std::forward<A>(Args)...));
     }
 
     /**
@@ -72,9 +72,9 @@ namespace retro::ranges {
      * @tparam R The type of the range to reduce.
      * @tparam I The type of the identity value.
      * @tparam A The types of additional arguments required for creating a binding.
-     * @param range The range of elements to process with reduction.
-     * @param identity The initial value for the reduction operation.
-     * @param args Additional arguments for creating the binding for the Functor.
+     * @param Range The range of elements to process with reduction.
+     * @param Identity The initial value for the reduction operation.
+     * @param Args Additional arguments for creating the binding for the Functor.
      * @return The result of reducing the range using the identity value and the created binding.
      */
     RETROLIB_EXPORT template <auto Functor, std::ranges::input_range R, typename I, typename... A>
@@ -82,9 +82,9 @@ namespace retro::ranges {
                  std::invocable<ConstBindingType<Functor, A...>, I, RangeCommonReference<R>> &&
                  std::convertible_to<std::invoke_result_t<ConstBindingType<Functor, A...>, I, RangeCommonReference<R>>,
                                      I>
-    constexpr auto reduce(R &&range, I &&identity, A &&...args) {
-        return reduce(std::forward<R>(range), std::forward<I>(identity),
-                      create_binding<Functor>(std::forward<A>(args)...));
+    constexpr auto Reduce(R &&Range, I &&Identity, A &&...Args) {
+        return Reduce(std::forward<R>(Range), std::forward<I>(Identity),
+                      CreateBinding<Functor>(std::forward<A>(Args)...));
     }
 
     /**
@@ -120,9 +120,9 @@ namespace retro::ranges {
          * @tparam I The type of the identity element used in the `reduce` operation.
          * @tparam A Variadic template for additional argument types forwarded to the `reduce` function.
          *
-         * @param range The input range over which the `reduce` operation will be applied.
-         * @param identity The identity element used for the `reduce` algorithm.
-         * @param args Additional arguments forwarded to the `reduce` operation.
+         * @param Range The input range over which the `reduce` operation will be applied.
+         * @param Identity The identity element used for the `reduce` algorithm.
+         * @param Args Additional arguments forwarded to the `reduce` operation.
          *
          * @return The result of the `reduce` operation, which combines the elements of the input range
          * starting with the identity element, using the specified operation logic.
@@ -130,8 +130,8 @@ namespace retro::ranges {
         template <std::ranges::input_range R, typename I, typename... A>
             requires std::invocable<BindingType<A...>, I, RangeCommonReference<R>> &&
                      std::convertible_to<std::invoke_result_t<BindingType<A...>, I, RangeCommonReference<R>>, I>
-        constexpr auto operator()(R &&range, I &&identity, A &&...args) const {
-            return reduce(std::forward<R>(range), std::forward<I>(identity), std::forward<A>(args)...);
+        constexpr auto operator()(R &&Range, I &&Identity, A &&...Args) const {
+            return Reduce(std::forward<R>(Range), std::forward<I>(Identity), std::forward<A>(Args)...);
         }
     };
 
@@ -151,7 +151,7 @@ namespace retro::ranges {
      * @note The availability and usage of `reduce_invoker` depend on the constraints and requirements
      * defined by the `ReduceInvoker` struct, including the necessary operator overloading and type compatibility.
      */
-    constexpr ReduceInvoker reduce_invoker;
+    constexpr ReduceInvoker ReduceFuction;
 
     /**
      * @struct ReduceConstInvoker
@@ -192,9 +192,9 @@ namespace retro::ranges {
          * @tparam I The type of the identity element.
          * @tparam A Variadic types for additional arguments forwarded to the `reduce` operation.
          *
-         * @param range The input range on which the `reduce` operation is applied.
-         * @param identity The identity element used as the initial value for the `reduce` operation.
-         * @param args Additional arguments forwarded to the provided functor during the reduction.
+         * @param Range The input range on which the `reduce` operation is applied.
+         * @param Identity The identity element used as the initial value for the `reduce` operation.
+         * @param Args Additional arguments forwarded to the provided functor during the reduction.
          *
          * @return The result of the `reduce` operation, combining the elements of the range with the identity value,
          * using the specified functor. The result must be convertible to the type of the identity value.
@@ -203,8 +203,8 @@ namespace retro::ranges {
             requires std::invocable<ConstBindingType<Functor, A...>, I, RangeCommonReference<R>> &&
                      std::convertible_to<
                          std::invoke_result_t<ConstBindingType<Functor, A...>, I, RangeCommonReference<R>>, I>
-        constexpr auto operator()(R &&range, I &&identity, A &&...args) const {
-            return reduce<Functor>(std::forward<R>(range), std::forward<I>(identity), std::forward<A>(args)...);
+        constexpr auto operator()(R &&Range, I &&Identity, A &&...Args) const {
+            return Reduce<Functor>(std::forward<R>(Range), std::forward<I>(Identity), std::forward<A>(Args)...);
         }
     };
 
@@ -232,7 +232,7 @@ namespace retro::ranges {
      */
     template <auto Functor>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr ReduceConstInvoker<Functor> reduce_const_invoker;
+    constexpr ReduceConstInvoker<Functor> ReduceConstFunction;
 
     /**
      * @fn reduce
@@ -246,16 +246,16 @@ namespace retro::ranges {
      * @tparam I The type of the identity element.
      * @tparam A Variadic template representing additional arguments passed to the operation.
      *
-     * @param identity The identity element used as the starting point for the reduction operation.
-     * @param args Additional arguments forwarded to the `reduce_invoker` implementation.
+     * @param Identity The identity element used as the starting point for the reduction operation.
+     * @param Args Additional arguments forwarded to the `reduce_invoker` implementation.
      *
      * @return The result of invoking the `reduce_invoker` operation with the provided arguments.
      *
-     * @note This function relies on the `extension_method` mechanism for leveraging the `reduce_invoker`.
+     * @note This function relies on the `ExtensionMethod` mechanism for leveraging the `reduce_invoker`.
      */
     RETROLIB_EXPORT template <typename I, typename... A>
-    constexpr auto reduce(I &&identity, A &&...args) {
-        return extension_method<reduce_invoker>(std::forward<I>(identity), std::forward<A>(args)...);
+    constexpr auto Reduce(I &&Identity, A &&...Args) {
+        return ExtensionMethod<ReduceFuction>(std::forward<I>(Identity), std::forward<A>(Args)...);
     }
 
     /**
@@ -268,8 +268,8 @@ namespace retro::ranges {
      * @tparam I The type of the identity value.
      * @tparam A The types of additional arguments forwarded to the reduction operation.
      *
-     * @param identity The initial value for the reduction operation, which serves as the identity element.
-     * @param args Additional arguments required by the reduction operation, forwarded appropriately.
+     * @param Identity The initial value for the reduction operation, which serves as the identity element.
+     * @param Args Additional arguments required by the reduction operation, forwarded appropriately.
      *
      * @return The result of the reduction operation performed on the provided range and arguments.
      *
@@ -279,7 +279,7 @@ namespace retro::ranges {
      */
     RETROLIB_EXPORT template <auto Functor, typename I, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr auto reduce(I &&identity, A &&...args) {
-        return extension_method<reduce_const_invoker<Functor>>(std::forward<I>(identity), std::forward<A>(args)...);
+    constexpr auto Reduce(I &&Identity, A &&...Args) {
+        return ExtensionMethod<ReduceConstFunction<Functor>>(std::forward<I>(Identity), std::forward<A>(Args)...);
     }
 } // namespace retro::ranges

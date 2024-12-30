@@ -16,16 +16,16 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace retro {
+namespace Retro {
     /**
      * Concept for the minimum requirements for an iterator.
      *
      * @tparam T The iterator type
      */
     template <typename T>
-    concept Iterator = requires(T iter) {
-        { ++iter } -> std::same_as<T &>;
-        *iter;
+    concept Iterator = requires(T Iter) {
+        { ++Iter } -> std::same_as<T &>;
+        *Iter;
     };
 
     /**
@@ -35,8 +35,8 @@ namespace retro {
      * @tparam I The iterator type
      */
     template <typename S, typename I>
-    concept Sentinel = requires(S s, I i) {
-        { i != s } -> std::same_as<bool>;
+    concept Sentinel = requires(S Sentinel, I Iterator) {
+        { Iterator != Sentinel } -> std::same_as<bool>;
     };
 
     /**
@@ -61,8 +61,8 @@ namespace retro {
      * @tparam T The container type.
      */
     template <typename T>
-    concept Iterable = requires(T &&range) {
-        { std::forward<T>(range).begin() } -> Iterator;
-        { std::forward<T>(range).end() } -> Sentinel<IteratorType<T>>;
+    concept Iterable = requires(T &&Range) {
+        { std::forward<T>(Range).begin() } -> Iterator;
+        { std::forward<T>(Range).end() } -> Sentinel<IteratorType<T>>;
     };
 } // namespace retro
