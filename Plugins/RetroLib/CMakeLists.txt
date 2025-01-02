@@ -59,9 +59,9 @@ endif()
 
 
 
-add_subdirectory(RetroLib)
+add_subdirectory(Source/RetroLib)
 
 if (RETROLIB_WITH_TESTS)
     enable_testing()
-    add_subdirectory(Tests)
+    add_subdirectory(Source/RetroLibTests)
 endif()

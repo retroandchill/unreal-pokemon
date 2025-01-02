@@ -67,11 +67,11 @@ jobs:
 
       - name: Merge counters from different runs and convert the result into an llvm-cov-compatible form
         run: |
-          llvm-profdata-18 merge -o merged.profdata ${{ runner.workspace }}/build/**/*.profraw
+          llvm-profdata-18 merge -o merged.profdata ${{ runner.workspace }}/build/Source/**/*.profraw
 
       - name: Collect the coverage
         run: |
-          llvm-cov-18 show --show-branches=count --instr-profile merged.profdata ${{ runner.workspace }}/build/Tests/RetroLibTests > coverage.txt
+          llvm-cov-18 show --show-branches=count --instr-profile merged.profdata ${{ runner.workspace }}/build/Source/RetroLibTests/RetroLibTests > coverage.txt
 
       - name: Run sonar-scanner
         env:

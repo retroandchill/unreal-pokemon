@@ -2,3 +2,5 @@
 cmake-build-*
 build
 .venv
+Binaries
+Intermediate
