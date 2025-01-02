@@ -10,6 +10,7 @@ public class GridBased2D : ModuleRules {
 
         PrivateDependencyModuleNames.AddRange(
             new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "EnhancedInput", "CommonMath", "TileReplacer",
-                           "DeveloperSettings", "UnrealRanges", "AudioPlaybackManager" });
+                           "DeveloperSettings",  "AudioPlaybackManager", "RetroLib"
+            });
     }
 }

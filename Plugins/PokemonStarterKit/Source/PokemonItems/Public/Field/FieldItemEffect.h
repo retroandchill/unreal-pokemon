@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Functional/Delegates.h"
+
 #include "UObject/Object.h"
+#include "RetroLib.h"
 
 #include "FieldItemEffect.generated.h"
 
@@ -26,7 +27,7 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
     bool ImplementsGetWorld() const override;
 #endif
 
-    UE_MULTICAST_DELEGATE_MEMBER(FOnItemEffectComplete, OnEffectComplete);
+    RETRO_MULTICAST_DELEGATE_MEMBER(FOnItemEffectComplete, OnEffectComplete);
 
   protected:
     /**

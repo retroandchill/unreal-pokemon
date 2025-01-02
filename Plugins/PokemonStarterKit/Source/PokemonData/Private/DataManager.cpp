@@ -2,18 +2,15 @@
 #include "DataManager.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
+
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();
     // clang-format off
     Settings->DataTables |
-        UE::Ranges::Map(&FSoftObjectPath::TryLoad, nullptr) |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<UDataTable>) |
-        UE::Ranges::ForEach([this](UDataTable *Table) {
+        Retro::Ranges::Views::Transform<&FSoftObjectPath::TryLoad>(nullptr) |
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<UDataTable>) |
+        Retro::Ranges::ForEach([this](UDataTable *Table) {
             auto RowStruct = Table->GetRowStruct();
             if (RowStruct == nullptr) {
                 return;

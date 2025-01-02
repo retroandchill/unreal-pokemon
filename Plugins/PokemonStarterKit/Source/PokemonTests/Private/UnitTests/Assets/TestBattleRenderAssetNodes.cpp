@@ -2,12 +2,14 @@
 #include "Graphics/BattleRender.h"
 #include "K2Node_CallFunction.h"
 #include "Misc/AutomationTest.h"
-#include "Ranges/Blueprints/BlueprintPins.h"
-#include "Ranges/Variants/K2Node_GetVariantObject.h"
-#include "Ranges/Variants/K2Node_GetVariantValue.h"
-#include "Ranges/Variants/K2Node_LoadVariantSynchronous.h"
-#include "Ranges/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
-#include "Ranges/Variants/K2Node_MakeVariantObjectStruct.h"
+#include "RetroLib/Blueprints/BlueprintPins.h"
+#include "RetroLib/Variants/K2Node_GetVariantObject.h"
+#include "RetroLib/Variants/K2Node_GetVariantValue.h"
+#include "RetroLib/Variants/K2Node_LoadVariantSynchronous.h"
+#include "RetroLib/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
+#include "RetroLib/Variants/K2Node_MakeVariantObjectStruct.h"
+
+
 #include "Utilities/K2Nodes.h"
 #include "UtilityClasses/Helpers/ToolMenuActionAccess.h"
 
@@ -18,7 +20,7 @@ DeclareTestableBP(TestBP, TestGraph);
 
 TObjectPtr<UScriptStruct> StructType;
 TObjectPtr<UScriptStruct> SoftStructType;
-TOptional<UE::Ranges::IVariantRegistration &> Registration;
+TOptional<Retro::IVariantRegistration &> Registration;
 
 template <bool bIsCompact = false>
 FORCEINLINE void AssertValidNode(UK2Node *Node) {
@@ -38,9 +40,9 @@ END_DEFINE_SPEC(FTestBattleRenderAssetNodes);
 void FTestBattleRenderAssetNodes::Define() {
     Describe("Test Battle Render Blueprint Nodes", [this] {
         BeforeEach([this] {
-            auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
-            StructType = UE::Ranges::GetScriptStruct<FBattleRender>();
-            SoftStructType = UE::Ranges::GetScriptStruct<FSoftBattleRender>();
+            auto &Registry = Retro::FVariantObjectStructRegistry::Get();
+            StructType = Retro::GetScriptStruct<FBattleRender>();
+            SoftStructType = Retro::GetScriptStruct<FSoftBattleRender>();
             Registration = Registry.GetVariantStructData(*StructType);
             DefineTestableBP(TestBP, TestGraph);
         });
@@ -56,7 +58,7 @@ void FTestBattleRenderAssetNodes::Define() {
             Node->AllocateDefaultPins();
             AssertValidNode<true>(Node);
 
-            auto InputPin = Node->FindPin(UE::Ranges::PN_Variant);
+            auto InputPin = Node->FindPin(Retro::PN_Variant);
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
@@ -99,7 +101,7 @@ void FTestBattleRenderAssetNodes::Define() {
             Node->AllocateDefaultPins();
             AssertValidNode(Node);
 
-            auto InputPin = Node->FindPin(UE::Ranges::PN_Object);
+            auto InputPin = Node->FindPin(Retro::PN_Object);
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
@@ -145,7 +147,7 @@ void FTestBattleRenderAssetNodes::Define() {
             Node->AllocateDefaultPins();
             AssertValidNode(Node);
 
-            auto InputPin = Node->FindPin(UE::Ranges::PN_Object);
+            auto InputPin = Node->FindPin(Retro::PN_Object);
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);
@@ -228,7 +230,7 @@ void FTestBattleRenderAssetNodes::Define() {
             AssertValidNode(Node);
             UE_CHECK_FALSE(Node->IsNodePure());
 
-            auto InputPin = Node->FindPin(UE::Ranges::PN_SoftReference);
+            auto InputPin = Node->FindPin(Retro::PN_SoftReference);
             UE_ASSERT_NOT_NULL(InputPin);
             auto OutputPin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
             UE_ASSERT_NOT_NULL(OutputPin);

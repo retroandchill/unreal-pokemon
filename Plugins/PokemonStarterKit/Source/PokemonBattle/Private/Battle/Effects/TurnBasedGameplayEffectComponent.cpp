@@ -7,10 +7,7 @@
 #include "GameplayEffect.h"
 #include "MathUtilities.h"
 #include "Misc/DataValidation.h"
-#include "Ranges/Optional/Filter.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OrElse.h"
-#include "Ranges/Utilities/Localization.h"
+
 
 bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
                                                                     FActiveGameplayEffect &ActiveGE) const {
@@ -19,8 +16,8 @@ bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGamep
     check(IsValid(TurnBasedComponent))
     // clang-format off
     int32 Duration = TurnDuration |
-                     UE::Optionals::Map(&UMathUtilities::RandomIntInRange) |
-                     UE::Optionals::OrElse(INDEX_NONE);
+                     Retro::Optionals::Transform<&UMathUtilities::RandomIntInRange>() |
+                     Retro::Optionals::OrElseValue(INDEX_NONE);
     // clang-format on
     TurnBasedComponent->AddTurnBasedEffect(ActiveGE.Handle, Duration);
     auto EventSet = GEContainer.Owner->GetActiveEffectEventSet(ActiveGE.Handle);

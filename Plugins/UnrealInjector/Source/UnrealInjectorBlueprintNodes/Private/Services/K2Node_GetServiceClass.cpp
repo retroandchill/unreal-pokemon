@@ -4,13 +4,8 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
-#include "Kismet2/BlueprintEditorUtils.h"
 #include "KismetCompiler.h"
 #include "Lookup/InjectionUtilities.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalClosure.h"
-#include "Ranges/Optional/OptionalRef.h"
-#include "Ranges/Optional/OrElseGet.h"
 #include "Services/GameServiceSubsystem.h"
 #include "Services/ServiceUtilities.h"
 
@@ -39,26 +34,26 @@ void UK2Node_GetServiceClass::AllocateDefaultPins() {
 
 FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     // clang-format off
-    auto Name = UE::Optionals::OfNullable(ServiceClass) |
-                UE::Optionals::Map(&UClass::GetDisplayNameText) |
-                UE::Optionals::OrElseGet(&FText::FromStringView, TEXT("???"));
+    auto Name = Retro::Optionals::OfNullable(ServiceClass) |
+                Retro::Optionals::Transform<&UClass::GetDisplayNameText>() |
+                Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
     // clang-format on
     return FText::FormatOrdered(NSLOCTEXT("UK2Node_GetServiceClass", "GetNodeTitle", "Get {0}"), Name);
 }
 
 FText UK2Node_GetServiceClass::GetTooltipText() const {
     // clang-format off
-    return UE::Optionals::OfNullable(ServiceClass) |
-           UE::Optionals::Map(&UClass::GetToolTipText, false) |
-           UE::Optionals::OrElseGet(&FText::FromStringView, TEXT("???"));
+    return Retro::Optionals::OfNullable(ServiceClass) |
+           Retro::Optionals::Transform<&UClass::GetToolTipText>(false) |
+           Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
     // clang-format on
 }
 
 FText UK2Node_GetServiceClass::GetCompactNodeTitle() const {
     // clang-format off
-    return UE::Optionals::OfNullable(ServiceClass) |
-           UE::Optionals::Map(&UClass::GetDisplayNameText) |
-           UE::Optionals::OrElseGet(&FText::FromStringView, TEXT("???"));
+    return Retro::Optionals::OfNullable(ServiceClass) |
+           Retro::Optionals::Transform<&UClass::GetDisplayNameText>() |
+           Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
     // clang-format on
 }
 
@@ -88,7 +83,7 @@ void UK2Node_GetServiceClass::GetMenuActions(FBlueprintActionDatabaseRegistrar &
 
     // clang-format off
     UnrealInjector::GetAllServices() |
-        UE::Ranges::ForEach(&UK2Node_GetServiceClass::AddMenuActionForType, ActionRegistrar, ActionKey);
+        Retro::Ranges::ForEach(&UK2Node_GetServiceClass::AddMenuActionForType, ActionRegistrar, ActionKey);
     // clang-format on
 }
 

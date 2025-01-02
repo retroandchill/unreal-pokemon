@@ -2,9 +2,7 @@
 
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
-#include "Ranges/Functional/PropertyBindings.h"
-#include "Ranges/Optional/GetPtrOrNull.h"
-#include "Ranges/Optional/Map.h"
+
 #include "Slate/SlateBrushAsset.h"
 #include "SPaperFlipbookWidget.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"
@@ -27,10 +25,10 @@ void UEnhancedImage::SetBrush(const FSlateBrush &InBrush, bool bUpdateAssetImage
 void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset) {
     Super::SetBrushFromAsset(Asset);
     // clang-format off
-    SetSourceImageInternal(UE::Optionals::OfNullable(Asset) |
-                           UE::Optionals::Map(&USlateBrushAsset::Brush) |
-                           UE::Optionals::Map(&FSlateBrush::GetResourceObject) |
-                           UE::Optionals::GetPtrOrNull);
+    SetSourceImageInternal(Retro::Optionals::OfNullable(Asset) |
+                           Retro::Optionals::Transform<&USlateBrushAsset::Brush>() |
+                           Retro::Optionals::Transform<&FSlateBrush::GetResourceObject>() |
+                           Retro::Optionals::PtrOrNull);
     // clang-format on
     bManualSize = true;
 }

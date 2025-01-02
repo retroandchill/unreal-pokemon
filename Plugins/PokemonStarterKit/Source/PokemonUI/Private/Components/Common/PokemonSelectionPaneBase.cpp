@@ -5,16 +5,16 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Views/Filter.h"
+
+
+
 
 TOptional<UPokemonPanel &>
 UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
     // clang-format off
     return GetSelectableOptions<UPokemonPanel>() |
-           UE::Ranges::Filter([&Pokemon](const UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
-           UE::Ranges::FindFirst;
+           Retro::Ranges::Views::Filter([&Pokemon](const UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
+           Retro::Ranges::FindFirst;
     // clang-format on
 }
 
@@ -40,7 +40,7 @@ void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInter
 }
 
 void UPokemonSelectionPaneBase::RefreshWindow() {
-    GetSelectableOptions<ISelectablePanel>() | UE::Ranges::ForEach(&ISelectablePanel::Refresh);
+    GetSelectableOptions<ISelectablePanel>() | Retro::Ranges::ForEach<&ISelectablePanel::Refresh>();
 }
 
 bool UPokemonSelectionPaneBase::IsSwitching() const {

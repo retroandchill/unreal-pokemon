@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
-#include "Ranges/Concepts/Structs.h"
+#include "RetroLib.h"
+
 #include <memory>
 
 #include "DataStructHandle.generated.h"
@@ -15,7 +16,7 @@ namespace Pokemon::Data {
      * @tparam T The type to verify the struct status against
      */
     template <typename T>
-    concept DataStruct = UE::Ranges::UEStruct<T> && std::is_base_of_v<FIndexedTableRow, T>;
+    concept DataStruct = Retro::UEStruct<T> && std::is_base_of_v<FIndexedTableRow, T>;
 
     /**
      * Concept for a data struct handle type

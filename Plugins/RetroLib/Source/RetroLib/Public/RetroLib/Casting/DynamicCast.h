@@ -7,7 +7,9 @@
  */
 #pragma once
 
+#include "RetroLib/TypeTraits.h"
 #include "RetroLib/Concepts/Inheritance.h"
+#include "RetroLib/Concepts/Pointers.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 #include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Utils/ValidPtr.h"
@@ -54,7 +56,7 @@ namespace Retro {
         } else {
             auto Ptr = dynamic_cast<T *>(&Value);
             if constexpr (Checked) {
-                RETROLIB_ASSERT(valid_ptr(Ptr));
+                RETROLIB_ASSERT(ValidPtr(Ptr));
                 return dynamic_cast<T &>(Value);
             } else {
                 return Ptr != nullptr ? TDynamicCastOptionalType<T &>(*Ptr) : TDynamicCastOptionalType<T &>();
@@ -104,7 +106,7 @@ namespace Retro {
         template <PointerType U>
         constexpr decltype(auto) operator()(U &&Value) const {
             if constexpr (Checked) {
-                RETROLIB_ASSERT(valid_ptr(std::forward<U>(Value)));
+                RETROLIB_ASSERT(ValidPtr(std::forward<U>(Value)));
                 return DynCastRef<T, std::remove_pointer_t<U>, Checked>(*std::forward<U>(Value));
             } else if constexpr (std::derived_from<std::decay_t<TDereferencedType<U>>, std::decay_t<T>>) {
                 return ValidPtr(std::forward<U>(Value)) ? TDynamicCastOptionalType<T &>(*std::forward<U>(Value)) : TDynamicCastOptionalType<T &>();
@@ -181,6 +183,6 @@ namespace Retro {
      *           be specified to indicate the destination class type for the casting operation.
      */
     RETROLIB_EXPORT template <Class T>
-    constexpr TDynamicCastFunction<T, true> ClassCastChecked;
+    constexpr TDynamicCastFunction<T, true> DynamicCastChecked;
 
 } // namespace retro

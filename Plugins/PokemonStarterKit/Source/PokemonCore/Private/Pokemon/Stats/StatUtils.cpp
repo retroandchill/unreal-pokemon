@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/StatUtils.h"
 #include "DataManager.h"
-#include "Ranges/Algorithm/ForEach.h"
+
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 
@@ -14,7 +14,7 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
     TMap<FName, int32> Ret;
-    StatTable.GetAllRows() | UE::Ranges::ForEach([&Ret](const FStat &Stat) {
+    StatTable.GetAllRows() | Retro::Ranges::ForEach([&Ret](const FStat &Stat) {
         if (Stat.Type == EPokemonStatType::Battle)
             return;
 
@@ -33,7 +33,7 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
     TMap<FName, int32> Ret;
-    StatTable.GetAllRows() | UE::Ranges::ForEach([&Ret](const FStat &Stat) {
+    StatTable.GetAllRows() | Retro::Ranges::ForEach([&Ret](const FStat &Stat) {
         if (Stat.Type == EPokemonStatType::Battle)
             return;
 

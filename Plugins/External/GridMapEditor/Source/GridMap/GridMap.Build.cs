@@ -26,7 +26,7 @@ public class GridMap : ModuleRules
 			new string[]
 			{
 				"Core",
-				"MapMetadata"
+				"MapMetadata", "RetroLib"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -40,7 +40,7 @@ public class GridMap : ModuleRules
 				"Slate",
 				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
-                "GameplayTags", "UnrealRanges",
+                "GameplayTags", 
 			}
 			);
 		

@@ -12,12 +12,9 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Pointers/MakeWeak.h"
-#include "Ranges/Pointers/ValidPtr.h"
-#include "Ranges/Views/ContainerView.h"
+
+
+
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(std::move(Battler));
@@ -57,7 +54,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     auto ExistingHandle = AbilityComponent->FindAbilityOfClass(EffectClass);
     // clang-format off
     auto Handle = ExistingHandle |
-                  UE::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
+                  Retro::Optionals::OrElseGet([&EffectClass, &Owner, &AbilityComponent] {
                       FGameplayAbilitySpec Spec(EffectClass, 1, INDEX_NONE, Owner.GetObject());
                       return AbilityComponent->GiveAbility(Spec);
                   });
@@ -87,10 +84,10 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
 
     // clang-format off
     TargetData->SetActors(Targets |
-        UE::Ranges::Filter(UE::Ranges::ValidPtr) |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
-        UE::Ranges::Map(UE::Ranges::MakeWeak) |
-        UE::Ranges::ToArray);
+        Retro::Ranges::Views::Filter(Retro::ValidPtr) |
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
+        Retro::Ranges::Views::Transform(UE::Ranges::MakeWeak) |
+        Retro::Ranges::To<TArray>());
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 

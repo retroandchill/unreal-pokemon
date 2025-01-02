@@ -8,8 +8,8 @@ public class PokemonUtilities : ModuleRules {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new string[] { "Core", "UnrealRanges", "GameplayTags", "GameplayAbilities" });
+            new string[] { "Core",  "GameplayTags", "GameplayAbilities" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "RetroLib" });
     }
 }

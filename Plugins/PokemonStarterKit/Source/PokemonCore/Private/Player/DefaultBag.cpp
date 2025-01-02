@@ -6,16 +6,11 @@
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/AnyOf.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalClosure.h"
-#include "Ranges/Optional/OrElse.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Join.h"
-#include "Ranges/Views/Map.h"
-#include "Ranges/Views/MapValue.h"
+
+
+
+
+
 #include <functional>
 
 /**
@@ -50,13 +45,13 @@ bool UDefaultBag::HasItemWithTag(FName Tag) const {
     auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     // clang-format off
     return ItemSlots |
-                 UE::Ranges::MapValue |
-                 UE::Ranges::Map(&FPocket::Items) |
-                 UE::Ranges::Join |
-                 UE::Ranges::Map(&FItemSlot::Item) |
-                 UE::Ranges::Map(ItemTable, &TDataTableProxy<FItem>::GetDataChecked) |
-                 UE::Ranges::Map(&FItem::Tags) |
-                 UE::Ranges::AnyOf(&TArray<FName>::Contains<FName>, Tag);
+                 Retro::Ranges::Views::Values |
+                 Retro::Ranges::Views::Transform<&FPocket::Items>() |
+                 Retro::Ranges::Views::Join |
+                 Retro::Ranges::Views::Transform<&FItemSlot::Item>() |
+                 Retro::Ranges::Views::Transform(ItemTable, &TDataTableProxy<FItem>::GetDataChecked) |
+                 Retro::Ranges::Views::Transform<&FItem::Tags>() |
+                 Retro::Ranges::AnyOf(&TArray<FName>::Contains<FName>, Tag);
     // clang-format on
 }
 
@@ -76,10 +71,10 @@ bool UDefaultBag::CanObtainItem(FItemHandle ItemID) const {
     const auto &[DisplayName, MaxPocketSize, bAutoSort] = Settings->PocketInfo.FindChecked(Item->Pocket);
     // clang-format off
     return MaxPocketSize |
-           UE::Optionals::Map([&Pocket](int32 Max) {
+           Retro::Optionals::Transform([&Pocket](int32 Max) {
                return Pocket->Items.Num() < Max;
            }) |
-           UE::Optionals::OrElse(true);
+           Retro::Optionals::OrElseValue(true);
     // clang-format on
 }
 

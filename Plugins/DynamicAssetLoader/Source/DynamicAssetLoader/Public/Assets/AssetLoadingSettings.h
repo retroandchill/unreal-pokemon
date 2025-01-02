@@ -4,16 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "Ranges/RangeConcepts.h"
-#include "Ranges/Variants/SoftVariantObject.h"
-#include "Ranges/Variants/VariantObject.h"
-#include "Ranges/Variants/VariantObjectStruct.h"
+#include "RetroLib.h"
 
 #include "AssetLoadingSettings.generated.h"
 
 namespace UE::Assets {
     template <typename T>
-    concept AssetClassType = std::is_base_of_v<UObject, T> || Ranges::VariantObjectStruct<T>;
+    concept AssetClassType = std::is_base_of_v<UObject, T> || Retro::VariantObjectStruct<T>;
 
     template <typename T>
         requires AssetClassType<T>
@@ -25,7 +22,7 @@ namespace UE::Assets {
 } // namespace UE::Assets
 
 #if CPP
-UE_DECLARE_VARIANT_OBJECT_STRUCT(AssetClassType, UClass, UScriptStruct);
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(AssetClassType, UClass, UScriptStruct);
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FAssetClassType {

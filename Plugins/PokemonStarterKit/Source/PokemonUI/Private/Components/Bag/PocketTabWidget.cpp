@@ -9,9 +9,9 @@
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
+
+
+
 
 UPocketTabWidget::UPocketTabWidget() {
     for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets) {
@@ -32,8 +32,8 @@ void UPocketTabWidget::NativePreConstruct() {
     Algo::ForEach(PocketButtons, &UWidget::RemoveFromParent);
     // clang-format off
     PocketButtons = PocketNames |
-                    UE::Ranges::Map(this, &UPocketTabWidget::CreatePocketButton) |
-                    UE::Ranges::ToArray;
+                    Retro::Ranges::Views::Transform(this, &UPocketTabWidget::CreatePocketButton) |
+                    Retro::Ranges::To<TArray>();
     // clang-format on
 
     PocketLeftActionWidget->SetEnhancedInputAction(PocketLeftAction);

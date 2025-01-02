@@ -6,9 +6,10 @@
 #include "VariantObject.h"
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Exceptions/VariantException.h"
-#include "RetroLib/Ranges/Views/Transform.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "RetroLib/Ranges/Compatibility/UnrealContainers.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
 
@@ -258,7 +259,7 @@ namespace Retro {
         template <typename T>
             requires VariantObjectStruct<T>
         static bool RegisterVariantStruct() {
-            AddToDelegate(FCoreDelegates::OnPostEngineInit, [] {
+            FCoreDelegates::OnPostEngineInit | Delegates::Add([] {
                 auto &Instance = Get();
                 auto Struct = GetScriptStruct<T>();
                 auto &Registered =

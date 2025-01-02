@@ -3,9 +3,7 @@
 #include "Assets/K2Node_LookupAssetByName.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetLoadingSettings.h"
-#include "Ranges/Functional/Overloaded.h"
-#include "Ranges/Optional/GetPtrOrNull.h"
-#include "Ranges/Variants/K2Node_CastSoftObjectToSoftVariant.h"
+
 
 UK2Node_LookupAssetByName::UK2Node_LookupAssetByName() {
     SetNodeTooltip(
@@ -17,15 +15,15 @@ FText UK2Node_LookupAssetByName::GetNodeTitleFormat() const {
 }
 
 UEdGraphPin *UK2Node_LookupAssetByName::CreateResultsPin(const FAssetClassType &AssetClass) {
-    return AssetClass.Visit(UE::Ranges::TOverloaded{
+    return AssetClass.Visit(Retro::TOverloaded{
         [this](UClass *Class) {
             return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_SoftObject, Class, UEdGraphSchema_K2::PN_ReturnValue);
         },
         [this](UScriptStruct *Struct) {
             // clang-format off
-            auto SoftStruct = UE::Ranges::FVariantObjectStructRegistry::Get().GetVariantStructData(*Struct) |
-                              UE::Optionals::Map(&UE::Ranges::IVariantRegistration::GetSoftStructType) |
-                              UE::Optionals::GetPtrOrNull;
+            auto SoftStruct = Retro::FVariantObjectStructRegistry::Get().GetVariantStructData(*Struct) |
+                              Retro::Optionals::Transform<&Retro::IVariantRegistration::GetSoftStructType>() |
+                              Retro::Optionals::PtrOrNull;
             // clang-format on
             return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, SoftStruct, UEdGraphSchema_K2::PN_ReturnValue);
         }});

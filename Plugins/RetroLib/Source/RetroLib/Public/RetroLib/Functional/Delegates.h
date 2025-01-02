@@ -153,6 +153,11 @@ namespace Retro {
         };
 
         RETROLIB_EXPORT constexpr auto Add = ExtensionMethod<FDelegateAdder{}>;
+
+        template <typename D, typename... A>
+        concept CanAddToDelegate = NativeMulitcastDelegate<D> && requires(D& Delegate, A&&... Args) {
+            { Retro::Delegates::Add(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        };
     }
 
 } // namespace retro

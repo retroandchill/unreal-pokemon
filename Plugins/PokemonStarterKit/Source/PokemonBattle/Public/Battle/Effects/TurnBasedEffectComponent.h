@@ -7,9 +7,9 @@
 #include "Battle/Effects/TurnBasedGameplayEffect.h"
 #include "Battle/Events/BattleMessage.h"
 #include "Components/ActorComponent.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/MapValue.h"
+
+
+
 
 #include "TurnBasedEffectComponent.generated.h"
 
@@ -63,8 +63,8 @@ class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent {
     auto GetAllTurnBasedEffectsForTrigger(ETurnDurationTrigger Trigger) {
         // clang-format off
         return ActiveTurnBasedEffects |
-               UE::Ranges::MapValue |
-               UE::Ranges::Filter(&FTurnBasedGameplayEffect::HasTrigger, Trigger);
+               Retro::Ranges::Views::Values |
+               Retro::Ranges::Views::Filter<&FTurnBasedGameplayEffect::HasTrigger>(Trigger);
         // clang-format on
     }
 

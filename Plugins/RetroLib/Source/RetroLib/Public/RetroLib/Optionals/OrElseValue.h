@@ -29,9 +29,9 @@ namespace Retro::Optionals {
             requires std::convertible_to<TCommonReference<O>, T> &&
                      (!std::is_lvalue_reference_v<TCommonReference<O>> ||
                       !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
-        constexpr decltype(auto) operator()(O &&Optional, T &&Value) const {
+        constexpr std::common_reference_t<TCommonReference<O>, T> operator()(O &&Optional, T &&Value) const {
             if (HasValue(Optional)) {
-                return static_cast<T &&>(Get(std::forward<O>(Optional)));
+                return Get(std::forward<O>(Optional));
             }
 
             return std::forward<T>(Value);
@@ -50,7 +50,7 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename T>
             requires std::convertible_to<TCommonReference<O>, T> && std::is_lvalue_reference_v<TCommonReference<O>>
-        constexpr T &operator()(O &&Optional, const std::reference_wrapper<T> &Value) const {
+        constexpr T&& operator()(O &&Optional, const std::reference_wrapper<T> &Value) const {
             if (HasValue(Optional)) {
                 return Get(std::forward<O>(Optional));
             }

@@ -72,7 +72,7 @@
         }                                                                                                              \
     };                                                                                                                 \
     template <>                                                                                                        \
-    struct Retro::Detail::TIsVariantObject<F##StructName> : std::true_type {};                                    \
+    struct Retro::TIsVariantObject<F##StructName> : std::true_type {};                                    \
     struct FSoft##StructName : Retro::TSoftVariantObject<F##StructName> {                                         \
         FSoft##StructName() = default;                                                                                 \
         template <typename... T>                                                                                       \
@@ -81,7 +81,7 @@
         }                                                                                                              \
     };                                                                                                                 \
     template <>                                                                                                        \
-    struct Retro::Detail::TIsSoftVariantObject<FSoft##StructName> : std::true_type {}
+    struct Retro::TIsSoftVariantObject<FSoft##StructName> : std::true_type {}
 
 /**
  * Perform the static registration of the struct type. This is required to allow a variant struct to be accessible to
@@ -135,4 +135,57 @@
  * @param Text The text itself
  */
 #define LOCALIZED_TEXT(Key, Text) NSLOCTEXT(__FILE__, Key, Text)
+
+/**
+ * Declares a multicast delegate member for a class adding some basic boilerplate methods that are used to bind the
+ * delegate and release the binding, but allowing the invocation to remain private.
+ * @param DelegateType The type of delegate
+ * @param MemberName The name of the member variable
+ */
+#define RETRO_MULTICAST_DELEGATE_MEMBER(DelegateType, MemberName)                                                         \
+    private:                                                                                                             \
+        DelegateType MemberName;                                                                                           \
+    \
+    public:                                                                                                              \
+        template <typename F, typename... A>                                                                                           \
+            requires Retro::Delegates::CanAddFree<DelegateType, F, A...>                                                      \
+        FDelegateHandle BindTo##MemberName(F&& Functor, A &&...Args) {                                                                  \
+            return MemberName | Retro::Delegates::Add(std::forward<F>(Functor), std::forward<A>(Args)...);                                        \
+        }                                                                                                                  \
+        template <typename O, typename F, typename... A>                                                                                           \
+            requires Retro::Delegates::CanAddMember<DelegateType, O, F, A...>                                                      \
+        FDelegateHandle BindTo##MemberName(O&& Object, F&& Functor, A &&...Args) {                                                                  \
+            return MemberName | Retro::Delegates::Add(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);                                        \
+        }  \
+        void RemoveFrom##MemberName(FDelegateHandle Handle) {                                                              \
+            MemberName.Remove(Handle);                                                                                     \
+        }
+
+#if WITH_EDITOR
+/**
+ * Helper macro for binding to a delegate or using the constant value when constructing the underlying SWidget.
+ * These macros create a binding that has a layer of indirection that allows blueprint debugging to work more
+ * effectively.
+ */
+#define PROPERTY_BINDING_WRAPPED(ReturnType, MemberName)                                                               \
+    (MemberName##Delegate.IsBound() && !IsDesignTime()) ? BIND_UOBJECT_ATTRIBUTE(ReturnType, K2_Gate_##MemberName)     \
+                                                        : TAttribute<ReturnType>(Get##MemberName())
+
+#define BITFIELD_PROPERTY_BINDING_WRAPPED(MemberName)                                                                  \
+    (MemberName##Delegate.IsBound() && !IsDesignTime()) ? BIND_UOBJECT_ATTRIBUTE(bool, K2_Gate_##MemberName)           \
+                                                        : TAttribute<bool>(Get##MemberName() != 0)
+
+#else
+
+#define PROPERTY_BINDING_WRAPPED(ReturnType, MemberName)                                                               \
+    (MemberName##Delegate.IsBound() && !IsDesignTime())                                                                \
+        ? TAttribute<ReturnType>::Create(MemberName##Delegate.GetUObject(), MemberName##Delegate.GetFunctionName())    \
+        : TAttribute<ReturnType>(Get##MemberName())
+
+#define BITFIELD_PROPERTY_BINDING_WRAPPED(MemberName)                                                                  \
+    (MemberName##Delegate.IsBound() && !IsDesignTime())                                                                \
+        ? TAttribute<bool>::Create(MemberName##Delegate.GetUObject(), MemberName##Delegate.GetFunctionName())          \
+        : TAttribute<bool>(Get##MemberName() != 0)
+
+#endif
 #endif

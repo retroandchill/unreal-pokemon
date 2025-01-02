@@ -9,11 +9,7 @@
 #include "Battle/BattleSideAbilitySystemComponent.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Pokemon/Pokemon.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/Concat.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Single.h"
+
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
@@ -109,8 +105,8 @@ void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     Super::EndPlay(EndPlayReason);
     // clang-format off
     Battlers |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
-        UE::Ranges::ForEach([](AActor *A) {
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
+        Retro::Ranges::ForEach([](AActor *A) {
             return A->Destroy();
         });
     // clang-format on
@@ -128,10 +124,10 @@ UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
     return TurnBasedEffectComponent;
 }
 
-UE::Ranges::TAnyView<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
-    auto MyComponent = UE::Ranges::Single(TurnBasedEffectComponent.Get());
-    auto BattlerComponents = Battlers | UE::Ranges::Map(&IBattler::GetTurnBasedEffectComponent);
-    return UE::Ranges::Concat(std::move(MyComponent), std::move(BattlerComponents));
+Retro::Ranges::TAnyView<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
+    auto MyComponent = Retro::Ranges::Views::Single(TurnBasedEffectComponent.Get());
+    auto BattlerComponents = Battlers | Retro::Ranges::Views::Transform<&IBattler::GetTurnBasedEffectComponent>();
+    return Retro::Ranges::Views::Concat(std::move(MyComponent), std::move(BattlerComponents));
 }
 
 uint8 AActiveSide::GetSideSize() const {
@@ -151,7 +147,7 @@ bool AActiveSide::ShowBackSprites() const {
 }
 
 void AActiveSide::SendOutBattlers() const {
-    Battlers | UE::Ranges::ForEach(&IBattler::ShowSprite, FVector());
+    Battlers | Retro::Ranges::ForEach(&IBattler::ShowSprite, FVector());
 }
 
 const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {

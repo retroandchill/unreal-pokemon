@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Functional/Delegates.h"
+
 #include "Screens/Screen.h"
 
 #include "MoveForgetScreen.generated.h"
@@ -51,7 +51,7 @@ class POKEMONUI_API UMoveForgetScreen : public UScreen {
     /**
      * Called when the move deletion is completed
      */
-    UE_MULTICAST_DELEGATE_MEMBER(FOnMoveForgetComplete, OnMoveForgetComplete)
+    RETRO_MULTICAST_DELEGATE_MEMBER(FOnMoveForgetComplete, OnMoveForgetComplete)
 
   protected:
     /**

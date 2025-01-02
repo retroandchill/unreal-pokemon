@@ -2,7 +2,7 @@
 
 #include "Graphics/BattleRender.h"
 
-UE_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
+RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
 
 static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/PokemonAssets"));

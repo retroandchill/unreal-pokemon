@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "InjectableDependency.h"
-#include "Ranges/Optional/OptionalRef.h"
-#include "Ranges/RangeConcepts.h"
+#include "RetroLib.h"
+
 
 namespace UnrealInjector {
 
@@ -15,7 +15,7 @@ namespace UnrealInjector {
      * @return The first class that can be used
      */
     template <typename T>
-        requires UE::Ranges::UnrealInterface<T>
+        requires Retro::UnrealInterface<T>
     TOptional<UClass &> GetFirstInjectableObject() {
         return GetFirstInjectableObject(T::UClassType::StaticClass());
     }

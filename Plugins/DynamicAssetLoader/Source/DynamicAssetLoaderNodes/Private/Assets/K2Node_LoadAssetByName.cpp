@@ -3,7 +3,7 @@
 #include "Assets/K2Node_LoadAssetByName.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetLoadingSettings.h"
-#include "Ranges/Functional/Overloaded.h"
+
 
 UK2Node_LoadAssetByName::UK2Node_LoadAssetByName() {
     SetNodeTooltip(NSLOCTEXT("UK2Node_LoadAssetByName", "NodeTooltip", "Attempts to retrieve an asset by its name"));
@@ -14,7 +14,7 @@ FText UK2Node_LoadAssetByName::GetNodeTitleFormat() const {
 }
 
 UEdGraphPin *UK2Node_LoadAssetByName::CreateResultsPin(const FAssetClassType &AssetClass) {
-    return AssetClass.Visit(UE::Ranges::TOverloaded{
+    return AssetClass.Visit(Retro::TOverloaded{
         [this](UClass *Class) {
             return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, Class, UEdGraphSchema_K2::PN_ReturnValue);
         },

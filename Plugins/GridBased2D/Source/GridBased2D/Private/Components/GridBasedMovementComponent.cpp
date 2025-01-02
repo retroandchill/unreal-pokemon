@@ -9,12 +9,8 @@
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
 #include "MathUtilities.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Utilities/WrapPointer.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
+
+#include "RetroLib.h"
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
     PrimaryComponentTick.bCanEverTick = true;
@@ -223,10 +219,10 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
     auto Results = HitTestOnFacingTile(MovementDirection);
     // clang-format off
     return Results |
-           UE::Ranges::Map(&FOverlapResult::GetActor) |
-           UE::Ranges::Filter(&AActor::Implements<UInteractable>) |
-           UE::Ranges::Map(UE::Ranges::DynamicCastChecked<IInteractable>) |
-           UE::Ranges::ToArray;
+           Retro::Ranges::Views::Transform<&FOverlapResult::GetActor>() |
+           Retro::Ranges::Views::Filter<&AActor::Implements<UInteractable>>() |
+           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IInteractable>) |
+           Retro::Ranges::To<TArray>();
     // clang-format on
 }
 

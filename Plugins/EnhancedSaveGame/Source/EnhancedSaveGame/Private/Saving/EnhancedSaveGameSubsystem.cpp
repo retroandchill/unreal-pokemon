@@ -3,14 +3,7 @@
 #include "Saving/EnhancedSaveGameSubsystem.h"
 #include "EnhancedSaveGameModule.h"
 #include "Kismet/GameplayStatics.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Algorithm/ToMap.h"
-#include "Ranges/Casting/InstanceOf.h"
-#include "Ranges/Optional/GetValue.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Pointers/SoftObjectRef.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
+
 #include "Saving/SaveableSubsystem.h"
 #include "Saving/Serialization/EnhancedSaveGame.h"
 
@@ -20,12 +13,12 @@
 
 UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *WorldContext) {
     // clang-format off
-    return UE::Optionals::OfNullable(WorldContext) |
-           UE::Optionals::Map(&UGameplayStatics::GetGameInstance) |
-           UE::Optionals::Map([](const UGameInstance &G) {
+    return Retro::Optionals::OfNullable(WorldContext) |
+           Retro::Optionals::Transform<&UGameplayStatics::GetGameInstance>() |
+           Retro::Optionals::Transform([](const UGameInstance &G) {
                return G.GetSubsystem<UEnhancedSaveGameSubsystem>();
            }) |
-           UE::Optionals::GetValue;
+           Retro::Optionals::Value;
     // clang-format on
 }
 
@@ -35,8 +28,8 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
     Subsystems |
-        UE::Ranges::Filter(UE::Ranges::InstanceOf<ISaveableSubsystem>) |
-        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
+        Retro::Ranges::Views::Filter(Retro::InstanceOf<ISaveableSubsystem>) |
+        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags));
     // clang-format on
 
 #if WITH_UNREAL_INJECTOR
@@ -44,8 +37,8 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        UE::Ranges::Map(&FScriptInterface::GetObject) |
-        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_CreateSaveData, SaveGame, SaveTags);
+        Retro::Ranges::Views::Transform<&FScriptInterface::GetObject>() |
+        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags));
     // clang-format on
 #endif
 
@@ -58,8 +51,8 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
     Subsystems |
-        UE::Ranges::Filter(UE::Ranges::InstanceOf<ISaveableSubsystem>) |
-        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_LoadSaveData, SaveGame, LoadTags);
+        Retro::Ranges::Views::Filter(Retro::InstanceOf<ISaveableSubsystem>) |
+        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags));
     // clang-format on
 
 #if WITH_UNREAL_INJECTOR
@@ -67,8 +60,8 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        UE::Ranges::Map(&FScriptInterface::GetObject) |
-        UE::Ranges::ForEach(&ISaveableSubsystem::Execute_LoadSaveData, SaveGame, LoadTags);
+        Retro::Ranges::Views::Transform<&FScriptInterface::GetObject>() |
+        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags));
     // clang-format on
 #endif
 }

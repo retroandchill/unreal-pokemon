@@ -4,8 +4,6 @@
 #include "Battle/BlueprintClasses.h"
 #include "Battle/Status.h"
 #include "GameplayEffect.h"
-#include "Ranges/Optional/FlatMap.h"
-#include "Ranges/Optional/Map.h"
 
 TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID) {
     return Classes::StatusEffects.LoadClass(ID);
@@ -15,7 +13,7 @@ TOptional<TNonNullSubclassOf<UGameplayEffect>>
 Pokemon::Battle::StatusEffects::FindStatusEffect(TOptional<const FStatus &> Status) {
     // clang-format off
     return Status |
-           UE::Optionals::Map(&FStatus::ID) |
-           UE::Optionals::FlatMap([](FName ID) { return FindStatusEffect(ID); });
+           Retro::Optionals::Transform<&FStatus::ID>() |
+           Retro::Optionals::AndThen([](FName ID) { return FindStatusEffect(ID); });
     // clang-format on
 }

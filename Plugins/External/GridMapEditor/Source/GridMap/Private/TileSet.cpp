@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TileSet.h"
-#include "Ranges/Optional/Or.h"
 
 UGridMapTileSet::UGridMapTileSet() : TileSize(100), TileHeight(200) {
 }
@@ -23,7 +22,7 @@ TOptional<const FGridMapTileList &> UGridMapTileSet::FindTilesForAdjacency(uint3
     // If we couldn't find a matching tile, we might be relying on 4 way
     // tiles, so let's mask off the upper bits and check again
     return SearchForTilesWithCompatibleAdjacency(Bitmask) |
-           UE::Optionals::Or(this, &UGridMapTileSet::SearchForTilesWithCompatibleAdjacency, Bitmask & 0xF);
+           Retro::Optionals::OrElse<&UGridMapTileSet::SearchForTilesWithCompatibleAdjacency>(Retro::TThis(this), Bitmask & 0xF);
 }
 
 TOptional<const FGridMapTileList &> UGridMapTileSet::SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const {

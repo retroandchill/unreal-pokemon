@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Async/GameThreadFutureExecutor.h"
-#include "Ranges/Functional/Delegates.h"
+
+
 #include "Screens/Screen.h"
 
 #include "SaveScreen.generated.h"
@@ -68,7 +68,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
      */
     void SaveGame(FOnSaveComplete &&OnComplete);
 
-    UE_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
+    RETRO_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
 
   protected:
     /**
@@ -92,7 +92,7 @@ class POKEMONUI_API USaveScreen : public UScreen {
 
     FOnSaveComplete OnSaveCompleteDelegate;
 
-    TOptional<UE::Ranges::TGameThreadFutureExecutor<UEnhancedSaveGame *>> SaveGameCreationFuture;
+    TOptional<Retro::TGameThreadFutureExecutor<UEnhancedSaveGame *>> SaveGameCreationFuture;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, USaveScreen)

@@ -9,7 +9,7 @@ public class RetroLibTests : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "FunctionalTestingEditor",
             }
         );
 

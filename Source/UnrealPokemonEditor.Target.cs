@@ -9,9 +9,13 @@ public class UnrealPokemonEditorTarget : TargetRules {
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V4;
         IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+        bEnableCppCoroutinesForEvaluation = true;
         // This does nothing now, but once https://github.com/EpicGames/UnrealEngine/pull/12561 is merged, then this
         // will automatically enable code coverage on Clang-CL builds.
-        bCodeCoverage = true;
+        if (Target.Configuration is UnrealTargetConfiguration.Debug or UnrealTargetConfiguration.DebugGame or UnrealTargetConfiguration.Test) {
+            bCodeCoverage = true;
+        }
+
         RegisterModulesCreatedByRider();
     }
 

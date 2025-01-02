@@ -8,8 +8,8 @@
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Groups/CommonButtonGroupBase.h"
 #include "Input/CommonUIInputTypes.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Map.h"
+
+
 
 void USummaryTabWidget::NativePreConstruct() {
     Super::NativePreConstruct();
@@ -46,8 +46,8 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
     auto Pages = SummaryPages->GetPages();
     // clang-format off
     PageButtons = Pages |
-                  UE::Ranges::Map(this, &USummaryTabWidget::CreatePageButton) |
-                  UE::Ranges::ToArray;
+                  Retro::Ranges::Views::Transform(this, &USummaryTabWidget::CreatePageButton) |
+                  Retro::Ranges::To<TArray>();
     // clang-format on
     if (SummaryPages->GetPages().IsEmpty()) {
         return;

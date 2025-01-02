@@ -3,7 +3,7 @@
 #include "Battle/Stats/StatTags.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
-#include "Ranges/Algorithm/ForEach.h"
+
 #include "Species/Stat.h"
 
 namespace Pokemon::Battle::Stats {
@@ -13,7 +13,7 @@ namespace Pokemon::Battle::Stats {
         FLookup::FLookup() {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FStat>();
-        TypeTable.GetAllRows() | UE::Ranges::ForEach([this](const FStat &Stat) {
+        TypeTable.GetAllRows() | Retro::Ranges::ForEach([this](const FStat &Stat) {
             if (Stat.Type == EPokemonStatType::Main) {
                 return;
             }

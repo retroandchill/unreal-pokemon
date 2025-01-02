@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
-#include "Ranges/Optional/OptionalRef.h"
+#include "RetroLib.h"
 #include "UObject/Object.h"
 
 #include "TurnBasedGameplayEffect.generated.h"

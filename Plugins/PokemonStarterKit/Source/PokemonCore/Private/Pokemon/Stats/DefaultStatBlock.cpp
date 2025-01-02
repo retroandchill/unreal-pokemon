@@ -10,8 +10,7 @@
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ToMap.h"
-#include "Ranges/Views/Filter.h"
+#include "RetroLib.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -46,7 +45,7 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
     using enum EPokemonStatType;
     // clang-format off
     Stats = StatTable.GetAllRows() |
-            UE::Ranges::Filter([](const FStat &Stat) {
+            Retro::Ranges::Views::Filter([](const FStat &Stat) {
                 return Stat.Type != Battle;
             }) |
             UE::Ranges::ToMap(&FStat::ID)([this, &DTO](const FStat &Stat) {

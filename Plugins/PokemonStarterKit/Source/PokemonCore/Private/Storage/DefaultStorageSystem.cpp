@@ -2,16 +2,14 @@
 
 #include "Storage/DefaultStorageSystem.h"
 #include "Lookup/InjectionUtilities.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/FlatMapTuple.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Utilities/Construct.h"
-#include "Ranges/Views/Enumerate.h"
-#include "Ranges/Views/FilterTuple.h"
-#include "Ranges/Views/Ints.h"
-#include "Ranges/Views/Join.h"
-#include "Ranges/Views/Map.h"
+
+
+
+
+
+
+
+
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageBox.h"
 
@@ -23,10 +21,10 @@ static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInter
 TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCount, int32 BoxCapacity,
                                                                    int32 StartingIndex) {
     // clang-format off
-    Boxes = UE::Ranges::Ints(0, BoxCount) |
-            UE::Ranges::Map(&GetDefaultBoxName) |
-            UE::Ranges::Map(this, &UDefaultStorageSystem::CreateStorageBox, BoxCapacity) |
-            UE::Ranges::ToArray;
+    Boxes = Retro::Ranges::Views::Iota(0, BoxCount) |
+            Retro::Ranges::Views::Transform<&GetDefaultBoxName>() |
+            Retro::Ranges::Views::Transform(this, &UDefaultStorageSystem::CreateStorageBox, BoxCapacity) |
+            Retro::Ranges::To<TArray>();
     // clang-format on
     CurrentBoxIndex = StartingIndex;
     check(Boxes.IsValidIndex(CurrentBoxIndex))
@@ -36,8 +34,8 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCoun
 TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorageSystemDTO &DTO) {
     // clang-format off
     Boxes = DTO.Boxes |
-            UE::Ranges::Map(&FStorageBoxDTO::CreateBox, this) |
-            UE::Ranges::ToArray;
+            Retro::Ranges::Views::Transform<&FStorageBoxDTO::CreateBox>(this) |
+            Retro::Ranges::To<TArray>();
     // clang-format on
     CurrentBoxIndex = DTO.CurrentBoxIndex;
     check(Boxes.IsValidIndex(CurrentBoxIndex))
@@ -47,8 +45,8 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
 FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
     return {// clang-format off
         .Boxes = Boxes |
-                 UE::Ranges::Map(&IStorageBox::ToDTO) |
-                 UE::Ranges::ToArray,
+                 Retro::Ranges::Views::Transform<&IStorageBox::ToDTO>() |
+                 Retro::Ranges::To<TArray>(),
             // clang-format on
             .CurrentBoxIndex = CurrentBoxIndex};
 }
@@ -77,14 +75,14 @@ void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
 
 TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon) {
     check(Boxes.IsValidIndex(CurrentBoxIndex))
-    std::array Indexes = {UE::Ranges::Ints(CurrentBoxIndex, Boxes.Num()), UE::Ranges::Ints(0, CurrentBoxIndex)};
+    std::array Indexes = {Retro::Ranges::Views::Iota(CurrentBoxIndex, Boxes.Num()), Retro::Ranges::Views::Iota(0, CurrentBoxIndex)};
     // clang-format off
     return Indexes |
-           UE::Ranges::Join |
-           UE::Ranges::ReverseEnumerate<int32>(Boxes) |
-           UE::Ranges::FilterTuple(&CheckOpenBox) |
-           UE::Ranges::FindFirst |
-           UE::Optionals::FlatMapTuple(&TryDepositToBox, Pokemon);
+           Retro::Ranges::Views::Join |
+           Retro::Ranges::Views::ReverseEnumerate(Boxes) |
+           Retro::Ranges::Views::Filter<&CheckOpenBox>() |
+           Retro::Ranges::FindFirst |
+           Retro::Optionals::AndThen<&TryDepositToBox>(Pokemon);
     // clang-format on
 }
 
@@ -105,6 +103,6 @@ static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInter
                                                  const TScriptInterface<IPokemon> &Pokemon) {
     // clang-format off
     return Box->DepositToBox(Pokemon) |
-           UE::Optionals::Map(UE::Ranges::Construct<FDepositResult>, Index);
+           Retro::Optionals::Transform(Retro::Construct<FDepositResult>, Index);
     // clang-format on
 }

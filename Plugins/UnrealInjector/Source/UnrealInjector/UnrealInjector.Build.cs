@@ -15,7 +15,7 @@ public class UnrealInjector : ModuleRules {
         });
 
         PublicDependencyModuleNames.AddRange(new string[] {
-            "Core", "UnrealRanges",
+            "Core",  "RetroLib",
             // ... add other public dependencies that you statically link with here ...
         });
 

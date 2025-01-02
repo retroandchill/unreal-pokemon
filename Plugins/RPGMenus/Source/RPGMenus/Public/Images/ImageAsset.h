@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Engine/Texture2DDynamic.h"
 #include "PaperFlipbook.h"
-#include "Ranges/Variants/VariantObjectStruct.h"
+#include "RetroLib.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
 #include "ImageAsset.generated.h"
 
 #if CPP
-UE_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture2D, UTexture2DDynamic, UMaterialInterface,
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture2D, UTexture2DDynamic, UMaterialInterface,
                                  ISlateTextureAtlasInterface, UPaperFlipbook);
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))

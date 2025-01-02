@@ -4,7 +4,6 @@
 #include "CoreMinimal.h"
 #include "DataRetrieval/DataTableProxy.h"
 #include "IndexedTableRow.h"
-#include "Ranges/Views/AnyView.h"
 #include "UObject/Object.h"
 
 #include "Status.generated.h"
@@ -66,6 +65,6 @@ class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
     static FStatusHandle ConvertNameToStatusHandle(FName Name);
 };
 
-static_assert(UE::Ranges::UEStruct<FStatus>);
+static_assert(Retro::UEStruct<FStatus>);
 static_assert(Pokemon::Data::DataStruct<FStatus>);
 static_assert(Pokemon::Data::DataStructHandle<FStatusHandle>);

@@ -3,17 +3,17 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/WidgetSwitcher.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/Ints.h"
-#include "Ranges/Views/Map.h"
+
+
+
+
 
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off
-    UE::Ranges::Ints(0, PageSwitcher->GetNumWidgets()) |
-        UE::Ranges::Map(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<USummaryScreenPage>) |
-        UE::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
+    Retro::Ranges::Views::Iota(0, PageSwitcher->GetNumWidgets()) |
+        Retro::Ranges::Views::Transform(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<USummaryScreenPage>) |
+        Retro::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
     // clang-format on
 }
 

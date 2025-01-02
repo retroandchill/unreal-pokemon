@@ -76,12 +76,52 @@ struct TSoftObjectRef {
 		return Retro::TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
 	}
 
+    /**
+     * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
+     * @return The StringObjectPath that is wrapped by this SoftObjectPtr
+     */
+    TSoftObjectPtr<T>& ToSoftObjectPtr() & {
+	    return Ptr;
+	}
+
 	/**
 	 * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
 	 * @return The StringObjectPath that is wrapped by this SoftObjectPtr
 	 */
-	const TSoftObjectPtr<T>& ToSoftObjectPtr() const {
+	const TSoftObjectPtr<T>& ToSoftObjectPtr() const& {
 		return Ptr;
+	}
+
+    /**
+     * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
+     * @return The StringObjectPath that is wrapped by this SoftObjectPtr
+     */
+    TSoftObjectPtr<T>&& ToSoftObjectPtr() && {
+	    return std::move(Ptr);
+	}
+
+    /**
+     * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
+     * @return The StringObjectPath that is wrapped by this SoftObjectPtr
+     */
+    operator TSoftObjectPtr<T> () & {
+        return Ptr;
+    }
+
+    /**
+     * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
+     * @return The StringObjectPath that is wrapped by this SoftObjectPtr
+     */
+    operator TSoftObjectPtr<T> () const & {
+	    return Ptr;
+	}
+
+    /**
+     * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
+     * @return The StringObjectPath that is wrapped by this SoftObjectPtr
+     */
+    operator TSoftObjectPtr<T> () && {
+	    return std::move(Ptr);
 	}
 
 	/**
@@ -131,7 +171,7 @@ private:
 };
 
 namespace Retro::Optionals {
-	template <typename T>
+	RETROLIB_EXPORT template <typename T>
 		requires std::derived_from<T, UObject>
 	struct TNullableOptionalParam<TSoftObjectPtr<T>> : FValidType {
 		using RawType = TSoftObjectPtr<T>;
@@ -150,7 +190,7 @@ namespace Retro::Optionals {
 		}
 	};
 
-	template <typename T>
+	RETROLIB_EXPORT template <typename T>
 		requires SpecializationOf<std::decay_t<T>, TSoftObjectPtr> && (!std::same_as<std::decay_t<T>, T>)
 	struct TNullableOptionalParam<T> : TNullableOptionalParam<std::decay_t<T>> {};
 } // namespace UE::Optionals

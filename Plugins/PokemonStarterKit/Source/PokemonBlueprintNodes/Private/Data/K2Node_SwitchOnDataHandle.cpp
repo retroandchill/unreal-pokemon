@@ -5,7 +5,7 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "DataManager.h"
-#include "Ranges/Algorithm/ToArray.h"
+
 
 UK2Node_SwitchOnDataHandle::UK2Node_SwitchOnDataHandle(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer) {
@@ -93,8 +93,8 @@ void UK2Node_SwitchOnDataHandle::AddPinToSwitchNode() {
 FName UK2Node_SwitchOnDataHandle::GetUniquePinName() {
     Pokemon::Data::FStructWrapper DataHandle(StructType);
     auto Options = DataHandle.GetStructOptions();
-    auto Rows = Options | UE::Ranges::Map([](const TSharedPtr<FString> &String) { return FName(**String); }) |
-                UE::Ranges::ToArray;
+    auto Rows = Options | Retro::Ranges::Views::Transform([](const TSharedPtr<FString> &String) { return FName(**String); }) |
+                Retro::Ranges::To<TArray>();
     FName NewPinName;
     for (auto Row : Rows) {
         if (!FindPin(Row)) {

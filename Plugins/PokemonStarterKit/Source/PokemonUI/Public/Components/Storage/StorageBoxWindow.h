@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
-#include "Ranges/Functional/Delegates.h"
+
 #include "StorageInfoPage.h"
 
 #include "StorageBoxWindow.generated.h"
@@ -29,7 +29,7 @@ class POKEMONUI_API UStorageBoxWindow : public USelectableWidget {
     /**
      * Binding for the selected Pokémon being changed.
      */
-    UE_MULTICAST_DELEGATE_MEMBER(FOnSelectedPokemonChanged, OnSelectedPokemonChanged)
+    RETRO_MULTICAST_DELEGATE_MEMBER(FOnSelectedPokemonChanged, OnSelectedPokemonChanged)
 
   protected:
     void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;

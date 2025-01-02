@@ -9,11 +9,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Construct.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
+
 #include "Species/SpeciesData.h"
 #include "Utilities/Node/Utility_LearnMove.h"
 
@@ -86,11 +82,11 @@ TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32
 
     // clang-format off
     return Species.Moves |
-           UE::Ranges::Filter(MoveLevelInRange) |
-           UE::Ranges::Filter(DoesNotKnowMove) |
-           UE::Ranges::Map(&FLevelUpMove::Move) |
-           UE::Ranges::Map(UE::Ranges::Construct<FMoveHandle>) |    
-           UE::Ranges::ToArray;
+           Retro::Ranges::Views::Filter(MoveLevelInRange) |
+           Retro::Ranges::Views::Filter(DoesNotKnowMove) |
+           Retro::Ranges::Views::Transform<&FLevelUpMove::Move>() |
+           Retro::Ranges::Views::Transform(Retro::Construct<FMoveHandle>) |    
+           Retro::Ranges::To<TArray>();
     // clang-format on
 }
 

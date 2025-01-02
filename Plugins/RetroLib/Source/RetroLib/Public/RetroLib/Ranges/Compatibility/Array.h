@@ -87,7 +87,7 @@ namespace Retro::Ranges {
         }
 
         constexpr TArrayIterator operator+(S Offset) const {
-            return TCheckedArrayIterator(Ptr + Offset, *CurrentArray);
+            return TArrayIterator(Ptr + Offset, *CurrentArray);
         }
 
         constexpr friend TArrayIterator operator+(S Offset, const TArrayIterator &Other) {
@@ -99,17 +99,17 @@ namespace Retro::Ranges {
         }
 
         constexpr difference_type operator-(const TArrayIterator &Other) const {
-            ensureMsgf(CurrentArray->Num() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
+            ensureMsgf(GetNum() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
             return Ptr - Other.Ptr;
         }
 
         constexpr bool operator==(const TArrayIterator &Other) const {
-            ensureMsgf(CurrentArray->Num() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
+            ensureMsgf(GetNum() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
             return Ptr == Other.Ptr;
         }
 
         constexpr std::strong_ordering operator<=>(const TArrayIterator &Other) const {
-            ensureMsgf(CurrentArray->Num() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
+            ensureMsgf(GetNum() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
             return Ptr <=> Other.Ptr;
         }
 

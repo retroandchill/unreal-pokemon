@@ -7,6 +7,10 @@
 #include "RetroLib/Concepts/Structs.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 
+#if !RETROLIB_WITH_MODULES
+#include <concepts>
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
@@ -14,7 +18,7 @@
 namespace Retro {
 
     RETROLIB_EXPORT template <typename... T>
-        requires((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+        requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
     struct TVariantObject;
     
         template <typename>
@@ -46,7 +50,7 @@ namespace Retro {
      * @tparam T The types that are valid
      */
     template <typename... T>
-        requires((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+        requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
     struct TVariantObject {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TVariantObject;
@@ -212,7 +216,7 @@ namespace Retro {
                 return TOptional<U &>();
             }
 
-            return Optionals::OfNullable<TOptional>(static_cast<U *>(ContainedObject));
+            return Optionals::OfNullable(static_cast<U *>(ContainedObject));
         }
 
         /**
@@ -220,7 +224,7 @@ namespace Retro {
          * @return The underlying object
          */
         TOptional<UObject &> TryGet() const {
-            return Optionals::OfNullable<TOptional>(ContainedObject);
+            return Optionals::OfNullable(ContainedObject);
         }
 
         /**

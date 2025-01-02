@@ -7,9 +7,9 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
+
+
+
 
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
     InternalId = FGuid::NewGuid();
@@ -29,10 +29,10 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
 
     // clang-format off
     Party = DTO.Party |
-            UE::Ranges::Map([this](const FPokemonDTO &Pokemon) {
+            Retro::Ranges::Views::Transform([this](const FPokemonDTO &Pokemon) {
                 return UnrealInjector::NewInjectedDependency<IPokemon>(this, Pokemon);
             }) |
-            UE::Ranges::ToArray;
+            Retro::Ranges::To<TArray>();
     // clang-format on
     return this;
 }
@@ -43,8 +43,8 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
             .Name = Name,
             // clang-format off
             .Party = Party |
-                     UE::Ranges::Map(&IPokemon::ToDTO) |
-                     UE::Ranges::ToArray,
+                     Retro::Ranges::Views::Transform<&IPokemon::ToDTO>() |
+                     Retro::Ranges::To<TArray>(),
             // clang-format on
             .ID = ID,
             .SecretID = SecretID};

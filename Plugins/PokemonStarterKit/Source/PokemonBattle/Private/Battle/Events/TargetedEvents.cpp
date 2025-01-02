@@ -7,14 +7,14 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Utilities/Casts.h"
-#include "Ranges/Views/Concat.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Join.h"
-#include "Ranges/Views/Single.h"
+
+
+
+
+
+
+
+
 
 const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Scope) {
     switch (Scope) {
@@ -39,13 +39,13 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     // clang-format off
-    auto SideView = UE::Ranges::Single(Side) |
-                    UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>);
+    auto SideView = Retro::Ranges::Views::Single(Side) |
+                    Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>);
     auto ActiveBattlers = Side->GetBattlers() |
-                          UE::Ranges::Filter(&IBattler::IsNotFainted) |
-                          UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>);
+                          Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+                          Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>);
     // clang-format on
-    return UE::Ranges::Concat(std::move(SideView), std::move(ActiveBattlers));
+    return Retro::Ranges::Views::Concat(std::move(SideView), std::move(ActiveBattlers));
 }
 
 static void SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag, FGameplayEventData &EventData) {
@@ -55,7 +55,7 @@ static void SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag, FGamepl
 
 void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject *Payload,
                                                  const FGameplayTag &Tag) {
-    auto BattleActor = UE::Ranges::CastInterfaceChecked<AActor>(Battle);
+    auto BattleActor = Retro::CastInterfaceChecked<AActor>(Battle);
     FGameplayEventData EventData;
     EventData.Instigator = BattleActor;
     EventData.OptionalObject = Payload;
@@ -63,15 +63,15 @@ void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle>
     SendOutEventForActor(BattleActor, Tag, EventData);
     // clang-format off
     Battle->GetSides() |
-        UE::Ranges::Map(&UnrollBattleSide) |
-        UE::Ranges::Join |
-        UE::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
+        Retro::Ranges::Views::Transform<&UnrollBattleSide>() |
+        Retro::Ranges::Views::Join |
+        Retro::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
     // clang-format on
 }
 
 void Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
                                                const FNativeGameplayTag &EventTag) {
-    auto UserActor = UE::Ranges::CastInterfaceChecked<AActor>(User);
+    auto UserActor = Retro::CastInterfaceChecked<AActor>(User);
     FGameplayEventData EventData;
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
@@ -83,7 +83,7 @@ void Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> 
 void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler> &User,
                                                 const TScriptInterface<IBattler> &Target, const UObject *Payload,
                                                 const FTargetedEvent &EventTags) {
-    auto UserActor = UE::Ranges::CastInterfaceChecked<AActor>(User);
+    auto UserActor = Retro::CastInterfaceChecked<AActor>(User);
     FGameplayEventData EventData;
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
@@ -92,9 +92,9 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
 
     SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
-    User->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
-        UE::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
+    User->GetAllies() | Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
+        Retro::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.UserAllyTag, EventData);
         });
@@ -102,9 +102,9 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     auto TargetActor = CastChecked<AActor>(Target.GetObject());
     SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
-    Target->GetAllies() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
-        UE::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
+    Target->GetAllies() | Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
+        Retro::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
             SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
         });

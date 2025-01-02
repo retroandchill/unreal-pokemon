@@ -33,12 +33,12 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Construct.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
+
+
+
+
+
+
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -77,7 +77,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     }
 
     auto StatBlock = WrappedPokemon->GetStatBlock();
-    StatTable.GetAllRows() | UE::Ranges::ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
+    StatTable.GetAllRows() | Retro::Ranges::ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
         if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
             auto StatValue = StatBlock->GetStat(Stat.ID);
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
@@ -98,8 +98,8 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     auto MoveBlock = Pokemon->GetMoveBlock();
     // clang-format off
     Moves = MoveBlock->GetMoves() |
-            UE::Ranges::Map(&CreateBattleMove, this) |
-            UE::Ranges::ToArray;
+            Retro::Ranges::Views::Transform<&CreateBattleMove>(this) |
+            Retro::Ranges::To<TArray>();
     // clang-format on
     SpawnSpriteActor(ShowImmediately);
 
@@ -151,16 +151,16 @@ void ABattlerActor::BeginPlay() {
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     // clang-format off
     InnateAbilityHandles = InnateAbilities |
-                           UE::Ranges::Map(UE::Ranges::Construct<FGameplayAbilitySpec>, 1, INDEX_NONE, this) |
-                           UE::Ranges::Map(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
-                           UE::Ranges::ToArray;
+                           Retro::Ranges::Views::Transform(Retro::Construct<FGameplayAbilitySpec>, 1, INDEX_NONE, this) |
+                           Retro::Ranges::Views::Transform(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
+                           Retro::Ranges::To<TArray>();
     InnateEffectHandles = InnateEffects |
-                          UE::Ranges::Map([this](const TSubclassOf<UGameplayEffect> &Effect) {
+                          Retro::Ranges::Views::Transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
                               auto Context = BattlerAbilityComponent->MakeEffectContext();
                               auto SpecHandle = BattlerAbilityComponent->MakeOutgoingSpec(Effect, 1, Context);
                               return BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
                           }) |
-                          UE::Ranges::ToArray;
+                          Retro::Ranges::To<TArray>();
     // clang-format on
 }
 
@@ -211,7 +211,7 @@ void ABattlerActor::RefreshStats() {
     auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
     auto StatBlock = WrappedPokemon->GetStatBlock();
-    StatTable.GetAllRows() | UE::Ranges::ForEach([this, &StatBlock](const FStat &Stat) {
+    StatTable.GetAllRows() | Retro::Ranges::ForEach([this, &StatBlock](const FStat &Stat) {
         if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
             auto StatValue = StatBlock->GetStat(Stat.ID);
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
@@ -357,10 +357,10 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-UE::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+Retro::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
     // clang-format off
     return OwningSide->GetBattlers() |
-           UE::Ranges::Filter([this](const TScriptInterface<IBattler> &Battler) {
+           Retro::Ranges::Views::Filter([this](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() == InternalId;
            });
     // clang-format on
@@ -382,8 +382,8 @@ void ABattlerActor::RecordParticipation() {
         return;
     }
 
-    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() | UE::Ranges::Filter(&IBattler::IsNotFainted) |
-        UE::Ranges::ForEach(&IBattler::AddParticipant, this);
+    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() | Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+        Retro::Ranges::ForEach(&IBattler::AddParticipant, this);
 }
 
 void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {

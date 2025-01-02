@@ -15,7 +15,7 @@ public class EnhancedSaveGame : ModuleRules {
         });
 
         PublicDependencyModuleNames.AddRange(new string[] {
-            "Core", "UnrealRanges",
+            "Core", 
             // ... add other public dependencies that you statically link with here ...
         });
 

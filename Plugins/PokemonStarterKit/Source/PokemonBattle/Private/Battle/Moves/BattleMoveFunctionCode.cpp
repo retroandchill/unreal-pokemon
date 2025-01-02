@@ -27,16 +27,16 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Casting/InstanceOf.h"
-#include "Ranges/Pointers/MakeStrong.h"
-#include "Ranges/Views/CacheLast.h"
-#include "Ranges/Views/Concat.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Join.h"
-#include "Ranges/Views/Map.h"
-#include "Ranges/Views/Single.h"
+
+
+
+
+
+
+
+
+
+
 #include "Species/Stat.h"
 
 int32 FCapturedBattleStat::GetStatValue() const {
@@ -75,10 +75,10 @@ void UBattleMoveFunctionCode::ActivateAbility(const FGameplayAbilitySpecHandle H
     static auto &Lookup = Pokemon::Battle::Moves::FLookup::GetInstance();
     // clang-format off
     auto TagsList = BattleMove->GetTags() |
-                    UE::Ranges::Map([](FName Tag) -> FGameplayTag {
+                    Retro::Ranges::Views::Transform([](FName Tag) -> FGameplayTag {
                         return Lookup.GetTag(Tag);
                     }) |
-                    UE::Ranges::ToArray;
+                    Retro::Ranges::To<TArray>();
     // clang-format on
     TagsList.Emplace(Pokemon::Battle::Moves::UsingMove);
     TagsList.Emplace(Pokemon::Battle::Moves::GetUserCategoryTag(BattleMove->GetCategory()));
@@ -139,16 +139,15 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                                                                const FGameplayEventData *TriggerEventData) {
     // clang-format off
     return TriggerEventData->TargetData.Data |
-           UE::Ranges::Map(&FGameplayAbilityTargetData::GetActors) |
-           UE::Ranges::CacheLast |
-           UE::Ranges::Join |
-           UE::Ranges::Map(UE::Ranges::MakeStrongChecked) |
-           UE::Ranges::Filter(UE::Ranges::InstanceOf<IBattler>) |
-           UE::Ranges::Filter([](AActor *Actor) {
+           Retro::Ranges::Views::Transform<&FGameplayAbilityTargetData::GetActors>() |
+           Retro::Ranges::Views::Join |
+           Retro::Ranges::Views::Transform(UE::Ranges::MakeStrongChecked) |
+           Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
+           Retro::Ranges::Views::Filter([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;
                return !Battler->IsFainted();
            }) |
-           UE::Ranges::ToArray;
+           Retro::Ranges::To<TArray>();
     // clang-format on
 }
 
@@ -182,7 +181,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bSuccess;
     };
-    auto FilteredTargets = Targets | UE::Ranges::Filter(TargetFailureCheckCallback) | UE::Ranges::ToArray;
+    auto FilteredTargets = Targets | Retro::Ranges::Views::Filter(TargetFailureCheckCallback) | Retro::Ranges::To<TArray>();
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
@@ -202,7 +201,7 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bHitResult;
     };
-    auto SuccessfulHits = FilteredTargets | UE::Ranges::Filter(HitCheckCallback) | UE::Ranges::ToArray;
+    auto SuccessfulHits = FilteredTargets | Retro::Ranges::Views::Filter(HitCheckCallback) | Retro::Ranges::To<TArray>();
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
@@ -513,9 +512,9 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
 void UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
                                          const TArray<TScriptInterface<IBattler>> &Targets) {
     // clang-format off
-    UE::Ranges::Concat(UE::Ranges::Single(User), UE::Ranges::CreateRange(Targets)) |
-        UE::Ranges::Filter(&IBattler::IsFainted) |
-        UE::Ranges::ForEach(this, &UBattleMoveFunctionCode::AddFaintAnimation);
+    Retro::Ranges::Views::Concat(Retro::Ranges::Views::Single(User), Targets) |
+        Retro::Ranges::Views::Filter<&IBattler::IsFainted>() |
+        Retro::Ranges::ForEach(this, &UBattleMoveFunctionCode::AddFaintAnimation);
     // clang-format on
 }
 

@@ -1,10 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 #include "Strings/StringUtilities.h"
-#include "Ranges/Algorithm/ToString.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
-#include "Ranges/Views/Span.h"
+#include "RetroLib.h"
 
 bool UStringUtilities::StartsWithVowelText(const FText &Text) {
     return StartsWithVowel(Text.ToString());
@@ -28,20 +25,22 @@ FText UStringUtilities::GenerateList(const TArray<FText> &Items, const FText &Co
         return FText::GetEmpty();
     }
 
-    auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
+    constexpr auto ExtractString = [](const FText &Text) -> const FString & { return Text.ToString(); };
 
     if (Items.Num() <= 2) {
         // clang-format off
         return FText::FromString(Items |
-                                 UE::Ranges::Map(ExtractString) |
-                                 UE::Ranges::ToString(Conjunction.ToString()));
+                                 Retro::Ranges::Views::Transform(ExtractString) |
+                                 Retro::Ranges::Views::JoinWith(Conjunction.ToString()) |
+                                 Retro::Ranges::To<FString>());
         // clang-format on
     }
 
     // clang-format off
-    auto JoinedItems = UE::Ranges::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
-                       UE::Ranges::Map(ExtractString) |
-                       UE::Ranges::ToString(TEXT(", "));
+    auto JoinedItems = Retro::TSpan<const FText>(Items.GetData(), Items.Num() - 1) |
+                       Retro::Ranges::Views::Transform(ExtractString) |
+                       Retro::Ranges::Views::JoinWith(Conjunction.ToString()) |
+                       Retro::Ranges::To<FString>();
     // clang-format on
     if (bOxfordComma) {
         JoinedItems.Append(TEXT(", "));
@@ -62,7 +61,8 @@ FString UStringUtilities::FormatDate(const FDateTime &DateTime, const FString &F
 FText UStringUtilities::JoinText(const TArray<FText> &Lines) {
     // clang-format off
     return FText::FromString(Lines |
-                             UE::Ranges::Map(&FText::ToString) |
-                             UE::Ranges::ToString(TEXT("\n")));
+                             Retro::Ranges::Views::Transform<&FText::ToString>() |
+                             Retro::Ranges::Views::JoinWith(TEXT("\n")) |
+                             Retro::Ranges::To<FString>());
     // clang-format on
 }

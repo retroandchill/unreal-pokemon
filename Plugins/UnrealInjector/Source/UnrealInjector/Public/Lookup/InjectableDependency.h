@@ -4,18 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "DependencyInjectionSettings.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/RangeConcepts.h"
-#include "Ranges/Utilities/Casts.h"
-#include "Ranges/Views/Filter.h"
+#include "RetroLib.h"
+
 #include "UObject/Interface.h"
 
 namespace UnrealInjector {
 
     template <typename T>
-    concept CanInject = std::derived_from<T, UObject> || UE::Ranges::UnrealInterface<T>;
+    concept CanInject = std::derived_from<T, UObject> || Retro::UnrealInterface<T>;
 
     template <typename T>
         requires CanInject<T>
@@ -66,9 +62,9 @@ namespace UnrealInjector {
             auto Setting = GetMutableDefault<UDependencyInjectionSettings>();
             // clang-format off
             auto& Result = Setting->TargetInjections |
-                UE::Ranges::Filter([](const FInjectionTarget& Target) { return UE::Ranges::TypesMatch<T>(Target.TargetInterface); }) |
-                UE::Ranges::FindFirst |
-                UE::Optionals::OrElseGet([Setting]() -> auto& { return Setting->TargetInjections.Emplace_GetRef(UE::Ranges::GetClass<T>()); });
+                Retro::Ranges::Views::Filter([](const FInjectionTarget& Target) { return Retro::TypesMatch<T>(Target.TargetInterface); }) |
+                Retro::Ranges::FindFirst |
+                Retro::Optionals::OrElseGet([Setting]() -> auto& { return Setting->TargetInjections.Emplace_GetRef(Retro::GetClass<T>()); });
             // clang-format on
 
             ClassPtr = Result.InjectedClass;

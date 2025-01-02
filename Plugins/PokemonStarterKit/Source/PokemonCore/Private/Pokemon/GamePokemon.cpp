@@ -13,16 +13,11 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OrElse.h"
-#include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
+#include "RetroLib.h"
 
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;
@@ -87,8 +82,8 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Item = HoldItem,
             // clang-format off
             .Moves = MoveBlock->GetMoves() |
-                     UE::Ranges::Map(&IMove::ToDTO) |
-                     UE::Ranges::ToArray,
+                     Retro::Ranges::Views::Transform<&IMove::ToDTO>() |
+                     Retro::Ranges::To<TArray>(),
             // clang-format on
             .MoveMemory = MoveBlock->GetMoveMemory(),
             .StatusEffect = StatusEffect,
@@ -218,7 +213,7 @@ TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const {
     static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
     // clang-format off
     return StatusEffect |
-           UE::Optionals::Map([](const FName &ID) {
+           Retro::Optionals::Transform([](const FName &ID) {
                return StatusTable.GetData(ID);
            });
     // clang-format on

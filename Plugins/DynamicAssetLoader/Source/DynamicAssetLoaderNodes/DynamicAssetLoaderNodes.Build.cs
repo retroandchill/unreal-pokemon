@@ -10,7 +10,7 @@ public class DynamicAssetLoaderNodes : ModuleRules {
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
                                                              "DynamicAssetLoader", "UnrealEd", "BlueprintGraph",
-                                                             "KismetCompiler", "UnrealRanges",
-                                                             "UnrealRangesBlueprintNodes", "ToolMenus" });
+                                                             "KismetCompiler",  "RetroLib",
+                                                             "RetroLibBlueprintNodes", "ToolMenus" });
     }
 }

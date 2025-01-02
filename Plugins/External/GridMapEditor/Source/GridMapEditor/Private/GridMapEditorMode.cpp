@@ -15,9 +15,6 @@
 #include "GridMapStaticMeshActor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Materials/MaterialInstanceDynamic.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalRef.h"
-#include "Ranges/Optional/OrElse.h"
 #include "TileSet.h"
 #include "Toolkits/ToolkitManager.h"
 
@@ -121,10 +118,10 @@ void FGridMapEditorMode::Tick(FEditorViewportClient *ViewportClient, float Delta
                            TileSet.TileHeight * (TileSet.SizeZ - 1) / 2);
         };
 
-        auto BrushScale = UE::Optionals::OfNullable(ActiveTileSet) | UE::Optionals::Map(BrushScaleCalc) |
-                          UE::Optionals::OrElse(FVector::OneVector);
-        auto BrushOffset = UE::Optionals::OfNullable(ActiveTileSet) | UE::Optionals::Map(BrushScaleOffset) |
-                           UE::Optionals::OrElse(FVector::ZeroVector);
+        auto BrushScale = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform(BrushScaleCalc) |
+                          Retro::Optionals::OrElseValue(FVector::OneVector);
+        auto BrushOffset = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform(BrushScaleOffset) |
+                           Retro::Optionals::OrElseValue(FVector::ZeroVector);
         FTransform BrushTransform = FTransform(FQuat::Identity, BrushLocation + BrushOffset, BrushScale);
         TileBrushComponent->SetRelativeTransform(BrushTransform);
 
@@ -263,9 +260,9 @@ void FGridMapEditorMode::PaintTile() {
             MeshActor->GetStaticMeshComponent()->SetStaticMesh(StaticMesh);
             MeshActor->ReregisterAllComponents();
 
-            auto Offset = UE::Optionals::OfNullable(ActiveTileSet) | UE::Optionals::Map(&UGridMapTileSet::BrushOffset) |
-                          UE::Optionals::Map([](const FVector2D &V) { return FVector(V, 0); }) |
-                          UE::Optionals::OrElse(FVector::ZeroVector);
+            auto Offset = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform<&UGridMapTileSet::BrushOffset>() |
+                          Retro::Optionals::Transform([](const FVector2D &V) { return FVector(V, 0); }) |
+                          Retro::Optionals::OrElseValue(FVector::ZeroVector);
             FTransform BrushTransform =
                 FTransform(TileList->Rotation.Quaternion(), BrushLocation + Offset, FVector::OneVector);
             MeshActor->SetActorTransform(BrushTransform);
@@ -443,9 +440,9 @@ bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin, int32 Lay
 
     auto TileSize = GetTileSize();
     auto TileHeight = GetTileHeight();
-    auto Scaled = UE::Optionals::OfNullable(ActiveTileSet) |
-                  UE::Optionals::Map([](const UGridMapTileSet &M) { return FUintVector(M.SizeX, M.SizeY, M.SizeZ); }) |
-                  UE::Optionals::OrElse(FUintVector(1));
+    auto Scaled = Retro::Optionals::OfNullable(ActiveTileSet) |
+                  Retro::Optionals::Transform([](const UGridMapTileSet &M) { return FUintVector(M.SizeX, M.SizeY, M.SizeZ); }) |
+                  Retro::Optionals::OrElseValue(FUintVector(1));
     auto ScaledGridWidth = static_cast<int32>(TileSize * Scaled.X * .95f / 2.f);
     auto ScaledGridLength = static_cast<int32>(TileSize * Scaled.Y * .95f / 2.f);
     auto ScaledGridHeight = static_cast<int32>(TileHeight * Scaled.Z / 2.f);

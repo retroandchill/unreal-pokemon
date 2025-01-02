@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Views/AnyView.h"
+#include "RetroLib.h"
 
 class UService;
 
@@ -17,6 +17,6 @@ namespace UnrealInjector {
      *
      * @return A list of classes, where each string represents the name of a service.
      */
-    UNREALINJECTOR_API UE::Ranges::TAnyView<TSubclassOf<UService>> GetAllServices();
+    UNREALINJECTOR_API Retro::TGenerator<TSubclassOf<UService>> GetAllServices();
 
 } // namespace UnrealInjector
