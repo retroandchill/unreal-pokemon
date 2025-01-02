@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-    <Type Name="retro::Polymorphic&lt;*&gt;">
+    <Type Name="Retro::Polymorphic&lt;*&gt;">
         <Expand>
-            <Item Name="[value]" ExcludeView="simple">vtable->get_size() > sizeof(storage) ? *(($T1*)storage.large_storage) : *(($T1*)storage.small_storage.data())</Item>
-            <Item Name="[large]" ExcludeView="simple">vtable->get_size() > sizeof(storage)</Item>
+            <Item Name="[value]" Condition="Vtable != nullptr" ExcludeView="simple">Vtable->GetSize() > sizeof(Storage) ? *(($T1*)Storage.LargeStorage) : *(($T1*)Storage.SmallStorage.data())</Item>
+            <Item Name="[large]" Condition="Vtable != nullptr" ExcludeView="simple">Vtable->GetSize() > sizeof(Storage)</Item>
         </Expand>
     </Type>
 
-    <Type Name="retro::Optional&lt;*&gt;">
-        <DisplayString Condition="!is_set">nullopt</DisplayString>
-        <DisplayString Condition="is_set">{data}</DisplayString>
+    <Type Name="Retro::Optional&lt;*&gt;">
+        <DisplayString Condition="!IsSet">nullopt</DisplayString>
+        <DisplayString Condition="IsSet">{Data}</DisplayString>
         <Expand>
-            <Item Condition="is_set" Name="[value]">data</Item>
+            <Item Condition="IsSet" Name="[value]">Data</Item>
         </Expand>
     </Type>
 
-    <Type Name="retro::Optional&lt;*&gt;" Priority="Low">
-        <DisplayString Condition="data == nullptr">nullopt</DisplayString>
-        <DisplayString Condition="data != nullptr">{*data}</DisplayString>
+    <Type Name="Retro::Optional&lt;*&gt;" Priority="Low">
+        <DisplayString Condition="Data == nullptr">nullopt</DisplayString>
+        <DisplayString Condition="Data != nullptr">{*Data}</DisplayString>
         <Expand>
-            <Item Condition="data != nullptr" Name="[value]">*data</Item>
+            <Item Condition="Data != nullptr" Name="[value]">*Data</Item>
         </Expand>
     </Type>
 
-    <Type Name="retro::UniqueAny">
-        <Intrinsic Name="has_value"   Expression="vtable != 0"/>
-        <Intrinsic Name="rep"        Expression="storage"/>
-        <Intrinsic Name="type"        Expression="has_value() &amp;&amp; vtable->type"/>
-        <Intrinsic Name="is_big"     Expression="has_value() &amp;&amp; vtable->is_large"/>
-        <Intrinsic Name="is_small"   Expression="has_value() &amp;&amp; !vtable->is_large"/>
-        <DisplayString Condition="!has_value()">[empty]</DisplayString>
-        <DisplayString Condition="is_small()">[not empty (small)]</DisplayString>
-        <DisplayString Condition="is_big()">[not empty (large)]</DisplayString>
+    <Type Name="Retro::UniqueAny">
+        <Intrinsic Name="HasValue"   Expression="Vtable != 0"/>
+        <Intrinsic Name="Rep"        Expression="Storage"/>
+        <Intrinsic Name="Type"        Expression="HasValue() &amp;&amp; Vtable->Type"/>
+        <Intrinsic Name="IsBig"     Expression="HasValue() &amp;&amp; Vtable->IsLarge"/>
+        <Intrinsic Name="IsSmall"   Expression="HasValue() &amp;&amp; !Vtable->IsLarge"/>
+        <DisplayString Condition="!HasValue()">[empty]</DisplayString>
+        <DisplayString Condition="IsSmall()">[not empty (small)]</DisplayString>
+        <DisplayString Condition="IsBig()">[not empty (large)]</DisplayString>
         <Expand>
-            <Item Name="[castable_ptr]" Condition="is_small()">(void*)(&amp;storage.small_storage)</Item>
-            <Item Name="[castable_ptr]" Condition="is_big()">storage.large_storage</Item>
-            <Synthetic Name="has_value">
-                <DisplayString>{has_value()}</DisplayString>
+            <Item Name="[castable_ptr]" Condition="IsSmall()">(void*)(&amp;storage.SmallStorage)</Item>
+            <Item Name="[castable_ptr]" Condition="IsBig()">Storage.LargeStorage</Item>
+            <Synthetic Name="HasStorage">
+                <DisplayString>{HasStorage()}</DisplayString>
             </Synthetic>
-            <Synthetic Name="type" Condition="has_value()">
+            <Synthetic Name="Type" Condition="HasStorage()">
                 <DisplayString>{type()}</DisplayString>
             </Synthetic>
-            <Synthetic Name="[representation]" Condition="is_small()">
+            <Synthetic Name="[representation]" Condition="IsSmall()">
                 <DisplayString>(Small Object)</DisplayString>
             </Synthetic>
-            <Synthetic Name="[representation]" Condition="is_big()">
+            <Synthetic Name="[representation]" Condition="IsBig()">
                 <DisplayString>(Dynamic Allocation)</DisplayString>
             </Synthetic>
         </Expand>
