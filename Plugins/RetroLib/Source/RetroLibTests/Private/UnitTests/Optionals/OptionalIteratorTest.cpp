@@ -14,7 +14,6 @@ import RetroLib;
 #include "RetroLib/Optionals/OptionalOperations.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
-
 #include <ranges>
 #endif
 

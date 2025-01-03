@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "FunctionalTesting/ScopedTimeDilationComponent.h"
-
 #include "FunctionalTesting/ScopedFunctionalTest.h"
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
 

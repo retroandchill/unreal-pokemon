@@ -2,9 +2,7 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Blueprints/Properties.h"
-
 #include "RetroLib/Optionals/OptionalOperations.h"
-
 #include <RetroLib/Optionals/OrElseValue.h>
 #include <RetroLib/Optionals/Transform.h>
 

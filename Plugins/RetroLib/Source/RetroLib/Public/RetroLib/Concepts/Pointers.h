@@ -12,7 +12,6 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "Templates/NonNullSubclassOf.h"
-
 #include <concepts>
 #endif
 

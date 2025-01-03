@@ -2,10 +2,11 @@
 
 #pragma once
 
-#include "BlueprintBridge.generated.h"
 #include "RetroLib/Concepts/Interfaces.h"
 #include "RetroLib/TypeTraits.h"
 #include "UObject/Object.h"
+
+#include "BlueprintBridge.generated.h"
 
 /**
  * @enum ESetStatus

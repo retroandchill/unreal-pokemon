@@ -5,7 +5,6 @@
 #ifdef __UNREAL__
 #if !RETROLIB_WITH_MODULES
 #include "Blueprint/BlueprintExceptionInfo.h"
-
 #include <exception>
 #include <string>
 #endif

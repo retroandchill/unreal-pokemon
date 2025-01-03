@@ -11,7 +11,6 @@
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/Ranges/Concepts/Iterable.h"
 #include "RetroLib/TypeTraits.h"
-
 #include <ranges>
 #endif
 

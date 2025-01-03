@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
-
 #include "Kismet/GameplayStatics.h"
 
 namespace Retro {

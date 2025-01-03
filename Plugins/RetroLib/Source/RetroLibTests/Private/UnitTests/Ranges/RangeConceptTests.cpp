@@ -6,7 +6,6 @@
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TestAdapter.h"
-
 #include <array>
 
 TEST_CASE_NAMED(FRangePipeTest, "RetroLib::Ranges::Compatibility", "[RetroLib][Ranges]") {

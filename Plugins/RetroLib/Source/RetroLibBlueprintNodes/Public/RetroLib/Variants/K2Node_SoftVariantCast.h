@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node_SoftVariantCast.generated.h"
 #include "K2Node_VariantCastBase.h"
+
+#include "K2Node_SoftVariantCast.generated.h"
 
 /**
  * Attempt to cast a soft variant to a soft object of one of its valid types.

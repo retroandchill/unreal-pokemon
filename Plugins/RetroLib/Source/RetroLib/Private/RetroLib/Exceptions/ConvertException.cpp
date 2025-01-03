@@ -4,7 +4,6 @@
 #pragma once
 
 #include "RetroLib/Exceptions/ConvertException.h"
-
 #include "RetroLib/Exceptions/BlueprintException.h"
 
 FBlueprintExceptionInfo Retro::ConvertException(const std::exception &Exception, EBlueprintExceptionType::Type Type) {

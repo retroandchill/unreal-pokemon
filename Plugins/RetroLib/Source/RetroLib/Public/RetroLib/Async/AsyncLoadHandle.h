@@ -6,7 +6,6 @@
 #if !RETROLIB_WITH_MODULES
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
-
 #include <mutex>
 #endif
 

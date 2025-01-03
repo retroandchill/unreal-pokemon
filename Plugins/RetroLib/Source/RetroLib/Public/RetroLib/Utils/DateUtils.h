@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DateUtils.generated.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
+#include "DateUtils.generated.h"
 
 /**
  * Utlity methods related to date operations.

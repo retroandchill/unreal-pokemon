@@ -6,7 +6,6 @@
  * https://github.com/retroandchill
  */
 #include "RetroLib/Ranges/Views/AnyView.h"
-
 #include "TestAdapter.h"
 
 #if RETROLIB_WITH_MODULES

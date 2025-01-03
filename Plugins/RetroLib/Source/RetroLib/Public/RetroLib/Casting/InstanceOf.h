@@ -13,7 +13,6 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
-
 #include <type_traits>
 #endif
 

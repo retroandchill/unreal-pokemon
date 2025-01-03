@@ -9,7 +9,6 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
-
 #include <ranges>
 #include <span>
 #endif

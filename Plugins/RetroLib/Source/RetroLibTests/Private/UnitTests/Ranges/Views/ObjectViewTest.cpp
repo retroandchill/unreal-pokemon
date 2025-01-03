@@ -1,5 +1,4 @@
 ﻿#include "RetroLib/Ranges/Views/ObjectView.h"
-
 #include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/ClassView.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"

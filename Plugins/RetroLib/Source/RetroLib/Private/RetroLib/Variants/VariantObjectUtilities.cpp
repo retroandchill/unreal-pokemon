@@ -2,14 +2,12 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObjectUtilities.h"
-
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Blueprints/Properties.h"
 #include "RetroLib/Exceptions/ConvertException.h"
 #include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
-
 #include <RetroLib/Optionals/Filter.h>
 #include <RetroLib/Optionals/PtrOrNull.h>
 

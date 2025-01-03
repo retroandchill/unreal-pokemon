@@ -2,10 +2,11 @@
 
 #pragma once
 
-#include "Components/ActorComponent.h"
 #include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
 #include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Utils/Unreachable.h"
+
 #include "ScopedTestComponent.generated.h"
 
 class AScopedFunctionalTest;

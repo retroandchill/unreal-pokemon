@@ -5,7 +5,6 @@
 #include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TestAdapter.h"
-
 #include <array>
 
 namespace Retro::Testing::Delegates {

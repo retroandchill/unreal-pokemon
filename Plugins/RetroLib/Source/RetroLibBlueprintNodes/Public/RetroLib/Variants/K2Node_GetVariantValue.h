@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_GetVariantValue.generated.h"
 #include "K2Node_VariantCastBase.h"
+
+#include "K2Node_GetVariantValue.generated.h"
 
 /**
  * Get the value of a variant object, with a check for an invalid value

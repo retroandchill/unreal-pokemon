@@ -4,7 +4,6 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Blueprints/Properties.h"
-
 #include <variant>
 
 namespace Retro {

@@ -12,7 +12,6 @@ import std;
 import RetroLib;
 #else
 #include "RetroLib/Functional/CreateBinding.h"
-
 #include <vector>
 #endif
 

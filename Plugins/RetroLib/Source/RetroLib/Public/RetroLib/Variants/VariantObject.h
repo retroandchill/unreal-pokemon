@@ -154,8 +154,8 @@ namespace Retro {
         template <typename F>
             requires(std::invocable<F, T *> && ...)
         decltype(auto) Visit(F &&Functor) const {
-            check(TypeIndex != GetTypeIndex<std::nullptr_t>()) static constexpr std::array VisitFunctions = {
-                &TVariantObject::VisitSingle<T, F>...};
+            check(TypeIndex != GetTypeIndex<std::nullptr_t>())
+            static constexpr std::array VisitFunctions = {&TVariantObject::VisitSingle<T, F>...};
             return std::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, std::forward<F>(Functor));
         }
 
@@ -200,7 +200,8 @@ namespace Retro {
          * @return A reference to the value
          */
         UObject &Get() const {
-            check(::IsValid(ContainedObject)) return *ContainedObject;
+            check(::IsValid(ContainedObject))
+            return *ContainedObject;
         }
 
         /**
@@ -237,7 +238,8 @@ namespace Retro {
             constexpr std::array<bool, sizeof...(T) + 1> TypesMatch = {std::same_as<U, std::nullptr_t>,
                                                                        std::same_as<U, T>...};
             auto Find = std::ranges::find_if(TypesMatch, [](bool Matches) { return Matches; });
-            check(Find != TypesMatch.end()) return std::distance(TypesMatch.begin(), Find);
+            check(Find != TypesMatch.end())
+            return std::distance(TypesMatch.begin(), Find);
         }
 
         /**

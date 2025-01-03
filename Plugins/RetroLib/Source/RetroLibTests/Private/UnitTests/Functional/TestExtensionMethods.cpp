@@ -12,7 +12,6 @@ import std;
 import RetroLib;
 #else
 #include "RetroLib/Functional/ExtensionMethods.h"
-
 #include <string_view>
 #include <vector>
 #endif

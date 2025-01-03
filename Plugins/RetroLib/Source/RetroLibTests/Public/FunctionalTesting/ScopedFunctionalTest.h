@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "EditorFunctionalTest.h"
 #include "RetroLib/Utils/UniqueAny.h"
+
 #include "ScopedFunctionalTest.generated.h"
 
 /**

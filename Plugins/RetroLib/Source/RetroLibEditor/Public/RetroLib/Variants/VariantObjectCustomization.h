@@ -39,7 +39,8 @@ namespace Retro {
                     return;
                 }
 
-                check(StructData != nullptr) auto AsVariant = static_cast<T *>(StructData);
+                check(StructData != nullptr)
+                auto AsVariant = static_cast<T *>(StructData);
                 AsVariant->TypeIndex = AsVariant->GetTypeIndex(AsVariant->ContainedObject).GetValue();
             }));
         }

@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_GetVariantObject.h"
-
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -12,7 +11,6 @@
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
-
 #include <RetroLib/Optionals/Transform.h>
 
 void UK2Node_GetVariantObject::AllocateDefaultPins() {
@@ -86,7 +84,8 @@ void UK2Node_GetVariantObject::GetMenuActions(FBlueprintActionDatabaseRegistrar 
     }
 
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr) ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    check(Spawner != nullptr)
+    ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
 void UK2Node_GetVariantObject::EarlyValidation(FCompilerResultsLog &MessageLog) const {
@@ -140,7 +139,8 @@ TOptional<UScriptStruct &> UK2Node_GetVariantObject::GetInputStruct() const {
 
 void UK2Node_GetVariantObject::RefreshInputPin() const {
     if (auto ObjectPin = GetVariantPin(); ObjectPin->LinkedTo.Num() > 0) {
-        check(ObjectPin->LinkedTo.Num() == 1) auto Pin = ObjectPin->LinkedTo[0];
+        check(ObjectPin->LinkedTo.Num() == 1)
+        auto Pin = ObjectPin->LinkedTo[0];
         ObjectPin->PinType = Pin->PinType;
         ObjectPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
     } else {

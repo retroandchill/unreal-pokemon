@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_MakeVariantObjectStruct.h"
-
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -37,7 +36,7 @@ bool UK2Node_MakeVariantObjectStruct::IsConnectionDisallowed(const UEdGraphPin *
     auto Registration = Registry.GetVariantStructData(*OutputType);
     check(Registration.IsSet())
 
-        bool bDisallowed = true;
+    bool bDisallowed = true;
     if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Object ||
         OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Interface) {
         auto Class = Cast<UClass>(OtherPin->PinType.PinSubCategoryObject.Get());
@@ -122,8 +121,8 @@ void UK2Node_MakeVariantObjectStruct::AddMenuOptionsForStruct(FBlueprintActionDa
     auto ActionKey = GetClass();
     auto Struct = Registration.GetStructType();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr) Spawner->CustomizeNodeDelegate =
-        FCustomizeDelegate::CreateStatic(CustomizeCallback, Struct);
+    check(Spawner != nullptr)
+    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, Struct);
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
@@ -142,7 +141,8 @@ TOptional<UClass &> UK2Node_MakeVariantObjectStruct::GetInputClass() const {
 
 void UK2Node_MakeVariantObjectStruct::RefreshInputPinType() const {
     if (auto ObjectPin = GetObjectPin(); ObjectPin->LinkedTo.Num() > 0) {
-        check(ObjectPin->LinkedTo.Num() == 1) auto Pin = ObjectPin->LinkedTo[0];
+        check(ObjectPin->LinkedTo.Num() == 1)
+        auto Pin = ObjectPin->LinkedTo[0];
         ObjectPin->PinType = Pin->PinType;
         ObjectPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
     } else {

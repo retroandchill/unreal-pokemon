@@ -11,7 +11,6 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
-
 #include <bit>
 #include <cassert>
 #include <coroutine>

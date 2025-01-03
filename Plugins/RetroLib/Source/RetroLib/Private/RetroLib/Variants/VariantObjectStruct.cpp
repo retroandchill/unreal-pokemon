@@ -2,7 +2,6 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObjectStruct.h"
-
 #include "RetroLib/Optionals/Transform.h"
 
 namespace Retro {

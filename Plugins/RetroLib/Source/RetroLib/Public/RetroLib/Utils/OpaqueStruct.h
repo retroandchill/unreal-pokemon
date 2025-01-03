@@ -6,7 +6,6 @@
 #include "RetroLib/Concepts/OpaqueStorage.h"
 #include "RetroLib/Concepts/Structs.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-
 #include <array>
 
 namespace Retro {
@@ -288,7 +287,8 @@ namespace Retro {
         template <typename T>
             requires UEStruct<T>
         T &Get() {
-            check(IsStruct<T>()) return GetUnchecked<T>();
+            check(IsStruct<T>())
+            return GetUnchecked<T>();
         }
 
         /**
@@ -302,7 +302,8 @@ namespace Retro {
         template <typename T>
             requires UEStruct<T>
         const T &Get() const {
-            check(IsStruct<T>()) return GetUnchecked<T>();
+            check(IsStruct<T>())
+            return GetUnchecked<T>();
         }
 
         /**
@@ -313,8 +314,8 @@ namespace Retro {
          * on the structure size.
          */
         void *GetRaw() {
-            check(HasValue()) return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small
-                                                                                              : Storage.Large;
+            check(HasValue())
+            return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small : Storage.Large;
         }
 
         /**
@@ -325,8 +326,8 @@ namespace Retro {
          * on the structure size.
          */
         const void *GetRaw() const {
-            check(HasValue()) return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small
-                                                                                              : Storage.Large;
+            check(HasValue())
+            return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small : Storage.Large;
         }
 
         /**

@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "FunctionalTesting/ScopedFunctionalTest.h"
-
 #include "FunctionalTesting/ScopedTestComponent.h"
 #include "RetroLib/Casting/InstanceOf.h"
 #include "RetroLib/Casting/StaticCast.h"

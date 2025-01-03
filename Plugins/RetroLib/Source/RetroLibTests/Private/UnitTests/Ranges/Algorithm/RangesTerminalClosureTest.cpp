@@ -17,7 +17,6 @@ import RetroLib;
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Utils/Operators.h"
-
 #include <array>
 #include <map>
 #include <optional>

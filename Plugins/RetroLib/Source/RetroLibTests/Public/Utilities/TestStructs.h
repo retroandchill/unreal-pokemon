@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TestStructs.generated.h"
 #include "UObject/Object.h"
+
+#include "TestStructs.generated.h"
 
 USTRUCT()
 struct FTestStruct {

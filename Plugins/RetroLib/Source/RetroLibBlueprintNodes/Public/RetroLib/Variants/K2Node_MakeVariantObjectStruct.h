@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_MakeVariantObjectStruct.generated.h"
 #include "K2Node_VariantOperationBase.h"
+
+#include "K2Node_MakeVariantObjectStruct.generated.h"
 
 /**
  * K2 Node to make a variant object struct from a valid object type.

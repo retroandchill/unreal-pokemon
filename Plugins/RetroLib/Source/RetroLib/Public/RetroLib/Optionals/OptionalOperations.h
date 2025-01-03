@@ -9,7 +9,6 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
-
 #include <optional>
 #endif
 
@@ -796,7 +795,8 @@ struct TOptional<T &> {
      * @return The retrieved value
      */
     T &GetValue() const {
-        check(Data != nullptr) return *Data;
+        check(Data != nullptr)
+        return *Data;
     }
 
     auto GetValueOptional() const {
@@ -834,7 +834,8 @@ struct TOptional<T &> {
      * @return A reference to the underlying data.
      */
     T &operator*() {
-        check(Data != nullptr) return *Data;
+        check(Data != nullptr)
+        return *Data;
     }
 
     /**
@@ -842,7 +843,8 @@ struct TOptional<T &> {
      * @return A reference to the underlying data.
      */
     T &operator*() const {
-        check(Data != nullptr) return *Data;
+        check(Data != nullptr)
+        return *Data;
     }
 
     /**
@@ -850,7 +852,8 @@ struct TOptional<T &> {
      * @return A pointer to the underlying data.
      */
     T *operator->() {
-        check(Data != nullptr) return Data;
+        check(Data != nullptr)
+        return Data;
     }
 
     /**
@@ -858,7 +861,8 @@ struct TOptional<T &> {
      * @return A pointer to the underlying data.
      */
     T *operator->() const {
-        check(Data != nullptr) return Data;
+        check(Data != nullptr)
+        return Data;
     }
 
   private:

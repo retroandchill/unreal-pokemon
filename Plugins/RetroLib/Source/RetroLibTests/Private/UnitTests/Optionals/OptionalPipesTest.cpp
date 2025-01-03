@@ -5,7 +5,6 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Compatibility/Array.h"
 #include "TestAdapter.h"
-
 #include <array>
 
 TEST_CASE_NAMED(FOptionalPipesTest, "RetroLib::Optionals::Pipes", "[RetroLib][Optionals]") {

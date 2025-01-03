@@ -13,7 +13,6 @@ import RetroLib;
 #include "RetroLib/Casting/ByteCast.h"
 #include "RetroLib/Casting/StaticCast.h"
 #include "RetroLib/RetroLibMacros.h"
-
 #include <memory>
 #include <optional>
 #endif

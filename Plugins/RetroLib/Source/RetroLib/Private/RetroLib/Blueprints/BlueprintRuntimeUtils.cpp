@@ -2,7 +2,6 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
-
 #include "RetroLib/Exceptions/TypeException.h"
 #include "RetroLib/Exceptions/VariantException.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"

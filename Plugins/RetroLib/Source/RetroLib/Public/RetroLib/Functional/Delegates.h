@@ -24,7 +24,8 @@ namespace Retro {
             template <typename... A>
             constexpr decltype(auto) operator()(A &&...Args) const {
                 if constexpr (UnicastDelegate<D>) {
-                    check(Delegate.IsBound()) return Delegate.Execute(std::forward<A>(Args)...);
+                    check(Delegate.IsBound())
+                    return Delegate.Execute(std::forward<A>(Args)...);
                 } else if constexpr (MulticastDelegate<D>) {
                     return Delegate.Broadcast(std::forward<A>(Args)...);
                 }

@@ -24,7 +24,6 @@ import std;
 #include "RetroLib/Optionals/To.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/Value.h"
-
 #include <array>
 #endif
 

@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_VariantCastBase.h"
-
 #include "K2Node_IfThenElse.h"
 #include "KismetCompiler.h"
 #include "RetroLib/Blueprints/BlueprintPins.h"
@@ -57,7 +56,7 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
         const UEdGraphSchema_K2 *K2Schema = Cast<UEdGraphSchema_K2>(GetSchema());
         check(K2Schema != nullptr)
 
-            bCanTogglePurity = K2Schema->DoesGraphSupportImpureFunctions(GetGraph());
+        bCanTogglePurity = K2Schema->DoesGraphSupportImpureFunctions(GetGraph());
         if (!bCanTogglePurity) {
             MenuEntryTooltip = NSLOCTEXT("UK2Node_VariantCastBase", "CannotMakeImpureTooltip",
                                          "This graph does not support impure calls (and you should therefore test the "

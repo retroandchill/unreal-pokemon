@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_VariantCastBase.generated.h"
 #include "K2Node_VariantOperationBase.h"
+
+#include "K2Node_VariantCastBase.generated.h"
 
 /**
  * @class UK2Node_VariantCastBase
@@ -51,16 +52,19 @@ class RETROLIBBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_Varian
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
   protected:
-    virtual void CreateInputAndOutputPins() ABSTRACT_METHOD UEdGraphPin *GetCastFailedPin() const;
+    virtual void CreateInputAndOutputPins() ABSTRACT_METHOD
+    UEdGraphPin *GetCastFailedPin() const;
 
     virtual void MakeAdditionalPinLinks(UK2Node &CallPerformCast) const;
     virtual UEdGraphPin *GetInputPin() const ABSTRACT_METHOD
-        virtual UEdGraphPin *GetOutputPin() const ABSTRACT_METHOD UEdGraphPin *GetCastSucceededPin() const;
+    virtual UEdGraphPin *GetOutputPin() const ABSTRACT_METHOD
+    UEdGraphPin *GetCastSucceededPin() const;
 
-    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext,
-                                                 UEdGraph *SourceGraph) ABSTRACT_METHOD
+    virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+        ABSTRACT_METHOD
 
-        private : void TogglePurity();
+  private:
+    void TogglePurity();
     void SetPurity(bool bPurity);
 
     UPROPERTY()
