@@ -7,7 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Pokemon/Pokemon.h"
-
+#include "RetroLib/Utils/Construct.h"
 #include <functional>
 
 void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const {

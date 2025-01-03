@@ -1,5 +1,10 @@
 ﻿
-#include "RetroLib.h"
+
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/Enumerate.h"
+#include "RetroLib/Ranges/Views/JoinWith.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TestAdapter.h"
 
 #include <array>

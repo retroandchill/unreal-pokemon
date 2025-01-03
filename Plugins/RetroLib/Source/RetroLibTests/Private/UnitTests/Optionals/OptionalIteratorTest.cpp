@@ -11,7 +11,9 @@
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Ranges/Views/Concat.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 #include <ranges>
 #endif
@@ -50,8 +52,8 @@ TEST_CASE_NAMED(FOptionalIteratorTest, "RetroLib::Optionals::Iterator", "[option
     }
 
     SECTION("Can be used to determine size") {
-        auto View = Retro::Ranges::Views::Concat(TOptional(1), TOptional<int>(), TOptional(2),
-                                                 TOptional<int>(), TOptional<int>(), TOptional(3));
+        auto View = Retro::Ranges::Views::Concat(TOptional(1), TOptional<int>(), TOptional(2), TOptional<int>(),
+                                                 TOptional<int>(), TOptional(3));
         CHECK(View.size() == 3);
     }
 }

@@ -4,8 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "DependencyInjectionSettings.h"
-#include "RetroLib.h"
-
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Concepts/Interfaces.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "UObject/Interface.h"
 
 namespace UnrealInjector {
@@ -63,7 +67,7 @@ namespace UnrealInjector {
             // clang-format off
             auto& Result = Setting->TargetInjections |
                 Retro::Ranges::Views::Filter([](const FInjectionTarget& Target) { return Retro::TypesMatch<T>(Target.TargetInterface); }) |
-                Retro::Ranges::FindFirst |
+                Retro::Ranges::FindFirst() |
                 Retro::Optionals::OrElseGet([Setting]() -> auto& { return Setting->TargetInjections.Emplace_GetRef(Retro::GetClass<T>()); });
             // clang-format on
 

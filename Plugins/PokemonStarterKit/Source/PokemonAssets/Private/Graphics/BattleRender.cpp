@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/BattleRender.h"
+#include "RetroLib/Variants/VariantObjectStruct.h"
 
 RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
 

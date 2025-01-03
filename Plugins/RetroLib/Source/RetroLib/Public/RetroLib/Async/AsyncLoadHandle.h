@@ -4,9 +4,10 @@
 
 #ifdef __UNREAL__
 #if !RETROLIB_WITH_MODULES
-#include <mutex>
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+
+#include <mutex>
 #endif
 
 #include "RetroLib/Concepts/Delegates.h"
@@ -102,5 +103,5 @@ namespace Retro {
         bool bLoadCompleted = false;
         std::mutex UpdateMutex;
     };
-}
+} // namespace Retro
 #endif

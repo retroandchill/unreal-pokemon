@@ -7,23 +7,21 @@
  */
 #pragma once
 
-#include "RetroLib/TypeTraits.h"
 #include "RetroLib/Concepts/Pointers.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-
+#include "RetroLib/TypeTraits.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
 
 namespace Retro::Optionals {
-    
 
     struct FPtrOrNullInvoker {
 
         template <OptionalType O>
-            requires (!SpecializationOf<TValueType<O>, std::reference_wrapper>)
+            requires(!SpecializationOf<TValueType<O>, std::reference_wrapper>)
         constexpr auto operator()(O &&Optional) const {
             return HasValue(std::forward<O>(Optional)) ? GetPtrFromRef(Get(std::forward<O>(Optional))) : nullptr;
         }
@@ -49,4 +47,4 @@ namespace Retro::Optionals {
      */
     RETROLIB_EXPORT constexpr auto PtrOrNull = ExtensionMethod<FPtrOrNullInvoker{}>();
 
-} // namespace retro::optionals
+} // namespace Retro::Optionals

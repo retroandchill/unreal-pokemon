@@ -3,7 +3,7 @@
 #include "Battle/Stats/StatTags.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Species/Stat.h"
 
 namespace Pokemon::Battle::Stats {

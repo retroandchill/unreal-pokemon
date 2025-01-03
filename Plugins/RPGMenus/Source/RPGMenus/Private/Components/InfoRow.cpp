@@ -1,7 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/InfoRow.h"
-#include "RetroLib.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/Transform.h"
 
 void UInfoRow::NativePreConstruct() {
     Super::NativePreConstruct();

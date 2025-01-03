@@ -11,7 +11,19 @@
 import RetroLib;
 import std;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/IfPresentOrElse.h"
+#include "RetroLib/Optionals/IsSet.h"
+#include "RetroLib/Optionals/OrElse.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Optionals/OrElseThrow.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/To.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/Value.h"
 
 #include <array>
 #endif
@@ -20,7 +32,7 @@ namespace Retro::Testing::Optionals {
     struct DataStruct {
         int Member;
     };
-}
+} // namespace Retro::Testing::Optionals
 
 TEST_CASE_NAMED(FFilterOptionalTest, "RetroLib::Optionals::Filter", "[optionals]") {
     SECTION("Can filter on a constant functor") {
@@ -242,7 +254,7 @@ TEST_CASE_NAMED(FOptionalToTest, "RetroLib::Optionals::To", "[optionals]") {
         CHECK(Value2.has_value());
         CHECK(Value2.value() == 34);
 
-        TOptional<int&> Value3;
+        TOptional<int &> Value3;
         auto Value4 = Value3 | Retro::Optionals::To<std::optional>();
         CHECK_FALSE(Value4.has_value());
     }
@@ -344,10 +356,9 @@ TEST_CASE_NAMED(FOptionalMemberReferenceTest, "RetroLib::Optionals::MemberRefere
     using namespace Retro::Testing::Optionals;
 
     SECTION("Can use the member as a runtime pointer") {
-       std::optional Value = DataStruct{3};
+        std::optional Value = DataStruct{3};
 
-        auto Result = Value |
-            Retro::Optionals::Transform(&DataStruct::Member);
+        auto Result = Value | Retro::Optionals::Transform(&DataStruct::Member);
         CHECK(Result.has_value());
         CHECK(Result.value() == 3);
     }
@@ -355,8 +366,7 @@ TEST_CASE_NAMED(FOptionalMemberReferenceTest, "RetroLib::Optionals::MemberRefere
     SECTION("Can use the member as a compile time pointer") {
         std::optional Value = DataStruct{3};
 
-        auto Result = Value |
-            Retro::Optionals::Transform<&DataStruct::Member>();
+        auto Result = Value | Retro::Optionals::Transform<&DataStruct::Member>();
         CHECK(Result.has_value());
         CHECK(Result.value() == 3);
     }

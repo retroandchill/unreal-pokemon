@@ -17,6 +17,6 @@
 #include "RetroLib/Utils/CommonString.h"
 #include "RetroLib/Utils/DateUtils.h"
 #include "RetroLib/Utils/OpaqueStruct.h"
-#include "RetroLib/Utils/SoftObjectRef.h"
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
+#include "RetroLib/Utils/SoftObjectRef.h"
 #endif

@@ -2,8 +2,6 @@
 
 #include "RetroLib/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
 
-#include <RetroLib/Optionals/To.h>
-
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -14,6 +12,8 @@
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
+
+#include <RetroLib/Optionals/To.h>
 
 void UK2Node_MakeSoftVariantFromSoftObject::Initialize(UScriptStruct *SoftReference) {
     SoftReferenceType = SoftReference;
@@ -43,7 +43,7 @@ bool UK2Node_MakeSoftVariantFromSoftObject::IsConnectionDisallowed(const UEdGrap
     auto Registration = Registry.GetVariantStructData(*SoftReferenceType);
     check(Registration.IsSet())
 
-    bool bDisallowed = true;
+        bool bDisallowed = true;
     if (OtherPin->PinType.PinCategory == UEdGraphSchema_K2::PC_SoftObject) {
         auto Class = Cast<UClass>(OtherPin->PinType.PinSubCategoryObject.Get());
         bDisallowed = Class == nullptr || !Registration->IsValidType(Class);
@@ -115,8 +115,8 @@ void UK2Node_MakeSoftVariantFromSoftObject::ExpandNode(FKismetCompilerContext &C
     BreakAllNodeLinks();
 }
 
-void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(
-    FBlueprintActionDatabaseRegistrar &ActionRegistrar, Retro::IVariantRegistration &Registration) const {
+void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+                                                                    Retro::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeSoftVariantFromSoftObject>(Node);
@@ -126,8 +126,8 @@ void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(
     auto ActionKey = GetClass();
     auto SoftStruct = Registration.GetSoftStructType();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr)
-    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateStatic(CustomizeCallback, SoftStruct);
+    check(Spawner != nullptr) Spawner->CustomizeNodeDelegate =
+        FCustomizeDelegate::CreateStatic(CustomizeCallback, SoftStruct);
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
@@ -147,8 +147,7 @@ TOptional<UClass &> UK2Node_MakeSoftVariantFromSoftObject::GetInputClass() const
 
 void UK2Node_MakeSoftVariantFromSoftObject::RefreshInputPinType() const {
     if (auto ObjectPin = GetObjectPin(); ObjectPin->LinkedTo.Num() > 0) {
-        check(ObjectPin->LinkedTo.Num() == 1)
-        auto Pin = ObjectPin->LinkedTo[0];
+        check(ObjectPin->LinkedTo.Num() == 1) auto Pin = ObjectPin->LinkedTo[0];
         ObjectPin->PinType = Pin->PinType;
         ObjectPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
     } else {

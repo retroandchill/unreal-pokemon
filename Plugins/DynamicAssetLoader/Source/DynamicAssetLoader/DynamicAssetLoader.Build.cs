@@ -15,7 +15,7 @@ public class DynamicAssetLoader : ModuleRules {
         });
 
         PublicDependencyModuleNames.AddRange(new string[] {
-            "Core",  "RetroLib", "CoreUObject", "DeveloperSettings"
+            "Core", "RetroLib", "CoreUObject", "DeveloperSettings"
             // ... add other public dependencies that you statically link with here ...
         });
 

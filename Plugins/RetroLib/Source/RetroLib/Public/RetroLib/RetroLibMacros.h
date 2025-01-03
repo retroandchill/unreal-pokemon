@@ -35,15 +35,15 @@
 #define RETROLIB_ASSERT(...) assert(__VA_ARGS__)
 #endif
 
-#define RETROLIB_FUNCTIONAL_EXTENSION(Exporter, Method, Name) \
-  constexpr auto Invoker_##Name##_Method_Variable = Method; \
-  template <auto Functor = DynamicFunctor> \
-        requires (DynamicFunctorBinding<Functor> || IsValidFunctorObject(Functor)) \
-  constexpr TFunctorBindingInvoker<Functor, Invoker_##Name##_Method_Variable> FunctorExtension_##Name##_Callback; \
-  Exporter template <auto Functor = DynamicFunctor, typename... A> \
-        requires (DynamicFunctorBinding<Functor> || IsValidFunctorObject(Functor)) \
-    constexpr auto Name(A &&...Args) { \
-          return ExtensionMethod<FunctorExtension_##Name##_Callback<Functor>>(std::forward<A>(Args)...); \
+#define RETROLIB_FUNCTIONAL_EXTENSION(Exporter, Method, Name)                                                          \
+    constexpr auto Invoker_##Name##_Method_Variable = Method;                                                          \
+    template <auto Functor = DynamicFunctor>                                                                           \
+        requires(DynamicFunctorBinding<Functor> || IsValidFunctorObject(Functor))                                      \
+    constexpr TFunctorBindingInvoker<Functor, Invoker_##Name##_Method_Variable> FunctorExtension_##Name##_Callback;    \
+    Exporter template <auto Functor = DynamicFunctor, typename... A>                                                   \
+        requires(DynamicFunctorBinding<Functor> || IsValidFunctorObject(Functor))                                      \
+    constexpr auto Name(A &&...Args) {                                                                                 \
+        return ExtensionMethod<FunctorExtension_##Name##_Callback<Functor>>(std::forward<A>(Args)...);                 \
     }
 
 #ifdef __UNREAL__
@@ -58,9 +58,9 @@
  * @param StructName The name of the struct in question
  * @param ... The types that are registered to the struct type
  */
-#define RETRO_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...)                                                              \
+#define RETRO_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...)                                                           \
     struct FSoft##StructName;                                                                                          \
-    struct F##StructName : Retro::TVariantObject<__VA_ARGS__> {                                                   \
+    struct F##StructName : Retro::TVariantObject<__VA_ARGS__> {                                                        \
         using SoftPtrType = FSoft##StructName;                                                                         \
         F##StructName() = default;                                                                                     \
         template <typename... T>                                                                                       \
@@ -72,8 +72,8 @@
         }                                                                                                              \
     };                                                                                                                 \
     template <>                                                                                                        \
-    struct Retro::TIsVariantObject<F##StructName> : std::true_type {};                                    \
-    struct FSoft##StructName : Retro::TSoftVariantObject<F##StructName> {                                         \
+    struct Retro::TIsVariantObject<F##StructName> : std::true_type {};                                                 \
+    struct FSoft##StructName : Retro::TSoftVariantObject<F##StructName> {                                              \
         FSoft##StructName() = default;                                                                                 \
         template <typename... T>                                                                                       \
             requires std::constructible_from<TSoftVariantObject, T...>                                                 \
@@ -88,7 +88,7 @@
  * blueprints.
  * @param StructName The name of the struct to implement.
  */
-#define RETRO_DEFINE_VARIANT_OBJECT_STRUCT(StructName)                                                                    \
+#define RETRO_DEFINE_VARIANT_OBJECT_STRUCT(StructName)                                                                 \
     static const bool __##StructName__Registration =                                                                   \
         Retro::FVariantObjectStructRegistry::RegisterVariantStruct<StructName>()
 
@@ -106,10 +106,8 @@
 
 #define CUSTOM_THUNK_STUB(RetType, Method, ...)                                                                        \
     RetType Method(__VA_ARGS__) {                                                                                      \
-        check(false) Retro::Unreachable();                                                                        \
+        check(false) Retro::Unreachable();                                                                             \
     }
-
-
 
 #define NUMBER_LITERAL(Number) #Number
 
@@ -119,9 +117,10 @@
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
-#define ABSTRACT_METHOD {                                                                                                                  \
+#define ABSTRACT_METHOD                                                                                                \
+    {                                                                                                                  \
         LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(__PRETTY_FUNCTION__));                      \
-        Retro::Unreachable();                                                                                     \
+        Retro::Unreachable();                                                                                          \
     }
 
 #define NUMBER_LITERAL(Number) #Number
@@ -142,24 +141,25 @@
  * @param DelegateType The type of delegate
  * @param MemberName The name of the member variable
  */
-#define RETRO_MULTICAST_DELEGATE_MEMBER(DelegateType, MemberName)                                                         \
-    private:                                                                                                             \
-        DelegateType MemberName;                                                                                           \
-    \
-    public:                                                                                                              \
-        template <typename F, typename... A>                                                                                           \
-            requires Retro::Delegates::CanAddFree<DelegateType, F, A...>                                                      \
-        FDelegateHandle BindTo##MemberName(F&& Functor, A &&...Args) {                                                                  \
-            return MemberName | Retro::Delegates::Add(std::forward<F>(Functor), std::forward<A>(Args)...);                                        \
-        }                                                                                                                  \
-        template <typename O, typename F, typename... A>                                                                                           \
-            requires Retro::Delegates::CanAddMember<DelegateType, O, F, A...>                                                      \
-        FDelegateHandle BindTo##MemberName(O&& Object, F&& Functor, A &&...Args) {                                                                  \
-            return MemberName | Retro::Delegates::Add(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);                                        \
-        }  \
-        void RemoveFrom##MemberName(FDelegateHandle Handle) {                                                              \
-            MemberName.Remove(Handle);                                                                                     \
-        }
+#define RETRO_MULTICAST_DELEGATE_MEMBER(DelegateType, MemberName)                                                      \
+  private:                                                                                                             \
+    DelegateType MemberName;                                                                                           \
+                                                                                                                       \
+  public:                                                                                                              \
+    template <typename F, typename... A>                                                                               \
+        requires Retro::Delegates::CanAddFree<DelegateType, F, A...>                                                   \
+    FDelegateHandle BindTo##MemberName(F &&Functor, A &&...Args) {                                                     \
+        return MemberName | Retro::Delegates::Add(std::forward<F>(Functor), std::forward<A>(Args)...);                 \
+    }                                                                                                                  \
+    template <typename O, typename F, typename... A>                                                                   \
+        requires Retro::Delegates::CanAddMember<DelegateType, O, F, A...>                                              \
+    FDelegateHandle BindTo##MemberName(O &&Object, F &&Functor, A &&...Args) {                                         \
+        return MemberName |                                                                                            \
+               Retro::Delegates::Add(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);     \
+    }                                                                                                                  \
+    void RemoveFrom##MemberName(FDelegateHandle Handle) {                                                              \
+        MemberName.Remove(Handle);                                                                                     \
+    }
 
 #if WITH_EDITOR
 /**

@@ -3,6 +3,7 @@
 #include "Algo/ForEach.h"
 #include "CommonButtonBase.h"
 #include "Groups/CommonButtonGroupBase.h"
+#include "RetroLib/Optionals/IfPresent.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
     bIsBackHandler = true;

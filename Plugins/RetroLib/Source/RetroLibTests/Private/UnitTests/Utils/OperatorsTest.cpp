@@ -5,13 +5,14 @@
  * @author Retro & Chill
  * https://github.com/retroandchill
  */
+
 #include "TestAdapter.h"
 
 #if RETROLIB_WITH_MODULES
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Utils/Operators.h"
 
 #include <array>
 #include <memory>

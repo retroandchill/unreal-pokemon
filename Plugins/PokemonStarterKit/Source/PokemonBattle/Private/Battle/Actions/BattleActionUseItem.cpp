@@ -12,9 +12,8 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
-
-
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Utils/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
     Data.Set<TWeakInterfacePtr<IBattler>>(std::move(Battler));
@@ -86,7 +85,7 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     TargetData->SetActors(Targets |
         Retro::Ranges::Views::Filter(Retro::ValidPtr) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
-        Retro::Ranges::Views::Transform(UE::Ranges::MakeWeak) |
+        Retro::Ranges::Views::Transform(Retro::MakeWeak) |
         Retro::Ranges::To<TArray>());
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);

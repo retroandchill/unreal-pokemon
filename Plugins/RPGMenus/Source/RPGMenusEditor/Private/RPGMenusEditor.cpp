@@ -2,10 +2,10 @@
 #include "RPGMenusEditor.h"
 #include "AssetToolsModule.h"
 #include "Data/Windowskin.h"
-#include "RetroLib/Variants/VariantObjectCustomization.h"
-#include "RetroLib/Variants/SoftVariantObjectCustomization.h"
 #include "IAssetTools.h"
 #include "Images/ImageAsset.h"
+#include "RetroLib/Variants/SoftVariantObjectCustomization.h"
+#include "RetroLib/Variants/VariantObjectCustomization.h"
 #include "Windowskin/WindowskinAssetActions.h"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 

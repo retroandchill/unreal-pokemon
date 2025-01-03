@@ -39,7 +39,7 @@ namespace Retro::Ranges {
 
         constexpr TArrayIterator() = default;
 
-        constexpr TArrayIterator(T *Ptr, C &Array) : Ptr(Ptr), CurrentArray(&Array), InitialNum(GetNum()) {
+        constexpr TArrayIterator(T *Ptr, const C &Array) : Ptr(Ptr), CurrentArray(&Array), InitialNum(GetNum()) {
         }
 
         constexpr T &operator*() const {
@@ -154,20 +154,19 @@ constexpr auto end(const TArray<T, A> &Array) {
 }
 
 RETROLIB_EXPORT template <typename T, typename A>
-constexpr T* data(TArray<T, A> &Array) {
+constexpr T *data(TArray<T, A> &Array) {
     return Array.GetData();
 }
 
 RETROLIB_EXPORT template <typename T, typename A>
-constexpr const T* data(const TArray<T, A> &Array) {
+constexpr const T *data(const TArray<T, A> &Array) {
     return Array.GetData();
 }
 
 RETROLIB_EXPORT template <typename T, typename A>
-constexpr T* data(TArray<T, A> &&Array) {
+constexpr T *data(TArray<T, A> &&Array) {
     return Array.GetData();
 }
-
 
 RETROLIB_EXPORT constexpr auto begin(FString &String) {
     if constexpr (std::contiguous_iterator<decltype(String.begin())>) {
@@ -201,15 +200,15 @@ RETROLIB_EXPORT constexpr auto end(const FString &String) {
     }
 }
 
-RETROLIB_EXPORT inline TCHAR* data(FString &String) {
+RETROLIB_EXPORT inline TCHAR *data(FString &String) {
     return String.GetCharArray().GetData();
 }
 
-RETROLIB_EXPORT inline const TCHAR* data(const FString &String) {
+RETROLIB_EXPORT inline const TCHAR *data(const FString &String) {
     return String.GetCharArray().GetData();
 }
 
-RETROLIB_EXPORT inline TCHAR* data(FString &&String) {
+RETROLIB_EXPORT inline TCHAR *data(FString &&String) {
     return String.GetCharArray().GetData();
 }
 #endif

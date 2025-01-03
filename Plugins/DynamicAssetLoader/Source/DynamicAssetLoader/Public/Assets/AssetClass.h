@@ -6,7 +6,7 @@
 #include "AssetLoader.h"
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
-#include "RetroLib.h"
+#include "RetroLib/Exceptions/TypeException.h"
 
 namespace UE::Assets {
 
@@ -327,8 +327,9 @@ namespace UE::Assets {
             if constexpr (Retro::VariantObjectStruct<T>) {
                 if (auto StructProperty = CastField<FStructProperty>(&Property);
                     StructProperty == nullptr || StructProperty->Struct.Get() != Retro::GetScriptStruct<T>()) {
-                    throw Retro::FTypeException("Incompatible output parameter; the supplied struct does not have the same layout as "
-                                  "what is expected for a variant object struct.");
+                    throw Retro::FTypeException(
+                        "Incompatible output parameter; the supplied struct does not have the same layout as "
+                        "what is expected for a variant object struct.");
                 }
 
                 void *StructPtr = Data;
@@ -339,7 +340,7 @@ namespace UE::Assets {
                 auto ObjectProperty = CastField<FObjectProperty>(&Property);
                 if (ObjectProperty == nullptr || !ObjectProperty->PropertyClass->IsChildOf<T>()) {
                     throw Retro::FTypeException("Incompatible output parameter; the supplied object does is "
-                                                           "not of the correct type for this object.");
+                                                "not of the correct type for this object.");
                 }
 
                 ObjectProperty->SetObjectPropertyValue(Data, Result.GetPtrOrNull());
@@ -358,8 +359,9 @@ namespace UE::Assets {
                 if (auto StructProperty = CastField<FStructProperty>(&Property);
                     StructProperty == nullptr ||
                     StructProperty->Struct.Get() != Retro::GetScriptStruct<typename T::SoftPtrType>()) {
-                    throw Retro::FTypeException("Incompatible output parameter; the supplied struct does not have the same layout as "
-                                  "what is expected for a variant object struct.");
+                    throw Retro::FTypeException(
+                        "Incompatible output parameter; the supplied struct does not have the same layout as "
+                        "what is expected for a variant object struct.");
                 }
 
                 void *StructPtr = Data;
@@ -370,7 +372,7 @@ namespace UE::Assets {
                 auto ObjectProperty = CastField<FSoftObjectProperty>(&Property);
                 if (ObjectProperty == nullptr || ObjectProperty->PropertyClass->IsChildOf<T>()) {
                     throw Retro::FTypeException("Incompatible output parameter; the supplied object does is "
-                                                           "not of the correct type for this object.");
+                                                "not of the correct type for this object.");
                 }
 
                 ObjectProperty->SetValue_InContainer(Data, FSoftObjectPtr(Result->ToSoftObjectPath()));

@@ -3,8 +3,9 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include "RetroLib/Concepts/Structs.h"
 #include "RetroLib/Concepts/OpaqueStorage.h"
+#include "RetroLib/Concepts/Structs.h"
+#include "RetroLib/Optionals/OptionalOperations.h"
 
 #include <array>
 
@@ -198,7 +199,7 @@ namespace Retro {
             }
 
             Struct = &StructType;
-            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= SmallStructSize) {
+            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                 Struct->InitializeStruct(&Storage.Small);
             } else {
                 Storage.Large = FMemory::Malloc(Size);
@@ -221,7 +222,7 @@ namespace Retro {
             }
 
             Struct = &StructType;
-            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= SmallStructSize) {
+            if (auto Size = static_cast<size_t>(Struct->GetStructureSize()); Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                 Struct->InitializeStruct(&Storage.Small);
                 Struct->CopyScriptStruct(&Storage.Small, Data);
             } else {
@@ -287,8 +288,7 @@ namespace Retro {
         template <typename T>
             requires UEStruct<T>
         T &Get() {
-            check(IsStruct<T>())
-            return GetUnchecked<T>();
+            check(IsStruct<T>()) return GetUnchecked<T>();
         }
 
         /**
@@ -302,8 +302,7 @@ namespace Retro {
         template <typename T>
             requires UEStruct<T>
         const T &Get() const {
-            check(IsStruct<T>())
-            return GetUnchecked<T>();
+            check(IsStruct<T>()) return GetUnchecked<T>();
         }
 
         /**
@@ -314,8 +313,8 @@ namespace Retro {
          * on the structure size.
          */
         void *GetRaw() {
-            check(HasValue())
-            return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
+            check(HasValue()) return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small
+                                                                                              : Storage.Large;
         }
 
         /**
@@ -326,8 +325,8 @@ namespace Retro {
          * on the structure size.
          */
         const void *GetRaw() const {
-            check(HasValue())
-            return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
+            check(HasValue()) return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small
+                                                                                              : Storage.Large;
         }
 
         /**
@@ -374,12 +373,12 @@ namespace Retro {
          * @return A TOptional containing the pointer to the raw data if the structure has a value.
          * Returns an empty TOptional if the structure does not have a value.
          */
-        TOptional<void> TryGetRaw() {
+        TOptional<void *> TryGetRaw() {
             if (!HasValue()) {
-                return TOptional<void>();
+                return TOptional<void *>();
             }
 
-            return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
+            return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small : Storage.Large;
         }
 
         /**
@@ -388,12 +387,12 @@ namespace Retro {
          * @return A TOptional containing the pointer to the raw data if the structure has a value.
          * Returns an empty TOptional if the structure does not have a value.
          */
-        TOptional<const void> TryGetRaw() const {
+        TOptional<const void *> TryGetRaw() const {
             if (!HasValue()) {
-                return TOptional<const void>();
+                return TOptional<const void *>();
             }
 
-            return Struct->GetStructureSize() <= SmallStructSize ? &Storage.Small : Storage.Large;
+            return Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE ? &Storage.Small : Storage.Large;
         }
 
         /**
@@ -401,7 +400,7 @@ namespace Retro {
          *
          * This method checks if the internal structure (`Struct`) is non-null and
          * then determines the size of the structure. If the structure size is less
-         * than or equal to `SmallStructSize`, it destroys the small-sized structure.
+         * than or equal to `DEFAULT_SMALL_STORAGE_SIZE`, it destroys the small-sized structure.
          * Otherwise, it destroys and frees the large-sized structure's memory.
          *
          * @note This method is noexcept and guarantees to not throw exceptions.
@@ -418,7 +417,7 @@ namespace Retro {
       private:
         template <typename T>
         T &GetUnchecked() {
-            if (Struct->GetStructureSize() <= SmallStructSize) {
+            if (Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE) {
                 return *reinterpret_cast<T *>(&Storage.Small);
             }
 
@@ -427,7 +426,7 @@ namespace Retro {
 
         template <typename T>
         const T &GetUnchecked() const {
-            if (Struct->GetStructureSize() <= SmallStructSize) {
+            if (Struct->GetStructureSize() <= DEFAULT_SMALL_STORAGE_SIZE) {
                 return *reinterpret_cast<const T *>(&Storage.Small);
             }
 
@@ -435,14 +434,14 @@ namespace Retro {
         }
 
         union FStorage {
-            std::array<std::byte, SmallStructSize> Small;
+            std::array<std::byte, DEFAULT_SMALL_STORAGE_SIZE> Small;
             void *Large;
 
             FStorage() : Large(nullptr) {
             }
 
             explicit FStorage(const UScriptStruct &Struct) noexcept {
-                if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= SmallStructSize) {
+                if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                     Struct.InitializeStruct(&Small);
                 } else {
                     Large = FMemory::Malloc(Size);
@@ -452,7 +451,7 @@ namespace Retro {
 
             template <typename T>
             explicit FStorage(const UScriptStruct &Struct, T *Data) noexcept {
-                if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= SmallStructSize) {
+                if (auto Size = static_cast<size_t>(Struct.GetStructureSize()); Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                     Struct.CopyScriptStruct(&Small, Data);
                 } else {
                     Large = FMemory::Malloc(Size);
@@ -471,7 +470,8 @@ namespace Retro {
             }
 
             void Destroy(const UScriptStruct &StructType) noexcept {
-                if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
+                if (auto Size = static_cast<size_t>(StructType.GetStructureSize());
+                    Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                     StructType.DestroyStruct(&Small);
                 } else {
                     StructType.DestroyStruct(Large);
@@ -480,7 +480,8 @@ namespace Retro {
             }
 
             void CopyTo(const UScriptStruct &StructType, FStorage &Dest) const noexcept {
-                if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
+                if (auto Size = static_cast<size_t>(StructType.GetStructureSize());
+                    Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                     StructType.InitializeStruct(&Dest.Small);
                     StructType.CopyScriptStruct(&Dest.Small, &Small);
                 } else {
@@ -491,7 +492,8 @@ namespace Retro {
             }
 
             void MoveTo(const UScriptStruct &StructType, FStorage &Dest) noexcept {
-                if (auto Size = static_cast<size_t>(StructType.GetStructureSize()); Size <= SmallStructSize) {
+                if (auto Size = static_cast<size_t>(StructType.GetStructureSize());
+                    Size <= DEFAULT_SMALL_STORAGE_SIZE) {
                     std::memcpy(&Dest.Small, &Small, Size);
                 } else {
                     Dest.Large = Large;
@@ -503,5 +505,5 @@ namespace Retro {
         FStorage Storage;
         TObjectPtr<const UScriptStruct> Struct;
     };
-} // namespace UE::Ranges
+} // namespace Retro
 #endif

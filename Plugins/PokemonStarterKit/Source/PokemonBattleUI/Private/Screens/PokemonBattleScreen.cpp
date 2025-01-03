@@ -15,9 +15,8 @@
 #include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
-
-
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Utils/Construct.h"
 #include "Utilities/RPGMenuUtilities.h"
 #include <functional>
 

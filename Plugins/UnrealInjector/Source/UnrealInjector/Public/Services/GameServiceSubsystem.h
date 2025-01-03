@@ -4,7 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/GameplayStatics.h"
-#include "RetroLib.h"
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Casting/InstanceOf.h"
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Concepts/Interfaces.h"
+#include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/Value.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Service.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
@@ -33,8 +43,8 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
     T &GetService(const TSubclassOf<T> &ServiceClass = T::StaticClass()) const {
         // clang-format off
         return Retro::Optionals::OfNullable(Services.Find(ServiceClass)) |
-               Retro::Optionals::Transform(&TObjectPtr<UService>::Get) |
-               Retro::Optionals::AndThen(Retro::DynamicCast<T>) |
+               Retro::Optionals::Transform([](const TObjectPtr<UService>& P) { return P.Get(); }) |
+               Retro::Optionals::Transform(Retro::DynamicCastChecked<T>) |
                Retro::Optionals::Value;
         // clang-format on
     }

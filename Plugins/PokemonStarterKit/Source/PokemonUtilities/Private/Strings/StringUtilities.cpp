@@ -1,7 +1,9 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 #include "Strings/StringUtilities.h"
-#include "RetroLib.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/JoinWith.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 bool UStringUtilities::StartsWithVowelText(const FText &Text) {
     return StartsWithVowel(Text.ToString());

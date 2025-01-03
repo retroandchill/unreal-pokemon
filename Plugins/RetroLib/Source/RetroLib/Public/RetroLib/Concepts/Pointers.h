@@ -12,6 +12,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "Templates/NonNullSubclassOf.h"
+
 #include <concepts>
 #endif
 
@@ -61,4 +62,4 @@ namespace Retro {
     constexpr auto GetPtrFromRef(T &&Ref) {
         return TPointerGetter<std::remove_cvref_t<T>>::template Get(Ref);
     }
-} // namespace retro
+} // namespace Retro

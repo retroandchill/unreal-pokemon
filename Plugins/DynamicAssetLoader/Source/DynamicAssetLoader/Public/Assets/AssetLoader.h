@@ -4,7 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "RetroLib.h"
+#include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/SoftObjectRef.h"
 #include "Templates/NonNullSubclassOf.h"
 #include "TextureCompiler.h"
 
@@ -44,7 +50,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T>
     static TOptional<T &> AttemptLoad(FStringView SearchKey) {
         if constexpr (std::is_same_v<T, UObject>) {
-            auto Asset = Retro::Optionals::OfNullable<T>(
+            auto Asset = Retro::Optionals::OfNullable(
                 StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn));
 
 #if WITH_EDITOR
@@ -52,7 +58,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
 #endif
             return Asset;
         } else {
-            auto Asset = Retro::Optionals::OfNullable<T>(
+            auto Asset = Retro::Optionals::OfNullable(
                 Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn)));
 
 #if WITH_EDITOR
@@ -111,7 +117,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         const auto &AssetManager = UAssetManager::Get();
         FSoftObjectPath Path(CreateSearchKey(BasePackageName, AssetName));
         if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>()) {
-            return Retro::Optionals::OfNullable<T>(TSoftObjectPtr<T>(Path));
+            return Retro::Optionals::OfNullable(TSoftObjectPtr<T>(Path));
         }
 
         return TOptional<TSoftObjectRef<T>>();
@@ -252,14 +258,13 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<T &> ResolveAsset(FStringView BasePackageName, R &&Keys) {
-        using ElementType = Retro::TRangeCommonReference<R>;
         // clang-format off
         return Keys |
-               Retro::Ranges::Views::Transform([&BasePackageName](ElementType Key) {
-                   return FindAssetByName<T>(BasePackageName, Key);
+               Retro::Ranges::Views::Transform([&BasePackageName]<typename U>(U &&Key) {
+                   return FindAssetByName<T>(BasePackageName, std::forward<U>(Key));
                }) |
-               Retro::Ranges::Views::Filter([](TOptional<T&> Optional) { return Optional.IsSet(); }) |
-               Retro::Ranges::FindFirst |
+               Retro::Ranges::Views::Join |
+               Retro::Ranges::FindFirst() |
                Retro::Optionals::AndThen([](const TOptional<T &> Optional) {
                    return Optional;
                });
@@ -319,7 +324,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
                    return LookupAssetByName<T>(BasePackageName, Key);
                }) |
                Retro::Ranges::Views::Filter([](TOptional<TSoftObjectRef<T>> Optional) { return Optional.IsSet(); }) |
-               Retro::Ranges::FindFirst |
+               Retro::Ranges::FindFirst() |
                Retro::Optionals::AndThen([](const TOptional<TSoftObjectRef<T>> Optional) {
                    return Optional;
                });
@@ -358,7 +363,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
                    return LookupBlueprintClassByName<T>(BasePackageName, Key);
                }) |
                Retro::Ranges::Views::Filter([](TOptional<TNonNullSubclassOf<T>> Optional) { return Optional.IsSet(); }) |
-               Retro::Ranges::FindFirst |
+               Retro::Ranges::FindFirst() |
                Retro::Optionals::AndThen([](const TOptional<TNonNullSubclassOf<T>> Optional) {
                    return Optional;
                });

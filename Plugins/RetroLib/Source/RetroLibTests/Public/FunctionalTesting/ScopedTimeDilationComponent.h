@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "ScopedTestComponent.h"
-
 #include "ScopedTimeDilationComponent.generated.h"
 
 /**

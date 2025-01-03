@@ -3,5 +3,3 @@
 #ifdef __UNREAL__
 #include "RetroLib/Exceptions/TypeException.h"
 #endif
-
-

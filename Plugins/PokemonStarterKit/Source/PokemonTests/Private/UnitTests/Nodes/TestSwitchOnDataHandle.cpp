@@ -6,11 +6,6 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
-
-
-
-
-
 #include "Species/Ability.h"
 #include "Utilities/K2Nodes.h"
 
@@ -49,7 +44,8 @@ bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
                     }) |
                     Retro::Ranges::Views::Filter([](const UEdGraphPin *Pin) { return Pin->Direction == EGPD_Output; }) |
                     Retro::Ranges::Views::Transform<&UEdGraphPin::PinName>() |
-                    Retro::Ranges::Views::Filter([](FName Name) { return Name != FName("Default"); }) | Retro::Ranges::To<TArray>();
+                    Retro::Ranges::Views::Filter([](FName Name) { return Name != FName("Default"); }) |
+                    Retro::Ranges::To<TArray>();
 
     UE_ASSERT_EQUAL(5, PinNames.Num());
     auto &AbilityTable = FDataManager::GetInstance().GetDataTable<FAbility>();

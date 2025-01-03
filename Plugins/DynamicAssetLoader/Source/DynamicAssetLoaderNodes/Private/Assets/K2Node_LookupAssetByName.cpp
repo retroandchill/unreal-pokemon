@@ -3,7 +3,8 @@
 #include "Assets/K2Node_LookupAssetByName.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetLoadingSettings.h"
-
+#include "RetroLib/Functional/Overloaded.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
 
 UK2Node_LookupAssetByName::UK2Node_LookupAssetByName() {
     SetNodeTooltip(

@@ -5,16 +5,15 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Party/PokemonPanel.h"
 #include "Components/Party/SelectablePanel.h"
-
-
-
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 TOptional<UPokemonPanel &>
 UPokemonSelectionPaneBase::FindPanelForPokemon(const TScriptInterface<IPokemon> &Pokemon) const {
     // clang-format off
     return GetSelectableOptions<UPokemonPanel>() |
            Retro::Ranges::Views::Filter([&Pokemon](const UPokemonPanel *Panel) { return Panel->GetPokemon() == Pokemon; }) |
-           Retro::Ranges::FindFirst;
+           Retro::Ranges::FindFirst();
     // clang-format on
 }
 

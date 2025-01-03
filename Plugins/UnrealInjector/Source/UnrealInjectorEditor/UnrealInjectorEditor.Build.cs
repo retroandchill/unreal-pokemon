@@ -9,8 +9,7 @@ public class UnrealInjectorEditor : ModuleRules {
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
-                                                             "UnrealInjector", "PropertyEditor", 
-                                                             "UnrealEd" });
+                                                             "UnrealInjector", "PropertyEditor", "UnrealEd" });
 
         if (Target.WithAutomationTests && !string.IsNullOrEmpty(GetModuleDirectory("AutomationTestHelpers"))) {
             PrivateDependencyModuleNames.Add("AutomationTestHelpers");

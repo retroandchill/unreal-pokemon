@@ -3,15 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
-
 #include "DateUtils.generated.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
 /**
  * Utlity methods related to date operations.
  */
 UCLASS()
-class UNREALRANGES_API UDateUtils : public UBlueprintFunctionLibrary {
+class RETROLIB_API UDateUtils : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:

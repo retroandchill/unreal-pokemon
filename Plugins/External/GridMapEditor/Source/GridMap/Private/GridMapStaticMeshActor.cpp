@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GridMapStaticMeshActor.h"
-#include "RetroLib.h"
+
 #include "TileSet.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/OrElseValue.h"
 
 AGridMapStaticMeshActor::AGridMapStaticMeshActor(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer) {

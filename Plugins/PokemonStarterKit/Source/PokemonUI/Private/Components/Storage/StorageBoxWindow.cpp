@@ -3,8 +3,7 @@
 #include "Components/Storage/StorageBoxWindow.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Storage/StorageBoxIcon.h"
-
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Storage/StorageBox.h"
 
 const TScriptInterface<IStorageBox> &UStorageBoxWindow::GetStorageBox() const {
@@ -13,7 +12,8 @@ const TScriptInterface<IStorageBox> &UStorageBoxWindow::GetStorageBox() const {
 
 void UStorageBoxWindow::SetStorageBox(const TScriptInterface<IStorageBox> &InStorageBox) {
     StorageBox = InStorageBox;
-    StorageBox->GetStoredPokemon() | Retro::Ranges::ForEach(this, &UStorageBoxWindow::CreateStorageBoxIcon);
+    StorageBox->GetStoredPokemon() |
+        Retro::Ranges::ForEach<&UStorageBoxWindow::CreateStorageBoxIcon>(Retro::TThis(this));
 }
 
 void UStorageBoxWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {

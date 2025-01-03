@@ -29,7 +29,27 @@ namespace Retro::Optionals {
             requires std::convertible_to<TCommonReference<O>, T> &&
                      (!std::is_lvalue_reference_v<TCommonReference<O>> ||
                       !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
-        constexpr std::common_reference_t<TCommonReference<O>, T> operator()(O &&Optional, T &&Value) const {
+        constexpr auto operator()(O &&Optional, T &&Value) const {
+            if (HasValue(Optional)) {
+                return static_cast<T>(Get(std::forward<O>(Optional)));
+            }
+
+            return std::forward<T>(Value);
+        }
+
+        /**
+         * Functional call operator that returns the value of the provided optional object
+         * if it contains a value; otherwise, returns the provided fallback value.
+         *
+         * @param Optional The optional object to be checked for a valid value.
+         * @param Value The fallback value to be returned if the optional object does not contain a value.
+         * @return The value contained in the optional object if it has one; otherwise, the provided fallback value.
+         */
+        template <OptionalType O, typename T, typename V = TValueType<O>>
+            requires std::convertible_to<T, TValueType<O>> && (!std::convertible_to<TCommonReference<O>, T>) &&
+                     (!std::is_lvalue_reference_v<TCommonReference<O>> ||
+                      !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
+        constexpr V operator()(O &&Optional, T &&Value) const {
             if (HasValue(Optional)) {
                 return Get(std::forward<O>(Optional));
             }
@@ -49,8 +69,29 @@ namespace Retro::Optionals {
          *         otherwise, the fallback value from the provided reference wrapper.
          */
         template <OptionalType O, typename T>
-            requires std::convertible_to<TCommonReference<O>, T> && std::is_lvalue_reference_v<TCommonReference<O>>
-        constexpr T&& operator()(O &&Optional, const std::reference_wrapper<T> &Value) const {
+            requires std::convertible_to<TCommonReference<O>, T &> && std::is_lvalue_reference_v<TCommonReference<O>>
+        constexpr T &operator()(O &&Optional, T &Value) const {
+            if (HasValue(Optional)) {
+                return Get(std::forward<O>(Optional));
+            }
+
+            return Value;
+        }
+
+        /**
+         * Overloaded function call operator that retrieves a value from an optional-like
+         * object if it contains a value; otherwise, returns the provided reference wrapper.
+         *
+         * @tparam O The type of the optional-like object.
+         * @tparam T The type of the referenced value.
+         * @param Optional The optional-like object to check for a contained value.
+         * @param Value A reference wrapper containing the fallback value.
+         * @return A reference to the contained value in the optional-like object if it exists;
+         *         otherwise, the fallback value from the provided reference wrapper.
+         */
+        template <OptionalType O, typename T>
+            requires std::convertible_to<TCommonReference<O>, T &> && std::is_lvalue_reference_v<TCommonReference<O>>
+        constexpr T &operator()(O &&Optional, const std::reference_wrapper<T> &Value) const {
             if (HasValue(Optional)) {
                 return Get(std::forward<O>(Optional));
             }
@@ -76,4 +117,4 @@ namespace Retro::Optionals {
      * Intended for use where inline handling of optional values with a default fallback is required.
      */
     RETROLIB_EXPORT constexpr auto OrElseValue = ExtensionMethod<FOrElseValueInvoker{}>;
-} // namespace retro::optionals
+} // namespace Retro::Optionals

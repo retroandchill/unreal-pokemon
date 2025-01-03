@@ -229,7 +229,7 @@ namespace Retro {
         template <typename R, typename A>
         TElementsOf(R &&, A &&) -> TElementsOf<R, A>;
 
-    } // namespace ranges
+    } // namespace Ranges
 
     template <typename A>
     static constexpr bool AllocatorNeedsToBeStored =
@@ -312,8 +312,7 @@ namespace Retro {
         TManualLifetime<std::exception_ptr> Exception;
         TManualLifetime<T> Value;
 
-        explicit TGeneratorPromiseBase(std::coroutine_handle<> ThisCoro) noexcept
-            : Root(this), ParentOrLeaf(ThisCoro) {
+        explicit TGeneratorPromiseBase(std::coroutine_handle<> ThisCoro) noexcept : Root(this), ParentOrLeaf(ThisCoro) {
         }
 
         ~TGeneratorPromiseBase() {
@@ -448,7 +447,7 @@ namespace Retro {
 
     template <typename T, typename V, typename A, typename B, bool ExplicitAllocator>
     struct TGeneratorPromise<TGenerator<T, V, A>, B, ExplicitAllocator> final : public TGeneratorPromiseBase<T>,
-                                                                              public TPromiseBaseAlloc<B> {
+                                                                                public TPromiseBaseAlloc<B> {
         TGeneratorPromise() noexcept
             : TGeneratorPromiseBase<T>(std::coroutine_handle<TGeneratorPromise>::from_promise(*this)) {
         }
@@ -465,16 +464,16 @@ namespace Retro {
             static_assert(!ExplicitAllocator, "This coroutine has an explicit allocator specified with "
                                               "std::allocator_arg so an allocator needs to be passed "
                                               "explicitly to std::elements_of");
-            return []<typename U> (U &&Range) -> TGenerator<T, V, A> {
+            return []<typename U>(U &&Range) -> TGenerator<T, V, A> {
                 for (auto &&E : std::forward<U>(Range))
                     co_yield std::forward<decltype(E)>(E);
-            }(std::forward<R>(X.get()));
+            }(std::forward<R>(X.Get()));
         }
     };
 
     template <typename A>
     using TByteAllocatorType = typename std::allocator_traits<std::remove_cvref_t<A>>::template rebind_alloc<std::byte>;
-} // namespace retro
+} // namespace Retro
 
 namespace std {
     // Type-erased allocator with default allocator behaviour.
@@ -536,7 +535,7 @@ namespace Retro {
       private:
         using CoroutineHandle = std::coroutine_handle<promise_type>;
 
-    public:
+      public:
         /**
          * @brief Default constructor for the Generator class.
          *
@@ -608,7 +607,7 @@ namespace Retro {
             std::swap(Started, other.started);
         }
 
-    private:
+      private:
         struct Sentinel {};
 
         class Iterator {
@@ -660,7 +659,7 @@ namespace Retro {
             CoroutineHandle Coroutine;
         };
 
-    public:
+      public:
         /**
          * @brief Returns an iterator pointing to the beginning of the sequence.
          *
@@ -691,7 +690,7 @@ namespace Retro {
         explicit TGenerator(CoroutineHandle coroutine) noexcept : Coroutine(coroutine) {
         }
 
-    public:
+      public:
         /**
          * @brief Retrieves the current coroutine handle.
          *
@@ -733,7 +732,7 @@ namespace Retro {
     class TGenerator<R, V, FUseAllocatorArg> : public std::ranges::view_interface<TGenerator<R, V>> {
         using PromiseBase = TGeneratorPromiseBase<R>;
 
-    public:
+      public:
         /**
          * @brief Default constructor for the Generator class.
          *
@@ -806,7 +805,7 @@ namespace Retro {
             std::swap(Started, Other.started);
         }
 
-    private:
+      private:
         struct Sentinel {};
 
         class Iterator {
@@ -863,7 +862,7 @@ namespace Retro {
             std::coroutine_handle<> Coroutine;
         };
 
-    public:
+      public:
         /**
          * @brief Returns an iterator representing the beginning of a range.
          *
@@ -904,15 +903,15 @@ namespace Retro {
             : Promise(std::addressof(Coroutine.promise())), Coroutine(Coroutine) {
         }
 
-    public:
+      public:
         /**
-        * @brief Retrieves the coroutine handle.
-        *
-        * This method provides access to the internal coroutine handle. It is marked noexcept,
-        * indicating that it guarantees not to throw any exceptions.
-        *
-        * @return The coroutine handle associated with this object.
-        */
+         * @brief Retrieves the coroutine handle.
+         *
+         * This method provides access to the internal coroutine handle. It is marked noexcept,
+         * indicating that it guarantees not to throw any exceptions.
+         *
+         * @return The coroutine handle associated with this object.
+         */
         std::coroutine_handle<> GetCoro() noexcept {
             return Coroutine;
         }
@@ -935,6 +934,6 @@ namespace Retro {
         std::coroutine_handle<> Coroutine;
         bool Started = false;
     };
-} // namespace retro
+} // namespace Retro
 
 #endif

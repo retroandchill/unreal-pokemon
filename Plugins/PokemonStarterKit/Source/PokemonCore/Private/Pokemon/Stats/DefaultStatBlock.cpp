@@ -10,7 +10,6 @@
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "PokemonDataSettings.h"
-#include "RetroLib.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -48,15 +47,16 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
             Retro::Ranges::Views::Filter([](const FStat &Stat) {
                 return Stat.Type != Battle;
             }) |
-            UE::Ranges::ToMap(&FStat::ID)([this, &DTO](const FStat &Stat) {
+            Retro::Ranges::Views::Transform([this, &DTO](const FStat &Stat) {
                 auto IV = DTO.IVs.Contains(Stat.ID) ? TOptional(DTO.IVs[Stat.ID]) : TOptional<int32>();
                 int32 EV = DTO.EVs.Contains(Stat.ID) ? DTO.EVs[Stat.ID] : 0;
                 if (Stat.Type == Main) {
-                    return NewObject<UDefaultMainStatEntry>(this)->Initialize(Stat.ID, IV, EV);
+                    return MakeTuple(Stat.ID, NewObject<UDefaultMainStatEntry>(this)->Initialize(Stat.ID, IV, EV));
                 }
-
-                return NewObject<UDefaultMainBattleStatEntry>(this)->Initialize(Stat.ID, IV, EV);
-            });
+                
+                return MakeTuple(Stat.ID, NewObject<UDefaultMainBattleStatEntry>(this)->Initialize(Stat.ID, IV, EV));
+            }) |
+            Retro::Ranges::To<TMap>();
     // clang-format on
 }
 

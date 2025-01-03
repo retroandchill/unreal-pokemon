@@ -20,12 +20,12 @@ namespace Retro {
     RETROLIB_EXPORT template <typename... T>
         requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
     struct TVariantObject;
-    
-        template <typename>
-        struct TIsVariantObject : std::false_type {};
 
-        template <typename... T>
-        struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
+    template <typename>
+    struct TIsVariantObject : std::false_type {};
+
+    template <typename... T>
+    struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
 
     /**
      * Checks if the given type is a variant object.
@@ -68,7 +68,7 @@ namespace Retro {
          * @param Object The object to construct from
          */
         template <typename U>
-            requires std::convertible_to<U, UObject*> && (std::same_as<T, U> || ...)
+            requires std::convertible_to<U, UObject *> && (std::same_as<T, U> || ...)
         explicit TVariantObject(U *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex<U>()) {
             check(Object != nullptr)
         }
@@ -154,8 +154,8 @@ namespace Retro {
         template <typename F>
             requires(std::invocable<F, T *> && ...)
         decltype(auto) Visit(F &&Functor) const {
-            check(TypeIndex != GetTypeIndex<std::nullptr_t>())
-            static constexpr std::array VisitFunctions = {&TVariantObject::VisitSingle<T, F>...};
+            check(TypeIndex != GetTypeIndex<std::nullptr_t>()) static constexpr std::array VisitFunctions = {
+                &TVariantObject::VisitSingle<T, F>...};
             return std::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, std::forward<F>(Functor));
         }
 
@@ -200,8 +200,7 @@ namespace Retro {
          * @return A reference to the value
          */
         UObject &Get() const {
-            check(::IsValid(ContainedObject))
-            return *ContainedObject;
+            check(::IsValid(ContainedObject)) return *ContainedObject;
         }
 
         /**
@@ -238,8 +237,7 @@ namespace Retro {
             constexpr std::array<bool, sizeof...(T) + 1> TypesMatch = {std::same_as<U, std::nullptr_t>,
                                                                        std::same_as<U, T>...};
             auto Find = std::ranges::find_if(TypesMatch, [](bool Matches) { return Matches; });
-            check(Find != TypesMatch.end())
-            return std::distance(TypesMatch.begin(), Find);
+            check(Find != TypesMatch.end()) return std::distance(TypesMatch.begin(), Find);
         }
 
         /**
@@ -262,7 +260,8 @@ namespace Retro {
         static TOptional<uint64> GetTypeIndex(const FAssetData &Data) {
             constexpr std::array TypeChecks = {&TVariantObject::IsAssetTypeValid<std::nullptr_t>,
                                                &TVariantObject::IsAssetTypeValid<T>...};
-            auto Find = std::ranges::find_if(TypeChecks, [&Data](auto &&Callback) { return std::invoke(Callback, Data); });
+            auto Find =
+                std::ranges::find_if(TypeChecks, [&Data](auto &&Callback) { return std::invoke(Callback, Data); });
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
@@ -446,5 +445,5 @@ namespace Retro {
         TObjectPtr<UObject> ContainedObject;
         uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();
     };
-}
+} // namespace Retro
 #endif

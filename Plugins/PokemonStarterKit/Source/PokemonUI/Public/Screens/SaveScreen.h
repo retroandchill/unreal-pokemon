@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-
+#include "RetroLib/Async/GameThreadFutureExecutor.h"
+#include "RetroLib/Concepts/Delegates.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "Screens/Screen.h"
 
 #include "SaveScreen.generated.h"

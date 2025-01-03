@@ -12,59 +12,58 @@
 #endif
 
 namespace Retro::Ranges {
-	
-	RETROLIB_EXPORT template <std::derived_from<UObject> T>
-	class TObjectView {
-		struct FIterator {
-			using value_type = T*;
-			using difference_type = std::ptrdiff_t;
 
-			FIterator() = default;
+    RETROLIB_EXPORT template <std::derived_from<UObject> T>
+    class TObjectView {
+        struct FIterator {
+            using value_type = T *;
+            using difference_type = std::ptrdiff_t;
 
-			FIterator(const FIterator&) = delete;
-			FIterator(FIterator&&) = default;
+            FIterator() = default;
 
-			~FIterator() = default;
-			
-			FIterator& operator=(const FIterator&) = delete;
-			FIterator& operator=(FIterator&&) = default;
+            FIterator(const FIterator &) = delete;
+            FIterator(FIterator &&) = default;
 
-			T* operator*() const {
-				return *Source;
-			}
+            ~FIterator() = default;
 
-			T* operator->() const {
-				return *Source;
-			}
+            FIterator &operator=(const FIterator &) = delete;
+            FIterator &operator=(FIterator &&) = default;
 
-			bool operator==(const std::default_sentinel_t&) const {
-				return !Source;
-			}
+            T *operator*() const {
+                return *Source;
+            }
 
-			FIterator &operator++() {
-				++Source;
-				return *this;
-			}
+            T *operator->() const {
+                return *Source;
+            }
 
-			void operator++(int) {
-				++Source;
-			}
+            bool operator==(const std::default_sentinel_t &) const {
+                return !Source;
+            }
 
-		private:
-			TObjectIterator<T> Source;
-		};
-		
-	public:
-		TObjectView() = default;
+            FIterator &operator++() {
+                ++Source;
+                return *this;
+            }
 
-		FIterator begin() const {
-			return FIterator();
-		}
+            void operator++(int) {
+                ++Source;
+            }
 
-		std::default_sentinel_t end() const {
-			return std::default_sentinel_t();
-		}
-		
-	};
-}
+          private:
+            TObjectIterator<T> Source;
+        };
+
+      public:
+        TObjectView() = default;
+
+        FIterator begin() const {
+            return FIterator();
+        }
+
+        std::default_sentinel_t end() const {
+            return std::default_sentinel_t();
+        }
+    };
+} // namespace Retro::Ranges
 #endif

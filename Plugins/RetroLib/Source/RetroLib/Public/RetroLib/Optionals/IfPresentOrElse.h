@@ -55,4 +55,4 @@ namespace Retro::Optionals {
      * functional code entities.
      */
     RETROLIB_EXPORT constexpr auto IfPresentOrElse = ExtensionMethod<FIfPresentOrElseInvoker{}>;
-} // namespace retro::optionals
+} // namespace Retro::Optionals

@@ -22,4 +22,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename I>
     concept SinglePassIterator = std::input_or_output_iterator<I> && !std::forward_iterator<I>;
-} // namespace retro
+} // namespace Retro

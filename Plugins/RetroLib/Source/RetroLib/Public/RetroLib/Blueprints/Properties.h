@@ -15,7 +15,7 @@
 #endif
 
 namespace Retro {
-	/**
+    /**
      * Concept used to check that a property get actually get a value out using a static method.
      *
      * @tparam T The type to validate the concept against.
@@ -185,5 +185,5 @@ namespace Retro {
      * Visitor for checking either an object or an interface property.
      */
     using FObjectPropertyVisitor = TPropertyVisitor<FObjectProperty, FInterfaceProperty>;
-}
+} // namespace Retro
 #endif

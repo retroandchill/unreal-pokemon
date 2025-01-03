@@ -1,4 +1,9 @@
-﻿#include "RetroLib.h"
+﻿
+#include "RetroLib/Concepts/Delegates.h"
+#include "RetroLib/Functional/CreateBinding.h"
+#include "RetroLib/Functional/Delegates.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TestAdapter.h"
 
 #include <array>
@@ -7,12 +12,11 @@ namespace Retro::Testing::Delegates {
     DECLARE_DELEGATE_RetVal_TwoParams(bool, FDemoDelegate, FStringView, int32);
     DECLARE_MULTICAST_DELEGATE_TwoParams(FDemoMulticastDelegate, FStringView, int32);
     DECLARE_DELEGATE_RetVal(FString, FGetObjectName);
-    DECLARE_DELEGATE_OneParam(FAddToValue, int32)
-    DECLARE_DELEGATE_OneParam(FAddToArray, TArray<int32> &);
-    
-    DECLARE_MULTICAST_DELEGATE_OneParam(FMultiGetObjectName, FString&);
+    DECLARE_DELEGATE_OneParam(FAddToValue, int32) DECLARE_DELEGATE_OneParam(FAddToArray, TArray<int32> &);
+
+    DECLARE_MULTICAST_DELEGATE_OneParam(FMultiGetObjectName, FString &);
     DECLARE_MULTICAST_DELEGATE_OneParam(FMultiAddToValue, int32)
-    DECLARE_MULTICAST_DELEGATE_OneParam(FMultiAddToArray, TArray<int32> &);
+        DECLARE_MULTICAST_DELEGATE_OneParam(FMultiAddToArray, TArray<int32> &);
 
     static_assert(Retro::Delegates::NativeDelegate<FDemoDelegate>);
     static_assert(Retro::Delegates::UnicastDelegate<FDemoDelegate>);
@@ -62,7 +66,7 @@ namespace Retro::Testing::Delegates {
       private:
         int32 Value;
     };
-} // namespace retro::testing::delegates
+} // namespace Retro::Testing::Delegates
 
 TEST_CASE_NAMED(FDelegateBindingTest, "RetroLib::Functional::Delegates::Wrapping", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
@@ -129,8 +133,8 @@ TEST_CASE_NAMED(FCreateDelegateTest, "RetroLib::Functional::Delegates::Creation"
         static_assert(!Retro::Delegates::CanBindSP<FGetObjectName, UObject *, FString (UObject::*)() const>);
         static_assert(!Retro::Delegates::CanBindSPLambda<FGetObjectName, UObject *, FString (UObject::*)() const>);
         static_assert(Retro::Delegates::CanBindRaw<FGetObjectName, UObject *, FString (UObject::*)() const>);
-        auto Delegate1 =
-            Retro::Delegates::Create<FGetObjectName>(Object, static_cast<FString (UObject::*)() const>(&UObject::GetName));
+        auto Delegate1 = Retro::Delegates::Create<FGetObjectName>(
+            Object, static_cast<FString (UObject::*)() const>(&UObject::GetName));
         CHECK(Delegate1.Execute() == Object->GetName());
 
         int Value = 12;
@@ -144,9 +148,11 @@ TEST_CASE_NAMED(FCreateDelegateTest, "RetroLib::Functional::Delegates::Creation"
 
     SECTION("Can bind to shared pointers") {
         auto SharedValue = MakeShared<FDemoClass>(12);
-        static_assert(!Retro::Delegates::CanBindUObject<FGetObjectName, TSharedRef<FDemoClass> &, FString (UObject::*)() const>);
+        static_assert(
+            !Retro::Delegates::CanBindUObject<FGetObjectName, TSharedRef<FDemoClass> &, FString (UObject::*)() const>);
         static_assert(!Retro::Delegates::CanBindUObject<FGetObjectName, FDemoClass *, FString (UObject::*)() const>);
-        static_assert(Retro::Delegates::CanBindSP<FAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
+        static_assert(
+            Retro::Delegates::CanBindSP<FAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
         static_assert(Retro::Delegates::CanBindSP<FAddToValue, FDemoClass *, decltype(&FDemoClass::AddToValue)>);
 
         auto Delegate1 = Retro::Delegates::Create<FAddToValue>(SharedValue, &FDemoClass::AddToValue);
@@ -168,10 +174,12 @@ TEST_CASE_NAMED(FCreateDelegateTest, "RetroLib::Functional::Delegates::Creation"
     SECTION("Can bind to raw pointers") {
         FUnsharedDemoClass RawValue(12);
 
-        static_assert(Retro::Delegates::CanBindRaw<FAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
         static_assert(
-            !Retro::Delegates::CanBindUObject<FAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
-        static_assert(!Retro::Delegates::CanBindSP<FAddToValue, FUnsharedDemoClass *, decltype(&FDemoClass::AddToValue)>);
+            Retro::Delegates::CanBindRaw<FAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
+        static_assert(!Retro::Delegates::CanBindUObject<FAddToValue, FUnsharedDemoClass *,
+                                                        decltype(&FUnsharedDemoClass::AddToValue)>);
+        static_assert(
+            !Retro::Delegates::CanBindSP<FAddToValue, FUnsharedDemoClass *, decltype(&FDemoClass::AddToValue)>);
 
         auto Delegate1 = Retro::Delegates::Create<FAddToValue>(&RawValue, &FUnsharedDemoClass::AddToValue);
         Delegate1.Execute(10);
@@ -226,9 +234,11 @@ TEST_CASE_NAMED(FBindDelegateTest, "RetroLib::Functional::Delegates::Binding", "
 
     SECTION("Can bind to shared pointers") {
         auto SharedValue = MakeShared<FDemoClass>(12);
-        static_assert(!Retro::Delegates::CanBindUObject<FGetObjectName, TSharedRef<FDemoClass> &, FString (UObject::*)() const>);
+        static_assert(
+            !Retro::Delegates::CanBindUObject<FGetObjectName, TSharedRef<FDemoClass> &, FString (UObject::*)() const>);
         static_assert(!Retro::Delegates::CanBindUObject<FGetObjectName, FDemoClass *, FString (UObject::*)() const>);
-        static_assert(Retro::Delegates::CanBindSP<FAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
+        static_assert(
+            Retro::Delegates::CanBindSP<FAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
         static_assert(Retro::Delegates::CanBindSP<FAddToValue, FDemoClass *, decltype(&FDemoClass::AddToValue)>);
 
         FAddToValue Delegate1;
@@ -253,10 +263,12 @@ TEST_CASE_NAMED(FBindDelegateTest, "RetroLib::Functional::Delegates::Binding", "
     SECTION("Can bind to raw pointers") {
         FUnsharedDemoClass RawValue(12);
 
-        static_assert(Retro::Delegates::CanBindRaw<FAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
         static_assert(
-            !Retro::Delegates::CanBindUObject<FAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
-        static_assert(!Retro::Delegates::CanBindSP<FAddToValue, FUnsharedDemoClass *, decltype(&FDemoClass::AddToValue)>);
+            Retro::Delegates::CanBindRaw<FAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
+        static_assert(!Retro::Delegates::CanBindUObject<FAddToValue, FUnsharedDemoClass *,
+                                                        decltype(&FUnsharedDemoClass::AddToValue)>);
+        static_assert(
+            !Retro::Delegates::CanBindSP<FAddToValue, FUnsharedDemoClass *, decltype(&FDemoClass::AddToValue)>);
 
         FAddToValue Delegate1;
         Retro::Delegates::Bind(Delegate1, &RawValue, &FUnsharedDemoClass::AddToValue);
@@ -291,13 +303,16 @@ TEST_CASE_NAMED(FAddDelegateTest, "RetroLib::Functional::Delegates::Adding", "[R
 
     SECTION("Can bind UObject members") {
         auto Object = NewObject<UDataTable>();
-        static_assert(Retro::Delegates::CanAddUObject<FMultiGetObjectName, UObject *, void (UObject::*)(FString&) const>);
-        static_assert(!Retro::Delegates::CanAddWeakLambda<FMultiGetObjectName, UObject *, void (UObject::*)(FString&) const>);
-        static_assert(!Retro::Delegates::CanAddSP<FMultiGetObjectName, UObject *, void (UObject::*)(FString&) const>);
-        static_assert(!Retro::Delegates::CanAddSPLambda<FMultiGetObjectName, UObject *,void (UObject::*)(FString&) const>);
-        static_assert(Retro::Delegates::CanAddRaw<FMultiGetObjectName, UObject *, void (UObject::*)(FString&) const>);
+        static_assert(
+            Retro::Delegates::CanAddUObject<FMultiGetObjectName, UObject *, void (UObject::*)(FString &) const>);
+        static_assert(
+            !Retro::Delegates::CanAddWeakLambda<FMultiGetObjectName, UObject *, void (UObject::*)(FString &) const>);
+        static_assert(!Retro::Delegates::CanAddSP<FMultiGetObjectName, UObject *, void (UObject::*)(FString &) const>);
+        static_assert(
+            !Retro::Delegates::CanAddSPLambda<FMultiGetObjectName, UObject *, void (UObject::*)(FString &) const>);
+        static_assert(Retro::Delegates::CanAddRaw<FMultiGetObjectName, UObject *, void (UObject::*)(FString &) const>);
         FMultiGetObjectName Delegate1;
-        Retro::Delegates::Add(Delegate1, Object, static_cast<void (UObject::*)(FString&) const>(&UObject::GetName));
+        Retro::Delegates::Add(Delegate1, Object, static_cast<void (UObject::*)(FString &) const>(&UObject::GetName));
         FString Name;
         Delegate1.Broadcast(Name);
         CHECK(Name == Object->GetName());
@@ -314,7 +329,8 @@ TEST_CASE_NAMED(FAddDelegateTest, "RetroLib::Functional::Delegates::Adding", "[R
 
     SECTION("Can bind to shared pointers") {
         auto SharedValue = MakeShared<FDemoClass>(12);
-        static_assert(Retro::Delegates::CanAddSP<FMultiAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
+        static_assert(
+            Retro::Delegates::CanAddSP<FMultiAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
         static_assert(Retro::Delegates::CanAddSP<FMultiAddToValue, FDemoClass *, decltype(&FDemoClass::AddToValue)>);
 
         FMultiAddToValue Delegate1;
@@ -338,10 +354,12 @@ TEST_CASE_NAMED(FAddDelegateTest, "RetroLib::Functional::Delegates::Adding", "[R
     SECTION("Can bind to raw pointers") {
         FUnsharedDemoClass RawValue(12);
 
-        static_assert(Retro::Delegates::CanAddRaw<FMultiAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
+        static_assert(Retro::Delegates::CanAddRaw<FMultiAddToValue, FUnsharedDemoClass *,
+                                                  decltype(&FUnsharedDemoClass::AddToValue)>);
+        static_assert(!Retro::Delegates::CanAddUObject<FMultiAddToValue, FUnsharedDemoClass *,
+                                                       decltype(&FUnsharedDemoClass::AddToValue)>);
         static_assert(
-            !Retro::Delegates::CanAddUObject<FMultiAddToValue, FUnsharedDemoClass *, decltype(&FUnsharedDemoClass::AddToValue)>);
-        static_assert(!Retro::Delegates::CanAddSP<FMultiAddToValue, FUnsharedDemoClass *, decltype(&FDemoClass::AddToValue)>);
+            !Retro::Delegates::CanAddSP<FMultiAddToValue, FUnsharedDemoClass *, decltype(&FDemoClass::AddToValue)>);
 
         FMultiAddToValue Delegate1;
         Retro::Delegates::Add(Delegate1, &RawValue, &FUnsharedDemoClass::AddToValue);

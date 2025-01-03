@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "RetroLib.h"
+#include "RetroLib/RetroLibMacros.h"
+#include "RetroLib/Utils/Unreachable.h"
 
 #include "K2Node_DynamicAssetLoadBase.generated.h"
 

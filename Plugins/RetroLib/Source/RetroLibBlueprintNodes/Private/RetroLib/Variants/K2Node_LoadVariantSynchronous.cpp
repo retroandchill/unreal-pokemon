@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_LoadVariantSynchronous.h"
+
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -82,8 +83,7 @@ void UK2Node_LoadVariantSynchronous::GetMenuActions(FBlueprintActionDatabaseRegi
     }
 
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr)
-    ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    check(Spawner != nullptr) ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
 void UK2Node_LoadVariantSynchronous::EarlyValidation(FCompilerResultsLog &MessageLog) const {
@@ -168,8 +168,7 @@ void UK2Node_LoadVariantSynchronous::RefreshInputPin() const {
     auto OutputPin = GetResultPin();
     auto &Registry = Retro::FVariantObjectStructRegistry::Get();
     if (InputPin->LinkedTo.Num() > 0) {
-        check(InputPin->LinkedTo.Num() == 1)
-        auto Pin = InputPin->LinkedTo[0];
+        check(InputPin->LinkedTo.Num() == 1) auto Pin = InputPin->LinkedTo[0];
         InputPin->PinType = Pin->PinType;
         InputPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
 
@@ -177,7 +176,7 @@ void UK2Node_LoadVariantSynchronous::RefreshInputPin() const {
             Registry.GetVariantStructData(*CastChecked<UScriptStruct>(InputPin->PinType.PinSubCategoryObject.Get()));
         check(Registration.IsSet())
 
-        OutputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Struct;
+            OutputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Struct;
         OutputPin->PinType.PinSubCategoryObject = Registration->GetStructType();
     } else if (OutputPin->LinkedTo.Num() > 0) {
         auto Pin = OutputPin->LinkedTo[0];
@@ -188,7 +187,7 @@ void UK2Node_LoadVariantSynchronous::RefreshInputPin() const {
             Registry.GetVariantStructData(*CastChecked<UScriptStruct>(OutputPin->PinType.PinSubCategoryObject.Get()));
         check(Registration.IsSet())
 
-        InputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Struct;
+            InputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Struct;
         InputPin->PinType.PinSubCategoryObject = Registration->GetSoftStructType();
     } else {
         InputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;

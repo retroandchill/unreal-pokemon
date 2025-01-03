@@ -41,7 +41,7 @@ public class PokemonTests : ModuleRules {
                                                              "RetroLib",
                                                              "RetroLibBlueprintNodes",
                                                              "PokemonAssets",
-                                                             
+
                                                              "ToolMenus",
                                                              "DynamicAssetLoaderNodes",
                                                              "AutomationTest",

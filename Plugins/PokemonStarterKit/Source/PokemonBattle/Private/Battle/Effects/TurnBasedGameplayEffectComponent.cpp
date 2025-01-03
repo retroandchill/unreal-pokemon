@@ -7,7 +7,8 @@
 #include "GameplayEffect.h"
 #include "MathUtilities.h"
 #include "Misc/DataValidation.h"
-
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/Transform.h"
 
 bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
                                                                     FActiveGameplayEffect &ActiveGE) const {

@@ -3,7 +3,6 @@
 #include "Pokemon/TrainerMemo/DefaultObtainedBlock.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
-#include "RetroLib.h"
 
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;

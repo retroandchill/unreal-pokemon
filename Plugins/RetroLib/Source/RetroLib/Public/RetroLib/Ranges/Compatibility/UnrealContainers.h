@@ -10,8 +10,8 @@
 
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Compatibility/ForEachRange.h"
-#include "RetroLib/TypeTraits.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
+#include "RetroLib/TypeTraits.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -29,7 +29,8 @@ namespace Retro::Ranges {
     concept UnrealInsert = requires(C &Container, T &&Ref) { Container.Insert(std::forward<T>(Ref)); };
 
     template <typename C, typename T>
-    concept UnrealAddable = (!StlAppendable<C, T>) && requires(C &Container, T &&Ref) { Container += std::forward<T>(Ref); };
+    concept UnrealAddable =
+        (!StlAppendable<C, T>) && requires(C &Container, T &&Ref) { Container += std::forward<T>(Ref); };
 
     template <typename C, typename T>
     concept UnrealAppendable = UnrealEmplace<C, T> || UnrealAdd<C, T> || UnrealInsert<C, T> || UnrealAddable<C, T>;

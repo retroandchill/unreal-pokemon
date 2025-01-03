@@ -76,4 +76,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
     constexpr TByteCastFunction<T> ByteCast;
-} // namespace retro
+} // namespace Retro

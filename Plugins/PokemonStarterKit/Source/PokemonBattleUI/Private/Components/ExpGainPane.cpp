@@ -7,10 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattlerExpPanel.h"
-
-
-
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Utilities/TrainerHelpers.h"
 
 void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {

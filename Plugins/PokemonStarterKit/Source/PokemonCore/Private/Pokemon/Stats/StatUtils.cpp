@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/StatUtils.h"
 #include "DataManager.h"
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Species/Nature.h"
 #include "Species/Stat.h"
 

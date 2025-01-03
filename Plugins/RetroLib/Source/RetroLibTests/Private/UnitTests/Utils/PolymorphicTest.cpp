@@ -5,14 +5,14 @@
  * @author Retro & Chill
  * https://github.com/retroandchill
  */
+
 #include "TestAdapter.h"
-#include "rapidjson/reader.h"
 
 #if RETROLIB_WITH_MODULES
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Utils/Polymorphic.h"
 
 #include <array>
 #include <memory>
@@ -20,7 +20,7 @@ import RetroLib;
 
 namespace Retro::Testing::Polymorphic {
     class Base {
-    public:
+      public:
         virtual ~Base() = default;
 
         virtual int GetValue() const {
@@ -33,7 +33,7 @@ namespace Retro::Testing::Polymorphic {
     };
 
     class Derived1 : public Base {
-    public:
+      public:
         explicit Derived1(int Value) : Value(Value) {
         }
 
@@ -45,12 +45,12 @@ namespace Retro::Testing::Polymorphic {
             return typeid(Derived1);
         }
 
-    private:
+      private:
         int Value;
     };
 
     class Derived2 : public Base {
-    public:
+      public:
         explicit Derived2(const std::array<int, 15> &Values) : Values(Values) {
         }
 
@@ -66,12 +66,12 @@ namespace Retro::Testing::Polymorphic {
             return typeid(Derived2);
         }
 
-    private:
+      private:
         std::array<int, 15> Values;
     };
 
     class Derived3 : public Base {
-    public:
+      public:
         explicit Derived3(std::shared_ptr<int> Value) : Value(std::move(Value)) {
         }
 
@@ -83,17 +83,17 @@ namespace Retro::Testing::Polymorphic {
             return typeid(Derived3);
         }
 
-    private:
+      private:
         std::shared_ptr<int> Value;
     };
-}
+} // namespace Retro::Testing::Polymorphic
 
 constexpr std::array ValueArray1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 constexpr std::array ValueArray2 = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30};
 
 TEST_CASE_NAMED(FPolymorphicCopyTest, "RetroLib::Utils::Polymorphic::Copying", "[utils]") {
     using namespace Retro::Testing::Polymorphic;
-    
+
     // We want to test that we can assign different polymorphic values into each other
     Retro::TPolymorphic<Base> Polymorphic1 = Derived1(42);
     CHECK(Polymorphic1->GetValue() == 42);
@@ -162,7 +162,7 @@ TEST_CASE_NAMED(FPolymorphicCopyTest, "RetroLib::Utils::Polymorphic::Copying", "
 #ifdef __UNREAL__
 TEST_CASE_NAMED(FPolymorphicOptionalState, "RetroLib::Utils::Polymorphic::IntrusiveOptional", "[utils]") {
     using namespace Retro::Testing::Polymorphic;
-    
+
     static_assert(sizeof(Retro::TPolymorphic<Base>) == sizeof(TOptional<Retro::TPolymorphic<Base>>));
     TOptional<Retro::TPolymorphic<Base>> Optional1;
     CHECK_FALSE(Optional1.IsSet());

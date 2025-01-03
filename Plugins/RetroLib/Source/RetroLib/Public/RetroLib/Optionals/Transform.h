@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/FunctionTraits.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #if !RETROLIB_WITH_MODULES
 #include <ranges>
@@ -51,10 +51,10 @@ namespace Retro::Optionals {
                 std::forward<O>(Optional), std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))));
             return HasValue(std::forward<O>(Optional))
                        ? FromResult(std::forward<O>(Optional),
-                                     std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional))))
+                                    std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional))))
                        : ResultType();
         }
     };
 
     RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FTransformInvoker{}, Transform)
-} // namespace retro::optionals
+} // namespace Retro::Optionals

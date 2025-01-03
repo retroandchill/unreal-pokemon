@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TileSet.h"
+#include "RetroLib/Optionals/OrElse.h"
 
 UGridMapTileSet::UGridMapTileSet() : TileSize(100), TileHeight(200) {
 }

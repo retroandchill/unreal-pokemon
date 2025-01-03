@@ -8,8 +8,8 @@
 #pragma once
 
 #include "RetroLib/Concepts/Iterators.h"
-#include "RetroLib/Ranges/Concepts/Concatable.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
+#include "RetroLib/Ranges/Concepts/Concatable.h"
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Utils/Variant.h"
@@ -70,7 +70,7 @@ namespace Retro::Ranges {
           public:
             constexpr TSentinel() = default;
             explicit constexpr TSentinel(ConcatViewType &View, FEndTag)
-                : EndElement(std::ranges::end(std::get<RangesSize - 1>(View.ranges))) {
+                : EndElement(std::ranges::end(std::get<RangesSize - 1>(View.Ranges))) {
             }
 
             template <bool Other>
@@ -184,7 +184,7 @@ namespace Retro::Ranges {
             };
 
             [[noreturn]] static difference_type DistanceTo(std::integral_constant<size_t, RangesSize>,
-                                                            const TIterator &, const TIterator &) {
+                                                           const TIterator &, const TIterator &) {
                 RETROLIB_ASSERT(false);
                 Unreachable();
             }
@@ -192,7 +192,7 @@ namespace Retro::Ranges {
             template <size_t N>
                 requires(N < RangesSize)
             static difference_type DistanceTo(std::integral_constant<size_t, N>, const TIterator &From,
-                                               const TIterator &To) {
+                                              const TIterator &To) {
                 if (From.It.index() > N) {
                     return TIterator::DistanceTo(std::integral_constant<size_t, N + 1>{}, From, To);
                 }
@@ -262,18 +262,18 @@ namespace Retro::Ranges {
             }
 
             constexpr bool operator==(const TSentinel<IsConst> &Post) const {
-                return It.index() == RangesSize - 1 && std::get<RangesSize - 1>(View->it) == Post.EndElement;
+                return It.index() == RangesSize - 1 && get<RangesSize - 1>(It) == Post.EndElement;
             }
 
             constexpr std::partial_ordering operator<=>(const TIterator &Other) const
                 requires(std::random_access_iterator<std::ranges::iterator_t<R>> && ...)
             {
-                auto distance = *this - Other;
-                if (distance == 0) {
+                auto Distance = *this - Other;
+                if (Distance == 0) {
                     return std::partial_ordering::equivalent;
                 }
 
-                if (distance < 0) {
+                if (Distance < 0) {
                     return std::partial_ordering::less;
                 }
 
@@ -516,5 +516,5 @@ namespace Retro::Ranges {
          * within the retro::ranges::views namespace.
          */
         RETROLIB_EXPORT constexpr FConcatInvoker Concat;
-    } // namespace views
-} // namespace retro::ranges
+    } // namespace Views
+} // namespace Retro::Ranges

@@ -8,9 +8,8 @@ public class GridBased2D : ModuleRules {
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "Paper2D" });
 
-        PrivateDependencyModuleNames.AddRange(
-            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "EnhancedInput", "CommonMath", "TileReplacer",
-                           "DeveloperSettings",  "AudioPlaybackManager", "RetroLib"
-            });
+        PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
+                                                             "EnhancedInput", "CommonMath", "TileReplacer",
+                                                             "DeveloperSettings", "AudioPlaybackManager", "RetroLib" });
     }
 }

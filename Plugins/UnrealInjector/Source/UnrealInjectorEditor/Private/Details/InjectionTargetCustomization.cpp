@@ -5,7 +5,10 @@
 #include "EditorClassUtils.h"
 #include "Lookup/InjectionTarget.h"
 #include "PropertyCustomizationHelpers.h"
-#include "RetroLib.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 
 TSharedRef<IPropertyTypeCustomization> FInjectionTargetCustomization::MakeInstance() {
     return MakeShared<FInjectionTargetCustomization>();
@@ -25,11 +28,12 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
         ->GetValue(InterfaceObject);
     TSubclassOf<UObject> FoundClass = Cast<UClass>(InterfaceObject);
     auto MetaClass = Retro::Optionals::OfNullable(FoundClass) |
-                     Retro::Optionals::Filter([](const UClass &Class) { return !Class.IsChildOf<UInterface>(); }) |
+                     Retro::Optionals::Filter([](const UClass *Class) { return !Class->IsChildOf<UInterface>(); }) |
                      Retro::Optionals::OrElseValue(UObject::StaticClass());
-    auto RequiredInterface = Retro::Optionals::OfNullable(FoundClass) |
-                             Retro::Optionals::Filter([](const UClass &Class) { return Class.IsChildOf<UInterface>(); }) |
-                             Retro::Optionals::PtrOrNull;
+    auto RequiredInterface =
+        Retro::Optionals::OfNullable(FoundClass) |
+        Retro::Optionals::Filter([](const UClass *Class) { return Class->IsChildOf<UInterface>(); }) |
+        Retro::Optionals::PtrOrNull;
 
     HeaderRow.NameContent()[PropertyHandle->CreatePropertyNameWidget()]
         .ValueContent()
@@ -43,7 +47,8 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
                                                      Retro::Optionals::Transform([](const UClass *Class) {
                                                          return Class->GetDisplayNameText();
                                                      }) |
-                                                     Retro::Optionals::OrElseValue(FText::FromStringView(TEXT("Invalid"))))] +
+                                                     Retro::Optionals::OrElseValue(
+                                                         FText::FromStringView(TEXT("Invalid"))))] +
                   SHorizontalBox::Slot()
                       .VAlign(VAlign_Center)
                       .HAlign(HAlign_Left)[

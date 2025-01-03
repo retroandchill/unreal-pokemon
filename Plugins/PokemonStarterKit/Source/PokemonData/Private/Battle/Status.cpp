@@ -2,9 +2,6 @@
 #include "Battle/Status.h"
 #include "DataManager.h"
 
-
-
-
 TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     static auto &Table = FDataManager::GetInstance().GetDataTable<FStatus>();
     auto Rows = Table.GetAllRows();

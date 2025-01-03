@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_VariantCastBase.h"
-
 #include "K2Node_CastObjectToVariant.generated.h"
+#include "K2Node_VariantCastBase.h"
 
 /**
  * Node for handling the cast of an object to a variant.

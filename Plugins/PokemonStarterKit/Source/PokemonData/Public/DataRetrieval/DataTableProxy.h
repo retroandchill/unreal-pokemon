@@ -4,8 +4,10 @@
 #include "CoreMinimal.h"
 #include "DataStructHandle.h"
 #include "GameData.h"
-
-#include "RetroLib.h"
+#include "RetroLib/Casting/ByteCast.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it

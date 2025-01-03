@@ -182,4 +182,4 @@ namespace Retro {
         return FuncPtrs[Variant.index()](std::forward<F>(Visitor), std::forward<V>(Variant));
     }
 
-} // namespace retro
+} // namespace Retro

@@ -8,9 +8,6 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonDataSettings.h"
 
-
-
-
 TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
     InternalId = FGuid::NewGuid();
     TrainerType = NewTrainerType;

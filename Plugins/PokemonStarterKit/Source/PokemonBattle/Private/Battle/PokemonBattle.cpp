@@ -14,16 +14,12 @@
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
-#include "Pokemon/Pokemon.h"
-#include "range/v3/view/join.hpp"
-
-
-
-
-
-
-
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Concat.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
@@ -178,7 +174,7 @@ const TScriptInterface<IBattleSide> &APokemonBattle::GetOpposingSide() const {
 }
 
 Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
-    return UE::Ranges::CreateRange(Sides);
+    return Sides;
 }
 
 Retro::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
@@ -271,7 +267,7 @@ void APokemonBattle::ExecuteAction() {
 void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     // clang-format off
     Retro::Optionals::OfNullable(BattlePawn) |
-        Retro::Optionals::Transform([](const APawn *Pawn) { return Pawn->GetController(); }) |
+        Retro::Optionals::Transform([](const APawn &Pawn) { return Pawn.GetController(); }) |
         Retro::Optionals::IfPresent<&APlayerController::Possess>(StoredPlayerPawn);
     // clang-format on
     OnBattleEnd.Broadcast(Result);

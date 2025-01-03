@@ -2,14 +2,12 @@
 
 #include "Storage/DefaultStorageSystem.h"
 #include "Lookup/InjectionUtilities.h"
-
-
-
-
-
-
-
-
+#include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Enumerate.h"
+#include "RetroLib/Utils/Construct.h"
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageBox.h"
 
@@ -75,14 +73,19 @@ void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
 
 TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon) {
     check(Boxes.IsValidIndex(CurrentBoxIndex))
-    std::array Indexes = {Retro::Ranges::Views::Iota(CurrentBoxIndex, Boxes.Num()), Retro::Ranges::Views::Iota(0, CurrentBoxIndex)};
+    std::array Indexes = {Retro::Ranges::Views::Iota(CurrentBoxIndex, Boxes.Num()),
+                          Retro::Ranges::Views::Iota(0, CurrentBoxIndex)};
     // clang-format off
-    return Indexes |
+    auto View = Indexes |
            Retro::Ranges::Views::Join |
-           Retro::Ranges::Views::ReverseEnumerate(Boxes) |
-           Retro::Ranges::Views::Filter<&CheckOpenBox>() |
-           Retro::Ranges::FindFirst |
-           Retro::Optionals::AndThen<&TryDepositToBox>(Pokemon);
+           Retro::Ranges::Views::ReverseEnumerate(Retro::Ranges::Views::All(Boxes));
+    for (auto [Index, Value] : View) {
+        if (CheckOpenBox(Index, Value)) {
+            return TryDepositToBox(Index, Value, Pokemon);
+        }
+    }
+
+    return TOptional<FDepositResult>();
     // clang-format on
 }
 

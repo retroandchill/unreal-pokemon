@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RetroLib.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 
 class UService;
 

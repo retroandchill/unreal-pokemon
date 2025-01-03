@@ -6,11 +6,9 @@
 #include "Player/ItemSlot.h"
 #include "Player/Sorting/BagSorter.h"
 #include "PokemonDataSettings.h"
-
-
-
-
-
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include <functional>
 
 /**
@@ -49,9 +47,9 @@ bool UDefaultBag::HasItemWithTag(FName Tag) const {
                  Retro::Ranges::Views::Transform<&FPocket::Items>() |
                  Retro::Ranges::Views::Join |
                  Retro::Ranges::Views::Transform<&FItemSlot::Item>() |
-                 Retro::Ranges::Views::Transform(ItemTable, &TDataTableProxy<FItem>::GetDataChecked) |
+                 Retro::Ranges::Views::Transform<&TDataTableProxy<FItem>::GetDataChecked>(Retro::TThis(std::ref(ItemTable))) |
                  Retro::Ranges::Views::Transform<&FItem::Tags>() |
-                 Retro::Ranges::AnyOf(&TArray<FName>::Contains<FName>, Tag);
+                 Retro::Ranges::AnyOf<&TArray<FName>::Contains<FName>>(Tag);
     // clang-format on
 }
 

@@ -3,7 +3,7 @@
 #include "Assets/K2Node_LoadAssetByName.h"
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetLoadingSettings.h"
-
+#include "RetroLib/Functional/Overloaded.h"
 
 UK2Node_LoadAssetByName::UK2Node_LoadAssetByName() {
     SetNodeTooltip(NSLOCTEXT("UK2Node_LoadAssetByName", "NodeTooltip", "Attempts to retrieve an asset by its name"));

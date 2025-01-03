@@ -40,7 +40,20 @@ namespace Retro::Optionals {
 
             return std::invoke(std::forward<F>(Functor));
         }
+
+#ifdef __UNREAL__
+        template <OptionalType O, typename F>
+            requires std::invocable<F> && UnrealInterface<TValueType<O>> &&
+                     SpecializationOf<std::invoke_result_t<F>, TScriptInterface>
+        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const {
+            if (HasValue(std::forward<O>(Optional))) {
+                return static_cast<std::invoke_result_t<F>>(Get(std::forward<O>(Optional))._getUObject());
+            }
+
+            return std::invoke(std::forward<F>(Functor));
+        }
+#endif
     };
 
     RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FOrElseGetInvoker{}, OrElseGet)
-} // namespace retro::optionals
+} // namespace Retro::Optionals

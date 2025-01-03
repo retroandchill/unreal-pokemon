@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node_VariantOperationBase.h"
-
 #include "K2Node_GetVariantObject.generated.h"
+#include "K2Node_VariantOperationBase.h"
 
 /**
  * Get the underlying object of a variant struct.

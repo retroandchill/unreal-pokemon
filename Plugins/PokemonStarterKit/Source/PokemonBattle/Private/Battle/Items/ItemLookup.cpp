@@ -5,6 +5,8 @@
 #include "Bag/Item.h"
 #include "Battle/BlueprintClasses.h"
 #include "PokemonBattleSettings.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Optionals/OrElseValue.h"
 
 TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(FName ID) {
     return Classes::HoldItemEffects.LoadClass(ID);

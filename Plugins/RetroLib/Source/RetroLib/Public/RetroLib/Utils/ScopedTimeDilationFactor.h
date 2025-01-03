@@ -12,7 +12,6 @@
 #define RETROLIB_EXPORT
 #endif
 
-
 namespace Retro {
     /**
      * @class FScopedTimeDilationFactor
@@ -66,5 +65,5 @@ namespace Retro {
         TObjectPtr<const UObject> WorldContextObject;
         float Factor;
     };
-} // namespace UE::Ranges
+} // namespace Retro
 #endif

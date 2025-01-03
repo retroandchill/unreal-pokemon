@@ -11,8 +11,14 @@
 import std;
 import RetroLib;
 #else
-
-#include "RetroLib.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Views/CacheLast.h"
+#include "RetroLib/Ranges/Views/Concat.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/Enumerate.h"
+#include "RetroLib/Ranges/Views/JoinWith.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/Tuple.h"
 
 #include <array>
 #include <map>
@@ -113,7 +119,7 @@ TEST_CASE_NAMED(FConcatViewTest, "RetroLib::Ranges::Views::Concat", "[ranges]") 
 
     SECTION("Can concatenate and use with a range adaptor chain") {
         auto ViewChain = Retro::Ranges::Views::Concat(Range1, Range2) |
-                          Retro::Ranges::Views::Filter([](int i) { return i % 2 == 0; });
+                         Retro::Ranges::Views::Filter([](int i) { return i % 2 == 0; });
         int Sum = 0;
         for (int i : ViewChain) {
             Sum += i;
@@ -313,7 +319,7 @@ TEST_CASE_NAMED(FElementsTest, "RetroLib::Ranges::Views::Elements", "[ranges]") 
     SECTION("Can get the values of a map") {
         std::map<int, std::string> Map = {{1, "One"}, {2, "Two"}, {3, "Three"}};
         auto ValuesView = Map | Retro::Ranges::Views::Values | Retro::Ranges::Views::JoinWith(", ") |
-                           Retro::Ranges::To<std::string>();
+                          Retro::Ranges::To<std::string>();
 
         CHECK(ValuesView == "One, Two, Three");
     }
@@ -352,8 +358,7 @@ TEST_CASE_NAMED(FReverseEnumerateTest, "RetroLib::Ranges::Views::ReverseEnumerat
     constexpr static std::array Input = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
 
     SECTION("Can reverse enumerate using some generated indices") {
-        auto Pairs = std::ranges::views::iota(6, 12) |
-                     Retro::Ranges::Views::ReverseEnumerate(Input);
+        auto Pairs = std::ranges::views::iota(6, 12) | Retro::Ranges::Views::ReverseEnumerate(Input);
 
         int Count = 0;
         for (auto [index, letter] : Pairs) {

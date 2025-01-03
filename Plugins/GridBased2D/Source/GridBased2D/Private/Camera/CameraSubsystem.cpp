@@ -2,7 +2,8 @@
 
 #include "Camera/CameraSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "RetroLib.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/Transform.h"
 
 void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
     Super::OnWorldBeginPlay(InWorld);

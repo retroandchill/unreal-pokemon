@@ -8,8 +8,7 @@
 #include "RetroLib/Variants/K2Node_LoadVariantSynchronous.h"
 #include "RetroLib/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
 #include "RetroLib/Variants/K2Node_MakeVariantObjectStruct.h"
-
-
+#include "RetroLib/Variants/VariantObjectStruct.h"
 #include "Utilities/K2Nodes.h"
 #include "UtilityClasses/Helpers/ToolMenuActionAccess.h"
 

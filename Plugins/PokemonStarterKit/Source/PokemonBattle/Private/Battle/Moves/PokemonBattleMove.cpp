@@ -12,12 +12,8 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-
-
-
-
-
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Utils/MakeWeak.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
                                                              const TScriptInterface<IMove> &Move) {
@@ -121,9 +117,9 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     // clang-format off
     TargetData->SetActors(Targets |
                           Retro::Ranges::Views::Transform<&FTargetWithIndex::SwapIfNecessary>() |
-                          Retro::Ranges::Views::Filter(UE::Ranges::ValidPtr) |
+                          Retro::Ranges::Views::Filter(Retro::ValidPtr) |
                           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
-                          Retro::Ranges::Views::Transform(UE::Ranges::MakeWeak) |
+                          Retro::Ranges::Views::Transform(Retro::MakeWeak) |
                           Retro::Ranges::To<TArray>());
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);

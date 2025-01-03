@@ -11,13 +11,18 @@
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Algorithm/Reduce.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/Operators.h"
 
 #include <array>
-#include <optional>
-#include <vector>
 #include <map>
+#include <optional>
 #include <set>
+#include <vector>
 #endif
 
 TEST_CASE_NAMED(FRangeToTest, "Retro::Ranges::Algorithm::To", "[ranges]") {
@@ -91,7 +96,7 @@ TEST_CASE_NAMED(FRangeFindFirstTest, "Retro::Ranges::Algorithm::FindFirst", "[ra
         CHECK(Retro::Optionals::Get(ValidResult) == 3);
 
         auto InvalidResult = Values | Retro::Ranges::Views::Filter<IsMultipleOf>(10) | Retro::Ranges::FindFirst();
-        CHECK_FALSE(Retro::Optionals::HasValue(InvalidResult) );
+        CHECK_FALSE(Retro::Optionals::HasValue(InvalidResult));
     }
 
     SECTION("Can reduce using an inferred template parameter") {
@@ -106,8 +111,8 @@ TEST_CASE_NAMED(FRangeFindFirstTest, "Retro::Ranges::Algorithm::FindFirst", "[ra
     }
 
     SECTION("Can reduce using an explicit template parameter") {
-        auto ValidResult = Values | Retro::Ranges::Views::Filter<IsMultipleOf>(3) |
-                            Retro::Ranges::FindFirst<std::optional<int>>();
+        auto ValidResult =
+            Values | Retro::Ranges::Views::Filter<IsMultipleOf>(3) | Retro::Ranges::FindFirst<std::optional<int>>();
         CHECK(ValidResult == 3);
 
         auto InvalidResult =

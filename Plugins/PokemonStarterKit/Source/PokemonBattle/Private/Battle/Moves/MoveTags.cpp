@@ -4,7 +4,7 @@
 #include "Battle/Tags.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 namespace Pokemon::Battle::Moves {
 

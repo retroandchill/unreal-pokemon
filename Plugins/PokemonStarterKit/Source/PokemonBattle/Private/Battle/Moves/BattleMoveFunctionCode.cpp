@@ -27,16 +27,9 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
-
-
-
-
-
-
-
-
-
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Views/Concat.h"
+#include "RetroLib/Utils/MakeStrong.h"
 #include "Species/Stat.h"
 
 int32 FCapturedBattleStat::GetStatValue() const {
@@ -141,7 +134,7 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
     return TriggerEventData->TargetData.Data |
            Retro::Ranges::Views::Transform<&FGameplayAbilityTargetData::GetActors>() |
            Retro::Ranges::Views::Join |
-           Retro::Ranges::Views::Transform(UE::Ranges::MakeStrongChecked) |
+           Retro::Ranges::Views::Transform(Retro::MakeStrongChecked) |
            Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
            Retro::Ranges::Views::Filter([](AActor *Actor) {
                TScriptInterface<IBattler> Battler = Actor;
@@ -181,7 +174,8 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bSuccess;
     };
-    auto FilteredTargets = Targets | Retro::Ranges::Views::Filter(TargetFailureCheckCallback) | Retro::Ranges::To<TArray>();
+    auto FilteredTargets =
+        Targets | Retro::Ranges::Views::Filter(TargetFailureCheckCallback) | Retro::Ranges::To<TArray>();
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
@@ -201,7 +195,8 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
         }
         return bHitResult;
     };
-    auto SuccessfulHits = FilteredTargets | Retro::Ranges::Views::Filter(HitCheckCallback) | Retro::Ranges::To<TArray>();
+    auto SuccessfulHits =
+        FilteredTargets | Retro::Ranges::Views::Filter(HitCheckCallback) | Retro::Ranges::To<TArray>();
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
@@ -218,8 +213,10 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     }
 
     QueueMoveAnimation(User, SuccessfulHits);
-    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::DealDamage, User,
-                                            std::move(SuccessfulHits));
+    FSimpleMulticastDelegate Del;
+    DealDamage(User, SuccessfulHits);
+    ABattleSequencer::DisplayBattleMessages(this, Retro::CreateBinding<&UBattleMoveFunctionCode::DealDamage>(
+                                                      Retro::TThis(this), User, std::move(SuccessfulHits)));
 }
 
 bool UBattleMoveFunctionCode::MoveFailed_Implementation(const TScriptInterface<IBattler> &User,
@@ -338,7 +335,8 @@ void UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
     }
 
     AddDamageDisplayAnimations(User, Targets);
-    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::ApplyMoveEffects, User, Targets);
+    ABattleSequencer::DisplayBattleMessages(
+        this, Retro::BindMethod<&UBattleMoveFunctionCode::ApplyMoveEffects>(this, User, Targets));
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,
@@ -506,7 +504,9 @@ void UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> 
 
     ApplyGeneralEffect(User);
     FaintCheck(User, Targets);
-    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::ApplyAdditionalEffects, User, Targets);
+    ABattleSequencer::DisplayBattleMessages(
+        this,
+        Retro::CreateBinding<&UBattleMoveFunctionCode::ApplyAdditionalEffects>(Retro::TThis(this), User, Targets));
 }
 
 void UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
@@ -549,7 +549,8 @@ void UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBat
 
     UE_LOG(LogBattle, Display, TEXT("%s has finished, display messages and concluding!"),
            *BattleMove->GetDisplayName().ToString())
-    ABattleSequencer::DisplayBattleMessages(this, &UBattleMoveFunctionCode::EndMove, User, Targets);
+    ABattleSequencer::DisplayBattleMessages(this,
+                                            Retro::BindMethod<&UBattleMoveFunctionCode::EndMove>(this, User, Targets));
 }
 
 int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(

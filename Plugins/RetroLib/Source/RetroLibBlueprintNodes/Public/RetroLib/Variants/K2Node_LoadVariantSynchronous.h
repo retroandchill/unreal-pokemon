@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node_VariantOperationBase.h"
-
 #include "K2Node_LoadVariantSynchronous.generated.h"
+#include "K2Node_VariantOperationBase.h"
 
 /**
  *

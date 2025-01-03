@@ -9,7 +9,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "PokemonDataSettings.h"
-
+#include "RetroLib/Utils/Construct.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/Node/Utility_LearnMove.h"
 

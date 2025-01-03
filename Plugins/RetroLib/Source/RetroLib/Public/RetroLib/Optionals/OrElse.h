@@ -44,4 +44,4 @@ namespace Retro::Optionals {
 
     RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FOrElseInvoker{}, OrElse)
 
-} // namespace retro::optionals
+} // namespace Retro::Optionals

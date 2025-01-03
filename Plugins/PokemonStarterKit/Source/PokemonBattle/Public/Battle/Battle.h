@@ -3,10 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RetroLib.h"
-#include "Events/BattleMessage.h"
-#include "Functional/FunctionalShorthands.h"
-
+#include "RetroLib/Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
 
 #include "Battle.generated.h"

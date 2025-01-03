@@ -10,9 +10,6 @@
 #include "Memory/CursorMemorySubsystem.h"
 #include "PokemonDataSettings.h"
 
-
-
-
 UPocketTabWidget::UPocketTabWidget() {
     for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets) {
         PocketButtonStyles.Emplace(Name);

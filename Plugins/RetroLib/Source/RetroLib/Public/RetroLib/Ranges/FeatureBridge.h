@@ -24,4 +24,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <std::ranges::range R>
     using TRangeCommonReference = std::iter_common_reference_t<std::ranges::iterator_t<R>>;
-} // namespace retro
+} // namespace Retro

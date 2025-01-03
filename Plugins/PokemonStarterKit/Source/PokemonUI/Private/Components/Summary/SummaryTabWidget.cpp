@@ -8,8 +8,7 @@
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Groups/CommonButtonGroupBase.h"
 #include "Input/CommonUIInputTypes.h"
-
-
+#include "RetroLib/Ranges/Compatibility/Array.h"
 
 void USummaryTabWidget::NativePreConstruct() {
     Super::NativePreConstruct();

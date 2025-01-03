@@ -3,8 +3,9 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include <variant>
 #include "RetroLib/Blueprints/Properties.h"
+
+#include <variant>
 
 namespace Retro {
 
@@ -105,5 +106,5 @@ namespace Retro {
      */
     using FStringPropertyVisitor = TPropertyVisitor<FNameProperty, FStrProperty, FTextProperty>;
 
-} // namespace UE::Ranges
+} // namespace Retro
 #endif

@@ -140,4 +140,4 @@ namespace Retro {
      */
     template <typename T, typename U>
     struct TNonPropagatingCache<T, U, false> {};
-} // namespace retro
+} // namespace Retro

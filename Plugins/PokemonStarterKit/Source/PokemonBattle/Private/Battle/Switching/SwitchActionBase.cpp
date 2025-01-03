@@ -9,7 +9,6 @@
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Tags.h"
 
-
 USwitchActionBase::USwitchActionBase() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
     AbilityTrigger.TriggerTag = Pokemon::Battle::SwitchOut;

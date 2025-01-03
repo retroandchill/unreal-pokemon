@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
+
 #include "Kismet/GameplayStatics.h"
 
 namespace Retro {
@@ -23,4 +23,4 @@ namespace Retro {
     FString FScopedTimeDilationFactor::GetReferencerName() const {
         return TEXT("FScopedTimeDilationFactor");
     }
-}
+} // namespace Retro

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "RetroLib.h"
+#include "RetroLib/Optionals/OptionalOperations.h"
 #include "TileSetTagRequirements.h"
 #include "UObject/Object.h"
 

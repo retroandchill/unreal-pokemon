@@ -3,7 +3,9 @@
 #include "Saving/EnhancedSaveGameSubsystem.h"
 #include "EnhancedSaveGameModule.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
 #include "Saving/SaveableSubsystem.h"
 #include "Saving/Serialization/EnhancedSaveGame.h"
 
@@ -14,7 +16,7 @@
 UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *WorldContext) {
     // clang-format off
     return Retro::Optionals::OfNullable(WorldContext) |
-           Retro::Optionals::Transform<&UGameplayStatics::GetGameInstance>() |
+           Retro::Optionals::Transform([](const UObject& O) { return UGameplayStatics::GetGameInstance(&O); }) |
            Retro::Optionals::Transform([](const UGameInstance &G) {
                return G.GetSubsystem<UEnhancedSaveGameSubsystem>();
            }) |
@@ -37,7 +39,7 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        Retro::Ranges::Views::Transform<&FScriptInterface::GetObject>() |
+        Retro::Ranges::Views::Transform(Retro::ToUObject) |
         Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags));
     // clang-format on
 #endif
@@ -60,7 +62,7 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        Retro::Ranges::Views::Transform<&FScriptInterface::GetObject>() |
+        Retro::Ranges::Views::Transform(Retro::ToUObject) |
         Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags));
     // clang-format on
 #endif

@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
-
+#include "RetroLib/Concepts/Delegates.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "StorageInfoPage.h"
 
 #include "StorageBoxWindow.generated.h"

@@ -7,6 +7,8 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include <algorithm>
 
 static const FName AssetNamePinName = "AssetName";

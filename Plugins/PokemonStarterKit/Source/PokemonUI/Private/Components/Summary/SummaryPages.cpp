@@ -3,10 +3,8 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/WidgetSwitcher.h"
-
-
-
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off

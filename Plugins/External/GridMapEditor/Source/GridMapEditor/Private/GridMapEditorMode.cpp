@@ -17,6 +17,9 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "TileSet.h"
 #include "Toolkits/ToolkitManager.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/OrElseValue.h"
 
 static FName GridMapBrushHighlightColorParamName("HighlightColor");
 

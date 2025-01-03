@@ -11,7 +11,7 @@
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 
 #include <string_view>
 #include <vector>
@@ -51,7 +51,7 @@ namespace Retro::Testing::Extensions {
 
     constexpr VectorAppender VectorAppenderCaller;
     constexpr auto Append = Retro::ExtensionMethod<VectorAppenderCaller>;
-}
+} // namespace Retro::Testing::Extensions
 
 TEST_CASE_NAMED(FExtensionMethodTest, "RetroLib::Functional::ExtensionMethods", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Extensions;

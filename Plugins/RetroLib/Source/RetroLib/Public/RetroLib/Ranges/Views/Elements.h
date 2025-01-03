@@ -168,14 +168,14 @@ namespace Retro::Ranges {
             {
                 return Right < Left;
             }
-            [[nodiscard]] friend constexpr bool operator<=(const TIterator &Left,
-                                                           const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
+            [[nodiscard]] friend constexpr bool
+            operator<=(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
                 requires std::ranges::random_access_range<R>
             {
                 return !(Right < Left);
             }
-            [[nodiscard]] friend constexpr bool operator>=(const TIterator &Left,
-                                                           const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
+            [[nodiscard]] friend constexpr bool
+            operator>=(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
                 requires std::ranges::random_access_range<R>
             {
                 return !(Left < Right);
@@ -202,7 +202,7 @@ namespace Retro::Ranges {
             [[nodiscard]] friend constexpr TIterator
             operator+(const difference_type Offset,
                       const TIterator &It) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() += Offset) &&
-                                                   std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+                                                    std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
                 auto Copy = It;
@@ -509,5 +509,5 @@ namespace Retro::Ranges {
          * a specific aspect of a data structure or range in a compile-time evaluable manner.
          */
         RETROLIB_EXPORT constexpr auto Values = Elements<1>;
-    } // namespace views
-} // namespace retro::ranges
+    } // namespace Views
+} // namespace Retro::Ranges

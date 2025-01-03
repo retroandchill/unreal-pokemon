@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_MakeSoftVariantFromVariant.h"
+
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -79,8 +80,7 @@ void UK2Node_MakeSoftVariantFromVariant::AddMenuOptionsForStruct(FBlueprintActio
 
     auto ActionKey = GetClass();
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr)
-    Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(CustomizeCallback, Registration.GetStructType(),
-                                                                      Registration.GetSoftStructType());
+    check(Spawner != nullptr) Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(
+        CustomizeCallback, Registration.GetStructType(), Registration.GetSoftStructType());
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }

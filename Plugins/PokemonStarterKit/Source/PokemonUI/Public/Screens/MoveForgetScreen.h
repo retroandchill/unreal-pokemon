@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Screens/Screen.h"
 
 #include "MoveForgetScreen.generated.h"

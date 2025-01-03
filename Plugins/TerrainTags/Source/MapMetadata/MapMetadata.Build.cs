@@ -20,7 +20,7 @@ public class MapMetadata : ModuleRules {
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {
-            "CoreUObject", "Engine", "Slate", "SlateCore", "RetroLib", 
+            "CoreUObject", "Engine", "Slate", "SlateCore", "RetroLib",
             // ... add private dependencies that you statically link with here ...
         });
 

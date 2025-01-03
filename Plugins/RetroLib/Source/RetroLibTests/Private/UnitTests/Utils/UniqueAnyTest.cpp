@@ -5,13 +5,14 @@
  * @author Retro & Chill
  * https://github.com/retroandchill
  */
+
 #include "TestAdapter.h"
 
 #if RETROLIB_WITH_MODULES
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Utils/UniqueAny.h"
 
 #include <array>
 #include <memory>
@@ -46,14 +47,14 @@ TEST_CASE_NAMED(FUniqueAnyTest, "RetroLib::Utils::UniqueAny", "[utils]") {
 
         auto StringValue = Any.TryGet<std::string>();
         CHECK(Retro::Optionals::HasValue(StringValue));
-        CHECK(static_cast<std::string&>(Retro::Optionals::Get(StringValue)) == "Hello world");
+        CHECK(static_cast<std::string &>(Retro::Optionals::Get(StringValue)) == "Hello world");
 
         auto StringViewValue = Any.TryGet<std::string_view>();
         CHECK_FALSE(Retro::Optionals::HasValue(StringViewValue));
 
         auto ConstStringValue = std::as_const(Any).TryGet<std::string>();
         CHECK(Retro::Optionals::HasValue(ConstStringValue));
-        CHECK(static_cast<const std::string&>(Retro::Optionals::Get(ConstStringValue)) == "Hello world");
+        CHECK(static_cast<const std::string &>(Retro::Optionals::Get(ConstStringValue)) == "Hello world");
 
         auto ConstStringViewValue = std::as_const(Any).TryGet<std::string_view>();
         CHECK_FALSE(Retro::Optionals::HasValue(ConstStringViewValue));

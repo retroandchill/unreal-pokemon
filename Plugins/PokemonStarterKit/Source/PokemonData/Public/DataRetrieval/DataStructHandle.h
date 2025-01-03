@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
-#include "RetroLib.h"
-
+#include "RetroLib/Concepts/Structs.h"
 #include <memory>
 
 #include "DataStructHandle.generated.h"

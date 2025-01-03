@@ -4,7 +4,7 @@
 #include "Battle/Tags.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 namespace Pokemon::Battle::Types {
 

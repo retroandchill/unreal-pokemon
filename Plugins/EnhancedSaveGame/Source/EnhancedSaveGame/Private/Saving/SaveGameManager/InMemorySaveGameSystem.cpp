@@ -2,7 +2,9 @@
 
 #include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
 #include "EnhancedSaveGameModule.h"
-#include "RetroLib.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/Transform.h"
 
 using namespace EnhancedSaveGame;
 

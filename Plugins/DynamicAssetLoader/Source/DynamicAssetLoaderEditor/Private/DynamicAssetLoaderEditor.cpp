@@ -9,9 +9,8 @@ void FDynamicAssetLoaderEditorModule::StartupModule() {
         TEXT("AssetClassType"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
                                     &Retro::TVariantObjectCustomization<FAssetClassType>::MakeInstance));
     PropertyModule.RegisterCustomPropertyTypeLayout(
-        TEXT("SoftAssetClassType"),
-        FOnGetPropertyTypeCustomizationInstance::CreateStatic(
-            &Retro::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
+        TEXT("SoftAssetClassType"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
+                                        &Retro::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
 }
 
 void FDynamicAssetLoaderEditorModule::ShutdownModule() {

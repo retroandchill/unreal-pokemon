@@ -2,7 +2,8 @@
 #include "DataManager.h"
 #include "DataRetrieval/DataRegistry.h"
 #include "PokemonDataSettings.h"
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();

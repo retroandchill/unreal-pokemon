@@ -2,7 +2,9 @@
 #include "AutomationTestModule.h"
 #include "Graphics/BattleRender.h"
 #include "Misc/AutomationTest.h"
-
+#include "RetroLib/Exceptions/TypeException.h"
+#include "RetroLib/Exceptions/VariantException.h"
+#include "RetroLib/Variants/VariantObjectStruct.h"
 #include "Utilities/ContextObject.h"
 #include "UtilityClasses/Helpers/ExceptionTestHelper.h"
 

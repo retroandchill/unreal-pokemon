@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_GetVariantValue.h"
+
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -55,8 +56,8 @@ void UK2Node_GetVariantValue::AddMenuOptionsForStruct(FBlueprintActionDatabaseRe
     auto Struct = Registration.GetStructType();
     for (auto Classes = Registration.GetValidClasses(); auto Class : Classes) {
         auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-        check(Spawner != nullptr)
-        Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(Callback, Class, Struct);
+        check(Spawner != nullptr) Spawner->CustomizeNodeDelegate =
+            FCustomizeDelegate::CreateLambda(Callback, Class, Struct);
         ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
     }
 }

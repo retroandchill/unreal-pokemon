@@ -78,8 +78,8 @@ namespace Retro::Ranges {
     RETROLIB_EXPORT template <auto Functor, std::ranges::input_range R, typename I, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)> &&
                  std::invocable<TConstBindingType<Functor, A...>, I, TRangeCommonReference<R>> &&
-                 std::convertible_to<std::invoke_result_t<TConstBindingType<Functor, A...>, I, TRangeCommonReference<R>>,
-                                     I>
+                 std::convertible_to<
+                     std::invoke_result_t<TConstBindingType<Functor, A...>, I, TRangeCommonReference<R>>, I>
     constexpr auto Reduce(R &&Range, I &&Identity, A &&...Args) {
         return Reduce(std::forward<R>(Range), std::forward<I>(Identity),
                       CreateBinding<Functor>(std::forward<A>(Args)...));
@@ -280,4 +280,4 @@ namespace Retro::Ranges {
     constexpr auto Reduce(I &&Identity, A &&...Args) {
         return ExtensionMethod<ReduceConstFunction<Functor>>(std::forward<I>(Identity), std::forward<A>(Args)...);
     }
-} // namespace retro::ranges
+} // namespace Retro::Ranges

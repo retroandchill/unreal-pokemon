@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "RetroLib.h"
+#include "RetroLib/RetroLibMacros.h"
+#include "RetroLib/Variants/SoftVariantObject.h"
+#include "RetroLib/Variants/VariantObjectStruct.h"
 
 #include "AssetLoadingSettings.generated.h"
 

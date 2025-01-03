@@ -6,6 +6,8 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "Lookup/InjectionUtilities.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Utils/SoftObjectRef.h"
 #include "Services/GameServiceSubsystem.h"
 #include "Services/ServiceUtilities.h"
 
@@ -35,7 +37,7 @@ void UK2Node_GetServiceClass::AllocateDefaultPins() {
 FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     // clang-format off
     auto Name = Retro::Optionals::OfNullable(ServiceClass) |
-                Retro::Optionals::Transform<&UClass::GetDisplayNameText>() |
+                Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
                 Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
     // clang-format on
     return FText::FormatOrdered(NSLOCTEXT("UK2Node_GetServiceClass", "GetNodeTitle", "Get {0}"), Name);
@@ -44,7 +46,7 @@ FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) cons
 FText UK2Node_GetServiceClass::GetTooltipText() const {
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
-           Retro::Optionals::Transform<&UClass::GetToolTipText>(false) |
+           Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetToolTipText(); }) |
            Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
     // clang-format on
 }
@@ -52,7 +54,7 @@ FText UK2Node_GetServiceClass::GetTooltipText() const {
 FText UK2Node_GetServiceClass::GetCompactNodeTitle() const {
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
-           Retro::Optionals::Transform<&UClass::GetDisplayNameText>() |
+           Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
            Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
     // clang-format on
 }

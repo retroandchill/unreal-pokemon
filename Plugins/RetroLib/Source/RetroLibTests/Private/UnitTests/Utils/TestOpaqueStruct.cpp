@@ -1,7 +1,6 @@
-﻿#include "TestAdapter.h"
-#include "Misc/AutomationTest.h"
-#include "RetroLib.h"
-
+﻿#include "Misc/AutomationTest.h"
+#include "RetroLib/Utils/OpaqueStruct.h"
+#include "TestAdapter.h"
 #include "Utilities/TestStructs.h"
 
 BEGIN_DEFINE_SPEC(FTestOpaqueStruct, "Unit Tests.Ranges.Structs",
@@ -92,8 +91,8 @@ void FTestOpaqueStruct::Define() {
             Struct.Emplace(*Retro::GetScriptStruct<FTransform>(), &Transform);
             CHECK(Struct.IsStruct<FTransform>());
             bool bIdentical = false;
-            CHECK(Retro::GetScriptStruct<FTransform>()->GetCppStructOps()->Identical(
-                Struct.GetRaw(), &Transform, PPF_None, bIdentical));
+            CHECK(Retro::GetScriptStruct<FTransform>()->GetCppStructOps()->Identical(Struct.GetRaw(), &Transform,
+                                                                                     PPF_None, bIdentical));
             CHECK(bIdentical);
 
             FVector Vector;

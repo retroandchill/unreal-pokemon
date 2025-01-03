@@ -11,7 +11,7 @@
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Optionals/OptionalOperations.h"
 #endif
 
 TEST_CASE_NAMED(FTestOptionalOperations, "RetroLib::Optionals::Operations", "[optionals]") {

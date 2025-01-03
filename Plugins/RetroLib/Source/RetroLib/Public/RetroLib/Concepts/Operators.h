@@ -137,4 +137,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T, typename U = T>
     concept Moduloable = requires(const T &lhs, const U &rhs) { lhs % rhs; };
-} // namespace retro
+} // namespace Retro

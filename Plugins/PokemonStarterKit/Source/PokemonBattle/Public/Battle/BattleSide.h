@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RetroLib.h"
+#include "RetroLib/Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
 
 #include "BattleSide.generated.h"

@@ -24,10 +24,11 @@ namespace Retro {
     struct TThis {
         T Value;
 
+        constexpr explicit TThis(const T &Value) : Value(Value) {
+        }
 
-        constexpr explicit TThis(const T& Value) : Value(Value) {}
-
-        constexpr explicit TThis(T&& Value) : Value(std::move(Value)) {}
+        constexpr explicit TThis(T &&Value) : Value(std::move(Value)) {
+        }
     };
 
     /**
@@ -240,13 +241,16 @@ namespace Retro {
     struct TAdditionalBindingTypes : FInvalidType {};
 
     RETROLIB_EXPORT template <typename F, typename... A>
-    concept HasExtenededBinding = TAdditionalBindingTypes<std::decay_t<F>>::IsValid && requires(F&& Functor, A&&... Args) {
-        { TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...) } -> HasFunctionCallOperator;
-    };
+    concept HasExtenededBinding =
+        TAdditionalBindingTypes<std::decay_t<F>>::IsValid && requires(F &&Functor, A &&...Args) {
+            {
+                TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...)
+            } -> HasFunctionCallOperator;
+        };
 
     RETROLIB_EXPORT template <typename F, typename... A>
         requires HasExtenededBinding<F, A...>
-    constexpr auto CreateBinding(F&& Functor, A &&...Args) {
+    constexpr auto CreateBinding(F &&Functor, A &&...Args) {
         return TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...);
     }
 
@@ -267,4 +271,4 @@ namespace Retro {
     template <auto Functor>
     concept DynamicFunctorBinding = std::same_as<std::decay_t<decltype(Functor)>, FDynamicFunctorTag>;
 
-} // namespace retro
+} // namespace Retro

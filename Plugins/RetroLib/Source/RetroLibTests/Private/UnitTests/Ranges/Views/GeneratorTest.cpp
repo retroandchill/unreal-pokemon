@@ -12,7 +12,13 @@
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Views/Generator.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
+
+#ifdef __UNREAL__
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#endif
 
 #include <array>
 #include <vector>
@@ -29,7 +35,7 @@ namespace Retro::Ranges::Testing {
     struct Tree {
         T Value;
         Tree *Left{};
-        Tree* Right{};
+        Tree *Right{};
 
         TGenerator<const T &> TraverseInorder() const {
             if (Left) {
@@ -50,7 +56,7 @@ namespace Retro::Ranges::Testing {
             Start++;
         }
     }
-} // namespace retro::ranges::testing
+} // namespace Retro::Ranges::Testing
 
 TEST_CASE("Can create a lazily evaluated generator", "[ranges]") {
     using namespace Retro::Ranges::Testing;
@@ -90,9 +96,7 @@ TEST_CASE("Can create a lazily evaluated generator", "[ranges]") {
 TEST_CASE_NAMED(FGeneratorTest, "RetroLib::Ranges::Views::Generator", "[RetroLib][Ranges]") {
     using namespace Retro::Ranges::Testing;
 
-    auto Sequence = GenerateInts(1) |
-            Retro::Ranges::Views::Take(10) |
-            Retro::Ranges::To<TArray>();
+    auto Sequence = GenerateInts(1) | Retro::Ranges::Views::Take(10) | Retro::Ranges::To<TArray>();
     REQUIRE(Sequence.Num() == 10);
     CHECK(Sequence == TArray({1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
 }

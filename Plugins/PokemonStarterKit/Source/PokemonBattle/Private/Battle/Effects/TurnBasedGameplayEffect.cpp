@@ -4,7 +4,11 @@
 #include "AbilitySystemComponent.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Effects/TurnBasedGameplayEffectComponent.h"
-
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IsSet.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Utils/Operators.h"
 
 FTurnBasedGameplayEffect::FTurnBasedGameplayEffect(UTurnBasedEffectComponent *OwningComponent,
                                                    FActiveGameplayEffectHandle EffectHandle, int32 TurnDuration)
@@ -40,5 +44,4 @@ bool FTurnBasedGameplayEffect::RemoveEffect(int32 StacksToRemove) {
                     Retro::Optionals::Transform<&UAbilitySystemComponent::RemoveActiveGameplayEffect>(EffectHandle, StacksToRemove) |
                     Retro::Optionals::OrElseValue(false);
     // clang-format on
-    
 }

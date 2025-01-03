@@ -6,7 +6,6 @@
 #include "BlueprintNodeSpawner.h"
 #include "DataManager.h"
 
-
 UK2Node_SwitchOnDataHandle::UK2Node_SwitchOnDataHandle(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer) {
     FunctionName = TEXT("NotEqual_HandleHandle");
@@ -93,7 +92,8 @@ void UK2Node_SwitchOnDataHandle::AddPinToSwitchNode() {
 FName UK2Node_SwitchOnDataHandle::GetUniquePinName() {
     Pokemon::Data::FStructWrapper DataHandle(StructType);
     auto Options = DataHandle.GetStructOptions();
-    auto Rows = Options | Retro::Ranges::Views::Transform([](const TSharedPtr<FString> &String) { return FName(**String); }) |
+    auto Rows = Options |
+                Retro::Ranges::Views::Transform([](const TSharedPtr<FString> &String) { return FName(**String); }) |
                 Retro::Ranges::To<TArray>();
     FName NewPinName;
     for (auto Row : Rows) {

@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node_VariantCastBase.h"
-
 #include "K2Node_CastSoftObjectToSoftVariant.generated.h"
+#include "K2Node_VariantCastBase.h"
 
 /**
  * Perform a checked conversion to a soft variant object from a wildcard soft object.

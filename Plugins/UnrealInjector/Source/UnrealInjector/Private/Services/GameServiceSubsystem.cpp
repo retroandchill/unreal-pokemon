@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Services/GameServiceSubsystem.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Services/Service.h"
 #include "Services/ServiceUtilities.h"
 

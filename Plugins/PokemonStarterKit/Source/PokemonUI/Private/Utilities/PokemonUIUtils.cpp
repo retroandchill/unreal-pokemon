@@ -4,7 +4,6 @@
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
 
-
 enum class EPokemonGender : uint8;
 
 FString UPokemonUIUtils::ZeroPad(int32 Value, int32 DesiredLength) {

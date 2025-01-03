@@ -7,10 +7,10 @@
  */
 #pragma once
 
-#include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -31,7 +31,8 @@ namespace Retro::Optionals {
          *         if the optional has a value. Otherwise, returns the default value of the functor's result type.
          */
         template <OptionalType O, typename F>
-            requires std::invocable<F, TCommonReference<O>> && OptionalType<std::invoke_result_t<F, TCommonReference<O>>>
+            requires std::invocable<F, TCommonReference<O>> &&
+                     OptionalType<std::invoke_result_t<F, TCommonReference<O>>>
         constexpr auto operator()(O &&Optional, F &&Functor) const {
             return HasValue(std::forward<O>(Optional))
                        ? std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))
@@ -40,4 +41,4 @@ namespace Retro::Optionals {
     };
 
     RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FAndThenInvoker{}, AndThen)
-} // namespace retro::optionals
+} // namespace Retro::Optionals

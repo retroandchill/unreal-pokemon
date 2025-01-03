@@ -6,14 +6,16 @@
  * https://github.com/retroandchill
  */
 #include "TestAdapter.h"
-
 #if RETROLIB_WITH_MODULES
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Casting/ByteCast.h"
+#include "RetroLib/Casting/StaticCast.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #include <memory>
+#include <optional>
 #endif
 
 namespace InstanceofTest {
@@ -36,7 +38,7 @@ namespace InstanceofTest {
 
         int Value2 = 4;
     };
-} // namespace instanceof_test
+} // namespace InstanceofTest
 
 using namespace InstanceofTest;
 

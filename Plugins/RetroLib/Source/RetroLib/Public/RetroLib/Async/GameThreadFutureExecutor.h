@@ -77,5 +77,5 @@ namespace Retro {
         TOptional<T> Value;
         FCompleteDelegate OnComplete;
     };
-} // namespace UE::Ranges
+} // namespace Retro
 #endif

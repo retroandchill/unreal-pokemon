@@ -4,7 +4,7 @@
 #include "Battle/Status.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 namespace Pokemon::Battle::StatusEffects {
 

@@ -11,4 +11,4 @@ namespace Retro {
     FStringView GetStringView(const FCommonString &String) {
         return std::visit([]<typename T>(T &&Str) { return GetStringView(std::forward<T>(Str)); }, String);
     }
-} // namespace UE::Ranges
+} // namespace Retro

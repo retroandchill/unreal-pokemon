@@ -3,10 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node_VariantOperationBase.h"
-
 #include "K2Node_MakeSoftVariantFromVariant.generated.h"
-
+#include "K2Node_VariantOperationBase.h"
 
 /**
  * Make a soft variant struct from its corresponding hard reference.

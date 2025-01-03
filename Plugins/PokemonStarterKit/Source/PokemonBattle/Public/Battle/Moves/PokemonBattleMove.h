@@ -6,7 +6,6 @@
 #include "BattleMove.h"
 #include "GameplayAbilitySpecHandle.h"
 
-
 #include "PokemonBattleMove.generated.h"
 
 class UGameplayAbility;

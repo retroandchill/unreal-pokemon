@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PaperSprite.h"
 #include "PaperFlipbook.h"
-#include "RetroLib.h"
+#include "PaperSprite.h"
+#include "RetroLib/Variants/SoftVariantObject.h"
 
 #if WITH_PAPERZD
 #include "AnimSequences/PaperZDAnimSequence.h"

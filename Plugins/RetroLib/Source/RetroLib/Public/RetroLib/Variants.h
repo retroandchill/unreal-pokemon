@@ -2,10 +2,9 @@
 
 #pragma once
 
-
 #ifdef __UNREAL__
-#include "RetroLib/Variants/VariantObject.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
-#include "RetroLib/Variants/VariantObjectUtilities.h"
+#include "RetroLib/Variants/VariantObject.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
+#include "RetroLib/Variants/VariantObjectUtilities.h"
 #endif

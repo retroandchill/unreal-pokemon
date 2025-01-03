@@ -2,16 +2,15 @@
 
 #pragma once
 
-
 #include "CoreMinimal.h"
 #include "K2Node.h"
+#include "K2Node_VariantOperationBase.generated.h"
 #include "RetroLib/RetroLibMacros.h"
+
 #include <RetroLib/Utils/Unreachable.h>
 
-#include "K2Node_VariantOperationBase.generated.h"
-
 namespace Retro {
-  class IVariantRegistration;
+    class IVariantRegistration;
 }
 
 /**

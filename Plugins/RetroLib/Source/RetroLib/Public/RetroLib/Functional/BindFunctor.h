@@ -68,4 +68,4 @@ namespace Retro {
         return TSimpleFunctorBinding<Functor>();
     }
 
-} // namespace retro
+} // namespace Retro

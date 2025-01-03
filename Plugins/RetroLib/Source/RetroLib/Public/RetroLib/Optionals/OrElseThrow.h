@@ -59,4 +59,4 @@ namespace Retro::Optionals {
         return OrElseThrow([] { return std::bad_optional_access{}; });
     }
 
-} // namespace retro::optionals
+} // namespace Retro::Optionals

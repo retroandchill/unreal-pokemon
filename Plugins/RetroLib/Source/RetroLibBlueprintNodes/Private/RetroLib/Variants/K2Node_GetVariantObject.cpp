@@ -2,18 +2,18 @@
 
 #include "RetroLib/Variants/K2Node_GetVariantObject.h"
 
-#include <RetroLib/Optionals/Transform.h>
-
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "RetroLib/Blueprints/BlueprintPins.h"
-#include "RetroLib/Optionals/Transform.h"
-#include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
+
+#include <RetroLib/Optionals/Transform.h>
 
 void UK2Node_GetVariantObject::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, Retro::PN_Variant);
@@ -86,8 +86,7 @@ void UK2Node_GetVariantObject::GetMenuActions(FBlueprintActionDatabaseRegistrar 
     }
 
     auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-    check(Spawner != nullptr)
-    ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    check(Spawner != nullptr) ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
 void UK2Node_GetVariantObject::EarlyValidation(FCompilerResultsLog &MessageLog) const {
@@ -141,8 +140,7 @@ TOptional<UScriptStruct &> UK2Node_GetVariantObject::GetInputStruct() const {
 
 void UK2Node_GetVariantObject::RefreshInputPin() const {
     if (auto ObjectPin = GetVariantPin(); ObjectPin->LinkedTo.Num() > 0) {
-        check(ObjectPin->LinkedTo.Num() == 1)
-        auto Pin = ObjectPin->LinkedTo[0];
+        check(ObjectPin->LinkedTo.Num() == 1) auto Pin = ObjectPin->LinkedTo[0];
         ObjectPin->PinType = Pin->PinType;
         ObjectPin->PinType.PinSubCategoryObject = Pin->PinType.PinSubCategoryObject;
     } else {

@@ -10,6 +10,6 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
 #ifdef __UNREAL__
-#include "RetroLib/Ranges/Views/ObjectView.h"
 #include "RetroLib/Ranges/Views/ClassView.h"
+#include "RetroLib/Ranges/Views/ObjectView.h"
 #endif

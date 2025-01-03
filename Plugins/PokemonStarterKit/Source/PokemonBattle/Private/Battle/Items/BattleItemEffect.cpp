@@ -11,17 +11,8 @@
 #include "DataManager.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
-
-
-
-
-
-
-
-
-
-
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Utils/MakeStrong.h"
 
 UBattleItemEffect::UBattleItemEffect() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -87,10 +78,12 @@ bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBat
 
 TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
     // clang-format on
-    return TriggerEventData->TargetData.Data | Retro::Ranges::Views::Transform<&FGameplayAbilityTargetData::GetActors>() |
-           Retro::Ranges::Views::Join | Retro::Ranges::Views::Transform(UE::Ranges::MakeStrongChecked) |
-           Retro::Ranges::Views::Filter(Retro::ValidPtr) | Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
+    return TriggerEventData->TargetData.Data |
+           Retro::Ranges::Views::Transform<&FGameplayAbilityTargetData::GetActors>() | Retro::Ranges::Views::Join |
+           Retro::Ranges::Views::Transform(Retro::MakeStrongChecked) | Retro::Ranges::Views::Filter(Retro::ValidPtr) |
+           Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
            Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IBattler>) |
+           Retro::Ranges::Views::Transform(Retro::WrapPointer) |
            Retro::Ranges::Views::Filter(this, &UBattleItemEffect::IsTargetValid) | Retro::Ranges::To<TArray>();
     // clang-format off
 }

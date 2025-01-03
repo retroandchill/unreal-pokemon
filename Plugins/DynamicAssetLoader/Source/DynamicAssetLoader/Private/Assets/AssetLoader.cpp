@@ -2,9 +2,11 @@
 
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetClass.h"
-#include "Assets/AssetLoadingSettings.h"
-#include "Assets/AssetUtilities.h"
-
+#include "RetroLib/Exceptions/ConvertException.h"
+#include "RetroLib/Exceptions/InvalidArgumentException.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Utils/CommonString.h"
 
 FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView AssetName) {
     FStringView Prefix;

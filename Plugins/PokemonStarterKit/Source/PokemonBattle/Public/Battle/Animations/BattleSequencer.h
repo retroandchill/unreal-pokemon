@@ -7,8 +7,6 @@
 #include "GameFramework/Actor.h"
 #include "PokemonBattleModule.h"
 #include "RetroLib/Functional/Delegates.h"
-
-
 #include <queue>
 
 #include "BattleSequencer.generated.h"

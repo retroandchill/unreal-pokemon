@@ -13,11 +13,11 @@
 #include "Pokemon/Stats/DefaultStatBlock.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
-#include "RetroLib.h"
 
 void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
     Species = DTO.Species;

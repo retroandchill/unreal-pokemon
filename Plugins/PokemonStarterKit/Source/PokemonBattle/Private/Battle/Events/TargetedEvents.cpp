@@ -7,14 +7,11 @@
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-
-
-
-
-
-
-
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Views/Concat.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Scope) {
     switch (Scope) {

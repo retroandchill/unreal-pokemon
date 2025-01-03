@@ -37,6 +37,14 @@ namespace Retro::Ranges {
         return Result != std::ranges::end(Range) ? O(*ForwardLike<R>(Result)) : O();
     }
 
+    RETROLIB_EXPORT template <Optionals::OptionalType O, std::ranges::input_range R>
+        requires(!std::constructible_from<O, TRangeCommonReference<R>>) && Dereferenceable<TRangeCommonReference<R>> &&
+                std::constructible_from<O, TDereferencedType<TRangeCommonReference<R>>>
+    constexpr O FindFirst(R &&Range) {
+        auto Result = std::ranges::begin(Range);
+        return Result != std::ranges::end(Range) ? O(**ForwardLike<R>(Result)) : O();
+    }
+
     /**
      * Finds the first element in a range based on specific conditions and types.
      *
@@ -44,10 +52,15 @@ namespace Retro::Ranges {
      * @param Range The range object to inspect or process.
      * @return An object of type deduced from the range and conditions applied.
      */
-    RETROLIB_EXPORT template <template <typename...> typename O = RETROLIB_DEFAULT_OPTIONAL_TYPE, std::ranges::input_range R>
+    RETROLIB_EXPORT template <template <typename...> typename O = RETROLIB_DEFAULT_OPTIONAL_TYPE,
+                              std::ranges::input_range R>
         requires Optionals::OptionalType<O<std::ranges::range_value_t<R>>>
     constexpr auto FindFirst(R &&Range) {
-        if constexpr (std::is_lvalue_reference_v<TRangeCommonReference<R>>) {
+        if constexpr (Optionals::Nullable<TRangeCommonReference<R>, O>) {
+            auto Result = std::ranges::begin(Range);
+            using ResultType = decltype(Optionals::OfNullable<O>(*ForwardLike<R>(Result)));
+            return Result != std::ranges::end(Range) ? Optionals::OfNullable<O>(*ForwardLike<R>(Result)) : ResultType();
+        } else if constexpr (std::is_lvalue_reference_v<TRangeCommonReference<R>>) {
             if constexpr (Optionals::RawReferenceOptionalValid<O, std::ranges::range_value_t<R>>) {
                 return FindFirst<O<TRangeCommonReference<R>>>(std::forward<R>(Range));
             } else {
@@ -168,4 +181,4 @@ namespace Retro::Ranges {
         return ExtensionMethod<FindFirstTemplateFunction<O>>();
     }
 
-} // namespace retro::ranges
+} // namespace Retro::Ranges

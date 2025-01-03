@@ -2,7 +2,8 @@
 
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
-
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "Slate/SlateBrushAsset.h"
 #include "SPaperFlipbookWidget.h"
 #include "Widgets/Layout/SWidgetSwitcher.h"

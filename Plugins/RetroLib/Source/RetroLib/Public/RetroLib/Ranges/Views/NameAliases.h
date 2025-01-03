@@ -9,6 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
+
 #include <ranges>
 #include <span>
 #endif
@@ -60,5 +61,5 @@ namespace Retro {
         RETROLIB_EXPORT constexpr auto Common = std::ranges::views::common;
 
         RETROLIB_EXPORT constexpr auto Reverse = std::ranges::views::reverse;
-    }
-}
+    } // namespace Ranges::Views
+} // namespace Retro

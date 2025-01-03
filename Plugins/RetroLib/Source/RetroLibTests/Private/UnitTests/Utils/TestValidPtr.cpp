@@ -11,7 +11,7 @@
 import std;
 import RetroLib;
 #else
-#include "RetroLib.h"
+#include "RetroLib/Utils/ValidPtr.h"
 
 #include <memory>
 #endif

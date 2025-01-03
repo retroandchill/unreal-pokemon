@@ -30,8 +30,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T, size_t I>
     using TForwardedTupleType = std::conditional_t<std::is_lvalue_reference_v<std::tuple_element_t<I, std::decay_t<T>>>,
-                                                  std::tuple_element_t<I, std::decay_t<T>>,
-                                                  ForwardLikeType<T, std::tuple_element_t<I, std::decay_t<T>>>>;
+                                                   std::tuple_element_t<I, std::decay_t<T>>,
+                                                   ForwardLikeType<T, std::tuple_element_t<I, std::decay_t<T>>>>;
 
     /**
      * Concept to check if a type is indexable by the given tuple element.
@@ -145,4 +145,4 @@ namespace Retro {
     concept NoThrowApplicable =
         HasFunctionCallOperator<std::decay_t<F>> && TupleLike<std::decay_t<T>> &&
         IsNoThrowApplicable<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
-} // namespace retro
+} // namespace Retro

@@ -1,7 +1,6 @@
-﻿#include "TestAdapter.h"
-#include "Misc/AutomationTest.h"
-#include "RetroLib.h"
-
+﻿#include "Misc/AutomationTest.h"
+#include "RetroLib/Utils/CommonString.h"
+#include "TestAdapter.h"
 
 BEGIN_DEFINE_SPEC(FTestCommonString, "Unit Tests.Ranges.String",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);

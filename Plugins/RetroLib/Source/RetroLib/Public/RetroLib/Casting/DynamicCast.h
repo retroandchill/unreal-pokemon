@@ -7,10 +7,10 @@
  */
 #pragma once
 
-#include "RetroLib/TypeTraits.h"
 #include "RetroLib/Concepts/Inheritance.h"
 #include "RetroLib/Concepts/Pointers.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/TypeTraits.h"
 #include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Utils/ValidPtr.h"
 
@@ -29,9 +29,9 @@ namespace Retro {
     using TDynamicCastOptionalType = TOptional<T>;
 #else
     template <typename T>
-    using TDynamicCastOptionalType = std::conditional_t<std::is_reference_v<T>,
-        std::optional<std::reference_wrapper<std::remove_reference_t<T>>>,
-        std::optional<T>>;
+    using TDynamicCastOptionalType =
+        std::conditional_t<std::is_reference_v<T>, std::optional<std::reference_wrapper<std::remove_reference_t<T>>>,
+                           std::optional<T>>;
 #endif
 
     /**
@@ -49,7 +49,7 @@ namespace Retro {
      * @return A reference of type T if the cast is successful. If Checked is false and the cast is unsuccessful, an
      * Optional reference to T is returned.
      */
-    RETROLIB_EXPORT template <PolymorphicType T, PolymorphicType U, bool Checked = false>
+    RETROLIB_EXPORT template <Class T, bool Checked = false, Class U>
     constexpr decltype(auto) DynCastRef(U &Value) {
         if constexpr (std::is_base_of_v<T, U>) {
             return static_cast<T &>(Value);
@@ -86,9 +86,8 @@ namespace Retro {
          * which is determined by the use of `decltype(auto)`.
          */
         template <PolymorphicType U>
-            requires std::is_polymorphic_v<U>
         constexpr decltype(auto) operator()(U &Value) {
-            return DynCastRef<T, U, Checked>(Value);
+            return DynCastRef<T, Checked>(Value);
         }
 
         /**
@@ -104,18 +103,20 @@ namespace Retro {
          * cast/conversion succeeds. If the pointer is invalid, an empty Optional is returned.
          */
         template <PointerType U>
+            requires PolymorphicType<std::decay_t<TDereferencedType<U>>>
         constexpr decltype(auto) operator()(U &&Value) const {
             if constexpr (Checked) {
                 RETROLIB_ASSERT(ValidPtr(std::forward<U>(Value)));
-                return DynCastRef<T, std::remove_pointer_t<U>, Checked>(*std::forward<U>(Value));
+                return &DynCastRef<T, Checked>(*std::forward<U>(Value));
             } else if constexpr (std::derived_from<std::decay_t<TDereferencedType<U>>, std::decay_t<T>>) {
-                return ValidPtr(std::forward<U>(Value)) ? TDynamicCastOptionalType<T &>(*std::forward<U>(Value)) : TDynamicCastOptionalType<T &>();
+                return ValidPtr(std::forward<U>(Value)) ? TDynamicCastOptionalType<T &>(*std::forward<U>(Value))
+                                                        : TDynamicCastOptionalType<T &>();
             } else {
                 if (!ValidPtr(std::forward<U>(Value))) {
                     return TDynamicCastOptionalType<T &>();
                 }
 
-                return DynCastRef<T, std::decay_t<TDereferencedType<U>>, Checked>(*std::forward<U>(Value));
+                return DynCastRef<T, Checked>(*std::forward<U>(Value));
             }
         }
 
@@ -130,7 +131,7 @@ namespace Retro {
          *         deduced using decltype(auto), meaning it will preserve the value category and type
          *         of the final operation's result.
          */
-        template <Class U>
+        template <PolymorphicType U>
         constexpr decltype(auto) operator()(TPolymorphic<U> &Value) const {
             return (*this)(*Value);
         }
@@ -144,7 +145,7 @@ namespace Retro {
          * @param Value A constant reference to a Polymorphic object containing the value.
          * @return The result of applying the functor to the dereferenced value stored in the Polymorphic object.
          */
-        template <Class U>
+        template <PolymorphicType U>
         constexpr decltype(auto) operator()(const TPolymorphic<U> &Value) const {
             return (*this)(*Value);
         }
@@ -168,7 +169,7 @@ namespace Retro {
      *
      * @tparam T The target class type to which the casting is to be performed.
      */
-    RETROLIB_EXPORT template <Class T>
+    RETROLIB_EXPORT template <PolymorphicType T>
     constexpr TDynamicCastFunction<T> DynamicCast;
 
     /**
@@ -182,7 +183,7 @@ namespace Retro {
      * @tparam T The type to which the object will be cast. This template parameter should
      *           be specified to indicate the destination class type for the casting operation.
      */
-    RETROLIB_EXPORT template <Class T>
+    RETROLIB_EXPORT template <PolymorphicType T>
     constexpr TDynamicCastFunction<T, true> DynamicCastChecked;
 
-} // namespace retro
+} // namespace Retro

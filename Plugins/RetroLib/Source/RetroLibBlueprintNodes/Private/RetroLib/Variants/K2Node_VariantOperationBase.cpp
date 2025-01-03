@@ -1,9 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_VariantOperationBase.h"
+
 #include "BlueprintActionDatabaseRegistrar.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
-#include "RetroLib/Ranges/Views/Filter.h"
 
 FText UK2Node_VariantOperationBase::GetMenuCategory() const {
     return NSLOCTEXT("K2Node", "VariantOperationBase_GetMenuCategory", "Variants");

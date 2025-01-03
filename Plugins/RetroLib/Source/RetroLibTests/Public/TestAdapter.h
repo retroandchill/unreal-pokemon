@@ -10,22 +10,22 @@
 #ifdef __UNREAL__
 #include "Tests/TestHarnessAdapter.h"
 
-#define CHECK_THROWS_AS(Expression, Exception) \
-    try { \
-        Expression; \
-        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("No exception thrown")); \
-    } catch (Exception &) { \
-    } catch (std::exception &) { \
-        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Wrong exception thrown")); \
+#define CHECK_THROWS_AS(Expression, Exception)                                                                         \
+    try {                                                                                                              \
+        Expression;                                                                                                    \
+        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("No exception thrown"));                       \
+    } catch (Exception &) {                                                                                            \
+    } catch (std::exception &) {                                                                                       \
+        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Wrong exception thrown"));                    \
     }
 
-#define CHECK_NOTHROW(Expression) \
-    try { \
-        Expression; \
-    } catch (std::exception &) { \
-        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Exception thrown where none expected")); \
+#define CHECK_NOTHROW(Expression)                                                                                      \
+    try {                                                                                                              \
+        Expression;                                                                                                    \
+    } catch (std::exception &) {                                                                                       \
+        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Exception thrown where none expected"));      \
     }
-        
+
 #else
 #include <catch2/catch_test_macros.hpp>
 

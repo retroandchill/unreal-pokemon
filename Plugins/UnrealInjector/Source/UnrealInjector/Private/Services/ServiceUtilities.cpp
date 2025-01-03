@@ -3,16 +3,21 @@
 #include "Services/ServiceUtilities.h"
 #include "DependencyInjectionSettings.h"
 #include "Engine/ObjectLibrary.h"
-
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/ClassView.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Services/Service.h"
 
 Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
-    TSet<UClass*> Visited;
+    TSet<UClass *> Visited;
     for (auto Class : Retro::Ranges::TClassView<UService>()) {
         co_yield Class;
         Visited.Add(Class);
     }
-    
+
     auto Settings = GetDefault<UDependencyInjectionSettings>();
     // clang-format off
     auto Paths = Settings->BlueprintServiceScan |

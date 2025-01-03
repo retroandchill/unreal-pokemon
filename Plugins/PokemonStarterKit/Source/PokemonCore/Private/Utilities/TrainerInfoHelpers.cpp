@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/TrainerInfoHelpers.h"
-#include "RetroLib.h"
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
+#include "RetroLib/Optionals/BlueprintBridge.h"
 
 ESetStatus UTrainerInfoHelpers::GetTimeReceived(const TScriptInterface<IObtainedBlock> &ObtainedBlock,
                                                 FDateTime &TimeReceived) {

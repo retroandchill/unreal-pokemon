@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "K2Node_VariantOperationBase.h"
-
 #include "K2Node_MakeSoftVariantFromSoftObject.generated.h"
+#include "K2Node_VariantOperationBase.h"
 
 /**
  * Create a soft variant reference from a valid soft object reference.

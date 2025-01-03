@@ -33,12 +33,8 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-
-
-
-
-
-
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Utils/Construct.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
@@ -382,7 +378,8 @@ void ABattlerActor::RecordParticipation() {
         return;
     }
 
-    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() | Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+    OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
+        Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
         Retro::Ranges::ForEach(&IBattler::AddParticipant, this);
 }
 
