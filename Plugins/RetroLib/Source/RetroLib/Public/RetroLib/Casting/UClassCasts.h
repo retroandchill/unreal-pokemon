@@ -270,5 +270,21 @@ namespace Retro {
     };
 
     constexpr FWrapPointerFunction WrapPointer;
+
+    template <UnrealInterface T>
+    struct TAsInterfaceFunction {
+        TScriptInterface<T> operator()(UObject &Object) {
+            check(Object.Implements<typename T::UClassType>())
+            return TScriptInterface<T>(&Object);
+        }
+
+        TScriptInterface<T> operator()(UObject *Object) {
+            check(IsValid(Object))
+            return (*this)(*Object);
+        }
+    };
+
+    template <UnrealInterface T>
+    constexpr TAsInterfaceFunction<T> AsInterface;
 } // namespace Retro
 #endif

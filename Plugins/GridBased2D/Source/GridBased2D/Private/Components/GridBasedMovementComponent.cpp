@@ -223,8 +223,7 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
     return Results |
            Retro::Ranges::Views::Transform<&FOverlapResult::GetActor>() |
            Retro::Ranges::Views::Filter<&AActor::Implements<UInteractable>>() |
-           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IInteractable>) |
-           Retro::Ranges::Views::Transform(Retro::WrapPointer) |
+           Retro::Ranges::Views::Transform(Retro::AsInterface<IInteractable>) |
            Retro::Ranges::To<TArray>();
     // clang-format on
 }
