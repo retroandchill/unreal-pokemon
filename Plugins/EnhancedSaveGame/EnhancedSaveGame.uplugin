@@ -34,6 +34,10 @@
 			"Name": "UnrealInjector",
 			"Enabled": true,
 			"Optional": true
+		},
+		{
+			"Name": "FunctionalTestingEditor",
+			"Enabled": true
 		}
 	]
 }
