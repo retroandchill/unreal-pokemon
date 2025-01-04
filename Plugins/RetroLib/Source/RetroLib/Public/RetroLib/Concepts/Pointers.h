@@ -59,6 +59,6 @@ namespace Retro {
 
     RETROLIB_EXPORT template <typename T>
     constexpr auto GetPtrFromRef(T &&Ref) {
-        return TPointerGetter<std::remove_cvref_t<T>>::template Get(Ref);
+        return TPointerGetter<std::remove_cvref_t<T>>::Get(Ref);
     }
 } // namespace Retro
