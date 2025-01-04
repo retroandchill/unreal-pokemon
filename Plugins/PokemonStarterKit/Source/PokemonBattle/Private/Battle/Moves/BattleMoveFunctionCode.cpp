@@ -213,8 +213,6 @@ void UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
     }
 
     QueueMoveAnimation(User, SuccessfulHits);
-    FSimpleMulticastDelegate Del;
-    DealDamage(User, SuccessfulHits);
     ABattleSequencer::DisplayBattleMessages(this, Retro::CreateBinding<&UBattleMoveFunctionCode::DealDamage>(
                                                       Retro::TThis(this), User, std::move(SuccessfulHits)));
 }
