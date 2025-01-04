@@ -67,7 +67,7 @@ namespace Retro::Testing::Delegates {
     };
 } // namespace Retro::Testing::Delegates
 
-TEST_CASE_NAMED(FDelegateBindingTest, "RetroLib::Functional::Delegates::Wrapping", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegates::Wrapping", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
 
     SECTION("Should be able to bind a regular delegate") {
@@ -103,7 +103,7 @@ TEST_CASE_NAMED(FDelegateBindingTest, "RetroLib::Functional::Delegates::Wrapping
     }
 }
 
-TEST_CASE_NAMED(FCreateDelegateTest, "RetroLib::Functional::Delegates::Creation", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Creation", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
 
     SECTION("Can bind free functions and lambdas") {
@@ -186,7 +186,7 @@ TEST_CASE_NAMED(FCreateDelegateTest, "RetroLib::Functional::Delegates::Creation"
     }
 }
 
-TEST_CASE_NAMED(FBindDelegateTest, "RetroLib::Functional::Delegates::Binding", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Binding", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
 
     SECTION("Can bind free functions and lambdas") {
@@ -276,7 +276,7 @@ TEST_CASE_NAMED(FBindDelegateTest, "RetroLib::Functional::Delegates::Binding", "
     }
 }
 
-TEST_CASE_NAMED(FAddDelegateTest, "RetroLib::Functional::Delegates::Adding", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FAddDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Adding", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
 
     SECTION("Can bind free functions and lambdas") {

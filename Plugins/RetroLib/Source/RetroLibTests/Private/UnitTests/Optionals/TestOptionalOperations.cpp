@@ -14,7 +14,7 @@ import RetroLib;
 #include "RetroLib/Optionals/OptionalOperations.h"
 #endif
 
-TEST_CASE_NAMED(FTestOptionalOperations, "RetroLib::Optionals::Operations", "[optionals]") {
+TEST_CASE_NAMED(FTestOptionalOperations, "Unit Tests::RetroLib::Optionals::Operations", "[optionals]") {
     SECTION("Can get the values out of an optional correctly") {
         std::optional<int> Optional1;
         std::optional Optional2 = 1;

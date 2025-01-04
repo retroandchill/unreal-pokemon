@@ -90,7 +90,7 @@ namespace Retro::Testing::Polymorphic {
 constexpr std::array ValueArray1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 constexpr std::array ValueArray2 = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30};
 
-TEST_CASE_NAMED(FPolymorphicCopyTest, "RetroLib::Utils::Polymorphic::Copying", "[utils]") {
+TEST_CASE_NAMED(FPolymorphicCopyTest, "Unit Tests::RetroLib::Utils::Polymorphic::Copying", "[utils]") {
     using namespace Retro::Testing::Polymorphic;
 
     // We want to test that we can assign different polymorphic values into each other
@@ -159,7 +159,7 @@ TEST_CASE_NAMED(FPolymorphicCopyTest, "RetroLib::Utils::Polymorphic::Copying", "
 }
 
 #ifdef __UNREAL__
-TEST_CASE_NAMED(FPolymorphicOptionalState, "RetroLib::Utils::Polymorphic::IntrusiveOptional", "[utils]") {
+TEST_CASE_NAMED(FPolymorphicOptionalState, "Unit Tests::RetroLib::Utils::Polymorphic::IntrusiveOptional", "[utils]") {
     using namespace Retro::Testing::Polymorphic;
 
     static_assert(sizeof(Retro::TPolymorphic<Base>) == sizeof(TOptional<Retro::TPolymorphic<Base>>));

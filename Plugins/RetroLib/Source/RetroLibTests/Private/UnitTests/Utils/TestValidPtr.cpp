@@ -15,7 +15,7 @@ import RetroLib;
 #include <memory>
 #endif
 
-TEST_CASE_NAMED(FValidPtrTest, "RetroLib::Utils::ValidPtr", "[utils]") {
+TEST_CASE_NAMED(FValidPtrTest, "Unit Tests::RetroLib::Utils::ValidPtr", "[utils]") {
     SECTION("Can work with raw pointers") {
         int Value = 3;
         int *Ptr = nullptr;

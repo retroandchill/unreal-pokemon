@@ -14,6 +14,9 @@
 Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     TSet<UClass *> Visited;
     for (auto Class : Retro::Ranges::TClassView<UService>()) {
+        if (Class->HasAnyClassFlags(CLASS_Abstract) || !Retro::IsInstantiableClass(Class)) {
+            continue;
+        }
         co_yield Class;
         Visited.Add(Class);
     }

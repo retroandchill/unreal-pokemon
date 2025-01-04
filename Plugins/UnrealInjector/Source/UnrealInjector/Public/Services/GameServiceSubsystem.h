@@ -95,7 +95,7 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
         return Services |
             Retro::Ranges::Views::Values |
             Retro::Ranges::Views::Filter(Retro::InstanceOf<T>) |
-            Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<T>);
+            Retro::Ranges::Views::Transform(Retro::AsInterface<T>);
         // clang-format on
     }
 

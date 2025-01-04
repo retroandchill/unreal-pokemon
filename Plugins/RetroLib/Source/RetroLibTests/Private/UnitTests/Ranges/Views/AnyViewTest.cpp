@@ -16,7 +16,7 @@ import RetroLib;
 #include <vector>
 #endif
 
-TEST_CASE_NAMED(FAnyViewTest, "RetroLib::Ranges::Views::AnyView", "[views]") {
+TEST_CASE_NAMED(FAnyViewTest, "Unit Tests::RetroLib::Ranges::Views::AnyView", "[views]") {
     SECTION("Iterating over a default initialized view is empty") {
         Retro::Ranges::TAnyView<int> View;
         int Count = 0;

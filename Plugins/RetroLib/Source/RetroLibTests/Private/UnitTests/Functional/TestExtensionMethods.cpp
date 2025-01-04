@@ -52,7 +52,7 @@ namespace Retro::Testing::Extensions {
     constexpr auto Append = Retro::ExtensionMethod<VectorAppenderCaller>;
 } // namespace Retro::Testing::Extensions
 
-TEST_CASE_NAMED(FExtensionMethodTest, "RetroLib::Functional::ExtensionMethods", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FExtensionMethodTest, "Unit Tests::RetroLib::Functional::ExtensionMethods", "[RetroLib][Functional]") {
     using namespace Retro::Testing::Extensions;
     SECTION("Extension method on enum with no arguments") {
         CHECK((TestEnum::Ordinal1 | Retro::Testing::Extensions::ToString()) == "Ordinal1");

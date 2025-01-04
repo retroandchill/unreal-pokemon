@@ -93,7 +93,7 @@ TEST_CASE("Can create a lazily evaluated generator", "[ranges]") {
 }
 
 #ifdef __UNREAL__
-TEST_CASE_NAMED(FGeneratorTest, "RetroLib::Ranges::Views::Generator", "[RetroLib][Ranges]") {
+TEST_CASE_NAMED(FGeneratorTest, "Unit Tests::RetroLib::Ranges::Views::Generator", "[RetroLib][Ranges]") {
     using namespace Retro::Ranges::Testing;
 
     auto Sequence = GenerateInts(1) | Retro::Ranges::Views::Take(10) | Retro::Ranges::To<TArray>();

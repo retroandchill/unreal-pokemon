@@ -17,7 +17,7 @@ import RetroLib;
 #include <memory>
 #endif
 
-TEST_CASE_NAMED(FFunctionalComparisonTest, "RetroLib::Utils::Comparisons", "[utils]") {
+TEST_CASE_NAMED(FFunctionalComparisonTest, "Unit Tests::RetroLib::Utils::Comparisons", "[utils]") {
     CHECK(Retro::Equals(1, 1));
     CHECK_FALSE(Retro::Equals(1, 2));
 
@@ -45,7 +45,7 @@ TEST_CASE_NAMED(FFunctionalComparisonTest, "RetroLib::Utils::Comparisons", "[uti
     CHECK(Retro::ThreeWayCompare(1, 2) == std::strong_ordering::less);
 }
 
-TEST_CASE_NAMED(FFunctionalArithmeticTest, "RetroLib::Utils::Arithmetic", "[utils]") {
+TEST_CASE_NAMED(FFunctionalArithmeticTest, "Unit Tests::RetroLib::Utils::Arithmetic", "[utils]") {
     CHECK(Retro::Add(2, 2) == 4);
     CHECK(Retro::Subtract(6, 2) == 4);
     CHECK(Retro::Multiply(6, 2) == 12);

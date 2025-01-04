@@ -39,7 +39,7 @@ namespace InstanceofTest {
     };
 } // namespace InstanceofTest
 
-TEST_CASE_NAMED(FStaticCastTest, "RetroLib::Casting::StaticCast", "[utils]") {
+TEST_CASE_NAMED(FStaticCastTest, "Unit Tests::RetroLib::Casting::StaticCast", "[utils]") {
     using namespace InstanceofTest;
     
     SECTION("Can convert between numberic types") {
@@ -65,7 +65,7 @@ TEST_CASE_NAMED(FStaticCastTest, "RetroLib::Casting::StaticCast", "[utils]") {
 }
 
 #if RTTI_ENABLED
-TEST_CASE_NAMED(FInstanceOfTest, "RetroLib::Casting::InstanceOf", "[utils]") {
+TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[utils]") {
     using namespace InstanceofTest;
     
     SECTION("Can work with raw pointers") {
@@ -125,7 +125,7 @@ TEST_CASE_NAMED(FInstanceOfTest, "RetroLib::Casting::InstanceOf", "[utils]") {
     }
 }
 
-TEST_CASE_NAMED(FDynamicCastTest, "RetroLib::Casting::DynamicCast", "[utils]") {
+TEST_CASE_NAMED(FDynamicCastTest, "Unit Tests::RetroLib::Casting::DynamicCast", "[utils]") {
     using namespace InstanceofTest;
     
     SECTION("Can work with raw pointers") {

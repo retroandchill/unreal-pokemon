@@ -5,7 +5,7 @@
 #include "Slate/SlateTextureAtlasInterface.h"
 #include "TestAdapter.h"
 
-TEST_CASE_NAMED(FObjectViewTest, "RetroLib::Ranges::Views::ObjectView", "[RetroLib][Ranges]") {
+TEST_CASE_NAMED(FObjectViewTest, "Unit Tests::RetroLib::Ranges::Views::ObjectView", "[RetroLib][Ranges]") {
     SECTION("Can iterate over a view of objects") {
         static_assert(std::ranges::input_range<Retro::Ranges::TObjectView<UClass>>);
         auto ActorClasses =
@@ -17,7 +17,7 @@ TEST_CASE_NAMED(FObjectViewTest, "RetroLib::Ranges::Views::ObjectView", "[RetroL
     }
 }
 
-TEST_CASE_NAMED(FClassViewTest, "RetroLib::Ranges::Views::ClassView", "[RetroLib][Ranges]") {
+TEST_CASE_NAMED(FClassViewTest, "Unit Tests::RetroLib::Ranges::Views::ClassView", "[RetroLib][Ranges]") {
     SECTION("Can iterate over a view of classes") {
         static_assert(std::ranges::input_range<Retro::Ranges::TClassView<AActor>>);
         auto ActorClasses = Retro::Ranges::TClassView<AActor>() | Retro::Ranges::To<TArray>();

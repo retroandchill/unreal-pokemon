@@ -18,7 +18,7 @@ import RetroLib;
 #endif
 
 #ifdef __UNREAL__
-TEST_CASE_NAMED(FOptionalIteratorTest, "RetroLib::Optionals::Iterator", "[optionals]") {
+TEST_CASE_NAMED(FOptionalIteratorTest, "Unit Tests::RetroLib::Optionals::Iterator", "[optionals]") {
     SECTION("Can use a ranged for loop") {
         TOptional Value = 3;
 

@@ -7,7 +7,7 @@
 #include "TestAdapter.h"
 #include <array>
 
-TEST_CASE_NAMED(FOptionalPipesTest, "RetroLib::Optionals::Pipes", "[RetroLib][Optionals]") {
+TEST_CASE_NAMED(FOptionalPipesTest, "Unit Tests::RetroLib::Optionals::Pipes", "[RetroLib][Optionals]") {
     SECTION("Can pipe an TOptional object") {
         TOptional Value = 4;
         auto Result = Value | Retro::Optionals::Transform([](int i) { return i * 2; }) | Retro::Optionals::Value;

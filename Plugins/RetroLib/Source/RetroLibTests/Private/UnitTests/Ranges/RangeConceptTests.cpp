@@ -8,7 +8,7 @@
 #include "TestAdapter.h"
 #include <array>
 
-TEST_CASE_NAMED(FRangePipeTest, "RetroLib::Ranges::Compatibility", "[RetroLib][Ranges]") {
+TEST_CASE_NAMED(FRangePipeTest, "Unit Tests::RetroLib::Ranges::Compatibility", "[RetroLib][Ranges]") {
     SECTION("Can iterate over an instance of TArray") {
         static_assert(std::ranges::contiguous_range<TArray<int32>>);
         TArray Container = {1, 2, 3, 4, 5};
@@ -61,7 +61,7 @@ TEST_CASE_NAMED(FRangePipeTest, "RetroLib::Ranges::Compatibility", "[RetroLib][R
     }
 }
 
-TEST_CASE_NAMED(FRangesToTest, "RetroLib::Ranges::To", "[RetroLib][Ranges]") {
+TEST_CASE_NAMED(FRangesToTest, "Unit Tests::RetroLib::Ranges::To", "[RetroLib][Ranges]") {
     SECTION("Can convert a TArray to a TSet") {
         TArray Array = {1, 2, 3, 4, 5};
         auto Set = Array | Retro::Ranges::To<TSet>();

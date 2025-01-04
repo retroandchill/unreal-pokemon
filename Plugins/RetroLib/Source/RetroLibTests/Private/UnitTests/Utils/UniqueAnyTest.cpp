@@ -17,7 +17,7 @@ import RetroLib;
 #include <memory>
 #endif
 
-TEST_CASE_NAMED(FUniqueAnyTest, "RetroLib::Utils::UniqueAny", "[utils]") {
+TEST_CASE_NAMED(FUniqueAnyTest, "Unit Tests::RetroLib::Utils::UniqueAny", "[utils]") {
     SECTION("Can move a value from one location to another") {
         auto SharedPointer = std::make_shared<int>(3);
         std::weak_ptr WeakPointer = SharedPointer;

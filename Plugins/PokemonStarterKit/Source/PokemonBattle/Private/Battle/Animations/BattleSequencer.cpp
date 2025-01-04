@@ -37,7 +37,9 @@ void ABattleSequencer::QueueBattleMessageWithAnimation(FText Text, const TScript
 }
 
 void ABattleSequencer::ProcessNextBattleMessage() {
+    check(!Messages.empty())
     Messages.pop();
+    
     if (Messages.empty()) {
         ProcessMessagesComplete();
     } else {

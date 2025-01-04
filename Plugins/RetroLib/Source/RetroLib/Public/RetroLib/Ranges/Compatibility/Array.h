@@ -115,9 +115,14 @@ namespace Retro::Ranges {
 
       private:
         constexpr S GetNum() const {
+            if (CurrentArray == nullptr) {
+                return 0;
+            }
+            
             if constexpr (UnrealSizedContainer<const C>) {
                 return CurrentArray->Num();
-            } else if constexpr (UnrealSizedString<const C>) {
+            } else {
+                static_assert(UnrealSizedString<const C>);
                 return CurrentArray->Len();
             }
         }

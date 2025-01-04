@@ -24,7 +24,7 @@ import RetroLib;
 #include <vector>
 #endif
 
-TEST_CASE_NAMED(FRangeToTest, "Retro::Ranges::Algorithm::To", "[ranges]") {
+TEST_CASE_NAMED(FRangeToTest, "Unit Tests::RetroLib::Ranges::Algorithm::To", "[ranges]") {
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     SECTION("Convert to a like range type") {
         auto Vectored = Values | Retro::Ranges::To<std::vector>();
@@ -53,7 +53,7 @@ TEST_CASE_NAMED(FRangeToTest, "Retro::Ranges::Algorithm::To", "[ranges]") {
     }
 }
 
-TEST_CASE_NAMED(FRangeForEachTest, "Retro::Ranges::Algorithm::ForEach", "[ranges]") {
+TEST_CASE_NAMED(FRangeForEachTest, "Unit Tests::RetroLib::Ranges::Algorithm::ForEach", "[ranges]") {
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     SECTION("Can iterate over the values of a collection") {
         std::vector<int> Vectored;
@@ -74,7 +74,7 @@ TEST_CASE_NAMED(FRangeForEachTest, "Retro::Ranges::Algorithm::ForEach", "[ranges
     }
 }
 
-TEST_CASE_NAMED(FRangeReduceTest, "Retro::Ranges::Algorithm::Reduce", "[ranges]") {
+TEST_CASE_NAMED(FRangeReduceTest, "Unit Tests::RetroLib::Ranges::Algorithm::Reduce", "[ranges]") {
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     SECTION("Can reduce a range to a single value using a runtime binding") {
         auto Result = Values | Retro::Ranges::Reduce(0, Retro::Add);
@@ -87,7 +87,7 @@ TEST_CASE_NAMED(FRangeReduceTest, "Retro::Ranges::Algorithm::Reduce", "[ranges]"
     }
 }
 
-TEST_CASE_NAMED(FRangeFindFirstTest, "Retro::Ranges::Algorithm::FindFirst", "[ranges]") {
+TEST_CASE_NAMED(FRangeFindFirstTest, "Unit Tests::RetroLib::Ranges::Algorithm::FindFirst", "[ranges]") {
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     constexpr auto IsMultipleOf = [](int i, int j) { return i % j == 0; };
     SECTION("Can reduce using an inferred optional value") {
@@ -120,7 +120,7 @@ TEST_CASE_NAMED(FRangeFindFirstTest, "Retro::Ranges::Algorithm::FindFirst", "[ra
     }
 }
 
-TEST_CASE_NAMED(FRangeAllOf, "Retro::Ranges::Algorithm::AllOf", "[ranges]") {
+TEST_CASE_NAMED(FRangeAllOf, "Unit Tests::RetroLib::Ranges::Algorithm::AllOf", "[ranges]") {
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     SECTION("Check the all of condition") {
         CHECK(Values | Retro::Ranges::AllOf(Retro::GreaterThan, 0));

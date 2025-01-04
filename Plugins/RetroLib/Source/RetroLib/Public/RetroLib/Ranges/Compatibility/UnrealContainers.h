@@ -56,7 +56,7 @@ namespace Retro::Ranges {
     concept UnrealStringReservable =
         std::ranges::sized_range<T> && requires(T &Container, std::ranges::range_size_t<T> Size) {
             Container.Reserve(Size);
-            Container.GetAllocatedSize();
+            { Container.GetCharArray() } -> UnrealReservable;
         };
 
     template <>
@@ -128,18 +128,17 @@ namespace Retro::Ranges {
     };
 
     RETROLIB_EXPORT template <UnrealStringReservable T>
-        requires(!UnrealReservable<T>)
     struct TReservableContainerType<T> : FValidType {
         static constexpr void Reserve(T &Container, int32 Size) {
             Container.Reserve(Size);
         }
 
         static constexpr int32 Capacity(const T &Container) {
-            return Container.GetAllocatedSize() / sizeof(typename T::ElementType);
+            return Container.GetCharArray().Max() / sizeof(typename T::ElementType);
         }
 
         static constexpr int32 MaxSize([[maybe_unused]] const T &Container) {
-            return std::numeric_limits<decltype(Container.GetAllocatedSize())>::max();
+            return std::numeric_limits<decltype(Container.GetCharArray().Max())>::max();
         }
     };
 } // namespace Retro::Ranges
