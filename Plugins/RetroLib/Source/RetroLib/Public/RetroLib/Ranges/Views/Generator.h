@@ -218,7 +218,11 @@ namespace Retro {
             }
 
           private:
+#ifdef _MSC_VER
+            [[msvc::no_unique_address]] A Alloc; // \expos
+#else
             [[no_unique_address]] A Alloc; // \expos
+#endif
             R &&Range;                     // \expos
         };
 

@@ -171,7 +171,8 @@ namespace Retro {
         return true;
     }
 
-    RETROLIB_EXPORT template <std::derived_from<UObject> T>
+    RETROLIB_EXPORT template <PolymorphicType T>
+        requires std::derived_from<T, UObject>
     struct TInstanceChecker<T> {
         /**
          * Checks if the given instance of type U is a valid instance of the desired base type T.
@@ -203,7 +204,8 @@ namespace Retro {
         }
     };
 
-    RETROLIB_EXPORT template <UnrealInterface T>
+    RETROLIB_EXPORT template <PolymorphicType T>
+        requires UnrealInterface<T>
     struct TInstanceChecker<T> {
         /**
          * Checks if the given instance of type U is a valid instance of the desired base type T.
@@ -260,7 +262,7 @@ namespace Retro {
     struct FWrapPointerFunction {
         template <std::derived_from<UObject> T>
         constexpr auto operator()(T *Interface) {
-            return TObjectPtr<T>(Interface._getUObject());
+            return TObjectPtr<T>(Interface->_getUObject());
         }
 
         template <UnrealInterface T>

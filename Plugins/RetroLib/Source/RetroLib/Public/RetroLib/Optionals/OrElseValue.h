@@ -29,12 +29,12 @@ namespace Retro::Optionals {
             requires std::convertible_to<TCommonReference<O>, T> &&
                      (!std::is_lvalue_reference_v<TCommonReference<O>> ||
                       !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
-        constexpr auto operator()(O &&Optional, T &&Value) const {
+        constexpr auto operator()(O &&Optional, T &&Val) const {
             if (HasValue(Optional)) {
                 return static_cast<T>(Get(std::forward<O>(Optional)));
             }
 
-            return std::forward<T>(Value);
+            return std::forward<T>(Val);
         }
 
         /**
@@ -49,12 +49,12 @@ namespace Retro::Optionals {
             requires std::convertible_to<T, TValueType<O>> && (!std::convertible_to<TCommonReference<O>, T>) &&
                      (!std::is_lvalue_reference_v<TCommonReference<O>> ||
                       !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
-        constexpr V operator()(O &&Optional, T &&Value) const {
+        constexpr V operator()(O &&Optional, T &&Val) const {
             if (HasValue(Optional)) {
                 return Get(std::forward<O>(Optional));
             }
 
-            return std::forward<T>(Value);
+            return std::forward<T>(Val);
         }
 
         /**
@@ -70,12 +70,12 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename T>
             requires std::convertible_to<TCommonReference<O>, T &> && std::is_lvalue_reference_v<TCommonReference<O>>
-        constexpr T &operator()(O &&Optional, T &Value) const {
+        constexpr T &operator()(O &&Optional, T &Val) const {
             if (HasValue(Optional)) {
                 return Get(std::forward<O>(Optional));
             }
 
-            return Value;
+            return Val;
         }
 
         /**
@@ -91,12 +91,12 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename T>
             requires std::convertible_to<TCommonReference<O>, T &> && std::is_lvalue_reference_v<TCommonReference<O>>
-        constexpr T &operator()(O &&Optional, const std::reference_wrapper<T> &Value) const {
+        constexpr T &operator()(O &&Optional, const std::reference_wrapper<T> &Val) const {
             if (HasValue(Optional)) {
                 return Get(std::forward<O>(Optional));
             }
 
-            return Value;
+            return Val;
         }
 
         template <OptionalType O>

@@ -212,7 +212,7 @@ namespace Retro {
      * @return A callable object that represents the bound functor.
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
-        requires HasFunctionCallOperator<decltype(Functor)>
+        requires (IsValidFunctorObject(Functor))
     constexpr auto CreateBinding(A &&...Args) {
         if constexpr (sizeof...(A) == 0) {
             return TWrappedFunctor(BindFunctor<Functor>());

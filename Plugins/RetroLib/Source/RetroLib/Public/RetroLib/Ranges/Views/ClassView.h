@@ -21,7 +21,7 @@ namespace Retro::Ranges {
 
             FIterator() {
                 if constexpr (UnrealInterface<T>) {
-                    while (Source && !Source->ImplementsInterface(typename T::UClassType::StaticClass())) {
+                    while (Source && !Source->ImplementsInterface(T::UClassType::StaticClass())) {
                         ++Source;
                     }
                 } else {
@@ -77,7 +77,7 @@ namespace Retro::Ranges {
             {
                 while (true) {
                     ++Source;
-                    if (!Source || Source->ImplementsInterface(typename T::UClassType::StaticClass())) {
+                    if (!Source || Source->ImplementsInterface(T::UClassType::StaticClass())) {
                         break;
                     }
                 }

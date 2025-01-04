@@ -155,7 +155,9 @@ namespace Retro {
         RETROLIB_EXPORT constexpr auto Add = ExtensionMethod<FDelegateAdder{}>;
 
         template <typename D, typename... A>
-        concept CanAddToDelegate = CanAddFree<D, A...> || CanAddMember<D, A...>;
+        concept CanAddToDelegate = requires(D& Delegate, A &&...Args) {
+            { Retro::Delegates::Add(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        };
     } // namespace Delegates
 
 } // namespace Retro
