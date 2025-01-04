@@ -79,6 +79,11 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
     template <typename... A>
         requires Retro::Delegates::CanAddToDelegate<FSimpleMulticastDelegate, A...>
     void ProcessBattleMessages(A &&...Args) {
+        if (bIsProcessingMessages) {
+            UE_LOG(LogBattle, Warning, TEXT("Battle sequencer is already processing!"))
+            return;
+        }
+        
         Retro::Delegates::Add(OnMessagesComplete, std::forward<A>(Args)...);
         if (Messages.empty()) {
             ProcessMessagesComplete();

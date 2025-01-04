@@ -49,5 +49,6 @@ void ABattleSequencer::ProcessNextBattleMessage() {
 
 void ABattleSequencer::ProcessMessagesComplete() {
     auto MessagesDelegate = std::move(OnMessagesComplete);
+    bIsProcessingMessages = false;
     MessagesDelegate.Broadcast();
 }
