@@ -35,17 +35,6 @@
 #define RETROLIB_ASSERT(...) assert(__VA_ARGS__)
 #endif
 
-#define RETROLIB_FUNCTIONAL_EXTENSION(Exporter, Method, Name)                                                          \
-    constexpr auto Invoker_##Name##_Method_Variable = Method;                                                          \
-    template <auto Functor = DynamicFunctor>                                                                           \
-        requires(DynamicFunctorBinding<Functor> || IsValidFunctorObject(Functor))                                      \
-    constexpr TFunctorBindingInvoker<Functor, Invoker_##Name##_Method_Variable> FunctorExtension_##Name##_Callback;    \
-    Exporter template <auto Functor = DynamicFunctor, typename... A>                                                   \
-        requires(DynamicFunctorBinding<Functor> || IsValidFunctorObject(Functor))                                      \
-    constexpr auto Name(A &&...Args) {                                                                                 \
-        return ExtensionMethod<FunctorExtension_##Name##_Callback<Functor>>(std::forward<A>(Args)...);                 \
-    }
-
 #ifdef __UNREAL__
 #define RETROLIB_DEFAULT_OPTIONAL_TYPE TOptional
 #else

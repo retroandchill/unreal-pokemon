@@ -95,7 +95,7 @@ TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegat
     SECTION("Can binding a delegate to a range pipe") {
         std::array Strings = {FStringView(TEXT("1234567890")), FStringView(TEXT("123456789"))};
 
-        auto ValidStrings = Strings | Retro::Ranges::Views::Filter(FDemoDelegate::CreateStatic(&IsLength), 10) |
+        auto ValidStrings = Strings | Retro::Ranges::Views::Filter(Retro::BindDelegate(FDemoDelegate::CreateStatic(&IsLength), 10)) |
                             Retro::Ranges::To<TArray>();
 
         REQUIRE(ValidStrings.Num() == 1);

@@ -64,7 +64,7 @@ class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent {
         // clang-format off
         return ActiveTurnBasedEffects |
                Retro::Ranges::Views::Values |
-               Retro::Ranges::Views::Filter<&FTurnBasedGameplayEffect::HasTrigger>(Trigger);
+               Retro::Ranges::Views::Filter(Retro::BindBack<&FTurnBasedGameplayEffect::HasTrigger>(Trigger));
         // clang-format on
     }
 

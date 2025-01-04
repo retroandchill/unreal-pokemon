@@ -22,7 +22,7 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
 
     // clang-format off
     auto Match = Options |
-                 Retro::Ranges::AnyOf(this, &SDataHandlePinStructPin::RowMatches);
+                 Retro::Ranges::AnyOf(Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this));
     // clang-format on
     if (!Match && !Options.IsEmpty()) {
         Handle.SetRowID(FName(**Options[0]));
@@ -63,7 +63,7 @@ bool SDataHandlePinStructPin::RowMatches(const TSharedPtr<FString> &Str) const {
 const TSharedPtr<FString> &SDataHandlePinStructPin::GetItemString() const {
     // clang-format off
     auto Item = Options |
-                Retro::Ranges::Views::Filter<&SDataHandlePinStructPin::RowMatches>(Retro::TThis(this)) |
+                Retro::Ranges::Views::Filter(Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this)) |
                 Retro::Ranges::FindFirst();
     // clang-format on
     check(Item.IsSet())

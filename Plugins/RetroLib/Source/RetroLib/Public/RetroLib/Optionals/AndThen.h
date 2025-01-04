@@ -7,10 +7,8 @@
  */
 #pragma once
 
-#include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-#include "RetroLib/RetroLibMacros.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -40,5 +38,5 @@ namespace Retro::Optionals {
         }
     };
 
-    RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FAndThenInvoker{}, AndThen)
+    RETROLIB_EXPORT constexpr auto AndThen = ExtensionMethod<FAndThenInvoker{}>;
 } // namespace Retro::Optionals

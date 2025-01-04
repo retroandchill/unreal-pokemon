@@ -13,7 +13,7 @@ TArray<FName> UStatHelper::GetMainStatNames() {
            Retro::Ranges::Views::Filter([](const FStat &Stat) {
                return Stat.Type != EPokemonStatType::Battle;
            }) |
-           Retro::Ranges::Views::Transform<&FStat::ID>() |
+           Retro::Ranges::Views::Transform(&FStat::ID) |
            Retro::Ranges::To<TArray>();
     // clang-format on
 }
@@ -25,7 +25,7 @@ TArray<FName> UStatHelper::GetBattleStatNames() {
            Retro::Ranges::Views::Filter([](const FStat &Stat) {
                return Stat.Type != EPokemonStatType::Main;
            }) |
-           Retro::Ranges::Views::Transform<&FStat::ID>() |
+           Retro::Ranges::Views::Transform(&FStat::ID) |
            Retro::Ranges::To<TArray>();
     // clang-format on
 }
@@ -41,7 +41,7 @@ TArray<FName> UStatHelper::GetMainBattleStatNames() {
            Retro::Ranges::Views::Filter([](const FStat &Stat) {
                return Stat.Type == EPokemonStatType::MainBattle;
            }) |
-           Retro::Ranges::Views::Transform<&FStat::ID>() |
+           Retro::Ranges::Views::Transform(&FStat::ID) |
            Retro::Ranges::To<TArray>();
     // clang-format on
 }

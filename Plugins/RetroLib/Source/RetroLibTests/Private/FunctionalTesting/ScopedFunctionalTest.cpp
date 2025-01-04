@@ -15,7 +15,7 @@ void AScopedFunctionalTest::PrepareTest() {
     GetComponents() |
         Retro::Ranges::Views::Filter(Retro::InstanceOf<UScopedTestComponent>) |
         Retro::Ranges::Views::Transform(Retro::StaticCast<UScopedTestComponent *>) |
-        Retro::Ranges::ForEach(&UScopedTestComponent::AddScopedComponent, std::ref(*this));
+        Retro::Ranges::ForEach(Retro::BindBack<&UScopedTestComponent::AddScopedComponent>(std::ref(*this)));
     // clang-format on
 }
 

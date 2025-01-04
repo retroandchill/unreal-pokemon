@@ -40,7 +40,7 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
             .Name = Name,
             // clang-format off
             .Party = Party |
-                     Retro::Ranges::Views::Transform<&IPokemon::ToDTO>() |
+                     Retro::Ranges::Views::Transform(&IPokemon::ToDTO) |
                      Retro::Ranges::To<TArray>(),
             // clang-format on
             .ID = ID,

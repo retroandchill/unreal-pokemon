@@ -7,7 +7,7 @@ TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     auto Rows = Table.GetAllRows();
     // clang-format off
     return Rows |
-           Retro::Ranges::Views::Transform<&FStatus::ID>() |
+           Retro::Ranges::Views::Transform(&FStatus::ID) |
            Retro::Ranges::To<TArray>();
     // clang-format on
 }

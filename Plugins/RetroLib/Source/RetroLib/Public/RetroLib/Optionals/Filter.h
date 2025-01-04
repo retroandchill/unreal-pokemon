@@ -7,12 +7,8 @@
  */
 #pragma once
 
-#if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
-#endif
 
-#include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 
 #ifndef RETROLIB_EXPORT
@@ -57,6 +53,6 @@ namespace Retro::Optionals {
         }
     };
 
-    RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FFilterInvoker{}, Filter)
+    RETROLIB_EXPORT constexpr auto Filter = ExtensionMethod<FFilterInvoker{}>;
 
 } // namespace Retro::Optionals

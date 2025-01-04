@@ -44,12 +44,12 @@ bool UDefaultBag::HasItemWithTag(FName Tag) const {
     // clang-format off
     return ItemSlots |
                  Retro::Ranges::Views::Values |
-                 Retro::Ranges::Views::Transform<&FPocket::Items>() |
+                 Retro::Ranges::Views::Transform(&FPocket::Items) |
                  Retro::Ranges::Views::Join |
-                 Retro::Ranges::Views::Transform<&FItemSlot::Item>() |
-                 Retro::Ranges::Views::Transform<&TDataTableProxy<FItem>::GetDataChecked>(Retro::TThis(std::ref(ItemTable))) |
-                 Retro::Ranges::Views::Transform<&FItem::Tags>() |
-                 Retro::Ranges::AnyOf<&TArray<FName>::Contains<FName>>(Tag);
+                 Retro::Ranges::Views::Transform(&FItemSlot::Item) |
+                 Retro::Ranges::Views::Transform(Retro::BindFront<&TDataTableProxy<FItem>::GetDataChecked>(std::ref(ItemTable))) |
+                 Retro::Ranges::Views::Transform(&FItem::Tags) |
+                 Retro::Ranges::AnyOf(Retro::BindBack<&TArray<FName>::Contains<FName>>(Tag));
     // clang-format on
 }
 

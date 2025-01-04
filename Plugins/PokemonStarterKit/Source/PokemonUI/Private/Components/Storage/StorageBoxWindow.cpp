@@ -13,7 +13,7 @@ const TScriptInterface<IStorageBox> &UStorageBoxWindow::GetStorageBox() const {
 void UStorageBoxWindow::SetStorageBox(const TScriptInterface<IStorageBox> &InStorageBox) {
     StorageBox = InStorageBox;
     StorageBox->GetStoredPokemon() |
-        Retro::Ranges::ForEach<&UStorageBoxWindow::CreateStorageBoxIcon>(Retro::TThis(this));
+        Retro::Ranges::ForEach(Retro::BindMethod<&UStorageBoxWindow::CreateStorageBoxIcon>(this));
 }
 
 void UStorageBoxWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {

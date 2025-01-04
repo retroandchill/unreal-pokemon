@@ -230,8 +230,8 @@ UClass *UK2Node_DynamicAssetLoadBase::GetAssetClassType() const {
     auto Setting = GetDefault<UAssetLoadingSettings>();
     // clang-format off
     return &(Retro::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
-             Retro::Optionals::Transform<&FAssetLoadingEntry::AssetClass>() |
-             Retro::Optionals::AndThen<&FAssetClassType::TryGet<UClass>>() |
+             Retro::Optionals::Transform(&FAssetLoadingEntry::AssetClass) |
+             Retro::Optionals::AndThen(&FAssetClassType::TryGet<UClass>) |
              Retro::Optionals::OrElseValue(std::ref(*UObject::StaticClass())));
     // clang-format on
 }
@@ -252,7 +252,7 @@ void UK2Node_DynamicAssetLoadBase::SetWildcardMode(bool bNewWildcardMode) {
     auto LinkedPins = AssetNamePin->LinkedTo |
                    Retro::Ranges::Views::Filter([](const UEdGraphPin *Pin) { return Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_String; }) |
                        Retro::Ranges::To<TArray>();
-    LinkedPins | Retro::Ranges::ForEach(AssetNamePin, &UEdGraphPin::BreakLinkTo, true);
+    LinkedPins | Retro::Ranges::ForEach(Retro::BindMethod<&UEdGraphPin::BreakLinkTo>(AssetNamePin, true));
     // clang-format on
     RefreshAssetNamePin();
 }

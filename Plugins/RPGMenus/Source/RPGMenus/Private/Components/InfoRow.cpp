@@ -20,8 +20,8 @@ void UInfoRow::UpdateVisibility() {
 
     // clang-format off
     Retro::Optionals::Of(InitialVisibilityDelegate) |
-        Retro::Optionals::Filter<&FGetSlateVisibility::IsBound>() |
-        Retro::Optionals::Transform<&FGetSlateVisibility::Execute>() |
+        Retro::Optionals::Filter(&FGetSlateVisibility::IsBound) |
+        Retro::Optionals::Transform(&FGetSlateVisibility::Execute) |
         Retro::Optionals::OrElseValue(InitialVisibility);
     // clang-format on
 }

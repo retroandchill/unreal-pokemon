@@ -39,7 +39,7 @@ void UPokemonSelectionPaneBase::SetPokemonToDisplay(TConstArrayView<TScriptInter
 }
 
 void UPokemonSelectionPaneBase::RefreshWindow() {
-    GetSelectableOptions<ISelectablePanel>() | Retro::Ranges::ForEach<&ISelectablePanel::Refresh>();
+    GetSelectableOptions<ISelectablePanel>() | Retro::Ranges::ForEach(&ISelectablePanel::Refresh);
 }
 
 bool UPokemonSelectionPaneBase::IsSwitching() const {

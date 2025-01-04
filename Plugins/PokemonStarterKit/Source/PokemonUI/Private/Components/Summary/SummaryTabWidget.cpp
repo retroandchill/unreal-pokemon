@@ -45,7 +45,7 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
     auto Pages = SummaryPages->GetPages();
     // clang-format off
     PageButtons = Pages |
-                  Retro::Ranges::Views::Transform(this, &USummaryTabWidget::CreatePageButton) |
+                  Retro::Ranges::Views::Transform(Retro::BindMethod<&USummaryTabWidget::CreatePageButton>(this)) |
                   Retro::Ranges::To<TArray>();
     // clang-format on
     if (SummaryPages->GetPages().IsEmpty()) {

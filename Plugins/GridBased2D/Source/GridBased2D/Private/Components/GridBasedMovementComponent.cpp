@@ -221,8 +221,8 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
     auto Results = HitTestOnFacingTile(MovementDirection);
     // clang-format off
     return Results |
-           Retro::Ranges::Views::Transform<&FOverlapResult::GetActor>() |
-           Retro::Ranges::Views::Filter<&AActor::Implements<UInteractable>>() |
+           Retro::Ranges::Views::Transform(&FOverlapResult::GetActor) |
+           Retro::Ranges::Views::Filter(&AActor::Implements<UInteractable>) |
            Retro::Ranges::Views::Transform(Retro::AsInterface<IInteractable>) |
            Retro::Ranges::To<TArray>();
     // clang-format on

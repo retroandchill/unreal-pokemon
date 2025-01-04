@@ -15,7 +15,7 @@ TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHold
 TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(const FItem *Item) {
     // clang-format off
     return Retro::Optionals::OfNullable(Item) |
-           Retro::Optionals::Transform<&FItem::ID>() |
+           Retro::Optionals::Transform(&FItem::ID) |
            Retro::Optionals::AndThen([](FName ID) {
                return FindHoldItemEffect(ID);
            });
@@ -31,14 +31,14 @@ static TSubclassOf<UBattleItemEffect> FindDefaultItemEffect() {
 TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(FName ID) {
     // clang-format off
     return Classes::ItemEffects.LoadClass(ID) |
-           Retro::Optionals::OrElseGet<&FindDefaultItemEffect>();
+           Retro::Optionals::OrElseGet(&FindDefaultItemEffect);
     // clang-format on
 }
 
 TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(const FItem *Item) {
     // clang-format off
     auto ID = Retro::Optionals::OfNullable(Item) |
-              Retro::Optionals::Transform<&FItem::ID>() |
+              Retro::Optionals::Transform(&FItem::ID) |
               Retro::Optionals::OrElseValue(NAME_None);
     // clang-format on
 

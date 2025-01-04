@@ -13,7 +13,7 @@ namespace Retro {
     TOptional<IVariantRegistration &> FVariantObjectStructRegistry::GetVariantStructData(const UScriptStruct &Struct) {
         static_assert(IsValidFunctorObject(&TSharedRef<IVariantRegistration>::Get));
         return Optionals::OfNullable<TOptional>(RegisteredStructs.Find(Struct.GetFName())) |
-               Optionals::Transform<&TSharedRef<IVariantRegistration>::Get>();
+               Optionals::Transform(&TSharedRef<IVariantRegistration>::Get);
     }
 } // namespace Retro
 #endif

@@ -39,18 +39,18 @@ TEST_CASE_NAMED(FFilterOptionalTest, "Unit Tests::RetroLib::Optionals::Filter", 
         std::optional Odd = 3;
         std::optional Even = 4;
         std::optional<int> Empty;
-        auto FilteredOdd = Odd | Retro::Optionals::Filter<IsEven>(2);
+        auto FilteredOdd = Odd | Retro::Optionals::Filter(Retro::BindBack<IsEven>(2));
         CHECK_FALSE(FilteredOdd.has_value());
-        auto FilteredEven = Even | Retro::Optionals::Filter<IsEven>(2);
+        auto FilteredEven = Even | Retro::Optionals::Filter(Retro::BindBack<IsEven>(2));
         CHECK(FilteredEven.has_value());
-        auto FilteredEmpty = Empty | Retro::Optionals::Filter<IsEven>(2);
+        auto FilteredEmpty = Empty | Retro::Optionals::Filter(Retro::BindBack<IsEven>(2));
         CHECK_FALSE(FilteredEmpty.has_value());
 
-        auto FilteredRvalueOdd = std::optional(5) | Retro::Optionals::Filter<IsEven>(2);
+        auto FilteredRvalueOdd = std::optional(5) | Retro::Optionals::Filter(Retro::BindBack<IsEven>(2));
         CHECK_FALSE(FilteredRvalueOdd.has_value());
-        auto FilteredRvalueEven = std::optional(6) | Retro::Optionals::Filter<IsEven>(2);
+        auto FilteredRvalueEven = std::optional(6) | Retro::Optionals::Filter(Retro::BindBack<IsEven>(2));
         CHECK(FilteredRvalueEven.has_value());
-        auto FilteredEmptyRvalue = std::optional<int>() | Retro::Optionals::Filter<IsEven>(2);
+        auto FilteredEmptyRvalue = std::optional<int>() | Retro::Optionals::Filter(Retro::BindBack<IsEven>(2));
         CHECK_FALSE(FilteredEmptyRvalue.has_value());
     }
 
@@ -60,18 +60,18 @@ TEST_CASE_NAMED(FFilterOptionalTest, "Unit Tests::RetroLib::Optionals::Filter", 
         std::optional Even = 4;
         std::optional<int> Empty;
         static_assert(Retro::Optionals::OptionalType<decltype(Odd)>);
-        auto FilteredOdd = Odd | Retro::Optionals::Filter(GreaterThan, 4);
+        auto FilteredOdd = Odd | Retro::Optionals::Filter(Retro::BindBack(GreaterThan, 4));
         CHECK_FALSE(FilteredOdd.has_value());
-        auto FilteredEven = Even | Retro::Optionals::Filter(GreaterThan, 3);
+        auto FilteredEven = Even | Retro::Optionals::Filter(Retro::BindBack(GreaterThan, 3));
         CHECK(FilteredEven.has_value());
-        auto FilteredEmpty = Empty | Retro::Optionals::Filter(GreaterThan, 3);
+        auto FilteredEmpty = Empty | Retro::Optionals::Filter(Retro::BindBack(GreaterThan, 3));
         CHECK_FALSE(FilteredEmpty.has_value());
 
-        auto FilteredRvalueOdd = std::optional(5) | Retro::Optionals::Filter(GreaterThan, 7);
+        auto FilteredRvalueOdd = std::optional(5) | Retro::Optionals::Filter(Retro::BindBack(GreaterThan, 7));
         CHECK_FALSE(FilteredRvalueOdd.has_value());
-        auto FilteredRvalueEven = std::optional(6) | Retro::Optionals::Filter(GreaterThan, 4);
+        auto FilteredRvalueEven = std::optional(6) | Retro::Optionals::Filter(Retro::BindBack(GreaterThan, 4));
         CHECK(FilteredRvalueEven.has_value());
-        auto FilteredRvalueEmpty = std::optional<int>() | Retro::Optionals::Filter(GreaterThan, 4);
+        auto FilteredRvalueEmpty = std::optional<int>() | Retro::Optionals::Filter(Retro::BindBack(GreaterThan, 4));
         CHECK_FALSE(FilteredRvalueEmpty.has_value());
     }
 }
@@ -80,18 +80,18 @@ TEST_CASE_NAMED(FTransformOptionalTest, "Unit Tests::RetroLib::Optionals::Transf
     constexpr auto MultiplyValue = [](int x, int y) { return x * y; };
     SECTION("Can transform using a constant functor") {
         std::optional Value = 3;
-        auto Transformed = Value | Retro::Optionals::Transform<MultiplyValue>(2);
+        auto Transformed = Value | Retro::Optionals::Transform(Retro::BindBack<MultiplyValue>(2));
         CHECK(Transformed.has_value());
         CHECK(Transformed.value() == 6);
 
         std::optional<int> EmptyOpt;
-        auto EmptyTransformed = EmptyOpt | Retro::Optionals::Transform<MultiplyValue>(2);
+        auto EmptyTransformed = EmptyOpt | Retro::Optionals::Transform(Retro::BindBack<MultiplyValue>(2));
         CHECK_FALSE(EmptyTransformed.has_value());
     }
 
     SECTION("Can transform using a runtime defined functor") {
         std::optional Value = 6;
-        auto Transformed = Value | Retro::Optionals::Transform(MultiplyValue, 5);
+        auto Transformed = Value | Retro::Optionals::Transform(Retro::BindBack(MultiplyValue, 5));
         CHECK(Transformed.has_value());
         CHECK(Transformed.value() == 30);
     }
@@ -155,14 +155,14 @@ TEST_CASE_NAMED(FAndThenOptionalTest, "Unit Tests::RetroLib::Optionals::AndThen"
             return std::optional<int>();
         };
 
-        auto Mapped1 = std::optional(4) | Retro::Optionals::AndThen<Mapper>();
+        auto Mapped1 = std::optional(4) | Retro::Optionals::AndThen(Mapper);
         CHECK(Mapped1.has_value());
         CHECK(Mapped1.value() == 8);
 
-        auto Mapped2 = std::optional(-3) | Retro::Optionals::AndThen<Mapper>();
+        auto Mapped2 = std::optional(-3) | Retro::Optionals::AndThen(Mapper);
         CHECK_FALSE(Mapped2.has_value());
 
-        auto Mapped3 = std::optional<int>() | Retro::Optionals::AndThen<Mapper>();
+        auto Mapped3 = std::optional<int>() | Retro::Optionals::AndThen(Mapper);
         CHECK_FALSE(Mapped3.has_value());
     }
 }
@@ -175,8 +175,8 @@ TEST_CASE_NAMED(FOptionalOrElseThrowTest, "Unit Tests::RetroLib::Optionals::OrEl
     CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(), std::bad_optional_access);
 
     constexpr auto AltThrow = [](std::string_view Message) { return std::runtime_error(Message.data()); };
-    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow<AltThrow>("Could not get value!"), std::runtime_error);
-    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(AltThrow, "Could not get value!"), std::runtime_error);
+    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(Retro::BindBack<AltThrow>("Could not get value!")), std::runtime_error);
+    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(Retro::BindBack(AltThrow, "Could not get value!")), std::runtime_error);
 }
 
 TEST_CASE_NAMED(FOptionalGetTest, "Unit Tests::RetroLib::Optionals::Value", "[optionals]") {
@@ -365,7 +365,7 @@ TEST_CASE_NAMED(FOptionalMemberReferenceTest, "Unit Tests::RetroLib::Optionals::
     SECTION("Can use the member as a compile time pointer") {
         std::optional Value = DataStruct{3};
 
-        auto Result = Value | Retro::Optionals::Transform<&DataStruct::Member>();
+        auto Result = Value | Retro::Optionals::Transform(&DataStruct::Member);
         CHECK(Result.has_value());
         CHECK(Result.value() == 3);
     }

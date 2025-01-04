@@ -39,7 +39,7 @@ static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     auto SideView = Retro::Ranges::Views::Single(Side) |
                     Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>);
     auto ActiveBattlers = Side->GetBattlers() |
-                          Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+                          Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
                           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>);
     // clang-format on
     return Retro::Ranges::Views::Concat(std::move(SideView), std::move(ActiveBattlers));
@@ -60,9 +60,9 @@ void Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle>
     SendOutEventForActor(BattleActor, Tag, EventData);
     // clang-format off
     Battle->GetSides() |
-        Retro::Ranges::Views::Transform<&UnrollBattleSide>() |
+        Retro::Ranges::Views::Transform(&UnrollBattleSide) |
         Retro::Ranges::Views::Join |
-        Retro::Ranges::ForEach(&SendOutEventForActor, Tag, EventData);
+        Retro::Ranges::ForEach(Retro::BindBack<&SendOutEventForActor>(Tag, EventData));
     // clang-format on
 }
 
@@ -89,7 +89,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
 
     SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
-    User->GetAllies() | Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+    User->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
         Retro::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
@@ -99,7 +99,7 @@ void Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler>
     auto TargetActor = CastChecked<AActor>(Target.GetObject());
     SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
-    Target->GetAllies() | Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+    Target->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
         Retro::Ranges::ForEach([&EventTags, &EventData](AActor *Ally) {
             SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);

@@ -9,9 +9,9 @@
 void USummaryPages::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
     // clang-format off
     Retro::Ranges::Views::Iota(0, PageSwitcher->GetNumWidgets()) |
-        Retro::Ranges::Views::Transform(PageSwitcher, &UWidgetSwitcher::GetWidgetAtIndex) |
+        Retro::Ranges::Views::Transform(Retro::BindMethod<&UWidgetSwitcher::GetWidgetAtIndex>(PageSwitcher)) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<USummaryScreenPage>) |
-        Retro::Ranges::ForEach(&UPokemonInfoWidget::SetPokemon, NewPokemon);
+        Retro::Ranges::ForEach(Retro::BindBack<&UPokemonInfoWidget::SetPokemon>(NewPokemon));
     // clang-format on
 }
 

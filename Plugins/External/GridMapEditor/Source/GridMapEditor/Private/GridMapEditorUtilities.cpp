@@ -34,9 +34,9 @@ static FGridMapTileList MakeTileList(const FTileBasicInfo &Info, const TArray<US
 }
 
 static void SetTileInfos(UGridMapTileSet &TileSet, const TArray<UStaticMesh *> &Tiles) {
-    TileSet.Tiles = TileBasicInfos | Retro::Ranges::Views::Transform<&MakeTileList>(Tiles) | Retro::Ranges::To<TArray>();
+    TileSet.Tiles = TileBasicInfos | Retro::Ranges::Views::Transform(Retro::BindBack<&MakeTileList>(Tiles)) | Retro::Ranges::To<TArray>();
 }
 
 void UGridMapEditorUtilities::CreateAutoTileLayout(UGridMapTileSet *TileSet, const TArray<UStaticMesh *> &Tiles) {
-    Retro::Optionals::OfNullable(TileSet) | Retro::Optionals::IfPresent<&SetTileInfos>(Tiles);
+    Retro::Optionals::OfNullable(TileSet) | Retro::Optionals::IfPresent(Retro::BindBack<&SetTileInfos>(Tiles));
 }

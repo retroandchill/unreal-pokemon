@@ -8,13 +8,9 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
 #include <ranges>
 #include <span>
 #endif
-
-#include "RetroLib/Functional/ExtensionMethods.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -28,9 +24,9 @@ namespace Retro {
         RETROLIB_EXPORT template <typename T>
         constexpr auto Empty = std::ranges::views::empty<T>;
 
-        RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::views::filter, Filter)
+        RETROLIB_EXPORT constexpr auto Filter = std::ranges::views::filter;
 
-        RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::views::transform, Transform)
+        RETROLIB_EXPORT constexpr auto Transform = std::ranges::views::transform;
 
         RETROLIB_EXPORT constexpr auto Single = std::ranges::views::single;
 
@@ -43,11 +39,11 @@ namespace Retro {
 
         RETROLIB_EXPORT constexpr auto Take = std::ranges::views::take;
 
-        RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::views::take_while, TakeWhile)
+        RETROLIB_EXPORT constexpr auto TakeWhile = std::ranges::views::take_while;
 
         RETROLIB_EXPORT constexpr auto Drop = std::ranges::views::drop;
 
-        RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::views::drop_while, DropWhile)
+        RETROLIB_EXPORT constexpr auto DropWhile = std::ranges::views::drop_while;
 
         RETROLIB_EXPORT constexpr auto Join = std::ranges::views::join;
 

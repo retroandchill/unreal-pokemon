@@ -17,7 +17,7 @@ bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGamep
     check(IsValid(TurnBasedComponent))
     // clang-format off
     int32 Duration = TurnDuration |
-                     Retro::Optionals::Transform<&UMathUtilities::RandomIntInRange>() |
+                     Retro::Optionals::Transform(&UMathUtilities::RandomIntInRange) |
                      Retro::Optionals::OrElseValue(INDEX_NONE);
     // clang-format on
     TurnBasedComponent->AddTurnBasedEffect(ActiveGE.Handle, Duration);

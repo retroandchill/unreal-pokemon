@@ -62,14 +62,14 @@ TEST_CASE_NAMED(FRangeForEachTest, "Unit Tests::RetroLib::Ranges::Algorithm::For
 
         constexpr auto AddToVector = [](int value, std::vector<int> &vector) { vector.push_back(value); };
         Vectored.clear();
-        Values | Retro::Ranges::ForEach<AddToVector>(std::ref(Vectored));
+        Values | Retro::Ranges::ForEach(Retro::BindBack<AddToVector>(std::ref(Vectored)));
         CHECK(Vectored == std::vector({1, 2, 3, 4, 5}));
     }
 
     SECTION("Can iterate over a range of pairs using a two arg functor") {
         static constexpr std::array Pairs = {std::make_pair(1, 2), std::make_pair(3, 4)};
         std::map<int, int> AsMap;
-        Pairs | Retro::Ranges::ForEach([&AsMap](int key, int value) { AsMap[key] = value; });
+        Pairs | Retro::Ranges::ForEach(Retro::TWrappedFunctor([&AsMap](int key, int value) { AsMap[key] = value; }));
         CHECK(AsMap == std::map<int, int>({{1, 2}, {3, 4}}));
     }
 }
@@ -82,7 +82,7 @@ TEST_CASE_NAMED(FRangeReduceTest, "Unit Tests::RetroLib::Ranges::Algorithm::Redu
     }
 
     SECTION("Can reduce a range to a single value using a constexpr binding") {
-        auto Result = Values | Retro::Ranges::Reduce<Retro::Add>(0);
+        auto Result = Values | Retro::Ranges::Reduce(0, Retro::Add);
         CHECK(Result == 15);
     }
 }
@@ -91,31 +91,31 @@ TEST_CASE_NAMED(FRangeFindFirstTest, "Unit Tests::RetroLib::Ranges::Algorithm::F
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     constexpr auto IsMultipleOf = [](int i, int j) { return i % j == 0; };
     SECTION("Can reduce using an inferred optional value") {
-        auto ValidResult = Values | Retro::Ranges::Views::Filter<IsMultipleOf>(3) | Retro::Ranges::FindFirst();
+        auto ValidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst();
         CHECK(Retro::Optionals::Get(ValidResult) == 3);
 
-        auto InvalidResult = Values | Retro::Ranges::Views::Filter<IsMultipleOf>(10) | Retro::Ranges::FindFirst();
+        auto InvalidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst();
         CHECK_FALSE(Retro::Optionals::HasValue(InvalidResult));
     }
 
     SECTION("Can reduce using an inferred template parameter") {
         auto ValidResult =
-            Values | Retro::Ranges::Views::Filter<IsMultipleOf>(3) | Retro::Ranges::FindFirst<std::optional>();
+            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst<std::optional>();
         REQUIRE(ValidResult.has_value());
         CHECK(ValidResult->get() == 3);
 
         auto InvalidResult =
-            Values | Retro::Ranges::Views::Filter<IsMultipleOf>(10) | Retro::Ranges::FindFirst<std::optional>();
+            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst<std::optional>();
         CHECK_FALSE(InvalidResult.has_value());
     }
 
     SECTION("Can reduce using an explicit template parameter") {
         auto ValidResult =
-            Values | Retro::Ranges::Views::Filter<IsMultipleOf>(3) | Retro::Ranges::FindFirst<std::optional<int>>();
+            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst<std::optional<int>>();
         CHECK(ValidResult == 3);
 
         auto InvalidResult =
-            Values | Retro::Ranges::Views::Filter<IsMultipleOf>(10) | Retro::Ranges::FindFirst<std::optional<int>>();
+            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst<std::optional<int>>();
         CHECK_FALSE(InvalidResult.has_value());
     }
 }
@@ -123,23 +123,17 @@ TEST_CASE_NAMED(FRangeFindFirstTest, "Unit Tests::RetroLib::Ranges::Algorithm::F
 TEST_CASE_NAMED(FRangeAllOf, "Unit Tests::RetroLib::Ranges::Algorithm::AllOf", "[ranges]") {
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     SECTION("Check the all of condition") {
-        CHECK(Values | Retro::Ranges::AllOf(Retro::GreaterThan, 0));
-        CHECK(Values | Retro::Ranges::AllOf<Retro::GreaterThan>(0));
-        CHECK_FALSE(Values | Retro::Ranges::AllOf(Retro::GreaterThan, 10));
-        CHECK_FALSE(Values | Retro::Ranges::AllOf<Retro::GreaterThan>(20));
+        CHECK(Values | Retro::Ranges::AllOf(BindBack(Retro::GreaterThan, 0)));
+        CHECK_FALSE(Values | Retro::Ranges::AllOf(BindBack(Retro::GreaterThan, 10)));
     }
 
     SECTION("Check the none of condition") {
-        CHECK_FALSE(Values | Retro::Ranges::NoneOf(Retro::GreaterThan, 0));
-        CHECK_FALSE(Values | Retro::Ranges::NoneOf<Retro::GreaterThan>(0));
-        CHECK(Values | Retro::Ranges::NoneOf(Retro::GreaterThan, 10));
-        CHECK(Values | Retro::Ranges::NoneOf<Retro::GreaterThan>(20));
+        CHECK_FALSE(Values | Retro::Ranges::NoneOf(BindBack(Retro::GreaterThan, 0)));
+        CHECK(Values | Retro::Ranges::NoneOf(BindBack(Retro::GreaterThan, 10)));
     }
 
     SECTION("Check the any of condition") {
-        CHECK(Values | Retro::Ranges::AnyOf(Retro::GreaterThan, 2));
-        CHECK(Values | Retro::Ranges::AnyOf<Retro::GreaterThan>(2));
-        CHECK_FALSE(Values | Retro::Ranges::AnyOf(Retro::GreaterThan, 10));
-        CHECK_FALSE(Values | Retro::Ranges::AnyOf<Retro::GreaterThan>(20));
+        CHECK(Values | Retro::Ranges::AnyOf(BindBack(Retro::GreaterThan, 2)));
+        CHECK_FALSE(Values | Retro::Ranges::AnyOf(BindBack(Retro::GreaterThan, 10)));
     }
 }

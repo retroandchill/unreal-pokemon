@@ -82,7 +82,7 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .Item = HoldItem,
             // clang-format off
             .Moves = MoveBlock->GetMoves() |
-                     Retro::Ranges::Views::Transform<&IMove::ToDTO>() |
+                     Retro::Ranges::Views::Transform(&IMove::ToDTO) |
                      Retro::Ranges::To<TArray>(),
             // clang-format on
             .MoveMemory = MoveBlock->GetMoveMemory(),

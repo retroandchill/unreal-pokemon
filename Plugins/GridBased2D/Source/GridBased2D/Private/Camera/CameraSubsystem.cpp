@@ -10,9 +10,9 @@ void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
 
     // clang-format off
     Retro::Optionals::OfNullable(InWorld.GetGameInstance()) |
-        Retro::Optionals::Transform<&UGameInstance::GetPrimaryPlayerController>(false) |
-        Retro::Optionals::Transform<&APlayerController::GetLocalPlayer>() |
-        Retro::Optionals::Transform<&ULocalPlayer::GetLocalPlayerIndex>() |
+        Retro::Optionals::Transform(Retro::BindBack<&UGameInstance::GetPrimaryPlayerController>(false)) |
+        Retro::Optionals::Transform(&APlayerController::GetLocalPlayer) |
+        Retro::Optionals::Transform(&ULocalPlayer::GetLocalPlayerIndex) |
         Retro::Optionals::IfPresent([this, &InWorld](int32 PlayerIndex) {
             PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(&InWorld, PlayerIndex);
         });

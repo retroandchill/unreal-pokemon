@@ -31,7 +31,7 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const
                                                  const FString &AssetName, TSoftObjectPtr<> &FoundAsset) {
     // clang-format off
     FoundAsset = LookupAssetByName(BasePackageName, AssetName) |
-                 Retro::Optionals::Filter<&TSoftObjectRef<>::IsAssetOfType>(AssetClass) |
+                 Retro::Optionals::Filter(Retro::BindBack<&TSoftObjectRef<>::IsAssetOfType>(AssetClass)) |
                  Retro::Optionals::OrElseGet([] { return TSoftObjectPtr(); });
     // clang-format on
     return !FoundAsset.IsNull() ? EAssetLoadResult::Found : EAssetLoadResult::NotFound;

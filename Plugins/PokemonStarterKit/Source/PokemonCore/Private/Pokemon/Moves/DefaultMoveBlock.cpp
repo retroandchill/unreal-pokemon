@@ -84,7 +84,7 @@ TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32
     return Species.Moves |
            Retro::Ranges::Views::Filter(MoveLevelInRange) |
            Retro::Ranges::Views::Filter(DoesNotKnowMove) |
-           Retro::Ranges::Views::Transform<&FLevelUpMove::Move>() |
+           Retro::Ranges::Views::Transform(&FLevelUpMove::Move) |
            Retro::Ranges::Views::Transform(Retro::Construct<FMoveHandle>) |    
            Retro::Ranges::To<TArray>();
     // clang-format on

@@ -63,7 +63,7 @@ FString UStringUtilities::FormatDate(const FDateTime &DateTime, const FString &F
 FText UStringUtilities::JoinText(const TArray<FText> &Lines) {
     // clang-format off
     return FText::FromString(Lines |
-                             Retro::Ranges::Views::Transform<&FText::ToString>() |
+                             Retro::Ranges::Views::Transform(&FText::ToString) |
                              Retro::Ranges::Views::JoinWith(TEXT("\n")) |
                              Retro::Ranges::To<FString>());
     // clang-format on

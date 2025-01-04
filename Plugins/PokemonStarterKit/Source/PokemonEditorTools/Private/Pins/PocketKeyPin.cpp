@@ -25,13 +25,13 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
     // clang-format off
     Options = GetDefault<UPokemonDataSettings>()->PocketNames |
               Retro::Ranges::Views::Values |
-              Retro::Ranges::Views::Transform<&UStringUtilities::NameToStringPtr>() |
+              Retro::Ranges::Views::Transform(&UStringUtilities::NameToStringPtr) |
               Retro::Ranges::To<TArray>();
     // clang-format on
 
     // clang-format off
     auto Match = Options |
-                 Retro::Ranges::AnyOf<&SPocketKeyPin::RowMatches>(Retro::TThis(this));
+                 Retro::Ranges::AnyOf(Retro::BindFront<&SPocketKeyPin::RowMatches>(this));
     // clang-format on
     if (!Match && !Options.IsEmpty()) {
         Handle.PocketName = **Options[0];
@@ -72,7 +72,7 @@ bool SPocketKeyPin::RowMatches(const TSharedPtr<FString> &Str) const {
 const TSharedPtr<FString> &SPocketKeyPin::GetItemString() const {
     // clang-format off
     auto Item = Options |
-                Retro::Ranges::Views::Filter<&SPocketKeyPin::RowMatches>(Retro::TThis(this)) |
+                Retro::Ranges::Views::Filter(Retro::BindFront<&SPocketKeyPin::RowMatches>(this)) |
                 Retro::Ranges::FindFirst();
     // clang-format on
     check(Item.IsSet())

@@ -94,7 +94,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     auto MoveBlock = Pokemon->GetMoveBlock();
     // clang-format off
     Moves = MoveBlock->GetMoves() |
-            Retro::Ranges::Views::Transform<&CreateBattleMove>(this) |
+            Retro::Ranges::Views::Transform(Retro::BindBack<&CreateBattleMove>(this)) |
             Retro::Ranges::To<TArray>();
     // clang-format on
     SpawnSpriteActor(ShowImmediately);
@@ -147,8 +147,8 @@ void ABattlerActor::BeginPlay() {
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     // clang-format off
     InnateAbilityHandles = InnateAbilities |
-                           Retro::Ranges::Views::Transform(Retro::Construct<FGameplayAbilitySpec>, 1, INDEX_NONE, this) |
-                           Retro::Ranges::Views::Transform(BattlerAbilityComponent, &UAbilitySystemComponent::GiveAbility) |
+                           Retro::Ranges::Views::Transform(BindBack(Retro::Construct<FGameplayAbilitySpec>, 1, INDEX_NONE, this)) |
+                           Retro::Ranges::Views::Transform(Retro::BindMethod<&UAbilitySystemComponent::GiveAbility>(BattlerAbilityComponent)) |
                            Retro::Ranges::To<TArray>();
     InnateEffectHandles = InnateEffects |
                           Retro::Ranges::Views::Transform([this](const TSubclassOf<UGameplayEffect> &Effect) {
@@ -379,8 +379,8 @@ void ABattlerActor::RecordParticipation() {
     }
 
     OwningSide->GetOwningBattle()->GetOpposingSide()->GetBattlers() |
-        Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
-        Retro::Ranges::ForEach(&IBattler::AddParticipant, this);
+        Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
+        Retro::Ranges::ForEach(Retro::BindBack<&IBattler::AddParticipant>(this));
 }
 
 void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {

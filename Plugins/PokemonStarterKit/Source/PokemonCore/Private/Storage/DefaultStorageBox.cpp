@@ -22,10 +22,10 @@ TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(const FStorageBoxDT
     check(Player != nullptr)
     // clang-format off
     StoredPokemon = DTO.StoredPokemon |
-                    Retro::Ranges::Views::Transform<&FStorageSlot::Pokemon>() |
+                    Retro::Ranges::Views::Transform(&FStorageSlot::Pokemon) |
                     Retro::Ranges::Views::Transform([&Player](const TOptional<FPokemonDTO> &Pokemon) {
                         return Pokemon |
-                               Retro::Optionals::Transform<&FPokemonDTO::CreatePokemon>(Player.GetObject()) |
+                               Retro::Optionals::Transform(Retro::BindBack<&FPokemonDTO::CreatePokemon>(Player.GetObject())) |
                                Retro::Optionals::OrElseGet([] {
                                    return TScriptInterface<IPokemon>();
                                });
@@ -44,7 +44,7 @@ FStorageBoxDTO UDefaultStorageBox::ToDTO() const {
                          Retro::Ranges::Views::Transform(&TScriptInterface<IPokemon>::GetInterface) |
                          Retro::Ranges::Views::Transform([](IPokemon *Pokemon) {
                              return Retro::Optionals::OfNullable(Pokemon) |
-                                    Retro::Optionals::Transform<&IPokemon::ToDTO>();
+                                    Retro::Optionals::Transform(&IPokemon::ToDTO);
                          }) |
                          Retro::Ranges::Views::Transform(Retro::Construct<FStorageSlot>) |
                          Retro::Ranges::To<TArray>()
@@ -78,7 +78,7 @@ bool UDefaultStorageBox::IsBoxFull() const {
     // clang-format off
     return StoredPokemon |
            Retro::Ranges::Views::Transform(&TScriptInterface<IPokemon>::GetObject) |
-           Retro::Ranges::AllOf<&IsValid>();
+           Retro::Ranges::AllOf(&IsValid);
     // clang-format on
 }
 

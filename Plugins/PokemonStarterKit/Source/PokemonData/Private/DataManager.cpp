@@ -9,7 +9,7 @@ FDataManager::FDataManager() {
     auto Settings = GetDefault<UPokemonDataSettings>();
     // clang-format off
     Settings->DataTables |
-        Retro::Ranges::Views::Transform<&FSoftObjectPath::TryLoad>(nullptr) |
+        Retro::Ranges::Views::Transform(Retro::BindBack<&FSoftObjectPath::TryLoad>(nullptr)) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<UDataTable>) |
         Retro::Ranges::ForEach([this](UDataTable *Table) {
             auto RowStruct = Table->GetRowStruct();

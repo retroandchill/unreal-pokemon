@@ -8,14 +8,8 @@
 
 #pragma once
 
-#include "RetroLib/Functional/FunctionalClosure.h"
-#include "RetroLib/FunctionTraits.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-#include "RetroLib/RetroLibMacros.h"
-
-#if !RETROLIB_WITH_MODULES
-#include <ranges>
-#endif
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -56,5 +50,5 @@ namespace Retro::Optionals {
         }
     };
 
-    RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FTransformInvoker{}, Transform)
+    RETROLIB_EXPORT constexpr auto Transform = ExtensionMethod<FTransformInvoker{}>;
 } // namespace Retro::Optionals

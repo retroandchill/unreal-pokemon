@@ -20,8 +20,8 @@ void FDataHandleCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Prope
     auto StructTypes = OuterObjects |
         Retro::Ranges::Views::Filter(&UObject::Implements<UDataStructHandleNode>) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IDataStructHandleNode>) |
-        Retro::Ranges::Views::Transform<&IDataStructHandleNode::GetStructType>() |
-        Retro::Ranges::Views::Filter<&Pokemon::Data::IsValidDataTableStruct>() |
+        Retro::Ranges::Views::Transform(&IDataStructHandleNode::GetStructType) |
+        Retro::Ranges::Views::Filter(&Pokemon::Data::IsValidDataTableStruct) |
         Retro::Ranges::To<TSet>();
     // clang-format on
 

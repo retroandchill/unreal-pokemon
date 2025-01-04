@@ -129,7 +129,7 @@ UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
 
 Retro::Ranges::TAnyView<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
     auto MyComponent = Retro::Ranges::Views::Single(TurnBasedEffectComponent.Get());
-    auto BattlerComponents = Battlers | Retro::Ranges::Views::Transform<&IBattler::GetTurnBasedEffectComponent>();
+    auto BattlerComponents = Battlers | Retro::Ranges::Views::Transform(&IBattler::GetTurnBasedEffectComponent);
     return Retro::Ranges::Views::Concat(std::move(MyComponent), std::move(BattlerComponents));
 }
 
@@ -150,7 +150,7 @@ bool AActiveSide::ShowBackSprites() const {
 }
 
 void AActiveSide::SendOutBattlers() const {
-    Battlers | Retro::Ranges::ForEach(&IBattler::ShowSprite, FVector());
+    Battlers | Retro::Ranges::ForEach(Retro::BindBack<&IBattler::ShowSprite>(FVector()));
 }
 
 const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {

@@ -31,7 +31,7 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     // clang-format off
     Subsystems |
         Retro::Ranges::Views::Filter(Retro::InstanceOf<ISaveableSubsystem>) |
-        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags));
+        Retro::Ranges::ForEach(Retro::BindBack<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags)));
     // clang-format on
 
 #if WITH_UNREAL_INJECTOR
@@ -39,8 +39,8 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        Retro::Ranges::Views::Transform<&FScriptInterface::GetObject>() |
-        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags));
+        Retro::Ranges::Views::Transform(&FScriptInterface::GetObject) |
+        Retro::Ranges::ForEach(Retro::BindBack<&ISaveableSubsystem::Execute_CreateSaveData>(SaveGame, std::ref(SaveTags)));
     // clang-format on
 #endif
 
@@ -54,7 +54,7 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
     // clang-format off
     Subsystems |
         Retro::Ranges::Views::Filter(Retro::InstanceOf<ISaveableSubsystem>) |
-        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags));
+        Retro::Ranges::ForEach(Retro::BindBack<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags)));
     // clang-format on
 
 #if WITH_UNREAL_INJECTOR
@@ -62,8 +62,8 @@ void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
     check(ServiceSubsystem != nullptr)
     // clang-format off
     ServiceSubsystem->GetServicesOfType<ISaveableSubsystem>() |
-        Retro::Ranges::Views::Transform<&FScriptInterface::GetObject>() |
-        Retro::Ranges::ForEach<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags));
+        Retro::Ranges::Views::Transform(&FScriptInterface::GetObject) |
+        Retro::Ranges::ForEach(Retro::BindBack<&ISaveableSubsystem::Execute_LoadSaveData>(SaveGame, std::ref(LoadTags)));
     // clang-format on
 #endif
 }

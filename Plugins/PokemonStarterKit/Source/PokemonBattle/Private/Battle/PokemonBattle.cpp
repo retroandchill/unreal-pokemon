@@ -114,7 +114,7 @@ void APokemonBattle::StartBattle() {
 void APokemonBattle::OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     // clang-format off
     auto Sorted = Battlers |
-                  Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
+                  Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
                   Retro::Ranges::To<TArray>();
     // clang-format on
     Sorted.Sort([](const TScriptInterface<IBattler> &A, const TScriptInterface<IBattler> &B) {
@@ -180,9 +180,9 @@ Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides(
 Retro::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     // clang-format off
     return Sides |
-           Retro::Ranges::Views::Transform<&IBattleSide::GetBattlers>() |
+           Retro::Ranges::Views::Transform(&IBattleSide::GetBattlers) |
            Retro::Ranges::Views::Join |
-           Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>();
+           Retro::Ranges::Views::Filter(&IBattler::IsNotFainted);
     // clang-format on
 }
 
@@ -202,10 +202,9 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     float EnemySpeed = 1.f;
     // clang-format off
     GetOpposingSide()->GetBattlers() |
-        Retro::Ranges::Views::Filter<&IBattler::IsNotFainted>() |
-        Retro::Ranges::Views::Transform<&IBattler::GetAbilityComponent>() |
-        Retro::Ranges::Views::Transform(&UAbilitySystemComponent::GetNumericAttributeBase,
-                        UPokemonCoreAttributeSet::GetSpeedAttribute()) |
+        Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
+        Retro::Ranges::Views::Transform(&IBattler::GetAbilityComponent) |
+        Retro::Ranges::Views::Transform(Retro::BindBack<&UAbilitySystemComponent::GetNumericAttributeBase>(UPokemonCoreAttributeSet::GetSpeedAttribute())) |
         Retro::Ranges::ForEach([&EnemySpeed](float Speed) {
             if (Speed > EnemySpeed) {
                 EnemySpeed = Speed;
@@ -268,7 +267,7 @@ void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     // clang-format off
     Retro::Optionals::OfNullable(BattlePawn) |
         Retro::Optionals::Transform([](const APawn &Pawn) { return Pawn.GetController(); }) |
-        Retro::Optionals::IfPresent<&APlayerController::Possess>(StoredPlayerPawn);
+        Retro::Optionals::IfPresent(Retro::BindBack<&APlayerController::Possess>(StoredPlayerPawn));
     // clang-format on
     OnBattleEnd.Broadcast(Result);
 }
@@ -277,10 +276,10 @@ void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
     // clang-format off
     auto MyComponent = Retro::Ranges::Views::Single(TurnBasedEffectComponent.Get());
     auto ChildComponents = Sides |
-                           Retro::Ranges::Views::Transform<&IBattleSide::GetChildEffectComponents>() |
+                           Retro::Ranges::Views::Transform(&IBattleSide::GetChildEffectComponents) |
                            Retro::Ranges::Views::Join;
     Retro::Ranges::Views::Concat(std::move(MyComponent), std::move(ChildComponents)) |
-        Retro::Ranges::Views::Transform<&UTurnBasedEffectComponent::GetAllTurnBasedEffectsForTrigger>(Trigger) |
+        Retro::Ranges::Views::Transform(Retro::BindBack<&UTurnBasedEffectComponent::GetAllTurnBasedEffectsForTrigger>(Trigger)) |
         Retro::Ranges::Views::Join |
         Retro::Ranges::ForEach(&FTurnBasedGameplayEffect::IncrementTurnCount);
     // clang-format on
@@ -314,7 +313,7 @@ void APokemonBattle::EndTurn() {
 
         // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out
         // faints
-        Sides[i]->GetBattlers() | Retro::Ranges::Views::Filter<&IBattler::IsFainted>() |
+        Sides[i]->GetBattlers() | Retro::Ranges::Views::Filter(&IBattler::IsFainted) |
             Retro::Ranges::ForEach([this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
                 auto BattlerId = Battler->GetInternalId();
                 CurrentActionCount.Add(BattlerId, 0);

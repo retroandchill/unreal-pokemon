@@ -27,7 +27,7 @@ void USelectableWidget::SetIndex(int32 NewIndex) {
     int32 OldIndex = Index;
     Index = FMath::Clamp(NewIndex, static_cast<int32>(INDEX_NONE), GetItemCount() - 1);
     Retro::Optionals::OfNullable(GetSelectableOption(Index)) |
-        Retro::Optionals::IfPresent<&UCommonButtonBase::SetIsSelected>(true, false);
+        Retro::Optionals::IfPresent(Retro::BindBack<&UCommonButtonBase::SetIsSelected>(true, false));
     OnSelectionChange(OldIndex, Index);
 }
 
@@ -35,7 +35,7 @@ void USelectableWidget::Deselect() {
     int32 OldIndex = Index;
     Index = INDEX_NONE;
     Retro::Optionals::OfNullable(GetSelectableOption(OldIndex)) |
-        Retro::Optionals::IfPresent<&UCommonButtonBase::SetIsSelected>(false, false);
+        Retro::Optionals::IfPresent(Retro::BindBack<&UCommonButtonBase::SetIsSelected>(false, false));
     OnSelectionChange(OldIndex, Index);
 }
 

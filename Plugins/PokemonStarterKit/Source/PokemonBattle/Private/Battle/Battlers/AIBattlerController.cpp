@@ -29,7 +29,7 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
     // clang-format off
     auto PossibleMoves = Battler->GetMoves() |
-                         Retro::Ranges::Views::Filter<&IBattleMove::IsUsable>() |
+                         Retro::Ranges::Views::Filter(&IBattleMove::IsUsable) |
                          Retro::Ranges::To<TArray>();
     // clang-format on
 

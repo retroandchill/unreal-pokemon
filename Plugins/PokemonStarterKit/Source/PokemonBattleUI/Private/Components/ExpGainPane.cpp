@@ -19,7 +19,7 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
     // clang-format off
     Panels = OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer) |
-             Retro::Ranges::Views::Transform(this, &UExpGainPane::CreateBattlerPanel) |
+             Retro::Ranges::Views::Transform(Retro::BindMethod<&UExpGainPane::CreateBattlerPanel>(this)) |
              Retro::Ranges::To<TArray>();
     // clang-format on
 }
@@ -38,7 +38,7 @@ void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
 
 void UExpGainPane::PlayExpGain(float MaxDuration) {
     AnimationsComplete = 0;
-    Panels | Retro::Ranges::ForEach<&UBattlerExpPanel::AnimateGain>(MaxDuration);
+    Panels | Retro::Ranges::ForEach(Retro::BindBack<&UBattlerExpPanel::AnimateGain>(MaxDuration));
 }
 
 const TArray<FExpGainInfo> &UExpGainPane::GetGainInfos() const {

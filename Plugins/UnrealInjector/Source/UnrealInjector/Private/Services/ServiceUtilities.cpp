@@ -24,7 +24,7 @@ Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     auto Settings = GetDefault<UDependencyInjectionSettings>();
     // clang-format off
     auto Paths = Settings->BlueprintServiceScan |
-                 Retro::Ranges::Views::Transform<&FDirectoryPath::Path>() |
+                 Retro::Ranges::Views::Transform(&FDirectoryPath::Path) |
                  Retro::Ranges::To<TArray>();
     // clang-format on
 
@@ -36,15 +36,15 @@ Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
 
     // clang-format off
     co_yield Retro::Ranges::TElementsOf(AssetData |
-        Retro::Ranges::Views::Transform<&FAssetData::GetAsset>(TSet<FName>()) |
+        Retro::Ranges::Views::Transform(Retro::BindBack<&FAssetData::GetAsset>(TSet<FName>())) |
         Retro::Ranges::Views::Filter([](const UObject *Object) {
             return Object->IsA<UBlueprint>();
         }) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<UBlueprint>) |
-        Retro::Ranges::Views::Transform<&UBlueprint::GeneratedClass>() |
+        Retro::Ranges::Views::Transform(&UBlueprint::GeneratedClass) |
         Retro::Ranges::Views::Filter([&](const UClass* Class) { return !Visited.Contains(Class); }) |
         Retro::Ranges::Views::Filter([](const UClass* Class) { return !Class->HasAnyClassFlags(CLASS_Abstract); }) |
-        Retro::Ranges::Views::Filter<&Retro::IsInstantiableClass>() |
+        Retro::Ranges::Views::Filter(&Retro::IsInstantiableClass) |
         Retro::Ranges::Views::Transform([](UClass* Class) { return TSubclassOf<UService>(Class); }));
     // clang-format on
 }

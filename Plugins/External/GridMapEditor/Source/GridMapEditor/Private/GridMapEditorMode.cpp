@@ -263,7 +263,7 @@ void FGridMapEditorMode::PaintTile() {
             MeshActor->GetStaticMeshComponent()->SetStaticMesh(StaticMesh);
             MeshActor->ReregisterAllComponents();
 
-            auto Offset = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform<&UGridMapTileSet::BrushOffset>() |
+            auto Offset = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform(&UGridMapTileSet::BrushOffset) |
                           Retro::Optionals::Transform([](const FVector2D &V) { return FVector(V, 0); }) |
                           Retro::Optionals::OrElseValue(FVector::ZeroVector);
             FTransform BrushTransform =

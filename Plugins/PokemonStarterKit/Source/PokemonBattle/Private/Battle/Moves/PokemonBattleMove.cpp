@@ -116,7 +116,7 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     // clang-format off
     TargetData->SetActors(Targets |
-                          Retro::Ranges::Views::Transform<&FTargetWithIndex::SwapIfNecessary>() |
+                          Retro::Ranges::Views::Transform(&FTargetWithIndex::SwapIfNecessary) |
                           Retro::Ranges::Views::Filter(Retro::ValidPtr) |
                           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
                           Retro::Ranges::Views::Transform(Retro::MakeWeak) |

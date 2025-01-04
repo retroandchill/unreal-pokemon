@@ -132,7 +132,7 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
                                                                const FGameplayEventData *TriggerEventData) {
     // clang-format off
     return TriggerEventData->TargetData.Data |
-           Retro::Ranges::Views::Transform<&FGameplayAbilityTargetData::GetActors>() |
+           Retro::Ranges::Views::Transform(&FGameplayAbilityTargetData::GetActors) |
            Retro::Ranges::Views::Join |
            Retro::Ranges::Views::Transform(Retro::MakeStrongChecked) |
            Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
@@ -513,8 +513,8 @@ void UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
                                          const TArray<TScriptInterface<IBattler>> &Targets) {
     // clang-format off
     Retro::Ranges::Views::Concat(Retro::Ranges::Views::Single(User), Targets) |
-        Retro::Ranges::Views::Filter<&IBattler::IsFainted>() |
-        Retro::Ranges::ForEach(this, &UBattleMoveFunctionCode::AddFaintAnimation);
+        Retro::Ranges::Views::Filter(&IBattler::IsFainted) |
+        Retro::Ranges::ForEach(Retro::BindMethod<&UBattleMoveFunctionCode::AddFaintAnimation>(this));
     // clang-format on
 }
 

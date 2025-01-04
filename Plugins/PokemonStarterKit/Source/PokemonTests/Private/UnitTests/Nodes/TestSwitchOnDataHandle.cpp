@@ -43,7 +43,7 @@ bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
                         return Pin->PinType.PinCategory == UEdGraphSchema_K2::PC_Exec;
                     }) |
                     Retro::Ranges::Views::Filter([](const UEdGraphPin *Pin) { return Pin->Direction == EGPD_Output; }) |
-                    Retro::Ranges::Views::Transform<&UEdGraphPin::PinName>() |
+                    Retro::Ranges::Views::Transform(&UEdGraphPin::PinName) |
                     Retro::Ranges::Views::Filter([](FName Name) { return Name != FName("Default"); }) |
                     Retro::Ranges::To<TArray>();
 

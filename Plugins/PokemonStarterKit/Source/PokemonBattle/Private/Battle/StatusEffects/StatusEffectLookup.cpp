@@ -13,7 +13,7 @@ TOptional<TNonNullSubclassOf<UGameplayEffect>>
 Pokemon::Battle::StatusEffects::FindStatusEffect(TOptional<const FStatus &> Status) {
     // clang-format off
     return Status |
-           Retro::Optionals::Transform<&FStatus::ID>() |
+           Retro::Optionals::Transform(&FStatus::ID) |
            Retro::Optionals::AndThen([](FName ID) { return FindStatusEffect(ID); });
     // clang-format on
 }

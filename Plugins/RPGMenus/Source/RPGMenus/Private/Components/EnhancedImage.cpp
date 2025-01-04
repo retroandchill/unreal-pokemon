@@ -27,8 +27,8 @@ void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset) {
     Super::SetBrushFromAsset(Asset);
     // clang-format off
     SetSourceImageInternal(Retro::Optionals::OfNullable(Asset) |
-                           Retro::Optionals::Transform<&USlateBrushAsset::Brush>() |
-                           Retro::Optionals::Transform<&FSlateBrush::GetResourceObject>() |
+                           Retro::Optionals::Transform(&USlateBrushAsset::Brush) |
+                           Retro::Optionals::Transform(&FSlateBrush::GetResourceObject) |
                            Retro::Optionals::PtrOrNull);
     // clang-format on
     bManualSize = true;

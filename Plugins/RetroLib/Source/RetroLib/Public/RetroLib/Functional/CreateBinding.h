@@ -39,7 +39,7 @@ namespace Retro {
      * abstraction is particularly useful for scenarios requiring dynamic handling of callables or delayed
      * execution.
      */
-    template <HasFunctionCallOperator F>
+    RETROLIB_EXPORT template <HasFunctionCallOperator F>
     struct TWrappedFunctor {
         /**
          * @brief Constructs a WrappedFunctor by forwarding the given functor.
@@ -260,15 +260,5 @@ namespace Retro {
     RETROLIB_EXPORT template <auto Functor, typename... A>
         requires HasFunctionCallOperator<decltype(Functor)>
     using TConstBindingType = decltype(CreateBinding<Functor>(std::declval<A>()...));
-
-    struct FDynamicFunctorTag {};
-
-    /**
-     * Constant tag used to signify that functional object is bounding by taking in a functor as its argument.
-     */
-    RETROLIB_EXPORT constexpr FDynamicFunctorTag DynamicFunctor;
-
-    template <auto Functor>
-    concept DynamicFunctorBinding = std::same_as<std::decay_t<decltype(Functor)>, FDynamicFunctorTag>;
 
 } // namespace Retro

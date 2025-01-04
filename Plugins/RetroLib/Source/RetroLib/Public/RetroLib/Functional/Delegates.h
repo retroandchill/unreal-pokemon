@@ -39,6 +39,15 @@ namespace Retro {
         TDelegateInvoker(D &&) -> TDelegateInvoker<std::decay_t<D>>;
     } // namespace Delegates
 
+    RETROLIB_EXPORT template <Delegates::UEDelegate D, typename... A>
+    constexpr auto BindDelegate(D &&Delegate, A&&... Args) {
+        if constexpr (sizeof...(A) > 0) {
+            return BindBack(Delegates::TDelegateInvoker(std::forward<D>(Delegate)), std::forward<A>(Args)...);
+        } else {
+            return Delegates::TDelegateInvoker(std::forward<D>(Delegate));
+        }
+    }
+
     RETROLIB_EXPORT template <Delegates::UEDelegate D>
     struct TAdditionalBindingTypes<D> : FValidType {
         template <Delegates::UEDelegate F, typename... A>

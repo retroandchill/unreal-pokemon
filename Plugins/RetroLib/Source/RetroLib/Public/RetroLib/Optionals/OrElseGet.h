@@ -7,13 +7,8 @@
  */
 #pragma once
 
-#if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
-#endif
-
-#include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -55,5 +50,5 @@ namespace Retro::Optionals {
 #endif
     };
 
-    RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FOrElseGetInvoker{}, OrElseGet)
+    RETROLIB_EXPORT constexpr auto OrElseGet = ExtensionMethod<FOrElseGetInvoker{}>;
 } // namespace Retro::Optionals

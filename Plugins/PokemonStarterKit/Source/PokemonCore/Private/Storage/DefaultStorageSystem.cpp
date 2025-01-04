@@ -20,8 +20,8 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCoun
                                                                    int32 StartingIndex) {
     // clang-format off
     Boxes = Retro::Ranges::Views::Iota(0, BoxCount) |
-            Retro::Ranges::Views::Transform<&GetDefaultBoxName>() |
-            Retro::Ranges::Views::Transform(this, &UDefaultStorageSystem::CreateStorageBox, BoxCapacity) |
+            Retro::Ranges::Views::Transform(&GetDefaultBoxName) |
+            Retro::Ranges::Views::Transform(Retro::BindMethod<&UDefaultStorageSystem::CreateStorageBox>(this, BoxCapacity)) |
             Retro::Ranges::To<TArray>();
     // clang-format on
     CurrentBoxIndex = StartingIndex;
@@ -32,7 +32,7 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCoun
 TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorageSystemDTO &DTO) {
     // clang-format off
     Boxes = DTO.Boxes |
-            Retro::Ranges::Views::Transform<&FStorageBoxDTO::CreateBox>(this) |
+            Retro::Ranges::Views::Transform(Retro::BindBack<&FStorageBoxDTO::CreateBox>(this)) |
             Retro::Ranges::To<TArray>();
     // clang-format on
     CurrentBoxIndex = DTO.CurrentBoxIndex;
@@ -43,7 +43,7 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
 FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
     return {// clang-format off
         .Boxes = Boxes |
-                 Retro::Ranges::Views::Transform<&IStorageBox::ToDTO>() |
+                 Retro::Ranges::Views::Transform(&IStorageBox::ToDTO) |
                  Retro::Ranges::To<TArray>(),
             // clang-format on
             .CurrentBoxIndex = CurrentBoxIndex};
@@ -106,6 +106,6 @@ static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInter
                                                  const TScriptInterface<IPokemon> &Pokemon) {
     // clang-format off
     return Box->DepositToBox(Pokemon) |
-           Retro::Optionals::Transform(Retro::Construct<FDepositResult>, Index);
+           Retro::Optionals::Transform(BindBack(Retro::Construct<FDepositResult>, Index));
     // clang-format on
 }

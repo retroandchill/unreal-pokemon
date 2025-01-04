@@ -3,6 +3,7 @@
 #include "GridMapStaticMeshActor.h"
 
 #include "TileSet.h"
+#include "RetroLib/Functional/BindMethod.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 
@@ -14,8 +15,8 @@ AGridMapStaticMeshActor::AGridMapStaticMeshActor(const FObjectInitializer &Objec
 bool AGridMapStaticMeshActor::HasTerrainTag_Implementation(const FGameplayTag &Tag) const {
     // clang-format off
     return Retro::Optionals::OfNullable(TileSet) |
-        Retro::Optionals::Transform<&UGridMapTileSet::TileTags>() |
-        Retro::Optionals::Transform<&FGameplayTagContainer::HasTag>(Tag) |
+        Retro::Optionals::Transform(&UGridMapTileSet::TileTags) |
+        Retro::Optionals::Transform(Retro::BindBack<&FGameplayTagContainer::HasTag>(Tag)) |
         Retro::Optionals::OrElseValue(false);
     // clang-format on
 }
@@ -23,8 +24,8 @@ bool AGridMapStaticMeshActor::HasTerrainTag_Implementation(const FGameplayTag &T
 bool AGridMapStaticMeshActor::HasAnyTerrainTag_Implementation(const FGameplayTagContainer &TagsToCheck) const {
     // clang-format off
     return Retro::Optionals::OfNullable(TileSet) |
-        Retro::Optionals::Transform<&UGridMapTileSet::TileTags>() |
-        Retro::Optionals::Transform<&FGameplayTagContainer::HasAny>(std::ref(TagsToCheck)) |
+        Retro::Optionals::Transform(&UGridMapTileSet::TileTags) |
+        Retro::Optionals::Transform(Retro::BindMethod<&FGameplayTagContainer::HasAny>(std::ref(TagsToCheck))) |
         Retro::Optionals::OrElseValue(false);
     // clang-format on
 }
@@ -32,8 +33,8 @@ bool AGridMapStaticMeshActor::HasAnyTerrainTag_Implementation(const FGameplayTag
 bool AGridMapStaticMeshActor::HasAllTerrainTags_Implementation(const FGameplayTagContainer &TagsToCheck) const {
     // clang-format off
     return Retro::Optionals::OfNullable(TileSet) |
-        Retro::Optionals::Transform<&UGridMapTileSet::TileTags>() |
-        Retro::Optionals::Transform<&FGameplayTagContainer::HasAll>(std::ref(TagsToCheck)) |
+        Retro::Optionals::Transform(&UGridMapTileSet::TileTags) |
+        Retro::Optionals::Transform(Retro::BindMethod<&FGameplayTagContainer::HasAll>(std::ref(TagsToCheck))) |
         Retro::Optionals::OrElseValue(false);
     // clang-format on
 }

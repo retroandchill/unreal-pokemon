@@ -136,8 +136,8 @@ UEdGraphPin *UK2Node_MakeSoftVariantFromSoftObject::GetObjectPin() const {
 TOptional<UClass &> UK2Node_MakeSoftVariantFromSoftObject::GetInputClass() const {
     // clang-format off
     return Retro::Optionals::OfNullable(GetObjectPin()) |
-           Retro::Optionals::Transform<&UEdGraphPin::PinType>() |
-           Retro::Optionals::Transform<&FEdGraphPinType::PinSubCategoryObject>() |
+           Retro::Optionals::Transform(&UEdGraphPin::PinType) |
+           Retro::Optionals::Transform(&FEdGraphPinType::PinSubCategoryObject) |
            Retro::Optionals::AndThen(Retro::DynamicCast<UClass>) |
            Retro::Optionals::To<TOptional>();
     // clang-format on

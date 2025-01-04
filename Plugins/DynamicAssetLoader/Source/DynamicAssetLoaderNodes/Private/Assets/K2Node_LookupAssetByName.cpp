@@ -23,7 +23,7 @@ UEdGraphPin *UK2Node_LookupAssetByName::CreateResultsPin(const FAssetClassType &
         [this](UScriptStruct *Struct) {
             // clang-format off
             auto SoftStruct = Retro::FVariantObjectStructRegistry::Get().GetVariantStructData(*Struct) |
-                              Retro::Optionals::Transform<&Retro::IVariantRegistration::GetSoftStructType>() |
+                              Retro::Optionals::Transform(&Retro::IVariantRegistration::GetSoftStructType) |
                               Retro::Optionals::PtrOrNull;
             // clang-format on
             return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, SoftStruct, UEdGraphSchema_K2::PN_ReturnValue);

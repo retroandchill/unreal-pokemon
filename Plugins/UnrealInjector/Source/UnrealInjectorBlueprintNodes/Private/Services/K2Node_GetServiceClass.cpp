@@ -38,7 +38,7 @@ FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) cons
     // clang-format off
     auto Name = Retro::Optionals::OfNullable(ServiceClass) |
                 Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
-                Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
+                Retro::Optionals::OrElseGet(Retro::BindBack(&FText::FromStringView, TEXT("???")));
     // clang-format on
     return FText::FormatOrdered(NSLOCTEXT("UK2Node_GetServiceClass", "GetNodeTitle", "Get {0}"), Name);
 }
@@ -47,7 +47,7 @@ FText UK2Node_GetServiceClass::GetTooltipText() const {
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
            Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetToolTipText(); }) |
-           Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
+           Retro::Optionals::OrElseGet(Retro::BindBack(&FText::FromStringView, TEXT("???")));
     // clang-format on
 }
 
@@ -55,7 +55,7 @@ FText UK2Node_GetServiceClass::GetCompactNodeTitle() const {
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
            Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
-           Retro::Optionals::OrElseGet<&FText::FromStringView>(TEXT("???"));
+           Retro::Optionals::OrElseGet(Retro::BindBack<&FText::FromStringView>(TEXT("???")));
     // clang-format on
 }
 
@@ -85,7 +85,7 @@ void UK2Node_GetServiceClass::GetMenuActions(FBlueprintActionDatabaseRegistrar &
 
     // clang-format off
     UnrealInjector::GetAllServices() |
-        Retro::Ranges::ForEach(&UK2Node_GetServiceClass::AddMenuActionForType, ActionRegistrar, ActionKey);
+        Retro::Ranges::ForEach(Retro::BindBack<&UK2Node_GetServiceClass::AddMenuActionForType>(ActionRegistrar, ActionKey));
     // clang-format on
 }
 

@@ -21,8 +21,8 @@ bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
     // clang-format off
     return Retro::Optionals::OfNullable(GameplayEffect) |
            Retro::Optionals::Transform(&UGameplayEffect::FindComponent<UTurnBasedGameplayEffectComponent>) |
-           Retro::Optionals::Transform<&UTurnBasedGameplayEffectComponent::GetTurnDurationTrigger>() |
-           Retro::Optionals::Filter(Retro::Equals, Trigger) |
+           Retro::Optionals::Transform(&UTurnBasedGameplayEffectComponent::GetTurnDurationTrigger) |
+           Retro::Optionals::Filter(BindBack(Retro::Equals, Trigger)) |
            Retro::Optionals::IsSet;
     // clang-format on
 }
@@ -31,7 +31,7 @@ bool FTurnBasedGameplayEffect::IncrementTurnCount() {
     TurnsActive++;
     // clang-format off
     return TurnsRemaining |
-           Retro::Optionals::Filter(Retro::GreaterThan, TurnsActive) |
+           Retro::Optionals::Filter(BindBack(Retro::GreaterThan, TurnsActive)) |
            Retro::Optionals::Transform([this](auto) { return RemoveEffect(); }) | 
            Retro::Optionals::OrElseValue(false);
     // clang-format on
@@ -40,8 +40,8 @@ bool FTurnBasedGameplayEffect::IncrementTurnCount() {
 bool FTurnBasedGameplayEffect::RemoveEffect(int32 StacksToRemove) {
     // clang-format off
     return Retro::Optionals::OfNullable(OwningComponent.Get()) |
-                    Retro::Optionals::Transform<&UTurnBasedEffectComponent::GetAbilitySystemComponent>() |
-                    Retro::Optionals::Transform<&UAbilitySystemComponent::RemoveActiveGameplayEffect>(EffectHandle, StacksToRemove) |
+                    Retro::Optionals::Transform(&UTurnBasedEffectComponent::GetAbilitySystemComponent) |
+                    Retro::Optionals::Transform(Retro::BindBack<&UAbilitySystemComponent::RemoveActiveGameplayEffect>(EffectHandle, StacksToRemove)) |
                     Retro::Optionals::OrElseValue(false);
     // clang-format on
 }

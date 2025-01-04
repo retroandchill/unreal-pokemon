@@ -10,6 +10,6 @@ namespace UE::Assets {
 
     TOptional<IAssetClassRegistration &> FAssetClassRegistry::GetAssetClassRegistration(FName Key) const {
         return Retro::Optionals::OfNullable(AssetClassRegistry.Find(Key)) |
-               Retro::Optionals::Transform<&TUniquePtr<IAssetClassRegistration>::Get>();
+               Retro::Optionals::Transform(&TUniquePtr<IAssetClassRegistration>::Get);
     }
 } // namespace UE::Assets
