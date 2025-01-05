@@ -9,12 +9,12 @@
 
 #ifdef __UNREAL__
 namespace Retro {
-	/**
-	 * 
-	 */
-	RETROLIB_EXPORT class RETROLIB_API FVariantException : public FBlueprintException {
-	public:
-		using FBlueprintException::FBlueprintException;
-	};
-}
+    /**
+     *
+     */
+    RETROLIB_EXPORT class RETROLIB_API FVariantException : public FBlueprintException {
+      public:
+        using FBlueprintException::FBlueprintException;
+    };
+} // namespace Retro
 #endif

@@ -1,9 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_MakeSoftVariantFromSoftObject.h"
-
-#include <RetroLib/Optionals/To.h>
-
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
@@ -14,6 +11,7 @@
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
+#include <RetroLib/Optionals/To.h>
 
 void UK2Node_MakeSoftVariantFromSoftObject::Initialize(UScriptStruct *SoftReference) {
     SoftReferenceType = SoftReference;
@@ -115,8 +113,8 @@ void UK2Node_MakeSoftVariantFromSoftObject::ExpandNode(FKismetCompilerContext &C
     BreakAllNodeLinks();
 }
 
-void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(
-    FBlueprintActionDatabaseRegistrar &ActionRegistrar, Retro::IVariantRegistration &Registration) const {
+void UK2Node_MakeSoftVariantFromSoftObject::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+                                                                    Retro::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeSoftVariantFromSoftObject>(Node);
@@ -138,8 +136,8 @@ UEdGraphPin *UK2Node_MakeSoftVariantFromSoftObject::GetObjectPin() const {
 TOptional<UClass &> UK2Node_MakeSoftVariantFromSoftObject::GetInputClass() const {
     // clang-format off
     return Retro::Optionals::OfNullable(GetObjectPin()) |
-           Retro::Optionals::Transform<&UEdGraphPin::PinType>() |
-           Retro::Optionals::Transform<&FEdGraphPinType::PinSubCategoryObject>() |
+           Retro::Optionals::Transform(&UEdGraphPin::PinType) |
+           Retro::Optionals::Transform(&FEdGraphPinType::PinSubCategoryObject) |
            Retro::Optionals::AndThen(Retro::DynamicCast<UClass>) |
            Retro::Optionals::To<TOptional>();
     // clang-format on

@@ -61,7 +61,8 @@ namespace Retro::Ranges {
         std::common_reference_with<TConcatReference<R...> &&, TConcatValue<R...> &> &&
         std::common_reference_with<TConcatReference<R...> &&, TConcatRValueReference<R...> &&> &&
         std::common_reference_with<TConcatRValueReference<R...> &&, TConcatValue<R...> const &> &&
-        (ConcatIndirectlyReadableImpl<TConcatReference<R...>, TConcatRValueReference<R...>, std::ranges::iterator_t<R>> &&
+        (ConcatIndirectlyReadableImpl<TConcatReference<R...>, TConcatRValueReference<R...>,
+                                      std::ranges::iterator_t<R>> &&
          ...);
 
     /**
@@ -75,4 +76,4 @@ namespace Retro::Ranges {
         typename TConcatValue<R...>;
         typename TConcatRValueReference<R...>;
     } && ConcatIndirectlyReadable<R...>;
-} // namespace retro::ranges
+} // namespace Retro::Ranges

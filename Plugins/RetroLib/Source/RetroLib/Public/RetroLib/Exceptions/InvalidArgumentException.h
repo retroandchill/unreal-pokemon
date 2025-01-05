@@ -10,12 +10,12 @@
 #endif
 
 namespace Retro {
-	/**
-	 * Exception for where there is an invalid argument in a Blueprint function.
-	 */
-	RETROLIB_EXPORT class RETROLIB_API FInvalidArgumentException : public FBlueprintException {
-	public:
-		using FBlueprintException::FBlueprintException;
-	};
+    /**
+     * Exception for where there is an invalid argument in a Blueprint function.
+     */
+    RETROLIB_EXPORT class RETROLIB_API FInvalidArgumentException : public FBlueprintException {
+      public:
+        using FBlueprintException::FBlueprintException;
+    };
 } // namespace Retro
 #endif

@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Events/BattleMessage.h"
-#include "Functional/FunctionalShorthands.h"
-#include "Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
 
 #include "Battle.generated.h"
@@ -101,7 +99,7 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual void StartBattle() = 0;
 
-    virtual void OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
+    virtual void OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
 
     /**
      * Add an action to the pending queue
@@ -128,13 +126,13 @@ class POKEMONBATTLE_API IBattle {
      * Get all sides in the current battle
      * @return A view of all sides in the battle
      */
-    virtual UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const = 0;
+    virtual Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const = 0;
 
     /**
      * Get all active battlers in the battle
      * @return A view of all active battlers
      */
-    virtual UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
+    virtual Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
 
     /**
      * Initiate the process of selecting actions for the given battler.

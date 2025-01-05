@@ -1,19 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "RetroLib/Variants/K2Node_GetVariantObject.h"
-
-#include <RetroLib/Optionals/Transform.h>
-
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 #include "RetroLib/Blueprints/BlueprintPins.h"
-#include "RetroLib/Optionals/Transform.h"
-#include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
+#include <RetroLib/Optionals/Transform.h>
 
 void UK2Node_GetVariantObject::AllocateDefaultPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, Retro::PN_Variant);
@@ -39,8 +37,8 @@ bool UK2Node_GetVariantObject::IsConnectionDisallowed(const UEdGraphPin *MyPin, 
         auto Struct = Cast<UScriptStruct>(OtherPin->PinType.PinSubCategoryObject.Get());
         // clang-format off
         auto Result = Retro::Optionals::OfNullable<TOptional>(Struct) |
-                      Retro::Optionals::AndThen<&Retro::FVariantObjectStructRegistry::GetVariantStructData>(Retro::TThis(&Registry)) |
-                      Retro::Optionals::Transform<&Retro::IVariantRegistration::GetStructType>() |
+                      Retro::Optionals::AndThen(Retro::BindMethod<&Retro::FVariantObjectStructRegistry::GetVariantStructData>(&Registry)) |
+                      Retro::Optionals::Transform(&Retro::IVariantRegistration::GetStructType) |
                       Retro::Optionals::PtrOrNull;
         // clang-format on
         bDisallowed = Struct == nullptr || Struct != Result;

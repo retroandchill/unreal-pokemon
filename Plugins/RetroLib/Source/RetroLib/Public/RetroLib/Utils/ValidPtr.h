@@ -56,6 +56,27 @@ namespace Retro {
         constexpr bool operator()(std::nullptr_t) const {
             return false;
         }
+
+#ifdef __UNREAL__
+        template <std::derived_from<UObject> T>
+        constexpr bool operator()(const T *Ptr) const {
+            return IsValid(Ptr);
+        }
+
+        template <std::derived_from<UObject> T>
+        constexpr bool operator()(TObjectPtr<T> Ptr) const {
+            return IsValid(Ptr);
+        }
+
+        template <std::derived_from<UObject> T>
+        constexpr bool operator()(TObjectPtr<const T> Ptr) const {
+            return IsValid(Ptr);
+        }
+
+        bool operator()(const FScriptInterface &Ptr) const {
+            return IsValid(Ptr.GetObject());
+        }
+#endif
     };
 
     /**
@@ -116,4 +137,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT constexpr FInvalidPtrFunction InvalidPtr;
 
-} // namespace retro
+} // namespace Retro

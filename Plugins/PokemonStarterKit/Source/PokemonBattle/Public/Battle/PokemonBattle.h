@@ -78,7 +78,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     void StartBattle() override;
 
-    void OnBattlersEnteringBattle(UE::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
+    void OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
 
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
@@ -106,8 +106,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintPure, Category = "Battle|Content")
     const TScriptInterface<IBattleSide> &GetOpposingSide() const override;
 
-    UE::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const override;
-    UE::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const override;
+    Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const override;
+    Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
 
   protected:

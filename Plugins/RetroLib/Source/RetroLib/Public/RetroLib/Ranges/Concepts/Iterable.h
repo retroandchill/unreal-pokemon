@@ -65,4 +65,4 @@ namespace Retro {
         { std::forward<T>(Range).begin() } -> Iterator;
         { std::forward<T>(Range).end() } -> Sentinel<TIteratorType<T>>;
     };
-} // namespace retro
+} // namespace Retro

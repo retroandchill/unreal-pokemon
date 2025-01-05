@@ -1,8 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Graphics/BattleRender.h"
+#include "RetroLib/Variants/VariantObjectStruct.h"
 
-UE_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
+RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
 
 static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/PokemonAssets"));

@@ -52,4 +52,4 @@ namespace Retro {
 
     RETROLIB_EXPORT template <typename T, typename U>
     using ForwardLikeType = decltype(ForwardLike<T>(std::declval<U>()));
-} // namespace retro
+} // namespace Retro

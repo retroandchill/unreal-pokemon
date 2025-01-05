@@ -33,4 +33,4 @@ namespace Retro {
         __builtin_unreachable();
 #endif
     }
-} // namespace retro
+} // namespace Retro

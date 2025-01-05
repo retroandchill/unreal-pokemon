@@ -124,8 +124,7 @@ namespace Retro {
         constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, T..., A...>) {
             return std::apply(
                 [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
-                    return std::invoke(std::move(Functor), std::forward<T>(CallArgs)...,
-                                       std::forward<U>(FinalArgs)...);
+                    return std::invoke(std::move(Functor), std::forward<T>(CallArgs)..., std::forward<U>(FinalArgs)...);
                 },
                 std::move(Args));
         }
@@ -164,7 +163,8 @@ namespace Retro {
          */
         template <typename G, typename T>
             requires std::constructible_from<F, G> && std::convertible_to<T, A>
-        constexpr TBindBackInvoker(G &&Functor, T &&Arg) : Functor(std::forward<G>(Functor)), Arg(std::forward<T>(Arg)) {
+        constexpr TBindBackInvoker(G &&Functor, T &&Arg)
+            : Functor(std::forward<G>(Functor)), Arg(std::forward<T>(Arg)) {
         }
 
         /**
@@ -707,7 +707,8 @@ namespace Retro {
     RETROLIB_EXPORT template <typename F, typename... A>
         requires HasFunctionCallOperator<std::decay_t<F>>
     constexpr auto BindBack(F &&Functor, A &&...Args) {
-        return TBindBackInvoker<std::decay_t<F>, std::decay_t<A>...>(std::forward<F>(Functor), std::forward<A>(Args)...);
+        return TBindBackInvoker<std::decay_t<F>, std::decay_t<A>...>(std::forward<F>(Functor),
+                                                                     std::forward<A>(Args)...);
     }
 
     /**
@@ -734,4 +735,4 @@ namespace Retro {
         return TBindBackConstInvoker<Functor, std::decay_t<A>...>(std::forward<A>(Args)...);
     }
 
-} // namespace retro
+} // namespace Retro

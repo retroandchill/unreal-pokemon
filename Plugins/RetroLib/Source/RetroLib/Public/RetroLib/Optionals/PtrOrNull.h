@@ -7,10 +7,10 @@
  */
 #pragma once
 
-#include "RetroLib/TypeTraits.h"
+#include "RetroLib/Concepts/Pointers.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
-
+#include "RetroLib/TypeTraits.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -21,16 +21,15 @@ namespace Retro::Optionals {
     struct FPtrOrNullInvoker {
 
         template <OptionalType O>
-            requires(std::is_lvalue_reference_v<O> || OptionalReference<O>) &&
-                    (!SpecializationOf<TValueType<O>, std::reference_wrapper>)
-        constexpr std::add_pointer_t<TValueType<O>> operator()(O &&Optional) const {
-            return HasValue(std::forward<O>(Optional)) ? &Get(std::forward<O>(Optional)) : nullptr;
+            requires(!SpecializationOf<TValueType<O>, std::reference_wrapper>)
+        constexpr auto operator()(O &&Optional) const {
+            return HasValue(std::forward<O>(Optional)) ? GetPtrFromRef(Get(std::forward<O>(Optional))) : nullptr;
         }
 
         template <template <typename...> typename O, typename T>
             requires OptionalType<O<std::reference_wrapper<T>>>
-        constexpr std::add_pointer_t<T> operator()(const O<std::reference_wrapper<T>> &Optional) const {
-            return HasValue(Optional) ? &Get(Optional).get() : nullptr;
+        constexpr auto operator()(const O<std::reference_wrapper<T>> &Optional) const {
+            return HasValue(Optional) ? GetPtrFromRef(Get(Optional).get()) : nullptr;
         }
     };
 
@@ -48,4 +47,4 @@ namespace Retro::Optionals {
      */
     RETROLIB_EXPORT constexpr auto PtrOrNull = ExtensionMethod<FPtrOrNullInvoker{}>();
 
-} // namespace retro::optionals
+} // namespace Retro::Optionals

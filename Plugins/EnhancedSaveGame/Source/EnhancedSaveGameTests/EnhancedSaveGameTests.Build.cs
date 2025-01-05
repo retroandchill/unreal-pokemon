@@ -5,7 +5,7 @@ public class EnhancedSaveGameTests : ModuleRules {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "FunctionalTesting", "FunctionalTestingEditor",
-                                                            "AutomationTestHelpers", "UnrealRangesTests" });
+                                                            "AutomationTestHelpers", "RetroLibTests" });
 
         PrivateDependencyModuleNames.AddRange(
             new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "EnhancedSaveGame" });

@@ -83,4 +83,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
     constexpr TStaticCastFunction<T> StaticCast;
-} // namespace retro
+} // namespace Retro

@@ -44,7 +44,7 @@ namespace Retro {
         constexpr static bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TPolymorphic;
 #endif
-        
+
         /**
          * Default constructor for the Polymorphic class.
          *
@@ -118,7 +118,8 @@ namespace Retro {
         }
 
 #ifdef __UNREAL__
-        explicit constexpr TPolymorphic(FIntrusiveUnsetOptionalState) noexcept : Vtable(nullptr) {}
+        explicit constexpr TPolymorphic(FIntrusiveUnsetOptionalState) noexcept : Vtable(nullptr) {
+        }
 #endif
 
         /**
@@ -269,7 +270,7 @@ namespace Retro {
             Emplace<std::decay_t<U>>(std::forward<U>(Value));
             return *this;
         }
-        
+
 #ifdef __UNREAL__
         constexpr bool operator==(FIntrusiveUnsetOptionalState) const noexcept {
             return Vtable == nullptr;
@@ -462,8 +463,7 @@ namespace Retro {
 
             static constexpr void CopyAssign(const FOpaqueStorage &Src, FOpaqueStorage &Dest) {
                 if constexpr (FitsSmallStorage<U>) {
-                    *std::bit_cast<U *>(Dest.SmallStorage.data()) =
-                        *std::bit_cast<const U *>(Src.SmallStorage.data());
+                    *std::bit_cast<U *>(Dest.SmallStorage.data()) = *std::bit_cast<const U *>(Src.SmallStorage.data());
                 } else {
                     *static_cast<U *>(Dest.LargeStorage) = *static_cast<const U *>(Src.LargeStorage);
                 }
@@ -492,14 +492,14 @@ namespace Retro {
         static const FVTable *GetVtable() {
             using ImplType = TVTableImpl<U>;
             static constexpr FVTable Vtable = {.GetType = &ImplType::GetType,
-                                              .GetSize = &ImplType::GetSize,
-                                              .GetValue = &ImplType::GetValue,
-                                              .GetConstValue = &ImplType::GetConstValue,
-                                              .Destroy = &ImplType::Destroy,
-                                              .Copy = &ImplType::Copy,
-                                              .CopyAssign = &ImplType::CopyAssign,
-                                              .Move = &ImplType::Move,
-                                              .MoveAssign = &ImplType::MoveAssign};
+                                               .GetSize = &ImplType::GetSize,
+                                               .GetValue = &ImplType::GetValue,
+                                               .GetConstValue = &ImplType::GetConstValue,
+                                               .Destroy = &ImplType::Destroy,
+                                               .Copy = &ImplType::Copy,
+                                               .CopyAssign = &ImplType::CopyAssign,
+                                               .Move = &ImplType::Move,
+                                               .MoveAssign = &ImplType::MoveAssign};
             return &Vtable;
         }
 
@@ -507,4 +507,4 @@ namespace Retro {
         const FVTable *Vtable = GetVtable<T>();
     };
 
-} // namespace retro
+} // namespace Retro

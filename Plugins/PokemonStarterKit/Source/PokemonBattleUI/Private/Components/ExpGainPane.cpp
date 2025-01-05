@@ -7,10 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/BattlerExpPanel.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Utilities/TrainerHelpers.h"
 
 void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
@@ -22,8 +19,8 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
     // clang-format off
     Panels = OwningBattle->GetPlayerSide()->GetTrainerParty(PlayerTrainer) |
-             UE::Ranges::Map(this, &UExpGainPane::CreateBattlerPanel) |
-             UE::Ranges::ToArray;
+             Retro::Ranges::Views::Transform(Retro::BindMethod<&UExpGainPane::CreateBattlerPanel>(this)) |
+             Retro::Ranges::To<TArray>();
     // clang-format on
 }
 
@@ -41,7 +38,7 @@ void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
 
 void UExpGainPane::PlayExpGain(float MaxDuration) {
     AnimationsComplete = 0;
-    Panels | UE::Ranges::ForEach(&UBattlerExpPanel::AnimateGain, MaxDuration);
+    Panels | Retro::Ranges::ForEach(Retro::BindBack<&UBattlerExpPanel::AnimateGain>(MaxDuration));
 }
 
 const TArray<FExpGainInfo> &UExpGainPane::GetGainInfos() const {

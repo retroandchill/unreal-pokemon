@@ -819,7 +819,7 @@ namespace Retro {
             return BindFront<Functor>(std::forward<C>(Object));
         } else {
             return TMethodConstBinding<std::decay_t<C>, Functor, std::decay_t<A>...>(std::forward<C>(Object),
-                                                                                    std::forward<A>(Args)...);
+                                                                                     std::forward<A>(Args)...);
         }
     }
-} // namespace retro
+} // namespace Retro

@@ -7,7 +7,6 @@
 
 #include "K2Node_MakeSoftVariantFromVariant.generated.h"
 
-
 /**
  * Make a soft variant struct from its corresponding hard reference.
  */

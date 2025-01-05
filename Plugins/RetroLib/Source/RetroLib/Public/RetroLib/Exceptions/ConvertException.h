@@ -13,8 +13,9 @@
 #endif
 
 namespace Retro {
-	RETROLIB_API RETROLIB_EXPORT FBlueprintExceptionInfo ConvertException(const std::exception& Exception, EBlueprintExceptionType::Type Type = EBlueprintExceptionType::AccessViolation);
+    RETROLIB_API RETROLIB_EXPORT FBlueprintExceptionInfo ConvertException(
+        const std::exception &Exception, EBlueprintExceptionType::Type Type = EBlueprintExceptionType::AccessViolation);
 
-	RETROLIB_API RETROLIB_EXPORT FBlueprintExceptionInfo ConvertException(const class FBlueprintException& Exception);
-}
+    RETROLIB_API RETROLIB_EXPORT FBlueprintExceptionInfo ConvertException(const class FBlueprintException &Exception);
+} // namespace Retro
 #endif

@@ -12,8 +12,7 @@
 #endif
 
 namespace Retro {
-    namespace Delegates
-    {
+    namespace Delegates {
         template <UEDelegate D>
         struct TDelegateInvoker {
 
@@ -23,7 +22,7 @@ namespace Retro {
             }
 
             template <typename... A>
-            constexpr decltype(auto) operator()(A &&... Args) const {
+            constexpr decltype(auto) operator()(A &&...Args) const {
                 if constexpr (UnicastDelegate<D>) {
                     check(Delegate.IsBound())
                     return Delegate.Execute(std::forward<A>(Args)...);
@@ -32,19 +31,28 @@ namespace Retro {
                 }
             }
 
-        private:
+          private:
             D Delegate;
         };
 
         template <UEDelegate D>
         TDelegateInvoker(D &&) -> TDelegateInvoker<std::decay_t<D>>;
+    } // namespace Delegates
+
+    RETROLIB_EXPORT template <Delegates::UEDelegate D, typename... A>
+    constexpr auto BindDelegate(D &&Delegate, A&&... Args) {
+        if constexpr (sizeof...(A) > 0) {
+            return BindBack(Delegates::TDelegateInvoker(std::forward<D>(Delegate)), std::forward<A>(Args)...);
+        } else {
+            return Delegates::TDelegateInvoker(std::forward<D>(Delegate));
+        }
     }
 
     RETROLIB_EXPORT template <Delegates::UEDelegate D>
     struct TAdditionalBindingTypes<D> : FValidType {
         template <Delegates::UEDelegate F, typename... A>
             requires std::same_as<D, std::decay_t<F>>
-        static constexpr auto Bind(F &&Delegate, A &&... Args) {
+        static constexpr auto Bind(F &&Delegate, A &&...Args) {
             return Retro::BindBack(Delegates::TDelegateInvoker(std::forward<F>(Delegate)), std::forward<A>(Args)...);
         }
     };
@@ -52,7 +60,7 @@ namespace Retro {
     namespace Delegates {
         RETROLIB_EXPORT template <UEDelegate D, typename F, typename... A>
             requires CanBindFree<D, F, A...>
-        D Create(F &&Functor, A &&... Args) {
+        D Create(F &&Functor, A &&...Args) {
             if constexpr (CanBindStatic<D, F, A...>) {
                 return D::CreateStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
             } else {
@@ -63,7 +71,7 @@ namespace Retro {
 
         RETROLIB_EXPORT template <UEDelegate D, typename O, typename F, typename... A>
             requires CanBindMember<D, O, F, A...>
-        D Create(O &&Object, F &&Functor, A &&... Args) {
+        D Create(O &&Object, F &&Functor, A &&...Args) {
             if constexpr (CanBindSP<D, O, F, A...>) {
                 return D::CreateSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
             } else if constexpr (CanBindSPLambda<D, O, F, A...>) {
@@ -81,7 +89,7 @@ namespace Retro {
         struct FDelegateBinder {
             template <NativeUnicastDelegate D, typename F, typename... A>
                 requires CanBindFree<D, F, A...>
-            void operator()(D &Delegate, F &&Functor, A &&... Args) const {
+            void operator()(D &Delegate, F &&Functor, A &&...Args) const {
                 if constexpr (CanBindStatic<D, F, A...>) {
                     return Delegate.BindStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
                 } else {
@@ -92,7 +100,7 @@ namespace Retro {
 
             template <NativeUnicastDelegate D, typename O, typename F, typename... A>
                 requires CanBindMember<D, O, F, A...>
-            void operator()(D &Delegate, O &&Object, F &&Functor, A &&... Args) const {
+            void operator()(D &Delegate, O &&Object, F &&Functor, A &&...Args) const {
                 if constexpr (CanBindSP<D, O, F, A...>) {
                     return Delegate.BindSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
                 } else if constexpr (CanBindSPLambda<D, O, F, A...>) {
@@ -106,7 +114,8 @@ namespace Retro {
                                                    std::forward<A>(Args)...);
                 } else {
                     static_assert(CanBindRaw<D, O, F, A...>);
-                    return Delegate.BindRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
+                    return Delegate.BindRaw(std::forward<O>(Object), std::forward<F>(Functor),
+                                            std::forward<A>(Args)...);
                 }
             }
         };
@@ -116,13 +125,13 @@ namespace Retro {
         struct FDelegateAdder {
             template <MulticastDelegate D, UnicastDelegate O>
                 requires BindableTo<D, O>
-            decltype(auto) operator()(D& Delegate, O &&Binding) const {
+            decltype(auto) operator()(D &Delegate, O &&Binding) const {
                 return Delegate.Add(std::forward<O>(Binding));
             }
-            
+
             template <NativeMulitcastDelegate D, typename F, typename... A>
                 requires CanAddFree<D, F, A...>
-            FDelegateHandle operator()(D &Delegate, F &&Functor, A &&... Args) const {
+            FDelegateHandle operator()(D &Delegate, F &&Functor, A &&...Args) const {
                 if constexpr (CanAddStatic<D, F, A...>) {
                     return Delegate.AddStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
                 } else {
@@ -133,18 +142,18 @@ namespace Retro {
 
             template <NativeMulitcastDelegate D, typename O, typename F, typename... A>
                 requires CanAddMember<D, O, F, A...>
-            FDelegateHandle operator()(D &Delegate, O &&Object, F &&Functor, A &&... Args) const {
+            FDelegateHandle operator()(D &Delegate, O &&Object, F &&Functor, A &&...Args) const {
                 if constexpr (CanAddSP<D, O, F, A...>) {
                     return Delegate.AddSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
                 } else if constexpr (CanAddSPLambda<D, O, F, A...>) {
                     return Delegate.AddSPLambda(std::forward<O>(Object), std::forward<F>(Functor),
-                                                 std::forward<A>(Args)...);
+                                                std::forward<A>(Args)...);
                 } else if constexpr (CanAddUObject<D, O, F, A...>) {
                     return Delegate.AddUObject(std::forward<O>(Object), std::forward<F>(Functor),
-                                                std::forward<A>(Args)...);
+                                               std::forward<A>(Args)...);
                 } else if constexpr (CanAddWeakLambda<D, O, F, A...>) {
                     return Delegate.AddWeakLambda(std::forward<O>(Object), std::forward<F>(Functor),
-                                                   std::forward<A>(Args)...);
+                                                  std::forward<A>(Args)...);
                 } else {
                     static_assert(CanAddRaw<D, O, F, A...>);
                     return Delegate.AddRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
@@ -153,7 +162,12 @@ namespace Retro {
         };
 
         RETROLIB_EXPORT constexpr auto Add = ExtensionMethod<FDelegateAdder{}>;
-    }
 
-} // namespace retro
+        template <typename D, typename... A>
+        concept CanAddToDelegate = requires(D& Delegate, A &&...Args) {
+            { Retro::Delegates::Add(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        };
+    } // namespace Delegates
+
+} // namespace Retro
 #endif

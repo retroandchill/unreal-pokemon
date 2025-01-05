@@ -22,7 +22,7 @@
 	],
 	"Plugins": [
 		{
-			"Name": "UnrealRanges",
+			"Name": "RetroLib",
 			"Enabled": true
 		}
 	]

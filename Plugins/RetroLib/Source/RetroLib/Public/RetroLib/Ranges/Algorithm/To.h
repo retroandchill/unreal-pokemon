@@ -13,6 +13,7 @@
 #include "RetroLib/Ranges/FeatureBridge.h"
 
 #if !RETROLIB_WITH_MODULES
+#include "RetroLib/RetroLibMacros.h"
 #include <map>
 #endif
 
@@ -132,13 +133,13 @@ namespace Retro::Ranges {
         if constexpr (std::ranges::sized_range<R> && ReservableContainer<C>) {
             // We want to guarantee that we won't have any weird overflow issues when inserting into a container with
             // a mismatch between signed and unsigned sizes.
-            RETROLIB_ASSERT(std::ranges::size(Range) <= static_cast<std::ranges::range_size_t<R>>(ContainerMaxSize(Result)));
+            RETROLIB_ASSERT(static_cast<std::ranges::range_size_t<R>>(std::ranges::size(Range)) <=
+                            static_cast<std::ranges::range_size_t<R>>(ContainerMaxSize(Result)));
             ContainerReserve(Result, std::ranges::size(Range));
         }
 
-        using RangeType = TRangeCommonReference<R>;
         for (auto &&x : Range) {
-            AppendContainer(Result, std::forward<RangeType>(x));
+            AppendContainer(Result, std::forward<decltype(x)>(x));
         }
 
         return Result;
@@ -289,4 +290,4 @@ namespace Retro::Ranges {
         return ExtensionMethod<TemplateToCallback<C>>(std::forward<A>(Args)...);
     }
 
-} // namespace retro::ranges
+} // namespace Retro::Ranges

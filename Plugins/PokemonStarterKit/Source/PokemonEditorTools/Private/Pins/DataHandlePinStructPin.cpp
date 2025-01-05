@@ -1,11 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Pins/DataHandlePinStructPin.h"
-#include "Ranges/Algorithm/AnyOf.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Optional/Filter.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "SSearchableComboBox.h"
 
 void SDataHandlePinStructPin::Construct(const FArguments &, UEdGraphPin *InGraphPin) {
@@ -23,7 +22,7 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
 
     // clang-format off
     auto Match = Options |
-                 UE::Ranges::AnyOf(this, &SDataHandlePinStructPin::RowMatches);
+                 Retro::Ranges::AnyOf(Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this));
     // clang-format on
     if (!Match && !Options.IsEmpty()) {
         Handle.SetRowID(FName(**Options[0]));
@@ -64,8 +63,8 @@ bool SDataHandlePinStructPin::RowMatches(const TSharedPtr<FString> &Str) const {
 const TSharedPtr<FString> &SDataHandlePinStructPin::GetItemString() const {
     // clang-format off
     auto Item = Options |
-                UE::Ranges::Filter(this, &SDataHandlePinStructPin::RowMatches) |
-                UE::Ranges::FindFirst;
+                Retro::Ranges::Views::Filter(Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this)) |
+                Retro::Ranges::FindFirst();
     // clang-format on
     check(Item.IsSet())
     return *Item;

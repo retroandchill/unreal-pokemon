@@ -10,6 +10,7 @@
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Ranges/Concepts/Concatable.h"
 #include "RetroLib/Ranges/RangeBasics.h"
+#include "RetroLib/Utils/NonPropagatingCache.h"
 
 #if !RETROLIB_WITH_MODULES
 #include <variant>
@@ -48,7 +49,7 @@ namespace Retro::Ranges {
 
     template <std::ranges::input_range R>
     using TJoinViewInner = std::conditional_t<!std::is_reference_v<std::ranges::range_reference_t<R>>,
-                                             TStoreInner<std::ranges::range_reference_t<R>>, FPassThroughInner>;
+                                              TStoreInner<std::ranges::range_reference_t<R>>, FPassThroughInner>;
 
     /**
      * @brief A view that flattens a range of ranges, inserting a separator element between the inner ranges.
@@ -69,7 +70,8 @@ namespace Retro::Ranges {
     class TJoinWithView : public std::ranges::view_interface<TJoinWithView<R, P>>, private TJoinViewInner<R> {
         using OuterType = std::ranges::views::all_t<R>;
         using InnerType = std::ranges::views::all_t<std::ranges::range_reference_t<R>>;
-        using SizeType = std::common_type_t<std::ranges::range_difference_t<InnerType>, std::ranges::range_difference_t<P>>;
+        using SizeType =
+            std::common_type_t<std::ranges::range_difference_t<InnerType>, std::ranges::range_difference_t<P>>;
 
         class FIterator {
           public:
@@ -300,7 +302,7 @@ namespace Retro::Ranges {
                          std::ranges::viewable_range<P> && Concatable<std::ranges::range_reference_t<R>, P>
             constexpr auto operator()(R &&Range, P &&Contraction) const {
                 return TJoinWithView(std::ranges::views::all(std::forward<R>(Range)),
-                                    std::ranges::views::all(std::forward<P>(Contraction)));
+                                     std::ranges::views::all(std::forward<P>(Contraction)));
             }
 
             /**
@@ -345,5 +347,5 @@ namespace Retro::Ranges {
          * @return A range adapter that joins elements of the range with the provided separator.
          */
         RETROLIB_EXPORT constexpr auto JoinWith = ExtensionMethod<JoinWithFunction>;
-    } // namespace views
+    } // namespace Views
 } // namespace Retro::Ranges

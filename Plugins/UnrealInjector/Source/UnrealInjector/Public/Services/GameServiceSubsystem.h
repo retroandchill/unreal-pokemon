@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/GameplayStatics.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Casting/InstanceOf.h"
-#include "Ranges/Casting/StaticCast.h"
-#include "Ranges/Optional/FlatMap.h"
-#include "Ranges/Optional/GetValue.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Pointers/SoftObjectRef.h"
-#include "Ranges/RangeConcepts.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/MapValue.h"
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Casting/InstanceOf.h"
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Concepts/Interfaces.h"
+#include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/Value.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Service.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
@@ -42,10 +42,10 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
         requires std::derived_from<T, UService>
     T &GetService(const TSubclassOf<T> &ServiceClass = T::StaticClass()) const {
         // clang-format off
-        return UE::Optionals::OfNullable(Services.Find(ServiceClass)) |
-               UE::Optionals::Map(&TObjectPtr<UService>::Get) |
-               UE::Optionals::FlatMap(UE::Ranges::DynamicCast<T>) |
-               UE::Optionals::GetValue;
+        return Retro::Optionals::OfNullable(Services.Find(ServiceClass)) |
+               Retro::Optionals::Transform([](const TObjectPtr<UService>& P) { return P.Get(); }) |
+               Retro::Optionals::Transform(Retro::DynamicCastChecked<T>) |
+               Retro::Optionals::Value;
         // clang-format on
     }
 
@@ -89,13 +89,13 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
      * @return A list of services that match the specified type.
      */
     template <typename T>
-        requires std::derived_from<T, UService> || UE::Ranges::UnrealInterface<T>
+        requires std::derived_from<T, UService> || Retro::UnrealInterface<T>
     auto GetServicesOfType() const {
         // clang-format off
         return Services |
-            UE::Ranges::MapValue |
-            UE::Ranges::Filter(UE::Ranges::InstanceOf<T>) |
-            UE::Ranges::Map(UE::Ranges::DynamicCastChecked<T>);
+            Retro::Ranges::Views::Values |
+            Retro::Ranges::Views::Filter(Retro::InstanceOf<T>) |
+            Retro::Ranges::Views::Transform(Retro::AsInterface<T>);
         // clang-format on
     }
 

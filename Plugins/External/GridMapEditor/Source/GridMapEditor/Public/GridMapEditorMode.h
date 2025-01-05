@@ -6,6 +6,7 @@
 #include "EdMode.h"
 #include "GridMapEditorTypes.h"
 #include "GridMapEditorUISettings.h"
+#include "RetroLib/Optionals/OptionalOperations.h"
 
 class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode {
   protected:

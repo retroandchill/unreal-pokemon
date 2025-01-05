@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 #include "CoreMinimal.h"
 #include "K2Node.h"
 #include "RetroLib/RetroLibMacros.h"
@@ -11,7 +10,7 @@
 #include "K2Node_VariantOperationBase.generated.h"
 
 namespace Retro {
-  class IVariantRegistration;
+    class IVariantRegistration;
 }
 
 /**

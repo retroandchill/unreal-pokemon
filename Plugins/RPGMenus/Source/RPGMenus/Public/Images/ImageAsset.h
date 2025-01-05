@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "Engine/Texture2DDynamic.h"
 #include "PaperFlipbook.h"
-#include "Ranges/Variants/VariantObjectStruct.h"
+#include "RetroLib/Variants/SoftVariantObject.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
 #include "ImageAsset.generated.h"
 
 #if CPP
-UE_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture2D, UTexture2DDynamic, UMaterialInterface,
-                                 ISlateTextureAtlasInterface, UPaperFlipbook);
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture2D, UTexture2DDynamic, UMaterialInterface,
+                                    ISlateTextureAtlasInterface, UPaperFlipbook);
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FImageAsset {

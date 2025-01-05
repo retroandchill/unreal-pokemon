@@ -7,13 +7,8 @@
  */
 #pragma once
 
-#if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
-#endif
-
-#include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -40,7 +35,20 @@ namespace Retro::Optionals {
 
             return std::invoke(std::forward<F>(Functor));
         }
+
+#ifdef __UNREAL__
+        template <OptionalType O, typename F>
+            requires std::invocable<F> && UnrealInterface<TValueType<O>> &&
+                     SpecializationOf<std::invoke_result_t<F>, TScriptInterface>
+        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const {
+            if (HasValue(std::forward<O>(Optional))) {
+                return static_cast<std::invoke_result_t<F>>(Get(std::forward<O>(Optional))._getUObject());
+            }
+
+            return std::invoke(std::forward<F>(Functor));
+        }
+#endif
     };
 
-    RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FOrElseGetInvoker{}, OrElseGet)
-} // namespace retro::optionals
+    RETROLIB_EXPORT constexpr auto OrElseGet = ExtensionMethod<FOrElseGetInvoker{}>;
+} // namespace Retro::Optionals

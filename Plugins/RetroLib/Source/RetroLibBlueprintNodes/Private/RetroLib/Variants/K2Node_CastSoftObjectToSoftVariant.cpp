@@ -34,8 +34,8 @@ void UK2Node_CastSoftObjectToSoftVariant::CreateInputAndOutputPins() {
               UEdGraphSchema_K2::PN_ReturnValue);
 }
 
-void UK2Node_CastSoftObjectToSoftVariant::AddMenuOptionsForStruct(
-    FBlueprintActionDatabaseRegistrar &ActionRegistrar, Retro::IVariantRegistration &Registration) const {
+void UK2Node_CastSoftObjectToSoftVariant::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
+                                                                  Retro::IVariantRegistration &Registration) const {
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_CastSoftObjectToSoftVariant>(Node);
