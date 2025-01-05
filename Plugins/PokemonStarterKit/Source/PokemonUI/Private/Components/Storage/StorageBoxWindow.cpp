@@ -3,8 +3,7 @@
 #include "Components/Storage/StorageBoxWindow.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Storage/StorageBoxIcon.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Algorithm/ToArray.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Storage/StorageBox.h"
 
 const TScriptInterface<IStorageBox> &UStorageBoxWindow::GetStorageBox() const {
@@ -13,7 +12,8 @@ const TScriptInterface<IStorageBox> &UStorageBoxWindow::GetStorageBox() const {
 
 void UStorageBoxWindow::SetStorageBox(const TScriptInterface<IStorageBox> &InStorageBox) {
     StorageBox = InStorageBox;
-    StorageBox->GetStoredPokemon() | UE::Ranges::ForEach(this, &UStorageBoxWindow::CreateStorageBoxIcon);
+    StorageBox->GetStoredPokemon() |
+        Retro::Ranges::ForEach(Retro::BindMethod<&UStorageBoxWindow::CreateStorageBoxIcon>(this));
 }
 
 void UStorageBoxWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
@@ -28,9 +28,6 @@ void UStorageBoxWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 N
 void UStorageBoxWindow::CreateStorageBoxIcon(const TScriptInterface<IPokemon> &Pokemon) {
     check(IsValid(StorageBoxIconClass))
     auto Widget = WidgetTree->ConstructWidget(StorageBoxIconClass);
-    static_assert(UE::Ranges::Pointer<TScriptInterface<IPokemon>>);
-    static_assert(UE::Ranges::Pointer<const TScriptInterface<IPokemon>>);
-    static_assert(UE::Ranges::Pointer<const TScriptInterface<IPokemon> &>);
     if (IsValid(Pokemon.GetObject())) {
         Widget->SetPokemon(Pokemon);
     } else {

@@ -60,8 +60,8 @@ void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
 void UPokemonBattlePanel::RefreshStatusEffect() {
     // clang-format off
     auto Icon = CurrentBattler->GetStatusEffect() |
-                UE::Optionals::Map(&FStatusEffectInfo::StatusEffectID) |
-                UE::Optionals::FlatMap([](FName ID) { return Pokemon::Assets::Graphics::StatusIcons.LoadAsset(ID); });
+                Retro::Optionals::Transform(&FStatusEffectInfo::StatusEffectID) |
+                Retro::Optionals::AndThen([](FName ID) { return Pokemon::Assets::Graphics::StatusIcons.LoadAsset(ID); });
     // clang-format on
     if (!Icon.IsSet()) {
         StatusIcon->SetVisibility(ESlateVisibility::Hidden);

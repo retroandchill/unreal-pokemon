@@ -6,9 +6,7 @@
 #include "AssetLoader.h"
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Variants/VariantObject.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Exceptions/TypeException.h"
 
 namespace UE::Assets {
 
@@ -27,7 +25,7 @@ namespace UE::Assets {
       public:
         template <typename U>
         static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) ||
-                                                   (std::same_as<T, U> && Ranges::VariantObjectStruct<T>);
+                                                   (std::same_as<T, U> && Retro::VariantObjectStruct<T>);
 
         const FName &GetKey() const {
             return Key;
@@ -57,9 +55,9 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::FindAssetByName<U>(AssetClassData.RootDirectory, FullName);
             } else {
-                static_assert(Ranges::VariantObjectStruct<T>);
+                static_assert(Retro::VariantObjectStruct<T>);
                 return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
-                       Optionals::Map([](UObject &Object) { return T(&Object); });
+                       Retro::Optionals::Transform([](UObject &Object) { return T(&Object); });
             }
         }
 
@@ -84,9 +82,9 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, U>) {
                 return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
             } else {
-                static_assert(Ranges::VariantObjectStruct<U>);
+                static_assert(Retro::VariantObjectStruct<U>);
                 return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
-                       Optionals::Map([](const TSoftObjectRef<> &Object) {
+                       Retro::Optionals::Transform([](const TSoftObjectRef<> &Object) {
                            return typename U::SoftPtrType(Object.ToSoftObjectPtr());
                        });
             }
@@ -99,76 +97,76 @@ namespace UE::Assets {
         }
 
         template <typename U = T, typename R>
-            requires ValidTemplateParam<U> && Ranges::Range<R> &&
-                     std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+            requires ValidTemplateParam<U> && std::ranges::input_range<R> &&
+                     std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
         auto ResolveAsset(R &&Assets) const {
-            using ElementType = Ranges::TRangeCommonReference<R>;
+            using ElementType = Retro::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
             // clang-format off
             auto FullNames = Assets |
-                             Ranges::Map([&Prefix](ElementType AssetName) {
+                             Retro::Ranges::Views::Transform([&Prefix](ElementType AssetName) {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
             if constexpr (std::is_base_of_v<UObject, T>) {
                 return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
             } else {
-                static_assert(Ranges::VariantObjectStruct<T>);
+                static_assert(Retro::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
-                       Optionals::Map([](UObject &Object) { return T(&Object); });
+                       Retro::Optionals::Transform([](UObject &Object) { return T(&Object); });
             }
         }
 
         template <typename U = T, typename R>
-            requires ValidTemplateParam<U> && Ranges::Range<R> &&
-                     std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+            requires ValidTemplateParam<U> && std::ranges::input_range<R> &&
+                     std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
         auto ResolveSoftAsset(R &&Assets) const {
-            using ElementType = Ranges::TRangeCommonReference<R>;
+            using ElementType = Retro::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
             // clang-format off
             auto FullNames = Assets |
-                             Ranges::Map([&Prefix](ElementType AssetName) {
+                             Retro::Ranges::Views::Transform([&Prefix](ElementType AssetName) {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
             if constexpr (std::is_base_of_v<UObject, U>) {
                 return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
             } else {
-                static_assert(Ranges::VariantObjectStruct<U>);
+                static_assert(Retro::VariantObjectStruct<U>);
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
-                       Optionals::Map([](const TSoftObjectRef<> &Object) {
+                       Retro::Optionals::Transform([](const TSoftObjectRef<> &Object) {
                            return typename U::SoftPtrType(Object.ToSoftObjectPtr());
                        });
             }
         }
 
         template <typename U = T, typename R>
-            requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+            requires ValidTemplateParam<U> && std::ranges::input_range<R> && AssetKey<Retro::TRangeCommonReference<R>>
         auto LoadAssets(R &&Assets) const {
-            using ElementType = Ranges::TRangeCommonReference<R>;
+            using ElementType = Retro::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
-                   Ranges::Map([this](ElementType Value) {
+                   Retro::Ranges::Views::Transform([this](ElementType Value) {
                        return LoadAsset<U>(Value);
                    }) |
-                   Ranges::ToArray;
+                   Retro::Ranges::To<TArray>();
             // clang-format on
         }
 
         template <typename U = T, typename R>
-            requires ValidTemplateParam<U> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+            requires ValidTemplateParam<U> && std::ranges::input_range<R> && AssetKey<Retro::TRangeCommonReference<R>>
         auto LookupAssets(R &&Assets) const {
-            using ElementType = Ranges::TRangeCommonReference<R>;
+            using ElementType = Retro::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
-                   Ranges::Map([this](ElementType Value) {
+                   Retro::Ranges::Views::Transform([this](ElementType Value) {
                        return LookupAsset<U>(Value);
                    }) |
-                   Ranges::ToArray;
+                   Retro::Ranges::To<TArray>();
             // clang-format on
         }
 
@@ -179,8 +177,8 @@ namespace UE::Assets {
                 auto &AssetClass = Settings->AssetClasses[Key];
                 if constexpr (std::is_base_of_v<UObject, T>) {
                     AssetClass.AssetClass.Set(T::StaticClass());
-                } else if constexpr (Ranges::VariantObjectStruct<T>) {
-                    AssetClass.AssetClass.Set(Ranges::GetScriptStruct<T>());
+                } else if constexpr (Retro::VariantObjectStruct<T>) {
+                    AssetClass.AssetClass.Set(Retro::GetScriptStruct<T>());
                 }
                 return;
             }
@@ -188,9 +186,9 @@ namespace UE::Assets {
             if constexpr (std::is_base_of_v<UObject, T>) {
                 Settings->AssetClasses.Emplace(
                     Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
-            } else if constexpr (Ranges::VariantObjectStruct<T>) {
+            } else if constexpr (Retro::VariantObjectStruct<T>) {
                 Settings->AssetClasses.Emplace(
-                    Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, Ranges::GetScriptStruct<T>()));
+                    Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, Retro::GetScriptStruct<T>()));
             }
         }
 
@@ -241,16 +239,16 @@ namespace UE::Assets {
         }
 
         template <typename U = T, typename R>
-            requires std::is_base_of_v<T, U> && Ranges::Range<R> &&
-                     std::convertible_to<Ranges::TRangeCommonReference<R>, FStringView>
+            requires std::is_base_of_v<T, U> && std::ranges::input_range<R> &&
+                     std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
         TOptional<TNonNullSubclassOf<U>> ResolveClass(R &&Assets) const {
-            using ElementType = Ranges::TRangeCommonReference<R>;
+            using ElementType = Retro::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->BlueprintClasses.FindChecked(Key);
             auto Prefix = AssetClassData.AssetPrefix.Get(TEXT(""));
             // clang-format off
             auto FullNames = Assets |
-                             Ranges::Map([&Prefix](ElementType AssetName) {
+                             Retro::Ranges::Views::Transform([&Prefix](ElementType AssetName) {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
@@ -258,15 +256,15 @@ namespace UE::Assets {
         }
 
         template <typename U = T, typename R>
-            requires std::is_base_of_v<U, T> && Ranges::Range<R> && AssetKey<Ranges::TRangeCommonReference<R>>
+            requires std::is_base_of_v<U, T> && std::ranges::input_range<R> && AssetKey<Retro::TRangeCommonReference<R>>
         TArray<TOptional<TNonNullSubclassOf<U>>> LoadClasses(R &&Classes) const {
-            using ElementType = Ranges::TRangeCommonReference<R>;
+            using ElementType = Retro::TRangeCommonReference<R>;
             // clang-format off
             return Classes |
-                   Ranges::Map([this](ElementType Value) {
+                   Retro::Ranges::Views::Transform([this](ElementType Value) {
                        return LoadClass<U>(Value);
                    }) |
-                   Ranges::ToArray;
+                   Retro::Ranges::To<TArray>();
             // clang-format on
         }
 
@@ -326,14 +324,12 @@ namespace UE::Assets {
                 return false;
             }
 
-            if constexpr (Ranges::VariantObjectStruct<T>) {
+            if constexpr (Retro::VariantObjectStruct<T>) {
                 if (auto StructProperty = CastField<FStructProperty>(&Property);
-                    StructProperty == nullptr || StructProperty->Struct.Get() != Ranges::GetScriptStruct<T>()) {
-                    throw Ranges::FTypeException(
-                        EBlueprintExceptionType::AccessViolation,
-                        NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
-                                  "Incompatible output parameter; the supplied struct does not have the same layout as "
-                                  "what is expected for a variant object struct."));
+                    StructProperty == nullptr || StructProperty->Struct.Get() != Retro::GetScriptStruct<T>()) {
+                    throw Retro::FTypeException(
+                        "Incompatible output parameter; the supplied struct does not have the same layout as "
+                        "what is expected for a variant object struct.");
                 }
 
                 void *StructPtr = Data;
@@ -343,10 +339,8 @@ namespace UE::Assets {
                 static_assert(std::derived_from<T, UObject>);
                 auto ObjectProperty = CastField<FObjectProperty>(&Property);
                 if (ObjectProperty == nullptr || !ObjectProperty->PropertyClass->IsChildOf<T>()) {
-                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
-                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty_Object",
-                                                           "Incompatible output parameter; the supplied object does is "
-                                                           "not of the correct type for this object."));
+                    throw Retro::FTypeException("Incompatible output parameter; the supplied object does is "
+                                                "not of the correct type for this object.");
                 }
 
                 ObjectProperty->SetObjectPropertyValue(Data, Result.GetPtrOrNull());
@@ -361,15 +355,13 @@ namespace UE::Assets {
                 return false;
             }
 
-            if constexpr (Ranges::VariantObjectStruct<T>) {
+            if constexpr (Retro::VariantObjectStruct<T>) {
                 if (auto StructProperty = CastField<FStructProperty>(&Property);
                     StructProperty == nullptr ||
-                    StructProperty->Struct.Get() != Ranges::GetScriptStruct<typename T::SoftPtrType>()) {
-                    throw Ranges::FTypeException(
-                        EBlueprintExceptionType::AccessViolation,
-                        NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty",
-                                  "Incompatible output parameter; the supplied struct does not have the same layout as "
-                                  "what is expected for a variant object struct."));
+                    StructProperty->Struct.Get() != Retro::GetScriptStruct<typename T::SoftPtrType>()) {
+                    throw Retro::FTypeException(
+                        "Incompatible output parameter; the supplied struct does not have the same layout as "
+                        "what is expected for a variant object struct.");
                 }
 
                 void *StructPtr = Data;
@@ -379,10 +371,8 @@ namespace UE::Assets {
                 static_assert(std::derived_from<T, UObject>);
                 auto ObjectProperty = CastField<FSoftObjectProperty>(&Property);
                 if (ObjectProperty == nullptr || ObjectProperty->PropertyClass->IsChildOf<T>()) {
-                    throw Ranges::FTypeException(EBlueprintExceptionType::AccessViolation,
-                                                 NSLOCTEXT("TAssetClassRegistrationImpl", "IncompatibleProperty_Object",
-                                                           "Incompatible output parameter; the supplied object does is "
-                                                           "not of the correct type for this object."));
+                    throw Retro::FTypeException("Incompatible output parameter; the supplied object does is "
+                                                "not of the correct type for this object.");
                 }
 
                 ObjectProperty->SetValue_InContainer(Data, FSoftObjectPtr(Result->ToSoftObjectPath()));
@@ -410,7 +400,7 @@ namespace UE::Assets {
         template <typename T>
             requires AssetClassType<T>
         bool RegisterAssetClass(const TAssetClass<T> &Registration) {
-            Ranges::AddToDelegate(FCoreDelegates::OnPostEngineInit, [this, &Registration] {
+            FCoreDelegates::OnPostEngineInit | Retro::Delegates::Add([this, &Registration] {
                 auto Key = Registration.GetKey();
                 if (AssetClassRegistry.Contains(Key)) {
                     return;

@@ -3,7 +3,6 @@
 #include "Pokemon/TrainerMemo/DefaultObtainedBlock.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
-#include "Ranges/Optional/OrElseGet.h"
 
 TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
     ObtainMethod = DTO.ObtainMethod;
@@ -11,7 +10,7 @@ TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemo
 
     // clang-format off
     ObtainText = DTO.MetLocation |
-                 UE::Optionals::OrElseGet([this] {
+                 Retro::Optionals::OrElseGet([this] {
                      return UPokemonSubsystem::Exists(this)
                                 ? UPokemonSubsystem::GetInstance(this).GetCurrentLocation()
                                 : FText();

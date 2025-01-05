@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperFlipbook.h"
 #include "PaperSprite.h"
-#include "Ranges/Variants/VariantObjectStruct.h"
+#include "RetroLib/Variants/SoftVariantObject.h"
 
 #if WITH_PAPERZD
 #include "AnimSequences/PaperZDAnimSequence.h"
@@ -21,7 +21,7 @@
 #define BATTLE_RENDER_TYPES BATTLE_RENDER_BASE_TYPES
 #endif
 
-UE_DECLARE_VARIANT_OBJECT_STRUCT(BattleRender, BATTLE_RENDER_TYPES);
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(BattleRender, BATTLE_RENDER_TYPES);
 #else
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FBattleRender {

@@ -12,12 +12,8 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Pointers/MakeWeak.h"
-#include "Ranges/Pointers/ValidPtr.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Utils/MakeWeak.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
                                                              const TScriptInterface<IMove> &Move) {
@@ -40,14 +36,14 @@ bool UPokemonBattleMove::IsUsable() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-UE::Ranges::TAnyView<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
+Retro::Ranges::TAnyView<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
     // clang-format off
     return Battle->GetActiveBattlers() |
-           UE::Ranges::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
+           Retro::Ranges::Views::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() != UserId;
            });
     // clang-format on
@@ -120,11 +116,11 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     // clang-format off
     TargetData->SetActors(Targets |
-                          UE::Ranges::Map(&FTargetWithIndex::SwapIfNecessary) |
-                          UE::Ranges::Filter(UE::Ranges::ValidPtr) |
-                          UE::Ranges::Map(UE::Ranges::DynamicCastChecked<AActor>) |
-                          UE::Ranges::Map(UE::Ranges::MakeWeak) |
-                          UE::Ranges::ToArray);
+                          Retro::Ranges::Views::Transform(&FTargetWithIndex::SwapIfNecessary) |
+                          Retro::Ranges::Views::Filter(Retro::ValidPtr) |
+                          Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>) |
+                          Retro::Ranges::Views::Transform(Retro::MakeWeak) |
+                          Retro::Ranges::To<TArray>());
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 

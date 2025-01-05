@@ -38,9 +38,10 @@ public class PokemonTests : ModuleRules {
                                                              "EnhancedInput",
                                                              "PokemonEncounters",
                                                              "ToolWidgets",
-                                                             "UnrealRangesBlueprintNodes",
+                                                             "RetroLib",
+                                                             "RetroLibBlueprintNodes",
                                                              "PokemonAssets",
-                                                             "UnrealRanges",
+
                                                              "ToolMenus",
                                                              "DynamicAssetLoaderNodes",
                                                              "AutomationTest",

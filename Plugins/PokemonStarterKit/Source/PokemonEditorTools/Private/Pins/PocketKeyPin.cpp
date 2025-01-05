@@ -2,13 +2,11 @@
 
 #include "Pins/PocketKeyPin.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/AnyOf.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
-#include "Ranges/Views/MapValue.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "SSearchableComboBox.h"
 #include "Strings/StringUtilities.h"
 
@@ -26,14 +24,14 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
     ParseDefaultValueData();
     // clang-format off
     Options = GetDefault<UPokemonDataSettings>()->PocketNames |
-              UE::Ranges::MapValue |
-              UE::Ranges::Map(&UStringUtilities::NameToStringPtr) |
-              UE::Ranges::ToArray;
+              Retro::Ranges::Views::Values |
+              Retro::Ranges::Views::Transform(&UStringUtilities::NameToStringPtr) |
+              Retro::Ranges::To<TArray>();
     // clang-format on
 
     // clang-format off
     auto Match = Options |
-                 UE::Ranges::AnyOf(this, &SPocketKeyPin::RowMatches);
+                 Retro::Ranges::AnyOf(Retro::BindFront<&SPocketKeyPin::RowMatches>(this));
     // clang-format on
     if (!Match && !Options.IsEmpty()) {
         Handle.PocketName = **Options[0];
@@ -74,8 +72,8 @@ bool SPocketKeyPin::RowMatches(const TSharedPtr<FString> &Str) const {
 const TSharedPtr<FString> &SPocketKeyPin::GetItemString() const {
     // clang-format off
     auto Item = Options |
-                UE::Ranges::Filter(this, &SPocketKeyPin::RowMatches) |
-                UE::Ranges::FindFirst;
+                Retro::Ranges::Views::Filter(Retro::BindFront<&SPocketKeyPin::RowMatches>(this)) |
+                Retro::Ranges::FindFirst();
     // clang-format on
     check(Item.IsSet())
     return *Item;

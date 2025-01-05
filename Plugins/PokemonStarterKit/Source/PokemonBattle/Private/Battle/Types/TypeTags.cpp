@@ -4,7 +4,7 @@
 #include "Battle/Tags.h"
 #include "Battle/Type.h"
 #include "DataManager.h"
-#include "Ranges/Algorithm/ForEach.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
 namespace Pokemon::Battle::Types {
 
@@ -15,7 +15,7 @@ namespace Pokemon::Battle::Types {
     FLookup::FLookup() {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FType>();
-        TypeTable.GetAllRows() | UE::Ranges::ForEach([this](const FType &Type) {
+        TypeTable.GetAllRows() | Retro::Ranges::ForEach([this](const FType &Type) {
             // Add the tags for the types you attack from and defend from
             if (!Type.IsPseudoType) {
                 AddDynamicGameplayTag(AttackingTags, AttackingTagsFormat, Type.ID);

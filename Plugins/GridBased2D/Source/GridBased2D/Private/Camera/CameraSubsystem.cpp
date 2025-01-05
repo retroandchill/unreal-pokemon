@@ -2,20 +2,18 @@
 
 #include "Camera/CameraSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "Ranges/Optional/IfPresent.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalClosure.h"
-#include "Ranges/Optional/OptionalRef.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/Transform.h"
 
 void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
     Super::OnWorldBeginPlay(InWorld);
 
     // clang-format off
-    UE::Optionals::OfNullable(InWorld.GetGameInstance()) |
-        UE::Optionals::Map(&UGameInstance::GetPrimaryPlayerController, false) |
-        UE::Optionals::Map(&APlayerController::GetLocalPlayer) |
-        UE::Optionals::Map(&ULocalPlayer::GetLocalPlayerIndex) |
-        UE::Optionals::IfPresent([this, &InWorld](int32 PlayerIndex) {
+    Retro::Optionals::OfNullable(InWorld.GetGameInstance()) |
+        Retro::Optionals::Transform(Retro::BindBack<&UGameInstance::GetPrimaryPlayerController>(false)) |
+        Retro::Optionals::Transform(&APlayerController::GetLocalPlayer) |
+        Retro::Optionals::Transform(&ULocalPlayer::GetLocalPlayerIndex) |
+        Retro::Optionals::IfPresent([this, &InWorld](int32 PlayerIndex) {
             PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(&InWorld, PlayerIndex);
         });
     // clang-format on

@@ -4,9 +4,10 @@
 #include "CoreMinimal.h"
 #include "DataStructHandle.h"
 #include "GameData.h"
-#include "Ranges/Casting/ByteCast.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/MapValue.h"
+#include "RetroLib/Casting/ByteCast.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 /**
  * Proxy class that stores a data table and allows the retrieval of properties from it
@@ -48,8 +49,8 @@ class TDataTableProxy final : public IGameData {
     auto GetAllRows() const {
         // clang-format off
         return DataTable->GetRowMap() |
-               UE::Ranges::MapValue |
-               UE::Ranges::Map(UE::Ranges::ByteCast<T>);
+               Retro::Ranges::Views::Values |
+               Retro::Ranges::Views::Transform(Retro::ByteCast<T>);
         // clang-format on
     }
 

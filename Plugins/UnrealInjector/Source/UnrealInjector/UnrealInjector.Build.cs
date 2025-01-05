@@ -15,12 +15,12 @@ public class UnrealInjector : ModuleRules {
         });
 
         PublicDependencyModuleNames.AddRange(new string[] {
-            "Core", "UnrealRanges",
+            "Core", "RetroLib",
             // ... add other public dependencies that you statically link with here ...
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {
-            "CoreUObject", "Engine", "Slate", "SlateCore", "DeveloperSettings", "UnrealRanges"
+            "CoreUObject", "Engine", "Slate", "SlateCore", "DeveloperSettings"
             // ... add private dependencies that you statically link with here ...
         });
 

@@ -3,9 +3,7 @@
 #include "Algo/ForEach.h"
 #include "CommonButtonBase.h"
 #include "Groups/CommonButtonGroupBase.h"
-#include "Ranges/Optional/IfPresent.h"
-#include "Ranges/Optional/OptionalClosure.h"
-#include "Ranges/Pointers/SoftObjectRef.h"
+#include "RetroLib/Optionals/IfPresent.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer) {
     bIsBackHandler = true;
@@ -28,16 +26,16 @@ int32 USelectableWidget::GetIndex() const {
 void USelectableWidget::SetIndex(int32 NewIndex) {
     int32 OldIndex = Index;
     Index = FMath::Clamp(NewIndex, static_cast<int32>(INDEX_NONE), GetItemCount() - 1);
-    UE::Optionals::OfNullable(GetSelectableOption(Index)) |
-        UE::Optionals::IfPresent(&UCommonButtonBase::SetIsSelected, true, false);
+    Retro::Optionals::OfNullable(GetSelectableOption(Index)) |
+        Retro::Optionals::IfPresent(Retro::BindBack<&UCommonButtonBase::SetIsSelected>(true, false));
     OnSelectionChange(OldIndex, Index);
 }
 
 void USelectableWidget::Deselect() {
     int32 OldIndex = Index;
     Index = INDEX_NONE;
-    UE::Optionals::OfNullable(GetSelectableOption(OldIndex)) |
-        UE::Optionals::IfPresent(&UCommonButtonBase::SetIsSelected, false, false);
+    Retro::Optionals::OfNullable(GetSelectableOption(OldIndex)) |
+        Retro::Optionals::IfPresent(Retro::BindBack<&UCommonButtonBase::SetIsSelected>(false, false));
     OnSelectionChange(OldIndex, Index);
 }
 

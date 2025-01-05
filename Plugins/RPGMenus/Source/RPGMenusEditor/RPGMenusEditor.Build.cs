@@ -12,6 +12,6 @@ public class RPGMenusEditor : ModuleRules {
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "UnrealEd",
-                                                             "UnrealRangesEditor", "RPGMenus", "Paper2D" });
+                                                             "RetroLibEditor", "RPGMenus", "Paper2D" });
     }
 }

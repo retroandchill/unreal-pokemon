@@ -6,8 +6,7 @@
 #include "Battle/Events/BattleMessage.h"
 #include "GameFramework/Actor.h"
 #include "PokemonBattleModule.h"
-#include "Ranges/Functional/Bindings.h"
-#include "Ranges/Functional/Delegates.h"
+#include "RetroLib/Functional/Delegates.h"
 #include <queue>
 
 #include "BattleSequencer.generated.h"
@@ -48,7 +47,7 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
      * @param Args Variadic template arguments representing the battle messages to be displayed.
      */
     template <typename... A>
-        requires UE::Ranges::CanAddToDelegate<FSimpleMulticastDelegate, A...>
+        requires Retro::Delegates::CanAddToDelegate<FSimpleMulticastDelegate, A...>
     static void DisplayBattleMessages(A &&...Args) {
         if (Instance.IsValid()) {
             Instance->ProcessBattleMessages(std::forward<A>(Args)...);
@@ -57,7 +56,7 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
             // delegate and immediately execute it to avoid a soft-lock. We can't use std::invoke here because the
             // argument order isn't always correct to do that.
             UE_LOG(LogBattle, Warning, UninitializedLog)
-            UE::Ranges::CreateDelegate<FSimpleDelegate>(std::forward<A>(Args)...).Execute();
+            Retro::Delegates::Create<FSimpleDelegate>(std::forward<A>(Args)...).Execute();
         }
     }
 
@@ -78,9 +77,14 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
      * @param Args Variadic template arguments representing the battle messages to be processed.
      */
     template <typename... A>
-        requires UE::Ranges::CanAddToDelegate<FSimpleMulticastDelegate, A...>
+        requires Retro::Delegates::CanAddToDelegate<FSimpleMulticastDelegate, A...>
     void ProcessBattleMessages(A &&...Args) {
-        UE::Ranges::AddToDelegate(OnMessagesComplete, std::forward<A>(Args)...);
+        if (bIsProcessingMessages) {
+            UE_LOG(LogBattle, Warning, TEXT("Battle sequencer is already processing!"))
+            return;
+        }
+        
+        Retro::Delegates::Add(OnMessagesComplete, std::forward<A>(Args)...);
         if (Messages.empty()) {
             ProcessMessagesComplete();
             return;
