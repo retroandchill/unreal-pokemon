@@ -2,14 +2,10 @@
 
 #include "Storage/DefaultStorageBox.h"
 #include "Pokemon/Pokemon.h"
-#include "Ranges/Algorithm/AllOf.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalClosure.h"
-#include "Ranges/Optional/OrElseGet.h"
-#include "Ranges/Utilities/Construct.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Utils/Construct.h"
 #include "Storage/StorageBoxDTO.h"
 #include "Utilities/TrainerHelpers.h"
 
@@ -26,15 +22,15 @@ TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(const FStorageBoxDT
     check(Player != nullptr)
     // clang-format off
     StoredPokemon = DTO.StoredPokemon |
-                    UE::Ranges::Map(&FStorageSlot::Pokemon) |
-                    UE::Ranges::Map([&Player](const TOptional<FPokemonDTO> &Pokemon) {
+                    Retro::Ranges::Views::Transform(&FStorageSlot::Pokemon) |
+                    Retro::Ranges::Views::Transform([&Player](const TOptional<FPokemonDTO> &Pokemon) {
                         return Pokemon |
-                               UE::Optionals::Map(&FPokemonDTO::CreatePokemon, Player.GetObject()) |
-                               UE::Optionals::OrElseGet([] {
+                               Retro::Optionals::Transform(Retro::BindBack<&FPokemonDTO::CreatePokemon>(Player.GetObject())) |
+                               Retro::Optionals::OrElseGet([] {
                                    return TScriptInterface<IPokemon>();
                                });
                     }) |
-                    UE::Ranges::ToArray;
+                    Retro::Ranges::To<TArray>();
     // clang-format on
 
     return this;
@@ -45,13 +41,13 @@ FStorageBoxDTO UDefaultStorageBox::ToDTO() const {
         .DisplayName = DisplayName,
         // clang-format off
         .StoredPokemon = StoredPokemon |
-                         UE::Ranges::Map(&TScriptInterface<IPokemon>::GetInterface) |
-                         UE::Ranges::Map([](IPokemon *Pokemon) {
-                             return UE::Optionals::OfNullable(Pokemon) |
-                                    UE::Optionals::Map(&IPokemon::ToDTO);
+                         Retro::Ranges::Views::Transform(&TScriptInterface<IPokemon>::GetInterface) |
+                         Retro::Ranges::Views::Transform([](IPokemon *Pokemon) {
+                             return Retro::Optionals::OfNullable(Pokemon) |
+                                    Retro::Optionals::Transform(&IPokemon::ToDTO);
                          }) |
-                         UE::Ranges::Map(UE::Ranges::Construct<FStorageSlot>) |
-                         UE::Ranges::ToArray
+                         Retro::Ranges::Views::Transform(Retro::Construct<FStorageSlot>) |
+                         Retro::Ranges::To<TArray>()
         // clang-format on
     };
 }
@@ -81,8 +77,8 @@ TOptional<int32> UDefaultStorageBox::DepositToBox(const TScriptInterface<IPokemo
 bool UDefaultStorageBox::IsBoxFull() const {
     // clang-format off
     return StoredPokemon |
-           UE::Ranges::Map(&TScriptInterface<IPokemon>::GetObject) |
-           UE::Ranges::AllOf(&IsValid);
+           Retro::Ranges::Views::Transform(&TScriptInterface<IPokemon>::GetObject) |
+           Retro::Ranges::AllOf(&IsValid);
     // clang-format on
 }
 
@@ -103,7 +99,7 @@ TOptional<IPokemon &> UDefaultStorageBox::SwapWithPokemon(int32 BoxIndex, const 
 
 TOptional<IPokemon &> UDefaultStorageBox::GetStoredPokemon(int32 Index) const {
     check(StoredPokemon.IsValidIndex(Index))
-    return UE::Optionals::OfNullable(StoredPokemon[Index]);
+    return Retro::Optionals::OfNullable(StoredPokemon[Index]);
 }
 
 const TArray<TScriptInterface<IPokemon>> &UDefaultStorageBox::GetStoredPokemon() const {

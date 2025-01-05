@@ -4,12 +4,11 @@
 #include "Components/CapsuleComponent.h"
 #include "Engine/OverlapResult.h"
 #include "GameFramework/Character.h"
-#include "Ranges/Algorithm/AnyOf.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Casting/InstanceOf.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Casting/InstanceOf.h"
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TerrainTags/Terrain.h"
 
 constexpr float CapsuleOffset = 5.f;
@@ -36,9 +35,9 @@ bool UTerrainTagUtilities::HasTerrainTag(const UObject *WorldContext, const FGam
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     // clang-format off
     return Overlaps |
-           UE::Ranges::Map(&FOverlapResult::GetActor) |
-           UE::Ranges::Filter(UE::Ranges::InstanceOf<ITerrain>) |
-           UE::Ranges::AnyOf([&Tag](const AActor *A) {
+           Retro::Ranges::Views::Transform(&FOverlapResult::GetActor) |
+           Retro::Ranges::Views::Filter(Retro::InstanceOf<ITerrain>) |
+           Retro::Ranges::AnyOf([&Tag](const AActor *A) {
                return ITerrain::Execute_HasTerrainTag(A, Tag);
            });
     // clang-format on
@@ -49,9 +48,9 @@ bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const F
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     // clang-format off
     return Overlaps |
-           UE::Ranges::Map(&FOverlapResult::GetActor) |
-           UE::Ranges::Filter(UE::Ranges::InstanceOf<ITerrain>) |
-           UE::Ranges::AnyOf([&Tags](const AActor *A) {
+           Retro::Ranges::Views::Transform(&FOverlapResult::GetActor) |
+           Retro::Ranges::Views::Filter(Retro::InstanceOf<ITerrain>) |
+           Retro::Ranges::AnyOf([&Tags](const AActor *A) {
                return ITerrain::Execute_HasAnyTerrainTag(A, Tags);
            });
     // clang-format on
@@ -62,9 +61,9 @@ bool UTerrainTagUtilities::HasAllTerrainTags(const UObject *WorldContext, const 
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     // clang-format off
     return Overlaps |
-           UE::Ranges::Map(&FOverlapResult::GetActor) |
-           UE::Ranges::Filter(UE::Ranges::InstanceOf<ITerrain>) |
-           UE::Ranges::AnyOf([&Tags](const AActor *A) {
+           Retro::Ranges::Views::Transform(&FOverlapResult::GetActor) |
+           Retro::Ranges::Views::Filter(Retro::InstanceOf<ITerrain>) |
+           Retro::Ranges::AnyOf([&Tags](const AActor *A) {
                return ITerrain::Execute_HasAllTerrainTags(A, Tags);
            });
     // clang-format on

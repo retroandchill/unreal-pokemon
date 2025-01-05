@@ -11,6 +11,6 @@ public class PokemonCore : ModuleRules {
                                                      "GameplayTags" });
 
         PrivateDependencyModuleNames.AddRange(
-            new[] { "CoreUObject", "Engine", "Slate", "SlateCore", "Boost", "UnrealRanges" });
+            new[] { "CoreUObject", "Engine", "Slate", "SlateCore", "Boost", "RetroLib" });
     }
 }

@@ -1,17 +1,16 @@
 ﻿#include "DynamicAssetLoaderEditor.h"
 #include "Assets/AssetLoadingSettings.h"
-#include "Details/SoftVariantObjectCustomization.h"
-#include "Details/VariantObjectCustomization.h"
+#include "RetroLib/Variants/SoftVariantObjectCustomization.h"
+#include "RetroLib/Variants/VariantObjectCustomization.h"
 
 void FDynamicAssetLoaderEditorModule::StartupModule() {
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("AssetClassType"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
-                                    &UE::Ranges::TVariantObjectCustomization<FAssetClassType>::MakeInstance));
+                                    &Retro::TVariantObjectCustomization<FAssetClassType>::MakeInstance));
     PropertyModule.RegisterCustomPropertyTypeLayout(
-        TEXT("SoftAssetClassType"),
-        FOnGetPropertyTypeCustomizationInstance::CreateStatic(
-            &UE::Ranges::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
+        TEXT("SoftAssetClassType"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
+                                        &Retro::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
 }
 
 void FDynamicAssetLoaderEditorModule::ShutdownModule() {

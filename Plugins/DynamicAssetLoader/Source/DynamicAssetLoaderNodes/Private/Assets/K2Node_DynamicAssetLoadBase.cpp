@@ -7,15 +7,9 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/FlatMap.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OrElse.h"
-#include "Ranges/Views/ContainerView.h"
-
-THIRD_PARTY_INCLUDES_START
-#include <range/v3/algorithm/contains.hpp>
-THIRD_PARTY_INCLUDES_END
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include <algorithm>
 
 static const FName AssetNamePinName = "AssetName";
 static const FName AssetNotFoundPinName = "AssetNotFound";
@@ -62,7 +56,7 @@ bool UK2Node_DynamicAssetLoadBase::IsConnectionDisallowed(const UEdGraphPin *MyP
 
     const static std::array ValidPinTypes = {UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PC_String,
                                              UEdGraphSchema_K2::PC_Text};
-    if (!ranges::contains(ValidPinTypes, OtherPin->PinType.PinCategory)) {
+    if (std::ranges::find(ValidPinTypes, OtherPin->PinType.PinCategory) == ValidPinTypes.end()) {
         OutReason = TEXT("Not a valid string type structure!");
         return true;
     }
@@ -235,10 +229,10 @@ UEdGraphPin *UK2Node_DynamicAssetLoadBase::GetResultPin() const {
 UClass *UK2Node_DynamicAssetLoadBase::GetAssetClassType() const {
     auto Setting = GetDefault<UAssetLoadingSettings>();
     // clang-format off
-    return &(UE::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
-             UE::Optionals::Map(&FAssetLoadingEntry::AssetClass) |
-             UE::Optionals::FlatMap(&FAssetClassType::TryGet<UClass>) |
-             UE::Optionals::OrElse(*UObject::StaticClass()));
+    return &(Retro::Optionals::OfNullable(Setting->AssetClasses.Find(AssetKey)) |
+             Retro::Optionals::Transform(&FAssetLoadingEntry::AssetClass) |
+             Retro::Optionals::AndThen(&FAssetClassType::TryGet<UClass>) |
+             Retro::Optionals::OrElseValue(std::ref(*UObject::StaticClass())));
     // clang-format on
 }
 
@@ -256,9 +250,9 @@ void UK2Node_DynamicAssetLoadBase::SetWildcardMode(bool bNewWildcardMode) {
     auto AssetNamePin = GetAssetNamePin();
     // clang-format off
     auto LinkedPins = AssetNamePin->LinkedTo |
-                   UE::Ranges::Filter([](const UEdGraphPin *Pin) { return Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_String; }) |
-                       UE::Ranges::ToArray;
-    LinkedPins | UE::Ranges::ForEach(AssetNamePin, &UEdGraphPin::BreakLinkTo, true);
+                   Retro::Ranges::Views::Filter([](const UEdGraphPin *Pin) { return Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_String; }) |
+                       Retro::Ranges::To<TArray>();
+    LinkedPins | Retro::Ranges::ForEach(Retro::BindMethod<&UEdGraphPin::BreakLinkTo>(AssetNamePin, true));
     // clang-format on
     RefreshAssetNamePin();
 }

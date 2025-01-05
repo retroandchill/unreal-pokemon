@@ -4,15 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Ranges/Algorithm/FindFirst.h"
-#include "Ranges/Concepts/Types.h"
-#include "Ranges/Optional/Filter.h"
-#include "Ranges/Optional/FlatMap.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalRef.h"
-#include "Ranges/Pointers/SoftObjectRef.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/FindFirst.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/SoftObjectRef.h"
 #include "Templates/NonNullSubclassOf.h"
 #include "TextureCompiler.h"
 
@@ -52,7 +50,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         requires std::is_base_of_v<UObject, T>
     static TOptional<T &> AttemptLoad(FStringView SearchKey) {
         if constexpr (std::is_same_v<T, UObject>) {
-            auto Asset = UE::Optionals::OfNullable<T>(
+            auto Asset = Retro::Optionals::OfNullable(
                 StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn));
 
 #if WITH_EDITOR
@@ -60,7 +58,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
 #endif
             return Asset;
         } else {
-            auto Asset = UE::Optionals::OfNullable<T>(
+            auto Asset = Retro::Optionals::OfNullable(
                 Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn)));
 
 #if WITH_EDITOR
@@ -119,7 +117,7 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         const auto &AssetManager = UAssetManager::Get();
         FSoftObjectPath Path(CreateSearchKey(BasePackageName, AssetName));
         if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>()) {
-            return UE::Optionals::OfNullable<T>(TSoftObjectPtr<T>(Path));
+            return Retro::Optionals::OfNullable(TSoftObjectPtr<T>(Path));
         }
 
         return TOptional<TSoftObjectRef<T>>();
@@ -204,16 +202,16 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}_C"), {BasePackageName, Prefix, AssetName});
         if constexpr (std::is_same_v<T, UObject>) {
             // clang-format off
-            return UE::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
-                   UE::Optionals::Map([](UClass &Class) {
+            return Retro::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
+                   Retro::Optionals::Transform([](UClass &Class) {
                        return TNonNullSubclassOf<T>(&Class);
                    });
             // clang-format on
         } else {
             // clang-format off
-            return UE::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
-                   UE::Optionals::Filter([](UClass& Class) { return Class.IsChildOf(T::StaticClass()); }) |
-                   UE::Optionals::Map([](UClass &Class) {
+            return Retro::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
+                   Retro::Optionals::Filter([](UClass& Class) { return Class.IsChildOf(T::StaticClass()); }) |
+                   Retro::Optionals::Transform([](UClass &Class) {
                        return TNonNullSubclassOf<T>(&Class);
                    });
             // clang-format on
@@ -257,18 +255,17 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
-                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
+                 std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<T &> ResolveAsset(FStringView BasePackageName, R &&Keys) {
-        using ElementType = UE::Ranges::TRangeCommonReference<R>;
         // clang-format off
         return Keys |
-               UE::Ranges::Map([&BasePackageName](ElementType Key) {
-                   return FindAssetByName<T>(BasePackageName, Key);
+               Retro::Ranges::Views::Transform([&BasePackageName]<typename U>(U &&Key) {
+                   return FindAssetByName<T>(BasePackageName, std::forward<U>(Key));
                }) |
-               UE::Ranges::Filter([](TOptional<T&> Optional) { return Optional.IsSet(); }) |
-               UE::Ranges::FindFirst |
-               UE::Optionals::FlatMap([](const TOptional<T &> Optional) {
+               Retro::Ranges::Views::Join |
+               Retro::Ranges::FindFirst() |
+               Retro::Optionals::AndThen([](const TOptional<T &> Optional) {
                    return Optional;
                });
         // clang-format on
@@ -282,8 +279,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
-                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
+                 std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<T &> ResolveAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
         return ResolveAsset<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
@@ -317,18 +314,18 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      * @return An optional containing the first found soft asset reference or an unset optional if none are found.
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
-                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
+                 std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(FStringView BasePackageName, R &&Keys) {
-        using ElementType = UE::Ranges::TRangeCommonReference<R>;
+        using ElementType = Retro::TRangeCommonReference<R>;
         // clang-format off
         return Keys |
-               UE::Ranges::Map([&BasePackageName](ElementType Key) {
+               Retro::Ranges::Views::Transform([&BasePackageName](ElementType Key) {
                    return LookupAssetByName<T>(BasePackageName, Key);
                }) |
-               UE::Ranges::Filter([](TOptional<TSoftObjectRef<T>> Optional) { return Optional.IsSet(); }) |
-               UE::Ranges::FindFirst |
-               UE::Optionals::FlatMap([](const TOptional<TSoftObjectRef<T>> Optional) {
+               Retro::Ranges::Views::Filter([](TOptional<TSoftObjectRef<T>> Optional) { return Optional.IsSet(); }) |
+               Retro::Ranges::FindFirst() |
+               Retro::Optionals::AndThen([](const TOptional<TSoftObjectRef<T>> Optional) {
                    return Optional;
                });
         // clang-format on
@@ -342,8 +339,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      * @return An optional soft object reference to the resolved asset.
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
-                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
+                 std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
         return ResolveSoftAsset<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
@@ -356,18 +353,18 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
-                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
+                 std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<TNonNullSubclassOf<T>> ResolveClass(FStringView BasePackageName, R &&Keys) {
-        using ElementType = UE::Ranges::TRangeCommonReference<R>;
+        using ElementType = Retro::TRangeCommonReference<R>;
         // clang-format off
         return Keys |
-               UE::Ranges::Map([&BasePackageName](ElementType Key) {
+               Retro::Ranges::Views::Transform([&BasePackageName](ElementType Key) {
                    return LookupBlueprintClassByName<T>(BasePackageName, Key);
                }) |
-               UE::Ranges::Filter([](TOptional<TNonNullSubclassOf<T>> Optional) { return Optional.IsSet(); }) |
-               UE::Ranges::FindFirst |
-               UE::Optionals::FlatMap([](const TOptional<TNonNullSubclassOf<T>> Optional) {
+               Retro::Ranges::Views::Filter([](TOptional<TNonNullSubclassOf<T>> Optional) { return Optional.IsSet(); }) |
+               Retro::Ranges::FindFirst() |
+               Retro::Optionals::AndThen([](const TOptional<TNonNullSubclassOf<T>> Optional) {
                    return Optional;
                });
         // clang-format on
@@ -381,8 +378,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      * @return The found asset, if it exists
      */
     template <typename T = UObject, typename R>
-        requires std::is_base_of_v<UObject, T> && UE::Ranges::Range<R> &&
-                 std::convertible_to<UE::Ranges::TRangeCommonReference<R>, FStringView>
+        requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
+                 std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
     static TOptional<TNonNullSubclassOf<T>> ResolveClass(const FDirectoryPath &BasePackageName, R &&Keys) {
         return ResolveClass<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }

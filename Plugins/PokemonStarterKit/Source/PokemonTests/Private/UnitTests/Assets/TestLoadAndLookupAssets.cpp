@@ -173,7 +173,7 @@ void FTestLoadAndLookupAssets::Define() {
             UE_ASSERT_NOT_NULL(OutputPin);
 
             UE_ASSERT_EQUAL(UEdGraphSchema_K2::PC_Struct, OutputPin->PinType.PinCategory);
-            UE_ASSERT_TRUE(OutputPin->PinType.PinSubCategoryObject == UE::Ranges::GetScriptStruct<FImageAsset>());
+            UE_ASSERT_TRUE(OutputPin->PinType.PinSubCategoryObject == Retro::GetScriptStruct<FImageAsset>());
 
             return true;
         });
@@ -207,7 +207,7 @@ void FTestLoadAndLookupAssets::Define() {
             UE_ASSERT_NOT_NULL(OutputPin);
 
             UE_ASSERT_EQUAL(UEdGraphSchema_K2::PC_Struct, OutputPin->PinType.PinCategory);
-            UE_ASSERT_TRUE(OutputPin->PinType.PinSubCategoryObject == UE::Ranges::GetScriptStruct<FSoftImageAsset>());
+            UE_ASSERT_TRUE(OutputPin->PinType.PinSubCategoryObject == Retro::GetScriptStruct<FSoftImageAsset>());
 
             return true;
         });

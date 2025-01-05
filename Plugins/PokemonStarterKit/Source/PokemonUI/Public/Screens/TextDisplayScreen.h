@@ -100,6 +100,8 @@ class POKEMONUI_API UTextDisplayScreen : public UScreen {
      */
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UCommandWindow> CommandWindow;
+
+    bool bAdvancedMessage = false;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UTextDisplayScreen)

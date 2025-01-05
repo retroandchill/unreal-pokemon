@@ -2,7 +2,7 @@
 
 #include "Assets/AssetLoadingSettings.h"
 
-UE_DEFINE_VARIANT_OBJECT_STRUCT(FAssetClassType);
+RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FAssetClassType);
 
 static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/DynamicAssetLoader"));

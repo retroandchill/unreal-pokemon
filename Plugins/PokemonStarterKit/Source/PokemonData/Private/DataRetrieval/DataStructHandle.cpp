@@ -2,8 +2,9 @@
 
 #include "DataRetrieval/DataStructHandle.h"
 #include "Misc/OutputDeviceNull.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 #if WITH_METADATA
 bool Pokemon::Data::IsValidDataTableStruct(const UScriptStruct *Struct) {
@@ -47,8 +48,8 @@ TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() co
 
     // clang-format off
     return Params.ReturnValue |
-           UE::Ranges::Map([](FName N) -> TSharedPtr<FString> { return MakeShared<FString>(N.ToString()); }) |
-           UE::Ranges::ToArray;
+           Retro::Ranges::Views::Transform([](FName N) -> TSharedPtr<FString> { return MakeShared<FString>(N.ToString()); }) |
+           Retro::Ranges::To<TArray>();
     // clang-format on
 }
 #endif

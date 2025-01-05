@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Optional/OptionalRef.h"
+#include "Templates/NonNullSubclassOf.h"
 
 struct FStatus;
 class UGameplayEffect;

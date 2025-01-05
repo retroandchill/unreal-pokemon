@@ -6,11 +6,6 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Algorithm/ToSet.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
 #include "Species/Ability.h"
 #include "Utilities/K2Nodes.h"
 
@@ -44,12 +39,13 @@ bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
     }
 
     auto AllPins = TestNode->GetAllPins();
-    auto PinNames = AllPins | UE::Ranges::Filter([](const UEdGraphPin *Pin) {
+    auto PinNames = AllPins | Retro::Ranges::Views::Filter([](const UEdGraphPin *Pin) {
                         return Pin->PinType.PinCategory == UEdGraphSchema_K2::PC_Exec;
                     }) |
-                    UE::Ranges::Filter([](const UEdGraphPin *Pin) { return Pin->Direction == EGPD_Output; }) |
-                    UE::Ranges::Map(&UEdGraphPin::PinName) |
-                    UE::Ranges::Filter([](FName Name) { return Name != FName("Default"); }) | UE::Ranges::ToArray;
+                    Retro::Ranges::Views::Filter([](const UEdGraphPin *Pin) { return Pin->Direction == EGPD_Output; }) |
+                    Retro::Ranges::Views::Transform(&UEdGraphPin::PinName) |
+                    Retro::Ranges::Views::Filter([](FName Name) { return Name != FName("Default"); }) |
+                    Retro::Ranges::To<TArray>();
 
     UE_ASSERT_EQUAL(5, PinNames.Num());
     auto &AbilityTable = FDataManager::GetInstance().GetDataTable<FAbility>();

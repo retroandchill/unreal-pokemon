@@ -3,22 +3,29 @@
 #include "Services/ServiceUtilities.h"
 #include "DependencyInjectionSettings.h"
 #include "Engine/ObjectLibrary.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Casting/DynamicCast.h"
-#include "Ranges/Views/ClassView.h"
-#include "Ranges/Views/Concat.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
-#include "Ranges/Views/SharedArrayView.h"
-#include "Ranges/Views/Unique.h"
+#include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/ClassView.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Services/Service.h"
 
-UE::Ranges::TAnyView<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
+Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
+    TSet<UClass *> Visited;
+    for (auto Class : Retro::Ranges::TClassView<UService>()) {
+        if (Class->HasAnyClassFlags(CLASS_Abstract) || !Retro::IsInstantiableClass(Class)) {
+            continue;
+        }
+        co_yield Class;
+        Visited.Add(Class);
+    }
+
     auto Settings = GetDefault<UDependencyInjectionSettings>();
     // clang-format off
     auto Paths = Settings->BlueprintServiceScan |
-                 UE::Ranges::Map(&FDirectoryPath::Path) |
-                 UE::Ranges::ToArray;
+                 Retro::Ranges::Views::Transform(&FDirectoryPath::Path) |
+                 Retro::Ranges::To<TArray>();
     // clang-format on
 
     auto ObjectLibrary = UObjectLibrary::CreateLibrary(UService::StaticClass(), true, true);
@@ -28,17 +35,16 @@ UE::Ranges::TAnyView<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     ObjectLibrary->GetAssetDataList(AssetData);
 
     // clang-format off
-    auto FilteredAssetData = UE::Ranges::TSharedArrayView(std::move(AssetData)) |
-        UE::Ranges::Map(&FAssetData::GetAsset, TSet<FName>()) |
-        UE::Ranges::Filter([](const UObject *Object) {
+    co_yield Retro::Ranges::TElementsOf(AssetData |
+        Retro::Ranges::Views::Transform(Retro::BindBack<&FAssetData::GetAsset>(TSet<FName>())) |
+        Retro::Ranges::Views::Filter([](const UObject *Object) {
             return Object->IsA<UBlueprint>();
         }) |
-        UE::Ranges::Map(UE::Ranges::DynamicCastChecked<UBlueprint>) |
-        UE::Ranges::Map(&UBlueprint::GeneratedClass) |
-        UE::Ranges::Filter([](const UClass* Class) { return !Class->HasAnyClassFlags(CLASS_Abstract); }) |
-        UE::Ranges::Filter(&UE::Ranges::IsInstantiableClass) |
-        UE::Ranges::Map([](UClass* Class) { return TSubclassOf<UService>(Class); });
+        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<UBlueprint>) |
+        Retro::Ranges::Views::Transform(&UBlueprint::GeneratedClass) |
+        Retro::Ranges::Views::Filter([&](const UClass* Class) { return !Visited.Contains(Class); }) |
+        Retro::Ranges::Views::Filter([](const UClass* Class) { return !Class->HasAnyClassFlags(CLASS_Abstract); }) |
+        Retro::Ranges::Views::Filter(&Retro::IsInstantiableClass) |
+        Retro::Ranges::Views::Transform([](UClass* Class) { return TSubclassOf<UService>(Class); }));
     // clang-format on
-
-    return UE::Ranges::Concat(UE::Ranges::TClassView<UService>(), std::move(FilteredAssetData)) | UE::Ranges::Unique;
 }

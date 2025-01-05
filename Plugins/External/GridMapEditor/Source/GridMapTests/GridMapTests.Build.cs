@@ -22,7 +22,7 @@ public class GridMapTests : ModuleRules
                 "SlateCore", 
                 "GridMapEditor",
                 "GridMap",
-                "UnrealRanges",
+                
                 "InteractiveToolsFramework",
                 "UnrealEd",
                 "EditorFramework"

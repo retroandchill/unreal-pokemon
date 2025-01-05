@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/AnyView.h"
 #include "UObject/Interface.h"
 
 #include "BattleSide.generated.h"
@@ -70,7 +70,7 @@ class POKEMONBATTLE_API IBattleSide {
     UFUNCTION(BlueprintCallable, Category = GameplayAbilities)
     virtual UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const = 0;
 
-    virtual UE::Ranges::TAnyView<UTurnBasedEffectComponent *> GetChildEffectComponents() const = 0;
+    virtual Retro::Ranges::TAnyView<UTurnBasedEffectComponent *> GetChildEffectComponents() const = 0;
 
     /**
      * The capacity for battlers on a given side.

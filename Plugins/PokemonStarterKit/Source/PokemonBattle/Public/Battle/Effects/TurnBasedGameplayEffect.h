@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
-#include "Ranges/Optional/OptionalRef.h"
+#include "RetroLib/Optionals/OptionalOperations.h"
 #include "UObject/Object.h"
 
 #include "TurnBasedGameplayEffect.generated.h"
@@ -82,12 +82,12 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      * @return An optional reference to the owning UTurnBasedEffectComponent.
      */
     TOptional<UTurnBasedEffectComponent &> GetOwningComponent() const {
-        return OwningComponent.Get();
+        return *OwningComponent.Get();
     }
 
     /**
      * @brief Retrieves the handle of the active gameplay effect.
-     *
+     *Z
      * This method returns a constant reference to the FActiveGameplayEffectHandle
      * associated with the turn-based gameplay effect.
      *

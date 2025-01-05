@@ -7,10 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Pokemon/Pokemon.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Construct.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
+#include "RetroLib/Utils/Construct.h"
 #include <functional>
 
 void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const {
@@ -32,8 +29,8 @@ void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
 void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
     // clang-format off
     auto PossibleMoves = Battler->GetMoves() |
-                         UE::Ranges::Filter(&IBattleMove::IsUsable) |
-                         UE::Ranges::ToArray;
+                         Retro::Ranges::Views::Filter(&IBattleMove::IsUsable) |
+                         Retro::Ranges::To<TArray>();
     // clang-format on
 
     // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
@@ -44,8 +41,8 @@ void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) cons
     auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
     // clang-format off
     auto Targets = Move->GetAllPossibleTargets() |
-                   UE::Ranges::Map(UE::Ranges::Construct<FTargetWithIndex>) |
-                   UE::Ranges::ToArray;
+                   Retro::Ranges::Views::Transform(Retro::Construct<FTargetWithIndex>) |
+                   Retro::Ranges::To<TArray>();
     // clang-format on
     ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
 }

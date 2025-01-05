@@ -2,7 +2,9 @@
 #include "AutomationTestModule.h"
 #include "Graphics/BattleRender.h"
 #include "Misc/AutomationTest.h"
-#include "Ranges/Variants/K2Node_LoadVariantSynchronous.h"
+#include "RetroLib/Exceptions/TypeException.h"
+#include "RetroLib/Exceptions/VariantException.h"
+#include "RetroLib/Variants/VariantObjectStruct.h"
 #include "Utilities/ContextObject.h"
 #include "UtilityClasses/Helpers/ExceptionTestHelper.h"
 
@@ -12,7 +14,7 @@ BEGIN_DEFINE_SPEC(FTestRegistrationErrorChecking, "Unit Tests.Assets.BattleRende
 TObjectPtr<UExceptionTestHelper> Helper;
 TObjectPtr<UScriptStruct> StructType;
 TObjectPtr<UScriptStruct> SoftStructType;
-TOptional<UE::Ranges::IVariantRegistration &> Registration;
+TOptional<Retro::IVariantRegistration &> Registration;
 
 END_DEFINE_SPEC(FTestRegistrationErrorChecking);
 
@@ -20,9 +22,9 @@ void FTestRegistrationErrorChecking::Define() {
     Describe("Test Battle Render Blueprint System Error checking", [this] {
         BeforeEach([this] {
             Helper = NewObject<UExceptionTestHelper>();
-            auto &Registry = UE::Ranges::FVariantObjectStructRegistry::Get();
-            StructType = UE::Ranges::GetScriptStruct<FBattleRender>();
-            SoftStructType = UE::Ranges::GetScriptStruct<FSoftBattleRender>();
+            auto &Registry = Retro::FVariantObjectStructRegistry::Get();
+            StructType = Retro::GetScriptStruct<FBattleRender>();
+            SoftStructType = Retro::GetScriptStruct<FSoftBattleRender>();
             Registration = Registry.GetVariantStructData(*StructType);
         });
 
@@ -36,10 +38,10 @@ void FTestRegistrationErrorChecking::Define() {
 
             auto Sprite = NewObject<UContextObject>();
             UE_CHECK_THROWS(
-                UE::Ranges::FTypeException,
+                Retro::FTypeException,
                 Registration->SetStructValue(Sprite, *StructProperty, reinterpret_cast<uint8 *>(&Helper->Brush)))
             UE_CHECK_THROWS(
-                UE::Ranges::FTypeException,
+                Retro::FTypeException,
                 Registration->MakeSoftValue(Sprite, *StructProperty, reinterpret_cast<uint8 *>(&Helper->Brush)))
             return true;
         });
@@ -52,7 +54,7 @@ void FTestRegistrationErrorChecking::Define() {
 
             auto Sprite = NewObject<UContextObject>();
             UE_CHECK_THROWS(
-                UE::Ranges::FVariantException,
+                Retro::FVariantException,
                 Registration->SetStructValue(Sprite, *StructProperty, reinterpret_cast<uint8 *>(&Helper->Render)))
             return true;
         });
@@ -68,7 +70,7 @@ void FTestRegistrationErrorChecking::Define() {
             auto OutputStructProperty = CastField<FStructProperty>(OutputProperty);
             UE_ASSERT_NOT_NULL(OutputStructProperty);
 
-            UE_CHECK_THROWS(UE::Ranges::FTypeException,
+            UE_CHECK_THROWS(Retro::FTypeException,
                             Registration->MakeSoftValue(*InputStructProperty, reinterpret_cast<uint8 *>(&Helper->Brush),
                                                         *OutputStructProperty,
                                                         reinterpret_cast<uint8 *>(&Helper->Render)))
@@ -81,7 +83,7 @@ void FTestRegistrationErrorChecking::Define() {
             auto StructProperty = CastField<FStructProperty>(Property);
             UE_ASSERT_NOT_NULL(StructProperty);
 
-            UE_CHECK_THROWS(UE::Ranges::FTypeException,
+            UE_CHECK_THROWS(Retro::FTypeException,
                             Registration->TryGetSoftValue(UPaperSprite::StaticClass(), *StructProperty,
                                                           reinterpret_cast<uint8 *>(&Helper->Brush)))
             return true;
@@ -99,7 +101,7 @@ void FTestRegistrationErrorChecking::Define() {
             UE_ASSERT_NOT_NULL(OutputStructProperty);
 
             UE_CHECK_THROWS(
-                UE::Ranges::FTypeException,
+                Retro::FTypeException,
                 Registration->LoadSynchronous(*InputStructProperty, reinterpret_cast<uint8 *>(&Helper->Brush),
                                               *OutputStructProperty, reinterpret_cast<uint8 *>(&Helper->Render)))
             return true;

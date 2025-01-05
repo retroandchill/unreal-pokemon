@@ -15,9 +15,8 @@
 #include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
-#include "Ranges/Algorithm/ForEach.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Utilities/Construct.h"
+#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Utils/Construct.h"
 #include "Utilities/RPGMenuUtilities.h"
 #include <functional>
 
@@ -44,7 +43,7 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     int32 Index = 0;
     // clang-format off
     Battle->GetSides() |
-        UE::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
+        Retro::Ranges::ForEach([this, &Index](const TScriptInterface<IBattleSide> &Side) {
             AddPanelsForSide(Index, Side);
             Index++;
         });
@@ -165,8 +164,8 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
                                           const TScriptInterface<IBattleMove> &Move) {
     // clang-format off
     auto Targets = Move->GetAllPossibleTargets() |
-                   UE::Ranges::Map(UE::Ranges::Construct<FTargetWithIndex>) |
-                   UE::Ranges::ToArray;
+                   Retro::Ranges::Views::Transform(Retro::Construct<FTargetWithIndex>) |
+                   Retro::Ranges::To<TArray>();
     // clang-format on
     CurrentBattle->QueueAction(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
     MoveSelect->DeactivateWidget();
