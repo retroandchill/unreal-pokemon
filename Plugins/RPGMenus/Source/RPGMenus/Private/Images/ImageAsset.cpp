@@ -1,8 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Images/ImageAsset.h"
+#include "RetroLib/Variants/VariantObjectStruct.h"
 
-UE_DEFINE_VARIANT_OBJECT_STRUCT(FImageAsset);
+RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FImageAsset);
 
 static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));

@@ -23,7 +23,7 @@ class FMockBattleSide : public IBattleSide {
     MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IBattle> &, GetOwningBattle, (), (const, override));
     MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));
-    MOCK_METHOD(UE::Ranges::TAnyView<UTurnBasedEffectComponent *>, GetChildEffectComponents, (), (const, override));
+    MOCK_METHOD(Retro::Ranges::TAnyView<UTurnBasedEffectComponent *>, GetChildEffectComponents, (), (const, override));
     MOCK_METHOD(uint8, GetSideSize, (), (const, override));
     MOCK_METHOD(const FText &, GetIntroText, (), (const, override));
     MOCK_METHOD(const TOptional<FText> &, GetSendOutText, (), (const, override));

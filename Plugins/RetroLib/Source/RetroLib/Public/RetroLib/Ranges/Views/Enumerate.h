@@ -34,57 +34,67 @@ namespace Retro::Ranges {
         T Index;
         U Value;
 
-        constexpr TEnumerateViewResult() requires std::default_initializable<T> && std::default_initializable<U> = default;
+        constexpr TEnumerateViewResult()
+            requires std::default_initializable<T> && std::default_initializable<U>
+        = default;
 
         template <typename A, typename B>
-            requires std::convertible_to<A, T> && std::convertible_to<B, T>
-        constexpr TEnumerateViewResult(A&& Index, B&& Value) noexcept : Index(std::forward<A>(Index)), Value(std::forward<B>(Value)) {}
+            requires std::convertible_to<A, T> && std::convertible_to<B, U>
+        constexpr TEnumerateViewResult(A &&Index, B &&Value) noexcept
+            : Index(std::forward<A>(Index)), Value(std::forward<B>(Value)) {
+        }
 
         template <typename A, typename B>
-            requires std::convertible_to<A&, T> && std::convertible_to<B&, T>
-        constexpr explicit(false) TEnumerateViewResult(TEnumerateViewResult<A, B>& Tuple) : Index(Tuple.Index), Value(Tuple.Value) {}
+            requires std::convertible_to<A &, T> && std::convertible_to<B &, U>
+        constexpr explicit(false) TEnumerateViewResult(TEnumerateViewResult<A, B> &Tuple)
+            : Index(Tuple.Index), Value(Tuple.Value) {
+        }
 
         template <typename A, typename B>
-            requires std::convertible_to<const A&, T> && std::convertible_to<const B&, T>
-        constexpr explicit(false) TEnumerateViewResult(const TEnumerateViewResult<A, B>& Tuple) : Index(Tuple.Index), Value(Tuple.Value) {}
+            requires std::convertible_to<const A &, T> && std::convertible_to<const B &, U>
+        constexpr explicit(false) TEnumerateViewResult(const TEnumerateViewResult<A, B> &Tuple)
+            : Index(Tuple.Index), Value(Tuple.Value) {
+        }
 
         template <typename A, typename B>
-            requires std::convertible_to<A, T> && std::convertible_to<B, T>
-        constexpr explicit(false) TEnumerateViewResult(TEnumerateViewResult<A, B>&& Tuple) : Index(std::forward<A>(Tuple.Index)), Value(std::forward<B>(Tuple.Value)) {}
+            requires std::convertible_to<A, T> && std::convertible_to<B, U>
+        constexpr explicit(false) TEnumerateViewResult(TEnumerateViewResult<A, B> &&Tuple)
+            : Index(std::forward<A>(Tuple.Index)), Value(std::forward<B>(Tuple.Value)) {
+        }
 
         template <typename A, typename B>
-            requires std::convertible_to<T&, A> && std::convertible_to<U&, B>
-        constexpr operator std::tuple<A, B> () & {
+            requires std::convertible_to<T &, A> && std::convertible_to<U &, B>
+        constexpr operator std::tuple<A, B>() & {
             return std::tuple<A, B>(Index, Value);
         }
 
         template <typename A, typename B>
-            requires std::convertible_to<const T&, A> && std::convertible_to<const U&, B>
-        constexpr operator std::tuple<A, B> () const & {
+            requires std::convertible_to<const T &, A> && std::convertible_to<const U &, B>
+        constexpr operator std::tuple<A, B>() const & {
             return std::tuple<A, B>(Index, Value);
         }
 
         template <typename A, typename B>
             requires std::convertible_to<T, A> && std::convertible_to<U, B>
-        constexpr operator std::tuple<A, B> () && {
+        constexpr operator std::tuple<A, B>() && {
             return std::tuple<A, B>(std::move(Index), std::move(Value));
         }
 
         template <typename A, typename B>
-            requires std::convertible_to<T&, A> && std::convertible_to<U&, B>
-        constexpr operator std::pair<A, B> () & {
+            requires std::convertible_to<T &, A> && std::convertible_to<U &, B>
+        constexpr operator std::pair<A, B>() & {
             return std::pair<A, B>(Index, Value);
         }
 
         template <typename A, typename B>
-            requires std::convertible_to<const T&, A> && std::convertible_to<const U&, B>
-        constexpr operator std::pair<A, B> () const & {
+            requires std::convertible_to<const T &, A> && std::convertible_to<const U &, B>
+        constexpr operator std::pair<A, B>() const & {
             return std::pair<A, B>(Index, Value);
         }
 
         template <typename A, typename B>
             requires std::convertible_to<T, A> && std::convertible_to<U, B>
-        constexpr operator std::pair<A, B> () && {
+        constexpr operator std::pair<A, B>() && {
             return std::pair<A, B>(std::move(Index), std::move(Value));
         }
     };
@@ -499,7 +509,7 @@ namespace Retro::Ranges {
          * and usage for eligible contexts.
          */
         RETROLIB_EXPORT constexpr auto Enumerate = ExtensionMethod<FEnumerateInvoker{}>();
-    } // namespace views
+    } // namespace Views
 
     /**
      * @brief A view that provides reverse enumeration over a range.
@@ -528,10 +538,12 @@ namespace Retro::Ranges {
                                    std::conditional_t<std::ranges::forward_range<BaseType>, std::forward_iterator_tag,
                                                       std::input_iterator_tag>>>;
             using difference_type = std::ranges::range_difference_t<BaseType>;
-            using value_type = TEnumerateViewResult<std::ranges::range_value_t<BaseType>, std::ranges::range_value_t<Viewed>>;
+            using value_type =
+                TEnumerateViewResult<std::ranges::range_value_t<BaseType>, std::ranges::range_value_t<Viewed>>;
 
           private:
-            using ReferenceType = TEnumerateViewResult<std::ranges::range_value_t<BaseType>, std::ranges::range_reference_t<Viewed>>;
+            using ReferenceType =
+                TEnumerateViewResult<std::ranges::range_value_t<BaseType>, std::ranges::range_reference_t<Viewed>>;
 
           public:
             constexpr TIterator()
@@ -558,16 +570,17 @@ namespace Retro::Ranges {
                 return std::move(current);
             }
 
-            constexpr auto operator*() const
+            constexpr ReferenceType operator*() const
                 noexcept(noexcept(*current) && noexcept(viewed[*current]) &&
                          std::is_nothrow_copy_constructible_v<std::ranges::range_reference_t<BaseType>>) {
+                static_assert(std::constructible_from<ReferenceType, decltype(*current), decltype(viewed[*current])>);
                 return ReferenceType(*current, viewed[*current]);
             }
 
-            constexpr auto operator[](difference_type n) const
+            constexpr auto operator[](difference_type N) const
                 requires std::ranges::random_access_range<BaseType>
             {
-                return ReferenceType(*current + n, viewed[*current + n]);
+                return ReferenceType(current[N], viewed[current[N]]);
             }
 
             constexpr TIterator &operator++() {
@@ -582,9 +595,9 @@ namespace Retro::Ranges {
             constexpr TIterator operator++(int)
                 requires std::ranges::forward_range<BaseType>
             {
-                TIterator tmp = *this;
+                TIterator Tmp = *this;
                 ++*this;
-                return tmp;
+                return Tmp;
             }
 
             constexpr TIterator &operator--()
@@ -703,7 +716,7 @@ namespace Retro::Ranges {
             std::ranges::sentinel_t<Base> end;
         };
 
-    public:
+      public:
         /**
          * @brief Default constructor for the ReverseEnumerateView class.
          *
@@ -779,7 +792,7 @@ namespace Retro::Ranges {
          * @return An iterator to the beginning of the range.
          */
         constexpr auto begin() const
-            requires RangeWithMovableReference<const V> && std::ranges::random_access_range<const V>
+            requires RangeWithMovableReference<const V> && std::ranges::random_access_range<const R>
         {
             return TIterator<true>(std::ranges::begin(Indices), Range);
         }
@@ -813,7 +826,7 @@ namespace Retro::Ranges {
          * @return An iterator or sentinel representing the end of the range.
          */
         constexpr auto end() const
-            requires RangeWithMovableReference<const V> && std::ranges::random_access_range<const V>
+            requires RangeWithMovableReference<const V> && std::ranges::random_access_range<const R>
         {
             if constexpr (std::ranges::forward_range<V>) {
                 return TIterator<true>(std::ranges::end(Indices), Range);
@@ -858,10 +871,6 @@ namespace Retro::Ranges {
 
     namespace Views {
         struct FReverseEnumerateInvoker {
-            template <std::ranges::viewable_range V, std::ranges::random_access_range R>
-                requires std::ranges::view<std::ranges::views::all_t<V>> && RangeWithMovableReference<V> &&
-                         RangeWithMovableReference<R> && std::ranges::view<std::ranges::views::all_t<R>> &&
-                         std::convertible_to<std::ranges::range_reference_t<V>, std::ranges::range_difference_t<R>>
             /**
              * @brief Constructs a ReverseEnumerateView from the given indices and range.
              *
@@ -875,9 +884,13 @@ namespace Retro::Ranges {
              * @param Range The container representing the range of elements to be enumerated.
              * @return A ReverseEnumerateView constructed from the given indices and range.
              */
+            template <std::ranges::viewable_range V, std::ranges::random_access_range R>
+                requires std::ranges::view<std::ranges::views::all_t<V>> && RangeWithMovableReference<V> &&
+                         RangeWithMovableReference<R> && std::ranges::view<std::ranges::views::all_t<R>> &&
+                         std::convertible_to<std::ranges::range_reference_t<V>, std::ranges::range_difference_t<R>>
             constexpr auto operator()(V &&Indices, R &&Range) const {
                 return TReverseEnumerateView(std::ranges::views::all(std::forward<V>(Indices)),
-                                            std::ranges::views::all(std::forward<R>(Range)));
+                                             std::ranges::views::all(std::forward<R>(Range)));
             }
         };
 
@@ -892,8 +905,8 @@ namespace Retro::Ranges {
          * @return A reverse enumerate view invokable for use in range operations.
          */
         RETROLIB_EXPORT constexpr auto ReverseEnumerate = ExtensionMethod<FReverseEnumerateInvoker{}>;
-    } // namespace views
-} // namespace retro::ranges
+    } // namespace Views
+} // namespace Retro::Ranges
 
 namespace std {
     RETROLIB_EXPORT template <typename T>
@@ -922,12 +935,13 @@ namespace std {
         using type = Retro::Ranges::TEnumerateViewResult<std::common_reference_t<A, C>, std::common_reference_t<B, D>>;
     };
 
-}
+} // namespace std
 
 namespace Retro::Ranges {
     RETROLIB_EXPORT template <size_t I, typename T, typename U>
-        requires (I < 2)
-    constexpr auto get(TEnumerateViewResult<T, U>& t ) noexcept -> std::tuple_element_t<I, TEnumerateViewResult<T, U>>& {
+        requires(I < 2)
+    constexpr auto
+    get(TEnumerateViewResult<T, U> &t) noexcept -> std::tuple_element_t<I, TEnumerateViewResult<T, U>> & {
         if constexpr (I == 0) {
             return t.Index;
         } else {
@@ -937,8 +951,9 @@ namespace Retro::Ranges {
     }
 
     RETROLIB_EXPORT template <size_t I, typename T, typename U>
-        requires (I < 2)
-    constexpr auto get(const TEnumerateViewResult<T, U>& t ) noexcept -> const std::tuple_element_t<I, TEnumerateViewResult<T, U>>& {
+        requires(I < 2)
+    constexpr auto
+    get(const TEnumerateViewResult<T, U> &t) noexcept -> const std::tuple_element_t<I, TEnumerateViewResult<T, U>> & {
         if constexpr (I == 0) {
             return t.Index;
         } else {
@@ -948,20 +963,21 @@ namespace Retro::Ranges {
     }
 
     RETROLIB_EXPORT template <size_t I, typename T, typename U>
-        requires (I < 2)
-    constexpr auto get(TEnumerateViewResult<T, U>&& t ) noexcept -> std::tuple_element_t<I, TEnumerateViewResult<T, U>>&& {
+        requires(I < 2)
+    constexpr auto
+    get(TEnumerateViewResult<T, U> &&t) noexcept -> std::tuple_element_t<I, TEnumerateViewResult<T, U>> && {
         if constexpr (I == 0) {
-            return static_cast<std::tuple_element_t<I, TEnumerateViewResult<T, U>>&&>(t.Index);
+            return static_cast<std::tuple_element_t<I, TEnumerateViewResult<T, U>> &&>(t.Index);
         } else {
             static_assert(I == 1);
-            return static_cast<std::tuple_element_t<I, TEnumerateViewResult<T, U>>&&>(t.Value);
+            return static_cast<std::tuple_element_t<I, TEnumerateViewResult<T, U>> &&>(t.Value);
         }
     }
-}
+} // namespace Retro::Ranges
 
 namespace std {
     RETROLIB_EXPORT template <size_t I, typename T>
-        requires (I < 2) && Retro::Ranges::TIsEnumerateResult<std::decay_t<T>>::value && (!std::same_as<std::decay_t<T>, T>)
-    struct tuple_element<I, T> : tuple_element<I, std::decay_t<T>> {
-    };
-}
+        requires(I < 2) && Retro::Ranges::TIsEnumerateResult<std::decay_t<T>>::value &&
+                (!std::same_as<std::decay_t<T>, T>)
+    struct tuple_element<I, T> : tuple_element<I, std::decay_t<T>> {};
+} // namespace std

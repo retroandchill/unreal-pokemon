@@ -7,6 +7,10 @@
 #include "RetroLib/Concepts/Structs.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 
+#if !RETROLIB_WITH_MODULES
+#include <concepts>
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
@@ -14,14 +18,14 @@
 namespace Retro {
 
     RETROLIB_EXPORT template <typename... T>
-        requires((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+        requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
     struct TVariantObject;
-    
-        template <typename>
-        struct TIsVariantObject : std::false_type {};
 
-        template <typename... T>
-        struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
+    template <typename>
+    struct TIsVariantObject : std::false_type {};
+
+    template <typename... T>
+    struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
 
     /**
      * Checks if the given type is a variant object.
@@ -46,7 +50,7 @@ namespace Retro {
      * @tparam T The types that are valid
      */
     template <typename... T>
-        requires((std::is_base_of_v<UObject, T> || UnrealInterface<T>) && ...)
+        requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
     struct TVariantObject {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TVariantObject;
@@ -64,7 +68,7 @@ namespace Retro {
          * @param Object The object to construct from
          */
         template <typename U>
-            requires std::convertible_to<U, UObject*> && (std::same_as<T, U> || ...)
+            requires std::convertible_to<U, UObject *> && (std::same_as<T, U> || ...)
         explicit TVariantObject(U *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex<U>()) {
             check(Object != nullptr)
         }
@@ -212,7 +216,7 @@ namespace Retro {
                 return TOptional<U &>();
             }
 
-            return Optionals::OfNullable<TOptional>(static_cast<U *>(ContainedObject));
+            return Optionals::OfNullable(static_cast<U *>(ContainedObject));
         }
 
         /**
@@ -220,7 +224,7 @@ namespace Retro {
          * @return The underlying object
          */
         TOptional<UObject &> TryGet() const {
-            return Optionals::OfNullable<TOptional>(ContainedObject);
+            return Optionals::OfNullable(ContainedObject);
         }
 
         /**
@@ -258,7 +262,8 @@ namespace Retro {
         static TOptional<uint64> GetTypeIndex(const FAssetData &Data) {
             constexpr std::array TypeChecks = {&TVariantObject::IsAssetTypeValid<std::nullptr_t>,
                                                &TVariantObject::IsAssetTypeValid<T>...};
-            auto Find = std::ranges::find_if(TypeChecks, [&Data](auto &&Callback) { return std::invoke(Callback, Data); });
+            auto Find =
+                std::ranges::find_if(TypeChecks, [&Data](auto &&Callback) { return std::invoke(Callback, Data); });
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
@@ -442,5 +447,5 @@ namespace Retro {
         TObjectPtr<UObject> ContainedObject;
         uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();
     };
-}
+} // namespace Retro
 #endif

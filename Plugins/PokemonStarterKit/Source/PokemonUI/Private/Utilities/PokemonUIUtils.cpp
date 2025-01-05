@@ -3,7 +3,6 @@
 #include "Utilities/PokemonUIUtils.h"
 #include "Components/ProgressBar.h"
 #include "Pokemon/Pokemon.h"
-#include "Ranges/Utilities/Unreachable.h"
 
 enum class EPokemonGender : uint8;
 
@@ -49,5 +48,5 @@ FText UPokemonUIUtils::GetPokemonGenderText(EPokemonGender Gender) {
     }
 
     check(false)
-    UE::Ranges::Unreachable();
+    Retro::Unreachable();
 }

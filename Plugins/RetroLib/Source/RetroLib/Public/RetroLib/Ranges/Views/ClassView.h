@@ -11,92 +11,98 @@
 #endif
 
 namespace Retro::Ranges {
-	
-	RETROLIB_EXPORT template <typename T>
-		requires std::derived_from<T, UObject> || UnrealInterface<T>
-	class TClassView {
-		struct FIterator {
-			using value_type = std::conditional_t<std::derived_from<T, UObject>, TSubclassOf<T>, UClass*>;
-			using difference_type = std::ptrdiff_t;
 
-			FIterator() {
-				if constexpr (UnrealInterface<T>) {
-					while (Source && !Source->ImplementsInterface(typename T::UClassType::StaticClass())) {
-						++Source;
-					}
-				} else {
-					while (Source && !Source->IsChildOf<T>()) {
-						++Source;
-					}
-				}
-			}
+    RETROLIB_EXPORT template <typename T>
+        requires std::derived_from<T, UObject> || UnrealInterface<T>
+    class TClassView {
+        struct FIterator {
+            using value_type = std::conditional_t<std::derived_from<T, UObject>, TSubclassOf<T>, UClass *>;
+            using difference_type = std::ptrdiff_t;
 
-			FIterator(const FIterator&) = delete;
-			FIterator(FIterator&&) = default;
+            FIterator() {
+                if constexpr (UnrealInterface<T>) {
+                    while (Source && !Source->ImplementsInterface(T::UClassType::StaticClass())) {
+                        ++Source;
+                    }
+                } else {
+                    while (Source && !Source->IsChildOf<T>()) {
+                        ++Source;
+                    }
+                }
+            }
 
-			~FIterator() = default;
-			
-			FIterator& operator=(const FIterator&) = delete;
-			FIterator& operator=(FIterator&&) = default;
+            FIterator(const FIterator &) = delete;
+            FIterator(FIterator &&) = default;
 
-			TSubclassOf<T> operator*() const requires std::derived_from<T, UObject> {
-				return *Source;
-			}
+            ~FIterator() = default;
 
-			UClass* operator*() const requires UnrealInterface<T> {
-				return *Source;
-			}
+            FIterator &operator=(const FIterator &) = delete;
+            FIterator &operator=(FIterator &&) = default;
 
-			UClass* operator->() const {
-				return *Source;
-			}
+            TSubclassOf<T> operator*() const
+                requires std::derived_from<T, UObject>
+            {
+                return *Source;
+            }
 
-			bool operator==(const std::default_sentinel_t&) const {
-				return !Source;
-			}
+            UClass *operator*() const
+                requires UnrealInterface<T>
+            {
+                return *Source;
+            }
 
-			FIterator &operator++() requires std::derived_from<T, UObject> {
-				while (true) {
-					++Source;
-					if (!Source || Source->IsChildOf<T>()) {
-						break;
-					}
-				}
-				
-				return *this;
-			}
+            UClass *operator->() const {
+                return *Source;
+            }
 
-			FIterator &operator++() requires UnrealInterface<T> {
-				while (true) {
-					++Source;
-					if (!Source || Source->ImplementsInterface(typename T::UClassType::StaticClass())) {
-						break;
-					}
-				}
-				
-				return *this;
-			}
+            bool operator==(const std::default_sentinel_t &) const {
+                return !Source;
+            }
 
-			void operator++(int) {
-				++*this;
-			}
+            FIterator &operator++()
+                requires std::derived_from<T, UObject>
+            {
+                while (true) {
+                    ++Source;
+                    if (!Source || Source->IsChildOf<T>()) {
+                        break;
+                    }
+                }
 
-		private:
-			TObjectIterator<UClass> Source;
-		};
-		
-	public:
-		TClassView() = default;
+                return *this;
+            }
 
-		FIterator begin() const {
-			return FIterator();
-		}
+            FIterator &operator++()
+                requires UnrealInterface<T>
+            {
+                while (true) {
+                    ++Source;
+                    if (!Source || Source->ImplementsInterface(T::UClassType::StaticClass())) {
+                        break;
+                    }
+                }
 
-		std::default_sentinel_t end() const {
-			return std::default_sentinel_t();
-		}
+                return *this;
+            }
 
-		
-	};
-}
+            void operator++(int) {
+                ++*this;
+            }
+
+          private:
+            TObjectIterator<UClass> Source;
+        };
+
+      public:
+        TClassView() = default;
+
+        FIterator begin() const {
+            return FIterator();
+        }
+
+        std::default_sentinel_t end() const {
+            return std::default_sentinel_t();
+        }
+    };
+} // namespace Retro::Ranges
 #endif

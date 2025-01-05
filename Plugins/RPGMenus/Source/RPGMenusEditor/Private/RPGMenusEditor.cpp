@@ -2,10 +2,10 @@
 #include "RPGMenusEditor.h"
 #include "AssetToolsModule.h"
 #include "Data/Windowskin.h"
-#include "Details/SoftVariantObjectCustomization.h"
-#include "Details/VariantObjectCustomization.h"
 #include "IAssetTools.h"
 #include "Images/ImageAsset.h"
+#include "RetroLib/Variants/SoftVariantObjectCustomization.h"
+#include "RetroLib/Variants/VariantObjectCustomization.h"
 #include "Windowskin/WindowskinAssetActions.h"
 #include "Windowskin/WindowskinThumbnailRenderer.h"
 
@@ -28,11 +28,11 @@ void FRPGMenusEditorModule::OnPostEngineInit() const {
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("ImageAsset"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
-                                &UE::Ranges::TVariantObjectCustomization<FImageAsset>::MakeInstance));
+                                &Retro::TVariantObjectCustomization<FImageAsset>::MakeInstance));
 
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("SoftImageAsset"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
-                                    &UE::Ranges::TSoftVariantObjectCustomization<FSoftImageAsset>::MakeInstance));
+                                    &Retro::TSoftVariantObjectCustomization<FSoftImageAsset>::MakeInstance));
 }
 
 void FRPGMenusEditorModule::ShutdownModule() {

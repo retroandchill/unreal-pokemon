@@ -8,16 +8,10 @@
 #pragma once
 
 #if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
 #include <algorithm>
-#include <ranges>
 #endif
 
-#include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
-#include "RetroLib/Ranges/FeatureBridge.h"
-
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -25,12 +19,12 @@
 
 namespace Retro::Ranges {
 
-  RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::all_of, AllOf)
+    RETROLIB_EXPORT constexpr auto AllOf = ExtensionMethod<std::ranges::all_of>;
 
-  RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::any_of, AnyOf)
+    RETROLIB_EXPORT constexpr auto AnyOf = ExtensionMethod<std::ranges::any_of>;
 
-  RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::none_of, NoneOf)
+    RETROLIB_EXPORT constexpr auto NoneOf = ExtensionMethod<std::ranges::none_of>;
 
-  RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, std::ranges::for_each, ForEach)
+    RETROLIB_EXPORT constexpr auto ForEach = ExtensionMethod<std::ranges::for_each>;
 
-}
+} // namespace Retro::Ranges

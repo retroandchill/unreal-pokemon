@@ -3,32 +3,30 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include "VariantObject.h"
-#include "RetroLib/Assets/AsyncLoadHandle.h"
+#include "RetroLib/Async/AsyncLoadHandle.h"
+#include "RetroLib/Variants/VariantObject.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
 
 namespace Retro {
-	template <typename T>
+    template <typename T>
         requires VariantObject<T>
     struct TSoftVariantObject;
 
-    namespace Detail {
-        template <typename>
-        struct TIsSoftVariantObject : std::false_type {};
+    template <typename>
+    struct TIsSoftVariantObject : std::false_type {};
 
-        template <typename... T>
-        struct TIsSoftVariantObject<TSoftVariantObject<T...>> : std::true_type {};
-    } // namespace Detail
+    template <typename... T>
+    struct TIsSoftVariantObject<TSoftVariantObject<T...>> : std::true_type {};
 
     /**
      * Checks if the given type is a soft variant object.
      * @tparam T The type to check
      */
     RETROLIB_EXPORT template <typename T>
-    concept SoftVariantObject = Detail::TIsSoftVariantObject<T>::value;
+    concept SoftVariantObject = TIsSoftVariantObject<T>::value;
 
     /**
      * Checks if the given type is a soft variant object type that has a valid UStruct representation..
@@ -230,5 +228,5 @@ namespace Retro {
         TSoftObjectPtr<> Ptr;
         uint64 TypeIndex = T::template GetTypeIndex<std::nullptr_t>();
     };
-}
+} // namespace Retro
 #endif

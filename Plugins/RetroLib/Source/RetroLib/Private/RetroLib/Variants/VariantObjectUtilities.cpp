@@ -2,16 +2,14 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObjectUtilities.h"
-
-#include <RetroLib/Optionals/Filter.h>
-#include <RetroLib/Optionals/PtrOrNull.h>
-
-#include "RetroLib/Utils/Unreachable.h"
-#include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Blueprints/Properties.h"
 #include "RetroLib/Exceptions/ConvertException.h"
+#include "RetroLib/RetroLibMacros.h"
+#include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
+#include <RetroLib/Optionals/Filter.h>
+#include <RetroLib/Optionals/PtrOrNull.h>
 
 CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::CreateVariantFromObject, const UObject *, uint8 &)
 DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {

@@ -62,4 +62,4 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
     concept IncompleteType = !CompleteType<T>;
-} // namespace retro
+} // namespace Retro

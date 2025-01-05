@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/SelectableWidget.h"
-#include "Ranges/Optional/OptionalRef.h"
 
 #include "PokemonSelectionPaneBase.generated.h"
 

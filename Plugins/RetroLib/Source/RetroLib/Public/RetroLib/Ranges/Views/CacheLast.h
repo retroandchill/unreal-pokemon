@@ -260,5 +260,5 @@ namespace Retro::Ranges {
          * recalculating it at every access, even for non-bidirectional ranges.
          */
         RETROLIB_EXPORT constexpr auto CacheLast = ExtensionMethod<CacheLastInvoker{}>();
-    } // namespace views
-} // namespace retro::ranges
+    } // namespace Views
+} // namespace Retro::Ranges

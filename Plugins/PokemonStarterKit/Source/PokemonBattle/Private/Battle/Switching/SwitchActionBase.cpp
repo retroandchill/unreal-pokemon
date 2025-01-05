@@ -8,7 +8,6 @@
 #include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Tags.h"
-#include "Ranges/Views/Single.h"
 
 USwitchActionBase::USwitchActionBase() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -50,7 +49,7 @@ void USwitchActionBase::SwapWithTarget() {
 
 void USwitchActionBase::TriggerOnSendOut() {
     auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
-    Battle->OnBattlersEnteringBattle(UE::Ranges::Single(SwapTarget));
+    Battle->OnBattlersEnteringBattle(Retro::Ranges::Views::Single(SwapTarget));
     ABattleSequencer::DisplayBattleMessages(this, [this] {
         ensure(CurrentActorInfo != nullptr);
         EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);

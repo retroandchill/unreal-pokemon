@@ -351,4 +351,4 @@ namespace Retro {
      * This variable provides a convenient way to use the FModulo class for the modulo operation of two values.
      */
     RETROLIB_EXPORT constexpr FModuloFunction Modulo;
-} // namespace retro
+} // namespace Retro

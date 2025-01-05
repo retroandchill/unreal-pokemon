@@ -38,4 +38,4 @@ namespace Retro::Optionals {
      */
     RETROLIB_EXPORT constexpr auto IsSet = ExtensionMethod<FIsSetInvoker{}>();
 
-} // namespace retro::optionals
+} // namespace Retro::Optionals

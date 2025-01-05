@@ -332,7 +332,8 @@ namespace Retro {
      * @tparam A The argument types taken by the member function.
      */
     template <typename C, typename R, typename... A>
-    struct TFunctionTraits<R (C::*)(A...) const &> : TMethodTraitsBase<C, R, true, ERefQualifier::LValue, false, A...> {};
+    struct TFunctionTraits<R (C::*)(A...) const &> : TMethodTraitsBase<C, R, true, ERefQualifier::LValue, false, A...> {
+    };
 
     /**
      * @brief Provides type traits for rvalue reference qualified member functions.
@@ -363,7 +364,8 @@ namespace Retro {
      * @tparam A The argument types taken by the member function.
      */
     template <typename C, typename R, typename... A>
-    struct TFunctionTraits<R (C::*)(A...) const &&> : TMethodTraitsBase<C, R, true, ERefQualifier::RValue, false, A...> {};
+    struct TFunctionTraits<R (C::*)(A...) const &&>
+        : TMethodTraitsBase<C, R, true, ERefQualifier::RValue, false, A...> {};
 
     /**
      * @brief Provides type traits for noexcept member functions.
@@ -379,7 +381,8 @@ namespace Retro {
      * @tparam A The argument types taken by the member function.
      */
     template <typename C, typename R, typename... A>
-    struct TFunctionTraits<R (C::*)(A...) noexcept> : TMethodTraitsBase<C, R, false, ERefQualifier::None, true, A...> {};
+    struct TFunctionTraits<R (C::*)(A...) noexcept> : TMethodTraitsBase<C, R, false, ERefQualifier::None, true, A...> {
+    };
 
     /**
      * @brief Provides type traits for const noexcept member functions.
@@ -409,8 +412,8 @@ namespace Retro {
      * @tparam A The argument types taken by the member function.
      */
     template <typename C, typename R, typename... A>
-    struct TFunctionTraits<R (C::*)(A...) & noexcept> : TMethodTraitsBase<C, R, false, ERefQualifier::LValue, true, A...> {
-    };
+    struct TFunctionTraits<R (C::*)(A...) & noexcept>
+        : TMethodTraitsBase<C, R, false, ERefQualifier::LValue, true, A...> {};
 
     /**
      * @brief Provides type traits for const-qualified, lvalue-referenced, noexcept member functions.
@@ -682,4 +685,4 @@ namespace Retro {
     RETROLIB_EXPORT template <typename T>
     concept NoExcept = Method<T> && TFunctionTraits<T>::IsNoexcept;
 
-} // namespace retro
+} // namespace Retro

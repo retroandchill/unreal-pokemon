@@ -2,12 +2,11 @@
 #include "Pokemon/Stats/DefaultStatEntry.h"
 #include "DataManager.h"
 #include "Pokemon/Stats/StatUtils.h"
-#include "Ranges/Optional/OrElseGet.h"
 #include "Species/Stat.h"
 
 TScriptInterface<IStatEntry> UDefaultStatEntry::Initialize(FName Stat, const TOptional<int32> &IVs, int32 EVs) {
     StatID = Stat;
-    IV = IVs | UE::Optionals::OrElseGet([] { return StatUtils::RandomizeIV(); });
+    IV = IVs | Retro::Optionals::OrElseGet([] { return StatUtils::RandomizeIV(); });
     EV = EVs;
     return this;
 }

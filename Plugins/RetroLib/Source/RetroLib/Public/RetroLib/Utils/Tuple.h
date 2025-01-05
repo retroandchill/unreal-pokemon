@@ -45,4 +45,4 @@ namespace Retro {
 
     RETROLIB_EXPORT template <template <typename...> typename C>
     constexpr TConvertTupleFunction<C> ConvertTuple;
-} // namespace retro
+} // namespace Retro

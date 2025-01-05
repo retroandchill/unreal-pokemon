@@ -7,12 +7,7 @@
  */
 #pragma once
 
-#if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
-#endif
-
-#include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 
 #ifndef RETROLIB_EXPORT
@@ -22,6 +17,11 @@
 namespace Retro::Optionals {
 
     struct FOrElseThrowInvoker {
+        template <OptionalType O>
+        constexpr decltype(auto) operator()(O &&Optional) const {
+            return (*this)(std::forward<O>(Optional), [] { return std::bad_optional_access{}; });
+        }
+        
         /**
          * Invokes the functor with the provided arguments and throws the result if the optional parameter does not have
          * a value. If the optional parameter does have a value, retrieves and returns it.
@@ -42,21 +42,6 @@ namespace Retro::Optionals {
         }
     };
 
-    RETROLIB_FUNCTIONAL_EXTENSION(RETROLIB_EXPORT, FOrElseThrowInvoker{}, OrElseThrow)
+    RETROLIB_EXPORT constexpr auto OrElseThrow = ExtensionMethod<FOrElseThrowInvoker{}>;
 
-    /**
-     * Creates an extension method that acts as an operator for std::optional types,
-     * throwing an exception when the optional value is not set.
-     *
-     * By default, it throws a std::bad_optional_access exception if the optional
-     * value is not present. The method can be customized with alternative
-     * exception-throwing mechanisms.
-     *
-     * @return An invoker object that can be used to throw an exception when
-     *         applying to an empty optional value.
-     */
-    RETROLIB_EXPORT constexpr auto OrElseThrow() {
-        return OrElseThrow([] { return std::bad_optional_access{}; });
-    }
-
-} // namespace retro::optionals
+} // namespace Retro::Optionals

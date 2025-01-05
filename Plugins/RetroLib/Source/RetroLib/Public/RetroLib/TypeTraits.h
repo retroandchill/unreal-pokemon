@@ -115,4 +115,4 @@ namespace Retro {
     template <bool Condition, typename T>
     using TMaybeConst = std::conditional_t<Condition, const T, T>;
 
-} // namespace retro
+} // namespace Retro

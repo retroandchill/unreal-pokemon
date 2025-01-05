@@ -395,4 +395,4 @@ namespace Retro {
     RETROLIB_EXPORT template <auto Functor>
         requires(IsValidFunctorObject(Functor))
     constexpr ExtensionMethodBinder<Functor> ExtensionMethod;
-} // namespace retro
+} // namespace Retro

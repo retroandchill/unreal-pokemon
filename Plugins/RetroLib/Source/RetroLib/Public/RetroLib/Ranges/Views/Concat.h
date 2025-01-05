@@ -8,8 +8,8 @@
 #pragma once
 
 #include "RetroLib/Concepts/Iterators.h"
-#include "RetroLib/Ranges/Concepts/Concatable.h"
 #include "RetroLib/Concepts/ParameterPacks.h"
+#include "RetroLib/Ranges/Concepts/Concatable.h"
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Utils/Variant.h"
@@ -70,7 +70,7 @@ namespace Retro::Ranges {
           public:
             constexpr TSentinel() = default;
             explicit constexpr TSentinel(ConcatViewType &View, FEndTag)
-                : EndElement(std::ranges::end(std::get<RangesSize - 1>(View.ranges))) {
+                : EndElement(std::ranges::end(std::get<RangesSize - 1>(View.Ranges))) {
             }
 
             template <bool Other>
@@ -106,9 +106,9 @@ namespace Retro::Ranges {
             struct Next {
                 TIterator *Pos;
                 template <std::input_iterator I, size_t N>
-                constexpr void operator()(TIndexedElement<I, N> It) const {
-                    RETROLIB_ASSERT(It.Get() != std::ranges::end(std::get<N>(Pos->View->Ranges)));
-                    ++It.Get();
+                constexpr void operator()(TIndexedElement<I, N> Other) const {
+                    RETROLIB_ASSERT(Other.Get() != std::ranges::end(std::get<N>(Pos->View->Ranges)));
+                    ++Other.Get();
                     Pos->Satisfy<N>();
                 }
             };
@@ -117,21 +117,21 @@ namespace Retro::Ranges {
                 TIterator *Pos;
 
                 template <std::bidirectional_iterator I>
-                constexpr void operator()(TIndexedElement<I, 0> It) const {
-                    RETROLIB_ASSERT(It.Get() != std::ranges::begin(std::get<0>(Pos->View->Ranges)));
-                    --It.Get();
+                constexpr void operator()(TIndexedElement<I, 0> Other) const {
+                    RETROLIB_ASSERT(Other.Get() != std::ranges::begin(std::get<0>(Pos->View->Ranges)));
+                    --Other.Get();
                 }
 
                 template <std::bidirectional_iterator I, size_t N>
                     requires(N != 0)
-                constexpr void operator()(TIndexedElement<I, N> It) const {
-                    if (It.Get() == std::ranges::begin(std::get<N>(Pos->View->Ranges))) {
+                constexpr void operator()(TIndexedElement<I, N> Other) const {
+                    if (Other.Get() == std::ranges::begin(std::get<N>(Pos->View->Ranges))) {
                         auto &&Rng = std::get<N - 1>(Pos->View->Ranges);
                         Pos->It.template emplace<N - 1>(
                             std::ranges::next(std::ranges::begin(Rng), std::ranges::end(Rng)));
                         VisitIndex(*this, Pos->It);
                     } else {
-                        --It.Get();
+                        --Other.Get();
                     }
                 }
             };
@@ -141,14 +141,14 @@ namespace Retro::Ranges {
                 difference_type Index;
 
                 template <std::random_access_iterator I>
-                constexpr void operator()(TIndexedElement<I, RangesSize - 1> It) const {
-                    std::ranges::advance(It.Get(), Index);
+                constexpr void operator()(TIndexedElement<I, RangesSize - 1> Other) const {
+                    std::ranges::advance(Other.Get(), Index);
                 }
 
                 template <std::random_access_iterator I, size_t N>
-                constexpr void operator()(TIndexedElement<I, N> It) const {
+                constexpr void operator()(TIndexedElement<I, N> Other) const {
                     auto Last = std::ranges::end(std::get<N>(Pos->View->Ranges));
-                    auto Rest = std::ranges::advance(It.Get(), Index, std::move(Last));
+                    auto Rest = std::ranges::advance(Other.Get(), Index, std::move(Last));
                     Pos->Satisfy<N>();
 
                     if (Rest != 0) {
@@ -162,20 +162,20 @@ namespace Retro::Ranges {
                 difference_type Index;
 
                 template <std::random_access_iterator I>
-                constexpr void operator()(TIndexedElement<I, 0> It) const {
-                    std::ranges::advance(It.Get(), Index);
+                constexpr void operator()(TIndexedElement<I, 0> Other) const {
+                    std::ranges::advance(Other.Get(), Index);
                 }
 
                 template <std::random_access_iterator I, std::size_t N>
-                constexpr void operator()(TIndexedElement<I, N> It) const {
+                constexpr void operator()(TIndexedElement<I, N> Other) const {
                     auto First = std::ranges::begin(std::get<N>(Pos->View->Ranges));
-                    if (It.Get() == First) {
+                    if (Other.Get() == First) {
                         auto &&Rng = std::get<N - 1>(Pos->View->Ranges);
                         Pos->It.template emplace<N - 1>(
                             std::ranges::next(std::ranges::begin(Rng), std::ranges::end(Rng)));
                         VisitIndex(*this, Pos->It);
                     } else {
-                        auto Rest = std::ranges::advance(It.Get(), Index, std::move(First));
+                        auto Rest = std::ranges::advance(Other.Get(), Index, std::move(First));
                         if (Rest != 0) {
                             VisitIndex<void>(AdvanceReverse{Pos, Rest}, Pos->It);
                         }
@@ -184,7 +184,7 @@ namespace Retro::Ranges {
             };
 
             [[noreturn]] static difference_type DistanceTo(std::integral_constant<size_t, RangesSize>,
-                                                            const TIterator &, const TIterator &) {
+                                                           const TIterator &, const TIterator &) {
                 RETROLIB_ASSERT(false);
                 Unreachable();
             }
@@ -192,7 +192,7 @@ namespace Retro::Ranges {
             template <size_t N>
                 requires(N < RangesSize)
             static difference_type DistanceTo(std::integral_constant<size_t, N>, const TIterator &From,
-                                               const TIterator &To) {
+                                              const TIterator &To) {
                 if (From.It.index() > N) {
                     return TIterator::DistanceTo(std::integral_constant<size_t, N + 1>{}, From, To);
                 }
@@ -262,18 +262,18 @@ namespace Retro::Ranges {
             }
 
             constexpr bool operator==(const TSentinel<IsConst> &Post) const {
-                return It.index() == RangesSize - 1 && std::get<RangesSize - 1>(View->it) == Post.EndElement;
+                return It.index() == RangesSize - 1 && get<RangesSize - 1>(It) == Post.EndElement;
             }
 
             constexpr std::partial_ordering operator<=>(const TIterator &Other) const
                 requires(std::random_access_iterator<std::ranges::iterator_t<R>> && ...)
             {
-                auto distance = *this - Other;
-                if (distance == 0) {
+                auto Distance = *this - Other;
+                if (Distance == 0) {
                     return std::partial_ordering::equivalent;
                 }
 
-                if (distance < 0) {
+                if (Distance < 0) {
                     return std::partial_ordering::less;
                 }
 
@@ -305,10 +305,10 @@ namespace Retro::Ranges {
                 return Tmp;
             }
 
-            friend TIterator operator+(difference_type N, const TIterator &It)
+            friend TIterator operator+(difference_type N, const TIterator &Other)
                 requires(std::random_access_iterator<std::ranges::iterator_t<R>> && ...)
             {
-                return It + N;
+                return Other + N;
             }
 
             constexpr TIterator &operator+=(difference_type N)
@@ -516,5 +516,5 @@ namespace Retro::Ranges {
          * within the retro::ranges::views namespace.
          */
         RETROLIB_EXPORT constexpr FConcatInvoker Concat;
-    } // namespace views
-} // namespace retro::ranges
+    } // namespace Views
+} // namespace Retro::Ranges

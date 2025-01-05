@@ -53,6 +53,10 @@ void UTextDisplayScreen::ClearDisplayText() {
 }
 
 void UTextDisplayScreen::AdvanceToNextMessage() {
+    if (!bAdvancedMessage) {
+        UE_LOG(LogBlueprint, Warning, TEXT("Attempted to advance message before next message is ready!"))
+    }
+    
     NextMessage.Broadcast();
 }
 

@@ -39,7 +39,7 @@ namespace Retro::Ranges {
 
         constexpr TArrayIterator() = default;
 
-        constexpr TArrayIterator(T *Ptr, C &Array) : Ptr(Ptr), CurrentArray(&Array), InitialNum(GetNum()) {
+        constexpr TArrayIterator(T *Ptr, const C &Array) : Ptr(Ptr), CurrentArray(&Array), InitialNum(GetNum()) {
         }
 
         constexpr T &operator*() const {
@@ -87,7 +87,7 @@ namespace Retro::Ranges {
         }
 
         constexpr TArrayIterator operator+(S Offset) const {
-            return TCheckedArrayIterator(Ptr + Offset, *CurrentArray);
+            return TArrayIterator(Ptr + Offset, *CurrentArray);
         }
 
         constexpr friend TArrayIterator operator+(S Offset, const TArrayIterator &Other) {
@@ -99,25 +99,30 @@ namespace Retro::Ranges {
         }
 
         constexpr difference_type operator-(const TArrayIterator &Other) const {
-            ensureMsgf(CurrentArray->Num() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
+            ensureMsgf(GetNum() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
             return Ptr - Other.Ptr;
         }
 
         constexpr bool operator==(const TArrayIterator &Other) const {
-            ensureMsgf(CurrentArray->Num() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
+            ensureMsgf(GetNum() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
             return Ptr == Other.Ptr;
         }
 
         constexpr std::strong_ordering operator<=>(const TArrayIterator &Other) const {
-            ensureMsgf(CurrentArray->Num() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
+            ensureMsgf(GetNum() == InitialNum, TEXT("Array has changed during ranged-for iteration!"));
             return Ptr <=> Other.Ptr;
         }
 
       private:
         constexpr S GetNum() const {
+            if (CurrentArray == nullptr) {
+                return 0;
+            }
+            
             if constexpr (UnrealSizedContainer<const C>) {
                 return CurrentArray->Num();
-            } else if constexpr (UnrealSizedString<const C>) {
+            } else {
+                static_assert(UnrealSizedString<const C>);
                 return CurrentArray->Len();
             }
         }
@@ -154,20 +159,19 @@ constexpr auto end(const TArray<T, A> &Array) {
 }
 
 RETROLIB_EXPORT template <typename T, typename A>
-constexpr T* data(TArray<T, A> &Array) {
+constexpr T *data(TArray<T, A> &Array) {
     return Array.GetData();
 }
 
 RETROLIB_EXPORT template <typename T, typename A>
-constexpr const T* data(const TArray<T, A> &Array) {
+constexpr const T *data(const TArray<T, A> &Array) {
     return Array.GetData();
 }
 
 RETROLIB_EXPORT template <typename T, typename A>
-constexpr T* data(TArray<T, A> &&Array) {
+constexpr T *data(TArray<T, A> &&Array) {
     return Array.GetData();
 }
-
 
 RETROLIB_EXPORT constexpr auto begin(FString &String) {
     if constexpr (std::contiguous_iterator<decltype(String.begin())>) {
@@ -201,15 +205,15 @@ RETROLIB_EXPORT constexpr auto end(const FString &String) {
     }
 }
 
-RETROLIB_EXPORT inline TCHAR* data(FString &String) {
+RETROLIB_EXPORT inline TCHAR *data(FString &String) {
     return String.GetCharArray().GetData();
 }
 
-RETROLIB_EXPORT inline const TCHAR* data(const FString &String) {
+RETROLIB_EXPORT inline const TCHAR *data(const FString &String) {
     return String.GetCharArray().GetData();
 }
 
-RETROLIB_EXPORT inline TCHAR* data(FString &&String) {
+RETROLIB_EXPORT inline TCHAR *data(FString &&String) {
     return String.GetCharArray().GetData();
 }
 #endif

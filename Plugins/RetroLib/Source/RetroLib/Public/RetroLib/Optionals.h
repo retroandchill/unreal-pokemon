@@ -1,5 +1,3 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "RetroLib/Optionals/AndThen.h"
@@ -16,3 +14,7 @@
 #include "RetroLib/Optionals/To.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/Value.h"
+
+#ifdef __UNREAL__
+#include "RetroLib/Optionals/BlueprintBridge.h"
+#endif

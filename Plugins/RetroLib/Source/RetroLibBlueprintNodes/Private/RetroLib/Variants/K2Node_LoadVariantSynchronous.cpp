@@ -42,7 +42,7 @@ bool UK2Node_LoadVariantSynchronous::IsConnectionDisallowed(const UEdGraphPin *M
                                                                 : &Retro::IVariantRegistration::GetStructType;
         // clang-format off
         auto Result = Retro::Optionals::OfNullable(Struct) |
-                      Retro::Optionals::AndThen<&Retro::FVariantObjectStructRegistry::GetVariantStructData>(Retro::TThis(std::ref(Registry))) |
+                      Retro::Optionals::AndThen(Retro::BindMethod<&Retro::FVariantObjectStructRegistry::GetVariantStructData>(std::ref(Registry))) |
                       Retro::Optionals::Transform(GetStructFunction) |
                       Retro::Optionals::PtrOrNull;
         // clang-format on

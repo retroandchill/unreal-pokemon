@@ -9,7 +9,6 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
-
 #include <memory>
 #include <ranges>
 #include <type_traits>
@@ -759,4 +758,4 @@ namespace Retro::Ranges {
       private:
         TPolymorphic<TAnyViewInterface<T>> Data = TAnyViewImpl<std::ranges::empty_view<T>>(std::views::empty<T>);
     };
-} // namespace retro::ranges
+} // namespace Retro::Ranges

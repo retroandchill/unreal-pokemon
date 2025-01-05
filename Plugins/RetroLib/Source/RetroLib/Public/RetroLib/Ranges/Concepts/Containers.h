@@ -306,4 +306,4 @@ namespace Retro::Ranges {
      */
     template <typename R, typename T>
     concept ContainerCompatibleRange = std::ranges::input_range<R> && std::convertible_to<TRangeCommonReference<R>, T>;
-} // namespace retro::ranges
+} // namespace Retro::Ranges

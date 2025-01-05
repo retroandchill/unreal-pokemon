@@ -301,7 +301,8 @@ namespace Retro {
          */
         template <typename T, typename U>
             requires std::convertible_to<T, A> && std::convertible_to<U, B>
-        constexpr TBindFrontConstInvoker(T &&Arg1, U &&Arg2) : Arg1(std::forward<T>(Arg1)), Arg2(std::forward<U>(Arg2)) {
+        constexpr TBindFrontConstInvoker(T &&Arg1, U &&Arg2)
+            : Arg1(std::forward<T>(Arg1)), Arg2(std::forward<U>(Arg2)) {
         }
 
         /**
@@ -399,4 +400,4 @@ namespace Retro {
     constexpr auto BindFront(A &&...Args) {
         return TBindFrontConstInvoker<Functor, std::decay_t<A>...>(std::forward<A>(Args)...);
     }
-} // namespace retro
+} // namespace Retro

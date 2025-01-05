@@ -3,10 +3,6 @@
 #include "DataManager.h"
 #include "Misc/OutputDeviceNull.h"
 #include "PokemonDataSettings.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Views/ContainerView.h"
-#include "Ranges/Views/Filter.h"
-#include "Ranges/Views/Map.h"
 
 FItem::FItem() = default;
 
@@ -80,9 +76,9 @@ TArray<FName> UItemHelper::GetPokeBallNames() {
     auto Bytes = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
     // clang-format off
     return FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows() |
-           UE::Ranges::Filter(&FItem::IsPokeBall) |
-           UE::Ranges::Map(&FItem::ID) |
-           UE::Ranges::ToArray;
+           Retro::Ranges::Views::Filter(&FItem::IsPokeBall) |
+           Retro::Ranges::Views::Transform(&FItem::ID) |
+           Retro::Ranges::To<TArray>();
     // clang-format on
 }
 

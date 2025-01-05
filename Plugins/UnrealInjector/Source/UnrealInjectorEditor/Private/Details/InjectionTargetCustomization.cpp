@@ -5,11 +5,10 @@
 #include "EditorClassUtils.h"
 #include "Lookup/InjectionTarget.h"
 #include "PropertyCustomizationHelpers.h"
-#include "Ranges/Optional/Filter.h"
-#include "Ranges/Optional/GetPtrOrNull.h"
-#include "Ranges/Optional/Map.h"
-#include "Ranges/Optional/OptionalRef.h"
-#include "Ranges/Optional/OrElse.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/OrElseValue.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 
 TSharedRef<IPropertyTypeCustomization> FInjectionTargetCustomization::MakeInstance() {
     return MakeShared<FInjectionTargetCustomization>();
@@ -28,12 +27,13 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
     PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FInjectionTarget, TargetInterface))
         ->GetValue(InterfaceObject);
     TSubclassOf<UObject> FoundClass = Cast<UClass>(InterfaceObject);
-    auto MetaClass = UE::Optionals::OfNullable(FoundClass) |
-                     UE::Optionals::Filter([](const UClass &Class) { return !Class.IsChildOf<UInterface>(); }) |
-                     UE::Optionals::OrElse(UObject::StaticClass());
-    auto RequiredInterface = UE::Optionals::OfNullable(FoundClass) |
-                             UE::Optionals::Filter([](const UClass &Class) { return Class.IsChildOf<UInterface>(); }) |
-                             UE::Optionals::GetPtrOrNull;
+    auto MetaClass = Retro::Optionals::OfNullable(FoundClass) |
+                     Retro::Optionals::Filter([](const UClass *Class) { return !Class->IsChildOf<UInterface>(); }) |
+                     Retro::Optionals::OrElseValue(UObject::StaticClass());
+    auto RequiredInterface =
+        Retro::Optionals::OfNullable(FoundClass) |
+        Retro::Optionals::Filter([](const UClass *Class) { return Class->IsChildOf<UInterface>(); }) |
+        Retro::Optionals::PtrOrNull;
 
     HeaderRow.NameContent()[PropertyHandle->CreatePropertyNameWidget()]
         .ValueContent()
@@ -43,11 +43,12 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
                   SHorizontalBox::Slot()
                       .VAlign(VAlign_Center)
                       .HAlign(HAlign_Left)[SNew(STextBlock)
-                                               .Text(UE::Optionals::OfNullable(FoundClass) |
-                                                     UE::Optionals::Map([](const UClass *Class) {
+                                               .Text(Retro::Optionals::OfNullable(FoundClass) |
+                                                     Retro::Optionals::Transform([](const UClass *Class) {
                                                          return Class->GetDisplayNameText();
                                                      }) |
-                                                     UE::Optionals::OrElse(FText::FromStringView(TEXT("Invalid"))))] +
+                                                     Retro::Optionals::OrElseValue(
+                                                         FText::FromStringView(TEXT("Invalid"))))] +
                   SHorizontalBox::Slot()
                       .VAlign(VAlign_Center)
                       .HAlign(HAlign_Left)[

@@ -45,4 +45,4 @@ namespace Retro {
 
     template <typename T, typename... A>
     concept ConvertibleFromPack = (sizeof...(A) == 1) && std::convertible_to<TPackType<0, A...>, T>;
-} // namespace retro
+} // namespace Retro

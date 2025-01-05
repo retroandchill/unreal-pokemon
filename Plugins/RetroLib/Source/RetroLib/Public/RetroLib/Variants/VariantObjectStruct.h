@@ -3,14 +3,15 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include "VariantObject.h"
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Exceptions/VariantException.h"
-#include "RetroLib/Ranges/Views/Transform.h"
-#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 #include "RetroLib/Ranges/Compatibility/UnrealContainers.h"
+#include "RetroLib/Ranges/Views/Elements.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
+#include "VariantObject.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -158,7 +159,7 @@ namespace Retro {
             if (auto TypeIndex = T::GetTypeIndex(SourceObject);
                 !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
                 throw FVariantException("Incompatible object parameter; the supplied object is not of a "
-                                                  "valid type for this variant object");
+                                        "valid type for this variant object");
             }
 
             Variant->Set(SourceObject);
@@ -258,7 +259,7 @@ namespace Retro {
         template <typename T>
             requires VariantObjectStruct<T>
         static bool RegisterVariantStruct() {
-            AddToDelegate(FCoreDelegates::OnPostEngineInit, [] {
+            FCoreDelegates::OnPostEngineInit | Delegates::Add([] {
                 auto &Instance = Get();
                 auto Struct = GetScriptStruct<T>();
                 auto &Registered =
@@ -283,9 +284,8 @@ namespace Retro {
          * @return The iterable range of all the registered structs.
          */
         auto GetAllRegisteredStructs() const {
-            return RegisteredStructs |
-                Ranges::Views::Values |
-                    Ranges::Views::Transform(&TSharedRef<IVariantRegistration>::operator*);
+            return RegisteredStructs | Ranges::Views::Values |
+                   Ranges::Views::Transform(&TSharedRef<IVariantRegistration>::operator*);
         }
 
       private:

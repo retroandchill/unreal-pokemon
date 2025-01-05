@@ -7,12 +7,7 @@
  */
 #pragma once
 
-#if !RETROLIB_WITH_MODULES
-#include "RetroLib/RetroLibMacros.h"
-#endif
-
-#include "RetroLib/Functional/CreateBinding.h"
-#include "RetroLib/Functional/FunctionalClosure.h"
+#include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 
 #ifndef RETROLIB_EXPORT
@@ -55,4 +50,4 @@ namespace Retro::Optionals {
      * functional code entities.
      */
     RETROLIB_EXPORT constexpr auto IfPresentOrElse = ExtensionMethod<FIfPresentOrElseInvoker{}>;
-} // namespace retro::optionals
+} // namespace Retro::Optionals

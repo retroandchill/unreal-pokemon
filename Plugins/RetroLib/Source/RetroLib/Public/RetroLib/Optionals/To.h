@@ -120,4 +120,4 @@ namespace Retro::Optionals {
         return ExtensionMethod<TemplatedToFunction<T>>();
     }
 
-} // namespace retro::optionals
+} // namespace Retro::Optionals

@@ -12,6 +12,7 @@
 #include "RetroLib/Utils/ValidPtr.h"
 
 #if !RETROLIB_WITH_MODULES
+#include "RetroLib/RetroLibMacros.h"
 #include <type_traits>
 #endif
 
@@ -21,7 +22,7 @@
 
 namespace Retro {
 
-    RETROLIB_EXPORT template <Class T>
+    RETROLIB_EXPORT template <PolymorphicType T>
     struct TInstanceChecker {
         /**
          * Checks if the given instance of type U is a valid instance of the desired base type T.
@@ -30,27 +31,26 @@ namespace Retro {
          * @return True if the instance is valid, meaning that U is derived from T or is an instance
          *         that can be dynamically cast to T. Otherwise, returns false.
          */
-        template <Class U>
-        constexpr bool operator()(const U& Value) const {
+        template <PolymorphicType U>
+        constexpr bool operator()(const U &Value) const {
             if constexpr (std::derived_from<U, T>) {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
             } else {
 #if !RTTI_ENABLED
                 static_assert(false, "RTTI is disabled, but the type is not derived from T");
-    #endif
-                    auto casted = dynamic_cast<const T *>(&Value);
-                return casted != nullptr;
+#endif
+                auto Casted = dynamic_cast<const T *>(&Value);
+                return Casted != nullptr;
             }
         }
     };
 
-
-    template <Class T>
+    template <PolymorphicType T>
     static constexpr TInstanceChecker<T> IsValidInstance;
 
     /**
-     * @struct InstanceOfFunction
+     * @struct TInstanceOfFunction
      * @brief A utility to check if an object or a pointer is a valid instance of a specified type.
      *
      * The InstanceOf struct provides overloaded function call operators to determine if a given
@@ -58,15 +58,15 @@ namespace Retro {
      *
      * @tparam T The type against which the object's type is being checked.
      */
-    template <Class T>
-    struct InstanceOfFunction {
+    template <PolymorphicType T>
+    struct TInstanceOfFunction {
         /**
          * Checks if the given value is a valid instance of type U.
          *
          * @param Value The value to be checked against the type U.
          * @return A boolean indicating whether the value is a valid instance of type U.
          */
-        template <Class U>
+        template <PolymorphicType U>
         constexpr bool operator()(const U &Value) const {
             return IsValidInstance<T>(Value);
         }
@@ -130,6 +130,6 @@ namespace Retro {
      * useful in template metaprogramming and scenarios where type safety and checking
      * are performed at compile-time.
      */
-    RETROLIB_EXPORT template <Class T>
-    constexpr InstanceOfFunction<T> InstanceOf;
-} // namespace retro
+    RETROLIB_EXPORT template <PolymorphicType T>
+    constexpr TInstanceOfFunction<T> InstanceOf;
+} // namespace Retro

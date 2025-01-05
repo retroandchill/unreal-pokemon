@@ -24,10 +24,11 @@ namespace Retro {
     struct TThis {
         T Value;
 
+        constexpr explicit TThis(const T &Value) : Value(Value) {
+        }
 
-        constexpr explicit TThis(const T& Value) : Value(Value) {}
-
-        constexpr explicit TThis(T&& Value) : Value(std::move(Value)) {}
+        constexpr explicit TThis(T &&Value) : Value(std::move(Value)) {
+        }
     };
 
     /**
@@ -38,7 +39,7 @@ namespace Retro {
      * abstraction is particularly useful for scenarios requiring dynamic handling of callables or delayed
      * execution.
      */
-    template <HasFunctionCallOperator F>
+    RETROLIB_EXPORT template <HasFunctionCallOperator F>
     struct TWrappedFunctor {
         /**
          * @brief Constructs a WrappedFunctor by forwarding the given functor.
@@ -211,7 +212,7 @@ namespace Retro {
      * @return A callable object that represents the bound functor.
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
-        requires HasFunctionCallOperator<decltype(Functor)>
+        requires (IsValidFunctorObject(Functor))
     constexpr auto CreateBinding(A &&...Args) {
         if constexpr (sizeof...(A) == 0) {
             return TWrappedFunctor(BindFunctor<Functor>());
@@ -240,13 +241,16 @@ namespace Retro {
     struct TAdditionalBindingTypes : FInvalidType {};
 
     RETROLIB_EXPORT template <typename F, typename... A>
-    concept HasExtenededBinding = TAdditionalBindingTypes<std::decay_t<F>>::IsValid && requires(F&& Functor, A&&... Args) {
-        { TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...) } -> HasFunctionCallOperator;
-    };
+    concept HasExtenededBinding =
+        TAdditionalBindingTypes<std::decay_t<F>>::IsValid && requires(F &&Functor, A &&...Args) {
+            {
+                TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...)
+            } -> HasFunctionCallOperator;
+        };
 
     RETROLIB_EXPORT template <typename F, typename... A>
         requires HasExtenededBinding<F, A...>
-    constexpr auto CreateBinding(F&& Functor, A &&...Args) {
+    constexpr auto CreateBinding(F &&Functor, A &&...Args) {
         return TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...);
     }
 
@@ -257,14 +261,4 @@ namespace Retro {
         requires HasFunctionCallOperator<decltype(Functor)>
     using TConstBindingType = decltype(CreateBinding<Functor>(std::declval<A>()...));
 
-    struct FDynamicFunctorTag {};
-
-    /**
-     * Constant tag used to signify that functional object is bounding by taking in a functor as its argument.
-     */
-    RETROLIB_EXPORT constexpr FDynamicFunctorTag DynamicFunctor;
-
-    template <auto Functor>
-    concept DynamicFunctorBinding = std::same_as<std::decay_t<decltype(Functor)>, FDynamicFunctorTag>;
-
-} // namespace retro
+} // namespace Retro

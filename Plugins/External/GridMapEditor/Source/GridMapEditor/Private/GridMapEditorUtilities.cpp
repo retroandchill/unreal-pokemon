@@ -1,9 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "GridMapEditorUtilities.h"
-#include "Ranges/Algorithm/ToArray.h"
-#include "Ranges/Optional/IfPresent.h"
-#include "Ranges/Views/Map.h"
+#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include <array>
 
 struct FTileBasicInfo {
     const uint32 TileBitset;
@@ -33,9 +34,9 @@ static FGridMapTileList MakeTileList(const FTileBasicInfo &Info, const TArray<US
 }
 
 static void SetTileInfos(UGridMapTileSet &TileSet, const TArray<UStaticMesh *> &Tiles) {
-    TileSet.Tiles = TileBasicInfos | UE::Ranges::Map(&MakeTileList, Tiles) | UE::Ranges::ToArray;
+    TileSet.Tiles = TileBasicInfos | Retro::Ranges::Views::Transform(Retro::BindBack<&MakeTileList>(Tiles)) | Retro::Ranges::To<TArray>();
 }
 
 void UGridMapEditorUtilities::CreateAutoTileLayout(UGridMapTileSet *TileSet, const TArray<UStaticMesh *> &Tiles) {
-    UE::Optionals::OfNullable(TileSet) | UE::Optionals::IfPresent(&SetTileInfos, Tiles);
+    Retro::Optionals::OfNullable(TileSet) | Retro::Optionals::IfPresent(Retro::BindBack<&SetTileInfos>(Tiles));
 }
