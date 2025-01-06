@@ -54,7 +54,7 @@ bool UK2Node_DynamicAssetLoadBase::IsConnectionDisallowed(const UEdGraphPin *MyP
         return false;
     }
 
-    const static std::array ValidPinTypes = {UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PC_String,
+    constexpr std::array ValidPinTypes = {UEdGraphSchema_K2::PC_Name, UEdGraphSchema_K2::PC_String,
                                              UEdGraphSchema_K2::PC_Text};
     if (std::ranges::find(ValidPinTypes, OtherPin->PinType.PinCategory) == ValidPinTypes.end()) {
         OutReason = TEXT("Not a valid string type structure!");

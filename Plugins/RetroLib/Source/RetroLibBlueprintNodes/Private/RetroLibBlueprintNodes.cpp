@@ -1,13 +1,11 @@
 ﻿#include "RetroLibBlueprintNodes.h"
 
-#define LOCTEXT_NAMESPACE "FRetroLibBlueprintNodesModule"
-
 void FRetroLibBlueprintNodesModule::StartupModule() {
+    // No special startup code
 }
 
 void FRetroLibBlueprintNodesModule::ShutdownModule() {
+    // No special shutdown code
 }
-
-#undef LOCTEXT_NAMESPACE
 
 IMPLEMENT_MODULE(FRetroLibBlueprintNodesModule, RetroLibBlueprintNodes)

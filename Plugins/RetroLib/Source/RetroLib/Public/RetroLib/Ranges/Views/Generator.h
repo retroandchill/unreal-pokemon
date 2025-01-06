@@ -351,8 +351,7 @@ namespace Retro {
             template <typename P>
             std::coroutine_handle<> await_suspend(std::coroutine_handle<P> Handle) noexcept {
                 auto &Promise = Handle.promise();
-                auto &CurrentRoot = *Promise.Root;
-                if (&CurrentRoot != &Promise) {
+                if (auto &CurrentRoot = *Promise.Root; &CurrentRoot != &Promise) {
                     auto Parent = Promise.ParentOrLeaf;
                     CurrentRoot.ParentOrLeaf = Parent;
                     return Parent;
@@ -510,6 +509,7 @@ namespace std {
     // Generator with specified allocator type
     RETROLIB_EXPORT template <typename R, typename V, typename A, typename... T>
     struct coroutine_traits<Retro::TGenerator<R, V, A>, T...> {
+      private:
         using ByteAllocator = Retro::TByteAllocatorType<A>;
 
       public:
@@ -627,7 +627,7 @@ namespace Retro {
             Iterator(Iterator &&Other) noexcept : Coroutine(std::exchange(Other.Coroutine, {})) {
             }
 
-            Iterator &operator=(const Iterator &Other) = delete;
+            Iterator &operator=(const Iterator &) = delete;
 
             Iterator &operator=(Iterator &&Other) noexcept {
                 std::swap(Coroutine, Other.Coroutine);
