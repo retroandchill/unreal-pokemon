@@ -24,11 +24,6 @@
 
 namespace Retro::Ranges {
 
-    template <typename R>
-    concept RangeWithMovableReference =
-        std::ranges::input_range<R> && std::move_constructible<std::ranges::range_reference_t<R>> &&
-        std::move_constructible<std::ranges::range_reference_t<R>>;
-
     RETROLIB_EXPORT template <typename T, typename U>
     struct TEnumerateViewResult {
         T Index;

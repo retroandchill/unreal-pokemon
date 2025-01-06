@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
 
 #include "Battle.generated.h"
@@ -126,13 +127,13 @@ class POKEMONBATTLE_API IBattle {
      * Get all sides in the current battle
      * @return A view of all sides in the battle
      */
-    virtual Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const = 0;
+    virtual Retro::TGenerator<TScriptInterface<IBattleSide>> GetSides() const = 0;
 
     /**
      * Get all active battlers in the battle
      * @return A view of all active battlers
      */
-    virtual Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
+    virtual Retro::TGenerator<TScriptInterface<IBattler>> GetActiveBattlers() const = 0;
 
     /**
      * Initiate the process of selecting actions for the given battler.

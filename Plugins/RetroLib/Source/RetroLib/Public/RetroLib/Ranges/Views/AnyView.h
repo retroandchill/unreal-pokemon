@@ -286,19 +286,6 @@ namespace Retro::Ranges {
         virtual T Read() const = 0;
 
         /**
-         * @brief Compares this iterator with another to determine equality.
-         *
-         * This pure virtual function must be implemented by derived classes
-         * to check if the current iterator is equivalent to the specified
-         * `other` iterator. The criteria for equality depend on the specific
-         * implementation in the concrete subclass.
-         *
-         * @param other An instance of AnyViewIteratorInterface to compare against.
-         * @return True if the iterators are considered equal, false otherwise.
-         */
-        virtual bool Equal(const TAnyViewIteratorInterface &other) const = 0;
-
-        /**
          * @brief Advances the iterator to the next element in the sequence.
          *
          * This pure virtual function must be implemented by derived classes
@@ -386,13 +373,6 @@ namespace Retro::Ranges {
             return *Iter;
         }
 
-        bool Equal(const TAnyViewIteratorInterface<T> &other) const override {
-#if RTTI_ENABLED
-            RETROLIB_ASSERT(typeid(*this) == typeid(other));
-#endif
-            return Iter == static_cast<const TAnyViewIteratorImpl<I, T> &>(other).Iter;
-        }
-
         void Next() override {
             ++Iter;
         }
@@ -445,22 +425,7 @@ namespace Retro::Ranges {
         template <typename I>
             requires(!std::same_as<std::decay_t<I>, TAnyViewIterator>) && std::same_as<std::iter_value_t<I>, T>
         constexpr explicit TAnyViewIterator(I &&Iterator)
-            : Delegate(std::in_place_type<TAnyViewIteratorImpl<std::decay_t<I>>>, std::forward<I>(Iterator)) {
-        }
-
-        /**
-         * @brief Compares two AnyViewIterator objects for equality.
-         *
-         * This operator checks if the current AnyViewIterator object is equal to another
-         * AnyViewIterator object. Equality is determined by the underlying delegate's
-         * `equal` function, which typically compares the internal state of the iterators
-         * being pointed to by the AnyViewIterator instances.
-         *
-         * @param Other The other AnyViewIterator object to compare against.
-         * @return true if both AnyViewIterator objects are equal, false otherwise.
-         */
-        constexpr bool operator==(const TAnyViewIterator &Other) const {
-            return Delegate->Equal(*Other.Delegate);
+            : Delegate(std::make_unique<TAnyViewIteratorImpl<std::decay_t<I>>>(std::forward<I>(Iterator))) {
         }
 
         /**
@@ -516,14 +481,12 @@ namespace Retro::Ranges {
          *
          * @return A copy of the iterator's state prior to the increment.
          */
-        constexpr TAnyViewIterator operator++(int) {
-            auto Temp = *this;
+        constexpr void operator++(int) {
             ++*this;
-            return Temp;
         }
 
       private:
-        TPolymorphic<TAnyViewIteratorInterface<T>> Delegate = TAnyViewIteratorImpl<T *>(nullptr);
+        std::unique_ptr<TAnyViewIteratorInterface<T>> Delegate;
     };
 
     /**

@@ -53,15 +53,6 @@ TEST_CASE_NAMED(FAnyViewTest, "Unit Tests::RetroLib::Ranges::Views::AnyView", "[
         CHECK(Count == 30);
     }
 
-    SECTION("Can compare iterators between view instances") {
-        Retro::Ranges::TAnyView<int> view(std::vector<int>({1, 2, 3, 4}));
-        auto Iterator1 = view.begin();
-        auto Iterator2 = view.begin();
-        Iterator1++;
-        Iterator2++;
-        CHECK(Iterator1 == Iterator2);
-    }
-
     SECTION("Can use any view with a range pipe") {
         auto View = Retro::Ranges::TAnyView<int>(std::vector<int>({1, 2, 3, 4})) |
                     std::ranges::views::filter([](const int value) { return value % 2 == 0; });

@@ -6,7 +6,8 @@
 #include "Battle.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Effects/TurnBasedGameplayEffect.h"
-#include "Events/BattleMessage.h"
+#include "RetroLib/Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"
@@ -106,8 +107,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintPure, Category = "Battle|Content")
     const TScriptInterface<IBattleSide> &GetOpposingSide() const override;
 
-    Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> GetSides() const override;
-    Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetActiveBattlers() const override;
+    Retro::TGenerator<TScriptInterface<IBattleSide>> GetSides() const override;
+    Retro::TGenerator<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     void ExecuteAction(IBattleAction &Action) override;
 
   protected:

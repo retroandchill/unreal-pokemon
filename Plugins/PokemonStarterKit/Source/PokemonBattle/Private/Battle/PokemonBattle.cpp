@@ -20,6 +20,7 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/Concat.h"
+#include "RetroLib/Ranges/Views/SharedView.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
@@ -107,7 +108,7 @@ void APokemonBattle::Tick(float DeltaSeconds) {
 
 void APokemonBattle::StartBattle() {
     CreateBattleHUD();
-    OnBattlersEnteringBattle(GetActiveBattlers());
+    OnBattlersEnteringBattle(Retro::Ranges::Views::Shared(GetActiveBattlers()));
     ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::StartTurn);
 }
 
@@ -173,16 +174,16 @@ const TScriptInterface<IBattleSide> &APokemonBattle::GetOpposingSide() const {
     return Sides[OpponentSideIndex];
 }
 
-Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
-    return Sides;
+Retro::TGenerator<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
+    co_yield Retro::Ranges::TElementsOf(Sides);
 }
 
-Retro::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
+Retro::TGenerator<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     // clang-format off
-    return Sides |
+    co_yield Retro::Ranges::TElementsOf(Sides |
            Retro::Ranges::Views::Transform(&IBattleSide::GetBattlers) |
            Retro::Ranges::Views::Join |
-           Retro::Ranges::Views::Filter(&IBattler::IsNotFainted);
+           Retro::Ranges::Views::Filter(&IBattler::IsNotFainted));
     // clang-format on
 }
 
