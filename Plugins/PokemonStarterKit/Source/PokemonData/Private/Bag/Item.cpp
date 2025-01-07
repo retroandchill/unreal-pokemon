@@ -73,7 +73,6 @@ TArray<FName> UItemHelper::GetItemNames() {
 }
 
 TArray<FName> UItemHelper::GetPokeBallNames() {
-    auto Bytes = FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows();
     // clang-format off
     return FDataManager::GetInstance().GetDataTable<FItem>().GetAllRows() |
            Retro::Ranges::Views::Filter(&FItem::IsPokeBall) |

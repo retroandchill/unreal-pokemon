@@ -41,7 +41,7 @@ namespace Retro {
             return &Value;
         }
 
-        static constexpr const T *Get(T &&Value) {
+        static constexpr const T *Get([[maybe_unused]] T &&Value) {
             static_assert(false, "Can't apply to an r-value reference");
             Unreachable();
         }

@@ -6,6 +6,7 @@
  * https://github.com/retroandchill
  */
 #pragma once
+#include "AudioMixerBlueprintLibrary.h"
 
 #if RETROLIB_WITH_COROUTINES
 
@@ -351,8 +352,7 @@ namespace Retro {
             template <typename P>
             std::coroutine_handle<> await_suspend(std::coroutine_handle<P> Handle) noexcept {
                 auto &Promise = Handle.promise();
-                auto &CurrentRoot = *Promise.Root;
-                if (&CurrentRoot != &Promise) {
+                if (auto &CurrentRoot = *Promise.Root; &CurrentRoot != &Promise) {
                     auto Parent = Promise.ParentOrLeaf;
                     CurrentRoot.ParentOrLeaf = Parent;
                     return Parent;
@@ -461,15 +461,15 @@ namespace Retro {
 
         using TGeneratorPromiseBase<T>::yield_value;
 
-        template <std::ranges::range R>
-        typename TGeneratorPromiseBase<T>::template YieldSequenceAwaiter<TGenerator<T, V, A>>
-        yield_value(Ranges::TElementsOf<R> &&X) {
+        template <std::ranges::range R, typename M>
+        typename TGeneratorPromiseBase<T>::template YieldSequenceAwaiter<TGenerator<T, V, M>>
+        yield_value(Ranges::TElementsOf<R, M> &&X) {
             static_assert(!ExplicitAllocator, "This coroutine has an explicit allocator specified with "
                                               "std::allocator_arg so an allocator needs to be passed "
                                               "explicitly to std::elements_of");
-            return []<typename U>(U &&Range) -> TGenerator<T, V, A> {
-                for (auto &&E : std::forward<U>(Range))
-                    co_yield std::forward<decltype(E)>(E);
+            return [](auto &&Range) -> TGenerator<T, V, M> {
+                for (auto &&E : Range)
+                    co_yield static_cast<decltype(E)>(E);
             }(std::forward<R>(X.Get()));
         }
     };
@@ -510,6 +510,7 @@ namespace std {
     // Generator with specified allocator type
     RETROLIB_EXPORT template <typename R, typename V, typename A, typename... T>
     struct coroutine_traits<Retro::TGenerator<R, V, A>, T...> {
+      private:
         using ByteAllocator = Retro::TByteAllocatorType<A>;
 
       public:
@@ -627,7 +628,7 @@ namespace Retro {
             Iterator(Iterator &&Other) noexcept : Coroutine(std::exchange(Other.Coroutine, {})) {
             }
 
-            Iterator &operator=(const Iterator &Other) = delete;
+            Iterator &operator=(const Iterator &) = delete;
 
             Iterator &operator=(Iterator &&Other) noexcept {
                 std::swap(Coroutine, Other.Coroutine);
@@ -637,7 +638,7 @@ namespace Retro {
             ~Iterator() = default;
 
             friend bool operator==(const Iterator &It, Sentinel) noexcept {
-                return It.Coroutine.done();
+                return !It.Coroutine || It.Coroutine.done();
             }
 
             Iterator &operator++() {
@@ -803,9 +804,9 @@ namespace Retro {
          * @param Other The Generator instance to swap with.
          */
         void swap(TGenerator &Other) noexcept {
-            std::swap(Promise, Other.promise);
-            std::swap(Coroutine, Other.coroutine);
-            std::swap(Started, Other.started);
+            std::swap(Promise, Other.Promise);
+            std::swap(Coroutine, Other.Coroutine);
+            std::swap(Started, Other.Started);
         }
 
       private:
@@ -837,7 +838,7 @@ namespace Retro {
             ~Iterator() = default;
 
             friend bool operator==(const Iterator &It, Sentinel) noexcept {
-                return It.Coroutine.done();
+                return !It.Coroutine || It.Coroutine.done();
             }
 
             Iterator &operator++() {
@@ -878,10 +879,11 @@ namespace Retro {
          * @note The coroutine must be valid and not have started prior to this call.
          */
         Iterator begin() {
-            RETROLIB_ASSERT(Coroutine);
-            RETROLIB_ASSERT(!Started);
-            Started = true;
-            Coroutine.resume();
+            if (Coroutine) {
+                RETROLIB_ASSERT(!Started);
+                Started = true;
+                Coroutine.resume();
+            }
             return Iterator{Promise, Coroutine};
         }
 

@@ -1,13 +1,11 @@
 ﻿#include "RetroLibEditor.h"
 
-#define LOCTEXT_NAMESPACE "FRetroLibEditorModule"
-
 void FRetroLibEditorModule::StartupModule() {
+    // No special startup code
 }
 
 void FRetroLibEditorModule::ShutdownModule() {
+    // No special shutdown code
 }
-
-#undef LOCTEXT_NAMESPACE
 
 IMPLEMENT_MODULE(FRetroLibEditorModule, RetroLibEditor)

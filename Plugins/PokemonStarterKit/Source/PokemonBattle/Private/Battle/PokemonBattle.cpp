@@ -113,7 +113,7 @@ void APokemonBattle::StartBattle() {
 
 void APokemonBattle::OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     // clang-format off
-    auto Sorted = Battlers |
+    auto Sorted = std::move(Battlers) |
                   Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
                   Retro::Ranges::To<TArray>();
     // clang-format on
@@ -173,16 +173,16 @@ const TScriptInterface<IBattleSide> &APokemonBattle::GetOpposingSide() const {
     return Sides[OpponentSideIndex];
 }
 
-Retro::Ranges::TAnyView<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
-    return Sides;
+Retro::TGenerator<TScriptInterface<IBattleSide>> APokemonBattle::GetSides() const {
+    co_yield Retro::Ranges::TElementsOf(Sides);
 }
 
-Retro::Ranges::TAnyView<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
+Retro::TGenerator<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers() const {
     // clang-format off
-    return Sides |
+    co_yield Retro::Ranges::TElementsOf(Sides |
            Retro::Ranges::Views::Transform(&IBattleSide::GetBattlers) |
            Retro::Ranges::Views::Join |
-           Retro::Ranges::Views::Filter(&IBattler::IsNotFainted);
+           Retro::Ranges::Views::Filter(&IBattler::IsNotFainted));
     // clang-format on
 }
 

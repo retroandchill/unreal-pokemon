@@ -127,10 +127,10 @@ UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
     return TurnBasedEffectComponent;
 }
 
-Retro::Ranges::TAnyView<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
-    auto MyComponent = Retro::Ranges::Views::Single(TurnBasedEffectComponent.Get());
-    auto BattlerComponents = Battlers | Retro::Ranges::Views::Transform(&IBattler::GetTurnBasedEffectComponent);
-    return Retro::Ranges::Views::Concat(std::move(MyComponent), std::move(BattlerComponents));
+Retro::TGenerator<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
+    co_yield TurnBasedEffectComponent;
+    co_yield Retro::Ranges::TElementsOf(Battlers |
+        Retro::Ranges::Views::Transform(&IBattler::GetTurnBasedEffectComponent));
 }
 
 uint8 AActiveSide::GetSideSize() const {

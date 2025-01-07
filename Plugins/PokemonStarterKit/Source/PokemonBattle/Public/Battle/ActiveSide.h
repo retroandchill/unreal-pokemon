@@ -48,7 +48,7 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
     UFUNCTION(BlueprintPure, Category = GameplayAbilities)
     UTurnBasedEffectComponent *GetTurnBasedEffectComponent() const override;
 
-    Retro::Ranges::TAnyView<UTurnBasedEffectComponent *> GetChildEffectComponents() const override;
+    Retro::TGenerator<UTurnBasedEffectComponent *> GetChildEffectComponents() const override;
 
     uint8 GetSideSize() const override;
     const FText &GetIntroText() const override;

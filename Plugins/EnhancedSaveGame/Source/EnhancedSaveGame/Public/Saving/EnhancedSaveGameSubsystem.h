@@ -47,6 +47,5 @@ class ENHANCEDSAVEGAME_API UEnhancedSaveGameSubsystem : public UGameInstanceSubs
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Saving, meta = (AutoCreateRefTerm = LoadTags))
     void LoadSaveGame(const UEnhancedSaveGame *SaveGame,
                       const FGameplayTagContainer &LoadTags = FGameplayTagContainer()) const;
-
-  private:
+    
 };

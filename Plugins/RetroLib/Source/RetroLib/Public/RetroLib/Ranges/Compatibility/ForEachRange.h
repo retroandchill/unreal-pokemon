@@ -82,7 +82,7 @@ namespace Retro::Ranges {
          *
          * @return A constexpr IteratorStorage instance in an empty state.
          */
-        constexpr TIteratorStorage() : Empty() {
+        constexpr TIteratorStorage() : Empty(std::monostate{}) {
         }
 
         /**

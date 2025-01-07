@@ -6,6 +6,7 @@
 #include "GameplayAbilitySpecHandle.h"
 #include "Moves/MoveDamageCategory.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
 
 #include "BattleMove.generated.h"
@@ -52,7 +53,7 @@ class POKEMONBATTLE_API IBattleMove {
      * Compute all possible targets for the move based on the given user information
      * @return The found list of targets
      */
-    virtual Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetAllPossibleTargets() const = 0;
+    virtual Retro::TGenerator<TScriptInterface<IBattler>> GetAllPossibleTargets() const = 0;
 
     /**
      * Is the move usable

@@ -8,6 +8,7 @@
 #include "GameplayEffectTypes.h"
 #include "Pokemon/Breeding/PokemonGender.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
 #include "Utilities/Node/Utility_ProcessLevelUp.h"
 
@@ -266,7 +267,7 @@ class POKEMONBATTLE_API IBattler {
      * Get all allies in battle
      * @return A view of all allies
      */
-    virtual Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetAllies() const = 0;
+    virtual Retro::TGenerator<TScriptInterface<IBattler>> GetAllies() const = 0;
 
     /**
      * Show the battler's sprite in battle
